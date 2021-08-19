@@ -7,11 +7,11 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class SelectMenuRequest : redEvent
 	{
-		private CHandle<MenuItemController> _eventData;
+		private wCHandle<MenuItemController> _eventData;
 
 		[Ordinal(0)] 
 		[RED("eventData")] 
-		public CHandle<MenuItemController> EventData
+		public wCHandle<MenuItemController> EventData
 		{
 			get => GetProperty(ref _eventData);
 			set => SetProperty(ref _eventData, value);

@@ -13,10 +13,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CName _idleAnimationName;
 		private CName _glitchAnimationName;
 		private CHandle<inkanimProxy> _runningAnimation;
-		private CUInt32 _onGlitchingListener;
-		private CUInt32 _onIsInDefaultStateListener;
-		private CUInt32 _onShutdownModuleListener;
-		private CUInt32 _onBootModuleListener;
+		private CHandle<redCallbackObject> _onGlitchingListener;
+		private CHandle<redCallbackObject> _onIsInDefaultStateListener;
+		private CHandle<redCallbackObject> _onShutdownModuleListener;
+		private CHandle<redCallbackObject> _onBootModuleListener;
 
 		[Ordinal(18)] 
 		[RED("IdleGroup")] 
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(24)] 
 		[RED("onGlitchingListener")] 
-		public CUInt32 OnGlitchingListener
+		public CHandle<redCallbackObject> OnGlitchingListener
 		{
 			get => GetProperty(ref _onGlitchingListener);
 			set => SetProperty(ref _onGlitchingListener, value);
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(25)] 
 		[RED("onIsInDefaultStateListener")] 
-		public CUInt32 OnIsInDefaultStateListener
+		public CHandle<redCallbackObject> OnIsInDefaultStateListener
 		{
 			get => GetProperty(ref _onIsInDefaultStateListener);
 			set => SetProperty(ref _onIsInDefaultStateListener, value);
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(26)] 
 		[RED("onShutdownModuleListener")] 
-		public CUInt32 OnShutdownModuleListener
+		public CHandle<redCallbackObject> OnShutdownModuleListener
 		{
 			get => GetProperty(ref _onShutdownModuleListener);
 			set => SetProperty(ref _onShutdownModuleListener, value);
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(27)] 
 		[RED("onBootModuleListener")] 
-		public CUInt32 OnBootModuleListener
+		public CHandle<redCallbackObject> OnBootModuleListener
 		{
 			get => GetProperty(ref _onBootModuleListener);
 			set => SetProperty(ref _onBootModuleListener, value);

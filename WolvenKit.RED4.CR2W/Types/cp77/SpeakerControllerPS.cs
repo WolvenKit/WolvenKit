@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CName _currentValue;
 		private CName _previousValue;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("speakerSetup")] 
 		public SpeakerSetup SpeakerSetup
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _speakerSetup, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("currentValue")] 
 		public CName CurrentValue
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentValue, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("previousValue")] 
 		public CName PreviousValue
 		{

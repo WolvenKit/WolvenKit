@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CBool _isRevealingEnemies;
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("isRevealingEnemies")] 
 		public CBool IsRevealingEnemies
 		{

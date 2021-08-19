@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class TriggerHackingMinigameEffector : gameEffector
 	{
 		private wCHandle<gameObject> _owner;
-		private CUInt32 _listener;
+		private CHandle<redCallbackObject> _listener;
 		private gameItemID _item;
 		private TweakDBID _reward;
 		private CString _journalEntry;
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(1)] 
 		[RED("listener")] 
-		public CUInt32 Listener
+		public CHandle<redCallbackObject> Listener
 		{
 			get => GetProperty(ref _listener);
 			set => SetProperty(ref _listener, value);

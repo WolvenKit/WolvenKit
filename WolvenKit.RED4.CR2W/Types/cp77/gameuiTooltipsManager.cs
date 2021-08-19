@@ -13,15 +13,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkMargin _rootMargin;
 		private inkMargin _screenMargin;
 		private CArray<inkWidgetReference> _tooltipRequesters;
-		private redResourceReferenceScriptToken _tooltipsLibrary;
 		private CArray<CName> _genericTooltipsNames;
 		private CArray<TooltipWidgetReference> _tooltipLibrariesReferences;
 		private CArray<TooltipWidgetStyledReference> _tooltipLibrariesStyledReferences;
+		private redResourceReferenceScriptToken _tooltipsLibrary;
 		private redResourceReferenceScriptToken _menuTooltipStylePath;
 		private redResourceReferenceScriptToken _hudTooltipStylePath;
 		private CArray<wCHandle<AGenericTooltipController>> _indexedTooltips;
 		private CArray<CHandle<NamedTooltipController>> _namedTooltips;
-		private redResourceReferenceScriptToken _tooltipStylePath;
 		private CHandle<inkanimProxy> _introAnim;
 
 		[Ordinal(1)] 
@@ -73,14 +72,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(7)] 
-		[RED("TooltipsLibrary")] 
-		public redResourceReferenceScriptToken TooltipsLibrary
-		{
-			get => GetProperty(ref _tooltipsLibrary);
-			set => SetProperty(ref _tooltipsLibrary, value);
-		}
-
-		[Ordinal(8)] 
 		[RED("GenericTooltipsNames")] 
 		public CArray<CName> GenericTooltipsNames
 		{
@@ -88,7 +79,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _genericTooltipsNames, value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(8)] 
 		[RED("TooltipLibrariesReferences")] 
 		public CArray<TooltipWidgetReference> TooltipLibrariesReferences
 		{
@@ -96,12 +87,20 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _tooltipLibrariesReferences, value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(9)] 
 		[RED("TooltipLibrariesStyledReferences")] 
 		public CArray<TooltipWidgetStyledReference> TooltipLibrariesStyledReferences
 		{
 			get => GetProperty(ref _tooltipLibrariesStyledReferences);
 			set => SetProperty(ref _tooltipLibrariesStyledReferences, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("TooltipsLibrary")] 
+		public redResourceReferenceScriptToken TooltipsLibrary
+		{
+			get => GetProperty(ref _tooltipsLibrary);
+			set => SetProperty(ref _tooltipsLibrary, value);
 		}
 
 		[Ordinal(11)] 
@@ -137,14 +136,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(15)] 
-		[RED("TooltipStylePath")] 
-		public redResourceReferenceScriptToken TooltipStylePath
-		{
-			get => GetProperty(ref _tooltipStylePath);
-			set => SetProperty(ref _tooltipStylePath, value);
-		}
-
-		[Ordinal(16)] 
 		[RED("introAnim")] 
 		public CHandle<inkanimProxy> IntroAnim
 		{

@@ -8,6 +8,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class questSectionNode_ConditionType : questISceneConditionType
 	{
 		private raRef<scnSceneResource> _sceneFile;
+		private CEnum<scnSceneVersionCheck> _sceneVersion;
 		private CName _sectionName;
 		private CEnum<questSceneConditionType> _type;
 
@@ -20,6 +21,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("SceneVersion")] 
+		public CEnum<scnSceneVersionCheck> SceneVersion
+		{
+			get => GetProperty(ref _sceneVersion);
+			set => SetProperty(ref _sceneVersion, value);
+		}
+
+		[Ordinal(2)] 
 		[RED("sectionName")] 
 		public CName SectionName
 		{
@@ -27,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _sectionName, value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("type")] 
 		public CEnum<questSceneConditionType> Type
 		{

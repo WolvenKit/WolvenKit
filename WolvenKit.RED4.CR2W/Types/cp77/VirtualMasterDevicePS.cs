@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private gameGetActionsContext _context;
 		private CArray<CHandle<gameDeviceComponentPS>> _connectedDevices;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("owner")] 
 		public CHandle<IScriptable> Owner
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _owner, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("globalActions")] 
 		public CArray<CHandle<gamedeviceAction>> GlobalActions
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _globalActions, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("context")] 
 		public gameGetActionsContext Context
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _context, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("connectedDevices")] 
 		public CArray<CHandle<gameDeviceComponentPS>> ConnectedDevices
 		{

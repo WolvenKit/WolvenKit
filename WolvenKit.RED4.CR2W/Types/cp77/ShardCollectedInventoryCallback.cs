@@ -7,12 +7,12 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ShardCollectedInventoryCallback : gameInventoryScriptCallback
 	{
-		private CHandle<JournalNotificationQueue> _notificationQueue;
+		private wCHandle<JournalNotificationQueue> _notificationQueue;
 		private wCHandle<gameJournalManager> _journalManager;
 
 		[Ordinal(1)] 
 		[RED("notificationQueue")] 
-		public CHandle<JournalNotificationQueue> NotificationQueue
+		public wCHandle<JournalNotificationQueue> NotificationQueue
 		{
 			get => GetProperty(ref _notificationQueue);
 			set => SetProperty(ref _notificationQueue, value);

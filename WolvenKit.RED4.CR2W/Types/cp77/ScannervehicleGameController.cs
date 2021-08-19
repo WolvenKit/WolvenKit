@@ -7,14 +7,14 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ScannervehicleGameController : BaseChunkGameController
 	{
-		private CUInt32 _vehicleNameCallbackID;
-		private CUInt32 _vehicleManufacturerCallbackID;
-		private CUInt32 _vehicleProdYearsCallbackID;
-		private CUInt32 _vehicleDriveLayoutCallbackID;
-		private CUInt32 _vehicleHorsepowerCallbackID;
-		private CUInt32 _vehicleMassCallbackID;
-		private CUInt32 _vehicleStateCallbackID;
-		private CUInt32 _vehicleInfoCallbackID;
+		private CHandle<redCallbackObject> _vehicleNameCallbackID;
+		private CHandle<redCallbackObject> _vehicleManufacturerCallbackID;
+		private CHandle<redCallbackObject> _vehicleProdYearsCallbackID;
+		private CHandle<redCallbackObject> _vehicleDriveLayoutCallbackID;
+		private CHandle<redCallbackObject> _vehicleHorsepowerCallbackID;
+		private CHandle<redCallbackObject> _vehicleMassCallbackID;
+		private CHandle<redCallbackObject> _vehicleStateCallbackID;
+		private CHandle<redCallbackObject> _vehicleInfoCallbackID;
 		private CBool _isValidVehicleManufacturer;
 		private CBool _isValidVehicleName;
 		private CBool _isValidVehicleProdYears;
@@ -41,7 +41,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(5)] 
 		[RED("vehicleNameCallbackID")] 
-		public CUInt32 VehicleNameCallbackID
+		public CHandle<redCallbackObject> VehicleNameCallbackID
 		{
 			get => GetProperty(ref _vehicleNameCallbackID);
 			set => SetProperty(ref _vehicleNameCallbackID, value);
@@ -49,7 +49,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(6)] 
 		[RED("vehicleManufacturerCallbackID")] 
-		public CUInt32 VehicleManufacturerCallbackID
+		public CHandle<redCallbackObject> VehicleManufacturerCallbackID
 		{
 			get => GetProperty(ref _vehicleManufacturerCallbackID);
 			set => SetProperty(ref _vehicleManufacturerCallbackID, value);
@@ -57,7 +57,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(7)] 
 		[RED("vehicleProdYearsCallbackID")] 
-		public CUInt32 VehicleProdYearsCallbackID
+		public CHandle<redCallbackObject> VehicleProdYearsCallbackID
 		{
 			get => GetProperty(ref _vehicleProdYearsCallbackID);
 			set => SetProperty(ref _vehicleProdYearsCallbackID, value);
@@ -65,7 +65,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(8)] 
 		[RED("vehicleDriveLayoutCallbackID")] 
-		public CUInt32 VehicleDriveLayoutCallbackID
+		public CHandle<redCallbackObject> VehicleDriveLayoutCallbackID
 		{
 			get => GetProperty(ref _vehicleDriveLayoutCallbackID);
 			set => SetProperty(ref _vehicleDriveLayoutCallbackID, value);
@@ -73,7 +73,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(9)] 
 		[RED("vehicleHorsepowerCallbackID")] 
-		public CUInt32 VehicleHorsepowerCallbackID
+		public CHandle<redCallbackObject> VehicleHorsepowerCallbackID
 		{
 			get => GetProperty(ref _vehicleHorsepowerCallbackID);
 			set => SetProperty(ref _vehicleHorsepowerCallbackID, value);
@@ -81,7 +81,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("vehicleMassCallbackID")] 
-		public CUInt32 VehicleMassCallbackID
+		public CHandle<redCallbackObject> VehicleMassCallbackID
 		{
 			get => GetProperty(ref _vehicleMassCallbackID);
 			set => SetProperty(ref _vehicleMassCallbackID, value);
@@ -89,7 +89,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("vehicleStateCallbackID")] 
-		public CUInt32 VehicleStateCallbackID
+		public CHandle<redCallbackObject> VehicleStateCallbackID
 		{
 			get => GetProperty(ref _vehicleStateCallbackID);
 			set => SetProperty(ref _vehicleStateCallbackID, value);
@@ -97,7 +97,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("vehicleInfoCallbackID")] 
-		public CUInt32 VehicleInfoCallbackID
+		public CHandle<redCallbackObject> VehicleInfoCallbackID
 		{
 			get => GetProperty(ref _vehicleInfoCallbackID);
 			set => SetProperty(ref _vehicleInfoCallbackID, value);

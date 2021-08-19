@@ -7,10 +7,10 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class netChargesWidgetGameController : gameuiHUDGameController
 	{
-		private CHandle<gameIBlackboard> _bbPlayerStats;
-		private CUInt32 _bbPlayerEventId1;
-		private CUInt32 _bbPlayerEventId2;
-		private CUInt32 _bbPlayerEventId3;
+		private wCHandle<gameIBlackboard> _bbPlayerStats;
+		private CHandle<redCallbackObject> _bbPlayerEventId1;
+		private CHandle<redCallbackObject> _bbPlayerEventId2;
+		private CHandle<redCallbackObject> _bbPlayerEventId3;
 		private wCHandle<inkTextWidget> _networkName;
 		private wCHandle<inkTextWidget> _networkStatus;
 		private CArray<wCHandle<inkCompoundWidget>> _chargesList;
@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(9)] 
 		[RED("bbPlayerStats")] 
-		public CHandle<gameIBlackboard> BbPlayerStats
+		public wCHandle<gameIBlackboard> BbPlayerStats
 		{
 			get => GetProperty(ref _bbPlayerStats);
 			set => SetProperty(ref _bbPlayerStats, value);
@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("bbPlayerEventId1")] 
-		public CUInt32 BbPlayerEventId1
+		public CHandle<redCallbackObject> BbPlayerEventId1
 		{
 			get => GetProperty(ref _bbPlayerEventId1);
 			set => SetProperty(ref _bbPlayerEventId1, value);
@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("bbPlayerEventId2")] 
-		public CUInt32 BbPlayerEventId2
+		public CHandle<redCallbackObject> BbPlayerEventId2
 		{
 			get => GetProperty(ref _bbPlayerEventId2);
 			set => SetProperty(ref _bbPlayerEventId2, value);
@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("bbPlayerEventId3")] 
-		public CUInt32 BbPlayerEventId3
+		public CHandle<redCallbackObject> BbPlayerEventId3
 		{
 			get => GetProperty(ref _bbPlayerEventId3);
 			set => SetProperty(ref _bbPlayerEventId3, value);

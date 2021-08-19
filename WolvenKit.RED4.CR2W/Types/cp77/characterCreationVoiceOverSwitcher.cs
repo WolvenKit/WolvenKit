@@ -17,7 +17,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkImageWidgetReference _selectorTexture;
 		private inkImageWidgetReference _arrowsTexture;
 		private inkWidgetReference _optionSwitchHint;
-		private CHandle<inkTextReplaceAnimationController> _translationAnimationCtrl;
+		private wCHandle<inkTextReplaceAnimationController> _translationAnimationCtrl;
 		private wCHandle<inkWidget> _selector;
 
 		[Ordinal(1)] 
@@ -102,7 +102,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("translationAnimationCtrl")] 
-		public CHandle<inkTextReplaceAnimationController> TranslationAnimationCtrl
+		public wCHandle<inkTextReplaceAnimationController> TranslationAnimationCtrl
 		{
 			get => GetProperty(ref _translationAnimationCtrl);
 			set => SetProperty(ref _translationAnimationCtrl, value);

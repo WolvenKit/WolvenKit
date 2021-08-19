@@ -7,11 +7,11 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class JukeboxBigGameController : DeviceInkGameControllerBase
 	{
-		private CUInt32 _onTogglePlayListener;
+		private CHandle<redCallbackObject> _onTogglePlayListener;
 
 		[Ordinal(16)] 
 		[RED("onTogglePlayListener")] 
-		public CUInt32 OnTogglePlayListener
+		public CHandle<redCallbackObject> OnTogglePlayListener
 		{
 			get => GetProperty(ref _onTogglePlayListener);
 			set => SetProperty(ref _onTogglePlayListener, value);

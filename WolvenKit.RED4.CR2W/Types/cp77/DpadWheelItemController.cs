@@ -25,7 +25,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _weaponTextDist;
 		private QuickSlotCommand _data;
 		private wCHandle<inkWidget> _root;
-		private CHandle<InventoryItemDisplay> _item;
+		private wCHandle<InventoryItemDisplay> _item;
 		private wCHandle<inkWidget> _itemWidget;
 		private CHandle<InventoryDataManagerV2> _inventoryDataManager;
 		private inkImageWidgetReference _highlight;
@@ -179,7 +179,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(19)] 
 		[RED("item")] 
-		public CHandle<InventoryItemDisplay> Item
+		public wCHandle<InventoryItemDisplay> Item
 		{
 			get => GetProperty(ref _item);
 			set => SetProperty(ref _item, value);

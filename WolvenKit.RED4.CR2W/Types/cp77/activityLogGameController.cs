@@ -12,8 +12,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CInt32 _maxSize;
 		private CArray<CString> _entries;
 		private inkVerticalPanelWidgetReference _panel;
-		private CUInt32 _onNewEntries;
-		private CUInt32 _onHide;
+		private CHandle<redCallbackObject> _onNewEntries;
+		private CHandle<redCallbackObject> _onHide;
 
 		[Ordinal(9)] 
 		[RED("readIndex")] 
@@ -57,7 +57,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(14)] 
 		[RED("onNewEntries")] 
-		public CUInt32 OnNewEntries
+		public CHandle<redCallbackObject> OnNewEntries
 		{
 			get => GetProperty(ref _onNewEntries);
 			set => SetProperty(ref _onNewEntries, value);
@@ -65,7 +65,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("onHide")] 
-		public CUInt32 OnHide
+		public CHandle<redCallbackObject> OnHide
 		{
 			get => GetProperty(ref _onHide);
 			set => SetProperty(ref _onHide, value);

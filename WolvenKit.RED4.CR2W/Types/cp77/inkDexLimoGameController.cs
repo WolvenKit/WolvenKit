@@ -7,15 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkDexLimoGameController : gameuiWidgetGameController
 	{
-		private CHandle<gameIBlackboard> _activeVehicleBlackboard;
-		private CUInt32 _playerVehStateId;
+		private wCHandle<gameIBlackboard> _activeVehicleBlackboard;
+		private CHandle<redCallbackObject> _playerVehStateId;
 		private wCHandle<inkVideoWidget> _screenVideoWidget;
 		private CName _screenVideoWidgetPath;
 		private redResourceReferenceScriptToken _videoPath;
 
 		[Ordinal(2)] 
 		[RED("activeVehicleBlackboard")] 
-		public CHandle<gameIBlackboard> ActiveVehicleBlackboard
+		public wCHandle<gameIBlackboard> ActiveVehicleBlackboard
 		{
 			get => GetProperty(ref _activeVehicleBlackboard);
 			set => SetProperty(ref _activeVehicleBlackboard, value);
@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(3)] 
 		[RED("playerVehStateId")] 
-		public CUInt32 PlayerVehStateId
+		public CHandle<redCallbackObject> PlayerVehStateId
 		{
 			get => GetProperty(ref _playerVehStateId);
 			set => SetProperty(ref _playerVehStateId, value);

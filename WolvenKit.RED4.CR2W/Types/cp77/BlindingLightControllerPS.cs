@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private ReflectorSFX _reflectorSFX;
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("reflectorSFX")] 
 		public ReflectorSFX ReflectorSFX
 		{

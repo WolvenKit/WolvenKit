@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _wasLethalTakedownPerformed;
 		private CBool _isPlayerCurrentlyPerformingDisposal;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("DisposalDeviceSetup")] 
 		public DisposalDeviceSetup DisposalDeviceSetup
 		{
@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _disposalDeviceSetup, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("distractionSetup")] 
 		public DistractionSetup DistractionSetup
 		{
@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _distractionSetup, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("explosionSetup")] 
 		public DistractionSetup ExplosionSetup
 		{
@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _explosionSetup, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("isDistractionDisabled")] 
 		public CBool IsDistractionDisabled
 		{
@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isDistractionDisabled, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("wasActivated")] 
 		public CBool WasActivated
 		{
@@ -55,7 +55,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _wasActivated, value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("wasLethalTakedownPerformed")] 
 		public CBool WasLethalTakedownPerformed
 		{
@@ -63,7 +63,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _wasLethalTakedownPerformed, value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(110)] 
 		[RED("isPlayerCurrentlyPerformingDisposal")] 
 		public CBool IsPlayerCurrentlyPerformingDisposal
 		{

@@ -10,14 +10,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkCompoundWidgetReference _bracketsContainer;
 		private inkCompoundWidgetReference _tutorialOverlayContainer;
 		private CName _bracketLibraryID;
-		private CHandle<gameIBlackboard> _blackboard;
+		private wCHandle<gameIBlackboard> _blackboard;
 		private CHandle<UIGameDataDef> _bbDefinition;
 		private wCHandle<gameJournalManager> _journalManager;
-		private CHandle<gameIBlackboard> _uiSystemBB;
+		private wCHandle<gameIBlackboard> _uiSystemBB;
 		private CHandle<UI_SystemDef> _uiSystemBBDef;
-		private CUInt32 _uiSystemId;
-		private CUInt32 _isShownBbId;
-		private CUInt32 _dataBbId;
+		private CHandle<redCallbackObject> _uiSystemId;
+		private CHandle<redCallbackObject> _isShownBbId;
+		private CHandle<redCallbackObject> _dataBbId;
 		private CBool _tutorialOnHold;
 		private gamePopupData _tutorialData;
 		private gamePopupSettings _tutorialSettings;
@@ -27,6 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<inkGameNotificationToken> _vehiclesManagerToken;
 		private CHandle<inkGameNotificationToken> _vehicleRadioToken;
 		private CHandle<inkGameNotificationToken> _codexToken;
+		private CHandle<inkGameNotificationToken> _ponrToken;
 
 		[Ordinal(2)] 
 		[RED("bracketsContainer")] 
@@ -54,7 +55,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(5)] 
 		[RED("blackboard")] 
-		public CHandle<gameIBlackboard> Blackboard
+		public wCHandle<gameIBlackboard> Blackboard
 		{
 			get => GetProperty(ref _blackboard);
 			set => SetProperty(ref _blackboard, value);
@@ -78,7 +79,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(8)] 
 		[RED("uiSystemBB")] 
-		public CHandle<gameIBlackboard> UiSystemBB
+		public wCHandle<gameIBlackboard> UiSystemBB
 		{
 			get => GetProperty(ref _uiSystemBB);
 			set => SetProperty(ref _uiSystemBB, value);
@@ -94,7 +95,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("uiSystemId")] 
-		public CUInt32 UiSystemId
+		public CHandle<redCallbackObject> UiSystemId
 		{
 			get => GetProperty(ref _uiSystemId);
 			set => SetProperty(ref _uiSystemId, value);
@@ -102,7 +103,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("isShownBbId")] 
-		public CUInt32 IsShownBbId
+		public CHandle<redCallbackObject> IsShownBbId
 		{
 			get => GetProperty(ref _isShownBbId);
 			set => SetProperty(ref _isShownBbId, value);
@@ -110,7 +111,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("dataBbId")] 
-		public CUInt32 DataBbId
+		public CHandle<redCallbackObject> DataBbId
 		{
 			get => GetProperty(ref _dataBbId);
 			set => SetProperty(ref _dataBbId, value);
@@ -186,6 +187,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _codexToken);
 			set => SetProperty(ref _codexToken, value);
+		}
+
+		[Ordinal(22)] 
+		[RED("ponrToken")] 
+		public CHandle<inkGameNotificationToken> PonrToken
+		{
+			get => GetProperty(ref _ponrToken);
+			set => SetProperty(ref _ponrToken, value);
 		}
 
 		public gameuiPopupsManager(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

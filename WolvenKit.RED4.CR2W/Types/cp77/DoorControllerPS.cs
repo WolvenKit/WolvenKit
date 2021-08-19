@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isPlayerAuthorised;
 		private CArray<entEntityID> _openingTokens;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("doorProperties")] 
 		public DoorSetup DoorProperties
 		{
@@ -26,7 +26,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _doorProperties, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("doorSkillChecks")] 
 		public CHandle<EngDemoContainer> DoorSkillChecks
 		{
@@ -34,7 +34,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _doorSkillChecks, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("isOpened")] 
 		public CBool IsOpened
 		{
@@ -42,7 +42,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isOpened, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("isLocked")] 
 		public CBool IsLocked
 		{
@@ -50,7 +50,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isLocked, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("isSealed")] 
 		public CBool IsSealed
 		{
@@ -58,7 +58,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isSealed, value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("alarmRaised")] 
 		public CBool AlarmRaised
 		{
@@ -66,7 +66,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _alarmRaised, value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(110)] 
 		[RED("isBusy")] 
 		public CBool IsBusy
 		{
@@ -74,7 +74,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isBusy, value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(111)] 
 		[RED("isLiftDoor")] 
 		public CBool IsLiftDoor
 		{
@@ -82,7 +82,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isLiftDoor, value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(112)] 
 		[RED("isPlayerAuthorised")] 
 		public CBool IsPlayerAuthorised
 		{
@@ -90,7 +90,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isPlayerAuthorised, value);
 		}
 
-		[Ordinal(112)] 
+		[Ordinal(113)] 
 		[RED("openingTokens")] 
 		public CArray<entEntityID> OpeningTokens
 		{

@@ -8,9 +8,9 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class OnscreenMessageGameController : gameuiHUDGameController
 	{
 		private wCHandle<inkWidget> _root;
-		private CHandle<gameIBlackboard> _blackboard;
+		private wCHandle<gameIBlackboard> _blackboard;
 		private CHandle<UI_NotificationsDef> _blackboardDef;
-		private CUInt32 _screenMessageUpdateCallbackId;
+		private CHandle<redCallbackObject> _screenMessageUpdateCallbackId;
 		private gameSimpleScreenMessage _screenMessage;
 		private inkTextWidgetReference _mainTextWidget;
 		private CHandle<inkanimDefinition> _blinkingAnim;
@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("blackboard")] 
-		public CHandle<gameIBlackboard> Blackboard
+		public wCHandle<gameIBlackboard> Blackboard
 		{
 			get => GetProperty(ref _blackboard);
 			set => SetProperty(ref _blackboard, value);
@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("screenMessageUpdateCallbackId")] 
-		public CUInt32 ScreenMessageUpdateCallbackId
+		public CHandle<redCallbackObject> ScreenMessageUpdateCallbackId
 		{
 			get => GetProperty(ref _screenMessageUpdateCallbackId);
 			set => SetProperty(ref _screenMessageUpdateCallbackId, value);

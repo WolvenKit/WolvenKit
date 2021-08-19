@@ -12,6 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<CEnum<gamePSMMelee>> _meleeStates;
 		private CArray<CEnum<gamePSMZones>> _zoneStates;
 		private CArray<CEnum<gamePSMBodyCarrying>> _bodyCarryStates;
+		private CArray<CEnum<gamePSMCombat>> _combatStates;
 
 		[Ordinal(0)] 
 		[RED("locomotionStates")] 
@@ -51,6 +52,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _bodyCarryStates);
 			set => SetProperty(ref _bodyCarryStates, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("combatStates")] 
+		public CArray<CEnum<gamePSMCombat>> CombatStates
+		{
+			get => GetProperty(ref _combatStates);
+			set => SetProperty(ref _combatStates, value);
 		}
 
 		public AIActionPlayerStates(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

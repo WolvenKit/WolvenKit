@@ -7,16 +7,17 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class AISpotPersistentData : CVariable
 	{
-		private WorldTransform _worldTransform;
+		private WorldPosition _worldPosition;
 		private worldGlobalNodeID _globalNodeId;
+		private CFloat _yaw;
 		private CBool _isEnabled;
 
 		[Ordinal(0)] 
-		[RED("worldTransform")] 
-		public WorldTransform WorldTransform
+		[RED("worldPosition")] 
+		public WorldPosition WorldPosition
 		{
-			get => GetProperty(ref _worldTransform);
-			set => SetProperty(ref _worldTransform, value);
+			get => GetProperty(ref _worldPosition);
+			set => SetProperty(ref _worldPosition, value);
 		}
 
 		[Ordinal(1)] 
@@ -28,6 +29,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("yaw")] 
+		public CFloat Yaw
+		{
+			get => GetProperty(ref _yaw);
+			set => SetProperty(ref _yaw, value);
+		}
+
+		[Ordinal(3)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{

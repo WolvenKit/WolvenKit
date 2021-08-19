@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<InventoryItemPreviewData> _data;
 		private CBool _isMouseDown;
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("itemNameText")] 
 		public inkTextWidgetReference ItemNameText
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _itemNameText, value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("itemLevelText")] 
 		public inkTextWidgetReference ItemLevelText
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _itemLevelText, value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("itemRarityWidget")] 
 		public inkWidgetReference ItemRarityWidget
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _itemRarityWidget, value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("data")] 
 		public CHandle<InventoryItemPreviewData> Data
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _data, value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("isMouseDown")] 
 		public CBool IsMouseDown
 		{

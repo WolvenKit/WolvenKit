@@ -39,6 +39,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<inkGameNotificationData> _notificationUserData;
 		private CHandle<inkGameNotificationToken> _notificationToken;
 		private CHandle<inkanimProxy> _loopAnimproxy;
+		private CHandle<inkanimProxy> _uiVisiblityFadeAnim;
 
 		[Ordinal(2)] 
 		[RED("SetAttributeOptionEnabled")] 
@@ -294,6 +295,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _loopAnimproxy);
 			set => SetProperty(ref _loopAnimproxy, value);
+		}
+
+		[Ordinal(34)] 
+		[RED("uiVisiblityFadeAnim")] 
+		public CHandle<inkanimProxy> UiVisiblityFadeAnim
+		{
+			get => GetProperty(ref _uiVisiblityFadeAnim);
+			set => SetProperty(ref _uiVisiblityFadeAnim, value);
 		}
 
 		public gameuiPhotoModeMenuController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

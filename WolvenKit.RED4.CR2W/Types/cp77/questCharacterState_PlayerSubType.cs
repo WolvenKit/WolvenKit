@@ -19,6 +19,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CEnum<gamePSMVehicle> _vehicleState;
 		private CEnum<questEComparisonTypeEquality> _takedownStateComparisonType;
 		private CEnum<gamePSMTakedown> _takedownState;
+		private CEnum<questEComparisonTypeEquality> _swimmingStateComparisonType;
+		private CEnum<gamePSMSwimming> _swimmingState;
 
 		[Ordinal(0)] 
 		[RED("locomotionComparisonType")] 
@@ -114,6 +116,22 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _takedownState);
 			set => SetProperty(ref _takedownState, value);
+		}
+
+		[Ordinal(12)] 
+		[RED("swimmingStateComparisonType")] 
+		public CEnum<questEComparisonTypeEquality> SwimmingStateComparisonType
+		{
+			get => GetProperty(ref _swimmingStateComparisonType);
+			set => SetProperty(ref _swimmingStateComparisonType, value);
+		}
+
+		[Ordinal(13)] 
+		[RED("swimmingState")] 
+		public CEnum<gamePSMSwimming> SwimmingState
+		{
+			get => GetProperty(ref _swimmingState);
+			set => SetProperty(ref _swimmingState, value);
 		}
 
 		public questCharacterState_PlayerSubType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

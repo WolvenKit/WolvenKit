@@ -22,6 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CName _headerLibraryID;
 		private CName _boldLibraryID;
 		private CName _basicLibraryID;
+		private CName _basicTranslatableLibraryID;
 		private CFloat _topCreditsMargin;
 		private CFloat _bottomCreditsMargin;
 		private CFloat _startPosition;
@@ -152,6 +153,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(17)] 
+		[RED("basicTranslatableLibraryID")] 
+		public CName BasicTranslatableLibraryID
+		{
+			get => GetProperty(ref _basicTranslatableLibraryID);
+			set => SetProperty(ref _basicTranslatableLibraryID, value);
+		}
+
+		[Ordinal(18)] 
 		[RED("topCreditsMargin")] 
 		public CFloat TopCreditsMargin
 		{
@@ -159,7 +168,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _topCreditsMargin, value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("bottomCreditsMargin")] 
 		public CFloat BottomCreditsMargin
 		{
@@ -167,7 +176,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bottomCreditsMargin, value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("startPosition")] 
 		public CFloat StartPosition
 		{
@@ -175,7 +184,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _startPosition, value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("subtitlesContainer")] 
 		public inkCompoundWidgetReference SubtitlesContainer
 		{
@@ -183,7 +192,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _subtitlesContainer, value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("subtitlesLibraryPath")] 
 		public raRef<CResource> SubtitlesLibraryPath
 		{
@@ -191,7 +200,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _subtitlesLibraryPath, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("shouldShowRewardPrompt")] 
 		public CBool ShouldShowRewardPrompt
 		{
@@ -199,7 +208,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shouldShowRewardPrompt, value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("isInFinalBoardsMode")] 
 		public CBool IsInFinalBoardsMode
 		{
@@ -207,7 +216,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isInFinalBoardsMode, value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("exitNotificationDisplayTime")] 
 		public CFloat ExitNotificationDisplayTime
 		{

@@ -9,10 +9,10 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private inkTextWidgetReference _value;
 		private wCHandle<inkWidget> _rootWidget;
-		private CHandle<gameIBlackboard> _timerBB;
+		private wCHandle<gameIBlackboard> _timerBB;
 		private CHandle<UIGameDataDef> _timerDef;
-		private CUInt32 _activeBBID;
-		private CUInt32 _progressBBID;
+		private CHandle<redCallbackObject> _activeBBID;
+		private CHandle<redCallbackObject> _progressBBID;
 
 		[Ordinal(9)] 
 		[RED("value")] 
@@ -32,7 +32,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("timerBB")] 
-		public CHandle<gameIBlackboard> TimerBB
+		public wCHandle<gameIBlackboard> TimerBB
 		{
 			get => GetProperty(ref _timerBB);
 			set => SetProperty(ref _timerBB, value);
@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("activeBBID")] 
-		public CUInt32 ActiveBBID
+		public CHandle<redCallbackObject> ActiveBBID
 		{
 			get => GetProperty(ref _activeBBID);
 			set => SetProperty(ref _activeBBID, value);
@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(14)] 
 		[RED("progressBBID")] 
-		public CUInt32 ProgressBBID
+		public CHandle<redCallbackObject> ProgressBBID
 		{
 			get => GetProperty(ref _progressBBID);
 			set => SetProperty(ref _progressBBID, value);

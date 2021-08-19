@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CBool _isCombatGadgetActive;
 
-		[Ordinal(57)] 
+		[Ordinal(62)] 
 		[RED("isCombatGadgetActive")] 
 		public CBool IsCombatGadgetActive
 		{

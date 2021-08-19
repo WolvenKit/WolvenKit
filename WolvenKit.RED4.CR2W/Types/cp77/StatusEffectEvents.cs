@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<gamedataStatusEffectPlayerData_Record> _playerStatusEffectRecordData;
 		private CHandle<AnimFeature_StatusEffect> _animFeatureStatusEffect;
 
-		[Ordinal(0)] 
+		[Ordinal(3)] 
 		[RED("statusEffectRecord")] 
 		public wCHandle<gamedataStatusEffect_Record> StatusEffectRecord
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _statusEffectRecord, value);
 		}
 
-		[Ordinal(1)] 
+		[Ordinal(4)] 
 		[RED("playerStatusEffectRecordData")] 
 		public wCHandle<gamedataStatusEffectPlayerData_Record> PlayerStatusEffectRecordData
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerStatusEffectRecordData, value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(5)] 
 		[RED("animFeatureStatusEffect")] 
 		public CHandle<AnimFeature_StatusEffect> AnimFeatureStatusEffect
 		{

@@ -17,7 +17,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private gameDelayID _shortGlitchDelayID;
 		private CBool _isTVMoving;
 
-		[Ordinal(96)] 
+		[Ordinal(97)] 
 		[RED("channels")] 
 		public CArray<STvChannel> Channels
 		{
@@ -25,7 +25,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _channels, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(98)] 
 		[RED("initialActiveChannel")] 
 		public CInt32 InitialActiveChannel
 		{
@@ -33,7 +33,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _initialActiveChannel, value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(99)] 
 		[RED("securedText")] 
 		public CString SecuredText
 		{
@@ -41,7 +41,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _securedText, value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(100)] 
 		[RED("isInteractive")] 
 		public CBool IsInteractive
 		{
@@ -49,7 +49,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isInteractive, value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(101)] 
 		[RED("muteInterface")] 
 		public CBool MuteInterface
 		{
@@ -57,7 +57,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _muteInterface, value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(102)] 
 		[RED("useWhiteNoiseFX")] 
 		public CBool UseWhiteNoiseFX
 		{
@@ -65,7 +65,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _useWhiteNoiseFX, value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(103)] 
 		[RED("isShortGlitchActive")] 
 		public CBool IsShortGlitchActive
 		{
@@ -73,7 +73,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isShortGlitchActive, value);
 		}
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("shortGlitchDelayID")] 
 		public gameDelayID ShortGlitchDelayID
 		{
@@ -81,7 +81,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shortGlitchDelayID, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("isTVMoving")] 
 		public CBool IsTVMoving
 		{

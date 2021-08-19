@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkCompoundWidgetReference _gridList;
 		private inkTextWidgetReference _label;
 		private CInt32 _gridWidth;
-		private CArray<CHandle<InventoryItemDisplayController>> _gridData;
+		private CArray<wCHandle<InventoryItemDisplayController>> _gridData;
 
 		[Ordinal(1)] 
 		[RED("gridList")] 
@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(4)] 
 		[RED("gridData")] 
-		public CArray<CHandle<InventoryItemDisplayController>> GridData
+		public CArray<wCHandle<InventoryItemDisplayController>> GridData
 		{
 			get => GetProperty(ref _gridData);
 			set => SetProperty(ref _gridData, value);

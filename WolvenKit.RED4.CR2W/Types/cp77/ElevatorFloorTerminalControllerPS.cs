@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _hasDirectInteration;
 		private CBool _isElevatorAtThisFloor;
 
-		[Ordinal(113)] 
+		[Ordinal(114)] 
 		[RED("elevatorFloorSetup")] 
 		public ElevatorFloorSetup ElevatorFloorSetup
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _elevatorFloorSetup, value);
 		}
 
-		[Ordinal(114)] 
+		[Ordinal(115)] 
 		[RED("hasDirectInteration")] 
 		public CBool HasDirectInteration
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hasDirectInteration, value);
 		}
 
-		[Ordinal(115)] 
+		[Ordinal(116)] 
 		[RED("isElevatorAtThisFloor")] 
 		public CBool IsElevatorAtThisFloor
 		{

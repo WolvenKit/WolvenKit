@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CArray<gameItemID> _storedItems;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("storedItems")] 
 		public CArray<gameItemID> StoredItems
 		{

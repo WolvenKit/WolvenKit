@@ -13,6 +13,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CEnum<questPhoneCallMode> _mode;
 		private NodeRef _prefabNodeRef;
 		private CBool _applyPhoneRestriction;
+		private CBool _isRejectable;
 
 		[Ordinal(0)] 
 		[RED("caller")] 
@@ -60,6 +61,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _applyPhoneRestriction);
 			set => SetProperty(ref _applyPhoneRestriction, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("isRejectable")] 
+		public CBool IsRejectable
+		{
+			get => GetProperty(ref _isRejectable);
+			set => SetProperty(ref _isRejectable, value);
 		}
 
 		public questCallContact_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

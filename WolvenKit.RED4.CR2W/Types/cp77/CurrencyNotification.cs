@@ -10,13 +10,13 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CName _currencyUpdateAnimation;
 		private inkTextWidgetReference _currencyDiff;
 		private inkTextWidgetReference _currencyTotal;
-		private CHandle<inkTextValueProgressAnimationController> _diff_animator;
-		private CHandle<inkTextValueProgressAnimationController> _total_animator;
+		private wCHandle<inkTextValueProgressAnimationController> _diff_animator;
+		private wCHandle<inkTextValueProgressAnimationController> _total_animator;
 		private CHandle<gameuiCurrencyUpdateNotificationViewData> _currencyData;
 		private CHandle<inkanimProxy> _animProxy;
-		private CHandle<gameIBlackboard> _blackboard;
+		private wCHandle<gameIBlackboard> _blackboard;
 		private CHandle<UI_SystemDef> _uiSystemBB;
-		private CUInt32 _uiSystemId;
+		private CHandle<redCallbackObject> _uiSystemId;
 
 		[Ordinal(12)] 
 		[RED("CurrencyUpdateAnimation")] 
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("diff_animator")] 
-		public CHandle<inkTextValueProgressAnimationController> Diff_animator
+		public wCHandle<inkTextValueProgressAnimationController> Diff_animator
 		{
 			get => GetProperty(ref _diff_animator);
 			set => SetProperty(ref _diff_animator, value);
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(16)] 
 		[RED("total_animator")] 
-		public CHandle<inkTextValueProgressAnimationController> Total_animator
+		public wCHandle<inkTextValueProgressAnimationController> Total_animator
 		{
 			get => GetProperty(ref _total_animator);
 			set => SetProperty(ref _total_animator, value);
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(19)] 
 		[RED("blackboard")] 
-		public CHandle<gameIBlackboard> Blackboard
+		public wCHandle<gameIBlackboard> Blackboard
 		{
 			get => GetProperty(ref _blackboard);
 			set => SetProperty(ref _blackboard, value);
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(21)] 
 		[RED("uiSystemId")] 
-		public CUInt32 UiSystemId
+		public CHandle<redCallbackObject> UiSystemId
 		{
 			get => GetProperty(ref _uiSystemId);
 			set => SetProperty(ref _uiSystemId, value);

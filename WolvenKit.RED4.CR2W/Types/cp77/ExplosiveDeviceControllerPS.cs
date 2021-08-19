@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _provideExplodeAction;
 		private CBool _doExplosiveEngineerLogic;
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("explosiveSkillChecks")] 
 		public CHandle<EngDemoContainer> ExplosiveSkillChecks
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _explosiveSkillChecks, value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(110)] 
 		[RED("explosionDefinition")] 
 		public CArray<ExplosiveDeviceResourceDefinition> ExplosionDefinition
 		{
@@ -35,7 +35,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _explosionDefinition, value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(111)] 
 		[RED("explosiveWithQhacks")] 
 		public CBool ExplosiveWithQhacks
 		{
@@ -43,7 +43,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _explosiveWithQhacks, value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(112)] 
 		[RED("HealthDecay")] 
 		public CFloat HealthDecay
 		{
@@ -51,7 +51,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _healthDecay, value);
 		}
 
-		[Ordinal(112)] 
+		[Ordinal(113)] 
 		[RED("timeToMeshSwap")] 
 		public CFloat TimeToMeshSwap
 		{
@@ -59,7 +59,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _timeToMeshSwap, value);
 		}
 
-		[Ordinal(113)] 
+		[Ordinal(114)] 
 		[RED("shouldDistractionHitVFXIgnoreHitPosition")] 
 		public CBool ShouldDistractionHitVFXIgnoreHitPosition
 		{
@@ -67,7 +67,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shouldDistractionHitVFXIgnoreHitPosition, value);
 		}
 
-		[Ordinal(114)] 
+		[Ordinal(115)] 
 		[RED("canBeDisabledWithQhacks")] 
 		public CBool CanBeDisabledWithQhacks
 		{
@@ -75,7 +75,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _canBeDisabledWithQhacks, value);
 		}
 
-		[Ordinal(115)] 
+		[Ordinal(116)] 
 		[RED("disarmed")] 
 		public CBool Disarmed
 		{
@@ -83,7 +83,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _disarmed, value);
 		}
 
-		[Ordinal(116)] 
+		[Ordinal(117)] 
 		[RED("exploded")] 
 		public CBool Exploded
 		{
@@ -91,7 +91,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _exploded, value);
 		}
 
-		[Ordinal(117)] 
+		[Ordinal(118)] 
 		[RED("provideExplodeAction")] 
 		public CBool ProvideExplodeAction
 		{
@@ -99,7 +99,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _provideExplodeAction, value);
 		}
 
-		[Ordinal(118)] 
+		[Ordinal(119)] 
 		[RED("doExplosiveEngineerLogic")] 
 		public CBool DoExplosiveEngineerLogic
 		{

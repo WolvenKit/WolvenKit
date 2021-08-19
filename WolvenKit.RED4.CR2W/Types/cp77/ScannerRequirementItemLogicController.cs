@@ -10,8 +10,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _requirementNameText;
 		private inkTextWidgetReference _requirementLevelText;
 		private inkImageWidgetReference _requirementIcon;
-		private UIInteractionSkillCheck _requirementStruct;
 		private CEnum<EDeviceChallengeSkill> _skillCheck;
+		private CHandle<RequirementUserData> _requirementUserData;
 
 		[Ordinal(1)] 
 		[RED("requirementNameText")] 
@@ -38,19 +38,19 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(4)] 
-		[RED("requirementStruct")] 
-		public UIInteractionSkillCheck RequirementStruct
-		{
-			get => GetProperty(ref _requirementStruct);
-			set => SetProperty(ref _requirementStruct, value);
-		}
-
-		[Ordinal(5)] 
 		[RED("skillCheck")] 
 		public CEnum<EDeviceChallengeSkill> SkillCheck
 		{
 			get => GetProperty(ref _skillCheck);
 			set => SetProperty(ref _skillCheck, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("requirementUserData")] 
+		public CHandle<RequirementUserData> RequirementUserData
+		{
+			get => GetProperty(ref _requirementUserData);
+			set => SetProperty(ref _requirementUserData, value);
 		}
 
 		public ScannerRequirementItemLogicController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

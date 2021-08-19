@@ -12,6 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _useEnterAnim;
 		private CBool _useExitAnim;
 		private CBool _forceEmptyHands;
+		private gameMotionConstrainedTierDataParams _motionConstrainedTierDataParams;
 
 		[Ordinal(0)] 
 		[RED("tier")] 
@@ -51,6 +52,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _forceEmptyHands);
 			set => SetProperty(ref _forceEmptyHands, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("motionConstrainedTierDataParams")] 
+		public gameMotionConstrainedTierDataParams MotionConstrainedTierDataParams
+		{
+			get => GetProperty(ref _motionConstrainedTierDataParams);
+			set => SetProperty(ref _motionConstrainedTierDataParams, value);
 		}
 
 		public questSetTier_NodeType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

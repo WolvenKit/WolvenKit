@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private TweakDBID _thumbnailWidgetRecord;
 		private CArray<CName> _performedCustomActionsIDs;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("isRecognizableBySenses")] 
 		public CBool IsRecognizableBySenses
 		{
@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isRecognizableBySenses, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("genericDeviceActionsSetup")] 
 		public GenericDeviceActionsData GenericDeviceActionsSetup
 		{
@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _genericDeviceActionsSetup, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("genericDeviceSkillChecks")] 
 		public CHandle<GenericContainer> GenericDeviceSkillChecks
 		{
@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _genericDeviceSkillChecks, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("deviceWidgetRecord")] 
 		public TweakDBID DeviceWidgetRecord
 		{
@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _deviceWidgetRecord, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("thumbnailWidgetRecord")] 
 		public TweakDBID ThumbnailWidgetRecord
 		{
@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _thumbnailWidgetRecord, value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("performedCustomActionsIDs")] 
 		public CArray<CName> PerformedCustomActionsIDs
 		{

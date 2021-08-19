@@ -24,18 +24,18 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<gameStatViewData> _dPSStatsData;
 		private CArray<gameStatViewData> _armorStatsData;
 		private CArray<gameStatViewData> _otherStatsData;
-		private CHandle<gameIBlackboard> _playerStatsBlackboard;
-		private CUInt32 _currencyListener;
-		private CUInt32 _characterCredListener;
-		private CUInt32 _characterLevelListener;
-		private CUInt32 _characterCurrentXPListener;
-		private CUInt32 _characterCredPointsListener;
+		private wCHandle<gameIBlackboard> _playerStatsBlackboard;
+		private CHandle<redCallbackObject> _currencyListener;
+		private CHandle<redCallbackObject> _characterCredListener;
+		private CHandle<redCallbackObject> _characterLevelListener;
+		private CHandle<redCallbackObject> _characterCurrentXPListener;
+		private CHandle<redCallbackObject> _characterCredPointsListener;
 		private CHandle<PlayerDevelopmentSystem> _pDS;
-		private CHandle<StatsProgressController> _levelController;
-		private CHandle<StatsProgressController> _streetCredController;
-		private CHandle<StatsDetailListController> _detailListController;
-		private CHandle<StatsStreetCredReward> _statsStreetCredReward;
-		private CHandle<StatsPlayTimeController> _statsPlayTimeController;
+		private wCHandle<StatsProgressController> _levelController;
+		private wCHandle<StatsProgressController> _streetCredController;
+		private wCHandle<StatsDetailListController> _detailListController;
+		private wCHandle<StatsStreetCredReward> _statsStreetCredReward;
+		private wCHandle<StatsPlayTimeController> _statsPlayTimeController;
 		private CHandle<PreviousMenuData> _previousMenuData;
 		private wCHandle<ButtonHints> _buttonHintsController;
 
@@ -177,7 +177,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(20)] 
 		[RED("playerStatsBlackboard")] 
-		public CHandle<gameIBlackboard> PlayerStatsBlackboard
+		public wCHandle<gameIBlackboard> PlayerStatsBlackboard
 		{
 			get => GetProperty(ref _playerStatsBlackboard);
 			set => SetProperty(ref _playerStatsBlackboard, value);
@@ -185,7 +185,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(21)] 
 		[RED("currencyListener")] 
-		public CUInt32 CurrencyListener
+		public CHandle<redCallbackObject> CurrencyListener
 		{
 			get => GetProperty(ref _currencyListener);
 			set => SetProperty(ref _currencyListener, value);
@@ -193,7 +193,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(22)] 
 		[RED("characterCredListener")] 
-		public CUInt32 CharacterCredListener
+		public CHandle<redCallbackObject> CharacterCredListener
 		{
 			get => GetProperty(ref _characterCredListener);
 			set => SetProperty(ref _characterCredListener, value);
@@ -201,7 +201,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(23)] 
 		[RED("characterLevelListener")] 
-		public CUInt32 CharacterLevelListener
+		public CHandle<redCallbackObject> CharacterLevelListener
 		{
 			get => GetProperty(ref _characterLevelListener);
 			set => SetProperty(ref _characterLevelListener, value);
@@ -209,7 +209,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(24)] 
 		[RED("characterCurrentXPListener")] 
-		public CUInt32 CharacterCurrentXPListener
+		public CHandle<redCallbackObject> CharacterCurrentXPListener
 		{
 			get => GetProperty(ref _characterCurrentXPListener);
 			set => SetProperty(ref _characterCurrentXPListener, value);
@@ -217,7 +217,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(25)] 
 		[RED("characterCredPointsListener")] 
-		public CUInt32 CharacterCredPointsListener
+		public CHandle<redCallbackObject> CharacterCredPointsListener
 		{
 			get => GetProperty(ref _characterCredPointsListener);
 			set => SetProperty(ref _characterCredPointsListener, value);
@@ -233,7 +233,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(27)] 
 		[RED("levelController")] 
-		public CHandle<StatsProgressController> LevelController
+		public wCHandle<StatsProgressController> LevelController
 		{
 			get => GetProperty(ref _levelController);
 			set => SetProperty(ref _levelController, value);
@@ -241,7 +241,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(28)] 
 		[RED("streetCredController")] 
-		public CHandle<StatsProgressController> StreetCredController
+		public wCHandle<StatsProgressController> StreetCredController
 		{
 			get => GetProperty(ref _streetCredController);
 			set => SetProperty(ref _streetCredController, value);
@@ -249,7 +249,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(29)] 
 		[RED("detailListController")] 
-		public CHandle<StatsDetailListController> DetailListController
+		public wCHandle<StatsDetailListController> DetailListController
 		{
 			get => GetProperty(ref _detailListController);
 			set => SetProperty(ref _detailListController, value);
@@ -257,7 +257,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(30)] 
 		[RED("statsStreetCredReward")] 
-		public CHandle<StatsStreetCredReward> StatsStreetCredReward
+		public wCHandle<StatsStreetCredReward> StatsStreetCredReward
 		{
 			get => GetProperty(ref _statsStreetCredReward);
 			set => SetProperty(ref _statsStreetCredReward, value);
@@ -265,7 +265,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(31)] 
 		[RED("statsPlayTimeController")] 
-		public CHandle<StatsPlayTimeController> StatsPlayTimeController
+		public wCHandle<StatsPlayTimeController> StatsPlayTimeController
 		{
 			get => GetProperty(ref _statsPlayTimeController);
 			set => SetProperty(ref _statsPlayTimeController, value);

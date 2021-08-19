@@ -15,6 +15,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private Vector2 _faceDownStartPosition;
 		private wCHandle<gameObject> _playerPuppet;
 		private CFloat _warpDistance;
+		private CFloat _alitimeterValue;
+		private CFloat _precisionEpsilon;
 
 		[Ordinal(1)] 
 		[RED("faceUp")] 
@@ -78,6 +80,22 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _warpDistance);
 			set => SetProperty(ref _warpDistance, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("alitimeterValue")] 
+		public CFloat AlitimeterValue
+		{
+			get => GetProperty(ref _alitimeterValue);
+			set => SetProperty(ref _alitimeterValue, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("precisionEpsilon")] 
+		public CFloat PrecisionEpsilon
+		{
+			get => GetProperty(ref _precisionEpsilon);
+			set => SetProperty(ref _precisionEpsilon, value);
 		}
 
 		public AltimeterController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

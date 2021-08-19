@@ -10,7 +10,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _itemNameText;
 		private inkTextWidgetReference _itemRarityText;
 		private inkWidgetReference _rarityBars;
-		private inkTextWidgetReference _itemLevelText;
 		private inkCompoundWidgetReference _categoriesWrapper;
 		private inkCompoundWidgetReference _topContainer;
 		private inkCompoundWidgetReference _headerContainer;
@@ -32,7 +31,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkImageWidgetReference _itemIconImage;
 		private inkWidgetReference _itemAttributeRequirements;
 		private inkTextWidgetReference _itemAttributeRequirementsText;
-		private CHandle<LevelBarsController> _rarityBarsController;
+		private inkImageWidgetReference _iconicLines;
+		private wCHandle<LevelBarsController> _rarityBarsController;
 		private CHandle<InventoryTooltipData> _data;
 		private CHandle<inkanimProxy> _animProxy;
 
@@ -61,14 +61,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(5)] 
-		[RED("itemLevelText")] 
-		public inkTextWidgetReference ItemLevelText
-		{
-			get => GetProperty(ref _itemLevelText);
-			set => SetProperty(ref _itemLevelText, value);
-		}
-
-		[Ordinal(6)] 
 		[RED("categoriesWrapper")] 
 		public inkCompoundWidgetReference CategoriesWrapper
 		{
@@ -76,7 +68,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _categoriesWrapper, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(6)] 
 		[RED("topContainer")] 
 		public inkCompoundWidgetReference TopContainer
 		{
@@ -84,7 +76,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _topContainer, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(7)] 
 		[RED("headerContainer")] 
 		public inkCompoundWidgetReference HeaderContainer
 		{
@@ -92,7 +84,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _headerContainer, value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(8)] 
 		[RED("statsContainer")] 
 		public inkCompoundWidgetReference StatsContainer
 		{
@@ -100,7 +92,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _statsContainer, value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(9)] 
 		[RED("descriptionContainer")] 
 		public inkCompoundWidgetReference DescriptionContainer
 		{
@@ -108,7 +100,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _descriptionContainer, value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(10)] 
 		[RED("bottomContainer")] 
 		public inkCompoundWidgetReference BottomContainer
 		{
@@ -116,7 +108,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bottomContainer, value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(11)] 
 		[RED("statsList")] 
 		public inkCompoundWidgetReference StatsList
 		{
@@ -124,7 +116,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _statsList, value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(12)] 
 		[RED("priceContainer")] 
 		public inkCompoundWidgetReference PriceContainer
 		{
@@ -132,7 +124,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _priceContainer, value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(13)] 
 		[RED("descriptionText")] 
 		public inkTextWidgetReference DescriptionText
 		{
@@ -140,7 +132,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _descriptionText, value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(14)] 
 		[RED("priceText")] 
 		public inkTextWidgetReference PriceText
 		{
@@ -148,7 +140,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _priceText, value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(15)] 
 		[RED("equipedWrapper")] 
 		public inkWidgetReference EquipedWrapper
 		{
@@ -156,7 +148,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _equipedWrapper, value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(16)] 
 		[RED("itemTypeText")] 
 		public inkTextWidgetReference ItemTypeText
 		{
@@ -164,7 +156,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _itemTypeText, value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(17)] 
 		[RED("itemWeightWrapper")] 
 		public inkWidgetReference ItemWeightWrapper
 		{
@@ -172,7 +164,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _itemWeightWrapper, value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(18)] 
 		[RED("itemWeightText")] 
 		public inkTextWidgetReference ItemWeightText
 		{
@@ -180,7 +172,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _itemWeightText, value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(19)] 
 		[RED("cybderdeckBaseMemoryValue")] 
 		public inkTextWidgetReference CybderdeckBaseMemoryValue
 		{
@@ -188,7 +180,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cybderdeckBaseMemoryValue, value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(20)] 
 		[RED("cybderdeckBufferValue")] 
 		public inkTextWidgetReference CybderdeckBufferValue
 		{
@@ -196,7 +188,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cybderdeckBufferValue, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(21)] 
 		[RED("cybderdeckSlotsValue")] 
 		public inkTextWidgetReference CybderdeckSlotsValue
 		{
@@ -204,7 +196,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cybderdeckSlotsValue, value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(22)] 
 		[RED("deviceHacksGrid")] 
 		public inkCompoundWidgetReference DeviceHacksGrid
 		{
@@ -212,7 +204,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _deviceHacksGrid, value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(23)] 
 		[RED("itemIconImage")] 
 		public inkImageWidgetReference ItemIconImage
 		{
@@ -220,7 +212,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _itemIconImage, value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(24)] 
 		[RED("itemAttributeRequirements")] 
 		public inkWidgetReference ItemAttributeRequirements
 		{
@@ -228,7 +220,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _itemAttributeRequirements, value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(25)] 
 		[RED("itemAttributeRequirementsText")] 
 		public inkTextWidgetReference ItemAttributeRequirementsText
 		{
@@ -236,9 +228,17 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _itemAttributeRequirementsText, value);
 		}
 
+		[Ordinal(26)] 
+		[RED("iconicLines")] 
+		public inkImageWidgetReference IconicLines
+		{
+			get => GetProperty(ref _iconicLines);
+			set => SetProperty(ref _iconicLines, value);
+		}
+
 		[Ordinal(27)] 
 		[RED("rarityBarsController")] 
-		public CHandle<LevelBarsController> RarityBarsController
+		public wCHandle<LevelBarsController> RarityBarsController
 		{
 			get => GetProperty(ref _rarityBarsController);
 			set => SetProperty(ref _rarityBarsController, value);

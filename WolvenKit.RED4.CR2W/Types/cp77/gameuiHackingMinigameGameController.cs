@@ -20,10 +20,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<gameuiTooltipsManager> _tooltipsManager;
 		private CHandle<gameuiGameSystemUI> _uiSystem;
 		private CBool _contextHelpOverlay;
-		private CHandle<gameIBlackboard> _bbMinigame;
-		private CUInt32 _bbMinigameStateListener;
-		private CHandle<gameIBlackboard> _bbUiData;
-		private CUInt32 _bbControllerStateListener;
+		private wCHandle<gameIBlackboard> _bbMinigame;
+		private CHandle<redCallbackObject> _bbMinigameStateListener;
+		private wCHandle<gameIBlackboard> _bbUiData;
+		private CHandle<redCallbackObject> _bbControllerStateListener;
 
 		[Ordinal(2)] 
 		[RED("symbolsRecordTDBID")] 
@@ -131,7 +131,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("bbMinigame")] 
-		public CHandle<gameIBlackboard> BbMinigame
+		public wCHandle<gameIBlackboard> BbMinigame
 		{
 			get => GetProperty(ref _bbMinigame);
 			set => SetProperty(ref _bbMinigame, value);
@@ -139,7 +139,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(16)] 
 		[RED("bbMinigameStateListener")] 
-		public CUInt32 BbMinigameStateListener
+		public CHandle<redCallbackObject> BbMinigameStateListener
 		{
 			get => GetProperty(ref _bbMinigameStateListener);
 			set => SetProperty(ref _bbMinigameStateListener, value);
@@ -147,7 +147,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(17)] 
 		[RED("bbUiData")] 
-		public CHandle<gameIBlackboard> BbUiData
+		public wCHandle<gameIBlackboard> BbUiData
 		{
 			get => GetProperty(ref _bbUiData);
 			set => SetProperty(ref _bbUiData, value);
@@ -155,7 +155,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(18)] 
 		[RED("bbControllerStateListener")] 
-		public CUInt32 BbControllerStateListener
+		public CHandle<redCallbackObject> BbControllerStateListener
 		{
 			get => GetProperty(ref _bbControllerStateListener);
 			set => SetProperty(ref _bbControllerStateListener, value);

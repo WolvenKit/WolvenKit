@@ -24,12 +24,11 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<inkCanvasWidget> _panelFlathead;
 		private wCHandle<inkCanvasWidget> _panelToolbox;
 		private CHandle<UI_EquipmentDef> _uiBB_Equipment;
-		private CHandle<gameIBlackboard> _uiBB_EquipmentBlackboard;
+		private wCHandle<gameIBlackboard> _uiBB_EquipmentBlackboard;
 		private wCHandle<inkVideoWidget> _backgroundVideo;
 		private wCHandle<inkVideoWidget> _paperdollVideo;
 		private CArray<CName> _areaTags;
 		private CHandle<InventoryDataManager> _inventoryManager;
-		private CHandle<gameIBlackboard> _vendorBlackboard;
 		private CEnum<gamedataEquipmentArea> _equipArea;
 		private CInt32 _slotIndex;
 		private CArray<TweakDBID> _recipeItemList;
@@ -190,7 +189,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(20)] 
 		[RED("uiBB_EquipmentBlackboard")] 
-		public CHandle<gameIBlackboard> UiBB_EquipmentBlackboard
+		public wCHandle<gameIBlackboard> UiBB_EquipmentBlackboard
 		{
 			get => GetProperty(ref _uiBB_EquipmentBlackboard);
 			set => SetProperty(ref _uiBB_EquipmentBlackboard, value);
@@ -229,14 +228,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(25)] 
-		[RED("vendorBlackboard")] 
-		public CHandle<gameIBlackboard> VendorBlackboard
-		{
-			get => GetProperty(ref _vendorBlackboard);
-			set => SetProperty(ref _vendorBlackboard, value);
-		}
-
-		[Ordinal(26)] 
 		[RED("equipArea")] 
 		public CEnum<gamedataEquipmentArea> EquipArea
 		{
@@ -244,7 +235,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _equipArea, value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(26)] 
 		[RED("slotIndex")] 
 		public CInt32 SlotIndex
 		{
@@ -252,7 +243,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _slotIndex, value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(27)] 
 		[RED("recipeItemList")] 
 		public CArray<TweakDBID> RecipeItemList
 		{
@@ -260,7 +251,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _recipeItemList, value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(28)] 
 		[RED("playerCraftBook")] 
 		public CHandle<CraftBook> PlayerCraftBook
 		{
@@ -268,7 +259,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerCraftBook, value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(29)] 
 		[RED("tooltipsLibrary")] 
 		public redResourceReferenceScriptToken TooltipsLibrary
 		{
@@ -276,7 +267,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _tooltipsLibrary, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(30)] 
 		[RED("itemTooltipName")] 
 		public CName ItemTooltipName
 		{
@@ -284,7 +275,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _itemTooltipName, value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(31)] 
 		[RED("tooltipStylePath")] 
 		public redResourceReferenceScriptToken TooltipStylePath
 		{
@@ -292,7 +283,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _tooltipStylePath, value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(32)] 
 		[RED("tooltipLeft")] 
 		public wCHandle<InventorySlotTooltip> TooltipLeft
 		{
@@ -300,7 +291,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _tooltipLeft, value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(33)] 
 		[RED("tooltipRight")] 
 		public wCHandle<InventorySlotTooltip> TooltipRight
 		{
@@ -308,7 +299,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _tooltipRight, value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(34)] 
 		[RED("tooltipContainer")] 
 		public wCHandle<inkCompoundWidget> TooltipContainer
 		{
@@ -316,7 +307,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _tooltipContainer, value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(35)] 
 		[RED("paperDollList")] 
 		public CArray<CName> PaperDollList
 		{
@@ -324,7 +315,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _paperDollList, value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(36)] 
 		[RED("scrollOffset")] 
 		public CInt32 ScrollOffset
 		{
@@ -332,7 +323,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _scrollOffset, value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(37)] 
 		[RED("faceTags")] 
 		public CArray<CName> FaceTags
 		{
@@ -340,7 +331,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _faceTags, value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(38)] 
 		[RED("headTags")] 
 		public CArray<CName> HeadTags
 		{
@@ -348,7 +339,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _headTags, value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(39)] 
 		[RED("chestTags")] 
 		public CArray<CName> ChestTags
 		{
@@ -356,7 +347,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _chestTags, value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(40)] 
 		[RED("legTags")] 
 		public CArray<CName> LegTags
 		{
@@ -364,7 +355,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _legTags, value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(41)] 
 		[RED("weaponTags")] 
 		public CArray<CName> WeaponTags
 		{
@@ -372,7 +363,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _weaponTags, value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(42)] 
 		[RED("consumableTags")] 
 		public CArray<CName> ConsumableTags
 		{
@@ -380,7 +371,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _consumableTags, value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(43)] 
 		[RED("modulesTags")] 
 		public CArray<CName> ModulesTags
 		{
@@ -388,7 +379,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _modulesTags, value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(44)] 
 		[RED("framesTags")] 
 		public CArray<CName> FramesTags
 		{
@@ -396,7 +387,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _framesTags, value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(45)] 
 		[RED("operationsMode")] 
 		public CEnum<operationsMode> OperationsMode
 		{

@@ -19,11 +19,11 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _container;
 		private inkWidgetReference _defaultColorDummy;
 		private inkWidgetReference _activeColorDummy;
-		private CHandle<inkInputDisplayController> _leftArrowController;
-		private CHandle<inkInputDisplayController> _rightArrowController;
+		private wCHandle<inkInputDisplayController> _leftArrowController;
+		private wCHandle<inkInputDisplayController> _rightArrowController;
 		private CArray<MenuData> _elements;
 		private CInt32 _centerElementIndex;
-		private CArray<CHandle<HubMenuLabelContentContainer>> _widgetsControllers;
+		private CArray<wCHandle<HubMenuLabelContentContainer>> _widgetsControllers;
 		private CBool _waitForSizes;
 		private CBool _translationOnce;
 		private CInt32 _currentIndex;
@@ -127,7 +127,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(27)] 
 		[RED("leftArrowController")] 
-		public CHandle<inkInputDisplayController> LeftArrowController
+		public wCHandle<inkInputDisplayController> LeftArrowController
 		{
 			get => GetProperty(ref _leftArrowController);
 			set => SetProperty(ref _leftArrowController, value);
@@ -135,7 +135,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(28)] 
 		[RED("rightArrowController")] 
-		public CHandle<inkInputDisplayController> RightArrowController
+		public wCHandle<inkInputDisplayController> RightArrowController
 		{
 			get => GetProperty(ref _rightArrowController);
 			set => SetProperty(ref _rightArrowController, value);
@@ -159,7 +159,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(31)] 
 		[RED("widgetsControllers")] 
-		public CArray<CHandle<HubMenuLabelContentContainer>> WidgetsControllers
+		public CArray<wCHandle<HubMenuLabelContentContainer>> WidgetsControllers
 		{
 			get => GetProperty(ref _widgetsControllers);
 			set => SetProperty(ref _widgetsControllers, value);

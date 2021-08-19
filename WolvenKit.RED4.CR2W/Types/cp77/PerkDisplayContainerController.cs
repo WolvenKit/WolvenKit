@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _widget;
 		private CHandle<BasePerkDisplayData> _data;
 		private CHandle<PlayerDevelopmentDataManager> _dataManager;
-		private CHandle<PerkDisplayController> _controller;
+		private wCHandle<PerkDisplayController> _controller;
 
 		[Ordinal(1)] 
 		[RED("index")] 
@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(6)] 
 		[RED("controller")] 
-		public CHandle<PerkDisplayController> Controller
+		public wCHandle<PerkDisplayController> Controller
 		{
 			get => GetProperty(ref _controller);
 			set => SetProperty(ref _controller, value);

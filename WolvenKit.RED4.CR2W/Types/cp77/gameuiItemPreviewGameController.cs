@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CName _sceneName;
 		private NodeRef _cameraRef;
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("sceneName")] 
 		public CName SceneName
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _sceneName, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("cameraRef")] 
 		public NodeRef CameraRef
 		{

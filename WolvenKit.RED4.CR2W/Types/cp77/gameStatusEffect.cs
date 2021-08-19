@@ -8,9 +8,6 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class gameStatusEffect : gameStatusEffectBase
 	{
 		private CUInt32 _durationID;
-		private CArray<CHandle<gameStatModifierData>> _durationModifiers;
-		private CArray<CHandle<gameStatModifierData>> _stackModifiers;
-		private CArray<CHandle<gameStatModifierData>> _removeAllStacksWhenDurationEndsModifiers;
 		private CFloat _duration;
 		private CFloat _remainingDuration;
 		private CUInt32 _maxStacks;
@@ -33,30 +30,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(2)] 
-		[RED("durationModifiers")] 
-		public CArray<CHandle<gameStatModifierData>> DurationModifiers
-		{
-			get => GetProperty(ref _durationModifiers);
-			set => SetProperty(ref _durationModifiers, value);
-		}
-
-		[Ordinal(3)] 
-		[RED("stackModifiers")] 
-		public CArray<CHandle<gameStatModifierData>> StackModifiers
-		{
-			get => GetProperty(ref _stackModifiers);
-			set => SetProperty(ref _stackModifiers, value);
-		}
-
-		[Ordinal(4)] 
-		[RED("removeAllStacksWhenDurationEndsModifiers")] 
-		public CArray<CHandle<gameStatModifierData>> RemoveAllStacksWhenDurationEndsModifiers
-		{
-			get => GetProperty(ref _removeAllStacksWhenDurationEndsModifiers);
-			set => SetProperty(ref _removeAllStacksWhenDurationEndsModifiers, value);
-		}
-
-		[Ordinal(5)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
@@ -64,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _duration, value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(3)] 
 		[RED("remainingDuration")] 
 		public CFloat RemainingDuration
 		{
@@ -72,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _remainingDuration, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(4)] 
 		[RED("maxStacks")] 
 		public CUInt32 MaxStacks
 		{
@@ -80,7 +53,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _maxStacks, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(5)] 
 		[RED("sourcesData")] 
 		public CArray<gameSourceData> SourcesData
 		{
@@ -88,7 +61,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _sourcesData, value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(6)] 
 		[RED("initialApplicationTimestamp")] 
 		public CFloat InitialApplicationTimestamp
 		{
@@ -96,7 +69,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _initialApplicationTimestamp, value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(7)] 
 		[RED("lastApplicationTimestamp")] 
 		public CFloat LastApplicationTimestamp
 		{
@@ -104,7 +77,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lastApplicationTimestamp, value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(8)] 
 		[RED("ownerEntityID")] 
 		public entEntityID OwnerEntityID
 		{
@@ -112,7 +85,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ownerEntityID, value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(9)] 
 		[RED("instigatorRecordID")] 
 		public TweakDBID InstigatorRecordID
 		{
@@ -120,7 +93,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _instigatorRecordID, value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(10)] 
 		[RED("instigatorEntityID")] 
 		public entEntityID InstigatorEntityID
 		{
@@ -128,7 +101,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _instigatorEntityID, value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(11)] 
 		[RED("direction")] 
 		public Vector4 Direction
 		{
@@ -136,7 +109,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _direction, value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(12)] 
 		[RED("removeAllStacksWhenDurationEnds")] 
 		public CBool RemoveAllStacksWhenDurationEnds
 		{
@@ -144,7 +117,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _removeAllStacksWhenDurationEnds, value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(13)] 
 		[RED("applicationSource")] 
 		public CName ApplicationSource
 		{

@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private entEntityID _forceLookAt;
 		private CBool _forceFollow;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("isCalling")] 
 		public CBool IsCalling
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isCalling, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("sceneStarted")] 
 		public CBool SceneStarted
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _sceneStarted, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("endingCall")] 
 		public CBool EndingCall
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _endingCall, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("forceLookAt")] 
 		public entEntityID ForceLookAt
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _forceLookAt, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("forceFollow")] 
 		public CBool ForceFollow
 		{

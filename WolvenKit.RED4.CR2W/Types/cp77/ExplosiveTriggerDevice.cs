@@ -17,7 +17,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private gameDelayID _proximityExplosionEventID;
 		private CBool _proximityExplosionEventSent;
 
-		[Ordinal(119)] 
+		[Ordinal(120)] 
 		[RED("meshTrigger")] 
 		public CHandle<entMeshComponent> MeshTrigger
 		{
@@ -25,7 +25,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _meshTrigger, value);
 		}
 
-		[Ordinal(120)] 
+		[Ordinal(121)] 
 		[RED("trapTrigger")] 
 		public CHandle<gameStaticTriggerAreaComponent> TrapTrigger
 		{
@@ -33,7 +33,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _trapTrigger, value);
 		}
 
-		[Ordinal(121)] 
+		[Ordinal(122)] 
 		[RED("triggerName")] 
 		public CName TriggerName
 		{
@@ -41,7 +41,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _triggerName, value);
 		}
 
-		[Ordinal(122)] 
+		[Ordinal(123)] 
 		[RED("surroundingArea")] 
 		public CHandle<gameStaticTriggerAreaComponent> SurroundingArea
 		{
@@ -49,7 +49,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _surroundingArea, value);
 		}
 
-		[Ordinal(123)] 
+		[Ordinal(124)] 
 		[RED("surroundingAreaName")] 
 		public CName SurroundingAreaName
 		{
@@ -57,7 +57,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _surroundingAreaName, value);
 		}
 
-		[Ordinal(124)] 
+		[Ordinal(125)] 
 		[RED("soundIsActive")] 
 		public CBool SoundIsActive
 		{
@@ -65,7 +65,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _soundIsActive, value);
 		}
 
-		[Ordinal(125)] 
+		[Ordinal(126)] 
 		[RED("playerIsInSurroundingArea")] 
 		public CBool PlayerIsInSurroundingArea
 		{
@@ -73,7 +73,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerIsInSurroundingArea, value);
 		}
 
-		[Ordinal(126)] 
+		[Ordinal(127)] 
 		[RED("proximityExplosionEventID")] 
 		public gameDelayID ProximityExplosionEventID
 		{
@@ -81,7 +81,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _proximityExplosionEventID, value);
 		}
 
-		[Ordinal(127)] 
+		[Ordinal(128)] 
 		[RED("proximityExplosionEventSent")] 
 		public CBool ProximityExplosionEventSent
 		{

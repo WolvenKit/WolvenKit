@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private redTagList _tags;
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("tags")] 
 		public redTagList Tags
 		{

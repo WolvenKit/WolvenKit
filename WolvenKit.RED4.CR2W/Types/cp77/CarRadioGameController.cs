@@ -10,9 +10,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _radioStationName;
 		private inkTextWidgetReference _songName;
 		private wCHandle<inkWidget> _root;
-		private CUInt32 _stateChangesBlackboardId;
-		private CUInt32 _songNameChangeBlackboardId;
-		private CHandle<gameIBlackboard> _blackboard;
+		private CHandle<redCallbackObject> _stateChangesBlackboardId;
+		private CHandle<redCallbackObject> _songNameChangeBlackboardId;
+		private wCHandle<gameIBlackboard> _blackboard;
 		private CHandle<inkanimProxy> _animationProxy;
 
 		[Ordinal(9)] 
@@ -41,7 +41,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("stateChangesBlackboardId")] 
-		public CUInt32 StateChangesBlackboardId
+		public CHandle<redCallbackObject> StateChangesBlackboardId
 		{
 			get => GetProperty(ref _stateChangesBlackboardId);
 			set => SetProperty(ref _stateChangesBlackboardId, value);
@@ -49,7 +49,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("songNameChangeBlackboardId")] 
-		public CUInt32 SongNameChangeBlackboardId
+		public CHandle<redCallbackObject> SongNameChangeBlackboardId
 		{
 			get => GetProperty(ref _songNameChangeBlackboardId);
 			set => SetProperty(ref _songNameChangeBlackboardId, value);
@@ -57,7 +57,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(14)] 
 		[RED("blackboard")] 
-		public CHandle<gameIBlackboard> Blackboard
+		public wCHandle<gameIBlackboard> Blackboard
 		{
 			get => GetProperty(ref _blackboard);
 			set => SetProperty(ref _blackboard, value);

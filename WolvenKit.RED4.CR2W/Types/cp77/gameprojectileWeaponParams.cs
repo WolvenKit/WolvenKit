@@ -17,6 +17,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _shootingOffset;
 		private CBool _ignoreWeaponOwnerCollision;
 		private gameRicochetData _ricochetData;
+		private CFloat _range;
 
 		[Ordinal(0)] 
 		[RED("targetPosition")] 
@@ -96,6 +97,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _ricochetData);
 			set => SetProperty(ref _ricochetData, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("range")] 
+		public CFloat Range
+		{
+			get => GetProperty(ref _range);
+			set => SetProperty(ref _range, value);
 		}
 
 		public gameprojectileWeaponParams(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

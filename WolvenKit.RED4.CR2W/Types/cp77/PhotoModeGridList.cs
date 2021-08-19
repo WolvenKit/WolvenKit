@@ -14,8 +14,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CInt32 _firstOffset;
 		private CName _rowLibraryId;
 		private CName _buttonLibraryId;
-		private CHandle<PhotoModeMenuListItem> _parentListItem;
-		private CArray<CHandle<PhotoModeGridButton>> _buttons;
+		private wCHandle<PhotoModeMenuListItem> _parentListItem;
+		private CArray<wCHandle<PhotoModeGridButton>> _buttons;
 		private CArray<wCHandle<inkWidget>> _rows;
 		private wCHandle<inkSliderController> _sliderController;
 		private CInt32 _itemsInRow;
@@ -85,7 +85,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("parentListItem")] 
-		public CHandle<PhotoModeMenuListItem> ParentListItem
+		public wCHandle<PhotoModeMenuListItem> ParentListItem
 		{
 			get => GetProperty(ref _parentListItem);
 			set => SetProperty(ref _parentListItem, value);
@@ -93,7 +93,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("buttons")] 
-		public CArray<CHandle<PhotoModeGridButton>> Buttons
+		public CArray<wCHandle<PhotoModeGridButton>> Buttons
 		{
 			get => GetProperty(ref _buttons);
 			set => SetProperty(ref _buttons, value);

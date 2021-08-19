@@ -20,8 +20,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CInt32 _id;
 		private CBool _isSelected;
 		private gameinteractionsvisListChoiceHubData _data;
-		private CArray<CHandle<DialogChoiceLogicController>> _itemControllers;
-		private CHandle<DialogChoiceTimerController> _progressBar;
+		private CArray<wCHandle<DialogChoiceLogicController>> _itemControllers;
+		private wCHandle<DialogChoiceTimerController> _progressBar;
 		private CBool _hasProgressBar;
 		private CBool _wasTimmed;
 		private CBool _isClosingDelayed;
@@ -34,6 +34,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<inkanimProxy> _animfFadingOutProxy;
 		private CHandle<inkanimSizeInterpolator> _selectBgSizeInterp;
 		private CHandle<inkanimMarginInterpolator> _selectBgMarginInterp;
+		private DialogHubData _dialogHubData;
+		private CInt32 _pendingRequests;
+		private CArray<wCHandle<inkAsyncSpawnRequest>> _spawnTokens;
 
 		[Ordinal(1)] 
 		[RED("progressBarHolder")] 
@@ -141,7 +144,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(14)] 
 		[RED("itemControllers")] 
-		public CArray<CHandle<DialogChoiceLogicController>> ItemControllers
+		public CArray<wCHandle<DialogChoiceLogicController>> ItemControllers
 		{
 			get => GetProperty(ref _itemControllers);
 			set => SetProperty(ref _itemControllers, value);
@@ -149,7 +152,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("progressBar")] 
-		public CHandle<DialogChoiceTimerController> ProgressBar
+		public wCHandle<DialogChoiceTimerController> ProgressBar
 		{
 			get => GetProperty(ref _progressBar);
 			set => SetProperty(ref _progressBar, value);
@@ -249,6 +252,30 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _selectBgMarginInterp);
 			set => SetProperty(ref _selectBgMarginInterp, value);
+		}
+
+		[Ordinal(28)] 
+		[RED("dialogHubData")] 
+		public DialogHubData DialogHubData
+		{
+			get => GetProperty(ref _dialogHubData);
+			set => SetProperty(ref _dialogHubData, value);
+		}
+
+		[Ordinal(29)] 
+		[RED("pendingRequests")] 
+		public CInt32 PendingRequests
+		{
+			get => GetProperty(ref _pendingRequests);
+			set => SetProperty(ref _pendingRequests, value);
+		}
+
+		[Ordinal(30)] 
+		[RED("spawnTokens")] 
+		public CArray<wCHandle<inkAsyncSpawnRequest>> SpawnTokens
+		{
+			get => GetProperty(ref _spawnTokens);
+			set => SetProperty(ref _spawnTokens, value);
 		}
 
 		public DialogHubLogicController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<EngDemoContainer> _weakfenceSkillChecks;
 		private WeakFenceSetup _weakFenceSetup;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("weakfenceSkillChecks")] 
 		public CHandle<EngDemoContainer> WeakfenceSkillChecks
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _weakfenceSkillChecks, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("weakFenceSetup")] 
 		public WeakFenceSetup WeakFenceSetup
 		{

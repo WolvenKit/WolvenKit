@@ -5,7 +5,7 @@ using static WolvenKit.RED4.CR2W.Types.Enums;
 namespace WolvenKit.RED4.CR2W.Types
 {
 	[REDMeta]
-	public class SubMenuPanelLogicController : inkWidgetLogicController
+	public class SubMenuPanelLogicController : PlayerStatsUIHolder
 	{
 		private inkTextWidgetReference _levelValue;
 		private inkTextWidgetReference _streetCredLabel;
@@ -33,6 +33,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<MenuDataBuilder> _menusData;
 		private MenuData _curMenuData;
 		private MenuData _curSubMenuData;
+		private CUInt32 _hubMenuInstanceID;
 
 		[Ordinal(1)] 
 		[RED("levelValue")] 
@@ -240,6 +241,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _curSubMenuData);
 			set => SetProperty(ref _curSubMenuData, value);
+		}
+
+		[Ordinal(27)] 
+		[RED("hubMenuInstanceID")] 
+		public CUInt32 HubMenuInstanceID
+		{
+			get => GetProperty(ref _hubMenuInstanceID);
+			set => SetProperty(ref _hubMenuInstanceID, value);
 		}
 
 		public SubMenuPanelLogicController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

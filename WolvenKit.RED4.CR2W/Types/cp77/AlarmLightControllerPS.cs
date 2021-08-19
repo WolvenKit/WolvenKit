@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CEnum<ESecuritySystemState> _securityAlarmState;
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("securityAlarmState")] 
 		public CEnum<ESecuritySystemState> SecurityAlarmState
 		{

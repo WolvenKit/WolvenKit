@@ -20,8 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CUInt32 _numConstTrackKeys;
 		private CBool _isScaleConstant;
 		private CBool _hasRawRotations;
-		private animAnimFallbackFrameDesc _fallbackFrameDesc;
-		private DataBuffer _fallbackFrameBuffer;
+		private CArray<CUInt16> _fallbackFrameIndices;
 		private serializationDeferredDataBuffer _defferedBuffer;
 		private animAnimDataAddress _dataAddress;
 		private CArray<CName> _extraDataNames;
@@ -132,22 +131,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(13)] 
-		[RED("fallbackFrameDesc")] 
-		public animAnimFallbackFrameDesc FallbackFrameDesc
+		[RED("fallbackFrameIndices")] 
+		public CArray<CUInt16> FallbackFrameIndices
 		{
-			get => GetProperty(ref _fallbackFrameDesc);
-			set => SetProperty(ref _fallbackFrameDesc, value);
+			get => GetProperty(ref _fallbackFrameIndices);
+			set => SetProperty(ref _fallbackFrameIndices, value);
 		}
 
 		[Ordinal(14)] 
-		[RED("fallbackFrameBuffer")] 
-		public DataBuffer FallbackFrameBuffer
-		{
-			get => GetProperty(ref _fallbackFrameBuffer);
-			set => SetProperty(ref _fallbackFrameBuffer, value);
-		}
-
-		[Ordinal(15)] 
 		[RED("defferedBuffer")] 
 		public serializationDeferredDataBuffer DefferedBuffer
 		{
@@ -155,7 +146,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _defferedBuffer, value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(15)] 
 		[RED("dataAddress")] 
 		public animAnimDataAddress DataAddress
 		{
@@ -163,7 +154,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dataAddress, value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(16)] 
 		[RED("extraDataNames")] 
 		public CArray<CName> ExtraDataNames
 		{
@@ -171,7 +162,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _extraDataNames, value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(17)] 
 		[RED("inplaceCompressedBuffer")] 
 		public DataBuffer InplaceCompressedBuffer
 		{

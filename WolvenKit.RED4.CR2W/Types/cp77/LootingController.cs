@@ -44,6 +44,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isLocked;
 		private CInt32 _currentWidgetRequestVersion;
 		private CInt32 _currentItemRequestVersion;
+		private CInt32 _requestsCounter;
 
 		[Ordinal(1)] 
 		[RED("root")] 
@@ -339,6 +340,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _currentItemRequestVersion);
 			set => SetProperty(ref _currentItemRequestVersion, value);
+		}
+
+		[Ordinal(38)] 
+		[RED("requestsCounter")] 
+		public CInt32 RequestsCounter
+		{
+			get => GetProperty(ref _requestsCounter);
+			set => SetProperty(ref _requestsCounter, value);
 		}
 
 		public LootingController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

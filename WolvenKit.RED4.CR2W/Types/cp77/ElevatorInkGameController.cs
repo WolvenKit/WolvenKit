@@ -20,9 +20,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isAuthorized;
 		private CHandle<inkanimProxy> _animProxy;
 		private CArray<CFloat> _buttonSizes;
-		private CUInt32 _onChangeFloorListener;
-		private CUInt32 _onPlayerScannedListener;
-		private CUInt32 _onPausedChangeListener;
+		private CHandle<redCallbackObject> _onChangeFloorListener;
+		private CHandle<redCallbackObject> _onPlayerScannedListener;
+		private CHandle<redCallbackObject> _onPausedChangeListener;
 
 		[Ordinal(16)] 
 		[RED("verticalPanel")] 
@@ -130,7 +130,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(29)] 
 		[RED("onChangeFloorListener")] 
-		public CUInt32 OnChangeFloorListener
+		public CHandle<redCallbackObject> OnChangeFloorListener
 		{
 			get => GetProperty(ref _onChangeFloorListener);
 			set => SetProperty(ref _onChangeFloorListener, value);
@@ -138,7 +138,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(30)] 
 		[RED("onPlayerScannedListener")] 
-		public CUInt32 OnPlayerScannedListener
+		public CHandle<redCallbackObject> OnPlayerScannedListener
 		{
 			get => GetProperty(ref _onPlayerScannedListener);
 			set => SetProperty(ref _onPlayerScannedListener, value);
@@ -146,7 +146,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(31)] 
 		[RED("onPausedChangeListener")] 
-		public CUInt32 OnPausedChangeListener
+		public CHandle<redCallbackObject> OnPausedChangeListener
 		{
 			get => GetProperty(ref _onPausedChangeListener);
 			set => SetProperty(ref _onPausedChangeListener, value);

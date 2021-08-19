@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private ComputerQuickHackData _factQuickHackSetup;
 		private CBool _quickhackPerformed;
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("factQuickHackSetup")] 
 		public ComputerQuickHackData FactQuickHackSetup
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _factQuickHackSetup, value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(110)] 
 		[RED("quickhackPerformed")] 
 		public CBool QuickhackPerformed
 		{

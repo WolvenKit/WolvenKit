@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CName _audioMetadata;
 		private DataBuffer _compiledBufferFractured;
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("meshFractured")] 
 		public raRef<CMesh> MeshFractured
 		{
@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _meshFractured, value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("meshFracturedAppearance")] 
 		public CName MeshFracturedAppearance
 		{
@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _meshFracturedAppearance, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("numFrames")] 
 		public CFloat NumFrames
 		{
@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _numFrames, value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("frameRate")] 
 		public CFloat FrameRate
 		{
@@ -55,7 +55,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _frameRate, value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("playOnlyOnce")] 
 		public CBool PlayOnlyOnce
 		{
@@ -63,7 +63,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playOnlyOnce, value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(35)] 
 		[RED("restartOnTrigger")] 
 		public CBool RestartOnTrigger
 		{
@@ -71,7 +71,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _restartOnTrigger, value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("disableCollidersOnTrigger")] 
 		public CBool DisableCollidersOnTrigger
 		{
@@ -79,7 +79,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _disableCollidersOnTrigger, value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("damageThreshold")] 
 		public CFloat DamageThreshold
 		{
@@ -87,7 +87,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _damageThreshold, value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("damageEndurance")] 
 		public CFloat DamageEndurance
 		{
@@ -95,7 +95,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _damageEndurance, value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("impulseToDamage")] 
 		public CFloat ImpulseToDamage
 		{
@@ -103,7 +103,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _impulseToDamage, value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("contactToDamage")] 
 		public CFloat ContactToDamage
 		{
@@ -111,7 +111,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _contactToDamage, value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(41)] 
 		[RED("accumulateDamage")] 
 		public CBool AccumulateDamage
 		{
@@ -119,7 +119,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _accumulateDamage, value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(42)] 
 		[RED("destructionEffect")] 
 		public raRef<worldEffect> DestructionEffect
 		{
@@ -127,7 +127,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _destructionEffect, value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(43)] 
 		[RED("audioMetadata")] 
 		public CName AudioMetadata
 		{
@@ -135,7 +135,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _audioMetadata, value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(44)] 
 		[RED("compiledBufferFractured")] 
 		public DataBuffer CompiledBufferFractured
 		{

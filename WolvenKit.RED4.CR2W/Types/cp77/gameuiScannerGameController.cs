@@ -13,13 +13,13 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _oldPercentValue;
 		private wCHandle<gameIBlackboard> _bbWeaponInfo;
 		private wCHandle<gameIBlackboard> _braindanceBB;
-		private CUInt32 _bbWeaponEventId;
-		private CUInt32 _bBID_BraindanceActive;
-		private CUInt32 _scannerscannerObjectStatsId;
-		private CUInt32 _scannerScannablesId;
-		private CUInt32 _scannerCurrentProgressId;
-		private CUInt32 _scannerCurrentStateId;
-		private CUInt32 _scannerScannedObjectId;
+		private CHandle<redCallbackObject> _bbWeaponEventId;
+		private CHandle<redCallbackObject> _bBID_BraindanceActive;
+		private CHandle<redCallbackObject> _scannerscannerObjectStatsId;
+		private CHandle<redCallbackObject> _scannerScannablesId;
+		private CHandle<redCallbackObject> _scannerCurrentProgressId;
+		private CHandle<redCallbackObject> _scannerCurrentStateId;
+		private CHandle<redCallbackObject> _scannerScannedObjectId;
 		private scannerDataStructure _scannerData;
 		private GameObjectScanStats _curObj;
 		private wCHandle<inkCompoundWidget> _scannerBorderMain;
@@ -43,7 +43,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CName _soundFinishedOn;
 		private CName _soundFinishedOff;
 		private CUInt32 _playerSpawnedCallbackID;
-		private CUInt32 _bBID_IsEnabledChange;
+		private CHandle<redCallbackObject> _bBID_IsEnabledChange;
 		private ScriptGameInstance _gameInstance;
 		private CBool _isShown;
 		private wCHandle<gameObject> _playerPuppet;
@@ -98,7 +98,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("bbWeaponEventId")] 
-		public CUInt32 BbWeaponEventId
+		public CHandle<redCallbackObject> BbWeaponEventId
 		{
 			get => GetProperty(ref _bbWeaponEventId);
 			set => SetProperty(ref _bbWeaponEventId, value);
@@ -106,7 +106,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(16)] 
 		[RED("BBID_BraindanceActive")] 
-		public CUInt32 BBID_BraindanceActive
+		public CHandle<redCallbackObject> BBID_BraindanceActive
 		{
 			get => GetProperty(ref _bBID_BraindanceActive);
 			set => SetProperty(ref _bBID_BraindanceActive, value);
@@ -114,7 +114,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(17)] 
 		[RED("scannerscannerObjectStatsId")] 
-		public CUInt32 ScannerscannerObjectStatsId
+		public CHandle<redCallbackObject> ScannerscannerObjectStatsId
 		{
 			get => GetProperty(ref _scannerscannerObjectStatsId);
 			set => SetProperty(ref _scannerscannerObjectStatsId, value);
@@ -122,7 +122,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(18)] 
 		[RED("scannerScannablesId")] 
-		public CUInt32 ScannerScannablesId
+		public CHandle<redCallbackObject> ScannerScannablesId
 		{
 			get => GetProperty(ref _scannerScannablesId);
 			set => SetProperty(ref _scannerScannablesId, value);
@@ -130,7 +130,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(19)] 
 		[RED("scannerCurrentProgressId")] 
-		public CUInt32 ScannerCurrentProgressId
+		public CHandle<redCallbackObject> ScannerCurrentProgressId
 		{
 			get => GetProperty(ref _scannerCurrentProgressId);
 			set => SetProperty(ref _scannerCurrentProgressId, value);
@@ -138,7 +138,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(20)] 
 		[RED("scannerCurrentStateId")] 
-		public CUInt32 ScannerCurrentStateId
+		public CHandle<redCallbackObject> ScannerCurrentStateId
 		{
 			get => GetProperty(ref _scannerCurrentStateId);
 			set => SetProperty(ref _scannerCurrentStateId, value);
@@ -146,7 +146,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(21)] 
 		[RED("scannerScannedObjectId")] 
-		public CUInt32 ScannerScannedObjectId
+		public CHandle<redCallbackObject> ScannerScannedObjectId
 		{
 			get => GetProperty(ref _scannerScannedObjectId);
 			set => SetProperty(ref _scannerScannedObjectId, value);
@@ -338,7 +338,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(45)] 
 		[RED("BBID_IsEnabledChange")] 
-		public CUInt32 BBID_IsEnabledChange
+		public CHandle<redCallbackObject> BBID_IsEnabledChange
 		{
 			get => GetProperty(ref _bBID_IsEnabledChange);
 			set => SetProperty(ref _bBID_IsEnabledChange, value);

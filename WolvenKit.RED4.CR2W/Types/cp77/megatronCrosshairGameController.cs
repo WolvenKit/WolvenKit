@@ -7,14 +7,13 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class megatronCrosshairGameController : gameuiWidgetGameController
 	{
-		private CUInt32 _bulletSpreedBlackboardId;
-		private CUInt32 _crosshairStateBlackboardId;
+		private CHandle<redCallbackObject> _bulletSpreedBlackboardId;
+		private CHandle<redCallbackObject> _crosshairStateBlackboardId;
 		private wCHandle<inkImageWidget> _leftPart;
 		private wCHandle<inkImageWidget> _rightPart;
 		private wCHandle<inkImageWidget> _nearCenterPart;
 		private wCHandle<inkImageWidget> _farCenterPart;
 		private Vector2 _bufferedSpread;
-		private CHandle<gameIBlackboard> _weaponlocalBB;
 		private Vector2 _orgSideSize;
 		private CFloat _minSpread;
 		private CFloat _gameplaySpreadMultiplier;
@@ -22,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(2)] 
 		[RED("bulletSpreedBlackboardId")] 
-		public CUInt32 BulletSpreedBlackboardId
+		public CHandle<redCallbackObject> BulletSpreedBlackboardId
 		{
 			get => GetProperty(ref _bulletSpreedBlackboardId);
 			set => SetProperty(ref _bulletSpreedBlackboardId, value);
@@ -30,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(3)] 
 		[RED("crosshairStateBlackboardId")] 
-		public CUInt32 CrosshairStateBlackboardId
+		public CHandle<redCallbackObject> CrosshairStateBlackboardId
 		{
 			get => GetProperty(ref _crosshairStateBlackboardId);
 			set => SetProperty(ref _crosshairStateBlackboardId, value);
@@ -77,14 +76,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(9)] 
-		[RED("weaponlocalBB")] 
-		public CHandle<gameIBlackboard> WeaponlocalBB
-		{
-			get => GetProperty(ref _weaponlocalBB);
-			set => SetProperty(ref _weaponlocalBB, value);
-		}
-
-		[Ordinal(10)] 
 		[RED("orgSideSize")] 
 		public Vector2 OrgSideSize
 		{
@@ -92,7 +83,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _orgSideSize, value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(10)] 
 		[RED("minSpread")] 
 		public CFloat MinSpread
 		{
@@ -100,7 +91,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _minSpread, value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(11)] 
 		[RED("gameplaySpreadMultiplier")] 
 		public CFloat GameplaySpreadMultiplier
 		{
@@ -108,7 +99,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _gameplaySpreadMultiplier, value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(12)] 
 		[RED("crosshairState")] 
 		public CEnum<gamePSMCrosshairStates> CrosshairState
 		{

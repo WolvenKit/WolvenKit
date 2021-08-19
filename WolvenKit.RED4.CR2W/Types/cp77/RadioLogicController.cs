@@ -9,8 +9,8 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private inkTextWidgetReference _radioTextWidget;
 		private inkCanvasWidgetReference _radioEQWidget;
-		private CUInt32 _radioStateBBConnectionId;
-		private CUInt32 _radioNameBBConnectionId;
+		private CHandle<redCallbackObject> _radioStateBBConnectionId;
+		private CHandle<redCallbackObject> _radioNameBBConnectionId;
 		private wCHandle<gameIBlackboard> _vehBB;
 		private CHandle<inkanimProxy> _eqLoopAnimProxy;
 		private Vector2 _radioTextWidgetSize;
@@ -33,7 +33,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(3)] 
 		[RED("radioStateBBConnectionId")] 
-		public CUInt32 RadioStateBBConnectionId
+		public CHandle<redCallbackObject> RadioStateBBConnectionId
 		{
 			get => GetProperty(ref _radioStateBBConnectionId);
 			set => SetProperty(ref _radioStateBBConnectionId, value);
@@ -41,7 +41,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(4)] 
 		[RED("radioNameBBConnectionId")] 
-		public CUInt32 RadioNameBBConnectionId
+		public CHandle<redCallbackObject> RadioNameBBConnectionId
 		{
 			get => GetProperty(ref _radioNameBBConnectionId);
 			set => SetProperty(ref _radioNameBBConnectionId, value);

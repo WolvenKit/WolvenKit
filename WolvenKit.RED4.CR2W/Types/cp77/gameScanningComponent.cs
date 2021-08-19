@@ -29,6 +29,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isBeingScanned;
 		private CBool _isScanningCluesBlocked;
 		private CBool _isEntityVisible;
+		private CHandle<redCallbackObject> _onBraindanceVisionModeChangeCallback;
+		private CHandle<redCallbackObject> _onBraindanceFppChangeCallback;
 
 		[Ordinal(4)] 
 		[RED("scannableData")] 
@@ -204,6 +206,22 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _isEntityVisible);
 			set => SetProperty(ref _isEntityVisible, value);
+		}
+
+		[Ordinal(26)] 
+		[RED("OnBraindanceVisionModeChangeCallback")] 
+		public CHandle<redCallbackObject> OnBraindanceVisionModeChangeCallback
+		{
+			get => GetProperty(ref _onBraindanceVisionModeChangeCallback);
+			set => SetProperty(ref _onBraindanceVisionModeChangeCallback, value);
+		}
+
+		[Ordinal(27)] 
+		[RED("OnBraindanceFppChangeCallback")] 
+		public CHandle<redCallbackObject> OnBraindanceFppChangeCallback
+		{
+			get => GetProperty(ref _onBraindanceFppChangeCallback);
+			set => SetProperty(ref _onBraindanceFppChangeCallback, value);
 		}
 
 		public gameScanningComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -7,15 +7,15 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class RemoveDOTStatusEffectsEffector : gameEffector
 	{
-		private wCHandle<gameObject> _owner;
+		private entEntityID _ownerEntityID;
 		private CFloat _delay;
 
 		[Ordinal(0)] 
-		[RED("owner")] 
-		public wCHandle<gameObject> Owner
+		[RED("ownerEntityID")] 
+		public entEntityID OwnerEntityID
 		{
-			get => GetProperty(ref _owner);
-			set => SetProperty(ref _owner, value);
+			get => GetProperty(ref _ownerEntityID);
+			set => SetProperty(ref _ownerEntityID, value);
 		}
 
 		[Ordinal(1)] 

@@ -7,16 +7,16 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class physicsGeometryCacheArtifact : CResource
 	{
-		private CArray<serializationDeferredDataBuffer> _bufferTable;
+		private serializationDeferredDataBuffer _buffer;
 		private CArray<physicsCacheKey> _entryKeys;
 		private CArray<physicsCacheEntry> _entryTable;
 
 		[Ordinal(1)] 
-		[RED("bufferTable")] 
-		public CArray<serializationDeferredDataBuffer> BufferTable
+		[RED("buffer")] 
+		public serializationDeferredDataBuffer Buffer
 		{
-			get => GetProperty(ref _bufferTable);
-			set => SetProperty(ref _bufferTable, value);
+			get => GetProperty(ref _buffer);
+			set => SetProperty(ref _buffer, value);
 		}
 
 		[Ordinal(2)] 

@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CHandle<EngDemoContainer> _cleaningMachineSkillChecks;
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("cleaningMachineSkillChecks")] 
 		public CHandle<EngDemoContainer> CleaningMachineSkillChecks
 		{

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<ButtonHints> _buttonHintsController;
 		private wCHandle<gameuiTooltipsManager> _tooltipsManager;
 		private wCHandle<tarotCardLogicController> _selectedTarotCard;
-		private CHandle<TarotPreviewGameController> _fullscreenPreviewController;
+		private wCHandle<TarotPreviewGameController> _fullscreenPreviewController;
 		private wCHandle<inkMenuEventDispatcher> _menuEventDispatcher;
 		private CHandle<inkGameNotificationToken> _tarotPreviewPopupToken;
 		private CBool _afterCloseRequest;
@@ -78,7 +78,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("fullscreenPreviewController")] 
-		public CHandle<TarotPreviewGameController> FullscreenPreviewController
+		public wCHandle<TarotPreviewGameController> FullscreenPreviewController
 		{
 			get => GetProperty(ref _fullscreenPreviewController);
 			set => SetProperty(ref _fullscreenPreviewController, value);

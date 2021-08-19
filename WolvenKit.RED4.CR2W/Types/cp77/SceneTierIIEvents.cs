@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class SceneTierIIEvents : SceneTierAbstractEvents
 	{
 		private CFloat _cachedSpeedValue;
-		private CHandle<gameStatModifierData> _maxSpeedStat;
+		private CHandle<gameStatModifierData_Deprecated> _maxSpeedStat;
 		private CEnum<Tier2WalkType> _currentSpeedMovementPreset;
 		private CFloat _currentSpeedValue;
 		private CName _currentLocomotionState;
@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(1)] 
 		[RED("maxSpeedStat")] 
-		public CHandle<gameStatModifierData> MaxSpeedStat
+		public CHandle<gameStatModifierData_Deprecated> MaxSpeedStat
 		{
 			get => GetProperty(ref _maxSpeedStat);
 			set => SetProperty(ref _maxSpeedStat, value);

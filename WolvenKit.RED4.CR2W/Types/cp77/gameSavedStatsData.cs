@@ -7,20 +7,29 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameSavedStatsData : CVariable
 	{
-		private CArray<CHandle<gameStatModifierData>> _statModifiers;
+		private CArray<CHandle<gameStatModifierData_Deprecated>> _statModifiers;
+		private DataBuffer _modifiersBuffer;
 		private CArray<CEnum<gamedataStatType>> _inactiveStats;
 		private TweakDBID _recordID;
 		private CUInt32 _seed;
 
 		[Ordinal(0)] 
 		[RED("statModifiers")] 
-		public CArray<CHandle<gameStatModifierData>> StatModifiers
+		public CArray<CHandle<gameStatModifierData_Deprecated>> StatModifiers
 		{
 			get => GetProperty(ref _statModifiers);
 			set => SetProperty(ref _statModifiers, value);
 		}
 
 		[Ordinal(1)] 
+		[RED("modifiersBuffer")] 
+		public DataBuffer ModifiersBuffer
+		{
+			get => GetProperty(ref _modifiersBuffer);
+			set => SetProperty(ref _modifiersBuffer, value);
+		}
+
+		[Ordinal(2)] 
 		[RED("inactiveStats")] 
 		public CArray<CEnum<gamedataStatType>> InactiveStats
 		{
@@ -28,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _inactiveStats, value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("recordID")] 
 		public TweakDBID RecordID
 		{
@@ -36,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _recordID, value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("seed")] 
 		public CUInt32 Seed
 		{

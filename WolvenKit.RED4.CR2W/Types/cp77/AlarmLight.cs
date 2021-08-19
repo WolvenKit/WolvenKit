@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CBool _isGlitching;
 
-		[Ordinal(102)] 
+		[Ordinal(103)] 
 		[RED("isGlitching")] 
 		public CBool IsGlitching
 		{

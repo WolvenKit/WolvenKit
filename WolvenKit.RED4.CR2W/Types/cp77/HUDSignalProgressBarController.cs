@@ -13,11 +13,11 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _percent;
 		private CArray<inkWidgetReference> _signalBars;
 		private wCHandle<inkWidget> _rootWidget;
-		private CHandle<gameIBlackboard> _progressBarBB;
+		private wCHandle<gameIBlackboard> _progressBarBB;
 		private CHandle<UI_HUDSignalProgressBarDef> _progressBarDef;
-		private CUInt32 _stateBBID;
-		private CUInt32 _progressBBID;
-		private CUInt32 _signalStrengthBBID;
+		private CHandle<redCallbackObject> _stateBBID;
+		private CHandle<redCallbackObject> _progressBBID;
+		private CHandle<redCallbackObject> _signalStrengthBBID;
 		private HUDProgressBarData _data;
 		private CHandle<inkanimProxy> _outroAnimation;
 		private CHandle<inkanimProxy> _signalLostAnimation;
@@ -78,7 +78,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("progressBarBB")] 
-		public CHandle<gameIBlackboard> ProgressBarBB
+		public wCHandle<gameIBlackboard> ProgressBarBB
 		{
 			get => GetProperty(ref _progressBarBB);
 			set => SetProperty(ref _progressBarBB, value);
@@ -94,7 +94,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(17)] 
 		[RED("stateBBID")] 
-		public CUInt32 StateBBID
+		public CHandle<redCallbackObject> StateBBID
 		{
 			get => GetProperty(ref _stateBBID);
 			set => SetProperty(ref _stateBBID, value);
@@ -102,7 +102,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(18)] 
 		[RED("progressBBID")] 
-		public CUInt32 ProgressBBID
+		public CHandle<redCallbackObject> ProgressBBID
 		{
 			get => GetProperty(ref _progressBBID);
 			set => SetProperty(ref _progressBBID, value);
@@ -110,7 +110,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(19)] 
 		[RED("signalStrengthBBID")] 
-		public CUInt32 SignalStrengthBBID
+		public CHandle<redCallbackObject> SignalStrengthBBID
 		{
 			get => GetProperty(ref _signalStrengthBBID);
 			set => SetProperty(ref _signalStrengthBBID, value);

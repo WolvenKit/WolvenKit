@@ -9,8 +9,8 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private inkWidgetReference _plateHolder;
 		private CHandle<inkScreenProjection> _projection;
-		private CHandle<gameIBlackboard> _narrativePlateBlackboard;
-		private CUInt32 _narrativePlateBlackboardText;
+		private wCHandle<gameIBlackboard> _narrativePlateBlackboard;
+		private CHandle<redCallbackObject> _narrativePlateBlackboardText;
 		private wCHandle<NarrativePlateLogicController> _logicController;
 
 		[Ordinal(9)] 
@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("narrativePlateBlackboard")] 
-		public CHandle<gameIBlackboard> NarrativePlateBlackboard
+		public wCHandle<gameIBlackboard> NarrativePlateBlackboard
 		{
 			get => GetProperty(ref _narrativePlateBlackboard);
 			set => SetProperty(ref _narrativePlateBlackboard, value);
@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("narrativePlateBlackboardText")] 
-		public CUInt32 NarrativePlateBlackboardText
+		public CHandle<redCallbackObject> NarrativePlateBlackboardText
 		{
 			get => GetProperty(ref _narrativePlateBlackboardText);
 			set => SetProperty(ref _narrativePlateBlackboardText, value);

@@ -9,6 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CHandle<gamePersistentState> _persistentState;
 		private gamePlayerSocket _playerSocket;
+		private CHandle<entSlotComponent> _uiSlotComponent;
 		private redTagList _tags;
 		private LocalizationString _displayName;
 		private LocalizationString _displayDescription;
@@ -34,7 +35,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		private entEntityID _forceHighlightSource;
 		private CHandle<WorkspotMapperComponent> _workspotMapper;
 		private CHandle<StimBroadcasterComponent> _stimBroadcaster;
-		private CHandle<entSlotComponent> _uiSlotComponent;
 		private CHandle<SquadMemberBaseComponent> _squadMemberComponent;
 		private CHandle<gameSourceShootComponent> _sourceShootComponent;
 		private CHandle<gameTargetShootComponent> _targetShootComponent;
@@ -63,6 +63,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(4)] 
+		[RED("uiSlotComponent")] 
+		public CHandle<entSlotComponent> UiSlotComponent
+		{
+			get => GetProperty(ref _uiSlotComponent);
+			set => SetProperty(ref _uiSlotComponent, value);
+		}
+
+		[Ordinal(5)] 
 		[RED("tags")] 
 		public redTagList Tags
 		{
@@ -70,7 +78,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _tags, value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("displayName")] 
 		public LocalizationString DisplayName
 		{
@@ -78,7 +86,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _displayName, value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("displayDescription")] 
 		public LocalizationString DisplayDescription
 		{
@@ -86,7 +94,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _displayDescription, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("audioResourceName")] 
 		public CName AudioResourceName
 		{
@@ -94,7 +102,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _audioResourceName, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("visibilityCheckDistance")] 
 		public CFloat VisibilityCheckDistance
 		{
@@ -102,7 +110,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _visibilityCheckDistance, value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("forceRegisterInHudManager")] 
 		public CBool ForceRegisterInHudManager
 		{
@@ -110,7 +118,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _forceRegisterInHudManager, value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("prereqListeners")] 
 		public CArray<CHandle<GameObjectListener>> PrereqListeners
 		{
@@ -118,7 +126,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _prereqListeners, value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("statusEffectListeners")] 
 		public CArray<CHandle<StatusEffectTriggerListener>> StatusEffectListeners
 		{
@@ -126,7 +134,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _statusEffectListeners, value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("outlineRequestsManager")] 
 		public CHandle<OutlineRequestManager> OutlineRequestsManager
 		{
@@ -134,7 +142,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _outlineRequestsManager, value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("outlineFadeCounter")] 
 		public CInt32 OutlineFadeCounter
 		{
@@ -142,7 +150,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _outlineFadeCounter, value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("fadeOutStarted")] 
 		public CBool FadeOutStarted
 		{
@@ -150,7 +158,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _fadeOutStarted, value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("lastEngineTime")] 
 		public CFloat LastEngineTime
 		{
@@ -158,7 +166,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lastEngineTime, value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("accumulatedTimePasssed")] 
 		public CFloat AccumulatedTimePasssed
 		{
@@ -166,7 +174,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _accumulatedTimePasssed, value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("scanningComponent")] 
 		public CHandle<gameScanningComponent> ScanningComponent
 		{
@@ -174,7 +182,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _scanningComponent, value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("visionComponent")] 
 		public CHandle<gameVisionModeComponent> VisionComponent
 		{
@@ -182,7 +190,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _visionComponent, value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("isHighlightedInFocusMode")] 
 		public CBool IsHighlightedInFocusMode
 		{
@@ -190,7 +198,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isHighlightedInFocusMode, value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("statusEffectComponent")] 
 		public CHandle<gameStatusEffectComponent> StatusEffectComponent
 		{
@@ -198,7 +206,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _statusEffectComponent, value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("lastFrameGreen")] 
 		public CHandle<OutlineRequest> LastFrameGreen
 		{
@@ -206,7 +214,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lastFrameGreen, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("lastFrameRed")] 
 		public CHandle<OutlineRequest> LastFrameRed
 		{
@@ -214,7 +222,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lastFrameRed, value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("markAsQuest")] 
 		public CBool MarkAsQuest
 		{
@@ -222,7 +230,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _markAsQuest, value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("e3HighlightHackStarted")] 
 		public CBool E3HighlightHackStarted
 		{
@@ -230,7 +238,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _e3HighlightHackStarted, value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("e3ObjectRevealed")] 
 		public CBool E3ObjectRevealed
 		{
@@ -238,7 +246,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _e3ObjectRevealed, value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("forceHighlightSource")] 
 		public entEntityID ForceHighlightSource
 		{
@@ -246,7 +254,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _forceHighlightSource, value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("workspotMapper")] 
 		public CHandle<WorkspotMapperComponent> WorkspotMapper
 		{
@@ -254,20 +262,12 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _workspotMapper, value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("stimBroadcaster")] 
 		public CHandle<StimBroadcasterComponent> StimBroadcaster
 		{
 			get => GetProperty(ref _stimBroadcaster);
 			set => SetProperty(ref _stimBroadcaster, value);
-		}
-
-		[Ordinal(29)] 
-		[RED("uiSlotComponent")] 
-		public CHandle<entSlotComponent> UiSlotComponent
-		{
-			get => GetProperty(ref _uiSlotComponent);
-			set => SetProperty(ref _uiSlotComponent, value);
 		}
 
 		[Ordinal(30)] 

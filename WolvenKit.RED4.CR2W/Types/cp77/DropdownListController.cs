@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<IScriptable> _ownerController;
 		private wCHandle<DropdownButtonController> _triggerButton;
 		private CEnum<DropdownDisplayContext> _displayContext;
-		private CHandle<DropdownElementController> _activeElement;
+		private wCHandle<DropdownElementController> _activeElement;
 		private CBool _listOpened;
 		private CArray<CHandle<DropdownItemData>> _data;
 
@@ -49,7 +49,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(5)] 
 		[RED("activeElement")] 
-		public CHandle<DropdownElementController> ActiveElement
+		public wCHandle<DropdownElementController> ActiveElement
 		{
 			get => GetProperty(ref _activeElement);
 			set => SetProperty(ref _activeElement, value);

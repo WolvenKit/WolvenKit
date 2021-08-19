@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _previousPageBtn;
 		private inkWidgetReference _navigationButtons;
 		private inkWidgetReference _optionSwitchHint;
-		private CArray<CHandle<characterCreationStatsAttributeBtn>> _attributesControllers;
+		private CArray<wCHandle<characterCreationStatsAttributeBtn>> _attributesControllers;
 		private CInt32 _attributePointsAvailable;
 		private CInt32 _startingAttributePoints;
 		private wCHandle<gameuiTooltipsManager> _tooltipsManager;
@@ -171,7 +171,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(23)] 
 		[RED("attributesControllers")] 
-		public CArray<CHandle<characterCreationStatsAttributeBtn>> AttributesControllers
+		public CArray<wCHandle<characterCreationStatsAttributeBtn>> AttributesControllers
 		{
 			get => GetProperty(ref _attributesControllers);
 			set => SetProperty(ref _attributesControllers, value);

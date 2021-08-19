@@ -7,18 +7,18 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ChaosWeaponCustomEffector : gameEffector
 	{
-		private wCHandle<gameObject> _effectorOwner;
+		private entEntityID _effectorOwnerID;
 		private gameStatsObjectID _target;
 		private TweakDBID _record;
 		private CString _applicationTarget;
 		private CUInt64 _modGroupID;
 
 		[Ordinal(0)] 
-		[RED("effectorOwner")] 
-		public wCHandle<gameObject> EffectorOwner
+		[RED("effectorOwnerID")] 
+		public entEntityID EffectorOwnerID
 		{
-			get => GetProperty(ref _effectorOwner);
-			set => SetProperty(ref _effectorOwner, value);
+			get => GetProperty(ref _effectorOwnerID);
+			set => SetProperty(ref _effectorOwnerID, value);
 		}
 
 		[Ordinal(1)] 

@@ -15,10 +15,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<wCHandle<ChargeLogicController>> _chargeLogicInstances;
 		private wCHandle<gameIBlackboard> _bb;
 		private wCHandle<gameIBlackboard> _blackboard;
-		private CUInt32 _onCharge;
-		private CUInt32 _onTriggerMode;
-		private CUInt32 _onMagazineAmmoCount;
-		private CUInt32 _onMagazineAmmoCapacity;
+		private CHandle<redCallbackObject> _onCharge;
+		private CHandle<redCallbackObject> _onTriggerMode;
+		private CHandle<redCallbackObject> _onMagazineAmmoCount;
+		private CHandle<redCallbackObject> _onMagazineAmmoCapacity;
 		private CHandle<gameSlotDataHolder> _bufferedRosterData;
 		private gameSlotWeaponData _activeWeapon;
 		private CHandle<InventoryDataManagerV2> _inventoryManager;
@@ -89,7 +89,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(17)] 
 		[RED("onCharge")] 
-		public CUInt32 OnCharge
+		public CHandle<redCallbackObject> OnCharge
 		{
 			get => GetProperty(ref _onCharge);
 			set => SetProperty(ref _onCharge, value);
@@ -97,7 +97,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(18)] 
 		[RED("onTriggerMode")] 
-		public CUInt32 OnTriggerMode
+		public CHandle<redCallbackObject> OnTriggerMode
 		{
 			get => GetProperty(ref _onTriggerMode);
 			set => SetProperty(ref _onTriggerMode, value);
@@ -105,7 +105,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(19)] 
 		[RED("onMagazineAmmoCount")] 
-		public CUInt32 OnMagazineAmmoCount
+		public CHandle<redCallbackObject> OnMagazineAmmoCount
 		{
 			get => GetProperty(ref _onMagazineAmmoCount);
 			set => SetProperty(ref _onMagazineAmmoCount, value);
@@ -113,7 +113,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(20)] 
 		[RED("onMagazineAmmoCapacity")] 
-		public CUInt32 OnMagazineAmmoCapacity
+		public CHandle<redCallbackObject> OnMagazineAmmoCapacity
 		{
 			get => GetProperty(ref _onMagazineAmmoCapacity);
 			set => SetProperty(ref _onMagazineAmmoCapacity, value);

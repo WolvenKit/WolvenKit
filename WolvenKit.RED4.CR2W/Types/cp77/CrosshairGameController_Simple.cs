@@ -25,8 +25,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _overheatBL;
 		private inkWidgetReference _overheatTR;
 		private inkWidgetReference _overheatBR;
-		private CHandle<gameIBlackboard> _weaponLocalBB;
-		private CUInt32 _onChargeChangeBBID;
+		private wCHandle<gameIBlackboard> _weaponLocalBB;
+		private CHandle<redCallbackObject> _onChargeChangeBBID;
 		private CHandle<inkanimProxy> _shakeAnimation;
 		private CBool _isInForcedCool;
 
@@ -176,7 +176,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(36)] 
 		[RED("weaponLocalBB")] 
-		public CHandle<gameIBlackboard> WeaponLocalBB
+		public wCHandle<gameIBlackboard> WeaponLocalBB
 		{
 			get => GetProperty(ref _weaponLocalBB);
 			set => SetProperty(ref _weaponLocalBB, value);
@@ -184,7 +184,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(37)] 
 		[RED("onChargeChangeBBID")] 
-		public CUInt32 OnChargeChangeBBID
+		public CHandle<redCallbackObject> OnChargeChangeBBID
 		{
 			get => GetProperty(ref _onChargeChangeBBID);
 			set => SetProperty(ref _onChargeChangeBBID, value);

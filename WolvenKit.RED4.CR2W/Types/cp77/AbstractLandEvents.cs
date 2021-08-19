@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CBool _blockLandingStimBroadcasting;
 
-		[Ordinal(0)] 
+		[Ordinal(3)] 
 		[RED("blockLandingStimBroadcasting")] 
 		public CBool BlockLandingStimBroadcasting
 		{

@@ -5,12 +5,12 @@ using static WolvenKit.RED4.CR2W.Types.Enums;
 namespace WolvenKit.RED4.CR2W.Types
 {
 	[REDMeta]
-	public class gameinteractionsChoiceEvent : gameinteractionsInteractionEvent
+	public class gameinteractionsChoiceEvent : gameinteractionsInteractionBaseEvent
 	{
 		private gameinteractionsChoice _choice;
 		private CEnum<gameinputActionType> _actionType;
 
-		[Ordinal(4)] 
+		[Ordinal(3)] 
 		[RED("choice")] 
 		public gameinteractionsChoice Choice
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _choice, value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(4)] 
 		[RED("actionType")] 
 		public CEnum<gameinputActionType> ActionType
 		{

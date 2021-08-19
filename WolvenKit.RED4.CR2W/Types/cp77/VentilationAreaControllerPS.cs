@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private VentilationAreaSetup _ventilationAreaSetup;
 		private CBool _isActive;
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("ventilationAreaSetup")] 
 		public VentilationAreaSetup VentilationAreaSetup
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ventilationAreaSetup, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{

@@ -23,9 +23,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private gameNewMappinID _mappinID;
 		private CBool _ignoreAutoDoorClose;
 		private CUInt32 _timeSystemCallbackID;
-		private CUInt32 _vehicleTPPCallbackID;
-		private CUInt32 _vehicleSpeedCallbackID;
-		private CUInt32 _vehicleRPMCallbackID;
+		private CHandle<redCallbackObject> _vehicleTPPCallbackID;
+		private CHandle<redCallbackObject> _vehicleSpeedCallbackID;
+		private CHandle<redCallbackObject> _vehicleRPMCallbackID;
 		private CBool _broadcasting;
 		private CBool _hasSpoiler;
 		private CFloat _spoilerUp;
@@ -40,6 +40,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _radioPressTime;
 		private gameDelayID _raceClockTickID;
 		private CHandle<gameObjectActionsCallbackController> _objectActionsCallbackCtrl;
+		private wCHandle<gameObject> _trunkNpcBody;
 		private wCHandle<PlayerPuppet> _mountedPlayer;
 		private CBool _isIgnoredInTargetingSystem;
 		private CBool _arePlayerHitShapesEnabled;
@@ -175,7 +176,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(20)] 
 		[RED("vehicleTPPCallbackID")] 
-		public CUInt32 VehicleTPPCallbackID
+		public CHandle<redCallbackObject> VehicleTPPCallbackID
 		{
 			get => GetProperty(ref _vehicleTPPCallbackID);
 			set => SetProperty(ref _vehicleTPPCallbackID, value);
@@ -183,7 +184,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(21)] 
 		[RED("vehicleSpeedCallbackID")] 
-		public CUInt32 VehicleSpeedCallbackID
+		public CHandle<redCallbackObject> VehicleSpeedCallbackID
 		{
 			get => GetProperty(ref _vehicleSpeedCallbackID);
 			set => SetProperty(ref _vehicleSpeedCallbackID, value);
@@ -191,7 +192,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(22)] 
 		[RED("vehicleRPMCallbackID")] 
-		public CUInt32 VehicleRPMCallbackID
+		public CHandle<redCallbackObject> VehicleRPMCallbackID
 		{
 			get => GetProperty(ref _vehicleRPMCallbackID);
 			set => SetProperty(ref _vehicleRPMCallbackID, value);
@@ -310,6 +311,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(37)] 
+		[RED("trunkNpcBody")] 
+		public wCHandle<gameObject> TrunkNpcBody
+		{
+			get => GetProperty(ref _trunkNpcBody);
+			set => SetProperty(ref _trunkNpcBody, value);
+		}
+
+		[Ordinal(38)] 
 		[RED("mountedPlayer")] 
 		public wCHandle<PlayerPuppet> MountedPlayer
 		{
@@ -317,7 +326,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _mountedPlayer, value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("isIgnoredInTargetingSystem")] 
 		public CBool IsIgnoredInTargetingSystem
 		{
@@ -325,7 +334,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isIgnoredInTargetingSystem, value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("arePlayerHitShapesEnabled")] 
 		public CBool ArePlayerHitShapesEnabled
 		{
@@ -333,7 +342,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _arePlayerHitShapesEnabled, value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(41)] 
 		[RED("vehicleController")] 
 		public CHandle<vehicleController> VehicleController
 		{

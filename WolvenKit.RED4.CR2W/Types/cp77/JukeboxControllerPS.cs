@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CInt32 _activeStation;
 		private CBool _isPlaying;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("jukeboxSetup")] 
 		public JukeboxSetup JukeboxSetup
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _jukeboxSetup, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("stations")] 
 		public CArray<RadioStationsMap> Stations
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _stations, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("activeStation")] 
 		public CInt32 ActiveStation
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _activeStation, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("isPlaying")] 
 		public CBool IsPlaying
 		{

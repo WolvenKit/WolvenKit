@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CName _factOnQHack;
 		private CBool _wasWeighHacked;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("chestPressSkillChecks")] 
 		public CHandle<EngDemoContainer> ChestPressSkillChecks
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _chestPressSkillChecks, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("factOnQHack")] 
 		public CName FactOnQHack
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _factOnQHack, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("wasWeighHacked")] 
 		public CBool WasWeighHacked
 		{

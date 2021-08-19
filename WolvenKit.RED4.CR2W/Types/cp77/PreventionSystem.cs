@@ -49,11 +49,11 @@ namespace WolvenKit.RED4.CR2W.Types
 		private TweakDBID _failsafePoliceRecordT3;
 		private CArray<CName> _blinkReasonsStack;
 		private wCHandle<gameIBlackboard> _wantedBarBlackboard;
-		private CUInt32 _onPlayerChoiceCallID;
+		private CHandle<redCallbackObject> _onPlayerChoiceCallID;
 		private CUInt32 _playerAttachedCallbackID;
 		private CUInt32 _playerDetachedCallbackID;
-		private CUInt32 _playerHLSID;
-		private CUInt32 _playerVehicleStateID;
+		private CHandle<redCallbackObject> _playerHLSID;
+		private CHandle<redCallbackObject> _playerVehicleStateID;
 		private CEnum<gamePSMHighLevel> _playerHLS;
 		private CEnum<gamePSMVehicle> _playerVehicleState;
 		private CBool _currentStageFallbackUnitSpawned;
@@ -63,6 +63,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _reconDeployed;
 		private CArray<wCHandle<vehicleBaseObject>> _vehicles;
 		private CArray<wCHandle<gameObject>> _viewers;
+		private CBool _hasViewers;
 
 		[Ordinal(0)] 
 		[RED("districtManager")] 
@@ -402,7 +403,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(42)] 
 		[RED("onPlayerChoiceCallID")] 
-		public CUInt32 OnPlayerChoiceCallID
+		public CHandle<redCallbackObject> OnPlayerChoiceCallID
 		{
 			get => GetProperty(ref _onPlayerChoiceCallID);
 			set => SetProperty(ref _onPlayerChoiceCallID, value);
@@ -426,7 +427,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(45)] 
 		[RED("playerHLSID")] 
-		public CUInt32 PlayerHLSID
+		public CHandle<redCallbackObject> PlayerHLSID
 		{
 			get => GetProperty(ref _playerHLSID);
 			set => SetProperty(ref _playerHLSID, value);
@@ -434,7 +435,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(46)] 
 		[RED("playerVehicleStateID")] 
-		public CUInt32 PlayerVehicleStateID
+		public CHandle<redCallbackObject> PlayerVehicleStateID
 		{
 			get => GetProperty(ref _playerVehicleStateID);
 			set => SetProperty(ref _playerVehicleStateID, value);
@@ -510,6 +511,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _viewers);
 			set => SetProperty(ref _viewers, value);
+		}
+
+		[Ordinal(56)] 
+		[RED("hasViewers")] 
+		public CBool HasViewers
+		{
+			get => GetProperty(ref _hasViewers);
+			set => SetProperty(ref _hasViewers, value);
 		}
 
 		public PreventionSystem(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

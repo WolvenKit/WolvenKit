@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private Vector2 _slotSize;
 		private CArray<inkGridItemTemplate> _itemTemplates;
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("height")] 
 		public CUInt32 Height
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _height, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("width")] 
 		public CUInt32 Width
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _width, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("items")] 
 		public CArray<inkGridItem> Items
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _items, value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("slotSize")] 
 		public Vector2 SlotSize
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _slotSize, value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("itemTemplates")] 
 		public CArray<inkGridItemTemplate> ItemTemplates
 		{

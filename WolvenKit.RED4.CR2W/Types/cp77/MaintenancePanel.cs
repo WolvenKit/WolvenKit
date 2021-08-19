@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CHandle<AnimFeature_SimpleDevice> _animFeature;
 
-		[Ordinal(96)] 
+		[Ordinal(97)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_SimpleDevice> AnimFeature
 		{

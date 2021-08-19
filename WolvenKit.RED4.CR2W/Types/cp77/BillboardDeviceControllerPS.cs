@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<EditableGameLightSettings> _lightsSettings;
 		private CBool _useDeviceAppearence;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("glitchSFX")] 
 		public CName GlitchSFX
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _glitchSFX, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("useLights")] 
 		public CBool UseLights
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _useLights, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("lightsSettings")] 
 		public CArray<EditableGameLightSettings> LightsSettings
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lightsSettings, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("useDeviceAppearence")] 
 		public CBool UseDeviceAppearence
 		{

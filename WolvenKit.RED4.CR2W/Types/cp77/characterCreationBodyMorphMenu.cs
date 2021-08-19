@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _colorPickerBG;
 		private inkWidgetReference _colorPickerClose;
 		private inkScrollAreaWidgetReference _scrollArea;
-		private CHandle<inkCompoundWidget> _optionList;
+		private wCHandle<inkCompoundWidget> _optionList;
 		private inkWidgetReference _previousPageBtn;
 		private inkImageWidgetReference _previousPageBtnBg;
 		private inkImageWidgetReference _nextPageBtnBg;
@@ -94,7 +94,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("optionList")] 
-		public CHandle<inkCompoundWidget> OptionList
+		public wCHandle<inkCompoundWidget> OptionList
 		{
 			get => GetProperty(ref _optionList);
 			set => SetProperty(ref _optionList, value);

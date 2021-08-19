@@ -9,13 +9,13 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private wCHandle<gameIBlackboard> _vehicleBlackboard;
 		private wCHandle<gameIBlackboard> _activeVehicleUIBlackboard;
-		private CUInt32 _vehicleBBStateConectionId;
-		private CUInt32 _speedBBConnectionId;
-		private CUInt32 _gearBBConnectionId;
-		private CUInt32 _tppBBConnectionId;
-		private CUInt32 _rpmValueBBConnectionId;
-		private CUInt32 _leanAngleBBConnectionId;
-		private CUInt32 _playerStateBBConnectionId;
+		private CHandle<redCallbackObject> _vehicleBBStateConectionId;
+		private CHandle<redCallbackObject> _speedBBConnectionId;
+		private CHandle<redCallbackObject> _gearBBConnectionId;
+		private CHandle<redCallbackObject> _tppBBConnectionId;
+		private CHandle<redCallbackObject> _rpmValueBBConnectionId;
+		private CHandle<redCallbackObject> _leanAngleBBConnectionId;
+		private CHandle<redCallbackObject> _playerStateBBConnectionId;
 		private inkanimPlaybackOptions _playOptionReverse;
 		private wCHandle<inkCanvasWidget> _rootWidget;
 		private wCHandle<inkCanvasWidget> _mainCanvas;
@@ -66,7 +66,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("vehicleBBStateConectionId")] 
-		public CUInt32 VehicleBBStateConectionId
+		public CHandle<redCallbackObject> VehicleBBStateConectionId
 		{
 			get => GetProperty(ref _vehicleBBStateConectionId);
 			set => SetProperty(ref _vehicleBBStateConectionId, value);
@@ -74,7 +74,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("speedBBConnectionId")] 
-		public CUInt32 SpeedBBConnectionId
+		public CHandle<redCallbackObject> SpeedBBConnectionId
 		{
 			get => GetProperty(ref _speedBBConnectionId);
 			set => SetProperty(ref _speedBBConnectionId, value);
@@ -82,7 +82,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(14)] 
 		[RED("gearBBConnectionId")] 
-		public CUInt32 GearBBConnectionId
+		public CHandle<redCallbackObject> GearBBConnectionId
 		{
 			get => GetProperty(ref _gearBBConnectionId);
 			set => SetProperty(ref _gearBBConnectionId, value);
@@ -90,7 +90,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("tppBBConnectionId")] 
-		public CUInt32 TppBBConnectionId
+		public CHandle<redCallbackObject> TppBBConnectionId
 		{
 			get => GetProperty(ref _tppBBConnectionId);
 			set => SetProperty(ref _tppBBConnectionId, value);
@@ -98,7 +98,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(16)] 
 		[RED("rpmValueBBConnectionId")] 
-		public CUInt32 RpmValueBBConnectionId
+		public CHandle<redCallbackObject> RpmValueBBConnectionId
 		{
 			get => GetProperty(ref _rpmValueBBConnectionId);
 			set => SetProperty(ref _rpmValueBBConnectionId, value);
@@ -106,7 +106,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(17)] 
 		[RED("leanAngleBBConnectionId")] 
-		public CUInt32 LeanAngleBBConnectionId
+		public CHandle<redCallbackObject> LeanAngleBBConnectionId
 		{
 			get => GetProperty(ref _leanAngleBBConnectionId);
 			set => SetProperty(ref _leanAngleBBConnectionId, value);
@@ -114,7 +114,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(18)] 
 		[RED("playerStateBBConnectionId")] 
-		public CUInt32 PlayerStateBBConnectionId
+		public CHandle<redCallbackObject> PlayerStateBBConnectionId
 		{
 			get => GetProperty(ref _playerStateBBConnectionId);
 			set => SetProperty(ref _playerStateBBConnectionId, value);

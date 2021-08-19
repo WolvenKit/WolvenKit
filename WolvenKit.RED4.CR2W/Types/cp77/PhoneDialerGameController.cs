@@ -24,9 +24,11 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CName _audioPhoneNavigation;
 		private wCHandle<gameIBlackboard> _phoneBlackboard;
 		private CHandle<UI_ComDeviceDef> _phoneBBDefinition;
-		private CUInt32 _contactOpensBBID;
+		private CHandle<redCallbackObject> _contactOpensBBID;
 		private CHandle<inkanimProxy> _switchAnimProxy;
 		private CHandle<inkanimProxy> _transitionAnimProxy;
+		private CBool _repeatingScrollActionEnabled;
+		private CBool _firstInit;
 
 		[Ordinal(9)] 
 		[RED("contactsList")] 
@@ -166,7 +168,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(26)] 
 		[RED("contactOpensBBID")] 
-		public CUInt32 ContactOpensBBID
+		public CHandle<redCallbackObject> ContactOpensBBID
 		{
 			get => GetProperty(ref _contactOpensBBID);
 			set => SetProperty(ref _contactOpensBBID, value);
@@ -186,6 +188,22 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _transitionAnimProxy);
 			set => SetProperty(ref _transitionAnimProxy, value);
+		}
+
+		[Ordinal(29)] 
+		[RED("repeatingScrollActionEnabled")] 
+		public CBool RepeatingScrollActionEnabled
+		{
+			get => GetProperty(ref _repeatingScrollActionEnabled);
+			set => SetProperty(ref _repeatingScrollActionEnabled, value);
+		}
+
+		[Ordinal(30)] 
+		[RED("firstInit")] 
+		public CBool FirstInit
+		{
+			get => GetProperty(ref _firstInit);
+			set => SetProperty(ref _firstInit, value);
 		}
 
 		public PhoneDialerGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

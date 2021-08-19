@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private SmartHouseConfiguration _smartHouseCustomization;
 		private CUInt32 _callbackID;
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("timetable")] 
 		public CArray<SPresetTimetableEntry> Timetable
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _timetable, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("activePreset")] 
 		public CHandle<SmartHousePreset> ActivePreset
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _activePreset, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("availablePresets")] 
 		public CArray<CHandle<SmartHousePreset>> AvailablePresets
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _availablePresets, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("smartHouseCustomization")] 
 		public SmartHouseConfiguration SmartHouseCustomization
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _smartHouseCustomization, value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("callbackID")] 
 		public CUInt32 CallbackID
 		{

@@ -14,6 +14,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private gamebbScriptID_Variant _activePrograms;
 		private gamebbScriptID_Variant _activeTraps;
 		private gamebbScriptID_Int32 _state;
+		private gamebbScriptID_Float _timerLeftPercent;
 		private gamebbScriptID_Variant _entity;
 		private gamebbScriptID_Bool _isJournalTarget;
 
@@ -74,6 +75,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(7)] 
+		[RED("TimerLeftPercent")] 
+		public gamebbScriptID_Float TimerLeftPercent
+		{
+			get => GetProperty(ref _timerLeftPercent);
+			set => SetProperty(ref _timerLeftPercent, value);
+		}
+
+		[Ordinal(8)] 
 		[RED("Entity")] 
 		public gamebbScriptID_Variant Entity
 		{
@@ -81,7 +90,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _entity, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("IsJournalTarget")] 
 		public gamebbScriptID_Bool IsJournalTarget
 		{

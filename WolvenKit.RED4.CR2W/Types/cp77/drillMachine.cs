@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isActive;
 		private wCHandle<gameObject> _targetDevice;
 
-		[Ordinal(57)] 
+		[Ordinal(62)] 
 		[RED("rewireComponent")] 
 		public CHandle<RewireComponent> RewireComponent
 		{
@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _rewireComponent, value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(63)] 
 		[RED("player")] 
 		public wCHandle<gameObject> Player
 		{
@@ -32,7 +32,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _player, value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(64)] 
 		[RED("scanManager")] 
 		public CHandle<DrillMachineScanManager> ScanManager
 		{
@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _scanManager, value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(65)] 
 		[RED("screen_postprocess")] 
 		public CHandle<entIVisualComponent> Screen_postprocess
 		{
@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _screen_postprocess, value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(66)] 
 		[RED("screen_backside")] 
 		public CHandle<entIVisualComponent> Screen_backside
 		{
@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _screen_backside, value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(67)] 
 		[RED("isScanning")] 
 		public CBool IsScanning
 		{
@@ -64,7 +64,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isScanning, value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(68)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
@@ -72,7 +72,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isActive, value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(69)] 
 		[RED("targetDevice")] 
 		public wCHandle<gameObject> TargetDevice
 		{

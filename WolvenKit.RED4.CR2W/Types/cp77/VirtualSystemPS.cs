@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<CHandle<gameDeviceComponentPS>> _slaves;
 		private CBool _slavesCached;
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("owner")] 
 		public wCHandle<MasterControllerPS> Owner
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _owner, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("slaves")] 
 		public CArray<CHandle<gameDeviceComponentPS>> Slaves
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _slaves, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("slavesCached")] 
 		public CBool SlavesCached
 		{

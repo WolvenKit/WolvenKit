@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<AnimFeature_SimpleDevice> _animFeature;
 		private CName _factOnDoorOpened;
 
-		[Ordinal(96)] 
+		[Ordinal(97)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_SimpleDevice> AnimFeature
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animFeature, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(98)] 
 		[RED("factOnDoorOpened")] 
 		public CName FactOnDoorOpened
 		{

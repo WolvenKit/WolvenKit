@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _playerSafePass;
 		private CBool _triggerExploded;
 
-		[Ordinal(119)] 
+		[Ordinal(120)] 
 		[RED("playerSafePass")] 
 		public CBool PlayerSafePass
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerSafePass, value);
 		}
 
-		[Ordinal(120)] 
+		[Ordinal(121)] 
 		[RED("triggerExploded")] 
 		public CBool TriggerExploded
 		{

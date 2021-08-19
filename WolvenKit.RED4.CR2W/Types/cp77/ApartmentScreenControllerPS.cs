@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CEnum<ERentStatus> _currentRentStatus;
 		private CInt32 _lastStatusChangeDay;
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("initialRentStatus")] 
 		public CEnum<ERentStatus> InitialRentStatus
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _initialRentStatus, value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("overdueMessageRecordID")] 
 		public TweakDBID OverdueMessageRecordID
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _overdueMessageRecordID, value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(110)] 
 		[RED("paidMessageRecordID")] 
 		public TweakDBID PaidMessageRecordID
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _paidMessageRecordID, value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(111)] 
 		[RED("evictionMessageRecordID")] 
 		public TweakDBID EvictionMessageRecordID
 		{
@@ -53,7 +53,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _evictionMessageRecordID, value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(112)] 
 		[RED("paymentSchedule")] 
 		public CEnum<EPaymentSchedule> PaymentSchedule
 		{
@@ -61,7 +61,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _paymentSchedule, value);
 		}
 
-		[Ordinal(112)] 
+		[Ordinal(113)] 
 		[RED("randomizeInitialOverdue")] 
 		public CBool RandomizeInitialOverdue
 		{
@@ -69,7 +69,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _randomizeInitialOverdue, value);
 		}
 
-		[Ordinal(113)] 
+		[Ordinal(114)] 
 		[RED("initialOverdue")] 
 		public CInt32 InitialOverdue
 		{
@@ -77,7 +77,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _initialOverdue, value);
 		}
 
-		[Ordinal(114)] 
+		[Ordinal(115)] 
 		[RED("allowAutomaticRentStatusChange")] 
 		public CBool AllowAutomaticRentStatusChange
 		{
@@ -85,7 +85,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _allowAutomaticRentStatusChange, value);
 		}
 
-		[Ordinal(115)] 
+		[Ordinal(116)] 
 		[RED("maxDays")] 
 		public CInt32 MaxDays
 		{
@@ -93,7 +93,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _maxDays, value);
 		}
 
-		[Ordinal(116)] 
+		[Ordinal(117)] 
 		[RED("currentOverdue")] 
 		public CInt32 CurrentOverdue
 		{
@@ -101,7 +101,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentOverdue, value);
 		}
 
-		[Ordinal(117)] 
+		[Ordinal(118)] 
 		[RED("isInitialRentStateSet")] 
 		public CBool IsInitialRentStateSet
 		{
@@ -109,7 +109,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isInitialRentStateSet, value);
 		}
 
-		[Ordinal(118)] 
+		[Ordinal(119)] 
 		[RED("currentRentStatus")] 
 		public CEnum<ERentStatus> CurrentRentStatus
 		{
@@ -117,7 +117,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentRentStatus, value);
 		}
 
-		[Ordinal(119)] 
+		[Ordinal(120)] 
 		[RED("lastStatusChangeDay")] 
 		public CInt32 LastStatusChangeDay
 		{

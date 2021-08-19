@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CFloat _lapsedTime;
 
-		[Ordinal(0)] 
+		[Ordinal(3)] 
 		[RED("lapsedTime")] 
 		public CFloat LapsedTime
 		{

@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<PlayerPuppet> _player;
 		private wCHandle<QuickSlotsManager> _quickSlotsManager;
 		private CHandle<InventoryDataManagerV2> _inventoryDataManager;
-		private CArray<CHandle<DpadWheelItemController>> _dpadItemsList;
+		private CArray<wCHandle<DpadWheelItemController>> _dpadItemsList;
 		private CArray<QuickSlotCommand> _commandsList;
 		private wCHandle<DpadWheelItemController> _selectedWheelItem;
 		private wCHandle<ButtonHints> _buttonHintsController;
@@ -43,12 +43,12 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _dpadWheelOpen;
 		private gameDelayID _neutralChoiceDelayId;
 		private QuickSlotCommand _previouslySelectedData;
-		private CHandle<gameIBlackboard> _uiQuickItemsBlackboard;
+		private wCHandle<gameIBlackboard> _uiQuickItemsBlackboard;
 		private CHandle<UI_QuickSlotsDataDef> _uiQuickSlotDef;
-		private CUInt32 _dPadWheelAngleBBID;
-		private CUInt32 _dPadWheelInterationStartedBBID;
-		private CUInt32 _dPadWheelInterationEndedBBID;
-		private CUInt32 _dpadWheelCyberwareAssignedBBID;
+		private CHandle<redCallbackObject> _dPadWheelAngleBBID;
+		private CHandle<redCallbackObject> _dPadWheelInterationStartedBBID;
+		private CHandle<redCallbackObject> _dPadWheelInterationEndedBBID;
+		private CHandle<redCallbackObject> _dpadWheelCyberwareAssignedBBID;
 
 		[Ordinal(9)] 
 		[RED("haskMarkContainer")] 
@@ -228,7 +228,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(31)] 
 		[RED("dpadItemsList")] 
-		public CArray<CHandle<DpadWheelItemController>> DpadItemsList
+		public CArray<wCHandle<DpadWheelItemController>> DpadItemsList
 		{
 			get => GetProperty(ref _dpadItemsList);
 			set => SetProperty(ref _dpadItemsList, value);
@@ -340,7 +340,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(45)] 
 		[RED("UiQuickItemsBlackboard")] 
-		public CHandle<gameIBlackboard> UiQuickItemsBlackboard
+		public wCHandle<gameIBlackboard> UiQuickItemsBlackboard
 		{
 			get => GetProperty(ref _uiQuickItemsBlackboard);
 			set => SetProperty(ref _uiQuickItemsBlackboard, value);
@@ -356,7 +356,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(47)] 
 		[RED("DPadWheelAngleBBID")] 
-		public CUInt32 DPadWheelAngleBBID
+		public CHandle<redCallbackObject> DPadWheelAngleBBID
 		{
 			get => GetProperty(ref _dPadWheelAngleBBID);
 			set => SetProperty(ref _dPadWheelAngleBBID, value);
@@ -364,7 +364,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(48)] 
 		[RED("DPadWheelInterationStartedBBID")] 
-		public CUInt32 DPadWheelInterationStartedBBID
+		public CHandle<redCallbackObject> DPadWheelInterationStartedBBID
 		{
 			get => GetProperty(ref _dPadWheelInterationStartedBBID);
 			set => SetProperty(ref _dPadWheelInterationStartedBBID, value);
@@ -372,7 +372,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(49)] 
 		[RED("DPadWheelInterationEndedBBID")] 
-		public CUInt32 DPadWheelInterationEndedBBID
+		public CHandle<redCallbackObject> DPadWheelInterationEndedBBID
 		{
 			get => GetProperty(ref _dPadWheelInterationEndedBBID);
 			set => SetProperty(ref _dPadWheelInterationEndedBBID, value);
@@ -380,7 +380,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(50)] 
 		[RED("DpadWheelCyberwareAssignedBBID")] 
-		public CUInt32 DpadWheelCyberwareAssignedBBID
+		public CHandle<redCallbackObject> DpadWheelCyberwareAssignedBBID
 		{
 			get => GetProperty(ref _dpadWheelCyberwareAssignedBBID);
 			set => SetProperty(ref _dpadWheelCyberwareAssignedBBID, value);

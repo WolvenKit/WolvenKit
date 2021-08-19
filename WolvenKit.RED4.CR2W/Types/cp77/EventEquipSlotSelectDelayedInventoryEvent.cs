@@ -7,11 +7,11 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class EventEquipSlotSelectDelayedInventoryEvent : redEvent
 	{
-		private CHandle<InventoryItemDisplayController> _controller;
+		private wCHandle<InventoryItemDisplayController> _controller;
 
 		[Ordinal(0)] 
 		[RED("controller")] 
-		public CHandle<InventoryItemDisplayController> Controller
+		public wCHandle<InventoryItemDisplayController> Controller
 		{
 			get => GetProperty(ref _controller);
 			set => SetProperty(ref _controller, value);

@@ -7,24 +7,24 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class ItemCompareBuilder : IScriptable
 	{
-		private InventoryItemData _item1;
-		private InventoryItemData _item2;
+		private InventoryItemSortData _sortData1;
+		private InventoryItemSortData _sortData2;
 		private CHandle<CompareBuilder> _compareBuilder;
 
 		[Ordinal(0)] 
-		[RED("item1")] 
-		public InventoryItemData Item1
+		[RED("sortData1")] 
+		public InventoryItemSortData SortData1
 		{
-			get => GetProperty(ref _item1);
-			set => SetProperty(ref _item1, value);
+			get => GetProperty(ref _sortData1);
+			set => SetProperty(ref _sortData1, value);
 		}
 
 		[Ordinal(1)] 
-		[RED("item2")] 
-		public InventoryItemData Item2
+		[RED("sortData2")] 
+		public InventoryItemSortData SortData2
 		{
-			get => GetProperty(ref _item2);
-			set => SetProperty(ref _item2, value);
+			get => GetProperty(ref _sortData2);
+			set => SetProperty(ref _sortData2, value);
 		}
 
 		[Ordinal(2)] 

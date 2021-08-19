@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class PhotoModeSticker : inkWidgetLogicController
 	{
 		private inkImageWidgetReference _image;
-		private CHandle<gameuiPhotoModeStickersController> _stickersController;
+		private wCHandle<gameuiPhotoModeStickersController> _stickersController;
 
 		[Ordinal(1)] 
 		[RED("image")] 
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(2)] 
 		[RED("stickersController")] 
-		public CHandle<gameuiPhotoModeStickersController> StickersController
+		public wCHandle<gameuiPhotoModeStickersController> StickersController
 		{
 			get => GetProperty(ref _stickersController);
 			set => SetProperty(ref _stickersController, value);

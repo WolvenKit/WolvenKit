@@ -11,6 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _renderInShadows;
 		private CBool _isTwoSided;
 		private CBool _isRayTracedEmissive;
+		private CBool _isConsoleLOD0;
 
 		[Ordinal(0)] 
 		[RED("renderInScene")] 
@@ -42,6 +43,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _isRayTracedEmissive);
 			set => SetProperty(ref _isRayTracedEmissive, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("isConsoleLOD0")] 
+		public CBool IsConsoleLOD0
+		{
+			get => GetProperty(ref _isConsoleLOD0);
+			set => SetProperty(ref _isConsoleLOD0, value);
 		}
 
 		public meshChunkFlags(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

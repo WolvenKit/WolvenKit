@@ -20,6 +20,11 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CString _trailName;
 		private CFloat _maxChargeThreshold;
 		private CBool _lowAmmoEffectActive;
+		private CBool _hasSecondaryTriggerMode;
+		private CHandle<gamedataWeaponItem_Record> _weaponRecord;
+		private CBool _isHeavyWeapon;
+		private CBool _isMeleeWeapon;
+		private CBool _isRangedWeapon;
 		private CHandle<gameIBlackboard> _aIBlackboard;
 
 		[Ordinal(43)] 
@@ -127,6 +132,46 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(56)] 
+		[RED("hasSecondaryTriggerMode")] 
+		public CBool HasSecondaryTriggerMode
+		{
+			get => GetProperty(ref _hasSecondaryTriggerMode);
+			set => SetProperty(ref _hasSecondaryTriggerMode, value);
+		}
+
+		[Ordinal(57)] 
+		[RED("weaponRecord")] 
+		public CHandle<gamedataWeaponItem_Record> WeaponRecord
+		{
+			get => GetProperty(ref _weaponRecord);
+			set => SetProperty(ref _weaponRecord, value);
+		}
+
+		[Ordinal(58)] 
+		[RED("isHeavyWeapon")] 
+		public CBool IsHeavyWeapon
+		{
+			get => GetProperty(ref _isHeavyWeapon);
+			set => SetProperty(ref _isHeavyWeapon, value);
+		}
+
+		[Ordinal(59)] 
+		[RED("isMeleeWeapon")] 
+		public CBool IsMeleeWeapon
+		{
+			get => GetProperty(ref _isMeleeWeapon);
+			set => SetProperty(ref _isMeleeWeapon, value);
+		}
+
+		[Ordinal(60)] 
+		[RED("isRangedWeapon")] 
+		public CBool IsRangedWeapon
+		{
+			get => GetProperty(ref _isRangedWeapon);
+			set => SetProperty(ref _isRangedWeapon, value);
+		}
+
+		[Ordinal(61)] 
 		[RED("AIBlackboard")] 
 		public CHandle<gameIBlackboard> AIBlackboard
 		{
