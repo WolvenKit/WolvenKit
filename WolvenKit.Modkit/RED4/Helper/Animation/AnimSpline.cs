@@ -16,7 +16,7 @@ namespace WolvenKit.Modkit.RED4.Animation
         const int wSignRightShift = 15;
         const int componentRightShift = 13;
         const int boneIdxRightShift = 0;
-        public static void AddAnimationSpline(ref ModelRoot model, animAnimationBufferCompressed blob, string animName, Stream defferedBuffer)
+        public static void AddAnimationSpline(ref ModelRoot model, animAnimationBufferCompressed blob, string animName, Stream defferedBuffer, animAnimation animAnimDes)
         {
             //boneidx time value
             Dictionary<UInt16,Dictionary<float, Vec3>> positions = new Dictionary<ushort, Dictionary<float, Vec3>>();
@@ -24,6 +24,11 @@ namespace WolvenKit.Modkit.RED4.Animation
             Dictionary<UInt16, Dictionary<float, Vec3>> scales = new Dictionary<ushort, Dictionary<float, Vec3>>();
 
             Dictionary<UInt16, float> tracks = new Dictionary<UInt16, float>();
+
+            if(animAnimDes.MotionExtraction.IsSerialized)
+            {
+                ROOT_MOTION.AddRootMotion(ref positions, ref rotations, animAnimDes);
+            }
 
             BinaryReader br = new BinaryReader(defferedBuffer);
             float duration = blob.Duration.Value;

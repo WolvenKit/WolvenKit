@@ -95,7 +95,7 @@ namespace WolvenKit.Modkit.RED4
                             animStream.DecompressAndCopySegment(defferedBuffer, b.DiskSize, b.MemSize);
                         }
                         defferedBuffer.Seek(0, SeekOrigin.Begin);
-                        SIMD.AddAnimationSIMD(ref model, animBuff, animAnimDes.Name.Value, defferedBuffer);
+                        SIMD.AddAnimationSIMD(ref model, animBuff, animAnimDes.Name.Value, defferedBuffer, animAnimDes);
                     }
                     break;
                     case "animAnimationBufferCompressed":
@@ -135,7 +135,7 @@ namespace WolvenKit.Modkit.RED4
                             animStream.DecompressAndCopySegment(defferedBuffer, b.DiskSize, b.MemSize);
                         }
                         defferedBuffer.Seek(0, SeekOrigin.Begin);
-                        SPLINE.AddAnimationSpline(ref model, animBuff, animAnimDes.Name.Value, defferedBuffer);
+                        SPLINE.AddAnimationSpline(ref model, animBuff, animAnimDes.Name.Value, defferedBuffer,animAnimDes);
                     }
                     break;
                 }

@@ -10,8 +10,15 @@ namespace WolvenKit.Modkit.RED4.Animation
     using Vec3 = System.Numerics.Vector3;
     class SIMD
     {
-        public static void AddAnimationSIMD(ref ModelRoot model, animAnimationBufferSimd blob,string animName,Stream defferedBuffer)
+        public static void AddAnimationSIMD(ref ModelRoot model, animAnimationBufferSimd blob,string animName,Stream defferedBuffer,animAnimation animAnimDes)
         {
+            Dictionary<UInt16, Dictionary<float, Vec3>> rootPositions = new Dictionary<ushort, Dictionary<float, Vec3>>();
+            Dictionary<UInt16, Dictionary<float, Quat>> rootRotations = new Dictionary<ushort, Dictionary<float, Quat>>();
+            bool hasRootMotion = animAnimDes.MotionExtraction.IsSerialized;
+            if(hasRootMotion)
+            {
+                ROOT_MOTION.AddRootMotion(ref rootPositions, ref rootRotations, animAnimDes);
+            }
             BinaryReader br = new BinaryReader(defferedBuffer);
 
             UInt32 jointsCountAligned = (blob.NumJoints.Value + 3U) & (~3U); // simd 4 alignment
