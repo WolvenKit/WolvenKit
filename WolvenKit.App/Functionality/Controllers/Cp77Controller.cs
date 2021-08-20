@@ -312,18 +312,18 @@ namespace WolvenKit.Functionality.Controllers
             {
                 case GameType.Witcher3:
                 {
-                    if (project is Tw3Project witcherProject)
-                    {
-                        var diskPathInfo = new FileInfo(Path.Combine(witcherProject.ModCookedDirectory, file.Name));
-                        if (diskPathInfo.Directory == null)
-                        {
-                            break;
-                        }
+                    //if (project is Tw3Project witcherProject)
+                    //{
+                    //    var diskPathInfo = new FileInfo(Path.Combine(witcherProject.ModCookedDirectory, file.Name));
+                    //    if (diskPathInfo.Directory == null)
+                    //    {
+                    //        break;
+                    //    }
 
-                        Directory.CreateDirectory(diskPathInfo.Directory.FullName);
-                        using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
-                        file.Extract(fs);
-                    }
+                    //    Directory.CreateDirectory(diskPathInfo.Directory.FullName);
+                    //    using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
+                    //    file.Extract(fs);
+                    //}
                     break;
                 }
                 case GameType.Cyberpunk2077:

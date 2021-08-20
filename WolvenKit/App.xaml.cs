@@ -15,7 +15,7 @@ using WolvenKit.Functionality.Initialization;
 using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.Modkit.RED3;
+//using WolvenKit.Modkit.RED3;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W;
@@ -150,8 +150,8 @@ namespace WolvenKit
                     services.AddSingleton<Cp77Controller>();
 
                     // red3 modding tools
-                    services.AddSingleton<Red3ModTools>();
-                    services.AddSingleton<Tw3Controller>();
+                    //services.AddSingleton<Red3ModTools>();
+                    //services.AddSingleton<Tw3Controller>();
 
                     services.AddSingleton<IGameControllerFactory, GameControllerFactory>();
 

@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
-
 using DynamicData;
 using Newtonsoft.Json;
 using WolvenKit.Functionality.Services;

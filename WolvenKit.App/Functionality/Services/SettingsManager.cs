@@ -7,7 +7,6 @@ using System.Windows.Media;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
-using WolvenKit.Common.Tools;
 using WolvenKit.Core;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.WKitGlobal;
@@ -211,20 +210,20 @@ namespace WolvenKit.Functionality.Services
 
             // TODO: move this?
             // add a mechanism to update individual cache managers
-            for (var j = 0; j < config.ManagerVersions.Length; j++)
-            {
-                var savedversions = config.ManagerVersions[j];
-                var e = (EManagerType)j;
-                var curversion = IGameController.GetManagerVersion(e);
+            //for (var j = 0; j < config.ManagerVersions.Length; j++)
+            //{
+            //    var savedversions = config.ManagerVersions[j];
+            //    var e = (EManagerType)j;
+            //    var curversion = IGameController.GetManagerVersion(e);
 
-                if (savedversions != curversion)
-                {
-                    if (File.Exists(IGameController.GetManagerPath(e)))
-                    {
-                        File.Delete(IGameController.GetManagerPath(e));
-                    }
-                }
-            }
+            //    if (savedversions != curversion)
+            //    {
+            //        if (File.Exists(IGameController.GetManagerPath(e)))
+            //        {
+            //            File.Delete(IGameController.GetManagerPath(e));
+            //        }
+            //    }
+            //}
 
             return config;
         }

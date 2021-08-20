@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.Bundles;
-using WolvenKit.Cache;
 using WolvenKit.Common;
 using WolvenKit.Functionality.WKitGlobal;
-using WolvenKit.W3Strings;
 
 using DynamicData;
 using WolvenKit.Functionality.Services;
@@ -42,18 +39,18 @@ namespace WolvenKit.Functionality.Controllers
             return path;
         }
 
-        public static string GetManagerVersion(EManagerType type) =>
-            type switch
-            {
-                EManagerType.BundleManager => BundleManager.SerializationVersion,
-                EManagerType.CollisionManager => CollisionManager.SerializationVersion,
-                EManagerType.SoundManager => SoundManager.SerializationVersion,
-                EManagerType.W3StringManager => W3StringManager.SerializationVersion,
-                EManagerType.TextureManager => TextureManager.SerializationVersion,
-                EManagerType.ArchiveManager => ArchiveManager.SerializationVersion,
-                EManagerType.Max => throw new ArgumentOutOfRangeException(nameof(type), type, null),
-                _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
-            };
+        //public static string GetManagerVersion(EManagerType type) =>
+        //    type switch
+        //    {
+        //        EManagerType.BundleManager => BundleManager.SerializationVersion,
+        //        EManagerType.CollisionManager => CollisionManager.SerializationVersion,
+        //        EManagerType.SoundManager => SoundManager.SerializationVersion,
+        //        EManagerType.W3StringManager => W3StringManager.SerializationVersion,
+        //        EManagerType.TextureManager => TextureManager.SerializationVersion,
+        //        EManagerType.ArchiveManager => ArchiveManager.SerializationVersion,
+        //        EManagerType.Max => throw new ArgumentOutOfRangeException(nameof(type), type, null),
+        //        _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+        //    };
 
         public List<string> GetAvaliableClasses();
 

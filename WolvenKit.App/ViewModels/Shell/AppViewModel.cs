@@ -387,18 +387,18 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         case ".w3modproj":
                         {
-                            var np = new Tw3Project(location)
-                            {
-                                Name = Path.GetFileNameWithoutExtension(location),
-                                Author = "WolvenKit",
-                                Email = "",
-                                Version = "1.0"
+                            //var np = new Tw3Project(location)
+                            //{
+                            //    Name = Path.GetFileNameWithoutExtension(location),
+                            //    Author = "WolvenKit",
+                            //    Email = "",
+                            //    Version = "1.0"
 
-                            };
-                            _projectManager.ActiveProject = np;
-                            await _projectManager.SaveAsync();
-                            np.CreateDefaultDirectories();
-                            //saveProjectImg(location);
+                            //};
+                            //_projectManager.ActiveProject = np;
+                            //await _projectManager.SaveAsync();
+                            //np.CreateDefaultDirectories();
+                            ////saveProjectImg(location);
                             break;
                         }
                         case ".cpmodproj":

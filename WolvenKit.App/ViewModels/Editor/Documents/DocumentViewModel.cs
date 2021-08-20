@@ -290,8 +290,8 @@ namespace WolvenKit.ViewModels.Editor
 
                                 break;
 
-                            case Tw3Project tw3proj:
-                                throw new NotImplementedException();
+                            //case Tw3Project tw3proj:
+                            //    throw new NotImplementedException();
 
                             default:
                                 _isInitialized = false;

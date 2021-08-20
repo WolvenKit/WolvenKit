@@ -31,13 +31,13 @@ namespace WolvenKit.ViewModels.Editor
 
         public ModkitViewModel(
             IProjectManager projectManager,
-            ILoggerService loggerService,
-            Tw3Controller tw3Controller
+            ILoggerService loggerService
+            //Tw3Controller tw3Controller
         ) : base(ToolTitle)
         {
             _projectManager = projectManager;
             Logger = loggerService;
-            _tw3Controller = tw3Controller;
+            //_tw3Controller = tw3Controller;
 
             RunCommand = new Functionality.Commands.RelayCommand(Run, CanRun);
 

@@ -109,7 +109,7 @@ namespace WolvenKit.Functionality.Services
 
                 var project = fi.Extension switch
                 {
-                    ".w3modproj" => await Load<Tw3Project>(location),
+                    //".w3modproj" => await Load<Tw3Project>(location),
                     ".cpmodproj" => await Load<Cp77Project>(location),
                     _ => null
                 };
@@ -135,17 +135,17 @@ namespace WolvenKit.Functionality.Services
                     return null;
                 }
 
-                if (typeof(T) == typeof(Tw3Project))
-                {
-                    return new Tw3Project(path)
-                    {
-                        Author = obj.Author,
-                        Email = obj.Email,
-                        Name = obj.Name,
-                        Version = obj.Version,
-                    };
-                }
-                else if (typeof(T) == typeof(Cp77Project))
+                //if (typeof(T) == typeof(Tw3Project))
+                //{
+                //    return new Tw3Project(path)
+                //    {
+                //        Author = obj.Author,
+                //        Email = obj.Email,
+                //        Name = obj.Name,
+                //        Version = obj.Version,
+                //    };
+                //}
+                /*else*/ if (typeof(T) == typeof(Cp77Project))
                 {
                     return new Cp77Project(path)
                     {

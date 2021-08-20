@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using CP77Tools.Model;
 using WolvenKit.Common.RED4.Archive;
 using WolvenKit.Interfaces.Core;
-using WolvenKit.RED3.CR2W.Types;
 using WolvenKit.RED4.CR2W.Archive;
 using Index = CP77Tools.Model.Index;
 
