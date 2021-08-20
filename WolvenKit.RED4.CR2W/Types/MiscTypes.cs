@@ -64,8 +64,8 @@ namespace WolvenKit.RED4.CR2W.Types
             {
                 case 2:
                     throw new InvalidParsingException(nameof(DataBuffer));
-                    Buffer.Read(file, size);
-                    break;
+                    //Buffer.Read(file, size);
+                    //break;
                 case 4:
                 {
                     Buffer.Read(file, 2);
