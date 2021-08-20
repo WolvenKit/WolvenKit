@@ -351,7 +351,7 @@
                         <Grid.Resources>
                             
                             <DataTemplate x:Key="CommmonTemplate">
-                                <TextBlock Padding="5" Text="{Binding Property.Value}" />
+                                <TextBlock Padding="5" Text="{Binding Property.Value}"  />
                             </DataTemplate>
 
                             <DataTemplate x:Key="StringTemplateView">
@@ -363,7 +363,13 @@
                                     Background="Transparent"
                                     BorderBrush="Transparent"
                                     Style="{DynamicResource MahApps.Styles.TextBox.DataGrid.Editing}"
-                                    Text="{Binding Property.Value}" />
+                                    Text="{Binding Property.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <hc:Interaction.Triggers>
+                                        <hc:EventTrigger EventName="PreviewTextInput">
+                                            <hc:InvokeCommandAction Command="{Binding PreviewTextInputCommand}" />
+                                        </hc:EventTrigger>
+                                    </hc:Interaction.Triggers>
+                                </TextBox>
                             </DataTemplate>
 
                             <DataTemplate x:Key="RefTemplateView">
@@ -375,7 +381,13 @@
                                     Background="Transparent"
                                     BorderBrush="Transparent"
                                     Style="{DynamicResource MahApps.Styles.TextBox.DataGrid.Editing}"
-                                    Text="{Binding Property.DepotPath}" />
+                                    Text="{Binding Property.DepotPath}">
+                                    <hc:Interaction.Triggers>
+                                        <hc:EventTrigger EventName="PreviewTextInput">
+                                            <hc:InvokeCommandAction Command="{Binding PreviewTextInputCommand}" />
+                                        </hc:EventTrigger>
+                                    </hc:Interaction.Triggers>
+                                </TextBox>
                             </DataTemplate>
 
                             <DataTemplate x:Key="RedboolTemplate">
@@ -384,19 +396,17 @@
                                     Padding="5"
                                     HorizontalAlignment="Left"
                                     IsChecked="{Binding Property.Value}"
-                                    Style="{DynamicResource MahApps.Styles.CheckBox.DataGrid}" />
-                            </DataTemplate>
-
-                            <DataTemplate x:Key="NumericTemplate">
-                                <TextBox
-                                    Height="22"
-                                    Margin="0"
-                                    Padding="3,3,0,0"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent"
-                                    BorderBrush="Transparent"
-                                    Style="{DynamicResource MahApps.Styles.TextBox.DataGrid.Editing}"
-                                    Text="{Binding Property.Value}" />
+                                    Style="{DynamicResource MahApps.Styles.CheckBox.DataGrid}"
+                                    >
+                                    <hc:Interaction.Triggers>
+                                        <hc:EventTrigger EventName="Checked">
+                                            <hc:InvokeCommandAction Command="{Binding PreviewTextInputCommand}" />
+                                        </hc:EventTrigger>
+                                        <hc:EventTrigger EventName="Unchecked">
+                                            <hc:InvokeCommandAction Command="{Binding PreviewTextInputCommand}" />
+                                        </hc:EventTrigger>
+                                    </hc:Interaction.Triggers>
+                                </CheckBox>
                             </DataTemplate>
 
                             <DataTemplate x:Key="EnumTemplate">
@@ -410,11 +420,16 @@
                             <templates:EditableVariableDataTemplateSelector
                                 x:Key="DataTemplateSelector"
                                 CommmonTemplate="{StaticResource CommmonTemplate}"
+                                
                                 EnumTemplate="{StaticResource EnumTemplate}"
+                                
                                 HandleTemplateView="{StaticResource HandleTemplate}"
-                                NumericTemplate="{StaticResource NumericTemplate}"
+                                
                                 RedboolTemplate="{StaticResource RedboolTemplate}"
+                                
                                 RefTemplateView="{StaticResource RefTemplateView}"
+
+                                NumericTemplate="{StaticResource StringTemplateView}"
                                 StringTemplateView="{StaticResource StringTemplateView}"
                                 />
 

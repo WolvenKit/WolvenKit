@@ -4,23 +4,19 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Windows.Input;
 using DynamicData;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Commands;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public class ChunkPropertyViewModel : ReactiveObject, IEditableObject
+    public class ChunkPropertyViewModel : ReactiveObject
     {
-        #region Fields
-        public IEditableVariable Property { get; }
-        #endregion Fields
-
         #region Constructors
-
-        
 
         public ChunkPropertyViewModel(IEditableVariable prop)
         {
@@ -32,6 +28,16 @@ namespace WolvenKit.ViewModels.Shell
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _children)
                 .Subscribe();
+
+            PreviewTextInputCommand = ReactiveCommand.Create(
+                () =>
+                {
+                    if (!Property.IsSerialized)
+                    {
+                        Property.IsSerialized = true;
+                        this.RaisePropertyChanged(nameof(IsSerialized));
+                    }
+                });
         }
 
         private static ChunkPropertyViewModel GetViewModel(IEditableVariable editableVariable) =>
@@ -41,24 +47,15 @@ namespace WolvenKit.ViewModels.Shell
                 IREDString redString => new RedStringViewModel(redString),
                 _ => new ChunkPropertyViewModel(editableVariable)
             };
-        public void BeginEdit()
-        {
-            
-        }
-
-        public void CancelEdit()
-        {
-            
-        }
-
-        public void EndEdit()
-        {
-            
-        }
 
         #endregion Constructors
 
+        public ICommand PreviewTextInputCommand { get; private set; }
+
         #region Properties
+
+        public IEditableVariable Property { get; }
+
         public bool IsSelected { get; set; }
         public bool IsExpanded { get; set; }
 
@@ -83,18 +80,10 @@ namespace WolvenKit.ViewModels.Shell
     public class RedBoolViewModel : ChunkPropertyViewModel
     {
         public RedBoolViewModel(IREDBool prop) :base(prop) { }
-
-        private IREDBool Prop => Property as IREDBool;
-
-        [Reactive] public new bool Value { get; set; }
     }
 
     public class RedStringViewModel : ChunkPropertyViewModel
     {
         public RedStringViewModel(IREDString prop) : base(prop) { }
-
-        private IREDString Prop => Property as IREDString;
-
-        [Reactive] public new string Value { get; set; }
     }
 }

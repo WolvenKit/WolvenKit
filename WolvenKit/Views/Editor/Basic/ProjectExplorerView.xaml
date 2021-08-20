@@ -814,16 +814,10 @@
 
             <syncfusion:SfTreeGrid.ContextMenu>
                 <ContextMenu FontSize="11" Style="{DynamicResource ContextMenuBaseStyle}">
-                    <MenuItem Header="File">
-                        <MenuItem
-                            Command="{Binding OpenFileCommand}"
-                            Header="Open" />
-                        <MenuItem Command="{Binding CopyFileCommand}" Header="Copy" />
-                        <MenuItem Command="{Binding PasteFileCommand}" Header="Paste" />
-                        <MenuItem Command="{Binding DeleteFileCommand}" Header="Delete" />
-                        <MenuItem Command="{Binding RenameFileCommand}" Header="Rename" />
-                    </MenuItem>
+                    <MenuItem Command="{Binding OpenFileCommand}" Header="Open" />
 
+                    <Separator/>
+                    
                     <MenuItem
                         Margin="0"
                         Header="Actions"
@@ -832,6 +826,7 @@
                         <MenuItem Command="{Binding AddAllImportsCommand}" Header="Add all dependencies" />
                         <MenuItem Command="{Binding FastRenderCommand}" Header="Fast render" />
                     </MenuItem>
+                    
                     <MenuItem Header="BK2">
                         <MenuItem
                             x:Name="BKImport"
@@ -843,6 +838,15 @@
                             Header="Export BK2 to Avi" />
                     </MenuItem>
 
+                    <Separator/>
+
+                    <MenuItem Command="{Binding CopyFileCommand}" Header="Copy" />
+                    <MenuItem Command="{Binding PasteFileCommand}" Header="Paste" />
+                    <MenuItem Command="{Binding DeleteFileCommand}" Header="Delete" />
+                    <MenuItem Command="{Binding RenameFileCommand}" Header="Rename" />
+
+                    <Separator/>
+
                     <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path" />
                     <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer" />
                     <MenuItem
@@ -850,10 +854,12 @@
                         Header="Open in asset browser"
                         Visibility="Collapsed" />
 
-                    <MenuItem Click="ExpandChildren_OnClick" Header="Expand" />
-                    <MenuItem Click="CollapseChildren_OnClick" Header="Collapse" />
+                    <!--<Separator/>-->
+                    
+                    <!--<MenuItem Click="ExpandChildren_OnClick" Header="Expand" />
+                    <MenuItem Click="CollapseChildren_OnClick" Header="Collapse" />                    
                     <MenuItem Click="ExpandAll_OnClick" Header="Expand all" />
-                    <MenuItem Click="CollapseAll_OnClick" Header="Collapse all" />
+                    <MenuItem Click="CollapseAll_OnClick" Header="Collapse all" />-->
                 </ContextMenu>
             </syncfusion:SfTreeGrid.ContextMenu>
         </syncfusion:SfTreeGrid>
