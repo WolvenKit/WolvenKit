@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace WolvenKit.Core.Extensions
@@ -92,6 +93,62 @@ namespace WolvenKit.Core.Extensions
         /// bit1: 0 if widecharacterset is needed, 1 otherwise
         /// bit2: 1 if continuation byte is needed, 0 otherwise
         /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <param name="value">The string to write.</param>
+        public static void WriteLengthPrefixedString(this BinaryWriter writer, string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                writer.Write((byte)0x00);
+                return;
+            }
+
+            var len = value.Length;
+            var requiresWideChar = value.Any(c => c > 255);
+
+            var b = (byte)(len & 0x3F);
+            len >>= 6;
+            if (!requiresWideChar)
+            {
+                b |= 0x80;
+            }
+            bool cont = len != 0;
+            if (cont)
+            {
+                b |= 0x40;
+            }
+
+            writer.Write(b);
+            while (cont)
+            {
+                b = (byte)(len & 0x7F);
+                len >>= 7;
+
+                cont = len != 0;
+                if (cont)
+                {
+                    b |= 0x80;
+                }
+
+                writer.Write(b);
+            }
+
+            if (requiresWideChar)
+            {
+                writer.Write(Encoding.Unicode.GetBytes(value));
+            }
+            else
+            {
+                writer.Write(Encoding.GetEncoding("ISO-8859-1").GetBytes(value));
+            }
+        }
+
+        /// <summary>
+        /// Writes a string to a BinaryWriter Stream
+        /// First byte indicates length, where the first 2 bits are reserved
+        /// bit1: 0 if widecharacterset is needed, 1 otherwise
+        /// bit2: 1 if continuation byte is needed, 0 otherwise
+        /// </summary>
         /// <param name="bw"></param>
         /// <param name="value"></param>
         public static void WriteLengthPrefixedStringNullTerminated(this BinaryWriter bw, string value)
@@ -170,6 +227,32 @@ namespace WolvenKit.Core.Extensions
                     b |= 0x80;
                 }
                 bw.Write(b);
+            }
+        }
+
+        /// <summary>
+        /// Write a structure to the stream.
+        /// </summary>
+        /// <typeparam name="T">The struct type.</typeparam>
+        /// <param name="writer">The writer.</param>
+        /// <param name="obj">The instance of the structure.</param>
+        public static void Write<T>(this BinaryWriter writer, T obj)
+            where T : struct
+        {
+            var size = Marshal.SizeOf(typeof(T));
+            var ptr = Marshal.AllocHGlobal(size);
+
+            try
+            {
+                var bytes = new byte[size];
+                Marshal.StructureToPtr(obj, ptr, false);
+                Marshal.Copy(ptr, bytes, 0, size);
+
+                writer.Write(bytes);
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(ptr);
             }
         }
     }
