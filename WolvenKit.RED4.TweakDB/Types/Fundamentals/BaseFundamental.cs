@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace WolvenKit.RED4.TweakDB
+namespace WolvenKit.RED4.TweakDB.Types
 {
     [DebuggerDisplay("Primitive = {typeof(T).Name}, Value = {Value}")]
     public abstract class BaseFundamental<T> : IType

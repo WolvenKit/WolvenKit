@@ -1,6 +1,7 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.TweakDB.Types;
 
 namespace WolvenKit.RED4.TweakDB
 {

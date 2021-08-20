@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.IO;
 using WolvenKit.Core.Extensions;
 
-namespace WolvenKit.RED4.TweakDB
+namespace WolvenKit.RED4.TweakDB.Types
 {
     [DebuggerDisplay("{Text}")]
     public class CString : IType

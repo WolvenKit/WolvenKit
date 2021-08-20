@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace WolvenKit.RED4.TweakDB
+namespace WolvenKit.RED4.TweakDB.Types
 {
     public class CUint32 : BaseFundamental<uint>
     {

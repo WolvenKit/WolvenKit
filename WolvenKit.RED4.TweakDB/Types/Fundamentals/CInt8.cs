@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace WolvenKit.RED4.TweakDB
+namespace WolvenKit.RED4.TweakDB.Types
 {
     public class CInt8 : BaseFundamental<sbyte>
     {
