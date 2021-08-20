@@ -1,8 +1,17 @@
-using Catel.MVVM;
+
+
+using ReactiveUI;
+using WolvenKit.ViewModels.HomePage;
 
 namespace WolvenKit.ViewModels.HomePage.Pages
 {
-    public class GithubPageViewModel : ViewModelBase
+    public class GithubPageViewModel : PageViewModel
     {
+        public GithubPageViewModel()
+        {
+            
+        }
+
+
     }
 }

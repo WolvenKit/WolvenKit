@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,12 +13,10 @@ using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using Ab3d.Assimp;
 using Assimp;
-using Catel;
-using Catel.MVVM;
-using Catel.Services;
 using CP77.CR2W;
 using DynamicData;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
@@ -55,7 +54,6 @@ namespace WolvenKit.ViewModels.Editor
         private readonly ModTools _modTools;
 
         private readonly ILoggerService _loggerService;
-        private readonly IMessageService _messageService;
         private readonly INotificationService _notificationService;
         private readonly IProjectManager _projectManager;
         private readonly IWatcherService _watcherService;
@@ -93,7 +91,6 @@ namespace WolvenKit.ViewModels.Editor
         public ImportExportViewModel(
            IProjectManager projectManager,
            ILoggerService loggerService,
-           IMessageService messageService,
            IWatcherService watcherService,
            INotificationService notificationService,
            IGameControllerFactory gameController,
@@ -105,7 +102,6 @@ namespace WolvenKit.ViewModels.Editor
         {
             _projectManager = projectManager;
             _loggerService = loggerService;
-            _messageService = messageService;
             _watcherService = watcherService;
             _modTools = modTools;
             _gameController = gameController;
@@ -115,8 +111,8 @@ namespace WolvenKit.ViewModels.Editor
 
             SetupToolDefaults();
 
-            ProcessAllCommand = new TaskCommand(ExecuteProcessAll, CanProcessAll);
-            ProcessSelectedCommand = new TaskCommand(ExecuteProcessSelected, CanProcessSelected);
+            ProcessAllCommand = ReactiveCommand.CreateFromTask(ExecuteProcessAll);
+            ProcessSelectedCommand = ReactiveCommand.CreateFromTask(ExecuteProcessSelected);
             CopyArgumentsTemplateToCommand = new DelegateCommand<string>(ExecuteCopyArgumentsTemplateTo, CanCopyArgumentsTemplateTo);
             SetCollectionCommand = new DelegateCommand<string>(ExecuteSetCollection, CanSetCollection);
             ConfirmCollectionCommand = new DelegateCommand<string>(ExecuteConfirmCollection, CanConfirmCollection);
@@ -150,12 +146,30 @@ namespace WolvenKit.ViewModels.Editor
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _convertableItems)
                 .Subscribe();
+
+            ////=> IsImportsSelected ? SelectedImport : IsExportsSelected ? SelectedExport : SelectedConvert;
+            //this.WhenAnyValue(x => x.IsImportsSelected, y => y.IsExportsSelected, z => z.IsConvertsSelected)
+            //    .Subscribe(b =>
+            //{
+            //    SelectedObject = IsImportsSelected ? SelectedImport : IsExportsSelected ? SelectedExport : SelectedConvert;
+            //});
+
+
+            this.WhenAnyValue(x => x.SelectedExport, y => y.SelectedImport, z => z.SelectedConvert)
+                .Subscribe(b =>
+                {
+                    var x = b.Item1;
+                    var y = b.Item2;
+                    var z = b.Item3;
+
+                    SelectedObject = IsImportsSelected ? SelectedImport : IsExportsSelected ? SelectedExport : SelectedConvert;
+                });
         }
 
         #region properties
 
-        public ObservableCollection<CollectionItemViewModel> CollectionAvailableItems { get; set; } = new();
-        public ObservableCollection<CollectionItemViewModel> CollectionSelectedItems { get; set; } = new();
+        [Reactive] public ObservableCollection<CollectionItemViewModel> CollectionAvailableItems { get; set; } = new();
+        [Reactive] public ObservableCollection<CollectionItemViewModel> CollectionSelectedItems { get; set; } = new();
 
         public ReadOnlyObservableCollection<ConvertableItemViewModel> ConvertableItems => _convertableItems;
 
@@ -169,29 +183,29 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         public ReadOnlyObservableCollection<ExportableItemViewModel> ExportableItems => _exportableItems;
 
-        public ConvertableItemViewModel SelectedConvert { get; set; }
+        [Reactive] public ConvertableItemViewModel SelectedConvert { get; set; }
 
         /// <summary>
         /// Selected Export Item
         /// </summary>
-        public ExportableItemViewModel SelectedExport { get; set; }
+        [Reactive] public ExportableItemViewModel SelectedExport { get; set; }
 
         /// <summary>
         /// Selected Import Item
         /// </summary>
-        public ImportableItemViewModel SelectedImport { get; set; }
+        [Reactive] public ImportableItemViewModel SelectedImport { get; set; }
 
         /// <summary>
         /// Selected object , returns a Importable/Exportable ItemVM based on "IsImportsSelected"
         /// </summary>
-        public ImportExportItemViewModel SelectedObject => IsImportsSelected ? SelectedImport : IsExportsSelected ? SelectedExport : SelectedConvert;
+        [Reactive] public ImportExportItemViewModel SelectedObject { get; set; } //=> IsImportsSelected ? SelectedImport : IsExportsSelected ? SelectedExport : SelectedConvert;
 
-        public bool? IsHeaderChecked { get; set; }
+        [Reactive] public bool? IsHeaderChecked { get; set; }
 
         /// <summary>
         /// Lock Selection of items in grid.
         /// </summary>
-        public bool SelectionLocked { get; set; } = false;
+        [Reactive] public bool SelectionLocked { get; set; } = false;
 
         /// <summary>
         /// Returns the name of current selected object in Import/Export Grid.
@@ -226,10 +240,10 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// Is Import Selected, if false Export is default.
         /// </summary>
-        public bool IsImportsSelected { get; set; }
+        [Reactive] public bool IsImportsSelected { get; set; }
 
-        public bool IsExportsSelected { get; set; } = true;
-        public bool IsConvertsSelected { get; set; }
+        [Reactive] public bool IsExportsSelected { get; set; } = true;
+        [Reactive] public bool IsConvertsSelected { get; set; }
 
         #endregion properties
 
@@ -509,13 +523,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// Process all in Import / Export Grid Command.
         /// </summary>
-        public ICommand ProcessAllCommand { get; private set; }
-
-        /// <summary>
-        /// Can Process all Bool
-        /// </summary>
-        /// <returns>bool</returns>
-        private bool CanProcessAll() => true;
+        public ReactiveCommand<Unit, Unit> ProcessAllCommand { get; private set; }
 
         /// <summary>
         /// Execute Process all in Import / Export Grid Command.
@@ -664,11 +672,6 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         public ICommand ProcessSelectedCommand { get; private set; }
 
-        /// <summary>
-        /// Can Process Selected Bool.
-        /// </summary>
-        /// <returns>bool</returns>
-        private bool CanProcessSelected() => true;
 
         /// <summary>
         /// Execute Process selected in Import / Export Grid Command
@@ -862,22 +865,6 @@ namespace WolvenKit.ViewModels.Editor
 
             await Task.CompletedTask;
         }
-
-        /// <summary>
-        /// Close Async
-        /// </summary>
-        /// <returns></returns>
-        protected override Task CloseAsync() =>
-            // TODO: Unsubscribe from events
-            base.CloseAsync();
-
-        /// <summary>
-        /// Initialize Async
-        /// </summary>
-        /// <returns></returns>
-        protected override async Task InitializeAsync() =>
-            // TODO: Write initialization code here and subscribe to events
-            await base.InitializeAsync();
 
         /// <summary>
         /// Setup Tool defaults for tool window.

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using WolvenKit.ViewModels.Editor.Basic;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
@@ -9,18 +10,8 @@ using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    /// <summary>
-    /// Defines the interface to the <see cref="WorkSpaceViewModel"/> which implements
-    /// AvalonDock demo specific properties, events and methods.
-    /// </summary>
-    public interface IWorkSpaceViewModel
+    public interface IAppViewModel
     {
-        #region Events
-
-        /// <summary>Event is raised when AvalonDock (or the user) selects a new document.</summary>
-        event EventHandler ActiveDocumentChanged;
-
-        #endregion Events
 
         #region Properties
 
@@ -32,6 +23,9 @@ namespace WolvenKit.ViewModels.Shell
 
         /// <summary>Gets an enumeration of all currently available tool window viewmodels.</summary>
         ObservableCollection<IDockElement> Tools { get; }
+
+        ICommand FileSelectedCommand { get; set; }
+
 
         #endregion Properties
 

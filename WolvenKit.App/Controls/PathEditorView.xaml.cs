@@ -43,13 +43,24 @@ namespace WolvenKit.Controls
 
         private HandyControl.Data.OperationResult<bool> VerifyFile(string str)
         {
-            if (System.IO.File.Exists(str))
+            if (_isFolderPicker)
             {
-                notification.IsOpen = false;
-                return HandyControl.Data.OperationResult.Success();
+                if (System.IO.Directory.Exists(str))
+                {
+                    notification.IsOpen = false;
+                    return HandyControl.Data.OperationResult.Success();
+                }
+
+                return HandyControl.Data.OperationResult.Failed();
             }
             else
             {
+                if (System.IO.File.Exists(str))
+                {
+                    notification.IsOpen = false;
+                    return HandyControl.Data.OperationResult.Success();
+                }
+
                 return HandyControl.Data.OperationResult.Failed();
             }
         }

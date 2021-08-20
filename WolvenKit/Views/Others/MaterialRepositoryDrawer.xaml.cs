@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using Catel.IoC;
+using Splat;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Services;
 
@@ -28,7 +28,7 @@ namespace WolvenKit.Views.Others
             // string rootPath = @"C:\Wolvenkit_Develop";
             Folders = new ObservableCollection<MatDepoItem>();
 
-            var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
+            var settings = Locator.Current.GetService<ISettingsManager>();
             if (!string.IsNullOrEmpty(settings.MaterialRepositoryPath))
             {
                 PreviousFolder = settings.MaterialRepositoryPath;

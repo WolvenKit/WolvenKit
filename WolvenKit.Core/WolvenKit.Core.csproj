@@ -13,10 +13,11 @@
       <RepositoryUrl>https://github.com/WolvenKit/Wolven-kit</RepositoryUrl>
       <RepositoryType>git</RepositoryType>
       <PackageTags>wolvenkit, witcher3, cyberpunk2077</PackageTags>
-      <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+      <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
       <Version>1.2.3</Version>
       <PackageOutputPath>./nupkg</PackageOutputPath>
       <DebugType>embedded</DebugType>
+      <Platforms>x64</Platforms>
 
   </PropertyGroup>
 

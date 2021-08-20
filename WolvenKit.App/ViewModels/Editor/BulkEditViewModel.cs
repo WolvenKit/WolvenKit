@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Catel.MVVM;
+using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
@@ -142,21 +142,7 @@ namespace WolvenKit.ViewModels.Editor.Old
 
         #region ProgressReport
 
-        private ProgressReport _progressReport;
-
-        public ProgressReport ProgressReport
-        {
-            get => _progressReport;
-            set
-            {
-                if (_progressReport != value)
-                {
-                    var oldValue = _progressReport;
-                    _progressReport = value;
-                    RaisePropertyChanged(() => ProgressReport, oldValue, value);
-                }
-            }
-        }
+        [Reactive] public ProgressReport ProgressReport { get; set; }
 
         #endregion ProgressReport
 

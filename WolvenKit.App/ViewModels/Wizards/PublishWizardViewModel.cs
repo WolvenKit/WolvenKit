@@ -1,5 +1,4 @@
-using Catel.IoC;
-using Catel.MVVM;
+using ReactiveUI;
 using WolvenKit.Functionality.Services;
 using Splat;
 using WolvenKit.Common;
@@ -8,11 +7,9 @@ using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
 namespace WolvenKit.ViewModels.Wizards
 {
-    public class PublishWizardViewModel : ViewModelBase
+    public class PublishWizardViewModel : ReactiveObject
     {
         #region Properties
-
-        private ILogger Logger => ServiceLocator.Default.ResolveType<ILogger>();
 
         #endregion Properties
 

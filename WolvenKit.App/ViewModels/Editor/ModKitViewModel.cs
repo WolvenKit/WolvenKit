@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
@@ -30,13 +31,13 @@ namespace WolvenKit.ViewModels.Editor
 
         public ModkitViewModel(
             IProjectManager projectManager,
-            ILoggerService loggerService,
-            Tw3Controller tw3Controller
+            ILoggerService loggerService
+            //Tw3Controller tw3Controller
         ) : base(ToolTitle)
         {
             _projectManager = projectManager;
             Logger = loggerService;
-            _tw3Controller = tw3Controller;
+            //_tw3Controller = tw3Controller;
 
             RunCommand = new Functionality.Commands.RelayCommand(Run, CanRun);
 
@@ -58,21 +59,7 @@ namespace WolvenKit.ViewModels.Editor
 
         #region SelectedObject
 
-        private Common.Wcc.WCC_Command _selectedObject;
-
-        public Common.Wcc.WCC_Command SelectedObject
-        {
-            get => _selectedObject;
-            set
-            {
-                if (_selectedObject != value)
-                {
-                    var oldValue = _selectedObject;
-                    _selectedObject = value;
-                    RaisePropertyChanged(() => SelectedObject, oldValue, value);
-                }
-            }
-        }
+        [Reactive] public Common.Wcc.WCC_Command SelectedObject { get; set; }
 
         #endregion SelectedObject
 

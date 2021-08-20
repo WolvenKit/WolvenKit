@@ -58,10 +58,10 @@ namespace WolvenKit.Views.Templates
             {
                 enumtype = AssemblyDictionary.GetEnumByName(view.RedEnum.REDType);
             }
-            else if (RED3.CR2W.Reflection.AssemblyDictionary.EnumExists(view.RedEnum.REDType))
-            {
-                enumtype = RED3.CR2W.Reflection.AssemblyDictionary.GetEnumByName(view.RedEnum.REDType);
-            }
+            //else if (RED3.CR2W.Reflection.AssemblyDictionary.EnumExists(view.RedEnum.REDType))
+            //{
+            //    enumtype = RED3.CR2W.Reflection.AssemblyDictionary.GetEnumByName(view.RedEnum.REDType);
+            //}
             if (enumtype == null)
             {
                 return;

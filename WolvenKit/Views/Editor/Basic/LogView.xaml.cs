@@ -1,18 +1,20 @@
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-using Catel.Logging;
 using ControlzEx.Theming;
+using ReactiveUI;
+using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.Views.Editor
 {
     /// <summary>
     /// Interaction logic for LogView.xaml
     /// </summary>
-    public partial class LogView
+    public partial class LogView : ReactiveUserControl<LogViewModel>
     {
 
         #region Constructors
@@ -20,8 +22,9 @@ namespace WolvenKit.Views.Editor
         public LogView()
         {
             InitializeComponent();
-            //if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
-            //{ return; } // Prevents Designer from trying to do the below.
+
+            ViewModel = Locator.Current.GetService<LogViewModel>();
+            DataContext = ViewModel;
         }
 
         #endregion Constructors

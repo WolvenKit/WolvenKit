@@ -1,37 +1,24 @@
 using System.Windows.Media;
-using Catel.MVVM;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using WolvenKit.Models.Docking;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public abstract class PaneViewModel : ViewModelBase, IDockElement
+    public abstract class PaneViewModel : ReactiveObject, IDockElement
     {
-        #region fields
-
-        private string _contentId = null;
-        private bool _isActive = false;
-        private bool _isSelected = false;
-        private string _title = null;
-
-        #endregion fields
+        public PaneViewModel()
+        {
+            
+        }
 
         #region Properties
 
-        public string Header { get; set; }
-        public DockState State { get; set; }
+        [Reactive] public string Header { get; set; }
 
-        public string ContentId
-        {
-            get => _contentId;
-            protected set
-            {
-                if (_contentId != value)
-                {
-                    _contentId = value;
-                    RaisePropertyChanged(nameof(ContentId));
-                }
-            }
-        }
+        [Reactive] public DockState State { get; set; }
+
+        [Reactive] public string ContentId { get; set; }
 
         public ImageSource IconSource
         {
@@ -39,44 +26,11 @@ namespace WolvenKit.ViewModels.Shell
             protected set;
         }
 
-        public bool IsActive
-        {
-            get => _isActive;
-            set
-            {
-                if (_isActive != value)
-                {
-                    _isActive = value;
-                    RaisePropertyChanged(nameof(IsActive));
-                }
-            }
-        }
+        [Reactive] public bool IsActive { get; set; }
 
-        public bool IsSelected
-        {
-            get => _isSelected;
-            set
-            {
-                if (_isSelected != value)
-                {
-                    _isSelected = value;
-                    RaisePropertyChanged(nameof(IsSelected));
-                }
-            }
-        }
+        //[Reactive] public bool IsSelected { get; set; }
 
-        public new string Title
-        {
-            get => _title;
-            set
-            {
-                if (_title != value)
-                {
-                    _title = value;
-                    RaisePropertyChanged(nameof(Title));
-                }
-            }
-        }
+        [Reactive] public string Title { get; set; }
 
         #endregion Properties
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -13,14 +14,14 @@ namespace WolvenKit.Common
 
         public GameFileTreeNode()
         {
-            Directories = new Dictionary<string, GameFileTreeNode>();
+            Directories = new ObservableCollection<GameFileTreeNode>();
             Files = new List<IGameFile>();
             Name = "";
         }
 
         public GameFileTreeNode(EArchiveType bundleType)
         {
-            Directories = new Dictionary<string, GameFileTreeNode>();
+            Directories = new ObservableCollection<GameFileTreeNode>();
             Files = new List<IGameFile>();
             Name = "";
         }
@@ -33,7 +34,7 @@ namespace WolvenKit.Common
 
         public GameFileTreeNode Parent { get; set; }
 
-        public Dictionary<string, GameFileTreeNode> Directories { get; set; }
+        public ObservableCollection<GameFileTreeNode> Directories { get; set; }
 
         public List<IGameFile> Files { get; set; }
 
@@ -58,7 +59,7 @@ namespace WolvenKit.Common
             }
         }
 
-        public List<GameFileTreeNode> SubDirectories => Directories.Values.OrderBy(_ => _.Name).ToList();
+        //public List<GameFileTreeNode> SubDirectories => Directories.Values.OrderBy(_ => _.Name).ToList();
 
         public EArchiveType Type
         {

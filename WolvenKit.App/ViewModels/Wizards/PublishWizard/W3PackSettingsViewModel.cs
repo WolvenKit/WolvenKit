@@ -1,23 +1,17 @@
 using System;
 using System.Threading.Tasks;
-using Catel;
-using Catel.Fody;
-using Catel.IoC;
-using Catel.MVVM;
+using ReactiveUI;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Common.Model;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
 namespace WolvenKit.ViewModels.Wizards.PublishWizard
 {
-    public class W3PackSettingsViewModel : ViewModelBase
+    public class W3PackSettingsViewModel : ReactiveObject
     {
         public W3PackSettingsViewModel(
-            IServiceLocator serviceLocator,
             IProjectManager projectManager)
         {
-            Argument.IsNotNull(() => serviceLocator);
-            Argument.IsNotNull(() => projectManager);
 
             if (projectManager?.ActiveProject is Tw3Project tw3p)
             {

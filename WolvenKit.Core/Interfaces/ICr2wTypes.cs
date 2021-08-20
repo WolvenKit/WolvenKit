@@ -82,25 +82,30 @@ namespace WolvenKit.Common.Model.Cr2w
 
     #region red primitives
 
+    // UI template not used
     public interface IREDPrimitive : IEditableVariable
     {
         public object GetValue();
     }
-
     public interface IREDPrimitive<T> : IREDPrimitive
     {
         public T Value { get; set; }
     }
 
+    // UI template TODO
     public interface IREDColor : IREDPrimitive<Color> { }
 
+    // UI template done
     public interface IREDIntegerType : IREDPrimitive { }
     public interface IREDIntegerType<T> : IREDIntegerType, IREDPrimitive<T> { }
 
+    // UI template done
     public interface IREDString : IREDPrimitive<string> { }
 
+    // UI template done
     public interface IREDBool : IREDPrimitive<bool> { }
 
+    // UI template done
     public interface IREDEnum : IREDPrimitive
     {
         List<string> EnumValueList { get; set; }
@@ -119,6 +124,7 @@ namespace WolvenKit.Common.Model.Cr2w
 
     #region arrays
 
+    // UI template done
     public interface IREDArray : IEditableVariable, IList
     {
         List<int> Flags { get; set; }
@@ -136,6 +142,7 @@ namespace WolvenKit.Common.Model.Cr2w
 
     #endregion
 
+    // UI template TODO
     public interface IREDVariant : IEditableVariable
     {
         IEditableVariable Variant { get; set; }
@@ -144,7 +151,7 @@ namespace WolvenKit.Common.Model.Cr2w
     public interface IREDBufferVariant : IREDVariant { }
 
 
-
+    // UI template done
     public interface IREDChunkPtr : IREDPrimitive
     {
         public int ChunkIndex { get; }
@@ -194,9 +201,7 @@ namespace WolvenKit.Common.Model.Cr2w
         ushort Flags { get; set; }
     }
 
-    /// <summary>
-    ///
-    /// </summary>
+    // UI template TODO
     public interface IREDRef : IREDPrimitive
     {
         string DepotPath { get; set; }
