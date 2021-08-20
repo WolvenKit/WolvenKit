@@ -428,6 +428,7 @@
                         </Grid.ColumnDefinitions>-->
 
                         <syncfusion:SfTreeGrid
+                            x:Name="MainTreeGrid"
                             AllowFiltering="True"
                             AllowResizingColumns="True"
                             AutoExpandMode="RootNodesExpanded"

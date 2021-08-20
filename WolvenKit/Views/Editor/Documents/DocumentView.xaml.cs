@@ -52,6 +52,13 @@ namespace WolvenKit.Views.Editor
 
             });
 
+            this.MainTreeGrid.CurrentCellValueChanged += MainTreeGrid_CurrentCellValueChanged;
+
+        }
+
+        private void MainTreeGrid_CurrentCellValueChanged(object sender, Syncfusion.UI.Xaml.TreeGrid.TreeGridCurrentCellValueChangedEventArgs e)
+        {
+            
         }
 
         #endregion Constructors

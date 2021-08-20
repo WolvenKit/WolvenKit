@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
-
 using DynamicData;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -12,7 +12,7 @@ using WolvenKit.Common.Services;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public class ChunkPropertyViewModel : ReactiveObject
+    public class ChunkPropertyViewModel : ReactiveObject, IEditableObject
     {
         #region Fields
         public IEditableVariable Property { get; }
@@ -41,6 +41,20 @@ namespace WolvenKit.ViewModels.Shell
                 IREDString redString => new RedStringViewModel(redString),
                 _ => new ChunkPropertyViewModel(editableVariable)
             };
+        public void BeginEdit()
+        {
+            
+        }
+
+        public void CancelEdit()
+        {
+            
+        }
+
+        public void EndEdit()
+        {
+            
+        }
 
         #endregion Constructors
 
