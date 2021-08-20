@@ -44,6 +44,9 @@ jobs:
     - run: echo "OUT=./publish/full" >> $env:GITHUB_ENV
     - run: echo "FINALOUT=./publish" >> $env:GITHUB_ENV
     - run: echo "NAME=WolvenKit" >> $env:GITHUB_ENV
+    - run: echo "REF=${{github.ref}}" >> $env:GITHUB_ENV
+    - run: echo "SHA=${{github.sha}}" >> $env:GITHUB_ENV
+    - run: echo "MREPO=${{github.repository}}" >> $env:GITHUB_ENV
     
     - name: Get version
       uses: naminodarie/get-net-sdk-project-versions-action@v1
@@ -89,9 +92,9 @@ jobs:
     # RELEASE
     - name: Release
       run: |
-          gh release create ${{ env.VERSION }} -n "${{ env.MESSAGE }}" -t "${{ env.VERSION }}" -R ${{ env.REPO }} -p  ${{ env.FILES }}
+          gh release create ${{ env.VERSION }} -n "${{ env.MESSAGE }}" -t "${{ env.VERSION }}" -R ${{ env.REPO }} ${{ env.FILES }}
       env:
-        MESSAGE: "This is a beta release so you may encounter bugs. Please report them. This build is generated every day at 12:00am UTC. The builds are preserved for one week below. Please download the newest one."
+        MESSAGE: "This is a beta release so you may encounter bugs. Please report them. The latest commit this release is based on is: [#${{env.SHA}}](https://github.com/${{env.MREPO}}/commit/${{env.SHA}})"
         FILES: ${{env.FINALOUT}}/${{env.PORTABLE}} ${{env.FINALOUT}}/${{env.INSTALLER}} ${{env.FINALOUT}}/${{env.MANIFEST}}
         REPO: WolvenKit/WolvenKit-nightly-releases
         GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
