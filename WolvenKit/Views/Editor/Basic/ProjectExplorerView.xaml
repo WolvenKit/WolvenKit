@@ -10,6 +10,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     d:DataContext="{d:DesignInstance Type=editor:ProjectExplorerViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="400"
@@ -814,7 +815,17 @@
 
             <syncfusion:SfTreeGrid.ContextMenu>
                 <ContextMenu FontSize="11" Style="{DynamicResource ContextMenuBaseStyle}">
-                    <MenuItem Command="{Binding OpenFileCommand}" Header="Open" />
+                    <MenuItem Command="{Binding OpenFileCommand}" Header="Open" >
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconMaterial
+                                    Width="16"
+                                    Height="16"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Stretch"
+                                    Foreground="CornflowerBlue"
+                                    Kind="Share" />
+                        </MenuItem.Icon>
+                    </MenuItem>
 
                     <Separator/>
                     
@@ -840,10 +851,47 @@
 
                     <Separator/>
 
-                    <MenuItem Command="{Binding CopyFileCommand}" Header="Copy" />
-                    <MenuItem Command="{Binding PasteFileCommand}" Header="Paste" />
-                    <MenuItem Command="{Binding DeleteFileCommand}" Header="Delete" />
-                    <MenuItem Command="{Binding RenameFileCommand}" Header="Rename" />
+                    <MenuItem Command="{Binding CopyFileCommand}" Header="Copy" >
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconMaterial
+                                    Width="16"
+                                    Height="16"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Stretch"
+                                    Kind="ContentCopy" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="{Binding PasteFileCommand}" Header="Paste" >
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconMaterial
+                                    Width="16"
+                                    Height="16"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Stretch"
+                                    Kind="ContentPaste" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="{Binding DeleteFileCommand}" Header="Delete" >
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconMaterial
+                                    Width="16"
+                                    Height="16"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Stretch"
+                                    Foreground="Red"
+                                    Kind="Close" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="{Binding RenameFileCommand}" Header="Rename" >
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconMaterial
+                                    Width="16"
+                                    Height="16"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Stretch"
+                                    Kind="FormTextbox" />
+                        </MenuItem.Icon>
+                    </MenuItem>
 
                     <Separator/>
 
