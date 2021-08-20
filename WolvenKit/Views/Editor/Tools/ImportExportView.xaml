@@ -208,9 +208,9 @@
 
             <Grid Grid.Row="2" Background="{DynamicResource ContentBackgroundAlt2}" >
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition MinWidth="220" Width="*"/>
+                    <ColumnDefinition MinWidth="220" Width="Auto"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Orientation="Horizontal"
@@ -218,15 +218,15 @@
                     Grid.Column="0">
 
                     <Button
-                            Margin="4,0,4,0"
-                            Padding="4"
-                            VerticalAlignment="Center"
-                            Background="{DynamicResource ContentBackground}"
-                            BorderBrush="{DynamicResource ContentBackgroundAlt}"
-                            BorderThickness="1"
-                            Command="{Binding ProcessSelectedCommand}"
-                            FontSize="12"
-                            Style="{DynamicResource ButtonCustom}">
+                        Margin="0,0,4,0"
+                        Padding="4"
+                        VerticalAlignment="Center"
+                        Background="{DynamicResource ContentBackground}"
+                        BorderBrush="{DynamicResource ContentBackgroundAlt}"
+                        BorderThickness="1"
+                        Command="{Binding ProcessSelectedCommand}"
+                        FontSize="12"
+                        Style="{DynamicResource ButtonCustom}">
                         <StackPanel Orientation="Horizontal">
                             <iconPacks:PackIconCodicons
                                     Width="16"
@@ -241,23 +241,23 @@
                     </Button>
 
                     <Button
-                            Margin="4,0,4,0"
-                            Padding="4"
-                            VerticalAlignment="Center"
-                            Background="{DynamicResource ContentBackground}"
-                            BorderBrush="{DynamicResource ContentBackgroundAlt}"
-                            BorderThickness="1"
-                            Command="{Binding ProcessAllCommand}"
-                            FontSize="12"
-                            Style="{DynamicResource ButtonCustom}">
+                        Margin="4,0,0,0"
+                        Padding="4"
+                        VerticalAlignment="Center"
+                        Background="{DynamicResource ContentBackground}"
+                        BorderBrush="{DynamicResource ContentBackgroundAlt}"
+                        BorderThickness="1"
+                        Command="{Binding ProcessAllCommand}"
+                        FontSize="12"
+                        Style="{DynamicResource ButtonCustom}">
                         <StackPanel Orientation="Horizontal">
                             <iconPacks:PackIconCodicons
-                                    Width="16"
-                                    Height="16"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Margin="2"
-                                    Kind="RunAll" />
+                                Width="16"
+                                Height="16"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Margin="2"
+                                Kind="RunAll" />
 
                             <TextBlock Text="Process All" />
                         </StackPanel>
@@ -272,25 +272,25 @@
                     VerticalAlignment="Center">
 
                     <ToggleButton
-                            Margin="5,0,10,0"
-                            Padding="4"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Background="{DynamicResource ContentBackgroundAlt}"
-                            IsChecked="{Binding SelectionLocked}"
-                            Style="{DynamicResource WPFToggleButtonStyle}"
-                            ToolTip="Lock selected file">
+                        Margin="0,0,4,0"
+                        Padding="4"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="{DynamicResource ContentBackgroundAlt}"
+                        IsChecked="{Binding SelectionLocked}"
+                        Style="{DynamicResource WPFToggleButtonStyle}"
+                        ToolTip="Lock selected file">
                         <StackPanel Orientation="Horizontal">
                             <iconPacks:BootstrapIcons Kind="Lock" />
-
                         </StackPanel>
                     </ToggleButton>
 
                     <TextBlock
-                            x:Name="CurrentSelectedItemButtonbar"
-                            VerticalAlignment="Center"
-                            FontSize="11"
-                            Text="{Binding CurrentSelectedInGridName}" />
+                        x:Name="CurrentSelectedItemButtonbar"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Right"
+                        FontSize="11"
+                        Text="{Binding CurrentSelectedInGridName}" />
                     
                 </StackPanel>
 
@@ -301,14 +301,13 @@
                     VerticalAlignment="Center">
 
                     <StackPanel
-                        Margin="6,0,6,0"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
                         Orientation="Horizontal">
 
                         <Button
                             Padding="4"
-                            Margin="6,0,6,0"
+                            Margin="0,0,6,0"
                             VerticalAlignment="Center"
                             Background="{DynamicResource ContentBackground}"
                             BorderBrush="{DynamicResource ContentBackgroundAlt}"
@@ -331,7 +330,7 @@
                         </Button>
                         <syncfusion:ComboBoxAdv
                             x:Name="ToThese"
-                            Margin="6,0,6,0"
+                            Margin="6,0,0,0"
                             VerticalAlignment="Center"
                             FontSize="12"
                             ToolTip="Destination for copied settings"
@@ -343,9 +342,6 @@
                         </syncfusion:ComboBoxAdv>
 
                     </StackPanel>
-
-
-
                 </StackPanel>
             </Grid>
         </Grid>
@@ -375,7 +371,7 @@
 
                 <Border
                     Grid.Row="0"
-                    Margin="5,0"
+                    Margin="8,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Background="{DynamicResource ContentBackgroundAlt}"
@@ -393,34 +389,32 @@
                     Margin="8,2"
                     VerticalAlignment="Center"
                     Orientation="Horizontal">
-                    <StackPanel Margin="0,5" Orientation="Horizontal">
-                        <TextBlock FontSize="10" Text="Selected : " />
+                    <StackPanel Margin="8" Orientation="Horizontal">
                         <TextBlock
                             x:Name="XAML_AdvancedOptionsFileName"
-                            FontSize="10"
+                            FontSize="14"
                             Text="FileName" />
                     </StackPanel>
                 </StackPanel>
 
                 <StackPanel
                     Grid.Row="1"
-                    Margin="0">
-
+                    Margin="8,2">
                     <CheckBox
                         x:Name="ApplyToAllCheckbox"
-                        Margin="8,4,8,4"
+                        Margin="8"
                         Padding="4,0,4,0"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
                         Content="Apply to all files of the same extension"
                         FontSize="10"
                         Style="{DynamicResource MahApps.Styles.CheckBox.DataGrid}" />
-
                 </StackPanel>
 
                     <Button
                     Width="80"
                     Height="39"
+                    Margin="8,0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center"
                     Background="{DynamicResource ContentBackgroundAlt}"
