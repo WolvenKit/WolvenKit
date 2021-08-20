@@ -4,7 +4,7 @@ using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.RED4.TweakDB.Types
 {
-    [DebuggerDisplay("{Text}")]
+    [DebuggerDisplay("String, {Text}")]
     public class CString : IType
     {
         public string Name => "String";

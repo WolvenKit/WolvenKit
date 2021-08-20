@@ -3,7 +3,7 @@ using System.IO;
 
 namespace WolvenKit.RED4.TweakDB.Types
 {
-    [DebuggerDisplay("Primitive = {typeof(T).Name}, Value = {Value}")]
+    [DebuggerDisplay("typeof(T).Name, Value = {Value}")]
     public abstract class BaseFundamental<T> : IType
         where T : struct
     {

@@ -4,7 +4,7 @@ using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.RED4.TweakDB.Types
 {
-    [DebuggerDisplay("{Text}")]
+    [DebuggerDisplay("Name, {Text}")]
     public class CName : IType
     {
         public string Name => "CName";
