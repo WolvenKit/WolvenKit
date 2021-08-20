@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _globalTVInitialized;
 		private CArray<STvChannel> _backupCustomChannels;
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("tvSetup")] 
 		public TVSetup TvSetup
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _tvSetup, value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(110)] 
 		[RED("defaultGlitchVideoPath")] 
 		public redResourceReferenceScriptToken DefaultGlitchVideoPath
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _defaultGlitchVideoPath, value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(111)] 
 		[RED("broadcastGlitchVideoPath")] 
 		public redResourceReferenceScriptToken BroadcastGlitchVideoPath
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _broadcastGlitchVideoPath, value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(112)] 
 		[RED("globalTVInitialized")] 
 		public CBool GlobalTVInitialized
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _globalTVInitialized, value);
 		}
 
-		[Ordinal(112)] 
+		[Ordinal(113)] 
 		[RED("backupCustomChannels")] 
 		public CArray<STvChannel> BackupCustomChannels
 		{

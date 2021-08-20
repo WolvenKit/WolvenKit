@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isConnected;
 		private entEntityID _ownerEntityID;
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("parentDevice")] 
 		public DeviceLink ParentDevice
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _parentDevice, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("isConnected")] 
 		public CBool IsConnected
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isConnected, value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("ownerEntityID")] 
 		public entEntityID OwnerEntityID
 		{

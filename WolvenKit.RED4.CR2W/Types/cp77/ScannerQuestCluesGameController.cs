@@ -8,12 +8,12 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class ScannerQuestCluesGameController : BaseChunkGameController
 	{
 		private inkCompoundWidgetReference _scannerQuestPanel;
-		private CUInt32 _questCluesCallbackID;
-		private CUInt32 _scannerDataCallbackID;
+		private CHandle<redCallbackObject> _questCluesCallbackID;
+		private CHandle<redCallbackObject> _scannerDataCallbackID;
 		private CBool _isValidQuestClues;
 		private scannerDataStructure _scannerData;
 		private CBool _hasValidScannables;
-		private CArray<wCHandle<ScannerQuestClue>> _clues;
+		private CArray<wCHandle<inkAsyncSpawnRequest>> _asyncSpawnRequests;
 
 		[Ordinal(5)] 
 		[RED("ScannerQuestPanel")] 
@@ -25,7 +25,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(6)] 
 		[RED("questCluesCallbackID")] 
-		public CUInt32 QuestCluesCallbackID
+		public CHandle<redCallbackObject> QuestCluesCallbackID
 		{
 			get => GetProperty(ref _questCluesCallbackID);
 			set => SetProperty(ref _questCluesCallbackID, value);
@@ -33,7 +33,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(7)] 
 		[RED("scannerDataCallbackID")] 
-		public CUInt32 ScannerDataCallbackID
+		public CHandle<redCallbackObject> ScannerDataCallbackID
 		{
 			get => GetProperty(ref _scannerDataCallbackID);
 			set => SetProperty(ref _scannerDataCallbackID, value);
@@ -64,11 +64,11 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(11)] 
-		[RED("Clues")] 
-		public CArray<wCHandle<ScannerQuestClue>> Clues
+		[RED("asyncSpawnRequests")] 
+		public CArray<wCHandle<inkAsyncSpawnRequest>> AsyncSpawnRequests
 		{
-			get => GetProperty(ref _clues);
-			set => SetProperty(ref _clues, value);
+			get => GetProperty(ref _asyncSpawnRequests);
+			set => SetProperty(ref _asyncSpawnRequests, value);
 		}
 
 		public ScannerQuestCluesGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

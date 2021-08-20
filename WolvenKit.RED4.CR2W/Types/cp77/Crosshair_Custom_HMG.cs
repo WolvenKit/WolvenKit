@@ -24,9 +24,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _offsetLeftRight;
 		private CFloat _offsetLeftRightExtra;
 		private CFloat _latchVertical;
-		private CHandle<gameIBlackboard> _weaponLocalBB;
-		private CUInt32 _overheatBBID;
-		private CUInt32 _forcedOverheatBBID;
+		private wCHandle<gameIBlackboard> _weaponLocalBB;
+		private CHandle<redCallbackObject> _overheatBBID;
+		private CHandle<redCallbackObject> _forcedOverheatBBID;
 		private inkWidgetReference _targetColorChange;
 		private CHandle<inkanimProxy> _forcedCooldownProxy;
 		private inkanimPlaybackOptions _forcedCooldownOptions;
@@ -169,7 +169,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(35)] 
 		[RED("weaponLocalBB")] 
-		public CHandle<gameIBlackboard> WeaponLocalBB
+		public wCHandle<gameIBlackboard> WeaponLocalBB
 		{
 			get => GetProperty(ref _weaponLocalBB);
 			set => SetProperty(ref _weaponLocalBB, value);
@@ -177,7 +177,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(36)] 
 		[RED("overheatBBID")] 
-		public CUInt32 OverheatBBID
+		public CHandle<redCallbackObject> OverheatBBID
 		{
 			get => GetProperty(ref _overheatBBID);
 			set => SetProperty(ref _overheatBBID, value);
@@ -185,7 +185,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(37)] 
 		[RED("forcedOverheatBBID")] 
-		public CUInt32 ForcedOverheatBBID
+		public CHandle<redCallbackObject> ForcedOverheatBBID
 		{
 			get => GetProperty(ref _forcedOverheatBBID);
 			set => SetProperty(ref _forcedOverheatBBID, value);

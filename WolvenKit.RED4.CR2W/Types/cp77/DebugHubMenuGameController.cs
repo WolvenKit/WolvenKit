@@ -12,7 +12,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<inkMenuEventDispatcher> _menuEventDispatcher;
 		private wCHandle<PlayerPuppet> _player;
 		private CHandle<PlayerDevelopmentSystem> _pDS;
-		private CHandle<gameIBlackboard> _playerStatsBlackboard;
 		private CUInt32 _currencyListener;
 		private CUInt32 _characterCredListener;
 		private CUInt32 _characterLevelListener;
@@ -61,14 +60,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(8)] 
-		[RED("playerStatsBlackboard")] 
-		public CHandle<gameIBlackboard> PlayerStatsBlackboard
-		{
-			get => GetProperty(ref _playerStatsBlackboard);
-			set => SetProperty(ref _playerStatsBlackboard, value);
-		}
-
-		[Ordinal(9)] 
 		[RED("currencyListener")] 
 		public CUInt32 CurrencyListener
 		{
@@ -76,7 +67,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currencyListener, value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(9)] 
 		[RED("characterCredListener")] 
 		public CUInt32 CharacterCredListener
 		{
@@ -84,7 +75,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _characterCredListener, value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(10)] 
 		[RED("characterLevelListener")] 
 		public CUInt32 CharacterLevelListener
 		{
@@ -92,7 +83,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _characterLevelListener, value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(11)] 
 		[RED("characterCurrentXPListener")] 
 		public CUInt32 CharacterCurrentXPListener
 		{
@@ -100,7 +91,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _characterCurrentXPListener, value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(12)] 
 		[RED("characterCredPointsListener")] 
 		public CUInt32 CharacterCredPointsListener
 		{
@@ -108,7 +99,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _characterCredPointsListener, value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(13)] 
 		[RED("Transaction")] 
 		public CHandle<gameTransactionSystem> Transaction
 		{

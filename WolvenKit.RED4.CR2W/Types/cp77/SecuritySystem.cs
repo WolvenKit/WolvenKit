@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CArray<OutputValidationDataStruct> _savedOutputCache;
 
-		[Ordinal(96)] 
+		[Ordinal(97)] 
 		[RED("savedOutputCache")] 
 		public CArray<OutputValidationDataStruct> SavedOutputCache
 		{

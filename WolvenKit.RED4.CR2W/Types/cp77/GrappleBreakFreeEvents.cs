@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _playerPositionVerified;
 		private CBool _shouldPushPlayerAway;
 
-		[Ordinal(2)] 
+		[Ordinal(5)] 
 		[RED("playerPositionVerified")] 
 		public CBool PlayerPositionVerified
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerPositionVerified, value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("shouldPushPlayerAway")] 
 		public CBool ShouldPushPlayerAway
 		{

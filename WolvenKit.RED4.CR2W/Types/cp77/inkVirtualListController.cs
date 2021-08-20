@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<inkWidgetLibraryReference> _itemTemplates;
 		private CBool _cycleNavigation;
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("itemTemplates")] 
 		public CArray<inkWidgetLibraryReference> ItemTemplates
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _itemTemplates, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("cycleNavigation")] 
 		public CBool CycleNavigation
 		{

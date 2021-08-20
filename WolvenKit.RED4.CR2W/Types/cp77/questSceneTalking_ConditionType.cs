@@ -9,6 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private gameEntityReference _globalEntityRef;
 		private raRef<scnSceneResource> _sceneFile;
+		private CEnum<scnSceneVersionCheck> _sceneVersion;
 		private CName _sectionName;
 		private CString _actorName;
 		private CBool _isInverted;
@@ -30,6 +31,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("SceneVersion")] 
+		public CEnum<scnSceneVersionCheck> SceneVersion
+		{
+			get => GetProperty(ref _sceneVersion);
+			set => SetProperty(ref _sceneVersion, value);
+		}
+
+		[Ordinal(3)] 
 		[RED("SectionName")] 
 		public CName SectionName
 		{
@@ -37,7 +46,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _sectionName, value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("ActorName")] 
 		public CString ActorName
 		{
@@ -45,7 +54,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _actorName, value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("isInverted")] 
 		public CBool IsInverted
 		{

@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CInt32 _currentlyAvailableCharges;
 		private CInt32 _maxAvailableCharges;
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isActive, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("visualizerID")] 
 		public CUInt32 VisualizerID
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _visualizerID, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("hudActivated")] 
 		public CBool HudActivated
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hudActivated, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("currentlyAvailableCharges")] 
 		public CInt32 CurrentlyAvailableCharges
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentlyAvailableCharges, value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("maxAvailableCharges")] 
 		public CInt32 MaxAvailableCharges
 		{

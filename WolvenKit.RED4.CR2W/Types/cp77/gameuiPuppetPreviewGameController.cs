@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private gameuiPuppetPreviewCameraController _cameraController;
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("cameraController")] 
 		public gameuiPuppetPreviewCameraController CameraController
 		{

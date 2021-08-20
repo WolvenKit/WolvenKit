@@ -13,10 +13,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private TweakDBID _vendorID;
 		private CArray<CEnum<EVendorMode>> _vendingBlacklist;
 		private CFloat _timeToCompletePurchase;
-		private CHandle<gameIBlackboard> _uIBBEquipmentBlackboard;
 		private CHandle<UI_EquipmentDef> _uIBBEquipment;
-		private CUInt32 _inventoryBBID;
-		private CUInt32 _equipmentBBID;
+		private CHandle<redCallbackObject> _inventoryBBID;
+		private CHandle<redCallbackObject> _equipmentBBID;
 		private GameTime _openTime;
 
 		[Ordinal(0)] 
@@ -68,14 +67,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(6)] 
-		[RED("UIBBEquipmentBlackboard")] 
-		public CHandle<gameIBlackboard> UIBBEquipmentBlackboard
-		{
-			get => GetProperty(ref _uIBBEquipmentBlackboard);
-			set => SetProperty(ref _uIBBEquipmentBlackboard, value);
-		}
-
-		[Ordinal(7)] 
 		[RED("UIBBEquipment")] 
 		public CHandle<UI_EquipmentDef> UIBBEquipment
 		{
@@ -83,23 +74,23 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uIBBEquipment, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(7)] 
 		[RED("InventoryBBID")] 
-		public CUInt32 InventoryBBID
+		public CHandle<redCallbackObject> InventoryBBID
 		{
 			get => GetProperty(ref _inventoryBBID);
 			set => SetProperty(ref _inventoryBBID, value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(8)] 
 		[RED("EquipmentBBID")] 
-		public CUInt32 EquipmentBBID
+		public CHandle<redCallbackObject> EquipmentBBID
 		{
 			get => GetProperty(ref _equipmentBBID);
 			set => SetProperty(ref _equipmentBBID, value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(9)] 
 		[RED("openTime")] 
 		public GameTime OpenTime
 		{

@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CHandle<entIPlacedComponent> _feederMesh;
 
-		[Ordinal(86)] 
+		[Ordinal(87)] 
 		[RED("feederMesh")] 
 		public CHandle<entIPlacedComponent> FeederMesh
 		{

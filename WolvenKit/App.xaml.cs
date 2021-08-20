@@ -108,7 +108,7 @@ namespace WolvenKit
             // Startup speed boosting (HC)
             ApplicationHelper.StartProfileOptimization();
 
-            
+            var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
 
 
 #if DEBUG
@@ -129,9 +129,8 @@ namespace WolvenKit
 
 
             StaticReferences.Logger.Info("Initializing Shell");
-            /*await*/ Initializations.InitializeShell();
+            /*await*/ Initializations.InitializeShell(settings);
             var growl = ServiceLocator.Default.ResolveType<INotificationService>();
-            var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
             Helpers.ShowFirstTimeSetup(settings, growl);
 
             StaticReferences.Logger.Info("Initializing Discord RPC API");
@@ -150,7 +149,7 @@ namespace WolvenKit
 
             StaticReferences.Logger.Info("Check for new updates");
             //Helpers.CheckForUpdates();
-            Initializations.InitializeBk();
+            Initializations.InitializeBk(settings);
 
             //Window window = new Window();
             //window.AllowsTransparency = true;
@@ -158,10 +157,6 @@ namespace WolvenKit
             //window.Content = new HomePageView();
             //window.WindowStyle = WindowStyle.None;
             //window.Show();
-
-            // Create WebView Data Folder.
-            //Directory.CreateDirectory(@"C:\WebViewData");
-            // Message system for video tool.
 
 
         }
@@ -198,7 +193,7 @@ namespace WolvenKit
 
             _commandManager.CreateCommand(AppCommands.Application.ShowLog);
             _commandManager.CreateCommand(AppCommands.Application.ShowProjectExplorer);
-            _commandManager.CreateCommand(AppCommands.Application.ShowImportUtility);
+            //_commandManager.CreateCommand(AppCommands.Application.ShowImportUtility);
             _commandManager.CreateCommand(AppCommands.Application.ShowProperties);
             _commandManager.CreateCommand(AppCommands.Application.ShowPackageInstaller);
             _commandManager.CreateCommand(AppCommands.Application.ShowMimicsTool);

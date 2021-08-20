@@ -10,10 +10,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _nameText;
 		private inkWidgetReference _skullIndicator;
 		private inkImageWidgetReference _archetypeIcon;
-		private CUInt32 _levelCallbackID;
-		private CUInt32 _nameCallbackID;
-		private CUInt32 _attitudeCallbackID;
-		private CUInt32 _archtypeCallbackID;
+		private CHandle<redCallbackObject> _levelCallbackID;
+		private CHandle<redCallbackObject> _nameCallbackID;
+		private CHandle<redCallbackObject> _attitudeCallbackID;
+		private CHandle<redCallbackObject> _archtypeCallbackID;
 		private CBool _isValidName;
 		private CBool _isValidRarity;
 		private CBool _isValidArchetype;
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(8)] 
 		[RED("levelCallbackID")] 
-		public CUInt32 LevelCallbackID
+		public CHandle<redCallbackObject> LevelCallbackID
 		{
 			get => GetProperty(ref _levelCallbackID);
 			set => SetProperty(ref _levelCallbackID, value);
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(9)] 
 		[RED("nameCallbackID")] 
-		public CUInt32 NameCallbackID
+		public CHandle<redCallbackObject> NameCallbackID
 		{
 			get => GetProperty(ref _nameCallbackID);
 			set => SetProperty(ref _nameCallbackID, value);
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("attitudeCallbackID")] 
-		public CUInt32 AttitudeCallbackID
+		public CHandle<redCallbackObject> AttitudeCallbackID
 		{
 			get => GetProperty(ref _attitudeCallbackID);
 			set => SetProperty(ref _attitudeCallbackID, value);
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("archtypeCallbackID")] 
-		public CUInt32 ArchtypeCallbackID
+		public CHandle<redCallbackObject> ArchtypeCallbackID
 		{
 			get => GetProperty(ref _archtypeCallbackID);
 			set => SetProperty(ref _archtypeCallbackID, value);

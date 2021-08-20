@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CArray<CEnum<gamedataEquipmentArea>> _equipmentAreas;
 		private wCHandle<inkWidget> _displaysRoot;
-		private CArray<CHandle<InventoryItemDisplayController>> _displayControllers;
+		private CArray<wCHandle<InventoryItemDisplayController>> _displayControllers;
 
 		[Ordinal(0)] 
 		[RED("equipmentAreas")] 
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(2)] 
 		[RED("displayControllers")] 
-		public CArray<CHandle<InventoryItemDisplayController>> DisplayControllers
+		public CArray<wCHandle<InventoryItemDisplayController>> DisplayControllers
 		{
 			get => GetProperty(ref _displayControllers);
 			set => SetProperty(ref _displayControllers, value);

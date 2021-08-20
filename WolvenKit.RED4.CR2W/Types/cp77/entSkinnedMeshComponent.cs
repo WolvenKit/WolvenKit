@@ -19,6 +19,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isEnabled;
 		private CEnum<entMeshComponentLODMode> _lODMode;
 		private CBool _useProxyMeshAsShadowMesh;
+		private CEnum<entForcedLodDistance> _forcedLodDistance;
+		private CBool _overrideMeshNavigationImpact;
+		private NavGenNavigationSetting _navigationImpact;
 
 		[Ordinal(10)] 
 		[RED("mesh")] 
@@ -114,6 +117,30 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _useProxyMeshAsShadowMesh);
 			set => SetProperty(ref _useProxyMeshAsShadowMesh, value);
+		}
+
+		[Ordinal(22)] 
+		[RED("forcedLodDistance")] 
+		public CEnum<entForcedLodDistance> ForcedLodDistance
+		{
+			get => GetProperty(ref _forcedLodDistance);
+			set => SetProperty(ref _forcedLodDistance, value);
+		}
+
+		[Ordinal(23)] 
+		[RED("overrideMeshNavigationImpact")] 
+		public CBool OverrideMeshNavigationImpact
+		{
+			get => GetProperty(ref _overrideMeshNavigationImpact);
+			set => SetProperty(ref _overrideMeshNavigationImpact, value);
+		}
+
+		[Ordinal(24)] 
+		[RED("navigationImpact")] 
+		public NavGenNavigationSetting NavigationImpact
+		{
+			get => GetProperty(ref _navigationImpact);
+			set => SetProperty(ref _navigationImpact, value);
 		}
 
 		public entSkinnedMeshComponent(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

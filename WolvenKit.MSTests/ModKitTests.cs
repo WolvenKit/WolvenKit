@@ -183,7 +183,7 @@ namespace WolvenKit.MSTests
             var isKeep = bool.Parse(s_config.GetSection(s_KEEP).Value);
             var isettings = new GlobalImportArgs().Register(
                 new XbmImportArgs() { Keep = isKeep },
-                new MeshImportArgs() { Keep = isKeep },
+                new GltfImportArgs() { Keep = isKeep },
                 new CommonImportArgs() { Keep = isKeep }
             );
             var esettings = new GlobalExportArgs();

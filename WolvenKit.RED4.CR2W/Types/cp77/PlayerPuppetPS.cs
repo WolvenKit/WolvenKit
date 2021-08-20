@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<gameuiMinigameProgramData> _availablePrograms;
 		private CBool _hasAutoReveal;
 		private CFloat _combatExitTimestamp;
-		private CHandle<gameIBlackboard> _minigameBB;
+		private wCHandle<gameIBlackboard> _minigameBB;
 
 		[Ordinal(26)] 
 		[RED("keybindigs")] 
@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(30)] 
 		[RED("minigameBB")] 
-		public CHandle<gameIBlackboard> MinigameBB
+		public wCHandle<gameIBlackboard> MinigameBB
 		{
 			get => GetProperty(ref _minigameBB);
 			set => SetProperty(ref _minigameBB, value);

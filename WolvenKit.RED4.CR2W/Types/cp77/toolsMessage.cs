@@ -11,6 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CInt64 _created;
 		private CHandle<toolsIMessageLocation> _location;
 		private CArray<CHandle<toolsIMessageToken>> _tokens;
+		private CEnum<toolsMessageVerbosity> _verbosity;
 
 		[Ordinal(0)] 
 		[RED("severity")] 
@@ -42,6 +43,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _tokens);
 			set => SetProperty(ref _tokens, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("verbosity")] 
+		public CEnum<toolsMessageVerbosity> Verbosity
+		{
+			get => GetProperty(ref _verbosity);
+			set => SetProperty(ref _verbosity, value);
 		}
 
 		public toolsMessage(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

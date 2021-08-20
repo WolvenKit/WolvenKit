@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<TutorialPopupData> _data;
 		private CBool _inputBlocked;
 		private CBool _gamePaused;
-		private CUInt32 _isShownBbId;
+		private CHandle<redCallbackObject> _isShownBbId;
 		private CName _animIntroPopup;
 		private CName _animIntroPopupModal;
 		private CName _animIntroFullscreenLeft;
@@ -28,6 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CName _animOutro;
 		private inkWidgetReference _targetPopup;
 		private CHandle<inkanimProxy> _animationProxy;
+		private CEnum<gamePopupPosition> _targetPosition;
 
 		[Ordinal(2)] 
 		[RED("actionHint")] 
@@ -95,7 +96,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("isShownBbId")] 
-		public CUInt32 IsShownBbId
+		public CHandle<redCallbackObject> IsShownBbId
 		{
 			get => GetProperty(ref _isShownBbId);
 			set => SetProperty(ref _isShownBbId, value);
@@ -195,6 +196,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _animationProxy);
 			set => SetProperty(ref _animationProxy, value);
+		}
+
+		[Ordinal(23)] 
+		[RED("targetPosition")] 
+		public CEnum<gamePopupPosition> TargetPosition
+		{
+			get => GetProperty(ref _targetPosition);
+			set => SetProperty(ref _targetPosition, value);
 		}
 
 		public gameuiTutorialPopupGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

@@ -8,9 +8,9 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class WantedBarGameController : gameuiHUDGameController
 	{
 		private CArray<inkWidgetReference> _starsWidget;
-		private CHandle<gameIBlackboard> _wantedBlackboard;
+		private wCHandle<gameIBlackboard> _wantedBlackboard;
 		private CHandle<UI_WantedBarDef> _wantedBlackboardDef;
-		private CUInt32 _wantedCallbackID;
+		private CHandle<redCallbackObject> _wantedCallbackID;
 		private CHandle<inkanimProxy> _animProxy;
 		private CHandle<inkanimProxy> _attentionAnimProxy;
 		private CHandle<inkanimProxy> _bountyAnimProxy;
@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("wantedBlackboard")] 
-		public CHandle<gameIBlackboard> WantedBlackboard
+		public wCHandle<gameIBlackboard> WantedBlackboard
 		{
 			get => GetProperty(ref _wantedBlackboard);
 			set => SetProperty(ref _wantedBlackboard, value);
@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("wantedCallbackID")] 
-		public CUInt32 WantedCallbackID
+		public CHandle<redCallbackObject> WantedCallbackID
 		{
 			get => GetProperty(ref _wantedCallbackID);
 			set => SetProperty(ref _wantedCallbackID, value);

@@ -14,8 +14,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<inkWidget> _actionsList;
 		private CHandle<inkanimProxy> _runningAnimation;
 		private CBool _isConfessing;
-		private CUInt32 _onGlitchingStateChangedListener;
-		private CUInt32 _onConfessListener;
+		private CHandle<redCallbackObject> _onGlitchingStateChangedListener;
+		private CHandle<redCallbackObject> _onConfessListener;
 
 		[Ordinal(16)] 
 		[RED("defaultUI")] 
@@ -75,7 +75,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(23)] 
 		[RED("onGlitchingStateChangedListener")] 
-		public CUInt32 OnGlitchingStateChangedListener
+		public CHandle<redCallbackObject> OnGlitchingStateChangedListener
 		{
 			get => GetProperty(ref _onGlitchingStateChangedListener);
 			set => SetProperty(ref _onGlitchingStateChangedListener, value);
@@ -83,7 +83,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(24)] 
 		[RED("onConfessListener")] 
-		public CUInt32 OnConfessListener
+		public CHandle<redCallbackObject> OnConfessListener
 		{
 			get => GetProperty(ref _onConfessListener);
 			set => SetProperty(ref _onConfessListener, value);

@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CUInt32 _timeSystemCallbackID;
 
-		[Ordinal(98)] 
+		[Ordinal(99)] 
 		[RED("timeSystemCallbackID")] 
 		public CUInt32 TimeSystemCallbackID
 		{

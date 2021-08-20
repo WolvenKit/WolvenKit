@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isConnectedToCLS;
 		private CBool _wasCLSInitTriggered;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("isConnectedToCLS")] 
 		public CBool IsConnectedToCLS
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isConnectedToCLS, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("wasCLSInitTriggered")] 
 		public CBool WasCLSInitTriggered
 		{

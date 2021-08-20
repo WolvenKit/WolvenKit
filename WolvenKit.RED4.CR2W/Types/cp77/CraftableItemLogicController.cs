@@ -9,9 +9,9 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private inkCompoundWidgetReference _normalAppearence;
 		private wCHandle<InventoryItemDisplayController> _controller;
-		private CBool _isSelected;
 		private CHandle<ItemCraftingData> _itemData;
 		private CHandle<RecipeData> _recipeData;
+		private CBool _isSpawnInProgress;
 		private CName _displayToCreate;
 
 		[Ordinal(15)] 
@@ -31,14 +31,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(17)] 
-		[RED("isSelected")] 
-		public CBool IsSelected
-		{
-			get => GetProperty(ref _isSelected);
-			set => SetProperty(ref _isSelected, value);
-		}
-
-		[Ordinal(18)] 
 		[RED("itemData")] 
 		public CHandle<ItemCraftingData> ItemData
 		{
@@ -46,12 +38,20 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _itemData, value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(18)] 
 		[RED("recipeData")] 
 		public CHandle<RecipeData> RecipeData
 		{
 			get => GetProperty(ref _recipeData);
 			set => SetProperty(ref _recipeData, value);
+		}
+
+		[Ordinal(19)] 
+		[RED("isSpawnInProgress")] 
+		public CBool IsSpawnInProgress
+		{
+			get => GetProperty(ref _isSpawnInProgress);
+			set => SetProperty(ref _isSpawnInProgress, value);
 		}
 
 		[Ordinal(20)] 

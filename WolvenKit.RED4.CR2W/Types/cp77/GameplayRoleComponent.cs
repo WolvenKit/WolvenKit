@@ -17,6 +17,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isBeingScanned;
 		private CBool _isCurrentTarget;
 		private CBool _isShowingMappins;
+		private CBool _canShowMappinsByTask;
+		private CBool _canHideMappinsByTask;
 		private CBool _isHighlightedInFocusMode;
 		private CEnum<EGameplayRole> _currentGameplayRole;
 		private CBool _isGameplayRoleInitialized;
@@ -104,6 +106,22 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(15)] 
+		[RED("canShowMappinsByTask")] 
+		public CBool CanShowMappinsByTask
+		{
+			get => GetProperty(ref _canShowMappinsByTask);
+			set => SetProperty(ref _canShowMappinsByTask, value);
+		}
+
+		[Ordinal(16)] 
+		[RED("canHideMappinsByTask")] 
+		public CBool CanHideMappinsByTask
+		{
+			get => GetProperty(ref _canHideMappinsByTask);
+			set => SetProperty(ref _canHideMappinsByTask, value);
+		}
+
+		[Ordinal(17)] 
 		[RED("isHighlightedInFocusMode")] 
 		public CBool IsHighlightedInFocusMode
 		{
@@ -111,7 +129,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isHighlightedInFocusMode, value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(18)] 
 		[RED("currentGameplayRole")] 
 		public CEnum<EGameplayRole> CurrentGameplayRole
 		{
@@ -119,7 +137,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentGameplayRole, value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("isGameplayRoleInitialized")] 
 		public CBool IsGameplayRoleInitialized
 		{
@@ -127,7 +145,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isGameplayRoleInitialized, value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("isForceHidden")] 
 		public CBool IsForceHidden
 		{
@@ -135,7 +153,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isForceHidden, value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("isForcedVisibleThroughWalls")] 
 		public CBool IsForcedVisibleThroughWalls
 		{

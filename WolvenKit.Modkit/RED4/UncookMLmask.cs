@@ -137,7 +137,10 @@ namespace WolvenKit.Modkit.RED4
                     {
                         // convert
                         ms.Seek(0, SeekOrigin.Begin);
-                        return DDSUtils.ConvertFromDdsAndSave(ms, newpath, args);
+                        if (!DDSUtils.ConvertFromDdsAndSave(ms, newpath, args))
+                        {
+                            return false;
+                        }
                     }
                 }
             }

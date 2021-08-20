@@ -2,6 +2,12 @@
 
 namespace WolvenKit.Common
 {
+    public enum EUpdateChannel
+    {
+        Stable,
+        Nightly
+    }
+
     public enum ESerializeFormat
     {
         json,
@@ -45,8 +51,8 @@ namespace WolvenKit.Common
 
     public enum ERedExtension
     {
-        actionanimdb,
         acousticdata,
+        actionanimdb,
         aiarch,
         animgraph,
         anims,
@@ -71,6 +77,7 @@ namespace WolvenKit.Common
         credits,
         csv,
         cubemap,
+        curveresset,
         curveset,
         dat,
         devices,
@@ -88,6 +95,7 @@ namespace WolvenKit.Common
         folbrush,
         foldest,
         fp,
+        game,
         gamedef,
         garmentlayerparams,
         genericanimdb,
@@ -123,6 +131,7 @@ namespace WolvenKit.Common
         locopaths,
         loot,
         mappins,
+        matlib,
         mesh,
         mi,
         mlmask,
@@ -130,7 +139,6 @@ namespace WolvenKit.Common
         mltemplate,
         morphtarget,
         mt,
-        navmesh,
         null_areas,
         opusinfo,
         opuspak,
@@ -144,6 +152,7 @@ namespace WolvenKit.Common
         questphase,
         regionset,
         remt,
+        reps,
         reslist,
         rig,
         scene,
@@ -153,7 +162,6 @@ namespace WolvenKit.Common
         smartobjects,
         sp,
         spatial_representation,
-        streamingquerydata,
         streamingsector,
         streamingsector_inplace,
         streamingworld,
@@ -161,6 +169,8 @@ namespace WolvenKit.Common
         texarray,
         traffic_collisions,
         traffic_persistent,
+        vehcommoncurveset,
+        vehcurveset,
         voicetags,
         w2mesh,
         w2mi,
@@ -228,7 +238,8 @@ namespace WolvenKit.Common
         gltf,
         glb,
         ttf,
-        wav
+        wav,
+        masklist
     }
 
     public enum EConvertableOutput

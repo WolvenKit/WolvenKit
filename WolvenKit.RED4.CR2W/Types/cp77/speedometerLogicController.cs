@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class speedometerLogicController : IVehicleModuleController
 	{
 		private inkTextWidgetReference _speedTextWidget;
-		private CUInt32 _speedBBConnectionId;
+		private CHandle<redCallbackObject> _speedBBConnectionId;
 		private wCHandle<gameIBlackboard> _vehBB;
 		private wCHandle<vehicleBaseObject> _vehicle;
 
@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(2)] 
 		[RED("speedBBConnectionId")] 
-		public CUInt32 SpeedBBConnectionId
+		public CHandle<redCallbackObject> SpeedBBConnectionId
 		{
 			get => GetProperty(ref _speedBBConnectionId);
 			set => SetProperty(ref _speedBBConnectionId, value);

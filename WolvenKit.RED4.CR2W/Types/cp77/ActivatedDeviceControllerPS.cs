@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private NodeRef _spiderbotInteractionLocationOverride;
 		private CInt32 _industrialArmAnimationOverride;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("animationSetup")] 
 		public ActivatedDeviceAnimSetup AnimationSetup
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animationSetup, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("activatedDeviceSetup")] 
 		public ActivatedDeviceSetup ActivatedDeviceSetup
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _activatedDeviceSetup, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("spiderbotInteractionLocationOverride")] 
 		public NodeRef SpiderbotInteractionLocationOverride
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _spiderbotInteractionLocationOverride, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("industrialArmAnimationOverride")] 
 		public CInt32 IndustrialArmAnimationOverride
 		{

@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CBool _quickHacksEnabled;
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("quickHacksEnabled")] 
 		public CBool QuickHacksEnabled
 		{

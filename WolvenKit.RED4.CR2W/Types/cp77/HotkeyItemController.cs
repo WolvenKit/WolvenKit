@@ -8,10 +8,10 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class HotkeyItemController : GenericHotkeyController
 	{
 		private inkWidgetReference _hotkeyItemSlot;
-		private CHandle<InventoryItemDisplayController> _hotkeyItemController;
+		private wCHandle<InventoryItemDisplayController> _hotkeyItemController;
 		private InventoryItemData _currentItem;
-		private CHandle<gameIBlackboard> _hotkeyBlackboard;
-		private CUInt32 _hotkeyCallbackID;
+		private wCHandle<gameIBlackboard> _hotkeyBlackboard;
+		private CHandle<redCallbackObject> _hotkeyCallbackID;
 		private wCHandle<EquipmentSystem> _equipmentSystem;
 		private CHandle<InventoryDataManagerV2> _inventoryManager;
 
@@ -25,7 +25,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(20)] 
 		[RED("hotkeyItemController")] 
-		public CHandle<InventoryItemDisplayController> HotkeyItemController_
+		public wCHandle<InventoryItemDisplayController> HotkeyItemController_
 		{
 			get => GetProperty(ref _hotkeyItemController);
 			set => SetProperty(ref _hotkeyItemController, value);
@@ -41,7 +41,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(22)] 
 		[RED("hotkeyBlackboard")] 
-		public CHandle<gameIBlackboard> HotkeyBlackboard
+		public wCHandle<gameIBlackboard> HotkeyBlackboard
 		{
 			get => GetProperty(ref _hotkeyBlackboard);
 			set => SetProperty(ref _hotkeyBlackboard, value);
@@ -49,7 +49,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(23)] 
 		[RED("hotkeyCallbackID")] 
-		public CUInt32 HotkeyCallbackID
+		public CHandle<redCallbackObject> HotkeyCallbackID
 		{
 			get => GetProperty(ref _hotkeyCallbackID);
 			set => SetProperty(ref _hotkeyCallbackID, value);

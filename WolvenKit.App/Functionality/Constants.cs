@@ -46,7 +46,7 @@ namespace WolvenKit.Functionality.WKitGlobal
             public const string ShowGameDebuggerTool = "Application.ShowGameDebuggerTool";
             public const string ShowHexEditor = "Application.ShowHexEditor";
             public const string ShowImporterTool = "Application.ShowImporterTool";
-            public const string ShowImportUtility = "Application.ShowImportUtility";
+            //public const string ShowImportUtility = "Application.ShowImportUtility";
             public const string ShowJournalEditor = "Application.ShowJournalEditor";
             public const string ShowLog = "Application.ShowLog";
             public const string ShowMenuCreatorTool = "Application.ShowMenuCreatorTool";

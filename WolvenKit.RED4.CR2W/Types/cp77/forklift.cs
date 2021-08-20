@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isPlayerUnder;
 		private CHandle<entPhysicalMeshComponent> _cargoBox;
 
-		[Ordinal(96)] 
+		[Ordinal(97)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_ForkliftDevice> AnimFeature
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animFeature, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(98)] 
 		[RED("animationController")] 
 		public CHandle<entAnimationControllerComponent> AnimationController
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animationController, value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(99)] 
 		[RED("isPlayerUnder")] 
 		public CBool IsPlayerUnder
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isPlayerUnder, value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(100)] 
 		[RED("cargoBox")] 
 		public CHandle<entPhysicalMeshComponent> CargoBox
 		{

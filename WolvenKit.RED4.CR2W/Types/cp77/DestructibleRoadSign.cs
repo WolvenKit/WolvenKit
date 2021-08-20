@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<entMeshComponent> _uiMesh;
 		private CHandle<entMeshComponent> _uiMesh_2;
 
-		[Ordinal(89)] 
+		[Ordinal(90)] 
 		[RED("frameMesh")] 
 		public CHandle<entMeshComponent> FrameMesh
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _frameMesh, value);
 		}
 
-		[Ordinal(90)] 
+		[Ordinal(91)] 
 		[RED("uiMesh")] 
 		public CHandle<entMeshComponent> UiMesh
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _uiMesh, value);
 		}
 
-		[Ordinal(91)] 
+		[Ordinal(92)] 
 		[RED("uiMesh_2")] 
 		public CHandle<entMeshComponent> UiMesh_2
 		{

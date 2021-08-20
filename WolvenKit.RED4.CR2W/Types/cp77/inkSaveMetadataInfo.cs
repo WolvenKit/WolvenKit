@@ -19,6 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CDouble _playthroughTime;
 		private CUInt64 _initialLoadingScreenID;
 		private CDouble _level;
+		private CString _gameVersion;
 		private CBool _isValid;
 
 		[Ordinal(0)] 
@@ -118,6 +119,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(12)] 
+		[RED("gameVersion")] 
+		public CString GameVersion
+		{
+			get => GetProperty(ref _gameVersion);
+			set => SetProperty(ref _gameVersion, value);
+		}
+
+		[Ordinal(13)] 
 		[RED("isValid")] 
 		public CBool IsValid
 		{

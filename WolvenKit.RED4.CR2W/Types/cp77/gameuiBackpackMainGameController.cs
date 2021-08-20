@@ -24,15 +24,15 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<InventoryDataManagerV2> _inventoryManager;
 		private wCHandle<PlayerPuppet> _player;
 		private CArray<gameItemModParams> _itemDropQueue;
-		private CArray<CHandle<CrafringMaterialItemController>> _craftingMaterialsListItems;
+		private CArray<wCHandle<CrafringMaterialItemController>> _craftingMaterialsListItems;
 		private CHandle<UI_CraftingDef> _disassembleCallback;
-		private CHandle<gameIBlackboard> _disassembleBlackboard;
-		private CUInt32 _disassembleBBID;
+		private wCHandle<gameIBlackboard> _disassembleBlackboard;
+		private CHandle<redCallbackObject> _disassembleBBID;
 		private CHandle<UI_EquipmentDef> _equippedCallback;
-		private CHandle<gameIBlackboard> _equippedBlackboard;
-		private CUInt32 _equippedBBID;
+		private wCHandle<gameIBlackboard> _equippedBlackboard;
+		private CHandle<redCallbackObject> _equippedBBID;
 		private wCHandle<inkMenuEventDispatcher> _menuEventDispatcher;
-		private CHandle<BackpackFilterButtonController> _activeFilter;
+		private wCHandle<BackpackFilterButtonController> _activeFilter;
 		private CHandle<inkScriptableDataSourceWrapper> _backpackItemsDataSource;
 		private CHandle<BackpackDataView> _backpackItemsDataView;
 		private CHandle<ItemPreferredComparisonResolver> _comparisonResolver;
@@ -191,7 +191,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(20)] 
 		[RED("craftingMaterialsListItems")] 
-		public CArray<CHandle<CrafringMaterialItemController>> CraftingMaterialsListItems
+		public CArray<wCHandle<CrafringMaterialItemController>> CraftingMaterialsListItems
 		{
 			get => GetProperty(ref _craftingMaterialsListItems);
 			set => SetProperty(ref _craftingMaterialsListItems, value);
@@ -207,7 +207,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(22)] 
 		[RED("DisassembleBlackboard")] 
-		public CHandle<gameIBlackboard> DisassembleBlackboard
+		public wCHandle<gameIBlackboard> DisassembleBlackboard
 		{
 			get => GetProperty(ref _disassembleBlackboard);
 			set => SetProperty(ref _disassembleBlackboard, value);
@@ -215,7 +215,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(23)] 
 		[RED("DisassembleBBID")] 
-		public CUInt32 DisassembleBBID
+		public CHandle<redCallbackObject> DisassembleBBID
 		{
 			get => GetProperty(ref _disassembleBBID);
 			set => SetProperty(ref _disassembleBBID, value);
@@ -231,7 +231,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(25)] 
 		[RED("EquippedBlackboard")] 
-		public CHandle<gameIBlackboard> EquippedBlackboard
+		public wCHandle<gameIBlackboard> EquippedBlackboard
 		{
 			get => GetProperty(ref _equippedBlackboard);
 			set => SetProperty(ref _equippedBlackboard, value);
@@ -239,7 +239,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(26)] 
 		[RED("EquippedBBID")] 
-		public CUInt32 EquippedBBID
+		public CHandle<redCallbackObject> EquippedBBID
 		{
 			get => GetProperty(ref _equippedBBID);
 			set => SetProperty(ref _equippedBBID, value);
@@ -255,7 +255,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(28)] 
 		[RED("activeFilter")] 
-		public CHandle<BackpackFilterButtonController> ActiveFilter
+		public wCHandle<BackpackFilterButtonController> ActiveFilter
 		{
 			get => GetProperty(ref _activeFilter);
 			set => SetProperty(ref _activeFilter, value);

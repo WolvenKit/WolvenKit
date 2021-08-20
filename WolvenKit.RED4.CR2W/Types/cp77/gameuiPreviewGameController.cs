@@ -10,6 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _yawSpeed;
 		private CFloat _yawDefault;
 		private CBool _isRotatable;
+		private CFloat _rotationSpeed;
 
 		[Ordinal(3)] 
 		[RED("yawSpeed")] 
@@ -33,6 +34,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _isRotatable);
 			set => SetProperty(ref _isRotatable, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("rotationSpeed")] 
+		public CFloat RotationSpeed
+		{
+			get => GetProperty(ref _rotationSpeed);
+			set => SetProperty(ref _rotationSpeed, value);
 		}
 
 		public gameuiPreviewGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

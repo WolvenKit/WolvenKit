@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _isShortGlitchActive;
 		private gameDelayID _shortGlitchDelayID;
 
-		[Ordinal(102)] 
+		[Ordinal(103)] 
 		[RED("isShortGlitchActive")] 
 		public CBool IsShortGlitchActive
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isShortGlitchActive, value);
 		}
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("shortGlitchDelayID")] 
 		public gameDelayID ShortGlitchDelayID
 		{

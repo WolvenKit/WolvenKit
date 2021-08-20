@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CInt32 _customNumber;
 		private CHandle<ScreenMessageSelector> _messageRecordSelector;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("messageRecordID")] 
 		public TweakDBID MessageRecordID
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _messageRecordID, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("replaceTextWithCustomNumber")] 
 		public CBool ReplaceTextWithCustomNumber
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _replaceTextWithCustomNumber, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("customNumber")] 
 		public CInt32 CustomNumber
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _customNumber, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("messageRecordSelector")] 
 		public CHandle<ScreenMessageSelector> MessageRecordSelector
 		{

@@ -13,8 +13,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<wCHandle<KeyboardHintItemController>> _uIItems;
 		private wCHandle<PlayerPuppet> _player;
 		private wCHandle<QuickSlotsManager> _quickSlotsManager;
-		private CHandle<gameIBlackboard> _uiQuickItemsBlackboard;
-		private CUInt32 _keyboardCommandBBID;
+		private wCHandle<gameIBlackboard> _uiQuickItemsBlackboard;
+		private CHandle<redCallbackObject> _keyboardCommandBBID;
 
 		[Ordinal(9)] 
 		[RED("TopElementName")] 
@@ -66,7 +66,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("UiQuickItemsBlackboard")] 
-		public CHandle<gameIBlackboard> UiQuickItemsBlackboard
+		public wCHandle<gameIBlackboard> UiQuickItemsBlackboard
 		{
 			get => GetProperty(ref _uiQuickItemsBlackboard);
 			set => SetProperty(ref _uiQuickItemsBlackboard, value);
@@ -74,7 +74,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(16)] 
 		[RED("KeyboardCommandBBID")] 
-		public CUInt32 KeyboardCommandBBID
+		public CHandle<redCallbackObject> KeyboardCommandBBID
 		{
 			get => GetProperty(ref _keyboardCommandBBID);
 			set => SetProperty(ref _keyboardCommandBBID, value);

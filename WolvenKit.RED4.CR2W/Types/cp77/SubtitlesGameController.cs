@@ -9,11 +9,11 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private wCHandle<inkTextWidget> _sceneComment;
 		private wCHandle<inkVerticalPanelWidget> _subtitlesPanel;
-		private CUInt32 _bbCbShowSceneComment;
-		private CUInt32 _bbCbHideSceneComment;
-		private CHandle<gameIBlackboard> _uiSceneCommentsBlackboard;
+		private CHandle<redCallbackObject> _bbCbShowSceneComment;
+		private CHandle<redCallbackObject> _bbCbHideSceneComment;
+		private wCHandle<gameIBlackboard> _uiSceneCommentsBlackboard;
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("sceneComment")] 
 		public wCHandle<inkTextWidget> SceneComment
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _sceneComment, value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("subtitlesPanel")] 
 		public wCHandle<inkVerticalPanelWidget> SubtitlesPanel
 		{
@@ -29,25 +29,25 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _subtitlesPanel, value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("bbCbShowSceneComment")] 
-		public CUInt32 BbCbShowSceneComment
+		public CHandle<redCallbackObject> BbCbShowSceneComment
 		{
 			get => GetProperty(ref _bbCbShowSceneComment);
 			set => SetProperty(ref _bbCbShowSceneComment, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("bbCbHideSceneComment")] 
-		public CUInt32 BbCbHideSceneComment
+		public CHandle<redCallbackObject> BbCbHideSceneComment
 		{
 			get => GetProperty(ref _bbCbHideSceneComment);
 			set => SetProperty(ref _bbCbHideSceneComment, value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("uiSceneCommentsBlackboard")] 
-		public CHandle<gameIBlackboard> UiSceneCommentsBlackboard
+		public wCHandle<gameIBlackboard> UiSceneCommentsBlackboard
 		{
 			get => GetProperty(ref _uiSceneCommentsBlackboard);
 			set => SetProperty(ref _uiSceneCommentsBlackboard, value);

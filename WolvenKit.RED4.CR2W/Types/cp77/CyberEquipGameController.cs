@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<CName> _weaponsQuickSlotTags;
 		private CArray<CName> _fragmentTags;
 
-		[Ordinal(47)] 
+		[Ordinal(46)] 
 		[RED("eyesTags")] 
 		public CArray<CName> EyesTags
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _eyesTags, value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(47)] 
 		[RED("brainTags")] 
 		public CArray<CName> BrainTags
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _brainTags, value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(48)] 
 		[RED("musculoskeletalTags")] 
 		public CArray<CName> MusculoskeletalTags
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _musculoskeletalTags, value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(49)] 
 		[RED("nervousTags")] 
 		public CArray<CName> NervousTags
 		{
@@ -53,7 +53,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _nervousTags, value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(50)] 
 		[RED("cardiovascularTags")] 
 		public CArray<CName> CardiovascularTags
 		{
@@ -61,7 +61,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cardiovascularTags, value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(51)] 
 		[RED("immuneTags")] 
 		public CArray<CName> ImmuneTags
 		{
@@ -69,7 +69,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _immuneTags, value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(52)] 
 		[RED("integumentaryTags")] 
 		public CArray<CName> IntegumentaryTags
 		{
@@ -77,7 +77,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _integumentaryTags, value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(53)] 
 		[RED("handsTags")] 
 		public CArray<CName> HandsTags
 		{
@@ -85,7 +85,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _handsTags, value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(54)] 
 		[RED("armsTags")] 
 		public CArray<CName> ArmsTags
 		{
@@ -93,7 +93,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _armsTags, value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(55)] 
 		[RED("legsTags")] 
 		public CArray<CName> LegsTags
 		{
@@ -101,7 +101,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _legsTags, value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(56)] 
 		[RED("quickSlotTags")] 
 		public CArray<CName> QuickSlotTags
 		{
@@ -109,7 +109,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _quickSlotTags, value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(57)] 
 		[RED("weaponsQuickSlotTags")] 
 		public CArray<CName> WeaponsQuickSlotTags
 		{
@@ -117,7 +117,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _weaponsQuickSlotTags, value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(58)] 
 		[RED("fragmentTags")] 
 		public CArray<CName> FragmentTags
 		{

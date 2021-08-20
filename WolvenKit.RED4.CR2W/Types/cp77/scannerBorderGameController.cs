@@ -18,17 +18,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkImageWidgetReference _distanceImageRuler;
 		private inkImageWidgetReference _zoomMoveBracketL;
 		private inkImageWidgetReference _zoomMoveBracketR;
-		private inkCompoundWidgetReference _insideCrosshair;
 		private inkCompoundWidgetReference _scannerBarWidget;
 		private inkTextWidgetReference _scannerBarFluffText;
 		private inkImageWidgetReference _scannerBarFill;
-		private inkCanvasWidgetReference _deviceFluff1;
-		private inkCanvasWidgetReference _deviceFluff2;
-		private inkCanvasWidgetReference _deviceFluff3;
-		private inkFlexWidgetReference _deviceFluff4;
-		private inkFlexWidgetReference _deviceFluff5;
-		private inkHorizontalPanelWidgetReference _deviceFluff6;
-		private inkImageWidgetReference _deviceFluff7;
+		private CArray<inkWidgetReference> _deviceFluffs;
 		private CHandle<inkanimProxy> _lockOnAnimProxy;
 		private CHandle<inkanimProxy> _idleAnimProxy;
 		private CHandle<inkanimProxy> _bracketsAppearAnimProxy;
@@ -52,19 +45,19 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _argZoomBuffered;
 		private CArray<wCHandle<inkImageWidget>> _squares;
 		private CArray<wCHandle<inkImageWidget>> _squaresFilled;
-		private CHandle<gameIBlackboard> _scanBlackboard;
-		private CHandle<gameIBlackboard> _psmBlackboard;
-		private CHandle<gameIBlackboard> _tcsBlackboard;
-		private CUInt32 _bBID_ScanObject;
-		private CUInt32 _bBID_ScanObject_Data;
-		private CUInt32 _bBID_ScanObject_Position;
-		private CUInt32 _bBID_ScanState;
-		private CUInt32 _bBID_ProgressNum;
-		private CUInt32 _bBID_ProgressText;
-		private CUInt32 _bBID_ExclusiveFocus;
-		private CUInt32 _pSM_BBID;
-		private CUInt32 _tcs_BBID;
-		private CUInt32 _visionStateBlackboardId;
+		private wCHandle<gameIBlackboard> _scanBlackboard;
+		private wCHandle<gameIBlackboard> _psmBlackboard;
+		private wCHandle<gameIBlackboard> _tcsBlackboard;
+		private CHandle<redCallbackObject> _bBID_ScanObject;
+		private CHandle<redCallbackObject> _bBID_ScanObject_Data;
+		private CHandle<redCallbackObject> _bBID_ScanObject_Position;
+		private CHandle<redCallbackObject> _bBID_ScanState;
+		private CHandle<redCallbackObject> _bBID_ProgressNum;
+		private CHandle<redCallbackObject> _bBID_ProgressText;
+		private CHandle<redCallbackObject> _bBID_ExclusiveFocus;
+		private CHandle<redCallbackObject> _pSM_BBID;
+		private CHandle<redCallbackObject> _tcs_BBID;
+		private CHandle<redCallbackObject> _visionStateBlackboardId;
 
 		[Ordinal(9)] 
 		[RED("ZoomMovingContainer")] 
@@ -155,14 +148,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(20)] 
-		[RED("insideCrosshair")] 
-		public inkCompoundWidgetReference InsideCrosshair
-		{
-			get => GetProperty(ref _insideCrosshair);
-			set => SetProperty(ref _insideCrosshair, value);
-		}
-
-		[Ordinal(21)] 
 		[RED("scannerBarWidget")] 
 		public inkCompoundWidgetReference ScannerBarWidget
 		{
@@ -170,7 +155,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _scannerBarWidget, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(21)] 
 		[RED("scannerBarFluffText")] 
 		public inkTextWidgetReference ScannerBarFluffText
 		{
@@ -178,7 +163,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _scannerBarFluffText, value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(22)] 
 		[RED("scannerBarFill")] 
 		public inkImageWidgetReference ScannerBarFill
 		{
@@ -186,63 +171,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _scannerBarFill, value);
 		}
 
+		[Ordinal(23)] 
+		[RED("deviceFluffs")] 
+		public CArray<inkWidgetReference> DeviceFluffs
+		{
+			get => GetProperty(ref _deviceFluffs);
+			set => SetProperty(ref _deviceFluffs, value);
+		}
+
 		[Ordinal(24)] 
-		[RED("DeviceFluff1")] 
-		public inkCanvasWidgetReference DeviceFluff1
-		{
-			get => GetProperty(ref _deviceFluff1);
-			set => SetProperty(ref _deviceFluff1, value);
-		}
-
-		[Ordinal(25)] 
-		[RED("DeviceFluff2")] 
-		public inkCanvasWidgetReference DeviceFluff2
-		{
-			get => GetProperty(ref _deviceFluff2);
-			set => SetProperty(ref _deviceFluff2, value);
-		}
-
-		[Ordinal(26)] 
-		[RED("DeviceFluff3")] 
-		public inkCanvasWidgetReference DeviceFluff3
-		{
-			get => GetProperty(ref _deviceFluff3);
-			set => SetProperty(ref _deviceFluff3, value);
-		}
-
-		[Ordinal(27)] 
-		[RED("DeviceFluff4")] 
-		public inkFlexWidgetReference DeviceFluff4
-		{
-			get => GetProperty(ref _deviceFluff4);
-			set => SetProperty(ref _deviceFluff4, value);
-		}
-
-		[Ordinal(28)] 
-		[RED("DeviceFluff5")] 
-		public inkFlexWidgetReference DeviceFluff5
-		{
-			get => GetProperty(ref _deviceFluff5);
-			set => SetProperty(ref _deviceFluff5, value);
-		}
-
-		[Ordinal(29)] 
-		[RED("DeviceFluff6")] 
-		public inkHorizontalPanelWidgetReference DeviceFluff6
-		{
-			get => GetProperty(ref _deviceFluff6);
-			set => SetProperty(ref _deviceFluff6, value);
-		}
-
-		[Ordinal(30)] 
-		[RED("DeviceFluff7")] 
-		public inkImageWidgetReference DeviceFluff7
-		{
-			get => GetProperty(ref _deviceFluff7);
-			set => SetProperty(ref _deviceFluff7, value);
-		}
-
-		[Ordinal(31)] 
 		[RED("LockOnAnimProxy")] 
 		public CHandle<inkanimProxy> LockOnAnimProxy
 		{
@@ -250,7 +187,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lockOnAnimProxy, value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(25)] 
 		[RED("IdleAnimProxy")] 
 		public CHandle<inkanimProxy> IdleAnimProxy
 		{
@@ -258,7 +195,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _idleAnimProxy, value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(26)] 
 		[RED("BracketsAppearAnimProxy")] 
 		public CHandle<inkanimProxy> BracketsAppearAnimProxy
 		{
@@ -266,7 +203,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bracketsAppearAnimProxy, value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(27)] 
 		[RED("lockOutAnimWasPlayed")] 
 		public CBool LockOutAnimWasPlayed
 		{
@@ -274,7 +211,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lockOutAnimWasPlayed, value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(28)] 
 		[RED("root")] 
 		public wCHandle<inkCompoundWidget> Root
 		{
@@ -282,7 +219,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _root, value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(29)] 
 		[RED("currentTarget")] 
 		public entEntityID CurrentTarget
 		{
@@ -290,7 +227,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentTarget, value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(30)] 
 		[RED("isTakeControllActive")] 
 		public CBool IsTakeControllActive
 		{
@@ -298,7 +235,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isTakeControllActive, value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(31)] 
 		[RED("ownerObject")] 
 		public wCHandle<gameObject> OwnerObject
 		{
@@ -306,7 +243,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ownerObject, value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(32)] 
 		[RED("currentTargetBuffered")] 
 		public entEntityID CurrentTargetBuffered
 		{
@@ -314,7 +251,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentTargetBuffered, value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(33)] 
 		[RED("scannerData")] 
 		public scannerDataStructure ScannerData
 		{
@@ -322,7 +259,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _scannerData, value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(34)] 
 		[RED("shouldShowScanner")] 
 		public CBool ShouldShowScanner
 		{
@@ -330,7 +267,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shouldShowScanner, value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(35)] 
 		[RED("isFullyScanned")] 
 		public CBool IsFullyScanned
 		{
@@ -338,7 +275,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isFullyScanned, value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(36)] 
 		[RED("ProjectionLogicController")] 
 		public wCHandle<ScannerCrosshairLogicController> ProjectionLogicController
 		{
@@ -346,7 +283,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _projectionLogicController, value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(37)] 
 		[RED("OriginalScannerBarFillSize")] 
 		public Vector2 OriginalScannerBarFillSize
 		{
@@ -354,7 +291,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _originalScannerBarFillSize, value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(38)] 
 		[RED("zoomUpAnim")] 
 		public CHandle<inkanimProxy> ZoomUpAnim
 		{
@@ -362,7 +299,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _zoomUpAnim, value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(39)] 
 		[RED("animLockOn")] 
 		public CHandle<inkanimProxy> AnimLockOn
 		{
@@ -370,7 +307,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animLockOn, value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(40)] 
 		[RED("zoomDownAnim")] 
 		public CHandle<inkanimProxy> ZoomDownAnim
 		{
@@ -378,7 +315,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _zoomDownAnim, value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(41)] 
 		[RED("animLockOff")] 
 		public CHandle<inkanimProxy> AnimLockOff
 		{
@@ -386,7 +323,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animLockOff, value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(42)] 
 		[RED("exclusiveFocusAnim")] 
 		public CHandle<inkanimProxy> ExclusiveFocusAnim
 		{
@@ -394,7 +331,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _exclusiveFocusAnim, value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(43)] 
 		[RED("isExclusiveFocus")] 
 		public CBool IsExclusiveFocus
 		{
@@ -402,7 +339,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isExclusiveFocus, value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(44)] 
 		[RED("argZoomBuffered")] 
 		public CFloat ArgZoomBuffered
 		{
@@ -410,7 +347,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _argZoomBuffered, value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(45)] 
 		[RED("squares")] 
 		public CArray<wCHandle<inkImageWidget>> Squares
 		{
@@ -418,7 +355,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _squares, value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(46)] 
 		[RED("squaresFilled")] 
 		public CArray<wCHandle<inkImageWidget>> SquaresFilled
 		{
@@ -426,105 +363,105 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _squaresFilled, value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(47)] 
 		[RED("scanBlackboard")] 
-		public CHandle<gameIBlackboard> ScanBlackboard
+		public wCHandle<gameIBlackboard> ScanBlackboard
 		{
 			get => GetProperty(ref _scanBlackboard);
 			set => SetProperty(ref _scanBlackboard, value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(48)] 
 		[RED("psmBlackboard")] 
-		public CHandle<gameIBlackboard> PsmBlackboard
+		public wCHandle<gameIBlackboard> PsmBlackboard
 		{
 			get => GetProperty(ref _psmBlackboard);
 			set => SetProperty(ref _psmBlackboard, value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(49)] 
 		[RED("tcsBlackboard")] 
-		public CHandle<gameIBlackboard> TcsBlackboard
+		public wCHandle<gameIBlackboard> TcsBlackboard
 		{
 			get => GetProperty(ref _tcsBlackboard);
 			set => SetProperty(ref _tcsBlackboard, value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(50)] 
 		[RED("BBID_ScanObject")] 
-		public CUInt32 BBID_ScanObject
+		public CHandle<redCallbackObject> BBID_ScanObject
 		{
 			get => GetProperty(ref _bBID_ScanObject);
 			set => SetProperty(ref _bBID_ScanObject, value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(51)] 
 		[RED("BBID_ScanObject_Data")] 
-		public CUInt32 BBID_ScanObject_Data
+		public CHandle<redCallbackObject> BBID_ScanObject_Data
 		{
 			get => GetProperty(ref _bBID_ScanObject_Data);
 			set => SetProperty(ref _bBID_ScanObject_Data, value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(52)] 
 		[RED("BBID_ScanObject_Position")] 
-		public CUInt32 BBID_ScanObject_Position
+		public CHandle<redCallbackObject> BBID_ScanObject_Position
 		{
 			get => GetProperty(ref _bBID_ScanObject_Position);
 			set => SetProperty(ref _bBID_ScanObject_Position, value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(53)] 
 		[RED("BBID_ScanState")] 
-		public CUInt32 BBID_ScanState
+		public CHandle<redCallbackObject> BBID_ScanState
 		{
 			get => GetProperty(ref _bBID_ScanState);
 			set => SetProperty(ref _bBID_ScanState, value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(54)] 
 		[RED("BBID_ProgressNum")] 
-		public CUInt32 BBID_ProgressNum
+		public CHandle<redCallbackObject> BBID_ProgressNum
 		{
 			get => GetProperty(ref _bBID_ProgressNum);
 			set => SetProperty(ref _bBID_ProgressNum, value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(55)] 
 		[RED("BBID_ProgressText")] 
-		public CUInt32 BBID_ProgressText
+		public CHandle<redCallbackObject> BBID_ProgressText
 		{
 			get => GetProperty(ref _bBID_ProgressText);
 			set => SetProperty(ref _bBID_ProgressText, value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(56)] 
 		[RED("BBID_ExclusiveFocus")] 
-		public CUInt32 BBID_ExclusiveFocus
+		public CHandle<redCallbackObject> BBID_ExclusiveFocus
 		{
 			get => GetProperty(ref _bBID_ExclusiveFocus);
 			set => SetProperty(ref _bBID_ExclusiveFocus, value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(57)] 
 		[RED("PSM_BBID")] 
-		public CUInt32 PSM_BBID
+		public CHandle<redCallbackObject> PSM_BBID
 		{
 			get => GetProperty(ref _pSM_BBID);
 			set => SetProperty(ref _pSM_BBID, value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(58)] 
 		[RED("tcs_BBID")] 
-		public CUInt32 Tcs_BBID
+		public CHandle<redCallbackObject> Tcs_BBID
 		{
 			get => GetProperty(ref _tcs_BBID);
 			set => SetProperty(ref _tcs_BBID, value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(59)] 
 		[RED("VisionStateBlackboardId")] 
-		public CUInt32 VisionStateBlackboardId
+		public CHandle<redCallbackObject> VisionStateBlackboardId
 		{
 			get => GetProperty(ref _visionStateBlackboardId);
 			set => SetProperty(ref _visionStateBlackboardId, value);

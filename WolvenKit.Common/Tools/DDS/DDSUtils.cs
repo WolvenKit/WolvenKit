@@ -704,7 +704,7 @@ namespace WolvenKit.Common.DDS
             // get arguments
             var uext = EUncookExtension.dds;
             var vflip = false;
-            if (args is not XbmExportArgs or MlmaskExportArgs)
+            if (args is not XbmExportArgs and not MlmaskExportArgs)
             {
                 return false;
 
@@ -829,7 +829,45 @@ namespace WolvenKit.Common.DDS
                 }
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        public unsafe static byte[] ConvertFromDdsMemory(Stream ms, EUncookExtension filetype, bool vflip = false, bool hflip = false)
+        {
+            byte[] rentedBuffer = null;
+            try
+            {
+                int len;
+                var offset = 0;
 
+                len = checked((int)ms.Length);
+                rentedBuffer = ArrayPool<byte>.Shared.Rent(len);
+
+                int readBytes;
+                while (offset < len &&
+                       (readBytes = ms.Read(rentedBuffer, offset, len - offset)) > 0)
+                {
+                    offset += readBytes;
+                }
+
+                var span = new ReadOnlySpan<byte>(rentedBuffer, 0, len);
+
+                fixed (byte* ptr = span)
+                {
+                    var buffer = DirectXTexSharp.Texconv.ConvertFromDdsArray(ptr, span.Length,
+                        (DirectXTexSharp.ESaveFileTypes)filetype,
+                        vflip, hflip);
+                    return buffer;
+                }
+            }
+            finally
+            {
+                if (rentedBuffer is object)
+                {
+                    ArrayPool<byte>.Shared.Return(rentedBuffer);
+                }
+            }
+        }
 
 
 

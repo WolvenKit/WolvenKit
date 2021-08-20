@@ -33,23 +33,23 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<gametargetingTargetingSystem> _targetingSystem;
 		private wCHandle<gameVisionModeSystem> _visionModeSystem;
 		private CBool _isHackingMinigameActive;
-		private CUInt32 _stickInputListener;
-		private CUInt32 _quickHackPanelListener;
-		private CUInt32 _carriedBodyListener;
-		private CUInt32 _grappleListener;
+		private CHandle<redCallbackObject> _stickInputListener;
+		private CHandle<redCallbackObject> _quickHackPanelListener;
+		private CHandle<redCallbackObject> _carriedBodyListener;
+		private CHandle<redCallbackObject> _grappleListener;
 		private gameaimAssistAimRequest _lookatRequest;
 		private CBool _isQHackUIInputLocked;
 		private CUInt32 _playerAttachedCallbackID;
 		private CUInt32 _playerDetachedCallbackID;
-		private CUInt32 _playerTargetCallbackID;
-		private CUInt32 _braindanceToggleCallbackID;
-		private CUInt32 _nameplateCallbackID;
-		private CUInt32 _visionModeChangedCallbackID;
-		private CUInt32 _scannerTargetCallbackID;
-		private CUInt32 _hackingMinigameCallbackID;
-		private CUInt32 _uiScannerVisibleCallbackID;
-		private CUInt32 _uiQuickHackVisibleCallbackID;
-		private CUInt32 _lootDataCallbackID;
+		private CHandle<redCallbackObject> _playerTargetCallbackID;
+		private CHandle<redCallbackObject> _braindanceToggleCallbackID;
+		private CHandle<redCallbackObject> _nameplateCallbackID;
+		private CHandle<redCallbackObject> _visionModeChangedCallbackID;
+		private CHandle<redCallbackObject> _scannerTargetCallbackID;
+		private CHandle<redCallbackObject> _hackingMinigameCallbackID;
+		private CHandle<redCallbackObject> _uiScannerVisibleCallbackID;
+		private CHandle<redCallbackObject> _uiQuickHackVisibleCallbackID;
+		private CHandle<redCallbackObject> _lootDataCallbackID;
 		private gameDelayID _pulseDelayID;
 		private Vector4 _previousStickInput;
 
@@ -263,7 +263,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(26)] 
 		[RED("stickInputListener")] 
-		public CUInt32 StickInputListener
+		public CHandle<redCallbackObject> StickInputListener
 		{
 			get => GetProperty(ref _stickInputListener);
 			set => SetProperty(ref _stickInputListener, value);
@@ -271,7 +271,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(27)] 
 		[RED("quickHackPanelListener")] 
-		public CUInt32 QuickHackPanelListener
+		public CHandle<redCallbackObject> QuickHackPanelListener
 		{
 			get => GetProperty(ref _quickHackPanelListener);
 			set => SetProperty(ref _quickHackPanelListener, value);
@@ -279,7 +279,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(28)] 
 		[RED("carriedBodyListener")] 
-		public CUInt32 CarriedBodyListener
+		public CHandle<redCallbackObject> CarriedBodyListener
 		{
 			get => GetProperty(ref _carriedBodyListener);
 			set => SetProperty(ref _carriedBodyListener, value);
@@ -287,7 +287,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(29)] 
 		[RED("grappleListener")] 
-		public CUInt32 GrappleListener
+		public CHandle<redCallbackObject> GrappleListener
 		{
 			get => GetProperty(ref _grappleListener);
 			set => SetProperty(ref _grappleListener, value);
@@ -327,7 +327,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(34)] 
 		[RED("playerTargetCallbackID")] 
-		public CUInt32 PlayerTargetCallbackID
+		public CHandle<redCallbackObject> PlayerTargetCallbackID
 		{
 			get => GetProperty(ref _playerTargetCallbackID);
 			set => SetProperty(ref _playerTargetCallbackID, value);
@@ -335,7 +335,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(35)] 
 		[RED("braindanceToggleCallbackID")] 
-		public CUInt32 BraindanceToggleCallbackID
+		public CHandle<redCallbackObject> BraindanceToggleCallbackID
 		{
 			get => GetProperty(ref _braindanceToggleCallbackID);
 			set => SetProperty(ref _braindanceToggleCallbackID, value);
@@ -343,7 +343,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(36)] 
 		[RED("nameplateCallbackID")] 
-		public CUInt32 NameplateCallbackID
+		public CHandle<redCallbackObject> NameplateCallbackID
 		{
 			get => GetProperty(ref _nameplateCallbackID);
 			set => SetProperty(ref _nameplateCallbackID, value);
@@ -351,7 +351,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(37)] 
 		[RED("visionModeChangedCallbackID")] 
-		public CUInt32 VisionModeChangedCallbackID
+		public CHandle<redCallbackObject> VisionModeChangedCallbackID
 		{
 			get => GetProperty(ref _visionModeChangedCallbackID);
 			set => SetProperty(ref _visionModeChangedCallbackID, value);
@@ -359,7 +359,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(38)] 
 		[RED("scannerTargetCallbackID")] 
-		public CUInt32 ScannerTargetCallbackID
+		public CHandle<redCallbackObject> ScannerTargetCallbackID
 		{
 			get => GetProperty(ref _scannerTargetCallbackID);
 			set => SetProperty(ref _scannerTargetCallbackID, value);
@@ -367,7 +367,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(39)] 
 		[RED("hackingMinigameCallbackID")] 
-		public CUInt32 HackingMinigameCallbackID
+		public CHandle<redCallbackObject> HackingMinigameCallbackID
 		{
 			get => GetProperty(ref _hackingMinigameCallbackID);
 			set => SetProperty(ref _hackingMinigameCallbackID, value);
@@ -375,7 +375,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(40)] 
 		[RED("uiScannerVisibleCallbackID")] 
-		public CUInt32 UiScannerVisibleCallbackID
+		public CHandle<redCallbackObject> UiScannerVisibleCallbackID
 		{
 			get => GetProperty(ref _uiScannerVisibleCallbackID);
 			set => SetProperty(ref _uiScannerVisibleCallbackID, value);
@@ -383,7 +383,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(41)] 
 		[RED("uiQuickHackVisibleCallbackID")] 
-		public CUInt32 UiQuickHackVisibleCallbackID
+		public CHandle<redCallbackObject> UiQuickHackVisibleCallbackID
 		{
 			get => GetProperty(ref _uiQuickHackVisibleCallbackID);
 			set => SetProperty(ref _uiQuickHackVisibleCallbackID, value);
@@ -391,7 +391,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(42)] 
 		[RED("lootDataCallbackID")] 
-		public CUInt32 LootDataCallbackID
+		public CHandle<redCallbackObject> LootDataCallbackID
 		{
 			get => GetProperty(ref _lootDataCallbackID);
 			set => SetProperty(ref _lootDataCallbackID, value);

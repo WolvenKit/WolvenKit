@@ -13,9 +13,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _desc2Text;
 		private inkTextWidgetReference _value2Text;
 		private inkImageWidgetReference _icon2;
-		private inkWidgetReference _resetWidget;
-		private inkTextWidgetReference _spentPerks;
-		private CInt32 _spentPerkPoints;
 		private CEnum<CharacterScreenType> _screenType;
 
 		[Ordinal(1)] 
@@ -67,30 +64,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(7)] 
-		[RED("resetWidget")] 
-		public inkWidgetReference ResetWidget
-		{
-			get => GetProperty(ref _resetWidget);
-			set => SetProperty(ref _resetWidget, value);
-		}
-
-		[Ordinal(8)] 
-		[RED("spentPerks")] 
-		public inkTextWidgetReference SpentPerks
-		{
-			get => GetProperty(ref _spentPerks);
-			set => SetProperty(ref _spentPerks, value);
-		}
-
-		[Ordinal(9)] 
-		[RED("spentPerkPoints")] 
-		public CInt32 SpentPerkPoints
-		{
-			get => GetProperty(ref _spentPerkPoints);
-			set => SetProperty(ref _spentPerkPoints, value);
-		}
-
-		[Ordinal(10)] 
 		[RED("screenType")] 
 		public CEnum<CharacterScreenType> ScreenType
 		{

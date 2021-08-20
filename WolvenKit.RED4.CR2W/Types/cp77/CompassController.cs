@@ -14,7 +14,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private Vector2 _faceRightStartPosition;
 		private Vector2 _faceLeftStartPosition;
 		private CBool _isVertical;
+		private CFloat _valueFloat;
 		private wCHandle<gameObject> _playerPuppet;
+		private CFloat _precisionEpsilon;
 
 		[Ordinal(1)] 
 		[RED("faceLeft")] 
@@ -73,11 +75,27 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(8)] 
+		[RED("valueFloat")] 
+		public CFloat ValueFloat
+		{
+			get => GetProperty(ref _valueFloat);
+			set => SetProperty(ref _valueFloat, value);
+		}
+
+		[Ordinal(9)] 
 		[RED("playerPuppet")] 
 		public wCHandle<gameObject> PlayerPuppet
 		{
 			get => GetProperty(ref _playerPuppet);
 			set => SetProperty(ref _playerPuppet, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("precisionEpsilon")] 
+		public CFloat PrecisionEpsilon
+		{
+			get => GetProperty(ref _precisionEpsilon);
+			set => SetProperty(ref _precisionEpsilon, value);
 		}
 
 		public CompassController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

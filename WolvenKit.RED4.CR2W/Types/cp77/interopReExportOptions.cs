@@ -39,6 +39,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _asBBoxPrefabsForceLast;
 		private CBool _skipCollisions;
 		private CFloat _preferSmallProxiesTreshold;
+		private CBool _generatePlayerBlockingCollision;
 
 		[Ordinal(0)] 
 		[RED("occlusionExportOptNames")] 
@@ -294,6 +295,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _preferSmallProxiesTreshold);
 			set => SetProperty(ref _preferSmallProxiesTreshold, value);
+		}
+
+		[Ordinal(32)] 
+		[RED("generatePlayerBlockingCollision")] 
+		public CBool GeneratePlayerBlockingCollision
+		{
+			get => GetProperty(ref _generatePlayerBlockingCollision);
+			set => SetProperty(ref _generatePlayerBlockingCollision, value);
 		}
 
 		public interopReExportOptions(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

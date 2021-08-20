@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private TweakDBID _nameForActivation;
 		private TweakDBID _nameForDeactivation;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isActive, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("hasInteraction")] 
 		public CBool HasInteraction
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hasInteraction, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("randomizeAnimationTime")] 
 		public CBool RandomizeAnimationTime
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _randomizeAnimationTime, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("nameForActivation")] 
 		public TweakDBID NameForActivation
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _nameForActivation, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("nameForDeactivation")] 
 		public TweakDBID NameForDeactivation
 		{

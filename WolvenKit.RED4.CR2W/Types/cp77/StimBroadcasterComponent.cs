@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<CHandle<StimRequest>> _activeRequests;
 		private CUInt32 _currentID;
 		private CBool _shouldBroadcast;
-		private CArray<NPCstubData> _targets;
+		private CArray<gameNPCstubData> _targets;
 		private CFloat _fallbackInterval;
 
 		[Ordinal(5)] 
@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(8)] 
 		[RED("targets")] 
-		public CArray<NPCstubData> Targets
+		public CArray<gameNPCstubData> Targets
 		{
 			get => GetProperty(ref _targets);
 			set => SetProperty(ref _targets, value);

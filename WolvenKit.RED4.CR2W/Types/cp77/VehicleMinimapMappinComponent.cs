@@ -11,8 +11,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _vehicleIsLatestSummoned;
 		private entEntityID _vehicleEntityID;
 		private CHandle<VehicleSummonDataDef> _vehicleSummonDataDef;
-		private CHandle<gameIBlackboard> _vehicleSummonDataBB;
-		private CUInt32 _vehicleSummonStateCallback;
+		private wCHandle<gameIBlackboard> _vehicleSummonDataBB;
+		private CHandle<redCallbackObject> _vehicleSummonStateCallback;
 
 		[Ordinal(0)] 
 		[RED("minimapPOIMappinController")] 
@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(4)] 
 		[RED("vehicleSummonDataBB")] 
-		public CHandle<gameIBlackboard> VehicleSummonDataBB
+		public wCHandle<gameIBlackboard> VehicleSummonDataBB
 		{
 			get => GetProperty(ref _vehicleSummonDataBB);
 			set => SetProperty(ref _vehicleSummonDataBB, value);
@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(5)] 
 		[RED("vehicleSummonStateCallback")] 
-		public CUInt32 VehicleSummonStateCallback
+		public CHandle<redCallbackObject> VehicleSummonStateCallback
 		{
 			get => GetProperty(ref _vehicleSummonStateCallback);
 			set => SetProperty(ref _vehicleSummonStateCallback, value);

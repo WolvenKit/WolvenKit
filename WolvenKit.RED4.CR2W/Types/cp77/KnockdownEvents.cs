@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _frictionForceAppliedLastFrame;
 		private CBool _delayDamageFrame;
 
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("cachedPlayerVelocity")] 
 		public Vector4 CachedPlayerVelocity
 		{
@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cachedPlayerVelocity, value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(7)] 
 		[RED("secondaryKnockdownDir")] 
 		public Vector4 SecondaryKnockdownDir
 		{
@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _secondaryKnockdownDir, value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("secondaryKnockdownTimer")] 
 		public CFloat SecondaryKnockdownTimer
 		{
@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _secondaryKnockdownTimer, value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(9)] 
 		[RED("playedImpactAnim")] 
 		public CBool PlayedImpactAnim
 		{
@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playedImpactAnim, value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(10)] 
 		[RED("frictionForceApplied")] 
 		public CBool FrictionForceApplied
 		{
@@ -55,7 +55,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _frictionForceApplied, value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(11)] 
 		[RED("frictionForceAppliedLastFrame")] 
 		public CBool FrictionForceAppliedLastFrame
 		{
@@ -63,7 +63,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _frictionForceAppliedLastFrame, value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(12)] 
 		[RED("delayDamageFrame")] 
 		public CBool DelayDamageFrame
 		{

@@ -7,12 +7,12 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class gameuiCrosshairBaseMelee : gameuiCrosshairBaseGameController
 	{
-		private CUInt32 _meleeStateBlackboardId;
-		private CHandle<gameIBlackboard> _playerSMBB;
+		private CHandle<redCallbackObject> _meleeStateBlackboardId;
+		private wCHandle<gameIBlackboard> _playerSMBB;
 
 		[Ordinal(18)] 
 		[RED("meleeStateBlackboardId")] 
-		public CUInt32 MeleeStateBlackboardId
+		public CHandle<redCallbackObject> MeleeStateBlackboardId
 		{
 			get => GetProperty(ref _meleeStateBlackboardId);
 			set => SetProperty(ref _meleeStateBlackboardId, value);
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(19)] 
 		[RED("playerSMBB")] 
-		public CHandle<gameIBlackboard> PlayerSMBB
+		public wCHandle<gameIBlackboard> PlayerSMBB
 		{
 			get => GetProperty(ref _playerSMBB);
 			set => SetProperty(ref _playerSMBB, value);

@@ -7,6 +7,8 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class inkImageWidget : inkLeafWidget
 	{
+		private CBool _useExternalDynamicTexture;
+		private CName _externalDynamicTexture;
 		private CBool _useNineSliceScale;
 		private inkMargin _nineSliceScale;
 		private CEnum<inkBrushMirrorType> _mirrorType;
@@ -19,6 +21,22 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CEnum<inkEVerticalAlign> _tileVAlign;
 
 		[Ordinal(20)] 
+		[RED("useExternalDynamicTexture")] 
+		public CBool UseExternalDynamicTexture
+		{
+			get => GetProperty(ref _useExternalDynamicTexture);
+			set => SetProperty(ref _useExternalDynamicTexture, value);
+		}
+
+		[Ordinal(21)] 
+		[RED("externalDynamicTexture")] 
+		public CName ExternalDynamicTexture
+		{
+			get => GetProperty(ref _externalDynamicTexture);
+			set => SetProperty(ref _externalDynamicTexture, value);
+		}
+
+		[Ordinal(22)] 
 		[RED("useNineSliceScale")] 
 		public CBool UseNineSliceScale
 		{
@@ -26,7 +44,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _useNineSliceScale, value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("nineSliceScale")] 
 		public inkMargin NineSliceScale
 		{
@@ -34,7 +52,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _nineSliceScale, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
 		[RED("mirrorType")] 
 		public CEnum<inkBrushMirrorType> MirrorType
 		{
@@ -42,7 +60,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _mirrorType, value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("tileType")] 
 		public CEnum<inkBrushTileType> TileType
 		{
@@ -50,7 +68,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _tileType, value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("textureAtlas")] 
 		public raRef<inkTextureAtlas> TextureAtlas
 		{
@@ -58,7 +76,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _textureAtlas, value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(27)] 
 		[RED("texturePart")] 
 		public CName TexturePart
 		{
@@ -66,7 +84,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _texturePart, value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(28)] 
 		[RED("contentHAlign")] 
 		public CEnum<inkEHorizontalAlign> ContentHAlign
 		{
@@ -74,7 +92,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _contentHAlign, value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(29)] 
 		[RED("contentVAlign")] 
 		public CEnum<inkEVerticalAlign> ContentVAlign
 		{
@@ -82,7 +100,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _contentVAlign, value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(30)] 
 		[RED("tileHAlign")] 
 		public CEnum<inkEHorizontalAlign> TileHAlign
 		{
@@ -90,7 +108,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _tileHAlign, value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(31)] 
 		[RED("tileVAlign")] 
 		public CEnum<inkEVerticalAlign> TileVAlign
 		{

@@ -5,11 +5,11 @@ using static WolvenKit.RED4.CR2W.Types.Enums;
 namespace WolvenKit.RED4.CR2W.Types
 {
 	[REDMeta]
-	public class AITargetTrackerComponent : entIComponent
+	public class AITargetTrackerComponent : gameComponent
 	{
 		private CBool _triggersCombat;
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("TriggersCombat")] 
 		public CBool TriggersCombat
 		{

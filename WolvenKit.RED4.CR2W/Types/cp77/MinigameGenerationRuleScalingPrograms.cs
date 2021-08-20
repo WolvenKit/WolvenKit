@@ -7,14 +7,14 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class MinigameGenerationRuleScalingPrograms : gameuiMinigameGenerationRule
 	{
-		private CHandle<gameIBlackboard> _bbNetwork;
+		private wCHandle<gameIBlackboard> _bbNetwork;
 		private CBool _isOfficerBreach;
 		private CBool _isRemoteBreach;
 		private CBool _isFirstAttempt;
 
 		[Ordinal(7)] 
 		[RED("bbNetwork")] 
-		public CHandle<gameIBlackboard> BbNetwork
+		public wCHandle<gameIBlackboard> BbNetwork
 		{
 			get => GetProperty(ref _bbNetwork);
 			set => SetProperty(ref _bbNetwork, value);

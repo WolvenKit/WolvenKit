@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<gameStaticTriggerAreaComponent> _areaComponent;
 		private CBool _highLightActive;
 
-		[Ordinal(102)] 
+		[Ordinal(103)] 
 		[RED("areaComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> AreaComponent
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _areaComponent, value);
 		}
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("highLightActive")] 
 		public CBool HighLightActive
 		{

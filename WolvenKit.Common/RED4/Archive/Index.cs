@@ -5,6 +5,7 @@ using WolvenKit.RED4.CR2W.Archive;
 using RED.CRC64;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
+using System;
 
 namespace CP77Tools.Model
 {
@@ -13,17 +14,25 @@ namespace CP77Tools.Model
     /// An entry in Index 3 (DependencyTable)
     /// </summary>
     [ProtoContract]
-    public class Dependency
+    public struct Dependency
     {
         #region Constructors
 
-        public Dependency()
-        {
-            
-        }
+        private IHashService _hashService;
 
-        public Dependency(ulong hash)
+        //public Dependency()
+        //{
+
+        //}
+
+        //public Dependency(IHashService hashService)
+        //{
+        //    _hashService = hashService;
+        //}
+
+        public Dependency(IHashService hashService, ulong hash)
         {
+            _hashService = hashService;
             Hash = hash;
         }
 
@@ -32,7 +41,9 @@ namespace CP77Tools.Model
         #region Properties
 
         [ProtoMember(1)] public ulong Hash { get; set; }
-        [ProtoMember(2)] public string HashStr { get; set; }
+        /*[ProtoMember(2)]*/ public string HashStr => _hashService != null ? _hashService.Get(Hash) : Hash.ToString();
+
+        public void SetHashService(IHashService hashService) => _hashService = hashService;
 
         #endregion Properties
     }
@@ -41,14 +52,14 @@ namespace CP77Tools.Model
     /// An entry in Index 2 (OffsetTable)
     /// </summary>
     [ProtoContract]
-    public class FileSegment
+    public struct FileSegment
     {
         #region Constructors
 
-        public FileSegment()
-        {
+        //public FileSegment()
+        //{
             
-        }
+        //}
 
         public FileSegment(ulong offset, uint zsize, uint size)
         {

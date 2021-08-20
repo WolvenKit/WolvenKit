@@ -197,11 +197,6 @@ namespace WolvenKit.ViewModels.HomePage.Pages
                     this.MaterialRepositoryPath = _settingsManager.MaterialRepositoryPath;
                     RaisePropertyChanged(() => MaterialRepositoryPath);
                 }
-                if(e.PropertyName == nameof(ISettingsManager.CatFactAnimal))
-                {
-                    this.CatFacts_Animal = _settingsManager.CatFactAnimal;
-                    RaisePropertyChanged(() => CatFacts_Animal);
-                }
                 
             };
         }
@@ -239,21 +234,7 @@ namespace WolvenKit.ViewModels.HomePage.Pages
             }
         }
 
-        [Category("Xtras")]
-        [Display(Name = "Fact Animal of Choice")]
-        public EAnimals CatFacts_Animal
-        {
-            get => _settingsManager.CatFactAnimal;
-            set
-            {
-                if (_settingsManager.CatFactAnimal != value)
-                {
-                    _settingsManager.CatFactAnimal = value;
-                    _settingsManager.Save();
-                    RaisePropertyChanged(() => CatFacts_Animal);
-                }
-            }
-        }
+       
     }
 
     public class TW3SettingsPGModel
@@ -298,21 +279,23 @@ namespace WolvenKit.ViewModels.HomePage.Pages
                     this.BrushProperty = new SolidColorBrush(_settingsManager.GetThemeAccent());
                     RaisePropertyChanged(() => BrushProperty);
                 }
+                if (e.PropertyName == nameof(ISettingsManager.CatFactAnimal))
+                {
+                    this.CatFacts_Animal = _settingsManager.CatFactAnimal;
+                    RaisePropertyChanged(() => CatFacts_Animal);
+                }
+                if (e.PropertyName == nameof(ISettingsManager.UpdateChannel))
+                {
+                    this.UpdateChannel = _settingsManager.UpdateChannel;
+                    RaisePropertyChanged(() => UpdateChannel);
+                }
             };
         }
 
         //[Category("General")]
         //public ApplicationLanguage Language { get; set; }
 
-        //public bool Desktop_Notifications { get; set; }  // Doesn't work yet I think?
-
-        //[Category("Updates")]
-        //[Display(Name = "Receive Auto updates?")]
-        //public bool ReceiveAutoUpdates { get; set; }
-
-        //[Category("Updates")]
-        //[Display(Name = "Set auto update channel.")]
-        //public AutoUpdateChannel UpdateChannel { get; set; }
+        //public bool Desktop_Notifications { get; set; }
 
         //[Category("Mods")]
         //[Display(Name = "Automatically install mods.")]
@@ -321,6 +304,22 @@ namespace WolvenKit.ViewModels.HomePage.Pages
         //[Category("Mods")]
         //[Display(Name = "Material depot path.")]
         //public string MaterialDepotPath { get; set; }
+
+        [Category("General")]
+        [Display(Name = "Update channel")]
+        public EUpdateChannel UpdateChannel
+        {
+            get => _settingsManager.UpdateChannel;
+            set
+            {
+                if (_settingsManager.UpdateChannel != value)
+                {
+                    _settingsManager.UpdateChannel = value;
+                    _settingsManager.Save();
+                    RaisePropertyChanged(() => UpdateChannel);
+                }
+            }
+        }
 
         [Category("Theme")]
         [Display(Name = "Application theme accent.")]
@@ -338,6 +337,24 @@ namespace WolvenKit.ViewModels.HomePage.Pages
                 }
             }
         }
+
+        [Category("Xtras")]
+        [Display(Name = "Fact Animal of Choice")]
+        public EAnimals CatFacts_Animal
+        {
+            get => _settingsManager.CatFactAnimal;
+            set
+            {
+                if (_settingsManager.CatFactAnimal != value)
+                {
+                    _settingsManager.CatFactAnimal = value;
+                    _settingsManager.Save();
+                    RaisePropertyChanged(() => CatFacts_Animal);
+                }
+            }
+        }
+
+
     }
 
     public class ToolSettingsPGModel
@@ -390,11 +407,6 @@ namespace WolvenKit.ViewModels.HomePage.Pages
     #endregion PropertyGridModels
 
     #region enums
-
-    public enum AutoUpdateChannel
-    {
-        Global,
-    }
 
     public enum ApplicationLanguage
     {

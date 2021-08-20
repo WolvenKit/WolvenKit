@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Windows.Media;
 using Catel.Data;
+using WolvenKit.Common;
 using WolvenKit.Common.Tools;
 using WolvenKit.Core;
 using WolvenKit.Functionality.Controllers;
@@ -20,7 +21,7 @@ namespace WolvenKit.Functionality.Services
     /// <summary>
     /// This handles the application settings defined by the user.
     /// </summary>
-    public class SettingsManager : ObservableObject, ISettingsManager
+    public class SettingsManager : Catel.Data.ObservableObject, ISettingsManager
     {
         #region fields
 
@@ -48,6 +49,8 @@ namespace WolvenKit.Functionality.Services
         public bool ShowGuidedTour { get; set; } = true;
 
         public bool CheckForUpdates { get; set; }
+
+        public EUpdateChannel UpdateChannel { get; set; }
 
         public string DepotPath { get; set; }
 
@@ -167,6 +170,7 @@ namespace WolvenKit.Functionality.Services
             var config = new SettingsManager()
             {
                 CheckForUpdates = settings.CheckForUpdates,
+                UpdateChannel = settings.UpdateChannel,
                 ShowGuidedTour = settings.ShowGuidedTour,
                 //ProfileImageBrush = settings.ProfileImageBrush,
                 TextLanguage = settings.TextLanguage,
@@ -260,6 +264,7 @@ namespace WolvenKit.Functionality.Services
         public SettingsDto(SettingsManager settings)
         {
             CheckForUpdates = settings.CheckForUpdates;
+            UpdateChannel = settings.UpdateChannel;
             ShowGuidedTour = settings.ShowGuidedTour;
             //ProfileImageBrush = settings.ProfileImageBrush;
             TextLanguage = settings.TextLanguage;
@@ -276,6 +281,7 @@ namespace WolvenKit.Functionality.Services
         public EAnimals CatFactAnimal { get; set; }
 
         public bool CheckForUpdates { get; set; }
+        public EUpdateChannel UpdateChannel { get; set; }
 
         //public ImageBrush ProfileImageBrush { get; set; }
         public string TextLanguage { get; set; }

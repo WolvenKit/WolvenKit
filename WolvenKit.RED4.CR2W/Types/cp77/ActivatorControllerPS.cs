@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<GenericContainer> _activatorSkillChecks;
 		private CString _alternativeInteractionString;
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("hasSpiderbotInteraction")] 
 		public CBool HasSpiderbotInteraction
 		{
@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hasSpiderbotInteraction, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("spiderbotInteractionLocationOverride")] 
 		public NodeRef SpiderbotInteractionLocationOverride
 		{
@@ -32,7 +32,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _spiderbotInteractionLocationOverride, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("hasSimpleInteraction")] 
 		public CBool HasSimpleInteraction
 		{
@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hasSimpleInteraction, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("alternativeInteractionName")] 
 		public TweakDBID AlternativeInteractionName
 		{
@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _alternativeInteractionName, value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("alternativeSpiderbotInteractionName")] 
 		public TweakDBID AlternativeSpiderbotInteractionName
 		{
@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _alternativeSpiderbotInteractionName, value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(110)] 
 		[RED("alternativeQuickHackName")] 
 		public TweakDBID AlternativeQuickHackName
 		{
@@ -64,7 +64,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _alternativeQuickHackName, value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(111)] 
 		[RED("activatorSkillChecks")] 
 		public CHandle<GenericContainer> ActivatorSkillChecks
 		{
@@ -72,7 +72,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _activatorSkillChecks, value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(112)] 
 		[RED("alternativeInteractionString")] 
 		public CString AlternativeInteractionString
 		{

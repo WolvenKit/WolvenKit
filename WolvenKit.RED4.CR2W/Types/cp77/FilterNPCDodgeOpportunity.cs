@@ -5,7 +5,7 @@ using static WolvenKit.RED4.CR2W.Types.Enums;
 namespace WolvenKit.RED4.CR2W.Types
 {
 	[REDMeta]
-	public class FilterNPCDodgeOpportunity : gameEffectObjectSingleFilter_Scripted
+	public class FilterNPCDodgeOpportunity : gameEffectObjectGroupFilter_Scripted
 	{
 		private CBool _applyToTechWeapons;
 		private CBool _doDodgingTargetsGetFilteredOut;

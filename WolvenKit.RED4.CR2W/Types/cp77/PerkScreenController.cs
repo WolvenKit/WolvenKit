@@ -22,13 +22,13 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _proficiencyDescriptionText;
 		private CHandle<PlayerDevelopmentDataManager> _dataManager;
 		private CHandle<AttributeDisplayData> _displayData;
-		private CHandle<TabRadioGroup> _proficiencyRoot;
+		private wCHandle<TabRadioGroup> _proficiencyRoot;
 		private CArray<wCHandle<PerkDisplayContainerController>> _widgetMap;
-		private CHandle<PerkDisplayContainerController> _traitController;
+		private wCHandle<PerkDisplayContainerController> _traitController;
 		private CInt32 _currentIndex;
 		private CArrayFixedSize<CInt32> _connectionLines;
-		private CHandle<StatsProgressController> _levelController;
-		private CHandle<StatsStreetCredReward> _rewardsController;
+		private wCHandle<StatsProgressController> _levelController;
+		private wCHandle<StatsStreetCredReward> _rewardsController;
 		private wCHandle<gameuiTooltipsManager> _tooltipsManager;
 
 		[Ordinal(1)] 
@@ -153,7 +153,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(16)] 
 		[RED("proficiencyRoot")] 
-		public CHandle<TabRadioGroup> ProficiencyRoot
+		public wCHandle<TabRadioGroup> ProficiencyRoot
 		{
 			get => GetProperty(ref _proficiencyRoot);
 			set => SetProperty(ref _proficiencyRoot, value);
@@ -169,7 +169,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(18)] 
 		[RED("traitController")] 
-		public CHandle<PerkDisplayContainerController> TraitController
+		public wCHandle<PerkDisplayContainerController> TraitController
 		{
 			get => GetProperty(ref _traitController);
 			set => SetProperty(ref _traitController, value);
@@ -193,7 +193,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(21)] 
 		[RED("levelController")] 
-		public CHandle<StatsProgressController> LevelController
+		public wCHandle<StatsProgressController> LevelController
 		{
 			get => GetProperty(ref _levelController);
 			set => SetProperty(ref _levelController, value);
@@ -201,7 +201,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(22)] 
 		[RED("rewardsController")] 
-		public CHandle<StatsStreetCredReward> RewardsController
+		public wCHandle<StatsStreetCredReward> RewardsController
 		{
 			get => GetProperty(ref _rewardsController);
 			set => SetProperty(ref _rewardsController, value);

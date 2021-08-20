@@ -14,9 +14,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		private DataBuffer _bakedData;
 		private DataBuffer _mainPosesData;
 		private DataBuffer _correctivePosesData;
-		private CArray<CName> _faceCorrectiveNames;
-		private CArray<CName> _tongueCorrectiveNames;
-		private CArray<CName> _eyesCorrectiveNames;
 		private CArray<CUInt16> _usedTransformIndices;
 		private CBool _useFemaleAnimSet;
 		private CUInt32 _version;
@@ -78,30 +75,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(8)] 
-		[RED("faceCorrectiveNames")] 
-		public CArray<CName> FaceCorrectiveNames
-		{
-			get => GetProperty(ref _faceCorrectiveNames);
-			set => SetProperty(ref _faceCorrectiveNames, value);
-		}
-
-		[Ordinal(9)] 
-		[RED("tongueCorrectiveNames")] 
-		public CArray<CName> TongueCorrectiveNames
-		{
-			get => GetProperty(ref _tongueCorrectiveNames);
-			set => SetProperty(ref _tongueCorrectiveNames, value);
-		}
-
-		[Ordinal(10)] 
-		[RED("eyesCorrectiveNames")] 
-		public CArray<CName> EyesCorrectiveNames
-		{
-			get => GetProperty(ref _eyesCorrectiveNames);
-			set => SetProperty(ref _eyesCorrectiveNames, value);
-		}
-
-		[Ordinal(11)] 
 		[RED("usedTransformIndices")] 
 		public CArray<CUInt16> UsedTransformIndices
 		{
@@ -109,7 +82,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _usedTransformIndices, value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(9)] 
 		[RED("useFemaleAnimSet")] 
 		public CBool UseFemaleAnimSet
 		{
@@ -117,7 +90,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _useFemaleAnimSet, value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(10)] 
 		[RED("version")] 
 		public CUInt32 Version
 		{

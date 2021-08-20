@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CEnum<EIndustrialArmAnimations> _loopAnimation;
 
-		[Ordinal(98)] 
+		[Ordinal(99)] 
 		[RED("loopAnimation")] 
 		public CEnum<EIndustrialArmAnimations> LoopAnimation
 		{

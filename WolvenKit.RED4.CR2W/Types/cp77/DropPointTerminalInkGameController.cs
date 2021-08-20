@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class DropPointTerminalInkGameController : DeviceInkGameControllerBase
 	{
 		private inkWidgetReference _sellAction;
-		private CUInt32 _onGlitchingStateChangedListener;
+		private CHandle<redCallbackObject> _onGlitchingStateChangedListener;
 
 		[Ordinal(16)] 
 		[RED("sellAction")] 
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(17)] 
 		[RED("onGlitchingStateChangedListener")] 
-		public CUInt32 OnGlitchingStateChangedListener
+		public CHandle<redCallbackObject> OnGlitchingStateChangedListener
 		{
 			get => GetProperty(ref _onGlitchingStateChangedListener);
 			set => SetProperty(ref _onGlitchingStateChangedListener, value);

@@ -22,6 +22,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private gamebbScriptID_Bool _slotAnimationInProgress;
 		private gamebbScriptID_Bool _inPendingBehavior;
 		private gamebbScriptID_Bool _hasCalledReinforcements;
+		private gamebbScriptID_Bool _isBodyDisposed;
 		private gamebbScriptID_Float _detectionPercentage;
 
 		[Ordinal(0)] 
@@ -145,6 +146,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(15)] 
+		[RED("IsBodyDisposed")] 
+		public gamebbScriptID_Bool IsBodyDisposed
+		{
+			get => GetProperty(ref _isBodyDisposed);
+			set => SetProperty(ref _isBodyDisposed, value);
+		}
+
+		[Ordinal(16)] 
 		[RED("DetectionPercentage")] 
 		public gamebbScriptID_Float DetectionPercentage
 		{

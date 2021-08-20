@@ -77,11 +77,11 @@ namespace CP77Tools.Tasks
             var settings = new GlobalImportArgs().Register(
                 _commonImportArgs.Value,
                 _xbmImportArgs.Value,
-                _meshImportArgs.Value
+                _gltfImportArgs.Value
             );
             settings.Get<CommonImportArgs>().Keep = keep;
             settings.Get<XbmImportArgs>().Keep = keep;
-            settings.Get<MeshImportArgs>().Keep = keep;
+            settings.Get<GltfImportArgs>().Keep = keep;
 
             var outDirectory = string.IsNullOrEmpty(outDir) ? null : new DirectoryInfo(outDir);
 

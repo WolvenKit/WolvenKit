@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private SecurityAlarmSetup _securityAlarmSetup;
 		private CEnum<ESecuritySystemState> _securityAlarmState;
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("securityAlarmSetup")] 
 		public SecurityAlarmSetup SecurityAlarmSetup
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _securityAlarmSetup, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("securityAlarmState")] 
 		public CEnum<ESecuritySystemState> SecurityAlarmState
 		{

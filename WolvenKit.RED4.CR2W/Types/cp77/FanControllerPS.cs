@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private FanSetup _fanSetup;
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("fanSetup")] 
 		public FanSetup FanSetup
 		{

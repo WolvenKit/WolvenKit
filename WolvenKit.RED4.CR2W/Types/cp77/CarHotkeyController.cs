@@ -9,8 +9,8 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private inkImageWidgetReference _carIconSlot;
 		private wCHandle<gameVehicleSystem> _vehicleSystem;
-		private CHandle<gameIBlackboard> _psmBB;
-		private CUInt32 _bbListener;
+		private wCHandle<gameIBlackboard> _psmBB;
+		private CHandle<redCallbackObject> _bbListener;
 
 		[Ordinal(19)] 
 		[RED("carIconSlot")] 
@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(21)] 
 		[RED("psmBB")] 
-		public CHandle<gameIBlackboard> PsmBB
+		public wCHandle<gameIBlackboard> PsmBB
 		{
 			get => GetProperty(ref _psmBB);
 			set => SetProperty(ref _psmBB, value);
@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(22)] 
 		[RED("bbListener")] 
-		public CUInt32 BbListener
+		public CHandle<redCallbackObject> BbListener
 		{
 			get => GetProperty(ref _bbListener);
 			set => SetProperty(ref _bbListener, value);

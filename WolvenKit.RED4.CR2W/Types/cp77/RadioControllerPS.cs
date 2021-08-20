@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<RadioStationsMap> _stations;
 		private CBool _stationsInitialized;
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("radioSetup")] 
 		public RadioSetup RadioSetup
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _radioSetup, value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(110)] 
 		[RED("stations")] 
 		public CArray<RadioStationsMap> Stations
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _stations, value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(111)] 
 		[RED("stationsInitialized")] 
 		public CBool StationsInitialized
 		{
