@@ -103,17 +103,21 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid Background="{DynamicResource ContentBackgroundAlt2}">
+    <Grid
+        Background="{DynamicResource ContentBackgroundAlt2}">
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        
         <fluent:Ribbon
             x:Name="ribbon"
             Grid.Row="0"
             Margin="0,0,0,0"
             Panel.ZIndex="0"
             Visibility="Collapsed">
+            
             <!--  StartScreen  -->
             <fluent:Ribbon.StartScreen>
                 <fluent:StartScreen
@@ -123,6 +127,7 @@
                     <HomeView:HomePageView x:Name="HMPV" />
                 </fluent:StartScreen>
             </fluent:Ribbon.StartScreen>
+            
         </fluent:Ribbon>
 
         <syncfusion:Ribbon
@@ -288,6 +293,7 @@
                         </syncfusion:RibbonBar>
                     </syncfusion:RibbonTab>
                 </syncfusion:ContextTabGroup>
+                
                 <!--  Contextual Project Explorer group  -->
                 <syncfusion:ContextTabGroup
                     x:Name="projectexplorercontextab"
@@ -572,6 +578,7 @@
 
             <!--  Recent Projects Button  -->
             <syncfusion:Ribbon.ApplicationMenu>
+                
                 <syncfusion:ApplicationMenu
                     Name="_applicationMenu"
                     Width="38"
@@ -582,6 +589,7 @@
                     IsPopupOpen="False">
 
                     <syncfusion:RibbonMenuGroup Header="Project">
+                        
                         <!--  Recent Projects Button  -->
                         <ToggleButton
                             x:Name="FileDrawer2"
@@ -602,6 +610,7 @@
                                 <TextBlock Margin="2,0,0,0" Text="Recent Projects" />
                             </StackPanel>
                         </ToggleButton>
+                        
                         <!--  Open Project Button  -->
                         <syncfusion:RibbonButton
                             x:Name="AppMenuOpenProjectButton"
@@ -716,7 +725,7 @@
                         </syncfusion:RibbonButton>-->
                     </syncfusion:RibbonMenuGroup>
 
-                    <syncfusion:RibbonMenuGroup Header="File" Visibility="Collapsed">
+                    <syncfusion:RibbonMenuGroup Header="File" Visibility="Visible">
 
                         <!--  New File Button  -->
                         <syncfusion:RibbonButton
@@ -777,16 +786,20 @@
 
                     </syncfusion:RibbonMenuGroup>
                 </syncfusion:ApplicationMenu>
+                
             </syncfusion:Ribbon.ApplicationMenu>
 
             <!--  GENERAL TAB  -->
-            <syncfusion:RibbonTab Caption="GENERAL" IsChecked="True">
+            <syncfusion:RibbonTab
+                Caption="GENERAL"
+                IsChecked="True">
 
                 <!--  Project bar  -->
                 <syncfusion:RibbonBar
                     Name="Mod"
                     Width="auto"
                     Header="Project">
+                    
                     <!--  Open Project Button  -->
                     <syncfusion:RibbonButton
                         x:Name="GeneralOpenProjectButton"
@@ -825,6 +838,7 @@
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>
+                    
                     <!--  Pack Project Button  -->
                     <syncfusion:RibbonButton
                         x:Name="GeneralPackProjectButton"
@@ -900,12 +914,14 @@
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>-->
                 </syncfusion:RibbonBar>
+                
                 <!--  File bar  -->
-                <syncfusion:RibbonBar
+                <syncfusion:RibbonBar Visibility="Visible"
                     Name="Filez"
                     Width="auto"
                     Header="File"
-                    Visibility="Collapsed">
+                    >
+                    
                     <!--  New File Button  -->
                     <syncfusion:RibbonButton
                         x:Name="GeneralNewFileButton"
@@ -962,6 +978,7 @@
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>
+                    
                 </syncfusion:RibbonBar>
 
                 <!--  View bar  -->
@@ -1046,18 +1063,23 @@
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>
                 </syncfusion:RibbonBar>
+
+                <!--  Preview bar  -->
                 <syncfusion:RibbonBar Header="Preview">
                     <syncfusion:RibbonCheckBox
                         x:Name="PrevFileInfo"
                         Content="Show File Preview"
                         IsChecked="{Binding canShowPrev, Mode=TwoWay}" />
                 </syncfusion:RibbonBar>
+                
             </syncfusion:RibbonTab>
+            
             <!--  EDITORS TAB  -->
-            <syncfusion:RibbonTab
+            <syncfusion:RibbonTab Visibility="Collapsed"
                 Caption="EDITORS"
                 IsChecked="False"
-                Visibility="Collapsed">
+                >
+                
                 <!--  Editors bar  -->
                 <syncfusion:RibbonBar
                     Name="Editors"
@@ -1177,25 +1199,28 @@
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>-->
                 </syncfusion:RibbonBar>
+                
                 <!--  CP77 bar  -->
                 <syncfusion:RibbonBar
                     Name="CP77BarEditors"
                     Width="auto"
                     Header="Cyberpunk 2077" />
+                
                 <!--  TW3 bar  -->
                 <syncfusion:RibbonBar
                     Name="TW3BarEditors"
                     Width="auto"
                     Header="The Witcher 3" />
+                
             </syncfusion:RibbonTab>
+            
             <!--  TOOLS TAB  -->
-            <syncfusion:RibbonTab
+            <syncfusion:RibbonTab Visibility="Collapsed"
                 Caption="TOOLS"
                 IsChecked="False"
-                Visibility="Collapsed">
+                >
 
                 <!--  Tools bar  -->
-
                 <syncfusion:RibbonBar
                     Name="Tools"
                     Width="auto"
@@ -1378,12 +1403,14 @@
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>-->
                 </syncfusion:RibbonBar>
+                
                 <!--  CP77 bar  -->
                 <syncfusion:RibbonBar
                     Name="CP77BarTools"
                     Width="auto"
                     Header="Cyberpunk 2077"
                     Visibility="Collapsed" />
+                
                 <!--  TW3 bar  -->
                 <syncfusion:RibbonBar
                     Name="TW3BarTools"
@@ -1393,7 +1420,9 @@
             </syncfusion:RibbonTab>
 
             <!--  OPTIONS TAB  -->
-            <syncfusion:RibbonTab Caption="OPTIONS" IsChecked="False">
+            <syncfusion:RibbonTab
+                Caption="OPTIONS"
+                IsChecked="False">
 
                 <!--  Options bar  -->
                 <syncfusion:RibbonBar
@@ -1463,6 +1492,7 @@
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>
                 </syncfusion:RibbonBar>
+                
                 <!--  Help bar  -->
                 <syncfusion:RibbonBar
                     Name="Help"
@@ -1528,10 +1558,13 @@
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>-->
                 </syncfusion:RibbonBar>
+                
             </syncfusion:RibbonTab>
 
             <!--  UTILITIES TAB  -->
-            <syncfusion:RibbonTab Caption="UTILITIES" IsChecked="False">
+            <syncfusion:RibbonTab
+                Caption="UTILITIES"
+                IsChecked="False">
 
                 <!--  Utilities bar  -->
                 <syncfusion:RibbonBar
@@ -1607,7 +1640,9 @@
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>-->
                 </syncfusion:RibbonBar>
+                
             </syncfusion:RibbonTab>
+            
         </syncfusion:Ribbon>
 
         <StackPanel
@@ -1619,6 +1654,7 @@
             Orientation="Horizontal">
             <TextBlock Background="{x:Null}" Text="RED Modding Tools - WolvenKit" />
         </StackPanel>
+        
         <Border
             Width="70"
             Height="30"
@@ -1627,7 +1663,7 @@
             VerticalAlignment="top"
             Background="{DynamicResource ContentBackgroundAlt2}"
             CornerRadius="0,5,0,0" />
-
+        
         <Border
             Width="42"
             Height="49"
@@ -1654,7 +1690,7 @@
                 </Border>
             </Grid>
         </Border>
-
+        
         <Border
             Width="42"
             Height="49"
@@ -1738,5 +1774,7 @@
                 </Grid>
             </Border>
         </hc:Drawer>
+        
     </Grid>
+    
 </reactiveUi:ReactiveUserControl>

@@ -13,14 +13,14 @@
     xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
-    d:DataContext="{d:DesignInstance Type={x:Type editor:DocumentViewModel}}"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type={x:Type editor:DocumentViewModel}}"
+    >
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
         
-
         <Grid.Resources>
             <ResourceDictionary>
                 
@@ -233,19 +233,20 @@
 
         </Grid.Resources>
 
-
-
-
         <syncfusion:SfNavigationDrawer
             x:Name="navigationDrawer"
             DisplayMode="Expanded"
             IsOpen="False">
+
             <syncfusion:SfNavigationDrawer.ContentView>
+
                 <Grid>
+
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
+
                     <Expander
                         Grid.Column="0"
                         ExpandDirection="Right"
@@ -344,9 +345,11 @@
 
 
                     </Expander>
+
                     <Grid Grid.Column="1">
 
                         <Grid.Resources>
+                            
                             <DataTemplate x:Key="CommmonTemplate">
                                 <TextBlock Padding="5" Text="{Binding Property.Value}" />
                             </DataTemplate>
@@ -416,13 +419,14 @@
                                 />
 
                             <converters1:CellStyleConverter x:Key="converter" />
+                            
                         </Grid.Resources>
 
                         <!--<Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>-->
-                        
+
                         <syncfusion:SfTreeGrid
                             AllowFiltering="True"
                             AllowResizingColumns="True"
@@ -431,8 +435,11 @@
                             ChildPropertyName="Children"
                             ColumnSizer="Star"
                             ItemsSource="{Binding SelectedChunk.ChildrenProperties}"
-                            Style="{DynamicResource SyncfusionSfTreeGridStyle}">
+                            Style="{DynamicResource SyncfusionSfTreeGridStyle}"
+                            >
+
                             <syncfusion:SfTreeGrid.Columns>
+
                                 <syncfusion:TreeGridTextColumn
                                     AllowEditing="False"
                                     ColumnSizer="SizeToCells"
@@ -444,6 +451,7 @@
                                         </Style>
                                     </syncfusion:TreeGridTextColumn.CellStyle>
                                 </syncfusion:TreeGridTextColumn>
+
                                 <syncfusion:TreeGridTemplateColumn
                                     AllowEditing="True"
                                     AllowSorting="False"
@@ -451,19 +459,20 @@
                                     ColumnSizer="FillColumn"
                                     HeaderText="Value"
                                     MappingName="Property" />
+
                                 <syncfusion:TreeGridTextColumn
                                     AllowEditing="False"
                                     ColumnSizer="SizeToCells"
                                     HeaderText="Type"
                                     MappingName="Type" />
-		                        <syncfusion:TreeGridCheckBoxColumn
+
+                                <syncfusion:TreeGridCheckBoxColumn
                                     MappingName="IsSerialized"
                                     AllowEditing="false"
                                     HeaderText="Serialized"
                                     ColumnSizer="SizeToHeader"/>
 
                             </syncfusion:SfTreeGrid.Columns>
-
 
                         </syncfusion:SfTreeGrid>
 
@@ -476,11 +485,10 @@
                             >
                             
                         </syncfusion:PropertyGrid>-->
+                        
                     </Grid>
 
                 </Grid>
-
-
 
             </syncfusion:SfNavigationDrawer.ContentView>
 
@@ -529,13 +537,9 @@
                     <iconPacks:PackIconMaterial Margin="10,5,5,5" Kind="BriefcaseEditOutline" />
                 </syncfusion:NavigationItem.Icon>
             </syncfusion:NavigationItem>
+            
         </syncfusion:SfNavigationDrawer>
 
-
-
-
-
-
     </Grid>
-    <!--    -->
+    
 </reactiveUi:ReactiveUserControl>

@@ -98,12 +98,12 @@ namespace WolvenKit.ViewModels.Shell
             ShowPackageInstallerCommand = new RelayCommand(ExecuteShowInstaller, CanShowInstaller);
 
             OpenFileCommand = new DelegateCommand<FileModel>(async (p) => await ExecuteOpenFile(p), CanOpenFile);
-            NewFileCommand = new RelayCommand(ExecuteNewFile, CanNewFile);
 
             PackModCommand = new RelayCommand(ExecutePackMod, CanPackMod);
             BackupModCommand = new RelayCommand(ExecuteBackupMod, CanBackupMod);
             PublishModCommand = new RelayCommand(ExecutePublishMod, CanPublishMod);
 
+            NewFileCommand = new RelayCommand(ExecuteNewFile, CanNewFile);
             SaveFileCommand = new RelayCommand(ExecuteSaveFile, CanSaveFile);
             SaveAllCommand = new RelayCommand(ExecuteSaveAll, CanSaveAll);
 

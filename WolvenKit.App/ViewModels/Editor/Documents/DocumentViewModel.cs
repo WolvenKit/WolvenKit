@@ -346,9 +346,9 @@ namespace WolvenKit.ViewModels.Editor
 
         private bool CanClose() => true;
 
-        private bool CanSave(object parameter) => IsDirty;
+        private bool CanSave(object parameter) => true/*IsDirty*/;
 
-        private bool CanSaveAs(object parameter) => IsDirty;
+        private bool CanSaveAs(object parameter) => true/*IsDirty*/;
 
         private void OnSave(object parameter)
         {

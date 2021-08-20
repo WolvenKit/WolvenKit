@@ -96,42 +96,54 @@ namespace WolvenKit.Functionality.Controllers
             }
 
             _loggerService.Info("Loading archive Manager ... ");
-            var chachePath = Path.Combine(ISettingsManager.GetAppData(), "archive_cache.bin");
+            //var chachePath = Path.Combine(ISettingsManager.GetAppData(), "archive_cache.bin");
             try
             {
-                if (File.Exists(chachePath))
-                {
-                    using var file = File.OpenRead(chachePath);
-                    ArchiveManager = Serializer.Deserialize<ArchiveManager>(file);
+                //if (File.Exists(chachePath))
+                //{
+                //    var sw = new Stopwatch();
+                //    sw.Start();
 
-                    if (!ArchiveManager.GameVersion.Equals(GameVersion))
-                    {
-                        throw new NotSupportedException(ArchiveManager.GameVersion.ToString());
-                    }
-                }
-                else
+                //    using var file = File.OpenRead(chachePath);
+                //    ArchiveManager = Serializer.Deserialize<ArchiveManager>(file);
+
+                //    sw.Stop();
+                //    var ms = sw.ElapsedMilliseconds;
+
+                //    if (!ArchiveManager.GameVersion.Equals(GameVersion))
+                //    {
+                //        throw new NotSupportedException(ArchiveManager.GameVersion.ToString());
+                //    }
+                //}
+                //else
                 {
-                    ArchiveManager = new ArchiveManager(_hashService) { GameVersion = GameVersion };
+                    var sw = new Stopwatch();
+                    sw.Start();
+
+                    ArchiveManager = new ArchiveManager(_hashService) /*{ GameVersion = GameVersion }*/;
                     ArchiveManager.LoadAll(new FileInfo(_settingsManager.CP77ExecutablePath));
 
-                    using var file = File.Create(chachePath);
-                    Serializer.Serialize(file, ArchiveManager);
+                    sw.Stop();
+                    var ms = sw.ElapsedMilliseconds;
 
-                    _settingsManager.ManagerVersions[(int)EManagerType.ArchiveManager] =
-                        ArchiveManager.SerializationVersion;
+                    //using var file = File.Create(chachePath);
+                    //Serializer.Serialize(file, ArchiveManager);
+
+                    //_settingsManager.ManagerVersions[(int)EManagerType.ArchiveManager] =
+                    //    ArchiveManager.SerializationVersion;
                 }
             }
             catch (Exception e)
             {
                 _loggerService.Log(e.Message);
-                ArchiveManager = new ArchiveManager(_hashService) { GameVersion = GameVersion };
+                ArchiveManager = new ArchiveManager(_hashService) /*{ GameVersion = GameVersion }*/;
                 ArchiveManager.LoadAll(new FileInfo(_settingsManager.CP77ExecutablePath));
 
-                using var file = File.Create(chachePath);
-                Serializer.Serialize(file, ArchiveManager);
+                //using var file = File.Create(chachePath);
+                //Serializer.Serialize(file, ArchiveManager);
 
-                _settingsManager.ManagerVersions[(int)EManagerType.ArchiveManager] =
-                    ArchiveManager.SerializationVersion;
+                //_settingsManager.ManagerVersions[(int)EManagerType.ArchiveManager] =
+                //    ArchiveManager.SerializationVersion;
             }
             finally
             {

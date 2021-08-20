@@ -101,43 +101,11 @@ namespace WolvenKit.ViewModels.Shell
 
         #endregion
 
-
         #region properties
-
-        public enum ERibbonContextualTabGroupVisibility
-        {
-            Collapsed,
-            Visible,
-        }
 
         [Reactive] public bool StartScreenShown { get; set; }
 
         [Reactive] public bool BackstageIsOpen { get; set; }
-
-        [Reactive] public ERibbonContextualTabGroupVisibility ProjectExplorerContextualTabGroupVisibility { get; set; }
-
-        //private Color _selectedTheme;
-        //public Color SelectedTheme
-        //{
-        //    get => _selectedTheme;
-        //    set
-        //    {
-        //        if (_selectedTheme != value)
-        //        {
-        //            //var stringint = "RandomTheme" + rnd.Next(0, 9999) + "Name";
-        //            _selectedTheme = value;
-
-
-        //            _loggerService.Info("Changed theme : " + value.ToString());
-        //            _settingsManager.SetThemeAccent(value);
-        //            _settingsManager.Save();
-        //        }
-        //    }
-        //}
-
-
-        public string ProjectExplorerContextualTabGroupVisibilityStr =>
-            ProjectExplorerContextualTabGroupVisibility.ToString();
 
         #endregion properties
 
