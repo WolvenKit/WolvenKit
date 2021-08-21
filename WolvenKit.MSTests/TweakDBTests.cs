@@ -197,10 +197,21 @@ namespace WolvenKit.MSTests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void Serialize_Db_AddDuplicate_ShouldThrow()
+        public void Serialize_Db_AddItem_Unique_ShouldNotThrow()
         {
+            using var stream = s_streamManager.GetStream();
+            using var writer = new BinaryWriter(stream);
 
+            var db = new TweakDB();
+            db.Add("FirstItem", new CBool { Value = true });
+            db.Add("SecondItem", new CInt32 { Value = 500 });
+            db.Add("ThirdItem", new CInt32 { Value = 500 });
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void Serialize_Db_AddItem_Duplicate_ShouldThrow()
+        {
             using var stream = s_streamManager.GetStream();
             using var writer = new BinaryWriter(stream);
 
@@ -210,10 +221,19 @@ namespace WolvenKit.MSTests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void Serialize_Db_NameTooBig_ShouldThrow()
+        public void Serialize_Db_Name_UnderMaxmimumLength_ShouldNotThrow()
         {
+            using var stream = s_streamManager.GetStream();
+            using var writer = new BinaryWriter(stream);
 
+            var db = new TweakDB();
+            db.Add("SomeName", new CBool { Value = true });
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void Serialize_Db_Name_TooLong_ShouldThrow()
+        {
             using var stream = s_streamManager.GetStream();
             using var writer = new BinaryWriter(stream);
 
