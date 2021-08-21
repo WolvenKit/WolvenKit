@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <Platforms>x64</Platforms>
     <Company>WolvenKit</Company>
     <Description>TweakDB file format (Cyberpunk 2077) for the WolvenKit Mod Editor.</Description>
     <RepositoryType>git</RepositoryType>
