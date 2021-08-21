@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using CP77Tools.Commands;
 using WolvenKit.Common.Tools.Oodle;
+using WolvenKit.Common.FNV1A;
 
 namespace WolvenKit.CLI
 {
@@ -18,6 +19,18 @@ namespace WolvenKit.CLI
         [STAThread]
         public static void Main(string[] args)
         {
+            //DEBUG / TESTING
+            /*
+            var archive_dir = @"C:\Program Files (x86)\Steam\steamapps\common\Cyberpunk 2077\archive\pc\content";
+            var out_dir = @"C:\dev\cyberpunk\animdata\_tmp";
+
+            var fileLoad = @"base\characters\head\player_base_heads\h0_000_pwa_c__basehead.ent";
+            fileLoad = @"base\vehicles\appearances\sport\quadra_type66_vtech.app";
+            fileLoad = @"base\characters\entities\player\player_wa_tpp.ent";
+            var fhash = FNV1A64HashAlgorithm.HashString(fileLoad).ToString();
+            args = new string[] { "uncook", "-p", archive_dir, "-w", "", "-o", out_dir, "--hash", fhash };
+            */
+
             // try get oodle dll from game
             if ((RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) && !TryCopyOodleLib())
             {
