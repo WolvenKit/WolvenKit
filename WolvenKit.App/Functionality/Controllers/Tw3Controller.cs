@@ -8,11 +8,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
-using Catel.IoC;
 using DynamicData;
 using Newtonsoft.Json;
 using WolvenKit.Functionality.Services;
 using ProtoBuf;
+using ReactiveUI.Fody.Helpers;
 using WolvenKit.Bundles;
 using WolvenKit.Cache;
 using WolvenKit.Common;
@@ -77,12 +77,12 @@ namespace WolvenKit.Functionality.Controllers
             _modtools = modtools;
         }
 
+        [Reactive] public bool IsManagerLoaded { get; set; }
+
         #region Methods
 
         public async Task HandleStartup()
         {
-            var assetBrowserViewModel = (AssetBrowserViewModel)ServiceLocator.Default.ResolveType(typeof(AssetBrowserViewModel));
-
             //await Task.Run( LoadStringsManager);
             LoadStringsManager();
 
@@ -103,7 +103,7 @@ namespace WolvenKit.Functionality.Controllers
             LoadSoundManager();
             LoadSpeechManager();
 
-            assetBrowserViewModel.ReInit(false);
+            IsManagerLoaded = true;
 
             await Task.CompletedTask;
         }
@@ -426,34 +426,36 @@ namespace WolvenKit.Functionality.Controllers
 
         public Task<bool> PackageMod()
         {
-            var pwm = ServiceLocator.Default.ResolveType<Models.Wizards.PublishWizardModel>();
-            var headerBackground = System.Drawing.Color.FromArgb(
-                pwm.HeaderBackground.A,
-                pwm.HeaderBackground.R,
-                pwm.HeaderBackground.G,
-                pwm.HeaderBackground.B
-            );
-            var iconBackground = System.Drawing.Color.FromArgb(
-                pwm.IconBackground.A,
-                pwm.IconBackground.R,
-                pwm.IconBackground.G,
-                pwm.IconBackground.B
-            );
-            var author = Tuple.Create<string, string, string, string, string, string>(
-                _projectManager.ActiveProject.Author, null, pwm.WebsiteLink, pwm.FacebookLink, pwm.TwitterLink, pwm.YoutubeLink
-            );
-            var package = Common.Model.Packaging.WKPackage.CreateModAssembly(
-                _projectManager.ActiveProject.Version,
-                _projectManager.ActiveProject.Name,
-                author,
-                pwm.Description,
-                pwm.LargeDescription,
-                pwm.License,
-                (headerBackground, pwm.UseBlackText, iconBackground).ToTuple(),
-                new List<System.Xml.Linq.XElement> { }
-            );
+            throw new NotImplementedException();
 
-            return Task.FromResult(true);
+            //var pwm = ServiceLocator.Default.ResolveType<Models.Wizards.PublishWizardModel>();
+            //var headerBackground = System.Drawing.Color.FromArgb(
+            //    pwm.HeaderBackground.A,
+            //    pwm.HeaderBackground.R,
+            //    pwm.HeaderBackground.G,
+            //    pwm.HeaderBackground.B
+            //);
+            //var iconBackground = System.Drawing.Color.FromArgb(
+            //    pwm.IconBackground.A,
+            //    pwm.IconBackground.R,
+            //    pwm.IconBackground.G,
+            //    pwm.IconBackground.B
+            //);
+            //var author = Tuple.Create<string, string, string, string, string, string>(
+            //    _projectManager.ActiveProject.Author, null, pwm.WebsiteLink, pwm.FacebookLink, pwm.TwitterLink, pwm.YoutubeLink
+            //);
+            //var package = Common.Model.Packaging.WKPackage.CreateModAssembly(
+            //    _projectManager.ActiveProject.Version,
+            //    _projectManager.ActiveProject.Name,
+            //    author,
+            //    pwm.Description,
+            //    pwm.LargeDescription,
+            //    pwm.License,
+            //    (headerBackground, pwm.UseBlackText, iconBackground).ToTuple(),
+            //    new List<System.Xml.Linq.XElement> { }
+            //);
+
+            //return Task.FromResult(true);
         }
 
         public void AddToMod(IGameFile file) => throw new NotImplementedException();

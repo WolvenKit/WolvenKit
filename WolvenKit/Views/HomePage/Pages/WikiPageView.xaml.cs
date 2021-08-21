@@ -1,16 +1,22 @@
 using System;
-using Catel.Logging;
 using Microsoft.Web.WebView2.Core;
+using ReactiveUI;
+using Splat;
 using WolvenKit.Functionality.Helpers;
+using WolvenKit.ViewModels.HomePage.Pages;
 
 namespace WolvenKit.Views.HomePage.Pages
 {
-    public partial class WikiPageView
+    public partial class WikiPageView : ReactiveUserControl<WikiPageViewModel>
     {
         // Constructor
         public WikiPageView()
         {
             InitializeComponent();
+
+            ViewModel = Locator.Current.GetService<WikiPageViewModel>();
+            DataContext = ViewModel;
+
             InitializeWebviev();
         }
 
@@ -28,9 +34,9 @@ namespace WolvenKit.Views.HomePage.Pages
 
                 cal.SetCurrentValue(Microsoft.Web.WebView2.Wpf.WebView2.SourceProperty, (System.Uri)new Uri("https://wiki.cybermods.net/wolvenkit/"));
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                StaticReferences.Logger.Error(e);
+                
             }
         }
     }

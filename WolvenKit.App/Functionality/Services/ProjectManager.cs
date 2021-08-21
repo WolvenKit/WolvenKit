@@ -1,20 +1,22 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using ObservableObject = Catel.Data.ObservableObject;
 
 namespace WolvenKit.Functionality.Services
 {
     /// <summary>
     /// Singleton Service
     /// </summary>
-    public class ProjectManager : ObservableObject, IProjectManager
+    public class ProjectManager : ReactiveObject, IProjectManager
     {
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
         private readonly INotificationService _notificationService;
@@ -39,9 +41,28 @@ namespace WolvenKit.Functionality.Services
             });
         }
 
-        public bool IsProjectLoaded { get; set; }
+        #region properties
 
-        public EditorProject ActiveProject { get; set; }
+        [Reactive] public bool IsProjectLoaded { get; set; }
+
+        [Reactive] public EditorProject ActiveProject { get; set; }
+
+        #endregion
+
+        #region commands
+
+        public ReactiveCommand<string, Unit> OpenProjectCommand { get; set; }
+
+
+        #endregion
+
+
+
+
+
+
+
+        #region methods
 
         public async Task<bool> SaveAsync() => await Save();
 
@@ -88,7 +109,7 @@ namespace WolvenKit.Functionality.Services
 
                 var project = fi.Extension switch
                 {
-                    ".w3modproj" => await Load<Tw3Project>(location),
+                    //".w3modproj" => await Load<Tw3Project>(location),
                     ".cpmodproj" => await Load<Cp77Project>(location),
                     _ => null
                 };
@@ -114,17 +135,17 @@ namespace WolvenKit.Functionality.Services
                     return null;
                 }
 
-                if (typeof(T) == typeof(Tw3Project))
-                {
-                    return new Tw3Project(path)
-                    {
-                        Author = obj.Author,
-                        Email = obj.Email,
-                        Name = obj.Name,
-                        Version = obj.Version,
-                    };
-                }
-                else if (typeof(T) == typeof(Cp77Project))
+                //if (typeof(T) == typeof(Tw3Project))
+                //{
+                //    return new Tw3Project(path)
+                //    {
+                //        Author = obj.Author,
+                //        Email = obj.Email,
+                //        Name = obj.Name,
+                //        Version = obj.Version,
+                //    };
+                //}
+                /*else*/ if (typeof(T) == typeof(Cp77Project))
                 {
                     return new Cp77Project(path)
                     {
@@ -160,6 +181,15 @@ namespace WolvenKit.Functionality.Services
 
             return true;
         }
+
+        #endregion
+
+
+        
+
+
+
+
 
         public class CP77Mod
         {

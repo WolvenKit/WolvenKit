@@ -1,11 +1,12 @@
-<catel:UserControl
+<reactiveUi:ReactiveUserControl
+    x:TypeArguments="pages:WebsitePageViewModel"
  x:Class="WolvenKit.Views.HomePage.Pages.WebsitePageView"
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
- xmlns:catel="http://schemas.catelproject.com"
+ xmlns:reactiveUi="http://reactiveui.net"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
- >
+ xmlns:pages="clr-namespace:WolvenKit.ViewModels.HomePage.Pages;assembly=WolvenKit.App">
 
     <Grid
      MinWidth="300"
@@ -76,4 +77,4 @@
                 <ComboBoxItem Content="Organization Website" />
             </hc:ComboBox>
     </Grid>
-</catel:UserControl>
+</reactiveUi:ReactiveUserControl>

@@ -46,8 +46,6 @@
          hc:InfoElement.Necessary="True"
          Style="{StaticResource TextBoxExtendCustom}"
          Text="{Binding Text}"
-         ToolTipService.IsEnabled="True"
-         ToolTipService.ToolTip="Add the path of an executable here."
          VerifyFunc="VerifyFile"
          />
         <Popup

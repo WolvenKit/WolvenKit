@@ -1,10 +1,12 @@
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
-using Catel.MVVM;
+using ReactiveUI;
+using WolvenKit.ViewModels.HomePage;
+
 
 namespace WolvenKit.ViewModels.HomePage.Pages
 {
-    public class DebugPageViewModel : ViewModelBase
+    public class DebugPageViewModel : PageViewModel
     {
         #region Fields
 

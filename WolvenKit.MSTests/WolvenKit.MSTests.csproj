@@ -6,6 +6,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>WolvenKit.MSTests</AssemblyName>
     <RootNamespace>WolvenKit.MSTests</RootNamespace>
+    <Platforms>x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

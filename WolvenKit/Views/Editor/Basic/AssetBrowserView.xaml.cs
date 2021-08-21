@@ -7,9 +7,10 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Catel.IoC;
 using CP77.CR2W;
 using HandyControl.Data;
+using ReactiveUI;
+using Splat;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.Common;
@@ -24,25 +25,36 @@ using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models.Docking;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Editor;
 using System.Text.RegularExpressions;
 
 namespace WolvenKit.Views.Editor
 {
-    public partial class AssetBrowserView : INotifyPropertyChanged
+    public partial class AssetBrowserView : ReactiveUserControl<AssetBrowserViewModel>
     {
-        public static AssetBrowserView GlobalABView;
-
         public AssetBrowserView()
         {
             InitializeComponent();
-            NotifyPropertyChanged();
-            GlobalABView = this;
+
+            ViewModel = Locator.Current.GetService<AssetBrowserViewModel>();
+            DataContext = ViewModel;
+
+
+            this.WhenActivated(disposables =>
+            {
+
+                ViewModel.ExpandAll.Subscribe(x => ExpandAllNodes());
+                ViewModel.CollapseAll.Subscribe(x => CollapseAllNodes());
+                ViewModel.Expand.Subscribe(x => ExpandNode());
+                ViewModel.Collapse.Subscribe(x => CollapseNode());
+
+                
+
+
+            });
+
         }
-
-        public new event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         private void SearchBar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
@@ -62,21 +74,10 @@ namespace WolvenKit.Views.Editor
 
         private void InnerList_SelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
         {
-            var newsender = sender as SfDataGrid;
-            if (newsender.SelectedItem != null)
-            {
-                var selected = newsender.SelectedItem as FileEntryViewModel;
-                StaticReferencesVM.GlobalStatusBar.SelectedFilename = selected.Name;
-
-            }
-
-            if (StaticReferences.GlobalPropertiesView == null)
-            { return; }
-
             if (ViewModel is not AssetBrowserViewModel vm)
             { return; }
 
-            var propertiesViewModel = ServiceLocator.Default.ResolveType<PropertiesViewModel>();
+            var propertiesViewModel = Locator.Current.GetService<PropertiesViewModel>();
 
             if (propertiesViewModel.State is DockState.AutoHidden or DockState.Hidden)
             { return; }
@@ -128,9 +129,11 @@ namespace WolvenKit.Views.Editor
             }
 
             var endPath = Path.Combine(managerCacheDir, Path.GetFileName(selectedItem.Name));
-            var q2 = ServiceLocator.Default.ResolveType<MeshTools>().ExportMeshWithoutRigPreviewer(selectedGameFile, endPath, ISettingsManager.GetTemp_OBJPath());
+            var q2 = Locator.Current.GetService<MeshTools>().ExportMeshWithoutRigPreviewer(selectedGameFile, endPath, ISettingsManager.GetTemp_OBJPath());
             if (q2.Length > 0)
-            { StaticReferences.GlobalPropertiesView.LoadModel(q2); }
+            {
+                propertiesViewModel.LoadModel(q2);
+            }
         }
 
         private void PreviewWem(PropertiesViewModel propertiesViewModel, FileEntryViewModel selectedItem, IGameFile selectedGameFile)
@@ -167,7 +170,7 @@ namespace WolvenKit.Views.Editor
         {
             propertiesViewModel.IsImagePreviewVisible = true;
 
-            var man = ServiceLocator.Default.ResolveType<ModTools>();
+            var man = Locator.Current.GetService<ModTools>();
 
             // extract cr2w to stream
             await using var cr2wstream = new MemoryStream();
@@ -183,7 +186,9 @@ namespace WolvenKit.Views.Editor
             {
                 var qa = await ImageDecoder.RenderToBitmapSourceDds(ddsstream);
                 if (qa != null)
-                { StaticReferences.GlobalPropertiesView.LoadImage(qa); }
+                {
+                    propertiesViewModel.LoadImage(qa);
+                }
             }
             catch (Exception) { }
         }

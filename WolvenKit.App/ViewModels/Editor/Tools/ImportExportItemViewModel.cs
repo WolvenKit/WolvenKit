@@ -1,17 +1,25 @@
 using System;
 using System.ComponentModel;
+using DynamicData.Binding;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Models;
-using ObservableObject = Catel.Data.ObservableObject;
 
 namespace WolvenKit.ViewModels.Editor
 {
     /// <summary>
     /// ImportExportItem ViewModel
     /// </summary>
-    public abstract class ImportExportItemViewModel : ObservableObject
+    public abstract class ImportExportItemViewModel : ReactiveObject
     {
+        public ImportExportItemViewModel()
+        {
+            
+        }
+
+
         /// <summary>
         /// BaseFile "FileModel"
         /// </summary>
@@ -20,7 +28,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// Properties
         /// </summary>
-        public ImportExportArgs Properties { get; set; }
+        [Reactive] public ImportExportArgs Properties { get; set; }
 
         public string ExportTaskIdentifier => Properties.ToString();
 
@@ -28,7 +36,7 @@ namespace WolvenKit.ViewModels.Editor
         public string FullName => BaseFile.FullName;
         public string Name => BaseFile.Name;
 
-        public bool IsChecked { get; set; }
+        [Reactive] public bool IsChecked { get; set; }
 
         public EExportState ExportState => BaseFile.IsImportable ? EExportState.Importable : EExportState.Exportable;
 
@@ -42,10 +50,11 @@ namespace WolvenKit.ViewModels.Editor
             BaseFile = model;
             Properties = DecideImportOptions(model);
 
-            Properties.PropertyChanged += PropertiesOnPropertyChanged;
+            Properties.WhenAnyPropertyChanged().Subscribe(v =>
+            {
+                this.RaisePropertyChanged(nameof(Properties));
+            });
         }
-
-        private void PropertiesOnPropertyChanged(object sender, PropertyChangedEventArgs e) => RaisePropertyChanged(nameof(Properties));
 
         private ImportArgs DecideImportOptions(FileModel model)
         {
@@ -77,10 +86,11 @@ namespace WolvenKit.ViewModels.Editor
             BaseFile = model;
             Properties = DecideConverOptions(model);
 
-            Properties.PropertyChanged += PropertiesOnPropertyChanged;
+            Properties.WhenAnyPropertyChanged().Subscribe(v =>
+            {
+                this.RaisePropertyChanged(nameof(Properties));
+            });
         }
-
-        private void PropertiesOnPropertyChanged(object sender, PropertyChangedEventArgs e) => RaisePropertyChanged(nameof(Properties));
 
         private ConvertArgs DecideConverOptions(FileModel model)
         {
@@ -96,10 +106,11 @@ namespace WolvenKit.ViewModels.Editor
             BaseFile = model;
             Properties = DecideExportOptions(model);
 
-            Properties.PropertyChanged += PropertiesOnPropertyChanged;
+            Properties.WhenAnyPropertyChanged().Subscribe(v =>
+            {
+                this.RaisePropertyChanged(nameof(Properties));
+            });
         }
-
-        private void PropertiesOnPropertyChanged(object sender, PropertyChangedEventArgs e) => RaisePropertyChanged(nameof(Properties));
 
         private ExportArgs DecideExportOptions(FileModel model)
         {

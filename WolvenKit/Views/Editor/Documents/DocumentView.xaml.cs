@@ -1,6 +1,10 @@
+using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using System.Windows;
+using ReactiveUI;
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.Views.Editor
@@ -8,7 +12,7 @@ namespace WolvenKit.Views.Editor
     /// <summary>
     /// Interaction logic for TextDocumentView.xaml
     /// </summary>
-    public partial class DocumentView
+    public partial class DocumentView : ReactiveUserControl<DocumentViewModel>
     {
         #region Fields
 
@@ -29,7 +33,32 @@ namespace WolvenKit.Views.Editor
             WeakEventManager<FrameworkElement, RoutedEventArgs>
                 .AddHandler(this, "Loaded", View_LoadedAsync);
 
+            
+            
 
+            this.WhenActivated(disposables =>
+            {
+                ////LoadOnDemandCommand = "{Binding LoadOnDemandCommand}"
+                //this.BindCommand(ViewModel,
+                //       viewModel => viewModel.LoadOnDemandCommand,
+                //       view => view.MainTreeGrid.LoadOnDemandCommand)
+                //   .DisposeWith(disposables);
+                //ItemsSource = "{Binding SelectedChunk.ChildrenProperties}"
+                //this.Bind(ViewModel,
+                //        viewModel => viewModel.SelectedChunk.ChildrenProperties,
+                //        view => view.MainTreeGrid.ItemsSource)
+                //    .DisposeWith(disposables);
+
+
+            });
+
+            this.MainTreeGrid.CurrentCellValueChanged += MainTreeGrid_CurrentCellValueChanged;
+
+        }
+
+        private void MainTreeGrid_CurrentCellValueChanged(object sender, Syncfusion.UI.Xaml.TreeGrid.TreeGridCurrentCellValueChangedEventArgs e)
+        {
+            
         }
 
         #endregion Constructors
@@ -40,7 +69,7 @@ namespace WolvenKit.Views.Editor
         {
             _viewInitialized = true;                    // We'll try this only once
 
-            if (DataContext is not IDocumentViewModel vm)
+            if (DataContext is not DocumentViewModel vm)
             {
                 return;
             }
@@ -53,7 +82,7 @@ namespace WolvenKit.Views.Editor
                 // Attempt to close this document if it appears to be invalid
                 if (result == false)
                 {
-                    vm.CloseCommand.Execute(null);
+                    vm.Close.Execute();
                 }
 
                 NavigationItemChunks.DataContext = ViewModel as DocumentViewModel;
@@ -113,6 +142,33 @@ namespace WolvenKit.Views.Editor
         {
             SetCollapsedAll();
             EDITORSVISIBILITY.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        }
+
+        private void PropertyGrid_AutoGeneratingPropertyGridItem(object sender, Syncfusion.Windows.PropertyGrid.AutoGeneratingPropertyGridItemEventArgs e)
+        {
+            switch (e.DisplayName)
+            {
+                case nameof(IEditableVariable.accessor):
+                case nameof(IEditableVariable.ChildrEditableVariables):
+                case nameof(IEditableVariable.Cr2wFile):
+                case nameof(IEditableVariable.IsSerialized):
+                case nameof(IEditableVariable.ParentVar):
+                case nameof(IEditableVariable.REDFlags):
+                case nameof(IEditableVariable.REDName):
+                case nameof(IEditableVariable.REDType):
+                case nameof(IEditableVariable.REDValue):
+                case nameof(IEditableVariable.SerializedProperties):
+                case nameof(IEditableVariable.UniqueIdentifier):
+                case nameof(IEditableVariable.VarChunkIndex):
+                case nameof(CVariable.IsNulled):
+                case nameof(CVariable.cr2w):
+                case nameof(CVariable.UnknownCVariables):
+#if DEBUG
+                case nameof(CVariable.GottenVarChunkIndex):
+#endif
+                    e.Cancel = true;
+                    break;
+            }
         }
     }
 }

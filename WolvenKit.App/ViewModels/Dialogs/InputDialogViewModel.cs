@@ -1,12 +1,14 @@
 using System.Threading.Tasks;
-using Catel.MVVM;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
+
 
 namespace WolvenKit.ViewModels.Dialogs
 {
     /// <summary>
     /// Implements the viewmodel that drives the log view.
     /// </summary>
-    public class InputDialogViewModel : ViewModelBase
+    public class InputDialogViewModel : ReactiveObject
     {
         #region constructors
 
@@ -22,19 +24,8 @@ namespace WolvenKit.ViewModels.Dialogs
         /// The application log.
         /// Bound to the logview, implements OnPropertyRaised through Fody
         /// </summary>
-        public string Text { get; set; }
+        [Reactive] public string Text { get; set; }
 
         #endregion properties
-
-        #region methods
-
-        protected override Task CloseAsync() =>
-            // TODO: Unsubscribe from events
-
-            base.CloseAsync();
-
-        protected override async Task InitializeAsync() => await base.InitializeAsync();// TODO: Write initialization code here and subscribe to events
-
-        #endregion methods
     }
 }

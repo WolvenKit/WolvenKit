@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using ReactiveUI;
 using WolvenKit.Common.DDS;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.Types;
@@ -165,8 +166,10 @@ namespace WolvenKit.Common.Model.Arguments
     /// <summary>
     /// Import Export Arguments
     /// </summary>
-    public abstract class ImportExportArgs : ObservableObject
+    public abstract class ImportExportArgs : ReactiveObject
     {
+
+
     }
 
     /// <summary>
@@ -412,15 +415,15 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Export Type")]
         [Display(Name = "Mesh Export Type")]
-        [Description("The type of export for your mesh, by default no Materials or Rig is used.")]
+        [Description("Select between mesh export options. By default no rig or materials are included.")]
         public MeshExportType meshExportType { get; set; } = MeshExportType.Default;
 
         /// <summary>
         /// If lodfilter = true, only exports the highest quality geometry, if false export all the geometry.
         /// </summary>
         [Category("Default Export Settings")]
-        [Display(Name = "Lod Filter")]
-        [Description("If lodfilter = true, only exports the highest quality geometry, if false export all the geometry.")]
+        [Display(Name = "LOD Filter")]
+        [Description("When used LOD meshes will not be included. Not recommended for most cases due to complications with clipping decals.")]
         public bool LodFilter { get; set; } = true;
 
         /// <summary>
@@ -428,37 +431,39 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Default Export Settings")]
         [Display(Name = "Is Binary")]
-        [Description("If checked the mesh will be exported as GLB, if unchecked as GLTF")]
+        [Description("When used mesh exports will be in binary form as GLB rather than glTF format. (Recommended)")]
         public bool isGLBinary { get; set; } = true;
 
         /// <summary>
         /// MultiMesh Mesh List.
         /// </summary>
         [Category("MultiMesh Settings")]
-        [Display(Name = "Select additional meshes")]
+        [Display(Name = "Select Additional Meshes")]
+        [Description("Select additional meshes to be included within a single export.")]
         public List<FileEntry> MultiMeshMeshes { get; set; } = new();      // meshes?
 
         /// <summary>
         /// MultiMesh Rig List.
         /// </summary>
         [Category("MultiMesh Settings")]
-        [Display(Name = "Select rig(s)")]
+        [Display(Name = "Select Rig(s)")]
+        [Description("Select one or multiple rigs to be used within a single export. Recommended for meshes which use more than one rig.")]
         public List<FileEntry> MultiMeshRigs { get; set; } = new();        // rigs
 
         /// <summary>
         /// Selected Rig for Mesh WithRig Export. ALWAYS USE THE FIRST ENTRY IN THE LIST.
         /// </summary>
         [Category("WithRig Settings")]
-        [Display(Name = "Select rig(s)")]
-        [Description("Select rig(s) to export within your mesh.")]
+        [Display(Name = "Select Rig")]
+        [Description("Select a rig to export within the mesh.")]
         public List<FileEntry> Rig { get; set; }
 
         /// <summary>
         /// Uncook Format for material files. (DDS,TGA,PNG Etc)
         /// </summary>
         [Category("WithMaterials Settings")]
-        [Display(Name = "Select Export Format")]
-        [Description("Exports textures(dds,png,tga etc) and material helper data with the mesh.")]
+        [Display(Name = "Select Texture Format")]
+        [Description("Select the preferred texture format to be exported within the Material Repository.")]
         public EUncookExtension MaterialUncookExtension { get; set; } = EUncookExtension.dds;
 
         /// <summary>

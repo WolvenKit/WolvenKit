@@ -2,14 +2,17 @@ using System;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
-using Catel.IoC;
 using Discord;
 using Discord.WebSocket;
+using ReactiveUI;
+using Splat;
 using WolvenKit.Functionality.Services;
+using WolvenKit.ViewModels.HomePage.Pages;
+using WolvenKit.ViewModels.Wizards;
 
 namespace WolvenKit.Views.Wizards
 {
-    public partial class FeedbackWizardView
+    public partial class FeedbackWizardView : ReactiveUserControl<FeedbackWizardViewModel>
     {
         private static SocketTextChannel ms_hashChannel { get; set; }
 
@@ -20,6 +23,10 @@ namespace WolvenKit.Views.Wizards
         public FeedbackWizardView()
         {
             InitializeComponent();
+
+            ViewModel = Locator.Current.GetService<FeedbackWizardViewModel>();
+            DataContext = ViewModel;
+
             TestConnect();
         }
 
@@ -48,7 +55,7 @@ namespace WolvenKit.Views.Wizards
         public async Task SendMessage()
 
         {
-            var _settingsManager = ServiceLocator.Default.ResolveType<ISettingsManager>();
+            var _settingsManager = Locator.Current.GetService<ISettingsManager>();
             var teststring = "Reviewer : ``" + _authortitle + "``\n"
                 + "||-||\n"
                 + "||-||:arrow_down: **Review** :arrow_down: \n" +

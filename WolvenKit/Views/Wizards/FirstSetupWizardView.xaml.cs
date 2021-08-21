@@ -1,34 +1,56 @@
 using System;
 using System.IO;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using Catel.IoC;
-using Catel.Services;
-using ControlzEx.Theming;
+using ReactiveUI;
+using Splat;
 using WolvenKit.Core;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Wizards;
-using Path = System.IO.Path;
 
 namespace WolvenKit.Views.Wizards
 {
-    public partial class FirstSetupWizardView
+    public partial class FirstSetupWizardView : ReactiveUserControl<FirstSetupWizardViewModel>
     {
-        #region Fields
-
-        //private bool _filled = false;
-
-        //private Brush _lastaccent;
-
-        #endregion Fields
 
         #region Constructors
 
         public FirstSetupWizardView()
         {
             InitializeComponent();
+
+            this.WhenActivated(disposables =>
+            {
+                Observable
+                    .FromEventPattern(WizardControl, nameof(Syncfusion.Windows.Tools.Controls.WizardControl.Finish))
+                    .Subscribe(_ => ViewModel.OkCommand.Execute().Subscribe())
+                    .DisposeWith(disposables);
+
+                this.Bind(ViewModel,
+                    vm => vm.CP77ExePath,
+                    v => v.cp77ExeTxtb.Text)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        vm => vm.MaterialDepotPath,
+                        v => v.matdepotxtb.Text)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        vm => vm.AllFieldsValid,
+                        v => v.WizardControl.FinishEnabled)
+                    .DisposeWith(disposables);
+
+                this.BindCommand(ViewModel,
+                    vm => vm.OpenCP77GamePathCommand,
+                    v => v.cp77ExeButton).DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                    vm => vm.OpenDepotPathCommand,
+                    v => v.matdepotButton).DisposeWith(disposables);
+
+            });
         }
 
         #endregion Constructors
@@ -67,56 +89,14 @@ namespace WolvenKit.Views.Wizards
 
         private void UserControl_Initialized_1(object sender, EventArgs e)
         {
-            //if (!_filled)
-            //{
-            //    new Thread(() =>
-            //    {
-            //        foreach (var Theme in ThemeManager.Current.Themes)
-            //        {
-            //            Thread.Sleep(15);
-            //            if (Theme.BaseColorScheme == "Dark")
-            //            {
-            //                if (!Theme.DisplayName.Contains("Colorful"))
-            //                {
-            //                    if (!Theme.DisplayName.Contains('#'))
-            //                    {
-            //                        Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-            //                        {
-            //                            var circle = new Ellipse
-            //                            {
-            //                                Height = 25,
-            //                                Width = 25,
-            //                                Margin = new Thickness(5)
-            //                            };
-            //                            circle.MouseEnter += Circle_MouseEnter;
-            //                            circle.MouseLeave += Circle_MouseLeave;
-            //                            circle.MouseLeftButtonDown += Circle_MouseLeftButtonDown;
-            //                            circle.Name = Theme.DisplayName.Split('(')[0].ToString().Trim();
-            //                            circle.Fill = Theme.ShowcaseBrush;
-
-            //                            CircleTest.Children.Add(circle);
-            //                        }));
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }).Start();
-            //}
-            //_filled = true;
+            
         }
-
 
         #region Validation
 
-       private void Field_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) => validateAllFields();
+        private void Field_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) => ValidateAllFields();
 
-        private void validateAllFields()
-        {
-            if (ViewModel is FirstSetupWizardViewModel vm)
-            {
-                vm.AllFieldsValid = /*projectNameTxtbx.VerifyData() &&*/ cp77ExeTxtb.VerifyData();
-            }
-        }
+        private void ValidateAllFields() => ViewModel.AllFieldsValid = matdepotxtb.VerifyData() && cp77ExeTxtb.VerifyData();
 
         private HandyControl.Data.OperationResult<bool> VerifyFile(string str)
         {

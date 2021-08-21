@@ -2,7 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Catel.IoC;
+
 using DynamicData;
 using ReactiveUI;
 using WolvenKit.Common.Services;
@@ -39,7 +39,7 @@ namespace WolvenKit.ViewModels.Editor
             ILoggerService loggerService
             ) : base(ToolTitle)
         {
-            _loggerService = loggerService ??  ServiceLocator.Default.ResolveType<ILoggerService>();
+            _loggerService = loggerService;
 
             SetupToolDefaults();
 
@@ -63,13 +63,6 @@ namespace WolvenKit.ViewModels.Editor
         #endregion properties
 
         #region methods
-
-        protected override Task CloseAsync() =>
-            // TODO: Unsubscribe from events
-
-            base.CloseAsync();
-
-        protected override async Task InitializeAsync() => await base.InitializeAsync();// TODO: Write initialization code here and subscribe to events
 
         /// <summary>
         /// Initialize Avalondock specific defaults that are specific to this tool window.

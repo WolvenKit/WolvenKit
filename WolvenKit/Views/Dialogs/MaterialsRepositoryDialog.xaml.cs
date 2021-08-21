@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Catel.IoC;
 using CP77.CR2W;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
@@ -38,11 +38,11 @@ namespace WolvenKit.Views.Dialogs
         {
             InitializeComponent();
 
-            _settingsManager = ServiceLocator.Default.ResolveType<ISettingsManager>();
-            _gameControllerFactory = ServiceLocator.Default.ResolveType<IGameControllerFactory>();
-            _modTools = ServiceLocator.Default.ResolveType<ModTools>();
-            _progress = ServiceLocator.Default.ResolveType<IProgressService<double>>();
-            _loggerService = ServiceLocator.Default.ResolveType<ILoggerService>();
+            _settingsManager = Locator.Current.GetService<ISettingsManager>();
+            _gameControllerFactory = Locator.Current.GetService<IGameControllerFactory>();
+            _modTools = Locator.Current.GetService<ModTools>();
+            _progress = Locator.Current.GetService<IProgressService<double>>();
+            _loggerService = Locator.Current.GetService<ILoggerService>();
 
             _archivesFolderPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "archive", "pc", "content");
             MaterialsDepotPath = _settingsManager.MaterialRepositoryPath;

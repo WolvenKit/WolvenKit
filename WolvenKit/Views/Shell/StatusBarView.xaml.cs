@@ -1,18 +1,30 @@
 using System;
-using Catel.IoC;
+
 using CatFacts.Net;
+using ReactiveUI;
+using Splat;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Views.Shell
 {
-    public partial class StatusBarView
+    public partial class StatusBarView : ReactiveUserControl<StatusBarViewModel>
     {
         #region Constructors
 
         public StatusBarView()
         {
             InitializeComponent();
+
+            ViewModel = Locator.Current.GetService<StatusBarViewModel>();
+            DataContext = ViewModel;
+
+            this.WhenActivated(disposables =>
+            {
+
+            });
+
         }
 
         #endregion Constructors
@@ -22,7 +34,7 @@ namespace WolvenKit.Views.Shell
             try
             {
                 var client = new CatFactsClient();
-                var randomFact = await client.GetRandomFactsAsync(ServiceLocator.Default.ResolveType<ISettingsManager>().CatFactAnimal.ToString().ToLower());
+                var randomFact = await client.GetRandomFactsAsync(Locator.Current.GetService<ISettingsManager>().CatFactAnimal.ToString().ToLower());
                 Random x = new Random();
                 var z = x.Next(0, randomFact.Length);
                 var catfact = randomFact[z].Text;
@@ -31,7 +43,7 @@ namespace WolvenKit.Views.Shell
                 {
                     if (!catfact.Contains("test", StringComparison.OrdinalIgnoreCase))
                     {
-                        ServiceLocator.Default.ResolveType<INotificationService>().Info(catfact);
+                        Locator.Current.GetService<INotificationService>().Info(catfact);
                     }
                 }
                 else

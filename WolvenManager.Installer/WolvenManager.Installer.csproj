@@ -7,6 +7,7 @@
       <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
       <DebugType>embedded</DebugType>
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+      <Platforms>x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

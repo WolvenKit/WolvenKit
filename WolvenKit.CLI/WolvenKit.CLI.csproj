@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <Platforms>x64</Platforms>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyVersion>1.4.4</AssemblyVersion>
@@ -10,7 +11,7 @@
       <PackAsTool>true</PackAsTool>
       <ToolCommandName>cp77tools</ToolCommandName>
       <PackageOutputPath>./nupkg</PackageOutputPath>
-      <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+      <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
       <PackageId>WolvenKit.CLI</PackageId>
       <Company>WolvenKit</Company>
       <Product>WolvenKit.CLI</Product>
@@ -52,7 +53,7 @@
     </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj"/>
+    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
     <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
     <ProjectReference Include="..\WolvenKit.Modkit\WolvenKit.Modkit.csproj" />
   </ItemGroup>

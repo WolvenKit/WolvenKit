@@ -42,7 +42,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
         private static readonly Func<string, string> funcCtor = (x) => $"\t\tpublic {x}(CR2WFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)\r\n\t\t{{\r\n\t\t}}\r\n";
 
-        private static Assembly m_assembly;
+        //private static Assembly m_assembly;
 
         private static Dictionary<string, Type> m_enums;
 
@@ -462,21 +462,21 @@ namespace WolvenKit.RED4.CR2W.Types
             return csline;
         }
 
-        private static void LoadTypes()
-        {
-            m_types = new Dictionary<string, Type>();
+        //private static void LoadTypes()
+        //{
+        //    m_types = new Dictionary<string, Type>();
 
-            foreach (Type type in m_assembly.GetTypes())
-            {
-                if (!type.IsPublic)
-                    continue;
+        //    foreach (Type type in m_assembly.GetTypes())
+        //    {
+        //        if (!type.IsPublic)
+        //            continue;
 
-                if (m_types.ContainsKey(type.Name))
-                    continue;
+        //        if (m_types.ContainsKey(type.Name))
+        //            continue;
 
-                m_types.Add(type.Name, type);
-            }
-        }
+        //        m_types.Add(type.Name, type);
+        //    }
+        //}
 
         #endregion Methods
 

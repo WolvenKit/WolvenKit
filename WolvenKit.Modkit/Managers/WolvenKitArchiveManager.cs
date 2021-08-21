@@ -52,19 +52,19 @@ namespace WolvenKit.Common.Model
 
                 for (var i = 0; i < parts.Length - 1; i++)
                 {
-                    if (!currentNode.Directories.ContainsKey(parts[i]))
+                    if (!currentNode.Directories.Any(_ => _.Name == parts[i]))
                     {
                         var newNode = new GameFileTreeNode
                         {
                             Parent = currentNode,
                             Name = parts[i]
                         };
-                        currentNode.Directories.Add(parts[i], newNode);
+                        currentNode.Directories.Add(/*parts[i], */newNode);
                         currentNode = newNode;
                     }
                     else
                     {
-                        currentNode = currentNode.Directories[parts[i]];
+                        currentNode = currentNode.Directories.First(_ => _.Name == parts[i]);
                     }
                 }
 
@@ -97,7 +97,7 @@ namespace WolvenKit.Common.Model
                 {
                     bundfiles.Add(wfile);
                 }
-                bundfiles.AddRange(mainnode.Directories.Values.SelectMany(GetFiles));
+                bundfiles.AddRange(mainnode.Directories.SelectMany(GetFiles));
             }
             return bundfiles;
         }

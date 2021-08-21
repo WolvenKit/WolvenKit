@@ -8,11 +8,6 @@ namespace WolvenKit.ViewModels.Editor
         #region Properties
 
         /// <summary>
-        /// Gets a command to close this document.
-        /// </summary>
-        ICommand CloseCommand { get; }
-
-        /// <summary>
         /// Gets the current filename of the file being managed in this document viewmodel.
         /// </summary>
         string FileName { get; }
@@ -41,21 +36,8 @@ namespace WolvenKit.ViewModels.Editor
 
         #region Methods
 
-        /// <summary>
-        /// Attempts to read the contents of a text file and assigns it to
-        /// text content of this viewmodel.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns>True if file read was successful, otherwise false</returns>
         Task<bool> OpenFileAsync(string path);
 
-        /// <summary>
-        /// Attempts to read the contents of a text file defined via initialPath
-        /// and assigns it to text content of this viewmodel.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns>True if file read was successful, otherwise false</returns>
-        Task<bool> OpenFileWithInitialPathAsync();
 
         #endregion Methods
     }
