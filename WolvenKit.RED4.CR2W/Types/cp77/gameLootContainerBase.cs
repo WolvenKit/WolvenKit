@@ -11,9 +11,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<TweakDBID> _lootTables;
 		private TweakDBID _contentAssignment;
 		private CBool _isIllegal;
+		private CBool _wasLootInitalized;
 		private CEnum<gamedataQuality> _lootQuality;
 		private CBool _hasQuestItems;
-		private CBool _wasLootInitalized;
 		private CBool _isInIconForcedVisibilityRange;
 		private CBool _isIconic;
 		private CName _activeQualityRangeInteraction;
@@ -51,6 +51,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(44)] 
+		[RED("wasLootInitalized")] 
+		public CBool WasLootInitalized
+		{
+			get => GetProperty(ref _wasLootInitalized);
+			set => SetProperty(ref _wasLootInitalized, value);
+		}
+
+		[Ordinal(45)] 
 		[RED("lootQuality")] 
 		public CEnum<gamedataQuality> LootQuality
 		{
@@ -58,20 +66,12 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lootQuality, value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(46)] 
 		[RED("hasQuestItems")] 
 		public CBool HasQuestItems
 		{
 			get => GetProperty(ref _hasQuestItems);
 			set => SetProperty(ref _hasQuestItems, value);
-		}
-
-		[Ordinal(46)] 
-		[RED("wasLootInitalized")] 
-		public CBool WasLootInitalized
-		{
-			get => GetProperty(ref _wasLootInitalized);
-			set => SetProperty(ref _wasLootInitalized, value);
 		}
 
 		[Ordinal(47)] 

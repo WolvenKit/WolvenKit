@@ -14,11 +14,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkImageWidgetReference _centerPart;
 		private Vector2 _bufferedSpread;
 		private CEnum<gamedataTriggerMode> _currentFireMode;
-		private CHandle<gameIBlackboard> _weaponlocalBB;
-		private CUInt32 _bbcurrentFireMode;
+		private wCHandle<gameIBlackboard> _weaponlocalBB;
+		private CHandle<redCallbackObject> _bbcurrentFireMode;
 		private CUInt32 _ricochetModeActive;
 		private CUInt32 _ricochetChance;
-		private CHandle<gameIBlackboard> _uiBlackboard;
 		private CFloat _horizontalMinSpread;
 		private CFloat _verticalMinSpread;
 		private CFloat _gameplaySpreadMultiplier;
@@ -81,7 +80,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(25)] 
 		[RED("weaponlocalBB")] 
-		public CHandle<gameIBlackboard> WeaponlocalBB
+		public wCHandle<gameIBlackboard> WeaponlocalBB
 		{
 			get => GetProperty(ref _weaponlocalBB);
 			set => SetProperty(ref _weaponlocalBB, value);
@@ -89,7 +88,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(26)] 
 		[RED("bbcurrentFireMode")] 
-		public CUInt32 BbcurrentFireMode
+		public CHandle<redCallbackObject> BbcurrentFireMode
 		{
 			get => GetProperty(ref _bbcurrentFireMode);
 			set => SetProperty(ref _bbcurrentFireMode, value);
@@ -112,14 +111,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(29)] 
-		[RED("uiBlackboard")] 
-		public CHandle<gameIBlackboard> UiBlackboard
-		{
-			get => GetProperty(ref _uiBlackboard);
-			set => SetProperty(ref _uiBlackboard, value);
-		}
-
-		[Ordinal(30)] 
 		[RED("horizontalMinSpread")] 
 		public CFloat HorizontalMinSpread
 		{
@@ -127,7 +118,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _horizontalMinSpread, value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(30)] 
 		[RED("verticalMinSpread")] 
 		public CFloat VerticalMinSpread
 		{
@@ -135,7 +126,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _verticalMinSpread, value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(31)] 
 		[RED("gameplaySpreadMultiplier")] 
 		public CFloat GameplaySpreadMultiplier
 		{

@@ -22,13 +22,13 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _temperature;
 		private CEnum<rendLightChannel> _lightChannel;
 		private CBool _sceneDiffuse;
-		private CBool _sceneSpecular;
+		private CUInt8 _sceneSpecularScale;
 		private CBool _directional;
 		private CInt8 _roughnessBias;
-		private CBool _useInGI;
-		private CBool _useInEnvProbes;
+		private CUInt8 _scaleGI;
+		private CUInt8 _scaleEnvProbes;
 		private CBool _useInTransparents;
-		private CBool _useInFog;
+		private CUInt8 _scaleVolFog;
 		private CBool _useInParticles;
 		private CEnum<rendLightAttenuation> _attenuation;
 		private CBool _clampAttenuation;
@@ -179,11 +179,11 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(15)] 
-		[RED("sceneSpecular")] 
-		public CBool SceneSpecular
+		[RED("sceneSpecularScale")] 
+		public CUInt8 SceneSpecularScale
 		{
-			get => GetProperty(ref _sceneSpecular);
-			set => SetProperty(ref _sceneSpecular, value);
+			get => GetProperty(ref _sceneSpecularScale);
+			set => SetProperty(ref _sceneSpecularScale, value);
 		}
 
 		[Ordinal(16)] 
@@ -203,19 +203,19 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(18)] 
-		[RED("useInGI")] 
-		public CBool UseInGI
+		[RED("scaleGI")] 
+		public CUInt8 ScaleGI
 		{
-			get => GetProperty(ref _useInGI);
-			set => SetProperty(ref _useInGI, value);
+			get => GetProperty(ref _scaleGI);
+			set => SetProperty(ref _scaleGI, value);
 		}
 
 		[Ordinal(19)] 
-		[RED("useInEnvProbes")] 
-		public CBool UseInEnvProbes
+		[RED("scaleEnvProbes")] 
+		public CUInt8 ScaleEnvProbes
 		{
-			get => GetProperty(ref _useInEnvProbes);
-			set => SetProperty(ref _useInEnvProbes, value);
+			get => GetProperty(ref _scaleEnvProbes);
+			set => SetProperty(ref _scaleEnvProbes, value);
 		}
 
 		[Ordinal(20)] 
@@ -227,11 +227,11 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(21)] 
-		[RED("useInFog")] 
-		public CBool UseInFog
+		[RED("scaleVolFog")] 
+		public CUInt8 ScaleVolFog
 		{
-			get => GetProperty(ref _useInFog);
-			set => SetProperty(ref _useInFog, value);
+			get => GetProperty(ref _scaleVolFog);
+			set => SetProperty(ref _scaleVolFog, value);
 		}
 
 		[Ordinal(22)] 

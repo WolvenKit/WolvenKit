@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private rRef<CMesh> _meshProxy;
 		private CArray<entVisualControllerDependency> _appearanceDependency;
 		private raRef<appearanceCookedAppearanceData> _cookedAppearanceData;
-		private CEnum<entVisualControllerComponentForcedLodDistance> _forcedLodDistance;
+		private CEnum<entForcedLodDistance> _forcedLodDistance;
 
 		[Ordinal(3)] 
 		[RED("meshProxy")] 
@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(6)] 
 		[RED("forcedLodDistance")] 
-		public CEnum<entVisualControllerComponentForcedLodDistance> ForcedLodDistance
+		public CEnum<entForcedLodDistance> ForcedLodDistance
 		{
 			get => GetProperty(ref _forcedLodDistance);
 			set => SetProperty(ref _forcedLodDistance, value);

@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<gameObject> _owner;
 		private CName _attitudeGroupName;
 		private CArray<CName> _followTargetSquads;
-		private CUInt32 _playerCombatListener;
+		private CHandle<redCallbackObject> _playerCombatListener;
 		private EngineTime _lastStealthLeaveTimeStamp;
 		private CHandle<gameAttachmentSlotsScriptListener> _friendlyTargetSlotListener;
 		private CHandle<gameAttachmentSlotsScriptListener> _ownerTargetSlotListener;
@@ -61,7 +61,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(5)] 
 		[RED("playerCombatListener")] 
-		public CUInt32 PlayerCombatListener
+		public CHandle<redCallbackObject> PlayerCombatListener
 		{
 			get => GetProperty(ref _playerCombatListener);
 			set => SetProperty(ref _playerCombatListener, value);

@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CHandle<gameStaticTriggerAreaComponent> _areaComponent;
 
-		[Ordinal(96)] 
+		[Ordinal(97)] 
 		[RED("areaComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> AreaComponent
 		{

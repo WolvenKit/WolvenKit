@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CFloat _killDelay;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("killDelay")] 
 		public CFloat KillDelay
 		{

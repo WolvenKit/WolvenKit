@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using ReactiveUI;
 using WolvenKit.Common.DDS;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.Types;
+using SharpGLTF.Validation;
 
 namespace WolvenKit.Common.Model.Arguments
 {
@@ -117,8 +119,9 @@ namespace WolvenKit.Common.Model.Arguments
         {
             { typeof(CommonImportArgs), new CommonImportArgs() },
             { typeof(XbmImportArgs), new XbmImportArgs() },
-            { typeof(MeshImportArgs), new MeshImportArgs() },
+            { typeof(GltfImportArgs), new GltfImportArgs() },
             { typeof(OpusImportArgs), new OpusImportArgs() },
+            { typeof(MlmaskImportArgs), new MlmaskImportArgs() },
         };
 
         /// <summary>
@@ -164,8 +167,10 @@ namespace WolvenKit.Common.Model.Arguments
     /// <summary>
     /// Import Export Arguments
     /// </summary>
-    public abstract class ImportExportArgs : ObservableObject
+    public abstract class ImportExportArgs : ReactiveObject
     {
+
+
     }
 
     /// <summary>
@@ -237,19 +242,50 @@ namespace WolvenKit.Common.Model.Arguments
     /// <summary>
     /// Mesh Import Arguments
     /// </summary>
-    public class MeshImportArgs : ImportArgs
+    public class GltfImportArgs : ImportArgs
     {
-        [Browsable(false)]
-        public Archive Archive { get; set; } = new(); // basegame4_gamedata.archive
-        [Category("Mesh Import Settings")]
+        [Category("Import Settings")]
         [Display(Name = "Import Material.Json Only")]
         [Description("If checked only the Materials from Material.Json will be imported to the mesh, geometry from GLTF/GLB will not be imported!, uncheck imports Both!")]
         public bool importMaterialOnly { get; set; } = false;
+
+        /// <summary>
+        /// Validation type for the selected GLB/GLTF.
+        /// </summary>
+        [Category("Import Settings")]
+        [Display(Name = "GLTF Validation Checks")]
+        [Description("The type of validation check for your glb/gltf file")]
+        public ValidationMode validationMode { get; set; } = ValidationMode.Strict;
+        /// <summary>
+        /// RedEngine4 Cooked File type for the selected GLB/GLTF.
+        /// </summary>
+        [Category("Import Settings")]
+        [Display(Name = "Import As RedEngine File Format")]
+        [Description("The RedEngine file format to import as for your glb/gltf file")]
+        public GltfImportAsFormat importFormat { get; set; } = GltfImportAsFormat.Mesh;
+        /// <summary>
+        /// List of Archives for Morphtarget Import.
+        /// </summary>
+        [Browsable(false)]
+        public List<Archive> Archives { get; set; } = new();
         /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
-        public override string ToString() => ".Mesh";
+        public override string ToString() => "Mesh/Morphtarget | " + $"Import Format :  {importFormat.ToString()}";
+    }
+    public enum GltfImportAsFormat
+    {
+        Mesh,
+        Morphtarget
+    }
+    public class MlmaskImportArgs : ImportArgs
+    {
+        /// <summary>
+        /// String Override to display info in datagrid.
+        /// </summary>
+        /// <returns>String</returns>
+        public override string ToString() => "Masklist(txt file containing mask image paths) TO--> Mlmask";
     }
 
     #endregion import args
@@ -303,7 +339,7 @@ namespace WolvenKit.Common.Model.Arguments
         public bool IsBinary { get; set; } = true;
 
         /// <summary>
-        /// List of Archives for WithMaterials Mesh Export.
+        /// List of Archives for Morphtarget Export.
         /// </summary>
         [Browsable(false)]
         public List<Archive> Archives { get; set; } = new();
@@ -313,6 +349,8 @@ namespace WolvenKit.Common.Model.Arguments
         [Browsable(false)]
         public string ArchiveDepot { get; set; }
 
+        [Browsable(false)]
+        public string ModFolderPath { get; set; }
         /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>
@@ -383,15 +421,15 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Export Type")]
         [Display(Name = "Mesh Export Type")]
-        [Description("The type of export for your mesh, by default no Materials or Rig is used.")]
+        [Description("Select between mesh export options. By default no rig or materials are included.")]
         public MeshExportType meshExportType { get; set; } = MeshExportType.Default;
 
         /// <summary>
         /// If lodfilter = true, only exports the highest quality geometry, if false export all the geometry.
         /// </summary>
         [Category("Default Export Settings")]
-        [Display(Name = "Lod Filter")]
-        [Description("If lodfilter = true, only exports the highest quality geometry, if false export all the geometry.")]
+        [Display(Name = "LOD Filter")]
+        [Description("When used LOD meshes will not be included. Not recommended for most cases due to complications with clipping decals.")]
         public bool LodFilter { get; set; } = true;
 
         /// <summary>
@@ -399,37 +437,39 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Default Export Settings")]
         [Display(Name = "Is Binary")]
-        [Description("If checked the mesh will be exported as GLB, if unchecked as GLTF")]
+        [Description("When used mesh exports will be in binary form as GLB rather than glTF format. (Recommended)")]
         public bool isGLBinary { get; set; } = true;
 
         /// <summary>
         /// MultiMesh Mesh List.
         /// </summary>
         [Category("MultiMesh Settings")]
-        [Display(Name = "Select additional meshes")]
+        [Display(Name = "Select Additional Meshes")]
+        [Description("Select additional meshes to be included within a single export.")]
         public List<FileEntry> MultiMeshMeshes { get; set; } = new();      // meshes?
 
         /// <summary>
         /// MultiMesh Rig List.
         /// </summary>
         [Category("MultiMesh Settings")]
-        [Display(Name = "Select rig(s)")]
+        [Display(Name = "Select Rig(s)")]
+        [Description("Select one or multiple rigs to be used within a single export. Recommended for meshes which use more than one rig.")]
         public List<FileEntry> MultiMeshRigs { get; set; } = new();        // rigs
 
         /// <summary>
         /// Selected Rig for Mesh WithRig Export. ALWAYS USE THE FIRST ENTRY IN THE LIST.
         /// </summary>
         [Category("WithRig Settings")]
-        [Display(Name = "Select rig(s)")]
-        [Description("Select rig(s) to export within your mesh.")]
+        [Display(Name = "Select Rig")]
+        [Description("Select a rig to export within the mesh.")]
         public List<FileEntry> Rig { get; set; }
 
         /// <summary>
         /// Uncook Format for material files. (DDS,TGA,PNG Etc)
         /// </summary>
         [Category("WithMaterials Settings")]
-        [Display(Name = "Select Export Format")]
-        [Description("Exports textures(dds,png,tga etc) and material helper data with the mesh.")]
+        [Display(Name = "Select Texture Format")]
+        [Description("Select the preferred texture format to be exported within the Material Repository.")]
         public EUncookExtension MaterialUncookExtension { get; set; } = EUncookExtension.dds;
 
         /// <summary>

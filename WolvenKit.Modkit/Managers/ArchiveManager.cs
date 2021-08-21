@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ProtoBuf;
+using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using Path = System.IO.Path;
@@ -21,7 +22,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region Constructors
 
-        public ArchiveManager()
+        public ArchiveManager() : this(Locator.Current.GetService<IHashService>())
         {
 
         }
@@ -35,6 +36,10 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region properties
         [ProtoMember(1)] public override Dictionary<string, IGameArchive> Archives { get; set; } = new();
+
+        //[ProtoMember(2)] public string GameVersion { get; set; }
+
+        //[ProtoMember(3)] public List<string> CachedArchives { get; set; } = new();
 
         public Dictionary<string, IEnumerable<FileEntry>> GroupedFiles =>
             Archives.Values
@@ -57,6 +62,12 @@ namespace WolvenKit.RED4.CR2W.Archive
                 {
                     file.Archive = archive;
                     archive.Files.Add(file.Key, file);
+                    file.SetHashService(_hashService);
+                }
+                var deps = (archive as Archive).Index.Dependencies;
+                foreach (var d in deps)
+                {
+                    d.SetHashService(_hashService);
                 }
             }
 
@@ -131,9 +142,9 @@ namespace WolvenKit.RED4.CR2W.Archive
                 return;
             }
 
-            var bundle = Red4ParserServiceExtensions.ReadArchive(filename, _hashService);
+            var archive = Red4ParserServiceExtensions.ReadArchive(filename, _hashService);
 
-            foreach (var (key, value) in bundle.Files)
+            foreach (var (key, value) in archive.Files)
             {
                 // add new key if the file isn't already in another bundle
                 if (!Items.ContainsKey(key))
@@ -147,8 +158,8 @@ namespace WolvenKit.RED4.CR2W.Archive
                 }
             }
 
-
-            Archives.Add(bundle.ArchiveAbsolutePath, bundle);
+            Archives.Add(archive.ArchiveAbsolutePath, archive);
+            //CachedArchives.Add(archive.Name);
         }
 
         /// <summary>

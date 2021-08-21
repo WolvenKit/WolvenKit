@@ -48,9 +48,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<gameObject> _whoOpened;
 		private CBool _openedUsingForce;
 		private CBool _illegalOpen;
+		private CName _componentName;
 		private wCHandle<PlayerPuppet> _playerInWorkspot;
 
-		[Ordinal(96)] 
+		[Ordinal(97)] 
 		[RED("animationController")] 
 		public CHandle<entAnimationControllerComponent> AnimationController
 		{
@@ -58,7 +59,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animationController, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(98)] 
 		[RED("triggerComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> TriggerComponent
 		{
@@ -66,7 +67,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _triggerComponent, value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(99)] 
 		[RED("triggerSideOne")] 
 		public CHandle<gameStaticTriggerAreaComponent> TriggerSideOne
 		{
@@ -74,7 +75,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _triggerSideOne, value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(100)] 
 		[RED("triggerSideTwo")] 
 		public CHandle<gameStaticTriggerAreaComponent> TriggerSideTwo
 		{
@@ -82,7 +83,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _triggerSideTwo, value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(101)] 
 		[RED("offMeshConnectionComponent")] 
 		public CHandle<AIOffMeshConnectionComponent> OffMeshConnectionComponent
 		{
@@ -90,7 +91,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _offMeshConnectionComponent, value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(102)] 
 		[RED("strongSoloFrame")] 
 		public CHandle<entMeshComponent> StrongSoloFrame
 		{
@@ -98,7 +99,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _strongSoloFrame, value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(103)] 
 		[RED("terminalNetrunner1")] 
 		public CHandle<entMeshComponent> TerminalNetrunner1
 		{
@@ -106,7 +107,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _terminalNetrunner1, value);
 		}
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("terminalNetrunner2")] 
 		public CHandle<entMeshComponent> TerminalNetrunner2
 		{
@@ -114,7 +115,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _terminalNetrunner2, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("terminalTechie1")] 
 		public CHandle<entMeshComponent> TerminalTechie1
 		{
@@ -122,7 +123,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _terminalTechie1, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("terminalTechie2")] 
 		public CHandle<entMeshComponent> TerminalTechie2
 		{
@@ -130,7 +131,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _terminalTechie2, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("ledTechie1")] 
 		public CHandle<gameLightComponent> LedTechie1
 		{
@@ -138,7 +139,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ledTechie1, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("ledTechie2")] 
 		public CHandle<gameLightComponent> LedTechie2
 		{
@@ -146,7 +147,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ledTechie2, value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("ledNetrunner1")] 
 		public CHandle<gameLightComponent> LedNetrunner1
 		{
@@ -154,7 +155,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ledNetrunner1, value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(110)] 
 		[RED("ledNetrunner2")] 
 		public CHandle<gameLightComponent> LedNetrunner2
 		{
@@ -162,7 +163,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ledNetrunner2, value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(111)] 
 		[RED("led1")] 
 		public CHandle<gameLightComponent> Led1
 		{
@@ -170,7 +171,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _led1, value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(112)] 
 		[RED("led2")] 
 		public CHandle<gameLightComponent> Led2
 		{
@@ -178,7 +179,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _led2, value);
 		}
 
-		[Ordinal(112)] 
+		[Ordinal(113)] 
 		[RED("ledHandle1")] 
 		public CHandle<gameLightComponent> LedHandle1
 		{
@@ -186,7 +187,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ledHandle1, value);
 		}
 
-		[Ordinal(113)] 
+		[Ordinal(114)] 
 		[RED("ledHandle2")] 
 		public CHandle<gameLightComponent> LedHandle2
 		{
@@ -194,7 +195,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ledHandle2, value);
 		}
 
-		[Ordinal(114)] 
+		[Ordinal(115)] 
 		[RED("ledHandle1a")] 
 		public CHandle<gameLightComponent> LedHandle1a
 		{
@@ -202,7 +203,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ledHandle1a, value);
 		}
 
-		[Ordinal(115)] 
+		[Ordinal(116)] 
 		[RED("ledHandle2a")] 
 		public CHandle<gameLightComponent> LedHandle2a
 		{
@@ -210,7 +211,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ledHandle2a, value);
 		}
 
-		[Ordinal(116)] 
+		[Ordinal(117)] 
 		[RED("occluder")] 
 		public CHandle<entIPlacedComponent> Occluder
 		{
@@ -218,7 +219,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _occluder, value);
 		}
 
-		[Ordinal(117)] 
+		[Ordinal(118)] 
 		[RED("portalLight1")] 
 		public CHandle<gameLightComponent> PortalLight1
 		{
@@ -226,7 +227,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _portalLight1, value);
 		}
 
-		[Ordinal(118)] 
+		[Ordinal(119)] 
 		[RED("portalLight2")] 
 		public CHandle<gameLightComponent> PortalLight2
 		{
@@ -234,7 +235,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _portalLight2, value);
 		}
 
-		[Ordinal(119)] 
+		[Ordinal(120)] 
 		[RED("portalLight3")] 
 		public CHandle<gameLightComponent> PortalLight3
 		{
@@ -242,7 +243,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _portalLight3, value);
 		}
 
-		[Ordinal(120)] 
+		[Ordinal(121)] 
 		[RED("portalLight4")] 
 		public CHandle<gameLightComponent> PortalLight4
 		{
@@ -250,7 +251,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _portalLight4, value);
 		}
 
-		[Ordinal(121)] 
+		[Ordinal(122)] 
 		[RED("playerBlocker")] 
 		public CHandle<entColliderComponent> PlayerBlocker
 		{
@@ -258,7 +259,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerBlocker, value);
 		}
 
-		[Ordinal(122)] 
+		[Ordinal(123)] 
 		[RED("animFeatureDoor")] 
 		public CHandle<AnimFeatureDoor> AnimFeatureDoor
 		{
@@ -266,7 +267,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animFeatureDoor, value);
 		}
 
-		[Ordinal(123)] 
+		[Ordinal(124)] 
 		[RED("isVisuallyOpened")] 
 		public CBool IsVisuallyOpened
 		{
@@ -274,7 +275,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isVisuallyOpened, value);
 		}
 
-		[Ordinal(124)] 
+		[Ordinal(125)] 
 		[RED("lastDoorSide")] 
 		public CInt32 LastDoorSide
 		{
@@ -282,7 +283,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _lastDoorSide, value);
 		}
 
-		[Ordinal(125)] 
+		[Ordinal(126)] 
 		[RED("bankToLoad_TEMP")] 
 		public CString BankToLoad_TEMP
 		{
@@ -290,7 +291,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bankToLoad_TEMP, value);
 		}
 
-		[Ordinal(126)] 
+		[Ordinal(127)] 
 		[RED("colors")] 
 		public LedColors Colors
 		{
@@ -298,7 +299,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _colors, value);
 		}
 
-		[Ordinal(127)] 
+		[Ordinal(128)] 
 		[RED("activeSkillcheckLights")] 
 		public CArray<CHandle<gameLightComponent>> ActiveSkillcheckLights
 		{
@@ -306,7 +307,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _activeSkillcheckLights, value);
 		}
 
-		[Ordinal(128)] 
+		[Ordinal(129)] 
 		[RED("allActiveLights")] 
 		public CArray<CHandle<gameLightComponent>> AllActiveLights
 		{
@@ -314,7 +315,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _allActiveLights, value);
 		}
 
-		[Ordinal(129)] 
+		[Ordinal(130)] 
 		[RED("closingAnimationLength")] 
 		public CFloat ClosingAnimationLength
 		{
@@ -322,7 +323,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _closingAnimationLength, value);
 		}
 
-		[Ordinal(130)] 
+		[Ordinal(131)] 
 		[RED("automaticCloseDelay")] 
 		public CFloat AutomaticCloseDelay
 		{
@@ -330,7 +331,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _automaticCloseDelay, value);
 		}
 
-		[Ordinal(131)] 
+		[Ordinal(132)] 
 		[RED("doorOpeningType")] 
 		public CEnum<EDoorOpeningType> DoorOpeningType
 		{
@@ -338,7 +339,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _doorOpeningType, value);
 		}
 
-		[Ordinal(132)] 
+		[Ordinal(133)] 
 		[RED("animationType")] 
 		public CEnum<EAnimationType> AnimationType
 		{
@@ -346,7 +347,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animationType, value);
 		}
 
-		[Ordinal(133)] 
+		[Ordinal(134)] 
 		[RED("doorTriggerSide")] 
 		public CEnum<EDoorTriggerSide> DoorTriggerSide
 		{
@@ -354,7 +355,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _doorTriggerSide, value);
 		}
 
-		[Ordinal(134)] 
+		[Ordinal(135)] 
 		[RED("whoOpened")] 
 		public wCHandle<gameObject> WhoOpened
 		{
@@ -362,7 +363,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _whoOpened, value);
 		}
 
-		[Ordinal(135)] 
+		[Ordinal(136)] 
 		[RED("openedUsingForce")] 
 		public CBool OpenedUsingForce
 		{
@@ -370,7 +371,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _openedUsingForce, value);
 		}
 
-		[Ordinal(136)] 
+		[Ordinal(137)] 
 		[RED("illegalOpen")] 
 		public CBool IllegalOpen
 		{
@@ -378,7 +379,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _illegalOpen, value);
 		}
 
-		[Ordinal(137)] 
+		[Ordinal(138)] 
+		[RED("componentName")] 
+		public CName ComponentName
+		{
+			get => GetProperty(ref _componentName);
+			set => SetProperty(ref _componentName, value);
+		}
+
+		[Ordinal(139)] 
 		[RED("playerInWorkspot")] 
 		public wCHandle<PlayerPuppet> PlayerInWorkspot
 		{

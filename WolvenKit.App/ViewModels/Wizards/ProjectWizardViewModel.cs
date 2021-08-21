@@ -1,39 +1,38 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Reactive;
 using System.Windows.Input;
 using System.Windows.Media;
-using Catel.MVVM;
-using Catel.Services;
+using Microsoft.WindowsAPICodePack.Dialogs;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
+using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.Functionality.Commands;
 
 namespace WolvenKit.ViewModels.Wizards
 {
-    public class ProjectWizardViewModel : ViewModelBase
+    public class ProjectWizardViewModel : DialogViewModel
     {
         #region Fields
 
-        private readonly ISelectDirectoryService _selectDirectoryService;
-
         public const string WitcherGameName = "Witcher 3";
         public const string CyberpunkGameName = "Cyberpunk 2077";
-
-
 
         #endregion Fields
 
         #region Constructors
 
-        public ProjectWizardViewModel(
-            ISelectDirectoryService selectDirectoryService
-            ) : base(null)
+        public ProjectWizardViewModel()
         {
-            _selectDirectoryService = selectDirectoryService;
-
+            Title = "Project Wizard";
 
 
             OpenProjectPathCommand = new RelayCommand(ExecuteOpenProjectPath, CanOpenProjectPath);
-            FinishCommand = new RelayCommand(ExecuteFinish, CanFinish);
-            CancelCommand = new RelayCommand(ExecuteCancel, CanCancel);
+
+            CloseCommand = ReactiveCommand.Create(() => { });
+            OkCommand = ReactiveCommand.Create(() => { }, CanExecute);
+            CancelCommand = ReactiveCommand.Create(() => { });
 
             ProjectType = new ObservableCollection<string> {"Cyberpunk 2077"};
             //ProjectType.Add("Witcher 3");
@@ -41,59 +40,29 @@ namespace WolvenKit.ViewModels.Wizards
 
         #endregion Constructors
 
-        public ICommand OpenProjectPathCommand { get; private set; }
-        public ICommand FinishCommand { get; private set; }
-        public ICommand CancelCommand { get; private set; }
-
-        private bool CanCancel() => true;
-
-        private void ExecuteCancel() => this.CancelAndCloseViewModelAsync();
+        public sealed override ReactiveCommand<Unit, Unit> CloseCommand { get; set; }
+        public sealed override ReactiveCommand<Unit, Unit> CancelCommand { get; set; }
+        public sealed override ReactiveCommand<Unit, Unit> OkCommand { get; set; }
 
 
-        private bool CanFinish() => AllFieldsValid;
-
-        private void ExecuteFinish() => this.SaveAndCloseViewModelAsync();
-
-
-        private bool CanOpenProjectPath() => true;
-
-        private async void ExecuteOpenProjectPath()
-        {
-            var result = await _selectDirectoryService.DetermineDirectoryAsync(
-                new DetermineDirectoryContext()
-            );
-            if (result.Result)
-            {
-                ProjectPath = result.DirectoryName;
-            }
-        }
-
-        
         #region Properties
 
-        public string ProjectName { get; set; }
-        public string ProjectPath { get; set; }
-        public ObservableCollection<string> ProjectType { get; set; }
+        public sealed override string Title { get; set; }
 
+        [Reactive] public string ProjectName { get; set; }
+        [Reactive] public string ProjectPath { get; set; }
+        [Reactive] public ObservableCollection<string> ProjectType { get; set; }
+
+        private IObservable<bool> CanExecute =>
+            this.WhenAnyValue(
+                x => x.AllFieldsValid,
+                (b) => b == true
+            );
 
         /// <summary>
         /// Gets/Sets if all the fields are valid.
         /// </summary>
-        public bool AllFieldsValid
-        {
-            get => _allFieldsValid;
-            set
-            {
-                if (_allFieldsValid != value)
-                {
-                    var oldValue = _allFieldsValid;
-                    _allFieldsValid = value;
-                    RaisePropertyChanged(() => AllFieldsValid, oldValue, value);
-                }
-            }
-        }
-
-        private bool _allFieldsValid;
+        [Reactive] public bool AllFieldsValid { get; set; }
 
         ///// <summary>
         ///// Gets/Sets the author's profile image brush.
@@ -106,5 +75,39 @@ namespace WolvenKit.ViewModels.Wizards
         //public string ProfileImageBrushPath { get; set; }
 
         #endregion Properties
+
+        public ICommand OpenProjectPathCommand { get; private set; }
+
+
+
+        private bool CanOpenProjectPath() => true;
+
+        private void ExecuteOpenProjectPath()
+        {
+            var dlg = new CommonOpenFileDialog
+            {
+                AllowNonFileSystemItems = false,
+                Multiselect = false,
+                IsFolderPicker = true,
+                Title = "Select the WolvenKit project folder"
+            };
+            //dlg.Filters.Add(new CommonFileDialogFilter("Cyberpunk 2077 Project", "*.cpmodproj"));
+
+            if (dlg.ShowDialog() != CommonFileDialogResult.Ok)
+            {
+                return;
+            }
+
+            var result = dlg.FileName;
+            if (string.IsNullOrEmpty(result))
+            {
+                return;
+            }
+
+            ProjectPath = result;
+        }
+
+        
+
     }
 }

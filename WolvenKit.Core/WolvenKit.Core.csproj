@@ -13,10 +13,11 @@
       <RepositoryUrl>https://github.com/WolvenKit/Wolven-kit</RepositoryUrl>
       <RepositoryType>git</RepositoryType>
       <PackageTags>wolvenkit, witcher3, cyberpunk2077</PackageTags>
-      <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+      <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
       <Version>1.2.3</Version>
       <PackageOutputPath>./nupkg</PackageOutputPath>
       <DebugType>embedded</DebugType>
+      <Platforms>x64</Platforms>
 
   </PropertyGroup>
 
@@ -24,11 +25,11 @@
         <PackageReference Include="DynamicData" Version="7.2.1" />
         <PackageReference Include="FastMember" Version="1.5.0" />
         <PackageReference Include="DotNetHelper.FastMember.Extension" Version="2.0.0" />
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.10.0" />
         <PackageReference Include="CsvHelper" Version="27.1.1" />
         <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
         <PackageReference Include="protobuf-net.Core" Version="3.0.101" />
         <PackageReference Include="ReactiveUI" Version="14.1.1" />
+        <PackageReference Include="semver" Version="2.0.6" />
         <PackageReference Include="System.Reflection.MetadataLoadContext" Version="5.0.1" />
     </ItemGroup>
 

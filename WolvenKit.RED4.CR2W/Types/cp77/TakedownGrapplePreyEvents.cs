@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CBool _isGrappleReactionVOPlayed;
 
-		[Ordinal(1)] 
+		[Ordinal(4)] 
 		[RED("isGrappleReactionVOPlayed")] 
 		public CBool IsGrappleReactionVOPlayed
 		{

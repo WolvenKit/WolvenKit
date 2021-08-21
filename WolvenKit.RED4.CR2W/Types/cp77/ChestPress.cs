@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<AnimFeature_ChestPress> _animFeatureData;
 		private CName _animFeatureDataName;
 
-		[Ordinal(96)] 
+		[Ordinal(97)] 
 		[RED("animFeatureData")] 
 		public CHandle<AnimFeature_ChestPress> AnimFeatureData
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animFeatureData, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(98)] 
 		[RED("animFeatureDataName")] 
 		public CName AnimFeatureDataName
 		{

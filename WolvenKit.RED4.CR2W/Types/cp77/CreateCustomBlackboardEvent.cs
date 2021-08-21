@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class CreateCustomBlackboardEvent : redEvent
 	{
 		private CHandle<CustomBlackboardDef> _blackboardDef;
-		private CHandle<gameIBlackboard> _blackboard;
+		private wCHandle<gameIBlackboard> _blackboard;
 
 		[Ordinal(0)] 
 		[RED("blackboardDef")] 
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(1)] 
 		[RED("blackboard")] 
-		public CHandle<gameIBlackboard> Blackboard
+		public wCHandle<gameIBlackboard> Blackboard
 		{
 			get => GetProperty(ref _blackboard);
 			set => SetProperty(ref _blackboard, value);

@@ -7,7 +7,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class EvaluateMinigame : redEvent
 	{
-		private CHandle<gameIBlackboard> _minigameBB;
+		private wCHandle<gameIBlackboard> _minigameBB;
 		private TweakDBID _reward;
 		private CString _journalEntry;
 		private CName _fact;
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(0)] 
 		[RED("minigameBB")] 
-		public CHandle<gameIBlackboard> MinigameBB
+		public wCHandle<gameIBlackboard> MinigameBB
 		{
 			get => GetProperty(ref _minigameBB);
 			set => SetProperty(ref _minigameBB, value);

@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class NPCDetectingPlayerPrereqState : gamePrereqState
 	{
 		private wCHandle<gameObject> _owner;
-		private CUInt32 _listenerID;
+		private CHandle<redCallbackObject> _listenerID;
 
 		[Ordinal(0)] 
 		[RED("owner")] 
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(1)] 
 		[RED("listenerID")] 
-		public CUInt32 ListenerID
+		public CHandle<redCallbackObject> ListenerID
 		{
 			get => GetProperty(ref _listenerID);
 			set => SetProperty(ref _listenerID, value);

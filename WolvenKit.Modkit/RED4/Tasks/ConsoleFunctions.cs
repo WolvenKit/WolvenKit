@@ -42,7 +42,7 @@ namespace CP77Tools.Tasks
 
         private readonly IOptions<CommonImportArgs> _commonImportArgs;
         private readonly IOptions<XbmImportArgs> _xbmImportArgs;
-        private readonly IOptions<MeshImportArgs> _meshImportArgs;
+        private readonly IOptions<GltfImportArgs> _gltfImportArgs;
         private readonly IOptions<XbmExportArgs> _xbmExportArgs;
         private readonly IOptions<MeshExportArgs> _meshExportArgs;
         private readonly IOptions<MorphTargetExportArgs> _morphTargetExportArgs;
@@ -60,7 +60,7 @@ namespace CP77Tools.Tasks
 
             IOptions<CommonImportArgs> commonImportArgs,
             IOptions<XbmImportArgs> xbmImportArgs,
-            IOptions<MeshImportArgs> meshImportArgs,
+            IOptions<GltfImportArgs> gltfImportArgs,
             IOptions<XbmExportArgs> xbmExportArgs,
             IOptions<MeshExportArgs> meshExportArgs,
             IOptions<MorphTargetExportArgs> morphTargetExportArgs,
@@ -76,7 +76,7 @@ namespace CP77Tools.Tasks
 
             _commonImportArgs = commonImportArgs;
             _xbmImportArgs = xbmImportArgs;
-            _meshImportArgs = meshImportArgs;
+            _gltfImportArgs = gltfImportArgs;
             _wolvenkitFileService = wolvenkitFileService;
             _xbmExportArgs = xbmExportArgs;
             _meshExportArgs = meshExportArgs;

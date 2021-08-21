@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<ChangeMusicAction> _currentEvent;
 		private CHandle<ChangeMusicAction> _cachedEvent;
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("defaultAction")] 
 		public CInt32 DefaultAction
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _defaultAction, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("soundSystemSettings")] 
 		public CArray<SoundSystemSettings> SoundSystemSettings
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _soundSystemSettings, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("currentEvent")] 
 		public CHandle<ChangeMusicAction> CurrentEvent
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentEvent, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("cachedEvent")] 
 		public CHandle<ChangeMusicAction> CachedEvent
 		{

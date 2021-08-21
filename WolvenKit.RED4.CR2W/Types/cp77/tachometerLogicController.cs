@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _rpmValueWidget;
 		private inkRectangleWidgetReference _rpmGaugeForegroundWidget;
 		private CBool _scaleX;
-		private CUInt32 _rpmValueBBConnectionId;
+		private CHandle<redCallbackObject> _rpmValueBBConnectionId;
 		private wCHandle<gameIBlackboard> _vehBB;
 		private Vector2 _rpmGaugeMaxSize;
 		private CFloat _rpmMaxValue;
@@ -42,7 +42,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(4)] 
 		[RED("rpmValueBBConnectionId")] 
-		public CUInt32 RpmValueBBConnectionId
+		public CHandle<redCallbackObject> RpmValueBBConnectionId
 		{
 			get => GetProperty(ref _rpmValueBBConnectionId);
 			set => SetProperty(ref _rpmValueBBConnectionId, value);

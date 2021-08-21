@@ -9,8 +9,8 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private inkImageWidgetReference _lightStateImageWidget;
 		private inkImageWidgetReference _cautionStateImageWidget;
-		private CUInt32 _lightStateBBConnectionId;
-		private CUInt32 _cautionStateBBConnectionId;
+		private CHandle<redCallbackObject> _lightStateBBConnectionId;
+		private CHandle<redCallbackObject> _cautionStateBBConnectionId;
 		private wCHandle<gameIBlackboard> _vehBB;
 
 		[Ordinal(1)] 
@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(3)] 
 		[RED("lightStateBBConnectionId")] 
-		public CUInt32 LightStateBBConnectionId
+		public CHandle<redCallbackObject> LightStateBBConnectionId
 		{
 			get => GetProperty(ref _lightStateBBConnectionId);
 			set => SetProperty(ref _lightStateBBConnectionId, value);
@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(4)] 
 		[RED("cautionStateBBConnectionId")] 
-		public CUInt32 CautionStateBBConnectionId
+		public CHandle<redCallbackObject> CautionStateBBConnectionId
 		{
 			get => GetProperty(ref _cautionStateBBConnectionId);
 			set => SetProperty(ref _cautionStateBBConnectionId, value);

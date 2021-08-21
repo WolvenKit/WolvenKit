@@ -29,9 +29,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<CName> _gameplayRestrictions;
 		private wCHandle<gameIBlackboard> _blackboard;
 		private CHandle<UI_ComDeviceDef> _blackboardDef;
-		private CUInt32 _callInformationBBID;
-		private CUInt32 _statusNameBBID;
-		private CUInt32 _minimizedListener;
+		private CHandle<redCallbackObject> _callInformationBBID;
+		private CHandle<redCallbackObject> _statusNameBBID;
+		private CHandle<redCallbackObject> _minimizedListener;
 		private gameDelayID _delayedCallbackId;
 		private gameDelayID _delayedTimeoutCallbackId;
 		private CFloat _timeoutPeroid;
@@ -220,7 +220,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(31)] 
 		[RED("CallInformationBBID")] 
-		public CUInt32 CallInformationBBID
+		public CHandle<redCallbackObject> CallInformationBBID
 		{
 			get => GetProperty(ref _callInformationBBID);
 			set => SetProperty(ref _callInformationBBID, value);
@@ -228,7 +228,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(32)] 
 		[RED("StatusNameBBID")] 
-		public CUInt32 StatusNameBBID
+		public CHandle<redCallbackObject> StatusNameBBID
 		{
 			get => GetProperty(ref _statusNameBBID);
 			set => SetProperty(ref _statusNameBBID, value);
@@ -236,7 +236,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(33)] 
 		[RED("MinimizedListener")] 
-		public CUInt32 MinimizedListener
+		public CHandle<redCallbackObject> MinimizedListener
 		{
 			get => GetProperty(ref _minimizedListener);
 			set => SetProperty(ref _minimizedListener, value);

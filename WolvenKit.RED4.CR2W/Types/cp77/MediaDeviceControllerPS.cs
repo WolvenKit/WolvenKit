@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CInt32 _amountOfStations;
 		private CInt32 _activeStation;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("previousStation")] 
 		public CInt32 PreviousStation
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _previousStation, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("activeChannelName")] 
 		public CString ActiveChannelName
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _activeChannelName, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("dataInitialized")] 
 		public CBool DataInitialized
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dataInitialized, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("amountOfStations")] 
 		public CInt32 AmountOfStations
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _amountOfStations, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("activeStation")] 
 		public CInt32 ActiveStation
 		{

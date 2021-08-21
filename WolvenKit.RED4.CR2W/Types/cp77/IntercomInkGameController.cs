@@ -9,10 +9,10 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private inkWidgetReference _actionsList;
 		private wCHandle<inkVideoWidget> _mainDisplayWidget;
-		private CHandle<CallActionWidgetController> _buttonRef;
+		private wCHandle<CallActionWidgetController> _buttonRef;
 		private CEnum<IntercomStatus> _state;
-		private CUInt32 _onUpdateStatusListener;
-		private CUInt32 _onGlitchingStateChangedListener;
+		private CHandle<redCallbackObject> _onUpdateStatusListener;
+		private CHandle<redCallbackObject> _onGlitchingStateChangedListener;
 
 		[Ordinal(16)] 
 		[RED("actionsList")] 
@@ -32,7 +32,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(18)] 
 		[RED("buttonRef")] 
-		public CHandle<CallActionWidgetController> ButtonRef
+		public wCHandle<CallActionWidgetController> ButtonRef
 		{
 			get => GetProperty(ref _buttonRef);
 			set => SetProperty(ref _buttonRef, value);
@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(20)] 
 		[RED("onUpdateStatusListener")] 
-		public CUInt32 OnUpdateStatusListener
+		public CHandle<redCallbackObject> OnUpdateStatusListener
 		{
 			get => GetProperty(ref _onUpdateStatusListener);
 			set => SetProperty(ref _onUpdateStatusListener, value);
@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(21)] 
 		[RED("onGlitchingStateChangedListener")] 
-		public CUInt32 OnGlitchingStateChangedListener
+		public CHandle<redCallbackObject> OnGlitchingStateChangedListener
 		{
 			get => GetProperty(ref _onGlitchingStateChangedListener);
 			set => SetProperty(ref _onGlitchingStateChangedListener, value);

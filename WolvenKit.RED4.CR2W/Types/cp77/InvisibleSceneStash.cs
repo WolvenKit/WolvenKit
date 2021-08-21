@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<CEnum<gamedataEquipmentArea>> _itemSlots;
 		private CHandle<EquipmentSystemPlayerData> _equipmentData;
 
-		[Ordinal(86)] 
+		[Ordinal(87)] 
 		[RED("itemSlots")] 
 		public CArray<CEnum<gamedataEquipmentArea>> ItemSlots
 		{
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _itemSlots, value);
 		}
 
-		[Ordinal(87)] 
+		[Ordinal(88)] 
 		[RED("equipmentData")] 
 		public CHandle<EquipmentSystemPlayerData> EquipmentData
 		{

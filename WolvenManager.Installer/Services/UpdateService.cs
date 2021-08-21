@@ -9,6 +9,8 @@ using System.Reactive.Linq;
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Semver;
+using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Core;
 using WolvenKit.Core.Services;
@@ -24,11 +26,8 @@ namespace WolvenManager.Installer.Services
         private readonly ILoggerService _loggerService;
         private readonly IProgressService<double> _progressService;
 
-        
-        
-
-
-        private string _remoteUri;
+        private EUpdateChannel _updateChannel;
+        private string[] _remoteUris;
         private string _assemblyName;
         private Action<FileInfo, bool> _updateAction;
 
@@ -44,6 +43,8 @@ namespace WolvenManager.Installer.Services
             _loggerService = loggerService;
             _notificationService = notificationService;
             _progressService = progressService;
+
+            _updateChannel = EUpdateChannel.Stable;
         }
 
         #region properties
@@ -55,22 +56,26 @@ namespace WolvenManager.Installer.Services
 
         #region methods
 
+        public void SetUpdateChannel(EUpdateChannel channel) => _updateChannel = channel;
+
         /// <summary>
         /// Initializes the Updatemanager
         /// </summary>
-        /// <param name="updateUrl">full url to where the manifest is located</param>
+        /// <param name="updateUrls">full url to where the manifest is located</param>
         /// <param name="assemblyName">loaded assembly name to check the version against</param>
         /// <param name="updateAction">action to execute for managed installs</param>
-        public void Init(string updateUrl, string assemblyName, Action<FileInfo, bool> updateAction)
+        public void Init(string[] updateUrls, string assemblyName, Action<FileInfo, bool> updateAction)
         {
-            _remoteUri = updateUrl;
+            _remoteUris = updateUrls;
             _assemblyName = assemblyName;
             _updateAction = updateAction;
 
             _isInitialized = true;
         }
 
-        private Uri GetManifestUri() => new($"{_remoteUri.TrimEnd('/')}/{Constants.Manifest}" );
+        private string GetUpdateUri() => _remoteUris[(int)_updateChannel];
+
+        private Uri GetManifestUri() => new($"{GetUpdateUri().TrimEnd('/')}/{Constants.Manifest}");
 
         private static bool IsManaged() => File.Exists(Path.GetFullPath(Constants.ManagedRegistration));
 
@@ -80,6 +85,8 @@ namespace WolvenManager.Installer.Services
         /// <returns></returns>
         public async Task CheckForUpdatesAsync()
         {
+            var manifestUri = GetManifestUri();
+
             if (!_isInitialized)
             {
                 return;
@@ -88,7 +95,7 @@ namespace WolvenManager.Installer.Services
             // ping
             try
             {
-                var host = GetManifestUri().Host;
+                var host = manifestUri.Host;
                 var reply = new Ping().Send(host, 3000);
                 if (reply.Status != IPStatus.Success)
                 {
@@ -104,13 +111,19 @@ namespace WolvenManager.Installer.Services
 
             // check versions
             var http = new HttpClient();
-            var manifestJson = await http.GetStringAsync(GetManifestUri());
+
+            var manifestJson = await http.GetStringAsync(manifestUri);
+            if (string.IsNullOrEmpty(manifestJson))
+            {
+                return;
+            }
             var manifest = JsonSerializer.Deserialize<Manifest>(manifestJson);
             if (manifest == null)
             {
                 return;
             }
-            var latestVersion = new Version(manifest.Version);
+
+            var latestVersion = SemVersion.Parse(manifest.Version);
             var myVersion = CommonFunctions.GetAssemblyVersion(_assemblyName);
 
             if (latestVersion > myVersion)
@@ -170,9 +183,11 @@ namespace WolvenManager.Installer.Services
 
         private async Task DownloadUpdateAsync(Manifest manifest, EIncludedFiles type)
         {
-            var latestVersion = new Version(manifest.Version);
+            _notificationService.ShowDesktopNotification("test", ENotificationType.Info);
 
-            _notificationService.Ask($"Update available. Would you like to update to the latest version {latestVersion}?",
+            var latestVersion = manifest.Version;
+
+            _notificationService.AskInDesktop($"Update available. Would you like to update to the latest version {latestVersion}?",
                 delegate(bool b)
                 {
                     if (!b)
@@ -203,7 +218,7 @@ namespace WolvenManager.Installer.Services
                                 OnDownloadCompletedCallback(c, manifest, type);
                             });
 
-                        var uri = new Uri($"{_remoteUri.TrimEnd('/')}/{manifest.Get(type).Key}");
+                        var uri = new Uri($"{GetUpdateUri().TrimEnd('/')}/{manifest.Get(type).Key}");
                         var physicalPath = Path.Combine(Path.GetTempPath(), manifest.Get(type).Key);
                         wc.DownloadFileAsync(uri, physicalPath);
                     }
@@ -254,7 +269,7 @@ namespace WolvenManager.Installer.Services
             IsUpdateReadyToInstall = true;
 
             // ask user to restart
-            _notificationService.Ask($"Update ready to install - restart?", delegate(bool b)
+            _notificationService.AskInDesktop($"Update ready to install - restart?", delegate(bool b)
             {
                 if (!b)
                 {

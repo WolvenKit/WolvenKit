@@ -1,9 +1,10 @@
-<catel:UserControl
+<reactiveUi:ReactiveUserControl
+    x:TypeArguments="shell:RibbonViewModel"
     x:Class="WolvenKit.Views.Shell.RibbonView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:HomeView="clr-namespace:WolvenKit.Views.HomePage"
-    xmlns:catel="http://schemas.catelproject.com"
+    xmlns:reactiveUi="http://reactiveui.net"
     xmlns:feather="clr-namespace:Feather.Controls;assembly=Feather.Controls"
     xmlns:fluent="urn:fluent-ribbon"
     xmlns:hc="https://handyorg.github.io/handycontrol"
@@ -16,6 +17,7 @@
     xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:views1="clr-namespace:WolvenKit.MVVM.Views.Shell.Backstage"
+    xmlns:shell="clr-namespace:WolvenKit.ViewModels.Shell;assembly=WolvenKit.App"
     Margin="0,33,0,0"
     Panel.ZIndex="-15">
 
@@ -101,17 +103,21 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid Background="{DynamicResource ContentBackgroundAlt2}">
+    <Grid
+        Background="{DynamicResource ContentBackgroundAlt2}">
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        
         <fluent:Ribbon
             x:Name="ribbon"
             Grid.Row="0"
             Margin="0,0,0,0"
             Panel.ZIndex="0"
             Visibility="Collapsed">
+            
             <!--  StartScreen  -->
             <fluent:Ribbon.StartScreen>
                 <fluent:StartScreen
@@ -121,6 +127,7 @@
                     <HomeView:HomePageView x:Name="HMPV" />
                 </fluent:StartScreen>
             </fluent:Ribbon.StartScreen>
+            
         </fluent:Ribbon>
 
         <syncfusion:Ribbon
@@ -286,6 +293,7 @@
                         </syncfusion:RibbonBar>
                     </syncfusion:RibbonTab>
                 </syncfusion:ContextTabGroup>
+                
                 <!--  Contextual Project Explorer group  -->
                 <syncfusion:ContextTabGroup
                     x:Name="projectexplorercontextab"
@@ -304,9 +312,8 @@
                             Header="File">
                             <!--  Open File Button  -->
                             <syncfusion:RibbonButton
-                                x:Name="OpenFileContext"
-                                Command="{catel:CommandManagerBinding Application.OpenFile}"
-                                CommandParameter="{Binding SelectedItem}"
+                                x:Name="CPEOpenFileButton"
+                                Command="{Binding OpenFileCommand}"
                                 IconStretch="Fill"
                                 IconType="Icon"
                                 Label="Open"
@@ -566,10 +573,12 @@
                         </syncfusion:RibbonBar>
                     </syncfusion:RibbonTab>
                 </syncfusion:ContextTabGroup>
+
             </syncfusion:Ribbon.ContextTabGroups>
 
             <!--  Recent Projects Button  -->
             <syncfusion:Ribbon.ApplicationMenu>
+                
                 <syncfusion:ApplicationMenu
                     Name="_applicationMenu"
                     Width="38"
@@ -580,6 +589,7 @@
                     IsPopupOpen="False">
 
                     <syncfusion:RibbonMenuGroup Header="Project">
+                        
                         <!--  Recent Projects Button  -->
                         <ToggleButton
                             x:Name="FileDrawer2"
@@ -600,9 +610,10 @@
                                 <TextBlock Margin="2,0,0,0" Text="Recent Projects" />
                             </StackPanel>
                         </ToggleButton>
+                        
                         <!--  Open Project Button  -->
                         <syncfusion:RibbonButton
-                            Command="{catel:CommandManagerBinding Application.OpenProject}"
+                            x:Name="AppMenuOpenProjectButton"
                             IconStretch="Fill"
                             IconType="Icon"
                             Label="Open Project"
@@ -622,7 +633,7 @@
 
                         <!--  New Project Button  -->
                         <syncfusion:RibbonButton
-                            Command="{catel:CommandManagerBinding Application.NewProject}"
+                            x:Name="AppMenuNewProjectButton"
                             IconStretch="Fill"
                             IconType="Icon"
                             Label="New Project"
@@ -640,7 +651,7 @@
                         </syncfusion:RibbonButton>
                         <!--  Pack Project Button  -->
                         <syncfusion:RibbonButton
-                            Command="{catel:CommandManagerBinding Application.PackMod}"
+                            x:Name="AppMenuPackProjectButton"
                             IconStretch="Fill"
                             IconType="Icon"
                             Label="Pack Project"
@@ -658,7 +669,7 @@
                         </syncfusion:RibbonButton>
 
                         <!--  Publish Project Button  -->
-                        <syncfusion:RibbonButton
+                        <!--<syncfusion:RibbonButton
                             Command="{catel:CommandManagerBinding Application.PublishProject}"
                             IconStretch="Fill"
                             IconType="Icon"
@@ -674,9 +685,9 @@
                                         Kind="CloudUploadOutline" />
                                 </DataTemplate>
                             </syncfusion:RibbonButton.IconTemplate>
-                        </syncfusion:RibbonButton>
+                        </syncfusion:RibbonButton>-->
                         <!--  Backup Project Button  -->
-                        <syncfusion:RibbonButton
+                        <!--<syncfusion:RibbonButton
                             Command="{catel:CommandManagerBinding Application.BackupMod}"
                             IconStretch="Fill"
                             IconType="Icon"
@@ -692,10 +703,10 @@
                                         Kind="Archive" />
                                 </DataTemplate>
                             </syncfusion:RibbonButton.IconTemplate>
-                        </syncfusion:RibbonButton>
+                        </syncfusion:RibbonButton>-->
 
                         <!--  Package installer Button  -->
-                        <syncfusion:RibbonButton
+                        <!--<syncfusion:RibbonButton
                             Command="{catel:CommandManagerBinding Application.ShowPackageInstaller}"
                             IconStretch="Fill"
                             IconType="Icon"
@@ -711,14 +722,14 @@
                                         Kind="Package" />
                                 </DataTemplate>
                             </syncfusion:RibbonButton.IconTemplate>
-                        </syncfusion:RibbonButton>
+                        </syncfusion:RibbonButton>-->
                     </syncfusion:RibbonMenuGroup>
 
-                    <syncfusion:RibbonMenuGroup Header="File" Visibility="Collapsed">
+                    <syncfusion:RibbonMenuGroup Header="File" Visibility="Visible">
 
                         <!--  New File Button  -->
                         <syncfusion:RibbonButton
-                            Command="{catel:CommandManagerBinding Application.NewFile}"
+                            x:Name="AppMenuNewFileButton"
                             IconStretch="Fill"
                             IconType="Icon"
                             Label="New File"
@@ -737,7 +748,7 @@
 
                         <!--  Save File Button  -->
                         <syncfusion:RibbonButton
-                            Command="{catel:CommandManagerBinding Application.SaveFile}"
+                            x:Name="AppMenuSaveFileButton"
                             IconStretch="Fill"
                             IconType="Icon"
                             Label="Save File"
@@ -756,7 +767,7 @@
 
                         <!--  Save All Button  -->
                         <syncfusion:RibbonButton
-                            Command="{catel:CommandManagerBinding Application.SaveAll}"
+                            x:Name="AppMenuSaveAllFileButton"
                             IconStretch="Fill"
                             IconType="Icon"
                             Label="Save All"
@@ -772,21 +783,26 @@
                                 </DataTemplate>
                             </syncfusion:RibbonButton.IconTemplate>
                         </syncfusion:RibbonButton>
+
                     </syncfusion:RibbonMenuGroup>
                 </syncfusion:ApplicationMenu>
+                
             </syncfusion:Ribbon.ApplicationMenu>
 
             <!--  GENERAL TAB  -->
-            <syncfusion:RibbonTab Caption="GENERAL" IsChecked="True">
+            <syncfusion:RibbonTab
+                Caption="GENERAL"
+                IsChecked="True">
 
                 <!--  Project bar  -->
                 <syncfusion:RibbonBar
                     Name="Mod"
                     Width="auto"
                     Header="Project">
+                    
                     <!--  Open Project Button  -->
                     <syncfusion:RibbonButton
-                        Command="{catel:CommandManagerBinding Application.OpenProject}"
+                        x:Name="GeneralOpenProjectButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Open Project"
@@ -806,7 +822,7 @@
 
                     <!--  New Project Button  -->
                     <syncfusion:RibbonButton
-                        Command="{catel:CommandManagerBinding Application.NewProject}"
+                        x:Name="GeneralNewProjectButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="New Project"
@@ -822,9 +838,10 @@
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>
+                    
                     <!--  Pack Project Button  -->
                     <syncfusion:RibbonButton
-                        Command="{catel:CommandManagerBinding Application.PackMod}"
+                        x:Name="GeneralPackProjectButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Pack Project"
@@ -842,7 +859,7 @@
                     </syncfusion:RibbonButton>
 
                     <!--  Publish Project Button  -->
-                    <syncfusion:RibbonButton
+                    <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.PublishProject}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -858,9 +875,9 @@
                                     Kind="CloudUploadOutline" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                    </syncfusion:RibbonButton>-->
                     <!--  Backup Project Button  -->
-                    <syncfusion:RibbonButton
+                    <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.BackupMod}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -876,10 +893,10 @@
                                     Kind="Archive" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                    </syncfusion:RibbonButton>-->
 
                     <!--  Package installer Button  -->
-                    <syncfusion:RibbonButton
+                    <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowPackageInstaller}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -895,17 +912,19 @@
                                     Kind="Package" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                    </syncfusion:RibbonButton>-->
                 </syncfusion:RibbonBar>
+                
                 <!--  File bar  -->
-                <syncfusion:RibbonBar
+                <syncfusion:RibbonBar Visibility="Visible"
                     Name="Filez"
                     Width="auto"
                     Header="File"
-                    Visibility="Collapsed">
+                    >
+                    
                     <!--  New File Button  -->
                     <syncfusion:RibbonButton
-                        Command="{catel:CommandManagerBinding Application.NewFile}"
+                        x:Name="GeneralNewFileButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="New File"
@@ -924,7 +943,7 @@
 
                     <!--  Save File Button  -->
                     <syncfusion:RibbonButton
-                        Command="{catel:CommandManagerBinding Application.SaveFile}"
+                        x:Name="GeneralSaveFileButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Save File"
@@ -943,7 +962,7 @@
 
                     <!--  Save All Button  -->
                     <syncfusion:RibbonButton
-                        Command="{catel:CommandManagerBinding Application.SaveAll}"
+                        x:Name="GeneralSaveAllButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Save All"
@@ -959,6 +978,7 @@
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>
+                    
                 </syncfusion:RibbonBar>
 
                 <!--  View bar  -->
@@ -969,7 +989,7 @@
 
                     <!--  Project Explorer Button  -->
                     <syncfusion:RibbonButton
-                        Command="{catel:CommandManagerBinding Application.ShowProjectExplorer}"
+                        x:Name="ViewProjectExplorerButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Project Explorer"
@@ -988,7 +1008,7 @@
 
                     <!--  Asset Browser Button  -->
                     <syncfusion:RibbonButton
-                        Command="{catel:CommandManagerBinding Application.ShowAssetBrowser}"
+                        x:Name="ViewAssetBrowserButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Asset Browser"
@@ -1007,7 +1027,7 @@
 
                     <!--  Properties Button  -->
                     <syncfusion:RibbonButton
-                        Command="{catel:CommandManagerBinding Application.ShowProperties}"
+                        x:Name="ViewPropertiesButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Properties"
@@ -1026,7 +1046,7 @@
 
                     <!--  Project Log Button  -->
                     <syncfusion:RibbonButton
-                        Command="{catel:CommandManagerBinding Application.ShowLog}"
+                        x:Name="ViewLogButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Log"
@@ -1043,18 +1063,23 @@
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>
                 </syncfusion:RibbonBar>
+
+                <!--  Preview bar  -->
                 <syncfusion:RibbonBar Header="Preview">
                     <syncfusion:RibbonCheckBox
                         x:Name="PrevFileInfo"
                         Content="Show File Preview"
                         IsChecked="{Binding canShowPrev, Mode=TwoWay}" />
                 </syncfusion:RibbonBar>
+                
             </syncfusion:RibbonTab>
+            
             <!--  EDITORS TAB  -->
-            <syncfusion:RibbonTab
+            <syncfusion:RibbonTab Visibility="Collapsed"
                 Caption="EDITORS"
                 IsChecked="False"
-                Visibility="Collapsed">
+                >
+                
                 <!--  Editors bar  -->
                 <syncfusion:RibbonBar
                     Name="Editors"
@@ -1062,7 +1087,7 @@
                     Header="Editors">
                     <!--  Code Editor Button  -->
                     <syncfusion:RibbonButton
-                        Command="{catel:CommandManagerBinding Application.ShowCodeEditor}"
+                        x:Name="ViewCodeEditorButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Code Editor"
@@ -1080,7 +1105,7 @@
                     </syncfusion:RibbonButton>
 
                     <!--  Visual Editor Button  -->
-                    <syncfusion:RibbonButton
+                    <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowVisualEditor}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1096,10 +1121,10 @@
                                     Kind="UiRadiosGrid" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                    </syncfusion:RibbonButton>-->
 
                     <!--  Journal Editor Button  -->
-                    <syncfusion:RibbonButton
+                    <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowJournalEditor}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1115,10 +1140,10 @@
                                     Kind="JournalCode" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                    </syncfusion:RibbonButton>-->
 
                     <!--  Hex Editor Button  -->
-                    <syncfusion:RibbonButton
+                    <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowHexEditor}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1134,10 +1159,10 @@
                                     Kind="Edit" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                    </syncfusion:RibbonButton>-->
 
                     <!--  CSV Editor Button  -->
-                    <syncfusion:RibbonButton
+                    <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowCsvEditor}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1153,10 +1178,10 @@
                                     Kind="TextIndentLeft" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                    </syncfusion:RibbonButton>-->
 
                     <!--  Bulk Editor Button  -->
-                    <syncfusion:RibbonButton
+                    <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowBulkEditor}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1172,53 +1197,37 @@
                                     Kind="Command" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                    </syncfusion:RibbonButton>-->
                 </syncfusion:RibbonBar>
+                
                 <!--  CP77 bar  -->
                 <syncfusion:RibbonBar
                     Name="CP77BarEditors"
                     Width="auto"
                     Header="Cyberpunk 2077" />
+                
                 <!--  TW3 bar  -->
                 <syncfusion:RibbonBar
                     Name="TW3BarEditors"
                     Width="auto"
                     Header="The Witcher 3" />
+                
             </syncfusion:RibbonTab>
+            
             <!--  TOOLS TAB  -->
-            <syncfusion:RibbonTab
+            <syncfusion:RibbonTab Visibility="Collapsed"
                 Caption="TOOLS"
                 IsChecked="False"
-                Visibility="Collapsed">
+                >
 
                 <!--  Tools bar  -->
-
                 <syncfusion:RibbonBar
                     Name="Tools"
                     Width="auto"
                     Header="Tools">
-                    <!--  Import Utility Button  -->
-                    <syncfusion:RibbonButton
-                        Command="{catel:CommandManagerBinding Application.ShowImportUtility}"
-                        IconStretch="Fill"
-                        IconType="Icon"
-                        Label="Import Utility"
-                        SizeForm="Large"
-                        Visibility="Collapsed">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconCodicons
-                                    Width="auto"
-                                    Height="auto"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Stretch"
-                                    Kind="Extensions" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
 
                     <!--  Audio Tool Button  -->
-                    <syncfusion:RibbonButton
+                    <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowAudioTool}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1235,10 +1244,10 @@
                                     Kind="Soundwave" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                    </syncfusion:RibbonButton>-->
 
                     <!--  Video Tool Button  -->
-                    <syncfusion:RibbonButton
+                    <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowVideoTool}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1254,10 +1263,10 @@
                                     Kind="CameraVideo" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                    </syncfusion:RibbonButton>-->
 
                     <!--  WCC Tool Button  -->
-                    <syncfusion:RibbonButton
+                    <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowWccTool}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1274,10 +1283,10 @@
                                     Kind="Thermometer" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                    </syncfusion:RibbonButton>-->
 
                     <!--  CR2W2Text Tool Button  -->
-                    <syncfusion:RibbonButton
+                    <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowCR2WToTextTool}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1294,9 +1303,9 @@
                                     Kind="FileEarmarkXFill" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                    </syncfusion:RibbonButton>-->
                     <!--  Importer Tool Button  -->
-                    <syncfusion:RibbonButton
+                    <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowImporterTool}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1313,9 +1322,9 @@
                                     Kind="ArrowDown" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                    </syncfusion:RibbonButton>-->
                     <!--  Anim Tool Button  -->
-                    <syncfusion:RibbonButton
+                    <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowAnimationTool}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1332,10 +1341,10 @@
                                     Kind="Stickies" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                    </syncfusion:RibbonButton>-->
 
                     <!--  Mimics  Tool Button  -->
-                    <syncfusion:RibbonButton
+                    <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowMimicsTool}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1352,10 +1361,10 @@
                                     Kind="Stickies" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                    </syncfusion:RibbonButton>-->
 
                     <!--  Game Debugger Tool Button  -->
-                    <syncfusion:RibbonButton
+                    <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowGameDebuggerTool}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1372,10 +1381,10 @@
                                     Kind="Debug" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                    </syncfusion:RibbonButton>-->
 
                     <!--  Menu Creator Tool Button  -->
-                    <syncfusion:RibbonButton
+                    <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowMenuCreatorTool}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1392,14 +1401,16 @@
                                     Kind="HddRack" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                    </syncfusion:RibbonButton>-->
                 </syncfusion:RibbonBar>
+                
                 <!--  CP77 bar  -->
                 <syncfusion:RibbonBar
                     Name="CP77BarTools"
                     Width="auto"
                     Header="Cyberpunk 2077"
                     Visibility="Collapsed" />
+                
                 <!--  TW3 bar  -->
                 <syncfusion:RibbonBar
                     Name="TW3BarTools"
@@ -1409,7 +1420,9 @@
             </syncfusion:RibbonTab>
 
             <!--  OPTIONS TAB  -->
-            <syncfusion:RibbonTab Caption="OPTIONS" IsChecked="False">
+            <syncfusion:RibbonTab
+                Caption="OPTIONS"
+                IsChecked="False">
 
                 <!--  Options bar  -->
                 <syncfusion:RibbonBar
@@ -1418,8 +1431,8 @@
                     Header="Options">
 
                     <!--  Settings Button  -->
-                    <syncfusion:RibbonButton
-                        Command="{catel:CommandManagerBinding Application.ShowSettings}"
+                    <!--<syncfusion:RibbonButton
+                        x:Name="OptionsShowSettingsButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Settings"
@@ -1434,7 +1447,7 @@
                                     Kind="Settings" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                    </syncfusion:RibbonButton>-->
 
                     <!--  Material Depot Settings Button  -->
                     <syncfusion:RibbonButton
@@ -1479,6 +1492,7 @@
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>
                 </syncfusion:RibbonBar>
+                
                 <!--  Help bar  -->
                 <syncfusion:RibbonBar
                     Name="Help"
@@ -1488,7 +1502,7 @@
 
                     <!--  BugReport Button  -->
                     <syncfusion:RibbonButton
-                        Command="{catel:CommandManagerBinding Application.BugReport}"
+                        x:Name="OptionsShowBugReportButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Bug Report"
@@ -1507,7 +1521,7 @@
 
                     <!--  Feedback Button  -->
                     <syncfusion:RibbonButton
-                        Command="{catel:CommandManagerBinding Application.ShowFeedback}"
+                        x:Name="OptionsShowFeedbackButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Feedback"
@@ -1525,7 +1539,7 @@
                     </syncfusion:RibbonButton>
 
                     <!--  About Button  -->
-                    <syncfusion:RibbonButton
+                    <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowAbout}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1542,12 +1556,15 @@
                                     Kind="Info" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                    </syncfusion:RibbonButton>-->
                 </syncfusion:RibbonBar>
+                
             </syncfusion:RibbonTab>
 
             <!--  UTILITIES TAB  -->
-            <syncfusion:RibbonTab Caption="UTILITIES" IsChecked="False">
+            <syncfusion:RibbonTab
+                Caption="UTILITIES"
+                IsChecked="False">
 
                 <!--  Utilities bar  -->
                 <syncfusion:RibbonBar
@@ -1557,7 +1574,7 @@
 
                     <!--  Import Export Utility Button  -->
                     <syncfusion:RibbonButton
-                        Command="{catel:CommandManagerBinding Application.ShowImportExportTool}"
+                        x:Name="UtilitiesShowImportExportToolButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Import/Export Utility"
@@ -1604,7 +1621,7 @@
                         </Grid>
                     </ToggleButton>
                     <!--  Plugin Manager Button  -->
-                    <syncfusion:RibbonButton
+                    <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowPluginManager}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1621,9 +1638,11 @@
                                     Kind="PlugFill" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                    </syncfusion:RibbonButton>-->
                 </syncfusion:RibbonBar>
+                
             </syncfusion:RibbonTab>
+            
         </syncfusion:Ribbon>
 
         <StackPanel
@@ -1635,6 +1654,7 @@
             Orientation="Horizontal">
             <TextBlock Background="{x:Null}" Text="RED Modding Tools - WolvenKit" />
         </StackPanel>
+        
         <Border
             Width="70"
             Height="30"
@@ -1643,7 +1663,7 @@
             VerticalAlignment="top"
             Background="{DynamicResource ContentBackgroundAlt2}"
             CornerRadius="0,5,0,0" />
-
+        
         <Border
             Width="42"
             Height="49"
@@ -1670,7 +1690,7 @@
                 </Border>
             </Grid>
         </Border>
-
+        
         <Border
             Width="42"
             Height="49"
@@ -1754,5 +1774,7 @@
                 </Grid>
             </Border>
         </hc:Drawer>
+        
     </Grid>
-</catel:UserControl>
+    
+</reactiveUi:ReactiveUserControl>

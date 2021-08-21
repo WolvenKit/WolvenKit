@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CArrayFixedSize<CHandle<entMeshComponent>> _lasers;
 
-		[Ordinal(92)] 
+		[Ordinal(93)] 
 		[RED("lasers", 2)] 
 		public CArrayFixedSize<CHandle<entMeshComponent>> Lasers
 		{

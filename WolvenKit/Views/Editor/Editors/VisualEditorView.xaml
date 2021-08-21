@@ -1,22 +1,17 @@
-<catel:UserControl
+<reactiveUi:ReactiveUserControl
+    x:TypeArguments="editor:VisualEditorViewModel"
  x:Class="WolvenKit.Views.Editor.VisualEditor.VisualEditorView"
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
- xmlns:catel="http://schemas.catelproject.com"
+ xmlns:reactiveUi="http://reactiveui.net"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
  xmlns:nodenetwork="clr-namespace:NodeNetwork.Views;assembly=NodeNetwork"
+ xmlns:editor="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
  BorderBrush="{x:Null}"
  >
 
-    <catel:UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <hc:ThemeResources />
-                <hc:Theme />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </catel:UserControl.Resources>
+   
 
     <Border
      hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
@@ -24,6 +19,15 @@
      BorderThickness="1"
      >
         <Grid Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
+
+            <Grid.Resources>
+                <ResourceDictionary>
+                    <ResourceDictionary.MergedDictionaries>
+                        <hc:ThemeResources />
+                        <hc:Theme />
+                    </ResourceDictionary.MergedDictionaries>
+                </ResourceDictionary>
+            </Grid.Resources>
 
             <hc:TabControl>
                 <hc:TabItem Header="Quest Editor">
@@ -404,4 +408,4 @@
 
         </Grid>
     </Border>
-</catel:UserControl>
+</reactiveUi:ReactiveUserControl>

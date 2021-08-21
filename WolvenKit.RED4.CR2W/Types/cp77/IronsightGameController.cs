@@ -16,13 +16,13 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _targetAttitudeFriendly;
 		private inkWidgetReference _targetAttitudeHostile;
 		private inkWidgetReference _targetAttitudeEnemyNonHostile;
-		private CHandle<gameIBlackboard> _weaponDataBB;
+		private wCHandle<gameIBlackboard> _weaponDataBB;
 		private CName _targetHitAnimationName;
 		private CHandle<inkanimProxy> _targetHitAnimation;
-		private CUInt32 _weaponDataTargetHitBBID;
+		private CHandle<redCallbackObject> _weaponDataTargetHitBBID;
 		private CName _shootAnimationName;
 		private CHandle<inkanimProxy> _shootAnimation;
-		private CUInt32 _weaponDataShootBBID;
+		private CHandle<redCallbackObject> _weaponDataShootBBID;
 		private CInt32 _currentAmmo;
 		private CHandle<inkanimProxy> _animIntro;
 		private CHandle<inkanimProxy> _animLoop;
@@ -32,15 +32,15 @@ namespace WolvenKit.RED4.CR2W.Types
 		private InventoryItemData _weaponItemData;
 		private CHandle<InventoryDataManagerV2> _inventoryManager;
 		private wCHandle<gameIBlackboard> _bb;
-		private CUInt32 _bbID;
+		private CHandle<redCallbackObject> _bbID;
 		private wCHandle<gameObject> _target;
 		private wCHandle<gameIBlackboard> _targetBB;
 		private CFloat _targetRange;
-		private CUInt32 _targetRangeBBID;
-		private CUInt32 _targetAttitudeBBID;
-		private CUInt32 _targetAcquiredBBID;
-		private CUInt32 _targetRangeObstructedBBID;
-		private CUInt32 _targetAcquiredObstructedBBID;
+		private CHandle<redCallbackObject> _targetRangeBBID;
+		private CHandle<redCallbackObject> _targetAttitudeBBID;
+		private CHandle<redCallbackObject> _targetAcquiredBBID;
+		private CHandle<redCallbackObject> _targetRangeObstructedBBID;
+		private CHandle<redCallbackObject> _targetAcquiredObstructedBBID;
 		private CUInt32 _targetRangeDecimalPrecision;
 		private wCHandle<TargetAttitudeAnimationController> _targetAttitudeAnimator;
 		private inkWidgetReference _targetAttitudeContainer;
@@ -54,13 +54,13 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<gameIBlackboard> _weaponBB;
 		private wCHandle<ChargebarController> _chargebar;
 		private inkWidgetReference _chargebarContainer;
-		private CUInt32 _chargebarValueChanged;
-		private CUInt32 _chargebarTriggerModeChanged;
+		private CHandle<redCallbackObject> _chargebarValueChanged;
+		private CHandle<redCallbackObject> _chargebarTriggerModeChanged;
 		private inkWidgetReference _aDSContainer;
 		private wCHandle<AimDownSightController> _aDSAnimator;
-		private CHandle<gameIBlackboard> _playerStateMachineBB;
-		private CUInt32 _playerStateMachineUpperBodyBBID;
-		private CUInt32 _crosshairStateChanged;
+		private wCHandle<gameIBlackboard> _playerStateMachineBB;
+		private CHandle<redCallbackObject> _playerStateMachineUpperBodyBBID;
+		private CHandle<redCallbackObject> _crosshairStateChanged;
 		private CEnum<gamePSMCrosshairStates> _crosshairState;
 		private CBool _isTargetEnemy;
 		private CEnum<EAIAttitude> _attitude;
@@ -139,7 +139,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("weaponDataBB")] 
-		public CHandle<gameIBlackboard> WeaponDataBB
+		public wCHandle<gameIBlackboard> WeaponDataBB
 		{
 			get => GetProperty(ref _weaponDataBB);
 			set => SetProperty(ref _weaponDataBB, value);
@@ -163,7 +163,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(14)] 
 		[RED("weaponDataTargetHitBBID")] 
-		public CUInt32 WeaponDataTargetHitBBID
+		public CHandle<redCallbackObject> WeaponDataTargetHitBBID
 		{
 			get => GetProperty(ref _weaponDataTargetHitBBID);
 			set => SetProperty(ref _weaponDataTargetHitBBID, value);
@@ -187,7 +187,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(17)] 
 		[RED("weaponDataShootBBID")] 
-		public CUInt32 WeaponDataShootBBID
+		public CHandle<redCallbackObject> WeaponDataShootBBID
 		{
 			get => GetProperty(ref _weaponDataShootBBID);
 			set => SetProperty(ref _weaponDataShootBBID, value);
@@ -267,7 +267,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(27)] 
 		[RED("bbID")] 
-		public CUInt32 BbID
+		public CHandle<redCallbackObject> BbID
 		{
 			get => GetProperty(ref _bbID);
 			set => SetProperty(ref _bbID, value);
@@ -299,7 +299,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(31)] 
 		[RED("targetRangeBBID")] 
-		public CUInt32 TargetRangeBBID
+		public CHandle<redCallbackObject> TargetRangeBBID
 		{
 			get => GetProperty(ref _targetRangeBBID);
 			set => SetProperty(ref _targetRangeBBID, value);
@@ -307,7 +307,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(32)] 
 		[RED("targetAttitudeBBID")] 
-		public CUInt32 TargetAttitudeBBID
+		public CHandle<redCallbackObject> TargetAttitudeBBID
 		{
 			get => GetProperty(ref _targetAttitudeBBID);
 			set => SetProperty(ref _targetAttitudeBBID, value);
@@ -315,7 +315,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(33)] 
 		[RED("targetAcquiredBBID")] 
-		public CUInt32 TargetAcquiredBBID
+		public CHandle<redCallbackObject> TargetAcquiredBBID
 		{
 			get => GetProperty(ref _targetAcquiredBBID);
 			set => SetProperty(ref _targetAcquiredBBID, value);
@@ -323,7 +323,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(34)] 
 		[RED("targetRangeObstructedBBID")] 
-		public CUInt32 TargetRangeObstructedBBID
+		public CHandle<redCallbackObject> TargetRangeObstructedBBID
 		{
 			get => GetProperty(ref _targetRangeObstructedBBID);
 			set => SetProperty(ref _targetRangeObstructedBBID, value);
@@ -331,7 +331,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(35)] 
 		[RED("targetAcquiredObstructedBBID")] 
-		public CUInt32 TargetAcquiredObstructedBBID
+		public CHandle<redCallbackObject> TargetAcquiredObstructedBBID
 		{
 			get => GetProperty(ref _targetAcquiredObstructedBBID);
 			set => SetProperty(ref _targetAcquiredObstructedBBID, value);
@@ -443,7 +443,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(49)] 
 		[RED("chargebarValueChanged")] 
-		public CUInt32 ChargebarValueChanged
+		public CHandle<redCallbackObject> ChargebarValueChanged
 		{
 			get => GetProperty(ref _chargebarValueChanged);
 			set => SetProperty(ref _chargebarValueChanged, value);
@@ -451,7 +451,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(50)] 
 		[RED("chargebarTriggerModeChanged")] 
-		public CUInt32 ChargebarTriggerModeChanged
+		public CHandle<redCallbackObject> ChargebarTriggerModeChanged
 		{
 			get => GetProperty(ref _chargebarTriggerModeChanged);
 			set => SetProperty(ref _chargebarTriggerModeChanged, value);
@@ -475,7 +475,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(53)] 
 		[RED("playerStateMachineBB")] 
-		public CHandle<gameIBlackboard> PlayerStateMachineBB
+		public wCHandle<gameIBlackboard> PlayerStateMachineBB
 		{
 			get => GetProperty(ref _playerStateMachineBB);
 			set => SetProperty(ref _playerStateMachineBB, value);
@@ -483,7 +483,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(54)] 
 		[RED("playerStateMachineUpperBodyBBID")] 
-		public CUInt32 PlayerStateMachineUpperBodyBBID
+		public CHandle<redCallbackObject> PlayerStateMachineUpperBodyBBID
 		{
 			get => GetProperty(ref _playerStateMachineUpperBodyBBID);
 			set => SetProperty(ref _playerStateMachineUpperBodyBBID, value);
@@ -491,7 +491,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(55)] 
 		[RED("crosshairStateChanged")] 
-		public CUInt32 CrosshairStateChanged
+		public CHandle<redCallbackObject> CrosshairStateChanged
 		{
 			get => GetProperty(ref _crosshairStateChanged);
 			set => SetProperty(ref _crosshairStateChanged, value);

@@ -15,9 +15,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<gameObject> _playerPuppet;
 		private wCHandle<gameInventoryScriptListener> _inventoryListener;
 		private wCHandle<gameInventoryScriptListener> _currencyInventoryListener;
-		private CHandle<gameIBlackboard> _playerStatsBlackboard;
 		private CHandle<PlayerDevelopmentSystem> _playerDevelopmentSystem;
-		private CUInt32 _combatModeListener;
+		private CHandle<redCallbackObject> _combatModeListener;
 		private CHandle<InventoryDataManagerV2> _inventoryManager;
 		private CHandle<ItemPreferredComparisonResolver> _comparisonResolver;
 		private CEnum<gamePSMCombat> _combatModePSM;
@@ -87,14 +86,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(10)] 
-		[RED("playerStatsBlackboard")] 
-		public CHandle<gameIBlackboard> PlayerStatsBlackboard
-		{
-			get => GetProperty(ref _playerStatsBlackboard);
-			set => SetProperty(ref _playerStatsBlackboard, value);
-		}
-
-		[Ordinal(11)] 
 		[RED("playerDevelopmentSystem")] 
 		public CHandle<PlayerDevelopmentSystem> PlayerDevelopmentSystem
 		{
@@ -102,15 +93,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _playerDevelopmentSystem, value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(11)] 
 		[RED("combatModeListener")] 
-		public CUInt32 CombatModeListener
+		public CHandle<redCallbackObject> CombatModeListener
 		{
 			get => GetProperty(ref _combatModeListener);
 			set => SetProperty(ref _combatModeListener, value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(12)] 
 		[RED("InventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
@@ -118,7 +109,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _inventoryManager, value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(13)] 
 		[RED("comparisonResolver")] 
 		public CHandle<ItemPreferredComparisonResolver> ComparisonResolver
 		{
@@ -126,7 +117,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _comparisonResolver, value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(14)] 
 		[RED("combatModePSM")] 
 		public CEnum<gamePSMCombat> CombatModePSM
 		{

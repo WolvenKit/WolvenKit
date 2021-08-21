@@ -1,8 +1,5 @@
-using Catel;
-using Catel.Data;
-using Catel.Fody;
-using Catel.IoC;
-using Catel.MVVM;
+
+using ReactiveUI;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Common.Model;
 using WolvenKit.Models.Wizards;
@@ -10,16 +7,13 @@ using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
 namespace WolvenKit.ViewModels.Wizards.PublishWizard
 {
-    public class RequiredSettingsViewModel : ViewModelBase
+    public class RequiredSettingsViewModel : ReactiveObject
     {
         #region constructors
 
         public RequiredSettingsViewModel(
-            IServiceLocator serviceLocator,
             IProjectManager projectManager)
         {
-            Argument.IsNotNull(() => serviceLocator);
-            Argument.IsNotNull(() => projectManager);
 
             if (projectManager.ActiveProject is EditorProject ep)
             {

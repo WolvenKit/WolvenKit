@@ -31,7 +31,10 @@ namespace WolvenKit.CLI
         public static void Main(string[] args)
         {
             var oodlePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "oo2ext_7_win64.dll");
-            OodleLoadLib.Load(oodlePath);
+            if (File.Exists(oodlePath))
+            {
+                OodleLoadLib.Load(oodlePath);
+            }
 
             var host = GenericHost.CreateHostBuilder(args);
             host.ConfigureServices((hostContext, services) =>

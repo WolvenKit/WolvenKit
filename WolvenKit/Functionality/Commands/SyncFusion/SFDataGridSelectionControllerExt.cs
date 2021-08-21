@@ -23,8 +23,9 @@ using Syncfusion.Data;
 using Syncfusion.UI.Xaml.Grid.Cells;
 using Syncfusion.Windows.Shared;
 using System.Collections.Specialized;
+using Splat;
 using WolvenKit.ViewModels.Editor;
-using Catel.IoC;
+
 
 namespace WolvenKit
 {
@@ -36,7 +37,7 @@ namespace WolvenKit
 
         protected override void ProcessPointerReleased(MouseButtonEventArgs args, RowColumnIndex rowColumnIndex)
         {
-            var IEVM = ServiceLocator.Default.ResolveType<ImportExportViewModel>();
+            var IEVM = Locator.Current.GetService<ImportExportViewModel>();
 
             if (rowColumnIndex.ColumnIndex == 0)
             {
@@ -123,7 +124,7 @@ namespace WolvenKit
         protected override void ProcessSelectedItemsChanged(NotifyCollectionChangedEventArgs e)
         {
             base.ProcessSelectedItemsChanged(e);
-            var IEVM = ServiceLocator.Default.ResolveType<ImportExportViewModel>();
+            var IEVM = Locator.Current.GetService<ImportExportViewModel>();
 
             if (IEVM != null)
             {

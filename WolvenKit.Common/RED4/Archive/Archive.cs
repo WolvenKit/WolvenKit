@@ -10,7 +10,6 @@ using ProtoBuf;
 using WolvenKit.Common;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
-using Index = CP77Tools.Model.Index;
 
 namespace WolvenKit.RED4.CR2W.Archive
 {
@@ -22,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         public Archive()
         {
             Header = new Header();
-            Index = new Index();
+            Index = new CP77Tools.Model.Index();
             Files = new Dictionary<ulong, IGameFile>();
         }
 
@@ -34,7 +33,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         [ProtoMember(2)] public Header Header { get; set; }
 
-        [ProtoMember(3)] public Index Index { get; set; }
+        [ProtoMember(3)] public CP77Tools.Model.Index Index { get; set; }
 
 
         public Dictionary<ulong, IGameFile> Files { get; }

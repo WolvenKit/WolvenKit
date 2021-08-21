@@ -19,7 +19,7 @@ namespace WolvenKit.Functionality.Controllers
 
     public class GameControllerFactory : IGameControllerFactory
     {
-        private readonly Tw3Controller _tw3Controller;
+        //private readonly Tw3Controller _tw3Controller;
         private readonly Cp77Controller _cp77Controller;
         private readonly MockGameController _mockGameController;
         private readonly IProjectManager _projectManager;
@@ -28,12 +28,12 @@ namespace WolvenKit.Functionality.Controllers
 
         public GameControllerFactory(
             IProjectManager projectManager,
-            Tw3Controller tw3Controller,
+            //Tw3Controller tw3Controller,
             Cp77Controller cp77Controller,
             MockGameController mockGameController
             )
         {
-            _tw3Controller = tw3Controller;
+            //_tw3Controller = tw3Controller;
             _cp77Controller = cp77Controller;
             _projectManager = projectManager;
             _mockGameController = mockGameController;
@@ -46,7 +46,7 @@ namespace WolvenKit.Functionality.Controllers
                 ? _mockGameController
                 : _projectManager.ActiveProject.GameType switch
                 {
-                    GameType.Witcher3 => _tw3Controller,
+                    //GameType.Witcher3 => _tw3Controller,
                     GameType.Cyberpunk2077 => _cp77Controller,
                     _ => throw new ArgumentOutOfRangeException(
                         nameof(_projectManager.ActiveProject.GameType),

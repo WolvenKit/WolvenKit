@@ -8,8 +8,8 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class DebugNpcNameplateGameController : gameuiProjectedHUDGameController
 	{
 		private CBool _isToggledOn;
-		private CHandle<gameIBlackboard> _uiBlackboard;
-		private CUInt32 _bbNPCStatsInfo;
+		private wCHandle<gameIBlackboard> _uiBlackboard;
+		private CHandle<redCallbackObject> _bbNPCStatsInfo;
 		private CHandle<inkScreenProjection> _nameplateProjection;
 		private wCHandle<gameObject> _bufferedNPC;
 		private wCHandle<inkWidget> _rootWidget;
@@ -26,7 +26,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("uiBlackboard")] 
-		public CHandle<gameIBlackboard> UiBlackboard
+		public wCHandle<gameIBlackboard> UiBlackboard
 		{
 			get => GetProperty(ref _uiBlackboard);
 			set => SetProperty(ref _uiBlackboard, value);
@@ -34,7 +34,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("bbNPCStatsInfo")] 
-		public CUInt32 BbNPCStatsInfo
+		public CHandle<redCallbackObject> BbNPCStatsInfo
 		{
 			get => GetProperty(ref _bbNPCStatsInfo);
 			set => SetProperty(ref _bbNPCStatsInfo, value);

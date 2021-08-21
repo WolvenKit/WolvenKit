@@ -12,21 +12,26 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<inkWidget> _titleBorder;
 		private wCHandle<inkHorizontalPanelWidget> _optionsList;
 		private CArray<wCHandle<inkWidget>> _widgetsPool;
-		private CHandle<gameIBlackboard> _bbInteraction;
-		private CHandle<gameIBlackboard> _bbPlayerStateMachine;
+		private CArray<CHandle<redCallbackObject>> _widgetsCallbacks;
+		private wCHandle<gameIBlackboard> _bbInteraction;
+		private wCHandle<gameIBlackboard> _bbPlayerStateMachine;
 		private CHandle<UIInteractionsDef> _bbInteractionDefinition;
-		private CUInt32 _updateInteractionId;
-		private CUInt32 _activeHubListenerId;
-		private CUInt32 _contactsActiveListenerId;
+		private CHandle<redCallbackObject> _updateInteractionId;
+		private CHandle<redCallbackObject> _activeHubListenerId;
+		private CHandle<redCallbackObject> _contactsActiveListenerId;
 		private CInt32 _id;
 		private CBool _isActive;
 		private CBool _areContactsOpen;
 		private inkWidgetReference _progressBarHolder;
-		private CHandle<DialogChoiceTimerController> _progressBar;
+		private wCHandle<DialogChoiceTimerController> _progressBar;
 		private CBool _hasProgressBar;
-		private CHandle<gameIBlackboard> _bb;
+		private wCHandle<gameIBlackboard> _bb;
 		private CHandle<UIInteractionsDef> _bbUIInteractionsDef;
-		private CUInt32 _bbLastAttemptedChoiceCallbackId;
+		private CHandle<redCallbackObject> _bbLastAttemptedChoiceCallbackId;
+		private CHandle<redCallbackObject> _onZoneChangeCallback;
+		private CInt32 _pendingRequests;
+		private CArray<wCHandle<inkAsyncSpawnRequest>> _spawnTokens;
+		private CArray<gameinteractionsvisInteractionChoiceData> _currentOptions;
 
 		[Ordinal(9)] 
 		[RED("root")] 
@@ -69,22 +74,30 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(14)] 
+		[RED("widgetsCallbacks")] 
+		public CArray<CHandle<redCallbackObject>> WidgetsCallbacks
+		{
+			get => GetProperty(ref _widgetsCallbacks);
+			set => SetProperty(ref _widgetsCallbacks, value);
+		}
+
+		[Ordinal(15)] 
 		[RED("bbInteraction")] 
-		public CHandle<gameIBlackboard> BbInteraction
+		public wCHandle<gameIBlackboard> BbInteraction
 		{
 			get => GetProperty(ref _bbInteraction);
 			set => SetProperty(ref _bbInteraction, value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("bbPlayerStateMachine")] 
-		public CHandle<gameIBlackboard> BbPlayerStateMachine
+		public wCHandle<gameIBlackboard> BbPlayerStateMachine
 		{
 			get => GetProperty(ref _bbPlayerStateMachine);
 			set => SetProperty(ref _bbPlayerStateMachine, value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("bbInteractionDefinition")] 
 		public CHandle<UIInteractionsDef> BbInteractionDefinition
 		{
@@ -92,31 +105,31 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bbInteractionDefinition, value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("updateInteractionId")] 
-		public CUInt32 UpdateInteractionId
+		public CHandle<redCallbackObject> UpdateInteractionId
 		{
 			get => GetProperty(ref _updateInteractionId);
 			set => SetProperty(ref _updateInteractionId, value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("activeHubListenerId")] 
-		public CUInt32 ActiveHubListenerId
+		public CHandle<redCallbackObject> ActiveHubListenerId
 		{
 			get => GetProperty(ref _activeHubListenerId);
 			set => SetProperty(ref _activeHubListenerId, value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("contactsActiveListenerId")] 
-		public CUInt32 ContactsActiveListenerId
+		public CHandle<redCallbackObject> ContactsActiveListenerId
 		{
 			get => GetProperty(ref _contactsActiveListenerId);
 			set => SetProperty(ref _contactsActiveListenerId, value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("id")] 
 		public CInt32 Id
 		{
@@ -124,7 +137,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _id, value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
@@ -132,7 +145,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isActive, value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("areContactsOpen")] 
 		public CBool AreContactsOpen
 		{
@@ -140,7 +153,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _areContactsOpen, value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("progressBarHolder")] 
 		public inkWidgetReference ProgressBarHolder
 		{
@@ -148,15 +161,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _progressBarHolder, value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("progressBar")] 
-		public CHandle<DialogChoiceTimerController> ProgressBar
+		public wCHandle<DialogChoiceTimerController> ProgressBar
 		{
 			get => GetProperty(ref _progressBar);
 			set => SetProperty(ref _progressBar, value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("hasProgressBar")] 
 		public CBool HasProgressBar
 		{
@@ -164,15 +177,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hasProgressBar, value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("bb")] 
-		public CHandle<gameIBlackboard> Bb
+		public wCHandle<gameIBlackboard> Bb
 		{
 			get => GetProperty(ref _bb);
 			set => SetProperty(ref _bb, value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("bbUIInteractionsDef")] 
 		public CHandle<UIInteractionsDef> BbUIInteractionsDef
 		{
@@ -180,12 +193,44 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _bbUIInteractionsDef, value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("bbLastAttemptedChoiceCallbackId")] 
-		public CUInt32 BbLastAttemptedChoiceCallbackId
+		public CHandle<redCallbackObject> BbLastAttemptedChoiceCallbackId
 		{
 			get => GetProperty(ref _bbLastAttemptedChoiceCallbackId);
 			set => SetProperty(ref _bbLastAttemptedChoiceCallbackId, value);
+		}
+
+		[Ordinal(30)] 
+		[RED("OnZoneChangeCallback")] 
+		public CHandle<redCallbackObject> OnZoneChangeCallback
+		{
+			get => GetProperty(ref _onZoneChangeCallback);
+			set => SetProperty(ref _onZoneChangeCallback, value);
+		}
+
+		[Ordinal(31)] 
+		[RED("pendingRequests")] 
+		public CInt32 PendingRequests
+		{
+			get => GetProperty(ref _pendingRequests);
+			set => SetProperty(ref _pendingRequests, value);
+		}
+
+		[Ordinal(32)] 
+		[RED("spawnTokens")] 
+		public CArray<wCHandle<inkAsyncSpawnRequest>> SpawnTokens
+		{
+			get => GetProperty(ref _spawnTokens);
+			set => SetProperty(ref _spawnTokens, value);
+		}
+
+		[Ordinal(33)] 
+		[RED("currentOptions")] 
+		public CArray<gameinteractionsvisInteractionChoiceData> CurrentOptions
+		{
+			get => GetProperty(ref _currentOptions);
+			set => SetProperty(ref _currentOptions, value);
 		}
 
 		public interactionWidgetGameController(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

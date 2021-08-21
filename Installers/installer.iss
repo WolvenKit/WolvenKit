@@ -12,14 +12,13 @@
 # define MyAppBaseDir "..\publish\full\"
 #endif
 #define MyAppPath MyAppBaseDir + MyAppExeName
-#define MyAppVersion GetVersionNumbersString(MyAppPath)
+#define MyAppVersion GetStringFileInfo(MyAppPath, "ProductVersion")
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{7ADB3751-78A3-4983-BB58-5795FC8A24FE}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppVerName={#MyAppName} {#MyAppVersion}
-VersionInfoVersion={#MyAppVersion}
 OutputDir=MyOutput
 OutputBaseFilename={#MyAppName}-installer-{#MyAppVersion}
 AppPublisher={#MyAppPublisher}

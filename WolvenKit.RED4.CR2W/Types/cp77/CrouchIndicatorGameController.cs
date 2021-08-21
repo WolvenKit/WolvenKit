@@ -26,14 +26,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		private InventoryItemData _weaponItemData;
 		private wCHandle<DamageTypeIndicator> _damageTypeIndicator;
 		private CArray<CEnum<gamedataItemType>> _weaponAreas;
-		private CUInt32 _bBWeaponList;
-		private CUInt32 _bBAmmoLooted;
-		private CUInt32 _bBCurrentWeapon;
-		private CUInt32 _locomotionStateBlackboardId;
-		private CUInt32 _visionStateBlackboardId;
-		private CUInt32 _uIStateBlackboardId;
-		private CUInt32 _playerSpawnedCallbackID;
-		private CUInt32 _ammoHackedListenerId;
+		private CHandle<redCallbackObject> _bBWeaponList;
+		private CHandle<redCallbackObject> _bBAmmoLooted;
+		private CHandle<redCallbackObject> _bBCurrentWeapon;
+		private CHandle<redCallbackObject> _locomotionStateBlackboardId;
+		private CHandle<redCallbackObject> _visionStateBlackboardId;
+		private CHandle<redCallbackObject> _uIStateBlackboardId;
+		private CHandle<redCallbackObject> _playerSpawnedCallbackID;
+		private CHandle<redCallbackObject> _ammoHackedListenerId;
 		private CHandle<gameSlotDataHolder> _bufferedRosterData;
 		private wCHandle<gameIBlackboard> _uIBlackboard;
 		private gameSlotWeaponData _activeWeapon;
@@ -43,10 +43,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CHandle<inkanimProxy> _transitionAnimProxy;
 		private wCHandle<gameIBlackboard> _blackboard;
 		private CHandle<UIInteractionsDef> _bbDefinition;
-		private CUInt32 _onMagazineAmmoCount;
-		private CUInt32 _dataListenerId;
+		private CHandle<redCallbackObject> _onMagazineAmmoCount;
+		private CHandle<redCallbackObject> _dataListenerId;
 		private wCHandle<gameIBlackboard> _weaponBlackboard;
-		private CUInt32 _weaponParamsListenerId;
+		private CHandle<redCallbackObject> _weaponParamsListenerId;
 		private CInt32 _bufferedMaxAmmo;
 		private CInt32 _bufferedAmmoId;
 		private CName _genderName;
@@ -205,7 +205,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(28)] 
 		[RED("BBWeaponList")] 
-		public CUInt32 BBWeaponList
+		public CHandle<redCallbackObject> BBWeaponList
 		{
 			get => GetProperty(ref _bBWeaponList);
 			set => SetProperty(ref _bBWeaponList, value);
@@ -213,7 +213,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(29)] 
 		[RED("BBAmmoLooted")] 
-		public CUInt32 BBAmmoLooted
+		public CHandle<redCallbackObject> BBAmmoLooted
 		{
 			get => GetProperty(ref _bBAmmoLooted);
 			set => SetProperty(ref _bBAmmoLooted, value);
@@ -221,7 +221,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(30)] 
 		[RED("BBCurrentWeapon")] 
-		public CUInt32 BBCurrentWeapon
+		public CHandle<redCallbackObject> BBCurrentWeapon
 		{
 			get => GetProperty(ref _bBCurrentWeapon);
 			set => SetProperty(ref _bBCurrentWeapon, value);
@@ -229,7 +229,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(31)] 
 		[RED("LocomotionStateBlackboardId")] 
-		public CUInt32 LocomotionStateBlackboardId
+		public CHandle<redCallbackObject> LocomotionStateBlackboardId
 		{
 			get => GetProperty(ref _locomotionStateBlackboardId);
 			set => SetProperty(ref _locomotionStateBlackboardId, value);
@@ -237,7 +237,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(32)] 
 		[RED("VisionStateBlackboardId")] 
-		public CUInt32 VisionStateBlackboardId
+		public CHandle<redCallbackObject> VisionStateBlackboardId
 		{
 			get => GetProperty(ref _visionStateBlackboardId);
 			set => SetProperty(ref _visionStateBlackboardId, value);
@@ -245,7 +245,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(33)] 
 		[RED("UIStateBlackboardId")] 
-		public CUInt32 UIStateBlackboardId
+		public CHandle<redCallbackObject> UIStateBlackboardId
 		{
 			get => GetProperty(ref _uIStateBlackboardId);
 			set => SetProperty(ref _uIStateBlackboardId, value);
@@ -253,7 +253,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(34)] 
 		[RED("PlayerSpawnedCallbackID")] 
-		public CUInt32 PlayerSpawnedCallbackID
+		public CHandle<redCallbackObject> PlayerSpawnedCallbackID
 		{
 			get => GetProperty(ref _playerSpawnedCallbackID);
 			set => SetProperty(ref _playerSpawnedCallbackID, value);
@@ -261,7 +261,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(35)] 
 		[RED("ammoHackedListenerId")] 
-		public CUInt32 AmmoHackedListenerId
+		public CHandle<redCallbackObject> AmmoHackedListenerId
 		{
 			get => GetProperty(ref _ammoHackedListenerId);
 			set => SetProperty(ref _ammoHackedListenerId, value);
@@ -341,7 +341,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(45)] 
 		[RED("onMagazineAmmoCount")] 
-		public CUInt32 OnMagazineAmmoCount
+		public CHandle<redCallbackObject> OnMagazineAmmoCount
 		{
 			get => GetProperty(ref _onMagazineAmmoCount);
 			set => SetProperty(ref _onMagazineAmmoCount, value);
@@ -349,7 +349,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(46)] 
 		[RED("dataListenerId")] 
-		public CUInt32 DataListenerId
+		public CHandle<redCallbackObject> DataListenerId
 		{
 			get => GetProperty(ref _dataListenerId);
 			set => SetProperty(ref _dataListenerId, value);
@@ -365,7 +365,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(48)] 
 		[RED("weaponParamsListenerId")] 
-		public CUInt32 WeaponParamsListenerId
+		public CHandle<redCallbackObject> WeaponParamsListenerId
 		{
 			get => GetProperty(ref _weaponParamsListenerId);
 			set => SetProperty(ref _weaponParamsListenerId, value);

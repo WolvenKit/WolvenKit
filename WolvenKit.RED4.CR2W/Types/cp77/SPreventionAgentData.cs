@@ -5,25 +5,16 @@ using static WolvenKit.RED4.CR2W.Types.Enums;
 namespace WolvenKit.RED4.CR2W.Types
 {
 	[REDMeta]
-	public class SPreventionAgentData : CVariable
+	public class SPreventionAgentData : IScriptable
 	{
-		private entEntityID _entityID;
-		private Vector4 _position;
+		private wCHandle<gamePersistentState> _ps;
 
 		[Ordinal(0)] 
-		[RED("entityID")] 
-		public entEntityID EntityID
+		[RED("ps")] 
+		public wCHandle<gamePersistentState> Ps
 		{
-			get => GetProperty(ref _entityID);
-			set => SetProperty(ref _entityID, value);
-		}
-
-		[Ordinal(1)] 
-		[RED("position")] 
-		public Vector4 Position
-		{
-			get => GetProperty(ref _position);
-			set => SetProperty(ref _position, value);
+			get => GetProperty(ref _ps);
+			set => SetProperty(ref _ps, value);
 		}
 
 		public SPreventionAgentData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

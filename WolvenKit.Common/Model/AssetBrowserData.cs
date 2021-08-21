@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using ReactiveUI;
 using WolvenKit.RED4.CR2W.Archive;
+using System;
 
 namespace WolvenKit.Common.Model
 {
@@ -33,8 +34,20 @@ namespace WolvenKit.Common.Model
         [Browsable(false)] public ulong Key => _fileEntry.Key;
 
 
-        public uint Size => _fileEntry.Size;
+        public string Size => FormatSize(_fileEntry.Size);
+        string FormatSize(uint size)
+        {
+            string[] suffixes = { "Bytes", "KB", "MB", "GB", "TB", "PB" };
 
+            var counter = 0;
+            var number = (decimal)size;
+            while (Math.Round(number / 1024) >= 1)
+            {
+                number = number / 1024;
+                counter++;
+            }
+            return $"{number:n1} {suffixes[counter]}";
+        }
 
         public IGameFile GetGameFile() => _fileEntry;
 

@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<gameSItemStack> _shopStock;
 		private CBool _shopStockInit;
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("vendingMachineSetup")] 
 		public VendingMachineSetup VendingMachineSetup
 		{
@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _vendingMachineSetup, value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("vendingMachineSFX")] 
 		public VendingMachineSFX VendingMachineSFX
 		{
@@ -32,7 +32,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _vendingMachineSFX, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("soldOutProbability")] 
 		public CFloat SoldOutProbability
 		{
@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _soldOutProbability, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("isReady")] 
 		public CBool IsReady
 		{
@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isReady, value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(108)] 
 		[RED("isSoldOut")] 
 		public CBool IsSoldOut
 		{
@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isSoldOut, value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(109)] 
 		[RED("hackCount")] 
 		public CInt32 HackCount
 		{
@@ -64,7 +64,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _hackCount, value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(110)] 
 		[RED("shopStock")] 
 		public CArray<gameSItemStack> ShopStock
 		{
@@ -72,7 +72,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shopStock, value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(111)] 
 		[RED("shopStockInit")] 
 		public CBool ShopStockInit
 		{

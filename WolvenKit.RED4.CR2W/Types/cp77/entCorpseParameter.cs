@@ -10,6 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CUInt32 _lod;
 		private CArray<QsTransform> _bakedPose;
 		private CArray<CName> _bakedBoneNames;
+		private CArray<CRUID> _forceLOD0Components;
 		private raRef<animRig> _baseRig;
 
 		[Ordinal(0)] 
@@ -37,6 +38,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("forceLOD0Components")] 
+		public CArray<CRUID> ForceLOD0Components
+		{
+			get => GetProperty(ref _forceLOD0Components);
+			set => SetProperty(ref _forceLOD0Components, value);
+		}
+
+		[Ordinal(4)] 
 		[RED("baseRig")] 
 		public raRef<animRig> BaseRig
 		{

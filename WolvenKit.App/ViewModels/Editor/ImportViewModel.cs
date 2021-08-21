@@ -6,9 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Catel;
-using Catel.Services;
-using Catel.Threading;
 using CsvHelper;
 using WolvenKit.Common;
 using WolvenKit.Functionality.Services;
@@ -42,7 +39,6 @@ namespace WolvenKit.ViewModels.Editor
         public const string ToolTitle = "Import";
 
         private readonly ILoggerService _loggerService;
-        private readonly IMessageService _messageService;
         private readonly IProjectManager _projectManager;
         private readonly ISettingsManager _settingsManager;
         private readonly Tw3Controller _tw3Controller;
@@ -60,20 +56,12 @@ namespace WolvenKit.ViewModels.Editor
         public ImportViewModel(
             IProjectManager projectManager,
             ILoggerService loggerService,
-            IMessageService messageService,
             Tw3Controller tw3Controller,
             ISettingsManager settingsManager
         ) : base(ToolTitle)
         {
-            Argument.IsNotNull(() => projectManager);
-            Argument.IsNotNull(() => messageService);
-            Argument.IsNotNull(() => loggerService);
-            Argument.IsNotNull(() => tw3Controller);
-            Argument.IsNotNull(() => settingsManager);
-
             _projectManager = projectManager;
             _loggerService = loggerService;
-            _messageService = messageService;
             _tw3Controller = tw3Controller;
             _settingsManager = settingsManager;
 
@@ -96,21 +84,7 @@ namespace WolvenKit.ViewModels.Editor
 
         #region SelectedItem
 
-        private BindingList<ImportableFile> _importableobjects = null;
-
-        public BindingList<ImportableFile> Importableobjects
-        {
-            get => _importableobjects;
-            set
-            {
-                if (_importableobjects != value)
-                {
-                    var oldValue = _importableobjects;
-                    _importableobjects = value;
-                    RaisePropertyChanged(() => Importableobjects, oldValue, value);
-                }
-            }
-        }
+        public BindingList<ImportableFile> Importableobjects { get; set; }
 
         #endregion SelectedItem
 
@@ -295,7 +269,7 @@ namespace WolvenKit.ViewModels.Editor
             AddObjects(importablefiles, _projectManager.ActiveProject.FileDirectory);
 
             //TryGetTextureGroupsCommand.SafeExecute();
-            RaisePropertyChanged(nameof(Importableobjects));
+            //RaisePropertyChanged(nameof(Importableobjects));
         }
 
         #endregion Commands Implementation

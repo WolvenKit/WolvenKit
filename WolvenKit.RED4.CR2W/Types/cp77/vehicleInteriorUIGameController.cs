@@ -8,14 +8,14 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class vehicleInteriorUIGameController : gameuiHUDGameController
 	{
 		private wCHandle<gameIBlackboard> _vehicleBlackboard;
-		private CUInt32 _vehicleBBStateConectionId;
-		private CUInt32 _vehicleBBReadyConectionId;
-		private CUInt32 _vehicleBBUIActivId;
-		private CUInt32 _speedBBConnectionId;
-		private CUInt32 _gearBBConnectionId;
-		private CUInt32 _rpmValueBBConnectionId;
-		private CUInt32 _rpmMaxBBConnectionId;
-		private CUInt32 _autopilotOnId;
+		private CHandle<redCallbackObject> _vehicleBBStateConectionId;
+		private CHandle<redCallbackObject> _vehicleBBReadyConectionId;
+		private CHandle<redCallbackObject> _vehicleBBUIActivId;
+		private CHandle<redCallbackObject> _speedBBConnectionId;
+		private CHandle<redCallbackObject> _gearBBConnectionId;
+		private CHandle<redCallbackObject> _rpmValueBBConnectionId;
+		private CHandle<redCallbackObject> _rpmMaxBBConnectionId;
+		private CHandle<redCallbackObject> _autopilotOnId;
 		private wCHandle<inkCanvasWidget> _rootWidget;
 		private inkTextWidgetReference _speedTextWidget;
 		private inkTextWidgetReference _gearTextWidget;
@@ -43,7 +43,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("vehicleBBStateConectionId")] 
-		public CUInt32 VehicleBBStateConectionId
+		public CHandle<redCallbackObject> VehicleBBStateConectionId
 		{
 			get => GetProperty(ref _vehicleBBStateConectionId);
 			set => SetProperty(ref _vehicleBBStateConectionId, value);
@@ -51,7 +51,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("vehicleBBReadyConectionId")] 
-		public CUInt32 VehicleBBReadyConectionId
+		public CHandle<redCallbackObject> VehicleBBReadyConectionId
 		{
 			get => GetProperty(ref _vehicleBBReadyConectionId);
 			set => SetProperty(ref _vehicleBBReadyConectionId, value);
@@ -59,7 +59,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("vehicleBBUIActivId")] 
-		public CUInt32 VehicleBBUIActivId
+		public CHandle<redCallbackObject> VehicleBBUIActivId
 		{
 			get => GetProperty(ref _vehicleBBUIActivId);
 			set => SetProperty(ref _vehicleBBUIActivId, value);
@@ -67,7 +67,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("speedBBConnectionId")] 
-		public CUInt32 SpeedBBConnectionId
+		public CHandle<redCallbackObject> SpeedBBConnectionId
 		{
 			get => GetProperty(ref _speedBBConnectionId);
 			set => SetProperty(ref _speedBBConnectionId, value);
@@ -75,7 +75,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(14)] 
 		[RED("gearBBConnectionId")] 
-		public CUInt32 GearBBConnectionId
+		public CHandle<redCallbackObject> GearBBConnectionId
 		{
 			get => GetProperty(ref _gearBBConnectionId);
 			set => SetProperty(ref _gearBBConnectionId, value);
@@ -83,7 +83,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("rpmValueBBConnectionId")] 
-		public CUInt32 RpmValueBBConnectionId
+		public CHandle<redCallbackObject> RpmValueBBConnectionId
 		{
 			get => GetProperty(ref _rpmValueBBConnectionId);
 			set => SetProperty(ref _rpmValueBBConnectionId, value);
@@ -91,7 +91,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(16)] 
 		[RED("rpmMaxBBConnectionId")] 
-		public CUInt32 RpmMaxBBConnectionId
+		public CHandle<redCallbackObject> RpmMaxBBConnectionId
 		{
 			get => GetProperty(ref _rpmMaxBBConnectionId);
 			set => SetProperty(ref _rpmMaxBBConnectionId, value);
@@ -99,7 +99,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(17)] 
 		[RED("autopilotOnId")] 
-		public CUInt32 AutopilotOnId
+		public CHandle<redCallbackObject> AutopilotOnId
 		{
 			get => GetProperty(ref _autopilotOnId);
 			set => SetProperty(ref _autopilotOnId, value);

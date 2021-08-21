@@ -15,9 +15,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkImageWidgetReference _zoomMoveBracketL;
 		private inkImageWidgetReference _zoomMoveBracketR;
 		private CString _zoomLevelString;
-		private CHandle<gameIBlackboard> _playerSMBB;
-		private CUInt32 _zoomLevelBBID;
-		private CUInt32 _sceneTierBlackboardId;
+		private wCHandle<gameIBlackboard> _playerSMBB;
+		private CHandle<redCallbackObject> _zoomLevelBBID;
+		private CHandle<redCallbackObject> _sceneTierBlackboardId;
 		private CEnum<gamePSMHighLevel> _sceneTier;
 		private CHandle<inkanimProxy> _zoomUpAnim;
 		private CHandle<inkanimProxy> _animLockOn;
@@ -93,7 +93,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(26)] 
 		[RED("PlayerSMBB")] 
-		public CHandle<gameIBlackboard> PlayerSMBB
+		public wCHandle<gameIBlackboard> PlayerSMBB
 		{
 			get => GetProperty(ref _playerSMBB);
 			set => SetProperty(ref _playerSMBB, value);
@@ -101,7 +101,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(27)] 
 		[RED("ZoomLevelBBID")] 
-		public CUInt32 ZoomLevelBBID
+		public CHandle<redCallbackObject> ZoomLevelBBID
 		{
 			get => GetProperty(ref _zoomLevelBBID);
 			set => SetProperty(ref _zoomLevelBBID, value);
@@ -109,7 +109,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(28)] 
 		[RED("sceneTierBlackboardId")] 
-		public CUInt32 SceneTierBlackboardId
+		public CHandle<redCallbackObject> SceneTierBlackboardId
 		{
 			get => GetProperty(ref _sceneTierBlackboardId);
 			set => SetProperty(ref _sceneTierBlackboardId, value);

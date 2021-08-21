@@ -28,15 +28,13 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkCanvasWidgetReference _yaw;
 		private inkCanvasWidgetReference _tele;
 		private inkCanvasWidgetReference _teleScale;
-		private CHandle<gameIBlackboard> _scanBlackboard;
-		private CHandle<gameIBlackboard> _psmBlackboard;
-		private CHandle<gameIBlackboard> _tcsBlackboard;
-		private CUInt32 _pSM_BBID;
-		private CUInt32 _tcs_BBID;
-		private CUInt32 _deviceChain_BBID;
+		private wCHandle<gameIBlackboard> _psmBlackboard;
+		private wCHandle<gameIBlackboard> _tcsBlackboard;
+		private CHandle<redCallbackObject> _pSM_BBID;
+		private CHandle<redCallbackObject> _tcs_BBID;
+		private CHandle<redCallbackObject> _deviceChain_BBID;
 		private wCHandle<inkCompoundWidget> _root;
 		private CFloat _currentZoom;
-		private GameTime _currentTime;
 		private wCHandle<gameObject> _controlledObjectRef;
 		private CHandle<inkanimDefinition> _alpha_fadein;
 		private CHandle<inkanimProxy> _animProxy;
@@ -213,54 +211,46 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(30)] 
-		[RED("scanBlackboard")] 
-		public CHandle<gameIBlackboard> ScanBlackboard
-		{
-			get => GetProperty(ref _scanBlackboard);
-			set => SetProperty(ref _scanBlackboard, value);
-		}
-
-		[Ordinal(31)] 
 		[RED("psmBlackboard")] 
-		public CHandle<gameIBlackboard> PsmBlackboard
+		public wCHandle<gameIBlackboard> PsmBlackboard
 		{
 			get => GetProperty(ref _psmBlackboard);
 			set => SetProperty(ref _psmBlackboard, value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(31)] 
 		[RED("tcsBlackboard")] 
-		public CHandle<gameIBlackboard> TcsBlackboard
+		public wCHandle<gameIBlackboard> TcsBlackboard
 		{
 			get => GetProperty(ref _tcsBlackboard);
 			set => SetProperty(ref _tcsBlackboard, value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(32)] 
 		[RED("PSM_BBID")] 
-		public CUInt32 PSM_BBID
+		public CHandle<redCallbackObject> PSM_BBID
 		{
 			get => GetProperty(ref _pSM_BBID);
 			set => SetProperty(ref _pSM_BBID, value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(33)] 
 		[RED("tcs_BBID")] 
-		public CUInt32 Tcs_BBID
+		public CHandle<redCallbackObject> Tcs_BBID
 		{
 			get => GetProperty(ref _tcs_BBID);
 			set => SetProperty(ref _tcs_BBID, value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(34)] 
 		[RED("deviceChain_BBID")] 
-		public CUInt32 DeviceChain_BBID
+		public CHandle<redCallbackObject> DeviceChain_BBID
 		{
 			get => GetProperty(ref _deviceChain_BBID);
 			set => SetProperty(ref _deviceChain_BBID, value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(35)] 
 		[RED("root")] 
 		public wCHandle<inkCompoundWidget> Root
 		{
@@ -268,7 +258,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _root, value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(36)] 
 		[RED("currentZoom")] 
 		public CFloat CurrentZoom
 		{
@@ -276,15 +266,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _currentZoom, value);
 		}
 
-		[Ordinal(38)] 
-		[RED("currentTime")] 
-		public GameTime CurrentTime
-		{
-			get => GetProperty(ref _currentTime);
-			set => SetProperty(ref _currentTime, value);
-		}
-
-		[Ordinal(39)] 
+		[Ordinal(37)] 
 		[RED("controlledObjectRef")] 
 		public wCHandle<gameObject> ControlledObjectRef
 		{
@@ -292,7 +274,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _controlledObjectRef, value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(38)] 
 		[RED("alpha_fadein")] 
 		public CHandle<inkanimDefinition> Alpha_fadein
 		{
@@ -300,7 +282,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _alpha_fadein, value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(39)] 
 		[RED("AnimProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
@@ -308,7 +290,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animProxy, value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(40)] 
 		[RED("AnimOptions")] 
 		public inkanimPlaybackOptions AnimOptions
 		{
@@ -316,7 +298,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _animOptions, value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(41)] 
 		[RED("ownerObject")] 
 		public wCHandle<gameObject> OwnerObject
 		{
@@ -324,7 +306,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _ownerObject, value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(42)] 
 		[RED("maxZoomLevel")] 
 		public CInt32 MaxZoomLevel
 		{

@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.CR2W.Archive
     {
         #region Fields
 
-        [ProtoMember(11)] private string _nameStr;
+        private IHashService _hashService;
 
         #endregion Fields
 
@@ -21,11 +21,27 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         public FileEntry()
         {
+
         }
 
-        public FileEntry(ulong hash, DateTime datetime, uint flags
-            , uint segmentsStart, uint segmentsEnd, uint resourceDependenciesStart, uint resourceDependenciesEnd, byte[] sha1hash)
+        public FileEntry(IHashService hashService)
         {
+            _hashService = hashService;
+        }
+
+        public FileEntry(
+            IHashService hashService,
+            ulong hash,
+            DateTime datetime,
+            uint flags,
+            uint segmentsStart,
+            uint segmentsEnd,
+            uint resourceDependenciesStart,
+            uint resourceDependenciesEnd,
+            byte[] sha1hash)
+        {
+            _hashService = hashService;
+
             NameHash64 = hash;
             Timestamp = datetime;
             NumInlineBufferSegments = flags;
@@ -36,9 +52,18 @@ namespace WolvenKit.RED4.CR2W.Archive
             SHA1Hash = sha1hash;
         }
 
+        [ProtoAfterDeserialization]
+        public void AfterDeserializationCallback()
+        {
+           
+        }
+
         #endregion Constructors
 
         #region Properties
+
+        public IGameArchive Archive { get; set; }
+
 
         [ProtoMember(1)] public ulong NameHash64 { get; set; }
         [ProtoMember(2)] public DateTime Timestamp { get; set; }
@@ -48,17 +73,14 @@ namespace WolvenKit.RED4.CR2W.Archive
         [ProtoMember(6)] public uint ResourceDependenciesStart { get; set; }
         [ProtoMember(7)] public uint ResourceDependenciesEnd { get; set; }
         [ProtoMember(8)] public byte[] SHA1Hash { get; set; }
-
-        public IGameArchive Archive { get; set; }
-
         [ProtoMember(9)] public uint Size { get; set; }
         [ProtoMember(10)] public uint ZSize { get; set; }
 
         public ulong Key => NameHash64;
-        public string Name => !string.IsNullOrEmpty(_nameStr) ? _nameStr : NameHash64.ToString();
+        public string Name => !string.IsNullOrEmpty(GetNameString()) ? GetNameString() : NameHash64.ToString();
         public string bytesAsString => BitConverter.ToString(SHA1Hash);
-        public string FileName => string.IsNullOrEmpty(_nameStr) ? $"{NameHash64}.bin" : _nameStr;
-        public string NameOrHash => string.IsNullOrEmpty(_nameStr) ? $"{NameHash64}" : _nameStr;
+        public string FileName => string.IsNullOrEmpty(GetNameString()) ? $"{NameHash64}.bin" : GetNameString();
+        public string NameOrHash => string.IsNullOrEmpty(GetNameString()) ? $"{NameHash64}" : GetNameString();
         public string Extension => Path.GetExtension(FileName);
 
         public string ShortName => Path.GetFileName(FileName);
@@ -66,6 +88,9 @@ namespace WolvenKit.RED4.CR2W.Archive
         #endregion Properties
 
         #region Methods
+
+        public void SetHashService(IHashService hashService) => _hashService = hashService;
+
 
         public void Extract(Stream output)
         {
@@ -77,7 +102,20 @@ namespace WolvenKit.RED4.CR2W.Archive
             ar.CopyFileToStream(output, NameHash64, false);
         }
 
-        public void SetNameStr(string s) => _nameStr = s;
+        private string GetNameString()
+        {
+            var _nameStr = _hashService?.Get(NameHash64);
+            // x-platform support
+            if (System.Runtime.InteropServices.RuntimeInformation
+                .IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX))
+            {
+                if (!string.IsNullOrEmpty(_nameStr) && _nameStr.Contains('\\'))
+                {
+                    _nameStr = _nameStr.Replace('\\', Path.DirectorySeparatorChar);
+                }
+            }
+            return _nameStr;
+        }
 
 
 

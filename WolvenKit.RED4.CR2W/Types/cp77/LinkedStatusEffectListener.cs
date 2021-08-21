@@ -10,7 +10,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<gameObject> _instigatorObject;
 		private TweakDBID _linkedEffect;
 		private CHandle<RemoveLinkedStatusEffectsEvent> _evt;
-		private CHandle<gameStatusEffect> _statusEffect;
 
 		[Ordinal(0)] 
 		[RED("instigatorObject")] 
@@ -34,14 +33,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _evt);
 			set => SetProperty(ref _evt, value);
-		}
-
-		[Ordinal(3)] 
-		[RED("statusEffect")] 
-		public CHandle<gameStatusEffect> StatusEffect
-		{
-			get => GetProperty(ref _statusEffect);
-			set => SetProperty(ref _statusEffect, value);
 		}
 
 		public LinkedStatusEffectListener(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

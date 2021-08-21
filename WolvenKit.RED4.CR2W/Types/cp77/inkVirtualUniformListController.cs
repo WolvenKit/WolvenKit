@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private inkWidgetLibraryReference _itemTemplate;
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("itemTemplate")] 
 		public inkWidgetLibraryReference ItemTemplate
 		{

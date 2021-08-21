@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CBool _isWalking;
 
-		[Ordinal(1)] 
+		[Ordinal(4)] 
 		[RED("isWalking")] 
 		public CBool IsWalking
 		{

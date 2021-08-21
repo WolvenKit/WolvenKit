@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<inkCompoundWidgetReference> _equipmentAreas;
 		private inkWidgetReference _newItemsWrapper;
 		private inkTextWidgetReference _newItemsCounter;
-		private CArray<CHandle<InventoryItemDisplayEquipmentArea>> _categoryAreas;
+		private CArray<wCHandle<InventoryItemDisplayEquipmentArea>> _categoryAreas;
 
 		[Ordinal(1)] 
 		[RED("areasToHide")] 
@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(5)] 
 		[RED("categoryAreas")] 
-		public CArray<CHandle<InventoryItemDisplayEquipmentArea>> CategoryAreas
+		public CArray<wCHandle<InventoryItemDisplayEquipmentArea>> CategoryAreas
 		{
 			get => GetProperty(ref _categoryAreas);
 			set => SetProperty(ref _categoryAreas, value);

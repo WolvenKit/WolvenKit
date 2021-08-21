@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -112,6 +113,10 @@ namespace WolvenKit.MSTests
             var archivedir = new DirectoryInfo(Path.Combine(gameDirectory.FullName, "archive", "pc", "content"));
             s_bm.LoadFromFolder(archivedir);
             s_groupedFiles = s_bm.GroupedFiles;
+
+            var keyes = s_groupedFiles.Keys.ToList();
+            var keystring = string.Join(',', keyes);
+            Console.WriteLine(keystring);
         }
 
         #endregion Methods

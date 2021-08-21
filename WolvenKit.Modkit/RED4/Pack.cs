@@ -158,7 +158,7 @@ namespace WolvenKit.Modkit.RED4
                     {
                         if (!ar.Index.Dependencies.Select(_ => _.HashStr).Contains(cr2WImportWrapper.DepotPathStr))
                             ar.Index.Dependencies.Add(
-                                new Dependency(FNV1A64HashAlgorithm.HashString(cr2WImportWrapper.DepotPathStr)));
+                                new Dependency(_hashService, FNV1A64HashAlgorithm.HashString(cr2WImportWrapper.DepotPathStr)));
                     }
                     lastimportidx = (uint)ar.Index.Dependencies.Count;
 
@@ -226,10 +226,16 @@ namespace WolvenKit.Modkit.RED4
                 // save table data
                 var sha1 = new System.Security.Cryptography.SHA1Managed();
                 var sha1hash = sha1.ComputeHash(fileBinaryReader.BaseStream.ToByteArray()); //TODO: this is only correct for files with no buffer
-                var item = new FileEntry(hash, DateTime.Now, (uint)flags
-                    , firstoffsetidx, lastoffsetidx,
-                    firstimportidx, lastimportidx
-                    , sha1hash);
+                var item = new FileEntry(
+                    _hashService,
+                    hash,
+                    DateTime.Now,
+                    (uint)flags,
+                    firstoffsetidx,
+                    lastoffsetidx,
+                    firstimportidx,
+                    lastimportidx,
+                    sha1hash);
                 ar.Index.FileEntries.Add(hash, item);
 
                 Interlocked.Increment(ref progress);

@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<DamageTypeIndicator> _damageTypeIndicator;
 		private wCHandle<TooltipSpecialAbilityList> _specialAbilitiesList;
 		private CHandle<InventoryTooltipData> _data;
-		private CHandle<ButtonHintListItem> _tooltipCycleHint;
+		private wCHandle<ButtonHintListItem> _tooltipCycleHint;
 		private CHandle<inkanimProxy> _anim;
 
 		[Ordinal(2)] 
@@ -291,7 +291,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(33)] 
 		[RED("tooltipCycleHint")] 
-		public CHandle<ButtonHintListItem> TooltipCycleHint
+		public wCHandle<ButtonHintListItem> TooltipCycleHint
 		{
 			get => GetProperty(ref _tooltipCycleHint);
 			set => SetProperty(ref _tooltipCycleHint, value);

@@ -61,7 +61,7 @@ namespace WolvenKit.CLI
 
                     services.AddOptions<CommonImportArgs>().Bind(hostContext.Configuration.GetSection("CommonImportArgs"));
                     services.AddOptions<XbmImportArgs>().Bind(hostContext.Configuration.GetSection("XbmImportArgs"));
-                    services.AddOptions<MeshImportArgs>().Bind(hostContext.Configuration.GetSection("MeshImportArgs"));
+                    services.AddOptions<GltfImportArgs>().Bind(hostContext.Configuration.GetSection("GltfImportArgs"));
 
                     services.AddOptions<XbmExportArgs>().Bind(hostContext.Configuration.GetSection("XbmExportArgs"));
                     services.AddOptions<MeshExportArgs>().Bind(hostContext.Configuration.GetSection("MeshExportArgs"));

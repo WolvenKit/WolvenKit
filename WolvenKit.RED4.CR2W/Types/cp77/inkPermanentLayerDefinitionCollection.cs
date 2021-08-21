@@ -10,6 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkLoadingLayerDefinition _loadingLayer;
 		private inkWatermarksLayerDefinition _watermarksLayer;
 		private inkSystemNotificationsLayerDefinition _sysNotificationsLayer;
+		private inkWaitingSignLayerDefinition _waitingSignLayerDefinition;
 
 		[Ordinal(0)] 
 		[RED("loadingLayer")] 
@@ -33,6 +34,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _sysNotificationsLayer);
 			set => SetProperty(ref _sysNotificationsLayer, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("waitingSignLayerDefinition")] 
+		public inkWaitingSignLayerDefinition WaitingSignLayerDefinition
+		{
+			get => GetProperty(ref _waitingSignLayerDefinition);
+			set => SetProperty(ref _waitingSignLayerDefinition, value);
 		}
 
 		public inkPermanentLayerDefinitionCollection(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

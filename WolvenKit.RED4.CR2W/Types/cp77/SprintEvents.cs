@@ -8,11 +8,11 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class SprintEvents : LocomotionGroundEvents
 	{
 		private CFloat _previousStimTimeStamp;
-		private CHandle<gameStatModifierData> _reloadModifier;
+		private CHandle<gameStatModifierData_Deprecated> _reloadModifier;
 		private CBool _isInSecondSprint;
-		private CHandle<gameStatModifierData> _sprintModifier;
+		private CHandle<gameStatModifierData_Deprecated> _sprintModifier;
 
-		[Ordinal(0)] 
+		[Ordinal(3)] 
 		[RED("previousStimTimeStamp")] 
 		public CFloat PreviousStimTimeStamp
 		{
@@ -20,15 +20,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _previousStimTimeStamp, value);
 		}
 
-		[Ordinal(1)] 
+		[Ordinal(4)] 
 		[RED("reloadModifier")] 
-		public CHandle<gameStatModifierData> ReloadModifier
+		public CHandle<gameStatModifierData_Deprecated> ReloadModifier
 		{
 			get => GetProperty(ref _reloadModifier);
 			set => SetProperty(ref _reloadModifier, value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(5)] 
 		[RED("isInSecondSprint")] 
 		public CBool IsInSecondSprint
 		{
@@ -36,9 +36,9 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isInSecondSprint, value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("sprintModifier")] 
-		public CHandle<gameStatModifierData> SprintModifier
+		public CHandle<gameStatModifierData_Deprecated> SprintModifier
 		{
 			get => GetProperty(ref _sprintModifier);
 			set => SetProperty(ref _sprintModifier, value);

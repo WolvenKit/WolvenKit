@@ -7,11 +7,11 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class KerenzikovEvents : TimeDilationEventsTransitions
 	{
-		private CHandle<gameStatModifierData> _allowMovementModifier;
+		private CHandle<gameStatModifierData_Deprecated> _allowMovementModifier;
 
 		[Ordinal(0)] 
 		[RED("allowMovementModifier")] 
-		public CHandle<gameStatModifierData> AllowMovementModifier
+		public CHandle<gameStatModifierData_Deprecated> AllowMovementModifier
 		{
 			get => GetProperty(ref _allowMovementModifier);
 			set => SetProperty(ref _allowMovementModifier, value);

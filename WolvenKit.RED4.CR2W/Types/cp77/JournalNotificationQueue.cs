@@ -15,26 +15,26 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CName _genericNotification;
 		private CName _messageNotification;
 		private wCHandle<gameJournalManager> _journalMgr;
-		private CHandle<gameIBlackboard> _newAreablackboard;
+		private wCHandle<gameIBlackboard> _newAreablackboard;
 		private CHandle<UI_MapDef> _newAreaDef;
-		private CUInt32 _newAreaID;
-		private CHandle<gameIBlackboard> _tutorialBlackboard;
+		private CHandle<redCallbackObject> _newAreaID;
+		private wCHandle<gameIBlackboard> _tutorialBlackboard;
 		private CHandle<UIGameDataDef> _tutorialDef;
-		private CUInt32 _tutorialID;
-		private CUInt32 _tutorialDataID;
+		private CHandle<redCallbackObject> _tutorialID;
+		private CHandle<redCallbackObject> _tutorialDataID;
 		private CBool _isHiddenByTutorial;
-		private CUInt32 _customQuestNotificationblackBoardID;
+		private CHandle<redCallbackObject> _customQuestNotificationblackBoardID;
 		private CHandle<UI_CustomQuestNotificationDef> _customQuestNotificationblackboardDef;
-		private CHandle<gameIBlackboard> _customQuestNotificationblackboard;
+		private wCHandle<gameIBlackboard> _customQuestNotificationblackboard;
 		private wCHandle<gameTransactionSystem> _transactionSystem;
 		private wCHandle<gameObject> _playerPuppet;
-		private CHandle<gameIBlackboard> _activeVehicleBlackboard;
-		private CUInt32 _mountBBConnectionId;
+		private wCHandle<gameIBlackboard> _activeVehicleBlackboard;
+		private CHandle<redCallbackObject> _mountBBConnectionId;
 		private CBool _isPlayerMounted;
-		private CHandle<gameIBlackboard> _blackboard;
+		private wCHandle<gameIBlackboard> _blackboard;
 		private CHandle<UI_SystemDef> _uiSystemBB;
-		private CUInt32 _uiSystemId;
-		private CUInt32 _trackedMappinId;
+		private CHandle<redCallbackObject> _uiSystemId;
+		private CHandle<redCallbackObject> _trackedMappinId;
 		private CHandle<gameuiGameSystemUI> _uiSystem;
 		private wCHandle<gameInventoryScriptListener> _shardTransactionListener;
 
@@ -104,7 +104,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("newAreablackboard")] 
-		public CHandle<gameIBlackboard> NewAreablackboard
+		public wCHandle<gameIBlackboard> NewAreablackboard
 		{
 			get => GetProperty(ref _newAreablackboard);
 			set => SetProperty(ref _newAreablackboard, value);
@@ -120,7 +120,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("newAreaID")] 
-		public CUInt32 NewAreaID
+		public CHandle<redCallbackObject> NewAreaID
 		{
 			get => GetProperty(ref _newAreaID);
 			set => SetProperty(ref _newAreaID, value);
@@ -128,7 +128,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("tutorialBlackboard")] 
-		public CHandle<gameIBlackboard> TutorialBlackboard
+		public wCHandle<gameIBlackboard> TutorialBlackboard
 		{
 			get => GetProperty(ref _tutorialBlackboard);
 			set => SetProperty(ref _tutorialBlackboard, value);
@@ -144,7 +144,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("tutorialID")] 
-		public CUInt32 TutorialID
+		public CHandle<redCallbackObject> TutorialID
 		{
 			get => GetProperty(ref _tutorialID);
 			set => SetProperty(ref _tutorialID, value);
@@ -152,7 +152,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(16)] 
 		[RED("tutorialDataID")] 
-		public CUInt32 TutorialDataID
+		public CHandle<redCallbackObject> TutorialDataID
 		{
 			get => GetProperty(ref _tutorialDataID);
 			set => SetProperty(ref _tutorialDataID, value);
@@ -168,7 +168,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(18)] 
 		[RED("customQuestNotificationblackBoardID")] 
-		public CUInt32 CustomQuestNotificationblackBoardID
+		public CHandle<redCallbackObject> CustomQuestNotificationblackBoardID
 		{
 			get => GetProperty(ref _customQuestNotificationblackBoardID);
 			set => SetProperty(ref _customQuestNotificationblackBoardID, value);
@@ -184,7 +184,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(20)] 
 		[RED("customQuestNotificationblackboard")] 
-		public CHandle<gameIBlackboard> CustomQuestNotificationblackboard
+		public wCHandle<gameIBlackboard> CustomQuestNotificationblackboard
 		{
 			get => GetProperty(ref _customQuestNotificationblackboard);
 			set => SetProperty(ref _customQuestNotificationblackboard, value);
@@ -208,7 +208,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(23)] 
 		[RED("activeVehicleBlackboard")] 
-		public CHandle<gameIBlackboard> ActiveVehicleBlackboard
+		public wCHandle<gameIBlackboard> ActiveVehicleBlackboard
 		{
 			get => GetProperty(ref _activeVehicleBlackboard);
 			set => SetProperty(ref _activeVehicleBlackboard, value);
@@ -216,7 +216,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(24)] 
 		[RED("mountBBConnectionId")] 
-		public CUInt32 MountBBConnectionId
+		public CHandle<redCallbackObject> MountBBConnectionId
 		{
 			get => GetProperty(ref _mountBBConnectionId);
 			set => SetProperty(ref _mountBBConnectionId, value);
@@ -232,7 +232,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(26)] 
 		[RED("blackboard")] 
-		public CHandle<gameIBlackboard> Blackboard
+		public wCHandle<gameIBlackboard> Blackboard
 		{
 			get => GetProperty(ref _blackboard);
 			set => SetProperty(ref _blackboard, value);
@@ -248,7 +248,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(28)] 
 		[RED("uiSystemId")] 
-		public CUInt32 UiSystemId
+		public CHandle<redCallbackObject> UiSystemId
 		{
 			get => GetProperty(ref _uiSystemId);
 			set => SetProperty(ref _uiSystemId, value);
@@ -256,7 +256,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(29)] 
 		[RED("trackedMappinId")] 
-		public CUInt32 TrackedMappinId
+		public CHandle<redCallbackObject> TrackedMappinId
 		{
 			get => GetProperty(ref _trackedMappinId);
 			set => SetProperty(ref _trackedMappinId, value);

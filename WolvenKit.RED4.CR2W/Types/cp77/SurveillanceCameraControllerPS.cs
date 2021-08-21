@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _shouldRevealEnemies;
 		private CHandle<EngDemoContainer> _cameraSkillChecks;
 
-		[Ordinal(144)] 
+		[Ordinal(145)] 
 		[RED("cameraProperties")] 
 		public CameraSetup CameraProperties
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cameraProperties, value);
 		}
 
-		[Ordinal(145)] 
+		[Ordinal(146)] 
 		[RED("cameraQuestProperties")] 
 		public CameraQuestProperties CameraQuestProperties
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cameraQuestProperties, value);
 		}
 
-		[Ordinal(146)] 
+		[Ordinal(147)] 
 		[RED("cameraState")] 
 		public CEnum<ESurveillanceCameraStatus> CameraState
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _cameraState, value);
 		}
 
-		[Ordinal(147)] 
+		[Ordinal(148)] 
 		[RED("shouldStream")] 
 		public CBool ShouldStream
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shouldStream, value);
 		}
 
-		[Ordinal(148)] 
+		[Ordinal(149)] 
 		[RED("isDetecting")] 
 		public CBool IsDetecting
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isDetecting, value);
 		}
 
-		[Ordinal(149)] 
+		[Ordinal(150)] 
 		[RED("feedReceivers")] 
 		public CArray<entEntityID> FeedReceivers
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _feedReceivers, value);
 		}
 
-		[Ordinal(150)] 
+		[Ordinal(151)] 
 		[RED("mostRecentRequester")] 
 		public entEntityID MostRecentRequester
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _mostRecentRequester, value);
 		}
 
-		[Ordinal(151)] 
+		[Ordinal(152)] 
 		[RED("virtualComponentName")] 
 		public CName VirtualComponentName
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _virtualComponentName, value);
 		}
 
-		[Ordinal(152)] 
+		[Ordinal(153)] 
 		[RED("isFeedReplacedWithBink")] 
 		public CBool IsFeedReplacedWithBink
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _isFeedReplacedWithBink, value);
 		}
 
-		[Ordinal(153)] 
+		[Ordinal(154)] 
 		[RED("binkVideoPath")] 
 		public redResourceReferenceScriptToken BinkVideoPath
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _binkVideoPath, value);
 		}
 
-		[Ordinal(154)] 
+		[Ordinal(155)] 
 		[RED("shouldRevealEnemies")] 
 		public CBool ShouldRevealEnemies
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _shouldRevealEnemies, value);
 		}
 
-		[Ordinal(155)] 
+		[Ordinal(156)] 
 		[RED("cameraSkillChecks")] 
 		public CHandle<EngDemoContainer> CameraSkillChecks
 		{

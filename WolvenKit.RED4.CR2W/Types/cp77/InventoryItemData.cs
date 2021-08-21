@@ -56,6 +56,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CArray<TweakDBID> _placementSlots;
 		private CArray<gameStatViewData> _primaryStats;
 		private CArray<gameStatViewData> _secondaryStats;
+		private InventoryItemSortData _sortData;
 
 		[Ordinal(0)] 
 		[RED("Empty")] 
@@ -447,6 +448,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _secondaryStats);
 			set => SetProperty(ref _secondaryStats, value);
+		}
+
+		[Ordinal(49)] 
+		[RED("SortData")] 
+		public InventoryItemSortData SortData
+		{
+			get => GetProperty(ref _sortData);
+			set => SetProperty(ref _sortData, value);
 		}
 
 		public InventoryItemData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

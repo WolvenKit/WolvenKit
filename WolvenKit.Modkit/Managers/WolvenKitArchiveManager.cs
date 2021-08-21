@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ProtoBuf;
 
 namespace WolvenKit.Common.Model
@@ -54,24 +52,26 @@ namespace WolvenKit.Common.Model
 
                 for (var i = 0; i < parts.Length - 1; i++)
                 {
-                    if (!currentNode.Directories.ContainsKey(parts[i]))
+                    if (!currentNode.Directories.Any(_ => _.Name == parts[i]))
                     {
                         var newNode = new GameFileTreeNode
                         {
                             Parent = currentNode,
                             Name = parts[i]
                         };
-                        currentNode.Directories.Add(parts[i], newNode);
+                        currentNode.Directories.Add(/*parts[i], */newNode);
                         currentNode = newNode;
                     }
                     else
                     {
-                        currentNode = currentNode.Directories[parts[i]];
+                        currentNode = currentNode.Directories.First(_ => _.Name == parts[i]);
                     }
                 }
 
-                currentNode.Files.Add(parts[^1], item.Value.ToList());
+                currentNode.Files.AddRange(item.Value.ToList());
             }
+
+            //RootNode.Files.AddRange(Items.Values.ToList());
         }
 
 
@@ -95,9 +95,9 @@ namespace WolvenKit.Common.Model
             {
                 foreach (var wfile in mainnode.Files)
                 {
-                    bundfiles.AddRange(wfile.Value);
+                    bundfiles.Add(wfile);
                 }
-                bundfiles.AddRange(mainnode.Directories.Values.SelectMany(GetFiles));
+                bundfiles.AddRange(mainnode.Directories.SelectMany(GetFiles));
             }
             return bundfiles;
         }

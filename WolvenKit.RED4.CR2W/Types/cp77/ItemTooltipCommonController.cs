@@ -24,18 +24,18 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _descriptionText;
 		private inkWidgetReference _dEBUG_iconErrorWrapper;
 		private inkTextWidgetReference _dEBUG_iconErrorText;
-		private CHandle<ItemTooltipEquippedModule> _itemEquippedController;
-		private CHandle<ItemTooltipHeaderController> _itemHeaderController;
-		private CHandle<ItemTooltipIconModule> _itemIconController;
-		private CHandle<ItemTooltipWeaponInfoModule> _itemWeaponInfoController;
-		private CHandle<ItemTooltipClothingInfoModule> _itemClothingInfoController;
-		private CHandle<ItemTooltipGrenadeInfoModule> _itemGrenadeInfoController;
-		private CHandle<ItemTooltipRequirementsModule> _itemRequirementsController;
-		private CHandle<ItemTooltipDetailsModule> _itemDetailsController;
-		private CHandle<ItemTooltipRecipeDataModule> _itemRecipeDataController;
-		private CHandle<ItemTooltipEvolutionModule> _itemEvolutionController;
-		private CHandle<ItemTooltipCraftedModule> _itemCraftedController;
-		private CHandle<ItemTooltipBottomModule> _itemBottomController;
+		private wCHandle<ItemTooltipEquippedModule> _itemEquippedController;
+		private wCHandle<ItemTooltipHeaderController> _itemHeaderController;
+		private wCHandle<ItemTooltipIconModule> _itemIconController;
+		private wCHandle<ItemTooltipWeaponInfoModule> _itemWeaponInfoController;
+		private wCHandle<ItemTooltipClothingInfoModule> _itemClothingInfoController;
+		private wCHandle<ItemTooltipGrenadeInfoModule> _itemGrenadeInfoController;
+		private wCHandle<ItemTooltipRequirementsModule> _itemRequirementsController;
+		private wCHandle<ItemTooltipDetailsModule> _itemDetailsController;
+		private wCHandle<ItemTooltipRecipeDataModule> _itemRecipeDataController;
+		private wCHandle<ItemTooltipEvolutionModule> _itemEvolutionController;
+		private wCHandle<ItemTooltipCraftedModule> _itemCraftedController;
+		private wCHandle<ItemTooltipBottomModule> _itemBottomController;
 		private CBool _dEBUG_showAdditionalInfo;
 		private CHandle<MinimalItemTooltipData> _data;
 		private CArray<CName> _requestedModules;
@@ -178,7 +178,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(19)] 
 		[RED("itemEquippedController")] 
-		public CHandle<ItemTooltipEquippedModule> ItemEquippedController
+		public wCHandle<ItemTooltipEquippedModule> ItemEquippedController
 		{
 			get => GetProperty(ref _itemEquippedController);
 			set => SetProperty(ref _itemEquippedController, value);
@@ -186,7 +186,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(20)] 
 		[RED("itemHeaderController")] 
-		public CHandle<ItemTooltipHeaderController> ItemHeaderController
+		public wCHandle<ItemTooltipHeaderController> ItemHeaderController
 		{
 			get => GetProperty(ref _itemHeaderController);
 			set => SetProperty(ref _itemHeaderController, value);
@@ -194,7 +194,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(21)] 
 		[RED("itemIconController")] 
-		public CHandle<ItemTooltipIconModule> ItemIconController
+		public wCHandle<ItemTooltipIconModule> ItemIconController
 		{
 			get => GetProperty(ref _itemIconController);
 			set => SetProperty(ref _itemIconController, value);
@@ -202,7 +202,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(22)] 
 		[RED("itemWeaponInfoController")] 
-		public CHandle<ItemTooltipWeaponInfoModule> ItemWeaponInfoController
+		public wCHandle<ItemTooltipWeaponInfoModule> ItemWeaponInfoController
 		{
 			get => GetProperty(ref _itemWeaponInfoController);
 			set => SetProperty(ref _itemWeaponInfoController, value);
@@ -210,7 +210,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(23)] 
 		[RED("itemClothingInfoController")] 
-		public CHandle<ItemTooltipClothingInfoModule> ItemClothingInfoController
+		public wCHandle<ItemTooltipClothingInfoModule> ItemClothingInfoController
 		{
 			get => GetProperty(ref _itemClothingInfoController);
 			set => SetProperty(ref _itemClothingInfoController, value);
@@ -218,7 +218,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(24)] 
 		[RED("itemGrenadeInfoController")] 
-		public CHandle<ItemTooltipGrenadeInfoModule> ItemGrenadeInfoController
+		public wCHandle<ItemTooltipGrenadeInfoModule> ItemGrenadeInfoController
 		{
 			get => GetProperty(ref _itemGrenadeInfoController);
 			set => SetProperty(ref _itemGrenadeInfoController, value);
@@ -226,7 +226,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(25)] 
 		[RED("itemRequirementsController")] 
-		public CHandle<ItemTooltipRequirementsModule> ItemRequirementsController
+		public wCHandle<ItemTooltipRequirementsModule> ItemRequirementsController
 		{
 			get => GetProperty(ref _itemRequirementsController);
 			set => SetProperty(ref _itemRequirementsController, value);
@@ -234,7 +234,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(26)] 
 		[RED("itemDetailsController")] 
-		public CHandle<ItemTooltipDetailsModule> ItemDetailsController
+		public wCHandle<ItemTooltipDetailsModule> ItemDetailsController
 		{
 			get => GetProperty(ref _itemDetailsController);
 			set => SetProperty(ref _itemDetailsController, value);
@@ -242,7 +242,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(27)] 
 		[RED("itemRecipeDataController")] 
-		public CHandle<ItemTooltipRecipeDataModule> ItemRecipeDataController
+		public wCHandle<ItemTooltipRecipeDataModule> ItemRecipeDataController
 		{
 			get => GetProperty(ref _itemRecipeDataController);
 			set => SetProperty(ref _itemRecipeDataController, value);
@@ -250,7 +250,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(28)] 
 		[RED("itemEvolutionController")] 
-		public CHandle<ItemTooltipEvolutionModule> ItemEvolutionController
+		public wCHandle<ItemTooltipEvolutionModule> ItemEvolutionController
 		{
 			get => GetProperty(ref _itemEvolutionController);
 			set => SetProperty(ref _itemEvolutionController, value);
@@ -258,7 +258,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(29)] 
 		[RED("itemCraftedController")] 
-		public CHandle<ItemTooltipCraftedModule> ItemCraftedController
+		public wCHandle<ItemTooltipCraftedModule> ItemCraftedController
 		{
 			get => GetProperty(ref _itemCraftedController);
 			set => SetProperty(ref _itemCraftedController, value);
@@ -266,7 +266,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(30)] 
 		[RED("itemBottomController")] 
-		public CHandle<ItemTooltipBottomModule> ItemBottomController
+		public wCHandle<ItemTooltipBottomModule> ItemBottomController
 		{
 			get => GetProperty(ref _itemBottomController);
 			set => SetProperty(ref _itemBottomController, value);

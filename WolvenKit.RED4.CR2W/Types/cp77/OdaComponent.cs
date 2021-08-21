@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private wCHandle<NPCPuppet> _owner;
 		private entEntityID _owner_id;
 		private CHandle<AIHumanComponent> _odaAIComponent;
-		private CHandle<gameIBlackboard> _actionBlackBoard;
+		private wCHandle<gameIBlackboard> _actionBlackBoard;
 		private CHandle<gameStatPoolsSystem> _statPoolSystem;
 		private CEnum<gamedataStatPoolType> _statPoolType;
 		private CHandle<OdaEmergencyListener> _healthListener;
@@ -43,7 +43,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(8)] 
 		[RED("actionBlackBoard")] 
-		public CHandle<gameIBlackboard> ActionBlackBoard
+		public wCHandle<gameIBlackboard> ActionBlackBoard
 		{
 			get => GetProperty(ref _actionBlackBoard);
 			set => SetProperty(ref _actionBlackBoard, value);

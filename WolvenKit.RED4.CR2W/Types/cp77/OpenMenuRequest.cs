@@ -13,6 +13,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private MenuData _eventData;
 		private CName _submenuName;
 		private CBool _isMainMenu;
+		private CUInt32 _hubMenuInstanceID;
 
 		[Ordinal(0)] 
 		[RED("menuName")] 
@@ -60,6 +61,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _isMainMenu);
 			set => SetProperty(ref _isMainMenu, value);
+		}
+
+		[Ordinal(6)] 
+		[RED("hubMenuInstanceID")] 
+		public CUInt32 HubMenuInstanceID
+		{
+			get => GetProperty(ref _hubMenuInstanceID);
+			set => SetProperty(ref _hubMenuInstanceID, value);
 		}
 
 		public OpenMenuRequest(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

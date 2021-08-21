@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CUInt32 _layerId;
 
-		[Ordinal(0)] 
+		[Ordinal(3)] 
 		[RED("layerId")] 
 		public CUInt32 LayerId
 		{

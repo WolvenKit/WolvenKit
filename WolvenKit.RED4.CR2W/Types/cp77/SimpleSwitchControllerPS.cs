@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private TweakDBID _nameForON;
 		private TweakDBID _nameForOFF;
 
-		[Ordinal(104)] 
+		[Ordinal(105)] 
 		[RED("switchAction")] 
 		public CEnum<ESwitchAction> SwitchAction
 		{
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _switchAction, value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(106)] 
 		[RED("nameForON")] 
 		public TweakDBID NameForON
 		{
@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _nameForON, value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(107)] 
 		[RED("nameForOFF")] 
 		public TweakDBID NameForOFF
 		{

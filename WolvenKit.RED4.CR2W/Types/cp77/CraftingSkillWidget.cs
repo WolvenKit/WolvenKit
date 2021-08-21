@@ -15,8 +15,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _nextLevelText;
 		private inkTextWidgetReference _expPointText1;
 		private inkTextWidgetReference _expPointText2;
-		private CHandle<gameIBlackboard> _levelUpBlackboard;
-		private CUInt32 _playerLevelUpListener;
+		private wCHandle<gameIBlackboard> _levelUpBlackboard;
+		private CHandle<redCallbackObject> _playerLevelUpListener;
 		private CBool _isLevelUp;
 		private CInt32 _currentExp;
 
@@ -86,7 +86,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("levelUpBlackboard")] 
-		public CHandle<gameIBlackboard> LevelUpBlackboard
+		public wCHandle<gameIBlackboard> LevelUpBlackboard
 		{
 			get => GetProperty(ref _levelUpBlackboard);
 			set => SetProperty(ref _levelUpBlackboard, value);
@@ -94,7 +94,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("playerLevelUpListener")] 
-		public CUInt32 PlayerLevelUpListener
+		public CHandle<redCallbackObject> PlayerLevelUpListener
 		{
 			get => GetProperty(ref _playerLevelUpListener);
 			set => SetProperty(ref _playerLevelUpListener, value);

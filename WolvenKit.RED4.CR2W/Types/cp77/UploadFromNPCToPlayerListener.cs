@@ -9,8 +9,9 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private wCHandle<ScriptedPuppet> _playerPuppet;
 		private wCHandle<ScriptedPuppet> _npcPuppet;
+		private CArray<entEntityID> _npcSquad;
 		private HUDProgressBarData _variantHud;
-		private CHandle<gameIBlackboard> _hudBlackboard;
+		private wCHandle<gameIBlackboard> _hudBlackboard;
 		private CBool _ssAction;
 
 		[Ordinal(2)] 
@@ -30,6 +31,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(4)] 
+		[RED("npcSquad")] 
+		public CArray<entEntityID> NpcSquad
+		{
+			get => GetProperty(ref _npcSquad);
+			set => SetProperty(ref _npcSquad, value);
+		}
+
+		[Ordinal(5)] 
 		[RED("variantHud")] 
 		public HUDProgressBarData VariantHud
 		{
@@ -37,15 +46,15 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _variantHud, value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("hudBlackboard")] 
-		public CHandle<gameIBlackboard> HudBlackboard
+		public wCHandle<gameIBlackboard> HudBlackboard
 		{
 			get => GetProperty(ref _hudBlackboard);
 			set => SetProperty(ref _hudBlackboard, value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("ssAction")] 
 		public CBool SsAction
 		{

@@ -14,10 +14,10 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _container_wide;
 		private inkTextWidgetReference _text_normal;
 		private inkTextWidgetReference _text_wide;
-		private CHandle<inkTextKiroshiAnimationController> _kiroshiAnimationCtrl_Normal;
-		private CHandle<inkTextKiroshiAnimationController> _kiroshiAnimationCtrl_Wide;
-		private CHandle<inkTextMotherTongueController> _motherTongueCtrl_Normal;
-		private CHandle<inkTextMotherTongueController> _motherTongueCtrl_Wide;
+		private wCHandle<inkTextKiroshiAnimationController> _kiroshiAnimationCtrl_Normal;
+		private wCHandle<inkTextKiroshiAnimationController> _kiroshiAnimationCtrl_Wide;
+		private wCHandle<inkTextMotherTongueController> _motherTongueCtrl_Normal;
+		private wCHandle<inkTextMotherTongueController> _motherTongueCtrl_Wide;
 		private CBool _isNameplateVisible;
 		private entEntityID _nameplateEntityId;
 		private CFloat _nameplatHeightOffset;
@@ -86,7 +86,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("kiroshiAnimationCtrl_Normal")] 
-		public CHandle<inkTextKiroshiAnimationController> KiroshiAnimationCtrl_Normal
+		public wCHandle<inkTextKiroshiAnimationController> KiroshiAnimationCtrl_Normal
 		{
 			get => GetProperty(ref _kiroshiAnimationCtrl_Normal);
 			set => SetProperty(ref _kiroshiAnimationCtrl_Normal, value);
@@ -94,7 +94,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(13)] 
 		[RED("kiroshiAnimationCtrl_Wide")] 
-		public CHandle<inkTextKiroshiAnimationController> KiroshiAnimationCtrl_Wide
+		public wCHandle<inkTextKiroshiAnimationController> KiroshiAnimationCtrl_Wide
 		{
 			get => GetProperty(ref _kiroshiAnimationCtrl_Wide);
 			set => SetProperty(ref _kiroshiAnimationCtrl_Wide, value);
@@ -102,7 +102,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(14)] 
 		[RED("motherTongueCtrl_Normal")] 
-		public CHandle<inkTextMotherTongueController> MotherTongueCtrl_Normal
+		public wCHandle<inkTextMotherTongueController> MotherTongueCtrl_Normal
 		{
 			get => GetProperty(ref _motherTongueCtrl_Normal);
 			set => SetProperty(ref _motherTongueCtrl_Normal, value);
@@ -110,7 +110,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("motherTongueCtrl_Wide")] 
-		public CHandle<inkTextMotherTongueController> MotherTongueCtrl_Wide
+		public wCHandle<inkTextMotherTongueController> MotherTongueCtrl_Wide
 		{
 			get => GetProperty(ref _motherTongueCtrl_Wide);
 			set => SetProperty(ref _motherTongueCtrl_Wide, value);

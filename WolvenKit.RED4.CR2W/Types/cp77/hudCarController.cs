@@ -9,18 +9,18 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private inkTextWidgetReference _speedValue;
 		private CArray<inkImageWidgetReference> _rPMChunks;
-		private CHandle<gameIBlackboard> _psmBlackboard;
-		private CUInt32 _pSM_BBID;
+		private wCHandle<gameIBlackboard> _psmBlackboard;
+		private CHandle<redCallbackObject> _pSM_BBID;
 		private CFloat _currentZoom;
 		private GameTime _currentTime;
 		private wCHandle<gameIBlackboard> _activeVehicleUIBlackboard;
-		private CUInt32 _vehicleBBStateConectionId;
-		private CUInt32 _speedBBConnectionId;
-		private CUInt32 _gearBBConnectionId;
-		private CUInt32 _tppBBConnectionId;
-		private CUInt32 _rpmValueBBConnectionId;
-		private CUInt32 _leanAngleBBConnectionId;
-		private CUInt32 _playerStateBBConnectionId;
+		private CHandle<redCallbackObject> _vehicleBBStateConectionId;
+		private CHandle<redCallbackObject> _speedBBConnectionId;
+		private CHandle<redCallbackObject> _gearBBConnectionId;
+		private CHandle<redCallbackObject> _tppBBConnectionId;
+		private CHandle<redCallbackObject> _rpmValueBBConnectionId;
+		private CHandle<redCallbackObject> _leanAngleBBConnectionId;
+		private CHandle<redCallbackObject> _playerStateBBConnectionId;
 		private CInt32 _activeChunks;
 		private wCHandle<vehicleBaseObject> _activeVehicle;
 		private CBool _driver;
@@ -43,7 +43,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(11)] 
 		[RED("psmBlackboard")] 
-		public CHandle<gameIBlackboard> PsmBlackboard
+		public wCHandle<gameIBlackboard> PsmBlackboard
 		{
 			get => GetProperty(ref _psmBlackboard);
 			set => SetProperty(ref _psmBlackboard, value);
@@ -51,7 +51,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(12)] 
 		[RED("PSM_BBID")] 
-		public CUInt32 PSM_BBID
+		public CHandle<redCallbackObject> PSM_BBID
 		{
 			get => GetProperty(ref _pSM_BBID);
 			set => SetProperty(ref _pSM_BBID, value);
@@ -83,7 +83,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(16)] 
 		[RED("vehicleBBStateConectionId")] 
-		public CUInt32 VehicleBBStateConectionId
+		public CHandle<redCallbackObject> VehicleBBStateConectionId
 		{
 			get => GetProperty(ref _vehicleBBStateConectionId);
 			set => SetProperty(ref _vehicleBBStateConectionId, value);
@@ -91,7 +91,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(17)] 
 		[RED("speedBBConnectionId")] 
-		public CUInt32 SpeedBBConnectionId
+		public CHandle<redCallbackObject> SpeedBBConnectionId
 		{
 			get => GetProperty(ref _speedBBConnectionId);
 			set => SetProperty(ref _speedBBConnectionId, value);
@@ -99,7 +99,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(18)] 
 		[RED("gearBBConnectionId")] 
-		public CUInt32 GearBBConnectionId
+		public CHandle<redCallbackObject> GearBBConnectionId
 		{
 			get => GetProperty(ref _gearBBConnectionId);
 			set => SetProperty(ref _gearBBConnectionId, value);
@@ -107,7 +107,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(19)] 
 		[RED("tppBBConnectionId")] 
-		public CUInt32 TppBBConnectionId
+		public CHandle<redCallbackObject> TppBBConnectionId
 		{
 			get => GetProperty(ref _tppBBConnectionId);
 			set => SetProperty(ref _tppBBConnectionId, value);
@@ -115,7 +115,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(20)] 
 		[RED("rpmValueBBConnectionId")] 
-		public CUInt32 RpmValueBBConnectionId
+		public CHandle<redCallbackObject> RpmValueBBConnectionId
 		{
 			get => GetProperty(ref _rpmValueBBConnectionId);
 			set => SetProperty(ref _rpmValueBBConnectionId, value);
@@ -123,7 +123,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(21)] 
 		[RED("leanAngleBBConnectionId")] 
-		public CUInt32 LeanAngleBBConnectionId
+		public CHandle<redCallbackObject> LeanAngleBBConnectionId
 		{
 			get => GetProperty(ref _leanAngleBBConnectionId);
 			set => SetProperty(ref _leanAngleBBConnectionId, value);
@@ -131,7 +131,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(22)] 
 		[RED("playerStateBBConnectionId")] 
-		public CUInt32 PlayerStateBBConnectionId
+		public CHandle<redCallbackObject> PlayerStateBBConnectionId
 		{
 			get => GetProperty(ref _playerStateBBConnectionId);
 			set => SetProperty(ref _playerStateBBConnectionId, value);

@@ -15,6 +15,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CUInt64 _bytesReadDuringDriving;
 		private CUInt64 _bytesReadDuringCooldown;
 		private CUInt64 _totalSeeksBytes;
+		private CFloat _minFps;
+		private CFloat _maxFps;
+		private CFloat _averageFps;
 
 		[Ordinal(0)] 
 		[RED("gameDefinition")] 
@@ -78,6 +81,30 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _totalSeeksBytes);
 			set => SetProperty(ref _totalSeeksBytes, value);
+		}
+
+		[Ordinal(8)] 
+		[RED("minFps")] 
+		public CFloat MinFps
+		{
+			get => GetProperty(ref _minFps);
+			set => SetProperty(ref _minFps, value);
+		}
+
+		[Ordinal(9)] 
+		[RED("maxFps")] 
+		public CFloat MaxFps
+		{
+			get => GetProperty(ref _maxFps);
+			set => SetProperty(ref _maxFps, value);
+		}
+
+		[Ordinal(10)] 
+		[RED("averageFps")] 
+		public CFloat AverageFps
+		{
+			get => GetProperty(ref _averageFps);
+			set => SetProperty(ref _averageFps, value);
 		}
 
 		public worldStreamingTestSummary(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

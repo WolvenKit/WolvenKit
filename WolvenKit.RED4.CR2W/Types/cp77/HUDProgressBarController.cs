@@ -13,11 +13,11 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _completed;
 		private inkTextWidgetReference _failed;
 		private wCHandle<inkWidget> _rootWidget;
-		private CHandle<gameIBlackboard> _progressBarBB;
+		private wCHandle<gameIBlackboard> _progressBarBB;
 		private CHandle<UI_HUDProgressBarDef> _progressBarDef;
-		private CUInt32 _activeBBID;
-		private CUInt32 _headerBBID;
-		private CUInt32 _progressBBID;
+		private CHandle<redCallbackObject> _activeBBID;
+		private CHandle<redCallbackObject> _headerBBID;
+		private CHandle<redCallbackObject> _progressBBID;
 		private CHandle<inkanimProxy> _outroAnimation;
 		private CHandle<inkanimProxy> _loopAnimation;
 		private CHandle<inkanimProxy> _introAnimation;
@@ -74,7 +74,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(15)] 
 		[RED("progressBarBB")] 
-		public CHandle<gameIBlackboard> ProgressBarBB
+		public wCHandle<gameIBlackboard> ProgressBarBB
 		{
 			get => GetProperty(ref _progressBarBB);
 			set => SetProperty(ref _progressBarBB, value);
@@ -90,7 +90,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(17)] 
 		[RED("activeBBID")] 
-		public CUInt32 ActiveBBID
+		public CHandle<redCallbackObject> ActiveBBID
 		{
 			get => GetProperty(ref _activeBBID);
 			set => SetProperty(ref _activeBBID, value);
@@ -98,7 +98,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(18)] 
 		[RED("headerBBID")] 
-		public CUInt32 HeaderBBID
+		public CHandle<redCallbackObject> HeaderBBID
 		{
 			get => GetProperty(ref _headerBBID);
 			set => SetProperty(ref _headerBBID, value);
@@ -106,7 +106,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(19)] 
 		[RED("progressBBID")] 
-		public CUInt32 ProgressBBID
+		public CHandle<redCallbackObject> ProgressBBID
 		{
 			get => GetProperty(ref _progressBBID);
 			set => SetProperty(ref _progressBBID, value);

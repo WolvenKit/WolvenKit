@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private inkCompoundWidgetReference _listRef;
 		private CFloat _initialPopupDelay;
-		private CArray<CHandle<DisassemblePopupLogicController>> _popupList;
+		private CArray<wCHandle<DisassemblePopupLogicController>> _popupList;
 		private CArray<InventoryItemData> _listOfAddedInventoryItems;
 		private wCHandle<PlayerPuppet> _player;
 		private CHandle<InventoryDataManagerV2> _inventoryManager;
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(5)] 
 		[RED("popupList")] 
-		public CArray<CHandle<DisassemblePopupLogicController>> PopupList
+		public CArray<wCHandle<DisassemblePopupLogicController>> PopupList
 		{
 			get => GetProperty(ref _popupList);
 			set => SetProperty(ref _popupList, value);

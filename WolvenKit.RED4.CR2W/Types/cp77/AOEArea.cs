@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _extendPercentAABB;
 		private CBool _isAABBExtended;
 
-		[Ordinal(96)] 
+		[Ordinal(97)] 
 		[RED("areaComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> AreaComponent
 		{
@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _areaComponent, value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(98)] 
 		[RED("gameEffect")] 
 		public CHandle<gameEffectInstance> GameEffect
 		{
@@ -32,7 +32,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _gameEffect, value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(99)] 
 		[RED("highLightActive")] 
 		public CBool HighLightActive
 		{
@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _highLightActive, value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(100)] 
 		[RED("visionBlockerComponent")] 
 		public CHandle<entIComponent> VisionBlockerComponent
 		{
@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _visionBlockerComponent, value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(101)] 
 		[RED("obstacleComponent")] 
 		public CHandle<gameinfluenceObstacleComponent> ObstacleComponent
 		{
@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _obstacleComponent, value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(102)] 
 		[RED("activeStatusEffects")] 
 		public CArray<wCHandle<gamedataStatusEffect_Record>> ActiveStatusEffects
 		{
@@ -64,7 +64,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _activeStatusEffects, value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(103)] 
 		[RED("extendPercentAABB")] 
 		public CFloat ExtendPercentAABB
 		{
@@ -72,7 +72,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _extendPercentAABB, value);
 		}
 
-		[Ordinal(103)] 
+		[Ordinal(104)] 
 		[RED("isAABBExtended")] 
 		public CBool IsAABBExtended
 		{

@@ -8,9 +8,9 @@ namespace WolvenKit.RED4.CR2W.Types
 	public class SlideEvents : CrouchEvents
 	{
 		private CBool _rumblePlayed;
-		private CHandle<gameStatModifierData> _addDecelerationModifier;
+		private CHandle<gameStatModifierData_Deprecated> _addDecelerationModifier;
 
-		[Ordinal(0)] 
+		[Ordinal(3)] 
 		[RED("rumblePlayed")] 
 		public CBool RumblePlayed
 		{
@@ -18,9 +18,9 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _rumblePlayed, value);
 		}
 
-		[Ordinal(1)] 
+		[Ordinal(4)] 
 		[RED("addDecelerationModifier")] 
-		public CHandle<gameStatModifierData> AddDecelerationModifier
+		public CHandle<gameStatModifierData_Deprecated> AddDecelerationModifier
 		{
 			get => GetProperty(ref _addDecelerationModifier);
 			set => SetProperty(ref _addDecelerationModifier, value);

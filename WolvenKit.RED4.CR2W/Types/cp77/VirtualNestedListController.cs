@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CBool _defaultCollapsed;
 		private CArray<CInt32> _toggledLevels;
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("dataView")] 
 		public CHandle<VirtualNestedListDataView> DataView
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dataView, value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("dataSource")] 
 		public CHandle<inkScriptableDataSourceWrapper> DataSource
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _dataSource, value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("classifier")] 
 		public CHandle<VirutalNestedListClassifier> Classifier
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _classifier, value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("defaultCollapsed")] 
 		public CBool DefaultCollapsed
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _defaultCollapsed, value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("toggledLevels")] 
 		public CArray<CInt32> ToggledLevels
 		{

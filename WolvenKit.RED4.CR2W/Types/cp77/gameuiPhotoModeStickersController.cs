@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _backgroundViewRoot;
 		private CArray<wCHandle<inkWidget>> _stickers;
 		private wCHandle<inkWidget> _frame;
-		private CHandle<PhotoModeFrame> _frameLogic;
+		private wCHandle<PhotoModeFrame> _frameLogic;
 		private CInt32 _currentHovered;
 		private CInt32 _currentMouseDrag;
 		private CInt32 _currentMouseRotate;
@@ -136,7 +136,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(14)] 
 		[RED("frameLogic")] 
-		public CHandle<PhotoModeFrame> FrameLogic
+		public wCHandle<PhotoModeFrame> FrameLogic
 		{
 			get => GetProperty(ref _frameLogic);
 			set => SetProperty(ref _frameLogic, value);

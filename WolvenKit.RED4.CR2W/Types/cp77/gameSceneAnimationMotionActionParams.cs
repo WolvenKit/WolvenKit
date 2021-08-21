@@ -20,7 +20,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _globalTimeToAnimTime;
 		private gameMountDescriptor _mountDescriptor;
 		private gameScenePlayerAnimationParams _playerParams;
-		private CEnum<gameSceneAnimationMotionActionParamsActionPlayDirection> _hACK_eventPlayDirection;
 		private CArray<scnAnimationMotionSample> _trajectoryLOD;
 		private CUInt64 _dynamicAnimSetupHash;
 
@@ -129,14 +128,6 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(13)] 
-		[RED("HACK_eventPlayDirection")] 
-		public CEnum<gameSceneAnimationMotionActionParamsActionPlayDirection> HACK_eventPlayDirection
-		{
-			get => GetProperty(ref _hACK_eventPlayDirection);
-			set => SetProperty(ref _hACK_eventPlayDirection, value);
-		}
-
-		[Ordinal(14)] 
 		[RED("trajectoryLOD")] 
 		public CArray<scnAnimationMotionSample> TrajectoryLOD
 		{
@@ -144,7 +135,7 @@ namespace WolvenKit.RED4.CR2W.Types
 			set => SetProperty(ref _trajectoryLOD, value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(14)] 
 		[RED("dynamicAnimSetupHash")] 
 		public CUInt64 DynamicAnimSetupHash
 		{

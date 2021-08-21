@@ -1,3 +1,6 @@
+using System;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using WolvenKit.Models.Docking;
 using WolvenKit.ViewModels.Shell;
 
@@ -5,11 +8,6 @@ namespace WolvenKit.ViewModels.Editor
 {
     public class ToolViewModel : PaneViewModel
     {
-        #region Fields
-
-        private bool _isVisible = false;
-
-        #endregion Fields
 
         #region constructors
 
@@ -24,6 +22,12 @@ namespace WolvenKit.ViewModels.Editor
             Name = name;
             Title = name;
             Header = name;
+
+            this.WhenAnyValue(x => x.IsVisible).Subscribe(b =>
+            {
+                State = !b ? DockState.Hidden : DockState.Dock;
+            });
+
         }
 
         /// <summary>
@@ -47,19 +51,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// Gets/sets whether this tool window is visible or not.
         /// </summary>
-        public bool IsVisible
-        {
-            get => _isVisible;
-            set
-            {
-                if (_isVisible != value)
-                {
-                    _isVisible = value;
-                    RaisePropertyChanged(() => IsVisible);
-                    State = !_isVisible ? DockState.Hidden : DockState.Dock;
-                }
-            }
-        }
+        [Reactive] public bool IsVisible { get; set; }
 
         #endregion IsVisible
 

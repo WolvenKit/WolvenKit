@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkWidgetReference _analogTachNeedleWidget;
 		private CFloat _analogTachNeedleMinRotation;
 		private CFloat _analogTachNeedleMaxRotation;
-		private CUInt32 _rpmValueBBConnectionId;
+		private CHandle<redCallbackObject> _rpmValueBBConnectionId;
 		private wCHandle<gameIBlackboard> _vehBB;
 		private CFloat _rpmMaxValue;
 		private CFloat _rpmMinValue;
@@ -41,7 +41,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(4)] 
 		[RED("rpmValueBBConnectionId")] 
-		public CUInt32 RpmValueBBConnectionId
+		public CHandle<redCallbackObject> RpmValueBBConnectionId
 		{
 			get => GetProperty(ref _rpmValueBBConnectionId);
 			set => SetProperty(ref _rpmValueBBConnectionId, value);

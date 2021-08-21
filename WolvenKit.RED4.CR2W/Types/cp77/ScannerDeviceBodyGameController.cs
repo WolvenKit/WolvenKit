@@ -11,8 +11,8 @@ namespace WolvenKit.RED4.CR2W.Types
 		private inkTextWidgetReference _deviceAuthorizationText;
 		private inkCompoundWidgetReference _deviceAuthorizationRow;
 		private inkCompoundWidgetReference _networkStatusRow;
-		private CUInt32 _networkStatusCallbackID;
-		private CUInt32 _deviceAuthorizationCallbackID;
+		private CHandle<redCallbackObject> _networkStatusCallbackID;
+		private CHandle<redCallbackObject> _deviceAuthorizationCallbackID;
 		private CBool _isValidnetworkStatus;
 		private CBool _isValidDeviceAuthorization;
 
@@ -50,7 +50,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(9)] 
 		[RED("networkStatusCallbackID")] 
-		public CUInt32 NetworkStatusCallbackID
+		public CHandle<redCallbackObject> NetworkStatusCallbackID
 		{
 			get => GetProperty(ref _networkStatusCallbackID);
 			set => SetProperty(ref _networkStatusCallbackID, value);
@@ -58,7 +58,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(10)] 
 		[RED("deviceAuthorizationCallbackID")] 
-		public CUInt32 DeviceAuthorizationCallbackID
+		public CHandle<redCallbackObject> DeviceAuthorizationCallbackID
 		{
 			get => GetProperty(ref _deviceAuthorizationCallbackID);
 			set => SetProperty(ref _deviceAuthorizationCallbackID, value);

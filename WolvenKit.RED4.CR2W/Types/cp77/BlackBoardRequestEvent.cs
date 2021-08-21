@@ -7,13 +7,13 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BlackBoardRequestEvent : redEvent
 	{
-		private CHandle<gameIBlackboard> _blackBoard;
+		private wCHandle<gameIBlackboard> _blackBoard;
 		private CEnum<gameScriptedBlackboardStorage> _storageClass;
 		private CName _entryTag;
 
 		[Ordinal(0)] 
 		[RED("blackBoard")] 
-		public CHandle<gameIBlackboard> BlackBoard
+		public wCHandle<gameIBlackboard> BlackBoard
 		{
 			get => GetProperty(ref _blackBoard);
 			set => SetProperty(ref _blackBoard, value);

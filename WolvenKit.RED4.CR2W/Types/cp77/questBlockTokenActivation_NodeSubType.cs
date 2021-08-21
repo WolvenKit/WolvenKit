@@ -9,6 +9,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	{
 		private CEnum<questBlockAction> _action;
 		private CName _source;
+		private CBool _resetTokenSpawnTimer;
 
 		[Ordinal(0)] 
 		[RED("action")] 
@@ -24,6 +25,14 @@ namespace WolvenKit.RED4.CR2W.Types
 		{
 			get => GetProperty(ref _source);
 			set => SetProperty(ref _source, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("resetTokenSpawnTimer")] 
+		public CBool ResetTokenSpawnTimer
+		{
+			get => GetProperty(ref _resetTokenSpawnTimer);
+			set => SetProperty(ref _resetTokenSpawnTimer, value);
 		}
 
 		public questBlockTokenActivation_NodeSubType(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }

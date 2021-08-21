@@ -1,5 +1,8 @@
 using System;
+using System.Reactive.Disposables;
 using System.Windows;
+using ReactiveUI;
+using Splat;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.Common;
 using WolvenKit.Functionality.Commands;
@@ -7,7 +10,7 @@ using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.Views.Editor
 {
-    public partial class ImportExportView
+    public partial class ImportExportView : ReactiveUserControl<ImportExportViewModel>
     {
         /// <summary>
         /// Constructor I/E Tool.
@@ -15,6 +18,48 @@ namespace WolvenKit.Views.Editor
         public ImportExportView()
         {
             InitializeComponent();
+
+            ViewModel = Locator.Current.GetService<ImportExportViewModel>();
+            DataContext = ViewModel;
+
+            this.WhenActivated(disposables =>
+            {
+                //SelectedObject="{Binding SelectedObject.Properties, Mode=OneWay}"
+                this.OneWayBind(ViewModel,
+                        x => x.SelectedObject.Properties,
+                        x => x.OverlayPropertyGrid.SelectedObject)
+                    .DisposeWith(disposables);
+
+                this.Bind(ViewModel,
+                        x => x.ExportableItems,
+                        x => x.ExportGrid.ItemsSource)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                       x => x.SelectedExport,
+                       x => x.ExportGrid.SelectedItem)
+                   .DisposeWith(disposables);
+
+                this.Bind(ViewModel,
+                        x => x.ImportableItems,
+                        x => x.ImportGrid.ItemsSource)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                       x => x.SelectedImport,
+                       x => x.ImportGrid.SelectedItem)
+                   .DisposeWith(disposables);
+
+                this.Bind(ViewModel,
+                        x => x.ConvertableItems,
+                        x => x.ConvertGrid.ItemsSource)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                       x => x.SelectedConvert,
+                       x => x.ConvertGrid.SelectedItem)
+                   .DisposeWith(disposables);
+
+            });
+
+
         }
 
         /// <summary>
@@ -146,6 +191,18 @@ namespace WolvenKit.Views.Editor
             if (ViewModel is ImportExportViewModel vm)
             {
                 vm.RemoveItemsCommand.SafeExecute(SelectedFilesGrid.SelectedItems);
+            }
+        }
+
+        private void OverlayPropertyGrid_AutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
+        {
+            switch (e.DisplayName)
+            {
+                case nameof(ReactiveObject.Changed):
+                case nameof(ReactiveObject.Changing):
+                case nameof(ReactiveObject.ThrownExceptions):
+                    e.Cancel = true;
+                    break;
             }
         }
     }

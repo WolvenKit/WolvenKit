@@ -1,35 +1,28 @@
 using System;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Windows.Input;
-using System.Windows.Media;
-using Catel;
-using Catel.IoC;
-using Catel.MVVM;
-using Catel.Reflection;
-using Catel.Services;
-using ProtoBuf.Meta;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
+using Splat;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Functionality.WKitGlobal;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Interaction;
 using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.ViewModels.Shell
 { // #MVVM
     // #SortNameSpace
-    public class RibbonViewModel : ViewModelBase
+    public class RibbonViewModel : ReactiveObject
     {
         #region fields
 
-        public static RibbonViewModel GlobalRibbonVM;
         private readonly ILoggerService _loggerService;
-        private readonly INavigationService _navigationService;
         private readonly IProjectManager _projectManager;
         private readonly ISettingsManager _settingsManager;
-        private readonly IUIVisualizerService _uiVisualizerService;
+        public readonly AppViewModel _mainViewModel;
 
         #endregion fields
 
@@ -39,73 +32,80 @@ namespace WolvenKit.ViewModels.Shell
             ISettingsManager settingsManager,
             IProjectManager projectManager,
             ILoggerService loggerService,
-            INavigationService navigationService,
-            IUIVisualizerService uiVisualizerService
-            )
+            AppViewModel appViewModel
+        )
         {
-            Argument.IsNotNull(() => loggerService);
-            Argument.IsNotNull(() => navigationService);
-            Argument.IsNotNull(() => uiVisualizerService);
-            Argument.IsNotNull(() => projectManager);
-            Argument.IsNotNull(() => settingsManager);
+            _mainViewModel = appViewModel;
 
             _projectManager = projectManager;
             _loggerService = loggerService;
-            _navigationService = navigationService;
-            _uiVisualizerService = uiVisualizerService;
             _settingsManager = settingsManager;
 
             StartScreenShown = false;
             BackstageIsOpen = true;
-            GlobalRibbonVM = this;
 
-            ViewSelectedCommand = new DelegateCommand<object>(ExecuteViewSelected, CanViewSelected);
+            //ViewSelectedCommand = new DelegateCommand<object>(ExecuteViewSelected, CanViewSelected);
             AssetBrowserAddCommand = new RelayCommand(ExecuteAssetBrowserAdd, CanAssetBrowserAdd);
 
-            var assembly = AssemblyHelper.GetEntryAssembly();
-            Title = assembly.Title();
+            OpenProjectCommand = ReactiveCommand.Create<string>(s => _mainViewModel.OpenProjectCommand.Execute(s).Subscribe());
+            //NewProjectCommand = ReactiveCommand.Create(() => _mainViewModel.NewProjectCommand.Execute().Subscribe());
+            PackProjectCommand = ReactiveCommand.Create(() => _mainViewModel.PackModCommand.SafeExecute());
+
+            NewFileCommand = ReactiveCommand.Create(() => _mainViewModel.NewFileCommand.SafeExecute());
+            SaveFileCommand = ReactiveCommand.Create(() => _mainViewModel.SaveFileCommand.SafeExecute());
+            SaveAllCommand = ReactiveCommand.Create(() => _mainViewModel.SaveAllCommand.SafeExecute());
+
+            ViewProjectExplorerCommand = ReactiveCommand.Create(() => _mainViewModel.ShowProjectExplorerCommand.SafeExecute());
+            ViewAssetBrowserCommand = ReactiveCommand.Create(() => _mainViewModel.ShowAssetsCommand.SafeExecute());
+            ViewPropertiesCommand = ReactiveCommand.Create(() => _mainViewModel.ShowPropertiesCommand.SafeExecute());
+            ViewLogCommand = ReactiveCommand.Create(() => _mainViewModel.ShowLogCommand.SafeExecute());
+            ViewCodeEditorCommand = ReactiveCommand.Create(() => _mainViewModel.ShowCodeEditorCommand.SafeExecute());
+            ShowImportExportToolCommand = ReactiveCommand.Create(() => _mainViewModel.ShowImportExportToolCommand.SafeExecute());
+
+            ShowSettingsCommand = ReactiveCommand.Create(() =>
+            {
+
+            });
+            ShowBugReportCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                var result = await Interactions.ShowBugReport.Handle(Unit.Default);
+            });
+            ShowFeedbackCommand = ReactiveCommand.CreateFromTask(async  () =>
+            {
+                var result = await Interactions.ShowFeedback.Handle(Unit.Default);
+            });
         }
 
         #endregion constructors
 
+        #region commands
+
+        public ReactiveCommand<string, Unit> OpenProjectCommand { get; }
+        //public ReactiveCommand<Unit, Unit> NewProjectCommand { get; }
+        public ReactiveCommand<Unit, Unit> PackProjectCommand { get; }
+
+        public ReactiveCommand<Unit, Unit> NewFileCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveFileCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveAllCommand { get; }
+
+        public ReactiveCommand<Unit, Unit> ViewProjectExplorerCommand { get; }
+        public ReactiveCommand<Unit, Unit> ViewAssetBrowserCommand { get; }
+        public ReactiveCommand<Unit, Unit> ViewPropertiesCommand { get; }
+        public ReactiveCommand<Unit, Unit> ViewLogCommand { get; }
+        public ReactiveCommand<Unit, Unit> ViewCodeEditorCommand { get; }
+        public ReactiveCommand<Unit, Unit> ShowImportExportToolCommand { get; }
+
+        public ReactiveCommand<Unit, Unit> ShowSettingsCommand { get; }
+        public ReactiveCommand<Unit, Unit> ShowBugReportCommand { get; }
+        public ReactiveCommand<Unit, Unit> ShowFeedbackCommand { get; }
+
+        #endregion
+
         #region properties
 
-        public Random rnd = new Random();
-        
+        [Reactive] public bool StartScreenShown { get; set; }
 
-        public enum ERibbonContextualTabGroupVisibility
-        {
-            Collapsed,
-            Visible,
-        }
-
-
-        public bool BackstageIsOpen { get; set; }
-        public ERibbonContextualTabGroupVisibility ProjectExplorerContextualTabGroupVisibility { get; set; }
-
-        public string ProjectExplorerContextualTabGroupVisibilityStr =>
-            ProjectExplorerContextualTabGroupVisibility.ToString();
-
-        //private Color _selectedTheme;
-        //public Color SelectedTheme
-        //{
-        //    get => _selectedTheme;
-        //    set
-        //    {
-        //        if (_selectedTheme != value)
-        //        {
-        //            //var stringint = "RandomTheme" + rnd.Next(0, 9999) + "Name";
-        //            _selectedTheme = value;
-
-
-        //            _loggerService.Info("Changed theme : " + value.ToString());
-        //            _settingsManager.SetThemeAccent(value);
-        //            _settingsManager.Save();
-        //        }
-        //    }
-        //}
-
-        public bool StartScreenShown { get; set; }
+        [Reactive] public bool BackstageIsOpen { get; set; }
 
         #endregion properties
 
@@ -115,58 +115,16 @@ namespace WolvenKit.ViewModels.Shell
 
         private bool CanAssetBrowserAdd()
         {
-            var abvm = ServiceLocator.Default.ResolveType<AssetBrowserViewModel>();
+            var abvm = Locator.Current.GetService<AssetBrowserViewModel>();
             return abvm is {RightSelectedItems: { }} && abvm.RightSelectedItems.Any();
         }
 
         private void ExecuteAssetBrowserAdd()
         {
-            var abvm = ServiceLocator.Default.ResolveType<AssetBrowserViewModel>();
+            var abvm = Locator.Current.GetService<AssetBrowserViewModel>();
             abvm.AddSelectedCommand.SafeExecute();
         }
 
-        
-
-
-
-        /// <summary>
-        /// Is raised when a PaneView is selected: shows the contextual ribbon tab
-        /// </summary>
-        public ICommand ViewSelectedCommand { get; private set; }
-
-        private bool CanViewSelected(object view) => true;
-
-        private void ExecuteViewSelected(object viewmodel)
-        {
-            if (viewmodel is not Tuple<PaneViewModel, bool> tuple)
-            {
-                return;
-            }
-
-            if (tuple.Item1 is ProjectExplorerViewModel)
-            {
-                ProjectExplorerContextualTabGroupVisibility = tuple.Item2
-                    ? ERibbonContextualTabGroupVisibility.Visible
-                    : ERibbonContextualTabGroupVisibility.Collapsed;
-            }
-
-            //DiscordHelper.SetDiscordRPCStatus(tuple.Item1.Title); // Set status for discord RPC
-        }
-
         #endregion commands
-
-        #region methods
-
-        protected override async Task InitializeAsync()
-        {
-            await base.InitializeAsync();
-
-            // Write initialization code here and subscribe to events
-
-            ServiceLocator.Default.ResolveType<ICommandManager>()
-                .RegisterCommand(AppCommands.Application.ViewSelected, ViewSelectedCommand, this);
-        }
-
-        #endregion methods
     }
 }

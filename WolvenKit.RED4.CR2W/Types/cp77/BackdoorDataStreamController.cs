@@ -7,7 +7,7 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class BackdoorDataStreamController : BackdoorInkGameController
 	{
-		private inkWidgetReference _idleGroup_280;
+		private inkWidgetReference _idleGroup_384;
 		private inkWidgetReference _idleVPanelC1;
 		private inkWidgetReference _idleVPanelC2;
 		private inkWidgetReference _idleVPanelC3;
@@ -24,10 +24,10 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(28)] 
 		[RED("idleGroup")] 
-		public inkWidgetReference IdleGroup_280
+		public inkWidgetReference IdleGroup_384
 		{
-			get => GetProperty(ref _idleGroup_280);
-			set => SetProperty(ref _idleGroup_280, value);
+			get => GetProperty(ref _idleGroup_384);
+			set => SetProperty(ref _idleGroup_384, value);
 		}
 
 		[Ordinal(29)] 

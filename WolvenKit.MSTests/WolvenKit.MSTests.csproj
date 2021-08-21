@@ -1,15 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>WolvenKit.MSTests</AssemblyName>
     <RootNamespace>WolvenKit.MSTests</RootNamespace>
+    <Platforms>x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
-      <PackageReference Include="Catel.Core" Version="5.12.16" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
       <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
       <PackageReference Include="MSTest.TestAdapter" Version="2.2.4" />
@@ -31,12 +31,6 @@
     <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
     <ProjectReference Include="..\WolvenKit.Modkit\WolvenKit.Modkit.csproj" />
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="C:\Users\ghost\.nuget\packages\wolvenkit.red4.cr2w\1.0.0\contentFiles\any\net5.0-windows7.0\Resources\archivehashes.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
 </Project>

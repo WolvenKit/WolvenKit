@@ -1,17 +1,16 @@
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Catel.IoC;
+
 using HandyControl.Controls;
+using ReactiveUI;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models.Wizards;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using WolvenKit.ViewModels.Wizards.PublishWizard;
-using WolvenKit.Views.Wizards.WizardPages.PublishWizard;
 
 namespace WolvenKit.Views.Wizards
 {
-    public partial class PublishWizardView
+    public partial class PublishWizardView : ReactiveUserControl<PublishWizardViewModel>
     {
         #region Fields
 

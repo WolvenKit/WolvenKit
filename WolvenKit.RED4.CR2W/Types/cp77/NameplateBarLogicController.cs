@@ -7,11 +7,11 @@ namespace WolvenKit.RED4.CR2W.Types
 	[REDMeta]
 	public class NameplateBarLogicController : ProgressBarSimpleWidgetLogicController
 	{
-		private CHandle<DamagePreviewController> _damagePreview;
+		private wCHandle<DamagePreviewController> _damagePreview;
 
 		[Ordinal(24)] 
 		[RED("damagePreview")] 
-		public CHandle<DamagePreviewController> DamagePreview
+		public wCHandle<DamagePreviewController> DamagePreview
 		{
 			get => GetProperty(ref _damagePreview);
 			set => SetProperty(ref _damagePreview, value);
