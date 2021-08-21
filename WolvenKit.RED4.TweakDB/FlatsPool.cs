@@ -93,7 +93,7 @@ namespace WolvenKit.RED4.TweakDB
 
             if (_names.Contains(name))
             {
-                throw new ArgumentException($"A flat with key (hash='{name}') already exists");
+                throw new ArgumentException($"A flat with key '{name}' already exists");
             }
 
             var type = FNV1A64HashAlgorithm.HashString(value.Name);
