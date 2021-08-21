@@ -1,9 +1,7 @@
-using System.Diagnostics;
 using WolvenKit.RED4.TweakDB.Attributes;
 
 namespace WolvenKit.RED4.TweakDB.Types
 {
-    [DebuggerDisplay("Quaternion, i = {I.Value}, j = {J.Value}, k = {K.Value}, r = {R.Value}")]
     public class CQuaternion : CClass
     {
         [Property(Name = "i", Ordinal = 0)]
@@ -19,5 +17,6 @@ namespace WolvenKit.RED4.TweakDB.Types
         public CFloat R { get; set; } = new();
 
         public override string Name => "Quaternion";
+        public override string ToString() => $"Quaternion, i = {I.Value}, j = {J.Value}, k = {K.Value}, r = {R.Value}";
     }
 }

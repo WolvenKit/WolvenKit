@@ -1,9 +1,7 @@
-using System.Diagnostics;
 using WolvenKit.RED4.TweakDB.Attributes;
 
 namespace WolvenKit.RED4.TweakDB.Types
 {
-    [DebuggerDisplay("Color, Red = {Red.Value}, Green = {Green.Value}, Blue = {Blue.Value}, Blue = {Alpha.Value}")]
     public class CColor : CClass
     {
         [Property(Ordinal = 0)]
@@ -19,5 +17,6 @@ namespace WolvenKit.RED4.TweakDB.Types
         public CUint8 Alpha { get; set; } = new();
 
         public override string Name => "Color";
+        public override string ToString() => $"Color, Red = {Red.Value}, Green = {Green.Value}, Blue = {Blue.Value}, Blue = {Alpha.Value}";
     }
 }

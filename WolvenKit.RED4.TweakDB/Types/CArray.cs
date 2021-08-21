@@ -24,6 +24,8 @@ namespace WolvenKit.RED4.TweakDB.Types
 
         public IList<T> Items = new List<T>();
 
+        public override string ToString() => $"{Name}, Items = {Items.Count}";
+
         public void Serialize(BinaryWriter writer)
         {
             writer.Write(Items.Count);
