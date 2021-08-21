@@ -66,7 +66,23 @@ namespace WolvenKit.ViewModels.Editor
             _notificationService = notificationService;
             _gameController = gameController;
 
-            SearchStartedCommand = new DelegateCommand<object>(ExecuteSearchStartedCommand, CanSearchStartedCommand);
+            SearchStartedCommand = ReactiveCommand.CreateFromTask<string>(async b =>
+            {
+                //if (b is FunctionEventArgs<string> e)
+                {
+                    await Task.Run(() =>
+                    {
+                        var files = _managers.
+                        SelectMany(_ => CollectFiles(b, _))
+                        .GroupBy(x => x.Name)
+                        .Select(x => x.First())
+                        ;
+                        RightItems = files
+                            .Select(_ => new FileEntryViewModel(_));
+                    });
+                    //return Task.CompletedTask;
+                }
+            });
             TogglePreviewCommand = new RelayCommand(ExecuteTogglePreview, CanTogglePreview);
             ImportFileCommand = new RelayCommand(ExecuteImportFile, CanImportFile);
 
@@ -85,6 +101,8 @@ namespace WolvenKit.ViewModels.Editor
                 .Subscribe(b =>
                 {
                     LoadVisibility = b ? Visibility.Collapsed : Visibility.Visible;
+                    if (b)
+                        ReInit(false);
                 });
 
 
@@ -162,16 +180,15 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
-        public ICommand SearchStartedCommand { get; private set; }
+        public ReactiveCommand<string, Unit> SearchStartedCommand { get; private set; }
 
-        private bool CanSearchStartedCommand(object arg) => true;
-
-        private void ExecuteSearchStartedCommand(object arg)
+        private async Task ExecuteSearchAsync(object arg)
         {
             if (arg is FunctionEventArgs<string> e)
             {
-                PerformSearch(e.Info);
+                await PerformSearch(e.Info);
             }
+            //return Task.CompletedTask;
         }
 
         public ICommand TogglePreviewCommand { get; private set; }
@@ -246,15 +263,19 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
-        private void PerformSearch(string query)
+        private async Task PerformSearch(string query)
         {
-            var files = _managers.
+            await Task.Run(() =>
+            {
+                var files = _managers.
                 SelectMany(_ => CollectFiles(query, _))
                 .GroupBy(x => x.Name)
                 .Select(x => x.First())
                 ;
-            RightItems = files
-                .Select(_ => new FileEntryViewModel(_));
+                RightItems = files
+                    .Select(_ => new FileEntryViewModel(_));
+            });
+            
         }
 
         private void SetupToolDefaults()

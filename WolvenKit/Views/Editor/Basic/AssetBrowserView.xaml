@@ -187,7 +187,7 @@
 
 
                         <hc:SearchBar
-                            x:Name="SBBar"
+                            x:Name="FileSearchBar"
                             Margin="0,0,3,0"
                             VerticalAlignment="Top"
                             Background="{DynamicResource ContentBackgroundAlt}"
@@ -199,12 +199,6 @@
                             Style="{StaticResource SearchBarExtend}"
                             hc:InfoElement.Necessary="True"
                             TextChanged="SBBar_TextChanged">
-
-                            <hc:Interaction.Triggers>
-                                <hc:EventTrigger EventName="SearchStarted">
-                                    <hc:EventToCommand Command="{Binding SearchStartedCommand}" PassEventArgsToCommand="True" />
-                                </hc:EventTrigger>
-                            </hc:Interaction.Triggers>
                         </hc:SearchBar>
 
                         <Grid Margin="0,45,3,0">

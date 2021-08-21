@@ -49,6 +49,19 @@
     <None Remove="Extensions\PropertyGridEditors\**" />
     <None Remove="Model\Cr2w\**" />
     <None Remove="RED3\**" />
+    <None Remove="lib\vgmstream\avcodec-vgmstream-58.dll" />
+    <None Remove="lib\vgmstream\avformat-vgmstream-58.dll" />
+    <None Remove="lib\vgmstream\avutil-vgmstream-56.dll" />
+    <None Remove="lib\vgmstream\in_vgmstream.dll" />
+    <None Remove="lib\vgmstream\libatrac9.dll" />
+    <None Remove="lib\vgmstream\libcelt-0061.dll" />
+    <None Remove="lib\vgmstream\libcelt-0110.dll" />
+    <None Remove="lib\vgmstream\libg719_decode.dll" />
+    <None Remove="lib\vgmstream\libmpg123-0.dll" />
+    <None Remove="lib\vgmstream\libvorbis.dll" />
+    <None Remove="lib\vgmstream\swresample-vgmstream-3.dll" />
+    <None Remove="lib\vgmstream\test.exe" />
+    <None Remove="lib\vgmstream\xmp-vgmstream.dll" />
     <None Remove="Resources\missinghashes.txt" />
     <None Remove="Resources\unusedhashes.kark" />
     <EmbeddedResource Include="Resources\missinghashes.txt" />
@@ -62,6 +75,45 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         <Pack>true</Pack>
         <PackagePath>lib\net5.0</PackagePath>
+    </Content>
+    <Content Include="lib\vgmstream\avcodec-vgmstream-58.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\vgmstream\avformat-vgmstream-58.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\vgmstream\avutil-vgmstream-56.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\vgmstream\in_vgmstream.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\vgmstream\libatrac9.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\vgmstream\libcelt-0061.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\vgmstream\libcelt-0110.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\vgmstream\libg719_decode.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\vgmstream\libmpg123-0.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\vgmstream\libvorbis.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\vgmstream\swresample-vgmstream-3.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\vgmstream\test.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\vgmstream\xmp-vgmstream.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
@@ -88,6 +140,15 @@
   <ItemGroup>
     <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
     <ProjectReference Include="..\WolvenKit.RED4.CR2W\WolvenKit.RED4.CR2W.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="lib\vgmstream\COPYING">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="lib\vgmstream\README.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

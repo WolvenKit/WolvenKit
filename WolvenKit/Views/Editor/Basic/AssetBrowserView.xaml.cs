@@ -1,9 +1,7 @@
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -14,20 +12,18 @@ using Splat;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.Common;
-using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models.Docking;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Editor;
 using System.Text.RegularExpressions;
+using System.Reactive.Linq;
 
 namespace WolvenKit.Views.Editor
 {
@@ -49,8 +45,16 @@ namespace WolvenKit.Views.Editor
                 ViewModel.Expand.Subscribe(x => ExpandNode());
                 ViewModel.Collapse.Subscribe(x => CollapseNode());
 
-                
+                //FileSearchBar.Events().SearchStarted
+                var observable = Observable.FromEventPattern<EventHandler<FunctionEventArgs<string>>, FunctionEventArgs<string>>(
+                            handler => FileSearchBar.SearchStarted += handler,
+                            handler => FileSearchBar.SearchStarted -= handler);
 
+
+                observable
+                    .Select(x => x.EventArgs.Info)
+                    .InvokeCommand(this, x => x.ViewModel.SearchStartedCommand)
+                    ;
 
             });
 
@@ -58,17 +62,17 @@ namespace WolvenKit.Views.Editor
 
         private void SearchBar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (string.Equals(SBBar.Text, "Search", System.StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(FileSearchBar.Text, "Search", System.StringComparison.OrdinalIgnoreCase))
             {
-                SBBar.SetCurrentValue(TextBox.TextProperty, "");
+                FileSearchBar.SetCurrentValue(TextBox.TextProperty, "");
             }
         }
 
         private void SBBar_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-            if (string.Equals(SBBar.Text, "Search", System.StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(FileSearchBar.Text, "Search", System.StringComparison.OrdinalIgnoreCase))
             {
-                SBBar.SetCurrentValue(TextBox.TextProperty, "");
+                FileSearchBar.SetCurrentValue(TextBox.TextProperty, "");
             }
         }
 
@@ -200,11 +204,11 @@ namespace WolvenKit.Views.Editor
             if (InnerList == null)
             { return; }
 
-            if (SBBar.Text != "search" || SBBar.Text != "")
+            if (FileSearchBar.Text != "search" || FileSearchBar.Text != "")
             {
                 this.InnerList.SearchHelper.SetCurrentValue(Syncfusion.UI.Xaml.Grid.SearchHelper.SearchBrushProperty, HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3"));
                 this.InnerList.SearchHelper.SetCurrentValue(Syncfusion.UI.Xaml.Grid.SearchHelper.AllowFilteringProperty, true);
-                this.InnerList.SearchHelper.Search(SBBar.Text);
+                this.InnerList.SearchHelper.Search(FileSearchBar.Text);
             }
             else
             { this.InnerList.SearchHelper.ClearSearch(); }

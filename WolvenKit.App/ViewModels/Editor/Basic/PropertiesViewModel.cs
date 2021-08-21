@@ -340,7 +340,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// Working directory for audio preview.
         /// </summary>
-        private const string wdir = "vgmstream\\AudioWorkingDir\\";
+        //private const string wdir = "lib\\vgmstream\\AudioWorkingDir\\";
 
         /// <summary>
         /// audio file list for opuspak type files with multiple wems inside. (not visually implemented)
@@ -395,8 +395,9 @@ namespace WolvenKit.ViewModels.Editor
             Trace.WriteLine(path);
 
             var arg = path.ToEscapedPath() + " -o " + outf.ToEscapedPath();
+            var p = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", "vgmstream", "test.exe");
             var si = new ProcessStartInfo(
-                    Path.Combine("vgmstream", "test.exe"),
+                    p,
                     arg
                 )
             {

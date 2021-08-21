@@ -500,7 +500,7 @@ namespace WolvenKit.Modkit.RED4
 
             var arg = infile.ToEscapedPath() + " -o " + outfile.ToEscapedPath();
             var si = new ProcessStartInfo(
-                    AppDomain.CurrentDomain.BaseDirectory + "\\vgmstream\\test.exe",
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", "vgmstream", "test.exe"),
                     arg
                 )
             {
