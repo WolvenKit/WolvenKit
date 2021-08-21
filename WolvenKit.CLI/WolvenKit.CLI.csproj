@@ -4,9 +4,8 @@
     <Platforms>x64</Platforms>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
-    <AssemblyVersion>1.4.4</AssemblyVersion>
-    <FileVersion>1.4.4</FileVersion>
-      <Version>1.4.4</Version>
+    <AssemblyVersion>1.5.0</AssemblyVersion>
+      <Version>1.5.0</Version>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
       <PackAsTool>true</PackAsTool>
       <ToolCommandName>cp77tools</ToolCommandName>
