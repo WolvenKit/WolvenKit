@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using FastMember;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.TweakDB.Attributes;
@@ -17,41 +18,44 @@ namespace WolvenKit.RED4.TweakDB.Types
             var type = GetType();
             var accessor = TypeAccessor.Create(type);
 
-            var members = accessor.GetMembers();
-            foreach (var member in members)
+            var members = accessor.GetMembers()
+                .Select(m => new { value = m, attr = m.GetAttribute(typeof(PropertyAttribute), false) as PropertyAttribute })
+                .Where(o => o.attr is not null)
+                .OrderBy(o => o.attr.Ordinal);
+
+            foreach (var obj in members)
             {
-                var attr = member.GetAttribute(typeof(PropertyAttribute), false) as PropertyAttribute;
-                if (attr is not null)
+                var member = obj.value;
+                var attr = obj.attr;
+
+                var nativeType = accessor[this, member.Name] as IType;
+                if (nativeType is not null)
                 {
-                    var nativeType = accessor[this, member.Name] as IType;
-                    if (nativeType is not null)
-                    {
-                        writer.WriteLengthPrefixedString(attr.Name);
-                        writer.WriteLengthPrefixedString(nativeType.Name);
+                    writer.WriteLengthPrefixedString(attr.Name);
+                    writer.WriteLengthPrefixedString(nativeType.Name);
 
-                        var currOffset = writer.BaseStream.Position;
+                    var currOffset = writer.BaseStream.Position;
 
-                        // Skip next offset for now.
-                        writer.Seek(sizeof(uint), SeekOrigin.Current);
+                    // Skip next offset for now.
+                    writer.Seek(sizeof(uint), SeekOrigin.Current);
 
-                        // Serialize the type.
-                        nativeType.Serialize(writer);
-                        var endOffset = writer.BaseStream.Position;
+                    // Serialize the type.
+                    nativeType.Serialize(writer);
+                    var endOffset = writer.BaseStream.Position;
 
-                        // Now let's calculate the next variable offset.
-                        var nextOffset = (uint)(endOffset - currOffset);
+                    // Now let's calculate the next variable offset.
+                    var nextOffset = (uint)(endOffset - currOffset);
 
-                        // Move cursor back to size offset and write it.
-                        writer.Seek((int)currOffset, SeekOrigin.Begin);
-                        writer.Write(nextOffset);
+                    // Move cursor back to size offset and write it.
+                    writer.Seek((int)currOffset, SeekOrigin.Begin);
+                    writer.Write(nextOffset);
 
-                        // Move cursor to the correct offset to continue writing.
-                        writer.Seek((int)endOffset, SeekOrigin.Begin);
-                    }
-                    else
-                    {
-                        throw new ApplicationException($"'{type.Name}.{member.Name}' has an unknown type");
-                    }
+                    // Move cursor to the correct offset to continue writing.
+                    writer.Seek((int)endOffset, SeekOrigin.Begin);
+                }
+                else
+                {
+                    throw new ApplicationException($"'{type.Name}.{member.Name}' has an unknown type");
                 }
             }
 

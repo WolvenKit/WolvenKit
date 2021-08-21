@@ -6,16 +6,16 @@ namespace WolvenKit.RED4.TweakDB.Types
     [DebuggerDisplay("Quaternion, i = {I.Value}, j = {J.Value}, k = {K.Value}, r = {R.Value}")]
     public class CQuaternion : CClass
     {
-        [Property(Name = "i")]
+        [Property(Name = "i", Ordinal = 0)]
         public CFloat I { get; set; } = new();
 
-        [Property(Name = "j")]
+        [Property(Name = "j", Ordinal = 1)]
         public CFloat J { get; set; } = new();
 
-        [Property(Name = "k")]
+        [Property(Name = "k", Ordinal = 2)]
         public CFloat K { get; set; } = new();
 
-        [Property(Name = "r")]
+        [Property(Name = "r", Ordinal = 3)]
         public CFloat R { get; set; } = new();
 
         public override string Name => "Quaternion";

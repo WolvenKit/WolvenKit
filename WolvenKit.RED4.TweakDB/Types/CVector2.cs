@@ -6,10 +6,10 @@ namespace WolvenKit.RED4.TweakDB.Types
     [DebuggerDisplay("Vector2, X = {X.Value}, Y = {Y.Value}")]
     public class CVector2 : CClass
     {
-        [Property]
+        [Property(Ordinal = 0)]
         public CFloat X { get; set; } = new();
 
-        [Property]
+        [Property(Ordinal = 1)]
         public CFloat Y { get; set; } = new();
 
         public override string Name => "Vector2";

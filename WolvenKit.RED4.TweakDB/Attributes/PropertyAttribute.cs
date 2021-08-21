@@ -10,9 +10,14 @@ namespace WolvenKit.RED4.TweakDB.Attributes
     public class PropertyAttribute : Attribute
     {
         /// <summary>
-        /// The native name of the property.
+        /// The native name.
         /// </summary>
         public string Name { get; init; }
+
+        /// <summary>
+        /// The native order.
+        /// </summary>
+        public int Ordinal { get; init; }
 
         public PropertyAttribute([CallerMemberName] string propertyName = null)
         {
