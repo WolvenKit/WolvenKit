@@ -65,7 +65,7 @@ namespace WolvenKit.RED4.TweakDB
                     throw new ApplicationException("stream.Read != stream.Length");
                 }
 
-                var hash = Crc32Algorithm.Compute(data);
+                var hash = Crc32Algorithm.Compute(data, 0, length);
                 ArrayPool<byte>.Shared.Return(data);
 
                 return hash;
