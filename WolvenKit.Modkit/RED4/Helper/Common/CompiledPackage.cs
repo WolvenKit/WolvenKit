@@ -232,7 +232,10 @@ namespace WolvenKit.Modkit.RED4.Compiled
             }
             else if (parent is LocalizationString lstr)
             {
-                lstr.Read(br, (uint)(br.BaseStream.Length - br.BaseStream.Position));
+                lstr.Unk1.Read(br, 8);
+                var lslen = br.ReadUInt16();
+                var lsVal = System.Text.Encoding.GetEncoding("ISO-8859-1").GetString(br.ReadBytes(lslen));
+                lstr.Value.SetValue(lsVal);
             }
             else if (parent.ChildrEditableVariables.Count > 0)
             {
@@ -243,16 +246,6 @@ namespace WolvenKit.Modkit.RED4.Compiled
                 {
                     br.BaseStream.Position = pos;
                     ushort name = br.ReadUInt16();
-                    if ((name < 0) || name >= Names.Count)
-                    {
-                        br.BaseStream.Seek(0, SeekOrigin.Begin);
-                        var bts = new byte[br.BaseStream.Length];
-                        var bst = new MemoryStream();
-                        br.BaseStream.CopyTo(bst);
-                        bts = bst.ToArray();
-                        string hex = BitConverter.ToString(bts).Replace("-", "");
-                        throw new Exception("Nested Simple Types ?");
-                    }
                     string varname = Names[name].Str;
                     ushort type = br.ReadUInt16();
                     string typename = Names[type].Str;
