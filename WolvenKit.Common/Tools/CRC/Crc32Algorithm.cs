@@ -1,5 +1,6 @@
 using System;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace RED.CRC32
 {
@@ -75,6 +76,33 @@ namespace RED.CRC32
             if (input == null)
                 throw new ArgumentNullException();
             return AppendInternal(initial, input, 0, input.Length);
+        }
+
+        /// <summary>
+        /// Computes CRC-32 from an ASCII string.
+        /// </summary>
+        /// <param name="input">The input string.</param>
+        /// <returns>CRC-32 of the <paramref name="input"/>.</returns>
+        public static uint Compute(string input)
+        {
+            return Compute(input, Encoding.ASCII);
+        }
+
+        /// <summary>
+        /// Computes CRC-32 from a string.
+        /// </summary>
+        /// <param name="input">The input string.</param>
+        /// <param name="encoding">The encoding of the string.</param>
+        /// <returns>CRC-32 of the <paramref name="input"/>.</returns>
+        public static uint Compute(string input, Encoding encoding)
+        {
+            if (encoding is null)
+            {
+                throw new ArgumentNullException(nameof(encoding));
+            }
+
+            var bytes = encoding.GetBytes(input);
+            return Append(0, bytes, 0, bytes.Length);
         }
 
         /// <summary>
