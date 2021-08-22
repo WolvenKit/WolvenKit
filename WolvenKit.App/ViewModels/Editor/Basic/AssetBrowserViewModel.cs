@@ -66,23 +66,23 @@ namespace WolvenKit.ViewModels.Editor
             _notificationService = notificationService;
             _gameController = gameController;
 
-            SearchStartedCommand = ReactiveCommand.CreateFromTask<string>(async b =>
-            {
-                //if (b is FunctionEventArgs<string> e)
-                {
-                    await Task.Run(() =>
-                    {
-                        var files = _managers.
-                        SelectMany(_ => CollectFiles(b, _))
-                        .GroupBy(x => x.Name)
-                        .Select(x => x.First())
-                        ;
-                        RightItems = files
-                            .Select(_ => new FileEntryViewModel(_));
-                    });
-                    //return Task.CompletedTask;
-                }
-            });
+            //SearchStartedCommand = ReactiveCommand.CreateFromTask<string>(async b =>
+            //{
+            //    //if (b is FunctionEventArgs<string> e)
+            //    {
+            //        await Task.Run(() =>
+            //        {
+            //            var files = _managers.
+            //            SelectMany(_ => CollectFiles(b, _))
+            //            .GroupBy(x => x.Name)
+            //            .Select(x => x.First())
+            //            ;
+            //            RightItems = files
+            //                .Select(_ => new FileEntryViewModel(_));
+            //        });
+            //        //return Task.CompletedTask;
+            //    }
+            //});
             TogglePreviewCommand = new RelayCommand(ExecuteTogglePreview, CanTogglePreview);
             ImportFileCommand = new RelayCommand(ExecuteImportFile, CanImportFile);
 
@@ -149,7 +149,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// Items (Files) inside a Node (Folder) bound to right navigation
         /// </summary>
-        [Reactive] public IEnumerable<FileEntryViewModel> RightItems { get; set; }
+        [Reactive] public ObservableCollection<FileEntryViewModel> RightItems { get; set; } = new();
 
         /// <summary>
         /// Selected Files in right navigaiton
@@ -180,16 +180,7 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
-        public ReactiveCommand<string, Unit> SearchStartedCommand { get; private set; }
-
-        private async Task ExecuteSearchAsync(object arg)
-        {
-            if (arg is FunctionEventArgs<string> e)
-            {
-                await PerformSearch(e.Info);
-            }
-            //return Task.CompletedTask;
-        }
+        //public ReactiveCommand<string, Unit> SearchStartedCommand { get; private set; }
 
         public ICommand TogglePreviewCommand { get; private set; }
 
@@ -252,7 +243,7 @@ namespace WolvenKit.ViewModels.Editor
                     }
                 }
             }
-            return ret.Values.ToList();
+            return ret.Values;
         }
 
         private void AddFile(FileEntryViewModel item)
@@ -263,7 +254,7 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
-        private async Task PerformSearch(string query)
+        public async Task PerformSearchAsync(string query)
         {
             await Task.Run(() =>
             {
@@ -272,10 +263,24 @@ namespace WolvenKit.ViewModels.Editor
                 .GroupBy(x => x.Name)
                 .Select(x => x.First())
                 ;
-                RightItems = files
-                    .Select(_ => new FileEntryViewModel(_));
+                RightItems.Clear();
+                RightItems.AddRange(files
+                    .Select(_ => new FileEntryViewModel(_)));
             });
             
+        }
+
+        public void PerformSearch(string query)
+        {
+            var files = _managers.
+                SelectMany(_ => CollectFiles(query, _))
+                .GroupBy(x => x.Name)
+                .Select(x => x.First())
+                .ToList();
+            RightItems.Clear();
+            RightItems.AddRange(files
+                .Select(_ => new FileEntryViewModel(_)));
+
         }
 
         private void SetupToolDefaults()

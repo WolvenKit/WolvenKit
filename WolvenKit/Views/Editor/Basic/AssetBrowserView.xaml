@@ -193,12 +193,11 @@
                             Background="{DynamicResource ContentBackgroundAlt}"
                             BorderBrush="{DynamicResource BorderBrush}"
                             FlowDirection="LeftToRight"
-                            MouseDown="SearchBar_MouseDown"
-                            PreviewTextInput="SBBar_PreviewTextInput"
                             hc:InfoElement.Placeholder="Search"
                             Style="{StaticResource SearchBarExtend}"
                             hc:InfoElement.Necessary="True"
-                            TextChanged="SBBar_TextChanged">
+                            PreviewTextInput="FileSearchBar_PreviewTextInput"
+                            TextChanged="FileSearchBar_TextChanged">
                         </hc:SearchBar>
 
                         <Grid Margin="0,45,3,0">
@@ -221,6 +220,7 @@
                                 Background="{DynamicResource RegionBrush}"
                                 ColumnSizer="Star"
                                 EnableDataVirtualization="True"
+                                UseDrawing="Default"
                                 IsManipulationEnabled="False"
                                 ItemsSource="{Binding ElementName=dataPager, Path=PagedSource}"
                                 RowHeight="22"
@@ -953,13 +953,17 @@
                                         <hc:EventToCommand Command="{Binding ImportFileCommand}" />
                                     </hc:EventTrigger>
                                 </hc:Interaction.Triggers>
+                                
                             </syncfusion:SfDataGrid>
 
                             <syncfusion:SfDataPager
                                 x:Name="dataPager"
                                 Grid.Row="1"
-                                PageSize="500"
-                                Source="{Binding RightItems}" />
+                                PageCount="5"
+                                PageSize="100"
+                                UseOnDemandPaging="True"
+                                OnDemandLoading="dataPager_OnDemandLoading"
+                                />
                         </Grid>
                     </Grid>
                 </Grid>
