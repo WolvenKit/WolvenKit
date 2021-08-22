@@ -53,10 +53,6 @@ namespace WolvenKit.Views.Editor
                 Interactions.Rename.RegisterHandler(
                     interaction =>
                     {
-                        
-
-
-
                         var dialog = new DialogHostView();
                         var vm = Locator.Current.GetService<RenameDialogViewModel>();
                         vm.Text = interaction.Input;
@@ -72,7 +68,6 @@ namespace WolvenKit.Views.Editor
                                 result = innerVm.Text;
                             }
 
-                            //var result = dialog.ShowDialog() == true;
                             interaction.SetOutput(result);
                         }, RxApp.MainThreadScheduler);
                     });
@@ -142,9 +137,8 @@ namespace WolvenKit.Views.Editor
         private async Task<bool> DisplayModSortDialog(IEnumerable<string> input)
 #pragma warning restore 1998
         {
-            throw new NotImplementedException();
 
-            //return false;
+            return false;
 
 
             //var inputDialog = new PackageResolverView(new PackageResolverViewModel(input))

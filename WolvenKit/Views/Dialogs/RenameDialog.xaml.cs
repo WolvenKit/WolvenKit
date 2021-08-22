@@ -1,4 +1,5 @@
 using System.Reactive.Disposables;
+using System.Windows;
 using ReactiveUI;
 using Splat;
 using WolvenKit.ViewModels.Dialogs;

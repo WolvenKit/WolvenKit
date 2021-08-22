@@ -39,7 +39,8 @@
                 x:Name="ConfirmButton"
                 Width="150"
                 HorizontalAlignment="Right"
-                Content="Confirm" />
+                Content="Confirm"
+                />
             <Button
                 x:Name="CancelButton"
                 Width="150"

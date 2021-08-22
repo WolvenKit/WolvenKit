@@ -15,6 +15,8 @@
     ShowIcon="False"
     TitleBarBackground="Transparent"
     TitleTextAlignment="Right"
+    ResizeMode="CanResizeWithGrip"
+    UseNativeChrome="True"
     >
 
     <syncfusion:ChromelessWindow.Resources>
