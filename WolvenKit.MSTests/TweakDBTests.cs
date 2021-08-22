@@ -53,10 +53,10 @@ namespace WolvenKit.MSTests
                 new (
                     new CColor
                     {
-                        Red = new CUint8 { Value = 50 },
-                        Green = new CUint8 { Value = 10 },
-                        Blue = new CUint8 { Value = 255 },
-                        Alpha = new CUint8 { Value = 150 }
+                        Red = 50,
+                        Green = 10,
+                        Blue = 255,
+                        Alpha = 150
                     },
                     new byte[]
                     {
@@ -71,9 +71,9 @@ namespace WolvenKit.MSTests
                 new (
                     new CEulerAngles
                     {
-                        Pitch = new CFloat { Value = 150.79f },
-                        Yaw = new CFloat { Value = 15.0f },
-                        Roll = new CFloat { Value = 360.063f }
+                        Pitch = 150.79f,
+                        Yaw = 15.0f,
+                        Roll = 360.063f
                     },
                     new byte[]
                     {
@@ -87,10 +87,10 @@ namespace WolvenKit.MSTests
                 new (
                     new CQuaternion
                     {
-                        I = new CFloat { Value = 150.79f },
-                        J = new CFloat { Value = 15.0f },
-                        K = new CFloat { Value = 360.063f },
-                        R = new CFloat { Value = 123.321f }
+                        I = 150.79f,
+                        J = 15.0f,
+                        K = 360.063f,
+                        R = 123.321f
                     },
                     new byte[]
                     {
@@ -105,8 +105,8 @@ namespace WolvenKit.MSTests
                 new (
                     new CVector2
                     {
-                        X = new CFloat { Value = 150.79f },
-                        Y = new CFloat { Value = 360.063f }
+                        X = 150.79f,
+                        Y = 360.063f
                     },
                     new byte[]
                     {
@@ -119,9 +119,9 @@ namespace WolvenKit.MSTests
                 new (
                     new CVector3
                     {
-                        X = new CFloat { Value = 150.79f },
-                        Z = new CFloat { Value = 360.063f },
-                        Y = new CFloat { Value = 123.321f }
+                        X = 150.79f,
+                        Z = 360.063f,
+                        Y = 123.321f
                     },
                     new byte[]
                     {

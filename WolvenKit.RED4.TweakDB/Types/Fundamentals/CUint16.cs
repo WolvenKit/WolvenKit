@@ -6,6 +6,8 @@ namespace WolvenKit.RED4.TweakDB.Types
     {
         public override string Name => "Uint16";
 
+        public static implicit operator CUint16(ushort value) => new() { Value = value };
+
         public override void Serialize(BinaryWriter writer) => writer.Write(Value);
     }
 }
