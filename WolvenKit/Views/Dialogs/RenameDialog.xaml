@@ -20,13 +20,28 @@
         </Grid.Resources>
 
 
-        <hc:TextBox Width="400" VerticalAlignment="Top" x:Name="TextBox" />
+        <TextBox
+            x:Name="TextBox"
+            Height="22"
+            Width="400"
+            Margin="0"
+            Padding="3,3,0,0"
+            VerticalAlignment="Center"
+            Background="Transparent"
+            BorderBrush="Transparent"
+            Style="{DynamicResource MahApps.Styles.TextBox.DataGrid.Editing}"
+            >
+            
+        </TextBox>
+
         <Grid Margin="0,50,0,0">
             <Button
+                x:Name="ConfirmButton"
                 Width="150"
                 HorizontalAlignment="Right"
                 Content="Confirm" />
             <Button
+                x:Name="CancelButton"
                 Width="150"
                 HorizontalAlignment="Left"
                 Content="Cancel" />

@@ -1,24 +1,23 @@
-<adonisControls:AdonisWindow 
+<syncfusion:ChromelessWindow
     x:Class="WolvenKit.Views.Shell.MainView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:adonisControls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
     xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:shell="clr-namespace:WolvenKit.Views.Shell"
-
-    xmlns:adonisControls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
-    xmlns:hc="https://handyorg.github.io/handycontrol"
-    
-    PlaceTitleBarOverContent="True"
-    IconVisibility="Hidden"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
+    syncfusionskin:SfSkinManager.Theme="{syncfusionskin:SkinManagerExtension ThemeName=MaterialDark}"
+    IconAlignment="Right"
+    ShowIcon="False"
+    TitleBarBackground="Transparent"
+    TitleTextAlignment="Right"
     >
 
-    <Window.Style>
-        <Style TargetType="Window" BasedOn="{StaticResource {x:Type Window}}"/>
-    </Window.Style>
-
-    <adonisControls:AdonisWindow.Resources>
+    <syncfusion:ChromelessWindow.Resources>
         <DrawingBrush
             x:Key="CloudDrawingBrushMain"
             o:Freeze="True"
@@ -37,9 +36,9 @@
                     Rect="0,0,70,80" />
             </DrawingBrush.Drawing>
         </DrawingBrush>
-    </adonisControls:AdonisWindow.Resources>
+    </syncfusion:ChromelessWindow.Resources>
 
-    <Grid Background="{DynamicResource CloudDrawingBrushMain}">
+    <Grid Margin="0,-33,0,0" Background="{DynamicResource CloudDrawingBrushMain}">
         <Grid.Resources>
             <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" />
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
@@ -48,21 +47,23 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="25" />
+            <RowDefinition Height="38" />
         </Grid.RowDefinitions>
-        
 
-        <shell:RibbonView Grid.Row="0"></shell:RibbonView>
+        <shell:RibbonView Grid.Row="0" />
 
-        <shell:DockingAdapter Grid.Row="1" ActiveDocument="{Binding ActiveDocument, Mode=TwoWay}" ItemsSource="{Binding Tools}" />
+        <shell:DockingAdapter
+            Grid.Row="1"
+            ActiveDocument="{Binding ActiveDocument, Mode=TwoWay}"
+            ItemsSource="{Binding Tools}" />
 
-        <shell:StatusBarView Grid.Row="2"></shell:StatusBarView>
+        <shell:StatusBarView Grid.Row="2" />
 
-        <ScrollViewer   
-            VerticalScrollBarVisibility="Hidden" 
-            HorizontalAlignment="Right">
-            <StackPanel hc:Growl.GrowlParent="True" VerticalAlignment="Top" Margin="0,35,10,10"/>
+        <ScrollViewer HorizontalAlignment="Right" VerticalScrollBarVisibility="Hidden">
+            <StackPanel
+                Margin="0,35,10,10"
+                VerticalAlignment="Top"
+                hc:Growl.GrowlParent="True" />
         </ScrollViewer>
-
     </Grid>
-</adonisControls:AdonisWindow>
+</syncfusion:ChromelessWindow>

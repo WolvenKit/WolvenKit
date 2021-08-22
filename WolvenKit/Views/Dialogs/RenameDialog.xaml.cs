@@ -22,6 +22,15 @@ namespace WolvenKit.Views.Dialogs
                         x => x.Text,
                         x => x.TextBox.Text)
                     .DisposeWith(disposables);
+
+                this.BindCommand(ViewModel,
+                        x => x.OkCommand,
+                        x => x.ConfirmButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        x => x.CancelCommand,
+                        x => x.CancelButton)
+                    .DisposeWith(disposables);
             });
         }
 

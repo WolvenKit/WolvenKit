@@ -199,7 +199,7 @@ namespace WolvenKit.ViewModels.Editor
         private async void ExecuteDeleteFile()
         {
             var selected = SelectedItems.OfType<FileModel>().ToList();
-            var delete = await Interactions.ConfirmMultiple.Handle(selected.Select(_ => _.Name));
+            var delete = await Interactions.DeleteFiles.Handle(selected.Select(_ => _.Name));
             if (!delete)
             {
                 return;
