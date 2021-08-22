@@ -1330,7 +1330,7 @@
 
             <!--  VIEW TAB  -->
             <syncfusion:RibbonTab
-                Caption="View"
+                Caption="VIEW"
                 IsChecked="False">
 
                 <!--  Utilities bar  -->

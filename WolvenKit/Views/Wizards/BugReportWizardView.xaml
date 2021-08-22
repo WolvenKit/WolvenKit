@@ -8,12 +8,12 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:wizards="clr-namespace:WolvenKit.ViewModels.Wizards;assembly=WolvenKit.App"
+    Width="600"
     >
     
     <Grid
         Margin="5,5,2,5"
-        HorizontalAlignment="Stretch"
-        VerticalAlignment="Stretch"
+        
         hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
         <Grid.Resources>
@@ -148,10 +148,9 @@
             Finish="WizardControl_Finish"
             FinishButtonClosesWindow="True"
             CancelButtonCancelsWindow="True"
-            Width="600">
+            >
 
             <syncfusion:WizardPage
-                Margin="0,35,0,0"
                 BackVisibility="Collapsed"
                 HelpVisibility="Collapsed"
                 NextVisibility="Collapsed"

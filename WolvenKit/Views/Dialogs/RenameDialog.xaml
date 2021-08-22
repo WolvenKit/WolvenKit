@@ -42,7 +42,6 @@
                 <StackPanel Orientation="Vertical">
                     <hc:TextBox
                         x:Name="TextBox"
-                        Margin="0,35,0,0"
                         Style="{StaticResource TextBoxExtend}"
                         />
                 </StackPanel>

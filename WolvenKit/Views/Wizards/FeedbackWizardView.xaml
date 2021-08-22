@@ -8,7 +8,7 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:wizards="clr-namespace:WolvenKit.ViewModels.Wizards;assembly=WolvenKit.App"
-   
+    Width="600"
     >
 
     <Grid
@@ -147,11 +147,10 @@
             Finish="WizardControl_Finish"
             FinishButtonClosesWindow="True"
             CancelButtonCancelsWindow="True"
-            Width="600"
+            
             Grid.ColumnSpan="3">
 
             <syncfusion:WizardPage
-                Margin="0,35,0,0"
                 BackVisibility="Collapsed"
                 HelpVisibility="Collapsed"
                 NextVisibility="Collapsed"
@@ -160,8 +159,8 @@
                 <Grid HorizontalAlignment="Stretch">
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="120" />
-                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
                     <hc:Divider Margin="15,-10,15,0" />
