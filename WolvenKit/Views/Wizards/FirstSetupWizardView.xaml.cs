@@ -87,11 +87,6 @@ namespace WolvenKit.Views.Wizards
 
         #region Methods
 
-        private void UserControl_Initialized_1(object sender, EventArgs e)
-        {
-            
-        }
-
         #region Validation
 
         private void Field_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) => ValidateAllFields();

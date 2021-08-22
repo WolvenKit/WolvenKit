@@ -980,97 +980,6 @@
                     </syncfusion:RibbonButton>
                     
                 </syncfusion:RibbonBar>
-
-                <!--  View bar  -->
-                <syncfusion:RibbonBar
-                    Name="View"
-                    Width="auto"
-                    Header="View">
-
-                    <!--  Project Explorer Button  -->
-                    <syncfusion:RibbonButton
-                        x:Name="ViewProjectExplorerButton"
-                        IconStretch="Fill"
-                        IconType="Icon"
-                        Label="Project Explorer"
-                        SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconCodicons
-                                    Width="auto"
-                                    Height="auto"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Stretch"
-                                    Kind="Notebook" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
-
-                    <!--  Asset Browser Button  -->
-                    <syncfusion:RibbonButton
-                        x:Name="ViewAssetBrowserButton"
-                        IconStretch="Fill"
-                        IconType="Icon"
-                        Label="Asset Browser"
-                        SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconBootstrapIcons
-                                    Width="auto"
-                                    Height="auto"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Stretch"
-                                    Kind="InboxesFill" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
-
-                    <!--  Properties Button  -->
-                    <syncfusion:RibbonButton
-                        x:Name="ViewPropertiesButton"
-                        IconStretch="Fill"
-                        IconType="Icon"
-                        Label="Properties"
-                        SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconCodicons
-                                    Width="auto"
-                                    Height="auto"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Stretch"
-                                    Kind="SymbolProperty" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
-
-                    <!--  Project Log Button  -->
-                    <syncfusion:RibbonButton
-                        x:Name="ViewLogButton"
-                        IconStretch="Fill"
-                        IconType="Icon"
-                        Label="Log"
-                        SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconCodicons
-                                    Width="auto"
-                                    Height="auto"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Stretch"
-                                    Kind="Notebook" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
-                </syncfusion:RibbonBar>
-
-                <!--  Preview bar  -->
-                <syncfusion:RibbonBar Header="Preview">
-                    <syncfusion:RibbonCheckBox
-                        x:Name="PrevFileInfo"
-                        Content="Show File Preview"
-                        IsChecked="{Binding canShowPrev, Mode=TwoWay}" />
-                </syncfusion:RibbonBar>
                 
             </syncfusion:RibbonTab>
             
@@ -1419,6 +1328,175 @@
                     Visibility="Collapsed" />
             </syncfusion:RibbonTab>
 
+            <!--  VIEW TAB  -->
+            <syncfusion:RibbonTab
+                Caption="View"
+                IsChecked="False">
+
+                <!--  Utilities bar  -->
+                <syncfusion:RibbonBar
+                    Name="Utilities"
+                    Width="auto"
+                    Header="Utilities">
+
+                    <!--  Import Export Utility Button  -->
+                    <syncfusion:RibbonButton
+                        x:Name="UtilitiesShowImportExportToolButton"
+                        IconStretch="Fill"
+                        IconType="Icon"
+                        Label="Import/Export Utility"
+                        SizeForm="Large">
+                        <syncfusion:RibbonButton.IconTemplate>
+                            <DataTemplate>
+                                <iconPacks:PackIconMaterialDesign
+                                    Width="auto"
+                                    Height="auto"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Stretch"
+                                    Kind="ImportExport" />
+                            </DataTemplate>
+                        </syncfusion:RibbonButton.IconTemplate>
+                    </syncfusion:RibbonButton>
+
+                    <ToggleButton
+                        x:Name="xa"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center"
+                        hc:IconElement.Geometry="{DynamicResource IntegratedGeo}"
+                        hc:IconElement.Height="50"
+                        hc:IconElement.Width="50"
+                        IsChecked="{Binding IsOpen, ElementName=MatRepoDrawer}"
+                        Style="{DynamicResource WPFFlatToggleButtonStyle}">
+                        <Grid Height="70">
+                            <TextBlock
+                                Width="90"
+                                Margin="0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Bottom"
+                                Text="Browse Material Repository"
+                                TextAlignment="Center"
+                                TextWrapping="Wrap" />
+
+                            <iconPacks:PackIconBootstrapIcons
+                                Width="28"
+                                Height="28"
+                                Margin="6"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                Kind="Image" />
+                        </Grid>
+                    </ToggleButton>
+
+                    <!--  Plugin Manager Button  -->
+                    <!--<syncfusion:RibbonButton
+                        Command="{catel:CommandManagerBinding Application.ShowPluginManager}"
+                        IconStretch="Fill"
+                        IconType="Icon"
+                        Label="Plugin Manager"
+                        SizeForm="Large"
+                        Visibility="Collapsed">
+                        <syncfusion:RibbonButton.IconTemplate>
+                            <DataTemplate>
+                                <iconPacks:PackIconBootstrapIcons
+                                    Width="auto"
+                                    Height="auto"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Stretch"
+                                    Kind="PlugFill" />
+                            </DataTemplate>
+                        </syncfusion:RibbonButton.IconTemplate>
+                    </syncfusion:RibbonButton>-->
+
+                </syncfusion:RibbonBar>
+
+                <!--  View bar  -->
+                <syncfusion:RibbonBar
+                    Name="View"
+                    Width="auto"
+                    Header="View">
+
+                    <!--  Project Explorer Button  -->
+                    <syncfusion:RibbonButton
+                        x:Name="ViewProjectExplorerButton"
+                        IconStretch="Fill"
+                        IconType="Icon"
+                        Label="Project Explorer"
+                        SizeForm="Large">
+                        <syncfusion:RibbonButton.IconTemplate>
+                            <DataTemplate>
+                                <iconPacks:PackIconCodicons
+                                    Width="auto"
+                                    Height="auto"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Stretch"
+                                    Kind="Notebook" />
+                            </DataTemplate>
+                        </syncfusion:RibbonButton.IconTemplate>
+                    </syncfusion:RibbonButton>
+
+                    <!--  Asset Browser Button  -->
+                    <syncfusion:RibbonButton
+                        x:Name="ViewAssetBrowserButton"
+                        IconStretch="Fill"
+                        IconType="Icon"
+                        Label="Asset Browser"
+                        SizeForm="Large">
+                        <syncfusion:RibbonButton.IconTemplate>
+                            <DataTemplate>
+                                <iconPacks:PackIconBootstrapIcons
+                                    Width="auto"
+                                    Height="auto"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Stretch"
+                                    Kind="InboxesFill" />
+                            </DataTemplate>
+                        </syncfusion:RibbonButton.IconTemplate>
+                    </syncfusion:RibbonButton>
+
+                    <!--  Properties Button  -->
+                    <syncfusion:RibbonButton
+                        x:Name="ViewPropertiesButton"
+                        IconStretch="Fill"
+                        IconType="Icon"
+                        Label="Properties"
+                        SizeForm="Large">
+                        <syncfusion:RibbonButton.IconTemplate>
+                            <DataTemplate>
+                                <iconPacks:PackIconCodicons
+                                    Width="auto"
+                                    Height="auto"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Stretch"
+                                    Kind="SymbolProperty" />
+                            </DataTemplate>
+                        </syncfusion:RibbonButton.IconTemplate>
+                    </syncfusion:RibbonButton>
+
+                    <!--  Project Log Button  -->
+                    <syncfusion:RibbonButton
+                        x:Name="ViewLogButton"
+                        IconStretch="Fill"
+                        IconType="Icon"
+                        Label="Log"
+                        SizeForm="Large">
+                        <syncfusion:RibbonButton.IconTemplate>
+                            <DataTemplate>
+                                <iconPacks:PackIconCodicons
+                                    Width="auto"
+                                    Height="auto"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Stretch"
+                                    Kind="Notebook" />
+                            </DataTemplate>
+                        </syncfusion:RibbonButton.IconTemplate>
+                    </syncfusion:RibbonButton>
+
+                </syncfusion:RibbonBar>
+
+            </syncfusion:RibbonTab>
+
             <!--  OPTIONS TAB  -->
             <syncfusion:RibbonTab
                 Caption="OPTIONS"
@@ -1467,6 +1545,14 @@
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>
+                </syncfusion:RibbonBar>
+
+                <!--  Preview bar  -->
+                <syncfusion:RibbonBar Header="Preview">
+                    <syncfusion:RibbonCheckBox
+                        x:Name="PrevFileInfo"
+                        Content="Show File Preview"
+                        IsChecked="{Binding canShowPrev, Mode=TwoWay}" />
                 </syncfusion:RibbonBar>
 
                 <!--  Layout Bar  -->
@@ -1561,87 +1647,7 @@
                 
             </syncfusion:RibbonTab>
 
-            <!--  UTILITIES TAB  -->
-            <syncfusion:RibbonTab
-                Caption="UTILITIES"
-                IsChecked="False">
-
-                <!--  Utilities bar  -->
-                <syncfusion:RibbonBar
-                    Name="Utilities"
-                    Width="auto"
-                    Header="Utilities">
-
-                    <!--  Import Export Utility Button  -->
-                    <syncfusion:RibbonButton
-                        x:Name="UtilitiesShowImportExportToolButton"
-                        IconStretch="Fill"
-                        IconType="Icon"
-                        Label="Import/Export Utility"
-                        SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconMaterialDesign
-                                    Width="auto"
-                                    Height="auto"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Stretch"
-                                    Kind="ImportExport" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
-                    <ToggleButton
-                        x:Name="xa"
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Center"
-                        hc:IconElement.Geometry="{DynamicResource IntegratedGeo}"
-                        hc:IconElement.Height="50"
-                        hc:IconElement.Width="50"
-                        IsChecked="{Binding IsOpen, ElementName=MatRepoDrawer}"
-                        Style="{DynamicResource WPFFlatToggleButtonStyle}">
-                        <Grid Height="70">
-                            <TextBlock
-                                Width="90"
-                                Margin="0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Bottom"
-                                Text="Browse Material Repository"
-                                TextAlignment="Center"
-                                TextWrapping="Wrap" />
-
-                            <iconPacks:PackIconBootstrapIcons
-                                Width="28"
-                                Height="28"
-                                Margin="6"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Top"
-                                Kind="Image" />
-                        </Grid>
-                    </ToggleButton>
-                    <!--  Plugin Manager Button  -->
-                    <!--<syncfusion:RibbonButton
-                        Command="{catel:CommandManagerBinding Application.ShowPluginManager}"
-                        IconStretch="Fill"
-                        IconType="Icon"
-                        Label="Plugin Manager"
-                        SizeForm="Large"
-                        Visibility="Collapsed">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconBootstrapIcons
-                                    Width="auto"
-                                    Height="auto"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Stretch"
-                                    Kind="PlugFill" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>-->
-                </syncfusion:RibbonBar>
-                
-            </syncfusion:RibbonTab>
+           
             
         </syncfusion:Ribbon>
 

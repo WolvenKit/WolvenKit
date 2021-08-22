@@ -152,9 +152,12 @@ namespace WolvenKit.Views.Shell
                 {
                     var dialog = new DialogHostView();
                     dialog.ViewModel.HostedViewModel = Locator.Current.GetService<BugReportWizardViewModel>();
-
+                    
                     return Observable.Start(() =>
                     {
+                        dialog.Owner = Application.Current.MainWindow;
+                        dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
                         var result = dialog.ShowDialog() == true;
                         interaction.SetOutput(result);
                     }, RxApp.MainThreadScheduler);
@@ -163,6 +166,8 @@ namespace WolvenKit.Views.Shell
                 {
                     var dialog = new DialogHostView();
                     dialog.ViewModel.HostedViewModel = Locator.Current.GetService<FeedbackWizardViewModel>();
+                    dialog.Owner = Application.Current.MainWindow;
+                    dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
                     return Observable.Start(() =>
                     {

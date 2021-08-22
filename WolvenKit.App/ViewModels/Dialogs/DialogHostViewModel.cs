@@ -10,11 +10,6 @@ namespace WolvenKit.ViewModels.Dialogs
 {
     public class DialogHostViewModel : ReactiveObject
     {
-        public DialogHostViewModel()
-        {
-            
-        }
-
         [Reactive] public DialogViewModel HostedViewModel { get; set; }
     }
 }

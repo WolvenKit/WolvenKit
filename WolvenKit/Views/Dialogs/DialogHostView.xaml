@@ -8,10 +8,11 @@
                              xmlns:controls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
                              xmlns:reactiveUi="http://reactiveui.net"
                              mc:Ignorable="d"
-                             WindowStartupLocation="CenterScreen"
                              SizeToContent="WidthAndHeight"
                              IconVisibility="Collapsed"
                              PlaceTitleBarOverContent="True"
+                             
+                             WindowStartupLocation="Manual"
                              >
     <Grid>
         <reactiveUi:ViewModelViewHost x:Name="ViewModelViewHost"

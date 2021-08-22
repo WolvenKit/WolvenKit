@@ -18,7 +18,7 @@ namespace WolvenKit.ViewModels.Dialogs
 
             });
 
-            Title = "";
+            Title = "Rename";
         }
         [Reactive] public string Text { get; set; }
 
