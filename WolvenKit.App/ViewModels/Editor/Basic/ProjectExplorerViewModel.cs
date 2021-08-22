@@ -6,23 +6,17 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using DynamicData;
 using DynamicData.Binding;
-using HandyControl.Data;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common;
-using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
@@ -199,7 +193,7 @@ namespace WolvenKit.ViewModels.Editor
         private async void ExecuteDeleteFile()
         {
             var selected = SelectedItems.OfType<FileModel>().ToList();
-            var delete = await Interactions.ConfirmMultiple.Handle(selected.Select(_ => _.Name));
+            var delete = await Interactions.DeleteFiles.Handle(selected.Select(_ => _.Name));
             if (!delete)
             {
                 return;

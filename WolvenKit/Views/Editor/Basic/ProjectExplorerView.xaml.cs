@@ -20,7 +20,10 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Interaction;
 using WolvenKit.Models;
+using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Editor;
+using WolvenKit.ViewModels.Wizards;
+using WolvenKit.Views.Dialogs;
 
 namespace WolvenKit.Views.Editor
 {
@@ -41,17 +44,32 @@ namespace WolvenKit.Views.Editor
 
             this.WhenActivated(disposables =>
             {
-                Interactions.ConfirmMultiple.RegisterHandler(
+                Interactions.DeleteFiles.RegisterHandler(
                     async interaction =>
                     {
                         var action = await this.DisplayModSortDialog(interaction.Input);
                         interaction.SetOutput(action);
                     });
                 Interactions.Rename.RegisterHandler(
-                    async interaction =>
+                    interaction =>
                     {
-                        var action = await this.DisplayRenameDialog(interaction.Input);
-                        interaction.SetOutput(action);
+                        var dialog = new DialogHostView();
+                        var vm = Locator.Current.GetService<RenameDialogViewModel>();
+                        vm.Text = interaction.Input;
+                        dialog.ViewModel.HostedViewModel = vm;
+
+                        return Observable.Start(() =>
+                        {
+                            var result = "";
+                            if (dialog.ShowDialog() == true)
+                            {
+                                var innerVm = (RenameDialogViewModel)dialog.ViewModel.HostedViewModel;
+                                
+                                result = innerVm.Text;
+                            }
+
+                            interaction.SetOutput(result);
+                        }, RxApp.MainThreadScheduler);
                     });
 
                 ViewModel.ExpandAll.Subscribe(x => ExpandAll());
@@ -114,17 +132,13 @@ namespace WolvenKit.Views.Editor
         }
 
 #pragma warning disable 1998
-        private async Task<string> DisplayRenameDialog(string input)
-        {
-            throw new NotImplementedException();
-        }
+
 
         private async Task<bool> DisplayModSortDialog(IEnumerable<string> input)
 #pragma warning restore 1998
         {
-            throw new NotImplementedException();
 
-            //return false;
+            return false;
 
 
             //var inputDialog = new PackageResolverView(new PackageResolverViewModel(input))

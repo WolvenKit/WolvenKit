@@ -8,19 +8,6 @@
     <ItemGroup>
     <None Remove="bnkext\bnkextr.exe" />
     <None Remove="SoundCache\soundbanksinfo.xml" />
-    <None Remove="vgmstream\avcodec-vgmstream-58.dll" />
-    <None Remove="vgmstream\avformat-vgmstream-58.dll" />
-    <None Remove="vgmstream\avutil-vgmstream-56.dll" />
-    <None Remove="vgmstream\in_vgmstream.dll" />
-    <None Remove="vgmstream\libatrac9.dll" />
-    <None Remove="vgmstream\libcelt-0061.dll" />
-    <None Remove="vgmstream\libcelt-0110.dll" />
-    <None Remove="vgmstream\libg719_decode.dll" />
-    <None Remove="vgmstream\libmpg123-0.dll" />
-    <None Remove="vgmstream\libvorbis.dll" />
-    <None Remove="vgmstream\swresample-vgmstream-3.dll" />
-    <None Remove="vgmstream\test.exe" />
-    <None Remove="vgmstream\xmp-vgmstream.dll" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,45 +15,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="SoundCache\soundbanksinfo.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="vgmstream\avcodec-vgmstream-58.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="vgmstream\avformat-vgmstream-58.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="vgmstream\avutil-vgmstream-56.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="vgmstream\in_vgmstream.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="vgmstream\libatrac9.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="vgmstream\libcelt-0061.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="vgmstream\libcelt-0110.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="vgmstream\libg719_decode.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="vgmstream\libmpg123-0.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="vgmstream\libvorbis.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="vgmstream\swresample-vgmstream-3.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="vgmstream\test.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="vgmstream\xmp-vgmstream.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -87,16 +35,6 @@
         <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
         <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
         <ProjectReference Include="..\WolvenKit.Modkit\WolvenKit.Modkit.csproj" />
-    </ItemGroup>
-
-
-    <ItemGroup>
-      <None Update="vgmstream\COPYING">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="vgmstream\README.md">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
     </ItemGroup>
 
 </Project>
