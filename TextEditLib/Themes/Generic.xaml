@@ -1,9 +1,0 @@
-<ResourceDictionary
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/TextEditLib;component/Themes/LightBrushs.xaml" />
-        <ResourceDictionary Source="/TextEditLib;component/TextEdit.xaml" />
-        <ResourceDictionary Source="/TextEditLib;component/Themes/LightIcons.xaml" />
-    </ResourceDictionary.MergedDictionaries>
-</ResourceDictionary>
