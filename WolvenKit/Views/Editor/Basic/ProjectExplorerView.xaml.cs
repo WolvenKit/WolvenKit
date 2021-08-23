@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -45,10 +46,25 @@ namespace WolvenKit.Views.Editor
             this.WhenActivated(disposables =>
             {
                 Interactions.DeleteFiles.RegisterHandler(
-                    async interaction =>
+                    interaction =>
                     {
-                        var action = await this.DisplayModSortDialog(interaction.Input);
-                        interaction.SetOutput(action);
+                        var count = interaction.Input.Count();
+
+                        var result = AdonisUI.Controls.MessageBox.Show(
+                        "The selected items will be deleted permanently.",
+                        "WolvenKit",
+                        AdonisUI.Controls.MessageBoxButton.OKCancel,
+                        AdonisUI.Controls.MessageBoxImage.Information,
+                        AdonisUI.Controls.MessageBoxResult.OK);
+                        if (result == AdonisUI.Controls.MessageBoxResult.OK)
+                        {
+                            interaction.SetOutput(true);
+                        }
+                        else
+                        {
+                            interaction.SetOutput(false);
+                        }
+                        
                     });
                 Interactions.Rename.RegisterHandler(
                     interaction =>
