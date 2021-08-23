@@ -15,7 +15,6 @@ using WolvenKit.Functionality.Initialization;
 using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-//using WolvenKit.Modkit.RED3;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W;
@@ -48,7 +47,10 @@ namespace WolvenKit
         //public static bool IsInDesignMode => !(Current is App) || (bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue;
 
         // Constructor #1
-        static App() { }
+        static App()
+        {
+
+        }
 
         // Constructor #2
         public App()
@@ -59,11 +61,6 @@ namespace WolvenKit
         // Application OnStartup Override.
         protected override void OnStartup(StartupEventArgs e)
         {
-            // check prerequisites
-            // check Webview2
-            var keyName = @"SOFTWARE\Wow6432Node\Microsoft\EdgeUpdate\ClientState\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}";
-            var keyvalue = "pv";
-            StaticReferences.IsWebView2Enabled = Models.Commonfunctions.RegistryValueExists(Microsoft.Win32.RegistryHive.LocalMachine, keyName, keyvalue);
 
             // Startup speed boosting (HC)
             ApplicationHelper.StartProfileOptimization();
@@ -73,7 +70,7 @@ namespace WolvenKit
 
             loggerService.Info("Starting application");
 
-            Initializations.InitializeWebview2();
+            Initializations.InitializeWebview2(loggerService);
 
             loggerService.Info("Initializing Theme Helper");
             Initializations.InitializeThemeHelper();

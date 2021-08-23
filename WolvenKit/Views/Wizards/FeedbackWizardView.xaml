@@ -8,11 +8,14 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:wizards="clr-namespace:WolvenKit.ViewModels.Wizards;assembly=WolvenKit.App"
-    Margin="0,0,0,0"
-    
+    Width="600"
     >
-    
-    <Grid Margin="5,5,2,5" hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
+
+    <Grid
+        Margin="5,5,2,5"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
         <Grid.Resources>
             <ResourceDictionary>
@@ -140,98 +143,30 @@
             </ResourceDictionary>
         </Grid.Resources>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
-            <RowDefinition Height="90*" />
-        </Grid.RowDefinitions>
-
-        <StackPanel
-            Margin="-5,-7,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Orientation="Horizontal">
-
-            <iconPacks:PackIconCodicons
-                Grid.Row="0"
-                Width="30"
-                Height="30"
-                Margin="0,0,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                Kind="Hubot"
-                Spin="False"
-                SpinAutoReverse="False" />
-
-            <TextBlock
-                Grid.Row="0"
-                Margin="10,5,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                FontSize="17"
-                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                Text="Rate your WolvenKit experience!" />
-        </StackPanel>
         <syncfusion:WizardControl
-            Grid.RowSpan="3"
-            Margin="0,33,0,0"
             Finish="WizardControl_Finish"
-            FinishButtonClosesWindow="True">
+            FinishButtonClosesWindow="True"
+            CancelButtonCancelsWindow="True"
+            
+            Grid.ColumnSpan="3">
 
             <syncfusion:WizardPage
-                Name="wizardPage2"
                 BackVisibility="Collapsed"
                 HelpVisibility="Collapsed"
-                NextVisibility="Collapsed">
+                NextVisibility="Collapsed"
+                PageType="Exterior">
 
-                <Grid
-                    Grid.Row="3"
-                    Margin="-20,-30,0,-10"
-                    HorizontalAlignment="Stretch">
+                <Grid HorizontalAlignment="Stretch">
+
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="120" />
-                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
+
                     <hc:Divider Margin="15,-10,15,0" />
                     <hc:Divider Grid.Column="1" Margin="15,-10,15,0" />
 
-                    <Grid Grid.Column="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*" />
-                            <ColumnDefinition Width="1*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock
-                            Grid.ColumnSpan="2"
-                            Margin="0,-40,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Top"
-                            FontSize="15"
-                            Text="Review us"
-                            TextAlignment="Center" />
-                        <syncfusion:SfTextInputLayout Grid.Column="0" Hint="Review Title">
-                            <syncfusion:SfTextBoxExt
-                                x:Name="reviewtitle"
-                                Background="{DynamicResource ContentBackgroundAlt2}"
-                                Text=""
-                                TextWrapping="Wrap" />
-                        </syncfusion:SfTextInputLayout>
-                        <syncfusion:SfTextInputLayout Grid.Column="1" Hint="Author">
-                            <syncfusion:SfTextBoxExt
-                                x:Name="authortitle"
-                                Background="{DynamicResource ContentBackgroundAlt2}"
-                                Text=""
-                                TextWrapping="Wrap" />
-                        </syncfusion:SfTextInputLayout>
-                    </Grid>
-
-                    <RichTextBox
-                        x:Name="reviewtext"
-                        Grid.Column="1"
-                        Margin="0,50,0,0"
-                        Background="{DynamicResource ContentBackgroundAlt2}"
-                        BorderBrush="Transparent" />
-
-                    <Border
+                    <Border Grid.Column="0"
                         Margin="20,0,0,0"
                         Padding="5"
                         HorizontalAlignment="Left"
@@ -240,7 +175,6 @@
                         <Grid>
 
                             <TextBlock
-                                Margin="0,-40,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
                                 FontSize="15"
@@ -264,6 +198,53 @@
                             </hc:Rate>
                         </Grid>
                     </Border>
+
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock
+                            Grid.Row="0"
+                            HorizontalAlignment="Center"
+                            FontSize="15"
+                            Text="Review us"
+                            TextAlignment="Center" />
+
+                        <Grid Grid.Row="1">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+
+                            <syncfusion:SfTextInputLayout Grid.Column="0" Hint="Review Title">
+                                <syncfusion:SfTextBoxExt
+                                    x:Name="reviewtitle"
+                                    Background="{DynamicResource ContentBackgroundAlt2}"
+                                    Text=""
+                                    TextWrapping="Wrap" />
+                            </syncfusion:SfTextInputLayout>
+
+                            <syncfusion:SfTextInputLayout Grid.Column="1" Hint="Author">
+                                <syncfusion:SfTextBoxExt
+                                    x:Name="authortitle"
+                                    Background="{DynamicResource ContentBackgroundAlt2}"
+                                    Text=""
+                                    TextWrapping="Wrap" />
+                            </syncfusion:SfTextInputLayout>
+
+                        </Grid>
+
+                        <RichTextBox
+                            Grid.Row="2"
+                            x:Name="reviewtext"
+                            Background="{DynamicResource ContentBackgroundAlt2}"
+                            BorderBrush="Transparent" />
+                    </Grid>
+
                 </Grid>
             </syncfusion:WizardPage>
         </syncfusion:WizardControl>

@@ -45,6 +45,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installers", "Installers", 
 		Installers\wkit_setup.aip = Installers\wkit_setup.aip
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.RED4.TweakDB", "WolvenKit.RED4.TweakDB\WolvenKit.RED4.TweakDB.csproj", "{30FF3602-DA2B-4289-A9C6-7D1E1AA35A81}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,6 +123,12 @@ Global
 		{50472387-042A-4F22-9BF8-0837D68D4B78}.Release|Any CPU.Build.0 = Release|Any CPU
 		{50472387-042A-4F22-9BF8-0837D68D4B78}.Release|x64.ActiveCfg = Release|Any CPU
 		{50472387-042A-4F22-9BF8-0837D68D4B78}.Release|x64.Build.0 = Release|Any CPU
+		{30FF3602-DA2B-4289-A9C6-7D1E1AA35A81}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{30FF3602-DA2B-4289-A9C6-7D1E1AA35A81}.Debug|x64.ActiveCfg = Debug|x64
+		{30FF3602-DA2B-4289-A9C6-7D1E1AA35A81}.Debug|x64.Build.0 = Debug|x64
+		{30FF3602-DA2B-4289-A9C6-7D1E1AA35A81}.Release|Any CPU.ActiveCfg = Release|x64
+		{30FF3602-DA2B-4289-A9C6-7D1E1AA35A81}.Release|x64.ActiveCfg = Release|x64
+		{30FF3602-DA2B-4289-A9C6-7D1E1AA35A81}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -140,6 +148,7 @@ Global
 		{CEF1CF72-B8CF-4CBB-AA11-473438EDE3F3} = {825169A9-0548-4A0A-A1F1-B99BE7D0C23F}
 		{96B50D87-B772-4E1F-BF6C-44AFDC2CA748} = {B904A345-E6CF-4D6A-9F10-C04F02340B63}
 		{50472387-042A-4F22-9BF8-0837D68D4B78} = {7199D583-CA10-4035-9014-65158344B33D}
+		{30FF3602-DA2B-4289-A9C6-7D1E1AA35A81} = {A84C71C3-E7BD-4E88-847B-B743E549429A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8DAAF993-E8B7-47A4-AB0E-C159CB499F45}

@@ -12,11 +12,14 @@
     xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
     syncfusionskin:SfSkinManager.Theme="{syncfusionskin:SkinManagerExtension ThemeName=MaterialDark}"
     IconAlignment="Right"
+    Icon="TaskBarIcon.ico"
     ShowIcon="False"
+    ShowTitle="False"
     TitleBarBackground="Transparent"
     TitleTextAlignment="Right"
     ResizeMode="CanResizeWithGrip"
     UseNativeChrome="True"
+    Title="WolvenKit"
     >
 
     <syncfusion:ChromelessWindow.Resources>

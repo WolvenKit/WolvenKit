@@ -48,20 +48,21 @@ namespace WolvenKit.Views.Dialogs
                         view => view.Title)
                     .DisposeWith(disposables);
 
-                //this.ViewModel.HostedViewModel.OkCommand.Subscribe(_ =>
-                //{
-                //    this.DialogResult = true;
-                //});
-                //this.ViewModel.HostedViewModel.CancelCommand.Subscribe(_ =>
-                //{
-                //    this.DialogResult = false;
-                //});
-
             });
 
         }
 
-        
 
+        //private void Window_Loaded(object sender, RoutedEventArgs e)
+        //{
+        //    var mainWindow = Application.Current.MainWindow;
+
+        //    var l = mainWindow.Left + ((mainWindow.Width ) / 2) - (this.ActualWidth / 2);
+        //    var t = mainWindow.Top + ((mainWindow.Height ) / 2) - (this.ActualHeight / 2);
+
+        //    this.SetCurrentValue(LeftProperty, l);
+        //    this.SetCurrentValue(TopProperty, t);
+
+        //}
     }
 }

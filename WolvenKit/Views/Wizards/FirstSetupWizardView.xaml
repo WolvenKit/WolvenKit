@@ -9,16 +9,12 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:wizards="clr-namespace:WolvenKit.ViewModels.Wizards;assembly=WolvenKit.App"
-    Width="auto"
-    Height="500"
     MinWidth="700"
-    MinHeight="500"
-    Initialized="UserControl_Initialized_1">
+    MinHeight="200"
+    >
 
    
     <Grid
-        MinWidth="300"
-        MinHeight="300"
         Margin="5,5,2,5"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch">
@@ -31,157 +27,24 @@
             </ResourceDictionary>
         </Grid.Resources>
 
-        <!--<Grid.RowDefinitions>
-            <RowDefinition Height="15*" />
-            <RowDefinition Height="90*" />
-            <RowDefinition Height="10*" />
-        </Grid.RowDefinitions>-->
-
-        <!--<StackPanel
-            Margin="-5,-7,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Orientation="Horizontal">
-
-            <iconPacks:PackIconCodicons
-                Grid.Row="0"
-                Width="30"
-                Height="30"
-                Margin="0,0,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                Kind="Hubot"
-                Spin="False"
-                SpinAutoReverse="False" />
-
-            <TextBlock
-                Grid.Row="0"
-                Margin="10,5,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                FontSize="17"
-                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                Text="Let's set you up!" />
-        </StackPanel>-->
-
-        <!--<Grid x:Name="PageGrid" Grid.Row="1" />-->
-
         <syncfusion:WizardControl
             x:Name="WizardControl"
-            Grid.RowSpan="3"
             CancelButtonCancelsWindow="True"
             FinishButtonClosesWindow="True"
             >
-            <!--<hc:Interaction.Triggers>
-                <hc:EventTrigger EventName="Finish">
-                    <hc:EventToCommand Command="{Binding FinishCommand}" PassEventArgsToCommand="True" />
-                </hc:EventTrigger>
-            </hc:Interaction.Triggers>-->
-
-            <!--<syncfusion:WizardPage
-                Name="wizardPage1"
-                BackVisibility="Collapsed"
-                HelpVisibility="Collapsed"
-                NextVisibility="Visible"
-                FinishVisibility="Collapsed"
-                CancelVisibility="Collapsed">
-                <Grid Grid.Row="3" VerticalAlignment="Center">
-                    <Grid
-         Margin="5,-90,5,0"
-         HorizontalAlignment="Stretch"
-         Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
-                        <Grid Grid.Row="1" HorizontalAlignment="Stretch">
-                            <StackPanel
-                 Margin="0,0,0,0"
-                 VerticalAlignment="Top"
-                 Orientation="Vertical">
-                                <StackPanel Orientation="Horizontal">
-                                    <iconPacks:PackIconRPGAwesome
-
-                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                Kind="WolfHowl" />
-                                    <TextBlock Margin="5,0,0,0"  VerticalAlignment="Center" Text="Setup a profile (optional)" />
-                                </StackPanel>
-                                <hc:Divider Margin="0,5,0,15" />
-                                <Grid Margin="0,0,0,0">
-                                    <StackPanel>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="1*" />
-                                                <ColumnDefinition Width="3*" />
-                                            </Grid.ColumnDefinitions>
-                                            <hc:ImageSelector
-                                             x:Name="imgSelector"
-                                             Width="120"
-                                             Height="120"
-                                             Margin="0,-20,0,0"
-                                             HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                            <StackPanel Grid.Column="1">
-                                                <syncfusion:SfTextInputLayout  Hint="Author">
-                                                    <syncfusion:SfTextBoxExt Text="{Binding Author}" />
-                                                </syncfusion:SfTextInputLayout>
-                                                <syncfusion:SfTextInputLayout  Hint="Email">
-                                                    <syncfusion:SfTextBoxExt Text="{Binding Email}" />
-                                                </syncfusion:SfTextInputLayout>
-                                            </StackPanel>
-                                        </Grid>
-
-                                        <syncfusion:SfTextInputLayout  Hint="Donate Link">
-                                            <syncfusion:SfTextBoxExt Text="{Binding DonateLink}" />
-                                        </syncfusion:SfTextInputLayout>
-                                        <syncfusion:SfTextInputLayout  Hint="Description">
-                                            <syncfusion:SfTextBoxExt Text="{Binding Description}" />
-                                        </syncfusion:SfTextInputLayout>
-                                        <TextBlock  Text="Theme (applies after restart.)" />
-                                        <Border BorderThickness="1" BorderBrush="Gray" CornerRadius="4">
-
-                                        <WrapPanel
-                         x:Name="CircleTest"
-                         Margin="0,0,0,0"
-                         HorizontalAlignment="Stretch"
-                         VerticalAlignment="Center"
-                         FlowDirection="LeftToRight" />
-                                        </Border>
-                                    </StackPanel>
-                                </Grid>
-                            </StackPanel>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </syncfusion:WizardPage>-->
 
             <syncfusion:WizardPage
-                Name="wizardPage2"
                 BackVisibility="Collapsed"
                 CancelVisibility="Collapsed"
                 FinishVisibility="Visible"
                 HelpVisibility="Collapsed"
-                NextVisibility="Collapsed">
-                <Grid Grid.Row="3" VerticalAlignment="Center">
-                    <Grid
-                        Margin="5,-90,5,100"
-                        HorizontalAlignment="Stretch"
-                        Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
-                        <Grid Grid.Row="1" HorizontalAlignment="Stretch">
-                            <StackPanel
-                                Margin="0,0,0,0"
-                                VerticalAlignment="Top"
-                                Orientation="Vertical">
-                                <StackPanel Orientation="Horizontal">
-                                    <iconPacks:PackIconRPGAwesome Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" Kind="WolfHowl" />
-                                    <TextBlock
-                                        Margin="5,0,0,0"
-                                        VerticalAlignment="Center"
-                                        Text="Locate Game Data" />
-                                </StackPanel>
-                                <hc:Divider Margin="0,5,0,15" />
-                                <Grid Margin="0,0,0,0">
-                                    <StackPanel>
-                                        <Grid>
-                                            <StackPanel>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <hc:TextBox
+                NextVisibility="Collapsed"
+                PageType="Exterior"
+                >
+                <Grid HorizontalAlignment="Stretch">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <hc:TextBox
                                                         x:Name="cp77ExeTxtb"
                                                         Width="600"
                                                         Margin="0"
@@ -193,7 +56,7 @@
                                                         Style="{StaticResource TextBoxExtendCustom}"
                                                         TextChanged="Field_TextChanged"
                                                         VerifyFunc="VerifyFile" />
-                                                    <Button
+                            <Button
                                                         x:Name="cp77ExeButton"
                                                         Grid.Column="1"
                                                         Width="50"
@@ -203,7 +66,7 @@
                                                         BorderThickness="1"
                                                         Style="{DynamicResource WPFFlatButtonStyle}">
 
-                                                        <iconPacks:PackIconCodicons
+                                <iconPacks:PackIconCodicons
                                                             Grid.Row="0"
                                                             Width="15"
                                                             Height="15"
@@ -214,9 +77,9 @@
                                                             Kind="FolderOpened"
                                                             Spin="False"
                                                             SpinAutoReverse="False" />
-                                                    </Button>
-                                                </StackPanel>
-                                                <TextBlock
+                            </Button>
+                        </StackPanel>
+                        <TextBlock
                                                     x:Name="ValidationText"
                                                     MaxWidth="{Binding ActualWidth, ElementName=cp77ExeTxtb}"
                                                     Margin="150,2,65,0"
@@ -227,9 +90,9 @@
                                                     TextWrapping="Wrap"
                                                     Visibility="Collapsed" />
 
-                                                <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal">
 
-                                                    <hc:TextBox
+                            <hc:TextBox
                                                         x:Name="matdepotxtb"
                                                         Width="590"
                                                         Margin="0,10,10,0"
@@ -242,7 +105,7 @@
                                                         Style="{StaticResource TextBoxExtend}"
                                                         Visibility="Visible"
                                                         VerifyFunc="VerifyFolder" />
-                                                    <Button
+                            <Button
                                                         x:Name="matdepotButton"
                                                         Grid.Column="1"
                                                         Width="50"
@@ -252,7 +115,7 @@
                                                         BorderThickness="1"
                                                         Style="{DynamicResource WPFFlatButtonStyle}">
 
-                                                        <iconPacks:PackIconCodicons
+                                <iconPacks:PackIconCodicons
                                                             Grid.Row="0"
                                                             Width="15"
                                                             Height="15"
@@ -263,15 +126,9 @@
                                                             Kind="FolderOpened"
                                                             Spin="False"
                                                             SpinAutoReverse="False" />
-                                                    </Button>
-                                                </StackPanel>
-                                            </StackPanel>
-                                        </Grid>
-                                    </StackPanel>
-                                </Grid>
-                            </StackPanel>
-                        </Grid>
-                    </Grid>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
                 </Grid>
             </syncfusion:WizardPage>
         </syncfusion:WizardControl>

@@ -7,14 +7,13 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:wizards="clr-namespace:WolvenKit.ViewModels.Wizards;assembly=WolvenKit.App">
-
+    xmlns:wizards="clr-namespace:WolvenKit.ViewModels.Wizards;assembly=WolvenKit.App"
+    Width="600"
+    >
     
-
     <Grid
         Margin="5,5,2,5"
-        HorizontalAlignment="Stretch"
-        VerticalAlignment="Stretch"
+        
         hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
         <Grid.Resources>
@@ -144,140 +143,100 @@
             </ResourceDictionary>
         </Grid.Resources>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
-            <RowDefinition Height="90*" />
-        </Grid.RowDefinitions>
-
-        <StackPanel
-            Margin="-5,-7,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Orientation="Horizontal">
-
-            <iconPacks:PackIconCodicons
-                Grid.Row="0"
-                Width="30"
-                Height="30"
-                Margin="0,0,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                Kind="Hubot"
-                Spin="False"
-                SpinAutoReverse="False" />
-
-            <TextBlock
-                Grid.Row="0"
-                Margin="10,5,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                FontSize="17"
-                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                Text="Let's get rid of those bugs!" />
-        </StackPanel>
-
-        <syncfusion:WizardControl
-            Grid.RowSpan="3"
-            Margin="0,33,0,0"
+       <syncfusion:WizardControl
+           
             Finish="WizardControl_Finish"
-            FinishButtonClosesWindow="True">
+            FinishButtonClosesWindow="True"
+            CancelButtonCancelsWindow="True"
+            >
 
             <syncfusion:WizardPage
-                Name="wizardPage2"
                 BackVisibility="Collapsed"
                 HelpVisibility="Collapsed"
-                NextVisibility="Collapsed">
+                NextVisibility="Collapsed"
+                PageType="Exterior"
+                >
 
-                <Grid Margin="0,-10,0,0">
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="4*" />
+                    </Grid.ColumnDefinitions>
 
-                    <Grid x:Name="PageGrid" Grid.Row="1">
-                        <Grid Margin="0,-40,0,-50">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*" />
-                                <ColumnDefinition Width="4*" />
-                            </Grid.ColumnDefinitions>
-
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="50*" />
-                                <RowDefinition Height="50" />
-                            </Grid.RowDefinitions>
-
-                            <Border
-                                Grid.Row="0"
+                    <Border
                                 Grid.Column="1"
                                 Background="{DynamicResource ContentBackgroundAlt2}"
                                 BorderBrush="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
                                 BorderThickness="0">
-                                <Grid>
-                                    <StackPanel>
-                                        <TextBlock
+                        <Grid>
+                            <StackPanel>
+                                <TextBlock
                                             Margin="15"
                                             HorizontalAlignment="Left"
                                             FontSize="18"
                                             Text="Where did it happen and what did happen?" />
-                                        <hc:Divider Margin="0" Orientation="Horizontal" />
-                                        <ScrollViewer MaxHeight="420">
+                                <hc:Divider Margin="0" Orientation="Horizontal" />
+                                <ScrollViewer MaxHeight="420">
 
-                                            <StackPanel Margin="10,35,5,10">
-                                                <Grid Grid.Column="1">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="2*" />
-                                                        <ColumnDefinition Width="1*" />
-                                                    </Grid.ColumnDefinitions>
-                                                    <syncfusion:SfTextInputLayout Grid.Column="0" Hint="Bug Report Title">
-                                                        <syncfusion:SfTextBoxExt
+                                    <StackPanel Margin="10,35,5,10">
+                                        <Grid Grid.Column="1">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="2*" />
+                                                <ColumnDefinition Width="1*" />
+                                            </Grid.ColumnDefinitions>
+                                            <syncfusion:SfTextInputLayout Grid.Column="0" Hint="Bug Report Title">
+                                                <syncfusion:SfTextBoxExt
                                                             x:Name="messagetitlebox"
                                                             Background="{DynamicResource ContentBackgroundAlt2}"
                                                             Text=""
                                                             TextWrapping="Wrap" />
-                                                    </syncfusion:SfTextInputLayout>
-                                                    <syncfusion:SfTextInputLayout Grid.Column="1" Hint="Author">
-                                                        <syncfusion:SfTextBoxExt
+                                            </syncfusion:SfTextInputLayout>
+                                            <syncfusion:SfTextInputLayout Grid.Column="1" Hint="Author">
+                                                <syncfusion:SfTextBoxExt
                                                             x:Name="authortitlebox"
                                                             Background="{DynamicResource ContentBackgroundAlt2}"
                                                             Text=""
                                                             TextWrapping="Wrap" />
-                                                    </syncfusion:SfTextInputLayout>
-                                                </Grid>
+                                            </syncfusion:SfTextInputLayout>
+                                        </Grid>
 
-                                                <TextBlock Foreground="Gray" Text="Expected Behavior" />
-                                                <RichTextBox x:Name="expectedbehavbox" Height="50" />
+                                        <TextBlock Foreground="Gray" Text="Expected Behavior" />
+                                        <RichTextBox x:Name="expectedbehavbox" Height="50" />
 
-                                                <TextBlock Foreground="Gray" Text="Actual Behavior" />
-                                                <RichTextBox x:Name="actbehavtitlebox" Height="50" />
-                                                <TextBlock Foreground="Gray" Text="Steps to reproduce" />
-                                                <RichTextBox x:Name="reprostepsbox" Height="50" />
-                                                <TextBlock Foreground="Gray" Text="Additional Context" />
-                                                <RichTextBox x:Name="additioncontextbox" Height="50" />
-                                            </StackPanel>
-                                        </ScrollViewer>
+                                        <TextBlock Foreground="Gray" Text="Actual Behavior" />
+                                        <RichTextBox x:Name="actbehavtitlebox" Height="50" />
+                                        <TextBlock Foreground="Gray" Text="Steps to reproduce" />
+                                        <RichTextBox x:Name="reprostepsbox" Height="50" />
+                                        <TextBlock Foreground="Gray" Text="Additional Context" />
+                                        <RichTextBox x:Name="additioncontextbox" Height="50" />
                                     </StackPanel>
-                                </Grid>
-                            </Border>
+                                </ScrollViewer>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
 
-                            <Border
+                    <Border
                                 Grid.Column="0"
                                 Margin="0,0,10,0"
                                 Background="{DynamicResource ContentBackgroundAlt2}"
                                 BorderBrush="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
                                 BorderThickness="0">
 
-                                <Grid>
-                                    <StackPanel>
-                                        <TextBlock
+                        <Grid>
+                            <StackPanel>
+                                <TextBlock
                                             Margin="15"
                                             HorizontalAlignment="Left"
                                             FontSize="18"
                                             Text="Severity" />
-                                        <hc:Divider Margin="0" Orientation="Horizontal" />
-                                        <StackPanel
+                                <hc:Divider Margin="0" Orientation="Horizontal" />
+                                <StackPanel
                                             Margin="0,90,0,0"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
                                             Orientation="Horizontal" />
-                                    </StackPanel>
-                                    <hc:Rate
+                            </StackPanel>
+                            <hc:Rate
                                         x:Name="SevRater"
                                         Margin="0,0,0,0"
                                         HorizontalAlignment="Left"
@@ -289,47 +248,45 @@
                                         ItemMargin="3.4"
                                         ShowText="True"
                                         Style="{StaticResource RateBaseStyle}">
-                                        <hc:Rate.LayoutTransform>
-                                            <TransformGroup>
-                                                <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
-                                            </TransformGroup>
-                                        </hc:Rate.LayoutTransform>
-                                    </hc:Rate>
-                                    <StackPanel
-                                        Margin="25,-35,0,0"
+                                <hc:Rate.LayoutTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                    </TransformGroup>
+                                </hc:Rate.LayoutTransform>
+                            </hc:Rate>
+                            <StackPanel
+                                        Margin="50,-35,0,0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Orientation="Vertical">
-                                        <TextBlock
+                                <TextBlock
                                             Margin="5,10,0,0"
                                             FontSize="13"
                                             Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
                                             Text="Frustrating" />
-                                        <TextBlock
+                                <TextBlock
                                             Margin="5,24,0,0"
                                             FontSize="13"
                                             Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
                                             Text="Unexpected behavior" />
-                                        <TextBlock
+                                <TextBlock
                                             Margin="5,24,0,0"
                                             FontSize="13"
                                             Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
                                             Text="Unresponsive" />
-                                        <TextBlock
+                                <TextBlock
                                             Margin="5,24,0,0"
                                             FontSize="13"
                                             Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
                                             Text="Crash" />
-                                        <TextBlock
+                                <TextBlock
                                             Margin="5,24,0,0"
                                             FontSize="13"
                                             Foreground="{DynamicResource MahApps.HamburgerMenu.Pane.Background}"
                                             Text="Lost work" />
-                                    </StackPanel>
-                                </Grid>
-                            </Border>
+                            </StackPanel>
                         </Grid>
-                    </Grid>
+                    </Border>
                 </Grid>
             </syncfusion:WizardPage>
         </syncfusion:WizardControl>

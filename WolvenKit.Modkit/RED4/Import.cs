@@ -118,27 +118,6 @@ namespace WolvenKit.Modkit.RED4
                 // check for mlmaskparent
                 if (cookedTextureFormat == ECookedTextureFormat.mlmask)
                 {
-                    // ml_w_knife__combat__grip1_01_masksset_0.dds
-                    // ml_w_knife__combat__grip1_01_masksset_10.dds
-                    var mlmaskrelpath = $"{rawRelative.RelativePath[..^4]}"; //ml_w_knife__combat__grip1_01_masksset_10
-                    var idx = mlmaskrelpath.LastIndexOf('_');
-                    if (idx == -1)
-                    {
-                        continue;
-                    }
-
-                    mlmaskrelpath = $"{mlmaskrelpath[..idx]}.mlmask";
-
-
-                    //var mlmaskrelpath2 = Path.ChangeExtension(rawRelative.RelativePath[..^4], ERedExtension.mlmask.ToString());
-                    var mlmaskParent = new RedRelativePath(rawRelative)
-                        .ChangeBaseDir(outDir)
-                        .ChangeRelativePath(mlmaskrelpath);
-
-                    if (File.Exists(mlmaskParent.FullPath))
-                    {
-                        return RebuildMlMask(mlmaskParent.FullPath);
-                    }
 
                 }
                 else
@@ -156,38 +135,6 @@ namespace WolvenKit.Modkit.RED4
 
             _loggerService.Warning($"No existing redfile found to rebuild for {rawRelative.Name}");
             return false;
-
-
-            bool RebuildMlMask(string redparent)
-            {
-                _loggerService.Warning($"{rawRelative.Name} - Mlmask importing is not implemented yet");
-                return false;
-
-                // get all other buffers
-#pragma warning disable 162
-                var uncookedMaskRootPath = rawRelative.RelativePath[..^6];
-                var uncookedRelative = new RedRelativePath(rawRelative)
-                    .ChangeRelativePath(uncookedMaskRootPath);
-
-                var buffers = rawRelative.ToFileInfo().Directory
-                    .GetFiles($"{uncookedRelative.Name}_*.dds", SearchOption.TopDirectoryOnly);
-
-
-                using var fileStream = new FileStream(redparent, FileMode.Open, FileAccess.ReadWrite);
-                var result = Rebuild(fileStream, buffers);
-
-                if (result)
-                {
-                    _loggerService.Success($"Rebuilt {redparent} with buffers");
-                }
-                else
-                {
-                    _loggerService.Error($"Failed to rebuild {redparent} with buffers");
-                }
-
-                return result;
-#pragma warning restore 162
-            }
 
             bool RebuildTexture(string redparent)
             {

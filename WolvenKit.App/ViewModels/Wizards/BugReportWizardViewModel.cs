@@ -16,7 +16,7 @@ namespace WolvenKit.ViewModels.Wizards
             OkCommand = ReactiveCommand.Create(() => { });
             CancelCommand = ReactiveCommand.Create(() => { });
 
-            Title = "";
+            Title = "Bug Report";
         }
 
         public sealed override string Title { get; set; }

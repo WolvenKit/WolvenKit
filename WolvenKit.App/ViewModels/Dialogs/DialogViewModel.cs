@@ -15,12 +15,6 @@ namespace WolvenKit.ViewModels.Dialogs
         public abstract ReactiveCommand<Unit, Unit> OkCommand { get; set; }
         public abstract ReactiveCommand<Unit, Unit> CancelCommand { get; set; }
 
-        public DialogViewModel()
-        {
-            
-        }
-
-
         public abstract string Title { get; set; }
 
     }

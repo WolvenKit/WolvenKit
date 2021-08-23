@@ -151,6 +151,9 @@
     <Content Include="Resources\Media\t5.kark">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Views\Shell\TaskBarIcon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\env.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -1755,6 +1758,8 @@
     <None Remove="Resources\SkyboxTextures\skyrender0004.bmp" />
     <None Remove="Resources\SkyboxTextures\skyrender0005.bmp" />
     <None Remove="sample.mp4" />
+    <None Remove="SplashScreen1.png" />
+    <None Remove="TaskBarIcon.ico" />
     <None Remove="Views\Editor\Basic\default.svg" />
   </ItemGroup>
 
@@ -1770,6 +1775,10 @@
     </Reference>
     <Reference Include="AssimpNet">
     </Reference>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <SplashScreen Include="SplashScreen1.png" />
   </ItemGroup>
   <ItemGroup>
     <Page Update="PathIcon.xaml">
