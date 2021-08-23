@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.NetworkInformation;
+using System.Reactive.Linq;
 using System.Windows.Media;
 using Microsoft.Web.WebView2.Core;
 using Octokit;
@@ -11,11 +15,13 @@ using Splat;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Themes.MaterialDark.WPF;
 using WolvenKit.Common.Oodle;
+using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.Shell;
+using System.Runtime.InteropServices;
 
 namespace WolvenKit.Functionality.Initialization
 {
@@ -172,11 +178,66 @@ namespace WolvenKit.Functionality.Initialization
             return 1;
         }
 
-        public static async void InitializeWebview2()
+        [DllImport("WebView2Loader.dll", CallingConvention = CallingConvention.StdCall)]
+        static extern int GetAvailableCoreWebView2BrowserVersionString(string browserExecutableFolder, out string version);
+
+        public static bool IsMissingWebView2() => (GetAvailableCoreWebView2BrowserVersionString(null, out string edgeVersion) != 0) || (edgeVersion == null);
+
+        public static async void InitializeWebview2(ILoggerService _loggerService)
         {
+            // check prerequisites
+            // check Webview2
+            //var keyName = @"SOFTWARE\Wow6432Node\Microsoft\EdgeUpdate\ClientState\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}";
+            //var keyvalue = "pv";
+            //StaticReferences.IsWebView2Enabled = Models.Commonfunctions.RegistryValueExists(Microsoft.Win32.RegistryHive.LocalMachine, keyName, keyvalue);
+            StaticReferences.IsWebView2Enabled = !IsMissingWebView2();
+
             if (!StaticReferences.IsWebView2Enabled)
             {
-                return;
+                try
+                {
+                    var bootstrapperLink = @"https://go.microsoft.com/fwlink/p/?LinkId=2124703";
+
+                    var host = new Uri(bootstrapperLink).Host;
+                    var reply = new Ping().Send(host, 3000);
+                    if (reply.Status != IPStatus.Success)
+                    {
+                        return;
+                    }
+
+                    var bootstrapper = Path.Combine(Path.GetTempPath(), "MicrosoftEdgeWebview2Setup.exe");
+                    if (!File.Exists(bootstrapper))
+                    {
+                        // download
+                        using var wc = new WebClient();
+                        wc.DownloadFile(new Uri(bootstrapperLink), bootstrapper);
+                    }
+
+                    var result = AdonisUI.Controls.MessageBox.Show(
+                        "This App requires the Microsoft Webview 2 runtime to properly work.\r\nClick OK to run the 'WebView2 Runtime installer' and close the app. Please restart afterwards.",
+                        "Microsoft Webview 2 runtime not installed",
+                        AdonisUI.Controls.MessageBoxButton.OKCancel,
+                        AdonisUI.Controls.MessageBoxImage.Error,
+                        AdonisUI.Controls.MessageBoxResult.OK);
+                    if (result == AdonisUI.Controls.MessageBoxResult.OK)
+                    {
+                        // install runtime with MicrosoftEdgeWebview2Setup.exe /silent /install
+                        var psi = new ProcessStartInfo
+                        {
+                            FileName = bootstrapper,
+                            //Arguments = $"/silent /install"
+                        };
+                        var p = Process.Start(psi);
+
+                        //System.Windows.Forms.Application.Restart();
+                        System.Windows.Application.Current.Shutdown();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _loggerService.Error(ex.Message);
+                    return;
+                }
             }
 
             var webViewData = ISettingsManager.GetWebViewDataPath();
@@ -227,30 +288,15 @@ namespace WolvenKit.Functionality.Initialization
 
         public static /*async Task*/ void InitializeShell(ISettingsManager settings)
         {
-            if (!WolvenDBG.EnableTheming)
+            // Set service locator.
+            var mainWindow = Locator.Current.GetService<IViewFor<AppViewModel>>();
+            if (mainWindow is MainView window)
             {
-                ThemeInnerInit(settings);
-                //await ShellInnerInit();
+                window.Show();
             }
-            else
+
+            if (WolvenDBG.EnableTheming)
             {
-
-                // Set service locator.
-                var mainWindow = Locator.Current.GetService<IViewFor<AppViewModel>>();
-                if (mainWindow is MainView window)
-                {
-                    //if (Environment.OSVersion.Version.Major >= 6) // Windows Vista and above
-                    //{
-                    //    RegisterApplicationRestart("/restart", RestartRestrictions.None);
-                    //}
-
-
-                    window.Show();
-                }
-
-
-
-                //await ShellInnerInit();
                 ThemeInnerInit(settings);
             }
         }
