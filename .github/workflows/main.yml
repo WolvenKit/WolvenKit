@@ -44,7 +44,7 @@ jobs:
     #- run: echo "MANIFEST=manifest.json" >> $env:GITHUB_ENV
 
     # Publish app
-    - run: msbuild ${{env.PROJ}} -t:restore;Build;Publish /p:PublishDir="${{env.OUT}}";Configuration=Release;Platform=x64;SelfContained=False;PublishReadyToRun=False;PublishTrimmed=False
+    - run: msbuild ${{env.PROJ}} -t:restore -t:Build -t:Publish /p:PublishDir="${{env.OUT}}" /p:Configuration=Release /p:Platform=x64 /p:SelfContained=False /p:PublishReadyToRun=False /p:PublishTrimmed=False
 
     - run: Compress-Archive -Path ${{env.OUT}} -DestinationPath ${{env.NAME}}-${{env.VERSION}}.zip
 
@@ -83,7 +83,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
-    - uses: ilammy/msvc-dev-cmd@v1
+    - uses: microsoft/setup-msbuild@v1.0.2
 
     - name: Get version
       uses: naminodarie/get-net-sdk-project-versions-action@v1
@@ -92,7 +92,7 @@ jobs:
         proj-path: ./WolvenKit.CLI/WolvenKit.CLI.csproj
 
     - name: publish WolvenKit.Console
-      run: msbuild .\WolvenKit.CLI\WolvenKit.CLI.csproj -t:restore;Build;Publish /p:PublishDir="../publish/console/";Configuration=Release;Platform=x64;SelfContained=False;PublishReadyToRun=False;PublishTrimmed=False
+      run: msbuild .\WolvenKit.CLI\WolvenKit.CLI.csproj -t:restore -t:Build -t:Publish /p:PublishDir="../publish/console/" /p:Configuration=Release /p:Platform=x64 /p:SelfContained=False /p:PublishReadyToRun=False /p:PublishTrimmed=False
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
