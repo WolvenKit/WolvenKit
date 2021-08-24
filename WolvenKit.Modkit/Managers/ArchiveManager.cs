@@ -37,10 +37,6 @@ namespace WolvenKit.RED4.CR2W.Archive
         #region properties
         [ProtoMember(1)] public override Dictionary<string, IGameArchive> Archives { get; set; } = new();
 
-        //[ProtoMember(2)] public string GameVersion { get; set; }
-
-        //[ProtoMember(3)] public List<string> CachedArchives { get; set; } = new();
-
         public Dictionary<string, IEnumerable<FileEntry>> GroupedFiles =>
             Archives.Values
                 .SelectMany(_ => _.Files.Values)
@@ -71,10 +67,16 @@ namespace WolvenKit.RED4.CR2W.Archive
                 }
             }
 
-            Items = Archives.Values
-                .SelectMany(_ => _.Files)
-                .GroupBy(_ => _.Key)
-                .ToDictionary(_ => _.Key, _ => _.Select(x => x.Value).ToList());
+            Items.Edit(innerList =>
+            {
+                innerList.Clear();
+                innerList.AddOrUpdate(Archives.Values.SelectMany(_ => _.Files));
+            });
+
+            //Items = Archives.Values
+            //    .SelectMany(_ => _.Files)
+            //    .GroupBy(_ => _.Key)
+            //    .ToDictionary(_ => _.Key, _ => _.Select(x => x.Value).ToList());
 
             RebuildRootNode();
         }
@@ -128,6 +130,8 @@ namespace WolvenKit.RED4.CR2W.Archive
             {
                 RebuildRootNode();
             }
+
+            Extensions = Items.KeyValues.Select(_ => _.Value.Extension).Distinct();
         }
 
         /// <summary>
@@ -143,23 +147,28 @@ namespace WolvenKit.RED4.CR2W.Archive
             }
 
             var archive = Red4ParserServiceExtensions.ReadArchive(filename, _hashService);
+            Items.Edit(innerList =>
+            {
+                //innerList.Clear();
+                innerList.AddOrUpdate(archive.Files);
+            });
 
-            foreach (var (key, value) in archive.Files)
+
+            //foreach (var (key, value) in archive.Files)
             {
                 // add new key if the file isn't already in another bundle
-                if (!Items.ContainsKey(key))
-                {
-                    Items.Add(key, new List<IGameFile>());
-                }
-                if (!Items[key].ToList().Contains(value))
-                {
-                    var items = Items[key];
-                    items.Add(value);
-                }
+                //if (!Items.ContainsKey(key))
+                //{
+                //    Items.Add(key, new List<IGameFile>());
+                //}
+                //if (!Items[key].ToList().Contains(value))
+                //{
+                //    var items = Items[key];
+                //    items.Add(value);
+                //}
             }
 
             Archives.Add(archive.ArchiveAbsolutePath, archive);
-            //CachedArchives.Add(archive.Name);
         }
 
         /// <summary>

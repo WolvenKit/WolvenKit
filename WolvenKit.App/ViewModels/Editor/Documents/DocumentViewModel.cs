@@ -146,9 +146,9 @@ namespace WolvenKit.ViewModels.Editor
             var key = FNV1A64HashAlgorithm.HashString(depotpath);
             var foundItems = new List<IGameFile>();
             foreach (var manager in _gameControllerFactory.GetController().GetArchiveManagers(false)
-                .Where(manager => manager.Items.ContainsKey(key)))
+                .Where(manager => manager.Items.Lookup(key).HasValue))
             {
-                foundItems.AddRange(manager.Items[key]);
+                foundItems.Add(manager.Items.Lookup(key).Value);
             }
 
             var itemToImport = foundItems.FirstOrDefault();

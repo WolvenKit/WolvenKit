@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using DynamicData;
 using ProtoBuf;
 
 namespace WolvenKit.Common.Model
@@ -13,14 +14,13 @@ namespace WolvenKit.Common.Model
         public abstract EArchiveType TypeName { get; }
 
         public abstract Dictionary<string, IGameArchive> Archives { get; set; }
+        public SourceCache<IGameFile, ulong> Items { get; set; } = new(x => x.Key);
+
         public GameFileTreeNode RootNode { get; set; }
 
-        public Dictionary<ulong, List<IGameFile>> Items { get; set; } = new();
-
-
-        public IEnumerable<IGameFile> FileList => Items.Values.SelectMany(_ => _);
-        public IEnumerable<string> AutocompleteSource => FileList.Select(_ => GetFileName(_.Name)).Distinct();
-        public IEnumerable<string> Extensions => FileList.Select(_ => _.Extension).Distinct();
+        //public IEnumerable<IGameFile> FileList => Items.Values.SelectMany(_ => _);
+        //public IEnumerable<string> AutocompleteSource { get; set; } //=> FileList.Select(_ => GetFileName(_.Name)).Distinct();
+        public IEnumerable<string> Extensions { get; set; } //=> FileList.Select(_ => _.Extension).Distinct();
 
 
         public abstract void LoadAll(FileInfo executable, bool rebuildtree = true);
@@ -45,11 +45,11 @@ namespace WolvenKit.Common.Model
             {
                 Name = TypeName.ToString()
             };
-            foreach (var item in Items)
+            foreach (var item in Items.KeyValues)
             {
                 var currentNode = RootNode;
                 var model = item.Value;
-                var parts = model.First().Name.Split('\\');
+                var parts = model.Name.Split('\\');
 
                 for (var i = 0; i < parts.Length - 1; i++)
                 {
@@ -69,7 +69,7 @@ namespace WolvenKit.Common.Model
                     }
                 }
 
-                currentNode.Files.AddRange(item.Value.ToList());
+                currentNode.Files.Add(item.Value);
                 currentNode.Directories = new ObservableCollection<GameFileTreeNode>(currentNode.Directories.OrderBy(_ => _.Name)); 
             }
         }

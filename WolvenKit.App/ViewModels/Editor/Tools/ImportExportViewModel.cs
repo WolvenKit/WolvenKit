@@ -773,9 +773,9 @@ namespace WolvenKit.ViewModels.Editor
 
                 string outfile;
                 IGameFile file;
-                if (manager.Items.ContainsKey(hash))
+                if (manager.Items.Lookup(hash).HasValue)
                 {
-                    file = manager.Items[hash].First();
+                    file = manager.Items.Lookup(hash).Value;
                     if (file != null)
                     {
                         outfile = _meshTools.ExportMeshSimple(file, qx.FullName,

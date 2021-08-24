@@ -49,7 +49,6 @@ namespace WolvenKit.ViewModels.Editor
         private List<IGameArchiveManager> _managers;
         private readonly ReadOnlyObservableCollection<GameFileTreeNode> _boundRootNodes;
 
-        [Reactive] public bool StillLoading { get; set; }
 
         #endregion fields
 
@@ -67,23 +66,6 @@ namespace WolvenKit.ViewModels.Editor
             _notificationService = notificationService;
             _gameController = gameController;
 
-            //SearchStartedCommand = ReactiveCommand.CreateFromTask<string>(async b =>
-            //{
-            //    //if (b is FunctionEventArgs<string> e)
-            //    {
-            //        await Task.Run(() =>
-            //        {
-            //            var files = _managers.
-            //            SelectMany(_ => CollectFiles(b, _))
-            //            .GroupBy(x => x.Name)
-            //            .Select(x => x.First())
-            //            ;
-            //            RightItems = files
-            //                .Select(_ => new FileEntryViewModel(_));
-            //        });
-            //        //return Task.CompletedTask;
-            //    }
-            //});
             TogglePreviewCommand = new RelayCommand(ExecuteTogglePreview, CanTogglePreview);
             ImportFileCommand = new RelayCommand(ExecuteImportFile, CanImportFile);
 
@@ -157,7 +139,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// Selected Files in right navigaiton
         /// </summary>
-        [Reactive] public ObservableCollection<object> RightSelectedItems { get; set; }
+        [Reactive] public ObservableCollection<object> RightSelectedItems { get; set; } = new();
 
         [Reactive] public List<string> Extensions { get; set; }
         [Reactive] public List<string> Classes { get; set; }
@@ -233,22 +215,6 @@ namespace WolvenKit.ViewModels.Editor
             _notificationService.Success($"Asset Browser is initialized");
         }
 
-        private static IEnumerable<IGameFile> CollectFiles(string searchkeyword, IGameArchiveManager root)
-        {
-            var ret = new Dictionary<string, IGameFile>();
-            foreach (var f in root.FileList)
-            {
-                if (f.Name.Contains(searchkeyword, StringComparison.OrdinalIgnoreCase))
-                {
-                    if (!ret.ContainsKey(f.Name))
-                    {
-                        ret.TryAdd(f.Name, f);
-                    }
-                }
-            }
-            return ret.Values;
-        }
-
         private void AddFile(FileEntryViewModel item)
         {
             if (item != null)
@@ -257,33 +223,22 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
-        public async Task PerformSearchAsync(string query)
-        {
-            await Task.Run(() =>
-            {
-                var files = _managers.
-                SelectMany(_ => CollectFiles(query, _))
-                .GroupBy(x => x.Name)
-                .Select(x => x.First())
-                ;
-                RightItems.Clear();
-                RightItems.AddRange(files
-                    .Select(_ => new FileEntryViewModel(_)));
-            });
-            
-        }
+
 
         public void PerformSearch(string query)
         {
-            var files = _managers.
-                SelectMany(_ => CollectFiles(query, _))
-                .GroupBy(x => x.Name)
-                .Select(x => x.First())
-                .ToList();
-            RightItems.Clear();
-            RightItems.AddRange(files
-                .Select(_ => new FileEntryViewModel(_)));
+            ReadOnlyObservableCollection<FileEntryViewModel> list;
+            var ret = _managers.First().Items
+                .Connect()
+                .Filter(x => x.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
+                .LimitSizeTo(1000)
+                .Transform(x => new FileEntryViewModel(x))
+                .Bind(out list)
+                .Subscribe();
 
+
+            RightItems.Clear();
+            RightItems.AddRange(list);
         }
 
         private void SetupToolDefaults()

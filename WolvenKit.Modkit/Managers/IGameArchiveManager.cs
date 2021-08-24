@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using DynamicData;
 
 namespace WolvenKit.Common
 {
@@ -11,12 +12,12 @@ namespace WolvenKit.Common
         #region Properties
 
         Dictionary<string, IGameArchive> Archives { get; set; }
-        Dictionary<ulong, List<IGameFile>> Items { get; }
+        SourceCache<IGameFile, ulong> Items { get; }
         GameFileTreeNode RootNode { get; set; }
 
-        IEnumerable<string> AutocompleteSource { get; }
-        IEnumerable<string> Extensions { get; }
-        IEnumerable<IGameFile> FileList { get; }
+        //IEnumerable<string> AutocompleteSource { get; }
+        IEnumerable<string> Extensions { get; set; }
+        //IEnumerable<IGameFile> FileList { get; }
         EArchiveType TypeName { get; }
 
         #endregion Properties

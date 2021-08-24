@@ -59,7 +59,7 @@ namespace WolvenKit.Views.Editor
                     .Subscribe(query =>
                    {
                        ViewModel.PerformSearch(query);
-                       ResetDataGridPages();
+                       //ResetDataGridPages();
                    });
 
 
@@ -76,11 +76,15 @@ namespace WolvenKit.Views.Editor
 
                 //SelectedItem = "{Binding RightSelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 //SelectedItems = "{Binding RightSelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                this.OneWayBind(ViewModel,
+                        viewModel => viewModel.RightItems,
+                        view => view.InnerList.ItemsSource)
+                    .DisposeWith(disposables);
                 this.Bind(ViewModel,
                         viewModel => viewModel.RightSelectedItem,
                         view => view.InnerList.SelectedItem)
                     .DisposeWith(disposables);
-                this.OneWayBind(ViewModel,
+                this.Bind(ViewModel,
                       viewModel => viewModel.RightSelectedItems,
                       view => view.InnerList.SelectedItems)
                   .DisposeWith(disposables);
@@ -196,7 +200,7 @@ namespace WolvenKit.Views.Editor
             }
 
             // reset rightside
-            ResetDataGridPages();
+            //ResetDataGridPages();
         }
 
         private void FolderSearchBar_OnSearchStarted(object sender, FunctionEventArgs<string> e)
@@ -400,35 +404,7 @@ namespace WolvenKit.Views.Editor
 
             var process = Process.Start(procInfo);
             process?.WaitForInputIdle();
-            //var appControl = new AppControl();
-            //appControl.ExeName = x.Split('|')[0];
-            //appControl.Args = x.Split('|')[1];
-            //appControl.VisualPoint = new Point(0.0, 30.0);
-
-            //if (StaticReferences.XoWindow == null)
-            //{
-            //    StaticReferences.XoWindow = new HandyControl.Controls.GlowWindow();
-            //    StaticReferences.XoWindow.Closed += (sender, args) => StaticReferences.XoWindow = null;
-            //}
-
-            //if (StaticReferences.XoWindow.Content != null)
-            //{
-            //    return;
-            //}
-            //StaticReferences.XoWindow.Unloaded += new RoutedEventHandler((s, e) =>
-            //{
-            //    var q = s as HandyControl.Controls.GlowWindow;
-            //    q.Close();
-            //    StaticReferences.XoWindow = null;
-            //    StaticReferences.XoWindow = new HandyControl.Controls.GlowWindow();
-            //});
-
-            //Grid grid = new Grid();
-            //grid.Children.Add(appControl);
-            //StaticReferences.XoWindow.SetCurrentValue(ContentProperty, grid);
-            //StaticReferences.XoWindow.SetCurrentValue(Window.TopmostProperty, true);
-            //StaticReferences.XoWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            //StaticReferences.XoWindow.Show();
+            
         }
 
         private void BKExport_Click(object sender, RoutedEventArgs e)
@@ -464,58 +440,58 @@ namespace WolvenKit.Views.Editor
 
 
 
-        private void dataPager_OnDemandLoading(object sender, Syncfusion.UI.Xaml.Controls.DataPager.OnDemandLoadingEventArgs args)
-        {
-            if (ViewModel.RightItems !=  null)
-            {
-                if (ViewModel.RightItems.Any())
-                {
-                    var items = ViewModel.RightItems.Skip(args.StartIndex)?.Take(args.PageSize);
-                    dataPager.LoadDynamicItems(args.StartIndex, items);
-                }
-                else
-                {
-                    dataPager.SetCurrentValue(Syncfusion.UI.Xaml.Controls.DataPager.SfDataPager.SourceProperty, ViewModel.RightItems);
-                }
-            }
+        //private void dataPager_OnDemandLoading(object sender, Syncfusion.UI.Xaml.Controls.DataPager.OnDemandLoadingEventArgs args)
+        //{
+        //    if (ViewModel.RightItems !=  null)
+        //    {
+        //        if (ViewModel.RightItems.Any())
+        //        {
+        //            var items = ViewModel.RightItems.Skip(args.StartIndex)?.Take(args.PageSize);
+        //            dataPager.LoadDynamicItems(args.StartIndex, items);
+        //        }
+        //        else
+        //        {
+        //            dataPager.SetCurrentValue(Syncfusion.UI.Xaml.Controls.DataPager.SfDataPager.SourceProperty, ViewModel.RightItems);
+        //        }
+        //    }
             
-        }
+        //}
 
-        private void ResetDataGridPages()
-        {
-            if (ViewModel.RightItems == null)
-            {
-                return;
-            }
+        //private void ResetDataGridPages()
+        //{
+        //    if (ViewModel.RightItems == null)
+        //    {
+        //        return;
+        //    }
 
-            var prevPageCount = this.dataPager.PageCount;
+        //    var prevPageCount = this.dataPager.PageCount;
 
-            if (ViewModel.RightItems.Count < dataPager.PageSize)
-            {
-                dataPager.SetCurrentValue(Syncfusion.UI.Xaml.Controls.DataPager.SfDataPager.PageCountProperty, 1);
-            }
-            else
-            {
-                var count = ViewModel.RightItems.Count / dataPager.PageSize;
+        //    if (ViewModel.RightItems.Count < dataPager.PageSize)
+        //    {
+        //        dataPager.SetCurrentValue(Syncfusion.UI.Xaml.Controls.DataPager.SfDataPager.PageCountProperty, 1);
+        //    }
+        //    else
+        //    {
+        //        var count = ViewModel.RightItems.Count / dataPager.PageSize;
 
-                if (ViewModel.RightItems.Count % dataPager.PageSize == 0)
-                {
-                    dataPager.SetCurrentValue(Syncfusion.UI.Xaml.Controls.DataPager.SfDataPager.PageCountProperty, count);
-                }
-                else
-                {
-                    dataPager.SetCurrentValue(Syncfusion.UI.Xaml.Controls.DataPager.SfDataPager.PageCountProperty, count + 1);
-                }
-            }
+        //        if (ViewModel.RightItems.Count % dataPager.PageSize == 0)
+        //        {
+        //            dataPager.SetCurrentValue(Syncfusion.UI.Xaml.Controls.DataPager.SfDataPager.PageCountProperty, count);
+        //        }
+        //        else
+        //        {
+        //            dataPager.SetCurrentValue(Syncfusion.UI.Xaml.Controls.DataPager.SfDataPager.PageCountProperty, count + 1);
+        //        }
+        //    }
 
-            var newPageCount = this.dataPager.PageCount;
+        //    var newPageCount = this.dataPager.PageCount;
 
-            dataPager.MoveToPage(0);
-            //if (newPageCount == prevPageCount)
-            {
-                (dataPager.PagedSource as PagedCollectionView).ResetCacheForPage(this.dataPager.PageIndex);
-            }
-        }
+        //    dataPager.MoveToPage(0);
+        //    //if (newPageCount == prevPageCount)
+        //    {
+        //        (dataPager.PagedSource as PagedCollectionView).ResetCacheForPage(this.dataPager.PageIndex);
+        //    }
+        //}
 
         #endregion
     }

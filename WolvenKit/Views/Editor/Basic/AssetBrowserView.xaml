@@ -225,13 +225,12 @@
                                 AllowSorting="True"
                                 AutoGenerateColumns="False"
                                 Background="{DynamicResource RegionBrush}"
-                                ColumnSizer="Star"
+                                ColumnSizer="AutoLastColumnFill"
                                 EnableDataVirtualization="True"
                                 IsManipulationEnabled="False"
-                                ItemsSource="{Binding ElementName=dataPager, Path=PagedSource}"
-                                RowHeight="22"
                                 SelectionChanged="InnerList_SelectionChanged"
-                                SelectionMode="Extended">
+                                SelectionMode="Extended"
+                                >
 
                                 <syncfusion:SfDataGrid.RecordContextMenu>
                                     <ContextMenu>
@@ -968,14 +967,14 @@
                                 
                             </syncfusion:SfDataGrid>
 
-                            <syncfusion:SfDataPager
+                            <!--<syncfusion:SfDataPager
                                 x:Name="dataPager"
                                 Grid.Row="1"
                                 PageCount="5"
                                 PageSize="100"
                                 UseOnDemandPaging="True"
                                 OnDemandLoading="dataPager_OnDemandLoading"
-                                />
+                                />-->
                         </Grid>
                     </Grid>
                     
