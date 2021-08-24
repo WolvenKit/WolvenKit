@@ -18,8 +18,8 @@ jobs:
     # setup  
     - name: checkout
       uses: actions/checkout@v2
-      with:
-        submodules: recursive
+    - name: Checkout submodules
+      run: git submodule update --init --recursive
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
@@ -77,8 +77,8 @@ jobs:
     # setup  
     - name: checkout
       uses: actions/checkout@v2
-      with:
-        submodules: recursive
+    - name: Checkout submodules
+      run: git submodule update --init --recursive
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
