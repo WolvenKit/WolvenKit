@@ -36,7 +36,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
-    - uses: ilammy/msvc-dev-cmd@v1
+    - uses: microsoft/setup-msbuild@v1.0.2
 
      # environmental variables
     - run: echo "PROJ=./WolvenKit/WolvenKit.csproj" >> $env:GITHUB_ENV
@@ -69,10 +69,10 @@ jobs:
     - run: echo "VERSIONC=${{steps.get-version-cli.outputs.assembly-version}}-nightly.${{env.ISODATE}}" >> $env:GITHUB_ENV
     
     # Publish app
-    - run: msbuild ${{env.PROJ}} -t:restore;Build;Publish /p:PublishDir="${{env.OUT}}";InformationalVersion="${{env.VERSION}}";Configuration=Release;Platform=x64;SelfContained=False;PublishReadyToRun=False;PublishTrimmed=False
+    - run: msbuild ${{env.PROJ}} -t:restore -t:Build -t:Publish /p:PublishDir=".${{env.OUT}}" /p:InformationalVersion="${{env.VERSION}}" /p:Configuration=Release /p:Platform=x64 /p:SelfContained=False /p:PublishReadyToRun=False /p:PublishTrimmed=False
     
     # Publish console
-    - run: msbuild ${{env.PROJC}} -t:restore;Build;Publish /p:PublishDir="${{env.OUTC}}";Configuration=Release;Platform=x64;SelfContained=False;PublishReadyToRun=False;PublishTrimmed=False
+    - run: msbuild ${{env.PROJC}} -t:restore -t:Build -t:Publish /p:PublishDir=".${{env.OUTC}}" /p:Configuration=Release /p:Platform=x64 /p:SelfContained=False /p:PublishReadyToRun=False /p:PublishTrimmed=False
 
     - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION}}.zip" >> $env:GITHUB_ENV
     - run: echo "CONSOLE=${{env.NAME}}.Console-${{env.VERSIONC}}.zip" >> $env:GITHUB_ENV
