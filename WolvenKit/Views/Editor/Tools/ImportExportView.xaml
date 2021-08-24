@@ -135,7 +135,7 @@
                                 <CheckBox
                                     Command="local:SFDataGridCommands.CheckAndUnCheck"
                                     CommandParameter="{Binding ElementName=ExportGrid}"
-                                    IsChecked="{Binding Path=IsHeaderChecked}" />
+                                    />
                             </DataTemplate>
                         </syncfusion:GridCheckBoxColumn.HeaderTemplate>
                     </syncfusion:GridCheckBoxColumn>

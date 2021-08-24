@@ -200,8 +200,6 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         [Reactive] public ImportExportItemViewModel SelectedObject { get; set; } //=> IsImportsSelected ? SelectedImport : IsExportsSelected ? SelectedExport : SelectedConvert;
 
-        [Reactive] public bool? IsHeaderChecked { get; set; }
-
         /// <summary>
         /// Lock Selection of items in grid.
         /// </summary>

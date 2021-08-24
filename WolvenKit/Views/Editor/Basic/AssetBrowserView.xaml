@@ -12,6 +12,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:local="clr-namespace:WolvenKit"
+    xmlns:I="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
     d:DataContext="{d:DesignInstance Type=editor:AssetBrowserViewModel}"
     BorderBrush="{x:Null}"
     mc:Ignorable="d">
@@ -262,7 +264,21 @@
                                 </syncfusion:SfDataGrid.Resources>
 
                                 <syncfusion:SfDataGrid.Columns>
-                                    
+
+                                    <syncfusion:GridCheckBoxColumn
+                                        AllowEditing="True"
+                                        HeaderText="#"
+                                        MappingName="IsChecked">
+                                        <syncfusion:GridCheckBoxColumn.HeaderTemplate>
+                                            <DataTemplate>
+                                                <CheckBox
+                                                Command="local:SFDataGridCommands.CheckAndUnCheck"
+                                                CommandParameter="{Binding ElementName=InnerList}"
+                                                />
+                                            </DataTemplate>
+                                        </syncfusion:GridCheckBoxColumn.HeaderTemplate>
+                                    </syncfusion:GridCheckBoxColumn>
+
                                     <syncfusion:GridTemplateColumn
                                         Width="22"
                                         AllowFiltering="False"
@@ -958,6 +974,10 @@
                                         MappingName="Size" />
 
                                 </syncfusion:SfDataGrid.Columns>
+
+                                <I:Interaction.Behaviors>
+                                    <local:Behaviour />
+                                </I:Interaction.Behaviors>
 
                                 <hc:Interaction.Triggers>
                                     <hc:EventTrigger EventName="MouseDoubleClick">

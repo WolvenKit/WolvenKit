@@ -3,8 +3,10 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using ReactiveUI;
+//using ReactiveUI.Fody.Helpers;
 using WolvenKit.RED4.CR2W.Archive;
 using System;
+using WolvenKit.Common.Interfaces;
 
 namespace WolvenKit.Common.Model
 {
@@ -15,7 +17,7 @@ namespace WolvenKit.Common.Model
         MoveUP
     }
 
-    public class FileEntryViewModel
+    public class FileEntryViewModel : ReactiveObject, ISelectableViewModel
     {
         private readonly IGameFile _fileEntry;
 
@@ -32,6 +34,8 @@ namespace WolvenKit.Common.Model
         [Display(Name = "Hash")] public string HashStr => Key.ToString();
 
         [Browsable(false)] public ulong Key => _fileEntry.Key;
+
+        /*[Reactive] */public bool IsChecked { get; set; }
 
 
         public string Size => FormatSize(_fileEntry.Size);

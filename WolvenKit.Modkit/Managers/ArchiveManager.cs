@@ -48,38 +48,33 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region methods
 
-        [ProtoAfterDeserialization]
-        public void AfterDeserializationCallback()
-        {
-            foreach (var archive in Archives.Values)
-            {
-                var fileEntries = (archive as Archive).Index.FileEntries.Values;
-                foreach (var file in fileEntries)
-                {
-                    file.Archive = archive;
-                    archive.Files.Add(file.Key, file);
-                    file.SetHashService(_hashService);
-                }
-                var deps = (archive as Archive).Index.Dependencies;
-                foreach (var d in deps)
-                {
-                    d.SetHashService(_hashService);
-                }
-            }
+        //[ProtoAfterDeserialization]
+        //public void AfterDeserializationCallback()
+        //{
+        //    foreach (var archive in Archives.Values)
+        //    {
+        //        var fileEntries = (archive as Archive).Index.FileEntries.Values;
+        //        foreach (var file in fileEntries)
+        //        {
+        //            file.Archive = archive;
+        //            archive.Files.Add(file.Key, file);
+        //            file.SetHashService(_hashService);
+        //        }
+        //        var deps = (archive as Archive).Index.Dependencies;
+        //        foreach (var d in deps)
+        //        {
+        //            d.SetHashService(_hashService);
+        //        }
+        //    }
 
-            Items.Edit(innerList =>
-            {
-                innerList.Clear();
-                innerList.AddOrUpdate(Archives.Values.SelectMany(_ => _.Files));
-            });
+        //    Items.Edit(innerList =>
+        //    {
+        //        innerList.Clear();
+        //        innerList.AddOrUpdate(Archives.Values.SelectMany(_ => _.Files));
+        //    });
 
-            //Items = Archives.Values
-            //    .SelectMany(_ => _.Files)
-            //    .GroupBy(_ => _.Key)
-            //    .ToDictionary(_ => _.Key, _ => _.Select(x => x.Value).ToList());
-
-            RebuildRootNode();
-        }
+        //    RebuildRootNode();
+        //}
 
         public override EArchiveType TypeName => EArchiveType.Archive;
 
@@ -126,12 +121,19 @@ namespace WolvenKit.RED4.CR2W.Archive
                 LoadArchive(file);
             }
 
+            // populate lists
+            Items.Edit(innerList =>
+            {
+                innerList.Clear();
+                innerList.AddOrUpdate(Archives.Values.SelectMany(_ => _.Files));
+            });
+
+            Extensions = Items.KeyValues.Select(_ => _.Value.Extension).Distinct();
+
             if (rebuildtree)
             {
                 RebuildRootNode();
             }
-
-            Extensions = Items.KeyValues.Select(_ => _.Value.Extension).Distinct();
         }
 
         /// <summary>
@@ -147,27 +149,6 @@ namespace WolvenKit.RED4.CR2W.Archive
             }
 
             var archive = Red4ParserServiceExtensions.ReadArchive(filename, _hashService);
-            Items.Edit(innerList =>
-            {
-                //innerList.Clear();
-                innerList.AddOrUpdate(archive.Files);
-            });
-
-
-            //foreach (var (key, value) in archive.Files)
-            {
-                // add new key if the file isn't already in another bundle
-                //if (!Items.ContainsKey(key))
-                //{
-                //    Items.Add(key, new List<IGameFile>());
-                //}
-                //if (!Items[key].ToList().Contains(value))
-                //{
-                //    var items = Items[key];
-                //    items.Add(value);
-                //}
-            }
-
             Archives.Add(archive.ArchiveAbsolutePath, archive);
         }
 
