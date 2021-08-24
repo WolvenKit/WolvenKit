@@ -31,12 +31,6 @@
   <a href="https://github.com/WolvenKit/Wolven-kit/stargazers"><img src="https://img.shields.io/github/stars/WolvenKit/Wolven-kit.svg"></a>    
   <a href="https://raw.githubusercontent.com/WolvenKit/Wolven-kit/master/LICENSE"><img src="https://img.shields.io/badge/license-AGPL-blue.svg"></a>
   <a href="https://discord.gg/cp77modding"><img src="https://img.shields.io/discord/717692382849663036.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2">  </a>  
-<p align="center"> 
- <img src="https://media.discordapp.net/attachments/803648048018096170/809406032336912394/unknown.png?width=837&height=640"> 
-</p>
-
-![screenshot](https://cdn.discordapp.com/attachments/788051447081598976/811578293676539904/unknown.png)
-
 <div id="about">&zwnj;</div>
 <h3 align="center">About</h3>
 
@@ -70,7 +64,12 @@ Our primary focus at the moment is progressing with support for the new game, Cy
 ---
 
 1. **Download WolvenKit**
-   1. Get the latest release here: https://github.com/WolvenKit/Wolvenkit/releases/latest.
+
+    | Package | Latest Release | Checks  |
+    | ------- | ------------ | ----------------- |
+    | [WolvenKit Nightly](https://github.com/WolvenKit/WolvenKit-nightly-releases/) | [![GitHub release (latest by date)](https://img.shields.io/github/v/release/WolvenKit/WolvenKit-nightly-releases)](https://github.com/WolvenKit/WolvenKit-nightly-releases/releases/latest) | ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/WolvenKit/WolvenKit/WolvenKit-Nightly?color=green) |
+    | [WolvenKit](https://github.com/WolvenKit/WolvenKit/) | [![GitHub release (latest by date)](https://img.shields.io/github/v/release/WolvenKit/WolvenKit)](https://github.com/WolvenKit/WolvenKit/releases/latest) | ![GitHub branch checks state](https://img.shields.io/github/checks-status/WolvenKit/WolvenKit/master) | 
+
 
 2. **Launch the installer.**
    1. Double click on the .exe to start the installation procedure and the program will take care of the rest.
@@ -135,6 +134,15 @@ Offline | UI Development | [Email](mailto:sodanakin@gmail.com)
 :---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 [Traderain](https://github.com/Traderain)|[rfuzzo](https://github.com/rfuzzo)|[kote2ster](https://github.com/kote2ster)|[Murzinio](https://github.com/Murzinio)|[Offline-R503B](https://github.com/Offline-R503B)|[Maxzor](https://github.com/Maxzor)|[vonLeebpl](https://github.com/vonLeebpl)|[TheBloke](https://github.com/TheBloke)|[ja-to](https://github.com/ja-to)|[michaelpolakatwork](https://github.com/michaelpolakatwork)|[DerinHalil](https://github.com/DerinHalil)|[HitmanHimself](https://github.com/HitmanHimself)|[Lim3zer0](https://github.com/Lim3zer0)|[phrisk](https://github.com/phrisk)|[ali-alidoust](https://github.com/ali-alidoust)|[Anras573](https://github.com/Anras573)|[carlosproiete](https://github.com/carlosproiete)|[Jicksaw](https://github.com/Jicksaw)|[TheFusion21](https://github.com/TheFusion21)|[mattstates](https://github.com/mattstates)|[robymontyz](https://github.com/robymontyz)|[Strahlemann83](https://github.com/Strahlemann83)|[sw3dg1n](https://github.com/sw3dg1n)|[dingdio](https://github.com/dingdio)|[dnandha](https://github.com/dnandha)|[hrkrx](https://github.com/hrkrx)|[philippTheCat](https://github.com/philippTheCat)|
 <!-- readme: contributors -end -->
+
+<div id="screenshots">&zwnj;</div>
+<h3 align="center">Screenshot</h3>
+
+<p align="center"> 
+ <img src="https://media.discordapp.net/attachments/803648048018096170/809406032336912394/unknown.png?width=837&height=640"> 
+</p>
+
+![screenshot](https://cdn.discordapp.com/attachments/788051447081598976/811578293676539904/unknown.png)
 
 <div id="credits">&zwnj;</div>
 <h3 align="center">Credits</h3>
