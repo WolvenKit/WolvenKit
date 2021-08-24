@@ -181,7 +181,7 @@ namespace WolvenKit.Modkit.RED4
                 ms.CopyTo(intargetStream);
             }
             meshStream.Seek(0, SeekOrigin.Begin);
-            return ImportMesh(inGltfFile, meshStream, vmode);
+            return ImportMesh(inGltfFile, meshStream, archives, vmode);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace WolvenKit.Common.Tools
         /// <param name="cVariable"></param>
         /// <param name="value">either a JArray, JObject or primitive value</param>
         /// <exception cref="InvalidParsingException"></exception>
-        private static void SetFromJObject(this IEditableVariable cVariable, object value)
+        public static void SetFromJObject(this IEditableVariable cVariable, object value)
         {
             // switch over the jobject
             switch (value)
