@@ -19,6 +19,7 @@
       <PackageOutputPath>./nupkg</PackageOutputPath>
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
       <DebugType>embedded</DebugType>
+     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 
   </PropertyGroup>
 
