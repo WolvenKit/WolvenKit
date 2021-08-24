@@ -12,9 +12,9 @@ using WolvenKit.Common.DDS;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common.FNV1A;
 using SharpGLTF.IO;
-using System.Threading;
+using System.Diagnostics;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Common.Services;
+using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Tools;
 using Newtonsoft.Json;
 using WolvenKit.Modkit.RED4.RigFile;
@@ -452,7 +452,62 @@ namespace WolvenKit.Modkit.RED4
             {
                 RawMaterials.Add(ContainRawMaterial(materialEntries[i], materialEntryNames[i],archives, ref usedMts));
             }
-            var obj = new { MaterialRepo = matRepo, Materials = RawMaterials, TexturesList };
+            
+            List<RawMaterial> matTemplates = new List<RawMaterial>();
+            {
+                var keys = usedMts.Keys.ToList();
+                for (int i = 0; i < keys.Count; i++)
+                {
+                    var rawMat = new RawMaterial();
+                    rawMat.Name = keys[i];
+                    rawMat.Data = new Dictionary<string, object>();
+                    for (int e = 0; e < usedMts[keys[i]].Parameters[2].Count; e++)
+                    {
+                        var refer = usedMts[keys[i]].Parameters[2][e].GetReference().Data;
+                        if (refer.ChildrEditableVariables.Count > 2)
+                        {
+                            if(refer.ChildrEditableVariables[2] is Vector4 vec)
+                            {
+                                vec.X.Value = 0f;
+                                vec.Y.Value = 0f;
+                                vec.Z.Value = 0f;
+                                vec.W.Value = 0f;
+                                vec.X.IsSerialized = true;
+                                vec.Y.IsSerialized = true;
+                                vec.Z.IsSerialized = true;
+                                vec.W.IsSerialized = true;
+                            }
+                            if (refer.ChildrEditableVariables[2] is CFloat flo)
+                            {
+                                flo.Value = 0f;
+                                flo.IsSerialized = true;
+                            }
+                            if (refer.ChildrEditableVariables[2] is CColor col)
+                            {
+                                col.Red.Value = 0;
+                                col.Green.Value = 0;
+                                col.Blue.Value = 0;
+                                col.Alpha.Value = 0;
+                                col.Red.IsSerialized = true;
+                                col.Green.IsSerialized = true;
+                                col.Blue.IsSerialized = true;
+                                col.Alpha.IsSerialized = true;
+                            }
+                            if (refer.ChildrEditableVariables[2] is IREDRef dep)
+                            {
+                                dep.DepotPath = "";
+                                dep.IsSerialized = true;
+                            }
+                            refer.ChildrEditableVariables[2].IsSerialized = true;
+                            rawMat.Data.Add((refer.ChildrEditableVariables[0] as CName).Value, refer.ChildrEditableVariables[2].ToObject());
+                        }
+                    }
+                    matTemplates.Add(rawMat);
+                }
+            }
+            
+            var obj = new { MaterialRepo = matRepo, Materials = RawMaterials, Info = "Following data is for reference only, has no impact on imports",
+                TexturesList, MaterialTemplates = matTemplates };
 
             string str = JsonConvert.SerializeObject(obj, settings);
 
@@ -536,6 +591,10 @@ namespace WolvenKit.Modkit.RED4
                     {
                         rawMaterial.Data[BaseMaterials[i].CMaterialInstanceData[e].REDName] = BaseMaterials[i].CMaterialInstanceData[e].Variant.ToObject();
                     }
+                    else
+                    {
+                        rawMaterial.Data.Add(BaseMaterials[i].CMaterialInstanceData[e].REDName, BaseMaterials[i].CMaterialInstanceData[e].Variant.ToObject());
+                    }
                 }
             }
 
@@ -613,7 +672,7 @@ namespace WolvenKit.Modkit.RED4
                                 var refer = mt.Parameters[2][k].GetReference().Data;
                                 if((refer.ChildrEditableVariables[0] as CName).Value == keys[j])
                                 {
-                                    if (refer.ChildrEditableVariables.Count > 2 && refer.ChildrEditableVariables[2].IsSerialized)
+                                    if (refer.ChildrEditableVariables.Count > 2)
                                     {
                                         typename = refer.ChildrEditableVariables[2].REDType;
                                     }
