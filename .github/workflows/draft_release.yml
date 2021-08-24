@@ -44,12 +44,10 @@ jobs:
     - run: echo "VERSIONC=${{steps.get-version-cli.outputs.assembly-version}}" >> $env:GITHUB_ENV
     
     # Publish app
-    - uses: ilammy/msvc-dev-cmd@v1
-      run: msbuild ${{env.PROJ}} -t:restore;Build;Publish /p:PublishDir="${{env.OUT}}";Configuration=Release;Platform=x64;SelfContained=False;PublishReadyToRun=False;PublishTrimmed=False
+    - run: msbuild ${{env.PROJ}} -t:restore;Build;Publish /p:PublishDir="${{env.OUT}}";Configuration=Release;Platform=x64;SelfContained=False;PublishReadyToRun=False;PublishTrimmed=False
     
     # Publish console
-    - uses: ilammy/msvc-dev-cmd@v1
-      run: msbuild ${{env.PROJC}} -t:restore;Build;Publish /p:PublishDir="${{env.OUTC}}";Configuration=Release;Platform=x64;SelfContained=False;PublishReadyToRun=False;PublishTrimmed=False
+    - run: msbuild ${{env.PROJC}} -t:restore;Build;Publish /p:PublishDir="${{env.OUTC}}";Configuration=Release;Platform=x64;SelfContained=False;PublishReadyToRun=False;PublishTrimmed=False
 
     - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION}}.zip" >> $env:GITHUB_ENV
     - run: echo "CONSOLE=${{env.NAME}}.Console-${{env.VERSIONC}}.zip" >> $env:GITHUB_ENV
