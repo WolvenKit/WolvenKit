@@ -26,6 +26,7 @@ using System.Text.RegularExpressions;
 using System.Reactive.Linq;
 using Syncfusion.Data;
 using DynamicData;
+using System.Reactive.Disposables;
 
 namespace WolvenKit.Views.Editor
 {
@@ -60,6 +61,29 @@ namespace WolvenKit.Views.Editor
                        ViewModel.PerformSearch(query);
                        ResetDataGridPages();
                    });
+
+
+                // ItemsSource="{Binding LeftItems, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                //SelectedItem = "{Binding LeftSelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                this.OneWayBind(ViewModel,
+                        viewModel => viewModel.LeftItems,
+                        view => view.LeftNavigation.ItemsSource)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        viewModel => viewModel.LeftSelectedItem,
+                        view => view.LeftNavigation.SelectedItem)
+                    .DisposeWith(disposables);
+
+                //SelectedItem = "{Binding RightSelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                //SelectedItems = "{Binding RightSelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                this.Bind(ViewModel,
+                        viewModel => viewModel.RightSelectedItem,
+                        view => view.InnerList.SelectedItem)
+                    .DisposeWith(disposables);
+                this.OneWayBind(ViewModel,
+                      viewModel => viewModel.RightSelectedItems,
+                      view => view.InnerList.SelectedItems)
+                  .DisposeWith(disposables);
 
             });
 

@@ -18,6 +18,7 @@
 
 
     <Grid>
+        
         <Grid.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
@@ -27,25 +28,27 @@
             </ResourceDictionary>
         </Grid.Resources>
 
-
         <Border
             hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
             BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
             BorderThickness="0">
             <Grid>
                 <Grid>
+                    
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*" />
-                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="Auto" MinWidth="200"/>
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
+                    <!-- Left Navigation -->
                     <Grid Grid.Column="0">
-                        <Grid Grid.Column="0">
-                            <Grid.Resources>
-                                <converters1:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
-                            </Grid.Resources>
+                        
+                        <Grid.Resources>
+                            <converters1:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
+                        </Grid.Resources>
 
-                            <syncfusion:SfTreeGrid
+                        <syncfusion:SfTreeGrid
                                 x:Name="LeftNavigation"
                                 Grid.Column="0"
                                 Margin="0,0,0,0"
@@ -57,107 +60,108 @@
                                 ChildPropertyName="Directories"
                                 ColumnSizer="FillColumn"
                                 FilterLevel="Extended"
-                                ItemsSource="{Binding LeftItems, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                                SelectedItem="{Binding LeftSelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                SelectionChanged="LeftNavigation_OnSelectionChanged">
+                                SelectionChanged="LeftNavigation_OnSelectionChanged"
+                            
+                            >
 
-                                <syncfusion:SfTreeGrid.Resources>
-                                    <Style TargetType="syncfusion:TreeGridCell">
-                                        <Setter Property="BorderBrush" Value="Transparent" />
-                                        <Setter Property="BorderThickness" Value="0" />
-                                    </Style>
-                                    <Style TargetType="syncfusion:TreeGridExpanderCell">
-                                        <Setter Property="BorderBrush" Value="Transparent" />
-                                        <Setter Property="BorderThickness" Value="0" />
-                                    </Style>
-                                    <converters1:ExtensionToBitmapConverter x:Key="ExtensionToBmp" />
-                                </syncfusion:SfTreeGrid.Resources>
+                            <syncfusion:SfTreeGrid.Resources>
+                                <Style TargetType="syncfusion:TreeGridCell">
+                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                    <Setter Property="BorderThickness" Value="0" />
+                                </Style>
+                                <Style TargetType="syncfusion:TreeGridExpanderCell">
+                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                    <Setter Property="BorderThickness" Value="0" />
+                                </Style>
+                                <converters1:ExtensionToBitmapConverter x:Key="ExtensionToBmp" />
+                            </syncfusion:SfTreeGrid.Resources>
 
-                                <syncfusion:SfTreeGrid.Columns>
+                            <syncfusion:SfTreeGrid.Columns>
 
-                                    <syncfusion:TreeGridTextColumn
+                                <syncfusion:TreeGridTextColumn
                                         HeaderText="Name"
                                         HorizontalHeaderContentAlignment="Left"
                                         ImmediateUpdateColumnFilter="True"
                                         MappingName="Name">
-                                        <syncfusion:TreeGridTextColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="20" />
-                                                        <ColumnDefinition Width="*" />
-                                                    </Grid.ColumnDefinitions>
-                                                    <Image Height="13">
-                                                        <Image.Style>
-                                                            <Style TargetType="Image">
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding Extension}" Value="">
-                                                                        <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/default.svg}" />
-                                                                    </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding Extension}" Value="OpenDirImageKey">
-                                                                        <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderopened.svg}" />
-                                                                    </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding Extension}" Value="ClosedDirImageKey">
-                                                                        <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderdefault.svg}" />
-                                                                    </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding Extension}" Value="RawImageKey">
-                                                                        <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
-                                                                    </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding Extension}" Value="RawModImageKey">
-                                                                        <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
-                                                                    </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding Extension}" Value="RawDlcImageKey">
-                                                                        <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
-                                                                    </DataTrigger>
+                                    <syncfusion:TreeGridTextColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="20" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <Image Height="13">
+                                                    <Image.Style>
+                                                        <Style TargetType="Image">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/default.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="OpenDirImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderopened.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="ClosedDirImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderdefault.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="RawImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="RawModImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="RawDlcImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
 
-                                                                    <DataTrigger Binding="{Binding Extension}" Value="RadishImageKey">
-                                                                        <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
-                                                                    </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding Extension}" Value="ModImageKey">
-                                                                        <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
-                                                                    </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding Extension}" Value="ModCookedImageKey">
-                                                                        <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
-                                                                    </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding Extension}" Value="ModUncookedImageKey">
-                                                                        <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
-                                                                    </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding Extension}" Value="DlcImageKey">
-                                                                        <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
-                                                                    </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding Extension}" Value="DlcCookedImageKey">
-                                                                        <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
-                                                                    </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding Extension}" Value="DlcUncookedImageKey">
-                                                                        <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Image.Style>
-                                                    </Image>
-                                                    <TextBlock
+                                                                <DataTrigger Binding="{Binding Extension}" Value="RadishImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="ModImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="ModCookedImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="ModUncookedImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="DlcImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="DlcCookedImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="DlcUncookedImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Image.Style>
+                                                </Image>
+                                                <TextBlock
                                                         x:Name="TemplateTextBlock"
                                                         Grid.Column="1"
                                                         Margin="2"
                                                         VerticalAlignment="Center"
                                                         Text="{Binding Path=Name}" />
-                                                </Grid>
-                                            </DataTemplate>
-                                        </syncfusion:TreeGridTextColumn.CellTemplate>
-                                    </syncfusion:TreeGridTextColumn>
-                                </syncfusion:SfTreeGrid.Columns>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </syncfusion:TreeGridTextColumn.CellTemplate>
+                                </syncfusion:TreeGridTextColumn>
+                            </syncfusion:SfTreeGrid.Columns>
 
-                                <syncfusion:SfTreeGrid.ExpanderContextMenu>
-                                    <ContextMenu>
-                                        <MenuItem Click="Expand_OnClick" Header="Expand" />
-                                        <MenuItem Click="ExpandAll_OnClick" Header="Expand all" />
-                                        <MenuItem Click="Collapse_OnClick" Header="Collapse" />
-                                        <MenuItem Click="CollapseAll_OnClick" Header="Collapse all" />
-                                    </ContextMenu>
-                                </syncfusion:SfTreeGrid.ExpanderContextMenu>
-                            </syncfusion:SfTreeGrid>
+                            <syncfusion:SfTreeGrid.ExpanderContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Click="Expand_OnClick" Header="Expand" />
+                                    <MenuItem Click="ExpandAll_OnClick" Header="Expand all" />
+                                    <MenuItem Click="Collapse_OnClick" Header="Collapse" />
+                                    <MenuItem Click="CollapseAll_OnClick" Header="Collapse all" />
+                                </ContextMenu>
+                            </syncfusion:SfTreeGrid.ExpanderContextMenu>
 
-                            <hc:SearchBar
+                        </syncfusion:SfTreeGrid>
+
+                        <hc:SearchBar
                                 x:Name="FolderSearchBar"
                                 Margin="0,0,40,0"
                                 Padding="4,0,-25,0"
@@ -172,18 +176,21 @@
                                 ShowClearButton="True"
                                />
 
-                            <Button
+                        <Button
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Top"
                                 Background="{DynamicResource ContentBackground}"
                                 Click="LeftNavigationHomeButton_OnClick"
                                 Visibility="Visible">
-                                <iconPacks:PackIconCodicons Kind="Home" />
-                            </Button>
-                        </Grid>
+                            <iconPacks:PackIconCodicons Kind="Home" />
+                        </Button>
+                        
                     </Grid>
 
-                    <Grid Grid.Column="1">
+                    <syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+
+                    <!-- Right File List -->
+                    <Grid Grid.Column="2">
 
 
                         <hc:SearchBar
@@ -193,7 +200,7 @@
                             Background="{DynamicResource ContentBackgroundAlt}"
                             BorderBrush="{DynamicResource BorderBrush}"
                             FlowDirection="LeftToRight"
-                            hc:InfoElement.Placeholder="Search"
+                            hc:InfoElement.Placeholder="Search all Game Files"
                             Style="{StaticResource SearchBarExtend}"
                             hc:InfoElement.Necessary="True"
                             PreviewTextInput="FileSearchBar_PreviewTextInput"
@@ -214,18 +221,15 @@
                                 AllowDraggingRows="False"
                                 AllowEditing="False"
                                 AllowFiltering="True"
-                                AllowResizingColumns="False"
-                                AllowSorting="False"
+                                AllowResizingColumns="True"
+                                AllowSorting="True"
                                 AutoGenerateColumns="False"
                                 Background="{DynamicResource RegionBrush}"
                                 ColumnSizer="Star"
                                 EnableDataVirtualization="True"
-                                UseDrawing="Default"
                                 IsManipulationEnabled="False"
                                 ItemsSource="{Binding ElementName=dataPager, Path=PagedSource}"
                                 RowHeight="22"
-                                SelectedItem="{Binding RightSelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                SelectedItems="{Binding RightSelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 SelectionChanged="InnerList_SelectionChanged"
                                 SelectionMode="Extended">
 
@@ -259,6 +263,7 @@
                                 </syncfusion:SfDataGrid.Resources>
 
                                 <syncfusion:SfDataGrid.Columns>
+                                    
                                     <syncfusion:GridTemplateColumn
                                         Width="22"
                                         AllowFiltering="False"
@@ -945,7 +950,14 @@
                                         AllowFiltering="True"
                                         ColumnSizer="Auto"
                                         IsReadOnly="True"
+                                        MappingName="Extension" />
+                                    
+                                    <syncfusion:GridTextColumn
+                                        AllowFiltering="True"
+                                        ColumnSizer="Auto"
+                                        IsReadOnly="True"
                                         MappingName="Size" />
+
                                 </syncfusion:SfDataGrid.Columns>
 
                                 <hc:Interaction.Triggers>
@@ -966,9 +978,11 @@
                                 />
                         </Grid>
                     </Grid>
+                    
                 </Grid>
             </Grid>
         </Border>
+        
         <Border
             x:Name="LoadingBorder"
             Grid.RowSpan="3"
@@ -993,5 +1007,6 @@
                 </StackPanel>
             </Grid>
         </Border>
+        
     </Grid>
 </reactiveUi:ReactiveUserControl>

@@ -19,6 +19,7 @@ using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using RelayCommand = WolvenKit.Functionality.Commands.RelayCommand;
+using DynamicData.Binding;
 
 namespace WolvenKit.ViewModels.Editor
 {
@@ -94,7 +95,11 @@ namespace WolvenKit.ViewModels.Editor
             controller.ConnectHierarchy()
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _boundRootNodes)
-                .Subscribe(OnRootNodesUpdated);
+                .Subscribe(
+                _ =>
+                {
+                    LeftItems = new ObservableCollection<GameFileTreeNode>(_boundRootNodes);
+                });
 
             controller
                 .WhenAnyValue(x => x.IsManagerLoaded)
@@ -112,8 +117,6 @@ namespace WolvenKit.ViewModels.Editor
             Expand = ReactiveCommand.Create(() => { });
 
         }
-
-        private void OnRootNodesUpdated(IChangeSet<GameFileTreeNode, string> obj) => LeftItems = new ObservableCollection<GameFileTreeNode>(_boundRootNodes);
 
         #endregion ctor
 

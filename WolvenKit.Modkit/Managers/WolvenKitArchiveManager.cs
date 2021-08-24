@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using ProtoBuf;
@@ -59,7 +60,7 @@ namespace WolvenKit.Common.Model
                             Parent = currentNode,
                             Name = parts[i]
                         };
-                        currentNode.Directories.Add(/*parts[i], */newNode);
+                        currentNode.Directories.Add(newNode);
                         currentNode = newNode;
                     }
                     else
@@ -69,9 +70,8 @@ namespace WolvenKit.Common.Model
                 }
 
                 currentNode.Files.AddRange(item.Value.ToList());
+                currentNode.Directories = new ObservableCollection<GameFileTreeNode>(currentNode.Directories.OrderBy(_ => _.Name)); 
             }
-
-            //RootNode.Files.AddRange(Items.Values.ToList());
         }
 
 
