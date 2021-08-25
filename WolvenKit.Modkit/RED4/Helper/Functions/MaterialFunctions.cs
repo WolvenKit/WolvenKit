@@ -576,7 +576,20 @@ namespace WolvenKit.Modkit.RED4
                         // childreditablevars indexing is dangerous(what if someone changes order of vars), just works :D
                         if(refer.ChildrEditableVariables.Count > 2 && refer.ChildrEditableVariables[2].IsSerialized)
                         {
-                            rawMaterial.Data.Add(mt.UsedParameters[2][i].Name.Value, refer.ChildrEditableVariables[2].ToObject());
+                            if(refer.ChildrEditableVariables[2] is CColor col)
+                            {
+                                var col_ = new CColor_(col.Cr2wFile as CR2WFile, null, mt.UsedParameters[2][i].Name.Value);
+                                col_.Red = new CUInt8(col.Cr2wFile as CR2WFile, col_, "Red") { Value = col.Red.Value, IsSerialized = true };
+                                col_.Green = new CUInt8(col.Cr2wFile as CR2WFile, col_, "Green") { Value = col.Green.Value, IsSerialized = true };
+                                col_.Blue = new CUInt8(col.Cr2wFile as CR2WFile, col_, "Blue") { Value = col.Blue.Value, IsSerialized = true };
+                                col_.Alpha = new CUInt8(col.Cr2wFile as CR2WFile, col_, "Alpha") { Value = col.Alpha.Value, IsSerialized = true };
+
+                                rawMaterial.Data.Add(mt.UsedParameters[2][i].Name.Value, col_.ToObject());
+                            }
+                            else
+                            {
+                                rawMaterial.Data.Add(mt.UsedParameters[2][i].Name.Value, refer.ChildrEditableVariables[2].ToObject());
+                            }
                         }
                     }
                 }
@@ -587,13 +600,35 @@ namespace WolvenKit.Modkit.RED4
             {
                 for (int e = 0; e < BaseMaterials[i].CMaterialInstanceData.Count; e++)
                 {
-                    if (rawMaterial.Data.ContainsKey(BaseMaterials[i].CMaterialInstanceData[e].REDName))
+                    var variant = BaseMaterials[i].CMaterialInstanceData[e].Variant;
+                    // remove when tobj serialization is fixed
+                    if (variant is CColor col)
                     {
-                        rawMaterial.Data[BaseMaterials[i].CMaterialInstanceData[e].REDName] = BaseMaterials[i].CMaterialInstanceData[e].Variant.ToObject();
+                        var col_ = new CColor_(col.Cr2wFile as CR2WFile,null, BaseMaterials[i].CMaterialInstanceData[e].REDName);
+                        col_.Red = new CUInt8(col.Cr2wFile as CR2WFile, col_, "Red") { Value = col.Red.Value, IsSerialized = true };
+                        col_.Green = new CUInt8(col.Cr2wFile as CR2WFile, col_, "Green") { Value = col.Green.Value, IsSerialized = true };
+                        col_.Blue = new CUInt8(col.Cr2wFile as CR2WFile, col_, "Blue") { Value = col.Blue.Value, IsSerialized = true };
+                        col_.Alpha = new CUInt8(col.Cr2wFile as CR2WFile, col_, "Alpha") { Value = col.Alpha.Value, IsSerialized = true };
+
+                        if (rawMaterial.Data.ContainsKey(BaseMaterials[i].CMaterialInstanceData[e].REDName))
+                        {
+                            rawMaterial.Data[BaseMaterials[i].CMaterialInstanceData[e].REDName] = col_.ToObject();
+                        }
+                        else
+                        {
+                            rawMaterial.Data.Add(BaseMaterials[i].CMaterialInstanceData[e].REDName, col_.ToObject());
+                        }
                     }
                     else
                     {
-                        rawMaterial.Data.Add(BaseMaterials[i].CMaterialInstanceData[e].REDName, BaseMaterials[i].CMaterialInstanceData[e].Variant.ToObject());
+                        if (rawMaterial.Data.ContainsKey(BaseMaterials[i].CMaterialInstanceData[e].REDName))
+                        {
+                            rawMaterial.Data[BaseMaterials[i].CMaterialInstanceData[e].REDName] = variant.ToObject();
+                        }
+                        else
+                        {
+                            rawMaterial.Data.Add(BaseMaterials[i].CMaterialInstanceData[e].REDName, variant.ToObject());
+                        }
                     }
                 }
             }
@@ -680,12 +715,32 @@ namespace WolvenKit.Modkit.RED4
                             }
                             if(typename != null)
                             {
-                                var variant = new CVariantSizeNameType(mi, chunk.CMaterialInstanceData, keys[j]);
-                                var value = CR2WTypeManager.Create(typename, keys[j], mi, variant);
-                                value.IsSerialized = true;
-                                value.SetFromJObject(obj.Materials[i].Data[keys[j]]);
-                                variant.SetVariant(value);
-                                chunk.CMaterialInstanceData.Add(variant);
+                                // remove when setfromobj deserialization is fixed
+                                if(typename == "Color")
+                                {
+                                    CColor_ value0 = new CColor_(new CR2WFile(),null, keys[j]);
+                                    value0.IsSerialized = true;
+                                    value0.SetFromJObject(obj.Materials[i].Data[keys[j]]);
+
+                                    var variant = new CVariantSizeNameType(mi, chunk.CMaterialInstanceData, keys[j]);
+                                    CColor value = new CColor(mi, variant, keys[j]);
+                                    value.IsSerialized = true;
+                                    value.Red = new CUInt8(mi, value, "Red") { IsSerialized = true, Value = value0.Red.Value };
+                                    value.Green = new CUInt8(mi, value, "Green") { IsSerialized = true, Value = value0.Green.Value };
+                                    value.Blue = new CUInt8(mi, value, "Blue") { IsSerialized = true, Value = value0.Blue.Value };
+                                    value.Alpha = new CUInt8(mi, value, "Alpha") { IsSerialized = true, Value = value0.Alpha.Value };
+                                    variant.SetVariant(value);
+                                    chunk.CMaterialInstanceData.Add(variant);
+                                }
+                                else
+                                {
+                                    var variant = new CVariantSizeNameType(mi, chunk.CMaterialInstanceData, keys[j]);
+                                    var value = CR2WTypeManager.Create(typename, keys[j], mi, variant);
+                                    value.IsSerialized = true;
+                                    value.SetFromJObject(obj.Materials[i].Data[keys[j]]);
+                                    variant.SetVariant(value);
+                                    chunk.CMaterialInstanceData.Add(variant);
+                                }
                             }
                         }
                     }
