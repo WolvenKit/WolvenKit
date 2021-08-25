@@ -659,6 +659,14 @@ namespace WolvenKit.ViewModels.Editor
                     opusExportArgs.RawFolderPath = proj.RawDirectory;
                     opusExportArgs.ModFolderPath = proj.ModDirectory;
                 }
+                if (item.Properties is EntityExportArgs entExportArgs)
+                {
+                    if (_gameController.GetController() is Cp77Controller cp77Controller)
+                    {
+                        var archivemanager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
+                        entExportArgs.Archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
+                    }
+                }
 
                 var settings = new GlobalExportArgs().Register(item.Properties as ExportArgs);
                 await Task.Run(() => _modTools.Export(fi, settings,

@@ -130,6 +130,8 @@ namespace WolvenKit.ViewModels.Editor
                 ECookedFileFormat.texarray => new CommonExportArgs(),
                 ECookedFileFormat.fnt => new FntExportArgs(),
                 ECookedFileFormat.morphtarget => new MorphTargetExportArgs(),
+                ECookedFileFormat.ent => new EntityExportArgs(),
+                ECookedFileFormat.app => new EntityExportArgs(),
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
