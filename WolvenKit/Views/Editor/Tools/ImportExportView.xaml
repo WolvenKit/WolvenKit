@@ -34,6 +34,7 @@
             Grid.RowSpan="3"
             Grid.ColumnSpan="3"
             Background="Gray">
+            
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
@@ -129,6 +130,7 @@
                 Visibility="{Binding IsExportsSelected, Converter={StaticResource boolToVisibilityConverter}}">
 
                 <syncfusion:SfDataGrid.Columns>
+                    
                     <syncfusion:GridCheckBoxColumn HeaderText="#" MappingName="IsChecked">
                         <syncfusion:GridCheckBoxColumn.HeaderTemplate>
                             <DataTemplate>
@@ -139,6 +141,7 @@
                             </DataTemplate>
                         </syncfusion:GridCheckBoxColumn.HeaderTemplate>
                     </syncfusion:GridCheckBoxColumn>
+                    
                     <syncfusion:GridTextColumn
                         AllowEditing="False"
                         ColumnSizer="Star"
@@ -152,10 +155,13 @@
                         HeaderText="Export Task"
                         HorizontalHeaderContentAlignment="Left"
                         MappingName="Properties" />
+                    
                 </syncfusion:SfDataGrid.Columns>
+                
                 <I:Interaction.Behaviors>
                     <local:Behaviour />
                 </I:Interaction.Behaviors>
+                
             </syncfusion:SfDataGrid>
 
             <!--  Data Grid Imports  -->
@@ -205,7 +211,6 @@
             </syncfusion:SfDataGrid>
 
             <!--  Bottom Button Panel Main  -->
-
             <Grid Grid.Row="2" Background="{DynamicResource ContentBackgroundAlt2}" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition MinWidth="220" Width="Auto"/>
@@ -344,6 +349,7 @@
                     </StackPanel>
                 </StackPanel>
             </Grid>
+            
         </Grid>
 
         <!--  Special Import / Export Options  -->

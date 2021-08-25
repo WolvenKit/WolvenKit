@@ -18,8 +18,9 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using RelayCommand = WolvenKit.Functionality.Commands.RelayCommand;
 using DynamicData.Binding;
+using Microsoft.Extensions.FileSystemGlobbing;
+using WolvenKit.Common.FNV1A;
 
 namespace WolvenKit.ViewModels.Editor
 {
@@ -146,6 +147,9 @@ namespace WolvenKit.ViewModels.Editor
         [Reactive] public string SelectedClass { get; set; }
         [Reactive] public string SelectedExtension { get; set; }
 
+        [Reactive] public string SearchBarText { get; set; }
+        [Reactive] public string OptionsSearchBarText { get; set; }
+
         #endregion properties
 
         #region commands
@@ -223,22 +227,120 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
-
+        public enum ESearchKeys
+        {
+            Hash,
+            Ext,
+            Name,
+            Limit,
+        }
+        public const int SEARCH_LIMIT = 1000;
 
         public void PerformSearch(string query)
         {
-            ReadOnlyObservableCollection<FileEntryViewModel> list;
-            var ret = _managers.First().Items
-                .Connect()
-                .Filter(x => x.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
-                .LimitSizeTo(1000)
-                .Transform(x => new FileEntryViewModel(x))
-                .Bind(out list)
-                .Subscribe();
+            var inputs = SearchBarText.Split(' ');
+            Dictionary<ESearchKeys, List<string>> KeyDict = Enum
+                .GetValues<ESearchKeys>()
+                .ToDictionary(key => key, key => new List<string>());
+            KeyDict[ESearchKeys.Limit] = new List<string>() { SEARCH_LIMIT.ToString() };
 
+            // e.g. judy ext:mesh,ent test:xxx whatever
+            // Name < judy,whatever
+            // Ext < mesh,ent
+            foreach (var item in inputs)
+            {
+                //check if keyword
+                if (item.Contains(':'))
+                {
+                    var split = item.Split(':');
+                    if (split.Length != 2)
+                    {
+                        // incorrect format -> disregard
+                        continue;
+                    }
+
+                    var key = split[0].ToLower();
+                    var value = split[1];
+                    var names = Enum.GetNames<ESearchKeys>().Select(x => x.ToLower());
+                    if (names.Contains(key))
+                    {
+                        var ekey = (ESearchKeys)Enum.Parse(typeof(ESearchKeys), key, true);
+                        // get multiple
+                        var multiple = value.Split(',').ToList();
+                        // add to query
+                        KeyDict[ekey] = multiple;
+                    }
+                }
+                else
+                {
+                    // default to filename search term
+                    KeyDict[ESearchKeys.Name].Add(item);
+                }
+            }
+
+            
+            // order from most specific to least
+            // 1. Hash
+            var qhashes = KeyDict[ESearchKeys.Hash]
+                .Where(x => ulong.TryParse(x, out _))
+                .Select(ulong.Parse);
+            // 2. Extension
+            var qextensions = KeyDict[ESearchKeys.Ext]
+                .Where(x => Enum.TryParse<ERedExtension>(x, true, out _))
+                .Select(x => $".{x}");
+            // 3. Name
+            var qnames = KeyDict[ESearchKeys.Name];
+            // 4. Limit
+            if (!int.TryParse(KeyDict[ESearchKeys.Limit].First(), out var limit))
+            {
+                limit = SEARCH_LIMIT;
+            }
+
+            var result = _managers.First().Items.KeyValues
+                .Where(x => !qhashes.Any() || qhashes.Contains(x.Key))
+                .Where(x => !qextensions.Any() || qextensions.Any(y => y.Equals(x.Value.Extension, StringComparison.OrdinalIgnoreCase)))
+                .Where(x => !qnames.Any() || qnames.Any(y => x.Value.Name.Contains(y, StringComparison.OrdinalIgnoreCase)))
+                .Take(limit)
+                .Select(x => new FileEntryViewModel(x.Value));
 
             RightItems.Clear();
-            RightItems.AddRange(list);
+            RightItems.AddRange(result);
+
+
+
+
+            //ReadOnlyObservableCollection<string> allFiles;
+            //var disposable1 = _managers.First().Items
+            //    .Connect()
+            //    .LimitSizeTo(limit)
+            //    .Transform(x => x.Name)
+            //    .Bind(out allFiles)
+            //    .Subscribe();
+
+
+
+
+
+            //var matcher = new Matcher();
+            //matcher.AddInclude($"*{SearchBarText}*");   //matches word
+            ////matcher.AddInclude(OptionsSearchBarText);   //matches pattern
+
+            //var allfilesList = allFiles.ToList(); // tolist?
+            //var match = matcher.Match(allfilesList);
+            //var debugresult = match.Files.Select(x => x.Path);
+            //var results = debugresult.Select(x => FNV1A64HashAlgorithm.HashString(x)).ToList(); // to list here? or defer?
+
+            //ReadOnlyObservableCollection<FileEntryViewModel> list;
+            //var disposable2 = _managers.First().Items
+            //    .Connect()
+            //    .Filter(x => results.Contains(x.Key)) // bad
+            //    .LimitSizeTo(1000)
+            //    .Transform(x => new FileEntryViewModel(x))
+            //    .Bind(out list)
+            //    .Subscribe();
+
+            //RightItems.Clear();
+            //RightItems.AddRange(list);
         }
 
         private void SetupToolDefaults()

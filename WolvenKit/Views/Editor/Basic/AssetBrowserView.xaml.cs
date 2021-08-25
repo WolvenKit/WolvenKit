@@ -51,20 +51,34 @@ namespace WolvenKit.Views.Editor
                 ViewModel.Collapse.Subscribe(x => CollapseNode());
 
                 //FileSearchBar.Events().SearchStarted
-                var observable = Observable.FromEventPattern<EventHandler<FunctionEventArgs<string>>, FunctionEventArgs<string>>(
+                var observable1 = Observable.FromEventPattern<EventHandler<FunctionEventArgs<string>>, FunctionEventArgs<string>>(
                             handler => FileSearchBar.SearchStarted += handler,
                             handler => FileSearchBar.SearchStarted -= handler)
                     .Select(x => x.EventArgs.Info)
-                    //.InvokeCommand(this, x => x.ViewModel.SearchStartedCommand);
                     .Subscribe(query =>
                    {
                        ViewModel.PerformSearch(query);
-                       //ResetDataGridPages();
                    });
+                var observable2 = Observable.FromEventPattern<EventHandler<FunctionEventArgs<string>>, FunctionEventArgs<string>>(
+                            handler => OptionsSearchBar.SearchStarted += handler,
+                            handler => OptionsSearchBar.SearchStarted -= handler)
+                    .Select(x => x.EventArgs.Info)
+                    .Subscribe(query =>
+                    {
+                        ViewModel.PerformSearch(query);
+                    });
 
+                // top search
+                this.Bind(ViewModel,
+                      viewModel => viewModel.SearchBarText,
+                      view => view.FileSearchBar.Text)
+                  .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        viewModel => viewModel.OptionsSearchBarText,
+                        view => view.OptionsSearchBar.Text)
+                    .DisposeWith(disposables);
 
-                // ItemsSource="{Binding LeftItems, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                //SelectedItem = "{Binding LeftSelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                // left navigation
                 this.OneWayBind(ViewModel,
                         viewModel => viewModel.LeftItems,
                         view => view.LeftNavigation.ItemsSource)
@@ -74,8 +88,7 @@ namespace WolvenKit.Views.Editor
                         view => view.LeftNavigation.SelectedItem)
                     .DisposeWith(disposables);
 
-                //SelectedItem = "{Binding RightSelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                //SelectedItems = "{Binding RightSelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                // right file list
                 this.OneWayBind(ViewModel,
                         viewModel => viewModel.RightItems,
                         view => view.InnerList.ItemsSource)
@@ -177,6 +190,11 @@ namespace WolvenKit.Views.Editor
 
         #endregion
 
+        #region Top search
+
+
+        #endregion
+
         #region leftNavigation
 
         private void LeftNavigation_OnSelectionChanged(object sender, GridSelectionChangedEventArgs e)
@@ -253,36 +271,6 @@ namespace WolvenKit.Views.Editor
 
         #region rightFileGrid
 
-        private void FileSearchBar_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
-        {
-            if (string.Equals(FileSearchBar.Text, "Search", System.StringComparison.OrdinalIgnoreCase))
-            {
-                FileSearchBar.SetCurrentValue(TextBox.TextProperty, "");
-            }
-        }
-        private void FileSearchBar_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            //if (ViewModel is not AssetBrowserViewModel vm)
-            //{
-            //    return;
-            //}
-            //if (InnerList == null)
-            //{
-            //    return;
-            //}
-
-            //if (FileSearchBar.Text != "search" || FileSearchBar.Text != "")
-            //{
-            //    this.InnerList.SearchHelper.SetCurrentValue(Syncfusion.UI.Xaml.Grid.SearchHelper.SearchBrushProperty, HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3"));
-            //    this.InnerList.SearchHelper.SetCurrentValue(Syncfusion.UI.Xaml.Grid.SearchHelper.AllowFilteringProperty, true);
-            //    this.InnerList.SearchHelper.Search(FileSearchBar.Text);
-            //}
-            //else
-            //{
-            //    this.InnerList.SearchHelper.ClearSearch();
-            //}
-        }
-
         private void InnerList_SelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
         {
             if (ViewModel is not AssetBrowserViewModel vm)
@@ -336,9 +324,6 @@ namespace WolvenKit.Views.Editor
             propertiesViewModel.DecideForMeshPreview();
         }
 
-       
-
-        
         private void RightContextMenuAddAll_OnClick(object sender, RoutedEventArgs e)
         {
             if (ViewModel is AssetBrowserViewModel vm)

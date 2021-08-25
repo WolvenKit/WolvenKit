@@ -216,10 +216,10 @@ namespace WolvenKit.ViewModels.Shell
                 return;
             }
 
-            foreach (var message in messages)
-            {
-                _notificationService.Error(message);
-            }
+            //foreach (var message in messages)
+            //{
+            //    _notificationService.Error(message);
+            //}
 
             var result = await Interactions.ShowFirstTimeSetup.Handle(Unit.Default);
         }

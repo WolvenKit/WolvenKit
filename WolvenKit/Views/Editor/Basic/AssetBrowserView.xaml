@@ -20,15 +20,6 @@
 
 
     <Grid>
-        
-        <Grid.Resources>
-            <ResourceDictionary>
-                <ResourceDictionary.MergedDictionaries>
-                    <hc:ThemeResources />
-                    <hc:Theme />
-                </ResourceDictionary.MergedDictionaries>
-            </ResourceDictionary>
-        </Grid.Resources>
 
         <Border
             hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
@@ -41,21 +32,40 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <hc:SearchBar Grid.Row="0"
-                            x:Name="FileSearchBar"
-                            ShowClearButton="True"
-                             
-                                
-                            VerticalAlignment="Top"
-                            Style="{StaticResource SearchBarPlus}"
-                            FlowDirection="LeftToRight"
-                            hc:InfoElement.Placeholder="Search all game files"
-                            
-                            hc:InfoElement.Necessary="True"
-                            
-                            TextChanged="FileSearchBar_TextChanged">
-                </hc:SearchBar>
+                <!-- Asset Browser Search -->
+                <Grid Grid.Row="0" Margin="3" >
 
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <hc:SearchBar Grid.Column="0"
+                                  x:Name="FileSearchBar"
+                                  Style="{StaticResource SearchBarPlus}"
+                                  VerticalAlignment="Top"
+                                  FlowDirection="LeftToRight"
+                                  ShowClearButton="True"
+                                  hc:InfoElement.Placeholder="Search all game files"
+                                  hc:InfoElement.Title="Search all game files: "
+                                  hc:InfoElement.TitlePlacement="Left"
+                                  >
+                    </hc:SearchBar>
+                    <hc:SearchBar  Grid.Column="1" Margin="10,0,0,0"
+                                  x:Name="OptionsSearchBar"
+                                  Style="{StaticResource SearchBarPlus}"
+                                  VerticalAlignment="Top"
+                                  FlowDirection="LeftToRight"
+                                  ShowClearButton="True"
+                                  hc:InfoElement.Placeholder="(e.g. *.ent, base/**/judy)"
+                                  hc:InfoElement.Title="Globbin' for WopsS: "
+                                  hc:InfoElement.TitlePlacement="Left"
+                                  >
+                    </hc:SearchBar>
+
+                </Grid>
+                
+                <!-- Asset Browser  -->
                 <Grid Grid.Row="1">
                     
                     <Grid.ColumnDefinitions>
@@ -65,16 +75,52 @@
                     </Grid.ColumnDefinitions>
 
                     <!-- Left Navigation -->
-                    <Grid Grid.Column="0">
+                    <Grid Grid.Column="0" Margin="2">
 
                         <Grid.Resources>
                             <converters1:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
                         </Grid.Resources>
 
-                        <syncfusion:SfTreeGrid
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Search Bar -->
+                        <Grid Grid.Row="0" Margin="2">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <hc:SearchBar
+                                x:Name="FolderSearchBar"
+                                Margin="0,0,5,0"
+                                VerticalAlignment="Top"
+                                Background="{DynamicResource ContentBackgroundAlt}"
+                                BorderBrush="{DynamicResource BorderBrush}"
+                                FlowDirection="LeftToRight"
+                                hc:InfoElement.Placeholder="Search"
+                                Style="{StaticResource SearchBarExtend}"
+                                hc:InfoElement.Necessary="True"
+                                SearchStarted="FolderSearchBar_OnSearchStarted"
+                                ShowClearButton="True"
+                               />
+
+                            <Button Grid.Column="1"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                                Background="{DynamicResource ContentBackground}"
+                                Click="LeftNavigationHomeButton_OnClick"
+                                Visibility="Visible">
+                                <iconPacks:PackIconCodicons Kind="Home" />
+                            </Button>
+                        </Grid>
+
+                        <!--Folder Tree -->
+                        <syncfusion:SfTreeGrid Grid.Row="1" Margin="2"
                                 x:Name="LeftNavigation"
-                                Grid.Column="0"
-                                Margin="0,0,0,0"
                                 AllowFiltering="False"
                                 AllowSorting="False"
                                 AllowTriStateSorting="False"
@@ -84,7 +130,7 @@
                                 ColumnSizer="FillColumn"
                                 FilterLevel="Extended"
                                 SelectionChanged="LeftNavigation_OnSelectionChanged"
-                            
+                                
                             >
 
                             <syncfusion:SfTreeGrid.Resources>
@@ -102,10 +148,12 @@
                             <syncfusion:SfTreeGrid.Columns>
 
                                 <syncfusion:TreeGridTextColumn
+                                        
                                         HeaderText="Name"
                                         HorizontalHeaderContentAlignment="Left"
                                         ImmediateUpdateColumnFilter="True"
                                         MappingName="Name">
+                                    
                                     <syncfusion:TreeGridTextColumn.CellTemplate>
                                         <DataTemplate>
                                             <Grid>
@@ -170,6 +218,7 @@
                                             </Grid>
                                         </DataTemplate>
                                     </syncfusion:TreeGridTextColumn.CellTemplate>
+                                    
                                 </syncfusion:TreeGridTextColumn>
                             </syncfusion:SfTreeGrid.Columns>
 
@@ -184,37 +233,12 @@
 
                         </syncfusion:SfTreeGrid>
 
-                        <hc:SearchBar
-                                x:Name="FolderSearchBar"
-                                Margin="0,0,40,0"
-                                Padding="4,0,-25,0"
-                                VerticalAlignment="Top"
-                                 Background="{DynamicResource ContentBackgroundAlt}"
-                                BorderBrush="{DynamicResource BorderBrush}"
-                                FlowDirection="LeftToRight"
-                                hc:InfoElement.Placeholder="Search"
-                                Style="{StaticResource SearchBarExtend}"
-                                hc:InfoElement.Necessary="True"
-                                SearchStarted="FolderSearchBar_OnSearchStarted"
-                                ShowClearButton="True"
-                               />
-
-                        <Button
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Top"
-                                Background="{DynamicResource ContentBackground}"
-                                Click="LeftNavigationHomeButton_OnClick"
-                                Visibility="Visible">
-                            <iconPacks:PackIconCodicons Kind="Home" />
-                        </Button>
-
                     </Grid>
 
                     <syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
 
                     <!-- Right File List -->
-                    <Grid Grid.Column="2">
-                        <Grid >
+                    <Grid Grid.Column="2" Margin="4">
                             
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
@@ -223,7 +247,6 @@
 
                             <syncfusion:SfDataGrid
                                 x:Name="InnerList"
-                                
                                 AllowDeleting="False"
                                 AllowDraggingColumns="False"
                                 AllowDraggingRows="False"
@@ -233,7 +256,7 @@
                                 AllowSorting="True"
                                 AutoGenerateColumns="False"
                                 Background="{DynamicResource RegionBrush}"
-                                ColumnSizer="AutoLastColumnFill"
+                                ColumnSizer="Auto"
                                 EnableDataVirtualization="True"
                                 IsManipulationEnabled="False"
                                 SelectionChanged="InnerList_SelectionChanged"
@@ -277,7 +300,7 @@
                                         MappingName="IsChecked">
                                         <syncfusion:GridCheckBoxColumn.HeaderTemplate>
                                             <DataTemplate>
-                                                <CheckBox
+                                            <CheckBox
                                                 Command="local:SFDataGridCommands.CheckAndUnCheck"
                                                 CommandParameter="{Binding ElementName=InnerList}"
                                                 />
@@ -1001,9 +1024,10 @@
                                 UseOnDemandPaging="True"
                                 OnDemandLoading="dataPager_OnDemandLoading"
                                 />-->
-                        </Grid>
                     </Grid>
+
                 </Grid>
+                
             </Grid>
         </Border>
         
