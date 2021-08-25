@@ -220,7 +220,7 @@ namespace WolvenKit.Modkit.RED4.Compiled
                 }
                 enu.SetValue(strings);
             }
-            else if(parent.ChildrEditableVariables.Count > 0)
+            else if(parent is LocalizationString lstr)
             {
                 lstr.Unk1.Read(br, 8);
                 var lslen = br.ReadUInt16();

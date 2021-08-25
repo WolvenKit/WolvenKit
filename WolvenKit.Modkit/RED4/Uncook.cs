@@ -288,7 +288,17 @@ namespace WolvenKit.Modkit.RED4
 
                 case ECookedFileFormat.morphtarget:
                     return ExportMorphTargets(cr2wStream, outfile, settings.Get<MorphTargetExportArgs>().Archives, settings.Get<MorphTargetExportArgs>().ModFolderPath, settings.Get<MorphTargetExportArgs>().IsBinary);
+                case ECookedFileFormat.anims:
+                    try
+                    {
+                        return ExportAnim(cr2wStream, settings.Get<AnimationExportArgs>().Archives, outfile, settings.Get<AnimationExportArgs>().IsBinary);
+                    }
+                    catch (Exception e)
+                    {
+                        _loggerService.Error(e.Message);
 
+                        return false;
+                    }
                 case ECookedFileFormat.xbm:
                 {
                     if (settings.Get<XbmExportArgs>() is not { } xbmargs)
