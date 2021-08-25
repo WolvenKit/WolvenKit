@@ -35,7 +35,28 @@
             BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
             BorderThickness="0">
             <Grid>
-                <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <hc:SearchBar Grid.Row="0"
+                            x:Name="FileSearchBar"
+                            ShowClearButton="True"
+                             
+                                
+                            VerticalAlignment="Top"
+                            Style="{StaticResource SearchBarPlus}"
+                            FlowDirection="LeftToRight"
+                            hc:InfoElement.Placeholder="Search all game files"
+                            
+                            hc:InfoElement.Necessary="True"
+                            
+                            TextChanged="FileSearchBar_TextChanged">
+                </hc:SearchBar>
+
+                <Grid Grid.Row="1">
                     
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" MinWidth="200"/>
@@ -45,7 +66,7 @@
 
                     <!-- Left Navigation -->
                     <Grid Grid.Column="0">
-                        
+
                         <Grid.Resources>
                             <converters1:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
                         </Grid.Resources>
@@ -168,7 +189,7 @@
                                 Margin="0,0,40,0"
                                 Padding="4,0,-25,0"
                                 VerticalAlignment="Top"
-                                Background="{DynamicResource ContentBackground}"
+                                 Background="{DynamicResource ContentBackgroundAlt}"
                                 BorderBrush="{DynamicResource BorderBrush}"
                                 FlowDirection="LeftToRight"
                                 hc:InfoElement.Placeholder="Search"
@@ -186,30 +207,15 @@
                                 Visibility="Visible">
                             <iconPacks:PackIconCodicons Kind="Home" />
                         </Button>
-                        
+
                     </Grid>
 
                     <syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
 
                     <!-- Right File List -->
                     <Grid Grid.Column="2">
-
-
-                        <hc:SearchBar
-                            x:Name="FileSearchBar"
-                            Margin="0,0,3,0"
-                            VerticalAlignment="Top"
-                            Background="{DynamicResource ContentBackgroundAlt}"
-                            BorderBrush="{DynamicResource BorderBrush}"
-                            FlowDirection="LeftToRight"
-                            hc:InfoElement.Placeholder="Search all Game Files"
-                            Style="{StaticResource SearchBarExtend}"
-                            hc:InfoElement.Necessary="True"
-                            PreviewTextInput="FileSearchBar_PreviewTextInput"
-                            TextChanged="FileSearchBar_TextChanged">
-                        </hc:SearchBar>
-
-                        <Grid Margin="0,45,3,0">
+                        <Grid >
+                            
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="Auto" />
@@ -217,7 +223,7 @@
 
                             <syncfusion:SfDataGrid
                                 x:Name="InnerList"
-                                Margin="1,-15,0,0"
+                                
                                 AllowDeleting="False"
                                 AllowDraggingColumns="False"
                                 AllowDraggingRows="False"
@@ -966,7 +972,7 @@
                                         ColumnSizer="Auto"
                                         IsReadOnly="True"
                                         MappingName="Extension" />
-                                    
+
                                     <syncfusion:GridTextColumn
                                         AllowFiltering="True"
                                         ColumnSizer="Auto"
@@ -984,7 +990,7 @@
                                         <hc:EventToCommand Command="{Binding ImportFileCommand}" />
                                     </hc:EventTrigger>
                                 </hc:Interaction.Triggers>
-                                
+
                             </syncfusion:SfDataGrid>
 
                             <!--<syncfusion:SfDataPager
@@ -997,7 +1003,6 @@
                                 />-->
                         </Grid>
                     </Grid>
-                    
                 </Grid>
             </Grid>
         </Border>
