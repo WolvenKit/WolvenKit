@@ -7,6 +7,7 @@
     <AssemblyName>WolvenKit.MSTests</AssemblyName>
     <RootNamespace>WolvenKit.MSTests</RootNamespace>
     <Platforms>x64</Platforms>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
   </PropertyGroup>
 
   <ItemGroup>
