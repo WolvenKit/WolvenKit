@@ -17,13 +17,13 @@ namespace WolvenKit.RED4.CR2W.Types
 		private CFloat _temperature;
 		private CEnum<rendLightChannel> _lightChannel;
 		private CBool _sceneDiffuse;
-		private CBool _sceneSpecularScale;
+		private CUInt8 _sceneSpecularScale;
 		private CBool _directional;
 		private CInt8 _roughnessBias;
-		private CBool _scaleGI;
-		private CBool _scaleEnvProbes;
+		private CUInt8 _scaleGI;
+		private CUInt8 _scaleEnvProbes;
 		private CBool _useInTransparents;
-		private CBool _scaleVolFog;
+		private CUInt8 _scaleVolFog;
 		private CBool _useInParticles;
 		private CEnum<rendLightAttenuation> _attenuation;
 		private CBool _clampAttenuation;
@@ -136,7 +136,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 		[Ordinal(18)] 
 		[RED("sceneSpecularScale")] 
-		public CBool SceneSpecularScale
+		public CUInt8 SceneSpecularScale
 		{
 			get => GetProperty(ref _sceneSpecularScale);
 			set => SetProperty(ref _sceneSpecularScale, value);
@@ -159,17 +159,17 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(21)] 
-		[RED("useInGI")] //scaleGI
-		public CBool UseInGI
+		[RED("scaleGI")] 
+		public CUInt8 ScaleGI
 		{
 			get => GetProperty(ref _scaleGI);
 			set => SetProperty(ref _scaleGI, value);
 		}
 
 		[Ordinal(22)] 
-		[RED("useInEnvProbes")] //scaleEnvProbes
-		public CBool UseInEnvProbes
-        {
+		[RED("scaleEnvProbes")] 
+		public CUInt8 ScaleEnvProbes
+		{
 			get => GetProperty(ref _scaleEnvProbes);
 			set => SetProperty(ref _scaleEnvProbes, value);
 		}
@@ -183,9 +183,9 @@ namespace WolvenKit.RED4.CR2W.Types
 		}
 
 		[Ordinal(24)] 
-		[RED("useInFog")] //scaleVolFog
-        public CBool UseInFog
-        {
+		[RED("scaleVolFog")] 
+		public CUInt8 ScaleVolFog
+		{
 			get => GetProperty(ref _scaleVolFog);
 			set => SetProperty(ref _scaleVolFog, value);
 		}

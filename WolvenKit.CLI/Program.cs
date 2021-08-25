@@ -9,7 +9,6 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using CP77Tools.Commands;
 using WolvenKit.Common.Tools.Oodle;
-using WolvenKit.Common.FNV1A;
 
 namespace WolvenKit.CLI
 {

@@ -165,22 +165,12 @@ namespace WolvenKit.Modkit.RED4.Compiled
 
             for (int i = 0; i < NumChunksDesc; i++)
             {
-                try
-                {
-                    br.BaseStream.Seek(baseOff + _header.ChunkDescOffset + i * 8, SeekOrigin.Begin);
-                    var chunkDesc = br.BaseStream.ReadStruct<ChunkDesc>();
-                    ChunkDescs.Add(chunkDesc);
+                br.BaseStream.Seek(baseOff + _header.ChunkDescOffset + i * 8, SeekOrigin.Begin);
+                var chunkDesc = br.BaseStream.ReadStruct<ChunkDesc>();
+                ChunkDescs.Add(chunkDesc);
 
-                    br.BaseStream.Seek(baseOff + chunkDesc.ChunkDataOffset, SeekOrigin.Begin);
-                    CreateChunk(Names[(int)chunkDesc.ChunkRedTypeIdx].Str, i).ReadData(br);
-                }
-                catch (Exception ex)
-                {
-                    var m = ex.Message.ToString();
-                    Console.WriteLine(m);
-                    throw;
-                }
-                
+                br.BaseStream.Seek(baseOff + chunkDesc.ChunkDataOffset, SeekOrigin.Begin);
+                CreateChunk(Names[(int)chunkDesc.ChunkRedTypeIdx].Str, i).ReadData(br);
             }
             return EFileReadErrorCodes.NoError;
         }
@@ -190,7 +180,7 @@ namespace WolvenKit.Modkit.RED4.Compiled
         }
         public IEditableVariable ReadVariable(BinaryReader br, IEditableVariable parent)
         {
-            if (parent is DataBuffer buff)
+            if(parent is DataBuffer buff)
             {
                 buff.Buffer.Value = (ushort)Buffers.Count;
                 uint size = br.ReadUInt32();
@@ -199,7 +189,7 @@ namespace WolvenKit.Modkit.RED4.Compiled
                 buffWrapper.ReadData(br);
                 Buffers.Add(buffWrapper);
             }
-            else if (parent is IREDRef rref)
+            else if(parent is IREDRef rref)
             {
                 rref.DepotPath = Imports[br.ReadUInt16()].DepotPathStr;
             }
@@ -230,7 +220,7 @@ namespace WolvenKit.Modkit.RED4.Compiled
                 }
                 enu.SetValue(strings);
             }
-            else if (parent is LocalizationString lstr)
+            else if(parent.ChildrEditableVariables.Count > 0)
             {
                 lstr.Unk1.Read(br, 8);
                 var lslen = br.ReadUInt16();
@@ -380,16 +370,6 @@ namespace WolvenKit.Modkit.RED4.Compiled
                 uint off = br.ReadUInt32();
                 pos = br.BaseStream.Position;
                 var parsedvar = Data.GetPropertyByREDName(varname);
-                //CASE: typename prepended with Parent Type
-                if (parsedvar != null && parsedvar.REDType != typename)
-                {
-                    if(parsedvar.ParentVar != null)
-                    {
-                        var altType = parsedvar.ParentVar.REDType + char.ToUpper(parsedvar.REDName[0]) + parsedvar.REDName.Substring(1);
-                        if (typename == altType)
-                            typename = parsedvar.REDType;
-                    }
-                }
                 if (parsedvar == null || parsedvar.REDType != typename)
                 {
                     throw new MissingRTTIException(varname, typename, Data.REDType);
