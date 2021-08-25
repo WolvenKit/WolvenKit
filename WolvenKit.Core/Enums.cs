@@ -221,7 +221,8 @@ namespace WolvenKit.Common
         texarray,
         morphtarget,
         fnt,
-        opusinfo
+        opusinfo,
+        anims
     }
 
     /// <summary>

@@ -48,6 +48,7 @@ namespace CP77Tools.Tasks
         private readonly IOptions<MorphTargetExportArgs> _morphTargetExportArgs;
         private readonly IOptions<MlmaskExportArgs> _mlmaskExportArgs;
         private readonly IOptions<WemExportArgs> _wemExportArgs;
+        private readonly IOptions<AnimationExportArgs> _animationExportArgs;
 
 
         public ConsoleFunctions(
@@ -64,7 +65,8 @@ namespace CP77Tools.Tasks
             IOptions<MeshExportArgs> meshExportArgs,
             IOptions<MorphTargetExportArgs> morphTargetExportArgs,
             IOptions<MlmaskExportArgs> mlmaskExportArgs,
-            IOptions<WemExportArgs> wemExportArgs
+            IOptions<WemExportArgs> wemExportArgs,
+            IOptions<AnimationExportArgs> animationExportArgs
         )
         {
             _loggerService = loggerService;
@@ -81,6 +83,7 @@ namespace CP77Tools.Tasks
             _morphTargetExportArgs = morphTargetExportArgs;
             _mlmaskExportArgs = mlmaskExportArgs;
             _wemExportArgs = wemExportArgs;
+            _animationExportArgs = animationExportArgs;
         }
 
 

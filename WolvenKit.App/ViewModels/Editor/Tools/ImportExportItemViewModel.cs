@@ -132,6 +132,7 @@ namespace WolvenKit.ViewModels.Editor
                 ECookedFileFormat.morphtarget => new MorphTargetExportArgs(),
                 ECookedFileFormat.ent => new EntityExportArgs(),
                 ECookedFileFormat.app => new EntityExportArgs(),
+                ECookedFileFormat.anims => new AnimationExportArgs(),
                 _ => throw new ArgumentOutOfRangeException()
             };
         }

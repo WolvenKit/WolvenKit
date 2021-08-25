@@ -65,6 +65,7 @@ namespace WolvenKit.CLI
 
                     services.AddOptions<XbmExportArgs>().Bind(hostContext.Configuration.GetSection("XbmExportArgs"));
                     services.AddOptions<MeshExportArgs>().Bind(hostContext.Configuration.GetSection("MeshExportArgs"));
+                    services.AddOptions<AnimationExportArgs>().Bind(hostContext.Configuration.GetSection("AnimationExportArgs"));
                     services.AddOptions<MorphTargetExportArgs>().Bind(hostContext.Configuration.GetSection("MorphTargetExportArgs"));
                     services.AddOptions<MlmaskExportArgs>().Bind(hostContext.Configuration.GetSection("MlmaskExportArgs"));
                     services.AddOptions<WemExportArgs>().Bind(hostContext.Configuration.GetSection("WemExportArgs"));

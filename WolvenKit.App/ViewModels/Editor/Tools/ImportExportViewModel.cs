@@ -667,7 +667,14 @@ namespace WolvenKit.ViewModels.Editor
                         entExportArgs.Archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
                     }
                 }
-
+                if (item.Properties is AnimationExportArgs animationExportArgs)
+                {
+                    if (_gameController.GetController() is Cp77Controller cp77Controller)
+                    {
+                        var archivemanager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
+                        animationExportArgs.Archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
+                    }
+                }
                 var settings = new GlobalExportArgs().Register(item.Properties as ExportArgs);
                 await Task.Run(() => _modTools.Export(fi, settings,
                     new DirectoryInfo(proj.ModDirectory),
