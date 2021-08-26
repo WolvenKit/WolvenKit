@@ -21,6 +21,8 @@ using WolvenKit.Functionality.WKitGlobal.Helpers;
 using DynamicData.Binding;
 using Microsoft.Extensions.FileSystemGlobbing;
 using WolvenKit.Common.FNV1A;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace WolvenKit.ViewModels.Editor
 {
@@ -105,10 +107,7 @@ namespace WolvenKit.ViewModels.Editor
 
         #region properties
 
-        public ReactiveCommand<Unit, Unit> ExpandAll { get; set; }
-        public ReactiveCommand<Unit, Unit> CollapseAll { get; set; }
-        public ReactiveCommand<Unit, Unit> Expand { get; set; }
-        public ReactiveCommand<Unit, Unit> Collapse { get; set; }
+       
 
         // binding properties. do not make private
         [Reactive] public bool PreviewVisible { get; set; }
@@ -150,14 +149,14 @@ namespace WolvenKit.ViewModels.Editor
         [Reactive] public string SearchBarText { get; set; }
         [Reactive] public string OptionsSearchBarText { get; set; }
 
+        [Reactive] public bool IsRegexSearchEnabled { get; set; }
+
         #endregion properties
 
         #region commands
 
         public ICommand AddSelectedCommand { get; private set; }
-
         private bool CanAddSelected() => RightSelectedItems != null && RightSelectedItems.Any();
-
         private void ExecuteAddSelected()
         {
             foreach (var o in RightSelectedItems)
@@ -169,12 +168,8 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
-        //public ReactiveCommand<string, Unit> SearchStartedCommand { get; private set; }
-
         public ICommand TogglePreviewCommand { get; private set; }
-
         private bool CanTogglePreview() => true;
-
         private void ExecuteTogglePreview()
         {
             if (PreviewWidth.GridUnitType != System.Windows.GridUnitType.Pixel)
@@ -190,10 +185,13 @@ namespace WolvenKit.ViewModels.Editor
         }
 
         public ICommand ImportFileCommand { get; private set; }
-
         private bool CanImportFile() => /*CurrentNode != null*/ true;
-
         private void ExecuteImportFile() => AddFile(RightSelectedItem);
+
+        public ReactiveCommand<Unit, Unit> ExpandAll { get; set; }
+        public ReactiveCommand<Unit, Unit> CollapseAll { get; set; }
+        public ReactiveCommand<Unit, Unit> Expand { get; set; }
+        public ReactiveCommand<Unit, Unit> Collapse { get; set; }
 
         #endregion commands
 
@@ -238,6 +236,45 @@ namespace WolvenKit.ViewModels.Editor
 
         public void PerformSearch(string query)
         {
+            if (IsRegexSearchEnabled)
+            {
+                RegexSearch();
+            }
+            else
+            {
+                KeywordSearch();
+            }
+        }
+
+        public void RegexSearch()
+        {
+            var matcher = new Matcher();
+            matcher.AddInclude(OptionsSearchBarText);
+
+            Regex rx = new Regex(SearchBarText,
+                RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+            ReadOnlyObservableCollection<FileEntryViewModel> list;
+            _managers.First().Items
+                .Connect()
+                .Filter(x => string.IsNullOrEmpty(OptionsSearchBarText) || matcher.Match(x.Name).HasMatches)
+                .Filter(x => rx.IsMatch(x.Name))
+                .Transform(x => new FileEntryViewModel(x))
+                .Bind(out list)
+                .Subscribe()
+                .Dispose();
+
+            RightItems.Clear();
+            RightItems.AddRange(list);
+        }
+
+        public void KeywordSearch()
+        {
+            if (string.IsNullOrEmpty(SearchBarText))
+            {
+                return;
+            }
+
             var inputs = SearchBarText.Split(' ');
             Dictionary<ESearchKeys, List<string>> KeyDict = Enum
                 .GetValues<ESearchKeys>()
@@ -278,8 +315,17 @@ namespace WolvenKit.ViewModels.Editor
                 }
             }
 
-            
+
             // order from most specific to least
+            // 0. Glob
+
+            var matcher = new Matcher();
+            matcher.AddInclude(OptionsSearchBarText);
+            //var allfiles = _managers.First().Items
+            //    .KeyValues.Select(x => x.Value.Name);
+            //var match = matcher.Match(allfiles);
+            //var debugresult = match.Files.Select(x => x.Path);
+
             // 1. Hash
             var qhashes = KeyDict[ESearchKeys.Hash]
                 .Where(x => ulong.TryParse(x, out _))
@@ -296,51 +342,21 @@ namespace WolvenKit.ViewModels.Editor
                 limit = SEARCH_LIMIT;
             }
 
-            var result = _managers.First().Items.KeyValues
-                .Where(x => !qhashes.Any() || qhashes.Contains(x.Key))
-                .Where(x => !qextensions.Any() || qextensions.Any(y => y.Equals(x.Value.Extension, StringComparison.OrdinalIgnoreCase)))
-                .Where(x => !qnames.Any() || qnames.Any(y => x.Value.Name.Contains(y, StringComparison.OrdinalIgnoreCase)))
-                .Take(limit)
-                .Select(x => new FileEntryViewModel(x.Value));
+            ReadOnlyObservableCollection<FileEntryViewModel> list;
+            _managers.First().Items
+                .Connect()
+                .Filter(x => string.IsNullOrEmpty(OptionsSearchBarText) || matcher.Match(x.Name).HasMatches)
+                .Filter(x => !qhashes.Any() || qhashes.Contains(x.Key))
+                .Filter(x => !qextensions.Any() || qextensions.Any(y => y.Equals(x.Extension, StringComparison.OrdinalIgnoreCase)))
+                .Filter(x => !qnames.Any() || qnames.Any(y => x.Name.Contains(y, StringComparison.OrdinalIgnoreCase)))
+                .LimitSizeTo(limit)
+                .Transform(x => new FileEntryViewModel(x))
+                .Bind(out list)
+                .Subscribe()
+                .Dispose();
 
             RightItems.Clear();
-            RightItems.AddRange(result);
-
-
-
-
-            //ReadOnlyObservableCollection<string> allFiles;
-            //var disposable1 = _managers.First().Items
-            //    .Connect()
-            //    .LimitSizeTo(limit)
-            //    .Transform(x => x.Name)
-            //    .Bind(out allFiles)
-            //    .Subscribe();
-
-
-
-
-
-            //var matcher = new Matcher();
-            //matcher.AddInclude($"*{SearchBarText}*");   //matches word
-            ////matcher.AddInclude(OptionsSearchBarText);   //matches pattern
-
-            //var allfilesList = allFiles.ToList(); // tolist?
-            //var match = matcher.Match(allfilesList);
-            //var debugresult = match.Files.Select(x => x.Path);
-            //var results = debugresult.Select(x => FNV1A64HashAlgorithm.HashString(x)).ToList(); // to list here? or defer?
-
-            //ReadOnlyObservableCollection<FileEntryViewModel> list;
-            //var disposable2 = _managers.First().Items
-            //    .Connect()
-            //    .Filter(x => results.Contains(x.Key)) // bad
-            //    .LimitSizeTo(1000)
-            //    .Transform(x => new FileEntryViewModel(x))
-            //    .Bind(out list)
-            //    .Subscribe();
-
-            //RightItems.Clear();
-            //RightItems.AddRange(list);
+            RightItems.AddRange(list);
         }
 
         private void SetupToolDefaults()

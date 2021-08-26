@@ -50,7 +50,7 @@ namespace WolvenKit.Views.Editor
                 ViewModel.Expand.Subscribe(x => ExpandNode());
                 ViewModel.Collapse.Subscribe(x => CollapseNode());
 
-                //FileSearchBar.Events().SearchStarted
+                // top search
                 var observable1 = Observable.FromEventPattern<EventHandler<FunctionEventArgs<string>>, FunctionEventArgs<string>>(
                             handler => FileSearchBar.SearchStarted += handler,
                             handler => FileSearchBar.SearchStarted -= handler)
@@ -68,7 +68,6 @@ namespace WolvenKit.Views.Editor
                         ViewModel.PerformSearch(query);
                     });
 
-                // top search
                 this.Bind(ViewModel,
                       viewModel => viewModel.SearchBarText,
                       view => view.FileSearchBar.Text)
