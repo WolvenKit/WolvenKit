@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using ProtoBuf;
@@ -96,7 +97,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
             if (rebuildtree)
             {
-                RebuildRootNode();
+                RebuildRootNode(_hashService);
             }
         }
 
@@ -116,10 +117,16 @@ namespace WolvenKit.RED4.CR2W.Archive
 
             var archivedir = Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "content");
 
+            //var sw = new Stopwatch();
+            //sw.Start();
+
             foreach (var file in Directory.GetFiles(archivedir, "*.archive"))
             {
                 LoadArchive(file);
             }
+
+            //sw.Stop();
+            //var ms = sw.ElapsedMilliseconds;
 
             // populate lists
             Items.Edit(innerList =>
@@ -132,7 +139,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
             if (rebuildtree)
             {
-                RebuildRootNode();
+                RebuildRootNode(_hashService);
             }
         }
 

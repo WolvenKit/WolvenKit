@@ -51,22 +51,22 @@ namespace WolvenKit.Views.Editor
                 ViewModel.Collapse.Subscribe(x => CollapseNode());
 
                 // top search
-                var observable1 = Observable.FromEventPattern<EventHandler<FunctionEventArgs<string>>, FunctionEventArgs<string>>(
-                            handler => FileSearchBar.SearchStarted += handler,
-                            handler => FileSearchBar.SearchStarted -= handler)
-                    .Select(x => x.EventArgs.Info)
-                    .Subscribe(query =>
-                   {
-                       ViewModel.PerformSearch(query);
-                   });
-                var observable2 = Observable.FromEventPattern<EventHandler<FunctionEventArgs<string>>, FunctionEventArgs<string>>(
-                            handler => OptionsSearchBar.SearchStarted += handler,
-                            handler => OptionsSearchBar.SearchStarted -= handler)
-                    .Select(x => x.EventArgs.Info)
-                    .Subscribe(query =>
-                    {
-                        ViewModel.PerformSearch(query);
-                    });
+                //var observable1 = Observable.FromEventPattern<EventHandler<FunctionEventArgs<string>>, FunctionEventArgs<string>>(
+                //            handler => FileSearchBar.SearchStarted += handler,
+                //            handler => FileSearchBar.SearchStarted -= handler)
+                //    .Select(x => x.EventArgs.Info)
+                //    .Subscribe(query =>
+                //   {
+                //       ViewModel.PerformSearch(query);
+                //   });
+                //var observable2 = Observable.FromEventPattern<EventHandler<FunctionEventArgs<string>>, FunctionEventArgs<string>>(
+                //            handler => OptionsSearchBar.SearchStarted += handler,
+                //            handler => OptionsSearchBar.SearchStarted -= handler)
+                //    .Select(x => x.EventArgs.Info)
+                //    .Subscribe(query =>
+                //    {
+                //        ViewModel.PerformSearch(query);
+                //    });
 
                 this.Bind(ViewModel,
                       viewModel => viewModel.SearchBarText,
@@ -107,7 +107,7 @@ namespace WolvenKit.Views.Editor
 
         #region methods
 
-        private void PreviewMesh(PropertiesViewModel propertiesViewModel, FileEntryViewModel selectedItem, IGameFile selectedGameFile)
+        private void PreviewMesh(PropertiesViewModel propertiesViewModel, RedFileViewModel selectedItem, IGameFile selectedGameFile)
         {
             propertiesViewModel.AB_MeshPreviewVisible = true;
 
@@ -128,7 +128,7 @@ namespace WolvenKit.Views.Editor
             }
         }
 
-        private void PreviewWem(PropertiesViewModel propertiesViewModel, FileEntryViewModel selectedItem, IGameFile selectedGameFile)
+        private void PreviewWem(PropertiesViewModel propertiesViewModel, RedFileViewModel selectedItem, IGameFile selectedGameFile)
         {
             propertiesViewModel.IsAudioPreviewVisible = true;
 
@@ -158,7 +158,7 @@ namespace WolvenKit.Views.Editor
             }
         }
 
-        private async void PreviewTexture(PropertiesViewModel propertiesViewModel, FileEntryViewModel selectedItem, IGameFile selectedGameFile)
+        private async void PreviewTexture(PropertiesViewModel propertiesViewModel, RedFileViewModel selectedItem, IGameFile selectedGameFile)
         {
             propertiesViewModel.IsImagePreviewVisible = true;
 
@@ -185,7 +185,7 @@ namespace WolvenKit.Views.Editor
             catch (Exception) { }
         }
 
-        private bool FilterNodes(object o) => o is GameFileTreeNode data && data.Name.Contains(_currentFolderQuery);
+        private bool FilterNodes(object o) => o is RedDirectoryViewModel data && data.Name.Contains(_currentFolderQuery);
 
         #endregion
 
@@ -208,11 +208,12 @@ namespace WolvenKit.Views.Editor
                 return;
             }
 
-            if (e.AddedItems.First() is TreeGridRowInfo { RowData: GameFileTreeNode model })
+            if (e.AddedItems.First() is TreeGridRowInfo { RowData: RedDirectoryViewModel model })
             {
                 vm.RightItems.Clear();
+                vm.RightItems.AddRange(model.Directories
+                    .OrderBy(_ => Regex.Replace(_.Name, @"\d+", n => n.Value.PadLeft(16, '0'))));
                 vm.RightItems.AddRange(model.Files
-                    .Select(_ => new FileEntryViewModel(_))
                     .OrderBy(_ => Regex.Replace(_.Name, @"\d+", n => n.Value.PadLeft(16, '0'))));
             }
         }
@@ -237,7 +238,7 @@ namespace WolvenKit.Views.Editor
         public void ExpandNode()
         {
             var selectedIndex = LeftNavigation.SelectedIndex;
-            LeftNavigation.ExpandNode(selectedIndex);
+            LeftNavigation.ExpandNode(selectedIndex + 1);
         }
 
         private void ExpandAll_OnClick(object sender, RoutedEventArgs e) => ExpandAllNodes();
@@ -294,30 +295,35 @@ namespace WolvenKit.Views.Editor
             propertiesViewModel.IsAudioPreviewVisible = false;
             propertiesViewModel.IsImagePreviewVisible = false;
 
-            if (propertiesViewModel.AB_SelectedItem != null)
+            if (propertiesViewModel.AB_SelectedItem != null && propertiesViewModel.AB_SelectedItem is RedFileViewModel selectedItem)
             {
-                var selectedItem = propertiesViewModel.AB_SelectedItem;
-                var selectedGameFile = propertiesViewModel.AB_SelectedItem.GetGameFile();
+                var selectedGameFile = selectedItem.GetGameFile();
 
-                if (string.Equals(propertiesViewModel.AB_SelectedItem.Extension, ERedExtension.mesh.ToString(),
+                if (string.Equals(selectedItem.Extension, ERedExtension.mesh.ToString(),
                     System.StringComparison.OrdinalIgnoreCase))
                 {
                     PreviewMesh(propertiesViewModel, selectedItem, selectedGameFile);
                 }
 
-                if (string.Equals(propertiesViewModel.AB_SelectedItem.Extension, ERedExtension.wem.ToString(),
+                if (string.Equals(selectedItem.Extension, ERedExtension.wem.ToString(),
                     System.StringComparison.OrdinalIgnoreCase))
                 {
                     PreviewWem(propertiesViewModel, selectedItem, selectedGameFile);
                 }
 
-                if (string.Equals(propertiesViewModel.AB_SelectedItem.Extension, ERedExtension.xbm.ToString(),
+                if (string.Equals(selectedItem.Extension, ERedExtension.xbm.ToString(),
                                             System.StringComparison.OrdinalIgnoreCase))
                 {
                     PreviewTexture(propertiesViewModel, selectedItem, selectedGameFile);
                 }
             }
             propertiesViewModel.DecideForMeshPreview();
+        }
+
+        private void InnerList_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var selectedIndex = LeftNavigation.SelectedIndex;
+            LeftNavigation.ExpandNode(selectedIndex + 1);
         }
 
         private void RightContextMenuAddAll_OnClick(object sender, RoutedEventArgs e)
@@ -339,7 +345,7 @@ namespace WolvenKit.Views.Editor
             {
                 return;
             }
-            var selected = InnerList.SelectedItem as FileEntryViewModel;
+            var selected = InnerList.SelectedItem as RedFileViewModel;
 
             if (!selected.FullName.ToLower().Contains("bk2"))
             {
@@ -419,6 +425,12 @@ namespace WolvenKit.Views.Editor
             //process.WaitForInputIdle();
         }
 
+
         #endregion
+
+        private void FileSearchBar_SearchStarted(object sender, FunctionEventArgs<string> e)
+        {
+            ViewModel.PerformSearch(e.Info);
+        }
     }
 }

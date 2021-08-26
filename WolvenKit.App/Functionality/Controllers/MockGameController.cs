@@ -13,17 +13,17 @@ namespace WolvenKit.Functionality.Controllers
     {
         public MockGameController()
         {
-            _rootCache = new SourceCache<GameFileTreeNode, string>(t => t.FullPath);
+            _rootCache = new SourceCache<RedDirectoryViewModel, ulong>(t => t.Key);
         }
 
 
         #region Methods
 
-        private readonly SourceCache<GameFileTreeNode, string> _rootCache;
+        private readonly SourceCache<RedDirectoryViewModel, ulong> _rootCache;
 
         public bool IsManagerLoaded { get; set; } = true;
 
-        public IObservable<IChangeSet<GameFileTreeNode, string>> ConnectHierarchy() => _rootCache.Connect();
+        public IObservable<IChangeSet<RedDirectoryViewModel, ulong>> ConnectHierarchy() => _rootCache.Connect();
 
         public List<IGameArchiveManager> GetArchiveManagers(bool loadmods) => new List<IGameArchiveManager>();
 

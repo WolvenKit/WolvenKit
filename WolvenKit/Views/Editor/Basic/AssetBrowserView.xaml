@@ -59,6 +59,7 @@
                                   hc:InfoElement.Placeholder="(e.g. judy kind:mesh,ent)"
                                   hc:InfoElement.Title="Search all game files: "
                                   hc:InfoElement.TitlePlacement="Left"
+                                  SearchStarted="FileSearchBar_SearchStarted"
                                   >
                     </hc:SearchBar>
 
@@ -89,6 +90,7 @@
                                   hc:InfoElement.Placeholder="(e.g. *.ent, base/**/judy)"
                                   hc:InfoElement.Title="files to include: "
                                   hc:InfoElement.TitlePlacement="Left"
+                                  SearchStarted="FileSearchBar_SearchStarted"
                                   >
                        
                     </hc:SearchBar>
@@ -291,6 +293,7 @@
                                 IsManipulationEnabled="False"
                                 SelectionChanged="InnerList_SelectionChanged"
                                 SelectionMode="Extended"
+                                MouseDoubleClick="InnerList_MouseDoubleClick"
                                 >
 
                                 <syncfusion:SfDataGrid.RecordContextMenu>
@@ -1032,7 +1035,7 @@
                                         AllowFiltering="True"
                                         ColumnSizer="Auto"
                                         IsReadOnly="True"
-                                        MappingName="Extension" />
+                                        MappingName="DisplayExtension" />
 
                                     <syncfusion:GridTextColumn
                                         AllowFiltering="True"
@@ -1048,7 +1051,7 @@
 
                                 <hc:Interaction.Triggers>
                                     <hc:EventTrigger EventName="MouseDoubleClick">
-                                        <hc:EventToCommand Command="{Binding ImportFileCommand}" />
+                                    <hc:EventToCommand Command="{Binding OpenFileSystemItemCommand}" />
                                     </hc:EventTrigger>
                                 </hc:Interaction.Triggers>
 

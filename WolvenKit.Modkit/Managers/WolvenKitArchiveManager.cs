@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using DynamicData;
 using ProtoBuf;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.Common.Model
 {
@@ -16,9 +17,8 @@ namespace WolvenKit.Common.Model
         public abstract Dictionary<string, IGameArchive> Archives { get; set; }
         public SourceCache<IGameFile, ulong> Items { get; set; } = new(x => x.Key);
 
-        public GameFileTreeNode RootNode { get; set; }
+        public RedDirectoryViewModel RootNode { get; set; }
 
-        //public IEnumerable<IGameFile> FileList => Items.Values.SelectMany(_ => _);
         //public IEnumerable<string> AutocompleteSource { get; set; } //=> FileList.Select(_ => GetFileName(_.Name)).Distinct();
         public IEnumerable<string> Extensions { get; set; } //=> FileList.Select(_ => _.Extension).Distinct();
 
@@ -39,38 +39,54 @@ namespace WolvenKit.Common.Model
             return path;
         }
 
-        protected void RebuildRootNode()
+        //private Dictionary<ulong, RedDirectoryViewModel> _directoryDict = new();
+        //public bool ContainsDirectory(ulong key) => _directoryDict.ContainsKey(key);
+        //public RedDirectoryViewModel GetDirectoryByKey(ulong key) => _directoryDict[key];   
+
+        protected void RebuildRootNode(IHashService _hashService)
         {
-            RootNode = new GameFileTreeNode()
-            {
-                Name = TypeName.ToString()
-            };
+            RootNode = new RedDirectoryViewModel(TypeName.ToString(), null, _hashService);
+
             foreach (var item in Items.KeyValues)
             {
                 var currentNode = RootNode;
                 var model = item.Value;
                 var parts = model.Name.Split('\\');
 
+                // loop through path
+                var fullpath = "";
                 for (var i = 0; i < parts.Length - 1; i++)
                 {
-                    if (!currentNode.Directories.Any(_ => _.Name == parts[i]))
+                    var part = parts[i];
+                    fullpath += part + Path.DirectorySeparatorChar;
+                    // directory does not already exist
+                    if (!currentNode.Directories.Any(_ => _.Name == part))
                     {
-                        var newNode = new GameFileTreeNode
-                        {
-                            Parent = currentNode,
-                            Name = parts[i]
-                        };
+                        var newNode = new RedDirectoryViewModel(fullpath.TrimEnd(Path.DirectorySeparatorChar), currentNode, _hashService);
                         currentNode.Directories.Add(newNode);
                         currentNode = newNode;
+
+                        var h = newNode.Key;
+                        //if (!_directoryDict.ContainsKey(h))
+                        //{
+                        //    _directoryDict.Add(h, newNode);
+                        //}
+                        //else
+                        //{
+
+                        //}
                     }
                     else
                     {
-                        currentNode = currentNode.Directories.First(_ => _.Name == parts[i]);
+                        // add to existing directory
+                        currentNode = currentNode.Directories.First(_ => _.Name == part);
                     }
                 }
 
-                currentNode.Files.Add(item.Value);
-                currentNode.Directories = new ObservableCollection<GameFileTreeNode>(currentNode.Directories.OrderBy(_ => _.Name)); 
+                // add file to the last directory in path
+                currentNode.Files.Add(new RedFileViewModel(item.Value, currentNode));
+                //var dbg_ordered = currentNode.Directories.OrderBy(_ => _.Name);
+                //currentNode.Directories = new ObservableCollection<RedDirectoryViewModel>(dbg_ordered); 
             }
         }
 
@@ -88,14 +104,14 @@ namespace WolvenKit.Common.Model
         /// </summary>
         /// <param name="mainnode">The rootnode to get the files from</param>
         /// <returns></returns>
-        private static List<IGameFile> GetFiles(GameFileTreeNode mainnode)
+        private static List<IGameFile> GetFiles(RedDirectoryViewModel mainnode)
         {
             var bundfiles = new List<IGameFile>();
             if (mainnode?.Files != null)
             {
                 foreach (var wfile in mainnode.Files)
                 {
-                    bundfiles.Add(wfile);
+                    bundfiles.Add(wfile.GetGameFile());
                 }
                 bundfiles.AddRange(mainnode.Directories.SelectMany(GetFiles));
             }

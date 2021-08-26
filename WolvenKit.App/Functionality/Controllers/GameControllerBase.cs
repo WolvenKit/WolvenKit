@@ -58,7 +58,7 @@ namespace WolvenKit.Functionality.Controllers
 
         public Task<bool> PackAndInstallProject();
 
-        public IObservable<IChangeSet<GameFileTreeNode, string>> ConnectHierarchy();
+        public IObservable<IChangeSet<RedDirectoryViewModel, ulong>> ConnectHierarchy();
 
         List<IGameArchiveManager> GetArchiveManagers(bool loadmods);
 

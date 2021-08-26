@@ -13,7 +13,7 @@ namespace WolvenKit.Common
 
         Dictionary<string, IGameArchive> Archives { get; set; }
         SourceCache<IGameFile, ulong> Items { get; }
-        GameFileTreeNode RootNode { get; set; }
+        RedDirectoryViewModel RootNode { get; set; }
 
         //IEnumerable<string> AutocompleteSource { get; }
         IEnumerable<string> Extensions { get; set; }

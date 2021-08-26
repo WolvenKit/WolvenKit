@@ -23,6 +23,8 @@ using Microsoft.Extensions.FileSystemGlobbing;
 using WolvenKit.Common.FNV1A;
 using System.IO;
 using System.Text.RegularExpressions;
+using WolvenKit.Common.Interfaces;
+using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.ViewModels.Editor
 {
@@ -59,8 +61,8 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IProjectManager _projectManager;
         private readonly IGameControllerFactory _gameController;
 
-        private List<IGameArchiveManager> _managers;
-        private readonly ReadOnlyObservableCollection<GameFileTreeNode> _boundRootNodes;
+        private ArchiveManager _manager;
+        private readonly ReadOnlyObservableCollection<RedDirectoryViewModel> _boundRootNodes;
 
 
         #endregion fields
@@ -82,7 +84,7 @@ namespace WolvenKit.ViewModels.Editor
             ContentId = ToolContentId;
 
             TogglePreviewCommand = new RelayCommand(ExecuteTogglePreview, CanTogglePreview);
-            ImportFileCommand = new RelayCommand(ExecuteImportFile, CanImportFile);
+            OpenFileSystemItemCommand = new RelayCommand(ExecuteOpenFile, CanOpenFile);
             AddSelectedCommand = new RelayCommand(ExecuteAddSelected, CanAddSelected);
             OpenFileLocationCommand = new RelayCommand(ExecuteOpenFileLocationCommand, CanOpenFileLocationCommand);
 
@@ -101,7 +103,7 @@ namespace WolvenKit.ViewModels.Editor
                 _ =>
                 {
                     // binds only the root node
-                    LeftItems = new ObservableCollection<GameFileTreeNode>(_boundRootNodes);
+                    LeftItems = new ObservableCollection<RedDirectoryViewModel>(_boundRootNodes);
                 });
 
             controller
@@ -133,7 +135,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// Bound RootNodes to left navigation
         /// </summary>
-        [Reactive] public ObservableCollection<GameFileTreeNode> LeftItems { get; set; } = new();
+        [Reactive] public ObservableCollection<RedDirectoryViewModel> LeftItems { get; set; } = new();
 
         /// <summary>
         /// Selected Root node in left navigation
@@ -143,12 +145,12 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// Selected File in right navigaiton
         /// </summary>
-        [Reactive] public FileEntryViewModel RightSelectedItem { get; set; }
+        [Reactive] public IFileSystemViewModel RightSelectedItem { get; set; }
 
         /// <summary>
         /// Items (Files) inside a Node (Folder) bound to right navigation
         /// </summary>
-        [Reactive] public ObservableCollection<FileEntryViewModel> RightItems { get; set; } = new();
+        [Reactive] public ObservableCollection<IFileSystemViewModel> RightItems { get; set; } = new();
 
         /// <summary>
         /// Selected Files in right navigaiton
@@ -177,31 +179,40 @@ namespace WolvenKit.ViewModels.Editor
         {
             foreach (var o in RightSelectedItems)
             {
-                if (o is FileEntryViewModel fileVm)
+                if (o is RedFileViewModel fileVm)
                 {
                     AddFile(fileVm);
+                }
+                else if (o is RedDirectoryViewModel dirVm)
+                {
+                    AddFolderRecursive(dirVm);
                 }
             }
         }
 
         public ICommand OpenFileLocationCommand { get; private set; }
-        private bool CanOpenFileLocationCommand() => RightSelectedItems != null && RightSelectedItems.Any();
+        private bool CanOpenFileLocationCommand() => RightSelectedItems != null && RightSelectedItems.OfType<RedFileViewModel>().Any();
         private void ExecuteOpenFileLocationCommand()
         {
-            if (RightSelectedItems.First() is FileEntryViewModel fileVm)
+            if (RightSelectedItems.First() is RedFileViewModel fileVm)
             {
-                var parentHash = fileVm.GetParentHash();
+                var parentHash = fileVm.ParentKey;
                 if (parentHash == 0)
                 {
 
                 }
                 else
                 {
-                    if (LeftItems.Any(_ => _.Hash == parentHash))
-                    {
-                        var parent = LeftItems.First(_ => _.Hash == parentHash);
-                        LeftSelectedItem = parent;
-                    }
+                    //if (_manager.ContainsDirectory(parentHash))
+                    //{
+                    //    MoveToFolder(_manager.GetDirectoryByKey(parentHash));
+                    //}
+
+                    //if (LeftItems.Any(_ => _.Key == parentHash))
+                    //{
+                    //    var parent = LeftItems.First(_ => _.Key == parentHash);
+                    //    MoveToFolder(parent);
+                    //}
                 }
             }
         }
@@ -222,9 +233,19 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
-        public ICommand ImportFileCommand { get; private set; }
-        private bool CanImportFile() => /*CurrentNode != null*/ true;
-        private void ExecuteImportFile() => AddFile(RightSelectedItem);
+        public ICommand OpenFileSystemItemCommand { get; private set; }
+        private bool CanOpenFile() => true;
+        private void ExecuteOpenFile()
+        {
+            if (RightSelectedItem is RedFileViewModel fileVm)
+            {
+                AddFile(fileVm);
+            }
+            else if (RightSelectedItem is RedDirectoryViewModel dirVm)
+            {
+                MoveToFolder(dirVm);
+            }
+        }
 
         public ReactiveCommand<Unit, Unit> ExpandAll { get; set; }
         public ReactiveCommand<Unit, Unit> CollapseAll { get; set; }
@@ -242,7 +263,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <param name="loadmods"></param>
         public void ReInit(bool loadmods)
         {
-            _managers = _gameController.GetController().GetArchiveManagers(loadmods);
+            _manager = (ArchiveManager)_gameController.GetController().GetArchiveManagers(loadmods).First();
 
             Extensions = _gameController
                 .GetController()
@@ -257,11 +278,26 @@ namespace WolvenKit.ViewModels.Editor
             _notificationService.Success($"Asset Browser is initialized");
         }
 
-        private void AddFile(FileEntryViewModel item)
+        private void MoveToFolder(RedDirectoryViewModel dir)
         {
-            if (item != null)
+            //Expand.Execute().Subscribe();
+            LeftSelectedItem = dir;
+        }
+
+        private void AddFile(RedFileViewModel item)
+        {
+            Task.Run(() => _gameController.GetController().AddToMod(item.GetGameFile()));
+        }
+
+        private void AddFolderRecursive(RedDirectoryViewModel item)
+        {
+            foreach (var dir in item.Directories)
             {
-                Task.Run(() => _gameController.GetController().AddToMod(item.GetGameFile()));
+                AddFolderRecursive(dir);
+            }
+            foreach(var file in item.Files)
+            {
+                AddFile(file);
             }
         }
 
@@ -294,12 +330,12 @@ namespace WolvenKit.ViewModels.Editor
             Regex rx = new Regex(SearchBarText,
                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-            ReadOnlyObservableCollection<FileEntryViewModel> list;
-            _managers.First().Items
+            ReadOnlyObservableCollection<RedFileViewModel> list;
+            _manager.Items
                 .Connect()
                 .Filter(x => string.IsNullOrEmpty(OptionsSearchBarText) || matcher.Match(x.Name).HasMatches)
                 .Filter(x => rx.IsMatch(x.Name))
-                .Transform(x => new FileEntryViewModel(x))
+                .Transform(x => new RedFileViewModel(x))
                 .Bind(out list)
                 .Subscribe()
                 .Dispose();
@@ -387,15 +423,15 @@ namespace WolvenKit.ViewModels.Editor
                 limit = SEARCH_LIMIT;
             }
 
-            ReadOnlyObservableCollection<FileEntryViewModel> list;
-            _managers.First().Items
+            ReadOnlyObservableCollection<RedFileViewModel> list;
+            _manager.Items
                 .Connect()
                 .Filter(x => string.IsNullOrEmpty(OptionsSearchBarText) || matcher.Match(x.Name).HasMatches)
                 .Filter(x => !qhashes.Any() || qhashes.Contains(x.Key))
                 .Filter(x => !qextensions.Any() || qextensions.Any(y => y.Equals(x.Extension, StringComparison.OrdinalIgnoreCase)))
                 .Filter(x => !qnames.Any() || qnames.Any(y => x.Name.Contains(y, StringComparison.OrdinalIgnoreCase)))
                 .LimitSizeTo(limit)
-                .Transform(x => new FileEntryViewModel(x))
+                .Transform(x => new RedFileViewModel(x))
                 .Bind(out list)
                 .Subscribe()
                 .Dispose();
