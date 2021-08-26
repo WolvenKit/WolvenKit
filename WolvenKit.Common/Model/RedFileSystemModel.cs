@@ -1,18 +1,28 @@
-using ReactiveUI;
-using WolvenKit.Common.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace WolvenKit.Common.Model
 {
-    public abstract class FileSystemViewModel : /*ReactiveObject,*/ IFileSystemViewModel
+    public class RedFileSystemModel
     {
-        public abstract string Name { get; }
+        public RedFileSystemModel(string fullname)
+        {
+            FullName = fullname;
+        }
 
-        public abstract string FullName { get; }
-        
-        public abstract string DisplayExtension { get; }
+        public string Name => Path.GetFileName(FullName);
 
-        public abstract ulong Key { get; }
+        public string FullName { get; set; }
 
-        public abstract ulong ParentKey { get; }
+        public List<RedFileSystemModel> Directories { get; } = new();
+
+        public List<ulong> Files { get; } = new();
+
+        public string Extension => nameof(ECustomImageKeys.ClosedDirImageKey);
+
     }
 }

@@ -8,8 +8,8 @@ namespace WolvenKit.Common.Interfaces
 
         public string DisplayExtension { get; }
 
-        public ulong Key { get; }
+        //public ulong Key { get; }
 
-        public ulong ParentKey {  get; }
+        //public ulong ParentKey {  get; }
     }
 }

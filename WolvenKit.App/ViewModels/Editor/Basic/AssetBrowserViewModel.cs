@@ -62,7 +62,7 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IGameControllerFactory _gameController;
 
         private ArchiveManager _manager;
-        private readonly ReadOnlyObservableCollection<RedDirectoryViewModel> _boundRootNodes;
+        private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
 
 
         #endregion fields
@@ -103,7 +103,7 @@ namespace WolvenKit.ViewModels.Editor
                 _ =>
                 {
                     // binds only the root node
-                    LeftItems = new ObservableCollection<RedDirectoryViewModel>(_boundRootNodes);
+                    LeftItems = new ObservableCollection<RedFileSystemModel>(_boundRootNodes);
                 });
 
             controller
@@ -135,7 +135,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// Bound RootNodes to left navigation
         /// </summary>
-        [Reactive] public ObservableCollection<RedDirectoryViewModel> LeftItems { get; set; } = new();
+        [Reactive] public ObservableCollection<RedFileSystemModel> LeftItems { get; set; } = new();
 
         /// <summary>
         /// Selected Root node in left navigation
@@ -185,7 +185,7 @@ namespace WolvenKit.ViewModels.Editor
                 }
                 else if (o is RedDirectoryViewModel dirVm)
                 {
-                    AddFolderRecursive(dirVm);
+                    AddFolderRecursive(dirVm.GetModel());
                 }
             }
         }
@@ -196,24 +196,24 @@ namespace WolvenKit.ViewModels.Editor
         {
             if (RightSelectedItems.First() is RedFileViewModel fileVm)
             {
-                var parentHash = fileVm.ParentKey;
-                if (parentHash == 0)
-                {
+                //var parentHash = fileVm.ParentKey;
+                //if (parentHash == 0)
+                //{
 
-                }
-                else
-                {
-                    //if (_manager.ContainsDirectory(parentHash))
-                    //{
-                    //    MoveToFolder(_manager.GetDirectoryByKey(parentHash));
-                    //}
+                //}
+                //else
+                //{
+                //    //if (_manager.ContainsDirectory(parentHash))
+                //    //{
+                //    //    MoveToFolder(_manager.GetDirectoryByKey(parentHash));
+                //    //}
 
-                    //if (LeftItems.Any(_ => _.Key == parentHash))
-                    //{
-                    //    var parent = LeftItems.First(_ => _.Key == parentHash);
-                    //    MoveToFolder(parent);
-                    //}
-                }
+                //    //if (LeftItems.Any(_ => _.Key == parentHash))
+                //    //{
+                //    //    var parent = LeftItems.First(_ => _.Key == parentHash);
+                //    //    MoveToFolder(parent);
+                //    //}
+                //}
             }
         }
 
@@ -281,7 +281,7 @@ namespace WolvenKit.ViewModels.Editor
         private void MoveToFolder(RedDirectoryViewModel dir)
         {
             //Expand.Execute().Subscribe();
-            LeftSelectedItem = dir;
+            LeftSelectedItem = dir.GetModel();
         }
 
         private void AddFile(RedFileViewModel item)
@@ -289,7 +289,12 @@ namespace WolvenKit.ViewModels.Editor
             Task.Run(() => _gameController.GetController().AddToMod(item.GetGameFile()));
         }
 
-        private void AddFolderRecursive(RedDirectoryViewModel item)
+        private void AddFile(ulong hash)
+        {
+            Task.Run(() => _gameController.GetController().AddToMod(hash));
+        }
+
+        private void AddFolderRecursive(RedFileSystemModel item)
         {
             foreach (var dir in item.Directories)
             {
@@ -439,6 +444,8 @@ namespace WolvenKit.ViewModels.Editor
             RightItems.Clear();
             RightItems.AddRange(list);
         }
+
+        public IGameFile LookupGameFile(ulong hash)  => _manager.LookupFile(hash);
 
         #endregion methods
     }

@@ -8,6 +8,7 @@ using WolvenKit.Functionality.WKitGlobal;
 
 using DynamicData;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.Functionality.Controllers
 {
@@ -18,6 +19,7 @@ namespace WolvenKit.Functionality.Controllers
         #region Methods
 
         public void AddToMod(IGameFile file);
+        public void AddToMod(ulong hash);
 
         public static string GetManagerPath(EManagerType type)
         {
@@ -58,7 +60,8 @@ namespace WolvenKit.Functionality.Controllers
 
         public Task<bool> PackAndInstallProject();
 
-        public IObservable<IChangeSet<RedDirectoryViewModel, ulong>> ConnectHierarchy();
+        //public IObservable<IChangeSet<RedDirectoryViewModel, ulong>> ConnectHierarchy();
+        public IObservable<IChangeSet<RedFileSystemModel>> ConnectHierarchy();
 
         List<IGameArchiveManager> GetArchiveManagers(bool loadmods);
 

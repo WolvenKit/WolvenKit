@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using DynamicData;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.Common
 {
@@ -13,7 +14,7 @@ namespace WolvenKit.Common
 
         Dictionary<string, IGameArchive> Archives { get; set; }
         SourceCache<IGameFile, ulong> Items { get; }
-        RedDirectoryViewModel RootNode { get; set; }
+        RedFileSystemModel RootNode { get; set; }
 
         //IEnumerable<string> AutocompleteSource { get; }
         IEnumerable<string> Extensions { get; set; }

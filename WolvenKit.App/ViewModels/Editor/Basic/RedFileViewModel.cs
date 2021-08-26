@@ -7,8 +7,10 @@ using WolvenKit.RED4.CR2W.Archive;
 using System;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Common;
+using ReactiveUI.Fody.Helpers;
 
-namespace WolvenKit.Common.Model
+namespace WolvenKit.ViewModels
 {
     /// <summary>
     /// Wraps an IGameFile to display in a View
@@ -16,38 +18,20 @@ namespace WolvenKit.Common.Model
     public class RedFileViewModel : FileSystemViewModel, ISelectableViewModel
     {
         private readonly IGameFile _fileEntry;
-        //private readonly IFileSystemViewModel _parent;
 
         #region Constructors
 
         public RedFileViewModel(IGameFile fileEntry)
         {
             _fileEntry = fileEntry;
-
-            Key = fileEntry.Key;
         }
 
-        public RedFileViewModel(IGameFile fileEntry, IFileSystemViewModel parent) : this(fileEntry)
-        {
-            if (parent == null)
-            {
-                throw new ArgumentNullException(nameof(parent));
-            }
-
-            //_parent = parent;
-            ParentKey = parent.Key;
-        }
 
         #endregion Constructors
 
         #region Properties
 
-        [Browsable(false)] public bool IsChecked { get; set; }
-
-        [Browsable(false)] public override ulong Key { get; }
-
-        [Browsable(false)] public override ulong ParentKey { get; }
-
+        [Browsable(false)] [Reactive] public bool IsChecked { get; set; }
 
         [Browsable(false)] public string Extension => _fileEntry.Extension.TrimStart('.');
 
@@ -57,7 +41,7 @@ namespace WolvenKit.Common.Model
 
         public override string Name => Path.GetFileName(FullName);
 
-        [Display(Name = "Hash")] public string DisplayHash => Key.ToString();
+        [Display(Name = "Hash")] public string DisplayHash => _fileEntry.Key.ToString();
 
 
         public string Size => FormatSize(_fileEntry.Size);

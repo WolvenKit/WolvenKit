@@ -17,7 +17,7 @@ namespace WolvenKit.Common.Model
         public abstract Dictionary<string, IGameArchive> Archives { get; set; }
         public SourceCache<IGameFile, ulong> Items { get; set; } = new(x => x.Key);
 
-        public RedDirectoryViewModel RootNode { get; set; }
+        public RedFileSystemModel RootNode { get; set; }
 
         //public IEnumerable<string> AutocompleteSource { get; set; } //=> FileList.Select(_ => GetFileName(_.Name)).Distinct();
         public IEnumerable<string> Extensions { get; set; } //=> FileList.Select(_ => _.Extension).Distinct();
@@ -45,8 +45,9 @@ namespace WolvenKit.Common.Model
 
         protected void RebuildRootNode(IHashService _hashService)
         {
-            RootNode = new RedDirectoryViewModel(TypeName.ToString(), null, _hashService);
+            RootNode = new RedFileSystemModel(TypeName.ToString());
 
+            // loop through all files
             foreach (var item in Items.KeyValues)
             {
                 var currentNode = RootNode;
@@ -62,11 +63,11 @@ namespace WolvenKit.Common.Model
                     // directory does not already exist
                     if (!currentNode.Directories.Any(_ => _.Name == part))
                     {
-                        var newNode = new RedDirectoryViewModel(fullpath.TrimEnd(Path.DirectorySeparatorChar), currentNode, _hashService);
+                        var newNode = new RedFileSystemModel(fullpath.TrimEnd(Path.DirectorySeparatorChar));
                         currentNode.Directories.Add(newNode);
                         currentNode = newNode;
 
-                        var h = newNode.Key;
+                        //var h = newNode.Key;
                         //if (!_directoryDict.ContainsKey(h))
                         //{
                         //    _directoryDict.Add(h, newNode);
@@ -84,7 +85,7 @@ namespace WolvenKit.Common.Model
                 }
 
                 // add file to the last directory in path
-                currentNode.Files.Add(new RedFileViewModel(item.Value, currentNode));
+                currentNode.Files.Add(item.Key);
                 //var dbg_ordered = currentNode.Directories.OrderBy(_ => _.Name);
                 //currentNode.Directories = new ObservableCollection<RedDirectoryViewModel>(dbg_ordered); 
             }
@@ -104,18 +105,18 @@ namespace WolvenKit.Common.Model
         /// </summary>
         /// <param name="mainnode">The rootnode to get the files from</param>
         /// <returns></returns>
-        private static List<IGameFile> GetFiles(RedDirectoryViewModel mainnode)
-        {
-            var bundfiles = new List<IGameFile>();
-            if (mainnode?.Files != null)
-            {
-                foreach (var wfile in mainnode.Files)
-                {
-                    bundfiles.Add(wfile.GetGameFile());
-                }
-                bundfiles.AddRange(mainnode.Directories.SelectMany(GetFiles));
-            }
-            return bundfiles;
-        }
+        //private static List<IGameFile> GetFiles(RedDirectoryViewModel mainnode)
+        //{
+        //    var bundfiles = new List<IGameFile>();
+        //    if (mainnode?.Files != null)
+        //    {
+        //        foreach (var wfile in mainnode.Files)
+        //        {
+        //            bundfiles.Add(wfile.GetGameFile());
+        //        }
+        //        bundfiles.AddRange(mainnode.Directories.SelectMany(GetFiles));
+        //    }
+        //    return bundfiles;
+        //}
     }
 }

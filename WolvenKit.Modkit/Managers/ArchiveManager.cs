@@ -216,6 +216,21 @@ namespace WolvenKit.RED4.CR2W.Archive
             RebuildRootNode();*/
         }
 
+        public bool ContainsFile(ulong hash) => Items.Lookup(hash).HasValue;
+
+        public IGameFile LookupFile(ulong hash)
+        {
+            var query = Items.Lookup(hash);
+            if (query.HasValue)
+            {
+                return query.Value;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         #endregion methods
     }
 }

@@ -27,6 +27,7 @@ using System.Reactive.Linq;
 using Syncfusion.Data;
 using DynamicData;
 using System.Reactive.Disposables;
+using WolvenKit.ViewModels;
 
 namespace WolvenKit.Views.Editor
 {
@@ -185,7 +186,7 @@ namespace WolvenKit.Views.Editor
             catch (Exception) { }
         }
 
-        private bool FilterNodes(object o) => o is RedDirectoryViewModel data && data.Name.Contains(_currentFolderQuery);
+        private bool FilterNodes(object o) => o is RedFileSystemModel data && data.Name.Contains(_currentFolderQuery);
 
         #endregion
 
@@ -208,12 +209,14 @@ namespace WolvenKit.Views.Editor
                 return;
             }
 
-            if (e.AddedItems.First() is TreeGridRowInfo { RowData: RedDirectoryViewModel model })
+            if (e.AddedItems.First() is TreeGridRowInfo { RowData: RedFileSystemModel model })
             {
                 vm.RightItems.Clear();
                 vm.RightItems.AddRange(model.Directories
+                    .Select(h => new RedDirectoryViewModel(h))
                     .OrderBy(_ => Regex.Replace(_.Name, @"\d+", n => n.Value.PadLeft(16, '0'))));
                 vm.RightItems.AddRange(model.Files
+                    .Select(h => new RedFileViewModel(ViewModel.LookupGameFile(h)))
                     .OrderBy(_ => Regex.Replace(_.Name, @"\d+", n => n.Value.PadLeft(16, '0'))));
             }
         }
