@@ -7,6 +7,7 @@ using ReactiveUI;
 using WolvenKit.RED4.CR2W.Archive;
 using System;
 using WolvenKit.Common.Interfaces;
+using WolvenKit.Common.FNV1A;
 
 namespace WolvenKit.Common.Model
 {
@@ -32,6 +33,9 @@ namespace WolvenKit.Common.Model
         public string FullName => _fileEntry.Name;
         public string Archive => _fileEntry.Archive.Name;
         [Display(Name = "Hash")] public string HashStr => Key.ToString();
+        public string ParentPath => Path.GetDirectoryName(FullName);
+
+        public ulong GetParentHash() => string.IsNullOrEmpty(ParentPath) ? 0 : FNV1A64HashAlgorithm.HashString(ParentPath);
 
         [Browsable(false)] public ulong Key => _fileEntry.Key;
 

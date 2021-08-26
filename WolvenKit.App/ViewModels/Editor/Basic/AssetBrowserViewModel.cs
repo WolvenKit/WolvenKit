@@ -40,6 +40,16 @@ namespace WolvenKit.ViewModels.Editor
         /// </summary>
         public const string ToolTitle = "Asset Browser";
 
+        public enum ESearchKeys
+        {
+            Hash,
+            Kind,
+            Name,
+            Limit,
+        }
+
+        public const int SEARCH_LIMIT = 1000;
+
         #endregion constants
 
         #region fields
@@ -69,12 +79,19 @@ namespace WolvenKit.ViewModels.Editor
             _notificationService = notificationService;
             _gameController = gameController;
 
+            ContentId = ToolContentId;
+
             TogglePreviewCommand = new RelayCommand(ExecuteTogglePreview, CanTogglePreview);
             ImportFileCommand = new RelayCommand(ExecuteImportFile, CanImportFile);
-
             AddSelectedCommand = new RelayCommand(ExecuteAddSelected, CanAddSelected);
+            OpenFileLocationCommand = new RelayCommand(ExecuteOpenFileLocationCommand, CanOpenFileLocationCommand);
 
-            SetupToolDefaults();
+            ExpandAll = ReactiveCommand.Create(() => { });
+            CollapseAll = ReactiveCommand.Create(() => { });
+            Collapse = ReactiveCommand.Create(() => { });
+            Expand = ReactiveCommand.Create(() => { });
+
+            AddSearchKeyCommand = ReactiveCommand.Create<string>(x => SearchBarText += $" {x}:");
 
             var controller = _gameController.GetRed4Controller();
             controller.ConnectHierarchy()
@@ -83,6 +100,7 @@ namespace WolvenKit.ViewModels.Editor
                 .Subscribe(
                 _ =>
                 {
+                    // binds only the root node
                     LeftItems = new ObservableCollection<GameFileTreeNode>(_boundRootNodes);
                 });
 
@@ -92,22 +110,18 @@ namespace WolvenKit.ViewModels.Editor
                 {
                     LoadVisibility = b ? Visibility.Collapsed : Visibility.Visible;
                     if (b)
+                    {
                         ReInit(false);
+                    }
                 });
 
 
-            ExpandAll = ReactiveCommand.Create(() => { });
-            CollapseAll = ReactiveCommand.Create(() => { });
-            Collapse = ReactiveCommand.Create(() => { });
-            Expand = ReactiveCommand.Create(() => { });
-
+           
         }
 
         #endregion ctor
 
         #region properties
-
-       
 
         // binding properties. do not make private
         [Reactive] public bool PreviewVisible { get; set; }
@@ -155,6 +169,8 @@ namespace WolvenKit.ViewModels.Editor
 
         #region commands
 
+        public ReactiveCommand<string, Unit> AddSearchKeyCommand { get; set; }
+
         public ICommand AddSelectedCommand { get; private set; }
         private bool CanAddSelected() => RightSelectedItems != null && RightSelectedItems.Any();
         private void ExecuteAddSelected()
@@ -164,6 +180,28 @@ namespace WolvenKit.ViewModels.Editor
                 if (o is FileEntryViewModel fileVm)
                 {
                     AddFile(fileVm);
+                }
+            }
+        }
+
+        public ICommand OpenFileLocationCommand { get; private set; }
+        private bool CanOpenFileLocationCommand() => RightSelectedItems != null && RightSelectedItems.Any();
+        private void ExecuteOpenFileLocationCommand()
+        {
+            if (RightSelectedItems.First() is FileEntryViewModel fileVm)
+            {
+                var parentHash = fileVm.GetParentHash();
+                if (parentHash == 0)
+                {
+
+                }
+                else
+                {
+                    if (LeftItems.Any(_ => _.Hash == parentHash))
+                    {
+                        var parent = LeftItems.First(_ => _.Hash == parentHash);
+                        LeftSelectedItem = parent;
+                    }
                 }
             }
         }
@@ -199,7 +237,9 @@ namespace WolvenKit.ViewModels.Editor
 
         /// <summary>
         /// Initializes the Asset Browser and populates the data nodes.
+        /// Optionally load mods
         /// </summary>
+        /// <param name="loadmods"></param>
         public void ReInit(bool loadmods)
         {
             _managers = _gameController.GetController().GetArchiveManagers(loadmods);
@@ -225,15 +265,10 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
-        public enum ESearchKeys
-        {
-            Hash,
-            Ext,
-            Name,
-            Limit,
-        }
-        public const int SEARCH_LIMIT = 1000;
-
+        /// <summary>
+        /// Filters all game files by given keys or regex pattern
+        /// </summary>
+        /// <param name="query"></param>
         public void PerformSearch(string query)
         {
             if (IsRegexSearchEnabled)
@@ -246,6 +281,11 @@ namespace WolvenKit.ViewModels.Editor
             }
         }
 
+        /// <summary>
+        /// Parses the search bar and filters all game files by given regex pattern
+        /// Glob patterns from the additional search bar are evaluated first
+        /// Sets the right hand filelist to the result 
+        /// </summary>
         public void RegexSearch()
         {
             var matcher = new Matcher();
@@ -268,6 +308,11 @@ namespace WolvenKit.ViewModels.Editor
             RightItems.AddRange(list);
         }
 
+        /// <summary>
+        /// Parses the search bar and filters all game files by given search keys
+        /// Glob patterns from the additional search bar are evaluated first
+        /// Sets the right hand filelist to the result
+        /// </summary>
         public void KeywordSearch()
         {
             if (string.IsNullOrEmpty(SearchBarText))
@@ -331,7 +376,7 @@ namespace WolvenKit.ViewModels.Editor
                 .Where(x => ulong.TryParse(x, out _))
                 .Select(ulong.Parse);
             // 2. Extension
-            var qextensions = KeyDict[ESearchKeys.Ext]
+            var qextensions = KeyDict[ESearchKeys.Kind]
                 .Where(x => Enum.TryParse<ERedExtension>(x, true, out _))
                 .Select(x => $".{x}");
             // 3. Name
@@ -358,11 +403,6 @@ namespace WolvenKit.ViewModels.Editor
             RightItems.Clear();
             RightItems.AddRange(list);
         }
-
-        private void SetupToolDefaults()
-        {
-            ContentId = ToolContentId;
-        }        // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
 
         #endregion methods
     }

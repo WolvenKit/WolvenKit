@@ -32,7 +32,9 @@ namespace WolvenKit.Views.Shell
 
             this.WhenActivated(disposables =>
             {
-                // contextual tabs
+                #region contextual tab bindings
+
+                // project explorer
                 CPEOpenFileButton.DataContext = Locator.Current.GetService<ProjectExplorerViewModel>();
                 OpeninFileContext.DataContext = Locator.Current.GetService<ProjectExplorerViewModel>();
                 CopyFileContext.DataContext = Locator.Current.GetService<ProjectExplorerViewModel>();
@@ -40,8 +42,30 @@ namespace WolvenKit.Views.Shell
                 DeleteFileContext.DataContext = Locator.Current.GetService<ProjectExplorerViewModel>();
                 RenameFileContext.DataContext = Locator.Current.GetService<ProjectExplorerViewModel>();
 
+                // properties
                 PrevFileInfo.DataContext = Locator.Current.GetService<PropertiesViewModel>();
 
+                // asset browser
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.AssetBrowserVM.AddSelectedCommand,
+                        view => view.AddSelectedItemsButton).DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.AssetBrowserVM.OpenFileLocationCommand,
+                        view => view.SearchOpenFileLocation).DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.AssetBrowserVM.AddSearchKeyCommand,
+                        view => view.SearchKindButton).DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.AssetBrowserVM.AddSearchKeyCommand,
+                        view => view.SearchKindButton).DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.AssetBrowserVM.AddSearchKeyCommand,
+                        view => view.SearchKindButton).DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.AssetBrowserVM.AddSearchKeyCommand,
+                        view => view.SearchKindButton).DisposeWith(disposables);
+
+                #endregion
 
                 _mainViewModel = Locator.Current.GetService<AppViewModel>();
 

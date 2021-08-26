@@ -52,6 +52,7 @@
 
                     <hc:SearchBar Grid.Column="0"
                                   x:Name="FileSearchBar"
+                                  Style="{StaticResource SearchBarPlus}"
                                   VerticalAlignment="Top"
                                   FlowDirection="LeftToRight"
                                   ShowClearButton="False"

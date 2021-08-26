@@ -212,12 +212,9 @@ namespace WolvenKit.Views.Editor
             {
                 vm.RightItems.Clear();
                 vm.RightItems.AddRange(model.Files
-                    .Select(_ => new FileEntryViewModel(_ as FileEntry))
+                    .Select(_ => new FileEntryViewModel(_))
                     .OrderBy(_ => Regex.Replace(_.Name, @"\d+", n => n.Value.PadLeft(16, '0'))));
             }
-
-            // reset rightside
-            //ResetDataGridPages();
         }
 
         private void FolderSearchBar_OnSearchStarted(object sender, FunctionEventArgs<string> e)
@@ -421,61 +418,6 @@ namespace WolvenKit.Views.Editor
             //// Wait for process to be created and enter idle condition
             //process.WaitForInputIdle();
         }
-
-
-
-        //private void dataPager_OnDemandLoading(object sender, Syncfusion.UI.Xaml.Controls.DataPager.OnDemandLoadingEventArgs args)
-        //{
-        //    if (ViewModel.RightItems !=  null)
-        //    {
-        //        if (ViewModel.RightItems.Any())
-        //        {
-        //            var items = ViewModel.RightItems.Skip(args.StartIndex)?.Take(args.PageSize);
-        //            dataPager.LoadDynamicItems(args.StartIndex, items);
-        //        }
-        //        else
-        //        {
-        //            dataPager.SetCurrentValue(Syncfusion.UI.Xaml.Controls.DataPager.SfDataPager.SourceProperty, ViewModel.RightItems);
-        //        }
-        //    }
-            
-        //}
-
-        //private void ResetDataGridPages()
-        //{
-        //    if (ViewModel.RightItems == null)
-        //    {
-        //        return;
-        //    }
-
-        //    var prevPageCount = this.dataPager.PageCount;
-
-        //    if (ViewModel.RightItems.Count < dataPager.PageSize)
-        //    {
-        //        dataPager.SetCurrentValue(Syncfusion.UI.Xaml.Controls.DataPager.SfDataPager.PageCountProperty, 1);
-        //    }
-        //    else
-        //    {
-        //        var count = ViewModel.RightItems.Count / dataPager.PageSize;
-
-        //        if (ViewModel.RightItems.Count % dataPager.PageSize == 0)
-        //        {
-        //            dataPager.SetCurrentValue(Syncfusion.UI.Xaml.Controls.DataPager.SfDataPager.PageCountProperty, count);
-        //        }
-        //        else
-        //        {
-        //            dataPager.SetCurrentValue(Syncfusion.UI.Xaml.Controls.DataPager.SfDataPager.PageCountProperty, count + 1);
-        //        }
-        //    }
-
-        //    var newPageCount = this.dataPager.PageCount;
-
-        //    dataPager.MoveToPage(0);
-        //    //if (newPageCount == prevPageCount)
-        //    {
-        //        (dataPager.PagedSource as PagedCollectionView).ResetCacheForPage(this.dataPager.PageIndex);
-        //    }
-        //}
 
         #endregion
     }

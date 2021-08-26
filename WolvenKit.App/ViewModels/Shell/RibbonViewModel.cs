@@ -45,7 +45,8 @@ namespace WolvenKit.ViewModels.Shell
             BackstageIsOpen = true;
 
             //ViewSelectedCommand = new DelegateCommand<object>(ExecuteViewSelected, CanViewSelected);
-            AssetBrowserAddCommand = new RelayCommand(ExecuteAssetBrowserAdd, CanAssetBrowserAdd);
+            //AssetBrowserAddCommand = new RelayCommand(ExecuteAssetBrowserAdd, CanAssetBrowserAdd);
+            //AssetBrowserOpenFileLocation = new RelayCommand(ExecuteAssetBrowserOpenFileLocation, CanAssetBrowserOpenFileLocation);
 
             OpenProjectCommand = ReactiveCommand.Create<string>(s => _mainViewModel.OpenProjectCommand.Execute(s).Subscribe());
             //NewProjectCommand = ReactiveCommand.Create(() => _mainViewModel.NewProjectCommand.Execute().Subscribe());
@@ -109,22 +110,5 @@ namespace WolvenKit.ViewModels.Shell
 
         #endregion properties
 
-        #region commands
-
-        public ICommand AssetBrowserAddCommand { get; private set; }
-
-        private bool CanAssetBrowserAdd()
-        {
-            var abvm = Locator.Current.GetService<AssetBrowserViewModel>();
-            return abvm is {RightSelectedItems: { }} && abvm.RightSelectedItems.Any();
-        }
-
-        private void ExecuteAssetBrowserAdd()
-        {
-            var abvm = Locator.Current.GetService<AssetBrowserViewModel>();
-            abvm.AddSelectedCommand.SafeExecute();
-        }
-
-        #endregion commands
     }
 }

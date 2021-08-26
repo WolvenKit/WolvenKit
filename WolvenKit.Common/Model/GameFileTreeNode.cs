@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 
 namespace WolvenKit.Common
@@ -19,12 +20,12 @@ namespace WolvenKit.Common
             Name = "";
         }
 
-        public GameFileTreeNode(EArchiveType bundleType)
-        {
-            Directories = new ObservableCollection<GameFileTreeNode>();
-            Files = new List<IGameFile>();
-            Name = "";
-        }
+        //public GameFileTreeNode(EArchiveType bundleType)
+        //{
+        //    Directories = new ObservableCollection<GameFileTreeNode>();
+        //    Files = new List<IGameFile>();
+        //    Name = "";
+        //}
 
         #endregion Constructors
 
@@ -57,6 +58,8 @@ namespace WolvenKit.Common
             }
         }
 
+        public ulong Hash => FNV1A64HashAlgorithm.HashString(FullPath);
+
         public EArchiveType Type
         {
             get
@@ -84,6 +87,8 @@ namespace WolvenKit.Common
         #endregion Properties
    
         public override string ToString() => Name;
+
+        //public override int GetHashCode() => FNV1A64HashAlgorithm.HashString(FullPath);
 
     }
 }

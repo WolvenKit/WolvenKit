@@ -41,7 +41,7 @@ namespace WolvenKit.Common.Model
 
         protected void RebuildRootNode()
         {
-            RootNode = new GameFileTreeNode(TypeName)
+            RootNode = new GameFileTreeNode()
             {
                 Name = TypeName.ToString()
             };
