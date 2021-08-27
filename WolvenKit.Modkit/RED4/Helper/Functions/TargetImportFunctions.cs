@@ -251,7 +251,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var quantScale = new Vec4((max.X - min.X), (max.Y - min.Y), (max.Z - min.Z), 0);
-            var quantOffset = new Vec4((max.X + min.X - 1) / 2, (max.Y + min.Y - 1) / 2, (max.Z + min.Z - 1) / 2, 1);
+            var quantOffset = new Vec4((max.X + min.X), (max.Y + min.Y), (max.Z + min.Z), 1);
 
             return (quantScale, quantOffset);
 
