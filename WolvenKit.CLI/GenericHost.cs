@@ -12,12 +12,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using WolvenKit.CLI.Services;
+using WolvenKit.Common;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.CLI
 {
@@ -54,8 +57,8 @@ namespace WolvenKit.CLI
                     services.AddScoped<Red4ParserService>();
                     services.AddScoped<RIG>();              //Cp77FileService
                     services.AddScoped<MeshTools>();        //RIG, Cp77FileService
-
-                    services.AddScoped<ModTools>();         //Cp77FileService, ILoggerService, IProgress, IHashService, Mesh, Target
+                    services.AddSingleton<IArchiveManager, ArchiveManager>();
+                    services.AddSingleton<IModTools, ModTools>();
 
                     //services.AddScoped<MaterialTools>();    //ModTools, Cp77FileService, CookingUtilities
 

@@ -22,7 +22,7 @@ using WolvenKit.Models.Docking;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.ViewModels.Shell;
-using ModTools = WolvenKit.Modkit.RED4.ModTools;
+using WolvenKit.Common.Interfaces;
 
 namespace WolvenKit.ViewModels.Editor
 {
@@ -39,7 +39,7 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IProjectManager _projectManager;
         private readonly ILoggerService _loggerService;
         private readonly Red4ParserService _wolvenkitFileService;
-        private readonly ModTools _modTools;
+        private readonly IArchiveManager _archiveManager;
 
         private ICommand _saveAsCommand = null;
         private ICommand _saveCommand = null;
@@ -68,8 +68,8 @@ namespace WolvenKit.ViewModels.Editor
             _loggerService = Locator.Current.GetService<ILoggerService>();
             _gameControllerFactory = Locator.Current.GetService<IGameControllerFactory>();
             _projectManager = Locator.Current.GetService<IProjectManager>();
-            _modTools = Locator.Current.GetService<ModTools>();
             _wolvenkitFileService = Locator.Current.GetService<Red4ParserService>();
+            _archiveManager = Locator.Current.GetService<IArchiveManager>();
 
             OpenEditorCommand = new RelayCommand(ExecuteOpenEditor);
             OpenBufferCommand = new RelayCommand(ExecuteOpenBuffer);
@@ -144,14 +144,8 @@ namespace WolvenKit.ViewModels.Editor
         {
             var depotpath = input.DepotPathStr;
             var key = FNV1A64HashAlgorithm.HashString(depotpath);
-            var foundItems = new List<IGameFile>();
-            foreach (var manager in _gameControllerFactory.GetController().GetArchiveManagers(false)
-                .Where(manager => manager.Items.Lookup(key).HasValue))
-            {
-                foundItems.Add(manager.Items.Lookup(key).Value);
-            }
 
-            var itemToImport = foundItems.FirstOrDefault();
+            var itemToImport = _archiveManager.Items.Lookup(key).Value;
             if (itemToImport != null)
             {
                 _gameControllerFactory.GetController().AddToMod(itemToImport);

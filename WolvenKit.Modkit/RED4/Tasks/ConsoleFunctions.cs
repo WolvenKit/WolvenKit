@@ -7,11 +7,11 @@ using CP77.CR2W;
 using Microsoft.Extensions.Options;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.CR2W;
-using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
 namespace CP77Tools.Tasks
 {
@@ -35,7 +35,7 @@ namespace CP77Tools.Tasks
     public partial class ConsoleFunctions : IConsoleFunctions
     {
         private readonly ILoggerService _loggerService;
-        private readonly ModTools _modTools;
+        private readonly IModTools _modTools;
         private readonly IHashService _hashService;
         private readonly IProgressService<double> _progressService;
         private readonly Red4ParserService _wolvenkitFileService;
@@ -56,7 +56,7 @@ namespace CP77Tools.Tasks
             IHashService hashService,
             IProgressService<double> progress,
             Red4ParserService wolvenkitFileService,
-            ModTools modTools,
+            IModTools modTools,
 
             IOptions<CommonImportArgs> commonImportArgs,
             IOptions<XbmImportArgs> xbmImportArgs,

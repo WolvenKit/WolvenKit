@@ -60,8 +60,8 @@ namespace WolvenKit.ViewModels.Editor
         private readonly INotificationService _notificationService;
         private readonly IProjectManager _projectManager;
         private readonly IGameControllerFactory _gameController;
+        private readonly IArchiveManager _manager;
 
-        private ArchiveManager _manager;
         private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
 
 
@@ -73,13 +73,15 @@ namespace WolvenKit.ViewModels.Editor
             IProjectManager projectManager,
             ILoggerService loggerService,
             INotificationService notificationService,
-            IGameControllerFactory gameController
+            IGameControllerFactory gameController,
+            IArchiveManager manager
         ) : base(ToolTitle)
         {
             _projectManager = projectManager;
             _loggerService = loggerService;
             _notificationService = notificationService;
             _gameController = gameController;
+            _manager = manager;
 
             ContentId = ToolContentId;
 
@@ -251,13 +253,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <param name="loadmods"></param>
         public void ReInit(bool loadmods)
         {
-            _manager = (ArchiveManager)_gameController.GetController().GetArchiveManagers(loadmods).First();
-
-            Extensions = _gameController
-                .GetController()
-                .GetArchiveManagers(loadmods)
-                .SelectMany(x => x.Extensions)
-                .ToList();
+            Extensions = _manager.Extensions.ToList();
             Classes = _gameController
                 .GetController()
                 .GetAvaliableClasses();

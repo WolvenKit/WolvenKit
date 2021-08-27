@@ -28,6 +28,7 @@ using Syncfusion.Data;
 using DynamicData;
 using System.Reactive.Disposables;
 using WolvenKit.ViewModels;
+using WolvenKit.Common.Interfaces;
 
 namespace WolvenKit.Views.Editor
 {
@@ -163,7 +164,7 @@ namespace WolvenKit.Views.Editor
         {
             propertiesViewModel.IsImagePreviewVisible = true;
 
-            var man = Locator.Current.GetService<ModTools>();
+            var man = Locator.Current.GetService<IModTools>();
 
             // extract cr2w to stream
             await using var cr2wstream = new MemoryStream();

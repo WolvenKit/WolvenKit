@@ -12,14 +12,15 @@ using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Tools;
 using WolvenKit.Interfaces.Core;
 using WolvenKit.Interfaces.Extensions;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
-using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
 namespace WolvenKit.MSTests
 {
@@ -168,7 +169,7 @@ namespace WolvenKit.MSTests
             var ext = $".{extension.ToString()}";
             var infiles = s_groupedFiles[ext].ToList();
 
-            var modtools = ServiceLocator.Default.ResolveType<ModTools>();
+            var modtools = ServiceLocator.Default.ResolveType<IModTools>();
             var resultDir = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory, "temp"));
             if (!resultDir.Exists)
             {
@@ -426,7 +427,7 @@ namespace WolvenKit.MSTests
             var ext = $".{extension.ToString()}";
             var infiles = s_groupedFiles[ext].ToList();
 
-            var modtools = ServiceLocator.Default.ResolveType<ModTools>();
+            var modtools = ServiceLocator.Default.ResolveType<IModTools>();
             var resultDir = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory, "temp"));
             if (!resultDir.Exists)
             {

@@ -6,6 +6,7 @@ using System.Linq;
 using ProtoBuf;
 using Splat;
 using WolvenKit.Common;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using Path = System.IO.Path;
@@ -13,7 +14,7 @@ using Path = System.IO.Path;
 namespace WolvenKit.RED4.CR2W.Archive
 {
     [ProtoContract]
-    public class ArchiveManager : CyberArchiveManager
+    public class ArchiveManager : RED4ArchiveManager, IArchiveManager
     {
         #region Fields
 
@@ -24,27 +25,16 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region Constructors
 
-        public ArchiveManager() : this(Locator.Current.GetService<IHashService>())
-        {
-
-        }
-
         public ArchiveManager(IHashService hashService)
         {
             _hashService = hashService;
         }
-
+        
         #endregion Constructors
 
         #region properties
+
         [ProtoMember(1)] public override Dictionary<string, IGameArchive> Archives { get; set; } = new();
-
-        public Dictionary<string, IEnumerable<FileEntry>> GroupedFiles =>
-            Archives.Values
-                .SelectMany(_ => _.Files.Values)
-                .GroupBy(_ => _.Extension)
-                .ToDictionary(_ => _.Key, _ => _.Select(x => x as FileEntry));
-
 
         #endregion properties
 
@@ -78,6 +68,12 @@ namespace WolvenKit.RED4.CR2W.Archive
         //    RebuildRootNode();
         //}
 
+        public override Dictionary<string, IEnumerable<FileEntry>> GetGroupedFiles() =>
+           Archives.Values
+               .SelectMany(_ => _.Files.Values)
+               .GroupBy(_ => _.Extension)
+               .ToDictionary(_ => _.Key, _ => _.Select(x => x as FileEntry));
+
         public override EArchiveType TypeName => EArchiveType.Archive;
 
         /// <summary>
@@ -85,7 +81,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// </summary>
         /// <param name="archivedir"></param>
         /// <param name="rebuildtree"></param>
-        public void LoadFromFolder(DirectoryInfo archivedir, bool rebuildtree = false)
+        public override void LoadFromFolder(DirectoryInfo archivedir, bool rebuildtree = false)
         {
             if (!archivedir.Exists)
             {
@@ -229,7 +225,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// </summary>
         /// <param name="hash"></param>
         /// <returns></returns>
-        public IGameFile LookupFile(ulong hash)
+        public override IGameFile LookupFile(ulong hash)
         {
             var query = Items.Lookup(hash);
             if (query.HasValue)
@@ -247,7 +243,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// </summary>
         /// <param name="fullpath"></param>
         /// <returns></returns>
-        public RedFileSystemModel LookupDirectory(string fullpath, bool expandAll = false)
+        public override RedFileSystemModel LookupDirectory(string fullpath, bool expandAll = false)
         {
             var splits = fullpath.Split(Path.DirectorySeparatorChar);
 

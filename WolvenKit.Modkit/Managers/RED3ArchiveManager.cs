@@ -9,7 +9,7 @@ namespace WolvenKit.Common
     /// Abstract implementation for Witcher archive managers
     /// e.g. bundle, soundcache, collisioncache etc
     /// </summary>
-    public abstract class WitcherArchiveManager : WolvenKitArchiveManager
+    public abstract class RED3ArchiveManager : WolvenKitArchiveManager
     {
         protected readonly string[] VanillaDlClist = new string[]
         {

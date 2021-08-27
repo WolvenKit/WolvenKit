@@ -6,11 +6,12 @@ using System.Linq;
 using DynamicData;
 using ProtoBuf;
 using WolvenKit.Common.Services;
+using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.Common.Model
 {
     [ProtoContract]
-    public abstract class WolvenKitArchiveManager : IGameArchiveManager
+    public abstract class WolvenKitArchiveManager : IArchiveManager
     {
         #region properties
 
@@ -82,5 +83,9 @@ namespace WolvenKit.Common.Model
             }
         }
 
+        public abstract RedFileSystemModel LookupDirectory(string fullpath, bool expandAll = false);
+        public abstract IGameFile LookupFile(ulong hash);
+        public abstract Dictionary<string, IEnumerable<FileEntry>> GetGroupedFiles();
+        public abstract void LoadFromFolder(DirectoryInfo archivedir, bool rebuildtree = false);
     }
 }

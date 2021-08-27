@@ -22,7 +22,6 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.Views.Editor.AudioTool;
-using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
 namespace WolvenKit.ViewModels.Editor
 {
@@ -33,7 +32,7 @@ namespace WolvenKit.ViewModels.Editor
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
         private readonly MeshTools _meshTools;
-        private readonly ModTools _modTools;
+        private readonly IModTools _modTools;
 
         public const string ToolContentId = "Properties_Tool";
         public const string ToolTitle = "Properties";
@@ -50,7 +49,7 @@ namespace WolvenKit.ViewModels.Editor
             IProjectManager projectManager,
             ILoggerService loggerService,
             MeshTools meshTools,
-            ModTools modTools
+            IModTools modTools
         ) : base(ToolTitle)
         {
             _projectManager = projectManager;

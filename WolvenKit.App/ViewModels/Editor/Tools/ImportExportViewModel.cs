@@ -20,6 +20,7 @@ using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
@@ -28,7 +29,6 @@ using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.CR2W.Archive;
-using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
 namespace WolvenKit.ViewModels.Editor
 {
@@ -51,7 +51,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// Private Readonly ModTools
         /// </summary>
-        private readonly ModTools _modTools;
+        private readonly IModTools _modTools;
 
         private readonly ILoggerService _loggerService;
         private readonly INotificationService _notificationService;
@@ -60,6 +60,7 @@ namespace WolvenKit.ViewModels.Editor
         private readonly IGameControllerFactory _gameController;
         private readonly MeshTools _meshTools;
         private readonly ISettingsManager _settingsManager;
+        private readonly IArchiveManager _archiveManager;
 
         /// <summary>
         /// Private NameOf Selected Item in Grid.
@@ -95,9 +96,9 @@ namespace WolvenKit.ViewModels.Editor
            INotificationService notificationService,
            IGameControllerFactory gameController,
            ISettingsManager settingsManager,
-           ModTools modTools,
-           MeshTools meshTools
-
+           IModTools modTools,
+           MeshTools meshTools,
+           IArchiveManager archiveManager
            ) : base(ToolTitle)
         {
             _projectManager = projectManager;
@@ -108,6 +109,7 @@ namespace WolvenKit.ViewModels.Editor
             _notificationService = notificationService;
             _settingsManager = settingsManager;
             _meshTools = meshTools;
+            _archiveManager = archiveManager;
 
             SetupToolDefaults();
 
@@ -349,7 +351,7 @@ namespace WolvenKit.ViewModels.Editor
 
         private void InitCollectionEditorForMesh(string argType, MeshExportArgs meshExportArgs)
         {
-            if (_gameController.GetController() is not Cp77Controller cp77Controller)
+            if (_gameController.GetController() is not RED4Controller cp77Controller)
             {
                 return;
             }
@@ -392,11 +394,10 @@ namespace WolvenKit.ViewModels.Editor
                 return;
             }
 
-            var archivemanager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
             CollectionAvailableItems.Clear();
-            if (archivemanager != null)
+            if (_archiveManager != null)
             {
-                CollectionAvailableItems.AddRange(archivemanager.GroupedFiles[$".{fetchExtension}"].Select(_ => new CollectionItemViewModel(_)));
+                CollectionAvailableItems.AddRange(_archiveManager.GetGroupedFiles()[$".{fetchExtension}"].Select(_ => new CollectionItemViewModel(_)));
             }
         }
 
@@ -404,10 +405,9 @@ namespace WolvenKit.ViewModels.Editor
         {
             var proj = _projectManager.ActiveProject;
 
-            if (_gameController.GetController() is Cp77Controller cp77Controller)
+            if (_gameController.GetController() is RED4Controller cp77Controller)
             {
-                var archivemanager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
-                opusExportArgs.SoundbanksArchive = archivemanager.Archives.Values
+                opusExportArgs.SoundbanksArchive = _archiveManager.Archives.Values
                     .Cast<Archive>()
                     .FirstOrDefault(_ => _.Name.Equals("audio_2_soundbanks.archive"));
             }
@@ -572,10 +572,9 @@ namespace WolvenKit.ViewModels.Editor
         private async Task ImportWavs(List<string> wavs)
         {
             var proj = _projectManager.ActiveProject;
-            if (_gameController.GetController() is Cp77Controller cp77Controller)
+            if (_gameController.GetController() is RED4Controller cp77Controller)
             {
-                var archivemanager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
-                var soundbanksArchive = archivemanager.Archives.Values
+                var soundbanksArchive = _archiveManager.Archives.Values
                     .Cast<Archive>()
                     .FirstOrDefault(_ => _.Name.Equals("audio_2_soundbanks.archive"));
 
@@ -595,7 +594,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <param name="item"></param>
         private async Task ImportSingle(ImportableItemViewModel item)
         {
-            if (_gameController.GetController() is not Cp77Controller cp77Controller)
+            if (_gameController.GetController() is not RED4Controller cp77Controller)
             {
                 return;
             }
@@ -606,8 +605,7 @@ namespace WolvenKit.ViewModels.Editor
             {
                 if (item.Properties is GltfImportArgs gltfImportArgs)
                 {
-                    var archivemanager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
-                    gltfImportArgs.Archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
+                    gltfImportArgs.Archives = _archiveManager.Archives.Values.Cast<Archive>().ToList();
                 }
                 var settings = new GlobalImportArgs().Register(item.Properties as ImportArgs);
                 var rawDir = new DirectoryInfo(proj.RawDirectory);
@@ -628,28 +626,25 @@ namespace WolvenKit.ViewModels.Editor
             {
                 if (item.Properties is MeshExportArgs meshExportArgs)
                 {
-                    if (_gameController.GetController() is Cp77Controller cp77Controller)
+                    if (_gameController.GetController() is RED4Controller cp77Controller)
                     {
-                        var archivemanager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
-                        meshExportArgs.Archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
+                        meshExportArgs.Archives = _archiveManager.Archives.Values.Cast<Archive>().ToList();
                     }
                     meshExportArgs.MaterialRepo = _settingsManager.MaterialRepositoryPath;
                 }
                 if(item.Properties is MorphTargetExportArgs morphTargetExportArgs)
                 {
-                    if (_gameController.GetController() is Cp77Controller cp77Controller)
+                    if (_gameController.GetController() is RED4Controller cp77Controller)
                     {
-                        var archivemanager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
-                        morphTargetExportArgs.Archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
+                        morphTargetExportArgs.Archives = _archiveManager.Archives.Values.Cast<Archive>().ToList();
                     }
                     morphTargetExportArgs.ModFolderPath = _projectManager.ActiveProject.ModDirectory;
                 }
                 if (item.Properties is OpusExportArgs opusExportArgs)
                 {
-                    if (_gameController.GetController() is Cp77Controller cp77Controller)
+                    if (_gameController.GetController() is RED4Controller cp77Controller)
                     {
-                        var archivemanager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
-                        opusExportArgs.SoundbanksArchive = archivemanager.Archives.Values
+                        opusExportArgs.SoundbanksArchive = _archiveManager.Archives.Values
                             .Cast<Archive>()
                             .FirstOrDefault(_ => _.Name.Equals("audio_2_soundbanks.archive"));
                     }
@@ -659,18 +654,16 @@ namespace WolvenKit.ViewModels.Editor
                 }
                 if (item.Properties is EntityExportArgs entExportArgs)
                 {
-                    if (_gameController.GetController() is Cp77Controller cp77Controller)
+                    if (_gameController.GetController() is RED4Controller cp77Controller)
                     {
-                        var archivemanager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
-                        entExportArgs.Archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
+                        entExportArgs.Archives = _archiveManager.Archives.Values.Cast<Archive>().ToList();
                     }
                 }
                 if (item.Properties is AnimationExportArgs animationExportArgs)
                 {
-                    if (_gameController.GetController() is Cp77Controller cp77Controller)
+                    if (_gameController.GetController() is RED4Controller cp77Controller)
                     {
-                        var archivemanager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
-                        animationExportArgs.Archives = archivemanager.Archives.Values.Cast<Archive>().ToList();
+                        animationExportArgs.Archives = _archiveManager.Archives.Values.Cast<Archive>().ToList();
                     }
                 }
                 var settings = new GlobalExportArgs().Register(item.Properties as ExportArgs);
@@ -780,15 +773,13 @@ namespace WolvenKit.ViewModels.Editor
                 var relativename = qx.GetRelativeName(proj);
                 var newname = Path.ChangeExtension(relativename, ".mesh");
                 ulong hash = FNV1A64HashAlgorithm.HashString(newname);
-                var cp77Controller = _gameController.GetController() as Cp77Controller;
-
-                var manager = cp77Controller.GetArchiveManagers(false).First() as ArchiveManager;
+                var cp77Controller = _gameController.GetController() as RED4Controller;
 
                 string outfile;
                 IGameFile file;
-                if (manager.Items.Lookup(hash).HasValue)
+                if (_archiveManager.Items.Lookup(hash).HasValue)
                 {
-                    file = manager.Items.Lookup(hash).Value;
+                    file = _archiveManager.Items.Lookup(hash).Value;
                     if (file != null)
                     {
                         outfile = _meshTools.ExportMeshSimple(file, qx.FullName,
