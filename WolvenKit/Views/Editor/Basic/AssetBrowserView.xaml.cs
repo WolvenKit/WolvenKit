@@ -26,6 +26,8 @@ using System.Text.RegularExpressions;
 using System.Reactive.Linq;
 using Syncfusion.Data;
 using DynamicData;
+using System.Reactive.Disposables;
+using WolvenKit.ViewModels;
 
 namespace WolvenKit.Views.Editor
 {
@@ -49,17 +51,56 @@ namespace WolvenKit.Views.Editor
                 ViewModel.Expand.Subscribe(x => ExpandNode());
                 ViewModel.Collapse.Subscribe(x => CollapseNode());
 
-                //FileSearchBar.Events().SearchStarted
-                var observable = Observable.FromEventPattern<EventHandler<FunctionEventArgs<string>>, FunctionEventArgs<string>>(
-                            handler => FileSearchBar.SearchStarted += handler,
-                            handler => FileSearchBar.SearchStarted -= handler)
-                    .Select(x => x.EventArgs.Info)
-                    //.InvokeCommand(this, x => x.ViewModel.SearchStartedCommand);
-                    .Subscribe(query =>
-                   {
-                       ViewModel.PerformSearch(query);
-                       ResetDataGridPages();
-                   });
+                // top search
+                //var observable1 = Observable.FromEventPattern<EventHandler<FunctionEventArgs<string>>, FunctionEventArgs<string>>(
+                //            handler => FileSearchBar.SearchStarted += handler,
+                //            handler => FileSearchBar.SearchStarted -= handler)
+                //    .Select(x => x.EventArgs.Info)
+                //    .Subscribe(query =>
+                //   {
+                //       ViewModel.PerformSearch(query);
+                //   });
+                //var observable2 = Observable.FromEventPattern<EventHandler<FunctionEventArgs<string>>, FunctionEventArgs<string>>(
+                //            handler => OptionsSearchBar.SearchStarted += handler,
+                //            handler => OptionsSearchBar.SearchStarted -= handler)
+                //    .Select(x => x.EventArgs.Info)
+                //    .Subscribe(query =>
+                //    {
+                //        ViewModel.PerformSearch(query);
+                //    });
+
+                this.Bind(ViewModel,
+                      viewModel => viewModel.SearchBarText,
+                      view => view.FileSearchBar.Text)
+                  .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        viewModel => viewModel.OptionsSearchBarText,
+                        view => view.OptionsSearchBar.Text)
+                    .DisposeWith(disposables);
+
+                // left navigation
+                this.OneWayBind(ViewModel,
+                        viewModel => viewModel.LeftItems,
+                        view => view.LeftNavigation.ItemsSource)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        viewModel => viewModel.LeftSelectedItem,
+                        view => view.LeftNavigation.SelectedItem)
+                    .DisposeWith(disposables);
+
+                // right file list
+                this.OneWayBind(ViewModel,
+                        viewModel => viewModel.RightItems,
+                        view => view.InnerList.ItemsSource)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        viewModel => viewModel.RightSelectedItem,
+                        view => view.InnerList.SelectedItem)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                      viewModel => viewModel.RightSelectedItems,
+                      view => view.InnerList.SelectedItems)
+                  .DisposeWith(disposables);
 
             });
 
@@ -67,7 +108,7 @@ namespace WolvenKit.Views.Editor
 
         #region methods
 
-        private void PreviewMesh(PropertiesViewModel propertiesViewModel, FileEntryViewModel selectedItem, IGameFile selectedGameFile)
+        private void PreviewMesh(PropertiesViewModel propertiesViewModel, RedFileViewModel selectedItem, IGameFile selectedGameFile)
         {
             propertiesViewModel.AB_MeshPreviewVisible = true;
 
@@ -88,7 +129,7 @@ namespace WolvenKit.Views.Editor
             }
         }
 
-        private void PreviewWem(PropertiesViewModel propertiesViewModel, FileEntryViewModel selectedItem, IGameFile selectedGameFile)
+        private void PreviewWem(PropertiesViewModel propertiesViewModel, RedFileViewModel selectedItem, IGameFile selectedGameFile)
         {
             propertiesViewModel.IsAudioPreviewVisible = true;
 
@@ -118,7 +159,7 @@ namespace WolvenKit.Views.Editor
             }
         }
 
-        private async void PreviewTexture(PropertiesViewModel propertiesViewModel, FileEntryViewModel selectedItem, IGameFile selectedGameFile)
+        private async void PreviewTexture(PropertiesViewModel propertiesViewModel, RedFileViewModel selectedItem, IGameFile selectedGameFile)
         {
             propertiesViewModel.IsImagePreviewVisible = true;
 
@@ -145,7 +186,12 @@ namespace WolvenKit.Views.Editor
             catch (Exception) { }
         }
 
-        private bool FilterNodes(object o) => o is GameFileTreeNode data && data.Name.Contains(_currentFolderQuery);
+        private bool FilterNodes(object o) => o is RedFileSystemModel data && data.Name.Contains(_currentFolderQuery);
+
+        #endregion
+
+        #region Top search
+
 
         #endregion
 
@@ -163,16 +209,16 @@ namespace WolvenKit.Views.Editor
                 return;
             }
 
-            if (e.AddedItems.First() is TreeGridRowInfo { RowData: GameFileTreeNode model })
+            if (e.AddedItems.First() is TreeGridRowInfo { RowData: RedFileSystemModel model })
             {
                 vm.RightItems.Clear();
+                vm.RightItems.AddRange(model.Directories
+                    .Select(h => new RedDirectoryViewModel(h))
+                    .OrderBy(_ => Regex.Replace(_.Name, @"\d+", n => n.Value.PadLeft(16, '0'))));
                 vm.RightItems.AddRange(model.Files
-                    .Select(_ => new FileEntryViewModel(_ as FileEntry))
+                    .Select(h => new RedFileViewModel(ViewModel.LookupGameFile(h)))
                     .OrderBy(_ => Regex.Replace(_.Name, @"\d+", n => n.Value.PadLeft(16, '0'))));
             }
-
-            // reset rightside
-            ResetDataGridPages();
         }
 
         private void FolderSearchBar_OnSearchStarted(object sender, FunctionEventArgs<string> e)
@@ -195,7 +241,7 @@ namespace WolvenKit.Views.Editor
         public void ExpandNode()
         {
             var selectedIndex = LeftNavigation.SelectedIndex;
-            LeftNavigation.ExpandNode(selectedIndex);
+            LeftNavigation.ExpandNode(selectedIndex + 1);
         }
 
         private void ExpandAll_OnClick(object sender, RoutedEventArgs e) => ExpandAllNodes();
@@ -225,36 +271,6 @@ namespace WolvenKit.Views.Editor
 
         #region rightFileGrid
 
-        private void FileSearchBar_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
-        {
-            if (string.Equals(FileSearchBar.Text, "Search", System.StringComparison.OrdinalIgnoreCase))
-            {
-                FileSearchBar.SetCurrentValue(TextBox.TextProperty, "");
-            }
-        }
-        private void FileSearchBar_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            //if (ViewModel is not AssetBrowserViewModel vm)
-            //{
-            //    return;
-            //}
-            //if (InnerList == null)
-            //{
-            //    return;
-            //}
-
-            //if (FileSearchBar.Text != "search" || FileSearchBar.Text != "")
-            //{
-            //    this.InnerList.SearchHelper.SetCurrentValue(Syncfusion.UI.Xaml.Grid.SearchHelper.SearchBrushProperty, HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3"));
-            //    this.InnerList.SearchHelper.SetCurrentValue(Syncfusion.UI.Xaml.Grid.SearchHelper.AllowFilteringProperty, true);
-            //    this.InnerList.SearchHelper.Search(FileSearchBar.Text);
-            //}
-            //else
-            //{
-            //    this.InnerList.SearchHelper.ClearSearch();
-            //}
-        }
-
         private void InnerList_SelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
         {
             if (ViewModel is not AssetBrowserViewModel vm)
@@ -282,24 +298,23 @@ namespace WolvenKit.Views.Editor
             propertiesViewModel.IsAudioPreviewVisible = false;
             propertiesViewModel.IsImagePreviewVisible = false;
 
-            if (propertiesViewModel.AB_SelectedItem != null)
+            if (propertiesViewModel.AB_SelectedItem != null && propertiesViewModel.AB_SelectedItem is RedFileViewModel selectedItem)
             {
-                var selectedItem = propertiesViewModel.AB_SelectedItem;
-                var selectedGameFile = propertiesViewModel.AB_SelectedItem.GetGameFile();
+                var selectedGameFile = selectedItem.GetGameFile();
 
-                if (string.Equals(propertiesViewModel.AB_SelectedItem.Extension, ERedExtension.mesh.ToString(),
+                if (string.Equals(selectedItem.Extension, ERedExtension.mesh.ToString(),
                     System.StringComparison.OrdinalIgnoreCase))
                 {
                     PreviewMesh(propertiesViewModel, selectedItem, selectedGameFile);
                 }
 
-                if (string.Equals(propertiesViewModel.AB_SelectedItem.Extension, ERedExtension.wem.ToString(),
+                if (string.Equals(selectedItem.Extension, ERedExtension.wem.ToString(),
                     System.StringComparison.OrdinalIgnoreCase))
                 {
                     PreviewWem(propertiesViewModel, selectedItem, selectedGameFile);
                 }
 
-                if (string.Equals(propertiesViewModel.AB_SelectedItem.Extension, ERedExtension.xbm.ToString(),
+                if (string.Equals(selectedItem.Extension, ERedExtension.xbm.ToString(),
                                             System.StringComparison.OrdinalIgnoreCase))
                 {
                     PreviewTexture(propertiesViewModel, selectedItem, selectedGameFile);
@@ -308,9 +323,12 @@ namespace WolvenKit.Views.Editor
             propertiesViewModel.DecideForMeshPreview();
         }
 
-       
+        private void InnerList_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var selectedIndex = LeftNavigation.SelectedIndex;
+            LeftNavigation.ExpandNode(selectedIndex + 1);
+        }
 
-        
         private void RightContextMenuAddAll_OnClick(object sender, RoutedEventArgs e)
         {
             if (ViewModel is AssetBrowserViewModel vm)
@@ -330,7 +348,7 @@ namespace WolvenKit.Views.Editor
             {
                 return;
             }
-            var selected = InnerList.SelectedItem as FileEntryViewModel;
+            var selected = InnerList.SelectedItem as RedFileViewModel;
 
             if (!selected.FullName.ToLower().Contains("bk2"))
             {
@@ -376,35 +394,7 @@ namespace WolvenKit.Views.Editor
 
             var process = Process.Start(procInfo);
             process?.WaitForInputIdle();
-            //var appControl = new AppControl();
-            //appControl.ExeName = x.Split('|')[0];
-            //appControl.Args = x.Split('|')[1];
-            //appControl.VisualPoint = new Point(0.0, 30.0);
-
-            //if (StaticReferences.XoWindow == null)
-            //{
-            //    StaticReferences.XoWindow = new HandyControl.Controls.GlowWindow();
-            //    StaticReferences.XoWindow.Closed += (sender, args) => StaticReferences.XoWindow = null;
-            //}
-
-            //if (StaticReferences.XoWindow.Content != null)
-            //{
-            //    return;
-            //}
-            //StaticReferences.XoWindow.Unloaded += new RoutedEventHandler((s, e) =>
-            //{
-            //    var q = s as HandyControl.Controls.GlowWindow;
-            //    q.Close();
-            //    StaticReferences.XoWindow = null;
-            //    StaticReferences.XoWindow = new HandyControl.Controls.GlowWindow();
-            //});
-
-            //Grid grid = new Grid();
-            //grid.Children.Add(appControl);
-            //StaticReferences.XoWindow.SetCurrentValue(ContentProperty, grid);
-            //StaticReferences.XoWindow.SetCurrentValue(Window.TopmostProperty, true);
-            //StaticReferences.XoWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            //StaticReferences.XoWindow.Show();
+            
         }
 
         private void BKExport_Click(object sender, RoutedEventArgs e)
@@ -439,60 +429,11 @@ namespace WolvenKit.Views.Editor
         }
 
 
-
-        private void dataPager_OnDemandLoading(object sender, Syncfusion.UI.Xaml.Controls.DataPager.OnDemandLoadingEventArgs args)
-        {
-            if (ViewModel.RightItems !=  null)
-            {
-                if (ViewModel.RightItems.Any())
-                {
-                    var items = ViewModel.RightItems.Skip(args.StartIndex)?.Take(args.PageSize);
-                    dataPager.LoadDynamicItems(args.StartIndex, items);
-                }
-                else
-                {
-                    dataPager.SetCurrentValue(Syncfusion.UI.Xaml.Controls.DataPager.SfDataPager.SourceProperty, ViewModel.RightItems);
-                }
-            }
-            
-        }
-
-        private void ResetDataGridPages()
-        {
-            if (ViewModel.RightItems == null)
-            {
-                return;
-            }
-
-            var prevPageCount = this.dataPager.PageCount;
-
-            if (ViewModel.RightItems.Count < dataPager.PageSize)
-            {
-                dataPager.SetCurrentValue(Syncfusion.UI.Xaml.Controls.DataPager.SfDataPager.PageCountProperty, 1);
-            }
-            else
-            {
-                var count = ViewModel.RightItems.Count / dataPager.PageSize;
-
-                if (ViewModel.RightItems.Count % dataPager.PageSize == 0)
-                {
-                    dataPager.SetCurrentValue(Syncfusion.UI.Xaml.Controls.DataPager.SfDataPager.PageCountProperty, count);
-                }
-                else
-                {
-                    dataPager.SetCurrentValue(Syncfusion.UI.Xaml.Controls.DataPager.SfDataPager.PageCountProperty, count + 1);
-                }
-            }
-
-            var newPageCount = this.dataPager.PageCount;
-
-            dataPager.MoveToPage(0);
-            //if (newPageCount == prevPageCount)
-            {
-                (dataPager.PagedSource as PagedCollectionView).ResetCacheForPage(this.dataPager.PageIndex);
-            }
-        }
-
         #endregion
+
+        private void FileSearchBar_SearchStarted(object sender, FunctionEventArgs<string> e)
+        {
+            ViewModel.PerformSearch(e.Info);
+        }
     }
 }

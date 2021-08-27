@@ -102,6 +102,14 @@ namespace WolvenKit.Common.Services
             return "";
         }
 
+        public void AddCustom(ulong hash, string path)
+        {
+            if (!Contains(hash))
+            {
+                _userHashes.Add(hash, new SAsciiString(path));
+            }
+        }
+
         public void AddCustom(string path)
         {
             var hash = FNV1A64HashAlgorithm.HashString(path);

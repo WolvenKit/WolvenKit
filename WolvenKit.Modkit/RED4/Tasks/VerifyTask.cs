@@ -52,11 +52,11 @@ namespace CP77Tools.Tasks
                         continue;
                     }
 
-                    var file = bm.Items[hash];
+                    var fileEntry = (FileEntry)bm.Items.Lookup(hash).Value;
 
-                    foreach (var ifileEntry in file)
+                    //foreach (var ifileEntry in file)
                     {
-                        var fileEntry = ifileEntry as FileEntry;
+                        //var fileEntry = ifileEntry as FileEntry;
                         var ar = bm.Archives[fileEntry.Archive.ArchiveAbsolutePath] as Archive;
 
                         using var ms = new MemoryStream();

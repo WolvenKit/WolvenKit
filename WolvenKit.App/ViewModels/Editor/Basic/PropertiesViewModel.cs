@@ -13,6 +13,7 @@ using CP77.CR2W;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Ab4d;
@@ -85,7 +86,7 @@ namespace WolvenKit.ViewModels.Editor
         /// <summary>
         /// Selected Item from Asset Browser If Available.
         /// </summary>
-        [Reactive] public FileEntryViewModel AB_SelectedItem { get; set; }
+        [Reactive] public IFileSystemViewModel AB_SelectedItem { get; set; }
 
         /// <summary>
         /// Decides if Asset browser Selected File info should be visible.

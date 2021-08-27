@@ -869,35 +869,5 @@ namespace WolvenKit.Common.DDS
             }
         }
 
-
-
-        ////TODO: remove this
-        //private static DirectXTexSharp.ESaveFileTypes UncookExtensionToSaveFileType(EUncookExtension uncookExtension) => uncookExtension switch
-        //{
-        //    EUncookExtension.dds => throw new ArgumentOutOfRangeException(nameof(uncookExtension)),
-        //    EUncookExtension.tga => DirectXTexSharp.ESaveFileTypes.TGA,
-        //    EUncookExtension.bmp => DirectXTexSharp.ESaveFileTypes.BMP,
-        //    EUncookExtension.jpg => DirectXTexSharp.ESaveFileTypes.JPEG,
-        //    EUncookExtension.png => DirectXTexSharp.ESaveFileTypes.PNG,
-        //    EUncookExtension.tiff => DirectXTexSharp.ESaveFileTypes.TIFF,
-        //    _ => throw new ArgumentOutOfRangeException(nameof(uncookExtension)),
-        //};
-
-        //private static EUncookExtension SaveFileTypeToUncookExtension(DirectXTexSharp.ESaveFileTypes filetype) => filetype switch
-        //{
-        //    DirectXTexSharp.ESaveFileTypes.BMP => EUncookExtension.bmp,
-        //    DirectXTexSharp.ESaveFileTypes.JPEG => EUncookExtension.jpg,
-        //    DirectXTexSharp.ESaveFileTypes.PNG => EUncookExtension.png,
-        //    DirectXTexSharp.ESaveFileTypes.TGA => EUncookExtension.tga,
-        //    DirectXTexSharp.ESaveFileTypes.TIFF => EUncookExtension.tiff,
-        //    _ => throw new ArgumentOutOfRangeException(nameof(filetype)),
-        //};
-
-        //private static DirectXTexSharp.DXGI_FORMAT_WRAPPED EFormatToDXGIFormat(EFormat format)
-        //{
-        //    return (DirectXTexSharp.DXGI_FORMAT_WRAPPED)format;
-        //}
-
-
     }
 }

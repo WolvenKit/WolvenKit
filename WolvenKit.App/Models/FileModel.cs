@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
@@ -70,9 +71,27 @@ namespace WolvenKit.Models
         [Browsable(false)] public bool IsConvertable => !IsDirectory
                                                        && !string.IsNullOrEmpty(GetExtension())
                                                        && Enum.GetNames(typeof(EConvertableFileFormat)).Contains(GetExtension());
-        [Browsable(false)] public bool IsImportable => !IsDirectory
-                                                       && !string.IsNullOrEmpty(GetExtension())
-                                                       && Enum.GetNames(typeof(ERawFileFormat)).Contains(GetExtension());
+        [Browsable(false)]
+        public bool IsImportable
+        {
+            get
+            {
+                var ext = GetExtension();
+                var dbg_disabled = new List<string>()
+                {
+                    "bmp",
+                    "jpg",
+                    "png",
+                    "tga",
+                    "tiff",
+                };
+
+                return !IsDirectory
+              && !string.IsNullOrEmpty(ext)
+              && Enum.GetNames(typeof(ERawFileFormat)).Contains(ext)
+              && !dbg_disabled.Contains(ext);
+            }
+        }
 
         [Browsable(false)] public bool IsExportable => !IsDirectory
                                                        && !string.IsNullOrEmpty(GetExtension())

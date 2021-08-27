@@ -4,6 +4,7 @@ using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Models;
 
@@ -12,7 +13,7 @@ namespace WolvenKit.ViewModels.Editor
     /// <summary>
     /// ImportExportItem ViewModel
     /// </summary>
-    public abstract class ImportExportItemViewModel : ReactiveObject
+    public abstract class ImportExportItemViewModel : ReactiveObject, ISelectableViewModel
     {
         public ImportExportItemViewModel()
         {

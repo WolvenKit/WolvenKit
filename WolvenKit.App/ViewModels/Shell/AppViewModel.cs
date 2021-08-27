@@ -216,25 +216,25 @@ namespace WolvenKit.ViewModels.Shell
                 return;
             }
 
-            foreach (var message in messages)
-            {
-                _notificationService.Error(message);
-            }
+            //foreach (var message in messages)
+            //{
+            //    _notificationService.Error(message);
+            //}
 
             var result = await Interactions.ShowFirstTimeSetup.Handle(Unit.Default);
         }
 
-        private static void OnToolViewModelPropertyChanged(object sender, PropertyChangedEventArgs args)
-        {
-            // executes a global command that can be subscribed to from any viewmodel
-            // passes the currently active viewmodel
-            if (args.PropertyName == "IsActive" && sender is PaneViewModel panevm)
-            {
-                //ServiceLocator.Default.ResolveType<ICommandManager>()
-                //    .GetCommand(AppCommands.Application.ViewSelected)
-                //    .SafeExecute(new Tuple<PaneViewModel, bool>(panevm, panevm.IsActive));
-            }
-        }
+        //private static void OnToolViewModelPropertyChanged(object sender, PropertyChangedEventArgs args)
+        //{
+        //    // executes a global command that can be subscribed to from any viewmodel
+        //    // passes the currently active viewmodel
+        //    if (args.PropertyName == "IsActive" && sender is PaneViewModel panevm)
+        //    {
+        //        //ServiceLocator.Default.ResolveType<ICommandManager>()
+        //        //    .GetCommand(AppCommands.Application.ViewSelected)
+        //        //    .SafeExecute(new Tuple<PaneViewModel, bool>(panevm, panevm.IsActive));
+        //    }
+        //}
 
         #endregion init
 
@@ -817,7 +817,7 @@ namespace WolvenKit.ViewModels.Shell
             get
             {
                 _assetBrowserViewModel ??= Locator.Current.GetService<AssetBrowserViewModel>();
-                _assetBrowserViewModel.PropertyChanged += OnToolViewModelPropertyChanged;
+                //_assetBrowserViewModel.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _assetBrowserViewModel;
             }
         }
@@ -827,7 +827,7 @@ namespace WolvenKit.ViewModels.Shell
             get
             {
                 _codeEditorVm ??= Locator.Current.GetService<CodeEditorViewModel>();
-                _codeEditorVm.PropertyChanged += OnToolViewModelPropertyChanged;
+                //_codeEditorVm.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _codeEditorVm;
             }
         }
@@ -838,7 +838,7 @@ namespace WolvenKit.ViewModels.Shell
             get
             {
                 _importExportToolViewModel ??= Locator.Current.GetService<ImportExportViewModel>();
-                _importExportToolViewModel.PropertyChanged += OnToolViewModelPropertyChanged;
+                //_importExportToolViewModel.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _importExportToolViewModel;
             }
         }
@@ -870,7 +870,7 @@ namespace WolvenKit.ViewModels.Shell
             get
             {
                 _projectExplorerViewModel ??= Locator.Current.GetService<ProjectExplorerViewModel>();
-                _projectExplorerViewModel.PropertyChanged += OnToolViewModelPropertyChanged;
+                //_projectExplorerViewModel.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _projectExplorerViewModel;
             }
         }
@@ -889,7 +889,7 @@ namespace WolvenKit.ViewModels.Shell
             get
             {
                 _visualEditorVm ??= Locator.Current.GetService<VisualEditorViewModel>();
-                _visualEditorVm.PropertyChanged += OnToolViewModelPropertyChanged;
+                //_visualEditorVm.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _visualEditorVm;
             }
         }
