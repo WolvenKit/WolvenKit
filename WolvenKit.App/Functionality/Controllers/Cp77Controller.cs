@@ -10,6 +10,7 @@ using ProtoBuf;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
+using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Functionality.Services;
@@ -36,7 +37,7 @@ namespace WolvenKit.Functionality.Controllers
 
         private static ArchiveManager ArchiveManager { get; set; }
 
-        private readonly SourceCache<GameFileTreeNode, string> _rootCache;
+        private readonly SourceList<RedFileSystemModel> _rootCache;
 
         #endregion
 
@@ -53,15 +54,15 @@ namespace WolvenKit.Functionality.Controllers
             _hashService = hashService;
             _modTools = modTools;
 
-            _rootCache = new SourceCache<GameFileTreeNode, string>(t => t.FullPath);
+            _rootCache = new SourceList<RedFileSystemModel>();
         }
 
         #region Properties
 
         [Reactive] public bool IsManagerLoaded { get; set; }
 
-        public IObservable<IChangeSet<GameFileTreeNode, string>> ConnectHierarchy() => _rootCache.Connect();
-
+        //public IObservable<IChangeSet<RedDirectoryViewModel, ulong>> ConnectHierarchy() => _rootCache.Connect();
+        public IObservable<IChangeSet<RedFileSystemModel>> ConnectHierarchy() => _rootCache.Connect();
 
         #endregion Properties
 
@@ -136,8 +137,11 @@ namespace WolvenKit.Functionality.Controllers
             catch (Exception e)
             {
                 _loggerService.Log(e.Message);
-                ArchiveManager = new ArchiveManager(_hashService) /*{ GameVersion = GameVersion }*/;
-                ArchiveManager.LoadAll(new FileInfo(_settingsManager.CP77ExecutablePath));
+                throw;
+
+
+                //ArchiveManager = new ArchiveManager(_hashService) /*{ GameVersion = GameVersion }*/;
+                //ArchiveManager.LoadAll(new FileInfo(_settingsManager.CP77ExecutablePath));
 
                 //using var file = File.Create(chachePath);
                 //Serializer.Serialize(file, ArchiveManager);
@@ -154,7 +158,8 @@ namespace WolvenKit.Functionality.Controllers
             _rootCache.Edit(innerCache =>
             {
                 innerCache.Clear();
-                innerCache.AddOrUpdate(ArchiveManager.RootNode);
+                //innerCache.AddOrUpdate(ArchiveManager.RootNode);
+                innerCache.Add(ArchiveManager.RootNode);
             });
 
             return ArchiveManager;
@@ -303,6 +308,15 @@ namespace WolvenKit.Functionality.Controllers
                 //If we screwed up something. Log it.
                 _loggerService.Error(ex + "\n");
             }
+        }
+
+        public void AddToMod(ulong hash)
+        {
+            var file = ArchiveManager.LookupFile(hash);
+            if (file != null)
+            {
+                AddToMod(file);
+            } 
         }
 
         public void AddToMod(IGameFile file)

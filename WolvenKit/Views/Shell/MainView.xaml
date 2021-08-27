@@ -20,6 +20,8 @@
     ResizeMode="CanResizeWithGrip"
     UseNativeChrome="True"
     Title="WolvenKit"
+    MinWidth="800"
+    MinHeight="600"
     >
 
     <syncfusion:ChromelessWindow.Resources>

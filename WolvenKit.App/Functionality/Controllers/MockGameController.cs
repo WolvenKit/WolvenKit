@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DynamicData;
 using WolvenKit.Common;
+using WolvenKit.Common.Model;
 using WolvenKit.Functionality.Controllers;
 
 namespace WolvenKit.Functionality.Controllers
@@ -13,21 +14,22 @@ namespace WolvenKit.Functionality.Controllers
     {
         public MockGameController()
         {
-            _rootCache = new SourceCache<GameFileTreeNode, string>(t => t.FullPath);
+            _rootCache = new SourceList<RedFileSystemModel>();
         }
 
 
         #region Methods
 
-        private readonly SourceCache<GameFileTreeNode, string> _rootCache;
+        private readonly SourceList<RedFileSystemModel> _rootCache;
 
         public bool IsManagerLoaded { get; set; } = true;
 
-        public IObservable<IChangeSet<GameFileTreeNode, string>> ConnectHierarchy() => _rootCache.Connect();
+        public IObservable<IChangeSet<RedFileSystemModel>> ConnectHierarchy() => _rootCache.Connect();
 
         public List<IGameArchiveManager> GetArchiveManagers(bool loadmods) => new List<IGameArchiveManager>();
 
         public void AddToMod(IGameFile file) => throw new NotImplementedException();
+        public void AddToMod(ulong hash) => throw new NotImplementedException();
 
         public List<string> GetAvaliableClasses() => new List<string>();
 
