@@ -2,6 +2,23 @@
 
 namespace WolvenKit.Common
 {
+    public enum EWolvenKitFile
+    {
+        Redscript,
+        TweakDelta,
+        Cr2w
+    }
+
+    public enum ERedScriptExtension
+    {
+        SWIFT
+    }
+
+    public enum ETweakExtension
+    {
+        TWEAK
+    }
+
     public enum EUpdateChannel
     {
         Stable,

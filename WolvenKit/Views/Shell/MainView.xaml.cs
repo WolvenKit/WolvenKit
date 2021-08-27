@@ -16,6 +16,7 @@ using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Layout.MLib;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Interaction;
+using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Dialogs;
@@ -43,6 +44,31 @@ namespace WolvenKit.Views.Shell
 
             this.WhenActivated(disposables =>
             {
+                Interactions.AddNewFile.RegisterHandler(interaction =>
+                {
+                    var dialog = new DialogHostView();
+                    dialog.ViewModel.HostedViewModel = Locator.Current.GetService<NewFileViewModel>();
+                    dialog.Height = 600;
+                    dialog.Width = 700;
+
+                    return Observable.Start(() =>
+                    {
+                        var result = dialog.ShowDialog() == true;
+                        if (result)
+                        {
+                            var innerVm = (NewFileViewModel)dialog.ViewModel.HostedViewModel;
+                            var model = innerVm.SelectedFile;
+                            var filename = innerVm.FileName;
+
+                            interaction.SetOutput((model, filename));
+                        }
+                        else
+                        {
+                            interaction.SetOutput((null, null));
+                        }
+                    }, RxApp.MainThreadScheduler);
+                });
+
                 Interactions.ShowFirstTimeSetup.RegisterHandler(interaction =>
                 {
                     var dialog = new DialogHostView();

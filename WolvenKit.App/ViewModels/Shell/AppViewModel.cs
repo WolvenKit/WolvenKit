@@ -35,6 +35,7 @@ using WolvenKit.ViewModels.Editor;
 using WolvenKit.ViewModels.Wizards;
 using WolvenManager.Installer.Services;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -103,7 +104,7 @@ namespace WolvenKit.ViewModels.Shell
             BackupModCommand = new RelayCommand(ExecuteBackupMod, CanBackupMod);
             PublishModCommand = new RelayCommand(ExecutePublishMod, CanPublishMod);
 
-            NewFileCommand = new RelayCommand(ExecuteNewFile, CanNewFile);
+            NewFileCommand = new DelegateCommand<string>(ExecuteNewFile, CanNewFile);
             SaveFileCommand = new RelayCommand(ExecuteSaveFile, CanSaveFile);
             SaveAllCommand = new RelayCommand(ExecuteSaveAll, CanSaveAll);
 
@@ -117,7 +118,7 @@ namespace WolvenKit.ViewModels.Shell
 
             OnStartup();
 
-            Tools = new ObservableCollection<IDockElement> {
+            DockedViews = new ObservableCollection<IDockElement> {
                 Log,
                 ProjectExplorer,
                 PropertiesViewModel,
@@ -491,11 +492,105 @@ namespace WolvenKit.ViewModels.Shell
         /// Creates a new cr2w file in WolvenKit.
         /// </summary>
         public ICommand NewFileCommand { get; private set; }
+        private bool CanNewFile(string inputDir) => true;
+        private async void ExecuteNewFile(string inputDir)
+        {
+            var (model, file) = await Interactions.AddNewFile.Handle(Unit.Default);
+            if (file == null || string.IsNullOrEmpty(file))
+            {
+                return;
+            }
+
+            var filename = $"{Path.GetFileNameWithoutExtension(file)}.{model.Extension.ToLower()}";
+
+            var fullPath = string.IsNullOrEmpty(inputDir)
+            ? Path.Combine(GetDefaultDir(model.Type), filename)
+            : Path.Combine(inputDir, filename);
+
+            // move file to location
+            if (File.Exists(fullPath))
+            {
+                MessageBox.Show($"A file with name {filename} is already part of your mod. Please give a unique name to the item you are adding, or delete the existing item first.",
+                    "WolvenKit", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            switch (model.Type)
+            {
+                case EWolvenKitFile.Redscript:
+                case EWolvenKitFile.TweakDelta:
+                    File.Create(fullPath);
+                    break;
+                case EWolvenKitFile.Cr2w:
+                    CreateCr2wFile(model);
+                    break;
+                default:
+                    break;
+            }
+
+            // Open file
+            await RequestOpenFile(fullPath);
+
+
+            string GetDefaultDir(EWolvenKitFile type)
+            {
+                var project = _projectManager.ActiveProject as Cp77Project;
+                return type switch
+                {
+                    EWolvenKitFile.Redscript => project.ScriptDirectory,
+                    EWolvenKitFile.TweakDelta => project.TweakDirectory,
+                    EWolvenKitFile.Cr2w => project.ModDirectory,
+                    _ => throw new ArgumentOutOfRangeException(nameof(type)),
+                };
+            }
+
+        }
+
+        private void CreateCr2wFile(AddFileModel model)
+        {
+            //TODO
+        }
+
+        private async Task RequestOpenFile(string fullPath)
+        {
+            if (!File.Exists(fullPath))
+            {
+                _ = await Task.FromException<FileNotFoundException>(new FileNotFoundException(nameof(RequestOpenFile), fullPath));
+            }
+            // check if in 
+            await RequestFileOpen(fullPath);
+        }
 
         /// <summary>
         /// Opens a physical file in WolvenKit.
         /// </summary>
         public ICommand OpenFileCommand { get; private set; }
+        private async Task ExecuteOpenFile(FileModel model)
+        {
+            if (model == null)
+            {
+                var dlg = new OpenFileDialog();
+                if (dlg.ShowDialog().GetValueOrDefault())
+                {
+                    //model = new FileViewModel(new FileModel(new FileInfo(dlg.FileName)));
+                    //TODO
+                    ActiveDocument = await OpenAsync(model.FullName);
+                }
+            }
+            else
+            {
+                if (model.IsDirectory)
+                {
+                    model.IsExpanded = !model.IsExpanded;
+                }
+                else if (!model.IsDirectory)
+                {
+                    // TODO: make this a background task
+                    await RequestFileOpen(model.FullName);
+                }
+            }
+        }
+
 
         /// <summary>
         /// Packs the current mod project.
@@ -635,8 +730,6 @@ namespace WolvenKit.ViewModels.Shell
 
         private bool CanBackupMod() => _projectManager.ActiveProject != null;
 
-        private bool CanNewFile() => true;
-
         private bool CanOpenFile(FileModel model) => true;
 
         private bool CanPackMod() => _projectManager.ActiveProject != null;
@@ -703,37 +796,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private void ExecuteCodeEditor() => CodeEditorVM.IsVisible = !CodeEditorVM.IsVisible;
 
-
-        private void ExecuteNewFile()
-        {
-            //TODO
-        }
-
-        private async Task ExecuteOpenFile(FileModel model)
-        {
-            if (model == null)
-            {
-                var dlg = new OpenFileDialog();
-                if (dlg.ShowDialog().GetValueOrDefault())
-                {
-                    //model = new FileViewModel(new FileModel(new FileInfo(dlg.FileName)));
-                    //TODO
-                    ActiveDocument = await OpenAsync(model);
-                }
-            }
-            else
-            {
-                if (model.IsDirectory)
-                {
-                    model.IsExpanded = !model.IsExpanded;
-                }
-                else if (!model.IsDirectory)
-                {
-                    // TODO: make this a background task
-                    await RequestFileOpen(model);
-                }
-            }
-        }
+        
 
 
         private void ExecutePublishMod()
@@ -920,7 +983,7 @@ namespace WolvenKit.ViewModels.Shell
         /// <summary>
         /// Gets an enumeration of all currently available tool window viewmodels.
         /// </summary>
-        public ObservableCollection<IDockElement> Tools { get; set; }
+        public ObservableCollection<IDockElement> DockedViews { get; set; }
 
         #endregion properties
 
@@ -930,78 +993,78 @@ namespace WolvenKit.ViewModels.Shell
         /// Add a new document viewmodel into the collection of files.
         /// </summary>
         /// <param name="fileToAdd"></param>
-        public void AddFile(DocumentViewModel fileToAdd)
-        {
-            if (fileToAdd == null)
-            {
-                return;
-            }
+        //public void AddFile(DocumentViewModel fileToAdd)
+        //{
+        //    if (fileToAdd == null)
+        //    {
+        //        return;
+        //    }
 
-            // Don't add this twice
-            if (OpenDocuments.Any(f => f.ContentId == fileToAdd.ContentId))
-            {
-                return;
-            }
+        //    // Don't add this twice
+        //    if (OpenDocuments.Any(f => f.ContentId == fileToAdd.ContentId))
+        //    {
+        //        return;
+        //    }
 
-            Tools.Add(fileToAdd);
-        }
+        //    DockedViews.Add(fileToAdd);
+        //}
 
         /// <summary>
         /// Checks if a document can be closed and asks the user whether
         /// to save before closing if the document appears to be dirty.
         /// </summary>
         /// <param name="fileToClose"></param>
-        public void Close(DocumentViewModel fileToClose)
-        {
-            if (fileToClose.IsDirty)
-            {
-                var res = MessageBox.Show($"Save changes for file '{fileToClose.FileName}'?", "AvalonDock Test App", MessageBoxButton.YesNoCancel);
-                if (res == MessageBoxResult.Cancel)
-                {
-                    return;
-                }
+        //public void Close(DocumentViewModel fileToClose)
+        //{
+        //    if (fileToClose.IsDirty)
+        //    {
+        //        var res = MessageBox.Show($"Save changes for file '{fileToClose.FileName}'?", "AvalonDock Test App", MessageBoxButton.YesNoCancel);
+        //        if (res == MessageBoxResult.Cancel)
+        //        {
+        //            return;
+        //        }
 
-                if (res == MessageBoxResult.Yes)
-                {
-                    Save(fileToClose);
-                }
-            }
+        //        if (res == MessageBoxResult.Yes)
+        //        {
+        //            Save(fileToClose);
+        //        }
+        //    }
 
-            Tools.Remove(fileToClose);
-        }
+        //    DockedViews.Remove(fileToClose);
+        //}
 
         /// <summary>Closing all documents without user interaction to support reload of layout via menu.</summary>
-        public void CloseAllDocuments()
-        {
-            ActiveDocument = null;
-            foreach (var documentViewModel in OpenDocuments)
-            {
-                Tools.Remove(documentViewModel);
-            }
-        }
+        //public void CloseAllDocuments()
+        //{
+        //    ActiveDocument = null;
+        //    foreach (var documentViewModel in OpenDocuments)
+        //    {
+        //        DockedViews.Remove(documentViewModel);
+        //    }
+        //}
 
         /// <summary>
         /// Open a file and return its content in a viewmodel.
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<DocumentViewModel> OpenAsync(FileModel model)
+        public async Task<DocumentViewModel> OpenAsync(string fullPath)
         {
             // Check if we have already loaded this file and return it if so
-            var fileViewModel = OpenDocuments.FirstOrDefault(fm => fm.ContentId == model.FullName);
+            var fileViewModel = OpenDocuments.FirstOrDefault(fm => fm.ContentId == fullPath);
             if (fileViewModel != null)
             {
                 return fileViewModel;
             }
 
             // open file
-            fileViewModel = new DocumentViewModel(model);
-            var result = await fileViewModel.OpenFileAsync(model.FullName);
+            fileViewModel = new DocumentViewModel(fullPath);
+            var result = await fileViewModel.OpenFileAsync(fullPath);
 
             if (result)
             {
                 // TODO: this is not threadsafe
-                Tools.Add(fileViewModel);
+                DockedViews.Add(fileViewModel);
 
                 //Dispatcher.CurrentDispatcher.Invoke(new Action(() =>
                 //{
@@ -1035,10 +1098,8 @@ namespace WolvenKit.ViewModels.Shell
             ActiveDocument.SetIsDirty(false);
         }
 
-        private async Task RequestFileOpen(FileModel model)
+        private async Task RequestFileOpen(string fullpath)
         {
-            var fullpath = model.FullName;
-
             var ext = Path.GetExtension(fullpath).ToUpper();
 
             #region inspect on single click
@@ -1153,7 +1214,7 @@ namespace WolvenKit.ViewModels.Shell
                 // TODO SPLIT WEMS TO PLAYLIST FROM BNK
 
                 default:
-                    ActiveDocument = await OpenAsync(model);
+                    ActiveDocument = await OpenAsync(fullpath);
                     break;
             }
 

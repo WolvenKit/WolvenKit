@@ -49,16 +49,15 @@ namespace WolvenKit.ViewModels.Editor
         #region ctors
 
         public DocumentViewModel(
-            FileModel model)
+            string path)
             : this()
         {
-            var fileinfo = model;
-            _initialPath = fileinfo.FullName;
+            _initialPath = path;
 
-            Title = Path.GetFileName(fileinfo.FullName);
+            Title = Path.GetFileName(path);
             Header = Title;
 
-            ContentId = fileinfo.FullName;
+            ContentId = path;
         }
 
         private DocumentViewModel()

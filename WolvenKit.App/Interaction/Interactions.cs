@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
 using ReactiveUI;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.Interaction
 {
@@ -21,6 +22,8 @@ namespace WolvenKit.Interaction
 
         public static readonly Interaction<string, string> Rename = new();
         public static readonly Interaction<Unit, string> NewProjectInteraction = new();
+
+        public static readonly Interaction<Unit, (AddFileModel, string)> AddNewFile = new();
 
     }
 }

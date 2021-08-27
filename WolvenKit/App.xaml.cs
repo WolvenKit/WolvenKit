@@ -184,6 +184,9 @@ namespace WolvenKit
                     services.AddTransient<RenameDialogViewModel>();
                     services.AddTransient<IViewFor<RenameDialogViewModel>, RenameDialog>();
 
+                    services.AddTransient<NewFileViewModel>();
+                    services.AddTransient<IViewFor<NewFileViewModel>, NewFileView>();
+
                     #endregion
 
                     #region editor

@@ -48,11 +48,17 @@
     <Compile Remove="Models\CsvMaps.cs" />
     <Compile Remove="Models\ImageUtility.cs" />
     <Compile Remove="Models\ImportModel.cs" />
+    <Compile Remove="Models\IWolvenkitView.cs" />
     <Compile Remove="ViewModels\Editor\BulkEditViewModel.cs" />
+    <Compile Remove="ViewModels\Editor\Documents\IDocumentViewModel_old.cs" />
     <Compile Remove="ViewModels\Editor\ImportViewModel.cs" />
     <Compile Remove="ViewModels\Editor\ModKitViewModel.cs" />
     <Compile Remove="ViewModels\HomePage\Pages\RecentlyUsedItemsViewModel.cs" />
     <Compile Remove="ViewModels\Wizards\PublishWizardViewModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\WolvenKitFileDefinitions.xml" />
   </ItemGroup>
 
     <ItemGroup>
@@ -103,6 +109,10 @@
 
   <ItemGroup>
     <Folder Include="Models\Arguments\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\WolvenKitFileDefinitions.xml" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

@@ -22,8 +22,7 @@ namespace WolvenKit.Models
         public FileModel(string path, EditorProject project)
         {
             FullName = path;
-            var parentfullname = "";
-
+            string parentfullname;
             if (Directory.Exists(path))
             {
                 IsDirectory = true;

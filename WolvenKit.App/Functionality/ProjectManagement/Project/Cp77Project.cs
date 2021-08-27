@@ -46,6 +46,33 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
+        public string ScriptDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(FileDirectory, "Scripts");
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                return dir;
+            }
+        }
+
+        public string TweakDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(FileDirectory, "Tweaks");
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                return dir;
+            }
+        }
 
         #region methods
 
