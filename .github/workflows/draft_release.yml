@@ -44,11 +44,11 @@ jobs:
     - run: echo "VERSION=${{steps.get-version.outputs.assembly-version}}" >> $env:GITHUB_ENV
     - run: echo "VERSIONC=${{steps.get-version-cli.outputs.assembly-version}}" >> $env:GITHUB_ENV
     
-    # Publish app
-    - run: msbuild ${{env.PROJ}} -t:restore -t:Build -t:Publish /p:PublishDir="${{env.OUT}}";Configuration=Release /p:Platform=x64 /p:SelfContained=False /p:PublishReadyToRun=False /p:PublishTrimmed=False
+   # Publish app
+    - run: msbuild ${{env.PROJ}} -t:restore -t:Build -t:Publish /p:PublishDir=".${{env.OUT}}" /p:InformationalVersion="${{env.VERSION}}" /p:Configuration=Release /p:Platform=x64 /p:SelfContained=False /p:PublishReadyToRun=False /p:PublishTrimmed=False
     
     # Publish console
-    - run: msbuild ${{env.PROJC}} -t:restore -t:Build -t:Publish /p:PublishDir="${{env.OUTC}}" /p:Configuration=Release /p:Platform=x64 /p:SelfContained=False /p:PublishReadyToRun=False /p:PublishTrimmed=False
+    - run: msbuild ${{env.PROJC}} -t:restore -t:Build -t:Publish /p:PublishDir=".${{env.OUTC}}" /p:Configuration=Release /p:Platform=x64 /p:SelfContained=False /p:PublishReadyToRun=False /p:PublishTrimmed=False
 
     - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION}}.zip" >> $env:GITHUB_ENV
     - run: echo "CONSOLE=${{env.NAME}}.Console-${{env.VERSIONC}}.zip" >> $env:GITHUB_ENV
@@ -68,7 +68,7 @@ jobs:
     # RELEASE
     - name: Release
       run: |
-          gh release create ${{ env.VERSION }} -t "${{env.NAME}} v${{env.VERSION}}" -F ./CHANGELOG.md -d -R ${{ env.REPO }} ${{ env.FILES }}
+          gh release create ${{ env.VERSION }} -t "${{env.NAME}} v${{env.VERSION}}" -F ./CHANGELOG.md -d -p ${{ env.FILES }}
       env:
         FILES: ${{env.FINALOUT}}/${{env.PORTABLE}} ${{env.FINALOUT}}/${{env.CONSOLE}} ${{env.FINALOUT}}/${{env.INSTALLER}} ${{env.FINALOUT}}/${{env.MANIFEST}}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
