@@ -2,13 +2,14 @@ using System.Collections.Generic;
 using System.IO;
 using DynamicData;
 using WolvenKit.Common.Model;
+using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.Common
 {
     /// <summary>
     /// Top-level game bundle/archive manager
     /// </summary>
-    public interface IGameArchiveManager
+    public interface IArchiveManager
     {
         #region Properties
 
@@ -27,5 +28,10 @@ namespace WolvenKit.Common
         public void LoadArchive(string filename, bool ispatch = false);
         public void LoadModArchive(string filename);
         public void LoadModsArchives(string mods, string dlc);
+
+        RedFileSystemModel LookupDirectory(string fullpath, bool expandAll = false);
+        public IGameFile LookupFile(ulong hash);
+        Dictionary<string, IEnumerable<FileEntry>> GetGroupedFiles();
+        void LoadFromFolder(DirectoryInfo archivedir, bool rebuildtree = false);
     }
 }

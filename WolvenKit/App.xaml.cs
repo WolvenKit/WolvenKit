@@ -38,6 +38,7 @@ using WolvenKit.Views.Editor.VisualEditor;
 using WolvenKit.Views.HomePage;
 using WolvenKit.Views.HomePage.Pages;
 using WolvenKit.Views.Wizards;
+using WolvenKit.Common.Interfaces;
 
 namespace WolvenKit
 {
@@ -135,7 +136,7 @@ namespace WolvenKit
                     services.AddSingleton<IProjectManager, ProjectManager>();
                     services.AddSingleton<IWatcherService, WatcherService>();
 
-
+                    services.AddSingleton<IArchiveManager, ArchiveManager>();
                     services.AddSingleton<MockGameController>();
 
                     // red4 modding tools
@@ -143,8 +144,8 @@ namespace WolvenKit
                     services.AddSingleton<RIG>();
                     services.AddSingleton<MeshTools>();
 
-                    services.AddSingleton<ModTools>();
-                    services.AddSingleton<Cp77Controller>();
+                    services.AddSingleton<IModTools, ModTools>();
+                    services.AddSingleton< RED4Controller>();
 
                     // red3 modding tools
                     //services.AddSingleton<Red3ModTools>();
@@ -152,11 +153,7 @@ namespace WolvenKit
 
                     services.AddSingleton<IGameControllerFactory, GameControllerFactory>();
 
-
-                    // this passes IScreen resolution through to the previous viewmodel registration.
-                    // this is to prevent multiple instances by mistake.
-                    services.AddSingleton</*IAppViewModel,*/ AppViewModel>();
-                    //services.AddSingleton<IScreen, WorkSpaceViewModel>(x => x.GetRequiredService<WorkSpaceViewModel>());
+                    services.AddSingleton<AppViewModel>();
                     services.AddSingleton<IViewFor<AppViewModel>, MainView>();
 
                     // register views
@@ -248,8 +245,6 @@ namespace WolvenKit
                     //services.AddSingleton<IViewFor<RecentlyUsedItemsViewModel>, RecentlyUsedItemsView>();
 
                     #endregion
-
-                   
 
                     #region wizards
 

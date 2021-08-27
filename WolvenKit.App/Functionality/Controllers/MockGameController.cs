@@ -26,7 +26,7 @@ namespace WolvenKit.Functionality.Controllers
 
         public IObservable<IChangeSet<RedFileSystemModel>> ConnectHierarchy() => _rootCache.Connect();
 
-        public List<IGameArchiveManager> GetArchiveManagers(bool loadmods) => new List<IGameArchiveManager>();
+        public List<IArchiveManager> GetArchiveManagers(bool loadmods) => new List<IArchiveManager>();
 
         public void AddToMod(IGameFile file) => throw new NotImplementedException();
         public void AddToMod(ulong hash) => throw new NotImplementedException();

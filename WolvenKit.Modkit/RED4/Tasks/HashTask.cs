@@ -36,7 +36,7 @@ namespace CP77Tools.Tasks
 
                 List<ulong> missing = new();
 
-                var binfiles = bm.GroupedFiles[".bin"];
+                var binfiles = bm.GetGroupedFiles()[".bin"];
                 missing = binfiles.Select(_ => _.NameHash64).ToList();
 
                 var missinghashtxt = Path.Combine(inputDir.FullName, "missinghashes.txt");

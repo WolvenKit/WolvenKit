@@ -211,7 +211,8 @@ namespace WolvenKit.Common
         mesh,
         xbm,
         csv,
-
+        //app,
+        //ent,
         //json,
         mlmask,
 
@@ -220,7 +221,8 @@ namespace WolvenKit.Common
         texarray,
         morphtarget,
         fnt,
-        opusinfo
+        opusinfo,
+        anims
     }
 
     /// <summary>

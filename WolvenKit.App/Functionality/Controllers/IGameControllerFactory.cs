@@ -13,14 +13,14 @@ namespace WolvenKit.Functionality.Controllers
     {
         public IGameController GetController();
 
-        public Cp77Controller GetRed4Controller();
+        public RED4Controller GetRed4Controller();
     }
 
 
     public class GameControllerFactory : IGameControllerFactory
     {
         //private readonly Tw3Controller _tw3Controller;
-        private readonly Cp77Controller _cp77Controller;
+        private readonly RED4Controller _cp77Controller;
         private readonly MockGameController _mockGameController;
         private readonly IProjectManager _projectManager;
 
@@ -29,7 +29,7 @@ namespace WolvenKit.Functionality.Controllers
         public GameControllerFactory(
             IProjectManager projectManager,
             //Tw3Controller tw3Controller,
-            Cp77Controller cp77Controller,
+            RED4Controller cp77Controller,
             MockGameController mockGameController
             )
         {
@@ -39,7 +39,7 @@ namespace WolvenKit.Functionality.Controllers
             _mockGameController = mockGameController;
         }
 
-        public Cp77Controller GetRed4Controller() => _cp77Controller;
+        public RED4Controller GetRed4Controller() => _cp77Controller;
 
         public IGameController GetController() =>
             _projectManager.ActiveProject == null

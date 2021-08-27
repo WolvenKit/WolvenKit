@@ -15,7 +15,8 @@ using WolvenKit.Core.Services;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
-using ModTools = WolvenKit.Modkit.RED4.ModTools;
+using WolvenKit.Common.Interfaces;
+using WolvenKit.Modkit.RED4;
 
 namespace WolvenKit.MSTests
 {
@@ -25,13 +26,14 @@ namespace WolvenKit.MSTests
         #region Fields
 
         internal const string s_testResultsDirectory = "_CR2WTestResults";
-        internal static ArchiveManager s_bm;
         internal static Dictionary<string, IEnumerable<FileEntry>> s_groupedFiles;
+        internal static IArchiveManager s_bm;
         internal static bool s_writeToFile;
         private const string s_gameDirectorySetting = "GameDirectory";
         private const string s_writeToFileSetting = "WriteToFile";
         protected static IConfigurationRoot s_config;
         public static string s_gameDirectoryPath;
+
 
         #endregion Fields
 
@@ -103,16 +105,17 @@ namespace WolvenKit.MSTests
             ServiceLocator.Default.RegisterType<Red4ParserService>();
             ServiceLocator.Default.RegisterType<RIG>();              //Cp77FileService
             ServiceLocator.Default.RegisterType<MeshTools>();        //RIG, Cp77FileService
+            ServiceLocator.Default.RegisterType<IArchiveManager, ArchiveManager>();
+            ServiceLocator.Default.RegisterType<IModTools, ModTools>();         //Cp77FileService, ILoggerService, IProgress, IHashService, Mesh, Target
 
-            ServiceLocator.Default.RegisterType<ModTools>();         //Cp77FileService, ILoggerService, IProgress, IHashService, Mesh, Target
+
 
             var hashService = ServiceLocator.Default.ResolveType<IHashService>();
+            s_bm = ServiceLocator.Default.ResolveType<IArchiveManager>();
 
-
-            s_bm = new ArchiveManager(hashService);
             var archivedir = new DirectoryInfo(Path.Combine(gameDirectory.FullName, "archive", "pc", "content"));
             s_bm.LoadFromFolder(archivedir);
-            s_groupedFiles = s_bm.GroupedFiles;
+            s_groupedFiles = s_bm.GetGroupedFiles();
 
             var keyes = s_groupedFiles.Keys.ToList();
             var keystring = string.Join(',', keyes);

@@ -10,6 +10,7 @@ using ProtoBuf;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
@@ -23,7 +24,7 @@ using WolvenKit.RED4.CR2W.Types;
 
 namespace WolvenKit.Functionality.Controllers
 {
-    public class Cp77Controller : ReactiveObject, IGameController
+    public class RED4Controller : ReactiveObject, IGameController
     {
         #region fields
 
@@ -32,20 +33,20 @@ namespace WolvenKit.Functionality.Controllers
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
         private readonly ISettingsManager _settingsManager;
-        private readonly ModTools _modTools;
         private readonly IHashService _hashService;
-
-        private static ArchiveManager ArchiveManager { get; set; }
+        private readonly IModTools _modTools;
+        private readonly IArchiveManager _archiveManager;
 
         private readonly SourceList<RedFileSystemModel> _rootCache;
 
         #endregion
 
-        public Cp77Controller(ILoggerService loggerService,
+        public RED4Controller(ILoggerService loggerService,
             IProjectManager projectManager,
             ISettingsManager settingsManager,
             IHashService hashService,
-            ModTools modTools
+            IModTools modTools,
+            IArchiveManager gameArchiveManager
             )
         {
             _loggerService = loggerService;
@@ -53,6 +54,7 @@ namespace WolvenKit.Functionality.Controllers
             _settingsManager = settingsManager;
             _hashService = hashService;
             _modTools = modTools;
+            _archiveManager = gameArchiveManager;
 
             _rootCache = new SourceList<RedFileSystemModel>();
         }
@@ -75,7 +77,7 @@ namespace WolvenKit.Functionality.Controllers
                 throw new FileNotFoundException($"oo2ext_7_win64.dll not found.");
             }
 
-            var todo = new List<Func<IGameArchiveManager>>()
+            var todo = new List<Func<IArchiveManager>>()
             {
                 LoadArchiveManager,
             };
@@ -83,17 +85,11 @@ namespace WolvenKit.Functionality.Controllers
             return Task.CompletedTask;
         }
 
-        public List<IGameArchiveManager> GetArchiveManagers(bool loadmods) =>
-            new()
-            {
-                ArchiveManager
-            };
-
-        private ArchiveManager LoadArchiveManager()
+        private IArchiveManager LoadArchiveManager()
         {
-            if (ArchiveManager != null && IsManagerLoaded)
+            if (_archiveManager != null && IsManagerLoaded)
             {
-                return ArchiveManager;
+                return _archiveManager;
             }
 
             _loggerService.Info("Loading archive Manager ... ");
@@ -121,8 +117,7 @@ namespace WolvenKit.Functionality.Controllers
                     var sw = new Stopwatch();
                     sw.Start();
 
-                    ArchiveManager = new ArchiveManager(_hashService) /*{ GameVersion = GameVersion }*/;
-                    ArchiveManager.LoadAll(new FileInfo(_settingsManager.CP77ExecutablePath));
+                    _archiveManager.LoadAll(new FileInfo(_settingsManager.CP77ExecutablePath));
 
                     sw.Stop();
                     var ms = sw.ElapsedMilliseconds;
@@ -159,10 +154,10 @@ namespace WolvenKit.Functionality.Controllers
             {
                 innerCache.Clear();
                 //innerCache.AddOrUpdate(ArchiveManager.RootNode);
-                innerCache.Add(ArchiveManager.RootNode);
+                innerCache.Add(_archiveManager.RootNode);
             });
 
-            return ArchiveManager;
+            return _archiveManager;
         }
 
         public List<string> GetAvaliableClasses() => CR2WTypeManager.AvailableTypes.ToList();
@@ -312,7 +307,7 @@ namespace WolvenKit.Functionality.Controllers
 
         public void AddToMod(ulong hash)
         {
-            var file = ArchiveManager.LookupFile(hash);
+            var file = _archiveManager.LookupFile(hash);
             if (file != null)
             {
                 AddToMod(file);

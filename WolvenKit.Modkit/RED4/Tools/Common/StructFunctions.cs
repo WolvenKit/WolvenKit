@@ -7,10 +7,9 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
     {
         public static float hfconvert(UInt16 read)// for converting ushort representation of a Half float to a float32
         {
-            String bin = Convert.ToString(read, 2).PadLeft(16, '0');
-            UInt16 sp = Convert.ToUInt16(bin.Substring(6, 10), 2);
-            UInt16 pow = Convert.ToUInt16(bin.Substring(1, 5), 2);
-            UInt16 sign = Convert.ToUInt16(bin.Substring(0, 1));
+            UInt16 sp = Convert.ToUInt16(read & 0x3ff);
+            UInt16 pow = Convert.ToUInt16((read >> 10) & 0x1f);
+            UInt16 sign = Convert.ToUInt16(read >> 15);
 
             float value = 0f;
             if (pow == 0)

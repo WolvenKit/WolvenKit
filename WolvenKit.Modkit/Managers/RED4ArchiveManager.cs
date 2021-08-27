@@ -11,7 +11,7 @@ namespace WolvenKit.Common
     /// e.g. archive
     /// </summary>
     [ProtoContract]
-    public abstract class CyberArchiveManager : WolvenKitArchiveManager
+    public abstract class RED4ArchiveManager : WolvenKitArchiveManager
     {
         
     }

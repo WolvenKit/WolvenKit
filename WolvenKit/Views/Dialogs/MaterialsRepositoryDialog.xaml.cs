@@ -9,6 +9,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
@@ -17,7 +18,6 @@ using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Views.Shell;
-using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
 namespace WolvenKit.Views.Dialogs
 {
@@ -29,7 +29,7 @@ namespace WolvenKit.Views.Dialogs
         private readonly ISettingsManager _settingsManager;
         private readonly IGameControllerFactory _gameControllerFactory;
         private readonly IProgressService<double> _progress;
-        private readonly ModTools _modTools;
+        private readonly IModTools _modTools;
         private readonly ILoggerService _loggerService;
 
         private readonly string _archivesFolderPath;
@@ -40,7 +40,7 @@ namespace WolvenKit.Views.Dialogs
 
             _settingsManager = Locator.Current.GetService<ISettingsManager>();
             _gameControllerFactory = Locator.Current.GetService<IGameControllerFactory>();
-            _modTools = Locator.Current.GetService<ModTools>();
+            _modTools = Locator.Current.GetService<IModTools>();
             _progress = Locator.Current.GetService<IProgressService<double>>();
             _loggerService = Locator.Current.GetService<ILoggerService>();
 
@@ -60,8 +60,7 @@ namespace WolvenKit.Views.Dialogs
 
         private void GenerateMaterialRepo(DirectoryInfo materialRepoDir, EUncookExtension texturesExtension)
         {
-            var cp77Controller = _gameControllerFactory.GetRed4Controller();
-            var bm = cp77Controller.GetArchiveManagers(false).OfType<ArchiveManager>().FirstOrDefault();
+            var bm = Locator.Current.GetService<IArchiveManager>();
             if (bm == null)
             {
                 return;
@@ -87,7 +86,7 @@ namespace WolvenKit.Views.Dialogs
                 ".xbm",
                 ".mlmask"
             };
-            var groupedFiles = bm.GroupedFiles;
+            var groupedFiles = bm.GetGroupedFiles();
 
             // unbundle
             foreach (var (key, fileEntries) in groupedFiles)

@@ -265,6 +265,9 @@ namespace WolvenKit.Modkit.RED4
             //args.FileName = outFileInfo.FullName;
             switch (extAsEnum)
             {
+                //case ECookedFileFormat.ent:
+                //case ECookedFileFormat.app:
+                //    return HandleEntity(cr2wStream, outfile, settings.Get<EntityExportArgs>());
                 case ECookedFileFormat.opusinfo:
                     return HandleOpus(settings.Get<OpusExportArgs>());
 
@@ -285,7 +288,17 @@ namespace WolvenKit.Modkit.RED4
 
                 case ECookedFileFormat.morphtarget:
                     return ExportMorphTargets(cr2wStream, outfile, settings.Get<MorphTargetExportArgs>().Archives, settings.Get<MorphTargetExportArgs>().ModFolderPath, settings.Get<MorphTargetExportArgs>().IsBinary);
+                case ECookedFileFormat.anims:
+                    try
+                    {
+                        return ExportAnim(cr2wStream, settings.Get<AnimationExportArgs>().Archives, outfile, settings.Get<AnimationExportArgs>().IsBinary);
+                    }
+                    catch (Exception e)
+                    {
+                        _loggerService.Error(e.Message);
 
+                        return false;
+                    }
                 case ECookedFileFormat.xbm:
                 {
                     if (settings.Get<XbmExportArgs>() is not { } xbmargs)
@@ -390,7 +403,27 @@ namespace WolvenKit.Modkit.RED4
                     throw new ArgumentOutOfRangeException($"Uncooking failed for extension: {extAsEnum}.");
             }
         }
+        private bool HandleEntity(Stream cr2wStream, FileInfo cr2wFileName, EntityExportArgs entExportArgs)
+        {
+            try
+            {
+                switch (entExportArgs.ExportType)
+                {
+                    case EntityExportType.Json:
+                        return DumpEntityPackageAsJson(cr2wStream, cr2wFileName);
+                    case EntityExportType.Gltf:
+                        throw new NotImplementedException("Uncooking Entity/Appearance Resources To Gltf Not Implemented");
+                    default:
+                        break;
+                }
 
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error($"{ex.Message}");
+            }
+            return false;
+        }
         private bool HandleOpus(OpusExportArgs opusExportArgs)
         {
             OpusTools opusTools = new(
