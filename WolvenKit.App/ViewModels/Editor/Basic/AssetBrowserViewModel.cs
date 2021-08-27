@@ -196,24 +196,12 @@ namespace WolvenKit.ViewModels.Editor
         {
             if (RightSelectedItems.First() is RedFileViewModel fileVm)
             {
-                //var parentHash = fileVm.ParentKey;
-                //if (parentHash == 0)
-                //{
-
-                //}
-                //else
-                //{
-                //    //if (_manager.ContainsDirectory(parentHash))
-                //    //{
-                //    //    MoveToFolder(_manager.GetDirectoryByKey(parentHash));
-                //    //}
-
-                //    //if (LeftItems.Any(_ => _.Key == parentHash))
-                //    //{
-                //    //    var parent = LeftItems.First(_ => _.Key == parentHash);
-                //    //    MoveToFolder(parent);
-                //    //}
-                //}
+                var parentPath = fileVm.GetParentPath();
+                var dir = _manager.LookupDirectory(parentPath, true);
+                if (dir != null)
+                {
+                    MoveToFolder(dir);
+                }
             }
         }
 
@@ -278,9 +266,13 @@ namespace WolvenKit.ViewModels.Editor
             _notificationService.Success($"Asset Browser is initialized");
         }
 
+        private void MoveToFolder(RedFileSystemModel dir)
+        {
+            LeftSelectedItem = dir;
+        }
+
         private void MoveToFolder(RedDirectoryViewModel dir)
         {
-            //Expand.Execute().Subscribe();
             LeftSelectedItem = dir.GetModel();
         }
 

@@ -4,10 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ReactiveUI;
 
 namespace WolvenKit.Common.Model
 {
-    public class RedFileSystemModel
+    public class RedFileSystemModel : ReactiveObject
     {
         public RedFileSystemModel(string fullname)
         {
@@ -22,7 +23,16 @@ namespace WolvenKit.Common.Model
 
         public List<ulong> Files { get; } = new();
 
-        public string Extension => nameof(ECustomImageKeys.ClosedDirImageKey);
+        public string Extension => IsExpanded
+            ? nameof(ECustomImageKeys.OpenDirImageKey)
+            : nameof(ECustomImageKeys.ClosedDirImageKey);
+
+        private bool _isExpanded;
+        public bool IsExpanded
+        {
+            get => _isExpanded;
+            set => this.RaiseAndSetIfChanged(ref _isExpanded, value);
+        }
 
     }
 }

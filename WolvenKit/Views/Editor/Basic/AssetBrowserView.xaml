@@ -162,7 +162,7 @@
                                 ColumnSizer="FillColumn"
                                 FilterLevel="Extended"
                                 SelectionChanged="LeftNavigation_OnSelectionChanged"
-                                
+                                ExpandStateMappingName="IsExpanded"
                             >
 
                             <syncfusion:SfTreeGrid.Resources>

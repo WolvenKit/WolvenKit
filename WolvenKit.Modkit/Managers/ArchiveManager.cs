@@ -6,6 +6,7 @@ using System.Linq;
 using ProtoBuf;
 using Splat;
 using WolvenKit.Common;
+using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using Path = System.IO.Path;
 
@@ -216,8 +217,18 @@ namespace WolvenKit.RED4.CR2W.Archive
             RebuildRootNode();*/
         }
 
+        /// <summary>
+        /// Checks if a file with the given hash exists in the archivemanager
+        /// </summary>
+        /// <param name="hash"></param>
+        /// <returns></returns>
         public bool ContainsFile(ulong hash) => Items.Lookup(hash).HasValue;
 
+        /// <summary>
+        /// Retrieves a file with the given hash
+        /// </summary>
+        /// <param name="hash"></param>
+        /// <returns></returns>
         public IGameFile LookupFile(ulong hash)
         {
             var query = Items.Lookup(hash);
@@ -229,6 +240,52 @@ namespace WolvenKit.RED4.CR2W.Archive
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Retrieves a directory with the given fullpath
+        /// </summary>
+        /// <param name="fullpath"></param>
+        /// <returns></returns>
+        public RedFileSystemModel LookupDirectory(string fullpath, bool expandAll = false)
+        {
+            var splits = fullpath.Split(Path.DirectorySeparatorChar);
+
+            var currentDir = RootNode;
+            if (expandAll)
+            {
+                currentDir.IsExpanded = true;
+            }
+
+            for (var i = 0; i < splits.Length; i++)
+            {
+                var s = splits[i];
+               
+                if (currentDir.Directories.Any(d => d.Name == s))
+                {
+                    currentDir = currentDir.Directories.First(d => d.Name == s);
+                    if (expandAll)
+                    {
+                        currentDir.IsExpanded = true;
+                    }
+                    if (i == splits.Length - 1)
+                    {
+                        return currentDir;
+                    }
+                }
+                else
+                {
+                    if (i == splits.Length - 1)
+                    {
+                        return currentDir;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+            return null;
         }
 
         #endregion methods

@@ -46,7 +46,7 @@ namespace WolvenKit.ViewModels
 
         [Browsable(false)] public override string DisplayExtension => "";
 
-        public override string FullName => "";
+        public override string FullName => _model.FullName;
 
         #endregion Properties
 

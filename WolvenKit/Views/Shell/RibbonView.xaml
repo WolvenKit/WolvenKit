@@ -172,38 +172,11 @@
                     Margin="14"
                     IsGroupVisible="False"
                     Label="ASSET BROWSER">
-                    
+
                     <syncfusion:RibbonTab
                         MinWidth="100"
                         Caption="ACTIONS"
                         IsChecked="True">
-                        
-                        <!--  File bar  -->
-                        <syncfusion:RibbonBar
-                            x:Name="ABFileActions"
-                            Width="auto"
-                            Header="File">
-                            
-                            <!--  Add selected Items(s) to Project Button  -->
-                            <syncfusion:RibbonButton
-                                x:Name="AddSelectedItemsButton"
-                                IconStretch="Fill"
-                                IconType="Icon"
-                                Label="Add selected Item(s) to Project"
-                                SizeForm="Large">
-
-                                <syncfusion:RibbonButton.IconTemplate>
-                                    <DataTemplate>
-                                        <iconPacks:PackIconCodicons
-                                            Width="auto"
-                                            Height="auto"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Stretch"
-                                            Kind="File" />
-                                    </DataTemplate>
-                                </syncfusion:RibbonButton.IconTemplate>
-                            </syncfusion:RibbonButton>
-                        </syncfusion:RibbonBar>
 
                         <!--  View bar  -->
                         <syncfusion:RibbonBar
@@ -367,7 +340,35 @@
                             </syncfusion:RibbonButton>
 
                         </syncfusion:RibbonBar>
-                        
+
+                        <!--  File bar  -->
+                        <syncfusion:RibbonBar
+                            x:Name="ABFileActions"
+                            Width="auto"
+                            Header="File">
+
+                            <!--  Add selected Items(s) to Project Button  -->
+                            <syncfusion:RibbonButton
+                                x:Name="AddSelectedItemsButton"
+                                IconStretch="Fill"
+                                IconType="Icon"
+                                Label="Add selected Item(s) to Project"
+                                SizeForm="Large">
+
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconVaadinIcons
+                                            Width="auto"
+                                            Height="auto"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Stretch"
+                                            Kind="FileAdd"
+                                            Foreground="ForestGreen"/>
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
+                        </syncfusion:RibbonBar>
+
                     </syncfusion:RibbonTab>
                 </syncfusion:ContextTabGroup>
                 
