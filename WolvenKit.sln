@@ -41,6 +41,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit", "WolvenKit\Wolv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenManager.Installer", "WolvenManager.Installer\WolvenManager.Installer.csproj", "{216CC4EE-DF5E-4B12-9255-A2108ADA30D8}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.RED4.CR2W", "WolvenKit.RED4.CR2W\WolvenKit.RED4.CR2W.csproj", "{706A61F4-3AD8-4DCF-97F1-FDF653B6E2E4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -136,6 +138,20 @@ Global
 		{216CC4EE-DF5E-4B12-9255-A2108ADA30D8}.Static lib - Release - Fast FPU|x64.Build.0 = Release|Any CPU
 		{216CC4EE-DF5E-4B12-9255-A2108ADA30D8}.Static lib - Release|x64.ActiveCfg = Release|Any CPU
 		{216CC4EE-DF5E-4B12-9255-A2108ADA30D8}.Static lib - Release|x64.Build.0 = Release|Any CPU
+		{706A61F4-3AD8-4DCF-97F1-FDF653B6E2E4}.Debug|x64.ActiveCfg = Debug|x64
+		{706A61F4-3AD8-4DCF-97F1-FDF653B6E2E4}.Debug|x64.Build.0 = Debug|x64
+		{706A61F4-3AD8-4DCF-97F1-FDF653B6E2E4}.Release - Fast FPU|x64.ActiveCfg = Release|x64
+		{706A61F4-3AD8-4DCF-97F1-FDF653B6E2E4}.Release - Fast FPU|x64.Build.0 = Release|x64
+		{706A61F4-3AD8-4DCF-97F1-FDF653B6E2E4}.Release|x64.ActiveCfg = Release|x64
+		{706A61F4-3AD8-4DCF-97F1-FDF653B6E2E4}.Release|x64.Build.0 = Release|x64
+		{706A61F4-3AD8-4DCF-97F1-FDF653B6E2E4}.SDL-Debug|x64.ActiveCfg = Debug|x64
+		{706A61F4-3AD8-4DCF-97F1-FDF653B6E2E4}.SDL-Debug|x64.Build.0 = Debug|x64
+		{706A61F4-3AD8-4DCF-97F1-FDF653B6E2E4}.Static lib - Debug|x64.ActiveCfg = Debug|x64
+		{706A61F4-3AD8-4DCF-97F1-FDF653B6E2E4}.Static lib - Debug|x64.Build.0 = Debug|x64
+		{706A61F4-3AD8-4DCF-97F1-FDF653B6E2E4}.Static lib - Release - Fast FPU|x64.ActiveCfg = Release|x64
+		{706A61F4-3AD8-4DCF-97F1-FDF653B6E2E4}.Static lib - Release - Fast FPU|x64.Build.0 = Release|x64
+		{706A61F4-3AD8-4DCF-97F1-FDF653B6E2E4}.Static lib - Release|x64.ActiveCfg = Release|x64
+		{706A61F4-3AD8-4DCF-97F1-FDF653B6E2E4}.Static lib - Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -149,6 +165,7 @@ Global
 		{1D1CE939-BA87-4C88-9E49-A36C5B4B9EEB} = {7DED2833-D255-4CAA-A82F-8DC2D32E9F4F}
 		{283EA282-F15F-4978-8FF4-43EFE7A9EF69} = {13670C98-1505-4617-89CF-65B5F7217369}
 		{216CC4EE-DF5E-4B12-9255-A2108ADA30D8} = {C22F3C33-7D76-48BC-97DA-95F0BA300775}
+		{706A61F4-3AD8-4DCF-97F1-FDF653B6E2E4} = {7DED2833-D255-4CAA-A82F-8DC2D32E9F4F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7E26A334-EB40-465D-85F1-2AEE9D65F46A}

@@ -252,7 +252,12 @@ namespace WolvenKit.Modkit.RED4
                 for (int e = 0; e < diffsCount; e++)
                 {
                     Vec4 v = Converters.TenBitUnsigned(diffsbr.ReadUInt32());
-                    vertexDelta[e] = new Vec3((v.X * TargetPositionDiffScale.X + TargetPositionDiffOffset.X), (v.Z * TargetPositionDiffScale.Z + TargetPositionDiffOffset.Z), -(v.Y * TargetPositionDiffScale.Y + TargetPositionDiffOffset.Y));
+
+                    var x = (decimal)v.X * (decimal)TargetPositionDiffScale.X + (decimal)TargetPositionDiffOffset.X;
+                    var y = (decimal)v.Y * (decimal)TargetPositionDiffScale.Y + (decimal)TargetPositionDiffOffset.Y;
+                    var z = (decimal)v.Z * (decimal)TargetPositionDiffScale.Z + (decimal)TargetPositionDiffOffset.Z;
+
+                    vertexDelta[e] = new Vec3((float)x, (float)z, (float)-y);
                     Vec4 n = Converters.TenBitShifted(diffsbr.ReadUInt32());
                     normalDelta[e] = new Vec3(n.X, n.Z, -n.Y);
                     Vec4 t = Converters.TenBitShifted(diffsbr.ReadUInt32());

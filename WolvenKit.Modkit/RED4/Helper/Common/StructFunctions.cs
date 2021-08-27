@@ -134,6 +134,20 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
             UInt32 U32 = a | b | c | d;
             return U32;
         }
+
+        public static UInt32 Vec3ToU32(Vector3 v, ushort w = 1)
+        {
+            var x = (ushort)(v.X * 1023);
+            var y = (ushort)(v.Y * 1023);
+            var z = (ushort)(v.Z * 1023);
+
+            var output = (w << 30)
+                | (z << 20)
+                | (y << 10)
+                | x;
+
+            return (uint)output;
+        }
     }
     public class Manipulators
     {
