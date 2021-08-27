@@ -211,8 +211,8 @@ namespace WolvenKit.Common
         mesh,
         xbm,
         csv,
-        app,
-        ent,
+        //app,
+        //ent,
         //json,
         mlmask,
 
