@@ -47,6 +47,16 @@
                             <documents:DocumentView />
                         </Grid>
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type docvm:TweakDocumentViewModel}">
+                        <Grid>
+                            <documents:TweakDocumentView />
+                        </Grid>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type docvm:ScriptDocumentViewModel}">
+                        <Grid>
+                            <documents:TweakDocumentView />
+                        </Grid>
+                    </DataTemplate>
 
                     <!--<DataTemplate DataType="{x:Type viewmodels:CodeEditorViewModel}">
                         <Grid>

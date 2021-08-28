@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -110,6 +111,15 @@ namespace WolvenKit.Views.Shell
                         interaction.SetOutput(result);
                     }, RxApp.MainThreadScheduler);
                 });
+
+                this.Bind(ViewModel,
+                    vm => vm.ActiveDocument,
+                    v => v.dockingAdapter.ActiveDocument)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                    vm => vm.DockedViews,
+                    v => v.dockingAdapter.ItemsSource)
+                    .DisposeWith(disposables);
             });
         }
 

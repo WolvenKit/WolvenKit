@@ -123,67 +123,26 @@ namespace WolvenKit.ViewModels.Documents
 
             try
             {
-                // This is the same default buffer size as
-                // <see cref="StreamReader"/> and <see cref="FileStream"/>.
-                // int DefaultBufferSize = 4096;
-
-                // Indicates that
-                // 1. The file is to be used for asynchronous reading.
-                // 2. The file is to be accessed sequentially from beginning to end.
-                // FileOptions DefaultOptions = FileOptions.Asynchronous | FileOptions.SequentialScan;
-
-                _loggerService.Info("Opening file: " + path + "...");
-
-                //TODO
                 await using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
                     using var reader = new BinaryReader(stream);
 
-                    if (Path.GetExtension(path) == ".srt")
+                    var cr2w = _wolvenkitFileService.TryReadCr2WFile(reader);
+                    if (cr2w == null)
                     {
-                        //File = new Srtfile()
-                        //{
-                        //    FileName = path
-                        //};
-                        //errorcode = await File.Read(reader);
-
+                        _loggerService.Error($"Failed to read cr2w file {path}");
+                        return false;
                     }
-                    else
-                    {
-                        // check game
-                        switch (_projectManager.ActiveProject)
-                        {
-                            case Cp77Project cp77proj:
-                                var cr2w = _wolvenkitFileService.TryReadCr2WFile(reader);
-                                if (cr2w == null)
-                                {
-                                    _loggerService.Error($"Failed to read cr2w file {path}");
-                                    return false;
-                                }
-                                cr2w.FileName = path;
+                    cr2w.FileName = path;
 
-                                File = cr2w;
+                    File = cr2w;
 
-                                // events
-
-
-                                break;
-
-                            //case Tw3Project tw3proj:
-                            //    throw new NotImplementedException();
-
-                            default:
-                                _isInitialized = false;
-                                return false;
-                        }
-                    }
+                    ContentId = path;
+                    FilePath = path;
+                    IsDirty = false;
+                    Title = FileName;
+                    _isInitialized = true;
                 }
-
-                ContentId = path;
-                FilePath = path;
-                IsDirty = false;
-                Title = FileName;
-                _isInitialized = true;
 
                 return true;
             }

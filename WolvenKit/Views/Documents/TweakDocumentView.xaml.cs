@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,11 +21,21 @@ namespace WolvenKit.Views.Documents
     /// <summary>
     /// Interaction logic for TextEditorView.xaml
     /// </summary>
-    public partial class TextEditorView : ReactiveUserControl<TweakDocumentViewModel>
+    public partial class TweakDocumentView : ReactiveUserControl<TweakDocumentViewModel>
     {
-        public TextEditorView()
+        public TweakDocumentView()
         {
             InitializeComponent();
+
+            this.WhenActivated(disposables =>
+            {
+                this.Bind(ViewModel,
+                        viewModel => viewModel.FilePath,
+                        view => view.textEditor.DocumentSource)
+                    .DisposeWith(disposables);
+
+
+            });
         }
     }
 }

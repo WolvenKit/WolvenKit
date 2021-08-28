@@ -1,6 +1,6 @@
 <reactiveUi:ReactiveUserControl
     x:TypeArguments="documents:TweakDocumentViewModel"
-    x:Class="WolvenKit.Views.Documents.TextEditorView"
+    x:Class="WolvenKit.Views.Documents.TweakDocumentView"
     xmlns:documents="clr-namespace:WolvenKit.ViewModels.Documents;assembly=WolvenKit.App"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"

@@ -60,9 +60,10 @@
         <shell:RibbonView Grid.Row="0" />
 
         <shell:DockingAdapter
+            x:Name="dockingAdapter"
             Grid.Row="1"
-            ActiveDocument="{Binding ActiveDocument, Mode=TwoWay}"
-            ItemsSource="{Binding Tools}" />
+            
+             />
 
         <shell:StatusBarView Grid.Row="2" />
 

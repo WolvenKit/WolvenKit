@@ -40,6 +40,7 @@ namespace WolvenKit.Views.Shell
             PART_DockingManager.Loaded += PART_DockingManager_Loaded;
             PART_DockingManager.CloseButtonClick += PART_DockingManagerOnCloseButtonClick;
             PART_DockingManager.DockStateChanging += PART_DockingManagerOnDockStateChanging;
+            
 
             viewModel = DataContext as AppViewModel;
         }
@@ -59,9 +60,12 @@ namespace WolvenKit.Views.Shell
         /// <param name="e"></param>
         private void PART_DockingManagerOnCloseButtonClick(object sender, CloseButtonEventArgs e)
         {
-            if (e.TargetItem is ContentControl { Content: DocumentViewModel vm })
+            if (e.TargetItem is ContentControl { Content: IDocumentViewModel vm })
             {
                 vm.Close.Execute().Subscribe();
+
+                (ItemsSource as IList).Remove(vm);
+                
             }
         }
 
@@ -132,25 +136,25 @@ namespace WolvenKit.Views.Shell
             }
         }
 
-        public IDockElement ActiveDocument
+        public IDocumentViewModel ActiveDocument
         {
-            get => (IDockElement)GetValue(ActiveDocumentProperty);
+            get => (IDocumentViewModel)GetValue(ActiveDocumentProperty);
             set => SetValue(ActiveDocumentProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for ActiveDocument.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ActiveDocumentProperty =
-            DependencyProperty.Register(nameof(ActiveDocument), typeof(IDockElement), typeof(DockingAdapter), new PropertyMetadata(null, new PropertyChangedCallback(OnActiveDocumentChanged)));
+            DependencyProperty.Register(nameof(ActiveDocument), typeof(IDocumentViewModel), typeof(DockingAdapter), new PropertyMetadata(null, new PropertyChangedCallback(OnActiveDocumentChanged)));
 
-        public IList ItemsSource
+        public object ItemsSource
         {
-            get => (IList)GetValue(ItemsSourceProperty);
+            get => (object)GetValue(ItemsSourceProperty);
             set => SetValue(ItemsSourceProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for ItemsSource.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ItemsSourceProperty =
-            DependencyProperty.Register(nameof(ItemsSource), typeof(IList), typeof(DockingAdapter), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(ItemsSource), typeof(object), typeof(DockingAdapter), new PropertyMetadata(null));
 
         private static void OnActiveDocumentChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
@@ -252,6 +256,13 @@ namespace WolvenKit.Views.Shell
                                    where element.Content == item
                                    select element).FirstOrDefault();
                     PART_DockingManager.Children.Remove(control);
+                    if (control.Content is IDocumentViewModel document)
+                    {
+                        if (ActiveDocument == document)
+                        {
+                            SetCurrentValue(ActiveDocumentProperty, null);
+                        }
+                    }
                 }
             }
 
@@ -333,7 +344,6 @@ namespace WolvenKit.Views.Shell
                     case "Project Explorer":
                         propertiesViewModel.SetToNullAndResetVisibility();
                         propertiesViewModel.PE_FileInfoVisible = true;
-
                         break;
 
                     case "Asset Browser":
@@ -344,54 +354,13 @@ namespace WolvenKit.Views.Shell
                     case "CR2W Editor":
                         // This never happens as CR2W editor is always named after its active document.
                         break;
-
                     case "Properties":
                         break;
-
                     case "Log":
                         break;
-
-                    case "Visual Editor":
-                        break;
-
                     case "Import Export Tool":
                         break;
 
-                    case "Audio Tool":
-                        break;
-
-                    case "Bulk Editor":
-                        break;
-
-                    case "Mimics":
-                        break;
-
-                    case "CR2W To Text Tool":
-                        break;
-
-                    case "WCC Tool":
-                        break;
-
-                    case "Plugin Manager":
-                        break;
-
-                    case "Menu Creator Tool":
-                        break;
-
-                    case "Importer Tool":
-                        break;
-
-                    case "Code Editor":
-                        break;
-
-                    case "Csv Editor":
-                        break;
-
-                    case "Hex Editor":
-                        break;
-
-                    case "Journal Editor":
-                        break;
 
                     default:
                         //StaticReferences.RibbonViewInstance.cr2wcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, true);
@@ -400,9 +369,17 @@ namespace WolvenKit.Views.Shell
                 }
 
                 //if (((IDockElement)content.Content).State == DockState.Document)
+                try
                 {
-                    SetCurrentValue(ActiveDocumentProperty, (IDockElement)content.Content);
+                    if (content.Content is IDocumentViewModel document)
+                    {
+                        SetCurrentValue(ActiveDocumentProperty, document);
+                    }
                 }
+                catch (Exception)
+                {
+                }
+                
             }
         }
     }

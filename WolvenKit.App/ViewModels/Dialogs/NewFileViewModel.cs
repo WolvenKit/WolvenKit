@@ -24,13 +24,23 @@ namespace WolvenKit.ViewModels.Dialogs
 
             Title = "Add new file";
 
-            var serializer = new XmlSerializer(typeof(WolvenKitFileDefinitions));
-            using (var stream = Assembly.GetExecutingAssembly()
-                .GetManifestResourceStream(@"WolvenKit.App.Resources.WolvenKitFileDefinitions.xml"))
+            try
             {
-                var newdef = (WolvenKitFileDefinitions)serializer.Deserialize(stream);
-                Categories = new ObservableCollection<FileCategoryModel>(newdef.Categories);
+                var serializer = new XmlSerializer(typeof(WolvenKitFileDefinitions));
+                using (var stream = Assembly.GetExecutingAssembly()
+                    .GetManifestResourceStream(@"WolvenKit.App.Resources.WolvenKitFileDefinitions.xml"))
+                {
+                    var newdef = (WolvenKitFileDefinitions)serializer.Deserialize(stream);
+                    Categories = new ObservableCollection<FileCategoryModel>(newdef.Categories);
+                }
+
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+           
 
             this.WhenAnyValue(x => x.SelectedFile)
                 .Subscribe(x =>

@@ -37,10 +37,11 @@ using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 using WolvenKit.Common.Model;
 using WolvenKit.ViewModels.Tools;
 using WolvenKit.ViewModels.Documents;
+using System.Collections.Generic;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public class AppViewModel : ReactiveObject, IAppViewModel
+    public class AppViewModel : ReactiveObject/*, IAppViewModel*/
     {
         #region fields
 
@@ -132,12 +133,21 @@ namespace WolvenKit.ViewModels.Shell
 
             };
 
-            OpenDocuments
-                .ToObservableChangeSet()
-                .AutoRefreshOnObservable(document => document.Close)
-                .Select(_ => WhenAnyDocumentClosed())
-                .Switch()
-                .Subscribe(x => OpenDocuments.Remove(x));
+            //OpenDocuments
+            //    .ToObservableChangeSet()
+            //    .AutoRefreshOnObservable(document => document.Close)
+            //    .Select(_ => WhenAnyDocumentClosed())
+            //    .Switch()
+            //    .Subscribe(x => DockedViews.Remove(x));
+
+            //DockedViews
+            //    //.OfType<IDocumentViewModel>()
+            //    .ToObservableChangeSet()
+            //    .AutoRefreshOnObservable(document => document.Close)
+            //    .Select(_ => WhenAnyDocumentClosed())
+            //    .Switch()
+            //    .Subscribe(x => DockedViews.Remove(x));
+
 
             _settingsManager
                 .WhenAnyValue(x => x.UpdateChannel)
@@ -148,11 +158,10 @@ namespace WolvenKit.ViewModels.Shell
                 });
         }
 
-
-        IObservable<DocumentViewModel> WhenAnyDocumentClosed() =>
-            OpenDocuments
-                .Select(x => x.Close.Select(_ => x))
-                .Merge();
+        //private IObservable<IDocumentViewModel> WhenAnyDocumentClosed() =>
+        //    OpenDocuments
+        //        .Select(x => x.Close.Select(_ => x))
+        //        .Merge();
 
         #endregion constructors
 
@@ -708,11 +717,11 @@ namespace WolvenKit.ViewModels.Shell
 
         #endregion ToolViewModels
 
-        [Reactive] public DocumentViewModel ActiveDocument { get; set; }
+        [Reactive] public IDocumentViewModel ActiveDocument { get; set; }
 
-        [Reactive] public ObservableCollection<DocumentViewModel> OpenDocuments { get; protected set; } = new();
+        private List<IDocumentViewModel> OpenDocuments => DockedViews.OfType<IDocumentViewModel>().ToList();
 
-        public ObservableCollection<IDockElement> DockedViews { get; set; }
+        [Reactive] public ObservableCollection<IDockElement> DockedViews { get; set; }
 
         #endregion properties
 
@@ -792,7 +801,7 @@ namespace WolvenKit.ViewModels.Shell
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<DocumentViewModel> OpenAsync(string fullPath, EWolvenKitFile type)
+        public async Task<IDocumentViewModel> OpenAsync(string fullPath, EWolvenKitFile type)
         {
             // Check if we have already loaded this file and return it if so
             var fileViewModel = OpenDocuments.FirstOrDefault(fm => fm.ContentId == fullPath);
@@ -841,17 +850,17 @@ namespace WolvenKit.ViewModels.Shell
         /// </summary>
         /// <param name="fileToSave"></param>
         /// <param name="saveAsFlag"></param>
-        public void Save(DocumentViewModel fileToSave, bool saveAsFlag = false)
+        public void Save(IDocumentViewModel fileToSave, bool saveAsFlag = false)
         {
             // remove this?
-            if (fileToSave.FilePath == null || saveAsFlag)
-            {
-                var dlg = new SaveFileDialog();
-                if (dlg.ShowDialog().GetValueOrDefault())
-                {
-                    fileToSave.FilePath = dlg.SafeFileName;
-                }
-            }
+            //if (fileToSave.FilePath == null || saveAsFlag)
+            //{
+            //    var dlg = new SaveFileDialog();
+            //    if (dlg.ShowDialog().GetValueOrDefault())
+            //    {
+            //        fileToSave.FilePath = dlg.SafeFileName;
+            //    }
+            //}
 
             ActiveDocument.SaveCommand.SafeExecute();
             ActiveDocument.SetIsDirty(false);
@@ -983,19 +992,19 @@ namespace WolvenKit.ViewModels.Shell
                         type = EWolvenKitFile.Cr2w;
                     }
                     var isRedscriptFile = Enum.GetNames<ERedScriptExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal));
-                    if (isRedEngineFile)
+                    if (isRedscriptFile)
                     {
                         type = EWolvenKitFile.Redscript;
                     }
                     var isTweakFile = Enum.GetNames<ETweakExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal));
-                    if (isRedEngineFile)
+                    if (isTweakFile)
                     {
                         type = EWolvenKitFile.Tweak;
                     }
 
                     if (isRedEngineFile || isRedscriptFile || isTweakFile)
                     {
-                        ActiveDocument = await OpenAsync(fullpath, type);
+                        /*ActiveDocument =*/ await OpenAsync(fullpath, type);
                     }
 
                     

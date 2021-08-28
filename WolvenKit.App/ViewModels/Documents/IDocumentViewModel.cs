@@ -1,9 +1,12 @@
+using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using ReactiveUI;
+using WolvenKit.Models.Docking;
 
 namespace WolvenKit.ViewModels.Documents
 {
-    public interface IDocumentViewModel
+    public interface IDocumentViewModel : IDockElement
     {
         #region Properties
 
@@ -32,11 +35,16 @@ namespace WolvenKit.ViewModels.Documents
         /// </summary>
         ICommand SaveCommand { get; }
 
+        public ReactiveCommand<Unit, Unit> Close { get; set; }
+
+        string ContentId { get; }
+
         #endregion Properties
 
         #region Methods
 
         Task<bool> OpenFileAsync(string path);
+        void SetIsDirty(bool v);
 
 
         #endregion Methods
