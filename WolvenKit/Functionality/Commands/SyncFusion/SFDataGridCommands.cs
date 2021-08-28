@@ -1,4 +1,3 @@
-
 using Syncfusion.UI.Xaml.Grid;
 using System;
 using System.Collections.Generic;
@@ -8,7 +7,6 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Splat;
-using WolvenKit.ViewModels.Editor;
 using WolvenKit.Common.Interfaces;
 
 namespace WolvenKit

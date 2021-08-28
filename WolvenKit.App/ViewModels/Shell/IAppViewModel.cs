@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using WolvenKit.ViewModels.Editor.Basic;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
-using WolvenKit.ViewModels.Editor;
+using WolvenKit.Common;
+using WolvenKit.ViewModels.Documents;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -52,7 +52,7 @@ namespace WolvenKit.ViewModels.Shell
         /// </summary>
         /// <param name="filepath"></param>
         /// <returns></returns>
-        Task<DocumentViewModel> OpenAsync(string path);
+        Task<DocumentViewModel> OpenAsync(string path, EWolvenKitFile type);
 
         /// <summary>
         /// Saves a document and resets the dirty flag.

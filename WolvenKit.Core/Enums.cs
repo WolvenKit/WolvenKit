@@ -4,9 +4,9 @@ namespace WolvenKit.Common
 {
     public enum EWolvenKitFile
     {
+        Cr2w,
         Redscript,
-        TweakDelta,
-        Cr2w
+        Tweak
     }
 
     public enum ERedScriptExtension

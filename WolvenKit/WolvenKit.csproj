@@ -31,33 +31,21 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Functionality\Behavior\**" />
-    <Compile Remove="Views\Editor\Editors\Nodes\Audio\**" />
-    <Compile Remove="Views\Editor\Editors\Nodes\Quest\**" />
-    <Compile Remove="Views\Editor\Editors\Nodes\Scene\**" />
     <Compile Remove="NewFolder1\**" />
     <Compile Remove="Resources\Styles\CustomBase\**" />
     <Compile Remove="Resources\Styles\Custom\**" />
     <Compile Remove="Views\Wizards\PublishWizard\**" />
     <EmbeddedResource Remove="Functionality\Behavior\**" />
-    <EmbeddedResource Remove="Views\Editor\Editors\Nodes\Audio\**" />
-    <EmbeddedResource Remove="Views\Editor\Editors\Nodes\Quest\**" />
-    <EmbeddedResource Remove="Views\Editor\Editors\Nodes\Scene\**" />
     <EmbeddedResource Remove="NewFolder1\**" />
     <EmbeddedResource Remove="Resources\Styles\CustomBase\**" />
     <EmbeddedResource Remove="Resources\Styles\Custom\**" />
     <EmbeddedResource Remove="Views\Wizards\PublishWizard\**" />
     <None Remove="Functionality\Behavior\**" />
-    <None Remove="Views\Editor\Editors\Nodes\Audio\**" />
-    <None Remove="Views\Editor\Editors\Nodes\Quest\**" />
-    <None Remove="Views\Editor\Editors\Nodes\Scene\**" />
     <None Remove="NewFolder1\**" />
     <None Remove="Resources\Styles\CustomBase\**" />
     <None Remove="Resources\Styles\Custom\**" />
     <None Remove="Views\Wizards\PublishWizard\**" />
     <Page Remove="Functionality\Behavior\**" />
-    <Page Remove="Views\Editor\Editors\Nodes\Audio\**" />
-    <Page Remove="Views\Editor\Editors\Nodes\Quest\**" />
-    <Page Remove="Views\Editor\Editors\Nodes\Scene\**" />
     <Page Remove="NewFolder1\**" />
     <Page Remove="Resources\Styles\CustomBase\**" />
     <Page Remove="Resources\Styles\Custom\**" />
@@ -175,7 +163,7 @@
     <Resource Include="Resources\Media\Images\Icons\Files\w2animev.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Views\Editor\Basic\default.svg">
+    <Resource Include="Views\Tools\default.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\acousticdata.svg">
@@ -1760,7 +1748,6 @@
     <None Remove="sample.mp4" />
     <None Remove="SplashScreen1.png" />
     <None Remove="TaskBarIcon.ico" />
-    <None Remove="Views\Editor\Basic\default.svg" />
   </ItemGroup>
 
   <ItemGroup>

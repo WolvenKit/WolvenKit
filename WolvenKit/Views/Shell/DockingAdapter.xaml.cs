@@ -17,8 +17,9 @@ using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models.Docking;
-using WolvenKit.ViewModels.Editor;
+using WolvenKit.ViewModels.Documents;
 using WolvenKit.ViewModels.Shell;
+using WolvenKit.ViewModels.Tools;
 using DockState = WolvenKit.Models.Docking.DockState;
 
 namespace WolvenKit.Views.Shell

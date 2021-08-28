@@ -1,0 +1,1101 @@
+<reactiveUi:ReactiveUserControl
+    x:TypeArguments="tools:AssetBrowserViewModel"
+    x:Class="WolvenKit.Views.Tools.AssetBrowserView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:converters1="clr-namespace:WolvenKit.Functionality.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:local="clr-namespace:WolvenKit"
+    xmlns:I="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:tools="clr-namespace:WolvenKit.ViewModels.Tools;assembly=WolvenKit.App"
+    d:DataContext="{d:DesignInstance Type=tools:AssetBrowserViewModel}"
+    BorderBrush="{x:Null}"
+    mc:Ignorable="d">
+
+
+    <Grid>
+
+        <Border
+            hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
+            BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
+            BorderThickness="0">
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!-- Asset Browser Search -->
+                <Grid Grid.Row="0" Margin="3" >
+
+                    <Grid.Resources>
+                        <ResourceDictionary>
+                            <ResourceDictionary.MergedDictionaries>
+                                <hc:ThemeResources />
+                                <hc:Theme />
+                            </ResourceDictionary.MergedDictionaries>
+                        </ResourceDictionary>
+                    </Grid.Resources>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <hc:SearchBar Grid.Column="0"
+                                  x:Name="FileSearchBar"
+                                  Style="{StaticResource SearchBarPlus}"
+                                  VerticalAlignment="Top"
+                                  FlowDirection="LeftToRight"
+                                  ShowClearButton="False"
+                                  hc:InfoElement.Placeholder="(e.g. judy kind:mesh,ent)"
+                                  hc:InfoElement.Title="Search all game files: "
+                                  hc:InfoElement.TitlePlacement="Left"
+                                  SearchStarted="FileSearchBar_SearchStarted"
+                                  >
+                    </hc:SearchBar>
+
+                    <Viewbox Grid.Column="1"  Margin="-35,0,0,0" Height="30" Width="30" >
+                        <ToggleButton IsChecked="{Binding IsRegexSearchEnabled}" >
+
+                            <ToggleButton.Style>
+                                <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsChecked" Value="True">
+                                            <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.Accent}" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ToggleButton.Style>
+
+                            <iconPacks:PackIconCodicons Kind="Regex" />
+                            
+                        </ToggleButton>
+                    </Viewbox>
+                    
+                    <hc:SearchBar  Grid.Column="2" Margin="10,0,0,0"
+                                  x:Name="OptionsSearchBar"
+                                  Style="{StaticResource SearchBarPlus}"
+                                  VerticalAlignment="Top"
+                                  FlowDirection="LeftToRight"
+                                  ShowClearButton="True"
+                                  hc:InfoElement.Placeholder="(e.g. *.ent, base/**/judy)"
+                                  hc:InfoElement.Title="files to include: "
+                                  hc:InfoElement.TitlePlacement="Left"
+                                  SearchStarted="FileSearchBar_SearchStarted"
+                                  >
+                       
+                    </hc:SearchBar>
+
+                </Grid>
+                
+                <!-- Asset Browser  -->
+                <Grid Grid.Row="1">
+                    
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="200"/>
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left Navigation -->
+                    <Grid Grid.Column="0" Margin="2">
+
+                        <Grid.Resources>
+                            <converters1:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
+                        </Grid.Resources>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Search Bar -->
+                        <Grid Grid.Row="0" Margin="2">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <hc:SearchBar
+                                x:Name="FolderSearchBar"
+                                Margin="0,0,5,0"
+                                VerticalAlignment="Top"
+                                Background="{DynamicResource ContentBackgroundAlt}"
+                                BorderBrush="{DynamicResource BorderBrush}"
+                                FlowDirection="LeftToRight"
+                                hc:InfoElement.Placeholder="Search"
+                                Style="{StaticResource SearchBarPlus}"
+                                hc:InfoElement.Necessary="True"
+                                SearchStarted="FolderSearchBar_OnSearchStarted"
+                                ShowClearButton="True"
+                               />
+
+                            <Button Grid.Column="1"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Background="{DynamicResource ContentBackground}"
+                                Click="LeftNavigationHomeButton_OnClick"
+                                Visibility="Visible">
+                                <iconPacks:PackIconCodicons Kind="Home" />
+                            </Button>
+                        </Grid>
+
+                        <!--Folder Tree -->
+                        <syncfusion:SfTreeGrid Grid.Row="1" Margin="2"
+                                x:Name="LeftNavigation"
+                                AllowFiltering="False"
+                                AllowSorting="False"
+                                AllowTriStateSorting="False"
+                                AutoExpandMode="RootNodesExpanded"
+                                AutoGenerateColumns="False"
+                                ChildPropertyName="Directories"
+                                ColumnSizer="FillColumn"
+                                FilterLevel="Extended"
+                                SelectionChanged="LeftNavigation_OnSelectionChanged"
+                                ExpandStateMappingName="IsExpanded"
+                            >
+
+                            <syncfusion:SfTreeGrid.Resources>
+                                <Style TargetType="syncfusion:TreeGridCell">
+                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                    <Setter Property="BorderThickness" Value="0" />
+                                </Style>
+                                <Style TargetType="syncfusion:TreeGridExpanderCell">
+                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                    <Setter Property="BorderThickness" Value="0" />
+                                </Style>
+                                <converters1:ExtensionToBitmapConverter x:Key="ExtensionToBmp" />
+                            </syncfusion:SfTreeGrid.Resources>
+
+                            <syncfusion:SfTreeGrid.Columns>
+
+                                <syncfusion:TreeGridTextColumn
+                                        
+                                        HeaderText="Name"
+                                        HorizontalHeaderContentAlignment="Left"
+                                        ImmediateUpdateColumnFilter="True"
+                                        MappingName="Name">
+                                    
+                                    <syncfusion:TreeGridTextColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="20" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <Image Height="13">
+                                                    <Image.Style>
+                                                        <Style TargetType="Image">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/default.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="OpenDirImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderopened.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="ClosedDirImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderdefault.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="RawImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="RawModImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="RawDlcImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="RadishImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="ModImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="ModCookedImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="ModUncookedImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="DlcImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="DlcCookedImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="DlcUncookedImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Image.Style>
+                                                </Image>
+                                                <TextBlock
+                                                        x:Name="TemplateTextBlock"
+                                                        Grid.Column="1"
+                                                        Margin="2"
+                                                        VerticalAlignment="Center"
+                                                        Text="{Binding Path=Name}" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </syncfusion:TreeGridTextColumn.CellTemplate>
+                                    
+                                </syncfusion:TreeGridTextColumn>
+                            </syncfusion:SfTreeGrid.Columns>
+
+                            <syncfusion:SfTreeGrid.ExpanderContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Click="Expand_OnClick" Header="Expand" />
+                                    <MenuItem Click="ExpandAll_OnClick" Header="Expand all" />
+                                    <MenuItem Click="Collapse_OnClick" Header="Collapse" />
+                                    <MenuItem Click="CollapseAll_OnClick" Header="Collapse all" />
+                                </ContextMenu>
+                            </syncfusion:SfTreeGrid.ExpanderContextMenu>
+
+                        </syncfusion:SfTreeGrid>
+
+                    </Grid>
+
+                    <syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+
+                    <!-- Right File List -->
+                    <Grid Grid.Column="2" Margin="4">
+                            
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <syncfusion:SfDataGrid
+                                x:Name="InnerList"
+                                AllowDeleting="False"
+                                AllowDraggingColumns="False"
+                                AllowDraggingRows="False"
+                                AllowEditing="False"
+                                AllowFiltering="True"
+                                AllowResizingColumns="True"
+                                AllowSorting="True"
+                                AutoGenerateColumns="False"
+                                Background="{DynamicResource RegionBrush}"
+                                ColumnSizer="Auto"
+                                EnableDataVirtualization="True"
+                                IsManipulationEnabled="False"
+                                SelectionChanged="InnerList_SelectionChanged"
+                                SelectionMode="Extended"
+                                MouseDoubleClick="InnerList_MouseDoubleClick"
+                                >
+
+                                <syncfusion:SfDataGrid.RecordContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Click="RightContextMenuAddAll_OnClick" Header="Add selected items to Project" />
+                                        <MenuItem Header="BK2">
+                                            <MenuItem
+                                                x:Name="VidPreviewMenuItem"
+                                                Click="VidPreviewMenuItem_Click"
+                                                Header="Preview BK2" />
+                                            <MenuItem
+                                                x:Name="BKExport"
+                                                Click="BKExport_Click"
+                                                Header="Export BK2 to Avi"
+                                                Visibility="Collapsed"/>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </syncfusion:SfDataGrid.RecordContextMenu>
+
+                                <syncfusion:SfDataGrid.Resources>
+                                    
+                                    <Style TargetType="syncfusion:GridHeaderCellControl">
+                                        <Setter Property="BorderThickness" Value="0,0,0,1" />
+                                        <Setter Property="BorderBrush" Value="{DynamicResource SecondaryRegionBrush}" />
+                                    </Style>
+                                    <Style TargetType="syncfusion:GridCell">
+                                        <Setter Property="BorderThickness" Value="0,0,0,0" />
+                                    </Style>
+
+                                    <converters1:ExtensionToBitmapConverter x:Key="ExtensionToBmp" />
+
+                                <DataTemplate x:Key="TemplateToolTip">
+                                    <TextBlock Text="{Binding FullName}" />
+                                </DataTemplate>
+
+                            </syncfusion:SfDataGrid.Resources>
+
+                                <syncfusion:SfDataGrid.Columns>
+
+                                    <syncfusion:GridCheckBoxColumn
+                                        AllowEditing="True"
+                                        HeaderText="#"
+                                        MappingName="IsChecked">
+                                        <syncfusion:GridCheckBoxColumn.HeaderTemplate>
+                                            <DataTemplate>
+                                            <CheckBox
+                                                Command="local:SFDataGridCommands.CheckAndUnCheck"
+                                                CommandParameter="{Binding ElementName=InnerList}"
+                                                />
+                                            </DataTemplate>
+                                        </syncfusion:GridCheckBoxColumn.HeaderTemplate>
+                                    </syncfusion:GridCheckBoxColumn>
+
+                                    <syncfusion:GridTemplateColumn
+                                        Width="22"
+                                        AllowFiltering="False"
+                                        MappingName=".">
+                                        <syncfusion:GridTemplateColumn.CellTemplate>
+
+                                            <DataTemplate>
+                                                <Image Width="17" Margin="5,0,0,0">
+                                                    <Image.Style>
+                                                        <Style TargetType="Image">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w2cent">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/entity.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w2phase">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/quest_phase.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w2beh">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/behavior_graph3.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w2behtree ">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/behavior_graph3.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="env">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/env.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="gidata">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/gidata.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="gradient">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/gradient.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="lipmap">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/lipmap.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="mlmask">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mlmask.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="mltemplate">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mltemplate.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w2animev">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2animev.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/default.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="OpenDirImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderopened.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="ClosedDirImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderdefault.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="RawImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="RawModImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="RawDlcImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="RadishImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="ModImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="ModCookedImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="ModUncookedImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="DlcImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="DlcCookedImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="DlcUncookedImageKey">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="aiarch">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/aiarch.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="animgraph">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/animgraph.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="anims">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/anims.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="apb">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/apb.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="archetypes">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/archetypes.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="areas">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/areas.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="audio_metadata">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/audio_metadata.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="audiovehcurveset">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/audiovehcurveset.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="behavior">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/behavior.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="bikecurveset">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/bikecurveset.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="bk2">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/bk2.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="blend">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/blend.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="bnk">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/bnk.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="buffer">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/buffer.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="camcurveset">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/camcurveset.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="cfoliage">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/cfoliage.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="cminimap">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/cminimap.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="community">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/community.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="conversations">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/conversations.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="cooked_mlsetup">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/cooked_mlsetup.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="cookedanims">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/cookedanims.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="cookedapp">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/cookedapp.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="credits">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/credits.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="cubemap">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/cubemap.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="curveset">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/curveset.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="dat">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/dat.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="devices">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/devices.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="dtex">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/dtex.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="effect">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/effect.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="envparam">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/envparam.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="envprobe">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/envprobe.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="es">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/es.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="facialcustom">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/facialcustom.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="facialsetup">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/facialsetup.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="fb2tl">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/fb2tl.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="fbx">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/fbx.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="flyr">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/flyr.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="fnt">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/fnt.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="folbrush">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folbrush.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="foldest">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/foldest.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="font">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/font.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="formation">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/formation.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="fp">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/fp.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="gamedef">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/gamedef.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="garmentlayerparams">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/garmentlayerparams.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="genericanimdb">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/genericanimdb.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="geometry_cache">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/geometry_cache.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="grassmask">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/grassmask.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="hitrepresentation">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/hitrepresentation.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="hp">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/hp.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="ies">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/ies.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="inkanim">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inkanim.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="inkatlas">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inkatlas.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="inkcharcustomization">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inkcharcustomization.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="inkfontfamily">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inkfontfamily.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="inkfullscreencomposition">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inkfullscreencomposition.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="inkgamesettings">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inkgamesettings.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="inkhud">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inkhud.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="inklayers">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inklayers.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="inkmenu">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inkmenu.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="inkshapecollection">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inkshapecollection.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="inkstyle">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inkstyle.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="inktypography">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inktypography.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="inkwidget">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inkwidget.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="interaction">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/interaction.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="journal">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/journal.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="journaldesc">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/journaldesc.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="json">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/json.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="lane_connections">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/lane_connections.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="lane_polygons">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/lane_polygons.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="lane_spots">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/lane_spots.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="lights">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/lights.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="location">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/location.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="locopaths">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/locopaths.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="loot">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/loot.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="mappins">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mappins.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="menu">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/menu.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="mesh">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="mi">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mi.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="morphtarget">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/morphtarget.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="mt">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mt.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="navconfig">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/navconfig.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="naviobstacles">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/naviobstacles.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="navmesh">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/navmesh.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="navtile">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/navtile.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="null_areas">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/null_areas.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="opuspak">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/opuspak.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="particle">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/particle.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="phys">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/phys.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="physicalscene">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/physicalscene.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="physmatlib">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/physmatlib.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="poimappins">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/poimappins.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="popup">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/popup.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="psrep">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/psrep.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="quest">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/quest.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="questphase">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/questphase.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="redapex">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/redapex.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="redcloth">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/redcloth.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="reddlc">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/reddlc.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="redexp">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/redexp.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="redfur">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/redfur.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="redgame">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/redgame.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="regionset">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/regionset.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="remt">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/remt.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="reslist">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/reslist.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="rig">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/rig.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="sav">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/sav.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="scene">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/scene.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="scenerid">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/scenerid.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="scenesversions">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/scenesversions.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w3simplex">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w3simplex.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="smartobject">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/smartobject.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="smartobjects">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/smartobjects.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="sp">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/sp.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="spawntree">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/spawntree.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="srt">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/srt.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="streamingquerydata">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/streamingquerydata.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="streamingsector">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/streamingsector.svg}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Extension}" Value="streamingsector_inplace">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/streamingsector_inplace.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="streamingworld">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/streamingworld.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="subs">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/subs.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="swf">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/swf.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="terrainsetup">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/terrainsetup.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="texarray">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/texarray.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="textarray">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/textarray.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="traffic_collisions">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/traffic_collisions.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="traffic_persistent">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/traffic_persistent.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w2l">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2l.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="usm">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/usm.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="voicetags">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/voicetags.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w2mesh">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2mesh.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w2mi">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2mi.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w2mg">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2mg.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w3occulsion">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w3occulsion.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w3dyng">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w3dyng.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="wem">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/wem.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="workspot">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/workspot.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="xbm">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xbm.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="xcube">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xcube.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="xml">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xml.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w2sf">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2sf.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w2steer">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2steer.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w2ter">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2ter.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w2w">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2w.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="wizdef">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/wizdef.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w2ragdoll">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2ragdoll.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="app">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/app.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="spatial_representation">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/spatial_representation.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="mlsetup">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mlsetup.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="opusinfo">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/opusinfo.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w3fac">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w3fac.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="actionanimdb">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/actionanimdb.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="acousticdata">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/acousticdata.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="cellmap">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/cellmap.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="csv">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/csv.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="ent">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/ent.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="guiconfig">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/guiconfig.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="hud">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/hud.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="navgraph">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/navgraph.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="reddest">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/reddest.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="redicsv">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/redicsv.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="redswf">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/redswf.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="redwpset">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/redwpset.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w2em">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2em.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w2ent">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2ent.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w2fnt">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2fnt.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w2je">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2je.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w2job">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2job.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w2p">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2p.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w2qm">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2qm.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w2rig">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2rig.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w2scene">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2scene.svg}" />
+                                                                </DataTrigger>
+
+                                                                <DataTrigger Binding="{Binding Extension}" Value="w3app">
+                                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w3app.svg}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Image.Style>
+                                                </Image>
+                                            </DataTemplate>
+                                        </syncfusion:GridTemplateColumn.CellTemplate>
+                                    </syncfusion:GridTemplateColumn>
+
+                                    <syncfusion:GridTextColumn
+                                        AllowFiltering="True"
+                                        ColumnSizer="Star"
+                                        IsReadOnly="True"
+                                        MappingName="Name"
+                                        ShowToolTip="True" ToolTipTemplate="{StaticResource TemplateToolTip}"
+                                        />
+
+                                    <syncfusion:GridTextColumn
+                                        AllowFiltering="True"
+                                        ColumnSizer="Auto"
+                                        IsReadOnly="True"
+                                        MappingName="DisplayExtension" />
+
+                                    <syncfusion:GridTextColumn
+                                        AllowFiltering="True"
+                                        ColumnSizer="Auto"
+                                        IsReadOnly="True"
+                                        MappingName="Size" />
+
+                                </syncfusion:SfDataGrid.Columns>
+
+                                <I:Interaction.Behaviors>
+                                    <local:Behaviour />
+                                </I:Interaction.Behaviors>
+
+                                <hc:Interaction.Triggers>
+                                    <hc:EventTrigger EventName="MouseDoubleClick">
+                                    <hc:EventToCommand Command="{Binding OpenFileSystemItemCommand}" />
+                                    </hc:EventTrigger>
+                                </hc:Interaction.Triggers>
+
+                            </syncfusion:SfDataGrid>
+
+                            <!--<syncfusion:SfDataPager
+                                x:Name="dataPager"
+                                Grid.Row="1"
+                                PageCount="5"
+                                PageSize="100"
+                                UseOnDemandPaging="True"
+                                OnDemandLoading="dataPager_OnDemandLoading"
+                                />-->
+                    </Grid>
+
+                </Grid>
+                
+            </Grid>
+        </Border>
+        
+        <Border
+            x:Name="LoadingBorder"
+            Grid.RowSpan="3"
+            Background="#80000000"
+            BorderBrush="Black"
+            BorderThickness="1"
+            Visibility="{Binding Path=LoadVisibility}">
+            <Grid>
+                <syncfusion:SfBusyIndicator AnimationType="Ball" Foreground="{DynamicResource MahApps.Brushes.Accent}" />
+
+                <StackPanel VerticalAlignment="Center">
+
+                    <TextBlock
+                        Margin="0,75,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Foreground="#7EFFFFFF"
+                        Text="Loading game archives.."
+                        TextWrapping="Wrap" />
+                </StackPanel>
+            </Grid>
+        </Border>
+        
+    </Grid>
+</reactiveUi:ReactiveUserControl>

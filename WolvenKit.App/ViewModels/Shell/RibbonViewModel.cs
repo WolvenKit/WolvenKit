@@ -10,7 +10,6 @@ using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
-using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.ViewModels.Shell
 { // #MVVM

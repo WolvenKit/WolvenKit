@@ -6,7 +6,6 @@ using Syncfusion.UI.Xaml.Grid.Helpers;
 using Syncfusion.UI.Xaml.ScrollAxis;
 using System.Collections.Specialized;
 using Splat;
-using WolvenKit.ViewModels.Editor;
 using WolvenKit.Common.Interfaces;
 
 namespace WolvenKit

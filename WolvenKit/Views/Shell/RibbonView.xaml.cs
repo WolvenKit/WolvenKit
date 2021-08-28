@@ -10,8 +10,8 @@ using Splat;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Interaction;
-using WolvenKit.ViewModels.Editor;
 using WolvenKit.ViewModels.Shell;
+using WolvenKit.ViewModels.Tools;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Dialogs;
 

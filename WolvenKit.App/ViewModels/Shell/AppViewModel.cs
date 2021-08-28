@@ -31,11 +31,12 @@ using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.RED4.CR2W.Types;
-using WolvenKit.ViewModels.Editor;
 using WolvenKit.ViewModels.Wizards;
 using WolvenManager.Installer.Services;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 using WolvenKit.Common.Model;
+using WolvenKit.ViewModels.Tools;
+using WolvenKit.ViewModels.Documents;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -518,7 +519,7 @@ namespace WolvenKit.ViewModels.Shell
             switch (model.Type)
             {
                 case EWolvenKitFile.Redscript:
-                case EWolvenKitFile.TweakDelta:
+                case EWolvenKitFile.Tweak:
                     File.Create(fullPath);
                     break;
                 case EWolvenKitFile.Cr2w:
@@ -538,7 +539,7 @@ namespace WolvenKit.ViewModels.Shell
                 return type switch
                 {
                     EWolvenKitFile.Redscript => project.ScriptDirectory,
-                    EWolvenKitFile.TweakDelta => project.TweakDirectory,
+                    EWolvenKitFile.Tweak => project.TweakDirectory,
                     EWolvenKitFile.Cr2w => project.ModDirectory,
                     _ => throw new ArgumentOutOfRangeException(nameof(type)),
                 };
@@ -574,7 +575,7 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     //model = new FileViewModel(new FileModel(new FileInfo(dlg.FileName)));
                     //TODO
-                    ActiveDocument = await OpenAsync(model.FullName);
+                    //ActiveDocument = await OpenAsync(model.FullName);
                 }
             }
             else
@@ -1048,7 +1049,7 @@ namespace WolvenKit.ViewModels.Shell
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<DocumentViewModel> OpenAsync(string fullPath)
+        public async Task<DocumentViewModel> OpenAsync(string fullPath, EWolvenKitFile type)
         {
             // Check if we have already loaded this file and return it if so
             var fileViewModel = OpenDocuments.FirstOrDefault(fm => fm.ContentId == fullPath);
@@ -1058,8 +1059,23 @@ namespace WolvenKit.ViewModels.Shell
             }
 
             // open file
-            fileViewModel = new DocumentViewModel(fullPath);
-            var result = await fileViewModel.OpenFileAsync(fullPath);
+            bool result;
+            switch (type)
+            {
+                case EWolvenKitFile.Cr2w:
+                    fileViewModel = new RedDocumentViewModel(fullPath);
+                    break;
+                case EWolvenKitFile.Redscript:
+                    fileViewModel = new ScriptDocumentViewModel(fullPath);
+                    break;
+                case EWolvenKitFile.Tweak:
+                    fileViewModel = new TweakDocumentViewModel(fullPath);
+                    break;
+                default:
+                    break;
+            }
+
+            result = await fileViewModel.OpenFileAsync(fullPath);
 
             if (result)
             {
@@ -1214,7 +1230,32 @@ namespace WolvenKit.ViewModels.Shell
                 // TODO SPLIT WEMS TO PLAYLIST FROM BNK
 
                 default:
-                    ActiveDocument = await OpenAsync(fullpath);
+
+                    var trimmedExt = ext.TrimStart('.').ToUpper();
+                    EWolvenKitFile type = EWolvenKitFile.Cr2w;
+
+                    var isRedEngineFile = Enum.GetNames<ERedExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal));
+                    if (isRedEngineFile)
+                    {
+                        type = EWolvenKitFile.Cr2w;
+                    }
+                    var isRedscriptFile = Enum.GetNames<ERedScriptExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal));
+                    if (isRedEngineFile)
+                    {
+                        type = EWolvenKitFile.Redscript;
+                    }
+                    var isTweakFile = Enum.GetNames<ETweakExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal));
+                    if (isRedEngineFile)
+                    {
+                        type = EWolvenKitFile.Tweak;
+                    }
+
+                    if (isRedEngineFile || isRedscriptFile || isTweakFile)
+                    {
+                        ActiveDocument = await OpenAsync(fullpath, type);
+                    }
+
+                    
                     break;
             }
 
