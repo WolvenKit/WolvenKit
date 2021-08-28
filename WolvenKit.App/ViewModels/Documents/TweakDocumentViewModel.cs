@@ -17,25 +17,28 @@ namespace WolvenKit.ViewModels.Documents
 
         #region properties
 
-
+        [Reactive] public string DocumentSource {  get; set; }  
 
         #endregion
 
 
         public override void OnSave(object parameter)
         {
-
+            using var fs = new FileStream(FilePath, FileMode.Create, FileAccess.ReadWrite);
+            using var bw = new StreamWriter(fs);
+           bw.Write(DocumentSource);
         }
 
         public override async Task<bool> OpenFileAsync(string path)
         {
             _isInitialized = false;
 
-            //await using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            await using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                //using var reader = new BinaryReader(stream);
-
-
+                using (var sr = new StreamReader(fs))
+                {
+                    DocumentSource = sr.ReadToEnd();
+                }
 
                 ContentId = path;
                 FilePath = path;

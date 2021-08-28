@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ReactiveUI;
+using Syncfusion.Windows.Edit;
 using WolvenKit.ViewModels.Documents;
 
 namespace WolvenKit.Views.Documents
@@ -29,11 +30,14 @@ namespace WolvenKit.Views.Documents
 
             this.WhenActivated(disposables =>
             {
-                this.Bind(ViewModel,
-                        viewModel => viewModel.FilePath,
-                        view => view.textEditor.DocumentSource)
-                    .DisposeWith(disposables);
-
+                //this.OneWayBind(ViewModel,
+                //        viewModel => viewModel.DocumentSource,
+                //        view => view.textEditor.DocumentSource)
+                //    .DisposeWith(disposables);
+                //this.Bind(ViewModel,
+                //        viewModel => viewModel.DocumentSource,
+                //        view => view.textbox.Text)
+                //    .DisposeWith(disposables);
 
             });
         }

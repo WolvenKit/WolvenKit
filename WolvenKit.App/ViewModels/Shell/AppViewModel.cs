@@ -516,7 +516,7 @@ namespace WolvenKit.ViewModels.Shell
             }
 
             // Open file
-            await RequestOpenFile(fullPath);
+            //await RequestOpenFile(fullPath);
 
 
             string GetDefaultDir(EWolvenKitFile type)

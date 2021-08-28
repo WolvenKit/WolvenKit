@@ -9,20 +9,14 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:local="clr-namespace:WolvenKit.Views.Documents"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:interactivity="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:system="clr-namespace:System;assembly=netstandard"
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="800">
-    
+
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-
-
-
-        <syncfusion:EditControl
-                Name="textEditor"
-                >
-            
-        </syncfusion:EditControl>
+        
+        
     </Grid>
 </reactiveUi:ReactiveUserControl>
