@@ -28,8 +28,15 @@ namespace WolvenKit.Views.Documents
         {
             InitializeComponent();
 
+           
             this.WhenActivated(disposables =>
             {
+                if (DataContext is TweakDocumentViewModel vm)
+                {
+                    SetCurrentValue(ViewModelProperty, vm);
+                }
+
+
                 //Document = "{Binding Document, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                 //this.OneWayBind(ViewModel,
                 //        viewModel => viewModel.Document,
@@ -60,6 +67,32 @@ namespace WolvenKit.Views.Documents
                 //        viewModel => viewModel.DocumentSource,
                 //        view => view.textbox.Text)
                 //    .DisposeWith(disposables);
+
+
+                this.OneWayBind(ViewModel,
+                        viewModel => viewModel.Flats,
+                        view => view.FlatsTree.ItemsSource)
+                    .DisposeWith(disposables);
+
+                // ItemsSource="{Binding Types}"
+                //SelectedItem = "{Binding SelectedType}"
+                //this.OneWayBind(ViewModel,
+                //        viewModel => viewModel.Types,
+                //        view => view.TypeComboBox.ItemsSource)
+                //    .DisposeWith(disposables);
+                //this.OneWayBind(ViewModel,
+                //       viewModel => viewModel.SelectedType,
+                //       view => view.TypeComboBox.SelectedItem)
+                //   .DisposeWith(disposables);
+
+                this.Bind(ViewModel,
+                        viewModel => viewModel.FlatName,
+                        view => view.NameTextBox.Text)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        vm => vm.AddFlatCommand,
+                        v => v.AddButton)
+                    .DisposeWith(disposables);
 
             });
         }

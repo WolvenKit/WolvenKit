@@ -199,7 +199,7 @@ namespace WolvenKit.ViewModels.Wizards
                 IsFolderPicker = false,
                 Title = "Select Cyberpunk 2077 executable."
             };
-            dlg.Filters.Add(new CommonFileDialogFilter("Cyberpunk2077.exe", "*Cyberpunk2077.exe"));
+            dlg.Filters.Add(new CommonFileDialogFilter("Cyberpunk2077.exe", "*.exe"));
 
             if (dlg.ShowDialog() != CommonFileDialogResult.Ok)
             {

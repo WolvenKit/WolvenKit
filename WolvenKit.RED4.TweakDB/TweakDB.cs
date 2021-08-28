@@ -87,4 +87,27 @@ namespace WolvenKit.RED4.TweakDB
             writer.Write(header);
         }
     }
+
+    public class TweakFlatDto
+    {
+        public string Name { get; set; }
+        public string Type { get; set; }
+        public object Value { get; set; }
+    }
+
+    public enum EIType
+    {
+        CName,
+        CString,
+        CFloat,
+        CBool,
+        CUint8,
+        CUint16,
+        CUint32,
+        CUint64,
+        CInt8,
+        CInt16,
+        CInt32,
+        CInt64
+    }
 }

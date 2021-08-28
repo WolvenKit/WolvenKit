@@ -31,6 +31,12 @@ namespace WolvenKit.Views.Documents
 
             this.WhenActivated(disposables =>
             {
+                if (DataContext is RedDocumentViewModel vm)
+                {
+                    SetCurrentValue(ViewModelProperty, vm);
+                }
+
+
                 ////LoadOnDemandCommand = "{Binding LoadOnDemandCommand}"
                 //this.BindCommand(ViewModel,
                 //       viewModel => viewModel.LoadOnDemandCommand,
