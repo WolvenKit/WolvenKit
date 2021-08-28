@@ -13,7 +13,10 @@ namespace WolvenKit.Modkit.RED4.MLMask
 {
     class MLMASK
     {
-        private const UInt32 headerLength = 128;
+        private const UInt32 headerLength = 148;
+        //assuming DDSUtils.ConvertToDdsMemory always creates a dx10 dds,
+        //if it creates a dx9 or both we will have to check for it, headerlength = 128, if(dx10) headerlength += 20
+
         private MLMaskContainer mlmask;
         public void Import(FileInfo txtimageList, FileInfo outFile)
         {
