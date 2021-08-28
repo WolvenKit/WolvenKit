@@ -363,7 +363,6 @@ namespace WolvenKit.Views.Shell
 
 
                     default:
-                        //StaticReferences.RibbonViewInstance.cr2wcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, true);
 
                         break;
                 }

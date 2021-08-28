@@ -30,6 +30,28 @@ namespace WolvenKit.Views.Documents
 
             this.WhenActivated(disposables =>
             {
+                //Document = "{Binding Document, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                //this.OneWayBind(ViewModel,
+                //        viewModel => viewModel.Document,
+                //        view => view.textEditor.Document)
+                //    .DisposeWith(disposables);
+
+                //IsModified = "{Binding Path=IsDirty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                this.Bind(ViewModel,
+                        viewModel => viewModel.IsDirty,
+                        view => view.textEditor.IsModified)
+                    .DisposeWith(disposables);
+                //IsReadOnly = "{Binding IsReadOnly, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                this.OneWayBind(ViewModel,
+                        viewModel => viewModel.IsReadOnly,
+                        view => view.textEditor.IsReadOnly)
+                    .DisposeWith(disposables);
+                //SyntaxHighlighting="{Binding HighlightingDefinition, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                this.OneWayBind(ViewModel,
+                        viewModel => viewModel.HighlightingDefinition,
+                        view => view.textEditor.SyntaxHighlighting)
+                    .DisposeWith(disposables);
+
                 //this.OneWayBind(ViewModel,
                 //        viewModel => viewModel.DocumentSource,
                 //        view => view.textEditor.DocumentSource)

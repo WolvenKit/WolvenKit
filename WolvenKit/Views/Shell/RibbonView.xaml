@@ -152,15 +152,17 @@
 
                 <!--  Contextual CR2W group  -->
                 <syncfusion:ContextTabGroup
-                    x:Name="cr2wcontextab"
+                    x:Name="documentContextTab"
                     Height="90"
                     Margin="14"
                     IsGroupVisible="False"
-                    Label="CR2W EDITING">
+                    Label="DOCUMENT">
+                    
                     <syncfusion:RibbonTab
                         MinWidth="100"
                         Caption="EDIT"
                         IsChecked="True" />
+                    
                 </syncfusion:ContextTabGroup>
 
                 <!--  Contextual Asset Browser group  -->

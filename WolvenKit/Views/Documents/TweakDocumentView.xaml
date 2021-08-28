@@ -12,11 +12,45 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:interactivity="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:system="clr-namespace:System;assembly=netstandard"
+    xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="800">
 
-    <Grid>
-        
+    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}" Margin="3" >
+
+        <Grid.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <hc:ThemeResources />
+                    <hc:Theme />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </Grid.Resources>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- TEXT EDITOR -->
+        <avalonEdit:TextEditor
+            ShowLineNumbers="True"
+                    FontFamily="Consolas"
+                    FontSize="10pt"
+                    Name="textEditor"
+                    Foreground="LightGray"
+                    Document = "{Binding Document, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                    />
+
+        <!-- TEXT EDITOR -->
+        <GridSplitter Width="5" Grid.Column="1" HorizontalAlignment="Stretch"/>
+
+        <!-- UI EDITOR -->
+        <Grid Grid.Column="2">
+
+            
+        </Grid>
         
     </Grid>
 </reactiveUi:ReactiveUserControl>

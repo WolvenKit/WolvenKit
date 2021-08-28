@@ -118,7 +118,7 @@
                 ToolTip="Current Project"
                 Value="Displays current project.">
                 <hc:Tag
-                    Height="20"
+                    Height="28"
                     Margin="5,0,5,0"
                     hc:TitleElement.Background="{DynamicResource RegionBrush}"
                     Background="{DynamicResource GrayBrush10}"
@@ -144,7 +144,7 @@
                 ToolTip="Version"
                 Value="Shows the current app version">
                 <hc:Tag
-                    Height="20"
+                    Height="28"
                     Margin="0"
                     hc:TitleElement.Background="{DynamicResource RegionBrush}"
                     Background="{DynamicResource GrayBrush10}"
@@ -168,8 +168,8 @@
                 HorizontalAlignment="Right"
                 Value="DefaultIcon">
                 <hc:Tag
-                    Width="20"
-                    Height="20"
+                    Width="29"
+                    Height="28"
                     Margin="0"
                     hc:TitleElement.Background="{DynamicResource RegionBrush}"
                     Background="{DynamicResource GrayBrush10}"

@@ -76,6 +76,8 @@ namespace WolvenKit.Views.Shell
                     projectexplorercontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, b));
                 _mainViewModel.AssetBrowserVM.WhenAnyValue(x => x.IsActive).Subscribe(b =>
                     abcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, b));
+                //_mainViewModel.ActiveDocument.WhenAnyValue(x => x != null && x.IsActive).Subscribe(b =>
+                //    documentContextTab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, b));
 
                 #region commands
 
