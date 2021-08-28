@@ -91,19 +91,19 @@ namespace WolvenKit.ViewModels.Shell
             //ShowImportUtilityCommand = new RelayCommand(ExecuteShowImportUtility, CanShowImportUtility);
             ShowPropertiesCommand = new RelayCommand(ExecuteShowProperties, CanShowProperties);
             ShowAssetsCommand = new RelayCommand(ExecuteAssetBrowser, CanShowAssetBrowser);
-            ShowVisualEditorCommand = new RelayCommand(ExecuteVisualEditor, CanShowVisualEditor);
+            //ShowVisualEditorCommand = new RelayCommand(ExecuteVisualEditor, CanShowVisualEditor);
             //ShowAudioToolCommand = new RelayCommand(ExecuteAudioTool, CanShowAudioTool);
-            ShowVideoToolCommand = new RelayCommand(ExecuteVideoTool, CanShowVideoTool);
-            ShowCodeEditorCommand = new RelayCommand(ExecuteCodeEditor, CanShowCodeEditor);
+            //ShowVideoToolCommand = new RelayCommand(ExecuteVideoTool, CanShowVideoTool);
+            //ShowCodeEditorCommand = new RelayCommand(ExecuteCodeEditor, CanShowCodeEditor);
 
             ShowImportExportToolCommand = new RelayCommand(ExecuteImportExportTool, CanShowImportExportTool);
-            ShowPackageInstallerCommand = new RelayCommand(ExecuteShowInstaller, CanShowInstaller);
+            //ShowPackageInstallerCommand = new RelayCommand(ExecuteShowInstaller, CanShowInstaller);
 
             OpenFileCommand = new DelegateCommand<FileModel>(async (p) => await ExecuteOpenFile(p), CanOpenFile);
 
             PackModCommand = new RelayCommand(ExecutePackMod, CanPackMod);
-            BackupModCommand = new RelayCommand(ExecuteBackupMod, CanBackupMod);
-            PublishModCommand = new RelayCommand(ExecutePublishMod, CanPublishMod);
+            //BackupModCommand = new RelayCommand(ExecuteBackupMod, CanBackupMod);
+            //PublishModCommand = new RelayCommand(ExecutePublishMod, CanPublishMod);
 
             NewFileCommand = new DelegateCommand<string>(ExecuteNewFile, CanNewFile);
             SaveFileCommand = new RelayCommand(ExecuteSaveFile, CanSaveFile);
@@ -218,25 +218,8 @@ namespace WolvenKit.ViewModels.Shell
                 return;
             }
 
-            //foreach (var message in messages)
-            //{
-            //    _notificationService.Error(message);
-            //}
-
             var result = await Interactions.ShowFirstTimeSetup.Handle(Unit.Default);
         }
-
-        //private static void OnToolViewModelPropertyChanged(object sender, PropertyChangedEventArgs args)
-        //{
-        //    // executes a global command that can be subscribed to from any viewmodel
-        //    // passes the currently active viewmodel
-        //    if (args.PropertyName == "IsActive" && sender is PaneViewModel panevm)
-        //    {
-        //        //ServiceLocator.Default.ResolveType<ICommandManager>()
-        //        //    .GetCommand(AppCommands.Application.ViewSelected)
-        //        //    .SafeExecute(new Tuple<PaneViewModel, bool>(panevm, panevm.IsActive));
-        //    }
-        //}
 
         #endregion init
 
@@ -461,37 +444,31 @@ namespace WolvenKit.ViewModels.Shell
 
         }
 
-
-
-
-
-
-
-
         public ICommand FileSelectedCommand { get; set; }
-
         private bool CanSelectFile(FileModel model) => true;
-
         private async Task ExecuteSelectFile(FileModel model) => await PropertiesViewModel.ExecuteSelectFile(model);
 
-        /// <summary>
-        /// Saves the active Documents
-        /// </summary>
         public ICommand SaveFileCommand { get; private set; }
+        private bool CanSaveFile() => _projectManager.ActiveProject != null && ActiveDocument != null;
+        private void ExecuteSaveFile() => Save(ActiveDocument);
 
-        /// <summary>
-        /// Saves all open Documents
-        /// </summary>
         public ICommand SaveAllCommand { get; private set; }
+        private bool CanSaveAll() => _projectManager.ActiveProject != null && OpenDocuments?.Count > 0;
+        private void ExecuteSaveAll()
+        {
+            foreach (var file in OpenDocuments)
+            {
+                Save(file);
+            }
+        }
 
-        /// <summary>
-        /// Git-backup current mod project
-        /// </summary>
-        public ICommand BackupModCommand { get; private set; }
+        //public ICommand BackupModCommand { get; private set; }
+        //private bool CanBackupMod() => _projectManager.ActiveProject != null;
+        //private void ExecuteBackupMod()
+        //{
+        //    // TODO: Implement this
+        //}
 
-        /// <summary>
-        /// Creates a new cr2w file in WolvenKit.
-        /// </summary>
         public ICommand NewFileCommand { get; private set; }
         private bool CanNewFile(string inputDir) => true;
         private async void ExecuteNewFile(string inputDir)
@@ -547,25 +524,8 @@ namespace WolvenKit.ViewModels.Shell
 
         }
 
-        private void CreateCr2wFile(AddFileModel model)
-        {
-            //TODO
-        }
-
-        private async Task RequestOpenFile(string fullPath)
-        {
-            if (!File.Exists(fullPath))
-            {
-                _ = await Task.FromException<FileNotFoundException>(new FileNotFoundException(nameof(RequestOpenFile), fullPath));
-            }
-            // check if in 
-            await RequestFileOpen(fullPath);
-        }
-
-        /// <summary>
-        /// Opens a physical file in WolvenKit.
-        /// </summary>
         public ICommand OpenFileCommand { get; private set; }
+        private bool CanOpenFile(FileModel model) => true;
         private async Task ExecuteOpenFile(FileModel model)
         {
             if (model == null)
@@ -592,334 +552,112 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-
-        /// <summary>
-        /// Packs the current mod project.
-        /// </summary>
         public ICommand PackModCommand { get; private set; }
-
-        /// <summary>
-        /// ???
-        /// </summary>
-        public ICommand PublishModCommand { get; private set; }
-
-        /// <summary>
-        /// Displays the AssetBrowser.
-        /// </summary>
-        public ICommand ShowAnimationToolCommand { get; private set; }
-
-        /// <summary>
-        /// Displays the AssetBrowser.
-        /// </summary>
-        public ICommand ShowAssetsCommand { get; private set; }
-
-        /// <summary>
-        /// Displays the AssetBrowser.
-        /// </summary>
-        public ICommand ShowAudioToolCommand { get; private set; }
-
-        public ICommand ShowVideoToolCommand { get; private set; }
-
-        /// <summary>
-        /// Displays the BulkEditor.
-        /// </summary>
-        public ICommand ShowBulkEditorCommand { get; private set; }
-
-        public ICommand ShowCodeEditorCommand { get; private set; }
-
-        /// <summary>
-        /// Displays the AssetBrowser.
-        /// </summary>
-        public ICommand ShowCR2WToTextToolCommand { get; private set; }
-
-        /// <summary>
-        /// Displays the CsvEditor.
-        /// </summary>
-        public ICommand ShowCsvEditorCommand { get; private set; }
-
-        /// <summary>
-        /// Displays the AssetBrowser.
-        /// </summary>
-        public ICommand ShowGameDebuggerToolCommand { get; private set; }
-
-        public ICommand ShowImportExportToolCommand { get; private set; }
-
-        /// <summary>
-        /// Displays the AssetBrowser.
-        /// </summary>
-        public ICommand ShowHexEditorCommand { get; private set; }
-
-        /// <summary>
-        /// Displays the AssetBrowser.
-        /// </summary>
-        public ICommand ShowImporterToolCommand { get; private set; }
-
-        /// <summary>
-        /// Displays the Import Utility View
-        /// </summary>
-        //public ICommand ShowImportUtilityCommand { get; private set; }
-
-        /// <summary>
-        /// Displays the AssetBrowser.
-        /// </summary>
-        public ICommand ShowJournalEditorCommand { get; private set; }
-
-        /// <summary>
-        /// Displays the LogView.
-        /// </summary>
-        public ICommand ShowLogCommand { get; private set; }
-
-        /// <summary>
-        /// Displays the AssetBrowser.
-        /// </summary>
-        public ICommand ShowMenuCreatorToolCommand { get; private set; }
-
-        /// <summary>
-        /// Displays the AssetBrowser.
-        /// </summary>
-        public ICommand ShowMimicsToolCommand { get; private set; }
-
-        /// <summary>
-        /// Displays the Project Installer.
-        /// </summary>
-        public ICommand ShowPackageInstallerCommand { get; private set; }
-
-        /// <summary>
-        /// Displays the AssetBrowser.
-        /// </summary>
-        public ICommand ShowPluginManagerCommand { get; private set; }
-
-        /// <summary>
-        /// Displays the Project Explorer View.
-        /// </summary>
-        public ICommand ShowProjectExplorerCommand { get; private set; }
-
-        /// <summary>
-        /// Displays the Properties View
-        /// </summary>
-        public ICommand ShowPropertiesCommand { get; private set; }
-
-        /// <summary>
-        /// Displays the AssetBrowser.
-        /// </summary>
-        //public ICommand ShowRadishToolCommand { get; private set; }
-
-        /// <summary>
-        /// Displays the AssetBrowser.
-        /// </summary>
-        public ICommand ShowVisualEditorCommand { get; private set; }
-
-        /// <summary>
-        /// Displays the AssetBrowser.
-        /// </summary>
-        public ICommand ShowWccToolCommand { get; private set; }
-
-        #endregion commands
-
-        #region command implementation
-
-        // public void ExecuteAudioTool() => AudioToolVM.IsVisible = !AudioToolVM.IsVisible;
-
-        public void ExecuteVideoTool()
-        {
-            //var mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
-            //mediator.SendMessage<int>(0);
-            //mediator.SendMessage<bool>(true);
-        }
-
+        private bool CanPackMod() => _projectManager.ActiveProject != null;
         private void ExecutePackMod() => _gameControllerFactory.GetController().PackAndInstallProject();
 
-        private bool CanBackupMod() => _projectManager.ActiveProject != null;
+        //public ICommand PublishModCommand { get; private set; }
+        //private bool CanPublishMod() => _projectManager.ActiveProject != null;
+        //private void ExecutePublishMod()
+        //{                // #convert2MVVMSoon
+        //    //  try
+        //    //  {
+        //    //      var vm = new UserControlHostWindowViewModel(new PublishWizardView(), 600, 1200);
 
-        private bool CanOpenFile(FileModel model) => true;
+        //    //      ServiceLocator.Default.ResolveType<IUIVisualizerService>().ShowDialogAsync(vm);
+        //    // }
+        //    //  catch (Exception ex)
+        //    // {
+        //    //      _loggerService.LogString(ex.Message, Logtype.Error);
+        //    //     _loggerService.LogString("Failed to publish project!", Logtype.Error);
+        //    //  }
+        //}
 
-        private bool CanPackMod() => _projectManager.ActiveProject != null;
+        //public ICommand ShowAnimationToolCommand { get; private set; }
 
-        private bool CanPublishMod() => _projectManager.ActiveProject != null;
-
-        private bool CanShowAnimationTool() => false;
-
+        public ICommand ShowAssetsCommand { get; private set; }
         private bool CanShowAssetBrowser() => true;//AssetBrowserVM != null && AssetBrowserVM.IsLoaded;
-
-        private bool CanShowAudioTool() => _projectManager.ActiveProject != null;
-
-        private bool CanShowVideoTool() => _projectManager.ActiveProject != null;
-
-        private bool CanShowBulkEditor() => false;
-
-        private bool CanShowCR2WToTextTool() => false;
-
-        private bool CanShowCsvEditor() => _projectManager.ActiveProject != null;
-
-        private bool CanShowCodeEditor() => _projectManager.ActiveProject != null;
-
-        private bool CanShowGameDebuggerTool() => false;
-
-        private bool CanShowHexEditor() => false;
-
-        private bool CanShowImporterTool() => false;
-
-        //private bool CanShowImportUtility() => _projectManager.ActiveProject != null;
-
-        private bool CanShowInstaller() => false;
-
-        private bool CanShowJournalEditor() => false;
-
-        private bool CanShowLog() => _projectManager.ActiveProject != null;
-
-        private bool CanShowMenuCreatorTool() => false;
-
-        private bool CanShowMimicsTool() => false;
-
-        private bool CanShowPluginManagerTool() => false;
-
-        private bool CanShowProjectExplorer() => _projectManager.ActiveProject != null;
-
-        private bool CanShowProperties() => _projectManager.ActiveProject != null;
-
-        //private bool CanShowRadishTool() => false;
-
-        private bool CanShowVisualEditor() => _projectManager.ActiveProject != null;
-
-        private bool CanShowWccTool() => false;
-
-        private bool CanShowImportExportTool() => _projectManager.ActiveProject != null;
-
-        private void ExecuteImportExportTool() => ImportExportToolVM.IsVisible = !ImportExportToolVM.IsVisible;
-
-
         private void ExecuteAssetBrowser() => AssetBrowserVM.IsVisible = !AssetBrowserVM.IsVisible;
 
-        private void ExecuteBackupMod()
-        {
-            // TODO: Implement this
-        }
+        //public ICommand ShowAudioToolCommand { get; private set; }
+        //private bool CanShowAudioTool() => _projectManager.ActiveProject != null;
+        // public void ExecuteAudioTool() => AudioToolVM.IsVisible = !AudioToolVM.IsVisible;
 
-        private void ExecuteCodeEditor() => CodeEditorVM.IsVisible = !CodeEditorVM.IsVisible;
+        //public ICommand ShowVideoToolCommand { get; private set; }
+        //private bool CanShowVideoTool() => _projectManager.ActiveProject != null;
+        //public void ExecuteVideoTool()
+        //{
+        //    //var mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
+        //    //mediator.SendMessage<int>(0);
+        //    //mediator.SendMessage<bool>(true);
+        //}
 
-        
+        public ICommand ShowImportExportToolCommand { get; private set; }
+        private bool CanShowImportExportTool() => _projectManager.ActiveProject != null;
+        private void ExecuteImportExportTool() => ImportExportToolVM.IsVisible = !ImportExportToolVM.IsVisible;
 
-
-        private void ExecutePublishMod()
-        {                // #convert2MVVMSoon
-            //  try
-            //  {
-            //      var vm = new UserControlHostWindowViewModel(new PublishWizardView(), 600, 1200);
-
-            //      ServiceLocator.Default.ResolveType<IUIVisualizerService>().ShowDialogAsync(vm);
-            // }
-            //  catch (Exception ex)
-            // {
-            //      _loggerService.LogString(ex.Message, Logtype.Error);
-            //     _loggerService.LogString("Failed to publish project!", Logtype.Error);
-            //  }
-        }
-
-        //private void ExecuteShowImportUtility() => ImportViewModel.IsVisible = !ImportViewModel.IsVisible;
-
-        private void ExecuteShowInstaller()
-        {                // #convert2MVVMSoon
-            //  var rpv = new InstallerWizardView();
-            //  var zxc = new UserControlHostWindowViewModel(rpv);
-            //  var uchwv = new UserControlHostWindowView(zxc);
-            //  uchwv.Show();
-        }
-
+        public ICommand ShowLogCommand { get; private set; }
+        private bool CanShowLog() => _projectManager.ActiveProject != null;
         private void ExecuteShowLog() => Log.IsVisible = !Log.IsVisible;
 
+        //public ICommand ShowPackageInstallerCommand { get; private set; }
+        //private bool CanShowInstaller() => false;
+        //private void ExecuteShowInstaller()
+        //{                // #convert2MVVMSoon
+        //    //  var rpv = new InstallerWizardView();
+        //    //  var zxc = new UserControlHostWindowViewModel(rpv);
+        //    //  var uchwv = new UserControlHostWindowView(zxc);
+        //    //  uchwv.Show();
+        //}
+
+        //public ICommand ShowPluginManagerCommand { get; private set; }
+        //private bool CanShowPluginManagerTool() => false;
+
+
+        public ICommand ShowProjectExplorerCommand { get; private set; }
+        private bool CanShowProjectExplorer() => _projectManager.ActiveProject != null;
         private void ExecuteShowProjectExplorer() => ProjectExplorer.IsVisible = !ProjectExplorer.IsVisible;
 
+        public ICommand ShowPropertiesCommand { get; private set; }
+        private bool CanShowProperties() => _projectManager.ActiveProject != null;
         private void ExecuteShowProperties() => PropertiesViewModel.IsVisible = !PropertiesViewModel.IsVisible;
 
-        private void ExecuteVisualEditor() => VisualEditorVM.IsVisible = !VisualEditorVM.IsVisible;
+        //public ICommand ShowVisualEditorCommand { get; private set; }
+        //private bool CanShowVisualEditor() => _projectManager.ActiveProject != null;
+        //private void ExecuteVisualEditor() => VisualEditorVM.IsVisible = !VisualEditorVM.IsVisible;
 
+        //public ICommand ShowCodeEditorCommand { get; private set; }
+        //private bool CanShowCodeEditor() => _projectManager.ActiveProject != null;
+        //private void ExecuteCodeEditor() => CodeEditorVM.IsVisible = !CodeEditorVM.IsVisible;
 
-        private bool CanSaveAll() => _projectManager.ActiveProject != null && OpenDocuments?.Count > 0;
-
-        private void ExecuteSaveAll()
-        {
-            foreach (var file in OpenDocuments)
-            {
-                Save(file);
-            }
-        }
-
-        private bool CanSaveFile() => _projectManager.ActiveProject != null && ActiveDocument != null;
-
-        private void ExecuteSaveFile() => Save(ActiveDocument);
-
-        #endregion command implementation
+        #endregion commands
 
         #region properties
 
         #region ToolViewModels
 
-
         private AssetBrowserViewModel _assetBrowserViewModel;
-
-        private CodeEditorViewModel _codeEditorVm;
-
-        private ImportExportViewModel _importExportToolViewModel;
-
-
-        //private ImportViewModel _importViewModel = null;
-
-        private LogViewModel _logViewModel;
-
-        private ProjectExplorerViewModel _projectExplorerViewModel;
-
-        private PropertiesViewModel _propertiesViewModel;
-
-
-
-        private VisualEditorViewModel _visualEditorVm;
-
-
-
         public AssetBrowserViewModel AssetBrowserVM
         {
             get
             {
                 _assetBrowserViewModel ??= Locator.Current.GetService<AssetBrowserViewModel>();
-                //_assetBrowserViewModel.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _assetBrowserViewModel;
             }
         }
 
-        public CodeEditorViewModel CodeEditorVM
-        {
-            get
-            {
-                _codeEditorVm ??= Locator.Current.GetService<CodeEditorViewModel>();
-                //_codeEditorVm.PropertyChanged += OnToolViewModelPropertyChanged;
-                return _codeEditorVm;
-            }
-        }
-
-
+        private ImportExportViewModel _importExportToolViewModel;
         public ImportExportViewModel ImportExportToolVM
         {
             get
             {
                 _importExportToolViewModel ??= Locator.Current.GetService<ImportExportViewModel>();
-                //_importExportToolViewModel.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _importExportToolViewModel;
             }
         }
 
-
-        //public ImportViewModel ImportViewModel
-        //{
-        //    get
-        //    {
-        //        _importViewModel ??= ServiceLocator.Default.RegisterTypeAndInstantiate<ImportViewModel>();
-        //        return _importViewModel;
-        //    }
-        //}
-
-
-
-        public LogViewModel Log //=> _logViewModel ??= new LogViewModel();
+        private LogViewModel _logViewModel;
+        public LogViewModel Log
         {
             get
             {
@@ -928,17 +666,17 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-
+        private ProjectExplorerViewModel _projectExplorerViewModel;
         public ProjectExplorerViewModel ProjectExplorer
         {
             get
             {
                 _projectExplorerViewModel ??= Locator.Current.GetService<ProjectExplorerViewModel>();
-                //_projectExplorerViewModel.PropertyChanged += OnToolViewModelPropertyChanged;
                 return _projectExplorerViewModel;
             }
         }
 
+        private PropertiesViewModel _propertiesViewModel;
         public PropertiesViewModel PropertiesViewModel
         {
             get
@@ -948,47 +686,52 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public VisualEditorViewModel VisualEditorVM
-        {
-            get
-            {
-                _visualEditorVm ??= Locator.Current.GetService<VisualEditorViewModel>();
-                //_visualEditorVm.PropertyChanged += OnToolViewModelPropertyChanged;
-                return _visualEditorVm;
-            }
-        }
+        //private VisualEditorViewModel _visualEditorVm;
+        //public VisualEditorViewModel VisualEditorVM
+        //{
+        //    get
+        //    {
+        //        _visualEditorVm ??= Locator.Current.GetService<VisualEditorViewModel>();
+        //        return _visualEditorVm;
+        //    }
+        //}
 
-
+        //private CodeEditorViewModel _codeEditorVm;
+        //public CodeEditorViewModel CodeEditorVM
+        //{
+        //    get
+        //    {
+        //        _codeEditorVm ??= Locator.Current.GetService<CodeEditorViewModel>();
+        //        return _codeEditorVm;
+        //    }
+        //}
 
         #endregion ToolViewModels
 
-        ///// <summary>
-        ///// Event is raised when AvalonDock (or the user) selects a new document.
-        ///// </summary>
-        //public event EventHandler ActiveDocumentChanged;
-
-        /// <summary>
-        /// Gets/Sets the currently active document.
-        /// </summary>
         [Reactive] public DocumentViewModel ActiveDocument { get; set; }
 
-        /// <summary>
-        /// Gets a collection of all currently available document viewmodels
-        /// </summary>
         [Reactive] public ObservableCollection<DocumentViewModel> OpenDocuments { get; protected set; } = new();
-        //public List<DocumentViewModel> Files => Tools
-        //    .OfType<DocumentViewModel>()
-        //    .Where(_ => _.State == DockState.Document)
-        //    .ToList();
 
-        /// <summary>
-        /// Gets an enumeration of all currently available tool window viewmodels.
-        /// </summary>
         public ObservableCollection<IDockElement> DockedViews { get; set; }
 
         #endregion properties
 
         #region methods
+
+        private void CreateCr2wFile(AddFileModel model)
+        {
+            //TODO
+        }
+
+        private async Task RequestOpenFile(string fullPath)
+        {
+            if (!File.Exists(fullPath))
+            {
+                _ = await Task.FromException<FileNotFoundException>(new FileNotFoundException(nameof(RequestOpenFile), fullPath));
+            }
+            // check if in 
+            await RequestFileOpen(fullPath);
+        }
 
         /// <summary>
         /// Add a new document viewmodel into the collection of files.

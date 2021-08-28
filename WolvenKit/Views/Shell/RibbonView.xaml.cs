@@ -19,6 +19,9 @@ namespace WolvenKit.Views.Shell
 {
     public partial class RibbonView : ReactiveUserControl<RibbonViewModel>
     {
+        private AppViewModel _mainViewModel;
+
+
         public RibbonView()
         {
             ViewModel = Locator.Current.GetService<RibbonViewModel>();
@@ -204,7 +207,6 @@ namespace WolvenKit.Views.Shell
 
         #region properties
 
-        private AppViewModel _mainViewModel;
 
         #endregion
 
