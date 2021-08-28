@@ -717,6 +717,8 @@ namespace WolvenKit.ViewModels.Shell
 
         #endregion ToolViewModels
 
+        [Reactive] public string Status { get; set; }
+
         [Reactive] public IDocumentViewModel ActiveDocument { get; set; }
 
         private List<IDocumentViewModel> OpenDocuments => DockedViews.OfType<IDocumentViewModel>().ToList();

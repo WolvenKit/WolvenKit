@@ -54,7 +54,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="38" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <shell:RibbonView Grid.Row="0" />
