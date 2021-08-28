@@ -36,8 +36,6 @@ namespace WolvenKit.ViewModels.Documents
             using var fs = new FileStream(FilePath, FileMode.Create, FileAccess.ReadWrite);
             using var bw = new StreamWriter(fs);
             bw.Write(Document.Text);
-
-
         }
 
         public override async Task<bool> OpenFileAsync(string path)

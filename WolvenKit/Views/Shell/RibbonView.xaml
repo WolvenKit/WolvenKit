@@ -16,7 +16,6 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:shell="clr-namespace:WolvenKit.ViewModels.Shell;assembly=WolvenKit.App"
     xmlns:shell1="clr-namespace:WolvenKit.Views.Shell"
-    Margin="0,33,0,0"
     Panel.ZIndex="-15">
 
     <!--  Resources  -->
@@ -1742,7 +1741,7 @@
         <Border
             Width="70"
             Height="30"
-            Margin="0,-30,0,0"
+            Margin="0,24,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="top"
             Background="{DynamicResource ContentBackgroundAlt2}"
@@ -1751,7 +1750,7 @@
         <Border
             Width="42"
             Height="49"
-            Margin="13,-24,0,0"
+            Margin="13,0,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Background="Transparent"
@@ -1778,7 +1777,7 @@
         <Border
             Width="42"
             Height="49"
-            Margin="13,-24,0,0"
+            Margin="13,0,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="top"
             Background="Transparent"
