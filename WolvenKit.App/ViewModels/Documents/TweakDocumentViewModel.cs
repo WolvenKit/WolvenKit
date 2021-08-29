@@ -182,21 +182,21 @@ namespace WolvenKit.ViewModels.Documents
                     case EIType.CInt64:
                         value = (CInt64)long.Parse(ValueString);
                         break;
-                    case EIType.CColor:
-                        value = CColor.Parse(ValueString);
-                        break;
-                    case EIType.CEulerAngles:
-                        value = CEulerAngles.Parse(ValueString);
-                        break;
-                    case EIType.CQuaternion:
-                        value = CQuaternion.Parse(ValueString);
-                        break;
-                    case EIType.CVector2:
-                        value = CVector2.Parse(ValueString);
-                        break;
-                    case EIType.CVector3:
-                        value = CVector3.Parse(ValueString);
-                        break;
+                    //case EIType.CColor:
+                    //    value = CColor.Parse(ValueString);
+                    //    break;
+                    //case EIType.CEulerAngles:
+                    //    value = CEulerAngles.Parse(ValueString);
+                    //    break;
+                    //case EIType.CQuaternion:
+                    //    value = CQuaternion.Parse(ValueString);
+                    //    break;
+                    //case EIType.CVector2:
+                    //    value = CVector2.Parse(ValueString);
+                    //    break;
+                    //case EIType.CVector3:
+                    //    value = CVector3.Parse(ValueString);
+                    //    break;
                     default:
                         break;
                 }
