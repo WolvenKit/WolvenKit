@@ -9,7 +9,7 @@ using WolvenKit.RED4.TweakDB.Types;
 
 namespace WolvenKit.RED4.TweakDB.Converters
 {
-    internal sealed class JsonConverterCFloat : JsonConverter<CFloat>
+    public sealed class JsonConverterCFloat : JsonConverter<CFloat>
     {
         public override CFloat Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
             => reader.GetSingle();

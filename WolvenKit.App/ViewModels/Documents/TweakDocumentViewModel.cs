@@ -13,6 +13,8 @@ using ICSharpCode.AvalonEdit.Utils;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.RED4.TweakDB;
+using WolvenKit.RED4.TweakDB.Converters;
+using WolvenKit.RED4.TweakDB.Types;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -29,7 +31,7 @@ namespace WolvenKit.ViewModels.Documents
 
             Types = new(Enum.GetNames<EIType>());
 
-            AddFlatCommand = ReactiveCommand.Create(AddFlat, canAddFlat);
+            AddFlatCommand = ReactiveCommand.Create(AddFlat/*, canAddFlat*/);
 
         }
 
@@ -45,6 +47,7 @@ namespace WolvenKit.ViewModels.Documents
         [Reactive] public string IsReadOnlyReason { get; set; }
 
 
+        [Reactive] public string ValueString { get; set; }
 
         [Reactive] public string FlatName { get; set; }
 
@@ -58,27 +61,88 @@ namespace WolvenKit.ViewModels.Documents
         #region commands
 
         public ReactiveCommand<Unit, Unit> AddFlatCommand { get; }
-        private IObservable<bool> canAddFlat => this.WhenAnyValue(x => x.FileName, b =>
-        {
-            return !string.IsNullOrEmpty(b);
-        });
+        //private IObservable<bool> canAddFlat => this.WhenAnyValue(x => x.FileName, b =>
+        //{
+        //    return !string.IsNullOrEmpty(b);
+        //});
         private void AddFlat()
         {
-            if (string.IsNullOrEmpty(SelectedType) || string.IsNullOrEmpty(FlatName))
+            if (string.IsNullOrEmpty(SelectedType)
+                || string.IsNullOrEmpty(FlatName)
+                || string.IsNullOrEmpty(ValueString))
             {
                 return;
             }
 
+            // parse type
+            if (!Enum.TryParse<EIType>(SelectedType, out var type))
+            {
+                return;
+            }
+
+            object value = null;
+            switch (type)
+            {
+                case EIType.CName:
+                    CName CName = ValueString;
+                    value = CName;
+                    break;
+                case EIType.CString:
+                    CString CString = ValueString;
+                    value = CString;
+                    break;
+                case EIType.CFloat:
+                    CFloat CFloat = float.Parse(ValueString);
+                    value = CFloat;
+                    break;
+                case EIType.CBool:
+                    break;
+                case EIType.CUint8:
+                    break;
+                case EIType.CUint16:
+                    break;
+                case EIType.CUint32:
+                    break;
+                case EIType.CUint64:
+                    break;
+                case EIType.CInt8:
+                    break;
+                case EIType.CInt16:
+                    break;
+                case EIType.CInt32:
+                    break;
+                case EIType.CInt64:
+                    break;
+                default:
+                    break;
+            }
+
+
+            // parse Value
+            if (value is not IType ivalue)
+            {
+                return;
+            }
+
+
             var newFlat = new TweakFlatDto()
             {
                 Name = FlatName,
-                Type = SelectedType
-
+                Type = type,
+                Value = ivalue
             };
-
             Flats.Add(newFlat);
 
-            var options = new JsonSerializerOptions { WriteIndented = true };
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                Converters =
+                {
+                    new JsonConverterCName(),
+                    new JsonConverterCString(),
+                    new JsonConverterCFloat()
+                }
+            };
             string jsonString = JsonSerializer.Serialize(Flats, options);
             Document.Text = jsonString;
         }
@@ -137,6 +201,10 @@ namespace WolvenKit.ViewModels.Documents
                 }
 
                 FilePath = paramFilePath;
+
+
+                // parse file
+
 
                 return true;
             }

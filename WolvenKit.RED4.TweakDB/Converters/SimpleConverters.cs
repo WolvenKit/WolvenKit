@@ -9,7 +9,7 @@ using WolvenKit.RED4.TweakDB.Types;
 
 namespace WolvenKit.RED4.TweakDB.Converters
 {
-    internal sealed class JsonConverterCName : JsonConverter<CName>
+    public sealed class JsonConverterCName : JsonConverter<CName>
     {
         public override CName Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.GetString();
 
@@ -17,7 +17,7 @@ namespace WolvenKit.RED4.TweakDB.Converters
             => writer.WriteStringValue(value.Text);
     }
 
-    internal sealed class JsonConverterCString : JsonConverter<CString>
+    public sealed class JsonConverterCString : JsonConverter<CString>
     {
         public override CString Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.GetString();
 

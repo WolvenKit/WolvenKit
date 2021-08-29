@@ -94,6 +94,11 @@ namespace WolvenKit.Views.Documents
                         v => v.AddButton)
                     .DisposeWith(disposables);
 
+
+                this.Bind(ViewModel,
+                        viewModel => viewModel.ValueString,
+                        view => view.ValueTextBox.Text)
+                    .DisposeWith(disposables);
             });
         }
     }

@@ -91,8 +91,8 @@ namespace WolvenKit.RED4.TweakDB
     public class TweakFlatDto
     {
         public string Name { get; set; }
-        public string Type { get; set; }
-        public object Value { get; set; }
+        public EIType Type { get; set; }
+        public IType Value { get; set; }
     }
 
     public enum EIType
