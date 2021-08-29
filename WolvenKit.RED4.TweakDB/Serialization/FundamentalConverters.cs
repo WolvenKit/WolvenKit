@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using WolvenKit.RED4.TweakDB.Types;
 
-namespace WolvenKit.RED4.TweakDB.Converters
+namespace WolvenKit.RED4.TweakDB.Serialization
 {
     public sealed class CFloatJsonConverter : JsonConverter<CFloat>
     {

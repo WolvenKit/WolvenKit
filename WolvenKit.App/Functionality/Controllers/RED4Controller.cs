@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using DynamicData;
@@ -21,6 +22,8 @@ using WolvenKit.Modkit.RED4;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.TweakDB;
+using WolvenKit.RED4.TweakDB.Types;
 
 namespace WolvenKit.Functionality.Controllers
 {
@@ -218,14 +221,40 @@ namespace WolvenKit.Functionality.Controllers
 
             }
 
+            // pack mod
             _modTools.Pack(
                 new DirectoryInfo(cp77Proj.ModDirectory),
                 new DirectoryInfo(cp77Proj.PackedModDirectory),
                 $"mod{cp77Proj.Name}");
             _loggerService.Info("Packing complete!");
 
+            // compile tweak files
+            CompileTweakFiles(cp77Proj);
+
             InstallMod();
+
             return Task.FromResult(true);
+        }
+
+        private void CompileTweakFiles(Cp77Project cp77Proj)
+        {
+            var tweakFiles = Directory.GetFiles(cp77Proj.TweakDirectory);
+            foreach (var f in tweakFiles)
+            {
+                var json = File.ReadAllText(f);
+                var filename = Path.GetFileName(f);
+                var outPath = Path.Combine(cp77Proj.PackedScriptsDirectory, filename);
+
+                if (RED4.TweakDB.Serialization.Serialization.TryParseJsonFlats(json, out var dict))
+                {
+                    var db = new TweakDB();
+                    foreach (var (key, value) in dict)
+                    {
+                        db.Add(key, value);
+                    }
+                    db.Save(outPath);
+                }
+            }
         }
 
         /// <summary>

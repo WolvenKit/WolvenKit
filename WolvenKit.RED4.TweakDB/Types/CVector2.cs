@@ -13,23 +13,6 @@ namespace WolvenKit.RED4.TweakDB.Types
 
         public override string Name => "Vector2";
         public override string ToString() => $"Vector2, X = {X.Value}, Y = {Y.Value}";
-        public static CVector2 Parse(string valueString)
-        {
-            // parse this: 6.7,5
-            var splits = valueString.Split(',');
-            if (splits.Length != 2)
-            {
-                throw new FormatException();
-            }
-
-            var x = float.Parse(splits[0]);
-            var y = float.Parse(splits[1]);
-
-            return new CVector2
-            {
-                X = x,
-                Y = y,
-            };
-        }
+        
     }
 }
