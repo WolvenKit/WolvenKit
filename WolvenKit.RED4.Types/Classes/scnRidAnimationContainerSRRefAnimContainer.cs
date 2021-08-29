@@ -1,0 +1,27 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class scnRidAnimationContainerSRRefAnimContainer : RedBaseClass
+	{
+		private scnRidAnimationSRRefId _animation;
+		private scnRidAnimationContainerSRRefAnimContainerContext _context;
+
+		[Ordinal(0)] 
+		[RED("animation")] 
+		public scnRidAnimationSRRefId Animation
+		{
+			get => GetProperty(ref _animation);
+			set => SetProperty(ref _animation, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("context")] 
+		public scnRidAnimationContainerSRRefAnimContainerContext Context
+		{
+			get => GetProperty(ref _context);
+			set => SetProperty(ref _context, value);
+		}
+	}
+}

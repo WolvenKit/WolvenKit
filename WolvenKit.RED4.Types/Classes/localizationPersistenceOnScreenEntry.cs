@@ -1,0 +1,45 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class localizationPersistenceOnScreenEntry : RedBaseClass
+	{
+		private CUInt64 _primaryKey;
+		private CString _secondaryKey;
+		private CString _femaleVariant;
+		private CString _maleVariant;
+
+		[Ordinal(0)] 
+		[RED("primaryKey")] 
+		public CUInt64 PrimaryKey
+		{
+			get => GetProperty(ref _primaryKey);
+			set => SetProperty(ref _primaryKey, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("secondaryKey")] 
+		public CString SecondaryKey
+		{
+			get => GetProperty(ref _secondaryKey);
+			set => SetProperty(ref _secondaryKey, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("femaleVariant")] 
+		public CString FemaleVariant
+		{
+			get => GetProperty(ref _femaleVariant);
+			set => SetProperty(ref _femaleVariant, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("maleVariant")] 
+		public CString MaleVariant
+		{
+			get => GetProperty(ref _maleVariant);
+			set => SetProperty(ref _maleVariant, value);
+		}
+	}
+}

@@ -1,0 +1,27 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class entLookAtAddEvent : entAnimTargetAddEvent
+	{
+		private animLookAtRef _outLookAtRef;
+		private animLookAtRequest _request;
+
+		[Ordinal(2)] 
+		[RED("outLookAtRef")] 
+		public animLookAtRef OutLookAtRef
+		{
+			get => GetProperty(ref _outLookAtRef);
+			set => SetProperty(ref _outLookAtRef, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("request")] 
+		public animLookAtRequest Request
+		{
+			get => GetProperty(ref _request);
+			set => SetProperty(ref _request, value);
+		}
+	}
+}

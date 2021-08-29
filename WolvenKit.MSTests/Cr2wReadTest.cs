@@ -1,15 +1,17 @@
 #define IS_PARALLEL
-//#undef IS_PARALLEL
+#undef IS_PARALLEL
 
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.Common;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 
@@ -33,6 +35,29 @@ namespace WolvenKit.MSTests
         //    Test_Extension();
         //}
 
+        [TestMethod]
+        public void Debug()
+        {
+            var files = File.ReadAllLines(@"C:\Dev\C77\Generic\archivehashes.txt");
+            var missingHashes = File.ReadAllLines(@"C:\Dev\C77\Generic\missinghashes.txt").ToList();
+            var newHashes = new List<string>();
+
+            foreach (var file in files)
+            {
+                var t1 = file.LastIndexOf('.');
+                if (t1 == -1)
+                    continue;
+
+                var t2 = file.Substring(0, t1);
+                var t3 = t2 + ".cookedprefab";
+
+                var hash = FNV1A64HashAlgorithm.HashString(t3);
+                if (missingHashes.Contains(hash.ToString()))
+                {
+                    newHashes.Add(hash.ToString());
+                }
+            }
+        }
 
         [TestMethod]
         public void Read_bin() => Test_Extension(".bin");
@@ -442,13 +467,31 @@ namespace WolvenKit.MSTests
             {
                 try
                 {
+                    var sw = new Stopwatch();
+
                     var ar = s_bm.Archives[file.Archive.ArchiveAbsolutePath] as Archive;
                     using var ms = new MemoryStream();
                     ar?.CopyFileToStreamWithoutBuffers(ms, file.NameHash64);
 
                     var c = new CR2WFile {FileName = file.NameOrHash};
                     ms.Seek(0, SeekOrigin.Begin);
+
+                    sw.Start();
                     var readResult = c.Read(ms);
+                    sw.Stop();
+                    var t1 = sw.ElapsedTicks;
+
+
+                    using var ms2 = new MemoryStream();
+                    ar?.CopyFileToStreamWithoutBuffers(ms2, file.NameHash64);
+
+                    var c2 = new WolvenKit.RED4.NewCR2W.NewCR2WFile();
+                    ms2.Seek(0, SeekOrigin.Begin);
+
+                    sw.Restart();
+                    var readResult2 = c2.Read(ms2);
+                    sw.Stop();
+                    var t2 = sw.ElapsedTicks;
 
                     switch (readResult)
                     {

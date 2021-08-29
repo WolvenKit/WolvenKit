@@ -1,0 +1,27 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class gamemountingUnmountingRequest : IScriptable
+	{
+		private gamemountingMountingInfo _lowLevelMountingInfo;
+		private CHandle<gameMountEventData> _mountData;
+
+		[Ordinal(0)] 
+		[RED("lowLevelMountingInfo")] 
+		public gamemountingMountingInfo LowLevelMountingInfo
+		{
+			get => GetProperty(ref _lowLevelMountingInfo);
+			set => SetProperty(ref _lowLevelMountingInfo, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("mountData")] 
+		public CHandle<gameMountEventData> MountData
+		{
+			get => GetProperty(ref _mountData);
+			set => SetProperty(ref _mountData, value);
+		}
+	}
+}

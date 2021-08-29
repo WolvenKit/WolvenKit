@@ -1,0 +1,63 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class sampleBulletGeneric : BaseProjectile
+	{
+		private CHandle<entIComponent> _meshComponent;
+		private CHandle<gameEffectInstance> _damage;
+		private CFloat _countTime;
+		private CFloat _startVelocity;
+		private CFloat _lifetime_456;
+		private CBool _alive;
+
+		[Ordinal(51)] 
+		[RED("meshComponent")] 
+		public CHandle<entIComponent> MeshComponent
+		{
+			get => GetProperty(ref _meshComponent);
+			set => SetProperty(ref _meshComponent, value);
+		}
+
+		[Ordinal(52)] 
+		[RED("damage")] 
+		public CHandle<gameEffectInstance> Damage
+		{
+			get => GetProperty(ref _damage);
+			set => SetProperty(ref _damage, value);
+		}
+
+		[Ordinal(53)] 
+		[RED("countTime")] 
+		public CFloat CountTime
+		{
+			get => GetProperty(ref _countTime);
+			set => SetProperty(ref _countTime, value);
+		}
+
+		[Ordinal(54)] 
+		[RED("startVelocity")] 
+		public CFloat StartVelocity
+		{
+			get => GetProperty(ref _startVelocity);
+			set => SetProperty(ref _startVelocity, value);
+		}
+
+		[Ordinal(55)] 
+		[RED("lifetime")] 
+		public CFloat Lifetime_456
+		{
+			get => GetProperty(ref _lifetime_456);
+			set => SetProperty(ref _lifetime_456, value);
+		}
+
+		[Ordinal(56)] 
+		[RED("alive")] 
+		public CBool Alive
+		{
+			get => GetProperty(ref _alive);
+			set => SetProperty(ref _alive, value);
+		}
+	}
+}

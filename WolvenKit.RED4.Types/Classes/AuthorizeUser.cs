@@ -1,0 +1,36 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class AuthorizeUser : ActionBool
+	{
+		private CName _enteredPassword;
+		private CArray<CName> _validPasswords;
+		private CName _libraryName;
+
+		[Ordinal(25)] 
+		[RED("enteredPassword")] 
+		public CName EnteredPassword
+		{
+			get => GetProperty(ref _enteredPassword);
+			set => SetProperty(ref _enteredPassword, value);
+		}
+
+		[Ordinal(26)] 
+		[RED("validPasswords")] 
+		public CArray<CName> ValidPasswords
+		{
+			get => GetProperty(ref _validPasswords);
+			set => SetProperty(ref _validPasswords, value);
+		}
+
+		[Ordinal(27)] 
+		[RED("libraryName")] 
+		public CName LibraryName
+		{
+			get => GetProperty(ref _libraryName);
+			set => SetProperty(ref _libraryName, value);
+		}
+	}
+}

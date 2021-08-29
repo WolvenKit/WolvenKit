@@ -1,0 +1,45 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class animAnimVariableQuaternion : animAnimVariable
+	{
+		private CFloat _roll;
+		private CFloat _pitch;
+		private CFloat _yaw;
+		private Quaternion _default;
+
+		[Ordinal(2)] 
+		[RED("roll")] 
+		public CFloat Roll
+		{
+			get => GetProperty(ref _roll);
+			set => SetProperty(ref _roll, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("pitch")] 
+		public CFloat Pitch
+		{
+			get => GetProperty(ref _pitch);
+			set => SetProperty(ref _pitch, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("yaw")] 
+		public CFloat Yaw
+		{
+			get => GetProperty(ref _yaw);
+			set => SetProperty(ref _yaw, value);
+		}
+
+		[Ordinal(5)] 
+		[RED("default")] 
+		public Quaternion Default
+		{
+			get => GetProperty(ref _default);
+			set => SetProperty(ref _default, value);
+		}
+	}
+}

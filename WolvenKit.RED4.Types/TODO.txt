@@ -1,0 +1,4 @@
+- Unify type names...
+- CStatic -> CStaticArray
+- Custom props
+- Check what really needs to be here, what can move to WolvenKit.Core

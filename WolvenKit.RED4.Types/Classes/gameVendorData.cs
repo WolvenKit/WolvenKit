@@ -1,0 +1,36 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class gameVendorData : RedBaseClass
+	{
+		private CString _vendorId;
+		private entEntityID _entityID;
+		private CBool _isActive;
+
+		[Ordinal(0)] 
+		[RED("vendorId")] 
+		public CString VendorId
+		{
+			get => GetProperty(ref _vendorId);
+			set => SetProperty(ref _vendorId, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("entityID")] 
+		public entEntityID EntityID
+		{
+			get => GetProperty(ref _entityID);
+			set => SetProperty(ref _entityID, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("isActive")] 
+		public CBool IsActive
+		{
+			get => GetProperty(ref _isActive);
+			set => SetProperty(ref _isActive, value);
+		}
+	}
+}

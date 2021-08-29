@@ -1,0 +1,36 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class grsGatherAreaReplicatedInfo : RedBaseClass
+	{
+		private CStatic<netPeerID> _enteredPlayerIDs;
+		private CBool _hasActiveQuestListener;
+		private CBool _enabled;
+
+		[Ordinal(0)] 
+		[RED("enteredPlayerIDs", 7)] 
+		public CStatic<netPeerID> EnteredPlayerIDs
+		{
+			get => GetProperty(ref _enteredPlayerIDs);
+			set => SetProperty(ref _enteredPlayerIDs, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("hasActiveQuestListener")] 
+		public CBool HasActiveQuestListener
+		{
+			get => GetProperty(ref _hasActiveQuestListener);
+			set => SetProperty(ref _hasActiveQuestListener, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("enabled")] 
+		public CBool Enabled
+		{
+			get => GetProperty(ref _enabled);
+			set => SetProperty(ref _enabled, value);
+		}
+	}
+}

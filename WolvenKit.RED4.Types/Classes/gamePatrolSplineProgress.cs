@@ -1,0 +1,36 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class gamePatrolSplineProgress : ISerializable
+	{
+		private CArray<gamePatrolSplineControlPoint> _currentControlPoints;
+		private CFloat _entrySplineParam;
+		private CUInt32 _controlPointIndex;
+
+		[Ordinal(0)] 
+		[RED("currentControlPoints")] 
+		public CArray<gamePatrolSplineControlPoint> CurrentControlPoints
+		{
+			get => GetProperty(ref _currentControlPoints);
+			set => SetProperty(ref _currentControlPoints, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("entrySplineParam")] 
+		public CFloat EntrySplineParam
+		{
+			get => GetProperty(ref _entrySplineParam);
+			set => SetProperty(ref _entrySplineParam, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("controlPointIndex")] 
+		public CUInt32 ControlPointIndex
+		{
+			get => GetProperty(ref _controlPointIndex);
+			set => SetProperty(ref _controlPointIndex, value);
+		}
+	}
+}

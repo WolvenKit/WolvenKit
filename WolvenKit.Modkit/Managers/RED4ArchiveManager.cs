@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ProtoBuf;
 using WolvenKit.Common.Model;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common
 {
@@ -13,6 +14,9 @@ namespace WolvenKit.Common
     [ProtoContract]
     public abstract class RED4ArchiveManager : WolvenKitArchiveManager
     {
-        
+        public RED4ArchiveManager()
+        {
+            RedReflection.BuildCache();
+        }
     }
 }

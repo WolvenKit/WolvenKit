@@ -1,0 +1,54 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class IntercomControllerPS : ScriptableDeviceComponentPS
+	{
+		private CBool _isCalling;
+		private CBool _sceneStarted;
+		private CBool _endingCall;
+		private entEntityID _forceLookAt;
+		private CBool _forceFollow;
+
+		[Ordinal(104)] 
+		[RED("isCalling")] 
+		public CBool IsCalling
+		{
+			get => GetProperty(ref _isCalling);
+			set => SetProperty(ref _isCalling, value);
+		}
+
+		[Ordinal(105)] 
+		[RED("sceneStarted")] 
+		public CBool SceneStarted
+		{
+			get => GetProperty(ref _sceneStarted);
+			set => SetProperty(ref _sceneStarted, value);
+		}
+
+		[Ordinal(106)] 
+		[RED("endingCall")] 
+		public CBool EndingCall
+		{
+			get => GetProperty(ref _endingCall);
+			set => SetProperty(ref _endingCall, value);
+		}
+
+		[Ordinal(107)] 
+		[RED("forceLookAt")] 
+		public entEntityID ForceLookAt
+		{
+			get => GetProperty(ref _forceLookAt);
+			set => SetProperty(ref _forceLookAt, value);
+		}
+
+		[Ordinal(108)] 
+		[RED("forceFollow")] 
+		public CBool ForceFollow
+		{
+			get => GetProperty(ref _forceFollow);
+			set => SetProperty(ref _forceFollow, value);
+		}
+	}
+}

@@ -1,0 +1,27 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class SideScrollerMiniGameScoreSystemAdvanced : gameScriptableSystem
+	{
+		private CArrayFixedSize<CInt32> _scoreData;
+		private CArrayFixedSize<CString> _gameNames;
+
+		[Ordinal(0)] 
+		[RED("scoreData", 3)] 
+		public CArrayFixedSize<CInt32> ScoreData
+		{
+			get => GetProperty(ref _scoreData);
+			set => SetProperty(ref _scoreData, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("gameNames", 3)] 
+		public CArrayFixedSize<CString> GameNames
+		{
+			get => GetProperty(ref _gameNames);
+			set => SetProperty(ref _gameNames, value);
+		}
+	}
+}

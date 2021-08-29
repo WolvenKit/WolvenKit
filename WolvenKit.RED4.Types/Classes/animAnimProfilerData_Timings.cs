@@ -1,0 +1,36 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class animAnimProfilerData_Timings : RedBaseClass
+	{
+		private CName _className;
+		private CFloat _avarageExclusiveTimeMS;
+		private CFloat _avarageInclusiveTimeMS;
+
+		[Ordinal(0)] 
+		[RED("className")] 
+		public CName ClassName
+		{
+			get => GetProperty(ref _className);
+			set => SetProperty(ref _className, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("avarageExclusiveTimeMS")] 
+		public CFloat AvarageExclusiveTimeMS
+		{
+			get => GetProperty(ref _avarageExclusiveTimeMS);
+			set => SetProperty(ref _avarageExclusiveTimeMS, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("avarageInclusiveTimeMS")] 
+		public CFloat AvarageInclusiveTimeMS
+		{
+			get => GetProperty(ref _avarageInclusiveTimeMS);
+			set => SetProperty(ref _avarageInclusiveTimeMS, value);
+		}
+	}
+}

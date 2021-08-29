@@ -1,0 +1,54 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class animImportFacialCorrectivePoseDataDesc : RedBaseClass
+	{
+		private CArray<animImportFacialTransform> _transforms;
+		private CArray<animImportFacialTransformNoScale> _transformsNoScale;
+		private CArray<CUInt16> _transformIds;
+		private CArray<CName> _transformNames;
+		private CArray<CFloat> _parentsWeights;
+
+		[Ordinal(0)] 
+		[RED("transforms")] 
+		public CArray<animImportFacialTransform> Transforms
+		{
+			get => GetProperty(ref _transforms);
+			set => SetProperty(ref _transforms, value);
+		}
+
+		[Ordinal(1)] 
+		[RED("transformsNoScale")] 
+		public CArray<animImportFacialTransformNoScale> TransformsNoScale
+		{
+			get => GetProperty(ref _transformsNoScale);
+			set => SetProperty(ref _transformsNoScale, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("transformIds")] 
+		public CArray<CUInt16> TransformIds
+		{
+			get => GetProperty(ref _transformIds);
+			set => SetProperty(ref _transformIds, value);
+		}
+
+		[Ordinal(3)] 
+		[RED("transformNames")] 
+		public CArray<CName> TransformNames
+		{
+			get => GetProperty(ref _transformNames);
+			set => SetProperty(ref _transformNames, value);
+		}
+
+		[Ordinal(4)] 
+		[RED("parentsWeights")] 
+		public CArray<CFloat> ParentsWeights
+		{
+			get => GetProperty(ref _parentsWeights);
+			set => SetProperty(ref _parentsWeights, value);
+		}
+	}
+}

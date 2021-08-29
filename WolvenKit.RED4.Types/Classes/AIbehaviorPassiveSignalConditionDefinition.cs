@@ -1,0 +1,27 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class AIbehaviorPassiveSignalConditionDefinition : AIbehaviorPassiveConditionDefinition
+	{
+		private CName _tag;
+		private CBool _deactivateSignal;
+
+		[Ordinal(1)] 
+		[RED("tag")] 
+		public CName Tag
+		{
+			get => GetProperty(ref _tag);
+			set => SetProperty(ref _tag, value);
+		}
+
+		[Ordinal(2)] 
+		[RED("deactivateSignal")] 
+		public CBool DeactivateSignal
+		{
+			get => GetProperty(ref _deactivateSignal);
+			set => SetProperty(ref _deactivateSignal, value);
+		}
+	}
+}
