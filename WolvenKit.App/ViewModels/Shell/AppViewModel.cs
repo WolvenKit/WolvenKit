@@ -53,11 +53,11 @@ namespace WolvenKit.ViewModels.Shell
         private readonly INotificationService _notificationService;
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
 
-        
-        
 
-        
-        
+
+
+
+
 
 
         #endregion fields
@@ -167,7 +167,7 @@ namespace WolvenKit.ViewModels.Shell
 
         #region init
 
-        private async void OnStartup()
+        private void OnStartup()
         {
             _updateService.SetUpdateChannel(_settingsManager.UpdateChannel);
             _updateService.Init(new string[] { Constants.UpdateUrl, Constants.UpdateUrlNightly },
@@ -206,15 +206,6 @@ namespace WolvenKit.ViewModels.Shell
 
                 Application.Current.Shutdown();
             });
-
-            try
-            {
-                await _updateService.CheckForUpdatesAsync();
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error(e.Message);
-            }
 
             ShowFirstTimeSetup();
         }
