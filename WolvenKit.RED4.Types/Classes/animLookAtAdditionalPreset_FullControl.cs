@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _mode);
 			set => SetProperty(ref _mode, value);
 		}
+
+		public animLookAtAdditionalPreset_FullControl()
+		{
+			_useRightHand = true;
+			_suppress = 1.000000F;
+		}
 	}
 }

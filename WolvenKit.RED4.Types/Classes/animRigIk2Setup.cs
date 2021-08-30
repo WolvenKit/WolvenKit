@@ -68,5 +68,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _endBoneIdx);
 			set => SetProperty(ref _endBoneIdx, value);
 		}
+
+		public animRigIk2Setup()
+		{
+			_firstBoneIdx = -1;
+			_secondBoneIdx = -1;
+			_endBoneIdx = -1;
+		}
 	}
 }

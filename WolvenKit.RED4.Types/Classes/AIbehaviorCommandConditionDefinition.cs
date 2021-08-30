@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _commandOut);
 			set => SetProperty(ref _commandOut, value);
 		}
+
+		public AIbehaviorCommandConditionDefinition()
+		{
+			_isWaiting = true;
+			_isExecuting = true;
+		}
 	}
 }

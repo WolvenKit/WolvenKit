@@ -77,5 +77,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _token);
 			set => SetProperty(ref _token, value);
 		}
+
+		public FindServersMenuGameController()
+		{
+			_nONE_CHOOSEN = -1;
+			_curentlyChoosenServer = -1;
+		}
 	}
 }

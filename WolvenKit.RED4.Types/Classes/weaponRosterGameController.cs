@@ -392,5 +392,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _genderName);
 			set => SetProperty(ref _genderName, value);
 		}
+
+		public weaponRosterGameController()
+		{
+			_folded = true;
+		}
 	}
 }

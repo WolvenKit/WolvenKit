@@ -68,5 +68,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxPathDisplayLength);
 			set => SetProperty(ref _maxPathDisplayLength, value);
 		}
+
+		public gamegpsSettings()
+		{
+			_pathRefreshTimeInterval = 1.000000F;
+			_lastPlayerNavmeshPositionRefreshTimeIntervalSecs = 0.330000F;
+			_maxPathDisplayLength = 400.000000F;
+		}
 	}
 }

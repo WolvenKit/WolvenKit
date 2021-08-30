@@ -77,5 +77,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _enableSummoning);
 			set => SetProperty(ref _enableSummoning, value);
 		}
+
+		public worldVehicleForbiddenAreaNotifier()
+		{
+			_areaSpeedLimit = 30.000000F;
+			_enableNullArea = true;
+		}
 	}
 }

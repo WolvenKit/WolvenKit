@@ -77,5 +77,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _keyboardCommandBBID);
 			set => SetProperty(ref _keyboardCommandBBID, value);
 		}
+
+		public keyboardHintGameController()
+		{
+			_topElementName = "KeyboardHintItem_Top";
+			_bottomElementName = "KeyboardHintItem_Bot";
+		}
 	}
 }

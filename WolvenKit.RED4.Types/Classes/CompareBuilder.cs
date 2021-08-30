@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _value);
 			set => SetProperty(ref _value, value);
 		}
+
+		public CompareBuilder()
+		{
+			_fLOAT_EQUAL_EPSILON = 0.010000F;
+		}
 	}
 }

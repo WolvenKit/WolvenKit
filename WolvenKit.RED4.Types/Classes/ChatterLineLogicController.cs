@@ -185,5 +185,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _limitSubtitlesDistance);
 			set => SetProperty(ref _limitSubtitlesDistance, value);
 		}
+
+		public ChatterLineLogicController()
+		{
+			_c_ExtraWideTextWidth = 110;
+		}
 	}
 }

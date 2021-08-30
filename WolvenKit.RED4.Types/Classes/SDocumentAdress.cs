@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _documentID);
 			set => SetProperty(ref _documentID, value);
 		}
+
+		public SDocumentAdress()
+		{
+			_folderID = -1;
+			_documentID = -1;
+		}
 	}
 }

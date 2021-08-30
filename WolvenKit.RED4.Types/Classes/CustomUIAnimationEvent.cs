@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _ownerID);
 			set => SetProperty(ref _ownerID, value);
 		}
+
+		public CustomUIAnimationEvent()
+		{
+			_libraryItemAnchor = new() { Value = Enums.inkEAnchor.Fill };
+		}
 	}
 }

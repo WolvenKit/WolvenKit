@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _setUnconscious);
 			set => SetProperty(ref _setUnconscious, value);
 		}
+
+		public questPuppetsUnconscious()
+		{
+			_setUnconscious = true;
+		}
 	}
 }

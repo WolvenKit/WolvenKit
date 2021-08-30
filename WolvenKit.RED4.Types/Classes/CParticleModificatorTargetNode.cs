@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxForce);
 			set => SetProperty(ref _maxForce, value);
 		}
+
+		public CParticleModificatorTargetNode()
+		{
+			_maxForce = 100.000000F;
+		}
 	}
 }

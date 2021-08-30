@@ -59,5 +59,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _shaftsAreaSettings);
 			set => SetProperty(ref _shaftsAreaSettings, value);
 		}
+
+		public BloomAreaSettings()
+		{
+			_luminanceThresholdMax = 2.000000F;
+			_sceneColorScale = 0.800000F;
+			_bloomColorScale = 0.200000F;
+			_numDownsamplePasses = 6;
+		}
 	}
 }

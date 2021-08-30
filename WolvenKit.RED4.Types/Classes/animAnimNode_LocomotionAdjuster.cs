@@ -68,5 +68,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxDistance);
 			set => SetProperty(ref _maxDistance, value);
 		}
+
+		public animAnimNode_LocomotionAdjuster()
+		{
+			_blendSpeedPos = 8.000000F;
+			_blendSpeedPosMin = 2.000000F;
+			_blendSpeedRot = 180.000000F;
+			_maxDistance = 1.000000F;
+		}
 	}
 }

@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _show);
 			set => SetProperty(ref _show, value);
 		}
+
+		public questToggleMinimapVisibility_NodeSubType()
+		{
+			_show = true;
+		}
 	}
 }

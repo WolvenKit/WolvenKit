@@ -50,5 +50,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isEnabled);
 			set => SetProperty(ref _isEnabled, value);
 		}
+
+		public entDebug_ShapeComponent()
+		{
+			_radius = 0.500000F;
+			_halfHeight = 0.500000F;
+			_isEnabled = true;
+		}
 	}
 }

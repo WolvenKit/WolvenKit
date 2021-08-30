@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _updatePeriod);
 			set => SetProperty(ref _updatePeriod, value);
 		}
+
+		public AIbehaviorDistanceToExpressionDefinition()
+		{
+			_tolerance = 0.100000F;
+		}
 	}
 }

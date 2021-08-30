@@ -140,5 +140,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _destructionEffect);
 			set => SetProperty(ref _destructionEffect, value);
 		}
+
+		public gameLightComponent()
+		{
+			_onStrength = 1.000000F;
+			_turnOnTime = 0.300000F;
+			_turnOffTime = 0.300000F;
+			_isDestructible = true;
+		}
 	}
 }

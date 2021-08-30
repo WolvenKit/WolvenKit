@@ -113,5 +113,21 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _damp_value_sprint);
 			set => SetProperty(ref _damp_value_sprint, value);
 		}
+
+		public AnimFeature_ProceduralLean()
+		{
+			_angle_threshold = 5.000000F;
+			_max_turn_angle = 50.000000F;
+			_hips_shift_side = 0.100000F;
+			_hips_shift_down = -0.010000F;
+			_hips_tilt = -8.000000F;
+			_hips_turn = -5.000000F;
+			_spine_tilt = -5.000000F;
+			_spine_turn = -12.000000F;
+			_arms_counter_turn = 10.000000F;
+			_transform_multiplyer = 1.000000F;
+			_damp_value_walk = 100.000000F;
+			_damp_value_sprint = 100.000000F;
+		}
 	}
 }

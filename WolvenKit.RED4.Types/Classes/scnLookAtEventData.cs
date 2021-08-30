@@ -212,5 +212,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _eyesLimits);
 			set => SetProperty(ref _eyesLimits, value);
 		}
+
+		public scnLookAtEventData()
+		{
+			_id = 4294967295;
+			_enable = true;
+			_singleWeight = 1.000000F;
+			_bodyWeight = 1.000000F;
+			_headWeight = 1.000000F;
+			_eyesWeight = 1.000000F;
+		}
 	}
 }

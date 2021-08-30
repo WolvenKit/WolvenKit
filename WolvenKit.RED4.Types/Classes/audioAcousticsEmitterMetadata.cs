@@ -86,5 +86,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _elevateSource);
 			set => SetProperty(ref _elevateSource, value);
 		}
+
+		public audioAcousticsEmitterMetadata()
+		{
+			_obstructionFadeTime = 0.200000F;
+		}
 	}
 }

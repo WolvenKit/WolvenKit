@@ -68,5 +68,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isEnabled);
 			set => SetProperty(ref _isEnabled, value);
 		}
+
+		public gameBinkComponent()
+		{
+			_videoPlayerName = "DefaultVideoPlayerName";
+			_isEnabled = true;
+		}
 	}
 }

@@ -248,5 +248,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _customProxyMeshHelper);
 			set => SetProperty(ref _customProxyMeshHelper, value);
 		}
+
+		public worldPrefab()
+		{
+			_proxyDistanceFactor = 1.500000F;
+		}
 	}
 }

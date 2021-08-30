@@ -59,5 +59,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _propagateChange);
 			set => SetProperty(ref _propagateChange, value);
 		}
+
+		public questJournalBulkUpdate_NodeType()
+		{
+			_requiredEntryState = "Any";
+			_newEntryState = "Inactive";
+			_sendNotification = true;
+		}
 	}
 }

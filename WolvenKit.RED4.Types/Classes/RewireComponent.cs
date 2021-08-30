@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isActive);
 			set => SetProperty(ref _isActive, value);
 		}
+
+		public RewireComponent()
+		{
+			_miniGameVideoLenght = 5.000000F;
+		}
 	}
 }

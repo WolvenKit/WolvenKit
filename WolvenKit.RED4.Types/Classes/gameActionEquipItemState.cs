@@ -59,5 +59,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _spawnDelay);
 			set => SetProperty(ref _spawnDelay, value);
 		}
+
+		public gameActionEquipItemState()
+		{
+			_duration = -1.000000F;
+			_spawnDelay = -1.000000F;
+		}
 	}
 }

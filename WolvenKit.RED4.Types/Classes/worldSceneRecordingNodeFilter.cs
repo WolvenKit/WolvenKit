@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _meshResourceFilter);
 			set => SetProperty(ref _meshResourceFilter, value);
 		}
+
+		public worldSceneRecordingNodeFilter()
+		{
+			_meshNodesOnly = true;
+		}
 	}
 }

@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _timeToFireTransition);
 			set => SetProperty(ref _timeToFireTransition, value);
 		}
+
+		public animAnimStateTransitionCondition_Timed()
+		{
+			_timeToFireTransition = 1.000000F;
+		}
 	}
 }

@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _inputsToBlock);
 			set => SetProperty(ref _inputsToBlock, value);
 		}
+
+		public entChangeVoicesetStateEvent()
+		{
+			_enableVoicesetLines = true;
+			_enableVoicesetGrunts = true;
+		}
 	}
 }

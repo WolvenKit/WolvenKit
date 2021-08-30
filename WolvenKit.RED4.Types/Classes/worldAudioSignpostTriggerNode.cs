@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _exitCooldown);
 			set => SetProperty(ref _exitCooldown, value);
 		}
+
+		public worldAudioSignpostTriggerNode()
+		{
+			_exitCooldown = 5.000000F;
+		}
 	}
 }

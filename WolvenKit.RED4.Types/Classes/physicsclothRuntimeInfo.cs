@@ -167,5 +167,23 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _enableSelfCollision);
 			set => SetProperty(ref _enableSelfCollision, value);
 		}
+
+		public physicsclothRuntimeInfo()
+		{
+			_damping = 0.400000F;
+			_drag = 0.200000F;
+			_inertia = 1.000000F;
+			_numSolverIterations = 2;
+			_stiffnessFrequency = 100.000000F;
+			_friction = 1.000000F;
+			_tetherStiffness = 1.000000F;
+			_tetherScale = 1.000000F;
+			_selfCollisionDistance = 0.010000F;
+			_selfCollisionStiffness = 0.500000F;
+			_liftCoefficient = 0.020000F;
+			_dragCoefficient = 0.020000F;
+			_gravityScale = 1.000000F;
+			_motionConstraintStiffness = 1.000000F;
+		}
 	}
 }

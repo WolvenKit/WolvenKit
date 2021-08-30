@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _groupPath);
 			set => SetProperty(ref _groupPath, value);
 		}
+
+		public SettingsCategory()
+		{
+			_isEmpty = true;
+		}
 	}
 }

@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _itemFallSFX);
 			set => SetProperty(ref _itemFallSFX, value);
 		}
+
+		public VendorComponent()
+		{
+			_brandProcessingSFX = "dev_vending_machine_processing";
+			_itemFallSFX = "dev_vending_machine_can_falls";
+		}
 	}
 }

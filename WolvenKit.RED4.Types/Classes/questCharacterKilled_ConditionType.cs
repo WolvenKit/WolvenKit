@@ -50,5 +50,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _defeated);
 			set => SetProperty(ref _defeated, value);
 		}
+
+		public questCharacterKilled_ConditionType()
+		{
+			_killed = true;
+			_unconscious = true;
+			_defeated = true;
+		}
 	}
 }

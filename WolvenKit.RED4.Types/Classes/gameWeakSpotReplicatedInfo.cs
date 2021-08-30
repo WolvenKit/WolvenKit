@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lastDamageInstigator);
 			set => SetProperty(ref _lastDamageInstigator, value);
 		}
+
+		public gameWeakSpotReplicatedInfo()
+		{
+			_wsHealthValue = 100.000000F;
+		}
 	}
 }

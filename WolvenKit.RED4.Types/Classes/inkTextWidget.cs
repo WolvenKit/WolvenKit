@@ -185,5 +185,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _contentVAlign);
 			set => SetProperty(ref _contentVAlign, value);
 		}
+
+		public inkTextWidget()
+		{
+			_fontSize = 22;
+			_lineHeightPercentage = 1.000000F;
+			_scrollTextSpeed = 0.200000F;
+			_scrollDelay = 30;
+		}
 	}
 }

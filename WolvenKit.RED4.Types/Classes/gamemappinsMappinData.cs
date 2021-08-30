@@ -68,5 +68,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _scriptData);
 			set => SetProperty(ref _scriptData, value);
 		}
+
+		public gamemappinsMappinData()
+		{
+			_variant = new() { Value = Enums.gamedataMappinVariant.DefaultQuestVariant };
+			_active = true;
+			_visibleThroughWalls = true;
+		}
 	}
 }

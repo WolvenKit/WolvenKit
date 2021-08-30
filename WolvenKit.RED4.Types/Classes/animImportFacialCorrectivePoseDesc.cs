@@ -131,5 +131,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _useGlobalWeight);
 			set => SetProperty(ref _useGlobalWeight, value);
 		}
+
+		public animImportFacialCorrectivePoseDesc()
+		{
+			_useGlobalWeight = true;
+		}
 	}
 }

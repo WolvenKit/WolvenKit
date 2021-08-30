@@ -59,5 +59,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _healthPercentage);
 			set => SetProperty(ref _healthPercentage, value);
 		}
+
+		public HitOperationTriggerData()
+		{
+			_isAttackerPlayer = true;
+			_bullets = true;
+			_healthPercentage = 100.000000F;
+		}
 	}
 }

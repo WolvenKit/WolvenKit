@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _requests);
 			set => SetProperty(ref _requests, value);
 		}
+
+		public scnLookAtBasicEventData()
+		{
+			_removePreviousAdvancedLookAts = true;
+		}
 	}
 }

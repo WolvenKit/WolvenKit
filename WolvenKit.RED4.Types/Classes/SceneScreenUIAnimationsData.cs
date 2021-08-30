@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _defaultLibraryItemAnchor);
 			set => SetProperty(ref _defaultLibraryItemAnchor, value);
 		}
+
+		public SceneScreenUIAnimationsData()
+		{
+			_defaultLibraryItemAnchor = new() { Value = Enums.inkEAnchor.Fill };
+		}
 	}
 }

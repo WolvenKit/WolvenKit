@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _useEntitySetup);
 			set => SetProperty(ref _useEntitySetup, value);
 		}
+
+		public questTransformAnimatorNode_Action_Play()
+		{
+			_timesPlayed = -1;
+			_timeScale = 1.000000F;
+		}
 	}
 }

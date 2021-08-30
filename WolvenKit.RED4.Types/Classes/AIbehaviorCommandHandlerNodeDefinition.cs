@@ -86,5 +86,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _resultIfChildFailed);
 			set => SetProperty(ref _resultIfChildFailed, value);
 		}
+
+		public AIbehaviorCommandHandlerNodeDefinition()
+		{
+			_resultIfNoCommand = new() { Value = Enums.AIbehaviorCompletionStatus.SUCCESS };
+		}
 	}
 }

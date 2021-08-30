@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _mainPlayerObject);
 			set => SetProperty(ref _mainPlayerObject, value);
 		}
+
+		public questUniversalRef()
+		{
+			_refLocalPlayer = true;
+		}
 	}
 }

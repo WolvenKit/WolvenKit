@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _groundNormal);
 			set => SetProperty(ref _groundNormal, value);
 		}
+
+		public gameMuppetPhysicalState()
+		{
+			_isOnGround = true;
+		}
 	}
 }

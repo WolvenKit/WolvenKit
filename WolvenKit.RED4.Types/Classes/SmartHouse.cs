@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _timetableActive);
 			set => SetProperty(ref _timetableActive, value);
 		}
+
+		public SmartHouse()
+		{
+			_timetableActive = true;
+		}
 	}
 }

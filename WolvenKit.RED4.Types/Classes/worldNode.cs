@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isHostOnly);
 			set => SetProperty(ref _isHostOnly, value);
 		}
+
+		public worldNode()
+		{
+			_isVisibleInGame = true;
+		}
 	}
 }

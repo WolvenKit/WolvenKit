@@ -194,5 +194,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _damageDigitsStickingModeBlackboardId);
 			set => SetProperty(ref _damageDigitsStickingModeBlackboardId, value);
 		}
+
+		public DamageDigitsGameController()
+		{
+			_maxVisible = 50;
+			_maxAccumulatedVisible = 10;
+		}
 	}
 }

@@ -104,5 +104,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lookat_offset_vertical);
 			set => SetProperty(ref _lookat_offset_vertical, value);
 		}
+
+		public AnimFeature_CameraBodyOffset()
+		{
+			_lookat_pitch_forward_offset = 0.050000F;
+			_lookat_pitch_forward_down_ratio = 0.400000F;
+			_lookat_yaw_offset_active_angle = 45.000000F;
+			_paralax_radius = 0.100000F;
+			_paralax_forward_offset = 0.100000F;
+		}
 	}
 }

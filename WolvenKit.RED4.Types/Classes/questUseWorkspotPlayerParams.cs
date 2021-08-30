@@ -77,5 +77,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _parallaxSpace);
 			set => SetProperty(ref _parallaxSpace, value);
 		}
+
+		public questUseWorkspotPlayerParams()
+		{
+			_cameraUseTrajectorySpace = true;
+			_vehicleProceduralCameraWeight = 1.000000F;
+			_parallaxWeight = 1.000000F;
+		}
 	}
 }

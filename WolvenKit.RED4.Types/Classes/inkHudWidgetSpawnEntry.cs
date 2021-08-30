@@ -131,5 +131,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _spawnBeforeSlots);
 			set => SetProperty(ref _spawnBeforeSlots, value);
 		}
+
+		public inkHudWidgetSpawnEntry()
+		{
+			_enabled = true;
+			_contextVisibility = new() { Value = Enums.worlduiContextVisibility.SceneDefault | Enums.worlduiContextVisibility.SceneTier1 | Enums.worlduiContextVisibility.SceneTier2 | Enums.worlduiContextVisibility.SceneTier3 | Enums.worlduiContextVisibility.SceneTier4 | Enums.worlduiContextVisibility.SceneTier5 };
+			_gameContextVisibility = new() { Value = Enums.gameuiContext.Default | Enums.gameuiContext.QuickHack | Enums.gameuiContext.Scanning | Enums.gameuiContext.BraindanceEditor | Enums.gameuiContext.BraindancePlayback | Enums.gameuiContext.VehicleMounted };
+		}
 	}
 }

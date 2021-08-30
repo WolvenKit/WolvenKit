@@ -248,5 +248,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _remainingQuickMeleeCooldownTime);
 			set => SetProperty(ref _remainingQuickMeleeCooldownTime, value);
 		}
+
+		public gameMuppetUpperBodyState()
+		{
+			_currentWeaponAmmo = 10;
+			_currentWeaponAmmoCapacity = 10;
+		}
 	}
 }

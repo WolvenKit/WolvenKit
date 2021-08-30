@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _controlRenderToTextureState);
 			set => SetProperty(ref _controlRenderToTextureState, value);
 		}
+
+		public scneventsPlayRidCameraAnimEvent()
+		{
+			_activateAsGameCamera = true;
+		}
 	}
 }

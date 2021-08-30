@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _tire);
 			set => SetProperty(ref _tire, value);
 		}
+
+		public questToggleBrokenTire_NodeType()
+		{
+			_val = true;
+		}
 	}
 }

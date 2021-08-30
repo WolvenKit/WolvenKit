@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _exposureMethod);
 			set => SetProperty(ref _exposureMethod, value);
 		}
+
+		public AIBackgroundCombatStep()
+		{
+			_exposureMethod = new() { Value = Enums.AICoverExposureMethod.Stand_Up };
+		}
 	}
 }

@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _filterData);
 			set => SetProperty(ref _filterData, value);
 		}
+
+		public entPhysicalMeshComponent()
+		{
+			_simulationType = new() { Value = Enums.physicsSimulationType.Kinematic };
+		}
 	}
 }

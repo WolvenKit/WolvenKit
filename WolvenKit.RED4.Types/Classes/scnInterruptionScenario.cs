@@ -131,5 +131,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _returnConditions);
 			set => SetProperty(ref _returnConditions, value);
 		}
+
+		public scnInterruptionScenario()
+		{
+			_enabled = true;
+			_talkOnReturn = true;
+			_playInterruptLine = true;
+		}
 	}
 }

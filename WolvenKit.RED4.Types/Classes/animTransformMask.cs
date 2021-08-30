@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _weight);
 			set => SetProperty(ref _weight, value);
 		}
+
+		public animTransformMask()
+		{
+			_index = -1;
+		}
 	}
 }

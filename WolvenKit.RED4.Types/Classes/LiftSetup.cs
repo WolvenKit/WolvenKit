@@ -95,5 +95,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _authorizationTextOverride);
 			set => SetProperty(ref _authorizationTextOverride, value);
 		}
+
+		public LiftSetup()
+		{
+			_liftSpeed = 2.500000F;
+			_liftStartingDelay = 1.000000F;
+			_liftTravelTimeOverride = 4.000000F;
+			_emptyLiftSpeedMultiplier = 2.000000F;
+			_radioStationNumer = -1;
+		}
 	}
 }

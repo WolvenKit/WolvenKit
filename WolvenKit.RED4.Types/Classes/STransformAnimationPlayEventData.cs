@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _timesPlayed);
 			set => SetProperty(ref _timesPlayed, value);
 		}
+
+		public STransformAnimationPlayEventData()
+		{
+			_timeScale = 1.000000F;
+			_timesPlayed = 1;
+		}
 	}
 }

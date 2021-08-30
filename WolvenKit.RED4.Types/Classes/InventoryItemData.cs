@@ -455,5 +455,17 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _sortData);
 			set => SetProperty(ref _sortData, value);
 		}
+
+		public InventoryItemData()
+		{
+			_empty = true;
+			_damageType = new() { Value = Enums.gamedataDamageType.Invalid };
+			_equipmentArea = new() { Value = Enums.gamedataEquipmentArea.Invalid };
+			_comparedQuality = new() { Value = Enums.gamedataQuality.Invalid };
+			_isAvailable = true;
+			_positionInBackpack = 4294967295;
+			_isRequirementMet = true;
+			_isEquippable = true;
+		}
 	}
 }

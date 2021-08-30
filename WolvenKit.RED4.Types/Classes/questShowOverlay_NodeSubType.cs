@@ -59,5 +59,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _hideOnInput);
 			set => SetProperty(ref _hideOnInput, value);
 		}
+
+		public questShowOverlay_NodeSubType()
+		{
+			_libraryItemName = "Root";
+			_visible = true;
+		}
 	}
 }

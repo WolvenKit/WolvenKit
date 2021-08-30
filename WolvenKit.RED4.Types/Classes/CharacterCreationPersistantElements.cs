@@ -140,5 +140,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _c_fluffMaxY);
 			set => SetProperty(ref _c_fluffMaxY, value);
 		}
+
+		public CharacterCreationPersistantElements()
+		{
+			_c_fluffMaxX = 1800.000000F;
+			_c_fluffMinY = 300.000000F;
+			_c_fluffMaxY = 2000.000000F;
+		}
 	}
 }

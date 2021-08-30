@@ -167,5 +167,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _overrides);
 			set => SetProperty(ref _overrides, value);
 		}
+
+		public Multilayer_Layer()
+		{
+			_matTile = 1.000000F;
+			_mbTile = 1.000000F;
+			_microblendContrast = 0.500000F;
+			_microblendNormalStrength = 1.000000F;
+			_opacity = 1.000000F;
+		}
 	}
 }

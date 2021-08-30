@@ -59,5 +59,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _phoneIconName);
 			set => SetProperty(ref _phoneIconName, value);
 		}
+
+		public PhoneHotkeyController()
+		{
+			_phoneIconAtlas = new() { Text = @"base\gameplay\gui\common\icons\atlas_common.inkatlas" };
+			_phoneIconName = "ico_phone";
+		}
 	}
 }

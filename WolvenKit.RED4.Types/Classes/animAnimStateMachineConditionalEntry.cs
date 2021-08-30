@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isForcedToTrue);
 			set => SetProperty(ref _isForcedToTrue, value);
 		}
+
+		public animAnimStateMachineConditionalEntry()
+		{
+			_isEnabled = true;
+		}
 	}
 }

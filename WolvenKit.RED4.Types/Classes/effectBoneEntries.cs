@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _bones);
 			set => SetProperty(ref _bones, value);
 		}
+
+		public effectBoneEntries()
+		{
+			_inheritRotation = true;
+		}
 	}
 }

@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _forceRemoveAuthorization);
 			set => SetProperty(ref _forceRemoveAuthorization, value);
 		}
+
+		public BlacklistPlayer()
+		{
+			_blacklist = true;
+			_reason = new() { Value = Enums.BlacklistReason.COMBAT };
+		}
 	}
 }

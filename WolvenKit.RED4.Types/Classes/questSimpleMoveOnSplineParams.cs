@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _useOffMeshLinkReservation);
 			set => SetProperty(ref _useOffMeshLinkReservation, value);
 		}
+
+		public questSimpleMoveOnSplineParams()
+		{
+			_snapToTerrain = true;
+		}
 	}
 }

@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _flybyEvent);
 			set => SetProperty(ref _flybyEvent, value);
 		}
+
+		public audioFlybySettings()
+		{
+			_movementSpeed = 15.000000F;
+		}
 	}
 }

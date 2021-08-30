@@ -104,5 +104,16 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _enterOffset);
 			set => SetProperty(ref _enterOffset, value);
 		}
+
+		public gamestateMachineparameterTypeLadderDescription()
+		{
+			_exitStepTop = -1.000000F;
+			_verticalStepTop = -1.000000F;
+			_exitStepBottom = 0.600000F;
+			_verticalStepBottom = 0.400000F;
+			_exitStepJump = 0.600000F;
+			_verticalStepJump = 0.200000F;
+			_enterOffset = 0.500000F;
+		}
 	}
 }

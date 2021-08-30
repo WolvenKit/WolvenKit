@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _objectDescriptionOverride);
 			set => SetProperty(ref _objectDescriptionOverride, value);
 		}
+
+		public gameScanningComponentPS()
+		{
+			_isDecriptionEnabled = true;
+		}
 	}
 }

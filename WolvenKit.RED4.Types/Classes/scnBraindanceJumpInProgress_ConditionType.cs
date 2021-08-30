@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _sceneVersion);
 			set => SetProperty(ref _sceneVersion, value);
 		}
+
+		public scnBraindanceJumpInProgress_ConditionType()
+		{
+			_inProgress = true;
+		}
 	}
 }

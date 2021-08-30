@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isPlayerVehicleSummoned);
 			set => SetProperty(ref _isPlayerVehicleSummoned, value);
 		}
+
+		public vehicleAudioPSData()
+		{
+			_acousticIsolationFactor = -340282346638528859811704183484516925440.000000F;
+		}
 	}
 }

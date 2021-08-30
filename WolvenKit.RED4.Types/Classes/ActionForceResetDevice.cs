@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _restartDuration);
 			set => SetProperty(ref _restartDuration, value);
 		}
+
+		public ActionForceResetDevice()
+		{
+			_restartDuration = 30;
+		}
 	}
 }

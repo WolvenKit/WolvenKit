@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _frames);
 			set => SetProperty(ref _frames, value);
 		}
+
+		public animUncompressedAllAnglesMotionExtraction()
+		{
+			_duration = 1.000000F;
+		}
 	}
 }

@@ -32,5 +32,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _blendOutTime);
 			set => SetProperty(ref _blendOutTime, value);
 		}
+
+		public workPauseClip()
+		{
+			_timeMin = 2.000000F;
+			_timeMax = 5.000000F;
+			_blendOutTime = 0.500000F;
+		}
 	}
 }

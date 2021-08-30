@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _amount);
 			set => SetProperty(ref _amount, value);
 		}
+
+		public CpoCharacterSelectionWidgetGameController()
+		{
+			_amount = 5;
+		}
 	}
 }

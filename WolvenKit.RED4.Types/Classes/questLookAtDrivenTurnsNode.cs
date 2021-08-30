@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _canLookAtDrivenTurnsInterruptGesture);
 			set => SetProperty(ref _canLookAtDrivenTurnsInterruptGesture, value);
 		}
+
+		public questLookAtDrivenTurnsNode()
+		{
+			_canLookAtDrivenTurnsInterruptGesture = true;
+		}
 	}
 }

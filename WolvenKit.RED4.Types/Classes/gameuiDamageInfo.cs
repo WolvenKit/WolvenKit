@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _userData);
 			set => SetProperty(ref _userData, value);
 		}
+
+		public gameuiDamageInfo()
+		{
+			_damageType = new() { Value = Enums.gamedataDamageType.Invalid };
+		}
 	}
 }

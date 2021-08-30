@@ -284,5 +284,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _randStartVelocity);
 			set => SetProperty(ref _randStartVelocity, value);
 		}
+
+		public RainMissileProjectile()
+		{
+			_alive = true;
+			_timeToDestory = -1.000000F;
+		}
 	}
 }

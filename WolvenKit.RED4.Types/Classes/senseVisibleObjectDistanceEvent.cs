@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _distance);
 			set => SetProperty(ref _distance, value);
 		}
+
+		public senseVisibleObjectDistanceEvent()
+		{
+			_distance = 340282346638528859811704183484516925440.000000F;
+		}
 	}
 }

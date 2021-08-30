@@ -68,5 +68,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _updateComp);
 			set => SetProperty(ref _updateComp, value);
 		}
+
+		public Fan()
+		{
+			_rotateClockwise = true;
+			_maxRotationSpeed = 150.000000F;
+			_timeToMaxRotation = 3.000000F;
+		}
 	}
 }

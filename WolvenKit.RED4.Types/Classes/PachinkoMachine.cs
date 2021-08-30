@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _distractionFXName);
 			set => SetProperty(ref _distractionFXName, value);
 		}
+
+		public PachinkoMachine()
+		{
+			_distractionFXName = "effect_distraction";
+		}
 	}
 }

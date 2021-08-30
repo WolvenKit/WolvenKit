@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _direction);
 			set => SetProperty(ref _direction, value);
 		}
+
+		public questCharacterManagerCombat_SetDeathDirection()
+		{
+			_direction = new() { Value = Enums.gameeventsDeathDirection.Left };
+		}
 	}
 }

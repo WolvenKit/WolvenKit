@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _muteSound);
 			set => SetProperty(ref _muteSound, value);
 		}
+
+		public scneventsVFXDurationEvent()
+		{
+			_endAction = new() { Value = Enums.scneventsVFXActionType.Kill };
+		}
 	}
 }

@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _uiUpdateFrequency);
 			set => SetProperty(ref _uiUpdateFrequency, value);
 		}
+
+		public NcartTimetableSetup()
+		{
+			_departFrequency = 5;
+			_uiUpdateFrequency = 1;
+		}
 	}
 }

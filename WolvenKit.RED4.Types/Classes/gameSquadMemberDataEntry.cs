@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _squadType);
 			set => SetProperty(ref _squadType, value);
 		}
+
+		public gameSquadMemberDataEntry()
+		{
+			_squadType = new() { Value = Enums.AISquadType.Unknown };
+		}
 	}
 }

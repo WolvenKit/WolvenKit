@@ -86,5 +86,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _targetType);
 			set => SetProperty(ref _targetType, value);
 		}
+
+		public scnAnimTargetBasicData()
+		{
+			_isStart = true;
+			_targetSlot = "pla_default_tgt";
+		}
 	}
 }

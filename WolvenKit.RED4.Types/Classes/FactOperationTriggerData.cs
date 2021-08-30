@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _callbackID);
 			set => SetProperty(ref _callbackID, value);
 		}
+
+		public FactOperationTriggerData()
+		{
+			_factValue = 1;
+		}
 	}
 }

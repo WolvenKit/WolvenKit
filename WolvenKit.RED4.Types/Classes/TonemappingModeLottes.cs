@@ -59,5 +59,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _crosstalkSaturation);
 			set => SetProperty(ref _crosstalkSaturation, value);
 		}
+
+		public TonemappingModeLottes()
+		{
+			_maxInput = 50.000000F;
+			_contrast = 1.500000F;
+			_midIn = 0.180000F;
+			_midOut = 0.180000F;
+		}
 	}
 }

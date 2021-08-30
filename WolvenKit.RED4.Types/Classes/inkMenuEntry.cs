@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isAffectedByFadeout);
 			set => SetProperty(ref _isAffectedByFadeout, value);
 		}
+
+		public inkMenuEntry()
+		{
+			_isAffectedByFadeout = true;
+		}
 	}
 }

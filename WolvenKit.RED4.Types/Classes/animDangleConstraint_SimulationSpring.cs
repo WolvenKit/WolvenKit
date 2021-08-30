@@ -176,5 +176,21 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _sinOfHalfYAngle);
 			set => SetProperty(ref _sinOfHalfYAngle, value);
 		}
+
+		public animDangleConstraint_SimulationSpring()
+		{
+			_constraintSphereRadius = 0.500000F;
+			_constraintScale1 = 1.000000F;
+			_constraintScale2 = 1.000000F;
+			_mass = 1.000000F;
+			_damping = 1.000000F;
+			_invertedMass = 1.000000F;
+			_simulationFps = 10.000000F;
+			_gravityWS = 9.810000F;
+			_projectionType = new() { Value = Enums.animSpringProjectionType.ShortestPath };
+			_cosOfHalfXAngle = 1.000000F;
+			_cosOfHalfYAngle = 0.707107F;
+			_sinOfHalfYAngle = 0.707107F;
+		}
 	}
 }

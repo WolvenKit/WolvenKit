@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _stopOnlyVirtualSounds);
 			set => SetProperty(ref _stopOnlyVirtualSounds, value);
 		}
+
+		public audioDistanceSoundDecoratorMetadata()
+		{
+			_triggerDistance = 10.000000F;
+		}
 	}
 }

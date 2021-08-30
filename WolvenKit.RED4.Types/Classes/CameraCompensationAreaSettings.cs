@@ -41,5 +41,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _fStop);
 			set => SetProperty(ref _fStop, value);
 		}
+
+		public CameraCompensationAreaSettings()
+		{
+			_iSO = 100;
+			_shutterTime = 125.000000F;
+			_fStop = 8.000000F;
+		}
 	}
 }

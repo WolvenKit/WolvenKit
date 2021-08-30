@@ -176,5 +176,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _decorators);
 			set => SetProperty(ref _decorators, value);
 		}
+
+		public audioDroneMetadata()
+		{
+			_playDistance = 16.000000F;
+		}
 	}
 }

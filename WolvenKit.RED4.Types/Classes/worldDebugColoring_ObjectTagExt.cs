@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _color);
 			set => SetProperty(ref _color, value);
 		}
+
+		public worldDebugColoring_ObjectTagExt()
+		{
+			_tag = new() { Value = Enums.worldObjectTagExt.None };
+		}
 	}
 }

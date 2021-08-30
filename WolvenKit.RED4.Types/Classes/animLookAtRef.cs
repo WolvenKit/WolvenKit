@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _part);
 			set => SetProperty(ref _part, value);
 		}
+
+		public animLookAtRef()
+		{
+			_id = -1;
+		}
 	}
 }

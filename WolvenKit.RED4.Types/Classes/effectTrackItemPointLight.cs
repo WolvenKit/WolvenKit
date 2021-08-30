@@ -158,5 +158,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _flicker);
 			set => SetProperty(ref _flicker, value);
 		}
+
+		public effectTrackItemPointLight()
+		{
+			_colorGroupSaturation = 100;
+			_useInGI = true;
+			_useInTransparents = true;
+			_useInParticles = true;
+			_sceneDiffuse = true;
+			_sceneSpecular = true;
+		}
 	}
 }

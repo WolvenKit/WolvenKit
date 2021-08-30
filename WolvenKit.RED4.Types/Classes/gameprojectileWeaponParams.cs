@@ -104,5 +104,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _range);
 			set => SetProperty(ref _range, value);
 		}
+
+		public gameprojectileWeaponParams()
+		{
+			_smartGunAccuracy = 1.000000F;
+			_smartGunIsProjectileGuided = true;
+			_ignoreWeaponOwnerCollision = true;
+			_range = -1.000000F;
+		}
 	}
 }

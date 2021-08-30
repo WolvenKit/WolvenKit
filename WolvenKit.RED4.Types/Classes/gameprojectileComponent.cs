@@ -122,5 +122,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _gameEffectRef);
 			set => SetProperty(ref _gameEffectRef, value);
 		}
+
+		public gameprojectileComponent()
+		{
+			_onCollisionAction = new() { Value = Enums.gameprojectileOnCollisionAction.Stop };
+			_collisionsFilterClosest = true;
+			_deriveOwnerVelocity = true;
+		}
 	}
 }

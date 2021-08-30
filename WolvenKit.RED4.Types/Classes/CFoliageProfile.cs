@@ -113,5 +113,16 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _preserveOriginalColor);
 			set => SetProperty(ref _preserveOriginalColor, value);
 		}
+
+		public CFoliageProfile()
+		{
+			_cutoffAlphaMinMip = 0.450000F;
+			_cutoffAlphaMaxMip = 0.120000F;
+			_billboardCutoffAlpha = 0.600000F;
+			_aoScale = 0.500000F;
+			_terrainBlendScale = 0.200000F;
+			_billboardDepthScale = 1.000000F;
+			_billboardRoughnessBias = 0.100000F;
+		}
 	}
 }

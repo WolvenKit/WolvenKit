@@ -113,5 +113,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lightChannels);
 			set => SetProperty(ref _lightChannels, value);
 		}
+
+		public worldStaticFogVolumeNode()
+		{
+			_priority = 5;
+			_applyHeightFalloff = true;
+			_densityFactor = 100.000000F;
+			_absorption = -1.000000F;
+			_streamingDistance = 1000.000000F;
+			_ambientScale = 1.000000F;
+		}
 	}
 }

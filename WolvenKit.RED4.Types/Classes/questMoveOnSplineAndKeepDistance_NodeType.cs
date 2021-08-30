@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _reduceSpeedOnTurns);
 			set => SetProperty(ref _reduceSpeedOnTurns, value);
 		}
+
+		public questMoveOnSplineAndKeepDistance_NodeType()
+		{
+			_reduceSpeedOnTurns = true;
+		}
 	}
 }

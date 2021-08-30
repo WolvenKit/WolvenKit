@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _excludeMask);
 			set => SetProperty(ref _excludeMask, value);
 		}
+
+		public gameStaticTriggerAreaComponent()
+		{
+			_includeMask = 1;
+		}
 	}
 }

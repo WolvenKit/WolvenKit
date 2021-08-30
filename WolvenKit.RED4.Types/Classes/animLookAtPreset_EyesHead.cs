@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _softLimitAngle);
 			set => SetProperty(ref _softLimitAngle, value);
 		}
+
+		public animLookAtPreset_EyesHead()
+		{
+			_headMobility = 0.950000F;
+			_softLimitAngle = 360.000000F;
+		}
 	}
 }

@@ -167,5 +167,18 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _volumeChannels);
 			set => SetProperty(ref _volumeChannels, value);
 		}
+
+		public entEnvProbeComponent()
+		{
+			_isEnabled = true;
+			_emissiveScale = 1.000000F;
+			_boxProjection = true;
+			_streamingDistance = 16.000000F;
+			_streamingHeight = -1.000000F;
+			_blendRange = 20;
+			_neighborMode = new() { Value = Enums.envUtilsNeighborMode.eONLY_SELF };
+			_brightnessEVClamp = 8;
+			_priority = 2;
+		}
 	}
 }

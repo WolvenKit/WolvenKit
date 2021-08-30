@@ -320,5 +320,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _messageCounterController);
 			set => SetProperty(ref _messageCounterController, value);
 		}
+
+		public gameuiMinimapContainerController()
+		{
+			_visionRadiusVehicle = 125.000000F;
+			_visionRadiusCombat = 40.000000F;
+			_visionRadiusQuestArea = 40.000000F;
+			_visionRadiusSecurityArea = 40.000000F;
+			_visionRadiusInterior = 40.000000F;
+			_visionRadiusExterior = 100.000000F;
+		}
 	}
 }

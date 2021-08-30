@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _atlasTexture);
 			set => SetProperty(ref _atlasTexture, value);
 		}
+
+		public DispenceItemFromVendor()
+		{
+			_price = -1;
+		}
 	}
 }

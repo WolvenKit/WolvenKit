@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isSkip);
 			set => SetProperty(ref _isSkip, value);
 		}
+
+		public gameuiHUDVideoStopEvent()
+		{
+			_isSkip = true;
+		}
 	}
 }

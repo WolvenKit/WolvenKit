@@ -212,5 +212,28 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _highGearAccelerationThreshold);
 			set => SetProperty(ref _highGearAccelerationThreshold, value);
 		}
+
+		public audioDirectorSystemSettings()
+		{
+			_singleConversationMinRepeatTime = 40.000000F;
+			_allConversationsMinRepeatTime = 8.000000F;
+			_maxVelocityMagnitudeToConsiderPlayerVehicleInactive = 10.000000F;
+			_maxVelocityMagnitudeToConsiderTrafficVehicleIdle = 0.100000F;
+			_playerInactiveMinTimeNeededToEngageMovingFaster = 8.000000F;
+			_trafficSpeedRC = 0.050000F;
+			_trafficAccelerationRC = 0.200000F;
+			_trafficRpmRC = 0.200000F;
+			_overHeadVisibilityMaxOcclusion = 0.200000F;
+			_overHeadVisibilityMaxObstruction = 0.400000F;
+			_conversationMixCooldown = 5.000000F;
+			_enemyPingCooldown = 5.000000F;
+			_idleTimeBeforeAllowingOwMusicChange = 5.000000F;
+			_drivingStreamingAmbientEmittersDistanceRolloff = 32.000000F;
+			_lowHealthStateMaxTime = 5.000000F;
+			_lowGearMaxTrafficSpeed = 0.230000F;
+			_mediumGearMaxTrafficSpeed = 0.570000F;
+			_mediumGearAccelerationThreshold = -1.000000F;
+			_highGearAccelerationThreshold = -2.000000F;
+		}
 	}
 }

@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _animOptions);
 			set => SetProperty(ref _animOptions, value);
 		}
+
+		public DisassemblePopupLogicController()
+		{
+			_duration = 3.000000F;
+		}
 	}
 }

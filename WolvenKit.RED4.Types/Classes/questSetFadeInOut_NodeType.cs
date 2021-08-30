@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _duration);
 			set => SetProperty(ref _duration, value);
 		}
+
+		public questSetFadeInOut_NodeType()
+		{
+			_fadeIn = true;
+			_duration = 2.000000F;
+		}
 	}
 }

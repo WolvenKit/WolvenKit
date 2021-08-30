@@ -41,5 +41,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _correctives);
 			set => SetProperty(ref _correctives, value);
 		}
+
+		public animAnimNode_ApplyCorrectivePoseRBF()
+		{
+			_rbfCoefficient = 3.500000F;
+			_rbfPowValue = 20.000000F;
+			_correctiveFrame = 0.033330F;
+		}
 	}
 }

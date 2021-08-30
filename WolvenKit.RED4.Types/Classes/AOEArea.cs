@@ -77,5 +77,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isAABBExtended);
 			set => SetProperty(ref _isAABBExtended, value);
 		}
+
+		public AOEArea()
+		{
+			_extendPercentAABB = 1.300000F;
+		}
 	}
 }

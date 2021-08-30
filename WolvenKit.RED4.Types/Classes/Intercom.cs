@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _distractionSound);
 			set => SetProperty(ref _distractionSound, value);
 		}
+
+		public Intercom()
+		{
+			_distractionSound = "dev_radio_ditraction_glitching";
+		}
 	}
 }

@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _nextUserData);
 			set => SetProperty(ref _nextUserData, value);
 		}
+
+		public navLocomotionPathPointUserDataEntry()
+		{
+			_nextUserData = 4294967295;
+		}
 	}
 }

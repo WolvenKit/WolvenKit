@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _autoOpeningSpeed);
 			set => SetProperty(ref _autoOpeningSpeed, value);
 		}
+
+		public gameDoorComponent()
+		{
+			_interactible = true;
+			_autoOpeningSpeed = 1.000000F;
+		}
 	}
 }

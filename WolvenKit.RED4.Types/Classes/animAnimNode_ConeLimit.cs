@@ -248,5 +248,18 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _applyDebugConeScalling);
 			set => SetProperty(ref _applyDebugConeScalling, value);
 		}
+
+		public animAnimNode_ConeLimit()
+		{
+			_limit1 = 45.000000F;
+			_paraboloidRadius1 = 0.050000F;
+			_limit2 = 45.000000F;
+			_paraboloidRadius2 = 0.050000F;
+			_limit3 = 45.000000F;
+			_paraboloidRadius3 = 0.050000F;
+			_limit4 = 45.000000F;
+			_paraboloidRadius4 = 0.050000F;
+			_applyDebugConeScalling = true;
+		}
 	}
 }

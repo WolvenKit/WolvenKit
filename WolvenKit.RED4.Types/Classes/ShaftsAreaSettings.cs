@@ -32,5 +32,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _shaftsThresholdsScale);
 			set => SetProperty(ref _shaftsThresholdsScale, value);
 		}
+
+		public ShaftsAreaSettings()
+		{
+			_shaftsLevelIndex = 1;
+			_shaftsIntensity = 1.000000F;
+			_shaftsThresholdsScale = 1.000000F;
+		}
 	}
 }

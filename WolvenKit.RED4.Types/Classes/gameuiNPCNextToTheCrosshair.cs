@@ -131,5 +131,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _playerDetectionAtMax);
 			set => SetProperty(ref _playerDetectionAtMax, value);
 		}
+
+		public gameuiNPCNextToTheCrosshair()
+		{
+			_attitude = new() { Value = Enums.EAIAttitude.AIA_Neutral };
+			_highLevelState = new() { Value = Enums.gamedataNPCHighLevelState.Any };
+		}
 	}
 }

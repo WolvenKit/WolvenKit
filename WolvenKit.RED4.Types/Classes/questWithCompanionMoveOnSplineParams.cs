@@ -176,5 +176,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxCompanionDistanceOnSpline);
 			set => SetProperty(ref _maxCompanionDistanceOnSpline, value);
 		}
+
+		public questWithCompanionMoveOnSplineParams()
+		{
+			_companionDistancePreset = new() { Value = Enums.gamedataCompanionDistancePreset.Medium };
+			_catchUpWithCompanion = true;
+			_teleportToCompanion = true;
+			_minSearchAngle = 22.500000F;
+			_maxSearchAngle = 60.000000F;
+			_interruptCapability = new() { Value = Enums.scnInterruptCapability.NotInterruptable };
+		}
 	}
 }

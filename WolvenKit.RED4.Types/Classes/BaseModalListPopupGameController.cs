@@ -104,5 +104,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _firstInit);
 			set => SetProperty(ref _firstInit, value);
 		}
+
+		public BaseModalListPopupGameController()
+		{
+			_c_scrollInputThreshold = 0.750000F;
+		}
 	}
 }

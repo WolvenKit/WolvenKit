@@ -194,5 +194,22 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _sendFollowEvent);
 			set => SetProperty(ref _sendFollowEvent, value);
 		}
+
+		public gameprojectileFollowCurveTrajectoryParams()
+		{
+			_startVelocity = 6.000000F;
+			_linearTimeRatio = 0.900000F;
+			_interpolationTimeRatio = 0.700000F;
+			_returnTimeMargin = 0.300000F;
+			_bendTimeRatio = 0.400000F;
+			_bendFactor = 1.000000F;
+			_angleInHitPlane = 30.000000F;
+			_shouldRotate = true;
+			_halfLeanAngle = 45.000000F;
+			_angleInterpolationDuration = 0.200000F;
+			_snapRadius = 0.200000F;
+			_accuracy = 0.100000F;
+			_sendFollowEvent = true;
+		}
 	}
 }

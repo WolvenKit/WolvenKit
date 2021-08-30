@@ -104,5 +104,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _explosionDefinition);
 			set => SetProperty(ref _explosionDefinition, value);
 		}
+
+		public DistractionSetup()
+		{
+			_stimuliRange = 10.000000F;
+		}
 	}
 }

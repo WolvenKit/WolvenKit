@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _forceEnableLink);
 			set => SetProperty(ref _forceEnableLink, value);
 		}
+
+		public RoadBlock()
+		{
+			_openingSpeed = 2.000000F;
+		}
 	}
 }

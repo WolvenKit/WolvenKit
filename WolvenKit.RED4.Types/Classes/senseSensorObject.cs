@@ -68,5 +68,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _sensorObjectType);
 			set => SetProperty(ref _sensorObjectType, value);
 		}
+
+		public senseSensorObject()
+		{
+			_detectionFactor = 30.000000F;
+			_detectionDropFactor = 2.000000F;
+			_detectionCoolDownTime = 2.000000F;
+			_hearingEnabled = true;
+			_sensorObjectType = new() { Value = Enums.gamedataSenseObjectType.Undefined };
+		}
 	}
 }

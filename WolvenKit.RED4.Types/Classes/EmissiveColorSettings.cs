@@ -95,5 +95,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _exposureScale);
 			set => SetProperty(ref _exposureScale, value);
 		}
+
+		public EmissiveColorSettings()
+		{
+			_curveRampIBL = 2.000000F;
+		}
 	}
 }

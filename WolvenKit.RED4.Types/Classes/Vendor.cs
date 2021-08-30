@@ -104,5 +104,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _vendorRecord);
 			set => SetProperty(ref _vendorRecord, value);
 		}
+
+		public Vendor()
+		{
+			_priceMultiplier = 1.000000F;
+		}
 	}
 }

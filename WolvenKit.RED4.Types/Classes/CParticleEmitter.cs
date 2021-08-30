@@ -338,5 +338,17 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _noiseVelocity);
 			set => SetProperty(ref _noiseVelocity, value);
 		}
+
+		public CParticleEmitter()
+		{
+			_maxParticles = 55;
+			_diffuseWrapFactor = 0.650000F;
+			_backLightingFactor = 0.500000F;
+			_renderObjectType = new() { Value = Enums.ERenderObjectType.ROT_Particle };
+			_size = 1.000000F;
+			_density = 1.000000F;
+			_falloff = 1.000000F;
+			_noiseScale = 1.000000F;
+		}
 	}
 }

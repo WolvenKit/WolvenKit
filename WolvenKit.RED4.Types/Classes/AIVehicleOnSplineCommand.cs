@@ -158,5 +158,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _rubberBandingStayInFront);
 			set => SetProperty(ref _rubberBandingStayInFront, value);
 		}
+
+		public AIVehicleOnSplineCommand()
+		{
+			_secureTimeOut = 2.000000F;
+			_startFromClosest = true;
+			_forcedStartSpeed = -1.000000F;
+			_stopAtPathEnd = true;
+		}
 	}
 }

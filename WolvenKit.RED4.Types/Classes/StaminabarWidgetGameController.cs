@@ -122,5 +122,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _staminaPoolListener);
 			set => SetProperty(ref _staminaPoolListener, value);
 		}
+
+		public StaminabarWidgetGameController()
+		{
+			_currentStamina = 100.000000F;
+			_sceneTier = new() { Value = Enums.GameplayTier.Tier1_FullGameplay };
+		}
 	}
 }

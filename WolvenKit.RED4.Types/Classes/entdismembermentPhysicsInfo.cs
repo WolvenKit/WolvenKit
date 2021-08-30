@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _densityScale);
 			set => SetProperty(ref _densityScale, value);
 		}
+
+		public entdismembermentPhysicsInfo()
+		{
+			_densityScale = 1.000000F;
+		}
 	}
 }

@@ -59,5 +59,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _highBeamConeMultiplier);
 			set => SetProperty(ref _highBeamConeMultiplier, value);
 		}
+
+		public vehicleLightComponent()
+		{
+			_lightType = new() { Value = Enums.vehicleELightType.Head };
+			_highBeamRadiusMultiplier = 2.000000F;
+			_highBeamConeMultiplier = 2.000000F;
+		}
 	}
 }

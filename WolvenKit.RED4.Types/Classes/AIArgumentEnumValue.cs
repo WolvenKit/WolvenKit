@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _defaultValue);
 			set => SetProperty(ref _defaultValue, value);
 		}
+
+		public AIArgumentEnumValue()
+		{
+			_type = new() { Value = Enums.AIArgumentType.Enum };
+		}
 	}
 }

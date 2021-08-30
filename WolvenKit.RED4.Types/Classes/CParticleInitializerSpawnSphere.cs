@@ -113,5 +113,16 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _forceScale);
 			set => SetProperty(ref _forceScale, value);
 		}
+
+		public CParticleInitializerSpawnSphere()
+		{
+			_spawnPositiveX = true;
+			_spawnNegativeX = true;
+			_spawnPositiveY = true;
+			_spawnNegativeY = true;
+			_spawnPositiveZ = true;
+			_spawnNegativeZ = true;
+			_worldSpace = true;
+		}
 	}
 }

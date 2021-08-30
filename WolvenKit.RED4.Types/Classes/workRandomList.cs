@@ -68,5 +68,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _dontRepeatLastAnims);
 			set => SetProperty(ref _dontRepeatLastAnims, value);
 		}
+
+		public workRandomList()
+		{
+			_minClips = 3;
+			_maxClips = 5;
+			_pauseBetweenLength = 4.000000F;
+			_pauseLengthDeviation = 1.000000F;
+			_pauseBlendOutTime = 0.500000F;
+			_dontRepeatLastAnims = 1;
+		}
 	}
 }

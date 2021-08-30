@@ -50,5 +50,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _translationTolerance);
 			set => SetProperty(ref _translationTolerance, value);
 		}
+
+		public animBoneTraceCondition()
+		{
+			_boneIndex = -1;
+			_traceByRotation = true;
+			_rotationAngleTolerance = 0.785398F;
+			_traceByTranslation = true;
+			_translationTolerance = 1.000000F;
+		}
 	}
 }

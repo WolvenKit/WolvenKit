@@ -212,5 +212,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _activeCommands);
 			set => SetProperty(ref _activeCommands, value);
 		}
+
+		public AIHumanComponent()
+		{
+			_grenadeThrowQueryId = -1;
+		}
 	}
 }

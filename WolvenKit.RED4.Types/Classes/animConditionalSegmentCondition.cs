@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _animFeatureValue);
 			set => SetProperty(ref _animFeatureValue, value);
 		}
+
+		public animConditionalSegmentCondition()
+		{
+			_lod = -1;
+		}
 	}
 }

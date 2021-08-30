@@ -86,5 +86,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _redDelay);
 			set => SetProperty(ref _redDelay, value);
 		}
+
+		public Activator()
+		{
+			_meshAppearence = "default";
+			_meshAppearenceBreaking = "Yellow";
+			_meshAppearenceBroken = "red";
+			_defaultDelay = 2.980000F;
+			_yellowDelay = 1.680000F;
+			_redDelay = 4.030000F;
+		}
 	}
 }

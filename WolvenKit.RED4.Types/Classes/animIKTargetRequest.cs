@@ -50,5 +50,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _priority);
 			set => SetProperty(ref _priority, value);
 		}
+
+		public animIKTargetRequest()
+		{
+			_weightPosition = 1.000000F;
+			_weightOrientation = 1.000000F;
+			_transitionIn = 0.300000F;
+			_transitionOut = 0.300000F;
+		}
 	}
 }

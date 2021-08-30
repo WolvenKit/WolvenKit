@@ -95,5 +95,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _queue);
 			set => SetProperty(ref _queue, value);
 		}
+
+		public HudPhoneMessageController()
+		{
+			_showingAnimationName = "messageShowingAnimation";
+			_hidingAnimationName = "messageHidingAnimation";
+			_visibleAnimationName = "messageVisibleAnimation";
+			_messageMaxLength = 120;
+			_messageTopper = new() { Text = "..." };
+		}
 	}
 }

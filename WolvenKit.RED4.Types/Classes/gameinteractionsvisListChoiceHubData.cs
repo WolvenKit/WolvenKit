@@ -77,5 +77,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _hubPriority);
 			set => SetProperty(ref _hubPriority, value);
 		}
+
+		public gameinteractionsvisListChoiceHubData()
+		{
+			_id = -1;
+		}
 	}
 }

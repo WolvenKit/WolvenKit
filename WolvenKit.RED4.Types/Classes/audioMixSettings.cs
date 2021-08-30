@@ -59,5 +59,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _onStartupEvent);
 			set => SetProperty(ref _onStartupEvent, value);
 		}
+
+		public audioMixSettings()
+		{
+			_masterVolume = 10.000000F;
+			_sfxVolume = 10.000000F;
+			_musicVolume = 10.000000F;
+			_voVolume = 10.000000F;
+			_uiMenuVolume = 10.000000F;
+		}
 	}
 }

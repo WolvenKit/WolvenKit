@@ -104,5 +104,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _tEXT_OFFSET);
 			set => SetProperty(ref _tEXT_OFFSET, value);
 		}
+
+		public DEBUG_VisualizerComponent()
+		{
+			_tICK_TIME_DELTA = 0.010000F;
+			_tEXT_SCALE_NAME = 3.000000F;
+			_tEXT_SCALE_ATTITUDE = 2.000000F;
+			_tEXT_SCALE_IMMORTALITY_MODE = 1.000000F;
+			_tEXT_TOP = 2.300000F;
+			_tEXT_OFFSET = 0.200000F;
+		}
 	}
 }

@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _inputLink);
 			set => SetProperty(ref _inputLink, value);
 		}
+
+		public animAnimNode_WorkspotAnim()
+		{
+			_collectEvents = true;
+		}
 	}
 }

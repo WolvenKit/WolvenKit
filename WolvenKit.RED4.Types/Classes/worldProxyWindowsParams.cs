@@ -86,5 +86,17 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _distantWindowsTurnedOf);
 			set => SetProperty(ref _distantWindowsTurnedOf, value);
 		}
+
+		public worldProxyWindowsParams()
+		{
+			_windowsType = new() { Value = Enums.worldProxWindowsType.PropagateWindows };
+			_distance = 0.400000F;
+			_distanceAboveProxy = 0.020000F;
+			_removeSmallerThan = 0.300000F;
+			_distantWindowsEmissive = 1.000000F;
+			_distantWindowsSize = 3.000000F;
+			_distantWindowsSaturation = 0.750000F;
+			_distantWindowsTurnedOf = 0.450000F;
+		}
 	}
 }

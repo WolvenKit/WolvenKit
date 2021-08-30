@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _supportsHoldInput);
 			set => SetProperty(ref _supportsHoldInput, value);
 		}
+
+		public inkDiscreteNavigationController()
+		{
+			_isNavigalbe = true;
+			_supportsHoldInput = true;
+		}
 	}
 }

@@ -95,5 +95,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _assignedIndex);
 			set => SetProperty(ref _assignedIndex, value);
 		}
+
+		public AbilityData()
+		{
+			_empty = true;
+			_equipmentArea = new() { Value = Enums.gamedataEquipmentArea.Invalid };
+			_assignedIndex = -1;
+		}
 	}
 }

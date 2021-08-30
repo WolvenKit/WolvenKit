@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _conserveMomentum);
 			set => SetProperty(ref _conserveMomentum, value);
 		}
+
+		public CParticleInitializerVelocitySpread()
+		{
+			_conserveMomentum = true;
+		}
 	}
 }

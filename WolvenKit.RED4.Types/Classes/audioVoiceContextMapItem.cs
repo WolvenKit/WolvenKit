@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _gruntInterruptMode);
 			set => SetProperty(ref _gruntInterruptMode, value);
 		}
+
+		public audioVoiceContextMapItem()
+		{
+			_overridingVoContext = new() { Value = Enums.locVoiceoverContext.Default_Vo_Context };
+		}
 	}
 }

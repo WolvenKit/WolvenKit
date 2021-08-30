@@ -194,5 +194,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _specAppearance);
 			set => SetProperty(ref _specAppearance, value);
 		}
+
+		public scnActorDef()
+		{
+			_specAppearance = "default";
+		}
 	}
 }

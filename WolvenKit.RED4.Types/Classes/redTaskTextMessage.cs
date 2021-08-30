@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _type);
 			set => SetProperty(ref _type, value);
 		}
+
+		public redTaskTextMessage()
+		{
+			_taskId = 4294967295;
+		}
 	}
 }

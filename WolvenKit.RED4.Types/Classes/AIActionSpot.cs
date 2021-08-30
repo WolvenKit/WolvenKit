@@ -77,5 +77,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _clippingSpaceRange);
 			set => SetProperty(ref _clippingSpaceRange, value);
 		}
+
+		public AIActionSpot()
+		{
+			_clippingSpaceOrientation = 180.000000F;
+			_clippingSpaceRange = 120.000000F;
+		}
 	}
 }

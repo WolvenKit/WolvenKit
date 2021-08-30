@@ -32,5 +32,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _verticalAngle);
 			set => SetProperty(ref _verticalAngle, value);
 		}
+
+		public gameCoveringArc()
+		{
+			_leftAngle = -1.000000F;
+			_rightAngle = -1.000000F;
+			_verticalAngle = -1.000000F;
+		}
 	}
 }

@@ -230,5 +230,27 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _weaponPlane);
 			set => SetProperty(ref _weaponPlane, value);
 		}
+
+		public gameCameraComponent()
+		{
+			_animParamFovOverrideWeight = "fovOverride";
+			_animParamFovOverrideValue = "fovValue";
+			_animParamZoomOverrideWeight = "zoomOverride";
+			_animParamZoomOverrideValue = "zoomValue";
+			_animParamZoomWeaponOverrideWeight = "zoomWeaponOverride";
+			_animParamZoomWeaponOverrideValue = "zoomWeaponValue";
+			_animParamdofIntensity = "dofIntensity";
+			_animParamdofNearBlur = "dofNearBlur";
+			_animParamdofNearFocus = "dofNearFocus";
+			_animParamdofFarBlur = "dofFarBlur";
+			_animParamdofFarFocus = "dofFarFocus";
+			_animParamWeaponNearPlaneCM = "weaponNearPlane";
+			_animParamWeaponFarPlaneCM = "weaponFarPlane";
+			_animParamWeaponEdgesSharpness = "weaponEdgesSharpness";
+			_animParamWeaponVignetteIntensity = "weaponVignetteIntensity";
+			_animParamWeaponVignetteRadius = "weaponVignetteRadius";
+			_animParamWeaponVignetteCircular = "weaponVignetteCircular";
+			_animParamWeaponBlurIntensity = "weaponBlurIntensity";
+		}
 	}
 }

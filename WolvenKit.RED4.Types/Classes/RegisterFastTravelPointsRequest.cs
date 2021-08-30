@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _register);
 			set => SetProperty(ref _register, value);
 		}
+
+		public RegisterFastTravelPointsRequest()
+		{
+			_register = true;
+		}
 	}
 }

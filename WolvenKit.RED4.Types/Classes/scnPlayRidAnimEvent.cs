@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _blendInTrajectoryBone);
 			set => SetProperty(ref _blendInTrajectoryBone, value);
 		}
+
+		public scnPlayRidAnimEvent()
+		{
+			_actorHasCollision = true;
+		}
 	}
 }

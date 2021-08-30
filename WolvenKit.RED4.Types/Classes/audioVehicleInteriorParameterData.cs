@@ -59,5 +59,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _exitDelayTime);
 			set => SetProperty(ref _exitDelayTime, value);
 		}
+
+		public audioVehicleInteriorParameterData()
+		{
+			_enterCurveType = new() { Value = Enums.audioESoundCurveType.Linear };
+			_enterCurveTime = 3.000000F;
+			_enterDelayTime = 2.000000F;
+			_exitCurveType = new() { Value = Enums.audioESoundCurveType.Linear };
+			_exitCurveTime = 3.000000F;
+			_exitDelayTime = 2.000000F;
+		}
 	}
 }

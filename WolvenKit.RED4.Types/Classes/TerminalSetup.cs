@@ -41,5 +41,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _shouldForceVirtualSystem);
 			set => SetProperty(ref _shouldForceVirtualSystem, value);
 		}
+
+		public TerminalSetup()
+		{
+			_minClearance = 1;
+			_maxClearance = 10;
+			_shouldForceVirtualSystem = true;
+		}
 	}
 }

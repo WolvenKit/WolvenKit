@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _surfaceOnly);
 			set => SetProperty(ref _surfaceOnly, value);
 		}
+
+		public CParticleInitializerSpawnBox()
+		{
+			_worldSpace = true;
+		}
 	}
 }

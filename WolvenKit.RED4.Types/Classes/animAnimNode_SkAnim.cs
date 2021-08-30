@@ -158,5 +158,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _applyInertializationOnAnimSetSwap);
 			set => SetProperty(ref _applyInertializationOnAnimSetSwap, value);
 		}
+
+		public animAnimNode_SkAnim()
+		{
+			_applyMotion = true;
+			_isLooped = true;
+			_collectEvents = true;
+			_applyInertializationOnAnimSetSwap = true;
+		}
 	}
 }

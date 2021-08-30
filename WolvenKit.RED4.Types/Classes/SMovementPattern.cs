@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _direction);
 			set => SetProperty(ref _direction, value);
 		}
+
+		public SMovementPattern()
+		{
+			_speed = 2.000000F;
+		}
 	}
 }

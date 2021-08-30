@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _specularTint);
 			set => SetProperty(ref _specularTint, value);
 		}
+
+		public worldWorldGlobalLightParameters()
+		{
+			_unit = new() { Value = Enums.ELightUnit.LU_Lux };
+		}
 	}
 }

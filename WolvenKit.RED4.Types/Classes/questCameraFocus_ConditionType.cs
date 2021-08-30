@@ -68,5 +68,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _zoomed);
 			set => SetProperty(ref _zoomed, value);
 		}
+
+		public questCameraFocus_ConditionType()
+		{
+			_timeInterval = 1.000000F;
+			_angleTolerance = 30.000000F;
+		}
 	}
 }

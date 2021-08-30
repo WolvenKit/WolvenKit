@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _className);
 			set => SetProperty(ref _className, value);
 		}
+
+		public gameJournalPath()
+		{
+			_fileEntryIndex = -1;
+		}
 	}
 }

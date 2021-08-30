@@ -122,5 +122,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _statMaxValue);
 			set => SetProperty(ref _statMaxValue, value);
 		}
+
+		public gameStatViewData()
+		{
+			_type = new() { Value = Enums.gamedataStatType.Invalid };
+		}
 	}
 }

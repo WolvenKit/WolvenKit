@@ -104,5 +104,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _size);
 			set => SetProperty(ref _size, value);
 		}
+
+		public questHUDVideo_NodeType()
+		{
+			_playOnHud = true;
+		}
 	}
 }

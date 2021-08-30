@@ -167,5 +167,17 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _hintsName);
 			set => SetProperty(ref _hintsName, value);
 		}
+
+		public GameplaySettingsListener()
+		{
+			_additiveCameraGroupName = "AdditiveCameraMovements";
+			_fastForwardGroupName = "FastForward";
+			_movementDodgeGroupName = "MovementDodge";
+			_difficultyPath = "/gameplay/difficulty";
+			_miscPath = "/gameplay/misc";
+			_controlsPath = "/controls";
+			_hudPath = "/interface/hud";
+			_hintsName = "input_hints";
+		}
 	}
 }

@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _weapon);
 			set => SetProperty(ref _weapon, value);
 		}
+
+		public AddWeapon()
+		{
+			_weapon = new() { Value = Enums.EquipmentPriority.All };
+		}
 	}
 }

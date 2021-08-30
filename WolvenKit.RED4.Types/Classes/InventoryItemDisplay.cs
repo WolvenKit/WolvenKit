@@ -176,5 +176,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _owner);
 			set => SetProperty(ref _owner, value);
 		}
+
+		public InventoryItemDisplay()
+		{
+			_defaultCategoryIconName = new() { Text = "undefined" };
+		}
 	}
 }

@@ -122,5 +122,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _applicationSource);
 			set => SetProperty(ref _applicationSource, value);
 		}
+
+		public gameStatusEffect()
+		{
+			_durationID = 4294967295;
+			_duration = -1.000000F;
+			_remainingDuration = -1.000000F;
+			_maxStacks = 2147483647;
+		}
 	}
 }

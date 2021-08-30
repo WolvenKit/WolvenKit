@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _mesh);
 			set => SetProperty(ref _mesh, value);
 		}
+
+		public worldInstancedOccluderNode()
+		{
+			_autohideDistanceScale = 255;
+		}
 	}
 }

@@ -311,5 +311,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _hashMapCache);
 			set => SetProperty(ref _hashMapCache, value);
 		}
+
+		public InventoryDataManagerV2()
+		{
+			_toRebuild = true;
+			_toRebuildItemsWithEquipped = true;
+			_toRebuildWeapons = true;
+			_toRebuildEquipment = true;
+			_toRebuildQuickSlots = true;
+			_toRebuildConsumables = true;
+		}
 	}
 }

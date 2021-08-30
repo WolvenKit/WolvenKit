@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _movementType);
 			set => SetProperty(ref _movementType, value);
 		}
+
+		public AIMovementTypeSpec()
+		{
+			_useNPCMovementParams = true;
+		}
 	}
 }

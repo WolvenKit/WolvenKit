@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _category);
 			set => SetProperty(ref _category, value);
 		}
+
+		public worldStreamingSector()
+		{
+			_level = 255;
+			_category = -1;
+		}
 	}
 }

@@ -77,5 +77,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _zoom);
 			set => SetProperty(ref _zoom, value);
 		}
+
+		public rendGridGeneratorData()
+		{
+			_xStep = 88.900002F;
+			_yStep = 50.000000F;
+			_numberOfXSteps = 10;
+			_numberOfYSteps = 10;
+			_orbitDistance = 1.000000F;
+			_zoom = 50.000000F;
+		}
 	}
 }

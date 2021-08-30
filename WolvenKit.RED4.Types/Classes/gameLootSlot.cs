@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lootState);
 			set => SetProperty(ref _lootState, value);
 		}
+
+		public gameLootSlot()
+		{
+			_dropChance = 1.000000F;
+		}
 	}
 }

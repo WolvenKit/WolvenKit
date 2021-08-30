@@ -203,5 +203,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _rightHandLoadout);
 			set => SetProperty(ref _rightHandLoadout, value);
 		}
+
+		public ScriptedPuppetPS()
+		{
+			_isDefeatMechanicActive = true;
+		}
 	}
 }

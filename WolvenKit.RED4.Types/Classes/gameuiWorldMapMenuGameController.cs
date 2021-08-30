@@ -509,5 +509,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _initPosition);
 			set => SetProperty(ref _initPosition, value);
 		}
+
+		public gameuiWorldMapMenuGameController()
+		{
+			_hoveredDistrict = new() { Value = Enums.gamedataDistrict.Invalid };
+			_hoveredSubDistrict = new() { Value = Enums.gamedataDistrict.Invalid };
+			_selectedDistrict = new() { Value = Enums.gamedataDistrict.Invalid };
+			_canChangeCustomFilter = true;
+			_rightAxisZoomThreshold = 0.800000F;
+		}
 	}
 }

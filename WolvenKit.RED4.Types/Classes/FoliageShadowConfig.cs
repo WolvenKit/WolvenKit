@@ -32,5 +32,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _foliageShadowCascadeGradientDistanceRange);
 			set => SetProperty(ref _foliageShadowCascadeGradientDistanceRange, value);
 		}
+
+		public FoliageShadowConfig()
+		{
+			_foliageShadowCascadeGradient = 0.100000F;
+			_foliageShadowCascadeFilterScale = 0.100000F;
+			_foliageShadowCascadeGradientDistanceRange = 50.000000F;
+		}
 	}
 }

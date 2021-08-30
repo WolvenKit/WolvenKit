@@ -392,5 +392,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _playerInWorkspot);
 			set => SetProperty(ref _playerInWorkspot, value);
 		}
+
+		public Door()
+		{
+			_bankToLoad_TEMP = new() { Text = "dev_door_sliding_generic" };
+			_closingAnimationLength = 1.100000F;
+			_automaticCloseDelay = 3.000000F;
+		}
 	}
 }

@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _areaType);
 			set => SetProperty(ref _areaType, value);
 		}
+
+		public questCharacterManagerCombat_SetWeaponState()
+		{
+			_areaType = new() { Value = Enums.gameCityAreaType.PublicZone };
+		}
 	}
 }

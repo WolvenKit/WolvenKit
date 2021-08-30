@@ -59,5 +59,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _bokehSizeMuliplier);
 			set => SetProperty(ref _bokehSizeMuliplier, value);
 		}
+
+		public SBokehDofParams()
+		{
+			_hexToCircleScale = 1.000000F;
+			_planeInFocus = 3.000000F;
+			_fStops = new() { Value = Enums.EApertureValue.f_4_0 };
+			_bokehSizeMuliplier = 1.000000F;
+		}
 	}
 }

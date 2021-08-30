@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _delayChildActivationIfAttaching);
 			set => SetProperty(ref _delayChildActivationIfAttaching, value);
 		}
+
+		public AIbehaviorLimiterNodeDefinition()
+		{
+			_activationLimitPerFrame = 1;
+		}
 	}
 }

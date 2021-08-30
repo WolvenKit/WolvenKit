@@ -509,5 +509,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _attemptedShards);
 			set => SetProperty(ref _attemptedShards, value);
 		}
+
+		public ScriptedPuppet()
+		{
+			_shouldSpawnBloodPuddle = true;
+			_lootQuality = new() { Value = Enums.gamedataQuality.Invalid };
+		}
 	}
 }

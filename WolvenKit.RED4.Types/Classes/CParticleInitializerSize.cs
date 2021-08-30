@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _scale);
 			set => SetProperty(ref _scale, value);
 		}
+
+		public CParticleInitializerSize()
+		{
+			_scale = 1.000000F;
+		}
 	}
 }

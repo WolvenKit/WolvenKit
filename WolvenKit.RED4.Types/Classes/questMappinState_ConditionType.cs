@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _active);
 			set => SetProperty(ref _active, value);
 		}
+
+		public questMappinState_ConditionType()
+		{
+			_active = true;
+		}
 	}
 }

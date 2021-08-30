@@ -383,5 +383,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _dpadWheelCyberwareAssignedBBID);
 			set => SetProperty(ref _dpadWheelCyberwareAssignedBBID, value);
 		}
+
+		public DpadWheelGameController()
+		{
+			_itemDistance = 450.000000F;
+			_hashMarkDistance = 350.000000F;
+			_minDistance = 0.200000F;
+		}
 	}
 }

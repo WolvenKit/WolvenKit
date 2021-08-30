@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _texts);
 			set => SetProperty(ref _texts, value);
 		}
+
+		public TextSpawnerController()
+		{
+			_amountOfRows = 6;
+		}
 	}
 }

@@ -149,5 +149,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _target);
 			set => SetProperty(ref _target, value);
 		}
+
+		public minibossPlasmaProjectile()
+		{
+			_alive = true;
+		}
 	}
 }

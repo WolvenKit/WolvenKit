@@ -653,5 +653,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _playerObject);
 			set => SetProperty(ref _playerObject, value);
 		}
+
+		public QuickhacksListGameController()
+		{
+			_currentMemoryCellsActive = -1;
+			_desiredMemoryCellsActive = -1;
+		}
 	}
 }

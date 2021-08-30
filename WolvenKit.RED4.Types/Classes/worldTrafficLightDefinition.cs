@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _timeline);
 			set => SetProperty(ref _timeline, value);
 		}
+
+		public worldTrafficLightDefinition()
+		{
+			_groupIdx = 4294967295;
+		}
 	}
 }

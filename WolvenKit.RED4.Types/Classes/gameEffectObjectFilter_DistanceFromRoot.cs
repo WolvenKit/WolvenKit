@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _bonusRange);
 			set => SetProperty(ref _bonusRange, value);
 		}
+
+		public gameEffectObjectFilter_DistanceFromRoot()
+		{
+			_rootZOffset = 1.000000F;
+			_bonusRange = 0.500000F;
+		}
 	}
 }

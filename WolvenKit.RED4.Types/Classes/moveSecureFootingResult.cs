@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _type);
 			set => SetProperty(ref _type, value);
 		}
+
+		public moveSecureFootingResult()
+		{
+			_staticGroundFactor = -1.000000F;
+		}
 	}
 }

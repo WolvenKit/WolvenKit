@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _samplesAmount);
 			set => SetProperty(ref _samplesAmount, value);
 		}
+
+		public entTransformHistoryComponent()
+		{
+			_historyLength = 30.000000F;
+			_samplesAmount = 60;
+		}
 	}
 }

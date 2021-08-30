@@ -77,5 +77,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _closeTime);
 			set => SetProperty(ref _closeTime, value);
 		}
+
+		public audioDoorDecoratorMetadata()
+		{
+			_openTime = 1.000000F;
+			_closeTime = 1.000000F;
+		}
 	}
 }

@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _mode);
 			set => SetProperty(ref _mode, value);
 		}
+
+		public scnLookAtEyesProperties()
+		{
+			_enableFactor = 1.000000F;
+		}
 	}
 }

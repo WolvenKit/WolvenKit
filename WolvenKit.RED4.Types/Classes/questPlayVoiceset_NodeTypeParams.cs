@@ -95,5 +95,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _overridingVisualStyle);
 			set => SetProperty(ref _overridingVisualStyle, value);
 		}
+
+		public questPlayVoiceset_NodeTypeParams()
+		{
+			_overridingVoiceoverContext = new() { Value = Enums.locVoiceoverContext.Default_Vo_Context };
+		}
 	}
 }

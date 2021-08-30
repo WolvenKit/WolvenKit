@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _slotIndex);
 			set => SetProperty(ref _slotIndex, value);
 		}
+
+		public UnequipRequest()
+		{
+			_slotIndex = -1;
+		}
 	}
 }

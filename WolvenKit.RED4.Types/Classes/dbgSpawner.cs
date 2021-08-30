@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _alwaysSpawned);
 			set => SetProperty(ref _alwaysSpawned, value);
 		}
+
+		public dbgSpawner()
+		{
+			_appearance = "default";
+		}
 	}
 }

@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _cpoDefaultMenu);
 			set => SetProperty(ref _cpoDefaultMenu, value);
 		}
+
+		public DebugMenuScenario_HubMenu()
+		{
+			_defaultMenu = "builds_panel";
+			_cpoDefaultMenu = "builds_panel";
+		}
 	}
 }

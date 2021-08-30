@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _secondInputNode);
 			set => SetProperty(ref _secondInputNode, value);
 		}
+
+		public animAnimNode_FloatMathOp()
+		{
+			_operationType = new() { Value = Enums.animEAnimGraphMathOp.AGMO_Abs };
+		}
 	}
 }

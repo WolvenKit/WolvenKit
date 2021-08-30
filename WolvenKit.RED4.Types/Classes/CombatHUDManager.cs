@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _timeSinceLastUpdate);
 			set => SetProperty(ref _timeSinceLastUpdate, value);
 		}
+
+		public CombatHUDManager()
+		{
+			_interval = 1.000000F;
+		}
 	}
 }

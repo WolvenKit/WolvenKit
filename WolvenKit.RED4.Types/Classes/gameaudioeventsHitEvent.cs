@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _targetPuppetMeleeMaterial);
 			set => SetProperty(ref _targetPuppetMeleeMaterial, value);
 		}
+
+		public gameaudioeventsHitEvent()
+		{
+			_attackType = new() { Value = Enums.gamedataAttackType.Direct };
+		}
 	}
 }

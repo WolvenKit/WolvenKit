@@ -113,5 +113,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _animationState);
 			set => SetProperty(ref _animationState, value);
 		}
+
+		public ComputerSetup()
+		{
+			_mailsMenu = true;
+			_filesMenu = true;
+			_systemMenu = true;
+			_internetMenu = true;
+			_newsFeedInterval = 5.000000F;
+		}
 	}
 }

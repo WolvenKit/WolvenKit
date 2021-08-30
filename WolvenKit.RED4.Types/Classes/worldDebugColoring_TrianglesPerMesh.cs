@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxCount);
 			set => SetProperty(ref _maxCount, value);
 		}
+
+		public worldDebugColoring_TrianglesPerMesh()
+		{
+			_minCount = 500;
+			_maxCount = 20000;
+		}
 	}
 }

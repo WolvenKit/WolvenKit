@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _glitchParameter1);
 			set => SetProperty(ref _glitchParameter1, value);
 		}
+
+		public effectTrackItemHudParameter()
+		{
+			_scale = 1.000000F;
+			_scale1 = 1.000000F;
+		}
 	}
 }

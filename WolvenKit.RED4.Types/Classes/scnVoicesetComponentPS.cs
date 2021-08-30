@@ -59,5 +59,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _areVoicesetGruntsEnabled);
 			set => SetProperty(ref _areVoicesetGruntsEnabled, value);
 		}
+
+		public scnVoicesetComponentPS()
+		{
+			_nPCHighLevelState = new() { Value = Enums.gamedataNPCHighLevelState.Invalid };
+			_areVoicesetLinesEnabled = true;
+			_areVoicesetGruntsEnabled = true;
+		}
 	}
 }

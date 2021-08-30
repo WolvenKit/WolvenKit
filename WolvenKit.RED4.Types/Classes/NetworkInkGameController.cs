@@ -266,5 +266,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _onDevicesCountChangedListener);
 			set => SetProperty(ref _onDevicesCountChangedListener, value);
 		}
+
+		public NetworkInkGameController()
+		{
+			_turn = new() { Text = "Initial" };
+			_dimension = 5;
+			_steps = 6;
+			_initRound = true;
+		}
 	}
 }

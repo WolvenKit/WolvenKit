@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _hit);
 			set => SetProperty(ref _hit, value);
 		}
+
+		public SpiderbotHeavyProjectile()
+		{
+			_alive = true;
+		}
 	}
 }

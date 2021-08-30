@@ -185,5 +185,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _c_EXCLUDED_STATUS_EFFECT_NAME);
 			set => SetProperty(ref _c_EXCLUDED_STATUS_EFFECT_NAME, value);
 		}
+
+		public SingleCooldownManager()
+		{
+			_c_EXCLUDED_STATUS_EFFECT_NAME = new() { Text = "BaseStatusEffect.AlcoholDebuff" };
+		}
 	}
 }

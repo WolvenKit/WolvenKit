@@ -95,5 +95,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _inputNode);
 			set => SetProperty(ref _inputNode, value);
 		}
+
+		public animAnimNode_SpringDamp()
+		{
+			_massFactor = 1.000000F;
+			_springFactor = 1.000000F;
+			_dampFactor = 1.000000F;
+			_rangeMin = -180.000000F;
+			_rangeMax = 180.000000F;
+			_timeStep = 0.005000F;
+		}
 	}
 }

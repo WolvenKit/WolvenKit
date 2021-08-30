@@ -158,5 +158,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _forceHdrLut);
 			set => SetProperty(ref _forceHdrLut, value);
 		}
+
+		public ColorGradingAreaSettings()
+		{
+			_contrast = 1.000000F;
+			_contrastPivot = 0.435000F;
+			_saturation = 1.000000F;
+			_brightness = 1.000000F;
+			_lowRange = 0.100000F;
+			_highRange = 0.450000F;
+		}
 	}
 }

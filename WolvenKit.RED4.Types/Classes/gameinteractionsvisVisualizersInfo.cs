@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _visIds);
 			set => SetProperty(ref _visIds, value);
 		}
+
+		public gameinteractionsvisVisualizersInfo()
+		{
+			_activeVisId = -1;
+		}
 	}
 }

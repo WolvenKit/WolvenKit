@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _quickHacked);
 			set => SetProperty(ref _quickHacked, value);
 		}
+
+		public questCharacterQuickHacked_ConditionType()
+		{
+			_quickHacked = true;
+		}
 	}
 }

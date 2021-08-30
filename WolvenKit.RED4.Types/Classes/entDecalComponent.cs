@@ -149,5 +149,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isEnabled);
 			set => SetProperty(ref _isEnabled, value);
 		}
+
+		public entDecalComponent()
+		{
+			_scale = 1.000000F;
+			_alpha = 1.000000F;
+			_normalThreshold = 1.000000F;
+			_roughnessScale = 1.000000F;
+			_shouldCollectWithRayTracing = true;
+			_isEnabled = true;
+		}
 	}
 }

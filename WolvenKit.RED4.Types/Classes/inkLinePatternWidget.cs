@@ -77,5 +77,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _patternDirection);
 			set => SetProperty(ref _patternDirection, value);
 		}
+
+		public inkLinePatternWidget()
+		{
+			_spacing = 10.000000F;
+			_looseSpacing = 20.000000F;
+			_rotateWithSegment = true;
+		}
 	}
 }

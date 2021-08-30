@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _scale);
 			set => SetProperty(ref _scale, value);
 		}
+
+		public worldFoliageRawItem()
+		{
+			_scale = 1.000000F;
+		}
 	}
 }

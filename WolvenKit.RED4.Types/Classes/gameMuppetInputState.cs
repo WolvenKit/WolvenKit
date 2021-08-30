@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _frameId);
 			set => SetProperty(ref _frameId, value);
 		}
+
+		public gameMuppetInputState()
+		{
+			_frameId = 4294967295;
+		}
 	}
 }

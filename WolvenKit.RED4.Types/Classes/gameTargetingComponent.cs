@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _alwaysInTestRange);
 			set => SetProperty(ref _alwaysInTestRange, value);
 		}
+
+		public gameTargetingComponent()
+		{
+			_isPrimary = true;
+			_isEnabled = true;
+		}
 	}
 }

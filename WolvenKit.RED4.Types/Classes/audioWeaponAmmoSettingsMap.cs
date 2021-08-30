@@ -86,5 +86,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _flybyMinDistance);
 			set => SetProperty(ref _flybyMinDistance, value);
 		}
+
+		public audioWeaponAmmoSettingsMap()
+		{
+			_flybyMinDistance = 5.000000F;
+		}
 	}
 }

@@ -149,5 +149,16 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _navigationImpact);
 			set => SetProperty(ref _navigationImpact, value);
 		}
+
+		public entMeshComponent()
+		{
+			_meshAppearance = "default";
+			_castShadows = true;
+			_castLocalShadows = true;
+			_motionBlurScale = 1.000000F;
+			_chunkMask = 18446744073709551615;
+			_isEnabled = true;
+			_overrideMeshNavigationImpact = true;
+		}
 	}
 }

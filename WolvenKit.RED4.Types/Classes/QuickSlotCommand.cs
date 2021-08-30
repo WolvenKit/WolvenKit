@@ -176,5 +176,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _interactiveActionOwner);
 			set => SetProperty(ref _interactiveActionOwner, value);
 		}
+
+		public QuickSlotCommand()
+		{
+			_isSlotUnlocked = true;
+		}
 	}
 }

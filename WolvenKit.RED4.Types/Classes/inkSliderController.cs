@@ -149,5 +149,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _sliderHandleReleased);
 			set => SetProperty(ref _sliderHandleReleased, value);
 		}
+
+		public inkSliderController()
+		{
+			_minHandleSize = 20.000000F;
+			_percentHandleSize = 0.100000F;
+			_maximumValue = 1.000000F;
+		}
 	}
 }

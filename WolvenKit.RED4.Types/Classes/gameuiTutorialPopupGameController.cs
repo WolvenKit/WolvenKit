@@ -203,5 +203,17 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _targetPosition);
 			set => SetProperty(ref _targetPosition, value);
 		}
+
+		public gameuiTutorialPopupGameController()
+		{
+			_animIntroPopup = "into_popup";
+			_animIntroPopupModal = "into_popup_modal";
+			_animIntroFullscreenLeft = "into_fullscreen_left";
+			_animIntroFullscreenRight = "into_fullscreen_right";
+			_animOutroPopup = "outro_popup";
+			_animOutroPopupModal = "outro_popup_modal";
+			_animOutroFullscreenLeft = "outro_fullscreen_left";
+			_animOutroFullscreenRight = "outro_fullscreen_right";
+		}
 	}
 }

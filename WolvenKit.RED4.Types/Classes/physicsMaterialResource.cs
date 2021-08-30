@@ -77,5 +77,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _id);
 			set => SetProperty(ref _id, value);
 		}
+
+		public physicsMaterialResource()
+		{
+			_staticFriction = 0.500000F;
+			_dynamicFriction = 0.300000F;
+			_restitution = 0.200000F;
+			_density = 1000.000000F;
+		}
 	}
 }

@@ -131,5 +131,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _targetSlot);
 			set => SetProperty(ref _targetSlot, value);
 		}
+
+		public scneventsCameraParamsEvent()
+		{
+			_fovValue = 51.000000F;
+			_fovWeigh = 1.000000F;
+			_useNearPlane = true;
+			_useFarPlane = true;
+		}
 	}
 }

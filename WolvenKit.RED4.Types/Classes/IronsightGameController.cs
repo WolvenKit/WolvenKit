@@ -518,5 +518,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _attitude);
 			set => SetProperty(ref _attitude, value);
 		}
+
+		public IronsightGameController()
+		{
+			_currentAmmo = -1;
+			_targetRangeDecimalPrecision = 2;
+		}
 	}
 }

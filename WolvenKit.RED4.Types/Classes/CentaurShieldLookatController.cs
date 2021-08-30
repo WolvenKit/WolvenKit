@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _shieldTargetTimeStamp);
 			set => SetProperty(ref _shieldTargetTimeStamp, value);
 		}
+
+		public CentaurShieldLookatController()
+		{
+			_shieldTargetTimeStamp = -1.000000F;
+		}
 	}
 }

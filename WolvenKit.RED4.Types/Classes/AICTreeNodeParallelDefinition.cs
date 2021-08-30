@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _forwardChildrenCompleteness);
 			set => SetProperty(ref _forwardChildrenCompleteness, value);
 		}
+
+		public AICTreeNodeParallelDefinition()
+		{
+			_forwardChildrenCompleteness = true;
+		}
 	}
 }

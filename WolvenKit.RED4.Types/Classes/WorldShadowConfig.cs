@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _foliageShadowConfig);
 			set => SetProperty(ref _foliageShadowConfig, value);
 		}
+
+		public WorldShadowConfig()
+		{
+			_distantShadowsNumLevels = 3;
+			_distantShadowsBaseLevelRadius = 250.000000F;
+		}
 	}
 }

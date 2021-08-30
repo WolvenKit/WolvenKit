@@ -86,5 +86,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _emissiveScale);
 			set => SetProperty(ref _emissiveScale, value);
 		}
+
+		public HACK_AREA_Settings()
+		{
+			_surfelScale = 1.000000F;
+			_missingEnergyScale = 1.000000F;
+			_overrideOnPureView = true;
+			_skyScale = 1.000000F;
+			_emissiveScale = 1.000000F;
+		}
 	}
 }

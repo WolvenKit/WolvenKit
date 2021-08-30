@@ -59,5 +59,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isProcessingPayment);
 			set => SetProperty(ref _isProcessingPayment, value);
 		}
+
+		public PayActionWidgetController()
+		{
+			_moneyStatusAnimName = "no_money";
+			_processingAnimName = "pay";
+		}
 	}
 }

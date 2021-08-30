@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _bendPowerOffsetInCM);
 			set => SetProperty(ref _bendPowerOffsetInCM, value);
 		}
+
+		public garmentBendingParams()
+		{
+			_bendPowerOffsetInCM = 1.000000F;
+		}
 	}
 }

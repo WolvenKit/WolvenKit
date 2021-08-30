@@ -140,5 +140,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _weightNode);
 			set => SetProperty(ref _weightNode, value);
 		}
+
+		public animAnimNode_DirectConnConstraint()
+		{
+			_weight = 1.000000F;
+		}
 	}
 }

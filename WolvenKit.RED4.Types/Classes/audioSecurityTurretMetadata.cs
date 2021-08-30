@@ -77,5 +77,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _occlusionEnabled);
 			set => SetProperty(ref _occlusionEnabled, value);
 		}
+
+		public audioSecurityTurretMetadata()
+		{
+			_obstructionEnabled = true;
+			_occlusionEnabled = true;
+		}
 	}
 }

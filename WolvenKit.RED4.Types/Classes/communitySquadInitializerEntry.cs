@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _value);
 			set => SetProperty(ref _value, value);
 		}
+
+		public communitySquadInitializerEntry()
+		{
+			_type = new() { Value = Enums.communityESquadType.Unknown };
+		}
 	}
 }

@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _operationType);
 			set => SetProperty(ref _operationType, value);
 		}
+
+		public TriggerVolumeOperationTriggerData()
+		{
+			_canNPCBeDead = true;
+		}
 	}
 }

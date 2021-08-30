@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _radius);
 			set => SetProperty(ref _radius, value);
 		}
+
+		public gameinfluenceSeparationAgent()
+		{
+			_radius = 0.250000F;
+		}
 	}
 }

@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _dismount);
 			set => SetProperty(ref _dismount, value);
 		}
+
+		public questForbiddenTrigger_NodeType()
+		{
+			_activate = true;
+		}
 	}
 }

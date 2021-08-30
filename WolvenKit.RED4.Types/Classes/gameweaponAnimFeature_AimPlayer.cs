@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _aimOutTime);
 			set => SetProperty(ref _aimOutTime, value);
 		}
+
+		public gameweaponAnimFeature_AimPlayer()
+		{
+			_zoomLevel = 1.000000F;
+		}
 	}
 }

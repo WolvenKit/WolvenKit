@@ -77,5 +77,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _globalWaterMask);
 			set => SetProperty(ref _globalWaterMask, value);
 		}
+
+		public WaterAreaSettings()
+		{
+			_blurMax = 10.000000F;
+			_blurExponent = 1.000000F;
+			_depth = 50.000000F;
+			_density = 10.000000F;
+		}
 	}
 }

@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _nodeRef);
 			set => SetProperty(ref _nodeRef, value);
 		}
+
+		public SStimOperationData()
+		{
+			_lifeTime = 3.000000F;
+			_radius = 5.000000F;
+		}
 	}
 }

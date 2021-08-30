@@ -59,5 +59,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _microblends);
 			set => SetProperty(ref _microblends, value);
 		}
+
+		public CMaterialLayerLibrary()
+		{
+			_uvTiling = 1.000000F;
+			_mbTiling = 4.000000F;
+			_microblendContrast = 1.000000F;
+		}
 	}
 }

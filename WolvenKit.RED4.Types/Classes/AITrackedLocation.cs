@@ -122,5 +122,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _sharedLastKnown);
 			set => SetProperty(ref _sharedLastKnown, value);
 		}
+
+		public AITrackedLocation()
+		{
+			_accuracy = 1.000000F;
+			_sharedAccuracy = 1.000000F;
+		}
 	}
 }

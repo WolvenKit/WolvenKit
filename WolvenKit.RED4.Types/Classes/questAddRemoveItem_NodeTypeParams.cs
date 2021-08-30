@@ -113,5 +113,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _tagsToIgnoreOnRemove);
 			set => SetProperty(ref _tagsToIgnoreOnRemove, value);
 		}
+
+		public questAddRemoveItem_NodeTypeParams()
+		{
+			_quantity = 1;
+		}
 	}
 }

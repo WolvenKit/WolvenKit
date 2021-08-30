@@ -41,5 +41,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _backLimitDegrees);
 			set => SetProperty(ref _backLimitDegrees, value);
 		}
+
+		public entLookAtLimits()
+		{
+			_softLimitDegrees = 360.000000F;
+			_hardLimitDegrees = 360.000000F;
+			_hardLimitDistance = 1000000.000000F;
+			_backLimitDegrees = 180.000000F;
+		}
 	}
 }

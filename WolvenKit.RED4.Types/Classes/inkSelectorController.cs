@@ -131,5 +131,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _leftArrowButton);
 			set => SetProperty(ref _leftArrowButton, value);
 		}
+
+		public inkSelectorController()
+		{
+			_index = -1;
+			_cycledNavigation = true;
+			_labelPath = "Panel/Label";
+			_valuePath = "Panel/Value";
+			_leftArrowPath = "Panel/LeftArrow";
+			_rightArrowPath = "Panel/RightArrow";
+		}
 	}
 }

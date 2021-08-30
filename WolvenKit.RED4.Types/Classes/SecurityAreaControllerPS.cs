@@ -113,5 +113,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _pendingNotifyPlayerAboutTransition);
 			set => SetProperty(ref _pendingNotifyPlayerAboutTransition, value);
 		}
+
+		public SecurityAreaControllerPS()
+		{
+			_securityAreaType = new() { Value = Enums.ESecurityAreaType.DANGEROUS };
+		}
 	}
 }

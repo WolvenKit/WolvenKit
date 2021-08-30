@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _outLaneReversed);
 			set => SetProperty(ref _outLaneReversed, value);
 		}
+
+		public worldTrafficLaneExitDefinition()
+		{
+			_exitProbability = 1.000000F;
+		}
 	}
 }

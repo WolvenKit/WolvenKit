@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _snapToGround);
 			set => SetProperty(ref _snapToGround, value);
 		}
+
+		public moveMotionPlannerComponent()
+		{
+			_snapToGround = true;
+		}
 	}
 }

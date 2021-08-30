@@ -140,5 +140,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _craftingBBID);
 			set => SetProperty(ref _craftingBBID, value);
 		}
+
+		public DisassembleManager()
+		{
+			_initialPopupDelay = 1.000000F;
+		}
 	}
 }

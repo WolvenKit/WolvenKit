@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _networkRef);
 			set => SetProperty(ref _networkRef, value);
 		}
+
+		public questMinigameNodeDefinition()
+		{
+			_start = true;
+		}
 	}
 }

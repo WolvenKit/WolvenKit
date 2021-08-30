@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _resetOnActivation);
 			set => SetProperty(ref _resetOnActivation, value);
 		}
+
+		public animAnimNode_RotateBoneByQuaternion()
+		{
+			_resetOnActivation = true;
+		}
 	}
 }

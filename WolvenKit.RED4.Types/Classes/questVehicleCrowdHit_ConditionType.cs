@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lethal);
 			set => SetProperty(ref _lethal, value);
 		}
+
+		public questVehicleCrowdHit_ConditionType()
+		{
+			_lethal = true;
+		}
 	}
 }

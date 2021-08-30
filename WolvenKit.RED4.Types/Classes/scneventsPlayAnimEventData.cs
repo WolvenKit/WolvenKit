@@ -68,5 +68,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _blendOutCurve);
 			set => SetProperty(ref _blendOutCurve, value);
 		}
+
+		public scneventsPlayAnimEventData()
+		{
+			_stretch = 1.000000F;
+			_blendInCurve = new() { Value = Enums.scnEasingType.SinusoidalEaseInOut };
+			_blendOutCurve = new() { Value = Enums.scnEasingType.SinusoidalEaseInOut };
+		}
 	}
 }

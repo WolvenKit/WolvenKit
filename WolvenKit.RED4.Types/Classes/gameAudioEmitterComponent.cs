@@ -77,5 +77,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _tagList);
 			set => SetProperty(ref _tagList, value);
 		}
+
+		public gameAudioEmitterComponent()
+		{
+			_updateDistance = 100.000000F;
+		}
 	}
 }

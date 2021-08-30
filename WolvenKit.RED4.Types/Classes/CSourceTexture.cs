@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _format);
 			set => SetProperty(ref _format, value);
 		}
+
+		public CSourceTexture()
+		{
+			_depth = 1;
+			_format = new() { Value = Enums.ETextureRawFormat.TRF_TrueColor };
+		}
 	}
 }

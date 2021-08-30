@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _closesAt);
 			set => SetProperty(ref _closesAt, value);
 		}
+
+		public questFlowControlNodeDefinition()
+		{
+			_isOpen = true;
+		}
 	}
 }

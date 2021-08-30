@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _postJumpPlaySpeed);
 			set => SetProperty(ref _postJumpPlaySpeed, value);
 		}
+
+		public questRewindableSectionTimeJump_NodeType()
+		{
+			_jumpSpeed = 100.000000F;
+			_postJumpPlaySpeed = new() { Value = Enums.scnPlaySpeed.Normal };
+		}
 	}
 }

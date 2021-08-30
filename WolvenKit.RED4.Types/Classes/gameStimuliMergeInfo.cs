@@ -50,5 +50,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _propagationType);
 			set => SetProperty(ref _propagationType, value);
 		}
+
+		public gameStimuliMergeInfo()
+		{
+			_radius = -1.000000F;
+			_type = new() { Value = Enums.gamedataStimType.Invalid };
+			_propagationType = new() { Value = Enums.gamedataStimPropagation.Invalid };
+		}
 	}
 }

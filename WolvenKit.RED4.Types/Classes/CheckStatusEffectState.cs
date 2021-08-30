@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _topPrioStatusEffect);
 			set => SetProperty(ref _topPrioStatusEffect, value);
 		}
+
+		public CheckStatusEffectState()
+		{
+			_stateToCheck = new() { Value = Enums.EstatusEffectsState.Activating };
+		}
 	}
 }

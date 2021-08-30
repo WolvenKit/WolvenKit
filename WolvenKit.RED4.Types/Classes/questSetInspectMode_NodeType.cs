@@ -41,5 +41,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _timeInterval);
 			set => SetProperty(ref _timeInterval, value);
 		}
+
+		public questSetInspectMode_NodeType()
+		{
+			_startingOffset = 0.500000F;
+			_zoomOffset = 0.500000F;
+			_timeInterval = 0.500000F;
+		}
 	}
 }

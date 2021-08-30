@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _styleResRef);
 			set => SetProperty(ref _styleResRef, value);
 		}
+
+		public TooltipSpawnedCallbackData()
+		{
+			_index = -1;
+		}
 	}
 }

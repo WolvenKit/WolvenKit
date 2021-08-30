@@ -50,5 +50,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _constraintScale2);
 			set => SetProperty(ref _constraintScale2, value);
 		}
+
+		public animDyngConstraintEllipsoid()
+		{
+			_constraintRadius = 1.000000F;
+			_constraintScale1 = 1.000000F;
+			_constraintScale2 = 1.000000F;
+		}
 	}
 }

@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _compatibleDeviceName);
 			set => SetProperty(ref _compatibleDeviceName, value);
 		}
+
+		public questMultiplayerChoiceTokenParams()
+		{
+			_timeout = 15;
+		}
 	}
 }

@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _previewActive);
 			set => SetProperty(ref _previewActive, value);
 		}
+
+		public gameprojectileSpawnerPreviewEvent()
+		{
+			_previewActive = true;
+		}
 	}
 }

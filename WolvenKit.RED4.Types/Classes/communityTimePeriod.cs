@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _hour);
 			set => SetProperty(ref _hour, value);
 		}
+
+		public communityTimePeriod()
+		{
+			_hour = new() { Value = Enums.communityECommunitySpawnTime.Day };
+		}
 	}
 }

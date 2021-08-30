@@ -689,5 +689,40 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _animDynamicFadeInDuration);
 			set => SetProperty(ref _animDynamicFadeInDuration, value);
 		}
+
+		public AccumulatedDamageDigitLogicController()
+		{
+			_animTimeFadeIn = 0.100000F;
+			_animTimeFadeOut = 0.400000F;
+			_animBothTimeFadeIn = 0.100000F;
+			_animBothTimeFadeOut = 0.250000F;
+			_animTimeDelay = 1.300000F;
+			_animBothTimeDelay = 1.750000F;
+			_animStartHeight = -80.000000F;
+			_animEndHeight = -140.000000F;
+			_animPopScale = 1.500000F;
+			_animPopEndScale = 1.200000F;
+			_animPopInDuration = 0.050000F;
+			_animPopOutDuration = 0.150000F;
+			_animBothOffsetY = -50.000000F;
+			_animBothStickingOffsetY = -105.000000F;
+			_animTimeCritDelay = 1.300000F;
+			_animBothTimeCritDelay = 1.750000F;
+			_animTimeCritFade = 0.400000F;
+			_animBothTimeCritFade = 0.250000F;
+			_animMaxScreenDistanceFromLast = 500.000000F;
+			_animScreenInterpolationTime = 0.080000F;
+			_animMinScreenDistanceFromLast = 60.000000F;
+			_animStickTargetWorldZOffset = 0.500000F;
+			_animStickingOffsetY = -85.000000F;
+			_animDistanceModifierMinDistance = 7.000000F;
+			_animDistanceModifierMaxDistance = 25.000000F;
+			_animDistanceModifierMinValue = 0.600000F;
+			_animDistanceModifierMaxValue = 1.000000F;
+			_animDistanceHeightBias = 70.000000F;
+			_animStickingDistanceHeightBias = 70.000000F;
+			_animPositiveOpacity = 1.000000F;
+			_animNegativeOpacity = 0.800000F;
+		}
 	}
 }

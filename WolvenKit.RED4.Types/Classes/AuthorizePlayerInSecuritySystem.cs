@@ -32,5 +32,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _eSL);
 			set => SetProperty(ref _eSL, value);
 		}
+
+		public AuthorizePlayerInSecuritySystem()
+		{
+			_authorize = true;
+			_forceRemoveFromBlacklist = true;
+			_eSL = new() { Value = Enums.ESecurityAccessLevel.ESL_4 };
+		}
 	}
 }

@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _dangle);
 			set => SetProperty(ref _dangle, value);
 		}
+
+		public entdismembermentFillMeshInfo()
+		{
+			_placement = new() { Value = Enums.entdismembermentPlacementE.MAIN_MESH };
+		}
 	}
 }

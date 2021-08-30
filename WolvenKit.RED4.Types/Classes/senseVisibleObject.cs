@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _visibleObjectType);
 			set => SetProperty(ref _visibleObjectType, value);
 		}
+
+		public senseVisibleObject()
+		{
+			_visibilityDistance = 100.000000F;
+			_visibleObjectType = new() { Value = Enums.gamedataSenseObjectType.Undefined };
+		}
 	}
 }

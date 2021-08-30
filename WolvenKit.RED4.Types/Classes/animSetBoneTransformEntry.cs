@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _offset);
 			set => SetProperty(ref _offset, value);
 		}
+
+		public animSetBoneTransformEntry()
+		{
+			_setMethod = new() { Value = Enums.animSetBoneTransformEntry_SetMethod.WholeTransform };
+		}
 	}
 }

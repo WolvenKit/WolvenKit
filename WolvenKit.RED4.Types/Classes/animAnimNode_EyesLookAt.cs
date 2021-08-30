@@ -86,5 +86,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _forwardDirection);
 			set => SetProperty(ref _forwardDirection, value);
 		}
+
+		public animAnimNode_EyesLookAt()
+		{
+			_forwardDirection = new() { Value = Enums.animAxis.NegativeY };
+		}
 	}
 }

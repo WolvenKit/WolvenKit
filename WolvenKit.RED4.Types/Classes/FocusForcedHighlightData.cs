@@ -104,5 +104,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _patternType);
 			set => SetProperty(ref _patternType, value);
 		}
+
+		public FocusForcedHighlightData()
+		{
+			_outlineType = new() { Value = Enums.EFocusOutlineType.INVALID };
+			_inTransitionTime = 0.500000F;
+			_outTransitionTime = 2.000000F;
+		}
 	}
 }

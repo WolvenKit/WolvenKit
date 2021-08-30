@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _animationTime);
 			set => SetProperty(ref _animationTime, value);
 		}
+
+		public ActivatedDeviceAnimSetup()
+		{
+			_animationTime = 0.500000F;
+		}
 	}
 }

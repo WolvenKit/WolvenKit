@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _clueState);
 			set => SetProperty(ref _clueState, value);
 		}
+
+		public questSetFocusClueState_NodeType()
+		{
+			_clueId = -1;
+		}
 	}
 }

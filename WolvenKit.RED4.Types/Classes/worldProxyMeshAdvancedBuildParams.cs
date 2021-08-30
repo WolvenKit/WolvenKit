@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _rayMaxDistance);
 			set => SetProperty(ref _rayMaxDistance, value);
 		}
+
+		public worldProxyMeshAdvancedBuildParams()
+		{
+			_rayBias = 2.100000F;
+			_rayMaxDistance = -1.000000F;
+		}
 	}
 }

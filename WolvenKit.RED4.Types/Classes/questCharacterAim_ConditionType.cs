@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _targetRef);
 			set => SetProperty(ref _targetRef, value);
 		}
+
+		public questCharacterAim_ConditionType()
+		{
+			_isPlayer = true;
+		}
 	}
 }

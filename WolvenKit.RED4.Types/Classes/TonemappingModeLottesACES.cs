@@ -41,5 +41,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _midOut);
 			set => SetProperty(ref _midOut, value);
 		}
+
+		public TonemappingModeLottesACES()
+		{
+			_maxInput = 50.000000F;
+			_contrast = 1.500000F;
+			_midIn = 0.180000F;
+			_midOut = 0.180000F;
+		}
 	}
 }

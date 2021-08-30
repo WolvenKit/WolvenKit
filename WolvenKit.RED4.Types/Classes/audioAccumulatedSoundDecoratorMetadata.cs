@@ -77,5 +77,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _spammingSoundInterval);
 			set => SetProperty(ref _spammingSoundInterval, value);
 		}
+
+		public audioAccumulatedSoundDecoratorMetadata()
+		{
+			_soundTimeout = 1.000000F;
+			_spammingSoundInterval = 1.000000F;
+		}
 	}
 }

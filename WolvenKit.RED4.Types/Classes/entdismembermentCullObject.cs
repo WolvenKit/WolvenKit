@@ -77,5 +77,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _ragdollBodyIndex);
 			set => SetProperty(ref _ragdollBodyIndex, value);
 		}
+
+		public entdismembermentCullObject()
+		{
+			_capsuleRadius = 0.100000F;
+			_nearestAnimIndex = -1;
+			_ragdollBodyIndex = 65535;
+		}
 	}
 }

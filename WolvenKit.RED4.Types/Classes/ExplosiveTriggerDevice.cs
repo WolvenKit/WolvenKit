@@ -86,5 +86,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _proximityExplosionEventSent);
 			set => SetProperty(ref _proximityExplosionEventSent, value);
 		}
+
+		public ExplosiveTriggerDevice()
+		{
+			_triggerName = "trapTrigger";
+			_surroundingAreaName = "surroundingArea";
+		}
 	}
 }

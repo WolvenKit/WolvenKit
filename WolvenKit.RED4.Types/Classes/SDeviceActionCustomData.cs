@@ -113,5 +113,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _callbackID);
 			set => SetProperty(ref _callbackID, value);
 		}
+
+		public SDeviceActionCustomData()
+		{
+			_on = true;
+			_off = true;
+			_customClearance = 3;
+		}
 	}
 }

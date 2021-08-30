@@ -311,5 +311,17 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _buttonPressed);
 			set => SetProperty(ref _buttonPressed, value);
 		}
+
+		public HudPhoneGameController()
+		{
+			_soundNameActionOnOpen = "OnOpen";
+			_soundNameActionOnClose = "OnOpen";
+			_audioInitiateCallPositiveEvent = "PhoneCallPopup";
+			_audioInitiateCallNegativeEvent = "PhoneCallPopup";
+			_audioInitiateCallEvent = "PhoneCallPopup";
+			_audioPhoneOnEvent = "PhoneCallPopup";
+			_audioPhoneOffEvent = "PhoneCallPopup";
+			_timeoutPeroid = 8.000000F;
+		}
 	}
 }

@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _updateBucket);
 			set => SetProperty(ref _updateBucket, value);
 		}
+
+		public gameActionReplicatedState()
+		{
+			_type = 69;
+			_updateBucket = 2;
+		}
 	}
 }

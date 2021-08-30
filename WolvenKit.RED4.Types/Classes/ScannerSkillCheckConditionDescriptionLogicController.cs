@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _failedStateName);
 			set => SetProperty(ref _failedStateName, value);
 		}
+
+		public ScannerSkillCheckConditionDescriptionLogicController()
+		{
+			_passedStateName = "Passed";
+			_failedStateName = "Failed";
+		}
 	}
 }

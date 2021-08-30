@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _squadType);
 			set => SetProperty(ref _squadType, value);
 		}
+
+		public questCharacterManagerCombat_AssignSquad()
+		{
+			_presetID = new() { Value = 130861404206 };
+			_squadType = new() { Value = Enums.AISquadType.Combat };
+		}
 	}
 }

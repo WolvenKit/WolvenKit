@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _timeToSkip);
 			set => SetProperty(ref _timeToSkip, value);
 		}
+
+		public inkTextOffsetAnimationController()
+		{
+			_timeToSkip = 0.050000F;
+		}
 	}
 }

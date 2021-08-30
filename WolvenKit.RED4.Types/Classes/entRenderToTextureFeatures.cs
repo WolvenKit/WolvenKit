@@ -68,5 +68,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _allowOcclusionCulling);
 			set => SetProperty(ref _allowOcclusionCulling, value);
 		}
+
+		public entRenderToTextureFeatures()
+		{
+			_renderDecals = true;
+			_renderParticles = true;
+			_antiAliasing = true;
+			_localShadows = true;
+		}
 	}
 }

@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _gunFalls);
 			set => SetProperty(ref _gunFalls, value);
 		}
+
+		public WeaponVendingMachineSFX()
+		{
+			_processing = "dev_vending_machine_processing";
+		}
 	}
 }

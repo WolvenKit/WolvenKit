@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _connectedRoadsCount);
 			set => SetProperty(ref _connectedRoadsCount, value);
 		}
+
+		public worldStreamingQueryRoadData()
+		{
+			_connectedRoadsStartIndex = 65535;
+		}
 	}
 }

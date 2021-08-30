@@ -680,5 +680,25 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _hitReactionData);
 			set => SetProperty(ref _hitReactionData, value);
 		}
+
+		public HitReactionComponent()
+		{
+			_impactDamageDuration = 0.200000F;
+			_staggerDamageDuration = 0.400000F;
+			_impactDamageDurationMelee = 0.250000F;
+			_staggerDamageDurationMelee = 1.500000F;
+			_knockdownDamageDuration = 2.500000F;
+			_hitComboReset = 2.000000F;
+			_physicalImpulseReset = 0.300000F;
+			_previousMeleeHitTimeStamp = -1.000000F;
+			_previousRangedHitTimeStamp = -1.000000F;
+			_previousBlockTimeStamp = -1.000000F;
+			_previousParryTimeStamp = -1.000000F;
+			_disableDismembermentAfterDeathDelay = 10.000000F;
+			_cumulativeDamageUpdateInterval = 0.250000F;
+			_maxHitChainForMelee = 2;
+			_maxHitChainForRanged = 2;
+			_hitCountArrayEnd = 100;
+		}
 	}
 }

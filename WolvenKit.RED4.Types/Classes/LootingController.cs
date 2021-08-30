@@ -347,5 +347,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _requestsCounter);
 			set => SetProperty(ref _requestsCounter, value);
 		}
+
+		public LootingController()
+		{
+			_maxItemsNum = 3;
+		}
 	}
 }

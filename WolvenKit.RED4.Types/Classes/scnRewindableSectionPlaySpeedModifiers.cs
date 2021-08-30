@@ -59,5 +59,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _backwardSlow);
 			set => SetProperty(ref _backwardSlow, value);
 		}
+
+		public scnRewindableSectionPlaySpeedModifiers()
+		{
+			_forwardVeryFast = 6.000000F;
+			_forwardFast = 3.000000F;
+			_forwardSlow = 0.500000F;
+			_backwardVeryFast = 6.000000F;
+			_backwardFast = 3.000000F;
+			_backwardSlow = 0.500000F;
+		}
 	}
 }

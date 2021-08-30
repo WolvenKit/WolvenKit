@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _segmentsNumber);
 			set => SetProperty(ref _segmentsNumber, value);
 		}
+
+		public inkCircleWidget()
+		{
+			_segmentsNumber = 20;
+		}
 	}
 }

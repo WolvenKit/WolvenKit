@@ -176,5 +176,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _decalRenderMode);
 			set => SetProperty(ref _decalRenderMode, value);
 		}
+
+		public effectTrackItemDecal()
+		{
+			_atlasFrameStart = -1;
+			_atlasFrameEnd = -1;
+			_orderPriority = new() { Value = Enums.RenderDecalOrderPriority.Priority3 };
+		}
 	}
 }

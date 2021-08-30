@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _tags);
 			set => SetProperty(ref _tags, value);
 		}
+
+		public worldOffMeshConnectionNode()
+		{
+			_radius = 1.000000F;
+		}
 	}
 }

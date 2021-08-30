@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _newContext);
 			set => SetProperty(ref _newContext, value);
 		}
+
+		public gameuiContextChangedEvent()
+		{
+			_oldContext = new() { Value = Enums.gameuiContext.MAX };
+			_newContext = new() { Value = Enums.gameuiContext.MAX };
+		}
 	}
 }

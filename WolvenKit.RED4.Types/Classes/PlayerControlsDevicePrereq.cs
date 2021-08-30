@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _inverse);
 			set => SetProperty(ref _inverse, value);
 		}
+
+		public PlayerControlsDevicePrereq()
+		{
+			_inverse = true;
+		}
 	}
 }

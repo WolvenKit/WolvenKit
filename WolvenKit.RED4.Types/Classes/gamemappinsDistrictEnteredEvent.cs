@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _district);
 			set => SetProperty(ref _district, value);
 		}
+
+		public gamemappinsDistrictEnteredEvent()
+		{
+			_entered = true;
+			_sendNewLocationNotification = true;
+		}
 	}
 }

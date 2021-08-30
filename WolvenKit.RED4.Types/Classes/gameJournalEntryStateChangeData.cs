@@ -86,5 +86,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _changeType);
 			set => SetProperty(ref _changeType, value);
 		}
+
+		public gameJournalEntryStateChangeData()
+		{
+			_notifyOption = new() { Value = Enums.gameJournalNotifyOption.DoNotNotify };
+			_changeType = new() { Value = Enums.gameJournalChangeType.Direct };
+		}
 	}
 }

@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _distantLightFadeDistance);
 			set => SetProperty(ref _distantLightFadeDistance, value);
 		}
+
+		public DistantLightsAreaSettings()
+		{
+			_distantLightStartDistance = 50.000000F;
+			_distantLightFadeDistance = 15.000000F;
+		}
 	}
 }

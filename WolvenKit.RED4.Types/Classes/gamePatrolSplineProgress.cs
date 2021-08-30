@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _controlPointIndex);
 			set => SetProperty(ref _controlPointIndex, value);
 		}
+
+		public gamePatrolSplineProgress()
+		{
+			_entrySplineParam = -1.000000F;
+			_controlPointIndex = 4294967295;
+		}
 	}
 }

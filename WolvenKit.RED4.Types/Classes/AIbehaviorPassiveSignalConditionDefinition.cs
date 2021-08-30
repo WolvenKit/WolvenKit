@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _deactivateSignal);
 			set => SetProperty(ref _deactivateSignal, value);
 		}
+
+		public AIbehaviorPassiveSignalConditionDefinition()
+		{
+			_deactivateSignal = true;
+		}
 	}
 }

@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _voicesetComponent);
 			set => SetProperty(ref _voicesetComponent, value);
 		}
+
+		public scnChatter()
+		{
+			_id = 65535;
+		}
 	}
 }

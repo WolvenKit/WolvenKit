@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isValid);
 			set => SetProperty(ref _isValid, value);
 		}
+
+		public SWidgetPackageBase()
+		{
+			_isValid = true;
+		}
 	}
 }

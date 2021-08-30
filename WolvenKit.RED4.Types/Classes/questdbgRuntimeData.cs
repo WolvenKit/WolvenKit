@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _objects);
 			set => SetProperty(ref _objects, value);
 		}
+
+		public questdbgRuntimeData()
+		{
+			_selectedBlockId = 18446744073709551615;
+		}
 	}
 }

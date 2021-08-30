@@ -59,5 +59,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _valueMoreThan);
 			set => SetProperty(ref _valueMoreThan, value);
 		}
+
+		public questInputAction_ConditionType()
+		{
+			_valueLessThan = 1.000000F;
+			_valueMoreThan = -1.000000F;
+		}
 	}
 }

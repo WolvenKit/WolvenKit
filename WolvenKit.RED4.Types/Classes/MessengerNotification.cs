@@ -113,5 +113,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _mappinSystem);
 			set => SetProperty(ref _mappinSystem, value);
 		}
+
+		public MessengerNotification()
+		{
+			_textSizeLimit = 40;
+		}
 	}
 }

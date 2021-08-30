@@ -86,5 +86,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isSingleTextureMode);
 			set => SetProperty(ref _isSingleTextureMode, value);
 		}
+
+		public inkTextureAtlas()
+		{
+			_isSingleTextureMode = true;
+		}
 	}
 }

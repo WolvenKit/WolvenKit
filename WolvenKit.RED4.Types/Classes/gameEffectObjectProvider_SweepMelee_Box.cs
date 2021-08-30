@@ -41,5 +41,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _checkMeleeInvulnerability);
 			set => SetProperty(ref _checkMeleeInvulnerability, value);
 		}
+
+		public gameEffectObjectProvider_SweepMelee_Box()
+		{
+			_playerStaticDetectionConeDistance = 2.000000F;
+			_playerStaticDetectionConeStartAngle = 5.000000F;
+			_playerStaticDetectionConeEndAngle = 18.000000F;
+			_checkMeleeInvulnerability = true;
+		}
 	}
 }

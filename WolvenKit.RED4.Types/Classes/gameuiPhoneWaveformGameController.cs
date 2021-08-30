@@ -95,5 +95,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _barSize);
 			set => SetProperty(ref _barSize, value);
 		}
+
+		public gameuiPhoneWaveformGameController()
+		{
+			_measurementsIntreval = 0.100000F;
+			_measurementsCount = 10;
+			_maxValue = 200.000000F;
+			_barsPadding = 4.000000F;
+		}
 	}
 }

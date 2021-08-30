@@ -77,5 +77,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _alive);
 			set => SetProperty(ref _alive, value);
 		}
+
+		public piercingGrenade()
+		{
+			_trailEffectName = "trail";
+			_alive = true;
+		}
 	}
 }

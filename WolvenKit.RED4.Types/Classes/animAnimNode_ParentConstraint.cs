@@ -104,5 +104,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _offsetEulerRotationLS);
 			set => SetProperty(ref _offsetEulerRotationLS, value);
 		}
+
+		public animAnimNode_ParentConstraint()
+		{
+			_interpolationType = new() { Value = Enums.animEInterpolationType.Slerp };
+			_weight = 1.000000F;
+		}
 	}
 }

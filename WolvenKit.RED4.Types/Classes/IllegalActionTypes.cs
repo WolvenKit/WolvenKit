@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _skillChecks);
 			set => SetProperty(ref _skillChecks, value);
 		}
+
+		public IllegalActionTypes()
+		{
+			_skillChecks = true;
+		}
 	}
 }

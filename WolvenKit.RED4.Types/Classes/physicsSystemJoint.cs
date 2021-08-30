@@ -185,5 +185,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _breakingTorque);
 			set => SetProperty(ref _breakingTorque, value);
 		}
+
+		public physicsSystemJoint()
+		{
+			_linearTolerance = 10000000000.000000F;
+			_angularTolerance = 3.141593F;
+		}
 	}
 }

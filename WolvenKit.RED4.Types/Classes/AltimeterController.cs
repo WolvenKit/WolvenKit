@@ -95,5 +95,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _precisionEpsilon);
 			set => SetProperty(ref _precisionEpsilon, value);
 		}
+
+		public AltimeterController()
+		{
+			_decimalPrecision = 2;
+			_warpDistance = 2.000000F;
+		}
 	}
 }

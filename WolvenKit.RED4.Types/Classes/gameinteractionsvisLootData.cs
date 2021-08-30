@@ -86,5 +86,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isLocked);
 			set => SetProperty(ref _isLocked, value);
 		}
+
+		public gameinteractionsvisLootData()
+		{
+			_isListOpen = true;
+		}
 	}
 }

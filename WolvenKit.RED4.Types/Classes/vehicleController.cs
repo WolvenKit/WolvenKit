@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _alarmTime);
 			set => SetProperty(ref _alarmTime, value);
 		}
+
+		public vehicleController()
+		{
+			_alarmCurve = "default_alarm";
+			_alarmTime = 0.500000F;
+		}
 	}
 }

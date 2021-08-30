@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _time);
 			set => SetProperty(ref _time, value);
 		}
+
+		public gameNetAIState()
+		{
+			_time = -1.000000F;
+		}
 	}
 }

@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _faceDepth);
 			set => SetProperty(ref _faceDepth, value);
 		}
+
+		public CReflectionProbeDataResource()
+		{
+			_haveSkyData = true;
+		}
 	}
 }

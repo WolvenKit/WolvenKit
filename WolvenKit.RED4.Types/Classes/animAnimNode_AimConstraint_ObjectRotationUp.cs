@@ -86,5 +86,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _weightFloatTrack);
 			set => SetProperty(ref _weightFloatTrack, value);
 		}
+
+		public animAnimNode_AimConstraint_ObjectRotationUp()
+		{
+			_weight = 1.000000F;
+		}
 	}
 }

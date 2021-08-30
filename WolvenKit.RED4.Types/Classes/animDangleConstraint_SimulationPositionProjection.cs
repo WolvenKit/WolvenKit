@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _projectionType);
 			set => SetProperty(ref _projectionType, value);
 		}
+
+		public animDangleConstraint_SimulationPositionProjection()
+		{
+			_projectionType = new() { Value = Enums.animPositionProjectionType.ShortestPath };
+		}
 	}
 }

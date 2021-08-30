@@ -104,5 +104,16 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lodLevelScales);
 			set => SetProperty(ref _lodLevelScales, value);
 		}
+
+		public worldMeshNode()
+		{
+			_meshAppearance = "default";
+			_occluderAutohideDistanceScale = 255;
+			_castShadows = true;
+			_castLocalShadows = true;
+			_windImpulseEnabled = true;
+			_renderSceneLayerMask = new() { Value = Enums.RenderSceneLayerMask.Default };
+			_lodLevelScales = 4294967295;
+		}
 	}
 }

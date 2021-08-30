@@ -140,5 +140,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _dynamicAnimSetupHash);
 			set => SetProperty(ref _dynamicAnimSetupHash, value);
 		}
+
+		public gameSceneAnimationMotionActionParams()
+		{
+			_blendInCurve = new() { Value = Enums.gameSceneAnimationMotionActionParamsEasingType.SinusoidalEaseInOut };
+			_globalTimeToAnimTime = 1.000000F;
+		}
 	}
 }

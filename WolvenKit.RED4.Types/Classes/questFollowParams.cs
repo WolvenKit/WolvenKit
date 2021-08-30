@@ -77,5 +77,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _repeatCommandOnInterrupt);
 			set => SetProperty(ref _repeatCommandOnInterrupt, value);
 		}
+
+		public questFollowParams()
+		{
+			_companionDistance = 5.000000F;
+			_destinationPointTolerance = 2.000000F;
+			_matchSpeed = true;
+			_useTeleport = true;
+			_repeatCommandOnInterrupt = true;
+		}
 	}
 }

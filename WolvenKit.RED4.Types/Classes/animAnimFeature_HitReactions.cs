@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _hitBodyPart);
 			set => SetProperty(ref _hitBodyPart, value);
 		}
+
+		public animAnimFeature_HitReactions()
+		{
+			_hitIntensity = 1.000000F;
+		}
 	}
 }

@@ -59,5 +59,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _mouseRotationSpeed);
 			set => SetProperty(ref _mouseRotationSpeed, value);
 		}
+
+		public gameuiInventoryPuppetPreviewGameController()
+		{
+			_maxMousePointerOffset = 40.000000F;
+			_mouseRotationSpeed = 250.000000F;
+		}
 	}
 }

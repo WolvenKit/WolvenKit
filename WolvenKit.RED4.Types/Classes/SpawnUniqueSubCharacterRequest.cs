@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _desiredDistance);
 			set => SetProperty(ref _desiredDistance, value);
 		}
+
+		public SpawnUniqueSubCharacterRequest()
+		{
+			_desiredDistance = 3.000000F;
+		}
 	}
 }

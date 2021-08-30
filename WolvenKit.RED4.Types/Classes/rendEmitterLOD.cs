@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isEnabled);
 			set => SetProperty(ref _isEnabled, value);
 		}
+
+		public rendEmitterLOD()
+		{
+			_lodSwitchDistance = 100.000000F;
+		}
 	}
 }

@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _gender);
 			set => SetProperty(ref _gender, value);
 		}
+
+		public questCharacterBodyType_CondtionType()
+		{
+			_gender = "Female";
+		}
 	}
 }

@@ -50,5 +50,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _rayLengthMorphOffsetFactor);
 			set => SetProperty(ref _rayLengthMorphOffsetFactor, value);
 		}
+
+		public garmentHiddenTrianglesRemovalParams()
+		{
+			_garmentBorderThreshold = 0.650000F;
+			_removeHiddenTriangles = true;
+			_rayLengthInCM = 10.000000F;
+			_rayLengthMorphOffsetFactor = 1.000000F;
+		}
 	}
 }

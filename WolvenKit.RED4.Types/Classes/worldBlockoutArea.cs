@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _increaseTerrainStreamingDistance);
 			set => SetProperty(ref _increaseTerrainStreamingDistance, value);
 		}
+
+		public worldBlockoutArea()
+		{
+			_parent = 4294967295;
+		}
 	}
 }

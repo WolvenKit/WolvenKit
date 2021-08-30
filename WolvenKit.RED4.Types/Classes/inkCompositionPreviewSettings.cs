@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _texturePart);
 			set => SetProperty(ref _texturePart, value);
 		}
+
+		public inkCompositionPreviewSettings()
+		{
+			_previewResolution = new() { Value = Enums.inkETextureResolution.HD_1280_720 };
+		}
 	}
 }

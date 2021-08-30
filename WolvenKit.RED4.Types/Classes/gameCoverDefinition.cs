@@ -50,5 +50,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _overrideGeneratedCoverAngles);
 			set => SetProperty(ref _overrideGeneratedCoverAngles, value);
 		}
+
+		public gameCoverDefinition()
+		{
+			_overridenCoveringFOVDegrees = 90.000000F;
+			_overridenCoveringVerticalFOVDegrees = 90.000000F;
+			_fovExposureDegrees = 160.000000F;
+		}
 	}
 }

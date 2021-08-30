@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _includeMeshNodes);
 			set => SetProperty(ref _includeMeshNodes, value);
 		}
+
+		public interopSelectByDefinitionOptions()
+		{
+			_maxBBoxDiagonalLength = 5.000000F;
+		}
 	}
 }

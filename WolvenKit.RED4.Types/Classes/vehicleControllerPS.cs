@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isAlarmOn);
 			set => SetProperty(ref _isAlarmOn, value);
 		}
+
+		public vehicleControllerPS()
+		{
+			_state = new() { Value = Enums.vehicleEState.Default };
+		}
 	}
 }

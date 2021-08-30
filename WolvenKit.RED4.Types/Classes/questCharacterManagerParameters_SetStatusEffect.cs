@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _set);
 			set => SetProperty(ref _set, value);
 		}
+
+		public questCharacterManagerParameters_SetStatusEffect()
+		{
+			_set = true;
+		}
 	}
 }

@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _show);
 			set => SetProperty(ref _show, value);
 		}
+
+		public questShowOnscreen_NodeType()
+		{
+			_duration = 3.000000F;
+			_show = true;
+		}
 	}
 }

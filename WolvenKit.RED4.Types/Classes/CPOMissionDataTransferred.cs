@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _choiceTokenTimeout);
 			set => SetProperty(ref _choiceTokenTimeout, value);
 		}
+
+		public CPOMissionDataTransferred()
+		{
+			_dataDamagesPresetName = "CPODataRaceParams";
+		}
 	}
 }

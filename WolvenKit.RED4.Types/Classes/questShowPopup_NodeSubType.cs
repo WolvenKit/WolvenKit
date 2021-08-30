@@ -122,5 +122,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _ignoreDisabledTutorials);
 			set => SetProperty(ref _ignoreDisabledTutorials, value);
 		}
+
+		public questShowPopup_NodeSubType()
+		{
+			_open = true;
+			_closeAtInput = true;
+			_hideInMenu = true;
+			_position = new() { Value = Enums.gamePopupPosition.Center };
+			_closeCurrentPopup = true;
+			_videoType = new() { Value = Enums.gameVideoType.Unknown };
+		}
 	}
 }

@@ -149,5 +149,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _displayActivityLog);
 			set => SetProperty(ref _displayActivityLog, value);
 		}
+
+		public PlayerDevelopmentData()
+		{
+			_startingLevel = 1;
+			_displayActivityLog = true;
+		}
 	}
 }

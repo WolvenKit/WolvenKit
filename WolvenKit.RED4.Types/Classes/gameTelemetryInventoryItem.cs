@@ -77,5 +77,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isSilenced);
 			set => SetProperty(ref _isSilenced, value);
 		}
+
+		public gameTelemetryInventoryItem()
+		{
+			_quality = -1;
+			_itemType = new() { Value = Enums.gamedataItemType.Invalid };
+			_itemLevel = -1;
+		}
 	}
 }

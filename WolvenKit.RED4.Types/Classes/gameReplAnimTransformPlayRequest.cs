@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _timesToPlay);
 			set => SetProperty(ref _timesToPlay, value);
 		}
+
+		public gameReplAnimTransformPlayRequest()
+		{
+			_timeScale = 1.000000F;
+			_timesToPlay = 1;
+		}
 	}
 }

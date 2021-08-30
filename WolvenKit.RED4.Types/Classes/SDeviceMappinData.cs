@@ -131,5 +131,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _visualStateData);
 			set => SetProperty(ref _visualStateData, value);
 		}
+
+		public SDeviceMappinData()
+		{
+			_enabled = true;
+			_range = 30.000000F;
+			_checkIfIsTarget = true;
+		}
 	}
 }

@@ -41,5 +41,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _c_DisplayRangeNotAggressive);
 			set => SetProperty(ref _c_DisplayRangeNotAggressive, value);
 		}
+
+		public SNameplateRangesData()
+		{
+			_c_DisplayRange = 35.000000F;
+			_c_MaxDisplayRange = 50.000000F;
+			_c_MaxDisplayRangeNotAggressive = 10.000000F;
+			_c_DisplayRangeNotAggressive = 3.000000F;
+		}
 	}
 }

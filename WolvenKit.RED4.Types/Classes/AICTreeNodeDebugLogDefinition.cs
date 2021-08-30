@@ -32,5 +32,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _useVisualDebug);
 			set => SetProperty(ref _useVisualDebug, value);
 		}
+
+		public AICTreeNodeDebugLogDefinition()
+		{
+			_text = new() { Text = "Activated!" };
+			_timeOnScreen = 2.000000F;
+			_useVisualDebug = true;
+		}
 	}
 }

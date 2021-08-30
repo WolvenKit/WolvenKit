@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _textParams);
 			set => SetProperty(ref _textParams, value);
 		}
+
+		public ScannerName()
+		{
+			_displayName = new() { Text = "LocKey#42211" };
+		}
 	}
 }

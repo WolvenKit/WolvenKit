@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _upload_program_listener_id);
 			set => SetProperty(ref _upload_program_listener_id, value);
 		}
+
+		public AccessPoint()
+		{
+			_networkName = new() { Text = "Local Network 1" };
+		}
 	}
 }

@@ -86,5 +86,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _reason);
 			set => SetProperty(ref _reason, value);
 		}
+
+		public AIFollowerInterpolateFollowingSpeed()
+		{
+			_reason = "Following";
+		}
 	}
 }

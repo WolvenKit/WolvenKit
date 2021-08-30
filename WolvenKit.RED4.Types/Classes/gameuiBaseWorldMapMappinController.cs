@@ -140,5 +140,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _selectAnim);
 			set => SetProperty(ref _selectAnim, value);
 		}
+
+		public gameuiBaseWorldMapMappinController()
+		{
+			_collectionCount = 1;
+		}
 	}
 }

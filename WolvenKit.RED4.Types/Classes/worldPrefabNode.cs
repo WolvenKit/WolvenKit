@@ -122,5 +122,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _proxyScale);
 			set => SetProperty(ref _proxyScale, value);
 		}
+
+		public worldPrefabNode()
+		{
+			_renderSceneLayerMask = new() { Value = Enums.RenderSceneLayerMask.Default };
+			_occluderAutoHideDistanceScale = 255;
+		}
 	}
 }

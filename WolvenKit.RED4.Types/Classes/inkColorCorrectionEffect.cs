@@ -32,5 +32,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _saturation);
 			set => SetProperty(ref _saturation, value);
 		}
+
+		public inkColorCorrectionEffect()
+		{
+			_brightness = 1.000000F;
+			_contrast = 1.000000F;
+			_saturation = 1.000000F;
+		}
 	}
 }

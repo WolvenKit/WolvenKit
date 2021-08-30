@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _firstLipsyncOverrideTrackIndex);
 			set => SetProperty(ref _firstLipsyncOverrideTrackIndex, value);
 		}
+
+		public animImportFacialSetupCombinedDesc()
+		{
+			_firstLipsyncOverrideTrackIndex = -1;
+		}
 	}
 }

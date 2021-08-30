@@ -95,5 +95,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _rubberBandingParam);
 			set => SetProperty(ref _rubberBandingParam, value);
 		}
+
+		public questvehicleOnSplineParams()
+		{
+			_closest = true;
+			_forcedStartSpeed = -1.000000F;
+			_stopAtEnd = true;
+		}
 	}
 }

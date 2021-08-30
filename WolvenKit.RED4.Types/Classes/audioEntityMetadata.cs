@@ -86,5 +86,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _alwaysCreateDefaultEmitter);
 			set => SetProperty(ref _alwaysCreateDefaultEmitter, value);
 		}
+
+		public audioEntityMetadata()
+		{
+			_defaultPositionName = "default";
+			_defaultEmitterName = "default";
+			_priority = 3;
+		}
 	}
 }

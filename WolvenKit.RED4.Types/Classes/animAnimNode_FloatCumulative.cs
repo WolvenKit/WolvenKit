@@ -113,5 +113,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _normalize180Input);
 			set => SetProperty(ref _normalize180Input, value);
 		}
+
+		public animAnimNode_FloatCumulative()
+		{
+			_clamp = true;
+			_normalize180 = true;
+		}
 	}
 }

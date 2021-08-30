@@ -185,5 +185,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _onGlitchingStateChangedListener);
 			set => SetProperty(ref _onGlitchingStateChangedListener, value);
 		}
+
+		public TvInkGameController()
+		{
+			_activeChannelIDX = -1;
+			_previousGlobalTVChannelID = -1;
+			_globalTVchanellsCount = -1;
+		}
 	}
 }

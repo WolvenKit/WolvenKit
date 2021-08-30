@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _multiplier);
 			set => SetProperty(ref _multiplier, value);
 		}
+
+		public worldEditorForceAutoHideDistance()
+		{
+			_minAutoHideDistance = 1.000000F;
+			_multiplier = 1.000000F;
+		}
 	}
 }

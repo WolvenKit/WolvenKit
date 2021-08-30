@@ -104,5 +104,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _animOptions);
 			set => SetProperty(ref _animOptions, value);
 		}
+
+		public ItemLog()
+		{
+			_initialPopupDelay = 1.000000F;
+		}
 	}
 }

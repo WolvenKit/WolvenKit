@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _talkOnReturn);
 			set => SetProperty(ref _talkOnReturn, value);
 		}
+
+		public scnOverrideTalkOnReturn_InterruptionScenarioOperation()
+		{
+			_talkOnReturn = true;
+		}
 	}
 }

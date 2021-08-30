@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _initialyOpen);
 			set => SetProperty(ref _initialyOpen, value);
 		}
+
+		public gameaudioAcousticPortalComponent()
+		{
+			_initialyOpen = true;
+		}
 	}
 }

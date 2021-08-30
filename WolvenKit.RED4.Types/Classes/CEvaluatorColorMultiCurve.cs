@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _numberOfCurveSamples);
 			set => SetProperty(ref _numberOfCurveSamples, value);
 		}
+
+		public CEvaluatorColorMultiCurve()
+		{
+			_numberOfCurveSamples = 16;
+		}
 	}
 }

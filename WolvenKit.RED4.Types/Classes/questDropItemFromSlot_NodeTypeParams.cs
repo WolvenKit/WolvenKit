@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _useGravity);
 			set => SetProperty(ref _useGravity, value);
 		}
+
+		public questDropItemFromSlot_NodeTypeParams()
+		{
+			_useGravity = true;
+		}
 	}
 }

@@ -41,5 +41,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _value);
 			set => SetProperty(ref _value, value);
 		}
+
+		public gameCombinedStatModifierData_Deprecated()
+		{
+			_refStatType = new() { Value = Enums.gamedataStatType.Invalid };
+			_operation = new() { Value = Enums.gameCombinedStatOperation.Invalid };
+			_refObject = new() { Value = Enums.gameStatObjectsRelation.Invalid };
+		}
 	}
 }

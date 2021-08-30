@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _falseRecord);
 			set => SetProperty(ref _falseRecord, value);
 		}
+
+		public SpiderbotBoolAction()
+		{
+			_trueRecord = new() { Text = "SpiderbotToggleOn" };
+			_falseRecord = new() { Text = "SpiderbotToggleOff" };
+		}
 	}
 }

@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _translatedTextWidget);
 			set => SetProperty(ref _translatedTextWidget, value);
 		}
+
+		public inkTextKiroshiAnimationController()
+		{
+			_timeToSkip = 0.050000F;
+		}
 	}
 }

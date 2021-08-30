@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _ongoingSequence);
 			set => SetProperty(ref _ongoingSequence, value);
 		}
+
+		public ActionsSequencerControllerPS()
+		{
+			_sequenceDuration = 2.000000F;
+		}
 	}
 }

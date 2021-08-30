@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _filterName);
 			set => SetProperty(ref _filterName, value);
 		}
+
+		public entDebug_MeshComponent()
+		{
+			_filterName = new() { Text = "Other" };
+		}
 	}
 }

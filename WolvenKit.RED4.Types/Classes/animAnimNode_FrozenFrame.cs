@@ -32,5 +32,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _clearEventName);
 			set => SetProperty(ref _clearEventName, value);
 		}
+
+		public animAnimNode_FrozenFrame()
+		{
+			_maxFramesFrozen = 5;
+			_triggerEventName = "FreezeFrame";
+			_clearEventName = "UnfreezeFrame";
+		}
 	}
 }

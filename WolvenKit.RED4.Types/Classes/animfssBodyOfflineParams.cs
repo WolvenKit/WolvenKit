@@ -68,5 +68,16 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _legMaxStretchAdjustment);
 			set => SetProperty(ref _legMaxStretchAdjustment, value);
 		}
+
+		public animfssBodyOfflineParams()
+		{
+			_hipsTilt = 25.000000F;
+			_hipsShift = 0.100000F;
+			_legsPullFactorMin = 0.050000F;
+			_legsPullFactorMax = 0.165000F;
+			_legLengthAdjustment = 0.005000F;
+			_legMaxStretchOffset = 0.050000F;
+			_legMaxStretchAdjustment = 0.015000F;
+		}
 	}
 }

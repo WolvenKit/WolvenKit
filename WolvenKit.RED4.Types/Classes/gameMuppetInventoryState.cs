@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _activeSlot);
 			set => SetProperty(ref _activeSlot, value);
 		}
+
+		public gameMuppetInventoryState()
+		{
+			_activeSlot = -1;
+		}
 	}
 }

@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _forcedAutoHideRange);
 			set => SetProperty(ref _forcedAutoHideRange, value);
 		}
+
+		public worldStaticParticleNode()
+		{
+			_forcedAutoHideDistance = -1.000000F;
+			_forcedAutoHideRange = -1.000000F;
+		}
 	}
 }

@@ -140,5 +140,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _fleeType);
 			set => SetProperty(ref _fleeType, value);
 		}
+
+		public animAnimFeature_Crowd()
+		{
+			_speedType = 1;
+		}
 	}
 }

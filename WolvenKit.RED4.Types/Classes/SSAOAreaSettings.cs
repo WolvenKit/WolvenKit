@@ -167,5 +167,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _foliageDimSpecular);
 			set => SetProperty(ref _foliageDimSpecular, value);
 		}
+
+		public SSAOAreaSettings()
+		{
+			_combineResolutionsBeforeBlur = true;
+			_combineResolutionsWithMul = true;
+			_normalsEnable = true;
+			_hierarchyDepth = 3;
+			_qualityLevel = new() { Value = Enums.ESSAOQualityLevel.SSAOQUALITY_VeryHigh };
+		}
 	}
 }

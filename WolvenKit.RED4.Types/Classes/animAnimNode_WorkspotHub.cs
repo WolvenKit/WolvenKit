@@ -113,5 +113,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _facialIdleKey_FemaleAnimation);
 			set => SetProperty(ref _facialIdleKey_FemaleAnimation, value);
 		}
+
+		public animAnimNode_WorkspotHub()
+		{
+			_facialKeyWeight = 0.750000F;
+			_facialIdleMaleAnimation = "idle__neutral__male";
+			_facialIdleFemaleAnimation = "idle__neutral__female";
+		}
 	}
 }

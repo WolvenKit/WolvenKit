@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _show);
 			set => SetProperty(ref _show, value);
 		}
+
+		public questShowDialogIndicator_NodeTypeParams()
+		{
+			_show = true;
+		}
 	}
 }

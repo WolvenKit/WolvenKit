@@ -194,5 +194,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxAnimTimeLimit);
 			set => SetProperty(ref _maxAnimTimeLimit, value);
 		}
+
+		public questUseWorkspotParamsV1()
+		{
+			_teleport = true;
+			_finishAnimation = true;
+			_changeWorkspot = true;
+			_isWorkspotInfinite = true;
+			_repeatCommandOnInterrupt = true;
+		}
 	}
 }

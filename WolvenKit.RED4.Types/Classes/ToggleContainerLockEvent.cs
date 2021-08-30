@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isLocked);
 			set => SetProperty(ref _isLocked, value);
 		}
+
+		public ToggleContainerLockEvent()
+		{
+			_isLocked = true;
+		}
 	}
 }

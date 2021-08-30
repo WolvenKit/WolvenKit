@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _revealPositionAction);
 			set => SetProperty(ref _revealPositionAction, value);
 		}
+
+		public HackPlayerEvent()
+		{
+			_showDirectionalIndicator = true;
+		}
 	}
 }

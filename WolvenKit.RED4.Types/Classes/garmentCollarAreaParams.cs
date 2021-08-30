@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _offset);
 			set => SetProperty(ref _offset, value);
 		}
+
+		public garmentCollarAreaParams()
+		{
+			_radiusInCM = 32.000000F;
+			_radiusForTriangleRemovalInCM = 16.000000F;
+		}
 	}
 }

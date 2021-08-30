@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _resetTokenSpawnTimer);
 			set => SetProperty(ref _resetTokenSpawnTimer, value);
 		}
+
+		public questBlockTokenActivation_NodeSubType()
+		{
+			_resetTokenSpawnTimer = true;
+		}
 	}
 }

@@ -77,5 +77,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _progressTrack);
 			set => SetProperty(ref _progressTrack, value);
 		}
+
+		public animAnimNode_SimpleSpline()
+		{
+			_defaultProgress = 0.500000F;
+		}
 	}
 }

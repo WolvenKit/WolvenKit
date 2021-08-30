@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _partName);
 			set => SetProperty(ref _partName, value);
 		}
+
+		public InputProgressView()
+		{
+			_partName = new() { Text = "icon_circle_anim_" };
+		}
 	}
 }

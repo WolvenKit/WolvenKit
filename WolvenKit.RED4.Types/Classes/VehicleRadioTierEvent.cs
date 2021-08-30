@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _overrideTier);
 			set => SetProperty(ref _overrideTier, value);
 		}
+
+		public VehicleRadioTierEvent()
+		{
+			_radioTier = 1;
+		}
 	}
 }

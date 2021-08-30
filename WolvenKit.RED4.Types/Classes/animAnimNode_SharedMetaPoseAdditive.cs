@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _convertParentPoseToAdditive);
 			set => SetProperty(ref _convertParentPoseToAdditive, value);
 		}
+
+		public animAnimNode_SharedMetaPoseAdditive()
+		{
+			_blendTracks = new() { Value = Enums.animEBlendTracksMode.AGBT_Add };
+			_convertParentPoseToAdditive = true;
+		}
 	}
 }

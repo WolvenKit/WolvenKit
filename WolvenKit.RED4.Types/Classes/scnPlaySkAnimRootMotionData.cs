@@ -104,5 +104,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _trajectoryLOD);
 			set => SetProperty(ref _trajectoryLOD, value);
 		}
+
+		public scnPlaySkAnimRootMotionData()
+		{
+			_customBlendInTime = -1.000000F;
+			_customBlendInCurve = new() { Value = Enums.scnEasingType.SinusoidalEaseInOut };
+			_removePitchRollRotation = true;
+			_meshDissolvingEnabled = true;
+			_vehicleChangePhysicsState = true;
+			_vehicleEnabledPhysicsOnEnd = true;
+		}
 	}
 }

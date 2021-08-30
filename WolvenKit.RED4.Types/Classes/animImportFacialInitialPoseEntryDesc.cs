@@ -86,5 +86,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _initAnimationPoseMax);
 			set => SetProperty(ref _initAnimationPoseMax, value);
 		}
+
+		public animImportFacialInitialPoseEntryDesc()
+		{
+			_id = -1;
+		}
 	}
 }

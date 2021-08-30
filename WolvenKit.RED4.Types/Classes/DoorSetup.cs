@@ -158,5 +158,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _exposeQuickHacksIfNotConnectedToAP);
 			set => SetProperty(ref _exposeQuickHacksIfNotConnectedToAP, value);
 		}
+
+		public DoorSetup()
+		{
+			_doorType = new() { Value = Enums.EDoorType.INTERACTIVE };
+			_automaticallyClosesItself = true;
+			_openingSpeed = 1.000000F;
+			_doorOpeningTime = 1.000000F;
+			_doorOpeningStimRange = 5.000000F;
+		}
 	}
 }

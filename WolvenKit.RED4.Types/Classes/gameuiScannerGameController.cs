@@ -365,5 +365,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _playerPuppet);
 			set => SetProperty(ref _playerPuppet, value);
 		}
+
+		public gameuiScannerGameController()
+		{
+			_soundFinishedOn = "ui_generic_set_11_navigation";
+			_soundFinishedOff = "ui_generic_set_10_navigation";
+		}
 	}
 }

@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _timeToCompletePurchase);
 			set => SetProperty(ref _timeToCompletePurchase, value);
 		}
+
+		public VendingMachineSetup()
+		{
+			_timeToCompletePurchase = 0.100000F;
+		}
 	}
 }

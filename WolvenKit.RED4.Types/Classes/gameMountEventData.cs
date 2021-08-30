@@ -86,5 +86,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _mountEventOptions);
 			set => SetProperty(ref _mountEventOptions, value);
 		}
+
+		public gameMountEventData()
+		{
+			_removePitchRollRotationOnDismount = true;
+		}
 	}
 }

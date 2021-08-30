@@ -167,5 +167,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _onCarryingChangedCallback);
 			set => SetProperty(ref _onCarryingChangedCallback, value);
 		}
+
+		public DisposalDevice()
+		{
+			_currentDisposalSyncName = "disposalSyncSide1";
+			_currentKillSyncName = "killSyncSide1";
+			_lethalTakedownKillDelay = 0.200000F;
+			_distractionSoundName = "v_car_thorton_galena_horn";
+			_workspotDuration = 0.010000F;
+		}
 	}
 }

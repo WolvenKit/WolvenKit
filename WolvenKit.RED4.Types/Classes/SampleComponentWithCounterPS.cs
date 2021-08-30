@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _counter);
 			set => SetProperty(ref _counter, value);
 		}
+
+		public SampleComponentWithCounterPS()
+		{
+			_counter = 1000;
+		}
 	}
 }

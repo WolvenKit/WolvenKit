@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _speaker);
 			set => SetProperty(ref _speaker, value);
 		}
+
+		public questRadioStationAnnouncementEventStruct()
+		{
+			_sceneInput = "vo_init";
+		}
 	}
 }

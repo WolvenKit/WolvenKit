@@ -410,5 +410,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _previousStickInput);
 			set => SetProperty(ref _previousStickInput, value);
 		}
+
+		public HUDManager()
+		{
+			_activeMode = new() { Value = Enums.ActiveMode.SEMI };
+		}
 	}
 }

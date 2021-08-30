@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _renderTarget);
 			set => SetProperty(ref _renderTarget, value);
 		}
+
+		public PSODescBlendModeDesc()
+		{
+			_numTargets = 1;
+		}
 	}
 }

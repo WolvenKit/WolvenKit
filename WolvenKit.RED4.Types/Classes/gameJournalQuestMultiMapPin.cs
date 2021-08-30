@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _uiAnimation);
 			set => SetProperty(ref _uiAnimation, value);
 		}
+
+		public gameJournalQuestMultiMapPin()
+		{
+			_slotName = "UI_Interaction";
+		}
 	}
 }

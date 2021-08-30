@@ -86,5 +86,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _customTransitionAnim);
 			set => SetProperty(ref _customTransitionAnim, value);
 		}
+
+		public animFacialEmotionTransitionEditData()
+		{
+			_transitionType = new() { Value = Enums.animFacialEmotionTransitionType.Fast };
+			_toIdleWeight = 1.000000F;
+			_toIdleNeckWeight = 1.000000F;
+			_facialKeyWeight = 1.000000F;
+		}
 	}
 }

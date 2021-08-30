@@ -95,5 +95,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _effectName);
 			set => SetProperty(ref _effectName, value);
 		}
+
+		public PuppetForceVisionAppearanceData()
+		{
+			_highlightType = new() { Value = Enums.EFocusForcedHighlightType.INVALID };
+			_transitionTime = 0.500000F;
+			_priority = new() { Value = Enums.EPriority.VeryHigh };
+		}
 	}
 }

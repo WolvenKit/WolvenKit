@@ -104,5 +104,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _shouldWinNextTime);
 			set => SetProperty(ref _shouldWinNextTime, value);
 		}
+
+		public SlotMachineController()
+		{
+			_maxWinChance = 100;
+		}
 	}
 }

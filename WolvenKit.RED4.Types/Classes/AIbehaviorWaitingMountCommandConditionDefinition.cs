@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _callbackName);
 			set => SetProperty(ref _callbackName, value);
 		}
+
+		public AIbehaviorWaitingMountCommandConditionDefinition()
+		{
+			_callbackName = "OnMountRequest";
+		}
 	}
 }

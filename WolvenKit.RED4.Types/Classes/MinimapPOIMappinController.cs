@@ -86,5 +86,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _keepIconOnClamping);
 			set => SetProperty(ref _keepIconOnClamping, value);
 		}
+
+		public MinimapPOIMappinController()
+		{
+			_c_pingAnimCount = 3;
+		}
 	}
 }

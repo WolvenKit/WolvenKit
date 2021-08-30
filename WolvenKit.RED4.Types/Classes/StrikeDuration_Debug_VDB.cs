@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _timeToNextUpdate);
 			set => SetProperty(ref _timeToNextUpdate, value);
 		}
+
+		public StrikeDuration_Debug_VDB()
+		{
+			_uPDATE_DELAY = 1.000000F;
+			_dISPLAY_DURATION = 1.100000F;
+		}
 	}
 }

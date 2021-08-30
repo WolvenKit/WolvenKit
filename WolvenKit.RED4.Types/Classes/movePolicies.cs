@@ -302,5 +302,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _useOffMeshBlockedTags);
 			set => SetProperty(ref _useOffMeshBlockedTags, value);
 		}
+
+		public movePolicies()
+		{
+			_minFollowerDistance = 1.000000F;
+			_maxFollowerDistance = 3.000000F;
+			_useCollisionAvoidance = true;
+			_useStart = true;
+			_useStop = true;
+		}
 	}
 }

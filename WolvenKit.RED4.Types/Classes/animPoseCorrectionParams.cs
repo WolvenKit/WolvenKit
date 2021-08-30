@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _blendDuration);
 			set => SetProperty(ref _blendDuration, value);
 		}
+
+		public animPoseCorrectionParams()
+		{
+			_blendDuration = 0.200000F;
+		}
 	}
 }

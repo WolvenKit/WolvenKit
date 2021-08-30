@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _nodeRef2);
 			set => SetProperty(ref _nodeRef2, value);
 		}
+
+		public questObjectDistance()
+		{
+			_isPlayer = true;
+		}
 	}
 }

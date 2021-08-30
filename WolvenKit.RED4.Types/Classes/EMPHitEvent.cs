@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lifetime);
 			set => SetProperty(ref _lifetime, value);
 		}
+
+		public EMPHitEvent()
+		{
+			_lifetime = 15.000000F;
+		}
 	}
 }

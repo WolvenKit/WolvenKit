@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _inverted);
 			set => SetProperty(ref _inverted, value);
 		}
+
+		public questCharacterCombat_ConditionType()
+		{
+			_isPlayer = true;
+		}
 	}
 }

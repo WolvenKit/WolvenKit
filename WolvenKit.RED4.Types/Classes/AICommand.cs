@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _category);
 			set => SetProperty(ref _category, value);
 		}
+
+		public AICommand()
+		{
+			_id = 4294967295;
+		}
 	}
 }

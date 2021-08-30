@@ -95,5 +95,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _behaviorTime_PostAction);
 			set => SetProperty(ref _behaviorTime_PostAction, value);
 		}
+
+		public animAnimFeature_Cover()
+		{
+			_coverState = 1;
+			_behaviorTime_PreAction = 1.000000F;
+			_behaviorTime_Action = 1.000000F;
+			_behaviorTime_PostAction = 1.000000F;
+		}
 	}
 }

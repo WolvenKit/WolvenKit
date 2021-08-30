@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lightAttenuationClamp);
 			set => SetProperty(ref _lightAttenuationClamp, value);
 		}
+
+		public WorldLightingConfig()
+		{
+			_lightAttenuationClamp = 96.000000F;
+		}
 	}
 }

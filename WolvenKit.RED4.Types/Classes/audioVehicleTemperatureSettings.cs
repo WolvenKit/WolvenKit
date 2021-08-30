@@ -32,5 +32,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _cooldownTime);
 			set => SetProperty(ref _cooldownTime, value);
 		}
+
+		public audioVehicleTemperatureSettings()
+		{
+			_rpmThreshold = 3.000000F;
+			_timeToActivateTemperature = 8.000000F;
+			_cooldownTime = 10.000000F;
+		}
 	}
 }

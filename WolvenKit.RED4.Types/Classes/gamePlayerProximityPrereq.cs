@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _squaredRange);
 			set => SetProperty(ref _squaredRange, value);
 		}
+
+		public gamePlayerProximityPrereq()
+		{
+			_squaredRange = 1.000000F;
+		}
 	}
 }

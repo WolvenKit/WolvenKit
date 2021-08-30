@@ -203,5 +203,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _inCombat);
 			set => SetProperty(ref _inCombat, value);
 		}
+
+		public NPCStatesComponent()
+		{
+			_highLevelAnimFeatureName = "highLevelState";
+			_upperBodyAnimFeatureName = "upperBodyState";
+			_stanceAnimFeatureName = "stanceState";
+			_prevNPCStanceState = new() { Value = Enums.gamedataNPCStanceState.Invalid };
+			_previousHighLevelState = new() { Value = Enums.gamedataNPCHighLevelState.Invalid };
+			_prevHitReactionMode = new() { Value = Enums.EHitReactionMode.Invalid };
+		}
 	}
 }

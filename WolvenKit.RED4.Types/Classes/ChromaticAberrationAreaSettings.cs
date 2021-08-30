@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _subpixelDispersal);
 			set => SetProperty(ref _subpixelDispersal, value);
 		}
+
+		public ChromaticAberrationAreaSettings()
+		{
+			_chromaticAberrationOffset = 1.400000F;
+			_chromaticAberrationExp = 0.800000F;
+		}
 	}
 }

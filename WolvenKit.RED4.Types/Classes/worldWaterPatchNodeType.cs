@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _typeName);
 			set => SetProperty(ref _typeName, value);
 		}
+
+		public worldWaterPatchNodeType()
+		{
+			_typeName = "Grid_100x100";
+		}
 	}
 }

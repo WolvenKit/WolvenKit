@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isSleeping);
 			set => SetProperty(ref _isSleeping, value);
 		}
+
+		public entRagdollComponentReplicatedState()
+		{
+			_isSleeping = true;
+		}
 	}
 }

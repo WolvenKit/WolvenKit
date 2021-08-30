@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _shouldAdd);
 			set => SetProperty(ref _shouldAdd, value);
 		}
+
+		public AddItemForPlayerToPickUp()
+		{
+			_shouldAdd = true;
+		}
 	}
 }

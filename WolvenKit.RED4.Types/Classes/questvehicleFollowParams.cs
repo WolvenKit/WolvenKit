@@ -77,5 +77,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _trafficTryNeighborsForEnd);
 			set => SetProperty(ref _trafficTryNeighborsForEnd, value);
 		}
+
+		public questvehicleFollowParams()
+		{
+			_distanceMin = 1.000000F;
+			_distanceMax = 5.000000F;
+			_useTraffic = true;
+		}
 	}
 }

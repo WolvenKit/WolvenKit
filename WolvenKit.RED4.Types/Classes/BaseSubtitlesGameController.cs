@@ -185,5 +185,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _factlistenerId);
 			set => SetProperty(ref _factlistenerId, value);
 		}
+
+		public BaseSubtitlesGameController()
+		{
+			_groupPath = "/audio/subtitles";
+		}
 	}
 }

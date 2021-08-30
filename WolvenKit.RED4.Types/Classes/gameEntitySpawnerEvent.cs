@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _eventType);
 			set => SetProperty(ref _eventType, value);
 		}
+
+		public gameEntitySpawnerEvent()
+		{
+			_eventType = new() { Value = Enums.gameEntitySpawnerEventType.Spawn };
+		}
 	}
 }

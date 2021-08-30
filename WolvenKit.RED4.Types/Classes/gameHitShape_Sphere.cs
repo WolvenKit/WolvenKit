@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _radius);
 			set => SetProperty(ref _radius, value);
 		}
+
+		public gameHitShape_Sphere()
+		{
+			_radius = 0.200000F;
+		}
 	}
 }

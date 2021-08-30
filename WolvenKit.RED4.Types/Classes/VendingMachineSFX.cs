@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _glitchingStop);
 			set => SetProperty(ref _glitchingStop, value);
 		}
+
+		public VendingMachineSFX()
+		{
+			_glitchingStart = "amb_int_custom_megabuilding_01_adverts_interactive_nicola_01_select_q110";
+			_glitchingStop = "amb_int_custom_megabuilding_01_adverts_interactive_nicola_01_select_q110_stop";
+		}
 	}
 }

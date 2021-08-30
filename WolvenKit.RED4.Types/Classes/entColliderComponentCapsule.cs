@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _height);
 			set => SetProperty(ref _height, value);
 		}
+
+		public entColliderComponentCapsule()
+		{
+			_radius = 1.000000F;
+			_height = 1.000000F;
+		}
 	}
 }

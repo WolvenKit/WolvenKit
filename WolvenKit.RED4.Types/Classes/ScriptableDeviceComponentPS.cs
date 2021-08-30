@@ -743,5 +743,17 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isInteractive);
 			set => SetProperty(ref _isInteractive, value);
 		}
+
+		public ScriptableDeviceComponentPS()
+		{
+			_fullDepth = true;
+			_tweakDBRecord = new() { Value = 92249324940 };
+			_hasAuthorizationModule = true;
+			_backdoorBreachDifficulty = new() { Value = Enums.EGameplayChallengeLevel.EASY };
+			_minigameAttempt = 1;
+			_shouldScannerShowStatus = true;
+			_shouldScannerShowNetwork = true;
+			_isInteractive = true;
+		}
 	}
 }

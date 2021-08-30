@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _interpolationTime);
 			set => SetProperty(ref _interpolationTime, value);
 		}
+
+		public gameuiPuppetPreviewCameraSetup()
+		{
+			_cameraZoom = -1.000000F;
+			_interpolationTime = 1.000000F;
+		}
 	}
 }

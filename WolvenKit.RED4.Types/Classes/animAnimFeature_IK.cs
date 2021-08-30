@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _weight);
 			set => SetProperty(ref _weight, value);
 		}
+
+		public animAnimFeature_IK()
+		{
+			_weight = 1.000000F;
+		}
 	}
 }

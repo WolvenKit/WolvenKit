@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _targetPlaneSize);
 			set => SetProperty(ref _targetPlaneSize, value);
 		}
+
+		public entVirtualCameraViewComponent()
+		{
+			_virtualCameraName = "Component";
+		}
 	}
 }

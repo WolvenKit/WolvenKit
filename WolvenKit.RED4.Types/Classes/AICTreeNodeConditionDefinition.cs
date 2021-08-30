@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _reevaluateOnExecution);
 			set => SetProperty(ref _reevaluateOnExecution, value);
 		}
+
+		public AICTreeNodeConditionDefinition()
+		{
+			_reevaluateOnExecution = true;
+		}
 	}
 }

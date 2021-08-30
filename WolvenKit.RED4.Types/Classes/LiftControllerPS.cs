@@ -149,5 +149,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isAdsDisabled);
 			set => SetProperty(ref _isAdsDisabled, value);
 		}
+
+		public LiftControllerPS()
+		{
+			_targetFloor = -1;
+			_cachedGoToFloorAction = -1;
+		}
 	}
 }

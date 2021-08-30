@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _enableSkipping);
 			set => SetProperty(ref _enableSkipping, value);
 		}
+
+		public questFinalBoardsEnableSkipCredits_NodeType()
+		{
+			_enableSkipping = true;
+		}
 	}
 }

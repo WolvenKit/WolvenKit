@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _useFlatMessageLayout);
 			set => SetProperty(ref _useFlatMessageLayout, value);
 		}
+
+		public gameJournalContact()
+		{
+			_useFlatMessageLayout = true;
+		}
 	}
 }

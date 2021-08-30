@@ -86,5 +86,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _patrolAction);
 			set => SetProperty(ref _patrolAction, value);
 		}
+
+		public AIPatrolPathParameters()
+		{
+			_enterClosest = true;
+			_isInfinite = true;
+			_numberOfLoops = 1;
+			_sortPatrolPoints = true;
+			_patrolAction = new() { Value = 144011363920 };
+		}
 	}
 }

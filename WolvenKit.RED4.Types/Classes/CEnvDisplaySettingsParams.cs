@@ -122,5 +122,19 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _gamma);
 			set => SetProperty(ref _gamma, value);
 		}
+
+		public CEnvDisplaySettingsParams()
+		{
+			_allowEnvProbeUpdate = true;
+			_allowBloom = true;
+			_allowColorMod = true;
+			_allowAntialiasing = true;
+			_allowGlobalFog = true;
+			_allowDOF = true;
+			_allowSSAO = true;
+			_allowCloudsShadow = true;
+			_allowWaterShader = true;
+			_gamma = 2.200000F;
+		}
 	}
 }

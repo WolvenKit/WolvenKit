@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _outputAngleTrack);
 			set => SetProperty(ref _outputAngleTrack, value);
 		}
+
+		public animTwistOutput()
+		{
+			_positiveScale = 1.000000F;
+			_negativeScale = 1.000000F;
+		}
 	}
 }

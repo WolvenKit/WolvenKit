@@ -59,5 +59,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _imageId);
 			set => SetProperty(ref _imageId, value);
 		}
+
+		public MessangerItemRenderer()
+		{
+			_stateMessage = "Default";
+			_statePlayerReply = "Player";
+		}
 	}
 }

@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _effects);
 			set => SetProperty(ref _effects, value);
 		}
+
+		public RadialStatusEffectController()
+		{
+			_maxSize = 8;
+		}
 	}
 }

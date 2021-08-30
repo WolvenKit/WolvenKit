@@ -419,5 +419,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _workspotActivator);
 			set => SetProperty(ref _workspotActivator, value);
 		}
+
+		public Device()
+		{
+			_controllerTypeName = "ScriptableDC";
+			_isUIdirty = true;
+		}
 	}
 }

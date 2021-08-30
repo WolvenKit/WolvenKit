@@ -284,5 +284,17 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _blacklistVisualTags);
 			set => SetProperty(ref _blacklistVisualTags, value);
 		}
+
+		public workWorkspotTree()
+		{
+			_animGraphSlotName = "WORKSPOT";
+			_autoTransitionBlendTime = 1.000000F;
+			_itemsPolicy = new() { Value = Enums.workWorkspotItemPolicy.ItemPolicy_SpawnItemOnIdleChange | Enums.workWorkspotItemPolicy.ItemPolicy_DespawnItemOnIdleChange | Enums.workWorkspotItemPolicy.ItemPolicy_DespawnItemOnReaction };
+			_inertializationDurationEnter = 0.500000F;
+			_inertializationDurationExitNatural = 0.500000F;
+			_inertializationDurationExitForced = 0.200000F;
+			_sequencesTimeLimit = 1.000000F;
+			_unmountBodyCarry = true;
+		}
 	}
 }

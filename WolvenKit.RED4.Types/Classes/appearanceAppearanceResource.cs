@@ -158,5 +158,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _generatePlayerBlockingCollisionForProxy);
 			set => SetProperty(ref _generatePlayerBlockingCollisionForProxy, value);
 		}
+
+		public appearanceAppearanceResource()
+		{
+			_proxyPolyCount = 1400;
+		}
 	}
 }

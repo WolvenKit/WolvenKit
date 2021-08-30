@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isDisabled);
 			set => SetProperty(ref _isDisabled, value);
 		}
+
+		public DisableScannerEvent()
+		{
+			_isDisabled = true;
+		}
 	}
 }

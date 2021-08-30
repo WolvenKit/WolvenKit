@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _timeOfYearSeason);
 			set => SetProperty(ref _timeOfYearSeason, value);
 		}
+
+		public GlobalLightingTrajectory()
+		{
+			_timeOfYearSeason = new() { Value = Enums.ETimeOfYearSeason.ETOYS_Summer };
+		}
 	}
 }

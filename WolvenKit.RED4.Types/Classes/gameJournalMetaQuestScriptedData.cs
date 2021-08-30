@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _text);
 			set => SetProperty(ref _text, value);
 		}
+
+		public gameJournalMetaQuestScriptedData()
+		{
+			_hidden = true;
+		}
 	}
 }

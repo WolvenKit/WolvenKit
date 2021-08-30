@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _repeatTime);
 			set => SetProperty(ref _repeatTime, value);
 		}
+
+		public ParticleBurst()
+		{
+			_spawnCount = 1;
+		}
 	}
 }

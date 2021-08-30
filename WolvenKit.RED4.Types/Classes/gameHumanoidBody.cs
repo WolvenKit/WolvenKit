@@ -50,5 +50,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _aimAnimFeatureName);
 			set => SetProperty(ref _aimAnimFeatureName, value);
 		}
+
+		public gameHumanoidBody()
+		{
+			_basePersonalSpace = 0.350000F;
+			_baseHeight = 1.800000F;
+			_baseEyesHeightRatio = 0.950000F;
+			_stanceAnimFeatureName = "stanceStyle";
+			_aimAnimFeatureName = "aim";
+		}
 	}
 }

@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _sceneFilePath);
 			set => SetProperty(ref _sceneFilePath, value);
 		}
+
+		public audioPoliceDispatcherMetadata()
+		{
+			_dispatcherTimeInterval = 30.000000F;
+		}
 	}
 }

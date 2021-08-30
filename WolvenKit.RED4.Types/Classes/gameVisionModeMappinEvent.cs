@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _show);
 			set => SetProperty(ref _show, value);
 		}
+
+		public gameVisionModeMappinEvent()
+		{
+			_show = true;
+		}
 	}
 }

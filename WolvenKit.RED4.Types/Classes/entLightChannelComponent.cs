@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _shape);
 			set => SetProperty(ref _shape, value);
 		}
+
+		public entLightChannelComponent()
+		{
+			_isEnabled = true;
+			_channels = new() { Value = Enums.rendLightChannel.LC_Channel1 };
+		}
 	}
 }

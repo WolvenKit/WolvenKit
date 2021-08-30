@@ -311,5 +311,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _menuToOpen);
 			set => SetProperty(ref _menuToOpen, value);
 		}
+
+		public ComputerMainLayoutWidgetController()
+		{
+			_windowCloseAanimation = "windowClose_16x9";
+			_windowOpenAanimation = "windowOpen_16x9";
+			_menuToOpen = new() { Value = Enums.EComputerMenuType.INVALID };
+		}
 	}
 }

@@ -392,5 +392,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _nextDistanceCheckTime);
 			set => SetProperty(ref _nextDistanceCheckTime, value);
 		}
+
+		public gameuiNpcNameplateGameController()
+		{
+			_zoom = 1.000000F;
+			_currentHealth = 100;
+			_maximumHealth = 100;
+		}
 	}
 }

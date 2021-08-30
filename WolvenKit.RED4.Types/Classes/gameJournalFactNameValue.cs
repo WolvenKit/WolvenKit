@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _factValue);
 			set => SetProperty(ref _factValue, value);
 		}
+
+		public gameJournalFactNameValue()
+		{
+			_factValue = 1;
+		}
 	}
 }

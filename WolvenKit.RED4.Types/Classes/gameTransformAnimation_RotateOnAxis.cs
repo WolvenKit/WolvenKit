@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _movement);
 			set => SetProperty(ref _movement, value);
 		}
+
+		public gameTransformAnimation_RotateOnAxis()
+		{
+			_axis = new() { Value = Enums.gameTransformAnimation_RotateOnAxisAxis.Z };
+		}
 	}
 }

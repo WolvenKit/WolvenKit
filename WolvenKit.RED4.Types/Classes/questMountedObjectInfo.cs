@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _role);
 			set => SetProperty(ref _role, value);
 		}
+
+		public questMountedObjectInfo()
+		{
+			_onMount = true;
+		}
 	}
 }

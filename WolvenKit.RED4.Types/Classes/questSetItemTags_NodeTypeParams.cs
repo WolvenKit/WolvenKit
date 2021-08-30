@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _tags);
 			set => SetProperty(ref _tags, value);
 		}
+
+		public questSetItemTags_NodeTypeParams()
+		{
+			_addTags = true;
+			_tags = new() { Value = Enums.gameEItemDynamicTags.Quest };
+		}
 	}
 }

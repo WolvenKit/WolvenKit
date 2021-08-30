@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _packageName);
 			set => SetProperty(ref _packageName, value);
 		}
+
+		public gamestateMachineComponent()
+		{
+			_packageName = new() { Text = "playerStateMachine" };
+		}
 	}
 }

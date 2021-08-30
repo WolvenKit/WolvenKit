@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _probability);
 			set => SetProperty(ref _probability, value);
 		}
+
+		public CParticleEventGenerator()
+		{
+			_frequency = 0.500000F;
+			_probability = 1.000000F;
+		}
 	}
 }

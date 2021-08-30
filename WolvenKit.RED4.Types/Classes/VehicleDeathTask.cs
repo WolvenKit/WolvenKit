@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _readyToUnmount);
 			set => SetProperty(ref _readyToUnmount, value);
 		}
+
+		public VehicleDeathTask()
+		{
+			_timeToRagdoll = 0.440000F;
+		}
 	}
 }

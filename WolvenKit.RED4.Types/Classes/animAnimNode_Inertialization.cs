@@ -41,5 +41,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _rotationLimits);
 			set => SetProperty(ref _rotationLimits, value);
 		}
+
+		public animAnimNode_Inertialization()
+		{
+			_safeMode = true;
+			_transformsCountUpperBound = 94;
+			_tracksCountUpperBound = 37;
+		}
 	}
 }

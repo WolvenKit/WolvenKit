@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _channelEntries);
 			set => SetProperty(ref _channelEntries, value);
 		}
+
+		public animSimpleBounceTransformOutput()
+		{
+			_multiplier = 1.000000F;
+		}
 	}
 }

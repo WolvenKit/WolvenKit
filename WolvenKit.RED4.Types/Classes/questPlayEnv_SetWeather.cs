@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _source);
 			set => SetProperty(ref _source, value);
 		}
+
+		public questPlayEnv_SetWeather()
+		{
+			_blendTime = 5.000000F;
+		}
 	}
 }

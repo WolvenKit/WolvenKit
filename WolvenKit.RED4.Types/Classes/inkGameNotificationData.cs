@@ -59,5 +59,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _token);
 			set => SetProperty(ref _token, value);
 		}
+
+		public inkGameNotificationData()
+		{
+			_queueName = "Default";
+			_introAnimation = "__preload__";
+		}
 	}
 }

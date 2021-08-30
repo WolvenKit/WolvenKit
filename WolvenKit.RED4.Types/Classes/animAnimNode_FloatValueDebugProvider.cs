@@ -68,5 +68,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _wrap);
 			set => SetProperty(ref _wrap, value);
 		}
+
+		public animAnimNode_FloatValueDebugProvider()
+		{
+			_max = 1.000000F;
+			_progress = 1.000000F;
+			_speed = 1.000000F;
+		}
 	}
 }

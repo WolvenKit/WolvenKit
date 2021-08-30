@@ -383,5 +383,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _t4CameraControlIdleOrientation);
 			set => SetProperty(ref _t4CameraControlIdleOrientation, value);
 		}
+
+		public animAnimFeature_FPPCamera()
+		{
+			_fov = 51.000000F;
+			_sceneCameraUseTrajectorySpace = true;
+			_normalizeYaw = true;
+			_vehicleOffsetWeight = 1.000000F;
+			_gameplayCameraPoseWeight = 1.000000F;
+			_vehicleProceduralCameraWeight = 1.000000F;
+		}
 	}
 }

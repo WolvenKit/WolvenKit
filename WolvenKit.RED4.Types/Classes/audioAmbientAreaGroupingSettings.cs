@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxDistance);
 			set => SetProperty(ref _maxDistance, value);
 		}
+
+		public audioAmbientAreaGroupingSettings()
+		{
+			_maxDistance = 100.000000F;
+		}
 	}
 }

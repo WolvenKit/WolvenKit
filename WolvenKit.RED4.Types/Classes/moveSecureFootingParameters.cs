@@ -104,5 +104,20 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _slopeCurveName);
 			set => SetProperty(ref _slopeCurveName, value);
 		}
+
+		public moveSecureFootingParameters()
+		{
+			_unsecureCollisionFilterName = "World Static";
+			_maxVerticalDistanceForCentreRaycast = 0.300000F;
+			_maxAngularDistanceForOtherRaycasts = 30.000000F;
+			_standingMinNumberOfRaycasts = 3;
+			_standingMinCollisionHorizontalDistance = 0.100000F;
+			_fallingMinNumberOfRaycasts = 3;
+			_fallingMinCollisionHorizontalDistance = 0.100000F;
+			_maxStaticGroundFactor = -1.000000F;
+			_needsCentreRaycast = true;
+			_minVelocityForFalling = -0.500000F;
+			_slopeCurveName = "slope_curve";
+		}
 	}
 }

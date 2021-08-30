@@ -59,5 +59,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lookAtAxis);
 			set => SetProperty(ref _lookAtAxis, value);
 		}
+
+		public animDyngConstraintLink()
+		{
+			_lengthLowerBoundRatioPercentage = 100.000000F;
+			_lengthUpperBoundRatioPercentage = 100.000000F;
+		}
 	}
 }

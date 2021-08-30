@@ -113,5 +113,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isInSmartObject);
 			set => SetProperty(ref _isInSmartObject, value);
 		}
+
+		public gameActionMoveToSmartObjectState()
+		{
+			_usePathfinding = true;
+			_useStart = true;
+			_useStop = true;
+		}
 	}
 }

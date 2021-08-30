@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _id);
 			set => SetProperty(ref _id, value);
 		}
+
+		public scnEffectInstanceId()
+		{
+			_id = 4294967295;
+		}
 	}
 }

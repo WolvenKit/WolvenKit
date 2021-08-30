@@ -59,5 +59,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _revealMaster);
 			set => SetProperty(ref _revealMaster, value);
 		}
+
+		public RevealNetworkGridEvent()
+		{
+			_revealSlave = true;
+			_revealMaster = true;
+		}
 	}
 }

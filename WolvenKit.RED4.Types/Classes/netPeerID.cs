@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _value);
 			set => SetProperty(ref _value, value);
 		}
+
+		public netPeerID()
+		{
+			_value = 255;
+		}
 	}
 }

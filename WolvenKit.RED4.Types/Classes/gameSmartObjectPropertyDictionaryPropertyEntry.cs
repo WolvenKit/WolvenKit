@@ -95,5 +95,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _overObstacle);
 			set => SetProperty(ref _overObstacle, value);
 		}
+
+		public gameSmartObjectPropertyDictionaryPropertyEntry()
+		{
+			_movementOrientation = new() { Value = Enums.moveMovementOrientationType.Forward };
+		}
 	}
 }

@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lower);
 			set => SetProperty(ref _lower, value);
 		}
+
+		public physicsPhysicsJointAngularLimitPair()
+		{
+			_upper = 180.000000F;
+			_lower = -180.000000F;
+		}
 	}
 }

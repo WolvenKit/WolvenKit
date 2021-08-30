@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _useMovePlanner);
 			set => SetProperty(ref _useMovePlanner, value);
 		}
+
+		public AIbehaviorActionSlideToWorldPositionNodeDefinition()
+		{
+			_useMovePlanner = true;
+		}
 	}
 }

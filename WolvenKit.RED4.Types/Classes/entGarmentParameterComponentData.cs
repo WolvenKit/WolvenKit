@@ -176,5 +176,16 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _numOffsets);
 			set => SetProperty(ref _numOffsets, value);
 		}
+
+		public entGarmentParameterComponentData()
+		{
+			_bendPowerMultiplier = 1.000000F;
+			_smoothingStrength = 1.000000F;
+			_smoothingThreshold = 0.100000F;
+			_smoothingExponent = 1.000000F;
+			_smoothingNumNeighbours = 1;
+			_garmentBorderThreshold = 0.500000F;
+			_removeHiddenTriangles = true;
+		}
 	}
 }

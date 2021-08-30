@@ -149,5 +149,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _prefetchAppearance);
 			set => SetProperty(ref _prefetchAppearance, value);
 		}
+
+		public scnSpawnDespawnEntityParams()
+		{
+			_spawnOnStart = true;
+			_isEnabled = true;
+			_validateSpawnPostion = true;
+		}
 	}
 }

@@ -59,5 +59,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _common);
 			set => SetProperty(ref _common, value);
 		}
+
+		public animAnimNode_FloorIkBase()
+		{
+			_blockAnimEvent = "AlignToGround";
+			_useFixedVersion = true;
+			_slopeAngleDamp = 0.200000F;
+		}
 	}
 }

@@ -68,5 +68,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _rubberBandingParam);
 			set => SetProperty(ref _rubberBandingParam, value);
 		}
+
+		public questvehicleRacingParams()
+		{
+			_preciseLevel = 1.000000F;
+			_closest = true;
+		}
 	}
 }

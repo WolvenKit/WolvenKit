@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _timeout);
 			set => SetProperty(ref _timeout, value);
 		}
+
+		public AICTreeNodeTimeoutDefinition()
+		{
+			_timeout = 1.000000F;
+		}
 	}
 }

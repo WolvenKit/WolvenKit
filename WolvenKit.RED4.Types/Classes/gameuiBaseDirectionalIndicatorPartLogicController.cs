@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _adjustedForwardFovRange);
 			set => SetProperty(ref _adjustedForwardFovRange, value);
 		}
+
+		public gameuiBaseDirectionalIndicatorPartLogicController()
+		{
+			_defaultForwardFovRange = 80.000000F;
+			_adjustedForwardFovRange = 160.000000F;
+		}
 	}
 }

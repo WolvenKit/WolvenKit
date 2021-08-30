@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isInstant);
 			set => SetProperty(ref _isInstant, value);
 		}
+
+		public questVision_ConditionType()
+		{
+			_isObservedTargetPlayer = true;
+			_isInstant = true;
+		}
 	}
 }

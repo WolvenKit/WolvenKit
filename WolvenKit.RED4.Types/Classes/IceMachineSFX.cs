@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _processing);
 			set => SetProperty(ref _processing, value);
 		}
+
+		public IceMachineSFX()
+		{
+			_iceFalls = "dev_ice_machine_ice_cube_falls";
+			_processing = "dev_vending_machine_processing";
+		}
 	}
 }

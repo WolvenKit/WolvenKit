@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _distanceSquared);
 			set => SetProperty(ref _distanceSquared, value);
 		}
+
+		public gameQuestDistanceRequestFilter()
+		{
+			_distanceSquared = 1000000.000000F;
+		}
 	}
 }

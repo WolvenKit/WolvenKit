@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _keepDistance);
 			set => SetProperty(ref _keepDistance, value);
 		}
+
+		public AICTreeNodeActionDynamicMoveToDefinition()
+		{
+			_target = "CombatTarget";
+		}
 	}
 }

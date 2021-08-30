@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isValid);
 			set => SetProperty(ref _isValid, value);
 		}
+
+		public interopGlobalNodeIDResult()
+		{
+			_errorMessage = new() { Text = "<Unknown>" };
+		}
 	}
 }

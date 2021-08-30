@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _flickerPeriod);
 			set => SetProperty(ref _flickerPeriod, value);
 		}
+
+		public rendSLightFlickering()
+		{
+			_flickerPeriod = 0.200000F;
+		}
 	}
 }

@@ -167,5 +167,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxStreamingDistance);
 			set => SetProperty(ref _maxStreamingDistance, value);
 		}
+
+		public worldNodeEditorData()
+		{
+			_name = "node";
+			_isSnapTarget = true;
+			_isSnapSource = true;
+			_maxStreamingDistance = 340282346638528859811704183484516925440.000000F;
+		}
 	}
 }

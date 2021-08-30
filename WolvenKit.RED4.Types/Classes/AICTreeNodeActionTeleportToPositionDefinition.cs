@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _doNavTest);
 			set => SetProperty(ref _doNavTest, value);
 		}
+
+		public AICTreeNodeActionTeleportToPositionDefinition()
+		{
+			_positionName = "MovementTarget";
+		}
 	}
 }

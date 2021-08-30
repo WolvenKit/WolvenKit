@@ -59,5 +59,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _offsetY);
 			set => SetProperty(ref _offsetY, value);
 		}
+
+		public inkInnerGlowEffect()
+		{
+			_colorR = 255.000000F;
+			_colorG = 255.000000F;
+			_colorB = 255.000000F;
+			_colorA = 255.000000F;
+		}
 	}
 }

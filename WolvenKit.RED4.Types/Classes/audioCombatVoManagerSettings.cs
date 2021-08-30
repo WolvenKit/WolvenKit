@@ -149,5 +149,19 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _genericCombatSingleEnemyVOContexts);
 			set => SetProperty(ref _genericCombatSingleEnemyVOContexts, value);
 		}
+
+		public audioCombatVoManagerSettings()
+		{
+			_thresholdDbForCombatDialog = -200.000000F;
+			_maxVoHearableHorizontalDistance = 8.000000F;
+			_maxVoHearableVerticalDistance = 3.000000F;
+			_maxVoVisibleDistance = 30.000000F;
+			_triggerVoEventBufferTime = 0.200000F;
+			_triggerIdleChattersTime = 1.000000F;
+			_minNoVOTimeNeededToTryPlayingGenericVO = 12.000000F;
+			_specificVoicesetVoVariationMinRepeatTime = 60.000000F;
+			_forceApucVoiceTagSelectionProbability = 0.500000F;
+			_voiceTagSelectionRandomTimeOffset = 1.000000F;
+		}
 	}
 }

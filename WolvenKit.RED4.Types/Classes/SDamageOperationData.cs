@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _damageType);
 			set => SetProperty(ref _damageType, value);
 		}
+
+		public SDamageOperationData()
+		{
+			_range = -1.000000F;
+		}
 	}
 }

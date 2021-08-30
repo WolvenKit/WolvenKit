@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _pingType);
 			set => SetProperty(ref _pingType, value);
 		}
+
+		public gamemappinsPingSystemMappin()
+		{
+			_pingType = new() { Value = Enums.gamedataPingType.Invalid };
+		}
 	}
 }

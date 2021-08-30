@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _serialNumber);
 			set => SetProperty(ref _serialNumber, value);
 		}
+
+		public scnRidSerialNumber()
+		{
+			_serialNumber = 4294967295;
+		}
 	}
 }

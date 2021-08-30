@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _falseRecord);
 			set => SetProperty(ref _falseRecord, value);
 		}
+
+		public ToggleGlassTint()
+		{
+			_trueRecord = new() { Text = "TintGlass" };
+			_falseRecord = new() { Text = "ClearGlass" };
+		}
 	}
 }

@@ -131,5 +131,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _playerInPerception);
 			set => SetProperty(ref _playerInPerception, value);
 		}
+
+		public senseComponent()
+		{
+			_enableBeingDetectable = true;
+			_isEnabled = true;
+		}
 	}
 }

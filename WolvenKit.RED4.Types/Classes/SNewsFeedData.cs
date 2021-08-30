@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _elements);
 			set => SetProperty(ref _elements, value);
 		}
+
+		public SNewsFeedData()
+		{
+			_interval = 5.000000F;
+		}
 	}
 }

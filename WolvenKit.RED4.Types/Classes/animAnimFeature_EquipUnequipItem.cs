@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _firstEquip);
 			set => SetProperty(ref _firstEquip, value);
 		}
+
+		public animAnimFeature_EquipUnequipItem()
+		{
+			_itemType = -1;
+		}
 	}
 }

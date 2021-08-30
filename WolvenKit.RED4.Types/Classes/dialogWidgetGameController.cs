@@ -158,5 +158,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _uiSystemId);
 			set => SetProperty(ref _uiSystemId, value);
 		}
+
+		public dialogWidgetGameController()
+		{
+			_activeHubID = -1;
+			_fadeAnimTime = 0.500000F;
+			_fadeDelay = 1.000000F;
+		}
 	}
 }

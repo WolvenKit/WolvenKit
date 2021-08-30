@@ -455,5 +455,35 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _allowDistantLight);
 			set => SetProperty(ref _allowDistantLight, value);
 		}
+
+		public worldAdvertisementLightData()
+		{
+			_radius = 5.000000F;
+			_intensity = 100.000000F;
+			_rayTracingIntensityScale = 1.000000F;
+			_temperature = -1.000000F;
+			_sceneDiffuse = true;
+			_sceneSpecularScale = 100;
+			_scaleGI = 100;
+			_scaleEnvProbes = 100;
+			_useInTransparents = true;
+			_useInParticles = true;
+			_areaShape = new() { Value = Enums.EAreaLightShape.ALS_Capsule };
+			_areaTwoSided = true;
+			_sourceRadius = 0.050000F;
+			_capsuleLength = 1.000000F;
+			_areaRectSideA = 1.000000F;
+			_areaRectSideB = 1.000000F;
+			_innerAngle = 30.000000F;
+			_outerAngle = 45.000000F;
+			_softness = 2.000000F;
+			_shadowAngle = -1.000000F;
+			_shadowRadius = -1.000000F;
+			_shadowFadeDistance = 10.000000F;
+			_shadowFadeRange = 5.000000F;
+			_shadowSoftnessMode = new() { Value = Enums.ELightShadowSoftnessMode.LSSM_Default };
+			_colorGroupSaturation = 100;
+			_allowDistantLight = true;
+		}
 	}
 }

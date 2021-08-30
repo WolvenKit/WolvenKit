@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _editorEventId);
 			set => SetProperty(ref _editorEventId, value);
 		}
+
+		public scnNodeSymbol()
+		{
+			_editorEventId = 18446744073709551615;
+		}
 	}
 }

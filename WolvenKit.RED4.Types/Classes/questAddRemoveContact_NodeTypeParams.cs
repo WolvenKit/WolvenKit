@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _addContact);
 			set => SetProperty(ref _addContact, value);
 		}
+
+		public questAddRemoveContact_NodeTypeParams()
+		{
+			_addContact = true;
+		}
 	}
 }

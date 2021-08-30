@@ -167,5 +167,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _showOnMiniMap);
 			set => SetProperty(ref _showOnMiniMap, value);
 		}
+
+		public GameplayRoleMappinData()
+		{
+			_showOnMiniMap = true;
+		}
 	}
 }

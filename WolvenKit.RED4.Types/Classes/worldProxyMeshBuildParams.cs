@@ -140,5 +140,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _advancedParams);
 			set => SetProperty(ref _advancedParams, value);
 		}
+
+		public worldProxyMeshBuildParams()
+		{
+			_resolution = 5;
+			_polycount = 500;
+			_polycountPercentage = 5.000000F;
+			_coreAxis = new() { Value = Enums.worldProxyCoreAxis.Z };
+			_groupingNormals = new() { Value = Enums.worldProxyGroupingNormals.Around_All_Axes };
+		}
 	}
 }

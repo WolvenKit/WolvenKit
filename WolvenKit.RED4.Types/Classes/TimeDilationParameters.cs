@@ -59,5 +59,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _easeOutCurve);
 			set => SetProperty(ref _easeOutCurve, value);
 		}
+
+		public TimeDilationParameters()
+		{
+			_timeDilation = 0.010000F;
+			_playerTimeDilation = 0.010000F;
+			_duration = 9999.000000F;
+		}
 	}
 }

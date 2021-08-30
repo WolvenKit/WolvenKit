@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _impulseRadius);
 			set => SetProperty(ref _impulseRadius, value);
 		}
+
+		public gameBodyTriggerDestructionComponent()
+		{
+			_impulseForce = 10.000000F;
+			_impulseRadius = 5.000000F;
+		}
 	}
 }

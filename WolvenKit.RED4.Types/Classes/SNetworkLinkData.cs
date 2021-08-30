@@ -176,5 +176,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _weakLink);
 			set => SetProperty(ref _weakLink, value);
 		}
+
+		public SNetworkLinkData()
+		{
+			_drawLink = true;
+			_revealMaster = true;
+			_revealSlave = true;
+			_lifetime = -1.000000F;
+		}
 	}
 }

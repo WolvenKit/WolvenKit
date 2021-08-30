@@ -68,5 +68,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _hideAnimProxy);
 			set => SetProperty(ref _hideAnimProxy, value);
 		}
+
+		public gameuiHUDGameController()
+		{
+			_showAnimationName = "unfold";
+			_hideAnimationName = "fold";
+		}
 	}
 }

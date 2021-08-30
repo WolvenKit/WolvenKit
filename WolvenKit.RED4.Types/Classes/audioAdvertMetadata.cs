@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _filter);
 			set => SetProperty(ref _filter, value);
 		}
+
+		public audioAdvertMetadata()
+		{
+			_minSilenceTime = 1.000000F;
+			_maxSilenceTime = 1.000000F;
+		}
 	}
 }

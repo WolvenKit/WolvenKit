@@ -86,5 +86,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _useMeshNavmeshSettings);
 			set => SetProperty(ref _useMeshNavmeshSettings, value);
 		}
+
+		public worldPhysicalDestructionNode()
+		{
+			_meshAppearance = "default";
+			_forceLODLevel = -1;
+			_useMeshNavmeshSettings = true;
+		}
 	}
 }

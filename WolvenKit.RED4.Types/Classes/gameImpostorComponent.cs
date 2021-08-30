@@ -41,5 +41,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _slotIDsToOmit);
 			set => SetProperty(ref _slotIDsToOmit, value);
 		}
+
+		public gameImpostorComponent()
+		{
+			_isCharacterReplica = true;
+			_addHead = true;
+			_ignorePlayerHeadSlot = true;
+		}
 	}
 }

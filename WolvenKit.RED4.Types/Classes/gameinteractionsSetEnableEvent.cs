@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _layer);
 			set => SetProperty(ref _layer, value);
 		}
+
+		public gameinteractionsSetEnableEvent()
+		{
+			_enable = true;
+		}
 	}
 }

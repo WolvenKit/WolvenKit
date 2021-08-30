@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _spawnPointTag);
 			set => SetProperty(ref _spawnPointTag, value);
 		}
+
+		public questSetMultiplayerHeistSpawnPointTag_NodeType()
+		{
+			_spawnPointTag = "heist";
+		}
 	}
 }

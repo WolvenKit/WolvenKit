@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _ordinal);
 			set => SetProperty(ref _ordinal, value);
 		}
+
+		public scnInputSocketStamp()
+		{
+			_name = 65535;
+			_ordinal = 65535;
+		}
 	}
 }

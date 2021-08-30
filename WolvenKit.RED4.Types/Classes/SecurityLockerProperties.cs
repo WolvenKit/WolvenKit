@@ -41,5 +41,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _pickUpWeaponSFX);
 			set => SetProperty(ref _pickUpWeaponSFX, value);
 		}
+
+		public SecurityLockerProperties()
+		{
+			_securityLevelAccessGranted = new() { Value = Enums.ESecurityAccessLevel.ESL_4 };
+			_storeWeaponSFX = "ui_loot_gun";
+			_pickUpWeaponSFX = "ui_loot_take_all";
+		}
 	}
 }

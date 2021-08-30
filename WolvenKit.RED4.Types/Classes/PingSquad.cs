@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _shouldForward);
 			set => SetProperty(ref _shouldForward, value);
 		}
+
+		public PingSquad()
+		{
+			_shouldForward = true;
+		}
 	}
 }

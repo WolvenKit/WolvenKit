@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _reverseDirection);
 			set => SetProperty(ref _reverseDirection, value);
 		}
+
+		public worldRotatingMeshNode()
+		{
+			_fullRotationTime = 1.000000F;
+		}
 	}
 }

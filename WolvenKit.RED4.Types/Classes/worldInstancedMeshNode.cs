@@ -77,5 +77,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _worldTransformsBuffer);
 			set => SetProperty(ref _worldTransformsBuffer, value);
 		}
+
+		public worldInstancedMeshNode()
+		{
+			_meshLODScales = 4294967295;
+			_occluderAutohideDistanceScale = 255;
+		}
 	}
 }

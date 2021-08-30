@@ -266,5 +266,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _spread);
 			set => SetProperty(ref _spread, value);
 		}
+
+		public CrosshairGameController_Tech_Hex()
+		{
+			_currentAmmo = 2;
+			_currentMaxAmmo = 2;
+			_maxSupportedAmmo = 8;
+			_gameplaySpreadMultiplier = 1.000000F;
+		}
 	}
 }

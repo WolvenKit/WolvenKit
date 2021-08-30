@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _duration);
 			set => SetProperty(ref _duration, value);
 		}
+
+		public AIMeleeAttackCommandParams()
+		{
+			_duration = -1.000000F;
+		}
 	}
 }

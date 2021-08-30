@@ -59,5 +59,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _useMeshNavmeshSettings);
 			set => SetProperty(ref _useMeshNavmeshSettings, value);
 		}
+
+		public worldDynamicMeshNode()
+		{
+			_isDebris = true;
+			_initialGuess = true;
+			_useMeshNavmeshSettings = true;
+		}
 	}
 }

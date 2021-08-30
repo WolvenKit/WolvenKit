@@ -185,5 +185,20 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _rainRipplesMask);
 			set => SetProperty(ref _rainRipplesMask, value);
 		}
+
+		public RainAreaSettings()
+		{
+			_radius = 45.000000F;
+			_heightRange = 40.000000F;
+			_globalLightResponse = 1.000000F;
+			_porosityThresholdStart = 0.400000F;
+			_porosityThresholdEnd = 0.900000F;
+			_glossinessFactor = 0.500000F;
+			_baseColorFactor = 0.500000F;
+			_moistureAccumulationSpeed = 5.000000F;
+			_puddlesAccumulationSpeed = 1.500000F;
+			_moistureEvaporationSpeed = 2.500000F;
+			_puddlesEvaporationSpeed = 0.250000F;
+		}
 	}
 }

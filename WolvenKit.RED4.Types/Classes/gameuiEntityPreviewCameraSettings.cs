@@ -104,5 +104,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _zoomDefault);
 			set => SetProperty(ref _zoomDefault, value);
 		}
+
+		public gameuiEntityPreviewCameraSettings()
+		{
+			_panSpeed = 0.500000F;
+			_zoomSpeed = 0.500000F;
+			_zoomMin = 25.000000F;
+			_zoomMax = 100.000000F;
+			_zoomDefault = 50.000000F;
+		}
 	}
 }

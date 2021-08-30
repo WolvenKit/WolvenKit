@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _triggerName);
 			set => SetProperty(ref _triggerName, value);
 		}
+
+		public gameuiDistrictTriggerData()
+		{
+			_district = new() { Value = Enums.gamedataDistrict.Invalid };
+		}
 	}
 }

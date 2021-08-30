@@ -149,5 +149,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _filterDataOverride);
 			set => SetProperty(ref _filterDataOverride, value);
 		}
+
+		public physicsRagdollBodyInfo()
+		{
+			_parentAnimIndex = -1;
+			_childAnimIndex = -1;
+			_parentBodyIndex = -1;
+			_shapeRadius = 0.050000F;
+			_halfHeight = 0.050000F;
+		}
 	}
 }

@@ -149,5 +149,20 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _fixedRaycastPitch);
 			set => SetProperty(ref _fixedRaycastPitch, value);
 		}
+
+		public audioReflectionEmitterSettings()
+		{
+			_reflectionDeltaThreshold = 1.000000F;
+			_maxConcurrentReflections = 2;
+			_upReflectionEnabled = true;
+			_shortReflectionIndoors = true;
+			_reflectionVariant = new() { Value = Enums.audioReflectionVariant.FindingMaximumFaceAlignemnt };
+			_backReflectionCutoffStrength = 1.000000F;
+			_backReflectionCutoffSoftness = 1.000000F;
+			_farReflectionDistance = 80.000000F;
+			_nearReflectionDistance = 10.000000F;
+			_minimumFaceAlignement = 0.500000F;
+			_fixedRaycastPitch = 15.000000F;
+		}
 	}
 }

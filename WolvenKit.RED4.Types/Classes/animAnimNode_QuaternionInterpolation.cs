@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _weight);
 			set => SetProperty(ref _weight, value);
 		}
+
+		public animAnimNode_QuaternionInterpolation()
+		{
+			_interpolationType = new() { Value = Enums.animQuaternionInterpolationType.Spherical };
+		}
 	}
 }

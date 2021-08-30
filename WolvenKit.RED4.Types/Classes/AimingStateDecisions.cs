@@ -230,5 +230,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _mouseZoomLevel);
 			set => SetProperty(ref _mouseZoomLevel, value);
 		}
+
+		public AimingStateDecisions()
+		{
+			_mouseZoomLevel = 100000.000000F;
+		}
 	}
 }

@@ -248,5 +248,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _reminderCondition);
 			set => SetProperty(ref _reminderCondition, value);
 		}
+
+		public scnChoiceNode()
+		{
+			_mode = new() { Value = Enums.scnChoiceNodeNsOperationMode.attachToScreen };
+			_interruptCapability = new() { Value = Enums.scnInterruptCapability.Interruptable };
+		}
 	}
 }

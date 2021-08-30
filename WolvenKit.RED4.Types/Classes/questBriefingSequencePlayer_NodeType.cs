@@ -86,5 +86,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _briefingType);
 			set => SetProperty(ref _briefingType, value);
 		}
+
+		public questBriefingSequencePlayer_NodeType()
+		{
+			_briefingType = new() { Value = Enums.questBriefingType.Hud };
+		}
 	}
 }

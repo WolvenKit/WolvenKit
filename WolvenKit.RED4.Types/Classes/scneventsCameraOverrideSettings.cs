@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _resetDof);
 			set => SetProperty(ref _resetDof, value);
 		}
+
+		public scneventsCameraOverrideSettings()
+		{
+			_overrideFov = true;
+			_overrideDof = true;
+		}
 	}
 }

@@ -32,5 +32,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _turnOff);
 			set => SetProperty(ref _turnOff, value);
 		}
+
+		public ReflectorSFX()
+		{
+			_distraction = "dev_reflector_distraction";
+			_turnOn = "dev_reflector_turn_on_loop";
+			_turnOff = "dev_reflector_turn_on_loop_stop";
+		}
 	}
 }

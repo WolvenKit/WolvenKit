@@ -104,5 +104,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _timeDeltaMultiplier);
 			set => SetProperty(ref _timeDeltaMultiplier, value);
 		}
+
+		public worldCurvePathNode()
+		{
+			_globalInBlendTime = 0.200000F;
+			_globalOutBlendTime = 0.200000F;
+			_turnCharacterToMatchVelocity = true;
+			_timeDeltaMultiplier = 1.000000F;
+		}
 	}
 }

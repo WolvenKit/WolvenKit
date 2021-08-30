@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isSequence);
 			set => SetProperty(ref _isSequence, value);
 		}
+
+		public communityPhaseTimePeriod()
+		{
+			_quantity = 1;
+		}
 	}
 }

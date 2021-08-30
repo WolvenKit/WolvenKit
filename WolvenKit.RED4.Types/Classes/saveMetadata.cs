@@ -149,5 +149,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isEndGameSave);
 			set => SetProperty(ref _isEndGameSave, value);
 		}
+
+		public saveMetadata()
+		{
+			_saveVersion = 208;
+			_gameVersion = 1300;
+		}
 	}
 }

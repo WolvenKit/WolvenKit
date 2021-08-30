@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _hitObject);
 			set => SetProperty(ref _hitObject, value);
 		}
+
+		public gamePingEntry()
+		{
+			_pingType = new() { Value = Enums.gamedataPingType.Invalid };
+		}
 	}
 }

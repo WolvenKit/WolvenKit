@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _timeoutDuration);
 			set => SetProperty(ref _timeoutDuration, value);
 		}
+
+		public MoveToScavengeTarget()
+		{
+			_lastTime = -1.000000F;
+			_timeoutDuration = 0.100000F;
+		}
 	}
 }

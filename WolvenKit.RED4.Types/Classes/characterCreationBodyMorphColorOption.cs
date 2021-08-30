@@ -104,5 +104,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _selector);
 			set => SetProperty(ref _selector, value);
 		}
+
+		public characterCreationBodyMorphColorOption()
+		{
+			_currColorIndex = -1;
+		}
 	}
 }

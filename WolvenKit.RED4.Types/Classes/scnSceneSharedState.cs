@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _finishedOnClient);
 			set => SetProperty(ref _finishedOnClient, value);
 		}
+
+		public scnSceneSharedState()
+		{
+			_instanceHash = 6242570315725555409;
+		}
 	}
 }

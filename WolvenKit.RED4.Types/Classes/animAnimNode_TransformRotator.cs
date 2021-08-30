@@ -77,5 +77,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _angleSpeedNode);
 			set => SetProperty(ref _angleSpeedNode, value);
 		}
+
+		public animAnimNode_TransformRotator()
+		{
+			_valueScale = 1.000000F;
+			_angleMin = -180.000000F;
+			_angleMax = 180.000000F;
+		}
 	}
 }

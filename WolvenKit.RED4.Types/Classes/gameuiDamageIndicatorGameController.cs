@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxVisibleParts);
 			set => SetProperty(ref _maxVisibleParts, value);
 		}
+
+		public gameuiDamageIndicatorGameController()
+		{
+			_maxVisibleParts = 6;
+		}
 	}
 }

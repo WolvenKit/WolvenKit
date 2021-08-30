@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxCharge);
 			set => SetProperty(ref _maxCharge, value);
 		}
+
+		public gameweaponeventsSetMaxChargeEvent()
+		{
+			_maxCharge = 100.000000F;
+		}
 	}
 }

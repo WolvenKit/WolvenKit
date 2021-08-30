@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _bodyPartMask);
 			set => SetProperty(ref _bodyPartMask, value);
 		}
+
+		public scneventsPlayAnimEventExData()
+		{
+			_weight = 1.000000F;
+		}
 	}
 }

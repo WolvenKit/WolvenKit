@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _effectName);
 			set => SetProperty(ref _effectName, value);
 		}
+
+		public questPreloadFX_NodeTypeParams()
+		{
+			_preload = true;
+		}
 	}
 }

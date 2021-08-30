@@ -41,5 +41,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _makePlayerActiveVehicle);
 			set => SetProperty(ref _makePlayerActiveVehicle, value);
 		}
+
+		public questEnablePlayerVehicle_NodeType()
+		{
+			_enable = true;
+			_despawn = true;
+			_makePlayerActiveVehicle = true;
+		}
 	}
 }

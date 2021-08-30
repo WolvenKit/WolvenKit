@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _entityLod);
 			set => SetProperty(ref _entityLod, value);
 		}
+
+		public worldEntityNode()
+		{
+			_appearanceName = "default";
+			_ioPriority = new() { Value = Enums.entEntitySpawnPriority.Immediate };
+		}
 	}
 }

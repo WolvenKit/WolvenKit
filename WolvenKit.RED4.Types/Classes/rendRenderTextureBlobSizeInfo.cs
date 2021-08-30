@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _depth);
 			set => SetProperty(ref _depth, value);
 		}
+
+		public rendRenderTextureBlobSizeInfo()
+		{
+			_depth = 1;
+		}
 	}
 }

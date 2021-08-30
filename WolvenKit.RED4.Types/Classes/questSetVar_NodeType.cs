@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _setExactValue);
 			set => SetProperty(ref _setExactValue, value);
 		}
+
+		public questSetVar_NodeType()
+		{
+			_value = 1;
+		}
 	}
 }

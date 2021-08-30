@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _actionName);
 			set => SetProperty(ref _actionName, value);
 		}
+
+		public VentilationAreaSetup()
+		{
+			_actionName = "Activate";
+		}
 	}
 }

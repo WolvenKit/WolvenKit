@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _pulseAnim);
 			set => SetProperty(ref _pulseAnim, value);
 		}
+
+		public gameuiMinimapDynamicEventMappinController()
+		{
+			_hideAtDistance = 25.000000F;
+			_hideInCombat = true;
+		}
 	}
 }

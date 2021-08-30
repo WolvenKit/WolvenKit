@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _opacityScale);
 			set => SetProperty(ref _opacityScale, value);
 		}
+
+		public EmitterGroupParams()
+		{
+			_emissionScale = 1.000000F;
+			_opacityScale = 1.000000F;
+		}
 	}
 }

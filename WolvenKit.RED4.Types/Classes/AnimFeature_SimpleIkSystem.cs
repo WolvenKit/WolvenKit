@@ -77,5 +77,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _rotationOffset);
 			set => SetProperty(ref _rotationOffset, value);
 		}
+
+		public AnimFeature_SimpleIkSystem()
+		{
+			_weight = 1.000000F;
+		}
 	}
 }

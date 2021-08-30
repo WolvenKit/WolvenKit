@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _color);
 			set => SetProperty(ref _color, value);
 		}
+
+		public gameEffectDebugSettings()
+		{
+			_duration = 1.000000F;
+		}
 	}
 }

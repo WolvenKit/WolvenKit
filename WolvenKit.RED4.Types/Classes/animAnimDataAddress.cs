@@ -32,5 +32,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _zeInBytes);
 			set => SetProperty(ref _zeInBytes, value);
 		}
+
+		public animAnimDataAddress()
+		{
+			_unkIndex = 4294967295;
+			_fsetInBytes = 4294967295;
+			_zeInBytes = 4294967295;
+		}
 	}
 }

@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _navmeshImpact);
 			set => SetProperty(ref _navmeshImpact, value);
 		}
+
+		public NavGenNavigationSetting()
+		{
+			_navmeshImpact = new() { Value = Enums.NavGenNavmeshImpact.Blocking };
+		}
 	}
 }

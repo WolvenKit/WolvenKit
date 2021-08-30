@@ -86,5 +86,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _phaseDuration);
 			set => SetProperty(ref _phaseDuration, value);
 		}
+
+		public AIAnimationTask()
+		{
+			_animVariationValue = -1;
+		}
 	}
 }

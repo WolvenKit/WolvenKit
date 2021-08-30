@@ -77,5 +77,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _conditionDescriptionList);
 			set => SetProperty(ref _conditionDescriptionList, value);
 		}
+
+		public ScannerSkillCheckConditionDataItemLogicController()
+		{
+			_conditionDataDescriptionName = "ConditionDataDescription";
+		}
 	}
 }

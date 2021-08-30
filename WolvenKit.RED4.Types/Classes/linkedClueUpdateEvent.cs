@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _updatePS);
 			set => SetProperty(ref _updatePS, value);
 		}
+
+		public linkedClueUpdateEvent()
+		{
+			_updatePS = true;
+		}
 	}
 }

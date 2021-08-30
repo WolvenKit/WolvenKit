@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lightBlockerComponentVersion);
 			set => SetProperty(ref _lightBlockerComponentVersion, value);
 		}
+
+		public entLightBlockingComponent()
+		{
+			_radius = 0.100000F;
+		}
 	}
 }

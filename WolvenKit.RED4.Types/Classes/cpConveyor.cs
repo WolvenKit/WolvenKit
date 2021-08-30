@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _audioParameterLineSpeed);
 			set => SetProperty(ref _audioParameterLineSpeed, value);
 		}
+
+		public cpConveyor()
+		{
+			_entityDistance = 1.000000F;
+		}
 	}
 }

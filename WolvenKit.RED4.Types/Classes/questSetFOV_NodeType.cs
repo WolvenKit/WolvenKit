@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _fOV);
 			set => SetProperty(ref _fOV, value);
 		}
+
+		public questSetFOV_NodeType()
+		{
+			_fOV = 60.000000F;
+		}
 	}
 }

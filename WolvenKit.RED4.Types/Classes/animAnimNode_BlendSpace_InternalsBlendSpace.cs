@@ -122,5 +122,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _cachedSamplesForGridPoints_weightsForPoints);
 			set => SetProperty(ref _cachedSamplesForGridPoints_weightsForPoints, value);
 		}
+
+		public animAnimNode_BlendSpace_InternalsBlendSpace()
+		{
+			_spaceDimension = 1;
+			_isLooped = true;
+			_needsRuntimeTriangulation = true;
+		}
 	}
 }

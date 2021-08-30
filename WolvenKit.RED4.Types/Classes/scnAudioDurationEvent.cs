@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _playbackDirectionSupport);
 			set => SetProperty(ref _playbackDirectionSupport, value);
 		}
+
+		public scnAudioDurationEvent()
+		{
+			_playbackDirectionSupport = new() { Value = Enums.scnAudioPlaybackDirectionSupportFlag.Forward };
+		}
 	}
 }

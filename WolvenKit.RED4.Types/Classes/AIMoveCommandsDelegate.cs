@@ -500,5 +500,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _matchTargetSpeed);
 			set => SetProperty(ref _matchTargetSpeed, value);
 		}
+
+		public AIMoveCommandsDelegate()
+		{
+			_lowestCompanionDistanceToEnd = 9999999.000000F;
+			_previousCompanionDistanceToEnd = 9999999.000000F;
+		}
 	}
 }

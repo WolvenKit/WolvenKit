@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _activeIndex);
 			set => SetProperty(ref _activeIndex, value);
 		}
+
+		public gameSEquipArea()
+		{
+			_areaType = new() { Value = Enums.gamedataEquipmentArea.Invalid };
+		}
 	}
 }

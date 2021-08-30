@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _targetWeight);
 			set => SetProperty(ref _targetWeight, value);
 		}
+
+		public scnAddIdleWithBlendAnimEvent()
+		{
+			_actorComponent = "body";
+			_targetWeight = 1.000000F;
+		}
 	}
 }

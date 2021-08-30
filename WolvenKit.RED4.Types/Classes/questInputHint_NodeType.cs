@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _queuePriority);
 			set => SetProperty(ref _queuePriority, value);
 		}
+
+		public questInputHint_NodeType()
+		{
+			_show = true;
+			_queuePriority = -1;
+		}
 	}
 }

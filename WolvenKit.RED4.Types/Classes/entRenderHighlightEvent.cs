@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _opacity);
 			set => SetProperty(ref _opacity, value);
 		}
+
+		public entRenderHighlightEvent()
+		{
+			_opacity = 1.000000F;
+		}
 	}
 }

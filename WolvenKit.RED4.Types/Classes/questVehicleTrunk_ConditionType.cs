@@ -68,5 +68,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isInside);
 			set => SetProperty(ref _isInside, value);
 		}
+
+		public questVehicleTrunk_ConditionType()
+		{
+			_playerVehicle = true;
+			_isInside = true;
+		}
 	}
 }

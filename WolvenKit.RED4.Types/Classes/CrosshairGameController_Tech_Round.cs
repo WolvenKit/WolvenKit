@@ -365,5 +365,17 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _spreadRA);
 			set => SetProperty(ref _spreadRA, value);
 		}
+
+		public CrosshairGameController_Tech_Round()
+		{
+			_offsetLeftRight = 0.800000F;
+			_offsetLeftRightExtra = 1.200000F;
+			_latchVertical = 40.000000F;
+			_currentAmmo = 2;
+			_currentMaxAmmo = 2;
+			_maxSupportedAmmo = 8;
+			_useVisibleTarget = true;
+			_gameplaySpreadMultiplier = 1.000000F;
+		}
 	}
 }

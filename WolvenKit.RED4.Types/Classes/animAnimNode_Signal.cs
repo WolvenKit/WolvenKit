@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _cooldown);
 			set => SetProperty(ref _cooldown, value);
 		}
+
+		public animAnimNode_Signal()
+		{
+			_cooldown = -1.000000F;
+		}
 	}
 }

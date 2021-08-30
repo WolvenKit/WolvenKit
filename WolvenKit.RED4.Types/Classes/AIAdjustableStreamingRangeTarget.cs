@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _minStreamingDistance);
 			set => SetProperty(ref _minStreamingDistance, value);
 		}
+
+		public AIAdjustableStreamingRangeTarget()
+		{
+			_minStreamingDistance = 30.000000F;
+		}
 	}
 }

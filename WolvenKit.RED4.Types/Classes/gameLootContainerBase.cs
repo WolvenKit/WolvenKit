@@ -95,5 +95,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _activeQualityRangeInteraction);
 			set => SetProperty(ref _activeQualityRangeInteraction, value);
 		}
+
+		public gameLootContainerBase()
+		{
+			_useAreaLoot = true;
+		}
 	}
 }

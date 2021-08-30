@@ -95,5 +95,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _thumbnailWidgetRecord);
 			set => SetProperty(ref _thumbnailWidgetRecord, value);
 		}
+
+		public AOEAreaSetup()
+		{
+			_duration = -1.000000F;
+		}
 	}
 }

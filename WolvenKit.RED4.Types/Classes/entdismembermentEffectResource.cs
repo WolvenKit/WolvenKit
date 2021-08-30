@@ -86,5 +86,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _matchToWoundByName);
 			set => SetProperty(ref _matchToWoundByName, value);
 		}
+
+		public entdismembermentEffectResource()
+		{
+			_placement = new() { Value = Enums.entdismembermentPlacementE.MAIN_MESH };
+			_resourceSets = new() { Value = Enums.entdismembermentResourceSetMask.BARE | Enums.entdismembermentResourceSetMask.BARE1 | Enums.entdismembermentResourceSetMask.BARE2 | Enums.entdismembermentResourceSetMask.BARE3 | Enums.entdismembermentResourceSetMask.GARMENT | Enums.entdismembermentResourceSetMask.GARMENT1 | Enums.entdismembermentResourceSetMask.GARMENT2 | Enums.entdismembermentResourceSetMask.GARMENT3 };
+			_woundType = new() { Value = Enums.entdismembermentWoundTypeE.COARSE };
+		}
 	}
 }

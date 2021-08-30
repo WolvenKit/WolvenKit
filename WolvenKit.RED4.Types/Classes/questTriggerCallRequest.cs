@@ -59,5 +59,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isRejectable);
 			set => SetProperty(ref _isRejectable, value);
 		}
+
+		public questTriggerCallRequest()
+		{
+			_callPhase = new() { Value = Enums.questPhoneCallPhase.IncomingCall };
+			_callMode = new() { Value = Enums.questPhoneCallMode.Audio };
+		}
 	}
 }

@@ -140,5 +140,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _hackAlwaysSample);
 			set => SetProperty(ref _hackAlwaysSample, value);
 		}
+
+		public animAnimGraph()
+		{
+			_timeDeltaMultiplier = 1.000000F;
+		}
 	}
 }

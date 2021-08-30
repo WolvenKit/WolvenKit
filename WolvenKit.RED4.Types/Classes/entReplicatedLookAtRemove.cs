@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _outTransitionSpeed);
 			set => SetProperty(ref _outTransitionSpeed, value);
 		}
+
+		public entReplicatedLookAtRemove()
+		{
+			_outTransitionSpeed = 60.000000F;
+		}
 	}
 }

@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _amountOfRotation);
 			set => SetProperty(ref _amountOfRotation, value);
 		}
+
+		public animSBehaviorConstraintNodeFloorIKMaintainLookBoneData()
+		{
+			_amountOfRotation = 0.500000F;
+		}
 	}
 }

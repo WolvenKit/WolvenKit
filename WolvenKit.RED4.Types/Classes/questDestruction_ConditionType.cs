@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _threshold);
 			set => SetProperty(ref _threshold, value);
 		}
+
+		public questDestruction_ConditionType()
+		{
+			_threshold = 50.000000F;
+		}
 	}
 }

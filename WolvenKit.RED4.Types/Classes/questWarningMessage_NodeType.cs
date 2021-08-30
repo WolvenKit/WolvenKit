@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _instant);
 			set => SetProperty(ref _instant, value);
 		}
+
+		public questWarningMessage_NodeType()
+		{
+			_duration = -1.000000F;
+		}
 	}
 }

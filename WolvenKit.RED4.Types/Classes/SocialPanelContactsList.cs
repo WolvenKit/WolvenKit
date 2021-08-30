@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lastClickedContact);
 			set => SetProperty(ref _lastClickedContact, value);
 		}
+
+		public SocialPanelContactsList()
+		{
+			_listItemName = "contactsListItem";
+			_currentContactHash = -1;
+		}
 	}
 }

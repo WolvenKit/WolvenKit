@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _source);
 			set => SetProperty(ref _source, value);
 		}
+
+		public enteventsSetVisibility()
+		{
+			_visible = true;
+		}
 	}
 }

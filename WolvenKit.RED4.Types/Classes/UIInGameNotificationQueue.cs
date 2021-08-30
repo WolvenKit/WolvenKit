@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _duration);
 			set => SetProperty(ref _duration, value);
 		}
+
+		public UIInGameNotificationQueue()
+		{
+			_duration = 5.000000F;
+		}
 	}
 }

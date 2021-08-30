@@ -653,5 +653,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxYaw);
 			set => SetProperty(ref _maxYaw, value);
 		}
+
+		public SensorDevice()
+		{
+			_sensorDeviceState = new() { Value = Enums.ESensorDeviceStates.IDLE };
+			_scanFXSlotName = "laser";
+			_defaultSensePreset = new() { Value = 81335754956 };
+			_playIdleSoundOnIdle = true;
+			_minPitch = -70.000000F;
+			_maxPitch = 70.000000F;
+		}
 	}
 }

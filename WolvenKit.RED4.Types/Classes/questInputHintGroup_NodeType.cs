@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _localizedDescription);
 			set => SetProperty(ref _localizedDescription, value);
 		}
+
+		public questInputHintGroup_NodeType()
+		{
+			_show = true;
+		}
 	}
 }

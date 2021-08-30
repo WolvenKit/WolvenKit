@@ -104,5 +104,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _randomizeDirection);
 			set => SetProperty(ref _randomizeDirection, value);
 		}
+
+		public gameprojectileSpiralParams()
+		{
+			_cycleTimeMin = 0.100000F;
+			_cycleTimeMax = 0.100000F;
+			_rampUpDistanceEnd = 1.000000F;
+			_rampDownDistanceStart = 1.000000F;
+			_rampDownDistanceEnd = 2.000000F;
+		}
 	}
 }

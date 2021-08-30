@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _preventSkippingDeathAnimation);
 			set => SetProperty(ref _preventSkippingDeathAnimation, value);
 		}
+
+		public DeadOnInitTask()
+		{
+			_preventSkippingDeathAnimation = true;
+		}
 	}
 }

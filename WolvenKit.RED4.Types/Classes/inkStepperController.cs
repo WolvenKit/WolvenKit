@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _change);
 			set => SetProperty(ref _change, value);
 		}
+
+		public inkStepperController()
+		{
+			_cycledNavigation = true;
+		}
 	}
 }

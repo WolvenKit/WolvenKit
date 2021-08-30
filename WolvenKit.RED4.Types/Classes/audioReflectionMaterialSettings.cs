@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _gain);
 			set => SetProperty(ref _gain, value);
 		}
+
+		public audioReflectionMaterialSettings()
+		{
+			_gain = 1.000000F;
+		}
 	}
 }

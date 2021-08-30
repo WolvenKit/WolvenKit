@@ -707,5 +707,18 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _stealthTimeStampThreshold);
 			set => SetProperty(ref _stealthTimeStampThreshold, value);
 		}
+
+		public ReactionManagerComponent()
+		{
+			_desiredFearPhase = -1;
+			_nPCRadius = 0.300000F;
+			_bumpTriggerDistanceBufferMounted = 1.000000F;
+			_bumpTriggerDistanceBufferCrouched = -0.110000F;
+			_ovefloodCooldown = 1.000000F;
+			_stanceState = new() { Value = Enums.gamedataNPCStanceState.Stand };
+			_highLevelState = new() { Value = Enums.gamedataNPCHighLevelState.Relaxed };
+			_fastWalk = true;
+			_createThreshold = true;
+		}
 	}
 }

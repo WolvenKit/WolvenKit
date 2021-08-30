@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _endActionUserData);
 			set => SetProperty(ref _endActionUserData, value);
 		}
+
+		public AIbehaviorSendSignalTaskDefinition()
+		{
+			_startAction = new() { Value = Enums.gameBoolSignalAction.TurnOn };
+			_endAction = new() { Value = Enums.gameBoolSignalAction.TurnOff };
+		}
 	}
 }

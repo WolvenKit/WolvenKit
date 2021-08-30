@@ -257,5 +257,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _refreshTime);
 			set => SetProperty(ref _refreshTime, value);
 		}
+
+		public SecSystemDebugger()
+		{
+			_refreshTime = 60.000000F;
+		}
 	}
 }

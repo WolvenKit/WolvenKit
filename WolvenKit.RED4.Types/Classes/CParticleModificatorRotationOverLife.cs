@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _modulate);
 			set => SetProperty(ref _modulate, value);
 		}
+
+		public CParticleModificatorRotationOverLife()
+		{
+			_modulate = true;
+		}
 	}
 }

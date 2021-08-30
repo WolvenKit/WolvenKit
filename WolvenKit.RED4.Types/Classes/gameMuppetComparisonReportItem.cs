@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _clientValue);
 			set => SetProperty(ref _clientValue, value);
 		}
+
+		public gameMuppetComparisonReportItem()
+		{
+			_type = new() { Value = Enums.gameMuppetComparisonReportItemType.Equal };
+		}
 	}
 }

@@ -176,5 +176,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _factListenerID);
 			set => SetProperty(ref _factListenerID, value);
 		}
+
+		public ZoneAlertNotificationQueue()
+		{
+			_duration = 2.000000F;
+			_wANTED_TIER_SIZE = 5;
+		}
 	}
 }

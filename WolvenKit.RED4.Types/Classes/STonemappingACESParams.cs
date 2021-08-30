@@ -95,5 +95,16 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _applyAfterLUT);
 			set => SetProperty(ref _applyAfterLUT, value);
 		}
+
+		public STonemappingACESParams()
+		{
+			_minStops = -7.000000F;
+			_maxStops = 9.000000F;
+			_midGrayScale = 1.000000F;
+			_surroundGamma = 1.000000F;
+			_toneCurveSaturation = 1.000000F;
+			_adjustWhitePoint = true;
+			_dimSurround = true;
+		}
 	}
 }

@@ -41,5 +41,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _useDeviceAppearence);
 			set => SetProperty(ref _useDeviceAppearence, value);
 		}
+
+		public BillboardDeviceControllerPS()
+		{
+			_glitchSFX = "amb_int_custom_megabuilding_01_adverts_interactive_nicola_01_select_q110";
+			_useLights = true;
+			_useDeviceAppearence = true;
+		}
 	}
 }

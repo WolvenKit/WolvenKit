@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _dependsOnTimeDilation);
 			set => SetProperty(ref _dependsOnTimeDilation, value);
 		}
+
+		public questPlayHUDEntryAnimation_NodeType()
+		{
+			_dependsOnTimeDilation = true;
+		}
 	}
 }

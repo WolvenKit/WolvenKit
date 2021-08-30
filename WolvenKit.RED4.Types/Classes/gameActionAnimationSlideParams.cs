@@ -149,5 +149,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _zAlignmentThreshold);
 			set => SetProperty(ref _zAlignmentThreshold, value);
 		}
+
+		public gameActionAnimationSlideParams()
+		{
+			_usePositionSlide = true;
+			_useRotationSlide = true;
+		}
 	}
 }

@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _jammedWeaponStartTimeStamp);
 			set => SetProperty(ref _jammedWeaponStartTimeStamp, value);
 		}
+
+		public WeaponJammedAction()
+		{
+			_jammedWeaponDuration = 5.000000F;
+		}
 	}
 }

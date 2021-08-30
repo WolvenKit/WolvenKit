@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _animProxy);
 			set => SetProperty(ref _animProxy, value);
 		}
+
+		public GamepadHoldIndicatorGameController()
+		{
+			_partName = new() { Text = "icon_circle_anim_" };
+		}
 	}
 }

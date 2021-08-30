@@ -140,5 +140,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _oxygenListener);
 			set => SetProperty(ref _oxygenListener, value);
 		}
+
+		public OxygenbarWidgetGameController()
+		{
+			_currentOxygen = 100.000000F;
+			_sceneTier = new() { Value = Enums.GameplayTier.Tier1_FullGameplay };
+		}
 	}
 }

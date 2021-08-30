@@ -365,5 +365,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _dEBUG_iconErrorInfo);
 			set => SetProperty(ref _dEBUG_iconErrorInfo, value);
 		}
+
+		public MinimalItemTooltipData()
+		{
+			_itemType = new() { Value = Enums.gamedataItemType.Invalid };
+			_equipmentArea = new() { Value = Enums.gamedataEquipmentArea.Invalid };
+			_itemEvolution = new() { Value = Enums.gamedataWeaponEvolution.Invalid };
+		}
 	}
 }

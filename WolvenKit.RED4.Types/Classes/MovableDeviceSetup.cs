@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _numberOfUses);
 			set => SetProperty(ref _numberOfUses, value);
 		}
+
+		public MovableDeviceSetup()
+		{
+			_numberOfUses = 1;
+		}
 	}
 }

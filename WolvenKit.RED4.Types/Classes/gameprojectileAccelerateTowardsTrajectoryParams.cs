@@ -104,5 +104,16 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _accuracy);
 			set => SetProperty(ref _accuracy, value);
 		}
+
+		public gameprojectileAccelerateTowardsTrajectoryParams()
+		{
+			_accelerationSpeed = 2.000000F;
+			_maxSpeed = 4.000000F;
+			_decelerateTowardsTargetPositionDistance = -1.000000F;
+			_maxRotationSpeed = 360.000000F;
+			_minRotationSpeed = 180.000000F;
+			_diffForMaxRotation = 120.000000F;
+			_accuracy = 1.000000F;
+		}
 	}
 }

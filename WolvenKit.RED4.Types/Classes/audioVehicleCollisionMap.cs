@@ -122,5 +122,16 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _collisionSettings);
 			set => SetProperty(ref _collisionSettings, value);
 		}
+
+		public audioVehicleCollisionMap()
+		{
+			_minImpactVelocityThreshold = 0.800000F;
+			_minRumbleVelocityThreshold = 0.800000F;
+			_rumbleCooldown = 0.600000F;
+			_scrapingMinTangentialVelocityThreshold = 5.000000F;
+			_scrapingMaxCollisionCooldown = 0.200000F;
+			_scrapingMinVehicleUpCollisionContactAngle = 30.000000F;
+			_useScrapingMinVehicleUpCollisionContactAngle = true;
+		}
 	}
 }

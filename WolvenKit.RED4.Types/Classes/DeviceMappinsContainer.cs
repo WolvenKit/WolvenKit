@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _offsetValue);
 			set => SetProperty(ref _offsetValue, value);
 		}
+
+		public DeviceMappinsContainer()
+		{
+			_offsetValue = 0.200000F;
+		}
 	}
 }

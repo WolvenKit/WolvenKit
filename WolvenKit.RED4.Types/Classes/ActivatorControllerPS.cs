@@ -77,5 +77,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _alternativeInteractionString);
 			set => SetProperty(ref _alternativeInteractionString, value);
 		}
+
+		public ActivatorControllerPS()
+		{
+			_hasSimpleInteraction = true;
+			_alternativeInteractionString = new() { Text = "ToggleActivate" };
+		}
 	}
 }

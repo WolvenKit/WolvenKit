@@ -104,5 +104,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _coneLimitReached);
 			set => SetProperty(ref _coneLimitReached, value);
 		}
+
+		public animLookAtStateMachineSettings()
+		{
+			_followingSpeedFactor = 1.000000F;
+			_eyesOverrideFloatTrack = "pla_force_enable_eyes";
+			_transitionSpeedMultiplier = 1.000000F;
+			_blendWeightPowFactor = 1.000000F;
+		}
 	}
 }

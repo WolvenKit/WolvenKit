@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _deathFrameId);
 			set => SetProperty(ref _deathFrameId, value);
 		}
+
+		public gameMuppetHighLevelState()
+		{
+			_deathFrameId = 4294967295;
+		}
 	}
 }

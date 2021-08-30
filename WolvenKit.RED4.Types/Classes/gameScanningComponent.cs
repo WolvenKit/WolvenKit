@@ -221,5 +221,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _onBraindanceFppChangeCallback);
 			set => SetProperty(ref _onBraindanceFppChangeCallback, value);
 		}
+
+		public gameScanningComponent()
+		{
+			_autoGenerateBoundingSphere = true;
+			_cpoEnableMultiplePlayersScanningModifier = true;
+			_isEntityVisible = true;
+		}
 	}
 }

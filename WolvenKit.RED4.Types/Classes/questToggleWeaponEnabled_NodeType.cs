@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _weapon);
 			set => SetProperty(ref _weapon, value);
 		}
+
+		public questToggleWeaponEnabled_NodeType()
+		{
+			_val = true;
+			_weapon = new() { Value = Enums.questVehicleWeaponQuestID.All };
+		}
 	}
 }

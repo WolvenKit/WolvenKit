@@ -113,5 +113,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _overrideVisualStyle);
 			set => SetProperty(ref _overrideVisualStyle, value);
 		}
+
+		public entGameplayVOEvent()
+		{
+			_overridingVoiceoverContext = new() { Value = Enums.locVoiceoverContext.Default_Vo_Context };
+		}
 	}
 }

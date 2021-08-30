@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _mute);
 			set => SetProperty(ref _mute, value);
 		}
+
+		public questToggleEventExecutionTag_NodeType()
+		{
+			_mute = true;
+		}
 	}
 }

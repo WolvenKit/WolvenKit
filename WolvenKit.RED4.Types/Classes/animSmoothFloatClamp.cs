@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _marginEaseOutCurve);
 			set => SetProperty(ref _marginEaseOutCurve, value);
 		}
+
+		public animSmoothFloatClamp()
+		{
+			_min = -1.000000F;
+			_max = 1.000000F;
+		}
 	}
 }

@@ -86,5 +86,18 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _trackSkipFrameTolerance);
 			set => SetProperty(ref _trackSkipFrameTolerance, value);
 		}
+
+		public animSAnimationBufferBitwiseCompressionSettings()
+		{
+			_translationTolerance = 0.010000F;
+			_translationSkipFrameTolerance = 0.010000F;
+			_orientationTolerance = 0.002000F;
+			_orientationCompressionMethod = new() { Value = Enums.SAnimationBufferOrientationCompressionMethod.ABOCM_PackIn48bitsW };
+			_orientationSkipFrameTolerance = 0.010000F;
+			_scaleTolerance = 0.010000F;
+			_scaleSkipFrameTolerance = 0.010000F;
+			_trackTolerance = 0.001000F;
+			_trackSkipFrameTolerance = 0.001000F;
+		}
 	}
 }

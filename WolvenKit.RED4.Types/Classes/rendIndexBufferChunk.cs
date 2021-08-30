@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _teOffset);
 			set => SetProperty(ref _teOffset, value);
 		}
+
+		public rendIndexBufferChunk()
+		{
+			_pe = new() { Value = Enums.GpuWrapApieIndexBufferChunkType.IBCT_Max };
+		}
 	}
 }

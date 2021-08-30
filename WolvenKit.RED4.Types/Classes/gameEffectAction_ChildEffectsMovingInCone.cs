@@ -68,5 +68,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _smoothInterpolations);
 			set => SetProperty(ref _smoothInterpolations, value);
 		}
+
+		public gameEffectAction_ChildEffectsMovingInCone()
+		{
+			_effectsCount = 1;
+			_coneAngle = 40.000000F;
+			_minEffectDuration = 0.300000F;
+			_maxEffectDuration = 1.000000F;
+			_smoothInterpolations = true;
+		}
 	}
 }

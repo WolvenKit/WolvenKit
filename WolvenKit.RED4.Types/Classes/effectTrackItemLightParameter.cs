@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _radius);
 			set => SetProperty(ref _radius, value);
 		}
+
+		public effectTrackItemLightParameter()
+		{
+			_scale = 1.000000F;
+		}
 	}
 }

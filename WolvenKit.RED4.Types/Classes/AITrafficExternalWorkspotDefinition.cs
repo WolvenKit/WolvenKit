@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _globalWorkspotNodeRef);
 			set => SetProperty(ref _globalWorkspotNodeRef, value);
 		}
+
+		public AITrafficExternalWorkspotDefinition()
+		{
+			_nearestPointEntry = true;
+		}
 	}
 }

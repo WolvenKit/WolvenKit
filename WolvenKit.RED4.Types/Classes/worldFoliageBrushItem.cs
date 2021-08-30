@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _selected);
 			set => SetProperty(ref _selected, value);
 		}
+
+		public worldFoliageBrushItem()
+		{
+			_selected = true;
+		}
 	}
 }

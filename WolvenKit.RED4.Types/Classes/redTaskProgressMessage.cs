@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _processingTime);
 			set => SetProperty(ref _processingTime, value);
 		}
+
+		public redTaskProgressMessage()
+		{
+			_id = 4294967295;
+		}
 	}
 }

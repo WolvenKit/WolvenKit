@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _industrialArmAnimationOverride);
 			set => SetProperty(ref _industrialArmAnimationOverride, value);
 		}
+
+		public ActivatedDeviceControllerPS()
+		{
+			_industrialArmAnimationOverride = -1;
+		}
 	}
 }

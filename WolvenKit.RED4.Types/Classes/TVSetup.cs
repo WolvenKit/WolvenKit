@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isGlobalTvOnly);
 			set => SetProperty(ref _isGlobalTvOnly, value);
 		}
+
+		public TVSetup()
+		{
+			_muteInterface = true;
+		}
 	}
 }

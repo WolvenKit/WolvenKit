@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _gridDivisionsCount);
 			set => SetProperty(ref _gridDivisionsCount, value);
 		}
+
+		public animAnimNode_BlendSpace_InternalsBlendSpaceCoordinateDescription()
+		{
+			_maxValue = 1.000000F;
+			_gridDivisionsCount = 4;
+		}
 	}
 }

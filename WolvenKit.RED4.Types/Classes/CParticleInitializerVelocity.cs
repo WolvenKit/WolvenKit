@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _worldSpace);
 			set => SetProperty(ref _worldSpace, value);
 		}
+
+		public CParticleInitializerVelocity()
+		{
+			_scale = 1.000000F;
+			_worldSpace = true;
+		}
 	}
 }

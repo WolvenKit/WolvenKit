@@ -140,5 +140,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _introAnim);
 			set => SetProperty(ref _introAnim, value);
 		}
+
+		public gameuiTooltipsManager()
+		{
+			_flipX = true;
+			_flipY = true;
+		}
 	}
 }

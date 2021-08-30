@@ -95,5 +95,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxTargetAngleDegrees);
 			set => SetProperty(ref _maxTargetAngleDegrees, value);
 		}
+
+		public gameGrenadeThrowQueryParams()
+		{
+			_throwAngleDegrees = -1.000000F;
+			_gravitySimulation = -9.800000F;
+			_minTargetAngleDegrees = -180.000000F;
+			_maxTargetAngleDegrees = 180.000000F;
+		}
 	}
 }

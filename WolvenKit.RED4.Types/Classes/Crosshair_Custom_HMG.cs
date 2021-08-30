@@ -212,5 +212,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _forcedCooldownOptions);
 			set => SetProperty(ref _forcedCooldownOptions, value);
 		}
+
+		public Crosshair_Custom_HMG()
+		{
+			_offsetLeftRight = 0.800000F;
+			_offsetLeftRightExtra = 1.200000F;
+			_latchVertical = 40.000000F;
+		}
 	}
 }

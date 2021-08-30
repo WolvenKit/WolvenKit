@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _fullBannerWidgetData);
 			set => SetProperty(ref _fullBannerWidgetData, value);
 		}
+
+		public NewsFeedMenuWidgetController()
+		{
+			_bannersListWidgetPath = "banners";
+		}
 	}
 }

@@ -239,5 +239,21 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxAngularVelocity);
 			set => SetProperty(ref _maxAngularVelocity, value);
 		}
+
+		public physicsDestructionParams()
+		{
+			_damageThreshold = 25.000000F;
+			_damageEndurance = 10.000000F;
+			_bondEndurance = 20.000000F;
+			_accumulateDamage = true;
+			_impulseToDamage = 1.000000F;
+			_contactToDamage = 10.000000F;
+			_maxContactImpulseRatio = 1.000000F;
+			_impulseChildPropagationFactor = 1.000000F;
+			_impulsePropagationFactor = 0.500000F;
+			_impulseDiminishingFactor = 0.500000F;
+			_debrisMaxSeparation = 50.000000F;
+			_maxAngularVelocity = -1.000000F;
+		}
 	}
 }

@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _useInternalMask);
 			set => SetProperty(ref _useInternalMask, value);
 		}
+
+		public inkScrollAreaWidget()
+		{
+			_useInternalMask = true;
+		}
 	}
 }

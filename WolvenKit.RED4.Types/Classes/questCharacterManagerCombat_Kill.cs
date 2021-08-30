@@ -86,5 +86,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _dismembermentStrenght);
 			set => SetProperty(ref _dismembermentStrenght, value);
 		}
+
+		public questCharacterManagerCombat_Kill()
+		{
+			_skipDefeatedState = true;
+			_woundType = new() { Value = Enums.entdismembermentWoundTypeE.COARSE };
+			_dismembermentStrenght = 8.000000F;
+		}
 	}
 }

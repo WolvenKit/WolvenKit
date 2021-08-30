@@ -86,5 +86,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _onShowVendorListener);
 			set => SetProperty(ref _onShowVendorListener, value);
 		}
+
+		public InteractiveAdInkGameController()
+		{
+			_fadeDuration = 0.500000F;
+		}
 	}
 }

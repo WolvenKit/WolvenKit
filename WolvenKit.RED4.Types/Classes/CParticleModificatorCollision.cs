@@ -95,5 +95,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _killOnCollision);
 			set => SetProperty(ref _killOnCollision, value);
 		}
+
+		public CParticleModificatorCollision()
+		{
+			_dynamicFriction = 0.050000F;
+			_angularVelocityDamp = 0.500000F;
+			_particleMass = 0.100000F;
+			_particleRadius = 0.010000F;
+			_useGPUAcceleration = true;
+		}
 	}
 }

@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _prop);
 			set => SetProperty(ref _prop, value);
 		}
+
+		public workWorkspotGlobalProp()
+		{
+			_id = "[Enter Prop ID Here]";
+		}
 	}
 }

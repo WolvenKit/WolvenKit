@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _goShortPath);
 			set => SetProperty(ref _goShortPath, value);
 		}
+
+		public inkanimRotationInterpolator()
+		{
+			_goShortPath = true;
+		}
 	}
 }

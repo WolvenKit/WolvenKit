@@ -50,5 +50,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _worldSpace);
 			set => SetProperty(ref _worldSpace, value);
 		}
+
+		public CParticleModificatorVelocityTurbulize()
+		{
+			_noiseInterval = 1.000000F;
+			_duration = 1.000000F;
+			_worldSpace = true;
+		}
 	}
 }

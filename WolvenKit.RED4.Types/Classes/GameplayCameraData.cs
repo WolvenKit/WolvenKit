@@ -59,5 +59,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _is_yaw_off);
 			set => SetProperty(ref _is_yaw_off, value);
 		}
+
+		public GameplayCameraData()
+		{
+			_is_forward_offset = 1.000000F;
+			_forward_offset_value = 0.200000F;
+		}
 	}
 }

@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _curveStat);
 			set => SetProperty(ref _curveStat, value);
 		}
+
+		public gameCurveStatModifierData_Deprecated()
+		{
+			_curveStat = new() { Value = Enums.gamedataStatType.Invalid };
+		}
 	}
 }

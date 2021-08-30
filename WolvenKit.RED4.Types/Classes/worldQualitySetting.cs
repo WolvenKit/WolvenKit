@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _xEntitiesBudget);
 			set => SetProperty(ref _xEntitiesBudget, value);
 		}
+
+		public worldQualitySetting()
+		{
+			_qualityLevel = new() { Value = Enums.ConfigGraphicsQualityLevel.Console };
+			_xEntitiesBudget = 50;
+		}
 	}
 }

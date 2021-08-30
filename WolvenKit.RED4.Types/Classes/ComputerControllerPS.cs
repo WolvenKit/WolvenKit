@@ -77,5 +77,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isInSleepMode);
 			set => SetProperty(ref _isInSleepMode, value);
 		}
+
+		public ComputerControllerPS()
+		{
+			_isInSleepMode = true;
+		}
 	}
 }

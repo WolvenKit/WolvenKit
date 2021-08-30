@@ -41,5 +41,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _a);
 			set => SetProperty(ref _a, value);
 		}
+
+		public interopRTTIClassDumpEntry()
+		{
+			_i = -1;
+			_b = -1;
+			_r = -1;
+		}
 	}
 }

@@ -59,5 +59,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _ppOffFrameDelay);
 			set => SetProperty(ref _ppOffFrameDelay, value);
 		}
+
+		public DrillMachineScanManager()
+		{
+			_idleToScanTime = 1.700000F;
+			_ppOffFrameDelay = 2;
+		}
 	}
 }

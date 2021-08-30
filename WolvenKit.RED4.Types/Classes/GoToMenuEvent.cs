@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _ownerID);
 			set => SetProperty(ref _ownerID, value);
 		}
+
+		public GoToMenuEvent()
+		{
+			_wakeUp = true;
+		}
 	}
 }

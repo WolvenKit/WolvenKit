@@ -77,5 +77,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _useAutoOutdoorness);
 			set => SetProperty(ref _useAutoOutdoorness, value);
 		}
+
+		public audioAmbientAreaNotifier()
+		{
+			_obstructionChangeTime = 0.200000F;
+			_rolloffOverride = 1.000000F;
+		}
 	}
 }

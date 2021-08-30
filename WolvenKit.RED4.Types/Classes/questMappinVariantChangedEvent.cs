@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _variant);
 			set => SetProperty(ref _variant, value);
 		}
+
+		public questMappinVariantChangedEvent()
+		{
+			_phase = new() { Value = Enums.gamedataMappinPhase.DefaultPhase };
+			_variant = new() { Value = Enums.gamedataMappinVariant.DefaultVariant };
+		}
 	}
 }

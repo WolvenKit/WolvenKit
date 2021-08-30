@@ -212,5 +212,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _radioPlaysWhenEngineStartsProbability);
 			set => SetProperty(ref _radioPlaysWhenEngineStartsProbability, value);
 		}
+
+		public audioVehicleMetadata()
+		{
+			_dopplerFactor = 1.000000F;
+			_acousticIsolationFactor = 1.000000F;
+			_trafficEmitterMetadata = "acousticsemitter_default_occl_obstr_ignore_5m";
+			_radioReceiverType = "radio_car";
+			_radioPlaysWhenEngineStartsProbability = 0.300000F;
+		}
 	}
 }

@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _timeout);
 			set => SetProperty(ref _timeout, value);
 		}
+
+		public RevealQuestTargetEvent()
+		{
+			_reveal = true;
+			_timeout = 4.000000F;
+		}
 	}
 }

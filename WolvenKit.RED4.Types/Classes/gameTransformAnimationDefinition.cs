@@ -77,5 +77,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _timeline);
 			set => SetProperty(ref _timeline, value);
 		}
+
+		public gameTransformAnimationDefinition()
+		{
+			_timesToPlay = 1;
+			_timeScale = 1.000000F;
+		}
 	}
 }

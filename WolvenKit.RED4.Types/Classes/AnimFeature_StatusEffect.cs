@@ -77,5 +77,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _playImpact);
 			set => SetProperty(ref _playImpact, value);
 		}
+
+		public AnimFeature_StatusEffect()
+		{
+			_duration = -1.000000F;
+			_variation = 1;
+			_impactDirection = -1;
+		}
 	}
 }

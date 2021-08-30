@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _animTime);
 			set => SetProperty(ref _animTime, value);
 		}
+
+		public AnimateAnchorOnHoverView()
+		{
+			_animTime = 0.100000F;
+		}
 	}
 }

@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _rotationTime);
 			set => SetProperty(ref _rotationTime, value);
 		}
+
+		public gameActionRotateBaseState()
+		{
+			_rotationTime = -1.000000F;
+		}
 	}
 }

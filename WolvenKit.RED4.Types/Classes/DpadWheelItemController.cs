@@ -230,5 +230,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _quickHackWheelDefIcon);
 			set => SetProperty(ref _quickHackWheelDefIcon, value);
 		}
+
+		public DpadWheelItemController()
+		{
+			_textDist = 60.000000F;
+			_weaponTextDist = 140.000000F;
+		}
 	}
 }

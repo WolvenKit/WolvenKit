@@ -149,5 +149,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _nodeIDPath);
 			set => SetProperty(ref _nodeIDPath, value);
 		}
+
+		public interopTerrainNodeInfo()
+		{
+			_isTerrainNode = true;
+			_nodeCellResScale = 1.000000F;
+		}
 	}
 }

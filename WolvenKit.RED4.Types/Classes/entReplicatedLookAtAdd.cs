@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _ref);
 			set => SetProperty(ref _ref, value);
 		}
+
+		public entReplicatedLookAtAdd()
+		{
+			_bodyPart = "Eyes";
+		}
 	}
 }

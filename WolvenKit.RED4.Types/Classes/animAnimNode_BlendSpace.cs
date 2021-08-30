@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isLooped);
 			set => SetProperty(ref _isLooped, value);
 		}
+
+		public animAnimNode_BlendSpace()
+		{
+			_isLooped = true;
+		}
 	}
 }

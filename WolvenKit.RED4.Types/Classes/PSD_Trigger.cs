@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _className);
 			set => SetProperty(ref _className, value);
 		}
+
+		public PSD_Trigger()
+		{
+			_className = "PSD_DetectorPS";
+		}
 	}
 }

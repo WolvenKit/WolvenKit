@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _statPoolType);
 			set => SetProperty(ref _statPoolType, value);
 		}
+
+		public gamemappinsMappinScriptData()
+		{
+			_statPoolType = new() { Value = Enums.gamedataStatPoolType.Invalid };
+		}
 	}
 }

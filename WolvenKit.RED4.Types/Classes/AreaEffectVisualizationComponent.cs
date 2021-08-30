@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _activeEffectIndex);
 			set => SetProperty(ref _activeEffectIndex, value);
 		}
+
+		public AreaEffectVisualizationComponent()
+		{
+			_activeEffectIndex = -1;
+		}
 	}
 }

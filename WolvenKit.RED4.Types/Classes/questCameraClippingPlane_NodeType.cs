@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _preset);
 			set => SetProperty(ref _preset, value);
 		}
+
+		public questCameraClippingPlane_NodeType()
+		{
+			_preset = new() { Value = Enums.questCameraPlanesPreset.Normal };
+		}
 	}
 }

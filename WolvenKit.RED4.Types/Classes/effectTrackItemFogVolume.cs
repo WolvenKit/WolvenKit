@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _color);
 			set => SetProperty(ref _color, value);
 		}
+
+		public effectTrackItemFogVolume()
+		{
+			_priority = 5;
+		}
 	}
 }

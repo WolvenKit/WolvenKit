@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _itemOverride);
 			set => SetProperty(ref _itemOverride, value);
 		}
+
+		public scnEventBlendWorkspotSetupParameters()
+		{
+			_idleOnlyMode = true;
+		}
 	}
 }

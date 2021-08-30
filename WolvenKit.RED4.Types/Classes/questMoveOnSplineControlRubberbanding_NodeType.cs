@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _reduceSpeedOnTurns);
 			set => SetProperty(ref _reduceSpeedOnTurns, value);
 		}
+
+		public questMoveOnSplineControlRubberbanding_NodeType()
+		{
+			_reduceSpeedOnTurns = true;
+		}
 	}
 }

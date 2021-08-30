@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isRemote);
 			set => SetProperty(ref _isRemote, value);
 		}
+
+		public SetExposeQuickHacks()
+		{
+			_isRemote = true;
+		}
 	}
 }

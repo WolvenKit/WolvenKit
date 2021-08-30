@@ -77,5 +77,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _renderTextureResource);
 			set => SetProperty(ref _renderTextureResource, value);
 		}
+
+		public CBitmapTexture()
+		{
+			_depth = 1;
+		}
 	}
 }

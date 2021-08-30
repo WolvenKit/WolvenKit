@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isInCombat);
 			set => SetProperty(ref _isInCombat, value);
 		}
+
+		public scnCheckPlayerCombatInterruptConditionParams()
+		{
+			_isInCombat = true;
+		}
 	}
 }

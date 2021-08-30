@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _colorIndex);
 			set => SetProperty(ref _colorIndex, value);
 		}
+
+		public gameNetrunnerPrototypeSpawnRequestEvent()
+		{
+			_colorIndex = 255;
+		}
 	}
 }

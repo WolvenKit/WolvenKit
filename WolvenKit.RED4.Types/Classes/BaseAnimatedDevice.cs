@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _animationType);
 			set => SetProperty(ref _animationType, value);
 		}
+
+		public BaseAnimatedDevice()
+		{
+			_openingSpeed = 2.000000F;
+			_closingSpeed = 2.000000F;
+		}
 	}
 }

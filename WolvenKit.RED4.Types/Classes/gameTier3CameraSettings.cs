@@ -59,5 +59,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _yawSpeedMultiplier);
 			set => SetProperty(ref _yawSpeedMultiplier, value);
 		}
+
+		public gameTier3CameraSettings()
+		{
+			_yawLeftLimit = 60.000000F;
+			_yawRightLimit = 60.000000F;
+			_pitchTopLimit = 60.000000F;
+			_pitchBottomLimit = 45.000000F;
+			_pitchSpeedMultiplier = 1.000000F;
+			_yawSpeedMultiplier = 1.000000F;
+		}
 	}
 }

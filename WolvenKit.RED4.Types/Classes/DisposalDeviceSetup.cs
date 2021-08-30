@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _nonlethalTakedownActionName);
 			set => SetProperty(ref _nonlethalTakedownActionName, value);
 		}
+
+		public DisposalDeviceSetup()
+		{
+			_numberOfUses = 1;
+			_isBodyRequired = true;
+		}
 	}
 }

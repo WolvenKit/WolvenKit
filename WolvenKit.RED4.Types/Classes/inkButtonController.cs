@@ -86,5 +86,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _autoUpdateWidgetState);
 			set => SetProperty(ref _autoUpdateWidgetState, value);
 		}
+
+		public inkButtonController()
+		{
+			_autoUpdateWidgetState = true;
+		}
 	}
 }

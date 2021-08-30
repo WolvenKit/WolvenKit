@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isLookedAt);
 			set => SetProperty(ref _isLookedAt, value);
 		}
+
+		public FocusModeOperationTriggerData()
+		{
+			_isLookedAt = true;
+		}
 	}
 }

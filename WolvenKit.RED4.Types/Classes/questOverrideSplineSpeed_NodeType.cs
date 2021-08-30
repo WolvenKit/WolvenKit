@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _adjustTime);
 			set => SetProperty(ref _adjustTime, value);
 		}
+
+		public questOverrideSplineSpeed_NodeType()
+		{
+			_speed = -1.000000F;
+		}
 	}
 }

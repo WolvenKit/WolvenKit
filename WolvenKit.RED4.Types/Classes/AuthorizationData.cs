@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _authorizationDataEntry);
 			set => SetProperty(ref _authorizationDataEntry, value);
 		}
+
+		public AuthorizationData()
+		{
+			_isAuthorizationModuleOn = true;
+		}
 	}
 }

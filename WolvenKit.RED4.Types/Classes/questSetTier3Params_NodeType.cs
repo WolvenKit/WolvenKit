@@ -131,5 +131,17 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _useExitAnim);
 			set => SetProperty(ref _useExitAnim, value);
 		}
+
+		public questSetTier3Params_NodeType()
+		{
+			_yawLeftLimit = 30.000000F;
+			_yawRightLimit = 30.000000F;
+			_pitchUpLimit = 30.000000F;
+			_pitchDownLimit = 30.000000F;
+			_yawSpeedMultiplier = 1.000000F;
+			_pitchSpeedMultiplier = 1.000000F;
+			_rotationTime = 0.500000F;
+			_usePlayerWorkspot = true;
+		}
 	}
 }

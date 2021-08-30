@@ -77,5 +77,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _tags);
 			set => SetProperty(ref _tags, value);
 		}
+
+		public audioAudioEventMetadataArrayElement()
+		{
+			_wwiseId = 2166136261;
+		}
 	}
 }

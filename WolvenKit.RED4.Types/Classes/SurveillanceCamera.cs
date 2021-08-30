@@ -158,5 +158,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _currentPitchModifier);
 			set => SetProperty(ref _currentPitchModifier, value);
 		}
+
+		public SurveillanceCamera()
+		{
+			_shouldRotate = true;
+			_canDetectIntruders = true;
+		}
 	}
 }

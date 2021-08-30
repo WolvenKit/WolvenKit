@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _gameLogicFilterDefinition);
 			set => SetProperty(ref _gameLogicFilterDefinition, value);
 		}
+
+		public gameinteractionsCHotSpotLayerDefinition()
+		{
+			_priorityMultiplier = 1.000000F;
+		}
 	}
 }

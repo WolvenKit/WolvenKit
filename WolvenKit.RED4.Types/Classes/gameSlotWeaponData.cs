@@ -86,5 +86,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isFirstEquip);
 			set => SetProperty(ref _isFirstEquip, value);
 		}
+
+		public gameSlotWeaponData()
+		{
+			_ammoCurrent = -1;
+			_magazineCap = -1;
+			_triggerModeCurrent = new() { Value = Enums.gamedataTriggerMode.Invalid };
+			_evolution = new() { Value = Enums.gamedataWeaponEvolution.Invalid };
+			_isFirstEquip = true;
+		}
 	}
 }

@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _useEmitterDurationRange);
 			set => SetProperty(ref _useEmitterDurationRange, value);
 		}
+
+		public EmitterDurationSettings()
+		{
+			_emitterDuration = 1.000000F;
+		}
 	}
 }

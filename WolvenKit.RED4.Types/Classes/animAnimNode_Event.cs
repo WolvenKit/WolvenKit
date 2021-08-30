@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _eventValue);
 			set => SetProperty(ref _eventValue, value);
 		}
+
+		public animAnimNode_Event()
+		{
+			_eventValue = 1.000000F;
+		}
 	}
 }

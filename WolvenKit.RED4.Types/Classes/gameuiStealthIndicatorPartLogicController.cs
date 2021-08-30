@@ -86,5 +86,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _scaleAnimDef);
 			set => SetProperty(ref _scaleAnimDef, value);
 		}
+
+		public gameuiStealthIndicatorPartLogicController()
+		{
+			_stealthIndicatorDeadZoneAngle = 40.000000F;
+			_slowestFlashTime = 0.500000F;
+		}
 	}
 }

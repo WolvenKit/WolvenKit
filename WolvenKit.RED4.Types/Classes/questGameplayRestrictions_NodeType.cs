@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _restrictionIDs);
 			set => SetProperty(ref _restrictionIDs, value);
 		}
+
+		public questGameplayRestrictions_NodeType()
+		{
+			_source = "default";
+		}
 	}
 }

@@ -104,5 +104,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _audioCurves);
 			set => SetProperty(ref _audioCurves, value);
 		}
+
+		public questMoveOnSpline_NodeType()
+		{
+			_blendTime = 1.000000F;
+			_sceneBlendInDistance = 15.000000F;
+			_sceneBlendOutDistance = 15.000000F;
+		}
 	}
 }

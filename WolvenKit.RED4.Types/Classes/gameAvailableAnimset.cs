@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _resourcePath);
 			set => SetProperty(ref _resourcePath, value);
 		}
+
+		public gameAvailableAnimset()
+		{
+			_resourcePath = new() { Text = "Unknown" };
+		}
 	}
 }

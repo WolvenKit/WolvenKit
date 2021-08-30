@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _useOnlyGlitchSFX);
 			set => SetProperty(ref _useOnlyGlitchSFX, value);
 		}
+
+		public SpeakerSetup()
+		{
+			_range = 10.000000F;
+			_glitchSFX = "dev_radio_ditraction_glitching";
+		}
 	}
 }

@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _outputMapping);
 			set => SetProperty(ref _outputMapping, value);
 		}
+
+		public ColorGradingLutParams()
+		{
+			_inputMapping = new() { Value = Enums.EColorMappingFunction.CMF_sRGB };
+			_outputMapping = new() { Value = Enums.EColorMappingFunction.CMF_sRGB };
+		}
 	}
 }

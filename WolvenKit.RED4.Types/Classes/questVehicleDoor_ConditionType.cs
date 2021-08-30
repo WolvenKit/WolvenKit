@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _state);
 			set => SetProperty(ref _state, value);
 		}
+
+		public questVehicleDoor_ConditionType()
+		{
+			_state = new() { Value = Enums.vehicleVehicleDoorState.Open };
+		}
 	}
 }

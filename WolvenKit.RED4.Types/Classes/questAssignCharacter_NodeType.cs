@@ -77,5 +77,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _entrySlotName);
 			set => SetProperty(ref _entrySlotName, value);
 		}
+
+		public questAssignCharacter_NodeType()
+		{
+			_assign = true;
+			_slotName = "seat_front_left";
+			_entrySlotName = "default";
+		}
 	}
 }

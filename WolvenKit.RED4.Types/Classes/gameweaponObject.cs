@@ -176,5 +176,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _aIBlackboard);
 			set => SetProperty(ref _aIBlackboard, value);
 		}
+
+		public gameweaponObject()
+		{
+			_maxChargeThreshold = 100.000000F;
+		}
 	}
 }

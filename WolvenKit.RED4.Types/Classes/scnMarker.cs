@@ -59,5 +59,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isMounted);
 			set => SetProperty(ref _isMounted, value);
 		}
+
+		public scnMarker()
+		{
+			_type = new() { Value = Enums.scnMarkerType.Global };
+			_isMounted = true;
+		}
 	}
 }

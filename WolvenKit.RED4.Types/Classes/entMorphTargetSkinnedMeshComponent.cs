@@ -104,5 +104,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _tags);
 			set => SetProperty(ref _tags, value);
 		}
+
+		public entMorphTargetSkinnedMeshComponent()
+		{
+			_meshAppearance = "default";
+			_castShadows = true;
+			_castLocalShadows = true;
+			_acceptDismemberment = true;
+			_chunkMask = 18446744073709551615;
+			_isEnabled = true;
+		}
 	}
 }

@@ -86,5 +86,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _weatherStateValues);
 			set => SetProperty(ref _weatherStateValues, value);
 		}
+
+		public worldEnvAreaNotifier()
+		{
+			_blendTimeIn = 3.000000F;
+			_blendTimeOut = 3.000000F;
+		}
 	}
 }

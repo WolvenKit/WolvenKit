@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _priority);
 			set => SetProperty(ref _priority, value);
 		}
+
+		public gameinteractionsAlwaysSamePredicate()
+		{
+			_priority = 1.000000F;
+		}
 	}
 }

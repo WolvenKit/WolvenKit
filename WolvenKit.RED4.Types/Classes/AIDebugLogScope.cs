@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _id);
 			set => SetProperty(ref _id, value);
 		}
+
+		public AIDebugLogScope()
+		{
+			_index = 4294967295;
+			_id = 4294967295;
+		}
 	}
 }

@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _animationDuration);
 			set => SetProperty(ref _animationDuration, value);
 		}
+
+		public MessangerReplyItemRenderer()
+		{
+			_animationDuration = 0.300000F;
+		}
 	}
 }

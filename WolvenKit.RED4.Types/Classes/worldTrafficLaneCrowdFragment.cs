@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _laneX2);
 			set => SetProperty(ref _laneX2, value);
 		}
+
+		public worldTrafficLaneCrowdFragment()
+		{
+			_crowdCreationDataIndex = 4294967295;
+		}
 	}
 }

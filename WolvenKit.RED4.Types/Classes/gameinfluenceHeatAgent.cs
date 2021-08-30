@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _heatValue);
 			set => SetProperty(ref _heatValue, value);
 		}
+
+		public gameinfluenceHeatAgent()
+		{
+			_heatRadius = 1.500000F;
+			_heatValue = 0.500000F;
+		}
 	}
 }

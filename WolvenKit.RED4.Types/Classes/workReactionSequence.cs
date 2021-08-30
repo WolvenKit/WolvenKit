@@ -86,5 +86,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _facialIdleKey_FemaleAnimation);
 			set => SetProperty(ref _facialIdleKey_FemaleAnimation, value);
 		}
+
+		public workReactionSequence()
+		{
+			_forcedBlendIn = 0.200000F;
+			_facialKeyWeight = 1.000000F;
+		}
 	}
 }

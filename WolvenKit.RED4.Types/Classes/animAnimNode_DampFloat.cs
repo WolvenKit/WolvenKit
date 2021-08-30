@@ -95,5 +95,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _decreaseSpeedNode);
 			set => SetProperty(ref _decreaseSpeedNode, value);
 		}
+
+		public animAnimNode_DampFloat()
+		{
+			_defaultIncreaseSpeed = 1.000000F;
+			_defaultDecreaseSpeed = 1.000000F;
+			_rangeMin = -180.000000F;
+			_rangeMax = 180.000000F;
+		}
 	}
 }

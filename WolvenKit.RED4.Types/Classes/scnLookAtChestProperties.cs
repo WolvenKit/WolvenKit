@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _mode);
 			set => SetProperty(ref _mode, value);
 		}
+
+		public scnLookAtChestProperties()
+		{
+			_enableFactor = 0.350000F;
+		}
 	}
 }

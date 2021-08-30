@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _instant);
 			set => SetProperty(ref _instant, value);
 		}
+
+		public gamestateMachineparameterTypeItemUnequipRequest()
+		{
+			_instant = true;
+		}
 	}
 }

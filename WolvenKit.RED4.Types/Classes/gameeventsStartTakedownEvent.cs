@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _actionName);
 			set => SetProperty(ref _actionName, value);
 		}
+
+		public gameeventsStartTakedownEvent()
+		{
+			_slideTime = -1.000000F;
+		}
 	}
 }

@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _invert);
 			set => SetProperty(ref _invert, value);
 		}
+
+		public inkMaskEffect()
+		{
+			_opacity = 1.000000F;
+		}
 	}
 }

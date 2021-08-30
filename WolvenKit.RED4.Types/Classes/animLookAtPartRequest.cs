@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _mode);
 			set => SetProperty(ref _mode, value);
 		}
+
+		public animLookAtPartRequest()
+		{
+			_weight = 0.500000F;
+		}
 	}
 }

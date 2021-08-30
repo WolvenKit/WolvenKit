@@ -176,5 +176,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _streamingDistance);
 			set => SetProperty(ref _streamingDistance, value);
 		}
+
+		public entRenderToTextureCameraComponent()
+		{
+			_virtualCameraName = "Component";
+			_resolutionWidth = 100;
+			_resolutionHeight = 100;
+			_streamingDistance = 1.000000F;
+		}
 	}
 }

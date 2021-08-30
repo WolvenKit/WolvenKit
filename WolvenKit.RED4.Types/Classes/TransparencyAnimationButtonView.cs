@@ -68,5 +68,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _targets);
 			set => SetProperty(ref _targets, value);
 		}
+
+		public TransparencyAnimationButtonView()
+		{
+			_animationTime = 0.100000F;
+			_hoverTransparency = 0.200000F;
+			_pressTransparency = 0.400000F;
+		}
 	}
 }

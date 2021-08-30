@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _stackOffset);
 			set => SetProperty(ref _stackOffset, value);
 		}
+
+		public worldProxyBoundingBoxSyncParams()
+		{
+			_pullRange = 0.050000F;
+		}
 	}
 }

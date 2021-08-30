@@ -275,5 +275,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _spawnTokens);
 			set => SetProperty(ref _spawnTokens, value);
 		}
+
+		public DialogHubLogicController()
+		{
+			_moveAnimTime = 0.090000F;
+			_inActiveTransparency = 0.100000F;
+		}
 	}
 }

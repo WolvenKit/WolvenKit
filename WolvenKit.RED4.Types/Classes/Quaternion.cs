@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _r);
 			set => SetProperty(ref _r, value);
 		}
+
+		public Quaternion()
+		{
+			_r = 1.000000F;
+		}
 	}
 }

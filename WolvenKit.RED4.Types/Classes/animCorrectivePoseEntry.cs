@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _enabled);
 			set => SetProperty(ref _enabled, value);
 		}
+
+		public animCorrectivePoseEntry()
+		{
+			_enabled = true;
+		}
 	}
 }

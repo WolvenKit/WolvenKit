@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _timeProvider);
 			set => SetProperty(ref _timeProvider, value);
 		}
+
+		public gameinteractionsvisDeviceVisualizerDefinition()
+		{
+			_isDynamic = true;
+		}
 	}
 }

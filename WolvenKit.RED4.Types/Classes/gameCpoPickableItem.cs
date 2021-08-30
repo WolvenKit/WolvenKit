@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _quickSlotID);
 			set => SetProperty(ref _quickSlotID, value);
 		}
+
+		public gameCpoPickableItem()
+		{
+			_quickSlotID = -1;
+		}
 	}
 }

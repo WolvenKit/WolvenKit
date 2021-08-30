@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _tagSpread);
 			set => SetProperty(ref _tagSpread, value);
 		}
+
+		public worldAcousticZoneNode()
+		{
+			_tagSpread = 0.500000F;
+		}
 	}
 }

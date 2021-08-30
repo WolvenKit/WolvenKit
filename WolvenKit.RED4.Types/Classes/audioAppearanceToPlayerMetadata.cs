@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _priority);
 			set => SetProperty(ref _priority, value);
 		}
+
+		public audioAppearanceToPlayerMetadata()
+		{
+			_priority = new() { Value = Enums.audioFoleyItemPriority.P6 };
+		}
 	}
 }

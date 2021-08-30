@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _settings);
 			set => SetProperty(ref _settings, value);
 		}
+
+		public ChangeMusicAction()
+		{
+			_interactionRecordName = new() { Text = "NextStation" };
+		}
 	}
 }

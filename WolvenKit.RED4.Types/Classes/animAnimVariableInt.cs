@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _max);
 			set => SetProperty(ref _max, value);
 		}
+
+		public animAnimVariableInt()
+		{
+			_min = -16;
+			_max = 16;
+		}
 	}
 }

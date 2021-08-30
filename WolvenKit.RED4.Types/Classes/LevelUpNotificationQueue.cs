@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _combatModeListener);
 			set => SetProperty(ref _combatModeListener, value);
 		}
+
+		public LevelUpNotificationQueue()
+		{
+			_duration = 2.000000F;
+		}
 	}
 }

@@ -167,5 +167,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _netClientCurrentlyAppliedState);
 			set => SetProperty(ref _netClientCurrentlyAppliedState, value);
 		}
+
+		public SecurityTurret()
+		{
+			_animFeatureName = "SecurityTurretData";
+			_laserFXSlotName = "laser";
+		}
 	}
 }

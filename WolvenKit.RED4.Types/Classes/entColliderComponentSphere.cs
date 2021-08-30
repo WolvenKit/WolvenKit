@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _radius);
 			set => SetProperty(ref _radius, value);
 		}
+
+		public entColliderComponentSphere()
+		{
+			_radius = 1.000000F;
+		}
 	}
 }

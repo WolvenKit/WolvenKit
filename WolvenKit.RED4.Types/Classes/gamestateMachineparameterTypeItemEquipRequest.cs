@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _startingRenderingPlane);
 			set => SetProperty(ref _startingRenderingPlane, value);
 		}
+
+		public gamestateMachineparameterTypeItemEquipRequest()
+		{
+			_startingRenderingPlane = new() { Value = Enums.ERenderingPlane.RPl_Weapon };
+		}
 	}
 }

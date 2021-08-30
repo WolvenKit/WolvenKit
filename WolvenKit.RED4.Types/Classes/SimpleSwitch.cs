@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _animationSpeed);
 			set => SetProperty(ref _animationSpeed, value);
 		}
+
+		public SimpleSwitch()
+		{
+			_animationSpeed = 1.000000F;
+		}
 	}
 }

@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _providedAuthorizationLevel);
 			set => SetProperty(ref _providedAuthorizationLevel, value);
 		}
+
+		public CoderControllerPS()
+		{
+			_providedAuthorizationLevel = new() { Value = Enums.ESecurityAccessLevel.ESL_4 };
+		}
 	}
 }

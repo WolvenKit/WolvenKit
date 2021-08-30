@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _requestedByTag);
 			set => SetProperty(ref _requestedByTag, value);
 		}
+
+		public animAnimNode_BlendFromPose()
+		{
+			_blendTime = 0.200000F;
+		}
 	}
 }

@@ -59,5 +59,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _staticPoseProgress);
 			set => SetProperty(ref _staticPoseProgress, value);
 		}
+
+		public animAnimNode_BlendSpace_InternalsBlendSpacePoint()
+		{
+			_useFixedCoordinates = true;
+			_staticPoseProgress = -1.000000F;
+		}
 	}
 }

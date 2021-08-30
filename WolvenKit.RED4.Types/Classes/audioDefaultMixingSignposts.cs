@@ -59,5 +59,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _reservedSignposts);
 			set => SetProperty(ref _reservedSignposts, value);
 		}
+
+		public audioDefaultMixingSignposts()
+		{
+			_endOfCombat = "combat_ended";
+			_inCombat = "in_combat";
+			_inStealth = "in_stealth";
+			_aiAlerted = "ai_alerted";
+		}
 	}
 }

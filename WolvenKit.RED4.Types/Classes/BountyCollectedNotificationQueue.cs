@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _bountyNotification);
 			set => SetProperty(ref _bountyNotification, value);
 		}
+
+		public BountyCollectedNotificationQueue()
+		{
+			_duration = 2.000000F;
+			_bountyNotification = "notification_bounty";
+		}
 	}
 }

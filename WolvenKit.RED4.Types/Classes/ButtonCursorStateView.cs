@@ -32,5 +32,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _defaultStateName);
 			set => SetProperty(ref _defaultStateName, value);
 		}
+
+		public ButtonCursorStateView()
+		{
+			_hoverStateName = "Hover";
+			_pressStateName = "Hover";
+			_defaultStateName = "Default";
+		}
 	}
 }

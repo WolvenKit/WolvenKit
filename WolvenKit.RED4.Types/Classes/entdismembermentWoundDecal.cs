@@ -68,5 +68,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _material);
 			set => SetProperty(ref _material, value);
 		}
+
+		public entdismembermentWoundDecal()
+		{
+			_scale = 1.000000F;
+			_fadeOrigin = 0.700000F;
+			_fadePower = 1.000000F;
+		}
 	}
 }

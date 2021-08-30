@@ -41,5 +41,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _acceptNotInstant);
 			set => SetProperty(ref _acceptNotInstant, value);
 		}
+
+		public AIbehaviorMountRequestConditionDefinition()
+		{
+			_testMountRequest = true;
+			_acceptInstant = true;
+			_acceptNotInstant = true;
+		}
 	}
 }

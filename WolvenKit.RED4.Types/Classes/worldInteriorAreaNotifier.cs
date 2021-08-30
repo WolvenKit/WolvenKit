@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _setTier2);
 			set => SetProperty(ref _setTier2, value);
 		}
+
+		public worldInteriorAreaNotifier()
+		{
+			_treatAsInterior = true;
+		}
 	}
 }

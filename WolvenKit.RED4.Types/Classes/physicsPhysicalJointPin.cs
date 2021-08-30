@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _localRotation);
 			set => SetProperty(ref _localRotation, value);
 		}
+
+		public physicsPhysicalJointPin()
+		{
+			_featureIndex = -1;
+		}
 	}
 }

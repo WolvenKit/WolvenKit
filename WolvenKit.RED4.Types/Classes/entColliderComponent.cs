@@ -131,5 +131,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _dynamicTrafficSetting);
 			set => SetProperty(ref _dynamicTrafficSetting, value);
 		}
+
+		public entColliderComponent()
+		{
+			_simulationType = new() { Value = Enums.physicsSimulationType.Kinematic };
+			_massOverride = -1.000000F;
+			_isEnabled = true;
+		}
 	}
 }

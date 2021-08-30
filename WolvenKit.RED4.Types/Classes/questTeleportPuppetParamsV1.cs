@@ -59,5 +59,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _healAtTeleport);
 			set => SetProperty(ref _healAtTeleport, value);
 		}
+
+		public questTeleportPuppetParamsV1()
+		{
+			_resetLookAt = true;
+			_healAtTeleport = true;
+		}
 	}
 }

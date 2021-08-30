@@ -104,5 +104,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _crowdBlacklist);
 			set => SetProperty(ref _crowdBlacklist, value);
 		}
+
+		public worldAISpotNode()
+		{
+			_useCrowdWhitelist = true;
+			_useCrowdBlacklist = true;
+		}
 	}
 }

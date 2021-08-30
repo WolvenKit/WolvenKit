@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _dyngConstraint);
 			set => SetProperty(ref _dyngConstraint, value);
 		}
+
+		public animDangleConstraint_SimulationDyng()
+		{
+			_substepTime = 0.010000F;
+			_solverIterations = 1;
+		}
 	}
 }

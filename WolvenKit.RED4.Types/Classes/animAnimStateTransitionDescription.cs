@@ -122,5 +122,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isOutTransitionFromAction);
 			set => SetProperty(ref _isOutTransitionFromAction, value);
 		}
+
+		public animAnimStateTransitionDescription()
+		{
+			_isEnabled = true;
+		}
 	}
 }

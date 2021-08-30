@@ -86,5 +86,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _locomotionState);
 			set => SetProperty(ref _locomotionState, value);
 		}
+
+		public animAnimFeature_Movement()
+		{
+			_timeToChangeLocomotion = 1.000000F;
+		}
 	}
 }

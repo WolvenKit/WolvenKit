@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _activationTimeStamp);
 			set => SetProperty(ref _activationTimeStamp, value);
 		}
+
+		public SelectorRevalutionBreak()
+		{
+			_reevaluationDuration = 0.100000F;
+		}
 	}
 }

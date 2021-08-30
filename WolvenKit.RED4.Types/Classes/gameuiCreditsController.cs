@@ -221,5 +221,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _exitNotificationDisplayTime);
 			set => SetProperty(ref _exitNotificationDisplayTime, value);
 		}
+
+		public gameuiCreditsController()
+		{
+			_scrollingSpeed = 60.000000F;
+			_fastforwardScrollingSpeed = 1500.000000F;
+			_exitNotificationDisplayTime = 3.000000F;
+		}
 	}
 }

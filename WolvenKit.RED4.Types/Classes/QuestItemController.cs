@@ -158,5 +158,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _questData);
 			set => SetProperty(ref _questData, value);
 		}
+
+		public QuestItemController()
+		{
+			_defaultStateName = "Default";
+			_markedStateName = "Marked";
+		}
 	}
 }

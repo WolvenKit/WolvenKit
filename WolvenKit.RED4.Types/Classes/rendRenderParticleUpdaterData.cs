@@ -194,5 +194,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _eventSpawnObject);
 			set => SetProperty(ref _eventSpawnObject, value);
 		}
+
+		public rendRenderParticleUpdaterData()
+		{
+			_collisionRadius = 0.100000F;
+			_maxCollisions = 6;
+			_eventFrequency = 1.000000F;
+			_eventProbability = 1.000000F;
+			_randomPerChannel = true;
+		}
 	}
 }

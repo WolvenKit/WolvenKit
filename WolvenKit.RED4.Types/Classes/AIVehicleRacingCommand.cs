@@ -113,5 +113,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _rubberBandingStayInFront);
 			set => SetProperty(ref _rubberBandingStayInFront, value);
 		}
+
+		public AIVehicleRacingCommand()
+		{
+			_secureTimeOut = 2.000000F;
+			_startFromClosest = true;
+		}
 	}
 }

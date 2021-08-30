@@ -77,5 +77,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _inputContext);
 			set => SetProperty(ref _inputContext, value);
 		}
+
+		public inkLayerDefinition()
+		{
+			_enabled = true;
+			_useGlobalStyleTheme = true;
+			_isAffectedByFadeout = true;
+			_useGameInput = true;
+		}
 	}
 }

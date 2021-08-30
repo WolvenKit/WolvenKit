@@ -122,5 +122,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _easeOut);
 			set => SetProperty(ref _easeOut, value);
 		}
+
+		public scneventsPlayerLookAtEventParams()
+		{
+			_duration = 0.250000F;
+			_easeIn = true;
+			_easeOut = true;
+		}
 	}
 }

@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _valueChanged);
 			set => SetProperty(ref _valueChanged, value);
 		}
+
+		public inkRadioGroupController()
+		{
+			_selectedIndex = -1;
+		}
 	}
 }

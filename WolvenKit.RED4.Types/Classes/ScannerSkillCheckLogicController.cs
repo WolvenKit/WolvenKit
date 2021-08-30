@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _root);
 			set => SetProperty(ref _root, value);
 		}
+
+		public ScannerSkillCheckLogicController()
+		{
+			_scannerSkillCheckItemName = "SkillCheckItem";
+		}
 	}
 }

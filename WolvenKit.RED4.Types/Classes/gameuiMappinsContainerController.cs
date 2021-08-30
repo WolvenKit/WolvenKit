@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _gpsPlayerTrackedPathWidget);
 			set => SetProperty(ref _gpsPlayerTrackedPathWidget, value);
 		}
+
+		public gameuiMappinsContainerController()
+		{
+			_tier = new() { Value = Enums.GameplayTier.Tier1_FullGameplay };
+		}
 	}
 }

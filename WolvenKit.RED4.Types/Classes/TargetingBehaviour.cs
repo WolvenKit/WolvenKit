@@ -41,5 +41,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lostTargetSearchTime);
 			set => SetProperty(ref _lostTargetSearchTime, value);
 		}
+
+		public TargetingBehaviour()
+		{
+			_canRotate = true;
+			_lostTargetLookAtTime = 2.000000F;
+			_lostTargetSearchTime = 10.000000F;
+		}
 	}
 }

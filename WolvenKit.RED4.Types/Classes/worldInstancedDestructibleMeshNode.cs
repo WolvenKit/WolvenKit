@@ -203,5 +203,16 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _useMeshNavmeshSettings);
 			set => SetProperty(ref _useMeshNavmeshSettings, value);
 		}
+
+		public worldInstancedDestructibleMeshNode()
+		{
+			_simulationType = new() { Value = Enums.physicsSimulationType.Dynamic };
+			_startInactive = true;
+			_damageThreshold = 1.000000F;
+			_damageEndurance = 10.000000F;
+			_accumulateDamage = true;
+			_impulseToDamage = 1.000000F;
+			_useMeshNavmeshSettings = true;
+		}
 	}
 }

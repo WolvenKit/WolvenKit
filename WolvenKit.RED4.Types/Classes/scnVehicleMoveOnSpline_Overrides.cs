@@ -77,5 +77,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _exitMarker);
 			set => SetProperty(ref _exitMarker, value);
 		}
+
+		public scnVehicleMoveOnSpline_Overrides()
+		{
+			_entrySpeed = -1.000000F;
+			_exitSpeed = -1.000000F;
+		}
 	}
 }

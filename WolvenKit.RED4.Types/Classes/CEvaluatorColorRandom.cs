@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _randomPerChannel);
 			set => SetProperty(ref _randomPerChannel, value);
 		}
+
+		public CEvaluatorColorRandom()
+		{
+			_randomPerChannel = true;
+		}
 	}
 }

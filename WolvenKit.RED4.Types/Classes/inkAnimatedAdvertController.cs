@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _loopType);
 			set => SetProperty(ref _loopType, value);
 		}
+
+		public inkAnimatedAdvertController()
+		{
+			_loopType = new() { Value = Enums.inkanimLoopType.Cycle };
+		}
 	}
 }

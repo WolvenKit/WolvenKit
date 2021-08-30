@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _itemRecordID);
 			set => SetProperty(ref _itemRecordID, value);
 		}
+
+		public questRecordSelector()
+		{
+			_isCharacter = true;
+		}
 	}
 }

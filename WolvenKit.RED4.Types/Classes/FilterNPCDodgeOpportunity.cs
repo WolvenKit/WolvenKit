@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _doDodgingTargetsGetFilteredOut);
 			set => SetProperty(ref _doDodgingTargetsGetFilteredOut, value);
 		}
+
+		public FilterNPCDodgeOpportunity()
+		{
+			_doDodgingTargetsGetFilteredOut = true;
+		}
 	}
 }

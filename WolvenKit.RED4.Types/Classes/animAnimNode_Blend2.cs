@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _weightNode);
 			set => SetProperty(ref _weightNode, value);
 		}
+
+		public animAnimNode_Blend2()
+		{
+			_maxInputValue = 1.000000F;
+		}
 	}
 }

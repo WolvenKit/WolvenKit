@@ -104,5 +104,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _conclusionQuestState);
 			set => SetProperty(ref _conclusionQuestState, value);
 		}
+
+		public FocusClueDefinition()
+		{
+			_isProgressing = true;
+		}
 	}
 }

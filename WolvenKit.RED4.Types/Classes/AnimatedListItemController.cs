@@ -131,5 +131,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _animPulseOptions);
 			set => SetProperty(ref _animPulseOptions, value);
 		}
+
+		public AnimatedListItemController()
+		{
+			_animOutName = "MenuButtonFadeOut";
+			_animPulseName = "MenuButtonPulse";
+			_normalRootOpacity = 1.000000F;
+			_hoverRootOpacity = 1.000000F;
+		}
 	}
 }

@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _tokenAlreadyGiven);
 			set => SetProperty(ref _tokenAlreadyGiven, value);
 		}
+
+		public questMultiplayerGiveChoiceTokenEvent()
+		{
+			_timeout = 4294967295;
+		}
 	}
 }

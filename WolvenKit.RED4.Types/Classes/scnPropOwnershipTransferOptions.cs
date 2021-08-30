@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _removeFromInventory);
 			set => SetProperty(ref _removeFromInventory, value);
 		}
+
+		public scnPropOwnershipTransferOptions()
+		{
+			_dettachFromSlot = true;
+			_removeFromInventory = true;
+		}
 	}
 }

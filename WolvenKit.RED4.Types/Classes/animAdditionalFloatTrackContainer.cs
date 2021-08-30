@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _overwriteExistingValues);
 			set => SetProperty(ref _overwriteExistingValues, value);
 		}
+
+		public animAdditionalFloatTrackContainer()
+		{
+			_overwriteExistingValues = true;
+		}
 	}
 }

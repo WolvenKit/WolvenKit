@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _method);
 			set => SetProperty(ref _method, value);
 		}
+
+		public gameAvailableExposureMethodResult()
+		{
+			_distanceToTarget = 340282346638528859811704183484516925440.000000F;
+			_method = new() { Value = Enums.AICoverExposureMethod.Count };
+		}
 	}
 }

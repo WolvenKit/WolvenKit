@@ -86,5 +86,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isGameRunning);
 			set => SetProperty(ref _isGameRunning, value);
 		}
+
+		public gameuiSideScrollerMiniGameLogicController()
+		{
+			_startHealth = 3;
+		}
 	}
 }

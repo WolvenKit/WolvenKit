@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _condition);
 			set => SetProperty(ref _condition, value);
 		}
+
+		public AIFSMTransitionDefinition()
+		{
+			_destination = 65535;
+		}
 	}
 }

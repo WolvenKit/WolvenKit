@@ -158,5 +158,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _decalNodeVersion);
 			set => SetProperty(ref _decalNodeVersion, value);
 		}
+
+		public worldStaticDecalNode()
+		{
+			_autoHideDistance = 20.000000F;
+			_alpha = 1.000000F;
+			_normalThreshold = 1.000000F;
+			_roughnessScale = 1.000000F;
+			_enableNormalTreshold = true;
+			_shouldCollectWithRayTracing = true;
+		}
 	}
 }

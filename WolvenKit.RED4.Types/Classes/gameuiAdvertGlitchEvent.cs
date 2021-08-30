@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _glitchValue);
 			set => SetProperty(ref _glitchValue, value);
 		}
+
+		public gameuiAdvertGlitchEvent()
+		{
+			_glitchValue = 1.000000F;
+		}
 	}
 }

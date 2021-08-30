@@ -77,5 +77,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _collisionCapsuleHeightExtent);
 			set => SetProperty(ref _collisionCapsuleHeightExtent, value);
 		}
+
+		public animDyngConstraintCone()
+		{
+			_halfOfMaxApertureAngle = 45.000000F;
+			_projectionType = new() { Value = Enums.animPendulumProjectionType.ShortestPathRotational };
+		}
 	}
 }

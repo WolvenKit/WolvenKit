@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _tickCount);
 			set => SetProperty(ref _tickCount, value);
 		}
+
+		public questTickDelay_ConditionType()
+		{
+			_tickCount = 1;
+		}
 	}
 }

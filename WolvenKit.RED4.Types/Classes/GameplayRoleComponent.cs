@@ -158,5 +158,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isForcedVisibleThroughWalls);
 			set => SetProperty(ref _isForcedVisibleThroughWalls, value);
 		}
+
+		public GameplayRoleComponent()
+		{
+			_autoDeterminGameplayRole = true;
+			_mappinsDisplayMode = new() { Value = Enums.EMappinDisplayMode.MINIMALISTIC };
+			_alwaysCreateMappinAsDynamic = true;
+			_offsetValue = 0.040000F;
+		}
 	}
 }

@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _sendNotification);
 			set => SetProperty(ref _sendNotification, value);
 		}
+
+		public questChangeContactList_NodeTypeParams()
+		{
+			_addContact = true;
+			_sendNotification = true;
+		}
 	}
 }

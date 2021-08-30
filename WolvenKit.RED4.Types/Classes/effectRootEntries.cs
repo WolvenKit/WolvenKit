@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _roots);
 			set => SetProperty(ref _roots, value);
 		}
+
+		public effectRootEntries()
+		{
+			_inheritRotation = true;
+		}
 	}
 }

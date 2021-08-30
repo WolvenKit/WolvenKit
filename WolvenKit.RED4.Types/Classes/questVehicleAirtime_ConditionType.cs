@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _seconds);
 			set => SetProperty(ref _seconds, value);
 		}
+
+		public questVehicleAirtime_ConditionType()
+		{
+			_seconds = 1.000000F;
+		}
 	}
 }

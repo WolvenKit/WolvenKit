@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _mountData);
 			set => SetProperty(ref _mountData, value);
 		}
+
+		public gamemountingMountingRequest()
+		{
+			_preservePositionAfterMounting = true;
+		}
 	}
 }

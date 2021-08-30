@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _shouldSpawnBloodPuddle);
 			set => SetProperty(ref _shouldSpawnBloodPuddle, value);
 		}
+
+		public SetBloodPuddleSettingsEvent()
+		{
+			_shouldSpawnBloodPuddle = true;
+		}
 	}
 }

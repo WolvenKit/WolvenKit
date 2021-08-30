@@ -86,5 +86,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _visibilityDistance);
 			set => SetProperty(ref _visibilityDistance, value);
 		}
+
+		public worldStaticStickerNode()
+		{
+			_showBackground = true;
+			_spriteSize = 40;
+			_alignSpritesHorizontally = true;
+			_scale = 1.000000F;
+			_visibilityDistance = 25.000000F;
+		}
 	}
 }

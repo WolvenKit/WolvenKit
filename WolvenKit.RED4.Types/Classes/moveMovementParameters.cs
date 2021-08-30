@@ -50,5 +50,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _rotationSpeed);
 			set => SetProperty(ref _rotationSpeed, value);
 		}
+
+		public moveMovementParameters()
+		{
+			_maxSpeed = 4.500000F;
+			_acceleration = 16.000000F;
+			_deceleration = 16.000000F;
+			_rotationSpeed = 180.000000F;
+		}
 	}
 }

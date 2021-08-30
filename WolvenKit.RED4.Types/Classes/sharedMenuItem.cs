@@ -77,5 +77,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _checkGroup);
 			set => SetProperty(ref _checkGroup, value);
 		}
+
+		public sharedMenuItem()
+		{
+			_isEnabled = true;
+		}
 	}
 }

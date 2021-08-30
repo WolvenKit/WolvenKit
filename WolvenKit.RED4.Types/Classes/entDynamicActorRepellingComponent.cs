@@ -95,5 +95,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _capsuleHeight);
 			set => SetProperty(ref _capsuleHeight, value);
 		}
+
+		public entDynamicActorRepellingComponent()
+		{
+			_magnitude = 5.000000F;
+			_bendIntensity = 1.000000F;
+			_radius = 1.000000F;
+			_capsuleRadius = 1.000000F;
+			_capsuleHeight = 2.000000F;
+		}
 	}
 }

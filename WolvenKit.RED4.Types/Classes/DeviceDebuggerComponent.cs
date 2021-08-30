@@ -77,5 +77,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _layerIDs);
 			set => SetProperty(ref _layerIDs, value);
 		}
+
+		public DeviceDebuggerComponent()
+		{
+			_previousContext = new() { Text = "NONE" };
+			_cachedContext = new() { Text = "NONE" };
+		}
 	}
 }

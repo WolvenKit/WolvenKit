@@ -140,5 +140,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _score200ChanceCoeff);
 			set => SetProperty(ref _score200ChanceCoeff, value);
 		}
+
+		public gameuiPanzerEnemy()
+		{
+			_noBonusChanceCoeff = 80;
+			_lifeBonusChanceCoeff = 5;
+			_scoreBonusChanceCoeff = 15;
+			_score50ChanceCoeff = 50;
+			_score100ChanceCoeff = 35;
+			_score200ChanceCoeff = 15;
+		}
 	}
 }

@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _editOpacity);
 			set => SetProperty(ref _editOpacity, value);
 		}
+
+		public inkSettingsSelectorControllerKeyBinding()
+		{
+			_editOpacity = 0.400000F;
+		}
 	}
 }

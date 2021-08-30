@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _enable);
 			set => SetProperty(ref _enable, value);
 		}
+
+		public scnToggleScenario_InterruptionScenarioOperation()
+		{
+			_enable = true;
+		}
 	}
 }

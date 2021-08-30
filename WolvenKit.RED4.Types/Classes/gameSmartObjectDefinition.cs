@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _overrideGeneratedParameters);
 			set => SetProperty(ref _overrideGeneratedParameters, value);
 		}
+
+		public gameSmartObjectDefinition()
+		{
+			_enabled = true;
+		}
 	}
 }

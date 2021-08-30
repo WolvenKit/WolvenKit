@@ -59,5 +59,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _rotationSpeed);
 			set => SetProperty(ref _rotationSpeed, value);
 		}
+
+		public DetectionParameters()
+		{
+			_canDetectIntruders = true;
+			_timeToActionAfterSpot = 2.000000F;
+			_maxRotationAngle = 90.000000F;
+			_pitchAngle = -15.000000F;
+			_rotationSpeed = 5.000000F;
+		}
 	}
 }

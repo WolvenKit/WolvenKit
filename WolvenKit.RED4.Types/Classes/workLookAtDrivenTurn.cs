@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _blendTime);
 			set => SetProperty(ref _blendTime, value);
 		}
+
+		public workLookAtDrivenTurn()
+		{
+			_blendTime = 0.500000F;
+		}
 	}
 }

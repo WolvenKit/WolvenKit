@@ -104,5 +104,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _stimTypeTriggeredAlarm);
 			set => SetProperty(ref _stimTypeTriggeredAlarm, value);
 		}
+
+		public SecuritySystemInput()
+		{
+			_id = -1;
+		}
 	}
 }

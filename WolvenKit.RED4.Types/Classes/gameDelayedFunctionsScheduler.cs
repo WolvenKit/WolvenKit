@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _nextCallId);
 			set => SetProperty(ref _nextCallId, value);
 		}
+
+		public gameDelayedFunctionsScheduler()
+		{
+			_nextCallId = 1;
+		}
 	}
 }

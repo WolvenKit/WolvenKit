@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _screenAreaMultiplier);
 			set => SetProperty(ref _screenAreaMultiplier, value);
 		}
+
+		public gameuiScreenAreaMultiplierChangeEvent()
+		{
+			_screenAreaMultiplier = 1.000000F;
+		}
 	}
 }

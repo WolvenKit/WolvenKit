@@ -59,5 +59,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _speed);
 			set => SetProperty(ref _speed, value);
 		}
+
+		public animAnimNode_ValueBySpeed()
+		{
+			_clampType = new() { Value = Enums.animClampType.Clamp };
+			_rangeMax = 1.000000F;
+			_resetOnActivation = true;
+		}
 	}
 }

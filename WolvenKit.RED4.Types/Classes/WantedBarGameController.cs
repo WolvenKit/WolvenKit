@@ -113,5 +113,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _wANTED_MIN);
 			set => SetProperty(ref _wANTED_MIN, value);
 		}
+
+		public WantedBarGameController()
+		{
+			_wANTED_TIER_1 = 1.000000F;
+			_wANTED_MIN = 0.100000F;
+		}
 	}
 }

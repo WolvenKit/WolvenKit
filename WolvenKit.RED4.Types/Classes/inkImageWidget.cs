@@ -113,5 +113,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _tileVAlign);
 			set => SetProperty(ref _tileVAlign, value);
 		}
+
+		public inkImageWidget()
+		{
+			_tileHAlign = new() { Value = Enums.inkEHorizontalAlign.Left };
+			_tileVAlign = new() { Value = Enums.inkEVerticalAlign.Top };
+		}
 	}
 }

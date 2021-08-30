@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _request);
 			set => SetProperty(ref _request, value);
 		}
+
+		public scnIKEventData()
+		{
+			_chainName = "ikRightArm";
+		}
 	}
 }

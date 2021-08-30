@@ -383,5 +383,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _animIntroProxy);
 			set => SetProperty(ref _animIntroProxy, value);
 		}
+
+		public DialogChoiceLogicController()
+		{
+			_animationTime = 0.150000F;
+			_animationSpeed = 500.000000F;
+			_controllerPromptLimit = 3;
+			_fadingOptionEndTransparency = 0.100000F;
+		}
 	}
 }

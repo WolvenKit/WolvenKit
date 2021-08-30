@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _objectRef);
 			set => SetProperty(ref _objectRef, value);
 		}
+
+		public questReplacer_NodeType()
+		{
+			_enable = true;
+		}
 	}
 }

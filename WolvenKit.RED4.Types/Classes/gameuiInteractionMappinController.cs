@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _arrowWidgetName);
 			set => SetProperty(ref _arrowWidgetName, value);
 		}
+
+		public gameuiInteractionMappinController()
+		{
+			_canvasWidgetName = "Canvas";
+			_arrowWidgetName = "Arrow";
+		}
 	}
 }

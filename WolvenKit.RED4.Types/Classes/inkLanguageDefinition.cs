@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _fonts);
 			set => SetProperty(ref _fonts, value);
 		}
+
+		public inkLanguageDefinition()
+		{
+			_languageCode = "en-us";
+			_isoScriptCode = "Latn";
+		}
 	}
 }

@@ -104,5 +104,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _invalid);
 			set => SetProperty(ref _invalid, value);
 		}
+
+		public animLookAtRequest()
+		{
+			_transitionSpeed = 60.000000F;
+			_outTransitionSpeed = 60.000000F;
+			_followingSpeedFactorOverride = -1.000000F;
+		}
 	}
 }

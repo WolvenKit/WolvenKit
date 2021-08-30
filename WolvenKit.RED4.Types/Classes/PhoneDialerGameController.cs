@@ -203,5 +203,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _firstInit);
 			set => SetProperty(ref _firstInit, value);
 		}
+
+		public PhoneDialerGameController()
+		{
+			_soundName = "Phone";
+			_audioPhoneNavigation = "ui_phone_navigation";
+		}
 	}
 }

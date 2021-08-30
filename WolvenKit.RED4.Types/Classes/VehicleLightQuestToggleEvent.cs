@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lightType);
 			set => SetProperty(ref _lightType, value);
 		}
+
+		public VehicleLightQuestToggleEvent()
+		{
+			_lightType = new() { Value = Enums.vehicleELightType.Default };
+		}
 	}
 }

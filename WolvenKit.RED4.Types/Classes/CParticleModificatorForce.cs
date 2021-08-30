@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _damp);
 			set => SetProperty(ref _damp, value);
 		}
+
+		public CParticleModificatorForce()
+		{
+			_radius = 10.000000F;
+		}
 	}
 }

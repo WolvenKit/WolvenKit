@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _actionType);
 			set => SetProperty(ref _actionType, value);
 		}
+
+		public gameMuppetInputActionRangedAttack()
+		{
+			_actionType = new() { Value = Enums.gameMuppetInputActionType.Press };
+		}
 	}
 }

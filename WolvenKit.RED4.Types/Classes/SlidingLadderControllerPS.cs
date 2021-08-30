@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _animationTime);
 			set => SetProperty(ref _animationTime, value);
 		}
+
+		public SlidingLadderControllerPS()
+		{
+			_isShootable = true;
+			_animationTime = 1.000000F;
+		}
 	}
 }

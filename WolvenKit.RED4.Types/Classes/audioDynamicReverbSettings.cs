@@ -140,5 +140,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _reportPositionType);
 			set => SetProperty(ref _reportPositionType, value);
 		}
+
+		public audioDynamicReverbSettings()
+		{
+			_smallReverbMaxDistance = 20.000000F;
+			_smallReverbFadeOutThreshold = 15.000000F;
+			_weaponTailType = new() { Value = Enums.audioWeaponTailEnvironment.ExteriorUrbanNarrow };
+		}
 	}
 }

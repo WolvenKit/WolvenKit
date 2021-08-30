@@ -59,5 +59,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _fovExposureDegrees);
 			set => SetProperty(ref _fovExposureDegrees, value);
 		}
+
+		public gameCoverObject()
+		{
+			_coverType = new() { Value = Enums.animCoverState.LowCover };
+			_slotRadius = 0.800000F;
+			_hpMax = 1000.000000F;
+			_isDestructible = true;
+			_fovDegrees = 120.000000F;
+			_fovExposureDegrees = 160.000000F;
+		}
 	}
 }

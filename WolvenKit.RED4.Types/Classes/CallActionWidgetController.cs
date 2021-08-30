@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _status);
 			set => SetProperty(ref _status, value);
 		}
+
+		public CallActionWidgetController()
+		{
+			_callingAnimName = "calling_animation_maelstrom";
+			_talkingAnimName = "talking_animation_maelstrom";
+		}
 	}
 }

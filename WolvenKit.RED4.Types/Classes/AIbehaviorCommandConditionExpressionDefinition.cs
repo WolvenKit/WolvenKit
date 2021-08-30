@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isExecuting);
 			set => SetProperty(ref _isExecuting, value);
 		}
+
+		public AIbehaviorCommandConditionExpressionDefinition()
+		{
+			_isEnqueued = true;
+		}
 	}
 }

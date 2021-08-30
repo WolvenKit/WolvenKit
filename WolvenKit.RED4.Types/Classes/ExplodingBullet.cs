@@ -131,5 +131,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _bulletCollisionEvaluator);
 			set => SetProperty(ref _bulletCollisionEvaluator, value);
 		}
+
+		public ExplodingBullet()
+		{
+			_explodeAfterRangeTravelled = true;
+		}
 	}
 }

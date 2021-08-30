@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lowGravityStateMachineName);
 			set => SetProperty(ref _lowGravityStateMachineName, value);
 		}
+
+		public GravityChangeTrigger()
+		{
+			_regularStateMachineName = "Locomotion";
+			_lowGravityStateMachineName = "LocomotionLowGravity";
+		}
 	}
 }

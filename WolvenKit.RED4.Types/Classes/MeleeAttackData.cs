@@ -311,5 +311,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _ikOffset);
 			set => SetProperty(ref _ikOffset, value);
 		}
+
+		public MeleeAttackData()
+		{
+			_trailStartDelay = 0.100000F;
+			_trailStopDelay = 0.500000F;
+		}
 	}
 }

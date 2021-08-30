@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _restitution);
 			set => SetProperty(ref _restitution, value);
 		}
+
+		public CParticleModificatorVectorFieldAttractor()
+		{
+			_inheritVelocity = true;
+		}
 	}
 }

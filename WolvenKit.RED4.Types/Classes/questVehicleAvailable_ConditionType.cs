@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _vehicleName);
 			set => SetProperty(ref _vehicleName, value);
 		}
+
+		public questVehicleAvailable_ConditionType()
+		{
+			_vehicleType = new() { Value = Enums.questAvailableVehicleType.SpecificVehicle };
+		}
 	}
 }

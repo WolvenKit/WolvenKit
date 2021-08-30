@@ -131,5 +131,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _ambientPaletteTag);
 			set => SetProperty(ref _ambientPaletteTag, value);
 		}
+
+		public worldStaticSoundEmitterNode()
+		{
+			_obstructionChangeTime = 0.200000F;
+			_dopplerFactor = 1.000000F;
+			_rolloffOverride = 1.000000F;
+		}
 	}
 }

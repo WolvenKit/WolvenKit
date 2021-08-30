@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _negateOutput);
 			set => SetProperty(ref _negateOutput, value);
 		}
+
+		public animAnimNode_LookAtPose360Direction()
+		{
+			_angleOffset = -90.000000F;
+		}
 	}
 }

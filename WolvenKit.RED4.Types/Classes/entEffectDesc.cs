@@ -68,5 +68,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _randomWeight);
 			set => SetProperty(ref _randomWeight, value);
 		}
+
+		public entEffectDesc()
+		{
+			_autoSpawnTag = "_autospawn";
+			_randomWeight = 1;
+		}
 	}
 }

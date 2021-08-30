@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _mask);
 			set => SetProperty(ref _mask, value);
 		}
+
+		public scnGenderMask()
+		{
+			_mask = 128;
+		}
 	}
 }

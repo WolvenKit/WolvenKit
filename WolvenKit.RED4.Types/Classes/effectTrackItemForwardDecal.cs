@@ -122,5 +122,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _fadeInTime);
 			set => SetProperty(ref _fadeInTime, value);
 		}
+
+		public effectTrackItemForwardDecal()
+		{
+			_appearance = "default";
+			_sizeThreshold = 0.050000F;
+			_subUVx = 1;
+			_subUVy = 1;
+		}
 	}
 }

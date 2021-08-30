@@ -86,5 +86,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _blocked);
 			set => SetProperty(ref _blocked, value);
 		}
+
+		public RadialSlot()
+		{
+			_active = new() { Text = "Hover" };
+			_inactive = new() { Text = "Default" };
+			_blocked = new() { Text = "Blocked" };
+		}
 	}
 }

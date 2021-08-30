@@ -86,5 +86,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _trafficTryNeighborsForEnd);
 			set => SetProperty(ref _trafficTryNeighborsForEnd, value);
 		}
+
+		public questvehicleToNodeParams()
+		{
+			_stopAtEnd = true;
+			_useTraffic = true;
+			_forceGreenLights = true;
+		}
 	}
 }

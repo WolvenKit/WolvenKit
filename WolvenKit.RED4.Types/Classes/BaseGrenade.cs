@@ -491,5 +491,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _cpoTimeBeforeRelease);
 			set => SetProperty(ref _cpoTimeBeforeRelease, value);
 		}
+
+		public BaseGrenade()
+		{
+			_isAlive = true;
+			_cpoTimeBeforeRelease = 3.000000F;
+		}
 	}
 }

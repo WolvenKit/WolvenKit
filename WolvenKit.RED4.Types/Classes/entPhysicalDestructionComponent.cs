@@ -68,5 +68,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _audioMetadata);
 			set => SetProperty(ref _audioMetadata, value);
 		}
+
+		public entPhysicalDestructionComponent()
+		{
+			_meshAppearance = "default";
+			_isEnabled = true;
+		}
 	}
 }

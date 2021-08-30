@@ -239,5 +239,22 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _noFadeBlend);
 			set => SetProperty(ref _noFadeBlend, value);
 		}
+
+		public worldReflectionProbeNode()
+		{
+			_priority = 2;
+			_boxProjection = true;
+			_neighborMode = new() { Value = Enums.envUtilsNeighborMode.eONLY_SELF };
+			_emissiveScale = 1.000000F;
+			_reflectionDimming = 1.000000F;
+			_skyScale = 1.000000F;
+			_volFogAmbient = true;
+			_brightnessEVClamp = 8;
+			_nearClipDistance = 0.010000F;
+			_farClipDistance = 4000.000000F;
+			_blendRange = 20;
+			_streamingDistance = 64.000000F;
+			_streamingHeight = -1.000000F;
+		}
 	}
 }

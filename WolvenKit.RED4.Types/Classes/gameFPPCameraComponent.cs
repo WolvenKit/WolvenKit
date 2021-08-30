@@ -77,5 +77,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _timeDilationCurveName);
 			set => SetProperty(ref _timeDilationCurveName, value);
 		}
+
+		public gameFPPCameraComponent()
+		{
+			_sensitivityMultX = 1.000000F;
+			_sensitivityMultY = 1.000000F;
+		}
 	}
 }

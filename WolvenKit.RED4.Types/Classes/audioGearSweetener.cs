@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _burnoutFactor);
 			set => SetProperty(ref _burnoutFactor, value);
 		}
+
+		public audioGearSweetener()
+		{
+			_burnoutFactor = 1.000000F;
+		}
 	}
 }

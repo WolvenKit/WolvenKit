@@ -86,5 +86,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _colorMaskLevelsOut);
 			set => SetProperty(ref _colorMaskLevelsOut, value);
 		}
+
+		public Multilayer_LayerTemplate()
+		{
+			_tilingMultiplier = 1.000000F;
+		}
 	}
 }

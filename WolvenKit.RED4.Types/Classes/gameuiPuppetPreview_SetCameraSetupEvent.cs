@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _delayed);
 			set => SetProperty(ref _delayed, value);
 		}
+
+		public gameuiPuppetPreview_SetCameraSetupEvent()
+		{
+			_setupIndex = 4294967295;
+		}
 	}
 }

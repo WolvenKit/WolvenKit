@@ -95,5 +95,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _streamingDistance);
 			set => SetProperty(ref _streamingDistance, value);
 		}
+
+		public gamePhotoModeBackgroundCameraComponent()
+		{
+			_virtualCameraName = "Component";
+			_streamingDistance = 1.000000F;
+		}
 	}
 }

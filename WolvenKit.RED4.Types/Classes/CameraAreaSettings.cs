@@ -59,5 +59,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _fStop);
 			set => SetProperty(ref _fStop, value);
 		}
+
+		public CameraAreaSettings()
+		{
+			_cameraNearPlane = 0.400000F;
+			_cameraFarPlane = 8000.000000F;
+			_iSO = 100;
+			_shutterTime = 125.000000F;
+			_fStop = 8.000000F;
+		}
 	}
 }

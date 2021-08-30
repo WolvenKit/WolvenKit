@@ -95,5 +95,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _ownerID);
 			set => SetProperty(ref _ownerID, value);
 		}
+
+		public CustomAnimationsHudGameController()
+		{
+			_defaultLibraryItemAnchor = new() { Value = Enums.inkEAnchor.Fill };
+		}
 	}
 }

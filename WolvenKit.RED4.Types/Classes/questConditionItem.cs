@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _socketId);
 			set => SetProperty(ref _socketId, value);
 		}
+
+		public questConditionItem()
+		{
+			_socketId = 1734736146;
+		}
 	}
 }

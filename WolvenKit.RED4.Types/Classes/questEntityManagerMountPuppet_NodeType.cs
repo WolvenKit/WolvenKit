@@ -77,5 +77,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _removePitchRollRotation);
 			set => SetProperty(ref _removePitchRollRotation, value);
 		}
+
+		public questEntityManagerMountPuppet_NodeType()
+		{
+			_assign = true;
+			_isInstant = true;
+			_forcedCarryStyle = new() { Value = Enums.gamePSMBodyCarryingStyle.Friendly };
+			_removePitchRollRotation = true;
+		}
 	}
 }

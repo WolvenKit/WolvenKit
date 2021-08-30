@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _globalStreamingDistanceScale);
 			set => SetProperty(ref _globalStreamingDistanceScale, value);
 		}
+
+		public worldPerformanceAreaNode()
+		{
+			_globalStreamingDistanceScale = 1.000000F;
+		}
 	}
 }

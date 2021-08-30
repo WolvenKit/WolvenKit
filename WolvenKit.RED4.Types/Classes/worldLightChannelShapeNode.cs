@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _streamingDistanceFactor);
 			set => SetProperty(ref _streamingDistanceFactor, value);
 		}
+
+		public worldLightChannelShapeNode()
+		{
+			_channels = new() { Value = Enums.rendLightChannel.LC_Channel1 };
+			_streamingDistanceFactor = 5.000000F;
+		}
 	}
 }

@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _operationType);
 			set => SetProperty(ref _operationType, value);
 		}
+
+		public SFactToChange()
+		{
+			_operationType = new() { Value = Enums.EMathOperationType.Set };
+		}
 	}
 }

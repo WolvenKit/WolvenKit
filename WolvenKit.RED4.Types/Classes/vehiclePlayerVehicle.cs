@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isUnlocked);
 			set => SetProperty(ref _isUnlocked, value);
 		}
+
+		public vehiclePlayerVehicle()
+		{
+			_vehicleType = new() { Value = Enums.gamedataVehicleType.Invalid };
+		}
 	}
 }

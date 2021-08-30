@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _modulate);
 			set => SetProperty(ref _modulate, value);
 		}
+
+		public CParticleModificatorSizeOverLife()
+		{
+			_scale = 1.000000F;
+			_modulate = true;
+		}
 	}
 }

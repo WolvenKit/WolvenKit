@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _facialInstantTransition);
 			set => SetProperty(ref _facialInstantTransition, value);
 		}
+
+		public scnChangeIdleAnimEvent()
+		{
+			_isEnabled = true;
+		}
 	}
 }

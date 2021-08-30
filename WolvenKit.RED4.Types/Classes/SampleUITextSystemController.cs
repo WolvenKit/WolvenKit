@@ -176,5 +176,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _animateValueWidget);
 			set => SetProperty(ref _animateValueWidget, value);
 		}
+
+		public SampleUITextSystemController()
+		{
+			_numberToInject = 1;
+			_stringToInject = new() { Text = "Dex" };
+		}
 	}
 }

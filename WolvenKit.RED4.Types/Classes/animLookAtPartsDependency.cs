@@ -113,5 +113,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _innerSquareScale);
 			set => SetProperty(ref _innerSquareScale, value);
 		}
+
+		public animLookAtPartsDependency()
+		{
+			_angle = 10.000000F;
+			_speedToTargetFactor = 1.000000F;
+			_verticalPullSpeedFactor = 1.000000F;
+			_horizontalPullSpeedFactor = 1.000000F;
+			_pullScaleBySquareSizeFactor = 1.000000F;
+			_innerSquareScale = 0.500000F;
+		}
 	}
 }

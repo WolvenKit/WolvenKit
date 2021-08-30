@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _distanceLeft);
 			set => SetProperty(ref _distanceLeft, value);
 		}
+
+		public gameinteractionsCrosswalkEvent()
+		{
+			_trafficLightColor = new() { Value = Enums.worldTrafficLightColor.INVALID };
+			_oldTrafficLightColor = new() { Value = Enums.worldTrafficLightColor.INVALID };
+		}
 	}
 }

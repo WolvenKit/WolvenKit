@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _offset);
 			set => SetProperty(ref _offset, value);
 		}
+
+		public animAnimNode_MultipleParentConstraint_ParentInfo()
+		{
+			_parentStaticWeight = 1.000000F;
+		}
 	}
 }

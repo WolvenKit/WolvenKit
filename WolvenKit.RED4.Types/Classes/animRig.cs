@@ -158,5 +158,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _ragdollNames);
 			set => SetProperty(ref _ragdollNames, value);
 		}
+
+		public animRig()
+		{
+			_turnOffLOD = -1;
+		}
 	}
 }

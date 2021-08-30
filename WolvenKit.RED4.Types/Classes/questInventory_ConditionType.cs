@@ -59,5 +59,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _comparisonType);
 			set => SetProperty(ref _comparisonType, value);
 		}
+
+		public questInventory_ConditionType()
+		{
+			_isPlayer = true;
+			_comparisonType = new() { Value = Enums.EComparisonType.Equal };
+		}
 	}
 }

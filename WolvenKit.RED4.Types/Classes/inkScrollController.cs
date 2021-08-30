@@ -122,5 +122,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _contentSize);
 			set => SetProperty(ref _contentSize, value);
 		}
+
+		public inkScrollController()
+		{
+			_autoHideVertical = true;
+			_scrollSpeedGamepad = 75.000000F;
+			_scrollSpeedMouse = 75.000000F;
+		}
 	}
 }

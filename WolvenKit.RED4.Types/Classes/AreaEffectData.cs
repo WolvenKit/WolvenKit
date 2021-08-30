@@ -185,5 +185,17 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _gameEffectOverrideName);
 			set => SetProperty(ref _gameEffectOverrideName, value);
 		}
+
+		public AreaEffectData()
+		{
+			_indicatorEffectName = "focus_10m";
+			_indicatorEffectSize = 1.000000F;
+			_stimRange = 10.000000F;
+			_stimLifetime = 3.000000F;
+			_highlightTargets = true;
+			_highlightType = new() { Value = Enums.EFocusForcedHighlightType.INVALID };
+			_outlineType = new() { Value = Enums.EFocusOutlineType.DISTRACTION };
+			_highlightPriority = new() { Value = Enums.EPriority.High };
+		}
 	}
 }

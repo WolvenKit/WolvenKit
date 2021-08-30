@@ -104,5 +104,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _frameClampingEndFrame);
 			set => SetProperty(ref _frameClampingEndFrame, value);
 		}
+
+		public animAnimation()
+		{
+			_frameClampingStartFrame = -1;
+			_frameClampingEndFrame = -1;
+		}
 	}
 }

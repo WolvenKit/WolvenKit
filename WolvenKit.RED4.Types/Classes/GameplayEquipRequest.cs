@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _forceEquipWeapon);
 			set => SetProperty(ref _forceEquipWeapon, value);
 		}
+
+		public GameplayEquipRequest()
+		{
+			_slotIndex = -1;
+		}
 	}
 }

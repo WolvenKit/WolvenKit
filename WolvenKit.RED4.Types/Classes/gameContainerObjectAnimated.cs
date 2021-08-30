@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _animFeatureName);
 			set => SetProperty(ref _animFeatureName, value);
 		}
+
+		public gameContainerObjectAnimated()
+		{
+			_animFeatureName = "ContainerAnim";
+		}
 	}
 }

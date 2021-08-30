@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isOverride);
 			set => SetProperty(ref _isOverride, value);
 		}
+
+		public scnCinematicAnimSetSRRef()
+		{
+			_priority = 128;
+		}
 	}
 }

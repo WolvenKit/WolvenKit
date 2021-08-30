@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _triggersCombat);
 			set => SetProperty(ref _triggersCombat, value);
 		}
+
+		public AITargetTrackerComponent()
+		{
+			_triggersCombat = true;
+		}
 	}
 }

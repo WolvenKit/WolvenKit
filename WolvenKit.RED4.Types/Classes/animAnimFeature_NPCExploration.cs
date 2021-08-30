@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isEvenLoop);
 			set => SetProperty(ref _isEvenLoop, value);
 		}
+
+		public animAnimFeature_NPCExploration()
+		{
+			_isEvenLoop = true;
+		}
 	}
 }

@@ -77,5 +77,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _saturation);
 			set => SetProperty(ref _saturation, value);
 		}
+
+		public ImageBasedFlareAreaSettings()
+		{
+			_treshold = 2.000000F;
+			_dispersal = 0.300000F;
+			_haloWidth = 0.550000F;
+			_distortion = 1.000000F;
+			_curve = 1.000000F;
+		}
 	}
 }

@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _postFlattenReduce);
 			set => SetProperty(ref _postFlattenReduce, value);
 		}
+
+		public worldProxySurfaceFlattenParams()
+		{
+			_groupingStepAngle = new() { Value = Enums.worldProxyNormalAngleStepSize.STEP_45 };
+		}
 	}
 }

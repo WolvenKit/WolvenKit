@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _rotKeysData);
 			set => SetProperty(ref _rotKeysData, value);
 		}
+
+		public animSplineCompressedMotionExtraction()
+		{
+			_duration = 1.000000F;
+		}
 	}
 }

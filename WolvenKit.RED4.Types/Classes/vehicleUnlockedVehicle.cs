@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _health);
 			set => SetProperty(ref _health, value);
 		}
+
+		public vehicleUnlockedVehicle()
+		{
+			_health = 100.000000F;
+		}
 	}
 }

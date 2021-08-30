@@ -158,5 +158,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _playerSpawnedCallbackID);
 			set => SetProperty(ref _playerSpawnedCallbackID, value);
 		}
+
+		public TimeMenuGameController()
+		{
+			_inputEnabled = true;
+		}
 	}
 }

@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _onSlaves);
 			set => SetProperty(ref _onSlaves, value);
 		}
+
+		public AreaEffectTargetData()
+		{
+			_onSelf = true;
+		}
 	}
 }

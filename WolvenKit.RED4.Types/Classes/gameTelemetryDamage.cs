@@ -59,5 +59,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _time);
 			set => SetProperty(ref _time, value);
 		}
+
+		public gameTelemetryDamage()
+		{
+			_attackType = new() { Value = Enums.gamedataAttackType.Invalid };
+			_hitCount = 1;
+			_distance = -1.000000F;
+		}
 	}
 }

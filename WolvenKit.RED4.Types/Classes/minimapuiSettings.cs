@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _hideTime);
 			set => SetProperty(ref _hideTime, value);
 		}
+
+		public minimapuiSettings()
+		{
+			_showTime = 0.300000F;
+			_hideTime = 0.250000F;
+		}
 	}
 }

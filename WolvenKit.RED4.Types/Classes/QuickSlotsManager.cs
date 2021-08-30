@@ -194,5 +194,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _onVehPlayerStateDataChangedCallback);
 			set => SetProperty(ref _onVehPlayerStateDataChangedCallback, value);
 		}
+
+		public QuickSlotsManager()
+		{
+			_numberOfItemsPerWheel = 8;
+		}
 	}
 }

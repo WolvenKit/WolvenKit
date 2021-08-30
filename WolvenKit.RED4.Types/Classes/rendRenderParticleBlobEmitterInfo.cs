@@ -365,5 +365,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _volumetricParticleNoiseVelocity);
 			set => SetProperty(ref _volumetricParticleNoiseVelocity, value);
 		}
+
+		public rendRenderParticleBlobEmitterInfo()
+		{
+			_renderObjectType = new() { Value = Enums.ERenderObjectType.ROT_Particle };
+		}
 	}
 }

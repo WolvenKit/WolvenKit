@@ -95,5 +95,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _priority);
 			set => SetProperty(ref _priority, value);
 		}
+
+		public animAnimNode_AddIkRequest()
+		{
+			_weightPosition = 1.000000F;
+			_weightRotation = 1.000000F;
+			_blendTimeIn = 0.500000F;
+			_blendTimeOut = 0.500000F;
+			_priority = 100;
+		}
 	}
 }

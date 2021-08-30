@@ -68,5 +68,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _styleModifer);
 			set => SetProperty(ref _styleModifer, value);
 		}
+
+		public inkLanguageFontMapping()
+		{
+			_lineHeightModifier = 1.000000F;
+			_fontSizeModifierFloat = 1.000000F;
+		}
 	}
 }

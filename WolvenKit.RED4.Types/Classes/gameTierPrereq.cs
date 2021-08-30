@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _tier);
 			set => SetProperty(ref _tier, value);
 		}
+
+		public gameTierPrereq()
+		{
+			_tier = new() { Value = Enums.GameplayTier.Tier1_FullGameplay };
+		}
 	}
 }

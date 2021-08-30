@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _equipped);
 			set => SetProperty(ref _equipped, value);
 		}
+
+		public gameAmmoData()
+		{
+			_available = -1;
+			_equipped = -1;
+		}
 	}
 }

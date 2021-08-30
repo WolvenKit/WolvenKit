@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isEnabled);
 			set => SetProperty(ref _isEnabled, value);
 		}
+
+		public gameinteractionsComponent()
+		{
+			_isEnabled = true;
+		}
 	}
 }

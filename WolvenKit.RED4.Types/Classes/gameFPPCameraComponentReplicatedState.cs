@@ -41,5 +41,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lookAtData_m_yawRef);
 			set => SetProperty(ref _lookAtData_m_yawRef, value);
 		}
+
+		public gameFPPCameraComponentReplicatedState()
+		{
+			_lookAtData_m_pitchInput = 999.000000F;
+			_lookAtData_m_pitchRef = 999.000000F;
+			_lookAtData_m_yawInput = 999.000000F;
+			_lookAtData_m_yawRef = 999.000000F;
+		}
 	}
 }

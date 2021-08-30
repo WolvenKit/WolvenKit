@@ -131,5 +131,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _mingameBB);
 			set => SetProperty(ref _mingameBB, value);
 		}
+
+		public ShardNotificationController()
+		{
+			_longTextTrashold = 1000;
+		}
 	}
 }

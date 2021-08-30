@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _hoverSoundName);
 			set => SetProperty(ref _hoverSoundName, value);
 		}
+
+		public ButtonPlaySoundView()
+		{
+			_soundPrefix = "Button";
+			_pressSoundName = "OnPress";
+		}
 	}
 }

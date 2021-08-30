@@ -671,5 +671,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _spawnTokens);
 			set => SetProperty(ref _spawnTokens, value);
 		}
+
+		public healthbarWidgetGameController()
+		{
+			_isUnarmedRightHand = true;
+			_isUnarmedLeftHand = true;
+		}
 	}
 }

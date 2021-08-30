@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _revealMaster);
 			set => SetProperty(ref _revealMaster, value);
 		}
+
+		public RevealNetworkGridOnPulse()
+		{
+			_duration = 1.000000F;
+		}
 	}
 }

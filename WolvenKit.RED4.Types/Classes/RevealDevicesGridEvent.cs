@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _revealMaster);
 			set => SetProperty(ref _revealMaster, value);
 		}
+
+		public RevealDevicesGridEvent()
+		{
+			_revealSlave = true;
+			_revealMaster = true;
+		}
 	}
 }

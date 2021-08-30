@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _savable);
 			set => SetProperty(ref _savable, value);
 		}
+
+		public ForcedStateData()
+		{
+			_savable = true;
+		}
 	}
 }

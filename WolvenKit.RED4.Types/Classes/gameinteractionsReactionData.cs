@@ -86,5 +86,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _iKPoint);
 			set => SetProperty(ref _iKPoint, value);
 		}
+
+		public gameinteractionsReactionData()
+		{
+			_startDuration = 1.000000F;
+			_endDuration = 1.000000F;
+			_interactionDuration = -1.000000F;
+		}
 	}
 }

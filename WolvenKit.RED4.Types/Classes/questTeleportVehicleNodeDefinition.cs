@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _resetVelocities);
 			set => SetProperty(ref _resetVelocities, value);
 		}
+
+		public questTeleportVehicleNodeDefinition()
+		{
+			_resetVelocities = true;
+		}
 	}
 }

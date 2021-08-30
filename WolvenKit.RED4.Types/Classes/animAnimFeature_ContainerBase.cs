@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _transitionDuration);
 			set => SetProperty(ref _transitionDuration, value);
 		}
+
+		public animAnimFeature_ContainerBase()
+		{
+			_transitionDuration = 2.000000F;
+		}
 	}
 }

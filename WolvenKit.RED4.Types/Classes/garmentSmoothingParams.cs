@@ -41,5 +41,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _smoothingNumNeighbours);
 			set => SetProperty(ref _smoothingNumNeighbours, value);
 		}
+
+		public garmentSmoothingParams()
+		{
+			_smoothingRadiusInCM = 15.000000F;
+			_smoothingExponent = 0.500000F;
+			_smoothingNumNeighbours = 4;
+		}
 	}
 }

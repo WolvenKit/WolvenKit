@@ -176,5 +176,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lineCount);
 			set => SetProperty(ref _lineCount, value);
 		}
+
+		public textScrollingAnimController()
+		{
+			_defaultScrollSpeed = 0.050000F;
+			_numOfLines = 4;
+			_transparency = 1.000000F;
+			_binaryClusterCount = 4;
+		}
 	}
 }

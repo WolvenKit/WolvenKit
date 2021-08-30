@@ -86,5 +86,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _allowStubMovement);
 			set => SetProperty(ref _allowStubMovement, value);
 		}
+
+		public AIVehicleFollowCommand()
+		{
+			_secureTimeOut = 2.000000F;
+			_distanceMin = 0.500000F;
+			_distanceMax = 1.000000F;
+			_stopWhenTargetReached = true;
+			_useTraffic = true;
+		}
 	}
 }

@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _destroyedMesh);
 			set => SetProperty(ref _destroyedMesh, value);
 		}
+
+		public BaseDestructibleDevice()
+		{
+			_minTime = 5.000000F;
+			_maxTime = 10.000000F;
+		}
 	}
 }

@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _valueToCompare);
 			set => SetProperty(ref _valueToCompare, value);
 		}
+
+		public gamePrereqCheckData()
+		{
+			_comparisonType = new() { Value = Enums.EComparisonType.Equal };
+		}
 	}
 }

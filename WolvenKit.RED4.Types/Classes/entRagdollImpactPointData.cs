@@ -86,5 +86,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _otherProxyActorIndex);
 			set => SetProperty(ref _otherProxyActorIndex, value);
 		}
+
+		public entRagdollImpactPointData()
+		{
+			_otherProxyActorIndex = 1;
+		}
 	}
 }

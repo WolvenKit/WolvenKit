@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _tiredness);
 			set => SetProperty(ref _tiredness, value);
 		}
+
+		public AnimFeature_Stamina()
+		{
+			_staminaValue = 1.000000F;
+		}
 	}
 }

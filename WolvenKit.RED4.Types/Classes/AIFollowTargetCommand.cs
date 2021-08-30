@@ -77,5 +77,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _teleport);
 			set => SetProperty(ref _teleport, value);
 		}
+
+		public AIFollowTargetCommand()
+		{
+			_matchSpeed = true;
+			_teleport = true;
+		}
 	}
 }

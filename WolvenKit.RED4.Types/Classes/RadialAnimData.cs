@@ -41,5 +41,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _cycle_out);
 			set => SetProperty(ref _cycle_out, value);
 		}
+
+		public RadialAnimData()
+		{
+			_hover_in = "Anim name for hover in";
+			_hover_out = "Anim name for hover out";
+			_cycle_in = "Anim name for cycle in animation";
+			_cycle_out = "Anim name for cycle out animation";
+		}
 	}
 }

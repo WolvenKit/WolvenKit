@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _invokeCallback);
 			set => SetProperty(ref _invokeCallback, value);
 		}
+
+		public entReplicatedAnimFeature()
+		{
+			_invokeCallback = true;
+		}
 	}
 }

@@ -95,5 +95,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _physics);
 			set => SetProperty(ref _physics, value);
 		}
+
+		public entdismembermentMeshInfo()
+		{
+			_meshAppearance = "default";
+			_shouldReceiveDecal = true;
+			_woundType = new() { Value = Enums.entdismembermentWoundTypeE.CLEAN | Enums.entdismembermentWoundTypeE.COARSE };
+			_cullMesh = new() { Value = Enums.entdismembermentWoundTypeE.CLEAN };
+		}
 	}
 }

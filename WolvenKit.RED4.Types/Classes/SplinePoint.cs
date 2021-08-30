@@ -59,5 +59,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _id);
 			set => SetProperty(ref _id, value);
 		}
+
+		public SplinePoint()
+		{
+			_continuousTangents = true;
+			_automaticTangents = true;
+		}
 	}
 }

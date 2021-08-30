@@ -59,5 +59,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lobeMix);
 			set => SetProperty(ref _lobeMix, value);
 		}
+
+		public CSkinProfile()
+		{
+			_blurSize = 1.200000F;
+			_roughness0 = 0.750000F;
+			_roughness1 = 1.250000F;
+			_lobeMix = 0.800000F;
+		}
 	}
 }

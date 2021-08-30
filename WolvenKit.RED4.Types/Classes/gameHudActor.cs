@@ -122,5 +122,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _shouldRefreshQHack);
 			set => SetProperty(ref _shouldRefreshQHack, value);
 		}
+
+		public gameHudActor()
+		{
+			_shouldRefreshQHack = true;
+		}
 	}
 }

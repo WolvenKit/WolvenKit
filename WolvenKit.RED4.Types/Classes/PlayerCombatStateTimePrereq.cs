@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxTime);
 			set => SetProperty(ref _maxTime, value);
 		}
+
+		public PlayerCombatStateTimePrereq()
+		{
+			_minTime = -1.000000F;
+			_maxTime = -1.000000F;
+		}
 	}
 }

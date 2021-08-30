@@ -77,5 +77,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _shopStockInit);
 			set => SetProperty(ref _shopStockInit, value);
 		}
+
+		public VendingMachineControllerPS()
+		{
+			_soldOutProbability = 0.050000F;
+			_isReady = true;
+			_hackCount = 2;
+		}
 	}
 }

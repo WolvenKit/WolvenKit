@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxReprimandsPerDEVICE);
 			set => SetProperty(ref _maxReprimandsPerDEVICE, value);
 		}
+
+		public AgentRegistry()
+		{
+			_maxReprimandsPerNPC = 2;
+			_maxReprimandsPerDEVICE = 1;
+		}
 	}
 }

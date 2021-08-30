@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _langId);
 			set => SetProperty(ref _langId, value);
 		}
+
+		public scnlocLangId()
+		{
+			_langId = 255;
+		}
 	}
 }

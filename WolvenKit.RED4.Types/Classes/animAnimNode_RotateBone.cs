@@ -131,5 +131,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _inModelSpace);
 			set => SetProperty(ref _inModelSpace, value);
 		}
+
+		public animAnimNode_RotateBone()
+		{
+			_axis = new() { Value = Enums.animETransformAxis.X_Axis };
+			_scale = 1.000000F;
+			_minAngle = -90.000000F;
+			_maxAngle = 90.000000F;
+			_resetOnActivation = true;
+		}
 	}
 }

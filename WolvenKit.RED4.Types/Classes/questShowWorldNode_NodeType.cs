@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _componentName);
 			set => SetProperty(ref _componentName, value);
 		}
+
+		public questShowWorldNode_NodeType()
+		{
+			_show = true;
+		}
 	}
 }

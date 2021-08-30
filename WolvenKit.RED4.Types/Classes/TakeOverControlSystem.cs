@@ -95,5 +95,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lastInputSimTime);
 			set => SetProperty(ref _lastInputSimTime, value);
 		}
+
+		public TakeOverControlSystem()
+		{
+			_tCSupdateRate = 0.100000F;
+		}
 	}
 }

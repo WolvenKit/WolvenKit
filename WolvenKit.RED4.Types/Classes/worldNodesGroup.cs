@@ -131,5 +131,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _metadataArray);
 			set => SetProperty(ref _metadataArray, value);
 		}
+
+		public worldNodesGroup()
+		{
+			_proxyDistanceFactor = 1.000000F;
+		}
 	}
 }

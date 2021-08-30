@@ -149,5 +149,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _dstPrefabNodePath);
 			set => SetProperty(ref _dstPrefabNodePath, value);
 		}
+
+		public interopTerrainImportParams()
+		{
+			_cellRes = 128;
+			_cellSize = 256;
+			_importHeightMaps = true;
+			_importColorMaps = true;
+			_importControlMaps = true;
+			_overwriteTransformsOfExistingNodes = true;
+		}
 	}
 }

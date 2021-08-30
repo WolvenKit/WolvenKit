@@ -50,5 +50,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _doorID);
 			set => SetProperty(ref _doorID, value);
 		}
+
+		public questToggleDoor_NodeType()
+		{
+			_doorAction = new() { Value = Enums.vehicleEQuestVehicleDoorState.Invalid };
+			_door = new() { Value = Enums.vehicleEVehicleDoor.invalid };
+			_toOpen = true;
+		}
 	}
 }

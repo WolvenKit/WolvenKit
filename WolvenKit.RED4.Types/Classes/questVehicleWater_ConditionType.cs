@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _onEnter);
 			set => SetProperty(ref _onEnter, value);
 		}
+
+		public questVehicleWater_ConditionType()
+		{
+			_submergedOnly = true;
+			_onEnter = true;
+		}
 	}
 }

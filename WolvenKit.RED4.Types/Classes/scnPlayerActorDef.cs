@@ -167,5 +167,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _playerName);
 			set => SetProperty(ref _playerName, value);
 		}
+
+		public scnPlayerActorDef()
+		{
+			_specTemplate = "(None)";
+			_specAppearance = "default";
+		}
 	}
 }

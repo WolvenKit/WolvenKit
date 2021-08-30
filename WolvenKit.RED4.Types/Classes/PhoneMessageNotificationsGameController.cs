@@ -77,5 +77,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _data);
 			set => SetProperty(ref _data, value);
 		}
+
+		public PhoneMessageNotificationsGameController()
+		{
+			_maxMessageSize = 60;
+		}
 	}
 }

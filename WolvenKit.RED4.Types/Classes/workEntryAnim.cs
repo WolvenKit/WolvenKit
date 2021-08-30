@@ -77,5 +77,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _blendOutTime);
 			set => SetProperty(ref _blendOutTime, value);
 		}
+
+		public workEntryAnim()
+		{
+			_orientationType = new() { Value = Enums.moveMovementOrientationType.Forward };
+			_blendOutTime = 0.500000F;
+		}
 	}
 }

@@ -77,5 +77,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _currentVisibleIndex);
 			set => SetProperty(ref _currentVisibleIndex, value);
 		}
+
+		public WorldMapTooltipContainer()
+		{
+			_currentVisibleIndex = -1;
+		}
 	}
 }

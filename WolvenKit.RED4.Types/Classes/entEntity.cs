@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _renderSceneLayerMask);
 			set => SetProperty(ref _renderSceneLayerMask, value);
 		}
+
+		public entEntity()
+		{
+			_renderSceneLayerMask = new() { Value = Enums.RenderSceneLayerMask.Default };
+		}
 	}
 }

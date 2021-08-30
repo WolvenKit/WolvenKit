@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _conditions);
 			set => SetProperty(ref _conditions, value);
 		}
+
+		public audioAudioStateTransitionData()
+		{
+			_allConditionsFulfilled = true;
+		}
 	}
 }

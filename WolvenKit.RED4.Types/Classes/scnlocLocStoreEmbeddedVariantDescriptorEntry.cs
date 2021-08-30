@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _vpeIndex);
 			set => SetProperty(ref _vpeIndex, value);
 		}
+
+		public scnlocLocStoreEmbeddedVariantDescriptorEntry()
+		{
+			_vpeIndex = 4294967295;
+		}
 	}
 }

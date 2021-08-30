@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _refPlayer);
 			set => SetProperty(ref _refPlayer, value);
 		}
+
+		public questNPCLookAt_NodeType()
+		{
+			_assignLookAt = true;
+		}
 	}
 }

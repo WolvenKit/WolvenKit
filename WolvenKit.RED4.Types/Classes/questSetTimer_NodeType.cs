@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _duration);
 			set => SetProperty(ref _duration, value);
 		}
+
+		public questSetTimer_NodeType()
+		{
+			_enable = true;
+			_duration = 5.000000F;
+		}
 	}
 }

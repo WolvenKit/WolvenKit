@@ -347,5 +347,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _prevTargetedEntityIDs);
 			set => SetProperty(ref _prevTargetedEntityIDs, value);
 		}
+
+		public CrosshairGameController_Smart_Rifl()
+		{
+			_offsetLeftRight = 0.800000F;
+			_offsetLeftRightExtra = 1.200000F;
+			_latchVertical = 40.000000F;
+			_targetWidgetLibraryName = "bucket";
+			_targetsPullSize = 10;
+		}
 	}
 }

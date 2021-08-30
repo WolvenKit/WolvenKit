@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isPossible);
 			set => SetProperty(ref _isPossible, value);
 		}
+
+		public gameuiCharactersChain()
+		{
+			_ownerId = -1;
+			_isPossible = true;
+		}
 	}
 }

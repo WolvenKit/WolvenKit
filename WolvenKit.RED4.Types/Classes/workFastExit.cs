@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _movementType);
 			set => SetProperty(ref _movementType, value);
 		}
+
+		public workFastExit()
+		{
+			_forcedBlendIn = 0.200000F;
+			_movementType = new() { Value = Enums.moveMovementType.Stand };
+		}
 	}
 }

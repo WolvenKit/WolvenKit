@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _numberOfCoordinatesToDump);
 			set => SetProperty(ref _numberOfCoordinatesToDump, value);
 		}
+
+		public rendScreenshotBatchData()
+		{
+			_delayTime = 1.000000F;
+		}
 	}
 }

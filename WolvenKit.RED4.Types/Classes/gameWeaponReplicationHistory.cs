@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _continuousAttack);
 			set => SetProperty(ref _continuousAttack, value);
 		}
+
+		public gameWeaponReplicationHistory()
+		{
+			_latestShotId = 8;
+		}
 	}
 }

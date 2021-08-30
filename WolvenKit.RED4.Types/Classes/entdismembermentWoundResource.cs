@@ -122,5 +122,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _censorshipValid);
 			set => SetProperty(ref _censorshipValid, value);
 		}
+
+		public entdismembermentWoundResource()
+		{
+			_woundType = new() { Value = Enums.entdismembermentWoundTypeE.CLEAN | Enums.entdismembermentWoundTypeE.COARSE };
+			_garmentMorphStrength = 1.000000F;
+		}
 	}
 }

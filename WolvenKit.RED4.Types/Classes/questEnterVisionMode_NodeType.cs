@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _visionModeType);
 			set => SetProperty(ref _visionModeType, value);
 		}
+
+		public questEnterVisionMode_NodeType()
+		{
+			_visionModeType = new() { Value = Enums.gameVisionModeType.Focus };
+		}
 	}
 }

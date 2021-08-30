@@ -266,5 +266,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _inputsReceived);
 			set => SetProperty(ref _inputsReceived, value);
 		}
+
+		public SecuritySystemControllerPS()
+		{
+			_allowSecuritySystemToDisableItself = true;
+			_securitySystemState = new() { Value = Enums.ESecuritySystemState.SAFE };
+			_updateInterval = 1.000000F;
+			_restartDuration = 60;
+			_maxGlobalWarningsCount = 4;
+		}
 	}
 }

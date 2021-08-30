@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _nodeRef);
 			set => SetProperty(ref _nodeRef, value);
 		}
+
+		public scnWorldMarker()
+		{
+			_type = new() { Value = Enums.scnWorldMarkerType.NodeRef };
+		}
 	}
 }

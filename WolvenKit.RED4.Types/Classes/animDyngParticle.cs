@@ -86,5 +86,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _projectionType);
 			set => SetProperty(ref _projectionType, value);
 		}
+
+		public animDyngParticle()
+		{
+			_mass = 1.000000F;
+			_damping = 1.000000F;
+			_isFree = true;
+			_projectionType = new() { Value = Enums.animDyngParticleProjectionType.ShortestPath };
+		}
 	}
 }

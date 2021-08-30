@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _nodeParams);
 			set => SetProperty(ref _nodeParams, value);
 		}
+
+		public questMovePuppetNodeDefinition()
+		{
+			_moveType = "questMoveOnSplineParams";
+		}
 	}
 }

@@ -68,5 +68,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _resetCyberdeckRAM);
 			set => SetProperty(ref _resetCyberdeckRAM, value);
 		}
+
+		public questCharacterManagerParameters_HealPlayer()
+		{
+			_heal = true;
+			_removeStatusEffects = true;
+			_removeBuffs = true;
+			_removeDebuffs = true;
+			_resetCyberdeckRAM = true;
+		}
 	}
 }

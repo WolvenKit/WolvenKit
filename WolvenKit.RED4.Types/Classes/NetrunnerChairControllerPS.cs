@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _killDelay);
 			set => SetProperty(ref _killDelay, value);
 		}
+
+		public NetrunnerChairControllerPS()
+		{
+			_killDelay = 1.000000F;
+		}
 	}
 }

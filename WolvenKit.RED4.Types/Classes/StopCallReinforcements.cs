@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _statPoolType);
 			set => SetProperty(ref _statPoolType, value);
 		}
+
+		public StopCallReinforcements()
+		{
+			_statPoolType = new() { Value = Enums.gamedataStatPoolType.CallReinforcementProgress };
+		}
 	}
 }

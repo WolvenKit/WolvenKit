@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lootID);
 			set => SetProperty(ref _lootID, value);
 		}
+
+		public gameAreaData()
+		{
+			_size = 1.000000F;
+		}
 	}
 }

@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _speed);
 			set => SetProperty(ref _speed, value);
 		}
+
+		public questRotateToParams()
+		{
+			_speed = 180.000000F;
+		}
 	}
 }

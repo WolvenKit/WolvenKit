@@ -194,5 +194,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _animationProxy);
 			set => SetProperty(ref _animationProxy, value);
 		}
+
+		public hudTurretController()
+		{
+			_offsetLeft = -838.000000F;
+			_offsetRight = 1495.000000F;
+		}
 	}
 }

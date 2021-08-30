@@ -50,5 +50,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _ribbonTesselationDelta);
 			set => SetProperty(ref _ribbonTesselationDelta, value);
 		}
+
+		public CParticleDrawerTrail()
+		{
+			_texturesPerUnit = 0.500000F;
+			_minSegmentsPer360Degrees = 40;
+			_ribbonTesselationDelta = 100.000000F;
+		}
 	}
 }

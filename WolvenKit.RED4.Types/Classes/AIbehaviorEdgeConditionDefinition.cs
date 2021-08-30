@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _initialValue);
 			set => SetProperty(ref _initialValue, value);
 		}
+
+		public AIbehaviorEdgeConditionDefinition()
+		{
+			_risingEdgeAction = new() { Value = Enums.AIbehaviorEdgeConditionAction.TurnOn };
+		}
 	}
 }

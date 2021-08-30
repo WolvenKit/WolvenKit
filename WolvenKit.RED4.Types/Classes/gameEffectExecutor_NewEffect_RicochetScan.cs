@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _onlyForPlayer);
 			set => SetProperty(ref _onlyForPlayer, value);
 		}
+
+		public gameEffectExecutor_NewEffect_RicochetScan()
+		{
+			_onlyForPlayer = true;
+		}
 	}
 }

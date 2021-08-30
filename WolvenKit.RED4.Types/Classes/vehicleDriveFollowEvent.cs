@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _useTraffic);
 			set => SetProperty(ref _useTraffic, value);
 		}
+
+		public vehicleDriveFollowEvent()
+		{
+			_distanceMin = 1.000000F;
+			_distanceMax = 2.000000F;
+		}
 	}
 }

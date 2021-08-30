@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _filterData);
 			set => SetProperty(ref _filterData, value);
 		}
+
+		public worldPhysicalTriggerAreaNode()
+		{
+			_simulationType = new() { Value = Enums.physicsSimulationType.Dynamic };
+		}
 	}
 }

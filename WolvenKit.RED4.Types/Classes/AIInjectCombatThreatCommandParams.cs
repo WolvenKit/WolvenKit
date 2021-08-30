@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isPersistent);
 			set => SetProperty(ref _isPersistent, value);
 		}
+
+		public AIInjectCombatThreatCommandParams()
+		{
+			_duration = -1.000000F;
+		}
 	}
 }

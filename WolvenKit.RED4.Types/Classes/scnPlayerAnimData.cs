@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _unmountBodyCarry);
 			set => SetProperty(ref _unmountBodyCarry, value);
 		}
+
+		public scnPlayerAnimData()
+		{
+			_unmountBodyCarry = true;
+		}
 	}
 }

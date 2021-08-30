@@ -113,5 +113,18 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _timeInStep);
 			set => SetProperty(ref _timeInStep, value);
 		}
+
+		public animAnimNode_Drag()
+		{
+			_simulationFps = 100.000000F;
+			_sourceSpeedMultiplier = 10.000000F;
+			_hasOvershoot = true;
+			_overshootDuration = 1.000000F;
+			_overshootDetectionMinSpeed = 0.400000F;
+			_overshootDetectionMaxSpeed = 4.000000F;
+			_stepsTargetSpeedMultiplier = 10000.000000F;
+			_timeBetweenSteps = 0.100000F;
+			_timeInStep = 0.100000F;
+		}
 	}
 }

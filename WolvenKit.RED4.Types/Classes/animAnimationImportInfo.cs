@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _motionExtractionCompression);
 			set => SetProperty(ref _motionExtractionCompression, value);
 		}
+
+		public animAnimationImportInfo()
+		{
+			_compressionPreset = new() { Value = Enums.animcompressionQualityPreset.MID };
+			_motionExtractionCompression = new() { Value = Enums.animEMotionExtractionCompressionType.EMECT_SPLINE_MID };
+		}
 	}
 }

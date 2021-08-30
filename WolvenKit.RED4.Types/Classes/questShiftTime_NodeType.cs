@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _seconds);
 			set => SetProperty(ref _seconds, value);
 		}
+
+		public questShiftTime_NodeType()
+		{
+			_preventVisualGlitch = true;
+		}
 	}
 }

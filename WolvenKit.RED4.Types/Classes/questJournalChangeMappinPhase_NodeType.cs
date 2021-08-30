@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _notifyUI);
 			set => SetProperty(ref _notifyUI, value);
 		}
+
+		public questJournalChangeMappinPhase_NodeType()
+		{
+			_phase = new() { Value = Enums.gamedataMappinPhase.DefaultPhase };
+			_notifyUI = true;
+		}
 	}
 }

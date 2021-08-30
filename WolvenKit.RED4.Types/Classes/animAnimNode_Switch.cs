@@ -86,5 +86,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _canRequestInertialization);
 			set => SetProperty(ref _canRequestInertialization, value);
 		}
+
+		public animAnimNode_Switch()
+		{
+			_blendTime = 0.100000F;
+		}
 	}
 }

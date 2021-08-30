@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _armed);
 			set => SetProperty(ref _armed, value);
 		}
+
+		public ClaymoreMine()
+		{
+			_alive = true;
+		}
 	}
 }

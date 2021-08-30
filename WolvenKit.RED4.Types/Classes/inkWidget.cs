@@ -185,5 +185,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _effects);
 			set => SetProperty(ref _effects, value);
 		}
+
+		public inkWidget()
+		{
+			_name = "UNINITIALIZED_WIDGET";
+			_state = "Default";
+			_visible = true;
+			_opacity = 1.000000F;
+		}
 	}
 }

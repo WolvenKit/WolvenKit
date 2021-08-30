@@ -59,5 +59,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _margin);
 			set => SetProperty(ref _margin, value);
 		}
+
+		public gamePopupSettings()
+		{
+			_closeAtInput = true;
+			_position = new() { Value = Enums.gamePopupPosition.Center };
+		}
 	}
 }

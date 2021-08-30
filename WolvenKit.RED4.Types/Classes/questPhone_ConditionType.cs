@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _callPhase);
 			set => SetProperty(ref _callPhase, value);
 		}
+
+		public questPhone_ConditionType()
+		{
+			_callPhase = new() { Value = Enums.questPhoneCallPhase.IncomingCall };
+		}
 	}
 }

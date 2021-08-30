@@ -104,5 +104,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _quickMeleeHitSound);
 			set => SetProperty(ref _quickMeleeHitSound, value);
 		}
+
+		public audioNpcWeaponSettings()
+		{
+			_voiceSwitchCooldown = 3.000000F;
+		}
 	}
 }

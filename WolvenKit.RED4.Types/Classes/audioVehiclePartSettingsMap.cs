@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _partSettings);
 			set => SetProperty(ref _partSettings, value);
 		}
+
+		public audioVehiclePartSettingsMap()
+		{
+			_minAcousticsIsolationFactorValue = 0.200000F;
+		}
 	}
 }

@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _perspective);
 			set => SetProperty(ref _perspective, value);
 		}
+
+		public vehicleCameraManagerComponentPS()
+		{
+			_perspective = new() { Value = Enums.vehicleCameraPerspective.TPPFar };
+		}
 	}
 }

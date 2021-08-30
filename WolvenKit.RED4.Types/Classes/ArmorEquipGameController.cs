@@ -392,5 +392,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _operationsMode);
 			set => SetProperty(ref _operationsMode, value);
 		}
+
+		public ArmorEquipGameController()
+		{
+			_itemTooltipName = "itemTooltip";
+		}
 	}
 }

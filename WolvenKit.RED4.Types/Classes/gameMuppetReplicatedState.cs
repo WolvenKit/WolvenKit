@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _armor);
 			set => SetProperty(ref _armor, value);
 		}
+
+		public gameMuppetReplicatedState()
+		{
+			_health = -1.000000F;
+			_armor = -1.000000F;
+		}
 	}
 }

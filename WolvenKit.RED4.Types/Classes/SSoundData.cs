@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _onHoverOutKey);
 			set => SetProperty(ref _onHoverOutKey, value);
 		}
+
+		public SSoundData()
+		{
+			_widgetAudioName = "Button";
+		}
 	}
 }

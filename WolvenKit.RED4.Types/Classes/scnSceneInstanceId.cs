@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _hash);
 			set => SetProperty(ref _hash, value);
 		}
+
+		public scnSceneInstanceId()
+		{
+			_internalId = 255;
+			_hash = 6242570315725555409;
+		}
 	}
 }

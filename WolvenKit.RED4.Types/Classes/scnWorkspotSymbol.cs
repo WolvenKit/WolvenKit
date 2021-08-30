@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _wsEditorEventId);
 			set => SetProperty(ref _wsEditorEventId, value);
 		}
+
+		public scnWorkspotSymbol()
+		{
+			_wsEditorEventId = 18446744073709551615;
+		}
 	}
 }

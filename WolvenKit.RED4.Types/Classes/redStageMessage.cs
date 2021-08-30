@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _ids);
 			set => SetProperty(ref _ids, value);
 		}
+
+		public redStageMessage()
+		{
+			_parent = 4294967295;
+		}
 	}
 }

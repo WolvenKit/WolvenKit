@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _preserveLength);
 			set => SetProperty(ref _preserveLength, value);
 		}
+
+		public worldPersistentSnapData()
+		{
+			_snapTangent = true;
+		}
 	}
 }

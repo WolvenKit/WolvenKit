@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _invincibityBonusTime);
 			set => SetProperty(ref _invincibityBonusTime, value);
 		}
+
+		public ObstacleCollisionLogic()
+		{
+			_invincibityBonusTime = 0.800000F;
+		}
 	}
 }

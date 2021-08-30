@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _cmdCbId);
 			set => SetProperty(ref _cmdCbId, value);
 		}
+
+		public PassiveCommandCondition()
+		{
+			_useInheritance = true;
+		}
 	}
 }

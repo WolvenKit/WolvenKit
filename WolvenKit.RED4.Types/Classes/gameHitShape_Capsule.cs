@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _height);
 			set => SetProperty(ref _height, value);
 		}
+
+		public gameHitShape_Capsule()
+		{
+			_radius = 0.200000F;
+			_height = 0.400000F;
+		}
 	}
 }

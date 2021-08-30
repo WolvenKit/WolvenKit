@@ -68,5 +68,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _stanceState);
 			set => SetProperty(ref _stanceState, value);
 		}
+
+		public questCharacterState_PuppetSubType()
+		{
+			_upperBodyState = 1;
+			_highLevelState = 1;
+		}
 	}
 }

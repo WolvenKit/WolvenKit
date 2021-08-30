@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _customOffsetRot);
 			set => SetProperty(ref _customOffsetRot, value);
 		}
+
+		public scneventsAttachPropToPerformer()
+		{
+			_slot = "(Root)";
+		}
 	}
 }

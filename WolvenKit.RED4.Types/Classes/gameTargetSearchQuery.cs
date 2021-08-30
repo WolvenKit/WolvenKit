@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _queryTarget);
 			set => SetProperty(ref _queryTarget, value);
 		}
+
+		public gameTargetSearchQuery()
+		{
+			_includeSecondaryTargets = true;
+		}
 	}
 }

@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _count);
 			set => SetProperty(ref _count, value);
 		}
+
+		public gameEffectObjectFilter_OnlyNearestMelee()
+		{
+			_count = 1;
+		}
 	}
 }

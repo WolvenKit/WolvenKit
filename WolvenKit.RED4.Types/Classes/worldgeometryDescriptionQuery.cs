@@ -131,5 +131,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _flags);
 			set => SetProperty(ref _flags, value);
 		}
+
+		public worldgeometryDescriptionQuery()
+		{
+			_maxDistance = 2.000000F;
+			_maxExtent = 1.000000F;
+			_raycastStartDistance = 0.500000F;
+			_probingPrecision = 0.010000F;
+			_probingMaxDistanceDiff = 0.800000F;
+			_maxProbes = 100;
+		}
 	}
 }

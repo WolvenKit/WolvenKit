@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _hubPriority);
 			set => SetProperty(ref _hubPriority, value);
 		}
+
+		public gameinteractionsvisDialogVisualizerDefinition()
+		{
+			_useLookAt = true;
+			_disableAfterSelectingChoice = true;
+		}
 	}
 }

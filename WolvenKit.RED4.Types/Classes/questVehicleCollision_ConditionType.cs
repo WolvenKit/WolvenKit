@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _magnitude);
 			set => SetProperty(ref _magnitude, value);
 		}
+
+		public questVehicleCollision_ConditionType()
+		{
+			_magnitude = new() { Value = Enums.questImpulseMagnitude.Medium };
+		}
 	}
 }

@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _occluderAutohideDistanceScale);
 			set => SetProperty(ref _occluderAutohideDistanceScale, value);
 		}
+
+		public entStaticOccluderMeshComponent()
+		{
+			_occluderAutohideDistanceScale = 255;
+		}
 	}
 }

@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _enable);
 			set => SetProperty(ref _enable, value);
 		}
+
+		public questSetTriggerState_NodeTypeParams()
+		{
+			_enable = true;
+		}
 	}
 }

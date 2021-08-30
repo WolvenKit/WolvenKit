@@ -167,5 +167,25 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxWindowOffset);
 			set => SetProperty(ref _maxWindowOffset, value);
 		}
+
+		public audioAcousticConstantsPreset()
+		{
+			_dopplerFactor = 1.000000F;
+			_speedOfSound = 343.000000F;
+			_wideInteriorLimit = 10.000000F;
+			_enclosedCeilingDistance = 20.000000F;
+			_urbanNarrowDistance = 10.000000F;
+			_urbanStreetDistance = 25.000000F;
+			_exteriorWideAltitude = 50.000000F;
+			_elevatedOpenDistance = 40.000000F;
+			_ambExteriorCeilingMinDistance = 3.000000F;
+			_ambExteriorCeilingMaxDistance = 20.000000F;
+			_badlandsWideRelativeAltitude = 12.000000F;
+			_repositioningStandardZoomFactor = 0.250000F;
+			_repositioningScanningZoomFactor = 1.000000F;
+			_repositioningVoStandardZoomFactor = 1.000000F;
+			_repositioningVoScanningZoomFactor = 1.000000F;
+			_maxWindowOffset = 2.000000F;
+		}
 	}
 }

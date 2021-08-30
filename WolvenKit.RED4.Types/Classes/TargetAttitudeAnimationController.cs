@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _attitude);
 			set => SetProperty(ref _attitude, value);
 		}
+
+		public TargetAttitudeAnimationController()
+		{
+			_attitude = new() { Value = Enums.EAIAttitude.AIA_Neutral };
+		}
 	}
 }

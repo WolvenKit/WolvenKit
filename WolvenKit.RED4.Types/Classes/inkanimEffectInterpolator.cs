@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _paramName);
 			set => SetProperty(ref _paramName, value);
 		}
+
+		public inkanimEffectInterpolator()
+		{
+			_effectName = "";
+		}
 	}
 }

@@ -230,5 +230,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isOptional);
 			set => SetProperty(ref _isOptional, value);
 		}
+
+		public ObjectiveEntryLogicController()
+		{
+			_blinkInterval = 0.800000F;
+			_blinkTotalTime = 5.000000F;
+			_texturePart_Tracked = "tracked_left";
+			_texturePart_Untracked = "untracked_left";
+			_texturePart_Succeeded = "succeeded";
+			_texturePart_Failed = "failed";
+		}
 	}
 }

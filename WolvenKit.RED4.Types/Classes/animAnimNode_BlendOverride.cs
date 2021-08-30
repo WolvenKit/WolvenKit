@@ -113,5 +113,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _postProcess);
 			set => SetProperty(ref _postProcess, value);
 		}
+
+		public animAnimNode_BlendOverride()
+		{
+			_blendAllTracks = true;
+			_blendTrackMode = new() { Value = Enums.animEBlendTracksMode.AGBT_Interpolate };
+		}
 	}
 }

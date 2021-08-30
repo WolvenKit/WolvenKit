@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _additiveScale);
 			set => SetProperty(ref _additiveScale, value);
 		}
+
+		public animAnimFeature_VehiclePassengerAnimSetup()
+		{
+			_enableAdditiveAnim = true;
+			_additiveScale = 1.000000F;
+		}
 	}
 }

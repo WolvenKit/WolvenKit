@@ -77,5 +77,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _rules);
 			set => SetProperty(ref _rules, value);
 		}
+
+		public gameuiMinigameData()
+		{
+			_timeLimit = 100.000000F;
+			_trapSpawnProbability = -1.000000F;
+			_gridSize = 6;
+			_bufferSize = 7;
+			_timerWaitsForInteraction = true;
+		}
 	}
 }

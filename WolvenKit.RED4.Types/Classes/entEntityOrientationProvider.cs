@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _orientationEntitySpace);
 			set => SetProperty(ref _orientationEntitySpace, value);
 		}
+
+		public entEntityOrientationProvider()
+		{
+			_slotId = -1;
+		}
 	}
 }

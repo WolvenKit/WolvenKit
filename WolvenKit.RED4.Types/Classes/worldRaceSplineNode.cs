@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _offsetDefault);
 			set => SetProperty(ref _offsetDefault, value);
 		}
+
+		public worldRaceSplineNode()
+		{
+			_offsetDefault = 5.000000F;
+		}
 	}
 }

@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _fallbackInterval);
 			set => SetProperty(ref _fallbackInterval, value);
 		}
+
+		public StimBroadcasterComponent()
+		{
+			_fallbackInterval = 1.000000F;
+		}
 	}
 }

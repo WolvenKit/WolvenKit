@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _type);
 			set => SetProperty(ref _type, value);
 		}
+
+		public questStimuli_ConditionType()
+		{
+			_isPlayerInstigator = true;
+			_type = new() { Value = Enums.gamedataStimType.FootStepRegular };
+		}
 	}
 }

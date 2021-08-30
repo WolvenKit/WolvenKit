@@ -50,5 +50,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _statPoolType);
 			set => SetProperty(ref _statPoolType, value);
 		}
+
+		public questCharacterStatPool_ConditionType()
+		{
+			_isPlayer = true;
+			_comparisonType = new() { Value = Enums.EComparisonType.Equal };
+			_statPoolType = new() { Value = Enums.gamedataStatPoolType.Invalid };
+		}
 	}
 }

@@ -356,5 +356,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lastTime);
 			set => SetProperty(ref _lastTime, value);
 		}
+
+		public gameuiQuadRacerLogicController()
+		{
+			_segmentDetails = 1;
+			_cameraFov = 80.000000F;
+			_cameraHeight = 1000.000000F;
+		}
 	}
 }

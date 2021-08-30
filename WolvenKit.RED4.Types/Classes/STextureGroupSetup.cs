@@ -86,5 +86,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _allowTextureDowngrade);
 			set => SetProperty(ref _allowTextureDowngrade, value);
 		}
+
+		public STextureGroupSetup()
+		{
+			_group = new() { Value = Enums.GpuWrapApieTextureGroup.TEXG_Generic_Color };
+			_rawFormat = new() { Value = Enums.ETextureRawFormat.TRF_TrueColor };
+			_isStreamable = true;
+			_hasMipchain = true;
+			_allowTextureDowngrade = true;
+		}
 	}
 }

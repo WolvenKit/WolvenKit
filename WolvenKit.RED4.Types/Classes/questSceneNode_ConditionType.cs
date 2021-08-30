@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _type);
 			set => SetProperty(ref _type, value);
 		}
+
+		public questSceneNode_ConditionType()
+		{
+			_type = new() { Value = Enums.questSceneConditionType.IsInside };
+		}
 	}
 }

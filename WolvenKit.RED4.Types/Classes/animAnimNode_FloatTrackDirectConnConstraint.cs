@@ -68,5 +68,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _mulFactorNode);
 			set => SetProperty(ref _mulFactorNode, value);
 		}
+
+		public animAnimNode_FloatTrackDirectConnConstraint()
+		{
+			_mulFactor = 1.000000F;
+			_weight = 1.000000F;
+		}
 	}
 }

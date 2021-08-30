@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _removeAfterSingleUse);
 			set => SetProperty(ref _removeAfterSingleUse, value);
 		}
+
+		public questSetInteractionVisualizerOverride()
+		{
+			_applyOverride = true;
+		}
 	}
 }

@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _layoutOverride);
 			set => SetProperty(ref _layoutOverride, value);
 		}
+
+		public inkWidgetSlotAttachmentParams()
+		{
+			_useSlotLayout = true;
+		}
 	}
 }

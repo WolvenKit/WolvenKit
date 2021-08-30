@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _cycleNavigation);
 			set => SetProperty(ref _cycleNavigation, value);
 		}
+
+		public inkVirtualListController()
+		{
+			_cycleNavigation = true;
+		}
 	}
 }

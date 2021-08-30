@@ -131,5 +131,20 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _easeOut);
 			set => SetProperty(ref _easeOut, value);
 		}
+
+		public questPlayerLookAt_NodeType()
+		{
+			_duration = 0.250000F;
+			_adjustPitch = true;
+			_adjustYaw = true;
+			_endOnTargetReached = true;
+			_endOnCameraInputApplied = true;
+			_endOnTimeExceeded = true;
+			_cameraInputMagToBreak = 0.200000F;
+			_precision = 0.100000F;
+			_maxDuration = 2.000000F;
+			_easeIn = true;
+			_easeOut = true;
+		}
 	}
 }

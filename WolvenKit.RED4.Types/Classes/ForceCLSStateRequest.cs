@@ -50,5 +50,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _savable);
 			set => SetProperty(ref _savable, value);
 		}
+
+		public ForceCLSStateRequest()
+		{
+			_priority = new() { Value = Enums.EPriority.Medium };
+			_removePreviousRequests = true;
+			_savable = true;
+		}
 	}
 }

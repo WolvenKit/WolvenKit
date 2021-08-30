@@ -59,5 +59,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _factName);
 			set => SetProperty(ref _factName, value);
 		}
+
+		public scneventsClueEvent()
+		{
+			_markedOnTimeline = true;
+			_overrideFact = true;
+		}
 	}
 }

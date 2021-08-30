@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _vignetteColor);
 			set => SetProperty(ref _vignetteColor, value);
 		}
+
+		public VignetteAreaSettings()
+		{
+			_vignetteRadius = 0.500000F;
+			_vignetteExp = 2.000000F;
+		}
 	}
 }

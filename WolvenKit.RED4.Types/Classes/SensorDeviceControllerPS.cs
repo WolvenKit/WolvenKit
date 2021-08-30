@@ -230,5 +230,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isPartOfPrevention);
 			set => SetProperty(ref _isPartOfPrevention, value);
 		}
+
+		public SensorDeviceControllerPS()
+		{
+			_isRecognizableBySenses = true;
+		}
 	}
 }

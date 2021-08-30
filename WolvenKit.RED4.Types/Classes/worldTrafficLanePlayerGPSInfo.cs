@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _stronglyConnectedComponentId);
 			set => SetProperty(ref _stronglyConnectedComponentId, value);
 		}
+
+		public worldTrafficLanePlayerGPSInfo()
+		{
+			_subGraphId = 65535;
+			_stronglyConnectedComponentId = 65535;
+		}
 	}
 }

@@ -68,5 +68,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _patternType);
 			set => SetProperty(ref _patternType, value);
 		}
+
+		public HighlightEditableData()
+		{
+			_outlineType = new() { Value = Enums.EFocusOutlineType.INVALID };
+			_inTransitionTime = 0.500000F;
+			_outTransitionTime = 0.500000F;
+		}
 	}
 }

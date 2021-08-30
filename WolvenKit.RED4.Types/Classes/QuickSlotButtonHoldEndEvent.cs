@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _tryExecuteCommand);
 			set => SetProperty(ref _tryExecuteCommand, value);
 		}
+
+		public QuickSlotButtonHoldEndEvent()
+		{
+			_rightStickAngle = -1.000000F;
+			_tryExecuteCommand = true;
+		}
 	}
 }

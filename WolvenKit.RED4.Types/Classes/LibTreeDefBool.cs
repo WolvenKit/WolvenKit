@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _v);
 			set => SetProperty(ref _v, value);
 		}
+
+		public LibTreeDefBool()
+		{
+			_variableId = 65535;
+		}
 	}
 }

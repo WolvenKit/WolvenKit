@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _zAngle);
 			set => SetProperty(ref _zAngle, value);
 		}
+
+		public physicsPhysicsJointLimitConePair()
+		{
+			_yAngle = 0.000000F;
+			_zAngle = 0.000000F;
+		}
 	}
 }

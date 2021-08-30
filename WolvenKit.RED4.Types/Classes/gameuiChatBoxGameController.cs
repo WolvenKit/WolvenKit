@@ -113,5 +113,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxChatHistory);
 			set => SetProperty(ref _maxChatHistory, value);
 		}
+
+		public gameuiChatBoxGameController()
+		{
+			_maxChatsDisplayed = 7;
+			_maxChatHistory = 100;
+		}
 	}
 }

@@ -104,5 +104,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _id);
 			set => SetProperty(ref _id, value);
 		}
+
+		public senseStimuliEvent()
+		{
+			_stimType = new() { Value = Enums.gamedataStimType.Invalid };
+			_stimPropagation = new() { Value = Enums.gamedataStimPropagation.Invalid };
+		}
 	}
 }

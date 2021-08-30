@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _video);
 			set => SetProperty(ref _video, value);
 		}
+
+		public gamePopupData()
+		{
+			_videoType = new() { Value = Enums.gameVideoType.Unknown };
+		}
 	}
 }

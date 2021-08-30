@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _point);
 			set => SetProperty(ref _point, value);
 		}
+
+		public worldNavigationScriptFindPointResult()
+		{
+			_status = new() { Value = Enums.worldNavigationRequestStatus.OtherError };
+		}
 	}
 }

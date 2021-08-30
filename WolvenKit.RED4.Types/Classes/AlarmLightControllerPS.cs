@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _securityAlarmState);
 			set => SetProperty(ref _securityAlarmState, value);
 		}
+
+		public AlarmLightControllerPS()
+		{
+			_securityAlarmState = new() { Value = Enums.ESecuritySystemState.SAFE };
+		}
 	}
 }

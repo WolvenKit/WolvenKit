@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _alpha);
 			set => SetProperty(ref _alpha, value);
 		}
+
+		public worldDebugColoring_CookedResource()
+		{
+			_alpha = 192;
+		}
 	}
 }

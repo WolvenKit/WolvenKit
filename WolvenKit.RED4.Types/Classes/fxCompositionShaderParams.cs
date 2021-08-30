@@ -275,5 +275,19 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _uiLayer4Weight);
 			set => SetProperty(ref _uiLayer4Weight, value);
 		}
+
+		public fxCompositionShaderParams()
+		{
+			_shadowRadius = 1.000000F;
+			_glowIntensity = 0.500000F;
+			_glowTresholdStart = 0.750000F;
+			_glowTresholdEnd = 1.000000F;
+			_blurredRenderSaturation = 0.730000F;
+			_uiSaturation = 1.000000F;
+			_chromaticAberrationStrength = 0.000750F;
+			_uiLayer2Weight = 0.080000F;
+			_uiLayer3Weight = 0.070000F;
+			_uiLayer4Weight = 0.060000F;
+		}
 	}
 }

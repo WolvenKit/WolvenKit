@@ -95,5 +95,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _footstepMaterialOverride);
 			set => SetProperty(ref _footstepMaterialOverride, value);
 		}
+
+		public audioAcousticZoneMetadata()
+		{
+			_bleadingDistance = 10.000000F;
+		}
 	}
 }

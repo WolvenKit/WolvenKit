@@ -68,5 +68,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _legacyCharactersData);
 			set => SetProperty(ref _legacyCharactersData, value);
 		}
+
+		public gameCrowdTemplateEntryPhase()
+		{
+			_legacy = true;
+			_legacyDensityInTimePeriods = true;
+			_legacyCharactersData = true;
+		}
 	}
 }

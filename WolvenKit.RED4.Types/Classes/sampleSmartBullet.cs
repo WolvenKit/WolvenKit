@@ -392,5 +392,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _bulletCollisionEvaluator);
 			set => SetProperty(ref _bulletCollisionEvaluator, value);
 		}
+
+		public sampleSmartBullet()
+		{
+			_alive = true;
+		}
 	}
 }

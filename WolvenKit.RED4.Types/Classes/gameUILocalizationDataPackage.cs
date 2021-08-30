@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _textParams);
 			set => SetProperty(ref _textParams, value);
 		}
+
+		public gameUILocalizationDataPackage()
+		{
+			_paramsCount = -1;
+		}
 	}
 }

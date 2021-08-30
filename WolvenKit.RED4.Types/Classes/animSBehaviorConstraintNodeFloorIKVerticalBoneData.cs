@@ -59,5 +59,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _stiffness);
 			set => SetProperty(ref _stiffness, value);
 		}
+
+		public animSBehaviorConstraintNodeFloorIKVerticalBoneData()
+		{
+			_min_offset = -0.500000F;
+			_max_offset = 0.500000F;
+			_offsetToDesiredBlendTime = 0.100000F;
+			_stiffness = 1.000000F;
+		}
 	}
 }

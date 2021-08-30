@@ -50,5 +50,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _motionBlurScale);
 			set => SetProperty(ref _motionBlurScale, value);
 		}
+
+		public entBaseCameraComponent()
+		{
+			_fov = 60.000000F;
+			_zoom = 1.000000F;
+			_motionBlurScale = 1.000000F;
+		}
 	}
 }

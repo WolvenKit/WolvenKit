@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _filterData);
 			set => SetProperty(ref _filterData, value);
 		}
+
+		public worldDecorationMeshNode()
+		{
+			_filterDataSource = new() { Value = Enums.physicsFilterDataSource.Collider };
+		}
 	}
 }

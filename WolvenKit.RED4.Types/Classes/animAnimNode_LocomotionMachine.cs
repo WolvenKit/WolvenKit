@@ -95,5 +95,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _numVariants);
 			set => SetProperty(ref _numVariants, value);
 		}
+
+		public animAnimNode_LocomotionMachine()
+		{
+			_usePlanner = true;
+			_transitionTime = 0.200000F;
+			_numVariants = 1;
+		}
 	}
 }

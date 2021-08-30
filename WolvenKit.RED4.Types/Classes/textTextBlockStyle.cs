@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _fontSize);
 			set => SetProperty(ref _fontSize, value);
 		}
+
+		public textTextBlockStyle()
+		{
+			_fontSize = 22;
+		}
 	}
 }

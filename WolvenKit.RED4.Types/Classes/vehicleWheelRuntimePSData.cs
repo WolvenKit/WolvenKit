@@ -50,5 +50,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _previousDampedSpringForce);
 			set => SetProperty(ref _previousDampedSpringForce, value);
 		}
+
+		public vehicleWheelRuntimePSData()
+		{
+			_previousVisualDisplacement = -340282346638528859811704183484516925440.000000F;
+			_previousLogicalSpringCompression = -340282346638528859811704183484516925440.000000F;
+			_previousSwaybarDisplacement = -340282346638528859811704183484516925440.000000F;
+			_previousDampedSpringForce = -340282346638528859811704183484516925440.000000F;
+		}
 	}
 }

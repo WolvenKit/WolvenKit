@@ -68,5 +68,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _strafingTarget);
 			set => SetProperty(ref _strafingTarget, value);
 		}
+
+		public gameActionMoveToPositionState()
+		{
+			_useSpotReservation = true;
+			_usePathfinding = true;
+			_useStart = true;
+			_useStop = true;
+		}
 	}
 }

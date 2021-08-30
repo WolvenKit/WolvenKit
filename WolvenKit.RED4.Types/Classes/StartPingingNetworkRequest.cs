@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _virtualNetworkShapeID);
 			set => SetProperty(ref _virtualNetworkShapeID, value);
 		}
+
+		public StartPingingNetworkRequest()
+		{
+			_duration = 2.000000F;
+		}
 	}
 }

@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _speed);
 			set => SetProperty(ref _speed, value);
 		}
+
+		public cpTestPlatformController()
+		{
+			_speed = 1.000000F;
+		}
 	}
 }

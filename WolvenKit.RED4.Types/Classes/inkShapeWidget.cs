@@ -140,5 +140,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _vertexList);
 			set => SetProperty(ref _vertexList, value);
 		}
+
+		public inkShapeWidget()
+		{
+			_borderOpacity = 1.000000F;
+			_fillOpacity = 1.000000F;
+		}
 	}
 }

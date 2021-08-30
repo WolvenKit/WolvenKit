@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lifeTime);
 			set => SetProperty(ref _lifeTime, value);
 		}
+
+		public AIGateSignal()
+		{
+			_priority = 1.000000F;
+		}
 	}
 }

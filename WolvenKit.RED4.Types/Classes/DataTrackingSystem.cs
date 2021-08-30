@@ -473,5 +473,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _resetNpcGuardbreakReqDelayID);
 			set => SetProperty(ref _resetNpcGuardbreakReqDelayID, value);
 		}
+
+		public DataTrackingSystem()
+		{
+			_timeInterval = 5.000000F;
+			_numerOfKillsRequired = 3;
+		}
 	}
 }

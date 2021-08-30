@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _fadeoutRtpc);
 			set => SetProperty(ref _fadeoutRtpc, value);
 		}
+
+		public audioFoleyGlobalMetadata()
+		{
+			_fadeoutTime = 20.000000F;
+		}
 	}
 }

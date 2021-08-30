@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _deviceClassName);
 			set => SetProperty(ref _deviceClassName, value);
 		}
+
+		public worldDeviceRef()
+		{
+			_componentName = "controller";
+		}
 	}
 }

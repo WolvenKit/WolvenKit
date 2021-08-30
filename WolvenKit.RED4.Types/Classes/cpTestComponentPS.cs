@@ -68,5 +68,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _namePersistentInstanceEditable);
 			set => SetProperty(ref _namePersistentInstanceEditable, value);
 		}
+
+		public cpTestComponentPS()
+		{
+			_nameEditable = "E";
+			_nameInstanceEditable = "IE";
+			_namePersistent = "P";
+			_namePersistentEdiable = "PE";
+			_namePersistentInstanceEditable = "PIE";
+		}
 	}
 }

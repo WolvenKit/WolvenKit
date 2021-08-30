@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _itemTweakDBString);
 			set => SetProperty(ref _itemTweakDBString, value);
 		}
+
+		public C4ControllerPS()
+		{
+			_itemTweakDBString = "C4";
+		}
 	}
 }

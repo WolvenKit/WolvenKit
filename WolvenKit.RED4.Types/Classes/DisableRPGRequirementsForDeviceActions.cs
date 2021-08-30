@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _disable);
 			set => SetProperty(ref _disable, value);
 		}
+
+		public DisableRPGRequirementsForDeviceActions()
+		{
+			_disable = true;
+		}
 	}
 }

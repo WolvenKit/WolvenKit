@@ -122,5 +122,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maskName);
 			set => SetProperty(ref _maskName, value);
 		}
+
+		public animAnimNode_BlendAdditive()
+		{
+			_scaleValue = 1.000000F;
+			_blendTracks = new() { Value = Enums.animEBlendTracksMode.AGBT_Add };
+		}
 	}
 }

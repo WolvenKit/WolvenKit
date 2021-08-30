@@ -86,5 +86,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _foliageMaterials);
 			set => SetProperty(ref _foliageMaterials, value);
 		}
+
+		public audioAudioFoliageMetadata()
+		{
+			_locomotionTotalVelocityThreshold = 5.000000F;
+			_locomotionAngularVelocityMultiplier = 1.000000F;
+			_minFoliageMeshVolumeThreshold = 5.000000F;
+			_maxFoliageMeshHeight = 7.000000F;
+			_playerInsideRequiredPercentage = 0.500000F;
+		}
 	}
 }

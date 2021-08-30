@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isFacial);
 			set => SetProperty(ref _isFacial, value);
 		}
+
+		public animAnimNode_LookAtController()
+		{
+			_substepTime = 0.010000F;
+		}
 	}
 }

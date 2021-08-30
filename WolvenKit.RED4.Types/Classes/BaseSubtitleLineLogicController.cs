@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _c_tier2_duration);
 			set => SetProperty(ref _c_tier2_duration, value);
 		}
+
+		public BaseSubtitleLineLogicController()
+		{
+			_c_tier1_duration = 0.500000F;
+			_c_tier2_duration = 5.000000F;
+		}
 	}
 }

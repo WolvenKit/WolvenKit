@@ -122,5 +122,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _combatModePSM);
 			set => SetProperty(ref _combatModePSM, value);
 		}
+
+		public ItemsNotificationQueue()
+		{
+			_showDuration = 6.000000F;
+			_currencyNotification = "notification_currency";
+			_itemNotification = "Item_Received_SMALL";
+			_xpNotification = "progression";
+		}
 	}
 }

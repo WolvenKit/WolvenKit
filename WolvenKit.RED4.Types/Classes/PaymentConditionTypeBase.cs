@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _payWhenSucceded);
 			set => SetProperty(ref _payWhenSucceded, value);
 		}
+
+		public PaymentConditionTypeBase()
+		{
+			_payWhenSucceded = true;
+		}
 	}
 }

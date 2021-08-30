@@ -41,5 +41,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _max);
 			set => SetProperty(ref _max, value);
 		}
+
+		public animAnimNode_FloatRandom()
+		{
+			_rand = true;
+			_cooldown = 1.000000F;
+			_max = 1.000000F;
+		}
 	}
 }

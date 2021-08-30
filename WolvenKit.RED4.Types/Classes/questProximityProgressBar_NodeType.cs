@@ -77,5 +77,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _activator);
 			set => SetProperty(ref _activator, value);
 		}
+
+		public questProximityProgressBar_NodeType()
+		{
+			_show = true;
+			_duration = 10.000000F;
+			_reset = true;
+			_distance = 10.000000F;
+			_distanceComparisonType = new() { Value = Enums.EComparisonType.Less };
+			_isPlayerActivator = true;
+		}
 	}
 }

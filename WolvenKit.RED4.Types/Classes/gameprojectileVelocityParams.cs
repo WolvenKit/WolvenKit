@@ -32,5 +32,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _zFactor);
 			set => SetProperty(ref _zFactor, value);
 		}
+
+		public gameprojectileVelocityParams()
+		{
+			_xFactor = 1.000000F;
+			_yFactor = 1.000000F;
+			_zFactor = 1.000000F;
+		}
 	}
 }

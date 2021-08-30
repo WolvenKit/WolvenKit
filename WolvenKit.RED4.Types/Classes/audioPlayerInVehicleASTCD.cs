@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isInside);
 			set => SetProperty(ref _isInside, value);
 		}
+
+		public audioPlayerInVehicleASTCD()
+		{
+			_isInside = true;
+		}
 	}
 }

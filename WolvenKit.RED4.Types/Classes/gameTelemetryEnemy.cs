@@ -59,5 +59,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _level);
 			set => SetProperty(ref _level, value);
 		}
+
+		public gameTelemetryEnemy()
+		{
+			_archetype = new() { Value = Enums.gamedataArchetypeType.Invalid };
+			_level = -1;
+		}
 	}
 }

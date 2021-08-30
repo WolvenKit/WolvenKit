@@ -86,5 +86,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _anim);
 			set => SetProperty(ref _anim, value);
 		}
+
+		public animationPlayer()
+		{
+			_loopType = new() { Value = Enums.inkanimLoopType.Cycle };
+			_playInfinite = true;
+			_loopsAmount = 1;
+			_autoPlay = true;
+		}
 	}
 }

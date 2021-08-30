@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _markedStateName);
 			set => SetProperty(ref _markedStateName, value);
 		}
+
+		public InventoryItemAttachmentDisplay()
+		{
+			_markedStateName = "Marked";
+		}
 	}
 }

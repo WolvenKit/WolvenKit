@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _stopAllSoundsOnDetach);
 			set => SetProperty(ref _stopAllSoundsOnDetach, value);
 		}
+
+		public audioCommonEntitySettings()
+		{
+			_stopAllSoundsOnDetach = true;
+		}
 	}
 }

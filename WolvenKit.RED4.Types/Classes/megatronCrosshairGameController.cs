@@ -104,5 +104,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _crosshairState);
 			set => SetProperty(ref _crosshairState, value);
 		}
+
+		public megatronCrosshairGameController()
+		{
+			_minSpread = 120.000000F;
+			_gameplaySpreadMultiplier = 1.000000F;
+		}
 	}
 }

@@ -104,5 +104,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _comOffset);
 			set => SetProperty(ref _comOffset, value);
 		}
+
+		public physicsSystemBodyParams()
+		{
+			_simulationType = new() { Value = Enums.physicsSimulationType.Dynamic };
+			_solverIterationsCountPosition = 4;
+			_solverIterationsCountVelocity = 1;
+			_maxDepenetrationVelocity = -1.000000F;
+			_maxAngularVelocity = -1.000000F;
+			_maxContactImpulse = -1.000000F;
+		}
 	}
 }

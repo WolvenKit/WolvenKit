@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _bufferedValue);
 			set => SetProperty(ref _bufferedValue, value);
 		}
+
+		public TextAnimOnTextChange()
+		{
+			_animationName = "default";
+		}
 	}
 }

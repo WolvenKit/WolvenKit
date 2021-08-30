@@ -194,5 +194,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _joint_bend_dir_in_lower_s_BS);
 			set => SetProperty(ref _joint_bend_dir_in_lower_s_BS, value);
 		}
+
+		public animSTwoBonesIKSolverData()
+		{
+			_limitToLengthPercentage = 0.990000F;
+			_autoSetupDirs = true;
+			_jointSideWeightUpper = 0.500000F;
+			_jointSideWeightJoint = 0.300000F;
+			_jointSideWeightLower = 0.200000F;
+		}
 	}
 }

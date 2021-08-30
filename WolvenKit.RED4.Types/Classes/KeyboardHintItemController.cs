@@ -68,5 +68,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _animationName);
 			set => SetProperty(ref _animationName, value);
 		}
+
+		public KeyboardHintItemController()
+		{
+			_disabledStateName = "Disabled";
+			_selectedStateName = "Selected";
+			_frameSelectedName = "top_button_selected";
+			_frameUnselectedName = "top_button";
+			_animationName = "AnimRootOnThenOff";
+		}
 	}
 }

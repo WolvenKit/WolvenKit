@@ -194,5 +194,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isDelayActive);
 			set => SetProperty(ref _isDelayActive, value);
 		}
+
+		public SBaseDeviceOperationData()
+		{
+			_isEnabled = true;
+		}
 	}
 }

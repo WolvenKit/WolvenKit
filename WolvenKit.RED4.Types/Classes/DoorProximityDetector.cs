@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _blinkInterval);
 			set => SetProperty(ref _blinkInterval, value);
 		}
+
+		public DoorProximityDetector()
+		{
+			_blinkInterval = 2.000000F;
+		}
 	}
 }

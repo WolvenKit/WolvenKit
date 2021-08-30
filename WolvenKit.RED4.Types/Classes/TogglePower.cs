@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _falseRecordName);
 			set => SetProperty(ref _falseRecordName, value);
 		}
+
+		public TogglePower()
+		{
+			_trueRecordName = new() { Text = "Power" };
+			_falseRecordName = new() { Text = "Unpower" };
+		}
 	}
 }

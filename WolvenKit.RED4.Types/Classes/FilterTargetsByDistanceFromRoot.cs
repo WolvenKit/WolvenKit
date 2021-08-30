@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _tollerance);
 			set => SetProperty(ref _tollerance, value);
 		}
+
+		public FilterTargetsByDistanceFromRoot()
+		{
+			_rootOffset_Z = 1.000000F;
+			_tollerance = 0.500000F;
+		}
 	}
 }

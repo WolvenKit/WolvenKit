@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _useExitAnim);
 			set => SetProperty(ref _useExitAnim, value);
 		}
+
+		public questSetTier2Params_NodeType()
+		{
+			_playerWalkType = new() { Value = Enums.Tier2WalkType.Normal };
+		}
 	}
 }

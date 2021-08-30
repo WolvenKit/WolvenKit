@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _minimized);
 			set => SetProperty(ref _minimized, value);
 		}
+
+		public questMinimizeCallRequest()
+		{
+			_minimized = true;
+		}
 	}
 }

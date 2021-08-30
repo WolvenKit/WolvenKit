@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxAllowedAnglePitch);
 			set => SetProperty(ref _maxAllowedAnglePitch, value);
 		}
+
+		public IsFacingTowardsSource()
+		{
+			_maxAllowedAngleYaw = 90.000000F;
+			_maxAllowedAnglePitch = 45.000000F;
+		}
 	}
 }

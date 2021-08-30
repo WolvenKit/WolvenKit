@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _range);
 			set => SetProperty(ref _range, value);
 		}
+
+		public cpPlayerDetector()
+		{
+			_range = 10.000000F;
+		}
 	}
 }

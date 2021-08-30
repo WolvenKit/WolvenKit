@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _setExactValue);
 			set => SetProperty(ref _setExactValue, value);
 		}
+
+		public questEntityManagerSetStat_NodeType()
+		{
+			_statType = new() { Value = Enums.gamedataStatType.Invalid };
+			_setExactValue = true;
+		}
 	}
 }

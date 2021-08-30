@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _weightNode);
 			set => SetProperty(ref _weightNode, value);
 		}
+
+		public animAnimNode_LookAt()
+		{
+			_limitAngle = 90.000000F;
+		}
 	}
 }

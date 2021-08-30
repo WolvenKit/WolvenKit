@@ -68,5 +68,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _ignoreStateMachine);
 			set => SetProperty(ref _ignoreStateMachine, value);
 		}
+
+		public questCharacterManagerCombat_EquipWeapon()
+		{
+			_equip = true;
+			_weaponID = new() { Value = 71614763877 };
+			_slotID = new() { Value = 118070326407 };
+		}
 	}
 }

@@ -77,5 +77,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _keepLoadingScreenWhileVideoIsPlaying);
 			set => SetProperty(ref _keepLoadingScreenWhileVideoIsPlaying, value);
 		}
+
+		public questOverrideLoadingScreen_NodeType()
+		{
+			_minimumPlayCount = 3;
+			_tooltipDuration = 1.500000F;
+		}
 	}
 }

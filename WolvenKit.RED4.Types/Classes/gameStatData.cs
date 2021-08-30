@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _statType);
 			set => SetProperty(ref _statType, value);
 		}
+
+		public gameStatData()
+		{
+			_statType = new() { Value = Enums.gamedataStatType.Invalid };
+		}
 	}
 }

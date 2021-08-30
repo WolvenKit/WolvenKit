@@ -410,5 +410,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _targetWidgetPoolSize);
 			set => SetProperty(ref _targetWidgetPoolSize, value);
 		}
+
+		public gameuiPanzerHUDGameController()
+		{
+			_targetWidgetLibraryName = "Marker";
+			_targetWidgetPoolSize = 10;
+		}
 	}
 }

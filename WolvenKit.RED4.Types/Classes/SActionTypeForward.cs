@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _master);
 			set => SetProperty(ref _master, value);
 		}
+
+		public SActionTypeForward()
+		{
+			_qHack = true;
+		}
 	}
 }

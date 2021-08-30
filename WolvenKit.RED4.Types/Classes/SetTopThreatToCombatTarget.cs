@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _targetChangeTime);
 			set => SetProperty(ref _targetChangeTime, value);
 		}
+
+		public SetTopThreatToCombatTarget()
+		{
+			_refreshTimer = 0.500000F;
+		}
 	}
 }

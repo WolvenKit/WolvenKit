@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _effect);
 			set => SetProperty(ref _effect, value);
 		}
+
+		public SStatusEffectOperationData()
+		{
+			_range = 1.000000F;
+		}
 	}
 }

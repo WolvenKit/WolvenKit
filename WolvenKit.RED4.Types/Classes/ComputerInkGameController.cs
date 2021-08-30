@@ -167,5 +167,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _onGlitchingStateChangedListener);
 			set => SetProperty(ref _onGlitchingStateChangedListener, value);
 		}
+
+		public ComputerInkGameController()
+		{
+			_forceOpenDocumentType = new() { Value = Enums.EDocumentType.Invalid };
+		}
 	}
 }

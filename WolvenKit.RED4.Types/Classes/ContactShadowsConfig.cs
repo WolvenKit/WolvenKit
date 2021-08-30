@@ -50,5 +50,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _distanceFadeRange);
 			set => SetProperty(ref _distanceFadeRange, value);
 		}
+
+		public ContactShadowsConfig()
+		{
+			_range = 0.050000F;
+			_rangeLimit = 0.075000F;
+			_screenEdgeFadeRange = 0.150000F;
+			_distanceFadeLimit = 3.000000F;
+			_distanceFadeRange = 1.000000F;
+		}
 	}
 }

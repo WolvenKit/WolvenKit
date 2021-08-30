@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _strength);
 			set => SetProperty(ref _strength, value);
 		}
+
+		public MotionBlurAreaSettings()
+		{
+			_strength = 0.200000F;
+		}
 	}
 }

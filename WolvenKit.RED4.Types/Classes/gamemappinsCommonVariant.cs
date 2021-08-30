@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _variant);
 			set => SetProperty(ref _variant, value);
 		}
+
+		public gamemappinsCommonVariant()
+		{
+			_mappinType = new() { Value = 169957907894 };
+			_variant = new() { Value = Enums.gamedataMappinVariant.DefaultVariant };
+		}
 	}
 }

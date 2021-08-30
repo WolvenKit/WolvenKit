@@ -77,5 +77,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _jiggleEffectName);
 			set => SetProperty(ref _jiggleEffectName, value);
 		}
+
+		public cpMeatBag()
+		{
+			_rotationLerpFactor = 0.100000F;
+		}
 	}
 }

@@ -167,5 +167,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _actionWidgetRecord);
 			set => SetProperty(ref _actionWidgetRecord, value);
 		}
+
+		public ActivatedDeviceSetup()
+		{
+			_actionName = "LocKey#233";
+			_thumbnailIconRecord = new() { Value = 133181765352 };
+		}
 	}
 }

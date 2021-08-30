@@ -50,5 +50,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _video2);
 			set => SetProperty(ref _video2, value);
 		}
+
+		public SimpleBinkGameController()
+		{
+			_playCommonAd = true;
+			_video1Path = "Video1";
+			_video2Path = "Video2";
+		}
 	}
 }

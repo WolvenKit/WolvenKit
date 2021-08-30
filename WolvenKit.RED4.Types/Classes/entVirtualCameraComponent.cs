@@ -50,5 +50,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isEnabled);
 			set => SetProperty(ref _isEnabled, value);
 		}
+
+		public entVirtualCameraComponent()
+		{
+			_virtualCameraName = "Component";
+			_resolutionWidth = 1920;
+			_resolutionHeight = 1080;
+			_drawBackground = true;
+			_isEnabled = true;
+		}
 	}
 }

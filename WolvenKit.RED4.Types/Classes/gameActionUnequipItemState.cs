@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _duration);
 			set => SetProperty(ref _duration, value);
 		}
+
+		public gameActionUnequipItemState()
+		{
+			_duration = -1.000000F;
+		}
 	}
 }

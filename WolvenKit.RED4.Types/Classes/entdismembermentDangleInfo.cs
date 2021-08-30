@@ -50,5 +50,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _dangleCollisionSphereRadius);
 			set => SetProperty(ref _dangleCollisionSphereRadius, value);
 		}
+
+		public entdismembermentDangleInfo()
+		{
+			_dangleSegmentLenght = 0.100000F;
+			_dangleVelocityDamping = 0.400000F;
+			_dangleBendStiffness = 0.600000F;
+			_dangleCollisionSphereRadius = 0.250000F;
+		}
 	}
 }

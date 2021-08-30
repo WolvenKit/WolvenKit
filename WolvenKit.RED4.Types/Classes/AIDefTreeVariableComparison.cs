@@ -68,5 +68,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _referenceValue);
 			set => SetProperty(ref _referenceValue, value);
 		}
+
+		public AIDefTreeVariableComparison()
+		{
+			_referenceVariableId = 65535;
+			_operator = new() { Value = Enums.EComparisonType.Equal };
+		}
 	}
 }

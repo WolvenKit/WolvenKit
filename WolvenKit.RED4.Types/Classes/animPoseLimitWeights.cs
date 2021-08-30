@@ -59,5 +59,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isCachable);
 			set => SetProperty(ref _isCachable, value);
 		}
+
+		public animPoseLimitWeights()
+		{
+			_min = 1.000000F;
+			_mid = 1.000000F;
+			_max = 1.000000F;
+			_poseTrackIndex = -1;
+		}
 	}
 }

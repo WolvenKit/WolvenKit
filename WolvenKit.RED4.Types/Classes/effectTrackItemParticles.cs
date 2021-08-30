@@ -77,5 +77,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _renderLayerMask);
 			set => SetProperty(ref _renderLayerMask, value);
 		}
+
+		public effectTrackItemParticles()
+		{
+			_renderLayerMask = new() { Value = Enums.RenderSceneLayerMask.Default };
+		}
 	}
 }

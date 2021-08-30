@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _rightHandSide);
 			set => SetProperty(ref _rightHandSide, value);
 		}
+
+		public AIbehaviorComparisonExpressionDefinition()
+		{
+			_operator = new() { Value = Enums.EComparisonType.Equal };
+		}
 	}
 }

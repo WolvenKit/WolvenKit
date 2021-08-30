@@ -50,5 +50,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isEnabled);
 			set => SetProperty(ref _isEnabled, value);
 		}
+
+		public entParticlesComponent()
+		{
+			_emissionRate = 1.000000F;
+			_renderLayerMask = new() { Value = Enums.RenderSceneLayerMask.Default };
+			_isEnabled = true;
+		}
 	}
 }

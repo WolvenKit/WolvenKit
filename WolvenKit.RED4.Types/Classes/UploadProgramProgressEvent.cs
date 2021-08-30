@@ -77,5 +77,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _statPoolType);
 			set => SetProperty(ref _statPoolType, value);
 		}
+
+		public UploadProgramProgressEvent()
+		{
+			_duration = 3.000000F;
+			_statPoolType = new() { Value = Enums.gamedataStatPoolType.Invalid };
+		}
 	}
 }

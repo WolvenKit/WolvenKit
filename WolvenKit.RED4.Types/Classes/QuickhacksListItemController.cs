@@ -203,5 +203,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _defaultMargin);
 			set => SetProperty(ref _defaultMargin, value);
 		}
+
+		public QuickhacksListItemController()
+		{
+			_expandAnimationDuration = 0.200000F;
+		}
 	}
 }

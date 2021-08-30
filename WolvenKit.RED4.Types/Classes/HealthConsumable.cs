@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _respawnTime);
 			set => SetProperty(ref _respawnTime, value);
 		}
+
+		public HealthConsumable()
+		{
+			_disappearAfterEquip = true;
+			_respawnTime = -1.000000F;
+		}
 	}
 }

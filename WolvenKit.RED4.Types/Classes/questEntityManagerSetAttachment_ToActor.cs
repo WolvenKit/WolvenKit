@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _customOffsetRot);
 			set => SetProperty(ref _customOffsetRot, value);
 		}
+
+		public questEntityManagerSetAttachment_ToActor()
+		{
+			_isPlayer = true;
+		}
 	}
 }

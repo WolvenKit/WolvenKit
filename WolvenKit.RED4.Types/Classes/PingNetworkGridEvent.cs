@@ -68,5 +68,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _ignoreRevealed);
 			set => SetProperty(ref _ignoreRevealed, value);
 		}
+
+		public PingNetworkGridEvent()
+		{
+			_lifetime = -1.000000F;
+			_revealMaster = true;
+		}
 	}
 }

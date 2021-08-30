@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _max);
 			set => SetProperty(ref _max, value);
 		}
+
+		public CMaterialParameterScalar()
+		{
+			_min = -340282346638528859811704183484516925440.000000F;
+			_max = 340282346638528859811704183484516925440.000000F;
+		}
 	}
 }

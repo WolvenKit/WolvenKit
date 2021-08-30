@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _multiplier);
 			set => SetProperty(ref _multiplier, value);
 		}
+
+		public animSimpleBounceTrackOutput()
+		{
+			_multiplier = 1.000000F;
+		}
 	}
 }

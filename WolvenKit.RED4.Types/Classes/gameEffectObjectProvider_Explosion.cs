@@ -32,5 +32,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _destructibleAndDynamic);
 			set => SetProperty(ref _destructibleAndDynamic, value);
 		}
+
+		public gameEffectObjectProvider_Explosion()
+		{
+			_puppets = true;
+			_gameObjects = true;
+			_destructibleAndDynamic = true;
+		}
 	}
 }

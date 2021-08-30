@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _autoHideDistanceScale);
 			set => SetProperty(ref _autoHideDistanceScale, value);
 		}
+
+		public meshMeshParamOccluderData()
+		{
+			_defaultOccluderType = new() { Value = Enums.visWorldOccluderType.None };
+			_autoHideDistanceScale = 255;
+		}
 	}
 }

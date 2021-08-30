@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _test);
 			set => SetProperty(ref _test, value);
 		}
+
+		public moveCustomMoveEvent()
+		{
+			_test = 666;
+		}
 	}
 }

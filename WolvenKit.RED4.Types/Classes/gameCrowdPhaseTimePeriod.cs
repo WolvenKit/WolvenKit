@@ -77,5 +77,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _useDensityPreset);
 			set => SetProperty(ref _useDensityPreset, value);
 		}
+
+		public gameCrowdPhaseTimePeriod()
+		{
+			_density_52 = 0.500000F;
+			_density_56 = "Zero";
+			_workspotsUsage = 0.500000F;
+			_useDensityPreset = true;
+		}
 	}
 }

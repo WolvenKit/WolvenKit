@@ -239,5 +239,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _gruntVariations);
 			set => SetProperty(ref _gruntVariations, value);
 		}
+
+		public audioGeneralVoiceGruntSettings()
+		{
+			_variationsCount = 1;
+		}
 	}
 }

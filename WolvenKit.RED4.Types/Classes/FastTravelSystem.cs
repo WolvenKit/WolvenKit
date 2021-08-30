@@ -95,5 +95,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _removeAllLocksLisenerID);
 			set => SetProperty(ref _removeAllLocksLisenerID, value);
 		}
+
+		public FastTravelSystem()
+		{
+			_fastTravelPointsTotal = 149;
+			_lastUpdatedAchievementCount = -1;
+		}
 	}
 }

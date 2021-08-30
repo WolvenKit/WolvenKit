@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _blurDimension);
 			set => SetProperty(ref _blurDimension, value);
 		}
+
+		public inkBoxBlurEffect()
+		{
+			_samples = 10;
+			_intensity = 0.050000F;
+		}
 	}
 }

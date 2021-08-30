@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _interruptConditions);
 			set => SetProperty(ref _interruptConditions, value);
 		}
+
+		public questSceneInterrupt_ConditionType()
+		{
+			_onlyInSafeMoment = true;
+		}
 	}
 }

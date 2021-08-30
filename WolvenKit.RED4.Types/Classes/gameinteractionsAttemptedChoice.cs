@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _choice);
 			set => SetProperty(ref _choice, value);
 		}
+
+		public gameinteractionsAttemptedChoice()
+		{
+			_choiceIdx = -1;
+			_visualizerType = new() { Value = Enums.gameinteractionsvisEVisualizerType.Invalid };
+		}
 	}
 }

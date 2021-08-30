@@ -68,5 +68,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _compiledTopologyData);
 			set => SetProperty(ref _compiledTopologyData, value);
 		}
+
+		public entSkinnedClothComponent()
+		{
+			_isEnabled = true;
+			_meshAppearance = "default";
+			_chunkMask = 18446744073709551615;
+		}
 	}
 }

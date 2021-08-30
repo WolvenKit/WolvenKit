@@ -122,5 +122,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxHingeAngle);
 			set => SetProperty(ref _maxHingeAngle, value);
 		}
+
+		public animAnimNode_Ik2Constraint()
+		{
+			_hingeAxis = new() { Value = Enums.animAxis.Y };
+			_weight = 1.000000F;
+		}
 	}
 }

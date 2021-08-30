@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _tags);
 			set => SetProperty(ref _tags, value);
 		}
+
+		public meshMeshAppearance()
+		{
+			_name = "default";
+		}
 	}
 }

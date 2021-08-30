@@ -95,5 +95,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _precisionEpsilon);
 			set => SetProperty(ref _precisionEpsilon, value);
 		}
+
+		public CompassController()
+		{
+			_decimalPrecision = 2;
+		}
 	}
 }

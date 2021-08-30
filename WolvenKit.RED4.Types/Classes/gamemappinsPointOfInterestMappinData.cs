@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _active);
 			set => SetProperty(ref _active, value);
 		}
+
+		public gamemappinsPointOfInterestMappinData()
+		{
+			_active = true;
+		}
 	}
 }

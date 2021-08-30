@@ -95,5 +95,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _soundDelay4);
 			set => SetProperty(ref _soundDelay4, value);
 		}
+
+		public audioAdvertSoundMetadata()
+		{
+			_speedOfSound = 1.000000F;
+		}
 	}
 }

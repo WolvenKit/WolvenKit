@@ -32,5 +32,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _scaleVariation);
 			set => SetProperty(ref _scaleVariation, value);
 		}
+
+		public worldFoliageBrushParams()
+		{
+			_proximity = 1.000000F;
+			_scale = 1.000000F;
+			_scaleVariation = 0.100000F;
+		}
 	}
 }

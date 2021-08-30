@@ -77,5 +77,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _customParameters);
 			set => SetProperty(ref _customParameters, value);
 		}
+
+		public audioMixingActionData()
+		{
+			_actionType = new() { Value = Enums.audioMixingActionType.EmitterTag };
+			_voContext = new() { Value = Enums.locVoiceoverContext.Vo_Context_Community };
+			_distanceRolloffFactor = 1.000000F;
+		}
 	}
 }

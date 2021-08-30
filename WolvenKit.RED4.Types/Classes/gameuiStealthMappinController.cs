@@ -635,5 +635,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _c_objectMarkerMaxCameraDistance);
 			set => SetProperty(ref _c_objectMarkerMaxCameraDistance, value);
 		}
+
+		public gameuiStealthMappinController()
+		{
+			_objectMarkerFirstShowing = true;
+			_c_awareToCombatThreshold = 1.000000F;
+			_c_combatToAwareThreshold = 99.900002F;
+			_c_deviceCombatToAwareThreshold = 35.000000F;
+			_c_objectMarkerMaxDistance = 50.000000F;
+			_c_objectMarkerMaxCameraDistance = 30.000000F;
+		}
 	}
 }

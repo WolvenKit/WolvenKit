@@ -104,5 +104,16 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _diffuseAlphaAsEmissive);
 			set => SetProperty(ref _diffuseAlphaAsEmissive, value);
 		}
+
+		public worldProxyTextureParams()
+		{
+			_albedoTextureResolution = new() { Value = Enums.worldProxyMeshTexRes.RES_256 };
+			_generateAlbedo = true;
+			_normalTextureResolution = new() { Value = Enums.worldProxyMeshTexRes.RES_128 };
+			_roughnessTextureResolution = new() { Value = Enums.worldProxyMeshTexRes.RES_128 };
+			_generateRoughness = true;
+			_metalnessTextureResolution = new() { Value = Enums.worldProxyMeshTexRes.RES_128 };
+			_diffuseAlphaAsEmissive = true;
+		}
 	}
 }

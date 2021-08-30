@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _fastForwardAfterTeleport);
 			set => SetProperty(ref _fastForwardAfterTeleport, value);
 		}
+
+		public AIbehaviorSelectWorkspotNodeDefinition()
+		{
+			_repeatChild = true;
+		}
 	}
 }

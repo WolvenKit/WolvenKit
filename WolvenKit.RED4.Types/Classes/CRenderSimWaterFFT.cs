@@ -50,5 +50,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lambda);
 			set => SetProperty(ref _lambda, value);
 		}
+
+		public CRenderSimWaterFFT()
+		{
+			_windSpeed = 8.000000F;
+			_windScale = 1.000000F;
+			_amplitude = 20.000000F;
+			_lambda = 0.500000F;
+		}
 	}
 }

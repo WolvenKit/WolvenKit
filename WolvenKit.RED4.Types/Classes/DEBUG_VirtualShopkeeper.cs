@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _vendorID);
 			set => SetProperty(ref _vendorID, value);
 		}
+
+		public DEBUG_VirtualShopkeeper()
+		{
+			_vendorID = new() { Text = "Vendors.CCLVendor" };
+		}
 	}
 }

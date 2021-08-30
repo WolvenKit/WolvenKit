@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isNewLocation);
 			set => SetProperty(ref _isNewLocation, value);
 		}
+
+		public questSetLocationName_NodeType()
+		{
+			_isNewLocation = true;
+		}
 	}
 }

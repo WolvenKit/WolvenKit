@@ -257,5 +257,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _asyncSpawnRequests);
 			set => SetProperty(ref _asyncSpawnRequests, value);
 		}
+
+		public scannerDetailsGameController()
+		{
+			_isDescriptionVisible = true;
+		}
 	}
 }

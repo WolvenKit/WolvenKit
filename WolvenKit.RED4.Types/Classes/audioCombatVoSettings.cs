@@ -104,5 +104,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _minDamageToInterruptVoWithPainLong);
 			set => SetProperty(ref _minDamageToInterruptVoWithPainLong, value);
 		}
+
+		public audioCombatVoSettings()
+		{
+			_minDamageToInterruptVoWithPainShort = 9.000000F;
+			_minDamageToInterruptVoWithPainLong = 30.000000F;
+		}
 	}
 }

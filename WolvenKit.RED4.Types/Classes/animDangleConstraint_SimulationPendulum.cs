@@ -221,5 +221,23 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _sinOfHalfZAngle);
 			set => SetProperty(ref _sinOfHalfZAngle, value);
 		}
+
+		public animDangleConstraint_SimulationPendulum()
+		{
+			_halfOfMaxApertureAngle = 45.000000F;
+			_mass = 1.000000F;
+			_damping = 1.000000F;
+			_cosOfHalfMaxApertureAngle = 0.707107F;
+			_cosOfHalfOfHalfMaxApertureAngle = 0.923880F;
+			_sinOfHalfOfHalfMaxApertureAngle = 0.382683F;
+			_invertedMass = 1.000000F;
+			_simulationFps = 10.000000F;
+			_gravityWS = 9.810000F;
+			_projectionType = new() { Value = Enums.animPendulumProjectionType.ShortestPathRotational };
+			_cosOfHalfXAngle = 0.707107F;
+			_cosOfHalfYAngle = 1.000000F;
+			_cosOfHalfZAngle = 1.000000F;
+			_sinOfHalfXAngle = 0.707107F;
+		}
 	}
 }

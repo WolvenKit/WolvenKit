@@ -77,5 +77,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _customParameter3);
 			set => SetProperty(ref _customParameter3, value);
 		}
+
+		public effectTrackItemMaterialParameter()
+		{
+			_scale0 = 1.000000F;
+			_scale1 = 1.000000F;
+			_scale2 = 1.000000F;
+			_scale3 = 1.000000F;
+		}
 	}
 }

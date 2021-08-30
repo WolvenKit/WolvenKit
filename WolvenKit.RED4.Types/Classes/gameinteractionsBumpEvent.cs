@@ -77,5 +77,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _sourceRadius);
 			set => SetProperty(ref _sourceRadius, value);
 		}
+
+		public gameinteractionsBumpEvent()
+		{
+			_sourceSquaredDistance = float.PositiveInfinity;
+            _sourceRadius = 0.400000F;
+		}
 	}
 }

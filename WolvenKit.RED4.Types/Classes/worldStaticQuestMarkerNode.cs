@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _questMarkerHeight);
 			set => SetProperty(ref _questMarkerHeight, value);
 		}
+
+		public worldStaticQuestMarkerNode()
+		{
+			_questLabel = new() { Text = "Temporary Quest Label" };
+			_questMarkerHeight = 500.000000F;
+		}
 	}
 }

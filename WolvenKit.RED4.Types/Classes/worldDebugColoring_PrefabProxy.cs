@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _distinguishInstancedMesh);
 			set => SetProperty(ref _distinguishInstancedMesh, value);
 		}
+
+		public worldDebugColoring_PrefabProxy()
+		{
+			_distinguishInstancedMesh = true;
+		}
 	}
 }

@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isAvailable);
 			set => SetProperty(ref _isAvailable, value);
 		}
+
+		public FollowSlot()
+		{
+			_isEnabled = true;
+			_isAvailable = true;
+		}
 	}
 }

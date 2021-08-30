@@ -41,5 +41,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _hasQuickHack);
 			set => SetProperty(ref _hasQuickHack, value);
 		}
+
+		public WindowBlindersData()
+		{
+			_windowBlindersState = new() { Value = Enums.EWindowBlindersStates.Closed };
+			_hasOpenInteraction = true;
+			_hasQuickHack = true;
+		}
 	}
 }

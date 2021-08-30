@@ -41,5 +41,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxPriorityBoundsFactor);
 			set => SetProperty(ref _maxPriorityBoundsFactor, value);
 		}
+
+		public gameinteractionsDistanceFromScreenCenterPredicate()
+		{
+			_height = 1.000000F;
+			_width = 1.000000F;
+			_curvature = 1.000000F;
+		}
 	}
 }

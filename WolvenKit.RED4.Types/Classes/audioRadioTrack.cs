@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isStreamingFriendly);
 			set => SetProperty(ref _isStreamingFriendly, value);
 		}
+
+		public audioRadioTrack()
+		{
+			_isStreamingFriendly = true;
+		}
 	}
 }

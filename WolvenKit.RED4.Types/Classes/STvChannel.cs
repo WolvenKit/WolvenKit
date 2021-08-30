@@ -68,5 +68,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _channelTweakID);
 			set => SetProperty(ref _channelTweakID, value);
 		}
+
+		public STvChannel()
+		{
+			_channelName = new() { Text = "1" };
+			_looped = true;
+		}
 	}
 }

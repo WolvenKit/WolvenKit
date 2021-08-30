@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _requiredQualityDistanceCategory);
 			set => SetProperty(ref _requiredQualityDistanceCategory, value);
 		}
+
+		public animAnimNode_FloatTrackModifierMarkUnstable()
+		{
+			_requiredQualityDistanceCategory = 4;
+		}
 	}
 }

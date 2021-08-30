@@ -122,5 +122,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _stopSnapToTerrainBlendTime);
 			set => SetProperty(ref _stopSnapToTerrainBlendTime, value);
 		}
+
+		public questAnimMoveOnSplineParams()
+		{
+			_controllersSetupName = "Walk";
+		}
 	}
 }

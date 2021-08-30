@@ -284,5 +284,21 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxAvSpawnInterval);
 			set => SetProperty(ref _maxAvSpawnInterval, value);
 		}
+
+		public gameuiPanzerGameLogicController()
+		{
+			_gameOverDelay = 2.000000F;
+			_moveUpKey = "CameraStepPitchUp";
+			_moveDownKey = "CameraStepPitchDown";
+			_moveLeftKey = "CameraStepYawLeft";
+			_moveRightKey = "CameraStepYawRight";
+			_shootKey = "CameraStepUp";
+			_backKey = "CameraStepDown";
+			_submitKey = "click";
+			_axisDeadZone = 0.050000F;
+			_moveXAxis = "left_stick_x";
+			_moveYAxis = "left_stick_y";
+			_shootAxis = "right_trigger";
+		}
 	}
 }

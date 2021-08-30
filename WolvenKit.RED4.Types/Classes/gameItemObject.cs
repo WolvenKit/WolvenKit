@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isIconic);
 			set => SetProperty(ref _isIconic, value);
 		}
+
+		public gameItemObject()
+		{
+			_updateBucket = new() { Value = Enums.UpdateBucketEnum.AttachedObject };
+		}
 	}
 }

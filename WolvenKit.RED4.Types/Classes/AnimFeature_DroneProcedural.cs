@@ -122,5 +122,21 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _combat_default_z_offset);
 			set => SetProperty(ref _combat_default_z_offset, value);
 		}
+
+		public AnimFeature_DroneProcedural()
+		{
+			_mass = 100.000000F;
+			_size_front = 1.500000F;
+			_size_back = -1.500000F;
+			_size_left = 1.200000F;
+			_size_right = -1.200000F;
+			_walk_tilt_coef = 1.330000F;
+			_mass_normalized_coef = 2.000000F;
+			_tilt_angle_on_speed = 40.000000F;
+			_speed_idle_threshold = 0.200000F;
+			_starting_recovery_ballance = 0.010000F;
+			_pseudo_acceleration = 30.000000F;
+			_turn_inertia_damping = 0.750000F;
+		}
 	}
 }

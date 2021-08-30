@@ -275,5 +275,16 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _shardTransactionListener);
 			set => SetProperty(ref _shardTransactionListener, value);
 		}
+
+		public JournalNotificationQueue()
+		{
+			_showDuration = 6.000000F;
+			_currencyNotification = "notification_currency";
+			_shardNotification = "notification_shard";
+			_itemNotification = "Item_Received_SMALL";
+			_questNotification = "notification_quest";
+			_genericNotification = "notification";
+			_messageNotification = "notification_message";
+		}
 	}
 }

@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _blockOtherCameras);
 			set => SetProperty(ref _blockOtherCameras, value);
 		}
+
+		public questSetVehicleCamera_NodeType()
+		{
+			_cameraType = new() { Value = Enums.questVehicleCameraType.PuppetFPP };
+		}
 	}
 }

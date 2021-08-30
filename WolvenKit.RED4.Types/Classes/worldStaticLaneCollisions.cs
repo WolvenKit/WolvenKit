@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _deadEndStart);
 			set => SetProperty(ref _deadEndStart, value);
 		}
+
+		public worldStaticLaneCollisions()
+		{
+			_deadEndStart = float.PositiveInfinity;
+        }
 	}
 }

@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _subtreesToChange);
 			set => SetProperty(ref _subtreesToChange, value);
 		}
+
+		public animRigPartBoneTree()
+		{
+			_weight = 1.000000F;
+		}
 	}
 }

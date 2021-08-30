@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _linkedStatusEffectID);
 			set => SetProperty(ref _linkedStatusEffectID, value);
 		}
+
+		public EnableFastTravelRequest()
+		{
+			_forceRefreshUI = true;
+			_reason = "quest";
+		}
 	}
 }

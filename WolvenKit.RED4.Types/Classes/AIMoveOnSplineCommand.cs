@@ -248,5 +248,21 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxCompanionDistanceOnSpline);
 			set => SetProperty(ref _maxCompanionDistanceOnSpline, value);
 		}
+
+		public AIMoveOnSplineCommand()
+		{
+			_desiredDistance = -5.000000F;
+			_deadZoneRadius = 2.000000F;
+			_catchUpWithCompanion = true;
+			_teleportToCompanion = true;
+			_useMatchForSpeedForPlayer = true;
+			_snapToTerrain = true;
+			_useStart = true;
+			_useStop = true;
+			_minSearchAngle = 22.500000F;
+			_maxSearchAngle = 60.000000F;
+			_noWaitToEndDistance = 10.000000F;
+			_noWaitToEndCompanionDistance = 5.000000F;
+		}
 	}
 }

@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _animations);
 			set => SetProperty(ref _animations, value);
 		}
+
+		public animLookAtAnimationDefinition()
+		{
+			_minTransitionDuration = 1.000000F;
+			_playAnimProbability = 1.000000F;
+		}
 	}
 }

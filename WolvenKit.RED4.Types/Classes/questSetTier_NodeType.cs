@@ -59,5 +59,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _motionConstrainedTierDataParams);
 			set => SetProperty(ref _motionConstrainedTierDataParams, value);
 		}
+
+		public questSetTier_NodeType()
+		{
+			_tier = new() { Value = Enums.GameplayTier.Tier1_FullGameplay };
+			_forceEmptyHands = true;
+		}
 	}
 }

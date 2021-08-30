@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _updatePS);
 			set => SetProperty(ref _updatePS, value);
 		}
+
+		public ToggleFocusClueEvent()
+		{
+			_updatePS = true;
+		}
 	}
 }

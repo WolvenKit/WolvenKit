@@ -311,5 +311,17 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxZoomLevel);
 			set => SetProperty(ref _maxZoomLevel, value);
 		}
+
+		public hudCameraController()
+		{
+			_pitch_min = -360.000000F;
+			_pitch_max = 360.000000F;
+			_yaw_min = -640.000000F;
+			_yaw_max = 640.000000F;
+			_tele_min = -360.000000F;
+			_tele_max = 360.000000F;
+			_tele_scale = 0.750000F;
+			_max_zoom_level = 4.000000F;
+		}
 	}
 }

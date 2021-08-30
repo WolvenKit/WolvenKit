@@ -122,5 +122,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _compiledEntityLODFlags);
 			set => SetProperty(ref _compiledEntityLODFlags, value);
 		}
+
+		public entEntityTemplate()
+		{
+			_defaultAppearance = "default";
+		}
 	}
 }

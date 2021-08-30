@@ -104,5 +104,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _healthListener);
 			set => SetProperty(ref _healthListener, value);
 		}
+
+		public ScriptedWeakspotObject()
+		{
+			_alive = true;
+		}
 	}
 }

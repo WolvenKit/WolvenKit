@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _newTier);
 			set => SetProperty(ref _newTier, value);
 		}
+
+		public gameStoryTierChangedEvent()
+		{
+			_newTier = new() { Value = Enums.gameStoryTier.Cinematic };
+		}
 	}
 }

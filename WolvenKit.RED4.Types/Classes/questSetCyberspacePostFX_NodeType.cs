@@ -77,5 +77,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _timeBlend);
 			set => SetProperty(ref _timeBlend, value);
 		}
+
+		public questSetCyberspacePostFX_NodeType()
+		{
+			_enabled = true;
+			_fullScreen = true;
+			_targetDatamosh = 1.000000F;
+			_targetTreshold = 0.300000F;
+			_timeBlend = 3.000000F;
+		}
 	}
 }

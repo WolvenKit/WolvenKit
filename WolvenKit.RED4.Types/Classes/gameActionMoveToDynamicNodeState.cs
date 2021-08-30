@@ -77,5 +77,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _useStop);
 			set => SetProperty(ref _useStop, value);
 		}
+
+		public gameActionMoveToDynamicNodeState()
+		{
+			_stopWhenDestinationReached = true;
+			_pathfindingUpdateInterval = 0.500000F;
+			_usePathfinding = true;
+			_useStart = true;
+			_useStop = true;
+		}
 	}
 }

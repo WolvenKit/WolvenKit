@@ -185,5 +185,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _bptMinResetInputMag);
 			set => SetProperty(ref _bptMinResetInputMag, value);
 		}
+
+		public gameaimAssistAimRequest()
+		{
+			_checkRange = true;
+			_processAsInput = true;
+			_bptMaxSwitches = -1.000000F;
+		}
 	}
 }

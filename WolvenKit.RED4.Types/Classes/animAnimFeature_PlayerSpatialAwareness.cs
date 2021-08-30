@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _forwardDistance);
 			set => SetProperty(ref _forwardDistance, value);
 		}
+
+		public animAnimFeature_PlayerSpatialAwareness()
+		{
+			_forwardDistance = 340282346638528859811704183484516925440.000000F;
+		}
 	}
 }

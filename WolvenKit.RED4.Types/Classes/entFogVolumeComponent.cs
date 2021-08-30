@@ -68,5 +68,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isEnabled);
 			set => SetProperty(ref _isEnabled, value);
 		}
+
+		public entFogVolumeComponent()
+		{
+			_densityFactor = 100.000000F;
+			_absorption = -1.000000F;
+			_isEnabled = true;
+		}
 	}
 }

@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _falseRecordName);
 			set => SetProperty(ref _falseRecordName, value);
 		}
+
+		public ToggleON()
+		{
+			_trueRecordName = new() { Text = "On" };
+			_falseRecordName = new() { Text = "Off" };
+		}
 	}
 }

@@ -149,5 +149,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _genderSpecificParams);
 			set => SetProperty(ref _genderSpecificParams, value);
 		}
+
+		public scnPlayFPPControlAnimEvent()
+		{
+			_fPPControlActive = true;
+			_cameraUseTrajectorySpace = true;
+			_cameraBlendInDuration = 0.500000F;
+			_cameraBlendOutDuration = 0.500000F;
+		}
 	}
 }

@@ -59,5 +59,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isEnabled);
 			set => SetProperty(ref _isEnabled, value);
 		}
+
+		public entTriggerActivatorComponent()
+		{
+			_radius = 0.400000F;
+			_height = 1.800000F;
+			_channels = new() { Value = Enums.TriggerChannel.TC_Default };
+			_maxContinousDistance = 0.100000F;
+			_isEnabled = true;
+		}
 	}
 }

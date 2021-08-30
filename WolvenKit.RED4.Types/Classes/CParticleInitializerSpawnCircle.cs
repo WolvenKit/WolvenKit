@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _spawnToLocal);
 			set => SetProperty(ref _spawnToLocal, value);
 		}
+
+		public CParticleInitializerSpawnCircle()
+		{
+			_worldSpace = true;
+		}
 	}
 }

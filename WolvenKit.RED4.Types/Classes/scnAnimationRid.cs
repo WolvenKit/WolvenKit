@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _trajectoryBoneIndex);
 			set => SetProperty(ref _trajectoryBoneIndex, value);
 		}
+
+		public scnAnimationRid()
+		{
+			_trajectoryBoneIndex = -1;
+		}
 	}
 }

@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _ragdollOnCollision);
 			set => SetProperty(ref _ragdollOnCollision, value);
 		}
+
+		public entUncontrolledMovementStartEvent()
+		{
+			_ragdollOnCollision = true;
+		}
 	}
 }

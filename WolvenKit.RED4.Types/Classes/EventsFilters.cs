@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _outgoingEventsFilter);
 			set => SetProperty(ref _outgoingEventsFilter, value);
 		}
+
+		public EventsFilters()
+		{
+			_incomingEventsFilter = new() { Value = Enums.EFilterType.ALLOW_ALL };
+			_outgoingEventsFilter = new() { Value = Enums.EFilterType.ALLOW_ALL };
+		}
 	}
 }

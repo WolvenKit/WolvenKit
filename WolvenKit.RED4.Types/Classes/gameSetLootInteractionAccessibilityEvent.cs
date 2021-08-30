@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _accessible);
 			set => SetProperty(ref _accessible, value);
 		}
+
+		public gameSetLootInteractionAccessibilityEvent()
+		{
+			_accessible = true;
+		}
 	}
 }

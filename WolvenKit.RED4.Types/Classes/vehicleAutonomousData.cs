@@ -302,5 +302,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _trafficTryNeighborsForEnd);
 			set => SetProperty(ref _trafficTryNeighborsForEnd, value);
 		}
+
+		public vehicleAutonomousData()
+		{
+			_distanceMin = 0.500000F;
+			_distanceMax = 1.000000F;
+			_stopHasReachedTarget = true;
+			_startFromClosest = true;
+			_secureTimeOut = 60.000000F;
+		}
 	}
 }

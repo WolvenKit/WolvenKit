@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _components);
 			set => SetProperty(ref _components, value);
 		}
+
+		public questManageCollision_NodeTypeParams()
+		{
+			_enableQueries = true;
+		}
 	}
 }

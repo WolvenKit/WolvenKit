@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxEntries);
 			set => SetProperty(ref _maxEntries, value);
 		}
+
+		public HitHistory()
+		{
+			_maxEntries = 5;
+		}
 	}
 }

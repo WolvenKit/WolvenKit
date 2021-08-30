@@ -68,5 +68,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _generator);
 			set => SetProperty(ref _generator, value);
 		}
+
+		public DynamicTexture()
+		{
+			_width = 256;
+			_height = 256;
+			_samplesCount = 1;
+			_dataFormat = new() { Value = Enums.DynamicTextureDataFormat.RGBA_Uint8_SRGB };
+		}
 	}
 }

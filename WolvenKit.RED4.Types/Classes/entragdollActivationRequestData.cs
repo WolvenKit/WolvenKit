@@ -59,5 +59,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _filterDataOverride);
 			set => SetProperty(ref _filterDataOverride, value);
 		}
+
+		public entragdollActivationRequestData()
+		{
+			_activateOnCollision = true;
+			_applyPowerPose = true;
+			_applyMomentum = true;
+		}
 	}
 }

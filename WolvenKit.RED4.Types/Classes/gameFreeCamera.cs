@@ -59,5 +59,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _usePhysicalCollision);
 			set => SetProperty(ref _usePhysicalCollision, value);
 		}
+
+		public gameFreeCamera()
+		{
+			_baseSpeed = 10.000000F;
+			_analogTurnRate = 100.000000F;
+			_mouseTurnRate = 7.000000F;
+			_usePhysicalCollision = true;
+		}
 	}
 }

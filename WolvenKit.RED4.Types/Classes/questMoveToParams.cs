@@ -131,5 +131,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _alwaysUseStealth);
 			set => SetProperty(ref _alwaysUseStealth, value);
 		}
+
+		public questMoveToParams()
+		{
+			_useStart = true;
+			_useStop = true;
+			_finishWhenDestinationReached = true;
+			_repeatCommandOnInterrupt = true;
+			_executeWhileDespawned = true;
+		}
 	}
 }

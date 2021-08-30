@@ -77,5 +77,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _debugTargetTranslation);
 			set => SetProperty(ref _debugTargetTranslation, value);
 		}
+
+		public CParticleDrawerFacingBeam()
+		{
+			_texturesPerUnit = 1.000000F;
+			_numSegments = 10;
+		}
 	}
 }

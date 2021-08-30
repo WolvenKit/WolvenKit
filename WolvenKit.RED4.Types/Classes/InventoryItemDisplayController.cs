@@ -707,5 +707,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _parrentWrappedDataObject);
 			set => SetProperty(ref _parrentWrappedDataObject, value);
 		}
+
+		public InventoryItemDisplayController()
+		{
+			_equipmentArea = new() { Value = Enums.gamedataEquipmentArea.Invalid };
+			_itemType = new() { Value = Enums.gamedataItemType.Invalid };
+			_defaultFallbackImage = "undefined";
+			_defaultEmptyImage = "icon_add";
+			_defaultEmptyImageAtlas = new() { Text = @"base\gameplay\gui\fullscreen\inventory\inventory4_atlas.inkatlas" };
+			_hasAvailableItems = true;
+		}
 	}
 }

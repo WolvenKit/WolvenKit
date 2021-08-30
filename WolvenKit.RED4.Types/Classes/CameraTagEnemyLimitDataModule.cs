@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _cameraList);
 			set => SetProperty(ref _cameraList, value);
 		}
+
+		public CameraTagEnemyLimitDataModule()
+		{
+			_cameraLimit = 5;
+		}
 	}
 }

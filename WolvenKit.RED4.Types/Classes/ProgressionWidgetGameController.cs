@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _gameInstance);
 			set => SetProperty(ref _gameInstance, value);
 		}
+
+		public ProgressionWidgetGameController()
+		{
+			_duration = 3.000000F;
+		}
 	}
 }

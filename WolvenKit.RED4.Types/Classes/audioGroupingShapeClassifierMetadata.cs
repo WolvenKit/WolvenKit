@@ -86,5 +86,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxDistanceLimit);
 			set => SetProperty(ref _maxDistanceLimit, value);
 		}
+
+		public audioGroupingShapeClassifierMetadata()
+		{
+			_minDistanceLimit = "near";
+			_maxDistanceLimit = "infinite";
+		}
 	}
 }

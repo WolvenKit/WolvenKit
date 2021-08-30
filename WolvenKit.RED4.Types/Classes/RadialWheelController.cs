@@ -311,5 +311,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _dbg_activeSlotLayers);
 			set => SetProperty(ref _dbg_activeSlotLayers, value);
 		}
+
+		public RadialWheelController()
+		{
+			_radialMode = new() { Value = Enums.ERadialMode.ApplyActiveSlotAndConsumables };
+		}
 	}
 }

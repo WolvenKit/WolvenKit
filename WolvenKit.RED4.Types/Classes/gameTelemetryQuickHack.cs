@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _quality);
 			set => SetProperty(ref _quality, value);
 		}
+
+		public gameTelemetryQuickHack()
+		{
+			_quality = -1;
+		}
 	}
 }

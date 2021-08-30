@@ -50,5 +50,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _intensity);
 			set => SetProperty(ref _intensity, value);
 		}
+
+		public inkLightSweepEffect()
+		{
+			_positionX = 0.500000F;
+			_positionY = 0.500000F;
+			_width = 0.300000F;
+			_intensity = 2.000000F;
+		}
 	}
 }

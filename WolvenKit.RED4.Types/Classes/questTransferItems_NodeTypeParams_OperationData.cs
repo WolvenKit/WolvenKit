@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _quantity);
 			set => SetProperty(ref _quantity, value);
 		}
+
+		public questTransferItems_NodeTypeParams_OperationData()
+		{
+			_quantity = 1;
+		}
 	}
 }

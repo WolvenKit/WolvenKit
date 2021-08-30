@@ -41,5 +41,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _attachRightHandToLeftHand);
 			set => SetProperty(ref _attachRightHandToLeftHand, value);
 		}
+
+		public animLookAtRequestForPart()
+		{
+			_bodyPart = "Eyes";
+			_attachLeftHandToRightHand = -1;
+			_attachRightHandToLeftHand = -1;
+		}
 	}
 }

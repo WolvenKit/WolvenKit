@@ -104,5 +104,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _availableMaterials);
 			set => SetProperty(ref _availableMaterials, value);
 		}
+
+		public interopMaterialListDescriptor()
+		{
+			_appearanceName = new() { Text = "default" };
+		}
 	}
 }

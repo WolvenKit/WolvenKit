@@ -77,5 +77,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _depthToBrightness);
 			set => SetProperty(ref _depthToBrightness, value);
 		}
+
+		public inkPointCloudEffect()
+		{
+			_repeat = 1.000000F;
+			_fovScale = 3.000000F;
+			_parallaxDepth = 0.100000F;
+		}
 	}
 }

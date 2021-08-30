@@ -239,5 +239,26 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _backgroundColor);
 			set => SetProperty(ref _backgroundColor, value);
 		}
+
+		public worldProxyMiscAdvancedParams()
+		{
+			_useLod1 = true;
+			_blurCutout = 20;
+			_occlusionRatio = 40;
+			_fillHolesBeforeReduceRatio = 1.500000F;
+			_fillHolesAfterReduceRatio = 0.400000F;
+			_rsAliasingReduction = 1.000000F;
+			_bcMergeRange = 0.800000F;
+			_bcSizeCutoff = 120.000000F;
+			_bcIterations = 0.500000F;
+			_bcMaxSize = 120.000000F;
+			_bcMinSize = 2.000000F;
+			_bcMergeSensitivity = 50.000000F;
+			_bcMinScale = 1.000000F;
+			_bcGridSize = 120.000000F;
+			_bcFilterSensitivity = 0.250000F;
+			_bcBoundsRatioLimit = 0.250000F;
+			_removeIslands = true;
+		}
 	}
 }

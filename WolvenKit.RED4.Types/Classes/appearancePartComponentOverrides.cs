@@ -68,5 +68,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _acceptDismemberment);
 			set => SetProperty(ref _acceptDismemberment, value);
 		}
+
+		public appearancePartComponentOverrides()
+		{
+			_meshAppearance = "default";
+			_chunkMask = 18446744073709551615;
+			_acceptDismemberment = true;
+		}
 	}
 }

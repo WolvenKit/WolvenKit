@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _highLightActive);
 			set => SetProperty(ref _highLightActive, value);
 		}
+
+		public VentilationArea()
+		{
+			_attackRecord = new() { Text = "Attacks.FragGrenade" };
+		}
 	}
 }

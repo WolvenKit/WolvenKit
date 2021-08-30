@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _inputsData);
 			set => SetProperty(ref _inputsData, value);
 		}
+
+		public animAnimNode_MultiBoolToFloatValue()
+		{
+			_onTrue = 1.000000F;
+		}
 	}
 }

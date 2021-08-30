@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _activeVehicleType);
 			set => SetProperty(ref _activeVehicleType, value);
 		}
+
+		public QuickSlotsManagerPS()
+		{
+			_activeVehicleType = new() { Value = Enums.gamedataVehicleType.Car };
+		}
 	}
 }

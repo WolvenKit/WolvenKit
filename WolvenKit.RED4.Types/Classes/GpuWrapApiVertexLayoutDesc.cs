@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _hash);
 			set => SetProperty(ref _hash, value);
 		}
+
+		public GpuWrapApiVertexLayoutDesc()
+		{
+			_hash = 4294967295;
+		}
 	}
 }

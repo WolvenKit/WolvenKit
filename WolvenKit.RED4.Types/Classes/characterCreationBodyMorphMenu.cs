@@ -329,5 +329,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _cachedCursor);
 			set => SetProperty(ref _cachedCursor, value);
 		}
+
+		public characterCreationBodyMorphMenu()
+		{
+			_defaultPreviewSlot = "UI_Hairs";
+		}
 	}
 }

@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _stateToCheck);
 			set => SetProperty(ref _stateToCheck, value);
 		}
+
+		public CheckWoundedStatusEffectState()
+		{
+			_stateToCheck = new() { Value = Enums.EstatusEffectsState.Activating };
+		}
 	}
 }

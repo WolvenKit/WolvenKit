@@ -59,5 +59,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _requirement);
 			set => SetProperty(ref _requirement, value);
 		}
+
+		public gameSItemStack()
+		{
+			_quantity = 1;
+			_isAvailable = true;
+		}
 	}
 }

@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _retriggerAudioOnLoop);
 			set => SetProperty(ref _retriggerAudioOnLoop, value);
 		}
+
+		public inkanimVideoInterpolator()
+		{
+			_allowSkipBackward = true;
+		}
 	}
 }

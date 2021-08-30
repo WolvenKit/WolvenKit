@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _replicationTime);
 			set => SetProperty(ref _replicationTime, value);
 		}
+
+		public gameMuppetCompressedInputStates()
+		{
+			_firstFrameId = 4294967295;
+		}
 	}
 }

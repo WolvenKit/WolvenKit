@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _variableNames);
 			set => SetProperty(ref _variableNames, value);
 		}
+
+		public animAnimSetupEntry()
+		{
+			_priority = 128;
+		}
 	}
 }

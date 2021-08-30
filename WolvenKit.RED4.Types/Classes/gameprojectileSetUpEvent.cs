@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lerpMultiplier);
 			set => SetProperty(ref _lerpMultiplier, value);
 		}
+
+		public gameprojectileSetUpEvent()
+		{
+			_lerpMultiplier = 5.000000F;
+		}
 	}
 }

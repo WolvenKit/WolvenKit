@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _compiledBuffer);
 			set => SetProperty(ref _compiledBuffer, value);
 		}
+
+		public entSimpleColliderComponent()
+		{
+			_isEnabled = true;
+		}
 	}
 }

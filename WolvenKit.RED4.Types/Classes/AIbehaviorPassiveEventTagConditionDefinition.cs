@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _deactivateEvents);
 			set => SetProperty(ref _deactivateEvents, value);
 		}
+
+		public AIbehaviorPassiveEventTagConditionDefinition()
+		{
+			_deactivateEvents = true;
+		}
 	}
 }

@@ -140,5 +140,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _overrideSubMenuUserData);
 			set => SetProperty(ref _overrideSubMenuUserData, value);
 		}
+
+		public MenuData()
+		{
+			_identifier = -1;
+		}
 	}
 }

@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _sortQueryResultsByDistance);
 			set => SetProperty(ref _sortQueryResultsByDistance, value);
 		}
+
+		public gameEffectObjectFilter_BlockingGeometry()
+		{
+			_inclusive = true;
+			_sortQueryResultsByDistance = true;
+		}
 	}
 }

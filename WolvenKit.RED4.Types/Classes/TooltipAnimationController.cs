@@ -59,5 +59,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isHidden);
 			set => SetProperty(ref _isHidden, value);
 		}
+
+		public TooltipAnimationController()
+		{
+			_showAnimationName = "show_tooltip";
+			_hideAnimationName = "hide_tooltip";
+			_axisDataThreshold = 0.400000F;
+		}
 	}
 }

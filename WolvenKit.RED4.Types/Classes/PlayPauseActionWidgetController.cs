@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isPlaying);
 			set => SetProperty(ref _isPlaying, value);
 		}
+
+		public PlayPauseActionWidgetController()
+		{
+			_isPlaying = true;
+		}
 	}
 }

@@ -113,5 +113,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _trackOutputs);
 			set => SetProperty(ref _trackOutputs, value);
 		}
+
+		public animAnimNode_SimpleBounce()
+		{
+			_multiplier = 1.000000F;
+			_negativeMultiplier = 1.000000F;
+			_smoothStep = 1.000000F;
+		}
 	}
 }

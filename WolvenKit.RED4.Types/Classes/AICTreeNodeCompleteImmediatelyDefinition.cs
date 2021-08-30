@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _completeWithSuccess);
 			set => SetProperty(ref _completeWithSuccess, value);
 		}
+
+		public AICTreeNodeCompleteImmediatelyDefinition()
+		{
+			_completeWithSuccess = true;
+		}
 	}
 }

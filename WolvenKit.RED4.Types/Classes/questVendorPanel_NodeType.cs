@@ -59,5 +59,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _rootItemName);
 			set => SetProperty(ref _rootItemName, value);
 		}
+
+		public questVendorPanel_NodeType()
+		{
+			_scenarioName = "MenuScenario_Vendor";
+			_openVendorPanel = true;
+		}
 	}
 }

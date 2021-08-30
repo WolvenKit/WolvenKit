@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _ignoreDisabledTutorials);
 			set => SetProperty(ref _ignoreDisabledTutorials, value);
 		}
+
+		public questShowBracket_NodeSubType()
+		{
+			_visible = true;
+		}
 	}
 }

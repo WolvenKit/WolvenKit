@@ -185,5 +185,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _polygon);
 			set => SetProperty(ref _polygon, value);
 		}
+
+		public worldTrafficLanePersistent()
+		{
+			_deadEndStart = float.PositiveInfinity;
+			_subGraphId = 65535;
+			_neighborGroupIndex = 65535;
+		}
 	}
 }

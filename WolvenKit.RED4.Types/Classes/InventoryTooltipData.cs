@@ -419,5 +419,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _dEBUG_iconErrorInfo);
 			set => SetProperty(ref _dEBUG_iconErrorInfo, value);
 		}
+
+		public InventoryTooltipData()
+		{
+			_itemType = new() { Value = Enums.gamedataItemType.Invalid };
+		}
 	}
 }

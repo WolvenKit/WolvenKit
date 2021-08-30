@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _text);
 			set => SetProperty(ref _text, value);
 		}
+
+		public questProgressBar_NodeType()
+		{
+			_show = true;
+			_duration = 3.000000F;
+		}
 	}
 }

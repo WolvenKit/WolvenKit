@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _ownerDecidesOnTransfer);
 			set => SetProperty(ref _ownerDecidesOnTransfer, value);
 		}
+
+		public CPOMissionDataAccessPoint()
+		{
+			_hasDataToDownload = true;
+			_damagesPresetName = "CPODataRaceParams";
+		}
 	}
 }

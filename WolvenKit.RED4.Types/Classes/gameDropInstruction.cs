@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _quantity);
 			set => SetProperty(ref _quantity, value);
 		}
+
+		public gameDropInstruction()
+		{
+			_quantity = -1;
+		}
 	}
 }

@@ -212,5 +212,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _rootWidget);
 			set => SetProperty(ref _rootWidget, value);
 		}
+
+		public ProgressBarSimpleWidgetLogicController()
+		{
+			_currentValue = 1.000000F;
+			_previousValue = 1.000000F;
+			_maxCNBarFlashSize = 500.000000F;
+			_animDuration = 2.000000F;
+		}
 	}
 }

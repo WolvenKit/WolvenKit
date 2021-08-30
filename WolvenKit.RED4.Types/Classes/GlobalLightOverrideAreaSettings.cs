@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lightElevation);
 			set => SetProperty(ref _lightElevation, value);
 		}
+
+		public GlobalLightOverrideAreaSettings()
+		{
+			_lightAzimuth = 45.000000F;
+			_lightElevation = 45.000000F;
+		}
 	}
 }

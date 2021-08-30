@@ -68,5 +68,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _saveFormat);
 			set => SetProperty(ref _saveFormat, value);
 		}
+
+		public rendSingleScreenShotData()
+		{
+			_resolution = new() { Value = Enums.renddimEPreset._1920x1080 };
+			_resolutionMultiplier = new() { Value = Enums.rendResolutionMultiplier.X2 };
+			_saveFormat = new() { Value = Enums.ESaveFormat.SF_PNG };
+		}
 	}
 }

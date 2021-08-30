@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _overridingVoContext);
 			set => SetProperty(ref _overridingVoContext, value);
 		}
+
+		public audioVoiceTriggerData()
+		{
+			_overridingVoContext = new() { Value = Enums.locVoiceoverContext.Default_Vo_Context };
+		}
 	}
 }

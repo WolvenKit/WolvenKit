@@ -122,5 +122,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _snapFrameId);
 			set => SetProperty(ref _snapFrameId, value);
 		}
+
+		public gameMuppetState()
+		{
+			_frameId = 4294967295;
+			_snapFrameId = 4294967295;
+		}
 	}
 }

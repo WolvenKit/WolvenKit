@@ -41,5 +41,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _flags);
 			set => SetProperty(ref _flags, value);
 		}
+
+		public worldCompiledEffectPlacementInfo()
+		{
+			_placementTagIndex = 255;
+			_relativePositionIndex = 255;
+			_relativeRotationIndex = 255;
+		}
 	}
 }

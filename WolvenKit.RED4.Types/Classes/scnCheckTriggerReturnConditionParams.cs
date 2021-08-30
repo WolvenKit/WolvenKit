@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _triggerArea);
 			set => SetProperty(ref _triggerArea, value);
 		}
+
+		public scnCheckTriggerReturnConditionParams()
+		{
+			_inside = true;
+		}
 	}
 }

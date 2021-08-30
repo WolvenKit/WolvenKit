@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _sendNearMissEvents);
 			set => SetProperty(ref _sendNearMissEvents, value);
 		}
+
+		public gameEffectObjectFilter_HitRepresentation_Raycast()
+		{
+			_sendNearMissEvents = true;
+		}
 	}
 }

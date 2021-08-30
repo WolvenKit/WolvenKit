@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _enterTime);
 			set => SetProperty(ref _enterTime, value);
 		}
+
+		public gameCursorInterpolationOverrides()
+		{
+			_enterTime = 0.050000F;
+		}
 	}
 }

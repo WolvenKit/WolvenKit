@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _selectedIndex);
 			set => SetProperty(ref _selectedIndex, value);
 		}
+
+		public characterCreationBodyMorphOptionColorPicker()
+		{
+			_selectedIndex = -1;
+		}
 	}
 }

@@ -248,5 +248,17 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _minimized);
 			set => SetProperty(ref _minimized, value);
 		}
+
+		public HudPhoneAvatarController()
+		{
+			_unknownAvatarName = "Unknown";
+			_loopAnimationName = "avatarHoloCallLoopAnimation";
+			_showingAnimationName = "portraitIntro";
+			_hidingAnimationName = "portraitOutro";
+			_audiocallShowingAnimationName = "avatarAudiocallShowingAnimation";
+			_audiocallHidingAnimationName = "avatarAudiocallHidingAnimation";
+			_holocallShowingAnimationName = "avatarHolocallShowingAnimation";
+			_holocallHidingAnimationName = "avatarHolocallHidingAnimation";
+		}
 	}
 }

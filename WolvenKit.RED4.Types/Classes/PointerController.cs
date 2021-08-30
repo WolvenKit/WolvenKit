@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _currentIndex);
 			set => SetProperty(ref _currentIndex, value);
 		}
+
+		public PointerController()
+		{
+			_currentIndex = -1;
+		}
 	}
 }

@@ -122,5 +122,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _noReactionRecordID);
 			set => SetProperty(ref _noReactionRecordID, value);
 		}
+
+		public questReactionPresetRecordSelector()
+		{
+			_isGanger = true;
+		}
 	}
 }

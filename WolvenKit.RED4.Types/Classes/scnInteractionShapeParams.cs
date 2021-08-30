@@ -77,5 +77,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _activationHeight);
 			set => SetProperty(ref _activationHeight, value);
 		}
+
+		public scnInteractionShapeParams()
+		{
+			_preset = new() { Value = Enums.scnChoiceNodeNsSizePreset.normal };
+			_activationBaseLength = 1.000000F;
+			_activationHeight = 3.000000F;
+		}
 	}
 }

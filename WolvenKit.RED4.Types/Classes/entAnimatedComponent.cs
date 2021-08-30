@@ -131,5 +131,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _clientForcedVisibility);
 			set => SetProperty(ref _clientForcedVisibility, value);
 		}
+
+		public entAnimatedComponent()
+		{
+			_serverForcedLod = -1;
+			_clientForcedLod = -1;
+		}
 	}
 }

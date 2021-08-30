@@ -86,5 +86,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _navigationSetting);
 			set => SetProperty(ref _navigationSetting, value);
 		}
+
+		public worldBendedMeshNode()
+		{
+			_meshAppearance = "default";
+			_castShadows = true;
+			_castLocalShadows = true;
+		}
 	}
 }

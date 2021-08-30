@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _transitionDelay);
 			set => SetProperty(ref _transitionDelay, value);
 		}
+
+		public gameuiPuppetPreviewCameraController()
+		{
+			_transitionDelay = 0.500000F;
+		}
 	}
 }

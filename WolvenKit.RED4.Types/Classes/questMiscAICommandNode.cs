@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _params);
 			set => SetProperty(ref _params, value);
 		}
+
+		public questMiscAICommandNode()
+		{
+			_function = "AIClearRoleCommandParams";
+		}
 	}
 }

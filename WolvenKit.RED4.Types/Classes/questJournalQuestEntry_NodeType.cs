@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _trackQuest);
 			set => SetProperty(ref _trackQuest, value);
 		}
+
+		public questJournalQuestEntry_NodeType()
+		{
+			_sendNotification = true;
+			_trackQuest = true;
+		}
 	}
 }

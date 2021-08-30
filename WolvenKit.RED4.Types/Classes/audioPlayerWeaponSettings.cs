@@ -140,5 +140,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _dryFireSound);
 			set => SetProperty(ref _dryFireSound, value);
 		}
+
+		public audioPlayerWeaponSettings()
+		{
+			_timeLimitForAutoFireSingleShot = 0.250000F;
+		}
 	}
 }

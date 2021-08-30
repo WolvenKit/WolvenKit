@@ -68,5 +68,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _heal5HealthPercentage);
 			set => SetProperty(ref _heal5HealthPercentage, value);
 		}
+
+		public OdaEmergencyListener()
+		{
+			_heal1HealthPercentage = 70.000000F;
+			_heal2HealthPercentage = 55.000000F;
+			_heal3HealthPercentage = 40.000000F;
+			_heal4HealthPercentage = 25.000000F;
+			_heal5HealthPercentage = 10.000000F;
+		}
 	}
 }

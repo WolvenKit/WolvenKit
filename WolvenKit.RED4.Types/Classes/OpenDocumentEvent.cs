@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _ownerID);
 			set => SetProperty(ref _ownerID, value);
 		}
+
+		public OpenDocumentEvent()
+		{
+			_wakeUp = true;
+		}
 	}
 }

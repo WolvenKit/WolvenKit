@@ -176,5 +176,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _previousHealth);
 			set => SetProperty(ref _previousHealth, value);
 		}
+
+		public gameuiRoachRaceGameLogicController()
+		{
+			_maxSpeedMultiplier = 2.000000F;
+			_multiplierPerScore = 0.020000F;
+		}
 	}
 }

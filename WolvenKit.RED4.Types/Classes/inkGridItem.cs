@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _rootIdx);
 			set => SetProperty(ref _rootIdx, value);
 		}
+
+		public inkGridItem()
+		{
+			_rootIdx = 4294967295;
+		}
 	}
 }

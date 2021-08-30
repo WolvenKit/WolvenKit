@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _absolute);
 			set => SetProperty(ref _absolute, value);
 		}
+
+		public CParticleModificatorVelocityOverLife()
+		{
+			_scale = 1.000000F;
+			_modulate = true;
+		}
 	}
 }

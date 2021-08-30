@@ -149,5 +149,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _saveFormat);
 			set => SetProperty(ref _saveFormat, value);
 		}
+
+		public rendCaptureParameters()
+		{
+			_enable = true;
+			_outputDirectoryName = new() { Text = "Scene" };
+			_recordingFPS = 30;
+			_resolutionMultiplier = new() { Value = Enums.rendResolutionMultiplier.X2 };
+			_fovMultiplier = 1.000000F;
+			_saveFormat = new() { Value = Enums.ESaveFormat.SF_PNG };
+		}
 	}
 }

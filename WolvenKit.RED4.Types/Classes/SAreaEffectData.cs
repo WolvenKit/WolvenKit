@@ -158,5 +158,16 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _effectInstance);
 			set => SetProperty(ref _effectInstance, value);
 		}
+
+		public SAreaEffectData()
+		{
+			_indicatorEffectName = "focus_10m";
+			_indicatorEffectSize = 1.000000F;
+			_stimRange = 10.000000F;
+			_stimLifetime = 3.000000F;
+			_highlightTargets = true;
+			_highlightType = new() { Value = Enums.EFocusForcedHighlightType.DISTRACTION };
+			_highlightPriority = new() { Value = Enums.EPriority.High };
+		}
 	}
 }

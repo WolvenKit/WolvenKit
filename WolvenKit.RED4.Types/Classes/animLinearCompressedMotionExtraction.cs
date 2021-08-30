@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _posTime);
 			set => SetProperty(ref _posTime, value);
 		}
+
+		public animLinearCompressedMotionExtraction()
+		{
+			_duration = 1.000000F;
+		}
 	}
 }

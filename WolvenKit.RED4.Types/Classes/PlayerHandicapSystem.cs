@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _canDropAmmo);
 			set => SetProperty(ref _canDropAmmo, value);
 		}
+
+		public PlayerHandicapSystem()
+		{
+			_canDropHealingConsumable = true;
+			_canDropAmmo = true;
+		}
 	}
 }

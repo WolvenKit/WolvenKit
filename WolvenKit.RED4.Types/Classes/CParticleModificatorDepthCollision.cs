@@ -50,5 +50,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _collisionEffect);
 			set => SetProperty(ref _collisionEffect, value);
 		}
+
+		public CParticleModificatorDepthCollision()
+		{
+			_maxCollisions = 8;
+			_restitution = 0.700000F;
+			_friction = 1.000000F;
+			_radius = 0.010000F;
+			_collisionEffect = new() { Value = Enums.EDepthCollisionEffect.DCE_Bounce };
+		}
 	}
 }

@@ -113,5 +113,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _numberOfCardsInTarotDeck);
 			set => SetProperty(ref _numberOfCardsInTarotDeck, value);
 		}
+
+		public TarotMainGameController()
+		{
+			_numberOfCardsInTarotDeck = 22;
+		}
 	}
 }

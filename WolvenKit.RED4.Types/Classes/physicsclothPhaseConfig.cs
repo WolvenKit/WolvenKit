@@ -41,5 +41,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _stretchLimit);
 			set => SetProperty(ref _stretchLimit, value);
 		}
+
+		public physicsclothPhaseConfig()
+		{
+			_stiffness = 1.000000F;
+			_stiffnessMultiplier = 1.000000F;
+			_compressionLimit = 1.000000F;
+			_stretchLimit = 1.000000F;
+		}
 	}
 }

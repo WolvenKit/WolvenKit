@@ -167,5 +167,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _endTargetOrientationNode);
 			set => SetProperty(ref _endTargetOrientationNode, value);
 		}
+
+		public animAnimNode_Ik2()
+		{
+			_hingeAxis = new() { Value = Enums.animAxis.Y };
+			_maxHingeAngleDegrees = 180.000000F;
+			_firstBoneIkGain = 1.000000F;
+			_secondBoneIkGain = 1.000000F;
+			_endBoneIkGain = 1.000000F;
+			_enforceEndPosition = true;
+		}
 	}
 }

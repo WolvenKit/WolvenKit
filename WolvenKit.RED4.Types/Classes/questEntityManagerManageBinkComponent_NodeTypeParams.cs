@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _action);
 			set => SetProperty(ref _action, value);
 		}
+
+		public questEntityManagerManageBinkComponent_NodeTypeParams()
+		{
+			_action = new() { Value = Enums.gameBinkVideoAction.Start };
+		}
 	}
 }

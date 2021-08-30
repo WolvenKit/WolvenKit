@@ -68,5 +68,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isCLSInitialized);
 			set => SetProperty(ref _isCLSInitialized, value);
 		}
+
+		public FuseControllerPS()
+		{
+			_maxLightsSwitchedAtOnce = 5;
+			_timeToNextSwitch = 1.000000F;
+			_lightSwitchRandomizerType = new() { Value = Enums.ELightSwitchRandomizerType.RANDOM_PROGRESSIVE };
+		}
 	}
 }

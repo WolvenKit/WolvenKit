@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _comparisonOperator);
 			set => SetProperty(ref _comparisonOperator, value);
 		}
+
+		public AIbehaviorCheckDistanceToCompanionConditionDefinition()
+		{
+			_comparisonOperator = new() { Value = Enums.EComparisonType.Less };
+		}
 	}
 }

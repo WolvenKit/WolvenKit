@@ -68,5 +68,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _hOME_TEXT_NAME);
 			set => SetProperty(ref _hOME_TEXT_NAME, value);
 		}
+
+		public WebPage()
+		{
+			_hOME_IMAGE_NAME = new() { Text = "ImageLink" };
+			_hOME_TEXT_NAME = new() { Text = "TextLink" };
+		}
 	}
 }

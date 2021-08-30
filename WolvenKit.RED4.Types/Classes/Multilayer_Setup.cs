@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _useNormal);
 			set => SetProperty(ref _useNormal, value);
 		}
+
+		public Multilayer_Setup()
+		{
+			_ratio = 1.000000F;
+			_useNormal = true;
+		}
 	}
 }

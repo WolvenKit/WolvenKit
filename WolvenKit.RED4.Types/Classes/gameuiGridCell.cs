@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isActive);
 			set => SetProperty(ref _isActive, value);
 		}
+
+		public gameuiGridCell()
+		{
+			_isActive = true;
+		}
 	}
 }

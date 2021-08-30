@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _flags);
 			set => SetProperty(ref _flags, value);
 		}
+
+		public worldCompiledEffectEventInfo()
+		{
+			_flags = 1;
+		}
 	}
 }

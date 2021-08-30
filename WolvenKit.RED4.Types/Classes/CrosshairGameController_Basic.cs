@@ -131,5 +131,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _gameplaySpreadMultiplier);
 			set => SetProperty(ref _gameplaySpreadMultiplier, value);
 		}
+
+		public CrosshairGameController_Basic()
+		{
+			_horizontalMinSpread = 20.000000F;
+			_verticalMinSpread = 20.000000F;
+			_gameplaySpreadMultiplier = 1.000000F;
+		}
 	}
 }

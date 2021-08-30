@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _mountType);
 			set => SetProperty(ref _mountType, value);
 		}
+
+		public gameMountDescriptor()
+		{
+			_mountType = new() { Value = Enums.gameMountDescriptorMountType.KeepState };
+		}
 	}
 }

@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isFlushing);
 			set => SetProperty(ref _isFlushing, value);
 		}
+
+		public ToiletControllerPS()
+		{
+			_flushDuration = 5.000000F;
+		}
 	}
 }

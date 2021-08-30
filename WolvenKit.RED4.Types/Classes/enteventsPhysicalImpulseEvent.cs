@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _shapeIndex);
 			set => SetProperty(ref _shapeIndex, value);
 		}
+
+		public enteventsPhysicalImpulseEvent()
+		{
+			_bodyIndex = 4294967295;
+		}
 	}
 }

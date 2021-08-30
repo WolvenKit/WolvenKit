@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _objectToCheck);
 			set => SetProperty(ref _objectToCheck, value);
 		}
+
+		public StatusEffectPresentHitPrereqCondition()
+		{
+			_objectToCheck = "Target";
+		}
 	}
 }

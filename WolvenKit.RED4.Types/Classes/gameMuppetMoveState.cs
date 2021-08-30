@@ -68,5 +68,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _landFrameId);
 			set => SetProperty(ref _landFrameId, value);
 		}
+
+		public gameMuppetMoveState()
+		{
+			_jumpStartFrameId = 4294967295;
+			_landFrameId = 4294967295;
+		}
 	}
 }

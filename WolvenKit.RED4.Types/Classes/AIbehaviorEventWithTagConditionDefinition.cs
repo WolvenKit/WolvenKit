@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _consumeEvent);
 			set => SetProperty(ref _consumeEvent, value);
 		}
+
+		public AIbehaviorEventWithTagConditionDefinition()
+		{
+			_consumeEvent = true;
+		}
 	}
 }

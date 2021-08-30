@@ -32,5 +32,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _hasDistractionQuickhack);
 			set => SetProperty(ref _hasDistractionQuickhack, value);
 		}
+
+		public ForkliftSetup()
+		{
+			_actionActivateName = "Activate";
+			_liftingAnimationTime = 2.000000F;
+			_hasDistractionQuickhack = true;
+		}
 	}
 }

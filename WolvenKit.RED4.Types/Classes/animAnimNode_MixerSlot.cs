@@ -32,5 +32,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxOverrideAnimEntriesCount);
 			set => SetProperty(ref _maxOverrideAnimEntriesCount, value);
 		}
+
+		public animAnimNode_MixerSlot()
+		{
+			_maxNormalAnimEntriesCount = 2;
+			_maxAdditiveAnimEntriesCount = 2;
+			_maxOverrideAnimEntriesCount = 2;
+		}
 	}
 }

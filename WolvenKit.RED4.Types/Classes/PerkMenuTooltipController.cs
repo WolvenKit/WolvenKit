@@ -149,5 +149,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxProficiencyLevel);
 			set => SetProperty(ref _maxProficiencyLevel, value);
 		}
+
+		public PerkMenuTooltipController()
+		{
+			_maxProficiencyLevel = 20;
+		}
 	}
 }

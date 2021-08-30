@@ -68,5 +68,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _continuous);
 			set => SetProperty(ref _continuous, value);
 		}
+
+		public gameuiDamageIndicatorPartLogicController()
+		{
+			_maxDistanceForSharedIndicators = 4.000000F;
+			_damageThreshold = 100.000000F;
+		}
 	}
 }

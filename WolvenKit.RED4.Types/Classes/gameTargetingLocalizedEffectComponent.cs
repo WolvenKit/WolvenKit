@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _visibleTargetRange);
 			set => SetProperty(ref _visibleTargetRange, value);
 		}
+
+		public gameTargetingLocalizedEffectComponent()
+		{
+			_streamingDistance = 50.000000F;
+			_visibleTargetRange = -1.000000F;
+		}
 	}
 }

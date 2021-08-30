@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _targetFactor);
 			set => SetProperty(ref _targetFactor, value);
 		}
+
+		public worldSpeedSplineNodeRoadAdjustmentFactorChangeSection()
+		{
+			_targetFactor = 1.000000F;
+		}
 	}
 }

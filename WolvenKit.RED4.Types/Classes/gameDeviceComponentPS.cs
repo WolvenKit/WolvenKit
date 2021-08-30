@@ -122,5 +122,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _maxDevicesToExtractInOneFrame);
 			set => SetProperty(ref _maxDevicesToExtractInOneFrame, value);
 		}
+
+		public gameDeviceComponentPS()
+		{
+			_autoToggleQuestMark = true;
+			_maxDevicesToExtractInOneFrame = 10;
+		}
 	}
 }

@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _roleName);
 			set => SetProperty(ref _roleName, value);
 		}
+
+		public communityRole()
+		{
+			_roleName = "default";
+		}
 	}
 }

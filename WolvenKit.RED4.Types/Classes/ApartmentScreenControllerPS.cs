@@ -122,5 +122,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lastStatusChangeDay);
 			set => SetProperty(ref _lastStatusChangeDay, value);
 		}
+
+		public ApartmentScreenControllerPS()
+		{
+			_randomizeInitialOverdue = true;
+			_allowAutomaticRentStatusChange = true;
+			_maxDays = 90;
+		}
 	}
 }

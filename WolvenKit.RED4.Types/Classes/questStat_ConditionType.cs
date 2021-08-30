@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _comparisonType);
 			set => SetProperty(ref _comparisonType, value);
 		}
+
+		public questStat_ConditionType()
+		{
+			_statType = new() { Value = Enums.gamedataStatType.Invalid };
+		}
 	}
 }

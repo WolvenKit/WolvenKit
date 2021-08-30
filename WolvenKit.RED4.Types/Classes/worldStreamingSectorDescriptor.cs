@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _level);
 			set => SetProperty(ref _level, value);
 		}
+
+		public worldStreamingSectorDescriptor()
+		{
+			_sectorIndex = 4294967295;
+		}
 	}
 }

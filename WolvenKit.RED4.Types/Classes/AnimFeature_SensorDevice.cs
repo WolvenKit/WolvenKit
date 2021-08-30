@@ -122,5 +122,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _currentRotation);
 			set => SetProperty(ref _currentRotation, value);
 		}
+
+		public AnimFeature_SensorDevice()
+		{
+			_isInitialized = true;
+		}
 	}
 }

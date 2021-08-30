@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _dissolveRadius);
 			set => SetProperty(ref _dissolveRadius, value);
 		}
+
+		public gameBraindanceDissolveComponent()
+		{
+			_dissolveRadius = 0.600000F;
+		}
 	}
 }

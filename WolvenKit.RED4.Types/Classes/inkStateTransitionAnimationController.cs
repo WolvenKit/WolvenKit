@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _stopActiveAnimation);
 			set => SetProperty(ref _stopActiveAnimation, value);
 		}
+
+		public inkStateTransitionAnimationController()
+		{
+			_stopActiveAnimation = true;
+		}
 	}
 }

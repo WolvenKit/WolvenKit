@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _distantProxiesBboxzBlend);
 			set => SetProperty(ref _distantProxiesBboxzBlend, value);
 		}
+
+		public DistantProxiesSettings()
+		{
+			_distantProxiesEmissiveHeight = 500.000000F;
+			_distantProxiesEmissivePower = 5.000000F;
+		}
 	}
 }

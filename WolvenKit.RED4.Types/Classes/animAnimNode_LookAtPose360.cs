@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _durationCut);
 			set => SetProperty(ref _durationCut, value);
 		}
+
+		public animAnimNode_LookAtPose360()
+		{
+			_speedInDegreesPerSecond = 120.000000F;
+		}
 	}
 }

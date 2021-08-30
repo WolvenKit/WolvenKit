@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _movement);
 			set => SetProperty(ref _movement, value);
 		}
+
+		public gameTransformAnimation_MoveOnSpline()
+		{
+			_rotationMode = new() { Value = Enums.gameTransformAnimation_MoveOnSplineRotationMode.Yaw };
+		}
 	}
 }

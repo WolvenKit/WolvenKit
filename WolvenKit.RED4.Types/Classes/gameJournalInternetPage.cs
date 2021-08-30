@@ -86,5 +86,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _videos);
 			set => SetProperty(ref _videos, value);
 		}
+
+		public gameJournalInternetPage()
+		{
+			_scale = 1.000000F;
+		}
 	}
 }

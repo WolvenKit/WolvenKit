@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _attachment);
 			set => SetProperty(ref _attachment, value);
 		}
+
+		public gameJournalPhoneMessage()
+		{
+			_delay = 3.000000F;
+		}
 	}
 }

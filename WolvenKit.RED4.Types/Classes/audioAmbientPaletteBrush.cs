@@ -50,5 +50,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _radioStationMetadata);
 			set => SetProperty(ref _radioStationMetadata, value);
 		}
+
+		public audioAmbientPaletteBrush()
+		{
+			_distributionBucketSize = 10.000000F;
+			_virtualHearingRadius = 10.000000F;
+			_hearingDistanceCooldown = 1.000000F;
+		}
 	}
 }

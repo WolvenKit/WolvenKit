@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _targetTextLocalized);
 			set => SetProperty(ref _targetTextLocalized, value);
 		}
+
+		public inkTextReplaceAnimationController()
+		{
+			_timeToSkip = 0.050000F;
+		}
 	}
 }

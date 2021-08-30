@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _chance);
 			set => SetProperty(ref _chance, value);
 		}
+
+		public AIbehaviorRandomConditionDefinition()
+		{
+			_chance = 0.500000F;
+		}
 	}
 }

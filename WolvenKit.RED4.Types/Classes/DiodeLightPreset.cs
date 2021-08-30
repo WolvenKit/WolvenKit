@@ -95,5 +95,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _force);
 			set => SetProperty(ref _force, value);
 		}
+
+		public DiodeLightPreset()
+		{
+			_state = true;
+			_overrideColorMin = true;
+			_strength = 1.000000F;
+		}
 	}
 }

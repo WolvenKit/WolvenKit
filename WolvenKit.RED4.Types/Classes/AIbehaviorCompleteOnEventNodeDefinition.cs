@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _resultOnEvent);
 			set => SetProperty(ref _resultOnEvent, value);
 		}
+
+		public AIbehaviorCompleteOnEventNodeDefinition()
+		{
+			_resultOnEvent = new() { Value = Enums.AIbehaviorCompletionStatus.SUCCESS };
+		}
 	}
 }

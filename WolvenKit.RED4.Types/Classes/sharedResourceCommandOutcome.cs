@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _message);
 			set => SetProperty(ref _message, value);
 		}
+
+		public sharedResourceCommandOutcome()
+		{
+			_result = new() { Value = Enums.sharedCommandResult.Fail };
+		}
 	}
 }

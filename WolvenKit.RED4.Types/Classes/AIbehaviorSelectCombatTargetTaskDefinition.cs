@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _targetClosest);
 			set => SetProperty(ref _targetClosest, value);
 		}
+
+		public AIbehaviorSelectCombatTargetTaskDefinition()
+		{
+			_targetClosest = true;
+		}
 	}
 }

@@ -257,5 +257,18 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _fenceSpawnDistance);
 			set => SetProperty(ref _fenceSpawnDistance, value);
 		}
+
+		public gameuiContraLogicController()
+		{
+			_jumpKey = "CameraStepPitchUp";
+			_goDownKey = "CameraStepPitchDown";
+			_goLeftKey = "CameraStepYawLeft";
+			_goRightKey = "CameraStepYawRight";
+			_submitKey = "click";
+			_axisDeadZone = 0.050000F;
+			_moveXAxis = "left_stick_x";
+			_moveYAxis = "left_stick_y";
+			_shootTriggerName = "right_trigger";
+		}
 	}
 }

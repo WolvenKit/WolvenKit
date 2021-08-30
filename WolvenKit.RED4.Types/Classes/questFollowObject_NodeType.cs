@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _rotationLerpSpeed);
 			set => SetProperty(ref _rotationLerpSpeed, value);
 		}
+
+		public questFollowObject_NodeType()
+		{
+			_positionLerpSpeed = 1.000000F;
+			_rotationLerpSpeed = 1.000000F;
+		}
 	}
 }

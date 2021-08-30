@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _entireFolder);
 			set => SetProperty(ref _entireFolder, value);
 		}
+
+		public EnableDocumentEvent()
+		{
+			_enable = true;
+		}
 	}
 }

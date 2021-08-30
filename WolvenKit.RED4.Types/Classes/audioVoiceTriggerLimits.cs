@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _combatVolume);
 			set => SetProperty(ref _combatVolume, value);
 		}
+
+		public audioVoiceTriggerLimits()
+		{
+			_probability = 1.000000F;
+		}
 	}
 }

@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _heightMappingMax);
 			set => SetProperty(ref _heightMappingMax, value);
 		}
+
+		public interopTerrainEditToolCreationSlotInfo()
+		{
+			_heightMappingMax = 100.000000F;
+		}
 	}
 }

@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _updated);
 			set => SetProperty(ref _updated, value);
 		}
+
+		public worldGISpaceNode()
+		{
+			_priority = 1;
+		}
 	}
 }

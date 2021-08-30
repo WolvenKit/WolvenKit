@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _timeToLive);
 			set => SetProperty(ref _timeToLive, value);
 		}
+
+		public AIbehaviorCombatModeTaskDefinition()
+		{
+			_timeToLive = -1.000000F;
+		}
 	}
 }

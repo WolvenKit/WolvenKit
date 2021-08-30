@@ -275,5 +275,23 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _autoHideDistance);
 			set => SetProperty(ref _autoHideDistance, value);
 		}
+
+		public CDecalSpawner()
+		{
+			_specularBase = 1.000000F;
+			_roughnessScale = 1.000000F;
+			_normalThreshold = 1.000000F;
+			_additiveNormals = true;
+			_specularity = -1.000000F;
+			_farZ = 1.000000F;
+			_normalFadeScale = 1.000000F;
+			_decalFadeTime = 0.100000F;
+			_decalFadeInTime = 0.100000F;
+			_projectOnStatic = true;
+			_projectOnSkinned = true;
+			_startScale = 1.000000F;
+			_scaleTime = 1.000000F;
+			_autoHideDistance = -1.000000F;
+		}
 	}
 }

@@ -86,5 +86,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _attackerIsMaster);
 			set => SetProperty(ref _attackerIsMaster, value);
 		}
+
+		public gameRegular1v1FinisherScenario()
+		{
+			_targetBlendTime = 0.500000F;
+			_attackerBlendTime = 0.500000F;
+			_attackerIsMaster = true;
+		}
 	}
 }

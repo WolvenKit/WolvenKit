@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _policy);
 			set => SetProperty(ref _policy, value);
 		}
+
+		public questCharacterManagerParameters_EnableBumps()
+		{
+			_enable = true;
+			_policy = new() { Value = Enums.AIinfluenceEBumpPolicy.Lean };
+		}
 	}
 }

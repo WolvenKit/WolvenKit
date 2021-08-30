@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _statPoolType);
 			set => SetProperty(ref _statPoolType, value);
 		}
+
+		public PhoneCallUploadDurationListener()
+		{
+			_statPoolType = new() { Value = Enums.gamedataStatPoolType.PhoneCallDuration };
+		}
 	}
 }

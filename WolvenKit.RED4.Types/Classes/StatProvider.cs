@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _dataSource);
 			set => SetProperty(ref _dataSource, value);
 		}
+
+		public StatProvider()
+		{
+			_dataSource = new() { Value = Enums.gameEStatProviderDataSource.Invalid };
+		}
 	}
 }

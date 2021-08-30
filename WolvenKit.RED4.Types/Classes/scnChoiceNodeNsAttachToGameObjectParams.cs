@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _visualizerStyle);
 			set => SetProperty(ref _visualizerStyle, value);
 		}
+
+		public scnChoiceNodeNsAttachToGameObjectParams()
+		{
+			_visualizerStyle = new() { Value = Enums.scnChoiceNodeNsVisualizerStyle.inWorld };
+		}
 	}
 }

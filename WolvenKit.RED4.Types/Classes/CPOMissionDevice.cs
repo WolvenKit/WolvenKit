@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _factUnblockCallbackID);
 			set => SetProperty(ref _factUnblockCallbackID, value);
 		}
+
+		public CPOMissionDevice()
+		{
+			_blockAfterOperation = true;
+		}
 	}
 }

@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _durationOverride);
 			set => SetProperty(ref _durationOverride, value);
 		}
+
+		public AIUnequipCommand()
+		{
+			_durationOverride = -1.000000F;
+		}
 	}
 }

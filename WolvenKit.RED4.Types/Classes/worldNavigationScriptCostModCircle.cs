@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _cost);
 			set => SetProperty(ref _cost, value);
 		}
+
+		public worldNavigationScriptCostModCircle()
+		{
+			_cost = 1.000000F;
+		}
 	}
 }

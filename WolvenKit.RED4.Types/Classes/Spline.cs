@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _hasDirection);
 			set => SetProperty(ref _hasDirection, value);
 		}
+
+		public Spline()
+		{
+			_hasDirection = true;
+		}
 	}
 }

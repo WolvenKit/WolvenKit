@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _blendTime);
 			set => SetProperty(ref _blendTime, value);
 		}
+
+		public questPlayEnv_NodeTypeParams()
+		{
+			_enable = true;
+		}
 	}
 }

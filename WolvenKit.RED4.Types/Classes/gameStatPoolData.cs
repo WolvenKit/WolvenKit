@@ -131,5 +131,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _modificationStatus);
 			set => SetProperty(ref _modificationStatus, value);
 		}
+
+		public gameStatPoolData()
+		{
+			_type = new() { Value = Enums.gamedataStatPoolType.Invalid };
+			_stat = new() { Value = Enums.gamedataStatType.Invalid };
+			_modificationStatus = new() { Value = Enums.gameStatPoolDataStatPoolModificationStatus.NoModification };
+		}
 	}
 }

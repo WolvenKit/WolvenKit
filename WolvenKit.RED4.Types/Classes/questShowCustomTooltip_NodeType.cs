@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _queuePriority);
 			set => SetProperty(ref _queuePriority, value);
 		}
+
+		public questShowCustomTooltip_NodeType()
+		{
+			_setTooltip = true;
+			_queuePriority = -1;
+		}
 	}
 }

@@ -32,5 +32,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _value);
 			set => SetProperty(ref _value, value);
 		}
+
+		public questUIElement_ConditionType()
+		{
+			_condition = new() { Value = Enums.gamedataUICondition.Visible };
+			_value = true;
+		}
 	}
 }

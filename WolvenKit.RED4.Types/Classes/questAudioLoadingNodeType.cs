@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _description);
 			set => SetProperty(ref _description, value);
 		}
+
+		public questAudioLoadingNodeType()
+		{
+			_waitOnLoad = true;
+		}
 	}
 }

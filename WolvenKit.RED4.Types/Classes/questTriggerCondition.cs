@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isPlayerActivator);
 			set => SetProperty(ref _isPlayerActivator, value);
 		}
+
+		public questTriggerCondition()
+		{
+			_type = new() { Value = Enums.questTriggerConditionType.IsInside };
+			_isPlayerActivator = true;
+		}
 	}
 }

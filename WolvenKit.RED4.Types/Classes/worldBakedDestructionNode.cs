@@ -167,5 +167,18 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _useMeshNavmeshSettings);
 			set => SetProperty(ref _useMeshNavmeshSettings, value);
 		}
+
+		public worldBakedDestructionNode()
+		{
+			_frameRate = 24.000000F;
+			_playOnlyOnce = true;
+			_disableCollidersOnTrigger = true;
+			_damageThreshold = 10.000000F;
+			_damageEndurance = 20.000000F;
+			_impulseToDamage = 1.000000F;
+			_contactToDamage = 1.000000F;
+			_accumulateDamage = true;
+			_useMeshNavmeshSettings = true;
+		}
 	}
 }

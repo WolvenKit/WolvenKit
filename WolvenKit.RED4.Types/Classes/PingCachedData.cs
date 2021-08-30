@@ -131,5 +131,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _virtualNetworkShape);
 			set => SetProperty(ref _virtualNetworkShape, value);
 		}
+
+		public PingCachedData()
+		{
+			_currentInterval = 1;
+			_linkType = new() { Value = Enums.ELinkType.FREE };
+		}
 	}
 }

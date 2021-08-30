@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _inputPoseNode);
 			set => SetProperty(ref _inputPoseNode, value);
 		}
+
+		public animAnimNode_RagdollControl()
+		{
+			_inertializationBlendDuration = 1.000000F;
+		}
 	}
 }

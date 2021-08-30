@@ -140,5 +140,17 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _compiledBufferFractured);
 			set => SetProperty(ref _compiledBufferFractured, value);
 		}
+
+		public entBakedDestructionComponent()
+		{
+			_frameRate = 24.000000F;
+			_playOnlyOnce = true;
+			_disableCollidersOnTrigger = true;
+			_damageThreshold = 10.000000F;
+			_damageEndurance = 20.000000F;
+			_impulseToDamage = 1.000000F;
+			_contactToDamage = 1.000000F;
+			_accumulateDamage = true;
+		}
 	}
 }

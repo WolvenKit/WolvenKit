@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _footPhase);
 			set => SetProperty(ref _footPhase, value);
 		}
+
+		public entFootPhaseChangedEvent()
+		{
+			_footPhase = new() { Value = Enums.animEFootPhase.NotConsidered };
+		}
 	}
 }

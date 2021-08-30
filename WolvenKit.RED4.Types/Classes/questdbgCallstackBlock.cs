@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _parentId);
 			set => SetProperty(ref _parentId, value);
 		}
+
+		public questdbgCallstackBlock()
+		{
+			_id = 18446744073709551615;
+			_parentId = 18446744073709551615;
+		}
 	}
 }

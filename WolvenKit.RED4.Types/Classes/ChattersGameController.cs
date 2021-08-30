@@ -158,5 +158,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _onOnDialogsDataCallback);
 			set => SetProperty(ref _onOnDialogsDataCallback, value);
 		}
+
+		public ChattersGameController()
+		{
+			_c_DisplayRange = 150.000000F;
+			_c_CloseDisplayRange = 20.000000F;
+			_c_TimeToUnblockSec = 5.000000F;
+		}
 	}
 }

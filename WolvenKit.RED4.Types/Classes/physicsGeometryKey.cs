@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _ta);
 			set => SetProperty(ref _ta, value);
 		}
+
+		public physicsGeometryKey()
+		{
+			_pe = 6;
+		}
 	}
 }

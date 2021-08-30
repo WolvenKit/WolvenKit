@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _forceAnimationSystem);
 			set => SetProperty(ref _forceAnimationSystem, value);
 		}
+
+		public BasicDistractionDeviceControllerPS()
+		{
+			_distractorType = new() { Value = Enums.EPlaystyleType.NETRUNNER };
+			_animationType = new() { Value = Enums.EAnimationType.TRANSFORM };
+		}
 	}
 }

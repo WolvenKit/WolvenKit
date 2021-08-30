@@ -86,5 +86,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _particleDamage);
 			set => SetProperty(ref _particleDamage, value);
 		}
+
+		public CParticleSystem()
+		{
+			_autoHideDistance = 100.000000F;
+			_lastLODFadeoutRange = 10.000000F;
+		}
 	}
 }

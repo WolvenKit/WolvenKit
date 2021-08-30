@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isAvailable);
 			set => SetProperty(ref _isAvailable, value);
 		}
+
+		public WorkspotEntryData()
+		{
+			_isAvailable = true;
+		}
 	}
 }

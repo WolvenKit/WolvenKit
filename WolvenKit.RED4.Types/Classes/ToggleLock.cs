@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _shouldOpen);
 			set => SetProperty(ref _shouldOpen, value);
 		}
+
+		public ToggleLock()
+		{
+			_shouldOpen = true;
+		}
 	}
 }

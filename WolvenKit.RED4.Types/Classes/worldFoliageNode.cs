@@ -95,5 +95,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _meshHeight);
 			set => SetProperty(ref _meshHeight, value);
 		}
+
+		public worldFoliageNode()
+		{
+			_autoHideDistanceScale = 1.000000F;
+			_lodDistanceScale = 1.000000F;
+			_streamingDistance = -1.000000F;
+		}
 	}
 }

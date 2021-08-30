@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _val);
 			set => SetProperty(ref _val, value);
 		}
+
+		public questToggleTankCustomFPPLockOff_NodeType()
+		{
+			_val = true;
+		}
 	}
 }

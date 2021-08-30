@@ -95,5 +95,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _state);
 			set => SetProperty(ref _state, value);
 		}
+
+		public animAnimFeature_Climb()
+		{
+			_climbType = -1;
+			_state = -1;
+		}
 	}
 }

@@ -86,5 +86,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isBumpable);
 			set => SetProperty(ref _isBumpable, value);
 		}
+
+		public gameinfluenceBumpComponent()
+		{
+			_movementSpreadDistance = 2.000000F;
+			_movementSpreadRadius = 0.750000F;
+			_distanceToReactBack = 0.600000F;
+			_distanceToReactFront = 1.000000F;
+			_autoPlayBumpAnimation = true;
+			_isEnabled = true;
+		}
 	}
 }

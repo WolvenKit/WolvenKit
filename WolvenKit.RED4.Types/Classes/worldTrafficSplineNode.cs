@@ -113,5 +113,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _laneSamplingAngle);
 			set => SetProperty(ref _laneSamplingAngle, value);
 		}
+
+		public worldTrafficSplineNode()
+		{
+			_maxSlotMaxSpeed = 10.000000F;
+			_width = 2.000000F;
+			_pathSamplingDistance = 2.000000F;
+			_autoConnectionRange = 5.000000F;
+			_laneSamplingAngle = 15.000000F;
+		}
 	}
 }

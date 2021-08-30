@@ -59,5 +59,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _renderProxyAddressForDebug);
 			set => SetProperty(ref _renderProxyAddressForDebug, value);
 		}
+
+		public worldInspectorNodeInstanceProperties()
+		{
+			_lastObserverDistanceToStreamingPoint = -1.000000F;
+			_lastObserverDistanceToSecondaryReferencePoint = -1.000000F;
+		}
 	}
 }

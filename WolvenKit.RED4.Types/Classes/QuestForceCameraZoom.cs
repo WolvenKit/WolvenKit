@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _useWorkspot);
 			set => SetProperty(ref _useWorkspot, value);
 		}
+
+		public QuestForceCameraZoom()
+		{
+			_useWorkspot = true;
+		}
 	}
 }

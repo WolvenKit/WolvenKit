@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _policies);
 			set => SetProperty(ref _policies, value);
 		}
+
+		public AIbehaviorMovementPolicyTaskDefinition()
+		{
+			_waitForPolicy = true;
+		}
 	}
 }

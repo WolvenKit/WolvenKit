@@ -41,5 +41,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _performCheckOnPlayerOnly);
 			set => SetProperty(ref _performCheckOnPlayerOnly, value);
 		}
+
+		public SecurityGateDetectionProperties()
+		{
+			_performWeaponCheck = true;
+			_performCheckOnPlayerOnly = true;
+		}
 	}
 }

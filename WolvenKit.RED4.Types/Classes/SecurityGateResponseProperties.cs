@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _securityLevelAccessGranted);
 			set => SetProperty(ref _securityLevelAccessGranted, value);
 		}
+
+		public SecurityGateResponseProperties()
+		{
+			_securityGateResponseType = new() { Value = Enums.ESecurityGateResponseType.SEC_SYS_REPRIMAND };
+			_securityLevelAccessGranted = new() { Value = Enums.ESecurityAccessLevel.ESL_3 };
+		}
 	}
 }

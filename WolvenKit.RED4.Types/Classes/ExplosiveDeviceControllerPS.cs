@@ -104,5 +104,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _doExplosiveEngineerLogic);
 			set => SetProperty(ref _doExplosiveEngineerLogic, value);
 		}
+
+		public ExplosiveDeviceControllerPS()
+		{
+			_timeToMeshSwap = 0.100000F;
+			_provideExplodeAction = true;
+			_doExplosiveEngineerLogic = true;
+		}
 	}
 }

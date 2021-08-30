@@ -149,5 +149,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _controlVectorNode);
 			set => SetProperty(ref _controlVectorNode, value);
 		}
+
+		public animAnimNode_FootStepAdjuster()
+		{
+			_iKBlendTime = 0.200000F;
+			_pelvisAdjustmentBlendSpeed = 0.200000F;
+			_stepAdjustmentInterval = 1.000000F;
+		}
 	}
 }

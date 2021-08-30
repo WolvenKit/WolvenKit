@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _type);
 			set => SetProperty(ref _type, value);
 		}
+
+		public senseVisibleObjectTypeEvent()
+		{
+			_type = new() { Value = Enums.gamedataSenseObjectType.Undefined };
+		}
 	}
 }

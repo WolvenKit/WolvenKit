@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _priorityMultiplier);
 			set => SetProperty(ref _priorityMultiplier, value);
 		}
+
+		public gameinteractionsInteractionDefinitionOverrider()
+		{
+			_priorityMultiplier = 1.000000F;
+		}
 	}
 }

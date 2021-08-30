@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _currentNPCEntityID);
 			set => SetProperty(ref _currentNPCEntityID, value);
 		}
+
+		public gameeventsHighLevelStateDataEvent()
+		{
+			_currentHighLevelState = new() { Value = Enums.gamedataNPCHighLevelState.Invalid };
+		}
 	}
 }

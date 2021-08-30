@@ -194,5 +194,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _activeAnimations);
 			set => SetProperty(ref _activeAnimations, value);
 		}
+
+		public hubSelectorSingleCarouselController()
+		{
+			_nUMBER_OF_WIDGETS = 7;
+			_wIDGETS_PADDING = 10.000000F;
+			_sMALL_WIDGET_SCALE = 0.800000F;
+			_sMALL_WIDGET_OPACITY = 1.000000F;
+			_aNIMATION_TIME = 0.200000F;
+		}
 	}
 }

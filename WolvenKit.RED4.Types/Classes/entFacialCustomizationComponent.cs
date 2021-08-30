@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _ears);
 			set => SetProperty(ref _ears, value);
 		}
+
+		public entFacialCustomizationComponent()
+		{
+			_debugIgnoreComponent = true;
+		}
 	}
 }

@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _ignoreZAxis);
 			set => SetProperty(ref _ignoreZAxis, value);
 		}
+
+		public cpConveyorObject()
+		{
+			_rotationLerpFactor = 0.100000F;
+		}
 	}
 }

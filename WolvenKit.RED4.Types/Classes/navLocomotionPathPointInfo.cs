@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _userDataIndex);
 			set => SetProperty(ref _userDataIndex, value);
 		}
+
+		public navLocomotionPathPointInfo()
+		{
+			_userDataIndex = 4294967295;
+		}
 	}
 }

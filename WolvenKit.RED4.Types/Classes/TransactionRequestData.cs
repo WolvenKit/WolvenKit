@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _powerLevel);
 			set => SetProperty(ref _powerLevel, value);
 		}
+
+		public TransactionRequestData()
+		{
+			_quantity = 1;
+		}
 	}
 }

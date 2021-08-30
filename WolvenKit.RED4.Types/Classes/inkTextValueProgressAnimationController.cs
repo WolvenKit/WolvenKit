@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _suffix);
 			set => SetProperty(ref _suffix, value);
 		}
+
+		public inkTextValueProgressAnimationController()
+		{
+			_targetValue = 100.000000F;
+		}
 	}
 }

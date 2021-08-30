@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _allow);
 			set => SetProperty(ref _allow, value);
 		}
+
+		public entAllowVehicleCollisionRagdollInSceneEvent()
+		{
+			_allow = true;
+		}
 	}
 }

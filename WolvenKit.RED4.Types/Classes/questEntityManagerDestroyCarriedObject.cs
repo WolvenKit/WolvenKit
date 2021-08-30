@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isPlayer);
 			set => SetProperty(ref _isPlayer, value);
 		}
+
+		public questEntityManagerDestroyCarriedObject()
+		{
+			_isPlayer = true;
+		}
 	}
 }

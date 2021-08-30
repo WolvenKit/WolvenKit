@@ -302,5 +302,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _generatePlayerBlockingCollision);
 			set => SetProperty(ref _generatePlayerBlockingCollision, value);
 		}
+
+		public interopReExportOptions()
+		{
+			_exportMaterials = true;
+		}
 	}
 }

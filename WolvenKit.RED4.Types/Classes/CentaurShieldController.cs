@@ -50,5 +50,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _centaurBlackboard);
 			set => SetProperty(ref _centaurBlackboard, value);
 		}
+
+		public CentaurShieldController()
+		{
+			_startWithShieldActive = true;
+			_animFeatureName = "ShieldState";
+			_shieldDestroyedModifierName = "Shield_ControllerDestroyed";
+		}
 	}
 }

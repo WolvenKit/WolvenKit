@@ -131,5 +131,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _byItem);
 			set => SetProperty(ref _byItem, value);
 		}
+
+		public questEquipItemParams()
+		{
+			_equipDurationOverride = -1.000000F;
+			_unequipDurationOverride = -1.000000F;
+			_isPlayer = true;
+			_unequipTypes = new() { Value = Enums.gameItemUnequipContexts.AllItems };
+		}
 	}
 }

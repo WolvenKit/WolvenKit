@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _unequipDurationOverride);
 			set => SetProperty(ref _unequipDurationOverride, value);
 		}
+
+		public questUnequipItemParams()
+		{
+			_unequipDurationOverride = -1.000000F;
+		}
 	}
 }

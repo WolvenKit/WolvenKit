@@ -212,5 +212,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _attachmentSlotListener);
 			set => SetProperty(ref _attachmentSlotListener, value);
 		}
+
+		public AimingStateEvents()
+		{
+			_mouseZoomLevel = 100000.000000F;
+		}
 	}
 }

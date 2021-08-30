@@ -203,5 +203,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isInForcedCool);
 			set => SetProperty(ref _isInForcedCool, value);
 		}
+
+		public CrosshairGameController_Simple()
+		{
+			_offsetLeftRight = 0.800000F;
+			_offsetLeftRightExtra = 1.200000F;
+			_latchVertical = 40.000000F;
+		}
 	}
 }

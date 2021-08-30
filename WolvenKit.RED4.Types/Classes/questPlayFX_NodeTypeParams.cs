@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _sequenceShift);
 			set => SetProperty(ref _sequenceShift, value);
 		}
+
+		public questPlayFX_NodeTypeParams()
+		{
+			_play = true;
+		}
 	}
 }

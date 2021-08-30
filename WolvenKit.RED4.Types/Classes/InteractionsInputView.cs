@@ -86,5 +86,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _defaultInputPartName);
 			set => SetProperty(ref _defaultInputPartName, value);
 		}
+
+		public InteractionsInputView()
+		{
+			_showArrows = true;
+		}
 	}
 }

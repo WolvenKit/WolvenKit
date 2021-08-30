@@ -86,5 +86,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isTVMoving);
 			set => SetProperty(ref _isTVMoving, value);
 		}
+
+		public TV()
+		{
+			_securedText = new() { Text = "SECURED" };
+			_muteInterface = true;
+		}
 	}
 }

@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _entries);
 			set => SetProperty(ref _entries, value);
 		}
+
+		public audioFootstepDecalMaterialsMap()
+		{
+			_closestDecalDetectionRadius = 2.000000F;
+		}
 	}
 }

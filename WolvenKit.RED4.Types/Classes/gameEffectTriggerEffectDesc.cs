@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _playTillHour);
 			set => SetProperty(ref _playTillHour, value);
 		}
+
+		public gameEffectTriggerEffectDesc()
+		{
+			_playTillHour = 24;
+		}
 	}
 }

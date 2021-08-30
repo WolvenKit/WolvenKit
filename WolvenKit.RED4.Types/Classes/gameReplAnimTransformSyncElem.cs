@@ -59,5 +59,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _playing);
 			set => SetProperty(ref _playing, value);
 		}
+
+		public gameReplAnimTransformSyncElem()
+		{
+			_definitionId = -1;
+			_currentTime = -1.000000F;
+			_timeScale = 1.000000F;
+			_timesToPlay = -1;
+		}
 	}
 }

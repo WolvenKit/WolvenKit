@@ -95,5 +95,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _inputNodes);
 			set => SetProperty(ref _inputNodes, value);
 		}
+
+		public animAnimNode_BlendMultiple()
+		{
+			_maxWeight = 1.000000F;
+		}
 	}
 }

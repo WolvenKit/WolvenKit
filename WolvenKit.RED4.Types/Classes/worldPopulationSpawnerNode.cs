@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _prefetchAppearance);
 			set => SetProperty(ref _prefetchAppearance, value);
 		}
+
+		public worldPopulationSpawnerNode()
+		{
+			_appearanceName = "default";
+		}
 	}
 }

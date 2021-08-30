@@ -95,5 +95,15 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _minWheelTimeInAirBeforeLanding);
 			set => SetProperty(ref _minWheelTimeInAirBeforeLanding, value);
 		}
+
+		public audioVehicleWheelData()
+		{
+			_suspensionPressureMultiplier = 2.000000F;
+			_landingSuspensionPressureMultiplier = 1.000000F;
+			_suspensionPressureLimit = 1.000000F;
+			_minSuspensionPressureThreshold = 0.100000F;
+			_suspensionImpactCooldown = 0.200000F;
+			_minWheelTimeInAirBeforeLanding = 0.500000F;
+		}
 	}
 }

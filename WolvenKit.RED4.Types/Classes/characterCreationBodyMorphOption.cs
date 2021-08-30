@@ -131,5 +131,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _animationProxy);
 			set => SetProperty(ref _animationProxy, value);
 		}
+
+		public characterCreationBodyMorphOption()
+		{
+			_currSelectorIndex = -1;
+		}
 	}
 }

@@ -77,5 +77,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _sizeCoefficient);
 			set => SetProperty(ref _sizeCoefficient, value);
 		}
+
+		public inkWidgetLayout()
+		{
+			_sizeCoefficient = 1.000000F;
+		}
 	}
 }

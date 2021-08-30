@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _checkIfWrapperIsSet);
 			set => SetProperty(ref _checkIfWrapperIsSet, value);
 		}
+
+		public animAnimStateTransitionCondition_WrapperValue()
+		{
+			_checkIfWrapperIsSet = true;
+		}
 	}
 }

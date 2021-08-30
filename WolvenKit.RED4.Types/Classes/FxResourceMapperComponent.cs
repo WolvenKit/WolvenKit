@@ -68,5 +68,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _dEBUG_copiedDataFromFXStruct);
 			set => SetProperty(ref _dEBUG_copiedDataFromFXStruct, value);
 		}
+
+		public FxResourceMapperComponent()
+		{
+			_investigationSlotOffsetMultiplier = 1.000000F;
+		}
 	}
 }

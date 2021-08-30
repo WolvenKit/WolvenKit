@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _gradientEntriesRootToTip);
 			set => SetProperty(ref _gradientEntriesRootToTip, value);
 		}
+
+		public CHairProfile()
+		{
+			_sampleCount = 64;
+		}
 	}
 }

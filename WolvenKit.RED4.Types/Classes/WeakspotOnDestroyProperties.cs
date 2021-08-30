@@ -140,5 +140,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _statusEffectOnDestroyID);
 			set => SetProperty(ref _statusEffectOnDestroyID, value);
 		}
+
+		public WeakspotOnDestroyProperties()
+		{
+			_disableInteraction = true;
+			_destroyMesh = true;
+		}
 	}
 }

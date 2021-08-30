@@ -50,5 +50,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _slidingOnSlopeBlendTime);
 			set => SetProperty(ref _slidingOnSlopeBlendTime, value);
 		}
+
+		public animSBehaviorConstraintNodeFloorIKCommonData()
+		{
+			_rootRotationBlendTime = 0.200000F;
+			_verticalVelocityOffsetUpBlendTime = 0.080000F;
+			_verticalVelocityOffsetDownBlendTime = 0.030000F;
+			_slidingOnSlopeBlendTime = 0.200000F;
+		}
 	}
 }

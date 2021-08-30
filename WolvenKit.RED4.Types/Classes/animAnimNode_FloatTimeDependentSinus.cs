@@ -41,5 +41,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _phaseFactor);
 			set => SetProperty(ref _phaseFactor, value);
 		}
+
+		public animAnimNode_FloatTimeDependentSinus()
+		{
+			_min = -1.000000F;
+			_max = 1.000000F;
+			_frequencyFactor = 1.000000F;
+		}
 	}
 }

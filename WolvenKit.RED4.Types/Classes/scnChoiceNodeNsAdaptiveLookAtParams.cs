@@ -86,5 +86,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _auxiliaryRelativePoint);
 			set => SetProperty(ref _auxiliaryRelativePoint, value);
 		}
+
+		public scnChoiceNodeNsAdaptiveLookAtParams()
+		{
+			_referencePointNoEffectAngle = 63.000000F;
+			_referencePointFullEffectDistance = 5.000000F;
+		}
 	}
 }

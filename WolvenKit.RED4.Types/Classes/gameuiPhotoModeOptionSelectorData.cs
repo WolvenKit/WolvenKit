@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _optionText);
 			set => SetProperty(ref _optionText, value);
 		}
+
+		public gameuiPhotoModeOptionSelectorData()
+		{
+			_optionData = -1;
+		}
 	}
 }

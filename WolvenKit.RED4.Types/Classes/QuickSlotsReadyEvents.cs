@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _timePressed);
 			set => SetProperty(ref _timePressed, value);
 		}
+
+		public QuickSlotsReadyEvents()
+		{
+			_shouldSendEvent = true;
+		}
 	}
 }

@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _constAccel);
 			set => SetProperty(ref _constAccel, value);
 		}
+
+		public gameprojectileSlideTrajectoryParams()
+		{
+			_stickiness = 0.500000F;
+		}
 	}
 }

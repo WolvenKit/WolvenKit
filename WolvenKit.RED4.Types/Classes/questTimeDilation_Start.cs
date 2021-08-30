@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _easeOutCurve);
 			set => SetProperty(ref _easeOutCurve, value);
 		}
+
+		public questTimeDilation_Start()
+		{
+			_dilation = 1.000000F;
+		}
 	}
 }

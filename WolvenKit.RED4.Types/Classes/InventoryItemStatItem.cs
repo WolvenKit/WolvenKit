@@ -77,5 +77,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _positiveState);
 			set => SetProperty(ref _positiveState, value);
 		}
+
+		public InventoryItemStatItem()
+		{
+			_negativeState = "worse";
+			_positiveState = "better";
+		}
 	}
 }

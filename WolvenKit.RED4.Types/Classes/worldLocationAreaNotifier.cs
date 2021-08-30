@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _sendNewLocationNotification);
 			set => SetProperty(ref _sendNewLocationNotification, value);
 		}
+
+		public worldLocationAreaNotifier()
+		{
+			_sendNewLocationNotification = true;
+		}
 	}
 }

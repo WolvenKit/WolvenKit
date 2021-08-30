@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _boneRigMatrices);
 			set => SetProperty(ref _boneRigMatrices, value);
 		}
+
+		public MorphTargetMeshEntry()
+		{
+			_faceRegion = new() { Value = Enums.MorphTargetsFaceRegion.FACE_REGION_NONE };
+		}
 	}
 }

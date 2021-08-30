@@ -131,5 +131,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _numExtraBones);
 			set => SetProperty(ref _numExtraBones, value);
 		}
+
+		public animCAnimationBufferBitwiseCompressed()
+		{
+			_duration = 1.000000F;
+			_dt = 0.033000F;
+		}
 	}
 }

@@ -32,5 +32,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _optionData);
 			set => SetProperty(ref _optionData, value);
 		}
+
+		public gameuiPhotoModeOptionGridButtonData()
+		{
+			_optionData = -1;
+		}
 	}
 }

@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _rotationSpeedNode);
 			set => SetProperty(ref _rotationSpeedNode, value);
 		}
+
+		public animAnimNode_DampQuaternion()
+		{
+			_defaultRotationSpeed = 180.000000F;
+		}
 	}
 }

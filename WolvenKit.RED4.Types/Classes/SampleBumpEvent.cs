@@ -14,5 +14,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _amount);
 			set => SetProperty(ref _amount, value);
 		}
+
+		public SampleBumpEvent()
+		{
+			_amount = 1;
+		}
 	}
 }

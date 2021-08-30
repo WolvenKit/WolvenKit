@@ -572,5 +572,22 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _volDistantFogOpacity);
 			set => SetProperty(ref _volDistantFogOpacity, value);
 		}
+
+		public AtmosphereAreaSettings()
+		{
+			_volHorizonCoverage = 1.000000F;
+			_cloudsBottom = 400.000000F;
+			_cloudsTop = 1000.000000F;
+			_rayStartOffset = 25.000000F;
+			_rayStartFalloff = 50.000000F;
+			_inScatter = 0.200000F;
+			_outScatter = 0.100000F;
+			_inVsOutScatter = 0.500000F;
+			_silverLining = 0.800000F;
+			_volCoverageWindInfluence = 0.750000F;
+			_volNoiseWindInfluence = 1.000000F;
+			_volDetailWindInfluence = 1.250000F;
+			_volDistantFogOpacity = 1.000000F;
+		}
 	}
 }

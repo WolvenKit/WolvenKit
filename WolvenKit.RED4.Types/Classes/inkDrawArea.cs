@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _absolutePosition);
 			set => SetProperty(ref _absolutePosition, value);
 		}
+
+		public inkDrawArea()
+		{
+			_scale = 1.000000F;
+		}
 	}
 }

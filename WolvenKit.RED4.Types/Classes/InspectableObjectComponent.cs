@@ -59,5 +59,13 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _slot);
 			set => SetProperty(ref _slot, value);
 		}
+
+		public InspectableObjectComponent()
+		{
+			_offset = 0.500000F;
+			_adsOffset = 0.250000F;
+			_timeToScan = 2.000000F;
+			_slot = new() { Text = "AttachmentSlots.Inspect" };
+		}
 	}
 }

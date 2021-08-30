@@ -68,5 +68,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lookAtTargetYaw);
 			set => SetProperty(ref _lookAtTargetYaw, value);
 		}
+
+		public entMarketingAnimationComponent()
+		{
+			_freezeAnimations = true;
+			_lookAtOrbitDistance = 3.000000F;
+		}
 	}
 }

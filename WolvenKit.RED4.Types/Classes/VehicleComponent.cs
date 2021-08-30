@@ -347,5 +347,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _vehicleController);
 			set => SetProperty(ref _vehicleController, value);
 		}
+
+		public VehicleComponent()
+		{
+			_arePlayerHitShapesEnabled = true;
+		}
 	}
 }

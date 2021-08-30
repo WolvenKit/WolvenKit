@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _minimumOpacity);
 			set => SetProperty(ref _minimumOpacity, value);
 		}
+
+		public gameweaponeventsAIAttackAttemptEvent()
+		{
+			_minimumOpacity = -1.000000F;
+		}
 	}
 }

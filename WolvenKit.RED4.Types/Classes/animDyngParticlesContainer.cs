@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _gravityWS);
 			set => SetProperty(ref _gravityWS, value);
 		}
+
+		public animDyngParticlesContainer()
+		{
+			_gravityWS = 9.810000F;
+		}
 	}
 }

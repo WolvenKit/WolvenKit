@@ -86,5 +86,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _renderSettingsTPP);
 			set => SetProperty(ref _renderSettingsTPP, value);
 		}
+
+		public scneventsBraindanceVisibilityEvent()
+		{
+			_customMaterialParam = new() { Value = Enums.ECustomMaterialParam.ECMP_CustomParam0 };
+			_priority = 7;
+			_perspectiveBlend = 0.500000F;
+		}
 	}
 }

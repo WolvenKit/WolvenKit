@@ -230,5 +230,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _debugSymbols);
 			set => SetProperty(ref _debugSymbols, value);
 		}
+
+		public scnSceneResource()
+		{
+			_sceneCategoryTag = new() { Value = Enums.scnSceneCategoryTag.other };
+		}
 	}
 }

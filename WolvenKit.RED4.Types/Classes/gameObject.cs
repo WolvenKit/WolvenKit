@@ -347,5 +347,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isDead);
 			set => SetProperty(ref _isDead, value);
 		}
+
+		public gameObject()
+		{
+			_visibilityCheckDistance = 16000.000000F;
+		}
 	}
 }

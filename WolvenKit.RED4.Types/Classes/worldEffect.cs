@@ -59,5 +59,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _effectLoops);
 			set => SetProperty(ref _effectLoops, value);
 		}
+
+		public worldEffect()
+		{
+			_length = 1.000000F;
+		}
 	}
 }

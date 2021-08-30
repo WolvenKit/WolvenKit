@@ -86,5 +86,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _chestSquareScale);
 			set => SetProperty(ref _chestSquareScale, value);
 		}
+
+		public animLookAtPreset_FullControl()
+		{
+			_headSuppress = 1.000000F;
+			_chestSuppress = 1.000000F;
+		}
 	}
 }

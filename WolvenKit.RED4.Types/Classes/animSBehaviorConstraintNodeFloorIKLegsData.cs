@@ -95,5 +95,18 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _max_angle_from_upright_normal_to_revert_orientation);
 			set => SetProperty(ref _max_angle_from_upright_normal_to_revert_orientation, value);
 		}
+
+		public animSBehaviorConstraintNodeFloorIKLegsData()
+		{
+			_max_rel_offset = 0.500000F;
+			_min_trace_offset = -1.000000F;
+			_max_trace_offset = 1.000000F;
+			_verticalOffsetBlendUpTime = 0.060000F;
+			_verticalOffsetBlendDownTime = 0.030000F;
+			_max_distance_for_trace_update = 0.020000F;
+			_max_angle_from_upright_normal = 45.000000F;
+			_max_angle_from_upright_normal_to_side = 180.000000F;
+			_max_angle_from_upright_normal_to_revert_orientation = 70.000000F;
+		}
 	}
 }

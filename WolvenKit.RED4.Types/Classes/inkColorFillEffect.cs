@@ -50,5 +50,14 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _saturation);
 			set => SetProperty(ref _saturation, value);
 		}
+
+		public inkColorFillEffect()
+		{
+			_colorR = 255.000000F;
+			_colorG = 255.000000F;
+			_colorB = 255.000000F;
+			_colorA = 255.000000F;
+			_saturation = 1.000000F;
+		}
 	}
 }

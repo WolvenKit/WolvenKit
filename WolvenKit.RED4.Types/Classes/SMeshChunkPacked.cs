@@ -122,5 +122,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _lodMask);
 			set => SetProperty(ref _lodMask, value);
 		}
+
+		public SMeshChunkPacked()
+		{
+			_renderMask = new() { Value = Enums.EMeshChunkRenderMask.MCR_Scene | Enums.EMeshChunkRenderMask.MCR_Cascade1 };
+			_chunkRenderMask = new() { Value = Enums.EMeshChunkFlags.MCF_RenderInScene | Enums.EMeshChunkFlags.MCF_RenderInShadows };
+		}
 	}
 }

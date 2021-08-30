@@ -194,5 +194,12 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _globalBlendIn);
 			set => SetProperty(ref _globalBlendIn, value);
 		}
+
+		public animAnimFeatureUpdateWorkspot()
+		{
+			_timeScale = 1.000000F;
+			_animationStartTime = -1.000000D;
+			_facialKeyWeight = 0.750000F;
+		}
 	}
 }

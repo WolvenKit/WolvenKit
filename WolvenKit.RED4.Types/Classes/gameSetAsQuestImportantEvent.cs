@@ -23,5 +23,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _propagateToSlaves);
 			set => SetProperty(ref _propagateToSlaves, value);
 		}
+
+		public gameSetAsQuestImportantEvent()
+		{
+			_isImportant = true;
+			_propagateToSlaves = true;
+		}
 	}
 }

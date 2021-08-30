@@ -167,5 +167,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _startTime);
 			set => SetProperty(ref _startTime, value);
 		}
+
+		public SetCustomShootPosition()
+		{
+			_shootToTheGround = true;
+		}
 	}
 }

@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _valueToListen);
 			set => SetProperty(ref _valueToListen, value);
 		}
+
+		public EntityNoticedPlayerPrereq()
+		{
+			_valueToListen = 1;
+		}
 	}
 }

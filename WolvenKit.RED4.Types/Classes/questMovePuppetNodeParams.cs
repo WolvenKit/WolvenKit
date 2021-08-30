@@ -50,5 +50,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _repeatCommandOnInterrupt);
 			set => SetProperty(ref _repeatCommandOnInterrupt, value);
 		}
+
+		public questMovePuppetNodeParams()
+		{
+			_repeatCommandOnInterrupt = true;
+		}
 	}
 }

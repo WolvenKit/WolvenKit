@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _height);
 			set => SetProperty(ref _height, value);
 		}
+
+		public AreaShapeOutline()
+		{
+			_height = 2.000000F;
+		}
 	}
 }

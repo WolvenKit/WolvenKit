@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _immediately);
 			set => SetProperty(ref _immediately, value);
 		}
+
+		public questCombatNodeParams_LookAtTarget()
+		{
+			_duration = -1.000000F;
+		}
 	}
 }

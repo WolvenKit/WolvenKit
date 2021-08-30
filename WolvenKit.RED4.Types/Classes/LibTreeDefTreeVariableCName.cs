@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _defaultValue);
 			set => SetProperty(ref _defaultValue, value);
 		}
+
+		public LibTreeDefTreeVariableCName()
+		{
+			_exportAsProperty = true;
+		}
 	}
 }

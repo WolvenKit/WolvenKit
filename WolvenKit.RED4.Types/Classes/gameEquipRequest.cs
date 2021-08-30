@@ -41,5 +41,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _equipToCurrentActiveSlot);
 			set => SetProperty(ref _equipToCurrentActiveSlot, value);
 		}
+
+		public gameEquipRequest()
+		{
+			_slotIndex = -1;
+		}
 	}
 }

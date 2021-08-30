@@ -68,5 +68,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _highLevelStateCallbackId);
 			set => SetProperty(ref _highLevelStateCallbackId, value);
 		}
+
+		public MountRequestPassiveCondition()
+		{
+			_acceptInstant = true;
+			_acceptNotInstant = true;
+		}
 	}
 }

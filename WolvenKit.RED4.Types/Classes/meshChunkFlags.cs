@@ -50,5 +50,11 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isConsoleLOD0);
 			set => SetProperty(ref _isConsoleLOD0, value);
 		}
+
+		public meshChunkFlags()
+		{
+			_renderInScene = true;
+			_renderInShadows = true;
+		}
 	}
 }

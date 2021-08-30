@@ -23,5 +23,10 @@ namespace WolvenKit.RED4.Types
 			get => GetProperty(ref _isGPUBased);
 			set => SetProperty(ref _isGPUBased, value);
 		}
+
+		public CParticleDrawerMotionBlur()
+		{
+			_stretchPerVelocity = 0.500000F;
+		}
 	}
 }
