@@ -62,12 +62,12 @@
         <shell:DockingAdapter
             x:Name="dockingAdapter"
             Grid.Row="1"
-            
+
              />
 
         <shell:StatusBarView Grid.Row="2" />
 
-        <ScrollViewer HorizontalAlignment="Right" VerticalScrollBarVisibility="Hidden">
+        <ScrollViewer Grid.Row="0" Grid.RowSpan="3"  HorizontalAlignment="Right" VerticalScrollBarVisibility="Hidden">
             <StackPanel
                 Margin="0,35,10,10"
                 VerticalAlignment="Top"
