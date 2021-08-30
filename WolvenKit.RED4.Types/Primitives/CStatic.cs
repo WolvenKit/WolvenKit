@@ -1,11 +1,29 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WolvenKit.RED4.Types
 {
-    public class CStatic<T> : IRedArray<T> where T : IRedType
+    public class CStatic<T> : List<T>, IRedArray<T>, IEquatable<CStatic<T>> where T : IRedType
     {
-        public List<T> Value { get; set; } = new();
+        public override bool Equals(object obj)
+        {
+            if (obj is CStatic<T> cObj)
+            {
+                return Equals(obj);
+            }
 
-        public void Add(object value) => Value.Add((T)value);
+            return false;
+        }
+
+        public bool Equals(CStatic<T> other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+
+            return this.SequenceEqual(other);
+        }
     }
 }

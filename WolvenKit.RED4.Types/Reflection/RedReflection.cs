@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using FastMember;
+using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.Types
 {
@@ -25,6 +26,17 @@ namespace WolvenKit.RED4.Types
             }
 
             return null;
+        }
+
+        public static bool IsDefault(Type clsType, string redPropertyName, object? value)
+        {
+            var extendedPropertyInfo = GetProperty(clsType, redPropertyName);
+            if (extendedPropertyInfo == null)
+            {
+                throw new MissingRTTIException(redPropertyName, "???", clsType.Name);
+            }
+
+            return extendedPropertyInfo.DefaultValue.Equals(value);
         }
 
         public static ExtendedPropertyInfo GetProperty(Type type, string redPropertyName)

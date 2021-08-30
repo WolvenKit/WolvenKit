@@ -1,8 +1,9 @@
+using System;
 using System.IO;
 
 namespace WolvenKit.RED4.Types
 {
-    public class CName : IRedPrimitive
+    public class CName : IRedPrimitive, IEquatable<CName>
     {
         public string Text { get; set; }
 
@@ -10,5 +11,26 @@ namespace WolvenKit.RED4.Types
         public static implicit operator string(CName value) => value.Text;
 
         public override string ToString() => $"CName, Text = '{Text}'";
+
+
+        public override bool Equals(object obj)
+        {
+            if (obj is CName cObj)
+            {
+                return Equals(obj);
+            }
+
+            return false;
+        }
+
+        public bool Equals(CName other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+
+            return Text.Equals(other.Text);
+        }
     }
 }

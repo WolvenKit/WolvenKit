@@ -3,7 +3,7 @@ using System;
 namespace WolvenKit.RED4.Types
 {
     [RED("CDateTime")]
-    public class CDateTime : IRedPrimitive
+    public class CDateTime : IRedPrimitive, IEquatable<CDateTime>
     {
         public DateTime Value { get; set; }
 
@@ -79,5 +79,26 @@ namespace WolvenKit.RED4.Types
 
         public static implicit operator CDateTime(ulong value) => CDateTime.Parse(value);
         public static implicit operator ulong(CDateTime value) => value.ToUInt64();
+
+
+        public override bool Equals(object obj)
+        {
+            if (obj is CDateTime cObj)
+            {
+                return Equals(obj);
+            }
+
+            return false;
+        }
+
+        public bool Equals(CDateTime other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+
+            return Value.Equals(other.Value);
+        }
     }
 }

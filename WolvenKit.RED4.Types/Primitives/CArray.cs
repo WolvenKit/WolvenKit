@@ -1,13 +1,31 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace WolvenKit.RED4.Types
 {
-    public class CArray<T> : IRedArray<T> where T : IRedType
+    public class CArray<T> : List<T>, IRedArray<T>, IEquatable<CArray<T>> where T : IRedType
     {
-        public List<T> Value { get; set; } = new();
+        public override bool Equals(object obj)
+        {
+            if (obj is CArray<T> cObj)
+            {
+                return Equals(obj);
+            }
 
-        public void Add(object value) => Value.Add((T)value);
+            return false;
+        }
+
+        public bool Equals(CArray<T> other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+
+            return this.SequenceEqual(other);
+        }
     }
 }
