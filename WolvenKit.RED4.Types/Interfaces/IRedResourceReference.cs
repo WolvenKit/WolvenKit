@@ -2,6 +2,7 @@ namespace WolvenKit.RED4.Types
 {
     public interface IRedResourceReference
     {
+        public ushort GetValue();
         public void SetValue(ushort value);
     }
 

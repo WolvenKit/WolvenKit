@@ -2,9 +2,9 @@ using System.Collections.Generic;
 
 namespace WolvenKit.RED4.Types
 {
-    public interface IRedLegacySingleChannelCurve
+    public interface IRedLegacySingleChannelCurve : IList<IRedCurvePoint>
     {
-        public void Add(object value);
+        public uint Tail { get; set; }
     }
 
     public interface IRedLegacySingleChannelCurve<T> : IRedPrimitive<T>, IRedLegacySingleChannelCurve where T : IRedType
@@ -14,7 +14,10 @@ namespace WolvenKit.RED4.Types
 
     public interface IRedCurvePoint
     {
+        public float GetPoint();
         public void SetPoint(float point);
+
+        public object GetValue();
         public void SetValue(object value);
     }
 

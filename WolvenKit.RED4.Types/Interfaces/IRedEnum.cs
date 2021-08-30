@@ -4,6 +4,7 @@ namespace WolvenKit.RED4.Types
 {
     public interface IRedEnum
     {
+        public Enum GetValue();
         public void SetValue(object value);
     }
 

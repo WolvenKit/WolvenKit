@@ -53,9 +53,9 @@ namespace WolvenKit.RED4.NewCR2W
             }
         }
 
-        protected override void InternalReadCArray(IRedArray array) => InternalReadArray(array);
+        public override void ReadCArray(IRedArray array) => InternalReadArray(array);
 
-        protected override void InternalReadCStaticArray(IRedArray array) => InternalReadArray(array);
+        public override void ReadCStaticArray(IRedArray array) => InternalReadArray(array);
 
         public void ReadClass(IRedClass cls, uint size)
         {

@@ -8,14 +8,16 @@ namespace WolvenKit.RED4.Types
         public T Value { get; set; }
 
 
+        public float GetPoint() => Point;
         public void SetPoint(float point) => Point = point;
+
+        public object GetValue() => Value;
         public void SetValue(object value) => Value = (T)value;
     }
 
-    public class CLegacySingleChannelCurve<T> : IRedLegacySingleChannelCurve<T> where T : IRedType
+    public class CLegacySingleChannelCurve<T> : List<IRedCurvePoint>, IRedLegacySingleChannelCurve<T> where T : IRedType
     {
         public List<CurvePoint<T>> Elements { get; set; } = new();
-
-        public void Add(object value) => Elements.Add((CurvePoint<T>)value);
+        public uint Tail { get; set; }
     }
 }

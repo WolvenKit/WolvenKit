@@ -6,6 +6,7 @@ namespace WolvenKit.RED4.Types
     {
         public T Value { get; set; }
 
+        public Enum GetValue() => Value;
         public void SetValue(object value) => Value = (T)value;
 
         public static implicit operator CEnum<T>(T value) => new() { Value = value };

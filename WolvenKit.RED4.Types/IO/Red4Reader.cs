@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.IO
 {
     public class Red4Reader : IDisposable
     {
-        protected BinaryReader _reader;
+        protected readonly BinaryReader _reader;
         protected List<string> _stringList;
 
         private bool _disposed;
@@ -102,21 +102,7 @@ namespace WolvenKit.RED4.IO
         public virtual CName ReadCName() => _stringList[_reader.ReadUInt16()];
         public virtual CRUID ReadCRUID() => _reader.ReadUInt64();
         public virtual CString ReadCString() => ReadLengthPrefixedString();
-
-        // TODO: throw custom exception, other arg type?
-        public virtual CVariant ReadCVariant()
-        {
-            throw new NotImplementedException(nameof(ReadCVariant));
-
-            /*var typeStr = _stringList[this.ReadUInt16()];
-            var varSize = this.ReadUInt32() - 4;
-
-            if (varSize > 4)
-            {
-                // TODO: TypeManager.Create
-
-            }*/
-        }
+        public virtual CVariant ReadCVariant() => (CVariant)ThrowNotImplemented();
 
         public virtual DataBuffer ReadDataBuffer(uint size)
         {
@@ -132,9 +118,16 @@ namespace WolvenKit.RED4.IO
         }
 
         public virtual EditorObjectID ReadEditorObjectID() => (EditorObjectID)ThrowNotImplemented();
-        public virtual LocalizationString ReadLocalizationString() => (LocalizationString)ThrowNotImplemented();
+
+        public virtual LocalizationString ReadLocalizationString() =>
+            new()
+            {
+                Unk1 = _reader.ReadUInt64(),
+                Value = ReadLengthPrefixedString()
+            };
+
         public virtual MessageResourcePath ReadMessageResourcePath() => (MessageResourcePath)ThrowNotImplemented();
-        public virtual MultiChannelCurve<T> ReadMessageResourcePath<T>() where T : IRedType => (MultiChannelCurve<T>)ThrowNotImplemented();
+        public virtual MultiChannelCurve<T> ReadMultiChannelCurve<T>() where T : IRedType => (MultiChannelCurve<T>)ThrowNotImplemented();
         public virtual NodeRef ReadNodeRef() => ReadLengthPrefixedString();
 
         public virtual SerializationDeferredDataBuffer ReadSerializationDeferredDataBuffer(uint size)
@@ -156,11 +149,11 @@ namespace WolvenKit.RED4.IO
         public virtual IRedArray<T> ReadCArray<T>(IRedArray array) where T : IRedType
         {
             var instance = new CArray<T>();
-            InternalReadCArray(instance);
+            ReadCArray(instance);
             return instance;
         }
 
-        protected virtual void InternalReadCArray(IRedArray array)
+        public virtual void ReadCArray(IRedArray array)
         {
             ThrowNotImplemented();
         }
@@ -168,11 +161,11 @@ namespace WolvenKit.RED4.IO
         public virtual IRedArray<T> ReadCArrayFixedSize<T>(IRedArray array) where T : IRedType
         {
             var instance = new CArrayFixedSize<T>();
-            InternalCArrayFixedSize(instance);
+            ReadCArrayFixedSize(instance);
             return instance;
         }
 
-        protected virtual void InternalCArrayFixedSize(IRedArray array)
+        public virtual void ReadCArrayFixedSize(IRedArray array)
         {
             ThrowNotImplemented();
         }
@@ -180,62 +173,80 @@ namespace WolvenKit.RED4.IO
         public virtual IRedEnum<T> ReadCBitField<T>() where T : Enum
         {
             var instance = new CBitField<T>();
-            InternalReadCBitField(instance);
+            ReadCBitField(instance);
             return instance;
         }
 
-        protected virtual void InternalReadCBitField(IRedEnum @enum)
+        public virtual void ReadCBitField(IRedEnum instance)
         {
-            var innerType = @enum.GetType().GetGenericArguments()[0];
+            if (instance == null)
+            {
+                throw new ArgumentNullException(nameof(instance));
+            }
+
+            var innerType = instance.GetType().GetGenericArguments()[0];
 
             var index = _reader.ReadUInt16();
             var enumString = _stringList[index];
             var enumValue = Enum.Parse(innerType, enumString);
 
-            @enum.SetValue(enumValue);
+            instance.SetValue(enumValue);
         }
 
         public virtual IRedEnum<T> ReadCEnum<T>() where T : Enum
         {
             var instance = new CEnum<T>();
-            InternalReadCEnum(instance);
+            ReadCEnum(instance);
             return instance;
         }
 
-        protected virtual void InternalReadCEnum(IRedEnum @enum)
+        public virtual void ReadCEnum(IRedEnum instance)
         {
-            var innerType = @enum.GetType().GetGenericArguments()[0];
+            if (instance == null)
+            {
+                throw new ArgumentNullException(nameof(instance));
+            }
+
+            var innerType = instance.GetType().GetGenericArguments()[0];
 
             var index = _reader.ReadUInt16();
             var enumString = _stringList[index];
             var enumValue = Enum.Parse(innerType, enumString);
 
-            @enum.SetValue(enumValue);
+            instance.SetValue(enumValue);
         }
 
         public virtual IRedHandle<T> ReadCHandle<T>() where T : IRedClass
         {
             var instance = new CHandle<T>();
-            InternalReadCHandle(instance);
+            ReadCHandle(instance);
             return instance;
         }
 
-        protected virtual void InternalReadCHandle(IRedHandle handle)
+        public virtual void ReadCHandle(IRedHandle instance)
         {
-            handle.SetValue(_reader.ReadInt32());
+            if (instance == null)
+            {
+                throw new ArgumentNullException(nameof(instance));
+            }
+
+            instance.SetValue(_reader.ReadInt32());
         }
 
         public virtual IRedLegacySingleChannelCurve<T> ReadCLegacySingleChannelCurve<T>() where T : IRedType
         {
             var instance = new CLegacySingleChannelCurve<T>();
-
-            
-
+            ReadCLegacySingleChannelCurve(instance);
             return instance;
         }
 
-        protected virtual void InternalReadCLegacySingleChannelCurve(IRedLegacySingleChannelCurve singleChannelCurve)
+        public virtual void ReadCLegacySingleChannelCurve(IRedLegacySingleChannelCurve singleChannelCurve)
         {
+            if (singleChannelCurve == null)
+            {
+                throw new ArgumentNullException(nameof(singleChannelCurve));
+            }
+
             var innerType = singleChannelCurve.GetType().GetGenericArguments()[0];
 
             var startPos = BaseStream.Position;
@@ -257,54 +268,71 @@ namespace WolvenKit.RED4.IO
                     singleChannelCurve.Add(curvePoint);
                 }
             }
+
+            singleChannelCurve.Tail = _reader.ReadUInt16();
         }
 
-        public virtual IRedResourceReference<T> ReadCResourceAsyncReference<T>(IRedArray array) where T : IRedType
+        public virtual IRedResourceReference<T> ReadCResourceAsyncReference<T>() where T : IRedType
         {
             var instance = new CResourceAsyncReference<T>();
-            InternalReadCResourceAsyncReference(instance);
+            ReadCResourceAsyncReference(instance);
             return instance;
         }
 
-        protected virtual void InternalReadCResourceAsyncReference(IRedResourceReference redResourceReference)
+        public virtual void ReadCResourceAsyncReference(IRedResourceReference instance)
         {
-            redResourceReference.SetValue(_reader.ReadUInt16());
+            if (instance == null)
+            {
+                throw new ArgumentNullException(nameof(instance));
+            }
+
+            instance.SetValue(_reader.ReadUInt16());
         }
 
-        public virtual IRedResourceReference<T> ReadCResourceReference<T>(IRedArray array) where T : IRedType
+        public virtual IRedResourceReference<T> ReadCResourceReference<T>() where T : IRedType
         {
             var instance = new CResourceReference<T>();
-            InternalReadCResourceReference(instance);
+            ReadCResourceReference(instance);
             return instance;
         }
 
-        protected virtual void InternalReadCResourceReference(IRedResourceReference redResourceReference)
+        public virtual void ReadCResourceReference(IRedResourceReference instance)
         {
-            redResourceReference.SetValue(_reader.ReadUInt16());
+            if (instance == null)
+            {
+                throw new ArgumentNullException(nameof(instance));
+            }
+
+            instance.SetValue(_reader.ReadUInt16());
         }
 
-        public virtual IRedArray<T> ReadCStaticArray<T>(IRedArray array) where T : IRedType
+        public virtual IRedArray<T> ReadCStaticArray<T>() where T : IRedType
         {
             var instance = new CStatic<T>();
-            InternalReadCStaticArray(instance);
+            ReadCStaticArray(instance);
             return instance;
         }
 
-        protected virtual void InternalReadCStaticArray(IRedArray array)
+        public virtual void ReadCStaticArray(IRedArray array)
         {
             ThrowNotImplemented();
         }
 
-        public virtual IRedHandle<T> ReadCWeakHandle<T>(IRedHandle array) where T : IRedClass
+        public virtual IRedHandle<T> ReadCWeakHandle<T>() where T : IRedClass
         {
             var instance = new CWeakHandle<T>();
-            InternalReadCWeakHandle(instance);
+            ReadCWeakHandle(instance);
             return instance;
         }
 
-        protected virtual void InternalReadCWeakHandle(IRedHandle handle)
+        public virtual void ReadCWeakHandle(IRedHandle instance)
         {
-            handle.SetValue(_reader.ReadInt32());
+            if (instance == null)
+            {
+                throw new ArgumentNullException(nameof(instance));
+            }
+
+            instance.SetValue(_reader.ReadInt32());
         }
 
         #endregion General
@@ -323,14 +351,21 @@ namespace WolvenKit.RED4.IO
 
         #endregion
 
-        public virtual IRedClass ReadClass<T>(T type) where T : IRedClass
+        public virtual IRedClass ReadClass<T>(T type) where T : IRedClass => ReadClass(typeof(T));
+
+        public virtual IRedClass ReadClass(Type type)
         {
-            var cls = (IRedClass)System.Activator.CreateInstance<T>();
-            InternalReadClass(cls);
-            return cls;
+            if (!typeof(IRedClass).IsAssignableFrom(type))
+            {
+                throw new ArgumentException(nameof(type));
+            }
+
+            var instance = (IRedClass)System.Activator.CreateInstance(type);
+            ReadClass(instance);
+            return instance;
         }
 
-        protected virtual void InternalReadClass(IRedClass cls)
+        protected virtual void ReadClass(IRedClass cls)
         {
             ThrowNotImplemented();
         }
@@ -339,9 +374,7 @@ namespace WolvenKit.RED4.IO
         {
             if (typeof(IRedClass).IsAssignableFrom(type))
             {
-                var instance = (IRedClass)System.Activator.CreateInstance(type);
-                InternalReadClass(instance);
-                return instance;
+                return ReadClass(type);
             }
 
             if (!typeof(IRedType).IsAssignableFrom(type))
@@ -455,41 +488,43 @@ namespace WolvenKit.RED4.IO
             switch (type.GetGenericTypeDefinition())
             {
                 case { } cType when cType == typeof(CArray<>):
-                    InternalReadCArray((IRedArray)instance);
+                    ReadCArray((IRedArray)instance);
                     return instance;
 
                 case { } cType when cType == typeof(CEnum<>):
-                    InternalReadCEnum((IRedEnum)instance);
+                    ReadCEnum((IRedEnum)instance);
                     return instance;
 
                 case { } cType when cType == typeof(CHandle<>):
-                    InternalReadCHandle((IRedHandle)instance);
+                    ReadCHandle((IRedHandle)instance);
                     return instance;
 
                 case { } cType when cType == typeof(CLegacySingleChannelCurve<>):
-                    InternalReadCLegacySingleChannelCurve((IRedLegacySingleChannelCurve)instance);
+                    ReadCLegacySingleChannelCurve((IRedLegacySingleChannelCurve)instance);
                     return instance;
 
                 case { } cType when cType == typeof(CResourceAsyncReference<>):
-                    InternalReadCResourceAsyncReference((IRedResourceReference)instance);
+                    ReadCResourceAsyncReference((IRedResourceReference)instance);
                     return instance;
 
                 case { } cType when cType == typeof(CResourceReference<>):
-                    InternalReadCResourceReference((IRedResourceReference)instance);
+                    ReadCResourceReference((IRedResourceReference)instance);
                     return instance;
 
                 case { } cType when cType == typeof(CStatic<>):
-                    InternalReadCStaticArray((IRedArray)instance);
+                    ReadCStaticArray((IRedArray)instance);
                     return instance;
 
                 case { } cType when cType == typeof(CWeakHandle<>):
-                    InternalReadCWeakHandle((IRedHandle)instance);
+                    ReadCWeakHandle((IRedHandle)instance);
                     return instance;
 
                 default:
                     return ThrowNotSupported(type.Name);
             }
         }
+
+        #region IDisposable
 
         protected virtual void Dispose(bool disposing)
         {
@@ -506,5 +541,7 @@ namespace WolvenKit.RED4.IO
         public void Dispose() => Dispose(true);
 
         public virtual void Close() => Dispose(true);
+
+        #endregion IDisposable
     }
 }

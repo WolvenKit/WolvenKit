@@ -2,14 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.IO
 {
-    public class Red4Writer
+    public class Red4Writer : IDisposable
     {
         private readonly BinaryWriter _writer;
+        protected List<string> _stringList;
+
+        private bool _disposed;
 
         public Red4Writer(Stream output) : this(output, Encoding.UTF8, false)
         {
@@ -22,6 +26,7 @@ namespace WolvenKit.RED4.IO
         public Red4Writer(Stream output, Encoding encoding, bool leaveOpen)
         {
             _writer = new BinaryWriter(output, encoding, leaveOpen);
+            _stringList = new();
         }
 
         #region Support
@@ -97,28 +102,23 @@ namespace WolvenKit.RED4.IO
         #region Simple
 
         public virtual void Write(CDateTime val) => _writer.Write(val);
-        
         public virtual void Write(CGUID val) => _writer.Write(val.Value);
 
-        // TODO: throw custom exception, other arg type?
-        public virtual void Write(CName val, List<string> stringList) => _writer.Write((ushort)stringList.IndexOf(val));
+        public virtual void Write(CName val)
+        {
+            var index = _stringList.IndexOf(val.Text);
+            if (index == -1)
+            {
+                _stringList.Add(val.Text);
+                index = _stringList.Count - 1;
+            }
+
+            _writer.Write((ushort)index);
+        }
 
         public virtual void Write(CRUID val) => _writer.Write(val);
-
         public virtual void Write(CString val) => WriteLengthPrefixedString(val);
-
-        public virtual void Write(CVariant val, List<string> stringList)
-        {
-            throw new NotImplementedException("Write(CVariant)");
-
-            var redTypeName = RedReflection.GetRedTypeName(val.Value.GetType());
-
-            // TODO: Add to stringList, if not found
-            var index = stringList.IndexOf(redTypeName);
-            _writer.Write((ushort)index);
-
-            // TODO: Reflection, get redType from val.Value
-        }
+        public virtual void Write(CVariant val) => ThrowNotImplemented();
 
         public virtual void Write(DataBuffer val)
         {
@@ -127,7 +127,7 @@ namespace WolvenKit.RED4.IO
             _writer.Write((byte)0x80);
         }
 
-        public virtual void Write(EditorObjectID val) => throw new NotImplementedException();
+        public virtual void Write(EditorObjectID val) => ThrowNotImplemented();
 
         public virtual void Write(LocalizationString val)
         {
@@ -135,13 +135,87 @@ namespace WolvenKit.RED4.IO
             WriteLengthPrefixedString(val.Value);
         }
 
-        public virtual void Write(MessageResourcePath val) => throw new NotImplementedException();
-        public virtual void Write<T>(MultiChannelCurve<T> val) where T : IRedType => throw new NotImplementedException();
+        public virtual void Write(MessageResourcePath val) => ThrowNotImplemented();
+        public virtual void Write<T>(MultiChannelCurve<T> val) where T : IRedType => ThrowNotImplemented();
         public virtual void Write(NodeRef val) => WriteLengthPrefixedString(val);
         public virtual void Write(SerializationDeferredDataBuffer val) => _writer.Write(val.Buffer);
         public virtual void Write(SharedDataBuffer val) => _writer.Write(val.Buffer);
         public virtual void Write(TweakDBID val) => _writer.Write(val.Value);
 
+        #endregion Simple
+
+        #region General
+
+        public virtual void Write(IRedArray instance) => ThrowNotImplemented();
+
+        public virtual void Write(IRedEnum instance)
+        {
+            var enumValue = (Enum)instance.GetValue();
+
+            var index = _stringList.IndexOf(enumValue.ToString());
+            if (index == -1)
+            {
+                _stringList.Add(enumValue.ToString());
+                index = _stringList.Count - 1;
+            }
+
+            _writer.Write((ushort)index);
+        }
+
+        public virtual void Write(IRedHandle instance) => _writer.Write(instance.GetValue());
+
+        // TODO
+        public virtual void Write(IRedLegacySingleChannelCurve instance)
+        {
+            ThrowNotImplemented();
+
+            /*_writer.Write((uint)instance.Count);
+            foreach (var curvePoint in instance)
+            {
+                _writer.Write(curvePoint.GetValue());
+                _writer.Write(curvePoint.GetPoint());
+            }
+            _writer.Write(instance.Tail);*/
+        }
+
+        public virtual void Write(IRedResourceReference instance) => _writer.Write(instance.GetValue());
+
+        #endregion General
+
+        public virtual void Write(IRedClass instance) => ThrowNotImplemented();
+
+        #region Helper
+
+        protected IRedPrimitive ThrowNotImplemented([CallerMemberName] string callerMemberName = "")
+        {
+            throw new NotImplementedException($"{nameof(Red4Reader)}.{callerMemberName}");
+        }
+
+        protected IRedPrimitive ThrowNotSupported([CallerMemberName] string callerMemberName = "")
+        {
+            throw new NotSupportedException($"{nameof(Red4Reader)}.{callerMemberName}");
+        }
+
         #endregion
+
+        #region IDisposable
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _writer.Close();
+                }
+                _disposed = true;
+            }
+        }
+
+        public void Dispose() => Dispose(true);
+
+        public virtual void Close() => Dispose(true);
+
+        #endregion IDisposable
     }
 }
