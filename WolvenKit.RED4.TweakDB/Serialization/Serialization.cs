@@ -1,17 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using WolvenKit.RED4.TweakDB.Types;
 
 namespace WolvenKit.RED4.TweakDB.Serialization
 {
     public static class Serialization
     {
-        private static readonly JsonSerializerOptions s_options = new()
+        public static readonly JsonSerializerOptions Options = new()
         {
             WriteIndented = true,
             Converters =
@@ -19,32 +16,33 @@ namespace WolvenKit.RED4.TweakDB.Serialization
                     new ITypeConverterWithTypeDiscriminator(),
                     new JsonStringEnumConverter(),
 
+                    new BaseFundamentalConverter(),
+
                     new CNameJsonConverter(),
                     new CStringJsonConverter(),
+                    new CColorJsonConverter(),
+                    new CEulerAnglesJsonConverter(),
+                    new CQuaternionJsonConverter(),
+                    new CVector2JsonConverter(),
+                    new CVector3JsonConverter(),
 
-                    new CFloatJsonConverter(),
-                    new CBoolJsonConverter(),
-
-                    new JsonConverterCUint8(),
-                    new JsonConverterCUint16(),
-                    new JsonConverterCUint32(),
-                    new JsonConverterCUint64(),
-                    new JsonConverterCInt8(),
-                    new JsonConverterCInt16(),
-                    new JsonConverterCInt32(),
-                    new JsonConverterCInt64(),  
-                        
                 }
 
         };
 
-        public static bool TryParseJsonFlats(string json, out Dictionary<string, IType> dictionary)
+        /// <summary>
+        /// Tries to convert a list of  string representation of a logical value to its IType equivalent.
+        /// </summary>
+        /// <param name="json"></param>
+        /// <param name="dictionary"></param>
+        /// <returns></returns>
+        public static bool TryParseJsonFlatsDict(string json, out Dictionary<string, IType> dictionary)
         {
-            dictionary = new Dictionary<string, IType>();
+            dictionary = null;
             try
             {
-                var dict = JsonSerializer.Deserialize<Dictionary<string, IType>>(json, s_options);
-               
+                dictionary = JsonSerializer.Deserialize<Dictionary<string, IType>>(json, Options);
+
                 return true;
             }
             catch (Exception)
@@ -53,85 +51,68 @@ namespace WolvenKit.RED4.TweakDB.Serialization
             }
         }
 
-        public static bool TryParseValue(EIType type, string input, out IType variable)
+        /// <summary>
+        /// Tries to convert the specified json string representation to its IType equivalent.
+        /// </summary>
+        /// <param name="type">Type of the value to convert.</param>
+        /// <param name="value">A json string containing the value to convert.</param>
+        /// <param name="result"></param>
+        /// <returns>true if value was converted successfully; otherwise, false.</returns>
+        public static bool TryParseJsonFlat(Type type, string value, out IType result)
         {
+            if (value == null)
+            {
+                result = null;
+                return false;
+            }
+
             try
             {
-                object obj = null;
-                switch (type)
-                {
-                    case EIType.CName:
-                        obj = (CName)input;
-                        break;
-                    case EIType.CString:
-                        obj = (CString)input;
-                        break;
-                    case EIType.CFloat:
-                        obj = (CFloat)float.Parse(input);
-                        break;
-                    case EIType.CBool:
-                        obj = (CBool)bool.Parse(input);
-                        break;
-                    case EIType.CUint8:
-                        obj = (CUint8)byte.Parse(input);
-                        break;
-                    case EIType.CUint16:
-                        obj = (CUint16)ushort.Parse(input);
-                        break;
-                    case EIType.CUint32:
-                        obj = (CUint32)uint.Parse(input);
-                        break;
-                    case EIType.CUint64:
-                        obj = (CUint64)ulong.Parse(input);
-                        break;
-                    case EIType.CInt8:
-                        obj = (CInt8)sbyte.Parse(input);
-                        break;
-                    case EIType.CInt16:
-                        obj = (CInt16)short.Parse(input);
-                        break;
-                    case EIType.CInt32:
-                        obj = (CInt32)int.Parse(input);
-                        break;
-                    case EIType.CInt64:
-                        obj = (CInt64)long.Parse(input);
-                        break;
-                    //case EIType.CColor:
-                    //    value = CColor.Parse(ValueString);
-                    //    break;
-                    //case EIType.CEulerAngles:
-                    //    value = CEulerAngles.Parse(ValueString);
-                    //    break;
-                    //case EIType.CQuaternion:
-                    //    value = CQuaternion.Parse(ValueString);
-                    //    break;
-                    //case EIType.CVector2:
-                    //    value = CVector2.Parse(ValueString);
-                    //    break;
-                    //case EIType.CVector3:
-                    //    value = CVector3.Parse(ValueString);
-                    //    break;
-                    default:
-                        break;
-                }
-
-                // parse Value
+                var obj = JsonSerializer.Deserialize(value, type, Options);
                 if (obj is not IType ivalue)
                 {
-                    variable = null;
+                    result = null;
                     return false;
                 }
 
-                variable = ivalue;
+                result = ivalue;
                 return true;
             }
             catch (Exception)
             {
-                variable = null;
+                result = null;
                 return false;
             }
+
         }
 
-
+        /// <summary>
+        /// Get the runtime type from enum
+        /// </summary>
+        /// <param name="enumType"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public static Type GetTypeFromEnum(EIType enumType)
+            => enumType switch
+            {
+                EIType.CName => typeof(CName),
+                EIType.CString => typeof(CString),
+                EIType.CFloat => typeof(CFloat),
+                EIType.CBool => typeof(CBool),
+                EIType.CUint8 => typeof(CUint8),
+                EIType.CUint16 => typeof(CUint16),
+                EIType.CUint32 => typeof(CUint32),
+                EIType.CUint64 => typeof(CUint64),
+                EIType.CInt8 => typeof(CInt8),
+                EIType.CInt16 => typeof(CInt16),
+                EIType.CInt32 => typeof(CInt32),
+                EIType.CInt64 => typeof(CInt64),
+                EIType.CColor => typeof(CColor),
+                EIType.CEulerAngles => typeof(CEulerAngles),
+                EIType.CQuaternion => typeof(CQuaternion),
+                EIType.CVector2 => typeof(CVector2),
+                EIType.CVector3 => typeof(CVector3),
+                _ => throw new ArgumentOutOfRangeException(nameof(enumType))
+            };
     }
 }

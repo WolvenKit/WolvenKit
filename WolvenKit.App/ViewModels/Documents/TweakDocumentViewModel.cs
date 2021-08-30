@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows;
 using ICSharpCode.AvalonEdit.Document;
@@ -22,18 +20,19 @@ namespace WolvenKit.ViewModels.Documents
 {
     public class TweakDocumentViewModel : DocumentViewModel
     {
-        private TweakDB _tweakDb;
-        private JsonSerializerOptions options;
 
         public TweakDocumentViewModel(string path) : base(path)
         {
             Document = new TextDocument();
-            _tweakDb = new TweakDB();
             Flats = new();
 
             Types = new(Enum.GetNames<EIType>());
 
             AddFlatCommand = ReactiveCommand.Create(AddFlat/*, canAddFlat*/);
+
+
+            var hlManager = HighlightingManager.Instance;
+            HighlightingDefinition = hlManager.GetDefinitionByExtension(".json");
         }
 
 
@@ -71,13 +70,52 @@ namespace WolvenKit.ViewModels.Documents
                 return;
             }
 
+            // check name
+            if (Flats.Any(_ => _.Name == FlatName))
+            {
+                MessageBox.Show($"A flat with name {FlatName} is already part of your database. Please give a unique name to the item you are adding, or delete the existing item first.",
+                    "WolvenKit", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             // parse type
-            if (!Enum.TryParse<EIType>(SelectedType, out var type))
+            if (!Enum.TryParse<EIType>(SelectedType, out var enumType))
             {
                 return;
             }
 
-            if (!Serialization.TryParseValue(type, ValueString, out var ivalue))
+            var jsonvalue = ValueString;
+            // parse value
+            // some pretty input helpers
+            switch (enumType)
+            {
+                case EIType.CName:
+                case EIType.CString:
+                    if (!jsonvalue.StartsWith('\"'))
+                    {
+                        jsonvalue = $"\"{jsonvalue}";
+                    }
+                    if (!jsonvalue.EndsWith('\"'))
+                    {
+                        jsonvalue = $"{jsonvalue}\"";
+                    }
+                    break;
+                case EIType.CColor:
+                case EIType.CEulerAngles:
+                case EIType.CQuaternion:
+                case EIType.CVector2:
+                case EIType.CVector3:
+                    if (!jsonvalue.StartsWith('['))
+                    {
+                        jsonvalue = $"[{jsonvalue}";
+                    }
+                    if (!jsonvalue.EndsWith(']'))
+                    {
+                        jsonvalue = $"{jsonvalue}]";
+                    }
+                    break;
+            }
+            if (!Serialization.TryParseJsonFlat(Serialization.GetTypeFromEnum(enumType), jsonvalue, out var ivalue))
             {
                 return;
             }
@@ -87,23 +125,16 @@ namespace WolvenKit.ViewModels.Documents
                 Name = FlatName,
                 Value = ivalue
             };
-
-            if (Flats.Any(_ => _.Name == FlatName))
-            {
-                MessageBox.Show($"A flat with name {FlatName} is already part of your database. Please give a unique name to the item you are adding, or delete the existing item first.",
-                    "WolvenKit", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            // add to db
             Flats.Add(newFlat);
 
             // serialize textfile
             var dict = Flats.ToList();
             var d = dict.ToDictionary(x => x.Name, x => x.Value);
-            
-            Document.Text = JsonSerializer.Serialize(d, options);
+
+            Document.Text = JsonSerializer.Serialize(d, Serialization.Options);
         }
+
+
 
         #endregion
 
@@ -113,7 +144,7 @@ namespace WolvenKit.ViewModels.Documents
             using var bw = new StreamWriter(fs);
             bw.Write(Document.Text);
 
-            if (Serialization.TryParseJsonFlats(Document.Text, out var dict))
+            if (Serialization.TryParseJsonFlatsDict(Document.Text, out var dict))
             {
                 var list = dict.Select(_ => new TweakFlatDto()
                 {
@@ -145,11 +176,10 @@ namespace WolvenKit.ViewModels.Documents
             Title = FileName;
             _isInitialized = true;
 
-            return await Task.FromResult<bool>(true);
+            return await Task.FromResult(true);
         }
 
-
-        private bool LoadDocument(string paramFilePath)
+        private void LoadDocument(string paramFilePath)
         {
             if (File.Exists(paramFilePath))
             {
@@ -163,7 +193,7 @@ namespace WolvenKit.ViewModels.Documents
                 //IsReadOnly = false;
 
                 // Check file attributes and set to read-only if file attributes indicate that
-                if ((System.IO.File.GetAttributes(paramFilePath) & FileAttributes.ReadOnly) != 0)
+                if ((File.GetAttributes(paramFilePath) & FileAttributes.ReadOnly) != 0)
                 {
                     IsReadOnly = true;
                     IsReadOnlyReason = "This file cannot be edit because another process is currently writting to it.\n" +
@@ -178,7 +208,7 @@ namespace WolvenKit.ViewModels.Documents
 
                 FilePath = paramFilePath;
 
-                if (Serialization.TryParseJsonFlats(Document.Text, out var dict))
+                if (Serialization.TryParseJsonFlatsDict(Document.Text, out var dict))
                 {
                     var list = dict.Select(_ => new TweakFlatDto()
                     {
@@ -195,12 +225,14 @@ namespace WolvenKit.ViewModels.Documents
                         MessageBoxImage.Error);
 
                 }
-
-                return true;
             }
-
-            return false;
         }
 
+        public class TweakFlatDto
+        {
+            public string Name { get; set; }
+            //public EIType Type { get; set; }
+            public IType Value { get; set; }
+        }
     }
 }

@@ -20,10 +20,10 @@
     >
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
-        
+
         <Grid.Resources>
             <ResourceDictionary>
-                
+
                 <ResourceDictionary.MergedDictionaries>
                     <hc:ThemeResources RequestedTheme="Dark" />
                     <hc:Theme />
@@ -349,7 +349,7 @@
                     <Grid Grid.Column="1">
 
                         <Grid.Resources>
-                            
+
                             <DataTemplate x:Key="CommmonTemplate">
                                 <TextBlock Padding="5" Text="{Binding Property.Value}"  />
                             </DataTemplate>
@@ -420,13 +420,13 @@
                             <templates:EditableVariableDataTemplateSelector
                                 x:Key="DataTemplateSelector"
                                 CommmonTemplate="{StaticResource CommmonTemplate}"
-                                
+
                                 EnumTemplate="{StaticResource EnumTemplate}"
-                                
+
                                 HandleTemplateView="{StaticResource HandleTemplate}"
-                                
+
                                 RedboolTemplate="{StaticResource RedboolTemplate}"
-                                
+
                                 RefTemplateView="{StaticResource RefTemplateView}"
 
                                 NumericTemplate="{StaticResource StringTemplateView}"
@@ -434,7 +434,7 @@
                                 />
 
                             <converters1:CellStyleConverter x:Key="converter" />
-                            
+
                         </Grid.Resources>
 
                         <!--<Grid.ColumnDefinitions>
@@ -484,7 +484,7 @@
 
                                 <syncfusion:TreeGridCheckBoxColumn
                                     MappingName="IsSerialized"
-                                    AllowEditing="false"
+                                    AllowEditing="true"
                                     HeaderText="Serialized"
                                     ColumnSizer="SizeToHeader"/>
 
@@ -499,9 +499,9 @@
                             PropertyExpandMode="NestedMode"
                             AutoGeneratingPropertyGridItem="PropertyGrid_AutoGeneratingPropertyGridItem"
                             >
-                            
+
                         </syncfusion:PropertyGrid>-->
-                        
+
                     </Grid>
 
                 </Grid>
@@ -553,9 +553,9 @@
                     <iconPacks:PackIconMaterial Margin="10,5,5,5" Kind="BriefcaseEditOutline" />
                 </syncfusion:NavigationItem.Icon>
             </syncfusion:NavigationItem>
-            
+
         </syncfusion:SfNavigationDrawer>
 
     </Grid>
-    
+
 </reactiveUi:ReactiveUserControl>

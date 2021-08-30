@@ -245,7 +245,7 @@ namespace WolvenKit.Functionality.Controllers
                 var filename = Path.GetFileName(f);
                 var outPath = Path.Combine(cp77Proj.PackedScriptsDirectory, filename);
 
-                if (RED4.TweakDB.Serialization.Serialization.TryParseJsonFlats(json, out var dict))
+                if (RED4.TweakDB.Serialization.Serialization.TryParseJsonFlatsDict(json, out var dict))
                 {
                     var db = new TweakDB();
                     foreach (var (key, value) in dict)

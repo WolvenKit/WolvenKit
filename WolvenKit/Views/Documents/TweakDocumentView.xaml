@@ -44,6 +44,7 @@
                     Name="textEditor"
                     Foreground="LightGray"
                     Document = "{Binding Document, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                    SyntaxHighlighting="JSON"
                     />
 
         <!-- TEXT EDITOR -->
