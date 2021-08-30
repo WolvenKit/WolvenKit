@@ -21,8 +21,9 @@ namespace WolvenKit.ViewModels.Shell
         public ChunkPropertyViewModel(IEditableVariable prop)
         {
             Property = prop;
+            IsSerialized = prop.IsSerialized;
 
-            var disposable = Property.ChildrEditableVariables
+            _ = Property.ChildrEditableVariables
                 .AsObservableChangeSet()
                 .Transform(GetViewModel)
                 .ObserveOn(RxApp.MainThreadScheduler)
@@ -38,6 +39,14 @@ namespace WolvenKit.ViewModels.Shell
                         this.RaisePropertyChanged(nameof(IsSerialized));
                     }
                 });
+
+            this.WhenAnyValue(x => x.IsSerialized).Subscribe(b =>
+            {
+                if (prop.IsSerialized != b)
+                {
+                    prop.IsSerialized = b;
+                }
+            });
         }
 
         private static ChunkPropertyViewModel GetViewModel(IEditableVariable editableVariable) =>
@@ -62,7 +71,7 @@ namespace WolvenKit.ViewModels.Shell
         public string Name => Property.REDName;
         public string Type => Property.REDType;
         public string Value => Property.REDValue;
-        public bool IsSerialized => Property.IsSerialized;
+        [Reactive] public bool IsSerialized { get; set; }//=> Property.IsSerialized;
 
         private readonly ReadOnlyObservableCollection<ChunkPropertyViewModel> _children;
         public ReadOnlyObservableCollection<ChunkPropertyViewModel> Children => _children;
