@@ -122,11 +122,6 @@ namespace CP77Tools.Tasks
 
             foreach (var fileInfo in filesToExport)
             {
-                if (!Enum.TryParse(inputFileInfo.Extension.TrimStart('.'), true, out ECookedFileFormat extAsEnum))
-                {
-                    continue;
-                }
-
                 var di = string.IsNullOrEmpty(outDir) ? null : new DirectoryInfo(outDir);
                 if (_modTools.Export(fileInfo, exportArgs, basedir, di, forcebuffers))
                 {
@@ -136,7 +131,6 @@ namespace CP77Tools.Tasks
                 {
                     _loggerService.Error($"Failed to export {path}.");
                 }
-
             }
 
             return;
