@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.Types
         {
             if (obj is DataBuffer cObj)
             {
-                return Equals(obj);
+                return Equals(cObj);
             }
 
             return false;

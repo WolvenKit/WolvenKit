@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
         {
             if (obj is SerializationDeferredDataBuffer cObj)
             {
-                return Equals(obj);
+                return Equals(cObj);
             }
 
             return false;

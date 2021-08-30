@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
         {
             if (obj is LocalizationString cObj)
             {
-                return Equals(obj);
+                return Equals(cObj);
             }
 
             return false;

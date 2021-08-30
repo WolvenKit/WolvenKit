@@ -10,9 +10,9 @@ namespace WolvenKit.RED4.Types
 
         public override bool Equals(object value)
         {
-            if (value is SharedDataBuffer cguid)
+            if (value is SharedDataBuffer cObj)
             {
-                return Equals(cguid);
+                return Equals(cObj);
             }
             return false;
         }

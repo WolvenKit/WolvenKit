@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.Types
         {
             if (obj is NodeRef cObj)
             {
-                return Equals(obj);
+                return Equals(cObj);
             }
 
             return false;
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
                 return false;
             }
 
-            return Text.Equals(other.Text);
+            return string.Equals(Text, other.Text);
         }
     }
 }

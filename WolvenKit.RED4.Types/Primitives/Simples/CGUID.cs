@@ -20,9 +20,9 @@ namespace WolvenKit.RED4.Types
 
         public override bool Equals(object value)
         {
-            if (value is CGUID cguid)
+            if (value is CGUID cObj)
             {
-                return Equals(cguid);
+                return Equals(cObj);
             }
             return false;
         }

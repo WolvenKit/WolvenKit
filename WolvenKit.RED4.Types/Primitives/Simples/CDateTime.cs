@@ -85,7 +85,7 @@ namespace WolvenKit.RED4.Types
         {
             if (obj is CDateTime cObj)
             {
-                return Equals(obj);
+                return Equals(cObj);
             }
 
             return false;

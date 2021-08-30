@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
         {
             if (obj is CurvePoint<T> cObj)
             {
-                return Equals(obj);
+                return Equals(cObj);
             }
 
             return false;

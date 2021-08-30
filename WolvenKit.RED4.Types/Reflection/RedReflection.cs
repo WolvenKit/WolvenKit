@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
                 throw new MissingRTTIException(redPropertyName, "???", clsType.Name);
             }
 
-            return extendedPropertyInfo.DefaultValue.Equals(value);
+            return object.Equals(extendedPropertyInfo.DefaultValue, value);
         }
 
         public static ExtendedPropertyInfo GetProperty(Type type, string redPropertyName)

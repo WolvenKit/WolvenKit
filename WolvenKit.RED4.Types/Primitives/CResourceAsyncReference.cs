@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
         {
             if (obj is CResourceAsyncReference<T> cObj)
             {
-                return Equals(obj);
+                return Equals(cObj);
             }
 
             return false;

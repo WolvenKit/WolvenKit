@@ -17,7 +17,7 @@ namespace WolvenKit.RED4.Types
         {
             if (obj is CEnum<T> cObj)
             {
-                return Equals(obj);
+                return Equals(cObj);
             }
 
             return false;
