@@ -64,7 +64,8 @@
                     </hc:SearchBar>
 
                     <Viewbox Grid.Column="1"  Margin="-35,0,0,0" Height="30" Width="30" >
-                        <ToggleButton IsChecked="{Binding IsRegexSearchEnabled}" >
+                        <ToggleButton IsChecked="{Binding IsRegexSearchEnabled}"
+                                      ToolTip="Toggle Regex">
 
                             <ToggleButton.Style>
                                 <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
@@ -88,7 +89,7 @@
                                   FlowDirection="LeftToRight"
                                   ShowClearButton="True"
                                   hc:InfoElement.Placeholder="(e.g. *.ent, base/**/judy)"
-                                  hc:InfoElement.Title="files to include: "
+                                  hc:InfoElement.Title="Files to include: "
                                   hc:InfoElement.TitlePlacement="Left"
                                   SearchStarted="FileSearchBar_SearchStarted"
                                   >
@@ -288,6 +289,7 @@
                                 AllowSorting="True"
                                 AutoGenerateColumns="False"
                                 Background="{DynamicResource RegionBrush}"
+                                CurrentCellBorderThickness="0"
                                 ColumnSizer="Auto"
                                 EnableDataVirtualization="True"
                                 IsManipulationEnabled="False"
@@ -335,6 +337,9 @@
 
                                     <syncfusion:GridCheckBoxColumn
                                         AllowEditing="True"
+                                        AllowFiltering="False"
+                                        AllowResizing="False"
+                                        Width="40"
                                         HeaderText="#"
                                         MappingName="IsChecked">
                                         <syncfusion:GridCheckBoxColumn.HeaderTemplate>
@@ -348,9 +353,10 @@
                                     </syncfusion:GridCheckBoxColumn>
 
                                     <syncfusion:GridTemplateColumn
-                                        Width="22"
+                                        Width="26"
+                                        AllowResizing="False"
                                         AllowFiltering="False"
-                                        MappingName=".">
+                                        MappingName="">
                                         <syncfusion:GridTemplateColumn.CellTemplate>
 
                                             <DataTemplate>
@@ -1025,20 +1031,24 @@
 
                                     <syncfusion:GridTextColumn
                                         AllowFiltering="True"
-                                        ColumnSizer="Star"
+                                        ColumnSizer="AutoWithLastColumnFill"
                                         IsReadOnly="True"
                                         MappingName="Name"
+                                        AllowResizing="False"
                                         ShowToolTip="True" ToolTipTemplate="{StaticResource TemplateToolTip}"
                                         />
 
                                     <syncfusion:GridTextColumn
                                         AllowFiltering="True"
+                                        AllowResizing="False"
+                                        HeaderText="Kind"
                                         ColumnSizer="Auto"
                                         IsReadOnly="True"
                                         MappingName="DisplayExtension" />
 
                                     <syncfusion:GridTextColumn
                                         AllowFiltering="True"
+                                        AllowResizing="False"
                                         ColumnSizer="Auto"
                                         IsReadOnly="True"
                                         MappingName="Size" />
