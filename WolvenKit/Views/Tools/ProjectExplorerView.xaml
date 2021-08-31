@@ -11,7 +11,7 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:tools="clr-namespace:WolvenKit.ViewModels.Tools;assembly=WolvenKit.App"
-    d:DataContext="{d:DesignInstance Type=editor:ProjectExplorerViewModel}"
+    d:DataContext="{d:DesignInstance Type=tools:ProjectExplorerViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="400"
     mc:Ignorable="d">

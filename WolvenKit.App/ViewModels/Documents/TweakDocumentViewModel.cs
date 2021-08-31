@@ -28,11 +28,14 @@ namespace WolvenKit.ViewModels.Documents
 
             Types = new(Enum.GetNames<EIType>());
 
-            AddFlatCommand = ReactiveCommand.Create(AddFlat/*, canAddFlat*/);
-
+            AddFlatCommand = ReactiveCommand.Create(AddFlat);
+            DeleteFlatCommand = ReactiveCommand.Create(DeleteFlat);
+            EditFlatCommand = ReactiveCommand.Create(EditFlat);
 
             var hlManager = HighlightingManager.Instance;
             HighlightingDefinition = hlManager.GetDefinitionByExtension(".json");
+            
+
         }
 
 
@@ -46,15 +49,20 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public string IsReadOnlyReason { get; set; }
 
-        [Reactive] public string ValueString { get; set; }
+        
 
         [Reactive] public string FlatName { get; set; }
 
         [Reactive] public string SelectedType { get; set; }
 
+        [Reactive] public string ValueString { get; set; }
+
+
         [Reactive] public ObservableCollection<string> Types { get; set; }
 
-        [Reactive] public ObservableCollection<TweakFlatDto> Flats {  get; set; }
+        [Reactive] public ObservableCollection<FlatViewModel> Flats {  get; set; }
+
+        [Reactive] public FlatViewModel SelectedItem { get; set; }
 
         #endregion
 
@@ -120,21 +128,44 @@ namespace WolvenKit.ViewModels.Documents
                 return;
             }
 
-            var newFlat = new TweakFlatDto()
-            {
-                Name = FlatName,
-                Value = ivalue
-            };
+            var newFlat = new FlatViewModel(FlatName, ivalue);
             Flats.Add(newFlat);
 
             // serialize textfile
             var dict = Flats.ToList();
-            var d = dict.ToDictionary(x => x.Name, x => x.Value);
+            var d = dict.ToDictionary(x => x.Name, x => x.GetValue());
 
             Document.Text = JsonSerializer.Serialize(d, Serialization.Options);
         }
 
+        public ReactiveCommand<Unit, Unit> EditFlatCommand { get; }
+        private void EditFlat()
+        {
+            if (SelectedItem is null)
+            {
+                return;
+            }
 
+            
+        }
+
+        public ReactiveCommand<Unit, Unit> DeleteFlatCommand { get; }
+        private void DeleteFlat()
+        {
+            if (SelectedItem is null)
+            {
+                return;
+            }
+
+            Flats.Remove(SelectedItem);
+            SelectedItem = null;
+
+            // serialize textfile
+            var dict = Flats.ToList();
+            var d = dict.ToDictionary(x => x.Name, x => x.GetValue());
+
+            Document.Text = JsonSerializer.Serialize(d, Serialization.Options);
+        }
 
         #endregion
 
@@ -146,12 +177,8 @@ namespace WolvenKit.ViewModels.Documents
 
             if (Serialization.TryParseJsonFlatsDict(Document.Text, out var dict))
             {
-                var list = dict.Select(_ => new TweakFlatDto()
-                {
-                    Name = _.Key,
-                    Value = _.Value
-                });
-                Flats = new ObservableCollection<TweakFlatDto>(list);
+                var list = dict.Select(_ => new FlatViewModel(_.Key, _.Value));
+                Flats = new ObservableCollection<FlatViewModel>(list);
             }
 
             //dbg
@@ -210,12 +237,9 @@ namespace WolvenKit.ViewModels.Documents
 
                 if (Serialization.TryParseJsonFlatsDict(Document.Text, out var dict))
                 {
-                    var list = dict.Select(_ => new TweakFlatDto()
-                    {
-                        Name = _.Key,
-                        Value = _.Value
-                    });
-                    Flats = new ObservableCollection<TweakFlatDto>(list);
+                    var list = dict.Select(_ => new FlatViewModel(_.Key, _.Value));
+     
+                    Flats = new ObservableCollection<FlatViewModel>(list);
                 }
                 else
                 {
@@ -228,11 +252,21 @@ namespace WolvenKit.ViewModels.Documents
             }
         }
 
-        public class TweakFlatDto
+        public class FlatViewModel
         {
+            private readonly IType _value;
+
+            public FlatViewModel(string name, IType value)
+            {
+                Name = name;
+                _value = value;
+            }
+
             public string Name { get; set; }
-            //public EIType Type { get; set; }
-            public IType Value { get; set; }
+
+            public string DisplayString => _value.ToString();
+
+            public IType GetValue() => _value;
         }
     }
 }

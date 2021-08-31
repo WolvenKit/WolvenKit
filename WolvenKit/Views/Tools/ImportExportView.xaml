@@ -14,7 +14,7 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:tools="clr-namespace:WolvenKit.ViewModels.Tools;assembly=WolvenKit.App"
-    d:DataContext="{d:DesignInstance Type=editor:ImportExportViewModel}"
+    d:DataContext="{d:DesignInstance Type=tools:ImportExportViewModel}"
     mc:Ignorable="d">
 
     <Grid>

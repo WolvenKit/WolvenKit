@@ -36,70 +36,72 @@ namespace WolvenKit.Views.Documents
                     SetCurrentValue(ViewModelProperty, vm);
                 }
 
+                // TEXT EDITOR
 
+                // bind this directly
                 //Document = "{Binding Document, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                 //this.OneWayBind(ViewModel,
                 //        viewModel => viewModel.Document,
                 //        view => view.textEditor.Document)
                 //    .DisposeWith(disposables);
 
-                //IsModified = "{Binding Path=IsDirty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 this.Bind(ViewModel,
                         viewModel => viewModel.IsDirty,
                         view => view.textEditor.IsModified)
                     .DisposeWith(disposables);
-                //IsReadOnly = "{Binding IsReadOnly, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                 this.OneWayBind(ViewModel,
                         viewModel => viewModel.IsReadOnly,
                         view => view.textEditor.IsReadOnly)
                     .DisposeWith(disposables);
-                //SyntaxHighlighting="{Binding HighlightingDefinition, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                 this.OneWayBind(ViewModel,
                         viewModel => viewModel.HighlightingDefinition,
                         view => view.textEditor.SyntaxHighlighting)
                     .DisposeWith(disposables);
 
-                //this.OneWayBind(ViewModel,
-                //        viewModel => viewModel.DocumentSource,
-                //        view => view.textEditor.DocumentSource)
-                //    .DisposeWith(disposables);
-                //this.Bind(ViewModel,
-                //        viewModel => viewModel.DocumentSource,
-                //        view => view.textbox.Text)
-                //    .DisposeWith(disposables);
 
-
+                // LIST VIEW
                 this.OneWayBind(ViewModel,
                         viewModel => viewModel.Flats,
                         view => view.FlatsTree.ItemsSource)
                     .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        viewModel => viewModel.SelectedItem,
+                        view => view.FlatsTree.SelectedItem)
+                    .DisposeWith(disposables);
 
-                // ItemsSource="{Binding Types}"
-                //SelectedItem = "{Binding SelectedType}"
-                //this.OneWayBind(ViewModel,
-                //        viewModel => viewModel.Types,
-                //        view => view.TypeComboBox.ItemsSource)
-                //    .DisposeWith(disposables);
-                //this.OneWayBind(ViewModel,
-                //       viewModel => viewModel.SelectedType,
-                //       view => view.TypeComboBox.SelectedItem)
-                //   .DisposeWith(disposables);
+                // ADD VALUE BOX
+                this.OneWayBind(ViewModel,
+                       viewModel => viewModel.SelectedType,
+                       view => view.TypeComboBox.SelectedItem)
+                   .DisposeWith(disposables);
 
                 this.Bind(ViewModel,
                         viewModel => viewModel.FlatName,
                         view => view.NameTextBox.Text)
                     .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        vm => vm.AddFlatCommand,
-                        v => v.AddButton)
-                    .DisposeWith(disposables);
-
-
                 this.Bind(ViewModel,
                         viewModel => viewModel.ValueString,
                         view => view.ValueTextBox.Text)
                     .DisposeWith(disposables);
+
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.AddFlatCommand,
+                        view => view.AddButton)
+                    .DisposeWith(disposables);
+
+
+               
             });
+        }
+
+        private void EditButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            ViewModel?.EditFlatCommand.Execute().Subscribe();
+        }
+
+        private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            ViewModel?.DeleteFlatCommand.Execute().Subscribe();
         }
     }
 }

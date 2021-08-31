@@ -101,10 +101,50 @@
                                    ColumnSizer="FillColumn"
                                    Margin="0,10,0,0"
                                    AutoGenerateColumns="False"
+                                   AllowEditing="False"
                                    >
                 <syncfusion:SfTreeGrid.Columns>
+
                     <syncfusion:TreeGridTextColumn MappingName="Name" />
-                    <syncfusion:TreeGridTextColumn MappingName="Value" />
+                    <!--<syncfusion:TreeGridTextColumn MappingName="DisplayString" HeaderText="Value" />-->
+
+                    <syncfusion:TreeGridTemplateColumn MappingName="DisplayString" HeaderText="Value"
+                                                       AllowFocus="True"
+                                                        >
+                        <syncfusion:TreeGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <!--<ColumnDefinition Width="Auto"/>-->
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock
+                                        Text="{Binding DisplayString }"
+                                        VerticalAlignment="Center"/>
+                                    <!--<Button Grid.Column="1" x:Name="EditButton" Click="EditButton_OnClick"
+                                            syncfusion:FocusManagerHelper.FocusedElement="True">
+                                        <iconPacks:PackIconCodicons Kind="Edit"/>
+                                    </Button>-->
+                                    <Button Grid.Column="2" x:Name="DeleteButton" Click="DeleteButton_OnClick"
+                                            syncfusion:FocusManagerHelper.FocusedElement="True" >
+                                        <iconPacks:PackIconMaterial Kind="Delete" Foreground="Red"
+                                                                     />
+                                    </Button>
+                                </Grid>
+
+                                
+                            </DataTemplate>
+                        </syncfusion:TreeGridTemplateColumn.CellTemplate>
+                        <!--<syncfusion:TreeGridTemplateColumn.EditTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding FirstName}"
+                                         syncfusion:FocusManagerHelper.FocusedElement="True"/>
+                            </DataTemplate>
+                        </syncfusion:TreeGridTemplateColumn.EditTemplate>-->
+                    </syncfusion:TreeGridTemplateColumn>
+
                 </syncfusion:SfTreeGrid.Columns>
 
                 
