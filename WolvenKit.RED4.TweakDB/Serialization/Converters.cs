@@ -10,18 +10,108 @@ using WolvenKit.RED4.TweakDB.Types;
 
 namespace WolvenKit.RED4.TweakDB.Serialization
 {
+    public sealed class CFloatJsonConverter : JsonConverter<CFloat>
+    {
+        public override CFloat Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            => reader.GetSingle();
+
+        public override void Write(Utf8JsonWriter writer, CFloat value, JsonSerializerOptions options)
+            => writer.WriteNumberValue(value.Value);
+    }
+
+    public sealed class CBoolJsonConverter : JsonConverter<CBool>
+    {
+        public override CBool Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            => reader.GetBoolean();
+
+        public override void Write(Utf8JsonWriter writer, CBool value, JsonSerializerOptions options)
+            => writer.WriteBooleanValue(value.Value);
+    }
+
+    public sealed class CUint8JsonConverter : JsonConverter<CUint8>
+    {
+        public override CUint8 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            => reader.GetByte();
+
+        public override void Write(Utf8JsonWriter writer, CUint8 value, JsonSerializerOptions options)
+            => writer.WriteNumberValue(value.Value);
+    }
+    public sealed class CUint16JsonConverter : JsonConverter<CUint16>
+    {
+        public override CUint16 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            => reader.GetUInt16();
+
+        public override void Write(Utf8JsonWriter writer, CUint16 value, JsonSerializerOptions options)
+            => writer.WriteNumberValue(value.Value);
+    }
+    public sealed class CUint32JsonConverter : JsonConverter<CUint32>
+    {
+        public override CUint32 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            => reader.GetUInt32();
+
+        public override void Write(Utf8JsonWriter writer, CUint32 value, JsonSerializerOptions options)
+            => writer.WriteNumberValue(value.Value);
+    }
+    public sealed class CUint64JsonConverter : JsonConverter<CUint64>
+    {
+        public override CUint64 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            => reader.GetUInt64();
+
+        public override void Write(Utf8JsonWriter writer, CUint64 value, JsonSerializerOptions options)
+            => writer.WriteNumberValue(value.Value);
+    }
+
+    public sealed class CInt8JsonConverter : JsonConverter<CInt8>
+    {
+        public override CInt8 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            => reader.GetSByte();
+
+        public override void Write(Utf8JsonWriter writer, CInt8 value, JsonSerializerOptions options)
+            => writer.WriteNumberValue(value.Value);
+    }
+    public sealed class CInt16JsonConverter : JsonConverter<CInt16>
+    {
+        public override CInt16 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            => reader.GetInt16();
+
+        public override void Write(Utf8JsonWriter writer, CInt16 value, JsonSerializerOptions options)
+            => writer.WriteNumberValue(value.Value);
+    }
+    public sealed class CInt32JsonConverter : JsonConverter<CInt32>
+    {
+        public override CInt32 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            => reader.GetInt32();
+
+        public override void Write(Utf8JsonWriter writer, CInt32 value, JsonSerializerOptions options)
+            => writer.WriteNumberValue(value.Value);
+    }
+    public sealed class CInt64JsonConverter : JsonConverter<CInt64>
+    {
+        public override CInt64 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            => reader.GetInt64();
+
+        public override void Write(Utf8JsonWriter writer, CInt64 value, JsonSerializerOptions options)
+            => writer.WriteNumberValue(value.Value);
+    }
+
+
+
     public sealed class CNameJsonConverter : JsonConverter<CName>
     {
-        public override CName Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.GetString();
+        public override CName Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
+            reader.GetString();
 
-        public override void Write(Utf8JsonWriter writer, CName value, JsonSerializerOptions options) => writer.WriteStringValue(value.Text);
+        public override void Write(Utf8JsonWriter writer, CName value, JsonSerializerOptions options) =>
+            writer.WriteStringValue(value.Text);
     }
 
     public sealed class CStringJsonConverter : JsonConverter<CString>
     {
-        public override CString Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.GetString();
+        public override CString Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
+            reader.GetString();
 
-        public override void Write(Utf8JsonWriter writer, CString value, JsonSerializerOptions options) => writer.WriteStringValue(value.Text);
+        public override void Write(Utf8JsonWriter writer, CString value, JsonSerializerOptions options) =>
+            writer.WriteStringValue(value.Text);
     }
 
     public sealed class CColorJsonConverter : JsonConverter<CColor>
@@ -119,7 +209,7 @@ namespace WolvenKit.RED4.TweakDB.Serialization
 
         public override void Write(Utf8JsonWriter writer, CVector3 value, JsonSerializerOptions options)
         {
-            List<CFloat> list = new() { value.X, value.Y, value.Z };
+            List<float> list = new() { value.X.Value, value.Y.Value, value.Z.Value };
             JsonSerializer.Serialize(writer, list, options);
         }
     }

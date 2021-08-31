@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using DynamicData;
-using ProtoBuf;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
@@ -16,14 +14,10 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Models;
-using WolvenKit.Modkit.RED4;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.RED4.TweakDB;
-using WolvenKit.RED4.TweakDB.Types;
 
 namespace WolvenKit.Functionality.Controllers
 {
@@ -222,11 +216,15 @@ namespace WolvenKit.Functionality.Controllers
             }
 
             // pack mod
-            _modTools.Pack(
-                new DirectoryInfo(cp77Proj.ModDirectory),
-                new DirectoryInfo(cp77Proj.PackedModDirectory),
-                $"mod{cp77Proj.Name}");
-            _loggerService.Info("Packing complete!");
+            var modfiles = Directory.GetFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
+            if (modfiles.Any())
+            {
+                _modTools.Pack(
+                    new DirectoryInfo(cp77Proj.ModDirectory),
+                    new DirectoryInfo(cp77Proj.PackedModDirectory),
+                    $"mod{cp77Proj.Name}");
+                _loggerService.Info("Packing complete!");
+            }
 
             // compile tweak files
             CompileTweakFiles(cp77Proj);
@@ -238,12 +236,12 @@ namespace WolvenKit.Functionality.Controllers
 
         private void CompileTweakFiles(Cp77Project cp77Proj)
         {
-            var tweakFiles = Directory.GetFiles(cp77Proj.TweakDirectory);
+            var tweakFiles = Directory.GetFiles(cp77Proj.TweakDirectory, "*.tweak", SearchOption.AllDirectories);
             foreach (var f in tweakFiles)
             {
                 var json = File.ReadAllText(f);
-                var filename = Path.GetFileName(f);
-                var outPath = Path.Combine(cp77Proj.PackedScriptsDirectory, filename);
+                var filename = Path.GetFileNameWithoutExtension(f) + ".bin";
+                var outPath = Path.Combine(cp77Proj.PackedTweakDirectory, filename);
 
                 if (RED4.TweakDB.Serialization.Serialization.TryParseJsonFlatsDict(json, out var dict))
                 {

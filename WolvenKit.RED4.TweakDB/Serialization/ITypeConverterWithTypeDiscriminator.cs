@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using WolvenKit.RED4.TweakDB.Types;
@@ -41,35 +42,121 @@ namespace WolvenKit.RED4.TweakDB.Serialization
                 throw new JsonException();
             }
 
+            // get type
             using var jsonDocument = JsonDocument.ParseValue(ref reader);
             if (!jsonDocument.RootElement.TryGetProperty("Type", out var typeProperty))
             {
                 throw new JsonException();
             }
-
-            var type = _types.FirstOrDefault(x => x.Name == typeProperty.GetString());
+            var type = GetRedTypeFromString(typeProperty.GetString());
             if (type == null)
             {
-                var wtype = GetWType(typeProperty.GetString());
-                type = !string.IsNullOrEmpty(wtype)
-                    ? _types.FirstOrDefault(x => x.Name == wtype)
-                    : throw new JsonException();
+                throw new JsonException();
             }
 
+            // get value
             if (!jsonDocument.RootElement.TryGetProperty("Value", out var valueProperty))
             {
                 throw new JsonException();
             }
-
             var jsonObject = valueProperty.GetRawText();
-            if (type == null)
+
+            // check here for arrays?
+            if (IsArray(type))
+            {
+                var innertype = type.GetGenericArguments()[0];
+
+                var list = Activator.CreateInstance(
+                    typeof(List<>).MakeGenericType(
+                        new Type[] { innertype }),
+                    BindingFlags.Instance | BindingFlags.Public,
+                    binder: null,
+                    args: null,
+                    culture: null);
+
+                if (list is null)
+                {
+                    throw new JsonException();
+                }
+
+                var items = JsonSerializer.Deserialize(jsonObject, list.GetType(), options);
+
+
+                var array = (IArray)Activator.CreateInstance(
+                    typeof(CArray<>).MakeGenericType(
+                        new Type[] { innertype }),
+                    BindingFlags.Instance | BindingFlags.Public,
+                    binder: null,
+                    args: null,
+                    culture: null);
+                if (array is null)
+                {
+                    throw new JsonException();
+                }
+                array.SetItems(items);
+
+                return array is IType o ? o : throw new JsonException();
+            }
+            else
+            {
+                return (IType)JsonSerializer.Deserialize(jsonObject, type, options);
+            }
+
+        }
+
+        private Type GetRedTypeFromString(string redtype)
+        {
+            if (string.IsNullOrEmpty(redtype))
             {
                 throw new JsonException();
             }
 
-            var result = (IType)JsonSerializer.Deserialize(jsonObject, type, options);
+            var type = _types.FirstOrDefault(x => x.Name == redtype);
+            if (type == null)
+            {
+                // check simple type
+                var wtype = GetWType(redtype);
+                if (!string.IsNullOrEmpty(wtype))
+                {
+                    type = _types.FirstOrDefault(x => x.Name == wtype);
+                    return type;
+                }
 
-            return result;
+                // check array type
+                var splits = redtype.Split(':');
+                if (splits.Length == 2 && splits[0].Equals("array"))
+                {
+                    var innertype = GetRedTypeFromString(splits[1]);
+                    var outer =  Activator.CreateInstance(
+                        typeof(CArray<>).MakeGenericType(
+                            new Type[] { innertype }),
+                        BindingFlags.Instance | BindingFlags.Public,
+                        binder: null,
+                        args: null,
+                        culture: null);
+                    if (outer == null)
+                    {
+                        throw new JsonException();
+                    }
+                    return outer.GetType();
+                }
+                else
+                {
+                    throw new JsonException();
+                }
+            }
+
+            return type;
+        }
+
+        private static bool IsArray(Type type)
+        {
+            if (type is { IsGenericType: false })
+            {
+                return false;
+            }
+
+            return type != null && type.GetGenericTypeDefinition() == typeof(CArray<>);
         }
 
         private static string GetWType(string redtype)
@@ -88,7 +175,20 @@ namespace WolvenKit.RED4.TweakDB.Serialization
             writer.WriteStartObject();
             writer.WriteString("Type", value.Name);
             writer.WritePropertyName("Value");
-            JsonSerializer.Serialize(writer, (object)value, options);
+            if (IsArray(value.GetType()))
+            {
+                if (value is not IArray array)
+                {
+                    throw new JsonException();
+                }
+
+                var x = array.GetItems();
+                JsonSerializer.Serialize(writer, (object)array.GetItems(), options);
+            }
+            else
+            {
+                JsonSerializer.Serialize(writer, (object)value, options);
+            }
             writer.WriteEndObject();
         }
     }

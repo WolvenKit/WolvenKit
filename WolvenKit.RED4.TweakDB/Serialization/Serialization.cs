@@ -16,7 +16,17 @@ namespace WolvenKit.RED4.TweakDB.Serialization
                     new ITypeConverterWithTypeDiscriminator(),
                     new JsonStringEnumConverter(),
 
-                    new BaseFundamentalConverter(),
+                    new CFloatJsonConverter(),
+                    new CBoolJsonConverter(),
+
+                    new CUint8JsonConverter(),
+                    new CUint16JsonConverter(),
+                    new CUint32JsonConverter(),
+                    new CUint64JsonConverter(),
+                    new CInt8JsonConverter(),
+                    new CInt16JsonConverter(),
+                    new CInt32JsonConverter(),
+                    new CInt64JsonConverter(),
 
                     new CNameJsonConverter(),
                     new CStringJsonConverter(),
