@@ -48,11 +48,14 @@
     <Compile Remove="Models\CsvMaps.cs" />
     <Compile Remove="Models\ImageUtility.cs" />
     <Compile Remove="Models\ImportModel.cs" />
-    <Compile Remove="ViewModels\Editor\BulkEditViewModel.cs" />
-    <Compile Remove="ViewModels\Editor\ImportViewModel.cs" />
-    <Compile Remove="ViewModels\Editor\ModKitViewModel.cs" />
+    <Compile Remove="Models\IWolvenkitView.cs" />
+    <Compile Remove="ViewModels\Documents\IDocumentViewModel_old.cs" />
     <Compile Remove="ViewModels\HomePage\Pages\RecentlyUsedItemsViewModel.cs" />
     <Compile Remove="ViewModels\Wizards\PublishWizardViewModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\WolvenKitFileDefinitions.xml" />
   </ItemGroup>
 
     <ItemGroup>
@@ -60,10 +63,12 @@
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
     <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
     <ProjectReference Include="..\WolvenKit.Modkit\WolvenKit.Modkit.csproj" />
+    <ProjectReference Include="..\WolvenKit.RED4.TweakDB\WolvenKit.RED4.TweakDB.csproj" />
     <ProjectReference Include="..\WolvenManager.Installer\WolvenManager.Installer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AvalonEdit" Version="6.1.2.30" />
     <PackageReference Include="Microsoft.Extensions.FileSystemGlobbing" Version="5.0.0" />
     <PackageReference Include="SharpZipLib" Version="1.3.2" />
     <PackageReference Include="WinCopies.WindowsAPICodePack" Version="2.5.0" />
@@ -103,6 +108,10 @@
 
   <ItemGroup>
     <Folder Include="Models\Arguments\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\WolvenKitFileDefinitions.xml" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

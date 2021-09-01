@@ -9,16 +9,13 @@
     xmlns:fluent="urn:fluent-ribbon"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:local="clr-namespace:WolvenKit.Views.Editor"
-    xmlns:local1="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:sfskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
     xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:views1="clr-namespace:WolvenKit.MVVM.Views.Shell.Backstage"
     xmlns:shell="clr-namespace:WolvenKit.ViewModels.Shell;assembly=WolvenKit.App"
-    Margin="0,33,0,0"
+    xmlns:shell1="clr-namespace:WolvenKit.Views.Shell"
     Panel.ZIndex="-15">
 
     <!--  Resources  -->
@@ -154,15 +151,17 @@
 
                 <!--  Contextual CR2W group  -->
                 <syncfusion:ContextTabGroup
-                    x:Name="cr2wcontextab"
+                    x:Name="documentContextTab"
                     Height="90"
                     Margin="14"
                     IsGroupVisible="False"
-                    Label="CR2W EDITING">
+                    Label="DOCUMENT">
+                    
                     <syncfusion:RibbonTab
                         MinWidth="100"
                         Caption="EDIT"
                         IsChecked="True" />
+                    
                 </syncfusion:ContextTabGroup>
 
                 <!--  Contextual Asset Browser group  -->
@@ -1742,7 +1741,7 @@
         <Border
             Width="70"
             Height="30"
-            Margin="0,-30,0,0"
+            Margin="0,24,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="top"
             Background="{DynamicResource ContentBackgroundAlt2}"
@@ -1751,7 +1750,7 @@
         <Border
             Width="42"
             Height="49"
-            Margin="13,-24,0,0"
+            Margin="13,0,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Background="Transparent"
@@ -1778,7 +1777,7 @@
         <Border
             Width="42"
             Height="49"
-            Margin="13,-24,0,0"
+            Margin="13,0,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="top"
             Background="Transparent"
@@ -1853,7 +1852,7 @@
                 <Grid>
 
                     <Grid Grid.Row="1">
-                        <views1:BackStageView />
+                        <shell1:BackStageView />
                     </Grid>
                 </Grid>
             </Border>

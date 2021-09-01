@@ -1,0 +1,295 @@
+<reactiveUi:ReactiveUserControl
+    x:TypeArguments="tools:CodeEditorViewModel"
+    x:Class="WolvenKit.Views.Documents.CodeEditorView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:interactivity="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:system="clr-namespace:System;assembly=netstandard"
+    xmlns:tools="clr-namespace:WolvenKit.ViewModels.Tools;assembly=WolvenKit.App"
+    BorderBrush="{x:Null}">
+
+   
+
+    <Border
+        Width="auto"
+        Height="auto"
+        hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
+        BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
+        BorderThickness="1">
+
+        <Grid Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
+
+            <Grid.Resources>
+                <ResourceDictionary>
+                    <ResourceDictionary.MergedDictionaries>
+                        <hc:ThemeResources />
+                        <hc:Theme />
+                    </ResourceDictionary.MergedDictionaries>
+                    <syncfusion:FormatsCollection x:Key="pythonLanguageFormats">
+                        <syncfusion:EditFormats Foreground="Green" FormatName="CommentFormat" />
+                        <syncfusion:EditFormats Foreground="Black" FormatName="MultilineCommentFormat" />
+                        <syncfusion:EditFormats Foreground="Blue" FormatName="KeywordFormat" />
+                        <syncfusion:EditFormats Foreground="Navy" FormatName="OperatorFormat" />
+                        <syncfusion:EditFormats Foreground="Gray" FormatName="LiteralsFormat" />
+                    </syncfusion:FormatsCollection>
+                </ResourceDictionary>
+
+            </Grid.Resources>
+
+            <Grid
+                x:Name="DraggableTitleBar"
+                Grid.ColumnSpan="2"
+                VerticalAlignment="Top"
+                Background="{DynamicResource RegionBrush}"
+                MouseLeftButtonDown="DraggableTitleBar_MouseLeftButtonDown">
+
+                <Menu
+                    Margin="50,0,0,0"
+                    HorizontalAlignment="Left"
+                    Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
+                    <MenuItem Header="File" />
+                    <MenuItem Header="Edit" />
+                    <MenuItem Header="View" />
+                    <MenuItem Header="Compile" />
+                </Menu>
+
+                <iconPacks:PackIconCodicons
+                    Width="23"
+                    Height="23"
+                    Margin="13,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Kind="Code" />
+            </Grid>
+
+            <Grid Margin="3,33,3,3">
+
+                <hc:TabControl Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" ShowCloseButton="True">
+                    <hc:TabItem Header="wat">
+                        <Grid>
+                            <Grid.Resources>
+                                <ResourceDictionary>
+                                    <ResourceDictionary.MergedDictionaries>
+                                        <ResourceDictionary Source="/WolvenKit;component/PathIcon.xaml" />
+                                    </ResourceDictionary.MergedDictionaries>
+                                </ResourceDictionary>
+                            </Grid.Resources>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Menu
+                                Grid.ColumnSpan="2"
+                                Height="25"
+                                Padding="5,2,0,0"
+                                BorderBrush="LightGray"
+                                BorderThickness="1">
+                                <MenuItem Background="Transparent" Header="_File">
+                                    <MenuItem Command="{x:Static syncfusion:EditCommands.New}" CommandTarget="{Binding ElementName=editControl}" />
+                                    <MenuItem Command="{x:Static syncfusion:EditCommands.Open}" CommandTarget="{Binding ElementName=editControl}" />
+                                    <MenuItem Command="{x:Static syncfusion:EditCommands.Save}" CommandTarget="{Binding ElementName=editControl}" />
+                                    <MenuItem Command="{x:Static syncfusion:EditCommands.SaveAs}" CommandTarget="{Binding ElementName=editControl}" />
+                                </MenuItem>
+                                <MenuItem Background="Transparent" Header="_Edit">
+                                    <MenuItem Command="{x:Static syncfusion:EditCommands.Undo}" CommandTarget="{Binding ElementName=editControl}" />
+                                    <MenuItem Command="{x:Static syncfusion:EditCommands.Redo}" CommandTarget="{Binding ElementName=editControl}" />
+                                    <MenuItem Command="{x:Static syncfusion:EditCommands.Cut}" CommandTarget="{Binding ElementName=editControl}" />
+                                    <MenuItem Command="{x:Static syncfusion:EditCommands.Copy}" CommandTarget="{Binding ElementName=editControl}" />
+                                    <MenuItem Command="{x:Static syncfusion:EditCommands.Paste}" CommandTarget="{Binding ElementName=editControl}" />
+                                    <MenuItem Command="{x:Static syncfusion:EditCommands.SelectAll}" CommandTarget="{Binding ElementName=editControl}" />
+                                    <MenuItem Header="Find and Replace">
+                                        <MenuItem Command="{x:Static syncfusion:EditCommands.Find}" CommandTarget="{Binding ElementName=editControl}" />
+                                        <MenuItem Command="{x:Static syncfusion:EditCommands.Replace}" CommandTarget="{Binding ElementName=editControl}" />
+                                    </MenuItem>
+                                </MenuItem>
+                                <MenuItem Header="Options">
+                                    <MenuItem
+                                        Header="Accepts Tab"
+                                        IsCheckable="True"
+                                        IsChecked="{Binding ElementName=editControl, Path=AcceptsTab}" />
+                                    <MenuItem
+                                        Header="Is ReadOnly"
+                                        IsCheckable="True"
+                                        IsChecked="{Binding ElementName=editControl, Path=IsReadOnly}" />
+                                    <MenuItem
+                                        Header="Show Line Number"
+                                        IsCheckable="True"
+                                        IsChecked="{Binding ElementName=editControl, Path=ShowLineNumber}" />
+                                    <MenuItem
+                                        Header="Show Default Context Menu"
+                                        IsCheckable="True"
+                                        IsChecked="{Binding ElementName=editControl, Path=ShowDefaultContextMenu}" />
+                                </MenuItem>
+                            </Menu>
+                            <ToolBar
+                                Grid.Row="1"
+                                Grid.ColumnSpan="1"
+                                Margin="-1">
+                                <Button
+                                    Margin="1,0"
+                                    Command="{x:Static syncfusion:EditCommands.New}"
+                                    CommandTarget="{Binding ElementName=editControl}"
+                                    Content="{StaticResource New}"
+                                    ToolTip="New" />
+                                <Button
+                                    Margin="1,0"
+                                    Command="{x:Static syncfusion:EditCommands.Open}"
+                                    CommandTarget="{Binding ElementName=editControl}"
+                                    Content="{StaticResource Open}"
+                                    ToolTip="Open" />
+                                <Button
+                                    Margin="1,0"
+                                    Command="{x:Static syncfusion:EditCommands.Save}"
+                                    CommandTarget="{Binding ElementName=editControl}"
+                                    Content="{StaticResource Save}"
+                                    ToolTip="Save" />
+                                <Separator />
+                                <Button
+                                    Margin="1,0"
+                                    Command="{x:Static syncfusion:EditCommands.Cut}"
+                                    CommandTarget="{Binding ElementName=editControl}"
+                                    Content="{StaticResource Cut}"
+                                    ToolTip="Cut"
+                                    ToolTipService.ShowOnDisabled="True" />
+                                <Button
+                                    Margin="1,0"
+                                    Command="{x:Static syncfusion:EditCommands.Copy}"
+                                    CommandTarget="{Binding ElementName=editControl}"
+                                    Content="{StaticResource Copy}"
+                                    ToolTip="Copy"
+                                    ToolTipService.ShowOnDisabled="True" />
+                                <Button
+                                    Margin="1,0"
+                                    Command="{x:Static syncfusion:EditCommands.Paste}"
+                                    CommandTarget="{Binding ElementName=editControl}"
+                                    Content="{StaticResource Paste}"
+                                    ToolTip="Paste"
+                                    ToolTipService.ShowOnDisabled="True" />
+                                <Separator />
+                                <Button
+                                    Margin="1,0"
+                                    Command="{x:Static syncfusion:EditCommands.Undo}"
+                                    CommandTarget="{Binding ElementName=editControl}"
+                                    Content="{StaticResource Undo}"
+                                    ToolTip="Undo"
+                                    ToolTipService.ShowOnDisabled="True" />
+                                <Button
+                                    Margin="1,0"
+                                    Command="{x:Static syncfusion:EditCommands.Redo}"
+                                    CommandTarget="{Binding ElementName=editControl}"
+                                    Content="{StaticResource Redo}"
+                                    ToolTip="Redo"
+                                    ToolTipService.ShowOnDisabled="True" />
+                                <Separator />
+                                <ComboBox
+                                    Name="fontlist"
+                                    Grid.Column="1"
+                                    Width="120"
+                                    Margin="3"
+                                    ItemsSource="{x:Static Fonts.SystemFontFamilies}"
+                                    SelectedItem="{Binding SelectedFont}"
+                                    ToolTip="Font" />
+                                <ComboBox
+                                    Name="fontsize"
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Margin="3"
+                                    SelectedIndex="2"
+                                    ToolTip="Font size">
+                                    <system:Double>10</system:Double>
+                                    <system:Double>12</system:Double>
+                                    <system:Double>13</system:Double>
+                                    <system:Double>14</system:Double>
+                                    <system:Double>15</system:Double>
+                                    <system:Double>16</system:Double>
+                                    <system:Double>17</system:Double>
+                                    <system:Double>18</system:Double>
+                                    <system:Double>20</system:Double>
+                                </ComboBox>
+                                <Separator />
+                                <Button
+                                    Margin="1,0"
+                                    Command="{x:Static syncfusion:EditCommands.DecreaseIndent}"
+                                    CommandTarget="{Binding ElementName=editControl}"
+                                    Content="{StaticResource DecreaseIndent}"
+                                    ToolTip="Decrease indent" />
+                                <Button
+                                    Margin="1,0"
+                                    Command="{x:Static syncfusion:EditCommands.IncreaseIndent}"
+                                    CommandTarget="{Binding ElementName=editControl}"
+                                    Content="{StaticResource IncreaseIndent}"
+                                    ToolTip="Increase indent" />
+                                <Separator />
+                                <Button
+                                    Margin="1,0,1,1"
+                                    Command="{x:Static syncfusion:EditCommands.CommentSelection}"
+                                    CommandTarget="{Binding ElementName=editControl}"
+                                    ToolTip="Comment out the selected lines">
+                                    <Image
+                                        MaxWidth="16"
+                                        MaxHeight="16"
+                                        Source="/Syncfusion.Edit.Wpf;component/Resources/comment.png" />
+                                </Button>
+                                <Button
+                                    Margin="1,0,1,1"
+                                    Command="{x:Static syncfusion:EditCommands.UncommentSelection}"
+                                    CommandTarget="{Binding ElementName=editControl}"
+                                    ToolTip="Uncomment the selected lines">
+                                    <Image
+                                        MaxWidth="16"
+                                        MaxHeight="16"
+                                        Source="/Syncfusion.Edit.Wpf;component/Resources/uncomment.png" />
+                                </Button>
+                                <syncfusion:ComboBoxAdv
+                                    x:Name="combo"
+                                    Width="100"
+                                    Height="24"
+                                    Margin="4,4,4,4"
+                                    DefaultText="Code samples">
+                                    <system:String>C</system:String>
+                                    <system:String>CSharp</system:String>
+                                    <system:String>Delphi</system:String>
+                                    <system:String>HTML</system:String>
+                                    <system:String>Java</system:String>
+                                    <system:String>JScript</system:String>
+                                    <system:String>PowerShell</system:String>
+                                    <system:String>SQL</system:String>
+                                    <system:String>VBScript</system:String>
+                                    <system:String>Visual Basic</system:String>
+                                    <system:String>XAML</system:String>
+                                    <system:String>XML</system:String>
+                                    <interactivity:Interaction.Triggers>
+                                        <interactivity:EventTrigger EventName="SelectionChanged">
+                                            <interactivity:InvokeCommandAction Command="{Binding Path=SampleCommand}" CommandParameter="{Binding ElementName=combo}" />
+                                        </interactivity:EventTrigger>
+                                    </interactivity:Interaction.Triggers>
+                                </syncfusion:ComboBoxAdv>
+                            </ToolBar>
+                            <Border Grid.Row="2" BorderThickness="1">
+                                <syncfusion:EditControl
+                                    Name="editControl"
+                                    DocumentLanguage="{Binding Language}"
+                                    DocumentSource="{Binding DocumentSource}"
+                                    FontFamily="{Binding ElementName=fontlist, Path=SelectedItem}"
+                                    FontSize="{Binding ElementName=fontsize, Path=SelectedItem}">
+                                    <interactivity:Interaction.Triggers>
+                                        <interactivity:EventTrigger EventName="Loaded">
+                                            <interactivity:InvokeCommandAction Command="{Binding EditLoadedCommand}" CommandParameter="{Binding ElementName=editControl}" />
+                                        </interactivity:EventTrigger>
+                                    </interactivity:Interaction.Triggers>
+                                </syncfusion:EditControl>
+                            </Border>
+                        </Grid>
+                    </hc:TabItem>
+                    <hc:TabItem Header="wat" />
+                </hc:TabControl>
+            </Grid>
+        </Grid>
+    </Border>
+</reactiveUi:ReactiveUserControl>

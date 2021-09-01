@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using WolvenKit.ViewModels.Editor.Basic;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
-using WolvenKit.ViewModels.Editor;
+using WolvenKit.Common;
+using WolvenKit.ViewModels.Documents;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -22,7 +22,7 @@ namespace WolvenKit.ViewModels.Shell
         //List<DocumentViewModel> Files { get; }
 
         /// <summary>Gets an enumeration of all currently available tool window viewmodels.</summary>
-        ObservableCollection<IDockElement> Tools { get; }
+        ObservableCollection<IDockElement> DockedViews { get; }
 
         ICommand FileSelectedCommand { get; set; }
 
@@ -31,28 +31,28 @@ namespace WolvenKit.ViewModels.Shell
 
         #region methods
 
-        /// <summary>
-        /// Add a new document viewmodel into the collection of files.
-        /// </summary>
-        /// <param name="fileToAdd"></param>
-        void AddFile(DocumentViewModel fileToAdd);
+        ///// <summary>
+        ///// Add a new document viewmodel into the collection of files.
+        ///// </summary>
+        ///// <param name="fileToAdd"></param>
+        //void AddFile(DocumentViewModel fileToAdd);
 
-        /// <summary>
-        /// Checks if a document can be closed and asks the user whether
-        /// to save before closing if the document appears to be dirty.
-        /// </summary>
-        /// <param name="fileToClose"></param>
-        void Close(DocumentViewModel fileToClose);
+        ///// <summary>
+        ///// Checks if a document can be closed and asks the user whether
+        ///// to save before closing if the document appears to be dirty.
+        ///// </summary>
+        ///// <param name="fileToClose"></param>
+        //void Close(DocumentViewModel fileToClose);
 
-        /// <summary>Closing all documents without user interaction to support reload of layout via menu.</summary>
-        void CloseAllDocuments();
+        ///// <summary>Closing all documents without user interaction to support reload of layout via menu.</summary>
+        //void CloseAllDocuments();
 
         /// <summary>
         /// Open a file and return its content in a viewmodel.
         /// </summary>
         /// <param name="filepath"></param>
         /// <returns></returns>
-        Task<DocumentViewModel> OpenAsync(FileModel model);
+        Task<DocumentViewModel> OpenAsync(string path, EWolvenKitFile type);
 
         /// <summary>
         /// Saves a document and resets the dirty flag.

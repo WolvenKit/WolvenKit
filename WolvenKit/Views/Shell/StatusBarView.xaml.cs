@@ -29,31 +29,31 @@ namespace WolvenKit.Views.Shell
 
         #endregion Constructors
 
-        private async void Tag_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            try
-            {
-                var client = new CatFactsClient();
-                var randomFact = await client.GetRandomFactsAsync(Locator.Current.GetService<ISettingsManager>().CatFactAnimal.ToString().ToLower());
-                Random x = new Random();
-                var z = x.Next(0, randomFact.Length);
-                var catfact = randomFact[z].Text;
+        //private async void Tag_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        //{
+        //    try
+        //    {
+        //        var client = new CatFactsClient();
+        //        var randomFact = await client.GetRandomFactsAsync(Locator.Current.GetService<ISettingsManager>().CatFactAnimal.ToString().ToLower());
+        //        Random x = new Random();
+        //        var z = x.Next(0, randomFact.Length);
+        //        var catfact = randomFact[z].Text;
 
-                if (GetWords(catfact).Count > 1)
-                {
-                    if (!catfact.Contains("test", StringComparison.OrdinalIgnoreCase))
-                    {
-                        Locator.Current.GetService<INotificationService>().Info(catfact);
-                    }
-                }
-                else
-                {
-                }
-            }
-            catch
-            {
-            }
-        }
+        //        if (GetWords(catfact).Count > 1)
+        //        {
+        //            if (!catfact.Contains("test", StringComparison.OrdinalIgnoreCase))
+        //            {
+        //                Locator.Current.GetService<INotificationService>().Info(catfact);
+        //            }
+        //        }
+        //        else
+        //        {
+        //        }
+        //    }
+        //    catch
+        //    {
+        //    }
+        //}
 
         public System.Collections.Generic.List<string> GetWords(string Input)
         {

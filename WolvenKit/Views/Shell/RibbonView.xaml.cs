@@ -10,8 +10,8 @@ using Splat;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Interaction;
-using WolvenKit.ViewModels.Editor;
 using WolvenKit.ViewModels.Shell;
+using WolvenKit.ViewModels.Tools;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Dialogs;
 
@@ -19,6 +19,9 @@ namespace WolvenKit.Views.Shell
 {
     public partial class RibbonView : ReactiveUserControl<RibbonViewModel>
     {
+        private AppViewModel _mainViewModel;
+
+
         public RibbonView()
         {
             ViewModel = Locator.Current.GetService<RibbonViewModel>();
@@ -73,6 +76,8 @@ namespace WolvenKit.Views.Shell
                     projectexplorercontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, b));
                 _mainViewModel.AssetBrowserVM.WhenAnyValue(x => x.IsActive).Subscribe(b =>
                     abcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, b));
+                //_mainViewModel.ActiveDocument.WhenAnyValue(x => x != null && x.IsActive).Subscribe(b =>
+                //    documentContextTab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, b));
 
                 #region commands
 
@@ -204,7 +209,6 @@ namespace WolvenKit.Views.Shell
 
         #region properties
 
-        private AppViewModel _mainViewModel;
 
         #endregion
 

@@ -16,7 +16,6 @@
 
     
     <Grid>
-
         <Grid.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
@@ -26,159 +25,45 @@
             </ResourceDictionary>
         </Grid.Resources>
 
-        <hc:Divider
-            Width="9999"
-            Height="2"
-            Margin="-5,0,0,0"
-            LineStroke="Black"
-            LineStrokeThickness="1"
-            Orientation="Horizontal"
-            Visibility="Hidden" />
-        <Fluent:StatusBar Background="Transparent">
 
-            <Fluent:StatusBarItem
-                x:Name="OuterCatfact"
-                Title="CatFacts"
-                HorizontalAlignment="Left"
-                ToolTip="Show Animal Fact"
-                Value="Show Animal Fact">
-                <hc:Tag
-                    x:Name="InnerCatfact"
-                    Height="28"
-                    Margin="0,0,0,0"
-                    hc:TitleElement.Background="{DynamicResource RegionBrush}"
-                    Background="{DynamicResource GrayBrush10}"
-                    Content="Show Animal Fact"
-                    FontSize="11"
-                    MouseLeftButtonDown="Tag_MouseLeftButtonDown"
-                    ShowCloseButton="False"
-                    ToolTip="Show Animal Fact">
-                    <hc:Tag.Header>
-                        <iconPacks:PackIconFontAwesome Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Kind="PawSolid" />
-                    </hc:Tag.Header>
-                </hc:Tag>
+        <Fluent:StatusBar Background="{DynamicResource MahApps.Brushes.Accent3}" >
+
+            <Fluent:StatusBarItem Title="Status"
+                          
+                          HorizontalAlignment="Left">
+                <TextBlock Text="{Binding Status}" />
             </Fluent:StatusBarItem>
 
-            <!--<Fluent:StatusBarItem
-                Title="Selected File"
-                HorizontalAlignment="Right"
-                ToolTip="Selected File"
-                Value="Selected File">
-                <hc:Tag
-                    Height="28"
-                    Margin="5,0,5,0"
-                    hc:TitleElement.Background="{DynamicResource RegionBrush}"
-                    Background="{DynamicResource GrayBrush10}"
-                    FontSize="11"
-                    ShowCloseButton="False"
-                    ToolTip="Selected File">
-                    <StackPanel Orientation="Horizontal">
 
-                        <TextBlock FontSize="11" Text="Selected File/Folder : "/>
-                        <TextBlock FontSize="11"  FontWeight="Bold" Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Text="{Binding SelectedFilename}"/>
-                    </StackPanel>
-
-                    <hc:Tag.Header>
-                        <iconPacks:PackIconFontAwesome Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Kind="FileAltSolid" />
-                    </hc:Tag.Header>
-                </hc:Tag>
-
-            </Fluent:StatusBarItem>-->
-
-            <!--<Fluent:StatusBarItem
-                Title="Files in project"
-                HorizontalAlignment="Right"
-                ToolTip="Files in project"
-                Value="Displays current files amount in project (including folders).">
-                    <hc:Tag
-                    Height="28"
-                    Margin="5,0,5,0"
-                    hc:TitleElement.Background="{DynamicResource RegionBrush}"
-                    Background="{DynamicResource GrayBrush10}"
-                    FontSize="11"
-                    ShowCloseButton="False"
-                    ToolTip="Current Project">
-                    <StackPanel Orientation="Horizontal">
-
-                        <TextBlock FontSize="11" Text="Files in project : "/>
-                        <TextBlock FontSize="11" FontWeight="Bold" Foreground="{DynamicResource MahApps.Brushes.AccentBase}"  Text="{Binding FileCount}"/>
-                    </StackPanel>
-
-                        <hc:Tag.Header>
-                            <iconPacks:PackIconIonicons Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Kind="FilingMD" />
-                        </hc:Tag.Header>
-                    </hc:Tag>
-
-            </Fluent:StatusBarItem>-->
 
             <Fluent:StatusBarItem
                 Title="Current Project"
                 HorizontalAlignment="Right"
                 ToolTip="Current Project"
                 Value="Displays current project.">
-                <hc:Tag
-                    Height="28"
-                    Margin="5,0,5,0"
-                    hc:TitleElement.Background="{DynamicResource RegionBrush}"
-                    Background="{DynamicResource GrayBrush10}"
-                    FontSize="11"
-                    ShowCloseButton="False"
-                    ToolTip="Current Project">
-                    <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal">
 
-                        <TextBlock FontSize="11" Text="Current Project : "/>
-                        <TextBlock FontSize="11" FontWeight="Bold"
+                    <TextBlock FontSize="11" Text="Current Project : "/>
+                    <TextBlock FontSize="11" FontWeight="Bold"
                                    Foreground="{DynamicResource MahApps.Brushes.AccentBase}"
                                    Text="{Binding CurrentProject}"/>
-                    </StackPanel>
-                    <hc:Tag.Header>
-                        <iconPacks:PackIconFontAwesome Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Kind="ProjectDiagramSolid" />
-                    </hc:Tag.Header>
-                </hc:Tag>
+                </StackPanel>
             </Fluent:StatusBarItem>
+
+            <Separator Width="10" HorizontalAlignment="Right" />
 
             <Fluent:StatusBarItem
                 Title="Version"
                 HorizontalAlignment="Right"
                 ToolTip="Version"
                 Value="Shows the current app version">
-                <hc:Tag
-                    Height="28"
-                    Margin="0"
-                    hc:TitleElement.Background="{DynamicResource RegionBrush}"
-                    Background="{DynamicResource GrayBrush10}"
-                    FontSize="11"
-                    ShowCloseButton="False"
-                    ToolTip="Version">
-                    <StackPanel Orientation="Horizontal">
-
-                        <TextBlock FontSize="11"  Text="Version : "/>
-                        <TextBlock FontSize="11" FontWeight="Bold" Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Text="{Binding VersionNumber}"/>
-                    </StackPanel>
-                    <hc:Tag.Header>
-                        <iconPacks:PackIconCodicons Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Kind="Versions" />
-                    </hc:Tag.Header>
-                </hc:Tag>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontSize="11" Text="Version : "/>
+                    <TextBlock FontWeight="Bold" Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Text="{Binding VersionNumber}"/>
+                </StackPanel>
             </Fluent:StatusBarItem>
 
-            <Fluent:StatusBarItem
-                Title="DefaultIcon"
-                Margin="0,0,0,0"
-                HorizontalAlignment="Right"
-                Value="DefaultIcon">
-                <hc:Tag
-                    Width="29"
-                    Height="28"
-                    Margin="0"
-                    hc:TitleElement.Background="{DynamicResource RegionBrush}"
-                    Background="{DynamicResource GrayBrush10}"
-                    FontSize="11"
-                    ShowCloseButton="False">
-                    <hc:Tag.Header>
-                        <iconPacks:PackIconRPGAwesome Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Kind="WolfHowl" />
-                    </hc:Tag.Header>
-                </hc:Tag>
-            </Fluent:StatusBarItem>
+           
         </Fluent:StatusBar>
     </Grid>
 </reactiveUi:ReactiveUserControl>

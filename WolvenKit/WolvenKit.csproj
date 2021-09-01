@@ -16,8 +16,8 @@
     <NoWarn>$(NoWarn);SA1652</NoWarn>
     <NoWarn>$(NoWarn);CA1416</NoWarn>
     <NoWarn>$(NoWarn);SYSLIB0001</NoWarn>
-    <AssemblyVersion>8.3.0</AssemblyVersion>
-    <InformationalVersion>8.3.0</InformationalVersion>
+    <AssemblyVersion>8.3.1</AssemblyVersion>
+    <InformationalVersion>8.3.1</InformationalVersion>
     <Description>WPF</Description>
     <NoWin32Manifest>true</NoWin32Manifest>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
@@ -31,33 +31,21 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Functionality\Behavior\**" />
-    <Compile Remove="Views\Editor\Editors\Nodes\Audio\**" />
-    <Compile Remove="Views\Editor\Editors\Nodes\Quest\**" />
-    <Compile Remove="Views\Editor\Editors\Nodes\Scene\**" />
     <Compile Remove="NewFolder1\**" />
     <Compile Remove="Resources\Styles\CustomBase\**" />
     <Compile Remove="Resources\Styles\Custom\**" />
     <Compile Remove="Views\Wizards\PublishWizard\**" />
     <EmbeddedResource Remove="Functionality\Behavior\**" />
-    <EmbeddedResource Remove="Views\Editor\Editors\Nodes\Audio\**" />
-    <EmbeddedResource Remove="Views\Editor\Editors\Nodes\Quest\**" />
-    <EmbeddedResource Remove="Views\Editor\Editors\Nodes\Scene\**" />
     <EmbeddedResource Remove="NewFolder1\**" />
     <EmbeddedResource Remove="Resources\Styles\CustomBase\**" />
     <EmbeddedResource Remove="Resources\Styles\Custom\**" />
     <EmbeddedResource Remove="Views\Wizards\PublishWizard\**" />
     <None Remove="Functionality\Behavior\**" />
-    <None Remove="Views\Editor\Editors\Nodes\Audio\**" />
-    <None Remove="Views\Editor\Editors\Nodes\Quest\**" />
-    <None Remove="Views\Editor\Editors\Nodes\Scene\**" />
     <None Remove="NewFolder1\**" />
     <None Remove="Resources\Styles\CustomBase\**" />
     <None Remove="Resources\Styles\Custom\**" />
     <None Remove="Views\Wizards\PublishWizard\**" />
     <Page Remove="Functionality\Behavior\**" />
-    <Page Remove="Views\Editor\Editors\Nodes\Audio\**" />
-    <Page Remove="Views\Editor\Editors\Nodes\Quest\**" />
-    <Page Remove="Views\Editor\Editors\Nodes\Scene\**" />
     <Page Remove="NewFolder1\**" />
     <Page Remove="Resources\Styles\CustomBase\**" />
     <Page Remove="Resources\Styles\Custom\**" />
@@ -175,7 +163,7 @@
     <Resource Include="Resources\Media\Images\Icons\Files\w2animev.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Views\Editor\Basic\default.svg">
+    <Resource Include="Views\Tools\default.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Icons\Files\acousticdata.svg">
@@ -364,7 +352,7 @@
     <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" Version="19.2.0.49" />
     <PackageReference Include="Syncfusion.Themes.Office2019Black.WPF" Version="19.2.0.49" />
       <PackageReference Include="Syncfusion.Tools.WPF" Version="19.2.0.49" />
-
+    <PackageReference Include="AvalonEdit" Version="6.1.2.30" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
     <PackageReference Include="SharpVectors.Reloaded" Version="1.7.5" />
     <PackageReference Include="System.Security.Permissions" Version="5.0.0" />
@@ -1756,7 +1744,6 @@
     <None Remove="sample.mp4" />
     <None Remove="SplashScreen1.png" />
     <None Remove="TaskBarIcon.ico" />
-    <None Remove="Views\Editor\Basic\default.svg" />
   </ItemGroup>
 
   <ItemGroup>

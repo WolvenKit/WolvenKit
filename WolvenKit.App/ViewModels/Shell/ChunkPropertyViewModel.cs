@@ -1,16 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Input;
 using DynamicData;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Model.Cr2w;
-using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Commands;
 
 namespace WolvenKit.ViewModels.Shell
 {

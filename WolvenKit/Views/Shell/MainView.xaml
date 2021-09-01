@@ -54,19 +54,20 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="38" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <shell:RibbonView Grid.Row="0" />
 
         <shell:DockingAdapter
+            x:Name="dockingAdapter"
             Grid.Row="1"
-            ActiveDocument="{Binding ActiveDocument, Mode=TwoWay}"
-            ItemsSource="{Binding Tools}" />
+
+             />
 
         <shell:StatusBarView Grid.Row="2" />
 
-        <ScrollViewer HorizontalAlignment="Right" VerticalScrollBarVisibility="Hidden">
+        <ScrollViewer Grid.Row="0" Grid.RowSpan="3"  HorizontalAlignment="Right" VerticalScrollBarVisibility="Hidden">
             <StackPanel
                 Margin="0,35,10,10"
                 VerticalAlignment="Top"

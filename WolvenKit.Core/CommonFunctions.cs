@@ -116,6 +116,6 @@ namespace WolvenKit.Core
         // Display a byte array in a readable format.
         public static string PrettyByteArray(IEnumerable<byte> array) => array.Aggregate("", (current, t) => current + $"{t:X2}");
 
-        
+
     }
 }
