@@ -55,7 +55,7 @@ namespace WolvenKit.Views.Dialogs
 
         private async void GenerateButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            await Task.Run(() => GenerateMaterialRepo(new DirectoryInfo(MaterialsDepotPath), EUncookExtension.tga));
+            await Task.Run(() => GenerateMaterialRepo(new DirectoryInfo(MaterialsDepotPath), EUncookExtension.png));
         }
 
         private void GenerateMaterialRepo(DirectoryInfo materialRepoDir, EUncookExtension texturesExtension)
