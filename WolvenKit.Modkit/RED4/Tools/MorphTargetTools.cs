@@ -16,6 +16,7 @@ using WolvenKit.Common.Services;
 using CP77.CR2W;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Modkit.RED4.RigFile;
+
 namespace WolvenKit.Modkit.RED4
 {
     using Vec4 = System.Numerics.Vector4;
@@ -319,7 +320,9 @@ namespace WolvenKit.Modkit.RED4
                 byte[] bytes = texbr.ReadBytes((int)TargetDiffsDataSize[i]);
 
                 MemoryStream ms = new MemoryStream();
-                DDSMetadata metadata = new DDSMetadata(TargetDiffsWidth[i], TargetDiffsWidth[i], TargetDiffsMipLevelCounts[i], EFormat.BC7_UNORM, 16, false, 0, true);
+                DDSMetadata metadata = new DDSMetadata(
+                    TargetDiffsWidth[i], TargetDiffsWidth[i],
+                    1, 1, TargetDiffsMipLevelCounts[i], 0,0, EFormat.BC7_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 16, true);
                 DDSUtils.GenerateAndWriteHeader(ms, metadata);
                 BinaryWriter bw = new BinaryWriter(ms);
                 bw.Write(bytes);

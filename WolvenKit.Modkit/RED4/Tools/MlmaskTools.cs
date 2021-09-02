@@ -122,7 +122,9 @@ namespace WolvenKit.Modkit.RED4
                 using (var ms = new MemoryStream())
                 {
                     // create dds stream
-                    DDSUtils.GenerateAndWriteHeader(ms, new DDSMetadata(maskWidth, maskHeight, 0, EFormat.R8_UNORM, 8, false, 0, false));
+                    DDSUtils.GenerateAndWriteHeader(ms, new DDSMetadata(
+                        maskWidth, maskHeight,
+                        1, 1, 0, 0, 0, EFormat.R8_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 8,  true));
                     ms.Write(maskData);
 
                     if (args.UncookExtension == EUncookExtension.dds)
