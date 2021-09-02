@@ -672,6 +672,7 @@ namespace WolvenKit.Modkit.RED4
                     var chunk = new CMaterialInstance(mi, null, "CMaterialInstance") { IsSerialized = true };
                     chunk.CookingPlatform = new CEnum<Enums.ECookingPlatform>(mi, chunk, "cookingPlatform") { IsSerialized = true, Value = Enums.ECookingPlatform.PLATFORM_PC };
                     chunk.CookingPlatform.EnumValueList.Add("PLATFORM_PC");
+                    chunk.EnableMask = new CBool(mi, chunk, "enableMask") { IsSerialized = true, Value = true };
                     chunk.ResourceVersion = new CUInt8(mi, chunk, "resourceVersion") { IsSerialized = true, Value = 4 };
                     chunk.BaseMaterial = new rRef<IMaterial>(mi, chunk, "baseMaterial") { IsSerialized = true, DepotPath = mat.BaseMaterial };
                     chunk.CMaterialInstanceData = new CArray<CVariantSizeNameType>(mi, chunk, "CMaterialInstanceData") { IsSerialized = true };
