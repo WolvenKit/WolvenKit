@@ -45,7 +45,7 @@
         </DrawingBrush>
     </syncfusion:ChromelessWindow.Resources>
 
-    <Grid Margin="0,-33,0,0" Background="{DynamicResource CloudDrawingBrushMain}">
+    <Grid Margin="0,0,0,0" Background="{DynamicResource CloudDrawingBrushMain}">
         <Grid.Resources>
             <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" />
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
