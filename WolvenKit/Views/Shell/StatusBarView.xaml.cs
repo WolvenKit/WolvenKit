@@ -55,23 +55,23 @@ namespace WolvenKit.Views.Shell
         //    }
         //}
 
-        public System.Collections.Generic.List<string> GetWords(string Input)
-        {
-            string[] Result = System.Text.RegularExpressions.Regex.Split(Input, @"\b");
+        //public System.Collections.Generic.List<string> GetWords(string Input)
+        //{
+        //    string[] Result = System.Text.RegularExpressions.Regex.Split(Input, @"\b");
 
-            System.Collections.Generic.List<string> Words = new System.Collections.Generic.List<string>();
+        //    System.Collections.Generic.List<string> Words = new System.Collections.Generic.List<string>();
 
-            foreach (string s in Result)
+        //    foreach (string s in Result)
 
-            {
-                if (System.Text.RegularExpressions.Regex.IsMatch(s, @"[a-z]+", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+        //    {
+        //        if (System.Text.RegularExpressions.Regex.IsMatch(s, @"[a-z]+", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
 
-                {
-                    Words.Add(s);
-                }
-            }
+        //        {
+        //            Words.Add(s);
+        //        }
+        //    }
 
-            return Words;
-        }
+        //    return Words;
+        //}
     }
 }

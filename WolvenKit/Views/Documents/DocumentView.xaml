@@ -390,6 +390,7 @@
                                 </TextBox>
                             </DataTemplate>
 
+                           
                             <DataTemplate x:Key="RedboolTemplate">
                                 <CheckBox
                                     Margin="0"
@@ -430,7 +431,10 @@
                                 RefTemplateView="{StaticResource RefTemplateView}"
 
                                 NumericTemplate="{StaticResource StringTemplateView}"
+
                                 StringTemplateView="{StaticResource StringTemplateView}"
+
+                                
                                 />
 
                             <converters1:CellStyleConverter x:Key="converter" />

@@ -15,7 +15,7 @@ namespace WolvenKit.ViewModels.Shell
             "No project loaded, create or load an project to be able to view the game files...";
 
         private readonly ISettingsManager _settingsManager;
-        private readonly AppViewModel _appViewModel;
+        //private readonly AppViewModel _appViewModel;
         private readonly IProjectManager _projectManager;
 
         #endregion Fields
@@ -24,17 +24,17 @@ namespace WolvenKit.ViewModels.Shell
 
         public StatusBarViewModel(
             ISettingsManager settingsManager,
-            IProjectManager projectManager,
-            AppViewModel appViewModel
+            IProjectManager projectManager
+            //AppViewModel appViewModel
             )
         {
             _settingsManager = settingsManager;
-            _appViewModel = appViewModel;
+            //_appViewModel = appViewModel;
             _projectManager = projectManager;
 
 
-            var Connected = HandyControl.Tools.ApplicationHelper.IsConnectedToInternet();
-            if (Connected)
+            var connected = HandyControl.Tools.ApplicationHelper.IsConnectedToInternet();
+            if (connected)
             {
                 InternetConnected = "Connected";
             }
@@ -62,19 +62,19 @@ namespace WolvenKit.ViewModels.Shell
 
 
         //[Reactive] public int FileCount { get; set; } = 0;
-        public int Column { get; private set; }
-        public string Heading { get; private set; }
+        //public int Column { get; private set; }
+        //public string Heading { get; private set; }
         public string InternetConnected { get; private set; }
         public bool IsLoading { get; set; }
-        public bool IsUpdatedInstalled { get; private set; }
-        public int Line { get; private set; }
+        //public bool IsUpdatedInstalled { get; private set; }
+        //public int Line { get; private set; }
         public string LoadingString { get; set; }
-        public string ReceivingAutomaticUpdates { get; private set; }
+        //public string ReceivingAutomaticUpdates { get; private set; }
 
         readonly ObservableAsPropertyHelper<string> _currentProject;
         public string CurrentProject => _currentProject.Value;
 
-        //[Reactive] public string CurrentProject { get; set; }
+        [Reactive] public string Status { get; set; } = "Ready";
 
         public object VersionNumber => _settingsManager.GetVersionNumber();
 

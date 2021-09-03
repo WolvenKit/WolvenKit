@@ -142,7 +142,7 @@ namespace WolvenKit.Common.Model.Cr2w
 
     #endregion
 
-    // UI template TODO
+    // UI template done
     public interface IREDVariant : IEditableVariable
     {
         IEditableVariable Variant { get; set; }

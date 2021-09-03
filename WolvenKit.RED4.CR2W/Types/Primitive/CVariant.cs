@@ -91,8 +91,7 @@ namespace WolvenKit.RED4.CR2W.Types
             return copy;
         }
 
-        //public override List<IEditableVariable> GetEditableVariables() => new List<IEditableVariable> { Variant};
-        public override List<IEditableVariable> GetEditableVariables() => Variant?.GetEditableVariables();
+        public override List<IEditableVariable> GetEditableVariables() => new() { Variant };
 
         public override string ToString()
         {
