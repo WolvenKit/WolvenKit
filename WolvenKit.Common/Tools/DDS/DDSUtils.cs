@@ -6,6 +6,7 @@ using WolvenKit.Interfaces.Core;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using System.Buffers;
+using DirectXTexSharp;
 
 namespace WolvenKit.Common.DDS
 {
@@ -615,12 +616,19 @@ namespace WolvenKit.Common.DDS
 
         #region Reading
 
+        public static DDSMetadata GetMetadataFromTGAFile(string path)
+        {
+            var md = DirectXTexSharp.Metadata.GetMetadataFromTGAFile(path, DirectXTexSharp.TGA_FLAGS.TGA_FLAGS_NONE);
+            var bpp = DirectXTexSharp.Format.BitsPerPixel(md.format);
+            var iscube = md.is_cubemap();
 
+            return new DDSMetadata(md, (uint)bpp, true);
+        }
 
         public static DDSMetadata GetMetadataFromDDSFile(string path)
         {
             var md = DirectXTexSharp.Metadata.GetMetadataFromDDSFile(path, DirectXTexSharp.DDSFLAGS.DDS_FLAGS_NONE);
-            var bpp = 8;
+            var bpp = DirectXTexSharp.Format.BitsPerPixel(md.format);
             var iscube = md.is_cubemap();
 
             return new DDSMetadata(md, (uint)bpp, true);
@@ -635,7 +643,7 @@ namespace WolvenKit.Common.DDS
                 {
                     var md = DirectXTexSharp.Metadata.
                         GetMetadataFromDDSMemory(ptr, len, DirectXTexSharp.DDSFLAGS.DDS_FLAGS_NONE);
-                    var bpp = 8;
+                    var bpp = DirectXTexSharp.Format.BitsPerPixel(md.format);
                     var iscube = md.is_cubemap();
 
                     metadata = new DDSMetadata(md, (uint)bpp, true);
@@ -650,6 +658,9 @@ namespace WolvenKit.Common.DDS
 
             return true;
         }
+
+        public static int ComputeRowPitch(int width, int height, EFormat format) => DirectXTexSharp.Format.ComputeRowPitch((DXGI_FORMAT_WRAPPED)format, width, height);
+        public static int ComputeSlicePitch(int width, int height, EFormat format) => DirectXTexSharp.Format.ComputeSlicePitch((DXGI_FORMAT_WRAPPED)format, width, height);
 
         public static uint GetSlicePitch(uint width, uint height, EFormat format)
         {
@@ -684,61 +695,14 @@ namespace WolvenKit.Common.DDS
                 case EFormat.BC5_UNORM:
                 case EFormat.BC7_UNORM:
                     return Math.Max(1, (width / 4)) * 16;
-                //case EFormat.R32G32B32A32_FLOAT:
-                //case EFormat.R16G16B16A16_FLOAT:
-                //case EFormat.BC6H_UF16:
-                case EFormat.R8G8B8A8_UNORM:
 
+                //( width * bits-per-pixel + 7 ) / 8
                 default:
-                    throw new MissingFormatException($"Missing Format: {textureformat}");
+                    var bpp = (uint)DirectXTexSharp.Format.BitsPerPixel((DXGI_FORMAT_WRAPPED)textureformat);
+                    return (width * bpp) / 8;
+                    //throw new MissingFormatException($"Missing Format: {textureformat}");
             }
         }
-
-        // public static uint CalculateMipMapSize(uint width, uint height, EFormat format)
-        // {
-        //     //TODO: dword align, check if sizes are not pow2
-        //
-        //     switch (format)
-        //     {
-        //         case EFormat.R8G8B8A8_UNORM:
-        //             return width * height * 4; //(width * bpp + 7) / 8;
-        //         case EFormat.BC1_UNORM:
-        //         case EFormat.BC4_UNORM:
-        //             return width * height / 2;  //max(1,width ?4)x max(1,height ?4)x 8 (DXT1)
-        //         case EFormat.BC2_UNORM:
-        //         case EFormat.BC3_UNORM:
-        //         case EFormat.BC5_UNORM:
-        //         case EFormat.BC7_UNORM:
-        //             return width * height;      //max(1,width ?4)x max(1,height ?4)x 16 (DXT2-5)
-        //         default:
-        //             throw new ArgumentOutOfRangeException();
-        //     }
-        // }
-
-        // public static DDSMetadata ReadHeader(string ddsfile)
-        // {
-        //     var metadata = new DDSMetadata();
-        //     using var fs = new FileStream(ddsfile, FileMode.Open, FileAccess.Read);
-        //
-        //     if (fs.Length < 128)
-        //     {
-        //         throw new InvalidParsingException(ddsfile);
-        //     }
-        //
-        //     using var reader = new BinaryReader(fs);
-        //
-        //     // check if DDS file
-        //     var buffer = reader.ReadBytes(4);
-        //     if (!buffer.SequenceEqual(BitConverter.GetBytes(DDS_MAGIC)))
-        //     {
-        //         return metadata;
-        //     }
-        //
-        //     var id = reader.BaseStream.ReadStruct<DDS_HEADER>();
-        //     metadata = new DDSMetadata(id);
-        //
-        //     return metadata;
-        // }
 
         public static bool TryReadDdsHeader(Stream stream, out DDS_HEADER header)
         {
@@ -900,7 +864,9 @@ namespace WolvenKit.Common.DDS
 
                 fixed (byte* ptr = span)
                 {
-                    var fmt = format != null ? (DirectXTexSharp.DXGI_FORMAT_WRAPPED)format : DirectXTexSharp.DXGI_FORMAT_WRAPPED.DXGI_FORMAT_UNKNOWN;
+                    var fmt = format != null
+                        ? (DirectXTexSharp.DXGI_FORMAT_WRAPPED)format
+                        : DirectXTexSharp.DXGI_FORMAT_WRAPPED.DXGI_FORMAT_UNKNOWN;
 
 
                     var buffer = DirectXTexSharp.Texconv.ConvertToDdsArray(ptr, span.Length,

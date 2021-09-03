@@ -312,6 +312,7 @@ namespace WolvenKit.Modkit.RED4
         {
             var rawExt = rawRelative.Extension;
             var redfile = "";
+            var infile = rawRelative.FullName;
 
             // checks
             if (args.Keep)
@@ -379,10 +380,11 @@ namespace WolvenKit.Modkit.RED4
                 else
                 {
                     // TODO
-                    // get the format from texturegroup input or default
+                    var md = DDSUtils.GetMetadataFromTGAFile(infile);
+                    format = md.Format;
                 }
 
-                var infile = rawRelative.FullName;
+                
                 using var fs = new FileStream(infile, FileMode.Open);
                 var ddsbuffer = DDSUtils.ConvertToDdsMemory(fs, extAsEnum, format);
                 //ms.Write(ddsbuffer.Skip(148).ToArray());
@@ -487,7 +489,7 @@ namespace WolvenKit.Modkit.RED4
                 header.TextureInfo = texInfo;
                 // header.TextureInfo
                 var mipMapInfo = new CArray<rendRenderTextureBlobMipMapInfo>(red, blob.Header, "mipMapInfo") { IsSerialized = true };
-                using (var reader = new BinaryReader(ms))
+                //using (var reader = new BinaryReader(ms))
                 {
                     ms.Seek(148, SeekOrigin.Begin);
 
@@ -497,10 +499,10 @@ namespace WolvenKit.Modkit.RED4
                     for (var i = 0; i < metadata.Mipscount; i++)
                     {
                         // slicepitch
-                        var slicepitch = (int)DDSUtils.GetSlicePitch(mipsizeW, mipsizeH, fmt);
+                        var slicepitch = (int)DDSUtils.ComputeSlicePitch((int)mipsizeW, (int)mipsizeH, fmt);
                         offset += slicepitch;   
                         //rowpitch
-                        var rowpitch = DDSUtils.GetRowPitch(mipsizeW, fmt);
+                        var rowpitch = DDSUtils.ComputeRowPitch((int)mipsizeW, (int)mipsizeH, fmt);
 
                         //var buffer = reader.ReadBytes(slicepitch);
 
