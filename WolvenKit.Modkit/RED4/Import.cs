@@ -494,17 +494,15 @@ namespace WolvenKit.Modkit.RED4
                     var mipsizeH = height;
                     var mipsizeW = width;
                     var offset = 0;
-                    for (int i = 0; i < metadata.Mipscount; i++)
+                    for (var i = 0; i < metadata.Mipscount; i++)
                     {
                         // slicepitch
-                        var slicepitch = (int)DDSUtils.GetMipMapSize(mipsizeW, mipsizeH, fmt);
+                        var slicepitch = (int)DDSUtils.GetSlicePitch(mipsizeW, mipsizeH, fmt);
                         offset += slicepitch;   
                         //rowpitch
-                        var rowpitch = DDSUtils.GetBlockSize(mipsizeW, fmt);
+                        var rowpitch = DDSUtils.GetRowPitch(mipsizeW, fmt);
 
-
-                        var buffer = reader.ReadBytes(slicepitch);
-                        var size = buffer.Length;
+                        //var buffer = reader.ReadBytes(slicepitch);
 
                         var info = new rendRenderTextureBlobMipMapInfo(red, mipMapInfo, i.ToString()) { IsSerialized = true };
                         info.Layout = new rendRenderTextureBlobMemoryLayout(red, info, "layout")
@@ -551,7 +549,7 @@ namespace WolvenKit.Modkit.RED4
 
                     // add buffer
                     fs.Seek(0, SeekOrigin.Begin);
-                    var result = Rebuild(fs, new List<byte[]>() {ms.ToByteArray()});
+                    var result = Rebuild(fs, new List<byte[]>() { ms.ToByteArray().Skip(148).ToArray() });
                     if (!result)
                     {
                         throw new ImportException();

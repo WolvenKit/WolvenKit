@@ -651,7 +651,7 @@ namespace WolvenKit.Common.DDS
             return true;
         }
 
-        public static uint GetMipMapSize(uint width, uint height, EFormat format)
+        public static uint GetSlicePitch(uint width, uint height, EFormat format)
         {
             switch (format)
             {
@@ -672,7 +672,7 @@ namespace WolvenKit.Common.DDS
             }
         }
 
-        public static uint GetBlockSize(uint width, EFormat textureformat)
+        public static uint GetRowPitch(uint width, EFormat textureformat)
         {
             switch (textureformat)
             {
