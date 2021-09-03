@@ -70,7 +70,7 @@ namespace WolvenKit.Views.Documents
             CHUNKSVISIBILITY.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
             BUFFERSVISIBILITY.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
             IMPORTSVISISBILITY.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-            EDITORSVISIBILITY.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            //EDITORSVISIBILITY.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
 
         }
 
@@ -89,7 +89,7 @@ namespace WolvenKit.Views.Documents
         private void NavigationItem_MouseLeftButtonDown_3(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             SetCollapsedAll();
-            EDITORSVISIBILITY.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+            //EDITORSVISIBILITY.SetCurrentValue(VisibilityProperty, Visibility.Visible);
         }
 
         private void PropertyGrid_AutoGeneratingPropertyGridItem(object sender, Syncfusion.Windows.PropertyGrid.AutoGeneratingPropertyGridItemEventArgs e)
