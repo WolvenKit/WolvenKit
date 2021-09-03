@@ -2,10 +2,12 @@ using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using System.Windows;
 using ReactiveUI;
+using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.ViewModels.Documents;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Views.Documents
 {

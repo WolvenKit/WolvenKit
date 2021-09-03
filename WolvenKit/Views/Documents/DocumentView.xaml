@@ -13,6 +13,7 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     xmlns:documents="clr-namespace:WolvenKit.ViewModels.Documents;assembly=WolvenKit.App"
+    xmlns:shell="clr-namespace:WolvenKit.ViewModels.Shell;assembly=WolvenKit.App"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d"
@@ -372,6 +373,16 @@
                                 </TextBox>
                             </DataTemplate>
 
+                            <DataTemplate x:Key="ColorTemplateView">
+                                
+                                <syncfusion:ColorPickerPalette
+                                    GenerateThemeVariants="False"
+                                   Padding="3,-4,0,0"
+                                   Color="{Binding DisplayColor}"
+                                    SelectedCommand="{Binding SelectedColorCommand}"
+                                    d:DataContext="{d:DesignInstance shell:RedColorViewModel}" />
+                            </DataTemplate>
+
                             <DataTemplate x:Key="RefTemplateView">
                                 <TextBox
                                     Height="22"
@@ -433,6 +444,8 @@
                                 NumericTemplate="{StaticResource StringTemplateView}"
 
                                 StringTemplateView="{StaticResource StringTemplateView}"
+
+                                ColorTemplateView="{StaticResource ColorTemplateView}"
 
                                 
                                 />

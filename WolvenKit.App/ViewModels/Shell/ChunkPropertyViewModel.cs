@@ -1,10 +1,13 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Input;
+using System.Windows.Media;
 using DynamicData;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.ViewModels.Shell
@@ -49,6 +52,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 IREDBool redBool => new RedBoolViewModel(redBool),
                 IREDString redString => new RedStringViewModel(redString),
+                IREDColor redcolor => new RedColorViewModel(redcolor),
                 _ => new ChunkPropertyViewModel(editableVariable)
             };
 
@@ -60,6 +64,7 @@ namespace WolvenKit.ViewModels.Shell
 
         public IEditableVariable Property { get; }
 
+        
         public bool IsSelected { get; set; }
         public bool IsExpanded { get; set; }
 
@@ -78,6 +83,30 @@ namespace WolvenKit.ViewModels.Shell
 
 
         #endregion Properties
+    }
+
+    public class RedColorViewModel : ChunkPropertyViewModel
+    {
+        public RedColorViewModel(IREDColor prop) : base(prop)
+        {
+            DisplayColor = new Color() { A = prop.Value.A, R = prop.Value.R, G = prop.Value.G, B = prop.Value.B };
+            SelectedColorCommand =
+                ReactiveCommand.Create<ColorSelectedCommandArgs>(
+                    OnColorPicked);
+
+        }
+
+        [Reactive] public Color DisplayColor { get; set; }
+
+        public ReactiveCommand<ColorSelectedCommandArgs, Unit> SelectedColorCommand { get; set; } 
+
+        private void OnColorPicked(ColorSelectedCommandArgs e)
+        {
+            var mediaColor = e.Brush.Color;
+            DisplayColor = mediaColor;
+            var c = System.Drawing.Color.FromArgb(mediaColor.A, mediaColor.R, mediaColor.G, mediaColor.B);
+            (Property as IREDColor)?.SetValue(c);
+        }
     }
 
     // We can probably make this with generic types

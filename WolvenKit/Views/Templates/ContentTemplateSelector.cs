@@ -20,6 +20,7 @@ namespace WolvenKit.Views.Templates
         public DataTemplate EnumTemplate { get; set; }
         public DataTemplate HandleTemplateView { get; set; }
         public DataTemplate RefTemplateView { get; set; }
+        public DataTemplate ColorTemplateView { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container) =>
             item is not ChunkPropertyViewModel editableVariable
@@ -35,16 +36,16 @@ namespace WolvenKit.Views.Templates
                 IREDEnum => EnumTemplate,
                 IREDChunkPtr => HandleTemplateView,
                 IREDRef => RefTemplateView,
-                //IREDVariant x => GetVariantDataTemplate(x),
+                IREDColor x => ColorTemplateView,
                 IREDArray => CommmonTemplate,
                 _ => CommmonTemplate
             };
 
-        private DataTemplate GetVariantDataTemplate(IREDVariant variant)
-        {
-            var wrapped = variant.Variant;
-            var t = GetTemplate(wrapped);
-            return t;
-        }
+        //private DataTemplate GetVariantDataTemplate(IREDVariant variant)
+        //{
+        //    var wrapped = variant.Variant;
+        //    var t = GetTemplate(wrapped);
+        //    return t;
+        //}
     }
 }
