@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows.Input;
@@ -9,6 +10,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.RED4.CR2W.Types;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -45,9 +47,20 @@ namespace WolvenKit.ViewModels.Shell
                 if (prop.IsSerialized != b)
                 {
                     prop.IsSerialized = b;
+                    IsSerialized = b;
+                    this.RaisePropertyChanged(nameof(IsSerialized));
                 }
             });
+
+            Property.PropertyChanged += OnPropertyChanged;
         }
+
+        private void OnPropertyChanged(object sender, PropertyChangedEventArgs e) =>
+            IsSerialized = e.PropertyName switch
+            {
+                nameof(IEditableVariable.IsSerialized) => ((IEditableVariable)sender).IsSerialized,
+                _ => IsSerialized
+            };
 
         #endregion Constructors
 
@@ -64,7 +77,7 @@ namespace WolvenKit.ViewModels.Shell
         public string Name => Property.REDName;
         public string Type => Property.REDType;
         public string Value => Property.REDValue;
-        [Reactive] public bool IsSerialized { get; private set; }
+        [Reactive] public bool IsSerialized { get; set; }
 
         private readonly ReadOnlyObservableCollection<ChunkPropertyViewModel> _children;
         public ReadOnlyObservableCollection<ChunkPropertyViewModel> Children => _children;

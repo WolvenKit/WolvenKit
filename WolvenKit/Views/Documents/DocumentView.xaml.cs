@@ -1,8 +1,10 @@
+using System;
 using System.Linq;
 using System.Windows;
 using ReactiveUI;
 using Syncfusion.UI.Xaml.Grid;
 using WolvenKit.ViewModels.Documents;
+using WolvenKit.Views.Templates;
 
 namespace WolvenKit.Views.Documents
 {
@@ -86,19 +88,19 @@ namespace WolvenKit.Views.Documents
         //                    break;
         //            }
         //        }
-        private void TreeView_OnSelectionChanged(object sender, GridSelectionChangedEventArgs e)
+
+        private void HandleTemplateView_OnGoToChunkRequested(object sender, GoToChunkRequestedEventArgs e)
         {
-            if (DataContext is not RedDocumentViewModel vm)
+            var target = e.Export;
+
+            if (ViewModel == null || target == null)
             {
                 return;
             }
 
-            if (!e.AddedItems.Any())
-            {
-                return;
-            }
-
-
+            var chunk = ViewModel.Chunks.FirstOrDefault(x => x.Name.Equals(target.REDName));
+            chunk.IsSelected = true;
+            ViewModel.SelectedChunk = chunk;
         }
     }
 }

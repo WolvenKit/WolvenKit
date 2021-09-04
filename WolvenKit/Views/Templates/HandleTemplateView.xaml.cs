@@ -34,6 +34,7 @@ namespace WolvenKit.Views.Templates
             DependencyProperty.Register(nameof(RedChunkPtr), typeof(IREDChunkPtr),
                 typeof(HandleTemplateView), new PropertyMetadata(OnRedChunkPtrChanged));
 
+        public event EventHandler<GoToChunkRequestedEventArgs> GoToChunkRequested;
 
         private static void OnRedChunkPtrChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -67,8 +68,6 @@ namespace WolvenKit.Views.Templates
             view.SelectedItem = iptr.GetReference();
         }
 
-
-
         private void ComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (SelectedItem == null)
@@ -81,7 +80,23 @@ namespace WolvenKit.Views.Templates
             }
 
             RedChunkPtr.SetValue(SelectedItem);
-            RedChunkPtr.IsSerialized = true;
         }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            var target = RedChunkPtr?.GetReference();
+            if (target == null)
+            {
+                return;
+            }
+
+            GoToChunkRequested?.Invoke(this, new GoToChunkRequestedEventArgs() {Export = target});
+
+        }
+    }
+
+    public class GoToChunkRequestedEventArgs : EventArgs
+    {
+        public ICR2WExport Export { get; set; }
     }
 }

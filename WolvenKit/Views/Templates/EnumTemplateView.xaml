@@ -6,7 +6,7 @@
  xmlns:local="clr-namespace:WolvenKit.Views.Templates"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  d:DataContext="{d:DesignInstance Type={x:Type local:EnumTemplateView}}"
- d:DesignHeight="200"
+ d:DesignHeight="100"
  d:DesignWidth="400"
  mc:Ignorable="d"
  >
