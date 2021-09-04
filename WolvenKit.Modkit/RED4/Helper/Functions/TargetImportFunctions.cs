@@ -40,7 +40,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 Directory.CreateDirectory(new FileInfo(baseMeshPath).Directory.FullName);
             }
-            FileStream meshStream = new FileStream(baseMeshPath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            using FileStream meshStream = new FileStream(baseMeshPath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
             meshStream.Seek(0, SeekOrigin.Begin);
             if (meshStream.Length == 0)
             {
@@ -58,6 +58,10 @@ namespace WolvenKit.Modkit.RED4
             VerifyGLTF(model);
 
             var submeshCount = model.LogicalMeshes.Count;
+
+            if (submeshCount == 0)
+                throw new Exception("No submeshes found in model file.");
+
             var renderblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMorphTargetMeshBlob>().First();
 
             var diffsBufferId = renderblob.DiffsBuffer.Buffer.Value - 1;
@@ -81,9 +85,7 @@ namespace WolvenKit.Modkit.RED4
             for (int i = 0; i < renderblob.Header.TargetStartsInVertexDiffsMapping.Count; i++)
                 renderblob.Header.TargetStartsInVertexDiffsMapping[i].Value = 0;
 
-            for (int i = 0; i < submeshCount; i++)
-                SetTargets(cr2w, model, renderblob, diffsBuffer, mappingsBuffer, i);
-
+            SetTargets(cr2w, model, renderblob, diffsBuffer, mappingsBuffer);
             WriteTargetBuffer(cr2w, diffsBuffer, diffsBufferId);
             WriteTargetBuffer(cr2w, mappingsBuffer, mappingsBufferId);
 
@@ -219,17 +221,17 @@ namespace WolvenKit.Modkit.RED4
         {
             var logicalMesh = model.LogicalMeshes[0].Primitives[0];
             var morphTarget = logicalMesh.GetMorphTargetAccessors(morphTargetId);
-            var vertices = morphTarget["POSITION"].AsVector3Array();
-
-            var max = new Vec3(vertices[0].X, vertices[0].Y, vertices[0].Z);
-            var min = new Vec3(vertices[0].X, vertices[0].Y, vertices[0].Z);
+            var morphVertices = morphTarget["POSITION"].AsVector3Array();
+            
+            var max = new Vec3(morphVertices[0].X, -morphVertices[0].Z, morphVertices[0].Y);
+            var min = new Vec3(morphVertices[0].X, -morphVertices[0].Z, morphVertices[0].Y);
 
             for (int i = 0; i < model.LogicalMeshes.Count; i++)
             {
-                vertices = model.LogicalMeshes[i].Primitives[0].GetMorphTargetAccessors(morphTargetId)["POSITION"].AsVector3Array();
-                var maxX = vertices.Max(l => l.X);
-                var maxY = vertices.Max(l => l.Y);
-                var maxZ = vertices.Max(l => l.Z);
+                morphVertices = model.LogicalMeshes[i].Primitives[0].GetMorphTargetAccessors(morphTargetId)["POSITION"].AsVector3Array();
+                var maxX = morphVertices.Max(l => l.X);
+                var maxY = morphVertices.Max(l => -l.Z);
+                var maxZ = morphVertices.Max(l => l.Y);
 
                 if (maxX > max.X)
                     max.X = maxX;
@@ -238,9 +240,9 @@ namespace WolvenKit.Modkit.RED4
                 if (maxZ > max.Z)
                     max.Z = maxZ;
 
-                var minX = vertices.Min(l => l.X);
-                var minY = vertices.Min(l => l.Y);
-                var minZ = vertices.Min(l => l.Z);
+                var minX = morphVertices.Min(l => l.X);
+                var minY = morphVertices.Min(l => -l.Z);
+                var minZ = morphVertices.Min(l => l.Y);
 
                 if (minX < min.X)
                     min.X = minX;
@@ -251,36 +253,56 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var quantScale = new Vec4((max.X - min.X), (max.Y - min.Y), (max.Z - min.Z), 0);
-            var quantOffset = new Vec4((max.X + min.X), (max.Y + min.Y), (max.Z + min.Z), 1);
+            var quantOffset = new Vec4(min.X, min.Y, min.Z, 1);
 
             return (quantScale, quantOffset);
 
         }
 
-        private void SetTargets(CR2WFile cr2w, ModelRoot model, rendRenderMorphTargetMeshBlob blob, Stream diffsBuffer, Stream mappingsBuffer, int subMeshId)
+        private uint GetVertexCountInMorphTarget(ModelRoot model, int morphTargetId)
+        {
+            uint count = 0;
+            for (int i = 0; i < model.LogicalMeshes.Count; i++)
+            {
+                count += (uint)model.LogicalMeshes[i].Primitives[0].GetMorphTargetAccessors(morphTargetId)["POSITION"].AsVector3Array().Where(l => l.X != 0 && l.Y != 0 && l.Z != 0).Count();
+            }
+
+            return count;
+        }
+
+        private void SetTargets(CR2WFile cr2w, ModelRoot model, rendRenderMorphTargetMeshBlob blob, Stream diffsBuffer, Stream mappingsBuffer)
         {
 
-            var logicalMesh = model.LogicalMeshes[subMeshId].Primitives[0];
-            var morphTargetCount = model.LogicalMeshes[subMeshId].Primitives[0].MorphTargetsCount;
+            // Validate that all submeshes contain the same number of morph targets
+            int morphTargetCount = model.LogicalMeshes[0].Primitives[0].MorphTargetsCount;
+            if (model.LogicalMeshes.Any(l => l.Primitives[0].MorphTargetsCount != morphTargetCount))
+                throw new Exception("All submeshes must have the same number of morph targets.");
+
+            if (morphTargetCount == 0)
+                throw new Exception("Mesh contains no morph targets to import.");
 
             // Set global headers for blob
             blob.Header.NumTargets.Value = (uint)morphTargetCount;
-            
+
+            // Write buffer positions for all the morph targets
+            for (int morphTarget = 0; morphTarget < morphTargetCount; morphTarget++)
+            {
+                blob.Header.TargetStartsInVertexDiffs[morphTarget].Value = (uint)morphTarget;
+                blob.Header.TargetStartsInVertexDiffsMapping[morphTarget].Value = (uint)morphTarget;
+
+                for (int i = 0; i < morphTarget; i++)
+                {
+                    var vertexCount = GetVertexCountInMorphTarget(model, i);
+                    blob.Header.TargetStartsInVertexDiffs[morphTarget].Value += vertexCount - 1;
+                    blob.Header.TargetStartsInVertexDiffsMapping[morphTarget].Value += vertexCount - 1;
+                }
+            }
+
             var diffsWriter = new BinaryWriter(diffsBuffer);
             var mappingsWriter = new BinaryWriter(mappingsBuffer);
 
             for (int i = 0; i < morphTargetCount; i++)
             {
-                var morphTarget = logicalMesh.GetMorphTargetAccessors(i);
-                var vertices = morphTarget["POSITION"].AsVector3Array();
-                var normals = morphTarget["NORMAL"].AsVector3Array();
-                var tangents = morphTarget["TANGENT"].AsVector3Array();
-
-                if (blob.Header.TargetStartsInVertexDiffs[i].Value == 0 && i != 0)
-                    blob.Header.TargetStartsInVertexDiffs[i].Value = (uint)diffsBuffer.Position / 12;
-
-                if (blob.Header.TargetStartsInVertexDiffsMapping[i].Value == 0 && i != 0)
-                    blob.Header.TargetStartsInVertexDiffsMapping[i].Value = (uint)mappingsBuffer.Position / 4;
 
                 // Write scale and offsets
                 var quant = CalculateTargetQuant(model, i);
@@ -291,78 +313,76 @@ namespace WolvenKit.Modkit.RED4
                 blob.Header.TargetPositionDiffScale[i].Y.Value = quant.scale.Y;
                 blob.Header.TargetPositionDiffScale[i].Z.Value = quant.scale.Z;
 
-                //var mappings = GetTargetMappings(i, subMeshId, blob, mappingsBuffer);
-                var mappings = new List<ushort>();
-                int deltaCount = 0;
 
-                for (int x = 0; x < vertices.Count; x++)
+                for (int subMeshId = 0; subMeshId < model.LogicalMeshes.Count; subMeshId++)
                 {
-                    var vertexDelta = vertices[x];
-                    var normalsDelta = normals[x];
-                    var tangentsDelta = tangents[x];
+                    var logicalMesh = model.LogicalMeshes[subMeshId].Primitives[0];
+                    var morphTarget = logicalMesh.GetMorphTargetAccessors(i);
 
-                    if (vertexDelta.X == 0 && vertexDelta.Y == 0 && vertexDelta.Z == 0)
-                        continue;
+                    if (!morphTarget.ContainsKey("TANGENT"))
+                        throw new Exception($"Morph target {i} does not contain any tangents. Did you remember to export them?");
 
-                    
-                    // Mappings
-                    mappings.Add((ushort)x);
+                    if (!morphTarget.ContainsKey("NORMAL"))
+                        throw new Exception($"Morph target {i} does not contain any normals. Did you remember to export them?");
 
-                    deltaCount++;
+                    var vertices = morphTarget["POSITION"].AsVector3Array();
+                    var normals = morphTarget["NORMAL"].AsVector3Array();
+                    var tangents = morphTarget["TANGENT"].AsVector3Array();
 
-                    var convertX = (vertexDelta.X - blob.Header.TargetPositionDiffOffset[i].X.Value) / blob.Header.TargetPositionDiffScale[i].X.Value;
-                    var convertY = (vertexDelta.Y - blob.Header.TargetPositionDiffOffset[i].Y.Value) / blob.Header.TargetPositionDiffScale[i].Y.Value;
-                    var convertZ = (vertexDelta.Z - blob.Header.TargetPositionDiffOffset[i].Z.Value) / blob.Header.TargetPositionDiffScale[i].Z.Value;
+                    var mappings = new List<ushort>();
+                    int deltaCount = 0;
 
-                    // Position
-                    var output = Converters.Vec3ToU32(new Vec3((float)convertX, -(float)convertZ, (float)convertY));
-                    
-                    diffsWriter.Write(output);
+                    for (int x = 0; x < vertices.Count; x++)
+                    {
+                        var vertexDelta = vertices[x];
+                        var normalsDelta = normals[x];
+                        var tangentsDelta = tangents[x];
 
-                    // Normal
-                    output = Converters.Vec4ToU32(new Vec4(normalsDelta.X, -normalsDelta.Z, normalsDelta.Y, 1f));
-                    diffsWriter.Write(output);
+                        if (vertexDelta.X == 0 && vertexDelta.Y == 0 && vertexDelta.Z == 0)
+                            continue;
 
-                    // Tangent
-                    output = Converters.Vec4ToU32(new Vec4(tangentsDelta.X, -tangentsDelta.Z, tangentsDelta.Y, 0));
-                    diffsWriter.Write(output);
+
+                        // Mappings
+                        mappings.Add((ushort)x);
+
+                        deltaCount++;
+
+                        var convertX = (vertexDelta.X - quant.offset.X) / quant.scale.X;
+                        var convertY = (vertexDelta.Y - quant.offset.Z) / quant.scale.Z;
+                        var convertZ = (vertexDelta.Z - -quant.offset.Y) / quant.scale.Y;
+
+                        // Position
+                        var output = Converters.Vec3ToU32(new TargetVec3(convertX, -convertZ, convertY), 1);
+
+                        diffsWriter.Write(output);
+
+                        // Normal
+                        output = Converters.Vec4ToU32(new Vec4(normalsDelta.X, -normalsDelta.Z, normalsDelta.Y, 1f));
+                        diffsWriter.Write(output);
+
+                        // Tangent
+                        output = Converters.Vec4ToU32(new Vec4(tangentsDelta.X, -tangentsDelta.Z, tangentsDelta.Y, 1f));
+                        diffsWriter.Write(output);
+                    }
+
+                    // Write mappings
+                    foreach (var mapping in mappings)
+                    {
+                        mappingsWriter.Write(mapping);
+                    }
+
+                    // Padding?
+                    foreach (var mapping in mappings)
+                    {
+                        mappingsWriter.Write((ushort)0);
+                    }
+
+                    blob.Header.NumVertexDiffsInEachChunk[i][subMeshId].Value = (uint)deltaCount;
+                    blob.Header.NumVertexDiffsMappingInEachChunk[i][subMeshId].Value = (uint)deltaCount;
+                    blob.Header.NumDiffs.Value += (uint)deltaCount;
                 }
-
-                // Write mappings
-                foreach(var mapping in mappings)
-                {
-                    mappingsWriter.Write(mapping);
-                }
-
-                // Padding?
-                foreach (var mapping in mappings)
-                {
-                    mappingsWriter.Write((ushort)0);
-                }
-
-                blob.Header.NumVertexDiffsInEachChunk[i][subMeshId].Value = (uint)deltaCount;
-                blob.Header.NumVertexDiffsMappingInEachChunk[i][subMeshId].Value = (uint)deltaCount;
-                blob.Header.NumDiffs.Value += (uint)deltaCount;
             }
         }
-
-        /*private List<ushort> GetTargetMappings(int mappingId, int submeshId, rendRenderMorphTargetMeshBlob blob, Stream mappingsBuffer)
-        {
-            mappingsBuffer.Position = blob.Header.TargetStartsInVertexDiffsMapping[mappingId].Value * 4;
-            if (submeshId > 0)
-            {
-                for (int i = 0; i < submeshId; i++)
-                    mappingsBuffer.Position += blob.Header.NumVertexDiffsMappingInEachChunk[mappingId][i].Value * 4;
-            }
-
-            ushort[] vertexMapping = new ushort[blob.Header.NumVertexDiffsInEachChunk[mappingId][submeshId].Value];
-            var mappingsReader = new BinaryReader(mappingsBuffer);
-
-            for (int i = 0; i < vertexMapping.Length; i++)
-                vertexMapping[i] = mappingsReader.ReadUInt16();
-
-            return vertexMapping.ToList();
-        }*/
 
         public bool ImportTargetBaseMesh(FileInfo inGltfFile, Stream intargetStream, List<Archive> archives, string modFolder, ValidationMode vmode = ValidationMode.Strict, Stream outStream = null)
         {
@@ -381,7 +401,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 Directory.CreateDirectory(new FileInfo(baseMeshPath).Directory.FullName);
             }
-            FileStream meshStream = new FileStream(baseMeshPath, FileMode.OpenOrCreate,FileAccess.ReadWrite);
+            using FileStream meshStream = new FileStream(baseMeshPath, FileMode.OpenOrCreate,FileAccess.ReadWrite);
             meshStream.Seek(0, SeekOrigin.Begin);
             if (meshStream.Length == 0)
             {

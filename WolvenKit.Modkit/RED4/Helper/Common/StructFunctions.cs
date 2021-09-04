@@ -90,15 +90,16 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
             W = W / 3f;
             return new Vector4(X, Y, Z, W);
         }
-        public static Vector4 TenBitUnsigned(UInt32 U32)
+        public static TargetVec4 TenBitUnsigned(UInt32 U32)
         {
             float X = Convert.ToSingle(U32 & 0x3ff);
             float Y = Convert.ToSingle((U32 >> 10) & 0x3ff);
             float Z = Convert.ToSingle((U32 >> 20) & 0x3ff);
             float W = Convert.ToSingle((U32) >> 30);
 
-            return new Vector4(X / 1023f, Y / 1023f, Z / 1023f, W / 3f);
+            return new TargetVec4(X / 1023f, Y / 1023f, Z / 1023f, W / 3f);
         }
+
         public static Vector4 TenBitsigned(UInt32 U32)
         {
             Int16 X = Convert.ToInt16(U32 & 0x3ff);
@@ -135,11 +136,11 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
             return U32;
         }
 
-        public static UInt32 Vec3ToU32(Vector3 v, ushort w = 1)
+        public static uint Vec3ToU32(TargetVec3 v, ushort w = 1)
         {
-            var x = (ushort)(v.X * 1023);
-            var y = (ushort)(v.Y * 1023);
-            var z = (ushort)(v.Z * 1023);
+            var x = (ushort)(v.X * 1023f);
+            var y = (ushort)(v.Y * 1023f);
+            var z = (ushort)(v.Z * 1023f);
 
             var output = (w << 30)
                 | (z << 20)

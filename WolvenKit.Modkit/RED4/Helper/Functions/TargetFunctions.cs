@@ -232,7 +232,7 @@ namespace WolvenKit.Modkit.RED4
             for (int i = 0; i < SubMeshC; i++)
             {
                 UInt32 diffsCount = NumVertexDiffsInEachChunk[i];
-                Vec3[] vertexDelta = new Vec3[diffsCount];
+                TargetVec3[] vertexDelta = new TargetVec3[diffsCount];
                 Vec3[] normalDelta = new Vec3[diffsCount];
                 Vec3[] tangentDelta = new Vec3[diffsCount];
 
@@ -251,13 +251,13 @@ namespace WolvenKit.Modkit.RED4
 
                 for (int e = 0; e < diffsCount; e++)
                 {
-                    Vec4 v = Converters.TenBitUnsigned(diffsbr.ReadUInt32());
+                    TargetVec4 v = Converters.TenBitUnsigned(diffsbr.ReadUInt32());
 
-                    var x = (decimal)v.X * (decimal)TargetPositionDiffScale.X + (decimal)TargetPositionDiffOffset.X;
-                    var y = (decimal)v.Y * (decimal)TargetPositionDiffScale.Y + (decimal)TargetPositionDiffOffset.Y;
-                    var z = (decimal)v.Z * (decimal)TargetPositionDiffScale.Z + (decimal)TargetPositionDiffOffset.Z;
+                    var x = v.X * TargetPositionDiffScale.X + TargetPositionDiffOffset.X;
+                    var y = v.Y * TargetPositionDiffScale.Y + TargetPositionDiffOffset.Y;
+                    var z = v.Z * TargetPositionDiffScale.Z + TargetPositionDiffOffset.Z;
 
-                    vertexDelta[e] = new Vec3((float)x, (float)z, (float)-y);
+                    vertexDelta[e] = new TargetVec3(x, z, -y);
                     Vec4 n = Converters.TenBitShifted(diffsbr.ReadUInt32());
                     normalDelta[e] = new Vec3(n.X, n.Z, -n.Y);
                     Vec4 t = Converters.TenBitShifted(diffsbr.ReadUInt32());

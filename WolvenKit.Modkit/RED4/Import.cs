@@ -556,7 +556,10 @@ namespace WolvenKit.Modkit.RED4
                     _loggerService.Error($"Unexpected error occured while importing {redfileName}: {e.Message}");
                     return false;
                 }
-
+                finally
+                {
+                    redFs.Close();
+                }
 
             }
 
