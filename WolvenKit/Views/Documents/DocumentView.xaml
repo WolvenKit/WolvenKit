@@ -261,10 +261,11 @@
                                     AutoGenerateColumns="False"
                                     ChildPropertyName="Children"
                                     ColumnSizer="FillColumn"
-                                    EditTrigger="OnTap"
+                                    SelectionChanged="TreeView_OnSelectionChanged"
                                     ItemsSource="{Binding Chunks}"
                                     SelectedItem="{Binding SelectedChunk}"
                                     Style="{DynamicResource SyncfusionSfTreeGridStyle}">
+
                             <syncfusion:SfTreeGrid.Resources>
                                 <Style TargetType="syncfusion:TreeGridCell">
                                     <Setter Property="BorderBrush" Value="Transparent" />
@@ -277,11 +278,12 @@
                                 <converters1:ExtensionToBitmapConverter x:Key="ExtensionToBmp" />
 
                             </syncfusion:SfTreeGrid.Resources>
+
                             <syncfusion:SfTreeGrid.Columns>
+
                                 <syncfusion:TreeGridTextColumn HeaderText="Chunks" MappingName="Name" />
+
                             </syncfusion:SfTreeGrid.Columns>
-
-
 
                         </syncfusion:SfTreeGrid>
                     </Grid>
@@ -451,13 +453,13 @@
 
 
                 <DataTemplate x:Key="RedboolTemplate">
-                    <CheckBox
-                                    Margin="0"
-                                    Padding="5"
-                                    HorizontalAlignment="Left"
-                                    IsChecked="{Binding Property.Value}"
-                                    Style="{DynamicResource MahApps.Styles.CheckBox.DataGrid}"
-                                    >
+                    <CheckBox syncfusion:FocusManagerHelper.FocusedElement="True"
+                              Margin="0"
+                              Padding="5"
+                              HorizontalAlignment="Left"
+                              IsChecked="{Binding Property.Value}"
+                              Style="{DynamicResource MahApps.Styles.CheckBox.DataGrid}"
+                    >
                         <hc:Interaction.Triggers>
                             <hc:EventTrigger EventName="Checked">
                                 <hc:InvokeCommandAction Command="{Binding PreviewTextInputCommand}" />
@@ -507,17 +509,18 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>-->
 
-            <syncfusion:SfTreeGrid
-                            x:Name="MainTreeGrid"
-                            AllowFiltering="True"
-                            AllowResizingColumns="True"
-                            AutoExpandMode="RootNodesExpanded"
-                            AutoGenerateColumns="False"
-                            ChildPropertyName="Children"
-                            ColumnSizer="Star"
-                            ItemsSource="{Binding SelectedChunk.ChildrenProperties}"
-                            Style="{DynamicResource SyncfusionSfTreeGridStyle}"
-                            >
+            <syncfusion:SfTreeGrid 
+                                   x:Name="MainTreeGrid"
+                                   AllowFiltering="True"
+                                   AllowResizingColumns="True"
+                                   AutoExpandMode="RootNodesExpanded"
+                                   AutoGenerateColumns="False"
+                                   ChildPropertyName="Children"
+                                   ColumnSizer="Star"
+                            
+                                   ItemsSource="{Binding ChunkProperties}"
+                                   Style="{DynamicResource SyncfusionSfTreeGridStyle}"
+            >
 
                 <syncfusion:SfTreeGrid.Columns>
 
@@ -533,13 +536,13 @@
                         </syncfusion:TreeGridTextColumn.CellStyle>
                     </syncfusion:TreeGridTextColumn>
 
-                    <syncfusion:TreeGridTemplateColumn
-                                    AllowEditing="True"
-                                    AllowSorting="False"
-                                    CellTemplateSelector="{StaticResource DataTemplateSelector}"
-                                    ColumnSizer="FillColumn"
-                                    HeaderText="Value"
-                                    MappingName="Property" />
+                    <syncfusion:TreeGridTemplateColumn AllowFocus="True"
+                                                       AllowEditing="True"
+                                                       AllowSorting="False"
+                                                       CellTemplateSelector="{StaticResource DataTemplateSelector}"
+                                                       ColumnSizer="FillColumn"
+                                                       HeaderText="Value"
+                                                       MappingName="Property" />
 
                     <syncfusion:TreeGridTextColumn
                                     AllowEditing="False"

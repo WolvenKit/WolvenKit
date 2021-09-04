@@ -20,10 +20,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             Property = prop;
             IsSerialized = prop.IsSerialized;
-            Name = prop.REDName;
-            Value = prop.REDValue;
-            Type = prop.REDType;
-            
+
 
             _ = Property.ChildrEditableVariables
                 .AsObservableChangeSet()
@@ -38,6 +35,7 @@ namespace WolvenKit.ViewModels.Shell
                     if (!Property.IsSerialized)
                     {
                         Property.IsSerialized = true;
+                        IsSerialized = true;
                         this.RaisePropertyChanged(nameof(IsSerialized));
                     }
                 });
@@ -51,18 +49,9 @@ namespace WolvenKit.ViewModels.Shell
             });
         }
 
-        private static ChunkPropertyViewModel GetViewModel(IEditableVariable editableVariable) =>
-            editableVariable switch
-            {
-                IREDBool redBool => new RedBoolViewModel(redBool),
-                IREDString redString => new RedStringViewModel(redString),
-                IREDColor redcolor => new RedColorViewModel(redcolor),
-                _ => new ChunkPropertyViewModel(editableVariable)
-            };
-
         #endregion Constructors
 
-        public ICommand PreviewTextInputCommand { get; private set; }
+        public ICommand PreviewTextInputCommand { get; set; }
 
         #region Properties
 
@@ -72,10 +61,10 @@ namespace WolvenKit.ViewModels.Shell
         [Reactive] public bool IsSelected { get; set; }
         [Reactive] public bool IsExpanded { get; set; }
 
-        [Reactive] public string Name { get; init; }
-        [Reactive] public string Type { get; init; } 
-        [Reactive] public string Value { get; init; }
-        [Reactive] public bool IsSerialized { get; init; }
+        public string Name => Property.REDName;
+        public string Type => Property.REDType;
+        public string Value => Property.REDValue;
+        [Reactive] public bool IsSerialized { get; private set; }
 
         private readonly ReadOnlyObservableCollection<ChunkPropertyViewModel> _children;
         public ReadOnlyObservableCollection<ChunkPropertyViewModel> Children => _children;
@@ -87,6 +76,15 @@ namespace WolvenKit.ViewModels.Shell
 
 
         #endregion Properties
+
+        private static ChunkPropertyViewModel GetViewModel(IEditableVariable editableVariable) =>
+            editableVariable switch
+            {
+                IREDBool redBool => new RedBoolViewModel(redBool),
+                IREDString redString => new RedStringViewModel(redString),
+                IREDColor redcolor => new RedColorViewModel(redcolor),
+                _ => new ChunkPropertyViewModel(editableVariable)
+            };
     }
 
     public class RedColorViewModel : ChunkPropertyViewModel

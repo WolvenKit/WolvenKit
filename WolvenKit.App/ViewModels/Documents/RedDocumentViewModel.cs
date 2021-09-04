@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common;
@@ -42,6 +44,19 @@ namespace WolvenKit.ViewModels.Documents
             OpenEditorCommand = new RelayCommand(ExecuteOpenEditor);
             OpenBufferCommand = new RelayCommand(ExecuteOpenBuffer);
             OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport);
+
+            this.WhenAnyValue(x => x.SelectedChunk).Subscribe(chunk =>
+            {
+                if (chunk != null)
+                {
+                    ChunkProperties = new ObservableCollection<ChunkPropertyViewModel>(
+                        SelectedChunk.GetData()
+                            .ChildrEditableVariables
+                            .Select(x => new ChunkPropertyViewModel(x)));
+                    
+                }
+            });
+
         }
 
         public ICommand OpenBufferCommand { get; private set; }
@@ -74,6 +89,8 @@ namespace WolvenKit.ViewModels.Documents
         }
 
         #region properties
+
+        [Reactive] public ObservableCollection<ChunkPropertyViewModel> ChunkProperties { get; set; } = new();
 
         /// <summary>
         /// Gets or sets the editable File.
