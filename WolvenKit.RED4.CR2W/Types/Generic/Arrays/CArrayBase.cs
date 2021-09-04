@@ -34,6 +34,8 @@ namespace WolvenKit.RED4.CR2W.Types
         }
         public Type InnerType => this.GetType().GetGenericArguments().Single();
 
+        private byte[] _buffer;
+
         #endregion
 
         #region methods
@@ -64,13 +66,20 @@ namespace WolvenKit.RED4.CR2W.Types
 
         protected void Read(BinaryReader file, uint size, int elementcount)
         {
+            // read as byte array for perfomance
+            if (typeof(T) == typeof(CUInt8))
+            {
+                _buffer = file.ReadBytes(elementcount);
+                return;
+            }
+
 
             for (var i = 0; i < elementcount; i++)
             {
                 var element = Create<T>(i.ToString(), new int[0]);
 
                 // no actual way to find out the elementsize of an array element
-                // bacause cdpr serialized classes have no fixed size
+                // because cdpr serialized classes have no fixed size
                 // solution? not sure: pass 0 and disable checks?
 
                 var elementsize = 0;
@@ -90,6 +99,13 @@ namespace WolvenKit.RED4.CR2W.Types
 
         protected void ReadWithoutMeta(BinaryReader file, uint size, int elementcount)
         {
+            // read as byte array for perfomance
+            if (typeof(T) == typeof(CUInt8))
+            {
+                _buffer = file.ReadBytes(elementcount);
+                return;
+            }
+
             for (int i = 0; i < elementcount; i++)
             {
                 var element = CR2WTypeManager.Create(Elementtype, i.ToString(), cr2w, this);
@@ -113,6 +129,13 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public override void Write(BinaryWriter file)
         {
+            // write as byte array for perfomance
+            if (typeof(T) == typeof(CUInt8))
+            {
+                file.Write(_buffer);
+                return;
+            }
+
             foreach (var element in Elements)
             {
                 element.Write(file);
@@ -121,6 +144,13 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public override void WriteWithoutMeta(BinaryWriter file)
         {
+            // write as byte array for perfomance
+            if (typeof(T) == typeof(CUInt8))
+            {
+                file.Write(_buffer);
+                return;
+            }
+
             foreach (var element in Elements)
             {
                 if (!(element is CVariable elem))
@@ -232,7 +262,21 @@ namespace WolvenKit.RED4.CR2W.Types
         #region interface implements
 
         [Browsable(false)]
-        public T this[int index] { get => ((IList<T>)Elements)[index]; set => ((IList<T>)Elements)[index] = value; }
+        public T this[int index]
+        {
+            get
+            {
+                if (_buffer is { Length: > 0 })
+                {
+                    // super dumb but without refactoring most of the code this is it
+                    var element = Create<T>(index.ToString(), new int[0]);
+                    element.SetValue(_buffer[index]);
+                    return element;
+                }
+                return ((IList<T>)Elements)[index];
+            }
+            set => ((IList<T>)Elements)[index] = value;
+        }
 
         public int Count => ((IList<T>)Elements).Count;
 

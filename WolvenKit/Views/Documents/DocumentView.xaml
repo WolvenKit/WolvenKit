@@ -400,7 +400,7 @@
             <Grid.Resources>
 
                 <DataTemplate x:Key="CommmonTemplate">
-                    <TextBlock Padding="5" Text="{Binding Property.Value}"  />
+                    <TextBlock Padding="5" Text="{Binding Value}"  />
                 </DataTemplate>
 
                 <DataTemplate x:Key="StringTemplateView">

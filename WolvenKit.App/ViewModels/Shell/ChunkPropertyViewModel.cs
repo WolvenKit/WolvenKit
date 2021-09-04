@@ -20,6 +20,10 @@ namespace WolvenKit.ViewModels.Shell
         {
             Property = prop;
             IsSerialized = prop.IsSerialized;
+            Name = prop.REDName;
+            Value = prop.REDValue;
+            Type = prop.REDType;
+            
 
             _ = Property.ChildrEditableVariables
                 .AsObservableChangeSet()
@@ -64,22 +68,22 @@ namespace WolvenKit.ViewModels.Shell
 
         public IEditableVariable Property { get; }
 
-        
-        public bool IsSelected { get; set; }
-        public bool IsExpanded { get; set; }
 
-        public string Name => Property.REDName;
-        public string Type => Property.REDType;
-        public string Value => Property.REDValue;
-        [Reactive] public bool IsSerialized { get; set; }//=> Property.IsSerialized;
+        [Reactive] public bool IsSelected { get; set; }
+        [Reactive] public bool IsExpanded { get; set; }
+
+        [Reactive] public string Name { get; init; }
+        [Reactive] public string Type { get; init; } 
+        [Reactive] public string Value { get; init; }
+        [Reactive] public bool IsSerialized { get; init; }
 
         private readonly ReadOnlyObservableCollection<ChunkPropertyViewModel> _children;
         public ReadOnlyObservableCollection<ChunkPropertyViewModel> Children => _children;
 
 
-        public System.Windows.Media.Brush ForegroundColor => Property.IsSerialized
-                    ? System.Windows.Media.Brushes.Green
-            : System.Windows.Media.Brushes.Azure;
+        //public System.Windows.Media.Brush ForegroundColor => Property.IsSerialized
+        //            ? System.Windows.Media.Brushes.Green
+        //    : System.Windows.Media.Brushes.Azure;
 
 
         #endregion Properties
