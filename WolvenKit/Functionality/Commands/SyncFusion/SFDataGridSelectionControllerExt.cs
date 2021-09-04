@@ -166,17 +166,17 @@ namespace WolvenKit
                 }
                 else if (e.Action == NotifyCollectionChangedAction.Remove)
                 {
-                    if (IEVM.IsImportsSelected)
+                    if (IEVM.IsImportsSelected && e.OldItems.Cast<object>().All(l => l is ImportableItemViewModel))
                     {
                         foreach (ImportableItemViewModel o in e.OldItems)
                             o.IsChecked = false;
                     }
-                    if (IEVM.IsExportsSelected)
+                    if (IEVM.IsExportsSelected && e.OldItems.Cast<object>().All(l => l is ExportableItemViewModel))
                     {
                         foreach (ExportableItemViewModel o in e.OldItems)
                             o.IsChecked = false;
                     }
-                    if (IEVM.IsConvertsSelected)
+                    if (IEVM.IsConvertsSelected && e.OldItems.Cast<object>().All(l => l is ConvertableItemViewModel))
                     {
                         foreach (ConvertableItemViewModel o in e.OldItems)
                             o.IsChecked = false;
