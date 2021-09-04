@@ -306,7 +306,7 @@ namespace WolvenKit.Modkit.RED4
                         return false;
                     }
 
-                    EFormat texformat;
+                    DXGI_FORMAT texformat;
                     
                     if (WolvenTesting.IsTesting)
                     {
@@ -641,7 +641,7 @@ namespace WolvenKit.Modkit.RED4
             var height = blob.Header.SizeInfo.Height.Value;
             var width = blob.Header.SizeInfo.Width.Value;
 
-            const EFormat texformat = EFormat.R8G8B8A8_UNORM;
+            const DXGI_FORMAT texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
 
             DDSUtils.GenerateAndWriteHeader(outstream,
                 new DDSMetadata(width, height, 1, sliceCount, mipCount,
@@ -723,9 +723,9 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-        public bool ConvertXbmToDdsStream(Stream redInFile, Stream outstream, out EFormat texformat)
+        public bool ConvertXbmToDdsStream(Stream redInFile, Stream outstream, out DXGI_FORMAT texformat)
         {
-            texformat = EFormat.R8G8B8A8_UNORM;
+            texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
 
             // read the cr2wfile
             var cr2w = _wolvenkitFileService.TryReadRED4File(redInFile);

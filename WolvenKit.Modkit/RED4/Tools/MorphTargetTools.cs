@@ -322,7 +322,7 @@ namespace WolvenKit.Modkit.RED4
                 MemoryStream ms = new MemoryStream();
                 DDSMetadata metadata = new DDSMetadata(
                     TargetDiffsWidth[i], TargetDiffsWidth[i],
-                    1, 1, TargetDiffsMipLevelCounts[i], 0,0, EFormat.BC7_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 16, true);
+                    1, 1, TargetDiffsMipLevelCounts[i], 0,0, DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 16, true);
                 DDSUtils.GenerateAndWriteHeader(ms, metadata);
                 BinaryWriter bw = new BinaryWriter(ms);
                 bw.Write(bytes);

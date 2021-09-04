@@ -28,7 +28,7 @@ namespace WolvenKit.Common.DDS
         public uint Mipscount { get; }
         public uint MiscFlags { get; }
         public uint MiscFlags2 { get; }
-        public EFormat Format { get; }
+        public DXGI_FORMAT Format { get; }
         public TEX_DIMENSION Dimensions { get; }
 
 
@@ -53,7 +53,7 @@ namespace WolvenKit.Common.DDS
             Mipscount = (uint)metadata.mipLevels;
             MiscFlags = metadata.miscFlags;
             MiscFlags2 = metadata.miscFlags2;
-            Format = (EFormat)metadata.format;
+            Format = (DXGI_FORMAT)metadata.format;
             Dimensions = (TEX_DIMENSION)metadata.dimension;
 
             Bpp = bpp;
@@ -68,7 +68,7 @@ namespace WolvenKit.Common.DDS
             uint mipscount,
             uint miscFlags,
             uint miscFlags2,
-            EFormat format,
+            DXGI_FORMAT format,
             TEX_DIMENSION dimensions,
             uint bpp,
             bool dx10 = false)

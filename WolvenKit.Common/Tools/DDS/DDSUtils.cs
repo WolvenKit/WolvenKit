@@ -24,121 +24,7 @@ namespace WolvenKit.Common.DDS
         TEX_DIMENSION_TEXTURE3D = 4,
     };
 
-    /// <summary>
-    /// Texconv format: DXGI format without the DXGI_FORMAT_ prefix
-    /// </summary>
-    public enum EFormat
-    {
-        UNKNOWN = 0,
-
-        R32G32B32A32_FLOAT = 2,
-
-        //R32G32B32A32_UINT,
-        //R32G32B32A32_SINT,
-        //R32G32B32_FLOAT,
-        //R32G32B32_UINT,
-        //R32G32B32_SINT,
-        R16G16B16A16_FLOAT = 10,
-
-        //R16G16B16A16_UNORM,
-        //R16G16B16A16_UINT,
-        //R16G16B16A16_SNORM,
-        //R16G16B16A16_SINT,
-        //R32G32_FLOAT,
-        //R32G32_UINT,
-        //R32G32_SINT,
-        R10G10B10A2_UNORM = 24,
-
-        //R10G10B10A2_UINT,
-        //R11G11B10_FLOAT,
-        R8G8B8A8_UNORM = 28,
-
-        //R8G8B8A8_UNORM_SRGB,
-        //R8G8B8A8_UINT,
-        //R8G8B8A8_SNORM,
-        //R8G8B8A8_SINT,
-        //R16G16_FLOAT,
-        //R16G16_UNORM,
-        //R16G16_UINT,
-        //R16G16_SNORM,
-        //R16G16_SINT,
-        //R32_FLOAT,
-        R32_UINT = 42,
-
-        //R32_SINT,
-        R8G8_UNORM = 49,
-
-        //R8G8_UINT,
-        //R8G8_SNORM,
-        //R8G8_SINT,
-        R16_FLOAT = 54,
-
-        //R16_UNORM,
-        //R16_UINT,
-        //R16_SNORM,
-        //R16_SINT,
-        R8_UNORM = 61,
-
-        R8_UINT = 62,
-
-        //R8_SNORM,
-        //R8_SINT,
-        A8_UNORM = 65,
-
-        //R9G9B9E5_SHAREDEXP,
-        //R8G8_B8G8_UNORM,
-        //G8R8_G8B8_UNORM,
-        BC1_UNORM  = 71,
-
-        //BC1_UNORM_SRGB,
-        BC2_UNORM = 74,
-
-        //BC2_UNORM_SRGB,
-        BC3_UNORM = 77,
-
-        //BC3_UNORM_SRGB,
-        BC4_UNORM = 80,
-
-        //BC4_SNORM,
-        BC5_UNORM = 83,
-
-        //BC5_SNORM,
-        //B5G6R5_UNORM,
-        //B5G5R5A1_UNORM,
-        //B8G8R8A8_UNORM,
-        //B8G8R8X8_UNORM,
-        //R10G10B10_XR_BIAS_A2_UNORM,
-        //B8G8R8A8_UNORM_SRGB,
-        //B8G8R8X8_UNORM_SRGB,
-        //BC6H_UF16,
-        //BC6H_SF16,
-        BC7_UNORM = 98,
-
-        //BC7_UNORM_SRGB,
-        //AYUV,
-        //Y410,
-        //Y416,
-        //YUY2,
-        //Y210,
-        //Y216,
-        //B4G4R4A4_UNORM,
-        //DXT1,
-        //DXT2,
-        //DXT3,
-        //DXT4,
-        //DXT5,
-        //RGBA,
-        //BGRA,
-        //FP16,
-        //FP32,
-        //BPTC,
-        //BPTC_FLOAT
-    }
-
-
-
-
-    public static class DDSUtils
+   public static class DDSUtils
     {
         #region Fields
 
@@ -367,60 +253,60 @@ namespace WolvenKit.Common.DDS
                 {
                     switch (format)
                     {
-                        case EFormat.R32G32B32A32_FLOAT:
+                        case DXGI_FORMAT.DXGI_FORMAT_R32G32B32A32_FLOAT:
                             ddspf.dwFourCC = 116;
                             break;
 
-                        case EFormat.R16G16B16A16_FLOAT:
+                        case DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_FLOAT:
                             ddspf.dwFourCC = 113;
                             break;
 
-                        case EFormat.R10G10B10A2_UNORM:
+                        case DXGI_FORMAT.DXGI_FORMAT_R10G10B10A2_UNORM:
                             throw new NotImplementedException();
-                        case EFormat.R32_UINT:
+                        case DXGI_FORMAT.DXGI_FORMAT_R32_UINT:
                             throw new NotImplementedException();
-                        case EFormat.R8G8_UNORM:
+                        case DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM:
                             SetPixelmask(DDSPF_A8L8, ref ddspf);
                             break;
 
-                        case EFormat.R16_FLOAT:
+                        case DXGI_FORMAT.DXGI_FORMAT_R16_FLOAT:
                             ddspf.dwFourCC = 111;
                             break;
 
-                        case EFormat.R8_UNORM:
-                        case EFormat.R8_UINT:
+                        case DXGI_FORMAT.DXGI_FORMAT_R8_UNORM:
+                        case DXGI_FORMAT.DXGI_FORMAT_R8_UINT:
                             SetPixelmask(DDSPF_L8, ref ddspf);
                             break;
 
-                        case EFormat.A8_UNORM:
+                        case DXGI_FORMAT.DXGI_FORMAT_A8_UNORM:
                             SetPixelmask(DDSPF_A8, ref ddspf);
                             break;
 
-                        case EFormat.R8G8B8A8_UNORM:
+                        case DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM:
                             SetPixelmask(DDSPF_A8R8G8B8, ref ddspf);
                             break;
 
-                        case EFormat.BC1_UNORM:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM:
                             ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '1');
                             break;
 
-                        case EFormat.BC2_UNORM:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC2_UNORM:
                             ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '3');
                             break;
 
-                        case EFormat.BC3_UNORM:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM:
                             ddspf.dwFourCC = MAKEFOURCC('D', 'X', 'T', '5');
                             break;
 
-                        case EFormat.BC4_UNORM:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM:
                             ddspf.dwFourCC = MAKEFOURCC('B', 'C', '4', 'U');
                             break;
 
-                        case EFormat.BC5_UNORM:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM:
                             ddspf.dwFourCC = MAKEFOURCC('B', 'C', '5', 'U');
                             break;
 
-                        case EFormat.BC7_UNORM:
+                        case DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM:
                             dxt10 = true;
                             break;
 
@@ -449,34 +335,34 @@ namespace WolvenKit.Common.DDS
             var bpp = ddspf.dwRGBBitCount;
             switch (format)
             {
-                case EFormat.R8_UNORM:
+                case DXGI_FORMAT.DXGI_FORMAT_R8_UNORM:
                     header.dwPitchOrLinearSize = (width * bpp + 7) / 8;
                     break;
 
-                case EFormat.R32G32B32A32_FLOAT:
-                case EFormat.R16G16B16A16_FLOAT:
-                case EFormat.R10G10B10A2_UNORM:
-                case EFormat.R32_UINT:
-                case EFormat.R8_UINT:
-                case EFormat.R8G8_UNORM:
-                case EFormat.R16_FLOAT:
-                case EFormat.A8_UNORM:
-                case EFormat.R8G8B8A8_UNORM:
+                case DXGI_FORMAT.DXGI_FORMAT_R32G32B32A32_FLOAT:
+                case DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_FLOAT:
+                case DXGI_FORMAT.DXGI_FORMAT_R10G10B10A2_UNORM:
+                case DXGI_FORMAT.DXGI_FORMAT_R32_UINT:
+                case DXGI_FORMAT.DXGI_FORMAT_R8_UINT:
+                case DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM:
+                case DXGI_FORMAT.DXGI_FORMAT_R16_FLOAT:
+                case DXGI_FORMAT.DXGI_FORMAT_A8_UNORM:
+                case DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM:
                     header.dwPitchOrLinearSize = (width * bpp + 7) / 8;
                     header.dwFlags |= DDSD_PITCH;
                     break;
 
-                case EFormat.BC1_UNORM:
-                case EFormat.BC4_UNORM:
+                case DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM:
+                case DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM:
                     p = width * height / 2; //max(1,width ?4)x max(1,height ?4)x 8 (DXT1)
                     header.dwPitchOrLinearSize = (uint)(p);
                     header.dwFlags |= DDSD_LINEARSIZE;
                     break;
 
-                case EFormat.BC2_UNORM:
-                case EFormat.BC3_UNORM:
-                case EFormat.BC5_UNORM:
-                case EFormat.BC7_UNORM:
+                case DXGI_FORMAT.DXGI_FORMAT_BC2_UNORM:
+                case DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM:
+                case DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM:
+                case DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM:
                     p = width * height;     //max(1,width ?4)x max(1,height ?4)x 16 (DXT2-5)
                     header.dwPitchOrLinearSize = (uint)(p);
                     header.dwFlags |= DDSD_LINEARSIZE;
@@ -516,67 +402,67 @@ namespace WolvenKit.Common.DDS
                 // dxgiFormat
                 switch (format)
                 {
-                    case EFormat.R32G32B32A32_FLOAT:
+                    case DXGI_FORMAT.DXGI_FORMAT_R32G32B32A32_FLOAT:
                         dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R32G32B32A32_FLOAT;
                         break;
 
-                    case EFormat.R16G16B16A16_FLOAT:
+                    case DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_FLOAT:
                         dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_FLOAT;
                         break;
 
-                    case EFormat.R10G10B10A2_UNORM:
+                    case DXGI_FORMAT.DXGI_FORMAT_R10G10B10A2_UNORM:
                         dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R10G10B10A2_UNORM;
                         break;
 
-                    case EFormat.R8G8B8A8_UNORM:
+                    case DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM:
                         dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
                         break;
 
-                    case EFormat.R32_UINT:
+                    case DXGI_FORMAT.DXGI_FORMAT_R32_UINT:
                         dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R32_UINT;
                         break;
 
-                    case EFormat.R8G8_UNORM:
+                    case DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM:
                         dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM;
                         break;
 
-                    case EFormat.R16_FLOAT:
+                    case DXGI_FORMAT.DXGI_FORMAT_R16_FLOAT:
                         dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R16_FLOAT;
                         break;
 
-                    case EFormat.R8_UINT:
+                    case DXGI_FORMAT.DXGI_FORMAT_R8_UINT:
                         dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R8_UINT;
                         break;
 
-                    case EFormat.R8_UNORM:
+                    case DXGI_FORMAT.DXGI_FORMAT_R8_UNORM:
                         dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R8_UNORM;
                         break;
 
-                    case EFormat.A8_UNORM:
+                    case DXGI_FORMAT.DXGI_FORMAT_A8_UNORM:
                         dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_A8_UNORM;
                         break;
 
-                    case EFormat.BC1_UNORM:
+                    case DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM:
                         dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM;
                         break;
 
-                    case EFormat.BC2_UNORM:
+                    case DXGI_FORMAT.DXGI_FORMAT_BC2_UNORM:
                         dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC2_UNORM;
                         break;
 
-                    case EFormat.BC3_UNORM:
+                    case DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM:
                         dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM;
                         break;
 
-                    case EFormat.BC4_UNORM:
+                    case DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM:
                         dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM;
                         break;
 
-                    case EFormat.BC7_UNORM:
+                    case DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM:
                         dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM;
                         break;
 
-                    case EFormat.BC5_UNORM:
+                    case DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM:
                         dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM;
                         break;
 
@@ -659,50 +545,8 @@ namespace WolvenKit.Common.DDS
             return true;
         }
 
-        public static int ComputeRowPitch(int width, int height, EFormat format) => DirectXTexSharp.Format.ComputeRowPitch((DXGI_FORMAT_WRAPPED)format, width, height);
-        public static int ComputeSlicePitch(int width, int height, EFormat format) => DirectXTexSharp.Format.ComputeSlicePitch((DXGI_FORMAT_WRAPPED)format, width, height);
-
-        public static uint GetSlicePitch(uint width, uint height, EFormat format)
-        {
-            switch (format)
-            {
-                case EFormat.BC1_UNORM:
-                case EFormat.BC4_UNORM:
-                    return Math.Max(1, (height / 4)) * Math.Max(1, (width / 4)) * 8;
-                case EFormat.BC2_UNORM:
-                case EFormat.BC3_UNORM:
-                case EFormat.BC5_UNORM:
-                case EFormat.BC7_UNORM:
-                    return Math.Max(1, (height / 4)) * Math.Max(1, (width / 4)) * 16;
-                //case EFormat.R32G32B32A32_FLOAT:
-                //case EFormat.R16G16B16A16_FLOAT:
-                //case EFormat.BC6H_UF16:
-                case EFormat.R8G8B8A8_UNORM:
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(format), format, null);
-            }
-        }
-
-        public static uint GetRowPitch(uint width, EFormat textureformat)
-        {
-            switch (textureformat)
-            {
-                case EFormat.BC1_UNORM:
-                case EFormat.BC4_UNORM:
-                    return Math.Max(1, (width / 4)) * 8;
-                case EFormat.BC2_UNORM:
-                case EFormat.BC3_UNORM:
-                case EFormat.BC5_UNORM:
-                case EFormat.BC7_UNORM:
-                    return Math.Max(1, (width / 4)) * 16;
-
-                //( width * bits-per-pixel + 7 ) / 8
-                default:
-                    var bpp = (uint)DirectXTexSharp.Format.BitsPerPixel((DXGI_FORMAT_WRAPPED)textureformat);
-                    return (width * bpp) / 8;
-                    //throw new MissingFormatException($"Missing Format: {textureformat}");
-            }
-        }
+        public static int ComputeRowPitch(int width, int height, DXGI_FORMAT format) => DirectXTexSharp.Format.ComputeRowPitch((DXGI_FORMAT_WRAPPED)format, width, height);
+        public static int ComputeSlicePitch(int width, int height, DXGI_FORMAT format) => DirectXTexSharp.Format.ComputeSlicePitch((DXGI_FORMAT_WRAPPED)format, width, height);
 
         public static bool TryReadDdsHeader(Stream stream, out DDS_HEADER header)
         {
@@ -745,7 +589,7 @@ namespace WolvenKit.Common.DDS
         /// <param name="outfilename">The output filename. Extension will be overwritten with the correct filetype</param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static unsafe bool ConvertFromDdsAndSave(Stream ms, string outfilename, ExportArgs args)
+        public static bool ConvertFromDdsAndSave(Stream ms, string outfilename, ExportArgs args)
         {
             // check if stream is dds
             if (!DDSUtils.IsDdsFile(ms))
@@ -761,24 +605,18 @@ namespace WolvenKit.Common.DDS
                 return false;
 
             }
-            if (args is XbmExportArgs xbm)
+            switch (args)
             {
-                uext = xbm.UncookExtension;
-                vflip = xbm.Flip;
-            }
-            if (args is MlmaskExportArgs ml)
-            {
-                uext = ml.UncookExtension;
-            }
-            if (uext == EUncookExtension.dds)
-            {
-                return false;
+                case XbmExportArgs xbm:
+                    uext = xbm.UncookExtension;
+                    vflip = xbm.Flip;
+                    break;
+                case MlmaskExportArgs ml:
+                    uext = ml.UncookExtension;
+                    break;
             }
 
-            return ConvertFromDdsAndSave(ms, outfilename, (DirectXTexSharp.ESaveFileTypes)uext, vflip);
-
-
-
+            return uext != EUncookExtension.dds && ConvertFromDdsAndSave(ms, outfilename, (DirectXTexSharp.ESaveFileTypes)uext, vflip);
         }
 
         /// <summary>
@@ -795,10 +633,9 @@ namespace WolvenKit.Common.DDS
             byte[] rentedBuffer = null;
             try
             {
-                int len;
                 var offset = 0;
 
-                len = checked((int)ms.Length);
+                var len = checked((int)ms.Length);
                 rentedBuffer = ArrayPool<byte>.Shared.Rent(len);
 
                 int readBytes;
@@ -840,17 +677,16 @@ namespace WolvenKit.Common.DDS
         public static unsafe byte[] ConvertToDdsMemory(
             Stream ms,
             EUncookExtension filetype,
-            EFormat? format = null,
+            DXGI_FORMAT? format = null,
             bool vflip = false,
             bool hflip = false)
         {
             byte[] rentedBuffer = null;
             try
             {
-                int len;
                 var offset = 0;
 
-                len = checked((int)ms.Length);
+                var len = checked((int)ms.Length);
                 rentedBuffer = ArrayPool<byte>.Shared.Rent(len);
 
                 int readBytes;

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using FmodAudio;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
@@ -109,6 +108,7 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
         }
+
         private bool HandleTextures(RedRelativePath rawRelative, DirectoryInfo outDir, GlobalImportArgs args)
         {
             // dds can be imported to cubemap, envprobe, texarray, xbm, mlmask
@@ -338,7 +338,7 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 // get the format from the existing xbm
-                EFormat? format = null;
+                DXGI_FORMAT? format;
                 if (args.Keep)
                 {
                     using var redstream = new FileStream(redfile, FileMode.Open);
@@ -387,15 +387,11 @@ namespace WolvenKit.Modkit.RED4
                 
                 using var fs = new FileStream(infile, FileMode.Open);
                 var ddsbuffer = DDSUtils.ConvertToDdsMemory(fs, extAsEnum, format);
-                //ms.Write(ddsbuffer.Skip(148).ToArray());
                 ms.Write(ddsbuffer);
-                // remove first 148 bytes (dds header)
-                //var buffer = new byte[ddsbuffer.Length - 148];
-                //Buffer.BlockCopy(ddsbuffer, 148, buffer, 0, buffer.Length);
             }
             else
             {
-                using var fs = new FileStream(rawRelative.FullPath, FileMode.Open);
+                using var fs = new FileStream(infile, FileMode.Open);
                 fs.Seek(0, SeekOrigin.Begin);
                 fs.CopyTo(ms);
             }
@@ -489,7 +485,7 @@ namespace WolvenKit.Modkit.RED4
                 header.TextureInfo = texInfo;
                 // header.TextureInfo
                 var mipMapInfo = new CArray<rendRenderTextureBlobMipMapInfo>(red, blob.Header, "mipMapInfo") { IsSerialized = true };
-                //using (var reader = new BinaryReader(ms))
+
                 {
                     ms.Seek(148, SeekOrigin.Begin);
 
@@ -499,12 +495,10 @@ namespace WolvenKit.Modkit.RED4
                     for (var i = 0; i < metadata.Mipscount; i++)
                     {
                         // slicepitch
-                        var slicepitch = (int)DDSUtils.ComputeSlicePitch((int)mipsizeW, (int)mipsizeH, fmt);
+                        var slicepitch = DDSUtils.ComputeSlicePitch((int)mipsizeW, (int)mipsizeH, fmt);
                         offset += slicepitch;   
                         //rowpitch
                         var rowpitch = DDSUtils.ComputeRowPitch((int)mipsizeW, (int)mipsizeH, fmt);
-
-                        //var buffer = reader.ReadBytes(slicepitch);
 
                         var info = new rendRenderTextureBlobMipMapInfo(red, mipMapInfo, i.ToString()) { IsSerialized = true };
                         info.Layout = new rendRenderTextureBlobMemoryLayout(red, info, "layout")
