@@ -54,7 +54,8 @@ namespace WolvenKit.Views.Templates
 
             // get all possible chunks in the cr2w file
             var reftype = AssemblyDictionary.GetTypeByName(iptr.ReferenceType);
-            var available = AssemblyDictionary.GetSubClassesOf(reftype).Select(x => x.Name);
+            var available = AssemblyDictionary.GetSubClassesOf(reftype).Select(x => x.Name).ToList();
+            available.Add(reftype.Name);
 
             var availableChunks = iptr.Cr2wFile.Chunks.Where(x => available.Contains(x.REDType));
 
