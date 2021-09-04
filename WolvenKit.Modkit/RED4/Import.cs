@@ -8,9 +8,11 @@ using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Modkit.RED4.Opus;
+using WolvenKit.Interfaces.Extensions;
+using WolvenKit.Modkit.Exceptions;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.Modkit.RED4.MLMask;
+using WolvenKit.RED4.CR2W.Reflection;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -83,7 +85,7 @@ namespace WolvenKit.Modkit.RED4
         }
         private bool ImportMlmask(RedRelativePath rawRelative, DirectoryInfo outDir)
         {
-            MLMASK mlmask = new MLMASK();
+            var mlmask = new MLMASK();
             var ext = rawRelative.Extension;
             if (Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
             {
@@ -91,21 +93,22 @@ namespace WolvenKit.Modkit.RED4
                 try
                 {
                     mlmask.Import(rawRelative.ToFileInfo(), redfile.ToFileInfo());
-                    _loggerService.Success($"Successfully created {redfile.ToString()}");
+                    _loggerService.Success($"Successfully created {redfile}");
                     return true;
                 }
                 catch(Exception ex)
                 {
-                    _loggerService.Error($"Unexpected error occured while importing {rawRelative.ToString()}: {ex.Message}");
+                    _loggerService.Error($"Unexpected error occured while importing {rawRelative}: {ex.Message}");
                     return false;
                 }
             }
             else
             {
-                _loggerService.Error($"Unexpected error occured while importing {rawRelative.ToString()}");
+                _loggerService.Error($"Unexpected error occured while importing {rawRelative}");
                 return false;
             }
         }
+
         private bool HandleTextures(RedRelativePath rawRelative, DirectoryInfo outDir, GlobalImportArgs args)
         {
             // dds can be imported to cubemap, envprobe, texarray, xbm, mlmask
@@ -129,6 +132,10 @@ namespace WolvenKit.Modkit.RED4
                         return cookedTextureFormat == ECookedTextureFormat.xbm
                             ? ImportXbm(rawRelative, outDir, args.Get<XbmImportArgs>())
                             : RebuildTexture(redfile);
+                    }
+                    else
+                    {
+                        return ImportXbm(rawRelative, outDir, args.Get<XbmImportArgs>());
                     }
                 }
             }
@@ -194,7 +201,7 @@ namespace WolvenKit.Modkit.RED4
             foreach (var fi in rawFilesList)
             {
                 var ext = fi.TrimmedExtension();
-                if (!Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
+                if (!Enum.TryParse(ext, true, out ERawFileFormat _))
                 {
                     failsCount++;
                     continue;
@@ -253,7 +260,7 @@ namespace WolvenKit.Modkit.RED4
                 font.FontBuffer.Buffer.SetValue((ushort)1);
 
                 // add chunk
-                red.CreateChunk(font, 0);
+                red.CreateChunk(font);
 
                 // add fake buffer
                 red.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()));
@@ -272,7 +279,7 @@ namespace WolvenKit.Modkit.RED4
                 red.Buffers[0] = new CR2WBufferWrapper(new CR2WBuffer()
                 {
                     flags = 0xE0000, //TODO: find out what to set here, but for fnt files these are always 0xE0000
-                    index = (uint)0,
+                    index = 0,
                     offset = offset,
                     diskSize = zsize,
                     memSize = (uint)inbuffer.Length,
@@ -285,6 +292,11 @@ namespace WolvenKit.Modkit.RED4
 
                 // write to file
                 var redpath = Path.ChangeExtension(rawRelative.FullName, ECookedFileFormat.fnt.ToString());
+                if (redpath == null)
+                {
+                    return false;
+                }
+
                 using var fs = new FileStream(redpath, FileMode.Create, FileAccess.Write);
                 ms.Seek(0, SeekOrigin.Begin);
                 ms.CopyTo(fs);
@@ -299,12 +311,12 @@ namespace WolvenKit.Modkit.RED4
         private bool ImportXbm(RedRelativePath rawRelative, DirectoryInfo outDir, XbmImportArgs args)
         {
             var rawExt = rawRelative.Extension;
-            byte[] buffer;
-            string redfile = "";
+            var redfile = "";
+            var infile = rawRelative.FullName;
 
+            // checks
             if (args.Keep)
             {
-                //var buffer = new FileInfo(ddsPath);
                 redfile = FindRedFile(rawRelative, outDir, ERedExtension.xbm.ToString());
 
                 if (string.IsNullOrEmpty(redfile))
@@ -313,6 +325,8 @@ namespace WolvenKit.Modkit.RED4
                     return false;
                 }
             }
+
+            using var ms = new MemoryStream();
 
             // convert to dds if not already
             if (rawExt != EUncookExtension.dds.ToString())
@@ -323,76 +337,70 @@ namespace WolvenKit.Modkit.RED4
                     return false;
                 }
 
-                var infile = rawRelative.FullName;
-                using (var fs = new FileStream(infile, FileMode.Open))
+                // get the format from the existing xbm
+                DXGI_FORMAT? format;
+                if (args.Keep)
                 {
-                    EFormat? format = null;
-                    if (args.Keep)
+                    using var redstream = new FileStream(redfile, FileMode.Open);
+                    using var fileReader = new BinaryReader(redstream);
+
+                    var cr2w = _wolvenkitFileService.TryReadRED4File(fileReader);
+                    if (cr2w == null)
                     {
-                        using var redstream = new FileStream(redfile, FileMode.Open);
-                        using var fileReader = new BinaryReader(redstream);
-
-                        var cr2w = _wolvenkitFileService.TryReadRED4File(fileReader);
-                        if (cr2w == null)
-                        {
-                            return false;
-                        }
-
-                        if (cr2w.StringDictionary[1] != "CBitmapTexture")
-                        {
-                            return false;
-                        }
-
-                        if (cr2w.Chunks.FirstOrDefault()?.Data is not CBitmapTexture xbm ||
-                            cr2w.Chunks[1]?.Data is not rendRenderTextureBlobPC blob)
-                        {
-                            return false;
-                        }
-
-                        var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
-                        if (xbm.Setup.RawFormat?.Value != null)
-                        {
-                            rawfmt = xbm.Setup.RawFormat.Value;
-                        }
-
-                        var compression = Enums.ETextureCompression.TCM_None;
-                        if (xbm.Setup.Compression?.Value != null)
-                        {
-                            compression = xbm.Setup.Compression.Value;
-                        }
-
-                        format = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
-
+                        return false;
                     }
 
+                    if (cr2w.StringDictionary[1] != "CBitmapTexture")
+                    {
+                        return false;
+                    }
+
+                    if (cr2w.Chunks.FirstOrDefault()?.Data is not CBitmapTexture xbm ||
+                        cr2w.Chunks[1]?.Data is not rendRenderTextureBlobPC)
+                    {
+                        return false;
+                    }
+
+                    var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
+                    if (xbm.Setup.RawFormat?.Value != null)
+                    {
+                        rawfmt = xbm.Setup.RawFormat.Value;
+                    }
+
+                    var compression = Enums.ETextureCompression.TCM_None;
+                    if (xbm.Setup.Compression?.Value != null)
+                    {
+                        compression = xbm.Setup.Compression.Value;
+                    }
+
+                    format = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
 
 
-                    var ddsbuffer = DDSUtils.ConvertToDdsMemory(fs, extAsEnum, format);
-
-                    // remove first 148 bytes (dds header)
-                    buffer = new byte[ddsbuffer.Length - 148];
-                    Buffer.BlockCopy(ddsbuffer, 148, buffer, 0, buffer.Length);
                 }
+                else
+                {
+                    // TODO
+                    var md = DDSUtils.GetMetadataFromTGAFile(infile);
+                    format = md.Format;
+                }
+
+                
+                using var fs = new FileStream(infile, FileMode.Open);
+                var ddsbuffer = DDSUtils.ConvertToDdsMemory(fs, extAsEnum, format);
+                ms.Write(ddsbuffer);
             }
             else
             {
-                var infile = rawRelative.FullName;
-
-                using (var fs = new FileStream(infile, FileMode.Open))
-                using (var ms = new MemoryStream())
-                {
-                    fs.Seek(148, SeekOrigin.Begin);
-                    fs.CopyTo(ms);
-                    buffer = ms.ToArray();
-                }
-
-                //buffer = File.ReadAllBytes(infile).Skip(148).ToArray();
+                using var fs = new FileStream(infile, FileMode.Open);
+                fs.Seek(0, SeekOrigin.Begin);
+                fs.CopyTo(ms);
             }
 
+            // create xbm
             if (args.Keep)
             {
                 using var fileStream = new FileStream(redfile, FileMode.Open, FileAccess.ReadWrite);
-                var result = Rebuild(fileStream, new List<byte[]>() {buffer});
+                var result = Rebuild(fileStream, new List<byte[]>() {ms.ToByteArray().Skip(148).ToArray()});
 
                 if (result)
                 {
@@ -407,116 +415,215 @@ namespace WolvenKit.Modkit.RED4
             }
             else
             {
-                _loggerService.Warning($"{rawRelative.Name} - Direct xbm importing is not implemented");
+                // read dds metadata
+                ms.Seek(0, SeekOrigin.Begin);
+
+                var span = new Span<byte>(new byte[148]);
+                ms.Read(span);
+
+                if (!DDSUtils.TryGetMetadataFromDDSMemory(span, out var metadata))
+                {
+                    return false;
+                }
+
+                var width = metadata.Width;
+                var height = metadata.Height;
+                var mipCount = metadata.Mipscount;
+                var slicecount = metadata.Slicecount;
+                var alignment = metadata.Bpp;
+                var fmt = metadata.Format;
+                var textureDataSize = ms.Length - 148; //GetBlockSize(width, fmt);
 
 
 
+                // create cr2wfile
+                var red = new CR2WFile();
+                red.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()));
 
-                //// read dds metadata
-                //var metadata = DDSUtils.ReadHeader(ddsPath);
-                //var width = metadata.Width;
-                //var height = metadata.Height;
+                // create xbm chunk
+                var xbm = new CBitmapTexture(red, null, "CBitmapTexture");
+                xbm.CookingPlatform = new CEnum<Enums.ECookingPlatform>(red, xbm, "cookingPlatform") { Value = Enums.ECookingPlatform.PLATFORM_PC, IsSerialized = true };
+                xbm.Width = new CUInt32(red, xbm, "width") { Value = width, IsSerialized = true };
+                xbm.Height = new CUInt32(red, xbm, "height") { Value = height, IsSerialized = true };
+                xbm.Setup = new STextureGroupSetup(red, xbm, "setup") { IsSerialized = true };
 
-                //// create cr2wfile
-                //var red = new CR2WFile();
-                //red.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()));
-                //// create xbm chunk
-                //var xbm = new CBitmapTexture(red, null, "CBitmapTexture");
-                //xbm.CookingPlatform = new CEnum<Enums.ECookingPlatform>(red, xbm, "cookingPlatform")
-                //{
-                //    Value = Enums.ECookingPlatform.PLATFORM_PC,
-                //    IsSerialized = true
-                //};
-                //xbm.Width = new CUInt32(red, xbm, "width") { Value = width, IsSerialized = true };
-                //xbm.Height = new CUInt32(red, xbm, "height") { Value = height, IsSerialized = true };
-                //xbm.Setup = new STextureGroupSetup(red, xbm, "setup")
-                //{
-                //    IsSerialized = true
-                //};
-                //SetTextureGroupSetup(xbm.Setup, red);
-                //xbm.RenderResourceBlob = new CHandle<IRenderResourceBlob>(red, xbm, "renderTextureResource")
-                //    .SetValue(2) as CHandle<IRenderResourceBlob>;
+                SetTextureGroupSetup(xbm.Setup, red);
 
-                //// create rendRenderTextureBlobPC chunk
-                //var blob = new rendRenderTextureBlobPC(red, null, "rendRenderTextureBlobPC");
-                //blob.Header = new rendRenderTextureBlobHeader(red, blob.ParentVar as CVariable, "header")
-                //{
-                //    IsSerialized = true
-                //};
-                //blob.TextureData = new serializationDeferredDataBuffer(red, blob.ParentVar as CVariable, "textureData")
-                //    .SetValue(1) as serializationDeferredDataBuffer;
+                // blob
+                var renderTextureResource = new rendRenderTextureResource(red, xbm, "renderTextureResource") { IsSerialized = true };
+                renderTextureResource.RenderResourceBlobPC = new CHandle<IRenderResourceBlob>(red, renderTextureResource, "renderResourceBlobPC")
+                    .SetValue(2) as CHandle<IRenderResourceBlob>;
+                xbm.RenderTextureResource = renderTextureResource;
+
+                // create rendRenderTextureBlobPC chunk
+                var blob = new rendRenderTextureBlobPC(red, null, "rendRenderTextureBlobPC") { IsSerialized = true };
+                // header
+                var header = new rendRenderTextureBlobHeader(red, blob, "header")
+                    {
+                        IsSerialized = true,
+                        Version = new CUInt32(red, blob.Header, "version").SetValue(2) as CUInt32,
+                        Flags = new CUInt32(red, blob.Header, "flags").SetValue(1) as CUInt32
+                    };
+                // header.SizeInfo
+                var sizeInfo = new rendRenderTextureBlobSizeInfo(red, blob.Header, "sizeInfo")
+                    {
+                        IsSerialized = true,
+                        Width = new CUInt16(red, header.SizeInfo, "width").SetValue((ushort)width) as CUInt16,
+                        Height = new CUInt16(red, header.SizeInfo, "height").SetValue((ushort)height) as CUInt16
+                    };
+                header.SizeInfo = sizeInfo;
+                // header.TextureInfo
+                var texInfo = new rendRenderTextureBlobTextureInfo(red, blob.Header, "textureInfo")
+                    {
+                        IsSerialized = true,
+                        TextureDataSize = new CUInt32(red, header.TextureInfo, "textureDataSize").SetValue((uint)textureDataSize) as CUInt32,
+                        SliceSize = new CUInt32(red, header.TextureInfo, "sliceSize").SetValue((uint)textureDataSize) as CUInt32,
+                        DataAlignment = new CUInt32(red, header.TextureInfo, "dataAlignment").SetValue(alignment) as CUInt32,
+                        SliceCount = new CUInt16(red, header.TextureInfo, "sliceCount").SetValue((ushort)slicecount) as CUInt16,
+                        MipCount = new CUInt8(red, header.TextureInfo, "mipCount").SetValue((byte)mipCount) as CUInt8
+                    };
+                header.TextureInfo = texInfo;
+                // header.TextureInfo
+                var mipMapInfo = new CArray<rendRenderTextureBlobMipMapInfo>(red, blob.Header, "mipMapInfo") { IsSerialized = true };
+
+                {
+                    ms.Seek(148, SeekOrigin.Begin);
+
+                    var mipsizeH = height;
+                    var mipsizeW = width;
+                    var offset = 0;
+                    for (var i = 0; i < metadata.Mipscount; i++)
+                    {
+                        // slicepitch
+                        var slicepitch = DDSUtils.ComputeSlicePitch((int)mipsizeW, (int)mipsizeH, fmt);
+                        offset += slicepitch;   
+                        //rowpitch
+                        var rowpitch = DDSUtils.ComputeRowPitch((int)mipsizeW, (int)mipsizeH, fmt);
+
+                        var info = new rendRenderTextureBlobMipMapInfo(red, mipMapInfo, i.ToString()) { IsSerialized = true };
+                        info.Layout = new rendRenderTextureBlobMemoryLayout(red, info, "layout")
+                        {
+                            IsSerialized = true,
+                            RowPitch = new CUInt32(red, info.Layout, "rowPitch").SetValue(rowpitch) as CUInt32,
+                            SlicePitch = new CUInt32(red, info.Layout, "slicePitch").SetValue((uint)slicepitch) as CUInt32
+                        };
+                        info.Placement = new rendRenderTextureBlobPlacement(red, info, "placement")
+                        {
+                            IsSerialized = true,
+                            Offset = new CUInt32(red, info.Layout, "offset").SetValue((uint)offset) as CUInt32,
+                            Size = new CUInt32(red, info.Layout, "size").SetValue((uint)slicepitch) as CUInt32
+                        };
 
 
 
-                // kraken ddsfile
-                // remove dds header
+                        mipMapInfo.Add(info);
 
-                // compress file
+                        mipsizeH = Math.Max(4, mipsizeH / 2);
+                        mipsizeW = Math.Max(4, mipsizeW / 2);
+                    }
+                }
+                header.MipMapInfo = mipMapInfo;
+                blob.Header = header;
+                // texdata buffer ref
+                blob.TextureData = new serializationDeferredDataBuffer(red, blob, "textureData")
+                    .SetValue(1) as serializationDeferredDataBuffer;
 
-                // append to cr2wfile
+                red.CreateChunk(xbm);
+                var parentChunk = red.Chunks.First();
+                red.CreateChunk(blob, 1, parentChunk as CR2WExportWrapper);
 
-                // update cr2w headers
+                // write
+                var outpath = new RedRelativePath(rawRelative)
+                    .ChangeBaseDir(outDir)
+                    .ChangeExtension(ERedExtension.xbm.ToString());
+                using var fs = new FileStream(outpath.FullPath, FileMode.Create, FileAccess.ReadWrite);
+                //using (var outms = new MemoryStream())
+                using (var bw = new BinaryWriter(fs))
+                {
+                    // write cr2w file
+                    red.Write(bw);
 
-                throw new NotImplementedException();
+                    // add buffer
+                    fs.Seek(0, SeekOrigin.Begin);
+                    var result = Rebuild(fs, new List<byte[]>() { ms.ToByteArray().Skip(148).ToArray() });
+                    if (!result)
+                    {
+                        throw new ImportException();
+                    }
+                }
             }
 
-            #region local functions
+            return true;
 
+            #region local functions
 #pragma warning disable CS8321 // Local function is declared but never used
-            void SetTextureGroupSetup(STextureGroupSetup setup, CR2WFile cr2w)
-#pragma warning restore CS8321 // Local function is declared but never used
+
+            void SetTextureGroupSetup(STextureGroupSetup setup, IRed4EngineFile cr2w)
             {
                 // first check the user-texture group
-                var (compression, rawformat, flags) = CommonFunctions.GetRedFormatsFromTextureGroup(args.TextureGroup);
-                setup.Group = new CEnum<Enums.GpuWrapApieTextureGroup>(cr2w, setup.ParentVar as CVariable, "group")
+                //var (compression, rawformat, flags) = CommonFunctions.GetRedFormatsFromTextureGroup(args.TextureGroup);
+
+
+
+                setup.Group = new CEnum<Enums.GpuWrapApieTextureGroup>(cr2w, setup, "group")
                 {
                     IsSerialized = true,
                     Value = args.TextureGroup
                 };
-                if (flags is CommonFunctions.ETexGroupFlags.Both or CommonFunctions.ETexGroupFlags.CompressionOnly)
+                setup.Compression = new CEnum<Enums.ETextureCompression>(cr2w, setup, "compression")
                 {
-                    setup.Compression = new CEnum<Enums.ETextureCompression>(cr2w, setup.ParentVar as CVariable, "setup")
-                    {
-                        IsSerialized = true,
-                        Value = compression
-                    };
-                }
-
-                if (flags is CommonFunctions.ETexGroupFlags.Both or CommonFunctions.ETexGroupFlags.RawFormatOnly)
+                    IsSerialized = true,
+                    Value = Enums.ETextureCompression.TCM_None
+                };
+                setup.RawFormat = new CEnum<Enums.ETextureRawFormat>(cr2w, setup, "rawFormat")
                 {
-                    setup.RawFormat = new CEnum<Enums.ETextureRawFormat>(cr2w, setup.ParentVar as CVariable, "rawFormat")
-                    {
-                        IsSerialized = true,
-                        Value = rawformat
-                    };
-                }
+                    IsSerialized = true,
+                    Value = Enums.ETextureRawFormat.TRF_TrueColor
+                };
 
-                // if that didn't work, interpret the filename suffix
-                if (rawRelative.Name.Contains('_'))
-                {
-                    // try interpret suffix
-                    switch (rawRelative.Name.Split('_').Last())
-                    {
-                        case "d":
-                        case "d01":
+                //if (flags is CommonFunctions.ETexGroupFlags.Both or CommonFunctions.ETexGroupFlags.CompressionOnly)
+                //{
+                //    setup.Compression = new CEnum<Enums.ETextureCompression>(cr2w, setup.ParentVar as CVariable, "setup")
+                //    {
+                //        IsSerialized = true,
+                //        Value = compression
+                //    };
+                //}
 
-                            break;
-                        case "e":
+                //if (flags is CommonFunctions.ETexGroupFlags.Both or CommonFunctions.ETexGroupFlags.RawFormatOnly)
+                //{
+                //    setup.RawFormat = new CEnum<Enums.ETextureRawFormat>(cr2w, setup.ParentVar as CVariable, "rawFormat")
+                //    {
+                //        IsSerialized = true,
+                //        Value = rawformat
+                //    };
+                //}
 
-                            break;
-                        case "r":
-                        case "r01":
+                //// if that didn't work, interpret the filename suffix
+                //if (rawRelative.Name.Contains('_'))
+                //{
+                //    // try interpret suffix
+                //    switch (rawRelative.Name.Split('_').Last())
+                //    {
+                //        case "d":
+                //        case "d01":
 
-                            break;
-                        default:
-                            break;
-                    }
-                }
+                //            break;
+                //        case "e":
+
+                //            break;
+                //        case "r":
+                //        case "r01":
+
+                //            break;
+                //    }
+                //}
 
                 // if that also didn't work, just use default or skip
                 //TODO
             }
 
+#pragma warning restore CS8321 // Local function is declared but never used
             #endregion
 
         }
@@ -545,8 +652,6 @@ namespace WolvenKit.Modkit.RED4
                             break;
                         case GltfImportAsFormat.Morphtarget:
                             result = ImportTargetBaseMesh(rawRelative.ToFileInfo(), redFs, args.Archives, outDir.FullName, args.validationMode);
-                            break;
-                        default:
                             break;
                     }
 

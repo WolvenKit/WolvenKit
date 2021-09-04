@@ -106,9 +106,9 @@
                 <syncfusion:SfTreeGrid.Columns>
 
                     <syncfusion:TreeGridTextColumn MappingName="Name" />
-                    <!--<syncfusion:TreeGridTextColumn MappingName="DisplayString" HeaderText="Value" />-->
 
-                    <syncfusion:TreeGridTemplateColumn MappingName="DisplayString" HeaderText="Value"
+                    <syncfusion:TreeGridTemplateColumn MappingName="DisplayString"
+                                                       HeaderText="Value"
                                                        AllowFocus="True"
                                                         >
                         <syncfusion:TreeGridTemplateColumn.CellTemplate>

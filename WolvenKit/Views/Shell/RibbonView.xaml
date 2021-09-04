@@ -129,7 +129,7 @@
 
         <syncfusion:Ribbon
             x:Name="_ribbon"
-            Margin="4,0,0,0"
+            Margin="0,0,0,0"
             VerticalAlignment="Stretch"
             Panel.ZIndex="0"
             syncfusion:Ribbon.IsAutoSizeFormEnabled="True"
@@ -142,9 +142,9 @@
             ShowCustomizeRibbon="True"
             Visibility="Visible">
 
-            <syncfusion:Ribbon.QuickAccessToolBar>
+            <!--<syncfusion:Ribbon.QuickAccessToolBar>
                 <syncfusion:QuickAccessToolBar Margin="65,0,0,0" />
-            </syncfusion:Ribbon.QuickAccessToolBar>
+            </syncfusion:Ribbon.QuickAccessToolBar>-->
 
             <!--  Contextual Tabs  -->
             <syncfusion:Ribbon.ContextTabGroups>
@@ -740,6 +740,7 @@
                                         Height="auto"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Stretch"
+                                        Foreground="Green"
                                         Kind="Play" />
                                 </DataTemplate>
                             </syncfusion:RibbonButton.IconTemplate>
@@ -837,6 +838,7 @@
                                         Height="auto"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Stretch"
+                                        Foreground="CornflowerBlue"
                                         Kind="Save" />
                                 </DataTemplate>
                             </syncfusion:RibbonButton.IconTemplate>
@@ -856,6 +858,7 @@
                                         Height="auto"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Stretch"
+                                        Foreground="CornflowerBlue"
                                         Kind="SaveAll" />
                                 </DataTemplate>
                             </syncfusion:RibbonButton.IconTemplate>
@@ -891,7 +894,7 @@
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
-                                    Foreground="{DynamicResource MaterialDarkRibbonBackgroundBrush}"
+                                    Foreground="DarkGoldenrod"
                                     Kind="FolderOpened" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
@@ -911,6 +914,7 @@
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
+
                                     Kind="NewFolder" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
@@ -930,6 +934,7 @@
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
+                                    Foreground="Green"
                                     Kind="Play" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
@@ -1032,6 +1037,7 @@
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
+                                    Foreground="CornflowerBlue"
                                     Kind="Save" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
@@ -1051,6 +1057,7 @@
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
+                                    Foreground="CornflowerBlue"
                                     Kind="SaveAll" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
@@ -1741,7 +1748,7 @@
         <Border
             Width="70"
             Height="30"
-            Margin="0,24,0,0"
+            Margin="0,-2,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="top"
             Background="{DynamicResource ContentBackgroundAlt2}"
@@ -1750,7 +1757,7 @@
         <Border
             Width="42"
             Height="49"
-            Margin="13,0,0,0"
+            Margin="13,-30,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Background="Transparent"
@@ -1777,7 +1784,7 @@
         <Border
             Width="42"
             Height="49"
-            Margin="13,0,0,0"
+            Margin="13,-30,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="top"
             Background="Transparent"
@@ -1803,7 +1810,7 @@
             </Border>
         </Border>
 
-        <feather:GuidedTour
+        <!--<feather:GuidedTour
             Name="guide"
             AllowDismiss="True"
             Animate="True" />
@@ -1856,7 +1863,7 @@
                     </Grid>
                 </Grid>
             </Border>
-        </hc:Drawer>
+        </hc:Drawer>-->
         
     </Grid>
     

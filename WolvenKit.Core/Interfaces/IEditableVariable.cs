@@ -7,7 +7,7 @@ using FastMember;
 
 namespace WolvenKit.Common.Model.Cr2w
 {
-    public interface IEditableVariable
+    public interface IEditableVariable : INotifyPropertyChanged
     {
         IWolvenkitFile Cr2wFile { get; set; }
 

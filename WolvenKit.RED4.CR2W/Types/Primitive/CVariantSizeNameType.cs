@@ -85,7 +85,7 @@ namespace WolvenKit.RED4.CR2W.Types
             return copy;
         }
 
-        public override List<IEditableVariable> GetEditableVariables() => Variant?.GetEditableVariables();
+        public override List<IEditableVariable> GetEditableVariables() => new(){Variant}; /*Variant?.GetEditableVariables();*/
         public static CVariable Create(IRed4EngineFile cr2w, CVariable parent, string name) => new CVariantSizeNameType(cr2w, parent, name);
 
         public override CVariable SetValue(object val)

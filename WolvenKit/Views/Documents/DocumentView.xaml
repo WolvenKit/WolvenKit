@@ -13,6 +13,7 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     xmlns:documents="clr-namespace:WolvenKit.ViewModels.Documents;assembly=WolvenKit.App"
+    xmlns:shell="clr-namespace:WolvenKit.ViewModels.Shell;assembly=WolvenKit.App"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d"
@@ -233,7 +234,15 @@
 
         </Grid.Resources>
 
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Additional Navigation -->
         <syncfusion:SfNavigationDrawer
+            Grid.Column="0"
             x:Name="navigationDrawer"
             DisplayMode="Expanded"
             IsOpen="False">
@@ -242,19 +251,8 @@
 
                 <Grid>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Expander
-                        Grid.Column="0"
-                        ExpandDirection="Right"
-                        IsExpanded="True">
-                        <Grid>
-
-                            <Grid x:Name="CHUNKSVISIBILITY">
-                                <syncfusion:SfTreeGrid
+                    <Grid x:Name="CHUNKSVISIBILITY">
+                        <syncfusion:SfTreeGrid
                                     x:Name="TreeView"
                                     AllowEditing="False"
                                     AllowFiltering="True"
@@ -262,249 +260,85 @@
                                     AutoExpandMode="RootNodesExpanded"
                                     AutoGenerateColumns="False"
                                     ChildPropertyName="Children"
-                                    ColumnSizer="SizeToCells"
-                                    EditTrigger="OnTap"
+                                    ColumnSizer="FillColumn"
                                     ItemsSource="{Binding Chunks}"
                                     SelectedItem="{Binding SelectedChunk}"
                                     Style="{DynamicResource SyncfusionSfTreeGridStyle}">
-                                    <syncfusion:SfTreeGrid.Resources>
-                                        <Style TargetType="syncfusion:TreeGridCell">
-                                            <Setter Property="BorderBrush" Value="Transparent" />
-                                            <Setter Property="BorderThickness" Value="0" />
-                                        </Style>
-                                        <Style TargetType="syncfusion:TreeGridExpanderCell">
-                                            <Setter Property="BorderBrush" Value="Transparent" />
-                                            <Setter Property="BorderThickness" Value="0" />
-                                        </Style>
-                                        <converters1:ExtensionToBitmapConverter x:Key="ExtensionToBmp" />
 
-                                    </syncfusion:SfTreeGrid.Resources>
-                                    <syncfusion:SfTreeGrid.Columns>
-                                        <syncfusion:TreeGridTextColumn HeaderText="Chunks" MappingName="Name" />
-                                    </syncfusion:SfTreeGrid.Columns>
+                            <syncfusion:SfTreeGrid.Resources>
+                                <Style TargetType="syncfusion:TreeGridCell">
+                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                    <Setter Property="BorderThickness" Value="0" />
+                                </Style>
+                                <Style TargetType="syncfusion:TreeGridExpanderCell">
+                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                    <Setter Property="BorderThickness" Value="0" />
+                                </Style>
+                                <converters1:ExtensionToBitmapConverter x:Key="ExtensionToBmp" />
 
-
-
-                                </syncfusion:SfTreeGrid>
-                            </Grid>
-
-                            <Grid x:Name="IMPORTSVISISBILITY" Visibility="Collapsed">
-                                <ListView
-                                    Margin="20"
-                                    ItemsSource="{Binding Imports}"
-                                    SelectedItem="{Binding SelectedImport}">
-
-                                    <ListView.View>
-                                        <GridView>
-                                            <GridViewColumn DisplayMemberBinding="{Binding DepotPathStr}" Header="Name" />
-                                        </GridView>
-                                    </ListView.View>
-
-                                    <hc:Interaction.Triggers>
-                                        <hc:EventTrigger EventName="MouseDoubleClick">
-                                            <hc:EventToCommand Command="{Binding OpenImportCommand}" CommandParameter="{Binding SelectedImport}" />
-                                        </hc:EventTrigger>
-                                    </hc:Interaction.Triggers>
-                                </ListView>
-
-                            </Grid>
-
-                            <Grid x:Name="BUFFERSVISIBILITY" Visibility="Collapsed">
-                                <ListView ItemsSource="{Binding Buffers}">
-                                    <hc:Interaction.Triggers>
-                                        <hc:EventTrigger EventName="MouseDoubleClick">
-                                            <hc:EventToCommand Command="{Binding OpenBufferCommand}" PassEventArgsToCommand="True" />
-                                        </hc:EventTrigger>
-                                    </hc:Interaction.Triggers>
-
-                                    <ListView.View>
-                                        <GridView>
-                                            <GridViewColumn DisplayMemberBinding="{Binding Index}" Header="Name" />
-                                        </GridView>
-                                    </ListView.View>
-                                </ListView>
-                            </Grid>
-
-                            <Grid x:Name="EDITORSVISIBILITY" Visibility="Collapsed">
-                                <ListView ItemsSource="{Binding Editors}">
-                                    <hc:Interaction.Triggers>
-                                        <hc:EventTrigger EventName="MouseDoubleClick">
-                                            <hc:EventToCommand Command="{Binding OpenEditorCommand}" PassEventArgsToCommand="True" />
-                                        </hc:EventTrigger>
-                                    </hc:Interaction.Triggers>
-
-                                    <ListView.View>
-                                        <GridView>
-                                            <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Name" />
-                                        </GridView>
-                                    </ListView.View>
-                                </ListView>
-                            </Grid>
-
-                        </Grid>
-
-
-                    </Expander>
-
-                    <Grid Grid.Column="1">
-
-                        <Grid.Resources>
-
-                            <DataTemplate x:Key="CommmonTemplate">
-                                <TextBlock Padding="5" Text="{Binding Property.Value}"  />
-                            </DataTemplate>
-
-                            <DataTemplate x:Key="StringTemplateView">
-                                <TextBox
-                                    Height="22"
-                                    Margin="0"
-                                    Padding="3,3,0,0"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent"
-                                    BorderBrush="Transparent"
-                                    Style="{DynamicResource MahApps.Styles.TextBox.DataGrid.Editing}"
-                                    Text="{Binding Property.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                    <hc:Interaction.Triggers>
-                                        <hc:EventTrigger EventName="PreviewTextInput">
-                                            <hc:InvokeCommandAction Command="{Binding PreviewTextInputCommand}" />
-                                        </hc:EventTrigger>
-                                    </hc:Interaction.Triggers>
-                                </TextBox>
-                            </DataTemplate>
-
-                            <DataTemplate x:Key="RefTemplateView">
-                                <TextBox
-                                    Height="22"
-                                    Margin="0"
-                                    Padding="3,3,0,0"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent"
-                                    BorderBrush="Transparent"
-                                    Style="{DynamicResource MahApps.Styles.TextBox.DataGrid.Editing}"
-                                    Text="{Binding Property.DepotPath}">
-                                    <hc:Interaction.Triggers>
-                                        <hc:EventTrigger EventName="PreviewTextInput">
-                                            <hc:InvokeCommandAction Command="{Binding PreviewTextInputCommand}" />
-                                        </hc:EventTrigger>
-                                    </hc:Interaction.Triggers>
-                                </TextBox>
-                            </DataTemplate>
-
-                            <DataTemplate x:Key="RedboolTemplate">
-                                <CheckBox
-                                    Margin="0"
-                                    Padding="5"
-                                    HorizontalAlignment="Left"
-                                    IsChecked="{Binding Property.Value}"
-                                    Style="{DynamicResource MahApps.Styles.CheckBox.DataGrid}"
-                                    >
-                                    <hc:Interaction.Triggers>
-                                        <hc:EventTrigger EventName="Checked">
-                                            <hc:InvokeCommandAction Command="{Binding PreviewTextInputCommand}" />
-                                        </hc:EventTrigger>
-                                        <hc:EventTrigger EventName="Unchecked">
-                                            <hc:InvokeCommandAction Command="{Binding PreviewTextInputCommand}" />
-                                        </hc:EventTrigger>
-                                    </hc:Interaction.Triggers>
-                                </CheckBox>
-                            </DataTemplate>
-
-                            <DataTemplate x:Key="EnumTemplate">
-                                <templates:EnumTemplateView RedEnum="{Binding Property}" />
-                            </DataTemplate>
-
-                            <DataTemplate x:Key="HandleTemplate">
-                                <templates:HandleTemplateView RedChunkPtr="{Binding Property}" />
-                            </DataTemplate>
-
-                            <templates:EditableVariableDataTemplateSelector
-                                x:Key="DataTemplateSelector"
-                                CommmonTemplate="{StaticResource CommmonTemplate}"
-
-                                EnumTemplate="{StaticResource EnumTemplate}"
-
-                                HandleTemplateView="{StaticResource HandleTemplate}"
-
-                                RedboolTemplate="{StaticResource RedboolTemplate}"
-
-                                RefTemplateView="{StaticResource RefTemplateView}"
-
-                                NumericTemplate="{StaticResource StringTemplateView}"
-                                StringTemplateView="{StaticResource StringTemplateView}"
-                                />
-
-                            <converters1:CellStyleConverter x:Key="converter" />
-
-                        </Grid.Resources>
-
-                        <!--<Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>-->
-
-                        <syncfusion:SfTreeGrid
-                            x:Name="MainTreeGrid"
-                            AllowFiltering="True"
-                            AllowResizingColumns="True"
-                            AutoExpandMode="RootNodesExpanded"
-                            AutoGenerateColumns="False"
-                            ChildPropertyName="Children"
-                            ColumnSizer="Star"
-                            ItemsSource="{Binding SelectedChunk.ChildrenProperties}"
-                            Style="{DynamicResource SyncfusionSfTreeGridStyle}"
-                            >
+                            </syncfusion:SfTreeGrid.Resources>
 
                             <syncfusion:SfTreeGrid.Columns>
 
-                                <syncfusion:TreeGridTextColumn
-                                    AllowEditing="False"
-                                    ColumnSizer="SizeToCells"
-                                    HeaderText="Name"
-                                    MappingName="Name">
-                                    <syncfusion:TreeGridTextColumn.CellStyle>
-                                        <Style TargetType="syncfusion:TreeGridCell">
-                                            <Setter Property="Background" Value="{Binding Converter={StaticResource converter}}"/>
-                                        </Style>
-                                    </syncfusion:TreeGridTextColumn.CellStyle>
-                                </syncfusion:TreeGridTextColumn>
-
-                                <syncfusion:TreeGridTemplateColumn
-                                    AllowEditing="True"
-                                    AllowSorting="False"
-                                    CellTemplateSelector="{StaticResource DataTemplateSelector}"
-                                    ColumnSizer="FillColumn"
-                                    HeaderText="Value"
-                                    MappingName="Property" />
-
-                                <syncfusion:TreeGridTextColumn
-                                    AllowEditing="False"
-                                    ColumnSizer="SizeToCells"
-                                    HeaderText="Type"
-                                    MappingName="Type" />
-
-                                <syncfusion:TreeGridCheckBoxColumn
-                                    MappingName="IsSerialized"
-                                    AllowEditing="true"
-                                    HeaderText="Serialized"
-                                    ColumnSizer="SizeToHeader"
-
-                                    />
+                                <syncfusion:TreeGridTextColumn HeaderText="Chunks" MappingName="Name" />
 
                             </syncfusion:SfTreeGrid.Columns>
 
                         </syncfusion:SfTreeGrid>
+                    </Grid>
 
-                        <!--<syncfusion:PropertyGrid
-                            x:Name="PropertyGrid"
-                            Grid.Column="1"
-                            SelectedObject="{Binding SelectedChunk.Data}"
-                            PropertyExpandMode="NestedMode"
-                            AutoGeneratingPropertyGridItem="PropertyGrid_AutoGeneratingPropertyGridItem"
-                            >
+                    <Grid x:Name="IMPORTSVISISBILITY" Visibility="Collapsed">
+                        <ListView
+                                    Margin="20"
+                                    ItemsSource="{Binding Imports}"
+                                    SelectedItem="{Binding SelectedImport}">
 
-                        </syncfusion:PropertyGrid>-->
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn DisplayMemberBinding="{Binding DepotPathStr}" Header="Name" />
+                                </GridView>
+                            </ListView.View>
+
+                            <hc:Interaction.Triggers>
+                                <hc:EventTrigger EventName="MouseDoubleClick">
+                                    <hc:EventToCommand Command="{Binding OpenImportCommand}" CommandParameter="{Binding SelectedImport}" />
+                                </hc:EventTrigger>
+                            </hc:Interaction.Triggers>
+                        </ListView>
 
                     </Grid>
+
+                    <Grid x:Name="BUFFERSVISIBILITY" Visibility="Collapsed">
+                        <ListView ItemsSource="{Binding Buffers}">
+                            <hc:Interaction.Triggers>
+                                <hc:EventTrigger EventName="MouseDoubleClick">
+                                    <hc:EventToCommand Command="{Binding OpenBufferCommand}" PassEventArgsToCommand="True" />
+                                </hc:EventTrigger>
+                            </hc:Interaction.Triggers>
+
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Index}" Header="Name" />
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
+
+                    <!--<Grid x:Name="EDITORSVISIBILITY" Visibility="Collapsed">
+                        <ListView ItemsSource="{Binding Editors}">
+                            <hc:Interaction.Triggers>
+                                <hc:EventTrigger EventName="MouseDoubleClick">
+                                    <hc:EventToCommand Command="{Binding OpenEditorCommand}" PassEventArgsToCommand="True" />
+                                </hc:EventTrigger>
+                            </hc:Interaction.Triggers>
+
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Name" />
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>-->
 
                 </Grid>
 
@@ -545,7 +379,7 @@
                 </syncfusion:NavigationItem.Icon>
             </syncfusion:NavigationItem>
 
-            <syncfusion:NavigationItem
+            <!--<syncfusion:NavigationItem
                 Header="Editors"
                 IsExpanded="False"
                 IsSelected="False"
@@ -554,9 +388,197 @@
                 <syncfusion:NavigationItem.Icon>
                     <iconPacks:PackIconMaterial Margin="10,5,5,5" Kind="BriefcaseEditOutline" />
                 </syncfusion:NavigationItem.Icon>
-            </syncfusion:NavigationItem>
+            </syncfusion:NavigationItem>-->
 
         </syncfusion:SfNavigationDrawer>
+
+        <!-- CR2W TreeGrid -->
+        <syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+
+        <!-- CR2W TreeGrid -->
+        <Grid Grid.Column="2">
+
+            <Grid.Resources>
+
+                <DataTemplate x:Key="CommmonTemplate">
+                    <TextBlock Padding="5" Text="{Binding Value}" Foreground="Gray" />
+                </DataTemplate>
+
+                <DataTemplate x:Key="StringTemplateView">
+                    <TextBox syncfusion:FocusManagerHelper.FocusedElement="True"
+                             Height="22"
+                             Margin="0"
+                             Padding="3,3,0,0"
+                             VerticalAlignment="Center"
+                             Background="Transparent"
+                             BorderBrush="Transparent"
+                             Style="{DynamicResource MahApps.Styles.TextBox.DataGrid.Editing}"
+                             Text="{Binding Property.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <hc:Interaction.Triggers>
+                            <hc:EventTrigger EventName="PreviewTextInput">
+                                <hc:InvokeCommandAction Command="{Binding PreviewTextInputCommand}" />
+                            </hc:EventTrigger>
+                        </hc:Interaction.Triggers>
+                    </TextBox>
+                </DataTemplate>
+
+                <DataTemplate x:Key="ColorTemplateView">
+
+                    <syncfusion:ColorPickerPalette syncfusion:FocusManagerHelper.FocusedElement="True"
+                                                   GenerateThemeVariants="False"
+                                                   Padding="3,-4,0,0"
+                                                   Color="{Binding DisplayColor}"
+                                                   SelectedCommand="{Binding SelectedColorCommand}"
+                                                   d:DataContext="{d:DesignInstance shell:RedColorViewModel}" />
+                </DataTemplate>
+
+                <DataTemplate x:Key="RefTemplateView">
+                    <TextBox    syncfusion:FocusManagerHelper.FocusedElement="True"
+                                Height="22"
+                                Margin="0"
+                                Padding="3,3,0,0"
+                                VerticalAlignment="Center"
+                                Background="Transparent"
+                                BorderBrush="Transparent"
+                                Style="{DynamicResource MahApps.Styles.TextBox.DataGrid.Editing}"
+                                Text="{Binding Property.DepotPath}">
+                        <hc:Interaction.Triggers>
+                            <hc:EventTrigger EventName="PreviewTextInput">
+                                <hc:InvokeCommandAction Command="{Binding PreviewTextInputCommand}" />
+                            </hc:EventTrigger>
+                        </hc:Interaction.Triggers>
+                    </TextBox>
+                </DataTemplate>
+
+                <DataTemplate x:Key="RedboolTemplate">
+                    <CheckBox syncfusion:FocusManagerHelper.FocusedElement="True"
+                              Margin="3,0,0,0"
+                              Padding="5"
+                              HorizontalAlignment="Left"
+                              IsChecked="{Binding Property.Value}"
+                              Style="{DynamicResource MahApps.Styles.CheckBox.DataGrid}"
+                    >
+                        <hc:Interaction.Triggers>
+                            <hc:EventTrigger EventName="Checked">
+                                <hc:InvokeCommandAction Command="{Binding PreviewTextInputCommand}" />
+                            </hc:EventTrigger>
+                            <hc:EventTrigger EventName="Unchecked">
+                                <hc:InvokeCommandAction Command="{Binding PreviewTextInputCommand}" />
+                            </hc:EventTrigger>
+                        </hc:Interaction.Triggers>
+                    </CheckBox>
+                </DataTemplate>
+
+                <DataTemplate x:Key="EnumTemplate">
+                    <templates:EnumTemplateView
+                        syncfusion:FocusManagerHelper.FocusedElement="True"
+                        RedEnum="{Binding Property}"
+                        d:DataContext="{d:DesignInstance shell:ChunkPropertyViewModel }" />
+                </DataTemplate>
+
+                <DataTemplate x:Key="HandleTemplate">
+                    <templates:HandleTemplateView
+                        syncfusion:FocusManagerHelper.FocusedElement="True"
+                        RedChunkPtr="{Binding Property}"
+                      d:DataContext="{d:DesignInstance shell:ChunkPropertyViewModel }"
+                      GoToChunkRequested="HandleTemplateView_OnGoToChunkRequested"
+                      />
+                </DataTemplate>
+
+                <templates:EditableVariableDataTemplateSelector
+                                x:Key="DataTemplateSelector"
+                                CommmonTemplate="{StaticResource CommmonTemplate}"
+
+                                EnumTemplate="{StaticResource EnumTemplate}"
+
+                                HandleTemplateView="{StaticResource HandleTemplate}"
+
+                                RedboolTemplate="{StaticResource RedboolTemplate}"
+
+                                RefTemplateView="{StaticResource RefTemplateView}"
+
+                                NumericTemplate="{StaticResource StringTemplateView}"
+
+                                StringTemplateView="{StaticResource StringTemplateView}"
+
+                                ColorTemplateView="{StaticResource ColorTemplateView}"
+
+                                
+                                />
+
+                <converters1:CellStyleConverter x:Key="converter" />
+
+            </Grid.Resources>
+
+            <!--<Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>-->
+
+            <syncfusion:SfTreeGrid 
+                                   x:Name="MainTreeGrid"
+                                   AllowFiltering="True"
+                                   AllowResizingColumns="True"
+                                   AutoExpandMode="RootNodesExpanded"
+                                   AutoGenerateColumns="False"
+                                   ChildPropertyName="Children"
+                                   ColumnSizer="Star"
+                                   ItemsSource="{Binding ChunkProperties}"
+                                   Style="{DynamicResource SyncfusionSfTreeGridStyle}"
+            >
+
+                <syncfusion:SfTreeGrid.Columns>
+
+                    <syncfusion:TreeGridTextColumn
+                                    AllowEditing="False"
+                                    ColumnSizer="SizeToCells"
+                                    HeaderText="Name"
+                                    MappingName="Name">
+                        <syncfusion:TreeGridTextColumn.CellStyle>
+                            <Style TargetType="syncfusion:TreeGridCell">
+                                <Setter Property="Background" Value="{Binding Converter={StaticResource converter}}"/>
+                            </Style>
+                        </syncfusion:TreeGridTextColumn.CellStyle>
+                    </syncfusion:TreeGridTextColumn>
+
+                    <syncfusion:TreeGridTemplateColumn AllowFocus="True"
+                                                       AllowEditing="True"
+                                                       AllowSorting="False"
+                                                       CellTemplateSelector="{StaticResource DataTemplateSelector}"
+                                                       ColumnSizer="FillColumn"
+                                                       HeaderText="Value"
+                                                       MappingName="Property" />
+
+                    <syncfusion:TreeGridTextColumn
+                                    AllowEditing="False"
+                                    ColumnSizer="SizeToCells"
+                                    HeaderText="Type"
+                                    MappingName="Type" />
+
+                    <syncfusion:TreeGridCheckBoxColumn
+                                    MappingName="IsSerialized"
+                                    AllowEditing="true"
+                                    HeaderText="Serialized"
+                                    ColumnSizer="SizeToHeader"
+
+                                    />
+
+                </syncfusion:SfTreeGrid.Columns>
+
+            </syncfusion:SfTreeGrid>
+
+            <!--<syncfusion:PropertyGrid
+                            x:Name="PropertyGrid"
+                            Grid.Column="1"
+                            SelectedObject="{Binding SelectedChunk.Data}"
+                            PropertyExpandMode="NestedMode"
+                            AutoGeneratingPropertyGridItem="PropertyGrid_AutoGeneratingPropertyGridItem"
+                            >
+
+                        </syncfusion:PropertyGrid>-->
+
+        </Grid>
+
 
     </Grid>
 

@@ -138,7 +138,7 @@ namespace WolvenKit.RED4.CR2W.Types
                     {
                         ParentVar.IsSerialized = true;
                     }
-                    //RaisePropertyChanged(nameof(IsSerialized), oldValue, value);
+                    OnPropertyChanged(nameof(IsSerialized));
                 }
             }
         }

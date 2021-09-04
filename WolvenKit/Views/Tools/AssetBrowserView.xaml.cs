@@ -3,8 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
 using CP77.CR2W;
 using HandyControl.Data;
 using ReactiveUI;
@@ -19,14 +17,9 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models.Docking;
-using WolvenKit.Modkit.RED4;
-using WolvenKit.RED4.CR2W.Archive;
 using System.Text.RegularExpressions;
-using System.Reactive.Linq;
-using Syncfusion.Data;
 using DynamicData;
 using System.Reactive.Disposables;
-using WolvenKit.ViewModels;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.ViewModels.Tools;
 
@@ -109,35 +102,12 @@ namespace WolvenKit.Views.Tools
 
         #region methods
 
-        private void PreviewMesh(PropertiesViewModel propertiesViewModel, RedFileViewModel selectedItem, IGameFile selectedGameFile)
+        private static void PreviewMesh(PropertiesViewModel propertiesViewModel, RedFileViewModel selectedItem, IGameFile selectedGameFile)
         {
             propertiesViewModel.AB_MeshPreviewVisible = true;
 
             var managerCacheDir = ISettingsManager.GetTemp_MeshPath();
-            Directory.CreateDirectory(managerCacheDir);
-            foreach (var f in Directory.GetFiles(managerCacheDir))
-            {
-                try
-                { File.Delete(f); }
-                catch { }
-            }
-
-            var endPath = Path.Combine(managerCacheDir, Path.GetFileName(selectedItem.Name));
-            var q2 = Locator.Current.GetService<MeshTools>().ExportMeshWithoutRigPreviewer(selectedGameFile, endPath, ISettingsManager.GetTemp_OBJPath());
-            if (q2.Length > 0)
-            {
-                propertiesViewModel.LoadModel(q2);
-            }
-        }
-
-        private void PreviewWem(PropertiesViewModel propertiesViewModel, RedFileViewModel selectedItem, IGameFile selectedGameFile)
-        {
-            propertiesViewModel.IsAudioPreviewVisible = true;
-
-            var managerCacheDir = ISettingsManager.GetTemp_Audio_importPath();
-            Directory.CreateDirectory(managerCacheDir);
-
-            var endPath = Path.Combine(managerCacheDir, Path.GetFileName(selectedItem.Name));
+            _ = Directory.CreateDirectory(managerCacheDir);
             foreach (var f in Directory.GetFiles(managerCacheDir))
             {
                 try
@@ -146,6 +116,35 @@ namespace WolvenKit.Views.Tools
                 }
                 catch
                 {
+                    // ignored
+                }
+            }
+
+            var endPath = Path.Combine(managerCacheDir, Path.GetFileName(selectedItem.Name) ?? throw new InvalidOperationException());
+            var q2 = Locator.Current.GetService<MeshTools>()?.ExportMeshWithoutRigPreviewer(selectedGameFile, endPath, ISettingsManager.GetTemp_OBJPath());
+            if (q2 is { Length: > 0 })
+            {
+                propertiesViewModel.LoadModel(q2);
+            }
+        }
+
+        private static void PreviewWem(PropertiesViewModel propertiesViewModel, IFileSystemViewModel selectedItem, IGameFile selectedGameFile)
+        {
+            propertiesViewModel.IsAudioPreviewVisible = true;
+
+            var managerCacheDir = ISettingsManager.GetTemp_Audio_importPath();
+            _ = Directory.CreateDirectory(managerCacheDir);
+
+            var endPath = Path.Combine(managerCacheDir, Path.GetFileName(selectedItem.Name) ?? throw new InvalidOperationException());
+            foreach (var f in Directory.GetFiles(managerCacheDir))
+            {
+                try
+                {
+                    File.Delete(f);
+                }
+                catch
+                {
+                    // ignored
                 }
             }
 
@@ -173,7 +172,10 @@ namespace WolvenKit.Views.Tools
             // convert xbm to dds stream
             await using var ddsstream = new MemoryStream();
             var expargs = new XbmExportArgs { Flip = false, UncookExtension = EUncookExtension.tga };
-            man.ConvertXbmToDdsStream(cr2wstream, ddsstream, out _);
+            if (man != null)
+            {
+                man.ConvertXbmToDdsStream(cr2wstream, ddsstream, out _);
+            }
 
             // try loading it in pfim
             try
@@ -184,15 +186,13 @@ namespace WolvenKit.Views.Tools
                     propertiesViewModel.LoadImage(qa);
                 }
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+                // ignored
+            }
         }
 
         private bool FilterNodes(object o) => o is RedFileSystemModel data && data.Name.Contains(_currentFolderQuery);
-
-        #endregion
-
-        #region Top search
-
 
         #endregion
 
@@ -274,7 +274,7 @@ namespace WolvenKit.Views.Tools
 
         private void InnerList_SelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
         {
-            if (ViewModel is not AssetBrowserViewModel vm)
+            if (ViewModel is not { } vm)
             {
                 return;
             }
@@ -299,24 +299,21 @@ namespace WolvenKit.Views.Tools
             propertiesViewModel.IsAudioPreviewVisible = false;
             propertiesViewModel.IsImagePreviewVisible = false;
 
-            if (propertiesViewModel.AB_SelectedItem != null && propertiesViewModel.AB_SelectedItem is RedFileViewModel selectedItem)
+            if (propertiesViewModel.AB_SelectedItem is RedFileViewModel selectedItem)
             {
                 var selectedGameFile = selectedItem.GetGameFile();
 
-                if (string.Equals(selectedItem.Extension, ERedExtension.mesh.ToString(),
-                    System.StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(selectedItem.Extension, ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase))
                 {
                     PreviewMesh(propertiesViewModel, selectedItem, selectedGameFile);
                 }
 
-                if (string.Equals(selectedItem.Extension, ERedExtension.wem.ToString(),
-                    System.StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(selectedItem.Extension, ERedExtension.wem.ToString(), StringComparison.OrdinalIgnoreCase))
                 {
                     PreviewWem(propertiesViewModel, selectedItem, selectedGameFile);
                 }
 
-                if (string.Equals(selectedItem.Extension, ERedExtension.xbm.ToString(),
-                                            System.StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(selectedItem.Extension, ERedExtension.xbm.ToString(), StringComparison.OrdinalIgnoreCase))
                 {
                     PreviewTexture(propertiesViewModel, selectedItem, selectedGameFile);
                 }
@@ -332,7 +329,7 @@ namespace WolvenKit.Views.Tools
 
         private void RightContextMenuAddAll_OnClick(object sender, RoutedEventArgs e)
         {
-            if (ViewModel is AssetBrowserViewModel vm)
+            if (ViewModel is { } vm)
             {
                 vm.AddSelectedCommand.SafeExecute();
             }
@@ -351,12 +348,12 @@ namespace WolvenKit.Views.Tools
             }
             var selected = InnerList.SelectedItem as RedFileViewModel;
 
-            if (!selected.FullName.ToLower().Contains("bk2"))
+            if (selected != null && !selected.FullName.ToLower().Contains("bk2"))
             {
                 return;
             }
 
-            ///Extract to Temp dir
+            //Extract to Temp dir
 
             var tempPath = ISettingsManager.GetTemp_Video_PreviewPath();
             var endPath = Path.Combine(tempPath, Path.GetFileName(selected.Name));
@@ -369,6 +366,7 @@ namespace WolvenKit.Views.Tools
                 }
                 catch
                 {
+                    // ignored
                 }
             }
 
@@ -385,7 +383,7 @@ namespace WolvenKit.Views.Tools
 
             var args = $"\"{endPath}\" /I102 /p";
             var procInfo =
-                new System.Diagnostics.ProcessStartInfo(Path.Combine(ISettingsManager.GetWorkDir(),
+                new ProcessStartInfo(Path.Combine(ISettingsManager.GetWorkDir(),
                     "test.exe"))
                 {
 
@@ -432,9 +430,6 @@ namespace WolvenKit.Views.Tools
 
         #endregion
 
-        private void FileSearchBar_SearchStarted(object sender, FunctionEventArgs<string> e)
-        {
-            ViewModel.PerformSearch(e.Info);
-        }
+        private void FileSearchBar_SearchStarted(object sender, FunctionEventArgs<string> e) => ViewModel?.PerformSearch(e.Info);
     }
 }
