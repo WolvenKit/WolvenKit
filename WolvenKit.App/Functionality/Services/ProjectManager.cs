@@ -89,7 +89,7 @@ namespace WolvenKit.Functionality.Services
                 }
                 else
                 {
-                    
+
                 }
             });
 
@@ -159,7 +159,8 @@ namespace WolvenKit.Functionality.Services
             }
             catch (Exception e)
             {
-                _loggerService.Error($"Failed to load project. Exception: {e.Message}");
+                _loggerService.Error($"Failed to load project.");
+                _loggerService.Error(e);
                 return null;
             }
         }
@@ -175,7 +176,8 @@ namespace WolvenKit.Functionality.Services
             }
             catch (Exception e)
             {
-                _loggerService.Error($"Failed to save project. Exception: {e.Message}");
+                _loggerService.Error($"Failed to save project");
+                _loggerService.Error(e);
                 return false;
             }
 
@@ -185,7 +187,7 @@ namespace WolvenKit.Functionality.Services
         #endregion
 
 
-        
+
 
 
 
@@ -195,7 +197,7 @@ namespace WolvenKit.Functionality.Services
         {
             public CP77Mod()
             {
-                
+
             }
             public CP77Mod(EditorProject project)
             {

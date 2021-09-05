@@ -184,7 +184,7 @@ namespace CP77Tools.Tasks
 
                     // get info
                     var count = ar.FileCount;
-                    _loggerService.Log($"Exporting {count} bundle entries ");
+                    _loggerService.Info($"Exporting {count} bundle entries ");
 
                     Thread.Sleep(1000);
                     int progress = 0;

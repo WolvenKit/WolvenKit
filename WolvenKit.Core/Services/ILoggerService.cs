@@ -46,7 +46,6 @@ namespace WolvenKit.Common.Services
         public IObservable<IChangeSet<LogEntry>> Connect();
 
 
-
-
+        public void Error(Exception exception);
     }
 }

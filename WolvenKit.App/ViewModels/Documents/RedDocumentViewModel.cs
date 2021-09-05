@@ -53,7 +53,7 @@ namespace WolvenKit.ViewModels.Documents
                         SelectedChunk.GetData()
                             .ChildrEditableVariables
                             .Select(x => new ChunkPropertyViewModel(x)));
-                    
+
                 }
             });
 
@@ -163,8 +163,9 @@ namespace WolvenKit.ViewModels.Documents
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                _loggerService.Error(e);
                 // Not processing this catch in any other way than rejecting to initialize this
                 _isInitialized = false;
             }

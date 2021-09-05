@@ -99,6 +99,7 @@ namespace WolvenKit.Modkit.RED4
                 catch (Exception e)
                 {
                     _loggerService.Error($"{relFileFullName} And unexpected error occured while uncooking: {e.Message}");
+                    _loggerService.Error(e);
                     return false;
                 }
             }
@@ -282,6 +283,7 @@ namespace WolvenKit.Modkit.RED4
                     catch (Exception e)
                     {
                         _loggerService.Error($"{relPath} - {e.Message}");
+                        _loggerService.Error(e);
 
                         return false;
                     }
@@ -296,6 +298,7 @@ namespace WolvenKit.Modkit.RED4
                     catch (Exception e)
                     {
                         _loggerService.Error($"{relPath} - {e.Message}");
+                        _loggerService.Error(e);
 
                         return false;
                     }
@@ -307,7 +310,7 @@ namespace WolvenKit.Modkit.RED4
                     }
 
                     DXGI_FORMAT texformat;
-                    
+
                     if (WolvenTesting.IsTesting)
                     {
                         using var ms = new MemoryStream();
@@ -420,7 +423,7 @@ namespace WolvenKit.Modkit.RED4
             }
             catch (Exception ex)
             {
-                _loggerService.Error($"{ex.Message}");
+                _loggerService.Error(ex);
             }
             return false;
         }
