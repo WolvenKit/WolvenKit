@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using CP77.CR2W;
@@ -39,6 +40,7 @@ using WolvenKit.Views.HomePage;
 using WolvenKit.Views.HomePage.Pages;
 using WolvenKit.Views.Wizards;
 using WolvenKit.Common.Interfaces;
+using WolvenKit.Interaction;
 using WolvenKit.Views.Tools;
 using WolvenKit.ViewModels.Tools;
 
@@ -66,6 +68,18 @@ namespace WolvenKit
         // Application OnStartup Override.
         protected override void OnStartup(StartupEventArgs e)
         {
+            Interactions.ShowFirstTimeSetup.RegisterHandler(interaction =>
+            {
+                var dialog = new DialogHostView();
+                dialog.ViewModel.HostedViewModel = Locator.Current.GetService<FirstSetupWizardViewModel>();
+
+                return Observable.Start(() =>
+                {
+                    var result = dialog.ShowDialog() == true;
+                    interaction.SetOutput(result);
+                }, RxApp.MainThreadScheduler);
+            });
+
 
             // Startup speed boosting (HC)
             ApplicationHelper.StartProfileOptimization();

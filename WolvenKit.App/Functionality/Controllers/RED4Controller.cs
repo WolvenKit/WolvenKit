@@ -154,8 +154,6 @@ namespace WolvenKit.Functionality.Controllers
                 innerCache.Add(_archiveManager.RootNode);
             });
 
-            throw new NotImplementedException();
-
 #pragma warning disable 162
             return _archiveManager;
 #pragma warning restore 162
