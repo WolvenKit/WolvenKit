@@ -1,25 +1,33 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using DynamicData;
 using ProtoBuf;
+using WolvenKit.Common.Services;
+using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.Common.Model
 {
     [ProtoContract]
-    public abstract class WolvenKitArchiveManager : IGameArchiveManager
+    public abstract class WolvenKitArchiveManager : IArchiveManager
     {
+        #region properties
+
         public abstract EArchiveType TypeName { get; }
 
         public abstract Dictionary<string, IGameArchive> Archives { get; set; }
-        public GameFileTreeNode RootNode { get; set; }
 
-        public Dictionary<ulong, List<IGameFile>> Items { get; set; } = new();
+        public SourceCache<IGameFile, ulong> Items { get; set; } = new(x => x.Key);
 
+        public RedFileSystemModel RootNode { get; set; }
 
-        public IEnumerable<IGameFile> FileList => Items.Values.SelectMany(_ => _);
-        public IEnumerable<string> AutocompleteSource => FileList.Select(_ => GetFileName(_.Name)).Distinct();
-        public IEnumerable<string> Extensions => FileList.Select(_ => _.Extension).Distinct();
+        //public IEnumerable<string> AutocompleteSource { get; set; } //=> FileList.Select(_ => GetFileName(_.Name)).Distinct();
+
+        public IEnumerable<string> Extensions { get; set; } //=> FileList.Select(_ => _.Extension).Distinct();
+
+        #endregion
 
 
         public abstract void LoadAll(FileInfo executable, bool rebuildtree = true);
@@ -27,6 +35,7 @@ namespace WolvenKit.Common.Model
         public abstract void LoadArchive(string filename, bool ispatch = false);
 
         public abstract void LoadModArchive(string filename);
+
         public abstract void LoadModsArchives(string mods, string dlc);
 
         protected static string GetModFolder(string path)
@@ -38,68 +47,45 @@ namespace WolvenKit.Common.Model
             return path;
         }
 
-        protected void RebuildRootNode()
+        protected void RebuildRootNode(IHashService _hashService)
         {
-            RootNode = new GameFileTreeNode(TypeName)
-            {
-                Name = TypeName.ToString()
-            };
-            foreach (var item in Items)
+            RootNode = new RedFileSystemModel(TypeName.ToString());
+
+            // loop through all files
+            foreach (var item in Items.KeyValues)
             {
                 var currentNode = RootNode;
                 var model = item.Value;
-                var parts = model.First().Name.Split('\\');
+                var parts = model.Name.Split('\\');
 
+                // loop through path
+                var fullpath = "";
                 for (var i = 0; i < parts.Length - 1; i++)
                 {
-                    if (!currentNode.Directories.Any(_ => _.Name == parts[i]))
+                    var part = parts[i];
+                    fullpath += part + Path.DirectorySeparatorChar;
+                    // directory does not already exist
+                    if (!currentNode.Directories.Any(_ => _.Name == part))
                     {
-                        var newNode = new GameFileTreeNode
-                        {
-                            Parent = currentNode,
-                            Name = parts[i]
-                        };
-                        currentNode.Directories.Add(/*parts[i], */newNode);
+                        var newNode = new RedFileSystemModel(fullpath.TrimEnd(Path.DirectorySeparatorChar));
+                        currentNode.Directories.Add(newNode);
                         currentNode = newNode;
                     }
                     else
                     {
-                        currentNode = currentNode.Directories.First(_ => _.Name == parts[i]);
+                        // add to existing directory
+                        currentNode = currentNode.Directories.First(_ => _.Name == part);
                     }
                 }
 
-                currentNode.Files.AddRange(item.Value.ToList());
+                // add file to the last directory in path
+                currentNode.Files.Add(item.Key);
             }
-
-            //RootNode.Files.AddRange(Items.Values.ToList());
         }
 
-
-        /// <summary>
-        /// Since File.GetFileName() only works for real paths we need to have this
-        /// </summary>
-        /// <param name="s">Path/Name of the file</param>
-        /// <returns></returns>
-        public static string GetFileName(string s) => s.Contains('\\') ? s.Split('\\').Last() : s;
-
-
-        /// <summary>
-        /// Deep search for files
-        /// </summary>
-        /// <param name="mainnode">The rootnode to get the files from</param>
-        /// <returns></returns>
-        private static List<IGameFile> GetFiles(GameFileTreeNode mainnode)
-        {
-            var bundfiles = new List<IGameFile>();
-            if (mainnode?.Files != null)
-            {
-                foreach (var wfile in mainnode.Files)
-                {
-                    bundfiles.Add(wfile);
-                }
-                bundfiles.AddRange(mainnode.Directories.SelectMany(GetFiles));
-            }
-            return bundfiles;
-        }
+        public abstract RedFileSystemModel LookupDirectory(string fullpath, bool expandAll = false);
+        public abstract IGameFile LookupFile(ulong hash);
+        public abstract Dictionary<string, IEnumerable<FileEntry>> GetGroupedFiles();
+        public abstract void LoadFromFolder(DirectoryInfo archivedir, bool rebuildtree = false);
     }
 }

@@ -30,7 +30,7 @@
                     Margin="15,15,15,15"
                     VerticalAlignment="Stretch"
                     Style="{StaticResource BorderTipWarning}">
-                    <TextBlock Text="Warning this takes up to or more than 30GB's of space locally. (Default Textures output is TGA)" />
+                    <TextBlock Text="Generation requires 32GB of space and is extremely resource intensive. Full generation not necessary for material exports." />
                 </Border>
             </StackPanel>
             <StackPanel

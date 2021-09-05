@@ -265,6 +265,9 @@ namespace WolvenKit.Modkit.RED4
             //args.FileName = outFileInfo.FullName;
             switch (extAsEnum)
             {
+                //case ECookedFileFormat.ent:
+                //case ECookedFileFormat.app:
+                //    return HandleEntity(cr2wStream, outfile, settings.Get<EntityExportArgs>());
                 case ECookedFileFormat.opusinfo:
                     return HandleOpus(settings.Get<OpusExportArgs>());
 
@@ -278,14 +281,24 @@ namespace WolvenKit.Modkit.RED4
                     }
                     catch (Exception e)
                     {
-                        _loggerService.Error(e.Message);
+                        _loggerService.Error($"{relPath} - {e.Message}");
 
                         return false;
                     }
 
                 case ECookedFileFormat.morphtarget:
                     return ExportMorphTargets(cr2wStream, outfile, settings.Get<MorphTargetExportArgs>().Archives, settings.Get<MorphTargetExportArgs>().ModFolderPath, settings.Get<MorphTargetExportArgs>().IsBinary);
+                case ECookedFileFormat.anims:
+                    try
+                    {
+                        return ExportAnim(cr2wStream, settings.Get<AnimationExportArgs>().Archives, outfile, settings.Get<AnimationExportArgs>().IsBinary);
+                    }
+                    catch (Exception e)
+                    {
+                        _loggerService.Error($"{relPath} - {e.Message}");
 
+                        return false;
+                    }
                 case ECookedFileFormat.xbm:
                 {
                     if (settings.Get<XbmExportArgs>() is not { } xbmargs)
@@ -293,7 +306,7 @@ namespace WolvenKit.Modkit.RED4
                         return false;
                     }
 
-                    EFormat texformat;
+                    DXGI_FORMAT texformat;
                     
                     if (WolvenTesting.IsTesting)
                     {
@@ -390,7 +403,27 @@ namespace WolvenKit.Modkit.RED4
                     throw new ArgumentOutOfRangeException($"Uncooking failed for extension: {extAsEnum}.");
             }
         }
+        private bool HandleEntity(Stream cr2wStream, FileInfo cr2wFileName, EntityExportArgs entExportArgs)
+        {
+            try
+            {
+                switch (entExportArgs.ExportType)
+                {
+                    case EntityExportType.Json:
+                        return DumpEntityPackageAsJson(cr2wStream, cr2wFileName);
+                    case EntityExportType.Gltf:
+                        throw new NotImplementedException("Uncooking Entity/Appearance Resources To Gltf Not Implemented");
+                    default:
+                        break;
+                }
 
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error($"{ex.Message}");
+            }
+            return false;
+        }
         private bool HandleOpus(OpusExportArgs opusExportArgs)
         {
             OpusTools opusTools = new(
@@ -576,8 +609,8 @@ namespace WolvenKit.Modkit.RED4
             var texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
 
             DDSUtils.GenerateAndWriteHeader(outstream,
-                new DDSMetadata(width, height, mipCount, texformat, alignment, false, sliceCount,
-                    true));
+                new DDSMetadata(width, height, 1, sliceCount, mipCount,
+                    0,0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
 
             var b = cr2w.Buffers[0];
             cr2wStream.Seek(b.Offset, SeekOrigin.Begin);
@@ -608,11 +641,11 @@ namespace WolvenKit.Modkit.RED4
             var height = blob.Header.SizeInfo.Height.Value;
             var width = blob.Header.SizeInfo.Width.Value;
 
-            const EFormat texformat = EFormat.R8G8B8A8_UNORM;
+            const DXGI_FORMAT texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
 
             DDSUtils.GenerateAndWriteHeader(outstream,
-                new DDSMetadata(width, height, mipCount, texformat, alignment, false, sliceCount,
-                    true));
+                new DDSMetadata(width, height, 1, sliceCount, mipCount,
+                    0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
             var b = cr2w.Buffers[0];
             cr2wStream.Seek(b.Offset, SeekOrigin.Begin);
             cr2wStream.DecompressAndCopySegment(outstream, b.DiskSize, b.MemSize);
@@ -658,8 +691,8 @@ namespace WolvenKit.Modkit.RED4
             var texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
 
             DDSUtils.GenerateAndWriteHeader(outstream,
-                new DDSMetadata(width, height, mipCount, texformat, alignment, false, sliceCount,
-                    true));
+                new DDSMetadata(width, height, 1, sliceCount, mipCount,
+                    0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
             var b = cr2w.Buffers[0];
             cr2wStream.Seek(b.Offset, SeekOrigin.Begin);
             cr2wStream.DecompressAndCopySegment(outstream, b.DiskSize, b.MemSize);
@@ -690,9 +723,9 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-        public bool ConvertXbmToDdsStream(Stream redInFile, Stream outstream, out EFormat texformat)
+        public bool ConvertXbmToDdsStream(Stream redInFile, Stream outstream, out DXGI_FORMAT texformat)
         {
-            texformat = EFormat.R8G8B8A8_UNORM;
+            texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
 
             // read the cr2wfile
             var cr2w = _wolvenkitFileService.TryReadRED4File(redInFile);
@@ -716,8 +749,8 @@ namespace WolvenKit.Modkit.RED4
 
             var width = blob.Header.SizeInfo.Width.Value;
             var height = blob.Header.SizeInfo.Height.Value;
-            var mips = blob.Header.TextureInfo.MipCount.Value;
-            var slicecount = blob.Header.TextureInfo.SliceCount.Value;
+            var mipCount = blob.Header.TextureInfo.MipCount.Value;
+            var sliceCount = blob.Header.TextureInfo.SliceCount.Value;
             var alignment = blob.Header.TextureInfo.DataAlignment.Value;
 
             var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
@@ -737,8 +770,9 @@ namespace WolvenKit.Modkit.RED4
             #endregion get xbm data
 
             // extract and write dds to stream
-            DDSUtils.GenerateAndWriteHeader(outstream, new DDSMetadata(width, height, mips, texformat, alignment, false,
-                slicecount, true));
+            DDSUtils.GenerateAndWriteHeader(outstream,
+                new DDSMetadata(width, height, 1, sliceCount, mipCount,
+                    0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
             var b = cr2w.Buffers[0];
             redInFile.Seek(b.Offset, SeekOrigin.Begin);
             redInFile.DecompressAndCopySegment(outstream, b.DiskSize, b.MemSize);

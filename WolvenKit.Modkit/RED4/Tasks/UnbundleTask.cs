@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common.Services;
+using WolvenKit.Modkit.RED4;
 
 namespace CP77Tools.Tasks
 {
@@ -131,7 +132,7 @@ namespace CP77Tools.Tasks
                     _loggerService.Info($"Extracing all files from the hashlist ({hashlist.Count()}hashes) ...");
                     foreach (var hashNum in hashlist)
                     {
-                        var r = _modTools.ExtractSingle(ar, hashNum, outDir, DEBUG_decompress);
+                        var r = ModTools.ExtractSingle(ar, hashNum, outDir, DEBUG_decompress);
                         if (r > 0)
                         {
                             _loggerService.Success($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNum}");
@@ -146,7 +147,7 @@ namespace CP77Tools.Tasks
                 }
                 else if (isHash && hashNumber != 0)
                 {
-                    var r = _modTools.ExtractSingle(ar, hashNumber, outDir, DEBUG_decompress);
+                    var r = ModTools.ExtractSingle(ar, hashNumber, outDir, DEBUG_decompress);
                     if (r > 0)
                     {
                         _loggerService.Success($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNumber}");
@@ -253,7 +254,7 @@ namespace CP77Tools.Tasks
                     _loggerService.Info($"Extracing all files from the hashlist ({hashlist.Count()}hashes) ...");
                     foreach (var hash_num in hashlist)
                     {
-                        await _modTools.ExtractSingleAsync(ar, hash_num, outDir, DEBUG_decompress);
+                        await ModTools.ExtractSingleAsync(ar, hash_num, outDir, DEBUG_decompress);
                         _loggerService.Success($" {ar.ArchiveAbsolutePath}: Extracted one file: {hash_num}");
                     }
 
@@ -261,7 +262,7 @@ namespace CP77Tools.Tasks
                 }
                 else if (isHash && hashNumber != 0)
                 {
-                    await _modTools.ExtractSingleAsync(ar, hashNumber, outDir, DEBUG_decompress);
+                    await ModTools.ExtractSingleAsync(ar, hashNumber, outDir, DEBUG_decompress);
                     _loggerService.Success($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNumber}");
                 }
                 else

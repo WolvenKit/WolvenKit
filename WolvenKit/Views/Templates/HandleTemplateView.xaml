@@ -17,6 +17,7 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
+
         <ComboBox
          x:Name="ComboBox"
          Background="{DynamicResource MahApps.Brushes.Accent3}"
@@ -27,12 +28,14 @@
          SelectionChanged="ComboBox_OnSelectionChanged"
          Style="{DynamicResource MahApps.Styles.ComboBox.DataGrid.Editing}"
          />
+
         <Button
          Grid.Column="1"
          Width="35"
          Background="{DynamicResource MahApps.Brushes.Accent}"
          Foreground="Black"
          ToolTip="{Binding}"
+         Click="ButtonBase_OnClick"
          >
             <Button.Content>
                 <iconPacks:Codicons

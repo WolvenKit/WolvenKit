@@ -62,6 +62,7 @@ namespace WolvenKit.RED4.CR2W.Types
         public CR2WManager(ILoggerService loggerService)
         {
             _loggerService = loggerService;
+            m_types = new();
         }
 
         #region Methods
@@ -512,5 +513,5 @@ namespace WolvenKit.RED4.CR2W.Types
         #endregion Enums
     }
 
-    
+
 }

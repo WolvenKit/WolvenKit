@@ -29,49 +29,49 @@ namespace WolvenKit.Views.Shell
 
         #endregion Constructors
 
-        private async void Tag_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            try
-            {
-                var client = new CatFactsClient();
-                var randomFact = await client.GetRandomFactsAsync(Locator.Current.GetService<ISettingsManager>().CatFactAnimal.ToString().ToLower());
-                Random x = new Random();
-                var z = x.Next(0, randomFact.Length);
-                var catfact = randomFact[z].Text;
+        //private async void Tag_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        //{
+        //    try
+        //    {
+        //        var client = new CatFactsClient();
+        //        var randomFact = await client.GetRandomFactsAsync(Locator.Current.GetService<ISettingsManager>().CatFactAnimal.ToString().ToLower());
+        //        Random x = new Random();
+        //        var z = x.Next(0, randomFact.Length);
+        //        var catfact = randomFact[z].Text;
 
-                if (GetWords(catfact).Count > 1)
-                {
-                    if (!catfact.Contains("test", StringComparison.OrdinalIgnoreCase))
-                    {
-                        Locator.Current.GetService<INotificationService>().Info(catfact);
-                    }
-                }
-                else
-                {
-                }
-            }
-            catch
-            {
-            }
-        }
+        //        if (GetWords(catfact).Count > 1)
+        //        {
+        //            if (!catfact.Contains("test", StringComparison.OrdinalIgnoreCase))
+        //            {
+        //                Locator.Current.GetService<INotificationService>().Info(catfact);
+        //            }
+        //        }
+        //        else
+        //        {
+        //        }
+        //    }
+        //    catch
+        //    {
+        //    }
+        //}
 
-        public System.Collections.Generic.List<string> GetWords(string Input)
-        {
-            string[] Result = System.Text.RegularExpressions.Regex.Split(Input, @"\b");
+        //public System.Collections.Generic.List<string> GetWords(string Input)
+        //{
+        //    string[] Result = System.Text.RegularExpressions.Regex.Split(Input, @"\b");
 
-            System.Collections.Generic.List<string> Words = new System.Collections.Generic.List<string>();
+        //    System.Collections.Generic.List<string> Words = new System.Collections.Generic.List<string>();
 
-            foreach (string s in Result)
+        //    foreach (string s in Result)
 
-            {
-                if (System.Text.RegularExpressions.Regex.IsMatch(s, @"[a-z]+", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+        //    {
+        //        if (System.Text.RegularExpressions.Regex.IsMatch(s, @"[a-z]+", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
 
-                {
-                    Words.Add(s);
-                }
-            }
+        //        {
+        //            Words.Add(s);
+        //        }
+        //    }
 
-            return Words;
-        }
+        //    return Words;
+        //}
     }
 }

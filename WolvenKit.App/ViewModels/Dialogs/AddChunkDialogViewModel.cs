@@ -1,5 +1,3 @@
-
-
 using ReactiveUI;
 
 namespace WolvenKit.ViewModels.Dialogs

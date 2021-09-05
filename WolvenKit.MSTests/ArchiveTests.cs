@@ -8,7 +8,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using ProtoBuf;
 using WolvenKit.RED4.CR2W.Archive;
-using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
 namespace WolvenKit.MSTests
 {
@@ -110,8 +109,8 @@ namespace WolvenKit.MSTests
 
             // some lazy checks
             Assert.AreEqual(x.Archives.Count(), s_bm.Archives.Count());
-            Assert.AreEqual(x.FileList.Count(), s_bm.FileList.Count());
-            Assert.AreEqual(x.GroupedFiles.Count(), s_bm.GroupedFiles.Count());
+            //Assert.AreEqual(x.FileList.Count(), s_bm.FileList.Count());
+            Assert.AreEqual(x.GetGroupedFiles().Count(), s_bm.GetGroupedFiles().Count());
         }
 
         

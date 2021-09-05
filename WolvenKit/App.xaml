@@ -4,43 +4,57 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
-    xmlns:viewmodels="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
-    xmlns:views="clr-namespace:WolvenKit.Views.Editor"
-    xmlns:views1="clr-namespace:WolvenKit.Views.Editor.VisualEditor">
+    xmlns:toolvm="clr-namespace:WolvenKit.ViewModels.Tools;assembly=WolvenKit.App"
+    xmlns:docvm="clr-namespace:WolvenKit.ViewModels.Documents;assembly=WolvenKit.App"
+    xmlns:tools="clr-namespace:WolvenKit.Views.Tools"
+    xmlns:documents="clr-namespace:WolvenKit.Views.Documents">
 
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
-                    <DataTemplate DataType="{x:Type viewmodels:LogViewModel}">
+                    <DataTemplate DataType="{x:Type toolvm:LogViewModel}">
                         <Grid>
-                            <views:LogView />
+                            <tools:LogView />
                         </Grid>
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type viewmodels:PropertiesViewModel}">
+                    <DataTemplate DataType="{x:Type toolvm:PropertiesViewModel}">
                         <Grid>
-                            <views:PropertiesView />
+                            <tools:PropertiesView />
                         </Grid>
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type viewmodels:ProjectExplorerViewModel}">
+                    <DataTemplate DataType="{x:Type toolvm:ProjectExplorerViewModel}">
                         <Grid>
-                            <views:ProjectExplorerView />
+                            <tools:ProjectExplorerView />
                         </Grid>
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type viewmodels:AssetBrowserViewModel}">
+                    <DataTemplate DataType="{x:Type toolvm:AssetBrowserViewModel}">
                         <Grid>
-                            <views:AssetBrowserView />
-                        </Grid>
-                    </DataTemplate>
-                    <DataTemplate DataType="{x:Type viewmodels:DocumentViewModel}">
-                        <Grid>
-                            <views:DocumentView />
+                            <tools:AssetBrowserView />
                         </Grid>
                     </DataTemplate>
 
-                    <DataTemplate DataType="{x:Type viewmodels:ImportExportViewModel}">
+
+                    <DataTemplate DataType="{x:Type toolvm:ImportExportViewModel}">
                         <Grid>
-                            <views:ImportExportView />
+                            <tools:ImportExportView />
+                        </Grid>
+                    </DataTemplate>
+
+
+                    <DataTemplate DataType="{x:Type docvm:RedDocumentViewModel}">
+                        <Grid>
+                            <documents:DocumentView />
+                        </Grid>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type docvm:TweakDocumentViewModel}">
+                        <Grid>
+                            <documents:TweakDocumentView />
+                        </Grid>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type docvm:ScriptDocumentViewModel}">
+                        <Grid>
+                            <documents:TweakDocumentView />
                         </Grid>
                     </DataTemplate>
 
@@ -50,11 +64,11 @@
                         </Grid>
                     </DataTemplate>-->
 
-                    <DataTemplate DataType="{x:Type viewmodels:VisualEditorViewModel}">
+                    <!--<DataTemplate DataType="{x:Type viewmodels:VisualEditorViewModel}">
                         <Grid>
                             <views1:VisualEditorView />
                         </Grid>
-                    </DataTemplate>
+                    </DataTemplate>-->
                     
                 </ResourceDictionary>
 

@@ -10,7 +10,6 @@ using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
-using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.ViewModels.Shell
 { // #MVVM
@@ -45,13 +44,14 @@ namespace WolvenKit.ViewModels.Shell
             BackstageIsOpen = true;
 
             //ViewSelectedCommand = new DelegateCommand<object>(ExecuteViewSelected, CanViewSelected);
-            AssetBrowserAddCommand = new RelayCommand(ExecuteAssetBrowserAdd, CanAssetBrowserAdd);
+            //AssetBrowserAddCommand = new RelayCommand(ExecuteAssetBrowserAdd, CanAssetBrowserAdd);
+            //AssetBrowserOpenFileLocation = new RelayCommand(ExecuteAssetBrowserOpenFileLocation, CanAssetBrowserOpenFileLocation);
 
             OpenProjectCommand = ReactiveCommand.Create<string>(s => _mainViewModel.OpenProjectCommand.Execute(s).Subscribe());
             //NewProjectCommand = ReactiveCommand.Create(() => _mainViewModel.NewProjectCommand.Execute().Subscribe());
             PackProjectCommand = ReactiveCommand.Create(() => _mainViewModel.PackModCommand.SafeExecute());
 
-            NewFileCommand = ReactiveCommand.Create(() => _mainViewModel.NewFileCommand.SafeExecute());
+            NewFileCommand = ReactiveCommand.Create(() => _mainViewModel.NewFileCommand.SafeExecute(null));
             SaveFileCommand = ReactiveCommand.Create(() => _mainViewModel.SaveFileCommand.SafeExecute());
             SaveAllCommand = ReactiveCommand.Create(() => _mainViewModel.SaveAllCommand.SafeExecute());
 
@@ -59,7 +59,7 @@ namespace WolvenKit.ViewModels.Shell
             ViewAssetBrowserCommand = ReactiveCommand.Create(() => _mainViewModel.ShowAssetsCommand.SafeExecute());
             ViewPropertiesCommand = ReactiveCommand.Create(() => _mainViewModel.ShowPropertiesCommand.SafeExecute());
             ViewLogCommand = ReactiveCommand.Create(() => _mainViewModel.ShowLogCommand.SafeExecute());
-            ViewCodeEditorCommand = ReactiveCommand.Create(() => _mainViewModel.ShowCodeEditorCommand.SafeExecute());
+            //ViewCodeEditorCommand = ReactiveCommand.Create(() => _mainViewModel.ShowCodeEditorCommand.SafeExecute());
             ShowImportExportToolCommand = ReactiveCommand.Create(() => _mainViewModel.ShowImportExportToolCommand.SafeExecute());
 
             ShowSettingsCommand = ReactiveCommand.Create(() =>
@@ -109,22 +109,5 @@ namespace WolvenKit.ViewModels.Shell
 
         #endregion properties
 
-        #region commands
-
-        public ICommand AssetBrowserAddCommand { get; private set; }
-
-        private bool CanAssetBrowserAdd()
-        {
-            var abvm = Locator.Current.GetService<AssetBrowserViewModel>();
-            return abvm is {RightSelectedItems: { }} && abvm.RightSelectedItems.Any();
-        }
-
-        private void ExecuteAssetBrowserAdd()
-        {
-            var abvm = Locator.Current.GetService<AssetBrowserViewModel>();
-            abvm.AddSelectedCommand.SafeExecute();
-        }
-
-        #endregion commands
     }
 }

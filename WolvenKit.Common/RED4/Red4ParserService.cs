@@ -50,8 +50,9 @@ namespace WolvenKit.RED4.CR2W
                 Console.WriteLine(e.Message);
                 return null;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return null;
             }
 

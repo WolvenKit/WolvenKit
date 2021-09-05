@@ -121,6 +121,14 @@ namespace WolvenKit.Functionality.Services
                 return;
             }
 
+            if (Path.GetExtension(e.Name).ToUpper().Equals(".PDNSAVE", StringComparison.Ordinal) ||
+                Path.GetExtension(e.Name).ToUpper().Equals(".TMP", StringComparison.Ordinal
+                )
+                )
+            {
+                return;
+            }
+
             switch (e.ChangeType)
             {
                 case WatcherChangeTypes.Created:
@@ -130,6 +138,7 @@ namespace WolvenKit.Functionality.Services
                     break;
                 }
                 case WatcherChangeTypes.Deleted:
+                {
                     var key = FileModel.GenerateKey(e.FullPath, _projectManager.ActiveProject);
                     _files.Edit(inner =>
                     {
@@ -137,6 +146,7 @@ namespace WolvenKit.Functionality.Services
                         inner.Remove(key);
                     });
                     break;
+                }
                 case WatcherChangeTypes.All:
                     break;
                 case WatcherChangeTypes.Changed:
@@ -158,13 +168,25 @@ namespace WolvenKit.Functionality.Services
                 return;
             }
 
+            if (Path.GetExtension(e.Name).ToUpper().Equals(".TMP", StringComparison.Ordinal) ||
+                Path.GetExtension(e.OldName).ToUpper().Equals(".TMP", StringComparison.Ordinal) ||
+                Path.GetExtension(e.Name).ToUpper().Equals(".PDNSAVE", StringComparison.Ordinal) ||
+                Path.GetExtension(e.OldName).ToUpper().Equals(".PDNSAVE", StringComparison.Ordinal)
+                )
+            {
+                return;
+            }
+
             switch (e.ChangeType)
             {
                 case WatcherChangeTypes.Renamed:
+                {
                     var key = FileModel.GenerateKey(e.OldFullPath, _projectManager.ActiveProject);
                     _files.RemoveKey(key);
                     _files.AddOrUpdate(new FileModel(e.FullPath, _projectManager.ActiveProject));
                     break;
+                }
+                    
             }
 
         }

@@ -27,17 +27,19 @@ using Microsoft.Extensions.Hosting;
 using Splat.Microsoft.Extensions.DependencyInjection;
 using Splat;
 using WolvenKit.ViewModels.Dialogs;
-using WolvenKit.ViewModels.Editor;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.HomePage.Pages;
 using WolvenKit.ViewModels.Shared;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Editor;
-using WolvenKit.Views.Editor.VisualEditor;
+using WolvenKit.Views.Documents;
 using WolvenKit.Views.HomePage;
 using WolvenKit.Views.HomePage.Pages;
 using WolvenKit.Views.Wizards;
+using WolvenKit.Common.Interfaces;
+using WolvenKit.Views.Tools;
+using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit
 {
@@ -135,7 +137,7 @@ namespace WolvenKit
                     services.AddSingleton<IProjectManager, ProjectManager>();
                     services.AddSingleton<IWatcherService, WatcherService>();
 
-
+                    services.AddSingleton<IArchiveManager, ArchiveManager>();
                     services.AddSingleton<MockGameController>();
 
                     // red4 modding tools
@@ -143,8 +145,8 @@ namespace WolvenKit
                     services.AddSingleton<RIG>();
                     services.AddSingleton<MeshTools>();
 
-                    services.AddSingleton<ModTools>();
-                    services.AddSingleton<Cp77Controller>();
+                    services.AddSingleton<IModTools, ModTools>();
+                    services.AddSingleton< RED4Controller>();
 
                     // red3 modding tools
                     //services.AddSingleton<Red3ModTools>();
@@ -152,11 +154,7 @@ namespace WolvenKit
 
                     services.AddSingleton<IGameControllerFactory, GameControllerFactory>();
 
-
-                    // this passes IScreen resolution through to the previous viewmodel registration.
-                    // this is to prevent multiple instances by mistake.
-                    services.AddSingleton</*IAppViewModel,*/ AppViewModel>();
-                    //services.AddSingleton<IScreen, WorkSpaceViewModel>(x => x.GetRequiredService<WorkSpaceViewModel>());
+                    services.AddSingleton<AppViewModel>();
                     services.AddSingleton<IViewFor<AppViewModel>, MainView>();
 
                     // register views
@@ -187,9 +185,12 @@ namespace WolvenKit
                     services.AddTransient<RenameDialogViewModel>();
                     services.AddTransient<IViewFor<RenameDialogViewModel>, RenameDialog>();
 
+                    services.AddTransient<NewFileViewModel>();
+                    services.AddTransient<IViewFor<NewFileViewModel>, NewFileView>();
+
                     #endregion
 
-                    #region editor
+                    #region documents
 
                     services.AddSingleton<AssetBrowserViewModel>();
                     services.AddTransient<IViewFor<AssetBrowserViewModel>, AssetBrowserView>();
@@ -203,14 +204,15 @@ namespace WolvenKit
                     services.AddSingleton<PropertiesViewModel>();
                     services.AddTransient<IViewFor<PropertiesViewModel>, PropertiesView>();
 
+                    #endregion
 
+                    #region tools
 
+                    //services.AddTransient<CodeEditorViewModel>();
+                    //services.AddTransient<IViewFor<CodeEditorViewModel>, CodeEditorView>();
 
-                    services.AddTransient<CodeEditorViewModel>();
-                    services.AddTransient<IViewFor<CodeEditorViewModel>, CodeEditorView>();
-
-                    services.AddTransient<VisualEditorViewModel>();
-                    services.AddTransient<IViewFor<VisualEditorViewModel>, VisualEditorView>();
+                    //services.AddTransient<VisualEditorViewModel>();
+                    //services.AddTransient<IViewFor<VisualEditorViewModel>, VisualEditorView>();
 
                     services.AddSingleton<ImportExportViewModel>();
                     services.AddTransient<IViewFor<ImportExportViewModel>, ImportExportView>();
@@ -248,8 +250,6 @@ namespace WolvenKit
                     //services.AddSingleton<IViewFor<RecentlyUsedItemsViewModel>, RecentlyUsedItemsView>();
 
                     #endregion
-
-                   
 
                     #region wizards
 

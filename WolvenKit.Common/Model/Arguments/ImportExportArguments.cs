@@ -62,8 +62,10 @@ namespace WolvenKit.Common.Model.Arguments
             { typeof(MlmaskExportArgs), new MlmaskExportArgs() },
             { typeof(XbmExportArgs), new XbmExportArgs() },
             { typeof(MeshExportArgs), new MeshExportArgs() },
+            { typeof(AnimationExportArgs), new AnimationExportArgs() },
             { typeof(WemExportArgs), new WemExportArgs() },
             { typeof(OpusExportArgs), new OpusExportArgs() },
+            { typeof(EntityExportArgs), new EntityExportArgs() },
         };
 
         /// <summary>
@@ -229,7 +231,8 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public class XbmImportArgs : ImportArgs
     {
-        public Enums.GpuWrapApieTextureGroup TextureGroup { get; internal set; }
+        public Enums.GpuWrapApieTextureGroup TextureGroup { get; internal set; } =
+            Enums.GpuWrapApieTextureGroup.TEXG_Generic_Color;
 
         /// <summary>
         /// String Override to display info in datagrid.
@@ -342,6 +345,11 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Browsable(false)]
         public List<Archive> Archives { get; set; } = new();
+        /// <summary>
+        /// Archive path for Console Morphtarget Export.
+        /// </summary>
+        [Browsable(false)]
+        public string ArchiveDepot { get; set; }
 
         [Browsable(false)]
         public string ModFolderPath { get; set; }
@@ -404,7 +412,33 @@ namespace WolvenKit.Common.Model.Arguments
         /// <returns>String</returns>
         public override string ToString() => $"{UncookExtension.ToString()} | Flip : {Flip.ToString()}";
     }
-
+    /// <summary>
+    /// ENT Export Arguments
+    /// </summary>
+    public class EntityExportArgs : ExportArgs
+    {
+        /// <summary>
+        ///  Uncook Format for Entity.
+        /// </summary>
+        [Category("Export Type")]
+        [Display(Name = "Export Type")]
+        public EntityExportType ExportType { get; set; } = EntityExportType.Json;
+        /// <summary>
+        /// List of Archives for Gltf Mesh Export.
+        /// </summary>
+        [Browsable(false)]
+        public List<Archive> Archives { get; set; } = new();
+        /// <summary>
+        /// String Override to display info in datagrid.
+        /// </summary>
+        /// <returns>String</returns>
+        public override string ToString() => $"{ExportType.ToString()}";
+    }
+    public enum EntityExportType
+    {
+        Json,
+        Gltf
+    }
     /// <summary>
     /// Mesh Export Arguments
     /// </summary>
@@ -513,7 +547,32 @@ namespace WolvenKit.Common.Model.Arguments
         /// <returns>String</returns>
         public override string ToString() => wemExportType.ToString();
     }
+    public class AnimationExportArgs : ExportArgs
+    {
+        /// <summary>
+        /// Binary Export Bool, Decides between GLB and GLTF
+        /// </summary>
+        [Category("Export Settings")]
+        [Display(Name = "Is Binary")]
+        [Description("If checked the mesh will be exported as GLB, if unchecked as GLTF")]
+        public bool IsBinary { get; set; } = true;
 
+        /// <summary>
+        /// List of Archives for Animations Export.
+        /// </summary>
+        [Browsable(false)]
+        public List<Archive> Archives { get; set; } = new();
+        /// <summary>
+        /// Archive path for Console Anims Export.
+        /// </summary>
+        [Browsable(false)]
+        public string ArchiveDepot { get; set; }
+        /// <summary>
+        /// String Override to display info in datagrid.
+        /// </summary>
+        /// <returns>String</returns>
+        public override string ToString() => "GLTF/GLB | " + $"Is Binary :  {IsBinary.ToString()}";
+    }
     /// <summary>
     /// Wem Export Types
     /// </summary>

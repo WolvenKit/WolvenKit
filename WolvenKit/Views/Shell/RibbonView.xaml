@@ -9,16 +9,13 @@
     xmlns:fluent="urn:fluent-ribbon"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:local="clr-namespace:WolvenKit.Views.Editor"
-    xmlns:local1="clr-namespace:WolvenKit.ViewModels.Editor;assembly=WolvenKit.App"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:sfskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
     xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:views1="clr-namespace:WolvenKit.MVVM.Views.Shell.Backstage"
     xmlns:shell="clr-namespace:WolvenKit.ViewModels.Shell;assembly=WolvenKit.App"
-    Margin="0,33,0,0"
+    xmlns:shell1="clr-namespace:WolvenKit.Views.Shell"
     Panel.ZIndex="-15">
 
     <!--  Resources  -->
@@ -132,7 +129,7 @@
 
         <syncfusion:Ribbon
             x:Name="_ribbon"
-            Margin="4,0,0,0"
+            Margin="0,0,0,0"
             VerticalAlignment="Stretch"
             Panel.ZIndex="0"
             syncfusion:Ribbon.IsAutoSizeFormEnabled="True"
@@ -145,24 +142,26 @@
             ShowCustomizeRibbon="True"
             Visibility="Visible">
 
-            <syncfusion:Ribbon.QuickAccessToolBar>
+            <!--<syncfusion:Ribbon.QuickAccessToolBar>
                 <syncfusion:QuickAccessToolBar Margin="65,0,0,0" />
-            </syncfusion:Ribbon.QuickAccessToolBar>
+            </syncfusion:Ribbon.QuickAccessToolBar>-->
 
             <!--  Contextual Tabs  -->
             <syncfusion:Ribbon.ContextTabGroups>
 
                 <!--  Contextual CR2W group  -->
                 <syncfusion:ContextTabGroup
-                    x:Name="cr2wcontextab"
+                    x:Name="documentContextTab"
                     Height="90"
                     Margin="14"
                     IsGroupVisible="False"
-                    Label="CR2W EDITING">
+                    Label="DOCUMENT">
+                    
                     <syncfusion:RibbonTab
                         MinWidth="100"
                         Caption="EDIT"
                         IsChecked="True" />
+                    
                 </syncfusion:ContextTabGroup>
 
                 <!--  Contextual Asset Browser group  -->
@@ -172,41 +171,18 @@
                     Margin="14"
                     IsGroupVisible="False"
                     Label="ASSET BROWSER">
+
                     <syncfusion:RibbonTab
                         MinWidth="100"
                         Caption="ACTIONS"
                         IsChecked="True">
-                        <!--  File bar  -->
-                        <syncfusion:RibbonBar
-                            Name="ABFileActions"
-                            Width="auto"
-                            Header="File">
-                            <!--  Add selected Items(s) to Project Button  -->
-                            <syncfusion:RibbonButton
-                                x:Name="AddSelectedItems"
-                                Command="{Binding AssetBrowserAddCommand}"
-                                IconStretch="Fill"
-                                IconType="Icon"
-                                Label="Add selected Item(s) to Project"
-                                SizeForm="Large">
 
-                                <syncfusion:RibbonButton.IconTemplate>
-                                    <DataTemplate>
-                                        <iconPacks:PackIconCodicons
-                                            Width="auto"
-                                            Height="auto"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Stretch"
-                                            Kind="File" />
-                                    </DataTemplate>
-                                </syncfusion:RibbonButton.IconTemplate>
-                            </syncfusion:RibbonButton>
-                        </syncfusion:RibbonBar>
-                        <!--  File bar  -->
+                        <!--  View bar  -->
                         <syncfusion:RibbonBar
                             Name="ABViewActions"
                             Width="auto"
                             Header="View">
+                            
                             <!--  Expand Single Nodes  -->
                             <syncfusion:RibbonButton
                                 x:Name="ExpandSingleAB"
@@ -290,7 +266,108 @@
                                     </DataTemplate>
                                 </syncfusion:RibbonButton.IconTemplate>
                             </syncfusion:RibbonButton>
+                            
                         </syncfusion:RibbonBar>
+
+                        <!--  Search bar  -->
+                        <syncfusion:RibbonBar
+                            x:Name="ABSearchActions"
+                            Width="auto"
+                            Header="Search">
+                                                       
+                            <!--  Search by other keys  -->
+                            <syncfusion:DropDownButton
+                                x:Name="SearchOther"
+                                IconStretch="Fill"
+                                IconType="Icon"
+                                Label="Search options"
+                                SizeForm="Large"
+                                HorizontalAlignment="Left">
+
+                                <syncfusion:DropDownButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconCodicons
+                                            Width="auto"
+                                            Height="auto"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Stretch"
+                                            Kind="Search" />
+                                    </DataTemplate>
+                                </syncfusion:DropDownButton.IconTemplate>
+
+                                <syncfusion:DropDownMenuItem x:Name="SearchKindButton" Header="Kind" CommandParameter="kind">
+                                    <syncfusion:DropDownMenuItem.Icon>
+                                        <iconPacks:PackIconCodicons Kind="FileCode" />
+                                    </syncfusion:DropDownMenuItem.Icon>
+                                </syncfusion:DropDownMenuItem>
+                                <syncfusion:DropDownMenuItem x:Name="SearchHashButton" Header="Hash" CommandParameter="hash">
+                                    <syncfusion:DropDownMenuItem.Icon>
+                                        <iconPacks:PackIconCodicons Kind="FileCode" />
+                                    </syncfusion:DropDownMenuItem.Icon>
+                                </syncfusion:DropDownMenuItem>
+                                <syncfusion:DropDownMenuItem x:Name="SearchNameButton" Header="Name" CommandParameter="name">
+                                    <syncfusion:DropDownMenuItem.Icon>
+                                        <iconPacks:PackIconCodicons Kind="FileCode" />
+                                    </syncfusion:DropDownMenuItem.Icon>
+                                </syncfusion:DropDownMenuItem>
+                                <syncfusion:DropDownMenuItem x:Name="SearchLimitButton" Header="Limit" CommandParameter="limit">
+                                    <syncfusion:DropDownMenuItem.Icon>
+                                        <iconPacks:PackIconCodicons Kind="FileCode" />
+                                    </syncfusion:DropDownMenuItem.Icon>
+                                </syncfusion:DropDownMenuItem>
+
+                            </syncfusion:DropDownButton>
+
+                            <!--  Open file Location  -->
+                            <syncfusion:RibbonButton
+                                x:Name="SearchOpenFileLocation"
+                                IconStretch="Fill"
+                                IconType="Icon"
+                                Label="Open file Location"
+                                SizeForm="Large">
+
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconMaterialDesign
+                                            Width="auto"
+                                            Height="auto"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Stretch"
+                                            Kind="OpenInBrowser" />
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
+
+                        </syncfusion:RibbonBar>
+
+                        <!--  File bar  -->
+                        <syncfusion:RibbonBar
+                            x:Name="ABFileActions"
+                            Width="auto"
+                            Header="File">
+
+                            <!--  Add selected Items(s) to Project Button  -->
+                            <syncfusion:RibbonButton
+                                x:Name="AddSelectedItemsButton"
+                                IconStretch="Fill"
+                                IconType="Icon"
+                                Label="Add selected Item(s) to Project"
+                                SizeForm="Large">
+
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconVaadinIcons
+                                            Width="auto"
+                                            Height="auto"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Stretch"
+                                            Kind="FileAdd"
+                                            Foreground="ForestGreen"/>
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
+                        </syncfusion:RibbonBar>
+
                     </syncfusion:RibbonTab>
                 </syncfusion:ContextTabGroup>
                 
@@ -663,6 +740,7 @@
                                         Height="auto"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Stretch"
+                                        Foreground="Green"
                                         Kind="Play" />
                                 </DataTemplate>
                             </syncfusion:RibbonButton.IconTemplate>
@@ -760,6 +838,7 @@
                                         Height="auto"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Stretch"
+                                        Foreground="CornflowerBlue"
                                         Kind="Save" />
                                 </DataTemplate>
                             </syncfusion:RibbonButton.IconTemplate>
@@ -779,6 +858,7 @@
                                         Height="auto"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Stretch"
+                                        Foreground="CornflowerBlue"
                                         Kind="SaveAll" />
                                 </DataTemplate>
                             </syncfusion:RibbonButton.IconTemplate>
@@ -814,7 +894,7 @@
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
-                                    Foreground="{DynamicResource MaterialDarkRibbonBackgroundBrush}"
+                                    Foreground="DarkGoldenrod"
                                     Kind="FolderOpened" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
@@ -834,6 +914,7 @@
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
+
                                     Kind="NewFolder" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
@@ -853,6 +934,7 @@
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
+                                    Foreground="Green"
                                     Kind="Play" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
@@ -955,6 +1037,7 @@
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
+                                    Foreground="CornflowerBlue"
                                     Kind="Save" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
@@ -974,6 +1057,7 @@
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
+                                    Foreground="CornflowerBlue"
                                     Kind="SaveAll" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
@@ -1664,7 +1748,7 @@
         <Border
             Width="70"
             Height="30"
-            Margin="0,-30,0,0"
+            Margin="0,-2,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="top"
             Background="{DynamicResource ContentBackgroundAlt2}"
@@ -1673,7 +1757,7 @@
         <Border
             Width="42"
             Height="49"
-            Margin="13,-24,0,0"
+            Margin="13,-30,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Background="Transparent"
@@ -1700,7 +1784,7 @@
         <Border
             Width="42"
             Height="49"
-            Margin="13,-24,0,0"
+            Margin="13,-30,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="top"
             Background="Transparent"
@@ -1726,7 +1810,7 @@
             </Border>
         </Border>
 
-        <feather:GuidedTour
+        <!--<feather:GuidedTour
             Name="guide"
             AllowDismiss="True"
             Animate="True" />
@@ -1775,11 +1859,11 @@
                 <Grid>
 
                     <Grid Grid.Row="1">
-                        <views1:BackStageView />
+                        <shell1:BackStageView />
                     </Grid>
                 </Grid>
             </Border>
-        </hc:Drawer>
+        </hc:Drawer>-->
         
     </Grid>
     

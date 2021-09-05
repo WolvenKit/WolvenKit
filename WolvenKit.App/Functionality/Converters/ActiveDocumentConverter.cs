@@ -1,6 +1,6 @@
 using System;
 using System.Windows.Data;
-using WolvenKit.ViewModels.Editor;
+using WolvenKit.ViewModels.Documents;
 
 namespace WolvenKit.Functionality.Converters
 {

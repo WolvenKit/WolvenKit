@@ -798,7 +798,7 @@ namespace WolvenKit.MSTests
                 {
                     if (ulong.TryParse(line.Split(',').First(), out var hash))
                     {
-                        filesToTest.AddRange(s_bm.Items[hash].Cast<FileEntry>());
+                        filesToTest.Add(s_bm.Items.Lookup(hash).Value as FileEntry);
                     }
                 }
             }

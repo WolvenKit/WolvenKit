@@ -18,6 +18,7 @@
       <PackageOutputPath>./nupkg</PackageOutputPath>
       <DebugType>embedded</DebugType>
       <Platforms>x64</Platforms>
+      <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 
   </PropertyGroup>
 

@@ -2,6 +2,23 @@
 
 namespace WolvenKit.Common
 {
+    public enum EWolvenKitFile
+    {
+        Cr2w,
+        Redscript,
+        Tweak
+    }
+
+    public enum ERedScriptExtension
+    {
+        SWIFT
+    }
+
+    public enum ETweakExtension
+    {
+        TWEAK
+    }
+
     public enum EUpdateChannel
     {
         Stable,
@@ -211,7 +228,8 @@ namespace WolvenKit.Common
         mesh,
         xbm,
         csv,
-
+        //app,
+        //ent,
         //json,
         mlmask,
 
@@ -220,7 +238,8 @@ namespace WolvenKit.Common
         texarray,
         morphtarget,
         fnt,
-        opusinfo
+        opusinfo,
+        anims
     }
 
     /// <summary>

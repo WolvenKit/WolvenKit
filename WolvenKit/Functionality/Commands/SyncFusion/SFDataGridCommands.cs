@@ -1,4 +1,3 @@
-
 using Syncfusion.UI.Xaml.Grid;
 using System;
 using System.Collections.Generic;
@@ -8,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Splat;
-using WolvenKit.ViewModels.Editor;
+using WolvenKit.Common.Interfaces;
 
 namespace WolvenKit
 {
@@ -28,29 +27,31 @@ namespace WolvenKit
 
         private static void OnCheckUnCheckCommand(object sender, ExecutedRoutedEventArgs args)
         {
-            var sfdatagrid = (args.Parameter as SfDataGrid);
-            var viewmodel = Locator.Current.GetService<ImportExportViewModel>();
-            var checkbox = (sender as CheckBox).IsChecked;
-            if (viewmodel != null)
+            if (args.Parameter is not SfDataGrid sfdatagrid)
             {
-                if (checkbox == true)
+                return;
+            }
+            var checkbox = (sender as CheckBox).IsChecked;
+
+            if (checkbox == true)
+            {
+                sfdatagrid.SelectAll();
+                foreach (var item in sfdatagrid.SelectedItems)
                 {
-                    sfdatagrid.SelectAll();
-                    foreach (var collection in viewmodel.ExportableItems)
-                    {
-                        if (collection.IsChecked == false)
-                            collection.IsChecked = true;
-                    }
+                    var selectablevm = (ISelectableViewModel)item;
+                    if (selectablevm.IsChecked == false)
+                        selectablevm.IsChecked = true;
                 }
-                else if (checkbox == false)
+            }
+            else if (checkbox == false)
+            {
+                foreach (var item in sfdatagrid.SelectedItems)
                 {
-                    sfdatagrid.ClearSelections(false);
-                    foreach (var collection in viewmodel.ExportableItems)
-                    {
-                        if (collection.IsChecked == true)
-                            collection.IsChecked = false;
-                    }
+                    var selectablevm = (ISelectableViewModel)item;
+                    if (selectablevm.IsChecked == true)
+                        selectablevm.IsChecked = false;
                 }
+                sfdatagrid.ClearSelections(false);
             }
         }
     }

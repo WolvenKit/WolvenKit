@@ -21,10 +21,15 @@ namespace WolvenKit.Modkit.RED4
     {
         #region Methods
 
-
-        private bool Rebuild(Stream fileStream, IEnumerable<byte[]> buffersenumerable)
+        /// <summary>
+        /// Rebuild a list of buffer bytearrays into a redfile
+        /// </summary>
+        /// <param name="redfileStream"></param>
+        /// <param name="buffersenumerable"></param>
+        /// <returns></returns>
+        private bool Rebuild(Stream redfileStream, IEnumerable<byte[]> buffersenumerable)
         {
-            using var fileReader = new BinaryReader(fileStream);
+            using var fileReader = new BinaryReader(redfileStream);
 
             var cr2w = _wolvenkitFileService.TryReadRED4FileHeaders(fileReader);
             if (cr2w == null)
@@ -34,10 +39,10 @@ namespace WolvenKit.Modkit.RED4
 
             // remove old buffers
             fileReader.BaseStream.Seek(0, SeekOrigin.Begin);
-            fileStream.SetLength(cr2w.Header.objectsEnd);
+            redfileStream.SetLength(cr2w.Header.objectsEnd);
 
             // kraken the buffers and handle textures
-            using var fileWriter = new BinaryWriter(fileStream);
+            using var fileWriter = new BinaryWriter(redfileStream);
             fileWriter.BaseStream.Seek(0, SeekOrigin.End);
 
             var existingBufferCount = cr2w.Buffers.Count;
@@ -82,15 +87,15 @@ namespace WolvenKit.Modkit.RED4
         }
 
         /// <summary>
-        /// Rebuild a list of buffers into a redfile
+        /// Rebuild a list of buffer files into a redfile
         /// </summary>
-        /// <param name="redfile"></param>
+        /// <param name="redfileStream"></param>
         /// <param name="buffers"></param>
         /// <returns></returns>
         /// <exception cref="FileNotFoundException"></exception>
-        private bool Rebuild(Stream redfile, IEnumerable<FileInfo> buffers)
+        private bool Rebuild(Stream redfileStream, IEnumerable<FileInfo> buffers)
         {
-            AppendBuffersToFile(redfile);
+            AppendBuffersToFile(redfileStream);
 
             return true;
 

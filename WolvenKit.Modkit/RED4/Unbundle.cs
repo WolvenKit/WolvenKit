@@ -154,7 +154,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="outDir"></param>
         /// <param name="decompressBuffers"></param>
         /// <returns></returns>
-        public int ExtractSingle(Archive ar, ulong hash, DirectoryInfo outDir, bool decompressBuffers = false, MemoryMappedFile mmf = null)
+        public static int ExtractSingle(Archive ar, ulong hash, DirectoryInfo outDir, bool decompressBuffers = false, MemoryMappedFile mmf = null)
         {
             if (!ar.Files.ContainsKey(hash))
             {
@@ -197,7 +197,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="outDir"></param>
         /// <param name="decompressBuffers"></param>
         /// <returns></returns>
-        public async Task<int> ExtractSingleAsync(Archive ar, ulong hash, DirectoryInfo outDir, bool decompressBuffers = false, MemoryMappedFile mmf = null)
+        public static async Task<int> ExtractSingleAsync(Archive ar, ulong hash, DirectoryInfo outDir, bool decompressBuffers = false, MemoryMappedFile mmf = null)
         {
             if (!ar.Files.ContainsKey(hash))
             {

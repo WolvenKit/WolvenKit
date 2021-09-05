@@ -18,11 +18,25 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         public override GameType GameType => GameType.Cyberpunk2077;
 
-        public override string PackedModDirectory
+        public string ScriptDirectory
         {
             get
             {
-                var dir = Path.Combine(ProjectDirectory, "packed", "archive", "pc", "mod"/*, $"mod{Name}"*/);
+                var dir = Path.Combine(FileDirectory, "scripts");
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                return dir;
+            }
+        }
+
+        public string TweakDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(FileDirectory, "tweakdbs");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -46,6 +60,47 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
+        public override string PackedModDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(PackedRootDirectory, "archive", "pc", "mod"/*, $"mod{Name}"*/);
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                return dir;
+            }
+        }
+
+        public string PackedTweakDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(PackedRootDirectory, "r6", "tweakdbs");
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                return dir;
+            }
+        }
+
+        public string PackedScriptsDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(PackedRootDirectory, "r6", "scripts");
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                return dir;
+            }
+        }
 
         #region methods
 
@@ -56,6 +111,8 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             // create top-level directories
             _ = ModDirectory;
             _ = RawDirectory;
+            _ = TweakDirectory;
+            _ = ScriptDirectory;
         }
 
         public object Clone()

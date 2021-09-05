@@ -92,7 +92,6 @@ namespace WolvenKit.Views.Templates
             }
 
             cvar.SetValue(new List<string>() { SelectedItem });
-            cvar.IsSerialized = true;
         }
     }
 }

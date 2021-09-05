@@ -1,17 +1,20 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using ProtoBuf;
 using Splat;
 using WolvenKit.Common;
+using WolvenKit.Common.Interfaces;
+using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using Path = System.IO.Path;
 
 namespace WolvenKit.RED4.CR2W.Archive
 {
     [ProtoContract]
-    public class ArchiveManager : CyberArchiveManager
+    public class ArchiveManager : RED4ArchiveManager, IArchiveManager
     {
         #region Fields
 
@@ -22,62 +25,54 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region Constructors
 
-        public ArchiveManager() : this(Locator.Current.GetService<IHashService>())
-        {
-
-        }
-
         public ArchiveManager(IHashService hashService)
         {
             _hashService = hashService;
         }
-
+        
         #endregion Constructors
 
         #region properties
+
         [ProtoMember(1)] public override Dictionary<string, IGameArchive> Archives { get; set; } = new();
-
-        //[ProtoMember(2)] public string GameVersion { get; set; }
-
-        //[ProtoMember(3)] public List<string> CachedArchives { get; set; } = new();
-
-        public Dictionary<string, IEnumerable<FileEntry>> GroupedFiles =>
-            Archives.Values
-                .SelectMany(_ => _.Files.Values)
-                .GroupBy(_ => _.Extension)
-                .ToDictionary(_ => _.Key, _ => _.Select(x => x as FileEntry));
-
 
         #endregion properties
 
         #region methods
 
-        [ProtoAfterDeserialization]
-        public void AfterDeserializationCallback()
-        {
-            foreach (var archive in Archives.Values)
-            {
-                var fileEntries = (archive as Archive).Index.FileEntries.Values;
-                foreach (var file in fileEntries)
-                {
-                    file.Archive = archive;
-                    archive.Files.Add(file.Key, file);
-                    file.SetHashService(_hashService);
-                }
-                var deps = (archive as Archive).Index.Dependencies;
-                foreach (var d in deps)
-                {
-                    d.SetHashService(_hashService);
-                }
-            }
+        //[ProtoAfterDeserialization]
+        //public void AfterDeserializationCallback()
+        //{
+        //    foreach (var archive in Archives.Values)
+        //    {
+        //        var fileEntries = (archive as Archive).Index.FileEntries.Values;
+        //        foreach (var file in fileEntries)
+        //        {
+        //            file.Archive = archive;
+        //            archive.Files.Add(file.Key, file);
+        //            file.SetHashService(_hashService);
+        //        }
+        //        var deps = (archive as Archive).Index.Dependencies;
+        //        foreach (var d in deps)
+        //        {
+        //            d.SetHashService(_hashService);
+        //        }
+        //    }
 
-            Items = Archives.Values
-                .SelectMany(_ => _.Files)
-                .GroupBy(_ => _.Key)
-                .ToDictionary(_ => _.Key, _ => _.Select(x => x.Value).ToList());
+        //    Items.Edit(innerList =>
+        //    {
+        //        innerList.Clear();
+        //        innerList.AddOrUpdate(Archives.Values.SelectMany(_ => _.Files));
+        //    });
 
-            RebuildRootNode();
-        }
+        //    RebuildRootNode();
+        //}
+
+        public override Dictionary<string, IEnumerable<FileEntry>> GetGroupedFiles() =>
+           Archives.Values
+               .SelectMany(_ => _.Files.Values)
+               .GroupBy(_ => _.Extension)
+               .ToDictionary(_ => _.Key, _ => _.Select(x => x as FileEntry));
 
         public override EArchiveType TypeName => EArchiveType.Archive;
 
@@ -86,7 +81,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// </summary>
         /// <param name="archivedir"></param>
         /// <param name="rebuildtree"></param>
-        public void LoadFromFolder(DirectoryInfo archivedir, bool rebuildtree = false)
+        public override void LoadFromFolder(DirectoryInfo archivedir, bool rebuildtree = false)
         {
             if (!archivedir.Exists)
             {
@@ -99,7 +94,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
             if (rebuildtree)
             {
-                RebuildRootNode();
+                RebuildRootNode(_hashService);
             }
         }
 
@@ -119,14 +114,29 @@ namespace WolvenKit.RED4.CR2W.Archive
 
             var archivedir = Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "content");
 
+            //var sw = new Stopwatch();
+            //sw.Start();
+
             foreach (var file in Directory.GetFiles(archivedir, "*.archive"))
             {
                 LoadArchive(file);
             }
 
+            //sw.Stop();
+            //var ms = sw.ElapsedMilliseconds;
+
+            // populate lists
+            Items.Edit(innerList =>
+            {
+                innerList.Clear();
+                innerList.AddOrUpdate(Archives.Values.SelectMany(_ => _.Files));
+            });
+
+            Extensions = Items.KeyValues.Select(_ => _.Value.Extension).Distinct();
+
             if (rebuildtree)
             {
-                RebuildRootNode();
+                RebuildRootNode(_hashService);
             }
         }
 
@@ -143,23 +153,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             }
 
             var archive = Red4ParserServiceExtensions.ReadArchive(filename, _hashService);
-
-            foreach (var (key, value) in archive.Files)
-            {
-                // add new key if the file isn't already in another bundle
-                if (!Items.ContainsKey(key))
-                {
-                    Items.Add(key, new List<IGameFile>());
-                }
-                if (!Items[key].ToList().Contains(value))
-                {
-                    var items = Items[key];
-                    items.Add(value);
-                }
-            }
-
             Archives.Add(archive.ArchiveAbsolutePath, archive);
-            //CachedArchives.Add(archive.Name);
         }
 
         /// <summary>
@@ -217,6 +211,77 @@ namespace WolvenKit.RED4.CR2W.Archive
                 }
             }
             RebuildRootNode();*/
+        }
+
+        /// <summary>
+        /// Checks if a file with the given hash exists in the archivemanager
+        /// </summary>
+        /// <param name="hash"></param>
+        /// <returns></returns>
+        public bool ContainsFile(ulong hash) => Items.Lookup(hash).HasValue;
+
+        /// <summary>
+        /// Retrieves a file with the given hash
+        /// </summary>
+        /// <param name="hash"></param>
+        /// <returns></returns>
+        public override IGameFile LookupFile(ulong hash)
+        {
+            var query = Items.Lookup(hash);
+            if (query.HasValue)
+            {
+                return query.Value;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Retrieves a directory with the given fullpath
+        /// </summary>
+        /// <param name="fullpath"></param>
+        /// <returns></returns>
+        public override RedFileSystemModel LookupDirectory(string fullpath, bool expandAll = false)
+        {
+            var splits = fullpath.Split(Path.DirectorySeparatorChar);
+
+            var currentDir = RootNode;
+            if (expandAll)
+            {
+                currentDir.IsExpanded = true;
+            }
+
+            for (var i = 0; i < splits.Length; i++)
+            {
+                var s = splits[i];
+               
+                if (currentDir.Directories.Any(d => d.Name == s))
+                {
+                    currentDir = currentDir.Directories.First(d => d.Name == s);
+                    if (expandAll)
+                    {
+                        currentDir.IsExpanded = true;
+                    }
+                    if (i == splits.Length - 1)
+                    {
+                        return currentDir;
+                    }
+                }
+                else
+                {
+                    if (i == splits.Length - 1)
+                    {
+                        return currentDir;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+            return null;
         }
 
         #endregion methods

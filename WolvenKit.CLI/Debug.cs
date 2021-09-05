@@ -21,7 +21,6 @@ using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.Types;
-using ModTools = WolvenKit.Modkit.RED4.ModTools;
 
 namespace WolvenKit.CLI
 {
@@ -74,7 +73,7 @@ namespace WolvenKit.CLI
                 var exe = new FileInfo(Path.Combine(gameDirectory, "bin", "x64", Constants.Red4Exe));
                 var bm = new ArchiveManager(_hashService);
                 bm.LoadAll(exe, false);
-                var groupedFiles = bm.GroupedFiles;
+                var groupedFiles = bm.GetGroupedFiles();
                 _logger.LogInformation("ArchiveManager loaded");
 
                 var exclude = new List<String>()
@@ -145,7 +144,7 @@ namespace WolvenKit.CLI
                 var exe = new FileInfo(Path.Combine(gameDirectory, "bin", "x64", Constants.Red4Exe));
                 var bm = new ArchiveManager(_hashService);
                 bm.LoadAll(exe, false);
-                var groupedFiles = bm.GroupedFiles;
+                var groupedFiles = bm.GetGroupedFiles();
                 _logger.LogInformation("ArchiveManager loaded");
 
 

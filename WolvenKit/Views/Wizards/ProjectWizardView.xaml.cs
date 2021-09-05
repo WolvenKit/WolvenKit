@@ -8,7 +8,6 @@ using Syncfusion.UI.Xaml.TreeGrid;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models.Wizards;
-using WolvenKit.ViewModels.Editor;
 using WolvenKit.ViewModels.Wizards;
 
 namespace WolvenKit.Views.Wizards

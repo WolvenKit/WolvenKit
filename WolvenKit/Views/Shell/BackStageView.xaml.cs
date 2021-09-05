@@ -1,6 +1,6 @@
 using System.Windows.Controls;
 
-namespace WolvenKit.MVVM.Views.Shell.Backstage
+namespace WolvenKit.Views.Shell
 {
     /// <summary>
     /// Interaction logic for BackStageView.xaml

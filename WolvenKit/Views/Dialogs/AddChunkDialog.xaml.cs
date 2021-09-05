@@ -1,7 +1,6 @@
 using ReactiveUI;
 using Splat;
 using WolvenKit.ViewModels.Dialogs;
-using WolvenKit.ViewModels.Editor;
 
 namespace WolvenKit.Views.Dialogs
 {
