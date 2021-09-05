@@ -72,8 +72,7 @@ namespace WolvenKit
         protected override void ProcessSelectedItemsChanged(NotifyCollectionChangedEventArgs e)
         {
             base.ProcessSelectedItemsChanged(e);
-            var IEVM = Locator.Current.GetService<ImportExportViewModel>();
-
+            
             if (e.Action == NotifyCollectionChangedAction.Reset)
             {
                 if (DataGrid.SelectedItem is ISelectableViewModel m)

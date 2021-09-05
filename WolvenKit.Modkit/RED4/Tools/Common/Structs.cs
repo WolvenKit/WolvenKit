@@ -2,7 +2,6 @@ using System;
 using System.Numerics;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using WolvenKit.Modkit.RED4.Materials;
 using System.Runtime.CompilerServices;
 
 namespace WolvenKit.Modkit.RED4.GeneralStructs
