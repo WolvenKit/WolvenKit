@@ -34,7 +34,7 @@ namespace WolvenKit.ViewModels.Documents
 
             var hlManager = HighlightingManager.Instance;
             HighlightingDefinition = hlManager.GetDefinitionByExtension(".json");
-            
+
 
         }
 
@@ -49,7 +49,7 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public string IsReadOnlyReason { get; set; }
 
-        
+
 
         [Reactive] public string FlatName { get; set; }
 
@@ -143,10 +143,7 @@ namespace WolvenKit.ViewModels.Documents
         {
             if (SelectedItem is null)
             {
-                return;
             }
-
-            
         }
 
         public ReactiveCommand<Unit, Unit> DeleteFlatCommand { get; }
@@ -213,7 +210,7 @@ namespace WolvenKit.ViewModels.Documents
                 var hlManager = HighlightingManager.Instance;
 
                 Document = new TextDocument();
-                string extension = Path.GetExtension(paramFilePath);
+                var extension = Path.GetExtension(paramFilePath);
                 HighlightingDefinition = hlManager.GetDefinitionByExtension(extension);
 
                 IsDirty = false;
@@ -238,7 +235,7 @@ namespace WolvenKit.ViewModels.Documents
                 if (Serialization.TryParseJsonFlatsDict(Document.Text, out var dict))
                 {
                     var list = dict.Select(_ => new FlatViewModel(_.Key, _.Value));
-     
+
                     Flats = new ObservableCollection<FlatViewModel>(list);
                 }
                 else
@@ -252,7 +249,7 @@ namespace WolvenKit.ViewModels.Documents
             }
         }
 
-        public class FlatViewModel
+        public sealed class FlatViewModel
         {
             private readonly IType _value;
 

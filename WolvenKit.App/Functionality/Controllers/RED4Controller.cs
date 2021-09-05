@@ -238,6 +238,15 @@ namespace WolvenKit.Functionality.Controllers
 
         private void CompileTweakFiles(Cp77Project cp77Proj)
         {
+            try
+            {
+                Directory.Delete(cp77Proj.PackedTweakDirectory, true);
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error(e);
+            }
+
             var tweakFiles = Directory.GetFiles(cp77Proj.TweakDirectory, "*.tweak", SearchOption.AllDirectories);
             foreach (var f in tweakFiles)
             {
@@ -245,15 +254,17 @@ namespace WolvenKit.Functionality.Controllers
                 var filename = Path.GetFileNameWithoutExtension(f) + ".bin";
                 var outPath = Path.Combine(cp77Proj.PackedTweakDirectory, filename);
 
-                if (RED4.TweakDB.Serialization.Serialization.TryParseJsonFlatsDict(json, out var dict))
+                if (!RED4.TweakDB.Serialization.Serialization.TryParseJsonFlatsDict(json, out var dict))
                 {
-                    var db = new TweakDB();
-                    foreach (var (key, value) in dict)
-                    {
-                        db.Add(key, value);
-                    }
-                    db.Save(outPath);
+                    continue;
                 }
+
+                var db = new TweakDB();
+                foreach (var (key, value) in dict)
+                {
+                    db.Add(key, value);
+                }
+                db.Save(outPath);
             }
         }
 
