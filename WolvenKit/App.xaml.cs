@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows;
 using CP77.CR2W;
 using HandyControl.Tools;
@@ -58,6 +59,8 @@ namespace WolvenKit
         public App()
         {
             Init();
+
+            SetupExceptionHandling();
         }
 
         // Application OnStartup Override.
@@ -79,7 +82,7 @@ namespace WolvenKit
 
             loggerService.Info("Initializing Shell");
             /*await*/ Initializations.InitializeShell(settings);
-            
+
             loggerService.Info("Initializing Discord RPC API");
             DiscordHelper.InitializeDiscordRPC();
 
@@ -88,7 +91,7 @@ namespace WolvenKit
 
             // Some things can only be initialized after base.OnStartup(e);
             loggerService.Info("Calling base.OnStartup");
-            base.OnStartup(e); 
+            base.OnStartup(e);
 
             loggerService.Info("Initializing NodeNetwork.");
             NNViewRegistrar.RegisterSplat();
@@ -100,6 +103,7 @@ namespace WolvenKit
         }
 
         private IServiceProvider Container { get; set; }
+
         private IHost _host;
 
         private void Init()
@@ -278,6 +282,49 @@ namespace WolvenKit
             // we need to re-register the built container with Splat again
             Container = _host.Services;
             Container.UseMicrosoftDependencyResolver();
+        }
+
+        //https://stackoverflow.com/a/46804709/16407587
+        private void SetupExceptionHandling()
+        {
+            AppDomain.CurrentDomain.UnhandledException += (s, e) =>
+                LogUnhandledException((Exception)e.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException");
+
+            DispatcherUnhandledException += (s, e) =>
+            {
+                LogUnhandledException(e.Exception, "Application.Current.DispatcherUnhandledException");
+                e.Handled = true;
+            };
+
+            TaskScheduler.UnobservedTaskException += (s, e) =>
+            {
+                LogUnhandledException(e.Exception, "TaskScheduler.UnobservedTaskException");
+                e.SetObserved();
+            };
+        }
+
+        private void LogUnhandledException(Exception exception, string source)
+        {
+            var _logger = Splat.Locator.Current.GetService<ILoggerService>();
+            if (_logger == null)
+            {
+                return;
+            }
+
+            var message = $"Unhandled exception ({source})";
+            try
+            {
+                System.Reflection.AssemblyName assemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName();
+                message = string.Format("Unhandled exception in {0} v{1}", assemblyName.Name, assemblyName.Version);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
+            finally
+            {
+                _logger.Error(exception);
+            }
         }
     }
 }

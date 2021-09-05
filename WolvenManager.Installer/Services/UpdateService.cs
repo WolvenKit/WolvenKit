@@ -32,7 +32,7 @@ namespace WolvenManager.Installer.Services
         private Action<FileInfo, bool> _updateAction;
 
         private bool _isInitialized;
-        
+
         #endregion
 
         public UpdateService(
@@ -80,7 +80,7 @@ namespace WolvenManager.Installer.Services
         private static bool IsManaged() => File.Exists(Path.GetFullPath(Constants.ManagedRegistration));
 
         /// <summary>
-        /// Public entry point to check for updates 
+        /// Public entry point to check for updates
         /// </summary>
         /// <returns></returns>
         public async Task CheckForUpdatesAsync()
@@ -104,8 +104,7 @@ namespace WolvenManager.Installer.Services
             }
             catch (Exception ex)
             {
-
-                _loggerService.Error(ex.Message);
+                _loggerService.Error(ex);
                 return;
             }
 
@@ -237,7 +236,7 @@ namespace WolvenManager.Installer.Services
 
             if (e.Error != null)
             {
-                _loggerService.Error(e.Error.ToString());
+                _loggerService.Error(e.Error);
             }
 
             // check downloaded file

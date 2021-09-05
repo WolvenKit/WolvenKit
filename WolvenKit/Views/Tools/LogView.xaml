@@ -17,13 +17,11 @@
      mc:Ignorable="d"
  >
 
-   
-
     <Grid>
         <Grid.Resources>
-            <converters:LogColorConverter x:Key="converter"/>
-            <Style TargetType="sfgrid:VirtualizingCellsControl" x:Key="customRowStyle">
-                <Setter Property="Foreground" Value="{Binding Path=Level, Converter={StaticResource converter}}" />
+            <converters:LogColorConverter x:Key="Converter"/>
+            <Style TargetType="sfgrid:VirtualizingCellsControl" x:Key="CustomRowStyle">
+                <Setter Property="Foreground" Value="{Binding Path=Level, Converter={StaticResource Converter}}" />
             </Style>
         </Grid.Resources>
 
@@ -32,15 +30,15 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
-        <syncfusion:SfDataGrid x:Name="ListView" 
-                               AutoGenerateColumns="False" 
+        <syncfusion:SfDataGrid x:Name="ListView"
+                               AutoGenerateColumns="False"
                                ColumnSizer="AutoLastColumnFill"
                                AllowResizingColumns="True"
                                AllowFiltering="True"
                                AllowEditing="False"
                                AllowSorting="True"
                                ItemsSource="{Binding LogEntries}"
-                               RowStyle="{StaticResource customRowStyle}"
+                               RowStyle="{StaticResource CustomRowStyle}"
         >
             <syncfusion:SfDataGrid.Columns>
 

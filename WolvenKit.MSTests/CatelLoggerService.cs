@@ -52,9 +52,16 @@ namespace WolvenKit.Common.Services
         public void Success(string msg) => LogString(msg, Logtype.Success);
         public IObservable<IChangeSet<LogEntry>> Connect() => throw new NotImplementedException();
 
+
         public void Log(string msg, Logtype type = Logtype.Normal) => LogString(msg, type);
 
         public void Error(string msg) => LogString(msg, Logtype.Error);
+        public void Error(Exception exception)
+        {
+            Info("========================");
+            Error(exception.ToString());
+            Info("========================");
+        }
 
         public void Important(string msg) => LogString(msg, Logtype.Important);
 

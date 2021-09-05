@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using DynamicData;
 using WolvenKit.Common.Services;
 using WolvenKit.Common;
@@ -11,20 +8,44 @@ namespace WolvenKit.Functionality.Services
 {
     public class ReactiveLoggerService : ILoggerService
     {
-        private const int Limit = 100000;
+        private const int s_limit = 100000;
 
-        private readonly SourceList<LogEntry> _log = new SourceList<LogEntry>();
+        private readonly SourceList<LogEntry> _log = new();
         public IObservable<IChangeSet<LogEntry>> Connect() => _log.Connect();
 
+        public ReactiveLoggerService()
+        {
+            var outPath = Path.Combine(ISettingsManager.GetAppData(), "applog.txt");
+            File.WriteAllText(outPath, string.Empty);
+        }
 
         public void LogString(string msg, Logtype type)
         {
             var x = new LogEntry(msg, type);
-            if (_log.Count > Limit)
+            if (_log.Count > s_limit)
             {
                 _log.RemoveAt(0);
             }
             _log.Add(x);
+
+            // log to logfile
+            var outPath = Path.Combine(ISettingsManager.GetAppData(), "applog.txt");
+            using var w = File.AppendText(outPath);
+            logToFile(x, w);
+        }
+
+        private void logToFile(LogEntry logEntry, TextWriter txtWriter)
+        {
+            try
+            {
+                var logmessage =
+                    $"[{DateTime.Now.ToShortDateString()}, {DateTime.Now.ToLongTimeString()}] [{logEntry.Level}] {logEntry.Message}";
+                txtWriter.WriteLine(logmessage);
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
         }
 
         // Normal
@@ -39,5 +60,11 @@ namespace WolvenKit.Functionality.Services
         public void Warning(string s) => LogString(s, Logtype.Error);
 
         public void Error(string msg) => LogString(msg, Logtype.Error);
+        public void Error(Exception exception)
+        {
+            Info("========================");
+            Error(exception.ToString());
+            Info("========================");
+        }
     }
 }
