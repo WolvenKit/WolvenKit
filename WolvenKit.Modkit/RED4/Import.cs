@@ -96,17 +96,15 @@ namespace WolvenKit.Modkit.RED4
                     _loggerService.Success($"Successfully created {redfile}");
                     return true;
                 }
-                catch(Exception ex)
+                catch(Exception e)
                 {
-                    _loggerService.Error($"Unexpected error occured while importing {rawRelative}: {ex.Message}");
+                    _loggerService.Error(e);
                     return false;
                 }
             }
-            else
-            {
-                _loggerService.Error($"Unexpected error occured while importing {rawRelative}");
-                return false;
-            }
+
+            _loggerService.Error($"Unexpected error occured while importing {rawRelative}");
+            return false;
         }
 
         private bool HandleTextures(RedRelativePath rawRelative, DirectoryInfo outDir, GlobalImportArgs args)
@@ -384,7 +382,7 @@ namespace WolvenKit.Modkit.RED4
                     format = md.Format;
                 }
 
-                
+
                 using var fs = new FileStream(infile, FileMode.Open);
                 var ddsbuffer = DDSUtils.ConvertToDdsMemory(fs, extAsEnum, format);
                 ms.Write(ddsbuffer);
@@ -496,7 +494,7 @@ namespace WolvenKit.Modkit.RED4
                     {
                         // slicepitch
                         var slicepitch = DDSUtils.ComputeSlicePitch((int)mipsizeW, (int)mipsizeH, fmt);
-                        offset += slicepitch;   
+                        offset += slicepitch;
                         //rowpitch
                         var rowpitch = DDSUtils.ComputeRowPitch((int)mipsizeW, (int)mipsizeH, fmt);
 
@@ -667,10 +665,13 @@ namespace WolvenKit.Modkit.RED4
                 }
                 catch (Exception e)
                 {
-                    _loggerService.Error($"Unexpected error occured while importing {redfileName}: {e.Message}");
+                    _loggerService.Error(e);
                     return false;
                 }
-
+                finally
+                {
+                    redFs.Close();
+                }
 
             }
 

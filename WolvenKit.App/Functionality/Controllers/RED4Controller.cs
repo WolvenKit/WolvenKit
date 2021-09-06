@@ -128,7 +128,7 @@ namespace WolvenKit.Functionality.Controllers
             }
             catch (Exception e)
             {
-                _loggerService.Log(e.Message);
+                _loggerService.Error(e);
                 throw;
 
 
@@ -146,7 +146,7 @@ namespace WolvenKit.Functionality.Controllers
                 IsManagerLoaded = true;
                 _loggerService.Success("Finished loading archive manager.");
             }
-            
+
             _rootCache.Edit(innerCache =>
             {
                 innerCache.Clear();
@@ -154,7 +154,9 @@ namespace WolvenKit.Functionality.Controllers
                 innerCache.Add(_archiveManager.RootNode);
             });
 
+#pragma warning disable 162
             return _archiveManager;
+#pragma warning restore 162
         }
 
         public List<string> GetAvaliableClasses() => CR2WTypeManager.AvailableTypes.ToList();
@@ -210,9 +212,9 @@ namespace WolvenKit.Functionality.Controllers
             {
                 Directory.Delete(cp77Proj.PackedModDirectory, true);
             }
-            catch
+            catch (Exception e)
             {
-
+                _loggerService.Error(e);
             }
 
             // pack mod
@@ -338,7 +340,7 @@ namespace WolvenKit.Functionality.Controllers
             if (file != null)
             {
                 AddToMod(file);
-            } 
+            }
         }
 
         public void AddToMod(IGameFile file)
@@ -379,8 +381,6 @@ namespace WolvenKit.Functionality.Controllers
 
                     break;
                 }
-                default:
-                    break;
             }
         }
 

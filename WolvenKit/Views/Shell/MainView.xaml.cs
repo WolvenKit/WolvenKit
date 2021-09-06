@@ -70,18 +70,6 @@ namespace WolvenKit.Views.Shell
                     }, RxApp.MainThreadScheduler);
                 });
 
-                Interactions.ShowFirstTimeSetup.RegisterHandler(interaction =>
-                {
-                    var dialog = new DialogHostView();
-                    dialog.ViewModel.HostedViewModel = Locator.Current.GetService<FirstSetupWizardViewModel>();
-
-                    return Observable.Start(() =>
-                    {
-                        var result = dialog.ShowDialog() == true;
-                        interaction.SetOutput(result);
-                    }, RxApp.MainThreadScheduler);
-                });
-
                 Interactions.NewProjectInteraction.RegisterHandler(interaction =>
                 {
                     var dialog = new DialogHostView();

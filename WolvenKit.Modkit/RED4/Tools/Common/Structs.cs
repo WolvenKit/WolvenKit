@@ -2,6 +2,7 @@ using System;
 using System.Numerics;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using System.Runtime.CompilerServices;
 
 namespace WolvenKit.Modkit.RED4.GeneralStructs
 {
@@ -88,7 +89,7 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
 
     public class RawTargetContainer
     {
-        public Vector3[] vertexDelta { get; set; }
+        public TargetVec3[] vertexDelta { get; set; }
         public Vector3[] normalDelta { get; set; }
         public Vector3[] tangentDelta { get; set; }
         public UInt16[] vertexMapping { get; set; }
@@ -109,6 +110,38 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         public UInt32 NumTargets { get; set; }
         public string BaseMesh { get; set; }
         public string BaseTexture { get; set; }
+    }
+
+    public struct TargetVec3
+    {
+        public float X { get; set; }
+        public float Y {  get; set; }
+        public float Z {  get; set; }
+
+        [MethodImpl(MethodImplOptions.NoOptimization)]
+        public TargetVec3(float x, float y, float z)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+        }
+    }
+
+    public struct TargetVec4
+    {
+        public float X { get; set; }
+        public float Y { get; set; }
+        public float Z { get; set; }
+        public float W {  get; set; }
+
+        [MethodImpl(MethodImplOptions.NoOptimization)]
+        public TargetVec4(float x, float y, float z, float w)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+            W = w;
+        }
     }
 
     public class Appearance

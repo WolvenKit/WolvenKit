@@ -189,9 +189,10 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         shippedInstaller.MoveTo(newPath, true);
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
                         _loggerService.Error("Could not initialize auto-installer.");
+                        _loggerService.Error(e);
                         return;
                     }
 
@@ -731,7 +732,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 _ = await Task.FromException<FileNotFoundException>(new FileNotFoundException(nameof(RequestOpenFile), fullPath));
             }
-            // check if in 
+            // check if in
             await RequestFileOpen(fullPath);
         }
 
@@ -1000,7 +1001,7 @@ namespace WolvenKit.ViewModels.Shell
                         /*ActiveDocument =*/ await OpenAsync(fullpath, type);
                     }
 
-                    
+
                     break;
             }
 

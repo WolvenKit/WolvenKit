@@ -114,7 +114,7 @@ namespace WolvenKit.Functionality.Initialization
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="path"></param>
         /// <param name="outpath"></param>
@@ -235,7 +235,7 @@ namespace WolvenKit.Functionality.Initialization
                 }
                 catch (Exception ex)
                 {
-                    _loggerService.Error(ex.Message);
+                    _loggerService.Error(ex);
                     return;
                 }
             }
