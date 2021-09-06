@@ -15,6 +15,8 @@ using ReactiveUI.Fody.Helpers;
 using WolvenKit.RED4.TweakDB;
 using WolvenKit.RED4.TweakDB.Serialization;
 using WolvenKit.RED4.TweakDB.Types;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -86,44 +88,7 @@ namespace WolvenKit.ViewModels.Documents
                 return;
             }
 
-            // parse type
-            if (!Enum.TryParse<EIType>(SelectedType, out var enumType))
-            {
-                return;
-            }
-
-            var jsonvalue = ValueString;
-            // parse value
-            // some pretty input helpers
-            switch (enumType)
-            {
-                case EIType.CName:
-                case EIType.CString:
-                    if (!jsonvalue.StartsWith('\"'))
-                    {
-                        jsonvalue = $"\"{jsonvalue}";
-                    }
-                    if (!jsonvalue.EndsWith('\"'))
-                    {
-                        jsonvalue = $"{jsonvalue}\"";
-                    }
-                    break;
-                case EIType.CColor:
-                case EIType.CEulerAngles:
-                case EIType.CQuaternion:
-                case EIType.CVector2:
-                case EIType.CVector3:
-                    if (!jsonvalue.StartsWith('['))
-                    {
-                        jsonvalue = $"[{jsonvalue}";
-                    }
-                    if (!jsonvalue.EndsWith(']'))
-                    {
-                        jsonvalue = $"{jsonvalue}]";
-                    }
-                    break;
-            }
-            if (!Serialization.TryParseJsonFlat(Serialization.GetTypeFromEnum(enumType), jsonvalue, out var ivalue))
+            if (!Serialization.TryParseJsonFlat(SelectedType, ValueString, out var ivalue))
             {
                 return;
             }
@@ -131,11 +96,8 @@ namespace WolvenKit.ViewModels.Documents
             var newFlat = new FlatViewModel(FlatName, ivalue);
             Flats.Add(newFlat);
 
-            // serialize textfile
-            var dict = Flats.ToList();
-            var d = dict.ToDictionary(x => x.Name, x => x.GetValue());
-
-            Document.Text = JsonSerializer.Serialize(d, Serialization.Options);
+            var flatsDict = Flats.ToDictionary(x => x.Name, x => x.GetValue());
+            Document.Text = Serialization.Serialize(flatsDict);
         }
 
         public ReactiveCommand<Unit, Unit> EditFlatCommand { get; }
@@ -157,11 +119,8 @@ namespace WolvenKit.ViewModels.Documents
             Flats.Remove(SelectedItem);
             SelectedItem = null;
 
-            // serialize textfile
-            var dict = Flats.ToList();
-            var d = dict.ToDictionary(x => x.Name, x => x.GetValue());
-
-            Document.Text = JsonSerializer.Serialize(d, Serialization.Options);
+            var flatsDict = Flats.ToDictionary(x => x.Name, x => x.GetValue());
+            Document.Text = Serialization.Serialize(flatsDict);
         }
 
         #endregion
@@ -172,7 +131,7 @@ namespace WolvenKit.ViewModels.Documents
             using var bw = new StreamWriter(fs);
             bw.Write(Document.Text);
 
-            if (Serialization.TryParseJsonFlatsDict(Document.Text, out var dict))
+            if (Serialization.Deserialize(Document.Text, out var dict))
             {
                 var list = dict.Select(_ => new FlatViewModel(_.Key, _.Value));
                 Flats = new ObservableCollection<FlatViewModel>(list);
@@ -232,7 +191,7 @@ namespace WolvenKit.ViewModels.Documents
 
                 FilePath = paramFilePath;
 
-                if (Serialization.TryParseJsonFlatsDict(Document.Text, out var dict))
+                if (Serialization.Deserialize(Document.Text, out var dict))
                 {
                     var list = dict.Select(_ => new FlatViewModel(_.Key, _.Value));
 
@@ -265,5 +224,7 @@ namespace WolvenKit.ViewModels.Documents
 
             public IType GetValue() => _value;
         }
+
+
     }
 }

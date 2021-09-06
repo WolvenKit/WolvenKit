@@ -1,16 +1,26 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using WolvenKit.RED4.TweakDB.Types;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace WolvenKit.RED4.TweakDB.Serialization
 {
     public static class Serialization
     {
+        public sealed class FlatDto
+        {
+            public string Type { get; set; }
+            public string ValueString { get; set; }
+        }
+
         public static readonly JsonSerializerOptions Options = new()
         {
-            WriteIndented = true,
+            WriteIndented = false,
             Converters =
                 {
                     new ITypeConverterWithTypeDiscriminator(),
@@ -40,19 +50,43 @@ namespace WolvenKit.RED4.TweakDB.Serialization
 
         };
 
+        public static string Serialize(Dictionary<string, IType> dict)
+        {
+            return SerializeJson(dict);
+            //return SerializeYaml(dict);
+        }
+
+        private static string SerializeJson(Dictionary<string, IType> dict) => JsonSerializer.Serialize(dict, Serialization.Options);
+
+        private static string SerializeYaml(Dictionary<string, IType> dict)
+        {
+            var flatsDict = dict.ToDictionary(x => x.Key, y => new FlatDto()
+            {
+                Type = y.Value.Name,
+                ValueString = JsonSerializer.Serialize((object)y.Value, Serialization.Options)
+            });
+
+            var serializer = new SerializerBuilder()
+                .WithNamingConvention(CamelCaseNamingConvention.Instance)
+                .Build();
+            var yaml = serializer.Serialize(flatsDict);
+
+            return yaml;
+        }
+
         /// <summary>
         /// Tries to convert a list of  string representation of a logical value to its IType equivalent.
         /// </summary>
-        /// <param name="json"></param>
+        /// <param name="text"></param>
         /// <param name="dictionary"></param>
         /// <returns></returns>
-        public static bool TryParseJsonFlatsDict(string json, out Dictionary<string, IType> dictionary)
+        public static bool Deserialize(string text, out Dictionary<string, IType> dictionary)
         {
             dictionary = null;
             try
             {
-                dictionary = JsonSerializer.Deserialize<Dictionary<string, IType>>(json, Options);
-
+                dictionary = DeserializeJson(text);
+                //dictionary = DeserializeYaml(text);
                 return true;
             }
             catch (Exception)
@@ -61,8 +95,92 @@ namespace WolvenKit.RED4.TweakDB.Serialization
             }
         }
 
+        private static Dictionary<string, IType> DeserializeJson(string text) => JsonSerializer.Deserialize<Dictionary<string, IType>>(text, Options);
+
+        private static Dictionary<string, IType> DeserializeYaml(string text)
+        {
+            var deserializer = new DeserializerBuilder()
+                .WithNamingConvention(CamelCaseNamingConvention.Instance)
+                .Build();
+            var d = deserializer.Deserialize<Dictionary<string, FlatDto>>(text);
+
+            return d.ToDictionary(x => x.Key, y =>
+            {
+                if (!TryParseJsonFlat(y.Value.Type, y.Value.ValueString, out var itype))
+                {
+                    throw new SerializationException();
+                }
+                return itype;
+            });
+
+        }
+
         /// <summary>
-        /// Tries to convert the specified json string representation to its IType equivalent.
+        /// Tries to convert the specified string representation to its IType equivalent.
+        /// </summary>
+        /// <param name="type">Type of the value to convert.</param>
+        /// <param name="value">A json string containing the value to convert.</param>
+        /// <param name="flat"></param>
+        /// <returns>true if value was converted successfully; otherwise, false.</returns>
+        public static bool TryParseJsonFlat(string type, string value, out IType flat)
+        {
+            flat = null;
+
+            // parse type
+            if (!Enum.TryParse<EIType>(type, out var enumType))
+            {
+                // try other types
+                if (!Enum.TryParse<ERIType>(type, out var renumType))
+                {
+                    return false;
+                }
+
+                enumType = (EIType)renumType;
+            }
+
+            var jsonvalue = value;
+            // parse value
+            // some pretty input helpers
+            switch (enumType)
+            {
+                case EIType.CName:
+                case EIType.CString:
+                    if (!jsonvalue.StartsWith('\"'))
+                    {
+                        jsonvalue = $"\"{jsonvalue}";
+                    }
+                    if (!jsonvalue.EndsWith('\"'))
+                    {
+                        jsonvalue = $"{jsonvalue}\"";
+                    }
+                    break;
+                case EIType.CColor:
+                case EIType.CEulerAngles:
+                case EIType.CQuaternion:
+                case EIType.CVector2:
+                case EIType.CVector3:
+                    if (!jsonvalue.StartsWith('['))
+                    {
+                        jsonvalue = $"[{jsonvalue}";
+                    }
+                    if (!jsonvalue.EndsWith(']'))
+                    {
+                        jsonvalue = $"{jsonvalue}]";
+                    }
+                    break;
+            }
+
+            if (!Serialization.TryParseJsonFlat(Serialization.GetTypeFromEnum(enumType), jsonvalue, out var ivalue))
+            {
+                return false;
+            }
+
+            flat = ivalue;
+            return true;
+        }
+
+        /// <summary>
+        /// Tries to convert the specified string representation to its IType equivalent.
         /// </summary>
         /// <param name="type">Type of the value to convert.</param>
         /// <param name="value">A json string containing the value to convert.</param>

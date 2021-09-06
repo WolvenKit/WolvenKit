@@ -250,11 +250,11 @@ namespace WolvenKit.Functionality.Controllers
             var tweakFiles = Directory.GetFiles(cp77Proj.TweakDirectory, "*.tweak", SearchOption.AllDirectories);
             foreach (var f in tweakFiles)
             {
-                var json = File.ReadAllText(f);
+                var text = File.ReadAllText(f);
                 var filename = Path.GetFileNameWithoutExtension(f) + ".bin";
                 var outPath = Path.Combine(cp77Proj.PackedTweakDirectory, filename);
 
-                if (!RED4.TweakDB.Serialization.Serialization.TryParseJsonFlatsDict(json, out var dict))
+                if (!RED4.TweakDB.Serialization.Serialization.Deserialize(text, out var dict))
                 {
                     continue;
                 }
