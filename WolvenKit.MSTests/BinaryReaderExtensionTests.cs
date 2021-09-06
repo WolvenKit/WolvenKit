@@ -1,0 +1,136 @@
+using System;
+using System.IO;
+using Microsoft.IO;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using WolvenKit.Core.Extensions;
+
+namespace WolvenKit.MSTests
+{
+    using ReadVLQUInt32Test = Tuple<byte[], uint>;
+
+    [TestClass]
+    public class BinaryReaderExtensionTests
+    {
+        #region Helpers
+
+        private static readonly RecyclableMemoryStreamManager s_streamManager = new();
+
+        private static BinaryReader GetReaderFromByteArray(byte[] input) => new BinaryReader(s_streamManager.GetStream(input));
+
+        #endregion
+
+        #region Methods
+
+        [DataTestMethod]
+        [DataRow(new byte[] { 0x00 }, "", DisplayName = "00. Empty string")]
+        [DataRow(new byte[] { 0x84, 0x31, 0x36, 0x78, 0x39 }, "16x9", DisplayName = "01. From tweakdb.bin: 16x9")]
+        [DataRow(
+            new byte[] { 0x89, 0x43, 0x6F, 0x72, 0x70, 0x6F, 0x72, 0x61, 0x74, 0x65 },
+            "Corporate",
+            DisplayName = "02. From tweakdb.str: Corporate"
+        )]
+        [DataRow(
+            new byte[] {
+                0x9A, 0x4D, 0x65, 0x6E, 0x70, 0xC5, 0x8D, 0x20, 0x77, 0x69, 0x74, 0x68, 0x20, 0x72, 0x65, 0x61,
+                0x63, 0x74, 0x69, 0x76, 0x65, 0x20, 0x6C, 0x61, 0x79, 0x65, 0x72
+            },
+            "Menpō with reactive layer",
+            DisplayName = "03. From lang_en_text/onscreens.json: Menpō with reactive layer"
+        )]
+        [DataRow(
+            new byte[] {
+                0x95, 0xE8, 0xAC, 0x8E, 0xE3, 0x81, 0xAE, 0xE4, 0xBA, 0xBA, 0xE7, 0x89, 0xA9, 0xE3, 0x81, 0xA8,
+                0xE8, 0xA9, 0xB1, 0xE3, 0x81, 0x99
+            },
+            "謎の人物と話す",
+            DisplayName = "04. From lang_jp_text/onscreens.json: 謎の人物と話す"
+        )]
+        [DataRow(
+            new byte[] {
+                0xC4, 0x04, 0x54, 0x68, 0x65, 0x79, 0x20, 0x73, 0x61, 0x79, 0x20, 0x69, 0x66, 0x20, 0x79, 0x6F,
+                0x75, 0x20, 0x77, 0x61, 0x6E, 0x6E, 0x61, 0x20, 0x75, 0x6E, 0x64, 0x65, 0x72, 0x73, 0x74, 0x61,
+                0x6E, 0x64, 0x20, 0x74, 0x68, 0x65, 0x20, 0x73, 0x74, 0x72, 0x65, 0x65, 0x74, 0x73, 0x2C, 0x20,
+                0x79, 0x6F, 0x75, 0x20, 0x67, 0x6F, 0x74, 0x74, 0x61, 0x20, 0x6C, 0x69, 0x76, 0x65, 0x20, 0x27,
+                0x65, 0x6D, 0x2E, 0x20, 0x47, 0x61, 0x6E, 0x67, 0x73, 0x2C, 0x20, 0x66, 0x69, 0x78, 0x65, 0x72,
+                0x73, 0x2C, 0x20, 0x64, 0x6F, 0x6C, 0x6C, 0x73, 0x2C, 0x20, 0x73, 0x6D, 0x61, 0x6C, 0x6C, 0x2D,
+                0x74, 0x69, 0x6D, 0x65, 0x20, 0x70, 0x75, 0x73, 0x68, 0x65, 0x72, 0x73, 0x20, 0xE2, 0x80, 0x93,
+                0x20, 0x79, 0x6F, 0x75, 0x20, 0x77, 0x65, 0x72, 0x65, 0x20, 0x72, 0x61, 0x69, 0x73, 0x65, 0x64,
+                0x20, 0x62, 0x79, 0x20, 0x74, 0x68, 0x65, 0x6D, 0x20, 0x61, 0x6C, 0x6C, 0x2E, 0x20, 0x44, 0x6F,
+                0x77, 0x6E, 0x20, 0x68, 0x65, 0x72, 0x65, 0x20, 0x74, 0x68, 0x65, 0x20, 0x6C, 0x61, 0x77, 0x20,
+                0x6F, 0x66, 0x20, 0x74, 0x68, 0x65, 0x20, 0x6A, 0x75, 0x6E, 0x67, 0x6C, 0x65, 0x20, 0x64, 0x69,
+                0x63, 0x74, 0x61, 0x74, 0x65, 0x73, 0x20, 0x74, 0x68, 0x65, 0x20, 0x77, 0x65, 0x61, 0x6B, 0x20,
+                0x73, 0x65, 0x72, 0x76, 0x65, 0x20, 0x74, 0x68, 0x65, 0x20, 0x73, 0x74, 0x72, 0x6F, 0x6E, 0x67,
+                0x20, 0xE2, 0x80, 0x93, 0x20, 0x74, 0x68, 0x65, 0x20, 0x6F, 0x6E, 0x6C, 0x79, 0x20, 0x6C, 0x61,
+                0x77, 0x20, 0x69, 0x6E, 0x20, 0x4E, 0x69, 0x67, 0x68, 0x74, 0x20, 0x43, 0x69, 0x74, 0x79, 0x20,
+                0x79, 0x6F, 0x75, 0x20, 0x68, 0x61, 0x76, 0x65, 0x20, 0x79, 0x65, 0x74, 0x20, 0x74, 0x6F, 0x20,
+                0x62, 0x72, 0x65, 0x61, 0x6B, 0x2E
+            },
+            "They say if you wanna understand the streets, you gotta live 'em. Gangs, fixers, dolls, small-time pushers – you were raised by them all. Down here the law of the jungle dictates the weak serve the strong – the only law in Night City you have yet to break.",
+            DisplayName = "05. From lang_en_text/onscreens.json: The entire streetkid life path description"
+        )]
+        public void Test_ReadLengthPrefixedString(byte[] input, string expected)
+        {
+            Assert.AreEqual(expected, GetReaderFromByteArray(input).ReadLengthPrefixedString());
+        }
+
+
+        [TestMethod]
+        [DataRow(new byte[] { 0x00 },   0, DisplayName = "00. Zero value")]
+        [DataRow(new byte[] { 0x2A },  42, DisplayName = "01. Positive 1-byte value")]
+        [DataRow(new byte[] { 0xAA }, -42, DisplayName = "02. Negative 1-byte value")]
+        [DataRow(new byte[] { 0x3F },  63, DisplayName = "03. Max positive 1-byte value  (2^6 - 1)")]
+        [DataRow(new byte[] { 0xBF }, -63, DisplayName = "04. Min negative 1-byte value -(2^6 - 1)")]
+        [DataRow(new byte[] { 0x40, 0x01 },    64, DisplayName = "05. Min 2-byte value (2^6)")]
+        [DataRow(new byte[] { 0x7F, 0x7F },  8191, DisplayName = "06. Max positive 2-byte value  (2^13 - 1)")]
+        [DataRow(new byte[] { 0xFF, 0x7F }, -8191, DisplayName = "07. Max negative 2-byte value -(2^13 - 1)")]
+        [DataRow(new byte[] { 0x40, 0x80, 0x01 },     8192, DisplayName = "08. Min 3-byte value (2^13)")]
+        [DataRow(new byte[] { 0x7F, 0xFF, 0x7F },  1048575, DisplayName = "09. Max positive 3-byte value  (2^20 - 1)")]
+        [DataRow(new byte[] { 0xFF, 0xFF, 0x7F }, -1048575, DisplayName = "10. Max negative 3-byte value -(2^20 - 1)")]
+        [DataRow(new byte[] { 0x40, 0x80, 0x80, 0x01 },    1048576, DisplayName = "11. Min 4-byte value (2^20)")]
+        [DataRow(new byte[] { 0x7F, 0xFF, 0xFF, 0x7F },  134217727, DisplayName = "12. Max positive 4-byte value  (2^27 - 1)")]
+        [DataRow(new byte[] { 0xFF, 0xFF, 0xFF, 0x7F }, -134217727, DisplayName = "13. Max negative 4-byte value -(2^27 - 1)")]
+        [DataRow(new byte[] { 0x40, 0x80, 0x80, 0x80, 0x01 },   134217728, DisplayName = "14. Min 5-byte value (2^27)")]
+        [DataRow(new byte[] { 0x7F, 0xFF, 0xFF, 0xFF, 0x0F },  2147483647, DisplayName = "15. Max positive 32-bit value  (2^31 - 1)")]
+        [DataRow(new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0x0F }, -2147483647, DisplayName = "16. Max negative 32-bit value -(2^31 - 1)")]
+        public void Test_ReadVLQInt32(byte[] input, int expected)
+        {
+            Assert.AreEqual(expected, GetReaderFromByteArray(input).ReadVLQInt32());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidDataException))]
+        [DataRow(new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF })]
+        public void Test_ReadVLQInt32_InvalidData(byte[] input)
+        {
+            GetReaderFromByteArray(input).ReadVLQInt32();
+        }
+
+
+        [TestMethod]
+        [DataRow(new byte[] { 0x00 },   0u, DisplayName = "00. Zero value")]
+        [DataRow(new byte[] { 0x45 },  69u, DisplayName = "01. Random 1-byte value")]
+        [DataRow(new byte[] { 0x7F }, 127u, DisplayName = "02. Max 1-byte value (2^7 - 1)")]
+        [DataRow(new byte[] { 0x80, 0x01 },   128u, DisplayName = "03. Min 2-byte value (2^7)")]
+        [DataRow(new byte[] { 0xFF, 0x7F }, 16383u, DisplayName = "04. Max 2-byte value (2^14 - 1)")]
+        [DataRow(new byte[] { 0x80, 0x80, 0x01 },   16384u, DisplayName = "05. Min 3-byte value (2^14)")]
+        [DataRow(new byte[] { 0xFF, 0xFF, 0x7F }, 2097151u, DisplayName = "06. Max 3-byte value (2^21 - 1)")]
+        [DataRow(new byte[] { 0x80, 0x80, 0x80, 0x01 },   2097152u, DisplayName = "07. Min 4-byte value (2^21)")]
+        [DataRow(new byte[] { 0xFF, 0xFF, 0xFF, 0x7F }, 268435455u, DisplayName = "08. Max 4-byte value (2^28 - 1)")]
+        [DataRow(new byte[] { 0x80, 0x80, 0x80, 0x80, 0x01 },  268435456u, DisplayName = "09. Min 5-byte value (2^21)")]
+        [DataRow(new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0x0F }, 4294967295u, DisplayName = "10. Max 32-bit value (2^32)")]
+        public void Test_ReadVLQUInt32(byte[] input, uint expected)
+        {
+            Assert.AreEqual(expected, GetReaderFromByteArray(input).ReadVLQUInt32());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidDataException))]
+        [DataRow(new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF })]
+        public void Test_ReadVLQUInt32_InvalidData(byte[] input)
+        {
+            GetReaderFromByteArray(input).ReadVLQUInt32();
+        }
+
+        #endregion
+    }
+}
