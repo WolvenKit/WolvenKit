@@ -6,6 +6,7 @@ using System.Text;
 using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.RED4.CR2W.Types
 {
