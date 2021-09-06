@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -88,10 +88,8 @@ namespace WolvenKit.Core.Extensions
         }
 
         /// <summary>
-        /// Writes a string to a BinaryWriter Stream
-        /// First byte indicates length, where the first 2 bits are reserved
-        /// bit1: 0 if widecharacterset is needed, 1 otherwise
-        /// bit2: 1 if continuation byte is needed, 0 otherwise
+        /// Writes a UTF8 encoded string to a BinaryWriter Stream.
+        /// The string is prefixed with its length in bytes, stored as a VLQ encoded integer
         /// </summary>
         /// <param name="writer">The writer.</param>
         /// <param name="value">The string to write.</param>
@@ -103,131 +101,79 @@ namespace WolvenKit.Core.Extensions
                 return;
             }
 
-            var len = value.Length;
-            var requiresWideChar = value.Any(c => c > 255);
+            var output = Encoding.UTF8.GetBytes(value);
 
-            var b = (byte)(len & 0x3F);
-            len >>= 6;
-            if (!requiresWideChar)
+            // The sign bit of the prefix is used to denote the character encoding
+            // Positive (0) for UTF16, negative (1) for UTF8
+            // All strings seen in CP77 so far have been UTF8, so we set it negative
+            writer.WriteVLQInt32(-output.Length);
+
+            writer.Write(output);
+        }
+
+        /// <summary>
+        /// Writes a signed 32-bit integer as Variable-Length Quantity of bytes
+        /// <br/>
+        /// See <see cref="BinaryReaderExtensions.ReadVLQInt32"/> for more info
+        /// </summary>
+        /// <param name="bw"></param>
+        /// <param name="value"></param>
+        public static void WriteVLQInt32(this BinaryWriter bw, int value)
+        {
+            // Sign is stored in the 7th bit instead of two's-compliment
+            // so we save the absolute of the value and the sign separately
+            var isNegative = value < 0;
+            uint absVal = (uint)Math.Abs(value);
+
+            // Initial value from the lower 6 bits
+            byte b = (byte)(absVal & 0b00111111);
+
+            if (isNegative)
             {
-                b |= 0x80;
+                b |= 0b10000000;
             }
-            bool cont = len != 0;
-            if (cont)
+
+            absVal >>= 6;
+
+            // Is value larger than 6 bits?
+            if (absVal > 0)
             {
-                b |= 0x40;
+                // First octet stores the continuation flag in the 6th bit
+                b |= 0b01000000;
             }
+            bw.Write(b);
 
-            writer.Write(b);
-            while (cont)
+            // Any remaining octets are written the same as unsigned ints
+            if (absVal > 0)
             {
-                b = (byte)(len & 0x7F);
-                len >>= 7;
-
-                cont = len != 0;
-                if (cont)
-                {
-                    b |= 0x80;
-                }
-
-                writer.Write(b);
-            }
-
-            if (requiresWideChar)
-            {
-                writer.Write(Encoding.Unicode.GetBytes(value));
-            }
-            else
-            {
-                writer.Write(Encoding.GetEncoding("ISO-8859-1").GetBytes(value));
+                bw.WriteVLQUInt32(absVal);
             }
         }
 
         /// <summary>
-        /// Writes a string to a BinaryWriter Stream
-        /// First byte indicates length, where the first 2 bits are reserved
-        /// bit1: 0 if widecharacterset is needed, 1 otherwise
-        /// bit2: 1 if continuation byte is needed, 0 otherwise
+        /// Writes an unsigned 32-bit integer as Variable-Length Quantity of bytes
+        /// <br/>
+        /// See <see cref="BinaryReaderExtensions.ReadVLQInt32"/> for more info
         /// </summary>
         /// <param name="bw"></param>
         /// <param name="value"></param>
-        public static void WriteLengthPrefixedStringNullTerminated(this BinaryWriter bw, string value)
+        public static void WriteVLQUInt32(this BinaryWriter bw, uint value)
         {
-            if (string.IsNullOrEmpty(value))
+            do
             {
-                bw.Write((byte)0x80);
-                return;
-            }
-
-            int len = value.Length + 1; // null terminated
-            bool requiresWideChar = value.Any(c => c > 255);
-
-            var div = Math.DivRem(len, 0x40, out var mod);
-            len -= (div * 0x40);
-
-            // mask the value
-            byte b = (byte)(len & 0x3F); // 00xxxxxx
-            // check for continuation
-            //bool cont = len >> 6 != 0;
-            bool cont = div != 0;
-
-            // set the two last bits
-            // reserved utf bit 7
-            if (requiresWideChar)
-                throw new NotImplementedException(nameof(WriteLengthPrefixedStringNullTerminated));
-            else
-            {
-                // do nothing
-                //b |= 0x80;
-            }
-
-            // continuation bit 6
-            if (cont)
-            {
-                b |= 0x40;
-            }
-            bw.Write(b);
-
-            // continue
-            if (cont)
-                bw.Write((byte)div);
-
-            if (requiresWideChar)
-                bw.Write(Encoding.Unicode.GetBytes(value));
-            else
-                bw.Write(Encoding.GetEncoding("ISO-8859-1").GetBytes(value));
-
-            // null terminated
-            bw.Write((byte)0x00);
-        }
-
-        public static void WriteVLQInt32(this BinaryWriter bw, int value)
-        {
-            bool negative = value < 0;
-            value = Math.Abs(value);
-            byte b = (byte)(value & 0x3F);
-            value >>= 6;
-            if (negative)
-            {
-                b |= 0x80;
-            }
-            bool cont = value != 0;
-            if (cont)
-            {
-                b |= 0x40;
-            }
-            bw.Write(b);
-            while (cont)
-            {
-                b = (byte)(value & 0x7F);
+                // Get the value from the lower 7 bits
+                byte b = (byte)(value & 0b01111111);
+                // Shift the value down to the next 7 bits
                 value >>= 7;
-                cont = value != 0;
-                if (cont)
+                // Is there any data remaining?
+                if (value > 0)
                 {
-                    b |= 0x80;
+                    // Set the contiuation bit
+                    b |= 0b10000000;
                 }
                 bw.Write(b);
             }
+            while (value > 0);
         }
 
         /// <summary>

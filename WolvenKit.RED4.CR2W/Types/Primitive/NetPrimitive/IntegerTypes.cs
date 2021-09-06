@@ -423,9 +423,9 @@ namespace WolvenKit.RED4.CR2W.Types
         [DataMember]
         public int Value { get; set; }
 
-        public override void Read(BinaryReader file, uint size) => Value = file.ReadBit6();
+        public override void Read(BinaryReader file, uint size) => Value = file.ReadVLQInt32();
 
-        public override void Write(BinaryWriter file) => file.WriteBit6(Value);
+        public override void Write(BinaryWriter file) => file.WriteVLQInt32(Value);
 
         public override CVariable SetValue(object val)
         {

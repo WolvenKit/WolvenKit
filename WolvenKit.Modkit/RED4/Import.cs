@@ -668,7 +668,10 @@ namespace WolvenKit.Modkit.RED4
                     _loggerService.Error(e);
                     return false;
                 }
-
+                finally
+                {
+                    redFs.Close();
+                }
 
             }
 

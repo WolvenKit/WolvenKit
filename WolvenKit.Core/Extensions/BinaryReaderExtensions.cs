@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text;
 using WolvenKit.Common.Model.Cr2w;
@@ -100,58 +100,161 @@ namespace WolvenKit.Core.Extensions
         }
 
         /// <summary>
-        /// Reads a null terminated string from a BinaryReader Stream
-        /// First byte indicates length, where the first 2 bits are reserved
-        /// bit1: 0 if widecharacterset is needed, 1 otherwise
-        /// bit2: 1 if continuation byte is needed, 0 otherwise
+        /// Reads a length-prefixed string from a BinaryReader Stream.
+        /// <br/>
+        /// The length is stored as a VLQ encoded integer, using the sign to denote the character width
         /// </summary>
         /// <param name="br"></param>
         /// <returns></returns>
-        public static string ReadLengthPrefixedStringNullTerminated(this BinaryReader br)
+        public static string ReadLengthPrefixedString(this BinaryReader br)
         {
-            var b = br.ReadByte();
-            if (b == 0x80)
-                return null;
-            if (b == 0x00)
-                return "";
+            // Prefix length is stored as a VLQ signed integer
+            var prefix = br.ReadVLQInt32();
+            // The string length in characters is the absolute value of the prefix
+            var length = Math.Abs(prefix);
 
-            var nxt = (b & (1 << 6)) != 0;
-            var unknownFlag = (b & (1 << 7)) != 0;
-            int len = b & ((1 << 6) - 1);
-            if (nxt)
-            {
-                len += 64 * br.ReadByte();
-            }
+            if (length == 0)
+                return string.Empty;
 
-            string readstring;
-            if (unknownFlag)
-            {
-                throw new NotImplementedException(nameof(ReadLengthPrefixedStringNullTerminated));
-                // readstring = Encoding.Unicode.GetString(br.ReadBytes((len * 2) - 1));
-            }
-            else
-                readstring = Encoding.GetEncoding("ISO-8859-1").GetString(br.ReadBytes(len - 1));
-
-            if (br.ReadByte() != 0)
-                throw new NullReferenceException();
-            return readstring;
+            // The character width is determined by the sign of the prefix
+            return prefix > 0
+                ? Encoding.Unicode.GetString(br.ReadBytes(length * 2))
+                : Encoding.UTF8.GetString(br.ReadBytes(length));
         }
 
+        /// <summary>
+        /// Continuation bit flag used for VLQ packed ints
+        /// </summary>
+        internal const byte s_VLQ_Continuation = 0b10000000;
+
+        /// <summary>
+        /// Bitmask of the value bits in each VLQ packed octet
+        /// </summary>
+        internal const byte s_VLQ_ValueMask = 0b01111111;
+
+        /// <summary>
+        /// Helper extension function to simplify flag checks
+        /// </summary>
+        /// <param name="b">Data byte</param>
+        /// <param name="flag">Flag bits to check</param>
+        /// <returns></returns>
+        private static bool HasFlag(this byte b, byte flag) => (b & flag) == flag;
+
+        /// <summary>
+        /// Reads a Variable-Length Quantity of bytes and return a signed 32-bit integer
+        /// </summary>
+        /// <remarks>
+        /// CDPR seem to use a modified version of <see href="https://en.wikipedia.org/wiki/LEB128">LEB128</see>
+        /// encoding to store integer values.
+        /// <br/>
+        /// For signed integers, instead of using two's-compliment, they use a slightly modified encoding for the first octet:<br/>
+        /// - Bit 7 is used to denote sign<br/>
+        /// - Bit 6 is used as the continuation bit<br/>
+        /// - Bits 0-5 store the lower 6 bits of the value<br/>
+        /// The remaining octets use the standard LEB128 encoding, up to a maximum total of 5 bytes
+        /// <br/>
+        /// This implementation seems to mirror the
+        /// <see href="https://en.wikipedia.org/wiki/Variable-length_quantity#Sign_bit">Compact Indices</see>
+        /// layout used by Epic Games in their old Unreal Packages format.
+        /// </remarks>
+        /// <returns>A signed 32-bit integer</returns>
+        /// <exception cref="InvalidDataException">Thrown if continuation bit is set on the 5th byte</exception>
         public static int ReadVLQInt32(this BinaryReader br)
         {
-            var b1 = br.ReadByte();
-            var sign = (b1 & 128) == 128;
-            var next = (b1 & 64) == 64;
-            var size = b1 % 128 % 64;
-            var offset = 6;
-            while (next)
+            var b = br.ReadByte();
+            var isNegative = b.HasFlag(0b10000000);
+            // Initial value from the lower 6 bits
+            var value = b & 0b00111111;
+
+            // First octet stores the continuation flag in the 6th bit
+            // Is value larger than 6 bits?
+            if (b.HasFlag(0b01000000))
             {
-                var b = br.ReadByte();
-                size = (b % 128) << offset | size;
-                next = (b & 128) == 128;
-                offset += 7;
+                b = br.ReadByte();
+                // Mask and add the next 7 bits
+                value |= (b & s_VLQ_ValueMask) << 6;
+
+                // Is value larger than 13 bits?
+                if (b.HasFlag(s_VLQ_Continuation))
+                {
+                    b = br.ReadByte();
+                    value |= (b & s_VLQ_ValueMask) << 13;
+
+                    // Is value larger than 20 bits?
+                    if (b.HasFlag(s_VLQ_Continuation))
+                    {
+                        b = br.ReadByte();
+                        value |= (b & s_VLQ_ValueMask) << 20;
+
+                        // Is value larger than 27 bits?
+                        if (b.HasFlag(s_VLQ_Continuation))
+                        {
+                            b = br.ReadByte();
+                            value |= (b & s_VLQ_ValueMask) << 27;
+
+                            // Is value larger than 34 bits? That seems bad
+                            if (b.HasFlag(s_VLQ_Continuation))
+                            {
+                                throw new InvalidDataException($"Continuation bit set on 5th byte");
+                            }
+                        }
+                    }
+                }
             }
-            return sign ? size * -1 : size;
+
+            return isNegative ? -value : value;
+        }
+
+        /// <summary>
+        /// Reads a Variable-Length Quantity of bytes (between 1 and 5) and return an unsigned 32-bit integer.
+        /// <br/>
+        /// See <see cref="ReadVLQInt32"/> for more info.
+        /// </summary>
+        /// <returns>An unsigned 32-bit integer</returns>
+        /// <exception cref="InvalidDataException">Thrown if continuation bit is set on the 5th byte</exception>
+        public static uint ReadVLQUInt32(this BinaryReader br)
+        {
+            var b = br.ReadByte();
+            // Initial value from the lower 7 bits
+            uint value = (uint)b & s_VLQ_ValueMask;
+
+            // First octet stores the continuation flag in the 6th bit
+            // Is value larger than 7 bits?
+            if (b.HasFlag(s_VLQ_Continuation))
+            {
+                b = br.ReadByte();
+                // Mask and add the next 7 bits
+                value |= (uint)(b & s_VLQ_ValueMask) << 7;
+
+                // Is value larger than 14 bits?
+                if (b.HasFlag(s_VLQ_Continuation))
+                {
+                    b = br.ReadByte();
+                    value |= (uint)(b & s_VLQ_ValueMask) << 14;
+
+                    // Is value larger than 21 bits?
+                    if (b.HasFlag(s_VLQ_Continuation))
+                    {
+                        b = br.ReadByte();
+                        value |= (uint)(b & s_VLQ_ValueMask) << 21;
+
+                        // Is value larger than 28 bits?
+                        if (b.HasFlag(s_VLQ_Continuation))
+                        {
+                            b = br.ReadByte();
+                            value |= (uint)(b & s_VLQ_ValueMask) << 28;
+
+                            // Is value larger than 35 bits? That seems bad
+                            if (b.HasFlag(s_VLQ_Continuation))
+                            {
+                                throw new InvalidDataException($"Continuation bit set on 5th byte");
+                            }
+                        }
+                    }
+                }
+            }
+
+            return value;
         }
     }
 }
