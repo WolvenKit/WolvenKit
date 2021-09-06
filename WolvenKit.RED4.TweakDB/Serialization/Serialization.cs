@@ -12,13 +12,13 @@ namespace WolvenKit.RED4.TweakDB.Serialization
 {
     public static class Serialization
     {
-        public sealed class FlatDto
+        private sealed class FlatDto
         {
-            public string Type { get; set; }
-            public string ValueString { get; set; }
+            public string Type { get; init; }
+            public string ValueString { get; init; }
         }
 
-        public static readonly JsonSerializerOptions Options = new()
+        private static readonly JsonSerializerOptions s_options = new()
         {
             WriteIndented = false,
             Converters =
@@ -50,20 +50,16 @@ namespace WolvenKit.RED4.TweakDB.Serialization
 
         };
 
-        public static string Serialize(Dictionary<string, IType> dict)
-        {
-            return SerializeJson(dict);
-            //return SerializeYaml(dict);
-        }
+        public static string Serialize(Dictionary<string, IType> dict) => SerializeJson(dict); //SerializeYaml(dict);
 
-        private static string SerializeJson(Dictionary<string, IType> dict) => JsonSerializer.Serialize(dict, Serialization.Options);
+        private static string SerializeJson(Dictionary<string, IType> dict) => JsonSerializer.Serialize(dict, Serialization.s_options);
 
         private static string SerializeYaml(Dictionary<string, IType> dict)
         {
             var flatsDict = dict.ToDictionary(x => x.Key, y => new FlatDto()
             {
                 Type = y.Value.Name,
-                ValueString = JsonSerializer.Serialize((object)y.Value, Serialization.Options)
+                ValueString = JsonSerializer.Serialize((object)y.Value, Serialization.s_options)
             });
 
             var serializer = new SerializerBuilder()
@@ -95,7 +91,7 @@ namespace WolvenKit.RED4.TweakDB.Serialization
             }
         }
 
-        private static Dictionary<string, IType> DeserializeJson(string text) => JsonSerializer.Deserialize<Dictionary<string, IType>>(text, Options);
+        private static Dictionary<string, IType> DeserializeJson(string text) => JsonSerializer.Deserialize<Dictionary<string, IType>>(text, s_options);
 
         private static Dictionary<string, IType> DeserializeYaml(string text)
         {
@@ -186,7 +182,7 @@ namespace WolvenKit.RED4.TweakDB.Serialization
         /// <param name="value">A json string containing the value to convert.</param>
         /// <param name="result"></param>
         /// <returns>true if value was converted successfully; otherwise, false.</returns>
-        public static bool TryParseJsonFlat(Type type, string value, out IType result)
+        private static bool TryParseJsonFlat(Type type, string value, out IType result)
         {
             if (value == null)
             {
@@ -196,7 +192,7 @@ namespace WolvenKit.RED4.TweakDB.Serialization
 
             try
             {
-                var obj = JsonSerializer.Deserialize(value, type, Options);
+                var obj = JsonSerializer.Deserialize(value, type, s_options);
                 if (obj is not IType ivalue)
                 {
                     result = null;
