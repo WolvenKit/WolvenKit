@@ -249,20 +249,22 @@ namespace WolvenKit.Modkit.RED4
                     }
                 }
 
-
                 for (int e = 0; e < diffsCount; e++)
                 {
-                    TargetVec4 v = Converters.TenBitUnsigned(diffsbr.ReadUInt32());
+                    if (diffsbr.BaseStream.Position < (diffsbr.BaseStream.Length - 3))
+                    {
+                        TargetVec4 v = Converters.TenBitUnsigned(diffsbr.ReadUInt32());
 
-                    var x = v.X * TargetPositionDiffScale.X + TargetPositionDiffOffset.X;
-                    var y = v.Y * TargetPositionDiffScale.Y + TargetPositionDiffOffset.Y;
-                    var z = v.Z * TargetPositionDiffScale.Z + TargetPositionDiffOffset.Z;
+                        var x = v.X * TargetPositionDiffScale.X + TargetPositionDiffOffset.X;
+                        var y = v.Y * TargetPositionDiffScale.Y + TargetPositionDiffOffset.Y;
+                        var z = v.Z * TargetPositionDiffScale.Z + TargetPositionDiffOffset.Z;
 
-                    vertexDelta[e] = new TargetVec3(x, z, -y);
-                    Vec4 n = Converters.TenBitShifted(diffsbr.ReadUInt32());
-                    normalDelta[e] = new Vec3(n.X, n.Z, -n.Y);
-                    Vec4 t = Converters.TenBitShifted(diffsbr.ReadUInt32());
-                    tangentDelta[e] = new Vec3(t.X, t.Z, -t.Y);
+                        vertexDelta[e] = new TargetVec3(x, z, -y);
+                        Vec4 n = Converters.TenBitShifted(diffsbr.ReadUInt32());
+                        normalDelta[e] = new Vec3(n.X, n.Z, -n.Y);
+                        Vec4 t = Converters.TenBitShifted(diffsbr.ReadUInt32());
+                        tangentDelta[e] = new Vec3(t.X, t.Z, -t.Y);
+                    }                    
                 }
 
                 UInt16[] vertexMapping = new UInt16[diffsCount];
@@ -281,7 +283,10 @@ namespace WolvenKit.Modkit.RED4
 
                 for (int e = 0; e < diffsCount; e++)
                 {
-                    vertexMapping[e] = mappingbr.ReadUInt16();
+                    if (diffsbr.BaseStream.Position < (diffsbr.BaseStream.Length - 1))
+                    {
+                        vertexMapping[e] = mappingbr.ReadUInt16();
+                    }
                 }
 
                 rawtarget[i] = new RawTargetContainer()
