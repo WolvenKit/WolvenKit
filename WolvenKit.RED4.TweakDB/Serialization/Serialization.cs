@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.TweakDB.Serialization
 
         private static readonly JsonSerializerOptions s_options = new()
         {
-            WriteIndented = false,
+            WriteIndented = true,
             Converters =
                 {
                     new ITypeConverterWithTypeDiscriminator(),
