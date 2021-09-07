@@ -91,6 +91,7 @@
     <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.2.0.49" />
         <PackageReference Include="Pfim" Version="0.10.1" />
     <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
+    <PackageReference Include="YamlDotNet" Version="11.2.1" />
 
 
 

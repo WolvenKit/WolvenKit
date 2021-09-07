@@ -130,7 +130,7 @@ namespace WolvenKit.RED4.CR2W.Types
         public override void Write(BinaryWriter file)
         {
             // write as byte array for perfomance
-            if (typeof(T) == typeof(CUInt8))
+            if (typeof(T) == typeof(CUInt8) && _buffer != null)
             {
                 file.Write(_buffer);
                 return;
@@ -145,7 +145,7 @@ namespace WolvenKit.RED4.CR2W.Types
         public override void WriteWithoutMeta(BinaryWriter file)
         {
             // write as byte array for perfomance
-            if (typeof(T) == typeof(CUInt8))
+            if (typeof(T) == typeof(CUInt8) && _buffer != null)
             {
                 file.Write(_buffer);
                 return;

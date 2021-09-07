@@ -15,6 +15,8 @@ using ReactiveUI.Fody.Helpers;
 using WolvenKit.RED4.TweakDB;
 using WolvenKit.RED4.TweakDB.Serialization;
 using WolvenKit.RED4.TweakDB.Types;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -34,10 +36,9 @@ namespace WolvenKit.ViewModels.Documents
 
             var hlManager = HighlightingManager.Instance;
             HighlightingDefinition = hlManager.GetDefinitionByExtension(".json");
-            
+
 
         }
-
 
         #region properties
 
@@ -49,7 +50,7 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public string IsReadOnlyReason { get; set; }
 
-        
+
 
         [Reactive] public string FlatName { get; set; }
 
@@ -86,44 +87,7 @@ namespace WolvenKit.ViewModels.Documents
                 return;
             }
 
-            // parse type
-            if (!Enum.TryParse<EIType>(SelectedType, out var enumType))
-            {
-                return;
-            }
-
-            var jsonvalue = ValueString;
-            // parse value
-            // some pretty input helpers
-            switch (enumType)
-            {
-                case EIType.CName:
-                case EIType.CString:
-                    if (!jsonvalue.StartsWith('\"'))
-                    {
-                        jsonvalue = $"\"{jsonvalue}";
-                    }
-                    if (!jsonvalue.EndsWith('\"'))
-                    {
-                        jsonvalue = $"{jsonvalue}\"";
-                    }
-                    break;
-                case EIType.CColor:
-                case EIType.CEulerAngles:
-                case EIType.CQuaternion:
-                case EIType.CVector2:
-                case EIType.CVector3:
-                    if (!jsonvalue.StartsWith('['))
-                    {
-                        jsonvalue = $"[{jsonvalue}";
-                    }
-                    if (!jsonvalue.EndsWith(']'))
-                    {
-                        jsonvalue = $"{jsonvalue}]";
-                    }
-                    break;
-            }
-            if (!Serialization.TryParseJsonFlat(Serialization.GetTypeFromEnum(enumType), jsonvalue, out var ivalue))
+            if (!Serialization.TryParseJsonFlat(SelectedType, ValueString, out var ivalue))
             {
                 return;
             }
@@ -131,11 +95,8 @@ namespace WolvenKit.ViewModels.Documents
             var newFlat = new FlatViewModel(FlatName, ivalue);
             Flats.Add(newFlat);
 
-            // serialize textfile
-            var dict = Flats.ToList();
-            var d = dict.ToDictionary(x => x.Name, x => x.GetValue());
-
-            Document.Text = JsonSerializer.Serialize(d, Serialization.Options);
+            var flatsDict = Flats.ToDictionary(x => x.Name, x => x.GetValue());
+            Document.Text = Serialization.Serialize(flatsDict);
         }
 
         public ReactiveCommand<Unit, Unit> EditFlatCommand { get; }
@@ -143,10 +104,7 @@ namespace WolvenKit.ViewModels.Documents
         {
             if (SelectedItem is null)
             {
-                return;
             }
-
-            
         }
 
         public ReactiveCommand<Unit, Unit> DeleteFlatCommand { get; }
@@ -160,11 +118,8 @@ namespace WolvenKit.ViewModels.Documents
             Flats.Remove(SelectedItem);
             SelectedItem = null;
 
-            // serialize textfile
-            var dict = Flats.ToList();
-            var d = dict.ToDictionary(x => x.Name, x => x.GetValue());
-
-            Document.Text = JsonSerializer.Serialize(d, Serialization.Options);
+            var flatsDict = Flats.ToDictionary(x => x.Name, x => x.GetValue());
+            Document.Text = Serialization.Serialize(flatsDict);
         }
 
         #endregion
@@ -175,7 +130,7 @@ namespace WolvenKit.ViewModels.Documents
             using var bw = new StreamWriter(fs);
             bw.Write(Document.Text);
 
-            if (Serialization.TryParseJsonFlatsDict(Document.Text, out var dict))
+            if (Serialization.Deserialize(Document.Text, out var dict))
             {
                 var list = dict.Select(_ => new FlatViewModel(_.Key, _.Value));
                 Flats = new ObservableCollection<FlatViewModel>(list);
@@ -208,51 +163,58 @@ namespace WolvenKit.ViewModels.Documents
 
         private void LoadDocument(string paramFilePath)
         {
-            if (File.Exists(paramFilePath))
+            if (!File.Exists(paramFilePath))
             {
-                var hlManager = HighlightingManager.Instance;
+                return;
+            }
 
-                Document = new TextDocument();
-                string extension = Path.GetExtension(paramFilePath);
-                HighlightingDefinition = hlManager.GetDefinitionByExtension(extension);
+            var hlManager = HighlightingManager.Instance;
 
-                IsDirty = false;
-                //IsReadOnly = false;
+            Document = new TextDocument();
+            var extension = Path.GetExtension(paramFilePath);
+            HighlightingDefinition = hlManager.GetDefinitionByExtension(extension);
 
-                // Check file attributes and set to read-only if file attributes indicate that
-                if ((File.GetAttributes(paramFilePath) & FileAttributes.ReadOnly) != 0)
-                {
-                    IsReadOnly = true;
-                    IsReadOnlyReason = "This file cannot be edit because another process is currently writting to it.\n" +
-                                       "Change the file access permissions or save the file in a different location if you want to edit it.";
-                }
+            IsDirty = false;
+            //IsReadOnly = false;
 
-                using (var fs = new FileStream(paramFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
-                using (var fr = FileReader.OpenStream(fs, Encoding.UTF8))
-                {
-                    Document = new TextDocument(fr.ReadToEnd());
-                }
+            // Check file attributes and set to read-only if file attributes indicate that
+            if ((File.GetAttributes(paramFilePath) & FileAttributes.ReadOnly) != 0)
+            {
+                IsReadOnly = true;
+                IsReadOnlyReason = "This file cannot be edit because another process is currently writting to it.\n" +
+                                   "Change the file access permissions or save the file in a different location if you want to edit it.";
+            }
 
-                FilePath = paramFilePath;
+            using (var fs = new FileStream(paramFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (var fr = FileReader.OpenStream(fs, Encoding.UTF8))
+            {
+                Document = new TextDocument(fr.ReadToEnd());
+            }
 
-                if (Serialization.TryParseJsonFlatsDict(Document.Text, out var dict))
-                {
-                    var list = dict.Select(_ => new FlatViewModel(_.Key, _.Value));
-     
-                    Flats = new ObservableCollection<FlatViewModel>(list);
-                }
-                else
-                {
-                    MessageBox.Show($"The tweak file could not be parsed. Please check the file for errors.",
-                        "WolvenKit",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
+            FilePath = paramFilePath;
 
-                }
+            if (string.IsNullOrEmpty(Document.Text))
+            {
+                return;
+            }
+
+            if (Serialization.Deserialize(Document.Text, out var dict))
+            {
+                var list = dict.Select(_ => new FlatViewModel(_.Key, _.Value));
+
+                Flats = new ObservableCollection<FlatViewModel>(list);
+            }
+            else
+            {
+                MessageBox.Show($"The tweak file could not be parsed. Please check the file for errors.",
+                    "WolvenKit",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+
             }
         }
 
-        public class FlatViewModel
+        public sealed class FlatViewModel
         {
             private readonly IType _value;
 
@@ -268,5 +230,7 @@ namespace WolvenKit.ViewModels.Documents
 
             public IType GetValue() => _value;
         }
+
+
     }
 }

@@ -5,8 +5,8 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:WolvenKit.Views.Documents"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
@@ -44,7 +44,7 @@
                     Name="textEditor"
                     Foreground="LightGray"
                     Document = "{Binding Document, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                    SyntaxHighlighting="JSON"
+                    SyntaxHighlighting="C#"
                     />
 
         <!-- TEXT EDITOR -->
@@ -83,7 +83,7 @@
                              hc:InfoElement.TitlePlacement="Left"
                              ItemsSource="{Binding Types}"
                              SelectedItem="{Binding SelectedType}"/>
-                
+
 
                 <hc:TextBox Grid.Row="1"
                             Grid.ColumnSpan="2"
@@ -102,6 +102,7 @@
                                    Margin="0,10,0,0"
                                    AutoGenerateColumns="False"
                                    AllowEditing="False"
+                                   AllowResizingColumns="True"
                                    >
                 <syncfusion:SfTreeGrid.Columns>
 
@@ -134,7 +135,7 @@
                                     </Button>
                                 </Grid>
 
-                                
+
                             </DataTemplate>
                         </syncfusion:TreeGridTemplateColumn.CellTemplate>
                         <!--<syncfusion:TreeGridTemplateColumn.EditTemplate>
@@ -147,11 +148,11 @@
 
                 </syncfusion:SfTreeGrid.Columns>
 
-                
+
 
             </syncfusion:SfTreeGrid>
 
         </Grid>
-        
+
     </Grid>
 </reactiveUi:ReactiveUserControl>

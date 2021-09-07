@@ -72,16 +72,34 @@ namespace WolvenKit.Common.RED4.Archive
             var count = br.ReadInt32();
 
             var inbuffer = br.ReadBytes(zsize);
-            var outBuffer = new byte[size];
-            var r = OodleHelper.Decompress(inbuffer, outBuffer);
 
-            using var ms = new MemoryStream(outBuffer);
-            using var tempbr = new BinaryReader(ms);
-            for (var i = 0; i < count; i++)
+            if (size > zsize)
             {
-                FileInfos.Add(tempbr.ReadCR2WString());
+                // buffer is compressed
+                var outBuffer = new byte[size];
+                var r = OodleHelper.Decompress(inbuffer, outBuffer);
+                using var ms = new MemoryStream(outBuffer);
+                using var tempbr = new BinaryReader(ms);
+                for (var i = 0; i < count; i++)
+                {
+                    FileInfos.Add(tempbr.ReadCR2WString());
+                }
+            }
+            else if (size < zsize)
+            {
+                // error
+                // extract as .bin file
+            }
+            else
+            {
+                // no compression
+                using var ms = new MemoryStream(inbuffer);
+                using var tempbr = new BinaryReader(ms);
+                for (var i = 0; i < count; i++)
+                {
+                    FileInfos.Add(tempbr.ReadCR2WString());
+                }
             }
         }
-
     }
 }
