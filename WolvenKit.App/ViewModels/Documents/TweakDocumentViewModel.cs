@@ -40,7 +40,6 @@ namespace WolvenKit.ViewModels.Documents
 
         }
 
-
         #region properties
 
         [Reactive] public TextDocument Document {  get; set; }
@@ -164,47 +163,54 @@ namespace WolvenKit.ViewModels.Documents
 
         private void LoadDocument(string paramFilePath)
         {
-            if (File.Exists(paramFilePath))
+            if (!File.Exists(paramFilePath))
             {
-                var hlManager = HighlightingManager.Instance;
+                return;
+            }
 
-                Document = new TextDocument();
-                var extension = Path.GetExtension(paramFilePath);
-                HighlightingDefinition = hlManager.GetDefinitionByExtension(extension);
+            var hlManager = HighlightingManager.Instance;
 
-                IsDirty = false;
-                //IsReadOnly = false;
+            Document = new TextDocument();
+            var extension = Path.GetExtension(paramFilePath);
+            HighlightingDefinition = hlManager.GetDefinitionByExtension(extension);
 
-                // Check file attributes and set to read-only if file attributes indicate that
-                if ((File.GetAttributes(paramFilePath) & FileAttributes.ReadOnly) != 0)
-                {
-                    IsReadOnly = true;
-                    IsReadOnlyReason = "This file cannot be edit because another process is currently writting to it.\n" +
-                                       "Change the file access permissions or save the file in a different location if you want to edit it.";
-                }
+            IsDirty = false;
+            //IsReadOnly = false;
 
-                using (var fs = new FileStream(paramFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
-                using (var fr = FileReader.OpenStream(fs, Encoding.UTF8))
-                {
-                    Document = new TextDocument(fr.ReadToEnd());
-                }
+            // Check file attributes and set to read-only if file attributes indicate that
+            if ((File.GetAttributes(paramFilePath) & FileAttributes.ReadOnly) != 0)
+            {
+                IsReadOnly = true;
+                IsReadOnlyReason = "This file cannot be edit because another process is currently writting to it.\n" +
+                                   "Change the file access permissions or save the file in a different location if you want to edit it.";
+            }
 
-                FilePath = paramFilePath;
+            using (var fs = new FileStream(paramFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (var fr = FileReader.OpenStream(fs, Encoding.UTF8))
+            {
+                Document = new TextDocument(fr.ReadToEnd());
+            }
 
-                if (Serialization.Deserialize(Document.Text, out var dict))
-                {
-                    var list = dict.Select(_ => new FlatViewModel(_.Key, _.Value));
+            FilePath = paramFilePath;
 
-                    Flats = new ObservableCollection<FlatViewModel>(list);
-                }
-                else
-                {
-                    MessageBox.Show($"The tweak file could not be parsed. Please check the file for errors.",
-                        "WolvenKit",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
+            if (string.IsNullOrEmpty(Document.Text))
+            {
+                return;
+            }
 
-                }
+            if (Serialization.Deserialize(Document.Text, out var dict))
+            {
+                var list = dict.Select(_ => new FlatViewModel(_.Key, _.Value));
+
+                Flats = new ObservableCollection<FlatViewModel>(list);
+            }
+            else
+            {
+                MessageBox.Show($"The tweak file could not be parsed. Please check the file for errors.",
+                    "WolvenKit",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+
             }
         }
 
