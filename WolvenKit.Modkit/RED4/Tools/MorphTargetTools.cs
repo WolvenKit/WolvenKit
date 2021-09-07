@@ -283,7 +283,7 @@ namespace WolvenKit.Modkit.RED4
 
                 for (int e = 0; e < diffsCount; e++)
                 {
-                    if (diffsbr.BaseStream.Position < (diffsbr.BaseStream.Length - 1))
+                    if (mappingbr.BaseStream.Position < (mappingbr.BaseStream.Length - 1))
                     {
                         vertexMapping[e] = mappingbr.ReadUInt16();
                     }
