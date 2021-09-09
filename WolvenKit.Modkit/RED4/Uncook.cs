@@ -289,7 +289,15 @@ namespace WolvenKit.Modkit.RED4
                     }
 
                 case ECookedFileFormat.morphtarget:
-                    return ExportMorphTargets(cr2wStream, outfile, settings.Get<MorphTargetExportArgs>().Archives, settings.Get<MorphTargetExportArgs>().ModFolderPath, settings.Get<MorphTargetExportArgs>().IsBinary);
+                    // WolvenKit.CLI does not use (i.e. set) the App's settings configuration, resulting in a null value for
+                    // settings.Get<MorphTargetExportArgs>().ModFolderPath.  In the context of the CLI, output directory
+                    // (i.e. -o argument) can be used to provide the correct absolute pathname.
+                    var modFolderPath = settings.Get<MorphTargetExportArgs>().ModFolderPath;
+                    if (modFolderPath == null)
+                    {
+                        modFolderPath = rawOutDir.FullName;
+                    }
+                    return ExportMorphTargets(cr2wStream, outfile, settings.Get<MorphTargetExportArgs>().Archives, modFolderPath, settings.Get<MorphTargetExportArgs>().IsBinary);
                 case ECookedFileFormat.anims:
                     try
                     {
