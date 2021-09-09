@@ -160,7 +160,6 @@ namespace WolvenKit
 
                     // red4 modding tools
                     services.AddSingleton<Red4ParserService>();
-                    services.AddSingleton<RIG>();
                     services.AddSingleton<MeshTools>();
 
                     services.AddSingleton<IModTools, ModTools>();

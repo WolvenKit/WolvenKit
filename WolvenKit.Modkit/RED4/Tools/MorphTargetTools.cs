@@ -31,13 +31,16 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            RawArmature Rig = null;
-            MemoryStream meshbuffer = MeshTools.GetMeshBufferStream(targetStream, cr2w);
-            MeshesInfo meshinfo = MeshTools.GetMeshesinfo(cr2w);
-            List<RawMeshContainer> expMeshes = MeshTools.ContainRawMesh(meshbuffer, meshinfo, true);
-            int subMeshC = expMeshes.Count;
+            var rendblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
 
-            var buffers = cr2w.Buffers;
+            var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer.Value - 1];
+            targetStream.Seek(rendbuffer.Offset, SeekOrigin.Begin);
+            var meshbuffer = new MemoryStream();
+            targetStream.DecompressAndCopySegment(meshbuffer, rendbuffer.DiskSize, rendbuffer.MemSize);
+
+            var meshesinfo = MeshTools.GetMeshesinfo(rendblob);
+            List<RawMeshContainer> expMeshes = MeshTools.ContainRawMesh(meshbuffer, meshesinfo, true);
+
             var blob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMorphTargetMeshBlob>().First();
             string baseMeshPath = cr2w.Chunks.Select(_ => _.Data).OfType<MorphTargetMesh>().First().BaseMesh.DepotPath;
             ulong hash = FNV1A64HashAlgorithm.HashString(baseMeshPath);
@@ -58,31 +61,23 @@ namespace WolvenKit.Modkit.RED4
                     }
                 }
             }
+            RawArmature Rig = null;
             {
                 var meshCr2w = _wolvenkitFileService.TryReadRED4File(meshStream);
+                rendblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
 
                 if (meshCr2w != null && meshCr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() && meshCr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
                 {
-                    MeshTools.MeshBones meshBones = new MeshTools.MeshBones();
-                    meshBones.boneCount = meshCr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First().BoneNames.Count;
-                    if (meshBones.boneCount != 0)    // for rigid meshes
-                    {
-                        meshBones.Names = RIG.GetboneNames(meshCr2w);
-                        meshBones.WorldPosn = MeshTools.GetMeshBonesPosn(meshCr2w);
-                    }
+                    rendbuffer = meshCr2w.Buffers[rendblob.RenderBuffer.Buffer.Value - 1];
+                    meshStream.Seek(rendbuffer.Offset, SeekOrigin.Begin);
+                    var ms = new MemoryStream();
+                    meshStream.DecompressAndCopySegment(ms, rendbuffer.DiskSize, rendbuffer.MemSize);
 
-                    Rig = MeshTools.GetNonParentedRig(meshBones);
+                    meshesinfo = MeshTools.GetMeshesinfo(rendblob);
 
-                    MemoryStream ms = MeshTools.GetMeshBufferStream(meshStream, meshCr2w);
-                    meshinfo = MeshTools.GetMeshesinfo(meshCr2w);
-                    expMeshes = MeshTools.ContainRawMesh(ms, meshinfo, true);
-                    subMeshC = expMeshes.Count;
-                    if (meshBones.boneCount == 0)    // for rigid meshes
-                    {
-                        for (int i = 0; i < expMeshes.Count; i++)
-                            expMeshes[i].weightcount = 0;
-                    }
-                    MeshTools.UpdateMeshJoints(ref expMeshes, Rig, meshBones);
+                    expMeshes = MeshTools.ContainRawMesh(ms, meshesinfo, true);
+
+                    Rig = MeshTools.GetOrphanRig(rendblob);
                 }
             }
             MemoryStream diffsbuffer = new MemoryStream();
@@ -92,35 +87,35 @@ namespace WolvenKit.Modkit.RED4
             if(blob.DiffsBuffer.IsSerialized)
             {
                 targetStream.Seek(cr2w.Buffers[blob.DiffsBuffer.Buffer.Value - 1].Offset, SeekOrigin.Begin);
-                targetStream.DecompressAndCopySegment(diffsbuffer, buffers[blob.DiffsBuffer.Buffer.Value - 1].DiskSize, buffers[blob.DiffsBuffer.Buffer.Value - 1].MemSize);
+                targetStream.DecompressAndCopySegment(diffsbuffer, cr2w.Buffers[blob.DiffsBuffer.Buffer.Value - 1].DiskSize, cr2w.Buffers[blob.DiffsBuffer.Buffer.Value - 1].MemSize);
             }
 
             if(blob.MappingBuffer.IsSerialized)
             {
                 targetStream.Seek(cr2w.Buffers[blob.MappingBuffer.Buffer.Value - 1].Offset, SeekOrigin.Begin);
-                targetStream.DecompressAndCopySegment(mappingbuffer, buffers[blob.MappingBuffer.Buffer.Value - 1].DiskSize, buffers[blob.MappingBuffer.Buffer.Value - 1].MemSize);
+                targetStream.DecompressAndCopySegment(mappingbuffer, cr2w.Buffers[blob.MappingBuffer.Buffer.Value - 1].DiskSize, cr2w.Buffers[blob.MappingBuffer.Buffer.Value - 1].MemSize);
             }
 
             if(blob.TextureDiffsBuffer.IsSerialized)
             {
                 targetStream.Seek(cr2w.Buffers[blob.TextureDiffsBuffer.Buffer.Value - 1].Offset, SeekOrigin.Begin);
-                targetStream.DecompressAndCopySegment(texbuffer, buffers[blob.TextureDiffsBuffer.Buffer.Value - 1].DiskSize, buffers[blob.TextureDiffsBuffer.Buffer.Value - 1].MemSize);
+                targetStream.DecompressAndCopySegment(texbuffer, cr2w.Buffers[blob.TextureDiffsBuffer.Buffer.Value - 1].DiskSize, cr2w.Buffers[blob.TextureDiffsBuffer.Buffer.Value - 1].MemSize);
             }
 
-            TargetsInfo targetsInfo = GetTargetInfos(cr2w, subMeshC);
+            TargetsInfo targetsInfo = GetTargetInfos(cr2w, expMeshes.Count);
 
             List<RawTargetContainer[]> expTargets = new List<RawTargetContainer[]>();
 
             for (int i = 0; i < targetsInfo.NumTargets; i++)
             {
-                UInt32[] temp_NumVertexDiffsInEachChunk = new UInt32[subMeshC];
-                UInt32[] temp_NumVertexDiffsMappingInEachChunk = new UInt32[subMeshC];
-                for (int e = 0; e < subMeshC; e++)
+                UInt32[] temp_NumVertexDiffsInEachChunk = new UInt32[expMeshes.Count];
+                UInt32[] temp_NumVertexDiffsMappingInEachChunk = new UInt32[expMeshes.Count];
+                for (int e = 0; e < expMeshes.Count; e++)
                 {
                     temp_NumVertexDiffsInEachChunk[e] = targetsInfo.NumVertexDiffsInEachChunk[i, e];
                     temp_NumVertexDiffsMappingInEachChunk[e] = targetsInfo.NumVertexDiffsMappingInEachChunk[i, e];
                 }
-                expTargets.Add(ContainRawTargets(diffsbuffer, mappingbuffer, temp_NumVertexDiffsInEachChunk, temp_NumVertexDiffsMappingInEachChunk, targetsInfo.TargetStartsInVertexDiffs[i], targetsInfo.TargetStartsInVertexDiffsMapping[i], targetsInfo.TargetPositionDiffOffset[i], targetsInfo.TargetPositionDiffScale[i], subMeshC));
+                expTargets.Add(ContainRawTargets(diffsbuffer, mappingbuffer, temp_NumVertexDiffsInEachChunk, temp_NumVertexDiffsMappingInEachChunk, targetsInfo.TargetStartsInVertexDiffs[i], targetsInfo.TargetStartsInVertexDiffsMapping[i], targetsInfo.TargetPositionDiffOffset[i], targetsInfo.TargetPositionDiffScale[i], expMeshes.Count));
             }
 
             string[] names = new string[targetsInfo.NumTargets];

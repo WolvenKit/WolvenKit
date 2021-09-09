@@ -55,7 +55,6 @@ namespace WolvenKit.CLI
 
 
                     services.AddScoped<Red4ParserService>();
-                    services.AddScoped<RIG>();              //Cp77FileService
                     services.AddScoped<MeshTools>();        //RIG, Cp77FileService
                     services.AddSingleton<IArchiveManager, ArchiveManager>();
                     services.AddSingleton<IModTools, ModTools>();

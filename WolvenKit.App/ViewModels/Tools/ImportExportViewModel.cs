@@ -782,8 +782,20 @@ namespace WolvenKit.ViewModels.Tools
                     file = _archiveManager.Items.Lookup(hash).Value;
                     if (file != null)
                     {
-                        outfile = _meshTools.ExportMeshSimple(file, qx.FullName,
-                            Path.Combine(ISettingsManager.GetManagerCacheDir(), "Temp_OBJ"));
+                        var meshStream = new MemoryStream();
+                        file.Extract(meshStream);
+                        meshStream.Seek(0, SeekOrigin.Begin);
+
+                        outfile = Path.Combine(ISettingsManager.GetManagerCacheDir(), "Temp_OBJ", qx.Name);
+                        outfile = Path.ChangeExtension(outfile, ".glb");
+
+                        if(!_meshTools.ExportMeshPreviewer(meshStream, new FileInfo(outfile)))
+                        {
+                            outfile = "";
+                        }
+
+                        meshStream.Dispose();
+                        meshStream.Close();
                     }
                     else
                     {

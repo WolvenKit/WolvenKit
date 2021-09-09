@@ -14,6 +14,7 @@ using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Oodle;
+using CP77.CR2W;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -129,48 +130,19 @@ namespace WolvenKit.Modkit.RED4
             Vec4 QuantScale = new Vec4((max.X - min.X) / 2, (max.Y - min.Y) / 2, (max.Z - min.Z) / 2, 0);
             Vec4 QuantTrans = new Vec4((max.X + min.X) / 2, (max.Y + min.Y) / 2, (max.Z + min.Z) / 2, 1);
 
+            RawArmature newRig = MeshTools.GetOrphanRig(cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First());
+            RawArmature oldRig = null;
             if (model.LogicalSkins.Count != 0)
             {
-                string[] bones = new string[model.LogicalSkins[0].JointsCount];
+                oldRig = new RawArmature();
+                oldRig.Names = new string[model.LogicalSkins[0].JointsCount];
 
                 for (int i = 0; i < model.LogicalSkins[0].JointsCount; i++)
-                    bones[i] = model.LogicalSkins[0].GetJoint(i).Joint.Name;
-
-                meshStream.Seek(0, SeekOrigin.Begin);
-                string[] meshbones = RIG.GetboneNames(_wolvenkitFileService.TryReadRED4File(meshStream));
-
-                // reset vertex joint indices according to original
-                for (int i = 0; i < Meshes.Count; i++)
-                    for (int e = 0; e < Meshes[i].vertices.Length; e++)
-                        for (int eye = 0; eye < Meshes[i].weightcount; eye++)
-                        {
-                            if (Meshes[i].weights[e, eye] != 0)
-                            {
-                                bool existsInMeshBones = false;
-                                string name = bones[Meshes[i].boneindices[e, eye]];
-                                for (UInt16 t = 0; t < meshbones.Length; t++)
-                                {
-                                    if (name == meshbones[t])
-                                    {
-                                        Meshes[i].boneindices[e, eye] = t;
-                                        existsInMeshBones = true;
-                                    }
-                                }
-                                if (!existsInMeshBones)
-                                {
-                                    throw new Exception("One or more vertices in submesh: " + Meshes[i].name + " was weight Painted to bone: " + name + " Which Doesn't Exist in the provided .mesh file");
-                                }
-                            }
-                            else
-                            {
-                                if (Meshes[i].boneindices[e, eye] > (meshbones.Length - 1))
-                                {
-                                    Meshes[i].boneindices[e, eye] = 0;
-                                }
-                            }
-                        }
-
+                {
+                    oldRig.Names[i] = model.LogicalSkins[0].GetJoint(i).Joint.Name;
+                }
             }
+            MeshTools.UpdateMeshJoints(ref Meshes, newRig, oldRig);
 
             List<Re4MeshContainer> expMeshes = new List<Re4MeshContainer>();
 
@@ -180,8 +152,8 @@ namespace WolvenKit.Modkit.RED4
             MemoryStream meshBuffer = new MemoryStream();
             MeshesInfo meshesInfo = BufferWriter(expMeshes, ref meshBuffer);
 
-            meshesInfo.qScale = QuantScale;
-            meshesInfo.qTrans = QuantTrans;
+            meshesInfo.quantScale = QuantScale;
+            meshesInfo.quantTrans = QuantTrans;
 
             MemoryStream ms = GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer);
 

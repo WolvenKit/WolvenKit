@@ -14,31 +14,30 @@ namespace WolvenKit.Modkit.RED4.RigFile
 
     public class RIG
     {
-        private readonly Red4ParserService _modTools;
-
-        public RIG(Red4ParserService modTools)
+        public static RawArmature ProcessRig(CR2WFile cr2w)
         {
-            _modTools = modTools;
-        }
-
-        public RawArmature ProcessRig(Stream fs)
-        {
-            BinaryReader br = new BinaryReader(fs);
-
-            var cr2w = _modTools.TryReadRED4File(fs);
             if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<animRig>().Any())
             {
-                return new RawArmature();
+                return null;
             }
-            RawArmature Rig = new RawArmature();
-            Rig.Names = GetboneNames(cr2w);
-            Rig.BoneCount = Rig.Names.Length;
-
             var animrig = cr2w.Chunks.Select(_ => _.Data).OfType<animRig>().First();
-            Rig.Parent = GetboneParents(animrig);
+
+            RawArmature Rig = new RawArmature();
+            Rig.BoneCount = animrig.BoneNames.Count;
+
+            Rig.Names = new string[Rig.BoneCount];
+            for (int i = 0; i < animrig.BoneNames.Count; i++)
+            {
+                Rig.Names[i] = animrig.BoneNames[i].Value;
+            }
+
+            Rig.Parent = new Int16[Rig.BoneCount];
+            for (int i = 0; i < animrig.Unk1.Count; i++)
+            {
+                Rig.Parent[i] = animrig.Unk1[i].Value;
+            }
 
             Rig.LocalPosn = new Vec3[Rig.BoneCount];
-
             for (int i = 0; i < Rig.BoneCount; i++)
             {
                 Vec3 v = new Vec3(animrig.Unk2[i][0].X.Value, animrig.Unk2[i][0].Y.Value, animrig.Unk2[i][0].Z.Value);
@@ -123,38 +122,6 @@ namespace WolvenKit.Modkit.RED4.RigFile
                 }
             }
             return Rig;
-        }
-        static Int16[] GetboneParents(animRig animrig)
-        {
-            Int16[] boneParents = new Int16[animrig.Unk1.Count];
-            for (int i = 0; i < animrig.Unk1.Count; i++)
-            {
-                boneParents[i] = animrig.Unk1[i].Value;
-            }
-            return boneParents;
-        }
-        public static string[] GetboneNames(CR2WFile cr2w)
-        {
-            string[] bonenames = new string[0];
-            if (cr2w.Chunks.Select(_ => _.Data).OfType<animRig>().Any())
-            {
-                var animrig = cr2w.Chunks.Select(_ => _.Data).OfType<animRig>().First();
-                bonenames = new string[animrig.BoneNames.Count];
-                for (int i = 0; i < animrig.BoneNames.Count; i++)
-                {
-                    bonenames[i] = animrig.BoneNames[i].Value;
-                }
-            }
-            if(cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any())
-            {
-                var meshrig = cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First();
-                bonenames = new string[meshrig.BoneNames.Count];
-                for (int i = 0; i < meshrig.BoneNames.Count; i++)
-                {
-                    bonenames[i] = meshrig.BoneNames[i].Value;
-                }
-            }
-            return bonenames;
         }
         public static RawArmature CombineRigs(List<RawArmature> rigs)
         {
@@ -247,7 +214,7 @@ namespace WolvenKit.Modkit.RED4.RigFile
         public static Dictionary<int, Node> ExportNodes(ref ModelRoot model, RawArmature srcBones)
         {
             var bonesMapping = new Dictionary<int, Node>();
-
+            var armature = model.UseScene(0).CreateNode("Armature");
             for (int i = 0; i < srcBones.BoneCount; i++)
             {
                 if (srcBones.Parent[i] > -1)
@@ -273,7 +240,7 @@ namespace WolvenKit.Modkit.RED4.RigFile
                 }
                 else
                 {
-                    var root = model.UseScene(0).CreateNode(srcBones.Names[i]);
+                    var root = armature.CreateNode(srcBones.Names[i]);
                     if (srcBones.AposeLSExits)
                     {
                         var s = new Vec3(srcBones.AposeLSScale[i].X, srcBones.AposeLSScale[i].Y, srcBones.AposeLSScale[i].Z);

@@ -12,6 +12,7 @@ using WolvenKit.RED4.CR2W;
 using SharpGLTF.Validation;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W.Archive;
+using CP77.CR2W;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -104,47 +105,20 @@ namespace WolvenKit.Modkit.RED4
             Vec4 QuantScale = new Vec4((max.X - min.X) / 2, (max.Y - min.Y) / 2, (max.Z - min.Z) / 2, 0);
             Vec4 QuantTrans = new Vec4((max.X + min.X) / 2, (max.Y + min.Y) / 2, (max.Z + min.Z) / 2, 1);
 
-            if(model.LogicalSkins.Count != 0)
+            RawArmature newRig = MeshTools.GetOrphanRig(cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First());
+            RawArmature oldRig = null;
+            if (model.LogicalSkins.Count != 0)
             {
-                string[] bones = new string[model.LogicalSkins[0].JointsCount];
+                oldRig = new RawArmature();
+                oldRig.Names = new string[model.LogicalSkins[0].JointsCount];
 
                 for (int i = 0; i < model.LogicalSkins[0].JointsCount; i++)
-                    bones[i] = model.LogicalSkins[0].GetJoint(i).Joint.Name;
-
-                string[] meshbones = RIG.GetboneNames(cr2w);
-
-                // reset vertex joint indices according to original
-                for (int i = 0; i < Meshes.Count; i++)
-                    for (int e = 0; e < Meshes[i].vertices.Length; e++)
-                        for (int eye = 0; eye < Meshes[i].weightcount; eye++)
-                        {
-                            if (Meshes[i].weights[e, eye] != 0)
-                            {
-                                bool existsInMeshBones = false;
-                                string name = bones[Meshes[i].boneindices[e, eye]];
-                                for (UInt16 t = 0; t < meshbones.Length; t++)
-                                {
-                                    if (name == meshbones[t])
-                                    {
-                                        Meshes[i].boneindices[e, eye] = t;
-                                        existsInMeshBones = true;
-                                    }
-                                }
-                                if (!existsInMeshBones)
-                                {
-                                    throw new Exception("One or more vertices in submesh: " + Meshes[i].name + " was weight Painted to bone: " + name + " Which Doesn't Exist in the provided .mesh file");
-                                }
-                            }
-                            else
-                            {
-                                if (Meshes[i].boneindices[e, eye] > (meshbones.Length - 1))
-                                {
-                                    Meshes[i].boneindices[e, eye] = 0;
-                                }
-                            }
-                        }
-
+                {
+                    oldRig.Names[i] = model.LogicalSkins[0].GetJoint(i).Joint.Name;
+                }
             }
+            MeshTools.UpdateMeshJoints(ref Meshes, newRig, oldRig);
+
             UpdateSkinningParamCloth(ref Meshes, ref cr2w);
 
             List<Re4MeshContainer> expMeshes = new List<Re4MeshContainer>();
@@ -155,8 +129,8 @@ namespace WolvenKit.Modkit.RED4
             MemoryStream meshBuffer = new MemoryStream();
             MeshesInfo meshesInfo = BufferWriter(expMeshes, ref meshBuffer);
 
-            meshesInfo.qScale = QuantScale;
-            meshesInfo.qTrans = QuantTrans;
+            meshesInfo.quantScale = QuantScale;
+            meshesInfo.quantTrans = QuantTrans;
 
             MemoryStream ms = GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer);
             ms.Seek(0, SeekOrigin.Begin);
@@ -276,21 +250,21 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            Vec3[] extraData = new Vec3[vertCount];
-            bool extraExist = false;
+            Vec3[] garmentMorph = new Vec3[vertCount];
+
             if (mesh.Primitives[0].MorphTargetsCount > 0)
-            {
-                extraExist = true;
-            }
-            if (extraExist)
             {
                 int idx = mesh.Primitives[0].GetMorphTargetAccessors(0).Keys.ToList().IndexOf("POSITION");
                 List<Vec3> extraDataList = mesh.Primitives[0].GetMorphTargetAccessors(0).Values.ToList()[idx].AsVector3Array().ToList();
 
                 for (int i = 0; i < extraDataList.Count; i++)
                 {
-                    extraData[i] = new Vec3(extraDataList[i].X, -extraDataList[i].Z, extraDataList[i].Y);
+                    garmentMorph[i] = new Vec3(extraDataList[i].X, -extraDataList[i].Z, extraDataList[i].Y);
                 }
+            }
+            else
+            {
+                garmentMorph = new Vec3[0];
             }
             RawMeshContainer rawMeshContainer = new RawMeshContainer()
             {
@@ -305,8 +279,7 @@ namespace WolvenKit.Modkit.RED4
                 boneindices = boneindices,
                 weights = weights,
                 weightcount = weightcount,
-                extraExist = extraExist,
-                extradata = extraData,
+                garmentMorph = garmentMorph,
                 name = mesh.Name
             };
 
@@ -386,18 +359,20 @@ namespace WolvenKit.Modkit.RED4
                 // weight summing can cause problems here, sometimes sum >= 256, idk how to fix them yet
             }
             // extradata/ morphoffsetbs
-            UInt16[,] extraData = new UInt16[vertCount, 3];
-            bool extraExist = mesh.extraExist;
-            if (extraExist)
+            UInt16[,] garmentMorph = new UInt16[vertCount, 3];
+            if (mesh.garmentMorph.Length > 0)
             {
                 for (int i = 0; i < vertCount; i++)
                 {
-                    extraData[i, 0] = Converters.converthf(mesh.extradata[i].X);
-                    extraData[i, 1] = Converters.converthf(mesh.extradata[i].Y);
-                    extraData[i, 2] = Converters.converthf(mesh.extradata[i].Z);
+                    garmentMorph[i, 0] = Converters.converthf(mesh.garmentMorph[i].X);
+                    garmentMorph[i, 1] = Converters.converthf(mesh.garmentMorph[i].Y);
+                    garmentMorph[i, 2] = Converters.converthf(mesh.garmentMorph[i].Z);
                 }
             }
-
+            else
+            {
+                garmentMorph = new UInt16[0, 0];
+            }
             UInt16[] indices = new UInt16[mesh.indices.Length];
             for (int i = 0; i < mesh.indices.Length; i++)
                 indices[i] = Convert.ToUInt16(mesh.indices[i]);
@@ -415,8 +390,7 @@ namespace WolvenKit.Modkit.RED4
                 weightcount = weightcount,
                 indices = indices,
                 name = mesh.name,
-                extraExist = extraExist,
-                extraData = extraData
+                garmentMorph = garmentMorph
             };
             return Re4Mesh;
         }
@@ -435,7 +409,7 @@ namespace WolvenKit.Modkit.RED4
             UInt32[] vpStrides = new UInt32[meshC];
             UInt32[] weightcounts = new UInt32[meshC];
             UInt32[] LODLvl = new UInt32[meshC];
-            bool[] extraExists = new bool[meshC];
+            bool[] garmentSupportExists = new bool[meshC];
 
             UInt32 vertBufferSize = 0;
             UInt32 indexBufferSize = 0;
@@ -453,9 +427,9 @@ namespace WolvenKit.Modkit.RED4
                 vpStrides[i] = expMeshes[i].weightcount * 2 + 8;
                 weightcounts[i] = expMeshes[i].weightcount;
 
-                extraExists[i] = expMeshes[i].extraExist;
-                if (extraExists[i])
+                if (expMeshes[i].garmentMorph.Length > 0)
                 {
+                    garmentSupportExists[i] = true;
                     vpStrides[i] += 8;
                 }
 
@@ -471,11 +445,11 @@ namespace WolvenKit.Modkit.RED4
                     for (int eye = 0; eye < expMeshes[i].weightcount; eye++)
                         bw.Write(expMeshes[i].weights[e, eye]);
 
-                    if (extraExists[i])
+                    if (garmentSupportExists[i])
                     {
-                        bw.Write(expMeshes[i].extraData[e, 0]);
-                        bw.Write(expMeshes[i].extraData[e, 1]);
-                        bw.Write(expMeshes[i].extraData[e, 2]);
+                        bw.Write(expMeshes[i].garmentMorph[e, 0]);
+                        bw.Write(expMeshes[i].garmentMorph[e, 1]);
+                        bw.Write(expMeshes[i].garmentMorph[e, 2]);
                         bw.Write((UInt16)0);
                     }
                 }
@@ -620,7 +594,7 @@ namespace WolvenKit.Modkit.RED4
                 vertBufferSize = vertBufferSize,
                 indexBufferOffset = indexBufferOffset,
                 indexBufferSize = indexBufferSize,
-                extraExists = extraExists
+                garmentSupportExists = garmentSupportExists
             };
 
             return meshesInfo;
@@ -900,7 +874,7 @@ namespace WolvenKit.Modkit.RED4
                 elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
 
                 // extra data/ morphoffsets
-                if (info.extraExists[i])
+                if (info.garmentSupportExists[i])
                 {
                     chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement(cr2w, chunk.ChunkVertices.VertexLayout.Elements, Convert.ToString(elementCount)) { IsSerialized = true, IsNulled = false });
                     // fishy
@@ -984,12 +958,12 @@ namespace WolvenKit.Modkit.RED4
                 blob.Header.RenderChunkInfos.Add(chunk);
             }
 
-            blob.Header.QuantizationScale.X.Value = info.qScale.X;
-            blob.Header.QuantizationScale.Y.Value = info.qScale.Y;
-            blob.Header.QuantizationScale.Z.Value = info.qScale.Z;
-            blob.Header.QuantizationOffset.X.Value = info.qTrans.X;
-            blob.Header.QuantizationOffset.Y.Value = info.qTrans.Y;
-            blob.Header.QuantizationOffset.Z.Value = info.qTrans.Z;
+            blob.Header.QuantizationScale.X.Value = info.quantScale.X;
+            blob.Header.QuantizationScale.Y.Value = info.quantScale.Y;
+            blob.Header.QuantizationScale.Z.Value = info.quantScale.Z;
+            blob.Header.QuantizationOffset.X.Value = info.quantTrans.X;
+            blob.Header.QuantizationOffset.Y.Value = info.quantTrans.Y;
+            blob.Header.QuantizationOffset.Z.Value = info.quantTrans.Z;
 
             blob.Header.VertexBufferSize.Value = info.vertBufferSize;
             blob.Header.IndexBufferSize.Value = info.indexBufferSize;
@@ -1022,6 +996,11 @@ namespace WolvenKit.Modkit.RED4
             {
                 throw new Exception("Provided GLTF doesn't contain any 3D Geomerty");
             }
+            if (model.LogicalSkins.Count > 1)
+            {
+                throw new Exception($"Armature Count: {model.LogicalSkins.Count}, Only 1 Armature is allowed");
+            }
+
             List<UInt32> LODs = new List<UInt32>();
             for (int i = 0; i < model.LogicalMeshes.Count; i++)
             {

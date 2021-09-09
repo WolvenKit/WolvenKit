@@ -103,7 +103,6 @@ namespace WolvenKit.MSTests
             ServiceLocator.Default.RegisterType<IHashService, HashService>();
             ServiceLocator.Default.RegisterType<IProgressService<double>, ProgressService<double>>();
             ServiceLocator.Default.RegisterType<Red4ParserService>();
-            ServiceLocator.Default.RegisterType<RIG>();              //Cp77FileService
             ServiceLocator.Default.RegisterType<MeshTools>();        //RIG, Cp77FileService
             ServiceLocator.Default.RegisterType<IArchiveManager, ArchiveManager>();
             ServiceLocator.Default.RegisterType<IModTools, ModTools>();         //Cp77FileService, ILoggerService, IProgress, IHashService, Mesh, Target

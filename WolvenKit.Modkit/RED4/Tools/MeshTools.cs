@@ -15,6 +15,7 @@ using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Types;
 using SharpGLTF.Validation;
+
 namespace CP77.CR2W
 {
     using Vec2 = System.Numerics.Vector2;
@@ -23,40 +24,25 @@ namespace CP77.CR2W
 
     public class MeshTools
     {
-        private readonly Red4ParserService _modTools;
-        private readonly RIG _rig;
+        private readonly Red4ParserService _red4ParserService;
 
-        public MeshTools(Red4ParserService modtools, RIG rig)
+        public MeshTools(Red4ParserService red4ParserService)
         {
-            _modTools = modtools;
-            _rig = rig;
+            _red4ParserService = red4ParserService;
         }
-
-
-        public string ExportMeshSimple(IGameFile file, string FilePath, string v)
+        public bool ExportMeshPreviewer(Stream meshStream, FileInfo outFile)
         {
+            var cr2w = _red4ParserService.TryReadRED4File(meshStream);
 
-            using var meshStream = new MemoryStream();
-            file.Extract(meshStream);
-            meshStream.Seek(0, SeekOrigin.Begin);
-            var cr2w = _modTools.TryReadRED4File(meshStream);
-
-            if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any())
+            if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
             {
-                return "";
+                return false;
             }
-            var ms = GetMeshBufferStream(meshStream, cr2w);
 
-            var meshinfo = GetMeshesinfo(cr2w);
-
-            var expMeshes = ContainRawMesh(ms, meshinfo, true);
-
-            if (!Directory.Exists(v))
-                Directory.CreateDirectory(v);
-
-            if (Directory.GetFiles(v).Length > 5)
+            var cachedFiles = Directory.GetFiles(outFile.DirectoryName);
+            if (cachedFiles.Length > 5)
             {
-                foreach (var f in Directory.GetFiles(v))
+                foreach (var f in cachedFiles)
                 {
                     try
                     {
@@ -68,93 +54,26 @@ namespace CP77.CR2W
                 }
             }
 
-            ModelRoot model = RawMeshesToMinimalGLTF(expMeshes);
-            string outfile;
+            var rendblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
 
+            var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer.Value - 1];
+            meshStream.Seek(rendbuffer.Offset, SeekOrigin.Begin);
+            var ms = new MemoryStream();
+            meshStream.DecompressAndCopySegment(ms, rendbuffer.DiskSize, rendbuffer.MemSize);
 
-            if (true)
-            {
-                outfile = Path.Combine(v, Path.GetFileNameWithoutExtension(FilePath) + ".glb");
-                model.SaveGLB(outfile);
-            }
+            var meshesinfo = GetMeshesinfo(rendblob);
 
-            meshStream.Dispose();
-            meshStream.Close();
-
-            return outfile;
-        }
-
-
-        public string ExportMeshWithoutRigPreviewer(IGameFile file, string FilePath, string tempmodels, bool LodFilter = true, bool isGLBinary = true)
-        {
-            using var meshStream = new MemoryStream();
-            file.Extract(meshStream);
-            meshStream.Seek(0, SeekOrigin.Begin);
-            var cr2w = _modTools.TryReadRED4File(meshStream);
-
-            return ExportMeshWithoutRigPreviewerInner(meshStream, cr2w, FilePath, tempmodels, LodFilter, isGLBinary);
-        }
-
-        public string ExportMeshWithoutRigPreviewer(string FilePath, string tempmodels, bool LodFilter = true, bool isGLBinary = true)
-        {
-            using var meshStream = new FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            var cr2w = _modTools.TryReadRED4File(meshStream);
-
-            return ExportMeshWithoutRigPreviewerInner(meshStream, cr2w, FilePath, tempmodels, LodFilter, isGLBinary);
-        }
-
-        private string ExportMeshWithoutRigPreviewerInner(Stream meshStream, CR2WFile cr2w, string FilePath, string tempmodels, bool LodFilter = true, bool isGLBinary = true)
-        {
-            if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any())
-            {
-                return "";
-            }
-            var ms = GetMeshBufferStream(meshStream, cr2w);
-
-            var meshinfo = GetMeshesinfo(cr2w);
-
-            var expMeshes = ContainRawMesh(ms, meshinfo, LodFilter);
+            var expMeshes = ContainRawMesh(ms, meshesinfo, true);
 
             ModelRoot model = RawMeshesToMinimalGLTF(expMeshes);
-            string outfile;
 
-            if (!Directory.Exists(tempmodels))
-                Directory.CreateDirectory(tempmodels);
+            model.SaveGLB(outFile.FullName);
 
-            if (Directory.GetFiles(tempmodels).Length > 5)
-            {
-                foreach (var f in Directory.GetFiles(tempmodels))
-                {
-                    try
-                    {
-                        File.Delete(f);
-                    }
-                    catch
-                    {
-                    }
-                }
-            }
-
-
-            if (isGLBinary)
-            {
-                outfile = Path.Combine(tempmodels, Path.GetFileNameWithoutExtension(FilePath) + ".glb");
-                model.SaveGLB(outfile);
-            }
-            else
-            {
-                outfile = Path.Combine(tempmodels, Path.GetFileNameWithoutExtension(FilePath) + ".gltf");
-                model.SaveGLTF(outfile);
-            }
-            meshStream.Dispose();
-            meshStream.Close();
-
-            return outfile;
+            return true;
         }
-
         public bool ExportMesh(Stream meshStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.Strict)
         {
-            var cr2w = _modTools.TryReadRED4File(meshStream);
+            var cr2w = _red4ParserService.TryReadRED4File(meshStream);
 
             if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any())
             {
@@ -166,29 +85,19 @@ namespace CP77.CR2W
                 return WriteFakeMeshToFile();
             }
 
-            MeshBones meshBones = new MeshBones();
+            var rendblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
 
-            meshBones.boneCount = cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First().BoneNames.Count;
+            RawArmature Rig = GetOrphanRig(rendblob);
 
-            if (meshBones.boneCount != 0)    // for rigid meshes
-            {
-                meshBones.Names = RIG.GetboneNames(cr2w);
-                meshBones.WorldPosn = GetMeshBonesPosn(cr2w);
-            }
-            RawArmature Rig = GetNonParentedRig(meshBones);
+            var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer.Value - 1];
+            meshStream.Seek(rendbuffer.Offset, SeekOrigin.Begin);
+            var ms = new MemoryStream();
+            meshStream.DecompressAndCopySegment(ms, rendbuffer.DiskSize, rendbuffer.MemSize);
 
-            MemoryStream ms = GetMeshBufferStream(meshStream, cr2w);
+            var meshesinfo = GetMeshesinfo(rendblob);
 
-            MeshesInfo meshinfo = GetMeshesinfo(cr2w);
-
-            List<RawMeshContainer> expMeshes = ContainRawMesh(ms, meshinfo, LodFilter);
+            List<RawMeshContainer> expMeshes = ContainRawMesh(ms, meshesinfo, LodFilter);
             UpdateSkinningParamCloth(ref expMeshes, meshStream, cr2w);
-            if (meshBones.boneCount == 0)    // for rigid meshes
-            {
-                for (int i = 0; i < expMeshes.Count; i++)
-                    expMeshes[i].weightcount = 0;
-            }
-            UpdateMeshJoints(ref expMeshes, Rig, meshBones);
 
             ModelRoot model = RawMeshesToGLTF(expMeshes, Rig);
 
@@ -234,10 +143,9 @@ namespace CP77.CR2W
                 }
             }
         }
-
         public bool ExportMeshWithoutRig(Stream meshStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.Strict)
         {
-            var cr2w = _modTools.TryReadRED4File(meshStream);
+            var cr2w = _red4ParserService.TryReadRED4File(meshStream);
 
             if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any())
             {
@@ -249,11 +157,15 @@ namespace CP77.CR2W
                 return false;
             }
 
-            MemoryStream ms = GetMeshBufferStream(meshStream, cr2w);
+            var rendblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
+            var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer.Value - 1];
+            meshStream.Seek(rendbuffer.Offset, SeekOrigin.Begin);
+            var ms = new MemoryStream();
+            meshStream.DecompressAndCopySegment(ms, rendbuffer.DiskSize, rendbuffer.MemSize);
 
-            MeshesInfo meshinfo = GetMeshesinfo(cr2w);
+            var meshesinfo = GetMeshesinfo(rendblob);
 
-            List<RawMeshContainer> expMeshes = ContainRawMesh(ms, meshinfo, LodFilter);
+            List<RawMeshContainer> expMeshes = ContainRawMesh(ms, meshesinfo, LodFilter);
 
             ModelRoot model = RawMeshesToGLTF(expMeshes, null);
 
@@ -270,21 +182,25 @@ namespace CP77.CR2W
             meshStream.Close();
             return true;
         }
-
         public bool ExportMultiMeshWithoutRig(List<Stream> meshStreamS, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.Strict)
         {
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
 
             for (int m = 0; m < meshStreamS.Count; m++)
             {
-                var cr2w = _modTools.TryReadRED4File(meshStreamS[m]);
+                var cr2w = _red4ParserService.TryReadRED4File(meshStreamS[m]);
                 if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
                     continue;
 
-                MemoryStream ms = GetMeshBufferStream(meshStreamS[m], cr2w);
+                var rendblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
+                var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer.Value - 1];
+                meshStreamS[m].Seek(rendbuffer.Offset, SeekOrigin.Begin);
+                var ms = new MemoryStream();
+                meshStreamS[m].DecompressAndCopySegment(ms, rendbuffer.DiskSize, rendbuffer.MemSize);
 
-                MeshesInfo meshinfo = GetMeshesinfo(cr2w);
-                var Meshes = ContainRawMesh(ms, meshinfo, LodFilter);
+                var meshesinfo = GetMeshesinfo(rendblob);
+
+                var Meshes = ContainRawMesh(ms, meshesinfo, LodFilter);
                 for (int i = 0; i < Meshes.Count; i++)
                     Meshes[i].name = m + "_" + Meshes[i].name;
                 expMeshes.AddRange(Meshes);
@@ -308,43 +224,30 @@ namespace CP77.CR2W
 
             return true;
         }
-
         public bool ExportMeshWithRig(Stream meshStream, Stream rigStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.Strict)
         {
-            RawArmature Rig = _rig.ProcessRig(rigStream);
+            var cr2w = _red4ParserService.TryReadRED4File(meshStream);
 
-            var cr2w = _modTools.TryReadRED4File(meshStream);
-
-            if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any())
+            if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
             {
                 return false;
             }
 
-            if (!cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
-            {
-                return false;
-            }
+            var rendblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
+            var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer.Value - 1];
+            meshStream.Seek(rendbuffer.Offset, SeekOrigin.Begin);
+            var ms = new MemoryStream();
+            meshStream.DecompressAndCopySegment(ms, rendbuffer.DiskSize, rendbuffer.MemSize);
 
-            MemoryStream ms = GetMeshBufferStream(meshStream, cr2w);
-            MeshesInfo meshinfo = GetMeshesinfo(cr2w);
+            var meshesinfo = GetMeshesinfo(rendblob);
 
-            MeshBones bones = new MeshBones();
-
-            CMesh cmesh = cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First();
-            if (cmesh.BoneNames.Count != 0)    // for rigid meshes
-            {
-                bones.Names = RIG.GetboneNames(cr2w);
-                bones.WorldPosn = GetMeshBonesPosn(cr2w);
-            }
-
-            List<RawMeshContainer> expMeshes = ContainRawMesh(ms, meshinfo, LodFilter);
+            List<RawMeshContainer> expMeshes = ContainRawMesh(ms, meshesinfo, LodFilter);
             UpdateSkinningParamCloth(ref expMeshes, meshStream, cr2w);
-            if (cmesh.BoneNames.Count == 0)    // for rigid meshes
-            {
-                for (int i = 0; i < expMeshes.Count; i++)
-                    expMeshes[i].weightcount = 0;
-            }
-            UpdateMeshJoints(ref expMeshes, Rig, bones);
+
+            RawArmature meshRig = GetOrphanRig(rendblob);
+            RawArmature Rig = RIG.ProcessRig(_red4ParserService.TryReadRED4File(rigStream));
+
+            UpdateMeshJoints(ref expMeshes, Rig, meshRig);
 
             ModelRoot model = RawMeshesToGLTF(expMeshes, Rig);
 
@@ -364,13 +267,12 @@ namespace CP77.CR2W
 
             return true;
         }
-
         public bool ExportMultiMeshWithRig(List<Stream> meshStreamS, List<Stream> rigStreamS, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.Strict)
         {
             List<RawArmature> Rigs = new List<RawArmature>();
             for (int r = 0; r < rigStreamS.Count; r++)
             {
-                RawArmature Rig = _rig.ProcessRig(rigStreamS[r]);
+                RawArmature Rig = RIG.ProcessRig(_red4ParserService.TryReadRED4File(rigStreamS[r]));
                 Rigs.Add(Rig);
             }
             RawArmature expRig = RIG.CombineRigs(Rigs);
@@ -379,34 +281,26 @@ namespace CP77.CR2W
 
             for (int m = 0; m < meshStreamS.Count; m++)
             {
-                var cr2w = _modTools.TryReadRED4File(meshStreamS[m]);
+                var cr2w = _red4ParserService.TryReadRED4File(meshStreamS[m]);
                 if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
                 {
                     continue;
                 }
 
-                MemoryStream ms = GetMeshBufferStream(meshStreamS[m], cr2w);
-                MeshesInfo meshinfo = GetMeshesinfo(cr2w);
+                var rendblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
+                var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer.Value - 1];
+                meshStreamS[m].Seek(rendbuffer.Offset, SeekOrigin.Begin);
+                var ms = new MemoryStream();
+                meshStreamS[m].DecompressAndCopySegment(ms, rendbuffer.DiskSize, rendbuffer.MemSize);
 
-                MeshBones bones = new MeshBones();
+                var meshesinfo = GetMeshesinfo(rendblob);
 
-                CMesh cmesh = cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First();
-
-                if (cmesh.BoneNames.Count != 0)    // for rigid meshes
-                {
-                    bones.Names = RIG.GetboneNames(cr2w);
-                    bones.WorldPosn = GetMeshBonesPosn(cr2w);
-                }
-
-                List<RawMeshContainer> Meshes = ContainRawMesh(ms, meshinfo, LodFilter);
+                List<RawMeshContainer> Meshes = ContainRawMesh(ms, meshesinfo, LodFilter);
                 UpdateSkinningParamCloth(ref Meshes, meshStreamS[m], cr2w);
-                for (int i = 0; i < Meshes.Count; i++)
-                {
-                    Meshes[i].name = m + "_" + Meshes[i].name;
-                    if (cmesh.BoneNames.Count == 0)    // for rigid meshes
-                        Meshes[i].weightcount = 0;
-                }
-                UpdateMeshJoints(ref Meshes, expRig, bones);
+
+                RawArmature meshRig = GetOrphanRig(rendblob);
+
+                UpdateMeshJoints(ref expMeshes, expRig, meshRig);
 
                 expMeshes.AddRange(Meshes);
             }
@@ -432,28 +326,8 @@ namespace CP77.CR2W
             }
             return true;
         }
-
-        public static Vec3[] GetMeshBonesPosn(CR2WFile cr2w)
+        public static MeshesInfo GetMeshesinfo(rendRenderMeshBlob rendmeshblob)
         {
-            rendRenderMeshBlob rendmeshblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
-
-            int boneCount = rendmeshblob.Header.BonePositions.Count;
-            Vec3[] posn = new Vec3[boneCount];
-            float x, y, z = 0;
-            for (int i = 0; i < boneCount; i++)
-            {
-                x = rendmeshblob.Header.BonePositions[i].X.Value;
-                y = rendmeshblob.Header.BonePositions[i].Y.Value;
-                z = rendmeshblob.Header.BonePositions[i].Z.Value;
-                posn[i] = new Vec3(x, z, -y);
-            }
-            return posn;
-        }
-
-        public static MeshesInfo GetMeshesinfo(CR2WFile cr2w)
-        {
-            rendRenderMeshBlob rendmeshblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
-
             int meshC = rendmeshblob.Header.RenderChunkInfos.Count;
 
             UInt32[] vertCounts = new UInt32[meshC];
@@ -551,29 +425,22 @@ namespace CP77.CR2W
                             extraExists[i] = true;
                     }
                 }
-                if(!cr2w.Chunks.Select(_=>_.Data).OfType<meshMeshParamGarmentSupport>().Any())
+                if(!rendmeshblob.cr2w.Chunks.Select(_=>_.Data).OfType<meshMeshParamGarmentSupport>().Any())
                 {
                     extraExists[i] = false;
                 }
             }
 
-            List<Appearance> appearances = new List<Appearance>();
-            for (int i = 0; i < cr2w.Chunks.Count; i++)
+            Dictionary<string,string[]> appearances = new Dictionary<string, string[]>();
+            var apps = rendmeshblob.cr2w.Chunks.Select(_ => _.Data).OfType<meshMeshAppearance>().ToList();
+            for (int i = 0; i < apps.Count; i++)
             {
-                if (cr2w.Chunks[i].REDType == "meshMeshAppearance")
+                string[] materialNames = new string[apps[i].ChunkMaterials.Count];
+                for (int e = 0; e < apps[i].ChunkMaterials.Count; e++)
                 {
-                    Appearance appearance = new Appearance();
-                    appearance.Name = (cr2w.Chunks[i].Data as meshMeshAppearance).Name.Value;
-                    if (appearance.Name == string.Empty)
-                        appearance.Name = "DEFAULT";
-                    int mtCount = (cr2w.Chunks[i].Data as meshMeshAppearance).ChunkMaterials.Count;
-                    appearance.MaterialNames = new string[mtCount];
-                    for (int e = 0; e < mtCount; e++)
-                    {
-                        appearance.MaterialNames[e] = (cr2w.Chunks[i].Data as meshMeshAppearance).ChunkMaterials[e].Value;
-                    }
-                    appearances.Add(appearance);
+                    materialNames[e] = apps[i].ChunkMaterials[e].Value;
                 }
+                appearances.Add(apps[i].Name.Value, materialNames);
             }
             MeshesInfo meshesInfo = new MeshesInfo()
             {
@@ -589,10 +456,10 @@ namespace CP77.CR2W
                 indicesOffsets = indicesOffsets,
                 vpStrides = vpStrides,
                 weightcounts = weightcounts,
-                extraExists = extraExists,
+                garmentSupportExists = extraExists,
                 LODLvl = LODLvl,
-                qScale = qScale,
-                qTrans = qTrans,
+                quantScale = qScale,
+                quantTrans = qTrans,
                 meshC = meshC,
                 appearances = appearances,
                 vertBufferSize = rendmeshblob.Header.VertexBufferSize.Value,
@@ -620,16 +487,16 @@ namespace CP77.CR2W
                 Vec2[] tx1coords = new Vec2[info.vertCounts[index]];
                 float[,] weights = new float[info.vertCounts[index], info.weightcounts[index]];
                 UInt16[,] boneindices = new UInt16[info.vertCounts[index], info.weightcounts[index]];
-                Vec3[] extradata = new Vec3[info.vertCounts[index]];
+                Vec3[] garmentMorph = new Vec3[info.vertCounts[index]];
 
                 // geting vertices
                 for (int i = 0; i < info.vertCounts[index]; i++)
                 {
                     gfs.Position = info.vertOffsets[index] + i * info.vpStrides[index];
 
-                    float x = (gbr.ReadInt16() / 32767f) * info.qScale.X + info.qTrans.X;
-                    float y = (gbr.ReadInt16() / 32767f) * info.qScale.Y + info.qTrans.Y;
-                    float z = (gbr.ReadInt16() / 32767f) * info.qScale.Z + info.qTrans.Z;
+                    float x = (gbr.ReadInt16() / 32767f) * info.quantScale.X + info.quantTrans.X;
+                    float y = (gbr.ReadInt16() / 32767f) * info.quantScale.Y + info.quantTrans.Y;
+                    float z = (gbr.ReadInt16() / 32767f) * info.quantScale.Z + info.quantTrans.Z;
                     // changing orientation of geomerty, Y+ Z+ RHS-LHS BS
                     vertices[i] = new Vec3(x, z, -y);
                 }
@@ -774,7 +641,7 @@ namespace CP77.CR2W
                 }
                 // got weights
 
-                if (info.extraExists[index])
+                if (info.garmentSupportExists[index])
                 {
                     for (int i = 0; i < info.vertCounts[index]; i++)
                     {
@@ -782,8 +649,12 @@ namespace CP77.CR2W
                         float x = Converters.hfconvert(gbr.ReadUInt16());
                         float y = Converters.hfconvert(gbr.ReadUInt16());
                         float z = Converters.hfconvert(gbr.ReadUInt16());
-                        extradata[i] = new Vec3(x, z, -y);
+                        garmentMorph[i] = new Vec3(x, z, -y);
                     }
+                }
+                else
+                {
+                    garmentMorph = new Vec3[0];
                 }
                 // getting uint16 faces/indices
                 gfs.Position = info.indicesOffsets[index];
@@ -806,59 +677,63 @@ namespace CP77.CR2W
                     boneindices = boneindices,
                     weights = weights,
                     weightcount = info.weightcounts[index],
-                    extradata = extradata,
-                    extraExist = info.extraExists[index]
+                    garmentMorph = garmentMorph,
                 };
                 mesh.name = "submesh_" + Convert.ToString(index).PadLeft(2, '0') + "_LOD_" + info.LODLvl[index];
 
-                mesh.appNames = new string[info.appearances.Count];
                 mesh.materialNames = new string[info.appearances.Count];
-                for (int e = 0; e < info.appearances.Count; e++)
+                var apps = info.appearances.Keys.ToList();
+                for (int e = 0; e < apps.Count; e++)
                 {
-                    mesh.appNames[e] = info.appearances[e].Name;
-                    mesh.materialNames[e] = info.appearances[e].MaterialNames[index];
+                    mesh.materialNames[e] = info.appearances[apps[e]][index];
                 }
                 expMeshes.Add(mesh);
             }
             return expMeshes;
         }
-        public static void UpdateMeshJoints(ref List<RawMeshContainer> Meshes, RawArmature Rig, MeshBones Bones)
+        public static void UpdateMeshJoints(ref List<RawMeshContainer> Meshes, RawArmature newRig, RawArmature oldRig)
         {
-            // updating mesh bone indexes
-            for (int i = 0; i < Meshes.Count; i++)
+            // updating mesh bone indices
+            if(newRig != null && oldRig != null)
             {
-                for (int e = 0; e < Meshes[i].vertices.Length; e++)
+                for (int i = 0; i < Meshes.Count; i++)
                 {
-                    for (int eye = 0; eye < Meshes[i].weightcount; eye++)
+                    for (int e = 0; e < Meshes[i].vertices.Length; e++)
                     {
-                        bool found = false;
-                        for (UInt16 r = 0; r < Rig.BoneCount; r++)
+                        for (int eye = 0; eye < Meshes[i].weightcount; eye++)
                         {
-                            if (Rig.Names[r] == Bones.Names[Meshes[i].boneindices[e, eye]])
+                            if(Meshes[i].boneindices[e, eye] >= oldRig.BoneCount && Meshes[i].weights[e, eye] == 0)
                             {
-                                Meshes[i].boneindices[e, eye] = r;
-                                found = true;
-                                break;
+                                Meshes[i].boneindices[e, eye] = 0;
                             }
-                        }
-                        if (!found)
-                        {
-                            throw new Exception("Bone: " + Bones.Names[Meshes[i].boneindices[e, eye]] + " is not present in the Provided .rig(s).\nInput .rig(s) are incompatible or incomplete, Please provide a/more compatible .rig(s)\nTIP: 1. For body .rig(s) provide {BodyType}_base_deformations.rig instead of {BodyType}_base.rig.\n2. if Input .mesh(s) contains any dangle/physics bones, provide the compatible dangle.rig also.\n");
+                            bool found = false;
+                            for (UInt16 r = 0; r < newRig.BoneCount; r++)
+                            {
+                                if (newRig.Names[r] == oldRig.Names[Meshes[i].boneindices[e, eye]])
+                                {
+                                    Meshes[i].boneindices[e, eye] = r;
+                                    found = true;
+                                    break;
+                                }
+                            }
+                            if (!found)
+                            {
+                                throw new Exception($"Bone: {oldRig.Names[Meshes[i].boneindices[e, eye]]} not present in export Rig(s)/Import Mesh");
+                            }
                         }
                     }
                 }
             }
-        }
-        public static MemoryStream GetMeshBufferStream(Stream ms, CR2WFile cr2w)
-        {
-            var blob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
-            var bufferIdx = blob.RenderBuffer.Buffer.Value;
-
-            var buffer = cr2w.Buffers[bufferIdx - 1];
-            ms.Seek(buffer.Offset, SeekOrigin.Begin);
-            var meshstream = new MemoryStream();
-            ms.DecompressAndCopySegment(meshstream, buffer.DiskSize, buffer.MemSize);
-            return meshstream;
+            else
+            {
+                for (int i = 0; i < Meshes.Count; i++)
+                {
+                    for (int e = 0; e < Meshes[i].weightcount; e++)
+                    {
+                        Meshes[i].weightcount = 0;
+                    }
+                }
+            }
         }
         public static ModelRoot RawMeshesToGLTF(List<RawMeshContainer> meshes, RawArmature Rig)
         {
@@ -965,13 +840,13 @@ namespace CP77.CR2W
                     bw.Write(Convert.ToUInt16(mesh.indices[i + 0]));
                     bw.Write(Convert.ToUInt16(mesh.indices[i + 2]));
                 }
-                if (mesh.extraExist)
+                if (mesh.garmentMorph.Length > 0)
                 {
                     for (int i = 0; i < mesh.vertices.Length; i++)
                     {
-                        bw.Write(mesh.extradata[i].X);
-                        bw.Write(mesh.extradata[i].Y);
-                        bw.Write(mesh.extradata[i].Z);
+                        bw.Write(mesh.garmentMorph[i].X);
+                        bw.Write(mesh.garmentMorph[i].Y);
+                        bw.Write(mesh.garmentMorph[i].Z);
                     }
                 }
             }
@@ -1087,38 +962,32 @@ namespace CP77.CR2W
                 if (Rig != null && mesh.weightcount > 0)
                     nod.Skin = skins[0];
 
-                if(mesh.extraExist)
+                if(mesh.garmentMorph.Length > 0)
                 {
                     string[] arr = { "GarmentSupport" };
-                    var obj = new { appNames = mesh.appNames, materialNames = mesh.materialNames, targetNames = arr };
+                    var obj = new { materialNames = mesh.materialNames, targetNames = arr };
                     mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
                 }
                 else
                 {
-                    var obj = new { appNames = mesh.appNames, materialNames = mesh.materialNames };
+                    var obj = new { materialNames = mesh.materialNames };
                     mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
                 }
-                if(mesh.extraExist)
+                if(mesh.garmentMorph.Length > 0)
                 {
                     var acc = model.CreateAccessor();
-                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.extradata.Length * 12);
-                    acc.SetData(buff, 0, mesh.extradata.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
+                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.garmentMorph.Length * 12);
+                    acc.SetData(buff, 0, mesh.garmentMorph.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
                     var dict = new Dictionary<string, Accessor>();
                     dict.Add("POSITION", acc);
                     prim.SetMorphTargetAccessors(0, dict);
-                    BuffViewoffset += mesh.extradata.Length * 12;
+                    BuffViewoffset += mesh.garmentMorph.Length * 12;
                 }
             }
             model.UseScene(0).Name = "Scene";
             model.DefaultScene = model.UseScene(0);
             model.MergeBuffers();
             return model;
-        }
-        public class MeshBones
-        {
-            public string[] Names;
-            public Vec3[] WorldPosn;
-            public int boneCount;
         }
         private static ModelRoot RawMeshesToMinimalGLTF(List<RawMeshContainer> meshes)
         {
@@ -1153,37 +1022,39 @@ namespace CP77.CR2W
             var model = scene.ToGltf2();
             return model;
         }
-        public static RawArmature GetNonParentedRig(MeshBones meshBones)
+        public static RawArmature GetOrphanRig(rendRenderMeshBlob rendmeshblob)
         {
-            if (meshBones.boneCount != 0)    // for rigid meshes
+            if (rendmeshblob.Header.BonePositions.Count != 0)
             {
                 RawArmature Rig = new RawArmature();
-                Rig.BoneCount = meshBones.boneCount + 1;
+                Rig.BoneCount = rendmeshblob.Header.BonePositions.Count;
                 Rig.LocalPosn = new Vec3[Rig.BoneCount];
                 Rig.LocalRot = new System.Numerics.Quaternion[Rig.BoneCount];
                 Rig.LocalScale = new Vec3[Rig.BoneCount];
                 Rig.Parent = new Int16[Rig.BoneCount];
                 Rig.Names = new string[Rig.BoneCount];
 
-                Rig.Parent[0] = -1;
-                Rig.Names[0] = "WolvenKit_Root";
-                Rig.LocalPosn[0] = new Vec3(0f, 0f, 0f);
-                Rig.LocalRot[0] = new System.Numerics.Quaternion(0f, 0f, 0f, 1f);
-                Rig.LocalScale[0] = new Vec3(1f, 1f, 1f);
-
-                for (int i = 0; i < Rig.BoneCount - 1; i++)
+                for (int i = 0; i < Rig.BoneCount; i++)
                 {
-                    Rig.LocalPosn[i + 1] = meshBones.WorldPosn[i];
-                    Rig.Names[i + 1] = meshBones.Names[i];
-                    Rig.LocalRot[i + 1] = new System.Numerics.Quaternion(-0.707107f, 0f, 0f, 0.707107f);
-                    Rig.LocalScale[i + 1] = new Vec3(1f, 1f, 1f);
-                    Rig.Parent[i + 1] = 0;
+                    var vec = rendmeshblob.Header.BonePositions[i];
+                    Rig.LocalPosn[i] = new Vec3(vec.X.Value, vec.Z.Value, -vec.Y.Value);
+                    Rig.LocalRot[i] = System.Numerics.Quaternion.Identity;
+                    Rig.LocalScale[i] = Vec3.One;
+                    Rig.Parent[i] = -1;
+                }
+                if(rendmeshblob.cr2w.Chunks.Select(_=>_.Data).OfType<CMesh>().Any())
+                {
+                    var meshBlob = rendmeshblob.cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First();
+                    for (int i = 0; i < Rig.BoneCount; i++)
+                    {
+                        Rig.Names[i] = meshBlob.BoneNames[i].Value;
+                    }
                 }
                 return Rig;
             }
             return null;
         }
-        private static void UpdateSkinningParamCloth(ref List<RawMeshContainer> meshes,Stream ms, CR2WFile cr2w)
+        public static void UpdateSkinningParamCloth(ref List<RawMeshContainer> meshes,Stream ms, CR2WFile cr2w)
         {
             if (cr2w.Chunks.Select(_ => _.Data).OfType<meshMeshParamCloth>().Any())
             {

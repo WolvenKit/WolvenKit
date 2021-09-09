@@ -120,11 +120,18 @@ namespace WolvenKit.Views.Tools
                 }
             }
 
-            var endPath = Path.Combine(managerCacheDir, Path.GetFileName(selectedItem.Name) ?? throw new InvalidOperationException());
-            var q2 = Locator.Current.GetService<MeshTools>()?.ExportMeshWithoutRigPreviewer(selectedGameFile, endPath, ISettingsManager.GetTemp_OBJPath());
-            if (q2 is { Length: > 0 })
+            using (var meshStream = new MemoryStream())
             {
-                propertiesViewModel.LoadModel(q2);
+                selectedGameFile.Extract(meshStream);
+                meshStream.Seek(0, SeekOrigin.Begin);
+                string outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileName(selectedItem.Name) ?? throw new InvalidOperationException());
+                outPath = Path.ChangeExtension(outPath, ".glb");
+                if (Locator.Current.GetService<MeshTools>().ExportMeshPreviewer(meshStream, new FileInfo(outPath)))
+                {
+                    propertiesViewModel.LoadModel(outPath);
+                }
+                meshStream.Dispose();
+                meshStream.Close();
             }
         }
 
