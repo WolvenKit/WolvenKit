@@ -14,6 +14,7 @@
       <PackageReference Include="AsyncEnumerator" Version="4.0.2" />
       <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0023" />
       <PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0023" />
+      <PackageReference Include="ReactiveUI.Fody" Version="14.1.1" />
   </ItemGroup>
     <ItemGroup>
         <Content Include="opus-tools\opusdec.exe">

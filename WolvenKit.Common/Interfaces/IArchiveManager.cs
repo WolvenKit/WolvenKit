@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using DynamicData;
@@ -22,16 +23,20 @@ namespace WolvenKit.Common
         //IEnumerable<IGameFile> FileList { get; }
         EArchiveType TypeName { get; }
 
+        public bool IsManagerLoaded { get; }
+
         #endregion Properties
 
         public void LoadAll(FileInfo executable, bool rebuildtree = true);
         public void LoadArchive(string filename, bool ispatch = false);
         public void LoadModArchive(string filename);
-        public void LoadModsArchives(string mods, string dlc);
+        public void LoadModsArchivesLoadModsArchives(DirectoryInfo modsDir, DirectoryInfo dlcDir);
 
         RedFileSystemModel LookupDirectory(string fullpath, bool expandAll = false);
         public IGameFile LookupFile(ulong hash);
         Dictionary<string, IEnumerable<FileEntry>> GetGroupedFiles();
         void LoadFromFolder(DirectoryInfo archivedir, bool rebuildtree = false);
+
+        public IObservable<IChangeSet<RedFileSystemModel>> ConnectGameArchives();
     }
 }

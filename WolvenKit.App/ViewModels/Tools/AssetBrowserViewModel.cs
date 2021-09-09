@@ -88,6 +88,7 @@ namespace WolvenKit.ViewModels.Tools
             TogglePreviewCommand = new RelayCommand(ExecuteTogglePreview, CanTogglePreview);
             OpenFileSystemItemCommand = new RelayCommand(ExecuteOpenFile, CanOpenFile);
             AddSelectedCommand = new RelayCommand(ExecuteAddSelected, CanAddSelected);
+            ToggleModBrowserCommand = new RelayCommand(ExecuteToggleModBrowser, CanToggleModBrowser);
             OpenFileLocationCommand = new RelayCommand(ExecuteOpenFileLocationCommand, CanOpenFileLocationCommand);
 
             ExpandAll = ReactiveCommand.Create(() => { });
@@ -97,8 +98,7 @@ namespace WolvenKit.ViewModels.Tools
 
             AddSearchKeyCommand = ReactiveCommand.Create<string>(x => SearchBarText += $" {x}:");
 
-            var controller = _gameController.GetRed4Controller();
-            controller.ConnectHierarchy()
+            manager.ConnectGameArchives()
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _boundRootNodes)
                 .Subscribe(
@@ -108,19 +108,22 @@ namespace WolvenKit.ViewModels.Tools
                     LeftItems = new ObservableCollection<RedFileSystemModel>(_boundRootNodes);
                 });
 
-            controller
+            manager
                 .WhenAnyValue(x => x.IsManagerLoaded)
                 .Subscribe(b =>
                 {
                     LoadVisibility = b ? Visibility.Collapsed : Visibility.Visible;
                     if (b)
                     {
-                        ReInit(false);
+                        _notificationService.Success($"Asset Browser is initialized");
                     }
                 });
 
 
-           
+            Extensions = _manager.Extensions.ToList();
+            Classes = _gameController
+                .GetController()
+                .GetAvaliableClasses();
         }
 
         #endregion ctor
@@ -128,8 +131,6 @@ namespace WolvenKit.ViewModels.Tools
         #region properties
 
         // binding properties. do not make private
-        [Reactive] public bool PreviewVisible { get; set; }
-
         [Reactive] public GridLength PreviewWidth { get; set; } = new(0, GridUnitType.Pixel);
 
         [Reactive] public Visibility LoadVisibility { get; set; } = Visibility.Visible;
@@ -192,6 +193,14 @@ namespace WolvenKit.ViewModels.Tools
             }
         }
 
+        public ICommand ToggleModBrowserCommand { get; private set; }
+        private bool CanToggleModBrowser() => true;
+        private void ExecuteToggleModBrowser()
+        {
+
+
+        }
+
         public ICommand OpenFileLocationCommand { get; private set; }
         private bool CanOpenFileLocationCommand() => RightSelectedItems != null && RightSelectedItems.OfType<RedFileViewModel>().Any();
         private void ExecuteOpenFileLocationCommand()
@@ -214,12 +223,10 @@ namespace WolvenKit.ViewModels.Tools
             if (PreviewWidth.GridUnitType != System.Windows.GridUnitType.Pixel)
             {
                 PreviewWidth = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
-                PreviewVisible = true;
             }
             else
             {
                 PreviewWidth = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star);
-                PreviewVisible = false;
             }
         }
 
@@ -245,22 +252,6 @@ namespace WolvenKit.ViewModels.Tools
         #endregion commands
 
         #region methods
-
-        /// <summary>
-        /// Initializes the Asset Browser and populates the data nodes.
-        /// Optionally load mods
-        /// </summary>
-        /// <param name="loadmods"></param>
-        public void ReInit(bool loadmods)
-        {
-            Extensions = _manager.Extensions.ToList();
-            Classes = _gameController
-                .GetController()
-                .GetAvaliableClasses();
-            PreviewVisible = false;
-
-            _notificationService.Success($"Asset Browser is initialized");
-        }
 
         private void MoveToFolder(RedFileSystemModel dir)
         {

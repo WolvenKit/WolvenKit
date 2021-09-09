@@ -14,8 +14,6 @@ namespace WolvenKit.Functionality.Controllers
 {
     public interface IGameController
     {
-        public bool IsManagerLoaded { get; set; }
-
         #region Methods
 
         public void AddToMod(IGameFile file);
@@ -59,8 +57,6 @@ namespace WolvenKit.Functionality.Controllers
         public Task HandleStartup();
 
         public Task<bool> PackAndInstallProject();
-
-        public IObservable<IChangeSet<RedFileSystemModel>> ConnectHierarchy();
 
         Task<bool> PackageMod();
 

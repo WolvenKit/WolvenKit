@@ -53,6 +53,9 @@ namespace WolvenKit.Views.Shell
                         viewModel => viewModel._mainViewModel.AssetBrowserVM.AddSelectedCommand,
                         view => view.AddSelectedItemsButton).DisposeWith(disposables);
                 this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.AssetBrowserVM.ToggleModBrowserCommand,
+                        view => view.ModBrowserButton).DisposeWith(disposables);
+                this.BindCommand(ViewModel,
                         viewModel => viewModel._mainViewModel.AssetBrowserVM.OpenFileLocationCommand,
                         view => view.SearchOpenFileLocation).DisposeWith(disposables);
                 this.BindCommand(ViewModel,

@@ -5,13 +5,14 @@ using System.IO;
 using System.Linq;
 using DynamicData;
 using ProtoBuf;
+using ReactiveUI;
 using WolvenKit.Common.Services;
 using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.Common.Model
 {
     [ProtoContract]
-    public abstract class WolvenKitArchiveManager : IArchiveManager
+    public abstract class WolvenKitArchiveManager : ReactiveObject, IArchiveManager
     {
         #region properties
 
@@ -27,6 +28,8 @@ namespace WolvenKit.Common.Model
 
         public IEnumerable<string> Extensions { get; set; } //=> FileList.Select(_ => _.Extension).Distinct();
 
+        public abstract bool IsManagerLoaded { get; set; }
+
         #endregion
 
 
@@ -36,7 +39,7 @@ namespace WolvenKit.Common.Model
 
         public abstract void LoadModArchive(string filename);
 
-        public abstract void LoadModsArchives(string mods, string dlc);
+        public abstract void LoadModsArchives(DirectoryInfo modsDir, DirectoryInfo dlcDir);
 
         protected static string GetModFolder(string path)
         {
@@ -87,5 +90,6 @@ namespace WolvenKit.Common.Model
         public abstract IGameFile LookupFile(ulong hash);
         public abstract Dictionary<string, IEnumerable<FileEntry>> GetGroupedFiles();
         public abstract void LoadFromFolder(DirectoryInfo archivedir, bool rebuildtree = false);
+        public abstract IObservable<IChangeSet<RedFileSystemModel>> ConnectGameArchives();
     }
 }

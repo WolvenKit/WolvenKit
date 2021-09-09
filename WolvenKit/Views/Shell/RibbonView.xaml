@@ -366,6 +366,29 @@
                                     </DataTemplate>
                                 </syncfusion:RibbonButton.IconTemplate>
                             </syncfusion:RibbonButton>
+
+                            <!--  Add selected Items(s) to Project Button  -->
+                            <syncfusion:RibbonButton
+                                x:Name="ModBrowserButton"
+                                IconStretch="Fill"
+                                IconType="Icon"
+                                Label="Toggle Mod Asset Browser"
+                                SizeForm="Large">
+
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconCodicons
+                                            Width="auto"
+                                            Height="auto"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Stretch"
+                                            Kind="Database"
+                                            Foreground="DarkViolet"/>
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
+
+
                         </syncfusion:RibbonBar>
 
                     </syncfusion:RibbonTab>

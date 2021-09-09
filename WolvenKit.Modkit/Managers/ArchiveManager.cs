@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using DynamicData;
 using ProtoBuf;
 using Splat;
 using WolvenKit.Common;
@@ -21,6 +22,9 @@ namespace WolvenKit.RED4.CR2W.Archive
         public static string SerializationVersion = "1.1";
 
         private readonly IHashService _hashService;
+
+        private readonly SourceList<RedFileSystemModel> _rootCache;
+
         #endregion Fields
 
         #region Constructors
@@ -28,13 +32,19 @@ namespace WolvenKit.RED4.CR2W.Archive
         public ArchiveManager(IHashService hashService)
         {
             _hashService = hashService;
+
+            _rootCache = new SourceList<RedFileSystemModel>();
         }
-        
+
         #endregion Constructors
 
         #region properties
 
+        public override bool IsManagerLoaded { get; set; }
+
         [ProtoMember(1)] public override Dictionary<string, IGameArchive> Archives { get; set; } = new();
+
+        public override IObservable<IChangeSet<RedFileSystemModel>> ConnectGameArchives() => _rootCache.Connect();
 
         #endregion properties
 
@@ -137,6 +147,12 @@ namespace WolvenKit.RED4.CR2W.Archive
             if (rebuildtree)
             {
                 RebuildRootNode(_hashService);
+
+                _rootCache.Edit(innerCache =>
+                {
+                    innerCache.Clear();
+                    innerCache.Add(RootNode);
+                });
             }
         }
 
@@ -164,21 +180,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// </param>
         public override void LoadModArchive(string filename)
         {
-            throw new NotImplementedException();
-            /*if (Archives.ContainsKey(filename))
-                return;
-
-            var bundle = new Archive(filename);
-
-            foreach (var item in bundle.Files)
-            {
-                if (!Items.ContainsKey(GetModFolder(filename) + "\\" + item.Key))
-                    Items.Add(GetModFolder(filename) + "\\" + item.Key, new List<IGameFile>());
-
-                Items[GetModFolder(filename) + "\\" + item.Key].Add(item.Value);
-            }
-
-            Archives.Add(filename, bundle);*/
+            
         }
 
         /// <summary>
@@ -186,31 +188,43 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// </summary>
         /// <param name="mods"></param>
         /// <param name="dlc"></param>
-        public override void LoadModsArchives(string mods, string dlc)
+        public override void LoadModsArchives(DirectoryInfo modsDir, DirectoryInfo dlcDir)
         {
-            throw new NotImplementedException();
-            /*if (!Directory.Exists(mods))
-                Directory.CreateDirectory(mods);
-            var modsdirs = new List<string>(Directory.GetDirectories(mods));
-            modsdirs.Sort(new AlphanumComparator<string>());
-            var modbundles = modsdirs.SelectMany(dir => Directory.GetFiles(dir, "*.bundle", SearchOption.AllDirectories)).ToList();
-            foreach (var file in modbundles)
+            if (!modsDir.Exists)
             {
-                LoadModArchive(file);
+                return;
             }
 
-            if (Directory.Exists(dlc))
-            {
-                var dlcdirs = new List<string>(Directory.GetDirectories(dlc));
-                dlcdirs.Sort(new AlphanumComparator<string>());
+            //var sw = new Stopwatch();
+            //sw.Start();
 
-                var tmp = dlcdirs.Where(_ => !VanillaDlClist.Contains(new DirectoryInfo(_).Name)).ToList();
-                foreach (var file in tmp.SelectMany(dir => Directory.GetFiles(dir ?? "", "*.bundle", SearchOption.AllDirectories).OrderBy(k => k)))
+            foreach (var file in Directory.GetFiles(modsDir.FullName, "*.archive", SearchOption.AllDirectories))
+            {
+                LoadArchive(file);
+            }
+
+            //sw.Stop();
+            //var ms = sw.ElapsedMilliseconds;
+
+            // populate lists
+            Items.Edit(innerList =>
+            {
+                innerList.Clear();
+                innerList.AddOrUpdate(Archives.Values.SelectMany(_ => _.Files));
+            });
+
+            Extensions = Items.KeyValues.Select(_ => _.Value.Extension).Distinct();
+
+            //if (rebuildtree)
+            {
+                RebuildRootNode(_hashService);
+
+                _rootCache.Edit(innerCache =>
                 {
-                    LoadModArchive(file);
-                }
+                    innerCache.Clear();
+                    innerCache.Add(RootNode);
+                });
             }
-            RebuildRootNode();*/
         }
 
         /// <summary>
