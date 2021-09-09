@@ -30,7 +30,7 @@ namespace WolvenKit.Common
         public void LoadAll(FileInfo executable, bool rebuildtree = true);
         public void LoadArchive(string filename, bool ispatch = false);
         public void LoadModArchive(string filename);
-        public void LoadModsArchivesLoadModsArchives(DirectoryInfo modsDir, DirectoryInfo dlcDir);
+        public void LoadModsArchives(DirectoryInfo modsDir, DirectoryInfo dlcDir);
 
         RedFileSystemModel LookupDirectory(string fullpath, bool expandAll = false);
         public IGameFile LookupFile(ulong hash);
