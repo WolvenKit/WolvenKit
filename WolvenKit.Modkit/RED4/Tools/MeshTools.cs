@@ -71,18 +71,13 @@ namespace CP77.CR2W
 
             return true;
         }
-        public bool ExportMesh(Stream meshStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.Strict)
+        public bool ExportMesh(Stream meshStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
         {
             var cr2w = _red4ParserService.TryReadRED4File(meshStream);
 
-            if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any())
+            if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
             {
                 return false;
-            }
-
-            if (!cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
-            {
-                return WriteFakeMeshToFile();
             }
 
             var rendblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
@@ -101,58 +96,32 @@ namespace CP77.CR2W
 
             ModelRoot model = RawMeshesToGLTF(expMeshes, Rig);
 
-            WriteMeshToFile();
+
+            if (WolvenTesting.IsTesting)
+            {
+                model.WriteGLB(new WriteSettings(vmode));
+                return true;
+            }
+
+            if (isGLBinary)
+            {
+                model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
+            }
+            else
+            {
+                model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
+            }
 
             meshStream.Dispose();
             meshStream.Close();
 
             return true;
-
-            bool WriteFakeMeshToFile()
-            {
-                if (WolvenTesting.IsTesting)
-                {
-                    return true;
-                }
-                if (isGLBinary)
-                {
-                    ModelRoot.CreateModel().SaveGLB(outfile.FullName);
-                }
-                else
-                {
-                    ModelRoot.CreateModel().SaveGLTF(outfile.FullName);
-                }
-
-                return true;
-            }
-
-            void WriteMeshToFile()
-            {
-                if (WolvenTesting.IsTesting)
-                {
-                    return;
-                }
-
-                if (isGLBinary)
-                {
-                    model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
-                }
-                else
-                {
-                    model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
-                }
-            }
         }
-        public bool ExportMeshWithoutRig(Stream meshStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.Strict)
+        public bool ExportMeshWithoutRig(Stream meshStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
         {
             var cr2w = _red4ParserService.TryReadRED4File(meshStream);
 
-            if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any())
-            {
-                return false;
-            }
-
-            if (!cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
+            if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
             {
                 return false;
             }
@@ -169,6 +138,11 @@ namespace CP77.CR2W
 
             ModelRoot model = RawMeshesToGLTF(expMeshes, null);
 
+            if (WolvenTesting.IsTesting)
+            {
+                model.WriteGLB(new WriteSettings(vmode));
+                return true;
+            }
             if (isGLBinary)
             {
                 model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
@@ -182,21 +156,21 @@ namespace CP77.CR2W
             meshStream.Close();
             return true;
         }
-        public bool ExportMultiMeshWithoutRig(List<Stream> meshStreamS, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.Strict)
+        public bool ExportMultiMeshWithoutRig(List<Stream> meshStreamS, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
         {
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
 
-            for (int m = 0; m < meshStreamS.Count; m++)
+            foreach (var meshStream in meshStreamS)
             {
-                var cr2w = _red4ParserService.TryReadRED4File(meshStreamS[m]);
+                var cr2w = _red4ParserService.TryReadRED4File(meshStream);
                 if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
                     continue;
 
                 var rendblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
                 var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer.Value - 1];
-                meshStreamS[m].Seek(rendbuffer.Offset, SeekOrigin.Begin);
+                meshStream.Seek(rendbuffer.Offset, SeekOrigin.Begin);
                 var ms = new MemoryStream();
-                meshStreamS[m].DecompressAndCopySegment(ms, rendbuffer.DiskSize, rendbuffer.MemSize);
+                meshStream.DecompressAndCopySegment(ms, rendbuffer.DiskSize, rendbuffer.MemSize);
 
                 var meshesinfo = GetMeshesinfo(rendblob);
 
@@ -204,9 +178,19 @@ namespace CP77.CR2W
                 for (int i = 0; i < Meshes.Count; i++)
                     Meshes[i].name = m + "_" + Meshes[i].name;
                 expMeshes.AddRange(Meshes);
+
+                meshStream.Dispose();
+                meshStream.Close();
             }
 
             ModelRoot model = RawMeshesToGLTF(expMeshes, null);
+
+            if (WolvenTesting.IsTesting)
+            {
+                model.WriteGLB(new WriteSettings(vmode));
+                return true;
+            }
+
             if (isGLBinary)
             {
                 model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
@@ -216,15 +200,9 @@ namespace CP77.CR2W
                 model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
             }
 
-            for (int i = 0; i < meshStreamS.Count; i++)
-            {
-                meshStreamS[i].Dispose();
-                meshStreamS[i].Close();
-            }
-
             return true;
         }
-        public bool ExportMeshWithRig(Stream meshStream, Stream rigStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.Strict)
+        public bool ExportMeshWithRig(Stream meshStream, Stream rigStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
         {
             var cr2w = _red4ParserService.TryReadRED4File(meshStream);
 
@@ -251,6 +229,13 @@ namespace CP77.CR2W
 
             ModelRoot model = RawMeshesToGLTF(expMeshes, Rig);
 
+
+            if (WolvenTesting.IsTesting)
+            {
+                model.WriteGLB(new WriteSettings(vmode));
+                return true;
+            }
+
             if (isGLBinary)
             {
                 model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
@@ -267,21 +252,24 @@ namespace CP77.CR2W
 
             return true;
         }
-        public bool ExportMultiMeshWithRig(List<Stream> meshStreamS, List<Stream> rigStreamS, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.Strict)
+        public bool ExportMultiMeshWithRig(List<Stream> meshStreamS, List<Stream> rigStreamS, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
         {
             List<RawArmature> Rigs = new List<RawArmature>();
-            for (int r = 0; r < rigStreamS.Count; r++)
+            foreach (var rigStream in rigStreamS)
             {
-                RawArmature Rig = RIG.ProcessRig(_red4ParserService.TryReadRED4File(rigStreamS[r]));
+                RawArmature Rig = RIG.ProcessRig(_red4ParserService.TryReadRED4File(rigStream));
                 Rigs.Add(Rig);
+
+                rigStream.Dispose();
+                rigStream.Close();
             }
             RawArmature expRig = RIG.CombineRigs(Rigs);
 
             List<RawMeshContainer> expMeshes = new List<RawMeshContainer>();
 
-            for (int m = 0; m < meshStreamS.Count; m++)
+            foreach (var meshStream in meshStreamS)
             {
-                var cr2w = _red4ParserService.TryReadRED4File(meshStreamS[m]);
+                var cr2w = _red4ParserService.TryReadRED4File(meshStream);
                 if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
                 {
                     continue;
@@ -289,22 +277,32 @@ namespace CP77.CR2W
 
                 var rendblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
                 var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer.Value - 1];
-                meshStreamS[m].Seek(rendbuffer.Offset, SeekOrigin.Begin);
+                meshStream.Seek(rendbuffer.Offset, SeekOrigin.Begin);
                 var ms = new MemoryStream();
-                meshStreamS[m].DecompressAndCopySegment(ms, rendbuffer.DiskSize, rendbuffer.MemSize);
+                meshStream.DecompressAndCopySegment(ms, rendbuffer.DiskSize, rendbuffer.MemSize);
 
                 var meshesinfo = GetMeshesinfo(rendblob);
 
                 List<RawMeshContainer> Meshes = ContainRawMesh(ms, meshesinfo, LodFilter);
-                UpdateSkinningParamCloth(ref Meshes, meshStreamS[m], cr2w);
+                UpdateSkinningParamCloth(ref Meshes, meshStream, cr2w);
 
                 RawArmature meshRig = GetOrphanRig(rendblob);
 
                 UpdateMeshJoints(ref expMeshes, expRig, meshRig);
 
                 expMeshes.AddRange(Meshes);
+
+                meshStream.Dispose();
+                meshStream.Close();
             }
             ModelRoot model = RawMeshesToGLTF(expMeshes, expRig);
+
+            if (WolvenTesting.IsTesting)
+            {
+                model.WriteGLB(new WriteSettings(vmode));
+                return true;
+            }
+
             if (isGLBinary)
             {
                 model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
@@ -314,16 +312,6 @@ namespace CP77.CR2W
                 model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
             }
 
-            for (int i = 0; i < meshStreamS.Count; i++)
-            {
-                meshStreamS[i].Dispose();
-                meshStreamS[i].Close();
-            }
-            for (int i = 0; i < rigStreamS.Count; i++)
-            {
-                rigStreamS[i].Dispose();
-                rigStreamS[i].Close();
-            }
             return true;
         }
         public static MeshesInfo GetMeshesinfo(rendRenderMeshBlob rendmeshblob)
@@ -474,7 +462,6 @@ namespace CP77.CR2W
 
                 // getting float normals from 10bits
                 meshContainer.normals = new Vec3[0];
-                UInt32 invalidNormalsCount = 0;
                 if (info.normalOffsets[index] != 0)
                 {
                     meshContainer.normals = new Vec3[info.vertCounts[index]];
@@ -491,16 +478,11 @@ namespace CP77.CR2W
                         // Z up to Y up and LHCS to RHCS
                         meshContainer.normals[i] = new Vec3(vec.X, vec.Z, -vec.Y);
                         meshContainer.normals[i] = Vec3.Normalize(meshContainer.normals[i]);
-                        if (read == 0x5FF7FDFF)
-                        {
-                            invalidNormalsCount++;
-                        }
                     }
                 }
 
                 // getting float tangents from 10bits
                 meshContainer.tangents = new Vec4[0];
-                UInt32 invalidTangentsCount = 0;
                 if (info.tangentOffsets[index] != 0)
                 {
                     meshContainer.tangents = new Vec4[info.vertCounts[index]];
@@ -521,19 +503,7 @@ namespace CP77.CR2W
                         // Z up to Y up and LHCS to RHCS
                         Vec3 vec1 = Vec3.Normalize(new Vec3(vec0.X, vec0.Z, -vec0.Y));
                         meshContainer.tangents[i] = new Vec4(vec1.X, vec1.Y, vec1.Z, 1f);
-                        if (read == 0)
-                        {
-                            invalidTangentsCount++;
-                        }
                     }
-                }
-                if (invalidNormalsCount > (info.vertCounts[index] / 2))
-                {
-                    meshContainer.normals = new Vec3[0];
-                }
-                if (invalidTangentsCount > (info.vertCounts[index] / 2))
-                {
-                    meshContainer.tangents = new Vec4[0];
                 }
 
                 // getting uvcoordinates1 from half floats
@@ -650,7 +620,7 @@ namespace CP77.CR2W
         public static void UpdateMeshJoints(ref List<RawMeshContainer> Meshes, RawArmature newRig, RawArmature oldRig)
         {
             // updating mesh bone indices
-            if(newRig != null && oldRig != null)
+            if(newRig != null && newRig.BoneCount > 0 && oldRig != null && oldRig.BoneCount > 0)
             {
                 for (int i = 0; i < Meshes.Count; i++)
                 {
