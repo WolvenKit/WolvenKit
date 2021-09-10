@@ -175,8 +175,7 @@ namespace CP77.CR2W
                 var meshesinfo = GetMeshesinfo(rendblob);
 
                 var Meshes = ContainRawMesh(ms, meshesinfo, LodFilter);
-                for (int i = 0; i < Meshes.Count; i++)
-                    Meshes[i].name = m + "_" + Meshes[i].name;
+
                 expMeshes.AddRange(Meshes);
 
                 meshStream.Dispose();
@@ -288,7 +287,7 @@ namespace CP77.CR2W
 
                 RawArmature meshRig = GetOrphanRig(rendblob);
 
-                UpdateMeshJoints(ref expMeshes, expRig, meshRig);
+                UpdateMeshJoints(ref Meshes, expRig, meshRig);
 
                 expMeshes.AddRange(Meshes);
 
