@@ -356,11 +356,11 @@ namespace WolvenKit.Modkit.RED4
             foreach (var mesh in meshes)
             {
                 ++mIndex;
-                for (int i = 0; i < mesh.vertices.Length; i++)
+                for (int i = 0; i < mesh.positions.Length; i++)
                 {
-                    bw.Write(mesh.vertices[i].X);
-                    bw.Write(mesh.vertices[i].Y);
-                    bw.Write(mesh.vertices[i].Z);
+                    bw.Write(mesh.positions[i].X);
+                    bw.Write(mesh.positions[i].Y);
+                    bw.Write(mesh.positions[i].Z);
                 }
                 for (int i = 0; i < mesh.normals.Length; i++)
                 {
@@ -389,45 +389,45 @@ namespace WolvenKit.Modkit.RED4
                     bw.Write(mesh.colors1[i].Z);
                     bw.Write(mesh.colors1[i].W);
                 }
-                for (int i = 0; i < mesh.tx0coords.Length; i++)
+                for (int i = 0; i < mesh.texCoords0.Length; i++)
                 {
-                    bw.Write(mesh.tx0coords[i].X);
-                    bw.Write(mesh.tx0coords[i].Y);
+                    bw.Write(mesh.texCoords0[i].X);
+                    bw.Write(mesh.texCoords0[i].Y);
                 }
-                for (int i = 0; i < mesh.tx1coords.Length; i++)
+                for (int i = 0; i < mesh.texCoords1.Length; i++)
                 {
-                    bw.Write(mesh.tx1coords[i].X);
-                    bw.Write(mesh.tx1coords[i].Y);
+                    bw.Write(mesh.texCoords1[i].X);
+                    bw.Write(mesh.texCoords1[i].Y);
                 }
 
-                if (mesh.weightcount > 0)
+                if (mesh.weightCount > 0)
                 {
                     if (Rig != null)
                     {
-                        for (int i = 0; i < mesh.vertices.Length; i++)
+                        for (int i = 0; i < mesh.positions.Length; i++)
                         {
                             bw.Write(mesh.boneindices[i, 0]);
                             bw.Write(mesh.boneindices[i, 1]);
                             bw.Write(mesh.boneindices[i, 2]);
                             bw.Write(mesh.boneindices[i, 3]);
                         }
-                        for (int i = 0; i < mesh.vertices.Length; i++)
+                        for (int i = 0; i < mesh.positions.Length; i++)
                         {
                             bw.Write(mesh.weights[i, 0]);
                             bw.Write(mesh.weights[i, 1]);
                             bw.Write(mesh.weights[i, 2]);
                             bw.Write(mesh.weights[i, 3]);
                         }
-                        if (mesh.weightcount > 4)
+                        if (mesh.weightCount > 4)
                         {
-                            for (int i = 0; i < mesh.vertices.Length; i++)
+                            for (int i = 0; i < mesh.positions.Length; i++)
                             {
                                 bw.Write(mesh.boneindices[i, 4]);
                                 bw.Write(mesh.boneindices[i, 5]);
                                 bw.Write(mesh.boneindices[i, 6]);
                                 bw.Write(mesh.boneindices[i, 7]);
                             }
-                            for (int i = 0; i < mesh.vertices.Length; i++)
+                            for (int i = 0; i < mesh.positions.Length; i++)
                             {
                                 bw.Write(mesh.weights[i, 4]);
                                 bw.Write(mesh.weights[i, 5]);
@@ -446,7 +446,7 @@ namespace WolvenKit.Modkit.RED4
                 for (int i = 0; i < expTargets.Count; i++)
                 {
                     var mappings = expTargets[i][mIndex].vertexMapping.ToList();
-                    for (ushort e = 0; e < mesh.vertices.Length; e++)
+                    for (ushort e = 0; e < mesh.positions.Length; e++)
                     {
                         if(mappings.Contains(e))
                         {
@@ -506,10 +506,10 @@ namespace WolvenKit.Modkit.RED4
                 prim.Material = mat;
                 {
                     var acc = model.CreateAccessor();
-                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.vertices.Length * 12);
-                    acc.SetData(buff, 0, mesh.vertices.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
+                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.positions.Length * 12);
+                    acc.SetData(buff, 0, mesh.positions.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
                     prim.SetVertexAccessor("POSITION", acc);
-                    BuffViewoffset += mesh.vertices.Length * 12;
+                    BuffViewoffset += mesh.positions.Length * 12;
                 }
                 if (mesh.normals.Length > 0)
                 {
@@ -543,55 +543,55 @@ namespace WolvenKit.Modkit.RED4
                     prim.SetVertexAccessor("COLOR_1", acc);
                     BuffViewoffset += mesh.colors1.Length * 16;
                 }
-                if (mesh.tx0coords.Length > 0)
+                if (mesh.texCoords0.Length > 0)
                 {
                     var acc = model.CreateAccessor();
-                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.tx0coords.Length * 8);
-                    acc.SetData(buff, 0, mesh.tx0coords.Length, DimensionType.VEC2, EncodingType.FLOAT, false);
+                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.texCoords0.Length * 8);
+                    acc.SetData(buff, 0, mesh.texCoords0.Length, DimensionType.VEC2, EncodingType.FLOAT, false);
                     prim.SetVertexAccessor("TEXCOORD_0", acc);
-                    BuffViewoffset += mesh.tx0coords.Length * 8;
+                    BuffViewoffset += mesh.texCoords0.Length * 8;
                 }
-                if (mesh.tx1coords.Length > 0)
+                if (mesh.texCoords1.Length > 0)
                 {
                     var acc = model.CreateAccessor();
-                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.tx1coords.Length * 8);
-                    acc.SetData(buff, 0, mesh.tx1coords.Length, DimensionType.VEC2, EncodingType.FLOAT, false);
+                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.texCoords1.Length * 8);
+                    acc.SetData(buff, 0, mesh.texCoords1.Length, DimensionType.VEC2, EncodingType.FLOAT, false);
                     prim.SetVertexAccessor("TEXCOORD_1", acc);
-                    BuffViewoffset += mesh.tx1coords.Length * 8;
+                    BuffViewoffset += mesh.texCoords1.Length * 8;
                 }
-                if (mesh.weightcount > 0)
+                if (mesh.weightCount > 0)
                 {
                     if (Rig != null)
                     {
                         {
                             var acc = model.CreateAccessor();
-                            var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.vertices.Length * 8);
-                            acc.SetData(buff, 0, mesh.vertices.Length, DimensionType.VEC4, EncodingType.UNSIGNED_SHORT, false);
+                            var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.positions.Length * 8);
+                            acc.SetData(buff, 0, mesh.positions.Length, DimensionType.VEC4, EncodingType.UNSIGNED_SHORT, false);
                             prim.SetVertexAccessor("JOINTS_0", acc);
-                            BuffViewoffset += mesh.vertices.Length * 8;
+                            BuffViewoffset += mesh.positions.Length * 8;
                         }
                         {
                             var acc = model.CreateAccessor();
-                            var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.vertices.Length * 16);
-                            acc.SetData(buff, 0, mesh.vertices.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
+                            var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.positions.Length * 16);
+                            acc.SetData(buff, 0, mesh.positions.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
                             prim.SetVertexAccessor("WEIGHTS_0", acc);
-                            BuffViewoffset += mesh.vertices.Length * 16;
+                            BuffViewoffset += mesh.positions.Length * 16;
                         }
-                        if (mesh.weightcount > 4)
+                        if (mesh.weightCount > 4)
                         {
                             {
                                 var acc = model.CreateAccessor();
-                                var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.vertices.Length * 8);
-                                acc.SetData(buff, 0, mesh.vertices.Length, DimensionType.VEC4, EncodingType.UNSIGNED_SHORT, false);
+                                var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.positions.Length * 8);
+                                acc.SetData(buff, 0, mesh.positions.Length, DimensionType.VEC4, EncodingType.UNSIGNED_SHORT, false);
                                 prim.SetVertexAccessor("JOINTS_1", acc);
-                                BuffViewoffset += mesh.vertices.Length * 8;
+                                BuffViewoffset += mesh.positions.Length * 8;
                             }
                             {
                                 var acc = model.CreateAccessor();
-                                var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.vertices.Length * 16);
-                                acc.SetData(buff, 0, mesh.vertices.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
+                                var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.positions.Length * 16);
+                                acc.SetData(buff, 0, mesh.positions.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
                                 prim.SetVertexAccessor("WEIGHTS_1", acc);
-                                BuffViewoffset += mesh.vertices.Length * 16;
+                                BuffViewoffset += mesh.positions.Length * 16;
                             }
                         }
                     }
@@ -605,7 +605,7 @@ namespace WolvenKit.Modkit.RED4
                 }
                 var nod = model.UseScene(0).CreateNode(mesh.name);
                 nod.Mesh = mes;
-                if (Rig != null && mesh.weightcount > 0)
+                if (Rig != null && mesh.weightCount > 0)
                     nod.Skin = skins[0];
 
                 var obj = new { targetNames = names }; // anonymous variable/obj
@@ -616,10 +616,10 @@ namespace WolvenKit.Modkit.RED4
                     var dict = new Dictionary<string, Accessor>();
                     {
                         var acc = model.CreateAccessor();
-                        var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.vertices.Length * 12);
-                        acc.SetData(buff, 0, mesh.vertices.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
+                        var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.positions.Length * 12);
+                        acc.SetData(buff, 0, mesh.positions.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
                         dict.Add("POSITION", acc);
-                        BuffViewoffset += mesh.vertices.Length * 12;
+                        BuffViewoffset += mesh.positions.Length * 12;
                     }
                     if(mesh.normals.Length > 0)
                     {

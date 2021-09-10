@@ -97,24 +97,24 @@ namespace WolvenKit.Modkit.RED4
             {
                 Meshes.Add(GltfMeshToRawContainer(model.LogicalMeshes[i]));
             }
-            Vec3 max = new Vec3(Meshes[0].vertices[0].X, Meshes[0].vertices[0].Y, Meshes[0].vertices[0].Z);
-            Vec3 min = new Vec3(Meshes[0].vertices[0].X, Meshes[0].vertices[0].Y, Meshes[0].vertices[0].Z);
+            Vec3 max = new Vec3(Meshes[0].positions[0].X, Meshes[0].positions[0].Y, Meshes[0].positions[0].Z);
+            Vec3 min = new Vec3(Meshes[0].positions[0].X, Meshes[0].positions[0].Y, Meshes[0].positions[0].Z);
 
             for (int e = 0; e < Meshes.Count; e++)
-                for (int i = 0; i < Meshes[e].vertices.Length; i++)
+                for (int i = 0; i < Meshes[e].positions.Length; i++)
                 {
-                    if (Meshes[e].vertices[i].X >= max.X)
-                        max.X = Meshes[e].vertices[i].X;
-                    if (Meshes[e].vertices[i].Y >= max.Y)
-                        max.Y = Meshes[e].vertices[i].Y;
-                    if (Meshes[e].vertices[i].Z >= max.Z)
-                        max.Z = Meshes[e].vertices[i].Z;
-                    if (Meshes[e].vertices[i].X <= min.X)
-                        min.X = Meshes[e].vertices[i].X;
-                    if (Meshes[e].vertices[i].Y <= min.Y)
-                        min.Y = Meshes[e].vertices[i].Y;
-                    if (Meshes[e].vertices[i].Z <= min.Z)
-                        min.Z = Meshes[e].vertices[i].Z;
+                    if (Meshes[e].positions[i].X >= max.X)
+                        max.X = Meshes[e].positions[i].X;
+                    if (Meshes[e].positions[i].Y >= max.Y)
+                        max.Y = Meshes[e].positions[i].Y;
+                    if (Meshes[e].positions[i].Z >= max.Z)
+                        max.Z = Meshes[e].positions[i].Z;
+                    if (Meshes[e].positions[i].X <= min.X)
+                        min.X = Meshes[e].positions[i].X;
+                    if (Meshes[e].positions[i].Y <= min.Y)
+                        min.Y = Meshes[e].positions[i].Y;
+                    if (Meshes[e].positions[i].Z <= min.Z)
+                        min.Z = Meshes[e].positions[i].Z;
                 }
 
 

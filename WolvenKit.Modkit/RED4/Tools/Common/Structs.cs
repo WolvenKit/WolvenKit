@@ -31,32 +31,54 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
     {
         public UInt32[] vertCounts { get; set; }
         public UInt32[] indCounts { get; set; }
-        public UInt32[] vertOffsets { get; set; }
-        public UInt32[] tx0Offsets { get; set; }
+        public UInt32[] posnOffsets { get; set; }
+        public UInt32[] tex0Offsets { get; set; }
         public UInt32[] normalOffsets { get; set; }
         public UInt32[] tangentOffsets { get; set; }
         public UInt32[] colorOffsets { get; set; }
-        public UInt32[] tx1Offsets { get; set; }
+        public UInt32[] tex1Offsets { get; set; }
         public UInt32[] unknownOffsets { get; set; }
         public UInt32[] indicesOffsets { get; set; }
         public UInt32[] vpStrides { get; set; }
-        public UInt32[] weightcounts { get; set; }
+        public UInt32[] weightCounts { get; set; }
         public bool[] garmentSupportExists { get; set; }
         public Vector4 quantTrans { get; set; }
         public Vector4 quantScale { get; set; }
-        public int meshC { get; set; }
+        public int meshCount { get; set; }
         public UInt32[] LODLvl { get; set; }
         public Dictionary<string, string[]> appearances { get; set; }
         public UInt32 vertBufferSize { get; set; }
         public UInt32 indexBufferSize { get; set; }
         public UInt32 indexBufferOffset { get; set; }
+
+        public MeshesInfo() { }
+        public MeshesInfo(int meshCount)
+        {
+            this.meshCount = meshCount;
+
+            vertCounts = new UInt32[meshCount];
+            indCounts = new UInt32[meshCount];
+            posnOffsets = new UInt32[meshCount];
+            tex0Offsets = new UInt32[meshCount];
+            normalOffsets = new UInt32[meshCount];
+            tangentOffsets = new UInt32[meshCount];
+            colorOffsets = new UInt32[meshCount];
+            tex1Offsets = new UInt32[meshCount];
+            unknownOffsets = new UInt32[meshCount];
+            indicesOffsets = new UInt32[meshCount];
+            vpStrides = new UInt32[meshCount];
+            weightCounts = new UInt32[meshCount];
+            garmentSupportExists = new bool[meshCount];
+            LODLvl = new UInt32[meshCount];
+
+        }
     }
     public class RawMeshContainer
     {
-        public Vector3[] vertices { get; set; }
+        public Vector3[] positions { get; set; }
         public uint[] indices { get; set; }
-        public Vector2[] tx0coords { get; set; }
-        public Vector2[] tx1coords { get; set; }
+        public Vector2[] texCoords0 { get; set; }
+        public Vector2[] texCoords1 { get; set; }
         public Vector3[] normals { get; set; }
         public Vector4[] tangents { get; set; }
         public Vector4[] colors0 { get; set; }
@@ -65,7 +87,7 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         public UInt16[,] boneindices { get; set; }
         public Vector3[] garmentMorph { get; set; }
         public string name { get; set; }
-        public UInt32 weightcount { get; set; }
+        public UInt32 weightCount { get; set; }
         public string[] materialNames { get; set; }
     }
     public class Re4MeshContainer
