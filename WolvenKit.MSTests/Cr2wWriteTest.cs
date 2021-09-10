@@ -798,7 +798,7 @@ namespace WolvenKit.MSTests
                 {
                     if (ulong.TryParse(line.Split(',').First(), out var hash))
                     {
-                        filesToTest.Add(s_bm.Items.Lookup(hash).Value as FileEntry);
+                        filesToTest.Add(s_bm.Lookup(hash).Value as FileEntry);
                     }
                 }
             }
@@ -854,7 +854,7 @@ namespace WolvenKit.MSTests
             {
                 try
                 {
-                    var ar = s_bm.Archives[file.Archive.ArchiveAbsolutePath] as Archive;
+                    var ar = s_bm.Archives.Lookup(file.Archive.ArchiveAbsolutePath).Value as Archive;
                     using var originalStream = new MemoryStream();
                     ar.CopyFileToStream(originalStream, file.NameHash64, false);
                     originalStream.Seek(0, SeekOrigin.Begin);

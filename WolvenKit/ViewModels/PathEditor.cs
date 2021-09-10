@@ -29,7 +29,7 @@ namespace WolvenKit.Controls
             }
             else
             {
-                _wrappedControl.IsEnabled = false;
+                _wrappedControl.SetCurrentValue(System.Windows.UIElement.IsEnabledProperty, false);
                 var binding = new Binding("Value")
                 {
                     Source = info,

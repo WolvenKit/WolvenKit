@@ -8,7 +8,6 @@ using System.Windows.Media;
 using DynamicData;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.RED4.CR2W.Types;
 
@@ -106,18 +105,19 @@ namespace WolvenKit.ViewModels.Shell
         {
             DisplayColor = new Color() { A = prop.Value.A, R = prop.Value.R, G = prop.Value.G, B = prop.Value.B };
             SelectedColorCommand =
-                ReactiveCommand.Create<ColorSelectedCommandArgs>(
+                ReactiveCommand.Create<object>(
                     OnColorPicked);
 
         }
 
         [Reactive] public Color DisplayColor { get; set; }
 
-        public ReactiveCommand<ColorSelectedCommandArgs, Unit> SelectedColorCommand { get; set; } 
+        public ReactiveCommand<object, Unit> SelectedColorCommand { get; set; } 
 
-        private void OnColorPicked(ColorSelectedCommandArgs e)
+        private void OnColorPicked(object e)
         {
-            var mediaColor = e.Brush.Color;
+            dynamic d = e;
+            var mediaColor = d.Brush.Color;
             DisplayColor = mediaColor;
             var c = System.Drawing.Color.FromArgb(mediaColor.A, mediaColor.R, mediaColor.G, mediaColor.B);
             (Property as IREDColor)?.SetValue(c);

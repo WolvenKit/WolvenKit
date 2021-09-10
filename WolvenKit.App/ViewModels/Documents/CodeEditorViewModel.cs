@@ -2,10 +2,8 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using ReactiveUI.Fody.Helpers;
-using Syncfusion.Windows.Edit;
-using Syncfusion.Windows.Shared;
-using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
@@ -43,7 +41,7 @@ namespace WolvenKit.ViewModels.Tools
 
             SelectedFont = new FontFamily("Verdana");
             IsChecked = false;
-            Language = Languages.C;
+            //Language = Languages.C;
             sampleCommand = new DelegateCommand<object>(ExecuteSampleCommand);
         }
 
@@ -92,10 +90,10 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         [Reactive] public string DocumentSource { get; set; }
 
-        /// <summary>
-        /// Gets or sets the langugae of the content to be displayed in the edit control
-        /// </summary>
-        [Reactive] public Languages Language { get; set; }
+        ///// <summary>
+        ///// Gets or sets the langugae of the content to be displayed in the edit control
+        ///// </summary>
+        //[Reactive] public Languages Language { get; set; }
 
         /// <summary>
         /// Gets or sets the font family for the content to  be displayed in the edit control
@@ -108,55 +106,55 @@ namespace WolvenKit.ViewModels.Tools
         /// <param name="param">Speicfies the object paramter</param>
         private void ExecuteSampleCommand(object param)
         {
-            string choice = (param as ComboBoxAdv).SelectedItem.ToString();
-            if (choice == "C")
-            {
-                Language = Languages.C;
-            }
-            else if (choice == "CSharp")
-            {
-                Language = Languages.CSharp;
-            }
-            else if (choice == "Delphi")
-            {
-                Language = Languages.Delphi;
-            }
-            else if (choice == "HTML")
-            {
-                Language = Languages.HTML;
-            }
-            else if (choice == "Java")
-            {
-                Language = Languages.Java;
-            }
-            else if (choice == "JScript")
-            {
-                Language = Languages.JScript;
-            }
-            else if (choice == "PowerShell")
-            {
-                Language = Languages.PowerShell;
-            }
-            else if (choice == "SQL")
-            {
-                Language = Languages.SQL;
-            }
-            else if (choice == "VBScript")
-            {
-                Language = Languages.VBScript;
-            }
-            else if (choice == "VisualBasic")
-            {
-                Language = Languages.VisualBasic;
-            }
-            else if (choice == "XAML")
-            {
-                Language = Languages.XAML;
-            }
-            else
-            {
-                Language = Languages.XML;
-            }
+            //string choice = (param as ComboBoxAdv).SelectedItem.ToString();
+            //if (choice == "C")
+            //{
+            //    Language = Languages.C;
+            //}
+            //else if (choice == "CSharp")
+            //{
+            //    Language = Languages.CSharp;
+            //}
+            //else if (choice == "Delphi")
+            //{
+            //    Language = Languages.Delphi;
+            //}
+            //else if (choice == "HTML")
+            //{
+            //    Language = Languages.HTML;
+            //}
+            //else if (choice == "Java")
+            //{
+            //    Language = Languages.Java;
+            //}
+            //else if (choice == "JScript")
+            //{
+            //    Language = Languages.JScript;
+            //}
+            //else if (choice == "PowerShell")
+            //{
+            //    Language = Languages.PowerShell;
+            //}
+            //else if (choice == "SQL")
+            //{
+            //    Language = Languages.SQL;
+            //}
+            //else if (choice == "VBScript")
+            //{
+            //    Language = Languages.VBScript;
+            //}
+            //else if (choice == "VisualBasic")
+            //{
+            //    Language = Languages.VisualBasic;
+            //}
+            //else if (choice == "XAML")
+            //{
+            //    Language = Languages.XAML;
+            //}
+            //else
+            //{
+            //    Language = Languages.XML;
+            //}
         }
 
     }

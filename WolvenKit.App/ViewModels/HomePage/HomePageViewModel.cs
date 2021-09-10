@@ -1,8 +1,6 @@
 using System;
 using System.Windows;
 using System.Windows.Input;
-using HandyControl.Controls;
-using HandyControl.Data;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -35,7 +33,7 @@ namespace WolvenKit.ViewModels.HomePage
             RestoreWindow = new RelayCommand(ExecuteRestoreWindow);
             MinimizeWindow = new RelayCommand(ExecuteMinimizeWindow);
 
-            SwitchItemCmd = new DelegateCommand<FunctionEventArgs<object>>(SwitchItem);
+            SwitchItemCmd = new DelegateCommand<string>(SwitchItem);
 
             SetCurrentPage("Welcome");
             CurrentWindowState = WindowState.Maximized;
@@ -226,7 +224,7 @@ namespace WolvenKit.ViewModels.HomePage
             ribbon.BackstageIsOpen = false;
         }
 
-        private void SwitchItem(FunctionEventArgs<object> info) => SetCurrentPage((info.Info as SideMenuItem)?.Header.ToString());
+        private void SwitchItem(string info) => SetCurrentPage(info);
 
         #endregion Methods
     }

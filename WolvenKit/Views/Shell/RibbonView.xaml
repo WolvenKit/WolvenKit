@@ -102,19 +102,19 @@
 
     <Grid
         Background="{DynamicResource ContentBackgroundAlt2}">
-        
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
+
         <fluent:Ribbon
             x:Name="ribbon"
             Grid.Row="0"
             Margin="0,0,0,0"
             Panel.ZIndex="0"
             Visibility="Collapsed">
-            
+
             <!--  StartScreen  -->
             <fluent:Ribbon.StartScreen>
                 <fluent:StartScreen
@@ -124,23 +124,23 @@
                     <HomeView:HomePageView x:Name="HMPV" />
                 </fluent:StartScreen>
             </fluent:Ribbon.StartScreen>
-            
+
         </fluent:Ribbon>
 
         <syncfusion:Ribbon
             x:Name="_ribbon"
             Margin="0,0,0,0"
-            VerticalAlignment="Stretch"
+            EnableSimplifiedLayoutMode="True" 
             Panel.ZIndex="0"
-            syncfusion:Ribbon.IsAutoSizeFormEnabled="True"
             BackStageCornerImageVisibility="Collapsed"
             BackStageHeader="MENU"
             ContextAdornerStyle="{StaticResource SyncfusionTemplatedAdornerInternalControlStyle2}"
             EnableMoreCommands="True"
-            LayoutMode="Normal"
-            MinimizeButtonVisibility="Collapsed"
+            
             ShowCustomizeRibbon="True"
-            Visibility="Visible">
+            Visibility="Visible"
+            VerticalAlignment="Top"
+            >
 
             <!--<syncfusion:Ribbon.QuickAccessToolBar>
                 <syncfusion:QuickAccessToolBar Margin="65,0,0,0" />
@@ -156,12 +156,12 @@
                     Margin="14"
                     IsGroupVisible="False"
                     Label="DOCUMENT">
-                    
+
                     <syncfusion:RibbonTab
                         MinWidth="100"
                         Caption="EDIT"
                         IsChecked="True" />
-                    
+
                 </syncfusion:ContextTabGroup>
 
                 <!--  Contextual Asset Browser group  -->
@@ -182,7 +182,7 @@
                             Name="ABViewActions"
                             Width="auto"
                             Header="View">
-                            
+
                             <!--  Expand Single Nodes  -->
                             <syncfusion:RibbonButton
                                 x:Name="ExpandSingleAB"
@@ -266,7 +266,7 @@
                                     </DataTemplate>
                                 </syncfusion:RibbonButton.IconTemplate>
                             </syncfusion:RibbonButton>
-                            
+
                         </syncfusion:RibbonBar>
 
                         <!--  Search bar  -->
@@ -274,7 +274,7 @@
                             x:Name="ABSearchActions"
                             Width="auto"
                             Header="Search">
-                                                       
+
                             <!--  Search by other keys  -->
                             <syncfusion:DropDownButton
                                 x:Name="SearchOther"
@@ -393,7 +393,7 @@
 
                     </syncfusion:RibbonTab>
                 </syncfusion:ContextTabGroup>
-                
+
                 <!--  Contextual Project Explorer group  -->
                 <syncfusion:ContextTabGroup
                     x:Name="projectexplorercontextab"
@@ -678,7 +678,7 @@
 
             <!--  Recent Projects Button  -->
             <syncfusion:Ribbon.ApplicationMenu>
-                
+
                 <syncfusion:ApplicationMenu
                     Name="_applicationMenu"
                     Width="38"
@@ -689,7 +689,7 @@
                     IsPopupOpen="False">
 
                     <syncfusion:RibbonMenuGroup Header="Project">
-                        
+
                         <!--  Recent Projects Button  -->
                         <ToggleButton
                             x:Name="FileDrawer2"
@@ -710,7 +710,7 @@
                                 <TextBlock Margin="2,0,0,0" Text="Recent Projects" />
                             </StackPanel>
                         </ToggleButton>
-                        
+
                         <!--  Open Project Button  -->
                         <syncfusion:RibbonButton
                             x:Name="AppMenuOpenProjectButton"
@@ -889,20 +889,22 @@
 
                     </syncfusion:RibbonMenuGroup>
                 </syncfusion:ApplicationMenu>
-                
+
             </syncfusion:Ribbon.ApplicationMenu>
 
             <!--  GENERAL TAB  -->
             <syncfusion:RibbonTab
                 Caption="GENERAL"
-                IsChecked="True">
+                IsChecked="True"
+
+                >
 
                 <!--  Project bar  -->
                 <syncfusion:RibbonBar
-                    Name="Mod"
-                    Width="auto"
-                    Header="Project">
+                    Name="ProjectRibbonBar"
                     
+                    Header="Project">
+
                     <!--  Open Project Button  -->
                     <syncfusion:RibbonButton
                         x:Name="GeneralOpenProjectButton"
@@ -942,7 +944,7 @@
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>
-                    
+
                     <!--  Pack Project Button  -->
                     <syncfusion:RibbonButton
                         x:Name="GeneralPackProjectButton"
@@ -1019,14 +1021,14 @@
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>-->
                 </syncfusion:RibbonBar>
-                
+
                 <!--  File bar  -->
                 <syncfusion:RibbonBar Visibility="Visible"
-                    Name="Filez"
-                    Width="auto"
+                    Name="FileRibbonBar"
                     Header="File"
-                    >
                     
+                    >
+
                     <!--  New File Button  -->
                     <syncfusion:RibbonButton
                         x:Name="GeneralNewFileButton"
@@ -1085,23 +1087,23 @@
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>
-                    
+
                 </syncfusion:RibbonBar>
-                
+
             </syncfusion:RibbonTab>
-            
-            <!--  EDITORS TAB  -->
+
+            <!--  EDITORS TAB  --><!--
             <syncfusion:RibbonTab Visibility="Collapsed"
                 Caption="EDITORS"
                 IsChecked="False"
                 >
-                
-                <!--  Editors bar  -->
+
+                --><!--  Editors bar  --><!--
                 <syncfusion:RibbonBar
                     Name="Editors"
                     Width="auto"
                     Header="Editors">
-                    <!--  Code Editor Button  -->
+                    --><!--  Code Editor Button  --><!--
                     <syncfusion:RibbonButton
                         x:Name="ViewCodeEditorButton"
                         IconStretch="Fill"
@@ -1120,7 +1122,7 @@
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>
 
-                    <!--  Visual Editor Button  -->
+                    --><!--  Visual Editor Button  -->
                     <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowVisualEditor}"
                         IconStretch="Fill"
@@ -1213,23 +1215,23 @@
                                     Kind="Command" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>-->
+                    </syncfusion:RibbonButton>--><!--
                 </syncfusion:RibbonBar>
-                
-                <!--  CP77 bar  -->
+
+                --><!--  CP77 bar  --><!--
                 <syncfusion:RibbonBar
                     Name="CP77BarEditors"
                     Width="auto"
                     Header="Cyberpunk 2077" />
-                
-                <!--  TW3 bar  -->
+
+                --><!--  TW3 bar  --><!--
                 <syncfusion:RibbonBar
                     Name="TW3BarEditors"
                     Width="auto"
                     Header="The Witcher 3" />
-                
-            </syncfusion:RibbonTab>
-            
+
+            </syncfusion:RibbonTab>-->
+
             <!--  TOOLS TAB  -->
             <syncfusion:RibbonTab Visibility="Collapsed"
                 Caption="TOOLS"
@@ -1419,14 +1421,14 @@
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>-->
                 </syncfusion:RibbonBar>
-                
+
                 <!--  CP77 bar  -->
                 <syncfusion:RibbonBar
                     Name="CP77BarTools"
                     Width="auto"
                     Header="Cyberpunk 2077"
                     Visibility="Collapsed" />
-                
+
                 <!--  TW3 bar  -->
                 <syncfusion:RibbonBar
                     Name="TW3BarTools"
@@ -1685,7 +1687,7 @@
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>
                 </syncfusion:RibbonBar>
-                
+
                 <!--  Help bar  -->
                 <syncfusion:RibbonBar
                     Name="Help"
@@ -1751,11 +1753,11 @@
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>-->
                 </syncfusion:RibbonBar>
-                
+
             </syncfusion:RibbonTab>
 
-           
-            
+
+
         </syncfusion:Ribbon>
 
         <StackPanel
@@ -1767,7 +1769,7 @@
             Orientation="Horizontal">
             <TextBlock Background="{x:Null}" Text="RED Modding Tools - WolvenKit" />
         </StackPanel>
-        
+
         <Border
             Width="70"
             Height="30"
@@ -1776,7 +1778,7 @@
             VerticalAlignment="top"
             Background="{DynamicResource ContentBackgroundAlt2}"
             CornerRadius="0,5,0,0" />
-        
+
         <Border
             Width="42"
             Height="49"
@@ -1803,7 +1805,7 @@
                 </Border>
             </Grid>
         </Border>
-        
+
         <Border
             Width="42"
             Height="49"
@@ -1887,7 +1889,7 @@
                 </Grid>
             </Border>
         </hc:Drawer>-->
-        
+
     </Grid>
-    
+
 </reactiveUi:ReactiveUserControl>

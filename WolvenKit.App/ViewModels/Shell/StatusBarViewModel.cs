@@ -33,11 +33,11 @@ namespace WolvenKit.ViewModels.Shell
             _projectManager = projectManager;
 
 
-            var connected = HandyControl.Tools.ApplicationHelper.IsConnectedToInternet();
-            if (connected)
-            {
-                InternetConnected = "Connected";
-            }
+            //var connected = HandyControl.Tools.ApplicationHelper.IsConnectedToInternet();
+            //if (connected)
+            //{
+            //    InternetConnected = "Connected";
+            //}
 
             IsLoading = false;
             LoadingString = "";

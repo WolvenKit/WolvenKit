@@ -50,7 +50,7 @@
                 BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
                 BorderThickness="1"
                 CornerRadius="15">
-                    <hc:SideMenu
+                <hc:SideMenu
                         x:Name="LeftSideMenu"
                         Width="200"
                         Margin="0,90,0,25"
@@ -58,14 +58,11 @@
                         BorderThickness="0"
                         ExpandMode="ShowOne"
                         SideBrush="{DynamicResource MahApps.Brushes.AccentBase}"
-                        SubSideBrush="{DynamicResource MahApps.Brushes.Accent2}">
-                        <hc:Interaction.Triggers>
-                            <hc:EventTrigger EventName="SelectionChanged">
-                                <hc:EventToCommand Command="{Binding SwitchItemCmd}" PassEventArgsToCommand="True" />
-                            </hc:EventTrigger>
-                        </hc:Interaction.Triggers>
+                        SubSideBrush="{DynamicResource MahApps.Brushes.Accent2}"
+                        SelectionChanged="LeftSideMenu_OnSelectionChanged"
+                        >
 
-                        <hc:SideMenuItem
+                    <hc:SideMenuItem
                             x:Name="SideMenu_GetStartedItem"
                             Margin="0,100,0,0"
                             Background="{DynamicResource MahApps.Brushes.ThemeBackground}"

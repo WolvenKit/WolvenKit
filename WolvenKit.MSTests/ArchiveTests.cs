@@ -108,7 +108,7 @@ namespace WolvenKit.MSTests
             }
 
             // some lazy checks
-            Assert.AreEqual(x.Archives.Count(), s_bm.Archives.Count());
+            Assert.AreEqual(x.Archives.Items.Count(), s_bm.Archives.Items.Count());
             //Assert.AreEqual(x.FileList.Count(), s_bm.FileList.Count());
             Assert.AreEqual(x.GetGroupedFiles().Count(), s_bm.GetGroupedFiles().Count());
         }

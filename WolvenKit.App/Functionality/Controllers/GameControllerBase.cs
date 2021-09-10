@@ -15,8 +15,6 @@ namespace WolvenKit.Functionality.Controllers
     public interface IGameController
     {
         #region Methods
-
-        public void AddToMod(IGameFile file);
         public void AddToMod(ulong hash);
 
         public static string GetManagerPath(EManagerType type)

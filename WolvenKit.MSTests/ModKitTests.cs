@@ -50,11 +50,10 @@ namespace WolvenKit.MSTests
             var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
             Directory.CreateDirectory(resultDir);
 
-            var totalCount = s_bm.Items.Count;
             var results = new ConcurrentBag<ArchiveTestResult>();
             var archiveFullName = Path.Combine(s_gameDirectoryPath, "archive", "pc", "content", archivename);
 
-            var archive = s_bm.Archives[archiveFullName] as Archive;
+            var archive = s_bm.Archives.Lookup(archiveFullName).Value as Archive;
             Parallel.ForEach(archive.Files, keyvalue =>
             {
                 var (hash, file) = keyvalue;
@@ -138,6 +137,8 @@ namespace WolvenKit.MSTests
 
 
             });
+
+            var totalCount = archive.Files.Count;
 
             // Check success
             var successCount = results.Count(r => r.Success);
@@ -361,11 +362,11 @@ namespace WolvenKit.MSTests
             var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
             Directory.CreateDirectory(resultDir);
 
-            var totalCount = s_bm.Items.Count;
+            
             var results = new ConcurrentBag<ArchiveTestResult>();
             var archiveFullName = Path.Combine(s_gameDirectoryPath, "archive", "pc", "content", archivename);
 
-            var archive = s_bm.Archives[archiveFullName] as Archive;
+            var archive = s_bm.Archives.Lookup(archiveFullName).Value as Archive;
             Parallel.ForEach(archive.Files, keyvalue =>
             {
                 var (hash, _) = keyvalue;
@@ -395,6 +396,8 @@ namespace WolvenKit.MSTests
                     });
                 }
             });
+
+            var totalCount = archive.Files.Count;
 
             // Check success
             var successCount = results.Count(r => r.Success);

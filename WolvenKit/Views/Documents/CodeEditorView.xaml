@@ -30,13 +30,13 @@
                         <hc:ThemeResources />
                         <hc:Theme />
                     </ResourceDictionary.MergedDictionaries>
-                    <syncfusion:FormatsCollection x:Key="pythonLanguageFormats">
+                    <!--<syncfusion:FormatsCollection x:Key="pythonLanguageFormats">
                         <syncfusion:EditFormats Foreground="Green" FormatName="CommentFormat" />
                         <syncfusion:EditFormats Foreground="Black" FormatName="MultilineCommentFormat" />
                         <syncfusion:EditFormats Foreground="Blue" FormatName="KeywordFormat" />
                         <syncfusion:EditFormats Foreground="Navy" FormatName="OperatorFormat" />
                         <syncfusion:EditFormats Foreground="Gray" FormatName="LiteralsFormat" />
-                    </syncfusion:FormatsCollection>
+                    </syncfusion:FormatsCollection>-->
                 </ResourceDictionary>
 
             </Grid.Resources>
@@ -90,7 +90,7 @@
                                 Padding="5,2,0,0"
                                 BorderBrush="LightGray"
                                 BorderThickness="1">
-                                <MenuItem Background="Transparent" Header="_File">
+                                <!--<MenuItem Background="Transparent" Header="_File">
                                     <MenuItem Command="{x:Static syncfusion:EditCommands.New}" CommandTarget="{Binding ElementName=editControl}" />
                                     <MenuItem Command="{x:Static syncfusion:EditCommands.Open}" CommandTarget="{Binding ElementName=editControl}" />
                                     <MenuItem Command="{x:Static syncfusion:EditCommands.Save}" CommandTarget="{Binding ElementName=editControl}" />
@@ -107,7 +107,7 @@
                                         <MenuItem Command="{x:Static syncfusion:EditCommands.Find}" CommandTarget="{Binding ElementName=editControl}" />
                                         <MenuItem Command="{x:Static syncfusion:EditCommands.Replace}" CommandTarget="{Binding ElementName=editControl}" />
                                     </MenuItem>
-                                </MenuItem>
+                                </MenuItem>-->
                                 <MenuItem Header="Options">
                                     <MenuItem
                                         Header="Accepts Tab"
@@ -127,7 +127,7 @@
                                         IsChecked="{Binding ElementName=editControl, Path=ShowDefaultContextMenu}" />
                                 </MenuItem>
                             </Menu>
-                            <ToolBar
+                            <!--<ToolBar
                                 Grid.Row="1"
                                 Grid.ColumnSpan="1"
                                 Margin="-1">
@@ -270,9 +270,9 @@
                                         </interactivity:EventTrigger>
                                     </interactivity:Interaction.Triggers>
                                 </syncfusion:ComboBoxAdv>
-                            </ToolBar>
+                            </ToolBar>-->
                             <Border Grid.Row="2" BorderThickness="1">
-                                <syncfusion:EditControl
+                                <!--<syncfusion:EditControl
                                     Name="editControl"
                                     DocumentLanguage="{Binding Language}"
                                     DocumentSource="{Binding DocumentSource}"
@@ -283,7 +283,7 @@
                                             <interactivity:InvokeCommandAction Command="{Binding EditLoadedCommand}" CommandParameter="{Binding ElementName=editControl}" />
                                         </interactivity:EventTrigger>
                                     </interactivity:Interaction.Triggers>
-                                </syncfusion:EditControl>
+                                </syncfusion:EditControl>-->
                             </Border>
                         </Grid>
                     </hc:TabItem>

@@ -153,10 +153,10 @@ namespace WolvenKit.Views.Shell
                         viewModel => viewModel.ViewLogCommand,
                         view => view.ViewLogButton)
                     .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.ViewCodeEditorCommand,
-                        view => view.ViewCodeEditorButton)
-                    .DisposeWith(disposables);
+                //this.BindCommand(ViewModel,
+                //        viewModel => viewModel.ViewCodeEditorCommand,
+                //        view => view.ViewCodeEditorButton)
+                //    .DisposeWith(disposables);
 
                 //Options
                 //this.BindCommand(ViewModel,
