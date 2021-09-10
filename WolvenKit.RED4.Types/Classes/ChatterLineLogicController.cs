@@ -5,190 +5,178 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ChatterLineLogicController : BaseSubtitleLineLogicController
 	{
-		private inkWidgetReference _textContainer;
-		private inkWidgetReference _speachBubble;
-		private inkRectangleWidgetReference _background;
-		private inkWidgetReference _container_normal;
-		private inkWidgetReference _container_wide;
-		private inkTextWidgetReference _text_normal;
-		private inkTextWidgetReference _text_wide;
-		private CWeakHandle<inkTextKiroshiAnimationController> _kiroshiAnimationCtrl_Normal;
-		private CWeakHandle<inkTextKiroshiAnimationController> _kiroshiAnimationCtrl_Wide;
-		private CWeakHandle<inkTextMotherTongueController> _motherTongueCtrl_Normal;
-		private CWeakHandle<inkTextMotherTongueController> _motherTongueCtrl_Wide;
-		private CBool _isNameplateVisible;
-		private entEntityID _nameplateEntityId;
-		private CFloat _nameplatHeightOffset;
-		private entEntityID _ownerId;
-		private CInt32 _c_ExtraWideTextWidth;
-		private CWeakHandle<inkWidget> _rootWidget;
-		private CHandle<inkScreenProjection> _projection;
-		private CFloat _subtitlesMaxDistance;
-		private CBool _limitSubtitlesDistance;
-
 		[Ordinal(5)] 
 		[RED("TextContainer")] 
 		public inkWidgetReference TextContainer
 		{
-			get => GetProperty(ref _textContainer);
-			set => SetProperty(ref _textContainer, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("speachBubble")] 
 		public inkWidgetReference SpeachBubble
 		{
-			get => GetProperty(ref _speachBubble);
-			set => SetProperty(ref _speachBubble, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("background")] 
 		public inkRectangleWidgetReference Background
 		{
-			get => GetProperty(ref _background);
-			set => SetProperty(ref _background, value);
+			get => GetPropertyValue<inkRectangleWidgetReference>();
+			set => SetPropertyValue<inkRectangleWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("container_normal")] 
 		public inkWidgetReference Container_normal
 		{
-			get => GetProperty(ref _container_normal);
-			set => SetProperty(ref _container_normal, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("container_wide")] 
 		public inkWidgetReference Container_wide
 		{
-			get => GetProperty(ref _container_wide);
-			set => SetProperty(ref _container_wide, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("text_normal")] 
 		public inkTextWidgetReference Text_normal
 		{
-			get => GetProperty(ref _text_normal);
-			set => SetProperty(ref _text_normal, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("text_wide")] 
 		public inkTextWidgetReference Text_wide
 		{
-			get => GetProperty(ref _text_wide);
-			set => SetProperty(ref _text_wide, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("kiroshiAnimationCtrl_Normal")] 
 		public CWeakHandle<inkTextKiroshiAnimationController> KiroshiAnimationCtrl_Normal
 		{
-			get => GetProperty(ref _kiroshiAnimationCtrl_Normal);
-			set => SetProperty(ref _kiroshiAnimationCtrl_Normal, value);
+			get => GetPropertyValue<CWeakHandle<inkTextKiroshiAnimationController>>();
+			set => SetPropertyValue<CWeakHandle<inkTextKiroshiAnimationController>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("kiroshiAnimationCtrl_Wide")] 
 		public CWeakHandle<inkTextKiroshiAnimationController> KiroshiAnimationCtrl_Wide
 		{
-			get => GetProperty(ref _kiroshiAnimationCtrl_Wide);
-			set => SetProperty(ref _kiroshiAnimationCtrl_Wide, value);
+			get => GetPropertyValue<CWeakHandle<inkTextKiroshiAnimationController>>();
+			set => SetPropertyValue<CWeakHandle<inkTextKiroshiAnimationController>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("motherTongueCtrl_Normal")] 
 		public CWeakHandle<inkTextMotherTongueController> MotherTongueCtrl_Normal
 		{
-			get => GetProperty(ref _motherTongueCtrl_Normal);
-			set => SetProperty(ref _motherTongueCtrl_Normal, value);
+			get => GetPropertyValue<CWeakHandle<inkTextMotherTongueController>>();
+			set => SetPropertyValue<CWeakHandle<inkTextMotherTongueController>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("motherTongueCtrl_Wide")] 
 		public CWeakHandle<inkTextMotherTongueController> MotherTongueCtrl_Wide
 		{
-			get => GetProperty(ref _motherTongueCtrl_Wide);
-			set => SetProperty(ref _motherTongueCtrl_Wide, value);
+			get => GetPropertyValue<CWeakHandle<inkTextMotherTongueController>>();
+			set => SetPropertyValue<CWeakHandle<inkTextMotherTongueController>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("isNameplateVisible")] 
 		public CBool IsNameplateVisible
 		{
-			get => GetProperty(ref _isNameplateVisible);
-			set => SetProperty(ref _isNameplateVisible, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("nameplateEntityId")] 
 		public entEntityID NameplateEntityId
 		{
-			get => GetProperty(ref _nameplateEntityId);
-			set => SetProperty(ref _nameplateEntityId, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("nameplatHeightOffset")] 
 		public CFloat NameplatHeightOffset
 		{
-			get => GetProperty(ref _nameplatHeightOffset);
-			set => SetProperty(ref _nameplatHeightOffset, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("ownerId")] 
 		public entEntityID OwnerId
 		{
-			get => GetProperty(ref _ownerId);
-			set => SetProperty(ref _ownerId, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("c_ExtraWideTextWidth")] 
 		public CInt32 C_ExtraWideTextWidth
 		{
-			get => GetProperty(ref _c_ExtraWideTextWidth);
-			set => SetProperty(ref _c_ExtraWideTextWidth, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("rootWidget")] 
 		public CWeakHandle<inkWidget> RootWidget
 		{
-			get => GetProperty(ref _rootWidget);
-			set => SetProperty(ref _rootWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("projection")] 
 		public CHandle<inkScreenProjection> Projection
 		{
-			get => GetProperty(ref _projection);
-			set => SetProperty(ref _projection, value);
+			get => GetPropertyValue<CHandle<inkScreenProjection>>();
+			set => SetPropertyValue<CHandle<inkScreenProjection>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("subtitlesMaxDistance")] 
 		public CFloat SubtitlesMaxDistance
 		{
-			get => GetProperty(ref _subtitlesMaxDistance);
-			set => SetProperty(ref _subtitlesMaxDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("limitSubtitlesDistance")] 
 		public CBool LimitSubtitlesDistance
 		{
-			get => GetProperty(ref _limitSubtitlesDistance);
-			set => SetProperty(ref _limitSubtitlesDistance, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public ChatterLineLogicController()
 		{
-			_c_ExtraWideTextWidth = 110;
+			TextContainer = new();
+			SpeachBubble = new();
+			Background = new();
+			Container_normal = new();
+			Container_wide = new();
+			Text_normal = new();
+			Text_wide = new();
+			NameplateEntityId = new();
+			OwnerId = new();
+			C_ExtraWideTextWidth = 110;
 		}
 	}
 }

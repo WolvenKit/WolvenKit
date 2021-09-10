@@ -5,14 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SecurityAlarmBreachResponse : ActionBool
 	{
-		private CEnum<ESecuritySystemState> _currentSecurityState;
-
 		[Ordinal(25)] 
 		[RED("currentSecurityState")] 
 		public CEnum<ESecuritySystemState> CurrentSecurityState
 		{
-			get => GetProperty(ref _currentSecurityState);
-			set => SetProperty(ref _currentSecurityState, value);
+			get => GetPropertyValue<CEnum<ESecuritySystemState>>();
+			set => SetPropertyValue<CEnum<ESecuritySystemState>>(value);
+		}
+
+		public SecurityAlarmBreachResponse()
+		{
+			RequesterID = new();
+			InteractionChoice = new() { CaptionParts = new() { Parts = new() }, Data = new(), ChoiceMetaData = new() { Type = new() }, LookAtDescriptor = new() { Offset = new(), OrbId = new() } };
+			ActionWidgetPackage = new() { DependendActions = new() };
+			CanTriggerStim = true;
 		}
 	}
 }

@@ -5,59 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entTriggerEvent : redEvent
 	{
-		private entEntityID _triggerID;
-		private entEntityGameInterface _activator;
-		private Vector4 _worldPosition;
-		private CUInt32 _numActivatorsInArea;
-		private CUInt32 _activatorID;
-		private CName _componentName;
-
 		[Ordinal(0)] 
 		[RED("triggerID")] 
 		public entEntityID TriggerID
 		{
-			get => GetProperty(ref _triggerID);
-			set => SetProperty(ref _triggerID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("activator")] 
 		public entEntityGameInterface Activator
 		{
-			get => GetProperty(ref _activator);
-			set => SetProperty(ref _activator, value);
+			get => GetPropertyValue<entEntityGameInterface>();
+			set => SetPropertyValue<entEntityGameInterface>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("worldPosition")] 
 		public Vector4 WorldPosition
 		{
-			get => GetProperty(ref _worldPosition);
-			set => SetProperty(ref _worldPosition, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("numActivatorsInArea")] 
 		public CUInt32 NumActivatorsInArea
 		{
-			get => GetProperty(ref _numActivatorsInArea);
-			set => SetProperty(ref _numActivatorsInArea, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("activatorID")] 
 		public CUInt32 ActivatorID
 		{
-			get => GetProperty(ref _activatorID);
-			set => SetProperty(ref _activatorID, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("componentName")] 
 		public CName ComponentName
 		{
-			get => GetProperty(ref _componentName);
-			set => SetProperty(ref _componentName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 	}
 }

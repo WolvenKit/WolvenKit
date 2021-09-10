@@ -5,77 +5,69 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class cpTestComponentPS : gameComponentPS
 	{
-		private CInt32 _something;
-		private CBool _somethingNotInstanceEdiable;
-		private CName _nameEditable;
-		private CName _nameInstanceEditable;
-		private CName _namePersistent;
-		private CName _namePersistentEdiable;
-		private CName _namePersistentInstanceEditable;
-
 		[Ordinal(0)] 
 		[RED("something")] 
 		public CInt32 Something
 		{
-			get => GetProperty(ref _something);
-			set => SetProperty(ref _something, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("somethingNotInstanceEdiable")] 
 		public CBool SomethingNotInstanceEdiable
 		{
-			get => GetProperty(ref _somethingNotInstanceEdiable);
-			set => SetProperty(ref _somethingNotInstanceEdiable, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("nameEditable")] 
 		public CName NameEditable
 		{
-			get => GetProperty(ref _nameEditable);
-			set => SetProperty(ref _nameEditable, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("nameInstanceEditable")] 
 		public CName NameInstanceEditable
 		{
-			get => GetProperty(ref _nameInstanceEditable);
-			set => SetProperty(ref _nameInstanceEditable, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("namePersistent")] 
 		public CName NamePersistent
 		{
-			get => GetProperty(ref _namePersistent);
-			set => SetProperty(ref _namePersistent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("namePersistentEdiable")] 
 		public CName NamePersistentEdiable
 		{
-			get => GetProperty(ref _namePersistentEdiable);
-			set => SetProperty(ref _namePersistentEdiable, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("namePersistentInstanceEditable")] 
 		public CName NamePersistentInstanceEditable
 		{
-			get => GetProperty(ref _namePersistentInstanceEditable);
-			set => SetProperty(ref _namePersistentInstanceEditable, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public cpTestComponentPS()
 		{
-			_nameEditable = "E";
-			_nameInstanceEditable = "IE";
-			_namePersistent = "P";
-			_namePersistentEdiable = "PE";
-			_namePersistentInstanceEditable = "PIE";
+			NameEditable = "E";
+			NameInstanceEditable = "IE";
+			NamePersistent = "P";
+			NamePersistentEdiable = "PE";
+			NamePersistentInstanceEditable = "PIE";
 		}
 	}
 }

@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class IsPlayerReachablePrereq : gameIScriptablePrereq
 	{
-		private CBool _invert;
-		private CBool _checkRMA;
-
 		[Ordinal(0)] 
 		[RED("invert")] 
 		public CBool Invert
 		{
-			get => GetProperty(ref _invert);
-			set => SetProperty(ref _invert, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("checkRMA")] 
 		public CBool CheckRMA
 		{
-			get => GetProperty(ref _checkRMA);
-			set => SetProperty(ref _checkRMA, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

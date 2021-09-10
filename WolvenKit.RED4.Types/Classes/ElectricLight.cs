@@ -5,23 +5,27 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ElectricLight : Device
 	{
-		private CArray<CHandle<gameLightComponent>> _lightComponents;
-		private CArray<gamedataLightPreset> _lightDefinitions;
-
 		[Ordinal(87)] 
 		[RED("lightComponents")] 
 		public CArray<CHandle<gameLightComponent>> LightComponents
 		{
-			get => GetProperty(ref _lightComponents);
-			set => SetProperty(ref _lightComponents, value);
+			get => GetPropertyValue<CArray<CHandle<gameLightComponent>>>();
+			set => SetPropertyValue<CArray<CHandle<gameLightComponent>>>(value);
 		}
 
 		[Ordinal(88)] 
 		[RED("lightDefinitions")] 
 		public CArray<gamedataLightPreset> LightDefinitions
 		{
-			get => GetProperty(ref _lightDefinitions);
-			set => SetProperty(ref _lightDefinitions, value);
+			get => GetPropertyValue<CArray<gamedataLightPreset>>();
+			set => SetPropertyValue<CArray<gamedataLightPreset>>(value);
+		}
+
+		public ElectricLight()
+		{
+			ControllerTypeName = "ElectricLightController";
+			LightComponents = new();
+			LightDefinitions = new();
 		}
 	}
 }

@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameJournalBriefingVideoSection : gameJournalBriefingBaseSection
 	{
-		private CResourceAsyncReference<Bink> _videoResource;
-
 		[Ordinal(1)] 
 		[RED("videoResource")] 
 		public CResourceAsyncReference<Bink> VideoResource
 		{
-			get => GetProperty(ref _videoResource);
-			set => SetProperty(ref _videoResource, value);
+			get => GetPropertyValue<CResourceAsyncReference<Bink>>();
+			set => SetPropertyValue<CResourceAsyncReference<Bink>>(value);
 		}
 	}
 }

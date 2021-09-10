@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorStackScriptTaskDefinition : AIbehaviorTaskDefinition
 	{
-		private CHandle<AIbehaviortaskStackScript> _script;
-
 		[Ordinal(1)] 
 		[RED("script")] 
 		public CHandle<AIbehaviortaskStackScript> Script
 		{
-			get => GetProperty(ref _script);
-			set => SetProperty(ref _script, value);
+			get => GetPropertyValue<CHandle<AIbehaviortaskStackScript>>();
+			set => SetPropertyValue<CHandle<AIbehaviortaskStackScript>>(value);
 		}
 	}
 }

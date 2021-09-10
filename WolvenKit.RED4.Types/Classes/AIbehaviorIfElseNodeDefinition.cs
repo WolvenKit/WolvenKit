@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorIfElseNodeDefinition : AIbehaviorCompositeTreeNodeDefinition
 	{
-		private CHandle<AIbehaviorExpressionSocket> _condition;
-
 		[Ordinal(1)] 
 		[RED("condition")] 
 		public CHandle<AIbehaviorExpressionSocket> Condition
 		{
-			get => GetProperty(ref _condition);
-			set => SetProperty(ref _condition, value);
+			get => GetPropertyValue<CHandle<AIbehaviorExpressionSocket>>();
+			set => SetPropertyValue<CHandle<AIbehaviorExpressionSocket>>(value);
+		}
+
+		public AIbehaviorIfElseNodeDefinition()
+		{
+			Children = new();
 		}
 	}
 }

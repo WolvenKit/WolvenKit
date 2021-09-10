@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnGameplayActionEvent : scnSceneEvent
 	{
-		private scnPerformerId _performer;
-		private CHandle<scnIGameplayActionData> _gameplayActionData;
-
 		[Ordinal(6)] 
 		[RED("performer")] 
 		public scnPerformerId Performer
 		{
-			get => GetProperty(ref _performer);
-			set => SetProperty(ref _performer, value);
+			get => GetPropertyValue<scnPerformerId>();
+			set => SetPropertyValue<scnPerformerId>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("gameplayActionData")] 
 		public CHandle<scnIGameplayActionData> GameplayActionData
 		{
-			get => GetProperty(ref _gameplayActionData);
-			set => SetProperty(ref _gameplayActionData, value);
+			get => GetPropertyValue<CHandle<scnIGameplayActionData>>();
+			set => SetPropertyValue<CHandle<scnIGameplayActionData>>(value);
+		}
+
+		public scnGameplayActionEvent()
+		{
+			Id = new() { Id = 18446744073709551615 };
+			Performer = new() { Id = 4294967040 };
 		}
 	}
 }

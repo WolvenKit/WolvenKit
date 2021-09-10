@@ -5,55 +5,51 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class StimBroadcasterComponent : gameScriptableComponent
 	{
-		private CArray<CHandle<StimRequest>> _activeRequests;
-		private CUInt32 _currentID;
-		private CBool _shouldBroadcast;
-		private CArray<gameNPCstubData> _targets;
-		private CFloat _fallbackInterval;
-
 		[Ordinal(5)] 
 		[RED("activeRequests")] 
 		public CArray<CHandle<StimRequest>> ActiveRequests
 		{
-			get => GetProperty(ref _activeRequests);
-			set => SetProperty(ref _activeRequests, value);
+			get => GetPropertyValue<CArray<CHandle<StimRequest>>>();
+			set => SetPropertyValue<CArray<CHandle<StimRequest>>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("currentID")] 
 		public CUInt32 CurrentID
 		{
-			get => GetProperty(ref _currentID);
-			set => SetProperty(ref _currentID, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("shouldBroadcast")] 
 		public CBool ShouldBroadcast
 		{
-			get => GetProperty(ref _shouldBroadcast);
-			set => SetProperty(ref _shouldBroadcast, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("targets")] 
 		public CArray<gameNPCstubData> Targets
 		{
-			get => GetProperty(ref _targets);
-			set => SetProperty(ref _targets, value);
+			get => GetPropertyValue<CArray<gameNPCstubData>>();
+			set => SetPropertyValue<CArray<gameNPCstubData>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("fallbackInterval")] 
 		public CFloat FallbackInterval
 		{
-			get => GetProperty(ref _fallbackInterval);
-			set => SetProperty(ref _fallbackInterval, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public StimBroadcasterComponent()
 		{
-			_fallbackInterval = 1.000000F;
+			ActiveRequests = new();
+			Targets = new();
+			FallbackInterval = 1.000000F;
 		}
 	}
 }

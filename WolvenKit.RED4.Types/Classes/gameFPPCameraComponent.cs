@@ -5,83 +5,75 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameFPPCameraComponent : gameCameraComponent
 	{
-		private CFloat _pitchMin;
-		private CFloat _pitchMax;
-		private CFloat _yawMaxLeft;
-		private CFloat _yawMaxRight;
-		private CBool _headingLocked;
-		private CFloat _sensitivityMultX;
-		private CFloat _sensitivityMultY;
-		private CName _timeDilationCurveName;
-
 		[Ordinal(35)] 
 		[RED("pitchMin")] 
 		public CFloat PitchMin
 		{
-			get => GetProperty(ref _pitchMin);
-			set => SetProperty(ref _pitchMin, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(36)] 
 		[RED("pitchMax")] 
 		public CFloat PitchMax
 		{
-			get => GetProperty(ref _pitchMax);
-			set => SetProperty(ref _pitchMax, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(37)] 
 		[RED("yawMaxLeft")] 
 		public CFloat YawMaxLeft
 		{
-			get => GetProperty(ref _yawMaxLeft);
-			set => SetProperty(ref _yawMaxLeft, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(38)] 
 		[RED("yawMaxRight")] 
 		public CFloat YawMaxRight
 		{
-			get => GetProperty(ref _yawMaxRight);
-			set => SetProperty(ref _yawMaxRight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(39)] 
 		[RED("headingLocked")] 
 		public CBool HeadingLocked
 		{
-			get => GetProperty(ref _headingLocked);
-			set => SetProperty(ref _headingLocked, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(40)] 
 		[RED("sensitivityMultX")] 
 		public CFloat SensitivityMultX
 		{
-			get => GetProperty(ref _sensitivityMultX);
-			set => SetProperty(ref _sensitivityMultX, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(41)] 
 		[RED("sensitivityMultY")] 
 		public CFloat SensitivityMultY
 		{
-			get => GetProperty(ref _sensitivityMultY);
-			set => SetProperty(ref _sensitivityMultY, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(42)] 
 		[RED("timeDilationCurveName")] 
 		public CName TimeDilationCurveName
 		{
-			get => GetProperty(ref _timeDilationCurveName);
-			set => SetProperty(ref _timeDilationCurveName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public gameFPPCameraComponent()
 		{
-			_sensitivityMultX = 1.000000F;
-			_sensitivityMultY = 1.000000F;
+			Fov = 51.000000F;
+			SensitivityMultX = 1.000000F;
+			SensitivityMultY = 1.000000F;
 		}
 	}
 }

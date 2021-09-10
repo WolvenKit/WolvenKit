@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkanimExecuteCodeEventEvent : inkanimEvent
 	{
-		private CHandle<redEvent> _eventToExecute;
-
 		[Ordinal(1)] 
 		[RED("eventToExecute")] 
 		public CHandle<redEvent> EventToExecute
 		{
-			get => GetProperty(ref _eventToExecute);
-			set => SetProperty(ref _eventToExecute, value);
+			get => GetPropertyValue<CHandle<redEvent>>();
+			set => SetPropertyValue<CHandle<redEvent>>(value);
 		}
 	}
 }

@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameinteractionsReactionEvent : redEvent
 	{
-		private CName _interactionType;
-		private CArray<gameEquipParam> _interactionItems;
-		private CEnum<gameinteractionsReactionState> _state;
-
 		[Ordinal(0)] 
 		[RED("interactionType")] 
 		public CName InteractionType
 		{
-			get => GetProperty(ref _interactionType);
-			set => SetProperty(ref _interactionType, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("interactionItems")] 
 		public CArray<gameEquipParam> InteractionItems
 		{
-			get => GetProperty(ref _interactionItems);
-			set => SetProperty(ref _interactionItems, value);
+			get => GetPropertyValue<CArray<gameEquipParam>>();
+			set => SetPropertyValue<CArray<gameEquipParam>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("state")] 
 		public CEnum<gameinteractionsReactionState> State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<CEnum<gameinteractionsReactionState>>();
+			set => SetPropertyValue<CEnum<gameinteractionsReactionState>>(value);
+		}
+
+		public gameinteractionsReactionEvent()
+		{
+			InteractionItems = new();
 		}
 	}
 }

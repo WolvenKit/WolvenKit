@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameItemBeingRemovedEvent : redEvent
 	{
-		private gameItemID _itemID;
-		private CHandle<gameItemData> _itemData;
-		private CInt32 _difference;
-		private CInt32 _currentQuantity;
-
 		[Ordinal(0)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get => GetProperty(ref _itemID);
-			set => SetProperty(ref _itemID, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("itemData")] 
 		public CHandle<gameItemData> ItemData
 		{
-			get => GetProperty(ref _itemData);
-			set => SetProperty(ref _itemData, value);
+			get => GetPropertyValue<CHandle<gameItemData>>();
+			set => SetPropertyValue<CHandle<gameItemData>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("difference")] 
 		public CInt32 Difference
 		{
-			get => GetProperty(ref _difference);
-			set => SetProperty(ref _difference, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("currentQuantity")] 
 		public CInt32 CurrentQuantity
 		{
-			get => GetProperty(ref _currentQuantity);
-			set => SetProperty(ref _currentQuantity, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		public gameItemBeingRemovedEvent()
+		{
+			ItemID = new();
 		}
 	}
 }

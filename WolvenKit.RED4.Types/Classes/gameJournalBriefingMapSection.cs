@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameJournalBriefingMapSection : gameJournalBriefingBaseSection
 	{
-		private Vector3 _mapLocation;
-
 		[Ordinal(1)] 
 		[RED("mapLocation")] 
 		public Vector3 MapLocation
 		{
-			get => GetProperty(ref _mapLocation);
-			set => SetProperty(ref _mapLocation, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
+		}
+
+		public gameJournalBriefingMapSection()
+		{
+			MapLocation = new();
 		}
 	}
 }

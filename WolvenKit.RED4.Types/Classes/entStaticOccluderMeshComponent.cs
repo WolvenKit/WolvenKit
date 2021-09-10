@@ -5,55 +5,53 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entStaticOccluderMeshComponent : entIPlacedComponent
 	{
-		private CResourceReference<CMesh> _mesh;
-		private Vector3 _scale;
-		private CColor _color;
-		private CEnum<visWorldOccluderType> _occluderType;
-		private CUInt8 _occluderAutohideDistanceScale;
-
 		[Ordinal(5)] 
 		[RED("mesh")] 
 		public CResourceReference<CMesh> Mesh
 		{
-			get => GetProperty(ref _mesh);
-			set => SetProperty(ref _mesh, value);
+			get => GetPropertyValue<CResourceReference<CMesh>>();
+			set => SetPropertyValue<CResourceReference<CMesh>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("scale")] 
 		public Vector3 Scale
 		{
-			get => GetProperty(ref _scale);
-			set => SetProperty(ref _scale, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("color")] 
 		public CColor Color
 		{
-			get => GetProperty(ref _color);
-			set => SetProperty(ref _color, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("occluderType")] 
 		public CEnum<visWorldOccluderType> OccluderType
 		{
-			get => GetProperty(ref _occluderType);
-			set => SetProperty(ref _occluderType, value);
+			get => GetPropertyValue<CEnum<visWorldOccluderType>>();
+			set => SetPropertyValue<CEnum<visWorldOccluderType>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("occluderAutohideDistanceScale")] 
 		public CUInt8 OccluderAutohideDistanceScale
 		{
-			get => GetProperty(ref _occluderAutohideDistanceScale);
-			set => SetProperty(ref _occluderAutohideDistanceScale, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		public entStaticOccluderMeshComponent()
 		{
-			_occluderAutohideDistanceScale = 255;
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			Scale = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
+			Color = new();
+			OccluderAutohideDistanceScale = 255;
 		}
 	}
 }

@@ -5,50 +5,51 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questMultiplayerTeleportPuppetParams : RedBaseClass
 	{
-		private CBool _teleportAllPlayers;
-		private CName _spawnPointTag;
-		private gameEntityReference _destinationRef;
-		private Vector3 _destinationOffset;
-		private gameEntityReference _areaNodeTriggerRef;
-
 		[Ordinal(0)] 
 		[RED("teleportAllPlayers")] 
 		public CBool TeleportAllPlayers
 		{
-			get => GetProperty(ref _teleportAllPlayers);
-			set => SetProperty(ref _teleportAllPlayers, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("spawnPointTag")] 
 		public CName SpawnPointTag
 		{
-			get => GetProperty(ref _spawnPointTag);
-			set => SetProperty(ref _spawnPointTag, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("destinationRef")] 
 		public gameEntityReference DestinationRef
 		{
-			get => GetProperty(ref _destinationRef);
-			set => SetProperty(ref _destinationRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("destinationOffset")] 
 		public Vector3 DestinationOffset
 		{
-			get => GetProperty(ref _destinationOffset);
-			set => SetProperty(ref _destinationOffset, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("areaNodeTriggerRef")] 
 		public gameEntityReference AreaNodeTriggerRef
 		{
-			get => GetProperty(ref _areaNodeTriggerRef);
-			set => SetProperty(ref _areaNodeTriggerRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
+		}
+
+		public questMultiplayerTeleportPuppetParams()
+		{
+			DestinationRef = new() { Names = new() };
+			DestinationOffset = new();
+			AreaNodeTriggerRef = new() { Names = new() };
 		}
 	}
 }

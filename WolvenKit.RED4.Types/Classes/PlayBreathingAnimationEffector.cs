@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PlayBreathingAnimationEffector : gameEffector
 	{
-		private CHandle<AnimFeature_CameraBreathing> _animFeature;
-		private CName _animFeatureName;
-		private CWeakHandle<gameObject> _owner;
-
 		[Ordinal(0)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_CameraBreathing> AnimFeature
 		{
-			get => GetProperty(ref _animFeature);
-			set => SetProperty(ref _animFeature, value);
+			get => GetPropertyValue<CHandle<AnimFeature_CameraBreathing>>();
+			set => SetPropertyValue<CHandle<AnimFeature_CameraBreathing>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("animFeatureName")] 
 		public CName AnimFeatureName
 		{
-			get => GetProperty(ref _animFeatureName);
-			set => SetProperty(ref _animFeatureName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("owner")] 
 		public CWeakHandle<gameObject> Owner
 		{
-			get => GetProperty(ref _owner);
-			set => SetProperty(ref _owner, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 	}
 }

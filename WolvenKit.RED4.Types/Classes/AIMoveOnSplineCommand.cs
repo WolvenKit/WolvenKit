@@ -5,264 +5,237 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIMoveOnSplineCommand : AIMoveCommand
 	{
-		private NodeRef _spline;
-		private AIMovementTypeSpec _movementType;
-		private CBool _rotateEntityTowardsFacingTarget;
-		private CWeakHandle<gameObject> _facingTarget;
-		private CWeakHandle<gameObject> _shootingTarget;
-		private CWeakHandle<gameObject> _companion;
-		private CFloat _desiredDistance;
-		private CFloat _deadZoneRadius;
-		private CBool _catchUpWithCompanion;
-		private CBool _teleportToCompanion;
-		private CBool _useMatchForSpeedForPlayer;
-		private CBool _startFromClosestPoint;
-		private CBool _ignoreNavigation;
-		private CBool _snapToTerrain;
-		private CBool _ignoreLineOfSightCheck;
-		private CBool _useAlertedState;
-		private CBool _useStart;
-		private CBool _useStop;
-		private CBool _useCombatState;
-		private CBool _reverse;
-		private CBool _useOMLReservation;
-		private CWeakHandle<gameObject> _lookAtTarget;
-		private CFloat _minSearchAngle;
-		private CFloat _maxSearchAngle;
-		private CFloat _noWaitToEndDistance;
-		private CFloat _noWaitToEndCompanionDistance;
-		private CFloat _maxCompanionDistanceOnSpline;
-
 		[Ordinal(7)] 
 		[RED("spline")] 
 		public NodeRef Spline
 		{
-			get => GetProperty(ref _spline);
-			set => SetProperty(ref _spline, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("movementType")] 
 		public AIMovementTypeSpec MovementType
 		{
-			get => GetProperty(ref _movementType);
-			set => SetProperty(ref _movementType, value);
+			get => GetPropertyValue<AIMovementTypeSpec>();
+			set => SetPropertyValue<AIMovementTypeSpec>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("rotateEntityTowardsFacingTarget")] 
 		public CBool RotateEntityTowardsFacingTarget
 		{
-			get => GetProperty(ref _rotateEntityTowardsFacingTarget);
-			set => SetProperty(ref _rotateEntityTowardsFacingTarget, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("facingTarget")] 
 		public CWeakHandle<gameObject> FacingTarget
 		{
-			get => GetProperty(ref _facingTarget);
-			set => SetProperty(ref _facingTarget, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("shootingTarget")] 
 		public CWeakHandle<gameObject> ShootingTarget
 		{
-			get => GetProperty(ref _shootingTarget);
-			set => SetProperty(ref _shootingTarget, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("companion")] 
 		public CWeakHandle<gameObject> Companion
 		{
-			get => GetProperty(ref _companion);
-			set => SetProperty(ref _companion, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("desiredDistance")] 
 		public CFloat DesiredDistance
 		{
-			get => GetProperty(ref _desiredDistance);
-			set => SetProperty(ref _desiredDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("deadZoneRadius")] 
 		public CFloat DeadZoneRadius
 		{
-			get => GetProperty(ref _deadZoneRadius);
-			set => SetProperty(ref _deadZoneRadius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("catchUpWithCompanion")] 
 		public CBool CatchUpWithCompanion
 		{
-			get => GetProperty(ref _catchUpWithCompanion);
-			set => SetProperty(ref _catchUpWithCompanion, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("teleportToCompanion")] 
 		public CBool TeleportToCompanion
 		{
-			get => GetProperty(ref _teleportToCompanion);
-			set => SetProperty(ref _teleportToCompanion, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("useMatchForSpeedForPlayer")] 
 		public CBool UseMatchForSpeedForPlayer
 		{
-			get => GetProperty(ref _useMatchForSpeedForPlayer);
-			set => SetProperty(ref _useMatchForSpeedForPlayer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("startFromClosestPoint")] 
 		public CBool StartFromClosestPoint
 		{
-			get => GetProperty(ref _startFromClosestPoint);
-			set => SetProperty(ref _startFromClosestPoint, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("ignoreNavigation")] 
 		public CBool IgnoreNavigation
 		{
-			get => GetProperty(ref _ignoreNavigation);
-			set => SetProperty(ref _ignoreNavigation, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("snapToTerrain")] 
 		public CBool SnapToTerrain
 		{
-			get => GetProperty(ref _snapToTerrain);
-			set => SetProperty(ref _snapToTerrain, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("ignoreLineOfSightCheck")] 
 		public CBool IgnoreLineOfSightCheck
 		{
-			get => GetProperty(ref _ignoreLineOfSightCheck);
-			set => SetProperty(ref _ignoreLineOfSightCheck, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("useAlertedState")] 
 		public CBool UseAlertedState
 		{
-			get => GetProperty(ref _useAlertedState);
-			set => SetProperty(ref _useAlertedState, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("useStart")] 
 		public CBool UseStart
 		{
-			get => GetProperty(ref _useStart);
-			set => SetProperty(ref _useStart, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("useStop")] 
 		public CBool UseStop
 		{
-			get => GetProperty(ref _useStop);
-			set => SetProperty(ref _useStop, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("useCombatState")] 
 		public CBool UseCombatState
 		{
-			get => GetProperty(ref _useCombatState);
-			set => SetProperty(ref _useCombatState, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("reverse")] 
 		public CBool Reverse
 		{
-			get => GetProperty(ref _reverse);
-			set => SetProperty(ref _reverse, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("useOMLReservation")] 
 		public CBool UseOMLReservation
 		{
-			get => GetProperty(ref _useOMLReservation);
-			set => SetProperty(ref _useOMLReservation, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("lookAtTarget")] 
 		public CWeakHandle<gameObject> LookAtTarget
 		{
-			get => GetProperty(ref _lookAtTarget);
-			set => SetProperty(ref _lookAtTarget, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("minSearchAngle")] 
 		public CFloat MinSearchAngle
 		{
-			get => GetProperty(ref _minSearchAngle);
-			set => SetProperty(ref _minSearchAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("maxSearchAngle")] 
 		public CFloat MaxSearchAngle
 		{
-			get => GetProperty(ref _maxSearchAngle);
-			set => SetProperty(ref _maxSearchAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("noWaitToEndDistance")] 
 		public CFloat NoWaitToEndDistance
 		{
-			get => GetProperty(ref _noWaitToEndDistance);
-			set => SetProperty(ref _noWaitToEndDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("noWaitToEndCompanionDistance")] 
 		public CFloat NoWaitToEndCompanionDistance
 		{
-			get => GetProperty(ref _noWaitToEndCompanionDistance);
-			set => SetProperty(ref _noWaitToEndCompanionDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("maxCompanionDistanceOnSpline")] 
 		public CFloat MaxCompanionDistanceOnSpline
 		{
-			get => GetProperty(ref _maxCompanionDistanceOnSpline);
-			set => SetProperty(ref _maxCompanionDistanceOnSpline, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public AIMoveOnSplineCommand()
 		{
-			_desiredDistance = -5.000000F;
-			_deadZoneRadius = 2.000000F;
-			_catchUpWithCompanion = true;
-			_teleportToCompanion = true;
-			_useMatchForSpeedForPlayer = true;
-			_snapToTerrain = true;
-			_useStart = true;
-			_useStop = true;
-			_minSearchAngle = 22.500000F;
-			_maxSearchAngle = 60.000000F;
-			_noWaitToEndDistance = 10.000000F;
-			_noWaitToEndCompanionDistance = 5.000000F;
+			MovementType = new() { UseNPCMovementParams = true };
+			DesiredDistance = -5.000000F;
+			DeadZoneRadius = 2.000000F;
+			CatchUpWithCompanion = true;
+			TeleportToCompanion = true;
+			UseMatchForSpeedForPlayer = true;
+			SnapToTerrain = true;
+			UseStart = true;
+			UseStop = true;
+			MinSearchAngle = 22.500000F;
+			MaxSearchAngle = 60.000000F;
+			NoWaitToEndDistance = 10.000000F;
+			NoWaitToEndCompanionDistance = 5.000000F;
 		}
 	}
 }

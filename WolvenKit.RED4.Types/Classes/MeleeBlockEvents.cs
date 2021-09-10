@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MeleeBlockEvents : MeleeEventsTransition
 	{
-		private CHandle<gameStatModifierData_Deprecated> _blockStatFlag;
-
 		[Ordinal(0)] 
 		[RED("blockStatFlag")] 
 		public CHandle<gameStatModifierData_Deprecated> BlockStatFlag
 		{
-			get => GetProperty(ref _blockStatFlag);
-			set => SetProperty(ref _blockStatFlag, value);
+			get => GetPropertyValue<CHandle<gameStatModifierData_Deprecated>>();
+			set => SetPropertyValue<CHandle<gameStatModifierData_Deprecated>>(value);
 		}
 	}
 }

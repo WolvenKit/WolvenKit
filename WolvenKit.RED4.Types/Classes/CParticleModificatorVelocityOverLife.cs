@@ -5,47 +5,45 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CParticleModificatorVelocityOverLife : IParticleModificator
 	{
-		private CHandle<IEvaluatorVector> _velocity;
-		private CFloat _scale;
-		private CBool _modulate;
-		private CBool _absolute;
-
 		[Ordinal(4)] 
 		[RED("velocity")] 
 		public CHandle<IEvaluatorVector> Velocity
 		{
-			get => GetProperty(ref _velocity);
-			set => SetProperty(ref _velocity, value);
+			get => GetPropertyValue<CHandle<IEvaluatorVector>>();
+			set => SetPropertyValue<CHandle<IEvaluatorVector>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("scale")] 
 		public CFloat Scale
 		{
-			get => GetProperty(ref _scale);
-			set => SetProperty(ref _scale, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("modulate")] 
 		public CBool Modulate
 		{
-			get => GetProperty(ref _modulate);
-			set => SetProperty(ref _modulate, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("absolute")] 
 		public CBool Absolute
 		{
-			get => GetProperty(ref _absolute);
-			set => SetProperty(ref _absolute, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public CParticleModificatorVelocityOverLife()
 		{
-			_scale = 1.000000F;
-			_modulate = true;
+			EditorName = "Velocity over life";
+			EditorGroup = "Velocity";
+			IsEnabled = true;
+			Scale = 1.000000F;
+			Modulate = true;
 		}
 	}
 }

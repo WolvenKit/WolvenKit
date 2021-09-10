@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkShapeCollectionResource : CResource
 	{
-		private CArray<inkShapePreset> _presets;
-
 		[Ordinal(1)] 
 		[RED("presets")] 
 		public CArray<inkShapePreset> Presets
 		{
-			get => GetProperty(ref _presets);
-			set => SetProperty(ref _presets, value);
+			get => GetPropertyValue<CArray<inkShapePreset>>();
+			set => SetPropertyValue<CArray<inkShapePreset>>(value);
+		}
+
+		public inkShapeCollectionResource()
+		{
+			Presets = new();
 		}
 	}
 }

@@ -5,37 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scneventsPlayAnimEventExData : RedBaseClass
 	{
-		private scneventsPlayAnimEventData _basic;
-		private CFloat _weight;
-		private CName _bodyPartMask;
-
 		[Ordinal(0)] 
 		[RED("basic")] 
 		public scneventsPlayAnimEventData Basic
 		{
-			get => GetProperty(ref _basic);
-			set => SetProperty(ref _basic, value);
+			get => GetPropertyValue<scneventsPlayAnimEventData>();
+			set => SetPropertyValue<scneventsPlayAnimEventData>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("weight")] 
 		public CFloat Weight
 		{
-			get => GetProperty(ref _weight);
-			set => SetProperty(ref _weight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("bodyPartMask")] 
 		public CName BodyPartMask
 		{
-			get => GetProperty(ref _bodyPartMask);
-			set => SetProperty(ref _bodyPartMask, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public scneventsPlayAnimEventExData()
 		{
-			_weight = 1.000000F;
+			Basic = new() { Stretch = 1.000000F, BlendInCurve = Enums.scnEasingType.SinusoidalEaseInOut, BlendOutCurve = Enums.scnEasingType.SinusoidalEaseInOut };
+			Weight = 1.000000F;
 		}
 	}
 }

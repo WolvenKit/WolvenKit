@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AnimatedSign : InteractiveDevice
 	{
-		private CHandle<AnimFeature_AnimatedDevice> _animFeature;
-
 		[Ordinal(97)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_AnimatedDevice> AnimFeature
 		{
-			get => GetProperty(ref _animFeature);
-			set => SetProperty(ref _animFeature, value);
+			get => GetPropertyValue<CHandle<AnimFeature_AnimatedDevice>>();
+			set => SetPropertyValue<CHandle<AnimFeature_AnimatedDevice>>(value);
 		}
 	}
 }

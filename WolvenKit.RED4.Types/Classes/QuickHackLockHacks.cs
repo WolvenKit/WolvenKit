@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class QuickHackLockHacks : redEvent
 	{
-		private CBool _isLocked;
-
 		[Ordinal(0)] 
 		[RED("IsLocked")] 
 		public CBool IsLocked
 		{
-			get => GetProperty(ref _isLocked);
-			set => SetProperty(ref _isLocked, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

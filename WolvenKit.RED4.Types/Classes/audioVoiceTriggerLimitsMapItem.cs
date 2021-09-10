@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioVoiceTriggerLimitsMapItem : RedBaseClass
 	{
-		private CName _name;
-		private audioVoiceTriggerLimits _limits;
-
 		[Ordinal(0)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get => GetProperty(ref _name);
-			set => SetProperty(ref _name, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("limits")] 
 		public audioVoiceTriggerLimits Limits
 		{
-			get => GetProperty(ref _limits);
-			set => SetProperty(ref _limits, value);
+			get => GetPropertyValue<audioVoiceTriggerLimits>();
+			set => SetPropertyValue<audioVoiceTriggerLimits>(value);
+		}
+
+		public audioVoiceTriggerLimitsMapItem()
+		{
+			Limits = new() { Probability = 1.000000F };
 		}
 	}
 }

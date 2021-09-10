@@ -5,28 +5,29 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ChangeMusicAction : ActionBool
 	{
-		private CString _interactionRecordName;
-		private CHandle<MusicSettings> _settings;
-
 		[Ordinal(25)] 
 		[RED("interactionRecordName")] 
 		public CString InteractionRecordName
 		{
-			get => GetProperty(ref _interactionRecordName);
-			set => SetProperty(ref _interactionRecordName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("settings")] 
 		public CHandle<MusicSettings> Settings
 		{
-			get => GetProperty(ref _settings);
-			set => SetProperty(ref _settings, value);
+			get => GetPropertyValue<CHandle<MusicSettings>>();
+			set => SetPropertyValue<CHandle<MusicSettings>>(value);
 		}
 
 		public ChangeMusicAction()
 		{
-			_interactionRecordName = new() { Text = "NextStation" };
+			RequesterID = new();
+			InteractionChoice = new() { CaptionParts = new() { Parts = new() }, Data = new(), ChoiceMetaData = new() { Type = new() }, LookAtDescriptor = new() { Offset = new(), OrbId = new() } };
+			ActionWidgetPackage = new() { DependendActions = new() };
+			CanTriggerStim = true;
+			InteractionRecordName = "NextStation";
 		}
 	}
 }

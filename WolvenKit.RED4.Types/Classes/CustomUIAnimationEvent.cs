@@ -5,73 +5,66 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CustomUIAnimationEvent : redEvent
 	{
-		private CName _libraryItemName;
-		private CEnum<inkEAnchor> _libraryItemAnchor;
-		private CBool _forceRespawnLibraryItem;
-		private CName _animationName;
-		private CEnum<EInkAnimationPlaybackOption> _playbackOption;
-		private CHandle<PlaybackOptionsUpdateData> _animOptionsOverride;
-		private entEntityID _ownerID;
-
 		[Ordinal(0)] 
 		[RED("libraryItemName")] 
 		public CName LibraryItemName
 		{
-			get => GetProperty(ref _libraryItemName);
-			set => SetProperty(ref _libraryItemName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("libraryItemAnchor")] 
 		public CEnum<inkEAnchor> LibraryItemAnchor
 		{
-			get => GetProperty(ref _libraryItemAnchor);
-			set => SetProperty(ref _libraryItemAnchor, value);
+			get => GetPropertyValue<CEnum<inkEAnchor>>();
+			set => SetPropertyValue<CEnum<inkEAnchor>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("forceRespawnLibraryItem")] 
 		public CBool ForceRespawnLibraryItem
 		{
-			get => GetProperty(ref _forceRespawnLibraryItem);
-			set => SetProperty(ref _forceRespawnLibraryItem, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("animationName")] 
 		public CName AnimationName
 		{
-			get => GetProperty(ref _animationName);
-			set => SetProperty(ref _animationName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("playbackOption")] 
 		public CEnum<EInkAnimationPlaybackOption> PlaybackOption
 		{
-			get => GetProperty(ref _playbackOption);
-			set => SetProperty(ref _playbackOption, value);
+			get => GetPropertyValue<CEnum<EInkAnimationPlaybackOption>>();
+			set => SetPropertyValue<CEnum<EInkAnimationPlaybackOption>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("animOptionsOverride")] 
 		public CHandle<PlaybackOptionsUpdateData> AnimOptionsOverride
 		{
-			get => GetProperty(ref _animOptionsOverride);
-			set => SetProperty(ref _animOptionsOverride, value);
+			get => GetPropertyValue<CHandle<PlaybackOptionsUpdateData>>();
+			set => SetPropertyValue<CHandle<PlaybackOptionsUpdateData>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("ownerID")] 
 		public entEntityID OwnerID
 		{
-			get => GetProperty(ref _ownerID);
-			set => SetProperty(ref _ownerID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		public CustomUIAnimationEvent()
 		{
-			_libraryItemAnchor = new() { Value = Enums.inkEAnchor.Fill };
+			LibraryItemAnchor = Enums.inkEAnchor.Fill;
+			OwnerID = new();
 		}
 	}
 }

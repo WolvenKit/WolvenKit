@@ -5,48 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TerminalSetup : RedBaseClass
 	{
-		private CInt32 _minClearance;
-		private CInt32 _maxClearance;
-		private CBool _ignoreSlaveAuthorizationModule;
-		private CBool _shouldForceVirtualSystem;
-
 		[Ordinal(0)] 
 		[RED("minClearance")] 
 		public CInt32 MinClearance
 		{
-			get => GetProperty(ref _minClearance);
-			set => SetProperty(ref _minClearance, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("maxClearance")] 
 		public CInt32 MaxClearance
 		{
-			get => GetProperty(ref _maxClearance);
-			set => SetProperty(ref _maxClearance, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ignoreSlaveAuthorizationModule")] 
 		public CBool IgnoreSlaveAuthorizationModule
 		{
-			get => GetProperty(ref _ignoreSlaveAuthorizationModule);
-			set => SetProperty(ref _ignoreSlaveAuthorizationModule, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("shouldForceVirtualSystem")] 
 		public CBool ShouldForceVirtualSystem
 		{
-			get => GetProperty(ref _shouldForceVirtualSystem);
-			set => SetProperty(ref _shouldForceVirtualSystem, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public TerminalSetup()
 		{
-			_minClearance = 1;
-			_maxClearance = 10;
-			_shouldForceVirtualSystem = true;
+			MinClearance = 1;
+			MaxClearance = 10;
+			ShouldForceVirtualSystem = true;
 		}
 	}
 }

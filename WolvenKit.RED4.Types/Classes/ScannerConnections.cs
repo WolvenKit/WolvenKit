@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ScannerConnections : ScannerChunk
 	{
-		private CArray<DeviceConnectionScannerData> _deviceConnections;
-
 		[Ordinal(0)] 
 		[RED("deviceConnections")] 
 		public CArray<DeviceConnectionScannerData> DeviceConnections
 		{
-			get => GetProperty(ref _deviceConnections);
-			set => SetProperty(ref _deviceConnections, value);
+			get => GetPropertyValue<CArray<DeviceConnectionScannerData>>();
+			set => SetPropertyValue<CArray<DeviceConnectionScannerData>>(value);
+		}
+
+		public ScannerConnections()
+		{
+			DeviceConnections = new();
 		}
 	}
 }

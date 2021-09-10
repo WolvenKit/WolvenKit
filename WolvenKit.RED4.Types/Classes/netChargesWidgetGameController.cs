@@ -5,122 +5,113 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class netChargesWidgetGameController : gameuiHUDGameController
 	{
-		private CWeakHandle<gameIBlackboard> _bbPlayerStats;
-		private CHandle<redCallbackObject> _bbPlayerEventId1;
-		private CHandle<redCallbackObject> _bbPlayerEventId2;
-		private CHandle<redCallbackObject> _bbPlayerEventId3;
-		private CWeakHandle<inkTextWidget> _networkName;
-		private CWeakHandle<inkTextWidget> _networkStatus;
-		private CArray<CWeakHandle<inkCompoundWidget>> _chargesList;
-		private CInt32 _chargesCurrent;
-		private CInt32 _chargesMax;
-		private CString _networkNameText;
-		private CString _networkStatusText;
-		private CWeakHandle<inkWidget> _rootWidget;
-		private CWeakHandle<inkHorizontalPanelWidget> _chargeList;
-
 		[Ordinal(9)] 
 		[RED("bbPlayerStats")] 
 		public CWeakHandle<gameIBlackboard> BbPlayerStats
 		{
-			get => GetProperty(ref _bbPlayerStats);
-			set => SetProperty(ref _bbPlayerStats, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("bbPlayerEventId1")] 
 		public CHandle<redCallbackObject> BbPlayerEventId1
 		{
-			get => GetProperty(ref _bbPlayerEventId1);
-			set => SetProperty(ref _bbPlayerEventId1, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("bbPlayerEventId2")] 
 		public CHandle<redCallbackObject> BbPlayerEventId2
 		{
-			get => GetProperty(ref _bbPlayerEventId2);
-			set => SetProperty(ref _bbPlayerEventId2, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("bbPlayerEventId3")] 
 		public CHandle<redCallbackObject> BbPlayerEventId3
 		{
-			get => GetProperty(ref _bbPlayerEventId3);
-			set => SetProperty(ref _bbPlayerEventId3, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("networkName")] 
 		public CWeakHandle<inkTextWidget> NetworkName
 		{
-			get => GetProperty(ref _networkName);
-			set => SetProperty(ref _networkName, value);
+			get => GetPropertyValue<CWeakHandle<inkTextWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("networkStatus")] 
 		public CWeakHandle<inkTextWidget> NetworkStatus
 		{
-			get => GetProperty(ref _networkStatus);
-			set => SetProperty(ref _networkStatus, value);
+			get => GetPropertyValue<CWeakHandle<inkTextWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("chargesList")] 
 		public CArray<CWeakHandle<inkCompoundWidget>> ChargesList
 		{
-			get => GetProperty(ref _chargesList);
-			set => SetProperty(ref _chargesList, value);
+			get => GetPropertyValue<CArray<CWeakHandle<inkCompoundWidget>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<inkCompoundWidget>>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("chargesCurrent")] 
 		public CInt32 ChargesCurrent
 		{
-			get => GetProperty(ref _chargesCurrent);
-			set => SetProperty(ref _chargesCurrent, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("chargesMax")] 
 		public CInt32 ChargesMax
 		{
-			get => GetProperty(ref _chargesMax);
-			set => SetProperty(ref _chargesMax, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("networkNameText")] 
 		public CString NetworkNameText
 		{
-			get => GetProperty(ref _networkNameText);
-			set => SetProperty(ref _networkNameText, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("networkStatusText")] 
 		public CString NetworkStatusText
 		{
-			get => GetProperty(ref _networkStatusText);
-			set => SetProperty(ref _networkStatusText, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("rootWidget")] 
 		public CWeakHandle<inkWidget> RootWidget
 		{
-			get => GetProperty(ref _rootWidget);
-			set => SetProperty(ref _rootWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("chargeList")] 
 		public CWeakHandle<inkHorizontalPanelWidget> ChargeList
 		{
-			get => GetProperty(ref _chargeList);
-			set => SetProperty(ref _chargeList, value);
+			get => GetPropertyValue<CWeakHandle<inkHorizontalPanelWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkHorizontalPanelWidget>>(value);
+		}
+
+		public netChargesWidgetGameController()
+		{
+			ChargesList = new();
 		}
 	}
 }

@@ -5,37 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnPlayerAnimData : RedBaseClass
 	{
-		private CHandle<gameSceneTierData> _tierData;
-		private CBool _useZSnapping;
-		private CBool _unmountBodyCarry;
-
 		[Ordinal(0)] 
 		[RED("tierData")] 
 		public CHandle<gameSceneTierData> TierData
 		{
-			get => GetProperty(ref _tierData);
-			set => SetProperty(ref _tierData, value);
+			get => GetPropertyValue<CHandle<gameSceneTierData>>();
+			set => SetPropertyValue<CHandle<gameSceneTierData>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("useZSnapping")] 
 		public CBool UseZSnapping
 		{
-			get => GetProperty(ref _useZSnapping);
-			set => SetProperty(ref _useZSnapping, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("unmountBodyCarry")] 
 		public CBool UnmountBodyCarry
 		{
-			get => GetProperty(ref _unmountBodyCarry);
-			set => SetProperty(ref _unmountBodyCarry, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public scnPlayerAnimData()
 		{
-			_unmountBodyCarry = true;
+			UnmountBodyCarry = true;
 		}
 	}
 }

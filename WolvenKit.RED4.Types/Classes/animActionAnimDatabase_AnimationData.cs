@@ -5,68 +5,60 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animActionAnimDatabase_AnimationData : RedBaseClass
 	{
-		private CName _animationName;
-		private CName _fallbackAnimationName;
-		private CFloat _inTransitionDuration;
-		private CBool _inCanRequestInertialization;
-		private CFloat _outTransitionDuration;
-		private CBool _outCanRequestInertialization;
-		private CName _streamingContext;
-
 		[Ordinal(0)] 
 		[RED("animationName")] 
 		public CName AnimationName
 		{
-			get => GetProperty(ref _animationName);
-			set => SetProperty(ref _animationName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("fallbackAnimationName")] 
 		public CName FallbackAnimationName
 		{
-			get => GetProperty(ref _fallbackAnimationName);
-			set => SetProperty(ref _fallbackAnimationName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("inTransitionDuration")] 
 		public CFloat InTransitionDuration
 		{
-			get => GetProperty(ref _inTransitionDuration);
-			set => SetProperty(ref _inTransitionDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("inCanRequestInertialization")] 
 		public CBool InCanRequestInertialization
 		{
-			get => GetProperty(ref _inCanRequestInertialization);
-			set => SetProperty(ref _inCanRequestInertialization, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("outTransitionDuration")] 
 		public CFloat OutTransitionDuration
 		{
-			get => GetProperty(ref _outTransitionDuration);
-			set => SetProperty(ref _outTransitionDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("outCanRequestInertialization")] 
 		public CBool OutCanRequestInertialization
 		{
-			get => GetProperty(ref _outCanRequestInertialization);
-			set => SetProperty(ref _outCanRequestInertialization, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("streamingContext")] 
 		public CName StreamingContext
 		{
-			get => GetProperty(ref _streamingContext);
-			set => SetProperty(ref _streamingContext, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 	}
 }

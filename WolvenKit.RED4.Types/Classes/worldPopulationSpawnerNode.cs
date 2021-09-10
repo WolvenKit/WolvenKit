@@ -5,64 +5,57 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldPopulationSpawnerNode : worldNode
 	{
-		private TweakDBID _objectRecordId;
-		private CName _appearanceName;
-		private CBool _spawnOnStart;
-		private CEnum<gameAlwaysSpawnedState> _alwaysSpawned;
-		private CEnum<gameSpawnInViewState> _spawnInView;
-		private CBool _prefetchAppearance;
-
 		[Ordinal(4)] 
 		[RED("objectRecordId")] 
 		public TweakDBID ObjectRecordId
 		{
-			get => GetProperty(ref _objectRecordId);
-			set => SetProperty(ref _objectRecordId, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("appearanceName")] 
 		public CName AppearanceName
 		{
-			get => GetProperty(ref _appearanceName);
-			set => SetProperty(ref _appearanceName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("spawnOnStart")] 
 		public CBool SpawnOnStart
 		{
-			get => GetProperty(ref _spawnOnStart);
-			set => SetProperty(ref _spawnOnStart, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("alwaysSpawned")] 
 		public CEnum<gameAlwaysSpawnedState> AlwaysSpawned
 		{
-			get => GetProperty(ref _alwaysSpawned);
-			set => SetProperty(ref _alwaysSpawned, value);
+			get => GetPropertyValue<CEnum<gameAlwaysSpawnedState>>();
+			set => SetPropertyValue<CEnum<gameAlwaysSpawnedState>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("spawnInView")] 
 		public CEnum<gameSpawnInViewState> SpawnInView
 		{
-			get => GetProperty(ref _spawnInView);
-			set => SetProperty(ref _spawnInView, value);
+			get => GetPropertyValue<CEnum<gameSpawnInViewState>>();
+			set => SetPropertyValue<CEnum<gameSpawnInViewState>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("prefetchAppearance")] 
 		public CBool PrefetchAppearance
 		{
-			get => GetProperty(ref _prefetchAppearance);
-			set => SetProperty(ref _prefetchAppearance, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public worldPopulationSpawnerNode()
 		{
-			_appearanceName = "default";
+			AppearanceName = "default";
 		}
 	}
 }

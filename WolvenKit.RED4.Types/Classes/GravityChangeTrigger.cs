@@ -5,38 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class GravityChangeTrigger : gameObject
 	{
-		private CEnum<EGravityType> _gravityType;
-		private CName _regularStateMachineName;
-		private CName _lowGravityStateMachineName;
-
 		[Ordinal(40)] 
 		[RED("gravityType")] 
 		public CEnum<EGravityType> GravityType
 		{
-			get => GetProperty(ref _gravityType);
-			set => SetProperty(ref _gravityType, value);
+			get => GetPropertyValue<CEnum<EGravityType>>();
+			set => SetPropertyValue<CEnum<EGravityType>>(value);
 		}
 
 		[Ordinal(41)] 
 		[RED("regularStateMachineName")] 
 		public CName RegularStateMachineName
 		{
-			get => GetProperty(ref _regularStateMachineName);
-			set => SetProperty(ref _regularStateMachineName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(42)] 
 		[RED("lowGravityStateMachineName")] 
 		public CName LowGravityStateMachineName
 		{
-			get => GetProperty(ref _lowGravityStateMachineName);
-			set => SetProperty(ref _lowGravityStateMachineName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public GravityChangeTrigger()
 		{
-			_regularStateMachineName = "Locomotion";
-			_lowGravityStateMachineName = "LocomotionLowGravity";
+			RegularStateMachineName = "Locomotion";
+			LowGravityStateMachineName = "LocomotionLowGravity";
 		}
 	}
 }

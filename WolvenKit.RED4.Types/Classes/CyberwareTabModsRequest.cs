@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CyberwareTabModsRequest : redEvent
 	{
-		private CBool _open;
-		private CHandle<CyberwareDisplayWrapper> _wrapper;
-
 		[Ordinal(0)] 
 		[RED("open")] 
 		public CBool Open
 		{
-			get => GetProperty(ref _open);
-			set => SetProperty(ref _open, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("wrapper")] 
 		public CHandle<CyberwareDisplayWrapper> Wrapper
 		{
-			get => GetProperty(ref _wrapper);
-			set => SetProperty(ref _wrapper, value);
+			get => GetPropertyValue<CHandle<CyberwareDisplayWrapper>>();
+			set => SetPropertyValue<CHandle<CyberwareDisplayWrapper>>(value);
 		}
 	}
 }

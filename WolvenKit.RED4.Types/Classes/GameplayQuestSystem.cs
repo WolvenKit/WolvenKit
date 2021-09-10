@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class GameplayQuestSystem : gameScriptableSystem
 	{
-		private CArray<CHandle<GamplayQuestData>> _quests;
-
 		[Ordinal(0)] 
 		[RED("quests")] 
 		public CArray<CHandle<GamplayQuestData>> Quests
 		{
-			get => GetProperty(ref _quests);
-			set => SetProperty(ref _quests, value);
+			get => GetPropertyValue<CArray<CHandle<GamplayQuestData>>>();
+			set => SetPropertyValue<CArray<CHandle<GamplayQuestData>>>(value);
+		}
+
+		public GameplayQuestSystem()
+		{
+			Quests = new();
 		}
 	}
 }

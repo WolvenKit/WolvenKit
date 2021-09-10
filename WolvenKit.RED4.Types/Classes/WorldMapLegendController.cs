@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WorldMapLegendController : inkWidgetLogicController
 	{
-		private inkCompoundWidgetReference _list;
-		private CBool _initialized;
-		private CBool _visible;
-
 		[Ordinal(1)] 
 		[RED("list")] 
 		public inkCompoundWidgetReference List
 		{
-			get => GetProperty(ref _list);
-			set => SetProperty(ref _list, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("initialized")] 
 		public CBool Initialized
 		{
-			get => GetProperty(ref _initialized);
-			set => SetProperty(ref _initialized, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("visible")] 
 		public CBool Visible
 		{
-			get => GetProperty(ref _visible);
-			set => SetProperty(ref _visible, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public WorldMapLegendController()
+		{
+			List = new();
 		}
 	}
 }

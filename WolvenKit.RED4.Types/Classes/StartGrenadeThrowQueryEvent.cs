@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class StartGrenadeThrowQueryEvent : redEvent
 	{
-		private gameGrenadeThrowQueryParams _queryParams;
-
 		[Ordinal(0)] 
 		[RED("queryParams")] 
 		public gameGrenadeThrowQueryParams QueryParams
 		{
-			get => GetProperty(ref _queryParams);
-			set => SetProperty(ref _queryParams, value);
+			get => GetPropertyValue<gameGrenadeThrowQueryParams>();
+			set => SetPropertyValue<gameGrenadeThrowQueryParams>(value);
+		}
+
+		public StartGrenadeThrowQueryEvent()
+		{
+			QueryParams = new() { ThrowAngleDegrees = -1.000000F, GravitySimulation = -9.800000F, MinTargetAngleDegrees = -180.000000F, MaxTargetAngleDegrees = 180.000000F };
 		}
 	}
 }

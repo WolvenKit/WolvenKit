@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RemotePlayerMappinController : gameuiInteractionMappinController
 	{
-		private CWeakHandle<gamemappinsRemotePlayerMappin> _mappin;
-		private CWeakHandle<inkWidget> _root;
-
 		[Ordinal(11)] 
 		[RED("mappin")] 
 		public CWeakHandle<gamemappinsRemotePlayerMappin> Mappin
 		{
-			get => GetProperty(ref _mappin);
-			set => SetProperty(ref _mappin, value);
+			get => GetPropertyValue<CWeakHandle<gamemappinsRemotePlayerMappin>>();
+			set => SetPropertyValue<CWeakHandle<gamemappinsRemotePlayerMappin>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("root")] 
 		public CWeakHandle<inkWidget> Root
 		{
-			get => GetProperty(ref _root);
-			set => SetProperty(ref _root, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 	}
 }

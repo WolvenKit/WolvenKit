@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PlayerSecureAreaDef : gamebbScriptDefinition
 	{
-		private gamebbScriptID_Bool _inside;
-
 		[Ordinal(0)] 
 		[RED("inside")] 
 		public gamebbScriptID_Bool Inside
 		{
-			get => GetProperty(ref _inside);
-			set => SetProperty(ref _inside, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		public PlayerSecureAreaDef()
+		{
+			Inside = new();
 		}
 	}
 }

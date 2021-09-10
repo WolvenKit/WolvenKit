@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorDelegateTaskDefinition : AIbehaviorTaskDefinition
 	{
-		private AIbehaviorDelegateTaskRef _onActivate;
-		private AIbehaviorDelegateTaskRef _onUpdate;
-		private AIbehaviorDelegateTaskRef _onDeactivate;
-
 		[Ordinal(1)] 
 		[RED("onActivate")] 
 		public AIbehaviorDelegateTaskRef OnActivate
 		{
-			get => GetProperty(ref _onActivate);
-			set => SetProperty(ref _onActivate, value);
+			get => GetPropertyValue<AIbehaviorDelegateTaskRef>();
+			set => SetPropertyValue<AIbehaviorDelegateTaskRef>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("onUpdate")] 
 		public AIbehaviorDelegateTaskRef OnUpdate
 		{
-			get => GetProperty(ref _onUpdate);
-			set => SetProperty(ref _onUpdate, value);
+			get => GetPropertyValue<AIbehaviorDelegateTaskRef>();
+			set => SetPropertyValue<AIbehaviorDelegateTaskRef>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("onDeactivate")] 
 		public AIbehaviorDelegateTaskRef OnDeactivate
 		{
-			get => GetProperty(ref _onDeactivate);
-			set => SetProperty(ref _onDeactivate, value);
+			get => GetPropertyValue<AIbehaviorDelegateTaskRef>();
+			set => SetPropertyValue<AIbehaviorDelegateTaskRef>(value);
+		}
+
+		public AIbehaviorDelegateTaskDefinition()
+		{
+			OnActivate = new();
+			OnUpdate = new();
+			OnDeactivate = new();
 		}
 	}
 }

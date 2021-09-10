@@ -5,50 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VirtualNestedListController : inkVirtualListController
 	{
-		private CHandle<VirtualNestedListDataView> _dataView;
-		private CHandle<inkScriptableDataSourceWrapper> _dataSource;
-		private CHandle<VirutalNestedListClassifier> _classifier;
-		private CBool _defaultCollapsed;
-		private CArray<CInt32> _toggledLevels;
-
 		[Ordinal(9)] 
 		[RED("dataView")] 
 		public CHandle<VirtualNestedListDataView> DataView
 		{
-			get => GetProperty(ref _dataView);
-			set => SetProperty(ref _dataView, value);
+			get => GetPropertyValue<CHandle<VirtualNestedListDataView>>();
+			set => SetPropertyValue<CHandle<VirtualNestedListDataView>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("dataSource")] 
 		public CHandle<inkScriptableDataSourceWrapper> DataSource
 		{
-			get => GetProperty(ref _dataSource);
-			set => SetProperty(ref _dataSource, value);
+			get => GetPropertyValue<CHandle<inkScriptableDataSourceWrapper>>();
+			set => SetPropertyValue<CHandle<inkScriptableDataSourceWrapper>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("classifier")] 
 		public CHandle<VirutalNestedListClassifier> Classifier
 		{
-			get => GetProperty(ref _classifier);
-			set => SetProperty(ref _classifier, value);
+			get => GetPropertyValue<CHandle<VirutalNestedListClassifier>>();
+			set => SetPropertyValue<CHandle<VirutalNestedListClassifier>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("defaultCollapsed")] 
 		public CBool DefaultCollapsed
 		{
-			get => GetProperty(ref _defaultCollapsed);
-			set => SetProperty(ref _defaultCollapsed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("toggledLevels")] 
 		public CArray<CInt32> ToggledLevels
 		{
-			get => GetProperty(ref _toggledLevels);
-			set => SetProperty(ref _toggledLevels, value);
+			get => GetPropertyValue<CArray<CInt32>>();
+			set => SetPropertyValue<CArray<CInt32>>(value);
+		}
+
+		public VirtualNestedListController()
+		{
+			ToggledLevels = new();
 		}
 	}
 }

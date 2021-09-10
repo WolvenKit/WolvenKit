@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PointData : IScriptable
 	{
-		private Vector4 _position;
-		private Vector4 _direction;
-
 		[Ordinal(0)] 
 		[RED("position")] 
 		public Vector4 Position
 		{
-			get => GetProperty(ref _position);
-			set => SetProperty(ref _position, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("direction")] 
 		public Vector4 Direction
 		{
-			get => GetProperty(ref _direction);
-			set => SetProperty(ref _direction, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
+		}
+
+		public PointData()
+		{
+			Position = new();
+			Direction = new();
 		}
 	}
 }

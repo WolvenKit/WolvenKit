@@ -5,100 +5,89 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AOEAreaSetup : RedBaseClass
 	{
-		private TweakDBID _areaEffect;
-		private TweakDBID _actionName;
-		private CBool _blocksVisibility;
-		private CBool _isDangerous;
-		private CBool _activateOnStartup;
-		private CBool _effectsOnlyActiveInArea;
-		private CFloat _duration;
-		private TweakDBID _actionWidgetRecord;
-		private TweakDBID _deviceWidgetRecord;
-		private TweakDBID _thumbnailWidgetRecord;
-
 		[Ordinal(0)] 
 		[RED("areaEffect")] 
 		public TweakDBID AreaEffect
 		{
-			get => GetProperty(ref _areaEffect);
-			set => SetProperty(ref _areaEffect, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("actionName")] 
 		public TweakDBID ActionName
 		{
-			get => GetProperty(ref _actionName);
-			set => SetProperty(ref _actionName, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("blocksVisibility")] 
 		public CBool BlocksVisibility
 		{
-			get => GetProperty(ref _blocksVisibility);
-			set => SetProperty(ref _blocksVisibility, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isDangerous")] 
 		public CBool IsDangerous
 		{
-			get => GetProperty(ref _isDangerous);
-			set => SetProperty(ref _isDangerous, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("activateOnStartup")] 
 		public CBool ActivateOnStartup
 		{
-			get => GetProperty(ref _activateOnStartup);
-			set => SetProperty(ref _activateOnStartup, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("effectsOnlyActiveInArea")] 
 		public CBool EffectsOnlyActiveInArea
 		{
-			get => GetProperty(ref _effectsOnlyActiveInArea);
-			set => SetProperty(ref _effectsOnlyActiveInArea, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get => GetProperty(ref _duration);
-			set => SetProperty(ref _duration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("actionWidgetRecord")] 
 		public TweakDBID ActionWidgetRecord
 		{
-			get => GetProperty(ref _actionWidgetRecord);
-			set => SetProperty(ref _actionWidgetRecord, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("deviceWidgetRecord")] 
 		public TweakDBID DeviceWidgetRecord
 		{
-			get => GetProperty(ref _deviceWidgetRecord);
-			set => SetProperty(ref _deviceWidgetRecord, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("thumbnailWidgetRecord")] 
 		public TweakDBID ThumbnailWidgetRecord
 		{
-			get => GetProperty(ref _thumbnailWidgetRecord);
-			set => SetProperty(ref _thumbnailWidgetRecord, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		public AOEAreaSetup()
 		{
-			_duration = -1.000000F;
+			Duration = -1.000000F;
 		}
 	}
 }

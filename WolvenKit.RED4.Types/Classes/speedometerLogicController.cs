@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class speedometerLogicController : IVehicleModuleController
 	{
-		private inkTextWidgetReference _speedTextWidget;
-		private CHandle<redCallbackObject> _speedBBConnectionId;
-		private CWeakHandle<gameIBlackboard> _vehBB;
-		private CWeakHandle<vehicleBaseObject> _vehicle;
-
 		[Ordinal(1)] 
 		[RED("speedTextWidget")] 
 		public inkTextWidgetReference SpeedTextWidget
 		{
-			get => GetProperty(ref _speedTextWidget);
-			set => SetProperty(ref _speedTextWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("speedBBConnectionId")] 
 		public CHandle<redCallbackObject> SpeedBBConnectionId
 		{
-			get => GetProperty(ref _speedBBConnectionId);
-			set => SetProperty(ref _speedBBConnectionId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("vehBB")] 
 		public CWeakHandle<gameIBlackboard> VehBB
 		{
-			get => GetProperty(ref _vehBB);
-			set => SetProperty(ref _vehBB, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("vehicle")] 
 		public CWeakHandle<vehicleBaseObject> Vehicle
 		{
-			get => GetProperty(ref _vehicle);
-			set => SetProperty(ref _vehicle, value);
+			get => GetPropertyValue<CWeakHandle<vehicleBaseObject>>();
+			set => SetPropertyValue<CWeakHandle<vehicleBaseObject>>(value);
+		}
+
+		public speedometerLogicController()
+		{
+			SpeedTextWidget = new();
 		}
 	}
 }

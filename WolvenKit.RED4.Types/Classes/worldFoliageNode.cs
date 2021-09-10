@@ -5,102 +5,93 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldFoliageNode : worldNode
 	{
-		private CResourceAsyncReference<CMesh> _mesh;
-		private CName _meshAppearance;
-		private CResourceAsyncReference<worldFoliageCompiledResource> _foliageResource;
-		private Box _foliageLocalBounds;
-		private CFloat _autoHideDistanceScale;
-		private CFloat _lodDistanceScale;
-		private CFloat _streamingDistance;
-		private worldFoliagePopulationSpanInfo _populationSpanInfo;
-		private CUInt64 _destructionHash;
-		private CFloat _meshHeight;
-
 		[Ordinal(4)] 
 		[RED("mesh")] 
 		public CResourceAsyncReference<CMesh> Mesh
 		{
-			get => GetProperty(ref _mesh);
-			set => SetProperty(ref _mesh, value);
+			get => GetPropertyValue<CResourceAsyncReference<CMesh>>();
+			set => SetPropertyValue<CResourceAsyncReference<CMesh>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("meshAppearance")] 
 		public CName MeshAppearance
 		{
-			get => GetProperty(ref _meshAppearance);
-			set => SetProperty(ref _meshAppearance, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("foliageResource")] 
 		public CResourceAsyncReference<worldFoliageCompiledResource> FoliageResource
 		{
-			get => GetProperty(ref _foliageResource);
-			set => SetProperty(ref _foliageResource, value);
+			get => GetPropertyValue<CResourceAsyncReference<worldFoliageCompiledResource>>();
+			set => SetPropertyValue<CResourceAsyncReference<worldFoliageCompiledResource>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("foliageLocalBounds")] 
 		public Box FoliageLocalBounds
 		{
-			get => GetProperty(ref _foliageLocalBounds);
-			set => SetProperty(ref _foliageLocalBounds, value);
+			get => GetPropertyValue<Box>();
+			set => SetPropertyValue<Box>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("autoHideDistanceScale")] 
 		public CFloat AutoHideDistanceScale
 		{
-			get => GetProperty(ref _autoHideDistanceScale);
-			set => SetProperty(ref _autoHideDistanceScale, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("lodDistanceScale")] 
 		public CFloat LodDistanceScale
 		{
-			get => GetProperty(ref _lodDistanceScale);
-			set => SetProperty(ref _lodDistanceScale, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("streamingDistance")] 
 		public CFloat StreamingDistance
 		{
-			get => GetProperty(ref _streamingDistance);
-			set => SetProperty(ref _streamingDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("populationSpanInfo")] 
 		public worldFoliagePopulationSpanInfo PopulationSpanInfo
 		{
-			get => GetProperty(ref _populationSpanInfo);
-			set => SetProperty(ref _populationSpanInfo, value);
+			get => GetPropertyValue<worldFoliagePopulationSpanInfo>();
+			set => SetPropertyValue<worldFoliagePopulationSpanInfo>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("destructionHash")] 
 		public CUInt64 DestructionHash
 		{
-			get => GetProperty(ref _destructionHash);
-			set => SetProperty(ref _destructionHash, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("meshHeight")] 
 		public CFloat MeshHeight
 		{
-			get => GetProperty(ref _meshHeight);
-			set => SetProperty(ref _meshHeight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public worldFoliageNode()
 		{
-			_autoHideDistanceScale = 1.000000F;
-			_lodDistanceScale = 1.000000F;
-			_streamingDistance = -1.000000F;
+			FoliageLocalBounds = new() { Min = new(), Max = new() };
+			AutoHideDistanceScale = 1.000000F;
+			LodDistanceScale = 1.000000F;
+			StreamingDistance = -1.000000F;
+			PopulationSpanInfo = new();
 		}
 	}
 }

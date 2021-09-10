@@ -5,104 +5,106 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SubtitleLineLogicController : BaseSubtitleLineLogicController
 	{
-		private inkTextWidgetReference _speakerNameWidget;
-		private inkTextWidgetReference _subtitleWidget;
-		private inkTextWidgetReference _radioSpeaker;
-		private inkTextWidgetReference _radioSubtitle;
-		private inkWidgetReference _background;
-		private inkWidgetReference _backgroundSpeaker;
-		private inkWidgetReference _kiroshiAnimationContainer;
-		private inkWidgetReference _motherTongueContainter;
-		private inkTextWidgetReference _targetTextWidgetRef;
-		private scnDialogLineData _lineData;
-		private CHandle<textTextParameterSet> _spekerNameParams;
-
 		[Ordinal(5)] 
 		[RED("speakerNameWidget")] 
 		public inkTextWidgetReference SpeakerNameWidget
 		{
-			get => GetProperty(ref _speakerNameWidget);
-			set => SetProperty(ref _speakerNameWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("subtitleWidget")] 
 		public inkTextWidgetReference SubtitleWidget
 		{
-			get => GetProperty(ref _subtitleWidget);
-			set => SetProperty(ref _subtitleWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("radioSpeaker")] 
 		public inkTextWidgetReference RadioSpeaker
 		{
-			get => GetProperty(ref _radioSpeaker);
-			set => SetProperty(ref _radioSpeaker, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("radioSubtitle")] 
 		public inkTextWidgetReference RadioSubtitle
 		{
-			get => GetProperty(ref _radioSubtitle);
-			set => SetProperty(ref _radioSubtitle, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("background")] 
 		public inkWidgetReference Background
 		{
-			get => GetProperty(ref _background);
-			set => SetProperty(ref _background, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("backgroundSpeaker")] 
 		public inkWidgetReference BackgroundSpeaker
 		{
-			get => GetProperty(ref _backgroundSpeaker);
-			set => SetProperty(ref _backgroundSpeaker, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("kiroshiAnimationContainer")] 
 		public inkWidgetReference KiroshiAnimationContainer
 		{
-			get => GetProperty(ref _kiroshiAnimationContainer);
-			set => SetProperty(ref _kiroshiAnimationContainer, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("motherTongueContainter")] 
 		public inkWidgetReference MotherTongueContainter
 		{
-			get => GetProperty(ref _motherTongueContainter);
-			set => SetProperty(ref _motherTongueContainter, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("targetTextWidgetRef")] 
 		public inkTextWidgetReference TargetTextWidgetRef
 		{
-			get => GetProperty(ref _targetTextWidgetRef);
-			set => SetProperty(ref _targetTextWidgetRef, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("lineData")] 
 		public scnDialogLineData LineData
 		{
-			get => GetProperty(ref _lineData);
-			set => SetProperty(ref _lineData, value);
+			get => GetPropertyValue<scnDialogLineData>();
+			set => SetPropertyValue<scnDialogLineData>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("spekerNameParams")] 
 		public CHandle<textTextParameterSet> SpekerNameParams
 		{
-			get => GetProperty(ref _spekerNameParams);
-			set => SetProperty(ref _spekerNameParams, value);
+			get => GetPropertyValue<CHandle<textTextParameterSet>>();
+			set => SetPropertyValue<CHandle<textTextParameterSet>>(value);
+		}
+
+		public SubtitleLineLogicController()
+		{
+			SpeakerNameWidget = new();
+			SubtitleWidget = new();
+			RadioSpeaker = new();
+			RadioSubtitle = new();
+			Background = new();
+			BackgroundSpeaker = new();
+			KiroshiAnimationContainer = new();
+			MotherTongueContainter = new();
+			TargetTextWidgetRef = new();
+			LineData = new();
 		}
 	}
 }

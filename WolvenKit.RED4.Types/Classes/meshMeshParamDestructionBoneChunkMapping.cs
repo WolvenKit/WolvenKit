@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class meshMeshParamDestructionBoneChunkMapping : meshMeshParameter
 	{
-		private CArray<CUInt64> _boneChunkMasks;
-
 		[Ordinal(0)] 
 		[RED("boneChunkMasks")] 
 		public CArray<CUInt64> BoneChunkMasks
 		{
-			get => GetProperty(ref _boneChunkMasks);
-			set => SetProperty(ref _boneChunkMasks, value);
+			get => GetPropertyValue<CArray<CUInt64>>();
+			set => SetPropertyValue<CArray<CUInt64>>(value);
+		}
+
+		public meshMeshParamDestructionBoneChunkMapping()
+		{
+			BoneChunkMasks = new();
 		}
 	}
 }

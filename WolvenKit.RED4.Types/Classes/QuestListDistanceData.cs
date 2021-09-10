@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class QuestListDistanceData : IScriptable
 	{
-		private CWeakHandle<gameJournalQuestObjective> _objective;
-		private CFloat _distance;
-
 		[Ordinal(0)] 
 		[RED("objective")] 
 		public CWeakHandle<gameJournalQuestObjective> Objective
 		{
-			get => GetProperty(ref _objective);
-			set => SetProperty(ref _objective, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalQuestObjective>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalQuestObjective>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("distance")] 
 		public CFloat Distance
 		{
-			get => GetProperty(ref _distance);
-			set => SetProperty(ref _distance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

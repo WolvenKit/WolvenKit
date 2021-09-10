@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameStatTotalValue : RedBaseClass
 	{
-		private CEnum<gamedataStatType> _statType;
-		private CFloat _value;
-
 		[Ordinal(0)] 
 		[RED("statType")] 
 		public CEnum<gamedataStatType> StatType
 		{
-			get => GetProperty(ref _statType);
-			set => SetProperty(ref _statType, value);
+			get => GetPropertyValue<CEnum<gamedataStatType>>();
+			set => SetPropertyValue<CEnum<gamedataStatType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("value")] 
 		public CFloat Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

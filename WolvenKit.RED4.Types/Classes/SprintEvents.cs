@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SprintEvents : LocomotionGroundEvents
 	{
-		private CFloat _previousStimTimeStamp;
-		private CHandle<gameStatModifierData_Deprecated> _reloadModifier;
-		private CBool _isInSecondSprint;
-		private CHandle<gameStatModifierData_Deprecated> _sprintModifier;
-
 		[Ordinal(3)] 
 		[RED("previousStimTimeStamp")] 
 		public CFloat PreviousStimTimeStamp
 		{
-			get => GetProperty(ref _previousStimTimeStamp);
-			set => SetProperty(ref _previousStimTimeStamp, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("reloadModifier")] 
 		public CHandle<gameStatModifierData_Deprecated> ReloadModifier
 		{
-			get => GetProperty(ref _reloadModifier);
-			set => SetProperty(ref _reloadModifier, value);
+			get => GetPropertyValue<CHandle<gameStatModifierData_Deprecated>>();
+			set => SetPropertyValue<CHandle<gameStatModifierData_Deprecated>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("isInSecondSprint")] 
 		public CBool IsInSecondSprint
 		{
-			get => GetProperty(ref _isInSecondSprint);
-			set => SetProperty(ref _isInSecondSprint, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("sprintModifier")] 
 		public CHandle<gameStatModifierData_Deprecated> SprintModifier
 		{
-			get => GetProperty(ref _sprintModifier);
-			set => SetProperty(ref _sprintModifier, value);
+			get => GetPropertyValue<CHandle<gameStatModifierData_Deprecated>>();
+			set => SetPropertyValue<CHandle<gameStatModifierData_Deprecated>>(value);
 		}
 	}
 }

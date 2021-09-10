@@ -5,104 +5,98 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class QuestDataWrapper : AJournalEntryWrapper
 	{
-		private CBool _isNew;
-		private CWeakHandle<gameJournalQuest> _quest;
-		private CString _title;
-		private CString _description;
-		private CArray<CHandle<QuestObjectiveWrapper>> _questObjectives;
-		private CArray<CWeakHandle<gameJournalEntry>> _links;
-		private CEnum<gameJournalEntryState> _questStatus;
-		private CBool _isTracked;
-		private CBool _isChildTracked;
-		private CInt32 _recommendedLevel;
-		private CHandle<gamedataDistrict_Record> _district;
-
 		[Ordinal(1)] 
 		[RED("isNew")] 
 		public CBool IsNew
 		{
-			get => GetProperty(ref _isNew);
-			set => SetProperty(ref _isNew, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("quest")] 
 		public CWeakHandle<gameJournalQuest> Quest
 		{
-			get => GetProperty(ref _quest);
-			set => SetProperty(ref _quest, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalQuest>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalQuest>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("title")] 
 		public CString Title
 		{
-			get => GetProperty(ref _title);
-			set => SetProperty(ref _title, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("description")] 
 		public CString Description
 		{
-			get => GetProperty(ref _description);
-			set => SetProperty(ref _description, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("questObjectives")] 
 		public CArray<CHandle<QuestObjectiveWrapper>> QuestObjectives
 		{
-			get => GetProperty(ref _questObjectives);
-			set => SetProperty(ref _questObjectives, value);
+			get => GetPropertyValue<CArray<CHandle<QuestObjectiveWrapper>>>();
+			set => SetPropertyValue<CArray<CHandle<QuestObjectiveWrapper>>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("links")] 
 		public CArray<CWeakHandle<gameJournalEntry>> Links
 		{
-			get => GetProperty(ref _links);
-			set => SetProperty(ref _links, value);
+			get => GetPropertyValue<CArray<CWeakHandle<gameJournalEntry>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<gameJournalEntry>>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("questStatus")] 
 		public CEnum<gameJournalEntryState> QuestStatus
 		{
-			get => GetProperty(ref _questStatus);
-			set => SetProperty(ref _questStatus, value);
+			get => GetPropertyValue<CEnum<gameJournalEntryState>>();
+			set => SetPropertyValue<CEnum<gameJournalEntryState>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("isTracked")] 
 		public CBool IsTracked
 		{
-			get => GetProperty(ref _isTracked);
-			set => SetProperty(ref _isTracked, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("isChildTracked")] 
 		public CBool IsChildTracked
 		{
-			get => GetProperty(ref _isChildTracked);
-			set => SetProperty(ref _isChildTracked, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("recommendedLevel")] 
 		public CInt32 RecommendedLevel
 		{
-			get => GetProperty(ref _recommendedLevel);
-			set => SetProperty(ref _recommendedLevel, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("district")] 
 		public CHandle<gamedataDistrict_Record> District
 		{
-			get => GetProperty(ref _district);
-			set => SetProperty(ref _district, value);
+			get => GetPropertyValue<CHandle<gamedataDistrict_Record>>();
+			set => SetPropertyValue<CHandle<gamedataDistrict_Record>>(value);
+		}
+
+		public QuestDataWrapper()
+		{
+			QuestObjectives = new();
+			Links = new();
 		}
 	}
 }

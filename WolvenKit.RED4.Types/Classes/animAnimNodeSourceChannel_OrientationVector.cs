@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNodeSourceChannel_OrientationVector : animIAnimNodeSourceChannel_Vector
 	{
-		private animTransformIndex _transformIndex;
-		private animTransformIndex _inputTransformIndex;
-		private Vector3 _up;
-
 		[Ordinal(0)] 
 		[RED("transformIndex")] 
 		public animTransformIndex TransformIndex
 		{
-			get => GetProperty(ref _transformIndex);
-			set => SetProperty(ref _transformIndex, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("inputTransformIndex")] 
 		public animTransformIndex InputTransformIndex
 		{
-			get => GetProperty(ref _inputTransformIndex);
-			set => SetProperty(ref _inputTransformIndex, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("up")] 
 		public Vector3 Up
 		{
-			get => GetProperty(ref _up);
-			set => SetProperty(ref _up, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
+		}
+
+		public animAnimNodeSourceChannel_OrientationVector()
+		{
+			TransformIndex = new();
+			InputTransformIndex = new();
+			Up = new() { Y = 1.000000F };
 		}
 	}
 }

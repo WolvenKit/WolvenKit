@@ -5,41 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameAnimationTransforms : RedBaseClass
 	{
-		private CArray<Transform> _extractedMotion;
-		private Transform _gatePosition;
-		private Transform _boneOffset;
-		private CUInt64 _animsetHash;
-
 		[Ordinal(0)] 
 		[RED("extractedMotion")] 
 		public CArray<Transform> ExtractedMotion
 		{
-			get => GetProperty(ref _extractedMotion);
-			set => SetProperty(ref _extractedMotion, value);
+			get => GetPropertyValue<CArray<Transform>>();
+			set => SetPropertyValue<CArray<Transform>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("gatePosition")] 
 		public Transform GatePosition
 		{
-			get => GetProperty(ref _gatePosition);
-			set => SetProperty(ref _gatePosition, value);
+			get => GetPropertyValue<Transform>();
+			set => SetPropertyValue<Transform>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("boneOffset")] 
 		public Transform BoneOffset
 		{
-			get => GetProperty(ref _boneOffset);
-			set => SetProperty(ref _boneOffset, value);
+			get => GetPropertyValue<Transform>();
+			set => SetPropertyValue<Transform>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("animsetHash")] 
 		public CUInt64 AnimsetHash
 		{
-			get => GetProperty(ref _animsetHash);
-			set => SetProperty(ref _animsetHash, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
+		}
+
+		public gameAnimationTransforms()
+		{
+			ExtractedMotion = new();
+			GatePosition = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			BoneOffset = new() { Position = new(), Orientation = new() { R = 1.000000F } };
 		}
 	}
 }

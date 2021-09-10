@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class toolsLastNodeSelection : RedBaseClass
 	{
-		private CString _editorName;
-		private toolsEditorObjectIDPath _selectedNodeIDPath;
-
 		[Ordinal(0)] 
 		[RED("editorName")] 
 		public CString EditorName
 		{
-			get => GetProperty(ref _editorName);
-			set => SetProperty(ref _editorName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("selectedNodeIDPath")] 
 		public toolsEditorObjectIDPath SelectedNodeIDPath
 		{
-			get => GetProperty(ref _selectedNodeIDPath);
-			set => SetProperty(ref _selectedNodeIDPath, value);
+			get => GetPropertyValue<toolsEditorObjectIDPath>();
+			set => SetPropertyValue<toolsEditorObjectIDPath>(value);
+		}
+
+		public toolsLastNodeSelection()
+		{
+			SelectedNodeIDPath = new() { Elements = new() };
 		}
 	}
 }

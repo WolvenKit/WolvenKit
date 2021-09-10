@@ -5,41 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UI_HUDProgressBarDef : gamebbScriptDefinition
 	{
-		private gamebbScriptID_Variant _timerID;
-		private gamebbScriptID_String _header;
-		private gamebbScriptID_Bool _active;
-		private gamebbScriptID_Float _progress;
-
 		[Ordinal(0)] 
 		[RED("TimerID")] 
 		public gamebbScriptID_Variant TimerID
 		{
-			get => GetProperty(ref _timerID);
-			set => SetProperty(ref _timerID, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("Header")] 
 		public gamebbScriptID_String Header
 		{
-			get => GetProperty(ref _header);
-			set => SetProperty(ref _header, value);
+			get => GetPropertyValue<gamebbScriptID_String>();
+			set => SetPropertyValue<gamebbScriptID_String>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("Active")] 
 		public gamebbScriptID_Bool Active
 		{
-			get => GetProperty(ref _active);
-			set => SetProperty(ref _active, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("Progress")] 
 		public gamebbScriptID_Float Progress
 		{
-			get => GetProperty(ref _progress);
-			set => SetProperty(ref _progress, value);
+			get => GetPropertyValue<gamebbScriptID_Float>();
+			set => SetPropertyValue<gamebbScriptID_Float>(value);
+		}
+
+		public UI_HUDProgressBarDef()
+		{
+			TimerID = new();
+			Header = new();
+			Active = new();
+			Progress = new();
 		}
 	}
 }

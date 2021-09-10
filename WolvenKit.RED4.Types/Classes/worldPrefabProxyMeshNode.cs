@@ -5,41 +5,47 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldPrefabProxyMeshNode : worldMeshNode
 	{
-		private CFloat _nearAutoHideDistance;
-		private worldGlobalNodeID _ancestorPrefabProxyMeshNodeID;
-		private worldGlobalNodeID _ownerPrefabNodeId;
-		private CUInt32 _nbNodesUnderProxy;
-
 		[Ordinal(15)] 
 		[RED("nearAutoHideDistance")] 
 		public CFloat NearAutoHideDistance
 		{
-			get => GetProperty(ref _nearAutoHideDistance);
-			set => SetProperty(ref _nearAutoHideDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("ancestorPrefabProxyMeshNodeID")] 
 		public worldGlobalNodeID AncestorPrefabProxyMeshNodeID
 		{
-			get => GetProperty(ref _ancestorPrefabProxyMeshNodeID);
-			set => SetProperty(ref _ancestorPrefabProxyMeshNodeID, value);
+			get => GetPropertyValue<worldGlobalNodeID>();
+			set => SetPropertyValue<worldGlobalNodeID>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("ownerPrefabNodeId")] 
 		public worldGlobalNodeID OwnerPrefabNodeId
 		{
-			get => GetProperty(ref _ownerPrefabNodeId);
-			set => SetProperty(ref _ownerPrefabNodeId, value);
+			get => GetPropertyValue<worldGlobalNodeID>();
+			set => SetPropertyValue<worldGlobalNodeID>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("nbNodesUnderProxy")] 
 		public CUInt32 NbNodesUnderProxy
 		{
-			get => GetProperty(ref _nbNodesUnderProxy);
-			set => SetProperty(ref _nbNodesUnderProxy, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		public worldPrefabProxyMeshNode()
+		{
+			MeshAppearance = "default";
+			OccluderAutohideDistanceScale = 255;
+			CastShadows = true;
+			CastLocalShadows = true;
+			WindImpulseEnabled = true;
+			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
+			LodLevelScales = 4294967295;
 		}
 	}
 }

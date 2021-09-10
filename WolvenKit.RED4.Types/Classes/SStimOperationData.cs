@@ -5,56 +5,50 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SStimOperationData : RedBaseClass
 	{
-		private CEnum<DeviceStimType> _stimType;
-		private CFloat _lifeTime;
-		private CFloat _radius;
-		private CEnum<EEffectOperationType> _operationType;
-		private NodeRef _nodeRef;
-
 		[Ordinal(0)] 
 		[RED("stimType")] 
 		public CEnum<DeviceStimType> StimType
 		{
-			get => GetProperty(ref _stimType);
-			set => SetProperty(ref _stimType, value);
+			get => GetPropertyValue<CEnum<DeviceStimType>>();
+			set => SetPropertyValue<CEnum<DeviceStimType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("lifeTime")] 
 		public CFloat LifeTime
 		{
-			get => GetProperty(ref _lifeTime);
-			set => SetProperty(ref _lifeTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get => GetProperty(ref _radius);
-			set => SetProperty(ref _radius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("operationType")] 
 		public CEnum<EEffectOperationType> OperationType
 		{
-			get => GetProperty(ref _operationType);
-			set => SetProperty(ref _operationType, value);
+			get => GetPropertyValue<CEnum<EEffectOperationType>>();
+			set => SetPropertyValue<CEnum<EEffectOperationType>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("nodeRef")] 
 		public NodeRef NodeRef
 		{
-			get => GetProperty(ref _nodeRef);
-			set => SetProperty(ref _nodeRef, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		public SStimOperationData()
 		{
-			_lifeTime = 3.000000F;
-			_radius = 5.000000F;
+			LifeTime = 3.000000F;
+			Radius = 5.000000F;
 		}
 	}
 }

@@ -5,101 +5,94 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamePhotoModeBackgroundCameraComponent : entBaseCameraComponent
 	{
-		private CBool _isEnabled;
-		private CName _virtualCameraName;
-		private CResourceAsyncReference<DynamicTexture> _dynamicTextureRes;
-		private CResourceReference<worldEnvironmentAreaParameters> _env;
-		private WorldRenderAreaSettings _params;
-		private CFloat _depthCutDistance;
-		private CColor _backgroundColor;
-		private CBool _overrideBackgroundColor;
-		private CEnum<RenderSceneLayer> _renderSceneLayer;
-		private CFloat _streamingDistance;
-
 		[Ordinal(10)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("virtualCameraName")] 
 		public CName VirtualCameraName
 		{
-			get => GetProperty(ref _virtualCameraName);
-			set => SetProperty(ref _virtualCameraName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("dynamicTextureRes")] 
 		public CResourceAsyncReference<DynamicTexture> DynamicTextureRes
 		{
-			get => GetProperty(ref _dynamicTextureRes);
-			set => SetProperty(ref _dynamicTextureRes, value);
+			get => GetPropertyValue<CResourceAsyncReference<DynamicTexture>>();
+			set => SetPropertyValue<CResourceAsyncReference<DynamicTexture>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("env")] 
 		public CResourceReference<worldEnvironmentAreaParameters> Env
 		{
-			get => GetProperty(ref _env);
-			set => SetProperty(ref _env, value);
+			get => GetPropertyValue<CResourceReference<worldEnvironmentAreaParameters>>();
+			set => SetPropertyValue<CResourceReference<worldEnvironmentAreaParameters>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("params")] 
 		public WorldRenderAreaSettings Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<WorldRenderAreaSettings>();
+			set => SetPropertyValue<WorldRenderAreaSettings>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("depthCutDistance")] 
 		public CFloat DepthCutDistance
 		{
-			get => GetProperty(ref _depthCutDistance);
-			set => SetProperty(ref _depthCutDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("backgroundColor")] 
 		public CColor BackgroundColor
 		{
-			get => GetProperty(ref _backgroundColor);
-			set => SetProperty(ref _backgroundColor, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("overrideBackgroundColor")] 
 		public CBool OverrideBackgroundColor
 		{
-			get => GetProperty(ref _overrideBackgroundColor);
-			set => SetProperty(ref _overrideBackgroundColor, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("renderSceneLayer")] 
 		public CEnum<RenderSceneLayer> RenderSceneLayer
 		{
-			get => GetProperty(ref _renderSceneLayer);
-			set => SetProperty(ref _renderSceneLayer, value);
+			get => GetPropertyValue<CEnum<RenderSceneLayer>>();
+			set => SetPropertyValue<CEnum<RenderSceneLayer>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("streamingDistance")] 
 		public CFloat StreamingDistance
 		{
-			get => GetProperty(ref _streamingDistance);
-			set => SetProperty(ref _streamingDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public gamePhotoModeBackgroundCameraComponent()
 		{
-			_virtualCameraName = "Component";
-			_streamingDistance = 1.000000F;
+			NearPlaneOverride = 0.100000F;
+			FarPlaneOverride = 1000.000000F;
+			VirtualCameraName = "Component";
+			Params = new() { AreaParameters = new() };
+			BackgroundColor = new();
+			StreamingDistance = 1.000000F;
 		}
 	}
 }

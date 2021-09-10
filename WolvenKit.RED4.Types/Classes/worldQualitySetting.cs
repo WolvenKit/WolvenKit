@@ -5,29 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldQualitySetting : RedBaseClass
 	{
-		private CEnum<ConfigGraphicsQualityLevel> _qualityLevel;
-		private CUInt32 _xEntitiesBudget;
-
 		[Ordinal(0)] 
 		[RED("QualityLevel")] 
 		public CEnum<ConfigGraphicsQualityLevel> QualityLevel
 		{
-			get => GetProperty(ref _qualityLevel);
-			set => SetProperty(ref _qualityLevel, value);
+			get => GetPropertyValue<CEnum<ConfigGraphicsQualityLevel>>();
+			set => SetPropertyValue<CEnum<ConfigGraphicsQualityLevel>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("xEntitiesBudget")] 
 		public CUInt32 XEntitiesBudget
 		{
-			get => GetProperty(ref _xEntitiesBudget);
-			set => SetProperty(ref _xEntitiesBudget, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		public worldQualitySetting()
 		{
-			_qualityLevel = new() { Value = Enums.ConfigGraphicsQualityLevel.Console };
-			_xEntitiesBudget = 50;
+			QualityLevel = Enums.ConfigGraphicsQualityLevel.Console;
+			XEntitiesBudget = 50;
 		}
 	}
 }

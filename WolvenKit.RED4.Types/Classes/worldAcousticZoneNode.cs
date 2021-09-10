@@ -5,37 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldAcousticZoneNode : worldNode
 	{
-		private CBool _isBlocker;
-		private CName _tagName;
-		private CFloat _tagSpread;
-
 		[Ordinal(4)] 
 		[RED("isBlocker")] 
 		public CBool IsBlocker
 		{
-			get => GetProperty(ref _isBlocker);
-			set => SetProperty(ref _isBlocker, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("tagName")] 
 		public CName TagName
 		{
-			get => GetProperty(ref _tagName);
-			set => SetProperty(ref _tagName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("tagSpread")] 
 		public CFloat TagSpread
 		{
-			get => GetProperty(ref _tagSpread);
-			set => SetProperty(ref _tagSpread, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public worldAcousticZoneNode()
 		{
-			_tagSpread = 0.500000F;
+			TagSpread = 0.500000F;
 		}
 	}
 }

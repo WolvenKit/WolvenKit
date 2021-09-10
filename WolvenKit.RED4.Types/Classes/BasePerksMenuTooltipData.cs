@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class BasePerksMenuTooltipData : ATooltipData
 	{
-		private CHandle<PlayerDevelopmentDataManager> _manager;
-
 		[Ordinal(0)] 
 		[RED("manager")] 
 		public CHandle<PlayerDevelopmentDataManager> Manager
 		{
-			get => GetProperty(ref _manager);
-			set => SetProperty(ref _manager, value);
+			get => GetPropertyValue<CHandle<PlayerDevelopmentDataManager>>();
+			set => SetPropertyValue<CHandle<PlayerDevelopmentDataManager>>(value);
 		}
 	}
 }

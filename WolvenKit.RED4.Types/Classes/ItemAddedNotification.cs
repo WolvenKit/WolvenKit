@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ItemAddedNotification : GenericNotificationController
 	{
-		private inkImageWidgetReference _itemImage;
-		private inkWidgetReference _rarityBar;
-		private CEnum<gameItemIconGender> _itemIconGender;
-		private CName _animationName;
-
 		[Ordinal(12)] 
 		[RED("itemImage")] 
 		public inkImageWidgetReference ItemImage
 		{
-			get => GetProperty(ref _itemImage);
-			set => SetProperty(ref _itemImage, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("rarityBar")] 
 		public inkWidgetReference RarityBar
 		{
-			get => GetProperty(ref _rarityBar);
-			set => SetProperty(ref _rarityBar, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("itemIconGender")] 
 		public CEnum<gameItemIconGender> ItemIconGender
 		{
-			get => GetProperty(ref _itemIconGender);
-			set => SetProperty(ref _itemIconGender, value);
+			get => GetPropertyValue<CEnum<gameItemIconGender>>();
+			set => SetPropertyValue<CEnum<gameItemIconGender>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("animationName")] 
 		public CName AnimationName
 		{
-			get => GetProperty(ref _animationName);
-			set => SetProperty(ref _animationName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public ItemAddedNotification()
+		{
+			ItemImage = new();
+			RarityBar = new();
 		}
 	}
 }

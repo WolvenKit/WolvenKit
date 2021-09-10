@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnInterruptManagerNode : scnSceneGraphNode
 	{
-		private CArray<CHandle<scnIInterruptionOperation>> _interruptionOperations;
-
 		[Ordinal(3)] 
 		[RED("interruptionOperations")] 
 		public CArray<CHandle<scnIInterruptionOperation>> InterruptionOperations
 		{
-			get => GetProperty(ref _interruptionOperations);
-			set => SetProperty(ref _interruptionOperations, value);
+			get => GetPropertyValue<CArray<CHandle<scnIInterruptionOperation>>>();
+			set => SetPropertyValue<CArray<CHandle<scnIInterruptionOperation>>>(value);
+		}
+
+		public scnInterruptManagerNode()
+		{
+			NodeId = new() { Id = 4294967295 };
+			OutputSockets = new();
+			InterruptionOperations = new();
 		}
 	}
 }

@@ -5,59 +5,60 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CooldownStorage : IScriptable
 	{
-		private PSOwnerData _owner;
-		private CEnum<EBOOL> _initialized;
-		private ScriptGameInstance _gameInstanceHack;
-		private CArray<CHandle<CooldownPackage>> _packages;
-		private CUInt32 _currentID;
-		private CArray<CooldownPackageDelayIDs> _map;
-
 		[Ordinal(0)] 
 		[RED("owner")] 
 		public PSOwnerData Owner
 		{
-			get => GetProperty(ref _owner);
-			set => SetProperty(ref _owner, value);
+			get => GetPropertyValue<PSOwnerData>();
+			set => SetPropertyValue<PSOwnerData>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("initialized")] 
 		public CEnum<EBOOL> Initialized
 		{
-			get => GetProperty(ref _initialized);
-			set => SetProperty(ref _initialized, value);
+			get => GetPropertyValue<CEnum<EBOOL>>();
+			set => SetPropertyValue<CEnum<EBOOL>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("gameInstanceHack")] 
 		public ScriptGameInstance GameInstanceHack
 		{
-			get => GetProperty(ref _gameInstanceHack);
-			set => SetProperty(ref _gameInstanceHack, value);
+			get => GetPropertyValue<ScriptGameInstance>();
+			set => SetPropertyValue<ScriptGameInstance>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("packages")] 
 		public CArray<CHandle<CooldownPackage>> Packages
 		{
-			get => GetProperty(ref _packages);
-			set => SetProperty(ref _packages, value);
+			get => GetPropertyValue<CArray<CHandle<CooldownPackage>>>();
+			set => SetPropertyValue<CArray<CHandle<CooldownPackage>>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("currentID")] 
 		public CUInt32 CurrentID
 		{
-			get => GetProperty(ref _currentID);
-			set => SetProperty(ref _currentID, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("map")] 
 		public CArray<CooldownPackageDelayIDs> Map
 		{
-			get => GetProperty(ref _map);
-			set => SetProperty(ref _map, value);
+			get => GetPropertyValue<CArray<CooldownPackageDelayIDs>>();
+			set => SetPropertyValue<CArray<CooldownPackageDelayIDs>>(value);
+		}
+
+		public CooldownStorage()
+		{
+			Owner = new() { Id = new() };
+			GameInstanceHack = new();
+			Packages = new();
+			Map = new();
 		}
 	}
 }

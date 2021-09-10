@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioContextualVoiceGruntSettings : RedBaseClass
 	{
-		private audioContextualVoiceGrunt _painShort;
-		private audioContextualVoiceGrunt _effort;
-
 		[Ordinal(0)] 
 		[RED("painShort")] 
 		public audioContextualVoiceGrunt PainShort
 		{
-			get => GetProperty(ref _painShort);
-			set => SetProperty(ref _painShort, value);
+			get => GetPropertyValue<audioContextualVoiceGrunt>();
+			set => SetPropertyValue<audioContextualVoiceGrunt>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("effort")] 
 		public audioContextualVoiceGrunt Effort
 		{
-			get => GetProperty(ref _effort);
-			set => SetProperty(ref _effort, value);
+			get => GetPropertyValue<audioContextualVoiceGrunt>();
+			set => SetPropertyValue<audioContextualVoiceGrunt>(value);
+		}
+
+		public audioContextualVoiceGruntSettings()
+		{
+			PainShort = new();
+			Effort = new();
 		}
 	}
 }

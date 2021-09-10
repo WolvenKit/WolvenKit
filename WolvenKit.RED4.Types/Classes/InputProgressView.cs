@@ -5,37 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class InputProgressView : inkWidgetLogicController
 	{
-		private CWeakHandle<inkImageWidget> _targetImage;
-		private CInt32 _progressPercent;
-		private CString _partName;
-
 		[Ordinal(1)] 
 		[RED("TargetImage")] 
 		public CWeakHandle<inkImageWidget> TargetImage
 		{
-			get => GetProperty(ref _targetImage);
-			set => SetProperty(ref _targetImage, value);
+			get => GetPropertyValue<CWeakHandle<inkImageWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkImageWidget>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ProgressPercent")] 
 		public CInt32 ProgressPercent
 		{
-			get => GetProperty(ref _progressPercent);
-			set => SetProperty(ref _progressPercent, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("PartName")] 
 		public CString PartName
 		{
-			get => GetProperty(ref _partName);
-			set => SetProperty(ref _partName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		public InputProgressView()
 		{
-			_partName = new() { Text = "icon_circle_anim_" };
+			PartName = "icon_circle_anim_";
 		}
 	}
 }

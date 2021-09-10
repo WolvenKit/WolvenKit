@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questVisionModesManagerNodeDefinition : questDisableableNodeDefinition
 	{
-		private CHandle<questIVisionModeNodeType> _type;
-
 		[Ordinal(2)] 
 		[RED("type")] 
 		public CHandle<questIVisionModeNodeType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CHandle<questIVisionModeNodeType>>();
+			set => SetPropertyValue<CHandle<questIVisionModeNodeType>>(value);
+		}
+
+		public questVisionModesManagerNodeDefinition()
+		{
+			Sockets = new();
+			Id = 65535;
 		}
 	}
 }

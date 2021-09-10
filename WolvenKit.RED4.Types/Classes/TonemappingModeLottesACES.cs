@@ -5,49 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TonemappingModeLottesACES : ITonemappingMode
 	{
-		private CFloat _maxInput;
-		private CFloat _contrast;
-		private CFloat _midIn;
-		private CFloat _midOut;
-
 		[Ordinal(1)] 
 		[RED("maxInput")] 
 		public CFloat MaxInput
 		{
-			get => GetProperty(ref _maxInput);
-			set => SetProperty(ref _maxInput, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("contrast")] 
 		public CFloat Contrast
 		{
-			get => GetProperty(ref _contrast);
-			set => SetProperty(ref _contrast, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("midIn")] 
 		public CFloat MidIn
 		{
-			get => GetProperty(ref _midIn);
-			set => SetProperty(ref _midIn, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("midOut")] 
 		public CFloat MidOut
 		{
-			get => GetProperty(ref _midOut);
-			set => SetProperty(ref _midOut, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public TonemappingModeLottesACES()
 		{
-			_maxInput = 50.000000F;
-			_contrast = 1.500000F;
-			_midIn = 0.180000F;
-			_midOut = 0.180000F;
+			MaxInput = 50.000000F;
+			Contrast = 1.500000F;
+			MidIn = 0.180000F;
+			MidOut = 0.180000F;
 		}
 	}
 }

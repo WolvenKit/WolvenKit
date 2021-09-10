@@ -5,86 +5,76 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TimeBetweenHitsParameters : RedBaseClass
 	{
-		private CFloat _baseCoefficient;
-		private CFloat _baseSourceCoefficient;
-		private CFloat _difficultyLevelCoefficient;
-		private CFloat _groupCoefficient;
-		private CFloat _distanceCoefficient;
-		private CFloat _visibilityCoefficient;
-		private CFloat _playersCountCoefficient;
-		private CFloat _coefficientMultiplier;
-		private CFloat _accuracyCoefficient;
-
 		[Ordinal(0)] 
 		[RED("baseCoefficient")] 
 		public CFloat BaseCoefficient
 		{
-			get => GetProperty(ref _baseCoefficient);
-			set => SetProperty(ref _baseCoefficient, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("baseSourceCoefficient")] 
 		public CFloat BaseSourceCoefficient
 		{
-			get => GetProperty(ref _baseSourceCoefficient);
-			set => SetProperty(ref _baseSourceCoefficient, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("difficultyLevelCoefficient")] 
 		public CFloat DifficultyLevelCoefficient
 		{
-			get => GetProperty(ref _difficultyLevelCoefficient);
-			set => SetProperty(ref _difficultyLevelCoefficient, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("groupCoefficient")] 
 		public CFloat GroupCoefficient
 		{
-			get => GetProperty(ref _groupCoefficient);
-			set => SetProperty(ref _groupCoefficient, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("distanceCoefficient")] 
 		public CFloat DistanceCoefficient
 		{
-			get => GetProperty(ref _distanceCoefficient);
-			set => SetProperty(ref _distanceCoefficient, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("visibilityCoefficient")] 
 		public CFloat VisibilityCoefficient
 		{
-			get => GetProperty(ref _visibilityCoefficient);
-			set => SetProperty(ref _visibilityCoefficient, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("playersCountCoefficient")] 
 		public CFloat PlayersCountCoefficient
 		{
-			get => GetProperty(ref _playersCountCoefficient);
-			set => SetProperty(ref _playersCountCoefficient, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("coefficientMultiplier")] 
 		public CFloat CoefficientMultiplier
 		{
-			get => GetProperty(ref _coefficientMultiplier);
-			set => SetProperty(ref _coefficientMultiplier, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("accuracyCoefficient")] 
 		public CFloat AccuracyCoefficient
 		{
-			get => GetProperty(ref _accuracyCoefficient);
-			set => SetProperty(ref _accuracyCoefficient, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

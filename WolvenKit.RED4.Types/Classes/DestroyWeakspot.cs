@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DestroyWeakspot : AIActionHelperTask
 	{
-		private CInt32 _weakspotIndex;
-		private CHandle<gameWeakspotComponent> _weakspotComponent;
-		private CArray<CWeakHandle<gameWeakspotObject>> _weakspotArray;
-
 		[Ordinal(5)] 
 		[RED("weakspotIndex")] 
 		public CInt32 WeakspotIndex
 		{
-			get => GetProperty(ref _weakspotIndex);
-			set => SetProperty(ref _weakspotIndex, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("weakspotComponent")] 
 		public CHandle<gameWeakspotComponent> WeakspotComponent
 		{
-			get => GetProperty(ref _weakspotComponent);
-			set => SetProperty(ref _weakspotComponent, value);
+			get => GetPropertyValue<CHandle<gameWeakspotComponent>>();
+			set => SetPropertyValue<CHandle<gameWeakspotComponent>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("weakspotArray")] 
 		public CArray<CWeakHandle<gameWeakspotObject>> WeakspotArray
 		{
-			get => GetProperty(ref _weakspotArray);
-			set => SetProperty(ref _weakspotArray, value);
+			get => GetPropertyValue<CArray<CWeakHandle<gameWeakspotObject>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<gameWeakspotObject>>>(value);
+		}
+
+		public DestroyWeakspot()
+		{
+			WeakspotArray = new();
 		}
 	}
 }

@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorIsNodeStreamedConditionDefinition : AIbehaviorConditionDefinition
 	{
-		private CHandle<AIArgumentMapping> _nodeRef;
-
 		[Ordinal(1)] 
 		[RED("nodeRef")] 
 		public CHandle<AIArgumentMapping> NodeRef
 		{
-			get => GetProperty(ref _nodeRef);
-			set => SetProperty(ref _nodeRef, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 	}
 }

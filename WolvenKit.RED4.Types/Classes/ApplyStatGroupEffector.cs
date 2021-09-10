@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ApplyStatGroupEffector : gameEffector
 	{
-		private gameStatsObjectID _target;
-		private TweakDBID _record;
-		private CString _applicationTarget;
-		private CUInt64 _modGroupID;
-
 		[Ordinal(0)] 
 		[RED("target")] 
 		public gameStatsObjectID Target
 		{
-			get => GetProperty(ref _target);
-			set => SetProperty(ref _target, value);
+			get => GetPropertyValue<gameStatsObjectID>();
+			set => SetPropertyValue<gameStatsObjectID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("record")] 
 		public TweakDBID Record
 		{
-			get => GetProperty(ref _record);
-			set => SetProperty(ref _record, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("applicationTarget")] 
 		public CString ApplicationTarget
 		{
-			get => GetProperty(ref _applicationTarget);
-			set => SetProperty(ref _applicationTarget, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("modGroupID")] 
 		public CUInt64 ModGroupID
 		{
-			get => GetProperty(ref _modGroupID);
-			set => SetProperty(ref _modGroupID, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
+		}
+
+		public ApplyStatGroupEffector()
+		{
+			Target = new() { IdType = Enums.gameStatIDType.Invalid };
 		}
 	}
 }

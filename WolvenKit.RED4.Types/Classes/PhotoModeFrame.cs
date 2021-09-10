@@ -5,50 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PhotoModeFrame : inkWidgetLogicController
 	{
-		private CArray<inkImageWidgetReference> _images;
-		private CBool _keepImageAspectRatio;
-		private CWeakHandle<gameuiPhotoModeStickersController> _stickersController;
-		private CName _currentImagePart;
-		private CFloat _opacity;
-
 		[Ordinal(1)] 
 		[RED("images")] 
 		public CArray<inkImageWidgetReference> Images
 		{
-			get => GetProperty(ref _images);
-			set => SetProperty(ref _images, value);
+			get => GetPropertyValue<CArray<inkImageWidgetReference>>();
+			set => SetPropertyValue<CArray<inkImageWidgetReference>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("keepImageAspectRatio")] 
 		public CBool KeepImageAspectRatio
 		{
-			get => GetProperty(ref _keepImageAspectRatio);
-			set => SetProperty(ref _keepImageAspectRatio, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("stickersController")] 
 		public CWeakHandle<gameuiPhotoModeStickersController> StickersController
 		{
-			get => GetProperty(ref _stickersController);
-			set => SetProperty(ref _stickersController, value);
+			get => GetPropertyValue<CWeakHandle<gameuiPhotoModeStickersController>>();
+			set => SetPropertyValue<CWeakHandle<gameuiPhotoModeStickersController>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("currentImagePart")] 
 		public CName CurrentImagePart
 		{
-			get => GetProperty(ref _currentImagePart);
-			set => SetProperty(ref _currentImagePart, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("opacity")] 
 		public CFloat Opacity
 		{
-			get => GetProperty(ref _opacity);
-			set => SetProperty(ref _opacity, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public PhotoModeFrame()
+		{
+			Images = new();
 		}
 	}
 }

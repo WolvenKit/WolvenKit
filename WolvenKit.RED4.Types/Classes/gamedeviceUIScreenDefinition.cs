@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamedeviceUIScreenDefinition : RedBaseClass
 	{
-		private TweakDBID _screenType;
-
 		[Ordinal(0)] 
 		[RED("screenType")] 
 		public TweakDBID ScreenType
 		{
-			get => GetProperty(ref _screenType);
-			set => SetProperty(ref _screenType, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 	}
 }

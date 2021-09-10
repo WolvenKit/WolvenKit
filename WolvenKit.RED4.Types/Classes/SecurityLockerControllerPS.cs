@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SecurityLockerControllerPS : ScriptableDeviceComponentPS
 	{
-		private SecurityLockerProperties _securityLockerProperties;
-		private CBool _isStoringPlayerEquipement;
-
 		[Ordinal(104)] 
 		[RED("securityLockerProperties")] 
 		public SecurityLockerProperties SecurityLockerProperties
 		{
-			get => GetProperty(ref _securityLockerProperties);
-			set => SetProperty(ref _securityLockerProperties, value);
+			get => GetPropertyValue<SecurityLockerProperties>();
+			set => SetPropertyValue<SecurityLockerProperties>(value);
 		}
 
 		[Ordinal(105)] 
 		[RED("isStoringPlayerEquipement")] 
 		public CBool IsStoringPlayerEquipement
 		{
-			get => GetProperty(ref _isStoringPlayerEquipement);
-			set => SetProperty(ref _isStoringPlayerEquipement, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public SecurityLockerControllerPS()
+		{
+			DeviceName = "LocKey#122";
+			SecurityLockerProperties = new() { SecurityLevelAccessGranted = Enums.ESecurityAccessLevel.ESL_4, StoreWeaponSFX = "ui_loot_gun", PickUpWeaponSFX = "ui_loot_take_all" };
 		}
 	}
 }

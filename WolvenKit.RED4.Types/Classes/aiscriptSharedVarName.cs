@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class aiscriptSharedVarName : RedBaseClass
 	{
-		private LibTreeSharedVarReferenceName _varName;
-
 		[Ordinal(0)] 
 		[RED("varName")] 
 		public LibTreeSharedVarReferenceName VarName
 		{
-			get => GetProperty(ref _varName);
-			set => SetProperty(ref _varName, value);
+			get => GetPropertyValue<LibTreeSharedVarReferenceName>();
+			set => SetPropertyValue<LibTreeSharedVarReferenceName>(value);
+		}
+
+		public aiscriptSharedVarName()
+		{
+			VarName = new();
 		}
 	}
 }

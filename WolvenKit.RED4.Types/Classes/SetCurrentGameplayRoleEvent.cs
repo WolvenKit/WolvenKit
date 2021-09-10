@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SetCurrentGameplayRoleEvent : redEvent
 	{
-		private CEnum<EGameplayRole> _gameplayRole;
-
 		[Ordinal(0)] 
 		[RED("gameplayRole")] 
 		public CEnum<EGameplayRole> GameplayRole
 		{
-			get => GetProperty(ref _gameplayRole);
-			set => SetProperty(ref _gameplayRole, value);
+			get => GetPropertyValue<CEnum<EGameplayRole>>();
+			set => SetPropertyValue<CEnum<EGameplayRole>>(value);
 		}
 	}
 }

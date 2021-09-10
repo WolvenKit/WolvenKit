@@ -5,38 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class meshMeshParamOccluderData : meshMeshParameter
 	{
-		private CHandle<visIOccluderResource> _occluderResource;
-		private CEnum<visWorldOccluderType> _defaultOccluderType;
-		private CUInt8 _autoHideDistanceScale;
-
 		[Ordinal(0)] 
 		[RED("occluderResource")] 
 		public CHandle<visIOccluderResource> OccluderResource
 		{
-			get => GetProperty(ref _occluderResource);
-			set => SetProperty(ref _occluderResource, value);
+			get => GetPropertyValue<CHandle<visIOccluderResource>>();
+			set => SetPropertyValue<CHandle<visIOccluderResource>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("defaultOccluderType")] 
 		public CEnum<visWorldOccluderType> DefaultOccluderType
 		{
-			get => GetProperty(ref _defaultOccluderType);
-			set => SetProperty(ref _defaultOccluderType, value);
+			get => GetPropertyValue<CEnum<visWorldOccluderType>>();
+			set => SetPropertyValue<CEnum<visWorldOccluderType>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("autoHideDistanceScale")] 
 		public CUInt8 AutoHideDistanceScale
 		{
-			get => GetProperty(ref _autoHideDistanceScale);
-			set => SetProperty(ref _autoHideDistanceScale, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		public meshMeshParamOccluderData()
 		{
-			_defaultOccluderType = new() { Value = Enums.visWorldOccluderType.None };
-			_autoHideDistanceScale = 255;
+			DefaultOccluderType = Enums.visWorldOccluderType.None;
+			AutoHideDistanceScale = 255;
 		}
 	}
 }

@@ -5,41 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SecuritySystemOutput : ActionBool
 	{
-		private CEnum<ESecuritySystemState> _currentSecurityState;
-		private CEnum<EBreachOrigin> _breachOrigin;
-		private CHandle<SecuritySystemInput> _originalInputEvent;
-		private CBool _securityStateChanged;
-
 		[Ordinal(25)] 
 		[RED("currentSecurityState")] 
 		public CEnum<ESecuritySystemState> CurrentSecurityState
 		{
-			get => GetProperty(ref _currentSecurityState);
-			set => SetProperty(ref _currentSecurityState, value);
+			get => GetPropertyValue<CEnum<ESecuritySystemState>>();
+			set => SetPropertyValue<CEnum<ESecuritySystemState>>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("breachOrigin")] 
 		public CEnum<EBreachOrigin> BreachOrigin
 		{
-			get => GetProperty(ref _breachOrigin);
-			set => SetProperty(ref _breachOrigin, value);
+			get => GetPropertyValue<CEnum<EBreachOrigin>>();
+			set => SetPropertyValue<CEnum<EBreachOrigin>>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("originalInputEvent")] 
 		public CHandle<SecuritySystemInput> OriginalInputEvent
 		{
-			get => GetProperty(ref _originalInputEvent);
-			set => SetProperty(ref _originalInputEvent, value);
+			get => GetPropertyValue<CHandle<SecuritySystemInput>>();
+			set => SetPropertyValue<CHandle<SecuritySystemInput>>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("securityStateChanged")] 
 		public CBool SecurityStateChanged
 		{
-			get => GetProperty(ref _securityStateChanged);
-			set => SetProperty(ref _securityStateChanged, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public SecuritySystemOutput()
+		{
+			RequesterID = new();
+			InteractionChoice = new() { CaptionParts = new() { Parts = new() }, Data = new(), ChoiceMetaData = new() { Type = new() }, LookAtDescriptor = new() { Offset = new(), OrbId = new() } };
+			ActionWidgetPackage = new() { DependendActions = new() };
+			CanTriggerStim = true;
 		}
 	}
 }

@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MinesDataDef : gamebbScriptDefinition
 	{
-		private gamebbScriptID_Vector4 _currentNormal;
-
 		[Ordinal(0)] 
 		[RED("CurrentNormal")] 
 		public gamebbScriptID_Vector4 CurrentNormal
 		{
-			get => GetProperty(ref _currentNormal);
-			set => SetProperty(ref _currentNormal, value);
+			get => GetPropertyValue<gamebbScriptID_Vector4>();
+			set => SetPropertyValue<gamebbScriptID_Vector4>(value);
+		}
+
+		public MinesDataDef()
+		{
+			CurrentNormal = new();
 		}
 	}
 }

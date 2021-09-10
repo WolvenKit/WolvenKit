@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questMultiplayerChoiceTokenNodeDefinition : questSignalStoppingNodeDefinition
 	{
-		private questMultiplayerChoiceTokenParams _params;
-
 		[Ordinal(2)] 
 		[RED("params")] 
 		public questMultiplayerChoiceTokenParams Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<questMultiplayerChoiceTokenParams>();
+			set => SetPropertyValue<questMultiplayerChoiceTokenParams>(value);
+		}
+
+		public questMultiplayerChoiceTokenNodeDefinition()
+		{
+			Sockets = new();
+			Id = 65535;
+			Params = new() { Timeout = 15 };
 		}
 	}
 }

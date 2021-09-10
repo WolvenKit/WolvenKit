@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RectF : RedBaseClass
 	{
-		private CFloat _left;
-		private CFloat _top;
-		private CFloat _right;
-		private CFloat _bottom;
-
 		[Ordinal(0)] 
 		[RED("Left")] 
 		public CFloat Left
 		{
-			get => GetProperty(ref _left);
-			set => SetProperty(ref _left, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("Top")] 
 		public CFloat Top
 		{
-			get => GetProperty(ref _top);
-			set => SetProperty(ref _top, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("Right")] 
 		public CFloat Right
 		{
-			get => GetProperty(ref _right);
-			set => SetProperty(ref _right, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("Bottom")] 
 		public CFloat Bottom
 		{
-			get => GetProperty(ref _bottom);
-			set => SetProperty(ref _bottom, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

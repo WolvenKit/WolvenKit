@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiCurrencyUpdateNotificationViewData : gameuiGenericNotificationViewData
 	{
-		private CInt32 _diff;
-		private CUInt32 _total;
-
 		[Ordinal(5)] 
 		[RED("diff")] 
 		public CInt32 Diff
 		{
-			get => GetProperty(ref _diff);
-			set => SetProperty(ref _diff, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("total")] 
 		public CUInt32 Total
 		{
-			get => GetProperty(ref _total);
-			set => SetProperty(ref _total, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 	}
 }

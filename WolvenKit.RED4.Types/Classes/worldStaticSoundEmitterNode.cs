@@ -5,138 +5,123 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldStaticSoundEmitterNode : worldNode
 	{
-		private CFloat _radius;
-		private CName _audioName;
-		private CHandle<audioAmbientAreaSettings> _settings;
-		private CBool _usePhysicsObstruction;
-		private CBool _occlusionEnabled;
-		private CBool _acousticRepositioningEnabled;
-		private CFloat _obstructionChangeTime;
-		private CBool _useDoppler;
-		private CFloat _dopplerFactor;
-		private CBool _setOpenDoorEmitter;
-		private CName _emitterMetadataName;
-		private CBool _overrideRolloff;
-		private CFloat _rolloffOverride;
-		private CName _ambientPaletteTag;
-
 		[Ordinal(4)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get => GetProperty(ref _radius);
-			set => SetProperty(ref _radius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("audioName")] 
 		public CName AudioName
 		{
-			get => GetProperty(ref _audioName);
-			set => SetProperty(ref _audioName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("Settings")] 
 		public CHandle<audioAmbientAreaSettings> Settings
 		{
-			get => GetProperty(ref _settings);
-			set => SetProperty(ref _settings, value);
+			get => GetPropertyValue<CHandle<audioAmbientAreaSettings>>();
+			set => SetPropertyValue<CHandle<audioAmbientAreaSettings>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("usePhysicsObstruction")] 
 		public CBool UsePhysicsObstruction
 		{
-			get => GetProperty(ref _usePhysicsObstruction);
-			set => SetProperty(ref _usePhysicsObstruction, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("occlusionEnabled")] 
 		public CBool OcclusionEnabled
 		{
-			get => GetProperty(ref _occlusionEnabled);
-			set => SetProperty(ref _occlusionEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("acousticRepositioningEnabled")] 
 		public CBool AcousticRepositioningEnabled
 		{
-			get => GetProperty(ref _acousticRepositioningEnabled);
-			set => SetProperty(ref _acousticRepositioningEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("obstructionChangeTime")] 
 		public CFloat ObstructionChangeTime
 		{
-			get => GetProperty(ref _obstructionChangeTime);
-			set => SetProperty(ref _obstructionChangeTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("useDoppler")] 
 		public CBool UseDoppler
 		{
-			get => GetProperty(ref _useDoppler);
-			set => SetProperty(ref _useDoppler, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("dopplerFactor")] 
 		public CFloat DopplerFactor
 		{
-			get => GetProperty(ref _dopplerFactor);
-			set => SetProperty(ref _dopplerFactor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("setOpenDoorEmitter")] 
 		public CBool SetOpenDoorEmitter
 		{
-			get => GetProperty(ref _setOpenDoorEmitter);
-			set => SetProperty(ref _setOpenDoorEmitter, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("emitterMetadataName")] 
 		public CName EmitterMetadataName
 		{
-			get => GetProperty(ref _emitterMetadataName);
-			set => SetProperty(ref _emitterMetadataName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("overrideRolloff")] 
 		public CBool OverrideRolloff
 		{
-			get => GetProperty(ref _overrideRolloff);
-			set => SetProperty(ref _overrideRolloff, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("rolloffOverride")] 
 		public CFloat RolloffOverride
 		{
-			get => GetProperty(ref _rolloffOverride);
-			set => SetProperty(ref _rolloffOverride, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("ambientPaletteTag")] 
 		public CName AmbientPaletteTag
 		{
-			get => GetProperty(ref _ambientPaletteTag);
-			set => SetProperty(ref _ambientPaletteTag, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public worldStaticSoundEmitterNode()
 		{
-			_obstructionChangeTime = 0.200000F;
-			_dopplerFactor = 1.000000F;
-			_rolloffOverride = 1.000000F;
+			ObstructionChangeTime = 0.200000F;
+			DopplerFactor = 1.000000F;
+			RolloffOverride = 1.000000F;
 		}
 	}
 }

@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameJournalTree : ISerializable
 	{
-		private CArray<CHandle<gameJournalRootFolderEntry>> _rootEntries;
-
 		[Ordinal(0)] 
 		[RED("rootEntries")] 
 		public CArray<CHandle<gameJournalRootFolderEntry>> RootEntries
 		{
-			get => GetProperty(ref _rootEntries);
-			set => SetProperty(ref _rootEntries, value);
+			get => GetPropertyValue<CArray<CHandle<gameJournalRootFolderEntry>>>();
+			set => SetPropertyValue<CArray<CHandle<gameJournalRootFolderEntry>>>(value);
+		}
+
+		public gameJournalTree()
+		{
+			RootEntries = new();
 		}
 	}
 }

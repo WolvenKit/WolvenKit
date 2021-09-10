@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class workTagNode : workIEntry
 	{
-		private CName _tag;
-
 		[Ordinal(2)] 
 		[RED("tag")] 
 		public CName Tag
 		{
-			get => GetProperty(ref _tag);
-			set => SetProperty(ref _tag, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public workTagNode()
+		{
+			Id = new() { Id = 4294967295 };
+			Flags = 128;
 		}
 	}
 }

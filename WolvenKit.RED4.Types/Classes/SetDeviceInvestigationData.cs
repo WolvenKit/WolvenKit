@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SetDeviceInvestigationData : AIbehaviortaskScript
 	{
-		private CWeakHandle<ScriptedPuppet> _ownerPuppet;
-		private CWeakHandle<gameObject> _listener;
-
 		[Ordinal(0)] 
 		[RED("ownerPuppet")] 
 		public CWeakHandle<ScriptedPuppet> OwnerPuppet
 		{
-			get => GetProperty(ref _ownerPuppet);
-			set => SetProperty(ref _ownerPuppet, value);
+			get => GetPropertyValue<CWeakHandle<ScriptedPuppet>>();
+			set => SetPropertyValue<CWeakHandle<ScriptedPuppet>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("listener")] 
 		public CWeakHandle<gameObject> Listener
 		{
-			get => GetProperty(ref _listener);
-			set => SetProperty(ref _listener, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 	}
 }

@@ -5,68 +5,70 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PerksPointsDisplayController : inkWidgetLogicController
 	{
-		private inkTextWidgetReference _desc1Text;
-		private inkTextWidgetReference _value1Text;
-		private inkImageWidgetReference _icon1;
-		private inkTextWidgetReference _desc2Text;
-		private inkTextWidgetReference _value2Text;
-		private inkImageWidgetReference _icon2;
-		private CEnum<CharacterScreenType> _screenType;
-
 		[Ordinal(1)] 
 		[RED("desc1Text")] 
 		public inkTextWidgetReference Desc1Text
 		{
-			get => GetProperty(ref _desc1Text);
-			set => SetProperty(ref _desc1Text, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("value1Text")] 
 		public inkTextWidgetReference Value1Text
 		{
-			get => GetProperty(ref _value1Text);
-			set => SetProperty(ref _value1Text, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("icon1")] 
 		public inkImageWidgetReference Icon1
 		{
-			get => GetProperty(ref _icon1);
-			set => SetProperty(ref _icon1, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("desc2Text")] 
 		public inkTextWidgetReference Desc2Text
 		{
-			get => GetProperty(ref _desc2Text);
-			set => SetProperty(ref _desc2Text, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("value2Text")] 
 		public inkTextWidgetReference Value2Text
 		{
-			get => GetProperty(ref _value2Text);
-			set => SetProperty(ref _value2Text, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("icon2")] 
 		public inkImageWidgetReference Icon2
 		{
-			get => GetProperty(ref _icon2);
-			set => SetProperty(ref _icon2, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("screenType")] 
 		public CEnum<CharacterScreenType> ScreenType
 		{
-			get => GetProperty(ref _screenType);
-			set => SetProperty(ref _screenType, value);
+			get => GetPropertyValue<CEnum<CharacterScreenType>>();
+			set => SetPropertyValue<CEnum<CharacterScreenType>>(value);
+		}
+
+		public PerksPointsDisplayController()
+		{
+			Desc1Text = new();
+			Value1Text = new();
+			Icon1 = new();
+			Desc2Text = new();
+			Value2Text = new();
+			Icon2 = new();
 		}
 	}
 }

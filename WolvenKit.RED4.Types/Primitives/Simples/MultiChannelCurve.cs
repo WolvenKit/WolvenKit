@@ -1,53 +1,51 @@
+using System;
+
 namespace WolvenKit.RED4.Types
 {
     [RED("multiChannelCurve")]
-    public class MultiChannelCurve<T> : IRedPrimitive where T : IRedType
+    public class MultiChannelCurve<T> : IRedMultiChannelCurve<T>, IEquatable<MultiChannelCurve<T>> where T : IRedType
     {
-        /*private CUInt32 _numChannels;
-        private CEnum<Enums.EInterPolationType> _interPolationType;
-        private CEnum<Enums.EChannelLinkType> _linkType;
-        private CUInt32 _alignment;
-        private CByteArray _data;
+        public uint NumChannels { get; set; }
+        public Enums.EInterPolationType InterPolationType { get; set; }
+        public Enums.EChannelLinkType LinkType { get; set; }
+        public uint Alignment { get; set; }
+        public byte[] Data { get; set; }
 
-
-        [Ordinal(1)]
-        [REDBuffer(true)]
-        public CUInt32 NumChannels
+        public bool Equals(MultiChannelCurve<T> other)
         {
-            get => GetProperty(ref _numChannels);
-            set => SetProperty(ref _numChannels, value);
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            return NumChannels == other.NumChannels && InterPolationType == other.InterPolationType && LinkType == other.LinkType && Alignment == other.Alignment && Equals(Data, other.Data);
         }
 
-        [Ordinal(2)]
-        [REDBuffer(true)]
-        public CEnum<Enums.EInterPolationType> InterPolationType
+        public override bool Equals(object obj)
         {
-            get => GetProperty(ref _interPolationType);
-            set => SetProperty(ref _interPolationType, value);
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((MultiChannelCurve<T>)obj);
         }
 
-        [Ordinal(3)]
-        [REDBuffer(true)]
-        public CEnum<Enums.EChannelLinkType> LinkType
-        {
-            get => GetProperty(ref _linkType);
-            set => SetProperty(ref _linkType, value);
-        }
-
-        [Ordinal(4)]
-        [REDBuffer(true)]
-        public CUInt32 Alignment
-        {
-            get => GetProperty(ref _alignment);
-            set => SetProperty(ref _alignment, value);
-        }
-
-        [Ordinal(5)]
-        [REDBuffer(true)]
-        public CByteArray Data
-        {
-            get => GetProperty(ref _data);
-            set => SetProperty(ref _data, value);
-        }*/
+        public override int GetHashCode() => HashCode.Combine(NumChannels, (byte)InterPolationType, (byte)LinkType, Alignment, Data);
     }
 }

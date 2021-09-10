@@ -5,50 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CraftingSystem : gameScriptableSystem
 	{
-		private CBool _lastActionStatus;
-		private CHandle<CraftBook> _playerCraftBook;
-		private CHandle<CraftingSystemInventoryCallback> _callback;
-		private CHandle<gameInventoryScriptListener> _inventoryListener;
-		private CEnum<gameItemIconGender> _itemIconGender;
-
 		[Ordinal(0)] 
 		[RED("lastActionStatus")] 
 		public CBool LastActionStatus
 		{
-			get => GetProperty(ref _lastActionStatus);
-			set => SetProperty(ref _lastActionStatus, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("playerCraftBook")] 
 		public CHandle<CraftBook> PlayerCraftBook
 		{
-			get => GetProperty(ref _playerCraftBook);
-			set => SetProperty(ref _playerCraftBook, value);
+			get => GetPropertyValue<CHandle<CraftBook>>();
+			set => SetPropertyValue<CHandle<CraftBook>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("callback")] 
 		public CHandle<CraftingSystemInventoryCallback> Callback
 		{
-			get => GetProperty(ref _callback);
-			set => SetProperty(ref _callback, value);
+			get => GetPropertyValue<CHandle<CraftingSystemInventoryCallback>>();
+			set => SetPropertyValue<CHandle<CraftingSystemInventoryCallback>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("inventoryListener")] 
 		public CHandle<gameInventoryScriptListener> InventoryListener
 		{
-			get => GetProperty(ref _inventoryListener);
-			set => SetProperty(ref _inventoryListener, value);
+			get => GetPropertyValue<CHandle<gameInventoryScriptListener>>();
+			set => SetPropertyValue<CHandle<gameInventoryScriptListener>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("itemIconGender")] 
 		public CEnum<gameItemIconGender> ItemIconGender
 		{
-			get => GetProperty(ref _itemIconGender);
-			set => SetProperty(ref _itemIconGender, value);
+			get => GetPropertyValue<CEnum<gameItemIconGender>>();
+			set => SetPropertyValue<CEnum<gameItemIconGender>>(value);
 		}
 	}
 }

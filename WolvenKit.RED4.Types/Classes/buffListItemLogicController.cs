@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class buffListItemLogicController : inkWidgetLogicController
 	{
-		private inkImageWidgetReference _icon;
-		private inkTextWidgetReference _label;
-
 		[Ordinal(1)] 
 		[RED("icon")] 
 		public inkImageWidgetReference Icon
 		{
-			get => GetProperty(ref _icon);
-			set => SetProperty(ref _icon, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("label")] 
 		public inkTextWidgetReference Label
 		{
-			get => GetProperty(ref _label);
-			set => SetProperty(ref _label, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		public buffListItemLogicController()
+		{
+			Icon = new();
+			Label = new();
 		}
 	}
 }

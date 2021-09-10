@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamestateMachineeventStopStateMachine : redEvent
 	{
-		private gamestateMachineStateMachineIdentifier _stateMachineIdentifier;
-
 		[Ordinal(0)] 
 		[RED("stateMachineIdentifier")] 
 		public gamestateMachineStateMachineIdentifier StateMachineIdentifier
 		{
-			get => GetProperty(ref _stateMachineIdentifier);
-			set => SetProperty(ref _stateMachineIdentifier, value);
+			get => GetPropertyValue<gamestateMachineStateMachineIdentifier>();
+			set => SetPropertyValue<gamestateMachineStateMachineIdentifier>(value);
+		}
+
+		public gamestateMachineeventStopStateMachine()
+		{
+			StateMachineIdentifier = new();
 		}
 	}
 }

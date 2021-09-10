@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnAnimationMotionSample : RedBaseClass
 	{
-		private CFloat _time;
-		private Transform _transform;
-
 		[Ordinal(0)] 
 		[RED("time")] 
 		public CFloat Time
 		{
-			get => GetProperty(ref _time);
-			set => SetProperty(ref _time, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("transform")] 
 		public Transform Transform
 		{
-			get => GetProperty(ref _transform);
-			set => SetProperty(ref _transform, value);
+			get => GetPropertyValue<Transform>();
+			set => SetPropertyValue<Transform>(value);
+		}
+
+		public scnAnimationMotionSample()
+		{
+			Transform = new() { Position = new(), Orientation = new() { R = 1.000000F } };
 		}
 	}
 }

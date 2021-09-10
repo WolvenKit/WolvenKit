@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameprojectileLinearMovementEvent : redEvent
 	{
-		private Vector4 _targetPosition;
-
 		[Ordinal(0)] 
 		[RED("targetPosition")] 
 		public Vector4 TargetPosition
 		{
-			get => GetProperty(ref _targetPosition);
-			set => SetProperty(ref _targetPosition, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
+		}
+
+		public gameprojectileLinearMovementEvent()
+		{
+			TargetPosition = new() { X = 340282346638528859811704183484516925440.000000F, Y = 340282346638528859811704183484516925440.000000F, Z = 340282346638528859811704183484516925440.000000F, W = 1.000000F };
 		}
 	}
 }

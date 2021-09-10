@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SDoorStateOperationData : RedBaseClass
 	{
-		private CEnum<EDoorStatus> _state;
-		private SBaseDeviceOperationData _operation;
-
 		[Ordinal(0)] 
 		[RED("state")] 
 		public CEnum<EDoorStatus> State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<CEnum<EDoorStatus>>();
+			set => SetPropertyValue<CEnum<EDoorStatus>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("operation")] 
 		public SBaseDeviceOperationData Operation
 		{
-			get => GetProperty(ref _operation);
-			set => SetProperty(ref _operation, value);
+			get => GetPropertyValue<SBaseDeviceOperationData>();
+			set => SetPropertyValue<SBaseDeviceOperationData>(value);
+		}
+
+		public SDoorStateOperationData()
+		{
+			Operation = new() { IsEnabled = true, TransformAnimations = new(), VFXs = new(), SFXs = new(), Facts = new(), Components = new(), Stims = new(), StatusEffects = new(), Damages = new(), Items = new(), Teleport = new(), PlayerWorkspot = new(), ToggleOperations = new(), DelayID = new() };
 		}
 	}
 }

@@ -5,37 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkMaskEffect : inkIEffect
 	{
-		private CFloat _angle;
-		private CFloat _opacity;
-		private CBool _invert;
-
 		[Ordinal(2)] 
 		[RED("angle")] 
 		public CFloat Angle
 		{
-			get => GetProperty(ref _angle);
-			set => SetProperty(ref _angle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("opacity")] 
 		public CFloat Opacity
 		{
-			get => GetProperty(ref _opacity);
-			set => SetProperty(ref _opacity, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("invert")] 
 		public CBool Invert
 		{
-			get => GetProperty(ref _invert);
-			set => SetProperty(ref _invert, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public inkMaskEffect()
 		{
-			_opacity = 1.000000F;
+			Opacity = 1.000000F;
 		}
 	}
 }

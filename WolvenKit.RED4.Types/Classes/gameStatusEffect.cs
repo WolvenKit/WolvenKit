@@ -5,130 +5,120 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameStatusEffect : gameStatusEffectBase
 	{
-		private CUInt32 _durationID;
-		private CFloat _duration;
-		private CFloat _remainingDuration;
-		private CUInt32 _maxStacks;
-		private CArray<gameSourceData> _sourcesData;
-		private CFloat _initialApplicationTimestamp;
-		private CFloat _lastApplicationTimestamp;
-		private entEntityID _ownerEntityID;
-		private TweakDBID _instigatorRecordID;
-		private entEntityID _instigatorEntityID;
-		private Vector4 _direction;
-		private CBool _removeAllStacksWhenDurationEnds;
-		private CName _applicationSource;
-
 		[Ordinal(1)] 
 		[RED("durationID")] 
 		public CUInt32 DurationID
 		{
-			get => GetProperty(ref _durationID);
-			set => SetProperty(ref _durationID, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get => GetProperty(ref _duration);
-			set => SetProperty(ref _duration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("remainingDuration")] 
 		public CFloat RemainingDuration
 		{
-			get => GetProperty(ref _remainingDuration);
-			set => SetProperty(ref _remainingDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("maxStacks")] 
 		public CUInt32 MaxStacks
 		{
-			get => GetProperty(ref _maxStacks);
-			set => SetProperty(ref _maxStacks, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("sourcesData")] 
 		public CArray<gameSourceData> SourcesData
 		{
-			get => GetProperty(ref _sourcesData);
-			set => SetProperty(ref _sourcesData, value);
+			get => GetPropertyValue<CArray<gameSourceData>>();
+			set => SetPropertyValue<CArray<gameSourceData>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("initialApplicationTimestamp")] 
 		public CFloat InitialApplicationTimestamp
 		{
-			get => GetProperty(ref _initialApplicationTimestamp);
-			set => SetProperty(ref _initialApplicationTimestamp, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("lastApplicationTimestamp")] 
 		public CFloat LastApplicationTimestamp
 		{
-			get => GetProperty(ref _lastApplicationTimestamp);
-			set => SetProperty(ref _lastApplicationTimestamp, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("ownerEntityID")] 
 		public entEntityID OwnerEntityID
 		{
-			get => GetProperty(ref _ownerEntityID);
-			set => SetProperty(ref _ownerEntityID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("instigatorRecordID")] 
 		public TweakDBID InstigatorRecordID
 		{
-			get => GetProperty(ref _instigatorRecordID);
-			set => SetProperty(ref _instigatorRecordID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("instigatorEntityID")] 
 		public entEntityID InstigatorEntityID
 		{
-			get => GetProperty(ref _instigatorEntityID);
-			set => SetProperty(ref _instigatorEntityID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("direction")] 
 		public Vector4 Direction
 		{
-			get => GetProperty(ref _direction);
-			set => SetProperty(ref _direction, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("removeAllStacksWhenDurationEnds")] 
 		public CBool RemoveAllStacksWhenDurationEnds
 		{
-			get => GetProperty(ref _removeAllStacksWhenDurationEnds);
-			set => SetProperty(ref _removeAllStacksWhenDurationEnds, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("applicationSource")] 
 		public CName ApplicationSource
 		{
-			get => GetProperty(ref _applicationSource);
-			set => SetProperty(ref _applicationSource, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public gameStatusEffect()
 		{
-			_durationID = 4294967295;
-			_duration = -1.000000F;
-			_remainingDuration = -1.000000F;
-			_maxStacks = 2147483647;
+			DurationID = 4294967295;
+			Duration = -1.000000F;
+			RemainingDuration = -1.000000F;
+			MaxStacks = 2147483647;
+			SourcesData = new();
+			OwnerEntityID = new();
+			InstigatorEntityID = new();
+			Direction = new();
 		}
 	}
 }

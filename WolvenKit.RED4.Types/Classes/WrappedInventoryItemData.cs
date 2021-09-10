@@ -5,50 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WrappedInventoryItemData : IScriptable
 	{
-		private InventoryItemData _itemData;
-		private CEnum<gameItemComparisonState> _comparisonState;
-		private CBool _isNew;
-		private CUInt32 _itemTemplate;
-		private CEnum<gameItemDisplayContext> _displayContext;
-
 		[Ordinal(0)] 
 		[RED("ItemData")] 
 		public InventoryItemData ItemData
 		{
-			get => GetProperty(ref _itemData);
-			set => SetProperty(ref _itemData, value);
+			get => GetPropertyValue<InventoryItemData>();
+			set => SetPropertyValue<InventoryItemData>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ComparisonState")] 
 		public CEnum<gameItemComparisonState> ComparisonState
 		{
-			get => GetProperty(ref _comparisonState);
-			set => SetProperty(ref _comparisonState, value);
+			get => GetPropertyValue<CEnum<gameItemComparisonState>>();
+			set => SetPropertyValue<CEnum<gameItemComparisonState>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("IsNew")] 
 		public CBool IsNew
 		{
-			get => GetProperty(ref _isNew);
-			set => SetProperty(ref _isNew, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("ItemTemplate")] 
 		public CUInt32 ItemTemplate
 		{
-			get => GetProperty(ref _itemTemplate);
-			set => SetProperty(ref _itemTemplate, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("DisplayContext")] 
 		public CEnum<gameItemDisplayContext> DisplayContext
 		{
-			get => GetProperty(ref _displayContext);
-			set => SetProperty(ref _displayContext, value);
+			get => GetPropertyValue<CEnum<gameItemDisplayContext>>();
+			set => SetPropertyValue<CEnum<gameItemDisplayContext>>(value);
+		}
+
+		public WrappedInventoryItemData()
+		{
+			ItemData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
 		}
 	}
 }

@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class HighestPrioritySignalCondition : AIbehaviorexpressionScript
 	{
-		private CName _signalName;
-		private CUInt32 _cbId;
-		private CBool _lastValue;
-
 		[Ordinal(0)] 
 		[RED("signalName")] 
 		public CName SignalName
 		{
-			get => GetProperty(ref _signalName);
-			set => SetProperty(ref _signalName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("cbId")] 
 		public CUInt32 CbId
 		{
-			get => GetProperty(ref _cbId);
-			set => SetProperty(ref _cbId, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("lastValue")] 
 		public CBool LastValue
 		{
-			get => GetProperty(ref _lastValue);
-			set => SetProperty(ref _lastValue, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

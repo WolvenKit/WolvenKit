@@ -5,37 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class LibTreeDefInt32 : RedBaseClass
 	{
-		private CUInt16 _variableId;
-		private CName _treeVariable;
-		private CInt32 _v;
-
 		[Ordinal(0)] 
 		[RED("variableId")] 
 		public CUInt16 VariableId
 		{
-			get => GetProperty(ref _variableId);
-			set => SetProperty(ref _variableId, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("treeVariable")] 
 		public CName TreeVariable
 		{
-			get => GetProperty(ref _treeVariable);
-			set => SetProperty(ref _treeVariable, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("v")] 
 		public CInt32 V
 		{
-			get => GetProperty(ref _v);
-			set => SetProperty(ref _v, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		public LibTreeDefInt32()
 		{
-			_variableId = 65535;
+			VariableId = 65535;
 		}
 	}
 }

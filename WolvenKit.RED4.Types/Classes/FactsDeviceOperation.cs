@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class FactsDeviceOperation : DeviceOperationBase
 	{
-		private CArray<SFactOperationData> _facts;
-
 		[Ordinal(5)] 
 		[RED("facts")] 
 		public CArray<SFactOperationData> Facts
 		{
-			get => GetProperty(ref _facts);
-			set => SetProperty(ref _facts, value);
+			get => GetPropertyValue<CArray<SFactOperationData>>();
+			set => SetPropertyValue<CArray<SFactOperationData>>(value);
+		}
+
+		public FactsDeviceOperation()
+		{
+			IsEnabled = true;
+			ToggleOperations = new();
+			Facts = new();
 		}
 	}
 }

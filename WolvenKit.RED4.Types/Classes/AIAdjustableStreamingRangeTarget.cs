@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIAdjustableStreamingRangeTarget : gameObject
 	{
-		private CFloat _minStreamingDistance;
-
 		[Ordinal(40)] 
 		[RED("minStreamingDistance")] 
 		public CFloat MinStreamingDistance
 		{
-			get => GetProperty(ref _minStreamingDistance);
-			set => SetProperty(ref _minStreamingDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public AIAdjustableStreamingRangeTarget()
 		{
-			_minStreamingDistance = 30.000000F;
+			MinStreamingDistance = 30.000000F;
 		}
 	}
 }

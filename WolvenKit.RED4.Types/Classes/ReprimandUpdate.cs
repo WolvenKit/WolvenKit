@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ReprimandUpdate : redEvent
 	{
-		private CEnum<EReprimandInstructions> _reprimandInstructions;
-		private entEntityID _target;
-		private Vector4 _targetPos;
-		private CWeakHandle<gameObject> _currentPerformer;
-
 		[Ordinal(0)] 
 		[RED("reprimandInstructions")] 
 		public CEnum<EReprimandInstructions> ReprimandInstructions
 		{
-			get => GetProperty(ref _reprimandInstructions);
-			set => SetProperty(ref _reprimandInstructions, value);
+			get => GetPropertyValue<CEnum<EReprimandInstructions>>();
+			set => SetPropertyValue<CEnum<EReprimandInstructions>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("target")] 
 		public entEntityID Target
 		{
-			get => GetProperty(ref _target);
-			set => SetProperty(ref _target, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("targetPos")] 
 		public Vector4 TargetPos
 		{
-			get => GetProperty(ref _targetPos);
-			set => SetProperty(ref _targetPos, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("currentPerformer")] 
 		public CWeakHandle<gameObject> CurrentPerformer
 		{
-			get => GetProperty(ref _currentPerformer);
-			set => SetProperty(ref _currentPerformer, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
+		}
+
+		public ReprimandUpdate()
+		{
+			Target = new();
+			TargetPos = new();
 		}
 	}
 }

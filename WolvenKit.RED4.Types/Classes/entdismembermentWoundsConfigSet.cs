@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entdismembermentWoundsConfigSet : RedBaseClass
 	{
-		private CArray<CHandle<entdismembermentWoundConfigContainer>> _configs;
-
 		[Ordinal(0)] 
 		[RED("Configs")] 
 		public CArray<CHandle<entdismembermentWoundConfigContainer>> Configs
 		{
-			get => GetProperty(ref _configs);
-			set => SetProperty(ref _configs, value);
+			get => GetPropertyValue<CArray<CHandle<entdismembermentWoundConfigContainer>>>();
+			set => SetPropertyValue<CArray<CHandle<entdismembermentWoundConfigContainer>>>(value);
+		}
+
+		public entdismembermentWoundsConfigSet()
+		{
+			Configs = new();
 		}
 	}
 }

@@ -5,19 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entColliderComponentSphere : entColliderComponentShape
 	{
-		private CFloat _radius;
-
 		[Ordinal(1)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get => GetProperty(ref _radius);
-			set => SetProperty(ref _radius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public entColliderComponentSphere()
 		{
-			_radius = 1.000000F;
+			LocalToBody = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			Radius = 1.000000F;
 		}
 	}
 }

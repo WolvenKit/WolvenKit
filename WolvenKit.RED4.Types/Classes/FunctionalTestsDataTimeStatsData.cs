@@ -5,95 +5,89 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class FunctionalTestsDataTimeStatsData : ISerializable
 	{
-		private CUInt64 _engineTick;
-		private CFloat _lastFps;
-		private CFloat _minFps;
-		private CFloat _lastTimeDelta;
-		private CDouble _engineTime;
-		private CFloat _cpuTime;
-		private CFloat _gpuTime;
-		private CUInt64 _rawLocalTime;
-		private CString _playerPosition;
-		private CString _playerOrientation;
-
 		[Ordinal(0)] 
 		[RED("engineTick")] 
 		public CUInt64 EngineTick
 		{
-			get => GetProperty(ref _engineTick);
-			set => SetProperty(ref _engineTick, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("lastFps")] 
 		public CFloat LastFps
 		{
-			get => GetProperty(ref _lastFps);
-			set => SetProperty(ref _lastFps, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("minFps")] 
 		public CFloat MinFps
 		{
-			get => GetProperty(ref _minFps);
-			set => SetProperty(ref _minFps, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("lastTimeDelta")] 
 		public CFloat LastTimeDelta
 		{
-			get => GetProperty(ref _lastTimeDelta);
-			set => SetProperty(ref _lastTimeDelta, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("engineTime")] 
 		public CDouble EngineTime
 		{
-			get => GetProperty(ref _engineTime);
-			set => SetProperty(ref _engineTime, value);
+			get => GetPropertyValue<CDouble>();
+			set => SetPropertyValue<CDouble>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("cpuTime")] 
 		public CFloat CpuTime
 		{
-			get => GetProperty(ref _cpuTime);
-			set => SetProperty(ref _cpuTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("gpuTime")] 
 		public CFloat GpuTime
 		{
-			get => GetProperty(ref _gpuTime);
-			set => SetProperty(ref _gpuTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("rawLocalTime")] 
 		public CUInt64 RawLocalTime
 		{
-			get => GetProperty(ref _rawLocalTime);
-			set => SetProperty(ref _rawLocalTime, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("playerPosition")] 
 		public CString PlayerPosition
 		{
-			get => GetProperty(ref _playerPosition);
-			set => SetProperty(ref _playerPosition, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("playerOrientation")] 
 		public CString PlayerOrientation
 		{
-			get => GetProperty(ref _playerOrientation);
-			set => SetProperty(ref _playerOrientation, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		public FunctionalTestsDataTimeStatsData()
+		{
+			EngineTime = 0.000000;
 		}
 	}
 }

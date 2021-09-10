@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CMaterialParameter : ISerializable
 	{
-		private CName _parameterName;
-		private CUInt32 _register;
-
 		[Ordinal(0)] 
 		[RED("parameterName")] 
 		public CName ParameterName
 		{
-			get => GetProperty(ref _parameterName);
-			set => SetProperty(ref _parameterName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("register")] 
 		public CUInt32 Register
 		{
-			get => GetProperty(ref _register);
-			set => SetProperty(ref _register, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 	}
 }

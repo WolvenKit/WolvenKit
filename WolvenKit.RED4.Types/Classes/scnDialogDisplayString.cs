@@ -5,50 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnDialogDisplayString : RedBaseClass
 	{
-		private CString _text;
-		private CString _translation;
-		private CString _preTranslatedText;
-		private CString _postTranslatedText;
-		private CEnum<scnDialogLineLanguage> _language;
-
 		[Ordinal(0)] 
 		[RED("text")] 
 		public CString Text
 		{
-			get => GetProperty(ref _text);
-			set => SetProperty(ref _text, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("translation")] 
 		public CString Translation
 		{
-			get => GetProperty(ref _translation);
-			set => SetProperty(ref _translation, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("preTranslatedText")] 
 		public CString PreTranslatedText
 		{
-			get => GetProperty(ref _preTranslatedText);
-			set => SetProperty(ref _preTranslatedText, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("postTranslatedText")] 
 		public CString PostTranslatedText
 		{
-			get => GetProperty(ref _postTranslatedText);
-			set => SetProperty(ref _postTranslatedText, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("language")] 
 		public CEnum<scnDialogLineLanguage> Language
 		{
-			get => GetProperty(ref _language);
-			set => SetProperty(ref _language, value);
+			get => GetPropertyValue<CEnum<scnDialogLineLanguage>>();
+			set => SetPropertyValue<CEnum<scnDialogLineLanguage>>(value);
 		}
 	}
 }

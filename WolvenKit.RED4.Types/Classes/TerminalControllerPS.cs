@@ -5,86 +5,87 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TerminalControllerPS : MasterControllerPS
 	{
-		private TerminalSetup _terminalSetup;
-		private CHandle<HackEngContainer> _terminalSkillChecks;
-		private CArray<CHandle<VirtualSystemPS>> _spawnedSystems;
-		private CBool _useKeyloggerHack;
-		private CBool _shouldShowTerminalTitle;
-		private redResourceReferenceScriptToken _defaultGlitchVideoPath;
-		private redResourceReferenceScriptToken _broadcastGlitchVideoPath;
-		private CEnum<gameinteractionsReactionState> _state;
-		private CEnum<EForcedElevatorArrowsState> _forcedElevatorArrowsState;
-
 		[Ordinal(105)] 
 		[RED("terminalSetup")] 
 		public TerminalSetup TerminalSetup
 		{
-			get => GetProperty(ref _terminalSetup);
-			set => SetProperty(ref _terminalSetup, value);
+			get => GetPropertyValue<TerminalSetup>();
+			set => SetPropertyValue<TerminalSetup>(value);
 		}
 
 		[Ordinal(106)] 
 		[RED("terminalSkillChecks")] 
 		public CHandle<HackEngContainer> TerminalSkillChecks
 		{
-			get => GetProperty(ref _terminalSkillChecks);
-			set => SetProperty(ref _terminalSkillChecks, value);
+			get => GetPropertyValue<CHandle<HackEngContainer>>();
+			set => SetPropertyValue<CHandle<HackEngContainer>>(value);
 		}
 
 		[Ordinal(107)] 
 		[RED("spawnedSystems")] 
 		public CArray<CHandle<VirtualSystemPS>> SpawnedSystems
 		{
-			get => GetProperty(ref _spawnedSystems);
-			set => SetProperty(ref _spawnedSystems, value);
+			get => GetPropertyValue<CArray<CHandle<VirtualSystemPS>>>();
+			set => SetPropertyValue<CArray<CHandle<VirtualSystemPS>>>(value);
 		}
 
 		[Ordinal(108)] 
 		[RED("useKeyloggerHack")] 
 		public CBool UseKeyloggerHack
 		{
-			get => GetProperty(ref _useKeyloggerHack);
-			set => SetProperty(ref _useKeyloggerHack, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(109)] 
 		[RED("shouldShowTerminalTitle")] 
 		public CBool ShouldShowTerminalTitle
 		{
-			get => GetProperty(ref _shouldShowTerminalTitle);
-			set => SetProperty(ref _shouldShowTerminalTitle, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(110)] 
 		[RED("defaultGlitchVideoPath")] 
 		public redResourceReferenceScriptToken DefaultGlitchVideoPath
 		{
-			get => GetProperty(ref _defaultGlitchVideoPath);
-			set => SetProperty(ref _defaultGlitchVideoPath, value);
+			get => GetPropertyValue<redResourceReferenceScriptToken>();
+			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
 		[Ordinal(111)] 
 		[RED("broadcastGlitchVideoPath")] 
 		public redResourceReferenceScriptToken BroadcastGlitchVideoPath
 		{
-			get => GetProperty(ref _broadcastGlitchVideoPath);
-			set => SetProperty(ref _broadcastGlitchVideoPath, value);
+			get => GetPropertyValue<redResourceReferenceScriptToken>();
+			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
 		[Ordinal(112)] 
 		[RED("state")] 
 		public CEnum<gameinteractionsReactionState> State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<CEnum<gameinteractionsReactionState>>();
+			set => SetPropertyValue<CEnum<gameinteractionsReactionState>>(value);
 		}
 
 		[Ordinal(113)] 
 		[RED("forcedElevatorArrowsState")] 
 		public CEnum<EForcedElevatorArrowsState> ForcedElevatorArrowsState
 		{
-			get => GetProperty(ref _forcedElevatorArrowsState);
-			set => SetProperty(ref _forcedElevatorArrowsState, value);
+			get => GetPropertyValue<CEnum<EForcedElevatorArrowsState>>();
+			set => SetPropertyValue<CEnum<EForcedElevatorArrowsState>>(value);
+		}
+
+		public TerminalControllerPS()
+		{
+			DeviceName = "LocKey#112";
+			TweakDBRecord = new() { Value = 72052599123 };
+			TweakDBDescriptionRecord = new() { Value = 123011726280 };
+			TerminalSetup = new() { MinClearance = 1, MaxClearance = 10, ShouldForceVirtualSystem = true };
+			SpawnedSystems = new();
+			DefaultGlitchVideoPath = new();
+			BroadcastGlitchVideoPath = new();
 		}
 	}
 }

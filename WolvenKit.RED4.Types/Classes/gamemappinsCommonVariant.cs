@@ -5,29 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamemappinsCommonVariant : gamemappinsIPointOfInterestVariant
 	{
-		private TweakDBID _mappinType;
-		private CEnum<gamedataMappinVariant> _variant;
-
 		[Ordinal(0)] 
 		[RED("mappinType")] 
 		public TweakDBID MappinType
 		{
-			get => GetProperty(ref _mappinType);
-			set => SetProperty(ref _mappinType, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("variant")] 
 		public CEnum<gamedataMappinVariant> Variant
 		{
-			get => GetProperty(ref _variant);
-			set => SetProperty(ref _variant, value);
+			get => GetPropertyValue<CEnum<gamedataMappinVariant>>();
+			set => SetPropertyValue<CEnum<gamedataMappinVariant>>(value);
 		}
 
 		public gamemappinsCommonVariant()
 		{
-			_mappinType = new() { Value = 169957907894 };
-			_variant = new() { Value = Enums.gamedataMappinVariant.DefaultVariant };
+			MappinType = new() { Value = 169957907894 };
+			Variant = Enums.gamedataMappinVariant.DefaultVariant;
 		}
 	}
 }

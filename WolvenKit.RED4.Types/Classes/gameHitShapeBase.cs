@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameHitShapeBase : gameIHitShape
 	{
-		private Vector3 _translation;
-		private Quaternion _rotation;
-		private CMatrix _localTransform;
-
 		[Ordinal(0)] 
 		[RED("translation")] 
 		public Vector3 Translation
 		{
-			get => GetProperty(ref _translation);
-			set => SetProperty(ref _translation, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("rotation")] 
 		public Quaternion Rotation
 		{
-			get => GetProperty(ref _rotation);
-			set => SetProperty(ref _rotation, value);
+			get => GetPropertyValue<Quaternion>();
+			set => SetPropertyValue<Quaternion>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("localTransform")] 
 		public CMatrix LocalTransform
 		{
-			get => GetProperty(ref _localTransform);
-			set => SetProperty(ref _localTransform, value);
+			get => GetPropertyValue<CMatrix>();
+			set => SetPropertyValue<CMatrix>(value);
 		}
 	}
 }

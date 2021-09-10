@@ -5,29 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldTrafficLanePlayerGPSInfo : RedBaseClass
 	{
-		private CUInt16 _subGraphId;
-		private CUInt16 _stronglyConnectedComponentId;
-
 		[Ordinal(0)] 
 		[RED("subGraphId")] 
 		public CUInt16 SubGraphId
 		{
-			get => GetProperty(ref _subGraphId);
-			set => SetProperty(ref _subGraphId, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("stronglyConnectedComponentId")] 
 		public CUInt16 StronglyConnectedComponentId
 		{
-			get => GetProperty(ref _stronglyConnectedComponentId);
-			set => SetProperty(ref _stronglyConnectedComponentId, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		public worldTrafficLanePlayerGPSInfo()
 		{
-			_subGraphId = 65535;
-			_stronglyConnectedComponentId = 65535;
+			SubGraphId = 65535;
+			StronglyConnectedComponentId = 65535;
 		}
 	}
 }

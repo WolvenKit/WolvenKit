@@ -5,50 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIActionHelperTask : AIbehaviortaskScript
 	{
-		private CHandle<AIArgumentMapping> _actionTweakIDMapping;
-		private CString _actionStringName;
-		private CBool _initialized;
-		private CName _actionName;
-		private TweakDBID _actionID;
-
 		[Ordinal(0)] 
 		[RED("actionTweakIDMapping")] 
 		public CHandle<AIArgumentMapping> ActionTweakIDMapping
 		{
-			get => GetProperty(ref _actionTweakIDMapping);
-			set => SetProperty(ref _actionTweakIDMapping, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("actionStringName")] 
 		public CString ActionStringName
 		{
-			get => GetProperty(ref _actionStringName);
-			set => SetProperty(ref _actionStringName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("initialized")] 
 		public CBool Initialized
 		{
-			get => GetProperty(ref _initialized);
-			set => SetProperty(ref _initialized, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("actionName")] 
 		public CName ActionName
 		{
-			get => GetProperty(ref _actionName);
-			set => SetProperty(ref _actionName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("actionID")] 
 		public TweakDBID ActionID
 		{
-			get => GetProperty(ref _actionID);
-			set => SetProperty(ref _actionID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 	}
 }

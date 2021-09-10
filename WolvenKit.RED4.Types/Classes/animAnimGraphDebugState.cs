@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimGraphDebugState : ISerializable
 	{
-		private CArray<animAnimNodeDebugState> _nodes;
-
 		[Ordinal(0)] 
 		[RED("nodes")] 
 		public CArray<animAnimNodeDebugState> Nodes
 		{
-			get => GetProperty(ref _nodes);
-			set => SetProperty(ref _nodes, value);
+			get => GetPropertyValue<CArray<animAnimNodeDebugState>>();
+			set => SetPropertyValue<CArray<animAnimNodeDebugState>>(value);
+		}
+
+		public animAnimGraphDebugState()
+		{
+			Nodes = new();
 		}
 	}
 }

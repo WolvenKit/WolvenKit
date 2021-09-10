@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_StagePoseEntry : animAnimNode_Base
 	{
-		private CName _inputName;
-		private animPoseLink _parentInput;
-
 		[Ordinal(11)] 
 		[RED("inputName")] 
 		public CName InputName
 		{
-			get => GetProperty(ref _inputName);
-			set => SetProperty(ref _inputName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("parentInput")] 
 		public animPoseLink ParentInput
 		{
-			get => GetProperty(ref _parentInput);
-			set => SetProperty(ref _parentInput, value);
+			get => GetPropertyValue<animPoseLink>();
+			set => SetPropertyValue<animPoseLink>(value);
+		}
+
+		public animAnimNode_StagePoseEntry()
+		{
+			Id = 4294967295;
+			ParentInput = new();
 		}
 	}
 }

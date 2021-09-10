@@ -5,28 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animPlaneUncompressedMotionExtraction : animIMotionExtraction
 	{
-		private CArray<Vector3> _frames;
-		private CFloat _duration;
-
 		[Ordinal(0)] 
 		[RED("frames")] 
 		public CArray<Vector3> Frames
 		{
-			get => GetProperty(ref _frames);
-			set => SetProperty(ref _frames, value);
+			get => GetPropertyValue<CArray<Vector3>>();
+			set => SetPropertyValue<CArray<Vector3>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get => GetProperty(ref _duration);
-			set => SetProperty(ref _duration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public animPlaneUncompressedMotionExtraction()
 		{
-			_duration = 1.000000F;
+			Frames = new();
+			Duration = 1.000000F;
 		}
 	}
 }

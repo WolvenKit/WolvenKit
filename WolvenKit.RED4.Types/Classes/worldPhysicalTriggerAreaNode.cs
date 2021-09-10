@@ -5,37 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldPhysicalTriggerAreaNode : worldNode
 	{
-		private CEnum<physicsSimulationType> _simulationType;
-		private physicsTriggerShape _shape;
-		private CHandle<physicsFilterData> _filterData;
-
 		[Ordinal(4)] 
 		[RED("simulationType")] 
 		public CEnum<physicsSimulationType> SimulationType
 		{
-			get => GetProperty(ref _simulationType);
-			set => SetProperty(ref _simulationType, value);
+			get => GetPropertyValue<CEnum<physicsSimulationType>>();
+			set => SetPropertyValue<CEnum<physicsSimulationType>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("shape")] 
 		public physicsTriggerShape Shape
 		{
-			get => GetProperty(ref _shape);
-			set => SetProperty(ref _shape, value);
+			get => GetPropertyValue<physicsTriggerShape>();
+			set => SetPropertyValue<physicsTriggerShape>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("filterData")] 
 		public CHandle<physicsFilterData> FilterData
 		{
-			get => GetProperty(ref _filterData);
-			set => SetProperty(ref _filterData, value);
+			get => GetPropertyValue<CHandle<physicsFilterData>>();
+			set => SetPropertyValue<CHandle<physicsFilterData>>(value);
 		}
 
 		public worldPhysicalTriggerAreaNode()
 		{
-			_simulationType = new() { Value = Enums.physicsSimulationType.Dynamic };
+			SimulationType = Enums.physicsSimulationType.Dynamic;
+			Shape = new() { ShapeSize = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F }, ShapeLocalPose = new() { Position = new(), Orientation = new() { R = 1.000000F } } };
 		}
 	}
 }

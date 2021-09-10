@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SBaseActionOperationData : RedBaseClass
 	{
-		private CHandle<ScriptableDeviceAction> _action;
-		private SBaseDeviceOperationData _operation;
-
 		[Ordinal(0)] 
 		[RED("action")] 
 		public CHandle<ScriptableDeviceAction> Action
 		{
-			get => GetProperty(ref _action);
-			set => SetProperty(ref _action, value);
+			get => GetPropertyValue<CHandle<ScriptableDeviceAction>>();
+			set => SetPropertyValue<CHandle<ScriptableDeviceAction>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("operation")] 
 		public SBaseDeviceOperationData Operation
 		{
-			get => GetProperty(ref _operation);
-			set => SetProperty(ref _operation, value);
+			get => GetPropertyValue<SBaseDeviceOperationData>();
+			set => SetPropertyValue<SBaseDeviceOperationData>(value);
+		}
+
+		public SBaseActionOperationData()
+		{
+			Operation = new() { IsEnabled = true, TransformAnimations = new(), VFXs = new(), SFXs = new(), Facts = new(), Components = new(), Stims = new(), StatusEffects = new(), Damages = new(), Items = new(), Teleport = new(), PlayerWorkspot = new(), ToggleOperations = new(), DelayID = new() };
 		}
 	}
 }

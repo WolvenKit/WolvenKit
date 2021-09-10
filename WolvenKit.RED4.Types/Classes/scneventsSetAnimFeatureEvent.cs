@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scneventsSetAnimFeatureEvent : scnSceneEvent
 	{
-		private scnActorId _actorId;
-		private CName _animFeatureName;
-		private CHandle<animAnimFeature> _animFeature;
-
 		[Ordinal(6)] 
 		[RED("actorId")] 
 		public scnActorId ActorId
 		{
-			get => GetProperty(ref _actorId);
-			set => SetProperty(ref _actorId, value);
+			get => GetPropertyValue<scnActorId>();
+			set => SetPropertyValue<scnActorId>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("animFeatureName")] 
 		public CName AnimFeatureName
 		{
-			get => GetProperty(ref _animFeatureName);
-			set => SetProperty(ref _animFeatureName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("animFeature")] 
 		public CHandle<animAnimFeature> AnimFeature
 		{
-			get => GetProperty(ref _animFeature);
-			set => SetProperty(ref _animFeature, value);
+			get => GetPropertyValue<CHandle<animAnimFeature>>();
+			set => SetPropertyValue<CHandle<animAnimFeature>>(value);
+		}
+
+		public scneventsSetAnimFeatureEvent()
+		{
+			Id = new() { Id = 18446744073709551615 };
+			ActorId = new() { Id = 4294967295 };
 		}
 	}
 }

@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class netFramesInputsHistory : RedBaseClass
 	{
-		private CArray<netFrameInputs> _frames;
-
 		[Ordinal(0)] 
 		[RED("frames")] 
 		public CArray<netFrameInputs> Frames
 		{
-			get => GetProperty(ref _frames);
-			set => SetProperty(ref _frames, value);
+			get => GetPropertyValue<CArray<netFrameInputs>>();
+			set => SetPropertyValue<CArray<netFrameInputs>>(value);
+		}
+
+		public netFramesInputsHistory()
+		{
+			Frames = new();
 		}
 	}
 }

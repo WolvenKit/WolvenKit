@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameMuppetInventorySlotInfo : RedBaseClass
 	{
-		private TweakDBID _itemCategory;
-		private gameItemID _itemId;
-		private CUInt32 _quantity;
-
 		[Ordinal(0)] 
 		[RED("itemCategory")] 
 		public TweakDBID ItemCategory
 		{
-			get => GetProperty(ref _itemCategory);
-			set => SetProperty(ref _itemCategory, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("itemId")] 
 		public gameItemID ItemId
 		{
-			get => GetProperty(ref _itemId);
-			set => SetProperty(ref _itemId, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("quantity")] 
 		public CUInt32 Quantity
 		{
-			get => GetProperty(ref _quantity);
-			set => SetProperty(ref _quantity, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		public gameMuppetInventorySlotInfo()
+		{
+			ItemId = new();
 		}
 	}
 }

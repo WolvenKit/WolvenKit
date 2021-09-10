@@ -5,46 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIEquipCommand : AICommand
 	{
-		private TweakDBID _slotId;
-		private TweakDBID _itemId;
-		private CBool _failIfItemNotFound;
-		private CFloat _durationOverride;
-
 		[Ordinal(4)] 
 		[RED("slotId")] 
 		public TweakDBID SlotId
 		{
-			get => GetProperty(ref _slotId);
-			set => SetProperty(ref _slotId, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("itemId")] 
 		public TweakDBID ItemId
 		{
-			get => GetProperty(ref _itemId);
-			set => SetProperty(ref _itemId, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("failIfItemNotFound")] 
 		public CBool FailIfItemNotFound
 		{
-			get => GetProperty(ref _failIfItemNotFound);
-			set => SetProperty(ref _failIfItemNotFound, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("durationOverride")] 
 		public CFloat DurationOverride
 		{
-			get => GetProperty(ref _durationOverride);
-			set => SetProperty(ref _durationOverride, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public AIEquipCommand()
 		{
-			_durationOverride = -1.000000F;
+			DurationOverride = -1.000000F;
 		}
 	}
 }

@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using WolvenKit.RED4.Types;
@@ -12,7 +14,7 @@ namespace WolvenKit.RED4.IO
     public class Red4Reader : IDisposable
     {
         protected readonly BinaryReader _reader;
-        protected List<string> _stringList;
+        protected IList<CName> _stringList;
 
         private bool _disposed;
 
@@ -24,20 +26,72 @@ namespace WolvenKit.RED4.IO
         {
         }
 
-        public Red4Reader(Stream input, Encoding encoding, bool leaveOpen)
+        public Red4Reader(Stream input, Encoding encoding, bool leaveOpen) : this(new BinaryReader(input, encoding, leaveOpen))
         {
-            _reader = new BinaryReader(input, encoding, leaveOpen);
+        }
+
+        public Red4Reader(BinaryReader reader)
+        {
+            _reader = reader;
         }
 
         public BinaryReader BaseReader => _reader;
         public Stream BaseStream => _reader.BaseStream;
 
-        public void SetStringList(List<string> stringList)
-        {
-            _stringList = stringList;
-        }
+        public int Position => (int)_reader.BaseStream.Position;
 
         #region Support
+
+        internal const byte s_VLQ_Continuation = 0b10000000;
+        internal const byte s_VLQ_ValueMask = 0b01111111;
+
+        private bool HasFlag(byte b, byte flag) => (b & flag) == flag;
+
+        public int ReadVLQ()
+        {
+            var b = _reader.ReadByte();
+            var isNegative = HasFlag(b, 0b10000000);
+            // Initial value from the lower 6 bits
+            var value = b & 0b00111111;
+
+            // First octet stores the continuation flag in the 6th bit
+            // Is value larger than 6 bits?
+            if (HasFlag(b, 0b01000000))
+            {
+                b = _reader.ReadByte();
+                // Mask and add the next 7 bits
+                value |= (b & s_VLQ_ValueMask) << 6;
+
+                // Is value larger than 13 bits?
+                if (HasFlag(b, s_VLQ_Continuation))
+                {
+                    b = _reader.ReadByte();
+                    value |= (b & s_VLQ_ValueMask) << 13;
+
+                    // Is value larger than 20 bits?
+                    if (HasFlag(b, s_VLQ_Continuation))
+                    {
+                        b = _reader.ReadByte();
+                        value |= (b & s_VLQ_ValueMask) << 20;
+
+                        // Is value larger than 27 bits?
+                        if (HasFlag(b, s_VLQ_Continuation))
+                        {
+                            b = _reader.ReadByte();
+                            value |= (b & s_VLQ_ValueMask) << 27;
+
+                            // Is value larger than 34 bits? That seems bad
+                            if (HasFlag(b, s_VLQ_Continuation))
+                            {
+                                throw new InvalidDataException($"Continuation bit set on 5th byte");
+                            }
+                        }
+                    }
+                }
+            }
+
+            return isNegative ? -value : value;
+        }
 
         /// <summary>
         /// Reads a string from a BinaryReader Stream
@@ -76,6 +130,17 @@ namespace WolvenKit.RED4.IO
             return readstring;
         }
 
+        public string ReadNullTerminatedString()
+        {
+            var sb = new StringBuilder();
+            for (byte b; (b = _reader.ReadByte()) != 0x00;)
+            {
+                sb.Append((char)b);
+            }
+
+            return sb.ToString();
+        }
+
         #endregion
 
         #region Fundamentals
@@ -98,23 +163,47 @@ namespace WolvenKit.RED4.IO
 
         public virtual CDateTime ReadCDateTime() => _reader.ReadUInt64();
 
-        public virtual CGUID ReadCGUID() => _reader.ReadBytes(16);
+        public virtual CGuid ReadCGuid() => _reader.ReadBytes(16);
         public virtual CName ReadCName() => _stringList[_reader.ReadUInt16()];
         public virtual CRUID ReadCRUID() => _reader.ReadUInt64();
         public virtual CString ReadCString() => ReadLengthPrefixedString();
-        public virtual CVariant ReadCVariant() => (CVariant)ThrowNotImplemented();
+
+        public virtual CVariant ReadCVariant()
+        {
+            var result = new CVariant();
+
+            var typeName = _stringList[_reader.ReadUInt16()];
+            var (type, flags) = RedReflection.GetCSTypeFromRedType(typeName);
+            var size = _reader.ReadUInt32() - 4;
+            if (size > 0)
+            {
+                result.Value = Read(type, size, flags);
+            }
+
+            if (result.Value == null)
+            {
+
+            }
+
+            return result;
+        }
 
         public virtual DataBuffer ReadDataBuffer(uint size)
         {
-            if (size != 4)
+            var bufferSize = _reader.ReadUInt32();
+            if (bufferSize >= 0x80000000)
             {
-                throw new InvalidParsingException(nameof(ReadDataBuffer));
+                return new DataBuffer
+                {
+                    Pointer = (int)(bufferSize ^ 0x80000000),
+                    Buffer = Array.Empty<byte>()
+                };
             }
 
-            var result = new DataBuffer { Buffer = _reader.ReadUInt16() };
-            _reader.ReadUInt16();
-
-            return result;
+            return new DataBuffer
+            {
+                Buffer = _reader.ReadBytes((int)bufferSize)
+            };
         }
 
         public virtual EditorObjectID ReadEditorObjectID() => (EditorObjectID)ThrowNotImplemented();
@@ -127,7 +216,7 @@ namespace WolvenKit.RED4.IO
             };
 
         public virtual MessageResourcePath ReadMessageResourcePath() => (MessageResourcePath)ThrowNotImplemented();
-        public virtual MultiChannelCurve<T> ReadMultiChannelCurve<T>() where T : IRedType => (MultiChannelCurve<T>)ThrowNotImplemented();
+
         public virtual NodeRef ReadNodeRef() => ReadLengthPrefixedString();
 
         public virtual SerializationDeferredDataBuffer ReadSerializationDeferredDataBuffer(uint size)
@@ -137,244 +226,322 @@ namespace WolvenKit.RED4.IO
                 throw new InvalidParsingException(nameof(ReadSerializationDeferredDataBuffer));
             }
             
-            return new() { Buffer = ReadCUInt16() };
+            return new() { Buffer = _reader.ReadUInt16() };
         }
-        public virtual SharedDataBuffer ReadSharedDataBuffer() => (SharedDataBuffer)ThrowNotImplemented();
+
+        public virtual SharedDataBuffer ReadSharedDataBuffer(uint size)
+        {
+            return new SharedDataBuffer { Buffer = _reader.ReadBytes((int)size) };
+        }
+
         public virtual TweakDBID ReadTweakDBID() => _reader.ReadUInt64();
 
         #endregion Simples
 
         #region General
 
-        public virtual IRedArray<T> ReadCArray<T>(IRedArray array) where T : IRedType
+        public virtual IRedMultiChannelCurve ReadMultiChannelCurve(Type type)
         {
-            var instance = new CArray<T>();
-            ReadCArray(instance);
-            return instance;
+            var innerType = type.GetGenericArguments()[0];
+
+            var method = typeof(Red4Reader).GetMethod(nameof(ReadMultiChannelCurve), Type.EmptyTypes);
+            var generic = method.MakeGenericMethod(innerType);
+
+            return (IRedMultiChannelCurve)generic.Invoke(this, null);
         }
 
-        public virtual void ReadCArray(IRedArray array)
+        public virtual IRedMultiChannelCurve<T> ReadMultiChannelCurve<T>() where T : IRedType
         {
-            ThrowNotImplemented();
+            var result = new MultiChannelCurve<T>();
+
+            result.NumChannels = _reader.ReadUInt32();
+            result.InterPolationType = (Enums.EInterPolationType)_reader.ReadByte();
+            result.LinkType = (Enums.EChannelLinkType)_reader.ReadByte();
+            result.Alignment = _reader.ReadUInt32();
+
+            var size = _reader.ReadUInt32();
+            result.Data = _reader.ReadBytes((int)size);
+
+            return result;
         }
 
-        public virtual IRedArray<T> ReadCArrayFixedSize<T>(IRedArray array) where T : IRedType
+        public virtual IRedArray ReadCArray(Type type, uint size)
         {
-            var instance = new CArrayFixedSize<T>();
-            ReadCArrayFixedSize(instance);
-            return instance;
+            var innerType = type.GetGenericArguments()[0];
+
+            var method = typeof(Red4Reader).GetMethod(nameof(ReadCArray), new[] { typeof(uint) });
+            var generic = method.MakeGenericMethod(innerType);
+
+            return (IRedArray)generic.Invoke(this, new object[] { size });
         }
 
-        public virtual void ReadCArrayFixedSize(IRedArray array)
+        public virtual IRedArray<T> ReadCArray<T>(uint size) where T : IRedType
         {
-            ThrowNotImplemented();
+            return (IRedArray<T>)ThrowNotImplemented();
         }
 
-        public virtual IRedEnum<T> ReadCBitField<T>() where T : Enum
+        public virtual IRedArrayFixedSize ReadCArrayFixedSize(Type type, uint size, Flags flags)
         {
-            var instance = new CBitField<T>();
-            ReadCBitField(instance);
-            return instance;
+            var innerType = type.GetGenericArguments()[0];
+
+            var method = typeof(Red4Reader).GetMethod(nameof(ReadCArrayFixedSize), new[] { typeof(uint), typeof(Flags) });
+            var generic = method.MakeGenericMethod(innerType);
+
+            return (IRedArrayFixedSize)generic.Invoke(this, new object[] { size, flags });
         }
 
-        public virtual void ReadCBitField(IRedEnum instance)
+        public virtual IRedArrayFixedSize<T> ReadCArrayFixedSize<T>(uint size, Flags flags) where T : IRedType
         {
-            if (instance == null)
+            return (IRedArrayFixedSize<T>)ThrowNotImplemented();
+        }
+
+        public virtual IRedBitField ReadCBitField(Type type)
+        {
+            var innerType = type.GetGenericArguments()[0];
+
+            var method = typeof(Red4Reader).GetMethod(nameof(ReadCBitField), Type.EmptyTypes);
+            var generic = method.MakeGenericMethod(innerType);
+
+            return (IRedBitField)generic.Invoke(this, null);
+        }
+
+        public virtual CBitField<T> ReadCBitField<T>() where T : struct, Enum
+        {
+            var enumString = "";
+
+            while (true)
             {
-                throw new ArgumentNullException(nameof(instance));
+                var index = _reader.ReadUInt16();
+                if (index == 0)
+                {
+                    break;
+                }
+
+                if (!string.IsNullOrEmpty(enumString))
+                {
+                    enumString += ", ";
+                }
+
+                enumString += _stringList[index];
             }
 
-            var innerType = instance.GetType().GetGenericArguments()[0];
-
-            var index = _reader.ReadUInt16();
-            var enumString = _stringList[index];
-            var enumValue = Enum.Parse(innerType, enumString);
-
-            instance.SetValue(enumValue);
-        }
-
-        public virtual IRedEnum<T> ReadCEnum<T>() where T : Enum
-        {
-            var instance = new CEnum<T>();
-            ReadCEnum(instance);
-            return instance;
-        }
-
-        public virtual void ReadCEnum(IRedEnum instance)
-        {
-            if (instance == null)
+            if (string.IsNullOrEmpty(enumString))
             {
-                throw new ArgumentNullException(nameof(instance));
+                return default(T);
             }
+            
+            return Enum.Parse<T>(enumString);
+        }
 
-            var innerType = instance.GetType().GetGenericArguments()[0];
+        public virtual IRedEnum ReadCEnum(Type type)
+        {
+            var innerType = type.GetGenericArguments()[0];
 
+            var method = typeof(Red4Reader).GetMethod(nameof(ReadCEnum), Type.EmptyTypes);
+            var generic = method.MakeGenericMethod(innerType);
+
+            return (IRedEnum)generic.Invoke(this, null);
+        }
+
+        public virtual CEnum<T> ReadCEnum<T>() where T : struct, Enum
+        {
             var index = _reader.ReadUInt16();
             var enumString = _stringList[index];
-            var enumValue = Enum.Parse(innerType, enumString);
 
-            instance.SetValue(enumValue);
+            return CEnum.Parse<T>(enumString);
+        }
+
+        public virtual IRedHandle ReadCHandle(Type type)
+        {
+            var innerType = type.GetGenericArguments()[0];
+
+            var method = typeof(Red4Reader).GetMethod(nameof(ReadCHandle), Type.EmptyTypes);
+            var generic = method.MakeGenericMethod(innerType);
+
+            return (IRedHandle)generic.Invoke(this, null);
         }
 
         public virtual IRedHandle<T> ReadCHandle<T>() where T : IRedClass
         {
             var instance = new CHandle<T>();
-            ReadCHandle(instance);
+            instance.SetValue(_reader.ReadInt32());
             return instance;
         }
 
-        public virtual void ReadCHandle(IRedHandle instance)
+        public virtual IRedLegacySingleChannelCurve ReadCLegacySingleChannelCurve(Type type)
         {
-            if (instance == null)
-            {
-                throw new ArgumentNullException(nameof(instance));
-            }
+            var innerType = type.GetGenericArguments()[0];
 
-            instance.SetValue(_reader.ReadInt32());
+            var method = typeof(Red4Reader).GetMethod(nameof(ReadCLegacySingleChannelCurve), Type.EmptyTypes);
+            var generic = method.MakeGenericMethod(innerType);
+
+            return (IRedLegacySingleChannelCurve)generic.Invoke(this, null);
         }
 
         public virtual IRedLegacySingleChannelCurve<T> ReadCLegacySingleChannelCurve<T>() where T : IRedType
         {
             var instance = new CLegacySingleChannelCurve<T>();
-            ReadCLegacySingleChannelCurve(instance);
-            return instance;
-        }
-
-        public virtual void ReadCLegacySingleChannelCurve(IRedLegacySingleChannelCurve singleChannelCurve)
-        {
-            if (singleChannelCurve == null)
-            {
-                throw new ArgumentNullException(nameof(singleChannelCurve));
-            }
-
-            var innerType = singleChannelCurve.GetType().GetGenericArguments()[0];
-
-            var startPos = BaseStream.Position;
 
             var elementCount = _reader.ReadUInt32();
             for (var i = 0; i < elementCount; i++)
             {
-                var constructedType = typeof(CurvePoint<>).MakeGenericType(innerType);
-                var curvePoint = (IRedCurvePoint)System.Activator.CreateInstance(constructedType);
+                var curvePoint = new CurvePoint<T>();
 
-                var element = Read(innerType);
+                IRedType element;
+                if (typeof(IRedClass).IsAssignableFrom(typeof(T)))
+                {
+                    element = ReadFixedClass(typeof(T), 0);
+                }
+                else
+                {
+                    element = Read(typeof(T), 0, Flags.Empty);
+                }
+
                 var point = _reader.ReadSingle();
 
-                if (element.GetType() == innerType)
+                if (element.GetType() == typeof(T))
                 {
                     curvePoint.SetPoint(point);
                     curvePoint.SetValue(element);
 
-                    singleChannelCurve.Add(curvePoint);
+                    instance.Add(curvePoint);
                 }
             }
 
-            singleChannelCurve.Tail = _reader.ReadUInt16();
-        }
+            instance.Tail = _reader.ReadUInt16();
 
-        public virtual IRedResourceReference<T> ReadCResourceAsyncReference<T>() where T : IRedType
-        {
-            var instance = new CResourceAsyncReference<T>();
-            ReadCResourceAsyncReference(instance);
             return instance;
         }
 
-        public virtual void ReadCResourceAsyncReference(IRedResourceReference instance)
+        public virtual IRedResourceAsyncReference ReadCResourceAsyncReference(Type type)
         {
-            if (instance == null)
-            {
-                throw new ArgumentNullException(nameof(instance));
-            }
+            var innerType = type.GetGenericArguments()[0];
 
-            instance.SetValue(_reader.ReadUInt16());
+            var method = typeof(Red4Reader).GetMethod(nameof(ReadCResourceAsyncReference), Type.EmptyTypes);
+            var generic = method.MakeGenericMethod(innerType);
+
+            return (IRedResourceAsyncReference)generic.Invoke(this, null);
         }
 
-        public virtual IRedResourceReference<T> ReadCResourceReference<T>() where T : IRedType
+        public virtual IRedResourceAsyncReference<T> ReadCResourceAsyncReference<T>() where T : IRedClass
         {
-            var instance = new CResourceReference<T>();
-            ReadCResourceReference(instance);
-            return instance;
+            return (IRedResourceAsyncReference<T>)ThrowNotImplemented();
         }
 
-        public virtual void ReadCResourceReference(IRedResourceReference instance)
+        public virtual IRedResourceReference ReadCResourceReference(Type type)
         {
-            if (instance == null)
-            {
-                throw new ArgumentNullException(nameof(instance));
-            }
+            var innerType = type.GetGenericArguments()[0];
 
-            instance.SetValue(_reader.ReadUInt16());
+            var method = typeof(Red4Reader).GetMethod(nameof(ReadCResourceReference), Type.EmptyTypes);
+            var generic = method.MakeGenericMethod(innerType);
+
+            return (IRedResourceReference)generic.Invoke(this, null);
         }
 
-        public virtual IRedArray<T> ReadCStaticArray<T>() where T : IRedType
+        public virtual IRedResourceReference<T> ReadCResourceReference<T>() where T : IRedClass
         {
-            var instance = new CStatic<T>();
-            ReadCStaticArray(instance);
-            return instance;
+            return (IRedResourceReference<T>)ThrowNotImplemented();
         }
 
-        public virtual void ReadCStaticArray(IRedArray array)
+        public virtual IRedStatic ReadCStaticArray(Type type, uint size, Flags flags)
         {
-            ThrowNotImplemented();
+            var innerType = type.GetGenericArguments()[0];
+
+            var method = typeof(Red4Reader).GetMethod(nameof(ReadCStaticArray), new[] { typeof(uint), typeof(Flags) });
+            var generic = method.MakeGenericMethod(innerType);
+
+            return (IRedStatic)generic.Invoke(this, new object[] { size, flags });
         }
 
-        public virtual IRedHandle<T> ReadCWeakHandle<T>() where T : IRedClass
+        public virtual IRedStatic<T> ReadCStaticArray<T>(uint size, Flags flags) where T : IRedType
+        {
+            return (IRedStatic<T>)ThrowNotImplemented();
+        }
+
+        public virtual IRedWeakHandle ReadCWeakHandle(Type type)
+        {
+            var innerType = type.GetGenericArguments()[0];
+
+            var method = typeof(Red4Reader).GetMethod(nameof(ReadCWeakHandle), Type.EmptyTypes);
+            var generic = method.MakeGenericMethod(innerType);
+
+            return (IRedWeakHandle)generic.Invoke(this, null);
+        }
+
+        public virtual IRedWeakHandle<T> ReadCWeakHandle<T>() where T : IRedClass
         {
             var instance = new CWeakHandle<T>();
-            ReadCWeakHandle(instance);
-            return instance;
-        }
-
-        public virtual void ReadCWeakHandle(IRedHandle instance)
-        {
-            if (instance == null)
-            {
-                throw new ArgumentNullException(nameof(instance));
-            }
-
             instance.SetValue(_reader.ReadInt32());
+            return instance;
         }
 
         #endregion General
 
         #region Helper
 
-        protected IRedPrimitive ThrowNotImplemented([CallerMemberName] string callerMemberName = "")
+        protected IRedType ThrowNotImplemented([CallerMemberName] string callerMemberName = "")
         {
             throw new NotImplementedException($"{nameof(Red4Reader)}.{callerMemberName}");
         }
 
-        protected IRedPrimitive ThrowNotSupported([CallerMemberName] string callerMemberName = "")
+        protected IRedType ThrowNotSupported([CallerMemberName] string callerMemberName = "")
         {
             throw new NotSupportedException($"{nameof(Red4Reader)}.{callerMemberName}");
         }
 
         #endregion
 
-        public virtual IRedClass ReadClass<T>(T type) where T : IRedClass => ReadClass(typeof(T));
+        //public virtual IRedClass ReadClass<T>(T type, uint size) where T : IRedClass => ReadClass(type.GetType(), size);
 
-        public virtual IRedClass ReadClass(Type type)
+        public virtual IRedClass ReadClass(Type type, uint size)
         {
             if (!typeof(IRedClass).IsAssignableFrom(type))
             {
                 throw new ArgumentException(nameof(type));
             }
 
-            var instance = (IRedClass)System.Activator.CreateInstance(type);
-            ReadClass(instance);
+            var instance = RedTypeManager.Create(type);
+            ReadClass(instance, size);
             return instance;
         }
 
-        protected virtual void ReadClass(IRedClass cls)
+        public virtual void ReadClass(IRedClass cls, uint size)
         {
             ThrowNotImplemented();
         }
 
-        public virtual IRedType Read(Type type, uint size = 0)
+        public virtual IRedClass ReadFixedClass(Type type, uint size)
+        {
+            var typeInfo = RedReflection.GetTypeInfo(type);
+
+            var instance = RedTypeManager.Create(type);
+            foreach (var propertyInfo in typeInfo.PropertyInfos)
+            {
+                var value = Read(propertyInfo.Type, 0, Flags.Empty);
+                instance.InternalSetPropertyValue(propertyInfo.RedName, value);
+            }
+
+            return instance;
+        }
+
+        public virtual IRedClass ReadAITrafficWorkspotCompiled(uint size)
+        {
+            return new AITrafficWorkspotCompiled
+            {
+                Buffer = _reader.ReadBytes((int)size)
+            };
+        }
+
+        public virtual void ReadChunks()
+        {
+
+        }
+
+        public virtual IRedType Read(Type type, uint size = 0, Flags flags = null)
         {
             if (typeof(IRedClass).IsAssignableFrom(type))
             {
-                return ReadClass(type);
+                return ReadClass(type, size);
             }
 
             if (!typeof(IRedType).IsAssignableFrom(type))
@@ -382,21 +549,9 @@ namespace WolvenKit.RED4.IO
                 return ThrowNotSupported(type.Name);
             }
 
-            if (type.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IRedPrimitive<>)))
+            if (type.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IRedGenericType<>)))
             {
-                try
-                {
-                    var genArgs = type.GetGenericArguments();
-                    return ReadGeneric(type, type.GetGenericArguments()[0]);
-                }
-                catch (MissingRTTIException)
-                {
-                    throw;
-                }
-                catch (Exception e)
-                {
-                    throw;
-                }
+                return ReadGeneric(type, size, flags);
             }
 
             switch (type)
@@ -437,8 +592,8 @@ namespace WolvenKit.RED4.IO
                 case { } when type == typeof(CDateTime):
                     return ReadCDateTime();
 
-                case { } when type == typeof(CGUID):
-                    return ReadCGUID();
+                case { } when type == typeof(CGuid):
+                    return ReadCGuid();
 
                 case { } when type == typeof(CName):
                     return ReadCName();
@@ -471,7 +626,7 @@ namespace WolvenKit.RED4.IO
                     return ReadSerializationDeferredDataBuffer(size);
 
                 case { } when type == typeof(SharedDataBuffer):
-                    return ReadSharedDataBuffer();
+                    return ReadSharedDataBuffer(size);
 
                 case { } when type == typeof(TweakDBID):
                     return ReadTweakDBID();
@@ -481,43 +636,42 @@ namespace WolvenKit.RED4.IO
             }
         }
 
-        protected virtual IRedType ReadGeneric(Type type, Type genericType)
+        protected virtual IRedType ReadGeneric(Type type, uint size, Flags flags)
         {
-            var instance = (IRedPrimitive)System.Activator.CreateInstance(type);
-
             switch (type.GetGenericTypeDefinition())
             {
                 case { } cType when cType == typeof(CArray<>):
-                    ReadCArray((IRedArray)instance);
-                    return instance;
+                    return ReadCArray(type, size);
+
+                case { } cType when cType == typeof(CArrayFixedSize<>):
+                    return ReadCArrayFixedSize(type, size, flags);
+
+                case { } cType when cType == typeof(CBitField<>):
+                    return ReadCBitField(type);
 
                 case { } cType when cType == typeof(CEnum<>):
-                    ReadCEnum((IRedEnum)instance);
-                    return instance;
+                    return ReadCEnum(type);
 
                 case { } cType when cType == typeof(CHandle<>):
-                    ReadCHandle((IRedHandle)instance);
-                    return instance;
+                    return ReadCHandle(type);
 
                 case { } cType when cType == typeof(CLegacySingleChannelCurve<>):
-                    ReadCLegacySingleChannelCurve((IRedLegacySingleChannelCurve)instance);
-                    return instance;
+                    return ReadCLegacySingleChannelCurve(type);
+
+                case { } cType when cType == typeof(MultiChannelCurve<>):
+                    return ReadMultiChannelCurve(type);
 
                 case { } cType when cType == typeof(CResourceAsyncReference<>):
-                    ReadCResourceAsyncReference((IRedResourceReference)instance);
-                    return instance;
+                    return ReadCResourceAsyncReference(type);
 
                 case { } cType when cType == typeof(CResourceReference<>):
-                    ReadCResourceReference((IRedResourceReference)instance);
-                    return instance;
+                    return ReadCResourceReference(type);
 
                 case { } cType when cType == typeof(CStatic<>):
-                    ReadCStaticArray((IRedArray)instance);
-                    return instance;
+                    return ReadCStaticArray(type, size, flags);
 
                 case { } cType when cType == typeof(CWeakHandle<>):
-                    ReadCWeakHandle((IRedHandle)instance);
-                    return instance;
+                    return ReadCWeakHandle(type);
 
                 default:
                     return ThrowNotSupported(type.Name);

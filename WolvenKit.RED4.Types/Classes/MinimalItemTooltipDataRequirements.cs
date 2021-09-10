@@ -5,113 +5,100 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MinimalItemTooltipDataRequirements : IScriptable
 	{
-		private CBool _isLevelRequirementNotMet;
-		private CBool _isSmartlinkRequirementNotMet;
-		private CBool _isStrengthRequirementNotMet;
-		private CBool _isReflexRequirementNotMet;
-		private CBool _isAnyStatRequirementNotMet;
-		private CString _strengthOrReflexStatName;
-		private CString _anyStatName;
-		private CString _anyStatColor;
-		private CString _anyStatLocKey;
-		private CInt32 _strengthOrReflexValue;
-		private CInt32 _anyStatValue;
-		private CInt32 _requiredLevel;
-
 		[Ordinal(0)] 
 		[RED("isLevelRequirementNotMet")] 
 		public CBool IsLevelRequirementNotMet
 		{
-			get => GetProperty(ref _isLevelRequirementNotMet);
-			set => SetProperty(ref _isLevelRequirementNotMet, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isSmartlinkRequirementNotMet")] 
 		public CBool IsSmartlinkRequirementNotMet
 		{
-			get => GetProperty(ref _isSmartlinkRequirementNotMet);
-			set => SetProperty(ref _isSmartlinkRequirementNotMet, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isStrengthRequirementNotMet")] 
 		public CBool IsStrengthRequirementNotMet
 		{
-			get => GetProperty(ref _isStrengthRequirementNotMet);
-			set => SetProperty(ref _isStrengthRequirementNotMet, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isReflexRequirementNotMet")] 
 		public CBool IsReflexRequirementNotMet
 		{
-			get => GetProperty(ref _isReflexRequirementNotMet);
-			set => SetProperty(ref _isReflexRequirementNotMet, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("isAnyStatRequirementNotMet")] 
 		public CBool IsAnyStatRequirementNotMet
 		{
-			get => GetProperty(ref _isAnyStatRequirementNotMet);
-			set => SetProperty(ref _isAnyStatRequirementNotMet, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("strengthOrReflexStatName")] 
 		public CString StrengthOrReflexStatName
 		{
-			get => GetProperty(ref _strengthOrReflexStatName);
-			set => SetProperty(ref _strengthOrReflexStatName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("anyStatName")] 
 		public CString AnyStatName
 		{
-			get => GetProperty(ref _anyStatName);
-			set => SetProperty(ref _anyStatName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("anyStatColor")] 
 		public CString AnyStatColor
 		{
-			get => GetProperty(ref _anyStatColor);
-			set => SetProperty(ref _anyStatColor, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("anyStatLocKey")] 
 		public CString AnyStatLocKey
 		{
-			get => GetProperty(ref _anyStatLocKey);
-			set => SetProperty(ref _anyStatLocKey, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("strengthOrReflexValue")] 
 		public CInt32 StrengthOrReflexValue
 		{
-			get => GetProperty(ref _strengthOrReflexValue);
-			set => SetProperty(ref _strengthOrReflexValue, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("anyStatValue")] 
 		public CInt32 AnyStatValue
 		{
-			get => GetProperty(ref _anyStatValue);
-			set => SetProperty(ref _anyStatValue, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("requiredLevel")] 
 		public CInt32 RequiredLevel
 		{
-			get => GetProperty(ref _requiredLevel);
-			set => SetProperty(ref _requiredLevel, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

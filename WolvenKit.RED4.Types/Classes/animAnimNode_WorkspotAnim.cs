@@ -5,28 +5,27 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_WorkspotAnim : animAnimNode_Base
 	{
-		private CBool _collectEvents;
-		private animPoseLink _inputLink;
-
 		[Ordinal(11)] 
 		[RED("collectEvents")] 
 		public CBool CollectEvents
 		{
-			get => GetProperty(ref _collectEvents);
-			set => SetProperty(ref _collectEvents, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("inputLink")] 
 		public animPoseLink InputLink
 		{
-			get => GetProperty(ref _inputLink);
-			set => SetProperty(ref _inputLink, value);
+			get => GetPropertyValue<animPoseLink>();
+			set => SetPropertyValue<animPoseLink>(value);
 		}
 
 		public animAnimNode_WorkspotAnim()
 		{
-			_collectEvents = true;
+			Id = 4294967295;
+			CollectEvents = true;
+			InputLink = new();
 		}
 	}
 }

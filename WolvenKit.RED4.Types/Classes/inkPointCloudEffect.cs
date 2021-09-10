@@ -5,84 +5,75 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkPointCloudEffect : inkIEffect
 	{
-		private CFloat _repeat;
-		private CFloat _offsetX;
-		private CFloat _offsetY;
-		private CFloat _angle;
-		private CFloat _fovScale;
-		private CFloat _parallaxDepth;
-		private CFloat _depthToOpacity;
-		private CFloat _depthToBrightness;
-
 		[Ordinal(2)] 
 		[RED("repeat")] 
 		public CFloat Repeat
 		{
-			get => GetProperty(ref _repeat);
-			set => SetProperty(ref _repeat, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("offsetX")] 
 		public CFloat OffsetX
 		{
-			get => GetProperty(ref _offsetX);
-			set => SetProperty(ref _offsetX, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("offsetY")] 
 		public CFloat OffsetY
 		{
-			get => GetProperty(ref _offsetY);
-			set => SetProperty(ref _offsetY, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("angle")] 
 		public CFloat Angle
 		{
-			get => GetProperty(ref _angle);
-			set => SetProperty(ref _angle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("fovScale")] 
 		public CFloat FovScale
 		{
-			get => GetProperty(ref _fovScale);
-			set => SetProperty(ref _fovScale, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("parallaxDepth")] 
 		public CFloat ParallaxDepth
 		{
-			get => GetProperty(ref _parallaxDepth);
-			set => SetProperty(ref _parallaxDepth, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("depthToOpacity")] 
 		public CFloat DepthToOpacity
 		{
-			get => GetProperty(ref _depthToOpacity);
-			set => SetProperty(ref _depthToOpacity, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("depthToBrightness")] 
 		public CFloat DepthToBrightness
 		{
-			get => GetProperty(ref _depthToBrightness);
-			set => SetProperty(ref _depthToBrightness, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public inkPointCloudEffect()
 		{
-			_repeat = 1.000000F;
-			_fovScale = 3.000000F;
-			_parallaxDepth = 0.100000F;
+			Repeat = 1.000000F;
+			FovScale = 3.000000F;
+			ParallaxDepth = 0.100000F;
 		}
 	}
 }

@@ -5,77 +5,81 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameAINetStateComponentReplicatedState : netIComponentState
 	{
-		private gameNetAIState _replHighLevelState;
-		private gameNetAIState _replUpperBodyState;
-		private gameNetAIState _replStanceState;
-		private gameNetAIState _replHitReactionModeState;
-		private gameNetAIState _replBehaviorState;
-		private gameNetAIState _replPhaseState;
-		private gameNetAIState _replDefenseMode;
-		private gameNetAIState _replLocomotionMode;
-
 		[Ordinal(2)] 
 		[RED("replHighLevelState")] 
 		public gameNetAIState ReplHighLevelState
 		{
-			get => GetProperty(ref _replHighLevelState);
-			set => SetProperty(ref _replHighLevelState, value);
+			get => GetPropertyValue<gameNetAIState>();
+			set => SetPropertyValue<gameNetAIState>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("replUpperBodyState")] 
 		public gameNetAIState ReplUpperBodyState
 		{
-			get => GetProperty(ref _replUpperBodyState);
-			set => SetProperty(ref _replUpperBodyState, value);
+			get => GetPropertyValue<gameNetAIState>();
+			set => SetPropertyValue<gameNetAIState>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("replStanceState")] 
 		public gameNetAIState ReplStanceState
 		{
-			get => GetProperty(ref _replStanceState);
-			set => SetProperty(ref _replStanceState, value);
+			get => GetPropertyValue<gameNetAIState>();
+			set => SetPropertyValue<gameNetAIState>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("replHitReactionModeState")] 
 		public gameNetAIState ReplHitReactionModeState
 		{
-			get => GetProperty(ref _replHitReactionModeState);
-			set => SetProperty(ref _replHitReactionModeState, value);
+			get => GetPropertyValue<gameNetAIState>();
+			set => SetPropertyValue<gameNetAIState>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("replBehaviorState")] 
 		public gameNetAIState ReplBehaviorState
 		{
-			get => GetProperty(ref _replBehaviorState);
-			set => SetProperty(ref _replBehaviorState, value);
+			get => GetPropertyValue<gameNetAIState>();
+			set => SetPropertyValue<gameNetAIState>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("replPhaseState")] 
 		public gameNetAIState ReplPhaseState
 		{
-			get => GetProperty(ref _replPhaseState);
-			set => SetProperty(ref _replPhaseState, value);
+			get => GetPropertyValue<gameNetAIState>();
+			set => SetPropertyValue<gameNetAIState>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("replDefenseMode")] 
 		public gameNetAIState ReplDefenseMode
 		{
-			get => GetProperty(ref _replDefenseMode);
-			set => SetProperty(ref _replDefenseMode, value);
+			get => GetPropertyValue<gameNetAIState>();
+			set => SetPropertyValue<gameNetAIState>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("replLocomotionMode")] 
 		public gameNetAIState ReplLocomotionMode
 		{
-			get => GetProperty(ref _replLocomotionMode);
-			set => SetProperty(ref _replLocomotionMode, value);
+			get => GetPropertyValue<gameNetAIState>();
+			set => SetPropertyValue<gameNetAIState>(value);
+		}
+
+		public gameAINetStateComponentReplicatedState()
+		{
+			Enabled = true;
+			ReplHighLevelState = new() { Time = -1.000000F };
+			ReplUpperBodyState = new() { Time = -1.000000F };
+			ReplStanceState = new() { Time = -1.000000F };
+			ReplHitReactionModeState = new() { Time = -1.000000F };
+			ReplBehaviorState = new() { Time = -1.000000F };
+			ReplPhaseState = new() { Time = -1.000000F };
+			ReplDefenseMode = new() { Time = -1.000000F };
+			ReplLocomotionMode = new() { Time = -1.000000F };
 		}
 	}
 }

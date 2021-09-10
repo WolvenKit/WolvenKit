@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ConditionGroupData : RedBaseClass
 	{
-		private CArray<CHandle<GameplayConditionBase>> _conditions;
-		private CEnum<ELogicOperator> _logicOperator;
-
 		[Ordinal(0)] 
 		[RED("conditions")] 
 		public CArray<CHandle<GameplayConditionBase>> Conditions
 		{
-			get => GetProperty(ref _conditions);
-			set => SetProperty(ref _conditions, value);
+			get => GetPropertyValue<CArray<CHandle<GameplayConditionBase>>>();
+			set => SetPropertyValue<CArray<CHandle<GameplayConditionBase>>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("logicOperator")] 
 		public CEnum<ELogicOperator> LogicOperator
 		{
-			get => GetProperty(ref _logicOperator);
-			set => SetProperty(ref _logicOperator, value);
+			get => GetPropertyValue<CEnum<ELogicOperator>>();
+			set => SetPropertyValue<CEnum<ELogicOperator>>(value);
+		}
+
+		public ConditionGroupData()
+		{
+			Conditions = new();
 		}
 	}
 }

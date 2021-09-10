@@ -5,149 +5,145 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DeviceButtonLogicControllerBase : inkButtonController
 	{
-		private inkWidgetReference _targetWidgetRef;
-		private inkTextWidgetReference _displayNameWidget;
-		private inkImageWidgetReference _iconWidget;
-		private inkImageWidgetReference _toggleSwitchWidget;
-		private inkWidgetReference _sizeProviderWidget;
-		private inkWidgetReference _selectionMarkerWidget;
-		private CHandle<WidgetAnimationManager> _onReleaseAnimations;
-		private CHandle<WidgetAnimationManager> _onPressAnimations;
-		private CHandle<WidgetAnimationManager> _onHoverOverAnimations;
-		private CHandle<WidgetAnimationManager> _onHoverOutAnimations;
-		private redResourceReferenceScriptToken _defaultStyle;
-		private redResourceReferenceScriptToken _selectionStyle;
-		private SSoundData _soundData;
-		private CBool _isInitialized;
-		private CWeakHandle<inkWidget> _targetWidget;
-		private CBool _isSelected;
-
 		[Ordinal(10)] 
 		[RED("targetWidgetRef")] 
 		public inkWidgetReference TargetWidgetRef
 		{
-			get => GetProperty(ref _targetWidgetRef);
-			set => SetProperty(ref _targetWidgetRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("displayNameWidget")] 
 		public inkTextWidgetReference DisplayNameWidget
 		{
-			get => GetProperty(ref _displayNameWidget);
-			set => SetProperty(ref _displayNameWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("iconWidget")] 
 		public inkImageWidgetReference IconWidget
 		{
-			get => GetProperty(ref _iconWidget);
-			set => SetProperty(ref _iconWidget, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("toggleSwitchWidget")] 
 		public inkImageWidgetReference ToggleSwitchWidget
 		{
-			get => GetProperty(ref _toggleSwitchWidget);
-			set => SetProperty(ref _toggleSwitchWidget, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("sizeProviderWidget")] 
 		public inkWidgetReference SizeProviderWidget
 		{
-			get => GetProperty(ref _sizeProviderWidget);
-			set => SetProperty(ref _sizeProviderWidget, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("selectionMarkerWidget")] 
 		public inkWidgetReference SelectionMarkerWidget
 		{
-			get => GetProperty(ref _selectionMarkerWidget);
-			set => SetProperty(ref _selectionMarkerWidget, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("onReleaseAnimations")] 
 		public CHandle<WidgetAnimationManager> OnReleaseAnimations
 		{
-			get => GetProperty(ref _onReleaseAnimations);
-			set => SetProperty(ref _onReleaseAnimations, value);
+			get => GetPropertyValue<CHandle<WidgetAnimationManager>>();
+			set => SetPropertyValue<CHandle<WidgetAnimationManager>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("onPressAnimations")] 
 		public CHandle<WidgetAnimationManager> OnPressAnimations
 		{
-			get => GetProperty(ref _onPressAnimations);
-			set => SetProperty(ref _onPressAnimations, value);
+			get => GetPropertyValue<CHandle<WidgetAnimationManager>>();
+			set => SetPropertyValue<CHandle<WidgetAnimationManager>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("onHoverOverAnimations")] 
 		public CHandle<WidgetAnimationManager> OnHoverOverAnimations
 		{
-			get => GetProperty(ref _onHoverOverAnimations);
-			set => SetProperty(ref _onHoverOverAnimations, value);
+			get => GetPropertyValue<CHandle<WidgetAnimationManager>>();
+			set => SetPropertyValue<CHandle<WidgetAnimationManager>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("onHoverOutAnimations")] 
 		public CHandle<WidgetAnimationManager> OnHoverOutAnimations
 		{
-			get => GetProperty(ref _onHoverOutAnimations);
-			set => SetProperty(ref _onHoverOutAnimations, value);
+			get => GetPropertyValue<CHandle<WidgetAnimationManager>>();
+			set => SetPropertyValue<CHandle<WidgetAnimationManager>>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("defaultStyle")] 
 		public redResourceReferenceScriptToken DefaultStyle
 		{
-			get => GetProperty(ref _defaultStyle);
-			set => SetProperty(ref _defaultStyle, value);
+			get => GetPropertyValue<redResourceReferenceScriptToken>();
+			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("selectionStyle")] 
 		public redResourceReferenceScriptToken SelectionStyle
 		{
-			get => GetProperty(ref _selectionStyle);
-			set => SetProperty(ref _selectionStyle, value);
+			get => GetPropertyValue<redResourceReferenceScriptToken>();
+			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("soundData")] 
 		public SSoundData SoundData
 		{
-			get => GetProperty(ref _soundData);
-			set => SetProperty(ref _soundData, value);
+			get => GetPropertyValue<SSoundData>();
+			set => SetPropertyValue<SSoundData>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("isInitialized")] 
 		public CBool IsInitialized
 		{
-			get => GetProperty(ref _isInitialized);
-			set => SetProperty(ref _isInitialized, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("targetWidget")] 
 		public CWeakHandle<inkWidget> TargetWidget
 		{
-			get => GetProperty(ref _targetWidget);
-			set => SetProperty(ref _targetWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("isSelected")] 
 		public CBool IsSelected
 		{
-			get => GetProperty(ref _isSelected);
-			set => SetProperty(ref _isSelected, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public DeviceButtonLogicControllerBase()
+		{
+			TargetWidgetRef = new();
+			DisplayNameWidget = new();
+			IconWidget = new();
+			ToggleSwitchWidget = new();
+			SizeProviderWidget = new();
+			SelectionMarkerWidget = new();
+			DefaultStyle = new();
+			SelectionStyle = new();
+			SoundData = new() { WidgetAudioName = "Button" };
 		}
 	}
 }

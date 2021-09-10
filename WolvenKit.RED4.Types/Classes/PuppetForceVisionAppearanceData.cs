@@ -5,102 +5,93 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PuppetForceVisionAppearanceData : IScriptable
 	{
-		private CEnum<EFocusForcedHighlightType> _highlightType;
-		private CEnum<EFocusOutlineType> _outlineType;
-		private CWeakHandle<gamedataStim_Record> _stimRecord;
-		private CFloat _transitionTime;
-		private CEnum<EPriority> _priority;
-		private CArray<CWeakHandle<ScriptedPuppet>> _targets;
-		private CArray<CWeakHandle<ScriptedPuppet>> _highlightedTargets;
-		private CInt32 _investigationSlots;
-		private CBool _sourceHighlighted;
-		private CString _effectName;
-
 		[Ordinal(0)] 
 		[RED("highlightType")] 
 		public CEnum<EFocusForcedHighlightType> HighlightType
 		{
-			get => GetProperty(ref _highlightType);
-			set => SetProperty(ref _highlightType, value);
+			get => GetPropertyValue<CEnum<EFocusForcedHighlightType>>();
+			set => SetPropertyValue<CEnum<EFocusForcedHighlightType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("outlineType")] 
 		public CEnum<EFocusOutlineType> OutlineType
 		{
-			get => GetProperty(ref _outlineType);
-			set => SetProperty(ref _outlineType, value);
+			get => GetPropertyValue<CEnum<EFocusOutlineType>>();
+			set => SetPropertyValue<CEnum<EFocusOutlineType>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("stimRecord")] 
 		public CWeakHandle<gamedataStim_Record> StimRecord
 		{
-			get => GetProperty(ref _stimRecord);
-			set => SetProperty(ref _stimRecord, value);
+			get => GetPropertyValue<CWeakHandle<gamedataStim_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataStim_Record>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("transitionTime")] 
 		public CFloat TransitionTime
 		{
-			get => GetProperty(ref _transitionTime);
-			set => SetProperty(ref _transitionTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("priority")] 
 		public CEnum<EPriority> Priority
 		{
-			get => GetProperty(ref _priority);
-			set => SetProperty(ref _priority, value);
+			get => GetPropertyValue<CEnum<EPriority>>();
+			set => SetPropertyValue<CEnum<EPriority>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("targets")] 
 		public CArray<CWeakHandle<ScriptedPuppet>> Targets
 		{
-			get => GetProperty(ref _targets);
-			set => SetProperty(ref _targets, value);
+			get => GetPropertyValue<CArray<CWeakHandle<ScriptedPuppet>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<ScriptedPuppet>>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("highlightedTargets")] 
 		public CArray<CWeakHandle<ScriptedPuppet>> HighlightedTargets
 		{
-			get => GetProperty(ref _highlightedTargets);
-			set => SetProperty(ref _highlightedTargets, value);
+			get => GetPropertyValue<CArray<CWeakHandle<ScriptedPuppet>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<ScriptedPuppet>>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("investigationSlots")] 
 		public CInt32 InvestigationSlots
 		{
-			get => GetProperty(ref _investigationSlots);
-			set => SetProperty(ref _investigationSlots, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("sourceHighlighted")] 
 		public CBool SourceHighlighted
 		{
-			get => GetProperty(ref _sourceHighlighted);
-			set => SetProperty(ref _sourceHighlighted, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("effectName")] 
 		public CString EffectName
 		{
-			get => GetProperty(ref _effectName);
-			set => SetProperty(ref _effectName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		public PuppetForceVisionAppearanceData()
 		{
-			_highlightType = new() { Value = Enums.EFocusForcedHighlightType.INVALID };
-			_transitionTime = 0.500000F;
-			_priority = new() { Value = Enums.EPriority.VeryHigh };
+			HighlightType = Enums.EFocusForcedHighlightType.INVALID;
+			TransitionTime = 0.500000F;
+			Priority = Enums.EPriority.VeryHigh;
+			Targets = new();
+			HighlightedTargets = new();
 		}
 	}
 }

@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AnimFeature_RoadBlock : animAnimFeature
 	{
-		private CBool _isOpening;
-		private CFloat _duration;
-		private CBool _initOpen;
-
 		[Ordinal(0)] 
 		[RED("isOpening")] 
 		public CBool IsOpening
 		{
-			get => GetProperty(ref _isOpening);
-			set => SetProperty(ref _isOpening, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get => GetProperty(ref _duration);
-			set => SetProperty(ref _duration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("initOpen")] 
 		public CBool InitOpen
 		{
-			get => GetProperty(ref _initOpen);
-			set => SetProperty(ref _initOpen, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

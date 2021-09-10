@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class physicsTraceResult : RedBaseClass
 	{
-		private Vector3 _position;
-		private Vector3 _normal;
-		private CName _material;
-
 		[Ordinal(0)] 
 		[RED("position")] 
 		public Vector3 Position
 		{
-			get => GetProperty(ref _position);
-			set => SetProperty(ref _position, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("normal")] 
 		public Vector3 Normal
 		{
-			get => GetProperty(ref _normal);
-			set => SetProperty(ref _normal, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("material")] 
 		public CName Material
 		{
-			get => GetProperty(ref _material);
-			set => SetProperty(ref _material, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public physicsTraceResult()
+		{
+			Position = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
+			Normal = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
 		}
 	}
 }

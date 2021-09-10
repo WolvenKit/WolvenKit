@@ -5,41 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorSelectedCoversData : IScriptable
 	{
-		private CArray<CUInt64> _selectedCovers;
-		private CArray<CEnum<gamedataAIRingType>> _coverRingTypes;
-		private CArray<CBool> _coversUseLOS;
-		private CArray<CName> _sourcePresetName;
-
 		[Ordinal(0)] 
 		[RED("selectedCovers")] 
 		public CArray<CUInt64> SelectedCovers
 		{
-			get => GetProperty(ref _selectedCovers);
-			set => SetProperty(ref _selectedCovers, value);
+			get => GetPropertyValue<CArray<CUInt64>>();
+			set => SetPropertyValue<CArray<CUInt64>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("coverRingTypes")] 
 		public CArray<CEnum<gamedataAIRingType>> CoverRingTypes
 		{
-			get => GetProperty(ref _coverRingTypes);
-			set => SetProperty(ref _coverRingTypes, value);
+			get => GetPropertyValue<CArray<CEnum<gamedataAIRingType>>>();
+			set => SetPropertyValue<CArray<CEnum<gamedataAIRingType>>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("coversUseLOS")] 
 		public CArray<CBool> CoversUseLOS
 		{
-			get => GetProperty(ref _coversUseLOS);
-			set => SetProperty(ref _coversUseLOS, value);
+			get => GetPropertyValue<CArray<CBool>>();
+			set => SetPropertyValue<CArray<CBool>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("sourcePresetName")] 
 		public CArray<CName> SourcePresetName
 		{
-			get => GetProperty(ref _sourcePresetName);
-			set => SetProperty(ref _sourcePresetName, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
+		public AIbehaviorSelectedCoversData()
+		{
+			SelectedCovers = new();
+			CoverRingTypes = new();
+			CoversUseLOS = new();
+			SourcePresetName = new();
 		}
 	}
 }

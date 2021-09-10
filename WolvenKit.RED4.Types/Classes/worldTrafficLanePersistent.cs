@@ -5,192 +5,179 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldTrafficLanePersistent : RedBaseClass
 	{
-		private CArray<worldTrafficConnectivityOutLane> _outLanes;
-		private CArray<worldTrafficConnectivityInLane> _inLanes;
-		private CArray<Vector3> _outline;
-		private CArray<CFloat> _accumulatedLengths;
-		private worldTrafficLaneCrowdCreationInfo _crowdCreationInfo;
-		private CUInt8 _maxSpeed;
-		private CFloat _deadEndStart;
-		private CFloat _length;
-		private CFloat _width;
-		private CFloat _area;
-		private CUInt16 _flags;
-		private CUInt16 _subGraphId;
-		private worldTrafficLanePlayerGPSInfo _playerGPSInfo;
-		private CUInt16 _neighborGroupIndex;
-		private CUInt64 _nodeRefHash;
-		private CUInt16 _laneNumber;
-		private CUInt16 _seqNumber;
-		private CBool _isReversed;
-		private CArray<worldRoadMaterialInfo> _roadMaterials;
-		private CArray<Vector2> _polygon;
-
 		[Ordinal(0)] 
 		[RED("outLanes")] 
 		public CArray<worldTrafficConnectivityOutLane> OutLanes
 		{
-			get => GetProperty(ref _outLanes);
-			set => SetProperty(ref _outLanes, value);
+			get => GetPropertyValue<CArray<worldTrafficConnectivityOutLane>>();
+			set => SetPropertyValue<CArray<worldTrafficConnectivityOutLane>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("inLanes")] 
 		public CArray<worldTrafficConnectivityInLane> InLanes
 		{
-			get => GetProperty(ref _inLanes);
-			set => SetProperty(ref _inLanes, value);
+			get => GetPropertyValue<CArray<worldTrafficConnectivityInLane>>();
+			set => SetPropertyValue<CArray<worldTrafficConnectivityInLane>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("outline")] 
 		public CArray<Vector3> Outline
 		{
-			get => GetProperty(ref _outline);
-			set => SetProperty(ref _outline, value);
+			get => GetPropertyValue<CArray<Vector3>>();
+			set => SetPropertyValue<CArray<Vector3>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("accumulatedLengths")] 
 		public CArray<CFloat> AccumulatedLengths
 		{
-			get => GetProperty(ref _accumulatedLengths);
-			set => SetProperty(ref _accumulatedLengths, value);
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("crowdCreationInfo")] 
 		public worldTrafficLaneCrowdCreationInfo CrowdCreationInfo
 		{
-			get => GetProperty(ref _crowdCreationInfo);
-			set => SetProperty(ref _crowdCreationInfo, value);
+			get => GetPropertyValue<worldTrafficLaneCrowdCreationInfo>();
+			set => SetPropertyValue<worldTrafficLaneCrowdCreationInfo>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("maxSpeed")] 
 		public CUInt8 MaxSpeed
 		{
-			get => GetProperty(ref _maxSpeed);
-			set => SetProperty(ref _maxSpeed, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("deadEndStart")] 
 		public CFloat DeadEndStart
 		{
-			get => GetProperty(ref _deadEndStart);
-			set => SetProperty(ref _deadEndStart, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("length")] 
 		public CFloat Length
 		{
-			get => GetProperty(ref _length);
-			set => SetProperty(ref _length, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("width")] 
 		public CFloat Width
 		{
-			get => GetProperty(ref _width);
-			set => SetProperty(ref _width, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("area")] 
 		public CFloat Area
 		{
-			get => GetProperty(ref _area);
-			set => SetProperty(ref _area, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("flags")] 
 		public CUInt16 Flags
 		{
-			get => GetProperty(ref _flags);
-			set => SetProperty(ref _flags, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("subGraphId")] 
 		public CUInt16 SubGraphId
 		{
-			get => GetProperty(ref _subGraphId);
-			set => SetProperty(ref _subGraphId, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("playerGPSInfo")] 
 		public worldTrafficLanePlayerGPSInfo PlayerGPSInfo
 		{
-			get => GetProperty(ref _playerGPSInfo);
-			set => SetProperty(ref _playerGPSInfo, value);
+			get => GetPropertyValue<worldTrafficLanePlayerGPSInfo>();
+			set => SetPropertyValue<worldTrafficLanePlayerGPSInfo>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("neighborGroupIndex")] 
 		public CUInt16 NeighborGroupIndex
 		{
-			get => GetProperty(ref _neighborGroupIndex);
-			set => SetProperty(ref _neighborGroupIndex, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("nodeRefHash")] 
 		public CUInt64 NodeRefHash
 		{
-			get => GetProperty(ref _nodeRefHash);
-			set => SetProperty(ref _nodeRefHash, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("laneNumber")] 
 		public CUInt16 LaneNumber
 		{
-			get => GetProperty(ref _laneNumber);
-			set => SetProperty(ref _laneNumber, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("seqNumber")] 
 		public CUInt16 SeqNumber
 		{
-			get => GetProperty(ref _seqNumber);
-			set => SetProperty(ref _seqNumber, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("isReversed")] 
 		public CBool IsReversed
 		{
-			get => GetProperty(ref _isReversed);
-			set => SetProperty(ref _isReversed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("roadMaterials")] 
 		public CArray<worldRoadMaterialInfo> RoadMaterials
 		{
-			get => GetProperty(ref _roadMaterials);
-			set => SetProperty(ref _roadMaterials, value);
+			get => GetPropertyValue<CArray<worldRoadMaterialInfo>>();
+			set => SetPropertyValue<CArray<worldRoadMaterialInfo>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("polygon")] 
 		public CArray<Vector2> Polygon
 		{
-			get => GetProperty(ref _polygon);
-			set => SetProperty(ref _polygon, value);
+			get => GetPropertyValue<CArray<Vector2>>();
+			set => SetPropertyValue<CArray<Vector2>>(value);
 		}
 
 		public worldTrafficLanePersistent()
 		{
-			_deadEndStart = float.PositiveInfinity;
-			_subGraphId = 65535;
-			_neighborGroupIndex = 65535;
+			OutLanes = new();
+			InLanes = new();
+			Outline = new();
+			AccumulatedLengths = new();
+			CrowdCreationInfo = new() { ConnectedFragments = new() };
+			DeadEndStart = float.PositiveInfinity;
+			SubGraphId = 65535;
+			PlayerGPSInfo = new() { SubGraphId = 65535, StronglyConnectedComponentId = 65535 };
+			NeighborGroupIndex = 65535;
+			RoadMaterials = new();
+			Polygon = new();
 		}
 	}
 }

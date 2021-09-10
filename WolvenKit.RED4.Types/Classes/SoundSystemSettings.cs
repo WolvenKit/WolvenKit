@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SoundSystemSettings : RedBaseClass
 	{
-		private TweakDBID _interactionName;
-		private CHandle<MusicSettings> _musicSettings;
-		private CBool _canBeUsedAsQuickHack;
-
 		[Ordinal(0)] 
 		[RED("interactionName")] 
 		public TweakDBID InteractionName
 		{
-			get => GetProperty(ref _interactionName);
-			set => SetProperty(ref _interactionName, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("musicSettings")] 
 		public CHandle<MusicSettings> MusicSettings
 		{
-			get => GetProperty(ref _musicSettings);
-			set => SetProperty(ref _musicSettings, value);
+			get => GetPropertyValue<CHandle<MusicSettings>>();
+			set => SetPropertyValue<CHandle<MusicSettings>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("canBeUsedAsQuickHack")] 
 		public CBool CanBeUsedAsQuickHack
 		{
-			get => GetProperty(ref _canBeUsedAsQuickHack);
-			set => SetProperty(ref _canBeUsedAsQuickHack, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

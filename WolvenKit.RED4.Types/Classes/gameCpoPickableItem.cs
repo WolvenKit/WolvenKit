@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameCpoPickableItem : gameObject
 	{
-		private TweakDBID _itemIDToEquip;
-		private CInt32 _quickSlotID;
-
 		[Ordinal(40)] 
 		[RED("itemIDToEquip")] 
 		public TweakDBID ItemIDToEquip
 		{
-			get => GetProperty(ref _itemIDToEquip);
-			set => SetProperty(ref _itemIDToEquip, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(41)] 
 		[RED("quickSlotID")] 
 		public CInt32 QuickSlotID
 		{
-			get => GetProperty(ref _quickSlotID);
-			set => SetProperty(ref _quickSlotID, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		public gameCpoPickableItem()
 		{
-			_quickSlotID = -1;
+			QuickSlotID = -1;
 		}
 	}
 }

@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DEBUG_VirtualShopkeeper : gameObject
 	{
-		private CString _vendorID;
-
 		[Ordinal(40)] 
 		[RED("vendorID")] 
 		public CString VendorID
 		{
-			get => GetProperty(ref _vendorID);
-			set => SetProperty(ref _vendorID, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		public DEBUG_VirtualShopkeeper()
 		{
-			_vendorID = new() { Text = "Vendors.CCLVendor" };
+			VendorID = "Vendors.CCLVendor";
 		}
 	}
 }

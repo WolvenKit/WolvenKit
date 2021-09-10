@@ -5,41 +5,45 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameaudioSoundComponent : gameaudioSoundComponentBase
 	{
-		private CArray<gameaudioSoundComponentSubSystemWrapper> _subSystems;
-		private CName _voEventOverride;
-		private CFloat _minVocalizationRepeatTime;
-		private CFloat _streamingDistance;
-
 		[Ordinal(11)] 
 		[RED("subSystems")] 
 		public CArray<gameaudioSoundComponentSubSystemWrapper> SubSystems
 		{
-			get => GetProperty(ref _subSystems);
-			set => SetProperty(ref _subSystems, value);
+			get => GetPropertyValue<CArray<gameaudioSoundComponentSubSystemWrapper>>();
+			set => SetPropertyValue<CArray<gameaudioSoundComponentSubSystemWrapper>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("voEventOverride")] 
 		public CName VoEventOverride
 		{
-			get => GetProperty(ref _voEventOverride);
-			set => SetProperty(ref _voEventOverride, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("minVocalizationRepeatTime")] 
 		public CFloat MinVocalizationRepeatTime
 		{
-			get => GetProperty(ref _minVocalizationRepeatTime);
-			set => SetProperty(ref _minVocalizationRepeatTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("streamingDistance")] 
 		public CFloat StreamingDistance
 		{
-			get => GetProperty(ref _streamingDistance);
-			set => SetProperty(ref _streamingDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public gameaudioSoundComponent()
+		{
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			ObstructionChangeTime = 0.200000F;
+			MaxPlayDistance = 40.000000F;
+			SubSystems = new();
 		}
 	}
 }

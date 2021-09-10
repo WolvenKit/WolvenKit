@@ -5,28 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AreaShapeOutline : ISerializable
 	{
-		private CArray<Vector3> _points;
-		private CFloat _height;
-
 		[Ordinal(0)] 
 		[RED("points")] 
 		public CArray<Vector3> Points
 		{
-			get => GetProperty(ref _points);
-			set => SetProperty(ref _points, value);
+			get => GetPropertyValue<CArray<Vector3>>();
+			set => SetPropertyValue<CArray<Vector3>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("height")] 
 		public CFloat Height
 		{
-			get => GetProperty(ref _height);
-			set => SetProperty(ref _height, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public AreaShapeOutline()
 		{
-			_height = 2.000000F;
+			Points = new() { new() { X = -1.000000F, Y = -1.000000F }, new() { X = 1.000000F, Y = -1.000000F }, new() { X = 1.000000F, Y = 1.000000F }, new() { X = -1.000000F, Y = 1.000000F } };
+			Height = 2.000000F;
 		}
 	}
 }

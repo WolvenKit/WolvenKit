@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIGenericStaticLookatTask : AIGenericLookatTask
 	{
-		private CHandle<entLookAtAddEvent> _lookAtEvent;
-		private CFloat _activationTimeStamp;
-		private Vector4 _lookatTarget;
-		private Vector4 _currentLookatTarget;
-
 		[Ordinal(0)] 
 		[RED("lookAtEvent")] 
 		public CHandle<entLookAtAddEvent> LookAtEvent
 		{
-			get => GetProperty(ref _lookAtEvent);
-			set => SetProperty(ref _lookAtEvent, value);
+			get => GetPropertyValue<CHandle<entLookAtAddEvent>>();
+			set => SetPropertyValue<CHandle<entLookAtAddEvent>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("activationTimeStamp")] 
 		public CFloat ActivationTimeStamp
 		{
-			get => GetProperty(ref _activationTimeStamp);
-			set => SetProperty(ref _activationTimeStamp, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("lookatTarget")] 
 		public Vector4 LookatTarget
 		{
-			get => GetProperty(ref _lookatTarget);
-			set => SetProperty(ref _lookatTarget, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("currentLookatTarget")] 
 		public Vector4 CurrentLookatTarget
 		{
-			get => GetProperty(ref _currentLookatTarget);
-			set => SetProperty(ref _currentLookatTarget, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 	}
 }

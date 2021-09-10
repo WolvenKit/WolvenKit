@@ -5,68 +5,66 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameVisionModeComponentPS : gameComponentPS
 	{
-		private CBool _hideInDefaultMode;
-		private CBool _hideInFocusMode;
-		private CBool _inactive;
-		private CBool _questInactive;
-		private CArray<CName> _questForcedModules;
-		private CArray<CName> _questForcedMeshes;
-		private CHandle<FocusForcedHighlightPersistentData> _storedHighlightData;
-
 		[Ordinal(0)] 
 		[RED("hideInDefaultMode")] 
 		public CBool HideInDefaultMode
 		{
-			get => GetProperty(ref _hideInDefaultMode);
-			set => SetProperty(ref _hideInDefaultMode, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hideInFocusMode")] 
 		public CBool HideInFocusMode
 		{
-			get => GetProperty(ref _hideInFocusMode);
-			set => SetProperty(ref _hideInFocusMode, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("inactive")] 
 		public CBool Inactive
 		{
-			get => GetProperty(ref _inactive);
-			set => SetProperty(ref _inactive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("questInactive")] 
 		public CBool QuestInactive
 		{
-			get => GetProperty(ref _questInactive);
-			set => SetProperty(ref _questInactive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("questForcedModules")] 
 		public CArray<CName> QuestForcedModules
 		{
-			get => GetProperty(ref _questForcedModules);
-			set => SetProperty(ref _questForcedModules, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("questForcedMeshes")] 
 		public CArray<CName> QuestForcedMeshes
 		{
-			get => GetProperty(ref _questForcedMeshes);
-			set => SetProperty(ref _questForcedMeshes, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("storedHighlightData")] 
 		public CHandle<FocusForcedHighlightPersistentData> StoredHighlightData
 		{
-			get => GetProperty(ref _storedHighlightData);
-			set => SetProperty(ref _storedHighlightData, value);
+			get => GetPropertyValue<CHandle<FocusForcedHighlightPersistentData>>();
+			set => SetPropertyValue<CHandle<FocusForcedHighlightPersistentData>>(value);
+		}
+
+		public gameVisionModeComponentPS()
+		{
+			QuestForcedModules = new();
+			QuestForcedMeshes = new();
 		}
 	}
 }

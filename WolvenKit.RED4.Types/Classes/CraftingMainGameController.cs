@@ -5,221 +5,206 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CraftingMainGameController : gameuiMenuGameController
 	{
-		private inkWidgetReference _tooltipsManagerRef;
-		private inkWidgetReference _tabRootRef;
-		private inkWidgetReference _buttonHintsManagerRef;
-		private inkCompoundWidgetReference _skillWidgetRoot;
-		private inkWidgetReference _craftingLogicControllerContainer;
-		private inkWidgetReference _upgradingLogicControllerContainer;
-		private CWeakHandle<ButtonHints> _buttonHintsController;
-		private CWeakHandle<PlayerPuppet> _player;
-		private CWeakHandle<inkMenuEventDispatcher> _menuEventDispatcher;
-		private CHandle<CraftingSystem> _craftingSystem;
-		private CHandle<CraftBook> _playerCraftBook;
-		private CHandle<VendorDataManager> _vendorDataManager;
-		private CHandle<InventoryDataManagerV2> _inventoryManager;
-		private CWeakHandle<UIScriptableSystem> _uiScriptableSystem;
-		private CWeakHandle<gameuiTooltipsManager> _tooltipsManager;
-		private CHandle<UI_CraftingDef> _craftingDef;
-		private CWeakHandle<gameIBlackboard> _craftingBlackboard;
-		private CHandle<redCallbackObject> _craftingBBID;
-		private CWeakHandle<gameIBlackboard> _levelUpBlackboard;
-		private CHandle<redCallbackObject> _playerLevelUpListener;
-		private CEnum<CraftingMode> _mode;
-		private CBool _isInitializeOver;
-		private CWeakHandle<CraftingLogicController> _craftingLogicController;
-		private CWeakHandle<UpgradingScreenController> _upgradingLogicController;
-
 		[Ordinal(3)] 
 		[RED("tooltipsManagerRef")] 
 		public inkWidgetReference TooltipsManagerRef
 		{
-			get => GetProperty(ref _tooltipsManagerRef);
-			set => SetProperty(ref _tooltipsManagerRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("tabRootRef")] 
 		public inkWidgetReference TabRootRef
 		{
-			get => GetProperty(ref _tabRootRef);
-			set => SetProperty(ref _tabRootRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("buttonHintsManagerRef")] 
 		public inkWidgetReference ButtonHintsManagerRef
 		{
-			get => GetProperty(ref _buttonHintsManagerRef);
-			set => SetProperty(ref _buttonHintsManagerRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("skillWidgetRoot")] 
 		public inkCompoundWidgetReference SkillWidgetRoot
 		{
-			get => GetProperty(ref _skillWidgetRoot);
-			set => SetProperty(ref _skillWidgetRoot, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("craftingLogicControllerContainer")] 
 		public inkWidgetReference CraftingLogicControllerContainer
 		{
-			get => GetProperty(ref _craftingLogicControllerContainer);
-			set => SetProperty(ref _craftingLogicControllerContainer, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("upgradingLogicControllerContainer")] 
 		public inkWidgetReference UpgradingLogicControllerContainer
 		{
-			get => GetProperty(ref _upgradingLogicControllerContainer);
-			set => SetProperty(ref _upgradingLogicControllerContainer, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
-			get => GetProperty(ref _buttonHintsController);
-			set => SetProperty(ref _buttonHintsController, value);
+			get => GetPropertyValue<CWeakHandle<ButtonHints>>();
+			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
-			get => GetProperty(ref _player);
-			set => SetProperty(ref _player, value);
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("menuEventDispatcher")] 
 		public CWeakHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
-			get => GetProperty(ref _menuEventDispatcher);
-			set => SetProperty(ref _menuEventDispatcher, value);
+			get => GetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>();
+			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("craftingSystem")] 
 		public CHandle<CraftingSystem> CraftingSystem
 		{
-			get => GetProperty(ref _craftingSystem);
-			set => SetProperty(ref _craftingSystem, value);
+			get => GetPropertyValue<CHandle<CraftingSystem>>();
+			set => SetPropertyValue<CHandle<CraftingSystem>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("playerCraftBook")] 
 		public CHandle<CraftBook> PlayerCraftBook
 		{
-			get => GetProperty(ref _playerCraftBook);
-			set => SetProperty(ref _playerCraftBook, value);
+			get => GetPropertyValue<CHandle<CraftBook>>();
+			set => SetPropertyValue<CHandle<CraftBook>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("VendorDataManager")] 
 		public CHandle<VendorDataManager> VendorDataManager
 		{
-			get => GetProperty(ref _vendorDataManager);
-			set => SetProperty(ref _vendorDataManager, value);
+			get => GetPropertyValue<CHandle<VendorDataManager>>();
+			set => SetPropertyValue<CHandle<VendorDataManager>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("InventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
-			get => GetProperty(ref _inventoryManager);
-			set => SetProperty(ref _inventoryManager, value);
+			get => GetPropertyValue<CHandle<InventoryDataManagerV2>>();
+			set => SetPropertyValue<CHandle<InventoryDataManagerV2>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("uiScriptableSystem")] 
 		public CWeakHandle<UIScriptableSystem> UiScriptableSystem
 		{
-			get => GetProperty(ref _uiScriptableSystem);
-			set => SetProperty(ref _uiScriptableSystem, value);
+			get => GetPropertyValue<CWeakHandle<UIScriptableSystem>>();
+			set => SetPropertyValue<CWeakHandle<UIScriptableSystem>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("tooltipsManager")] 
 		public CWeakHandle<gameuiTooltipsManager> TooltipsManager
 		{
-			get => GetProperty(ref _tooltipsManager);
-			set => SetProperty(ref _tooltipsManager, value);
+			get => GetPropertyValue<CWeakHandle<gameuiTooltipsManager>>();
+			set => SetPropertyValue<CWeakHandle<gameuiTooltipsManager>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("craftingDef")] 
 		public CHandle<UI_CraftingDef> CraftingDef
 		{
-			get => GetProperty(ref _craftingDef);
-			set => SetProperty(ref _craftingDef, value);
+			get => GetPropertyValue<CHandle<UI_CraftingDef>>();
+			set => SetPropertyValue<CHandle<UI_CraftingDef>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("craftingBlackboard")] 
 		public CWeakHandle<gameIBlackboard> CraftingBlackboard
 		{
-			get => GetProperty(ref _craftingBlackboard);
-			set => SetProperty(ref _craftingBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("craftingBBID")] 
 		public CHandle<redCallbackObject> CraftingBBID
 		{
-			get => GetProperty(ref _craftingBBID);
-			set => SetProperty(ref _craftingBBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("levelUpBlackboard")] 
 		public CWeakHandle<gameIBlackboard> LevelUpBlackboard
 		{
-			get => GetProperty(ref _levelUpBlackboard);
-			set => SetProperty(ref _levelUpBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("playerLevelUpListener")] 
 		public CHandle<redCallbackObject> PlayerLevelUpListener
 		{
-			get => GetProperty(ref _playerLevelUpListener);
-			set => SetProperty(ref _playerLevelUpListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("mode")] 
 		public CEnum<CraftingMode> Mode
 		{
-			get => GetProperty(ref _mode);
-			set => SetProperty(ref _mode, value);
+			get => GetPropertyValue<CEnum<CraftingMode>>();
+			set => SetPropertyValue<CEnum<CraftingMode>>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("isInitializeOver")] 
 		public CBool IsInitializeOver
 		{
-			get => GetProperty(ref _isInitializeOver);
-			set => SetProperty(ref _isInitializeOver, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("craftingLogicController")] 
 		public CWeakHandle<CraftingLogicController> CraftingLogicController
 		{
-			get => GetProperty(ref _craftingLogicController);
-			set => SetProperty(ref _craftingLogicController, value);
+			get => GetPropertyValue<CWeakHandle<CraftingLogicController>>();
+			set => SetPropertyValue<CWeakHandle<CraftingLogicController>>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("upgradingLogicController")] 
 		public CWeakHandle<UpgradingScreenController> UpgradingLogicController
 		{
-			get => GetProperty(ref _upgradingLogicController);
-			set => SetProperty(ref _upgradingLogicController, value);
+			get => GetPropertyValue<CWeakHandle<UpgradingScreenController>>();
+			set => SetPropertyValue<CWeakHandle<UpgradingScreenController>>(value);
+		}
+
+		public CraftingMainGameController()
+		{
+			TooltipsManagerRef = new();
+			TabRootRef = new();
+			ButtonHintsManagerRef = new();
+			SkillWidgetRoot = new();
+			CraftingLogicControllerContainer = new();
+			UpgradingLogicControllerContainer = new();
 		}
 	}
 }

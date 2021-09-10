@@ -5,55 +5,54 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameJournalQuestMultiMapPin : gameJournalQuestMapPinBase
 	{
-		private CArray<NodeRef> _references;
-		private CName _slotName;
-		private gamemappinsMappinData _mappinData;
-		private Vector3 _offset;
-		private TweakDBID _uiAnimation;
-
 		[Ordinal(3)] 
 		[RED("references")] 
 		public CArray<NodeRef> References
 		{
-			get => GetProperty(ref _references);
-			set => SetProperty(ref _references, value);
+			get => GetPropertyValue<CArray<NodeRef>>();
+			set => SetPropertyValue<CArray<NodeRef>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("slotName")] 
 		public CName SlotName
 		{
-			get => GetProperty(ref _slotName);
-			set => SetProperty(ref _slotName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("mappinData")] 
 		public gamemappinsMappinData MappinData
 		{
-			get => GetProperty(ref _mappinData);
-			set => SetProperty(ref _mappinData, value);
+			get => GetPropertyValue<gamemappinsMappinData>();
+			set => SetPropertyValue<gamemappinsMappinData>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("offset")] 
 		public Vector3 Offset
 		{
-			get => GetProperty(ref _offset);
-			set => SetProperty(ref _offset, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("uiAnimation")] 
 		public TweakDBID UiAnimation
 		{
-			get => GetProperty(ref _uiAnimation);
-			set => SetProperty(ref _uiAnimation, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		public gameJournalQuestMultiMapPin()
 		{
-			_slotName = "UI_Interaction";
+			Entries = new();
+			EnableGPS = true;
+			References = new();
+			SlotName = "UI_Interaction";
+			MappinData = new() { MappinType = new() { Value = 151509826449 }, Variant = Enums.gamedataMappinVariant.DefaultQuestVariant, Active = true, LocalizedCaption = new() { Unk1 = 0, Value = "" }, VisibleThroughWalls = true };
+			Offset = new() { Z = 0.500000F };
 		}
 	}
 }

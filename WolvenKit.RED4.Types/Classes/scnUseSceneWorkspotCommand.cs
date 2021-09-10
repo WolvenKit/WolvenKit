@@ -5,41 +5,46 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnUseSceneWorkspotCommand : AIBaseUseWorkspotCommand
 	{
-		private scnSceneInstanceId _sceneInstanceId;
-		private scnSceneWorkspotInstanceId _workspotInstanceId;
-		private workWorkspotItemOverride _itemOverride;
-		private scnNodeId _nodeId;
-
 		[Ordinal(11)] 
 		[RED("sceneInstanceId")] 
 		public scnSceneInstanceId SceneInstanceId
 		{
-			get => GetProperty(ref _sceneInstanceId);
-			set => SetProperty(ref _sceneInstanceId, value);
+			get => GetPropertyValue<scnSceneInstanceId>();
+			set => SetPropertyValue<scnSceneInstanceId>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("workspotInstanceId")] 
 		public scnSceneWorkspotInstanceId WorkspotInstanceId
 		{
-			get => GetProperty(ref _workspotInstanceId);
-			set => SetProperty(ref _workspotInstanceId, value);
+			get => GetPropertyValue<scnSceneWorkspotInstanceId>();
+			set => SetPropertyValue<scnSceneWorkspotInstanceId>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("itemOverride")] 
 		public workWorkspotItemOverride ItemOverride
 		{
-			get => GetProperty(ref _itemOverride);
-			set => SetProperty(ref _itemOverride, value);
+			get => GetPropertyValue<workWorkspotItemOverride>();
+			set => SetPropertyValue<workWorkspotItemOverride>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("nodeId")] 
 		public scnNodeId NodeId
 		{
-			get => GetProperty(ref _nodeId);
-			set => SetProperty(ref _nodeId, value);
+			get => GetPropertyValue<scnNodeId>();
+			set => SetPropertyValue<scnNodeId>(value);
+		}
+
+		public scnUseSceneWorkspotCommand()
+		{
+			WorkExcludedGestures = new();
+			InfiniteSequenceEntryId = new() { Id = 4294967295 };
+			SceneInstanceId = new() { SceneId = new(), OwnerId = new(), InternalId = 255, Hash = 6242570315725555409 };
+			WorkspotInstanceId = new() { Id = 4294967295 };
+			ItemOverride = new() { PropOverrides = new(), ItemOverrides = new() };
+			NodeId = new() { Id = 4294967295 };
 		}
 	}
 }

@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_AnimSetTagValue : animAnimNode_FloatValue
 	{
-		private redTagList _tags;
-
 		[Ordinal(11)] 
 		[RED("tags")] 
 		public redTagList Tags
 		{
-			get => GetProperty(ref _tags);
-			set => SetProperty(ref _tags, value);
+			get => GetPropertyValue<redTagList>();
+			set => SetPropertyValue<redTagList>(value);
+		}
+
+		public animAnimNode_AnimSetTagValue()
+		{
+			Id = 4294967295;
+			Tags = new() { Tags = new() };
 		}
 	}
 }

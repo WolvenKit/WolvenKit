@@ -5,83 +5,77 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class workEntryAnim : workIEntry
 	{
-		private CName _animName;
-		private CName _idleAnim;
-		private CEnum<moveMovementType> _movementType;
-		private CEnum<moveMovementOrientationType> _orientationType;
-		private CBool _isSynchronized;
-		private CName _slotName;
-		private Transform _syncOffset;
-		private CFloat _blendOutTime;
-
 		[Ordinal(2)] 
 		[RED("animName")] 
 		public CName AnimName
 		{
-			get => GetProperty(ref _animName);
-			set => SetProperty(ref _animName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("idleAnim")] 
 		public CName IdleAnim
 		{
-			get => GetProperty(ref _idleAnim);
-			set => SetProperty(ref _idleAnim, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("movementType")] 
 		public CEnum<moveMovementType> MovementType
 		{
-			get => GetProperty(ref _movementType);
-			set => SetProperty(ref _movementType, value);
+			get => GetPropertyValue<CEnum<moveMovementType>>();
+			set => SetPropertyValue<CEnum<moveMovementType>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("orientationType")] 
 		public CEnum<moveMovementOrientationType> OrientationType
 		{
-			get => GetProperty(ref _orientationType);
-			set => SetProperty(ref _orientationType, value);
+			get => GetPropertyValue<CEnum<moveMovementOrientationType>>();
+			set => SetPropertyValue<CEnum<moveMovementOrientationType>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isSynchronized")] 
 		public CBool IsSynchronized
 		{
-			get => GetProperty(ref _isSynchronized);
-			set => SetProperty(ref _isSynchronized, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("slotName")] 
 		public CName SlotName
 		{
-			get => GetProperty(ref _slotName);
-			set => SetProperty(ref _slotName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("syncOffset")] 
 		public Transform SyncOffset
 		{
-			get => GetProperty(ref _syncOffset);
-			set => SetProperty(ref _syncOffset, value);
+			get => GetPropertyValue<Transform>();
+			set => SetPropertyValue<Transform>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("blendOutTime")] 
 		public CFloat BlendOutTime
 		{
-			get => GetProperty(ref _blendOutTime);
-			set => SetProperty(ref _blendOutTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public workEntryAnim()
 		{
-			_orientationType = new() { Value = Enums.moveMovementOrientationType.Forward };
-			_blendOutTime = 0.500000F;
+			Id = new() { Id = 4294967295 };
+			Flags = 65552;
+			OrientationType = Enums.moveMovementOrientationType.Forward;
+			SyncOffset = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			BlendOutTime = 0.500000F;
 		}
 	}
 }

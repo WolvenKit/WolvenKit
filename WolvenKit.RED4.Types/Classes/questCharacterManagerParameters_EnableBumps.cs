@@ -5,47 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questCharacterManagerParameters_EnableBumps : questICharacterManagerParameters_NodeSubType
 	{
-		private gameEntityReference _puppetRef;
-		private CBool _isPlayer;
-		private CBool _enable;
-		private CEnum<AIinfluenceEBumpPolicy> _policy;
-
 		[Ordinal(0)] 
 		[RED("puppetRef")] 
 		public gameEntityReference PuppetRef
 		{
-			get => GetProperty(ref _puppetRef);
-			set => SetProperty(ref _puppetRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isPlayer")] 
 		public CBool IsPlayer
 		{
-			get => GetProperty(ref _isPlayer);
-			set => SetProperty(ref _isPlayer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("enable")] 
 		public CBool Enable
 		{
-			get => GetProperty(ref _enable);
-			set => SetProperty(ref _enable, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("policy")] 
 		public CEnum<AIinfluenceEBumpPolicy> Policy
 		{
-			get => GetProperty(ref _policy);
-			set => SetProperty(ref _policy, value);
+			get => GetPropertyValue<CEnum<AIinfluenceEBumpPolicy>>();
+			set => SetPropertyValue<CEnum<AIinfluenceEBumpPolicy>>(value);
 		}
 
 		public questCharacterManagerParameters_EnableBumps()
 		{
-			_enable = true;
-			_policy = new() { Value = Enums.AIinfluenceEBumpPolicy.Lean };
+			PuppetRef = new() { Names = new() };
+			Enable = true;
+			Policy = Enums.AIinfluenceEBumpPolicy.Lean;
 		}
 	}
 }

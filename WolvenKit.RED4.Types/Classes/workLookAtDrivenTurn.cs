@@ -5,37 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class workLookAtDrivenTurn : workIEntry
 	{
-		private CInt32 _turnAngle;
-		private CName _turnAnimName;
-		private CFloat _blendTime;
-
 		[Ordinal(2)] 
 		[RED("turnAngle")] 
 		public CInt32 TurnAngle
 		{
-			get => GetProperty(ref _turnAngle);
-			set => SetProperty(ref _turnAngle, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("turnAnimName")] 
 		public CName TurnAnimName
 		{
-			get => GetProperty(ref _turnAnimName);
-			set => SetProperty(ref _turnAnimName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("blendTime")] 
 		public CFloat BlendTime
 		{
-			get => GetProperty(ref _blendTime);
-			set => SetProperty(ref _blendTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public workLookAtDrivenTurn()
 		{
-			_blendTime = 0.500000F;
+			Id = new() { Id = 4294967295 };
+			Flags = 512;
+			BlendTime = 0.500000F;
 		}
 	}
 }

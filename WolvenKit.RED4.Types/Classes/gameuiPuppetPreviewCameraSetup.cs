@@ -5,38 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiPuppetPreviewCameraSetup : RedBaseClass
 	{
-		private CName _slotName;
-		private CFloat _cameraZoom;
-		private CFloat _interpolationTime;
-
 		[Ordinal(0)] 
 		[RED("slotName")] 
 		public CName SlotName
 		{
-			get => GetProperty(ref _slotName);
-			set => SetProperty(ref _slotName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("cameraZoom")] 
 		public CFloat CameraZoom
 		{
-			get => GetProperty(ref _cameraZoom);
-			set => SetProperty(ref _cameraZoom, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("interpolationTime")] 
 		public CFloat InterpolationTime
 		{
-			get => GetProperty(ref _interpolationTime);
-			set => SetProperty(ref _interpolationTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public gameuiPuppetPreviewCameraSetup()
 		{
-			_cameraZoom = -1.000000F;
-			_interpolationTime = 1.000000F;
+			CameraZoom = -1.000000F;
+			InterpolationTime = 1.000000F;
 		}
 	}
 }

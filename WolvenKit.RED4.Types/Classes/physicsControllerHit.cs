@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class physicsControllerHit : RedBaseClass
 	{
-		private Vector4 _worldPos;
-		private Vector4 _worldNormal;
-
 		[Ordinal(0)] 
 		[RED("worldPos")] 
 		public Vector4 WorldPos
 		{
-			get => GetProperty(ref _worldPos);
-			set => SetProperty(ref _worldPos, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("worldNormal")] 
 		public Vector4 WorldNormal
 		{
-			get => GetProperty(ref _worldNormal);
-			set => SetProperty(ref _worldNormal, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
+		}
+
+		public physicsControllerHit()
+		{
+			WorldPos = new() { W = 1.000000F };
+			WorldNormal = new() { W = 1.000000F };
 		}
 	}
 }

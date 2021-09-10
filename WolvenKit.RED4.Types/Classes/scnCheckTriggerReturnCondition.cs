@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnCheckTriggerReturnCondition : scnIReturnCondition
 	{
-		private scnCheckTriggerReturnConditionParams _params;
-
 		[Ordinal(0)] 
 		[RED("params")] 
 		public scnCheckTriggerReturnConditionParams Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<scnCheckTriggerReturnConditionParams>();
+			set => SetPropertyValue<scnCheckTriggerReturnConditionParams>(value);
+		}
+
+		public scnCheckTriggerReturnCondition()
+		{
+			Params = new() { Inside = true };
 		}
 	}
 }

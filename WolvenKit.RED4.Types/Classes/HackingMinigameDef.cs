@@ -5,95 +5,98 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class HackingMinigameDef : gamebbScriptDefinition
 	{
-		private gamebbScriptID_Variant _minigameDefaults;
-		private gamebbScriptID_Variant _nextMinigameData;
-		private gamebbScriptID_Bool _skipSummaryScreen;
-		private gamebbScriptID_Variant _playerPrograms;
-		private gamebbScriptID_Variant _activePrograms;
-		private gamebbScriptID_Variant _activeTraps;
-		private gamebbScriptID_Int32 _state;
-		private gamebbScriptID_Float _timerLeftPercent;
-		private gamebbScriptID_Variant _entity;
-		private gamebbScriptID_Bool _isJournalTarget;
-
 		[Ordinal(0)] 
 		[RED("MinigameDefaults")] 
 		public gamebbScriptID_Variant MinigameDefaults
 		{
-			get => GetProperty(ref _minigameDefaults);
-			set => SetProperty(ref _minigameDefaults, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("NextMinigameData")] 
 		public gamebbScriptID_Variant NextMinigameData
 		{
-			get => GetProperty(ref _nextMinigameData);
-			set => SetProperty(ref _nextMinigameData, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("SkipSummaryScreen")] 
 		public gamebbScriptID_Bool SkipSummaryScreen
 		{
-			get => GetProperty(ref _skipSummaryScreen);
-			set => SetProperty(ref _skipSummaryScreen, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("PlayerPrograms")] 
 		public gamebbScriptID_Variant PlayerPrograms
 		{
-			get => GetProperty(ref _playerPrograms);
-			set => SetProperty(ref _playerPrograms, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("ActivePrograms")] 
 		public gamebbScriptID_Variant ActivePrograms
 		{
-			get => GetProperty(ref _activePrograms);
-			set => SetProperty(ref _activePrograms, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("ActiveTraps")] 
 		public gamebbScriptID_Variant ActiveTraps
 		{
-			get => GetProperty(ref _activeTraps);
-			set => SetProperty(ref _activeTraps, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("State")] 
 		public gamebbScriptID_Int32 State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<gamebbScriptID_Int32>();
+			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("TimerLeftPercent")] 
 		public gamebbScriptID_Float TimerLeftPercent
 		{
-			get => GetProperty(ref _timerLeftPercent);
-			set => SetProperty(ref _timerLeftPercent, value);
+			get => GetPropertyValue<gamebbScriptID_Float>();
+			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("Entity")] 
 		public gamebbScriptID_Variant Entity
 		{
-			get => GetProperty(ref _entity);
-			set => SetProperty(ref _entity, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("IsJournalTarget")] 
 		public gamebbScriptID_Bool IsJournalTarget
 		{
-			get => GetProperty(ref _isJournalTarget);
-			set => SetProperty(ref _isJournalTarget, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		public HackingMinigameDef()
+		{
+			MinigameDefaults = new();
+			NextMinigameData = new();
+			SkipSummaryScreen = new();
+			PlayerPrograms = new();
+			ActivePrograms = new();
+			ActiveTraps = new();
+			State = new();
+			TimerLeftPercent = new();
+			Entity = new();
+			IsJournalTarget = new();
 		}
 	}
 }

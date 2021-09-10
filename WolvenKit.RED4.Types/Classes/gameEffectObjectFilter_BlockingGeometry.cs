@@ -5,29 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameEffectObjectFilter_BlockingGeometry : gameEffectObjectGroupFilter
 	{
-		private CBool _inclusive;
-		private CBool _sortQueryResultsByDistance;
-
 		[Ordinal(0)] 
 		[RED("inclusive")] 
 		public CBool Inclusive
 		{
-			get => GetProperty(ref _inclusive);
-			set => SetProperty(ref _inclusive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("sortQueryResultsByDistance")] 
 		public CBool SortQueryResultsByDistance
 		{
-			get => GetProperty(ref _sortQueryResultsByDistance);
-			set => SetProperty(ref _sortQueryResultsByDistance, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public gameEffectObjectFilter_BlockingGeometry()
 		{
-			_inclusive = true;
-			_sortQueryResultsByDistance = true;
+			Inclusive = true;
+			SortQueryResultsByDistance = true;
 		}
 	}
 }

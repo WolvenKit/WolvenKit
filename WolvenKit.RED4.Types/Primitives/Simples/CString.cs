@@ -1,17 +1,26 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace WolvenKit.RED4.Types
 {
-    public class CString : IRedPrimitive, IEquatable<CString>
+    [RED("String")]
+    [DebuggerDisplay("{_value}", Type = "CString")]
+    public readonly struct CString : IRedPrimitive<string>, IEquatable<CString>
     {
-        public string Text { get; set; }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private readonly string _value;
 
-        public static implicit operator CString(string value) => new() { Text = value };
-        public static implicit operator string(CString value) => value.Text;
+        private CString(string value)
+        {
+            _value = value;
+        }
 
-        public override string ToString() => $"String, Text = '{Text}'";
+        public static implicit operator CString(string value) => new(value);
+        public static implicit operator string(CString value) => value._value;
 
+
+        public override int GetHashCode() => _value.GetHashCode();
 
         public override bool Equals(object obj)
         {
@@ -23,14 +32,6 @@ namespace WolvenKit.RED4.Types
             return false;
         }
 
-        public bool Equals(CString other)
-        {
-            if (other == null)
-            {
-                return false;
-            }
-
-            return string.Equals(Text, other.Text);
-        }
+        public bool Equals(CString other) => Equals(_value, other._value);
     }
 }

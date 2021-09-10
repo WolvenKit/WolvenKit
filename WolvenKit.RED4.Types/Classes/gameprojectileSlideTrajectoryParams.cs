@@ -5,28 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameprojectileSlideTrajectoryParams : gameprojectileTrajectoryParams
 	{
-		private CFloat _stickiness;
-		private Vector4 _constAccel;
-
 		[Ordinal(0)] 
 		[RED("stickiness")] 
 		public CFloat Stickiness
 		{
-			get => GetProperty(ref _stickiness);
-			set => SetProperty(ref _stickiness, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("constAccel")] 
 		public Vector4 ConstAccel
 		{
-			get => GetProperty(ref _constAccel);
-			set => SetProperty(ref _constAccel, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		public gameprojectileSlideTrajectoryParams()
 		{
-			_stickiness = 0.500000F;
+			Stickiness = 0.500000F;
+			ConstAccel = new() { Z = -0.500000F, W = 1.000000F };
 		}
 	}
 }

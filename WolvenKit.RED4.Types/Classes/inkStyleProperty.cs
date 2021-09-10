@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkStyleProperty : RedBaseClass
 	{
-		private CName _propertyPath;
-		private CVariant _value;
-
 		[Ordinal(0)] 
 		[RED("propertyPath")] 
 		public CName PropertyPath
 		{
-			get => GetProperty(ref _propertyPath);
-			set => SetProperty(ref _propertyPath, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("value")] 
 		public CVariant Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<CVariant>();
+			set => SetPropertyValue<CVariant>(value);
 		}
 	}
 }

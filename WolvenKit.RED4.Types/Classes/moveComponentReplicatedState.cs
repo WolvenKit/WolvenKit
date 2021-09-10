@@ -5,77 +5,77 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class moveComponentReplicatedState : netIComponentState
 	{
-		private Quaternion _rotation;
-		private Vector3 _position;
-		private Vector3 _linearVelocity;
-		private CInt16 _teleportCount;
-		private CBool _touchesGround;
-		private CBool _touchesWalls;
-		private CBool _physicalMove;
-		private netTime _inputTimestamp;
-
 		[Ordinal(2)] 
 		[RED("rotation")] 
 		public Quaternion Rotation
 		{
-			get => GetProperty(ref _rotation);
-			set => SetProperty(ref _rotation, value);
+			get => GetPropertyValue<Quaternion>();
+			set => SetPropertyValue<Quaternion>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("position")] 
 		public Vector3 Position
 		{
-			get => GetProperty(ref _position);
-			set => SetProperty(ref _position, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("linearVelocity")] 
 		public Vector3 LinearVelocity
 		{
-			get => GetProperty(ref _linearVelocity);
-			set => SetProperty(ref _linearVelocity, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("teleportCount")] 
 		public CInt16 TeleportCount
 		{
-			get => GetProperty(ref _teleportCount);
-			set => SetProperty(ref _teleportCount, value);
+			get => GetPropertyValue<CInt16>();
+			set => SetPropertyValue<CInt16>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("touchesGround")] 
 		public CBool TouchesGround
 		{
-			get => GetProperty(ref _touchesGround);
-			set => SetProperty(ref _touchesGround, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("touchesWalls")] 
 		public CBool TouchesWalls
 		{
-			get => GetProperty(ref _touchesWalls);
-			set => SetProperty(ref _touchesWalls, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("physicalMove")] 
 		public CBool PhysicalMove
 		{
-			get => GetProperty(ref _physicalMove);
-			set => SetProperty(ref _physicalMove, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("inputTimestamp")] 
 		public netTime InputTimestamp
 		{
-			get => GetProperty(ref _inputTimestamp);
-			set => SetProperty(ref _inputTimestamp, value);
+			get => GetPropertyValue<netTime>();
+			set => SetPropertyValue<netTime>(value);
+		}
+
+		public moveComponentReplicatedState()
+		{
+			Enabled = true;
+			Rotation = new() { R = 1.000000F };
+			Position = new();
+			LinearVelocity = new();
+			InputTimestamp = new();
 		}
 	}
 }

@@ -5,73 +5,69 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class rendEmitterLOD : RedBaseClass
 	{
-		private CFloat _lodSwitchDistance;
-		private CArray<rendParticleBurst> _burstList;
-		private CArray<CFloat> _birthRate;
-		private rendEmitterDurationSettings _emitterDurationSettings;
-		private rendEmitterDelaySettings _emitterDelaySettings;
-		private CEnum<rendEParticleSortingMode> _sortingMode;
-		private CBool _isEnabled;
-
 		[Ordinal(0)] 
 		[RED("lodSwitchDistance")] 
 		public CFloat LodSwitchDistance
 		{
-			get => GetProperty(ref _lodSwitchDistance);
-			set => SetProperty(ref _lodSwitchDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("burstList")] 
 		public CArray<rendParticleBurst> BurstList
 		{
-			get => GetProperty(ref _burstList);
-			set => SetProperty(ref _burstList, value);
+			get => GetPropertyValue<CArray<rendParticleBurst>>();
+			set => SetPropertyValue<CArray<rendParticleBurst>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("birthRate")] 
 		public CArray<CFloat> BirthRate
 		{
-			get => GetProperty(ref _birthRate);
-			set => SetProperty(ref _birthRate, value);
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("emitterDurationSettings")] 
 		public rendEmitterDurationSettings EmitterDurationSettings
 		{
-			get => GetProperty(ref _emitterDurationSettings);
-			set => SetProperty(ref _emitterDurationSettings, value);
+			get => GetPropertyValue<rendEmitterDurationSettings>();
+			set => SetPropertyValue<rendEmitterDurationSettings>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("emitterDelaySettings")] 
 		public rendEmitterDelaySettings EmitterDelaySettings
 		{
-			get => GetProperty(ref _emitterDelaySettings);
-			set => SetProperty(ref _emitterDelaySettings, value);
+			get => GetPropertyValue<rendEmitterDelaySettings>();
+			set => SetPropertyValue<rendEmitterDelaySettings>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("sortingMode")] 
 		public CEnum<rendEParticleSortingMode> SortingMode
 		{
-			get => GetProperty(ref _sortingMode);
-			set => SetProperty(ref _sortingMode, value);
+			get => GetPropertyValue<CEnum<rendEParticleSortingMode>>();
+			set => SetPropertyValue<CEnum<rendEParticleSortingMode>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public rendEmitterLOD()
 		{
-			_lodSwitchDistance = 100.000000F;
+			LodSwitchDistance = 100.000000F;
+			BurstList = new();
+			BirthRate = new();
+			EmitterDurationSettings = new() { EmitterDuration = 1.000000F };
+			EmitterDelaySettings = new();
 		}
 	}
 }

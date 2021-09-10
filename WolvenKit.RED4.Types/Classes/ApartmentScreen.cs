@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ApartmentScreen : LcdScreen
 	{
-		private CUInt32 _timeSystemCallbackID;
-
 		[Ordinal(99)] 
 		[RED("timeSystemCallbackID")] 
 		public CUInt32 TimeSystemCallbackID
 		{
-			get => GetProperty(ref _timeSystemCallbackID);
-			set => SetProperty(ref _timeSystemCallbackID, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		public ApartmentScreen()
+		{
+			ControllerTypeName = "ApartmentScreenController";
 		}
 	}
 }

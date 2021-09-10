@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class BackpackEquipSlotChooserData : inkGameNotificationData
 	{
-		private InventoryItemData _item;
-		private CHandle<InventoryDataManagerV2> _inventoryManager;
-
 		[Ordinal(6)] 
 		[RED("item")] 
 		public InventoryItemData Item
 		{
-			get => GetProperty(ref _item);
-			set => SetProperty(ref _item, value);
+			get => GetPropertyValue<InventoryItemData>();
+			set => SetPropertyValue<InventoryItemData>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("inventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
-			get => GetProperty(ref _inventoryManager);
-			set => SetProperty(ref _inventoryManager, value);
+			get => GetPropertyValue<CHandle<InventoryDataManagerV2>>();
+			set => SetPropertyValue<CHandle<InventoryDataManagerV2>>(value);
+		}
+
+		public BackpackEquipSlotChooserData()
+		{
+			Item = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
 		}
 	}
 }

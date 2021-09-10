@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questMinimize_NodeType : questIPhoneManagerNodeType
 	{
-		private CBool _minimize;
-
 		[Ordinal(0)] 
 		[RED("minimize")] 
 		public CBool Minimize
 		{
-			get => GetProperty(ref _minimize);
-			set => SetProperty(ref _minimize, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public questMinimize_NodeType()
 		{
-			_minimize = true;
+			Minimize = true;
 		}
 	}
 }

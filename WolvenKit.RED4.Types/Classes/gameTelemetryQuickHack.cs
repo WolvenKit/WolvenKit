@@ -5,55 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameTelemetryQuickHack : RedBaseClass
 	{
-		private CName _actionName;
-		private CString _titleLocKey;
-		private CString _targetType;
-		private TweakDBID _quickHackRecordID;
-		private CInt32 _quality;
-
 		[Ordinal(0)] 
 		[RED("actionName")] 
 		public CName ActionName
 		{
-			get => GetProperty(ref _actionName);
-			set => SetProperty(ref _actionName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("titleLocKey")] 
 		public CString TitleLocKey
 		{
-			get => GetProperty(ref _titleLocKey);
-			set => SetProperty(ref _titleLocKey, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("targetType")] 
 		public CString TargetType
 		{
-			get => GetProperty(ref _targetType);
-			set => SetProperty(ref _targetType, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("quickHackRecordID")] 
 		public TweakDBID QuickHackRecordID
 		{
-			get => GetProperty(ref _quickHackRecordID);
-			set => SetProperty(ref _quickHackRecordID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("quality")] 
 		public CInt32 Quality
 		{
-			get => GetProperty(ref _quality);
-			set => SetProperty(ref _quality, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		public gameTelemetryQuickHack()
 		{
-			_quality = -1;
+			Quality = -1;
 		}
 	}
 }

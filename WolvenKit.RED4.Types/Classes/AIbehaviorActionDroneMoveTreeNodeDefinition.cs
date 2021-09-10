@@ -5,77 +5,68 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorActionDroneMoveTreeNodeDefinition : AIbehaviorActionTreeNodeDefinition
 	{
-		private CHandle<AIArgumentMapping> _moveType;
-		private CHandle<AIArgumentMapping> _target;
-		private CHandle<AIArgumentMapping> _movementTarget;
-		private CHandle<AIArgumentMapping> _toleranceRadius;
-		private CHandle<AIArgumentMapping> _desiredDistanceFromTarget;
-		private CHandle<AIArgumentMapping> _strafingTarget;
-		private CHandle<AIArgumentMapping> _stopWhenDestinationReached;
-		private CHandle<AIArgumentMapping> _rotateEntity;
-
 		[Ordinal(1)] 
 		[RED("moveType")] 
 		public CHandle<AIArgumentMapping> MoveType
 		{
-			get => GetProperty(ref _moveType);
-			set => SetProperty(ref _moveType, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("target")] 
 		public CHandle<AIArgumentMapping> Target
 		{
-			get => GetProperty(ref _target);
-			set => SetProperty(ref _target, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("movementTarget")] 
 		public CHandle<AIArgumentMapping> MovementTarget
 		{
-			get => GetProperty(ref _movementTarget);
-			set => SetProperty(ref _movementTarget, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("toleranceRadius")] 
 		public CHandle<AIArgumentMapping> ToleranceRadius
 		{
-			get => GetProperty(ref _toleranceRadius);
-			set => SetProperty(ref _toleranceRadius, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("desiredDistanceFromTarget")] 
 		public CHandle<AIArgumentMapping> DesiredDistanceFromTarget
 		{
-			get => GetProperty(ref _desiredDistanceFromTarget);
-			set => SetProperty(ref _desiredDistanceFromTarget, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("strafingTarget")] 
 		public CHandle<AIArgumentMapping> StrafingTarget
 		{
-			get => GetProperty(ref _strafingTarget);
-			set => SetProperty(ref _strafingTarget, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("stopWhenDestinationReached")] 
 		public CHandle<AIArgumentMapping> StopWhenDestinationReached
 		{
-			get => GetProperty(ref _stopWhenDestinationReached);
-			set => SetProperty(ref _stopWhenDestinationReached, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("rotateEntity")] 
 		public CHandle<AIArgumentMapping> RotateEntity
 		{
-			get => GetProperty(ref _rotateEntity);
-			set => SetProperty(ref _rotateEntity, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 	}
 }

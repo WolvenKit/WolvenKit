@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameNetrunnerPrototypeNodeSetupEvent : redEvent
 	{
-		private Vector3 _scale;
-
 		[Ordinal(0)] 
 		[RED("scale")] 
 		public Vector3 Scale
 		{
-			get => GetProperty(ref _scale);
-			set => SetProperty(ref _scale, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
+		}
+
+		public gameNetrunnerPrototypeNodeSetupEvent()
+		{
+			Scale = new();
 		}
 	}
 }

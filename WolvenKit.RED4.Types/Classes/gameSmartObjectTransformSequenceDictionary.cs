@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameSmartObjectTransformSequenceDictionary : ISerializable
 	{
-		private CArray<gameSmartObjectTransformSequenceDictionaryEntry> _sequences;
-
 		[Ordinal(0)] 
 		[RED("sequences")] 
 		public CArray<gameSmartObjectTransformSequenceDictionaryEntry> Sequences
 		{
-			get => GetProperty(ref _sequences);
-			set => SetProperty(ref _sequences, value);
+			get => GetPropertyValue<CArray<gameSmartObjectTransformSequenceDictionaryEntry>>();
+			set => SetPropertyValue<CArray<gameSmartObjectTransformSequenceDictionaryEntry>>(value);
+		}
+
+		public gameSmartObjectTransformSequenceDictionary()
+		{
+			Sequences = new();
 		}
 	}
 }

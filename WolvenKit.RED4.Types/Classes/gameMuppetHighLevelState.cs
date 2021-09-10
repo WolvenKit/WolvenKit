@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameMuppetHighLevelState : RedBaseClass
 	{
-		private CBool _isDead;
-		private CUInt32 _deathFrameId;
-
 		[Ordinal(0)] 
 		[RED("isDead")] 
 		public CBool IsDead
 		{
-			get => GetProperty(ref _isDead);
-			set => SetProperty(ref _isDead, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("deathFrameId")] 
 		public CUInt32 DeathFrameId
 		{
-			get => GetProperty(ref _deathFrameId);
-			set => SetProperty(ref _deathFrameId, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		public gameMuppetHighLevelState()
 		{
-			_deathFrameId = 4294967295;
+			DeathFrameId = 4294967295;
 		}
 	}
 }

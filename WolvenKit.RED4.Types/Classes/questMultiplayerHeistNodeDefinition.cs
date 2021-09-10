@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questMultiplayerHeistNodeDefinition : questDisableableNodeDefinition
 	{
-		private CHandle<questIMultiplayerHeistNodeType> _type;
-
 		[Ordinal(2)] 
 		[RED("type")] 
 		public CHandle<questIMultiplayerHeistNodeType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CHandle<questIMultiplayerHeistNodeType>>();
+			set => SetPropertyValue<CHandle<questIMultiplayerHeistNodeType>>(value);
+		}
+
+		public questMultiplayerHeistNodeDefinition()
+		{
+			Sockets = new();
+			Id = 65535;
 		}
 	}
 }

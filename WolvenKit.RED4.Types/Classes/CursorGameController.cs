@@ -5,50 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CursorGameController : gameuiWidgetGameController
 	{
-		private CWeakHandle<CursorRootController> _cursorRoot;
-		private CName _currentContext;
-		private inkMargin _margin;
-		private CHandle<MenuCursorUserData> _data;
-		private CBool _isCursorVisible;
-
 		[Ordinal(2)] 
 		[RED("cursorRoot")] 
 		public CWeakHandle<CursorRootController> CursorRoot
 		{
-			get => GetProperty(ref _cursorRoot);
-			set => SetProperty(ref _cursorRoot, value);
+			get => GetPropertyValue<CWeakHandle<CursorRootController>>();
+			set => SetPropertyValue<CWeakHandle<CursorRootController>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("currentContext")] 
 		public CName CurrentContext
 		{
-			get => GetProperty(ref _currentContext);
-			set => SetProperty(ref _currentContext, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("margin")] 
 		public inkMargin Margin
 		{
-			get => GetProperty(ref _margin);
-			set => SetProperty(ref _margin, value);
+			get => GetPropertyValue<inkMargin>();
+			set => SetPropertyValue<inkMargin>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("data")] 
 		public CHandle<MenuCursorUserData> Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<CHandle<MenuCursorUserData>>();
+			set => SetPropertyValue<CHandle<MenuCursorUserData>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isCursorVisible")] 
 		public CBool IsCursorVisible
 		{
-			get => GetProperty(ref _isCursorVisible);
-			set => SetProperty(ref _isCursorVisible, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public CursorGameController()
+		{
+			Margin = new();
 		}
 	}
 }

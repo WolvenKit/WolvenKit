@@ -2,6 +2,6 @@ namespace WolvenKit.RED4.Types
 {
     public partial class EulerAngles
     {
-        public override string ToString() => $"EulerAngles, Pitch = {Pitch.Value}, Yaw = {Yaw.Value}, Roll = {Roll.Value}";
+        public override string ToString() => $"EulerAngles, Pitch = {Pitch}, Yaw = {Yaw}, Roll = {Roll}";
     }
 }

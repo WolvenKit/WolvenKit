@@ -5,37 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnAudioDurationEvent : scnSceneEvent
 	{
-		private scnPerformerId _performer;
-		private CName _audioEventName;
-		private CEnum<scnAudioPlaybackDirectionSupportFlag> _playbackDirectionSupport;
-
 		[Ordinal(6)] 
 		[RED("performer")] 
 		public scnPerformerId Performer
 		{
-			get => GetProperty(ref _performer);
-			set => SetProperty(ref _performer, value);
+			get => GetPropertyValue<scnPerformerId>();
+			set => SetPropertyValue<scnPerformerId>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("audioEventName")] 
 		public CName AudioEventName
 		{
-			get => GetProperty(ref _audioEventName);
-			set => SetProperty(ref _audioEventName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("playbackDirectionSupport")] 
 		public CEnum<scnAudioPlaybackDirectionSupportFlag> PlaybackDirectionSupport
 		{
-			get => GetProperty(ref _playbackDirectionSupport);
-			set => SetProperty(ref _playbackDirectionSupport, value);
+			get => GetPropertyValue<CEnum<scnAudioPlaybackDirectionSupportFlag>>();
+			set => SetPropertyValue<CEnum<scnAudioPlaybackDirectionSupportFlag>>(value);
 		}
 
 		public scnAudioDurationEvent()
 		{
-			_playbackDirectionSupport = new() { Value = Enums.scnAudioPlaybackDirectionSupportFlag.Forward };
+			Id = new() { Id = 18446744073709551615 };
+			Performer = new() { Id = 4294967040 };
+			PlaybackDirectionSupport = Enums.scnAudioPlaybackDirectionSupportFlag.Forward;
 		}
 	}
 }

@@ -5,68 +5,63 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entTriggerActivatorComponent : entIPlacedComponent
 	{
-		private CFloat _radius;
-		private CFloat _height;
-		private CEnum<TriggerChannel> _channels;
-		private CFloat _maxContinousDistance;
-		private CBool _enableCCD;
-		private CBool _isEnabled;
-
 		[Ordinal(5)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get => GetProperty(ref _radius);
-			set => SetProperty(ref _radius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("height")] 
 		public CFloat Height
 		{
-			get => GetProperty(ref _height);
-			set => SetProperty(ref _height, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("channels")] 
-		public CEnum<TriggerChannel> Channels
+		public CBitField<TriggerChannel> Channels
 		{
-			get => GetProperty(ref _channels);
-			set => SetProperty(ref _channels, value);
+			get => GetPropertyValue<CBitField<TriggerChannel>>();
+			set => SetPropertyValue<CBitField<TriggerChannel>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("maxContinousDistance")] 
 		public CFloat MaxContinousDistance
 		{
-			get => GetProperty(ref _maxContinousDistance);
-			set => SetProperty(ref _maxContinousDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("enableCCD")] 
 		public CBool EnableCCD
 		{
-			get => GetProperty(ref _enableCCD);
-			set => SetProperty(ref _enableCCD, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public entTriggerActivatorComponent()
 		{
-			_radius = 0.400000F;
-			_height = 1.800000F;
-			_channels = new() { Value = Enums.TriggerChannel.TC_Default };
-			_maxContinousDistance = 0.100000F;
-			_isEnabled = true;
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			Radius = 0.400000F;
+			Height = 1.800000F;
+			Channels = Enums.TriggerChannel.TC_Default;
+			MaxContinousDistance = 0.100000F;
+			IsEnabled = true;
 		}
 	}
 }

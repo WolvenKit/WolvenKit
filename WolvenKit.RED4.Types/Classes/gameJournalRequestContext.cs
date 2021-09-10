@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameJournalRequestContext : RedBaseClass
 	{
-		private gameJournalRequestStateFilter _stateFilter;
-		private gameJournalRequestClassFilter _classFilter;
-
 		[Ordinal(0)] 
 		[RED("stateFilter")] 
 		public gameJournalRequestStateFilter StateFilter
 		{
-			get => GetProperty(ref _stateFilter);
-			set => SetProperty(ref _stateFilter, value);
+			get => GetPropertyValue<gameJournalRequestStateFilter>();
+			set => SetPropertyValue<gameJournalRequestStateFilter>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("classFilter")] 
 		public gameJournalRequestClassFilter ClassFilter
 		{
-			get => GetProperty(ref _classFilter);
-			set => SetProperty(ref _classFilter, value);
+			get => GetPropertyValue<gameJournalRequestClassFilter>();
+			set => SetPropertyValue<gameJournalRequestClassFilter>(value);
+		}
+
+		public gameJournalRequestContext()
+		{
+			StateFilter = new();
+			ClassFilter = new();
 		}
 	}
 }

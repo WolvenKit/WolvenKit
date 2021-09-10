@@ -5,23 +5,29 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CParticleModificatorAlphaByDistance : IParticleModificator
 	{
-		private Vector2 _nearBlendDistance;
-		private Vector2 _farBlendDistance;
-
 		[Ordinal(4)] 
 		[RED("nearBlendDistance")] 
 		public Vector2 NearBlendDistance
 		{
-			get => GetProperty(ref _nearBlendDistance);
-			set => SetProperty(ref _nearBlendDistance, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("farBlendDistance")] 
 		public Vector2 FarBlendDistance
 		{
-			get => GetProperty(ref _farBlendDistance);
-			set => SetProperty(ref _farBlendDistance, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
+		}
+
+		public CParticleModificatorAlphaByDistance()
+		{
+			EditorName = "Alpha by distance";
+			EditorGroup = "Material";
+			IsEnabled = true;
+			NearBlendDistance = new() { X = 7.000000F, Y = 5.000000F };
+			FarBlendDistance = new() { X = 27.000000F, Y = 20.000000F };
 		}
 	}
 }

@@ -5,55 +5,51 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldTrafficCollisionSphere : RedBaseClass
 	{
-		private Vector3 _worldPos;
-		private Vector3 _direction;
-		private CFloat _radius;
-		private CUInt64 _userData;
-		private CUInt8 _flags;
-
 		[Ordinal(0)] 
 		[RED("worldPos")] 
 		public Vector3 WorldPos
 		{
-			get => GetProperty(ref _worldPos);
-			set => SetProperty(ref _worldPos, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("direction")] 
 		public Vector3 Direction
 		{
-			get => GetProperty(ref _direction);
-			set => SetProperty(ref _direction, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get => GetProperty(ref _radius);
-			set => SetProperty(ref _radius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("userData")] 
 		public CUInt64 UserData
 		{
-			get => GetProperty(ref _userData);
-			set => SetProperty(ref _userData, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("flags")] 
 		public CUInt8 Flags
 		{
-			get => GetProperty(ref _flags);
-			set => SetProperty(ref _flags, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		public worldTrafficCollisionSphere()
 		{
-			_flags = 1;
+			WorldPos = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
+			Direction = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
+			Flags = 1;
 		}
 	}
 }

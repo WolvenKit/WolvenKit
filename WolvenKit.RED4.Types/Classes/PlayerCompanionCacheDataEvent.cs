@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PlayerCompanionCacheDataEvent : redEvent
 	{
-		private CBool _isPlayerCompanionCached;
-		private CFloat _isPlayerCompanionCachedTimeStamp;
-
 		[Ordinal(0)] 
 		[RED("isPlayerCompanionCached")] 
 		public CBool IsPlayerCompanionCached
 		{
-			get => GetProperty(ref _isPlayerCompanionCached);
-			set => SetProperty(ref _isPlayerCompanionCached, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isPlayerCompanionCachedTimeStamp")] 
 		public CFloat IsPlayerCompanionCachedTimeStamp
 		{
-			get => GetProperty(ref _isPlayerCompanionCachedTimeStamp);
-			set => SetProperty(ref _isPlayerCompanionCachedTimeStamp, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

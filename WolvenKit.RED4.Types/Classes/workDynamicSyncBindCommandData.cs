@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class workDynamicSyncBindCommandData : workIWorkspotCommandData
 	{
-		private entEntityID _masterID;
-
 		[Ordinal(0)] 
 		[RED("masterID")] 
 		public entEntityID MasterID
 		{
-			get => GetProperty(ref _masterID);
-			set => SetProperty(ref _masterID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
+		}
+
+		public workDynamicSyncBindCommandData()
+		{
+			MasterID = new();
 		}
 	}
 }

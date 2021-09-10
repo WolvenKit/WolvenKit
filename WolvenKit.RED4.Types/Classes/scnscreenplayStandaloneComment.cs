@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnscreenplayStandaloneComment : RedBaseClass
 	{
-		private scnscreenplayItemId _itemId;
-		private CString _comment;
-
 		[Ordinal(0)] 
 		[RED("itemId")] 
 		public scnscreenplayItemId ItemId
 		{
-			get => GetProperty(ref _itemId);
-			set => SetProperty(ref _itemId, value);
+			get => GetPropertyValue<scnscreenplayItemId>();
+			set => SetPropertyValue<scnscreenplayItemId>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("comment")] 
 		public CString Comment
 		{
-			get => GetProperty(ref _comment);
-			set => SetProperty(ref _comment, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		public scnscreenplayStandaloneComment()
+		{
+			ItemId = new() { Id = 4294967040 };
 		}
 	}
 }

@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioMaterialMeleeSoundDictionary : audioInlinedAudioMetadata
 	{
-		private CArray<audioMaterialMeleeSoundDictionaryItem> _entries;
-		private CHandle<audioMaterialMeleeSoundDictionaryItem> _entryType;
-
 		[Ordinal(1)] 
 		[RED("entries")] 
 		public CArray<audioMaterialMeleeSoundDictionaryItem> Entries
 		{
-			get => GetProperty(ref _entries);
-			set => SetProperty(ref _entries, value);
+			get => GetPropertyValue<CArray<audioMaterialMeleeSoundDictionaryItem>>();
+			set => SetPropertyValue<CArray<audioMaterialMeleeSoundDictionaryItem>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("entryType")] 
 		public CHandle<audioMaterialMeleeSoundDictionaryItem> EntryType
 		{
-			get => GetProperty(ref _entryType);
-			set => SetProperty(ref _entryType, value);
+			get => GetPropertyValue<CHandle<audioMaterialMeleeSoundDictionaryItem>>();
+			set => SetPropertyValue<CHandle<audioMaterialMeleeSoundDictionaryItem>>(value);
+		}
+
+		public audioMaterialMeleeSoundDictionary()
+		{
+			Entries = new();
 		}
 	}
 }

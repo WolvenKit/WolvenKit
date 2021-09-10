@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animLookAtAdditionalPreset_LeftArm : animLookAtAdditionalPreset
 	{
-		private CBool _isAiming;
-		private CFloat _softLimitAngle;
-
 		[Ordinal(0)] 
 		[RED("isAiming")] 
 		public CBool IsAiming
 		{
-			get => GetProperty(ref _isAiming);
-			set => SetProperty(ref _isAiming, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("softLimitAngle")] 
 		public CFloat SoftLimitAngle
 		{
-			get => GetProperty(ref _softLimitAngle);
-			set => SetProperty(ref _softLimitAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public animLookAtAdditionalPreset_LeftArm()
 		{
-			_softLimitAngle = 360.000000F;
+			SoftLimitAngle = 360.000000F;
 		}
 	}
 }

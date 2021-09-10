@@ -5,29 +5,30 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ToggleON : ActionBool
 	{
-		private CString _trueRecordName;
-		private CString _falseRecordName;
-
 		[Ordinal(25)] 
 		[RED("TrueRecordName")] 
 		public CString TrueRecordName
 		{
-			get => GetProperty(ref _trueRecordName);
-			set => SetProperty(ref _trueRecordName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("FalseRecordName")] 
 		public CString FalseRecordName
 		{
-			get => GetProperty(ref _falseRecordName);
-			set => SetProperty(ref _falseRecordName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		public ToggleON()
 		{
-			_trueRecordName = new() { Text = "On" };
-			_falseRecordName = new() { Text = "Off" };
+			RequesterID = new();
+			InteractionChoice = new() { CaptionParts = new() { Parts = new() }, Data = new(), ChoiceMetaData = new() { Type = new() }, LookAtDescriptor = new() { Offset = new(), OrbId = new() } };
+			ActionWidgetPackage = new() { DependendActions = new() };
+			CanTriggerStim = true;
+			TrueRecordName = "On";
+			FalseRecordName = "Off";
 		}
 	}
 }

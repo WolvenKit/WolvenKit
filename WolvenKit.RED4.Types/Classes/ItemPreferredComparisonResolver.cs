@@ -5,59 +5,60 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ItemPreferredComparisonResolver : IScriptable
 	{
-		private CArray<CHandle<ItemPreferredAreaItems>> _cacheadAreaItems;
-		private CArray<CHandle<ItemComparableTypesCache>> _cachedComparableTypes;
-		private CArray<CHandle<TypeComparableItemsCache>> _typeComparableItemsCache;
-		private CHandle<InventoryDataManagerV2> _dataManager;
-		private InventoryItemData _forcedCompareItem;
-		private CBool _useForceCompare;
-
 		[Ordinal(0)] 
 		[RED("cacheadAreaItems")] 
 		public CArray<CHandle<ItemPreferredAreaItems>> CacheadAreaItems
 		{
-			get => GetProperty(ref _cacheadAreaItems);
-			set => SetProperty(ref _cacheadAreaItems, value);
+			get => GetPropertyValue<CArray<CHandle<ItemPreferredAreaItems>>>();
+			set => SetPropertyValue<CArray<CHandle<ItemPreferredAreaItems>>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("cachedComparableTypes")] 
 		public CArray<CHandle<ItemComparableTypesCache>> CachedComparableTypes
 		{
-			get => GetProperty(ref _cachedComparableTypes);
-			set => SetProperty(ref _cachedComparableTypes, value);
+			get => GetPropertyValue<CArray<CHandle<ItemComparableTypesCache>>>();
+			set => SetPropertyValue<CArray<CHandle<ItemComparableTypesCache>>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("typeComparableItemsCache")] 
 		public CArray<CHandle<TypeComparableItemsCache>> TypeComparableItemsCache
 		{
-			get => GetProperty(ref _typeComparableItemsCache);
-			set => SetProperty(ref _typeComparableItemsCache, value);
+			get => GetPropertyValue<CArray<CHandle<TypeComparableItemsCache>>>();
+			set => SetPropertyValue<CArray<CHandle<TypeComparableItemsCache>>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("dataManager")] 
 		public CHandle<InventoryDataManagerV2> DataManager
 		{
-			get => GetProperty(ref _dataManager);
-			set => SetProperty(ref _dataManager, value);
+			get => GetPropertyValue<CHandle<InventoryDataManagerV2>>();
+			set => SetPropertyValue<CHandle<InventoryDataManagerV2>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("forcedCompareItem")] 
 		public InventoryItemData ForcedCompareItem
 		{
-			get => GetProperty(ref _forcedCompareItem);
-			set => SetProperty(ref _forcedCompareItem, value);
+			get => GetPropertyValue<InventoryItemData>();
+			set => SetPropertyValue<InventoryItemData>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("useForceCompare")] 
 		public CBool UseForceCompare
 		{
-			get => GetProperty(ref _useForceCompare);
-			set => SetProperty(ref _useForceCompare, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public ItemPreferredComparisonResolver()
+		{
+			CacheadAreaItems = new();
+			CachedComparableTypes = new();
+			TypeComparableItemsCache = new();
+			ForcedCompareItem = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
 		}
 	}
 }

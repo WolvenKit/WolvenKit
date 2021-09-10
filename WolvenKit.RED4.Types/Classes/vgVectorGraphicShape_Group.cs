@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class vgVectorGraphicShape_Group : vgBaseVectorGraphicShape
 	{
-		private CArray<CHandle<vgBaseVectorGraphicShape>> _childShapes;
-
 		[Ordinal(2)] 
 		[RED("childShapes")] 
 		public CArray<CHandle<vgBaseVectorGraphicShape>> ChildShapes
 		{
-			get => GetProperty(ref _childShapes);
-			set => SetProperty(ref _childShapes, value);
+			get => GetPropertyValue<CArray<CHandle<vgBaseVectorGraphicShape>>>();
+			set => SetPropertyValue<CArray<CHandle<vgBaseVectorGraphicShape>>>(value);
+		}
+
+		public vgVectorGraphicShape_Group()
+		{
+			CalTransform = new();
+			ChildShapes = new();
 		}
 	}
 }

@@ -5,140 +5,131 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_RotateBone : animAnimNode_Base
 	{
-		private animPoseLink _inputNode;
-		private animFloatLink _angleNode;
-		private animFloatLink _minValueNode;
-		private animFloatLink _maxValueNode;
-		private animTransformIndex _bone;
-		private CEnum<animETransformAxis> _axis;
-		private CFloat _scale;
-		private CFloat _biasAngle;
-		private CFloat _minAngle;
-		private CFloat _maxAngle;
-		private CBool _clampRotation;
-		private CBool _useIncrementalMode;
-		private CBool _resetOnActivation;
-		private CBool _inModelSpace;
-
 		[Ordinal(11)] 
 		[RED("inputNode")] 
 		public animPoseLink InputNode
 		{
-			get => GetProperty(ref _inputNode);
-			set => SetProperty(ref _inputNode, value);
+			get => GetPropertyValue<animPoseLink>();
+			set => SetPropertyValue<animPoseLink>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("angleNode")] 
 		public animFloatLink AngleNode
 		{
-			get => GetProperty(ref _angleNode);
-			set => SetProperty(ref _angleNode, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("minValueNode")] 
 		public animFloatLink MinValueNode
 		{
-			get => GetProperty(ref _minValueNode);
-			set => SetProperty(ref _minValueNode, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("maxValueNode")] 
 		public animFloatLink MaxValueNode
 		{
-			get => GetProperty(ref _maxValueNode);
-			set => SetProperty(ref _maxValueNode, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("bone")] 
 		public animTransformIndex Bone
 		{
-			get => GetProperty(ref _bone);
-			set => SetProperty(ref _bone, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("axis")] 
 		public CEnum<animETransformAxis> Axis
 		{
-			get => GetProperty(ref _axis);
-			set => SetProperty(ref _axis, value);
+			get => GetPropertyValue<CEnum<animETransformAxis>>();
+			set => SetPropertyValue<CEnum<animETransformAxis>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("scale")] 
 		public CFloat Scale
 		{
-			get => GetProperty(ref _scale);
-			set => SetProperty(ref _scale, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("biasAngle")] 
 		public CFloat BiasAngle
 		{
-			get => GetProperty(ref _biasAngle);
-			set => SetProperty(ref _biasAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("minAngle")] 
 		public CFloat MinAngle
 		{
-			get => GetProperty(ref _minAngle);
-			set => SetProperty(ref _minAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("maxAngle")] 
 		public CFloat MaxAngle
 		{
-			get => GetProperty(ref _maxAngle);
-			set => SetProperty(ref _maxAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("clampRotation")] 
 		public CBool ClampRotation
 		{
-			get => GetProperty(ref _clampRotation);
-			set => SetProperty(ref _clampRotation, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("useIncrementalMode")] 
 		public CBool UseIncrementalMode
 		{
-			get => GetProperty(ref _useIncrementalMode);
-			set => SetProperty(ref _useIncrementalMode, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("resetOnActivation")] 
 		public CBool ResetOnActivation
 		{
-			get => GetProperty(ref _resetOnActivation);
-			set => SetProperty(ref _resetOnActivation, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("inModelSpace")] 
 		public CBool InModelSpace
 		{
-			get => GetProperty(ref _inModelSpace);
-			set => SetProperty(ref _inModelSpace, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public animAnimNode_RotateBone()
 		{
-			_axis = new() { Value = Enums.animETransformAxis.X_Axis };
-			_scale = 1.000000F;
-			_minAngle = -90.000000F;
-			_maxAngle = 90.000000F;
-			_resetOnActivation = true;
+			Id = 4294967295;
+			InputNode = new();
+			AngleNode = new();
+			MinValueNode = new();
+			MaxValueNode = new();
+			Bone = new();
+			Axis = Enums.animETransformAxis.X_Axis;
+			Scale = 1.000000F;
+			MinAngle = -90.000000F;
+			MaxAngle = 90.000000F;
+			ResetOnActivation = true;
 		}
 	}
 }

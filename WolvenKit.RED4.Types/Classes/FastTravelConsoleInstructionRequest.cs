@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class FastTravelConsoleInstructionRequest : gameScriptableSystemRequest
 	{
-		private CEnum<EFastTravelSystemInstruction> _instruction;
-		private CFloat _magicFloat;
-
 		[Ordinal(0)] 
 		[RED("instruction")] 
 		public CEnum<EFastTravelSystemInstruction> Instruction
 		{
-			get => GetProperty(ref _instruction);
-			set => SetProperty(ref _instruction, value);
+			get => GetPropertyValue<CEnum<EFastTravelSystemInstruction>>();
+			set => SetPropertyValue<CEnum<EFastTravelSystemInstruction>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("magicFloat")] 
 		public CFloat MagicFloat
 		{
-			get => GetProperty(ref _magicFloat);
-			set => SetProperty(ref _magicFloat, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

@@ -5,46 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animDyngParticlesContainer : RedBaseClass
 	{
-		private Vector3 _externalForceWS;
-		private animVectorLink _externalForceWsLink;
-		private CArray<animDyngParticle> _particles;
-		private CFloat _gravityWS;
-
 		[Ordinal(0)] 
 		[RED("externalForceWS")] 
 		public Vector3 ExternalForceWS
 		{
-			get => GetProperty(ref _externalForceWS);
-			set => SetProperty(ref _externalForceWS, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("externalForceWsLink")] 
 		public animVectorLink ExternalForceWsLink
 		{
-			get => GetProperty(ref _externalForceWsLink);
-			set => SetProperty(ref _externalForceWsLink, value);
+			get => GetPropertyValue<animVectorLink>();
+			set => SetPropertyValue<animVectorLink>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("particles")] 
 		public CArray<animDyngParticle> Particles
 		{
-			get => GetProperty(ref _particles);
-			set => SetProperty(ref _particles, value);
+			get => GetPropertyValue<CArray<animDyngParticle>>();
+			set => SetPropertyValue<CArray<animDyngParticle>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("gravityWS")] 
 		public CFloat GravityWS
 		{
-			get => GetProperty(ref _gravityWS);
-			set => SetProperty(ref _gravityWS, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public animDyngParticlesContainer()
 		{
-			_gravityWS = 9.810000F;
+			ExternalForceWS = new();
+			ExternalForceWsLink = new();
+			Particles = new();
+			GravityWS = 9.810000F;
 		}
 	}
 }

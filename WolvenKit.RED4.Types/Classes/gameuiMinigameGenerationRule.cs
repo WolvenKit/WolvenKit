@@ -5,68 +5,60 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiMinigameGenerationRule : IScriptable
 	{
-		private CWeakHandle<gameuiHackingMinigameGameController> _minigameController;
-		private CHandle<gameBlackboardSystem> _blackboardSystem;
-		private CWeakHandle<entEntity> _entity;
-		private CWeakHandle<PlayerPuppet> _player;
-		private CWeakHandle<gamedataMinigame_Def_Record> _minigameRecord;
-		private CInt32 _bufferSize;
-		private CBool _isItemBreach;
-
 		[Ordinal(0)] 
 		[RED("minigameController")] 
 		public CWeakHandle<gameuiHackingMinigameGameController> MinigameController
 		{
-			get => GetProperty(ref _minigameController);
-			set => SetProperty(ref _minigameController, value);
+			get => GetPropertyValue<CWeakHandle<gameuiHackingMinigameGameController>>();
+			set => SetPropertyValue<CWeakHandle<gameuiHackingMinigameGameController>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("blackboardSystem")] 
 		public CHandle<gameBlackboardSystem> BlackboardSystem
 		{
-			get => GetProperty(ref _blackboardSystem);
-			set => SetProperty(ref _blackboardSystem, value);
+			get => GetPropertyValue<CHandle<gameBlackboardSystem>>();
+			set => SetPropertyValue<CHandle<gameBlackboardSystem>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("entity")] 
 		public CWeakHandle<entEntity> Entity
 		{
-			get => GetProperty(ref _entity);
-			set => SetProperty(ref _entity, value);
+			get => GetPropertyValue<CWeakHandle<entEntity>>();
+			set => SetPropertyValue<CWeakHandle<entEntity>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
-			get => GetProperty(ref _player);
-			set => SetProperty(ref _player, value);
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("minigameRecord")] 
 		public CWeakHandle<gamedataMinigame_Def_Record> MinigameRecord
 		{
-			get => GetProperty(ref _minigameRecord);
-			set => SetProperty(ref _minigameRecord, value);
+			get => GetPropertyValue<CWeakHandle<gamedataMinigame_Def_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataMinigame_Def_Record>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("bufferSize")] 
 		public CInt32 BufferSize
 		{
-			get => GetProperty(ref _bufferSize);
-			set => SetProperty(ref _bufferSize, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isItemBreach")] 
 		public CBool IsItemBreach
 		{
-			get => GetProperty(ref _isItemBreach);
-			set => SetProperty(ref _isItemBreach, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

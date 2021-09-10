@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class Transition : redEvent
 	{
-		private CUInt32 _listenerID;
-
 		[Ordinal(0)] 
 		[RED("listenerID")] 
 		public CUInt32 ListenerID
 		{
-			get => GetProperty(ref _listenerID);
-			set => SetProperty(ref _listenerID, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 	}
 }

@@ -5,46 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AICTreeNodeActionDynamicMoveToDefinition : AICTreeNodeActionDefinition
 	{
-		private CEnum<moveMovementType> _moveType;
-		private CFloat _tolerance;
-		private CName _target;
-		private CBool _keepDistance;
-
 		[Ordinal(1)] 
 		[RED("moveType")] 
 		public CEnum<moveMovementType> MoveType
 		{
-			get => GetProperty(ref _moveType);
-			set => SetProperty(ref _moveType, value);
+			get => GetPropertyValue<CEnum<moveMovementType>>();
+			set => SetPropertyValue<CEnum<moveMovementType>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("tolerance")] 
 		public CFloat Tolerance
 		{
-			get => GetProperty(ref _tolerance);
-			set => SetProperty(ref _tolerance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("target")] 
 		public CName Target
 		{
-			get => GetProperty(ref _target);
-			set => SetProperty(ref _target, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("keepDistance")] 
 		public CBool KeepDistance
 		{
-			get => GetProperty(ref _keepDistance);
-			set => SetProperty(ref _keepDistance, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public AICTreeNodeActionDynamicMoveToDefinition()
 		{
-			_target = "CombatTarget";
+			Target = "CombatTarget";
 		}
 	}
 }

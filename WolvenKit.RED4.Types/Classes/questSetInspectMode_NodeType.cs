@@ -5,48 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questSetInspectMode_NodeType : questIInteractiveObjectManagerNodeType
 	{
-		private CString _objectID;
-		private CFloat _startingOffset;
-		private CFloat _zoomOffset;
-		private CFloat _timeInterval;
-
 		[Ordinal(0)] 
 		[RED("objectID")] 
 		public CString ObjectID
 		{
-			get => GetProperty(ref _objectID);
-			set => SetProperty(ref _objectID, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("startingOffset")] 
 		public CFloat StartingOffset
 		{
-			get => GetProperty(ref _startingOffset);
-			set => SetProperty(ref _startingOffset, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("zoomOffset")] 
 		public CFloat ZoomOffset
 		{
-			get => GetProperty(ref _zoomOffset);
-			set => SetProperty(ref _zoomOffset, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("timeInterval")] 
 		public CFloat TimeInterval
 		{
-			get => GetProperty(ref _timeInterval);
-			set => SetProperty(ref _timeInterval, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public questSetInspectMode_NodeType()
 		{
-			_startingOffset = 0.500000F;
-			_zoomOffset = 0.500000F;
-			_timeInterval = 0.500000F;
+			StartingOffset = 0.500000F;
+			ZoomOffset = 0.500000F;
+			TimeInterval = 0.500000F;
 		}
 	}
 }

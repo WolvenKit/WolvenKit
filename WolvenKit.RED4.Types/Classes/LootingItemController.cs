@@ -5,86 +5,87 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class LootingItemController : inkWidgetLogicController
 	{
-		private CWeakHandle<inkTextWidget> _itemNameText;
-		private CBool _isCurrentlySelected;
-		private inkTextWidgetReference _itemName;
-		private inkTextWidgetReference _itemType;
-		private inkTextWidgetReference _itemWeight;
-		private inkTextWidgetReference _itemQuantity;
-		private inkWidgetReference _itemQualityBar;
-		private inkWidgetReference _itemSelection;
-		private inkImageWidgetReference _itemIcon;
-
 		[Ordinal(1)] 
 		[RED("itemNameText")] 
 		public CWeakHandle<inkTextWidget> ItemNameText
 		{
-			get => GetProperty(ref _itemNameText);
-			set => SetProperty(ref _itemNameText, value);
+			get => GetPropertyValue<CWeakHandle<inkTextWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isCurrentlySelected")] 
 		public CBool IsCurrentlySelected
 		{
-			get => GetProperty(ref _isCurrentlySelected);
-			set => SetProperty(ref _isCurrentlySelected, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("itemName")] 
 		public inkTextWidgetReference ItemName
 		{
-			get => GetProperty(ref _itemName);
-			set => SetProperty(ref _itemName, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("itemType")] 
 		public inkTextWidgetReference ItemType
 		{
-			get => GetProperty(ref _itemType);
-			set => SetProperty(ref _itemType, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("itemWeight")] 
 		public inkTextWidgetReference ItemWeight
 		{
-			get => GetProperty(ref _itemWeight);
-			set => SetProperty(ref _itemWeight, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("itemQuantity")] 
 		public inkTextWidgetReference ItemQuantity
 		{
-			get => GetProperty(ref _itemQuantity);
-			set => SetProperty(ref _itemQuantity, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("itemQualityBar")] 
 		public inkWidgetReference ItemQualityBar
 		{
-			get => GetProperty(ref _itemQualityBar);
-			set => SetProperty(ref _itemQualityBar, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("itemSelection")] 
 		public inkWidgetReference ItemSelection
 		{
-			get => GetProperty(ref _itemSelection);
-			set => SetProperty(ref _itemSelection, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("itemIcon")] 
 		public inkImageWidgetReference ItemIcon
 		{
-			get => GetProperty(ref _itemIcon);
-			set => SetProperty(ref _itemIcon, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		public LootingItemController()
+		{
+			ItemName = new();
+			ItemType = new();
+			ItemWeight = new();
+			ItemQuantity = new();
+			ItemQualityBar = new();
+			ItemSelection = new();
+			ItemIcon = new();
 		}
 	}
 }

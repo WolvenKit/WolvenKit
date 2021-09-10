@@ -5,37 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CParticleInitializerSpawnBox : IParticleInitializer
 	{
-		private CHandle<IEvaluatorVector> _extents;
-		private CBool _worldSpace;
-		private CBool _surfaceOnly;
-
 		[Ordinal(4)] 
 		[RED("extents")] 
 		public CHandle<IEvaluatorVector> Extents
 		{
-			get => GetProperty(ref _extents);
-			set => SetProperty(ref _extents, value);
+			get => GetPropertyValue<CHandle<IEvaluatorVector>>();
+			set => SetPropertyValue<CHandle<IEvaluatorVector>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("worldSpace")] 
 		public CBool WorldSpace
 		{
-			get => GetProperty(ref _worldSpace);
-			set => SetProperty(ref _worldSpace, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("surfaceOnly")] 
 		public CBool SurfaceOnly
 		{
-			get => GetProperty(ref _surfaceOnly);
-			set => SetProperty(ref _surfaceOnly, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public CParticleInitializerSpawnBox()
 		{
-			_worldSpace = true;
+			EditorName = "Spawn box";
+			EditorGroup = "Location";
+			IsEnabled = true;
+			WorldSpace = true;
 		}
 	}
 }

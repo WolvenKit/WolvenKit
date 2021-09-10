@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkLanguageSpecificVideoController : inkWidgetLogicController
 	{
-		private CBool _isLooped;
-		private CResourceAsyncReference<Bink> _specificVideoForLanguage;
-		private CArray<CEnum<inkLanguageId>> _languages;
-		private CResourceAsyncReference<Bink> _fallbackVideo;
-
 		[Ordinal(1)] 
 		[RED("isLooped")] 
 		public CBool IsLooped
 		{
-			get => GetProperty(ref _isLooped);
-			set => SetProperty(ref _isLooped, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("specificVideoForLanguage")] 
 		public CResourceAsyncReference<Bink> SpecificVideoForLanguage
 		{
-			get => GetProperty(ref _specificVideoForLanguage);
-			set => SetProperty(ref _specificVideoForLanguage, value);
+			get => GetPropertyValue<CResourceAsyncReference<Bink>>();
+			set => SetPropertyValue<CResourceAsyncReference<Bink>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("languages")] 
 		public CArray<CEnum<inkLanguageId>> Languages
 		{
-			get => GetProperty(ref _languages);
-			set => SetProperty(ref _languages, value);
+			get => GetPropertyValue<CArray<CEnum<inkLanguageId>>>();
+			set => SetPropertyValue<CArray<CEnum<inkLanguageId>>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("fallbackVideo")] 
 		public CResourceAsyncReference<Bink> FallbackVideo
 		{
-			get => GetProperty(ref _fallbackVideo);
-			set => SetProperty(ref _fallbackVideo, value);
+			get => GetPropertyValue<CResourceAsyncReference<Bink>>();
+			set => SetPropertyValue<CResourceAsyncReference<Bink>>(value);
+		}
+
+		public inkLanguageSpecificVideoController()
+		{
+			Languages = new();
 		}
 	}
 }

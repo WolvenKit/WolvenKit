@@ -5,37 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questMovePuppetNodeDefinition : questConfigurableAICommandNode
 	{
-		private gameEntityReference _entityReference;
-		private CName _moveType;
-		private CHandle<questAICommandParams> _nodeParams;
-
 		[Ordinal(2)] 
 		[RED("entityReference")] 
 		public gameEntityReference EntityReference
 		{
-			get => GetProperty(ref _entityReference);
-			set => SetProperty(ref _entityReference, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("moveType")] 
 		public CName MoveType
 		{
-			get => GetProperty(ref _moveType);
-			set => SetProperty(ref _moveType, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("nodeParams")] 
 		public CHandle<questAICommandParams> NodeParams
 		{
-			get => GetProperty(ref _nodeParams);
-			set => SetProperty(ref _nodeParams, value);
+			get => GetPropertyValue<CHandle<questAICommandParams>>();
+			set => SetPropertyValue<CHandle<questAICommandParams>>(value);
 		}
 
 		public questMovePuppetNodeDefinition()
 		{
-			_moveType = "questMoveOnSplineParams";
+			Sockets = new();
+			Id = 65535;
+			EntityReference = new() { Names = new() };
+			MoveType = "questMoveOnSplineParams";
 		}
 	}
 }

@@ -5,37 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldRotatingMeshNode : worldMeshNode
 	{
-		private CEnum<worldRotatingMeshNodeAxis> _rotationAxis;
-		private CFloat _fullRotationTime;
-		private CBool _reverseDirection;
-
 		[Ordinal(15)] 
 		[RED("rotationAxis")] 
 		public CEnum<worldRotatingMeshNodeAxis> RotationAxis
 		{
-			get => GetProperty(ref _rotationAxis);
-			set => SetProperty(ref _rotationAxis, value);
+			get => GetPropertyValue<CEnum<worldRotatingMeshNodeAxis>>();
+			set => SetPropertyValue<CEnum<worldRotatingMeshNodeAxis>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("fullRotationTime")] 
 		public CFloat FullRotationTime
 		{
-			get => GetProperty(ref _fullRotationTime);
-			set => SetProperty(ref _fullRotationTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("reverseDirection")] 
 		public CBool ReverseDirection
 		{
-			get => GetProperty(ref _reverseDirection);
-			set => SetProperty(ref _reverseDirection, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public worldRotatingMeshNode()
 		{
-			_fullRotationTime = 1.000000F;
+			FullRotationTime = 1.000000F;
 		}
 	}
 }

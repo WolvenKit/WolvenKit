@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entRenderScanEvent : redEvent
 	{
-		private CEnum<rendPostFx_ScanningState> _scanState;
-
 		[Ordinal(0)] 
 		[RED("scanState")] 
 		public CEnum<rendPostFx_ScanningState> ScanState
 		{
-			get => GetProperty(ref _scanState);
-			set => SetProperty(ref _scanState, value);
+			get => GetPropertyValue<CEnum<rendPostFx_ScanningState>>();
+			set => SetPropertyValue<CEnum<rendPostFx_ScanningState>>(value);
 		}
 	}
 }

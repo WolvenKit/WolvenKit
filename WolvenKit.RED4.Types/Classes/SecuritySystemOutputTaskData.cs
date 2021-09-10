@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SecuritySystemOutputTaskData : gameScriptTaskData
 	{
-		private CHandle<SecuritySystemOutput> _cachedEvt;
-
 		[Ordinal(0)] 
 		[RED("cachedEvt")] 
 		public CHandle<SecuritySystemOutput> CachedEvt
 		{
-			get => GetProperty(ref _cachedEvt);
-			set => SetProperty(ref _cachedEvt, value);
+			get => GetPropertyValue<CHandle<SecuritySystemOutput>>();
+			set => SetPropertyValue<CHandle<SecuritySystemOutput>>(value);
 		}
 	}
 }

@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SetFactEffector : gameEffector
 	{
-		private CName _fact;
-		private CInt32 _value;
-
 		[Ordinal(0)] 
 		[RED("fact")] 
 		public CName Fact
 		{
-			get => GetProperty(ref _fact);
-			set => SetProperty(ref _fact, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("value")] 
 		public CInt32 Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

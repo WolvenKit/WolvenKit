@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldDebugColoring_Duplicates : worldEditorDebugColoringSettings
 	{
-		private CColor _defaultColor;
-		private CColor _duplicateColor;
-		private CResourceReference<worldPrefab> _refreshPrefab;
-		private CBool _refresh;
-
 		[Ordinal(0)] 
 		[RED("defaultColor")] 
 		public CColor DefaultColor
 		{
-			get => GetProperty(ref _defaultColor);
-			set => SetProperty(ref _defaultColor, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("duplicateColor")] 
 		public CColor DuplicateColor
 		{
-			get => GetProperty(ref _duplicateColor);
-			set => SetProperty(ref _duplicateColor, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("refreshPrefab")] 
 		public CResourceReference<worldPrefab> RefreshPrefab
 		{
-			get => GetProperty(ref _refreshPrefab);
-			set => SetProperty(ref _refreshPrefab, value);
+			get => GetPropertyValue<CResourceReference<worldPrefab>>();
+			set => SetPropertyValue<CResourceReference<worldPrefab>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("refresh")] 
 		public CBool Refresh
 		{
-			get => GetProperty(ref _refresh);
-			set => SetProperty(ref _refresh, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public worldDebugColoring_Duplicates()
+		{
+			DefaultColor = new();
+			DuplicateColor = new();
 		}
 	}
 }

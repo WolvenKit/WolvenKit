@@ -5,50 +5,51 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class Radio : InteractiveDevice
 	{
-		private CArray<RadioStationsMap> _stations;
-		private CInt32 _startingStation;
-		private CBool _isInteractive;
-		private CBool _isShortGlitchActive;
-		private gameDelayID _shortGlitchDelayID;
-
 		[Ordinal(97)] 
 		[RED("stations")] 
 		public CArray<RadioStationsMap> Stations
 		{
-			get => GetProperty(ref _stations);
-			set => SetProperty(ref _stations, value);
+			get => GetPropertyValue<CArray<RadioStationsMap>>();
+			set => SetPropertyValue<CArray<RadioStationsMap>>(value);
 		}
 
 		[Ordinal(98)] 
 		[RED("startingStation")] 
 		public CInt32 StartingStation
 		{
-			get => GetProperty(ref _startingStation);
-			set => SetProperty(ref _startingStation, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(99)] 
 		[RED("isInteractive")] 
 		public CBool IsInteractive
 		{
-			get => GetProperty(ref _isInteractive);
-			set => SetProperty(ref _isInteractive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(100)] 
 		[RED("isShortGlitchActive")] 
 		public CBool IsShortGlitchActive
 		{
-			get => GetProperty(ref _isShortGlitchActive);
-			set => SetProperty(ref _isShortGlitchActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(101)] 
 		[RED("shortGlitchDelayID")] 
 		public gameDelayID ShortGlitchDelayID
 		{
-			get => GetProperty(ref _shortGlitchDelayID);
-			set => SetProperty(ref _shortGlitchDelayID, value);
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
+		}
+
+		public Radio()
+		{
+			ControllerTypeName = "RadioController";
+			Stations = new();
+			ShortGlitchDelayID = new();
 		}
 	}
 }

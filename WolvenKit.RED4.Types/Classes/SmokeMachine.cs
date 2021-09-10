@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SmokeMachine : BasicDistractionDevice
 	{
-		private CHandle<gameStaticTriggerAreaComponent> _areaComponent;
-		private CBool _highLightActive;
-		private CArray<CWeakHandle<entEntity>> _entities;
-
 		[Ordinal(103)] 
 		[RED("areaComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> AreaComponent
 		{
-			get => GetProperty(ref _areaComponent);
-			set => SetProperty(ref _areaComponent, value);
+			get => GetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>();
+			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
 		[Ordinal(104)] 
 		[RED("highLightActive")] 
 		public CBool HighLightActive
 		{
-			get => GetProperty(ref _highLightActive);
-			set => SetProperty(ref _highLightActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(105)] 
 		[RED("entities")] 
 		public CArray<CWeakHandle<entEntity>> Entities
 		{
-			get => GetProperty(ref _entities);
-			set => SetProperty(ref _entities, value);
+			get => GetPropertyValue<CArray<CWeakHandle<entEntity>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<entEntity>>>(value);
+		}
+
+		public SmokeMachine()
+		{
+			ControllerTypeName = "SmokeMachineController";
+			Entities = new();
 		}
 	}
 }

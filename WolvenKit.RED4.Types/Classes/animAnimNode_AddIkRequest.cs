@@ -5,104 +5,99 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_AddIkRequest : animAnimNode_OnePoseInput
 	{
-		private CName _ikChain;
-		private animTransformIndex _targetBone;
-		private Vector3 _positionOffset;
-		private Quaternion _rotationOffset;
-		private animPoleVectorDetails _poleVector;
-		private CFloat _weightPosition;
-		private CFloat _weightRotation;
-		private CFloat _blendTimeIn;
-		private CFloat _blendTimeOut;
-		private CInt32 _priority;
-
 		[Ordinal(12)] 
 		[RED("ikChain")] 
 		public CName IkChain
 		{
-			get => GetProperty(ref _ikChain);
-			set => SetProperty(ref _ikChain, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("targetBone")] 
 		public animTransformIndex TargetBone
 		{
-			get => GetProperty(ref _targetBone);
-			set => SetProperty(ref _targetBone, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("positionOffset")] 
 		public Vector3 PositionOffset
 		{
-			get => GetProperty(ref _positionOffset);
-			set => SetProperty(ref _positionOffset, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("rotationOffset")] 
 		public Quaternion RotationOffset
 		{
-			get => GetProperty(ref _rotationOffset);
-			set => SetProperty(ref _rotationOffset, value);
+			get => GetPropertyValue<Quaternion>();
+			set => SetPropertyValue<Quaternion>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("poleVector")] 
 		public animPoleVectorDetails PoleVector
 		{
-			get => GetProperty(ref _poleVector);
-			set => SetProperty(ref _poleVector, value);
+			get => GetPropertyValue<animPoleVectorDetails>();
+			set => SetPropertyValue<animPoleVectorDetails>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("weightPosition")] 
 		public CFloat WeightPosition
 		{
-			get => GetProperty(ref _weightPosition);
-			set => SetProperty(ref _weightPosition, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("weightRotation")] 
 		public CFloat WeightRotation
 		{
-			get => GetProperty(ref _weightRotation);
-			set => SetProperty(ref _weightRotation, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("blendTimeIn")] 
 		public CFloat BlendTimeIn
 		{
-			get => GetProperty(ref _blendTimeIn);
-			set => SetProperty(ref _blendTimeIn, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("blendTimeOut")] 
 		public CFloat BlendTimeOut
 		{
-			get => GetProperty(ref _blendTimeOut);
-			set => SetProperty(ref _blendTimeOut, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("priority")] 
 		public CInt32 Priority
 		{
-			get => GetProperty(ref _priority);
-			set => SetProperty(ref _priority, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		public animAnimNode_AddIkRequest()
 		{
-			_weightPosition = 1.000000F;
-			_weightRotation = 1.000000F;
-			_blendTimeIn = 0.500000F;
-			_blendTimeOut = 0.500000F;
-			_priority = 100;
+			Id = 4294967295;
+			InputLink = new();
+			TargetBone = new();
+			PositionOffset = new();
+			RotationOffset = new() { R = 1.000000F };
+			PoleVector = new() { TargetBone = new(), PositionOffset = new() };
+			WeightPosition = 1.000000F;
+			WeightRotation = 1.000000F;
+			BlendTimeIn = 0.500000F;
+			BlendTimeOut = 0.500000F;
+			Priority = 100;
 		}
 	}
 }

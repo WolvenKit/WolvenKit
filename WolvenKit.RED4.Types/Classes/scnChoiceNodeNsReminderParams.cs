@@ -5,68 +5,69 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnChoiceNodeNsReminderParams : RedBaseClass
 	{
-		private CBool _reminderEnabled;
-		private CBool _useCustomReminder;
-		private scnActorId _reminderActor;
-		private scnSceneTime _waitTimeForReminderA;
-		private scnSceneTime _waitTimeForReminderB;
-		private scnSceneTime _waitTimeForReminderC;
-		private scnSceneTime _waitTimeForLooping;
-
 		[Ordinal(0)] 
 		[RED("reminderEnabled")] 
 		public CBool ReminderEnabled
 		{
-			get => GetProperty(ref _reminderEnabled);
-			set => SetProperty(ref _reminderEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("useCustomReminder")] 
 		public CBool UseCustomReminder
 		{
-			get => GetProperty(ref _useCustomReminder);
-			set => SetProperty(ref _useCustomReminder, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("reminderActor")] 
 		public scnActorId ReminderActor
 		{
-			get => GetProperty(ref _reminderActor);
-			set => SetProperty(ref _reminderActor, value);
+			get => GetPropertyValue<scnActorId>();
+			set => SetPropertyValue<scnActorId>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("waitTimeForReminderA")] 
 		public scnSceneTime WaitTimeForReminderA
 		{
-			get => GetProperty(ref _waitTimeForReminderA);
-			set => SetProperty(ref _waitTimeForReminderA, value);
+			get => GetPropertyValue<scnSceneTime>();
+			set => SetPropertyValue<scnSceneTime>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("waitTimeForReminderB")] 
 		public scnSceneTime WaitTimeForReminderB
 		{
-			get => GetProperty(ref _waitTimeForReminderB);
-			set => SetProperty(ref _waitTimeForReminderB, value);
+			get => GetPropertyValue<scnSceneTime>();
+			set => SetPropertyValue<scnSceneTime>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("waitTimeForReminderC")] 
 		public scnSceneTime WaitTimeForReminderC
 		{
-			get => GetProperty(ref _waitTimeForReminderC);
-			set => SetProperty(ref _waitTimeForReminderC, value);
+			get => GetPropertyValue<scnSceneTime>();
+			set => SetPropertyValue<scnSceneTime>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("waitTimeForLooping")] 
 		public scnSceneTime WaitTimeForLooping
 		{
-			get => GetProperty(ref _waitTimeForLooping);
-			set => SetProperty(ref _waitTimeForLooping, value);
+			get => GetPropertyValue<scnSceneTime>();
+			set => SetPropertyValue<scnSceneTime>(value);
+		}
+
+		public scnChoiceNodeNsReminderParams()
+		{
+			ReminderActor = new() { Id = 4294967295 };
+			WaitTimeForReminderA = new();
+			WaitTimeForReminderB = new();
+			WaitTimeForReminderC = new();
+			WaitTimeForLooping = new();
 		}
 	}
 }

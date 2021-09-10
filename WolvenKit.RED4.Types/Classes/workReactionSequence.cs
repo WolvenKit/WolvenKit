@@ -5,92 +5,85 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class workReactionSequence : workIContainerEntry
 	{
-		private CFloat _forcedBlendIn;
-		private CArray<TweakDBID> _reactionTypes;
-		private CName _mainEmotionalState;
-		private CName _emotionalExpression;
-		private CFloat _facialKeyWeight;
-		private CName _facialIdleMaleAnimation;
-		private CName _facialIdleKey_MaleAnimation;
-		private CName _facialIdleFemaleAnimation;
-		private CName _facialIdleKey_FemaleAnimation;
-
 		[Ordinal(4)] 
 		[RED("forcedBlendIn")] 
 		public CFloat ForcedBlendIn
 		{
-			get => GetProperty(ref _forcedBlendIn);
-			set => SetProperty(ref _forcedBlendIn, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("reactionTypes")] 
 		public CArray<TweakDBID> ReactionTypes
 		{
-			get => GetProperty(ref _reactionTypes);
-			set => SetProperty(ref _reactionTypes, value);
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("mainEmotionalState")] 
 		public CName MainEmotionalState
 		{
-			get => GetProperty(ref _mainEmotionalState);
-			set => SetProperty(ref _mainEmotionalState, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("emotionalExpression")] 
 		public CName EmotionalExpression
 		{
-			get => GetProperty(ref _emotionalExpression);
-			set => SetProperty(ref _emotionalExpression, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("facialKeyWeight")] 
 		public CFloat FacialKeyWeight
 		{
-			get => GetProperty(ref _facialKeyWeight);
-			set => SetProperty(ref _facialKeyWeight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("facialIdleMaleAnimation")] 
 		public CName FacialIdleMaleAnimation
 		{
-			get => GetProperty(ref _facialIdleMaleAnimation);
-			set => SetProperty(ref _facialIdleMaleAnimation, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("facialIdleKey_MaleAnimation")] 
 		public CName FacialIdleKey_MaleAnimation
 		{
-			get => GetProperty(ref _facialIdleKey_MaleAnimation);
-			set => SetProperty(ref _facialIdleKey_MaleAnimation, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("facialIdleFemaleAnimation")] 
 		public CName FacialIdleFemaleAnimation
 		{
-			get => GetProperty(ref _facialIdleFemaleAnimation);
-			set => SetProperty(ref _facialIdleFemaleAnimation, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("facialIdleKey_FemaleAnimation")] 
 		public CName FacialIdleKey_FemaleAnimation
 		{
-			get => GetProperty(ref _facialIdleKey_FemaleAnimation);
-			set => SetProperty(ref _facialIdleKey_FemaleAnimation, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public workReactionSequence()
 		{
-			_forcedBlendIn = 0.200000F;
-			_facialKeyWeight = 1.000000F;
+			Id = new() { Id = 4294967295 };
+			List = new();
+			ForcedBlendIn = 0.200000F;
+			ReactionTypes = new();
+			FacialKeyWeight = 1.000000F;
 		}
 	}
 }

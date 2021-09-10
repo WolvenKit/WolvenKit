@@ -5,50 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIRagdollDelegate : AIbehaviorScriptBehaviorDelegate
 	{
-		private CWeakHandle<gameObject> _ragdollInstigator;
-		private Vector4 _closestNavmeshPoint;
-		private CBool _ragdollOutOfNavmesh;
-		private CBool _isUnderwater;
-		private CBool _poseAllowsRecovery;
-
 		[Ordinal(0)] 
 		[RED("ragdollInstigator")] 
 		public CWeakHandle<gameObject> RagdollInstigator
 		{
-			get => GetProperty(ref _ragdollInstigator);
-			set => SetProperty(ref _ragdollInstigator, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("closestNavmeshPoint")] 
 		public Vector4 ClosestNavmeshPoint
 		{
-			get => GetProperty(ref _closestNavmeshPoint);
-			set => SetProperty(ref _closestNavmeshPoint, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ragdollOutOfNavmesh")] 
 		public CBool RagdollOutOfNavmesh
 		{
-			get => GetProperty(ref _ragdollOutOfNavmesh);
-			set => SetProperty(ref _ragdollOutOfNavmesh, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isUnderwater")] 
 		public CBool IsUnderwater
 		{
-			get => GetProperty(ref _isUnderwater);
-			set => SetProperty(ref _isUnderwater, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("poseAllowsRecovery")] 
 		public CBool PoseAllowsRecovery
 		{
-			get => GetProperty(ref _poseAllowsRecovery);
-			set => SetProperty(ref _poseAllowsRecovery, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public AIRagdollDelegate()
+		{
+			ClosestNavmeshPoint = new();
 		}
 	}
 }

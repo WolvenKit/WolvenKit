@@ -5,50 +5,51 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animHipsIkRequest : RedBaseClass
 	{
-		private CName _leftLegIkChain;
-		private CName _rightLegIkChain;
-		private animTransformIndex _hipsTransformIndex;
-		private animTransformIndex _leftFootTransformIndex;
-		private animTransformIndex _rightFootTransformIndex;
-
 		[Ordinal(0)] 
 		[RED("leftLegIkChain")] 
 		public CName LeftLegIkChain
 		{
-			get => GetProperty(ref _leftLegIkChain);
-			set => SetProperty(ref _leftLegIkChain, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("rightLegIkChain")] 
 		public CName RightLegIkChain
 		{
-			get => GetProperty(ref _rightLegIkChain);
-			set => SetProperty(ref _rightLegIkChain, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("hipsTransformIndex")] 
 		public animTransformIndex HipsTransformIndex
 		{
-			get => GetProperty(ref _hipsTransformIndex);
-			set => SetProperty(ref _hipsTransformIndex, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("leftFootTransformIndex")] 
 		public animTransformIndex LeftFootTransformIndex
 		{
-			get => GetProperty(ref _leftFootTransformIndex);
-			set => SetProperty(ref _leftFootTransformIndex, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("rightFootTransformIndex")] 
 		public animTransformIndex RightFootTransformIndex
 		{
-			get => GetProperty(ref _rightFootTransformIndex);
-			set => SetProperty(ref _rightFootTransformIndex, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
+		}
+
+		public animHipsIkRequest()
+		{
+			HipsTransformIndex = new();
+			LeftFootTransformIndex = new();
+			RightFootTransformIndex = new();
 		}
 	}
 }

@@ -5,59 +5,60 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SampleUIMeasurementController : inkWidgetLogicController
 	{
-		private CFloat _value;
-		private CEnum<EMeasurementUnit> _unit;
-		private inkTextWidgetReference _valueText;
-		private inkTextWidgetReference _unitText;
-		private inkWidgetReference _valueIncreaseButton;
-		private inkWidgetReference _valueDecreaseButton;
-
 		[Ordinal(1)] 
 		[RED("value")] 
 		public CFloat Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("unit")] 
 		public CEnum<EMeasurementUnit> Unit
 		{
-			get => GetProperty(ref _unit);
-			set => SetProperty(ref _unit, value);
+			get => GetPropertyValue<CEnum<EMeasurementUnit>>();
+			set => SetPropertyValue<CEnum<EMeasurementUnit>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("valueText")] 
 		public inkTextWidgetReference ValueText
 		{
-			get => GetProperty(ref _valueText);
-			set => SetProperty(ref _valueText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("unitText")] 
 		public inkTextWidgetReference UnitText
 		{
-			get => GetProperty(ref _unitText);
-			set => SetProperty(ref _unitText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("valueIncreaseButton")] 
 		public inkWidgetReference ValueIncreaseButton
 		{
-			get => GetProperty(ref _valueIncreaseButton);
-			set => SetProperty(ref _valueIncreaseButton, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("valueDecreaseButton")] 
 		public inkWidgetReference ValueDecreaseButton
 		{
-			get => GetProperty(ref _valueDecreaseButton);
-			set => SetProperty(ref _valueDecreaseButton, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		public SampleUIMeasurementController()
+		{
+			ValueText = new();
+			UnitText = new();
+			ValueIncreaseButton = new();
+			ValueDecreaseButton = new();
 		}
 	}
 }

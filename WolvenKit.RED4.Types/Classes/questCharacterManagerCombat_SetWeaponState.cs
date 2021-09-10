@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questCharacterManagerCombat_SetWeaponState : questICharacterManagerCombat_NodeSubType
 	{
-		private CEnum<gameCityAreaType> _areaType;
-
 		[Ordinal(0)] 
 		[RED("areaType")] 
 		public CEnum<gameCityAreaType> AreaType
 		{
-			get => GetProperty(ref _areaType);
-			set => SetProperty(ref _areaType, value);
+			get => GetPropertyValue<CEnum<gameCityAreaType>>();
+			set => SetPropertyValue<CEnum<gameCityAreaType>>(value);
 		}
 
 		public questCharacterManagerCombat_SetWeaponState()
 		{
-			_areaType = new() { Value = Enums.gameCityAreaType.PublicZone };
+			AreaType = Enums.gameCityAreaType.PublicZone;
 		}
 	}
 }

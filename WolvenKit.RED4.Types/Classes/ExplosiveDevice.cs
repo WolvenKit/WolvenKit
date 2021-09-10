@@ -5,158 +5,149 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ExplosiveDevice : BasicDistractionDevice
 	{
-		private CInt32 _numberOfComponentsToON;
-		private CInt32 _numberOfComponentsToOFF;
-		private CArray<CInt32> _indexesOfComponentsToOFF;
-		private CBool _shouldDistractionEnableCollider;
-		private CBool _shouldDistractionVFXstay;
-		private CName _loopAudioEvent;
-		private CArray<CHandle<gameFxInstance>> _spawnedFxInstancesToKill;
-		private CHandle<entMeshComponent> _mesh;
-		private CHandle<entIPlacedComponent> _collider;
-		private CHandle<entIPlacedComponent> _distractionCollider;
-		private CInt32 _numberOfReceivedHits;
-		private CFloat _devicePenetrationHealth;
-		private CBool _killedByExplosion;
-		private CFloat _distractionTimeStart;
-		private CBool _isBroadcastingEnvironmentalHazardStim;
-		private CArray<CHandle<entIPlacedComponent>> _componentsON;
-		private CArray<CHandle<entIPlacedComponent>> _componentsOFF;
-
 		[Ordinal(103)] 
 		[RED("numberOfComponentsToON")] 
 		public CInt32 NumberOfComponentsToON
 		{
-			get => GetProperty(ref _numberOfComponentsToON);
-			set => SetProperty(ref _numberOfComponentsToON, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(104)] 
 		[RED("numberOfComponentsToOFF")] 
 		public CInt32 NumberOfComponentsToOFF
 		{
-			get => GetProperty(ref _numberOfComponentsToOFF);
-			set => SetProperty(ref _numberOfComponentsToOFF, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(105)] 
 		[RED("indexesOfComponentsToOFF")] 
 		public CArray<CInt32> IndexesOfComponentsToOFF
 		{
-			get => GetProperty(ref _indexesOfComponentsToOFF);
-			set => SetProperty(ref _indexesOfComponentsToOFF, value);
+			get => GetPropertyValue<CArray<CInt32>>();
+			set => SetPropertyValue<CArray<CInt32>>(value);
 		}
 
 		[Ordinal(106)] 
 		[RED("shouldDistractionEnableCollider")] 
 		public CBool ShouldDistractionEnableCollider
 		{
-			get => GetProperty(ref _shouldDistractionEnableCollider);
-			set => SetProperty(ref _shouldDistractionEnableCollider, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(107)] 
 		[RED("shouldDistractionVFXstay")] 
 		public CBool ShouldDistractionVFXstay
 		{
-			get => GetProperty(ref _shouldDistractionVFXstay);
-			set => SetProperty(ref _shouldDistractionVFXstay, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(108)] 
 		[RED("loopAudioEvent")] 
 		public CName LoopAudioEvent
 		{
-			get => GetProperty(ref _loopAudioEvent);
-			set => SetProperty(ref _loopAudioEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(109)] 
 		[RED("spawnedFxInstancesToKill")] 
 		public CArray<CHandle<gameFxInstance>> SpawnedFxInstancesToKill
 		{
-			get => GetProperty(ref _spawnedFxInstancesToKill);
-			set => SetProperty(ref _spawnedFxInstancesToKill, value);
+			get => GetPropertyValue<CArray<CHandle<gameFxInstance>>>();
+			set => SetPropertyValue<CArray<CHandle<gameFxInstance>>>(value);
 		}
 
 		[Ordinal(110)] 
 		[RED("mesh")] 
 		public CHandle<entMeshComponent> Mesh
 		{
-			get => GetProperty(ref _mesh);
-			set => SetProperty(ref _mesh, value);
+			get => GetPropertyValue<CHandle<entMeshComponent>>();
+			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
 		[Ordinal(111)] 
 		[RED("collider")] 
 		public CHandle<entIPlacedComponent> Collider
 		{
-			get => GetProperty(ref _collider);
-			set => SetProperty(ref _collider, value);
+			get => GetPropertyValue<CHandle<entIPlacedComponent>>();
+			set => SetPropertyValue<CHandle<entIPlacedComponent>>(value);
 		}
 
 		[Ordinal(112)] 
 		[RED("distractionCollider")] 
 		public CHandle<entIPlacedComponent> DistractionCollider
 		{
-			get => GetProperty(ref _distractionCollider);
-			set => SetProperty(ref _distractionCollider, value);
+			get => GetPropertyValue<CHandle<entIPlacedComponent>>();
+			set => SetPropertyValue<CHandle<entIPlacedComponent>>(value);
 		}
 
 		[Ordinal(113)] 
 		[RED("numberOfReceivedHits")] 
 		public CInt32 NumberOfReceivedHits
 		{
-			get => GetProperty(ref _numberOfReceivedHits);
-			set => SetProperty(ref _numberOfReceivedHits, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(114)] 
 		[RED("devicePenetrationHealth")] 
 		public CFloat DevicePenetrationHealth
 		{
-			get => GetProperty(ref _devicePenetrationHealth);
-			set => SetProperty(ref _devicePenetrationHealth, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(115)] 
 		[RED("killedByExplosion")] 
 		public CBool KilledByExplosion
 		{
-			get => GetProperty(ref _killedByExplosion);
-			set => SetProperty(ref _killedByExplosion, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(116)] 
 		[RED("distractionTimeStart")] 
 		public CFloat DistractionTimeStart
 		{
-			get => GetProperty(ref _distractionTimeStart);
-			set => SetProperty(ref _distractionTimeStart, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(117)] 
 		[RED("isBroadcastingEnvironmentalHazardStim")] 
 		public CBool IsBroadcastingEnvironmentalHazardStim
 		{
-			get => GetProperty(ref _isBroadcastingEnvironmentalHazardStim);
-			set => SetProperty(ref _isBroadcastingEnvironmentalHazardStim, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(118)] 
 		[RED("componentsON")] 
 		public CArray<CHandle<entIPlacedComponent>> ComponentsON
 		{
-			get => GetProperty(ref _componentsON);
-			set => SetProperty(ref _componentsON, value);
+			get => GetPropertyValue<CArray<CHandle<entIPlacedComponent>>>();
+			set => SetPropertyValue<CArray<CHandle<entIPlacedComponent>>>(value);
 		}
 
 		[Ordinal(119)] 
 		[RED("componentsOFF")] 
 		public CArray<CHandle<entIPlacedComponent>> ComponentsOFF
 		{
-			get => GetProperty(ref _componentsOFF);
-			set => SetProperty(ref _componentsOFF, value);
+			get => GetPropertyValue<CArray<CHandle<entIPlacedComponent>>>();
+			set => SetPropertyValue<CArray<CHandle<entIPlacedComponent>>>(value);
+		}
+
+		public ExplosiveDevice()
+		{
+			ControllerTypeName = "ExplosiveDeviceController";
+			IndexesOfComponentsToOFF = new();
+			SpawnedFxInstancesToKill = new();
+			ComponentsON = new();
+			ComponentsOFF = new();
 		}
 	}
 }

@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questTogglePrefabVariant_NodeTypeParams : RedBaseClass
 	{
-		private NodeRef _prefabNodeRef;
-		private CArray<questVariantState> _variantStates;
-
 		[Ordinal(0)] 
 		[RED("prefabNodeRef")] 
 		public NodeRef PrefabNodeRef
 		{
-			get => GetProperty(ref _prefabNodeRef);
-			set => SetProperty(ref _prefabNodeRef, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("variantStates")] 
 		public CArray<questVariantState> VariantStates
 		{
-			get => GetProperty(ref _variantStates);
-			set => SetProperty(ref _variantStates, value);
+			get => GetPropertyValue<CArray<questVariantState>>();
+			set => SetPropertyValue<CArray<questVariantState>>(value);
+		}
+
+		public questTogglePrefabVariant_NodeTypeParams()
+		{
+			VariantStates = new();
 		}
 	}
 }

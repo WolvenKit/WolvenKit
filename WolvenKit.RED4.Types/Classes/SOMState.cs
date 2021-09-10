@@ -5,59 +5,59 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SOMState : RedBaseClass
 	{
-		private PSODescDepthStencilModeDesc _depthStencilModeDesc;
-		private PSODescRasterizerModeDesc _rasterizerModeDesc;
-		private PSODescBlendModeDesc _blendModeDesc;
-		private CUInt8 _stencilReadMask;
-		private CUInt8 _stencilWriteMask;
-		private CUInt8 _stencilRef;
-
 		[Ordinal(0)] 
 		[RED("depthStencilModeDesc")] 
 		public PSODescDepthStencilModeDesc DepthStencilModeDesc
 		{
-			get => GetProperty(ref _depthStencilModeDesc);
-			set => SetProperty(ref _depthStencilModeDesc, value);
+			get => GetPropertyValue<PSODescDepthStencilModeDesc>();
+			set => SetPropertyValue<PSODescDepthStencilModeDesc>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("rasterizerModeDesc")] 
 		public PSODescRasterizerModeDesc RasterizerModeDesc
 		{
-			get => GetProperty(ref _rasterizerModeDesc);
-			set => SetProperty(ref _rasterizerModeDesc, value);
+			get => GetPropertyValue<PSODescRasterizerModeDesc>();
+			set => SetPropertyValue<PSODescRasterizerModeDesc>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("blendModeDesc")] 
 		public PSODescBlendModeDesc BlendModeDesc
 		{
-			get => GetProperty(ref _blendModeDesc);
-			set => SetProperty(ref _blendModeDesc, value);
+			get => GetPropertyValue<PSODescBlendModeDesc>();
+			set => SetPropertyValue<PSODescBlendModeDesc>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("stencilReadMask")] 
 		public CUInt8 StencilReadMask
 		{
-			get => GetProperty(ref _stencilReadMask);
-			set => SetProperty(ref _stencilReadMask, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("stencilWriteMask")] 
 		public CUInt8 StencilWriteMask
 		{
-			get => GetProperty(ref _stencilWriteMask);
-			set => SetProperty(ref _stencilWriteMask, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("stencilRef")] 
 		public CUInt8 StencilRef
 		{
-			get => GetProperty(ref _stencilRef);
-			set => SetProperty(ref _stencilRef, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
+		}
+
+		public SOMState()
+		{
+			DepthStencilModeDesc = new() { DepthTestEnable = true, DepthWriteEnable = true, DepthFunc = Enums.PSODescDepthStencilModeComparisonMode.COMPARISON_LessEqual, StencilEnable = true, FrontFace = new() { StencilFunc = Enums.PSODescDepthStencilModeComparisonMode.COMPARISON_LessEqual } };
+			RasterizerModeDesc = new() { FrontWinding = Enums.PSODescRasterizerModeFrontFaceWinding.FRONTFACE_CW, CullMode = Enums.PSODescRasterizerModeCullMode.CULL_Back };
+			BlendModeDesc = new() { NumTargets = 1, RenderTarget = new(8) };
 		}
 	}
 }

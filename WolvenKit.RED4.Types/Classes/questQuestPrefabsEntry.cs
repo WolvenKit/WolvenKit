@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questQuestPrefabsEntry : RedBaseClass
 	{
-		private worldGlobalNodeRef _nodeRef;
-		private CEnum<worldQuestPrefabLoadingMode> _loadingMode;
-
 		[Ordinal(0)] 
 		[RED("nodeRef")] 
 		public worldGlobalNodeRef NodeRef
 		{
-			get => GetProperty(ref _nodeRef);
-			set => SetProperty(ref _nodeRef, value);
+			get => GetPropertyValue<worldGlobalNodeRef>();
+			set => SetPropertyValue<worldGlobalNodeRef>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("loadingMode")] 
 		public CEnum<worldQuestPrefabLoadingMode> LoadingMode
 		{
-			get => GetProperty(ref _loadingMode);
-			set => SetProperty(ref _loadingMode, value);
+			get => GetPropertyValue<CEnum<worldQuestPrefabLoadingMode>>();
+			set => SetPropertyValue<CEnum<worldQuestPrefabLoadingMode>>(value);
+		}
+
+		public questQuestPrefabsEntry()
+		{
+			NodeRef = new();
 		}
 	}
 }

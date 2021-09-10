@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIArchetypeSetEntry : RedBaseClass
 	{
-		private CName _name;
-		private CResourceReference<AIArchetype> _resource;
-
 		[Ordinal(0)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get => GetProperty(ref _name);
-			set => SetProperty(ref _name, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("resource")] 
 		public CResourceReference<AIArchetype> Resource
 		{
-			get => GetProperty(ref _resource);
-			set => SetProperty(ref _resource, value);
+			get => GetPropertyValue<CResourceReference<AIArchetype>>();
+			set => SetPropertyValue<CResourceReference<AIArchetype>>(value);
 		}
 	}
 }

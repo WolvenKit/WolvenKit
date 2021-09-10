@@ -5,50 +5,54 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_MotionAdjuster : animAnimNode_Base
 	{
-		private animPoseLink _inputNode;
-		private animVectorLink _targetPosition;
-		private animVectorLink _targetDirection;
-		private animFloatLink _totalTimeToAdjust;
-		private Vector4 _forwardVector;
-
 		[Ordinal(11)] 
 		[RED("inputNode")] 
 		public animPoseLink InputNode
 		{
-			get => GetProperty(ref _inputNode);
-			set => SetProperty(ref _inputNode, value);
+			get => GetPropertyValue<animPoseLink>();
+			set => SetPropertyValue<animPoseLink>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("targetPosition")] 
 		public animVectorLink TargetPosition
 		{
-			get => GetProperty(ref _targetPosition);
-			set => SetProperty(ref _targetPosition, value);
+			get => GetPropertyValue<animVectorLink>();
+			set => SetPropertyValue<animVectorLink>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("targetDirection")] 
 		public animVectorLink TargetDirection
 		{
-			get => GetProperty(ref _targetDirection);
-			set => SetProperty(ref _targetDirection, value);
+			get => GetPropertyValue<animVectorLink>();
+			set => SetPropertyValue<animVectorLink>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("totalTimeToAdjust")] 
 		public animFloatLink TotalTimeToAdjust
 		{
-			get => GetProperty(ref _totalTimeToAdjust);
-			set => SetProperty(ref _totalTimeToAdjust, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("forwardVector")] 
 		public Vector4 ForwardVector
 		{
-			get => GetProperty(ref _forwardVector);
-			set => SetProperty(ref _forwardVector, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
+		}
+
+		public animAnimNode_MotionAdjuster()
+		{
+			Id = 4294967295;
+			InputNode = new();
+			TargetPosition = new();
+			TargetDirection = new();
+			TotalTimeToAdjust = new();
+			ForwardVector = new() { Y = 1.000000F };
 		}
 	}
 }

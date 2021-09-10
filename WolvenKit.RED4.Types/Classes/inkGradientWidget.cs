@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkGradientWidget : inkBaseShapeWidget
 	{
-		private CEnum<inkGradientMode> _gradientMode;
-		private HDRColor _startColor;
-		private HDRColor _endColor;
-		private CFloat _angle;
-
 		[Ordinal(20)] 
 		[RED("gradientMode")] 
 		public CEnum<inkGradientMode> GradientMode
 		{
-			get => GetProperty(ref _gradientMode);
-			set => SetProperty(ref _gradientMode, value);
+			get => GetPropertyValue<CEnum<inkGradientMode>>();
+			set => SetPropertyValue<CEnum<inkGradientMode>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("startColor")] 
 		public HDRColor StartColor
 		{
-			get => GetProperty(ref _startColor);
-			set => SetProperty(ref _startColor, value);
+			get => GetPropertyValue<HDRColor>();
+			set => SetPropertyValue<HDRColor>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("endColor")] 
 		public HDRColor EndColor
 		{
-			get => GetProperty(ref _endColor);
-			set => SetProperty(ref _endColor, value);
+			get => GetPropertyValue<HDRColor>();
+			set => SetPropertyValue<HDRColor>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("angle")] 
 		public CFloat Angle
 		{
-			get => GetProperty(ref _angle);
-			set => SetProperty(ref _angle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public inkGradientWidget()
+		{
+			StartColor = new() { Alpha = 1.000000F };
+			EndColor = new();
 		}
 	}
 }

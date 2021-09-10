@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldStreamingQueryDataResource : CResource
 	{
-		private CArray<worldStreamingQueryRoadData> _roadDatas;
-		private CArray<CUInt16> _connectedRoadDataIndices;
-
 		[Ordinal(1)] 
 		[RED("roadDatas")] 
 		public CArray<worldStreamingQueryRoadData> RoadDatas
 		{
-			get => GetProperty(ref _roadDatas);
-			set => SetProperty(ref _roadDatas, value);
+			get => GetPropertyValue<CArray<worldStreamingQueryRoadData>>();
+			set => SetPropertyValue<CArray<worldStreamingQueryRoadData>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("connectedRoadDataIndices")] 
 		public CArray<CUInt16> ConnectedRoadDataIndices
 		{
-			get => GetProperty(ref _connectedRoadDataIndices);
-			set => SetProperty(ref _connectedRoadDataIndices, value);
+			get => GetPropertyValue<CArray<CUInt16>>();
+			set => SetPropertyValue<CArray<CUInt16>>(value);
+		}
+
+		public worldStreamingQueryDataResource()
+		{
+			RoadDatas = new();
+			ConnectedRoadDataIndices = new();
 		}
 	}
 }

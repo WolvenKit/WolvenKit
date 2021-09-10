@@ -5,159 +5,147 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entDecalComponent : entIVisualComponent
 	{
-		private CResourceReference<IMaterial> _material;
-		private CBool _verticalFlip;
-		private CBool _horizontalFlip;
-		private CFloat _aspectRatio;
-		private CFloat _scale;
-		private Vector3 _visualScale;
-		private CFloat _alpha;
-		private CFloat _normalThreshold;
-		private CFloat _roughnessScale;
-		private CUInt16 _orderNo;
-		private CEnum<ERenderObjectType> _surfaceType;
-		private CEnum<EDecalRenderMode> _decalRenderMode;
-		private CBool _isStretchingEnabled;
-		private CEnum<RenderDecalNormalsBlendingMode> _normalsBlendingMode;
-		private CBool _shouldCollectWithRayTracing;
-		private CBool _isEnabled;
-
 		[Ordinal(8)] 
 		[RED("material")] 
 		public CResourceReference<IMaterial> Material
 		{
-			get => GetProperty(ref _material);
-			set => SetProperty(ref _material, value);
+			get => GetPropertyValue<CResourceReference<IMaterial>>();
+			set => SetPropertyValue<CResourceReference<IMaterial>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("verticalFlip")] 
 		public CBool VerticalFlip
 		{
-			get => GetProperty(ref _verticalFlip);
-			set => SetProperty(ref _verticalFlip, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("horizontalFlip")] 
 		public CBool HorizontalFlip
 		{
-			get => GetProperty(ref _horizontalFlip);
-			set => SetProperty(ref _horizontalFlip, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("aspectRatio")] 
 		public CFloat AspectRatio
 		{
-			get => GetProperty(ref _aspectRatio);
-			set => SetProperty(ref _aspectRatio, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("scale")] 
 		public CFloat Scale
 		{
-			get => GetProperty(ref _scale);
-			set => SetProperty(ref _scale, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("visualScale")] 
 		public Vector3 VisualScale
 		{
-			get => GetProperty(ref _visualScale);
-			set => SetProperty(ref _visualScale, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("alpha")] 
 		public CFloat Alpha
 		{
-			get => GetProperty(ref _alpha);
-			set => SetProperty(ref _alpha, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("normalThreshold")] 
 		public CFloat NormalThreshold
 		{
-			get => GetProperty(ref _normalThreshold);
-			set => SetProperty(ref _normalThreshold, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("roughnessScale")] 
 		public CFloat RoughnessScale
 		{
-			get => GetProperty(ref _roughnessScale);
-			set => SetProperty(ref _roughnessScale, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("orderNo")] 
 		public CUInt16 OrderNo
 		{
-			get => GetProperty(ref _orderNo);
-			set => SetProperty(ref _orderNo, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("surfaceType")] 
 		public CEnum<ERenderObjectType> SurfaceType
 		{
-			get => GetProperty(ref _surfaceType);
-			set => SetProperty(ref _surfaceType, value);
+			get => GetPropertyValue<CEnum<ERenderObjectType>>();
+			set => SetPropertyValue<CEnum<ERenderObjectType>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("decalRenderMode")] 
 		public CEnum<EDecalRenderMode> DecalRenderMode
 		{
-			get => GetProperty(ref _decalRenderMode);
-			set => SetProperty(ref _decalRenderMode, value);
+			get => GetPropertyValue<CEnum<EDecalRenderMode>>();
+			set => SetPropertyValue<CEnum<EDecalRenderMode>>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("isStretchingEnabled")] 
 		public CBool IsStretchingEnabled
 		{
-			get => GetProperty(ref _isStretchingEnabled);
-			set => SetProperty(ref _isStretchingEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("normalsBlendingMode")] 
 		public CEnum<RenderDecalNormalsBlendingMode> NormalsBlendingMode
 		{
-			get => GetProperty(ref _normalsBlendingMode);
-			set => SetProperty(ref _normalsBlendingMode, value);
+			get => GetPropertyValue<CEnum<RenderDecalNormalsBlendingMode>>();
+			set => SetPropertyValue<CEnum<RenderDecalNormalsBlendingMode>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("shouldCollectWithRayTracing")] 
 		public CBool ShouldCollectWithRayTracing
 		{
-			get => GetProperty(ref _shouldCollectWithRayTracing);
-			set => SetProperty(ref _shouldCollectWithRayTracing, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public entDecalComponent()
 		{
-			_scale = 1.000000F;
-			_alpha = 1.000000F;
-			_normalThreshold = 1.000000F;
-			_roughnessScale = 1.000000F;
-			_shouldCollectWithRayTracing = true;
-			_isEnabled = true;
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
+			ForceLODLevel = -1;
+			Scale = 1.000000F;
+			VisualScale = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
+			Alpha = 1.000000F;
+			NormalThreshold = 1.000000F;
+			RoughnessScale = 1.000000F;
+			ShouldCollectWithRayTracing = true;
+			IsEnabled = true;
 		}
 	}
 }

@@ -5,59 +5,59 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class GenericDeviceControllerPS : ScriptableDeviceComponentPS
 	{
-		private CBool _isRecognizableBySenses;
-		private GenericDeviceActionsData _genericDeviceActionsSetup;
-		private CHandle<GenericContainer> _genericDeviceSkillChecks;
-		private TweakDBID _deviceWidgetRecord;
-		private TweakDBID _thumbnailWidgetRecord;
-		private CArray<CName> _performedCustomActionsIDs;
-
 		[Ordinal(104)] 
 		[RED("isRecognizableBySenses")] 
 		public CBool IsRecognizableBySenses
 		{
-			get => GetProperty(ref _isRecognizableBySenses);
-			set => SetProperty(ref _isRecognizableBySenses, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(105)] 
 		[RED("genericDeviceActionsSetup")] 
 		public GenericDeviceActionsData GenericDeviceActionsSetup
 		{
-			get => GetProperty(ref _genericDeviceActionsSetup);
-			set => SetProperty(ref _genericDeviceActionsSetup, value);
+			get => GetPropertyValue<GenericDeviceActionsData>();
+			set => SetPropertyValue<GenericDeviceActionsData>(value);
 		}
 
 		[Ordinal(106)] 
 		[RED("genericDeviceSkillChecks")] 
 		public CHandle<GenericContainer> GenericDeviceSkillChecks
 		{
-			get => GetProperty(ref _genericDeviceSkillChecks);
-			set => SetProperty(ref _genericDeviceSkillChecks, value);
+			get => GetPropertyValue<CHandle<GenericContainer>>();
+			set => SetPropertyValue<CHandle<GenericContainer>>(value);
 		}
 
 		[Ordinal(107)] 
 		[RED("deviceWidgetRecord")] 
 		public TweakDBID DeviceWidgetRecord
 		{
-			get => GetProperty(ref _deviceWidgetRecord);
-			set => SetProperty(ref _deviceWidgetRecord, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(108)] 
 		[RED("thumbnailWidgetRecord")] 
 		public TweakDBID ThumbnailWidgetRecord
 		{
-			get => GetProperty(ref _thumbnailWidgetRecord);
-			set => SetProperty(ref _thumbnailWidgetRecord, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(109)] 
 		[RED("performedCustomActionsIDs")] 
 		public CArray<CName> PerformedCustomActionsIDs
 		{
-			get => GetProperty(ref _performedCustomActionsIDs);
-			set => SetProperty(ref _performedCustomActionsIDs, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
+		public GenericDeviceControllerPS()
+		{
+			TweakDBDescriptionRecord = new() { Value = 143157997633 };
+			GenericDeviceActionsSetup = new() { StateActionsOverrides = new() { ToggleON = new(), TogglePower = new() }, CustomActions = new() { Actions = new() } };
+			PerformedCustomActionsIDs = new();
 		}
 	}
 }

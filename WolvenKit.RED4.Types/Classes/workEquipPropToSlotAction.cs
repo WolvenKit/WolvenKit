@@ -5,50 +5,50 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class workEquipPropToSlotAction : workIWorkspotItemAction
 	{
-		private CName _itemId;
-		private TweakDBID _itemSlot;
-		private CEnum<workPropAttachMethod> _attachMethod;
-		private Vector3 _customOffsetPos;
-		private Quaternion _customOffsetRot;
-
 		[Ordinal(0)] 
 		[RED("itemId")] 
 		public CName ItemId
 		{
-			get => GetProperty(ref _itemId);
-			set => SetProperty(ref _itemId, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("itemSlot")] 
 		public TweakDBID ItemSlot
 		{
-			get => GetProperty(ref _itemSlot);
-			set => SetProperty(ref _itemSlot, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("attachMethod")] 
 		public CEnum<workPropAttachMethod> AttachMethod
 		{
-			get => GetProperty(ref _attachMethod);
-			set => SetProperty(ref _attachMethod, value);
+			get => GetPropertyValue<CEnum<workPropAttachMethod>>();
+			set => SetPropertyValue<CEnum<workPropAttachMethod>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("customOffsetPos")] 
 		public Vector3 CustomOffsetPos
 		{
-			get => GetProperty(ref _customOffsetPos);
-			set => SetProperty(ref _customOffsetPos, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("customOffsetRot")] 
 		public Quaternion CustomOffsetRot
 		{
-			get => GetProperty(ref _customOffsetRot);
-			set => SetProperty(ref _customOffsetRot, value);
+			get => GetPropertyValue<Quaternion>();
+			set => SetPropertyValue<Quaternion>(value);
+		}
+
+		public workEquipPropToSlotAction()
+		{
+			CustomOffsetPos = new();
+			CustomOffsetRot = new() { R = 1.000000F };
 		}
 	}
 }

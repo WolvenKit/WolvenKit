@@ -5,28 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class physicsGeometryKey : RedBaseClass
 	{
-		private CUInt8 _pe;
-		private CArrayFixedSize<CUInt8> _ta;
-
 		[Ordinal(0)] 
 		[RED("pe")] 
 		public CUInt8 Pe
 		{
-			get => GetProperty(ref _pe);
-			set => SetProperty(ref _pe, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ta", 12)] 
 		public CArrayFixedSize<CUInt8> Ta
 		{
-			get => GetProperty(ref _ta);
-			set => SetProperty(ref _ta, value);
+			get => GetPropertyValue<CArrayFixedSize<CUInt8>>();
+			set => SetPropertyValue<CArrayFixedSize<CUInt8>>(value);
 		}
 
 		public physicsGeometryKey()
 		{
-			_pe = 6;
+			Pe = 6;
+			Ta = new(12);
 		}
 	}
 }

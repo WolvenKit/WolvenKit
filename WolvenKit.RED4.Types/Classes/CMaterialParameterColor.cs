@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CMaterialParameterColor : CMaterialParameter
 	{
-		private CColor _color;
-
 		[Ordinal(2)] 
 		[RED("color")] 
 		public CColor Color
 		{
-			get => GetProperty(ref _color);
-			set => SetProperty(ref _color, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
+		}
+
+		public CMaterialParameterColor()
+		{
+			Color = new();
 		}
 	}
 }

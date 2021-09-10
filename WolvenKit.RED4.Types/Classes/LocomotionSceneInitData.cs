@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class LocomotionSceneInitData : IScriptable
 	{
-		private CInt32 _previousLocomotionState;
-
 		[Ordinal(0)] 
 		[RED("previousLocomotionState")] 
 		public CInt32 PreviousLocomotionState
 		{
-			get => GetProperty(ref _previousLocomotionState);
-			set => SetProperty(ref _previousLocomotionState, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

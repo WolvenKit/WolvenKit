@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameBlackboardChangedEvent : redEvent
 	{
-		private CHandle<gamebbScriptDefinition> _definition;
-		private gamebbScriptID _id;
-
 		[Ordinal(0)] 
 		[RED("definition")] 
 		public CHandle<gamebbScriptDefinition> Definition
 		{
-			get => GetProperty(ref _definition);
-			set => SetProperty(ref _definition, value);
+			get => GetPropertyValue<CHandle<gamebbScriptDefinition>>();
+			set => SetPropertyValue<CHandle<gamebbScriptDefinition>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("id")] 
 		public gamebbScriptID Id
 		{
-			get => GetProperty(ref _id);
-			set => SetProperty(ref _id, value);
+			get => GetPropertyValue<gamebbScriptID>();
+			set => SetPropertyValue<gamebbScriptID>(value);
+		}
+
+		public gameBlackboardChangedEvent()
+		{
+			Id = new() { None = new() };
 		}
 	}
 }

@@ -5,187 +5,169 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioAcousticConstantsPreset : audioAudioMetadata
 	{
-		private CFloat _dopplerFactor;
-		private CFloat _speedOfSound;
-		private CFloat _wideInteriorLimit;
-		private CFloat _enclosedCeilingDistance;
-		private CFloat _urbanNarrowDistance;
-		private CFloat _urbanStreetDistance;
-		private CFloat _exteriorWideAltitude;
-		private CFloat _elevatedOpenDistance;
-		private CFloat _ambExteriorCeilingMinDistance;
-		private CFloat _ambExteriorCeilingMaxDistance;
-		private CFloat _badlandsWideRelativeAltitude;
-		private CFloat _repositioningStandardZoomFactor;
-		private CFloat _repositioningScanningZoomFactor;
-		private CFloat _repositioningVoStandardZoomFactor;
-		private CFloat _repositioningVoScanningZoomFactor;
-		private CArray<CName> _groupingExcludedVisualTags;
-		private CName _windowEventName;
-		private CFloat _maxWindowOffset;
-
 		[Ordinal(1)] 
 		[RED("dopplerFactor")] 
 		public CFloat DopplerFactor
 		{
-			get => GetProperty(ref _dopplerFactor);
-			set => SetProperty(ref _dopplerFactor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("speedOfSound")] 
 		public CFloat SpeedOfSound
 		{
-			get => GetProperty(ref _speedOfSound);
-			set => SetProperty(ref _speedOfSound, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("wideInteriorLimit")] 
 		public CFloat WideInteriorLimit
 		{
-			get => GetProperty(ref _wideInteriorLimit);
-			set => SetProperty(ref _wideInteriorLimit, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("enclosedCeilingDistance")] 
 		public CFloat EnclosedCeilingDistance
 		{
-			get => GetProperty(ref _enclosedCeilingDistance);
-			set => SetProperty(ref _enclosedCeilingDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("urbanNarrowDistance")] 
 		public CFloat UrbanNarrowDistance
 		{
-			get => GetProperty(ref _urbanNarrowDistance);
-			set => SetProperty(ref _urbanNarrowDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("urbanStreetDistance")] 
 		public CFloat UrbanStreetDistance
 		{
-			get => GetProperty(ref _urbanStreetDistance);
-			set => SetProperty(ref _urbanStreetDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("exteriorWideAltitude")] 
 		public CFloat ExteriorWideAltitude
 		{
-			get => GetProperty(ref _exteriorWideAltitude);
-			set => SetProperty(ref _exteriorWideAltitude, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("elevatedOpenDistance")] 
 		public CFloat ElevatedOpenDistance
 		{
-			get => GetProperty(ref _elevatedOpenDistance);
-			set => SetProperty(ref _elevatedOpenDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("ambExteriorCeilingMinDistance")] 
 		public CFloat AmbExteriorCeilingMinDistance
 		{
-			get => GetProperty(ref _ambExteriorCeilingMinDistance);
-			set => SetProperty(ref _ambExteriorCeilingMinDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("ambExteriorCeilingMaxDistance")] 
 		public CFloat AmbExteriorCeilingMaxDistance
 		{
-			get => GetProperty(ref _ambExteriorCeilingMaxDistance);
-			set => SetProperty(ref _ambExteriorCeilingMaxDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("badlandsWideRelativeAltitude")] 
 		public CFloat BadlandsWideRelativeAltitude
 		{
-			get => GetProperty(ref _badlandsWideRelativeAltitude);
-			set => SetProperty(ref _badlandsWideRelativeAltitude, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("repositioningStandardZoomFactor")] 
 		public CFloat RepositioningStandardZoomFactor
 		{
-			get => GetProperty(ref _repositioningStandardZoomFactor);
-			set => SetProperty(ref _repositioningStandardZoomFactor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("repositioningScanningZoomFactor")] 
 		public CFloat RepositioningScanningZoomFactor
 		{
-			get => GetProperty(ref _repositioningScanningZoomFactor);
-			set => SetProperty(ref _repositioningScanningZoomFactor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("repositioningVoStandardZoomFactor")] 
 		public CFloat RepositioningVoStandardZoomFactor
 		{
-			get => GetProperty(ref _repositioningVoStandardZoomFactor);
-			set => SetProperty(ref _repositioningVoStandardZoomFactor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("repositioningVoScanningZoomFactor")] 
 		public CFloat RepositioningVoScanningZoomFactor
 		{
-			get => GetProperty(ref _repositioningVoScanningZoomFactor);
-			set => SetProperty(ref _repositioningVoScanningZoomFactor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("groupingExcludedVisualTags")] 
 		public CArray<CName> GroupingExcludedVisualTags
 		{
-			get => GetProperty(ref _groupingExcludedVisualTags);
-			set => SetProperty(ref _groupingExcludedVisualTags, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("windowEventName")] 
 		public CName WindowEventName
 		{
-			get => GetProperty(ref _windowEventName);
-			set => SetProperty(ref _windowEventName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("maxWindowOffset")] 
 		public CFloat MaxWindowOffset
 		{
-			get => GetProperty(ref _maxWindowOffset);
-			set => SetProperty(ref _maxWindowOffset, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public audioAcousticConstantsPreset()
 		{
-			_dopplerFactor = 1.000000F;
-			_speedOfSound = 343.000000F;
-			_wideInteriorLimit = 10.000000F;
-			_enclosedCeilingDistance = 20.000000F;
-			_urbanNarrowDistance = 10.000000F;
-			_urbanStreetDistance = 25.000000F;
-			_exteriorWideAltitude = 50.000000F;
-			_elevatedOpenDistance = 40.000000F;
-			_ambExteriorCeilingMinDistance = 3.000000F;
-			_ambExteriorCeilingMaxDistance = 20.000000F;
-			_badlandsWideRelativeAltitude = 12.000000F;
-			_repositioningStandardZoomFactor = 0.250000F;
-			_repositioningScanningZoomFactor = 1.000000F;
-			_repositioningVoStandardZoomFactor = 1.000000F;
-			_repositioningVoScanningZoomFactor = 1.000000F;
-			_maxWindowOffset = 2.000000F;
+			DopplerFactor = 1.000000F;
+			SpeedOfSound = 343.000000F;
+			WideInteriorLimit = 10.000000F;
+			EnclosedCeilingDistance = 20.000000F;
+			UrbanNarrowDistance = 10.000000F;
+			UrbanStreetDistance = 25.000000F;
+			ExteriorWideAltitude = 50.000000F;
+			ElevatedOpenDistance = 40.000000F;
+			AmbExteriorCeilingMinDistance = 3.000000F;
+			AmbExteriorCeilingMaxDistance = 20.000000F;
+			BadlandsWideRelativeAltitude = 12.000000F;
+			RepositioningStandardZoomFactor = 0.250000F;
+			RepositioningScanningZoomFactor = 1.000000F;
+			RepositioningVoStandardZoomFactor = 1.000000F;
+			RepositioningVoScanningZoomFactor = 1.000000F;
+			GroupingExcludedVisualTags = new();
+			MaxWindowOffset = 2.000000F;
 		}
 	}
 }

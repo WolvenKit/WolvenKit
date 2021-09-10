@@ -5,50 +5,50 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ItemDisplayVirtualController : inkVirtualCompoundItemController
 	{
-		private inkWidgetReference _itemDisplayWidget;
-		private CName _widgetToSpawn;
-		private CHandle<WrappedInventoryItemData> _wrappedData;
-		private InventoryItemData _data;
-		private CWeakHandle<inkWidget> _spawnedWidget;
-
 		[Ordinal(15)] 
 		[RED("itemDisplayWidget")] 
 		public inkWidgetReference ItemDisplayWidget
 		{
-			get => GetProperty(ref _itemDisplayWidget);
-			set => SetProperty(ref _itemDisplayWidget, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("widgetToSpawn")] 
 		public CName WidgetToSpawn
 		{
-			get => GetProperty(ref _widgetToSpawn);
-			set => SetProperty(ref _widgetToSpawn, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("wrappedData")] 
 		public CHandle<WrappedInventoryItemData> WrappedData
 		{
-			get => GetProperty(ref _wrappedData);
-			set => SetProperty(ref _wrappedData, value);
+			get => GetPropertyValue<CHandle<WrappedInventoryItemData>>();
+			set => SetPropertyValue<CHandle<WrappedInventoryItemData>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("data")] 
 		public InventoryItemData Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<InventoryItemData>();
+			set => SetPropertyValue<InventoryItemData>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("spawnedWidget")] 
 		public CWeakHandle<inkWidget> SpawnedWidget
 		{
-			get => GetProperty(ref _spawnedWidget);
-			set => SetProperty(ref _spawnedWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
+		}
+
+		public ItemDisplayVirtualController()
+		{
+			ItemDisplayWidget = new();
+			Data = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
 		}
 	}
 }

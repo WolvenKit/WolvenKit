@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RoyceHealthChangeListener : gameCustomValueStatPoolsListener
 	{
-		private CWeakHandle<NPCPuppet> _owner;
-		private CHandle<RoyceComponent> _royceComponent;
-		private CArray<CWeakHandle<gameWeakspotObject>> _weakspots;
-
 		[Ordinal(0)] 
 		[RED("owner")] 
 		public CWeakHandle<NPCPuppet> Owner
 		{
-			get => GetProperty(ref _owner);
-			set => SetProperty(ref _owner, value);
+			get => GetPropertyValue<CWeakHandle<NPCPuppet>>();
+			set => SetPropertyValue<CWeakHandle<NPCPuppet>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("royceComponent")] 
 		public CHandle<RoyceComponent> RoyceComponent
 		{
-			get => GetProperty(ref _royceComponent);
-			set => SetProperty(ref _royceComponent, value);
+			get => GetPropertyValue<CHandle<RoyceComponent>>();
+			set => SetPropertyValue<CHandle<RoyceComponent>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("weakspots")] 
 		public CArray<CWeakHandle<gameWeakspotObject>> Weakspots
 		{
-			get => GetProperty(ref _weakspots);
-			set => SetProperty(ref _weakspots, value);
+			get => GetPropertyValue<CArray<CWeakHandle<gameWeakspotObject>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<gameWeakspotObject>>>(value);
+		}
+
+		public RoyceHealthChangeListener()
+		{
+			Weakspots = new();
 		}
 	}
 }

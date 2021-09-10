@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnActorId : RedBaseClass
 	{
-		private CUInt32 _id;
-
 		[Ordinal(0)] 
 		[RED("id")] 
 		public CUInt32 Id
 		{
-			get => GetProperty(ref _id);
-			set => SetProperty(ref _id, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		public scnActorId()
 		{
-			_id = 4294967295;
+			Id = 4294967295;
 		}
 	}
 }

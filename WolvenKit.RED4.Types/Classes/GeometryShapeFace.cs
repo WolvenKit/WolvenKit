@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class GeometryShapeFace : RedBaseClass
 	{
-		private CArray<CUInt32> _indices;
-
 		[Ordinal(0)] 
 		[RED("indices")] 
 		public CArray<CUInt32> Indices
 		{
-			get => GetProperty(ref _indices);
-			set => SetProperty(ref _indices, value);
+			get => GetPropertyValue<CArray<CUInt32>>();
+			set => SetPropertyValue<CArray<CUInt32>>(value);
+		}
+
+		public GeometryShapeFace()
+		{
+			Indices = new();
 		}
 	}
 }

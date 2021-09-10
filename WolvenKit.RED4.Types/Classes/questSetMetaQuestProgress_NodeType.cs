@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questSetMetaQuestProgress_NodeType : questIUIManagerNodeType
 	{
-		private CEnum<gamedataMetaQuest> _metaQuestId;
-		private CUInt32 _percent;
-		private LocalizationString _text;
-
 		[Ordinal(0)] 
 		[RED("metaQuestId")] 
 		public CEnum<gamedataMetaQuest> MetaQuestId
 		{
-			get => GetProperty(ref _metaQuestId);
-			set => SetProperty(ref _metaQuestId, value);
+			get => GetPropertyValue<CEnum<gamedataMetaQuest>>();
+			set => SetPropertyValue<CEnum<gamedataMetaQuest>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("percent")] 
 		public CUInt32 Percent
 		{
-			get => GetProperty(ref _percent);
-			set => SetProperty(ref _percent, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("text")] 
 		public LocalizationString Text
 		{
-			get => GetProperty(ref _text);
-			set => SetProperty(ref _text, value);
+			get => GetPropertyValue<LocalizationString>();
+			set => SetPropertyValue<LocalizationString>(value);
+		}
+
+		public questSetMetaQuestProgress_NodeType()
+		{
+			Text = new() { Unk1 = 0, Value = "" };
 		}
 	}
 }

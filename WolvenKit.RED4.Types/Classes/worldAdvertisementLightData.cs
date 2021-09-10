@@ -5,485 +5,437 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldAdvertisementLightData : RedBaseClass
 	{
-		private Transform _transform;
-		private CBool _isEnabled;
-		private CName _lightName;
-		private CBool _useAutoHideDistance;
-		private CFloat _autoHideDistance;
-		private CEnum<ELightType> _type;
-		private CColor _color;
-		private CFloat _radius;
-		private CEnum<ELightUnit> _unit;
-		private CFloat _intensity;
-		private CFloat _rayTracingIntensityScale;
-		private CFloat _eV;
-		private CFloat _temperature;
-		private CEnum<rendLightChannel> _lightChannel;
-		private CBool _sceneDiffuse;
-		private CUInt8 _sceneSpecularScale;
-		private CBool _directional;
-		private CInt8 _roughnessBias;
-		private CUInt8 _scaleGI;
-		private CUInt8 _scaleEnvProbes;
-		private CBool _useInTransparents;
-		private CUInt8 _scaleVolFog;
-		private CBool _useInParticles;
-		private CEnum<rendLightAttenuation> _attenuation;
-		private CBool _clampAttenuation;
-		private CEnum<rendLightGroup> _group;
-		private CEnum<EAreaLightShape> _areaShape;
-		private CBool _areaTwoSided;
-		private CBool _spotCapsule;
-		private CFloat _sourceRadius;
-		private CFloat _capsuleLength;
-		private CFloat _areaRectSideA;
-		private CFloat _areaRectSideB;
-		private CFloat _innerAngle;
-		private CFloat _outerAngle;
-		private CFloat _softness;
-		private CBool _enableLocalShadows;
-		private CBool _enableLocalShadowsForceStaticsOnly;
-		private CEnum<rendContactShadowReciever> _contactShadows;
-		private CFloat _shadowAngle;
-		private CFloat _shadowRadius;
-		private CFloat _shadowFadeDistance;
-		private CFloat _shadowFadeRange;
-		private CEnum<ELightShadowSoftnessMode> _shadowSoftnessMode;
-		private CResourceAsyncReference<CIESDataResource> _iesProfile;
-		private rendSLightFlickering _flicker;
-		private CEnum<EEnvColorGroup> _envColorGroup;
-		private CUInt8 _colorGroupSaturation;
-		private CUInt8 _portalAngleCutoff;
-		private CBool _allowDistantLight;
-
 		[Ordinal(0)] 
 		[RED("transform")] 
 		public Transform Transform
 		{
-			get => GetProperty(ref _transform);
-			set => SetProperty(ref _transform, value);
+			get => GetPropertyValue<Transform>();
+			set => SetPropertyValue<Transform>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("lightName")] 
 		public CName LightName
 		{
-			get => GetProperty(ref _lightName);
-			set => SetProperty(ref _lightName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("useAutoHideDistance")] 
 		public CBool UseAutoHideDistance
 		{
-			get => GetProperty(ref _useAutoHideDistance);
-			set => SetProperty(ref _useAutoHideDistance, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("autoHideDistance")] 
 		public CFloat AutoHideDistance
 		{
-			get => GetProperty(ref _autoHideDistance);
-			set => SetProperty(ref _autoHideDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("type")] 
 		public CEnum<ELightType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<ELightType>>();
+			set => SetPropertyValue<CEnum<ELightType>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("color")] 
 		public CColor Color
 		{
-			get => GetProperty(ref _color);
-			set => SetProperty(ref _color, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get => GetProperty(ref _radius);
-			set => SetProperty(ref _radius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("unit")] 
 		public CEnum<ELightUnit> Unit
 		{
-			get => GetProperty(ref _unit);
-			set => SetProperty(ref _unit, value);
+			get => GetPropertyValue<CEnum<ELightUnit>>();
+			set => SetPropertyValue<CEnum<ELightUnit>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("intensity")] 
 		public CFloat Intensity
 		{
-			get => GetProperty(ref _intensity);
-			set => SetProperty(ref _intensity, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("rayTracingIntensityScale")] 
 		public CFloat RayTracingIntensityScale
 		{
-			get => GetProperty(ref _rayTracingIntensityScale);
-			set => SetProperty(ref _rayTracingIntensityScale, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("EV")] 
 		public CFloat EV
 		{
-			get => GetProperty(ref _eV);
-			set => SetProperty(ref _eV, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("temperature")] 
 		public CFloat Temperature
 		{
-			get => GetProperty(ref _temperature);
-			set => SetProperty(ref _temperature, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("lightChannel")] 
-		public CEnum<rendLightChannel> LightChannel
+		public CBitField<rendLightChannel> LightChannel
 		{
-			get => GetProperty(ref _lightChannel);
-			set => SetProperty(ref _lightChannel, value);
+			get => GetPropertyValue<CBitField<rendLightChannel>>();
+			set => SetPropertyValue<CBitField<rendLightChannel>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("sceneDiffuse")] 
 		public CBool SceneDiffuse
 		{
-			get => GetProperty(ref _sceneDiffuse);
-			set => SetProperty(ref _sceneDiffuse, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("sceneSpecularScale")] 
 		public CUInt8 SceneSpecularScale
 		{
-			get => GetProperty(ref _sceneSpecularScale);
-			set => SetProperty(ref _sceneSpecularScale, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("directional")] 
 		public CBool Directional
 		{
-			get => GetProperty(ref _directional);
-			set => SetProperty(ref _directional, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("roughnessBias")] 
 		public CInt8 RoughnessBias
 		{
-			get => GetProperty(ref _roughnessBias);
-			set => SetProperty(ref _roughnessBias, value);
+			get => GetPropertyValue<CInt8>();
+			set => SetPropertyValue<CInt8>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("scaleGI")] 
 		public CUInt8 ScaleGI
 		{
-			get => GetProperty(ref _scaleGI);
-			set => SetProperty(ref _scaleGI, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("scaleEnvProbes")] 
 		public CUInt8 ScaleEnvProbes
 		{
-			get => GetProperty(ref _scaleEnvProbes);
-			set => SetProperty(ref _scaleEnvProbes, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("useInTransparents")] 
 		public CBool UseInTransparents
 		{
-			get => GetProperty(ref _useInTransparents);
-			set => SetProperty(ref _useInTransparents, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("scaleVolFog")] 
 		public CUInt8 ScaleVolFog
 		{
-			get => GetProperty(ref _scaleVolFog);
-			set => SetProperty(ref _scaleVolFog, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("useInParticles")] 
 		public CBool UseInParticles
 		{
-			get => GetProperty(ref _useInParticles);
-			set => SetProperty(ref _useInParticles, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("attenuation")] 
 		public CEnum<rendLightAttenuation> Attenuation
 		{
-			get => GetProperty(ref _attenuation);
-			set => SetProperty(ref _attenuation, value);
+			get => GetPropertyValue<CEnum<rendLightAttenuation>>();
+			set => SetPropertyValue<CEnum<rendLightAttenuation>>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("clampAttenuation")] 
 		public CBool ClampAttenuation
 		{
-			get => GetProperty(ref _clampAttenuation);
-			set => SetProperty(ref _clampAttenuation, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("group")] 
 		public CEnum<rendLightGroup> Group
 		{
-			get => GetProperty(ref _group);
-			set => SetProperty(ref _group, value);
+			get => GetPropertyValue<CEnum<rendLightGroup>>();
+			set => SetPropertyValue<CEnum<rendLightGroup>>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("areaShape")] 
 		public CEnum<EAreaLightShape> AreaShape
 		{
-			get => GetProperty(ref _areaShape);
-			set => SetProperty(ref _areaShape, value);
+			get => GetPropertyValue<CEnum<EAreaLightShape>>();
+			set => SetPropertyValue<CEnum<EAreaLightShape>>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("areaTwoSided")] 
 		public CBool AreaTwoSided
 		{
-			get => GetProperty(ref _areaTwoSided);
-			set => SetProperty(ref _areaTwoSided, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("spotCapsule")] 
 		public CBool SpotCapsule
 		{
-			get => GetProperty(ref _spotCapsule);
-			set => SetProperty(ref _spotCapsule, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("sourceRadius")] 
 		public CFloat SourceRadius
 		{
-			get => GetProperty(ref _sourceRadius);
-			set => SetProperty(ref _sourceRadius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("capsuleLength")] 
 		public CFloat CapsuleLength
 		{
-			get => GetProperty(ref _capsuleLength);
-			set => SetProperty(ref _capsuleLength, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("areaRectSideA")] 
 		public CFloat AreaRectSideA
 		{
-			get => GetProperty(ref _areaRectSideA);
-			set => SetProperty(ref _areaRectSideA, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("areaRectSideB")] 
 		public CFloat AreaRectSideB
 		{
-			get => GetProperty(ref _areaRectSideB);
-			set => SetProperty(ref _areaRectSideB, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("innerAngle")] 
 		public CFloat InnerAngle
 		{
-			get => GetProperty(ref _innerAngle);
-			set => SetProperty(ref _innerAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(34)] 
 		[RED("outerAngle")] 
 		public CFloat OuterAngle
 		{
-			get => GetProperty(ref _outerAngle);
-			set => SetProperty(ref _outerAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(35)] 
 		[RED("softness")] 
 		public CFloat Softness
 		{
-			get => GetProperty(ref _softness);
-			set => SetProperty(ref _softness, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(36)] 
 		[RED("enableLocalShadows")] 
 		public CBool EnableLocalShadows
 		{
-			get => GetProperty(ref _enableLocalShadows);
-			set => SetProperty(ref _enableLocalShadows, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(37)] 
 		[RED("enableLocalShadowsForceStaticsOnly")] 
 		public CBool EnableLocalShadowsForceStaticsOnly
 		{
-			get => GetProperty(ref _enableLocalShadowsForceStaticsOnly);
-			set => SetProperty(ref _enableLocalShadowsForceStaticsOnly, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(38)] 
 		[RED("contactShadows")] 
 		public CEnum<rendContactShadowReciever> ContactShadows
 		{
-			get => GetProperty(ref _contactShadows);
-			set => SetProperty(ref _contactShadows, value);
+			get => GetPropertyValue<CEnum<rendContactShadowReciever>>();
+			set => SetPropertyValue<CEnum<rendContactShadowReciever>>(value);
 		}
 
 		[Ordinal(39)] 
 		[RED("shadowAngle")] 
 		public CFloat ShadowAngle
 		{
-			get => GetProperty(ref _shadowAngle);
-			set => SetProperty(ref _shadowAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(40)] 
 		[RED("shadowRadius")] 
 		public CFloat ShadowRadius
 		{
-			get => GetProperty(ref _shadowRadius);
-			set => SetProperty(ref _shadowRadius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(41)] 
 		[RED("shadowFadeDistance")] 
 		public CFloat ShadowFadeDistance
 		{
-			get => GetProperty(ref _shadowFadeDistance);
-			set => SetProperty(ref _shadowFadeDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(42)] 
 		[RED("shadowFadeRange")] 
 		public CFloat ShadowFadeRange
 		{
-			get => GetProperty(ref _shadowFadeRange);
-			set => SetProperty(ref _shadowFadeRange, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(43)] 
 		[RED("shadowSoftnessMode")] 
 		public CEnum<ELightShadowSoftnessMode> ShadowSoftnessMode
 		{
-			get => GetProperty(ref _shadowSoftnessMode);
-			set => SetProperty(ref _shadowSoftnessMode, value);
+			get => GetPropertyValue<CEnum<ELightShadowSoftnessMode>>();
+			set => SetPropertyValue<CEnum<ELightShadowSoftnessMode>>(value);
 		}
 
 		[Ordinal(44)] 
 		[RED("iesProfile")] 
 		public CResourceAsyncReference<CIESDataResource> IesProfile
 		{
-			get => GetProperty(ref _iesProfile);
-			set => SetProperty(ref _iesProfile, value);
+			get => GetPropertyValue<CResourceAsyncReference<CIESDataResource>>();
+			set => SetPropertyValue<CResourceAsyncReference<CIESDataResource>>(value);
 		}
 
 		[Ordinal(45)] 
 		[RED("flicker")] 
 		public rendSLightFlickering Flicker
 		{
-			get => GetProperty(ref _flicker);
-			set => SetProperty(ref _flicker, value);
+			get => GetPropertyValue<rendSLightFlickering>();
+			set => SetPropertyValue<rendSLightFlickering>(value);
 		}
 
 		[Ordinal(46)] 
 		[RED("envColorGroup")] 
 		public CEnum<EEnvColorGroup> EnvColorGroup
 		{
-			get => GetProperty(ref _envColorGroup);
-			set => SetProperty(ref _envColorGroup, value);
+			get => GetPropertyValue<CEnum<EEnvColorGroup>>();
+			set => SetPropertyValue<CEnum<EEnvColorGroup>>(value);
 		}
 
 		[Ordinal(47)] 
 		[RED("colorGroupSaturation")] 
 		public CUInt8 ColorGroupSaturation
 		{
-			get => GetProperty(ref _colorGroupSaturation);
-			set => SetProperty(ref _colorGroupSaturation, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(48)] 
 		[RED("portalAngleCutoff")] 
 		public CUInt8 PortalAngleCutoff
 		{
-			get => GetProperty(ref _portalAngleCutoff);
-			set => SetProperty(ref _portalAngleCutoff, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(49)] 
 		[RED("allowDistantLight")] 
 		public CBool AllowDistantLight
 		{
-			get => GetProperty(ref _allowDistantLight);
-			set => SetProperty(ref _allowDistantLight, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public worldAdvertisementLightData()
 		{
-			_radius = 5.000000F;
-			_intensity = 100.000000F;
-			_rayTracingIntensityScale = 1.000000F;
-			_temperature = -1.000000F;
-			_sceneDiffuse = true;
-			_sceneSpecularScale = 100;
-			_scaleGI = 100;
-			_scaleEnvProbes = 100;
-			_useInTransparents = true;
-			_useInParticles = true;
-			_areaShape = new() { Value = Enums.EAreaLightShape.ALS_Capsule };
-			_areaTwoSided = true;
-			_sourceRadius = 0.050000F;
-			_capsuleLength = 1.000000F;
-			_areaRectSideA = 1.000000F;
-			_areaRectSideB = 1.000000F;
-			_innerAngle = 30.000000F;
-			_outerAngle = 45.000000F;
-			_softness = 2.000000F;
-			_shadowAngle = -1.000000F;
-			_shadowRadius = -1.000000F;
-			_shadowFadeDistance = 10.000000F;
-			_shadowFadeRange = 5.000000F;
-			_shadowSoftnessMode = new() { Value = Enums.ELightShadowSoftnessMode.LSSM_Default };
-			_colorGroupSaturation = 100;
-			_allowDistantLight = true;
+			Transform = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			Color = new();
+			Radius = 5.000000F;
+			Intensity = 100.000000F;
+			RayTracingIntensityScale = 1.000000F;
+			Temperature = -1.000000F;
+			SceneDiffuse = true;
+			SceneSpecularScale = 100;
+			ScaleGI = 100;
+			ScaleEnvProbes = 100;
+			UseInTransparents = true;
+			UseInParticles = true;
+			AreaShape = Enums.EAreaLightShape.ALS_Capsule;
+			AreaTwoSided = true;
+			SourceRadius = 0.050000F;
+			CapsuleLength = 1.000000F;
+			AreaRectSideA = 1.000000F;
+			AreaRectSideB = 1.000000F;
+			InnerAngle = 30.000000F;
+			OuterAngle = 45.000000F;
+			Softness = 2.000000F;
+			ShadowAngle = -1.000000F;
+			ShadowRadius = -1.000000F;
+			ShadowFadeDistance = 10.000000F;
+			ShadowFadeRange = 5.000000F;
+			ShadowSoftnessMode = Enums.ELightShadowSoftnessMode.LSSM_Default;
+			Flicker = new() { FlickerPeriod = 0.200000F };
+			ColorGroupSaturation = 100;
+			AllowDistantLight = true;
 		}
 	}
 }

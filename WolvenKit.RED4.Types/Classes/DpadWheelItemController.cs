@@ -5,236 +5,228 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DpadWheelItemController : inkWidgetLogicController
 	{
-		private inkWidgetReference _selectorWrapper;
-		private inkImageWidgetReference _icon;
-		private inkWidgetReference _displayWrapper;
-		private inkWidgetReference _itemWrapper;
-		private inkWidgetReference _arrows;
-		private inkImageWidgetReference _abilityIcon;
-		private inkImageWidgetReference _quickHackIcon;
-		private inkImageWidgetReference _highlight02;
-		private inkImageWidgetReference _highlight03;
-		private inkImageWidgetReference _highlight04;
-		private inkImageWidgetReference _highlight05;
-		private inkImageWidgetReference _highlight06;
-		private inkImageWidgetReference _highlight07;
-		private inkImageWidgetReference _highlight08;
-		private CFloat _textDist;
-		private CFloat _weaponTextDist;
-		private QuickSlotCommand _data;
-		private CWeakHandle<inkWidget> _root;
-		private CWeakHandle<InventoryItemDisplay> _item;
-		private CWeakHandle<inkWidget> _itemWidget;
-		private CHandle<InventoryDataManagerV2> _inventoryDataManager;
-		private inkImageWidgetReference _highlight;
-		private InventoryItemData _itemData;
-		private AbilityData _abilityData;
-		private CName _quickHackWheelDefIcon;
-
 		[Ordinal(1)] 
 		[RED("selectorWrapper")] 
 		public inkWidgetReference SelectorWrapper
 		{
-			get => GetProperty(ref _selectorWrapper);
-			set => SetProperty(ref _selectorWrapper, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("icon")] 
 		public inkImageWidgetReference Icon
 		{
-			get => GetProperty(ref _icon);
-			set => SetProperty(ref _icon, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("displayWrapper")] 
 		public inkWidgetReference DisplayWrapper
 		{
-			get => GetProperty(ref _displayWrapper);
-			set => SetProperty(ref _displayWrapper, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("itemWrapper")] 
 		public inkWidgetReference ItemWrapper
 		{
-			get => GetProperty(ref _itemWrapper);
-			set => SetProperty(ref _itemWrapper, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("arrows")] 
 		public inkWidgetReference Arrows
 		{
-			get => GetProperty(ref _arrows);
-			set => SetProperty(ref _arrows, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("abilityIcon")] 
 		public inkImageWidgetReference AbilityIcon
 		{
-			get => GetProperty(ref _abilityIcon);
-			set => SetProperty(ref _abilityIcon, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("quickHackIcon")] 
 		public inkImageWidgetReference QuickHackIcon
 		{
-			get => GetProperty(ref _quickHackIcon);
-			set => SetProperty(ref _quickHackIcon, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("highlight02")] 
 		public inkImageWidgetReference Highlight02
 		{
-			get => GetProperty(ref _highlight02);
-			set => SetProperty(ref _highlight02, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("highlight03")] 
 		public inkImageWidgetReference Highlight03
 		{
-			get => GetProperty(ref _highlight03);
-			set => SetProperty(ref _highlight03, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("highlight04")] 
 		public inkImageWidgetReference Highlight04
 		{
-			get => GetProperty(ref _highlight04);
-			set => SetProperty(ref _highlight04, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("highlight05")] 
 		public inkImageWidgetReference Highlight05
 		{
-			get => GetProperty(ref _highlight05);
-			set => SetProperty(ref _highlight05, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("highlight06")] 
 		public inkImageWidgetReference Highlight06
 		{
-			get => GetProperty(ref _highlight06);
-			set => SetProperty(ref _highlight06, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("highlight07")] 
 		public inkImageWidgetReference Highlight07
 		{
-			get => GetProperty(ref _highlight07);
-			set => SetProperty(ref _highlight07, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("highlight08")] 
 		public inkImageWidgetReference Highlight08
 		{
-			get => GetProperty(ref _highlight08);
-			set => SetProperty(ref _highlight08, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("textDist")] 
 		public CFloat TextDist
 		{
-			get => GetProperty(ref _textDist);
-			set => SetProperty(ref _textDist, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("weaponTextDist")] 
 		public CFloat WeaponTextDist
 		{
-			get => GetProperty(ref _weaponTextDist);
-			set => SetProperty(ref _weaponTextDist, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("data")] 
 		public QuickSlotCommand Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<QuickSlotCommand>();
+			set => SetPropertyValue<QuickSlotCommand>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("root")] 
 		public CWeakHandle<inkWidget> Root
 		{
-			get => GetProperty(ref _root);
-			set => SetProperty(ref _root, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("item")] 
 		public CWeakHandle<InventoryItemDisplay> Item
 		{
-			get => GetProperty(ref _item);
-			set => SetProperty(ref _item, value);
+			get => GetPropertyValue<CWeakHandle<InventoryItemDisplay>>();
+			set => SetPropertyValue<CWeakHandle<InventoryItemDisplay>>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("itemWidget")] 
 		public CWeakHandle<inkWidget> ItemWidget
 		{
-			get => GetProperty(ref _itemWidget);
-			set => SetProperty(ref _itemWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("InventoryDataManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryDataManager
 		{
-			get => GetProperty(ref _inventoryDataManager);
-			set => SetProperty(ref _inventoryDataManager, value);
+			get => GetPropertyValue<CHandle<InventoryDataManagerV2>>();
+			set => SetPropertyValue<CHandle<InventoryDataManagerV2>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("highlight")] 
 		public inkImageWidgetReference Highlight
 		{
-			get => GetProperty(ref _highlight);
-			set => SetProperty(ref _highlight, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("itemData")] 
 		public InventoryItemData ItemData
 		{
-			get => GetProperty(ref _itemData);
-			set => SetProperty(ref _itemData, value);
+			get => GetPropertyValue<InventoryItemData>();
+			set => SetPropertyValue<InventoryItemData>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("abilityData")] 
 		public AbilityData AbilityData
 		{
-			get => GetProperty(ref _abilityData);
-			set => SetProperty(ref _abilityData, value);
+			get => GetPropertyValue<AbilityData>();
+			set => SetPropertyValue<AbilityData>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("quickHackWheelDefIcon")] 
 		public CName QuickHackWheelDefIcon
 		{
-			get => GetProperty(ref _quickHackWheelDefIcon);
-			set => SetProperty(ref _quickHackWheelDefIcon, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public DpadWheelItemController()
 		{
-			_textDist = 60.000000F;
-			_weaponTextDist = 140.000000F;
+			SelectorWrapper = new();
+			Icon = new();
+			DisplayWrapper = new();
+			ItemWrapper = new();
+			Arrows = new();
+			AbilityIcon = new();
+			QuickHackIcon = new();
+			Highlight02 = new();
+			Highlight03 = new();
+			Highlight04 = new();
+			Highlight05 = new();
+			Highlight06 = new();
+			Highlight07 = new();
+			Highlight08 = new();
+			TextDist = 60.000000F;
+			WeaponTextDist = 140.000000F;
+			Data = new() { IsSlotUnlocked = true, ItemId = new(), PlayerVehicleData = new() { VehicleType = Enums.gamedataVehicleType.Invalid }, InteractiveActionOwner = new() };
+			Highlight = new();
+			ItemData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
+			AbilityData = new() { Empty = true, ID = new(), EquipmentArea = Enums.gamedataEquipmentArea.Invalid, AssignedIndex = -1 };
 		}
 	}
 }

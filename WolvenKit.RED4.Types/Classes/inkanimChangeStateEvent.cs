@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkanimChangeStateEvent : inkanimEvent
 	{
-		private CName _state;
-
 		[Ordinal(1)] 
 		[RED("state")] 
 		public CName State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 	}
 }

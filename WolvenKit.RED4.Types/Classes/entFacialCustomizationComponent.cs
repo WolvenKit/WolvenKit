@@ -5,73 +5,66 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entFacialCustomizationComponent : entIComponent
 	{
-		private CBool _debugIgnoreComponent;
-		private CResourceAsyncReference<animFacialCustomizationSet> _customizationSet;
-		private CUInt32 _eyes;
-		private CUInt32 _nose;
-		private CUInt32 _mouth;
-		private CUInt32 _jaw;
-		private CUInt32 _ears;
-
 		[Ordinal(3)] 
 		[RED("debugIgnoreComponent")] 
 		public CBool DebugIgnoreComponent
 		{
-			get => GetProperty(ref _debugIgnoreComponent);
-			set => SetProperty(ref _debugIgnoreComponent, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("customizationSet")] 
 		public CResourceAsyncReference<animFacialCustomizationSet> CustomizationSet
 		{
-			get => GetProperty(ref _customizationSet);
-			set => SetProperty(ref _customizationSet, value);
+			get => GetPropertyValue<CResourceAsyncReference<animFacialCustomizationSet>>();
+			set => SetPropertyValue<CResourceAsyncReference<animFacialCustomizationSet>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("eyes")] 
 		public CUInt32 Eyes
 		{
-			get => GetProperty(ref _eyes);
-			set => SetProperty(ref _eyes, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("nose")] 
 		public CUInt32 Nose
 		{
-			get => GetProperty(ref _nose);
-			set => SetProperty(ref _nose, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("mouth")] 
 		public CUInt32 Mouth
 		{
-			get => GetProperty(ref _mouth);
-			set => SetProperty(ref _mouth, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("jaw")] 
 		public CUInt32 Jaw
 		{
-			get => GetProperty(ref _jaw);
-			set => SetProperty(ref _jaw, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("ears")] 
 		public CUInt32 Ears
 		{
-			get => GetProperty(ref _ears);
-			set => SetProperty(ref _ears, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		public entFacialCustomizationComponent()
 		{
-			_debugIgnoreComponent = true;
+			Name = "Component";
+			DebugIgnoreComponent = true;
 		}
 	}
 }

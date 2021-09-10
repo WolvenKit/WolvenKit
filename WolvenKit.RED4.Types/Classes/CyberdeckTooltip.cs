@@ -5,257 +5,257 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CyberdeckTooltip : AGenericTooltipController
 	{
-		private inkTextWidgetReference _itemNameText;
-		private inkTextWidgetReference _itemRarityText;
-		private inkWidgetReference _rarityBars;
-		private inkCompoundWidgetReference _categoriesWrapper;
-		private inkCompoundWidgetReference _topContainer;
-		private inkCompoundWidgetReference _headerContainer;
-		private inkCompoundWidgetReference _statsContainer;
-		private inkCompoundWidgetReference _descriptionContainer;
-		private inkCompoundWidgetReference _bottomContainer;
-		private inkCompoundWidgetReference _statsList;
-		private inkCompoundWidgetReference _priceContainer;
-		private inkTextWidgetReference _descriptionText;
-		private inkTextWidgetReference _priceText;
-		private inkWidgetReference _equipedWrapper;
-		private inkTextWidgetReference _itemTypeText;
-		private inkWidgetReference _itemWeightWrapper;
-		private inkTextWidgetReference _itemWeightText;
-		private inkTextWidgetReference _cybderdeckBaseMemoryValue;
-		private inkTextWidgetReference _cybderdeckBufferValue;
-		private inkTextWidgetReference _cybderdeckSlotsValue;
-		private inkCompoundWidgetReference _deviceHacksGrid;
-		private inkImageWidgetReference _itemIconImage;
-		private inkWidgetReference _itemAttributeRequirements;
-		private inkTextWidgetReference _itemAttributeRequirementsText;
-		private inkImageWidgetReference _iconicLines;
-		private CWeakHandle<LevelBarsController> _rarityBarsController;
-		private CHandle<InventoryTooltipData> _data;
-		private CHandle<inkanimProxy> _animProxy;
-
 		[Ordinal(2)] 
 		[RED("itemNameText")] 
 		public inkTextWidgetReference ItemNameText
 		{
-			get => GetProperty(ref _itemNameText);
-			set => SetProperty(ref _itemNameText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("itemRarityText")] 
 		public inkTextWidgetReference ItemRarityText
 		{
-			get => GetProperty(ref _itemRarityText);
-			set => SetProperty(ref _itemRarityText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("rarityBars")] 
 		public inkWidgetReference RarityBars
 		{
-			get => GetProperty(ref _rarityBars);
-			set => SetProperty(ref _rarityBars, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("categoriesWrapper")] 
 		public inkCompoundWidgetReference CategoriesWrapper
 		{
-			get => GetProperty(ref _categoriesWrapper);
-			set => SetProperty(ref _categoriesWrapper, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("topContainer")] 
 		public inkCompoundWidgetReference TopContainer
 		{
-			get => GetProperty(ref _topContainer);
-			set => SetProperty(ref _topContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("headerContainer")] 
 		public inkCompoundWidgetReference HeaderContainer
 		{
-			get => GetProperty(ref _headerContainer);
-			set => SetProperty(ref _headerContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("statsContainer")] 
 		public inkCompoundWidgetReference StatsContainer
 		{
-			get => GetProperty(ref _statsContainer);
-			set => SetProperty(ref _statsContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("descriptionContainer")] 
 		public inkCompoundWidgetReference DescriptionContainer
 		{
-			get => GetProperty(ref _descriptionContainer);
-			set => SetProperty(ref _descriptionContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("bottomContainer")] 
 		public inkCompoundWidgetReference BottomContainer
 		{
-			get => GetProperty(ref _bottomContainer);
-			set => SetProperty(ref _bottomContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("statsList")] 
 		public inkCompoundWidgetReference StatsList
 		{
-			get => GetProperty(ref _statsList);
-			set => SetProperty(ref _statsList, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("priceContainer")] 
 		public inkCompoundWidgetReference PriceContainer
 		{
-			get => GetProperty(ref _priceContainer);
-			set => SetProperty(ref _priceContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("descriptionText")] 
 		public inkTextWidgetReference DescriptionText
 		{
-			get => GetProperty(ref _descriptionText);
-			set => SetProperty(ref _descriptionText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("priceText")] 
 		public inkTextWidgetReference PriceText
 		{
-			get => GetProperty(ref _priceText);
-			set => SetProperty(ref _priceText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("equipedWrapper")] 
 		public inkWidgetReference EquipedWrapper
 		{
-			get => GetProperty(ref _equipedWrapper);
-			set => SetProperty(ref _equipedWrapper, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("itemTypeText")] 
 		public inkTextWidgetReference ItemTypeText
 		{
-			get => GetProperty(ref _itemTypeText);
-			set => SetProperty(ref _itemTypeText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("itemWeightWrapper")] 
 		public inkWidgetReference ItemWeightWrapper
 		{
-			get => GetProperty(ref _itemWeightWrapper);
-			set => SetProperty(ref _itemWeightWrapper, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("itemWeightText")] 
 		public inkTextWidgetReference ItemWeightText
 		{
-			get => GetProperty(ref _itemWeightText);
-			set => SetProperty(ref _itemWeightText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("cybderdeckBaseMemoryValue")] 
 		public inkTextWidgetReference CybderdeckBaseMemoryValue
 		{
-			get => GetProperty(ref _cybderdeckBaseMemoryValue);
-			set => SetProperty(ref _cybderdeckBaseMemoryValue, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("cybderdeckBufferValue")] 
 		public inkTextWidgetReference CybderdeckBufferValue
 		{
-			get => GetProperty(ref _cybderdeckBufferValue);
-			set => SetProperty(ref _cybderdeckBufferValue, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("cybderdeckSlotsValue")] 
 		public inkTextWidgetReference CybderdeckSlotsValue
 		{
-			get => GetProperty(ref _cybderdeckSlotsValue);
-			set => SetProperty(ref _cybderdeckSlotsValue, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("deviceHacksGrid")] 
 		public inkCompoundWidgetReference DeviceHacksGrid
 		{
-			get => GetProperty(ref _deviceHacksGrid);
-			set => SetProperty(ref _deviceHacksGrid, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("itemIconImage")] 
 		public inkImageWidgetReference ItemIconImage
 		{
-			get => GetProperty(ref _itemIconImage);
-			set => SetProperty(ref _itemIconImage, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("itemAttributeRequirements")] 
 		public inkWidgetReference ItemAttributeRequirements
 		{
-			get => GetProperty(ref _itemAttributeRequirements);
-			set => SetProperty(ref _itemAttributeRequirements, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("itemAttributeRequirementsText")] 
 		public inkTextWidgetReference ItemAttributeRequirementsText
 		{
-			get => GetProperty(ref _itemAttributeRequirementsText);
-			set => SetProperty(ref _itemAttributeRequirementsText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("iconicLines")] 
 		public inkImageWidgetReference IconicLines
 		{
-			get => GetProperty(ref _iconicLines);
-			set => SetProperty(ref _iconicLines, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("rarityBarsController")] 
 		public CWeakHandle<LevelBarsController> RarityBarsController
 		{
-			get => GetProperty(ref _rarityBarsController);
-			set => SetProperty(ref _rarityBarsController, value);
+			get => GetPropertyValue<CWeakHandle<LevelBarsController>>();
+			set => SetPropertyValue<CWeakHandle<LevelBarsController>>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("data")] 
 		public CHandle<InventoryTooltipData> Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<CHandle<InventoryTooltipData>>();
+			set => SetPropertyValue<CHandle<InventoryTooltipData>>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
-			get => GetProperty(ref _animProxy);
-			set => SetProperty(ref _animProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		public CyberdeckTooltip()
+		{
+			ItemNameText = new();
+			ItemRarityText = new();
+			RarityBars = new();
+			CategoriesWrapper = new();
+			TopContainer = new();
+			HeaderContainer = new();
+			StatsContainer = new();
+			DescriptionContainer = new();
+			BottomContainer = new();
+			StatsList = new();
+			PriceContainer = new();
+			DescriptionText = new();
+			PriceText = new();
+			EquipedWrapper = new();
+			ItemTypeText = new();
+			ItemWeightWrapper = new();
+			ItemWeightText = new();
+			CybderdeckBaseMemoryValue = new();
+			CybderdeckBufferValue = new();
+			CybderdeckSlotsValue = new();
+			DeviceHacksGrid = new();
+			ItemIconImage = new();
+			ItemAttributeRequirements = new();
+			ItemAttributeRequirementsText = new();
+			IconicLines = new();
 		}
 	}
 }

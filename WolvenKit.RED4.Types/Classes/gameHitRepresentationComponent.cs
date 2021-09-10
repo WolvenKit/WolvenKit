@@ -5,59 +5,59 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameHitRepresentationComponent : entSlotComponent
 	{
-		private CArray<gameHitShapeContainer> _representations;
-		private CName _physicsMaterial;
-		private gameHitShapeBVH _bvhRoot;
-		private CBool _useResourceData;
-		private CResourceAsyncReference<gameHitRepresentationResource> _resource;
-		private CArray<gameHitRepresentationOverride> _appearanceOverrides;
-
 		[Ordinal(7)] 
 		[RED("representations")] 
 		public CArray<gameHitShapeContainer> Representations
 		{
-			get => GetProperty(ref _representations);
-			set => SetProperty(ref _representations, value);
+			get => GetPropertyValue<CArray<gameHitShapeContainer>>();
+			set => SetPropertyValue<CArray<gameHitShapeContainer>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("physicsMaterial")] 
 		public CName PhysicsMaterial
 		{
-			get => GetProperty(ref _physicsMaterial);
-			set => SetProperty(ref _physicsMaterial, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("bvhRoot")] 
 		public gameHitShapeBVH BvhRoot
 		{
-			get => GetProperty(ref _bvhRoot);
-			set => SetProperty(ref _bvhRoot, value);
+			get => GetPropertyValue<gameHitShapeBVH>();
+			set => SetPropertyValue<gameHitShapeBVH>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("useResourceData")] 
 		public CBool UseResourceData
 		{
-			get => GetProperty(ref _useResourceData);
-			set => SetProperty(ref _useResourceData, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("resource")] 
 		public CResourceAsyncReference<gameHitRepresentationResource> Resource
 		{
-			get => GetProperty(ref _resource);
-			set => SetProperty(ref _resource, value);
+			get => GetPropertyValue<CResourceAsyncReference<gameHitRepresentationResource>>();
+			set => SetPropertyValue<CResourceAsyncReference<gameHitRepresentationResource>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("appearanceOverrides")] 
 		public CArray<gameHitRepresentationOverride> AppearanceOverrides
 		{
-			get => GetProperty(ref _appearanceOverrides);
-			set => SetProperty(ref _appearanceOverrides, value);
+			get => GetPropertyValue<CArray<gameHitRepresentationOverride>>();
+			set => SetPropertyValue<CArray<gameHitRepresentationOverride>>(value);
+		}
+
+		public gameHitRepresentationComponent()
+		{
+			Representations = new();
+			BvhRoot = new() { ChildrenNodes = new(), ChildrenShapeNames = new() };
+			AppearanceOverrides = new();
 		}
 	}
 }

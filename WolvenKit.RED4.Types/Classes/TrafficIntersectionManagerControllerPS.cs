@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TrafficIntersectionManagerControllerPS : MasterControllerPS
 	{
-		private CEnum<worldTrafficLightColor> _trafficLightStatus;
-
 		[Ordinal(105)] 
 		[RED("trafficLightStatus")] 
 		public CEnum<worldTrafficLightColor> TrafficLightStatus
 		{
-			get => GetProperty(ref _trafficLightStatus);
-			set => SetProperty(ref _trafficLightStatus, value);
+			get => GetPropertyValue<CEnum<worldTrafficLightColor>>();
+			set => SetPropertyValue<CEnum<worldTrafficLightColor>>(value);
+		}
+
+		public TrafficIntersectionManagerControllerPS()
+		{
+			DeviceName = "Traffic Intersection Manager";
+			TweakDBRecord = new() { Value = 147361436664 };
+			TweakDBDescriptionRecord = new() { Value = 201737502228 };
 		}
 	}
 }

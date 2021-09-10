@@ -5,14 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SecuritySystemForceAttitudeChange : ScriptableDeviceAction
 	{
-		private CName _newAttitude;
-
 		[Ordinal(25)] 
 		[RED("newAttitude")] 
 		public CName NewAttitude
 		{
-			get => GetProperty(ref _newAttitude);
-			set => SetProperty(ref _newAttitude, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public SecuritySystemForceAttitudeChange()
+		{
+			RequesterID = new();
+			InteractionChoice = new() { CaptionParts = new() { Parts = new() }, Data = new(), ChoiceMetaData = new() { Type = new() }, LookAtDescriptor = new() { Offset = new(), OrbId = new() } };
+			ActionWidgetPackage = new() { DependendActions = new() };
+			CanTriggerStim = true;
 		}
 	}
 }

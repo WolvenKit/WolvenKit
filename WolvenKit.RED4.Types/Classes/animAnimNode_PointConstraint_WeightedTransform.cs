@@ -5,28 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_PointConstraint_WeightedTransform : RedBaseClass
 	{
-		private animTransformIndex _transform;
-		private CFloat _weight;
-
 		[Ordinal(0)] 
 		[RED("transform")] 
 		public animTransformIndex Transform
 		{
-			get => GetProperty(ref _transform);
-			set => SetProperty(ref _transform, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("weight")] 
 		public CFloat Weight
 		{
-			get => GetProperty(ref _weight);
-			set => SetProperty(ref _weight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public animAnimNode_PointConstraint_WeightedTransform()
 		{
-			_weight = 1.000000F;
+			Transform = new();
+			Weight = 1.000000F;
 		}
 	}
 }

@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questJournalNodeDefinition : questDisableableNodeDefinition
 	{
-		private CHandle<questIJournal_NodeType> _type;
-
 		[Ordinal(2)] 
 		[RED("type")] 
 		public CHandle<questIJournal_NodeType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CHandle<questIJournal_NodeType>>();
+			set => SetPropertyValue<CHandle<questIJournal_NodeType>>(value);
+		}
+
+		public questJournalNodeDefinition()
+		{
+			Sockets = new();
+			Id = 65535;
 		}
 	}
 }

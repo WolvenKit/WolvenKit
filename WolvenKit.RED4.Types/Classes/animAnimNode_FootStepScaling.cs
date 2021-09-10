@@ -5,59 +5,64 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_FootStepScaling : animAnimNode_OnePoseInput
 	{
-		private animTransformIndex _hipsIndex;
-		private animTransformIndex _leftFootIKIndex;
-		private animTransformIndex _rightFootIKIndex;
-		private animFloatLink _inputSpeed;
-		private animFloatLink _weight;
-		private animfssBodyOfflineParams _params;
-
 		[Ordinal(12)] 
 		[RED("hipsIndex")] 
 		public animTransformIndex HipsIndex
 		{
-			get => GetProperty(ref _hipsIndex);
-			set => SetProperty(ref _hipsIndex, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("leftFootIKIndex")] 
 		public animTransformIndex LeftFootIKIndex
 		{
-			get => GetProperty(ref _leftFootIKIndex);
-			set => SetProperty(ref _leftFootIKIndex, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("rightFootIKIndex")] 
 		public animTransformIndex RightFootIKIndex
 		{
-			get => GetProperty(ref _rightFootIKIndex);
-			set => SetProperty(ref _rightFootIKIndex, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("inputSpeed")] 
 		public animFloatLink InputSpeed
 		{
-			get => GetProperty(ref _inputSpeed);
-			set => SetProperty(ref _inputSpeed, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("weight")] 
 		public animFloatLink Weight
 		{
-			get => GetProperty(ref _weight);
-			set => SetProperty(ref _weight, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("Params")] 
 		public animfssBodyOfflineParams Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<animfssBodyOfflineParams>();
+			set => SetPropertyValue<animfssBodyOfflineParams>(value);
+		}
+
+		public animAnimNode_FootStepScaling()
+		{
+			Id = 4294967295;
+			InputLink = new();
+			HipsIndex = new();
+			LeftFootIKIndex = new();
+			RightFootIKIndex = new();
+			InputSpeed = new();
+			Weight = new();
+			Params = new() { HipsTilt = 25.000000F, HipsShift = 0.100000F, LegsPullFactorMin = 0.050000F, LegsPullFactorMax = 0.165000F, LegLengthAdjustment = 0.005000F, LegMaxStretchOffset = 0.050000F, LegMaxStretchAdjustment = 0.015000F };
 		}
 	}
 }

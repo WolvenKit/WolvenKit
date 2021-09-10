@@ -5,28 +5,29 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkVirtualListController : inkVirtualCompoundController
 	{
-		private CArray<inkWidgetLibraryReference> _itemTemplates;
-		private CBool _cycleNavigation;
-
 		[Ordinal(7)] 
 		[RED("itemTemplates")] 
 		public CArray<inkWidgetLibraryReference> ItemTemplates
 		{
-			get => GetProperty(ref _itemTemplates);
-			set => SetProperty(ref _itemTemplates, value);
+			get => GetPropertyValue<CArray<inkWidgetLibraryReference>>();
+			set => SetPropertyValue<CArray<inkWidgetLibraryReference>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("cycleNavigation")] 
 		public CBool CycleNavigation
 		{
-			get => GetProperty(ref _cycleNavigation);
-			set => SetProperty(ref _cycleNavigation, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public inkVirtualListController()
 		{
-			_cycleNavigation = true;
+			ItemSelected = new();
+			ItemActivated = new();
+			AllElementsSpawned = new();
+			ItemTemplates = new();
+			CycleNavigation = true;
 		}
 	}
 }

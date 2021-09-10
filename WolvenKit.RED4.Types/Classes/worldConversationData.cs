@@ -5,50 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldConversationData : ISerializable
 	{
-		private CResourceAsyncReference<scnSceneResource> _sceneFilename;
-		private CHandle<questIBaseCondition> _condition;
-		private CArray<CHandle<scnIInterruptionOperation>> _interruptionOperations;
-		private CBool _ignoreLocalLimit;
-		private CBool _ignoreGlobalLimit;
-
 		[Ordinal(0)] 
 		[RED("sceneFilename")] 
 		public CResourceAsyncReference<scnSceneResource> SceneFilename
 		{
-			get => GetProperty(ref _sceneFilename);
-			set => SetProperty(ref _sceneFilename, value);
+			get => GetPropertyValue<CResourceAsyncReference<scnSceneResource>>();
+			set => SetPropertyValue<CResourceAsyncReference<scnSceneResource>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("condition")] 
 		public CHandle<questIBaseCondition> Condition
 		{
-			get => GetProperty(ref _condition);
-			set => SetProperty(ref _condition, value);
+			get => GetPropertyValue<CHandle<questIBaseCondition>>();
+			set => SetPropertyValue<CHandle<questIBaseCondition>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("interruptionOperations")] 
 		public CArray<CHandle<scnIInterruptionOperation>> InterruptionOperations
 		{
-			get => GetProperty(ref _interruptionOperations);
-			set => SetProperty(ref _interruptionOperations, value);
+			get => GetPropertyValue<CArray<CHandle<scnIInterruptionOperation>>>();
+			set => SetPropertyValue<CArray<CHandle<scnIInterruptionOperation>>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("ignoreLocalLimit")] 
 		public CBool IgnoreLocalLimit
 		{
-			get => GetProperty(ref _ignoreLocalLimit);
-			set => SetProperty(ref _ignoreLocalLimit, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("ignoreGlobalLimit")] 
 		public CBool IgnoreGlobalLimit
 		{
-			get => GetProperty(ref _ignoreGlobalLimit);
-			set => SetProperty(ref _ignoreGlobalLimit, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public worldConversationData()
+		{
+			InterruptionOperations = new() { null, null };
 		}
 	}
 }

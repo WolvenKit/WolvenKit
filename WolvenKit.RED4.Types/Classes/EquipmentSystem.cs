@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class EquipmentSystem : gameScriptableSystem
 	{
-		private CArray<CHandle<EquipmentSystemPlayerData>> _ownerData;
-
 		[Ordinal(0)] 
 		[RED("ownerData")] 
 		public CArray<CHandle<EquipmentSystemPlayerData>> OwnerData
 		{
-			get => GetProperty(ref _ownerData);
-			set => SetProperty(ref _ownerData, value);
+			get => GetPropertyValue<CArray<CHandle<EquipmentSystemPlayerData>>>();
+			set => SetPropertyValue<CArray<CHandle<EquipmentSystemPlayerData>>>(value);
+		}
+
+		public EquipmentSystem()
+		{
+			OwnerData = new();
 		}
 	}
 }

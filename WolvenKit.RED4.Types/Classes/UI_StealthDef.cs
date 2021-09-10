@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UI_StealthDef : gamebbScriptDefinition
 	{
-		private gamebbScriptID_Bool _combatDebug;
-		private gamebbScriptID_Uint32 _numberOfCombatants;
-
 		[Ordinal(0)] 
 		[RED("CombatDebug")] 
 		public gamebbScriptID_Bool CombatDebug
 		{
-			get => GetProperty(ref _combatDebug);
-			set => SetProperty(ref _combatDebug, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("numberOfCombatants")] 
 		public gamebbScriptID_Uint32 NumberOfCombatants
 		{
-			get => GetProperty(ref _numberOfCombatants);
-			set => SetProperty(ref _numberOfCombatants, value);
+			get => GetPropertyValue<gamebbScriptID_Uint32>();
+			set => SetPropertyValue<gamebbScriptID_Uint32>(value);
+		}
+
+		public UI_StealthDef()
+		{
+			CombatDebug = new();
+			NumberOfCombatants = new();
 		}
 	}
 }

@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class genRandomizationDataEntry : RedBaseClass
 	{
-		private CString _id;
-		private CName _templateName;
-		private Transform _transform;
-		private CFloat _probability;
-
 		[Ordinal(0)] 
 		[RED("id")] 
 		public CString Id
 		{
-			get => GetProperty(ref _id);
-			set => SetProperty(ref _id, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("templateName")] 
 		public CName TemplateName
 		{
-			get => GetProperty(ref _templateName);
-			set => SetProperty(ref _templateName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("transform")] 
 		public Transform Transform
 		{
-			get => GetProperty(ref _transform);
-			set => SetProperty(ref _transform, value);
+			get => GetPropertyValue<Transform>();
+			set => SetPropertyValue<Transform>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("probability")] 
 		public CFloat Probability
 		{
-			get => GetProperty(ref _probability);
-			set => SetProperty(ref _probability, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public genRandomizationDataEntry()
+		{
+			Transform = new() { Position = new(), Orientation = new() { R = 1.000000F } };
 		}
 	}
 }

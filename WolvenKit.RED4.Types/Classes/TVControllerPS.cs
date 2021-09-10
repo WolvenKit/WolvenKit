@@ -5,50 +5,55 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TVControllerPS : MediaDeviceControllerPS
 	{
-		private TVSetup _tvSetup;
-		private redResourceReferenceScriptToken _defaultGlitchVideoPath;
-		private redResourceReferenceScriptToken _broadcastGlitchVideoPath;
-		private CBool _globalTVInitialized;
-		private CArray<STvChannel> _backupCustomChannels;
-
 		[Ordinal(109)] 
 		[RED("tvSetup")] 
 		public TVSetup TvSetup
 		{
-			get => GetProperty(ref _tvSetup);
-			set => SetProperty(ref _tvSetup, value);
+			get => GetPropertyValue<TVSetup>();
+			set => SetPropertyValue<TVSetup>(value);
 		}
 
 		[Ordinal(110)] 
 		[RED("defaultGlitchVideoPath")] 
 		public redResourceReferenceScriptToken DefaultGlitchVideoPath
 		{
-			get => GetProperty(ref _defaultGlitchVideoPath);
-			set => SetProperty(ref _defaultGlitchVideoPath, value);
+			get => GetPropertyValue<redResourceReferenceScriptToken>();
+			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
 		[Ordinal(111)] 
 		[RED("broadcastGlitchVideoPath")] 
 		public redResourceReferenceScriptToken BroadcastGlitchVideoPath
 		{
-			get => GetProperty(ref _broadcastGlitchVideoPath);
-			set => SetProperty(ref _broadcastGlitchVideoPath, value);
+			get => GetPropertyValue<redResourceReferenceScriptToken>();
+			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
 		[Ordinal(112)] 
 		[RED("globalTVInitialized")] 
 		public CBool GlobalTVInitialized
 		{
-			get => GetProperty(ref _globalTVInitialized);
-			set => SetProperty(ref _globalTVInitialized, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(113)] 
 		[RED("backupCustomChannels")] 
 		public CArray<STvChannel> BackupCustomChannels
 		{
-			get => GetProperty(ref _backupCustomChannels);
-			set => SetProperty(ref _backupCustomChannels, value);
+			get => GetPropertyValue<CArray<STvChannel>>();
+			set => SetPropertyValue<CArray<STvChannel>>(value);
+		}
+
+		public TVControllerPS()
+		{
+			DeviceName = "LocKey#97";
+			TweakDBRecord = new() { Value = 46674876326 };
+			TweakDBDescriptionRecord = new() { Value = 96486506199 };
+			TvSetup = new() { Channels = new(), MuteInterface = true };
+			DefaultGlitchVideoPath = new();
+			BroadcastGlitchVideoPath = new();
+			BackupCustomChannels = new();
 		}
 	}
 }

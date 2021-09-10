@@ -5,29 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animLookAtPreset_EyesHeadWithoutSuppress : animLookAtPreset
 	{
-		private CFloat _headMobility;
-		private CFloat _softLimitAngle;
-
 		[Ordinal(0)] 
 		[RED("headMobility")] 
 		public CFloat HeadMobility
 		{
-			get => GetProperty(ref _headMobility);
-			set => SetProperty(ref _headMobility, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("softLimitAngle")] 
 		public CFloat SoftLimitAngle
 		{
-			get => GetProperty(ref _softLimitAngle);
-			set => SetProperty(ref _softLimitAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public animLookAtPreset_EyesHeadWithoutSuppress()
 		{
-			_headMobility = 0.950000F;
-			_softLimitAngle = 360.000000F;
+			HeadMobility = 0.950000F;
+			SoftLimitAngle = 360.000000F;
 		}
 	}
 }

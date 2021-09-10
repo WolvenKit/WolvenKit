@@ -5,50 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SInteractionAreaOperationData : RedBaseClass
 	{
-		private CBool _isActivatorPlayer;
-		private CBool _isActivatorNPC;
-		private CName _areaTag;
-		private CEnum<gameinteractionsEInteractionEventType> _operationType;
-		private SBaseDeviceOperationData _operation;
-
 		[Ordinal(0)] 
 		[RED("isActivatorPlayer")] 
 		public CBool IsActivatorPlayer
 		{
-			get => GetProperty(ref _isActivatorPlayer);
-			set => SetProperty(ref _isActivatorPlayer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isActivatorNPC")] 
 		public CBool IsActivatorNPC
 		{
-			get => GetProperty(ref _isActivatorNPC);
-			set => SetProperty(ref _isActivatorNPC, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("areaTag")] 
 		public CName AreaTag
 		{
-			get => GetProperty(ref _areaTag);
-			set => SetProperty(ref _areaTag, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("operationType")] 
 		public CEnum<gameinteractionsEInteractionEventType> OperationType
 		{
-			get => GetProperty(ref _operationType);
-			set => SetProperty(ref _operationType, value);
+			get => GetPropertyValue<CEnum<gameinteractionsEInteractionEventType>>();
+			set => SetPropertyValue<CEnum<gameinteractionsEInteractionEventType>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("operation")] 
 		public SBaseDeviceOperationData Operation
 		{
-			get => GetProperty(ref _operation);
-			set => SetProperty(ref _operation, value);
+			get => GetPropertyValue<SBaseDeviceOperationData>();
+			set => SetPropertyValue<SBaseDeviceOperationData>(value);
+		}
+
+		public SInteractionAreaOperationData()
+		{
+			Operation = new() { IsEnabled = true, TransformAnimations = new(), VFXs = new(), SFXs = new(), Facts = new(), Components = new(), Stims = new(), StatusEffects = new(), Damages = new(), Items = new(), Teleport = new(), PlayerWorkspot = new(), ToggleOperations = new(), DelayID = new() };
 		}
 	}
 }

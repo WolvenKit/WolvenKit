@@ -5,50 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SecuritySystemMorphData : RedBaseClass
 	{
-		private CHandle<State> _state;
-		private CHandle<Reprimand> _reprimandData;
-		private CHandle<Blacklist> _blacklist;
-		private CHandle<ProtectedEntities> _protectedEntities;
-		private CHandle<EntitiesAtGate> _entitiesAtGate;
-
 		[Ordinal(0)] 
 		[RED("state")] 
 		public CHandle<State> State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<CHandle<State>>();
+			set => SetPropertyValue<CHandle<State>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("reprimandData")] 
 		public CHandle<Reprimand> ReprimandData
 		{
-			get => GetProperty(ref _reprimandData);
-			set => SetProperty(ref _reprimandData, value);
+			get => GetPropertyValue<CHandle<Reprimand>>();
+			set => SetPropertyValue<CHandle<Reprimand>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("blacklist")] 
 		public CHandle<Blacklist> Blacklist
 		{
-			get => GetProperty(ref _blacklist);
-			set => SetProperty(ref _blacklist, value);
+			get => GetPropertyValue<CHandle<Blacklist>>();
+			set => SetPropertyValue<CHandle<Blacklist>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("protectedEntities")] 
 		public CHandle<ProtectedEntities> ProtectedEntities
 		{
-			get => GetProperty(ref _protectedEntities);
-			set => SetProperty(ref _protectedEntities, value);
+			get => GetPropertyValue<CHandle<ProtectedEntities>>();
+			set => SetPropertyValue<CHandle<ProtectedEntities>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("entitiesAtGate")] 
 		public CHandle<EntitiesAtGate> EntitiesAtGate
 		{
-			get => GetProperty(ref _entitiesAtGate);
-			set => SetProperty(ref _entitiesAtGate, value);
+			get => GetPropertyValue<CHandle<EntitiesAtGate>>();
+			set => SetPropertyValue<CHandle<EntitiesAtGate>>(value);
 		}
 	}
 }

@@ -5,208 +5,197 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class QuickhacksListItemController : inkListItemController
 	{
-		private CFloat _expandAnimationDuration;
-		private inkImageWidgetReference _icon;
-		private inkTextWidgetReference _description;
-		private inkTextWidgetReference _memoryValue;
-		private inkCompoundWidgetReference _memoryCells;
-		private inkWidgetReference _actionStateRoot;
-		private inkTextWidgetReference _actionStateText;
-		private inkWidgetReference _cooldownIcon;
-		private inkTextWidgetReference _cooldownValue;
-		private inkWidgetReference _descriptionSize;
-		private inkWidgetReference _costReductionArrow;
-		private CFloat _curveRadius;
-		private CHandle<inkanimProxy> _selectedLoop;
-		private CName _currentAnimationName;
-		private CHandle<inkanimProxy> _choiceAccepted;
-		private CHandle<inkanimController> _resizeAnim;
-		private CWeakHandle<inkWidget> _root;
-		private CHandle<QuickhackData> _data;
-		private CBool _isSelected;
-		private CBool _expanded;
-		private Vector2 _cachedDescriptionSize;
-		private inkMargin _defaultMargin;
-
 		[Ordinal(16)] 
 		[RED("expandAnimationDuration")] 
 		public CFloat ExpandAnimationDuration
 		{
-			get => GetProperty(ref _expandAnimationDuration);
-			set => SetProperty(ref _expandAnimationDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("icon")] 
 		public inkImageWidgetReference Icon
 		{
-			get => GetProperty(ref _icon);
-			set => SetProperty(ref _icon, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("description")] 
 		public inkTextWidgetReference Description
 		{
-			get => GetProperty(ref _description);
-			set => SetProperty(ref _description, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("memoryValue")] 
 		public inkTextWidgetReference MemoryValue
 		{
-			get => GetProperty(ref _memoryValue);
-			set => SetProperty(ref _memoryValue, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("memoryCells")] 
 		public inkCompoundWidgetReference MemoryCells
 		{
-			get => GetProperty(ref _memoryCells);
-			set => SetProperty(ref _memoryCells, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("actionStateRoot")] 
 		public inkWidgetReference ActionStateRoot
 		{
-			get => GetProperty(ref _actionStateRoot);
-			set => SetProperty(ref _actionStateRoot, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("actionStateText")] 
 		public inkTextWidgetReference ActionStateText
 		{
-			get => GetProperty(ref _actionStateText);
-			set => SetProperty(ref _actionStateText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("cooldownIcon")] 
 		public inkWidgetReference CooldownIcon
 		{
-			get => GetProperty(ref _cooldownIcon);
-			set => SetProperty(ref _cooldownIcon, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("cooldownValue")] 
 		public inkTextWidgetReference CooldownValue
 		{
-			get => GetProperty(ref _cooldownValue);
-			set => SetProperty(ref _cooldownValue, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("descriptionSize")] 
 		public inkWidgetReference DescriptionSize
 		{
-			get => GetProperty(ref _descriptionSize);
-			set => SetProperty(ref _descriptionSize, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("costReductionArrow")] 
 		public inkWidgetReference CostReductionArrow
 		{
-			get => GetProperty(ref _costReductionArrow);
-			set => SetProperty(ref _costReductionArrow, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("curveRadius")] 
 		public CFloat CurveRadius
 		{
-			get => GetProperty(ref _curveRadius);
-			set => SetProperty(ref _curveRadius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("selectedLoop")] 
 		public CHandle<inkanimProxy> SelectedLoop
 		{
-			get => GetProperty(ref _selectedLoop);
-			set => SetProperty(ref _selectedLoop, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("currentAnimationName")] 
 		public CName CurrentAnimationName
 		{
-			get => GetProperty(ref _currentAnimationName);
-			set => SetProperty(ref _currentAnimationName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("choiceAccepted")] 
 		public CHandle<inkanimProxy> ChoiceAccepted
 		{
-			get => GetProperty(ref _choiceAccepted);
-			set => SetProperty(ref _choiceAccepted, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("resizeAnim")] 
 		public CHandle<inkanimController> ResizeAnim
 		{
-			get => GetProperty(ref _resizeAnim);
-			set => SetProperty(ref _resizeAnim, value);
+			get => GetPropertyValue<CHandle<inkanimController>>();
+			set => SetPropertyValue<CHandle<inkanimController>>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("root")] 
 		public CWeakHandle<inkWidget> Root
 		{
-			get => GetProperty(ref _root);
-			set => SetProperty(ref _root, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("data")] 
 		public CHandle<QuickhackData> Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<CHandle<QuickhackData>>();
+			set => SetPropertyValue<CHandle<QuickhackData>>(value);
 		}
 
 		[Ordinal(34)] 
 		[RED("isSelected")] 
 		public CBool IsSelected
 		{
-			get => GetProperty(ref _isSelected);
-			set => SetProperty(ref _isSelected, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(35)] 
 		[RED("expanded")] 
 		public CBool Expanded
 		{
-			get => GetProperty(ref _expanded);
-			set => SetProperty(ref _expanded, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(36)] 
 		[RED("cachedDescriptionSize")] 
 		public Vector2 CachedDescriptionSize
 		{
-			get => GetProperty(ref _cachedDescriptionSize);
-			set => SetProperty(ref _cachedDescriptionSize, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(37)] 
 		[RED("defaultMargin")] 
 		public inkMargin DefaultMargin
 		{
-			get => GetProperty(ref _defaultMargin);
-			set => SetProperty(ref _defaultMargin, value);
+			get => GetPropertyValue<inkMargin>();
+			set => SetPropertyValue<inkMargin>(value);
 		}
 
 		public QuickhacksListItemController()
 		{
-			_expandAnimationDuration = 0.200000F;
+			ExpandAnimationDuration = 0.200000F;
+			Icon = new();
+			Description = new();
+			MemoryValue = new();
+			MemoryCells = new();
+			ActionStateRoot = new();
+			ActionStateText = new();
+			CooldownIcon = new();
+			CooldownValue = new();
+			DescriptionSize = new();
+			CostReductionArrow = new();
+			CachedDescriptionSize = new();
+			DefaultMargin = new();
 		}
 	}
 }

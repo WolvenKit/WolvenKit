@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DeviceLinkEstablished : redEvent
 	{
-		private CWeakHandle<DeviceLinkComponentPS> _deviceLinkPS;
-
 		[Ordinal(0)] 
 		[RED("deviceLinkPS")] 
 		public CWeakHandle<DeviceLinkComponentPS> DeviceLinkPS
 		{
-			get => GetProperty(ref _deviceLinkPS);
-			set => SetProperty(ref _deviceLinkPS, value);
+			get => GetPropertyValue<CWeakHandle<DeviceLinkComponentPS>>();
+			set => SetPropertyValue<CWeakHandle<DeviceLinkComponentPS>>(value);
 		}
 	}
 }

@@ -5,131 +5,127 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkSettingsSelectorController : inkWidgetLogicController
 	{
-		private inkTextWidgetReference _labelText;
-		private inkTextWidgetReference _modifiedFlag;
-		private inkWidgetReference _raycaster;
-		private inkWidgetReference _optionSwitchHint;
-		private inkWidgetReference _hoverGeneralHighlight;
-		private inkWidgetReference _container;
-		private CWeakHandle<userSettingsVar> _settingsEntry;
-		private CArray<CWeakHandle<inkWidget>> _hoveredChildren;
-		private CBool _isPreGame;
-		private CName _varGroupPath;
-		private CName _varName;
-		private CName _additionalText;
-		private CHandle<inkanimProxy> _hoverInAnim;
-		private CHandle<inkanimProxy> _hoverOutAnim;
-
 		[Ordinal(1)] 
 		[RED("LabelText")] 
 		public inkTextWidgetReference LabelText
 		{
-			get => GetProperty(ref _labelText);
-			set => SetProperty(ref _labelText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ModifiedFlag")] 
 		public inkTextWidgetReference ModifiedFlag
 		{
-			get => GetProperty(ref _modifiedFlag);
-			set => SetProperty(ref _modifiedFlag, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("Raycaster")] 
 		public inkWidgetReference Raycaster
 		{
-			get => GetProperty(ref _raycaster);
-			set => SetProperty(ref _raycaster, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("optionSwitchHint")] 
 		public inkWidgetReference OptionSwitchHint
 		{
-			get => GetProperty(ref _optionSwitchHint);
-			set => SetProperty(ref _optionSwitchHint, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("hoverGeneralHighlight")] 
 		public inkWidgetReference HoverGeneralHighlight
 		{
-			get => GetProperty(ref _hoverGeneralHighlight);
-			set => SetProperty(ref _hoverGeneralHighlight, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("container")] 
 		public inkWidgetReference Container
 		{
-			get => GetProperty(ref _container);
-			set => SetProperty(ref _container, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("SettingsEntry")] 
 		public CWeakHandle<userSettingsVar> SettingsEntry
 		{
-			get => GetProperty(ref _settingsEntry);
-			set => SetProperty(ref _settingsEntry, value);
+			get => GetPropertyValue<CWeakHandle<userSettingsVar>>();
+			set => SetPropertyValue<CWeakHandle<userSettingsVar>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("hoveredChildren")] 
 		public CArray<CWeakHandle<inkWidget>> HoveredChildren
 		{
-			get => GetProperty(ref _hoveredChildren);
-			set => SetProperty(ref _hoveredChildren, value);
+			get => GetPropertyValue<CArray<CWeakHandle<inkWidget>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<inkWidget>>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("IsPreGame")] 
 		public CBool IsPreGame
 		{
-			get => GetProperty(ref _isPreGame);
-			set => SetProperty(ref _isPreGame, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("varGroupPath")] 
 		public CName VarGroupPath
 		{
-			get => GetProperty(ref _varGroupPath);
-			set => SetProperty(ref _varGroupPath, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("varName")] 
 		public CName VarName
 		{
-			get => GetProperty(ref _varName);
-			set => SetProperty(ref _varName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("additionalText")] 
 		public CName AdditionalText
 		{
-			get => GetProperty(ref _additionalText);
-			set => SetProperty(ref _additionalText, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("hoverInAnim")] 
 		public CHandle<inkanimProxy> HoverInAnim
 		{
-			get => GetProperty(ref _hoverInAnim);
-			set => SetProperty(ref _hoverInAnim, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("hoverOutAnim")] 
 		public CHandle<inkanimProxy> HoverOutAnim
 		{
-			get => GetProperty(ref _hoverOutAnim);
-			set => SetProperty(ref _hoverOutAnim, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		public inkSettingsSelectorController()
+		{
+			LabelText = new();
+			ModifiedFlag = new();
+			Raycaster = new();
+			OptionSwitchHint = new();
+			HoverGeneralHighlight = new();
+			Container = new();
+			HoveredChildren = new();
 		}
 	}
 }

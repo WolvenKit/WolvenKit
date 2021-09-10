@@ -5,176 +5,171 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class rendRenderMeshBlobHeader : RedBaseClass
 	{
-		private CUInt32 _version;
-		private CUInt32 _dataProcessing;
-		private CArray<Vector4> _bonePositions;
-		private CArray<CFloat> _renderLODs;
-		private CArray<CUInt8> _renderChunks;
-		private CArray<rendChunk> _renderChunkInfos;
-		private CArray<CUInt8> _speedTreeWind;
-		private CArray<CUInt8> _customData;
-		private CUInt32 _customDataElemStride;
-		private CArray<CUInt8> _topologyData;
-		private CUInt32 _topologyDataStride;
-		private CArray<CUInt8> _topologyMetadata;
-		private CUInt32 _topologyMetadataStride;
-		private CArray<rendTopologyData> _topology;
-		private Vector4 _quantizationScale;
-		private Vector4 _quantizationOffset;
-		private CUInt32 _vertexBufferSize;
-		private CUInt32 _indexBufferSize;
-		private CUInt32 _indexBufferOffset;
-
 		[Ordinal(0)] 
 		[RED("version")] 
 		public CUInt32 Version
 		{
-			get => GetProperty(ref _version);
-			set => SetProperty(ref _version, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("dataProcessing")] 
 		public CUInt32 DataProcessing
 		{
-			get => GetProperty(ref _dataProcessing);
-			set => SetProperty(ref _dataProcessing, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("bonePositions")] 
 		public CArray<Vector4> BonePositions
 		{
-			get => GetProperty(ref _bonePositions);
-			set => SetProperty(ref _bonePositions, value);
+			get => GetPropertyValue<CArray<Vector4>>();
+			set => SetPropertyValue<CArray<Vector4>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("renderLODs")] 
 		public CArray<CFloat> RenderLODs
 		{
-			get => GetProperty(ref _renderLODs);
-			set => SetProperty(ref _renderLODs, value);
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("renderChunks")] 
 		public CArray<CUInt8> RenderChunks
 		{
-			get => GetProperty(ref _renderChunks);
-			set => SetProperty(ref _renderChunks, value);
+			get => GetPropertyValue<CArray<CUInt8>>();
+			set => SetPropertyValue<CArray<CUInt8>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("renderChunkInfos")] 
 		public CArray<rendChunk> RenderChunkInfos
 		{
-			get => GetProperty(ref _renderChunkInfos);
-			set => SetProperty(ref _renderChunkInfos, value);
+			get => GetPropertyValue<CArray<rendChunk>>();
+			set => SetPropertyValue<CArray<rendChunk>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("speedTreeWind")] 
 		public CArray<CUInt8> SpeedTreeWind
 		{
-			get => GetProperty(ref _speedTreeWind);
-			set => SetProperty(ref _speedTreeWind, value);
+			get => GetPropertyValue<CArray<CUInt8>>();
+			set => SetPropertyValue<CArray<CUInt8>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("customData")] 
 		public CArray<CUInt8> CustomData
 		{
-			get => GetProperty(ref _customData);
-			set => SetProperty(ref _customData, value);
+			get => GetPropertyValue<CArray<CUInt8>>();
+			set => SetPropertyValue<CArray<CUInt8>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("customDataElemStride")] 
 		public CUInt32 CustomDataElemStride
 		{
-			get => GetProperty(ref _customDataElemStride);
-			set => SetProperty(ref _customDataElemStride, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("topologyData")] 
 		public CArray<CUInt8> TopologyData
 		{
-			get => GetProperty(ref _topologyData);
-			set => SetProperty(ref _topologyData, value);
+			get => GetPropertyValue<CArray<CUInt8>>();
+			set => SetPropertyValue<CArray<CUInt8>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("topologyDataStride")] 
 		public CUInt32 TopologyDataStride
 		{
-			get => GetProperty(ref _topologyDataStride);
-			set => SetProperty(ref _topologyDataStride, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("topologyMetadata")] 
 		public CArray<CUInt8> TopologyMetadata
 		{
-			get => GetProperty(ref _topologyMetadata);
-			set => SetProperty(ref _topologyMetadata, value);
+			get => GetPropertyValue<CArray<CUInt8>>();
+			set => SetPropertyValue<CArray<CUInt8>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("topologyMetadataStride")] 
 		public CUInt32 TopologyMetadataStride
 		{
-			get => GetProperty(ref _topologyMetadataStride);
-			set => SetProperty(ref _topologyMetadataStride, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("topology")] 
 		public CArray<rendTopologyData> Topology
 		{
-			get => GetProperty(ref _topology);
-			set => SetProperty(ref _topology, value);
+			get => GetPropertyValue<CArray<rendTopologyData>>();
+			set => SetPropertyValue<CArray<rendTopologyData>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("quantizationScale")] 
 		public Vector4 QuantizationScale
 		{
-			get => GetProperty(ref _quantizationScale);
-			set => SetProperty(ref _quantizationScale, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("quantizationOffset")] 
 		public Vector4 QuantizationOffset
 		{
-			get => GetProperty(ref _quantizationOffset);
-			set => SetProperty(ref _quantizationOffset, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("vertexBufferSize")] 
 		public CUInt32 VertexBufferSize
 		{
-			get => GetProperty(ref _vertexBufferSize);
-			set => SetProperty(ref _vertexBufferSize, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("indexBufferSize")] 
 		public CUInt32 IndexBufferSize
 		{
-			get => GetProperty(ref _indexBufferSize);
-			set => SetProperty(ref _indexBufferSize, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("indexBufferOffset")] 
 		public CUInt32 IndexBufferOffset
 		{
-			get => GetProperty(ref _indexBufferOffset);
-			set => SetProperty(ref _indexBufferOffset, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		public rendRenderMeshBlobHeader()
+		{
+			BonePositions = new();
+			RenderLODs = new();
+			RenderChunks = new();
+			RenderChunkInfos = new();
+			SpeedTreeWind = new();
+			CustomData = new();
+			TopologyData = new();
+			TopologyMetadata = new();
+			Topology = new();
+			QuantizationScale = new();
+			QuantizationOffset = new();
 		}
 	}
 }

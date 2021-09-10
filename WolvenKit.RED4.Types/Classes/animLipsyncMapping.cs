@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animLipsyncMapping : CResource
 	{
-		private CName _languageCodeName;
-		private CArray<CUInt64> _scenePaths;
-		private CArray<animLipsyncMappingSceneEntry> _sceneEntries;
-
 		[Ordinal(1)] 
 		[RED("languageCodeName")] 
 		public CName LanguageCodeName
 		{
-			get => GetProperty(ref _languageCodeName);
-			set => SetProperty(ref _languageCodeName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("scenePaths")] 
 		public CArray<CUInt64> ScenePaths
 		{
-			get => GetProperty(ref _scenePaths);
-			set => SetProperty(ref _scenePaths, value);
+			get => GetPropertyValue<CArray<CUInt64>>();
+			set => SetPropertyValue<CArray<CUInt64>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("sceneEntries")] 
 		public CArray<animLipsyncMappingSceneEntry> SceneEntries
 		{
-			get => GetProperty(ref _sceneEntries);
-			set => SetProperty(ref _sceneEntries, value);
+			get => GetPropertyValue<CArray<animLipsyncMappingSceneEntry>>();
+			set => SetPropertyValue<CArray<animLipsyncMappingSceneEntry>>(value);
+		}
+
+		public animLipsyncMapping()
+		{
+			ScenePaths = new();
+			SceneEntries = new();
 		}
 	}
 }

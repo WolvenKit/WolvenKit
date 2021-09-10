@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiPhoneWaveformData : IScriptable
 	{
-		private CArray<Vector4> _points;
-
 		[Ordinal(0)] 
 		[RED("points")] 
 		public CArray<Vector4> Points
 		{
-			get => GetProperty(ref _points);
-			set => SetProperty(ref _points, value);
+			get => GetPropertyValue<CArray<Vector4>>();
+			set => SetPropertyValue<CArray<Vector4>>(value);
+		}
+
+		public gameuiPhoneWaveformData()
+		{
+			Points = new();
 		}
 	}
 }

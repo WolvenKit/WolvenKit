@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AITrafficWorkspotDefinition : worldTrafficSpotDefinition
 	{
-		private CResourceReference<workWorkspotResource> _workspotResource;
-
 		[Ordinal(2)] 
 		[RED("workspotResource")] 
 		public CResourceReference<workWorkspotResource> WorkspotResource
 		{
-			get => GetProperty(ref _workspotResource);
-			set => SetProperty(ref _workspotResource, value);
+			get => GetPropertyValue<CResourceReference<workWorkspotResource>>();
+			set => SetPropertyValue<CResourceReference<workWorkspotResource>>(value);
+		}
+
+		public AITrafficWorkspotDefinition()
+		{
+			Direction = Enums.worldTrafficSpotDirection.Both;
 		}
 	}
 }

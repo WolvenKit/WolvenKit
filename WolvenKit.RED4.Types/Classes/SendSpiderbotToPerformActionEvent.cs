@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SendSpiderbotToPerformActionEvent : redEvent
 	{
-		private CWeakHandle<gameObject> _executor;
-
 		[Ordinal(0)] 
 		[RED("executor")] 
 		public CWeakHandle<gameObject> Executor
 		{
-			get => GetProperty(ref _executor);
-			set => SetProperty(ref _executor, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 	}
 }

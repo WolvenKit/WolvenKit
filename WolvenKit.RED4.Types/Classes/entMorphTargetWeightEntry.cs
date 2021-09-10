@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entMorphTargetWeightEntry : RedBaseClass
 	{
-		private CName _targetName;
-		private CName _regionName;
-		private CFloat _weight;
-
 		[Ordinal(0)] 
 		[RED("targetName")] 
 		public CName TargetName
 		{
-			get => GetProperty(ref _targetName);
-			set => SetProperty(ref _targetName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("regionName")] 
 		public CName RegionName
 		{
-			get => GetProperty(ref _regionName);
-			set => SetProperty(ref _regionName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("weight")] 
 		public CFloat Weight
 		{
-			get => GetProperty(ref _weight);
-			set => SetProperty(ref _weight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

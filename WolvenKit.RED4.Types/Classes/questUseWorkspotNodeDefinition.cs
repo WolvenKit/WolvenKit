@@ -5,23 +5,27 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questUseWorkspotNodeDefinition : questAICommandNodeBase
 	{
-		private gameEntityReference _entityReference;
-		private CHandle<questUseWorkspotParamsV1> _paramsV1;
-
 		[Ordinal(2)] 
 		[RED("entityReference")] 
 		public gameEntityReference EntityReference
 		{
-			get => GetProperty(ref _entityReference);
-			set => SetProperty(ref _entityReference, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("paramsV1")] 
 		public CHandle<questUseWorkspotParamsV1> ParamsV1
 		{
-			get => GetProperty(ref _paramsV1);
-			set => SetProperty(ref _paramsV1, value);
+			get => GetPropertyValue<CHandle<questUseWorkspotParamsV1>>();
+			set => SetPropertyValue<CHandle<questUseWorkspotParamsV1>>(value);
+		}
+
+		public questUseWorkspotNodeDefinition()
+		{
+			Sockets = new();
+			Id = 65535;
+			EntityReference = new() { Names = new() };
 		}
 	}
 }

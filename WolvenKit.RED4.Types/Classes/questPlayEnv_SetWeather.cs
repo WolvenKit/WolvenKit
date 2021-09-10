@@ -5,55 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questPlayEnv_SetWeather : questIEnvironmentManagerNodeType
 	{
-		private CBool _reset;
-		private TweakDBID _weatherID;
-		private CFloat _blendTime;
-		private CUInt32 _priority;
-		private CName _source;
-
 		[Ordinal(0)] 
 		[RED("reset")] 
 		public CBool Reset
 		{
-			get => GetProperty(ref _reset);
-			set => SetProperty(ref _reset, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("weatherID")] 
 		public TweakDBID WeatherID
 		{
-			get => GetProperty(ref _weatherID);
-			set => SetProperty(ref _weatherID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("blendTime")] 
 		public CFloat BlendTime
 		{
-			get => GetProperty(ref _blendTime);
-			set => SetProperty(ref _blendTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("priority")] 
 		public CUInt32 Priority
 		{
-			get => GetProperty(ref _priority);
-			set => SetProperty(ref _priority, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("source")] 
 		public CName Source
 		{
-			get => GetProperty(ref _source);
-			set => SetProperty(ref _source, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public questPlayEnv_SetWeather()
 		{
-			_blendTime = 5.000000F;
+			BlendTime = 5.000000F;
 		}
 	}
 }

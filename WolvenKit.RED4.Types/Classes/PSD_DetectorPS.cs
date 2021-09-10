@@ -5,50 +5,50 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PSD_DetectorPS : gameDeviceComponentPS
 	{
-		private CInt32 _counter;
-		private CBool _toggle;
-		private entEntityID _lastEntityID;
-		private gamePersistentID _lastPersistentID;
-		private CName _name;
-
 		[Ordinal(13)] 
 		[RED("counter")] 
 		public CInt32 Counter
 		{
-			get => GetProperty(ref _counter);
-			set => SetProperty(ref _counter, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("toggle")] 
 		public CBool Toggle
 		{
-			get => GetProperty(ref _toggle);
-			set => SetProperty(ref _toggle, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("lastEntityID")] 
 		public entEntityID LastEntityID
 		{
-			get => GetProperty(ref _lastEntityID);
-			set => SetProperty(ref _lastEntityID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("lastPersistentID")] 
 		public gamePersistentID LastPersistentID
 		{
-			get => GetProperty(ref _lastPersistentID);
-			set => SetProperty(ref _lastPersistentID, value);
+			get => GetPropertyValue<gamePersistentID>();
+			set => SetPropertyValue<gamePersistentID>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get => GetProperty(ref _name);
-			set => SetProperty(ref _name, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public PSD_DetectorPS()
+		{
+			LastEntityID = new();
+			LastPersistentID = new();
 		}
 	}
 }

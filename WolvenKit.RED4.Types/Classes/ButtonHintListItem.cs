@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ButtonHintListItem : inkWidgetLogicController
 	{
-		private inkWidgetReference _inputDisplay;
-		private inkTextWidgetReference _label;
-		private CWeakHandle<inkInputDisplayController> _buttonHint;
-		private CName _actionName;
-
 		[Ordinal(1)] 
 		[RED("inputDisplay")] 
 		public inkWidgetReference InputDisplay
 		{
-			get => GetProperty(ref _inputDisplay);
-			set => SetProperty(ref _inputDisplay, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("label")] 
 		public inkTextWidgetReference Label
 		{
-			get => GetProperty(ref _label);
-			set => SetProperty(ref _label, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("buttonHint")] 
 		public CWeakHandle<inkInputDisplayController> ButtonHint
 		{
-			get => GetProperty(ref _buttonHint);
-			set => SetProperty(ref _buttonHint, value);
+			get => GetPropertyValue<CWeakHandle<inkInputDisplayController>>();
+			set => SetPropertyValue<CWeakHandle<inkInputDisplayController>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("actionName")] 
 		public CName ActionName
 		{
-			get => GetProperty(ref _actionName);
-			set => SetProperty(ref _actionName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public ButtonHintListItem()
+		{
+			InputDisplay = new();
+			Label = new();
 		}
 	}
 }

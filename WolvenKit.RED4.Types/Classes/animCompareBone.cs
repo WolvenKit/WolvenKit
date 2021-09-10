@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animCompareBone : RedBaseClass
 	{
-		private CName _boneName;
-		private Quaternion _boneRotationLs;
-
 		[Ordinal(0)] 
 		[RED("boneName")] 
 		public CName BoneName
 		{
-			get => GetProperty(ref _boneName);
-			set => SetProperty(ref _boneName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("boneRotationLs")] 
 		public Quaternion BoneRotationLs
 		{
-			get => GetProperty(ref _boneRotationLs);
-			set => SetProperty(ref _boneRotationLs, value);
+			get => GetPropertyValue<Quaternion>();
+			set => SetPropertyValue<Quaternion>(value);
+		}
+
+		public animCompareBone()
+		{
+			BoneRotationLs = new() { R = 1.000000F };
 		}
 	}
 }

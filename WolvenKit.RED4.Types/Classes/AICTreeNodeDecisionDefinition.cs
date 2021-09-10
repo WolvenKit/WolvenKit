@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AICTreeNodeDecisionDefinition : AICTreeNodeCompositeDefinition
 	{
-		private CHandle<LibTreeINodeDefinition> _child;
-		private CArray<CHandle<LibTreeINodeDefinition>> _expressions;
-		private AIInterruptionSignal _interruption;
-
 		[Ordinal(0)] 
 		[RED("child")] 
 		public CHandle<LibTreeINodeDefinition> Child
 		{
-			get => GetProperty(ref _child);
-			set => SetProperty(ref _child, value);
+			get => GetPropertyValue<CHandle<LibTreeINodeDefinition>>();
+			set => SetPropertyValue<CHandle<LibTreeINodeDefinition>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("expressions")] 
 		public CArray<CHandle<LibTreeINodeDefinition>> Expressions
 		{
-			get => GetProperty(ref _expressions);
-			set => SetProperty(ref _expressions, value);
+			get => GetPropertyValue<CArray<CHandle<LibTreeINodeDefinition>>>();
+			set => SetPropertyValue<CArray<CHandle<LibTreeINodeDefinition>>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("interruption")] 
 		public AIInterruptionSignal Interruption
 		{
-			get => GetProperty(ref _interruption);
-			set => SetProperty(ref _interruption, value);
+			get => GetPropertyValue<AIInterruptionSignal>();
+			set => SetPropertyValue<AIInterruptionSignal>(value);
+		}
+
+		public AICTreeNodeDecisionDefinition()
+		{
+			Expressions = new();
+			Interruption = new() { Importance = Enums.AIEInterruptionImportance.Rush };
 		}
 	}
 }

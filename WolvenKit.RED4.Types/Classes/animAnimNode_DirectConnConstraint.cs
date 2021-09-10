@@ -5,145 +5,134 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_DirectConnConstraint : animAnimNode_OnePoseInput
 	{
-		private CHandle<animIAnimNodeSourceChannel_QsTransform> _sourceTransform;
-		private CBool _isSourceTransformResaved;
-		private animTransformIndex _sourceTransformIndex;
-		private animTransformIndex _transformIndex;
-		private CBool _posX;
-		private CBool _posY;
-		private CBool _posZ;
-		private CBool _rotX;
-		private CBool _rotY;
-		private CBool _rotZ;
-		private CBool _scaleX;
-		private CBool _scaleY;
-		private CBool _scaleZ;
-		private CFloat _weight;
-		private animFloatLink _weightNode;
-
 		[Ordinal(12)] 
 		[RED("sourceTransform")] 
 		public CHandle<animIAnimNodeSourceChannel_QsTransform> SourceTransform
 		{
-			get => GetProperty(ref _sourceTransform);
-			set => SetProperty(ref _sourceTransform, value);
+			get => GetPropertyValue<CHandle<animIAnimNodeSourceChannel_QsTransform>>();
+			set => SetPropertyValue<CHandle<animIAnimNodeSourceChannel_QsTransform>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("isSourceTransformResaved")] 
 		public CBool IsSourceTransformResaved
 		{
-			get => GetProperty(ref _isSourceTransformResaved);
-			set => SetProperty(ref _isSourceTransformResaved, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("sourceTransformIndex")] 
 		public animTransformIndex SourceTransformIndex
 		{
-			get => GetProperty(ref _sourceTransformIndex);
-			set => SetProperty(ref _sourceTransformIndex, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("transformIndex")] 
 		public animTransformIndex TransformIndex
 		{
-			get => GetProperty(ref _transformIndex);
-			set => SetProperty(ref _transformIndex, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("posX")] 
 		public CBool PosX
 		{
-			get => GetProperty(ref _posX);
-			set => SetProperty(ref _posX, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("posY")] 
 		public CBool PosY
 		{
-			get => GetProperty(ref _posY);
-			set => SetProperty(ref _posY, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("posZ")] 
 		public CBool PosZ
 		{
-			get => GetProperty(ref _posZ);
-			set => SetProperty(ref _posZ, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("rotX")] 
 		public CBool RotX
 		{
-			get => GetProperty(ref _rotX);
-			set => SetProperty(ref _rotX, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("rotY")] 
 		public CBool RotY
 		{
-			get => GetProperty(ref _rotY);
-			set => SetProperty(ref _rotY, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("rotZ")] 
 		public CBool RotZ
 		{
-			get => GetProperty(ref _rotZ);
-			set => SetProperty(ref _rotZ, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("scaleX")] 
 		public CBool ScaleX
 		{
-			get => GetProperty(ref _scaleX);
-			set => SetProperty(ref _scaleX, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("scaleY")] 
 		public CBool ScaleY
 		{
-			get => GetProperty(ref _scaleY);
-			set => SetProperty(ref _scaleY, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("scaleZ")] 
 		public CBool ScaleZ
 		{
-			get => GetProperty(ref _scaleZ);
-			set => SetProperty(ref _scaleZ, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("weight")] 
 		public CFloat Weight
 		{
-			get => GetProperty(ref _weight);
-			set => SetProperty(ref _weight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("weightNode")] 
 		public animFloatLink WeightNode
 		{
-			get => GetProperty(ref _weightNode);
-			set => SetProperty(ref _weightNode, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		public animAnimNode_DirectConnConstraint()
 		{
-			_weight = 1.000000F;
+			Id = 4294967295;
+			InputLink = new();
+			SourceTransformIndex = new();
+			TransformIndex = new();
+			Weight = 1.000000F;
+			WeightNode = new();
 		}
 	}
 }

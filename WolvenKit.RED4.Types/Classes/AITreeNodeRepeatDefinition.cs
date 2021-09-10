@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AITreeNodeRepeatDefinition : AICTreeNodeDecoratorDefinition
 	{
-		private LibTreeDefInt32 _limit;
-
 		[Ordinal(1)] 
 		[RED("limit")] 
 		public LibTreeDefInt32 Limit
 		{
-			get => GetProperty(ref _limit);
-			set => SetProperty(ref _limit, value);
+			get => GetPropertyValue<LibTreeDefInt32>();
+			set => SetPropertyValue<LibTreeDefInt32>(value);
+		}
+
+		public AITreeNodeRepeatDefinition()
+		{
+			Limit = new() { VariableId = 65535 };
 		}
 	}
 }

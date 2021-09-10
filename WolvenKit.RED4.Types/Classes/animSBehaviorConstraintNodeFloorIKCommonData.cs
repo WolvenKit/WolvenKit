@@ -5,58 +5,53 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animSBehaviorConstraintNodeFloorIKCommonData : RedBaseClass
 	{
-		private animTransformIndex _gravityCentreBone;
-		private CFloat _rootRotationBlendTime;
-		private CFloat _verticalVelocityOffsetUpBlendTime;
-		private CFloat _verticalVelocityOffsetDownBlendTime;
-		private CFloat _slidingOnSlopeBlendTime;
-
 		[Ordinal(0)] 
 		[RED("gravityCentreBone")] 
 		public animTransformIndex GravityCentreBone
 		{
-			get => GetProperty(ref _gravityCentreBone);
-			set => SetProperty(ref _gravityCentreBone, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("rootRotationBlendTime")] 
 		public CFloat RootRotationBlendTime
 		{
-			get => GetProperty(ref _rootRotationBlendTime);
-			set => SetProperty(ref _rootRotationBlendTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("verticalVelocityOffsetUpBlendTime")] 
 		public CFloat VerticalVelocityOffsetUpBlendTime
 		{
-			get => GetProperty(ref _verticalVelocityOffsetUpBlendTime);
-			set => SetProperty(ref _verticalVelocityOffsetUpBlendTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("verticalVelocityOffsetDownBlendTime")] 
 		public CFloat VerticalVelocityOffsetDownBlendTime
 		{
-			get => GetProperty(ref _verticalVelocityOffsetDownBlendTime);
-			set => SetProperty(ref _verticalVelocityOffsetDownBlendTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("slidingOnSlopeBlendTime")] 
 		public CFloat SlidingOnSlopeBlendTime
 		{
-			get => GetProperty(ref _slidingOnSlopeBlendTime);
-			set => SetProperty(ref _slidingOnSlopeBlendTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public animSBehaviorConstraintNodeFloorIKCommonData()
 		{
-			_rootRotationBlendTime = 0.200000F;
-			_verticalVelocityOffsetUpBlendTime = 0.080000F;
-			_verticalVelocityOffsetDownBlendTime = 0.030000F;
-			_slidingOnSlopeBlendTime = 0.200000F;
+			GravityCentreBone = new();
+			RootRotationBlendTime = 0.200000F;
+			VerticalVelocityOffsetUpBlendTime = 0.080000F;
+			VerticalVelocityOffsetDownBlendTime = 0.030000F;
+			SlidingOnSlopeBlendTime = 0.200000F;
 		}
 	}
 }

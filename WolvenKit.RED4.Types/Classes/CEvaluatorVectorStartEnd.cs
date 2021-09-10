@@ -5,23 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CEvaluatorVectorStartEnd : IEvaluatorVector
 	{
-		private Vector4 _start;
-		private Vector4 _end;
-
 		[Ordinal(2)] 
 		[RED("start")] 
 		public Vector4 Start
 		{
-			get => GetProperty(ref _start);
-			set => SetProperty(ref _start, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("end")] 
 		public Vector4 End
 		{
-			get => GetProperty(ref _end);
-			set => SetProperty(ref _end, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
+		}
+
+		public CEvaluatorVectorStartEnd()
+		{
+			FreeAxes = Enums.EFreeVectorAxes.FVA_Three;
+			Spill = true;
+			Start = new();
+			End = new();
 		}
 	}
 }

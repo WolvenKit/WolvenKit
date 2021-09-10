@@ -5,102 +5,91 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_LocomotionMachine : animAnimNode_StateMachine
 	{
-		private CBool _usePlanner;
-		private CName _group;
-		private CName _logic;
-		private CName _requestId;
-		private CName _distance;
-		private CName _duration;
-		private CName _motion;
-		private CName _state;
-		private CFloat _transitionTime;
-		private CUInt32 _numVariants;
-
 		[Ordinal(19)] 
 		[RED("usePlanner")] 
 		public CBool UsePlanner
 		{
-			get => GetProperty(ref _usePlanner);
-			set => SetProperty(ref _usePlanner, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("group")] 
 		public CName Group
 		{
-			get => GetProperty(ref _group);
-			set => SetProperty(ref _group, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("logic")] 
 		public CName Logic
 		{
-			get => GetProperty(ref _logic);
-			set => SetProperty(ref _logic, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("requestId")] 
 		public CName RequestId
 		{
-			get => GetProperty(ref _requestId);
-			set => SetProperty(ref _requestId, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("distance")] 
 		public CName Distance
 		{
-			get => GetProperty(ref _distance);
-			set => SetProperty(ref _distance, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("duration")] 
 		public CName Duration
 		{
-			get => GetProperty(ref _duration);
-			set => SetProperty(ref _duration, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("motion")] 
 		public CName Motion
 		{
-			get => GetProperty(ref _motion);
-			set => SetProperty(ref _motion, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("state")] 
 		public CName State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("transitionTime")] 
 		public CFloat TransitionTime
 		{
-			get => GetProperty(ref _transitionTime);
-			set => SetProperty(ref _transitionTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("numVariants")] 
 		public CUInt32 NumVariants
 		{
-			get => GetProperty(ref _numVariants);
-			set => SetProperty(ref _numVariants, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		public animAnimNode_LocomotionMachine()
 		{
-			_usePlanner = true;
-			_transitionTime = 0.200000F;
-			_numVariants = 1;
+			UsePlanner = true;
+			TransitionTime = 0.200000F;
+			NumVariants = 1;
 		}
 	}
 }

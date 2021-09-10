@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiCharacterCustomizationPersonalLinkController : gameuiICharacterCustomizationComponent
 	{
-		private CName _simpleLinkGroup;
-
 		[Ordinal(3)] 
 		[RED("simpleLinkGroup")] 
 		public CName SimpleLinkGroup
 		{
-			get => GetProperty(ref _simpleLinkGroup);
-			set => SetProperty(ref _simpleLinkGroup, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public gameuiCharacterCustomizationPersonalLinkController()
+		{
+			Name = "Component";
 		}
 	}
 }

@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimVariableQuaternion : animAnimVariable
 	{
-		private CFloat _roll;
-		private CFloat _pitch;
-		private CFloat _yaw;
-		private Quaternion _default;
-
 		[Ordinal(2)] 
 		[RED("roll")] 
 		public CFloat Roll
 		{
-			get => GetProperty(ref _roll);
-			set => SetProperty(ref _roll, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("pitch")] 
 		public CFloat Pitch
 		{
-			get => GetProperty(ref _pitch);
-			set => SetProperty(ref _pitch, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("yaw")] 
 		public CFloat Yaw
 		{
-			get => GetProperty(ref _yaw);
-			set => SetProperty(ref _yaw, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("default")] 
 		public Quaternion Default
 		{
-			get => GetProperty(ref _default);
-			set => SetProperty(ref _default, value);
+			get => GetPropertyValue<Quaternion>();
+			set => SetPropertyValue<Quaternion>(value);
+		}
+
+		public animAnimVariableQuaternion()
+		{
+			Default = new() { R = 1.000000F };
 		}
 	}
 }

@@ -5,75 +5,68 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class Fan : BasicDistractionDevice
 	{
-		private CEnum<EAnimationType> _animationType;
-		private CBool _rotateClockwise;
-		private CBool _randomizeBladesSpeed;
-		private CFloat _maxRotationSpeed;
-		private CFloat _timeToMaxRotation;
-		private CHandle<AnimFeature_RotatingObject> _animFeature;
-		private CHandle<UpdateComponent> _updateComp;
-
 		[Ordinal(103)] 
 		[RED("animationType")] 
 		public CEnum<EAnimationType> AnimationType
 		{
-			get => GetProperty(ref _animationType);
-			set => SetProperty(ref _animationType, value);
+			get => GetPropertyValue<CEnum<EAnimationType>>();
+			set => SetPropertyValue<CEnum<EAnimationType>>(value);
 		}
 
 		[Ordinal(104)] 
 		[RED("rotateClockwise")] 
 		public CBool RotateClockwise
 		{
-			get => GetProperty(ref _rotateClockwise);
-			set => SetProperty(ref _rotateClockwise, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(105)] 
 		[RED("randomizeBladesSpeed")] 
 		public CBool RandomizeBladesSpeed
 		{
-			get => GetProperty(ref _randomizeBladesSpeed);
-			set => SetProperty(ref _randomizeBladesSpeed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(106)] 
 		[RED("maxRotationSpeed")] 
 		public CFloat MaxRotationSpeed
 		{
-			get => GetProperty(ref _maxRotationSpeed);
-			set => SetProperty(ref _maxRotationSpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(107)] 
 		[RED("timeToMaxRotation")] 
 		public CFloat TimeToMaxRotation
 		{
-			get => GetProperty(ref _timeToMaxRotation);
-			set => SetProperty(ref _timeToMaxRotation, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(108)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_RotatingObject> AnimFeature
 		{
-			get => GetProperty(ref _animFeature);
-			set => SetProperty(ref _animFeature, value);
+			get => GetPropertyValue<CHandle<AnimFeature_RotatingObject>>();
+			set => SetPropertyValue<CHandle<AnimFeature_RotatingObject>>(value);
 		}
 
 		[Ordinal(109)] 
 		[RED("updateComp")] 
 		public CHandle<UpdateComponent> UpdateComp
 		{
-			get => GetProperty(ref _updateComp);
-			set => SetProperty(ref _updateComp, value);
+			get => GetPropertyValue<CHandle<UpdateComponent>>();
+			set => SetPropertyValue<CHandle<UpdateComponent>>(value);
 		}
 
 		public Fan()
 		{
-			_rotateClockwise = true;
-			_maxRotationSpeed = 150.000000F;
-			_timeToMaxRotation = 3.000000F;
+			ControllerTypeName = "FanController";
+			RotateClockwise = true;
+			MaxRotationSpeed = 150.000000F;
+			TimeToMaxRotation = 3.000000F;
 		}
 	}
 }

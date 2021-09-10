@@ -5,39 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ShaftsAreaSettings : RedBaseClass
 	{
-		private CUInt32 _shaftsLevelIndex;
-		private CFloat _shaftsIntensity;
-		private CFloat _shaftsThresholdsScale;
-
 		[Ordinal(0)] 
 		[RED("shaftsLevelIndex")] 
 		public CUInt32 ShaftsLevelIndex
 		{
-			get => GetProperty(ref _shaftsLevelIndex);
-			set => SetProperty(ref _shaftsLevelIndex, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("shaftsIntensity")] 
 		public CFloat ShaftsIntensity
 		{
-			get => GetProperty(ref _shaftsIntensity);
-			set => SetProperty(ref _shaftsIntensity, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("shaftsThresholdsScale")] 
 		public CFloat ShaftsThresholdsScale
 		{
-			get => GetProperty(ref _shaftsThresholdsScale);
-			set => SetProperty(ref _shaftsThresholdsScale, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public ShaftsAreaSettings()
 		{
-			_shaftsLevelIndex = 1;
-			_shaftsIntensity = 1.000000F;
-			_shaftsThresholdsScale = 1.000000F;
+			ShaftsLevelIndex = 1;
+			ShaftsIntensity = 1.000000F;
+			ShaftsThresholdsScale = 1.000000F;
 		}
 	}
 }

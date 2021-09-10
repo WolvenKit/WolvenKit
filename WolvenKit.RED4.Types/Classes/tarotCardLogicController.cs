@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class tarotCardLogicController : inkWidgetLogicController
 	{
-		private inkImageWidgetReference _image;
-		private inkWidgetReference _highlight;
-		private TarotCardData _data;
-
 		[Ordinal(1)] 
 		[RED("image")] 
 		public inkImageWidgetReference Image
 		{
-			get => GetProperty(ref _image);
-			set => SetProperty(ref _image, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("highlight")] 
 		public inkWidgetReference Highlight
 		{
-			get => GetProperty(ref _highlight);
-			set => SetProperty(ref _highlight, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("data")] 
 		public TarotCardData Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<TarotCardData>();
+			set => SetPropertyValue<TarotCardData>(value);
+		}
+
+		public tarotCardLogicController()
+		{
+			Image = new();
+			Highlight = new();
+			Data = new();
 		}
 	}
 }

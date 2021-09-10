@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class meshMeshParamBakedDestructionData : meshMeshParameter
 	{
-		private CArray<meshRegionData> _regionData;
-		private CArray<DataBuffer> _indices;
-
 		[Ordinal(0)] 
 		[RED("regionData")] 
 		public CArray<meshRegionData> RegionData
 		{
-			get => GetProperty(ref _regionData);
-			set => SetProperty(ref _regionData, value);
+			get => GetPropertyValue<CArray<meshRegionData>>();
+			set => SetPropertyValue<CArray<meshRegionData>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("indices")] 
 		public CArray<DataBuffer> Indices
 		{
-			get => GetProperty(ref _indices);
-			set => SetProperty(ref _indices, value);
+			get => GetPropertyValue<CArray<DataBuffer>>();
+			set => SetPropertyValue<CArray<DataBuffer>>(value);
+		}
+
+		public meshMeshParamBakedDestructionData()
+		{
+			RegionData = new();
+			Indices = new();
 		}
 	}
 }

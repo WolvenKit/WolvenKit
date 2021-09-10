@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MessengerContactsVirtualNestedListController : VirtualNestedListController
 	{
-		private CWeakHandle<MessengerContactDataView> _currentDataView;
-
 		[Ordinal(14)] 
 		[RED("currentDataView")] 
 		public CWeakHandle<MessengerContactDataView> CurrentDataView
 		{
-			get => GetProperty(ref _currentDataView);
-			set => SetProperty(ref _currentDataView, value);
+			get => GetPropertyValue<CWeakHandle<MessengerContactDataView>>();
+			set => SetPropertyValue<CWeakHandle<MessengerContactDataView>>(value);
 		}
 	}
 }

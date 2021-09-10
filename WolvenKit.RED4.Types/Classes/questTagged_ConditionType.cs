@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questTagged_ConditionType : questIObjectConditionType
 	{
-		private gameEntityReference _objectRef;
-		private CBool _inverted;
-
 		[Ordinal(0)] 
 		[RED("objectRef")] 
 		public gameEntityReference ObjectRef
 		{
-			get => GetProperty(ref _objectRef);
-			set => SetProperty(ref _objectRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("inverted")] 
 		public CBool Inverted
 		{
-			get => GetProperty(ref _inverted);
-			set => SetProperty(ref _inverted, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public questTagged_ConditionType()
+		{
+			ObjectRef = new() { Names = new() };
 		}
 	}
 }

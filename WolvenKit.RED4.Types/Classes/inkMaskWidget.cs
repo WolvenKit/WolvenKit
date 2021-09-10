@@ -5,59 +5,57 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkMaskWidget : inkLeafWidget
 	{
-		private CResourceAsyncReference<inkTextureAtlas> _textureAtlas;
-		private CName _texturePart;
-		private CName _dynamicTextureMask;
-		private CEnum<inkMaskDataSource> _dataSource;
-		private CBool _invertMask;
-		private CFloat _maskTransparency;
-
 		[Ordinal(20)] 
 		[RED("textureAtlas")] 
 		public CResourceAsyncReference<inkTextureAtlas> TextureAtlas
 		{
-			get => GetProperty(ref _textureAtlas);
-			set => SetProperty(ref _textureAtlas, value);
+			get => GetPropertyValue<CResourceAsyncReference<inkTextureAtlas>>();
+			set => SetPropertyValue<CResourceAsyncReference<inkTextureAtlas>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("texturePart")] 
 		public CName TexturePart
 		{
-			get => GetProperty(ref _texturePart);
-			set => SetProperty(ref _texturePart, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("dynamicTextureMask")] 
 		public CName DynamicTextureMask
 		{
-			get => GetProperty(ref _dynamicTextureMask);
-			set => SetProperty(ref _dynamicTextureMask, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("dataSource")] 
 		public CEnum<inkMaskDataSource> DataSource
 		{
-			get => GetProperty(ref _dataSource);
-			set => SetProperty(ref _dataSource, value);
+			get => GetPropertyValue<CEnum<inkMaskDataSource>>();
+			set => SetPropertyValue<CEnum<inkMaskDataSource>>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("invertMask")] 
 		public CBool InvertMask
 		{
-			get => GetProperty(ref _invertMask);
-			set => SetProperty(ref _invertMask, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("maskTransparency")] 
 		public CFloat MaskTransparency
 		{
-			get => GetProperty(ref _maskTransparency);
-			set => SetProperty(ref _maskTransparency, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public inkMaskWidget()
+		{
+			Opacity = 0.010000F;
 		}
 	}
 }

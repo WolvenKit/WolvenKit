@@ -5,86 +5,81 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class BroadcastEvent : redEvent
 	{
-		private CEnum<EBroadcasteingType> _broadcastType;
-		private CBool _shouldOverride;
-		private CFloat _lifetime;
-		private CEnum<gamedataStimType> _stimType;
-		private senseStimInvestigateData _stimData;
-		private CFloat _radius;
-		private CBool _propagationChange;
-		private CWeakHandle<entEntity> _directTarget;
-		private CFloat _delay;
-
 		[Ordinal(0)] 
 		[RED("broadcastType")] 
 		public CEnum<EBroadcasteingType> BroadcastType
 		{
-			get => GetProperty(ref _broadcastType);
-			set => SetProperty(ref _broadcastType, value);
+			get => GetPropertyValue<CEnum<EBroadcasteingType>>();
+			set => SetPropertyValue<CEnum<EBroadcasteingType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("shouldOverride")] 
 		public CBool ShouldOverride
 		{
-			get => GetProperty(ref _shouldOverride);
-			set => SetProperty(ref _shouldOverride, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("lifetime")] 
 		public CFloat Lifetime
 		{
-			get => GetProperty(ref _lifetime);
-			set => SetProperty(ref _lifetime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("stimType")] 
 		public CEnum<gamedataStimType> StimType
 		{
-			get => GetProperty(ref _stimType);
-			set => SetProperty(ref _stimType, value);
+			get => GetPropertyValue<CEnum<gamedataStimType>>();
+			set => SetPropertyValue<CEnum<gamedataStimType>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("stimData")] 
 		public senseStimInvestigateData StimData
 		{
-			get => GetProperty(ref _stimData);
-			set => SetProperty(ref _stimData, value);
+			get => GetPropertyValue<senseStimInvestigateData>();
+			set => SetPropertyValue<senseStimInvestigateData>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get => GetProperty(ref _radius);
-			set => SetProperty(ref _radius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("propagationChange")] 
 		public CBool PropagationChange
 		{
-			get => GetProperty(ref _propagationChange);
-			set => SetProperty(ref _propagationChange, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("directTarget")] 
 		public CWeakHandle<entEntity> DirectTarget
 		{
-			get => GetProperty(ref _directTarget);
-			set => SetProperty(ref _directTarget, value);
+			get => GetPropertyValue<CWeakHandle<entEntity>>();
+			set => SetPropertyValue<CWeakHandle<entEntity>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("delay")] 
 		public CFloat Delay
 		{
-			get => GetProperty(ref _delay);
-			set => SetProperty(ref _delay, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public BroadcastEvent()
+		{
+			StimData = new() { DistrationPoint = new(), AttackInstigatorPosition = new(), InvestigationSpots = new() };
 		}
 	}
 }

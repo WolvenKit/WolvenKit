@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SkillTooltipData : BasePerksMenuTooltipData
 	{
-		private CEnum<gamedataProficiencyType> _proficiencyType;
-		private CHandle<gamedataAttribute_Record> _attributeRecord;
-		private CHandle<ProficiencyDisplayData> _skillData;
-
 		[Ordinal(1)] 
 		[RED("proficiencyType")] 
 		public CEnum<gamedataProficiencyType> ProficiencyType
 		{
-			get => GetProperty(ref _proficiencyType);
-			set => SetProperty(ref _proficiencyType, value);
+			get => GetPropertyValue<CEnum<gamedataProficiencyType>>();
+			set => SetPropertyValue<CEnum<gamedataProficiencyType>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("attributeRecord")] 
 		public CHandle<gamedataAttribute_Record> AttributeRecord
 		{
-			get => GetProperty(ref _attributeRecord);
-			set => SetProperty(ref _attributeRecord, value);
+			get => GetPropertyValue<CHandle<gamedataAttribute_Record>>();
+			set => SetPropertyValue<CHandle<gamedataAttribute_Record>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("skillData")] 
 		public CHandle<ProficiencyDisplayData> SkillData
 		{
-			get => GetProperty(ref _skillData);
-			set => SetProperty(ref _skillData, value);
+			get => GetPropertyValue<CHandle<ProficiencyDisplayData>>();
+			set => SetPropertyValue<CHandle<ProficiencyDisplayData>>(value);
 		}
 	}
 }

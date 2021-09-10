@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questScene_NodeType : questSpawnManagerNodeType
 	{
-		private gameEntityReference _entityReference;
-
 		[Ordinal(1)] 
 		[RED("entityReference")] 
 		public gameEntityReference EntityReference
 		{
-			get => GetProperty(ref _entityReference);
-			set => SetProperty(ref _entityReference, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
+		}
+
+		public questScene_NodeType()
+		{
+			EntityReference = new() { Names = new() };
 		}
 	}
 }

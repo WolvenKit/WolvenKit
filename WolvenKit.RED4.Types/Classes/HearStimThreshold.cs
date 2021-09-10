@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class HearStimThreshold : AIbehaviorconditionScript
 	{
-		private CInt32 _thresholdNumber;
-
 		[Ordinal(0)] 
 		[RED("thresholdNumber")] 
 		public CInt32 ThresholdNumber
 		{
-			get => GetProperty(ref _thresholdNumber);
-			set => SetProperty(ref _thresholdNumber, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

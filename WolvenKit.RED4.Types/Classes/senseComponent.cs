@@ -5,137 +5,124 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class senseComponent : entIPlacedComponent
 	{
-		private CBool _enableBeingDetectable;
-		private CHandle<senseVisibleObject> _visibleObject;
-		private CHandle<senseSensorObject> _sensorObject;
-		private CBool _isEnabled;
-		private CHandle<redCallbackObject> _highLevelCb;
-		private CHandle<redCallbackObject> _reactionCb;
-		private CEnum<gamedataNPCHighLevelState> _highLevelState;
-		private TweakDBID _mainPreset;
-		private TweakDBID _secondaryPreset;
-		private CWeakHandle<gameIBlackboard> _puppetBlackboard;
-		private CHandle<redCallbackObject> _playerTakedownStateCallbackID;
-		private CHandle<redCallbackObject> _playerUpperBodyStateCallbackID;
-		private CHandle<redCallbackObject> _playerCarryingStateCallbackID;
-		private CWeakHandle<PlayerPuppet> _playerInPerception;
-
 		[Ordinal(5)] 
 		[RED("enableBeingDetectable")] 
 		public CBool EnableBeingDetectable
 		{
-			get => GetProperty(ref _enableBeingDetectable);
-			set => SetProperty(ref _enableBeingDetectable, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("visibleObject")] 
 		public CHandle<senseVisibleObject> VisibleObject
 		{
-			get => GetProperty(ref _visibleObject);
-			set => SetProperty(ref _visibleObject, value);
+			get => GetPropertyValue<CHandle<senseVisibleObject>>();
+			set => SetPropertyValue<CHandle<senseVisibleObject>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("sensorObject")] 
 		public CHandle<senseSensorObject> SensorObject
 		{
-			get => GetProperty(ref _sensorObject);
-			set => SetProperty(ref _sensorObject, value);
+			get => GetPropertyValue<CHandle<senseSensorObject>>();
+			set => SetPropertyValue<CHandle<senseSensorObject>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("highLevelCb")] 
 		public CHandle<redCallbackObject> HighLevelCb
 		{
-			get => GetProperty(ref _highLevelCb);
-			set => SetProperty(ref _highLevelCb, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("reactionCb")] 
 		public CHandle<redCallbackObject> ReactionCb
 		{
-			get => GetProperty(ref _reactionCb);
-			set => SetProperty(ref _reactionCb, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("highLevelState")] 
 		public CEnum<gamedataNPCHighLevelState> HighLevelState
 		{
-			get => GetProperty(ref _highLevelState);
-			set => SetProperty(ref _highLevelState, value);
+			get => GetPropertyValue<CEnum<gamedataNPCHighLevelState>>();
+			set => SetPropertyValue<CEnum<gamedataNPCHighLevelState>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("mainPreset")] 
 		public TweakDBID MainPreset
 		{
-			get => GetProperty(ref _mainPreset);
-			set => SetProperty(ref _mainPreset, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("secondaryPreset")] 
 		public TweakDBID SecondaryPreset
 		{
-			get => GetProperty(ref _secondaryPreset);
-			set => SetProperty(ref _secondaryPreset, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("puppetBlackboard")] 
 		public CWeakHandle<gameIBlackboard> PuppetBlackboard
 		{
-			get => GetProperty(ref _puppetBlackboard);
-			set => SetProperty(ref _puppetBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("playerTakedownStateCallbackID")] 
 		public CHandle<redCallbackObject> PlayerTakedownStateCallbackID
 		{
-			get => GetProperty(ref _playerTakedownStateCallbackID);
-			set => SetProperty(ref _playerTakedownStateCallbackID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("playerUpperBodyStateCallbackID")] 
 		public CHandle<redCallbackObject> PlayerUpperBodyStateCallbackID
 		{
-			get => GetProperty(ref _playerUpperBodyStateCallbackID);
-			set => SetProperty(ref _playerUpperBodyStateCallbackID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("playerCarryingStateCallbackID")] 
 		public CHandle<redCallbackObject> PlayerCarryingStateCallbackID
 		{
-			get => GetProperty(ref _playerCarryingStateCallbackID);
-			set => SetProperty(ref _playerCarryingStateCallbackID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("playerInPerception")] 
 		public CWeakHandle<PlayerPuppet> PlayerInPerception
 		{
-			get => GetProperty(ref _playerInPerception);
-			set => SetProperty(ref _playerInPerception, value);
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
 		public senseComponent()
 		{
-			_enableBeingDetectable = true;
-			_isEnabled = true;
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			EnableBeingDetectable = true;
+			IsEnabled = true;
 		}
 	}
 }

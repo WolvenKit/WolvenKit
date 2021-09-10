@@ -5,68 +5,67 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ScannerQuestCluesGameController : BaseChunkGameController
 	{
-		private inkCompoundWidgetReference _scannerQuestPanel;
-		private CHandle<redCallbackObject> _questCluesCallbackID;
-		private CHandle<redCallbackObject> _scannerDataCallbackID;
-		private CBool _isValidQuestClues;
-		private scannerDataStructure _scannerData;
-		private CBool _hasValidScannables;
-		private CArray<CWeakHandle<inkAsyncSpawnRequest>> _asyncSpawnRequests;
-
 		[Ordinal(5)] 
 		[RED("ScannerQuestPanel")] 
 		public inkCompoundWidgetReference ScannerQuestPanel
 		{
-			get => GetProperty(ref _scannerQuestPanel);
-			set => SetProperty(ref _scannerQuestPanel, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("questCluesCallbackID")] 
 		public CHandle<redCallbackObject> QuestCluesCallbackID
 		{
-			get => GetProperty(ref _questCluesCallbackID);
-			set => SetProperty(ref _questCluesCallbackID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("scannerDataCallbackID")] 
 		public CHandle<redCallbackObject> ScannerDataCallbackID
 		{
-			get => GetProperty(ref _scannerDataCallbackID);
-			set => SetProperty(ref _scannerDataCallbackID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("isValidQuestClues")] 
 		public CBool IsValidQuestClues
 		{
-			get => GetProperty(ref _isValidQuestClues);
-			set => SetProperty(ref _isValidQuestClues, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("ScannerData")] 
 		public scannerDataStructure ScannerData
 		{
-			get => GetProperty(ref _scannerData);
-			set => SetProperty(ref _scannerData, value);
+			get => GetPropertyValue<scannerDataStructure>();
+			set => SetPropertyValue<scannerDataStructure>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("hasValidScannables")] 
 		public CBool HasValidScannables
 		{
-			get => GetProperty(ref _hasValidScannables);
-			set => SetProperty(ref _hasValidScannables, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("asyncSpawnRequests")] 
 		public CArray<CWeakHandle<inkAsyncSpawnRequest>> AsyncSpawnRequests
 		{
-			get => GetProperty(ref _asyncSpawnRequests);
-			set => SetProperty(ref _asyncSpawnRequests, value);
+			get => GetPropertyValue<CArray<CWeakHandle<inkAsyncSpawnRequest>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<inkAsyncSpawnRequest>>>(value);
+		}
+
+		public ScannerQuestCluesGameController()
+		{
+			ScannerQuestPanel = new();
+			ScannerData = new() { QuestEntries = new() };
+			AsyncSpawnRequests = new();
 		}
 	}
 }

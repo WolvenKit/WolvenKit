@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AddItemsEffector : gameEffector
 	{
-		private CArray<CWeakHandle<gamedataInventoryItem_Record>> _items;
-
 		[Ordinal(0)] 
 		[RED("items")] 
 		public CArray<CWeakHandle<gamedataInventoryItem_Record>> Items
 		{
-			get => GetProperty(ref _items);
-			set => SetProperty(ref _items, value);
+			get => GetPropertyValue<CArray<CWeakHandle<gamedataInventoryItem_Record>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<gamedataInventoryItem_Record>>>(value);
+		}
+
+		public AddItemsEffector()
+		{
+			Items = new();
 		}
 	}
 }

@@ -5,95 +5,85 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioAudioFoliageMetadata : audioAudioMetadata
 	{
-		private CName _loopStartEvent;
-		private CName _loopStopEvent;
-		private CName _locomotionTotalVelocityParam;
-		private CFloat _locomotionTotalVelocityThreshold;
-		private CFloat _locomotionAngularVelocityMultiplier;
-		private CFloat _minFoliageMeshVolumeThreshold;
-		private CFloat _maxFoliageMeshHeight;
-		private CFloat _playerInsideRequiredPercentage;
-		private CHandle<audioAudioFoliageMaterialDictionary> _foliageMaterials;
-
 		[Ordinal(1)] 
 		[RED("loopStartEvent")] 
 		public CName LoopStartEvent
 		{
-			get => GetProperty(ref _loopStartEvent);
-			set => SetProperty(ref _loopStartEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("loopStopEvent")] 
 		public CName LoopStopEvent
 		{
-			get => GetProperty(ref _loopStopEvent);
-			set => SetProperty(ref _loopStopEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("locomotionTotalVelocityParam")] 
 		public CName LocomotionTotalVelocityParam
 		{
-			get => GetProperty(ref _locomotionTotalVelocityParam);
-			set => SetProperty(ref _locomotionTotalVelocityParam, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("locomotionTotalVelocityThreshold")] 
 		public CFloat LocomotionTotalVelocityThreshold
 		{
-			get => GetProperty(ref _locomotionTotalVelocityThreshold);
-			set => SetProperty(ref _locomotionTotalVelocityThreshold, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("locomotionAngularVelocityMultiplier")] 
 		public CFloat LocomotionAngularVelocityMultiplier
 		{
-			get => GetProperty(ref _locomotionAngularVelocityMultiplier);
-			set => SetProperty(ref _locomotionAngularVelocityMultiplier, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("minFoliageMeshVolumeThreshold")] 
 		public CFloat MinFoliageMeshVolumeThreshold
 		{
-			get => GetProperty(ref _minFoliageMeshVolumeThreshold);
-			set => SetProperty(ref _minFoliageMeshVolumeThreshold, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("maxFoliageMeshHeight")] 
 		public CFloat MaxFoliageMeshHeight
 		{
-			get => GetProperty(ref _maxFoliageMeshHeight);
-			set => SetProperty(ref _maxFoliageMeshHeight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("playerInsideRequiredPercentage")] 
 		public CFloat PlayerInsideRequiredPercentage
 		{
-			get => GetProperty(ref _playerInsideRequiredPercentage);
-			set => SetProperty(ref _playerInsideRequiredPercentage, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("foliageMaterials")] 
 		public CHandle<audioAudioFoliageMaterialDictionary> FoliageMaterials
 		{
-			get => GetProperty(ref _foliageMaterials);
-			set => SetProperty(ref _foliageMaterials, value);
+			get => GetPropertyValue<CHandle<audioAudioFoliageMaterialDictionary>>();
+			set => SetPropertyValue<CHandle<audioAudioFoliageMaterialDictionary>>(value);
 		}
 
 		public audioAudioFoliageMetadata()
 		{
-			_locomotionTotalVelocityThreshold = 5.000000F;
-			_locomotionAngularVelocityMultiplier = 1.000000F;
-			_minFoliageMeshVolumeThreshold = 5.000000F;
-			_maxFoliageMeshHeight = 7.000000F;
-			_playerInsideRequiredPercentage = 0.500000F;
+			LocomotionTotalVelocityThreshold = 5.000000F;
+			LocomotionAngularVelocityMultiplier = 1.000000F;
+			MinFoliageMeshVolumeThreshold = 5.000000F;
+			MaxFoliageMeshHeight = 7.000000F;
+			PlayerInsideRequiredPercentage = 0.500000F;
 		}
 	}
 }

@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimProfilerData_TimingsDetailedRoot : ISerializable
 	{
-		private CArray<animAnimProfilerData_SectionTimings> _sections;
-		private CArray<animAnimProfilerData_TimingsDetailed> _timings;
-
 		[Ordinal(0)] 
 		[RED("sections")] 
 		public CArray<animAnimProfilerData_SectionTimings> Sections
 		{
-			get => GetProperty(ref _sections);
-			set => SetProperty(ref _sections, value);
+			get => GetPropertyValue<CArray<animAnimProfilerData_SectionTimings>>();
+			set => SetPropertyValue<CArray<animAnimProfilerData_SectionTimings>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("timings")] 
 		public CArray<animAnimProfilerData_TimingsDetailed> Timings
 		{
-			get => GetProperty(ref _timings);
-			set => SetProperty(ref _timings, value);
+			get => GetPropertyValue<CArray<animAnimProfilerData_TimingsDetailed>>();
+			set => SetPropertyValue<CArray<animAnimProfilerData_TimingsDetailed>>(value);
+		}
+
+		public animAnimProfilerData_TimingsDetailedRoot()
+		{
+			Sections = new();
+			Timings = new();
 		}
 	}
 }

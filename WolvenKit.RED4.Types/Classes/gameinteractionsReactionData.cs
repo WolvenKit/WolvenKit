@@ -5,93 +5,86 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameinteractionsReactionData : IScriptable
 	{
-		private CName _choiceName;
-		private CFloat _startDuration;
-		private CFloat _endDuration;
-		private CFloat _interactionDuration;
-		private CName _interactionType;
-		private CArray<gameEquipParam> _requiredEquips;
-		private Transform _interactionPoint;
-		private CBool _useIK;
-		private Vector4 _iKPoint;
-
 		[Ordinal(0)] 
 		[RED("choiceName")] 
 		public CName ChoiceName
 		{
-			get => GetProperty(ref _choiceName);
-			set => SetProperty(ref _choiceName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("startDuration")] 
 		public CFloat StartDuration
 		{
-			get => GetProperty(ref _startDuration);
-			set => SetProperty(ref _startDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("endDuration")] 
 		public CFloat EndDuration
 		{
-			get => GetProperty(ref _endDuration);
-			set => SetProperty(ref _endDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("interactionDuration")] 
 		public CFloat InteractionDuration
 		{
-			get => GetProperty(ref _interactionDuration);
-			set => SetProperty(ref _interactionDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("interactionType")] 
 		public CName InteractionType
 		{
-			get => GetProperty(ref _interactionType);
-			set => SetProperty(ref _interactionType, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("requiredEquips")] 
 		public CArray<gameEquipParam> RequiredEquips
 		{
-			get => GetProperty(ref _requiredEquips);
-			set => SetProperty(ref _requiredEquips, value);
+			get => GetPropertyValue<CArray<gameEquipParam>>();
+			set => SetPropertyValue<CArray<gameEquipParam>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("interactionPoint")] 
 		public Transform InteractionPoint
 		{
-			get => GetProperty(ref _interactionPoint);
-			set => SetProperty(ref _interactionPoint, value);
+			get => GetPropertyValue<Transform>();
+			set => SetPropertyValue<Transform>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("useIK")] 
 		public CBool UseIK
 		{
-			get => GetProperty(ref _useIK);
-			set => SetProperty(ref _useIK, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("IKPoint")] 
 		public Vector4 IKPoint
 		{
-			get => GetProperty(ref _iKPoint);
-			set => SetProperty(ref _iKPoint, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		public gameinteractionsReactionData()
 		{
-			_startDuration = 1.000000F;
-			_endDuration = 1.000000F;
-			_interactionDuration = -1.000000F;
+			StartDuration = 1.000000F;
+			EndDuration = 1.000000F;
+			InteractionDuration = -1.000000F;
+			RequiredEquips = new();
+			InteractionPoint = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			IKPoint = new();
 		}
 	}
 }

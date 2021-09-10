@@ -5,49 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameEffectObjectProvider_SweepMelee_Box : gameEffectObjectProvider_SweepOverTime
 	{
-		private CFloat _playerStaticDetectionConeDistance;
-		private CFloat _playerStaticDetectionConeStartAngle;
-		private CFloat _playerStaticDetectionConeEndAngle;
-		private CBool _checkMeleeInvulnerability;
-
 		[Ordinal(1)] 
 		[RED("playerStaticDetectionConeDistance")] 
 		public CFloat PlayerStaticDetectionConeDistance
 		{
-			get => GetProperty(ref _playerStaticDetectionConeDistance);
-			set => SetProperty(ref _playerStaticDetectionConeDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("playerStaticDetectionConeStartAngle")] 
 		public CFloat PlayerStaticDetectionConeStartAngle
 		{
-			get => GetProperty(ref _playerStaticDetectionConeStartAngle);
-			set => SetProperty(ref _playerStaticDetectionConeStartAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("playerStaticDetectionConeEndAngle")] 
 		public CFloat PlayerStaticDetectionConeEndAngle
 		{
-			get => GetProperty(ref _playerStaticDetectionConeEndAngle);
-			set => SetProperty(ref _playerStaticDetectionConeEndAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("checkMeleeInvulnerability")] 
 		public CBool CheckMeleeInvulnerability
 		{
-			get => GetProperty(ref _checkMeleeInvulnerability);
-			set => SetProperty(ref _checkMeleeInvulnerability, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public gameEffectObjectProvider_SweepMelee_Box()
 		{
-			_playerStaticDetectionConeDistance = 2.000000F;
-			_playerStaticDetectionConeStartAngle = 5.000000F;
-			_playerStaticDetectionConeEndAngle = 18.000000F;
-			_checkMeleeInvulnerability = true;
+			PlayerStaticDetectionConeDistance = 2.000000F;
+			PlayerStaticDetectionConeStartAngle = 5.000000F;
+			PlayerStaticDetectionConeEndAngle = 18.000000F;
+			CheckMeleeInvulnerability = true;
 		}
 	}
 }

@@ -5,55 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class communityPhaseTimePeriod : communityTimePeriod
 	{
-		private CUInt16 _quantity;
-		private CArray<CName> _markings;
-		private CArray<NodeRef> _spotNodeRefs;
-		private CArray<gameSpotSequenceCategory> _categories;
-		private CBool _isSequence;
-
 		[Ordinal(1)] 
 		[RED("quantity")] 
 		public CUInt16 Quantity
 		{
-			get => GetProperty(ref _quantity);
-			set => SetProperty(ref _quantity, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("markings")] 
 		public CArray<CName> Markings
 		{
-			get => GetProperty(ref _markings);
-			set => SetProperty(ref _markings, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("spotNodeRefs")] 
 		public CArray<NodeRef> SpotNodeRefs
 		{
-			get => GetProperty(ref _spotNodeRefs);
-			set => SetProperty(ref _spotNodeRefs, value);
+			get => GetPropertyValue<CArray<NodeRef>>();
+			set => SetPropertyValue<CArray<NodeRef>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("categories")] 
 		public CArray<gameSpotSequenceCategory> Categories
 		{
-			get => GetProperty(ref _categories);
-			set => SetProperty(ref _categories, value);
+			get => GetPropertyValue<CArray<gameSpotSequenceCategory>>();
+			set => SetPropertyValue<CArray<gameSpotSequenceCategory>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("isSequence")] 
 		public CBool IsSequence
 		{
-			get => GetProperty(ref _isSequence);
-			set => SetProperty(ref _isSequence, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public communityPhaseTimePeriod()
 		{
-			_quantity = 1;
+			Quantity = 1;
+			Markings = new();
+			SpotNodeRefs = new();
+			Categories = new();
 		}
 	}
 }

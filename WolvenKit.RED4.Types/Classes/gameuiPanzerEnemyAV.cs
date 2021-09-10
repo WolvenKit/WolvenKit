@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiPanzerEnemyAV : gameuiPanzerEnemy
 	{
-		private CFloat _speed;
-		private CUInt32 _shotsAmount;
-		private CFloat _longShotInterval;
-		private CFloat _shortShotInterval;
-
 		[Ordinal(16)] 
 		[RED("speed")] 
 		public CFloat Speed
 		{
-			get => GetProperty(ref _speed);
-			set => SetProperty(ref _speed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("shotsAmount")] 
 		public CUInt32 ShotsAmount
 		{
-			get => GetProperty(ref _shotsAmount);
-			set => SetProperty(ref _shotsAmount, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("longShotInterval")] 
 		public CFloat LongShotInterval
 		{
-			get => GetProperty(ref _longShotInterval);
-			set => SetProperty(ref _longShotInterval, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("shortShotInterval")] 
 		public CFloat ShortShotInterval
 		{
-			get => GetProperty(ref _shortShotInterval);
-			set => SetProperty(ref _shortShotInterval, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

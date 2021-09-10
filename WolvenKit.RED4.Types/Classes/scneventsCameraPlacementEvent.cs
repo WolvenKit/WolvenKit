@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scneventsCameraPlacementEvent : scnSceneEvent
 	{
-		private NodeRef _cameraRef;
-		private Transform _cameraTransformLS;
-
 		[Ordinal(6)] 
 		[RED("cameraRef")] 
 		public NodeRef CameraRef
 		{
-			get => GetProperty(ref _cameraRef);
-			set => SetProperty(ref _cameraRef, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("cameraTransformLS")] 
 		public Transform CameraTransformLS
 		{
-			get => GetProperty(ref _cameraTransformLS);
-			set => SetProperty(ref _cameraTransformLS, value);
+			get => GetPropertyValue<Transform>();
+			set => SetPropertyValue<Transform>(value);
+		}
+
+		public scneventsCameraPlacementEvent()
+		{
+			Id = new() { Id = 18446744073709551615 };
+			CameraTransformLS = new() { Position = new(), Orientation = new() { R = 1.000000F } };
 		}
 	}
 }

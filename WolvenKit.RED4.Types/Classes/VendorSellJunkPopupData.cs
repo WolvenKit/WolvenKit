@@ -5,59 +5,58 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VendorSellJunkPopupData : inkGameNotificationData
 	{
-		private CArray<CWeakHandle<gameItemData>> _items;
-		private CArray<CHandle<VendorJunkSellItem>> _limitedItems;
-		private CInt32 _itemsQuantity;
-		private CInt32 _limitedItemsQuantity;
-		private CFloat _totalPrice;
-		private CInt32 _limitedTotalPrice;
-
 		[Ordinal(6)] 
 		[RED("items")] 
 		public CArray<CWeakHandle<gameItemData>> Items
 		{
-			get => GetProperty(ref _items);
-			set => SetProperty(ref _items, value);
+			get => GetPropertyValue<CArray<CWeakHandle<gameItemData>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<gameItemData>>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("limitedItems")] 
 		public CArray<CHandle<VendorJunkSellItem>> LimitedItems
 		{
-			get => GetProperty(ref _limitedItems);
-			set => SetProperty(ref _limitedItems, value);
+			get => GetPropertyValue<CArray<CHandle<VendorJunkSellItem>>>();
+			set => SetPropertyValue<CArray<CHandle<VendorJunkSellItem>>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("itemsQuantity")] 
 		public CInt32 ItemsQuantity
 		{
-			get => GetProperty(ref _itemsQuantity);
-			set => SetProperty(ref _itemsQuantity, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("limitedItemsQuantity")] 
 		public CInt32 LimitedItemsQuantity
 		{
-			get => GetProperty(ref _limitedItemsQuantity);
-			set => SetProperty(ref _limitedItemsQuantity, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("totalPrice")] 
 		public CFloat TotalPrice
 		{
-			get => GetProperty(ref _totalPrice);
-			set => SetProperty(ref _totalPrice, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("limitedTotalPrice")] 
 		public CInt32 LimitedTotalPrice
 		{
-			get => GetProperty(ref _limitedTotalPrice);
-			set => SetProperty(ref _limitedTotalPrice, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		public VendorSellJunkPopupData()
+		{
+			Items = new();
+			LimitedItems = new();
 		}
 	}
 }

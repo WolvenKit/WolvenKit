@@ -5,55 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class BaseBullet : BaseProjectile
 	{
-		private CHandle<entIComponent> _meshComponent;
-		private CFloat _countTime;
-		private CFloat _startVelocity;
-		private CFloat _lifetime_440;
-		private CBool _alive;
-
 		[Ordinal(51)] 
 		[RED("meshComponent")] 
 		public CHandle<entIComponent> MeshComponent
 		{
-			get => GetProperty(ref _meshComponent);
-			set => SetProperty(ref _meshComponent, value);
+			get => GetPropertyValue<CHandle<entIComponent>>();
+			set => SetPropertyValue<CHandle<entIComponent>>(value);
 		}
 
 		[Ordinal(52)] 
 		[RED("countTime")] 
 		public CFloat CountTime
 		{
-			get => GetProperty(ref _countTime);
-			set => SetProperty(ref _countTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(53)] 
 		[RED("startVelocity")] 
 		public CFloat StartVelocity
 		{
-			get => GetProperty(ref _startVelocity);
-			set => SetProperty(ref _startVelocity, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(54)] 
 		[RED("lifetime")] 
 		public CFloat Lifetime_440
 		{
-			get => GetProperty(ref _lifetime_440);
-			set => SetProperty(ref _lifetime_440, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(55)] 
 		[RED("alive")] 
 		public CBool Alive
 		{
-			get => GetProperty(ref _alive);
-			set => SetProperty(ref _alive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public BaseBullet()
 		{
-			_alive = true;
+			Alive = true;
 		}
 	}
 }

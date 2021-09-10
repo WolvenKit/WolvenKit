@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameAttackDebugData : RedBaseClass
 	{
-		private WorldTransform _pointOfViewTransform;
-		private Vector4 _projectileHitplaneSpread;
-		private Vector4 _bulletStartPosition;
-
 		[Ordinal(0)] 
 		[RED("pointOfViewTransform")] 
 		public WorldTransform PointOfViewTransform
 		{
-			get => GetProperty(ref _pointOfViewTransform);
-			set => SetProperty(ref _pointOfViewTransform, value);
+			get => GetPropertyValue<WorldTransform>();
+			set => SetPropertyValue<WorldTransform>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("projectileHitplaneSpread")] 
 		public Vector4 ProjectileHitplaneSpread
 		{
-			get => GetProperty(ref _projectileHitplaneSpread);
-			set => SetProperty(ref _projectileHitplaneSpread, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("bulletStartPosition")] 
 		public Vector4 BulletStartPosition
 		{
-			get => GetProperty(ref _bulletStartPosition);
-			set => SetProperty(ref _bulletStartPosition, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
+		}
+
+		public gameAttackDebugData()
+		{
+			PointOfViewTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			ProjectileHitplaneSpread = new();
+			BulletStartPosition = new();
 		}
 	}
 }

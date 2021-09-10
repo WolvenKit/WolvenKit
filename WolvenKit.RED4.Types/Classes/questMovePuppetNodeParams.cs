@@ -5,55 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questMovePuppetNodeParams : questAICommandParams
 	{
-		private CEnum<questMoveType> _moveType;
-		private CHandle<questMoveOnSplineParams> _moveOnSplineParams;
-		private CHandle<questMoveToParams> _moveToParams;
-		private CHandle<questAICommandParams> _otherParams;
-		private CBool _repeatCommandOnInterrupt;
-
 		[Ordinal(0)] 
 		[RED("moveType")] 
 		public CEnum<questMoveType> MoveType
 		{
-			get => GetProperty(ref _moveType);
-			set => SetProperty(ref _moveType, value);
+			get => GetPropertyValue<CEnum<questMoveType>>();
+			set => SetPropertyValue<CEnum<questMoveType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("moveOnSplineParams")] 
 		public CHandle<questMoveOnSplineParams> MoveOnSplineParams
 		{
-			get => GetProperty(ref _moveOnSplineParams);
-			set => SetProperty(ref _moveOnSplineParams, value);
+			get => GetPropertyValue<CHandle<questMoveOnSplineParams>>();
+			set => SetPropertyValue<CHandle<questMoveOnSplineParams>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("moveToParams")] 
 		public CHandle<questMoveToParams> MoveToParams
 		{
-			get => GetProperty(ref _moveToParams);
-			set => SetProperty(ref _moveToParams, value);
+			get => GetPropertyValue<CHandle<questMoveToParams>>();
+			set => SetPropertyValue<CHandle<questMoveToParams>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("otherParams")] 
 		public CHandle<questAICommandParams> OtherParams
 		{
-			get => GetProperty(ref _otherParams);
-			set => SetProperty(ref _otherParams, value);
+			get => GetPropertyValue<CHandle<questAICommandParams>>();
+			set => SetPropertyValue<CHandle<questAICommandParams>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("repeatCommandOnInterrupt")] 
 		public CBool RepeatCommandOnInterrupt
 		{
-			get => GetProperty(ref _repeatCommandOnInterrupt);
-			set => SetProperty(ref _repeatCommandOnInterrupt, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public questMovePuppetNodeParams()
 		{
-			_repeatCommandOnInterrupt = true;
+			RepeatCommandOnInterrupt = true;
 		}
 	}
 }

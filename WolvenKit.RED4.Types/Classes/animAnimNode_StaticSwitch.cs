@@ -5,41 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_StaticSwitch : animAnimNode_MotionTableSwitch
 	{
-		private CHandle<animIStaticCondition> _condition;
-		private CHandle<animIMotionTableProvider> _motionProvider;
-		private animPoseLink _true;
-		private animPoseLink _false;
-
 		[Ordinal(11)] 
 		[RED("condition")] 
 		public CHandle<animIStaticCondition> Condition
 		{
-			get => GetProperty(ref _condition);
-			set => SetProperty(ref _condition, value);
+			get => GetPropertyValue<CHandle<animIStaticCondition>>();
+			set => SetPropertyValue<CHandle<animIStaticCondition>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("motionProvider")] 
 		public CHandle<animIMotionTableProvider> MotionProvider
 		{
-			get => GetProperty(ref _motionProvider);
-			set => SetProperty(ref _motionProvider, value);
+			get => GetPropertyValue<CHandle<animIMotionTableProvider>>();
+			set => SetPropertyValue<CHandle<animIMotionTableProvider>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("True")] 
 		public animPoseLink True
 		{
-			get => GetProperty(ref _true);
-			set => SetProperty(ref _true, value);
+			get => GetPropertyValue<animPoseLink>();
+			set => SetPropertyValue<animPoseLink>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("False")] 
 		public animPoseLink False
 		{
-			get => GetProperty(ref _false);
-			set => SetProperty(ref _false, value);
+			get => GetPropertyValue<animPoseLink>();
+			set => SetPropertyValue<animPoseLink>(value);
+		}
+
+		public animAnimNode_StaticSwitch()
+		{
+			Id = 4294967295;
+			True = new();
+			False = new();
 		}
 	}
 }

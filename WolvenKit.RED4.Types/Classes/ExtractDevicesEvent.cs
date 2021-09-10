@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ExtractDevicesEvent : redEvent
 	{
-		private CArray<CHandle<gameLazyDevice>> _lazyDevices;
-		private CArray<CHandle<gameDeviceComponentPS>> _devices;
-		private CHandle<ProcessDevicesEvent> _eventToSendOnCompleted;
-		private CInt32 _lastExtractedIndex;
-
 		[Ordinal(0)] 
 		[RED("lazyDevices")] 
 		public CArray<CHandle<gameLazyDevice>> LazyDevices
 		{
-			get => GetProperty(ref _lazyDevices);
-			set => SetProperty(ref _lazyDevices, value);
+			get => GetPropertyValue<CArray<CHandle<gameLazyDevice>>>();
+			set => SetPropertyValue<CArray<CHandle<gameLazyDevice>>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("devices")] 
 		public CArray<CHandle<gameDeviceComponentPS>> Devices
 		{
-			get => GetProperty(ref _devices);
-			set => SetProperty(ref _devices, value);
+			get => GetPropertyValue<CArray<CHandle<gameDeviceComponentPS>>>();
+			set => SetPropertyValue<CArray<CHandle<gameDeviceComponentPS>>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("eventToSendOnCompleted")] 
 		public CHandle<ProcessDevicesEvent> EventToSendOnCompleted
 		{
-			get => GetProperty(ref _eventToSendOnCompleted);
-			set => SetProperty(ref _eventToSendOnCompleted, value);
+			get => GetPropertyValue<CHandle<ProcessDevicesEvent>>();
+			set => SetPropertyValue<CHandle<ProcessDevicesEvent>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("lastExtractedIndex")] 
 		public CInt32 LastExtractedIndex
 		{
-			get => GetProperty(ref _lastExtractedIndex);
-			set => SetProperty(ref _lastExtractedIndex, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		public ExtractDevicesEvent()
+		{
+			LazyDevices = new();
+			Devices = new();
 		}
 	}
 }

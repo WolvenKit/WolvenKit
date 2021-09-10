@@ -5,14 +5,21 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DeactivateC4 : ActionBool
 	{
-		private gameItemID _itemID;
-
 		[Ordinal(25)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get => GetProperty(ref _itemID);
-			set => SetProperty(ref _itemID, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
+		}
+
+		public DeactivateC4()
+		{
+			RequesterID = new();
+			InteractionChoice = new() { CaptionParts = new() { Parts = new() }, Data = new(), ChoiceMetaData = new() { Type = new() }, LookAtDescriptor = new() { Offset = new(), OrbId = new() } };
+			ActionWidgetPackage = new() { DependendActions = new() };
+			CanTriggerStim = true;
+			ItemID = new();
 		}
 	}
 }

@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scannerBorderLogicController : inkWidgetLogicController
 	{
-		private CArray<inkWidgetReference> _braindanceSetVisible;
-		private CArray<inkWidgetReference> _braindanceSetHidden;
-
 		[Ordinal(1)] 
 		[RED("braindanceSetVisible")] 
 		public CArray<inkWidgetReference> BraindanceSetVisible
 		{
-			get => GetProperty(ref _braindanceSetVisible);
-			set => SetProperty(ref _braindanceSetVisible, value);
+			get => GetPropertyValue<CArray<inkWidgetReference>>();
+			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("braindanceSetHidden")] 
 		public CArray<inkWidgetReference> BraindanceSetHidden
 		{
-			get => GetProperty(ref _braindanceSetHidden);
-			set => SetProperty(ref _braindanceSetHidden, value);
+			get => GetPropertyValue<CArray<inkWidgetReference>>();
+			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
+		}
+
+		public scannerBorderLogicController()
+		{
+			BraindanceSetVisible = new();
+			BraindanceSetHidden = new();
 		}
 	}
 }

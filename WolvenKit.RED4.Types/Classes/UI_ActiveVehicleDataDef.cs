@@ -5,41 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UI_ActiveVehicleDataDef : gamebbScriptDefinition
 	{
-		private gamebbScriptID_Variant _vehPlayerStateData;
-		private gamebbScriptID_Bool _isPlayerMounted;
-		private gamebbScriptID_Bool _isTPPCameraOn;
-		private gamebbScriptID_Int32 _positionInRace;
-
 		[Ordinal(0)] 
 		[RED("VehPlayerStateData")] 
 		public gamebbScriptID_Variant VehPlayerStateData
 		{
-			get => GetProperty(ref _vehPlayerStateData);
-			set => SetProperty(ref _vehPlayerStateData, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("IsPlayerMounted")] 
 		public gamebbScriptID_Bool IsPlayerMounted
 		{
-			get => GetProperty(ref _isPlayerMounted);
-			set => SetProperty(ref _isPlayerMounted, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("IsTPPCameraOn")] 
 		public gamebbScriptID_Bool IsTPPCameraOn
 		{
-			get => GetProperty(ref _isTPPCameraOn);
-			set => SetProperty(ref _isTPPCameraOn, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("PositionInRace")] 
 		public gamebbScriptID_Int32 PositionInRace
 		{
-			get => GetProperty(ref _positionInRace);
-			set => SetProperty(ref _positionInRace, value);
+			get => GetPropertyValue<gamebbScriptID_Int32>();
+			set => SetPropertyValue<gamebbScriptID_Int32>(value);
+		}
+
+		public UI_ActiveVehicleDataDef()
+		{
+			VehPlayerStateData = new();
+			IsPlayerMounted = new();
+			IsTPPCameraOn = new();
+			PositionInRace = new();
 		}
 	}
 }

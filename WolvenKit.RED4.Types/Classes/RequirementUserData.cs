@@ -5,50 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RequirementUserData : IScriptable
 	{
-		private CString _skillName;
-		private CInt32 _requiredSkill;
-		private CEnum<EDeviceChallengeSkill> _skillCheck;
-		private CBool _isPassed;
-		private CWeakHandle<inkAsyncSpawnRequest> _asyncSpawnRequest;
-
 		[Ordinal(0)] 
 		[RED("skillName")] 
 		public CString SkillName
 		{
-			get => GetProperty(ref _skillName);
-			set => SetProperty(ref _skillName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("requiredSkill")] 
 		public CInt32 RequiredSkill
 		{
-			get => GetProperty(ref _requiredSkill);
-			set => SetProperty(ref _requiredSkill, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("skillCheck")] 
 		public CEnum<EDeviceChallengeSkill> SkillCheck
 		{
-			get => GetProperty(ref _skillCheck);
-			set => SetProperty(ref _skillCheck, value);
+			get => GetPropertyValue<CEnum<EDeviceChallengeSkill>>();
+			set => SetPropertyValue<CEnum<EDeviceChallengeSkill>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isPassed")] 
 		public CBool IsPassed
 		{
-			get => GetProperty(ref _isPassed);
-			set => SetProperty(ref _isPassed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("asyncSpawnRequest")] 
 		public CWeakHandle<inkAsyncSpawnRequest> AsyncSpawnRequest
 		{
-			get => GetProperty(ref _asyncSpawnRequest);
-			set => SetProperty(ref _asyncSpawnRequest, value);
+			get => GetPropertyValue<CWeakHandle<inkAsyncSpawnRequest>>();
+			set => SetPropertyValue<CWeakHandle<inkAsyncSpawnRequest>>(value);
 		}
 	}
 }

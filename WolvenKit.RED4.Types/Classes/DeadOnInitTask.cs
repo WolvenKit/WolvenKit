@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DeadOnInitTask : AIbehaviortaskScript
 	{
-		private CBool _preventSkippingDeathAnimation;
-
 		[Ordinal(0)] 
 		[RED("preventSkippingDeathAnimation")] 
 		public CBool PreventSkippingDeathAnimation
 		{
-			get => GetProperty(ref _preventSkippingDeathAnimation);
-			set => SetProperty(ref _preventSkippingDeathAnimation, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public DeadOnInitTask()
 		{
-			_preventSkippingDeathAnimation = true;
+			PreventSkippingDeathAnimation = true;
 		}
 	}
 }

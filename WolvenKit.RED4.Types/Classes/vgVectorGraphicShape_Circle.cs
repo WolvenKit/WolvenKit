@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class vgVectorGraphicShape_Circle : vgBaseVectorGraphicShape
 	{
-		private CFloat _dius;
-
 		[Ordinal(2)] 
 		[RED("dius")] 
 		public CFloat Dius
 		{
-			get => GetProperty(ref _dius);
-			set => SetProperty(ref _dius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public vgVectorGraphicShape_Circle()
+		{
+			CalTransform = new();
 		}
 	}
 }

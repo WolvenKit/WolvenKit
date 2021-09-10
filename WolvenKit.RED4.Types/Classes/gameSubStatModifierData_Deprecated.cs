@@ -5,19 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameSubStatModifierData_Deprecated : gameStatModifierData_Deprecated
 	{
-		private CEnum<gamedataStatType> _refStatType;
-
 		[Ordinal(2)] 
 		[RED("refStatType")] 
 		public CEnum<gamedataStatType> RefStatType
 		{
-			get => GetProperty(ref _refStatType);
-			set => SetProperty(ref _refStatType, value);
+			get => GetPropertyValue<CEnum<gamedataStatType>>();
+			set => SetPropertyValue<CEnum<gamedataStatType>>(value);
 		}
 
 		public gameSubStatModifierData_Deprecated()
 		{
-			_refStatType = new() { Value = Enums.gamedataStatType.Invalid };
+			StatType = Enums.gamedataStatType.Invalid;
+			ModifierType = Enums.gameStatModifierType.Invalid;
+			RefStatType = Enums.gamedataStatType.Invalid;
 		}
 	}
 }

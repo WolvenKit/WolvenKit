@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DropPointControllerPS : BasicDistractionDeviceControllerPS
 	{
-		private CString _vendorRecord;
-		private CArray<TweakDBID> _rewardsLootTable;
-		private CBool _hasPlayerCollectedReward;
-
 		[Ordinal(109)] 
 		[RED("vendorRecord")] 
 		public CString VendorRecord
 		{
-			get => GetProperty(ref _vendorRecord);
-			set => SetProperty(ref _vendorRecord, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(110)] 
 		[RED("rewardsLootTable")] 
 		public CArray<TweakDBID> RewardsLootTable
 		{
-			get => GetProperty(ref _rewardsLootTable);
-			set => SetProperty(ref _rewardsLootTable, value);
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 
 		[Ordinal(111)] 
 		[RED("hasPlayerCollectedReward")] 
 		public CBool HasPlayerCollectedReward
 		{
-			get => GetProperty(ref _hasPlayerCollectedReward);
-			set => SetProperty(ref _hasPlayerCollectedReward, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public DropPointControllerPS()
+		{
+			RewardsLootTable = new();
 		}
 	}
 }

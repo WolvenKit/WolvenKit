@@ -5,29 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiContextChangedEvent : redEvent
 	{
-		private CEnum<gameuiContext> _oldContext;
-		private CEnum<gameuiContext> _newContext;
-
 		[Ordinal(0)] 
 		[RED("oldContext")] 
-		public CEnum<gameuiContext> OldContext
+		public CBitField<gameuiContext> OldContext
 		{
-			get => GetProperty(ref _oldContext);
-			set => SetProperty(ref _oldContext, value);
+			get => GetPropertyValue<CBitField<gameuiContext>>();
+			set => SetPropertyValue<CBitField<gameuiContext>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("newContext")] 
-		public CEnum<gameuiContext> NewContext
+		public CBitField<gameuiContext> NewContext
 		{
-			get => GetProperty(ref _newContext);
-			set => SetProperty(ref _newContext, value);
+			get => GetPropertyValue<CBitField<gameuiContext>>();
+			set => SetPropertyValue<CBitField<gameuiContext>>(value);
 		}
 
 		public gameuiContextChangedEvent()
 		{
-			_oldContext = new() { Value = Enums.gameuiContext.MAX };
-			_newContext = new() { Value = Enums.gameuiContext.MAX };
+			OldContext = Enums.gameuiContext.MAX;
+			NewContext = Enums.gameuiContext.MAX;
 		}
 	}
 }

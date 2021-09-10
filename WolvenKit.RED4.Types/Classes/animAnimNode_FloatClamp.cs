@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_FloatClamp : animAnimNode_FloatValue
 	{
-		private CFloat _min;
-		private CFloat _max;
-		private animFloatLink _inputNode;
-
 		[Ordinal(11)] 
 		[RED("min")] 
 		public CFloat Min
 		{
-			get => GetProperty(ref _min);
-			set => SetProperty(ref _min, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("max")] 
 		public CFloat Max
 		{
-			get => GetProperty(ref _max);
-			set => SetProperty(ref _max, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("inputNode")] 
 		public animFloatLink InputNode
 		{
-			get => GetProperty(ref _inputNode);
-			set => SetProperty(ref _inputNode, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
+		}
+
+		public animAnimNode_FloatClamp()
+		{
+			Id = 4294967295;
+			InputNode = new();
 		}
 	}
 }

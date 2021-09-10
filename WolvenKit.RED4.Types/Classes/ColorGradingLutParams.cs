@@ -5,38 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ColorGradingLutParams : RedBaseClass
 	{
-		private CResourceReference<CBitmapTexture> _lUT;
-		private CEnum<EColorMappingFunction> _inputMapping;
-		private CEnum<EColorMappingFunction> _outputMapping;
-
 		[Ordinal(0)] 
 		[RED("LUT")] 
 		public CResourceReference<CBitmapTexture> LUT
 		{
-			get => GetProperty(ref _lUT);
-			set => SetProperty(ref _lUT, value);
+			get => GetPropertyValue<CResourceReference<CBitmapTexture>>();
+			set => SetPropertyValue<CResourceReference<CBitmapTexture>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("inputMapping")] 
 		public CEnum<EColorMappingFunction> InputMapping
 		{
-			get => GetProperty(ref _inputMapping);
-			set => SetProperty(ref _inputMapping, value);
+			get => GetPropertyValue<CEnum<EColorMappingFunction>>();
+			set => SetPropertyValue<CEnum<EColorMappingFunction>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("outputMapping")] 
 		public CEnum<EColorMappingFunction> OutputMapping
 		{
-			get => GetProperty(ref _outputMapping);
-			set => SetProperty(ref _outputMapping, value);
+			get => GetPropertyValue<CEnum<EColorMappingFunction>>();
+			set => SetPropertyValue<CEnum<EColorMappingFunction>>(value);
 		}
 
 		public ColorGradingLutParams()
 		{
-			_inputMapping = new() { Value = Enums.EColorMappingFunction.CMF_sRGB };
-			_outputMapping = new() { Value = Enums.EColorMappingFunction.CMF_sRGB };
+			InputMapping = Enums.EColorMappingFunction.CMF_sRGB;
+			OutputMapping = Enums.EColorMappingFunction.CMF_sRGB;
 		}
 	}
 }

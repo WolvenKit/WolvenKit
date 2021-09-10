@@ -5,37 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnWorldMarker : RedBaseClass
 	{
-		private CEnum<scnWorldMarkerType> _type;
-		private CName _tag;
-		private NodeRef _nodeRef;
-
 		[Ordinal(0)] 
 		[RED("type")] 
 		public CEnum<scnWorldMarkerType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<scnWorldMarkerType>>();
+			set => SetPropertyValue<CEnum<scnWorldMarkerType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("tag")] 
 		public CName Tag
 		{
-			get => GetProperty(ref _tag);
-			set => SetProperty(ref _tag, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("nodeRef")] 
 		public NodeRef NodeRef
 		{
-			get => GetProperty(ref _nodeRef);
-			set => SetProperty(ref _nodeRef, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		public scnWorldMarker()
 		{
-			_type = new() { Value = Enums.scnWorldMarkerType.NodeRef };
+			Type = Enums.scnWorldMarkerType.NodeRef;
 		}
 	}
 }

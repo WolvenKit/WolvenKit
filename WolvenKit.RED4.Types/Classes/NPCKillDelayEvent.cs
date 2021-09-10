@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class NPCKillDelayEvent : redEvent
 	{
-		private CWeakHandle<gameObject> _target;
-		private CBool _isLethalTakedown;
-		private CBool _disableKillReward;
-
 		[Ordinal(0)] 
 		[RED("target")] 
 		public CWeakHandle<gameObject> Target
 		{
-			get => GetProperty(ref _target);
-			set => SetProperty(ref _target, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isLethalTakedown")] 
 		public CBool IsLethalTakedown
 		{
-			get => GetProperty(ref _isLethalTakedown);
-			set => SetProperty(ref _isLethalTakedown, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("disableKillReward")] 
 		public CBool DisableKillReward
 		{
-			get => GetProperty(ref _disableKillReward);
-			set => SetProperty(ref _disableKillReward, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

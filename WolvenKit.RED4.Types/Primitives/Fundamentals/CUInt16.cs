@@ -1,10 +1,42 @@
+using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace WolvenKit.RED4.Types
 {
-    public class CUInt16 : BaseFundamental<ushort>
+    [RED("Uint16")]
+    [DebuggerDisplay("{_value,nq}", Type = "CUInt16")]
+    public readonly struct CUInt16 : IRedPrimitive<ushort>, IEquatable<CUInt16>
     {
-        public static implicit operator CUInt16(ushort value) => new() { Value = value };
-        public static implicit operator ushort(CUInt16 value) => value.Value;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private readonly ushort _value;
+
+        private CUInt16(ushort value)
+        {
+            _value = value;
+        }
+
+        public static implicit operator CUInt16(ushort value) => new(value);
+        public static implicit operator ushort(CUInt16 value) => value._value;
+
+        public static CUInt16 operator +(CUInt16 objA, CUInt16 objB) => new((ushort)(objA._value + objB._value));
+        public static CUInt16 operator -(CUInt16 objA, CUInt16 objB) => new((ushort)(objA._value - objB._value));
+        public static CUInt16 operator *(CUInt16 objA, CUInt16 objB) => new((ushort)(objA._value * objB._value));
+        public static CUInt16 operator /(CUInt16 objA, CUInt16 objB) => new((ushort)(objA._value / objB._value));
+
+
+        public override int GetHashCode() => _value.GetHashCode();
+
+        public override bool Equals(object obj)
+        {
+            if (obj is CUInt16 cObj)
+            {
+                return Equals(cObj);
+            }
+
+            return false;
+        }
+
+        public bool Equals(CUInt16 other) => Equals(_value, other._value);
     }
 }

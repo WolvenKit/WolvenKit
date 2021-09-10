@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SlotReservationDecorator : AIVehicleTaskAbstract
 	{
-		private CHandle<AIArgumentMapping> _mountData;
-		private CHandle<gameMountEventData> _mountEventData;
-
 		[Ordinal(0)] 
 		[RED("mountData")] 
 		public CHandle<AIArgumentMapping> MountData
 		{
-			get => GetProperty(ref _mountData);
-			set => SetProperty(ref _mountData, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("mountEventData")] 
 		public CHandle<gameMountEventData> MountEventData
 		{
-			get => GetProperty(ref _mountEventData);
-			set => SetProperty(ref _mountEventData, value);
+			get => GetPropertyValue<CHandle<gameMountEventData>>();
+			set => SetPropertyValue<CHandle<gameMountEventData>>(value);
 		}
 	}
 }

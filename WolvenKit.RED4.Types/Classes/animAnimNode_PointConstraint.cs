@@ -5,82 +5,80 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_PointConstraint : animAnimNode_OnePoseInput
 	{
-		private CBool _areSourceChannelsResaved;
-		private CArray<CHandle<animAnimNodeSourceChannel_WeightedVector>> _inputTransforms;
-		private CArray<CFloat> _preprocessedWeights;
-		private CArray<animAnimNode_PointConstraint_WeightedTransform> _inputWeightedTransforms;
-		private animTransformIndex _transformIndex;
-		private CEnum<animConstraintWeightMode> _weightMode;
-		private CFloat _weight;
-		private animNamedTrackIndex _weightFloatTrack;
-
 		[Ordinal(12)] 
 		[RED("areSourceChannelsResaved")] 
 		public CBool AreSourceChannelsResaved
 		{
-			get => GetProperty(ref _areSourceChannelsResaved);
-			set => SetProperty(ref _areSourceChannelsResaved, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("inputTransforms")] 
 		public CArray<CHandle<animAnimNodeSourceChannel_WeightedVector>> InputTransforms
 		{
-			get => GetProperty(ref _inputTransforms);
-			set => SetProperty(ref _inputTransforms, value);
+			get => GetPropertyValue<CArray<CHandle<animAnimNodeSourceChannel_WeightedVector>>>();
+			set => SetPropertyValue<CArray<CHandle<animAnimNodeSourceChannel_WeightedVector>>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("preprocessedWeights")] 
 		public CArray<CFloat> PreprocessedWeights
 		{
-			get => GetProperty(ref _preprocessedWeights);
-			set => SetProperty(ref _preprocessedWeights, value);
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("inputWeightedTransforms")] 
 		public CArray<animAnimNode_PointConstraint_WeightedTransform> InputWeightedTransforms
 		{
-			get => GetProperty(ref _inputWeightedTransforms);
-			set => SetProperty(ref _inputWeightedTransforms, value);
+			get => GetPropertyValue<CArray<animAnimNode_PointConstraint_WeightedTransform>>();
+			set => SetPropertyValue<CArray<animAnimNode_PointConstraint_WeightedTransform>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("transformIndex")] 
 		public animTransformIndex TransformIndex
 		{
-			get => GetProperty(ref _transformIndex);
-			set => SetProperty(ref _transformIndex, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("weightMode")] 
 		public CEnum<animConstraintWeightMode> WeightMode
 		{
-			get => GetProperty(ref _weightMode);
-			set => SetProperty(ref _weightMode, value);
+			get => GetPropertyValue<CEnum<animConstraintWeightMode>>();
+			set => SetPropertyValue<CEnum<animConstraintWeightMode>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("weight")] 
 		public CFloat Weight
 		{
-			get => GetProperty(ref _weight);
-			set => SetProperty(ref _weight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("weightFloatTrack")] 
 		public animNamedTrackIndex WeightFloatTrack
 		{
-			get => GetProperty(ref _weightFloatTrack);
-			set => SetProperty(ref _weightFloatTrack, value);
+			get => GetPropertyValue<animNamedTrackIndex>();
+			set => SetPropertyValue<animNamedTrackIndex>(value);
 		}
 
 		public animAnimNode_PointConstraint()
 		{
-			_weight = 1.000000F;
+			Id = 4294967295;
+			InputLink = new();
+			InputTransforms = new();
+			PreprocessedWeights = new();
+			InputWeightedTransforms = new();
+			TransformIndex = new();
+			Weight = 1.000000F;
+			WeightFloatTrack = new();
 		}
 	}
 }

@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiSetCharacterCreationDataRequest : gamePlayerScriptableSystemRequest
 	{
-		private TweakDBID _lifepath;
-		private CArray<gameuiCharacterCustomizationAttribute> _attributes;
-
 		[Ordinal(1)] 
 		[RED("lifepath")] 
 		public TweakDBID Lifepath
 		{
-			get => GetProperty(ref _lifepath);
-			set => SetProperty(ref _lifepath, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("attributes")] 
 		public CArray<gameuiCharacterCustomizationAttribute> Attributes
 		{
-			get => GetProperty(ref _attributes);
-			set => SetProperty(ref _attributes, value);
+			get => GetPropertyValue<CArray<gameuiCharacterCustomizationAttribute>>();
+			set => SetPropertyValue<CArray<gameuiCharacterCustomizationAttribute>>(value);
+		}
+
+		public gameuiSetCharacterCreationDataRequest()
+		{
+			Attributes = new();
 		}
 	}
 }

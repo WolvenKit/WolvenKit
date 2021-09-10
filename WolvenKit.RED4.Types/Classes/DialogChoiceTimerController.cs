@@ -5,95 +5,91 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DialogChoiceTimerController : inkWidgetLogicController
 	{
-		private inkWidgetReference _bar;
-		private inkTextWidgetReference _timerValue;
-		private CHandle<inkanimDefinition> _progressAnimDef;
-		private CHandle<inkanimDefinition> _timerAnimDef;
-		private CHandle<inkanimScaleInterpolator> _progressAnimInterpolator;
-		private CHandle<inkanimTransparencyInterpolator> _timerAnimInterpolator;
-		private CHandle<inkanimProxy> _timerAnimProxy;
-		private CHandle<inkanimProxy> _timerBarAnimProxy;
-		private inkanimPlaybackOptions _animOptions;
-		private CFloat _time;
-
 		[Ordinal(1)] 
 		[RED("bar")] 
 		public inkWidgetReference Bar
 		{
-			get => GetProperty(ref _bar);
-			set => SetProperty(ref _bar, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("timerValue")] 
 		public inkTextWidgetReference TimerValue
 		{
-			get => GetProperty(ref _timerValue);
-			set => SetProperty(ref _timerValue, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("progressAnimDef")] 
 		public CHandle<inkanimDefinition> ProgressAnimDef
 		{
-			get => GetProperty(ref _progressAnimDef);
-			set => SetProperty(ref _progressAnimDef, value);
+			get => GetPropertyValue<CHandle<inkanimDefinition>>();
+			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("timerAnimDef")] 
 		public CHandle<inkanimDefinition> TimerAnimDef
 		{
-			get => GetProperty(ref _timerAnimDef);
-			set => SetProperty(ref _timerAnimDef, value);
+			get => GetPropertyValue<CHandle<inkanimDefinition>>();
+			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("ProgressAnimInterpolator")] 
 		public CHandle<inkanimScaleInterpolator> ProgressAnimInterpolator
 		{
-			get => GetProperty(ref _progressAnimInterpolator);
-			set => SetProperty(ref _progressAnimInterpolator, value);
+			get => GetPropertyValue<CHandle<inkanimScaleInterpolator>>();
+			set => SetPropertyValue<CHandle<inkanimScaleInterpolator>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("timerAnimInterpolator")] 
 		public CHandle<inkanimTransparencyInterpolator> TimerAnimInterpolator
 		{
-			get => GetProperty(ref _timerAnimInterpolator);
-			set => SetProperty(ref _timerAnimInterpolator, value);
+			get => GetPropertyValue<CHandle<inkanimTransparencyInterpolator>>();
+			set => SetPropertyValue<CHandle<inkanimTransparencyInterpolator>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("timerAnimProxy")] 
 		public CHandle<inkanimProxy> TimerAnimProxy
 		{
-			get => GetProperty(ref _timerAnimProxy);
-			set => SetProperty(ref _timerAnimProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("timerBarAnimProxy")] 
 		public CHandle<inkanimProxy> TimerBarAnimProxy
 		{
-			get => GetProperty(ref _timerBarAnimProxy);
-			set => SetProperty(ref _timerBarAnimProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("AnimOptions")] 
 		public inkanimPlaybackOptions AnimOptions
 		{
-			get => GetProperty(ref _animOptions);
-			set => SetProperty(ref _animOptions, value);
+			get => GetPropertyValue<inkanimPlaybackOptions>();
+			set => SetPropertyValue<inkanimPlaybackOptions>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("time")] 
 		public CFloat Time
 		{
-			get => GetProperty(ref _time);
-			set => SetProperty(ref _time, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public DialogChoiceTimerController()
+		{
+			Bar = new();
+			TimerValue = new();
+			AnimOptions = new();
 		}
 	}
 }

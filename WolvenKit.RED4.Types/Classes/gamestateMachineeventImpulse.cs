@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamestateMachineeventImpulse : gamestateMachineeventBaseEvent
 	{
-		private Vector4 _impulse;
-
 		[Ordinal(1)] 
 		[RED("impulse")] 
 		public Vector4 Impulse
 		{
-			get => GetProperty(ref _impulse);
-			set => SetProperty(ref _impulse, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
+		}
+
+		public gamestateMachineeventImpulse()
+		{
+			Impulse = new();
 		}
 	}
 }

@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class HotkeyAssignmentRequest : gamePlayerScriptableSystemRequest
 	{
-		private gameItemID _itemID;
-		private CEnum<gameEHotkey> _hotkey;
-		private CEnum<EHotkeyRequestType> _requestType;
-
 		[Ordinal(1)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get => GetProperty(ref _itemID);
-			set => SetProperty(ref _itemID, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("hotkey")] 
 		public CEnum<gameEHotkey> Hotkey
 		{
-			get => GetProperty(ref _hotkey);
-			set => SetProperty(ref _hotkey, value);
+			get => GetPropertyValue<CEnum<gameEHotkey>>();
+			set => SetPropertyValue<CEnum<gameEHotkey>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("requestType")] 
 		public CEnum<EHotkeyRequestType> RequestType
 		{
-			get => GetProperty(ref _requestType);
-			set => SetProperty(ref _requestType, value);
+			get => GetPropertyValue<CEnum<EHotkeyRequestType>>();
+			set => SetPropertyValue<CEnum<EHotkeyRequestType>>(value);
+		}
+
+		public HotkeyAssignmentRequest()
+		{
+			ItemID = new();
 		}
 	}
 }

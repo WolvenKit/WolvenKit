@@ -5,19 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questPopulactionControllerNodeDefinition : questBaseObjectNodeDefinition
 	{
-		private CBool _enable;
-
 		[Ordinal(3)] 
 		[RED("enable")] 
 		public CBool Enable
 		{
-			get => GetProperty(ref _enable);
-			set => SetProperty(ref _enable, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public questPopulactionControllerNodeDefinition()
 		{
-			_enable = true;
+			Sockets = new();
+			Id = 65535;
+			Enable = true;
 		}
 	}
 }

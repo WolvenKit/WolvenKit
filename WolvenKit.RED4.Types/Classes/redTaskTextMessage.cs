@@ -5,37 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class redTaskTextMessage : RedBaseClass
 	{
-		private CUInt32 _taskId;
-		private CString _text;
-		private CEnum<redTaskTextMessageType> _type;
-
 		[Ordinal(0)] 
 		[RED("taskId")] 
 		public CUInt32 TaskId
 		{
-			get => GetProperty(ref _taskId);
-			set => SetProperty(ref _taskId, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("text")] 
 		public CString Text
 		{
-			get => GetProperty(ref _text);
-			set => SetProperty(ref _text, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("type")] 
 		public CEnum<redTaskTextMessageType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<redTaskTextMessageType>>();
+			set => SetPropertyValue<CEnum<redTaskTextMessageType>>(value);
 		}
 
 		public redTaskTextMessage()
 		{
-			_taskId = 4294967295;
+			TaskId = 4294967295;
 		}
 	}
 }

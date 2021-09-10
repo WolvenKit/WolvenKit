@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameTrafficWorkspotTransitionData : ISerializable
 	{
-		private CHandle<gameSetupWorkspotActionEvent> _workspotData;
-		private CHandle<worldTrafficGlobalPathPosition> _returnPosition;
-		private Vector3 _workspotExitTangent;
-		private Vector3 _trafficLaneReturnTangent;
-
 		[Ordinal(0)] 
 		[RED("workspotData")] 
 		public CHandle<gameSetupWorkspotActionEvent> WorkspotData
 		{
-			get => GetProperty(ref _workspotData);
-			set => SetProperty(ref _workspotData, value);
+			get => GetPropertyValue<CHandle<gameSetupWorkspotActionEvent>>();
+			set => SetPropertyValue<CHandle<gameSetupWorkspotActionEvent>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("returnPosition")] 
 		public CHandle<worldTrafficGlobalPathPosition> ReturnPosition
 		{
-			get => GetProperty(ref _returnPosition);
-			set => SetProperty(ref _returnPosition, value);
+			get => GetPropertyValue<CHandle<worldTrafficGlobalPathPosition>>();
+			set => SetPropertyValue<CHandle<worldTrafficGlobalPathPosition>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("workspotExitTangent")] 
 		public Vector3 WorkspotExitTangent
 		{
-			get => GetProperty(ref _workspotExitTangent);
-			set => SetProperty(ref _workspotExitTangent, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("trafficLaneReturnTangent")] 
 		public Vector3 TrafficLaneReturnTangent
 		{
-			get => GetProperty(ref _trafficLaneReturnTangent);
-			set => SetProperty(ref _trafficLaneReturnTangent, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
+		}
+
+		public gameTrafficWorkspotTransitionData()
+		{
+			WorkspotExitTangent = new();
+			TrafficLaneReturnTangent = new();
 		}
 	}
 }

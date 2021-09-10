@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_DisableSleepMode : animAnimNode_OnePoseInput
 	{
-		private CBool _forceUpdate;
-
 		[Ordinal(12)] 
 		[RED("forceUpdate")] 
 		public CBool ForceUpdate
 		{
-			get => GetProperty(ref _forceUpdate);
-			set => SetProperty(ref _forceUpdate, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public animAnimNode_DisableSleepMode()
+		{
+			Id = 4294967295;
+			InputLink = new();
 		}
 	}
 }

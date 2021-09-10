@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class interopEntityEffectSelectionSyncData : RedBaseClass
 	{
-		private CName _effectName;
-		private toolsEditorObjectIDPath _effectIDPath;
-
 		[Ordinal(0)] 
 		[RED("effectName")] 
 		public CName EffectName
 		{
-			get => GetProperty(ref _effectName);
-			set => SetProperty(ref _effectName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("effectIDPath")] 
 		public toolsEditorObjectIDPath EffectIDPath
 		{
-			get => GetProperty(ref _effectIDPath);
-			set => SetProperty(ref _effectIDPath, value);
+			get => GetPropertyValue<toolsEditorObjectIDPath>();
+			set => SetPropertyValue<toolsEditorObjectIDPath>(value);
+		}
+
+		public interopEntityEffectSelectionSyncData()
+		{
+			EffectIDPath = new() { Elements = new() };
 		}
 	}
 }

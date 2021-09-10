@@ -5,23 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entSlotComponent : entIPlacedComponent
 	{
-		private CArray<entSlot> _slots;
-		private CArray<entFallbackSlot> _fallbackSlots;
-
 		[Ordinal(5)] 
 		[RED("slots")] 
 		public CArray<entSlot> Slots
 		{
-			get => GetProperty(ref _slots);
-			set => SetProperty(ref _slots, value);
+			get => GetPropertyValue<CArray<entSlot>>();
+			set => SetPropertyValue<CArray<entSlot>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("fallbackSlots")] 
 		public CArray<entFallbackSlot> FallbackSlots
 		{
-			get => GetProperty(ref _fallbackSlots);
-			set => SetProperty(ref _fallbackSlots, value);
+			get => GetPropertyValue<CArray<entFallbackSlot>>();
+			set => SetPropertyValue<CArray<entFallbackSlot>>(value);
+		}
+
+		public entSlotComponent()
+		{
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			Slots = new();
+			FallbackSlots = new();
 		}
 	}
 }

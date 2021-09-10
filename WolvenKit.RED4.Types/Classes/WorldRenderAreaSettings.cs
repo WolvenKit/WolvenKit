@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WorldRenderAreaSettings : RedBaseClass
 	{
-		private CArray<CHandle<IAreaSettings>> _areaParameters;
-
 		[Ordinal(0)] 
 		[RED("areaParameters")] 
 		public CArray<CHandle<IAreaSettings>> AreaParameters
 		{
-			get => GetProperty(ref _areaParameters);
-			set => SetProperty(ref _areaParameters, value);
+			get => GetPropertyValue<CArray<CHandle<IAreaSettings>>>();
+			set => SetPropertyValue<CArray<CHandle<IAreaSettings>>>(value);
+		}
+
+		public WorldRenderAreaSettings()
+		{
+			AreaParameters = new();
 		}
 	}
 }

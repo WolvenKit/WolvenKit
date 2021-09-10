@@ -5,131 +5,121 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIActionLookatParams : RedBaseClass
 	{
-		private CBool _useLookat;
-		private CBool _useLeftHand;
-		private CBool _useRightHand;
-		private CBool _attachRightHandtoLeftHand;
-		private CBool _attachLeftHandtoRightHand;
-		private CName _slotName;
-		private CEnum<animLookAtStyle> _lookatStyle;
-		private CBool _hasOutTransition;
-		private CEnum<animLookAtStyle> _outTransitionStyle;
-		private CEnum<animLookAtLimitDegreesType> _softLimitDegrees;
-		private CEnum<animLookAtLimitDegreesType> _hardLimitDegrees;
-		private CEnum<animLookAtLimitDistanceType> _hardLimitDistance;
-		private CEnum<animLookAtLimitDegreesType> _backLimitDegrees;
-		private CArray<animLookAtPartRequest> _additionalParts;
-
 		[Ordinal(0)] 
 		[RED("useLookat")] 
 		public CBool UseLookat
 		{
-			get => GetProperty(ref _useLookat);
-			set => SetProperty(ref _useLookat, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("useLeftHand")] 
 		public CBool UseLeftHand
 		{
-			get => GetProperty(ref _useLeftHand);
-			set => SetProperty(ref _useLeftHand, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("useRightHand")] 
 		public CBool UseRightHand
 		{
-			get => GetProperty(ref _useRightHand);
-			set => SetProperty(ref _useRightHand, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("attachRightHandtoLeftHand")] 
 		public CBool AttachRightHandtoLeftHand
 		{
-			get => GetProperty(ref _attachRightHandtoLeftHand);
-			set => SetProperty(ref _attachRightHandtoLeftHand, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("attachLeftHandtoRightHand")] 
 		public CBool AttachLeftHandtoRightHand
 		{
-			get => GetProperty(ref _attachLeftHandtoRightHand);
-			set => SetProperty(ref _attachLeftHandtoRightHand, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("slotName")] 
 		public CName SlotName
 		{
-			get => GetProperty(ref _slotName);
-			set => SetProperty(ref _slotName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("lookatStyle")] 
 		public CEnum<animLookAtStyle> LookatStyle
 		{
-			get => GetProperty(ref _lookatStyle);
-			set => SetProperty(ref _lookatStyle, value);
+			get => GetPropertyValue<CEnum<animLookAtStyle>>();
+			set => SetPropertyValue<CEnum<animLookAtStyle>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("hasOutTransition")] 
 		public CBool HasOutTransition
 		{
-			get => GetProperty(ref _hasOutTransition);
-			set => SetProperty(ref _hasOutTransition, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("outTransitionStyle")] 
 		public CEnum<animLookAtStyle> OutTransitionStyle
 		{
-			get => GetProperty(ref _outTransitionStyle);
-			set => SetProperty(ref _outTransitionStyle, value);
+			get => GetPropertyValue<CEnum<animLookAtStyle>>();
+			set => SetPropertyValue<CEnum<animLookAtStyle>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("softLimitDegrees")] 
 		public CEnum<animLookAtLimitDegreesType> SoftLimitDegrees
 		{
-			get => GetProperty(ref _softLimitDegrees);
-			set => SetProperty(ref _softLimitDegrees, value);
+			get => GetPropertyValue<CEnum<animLookAtLimitDegreesType>>();
+			set => SetPropertyValue<CEnum<animLookAtLimitDegreesType>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("hardLimitDegrees")] 
 		public CEnum<animLookAtLimitDegreesType> HardLimitDegrees
 		{
-			get => GetProperty(ref _hardLimitDegrees);
-			set => SetProperty(ref _hardLimitDegrees, value);
+			get => GetPropertyValue<CEnum<animLookAtLimitDegreesType>>();
+			set => SetPropertyValue<CEnum<animLookAtLimitDegreesType>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("hardLimitDistance")] 
 		public CEnum<animLookAtLimitDistanceType> HardLimitDistance
 		{
-			get => GetProperty(ref _hardLimitDistance);
-			set => SetProperty(ref _hardLimitDistance, value);
+			get => GetPropertyValue<CEnum<animLookAtLimitDistanceType>>();
+			set => SetPropertyValue<CEnum<animLookAtLimitDistanceType>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("backLimitDegrees")] 
 		public CEnum<animLookAtLimitDegreesType> BackLimitDegrees
 		{
-			get => GetProperty(ref _backLimitDegrees);
-			set => SetProperty(ref _backLimitDegrees, value);
+			get => GetPropertyValue<CEnum<animLookAtLimitDegreesType>>();
+			set => SetPropertyValue<CEnum<animLookAtLimitDegreesType>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("additionalParts")] 
 		public CArray<animLookAtPartRequest> AdditionalParts
 		{
-			get => GetProperty(ref _additionalParts);
-			set => SetProperty(ref _additionalParts, value);
+			get => GetPropertyValue<CArray<animLookAtPartRequest>>();
+			set => SetPropertyValue<CArray<animLookAtPartRequest>>(value);
+		}
+
+		public AIActionLookatParams()
+		{
+			AdditionalParts = new();
 		}
 	}
 }

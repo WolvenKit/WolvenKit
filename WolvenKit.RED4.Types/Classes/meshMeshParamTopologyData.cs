@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class meshMeshParamTopologyData : meshMeshParameter
 	{
-		private DataBuffer _data;
-		private CArray<CUInt32> _offsets;
-		private CArray<CUInt32> _sizes;
-
 		[Ordinal(0)] 
 		[RED("data")] 
 		public DataBuffer Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<DataBuffer>();
+			set => SetPropertyValue<DataBuffer>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("offsets")] 
 		public CArray<CUInt32> Offsets
 		{
-			get => GetProperty(ref _offsets);
-			set => SetProperty(ref _offsets, value);
+			get => GetPropertyValue<CArray<CUInt32>>();
+			set => SetPropertyValue<CArray<CUInt32>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("sizes")] 
 		public CArray<CUInt32> Sizes
 		{
-			get => GetProperty(ref _sizes);
-			set => SetProperty(ref _sizes, value);
+			get => GetPropertyValue<CArray<CUInt32>>();
+			set => SetPropertyValue<CArray<CUInt32>>(value);
+		}
+
+		public meshMeshParamTopologyData()
+		{
+			Offsets = new();
+			Sizes = new();
 		}
 	}
 }

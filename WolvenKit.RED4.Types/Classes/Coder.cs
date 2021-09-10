@@ -5,5 +5,9 @@ namespace WolvenKit.RED4.Types
 	public partial class Coder : BasicDistractionDevice
 	{
 
+		public Coder()
+		{
+			ControllerTypeName = "CoderController";
+		}
 	}
 }

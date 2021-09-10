@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnInputSocketId : RedBaseClass
 	{
-		private scnNodeId _nodeId;
-		private scnInputSocketStamp _isockStamp;
-
 		[Ordinal(0)] 
 		[RED("nodeId")] 
 		public scnNodeId NodeId
 		{
-			get => GetProperty(ref _nodeId);
-			set => SetProperty(ref _nodeId, value);
+			get => GetPropertyValue<scnNodeId>();
+			set => SetPropertyValue<scnNodeId>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isockStamp")] 
 		public scnInputSocketStamp IsockStamp
 		{
-			get => GetProperty(ref _isockStamp);
-			set => SetProperty(ref _isockStamp, value);
+			get => GetPropertyValue<scnInputSocketStamp>();
+			set => SetPropertyValue<scnInputSocketStamp>(value);
+		}
+
+		public scnInputSocketId()
+		{
+			NodeId = new() { Id = 4294967295 };
+			IsockStamp = new() { Name = 65535, Ordinal = 65535 };
 		}
 	}
 }

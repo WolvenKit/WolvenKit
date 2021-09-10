@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CheckReaction : AIbehaviorconditionScript
 	{
-		private CEnum<gamedataOutput> _reactionToCompare;
-
 		[Ordinal(0)] 
 		[RED("reactionToCompare")] 
 		public CEnum<gamedataOutput> ReactionToCompare
 		{
-			get => GetProperty(ref _reactionToCompare);
-			set => SetProperty(ref _reactionToCompare, value);
+			get => GetPropertyValue<CEnum<gamedataOutput>>();
+			set => SetPropertyValue<CEnum<gamedataOutput>>(value);
 		}
 	}
 }

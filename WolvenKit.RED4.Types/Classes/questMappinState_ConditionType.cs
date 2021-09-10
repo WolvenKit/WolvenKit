@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questMappinState_ConditionType : questIJournalConditionType
 	{
-		private CHandle<gameJournalPath> _mappinPath;
-		private CBool _active;
-
 		[Ordinal(0)] 
 		[RED("mappinPath")] 
 		public CHandle<gameJournalPath> MappinPath
 		{
-			get => GetProperty(ref _mappinPath);
-			set => SetProperty(ref _mappinPath, value);
+			get => GetPropertyValue<CHandle<gameJournalPath>>();
+			set => SetPropertyValue<CHandle<gameJournalPath>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("active")] 
 		public CBool Active
 		{
-			get => GetProperty(ref _active);
-			set => SetProperty(ref _active, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public questMappinState_ConditionType()
 		{
-			_active = true;
+			Active = true;
 		}
 	}
 }

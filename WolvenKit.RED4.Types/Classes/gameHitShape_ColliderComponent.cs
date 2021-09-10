@@ -5,14 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameHitShape_ColliderComponent : gameHitShapeBase
 	{
-		private CArray<CName> _componentNames;
-
 		[Ordinal(3)] 
 		[RED("componentNames")] 
 		public CArray<CName> ComponentNames
 		{
-			get => GetProperty(ref _componentNames);
-			set => SetProperty(ref _componentNames, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
+		public gameHitShape_ColliderComponent()
+		{
+			Translation = new();
+			Rotation = new() { R = 1.000000F };
+			LocalTransform = new();
+			ComponentNames = new();
 		}
 	}
 }

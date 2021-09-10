@@ -5,68 +5,66 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkScreenProjectionData : RedBaseClass
 	{
-		private CWeakHandle<entEntity> _entity;
-		private CName _slotComponentName;
-		private CName _slotName;
-		private CName _slotFallbackName;
-		private Vector4 _staticWorldPosition;
-		private Vector4 _fixedWorldOffset;
-		private CWeakHandle<IScriptable> _userData;
-
 		[Ordinal(0)] 
 		[RED("entity")] 
 		public CWeakHandle<entEntity> Entity
 		{
-			get => GetProperty(ref _entity);
-			set => SetProperty(ref _entity, value);
+			get => GetPropertyValue<CWeakHandle<entEntity>>();
+			set => SetPropertyValue<CWeakHandle<entEntity>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("slotComponentName")] 
 		public CName SlotComponentName
 		{
-			get => GetProperty(ref _slotComponentName);
-			set => SetProperty(ref _slotComponentName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("slotName")] 
 		public CName SlotName
 		{
-			get => GetProperty(ref _slotName);
-			set => SetProperty(ref _slotName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("slotFallbackName")] 
 		public CName SlotFallbackName
 		{
-			get => GetProperty(ref _slotFallbackName);
-			set => SetProperty(ref _slotFallbackName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("staticWorldPosition")] 
 		public Vector4 StaticWorldPosition
 		{
-			get => GetProperty(ref _staticWorldPosition);
-			set => SetProperty(ref _staticWorldPosition, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("fixedWorldOffset")] 
 		public Vector4 FixedWorldOffset
 		{
-			get => GetProperty(ref _fixedWorldOffset);
-			set => SetProperty(ref _fixedWorldOffset, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("userData")] 
 		public CWeakHandle<IScriptable> UserData
 		{
-			get => GetProperty(ref _userData);
-			set => SetProperty(ref _userData, value);
+			get => GetPropertyValue<CWeakHandle<IScriptable>>();
+			set => SetPropertyValue<CWeakHandle<IScriptable>>(value);
+		}
+
+		public inkScreenProjectionData()
+		{
+			StaticWorldPosition = new();
+			FixedWorldOffset = new();
 		}
 	}
 }

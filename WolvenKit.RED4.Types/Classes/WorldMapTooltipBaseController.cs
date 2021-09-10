@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WorldMapTooltipBaseController : inkWidgetLogicController
 	{
-		private inkWidgetReference _root;
-		private CHandle<inkanimProxy> _showHideAnim;
-		private CBool _visible;
-		private CBool _active;
-
 		[Ordinal(1)] 
 		[RED("root")] 
 		public inkWidgetReference Root
 		{
-			get => GetProperty(ref _root);
-			set => SetProperty(ref _root, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("showHideAnim")] 
 		public CHandle<inkanimProxy> ShowHideAnim
 		{
-			get => GetProperty(ref _showHideAnim);
-			set => SetProperty(ref _showHideAnim, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("visible")] 
 		public CBool Visible
 		{
-			get => GetProperty(ref _visible);
-			set => SetProperty(ref _visible, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("active")] 
 		public CBool Active
 		{
-			get => GetProperty(ref _active);
-			set => SetProperty(ref _active, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public WorldMapTooltipBaseController()
+		{
+			Root = new();
 		}
 	}
 }

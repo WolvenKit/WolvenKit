@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioRadioStationMetadata : audioAudioMetadata
 	{
-		private CArray<CName> _tracks;
-		private CEnum<audioRadioSpeakerType> _speaker;
-
 		[Ordinal(1)] 
 		[RED("tracks")] 
 		public CArray<CName> Tracks
 		{
-			get => GetProperty(ref _tracks);
-			set => SetProperty(ref _tracks, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("speaker")] 
 		public CEnum<audioRadioSpeakerType> Speaker
 		{
-			get => GetProperty(ref _speaker);
-			set => SetProperty(ref _speaker, value);
+			get => GetPropertyValue<CEnum<audioRadioSpeakerType>>();
+			set => SetPropertyValue<CEnum<audioRadioSpeakerType>>(value);
+		}
+
+		public audioRadioStationMetadata()
+		{
+			Tracks = new();
 		}
 	}
 }

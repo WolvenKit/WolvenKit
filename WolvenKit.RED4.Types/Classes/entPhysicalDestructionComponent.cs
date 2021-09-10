@@ -5,74 +5,72 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entPhysicalDestructionComponent : entIVisualComponent
 	{
-		private CResourceAsyncReference<CMesh> _mesh;
-		private CName _meshAppearance;
-		private CFloat _forceAutoHideDistance;
-		private physicsDestructionParams _destructionParams;
-		private CArray<physicsDestructionLevelData> _destructionLevelData;
-		private CBool _isEnabled;
-		private CName _audioMetadata;
-
 		[Ordinal(8)] 
 		[RED("mesh")] 
 		public CResourceAsyncReference<CMesh> Mesh
 		{
-			get => GetProperty(ref _mesh);
-			set => SetProperty(ref _mesh, value);
+			get => GetPropertyValue<CResourceAsyncReference<CMesh>>();
+			set => SetPropertyValue<CResourceAsyncReference<CMesh>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("meshAppearance")] 
 		public CName MeshAppearance
 		{
-			get => GetProperty(ref _meshAppearance);
-			set => SetProperty(ref _meshAppearance, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("forceAutoHideDistance")] 
 		public CFloat ForceAutoHideDistance
 		{
-			get => GetProperty(ref _forceAutoHideDistance);
-			set => SetProperty(ref _forceAutoHideDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("destructionParams")] 
 		public physicsDestructionParams DestructionParams
 		{
-			get => GetProperty(ref _destructionParams);
-			set => SetProperty(ref _destructionParams, value);
+			get => GetPropertyValue<physicsDestructionParams>();
+			set => SetPropertyValue<physicsDestructionParams>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("destructionLevelData")] 
 		public CArray<physicsDestructionLevelData> DestructionLevelData
 		{
-			get => GetProperty(ref _destructionLevelData);
-			set => SetProperty(ref _destructionLevelData, value);
+			get => GetPropertyValue<CArray<physicsDestructionLevelData>>();
+			set => SetPropertyValue<CArray<physicsDestructionLevelData>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("audioMetadata")] 
 		public CName AudioMetadata
 		{
-			get => GetProperty(ref _audioMetadata);
-			set => SetProperty(ref _audioMetadata, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public entPhysicalDestructionComponent()
 		{
-			_meshAppearance = "default";
-			_isEnabled = true;
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
+			ForceLODLevel = -1;
+			MeshAppearance = "default";
+			DestructionParams = new() { DamageThreshold = 25.000000F, DamageEndurance = 10.000000F, BondEndurance = 20.000000F, AccumulateDamage = true, ImpulseToDamage = 1.000000F, ContactToDamage = 10.000000F, MaxContactImpulseRatio = 1.000000F, ImpulseChildPropagationFactor = 1.000000F, ImpulsePropagationFactor = 0.500000F, ImpulseDiminishingFactor = 0.500000F, DebrisMaxSeparation = 50.000000F, MaxAngularVelocity = -1.000000F };
+			DestructionLevelData = new();
+			IsEnabled = true;
 		}
 	}
 }

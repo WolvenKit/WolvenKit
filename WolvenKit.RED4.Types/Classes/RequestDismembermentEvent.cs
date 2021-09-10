@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RequestDismembermentEvent : AIAIEvent
 	{
-		private CEnum<gameDismBodyPart> _bodyPart;
-		private CEnum<gameDismWoundType> _dismembermentType;
-		private Vector4 _hitPosition;
-		private CBool _isCritical;
-
 		[Ordinal(2)] 
 		[RED("bodyPart")] 
 		public CEnum<gameDismBodyPart> BodyPart
 		{
-			get => GetProperty(ref _bodyPart);
-			set => SetProperty(ref _bodyPart, value);
+			get => GetPropertyValue<CEnum<gameDismBodyPart>>();
+			set => SetPropertyValue<CEnum<gameDismBodyPart>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("dismembermentType")] 
 		public CEnum<gameDismWoundType> DismembermentType
 		{
-			get => GetProperty(ref _dismembermentType);
-			set => SetProperty(ref _dismembermentType, value);
+			get => GetPropertyValue<CEnum<gameDismWoundType>>();
+			set => SetPropertyValue<CEnum<gameDismWoundType>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("hitPosition")] 
 		public Vector4 HitPosition
 		{
-			get => GetProperty(ref _hitPosition);
-			set => SetProperty(ref _hitPosition, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("isCritical")] 
 		public CBool IsCritical
 		{
-			get => GetProperty(ref _isCritical);
-			set => SetProperty(ref _isCritical, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public RequestDismembermentEvent()
+		{
+			HitPosition = new();
 		}
 	}
 }

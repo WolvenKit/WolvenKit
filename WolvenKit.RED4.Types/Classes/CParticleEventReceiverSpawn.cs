@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CParticleEventReceiverSpawn : IParticleEvent
 	{
-		private CEnum<EParticleEventSpawnObject> _spawnObject;
-
 		[Ordinal(4)] 
 		[RED("spawnObject")] 
 		public CEnum<EParticleEventSpawnObject> SpawnObject
 		{
-			get => GetProperty(ref _spawnObject);
-			set => SetProperty(ref _spawnObject, value);
+			get => GetPropertyValue<CEnum<EParticleEventSpawnObject>>();
+			set => SetPropertyValue<CEnum<EParticleEventSpawnObject>>(value);
+		}
+
+		public CParticleEventReceiverSpawn()
+		{
+			EditorName = "Event Receiver Spawn";
+			EditorGroup = "Event";
+			IsEnabled = true;
 		}
 	}
 }

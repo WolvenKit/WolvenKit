@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VoiceOverQuickHackFeedbackEvent : redEvent
 	{
-		private CName _voName;
-		private CWeakHandle<gameObject> _owner;
-
 		[Ordinal(0)] 
 		[RED("voName")] 
 		public CName VoName
 		{
-			get => GetProperty(ref _voName);
-			set => SetProperty(ref _voName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("owner")] 
 		public CWeakHandle<gameObject> Owner
 		{
-			get => GetProperty(ref _owner);
-			set => SetProperty(ref _owner, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 	}
 }

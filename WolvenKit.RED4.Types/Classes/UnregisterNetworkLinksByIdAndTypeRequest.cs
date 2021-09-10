@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UnregisterNetworkLinksByIdAndTypeRequest : gameScriptableSystemRequest
 	{
-		private entEntityID _iD;
-		private CEnum<ELinkType> _type;
-
 		[Ordinal(0)] 
 		[RED("ID")] 
 		public entEntityID ID
 		{
-			get => GetProperty(ref _iD);
-			set => SetProperty(ref _iD, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("type")] 
 		public CEnum<ELinkType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<ELinkType>>();
+			set => SetPropertyValue<CEnum<ELinkType>>(value);
+		}
+
+		public UnregisterNetworkLinksByIdAndTypeRequest()
+		{
+			ID = new();
 		}
 	}
 }

@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class rendRenderParticleBlobHeader : RedBaseClass
 	{
-		private CUInt32 _version;
-		private rendRenderParticleBlobEmitterInfo _emitterInfo;
-
 		[Ordinal(0)] 
 		[RED("version")] 
 		public CUInt32 Version
 		{
-			get => GetProperty(ref _version);
-			set => SetProperty(ref _version, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("emitterInfo")] 
 		public rendRenderParticleBlobEmitterInfo EmitterInfo
 		{
-			get => GetProperty(ref _emitterInfo);
-			set => SetProperty(ref _emitterInfo, value);
+			get => GetPropertyValue<rendRenderParticleBlobEmitterInfo>();
+			set => SetPropertyValue<rendRenderParticleBlobEmitterInfo>(value);
+		}
+
+		public rendRenderParticleBlobHeader()
+		{
+			EmitterInfo = new() { RenderObjectType = Enums.ERenderObjectType.ROT_Particle, Seeds = new(), Lods = new(), VolumetricParticleColor = new() { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Alpha = 1.000000F }, VolumetricParticleNoiseVelocity = new() };
 		}
 	}
 }

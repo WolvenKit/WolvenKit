@@ -5,41 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameinteractionsCOrientedBoxDefinition : gameinteractionsIShapeDefinition
 	{
-		private Vector4 _position;
-		private Vector4 _forward;
-		private Vector4 _right;
-		private Vector4 _up;
-
 		[Ordinal(0)] 
 		[RED("position")] 
 		public Vector4 Position
 		{
-			get => GetProperty(ref _position);
-			set => SetProperty(ref _position, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("forward")] 
 		public Vector4 Forward
 		{
-			get => GetProperty(ref _forward);
-			set => SetProperty(ref _forward, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("right")] 
 		public Vector4 Right
 		{
-			get => GetProperty(ref _right);
-			set => SetProperty(ref _right, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("up")] 
 		public Vector4 Up
 		{
-			get => GetProperty(ref _up);
-			set => SetProperty(ref _up, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
+		}
+
+		public gameinteractionsCOrientedBoxDefinition()
+		{
+			Position = new() { W = 1.000000F };
+			Forward = new() { Y = 1.000000F };
+			Right = new() { X = 1.000000F };
+			Up = new() { Z = 1.000000F };
 		}
 	}
 }

@@ -5,77 +5,77 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MovableDevice : InteractiveDevice
 	{
-		private CName _workspotSideName;
-		private CArray<CName> _sideTriggerNames;
-		private CArray<CHandle<gameStaticTriggerAreaComponent>> _triggerComponents;
-		private CArray<CName> _offMeshConnectionsToOpenNames;
-		private CArray<CHandle<AIOffMeshConnectionComponent>> _offMeshConnectionsToOpen;
-		private CHandle<entMeshComponent> _additionalMeshComponent;
-		private CBool _useWorkspotComponentPosition;
-		private CBool _shouldMoveRight;
-
 		[Ordinal(97)] 
 		[RED("workspotSideName")] 
 		public CName WorkspotSideName
 		{
-			get => GetProperty(ref _workspotSideName);
-			set => SetProperty(ref _workspotSideName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(98)] 
 		[RED("sideTriggerNames")] 
 		public CArray<CName> SideTriggerNames
 		{
-			get => GetProperty(ref _sideTriggerNames);
-			set => SetProperty(ref _sideTriggerNames, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(99)] 
 		[RED("triggerComponents")] 
 		public CArray<CHandle<gameStaticTriggerAreaComponent>> TriggerComponents
 		{
-			get => GetProperty(ref _triggerComponents);
-			set => SetProperty(ref _triggerComponents, value);
+			get => GetPropertyValue<CArray<CHandle<gameStaticTriggerAreaComponent>>>();
+			set => SetPropertyValue<CArray<CHandle<gameStaticTriggerAreaComponent>>>(value);
 		}
 
 		[Ordinal(100)] 
 		[RED("offMeshConnectionsToOpenNames")] 
 		public CArray<CName> OffMeshConnectionsToOpenNames
 		{
-			get => GetProperty(ref _offMeshConnectionsToOpenNames);
-			set => SetProperty(ref _offMeshConnectionsToOpenNames, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(101)] 
 		[RED("offMeshConnectionsToOpen")] 
 		public CArray<CHandle<AIOffMeshConnectionComponent>> OffMeshConnectionsToOpen
 		{
-			get => GetProperty(ref _offMeshConnectionsToOpen);
-			set => SetProperty(ref _offMeshConnectionsToOpen, value);
+			get => GetPropertyValue<CArray<CHandle<AIOffMeshConnectionComponent>>>();
+			set => SetPropertyValue<CArray<CHandle<AIOffMeshConnectionComponent>>>(value);
 		}
 
 		[Ordinal(102)] 
 		[RED("additionalMeshComponent")] 
 		public CHandle<entMeshComponent> AdditionalMeshComponent
 		{
-			get => GetProperty(ref _additionalMeshComponent);
-			set => SetProperty(ref _additionalMeshComponent, value);
+			get => GetPropertyValue<CHandle<entMeshComponent>>();
+			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
 		[Ordinal(103)] 
 		[RED("UseWorkspotComponentPosition")] 
 		public CBool UseWorkspotComponentPosition
 		{
-			get => GetProperty(ref _useWorkspotComponentPosition);
-			set => SetProperty(ref _useWorkspotComponentPosition, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(104)] 
 		[RED("shouldMoveRight")] 
 		public CBool ShouldMoveRight
 		{
-			get => GetProperty(ref _shouldMoveRight);
-			set => SetProperty(ref _shouldMoveRight, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public MovableDevice()
+		{
+			ControllerTypeName = "MovableDeviceController";
+			SideTriggerNames = new();
+			TriggerComponents = new();
+			OffMeshConnectionsToOpenNames = new();
+			OffMeshConnectionsToOpen = new();
 		}
 	}
 }

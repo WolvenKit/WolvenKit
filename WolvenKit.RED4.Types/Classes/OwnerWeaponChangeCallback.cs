@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class OwnerWeaponChangeCallback : gameAttachmentSlotsScriptCallback
 	{
-		private CHandle<AIFollowerRole> _followerRole;
-
 		[Ordinal(2)] 
 		[RED("followerRole")] 
 		public CHandle<AIFollowerRole> FollowerRole
 		{
-			get => GetProperty(ref _followerRole);
-			set => SetProperty(ref _followerRole, value);
+			get => GetPropertyValue<CHandle<AIFollowerRole>>();
+			set => SetPropertyValue<CHandle<AIFollowerRole>>(value);
 		}
 	}
 }

@@ -5,110 +5,101 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class senseStimuliEvent : senseBaseStimuliEvent
 	{
-		private CWeakHandle<gameObject> _sourceObject;
-		private senseStimInvestigateData _stimInvestigateData;
-		private CArray<Vector4> _movePositions;
-		private Vector4 _sourcePosition;
-		private CWeakHandle<gamedataStim_Record> _stimRecord;
-		private CFloat _radius;
-		private CFloat _detection;
-		private CEnum<gamedataStimType> _stimType;
-		private CEnum<gamedataStimPropagation> _stimPropagation;
-		private CHandle<senseStimuliData> _data;
-		private CUInt32 _id;
-
 		[Ordinal(2)] 
 		[RED("sourceObject")] 
 		public CWeakHandle<gameObject> SourceObject
 		{
-			get => GetProperty(ref _sourceObject);
-			set => SetProperty(ref _sourceObject, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("stimInvestigateData")] 
 		public senseStimInvestigateData StimInvestigateData
 		{
-			get => GetProperty(ref _stimInvestigateData);
-			set => SetProperty(ref _stimInvestigateData, value);
+			get => GetPropertyValue<senseStimInvestigateData>();
+			set => SetPropertyValue<senseStimInvestigateData>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("movePositions")] 
 		public CArray<Vector4> MovePositions
 		{
-			get => GetProperty(ref _movePositions);
-			set => SetProperty(ref _movePositions, value);
+			get => GetPropertyValue<CArray<Vector4>>();
+			set => SetPropertyValue<CArray<Vector4>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("sourcePosition")] 
 		public Vector4 SourcePosition
 		{
-			get => GetProperty(ref _sourcePosition);
-			set => SetProperty(ref _sourcePosition, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("stimRecord")] 
 		public CWeakHandle<gamedataStim_Record> StimRecord
 		{
-			get => GetProperty(ref _stimRecord);
-			set => SetProperty(ref _stimRecord, value);
+			get => GetPropertyValue<CWeakHandle<gamedataStim_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataStim_Record>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get => GetProperty(ref _radius);
-			set => SetProperty(ref _radius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("detection")] 
 		public CFloat Detection
 		{
-			get => GetProperty(ref _detection);
-			set => SetProperty(ref _detection, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("stimType")] 
 		public CEnum<gamedataStimType> StimType
 		{
-			get => GetProperty(ref _stimType);
-			set => SetProperty(ref _stimType, value);
+			get => GetPropertyValue<CEnum<gamedataStimType>>();
+			set => SetPropertyValue<CEnum<gamedataStimType>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("stimPropagation")] 
 		public CEnum<gamedataStimPropagation> StimPropagation
 		{
-			get => GetProperty(ref _stimPropagation);
-			set => SetProperty(ref _stimPropagation, value);
+			get => GetPropertyValue<CEnum<gamedataStimPropagation>>();
+			set => SetPropertyValue<CEnum<gamedataStimPropagation>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("data")] 
 		public CHandle<senseStimuliData> Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<CHandle<senseStimuliData>>();
+			set => SetPropertyValue<CHandle<senseStimuliData>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("id")] 
 		public CUInt32 Id
 		{
-			get => GetProperty(ref _id);
-			set => SetProperty(ref _id, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		public senseStimuliEvent()
 		{
-			_stimType = new() { Value = Enums.gamedataStimType.Invalid };
-			_stimPropagation = new() { Value = Enums.gamedataStimPropagation.Invalid };
+			StimInvestigateData = new() { DistrationPoint = new(), AttackInstigatorPosition = new(), InvestigationSpots = new() };
+			MovePositions = new();
+			SourcePosition = new();
+			StimType = Enums.gamedataStimType.Invalid;
+			StimPropagation = Enums.gamedataStimPropagation.Invalid;
 		}
 	}
 }

@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameFastTravelPointData : IScriptable
 	{
-		private TweakDBID _pointRecord;
-		private NodeRef _markerRef;
-		private entEntityID _requesterID;
-		private gameNewMappinID _mappinID;
-
 		[Ordinal(0)] 
 		[RED("pointRecord")] 
 		public TweakDBID PointRecord
 		{
-			get => GetProperty(ref _pointRecord);
-			set => SetProperty(ref _pointRecord, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("markerRef")] 
 		public NodeRef MarkerRef
 		{
-			get => GetProperty(ref _markerRef);
-			set => SetProperty(ref _markerRef, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("requesterID")] 
 		public entEntityID RequesterID
 		{
-			get => GetProperty(ref _requesterID);
-			set => SetProperty(ref _requesterID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("mappinID")] 
 		public gameNewMappinID MappinID
 		{
-			get => GetProperty(ref _mappinID);
-			set => SetProperty(ref _mappinID, value);
+			get => GetPropertyValue<gameNewMappinID>();
+			set => SetPropertyValue<gameNewMappinID>(value);
+		}
+
+		public gameFastTravelPointData()
+		{
+			RequesterID = new();
+			MappinID = new();
 		}
 	}
 }

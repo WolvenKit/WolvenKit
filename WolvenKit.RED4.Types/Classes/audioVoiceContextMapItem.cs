@@ -5,64 +5,59 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioVoiceContextMapItem : audioAudioMetadata
 	{
-		private CName _voTrigger;
-		private CEnum<audioVoBarkType> _bark;
-		private CEnum<audioVoGruntType> _grunt;
-		private audioVoiceContextAnswer _answer;
-		private CEnum<locVoiceoverContext> _overridingVoContext;
-		private CEnum<audioVoGruntInterruptMode> _gruntInterruptMode;
-
 		[Ordinal(1)] 
 		[RED("voTrigger")] 
 		public CName VoTrigger
 		{
-			get => GetProperty(ref _voTrigger);
-			set => SetProperty(ref _voTrigger, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("bark")] 
 		public CEnum<audioVoBarkType> Bark
 		{
-			get => GetProperty(ref _bark);
-			set => SetProperty(ref _bark, value);
+			get => GetPropertyValue<CEnum<audioVoBarkType>>();
+			set => SetPropertyValue<CEnum<audioVoBarkType>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("grunt")] 
 		public CEnum<audioVoGruntType> Grunt
 		{
-			get => GetProperty(ref _grunt);
-			set => SetProperty(ref _grunt, value);
+			get => GetPropertyValue<CEnum<audioVoGruntType>>();
+			set => SetPropertyValue<CEnum<audioVoGruntType>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("answer")] 
 		public audioVoiceContextAnswer Answer
 		{
-			get => GetProperty(ref _answer);
-			set => SetProperty(ref _answer, value);
+			get => GetPropertyValue<audioVoiceContextAnswer>();
+			set => SetPropertyValue<audioVoiceContextAnswer>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("overridingVoContext")] 
 		public CEnum<locVoiceoverContext> OverridingVoContext
 		{
-			get => GetProperty(ref _overridingVoContext);
-			set => SetProperty(ref _overridingVoContext, value);
+			get => GetPropertyValue<CEnum<locVoiceoverContext>>();
+			set => SetPropertyValue<CEnum<locVoiceoverContext>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("gruntInterruptMode")] 
 		public CEnum<audioVoGruntInterruptMode> GruntInterruptMode
 		{
-			get => GetProperty(ref _gruntInterruptMode);
-			set => SetProperty(ref _gruntInterruptMode, value);
+			get => GetPropertyValue<CEnum<audioVoGruntInterruptMode>>();
+			set => SetPropertyValue<CEnum<audioVoGruntInterruptMode>>(value);
 		}
 
 		public audioVoiceContextMapItem()
 		{
-			_overridingVoContext = new() { Value = Enums.locVoiceoverContext.Default_Vo_Context };
+			Grunt = Enums.audioVoGruntType.None;
+			Answer = new();
+			OverridingVoContext = Enums.locVoiceoverContext.Default_Vo_Context;
 		}
 	}
 }

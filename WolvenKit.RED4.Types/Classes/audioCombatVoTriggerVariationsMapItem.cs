@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioCombatVoTriggerVariationsMapItem : RedBaseClass
 	{
-		private CName _name;
-		private CInt32 _numberOfVariations;
-		private CBool _shuffle;
-
 		[Ordinal(0)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get => GetProperty(ref _name);
-			set => SetProperty(ref _name, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("numberOfVariations")] 
 		public CInt32 NumberOfVariations
 		{
-			get => GetProperty(ref _numberOfVariations);
-			set => SetProperty(ref _numberOfVariations, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("shuffle")] 
 		public CBool Shuffle
 		{
-			get => GetProperty(ref _shuffle);
-			set => SetProperty(ref _shuffle, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

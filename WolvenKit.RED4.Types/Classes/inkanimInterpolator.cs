@@ -5,68 +5,60 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkanimInterpolator : IScriptable
 	{
-		private CEnum<inkanimInterpolationMode> _interpolationMode;
-		private CEnum<inkanimInterpolationType> _interpolationType;
-		private CEnum<inkanimInterpolationDirection> _interpolationDirection;
-		private CFloat _duration;
-		private CFloat _startDelay;
-		private CBool _useRelativeDuration;
-		private CBool _isAdditive;
-
 		[Ordinal(0)] 
 		[RED("interpolationMode")] 
 		public CEnum<inkanimInterpolationMode> InterpolationMode
 		{
-			get => GetProperty(ref _interpolationMode);
-			set => SetProperty(ref _interpolationMode, value);
+			get => GetPropertyValue<CEnum<inkanimInterpolationMode>>();
+			set => SetPropertyValue<CEnum<inkanimInterpolationMode>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("interpolationType")] 
 		public CEnum<inkanimInterpolationType> InterpolationType
 		{
-			get => GetProperty(ref _interpolationType);
-			set => SetProperty(ref _interpolationType, value);
+			get => GetPropertyValue<CEnum<inkanimInterpolationType>>();
+			set => SetPropertyValue<CEnum<inkanimInterpolationType>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("interpolationDirection")] 
 		public CEnum<inkanimInterpolationDirection> InterpolationDirection
 		{
-			get => GetProperty(ref _interpolationDirection);
-			set => SetProperty(ref _interpolationDirection, value);
+			get => GetPropertyValue<CEnum<inkanimInterpolationDirection>>();
+			set => SetPropertyValue<CEnum<inkanimInterpolationDirection>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get => GetProperty(ref _duration);
-			set => SetProperty(ref _duration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("startDelay")] 
 		public CFloat StartDelay
 		{
-			get => GetProperty(ref _startDelay);
-			set => SetProperty(ref _startDelay, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("useRelativeDuration")] 
 		public CBool UseRelativeDuration
 		{
-			get => GetProperty(ref _useRelativeDuration);
-			set => SetProperty(ref _useRelativeDuration, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isAdditive")] 
 		public CBool IsAdditive
 		{
-			get => GetProperty(ref _isAdditive);
-			set => SetProperty(ref _isAdditive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

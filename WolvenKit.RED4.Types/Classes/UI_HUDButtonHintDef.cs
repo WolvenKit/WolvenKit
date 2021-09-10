@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UI_HUDButtonHintDef : gamebbScriptDefinition
 	{
-		private gamebbScriptID_Variant _actionsData;
-
 		[Ordinal(0)] 
 		[RED("ActionsData")] 
 		public gamebbScriptID_Variant ActionsData
 		{
-			get => GetProperty(ref _actionsData);
-			set => SetProperty(ref _actionsData, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
+		}
+
+		public UI_HUDButtonHintDef()
+		{
+			ActionsData = new();
 		}
 	}
 }

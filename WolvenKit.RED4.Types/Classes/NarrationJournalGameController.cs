@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class NarrationJournalGameController : gameuiHUDGameController
 	{
-		private inkCompoundWidgetReference _entriesContainer;
-		private CHandle<redCallbackObject> _narrationJournalBlackboardId;
-
 		[Ordinal(9)] 
 		[RED("entriesContainer")] 
 		public inkCompoundWidgetReference EntriesContainer
 		{
-			get => GetProperty(ref _entriesContainer);
-			set => SetProperty(ref _entriesContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("narrationJournalBlackboardId")] 
 		public CHandle<redCallbackObject> NarrationJournalBlackboardId
 		{
-			get => GetProperty(ref _narrationJournalBlackboardId);
-			set => SetProperty(ref _narrationJournalBlackboardId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		public NarrationJournalGameController()
+		{
+			EntriesContainer = new();
 		}
 	}
 }

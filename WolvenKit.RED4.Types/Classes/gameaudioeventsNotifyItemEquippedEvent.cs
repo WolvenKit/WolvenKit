@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameaudioeventsNotifyItemEquippedEvent : redEvent
 	{
-		private CName _itemName;
-
 		[Ordinal(0)] 
 		[RED("itemName")] 
 		public CName ItemName
 		{
-			get => GetProperty(ref _itemName);
-			set => SetProperty(ref _itemName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 	}
 }

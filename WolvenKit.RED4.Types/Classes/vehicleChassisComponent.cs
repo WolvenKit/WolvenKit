@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class vehicleChassisComponent : entIPlacedComponent
 	{
-		private CResourceReference<physicsSystemResource> _collisionResource;
-		private CResourceReference<physicsSystemResource> _optionalPlayerOnlyCollisionResource;
-
 		[Ordinal(5)] 
 		[RED("collisionResource")] 
 		public CResourceReference<physicsSystemResource> CollisionResource
 		{
-			get => GetProperty(ref _collisionResource);
-			set => SetProperty(ref _collisionResource, value);
+			get => GetPropertyValue<CResourceReference<physicsSystemResource>>();
+			set => SetPropertyValue<CResourceReference<physicsSystemResource>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("optionalPlayerOnlyCollisionResource")] 
 		public CResourceReference<physicsSystemResource> OptionalPlayerOnlyCollisionResource
 		{
-			get => GetProperty(ref _optionalPlayerOnlyCollisionResource);
-			set => SetProperty(ref _optionalPlayerOnlyCollisionResource, value);
+			get => GetPropertyValue<CResourceReference<physicsSystemResource>>();
+			set => SetPropertyValue<CResourceReference<physicsSystemResource>>(value);
+		}
+
+		public vehicleChassisComponent()
+		{
+			Name = "Chassis";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
 		}
 	}
 }

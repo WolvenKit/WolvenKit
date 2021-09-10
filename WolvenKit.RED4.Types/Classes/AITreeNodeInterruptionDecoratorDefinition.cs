@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AITreeNodeInterruptionDecoratorDefinition : AICTreeNodeDecoratorDefinition
 	{
-		private CArray<CHandle<AIInterruptionHandlerDefinition>> _interruptions;
-
 		[Ordinal(1)] 
 		[RED("interruptions")] 
 		public CArray<CHandle<AIInterruptionHandlerDefinition>> Interruptions
 		{
-			get => GetProperty(ref _interruptions);
-			set => SetProperty(ref _interruptions, value);
+			get => GetPropertyValue<CArray<CHandle<AIInterruptionHandlerDefinition>>>();
+			set => SetPropertyValue<CArray<CHandle<AIInterruptionHandlerDefinition>>>(value);
+		}
+
+		public AITreeNodeInterruptionDecoratorDefinition()
+		{
+			Interruptions = new();
 		}
 	}
 }

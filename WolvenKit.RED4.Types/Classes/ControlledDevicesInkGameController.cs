@@ -5,77 +5,73 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ControlledDevicesInkGameController : gameuiWidgetGameController
 	{
-		private CWeakHandle<inkCanvasWidget> _rootWidget;
-		private CWeakHandle<inkHorizontalPanelWidget> _devcesStackSlot;
-		private CWeakHandle<inkTextWidget> _currentDeviceText;
-		private CArray<SWidgetPackage> _controlledDevicesWidgetsData;
-		private CHandle<redCallbackObject> _isDeviceWorking_BBID;
-		private CHandle<redCallbackObject> _activeDevice_BBID;
-		private CHandle<redCallbackObject> _deviceChain_BBID;
-		private CHandle<redCallbackObject> _chainLocked_BBID;
-
 		[Ordinal(2)] 
 		[RED("rootWidget")] 
 		public CWeakHandle<inkCanvasWidget> RootWidget
 		{
-			get => GetProperty(ref _rootWidget);
-			set => SetProperty(ref _rootWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkCanvasWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkCanvasWidget>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("devcesStackSlot")] 
 		public CWeakHandle<inkHorizontalPanelWidget> DevcesStackSlot
 		{
-			get => GetProperty(ref _devcesStackSlot);
-			set => SetProperty(ref _devcesStackSlot, value);
+			get => GetPropertyValue<CWeakHandle<inkHorizontalPanelWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkHorizontalPanelWidget>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("currentDeviceText")] 
 		public CWeakHandle<inkTextWidget> CurrentDeviceText
 		{
-			get => GetProperty(ref _currentDeviceText);
-			set => SetProperty(ref _currentDeviceText, value);
+			get => GetPropertyValue<CWeakHandle<inkTextWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("controlledDevicesWidgetsData")] 
 		public CArray<SWidgetPackage> ControlledDevicesWidgetsData
 		{
-			get => GetProperty(ref _controlledDevicesWidgetsData);
-			set => SetProperty(ref _controlledDevicesWidgetsData, value);
+			get => GetPropertyValue<CArray<SWidgetPackage>>();
+			set => SetPropertyValue<CArray<SWidgetPackage>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isDeviceWorking_BBID")] 
 		public CHandle<redCallbackObject> IsDeviceWorking_BBID
 		{
-			get => GetProperty(ref _isDeviceWorking_BBID);
-			set => SetProperty(ref _isDeviceWorking_BBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("activeDevice_BBID")] 
 		public CHandle<redCallbackObject> ActiveDevice_BBID
 		{
-			get => GetProperty(ref _activeDevice_BBID);
-			set => SetProperty(ref _activeDevice_BBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("deviceChain_BBID")] 
 		public CHandle<redCallbackObject> DeviceChain_BBID
 		{
-			get => GetProperty(ref _deviceChain_BBID);
-			set => SetProperty(ref _deviceChain_BBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("chainLocked_BBID")] 
 		public CHandle<redCallbackObject> ChainLocked_BBID
 		{
-			get => GetProperty(ref _chainLocked_BBID);
-			set => SetProperty(ref _chainLocked_BBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		public ControlledDevicesInkGameController()
+		{
+			ControlledDevicesWidgetsData = new();
 		}
 	}
 }

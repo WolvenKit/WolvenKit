@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ApplyDamageDeviceOperation : DeviceOperationBase
 	{
-		private CArray<SDamageOperationData> _damages;
-
 		[Ordinal(5)] 
 		[RED("damages")] 
 		public CArray<SDamageOperationData> Damages
 		{
-			get => GetProperty(ref _damages);
-			set => SetProperty(ref _damages, value);
+			get => GetPropertyValue<CArray<SDamageOperationData>>();
+			set => SetPropertyValue<CArray<SDamageOperationData>>(value);
+		}
+
+		public ApplyDamageDeviceOperation()
+		{
+			IsEnabled = true;
+			ToggleOperations = new();
+			Damages = new();
 		}
 	}
 }

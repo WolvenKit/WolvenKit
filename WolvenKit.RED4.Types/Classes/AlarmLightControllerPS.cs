@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AlarmLightControllerPS : BasicDistractionDeviceControllerPS
 	{
-		private CEnum<ESecuritySystemState> _securityAlarmState;
-
 		[Ordinal(109)] 
 		[RED("securityAlarmState")] 
 		public CEnum<ESecuritySystemState> SecurityAlarmState
 		{
-			get => GetProperty(ref _securityAlarmState);
-			set => SetProperty(ref _securityAlarmState, value);
+			get => GetPropertyValue<CEnum<ESecuritySystemState>>();
+			set => SetPropertyValue<CEnum<ESecuritySystemState>>(value);
 		}
 
 		public AlarmLightControllerPS()
 		{
-			_securityAlarmState = new() { Value = Enums.ESecuritySystemState.SAFE };
+			SecurityAlarmState = Enums.ESecuritySystemState.SAFE;
 		}
 	}
 }

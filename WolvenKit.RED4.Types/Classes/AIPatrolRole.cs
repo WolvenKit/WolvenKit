@@ -5,50 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIPatrolRole : AIRole
 	{
-		private CHandle<AIPatrolPathParameters> _pathParams;
-		private CHandle<AIPatrolPathParameters> _alertedPathParams;
-		private CFloat _alertedRadius;
-		private CHandle<AIbehaviorWorkspotList> _alertedSpots;
-		private CBool _forceAlerted;
-
 		[Ordinal(0)] 
 		[RED("pathParams")] 
 		public CHandle<AIPatrolPathParameters> PathParams
 		{
-			get => GetProperty(ref _pathParams);
-			set => SetProperty(ref _pathParams, value);
+			get => GetPropertyValue<CHandle<AIPatrolPathParameters>>();
+			set => SetPropertyValue<CHandle<AIPatrolPathParameters>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("alertedPathParams")] 
 		public CHandle<AIPatrolPathParameters> AlertedPathParams
 		{
-			get => GetProperty(ref _alertedPathParams);
-			set => SetProperty(ref _alertedPathParams, value);
+			get => GetPropertyValue<CHandle<AIPatrolPathParameters>>();
+			set => SetPropertyValue<CHandle<AIPatrolPathParameters>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("alertedRadius")] 
 		public CFloat AlertedRadius
 		{
-			get => GetProperty(ref _alertedRadius);
-			set => SetProperty(ref _alertedRadius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("alertedSpots")] 
 		public CHandle<AIbehaviorWorkspotList> AlertedSpots
 		{
-			get => GetProperty(ref _alertedSpots);
-			set => SetProperty(ref _alertedSpots, value);
+			get => GetPropertyValue<CHandle<AIbehaviorWorkspotList>>();
+			set => SetPropertyValue<CHandle<AIbehaviorWorkspotList>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("forceAlerted")] 
 		public CBool ForceAlerted
 		{
-			get => GetProperty(ref _forceAlerted);
-			set => SetProperty(ref _forceAlerted, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

@@ -5,129 +5,120 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameprojectileComponent : entIPlacedComponent
 	{
-		private CEnum<gameprojectileOnCollisionAction> _onCollisionAction;
-		private CBool _useSweepCollision;
-		private CBool _collisionsFilterClosest;
-		private CFloat _sweepCollisionRadius;
-		private Quaternion _rotationOffset;
-		private CBool _deriveOwnerVelocity;
-		private gameprojectileVelocityParams _derivedVelocityParams;
-		private CHandle<physicsFilterData> _filterData;
-		private CResourceAsyncReference<worldEffect> _previewEffect;
-		private CResourceAsyncReference<worldEffect> _bouncePreviewEffect;
-		private CResourceAsyncReference<worldEffect> _explosionPreviewEffect;
-		private CFloat _explosionPreviewTime;
-		private gameEffectRef _gameEffectRef;
-
 		[Ordinal(5)] 
 		[RED("onCollisionAction")] 
 		public CEnum<gameprojectileOnCollisionAction> OnCollisionAction
 		{
-			get => GetProperty(ref _onCollisionAction);
-			set => SetProperty(ref _onCollisionAction, value);
+			get => GetPropertyValue<CEnum<gameprojectileOnCollisionAction>>();
+			set => SetPropertyValue<CEnum<gameprojectileOnCollisionAction>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("useSweepCollision")] 
 		public CBool UseSweepCollision
 		{
-			get => GetProperty(ref _useSweepCollision);
-			set => SetProperty(ref _useSweepCollision, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("collisionsFilterClosest")] 
 		public CBool CollisionsFilterClosest
 		{
-			get => GetProperty(ref _collisionsFilterClosest);
-			set => SetProperty(ref _collisionsFilterClosest, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("sweepCollisionRadius")] 
 		public CFloat SweepCollisionRadius
 		{
-			get => GetProperty(ref _sweepCollisionRadius);
-			set => SetProperty(ref _sweepCollisionRadius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("rotationOffset")] 
 		public Quaternion RotationOffset
 		{
-			get => GetProperty(ref _rotationOffset);
-			set => SetProperty(ref _rotationOffset, value);
+			get => GetPropertyValue<Quaternion>();
+			set => SetPropertyValue<Quaternion>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("deriveOwnerVelocity")] 
 		public CBool DeriveOwnerVelocity
 		{
-			get => GetProperty(ref _deriveOwnerVelocity);
-			set => SetProperty(ref _deriveOwnerVelocity, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("derivedVelocityParams")] 
 		public gameprojectileVelocityParams DerivedVelocityParams
 		{
-			get => GetProperty(ref _derivedVelocityParams);
-			set => SetProperty(ref _derivedVelocityParams, value);
+			get => GetPropertyValue<gameprojectileVelocityParams>();
+			set => SetPropertyValue<gameprojectileVelocityParams>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("filterData")] 
 		public CHandle<physicsFilterData> FilterData
 		{
-			get => GetProperty(ref _filterData);
-			set => SetProperty(ref _filterData, value);
+			get => GetPropertyValue<CHandle<physicsFilterData>>();
+			set => SetPropertyValue<CHandle<physicsFilterData>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("previewEffect")] 
 		public CResourceAsyncReference<worldEffect> PreviewEffect
 		{
-			get => GetProperty(ref _previewEffect);
-			set => SetProperty(ref _previewEffect, value);
+			get => GetPropertyValue<CResourceAsyncReference<worldEffect>>();
+			set => SetPropertyValue<CResourceAsyncReference<worldEffect>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("bouncePreviewEffect")] 
 		public CResourceAsyncReference<worldEffect> BouncePreviewEffect
 		{
-			get => GetProperty(ref _bouncePreviewEffect);
-			set => SetProperty(ref _bouncePreviewEffect, value);
+			get => GetPropertyValue<CResourceAsyncReference<worldEffect>>();
+			set => SetPropertyValue<CResourceAsyncReference<worldEffect>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("explosionPreviewEffect")] 
 		public CResourceAsyncReference<worldEffect> ExplosionPreviewEffect
 		{
-			get => GetProperty(ref _explosionPreviewEffect);
-			set => SetProperty(ref _explosionPreviewEffect, value);
+			get => GetPropertyValue<CResourceAsyncReference<worldEffect>>();
+			set => SetPropertyValue<CResourceAsyncReference<worldEffect>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("explosionPreviewTime")] 
 		public CFloat ExplosionPreviewTime
 		{
-			get => GetProperty(ref _explosionPreviewTime);
-			set => SetProperty(ref _explosionPreviewTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("gameEffectRef")] 
 		public gameEffectRef GameEffectRef
 		{
-			get => GetProperty(ref _gameEffectRef);
-			set => SetProperty(ref _gameEffectRef, value);
+			get => GetPropertyValue<gameEffectRef>();
+			set => SetPropertyValue<gameEffectRef>(value);
 		}
 
 		public gameprojectileComponent()
 		{
-			_onCollisionAction = new() { Value = Enums.gameprojectileOnCollisionAction.Stop };
-			_collisionsFilterClosest = true;
-			_deriveOwnerVelocity = true;
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			OnCollisionAction = Enums.gameprojectileOnCollisionAction.Stop;
+			CollisionsFilterClosest = true;
+			RotationOffset = new() { R = 1.000000F };
+			DeriveOwnerVelocity = true;
+			DerivedVelocityParams = new() { XFactor = 1.000000F, YFactor = 1.000000F, ZFactor = 1.000000F };
+			GameEffectRef = new();
 		}
 	}
 }

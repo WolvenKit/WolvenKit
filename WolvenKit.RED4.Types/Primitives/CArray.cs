@@ -6,6 +6,7 @@ using System.Linq;
 
 namespace WolvenKit.RED4.Types
 {
+    [RED("array")]
     public class CArray<T> : List<T>, IRedArray<T>, IEquatable<CArray<T>> where T : IRedType
     {
         public override bool Equals(object obj)
@@ -27,5 +28,7 @@ namespace WolvenKit.RED4.Types
 
             return this.SequenceEqual(other);
         }
+
+        public override int GetHashCode() => ((List<T>)this).GetHashCode();
     }
 }

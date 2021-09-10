@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class HitIndicatorWeaponZoomListener : gameScriptStatsListener
 	{
-		private CWeakHandle<TargetHitIndicatorGameController> _gameController;
-
 		[Ordinal(0)] 
 		[RED("gameController")] 
 		public CWeakHandle<TargetHitIndicatorGameController> GameController
 		{
-			get => GetProperty(ref _gameController);
-			set => SetProperty(ref _gameController, value);
+			get => GetPropertyValue<CWeakHandle<TargetHitIndicatorGameController>>();
+			set => SetPropertyValue<CWeakHandle<TargetHitIndicatorGameController>>(value);
 		}
 	}
 }

@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class IncrimentStealthStimThreshold : AIbehaviortaskScript
 	{
-		private CFloat _thresholdTimeout;
-
 		[Ordinal(0)] 
 		[RED("thresholdTimeout")] 
 		public CFloat ThresholdTimeout
 		{
-			get => GetProperty(ref _thresholdTimeout);
-			set => SetProperty(ref _thresholdTimeout, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

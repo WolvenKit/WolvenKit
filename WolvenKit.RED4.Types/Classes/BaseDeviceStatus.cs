@@ -5,14 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class BaseDeviceStatus : ActionEnum
 	{
-		private CBool _isRestarting;
-
 		[Ordinal(25)] 
 		[RED("isRestarting")] 
 		public CBool IsRestarting
 		{
-			get => GetProperty(ref _isRestarting);
-			set => SetProperty(ref _isRestarting, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public BaseDeviceStatus()
+		{
+			RequesterID = new();
+			InteractionChoice = new() { CaptionParts = new() { Parts = new() }, Data = new(), ChoiceMetaData = new() { Type = new() }, LookAtDescriptor = new() { Offset = new(), OrbId = new() } };
+			ActionWidgetPackage = new() { DependendActions = new() };
+			CanTriggerStim = true;
 		}
 	}
 }

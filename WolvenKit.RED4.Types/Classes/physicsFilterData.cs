@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class physicsFilterData : ISerializable
 	{
-		private physicsSimulationFilter _simulationFilter;
-		private physicsQueryFilter _queryFilter;
-		private CName _preset;
-		private CHandle<physicsCustomFilterData> _customFilterData;
-
 		[Ordinal(0)] 
 		[RED("simulationFilter")] 
 		public physicsSimulationFilter SimulationFilter
 		{
-			get => GetProperty(ref _simulationFilter);
-			set => SetProperty(ref _simulationFilter, value);
+			get => GetPropertyValue<physicsSimulationFilter>();
+			set => SetPropertyValue<physicsSimulationFilter>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("queryFilter")] 
 		public physicsQueryFilter QueryFilter
 		{
-			get => GetProperty(ref _queryFilter);
-			set => SetProperty(ref _queryFilter, value);
+			get => GetPropertyValue<physicsQueryFilter>();
+			set => SetPropertyValue<physicsQueryFilter>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("preset")] 
 		public CName Preset
 		{
-			get => GetProperty(ref _preset);
-			set => SetProperty(ref _preset, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("customFilterData")] 
 		public CHandle<physicsCustomFilterData> CustomFilterData
 		{
-			get => GetProperty(ref _customFilterData);
-			set => SetProperty(ref _customFilterData, value);
+			get => GetPropertyValue<CHandle<physicsCustomFilterData>>();
+			set => SetPropertyValue<CHandle<physicsCustomFilterData>>(value);
+		}
+
+		public physicsFilterData()
+		{
+			SimulationFilter = new();
+			QueryFilter = new();
 		}
 	}
 }

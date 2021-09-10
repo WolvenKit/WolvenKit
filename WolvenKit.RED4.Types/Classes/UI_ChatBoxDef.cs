@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UI_ChatBoxDef : gamebbScriptDefinition
 	{
-		private gamebbScriptID_Variant _textList;
-
 		[Ordinal(0)] 
 		[RED("TextList")] 
 		public gamebbScriptID_Variant TextList
 		{
-			get => GetProperty(ref _textList);
-			set => SetProperty(ref _textList, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
+		}
+
+		public UI_ChatBoxDef()
+		{
+			TextList = new();
 		}
 	}
 }

@@ -5,23 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class physicsColliderMesh : physicsICollider
 	{
-		private CArray<CName> _faceMaterials;
-		private DataBuffer _compiledGeometryBuffer;
-
 		[Ordinal(8)] 
 		[RED("faceMaterials")] 
 		public CArray<CName> FaceMaterials
 		{
-			get => GetProperty(ref _faceMaterials);
-			set => SetProperty(ref _faceMaterials, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("compiledGeometryBuffer")] 
 		public DataBuffer CompiledGeometryBuffer
 		{
-			get => GetProperty(ref _compiledGeometryBuffer);
-			set => SetProperty(ref _compiledGeometryBuffer, value);
+			get => GetPropertyValue<DataBuffer>();
+			set => SetPropertyValue<DataBuffer>(value);
+		}
+
+		public physicsColliderMesh()
+		{
+			LocalToBody = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			MaterialApperanceOverrides = new();
+			VolumeModifier = 1.000000F;
+			FaceMaterials = new();
 		}
 	}
 }

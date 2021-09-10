@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AddAchievementRequest : gamePlayerScriptableSystemRequest
 	{
-		private CEnum<gamedataAchievement> _achievement;
-		private CWeakHandle<gamedataAchievement_Record> _achievementRecord;
-
 		[Ordinal(1)] 
 		[RED("achievement")] 
 		public CEnum<gamedataAchievement> Achievement
 		{
-			get => GetProperty(ref _achievement);
-			set => SetProperty(ref _achievement, value);
+			get => GetPropertyValue<CEnum<gamedataAchievement>>();
+			set => SetPropertyValue<CEnum<gamedataAchievement>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("achievementRecord")] 
 		public CWeakHandle<gamedataAchievement_Record> AchievementRecord
 		{
-			get => GetProperty(ref _achievementRecord);
-			set => SetProperty(ref _achievementRecord, value);
+			get => GetPropertyValue<CWeakHandle<gamedataAchievement_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataAchievement_Record>>(value);
 		}
 	}
 }

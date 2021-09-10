@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questSetProgress_NodeType : questIAchievementManagerNodeType
 	{
-		private TweakDBID _achievement;
-		private CString _factName;
-		private CUInt32 _maxValue;
-		private CUInt32 _currentValue;
-
 		[Ordinal(0)] 
 		[RED("achievement")] 
 		public TweakDBID Achievement
 		{
-			get => GetProperty(ref _achievement);
-			set => SetProperty(ref _achievement, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("factName")] 
 		public CString FactName
 		{
-			get => GetProperty(ref _factName);
-			set => SetProperty(ref _factName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("maxValue")] 
 		public CUInt32 MaxValue
 		{
-			get => GetProperty(ref _maxValue);
-			set => SetProperty(ref _maxValue, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("currentValue")] 
 		public CUInt32 CurrentValue
 		{
-			get => GetProperty(ref _currentValue);
-			set => SetProperty(ref _currentValue, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 	}
 }

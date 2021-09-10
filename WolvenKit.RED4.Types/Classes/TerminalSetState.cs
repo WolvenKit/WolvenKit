@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TerminalSetState : redEvent
 	{
-		private CEnum<gameinteractionsReactionState> _state;
-
 		[Ordinal(0)] 
 		[RED("state")] 
 		public CEnum<gameinteractionsReactionState> State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<CEnum<gameinteractionsReactionState>>();
+			set => SetPropertyValue<CEnum<gameinteractionsReactionState>>(value);
 		}
 	}
 }

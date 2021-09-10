@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameSquadMemberComponentPS : gameComponentPS
 	{
-		private CArray<gameSquadMemberDataEntry> _entries;
-
 		[Ordinal(0)] 
 		[RED("entries")] 
 		public CArray<gameSquadMemberDataEntry> Entries
 		{
-			get => GetProperty(ref _entries);
-			set => SetProperty(ref _entries, value);
+			get => GetPropertyValue<CArray<gameSquadMemberDataEntry>>();
+			set => SetPropertyValue<CArray<gameSquadMemberDataEntry>>(value);
+		}
+
+		public gameSquadMemberComponentPS()
+		{
+			Entries = new();
 		}
 	}
 }

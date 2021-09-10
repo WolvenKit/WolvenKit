@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class senseOnBeingDetectedEvent : redEvent
 	{
-		private CWeakHandle<senseSensorObject> _source;
-		private CBool _isVisible;
-		private TweakDBID _shapeId;
-
 		[Ordinal(0)] 
 		[RED("source")] 
 		public CWeakHandle<senseSensorObject> Source
 		{
-			get => GetProperty(ref _source);
-			set => SetProperty(ref _source, value);
+			get => GetPropertyValue<CWeakHandle<senseSensorObject>>();
+			set => SetPropertyValue<CWeakHandle<senseSensorObject>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isVisible")] 
 		public CBool IsVisible
 		{
-			get => GetProperty(ref _isVisible);
-			set => SetProperty(ref _isVisible, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("shapeId")] 
 		public TweakDBID ShapeId
 		{
-			get => GetProperty(ref _shapeId);
-			set => SetProperty(ref _shapeId, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 	}
 }

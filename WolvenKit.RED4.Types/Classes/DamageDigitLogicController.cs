@@ -5,626 +5,563 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DamageDigitLogicController : inkWidgetLogicController
 	{
-		private inkTextWidgetReference _critWidget;
-		private inkTextWidgetReference _headshotWidget;
-		private CWeakHandle<inkWidget> _rootWidget;
-		private CWeakHandle<inkWidget> _panelWidget;
-		private CWeakHandle<inkTextWidget> _textWidget;
-		private CWeakHandle<DamageDigitsGameController> _gameController;
-		private CBool _active;
-		private CBool _successful;
-		private CBool _successfulCritical;
-		private CBool _showingBothDigits;
-		private CFloat _distanceModifier;
-		private CFloat _calculatedDistanceHeightBias;
-		private CFloat _stickingDistanceHeightBias;
-		private CBool _stickToTarget;
-		private CBool _forceStickToTarget;
-		private CHandle<inkScreenProjection> _projection;
-		private CHandle<inkanimDefinition> _showPositiveAnimDef;
-		private CHandle<inkanimTransparencyInterpolator> _showPositiveAnimFadeInInterpolator;
-		private CHandle<inkanimTransparencyInterpolator> _showPositiveAnimFadeOutInterpolator;
-		private CHandle<inkanimMarginInterpolator> _showPositiveAnimMarginInterpolator;
-		private CHandle<inkanimScaleInterpolator> _showPositiveAnimScaleInterpolator;
-		private CHandle<inkanimDefinition> _showNegativeAnimDef;
-		private CHandle<inkanimTransparencyInterpolator> _showNegativeAnimFadeInInterpolator;
-		private CHandle<inkanimTransparencyInterpolator> _showNegativeAnimFadeOutInterpolator;
-		private CHandle<inkanimMarginInterpolator> _showNegativeAnimMarginInterpolator;
-		private CHandle<inkanimScaleInterpolator> _showNegativeAnimScaleInterpolator;
-		private Vector4 _animStickTargetOffset;
-		private CFloat _animTimeFadeIn;
-		private CFloat _animTimeFadeOut;
-		private CFloat _animBothTimeFadeIn;
-		private CFloat _animBothTimeFadeOut;
-		private CFloat _animTimeDelay;
-		private CFloat _animTimeCritDelay;
-		private CFloat _animBothTimeDelay;
-		private CFloat _animBothTimeCritDelay;
-		private CFloat _animStartHeight;
-		private CFloat _animAngleMin1;
-		private CFloat _animAngleMin2;
-		private CFloat _animAngleMax1;
-		private CFloat _animAngleMax2;
-		private CFloat _animBothAngleMin1;
-		private CFloat _animBothAngleMin2;
-		private CFloat _animBothAngleMax1;
-		private CFloat _animBothAngleMax2;
-		private CFloat _animDistanceMin;
-		private CFloat _animDistanceMax;
-		private CFloat _animDistanceMin_Crit;
-		private CFloat _animDistanceMax_Crit;
-		private CFloat _animBothOffsetX;
-		private CFloat _animBothOffsetY;
-		private CFloat _animBothStickingOffsetY;
-		private CFloat _animStickTargetWorldZOffset;
-		private CFloat _animStickingOffsetY;
-		private CFloat _animDistanceModifierMinDistance;
-		private CFloat _animDistanceModifierMaxDistance;
-		private CFloat _animDistanceModifierMinValue;
-		private CFloat _animDistanceModifierMaxValue;
-		private CFloat _animDistanceHeightBias;
-		private CFloat _animStickingDistanceHeightBias;
-		private CFloat _animPositiveOpacity;
-		private CFloat _animNegativeOpacity;
-		private CFloat _animDynamicDuration;
-		private CFloat _animDynamicDelay;
-		private CFloat _animDynamicCritDuration;
-		private CFloat _animDynamicCritDelay;
-
 		[Ordinal(1)] 
 		[RED("critWidget")] 
 		public inkTextWidgetReference CritWidget
 		{
-			get => GetProperty(ref _critWidget);
-			set => SetProperty(ref _critWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("headshotWidget")] 
 		public inkTextWidgetReference HeadshotWidget
 		{
-			get => GetProperty(ref _headshotWidget);
-			set => SetProperty(ref _headshotWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("rootWidget")] 
 		public CWeakHandle<inkWidget> RootWidget
 		{
-			get => GetProperty(ref _rootWidget);
-			set => SetProperty(ref _rootWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("panelWidget")] 
 		public CWeakHandle<inkWidget> PanelWidget
 		{
-			get => GetProperty(ref _panelWidget);
-			set => SetProperty(ref _panelWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("textWidget")] 
 		public CWeakHandle<inkTextWidget> TextWidget
 		{
-			get => GetProperty(ref _textWidget);
-			set => SetProperty(ref _textWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkTextWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("gameController")] 
 		public CWeakHandle<DamageDigitsGameController> GameController
 		{
-			get => GetProperty(ref _gameController);
-			set => SetProperty(ref _gameController, value);
+			get => GetPropertyValue<CWeakHandle<DamageDigitsGameController>>();
+			set => SetPropertyValue<CWeakHandle<DamageDigitsGameController>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("active")] 
 		public CBool Active
 		{
-			get => GetProperty(ref _active);
-			set => SetProperty(ref _active, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("successful")] 
 		public CBool Successful
 		{
-			get => GetProperty(ref _successful);
-			set => SetProperty(ref _successful, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("successfulCritical")] 
 		public CBool SuccessfulCritical
 		{
-			get => GetProperty(ref _successfulCritical);
-			set => SetProperty(ref _successfulCritical, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("showingBothDigits")] 
 		public CBool ShowingBothDigits
 		{
-			get => GetProperty(ref _showingBothDigits);
-			set => SetProperty(ref _showingBothDigits, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("distanceModifier")] 
 		public CFloat DistanceModifier
 		{
-			get => GetProperty(ref _distanceModifier);
-			set => SetProperty(ref _distanceModifier, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("calculatedDistanceHeightBias")] 
 		public CFloat CalculatedDistanceHeightBias
 		{
-			get => GetProperty(ref _calculatedDistanceHeightBias);
-			set => SetProperty(ref _calculatedDistanceHeightBias, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("stickingDistanceHeightBias")] 
 		public CFloat StickingDistanceHeightBias
 		{
-			get => GetProperty(ref _stickingDistanceHeightBias);
-			set => SetProperty(ref _stickingDistanceHeightBias, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("stickToTarget")] 
 		public CBool StickToTarget
 		{
-			get => GetProperty(ref _stickToTarget);
-			set => SetProperty(ref _stickToTarget, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("forceStickToTarget")] 
 		public CBool ForceStickToTarget
 		{
-			get => GetProperty(ref _forceStickToTarget);
-			set => SetProperty(ref _forceStickToTarget, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("projection")] 
 		public CHandle<inkScreenProjection> Projection
 		{
-			get => GetProperty(ref _projection);
-			set => SetProperty(ref _projection, value);
+			get => GetPropertyValue<CHandle<inkScreenProjection>>();
+			set => SetPropertyValue<CHandle<inkScreenProjection>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("showPositiveAnimDef")] 
 		public CHandle<inkanimDefinition> ShowPositiveAnimDef
 		{
-			get => GetProperty(ref _showPositiveAnimDef);
-			set => SetProperty(ref _showPositiveAnimDef, value);
+			get => GetPropertyValue<CHandle<inkanimDefinition>>();
+			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("showPositiveAnimFadeInInterpolator")] 
 		public CHandle<inkanimTransparencyInterpolator> ShowPositiveAnimFadeInInterpolator
 		{
-			get => GetProperty(ref _showPositiveAnimFadeInInterpolator);
-			set => SetProperty(ref _showPositiveAnimFadeInInterpolator, value);
+			get => GetPropertyValue<CHandle<inkanimTransparencyInterpolator>>();
+			set => SetPropertyValue<CHandle<inkanimTransparencyInterpolator>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("showPositiveAnimFadeOutInterpolator")] 
 		public CHandle<inkanimTransparencyInterpolator> ShowPositiveAnimFadeOutInterpolator
 		{
-			get => GetProperty(ref _showPositiveAnimFadeOutInterpolator);
-			set => SetProperty(ref _showPositiveAnimFadeOutInterpolator, value);
+			get => GetPropertyValue<CHandle<inkanimTransparencyInterpolator>>();
+			set => SetPropertyValue<CHandle<inkanimTransparencyInterpolator>>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("showPositiveAnimMarginInterpolator")] 
 		public CHandle<inkanimMarginInterpolator> ShowPositiveAnimMarginInterpolator
 		{
-			get => GetProperty(ref _showPositiveAnimMarginInterpolator);
-			set => SetProperty(ref _showPositiveAnimMarginInterpolator, value);
+			get => GetPropertyValue<CHandle<inkanimMarginInterpolator>>();
+			set => SetPropertyValue<CHandle<inkanimMarginInterpolator>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("showPositiveAnimScaleInterpolator")] 
 		public CHandle<inkanimScaleInterpolator> ShowPositiveAnimScaleInterpolator
 		{
-			get => GetProperty(ref _showPositiveAnimScaleInterpolator);
-			set => SetProperty(ref _showPositiveAnimScaleInterpolator, value);
+			get => GetPropertyValue<CHandle<inkanimScaleInterpolator>>();
+			set => SetPropertyValue<CHandle<inkanimScaleInterpolator>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("showNegativeAnimDef")] 
 		public CHandle<inkanimDefinition> ShowNegativeAnimDef
 		{
-			get => GetProperty(ref _showNegativeAnimDef);
-			set => SetProperty(ref _showNegativeAnimDef, value);
+			get => GetPropertyValue<CHandle<inkanimDefinition>>();
+			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("showNegativeAnimFadeInInterpolator")] 
 		public CHandle<inkanimTransparencyInterpolator> ShowNegativeAnimFadeInInterpolator
 		{
-			get => GetProperty(ref _showNegativeAnimFadeInInterpolator);
-			set => SetProperty(ref _showNegativeAnimFadeInInterpolator, value);
+			get => GetPropertyValue<CHandle<inkanimTransparencyInterpolator>>();
+			set => SetPropertyValue<CHandle<inkanimTransparencyInterpolator>>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("showNegativeAnimFadeOutInterpolator")] 
 		public CHandle<inkanimTransparencyInterpolator> ShowNegativeAnimFadeOutInterpolator
 		{
-			get => GetProperty(ref _showNegativeAnimFadeOutInterpolator);
-			set => SetProperty(ref _showNegativeAnimFadeOutInterpolator, value);
+			get => GetPropertyValue<CHandle<inkanimTransparencyInterpolator>>();
+			set => SetPropertyValue<CHandle<inkanimTransparencyInterpolator>>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("showNegativeAnimMarginInterpolator")] 
 		public CHandle<inkanimMarginInterpolator> ShowNegativeAnimMarginInterpolator
 		{
-			get => GetProperty(ref _showNegativeAnimMarginInterpolator);
-			set => SetProperty(ref _showNegativeAnimMarginInterpolator, value);
+			get => GetPropertyValue<CHandle<inkanimMarginInterpolator>>();
+			set => SetPropertyValue<CHandle<inkanimMarginInterpolator>>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("showNegativeAnimScaleInterpolator")] 
 		public CHandle<inkanimScaleInterpolator> ShowNegativeAnimScaleInterpolator
 		{
-			get => GetProperty(ref _showNegativeAnimScaleInterpolator);
-			set => SetProperty(ref _showNegativeAnimScaleInterpolator, value);
+			get => GetPropertyValue<CHandle<inkanimScaleInterpolator>>();
+			set => SetPropertyValue<CHandle<inkanimScaleInterpolator>>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("animStickTargetOffset")] 
 		public Vector4 AnimStickTargetOffset
 		{
-			get => GetProperty(ref _animStickTargetOffset);
-			set => SetProperty(ref _animStickTargetOffset, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("animTimeFadeIn")] 
 		public CFloat AnimTimeFadeIn
 		{
-			get => GetProperty(ref _animTimeFadeIn);
-			set => SetProperty(ref _animTimeFadeIn, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("animTimeFadeOut")] 
 		public CFloat AnimTimeFadeOut
 		{
-			get => GetProperty(ref _animTimeFadeOut);
-			set => SetProperty(ref _animTimeFadeOut, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("animBothTimeFadeIn")] 
 		public CFloat AnimBothTimeFadeIn
 		{
-			get => GetProperty(ref _animBothTimeFadeIn);
-			set => SetProperty(ref _animBothTimeFadeIn, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("animBothTimeFadeOut")] 
 		public CFloat AnimBothTimeFadeOut
 		{
-			get => GetProperty(ref _animBothTimeFadeOut);
-			set => SetProperty(ref _animBothTimeFadeOut, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("animTimeDelay")] 
 		public CFloat AnimTimeDelay
 		{
-			get => GetProperty(ref _animTimeDelay);
-			set => SetProperty(ref _animTimeDelay, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("animTimeCritDelay")] 
 		public CFloat AnimTimeCritDelay
 		{
-			get => GetProperty(ref _animTimeCritDelay);
-			set => SetProperty(ref _animTimeCritDelay, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(34)] 
 		[RED("animBothTimeDelay")] 
 		public CFloat AnimBothTimeDelay
 		{
-			get => GetProperty(ref _animBothTimeDelay);
-			set => SetProperty(ref _animBothTimeDelay, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(35)] 
 		[RED("animBothTimeCritDelay")] 
 		public CFloat AnimBothTimeCritDelay
 		{
-			get => GetProperty(ref _animBothTimeCritDelay);
-			set => SetProperty(ref _animBothTimeCritDelay, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(36)] 
 		[RED("animStartHeight")] 
 		public CFloat AnimStartHeight
 		{
-			get => GetProperty(ref _animStartHeight);
-			set => SetProperty(ref _animStartHeight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(37)] 
 		[RED("animAngleMin1")] 
 		public CFloat AnimAngleMin1
 		{
-			get => GetProperty(ref _animAngleMin1);
-			set => SetProperty(ref _animAngleMin1, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(38)] 
 		[RED("animAngleMin2")] 
 		public CFloat AnimAngleMin2
 		{
-			get => GetProperty(ref _animAngleMin2);
-			set => SetProperty(ref _animAngleMin2, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(39)] 
 		[RED("animAngleMax1")] 
 		public CFloat AnimAngleMax1
 		{
-			get => GetProperty(ref _animAngleMax1);
-			set => SetProperty(ref _animAngleMax1, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(40)] 
 		[RED("animAngleMax2")] 
 		public CFloat AnimAngleMax2
 		{
-			get => GetProperty(ref _animAngleMax2);
-			set => SetProperty(ref _animAngleMax2, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(41)] 
 		[RED("animBothAngleMin1")] 
 		public CFloat AnimBothAngleMin1
 		{
-			get => GetProperty(ref _animBothAngleMin1);
-			set => SetProperty(ref _animBothAngleMin1, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(42)] 
 		[RED("animBothAngleMin2")] 
 		public CFloat AnimBothAngleMin2
 		{
-			get => GetProperty(ref _animBothAngleMin2);
-			set => SetProperty(ref _animBothAngleMin2, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(43)] 
 		[RED("animBothAngleMax1")] 
 		public CFloat AnimBothAngleMax1
 		{
-			get => GetProperty(ref _animBothAngleMax1);
-			set => SetProperty(ref _animBothAngleMax1, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(44)] 
 		[RED("animBothAngleMax2")] 
 		public CFloat AnimBothAngleMax2
 		{
-			get => GetProperty(ref _animBothAngleMax2);
-			set => SetProperty(ref _animBothAngleMax2, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(45)] 
 		[RED("animDistanceMin")] 
 		public CFloat AnimDistanceMin
 		{
-			get => GetProperty(ref _animDistanceMin);
-			set => SetProperty(ref _animDistanceMin, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(46)] 
 		[RED("animDistanceMax")] 
 		public CFloat AnimDistanceMax
 		{
-			get => GetProperty(ref _animDistanceMax);
-			set => SetProperty(ref _animDistanceMax, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(47)] 
 		[RED("animDistanceMin_Crit")] 
 		public CFloat AnimDistanceMin_Crit
 		{
-			get => GetProperty(ref _animDistanceMin_Crit);
-			set => SetProperty(ref _animDistanceMin_Crit, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(48)] 
 		[RED("animDistanceMax_Crit")] 
 		public CFloat AnimDistanceMax_Crit
 		{
-			get => GetProperty(ref _animDistanceMax_Crit);
-			set => SetProperty(ref _animDistanceMax_Crit, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(49)] 
 		[RED("animBothOffsetX")] 
 		public CFloat AnimBothOffsetX
 		{
-			get => GetProperty(ref _animBothOffsetX);
-			set => SetProperty(ref _animBothOffsetX, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(50)] 
 		[RED("animBothOffsetY")] 
 		public CFloat AnimBothOffsetY
 		{
-			get => GetProperty(ref _animBothOffsetY);
-			set => SetProperty(ref _animBothOffsetY, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(51)] 
 		[RED("animBothStickingOffsetY")] 
 		public CFloat AnimBothStickingOffsetY
 		{
-			get => GetProperty(ref _animBothStickingOffsetY);
-			set => SetProperty(ref _animBothStickingOffsetY, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(52)] 
 		[RED("animStickTargetWorldZOffset")] 
 		public CFloat AnimStickTargetWorldZOffset
 		{
-			get => GetProperty(ref _animStickTargetWorldZOffset);
-			set => SetProperty(ref _animStickTargetWorldZOffset, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(53)] 
 		[RED("animStickingOffsetY")] 
 		public CFloat AnimStickingOffsetY
 		{
-			get => GetProperty(ref _animStickingOffsetY);
-			set => SetProperty(ref _animStickingOffsetY, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(54)] 
 		[RED("animDistanceModifierMinDistance")] 
 		public CFloat AnimDistanceModifierMinDistance
 		{
-			get => GetProperty(ref _animDistanceModifierMinDistance);
-			set => SetProperty(ref _animDistanceModifierMinDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(55)] 
 		[RED("animDistanceModifierMaxDistance")] 
 		public CFloat AnimDistanceModifierMaxDistance
 		{
-			get => GetProperty(ref _animDistanceModifierMaxDistance);
-			set => SetProperty(ref _animDistanceModifierMaxDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(56)] 
 		[RED("animDistanceModifierMinValue")] 
 		public CFloat AnimDistanceModifierMinValue
 		{
-			get => GetProperty(ref _animDistanceModifierMinValue);
-			set => SetProperty(ref _animDistanceModifierMinValue, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(57)] 
 		[RED("animDistanceModifierMaxValue")] 
 		public CFloat AnimDistanceModifierMaxValue
 		{
-			get => GetProperty(ref _animDistanceModifierMaxValue);
-			set => SetProperty(ref _animDistanceModifierMaxValue, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(58)] 
 		[RED("animDistanceHeightBias")] 
 		public CFloat AnimDistanceHeightBias
 		{
-			get => GetProperty(ref _animDistanceHeightBias);
-			set => SetProperty(ref _animDistanceHeightBias, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(59)] 
 		[RED("animStickingDistanceHeightBias")] 
 		public CFloat AnimStickingDistanceHeightBias
 		{
-			get => GetProperty(ref _animStickingDistanceHeightBias);
-			set => SetProperty(ref _animStickingDistanceHeightBias, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(60)] 
 		[RED("animPositiveOpacity")] 
 		public CFloat AnimPositiveOpacity
 		{
-			get => GetProperty(ref _animPositiveOpacity);
-			set => SetProperty(ref _animPositiveOpacity, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(61)] 
 		[RED("animNegativeOpacity")] 
 		public CFloat AnimNegativeOpacity
 		{
-			get => GetProperty(ref _animNegativeOpacity);
-			set => SetProperty(ref _animNegativeOpacity, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(62)] 
 		[RED("animDynamicDuration")] 
 		public CFloat AnimDynamicDuration
 		{
-			get => GetProperty(ref _animDynamicDuration);
-			set => SetProperty(ref _animDynamicDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(63)] 
 		[RED("animDynamicDelay")] 
 		public CFloat AnimDynamicDelay
 		{
-			get => GetProperty(ref _animDynamicDelay);
-			set => SetProperty(ref _animDynamicDelay, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(64)] 
 		[RED("animDynamicCritDuration")] 
 		public CFloat AnimDynamicCritDuration
 		{
-			get => GetProperty(ref _animDynamicCritDuration);
-			set => SetProperty(ref _animDynamicCritDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(65)] 
 		[RED("animDynamicCritDelay")] 
 		public CFloat AnimDynamicCritDelay
 		{
-			get => GetProperty(ref _animDynamicCritDelay);
-			set => SetProperty(ref _animDynamicCritDelay, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public DamageDigitLogicController()
 		{
-			_animTimeFadeIn = 0.100000F;
-			_animTimeFadeOut = 0.400000F;
-			_animBothTimeFadeIn = 0.100000F;
-			_animBothTimeFadeOut = 0.200000F;
-			_animTimeDelay = 0.800000F;
-			_animTimeCritDelay = 1.250000F;
-			_animBothTimeDelay = 0.500000F;
-			_animBothTimeCritDelay = 0.800000F;
-			_animStartHeight = -30.000000F;
-			_animAngleMin1 = -45.000000F;
-			_animAngleMin2 = 140.000000F;
-			_animAngleMax1 = 40.000000F;
-			_animAngleMax2 = 225.000000F;
-			_animBothAngleMin1 = -20.000000F;
-			_animBothAngleMin2 = 140.000000F;
-			_animBothAngleMax1 = 40.000000F;
-			_animBothAngleMax2 = 200.000000F;
-			_animDistanceMin = 70.000000F;
-			_animDistanceMax = 90.000000F;
-			_animDistanceMin_Crit = 110.000000F;
-			_animDistanceMax_Crit = 140.000000F;
-			_animBothStickingOffsetY = -70.000000F;
-			_animStickTargetWorldZOffset = 0.500000F;
-			_animStickingOffsetY = -70.000000F;
-			_animDistanceModifierMinDistance = 7.000000F;
-			_animDistanceModifierMaxDistance = 25.000000F;
-			_animDistanceModifierMinValue = 0.600000F;
-			_animDistanceModifierMaxValue = 1.000000F;
-			_animDistanceHeightBias = 50.000000F;
-			_animStickingDistanceHeightBias = 70.000000F;
-			_animPositiveOpacity = 0.950000F;
-			_animNegativeOpacity = 0.900000F;
+			CritWidget = new();
+			HeadshotWidget = new();
+			AnimStickTargetOffset = new();
+			AnimTimeFadeIn = 0.100000F;
+			AnimTimeFadeOut = 0.400000F;
+			AnimBothTimeFadeIn = 0.100000F;
+			AnimBothTimeFadeOut = 0.200000F;
+			AnimTimeDelay = 0.800000F;
+			AnimTimeCritDelay = 1.250000F;
+			AnimBothTimeDelay = 0.500000F;
+			AnimBothTimeCritDelay = 0.800000F;
+			AnimStartHeight = -30.000000F;
+			AnimAngleMin1 = -45.000000F;
+			AnimAngleMin2 = 140.000000F;
+			AnimAngleMax1 = 40.000000F;
+			AnimAngleMax2 = 225.000000F;
+			AnimBothAngleMin1 = -20.000000F;
+			AnimBothAngleMin2 = 140.000000F;
+			AnimBothAngleMax1 = 40.000000F;
+			AnimBothAngleMax2 = 200.000000F;
+			AnimDistanceMin = 70.000000F;
+			AnimDistanceMax = 90.000000F;
+			AnimDistanceMin_Crit = 110.000000F;
+			AnimDistanceMax_Crit = 140.000000F;
+			AnimBothStickingOffsetY = -70.000000F;
+			AnimStickTargetWorldZOffset = 0.500000F;
+			AnimStickingOffsetY = -70.000000F;
+			AnimDistanceModifierMinDistance = 7.000000F;
+			AnimDistanceModifierMaxDistance = 25.000000F;
+			AnimDistanceModifierMinValue = 0.600000F;
+			AnimDistanceModifierMaxValue = 1.000000F;
+			AnimDistanceHeightBias = 50.000000F;
+			AnimStickingDistanceHeightBias = 70.000000F;
+			AnimPositiveOpacity = 0.950000F;
+			AnimNegativeOpacity = 0.900000F;
 		}
 	}
 }

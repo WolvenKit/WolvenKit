@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RecurrentStimuliEvent : redEvent
 	{
-		private StimRequestID _requestID;
-
 		[Ordinal(0)] 
 		[RED("requestID")] 
 		public StimRequestID RequestID
 		{
-			get => GetProperty(ref _requestID);
-			set => SetProperty(ref _requestID, value);
+			get => GetPropertyValue<StimRequestID>();
+			set => SetPropertyValue<StimRequestID>(value);
+		}
+
+		public RecurrentStimuliEvent()
+		{
+			RequestID = new();
 		}
 	}
 }

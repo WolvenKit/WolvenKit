@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SetArgumentBoolean : SetArguments
 	{
-		private CBool _customVar;
-
 		[Ordinal(1)] 
 		[RED("customVar")] 
 		public CBool CustomVar
 		{
-			get => GetProperty(ref _customVar);
-			set => SetProperty(ref _customVar, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

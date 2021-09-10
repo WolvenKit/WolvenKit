@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questChangeVoicesetState_NodeType : questIVoicesetManager_NodeType
 	{
-		private CArray<questChangeVoicesetState_NodeTypeParams> _params;
-
 		[Ordinal(0)] 
 		[RED("params")] 
 		public CArray<questChangeVoicesetState_NodeTypeParams> Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<CArray<questChangeVoicesetState_NodeTypeParams>>();
+			set => SetPropertyValue<CArray<questChangeVoicesetState_NodeTypeParams>>(value);
+		}
+
+		public questChangeVoicesetState_NodeType()
+		{
+			Params = new() { new() };
 		}
 	}
 }

@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class BaseActionOperations : DeviceOperations
 	{
-		private CArray<SBaseActionOperationData> _baseActionsOperations;
-
 		[Ordinal(2)] 
 		[RED("baseActionsOperations")] 
 		public CArray<SBaseActionOperationData> BaseActionsOperations
 		{
-			get => GetProperty(ref _baseActionsOperations);
-			set => SetProperty(ref _baseActionsOperations, value);
+			get => GetPropertyValue<CArray<SBaseActionOperationData>>();
+			set => SetPropertyValue<CArray<SBaseActionOperationData>>(value);
+		}
+
+		public BaseActionOperations()
+		{
+			Components = new();
+			FxInstances = new();
+			BaseActionsOperations = new();
 		}
 	}
 }

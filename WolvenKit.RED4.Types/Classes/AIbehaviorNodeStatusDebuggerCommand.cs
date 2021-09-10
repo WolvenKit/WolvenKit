@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorNodeStatusDebuggerCommand : AIbehaviorIDebuggerCommand
 	{
-		private CUInt32 _behaviorResourceHash;
-		private CUInt32 _generation;
-		private CArray<AIbehaviorNodeStatusDebuggerCommandEntry> _entries;
-
 		[Ordinal(0)] 
 		[RED("behaviorResourceHash")] 
 		public CUInt32 BehaviorResourceHash
 		{
-			get => GetProperty(ref _behaviorResourceHash);
-			set => SetProperty(ref _behaviorResourceHash, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("generation")] 
 		public CUInt32 Generation
 		{
-			get => GetProperty(ref _generation);
-			set => SetProperty(ref _generation, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("entries")] 
 		public CArray<AIbehaviorNodeStatusDebuggerCommandEntry> Entries
 		{
-			get => GetProperty(ref _entries);
-			set => SetProperty(ref _entries, value);
+			get => GetPropertyValue<CArray<AIbehaviorNodeStatusDebuggerCommandEntry>>();
+			set => SetPropertyValue<CArray<AIbehaviorNodeStatusDebuggerCommandEntry>>(value);
+		}
+
+		public AIbehaviorNodeStatusDebuggerCommand()
+		{
+			Entries = new();
 		}
 	}
 }

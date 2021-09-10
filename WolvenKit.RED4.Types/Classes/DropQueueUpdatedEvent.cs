@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DropQueueUpdatedEvent : redEvent
 	{
-		private CArray<gameItemModParams> _dropQueue;
-
 		[Ordinal(0)] 
 		[RED("dropQueue")] 
 		public CArray<gameItemModParams> DropQueue
 		{
-			get => GetProperty(ref _dropQueue);
-			set => SetProperty(ref _dropQueue, value);
+			get => GetPropertyValue<CArray<gameItemModParams>>();
+			set => SetPropertyValue<CArray<gameItemModParams>>(value);
+		}
+
+		public DropQueueUpdatedEvent()
+		{
+			DropQueue = new();
 		}
 	}
 }

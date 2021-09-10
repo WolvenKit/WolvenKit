@@ -5,64 +5,58 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameStatDetailedData : RedBaseClass
 	{
-		private CEnum<gamedataStatType> _statType;
-		private CFloat _limitMin;
-		private CFloat _limitMax;
-		private CFloat _value;
-		private CArray<gameStatModifierDetailedData> _modifiers;
-		private CBool _boolStatType;
-
 		[Ordinal(0)] 
 		[RED("statType")] 
 		public CEnum<gamedataStatType> StatType
 		{
-			get => GetProperty(ref _statType);
-			set => SetProperty(ref _statType, value);
+			get => GetPropertyValue<CEnum<gamedataStatType>>();
+			set => SetPropertyValue<CEnum<gamedataStatType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("limitMin")] 
 		public CFloat LimitMin
 		{
-			get => GetProperty(ref _limitMin);
-			set => SetProperty(ref _limitMin, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("limitMax")] 
 		public CFloat LimitMax
 		{
-			get => GetProperty(ref _limitMax);
-			set => SetProperty(ref _limitMax, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("value")] 
 		public CFloat Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("modifiers")] 
 		public CArray<gameStatModifierDetailedData> Modifiers
 		{
-			get => GetProperty(ref _modifiers);
-			set => SetProperty(ref _modifiers, value);
+			get => GetPropertyValue<CArray<gameStatModifierDetailedData>>();
+			set => SetPropertyValue<CArray<gameStatModifierDetailedData>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("boolStatType")] 
 		public CBool BoolStatType
 		{
-			get => GetProperty(ref _boolStatType);
-			set => SetProperty(ref _boolStatType, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public gameStatDetailedData()
 		{
-			_statType = new() { Value = Enums.gamedataStatType.Invalid };
+			StatType = Enums.gamedataStatType.Invalid;
+			Modifiers = new();
 		}
 	}
 }

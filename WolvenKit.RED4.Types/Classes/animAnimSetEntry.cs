@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimSetEntry : ISerializable
 	{
-		private CHandle<animAnimation> _animation;
-		private CHandle<animEventsContainer> _events;
-
 		[Ordinal(0)] 
 		[RED("animation")] 
 		public CHandle<animAnimation> Animation
 		{
-			get => GetProperty(ref _animation);
-			set => SetProperty(ref _animation, value);
+			get => GetPropertyValue<CHandle<animAnimation>>();
+			set => SetPropertyValue<CHandle<animAnimation>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("events")] 
 		public CHandle<animEventsContainer> Events
 		{
-			get => GetProperty(ref _events);
-			set => SetProperty(ref _events, value);
+			get => GetPropertyValue<CHandle<animEventsContainer>>();
+			set => SetPropertyValue<CHandle<animEventsContainer>>(value);
 		}
 	}
 }

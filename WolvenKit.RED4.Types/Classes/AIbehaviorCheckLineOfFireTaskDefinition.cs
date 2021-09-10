@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorCheckLineOfFireTaskDefinition : AIbehaviorTaskDefinition
 	{
-		private CHandle<AIArgumentMapping> _slotName;
-		private CHandle<AIArgumentMapping> _attachmentName;
-		private CHandle<AIArgumentMapping> _spread;
-		private CHandle<AIArgumentMapping> _maxRange;
-
 		[Ordinal(1)] 
 		[RED("slotName")] 
 		public CHandle<AIArgumentMapping> SlotName
 		{
-			get => GetProperty(ref _slotName);
-			set => SetProperty(ref _slotName, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("attachmentName")] 
 		public CHandle<AIArgumentMapping> AttachmentName
 		{
-			get => GetProperty(ref _attachmentName);
-			set => SetProperty(ref _attachmentName, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("spread")] 
 		public CHandle<AIArgumentMapping> Spread
 		{
-			get => GetProperty(ref _spread);
-			set => SetProperty(ref _spread, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("maxRange")] 
 		public CHandle<AIArgumentMapping> MaxRange
 		{
-			get => GetProperty(ref _maxRange);
-			set => SetProperty(ref _maxRange, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 	}
 }

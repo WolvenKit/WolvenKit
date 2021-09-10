@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioGenericNameEventDictionary : audioInlinedAudioMetadata
 	{
-		private CArray<audioGenericNameEventItem> _entries;
-		private CHandle<audioGenericNameEventItem> _entryType;
-
 		[Ordinal(1)] 
 		[RED("entries")] 
 		public CArray<audioGenericNameEventItem> Entries
 		{
-			get => GetProperty(ref _entries);
-			set => SetProperty(ref _entries, value);
+			get => GetPropertyValue<CArray<audioGenericNameEventItem>>();
+			set => SetPropertyValue<CArray<audioGenericNameEventItem>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("entryType")] 
 		public CHandle<audioGenericNameEventItem> EntryType
 		{
-			get => GetProperty(ref _entryType);
-			set => SetProperty(ref _entryType, value);
+			get => GetPropertyValue<CHandle<audioGenericNameEventItem>>();
+			set => SetPropertyValue<CHandle<audioGenericNameEventItem>>(value);
+		}
+
+		public audioGenericNameEventDictionary()
+		{
+			Entries = new();
 		}
 	}
 }

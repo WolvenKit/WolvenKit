@@ -5,41 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnDebugSymbols : RedBaseClass
 	{
-		private CArray<scnPerformerSymbol> _performersDebugSymbols;
-		private CArray<scnWorkspotSymbol> _workspotsDebugSymbols;
-		private CArray<scnSceneEventSymbol> _sceneEventsDebugSymbols;
-		private CArray<scnNodeSymbol> _sceneNodesDebugSymbols;
-
 		[Ordinal(0)] 
 		[RED("performersDebugSymbols")] 
 		public CArray<scnPerformerSymbol> PerformersDebugSymbols
 		{
-			get => GetProperty(ref _performersDebugSymbols);
-			set => SetProperty(ref _performersDebugSymbols, value);
+			get => GetPropertyValue<CArray<scnPerformerSymbol>>();
+			set => SetPropertyValue<CArray<scnPerformerSymbol>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("workspotsDebugSymbols")] 
 		public CArray<scnWorkspotSymbol> WorkspotsDebugSymbols
 		{
-			get => GetProperty(ref _workspotsDebugSymbols);
-			set => SetProperty(ref _workspotsDebugSymbols, value);
+			get => GetPropertyValue<CArray<scnWorkspotSymbol>>();
+			set => SetPropertyValue<CArray<scnWorkspotSymbol>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("sceneEventsDebugSymbols")] 
 		public CArray<scnSceneEventSymbol> SceneEventsDebugSymbols
 		{
-			get => GetProperty(ref _sceneEventsDebugSymbols);
-			set => SetProperty(ref _sceneEventsDebugSymbols, value);
+			get => GetPropertyValue<CArray<scnSceneEventSymbol>>();
+			set => SetPropertyValue<CArray<scnSceneEventSymbol>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("sceneNodesDebugSymbols")] 
 		public CArray<scnNodeSymbol> SceneNodesDebugSymbols
 		{
-			get => GetProperty(ref _sceneNodesDebugSymbols);
-			set => SetProperty(ref _sceneNodesDebugSymbols, value);
+			get => GetPropertyValue<CArray<scnNodeSymbol>>();
+			set => SetPropertyValue<CArray<scnNodeSymbol>>(value);
+		}
+
+		public scnDebugSymbols()
+		{
+			PerformersDebugSymbols = new();
+			WorkspotsDebugSymbols = new();
+			SceneEventsDebugSymbols = new();
+			SceneNodesDebugSymbols = new();
 		}
 	}
 }

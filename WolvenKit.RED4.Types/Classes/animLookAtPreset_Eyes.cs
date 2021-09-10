@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animLookAtPreset_Eyes : animLookAtPreset
 	{
-		private CFloat _softLimitAngle;
-
 		[Ordinal(0)] 
 		[RED("softLimitAngle")] 
 		public CFloat SoftLimitAngle
 		{
-			get => GetProperty(ref _softLimitAngle);
-			set => SetProperty(ref _softLimitAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public animLookAtPreset_Eyes()
 		{
-			_softLimitAngle = 360.000000F;
+			SoftLimitAngle = 360.000000F;
 		}
 	}
 }

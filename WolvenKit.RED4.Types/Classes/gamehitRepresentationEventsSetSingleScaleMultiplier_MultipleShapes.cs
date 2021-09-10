@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamehitRepresentationEventsSetSingleScaleMultiplier_MultipleShapes : gamehitRepresentationEventsSetSingleScaleMultiplier_AllShapes
 	{
-		private CArray<CName> _shapeNames;
-
 		[Ordinal(1)] 
 		[RED("shapeNames")] 
 		public CArray<CName> ShapeNames
 		{
-			get => GetProperty(ref _shapeNames);
-			set => SetProperty(ref _shapeNames, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
+		public gamehitRepresentationEventsSetSingleScaleMultiplier_MultipleShapes()
+		{
+			ShapeNames = new();
 		}
 	}
 }

@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class rendRenderMeshBlob : IRenderResourceBlob
 	{
-		private rendRenderMeshBlobHeader _header;
-		private DataBuffer _renderBuffer;
-
 		[Ordinal(0)] 
 		[RED("header")] 
 		public rendRenderMeshBlobHeader Header
 		{
-			get => GetProperty(ref _header);
-			set => SetProperty(ref _header, value);
+			get => GetPropertyValue<rendRenderMeshBlobHeader>();
+			set => SetPropertyValue<rendRenderMeshBlobHeader>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("renderBuffer")] 
 		public DataBuffer RenderBuffer
 		{
-			get => GetProperty(ref _renderBuffer);
-			set => SetProperty(ref _renderBuffer, value);
+			get => GetPropertyValue<DataBuffer>();
+			set => SetPropertyValue<DataBuffer>(value);
+		}
+
+		public rendRenderMeshBlob()
+		{
+			Header = new() { BonePositions = new(), RenderLODs = new(), RenderChunks = new(), RenderChunkInfos = new(), SpeedTreeWind = new(), CustomData = new(), TopologyData = new(), TopologyMetadata = new(), Topology = new(), QuantizationScale = new(), QuantizationOffset = new() };
 		}
 	}
 }

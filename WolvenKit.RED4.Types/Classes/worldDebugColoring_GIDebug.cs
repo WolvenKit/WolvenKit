@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldDebugColoring_GIDebug : worldEditorDebugColoringSettings
 	{
-		private CColor _gIVisibleColor;
-		private CColor _gITransparentColor;
-
 		[Ordinal(0)] 
 		[RED("GIVisibleColor")] 
 		public CColor GIVisibleColor
 		{
-			get => GetProperty(ref _gIVisibleColor);
-			set => SetProperty(ref _gIVisibleColor, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("GITransparentColor")] 
 		public CColor GITransparentColor
 		{
-			get => GetProperty(ref _gITransparentColor);
-			set => SetProperty(ref _gITransparentColor, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
+		}
+
+		public worldDebugColoring_GIDebug()
+		{
+			GIVisibleColor = new();
+			GITransparentColor = new();
 		}
 	}
 }

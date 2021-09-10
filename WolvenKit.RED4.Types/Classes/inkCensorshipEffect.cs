@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkCensorshipEffect : inkGlitchEffect
 	{
-		private CEnum<CensorshipFlags> _censorshipFlags;
-
 		[Ordinal(7)] 
 		[RED("censorshipFlags")] 
-		public CEnum<CensorshipFlags> CensorshipFlags
+		public CBitField<CensorshipFlags> CensorshipFlags
 		{
-			get => GetProperty(ref _censorshipFlags);
-			set => SetProperty(ref _censorshipFlags, value);
+			get => GetPropertyValue<CBitField<CensorshipFlags>>();
+			set => SetPropertyValue<CBitField<CensorshipFlags>>(value);
 		}
 	}
 }

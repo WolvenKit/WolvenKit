@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class GameEffectTargetVisualizationData : IScriptable
 	{
-		private CName _bucketName;
-		private CArray<entEntityID> _forceHighlightTargets;
-
 		[Ordinal(0)] 
 		[RED("bucketName")] 
 		public CName BucketName
 		{
-			get => GetProperty(ref _bucketName);
-			set => SetProperty(ref _bucketName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("forceHighlightTargets")] 
 		public CArray<entEntityID> ForceHighlightTargets
 		{
-			get => GetProperty(ref _forceHighlightTargets);
-			set => SetProperty(ref _forceHighlightTargets, value);
+			get => GetPropertyValue<CArray<entEntityID>>();
+			set => SetPropertyValue<CArray<entEntityID>>(value);
+		}
+
+		public GameEffectTargetVisualizationData()
+		{
+			ForceHighlightTargets = new();
 		}
 	}
 }

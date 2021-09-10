@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ActivatedDeviceNPCControllerPS : ActivatedDeviceControllerPS
 	{
-		private ActivatedDeviceNPCSetup _activatedDeviceNPCSetup;
-
 		[Ordinal(108)] 
 		[RED("activatedDeviceNPCSetup")] 
 		public ActivatedDeviceNPCSetup ActivatedDeviceNPCSetup
 		{
-			get => GetProperty(ref _activatedDeviceNPCSetup);
-			set => SetProperty(ref _activatedDeviceNPCSetup, value);
+			get => GetPropertyValue<ActivatedDeviceNPCSetup>();
+			set => SetPropertyValue<ActivatedDeviceNPCSetup>(value);
+		}
+
+		public ActivatedDeviceNPCControllerPS()
+		{
+			ActivatedDeviceNPCSetup = new();
 		}
 	}
 }

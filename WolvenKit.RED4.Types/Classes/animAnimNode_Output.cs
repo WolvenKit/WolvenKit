@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_Output : animAnimNode_Base
 	{
-		private animPoseLink _node;
-
 		[Ordinal(11)] 
 		[RED("node")] 
 		public animPoseLink Node
 		{
-			get => GetProperty(ref _node);
-			set => SetProperty(ref _node, value);
+			get => GetPropertyValue<animPoseLink>();
+			set => SetPropertyValue<animPoseLink>(value);
+		}
+
+		public animAnimNode_Output()
+		{
+			Id = 4294967295;
+			Node = new();
 		}
 	}
 }

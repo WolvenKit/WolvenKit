@@ -5,59 +5,57 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TrespasserEntry : RedBaseClass
 	{
-		private CWeakHandle<gameObject> _trespasser;
-		private CBool _isScanned;
-		private CBool _isInsideA;
-		private CBool _isInsideB;
-		private CBool _isInsideScanner;
-		private CArray<CName> _areaStack;
-
 		[Ordinal(0)] 
 		[RED("trespasser")] 
 		public CWeakHandle<gameObject> Trespasser
 		{
-			get => GetProperty(ref _trespasser);
-			set => SetProperty(ref _trespasser, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isScanned")] 
 		public CBool IsScanned
 		{
-			get => GetProperty(ref _isScanned);
-			set => SetProperty(ref _isScanned, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isInsideA")] 
 		public CBool IsInsideA
 		{
-			get => GetProperty(ref _isInsideA);
-			set => SetProperty(ref _isInsideA, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isInsideB")] 
 		public CBool IsInsideB
 		{
-			get => GetProperty(ref _isInsideB);
-			set => SetProperty(ref _isInsideB, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("isInsideScanner")] 
 		public CBool IsInsideScanner
 		{
-			get => GetProperty(ref _isInsideScanner);
-			set => SetProperty(ref _isInsideScanner, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("areaStack")] 
 		public CArray<CName> AreaStack
 		{
-			get => GetProperty(ref _areaStack);
-			set => SetProperty(ref _areaStack, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
+		public TrespasserEntry()
+		{
+			AreaStack = new();
 		}
 	}
 }

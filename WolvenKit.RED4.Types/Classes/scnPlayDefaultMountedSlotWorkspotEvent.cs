@@ -5,41 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnPlayDefaultMountedSlotWorkspotEvent : scnSceneEvent
 	{
-		private scnPerformerId _performer;
-		private gameEntityReference _parentRef;
-		private CName _slotName;
-		private CEnum<scnPuppetVehicleState> _puppetVehicleState;
-
 		[Ordinal(6)] 
 		[RED("performer")] 
 		public scnPerformerId Performer
 		{
-			get => GetProperty(ref _performer);
-			set => SetProperty(ref _performer, value);
+			get => GetPropertyValue<scnPerformerId>();
+			set => SetPropertyValue<scnPerformerId>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("parentRef")] 
 		public gameEntityReference ParentRef
 		{
-			get => GetProperty(ref _parentRef);
-			set => SetProperty(ref _parentRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("slotName")] 
 		public CName SlotName
 		{
-			get => GetProperty(ref _slotName);
-			set => SetProperty(ref _slotName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("puppetVehicleState")] 
 		public CEnum<scnPuppetVehicleState> PuppetVehicleState
 		{
-			get => GetProperty(ref _puppetVehicleState);
-			set => SetProperty(ref _puppetVehicleState, value);
+			get => GetPropertyValue<CEnum<scnPuppetVehicleState>>();
+			set => SetPropertyValue<CEnum<scnPuppetVehicleState>>(value);
+		}
+
+		public scnPlayDefaultMountedSlotWorkspotEvent()
+		{
+			Id = new() { Id = 18446744073709551615 };
+			Performer = new() { Id = 4294967040 };
+			ParentRef = new() { Names = new() };
 		}
 	}
 }

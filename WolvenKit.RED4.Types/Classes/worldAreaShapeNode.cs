@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldAreaShapeNode : worldNode
 	{
-		private CColor _color;
-		private CHandle<AreaShapeOutline> _outline;
-
 		[Ordinal(4)] 
 		[RED("color")] 
 		public CColor Color
 		{
-			get => GetProperty(ref _color);
-			set => SetProperty(ref _color, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("outline")] 
 		public CHandle<AreaShapeOutline> Outline
 		{
-			get => GetProperty(ref _outline);
-			set => SetProperty(ref _outline, value);
+			get => GetPropertyValue<CHandle<AreaShapeOutline>>();
+			set => SetPropertyValue<CHandle<AreaShapeOutline>>(value);
+		}
+
+		public worldAreaShapeNode()
+		{
+			Color = new();
 		}
 	}
 }

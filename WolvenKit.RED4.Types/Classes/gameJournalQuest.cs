@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameJournalQuest : gameJournalFileEntry
 	{
-		private LocalizationString _title;
-		private CEnum<gameJournalQuestType> _type;
-		private TweakDBID _recommendedLevelID;
-		private CString _districtID;
-
 		[Ordinal(2)] 
 		[RED("title")] 
 		public LocalizationString Title
 		{
-			get => GetProperty(ref _title);
-			set => SetProperty(ref _title, value);
+			get => GetPropertyValue<LocalizationString>();
+			set => SetPropertyValue<LocalizationString>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("type")] 
 		public CEnum<gameJournalQuestType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<gameJournalQuestType>>();
+			set => SetPropertyValue<CEnum<gameJournalQuestType>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("recommendedLevelID")] 
 		public TweakDBID RecommendedLevelID
 		{
-			get => GetProperty(ref _recommendedLevelID);
-			set => SetProperty(ref _recommendedLevelID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("districtID")] 
 		public CString DistrictID
 		{
-			get => GetProperty(ref _districtID);
-			set => SetProperty(ref _districtID, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		public gameJournalQuest()
+		{
+			Entries = new();
+			Title = new() { Unk1 = 0, Value = "" };
 		}
 	}
 }

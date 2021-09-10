@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameSquadMemberDataEntry : RedBaseClass
 	{
-		private CName _squadName;
-		private CEnum<AISquadType> _squadType;
-
 		[Ordinal(0)] 
 		[RED("squadName")] 
 		public CName SquadName
 		{
-			get => GetProperty(ref _squadName);
-			set => SetProperty(ref _squadName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("squadType")] 
 		public CEnum<AISquadType> SquadType
 		{
-			get => GetProperty(ref _squadType);
-			set => SetProperty(ref _squadType, value);
+			get => GetPropertyValue<CEnum<AISquadType>>();
+			set => SetPropertyValue<CEnum<AISquadType>>(value);
 		}
 
 		public gameSquadMemberDataEntry()
 		{
-			_squadType = new() { Value = Enums.AISquadType.Unknown };
+			SquadType = Enums.AISquadType.Unknown;
 		}
 	}
 }

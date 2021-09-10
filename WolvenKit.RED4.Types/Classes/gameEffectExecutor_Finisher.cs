@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameEffectExecutor_Finisher : gameEffectExecutor
 	{
-		private CArray<CHandle<gameIFinisherScenario>> _finisherScenarios;
-		private CBool _alwaysUseEntryAnims;
-		private CBool _allowCameraMovement;
-
 		[Ordinal(1)] 
 		[RED("finisherScenarios")] 
 		public CArray<CHandle<gameIFinisherScenario>> FinisherScenarios
 		{
-			get => GetProperty(ref _finisherScenarios);
-			set => SetProperty(ref _finisherScenarios, value);
+			get => GetPropertyValue<CArray<CHandle<gameIFinisherScenario>>>();
+			set => SetPropertyValue<CArray<CHandle<gameIFinisherScenario>>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("alwaysUseEntryAnims")] 
 		public CBool AlwaysUseEntryAnims
 		{
-			get => GetProperty(ref _alwaysUseEntryAnims);
-			set => SetProperty(ref _alwaysUseEntryAnims, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("allowCameraMovement")] 
 		public CBool AllowCameraMovement
 		{
-			get => GetProperty(ref _allowCameraMovement);
-			set => SetProperty(ref _allowCameraMovement, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public gameEffectExecutor_Finisher()
+		{
+			FinisherScenarios = new();
 		}
 	}
 }

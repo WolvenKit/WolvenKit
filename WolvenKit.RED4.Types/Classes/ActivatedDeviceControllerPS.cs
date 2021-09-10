@@ -5,46 +5,47 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ActivatedDeviceControllerPS : ScriptableDeviceComponentPS
 	{
-		private ActivatedDeviceAnimSetup _animationSetup;
-		private ActivatedDeviceSetup _activatedDeviceSetup;
-		private NodeRef _spiderbotInteractionLocationOverride;
-		private CInt32 _industrialArmAnimationOverride;
-
 		[Ordinal(104)] 
 		[RED("animationSetup")] 
 		public ActivatedDeviceAnimSetup AnimationSetup
 		{
-			get => GetProperty(ref _animationSetup);
-			set => SetProperty(ref _animationSetup, value);
+			get => GetPropertyValue<ActivatedDeviceAnimSetup>();
+			set => SetPropertyValue<ActivatedDeviceAnimSetup>(value);
 		}
 
 		[Ordinal(105)] 
 		[RED("activatedDeviceSetup")] 
 		public ActivatedDeviceSetup ActivatedDeviceSetup
 		{
-			get => GetProperty(ref _activatedDeviceSetup);
-			set => SetProperty(ref _activatedDeviceSetup, value);
+			get => GetPropertyValue<ActivatedDeviceSetup>();
+			set => SetPropertyValue<ActivatedDeviceSetup>(value);
 		}
 
 		[Ordinal(106)] 
 		[RED("spiderbotInteractionLocationOverride")] 
 		public NodeRef SpiderbotInteractionLocationOverride
 		{
-			get => GetProperty(ref _spiderbotInteractionLocationOverride);
-			set => SetProperty(ref _spiderbotInteractionLocationOverride, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(107)] 
 		[RED("industrialArmAnimationOverride")] 
 		public CInt32 IndustrialArmAnimationOverride
 		{
-			get => GetProperty(ref _industrialArmAnimationOverride);
-			set => SetProperty(ref _industrialArmAnimationOverride, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		public ActivatedDeviceControllerPS()
 		{
-			_industrialArmAnimationOverride = -1;
+			DeviceName = "ActivatedDevice";
+			TweakDBRecord = new() { Value = 118827637830 };
+			TweakDBDescriptionRecord = new() { Value = 171165425479 };
+			ShouldScannerShowRole = true;
+			AnimationSetup = new() { AnimationTime = 0.500000F };
+			ActivatedDeviceSetup = new() { ActionName = "LocKey#233", VfxResource = new(), ThumbnailIconRecord = new() { Value = 133181765352 } };
+			IndustrialArmAnimationOverride = -1;
 		}
 	}
 }

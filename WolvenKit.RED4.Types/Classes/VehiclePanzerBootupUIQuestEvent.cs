@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VehiclePanzerBootupUIQuestEvent : redEvent
 	{
-		private CEnum<panzerBootupUI> _mode;
-
 		[Ordinal(0)] 
 		[RED("mode")] 
 		public CEnum<panzerBootupUI> Mode
 		{
-			get => GetProperty(ref _mode);
-			set => SetProperty(ref _mode, value);
+			get => GetPropertyValue<CEnum<panzerBootupUI>>();
+			set => SetPropertyValue<CEnum<panzerBootupUI>>(value);
 		}
 
 		public VehiclePanzerBootupUIQuestEvent()
 		{
-			_mode = new() { Value = Enums.panzerBootupUI.Loop };
+			Mode = Enums.panzerBootupUI.Loop;
 		}
 	}
 }

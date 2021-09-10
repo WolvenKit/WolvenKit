@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CompareBuilder : IScriptable
 	{
-		private CFloat _fLOAT_EQUAL_EPSILON;
-		private CInt32 _value;
-
 		[Ordinal(0)] 
 		[RED("FLOAT_EQUAL_EPSILON")] 
 		public CFloat FLOAT_EQUAL_EPSILON
 		{
-			get => GetProperty(ref _fLOAT_EQUAL_EPSILON);
-			set => SetProperty(ref _fLOAT_EQUAL_EPSILON, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("value")] 
 		public CInt32 Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		public CompareBuilder()
 		{
-			_fLOAT_EQUAL_EPSILON = 0.010000F;
+			FLOAT_EQUAL_EPSILON = 0.010000F;
 		}
 	}
 }

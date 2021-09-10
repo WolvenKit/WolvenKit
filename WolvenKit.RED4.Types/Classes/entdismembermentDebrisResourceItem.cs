@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entdismembermentDebrisResourceItem : RedBaseClass
 	{
-		private CResourceReference<animRig> _rig;
-		private CResourceReference<CMesh> _mesh;
-
 		[Ordinal(0)] 
 		[RED("rig")] 
 		public CResourceReference<animRig> Rig
 		{
-			get => GetProperty(ref _rig);
-			set => SetProperty(ref _rig, value);
+			get => GetPropertyValue<CResourceReference<animRig>>();
+			set => SetPropertyValue<CResourceReference<animRig>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("mesh")] 
 		public CResourceReference<CMesh> Mesh
 		{
-			get => GetProperty(ref _mesh);
-			set => SetProperty(ref _mesh, value);
+			get => GetPropertyValue<CResourceReference<CMesh>>();
+			set => SetPropertyValue<CResourceReference<CMesh>>(value);
 		}
 	}
 }

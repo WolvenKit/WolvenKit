@@ -5,59 +5,59 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameMuppetSubStepData : RedBaseClass
 	{
-		private CUInt32 _frameId;
-		private CUInt32 _parentFrameId;
-		private CBool _parentFramePrimaryColor;
-		private gameMuppetInputState _inputState;
-		private gameMuppetState _state;
-		private CArray<gameMuppetSubStepData> _resimulationSubsteps;
-
 		[Ordinal(0)] 
 		[RED("frameId")] 
 		public CUInt32 FrameId
 		{
-			get => GetProperty(ref _frameId);
-			set => SetProperty(ref _frameId, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("parentFrameId")] 
 		public CUInt32 ParentFrameId
 		{
-			get => GetProperty(ref _parentFrameId);
-			set => SetProperty(ref _parentFrameId, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("parentFramePrimaryColor")] 
 		public CBool ParentFramePrimaryColor
 		{
-			get => GetProperty(ref _parentFramePrimaryColor);
-			set => SetProperty(ref _parentFramePrimaryColor, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("inputState")] 
 		public gameMuppetInputState InputState
 		{
-			get => GetProperty(ref _inputState);
-			set => SetProperty(ref _inputState, value);
+			get => GetPropertyValue<gameMuppetInputState>();
+			set => SetPropertyValue<gameMuppetInputState>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("state")] 
 		public gameMuppetState State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<gameMuppetState>();
+			set => SetPropertyValue<gameMuppetState>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("resimulationSubsteps")] 
 		public CArray<gameMuppetSubStepData> ResimulationSubsteps
 		{
-			get => GetProperty(ref _resimulationSubsteps);
-			set => SetProperty(ref _resimulationSubsteps, value);
+			get => GetPropertyValue<CArray<gameMuppetSubStepData>>();
+			set => SetPropertyValue<CArray<gameMuppetSubStepData>>(value);
+		}
+
+		public gameMuppetSubStepData()
+		{
+			InputState = new() { FrameId = 4294967295 };
+			State = new() { FrameId = 4294967295, HighLevelState = new() { DeathFrameId = 4294967295 }, HealthState = new(), PhysicalMoveState = new() { Position = new(), Velocity = new(), IsOnGround = true, GroundNormal = new() { Z = 1.000000F } }, LookState = new() { LookDir = new() }, MoveState = new() { JumpStartFrameId = 4294967295, LandFrameId = 4294967295 }, UpperBodyState = new() { CurrentWeapon = new(), WantedWeapon = new(), InProgressWeapon = new(), LogicWantedWeapon = new(), CurrentWeaponAmmo = 10, CurrentWeaponAmmoCapacity = 10, SelectedConsumable = new() }, ScanningState = new(), InventoryState = new() { Slots = new(), ActiveSlot = -1 }, Abilities = new() { CanLook = new(), CanMove = new(), CanCrouch = new(), CanSprint = new(), CanSwitchWeapon = new(), CanHoldWeapon = new(), CanShoot = new(), CanAimDownSight = new() }, StateMachinesSnapshot = new() { StateMachines = new() }, ControllersSnapshot = new() { Controllers = new() }, SnapFrameId = 4294967295 };
+			ResimulationSubsteps = new();
 		}
 	}
 }

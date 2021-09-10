@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIHitReactionTask : AIbehaviortaskScript
 	{
-		private CFloat _activationTimeStamp;
-		private CFloat _reactionDuration;
-		private CHandle<ActionHitReactionScriptProxy> _hitReactionAction;
-		private CEnum<animHitReactionType> _hitReactionType;
-
 		[Ordinal(0)] 
 		[RED("activationTimeStamp")] 
 		public CFloat ActivationTimeStamp
 		{
-			get => GetProperty(ref _activationTimeStamp);
-			set => SetProperty(ref _activationTimeStamp, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("reactionDuration")] 
 		public CFloat ReactionDuration
 		{
-			get => GetProperty(ref _reactionDuration);
-			set => SetProperty(ref _reactionDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("hitReactionAction")] 
 		public CHandle<ActionHitReactionScriptProxy> HitReactionAction
 		{
-			get => GetProperty(ref _hitReactionAction);
-			set => SetProperty(ref _hitReactionAction, value);
+			get => GetPropertyValue<CHandle<ActionHitReactionScriptProxy>>();
+			set => SetPropertyValue<CHandle<ActionHitReactionScriptProxy>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("hitReactionType")] 
 		public CEnum<animHitReactionType> HitReactionType
 		{
-			get => GetProperty(ref _hitReactionType);
-			set => SetProperty(ref _hitReactionType, value);
+			get => GetPropertyValue<CEnum<animHitReactionType>>();
+			set => SetPropertyValue<CEnum<animHitReactionType>>(value);
 		}
 	}
 }

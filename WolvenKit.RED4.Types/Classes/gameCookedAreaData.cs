@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameCookedAreaData : RedBaseClass
 	{
-		private entEntityID _entityID;
-		private Vector3 _position;
-		private CFloat _radius;
-		private CHandle<gamemappinsIMappinVolume> _volume;
-
 		[Ordinal(0)] 
 		[RED("entityID")] 
 		public entEntityID EntityID
 		{
-			get => GetProperty(ref _entityID);
-			set => SetProperty(ref _entityID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("position")] 
 		public Vector3 Position
 		{
-			get => GetProperty(ref _position);
-			set => SetProperty(ref _position, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get => GetProperty(ref _radius);
-			set => SetProperty(ref _radius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("volume")] 
 		public CHandle<gamemappinsIMappinVolume> Volume
 		{
-			get => GetProperty(ref _volume);
-			set => SetProperty(ref _volume, value);
+			get => GetPropertyValue<CHandle<gamemappinsIMappinVolume>>();
+			set => SetPropertyValue<CHandle<gamemappinsIMappinVolume>>(value);
+		}
+
+		public gameCookedAreaData()
+		{
+			EntityID = new();
+			Position = new();
 		}
 	}
 }

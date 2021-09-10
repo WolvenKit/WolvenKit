@@ -5,46 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkDrawArea : RedBaseClass
 	{
-		private Vector2 _size;
-		private CFloat _scale;
-		private Vector2 _relativePosition;
-		private Vector2 _absolutePosition;
-
 		[Ordinal(0)] 
 		[RED("size")] 
 		public Vector2 Size
 		{
-			get => GetProperty(ref _size);
-			set => SetProperty(ref _size, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("scale")] 
 		public CFloat Scale
 		{
-			get => GetProperty(ref _scale);
-			set => SetProperty(ref _scale, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("relativePosition")] 
 		public Vector2 RelativePosition
 		{
-			get => GetProperty(ref _relativePosition);
-			set => SetProperty(ref _relativePosition, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("absolutePosition")] 
 		public Vector2 AbsolutePosition
 		{
-			get => GetProperty(ref _absolutePosition);
-			set => SetProperty(ref _absolutePosition, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		public inkDrawArea()
 		{
-			_scale = 1.000000F;
+			Size = new();
+			Scale = 1.000000F;
+			RelativePosition = new();
+			AbsolutePosition = new();
 		}
 	}
 }

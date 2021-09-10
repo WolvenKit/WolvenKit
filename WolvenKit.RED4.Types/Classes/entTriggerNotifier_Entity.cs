@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entTriggerNotifier_Entity : worldITriggerAreaNotifer
 	{
-		private NodeRef _entityRef;
-
 		[Ordinal(3)] 
 		[RED("entityRef")] 
 		public NodeRef EntityRef
 		{
-			get => GetProperty(ref _entityRef);
-			set => SetProperty(ref _entityRef, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
+		}
+
+		public entTriggerNotifier_Entity()
+		{
+			IsEnabled = true;
+			IncludeChannels = Enums.TriggerChannel.TC_Player;
 		}
 	}
 }

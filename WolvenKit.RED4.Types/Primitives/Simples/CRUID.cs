@@ -1,14 +1,25 @@
 using System;
+using System.Diagnostics;
 
 namespace WolvenKit.RED4.Types
 {
-    public class CRUID : IRedPrimitive, IEquatable<CRUID>
+    [RED("CRUID")]
+    [DebuggerDisplay("{_value}", Type = "CRUID")]
+    public readonly struct CRUID : IRedPrimitive<ulong>, IEquatable<CRUID>
     {
-        public ulong Value { get; set; }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private readonly ulong _value;
 
-        public static implicit operator CRUID(ulong value) => new() { Value = value };
-        public static implicit operator ulong(CRUID value) => value.Value;
+        private CRUID(ulong value)
+        {
+            _value = value;
+        }
 
+        public static implicit operator CRUID(ulong value) => new(value);
+        public static implicit operator ulong(CRUID value) => value._value;
+
+
+        public override int GetHashCode() => _value.GetHashCode();
 
         public override bool Equals(object obj)
         {
@@ -20,14 +31,6 @@ namespace WolvenKit.RED4.Types
             return false;
         }
 
-        public bool Equals(CRUID other)
-        {
-            if (other == null)
-            {
-                return false;
-            }
-
-            return Value.Equals(other.Value);
-        }
+        public bool Equals(CRUID other) => Equals(_value, other._value);
     }
 }

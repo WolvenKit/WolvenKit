@@ -5,50 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TarotPreviewGameController : gameuiWidgetGameController
 	{
-		private inkWidgetReference _background;
-		private inkImageWidgetReference _previewImage;
-		private inkTextWidgetReference _previewTitle;
-		private inkTextWidgetReference _previewDescription;
-		private CHandle<TarotCardPreviewData> _data;
-
 		[Ordinal(2)] 
 		[RED("background")] 
 		public inkWidgetReference Background
 		{
-			get => GetProperty(ref _background);
-			set => SetProperty(ref _background, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("previewImage")] 
 		public inkImageWidgetReference PreviewImage
 		{
-			get => GetProperty(ref _previewImage);
-			set => SetProperty(ref _previewImage, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("previewTitle")] 
 		public inkTextWidgetReference PreviewTitle
 		{
-			get => GetProperty(ref _previewTitle);
-			set => SetProperty(ref _previewTitle, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("previewDescription")] 
 		public inkTextWidgetReference PreviewDescription
 		{
-			get => GetProperty(ref _previewDescription);
-			set => SetProperty(ref _previewDescription, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("data")] 
 		public CHandle<TarotCardPreviewData> Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<CHandle<TarotCardPreviewData>>();
+			set => SetPropertyValue<CHandle<TarotCardPreviewData>>(value);
+		}
+
+		public TarotPreviewGameController()
+		{
+			Background = new();
+			PreviewImage = new();
+			PreviewTitle = new();
+			PreviewDescription = new();
 		}
 	}
 }

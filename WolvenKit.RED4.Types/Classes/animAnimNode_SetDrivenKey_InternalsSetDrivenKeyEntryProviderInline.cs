@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_SetDrivenKey_InternalsSetDrivenKeyEntryProviderInline : animAnimNode_SetDrivenKey_InternalsISetDrivenKeyEntryProvider
 	{
-		private CArray<animAnimNode_SetDrivenKey_InternalsEntry> _entries;
-
 		[Ordinal(0)] 
 		[RED("entries")] 
 		public CArray<animAnimNode_SetDrivenKey_InternalsEntry> Entries
 		{
-			get => GetProperty(ref _entries);
-			set => SetProperty(ref _entries, value);
+			get => GetPropertyValue<CArray<animAnimNode_SetDrivenKey_InternalsEntry>>();
+			set => SetPropertyValue<CArray<animAnimNode_SetDrivenKey_InternalsEntry>>(value);
+		}
+
+		public animAnimNode_SetDrivenKey_InternalsSetDrivenKeyEntryProviderInline()
+		{
+			Entries = new();
 		}
 	}
 }

@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ZoneAlertNotificationViewData : gameuiGenericNotificationViewData
 	{
-		private CBool _canBeMerged;
-		private CEnum<ESecurityAreaType> _securityZoneData;
-
 		[Ordinal(5)] 
 		[RED("canBeMerged")] 
 		public CBool CanBeMerged
 		{
-			get => GetProperty(ref _canBeMerged);
-			set => SetProperty(ref _canBeMerged, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("securityZoneData")] 
 		public CEnum<ESecurityAreaType> SecurityZoneData
 		{
-			get => GetProperty(ref _securityZoneData);
-			set => SetProperty(ref _securityZoneData, value);
+			get => GetPropertyValue<CEnum<ESecurityAreaType>>();
+			set => SetPropertyValue<CEnum<ESecurityAreaType>>(value);
 		}
 	}
 }

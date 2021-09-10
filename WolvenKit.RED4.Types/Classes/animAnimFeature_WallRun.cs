@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimFeature_WallRun : animAnimFeature
 	{
-		private CBool _wallOnRightSide;
-		private Vector4 _wallPosition;
-		private Vector4 _wallNormal;
-
 		[Ordinal(0)] 
 		[RED("wallOnRightSide")] 
 		public CBool WallOnRightSide
 		{
-			get => GetProperty(ref _wallOnRightSide);
-			set => SetProperty(ref _wallOnRightSide, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("wallPosition")] 
 		public Vector4 WallPosition
 		{
-			get => GetProperty(ref _wallPosition);
-			set => SetProperty(ref _wallPosition, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("wallNormal")] 
 		public Vector4 WallNormal
 		{
-			get => GetProperty(ref _wallNormal);
-			set => SetProperty(ref _wallNormal, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
+		}
+
+		public animAnimFeature_WallRun()
+		{
+			WallPosition = new();
+			WallNormal = new();
 		}
 	}
 }

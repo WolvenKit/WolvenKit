@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class LevelUpdateEvent : redEvent
 	{
-		private CInt32 _lvl;
-		private CEnum<gamedataProficiencyType> _type;
-		private CArray<SDevelopmentPoints> _devPoints;
-
 		[Ordinal(0)] 
 		[RED("lvl")] 
 		public CInt32 Lvl
 		{
-			get => GetProperty(ref _lvl);
-			set => SetProperty(ref _lvl, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("type")] 
 		public CEnum<gamedataProficiencyType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<gamedataProficiencyType>>();
+			set => SetPropertyValue<CEnum<gamedataProficiencyType>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("devPoints")] 
 		public CArray<SDevelopmentPoints> DevPoints
 		{
-			get => GetProperty(ref _devPoints);
-			set => SetProperty(ref _devPoints, value);
+			get => GetPropertyValue<CArray<SDevelopmentPoints>>();
+			set => SetPropertyValue<CArray<SDevelopmentPoints>>(value);
+		}
+
+		public LevelUpdateEvent()
+		{
+			DevPoints = new();
 		}
 	}
 }

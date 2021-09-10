@@ -5,77 +5,77 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class FuseBox : InteractiveMasterDevice
 	{
-		private CBool _isShortGlitchActive;
-		private gameDelayID _shortGlitchDelayID;
-		private CInt32 _numberOfComponentsToON;
-		private CInt32 _numberOfComponentsToOFF;
-		private CArray<CInt32> _indexesOfComponentsToOFF;
-		private CHandle<entMeshComponent> _mesh;
-		private CArray<CHandle<entIPlacedComponent>> _componentsON;
-		private CArray<CHandle<entIPlacedComponent>> _componentsOFF;
-
 		[Ordinal(97)] 
 		[RED("isShortGlitchActive")] 
 		public CBool IsShortGlitchActive
 		{
-			get => GetProperty(ref _isShortGlitchActive);
-			set => SetProperty(ref _isShortGlitchActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(98)] 
 		[RED("shortGlitchDelayID")] 
 		public gameDelayID ShortGlitchDelayID
 		{
-			get => GetProperty(ref _shortGlitchDelayID);
-			set => SetProperty(ref _shortGlitchDelayID, value);
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
 		}
 
 		[Ordinal(99)] 
 		[RED("numberOfComponentsToON")] 
 		public CInt32 NumberOfComponentsToON
 		{
-			get => GetProperty(ref _numberOfComponentsToON);
-			set => SetProperty(ref _numberOfComponentsToON, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(100)] 
 		[RED("numberOfComponentsToOFF")] 
 		public CInt32 NumberOfComponentsToOFF
 		{
-			get => GetProperty(ref _numberOfComponentsToOFF);
-			set => SetProperty(ref _numberOfComponentsToOFF, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(101)] 
 		[RED("indexesOfComponentsToOFF")] 
 		public CArray<CInt32> IndexesOfComponentsToOFF
 		{
-			get => GetProperty(ref _indexesOfComponentsToOFF);
-			set => SetProperty(ref _indexesOfComponentsToOFF, value);
+			get => GetPropertyValue<CArray<CInt32>>();
+			set => SetPropertyValue<CArray<CInt32>>(value);
 		}
 
 		[Ordinal(102)] 
 		[RED("mesh")] 
 		public CHandle<entMeshComponent> Mesh
 		{
-			get => GetProperty(ref _mesh);
-			set => SetProperty(ref _mesh, value);
+			get => GetPropertyValue<CHandle<entMeshComponent>>();
+			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
 		[Ordinal(103)] 
 		[RED("componentsON")] 
 		public CArray<CHandle<entIPlacedComponent>> ComponentsON
 		{
-			get => GetProperty(ref _componentsON);
-			set => SetProperty(ref _componentsON, value);
+			get => GetPropertyValue<CArray<CHandle<entIPlacedComponent>>>();
+			set => SetPropertyValue<CArray<CHandle<entIPlacedComponent>>>(value);
 		}
 
 		[Ordinal(104)] 
 		[RED("componentsOFF")] 
 		public CArray<CHandle<entIPlacedComponent>> ComponentsOFF
 		{
-			get => GetProperty(ref _componentsOFF);
-			set => SetProperty(ref _componentsOFF, value);
+			get => GetPropertyValue<CArray<CHandle<entIPlacedComponent>>>();
+			set => SetPropertyValue<CArray<CHandle<entIPlacedComponent>>>(value);
+		}
+
+		public FuseBox()
+		{
+			ControllerTypeName = "FuseBoxController";
+			ShortGlitchDelayID = new();
+			IndexesOfComponentsToOFF = new();
+			ComponentsON = new();
+			ComponentsOFF = new();
 		}
 	}
 }

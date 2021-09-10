@@ -5,86 +5,82 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamesmartGunUITargetParameters : RedBaseClass
 	{
-		private Vector2 _pos;
-		private CEnum<gamesmartGunTargetState> _state;
-		private CFloat _distance;
-		private CFloat _accuracy;
-		private CBool _isLocked;
-		private CFloat _timeLocking;
-		private CFloat _timeUnlocking;
-		private CFloat _timeOccluded;
-		private entEntityID _entityID;
-
 		[Ordinal(0)] 
 		[RED("pos")] 
 		public Vector2 Pos
 		{
-			get => GetProperty(ref _pos);
-			set => SetProperty(ref _pos, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("state")] 
 		public CEnum<gamesmartGunTargetState> State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<CEnum<gamesmartGunTargetState>>();
+			set => SetPropertyValue<CEnum<gamesmartGunTargetState>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("distance")] 
 		public CFloat Distance
 		{
-			get => GetProperty(ref _distance);
-			set => SetProperty(ref _distance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("accuracy")] 
 		public CFloat Accuracy
 		{
-			get => GetProperty(ref _accuracy);
-			set => SetProperty(ref _accuracy, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("isLocked")] 
 		public CBool IsLocked
 		{
-			get => GetProperty(ref _isLocked);
-			set => SetProperty(ref _isLocked, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("timeLocking")] 
 		public CFloat TimeLocking
 		{
-			get => GetProperty(ref _timeLocking);
-			set => SetProperty(ref _timeLocking, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("timeUnlocking")] 
 		public CFloat TimeUnlocking
 		{
-			get => GetProperty(ref _timeUnlocking);
-			set => SetProperty(ref _timeUnlocking, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("timeOccluded")] 
 		public CFloat TimeOccluded
 		{
-			get => GetProperty(ref _timeOccluded);
-			set => SetProperty(ref _timeOccluded, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("entityID")] 
 		public entEntityID EntityID
 		{
-			get => GetProperty(ref _entityID);
-			set => SetProperty(ref _entityID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
+		}
+
+		public gamesmartGunUITargetParameters()
+		{
+			Pos = new();
+			EntityID = new();
 		}
 	}
 }

@@ -5,50 +5,53 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkButtonTintController : inkButtonController
 	{
-		private CColor _normalColor;
-		private CColor _hoverColor;
-		private CColor _pressColor;
-		private CColor _disableColor;
-		private inkWidgetReference _tintControlRef;
-
 		[Ordinal(10)] 
 		[RED("NormalColor")] 
 		public CColor NormalColor
 		{
-			get => GetProperty(ref _normalColor);
-			set => SetProperty(ref _normalColor, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("HoverColor")] 
 		public CColor HoverColor
 		{
-			get => GetProperty(ref _hoverColor);
-			set => SetProperty(ref _hoverColor, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("PressColor")] 
 		public CColor PressColor
 		{
-			get => GetProperty(ref _pressColor);
-			set => SetProperty(ref _pressColor, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("DisableColor")] 
 		public CColor DisableColor
 		{
-			get => GetProperty(ref _disableColor);
-			set => SetProperty(ref _disableColor, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("TintControlRef")] 
 		public inkWidgetReference TintControlRef
 		{
-			get => GetProperty(ref _tintControlRef);
-			set => SetProperty(ref _tintControlRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		public inkButtonTintController()
+		{
+			NormalColor = new();
+			HoverColor = new();
+			PressColor = new();
+			DisableColor = new();
+			TintControlRef = new();
 		}
 	}
 }

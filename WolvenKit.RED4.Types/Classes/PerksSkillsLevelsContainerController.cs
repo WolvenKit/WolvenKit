@@ -5,59 +5,61 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PerksSkillsLevelsContainerController : inkWidgetLogicController
 	{
-		private inkCompoundWidgetReference _topRowItemsContainer;
-		private inkCompoundWidgetReference _bottomRowItemsContainer;
-		private inkWidgetReference _levelBar;
-		private inkWidgetReference _levelBarSpacer;
-		private inkTextWidgetReference _label;
-		private CHandle<ProficiencyDisplayData> _proficiencyDisplayData;
-
 		[Ordinal(1)] 
 		[RED("topRowItemsContainer")] 
 		public inkCompoundWidgetReference TopRowItemsContainer
 		{
-			get => GetProperty(ref _topRowItemsContainer);
-			set => SetProperty(ref _topRowItemsContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("bottomRowItemsContainer")] 
 		public inkCompoundWidgetReference BottomRowItemsContainer
 		{
-			get => GetProperty(ref _bottomRowItemsContainer);
-			set => SetProperty(ref _bottomRowItemsContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("levelBar")] 
 		public inkWidgetReference LevelBar
 		{
-			get => GetProperty(ref _levelBar);
-			set => SetProperty(ref _levelBar, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("levelBarSpacer")] 
 		public inkWidgetReference LevelBarSpacer
 		{
-			get => GetProperty(ref _levelBarSpacer);
-			set => SetProperty(ref _levelBarSpacer, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("label")] 
 		public inkTextWidgetReference Label
 		{
-			get => GetProperty(ref _label);
-			set => SetProperty(ref _label, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("proficiencyDisplayData")] 
 		public CHandle<ProficiencyDisplayData> ProficiencyDisplayData
 		{
-			get => GetProperty(ref _proficiencyDisplayData);
-			set => SetProperty(ref _proficiencyDisplayData, value);
+			get => GetPropertyValue<CHandle<ProficiencyDisplayData>>();
+			set => SetPropertyValue<CHandle<ProficiencyDisplayData>>(value);
+		}
+
+		public PerksSkillsLevelsContainerController()
+		{
+			TopRowItemsContainer = new();
+			BottomRowItemsContainer = new();
+			LevelBar = new();
+			LevelBarSpacer = new();
+			Label = new();
 		}
 	}
 }

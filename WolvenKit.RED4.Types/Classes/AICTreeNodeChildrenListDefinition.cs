@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AICTreeNodeChildrenListDefinition : AICTreeNodeCompositeDefinition
 	{
-		private CArray<CHandle<LibTreeINodeDefinition>> _children;
-
 		[Ordinal(0)] 
 		[RED("children")] 
 		public CArray<CHandle<LibTreeINodeDefinition>> Children
 		{
-			get => GetProperty(ref _children);
-			set => SetProperty(ref _children, value);
+			get => GetPropertyValue<CArray<CHandle<LibTreeINodeDefinition>>>();
+			set => SetPropertyValue<CArray<CHandle<LibTreeINodeDefinition>>>(value);
+		}
+
+		public AICTreeNodeChildrenListDefinition()
+		{
+			Children = new();
 		}
 	}
 }

@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class Hotkey : IScriptable
 	{
-		private CEnum<gameEHotkey> _hotkey;
-		private gameItemID _itemID;
-		private CArray<CEnum<gamedataItemType>> _scope;
-
 		[Ordinal(0)] 
 		[RED("hotkey")] 
 		public CEnum<gameEHotkey> Hotkey_
 		{
-			get => GetProperty(ref _hotkey);
-			set => SetProperty(ref _hotkey, value);
+			get => GetPropertyValue<CEnum<gameEHotkey>>();
+			set => SetPropertyValue<CEnum<gameEHotkey>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get => GetProperty(ref _itemID);
-			set => SetProperty(ref _itemID, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("scope")] 
 		public CArray<CEnum<gamedataItemType>> Scope
 		{
-			get => GetProperty(ref _scope);
-			set => SetProperty(ref _scope, value);
+			get => GetPropertyValue<CArray<CEnum<gamedataItemType>>>();
+			set => SetPropertyValue<CArray<CEnum<gamedataItemType>>>(value);
+		}
+
+		public Hotkey()
+		{
+			ItemID = new();
+			Scope = new();
 		}
 	}
 }

@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class senseVisibleObjectSecondaryPositionEvent : redEvent
 	{
-		private Vector3 _offset;
-
 		[Ordinal(0)] 
 		[RED("offset")] 
 		public Vector3 Offset
 		{
-			get => GetProperty(ref _offset);
-			set => SetProperty(ref _offset, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
+		}
+
+		public senseVisibleObjectSecondaryPositionEvent()
+		{
+			Offset = new();
 		}
 	}
 }

@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PhotoModeCameraLocation : inkWidgetLogicController
 	{
-		private inkWidgetReference _textWidget;
-
 		[Ordinal(1)] 
 		[RED("textWidget")] 
 		public inkWidgetReference TextWidget
 		{
-			get => GetProperty(ref _textWidget);
-			set => SetProperty(ref _textWidget, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		public PhotoModeCameraLocation()
+		{
+			TextWidget = new();
 		}
 	}
 }

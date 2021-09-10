@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkanimEvent : IScriptable
 	{
-		private CFloat _startTime;
-
 		[Ordinal(0)] 
 		[RED("startTime")] 
 		public CFloat StartTime
 		{
-			get => GetProperty(ref _startTime);
-			set => SetProperty(ref _startTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

@@ -5,28 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questShowHighlight_NodeSubType : questITutorial_NodeSubType
 	{
-		private gameEntityReference _entityReference;
-		private CBool _enable;
-
 		[Ordinal(0)] 
 		[RED("entityReference")] 
 		public gameEntityReference EntityReference
 		{
-			get => GetProperty(ref _entityReference);
-			set => SetProperty(ref _entityReference, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("enable")] 
 		public CBool Enable
 		{
-			get => GetProperty(ref _enable);
-			set => SetProperty(ref _enable, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public questShowHighlight_NodeSubType()
 		{
-			_enable = true;
+			EntityReference = new() { Names = new() };
+			Enable = true;
 		}
 	}
 }

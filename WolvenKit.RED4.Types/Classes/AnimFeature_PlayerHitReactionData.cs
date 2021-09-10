@@ -5,86 +5,76 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AnimFeature_PlayerHitReactionData : animAnimFeature
 	{
-		private CFloat _hitDirection;
-		private CFloat _hitStrength;
-		private CBool _isMeleeHit;
-		private CBool _isLightMeleeHit;
-		private CBool _isStrongMeleeHit;
-		private CBool _isQuickMeleeHit;
-		private CBool _isExplosion;
-		private CBool _isPressureWave;
-		private CInt32 _meleeAttackDirection;
-
 		[Ordinal(0)] 
 		[RED("hitDirection")] 
 		public CFloat HitDirection
 		{
-			get => GetProperty(ref _hitDirection);
-			set => SetProperty(ref _hitDirection, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hitStrength")] 
 		public CFloat HitStrength
 		{
-			get => GetProperty(ref _hitStrength);
-			set => SetProperty(ref _hitStrength, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isMeleeHit")] 
 		public CBool IsMeleeHit
 		{
-			get => GetProperty(ref _isMeleeHit);
-			set => SetProperty(ref _isMeleeHit, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isLightMeleeHit")] 
 		public CBool IsLightMeleeHit
 		{
-			get => GetProperty(ref _isLightMeleeHit);
-			set => SetProperty(ref _isLightMeleeHit, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("isStrongMeleeHit")] 
 		public CBool IsStrongMeleeHit
 		{
-			get => GetProperty(ref _isStrongMeleeHit);
-			set => SetProperty(ref _isStrongMeleeHit, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("isQuickMeleeHit")] 
 		public CBool IsQuickMeleeHit
 		{
-			get => GetProperty(ref _isQuickMeleeHit);
-			set => SetProperty(ref _isQuickMeleeHit, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isExplosion")] 
 		public CBool IsExplosion
 		{
-			get => GetProperty(ref _isExplosion);
-			set => SetProperty(ref _isExplosion, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("isPressureWave")] 
 		public CBool IsPressureWave
 		{
-			get => GetProperty(ref _isPressureWave);
-			set => SetProperty(ref _isPressureWave, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("meleeAttackDirection")] 
 		public CInt32 MeleeAttackDirection
 		{
-			get => GetProperty(ref _meleeAttackDirection);
-			set => SetProperty(ref _meleeAttackDirection, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

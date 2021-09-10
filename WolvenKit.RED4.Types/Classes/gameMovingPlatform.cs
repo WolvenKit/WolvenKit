@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameMovingPlatform : entIPlacedComponent
 	{
-		private CEnum<gameMovingPlatformLoopType> _loopType;
-
 		[Ordinal(5)] 
 		[RED("loopType")] 
 		public CEnum<gameMovingPlatformLoopType> LoopType
 		{
-			get => GetProperty(ref _loopType);
-			set => SetProperty(ref _loopType, value);
+			get => GetPropertyValue<CEnum<gameMovingPlatformLoopType>>();
+			set => SetPropertyValue<CEnum<gameMovingPlatformLoopType>>(value);
+		}
+
+		public gameMovingPlatform()
+		{
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
 		}
 	}
 }

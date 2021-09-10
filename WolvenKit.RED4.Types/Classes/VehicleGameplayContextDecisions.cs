@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VehicleGameplayContextDecisions : InputContextTransitionDecisions
 	{
-		private CHandle<redCallbackObject> _callbackID;
-
 		[Ordinal(0)] 
 		[RED("callbackID")] 
 		public CHandle<redCallbackObject> CallbackID
 		{
-			get => GetProperty(ref _callbackID);
-			set => SetProperty(ref _callbackID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 	}
 }

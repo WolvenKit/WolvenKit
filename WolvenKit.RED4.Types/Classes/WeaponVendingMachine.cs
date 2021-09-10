@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WeaponVendingMachine : VendingMachine
 	{
-		private CWeakHandle<IWorldWidgetComponent> _bigAdScreen;
-
 		[Ordinal(101)] 
 		[RED("bigAdScreen")] 
 		public CWeakHandle<IWorldWidgetComponent> BigAdScreen
 		{
-			get => GetProperty(ref _bigAdScreen);
-			set => SetProperty(ref _bigAdScreen, value);
+			get => GetPropertyValue<CWeakHandle<IWorldWidgetComponent>>();
+			set => SetPropertyValue<CWeakHandle<IWorldWidgetComponent>>(value);
+		}
+
+		public WeaponVendingMachine()
+		{
+			ControllerTypeName = "WeaponVendingMachineController";
 		}
 	}
 }

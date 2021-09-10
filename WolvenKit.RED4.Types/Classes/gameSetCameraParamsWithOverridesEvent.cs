@@ -5,68 +5,60 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameSetCameraParamsWithOverridesEvent : redEvent
 	{
-		private CName _paramsName;
-		private CFloat _yawMaxLeft;
-		private CFloat _yawMaxRight;
-		private CFloat _pitchMax;
-		private CFloat _pitchMin;
-		private CFloat _sensitivityMultX;
-		private CFloat _sensitivityMultY;
-
 		[Ordinal(0)] 
 		[RED("paramsName")] 
 		public CName ParamsName
 		{
-			get => GetProperty(ref _paramsName);
-			set => SetProperty(ref _paramsName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("yawMaxLeft")] 
 		public CFloat YawMaxLeft
 		{
-			get => GetProperty(ref _yawMaxLeft);
-			set => SetProperty(ref _yawMaxLeft, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("yawMaxRight")] 
 		public CFloat YawMaxRight
 		{
-			get => GetProperty(ref _yawMaxRight);
-			set => SetProperty(ref _yawMaxRight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("pitchMax")] 
 		public CFloat PitchMax
 		{
-			get => GetProperty(ref _pitchMax);
-			set => SetProperty(ref _pitchMax, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("pitchMin")] 
 		public CFloat PitchMin
 		{
-			get => GetProperty(ref _pitchMin);
-			set => SetProperty(ref _pitchMin, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("sensitivityMultX")] 
 		public CFloat SensitivityMultX
 		{
-			get => GetProperty(ref _sensitivityMultX);
-			set => SetProperty(ref _sensitivityMultX, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("sensitivityMultY")] 
 		public CFloat SensitivityMultY
 		{
-			get => GetProperty(ref _sensitivityMultY);
-			set => SetProperty(ref _sensitivityMultY, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

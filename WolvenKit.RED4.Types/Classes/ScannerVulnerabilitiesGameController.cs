@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ScannerVulnerabilitiesGameController : BaseChunkGameController
 	{
-		private inkCompoundWidgetReference _scannerVulnerabilitiesRightPanel;
-		private CHandle<redCallbackObject> _vulnerabilitiesCallbackID;
-		private CBool _isValidVulnerabilities;
-		private CArray<CWeakHandle<inkAsyncSpawnRequest>> _asyncSpawnRequests;
-
 		[Ordinal(5)] 
 		[RED("ScannerVulnerabilitiesRightPanel")] 
 		public inkCompoundWidgetReference ScannerVulnerabilitiesRightPanel
 		{
-			get => GetProperty(ref _scannerVulnerabilitiesRightPanel);
-			set => SetProperty(ref _scannerVulnerabilitiesRightPanel, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("vulnerabilitiesCallbackID")] 
 		public CHandle<redCallbackObject> VulnerabilitiesCallbackID
 		{
-			get => GetProperty(ref _vulnerabilitiesCallbackID);
-			set => SetProperty(ref _vulnerabilitiesCallbackID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("isValidVulnerabilities")] 
 		public CBool IsValidVulnerabilities
 		{
-			get => GetProperty(ref _isValidVulnerabilities);
-			set => SetProperty(ref _isValidVulnerabilities, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("asyncSpawnRequests")] 
 		public CArray<CWeakHandle<inkAsyncSpawnRequest>> AsyncSpawnRequests
 		{
-			get => GetProperty(ref _asyncSpawnRequests);
-			set => SetProperty(ref _asyncSpawnRequests, value);
+			get => GetPropertyValue<CArray<CWeakHandle<inkAsyncSpawnRequest>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<inkAsyncSpawnRequest>>>(value);
+		}
+
+		public ScannerVulnerabilitiesGameController()
+		{
+			ScannerVulnerabilitiesRightPanel = new();
+			AsyncSpawnRequests = new();
 		}
 	}
 }

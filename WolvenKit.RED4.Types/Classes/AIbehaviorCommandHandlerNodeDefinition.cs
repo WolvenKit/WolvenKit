@@ -5,91 +5,82 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorCommandHandlerNodeDefinition : AIbehaviorDecoratorNodeDefinition
 	{
-		private CName _commandName;
-		private CBool _useInheritance;
-		private CArray<CEnum<AICommandContextsType>> _contexts;
-		private CHandle<AIArgumentMapping> _commandOut;
-		private CName _runningSignal;
-		private CBool _waitForCommand;
-		private CBool _retryIfCommandEnqueued;
-		private CEnum<AIbehaviorCompletionStatus> _resultIfNoCommand;
-		private CEnum<AIbehaviorCompletionStatus> _resultIfChildFailed;
-
 		[Ordinal(1)] 
 		[RED("commandName")] 
 		public CName CommandName
 		{
-			get => GetProperty(ref _commandName);
-			set => SetProperty(ref _commandName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("useInheritance")] 
 		public CBool UseInheritance
 		{
-			get => GetProperty(ref _useInheritance);
-			set => SetProperty(ref _useInheritance, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("contexts")] 
 		public CArray<CEnum<AICommandContextsType>> Contexts
 		{
-			get => GetProperty(ref _contexts);
-			set => SetProperty(ref _contexts, value);
+			get => GetPropertyValue<CArray<CEnum<AICommandContextsType>>>();
+			set => SetPropertyValue<CArray<CEnum<AICommandContextsType>>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("commandOut")] 
 		public CHandle<AIArgumentMapping> CommandOut
 		{
-			get => GetProperty(ref _commandOut);
-			set => SetProperty(ref _commandOut, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("runningSignal")] 
 		public CName RunningSignal
 		{
-			get => GetProperty(ref _runningSignal);
-			set => SetProperty(ref _runningSignal, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("waitForCommand")] 
 		public CBool WaitForCommand
 		{
-			get => GetProperty(ref _waitForCommand);
-			set => SetProperty(ref _waitForCommand, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("retryIfCommandEnqueued")] 
 		public CBool RetryIfCommandEnqueued
 		{
-			get => GetProperty(ref _retryIfCommandEnqueued);
-			set => SetProperty(ref _retryIfCommandEnqueued, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("resultIfNoCommand")] 
 		public CEnum<AIbehaviorCompletionStatus> ResultIfNoCommand
 		{
-			get => GetProperty(ref _resultIfNoCommand);
-			set => SetProperty(ref _resultIfNoCommand, value);
+			get => GetPropertyValue<CEnum<AIbehaviorCompletionStatus>>();
+			set => SetPropertyValue<CEnum<AIbehaviorCompletionStatus>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("resultIfChildFailed")] 
 		public CEnum<AIbehaviorCompletionStatus> ResultIfChildFailed
 		{
-			get => GetProperty(ref _resultIfChildFailed);
-			set => SetProperty(ref _resultIfChildFailed, value);
+			get => GetPropertyValue<CEnum<AIbehaviorCompletionStatus>>();
+			set => SetPropertyValue<CEnum<AIbehaviorCompletionStatus>>(value);
 		}
 
 		public AIbehaviorCommandHandlerNodeDefinition()
 		{
-			_resultIfNoCommand = new() { Value = Enums.AIbehaviorCompletionStatus.SUCCESS };
+			Contexts = new();
+			ResultIfNoCommand = Enums.AIbehaviorCompletionStatus.SUCCESS;
 		}
 	}
 }

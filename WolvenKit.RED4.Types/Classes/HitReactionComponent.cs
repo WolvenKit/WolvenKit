@@ -5,700 +5,634 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class HitReactionComponent : AIMandatoryComponents
 	{
-		private CFloat _impactDamageDuration;
-		private CFloat _staggerDamageDuration;
-		private CFloat _impactDamageDurationMelee;
-		private CFloat _staggerDamageDurationMelee;
-		private CFloat _knockdownDamageDuration;
-		private CFloat _defeatedMinDuration;
-		private CFloat _previousHitTime;
-		private CEnum<animHitReactionType> _reactionType;
-		private CHandle<animAnimFeature_HitReactionsData> _animHitReaction;
-		private CHandle<animAnimFeature_HitReactionsData> _lastAnimHitReaction;
-		private CHandle<ActionHitReactionScriptProxy> _hitReactionAction;
-		private CArray<ScriptHitData> _previousAnimHitReactionArray;
-		private CEnum<EAILastHitReactionPlayed> _lastHitReactionPlayed;
-		private gameShapeData _hitShapeData;
-		private CInt32 _animVariation;
-		private CFloat _specificHitTimeout;
-		private CFloat _quickMeleeCooldown;
-		private CArray<CFloat> _dismembermentBodyPartDamageThreshold;
-		private CArray<CFloat> _woundedBodyPartDamageThreshold;
-		private CArray<CFloat> _defeatedBodyPartDamageThreshold;
-		private CFloat _impactDamageThreshold;
-		private CFloat _staggerDamageThreshold;
-		private CFloat _knockdownDamageThreshold;
-		private CFloat _knockdownImpulseThreshold;
-		private CBool _immuneToKnockDown;
-		private CFloat _hitComboReset;
-		private CFloat _physicalImpulseReset;
-		private CFloat _cumulatedDamages;
-		private CArray<CFloat> _bodyPartWoundCumulatedDamages;
-		private CArray<CFloat> _bodyPartDismemberCumulatedDamages;
-		private CFloat _overrideHitReactionImpulse;
-		private CFloat _cumulatedPhysicalImpulse;
-		private CFloat _comboResetTime;
-		private CFloat _ragdollImpulse;
-		private CEnum<EAIHitIntensity> _hitIntensity;
-		private CFloat _previousMeleeHitTimeStamp;
-		private CFloat _previousRangedHitTimeStamp;
-		private CFloat _previousBlockTimeStamp;
-		private CFloat _previousParryTimeStamp;
-		private CFloat _previousDodgeTimeStamp;
-		private CInt32 _blockCount;
-		private CInt32 _parryCount;
-		private CInt32 _dodgeCount;
-		private CUInt32 _hitCount;
-		private CBool _defeatedHasBeenPlayed;
-		private CBool _deathHasBeenPlayed;
-		private CFloat _deathRegisteredTime;
-		private CFloat _extendedDeathRegisteredTime;
-		private CFloat _extendedDeathDelayRegisteredTime;
-		private CFloat _disableDismembermentAfterDeathDelay;
-		private CFloat _extendedHitReactionRegisteredTime;
-		private CFloat _extendedHitReactionDelayRegisteredTime;
-		private CBool _scatteredGuts;
-		private CFloat _cumulativeDamageUpdateInterval;
-		private CBool _cumulativeDamageUpdateRequested;
-		private CUInt32 _currentStimId;
-		private CHandle<gamedamageAttackData> _attackData;
-		private Vector4 _hitPosition;
-		private Vector4 _hitDirection;
-		private CHandle<HitReactionBehaviorData> _lastHitReactionBehaviorData;
-		private CName _lastStimName;
-		private CName _deathStimName;
-		private CInt32 _meleeHitCount;
-		private CInt32 _strongMeleeHitCount;
-		private CInt32 _maxHitChainForMelee;
-		private CInt32 _maxHitChainForRanged;
-		private CBool _isAlive;
-		private CFloat _frameDamageHealthFactor;
-		private CArrayFixedSize<CFloat> _hitCountData;
-		private CInt32 _hitCountArrayEnd;
-		private CInt32 _hitCountArrayCurrent;
-		private CHandle<redCallbackObject> _indicatorEnabledBlackboardId;
-		private CBool _hitIndicatorEnabled;
-		private CBool _hasBeenWounded;
-		private CHandle<animAnimFeature_HitReactionsData> _hitReactionData;
-
 		[Ordinal(5)] 
 		[RED("impactDamageDuration")] 
 		public CFloat ImpactDamageDuration
 		{
-			get => GetProperty(ref _impactDamageDuration);
-			set => SetProperty(ref _impactDamageDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("staggerDamageDuration")] 
 		public CFloat StaggerDamageDuration
 		{
-			get => GetProperty(ref _staggerDamageDuration);
-			set => SetProperty(ref _staggerDamageDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("impactDamageDurationMelee")] 
 		public CFloat ImpactDamageDurationMelee
 		{
-			get => GetProperty(ref _impactDamageDurationMelee);
-			set => SetProperty(ref _impactDamageDurationMelee, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("staggerDamageDurationMelee")] 
 		public CFloat StaggerDamageDurationMelee
 		{
-			get => GetProperty(ref _staggerDamageDurationMelee);
-			set => SetProperty(ref _staggerDamageDurationMelee, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("knockdownDamageDuration")] 
 		public CFloat KnockdownDamageDuration
 		{
-			get => GetProperty(ref _knockdownDamageDuration);
-			set => SetProperty(ref _knockdownDamageDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("defeatedMinDuration")] 
 		public CFloat DefeatedMinDuration
 		{
-			get => GetProperty(ref _defeatedMinDuration);
-			set => SetProperty(ref _defeatedMinDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("previousHitTime")] 
 		public CFloat PreviousHitTime
 		{
-			get => GetProperty(ref _previousHitTime);
-			set => SetProperty(ref _previousHitTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("reactionType")] 
 		public CEnum<animHitReactionType> ReactionType
 		{
-			get => GetProperty(ref _reactionType);
-			set => SetProperty(ref _reactionType, value);
+			get => GetPropertyValue<CEnum<animHitReactionType>>();
+			set => SetPropertyValue<CEnum<animHitReactionType>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("animHitReaction")] 
 		public CHandle<animAnimFeature_HitReactionsData> AnimHitReaction
 		{
-			get => GetProperty(ref _animHitReaction);
-			set => SetProperty(ref _animHitReaction, value);
+			get => GetPropertyValue<CHandle<animAnimFeature_HitReactionsData>>();
+			set => SetPropertyValue<CHandle<animAnimFeature_HitReactionsData>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("lastAnimHitReaction")] 
 		public CHandle<animAnimFeature_HitReactionsData> LastAnimHitReaction
 		{
-			get => GetProperty(ref _lastAnimHitReaction);
-			set => SetProperty(ref _lastAnimHitReaction, value);
+			get => GetPropertyValue<CHandle<animAnimFeature_HitReactionsData>>();
+			set => SetPropertyValue<CHandle<animAnimFeature_HitReactionsData>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("hitReactionAction")] 
 		public CHandle<ActionHitReactionScriptProxy> HitReactionAction
 		{
-			get => GetProperty(ref _hitReactionAction);
-			set => SetProperty(ref _hitReactionAction, value);
+			get => GetPropertyValue<CHandle<ActionHitReactionScriptProxy>>();
+			set => SetPropertyValue<CHandle<ActionHitReactionScriptProxy>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("previousAnimHitReactionArray")] 
 		public CArray<ScriptHitData> PreviousAnimHitReactionArray
 		{
-			get => GetProperty(ref _previousAnimHitReactionArray);
-			set => SetProperty(ref _previousAnimHitReactionArray, value);
+			get => GetPropertyValue<CArray<ScriptHitData>>();
+			set => SetPropertyValue<CArray<ScriptHitData>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("lastHitReactionPlayed")] 
 		public CEnum<EAILastHitReactionPlayed> LastHitReactionPlayed
 		{
-			get => GetProperty(ref _lastHitReactionPlayed);
-			set => SetProperty(ref _lastHitReactionPlayed, value);
+			get => GetPropertyValue<CEnum<EAILastHitReactionPlayed>>();
+			set => SetPropertyValue<CEnum<EAILastHitReactionPlayed>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("hitShapeData")] 
 		public gameShapeData HitShapeData
 		{
-			get => GetProperty(ref _hitShapeData);
-			set => SetProperty(ref _hitShapeData, value);
+			get => GetPropertyValue<gameShapeData>();
+			set => SetPropertyValue<gameShapeData>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("animVariation")] 
 		public CInt32 AnimVariation
 		{
-			get => GetProperty(ref _animVariation);
-			set => SetProperty(ref _animVariation, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("specificHitTimeout")] 
 		public CFloat SpecificHitTimeout
 		{
-			get => GetProperty(ref _specificHitTimeout);
-			set => SetProperty(ref _specificHitTimeout, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("quickMeleeCooldown")] 
 		public CFloat QuickMeleeCooldown
 		{
-			get => GetProperty(ref _quickMeleeCooldown);
-			set => SetProperty(ref _quickMeleeCooldown, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("dismembermentBodyPartDamageThreshold")] 
 		public CArray<CFloat> DismembermentBodyPartDamageThreshold
 		{
-			get => GetProperty(ref _dismembermentBodyPartDamageThreshold);
-			set => SetProperty(ref _dismembermentBodyPartDamageThreshold, value);
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("woundedBodyPartDamageThreshold")] 
 		public CArray<CFloat> WoundedBodyPartDamageThreshold
 		{
-			get => GetProperty(ref _woundedBodyPartDamageThreshold);
-			set => SetProperty(ref _woundedBodyPartDamageThreshold, value);
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("defeatedBodyPartDamageThreshold")] 
 		public CArray<CFloat> DefeatedBodyPartDamageThreshold
 		{
-			get => GetProperty(ref _defeatedBodyPartDamageThreshold);
-			set => SetProperty(ref _defeatedBodyPartDamageThreshold, value);
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("impactDamageThreshold")] 
 		public CFloat ImpactDamageThreshold
 		{
-			get => GetProperty(ref _impactDamageThreshold);
-			set => SetProperty(ref _impactDamageThreshold, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("staggerDamageThreshold")] 
 		public CFloat StaggerDamageThreshold
 		{
-			get => GetProperty(ref _staggerDamageThreshold);
-			set => SetProperty(ref _staggerDamageThreshold, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("knockdownDamageThreshold")] 
 		public CFloat KnockdownDamageThreshold
 		{
-			get => GetProperty(ref _knockdownDamageThreshold);
-			set => SetProperty(ref _knockdownDamageThreshold, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("knockdownImpulseThreshold")] 
 		public CFloat KnockdownImpulseThreshold
 		{
-			get => GetProperty(ref _knockdownImpulseThreshold);
-			set => SetProperty(ref _knockdownImpulseThreshold, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("immuneToKnockDown")] 
 		public CBool ImmuneToKnockDown
 		{
-			get => GetProperty(ref _immuneToKnockDown);
-			set => SetProperty(ref _immuneToKnockDown, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("hitComboReset")] 
 		public CFloat HitComboReset
 		{
-			get => GetProperty(ref _hitComboReset);
-			set => SetProperty(ref _hitComboReset, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("physicalImpulseReset")] 
 		public CFloat PhysicalImpulseReset
 		{
-			get => GetProperty(ref _physicalImpulseReset);
-			set => SetProperty(ref _physicalImpulseReset, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("cumulatedDamages")] 
 		public CFloat CumulatedDamages
 		{
-			get => GetProperty(ref _cumulatedDamages);
-			set => SetProperty(ref _cumulatedDamages, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("bodyPartWoundCumulatedDamages")] 
 		public CArray<CFloat> BodyPartWoundCumulatedDamages
 		{
-			get => GetProperty(ref _bodyPartWoundCumulatedDamages);
-			set => SetProperty(ref _bodyPartWoundCumulatedDamages, value);
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
 		[Ordinal(34)] 
 		[RED("bodyPartDismemberCumulatedDamages")] 
 		public CArray<CFloat> BodyPartDismemberCumulatedDamages
 		{
-			get => GetProperty(ref _bodyPartDismemberCumulatedDamages);
-			set => SetProperty(ref _bodyPartDismemberCumulatedDamages, value);
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
 		[Ordinal(35)] 
 		[RED("overrideHitReactionImpulse")] 
 		public CFloat OverrideHitReactionImpulse
 		{
-			get => GetProperty(ref _overrideHitReactionImpulse);
-			set => SetProperty(ref _overrideHitReactionImpulse, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(36)] 
 		[RED("cumulatedPhysicalImpulse")] 
 		public CFloat CumulatedPhysicalImpulse
 		{
-			get => GetProperty(ref _cumulatedPhysicalImpulse);
-			set => SetProperty(ref _cumulatedPhysicalImpulse, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(37)] 
 		[RED("comboResetTime")] 
 		public CFloat ComboResetTime
 		{
-			get => GetProperty(ref _comboResetTime);
-			set => SetProperty(ref _comboResetTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(38)] 
 		[RED("ragdollImpulse")] 
 		public CFloat RagdollImpulse
 		{
-			get => GetProperty(ref _ragdollImpulse);
-			set => SetProperty(ref _ragdollImpulse, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(39)] 
 		[RED("hitIntensity")] 
 		public CEnum<EAIHitIntensity> HitIntensity
 		{
-			get => GetProperty(ref _hitIntensity);
-			set => SetProperty(ref _hitIntensity, value);
+			get => GetPropertyValue<CEnum<EAIHitIntensity>>();
+			set => SetPropertyValue<CEnum<EAIHitIntensity>>(value);
 		}
 
 		[Ordinal(40)] 
 		[RED("previousMeleeHitTimeStamp")] 
 		public CFloat PreviousMeleeHitTimeStamp
 		{
-			get => GetProperty(ref _previousMeleeHitTimeStamp);
-			set => SetProperty(ref _previousMeleeHitTimeStamp, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(41)] 
 		[RED("previousRangedHitTimeStamp")] 
 		public CFloat PreviousRangedHitTimeStamp
 		{
-			get => GetProperty(ref _previousRangedHitTimeStamp);
-			set => SetProperty(ref _previousRangedHitTimeStamp, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(42)] 
 		[RED("previousBlockTimeStamp")] 
 		public CFloat PreviousBlockTimeStamp
 		{
-			get => GetProperty(ref _previousBlockTimeStamp);
-			set => SetProperty(ref _previousBlockTimeStamp, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(43)] 
 		[RED("previousParryTimeStamp")] 
 		public CFloat PreviousParryTimeStamp
 		{
-			get => GetProperty(ref _previousParryTimeStamp);
-			set => SetProperty(ref _previousParryTimeStamp, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(44)] 
 		[RED("previousDodgeTimeStamp")] 
 		public CFloat PreviousDodgeTimeStamp
 		{
-			get => GetProperty(ref _previousDodgeTimeStamp);
-			set => SetProperty(ref _previousDodgeTimeStamp, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(45)] 
 		[RED("blockCount")] 
 		public CInt32 BlockCount
 		{
-			get => GetProperty(ref _blockCount);
-			set => SetProperty(ref _blockCount, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(46)] 
 		[RED("parryCount")] 
 		public CInt32 ParryCount
 		{
-			get => GetProperty(ref _parryCount);
-			set => SetProperty(ref _parryCount, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(47)] 
 		[RED("dodgeCount")] 
 		public CInt32 DodgeCount
 		{
-			get => GetProperty(ref _dodgeCount);
-			set => SetProperty(ref _dodgeCount, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(48)] 
 		[RED("hitCount")] 
 		public CUInt32 HitCount
 		{
-			get => GetProperty(ref _hitCount);
-			set => SetProperty(ref _hitCount, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(49)] 
 		[RED("defeatedHasBeenPlayed")] 
 		public CBool DefeatedHasBeenPlayed
 		{
-			get => GetProperty(ref _defeatedHasBeenPlayed);
-			set => SetProperty(ref _defeatedHasBeenPlayed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(50)] 
 		[RED("deathHasBeenPlayed")] 
 		public CBool DeathHasBeenPlayed
 		{
-			get => GetProperty(ref _deathHasBeenPlayed);
-			set => SetProperty(ref _deathHasBeenPlayed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(51)] 
 		[RED("deathRegisteredTime")] 
 		public CFloat DeathRegisteredTime
 		{
-			get => GetProperty(ref _deathRegisteredTime);
-			set => SetProperty(ref _deathRegisteredTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(52)] 
 		[RED("extendedDeathRegisteredTime")] 
 		public CFloat ExtendedDeathRegisteredTime
 		{
-			get => GetProperty(ref _extendedDeathRegisteredTime);
-			set => SetProperty(ref _extendedDeathRegisteredTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(53)] 
 		[RED("extendedDeathDelayRegisteredTime")] 
 		public CFloat ExtendedDeathDelayRegisteredTime
 		{
-			get => GetProperty(ref _extendedDeathDelayRegisteredTime);
-			set => SetProperty(ref _extendedDeathDelayRegisteredTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(54)] 
 		[RED("disableDismembermentAfterDeathDelay")] 
 		public CFloat DisableDismembermentAfterDeathDelay
 		{
-			get => GetProperty(ref _disableDismembermentAfterDeathDelay);
-			set => SetProperty(ref _disableDismembermentAfterDeathDelay, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(55)] 
 		[RED("extendedHitReactionRegisteredTime")] 
 		public CFloat ExtendedHitReactionRegisteredTime
 		{
-			get => GetProperty(ref _extendedHitReactionRegisteredTime);
-			set => SetProperty(ref _extendedHitReactionRegisteredTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(56)] 
 		[RED("extendedHitReactionDelayRegisteredTime")] 
 		public CFloat ExtendedHitReactionDelayRegisteredTime
 		{
-			get => GetProperty(ref _extendedHitReactionDelayRegisteredTime);
-			set => SetProperty(ref _extendedHitReactionDelayRegisteredTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(57)] 
 		[RED("scatteredGuts")] 
 		public CBool ScatteredGuts
 		{
-			get => GetProperty(ref _scatteredGuts);
-			set => SetProperty(ref _scatteredGuts, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(58)] 
 		[RED("cumulativeDamageUpdateInterval")] 
 		public CFloat CumulativeDamageUpdateInterval
 		{
-			get => GetProperty(ref _cumulativeDamageUpdateInterval);
-			set => SetProperty(ref _cumulativeDamageUpdateInterval, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(59)] 
 		[RED("cumulativeDamageUpdateRequested")] 
 		public CBool CumulativeDamageUpdateRequested
 		{
-			get => GetProperty(ref _cumulativeDamageUpdateRequested);
-			set => SetProperty(ref _cumulativeDamageUpdateRequested, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(60)] 
 		[RED("currentStimId")] 
 		public CUInt32 CurrentStimId
 		{
-			get => GetProperty(ref _currentStimId);
-			set => SetProperty(ref _currentStimId, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(61)] 
 		[RED("attackData")] 
 		public CHandle<gamedamageAttackData> AttackData
 		{
-			get => GetProperty(ref _attackData);
-			set => SetProperty(ref _attackData, value);
+			get => GetPropertyValue<CHandle<gamedamageAttackData>>();
+			set => SetPropertyValue<CHandle<gamedamageAttackData>>(value);
 		}
 
 		[Ordinal(62)] 
 		[RED("hitPosition")] 
 		public Vector4 HitPosition
 		{
-			get => GetProperty(ref _hitPosition);
-			set => SetProperty(ref _hitPosition, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(63)] 
 		[RED("hitDirection")] 
 		public Vector4 HitDirection
 		{
-			get => GetProperty(ref _hitDirection);
-			set => SetProperty(ref _hitDirection, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(64)] 
 		[RED("lastHitReactionBehaviorData")] 
 		public CHandle<HitReactionBehaviorData> LastHitReactionBehaviorData
 		{
-			get => GetProperty(ref _lastHitReactionBehaviorData);
-			set => SetProperty(ref _lastHitReactionBehaviorData, value);
+			get => GetPropertyValue<CHandle<HitReactionBehaviorData>>();
+			set => SetPropertyValue<CHandle<HitReactionBehaviorData>>(value);
 		}
 
 		[Ordinal(65)] 
 		[RED("lastStimName")] 
 		public CName LastStimName
 		{
-			get => GetProperty(ref _lastStimName);
-			set => SetProperty(ref _lastStimName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(66)] 
 		[RED("deathStimName")] 
 		public CName DeathStimName
 		{
-			get => GetProperty(ref _deathStimName);
-			set => SetProperty(ref _deathStimName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(67)] 
 		[RED("meleeHitCount")] 
 		public CInt32 MeleeHitCount
 		{
-			get => GetProperty(ref _meleeHitCount);
-			set => SetProperty(ref _meleeHitCount, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(68)] 
 		[RED("strongMeleeHitCount")] 
 		public CInt32 StrongMeleeHitCount
 		{
-			get => GetProperty(ref _strongMeleeHitCount);
-			set => SetProperty(ref _strongMeleeHitCount, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(69)] 
 		[RED("maxHitChainForMelee")] 
 		public CInt32 MaxHitChainForMelee
 		{
-			get => GetProperty(ref _maxHitChainForMelee);
-			set => SetProperty(ref _maxHitChainForMelee, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(70)] 
 		[RED("maxHitChainForRanged")] 
 		public CInt32 MaxHitChainForRanged
 		{
-			get => GetProperty(ref _maxHitChainForRanged);
-			set => SetProperty(ref _maxHitChainForRanged, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(71)] 
 		[RED("isAlive")] 
 		public CBool IsAlive
 		{
-			get => GetProperty(ref _isAlive);
-			set => SetProperty(ref _isAlive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(72)] 
 		[RED("frameDamageHealthFactor")] 
 		public CFloat FrameDamageHealthFactor
 		{
-			get => GetProperty(ref _frameDamageHealthFactor);
-			set => SetProperty(ref _frameDamageHealthFactor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(73)] 
 		[RED("hitCountData", 100)] 
 		public CArrayFixedSize<CFloat> HitCountData
 		{
-			get => GetProperty(ref _hitCountData);
-			set => SetProperty(ref _hitCountData, value);
+			get => GetPropertyValue<CArrayFixedSize<CFloat>>();
+			set => SetPropertyValue<CArrayFixedSize<CFloat>>(value);
 		}
 
 		[Ordinal(74)] 
 		[RED("hitCountArrayEnd")] 
 		public CInt32 HitCountArrayEnd
 		{
-			get => GetProperty(ref _hitCountArrayEnd);
-			set => SetProperty(ref _hitCountArrayEnd, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(75)] 
 		[RED("hitCountArrayCurrent")] 
 		public CInt32 HitCountArrayCurrent
 		{
-			get => GetProperty(ref _hitCountArrayCurrent);
-			set => SetProperty(ref _hitCountArrayCurrent, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(76)] 
 		[RED("indicatorEnabledBlackboardId")] 
 		public CHandle<redCallbackObject> IndicatorEnabledBlackboardId
 		{
-			get => GetProperty(ref _indicatorEnabledBlackboardId);
-			set => SetProperty(ref _indicatorEnabledBlackboardId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(77)] 
 		[RED("hitIndicatorEnabled")] 
 		public CBool HitIndicatorEnabled
 		{
-			get => GetProperty(ref _hitIndicatorEnabled);
-			set => SetProperty(ref _hitIndicatorEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(78)] 
 		[RED("hasBeenWounded")] 
 		public CBool HasBeenWounded
 		{
-			get => GetProperty(ref _hasBeenWounded);
-			set => SetProperty(ref _hasBeenWounded, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(79)] 
 		[RED("hitReactionData")] 
 		public CHandle<animAnimFeature_HitReactionsData> HitReactionData
 		{
-			get => GetProperty(ref _hitReactionData);
-			set => SetProperty(ref _hitReactionData, value);
+			get => GetPropertyValue<CHandle<animAnimFeature_HitReactionsData>>();
+			set => SetPropertyValue<CHandle<animAnimFeature_HitReactionsData>>(value);
 		}
 
 		public HitReactionComponent()
 		{
-			_impactDamageDuration = 0.200000F;
-			_staggerDamageDuration = 0.400000F;
-			_impactDamageDurationMelee = 0.250000F;
-			_staggerDamageDurationMelee = 1.500000F;
-			_knockdownDamageDuration = 2.500000F;
-			_hitComboReset = 2.000000F;
-			_physicalImpulseReset = 0.300000F;
-			_previousMeleeHitTimeStamp = -1.000000F;
-			_previousRangedHitTimeStamp = -1.000000F;
-			_previousBlockTimeStamp = -1.000000F;
-			_previousParryTimeStamp = -1.000000F;
-			_disableDismembermentAfterDeathDelay = 10.000000F;
-			_cumulativeDamageUpdateInterval = 0.250000F;
-			_maxHitChainForMelee = 2;
-			_maxHitChainForRanged = 2;
-			_hitCountArrayEnd = 100;
+			ImpactDamageDuration = 0.200000F;
+			StaggerDamageDuration = 0.400000F;
+			ImpactDamageDurationMelee = 0.250000F;
+			StaggerDamageDurationMelee = 1.500000F;
+			KnockdownDamageDuration = 2.500000F;
+			PreviousAnimHitReactionArray = new();
+			HitShapeData = new() { Result = new() { HitPositionEnter = new(), HitPositionExit = new() } };
+			DismembermentBodyPartDamageThreshold = new();
+			WoundedBodyPartDamageThreshold = new();
+			DefeatedBodyPartDamageThreshold = new();
+			HitComboReset = 2.000000F;
+			PhysicalImpulseReset = 0.300000F;
+			BodyPartWoundCumulatedDamages = new();
+			BodyPartDismemberCumulatedDamages = new();
+			PreviousMeleeHitTimeStamp = -1.000000F;
+			PreviousRangedHitTimeStamp = -1.000000F;
+			PreviousBlockTimeStamp = -1.000000F;
+			PreviousParryTimeStamp = -1.000000F;
+			DisableDismembermentAfterDeathDelay = 10.000000F;
+			CumulativeDamageUpdateInterval = 0.250000F;
+			HitPosition = new();
+			HitDirection = new();
+			MaxHitChainForMelee = 2;
+			MaxHitChainForRanged = 2;
+			HitCountData = new(100);
+			HitCountArrayEnd = 100;
 		}
 	}
 }

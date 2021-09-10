@@ -5,50 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameinteractionsChoice : RedBaseClass
 	{
-		private CString _caption;
-		private gameinteractionsChoiceCaption _captionParts;
-		private CArray<CVariant> _data;
-		private gameinteractionsChoiceMetaData _choiceMetaData;
-		private gameinteractionsChoiceLookAtDescriptor _lookAtDescriptor;
-
 		[Ordinal(0)] 
 		[RED("caption")] 
 		public CString Caption
 		{
-			get => GetProperty(ref _caption);
-			set => SetProperty(ref _caption, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("captionParts")] 
 		public gameinteractionsChoiceCaption CaptionParts
 		{
-			get => GetProperty(ref _captionParts);
-			set => SetProperty(ref _captionParts, value);
+			get => GetPropertyValue<gameinteractionsChoiceCaption>();
+			set => SetPropertyValue<gameinteractionsChoiceCaption>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("data")] 
 		public CArray<CVariant> Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<CArray<CVariant>>();
+			set => SetPropertyValue<CArray<CVariant>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("choiceMetaData")] 
 		public gameinteractionsChoiceMetaData ChoiceMetaData
 		{
-			get => GetProperty(ref _choiceMetaData);
-			set => SetProperty(ref _choiceMetaData, value);
+			get => GetPropertyValue<gameinteractionsChoiceMetaData>();
+			set => SetPropertyValue<gameinteractionsChoiceMetaData>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("lookAtDescriptor")] 
 		public gameinteractionsChoiceLookAtDescriptor LookAtDescriptor
 		{
-			get => GetProperty(ref _lookAtDescriptor);
-			set => SetProperty(ref _lookAtDescriptor, value);
+			get => GetPropertyValue<gameinteractionsChoiceLookAtDescriptor>();
+			set => SetPropertyValue<gameinteractionsChoiceLookAtDescriptor>(value);
+		}
+
+		public gameinteractionsChoice()
+		{
+			CaptionParts = new() { Parts = new() };
+			Data = new();
+			ChoiceMetaData = new() { Type = new() };
+			LookAtDescriptor = new() { Offset = new(), OrbId = new() };
 		}
 	}
 }

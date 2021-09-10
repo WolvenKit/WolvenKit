@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entIComponent : IScriptable
 	{
-		private CName _name;
-		private CBool _isReplicable;
-		private CRUID _id;
-
 		[Ordinal(0)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get => GetProperty(ref _name);
-			set => SetProperty(ref _name, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isReplicable")] 
 		public CBool IsReplicable
 		{
-			get => GetProperty(ref _isReplicable);
-			set => SetProperty(ref _isReplicable, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("id")] 
 		public CRUID Id
 		{
-			get => GetProperty(ref _id);
-			set => SetProperty(ref _id, value);
+			get => GetPropertyValue<CRUID>();
+			set => SetPropertyValue<CRUID>(value);
 		}
 	}
 }

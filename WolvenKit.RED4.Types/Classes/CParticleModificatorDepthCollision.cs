@@ -5,59 +5,56 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CParticleModificatorDepthCollision : IParticleModificator
 	{
-		private CUInt32 _maxCollisions;
-		private CFloat _restitution;
-		private CFloat _friction;
-		private CFloat _radius;
-		private CEnum<EDepthCollisionEffect> _collisionEffect;
-
 		[Ordinal(4)] 
 		[RED("maxCollisions")] 
 		public CUInt32 MaxCollisions
 		{
-			get => GetProperty(ref _maxCollisions);
-			set => SetProperty(ref _maxCollisions, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("restitution")] 
 		public CFloat Restitution
 		{
-			get => GetProperty(ref _restitution);
-			set => SetProperty(ref _restitution, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("friction")] 
 		public CFloat Friction
 		{
-			get => GetProperty(ref _friction);
-			set => SetProperty(ref _friction, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get => GetProperty(ref _radius);
-			set => SetProperty(ref _radius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("collisionEffect")] 
 		public CEnum<EDepthCollisionEffect> CollisionEffect
 		{
-			get => GetProperty(ref _collisionEffect);
-			set => SetProperty(ref _collisionEffect, value);
+			get => GetPropertyValue<CEnum<EDepthCollisionEffect>>();
+			set => SetPropertyValue<CEnum<EDepthCollisionEffect>>(value);
 		}
 
 		public CParticleModificatorDepthCollision()
 		{
-			_maxCollisions = 8;
-			_restitution = 0.700000F;
-			_friction = 1.000000F;
-			_radius = 0.010000F;
-			_collisionEffect = new() { Value = Enums.EDepthCollisionEffect.DCE_Bounce };
+			EditorName = "Depth Collision";
+			EditorGroup = "Physics";
+			IsEnabled = true;
+			MaxCollisions = 8;
+			Restitution = 0.700000F;
+			Friction = 1.000000F;
+			Radius = 0.010000F;
+			CollisionEffect = Enums.EDepthCollisionEffect.DCE_Bounce;
 		}
 	}
 }

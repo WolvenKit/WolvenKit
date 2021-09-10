@@ -5,64 +5,57 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ClaymoreMine : gameweaponObject
 	{
-		private CHandle<entMeshComponent> _visualComponent;
-		private CHandle<entMeshComponent> _triggerAreaIndicator;
-		private CHandle<entSimpleColliderComponent> _shootCollision;
-		private CHandle<gameStaticTriggerAreaComponent> _triggerComponent;
-		private CBool _alive;
-		private CBool _armed;
-
 		[Ordinal(62)] 
 		[RED("visualComponent")] 
 		public CHandle<entMeshComponent> VisualComponent
 		{
-			get => GetProperty(ref _visualComponent);
-			set => SetProperty(ref _visualComponent, value);
+			get => GetPropertyValue<CHandle<entMeshComponent>>();
+			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
 		[Ordinal(63)] 
 		[RED("triggerAreaIndicator")] 
 		public CHandle<entMeshComponent> TriggerAreaIndicator
 		{
-			get => GetProperty(ref _triggerAreaIndicator);
-			set => SetProperty(ref _triggerAreaIndicator, value);
+			get => GetPropertyValue<CHandle<entMeshComponent>>();
+			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
 		[Ordinal(64)] 
 		[RED("shootCollision")] 
 		public CHandle<entSimpleColliderComponent> ShootCollision
 		{
-			get => GetProperty(ref _shootCollision);
-			set => SetProperty(ref _shootCollision, value);
+			get => GetPropertyValue<CHandle<entSimpleColliderComponent>>();
+			set => SetPropertyValue<CHandle<entSimpleColliderComponent>>(value);
 		}
 
 		[Ordinal(65)] 
 		[RED("triggerComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> TriggerComponent
 		{
-			get => GetProperty(ref _triggerComponent);
-			set => SetProperty(ref _triggerComponent, value);
+			get => GetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>();
+			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
 		[Ordinal(66)] 
 		[RED("alive")] 
 		public CBool Alive
 		{
-			get => GetProperty(ref _alive);
-			set => SetProperty(ref _alive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(67)] 
 		[RED("armed")] 
 		public CBool Armed
 		{
-			get => GetProperty(ref _armed);
-			set => SetProperty(ref _armed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public ClaymoreMine()
 		{
-			_alive = true;
+			Alive = true;
 		}
 	}
 }

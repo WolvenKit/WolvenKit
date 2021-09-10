@@ -5,138 +5,126 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnInterruptionScenario : RedBaseClass
 	{
-		private scnInterruptionScenarioId _id;
-		private CName _name;
-		private CBool _enabled;
-		private CBool _talkOnReturn;
-		private CBool _playInterruptLine;
-		private CBool _forcePlayReturnLine;
-		private CBool _interruptionSpammingSafeguard;
-		private CEnum<scnInterruptReturnLinesBehavior> _playingLinesBehavior;
-		private CFloat _postInterruptSignalTimeDelay;
-		private CFloat _postReturnSignalTimeDelay;
-		private CHandle<scnInterruptFactConditionType> _postInterruptSignalFactCondition;
-		private CHandle<scnInterruptFactConditionType> _postReturnSignalFactCondition;
-		private CArray<CHandle<scnIInterruptCondition>> _interruptConditions;
-		private CArray<CHandle<scnIReturnCondition>> _returnConditions;
-
 		[Ordinal(0)] 
 		[RED("id")] 
 		public scnInterruptionScenarioId Id
 		{
-			get => GetProperty(ref _id);
-			set => SetProperty(ref _id, value);
+			get => GetPropertyValue<scnInterruptionScenarioId>();
+			set => SetPropertyValue<scnInterruptionScenarioId>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get => GetProperty(ref _name);
-			set => SetProperty(ref _name, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("enabled")] 
 		public CBool Enabled
 		{
-			get => GetProperty(ref _enabled);
-			set => SetProperty(ref _enabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("talkOnReturn")] 
 		public CBool TalkOnReturn
 		{
-			get => GetProperty(ref _talkOnReturn);
-			set => SetProperty(ref _talkOnReturn, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("playInterruptLine")] 
 		public CBool PlayInterruptLine
 		{
-			get => GetProperty(ref _playInterruptLine);
-			set => SetProperty(ref _playInterruptLine, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("forcePlayReturnLine")] 
 		public CBool ForcePlayReturnLine
 		{
-			get => GetProperty(ref _forcePlayReturnLine);
-			set => SetProperty(ref _forcePlayReturnLine, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("interruptionSpammingSafeguard")] 
 		public CBool InterruptionSpammingSafeguard
 		{
-			get => GetProperty(ref _interruptionSpammingSafeguard);
-			set => SetProperty(ref _interruptionSpammingSafeguard, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("playingLinesBehavior")] 
 		public CEnum<scnInterruptReturnLinesBehavior> PlayingLinesBehavior
 		{
-			get => GetProperty(ref _playingLinesBehavior);
-			set => SetProperty(ref _playingLinesBehavior, value);
+			get => GetPropertyValue<CEnum<scnInterruptReturnLinesBehavior>>();
+			set => SetPropertyValue<CEnum<scnInterruptReturnLinesBehavior>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("postInterruptSignalTimeDelay")] 
 		public CFloat PostInterruptSignalTimeDelay
 		{
-			get => GetProperty(ref _postInterruptSignalTimeDelay);
-			set => SetProperty(ref _postInterruptSignalTimeDelay, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("postReturnSignalTimeDelay")] 
 		public CFloat PostReturnSignalTimeDelay
 		{
-			get => GetProperty(ref _postReturnSignalTimeDelay);
-			set => SetProperty(ref _postReturnSignalTimeDelay, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("postInterruptSignalFactCondition")] 
 		public CHandle<scnInterruptFactConditionType> PostInterruptSignalFactCondition
 		{
-			get => GetProperty(ref _postInterruptSignalFactCondition);
-			set => SetProperty(ref _postInterruptSignalFactCondition, value);
+			get => GetPropertyValue<CHandle<scnInterruptFactConditionType>>();
+			set => SetPropertyValue<CHandle<scnInterruptFactConditionType>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("postReturnSignalFactCondition")] 
 		public CHandle<scnInterruptFactConditionType> PostReturnSignalFactCondition
 		{
-			get => GetProperty(ref _postReturnSignalFactCondition);
-			set => SetProperty(ref _postReturnSignalFactCondition, value);
+			get => GetPropertyValue<CHandle<scnInterruptFactConditionType>>();
+			set => SetPropertyValue<CHandle<scnInterruptFactConditionType>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("interruptConditions")] 
 		public CArray<CHandle<scnIInterruptCondition>> InterruptConditions
 		{
-			get => GetProperty(ref _interruptConditions);
-			set => SetProperty(ref _interruptConditions, value);
+			get => GetPropertyValue<CArray<CHandle<scnIInterruptCondition>>>();
+			set => SetPropertyValue<CArray<CHandle<scnIInterruptCondition>>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("returnConditions")] 
 		public CArray<CHandle<scnIReturnCondition>> ReturnConditions
 		{
-			get => GetProperty(ref _returnConditions);
-			set => SetProperty(ref _returnConditions, value);
+			get => GetPropertyValue<CArray<CHandle<scnIReturnCondition>>>();
+			set => SetPropertyValue<CArray<CHandle<scnIReturnCondition>>>(value);
 		}
 
 		public scnInterruptionScenario()
 		{
-			_enabled = true;
-			_talkOnReturn = true;
-			_playInterruptLine = true;
+			Id = new() { Id = 4294967295 };
+			Enabled = true;
+			TalkOnReturn = true;
+			PlayInterruptLine = true;
+			InterruptConditions = new();
+			ReturnConditions = new();
 		}
 	}
 }

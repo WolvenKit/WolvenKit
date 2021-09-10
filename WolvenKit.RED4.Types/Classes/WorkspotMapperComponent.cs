@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WorkspotMapperComponent : gameScriptableComponent
 	{
-		private CArray<CHandle<WorkspotMapData>> _workspotsMap;
-
 		[Ordinal(5)] 
 		[RED("workspotsMap")] 
 		public CArray<CHandle<WorkspotMapData>> WorkspotsMap
 		{
-			get => GetProperty(ref _workspotsMap);
-			set => SetProperty(ref _workspotsMap, value);
+			get => GetPropertyValue<CArray<CHandle<WorkspotMapData>>>();
+			set => SetPropertyValue<CArray<CHandle<WorkspotMapData>>>(value);
+		}
+
+		public WorkspotMapperComponent()
+		{
+			WorkspotsMap = new();
 		}
 	}
 }

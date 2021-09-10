@@ -5,46 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ActionsSequencerControllerPS : MasterControllerPS
 	{
-		private CFloat _sequenceDuration;
-		private CEnum<EActionsSequencerMode> _sequencerMode;
-		private SActionTypeForward _actionTypeToForward;
-		private ActionsSequence _ongoingSequence;
-
 		[Ordinal(105)] 
 		[RED("sequenceDuration")] 
 		public CFloat SequenceDuration
 		{
-			get => GetProperty(ref _sequenceDuration);
-			set => SetProperty(ref _sequenceDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(106)] 
 		[RED("sequencerMode")] 
 		public CEnum<EActionsSequencerMode> SequencerMode
 		{
-			get => GetProperty(ref _sequencerMode);
-			set => SetProperty(ref _sequencerMode, value);
+			get => GetPropertyValue<CEnum<EActionsSequencerMode>>();
+			set => SetPropertyValue<CEnum<EActionsSequencerMode>>(value);
 		}
 
 		[Ordinal(107)] 
 		[RED("actionTypeToForward")] 
 		public SActionTypeForward ActionTypeToForward
 		{
-			get => GetProperty(ref _actionTypeToForward);
-			set => SetProperty(ref _actionTypeToForward, value);
+			get => GetPropertyValue<SActionTypeForward>();
+			set => SetPropertyValue<SActionTypeForward>(value);
 		}
 
 		[Ordinal(108)] 
 		[RED("ongoingSequence")] 
 		public ActionsSequence OngoingSequence
 		{
-			get => GetProperty(ref _ongoingSequence);
-			set => SetProperty(ref _ongoingSequence, value);
+			get => GetPropertyValue<ActionsSequence>();
+			set => SetPropertyValue<ActionsSequence>(value);
 		}
 
 		public ActionsSequencerControllerPS()
 		{
-			_sequenceDuration = 2.000000F;
+			RevealDevicesGrid = false;
+			SequenceDuration = 2.000000F;
+			ActionTypeToForward = new() { QHack = true };
+			OngoingSequence = new() { SequenceInitiator = new(), DelayIDs = new() };
 		}
 	}
 }

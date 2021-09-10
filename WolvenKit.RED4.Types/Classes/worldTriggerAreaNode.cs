@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldTriggerAreaNode : worldAreaShapeNode
 	{
-		private CArray<CHandle<worldITriggerAreaNotifer>> _notifiers;
-
 		[Ordinal(6)] 
 		[RED("notifiers")] 
 		public CArray<CHandle<worldITriggerAreaNotifer>> Notifiers
 		{
-			get => GetProperty(ref _notifiers);
-			set => SetProperty(ref _notifiers, value);
+			get => GetPropertyValue<CArray<CHandle<worldITriggerAreaNotifer>>>();
+			set => SetPropertyValue<CArray<CHandle<worldITriggerAreaNotifer>>>(value);
+		}
+
+		public worldTriggerAreaNode()
+		{
+			Notifiers = new();
 		}
 	}
 }

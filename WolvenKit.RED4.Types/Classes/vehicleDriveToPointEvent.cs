@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class vehicleDriveToPointEvent : redEvent
 	{
-		private Vector3 _targetPos;
-		private CBool _useTraffic;
-		private CFloat _speedInTraffic;
-
 		[Ordinal(0)] 
 		[RED("targetPos")] 
 		public Vector3 TargetPos
 		{
-			get => GetProperty(ref _targetPos);
-			set => SetProperty(ref _targetPos, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("useTraffic")] 
 		public CBool UseTraffic
 		{
-			get => GetProperty(ref _useTraffic);
-			set => SetProperty(ref _useTraffic, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("speedInTraffic")] 
 		public CFloat SpeedInTraffic
 		{
-			get => GetProperty(ref _speedInTraffic);
-			set => SetProperty(ref _speedInTraffic, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public vehicleDriveToPointEvent()
+		{
+			TargetPos = new();
 		}
 	}
 }

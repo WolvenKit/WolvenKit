@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class FocusCluesSystem : gameScriptableSystem
 	{
-		private CArray<LinkedFocusClueData> _linkedClues;
-		private CArray<CName> _disabledGroupes;
-		private LinkedFocusClueData _activeLinkedClue;
-
 		[Ordinal(0)] 
 		[RED("linkedClues")] 
 		public CArray<LinkedFocusClueData> LinkedClues
 		{
-			get => GetProperty(ref _linkedClues);
-			set => SetProperty(ref _linkedClues, value);
+			get => GetPropertyValue<CArray<LinkedFocusClueData>>();
+			set => SetPropertyValue<CArray<LinkedFocusClueData>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("disabledGroupes")] 
 		public CArray<CName> DisabledGroupes
 		{
-			get => GetProperty(ref _disabledGroupes);
-			set => SetProperty(ref _disabledGroupes, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("activeLinkedClue")] 
 		public LinkedFocusClueData ActiveLinkedClue
 		{
-			get => GetProperty(ref _activeLinkedClue);
-			set => SetProperty(ref _activeLinkedClue, value);
+			get => GetPropertyValue<LinkedFocusClueData>();
+			set => SetPropertyValue<LinkedFocusClueData>(value);
+		}
+
+		public FocusCluesSystem()
+		{
+			LinkedClues = new();
+			DisabledGroupes = new();
+			ActiveLinkedClue = new() { OwnerID = new(), ExtendedClueRecords = new(), PsData = new() { Id = new() } };
 		}
 	}
 }

@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questTeleportPuppetNodeDefinition : questAICommandNodeBase
 	{
-		private CHandle<questUniversalRef> _entityReference;
-		private CHandle<questTeleportPuppetParamsV1> _params;
-
 		[Ordinal(2)] 
 		[RED("entityReference")] 
 		public CHandle<questUniversalRef> EntityReference
 		{
-			get => GetProperty(ref _entityReference);
-			set => SetProperty(ref _entityReference, value);
+			get => GetPropertyValue<CHandle<questUniversalRef>>();
+			set => SetPropertyValue<CHandle<questUniversalRef>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("params")] 
 		public CHandle<questTeleportPuppetParamsV1> Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<CHandle<questTeleportPuppetParamsV1>>();
+			set => SetPropertyValue<CHandle<questTeleportPuppetParamsV1>>(value);
+		}
+
+		public questTeleportPuppetNodeDefinition()
+		{
+			Sockets = new();
+			Id = 65535;
 		}
 	}
 }

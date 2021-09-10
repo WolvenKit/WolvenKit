@@ -5,68 +5,66 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CarRadioGameController : gameuiHUDGameController
 	{
-		private inkTextWidgetReference _radioStationName;
-		private inkTextWidgetReference _songName;
-		private CWeakHandle<inkWidget> _root;
-		private CHandle<redCallbackObject> _stateChangesBlackboardId;
-		private CHandle<redCallbackObject> _songNameChangeBlackboardId;
-		private CWeakHandle<gameIBlackboard> _blackboard;
-		private CHandle<inkanimProxy> _animationProxy;
-
 		[Ordinal(9)] 
 		[RED("radioStationName")] 
 		public inkTextWidgetReference RadioStationName
 		{
-			get => GetProperty(ref _radioStationName);
-			set => SetProperty(ref _radioStationName, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("songName")] 
 		public inkTextWidgetReference SongName
 		{
-			get => GetProperty(ref _songName);
-			set => SetProperty(ref _songName, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("root")] 
 		public CWeakHandle<inkWidget> Root
 		{
-			get => GetProperty(ref _root);
-			set => SetProperty(ref _root, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("stateChangesBlackboardId")] 
 		public CHandle<redCallbackObject> StateChangesBlackboardId
 		{
-			get => GetProperty(ref _stateChangesBlackboardId);
-			set => SetProperty(ref _stateChangesBlackboardId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("songNameChangeBlackboardId")] 
 		public CHandle<redCallbackObject> SongNameChangeBlackboardId
 		{
-			get => GetProperty(ref _songNameChangeBlackboardId);
-			set => SetProperty(ref _songNameChangeBlackboardId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("blackboard")] 
 		public CWeakHandle<gameIBlackboard> Blackboard
 		{
-			get => GetProperty(ref _blackboard);
-			set => SetProperty(ref _blackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{
-			get => GetProperty(ref _animationProxy);
-			set => SetProperty(ref _animationProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		public CarRadioGameController()
+		{
+			RadioStationName = new();
+			SongName = new();
 		}
 	}
 }

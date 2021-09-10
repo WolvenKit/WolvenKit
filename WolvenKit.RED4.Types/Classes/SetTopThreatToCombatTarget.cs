@@ -5,55 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SetTopThreatToCombatTarget : AIbehaviortaskScript
 	{
-		private CFloat _refreshTimer;
-		private CFloat _previousChecktime;
-		private CHandle<TargetTrackingExtension> _targetTrackerComponent;
-		private CHandle<movePoliciesComponent> _movePoliciesComponent;
-		private CFloat _targetChangeTime;
-
 		[Ordinal(0)] 
 		[RED("refreshTimer")] 
 		public CFloat RefreshTimer
 		{
-			get => GetProperty(ref _refreshTimer);
-			set => SetProperty(ref _refreshTimer, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("previousChecktime")] 
 		public CFloat PreviousChecktime
 		{
-			get => GetProperty(ref _previousChecktime);
-			set => SetProperty(ref _previousChecktime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("targetTrackerComponent")] 
 		public CHandle<TargetTrackingExtension> TargetTrackerComponent
 		{
-			get => GetProperty(ref _targetTrackerComponent);
-			set => SetProperty(ref _targetTrackerComponent, value);
+			get => GetPropertyValue<CHandle<TargetTrackingExtension>>();
+			set => SetPropertyValue<CHandle<TargetTrackingExtension>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("movePoliciesComponent")] 
 		public CHandle<movePoliciesComponent> MovePoliciesComponent
 		{
-			get => GetProperty(ref _movePoliciesComponent);
-			set => SetProperty(ref _movePoliciesComponent, value);
+			get => GetPropertyValue<CHandle<movePoliciesComponent>>();
+			set => SetPropertyValue<CHandle<movePoliciesComponent>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("targetChangeTime")] 
 		public CFloat TargetChangeTime
 		{
-			get => GetProperty(ref _targetChangeTime);
-			set => SetProperty(ref _targetChangeTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public SetTopThreatToCombatTarget()
 		{
-			_refreshTimer = 0.500000F;
+			RefreshTimer = 0.500000F;
 		}
 	}
 }

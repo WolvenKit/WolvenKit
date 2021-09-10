@@ -5,28 +5,27 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entCorpseComponent : entISkinableComponent
 	{
-		private CHandle<physicsFilterData> _filterData;
-		private CName _material;
-
 		[Ordinal(5)] 
 		[RED("filterData")] 
 		public CHandle<physicsFilterData> FilterData
 		{
-			get => GetProperty(ref _filterData);
-			set => SetProperty(ref _filterData, value);
+			get => GetPropertyValue<CHandle<physicsFilterData>>();
+			set => SetPropertyValue<CHandle<physicsFilterData>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("material")] 
 		public CName Material
 		{
-			get => GetProperty(ref _material);
-			set => SetProperty(ref _material, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public entCorpseComponent()
 		{
-			_material = "flesh.physmat";
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			Material = "flesh.physmat";
 		}
 	}
 }

@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class mathExprExpression : ISerializable
 	{
-		private CArray<CUInt32> _tokenData;
-		private CArray<CFloat> _valuesData;
-		private CUInt16 _returnVarType;
-
 		[Ordinal(0)] 
 		[RED("tokenData")] 
 		public CArray<CUInt32> TokenData
 		{
-			get => GetProperty(ref _tokenData);
-			set => SetProperty(ref _tokenData, value);
+			get => GetPropertyValue<CArray<CUInt32>>();
+			set => SetPropertyValue<CArray<CUInt32>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("valuesData")] 
 		public CArray<CFloat> ValuesData
 		{
-			get => GetProperty(ref _valuesData);
-			set => SetProperty(ref _valuesData, value);
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("returnVarType")] 
 		public CUInt16 ReturnVarType
 		{
-			get => GetProperty(ref _returnVarType);
-			set => SetProperty(ref _returnVarType, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
+		}
+
+		public mathExprExpression()
+		{
+			TokenData = new();
+			ValuesData = new();
 		}
 	}
 }

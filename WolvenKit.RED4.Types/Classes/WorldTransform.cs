@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WorldTransform : RedBaseClass
 	{
-		private WorldPosition _position;
-		private Quaternion _orientation;
-
 		[Ordinal(0)] 
 		[RED("Position")] 
 		public WorldPosition Position
 		{
-			get => GetProperty(ref _position);
-			set => SetProperty(ref _position, value);
+			get => GetPropertyValue<WorldPosition>();
+			set => SetPropertyValue<WorldPosition>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("Orientation")] 
 		public Quaternion Orientation
 		{
-			get => GetProperty(ref _orientation);
-			set => SetProperty(ref _orientation, value);
+			get => GetPropertyValue<Quaternion>();
+			set => SetPropertyValue<Quaternion>(value);
+		}
+
+		public WorldTransform()
+		{
+			Position = new() { X = new(), Y = new(), Z = new() };
+			Orientation = new() { R = 1.000000F };
 		}
 	}
 }

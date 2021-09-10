@@ -5,149 +5,152 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AICTreeNodeActionAnimationCurvePathDefinition : AICTreeNodeActionDefinition
 	{
-		private LibTreeDefNodeRef _nodeReference;
-		private LibTreeDefCName _controllersSetupName;
-		private LibTreeDefBool _useStart;
-		private LibTreeDefBool _useStop;
-		private LibTreeDefFloat _blendTime;
-		private LibTreeDefFloat _globalInBlendTime;
-		private LibTreeDefFloat _globalOutBlendTime;
-		private LibTreeDefBool _turnCharacterToMatchVelocity;
-		private LibTreeDefCName _customStartAnimationName;
-		private LibTreeDefCName _customMainAnimationName;
-		private LibTreeDefCName _customStopAnimationName;
-		private LibTreeDefBool _startSnapToTerrain;
-		private LibTreeDefBool _mainSnapToTerrain;
-		private LibTreeDefBool _stopSnapToTerrain;
-		private LibTreeDefFloat _startSnapToTerrainBlendTime;
-		private LibTreeDefFloat _stopSnapToTerrainBlendTime;
-
 		[Ordinal(1)] 
 		[RED("nodeReference")] 
 		public LibTreeDefNodeRef NodeReference
 		{
-			get => GetProperty(ref _nodeReference);
-			set => SetProperty(ref _nodeReference, value);
+			get => GetPropertyValue<LibTreeDefNodeRef>();
+			set => SetPropertyValue<LibTreeDefNodeRef>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("controllersSetupName")] 
 		public LibTreeDefCName ControllersSetupName
 		{
-			get => GetProperty(ref _controllersSetupName);
-			set => SetProperty(ref _controllersSetupName, value);
+			get => GetPropertyValue<LibTreeDefCName>();
+			set => SetPropertyValue<LibTreeDefCName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("useStart")] 
 		public LibTreeDefBool UseStart
 		{
-			get => GetProperty(ref _useStart);
-			set => SetProperty(ref _useStart, value);
+			get => GetPropertyValue<LibTreeDefBool>();
+			set => SetPropertyValue<LibTreeDefBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("useStop")] 
 		public LibTreeDefBool UseStop
 		{
-			get => GetProperty(ref _useStop);
-			set => SetProperty(ref _useStop, value);
+			get => GetPropertyValue<LibTreeDefBool>();
+			set => SetPropertyValue<LibTreeDefBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("blendTime")] 
 		public LibTreeDefFloat BlendTime
 		{
-			get => GetProperty(ref _blendTime);
-			set => SetProperty(ref _blendTime, value);
+			get => GetPropertyValue<LibTreeDefFloat>();
+			set => SetPropertyValue<LibTreeDefFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("globalInBlendTime")] 
 		public LibTreeDefFloat GlobalInBlendTime
 		{
-			get => GetProperty(ref _globalInBlendTime);
-			set => SetProperty(ref _globalInBlendTime, value);
+			get => GetPropertyValue<LibTreeDefFloat>();
+			set => SetPropertyValue<LibTreeDefFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("globalOutBlendTime")] 
 		public LibTreeDefFloat GlobalOutBlendTime
 		{
-			get => GetProperty(ref _globalOutBlendTime);
-			set => SetProperty(ref _globalOutBlendTime, value);
+			get => GetPropertyValue<LibTreeDefFloat>();
+			set => SetPropertyValue<LibTreeDefFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("turnCharacterToMatchVelocity")] 
 		public LibTreeDefBool TurnCharacterToMatchVelocity
 		{
-			get => GetProperty(ref _turnCharacterToMatchVelocity);
-			set => SetProperty(ref _turnCharacterToMatchVelocity, value);
+			get => GetPropertyValue<LibTreeDefBool>();
+			set => SetPropertyValue<LibTreeDefBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("customStartAnimationName")] 
 		public LibTreeDefCName CustomStartAnimationName
 		{
-			get => GetProperty(ref _customStartAnimationName);
-			set => SetProperty(ref _customStartAnimationName, value);
+			get => GetPropertyValue<LibTreeDefCName>();
+			set => SetPropertyValue<LibTreeDefCName>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("customMainAnimationName")] 
 		public LibTreeDefCName CustomMainAnimationName
 		{
-			get => GetProperty(ref _customMainAnimationName);
-			set => SetProperty(ref _customMainAnimationName, value);
+			get => GetPropertyValue<LibTreeDefCName>();
+			set => SetPropertyValue<LibTreeDefCName>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("customStopAnimationName")] 
 		public LibTreeDefCName CustomStopAnimationName
 		{
-			get => GetProperty(ref _customStopAnimationName);
-			set => SetProperty(ref _customStopAnimationName, value);
+			get => GetPropertyValue<LibTreeDefCName>();
+			set => SetPropertyValue<LibTreeDefCName>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("startSnapToTerrain")] 
 		public LibTreeDefBool StartSnapToTerrain
 		{
-			get => GetProperty(ref _startSnapToTerrain);
-			set => SetProperty(ref _startSnapToTerrain, value);
+			get => GetPropertyValue<LibTreeDefBool>();
+			set => SetPropertyValue<LibTreeDefBool>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("mainSnapToTerrain")] 
 		public LibTreeDefBool MainSnapToTerrain
 		{
-			get => GetProperty(ref _mainSnapToTerrain);
-			set => SetProperty(ref _mainSnapToTerrain, value);
+			get => GetPropertyValue<LibTreeDefBool>();
+			set => SetPropertyValue<LibTreeDefBool>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("stopSnapToTerrain")] 
 		public LibTreeDefBool StopSnapToTerrain
 		{
-			get => GetProperty(ref _stopSnapToTerrain);
-			set => SetProperty(ref _stopSnapToTerrain, value);
+			get => GetPropertyValue<LibTreeDefBool>();
+			set => SetPropertyValue<LibTreeDefBool>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("startSnapToTerrainBlendTime")] 
 		public LibTreeDefFloat StartSnapToTerrainBlendTime
 		{
-			get => GetProperty(ref _startSnapToTerrainBlendTime);
-			set => SetProperty(ref _startSnapToTerrainBlendTime, value);
+			get => GetPropertyValue<LibTreeDefFloat>();
+			set => SetPropertyValue<LibTreeDefFloat>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("stopSnapToTerrainBlendTime")] 
 		public LibTreeDefFloat StopSnapToTerrainBlendTime
 		{
-			get => GetProperty(ref _stopSnapToTerrainBlendTime);
-			set => SetProperty(ref _stopSnapToTerrainBlendTime, value);
+			get => GetPropertyValue<LibTreeDefFloat>();
+			set => SetPropertyValue<LibTreeDefFloat>(value);
+		}
+
+		public AICTreeNodeActionAnimationCurvePathDefinition()
+		{
+			NodeReference = new() { VariableId = 65535 };
+			ControllersSetupName = new() { VariableId = 65535 };
+			UseStart = new() { VariableId = 65535 };
+			UseStop = new() { VariableId = 65535 };
+			BlendTime = new() { VariableId = 65535 };
+			GlobalInBlendTime = new() { VariableId = 65535 };
+			GlobalOutBlendTime = new() { VariableId = 65535 };
+			TurnCharacterToMatchVelocity = new() { VariableId = 65535 };
+			CustomStartAnimationName = new() { VariableId = 65535 };
+			CustomMainAnimationName = new() { VariableId = 65535 };
+			CustomStopAnimationName = new() { VariableId = 65535 };
+			StartSnapToTerrain = new() { VariableId = 65535 };
+			MainSnapToTerrain = new() { VariableId = 65535 };
+			StopSnapToTerrain = new() { VariableId = 65535 };
+			StartSnapToTerrainBlendTime = new() { VariableId = 65535 };
+			StopSnapToTerrainBlendTime = new() { VariableId = 65535 };
 		}
 	}
 }

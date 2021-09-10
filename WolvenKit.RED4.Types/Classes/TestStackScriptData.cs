@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TestStackScriptData : RedBaseClass
 	{
-		private CInt32 _testVar;
-		private CName _anotherVar;
-
 		[Ordinal(0)] 
 		[RED("testVar")] 
 		public CInt32 TestVar
 		{
-			get => GetProperty(ref _testVar);
-			set => SetProperty(ref _testVar, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("anotherVar")] 
 		public CName AnotherVar
 		{
-			get => GetProperty(ref _anotherVar);
-			set => SetProperty(ref _anotherVar, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 	}
 }

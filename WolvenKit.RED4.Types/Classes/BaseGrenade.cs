@@ -5,497 +5,453 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class BaseGrenade : gameweaponGrenade
 	{
-		private CHandle<gameprojectileComponent> _projectileComponent;
-		private CWeakHandle<gameObject> _user;
-		private Vector4 _projectileSpawnPoint;
-		private CHandle<entSimpleColliderComponent> _shootCollision;
-		private CHandle<entIComponent> _visualComponent;
-		private CHandle<entIComponent> _stickyMeshComponent;
-		private CHandle<entIComponent> _decalsStickyComponent;
-		private CHandle<entIComponent> _homingMeshComponent;
-		private CHandle<gameTargetingComponent> _targetingComponent;
-		private CHandle<ResourceLibraryComponent> _resourceLibraryComponent;
-		private gameNewMappinID _mappinID;
-		private CFloat _timeSinceLaunch;
-		private CFloat _detonationTimer;
-		private CFloat _stickyTrackerTimeout;
-		private CFloat _timeOfFreezing;
-		private gameDelayID _queueFailDetonationDelayID;
-		private CFloat _delayToDetonate;
-		private CBool _detonationTimerActive;
-		private CBool _isAlive;
-		private CBool _delayingDetonation;
-		private CBool _landedOnGround;
-		private CBool _isStuck;
-		private CBool _isTracking;
-		private CBool _isLockingOn;
-		private CBool _isLockedOn;
-		private CBool _readyToTrack;
-		private CBool _lockOnFailed;
-		private CBool _canBeShot;
-		private CBool _shotDownByThePlayer;
-		private CBool _forceExplosion;
-		private CBool _hasClearedIgnoredObject;
-		private CBool _detonateOnImpact;
-		private CBool _setStickyTracker;
-		private CBool _isContinuousEffect;
-		private CBool _additionalAttackOnDetonate;
-		private CBool _additionalAttackOnCollision;
-		private CBool _targetAcquired;
-		private CBool _collidedWithNPC;
-		private CBool _isBroadcastingStim;
-		private CBool _playingFastBeep;
-		private CHandle<gameEffectInstance> _targetTracker;
-		private CArray<CWeakHandle<ScriptedPuppet>> _trackedTargets;
-		private CArray<GrenadePotentialHomingTarget> _potentialHomingTargets;
-		private GrenadePotentialHomingTarget _homingGrenadeTarget;
-		private CArray<CuttingGrenadePotentialTarget> _cuttingGrenadePotentialTargets;
-		private CuttingGrenadePotentialTarget _cuttingGrenadePotentialTarget;
-		private CWeakHandle<ScriptedPuppet> _stickedTarget;
-		private Vector4 _drillTargetPosition;
-		private CArray<CHandle<gameEffectInstance>> _attacksSpawned;
-		private CHandle<gamedataGrenade_Record> _tweakRecord;
-		private gameFxResource _additionalEffect;
-		private CBool _landedCooldownActive;
-		private CFloat _landedCooldownTimer;
-		private CFloat _cpoTimeBeforeRelease;
-
 		[Ordinal(45)] 
 		[RED("projectileComponent")] 
 		public CHandle<gameprojectileComponent> ProjectileComponent
 		{
-			get => GetProperty(ref _projectileComponent);
-			set => SetProperty(ref _projectileComponent, value);
+			get => GetPropertyValue<CHandle<gameprojectileComponent>>();
+			set => SetPropertyValue<CHandle<gameprojectileComponent>>(value);
 		}
 
 		[Ordinal(46)] 
 		[RED("user")] 
 		public CWeakHandle<gameObject> User
 		{
-			get => GetProperty(ref _user);
-			set => SetProperty(ref _user, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(47)] 
 		[RED("projectileSpawnPoint")] 
 		public Vector4 ProjectileSpawnPoint
 		{
-			get => GetProperty(ref _projectileSpawnPoint);
-			set => SetProperty(ref _projectileSpawnPoint, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(48)] 
 		[RED("shootCollision")] 
 		public CHandle<entSimpleColliderComponent> ShootCollision
 		{
-			get => GetProperty(ref _shootCollision);
-			set => SetProperty(ref _shootCollision, value);
+			get => GetPropertyValue<CHandle<entSimpleColliderComponent>>();
+			set => SetPropertyValue<CHandle<entSimpleColliderComponent>>(value);
 		}
 
 		[Ordinal(49)] 
 		[RED("visualComponent")] 
 		public CHandle<entIComponent> VisualComponent
 		{
-			get => GetProperty(ref _visualComponent);
-			set => SetProperty(ref _visualComponent, value);
+			get => GetPropertyValue<CHandle<entIComponent>>();
+			set => SetPropertyValue<CHandle<entIComponent>>(value);
 		}
 
 		[Ordinal(50)] 
 		[RED("stickyMeshComponent")] 
 		public CHandle<entIComponent> StickyMeshComponent
 		{
-			get => GetProperty(ref _stickyMeshComponent);
-			set => SetProperty(ref _stickyMeshComponent, value);
+			get => GetPropertyValue<CHandle<entIComponent>>();
+			set => SetPropertyValue<CHandle<entIComponent>>(value);
 		}
 
 		[Ordinal(51)] 
 		[RED("decalsStickyComponent")] 
 		public CHandle<entIComponent> DecalsStickyComponent
 		{
-			get => GetProperty(ref _decalsStickyComponent);
-			set => SetProperty(ref _decalsStickyComponent, value);
+			get => GetPropertyValue<CHandle<entIComponent>>();
+			set => SetPropertyValue<CHandle<entIComponent>>(value);
 		}
 
 		[Ordinal(52)] 
 		[RED("homingMeshComponent")] 
 		public CHandle<entIComponent> HomingMeshComponent
 		{
-			get => GetProperty(ref _homingMeshComponent);
-			set => SetProperty(ref _homingMeshComponent, value);
+			get => GetPropertyValue<CHandle<entIComponent>>();
+			set => SetPropertyValue<CHandle<entIComponent>>(value);
 		}
 
 		[Ordinal(53)] 
 		[RED("targetingComponent")] 
 		public CHandle<gameTargetingComponent> TargetingComponent
 		{
-			get => GetProperty(ref _targetingComponent);
-			set => SetProperty(ref _targetingComponent, value);
+			get => GetPropertyValue<CHandle<gameTargetingComponent>>();
+			set => SetPropertyValue<CHandle<gameTargetingComponent>>(value);
 		}
 
 		[Ordinal(54)] 
 		[RED("resourceLibraryComponent")] 
 		public CHandle<ResourceLibraryComponent> ResourceLibraryComponent
 		{
-			get => GetProperty(ref _resourceLibraryComponent);
-			set => SetProperty(ref _resourceLibraryComponent, value);
+			get => GetPropertyValue<CHandle<ResourceLibraryComponent>>();
+			set => SetPropertyValue<CHandle<ResourceLibraryComponent>>(value);
 		}
 
 		[Ordinal(55)] 
 		[RED("mappinID")] 
 		public gameNewMappinID MappinID
 		{
-			get => GetProperty(ref _mappinID);
-			set => SetProperty(ref _mappinID, value);
+			get => GetPropertyValue<gameNewMappinID>();
+			set => SetPropertyValue<gameNewMappinID>(value);
 		}
 
 		[Ordinal(56)] 
 		[RED("timeSinceLaunch")] 
 		public CFloat TimeSinceLaunch
 		{
-			get => GetProperty(ref _timeSinceLaunch);
-			set => SetProperty(ref _timeSinceLaunch, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(57)] 
 		[RED("detonationTimer")] 
 		public CFloat DetonationTimer
 		{
-			get => GetProperty(ref _detonationTimer);
-			set => SetProperty(ref _detonationTimer, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(58)] 
 		[RED("stickyTrackerTimeout")] 
 		public CFloat StickyTrackerTimeout
 		{
-			get => GetProperty(ref _stickyTrackerTimeout);
-			set => SetProperty(ref _stickyTrackerTimeout, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(59)] 
 		[RED("timeOfFreezing")] 
 		public CFloat TimeOfFreezing
 		{
-			get => GetProperty(ref _timeOfFreezing);
-			set => SetProperty(ref _timeOfFreezing, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(60)] 
 		[RED("queueFailDetonationDelayID")] 
 		public gameDelayID QueueFailDetonationDelayID
 		{
-			get => GetProperty(ref _queueFailDetonationDelayID);
-			set => SetProperty(ref _queueFailDetonationDelayID, value);
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
 		}
 
 		[Ordinal(61)] 
 		[RED("delayToDetonate")] 
 		public CFloat DelayToDetonate
 		{
-			get => GetProperty(ref _delayToDetonate);
-			set => SetProperty(ref _delayToDetonate, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(62)] 
 		[RED("detonationTimerActive")] 
 		public CBool DetonationTimerActive
 		{
-			get => GetProperty(ref _detonationTimerActive);
-			set => SetProperty(ref _detonationTimerActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(63)] 
 		[RED("isAlive")] 
 		public CBool IsAlive
 		{
-			get => GetProperty(ref _isAlive);
-			set => SetProperty(ref _isAlive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(64)] 
 		[RED("delayingDetonation")] 
 		public CBool DelayingDetonation
 		{
-			get => GetProperty(ref _delayingDetonation);
-			set => SetProperty(ref _delayingDetonation, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(65)] 
 		[RED("landedOnGround")] 
 		public CBool LandedOnGround
 		{
-			get => GetProperty(ref _landedOnGround);
-			set => SetProperty(ref _landedOnGround, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(66)] 
 		[RED("isStuck")] 
 		public CBool IsStuck
 		{
-			get => GetProperty(ref _isStuck);
-			set => SetProperty(ref _isStuck, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(67)] 
 		[RED("isTracking")] 
 		public CBool IsTracking
 		{
-			get => GetProperty(ref _isTracking);
-			set => SetProperty(ref _isTracking, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(68)] 
 		[RED("isLockingOn")] 
 		public CBool IsLockingOn
 		{
-			get => GetProperty(ref _isLockingOn);
-			set => SetProperty(ref _isLockingOn, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(69)] 
 		[RED("isLockedOn")] 
 		public CBool IsLockedOn
 		{
-			get => GetProperty(ref _isLockedOn);
-			set => SetProperty(ref _isLockedOn, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(70)] 
 		[RED("readyToTrack")] 
 		public CBool ReadyToTrack
 		{
-			get => GetProperty(ref _readyToTrack);
-			set => SetProperty(ref _readyToTrack, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(71)] 
 		[RED("lockOnFailed")] 
 		public CBool LockOnFailed
 		{
-			get => GetProperty(ref _lockOnFailed);
-			set => SetProperty(ref _lockOnFailed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(72)] 
 		[RED("canBeShot")] 
 		public CBool CanBeShot
 		{
-			get => GetProperty(ref _canBeShot);
-			set => SetProperty(ref _canBeShot, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(73)] 
 		[RED("shotDownByThePlayer")] 
 		public CBool ShotDownByThePlayer
 		{
-			get => GetProperty(ref _shotDownByThePlayer);
-			set => SetProperty(ref _shotDownByThePlayer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(74)] 
 		[RED("forceExplosion")] 
 		public CBool ForceExplosion
 		{
-			get => GetProperty(ref _forceExplosion);
-			set => SetProperty(ref _forceExplosion, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(75)] 
 		[RED("hasClearedIgnoredObject")] 
 		public CBool HasClearedIgnoredObject
 		{
-			get => GetProperty(ref _hasClearedIgnoredObject);
-			set => SetProperty(ref _hasClearedIgnoredObject, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(76)] 
 		[RED("detonateOnImpact")] 
 		public CBool DetonateOnImpact
 		{
-			get => GetProperty(ref _detonateOnImpact);
-			set => SetProperty(ref _detonateOnImpact, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(77)] 
 		[RED("setStickyTracker")] 
 		public CBool SetStickyTracker
 		{
-			get => GetProperty(ref _setStickyTracker);
-			set => SetProperty(ref _setStickyTracker, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(78)] 
 		[RED("isContinuousEffect")] 
 		public CBool IsContinuousEffect
 		{
-			get => GetProperty(ref _isContinuousEffect);
-			set => SetProperty(ref _isContinuousEffect, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(79)] 
 		[RED("additionalAttackOnDetonate")] 
 		public CBool AdditionalAttackOnDetonate
 		{
-			get => GetProperty(ref _additionalAttackOnDetonate);
-			set => SetProperty(ref _additionalAttackOnDetonate, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(80)] 
 		[RED("additionalAttackOnCollision")] 
 		public CBool AdditionalAttackOnCollision
 		{
-			get => GetProperty(ref _additionalAttackOnCollision);
-			set => SetProperty(ref _additionalAttackOnCollision, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(81)] 
 		[RED("targetAcquired")] 
 		public CBool TargetAcquired
 		{
-			get => GetProperty(ref _targetAcquired);
-			set => SetProperty(ref _targetAcquired, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(82)] 
 		[RED("collidedWithNPC")] 
 		public CBool CollidedWithNPC
 		{
-			get => GetProperty(ref _collidedWithNPC);
-			set => SetProperty(ref _collidedWithNPC, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(83)] 
 		[RED("isBroadcastingStim")] 
 		public CBool IsBroadcastingStim
 		{
-			get => GetProperty(ref _isBroadcastingStim);
-			set => SetProperty(ref _isBroadcastingStim, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(84)] 
 		[RED("playingFastBeep")] 
 		public CBool PlayingFastBeep
 		{
-			get => GetProperty(ref _playingFastBeep);
-			set => SetProperty(ref _playingFastBeep, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(85)] 
 		[RED("targetTracker")] 
 		public CHandle<gameEffectInstance> TargetTracker
 		{
-			get => GetProperty(ref _targetTracker);
-			set => SetProperty(ref _targetTracker, value);
+			get => GetPropertyValue<CHandle<gameEffectInstance>>();
+			set => SetPropertyValue<CHandle<gameEffectInstance>>(value);
 		}
 
 		[Ordinal(86)] 
 		[RED("trackedTargets")] 
 		public CArray<CWeakHandle<ScriptedPuppet>> TrackedTargets
 		{
-			get => GetProperty(ref _trackedTargets);
-			set => SetProperty(ref _trackedTargets, value);
+			get => GetPropertyValue<CArray<CWeakHandle<ScriptedPuppet>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<ScriptedPuppet>>>(value);
 		}
 
 		[Ordinal(87)] 
 		[RED("potentialHomingTargets")] 
 		public CArray<GrenadePotentialHomingTarget> PotentialHomingTargets
 		{
-			get => GetProperty(ref _potentialHomingTargets);
-			set => SetProperty(ref _potentialHomingTargets, value);
+			get => GetPropertyValue<CArray<GrenadePotentialHomingTarget>>();
+			set => SetPropertyValue<CArray<GrenadePotentialHomingTarget>>(value);
 		}
 
 		[Ordinal(88)] 
 		[RED("homingGrenadeTarget")] 
 		public GrenadePotentialHomingTarget HomingGrenadeTarget
 		{
-			get => GetProperty(ref _homingGrenadeTarget);
-			set => SetProperty(ref _homingGrenadeTarget, value);
+			get => GetPropertyValue<GrenadePotentialHomingTarget>();
+			set => SetPropertyValue<GrenadePotentialHomingTarget>(value);
 		}
 
 		[Ordinal(89)] 
 		[RED("cuttingGrenadePotentialTargets")] 
 		public CArray<CuttingGrenadePotentialTarget> CuttingGrenadePotentialTargets
 		{
-			get => GetProperty(ref _cuttingGrenadePotentialTargets);
-			set => SetProperty(ref _cuttingGrenadePotentialTargets, value);
+			get => GetPropertyValue<CArray<CuttingGrenadePotentialTarget>>();
+			set => SetPropertyValue<CArray<CuttingGrenadePotentialTarget>>(value);
 		}
 
 		[Ordinal(90)] 
 		[RED("cuttingGrenadePotentialTarget")] 
 		public CuttingGrenadePotentialTarget CuttingGrenadePotentialTarget
 		{
-			get => GetProperty(ref _cuttingGrenadePotentialTarget);
-			set => SetProperty(ref _cuttingGrenadePotentialTarget, value);
+			get => GetPropertyValue<CuttingGrenadePotentialTarget>();
+			set => SetPropertyValue<CuttingGrenadePotentialTarget>(value);
 		}
 
 		[Ordinal(91)] 
 		[RED("stickedTarget")] 
 		public CWeakHandle<ScriptedPuppet> StickedTarget
 		{
-			get => GetProperty(ref _stickedTarget);
-			set => SetProperty(ref _stickedTarget, value);
+			get => GetPropertyValue<CWeakHandle<ScriptedPuppet>>();
+			set => SetPropertyValue<CWeakHandle<ScriptedPuppet>>(value);
 		}
 
 		[Ordinal(92)] 
 		[RED("drillTargetPosition")] 
 		public Vector4 DrillTargetPosition
 		{
-			get => GetProperty(ref _drillTargetPosition);
-			set => SetProperty(ref _drillTargetPosition, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(93)] 
 		[RED("attacksSpawned")] 
 		public CArray<CHandle<gameEffectInstance>> AttacksSpawned
 		{
-			get => GetProperty(ref _attacksSpawned);
-			set => SetProperty(ref _attacksSpawned, value);
+			get => GetPropertyValue<CArray<CHandle<gameEffectInstance>>>();
+			set => SetPropertyValue<CArray<CHandle<gameEffectInstance>>>(value);
 		}
 
 		[Ordinal(94)] 
 		[RED("tweakRecord")] 
 		public CHandle<gamedataGrenade_Record> TweakRecord
 		{
-			get => GetProperty(ref _tweakRecord);
-			set => SetProperty(ref _tweakRecord, value);
+			get => GetPropertyValue<CHandle<gamedataGrenade_Record>>();
+			set => SetPropertyValue<CHandle<gamedataGrenade_Record>>(value);
 		}
 
 		[Ordinal(95)] 
 		[RED("additionalEffect")] 
 		public gameFxResource AdditionalEffect
 		{
-			get => GetProperty(ref _additionalEffect);
-			set => SetProperty(ref _additionalEffect, value);
+			get => GetPropertyValue<gameFxResource>();
+			set => SetPropertyValue<gameFxResource>(value);
 		}
 
 		[Ordinal(96)] 
 		[RED("landedCooldownActive")] 
 		public CBool LandedCooldownActive
 		{
-			get => GetProperty(ref _landedCooldownActive);
-			set => SetProperty(ref _landedCooldownActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(97)] 
 		[RED("landedCooldownTimer")] 
 		public CFloat LandedCooldownTimer
 		{
-			get => GetProperty(ref _landedCooldownTimer);
-			set => SetProperty(ref _landedCooldownTimer, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(98)] 
 		[RED("cpoTimeBeforeRelease")] 
 		public CFloat CpoTimeBeforeRelease
 		{
-			get => GetProperty(ref _cpoTimeBeforeRelease);
-			set => SetProperty(ref _cpoTimeBeforeRelease, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public BaseGrenade()
 		{
-			_isAlive = true;
-			_cpoTimeBeforeRelease = 3.000000F;
+			ProjectileSpawnPoint = new();
+			MappinID = new();
+			QueueFailDetonationDelayID = new();
+			IsAlive = true;
+			TrackedTargets = new();
+			PotentialHomingTargets = new();
+			HomingGrenadeTarget = new();
+			CuttingGrenadePotentialTargets = new();
+			CuttingGrenadePotentialTarget = new();
+			DrillTargetPosition = new();
+			AttacksSpawned = new();
+			AdditionalEffect = new();
+			CpoTimeBeforeRelease = 3.000000F;
 		}
 	}
 }

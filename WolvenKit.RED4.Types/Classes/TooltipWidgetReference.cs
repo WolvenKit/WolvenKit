@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TooltipWidgetReference : RedBaseClass
 	{
-		private CName _identifier;
-		private inkWidgetLibraryReference _widgetLibraryReference;
-
 		[Ordinal(0)] 
 		[RED("identifier")] 
 		public CName Identifier
 		{
-			get => GetProperty(ref _identifier);
-			set => SetProperty(ref _identifier, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("widgetLibraryReference")] 
 		public inkWidgetLibraryReference WidgetLibraryReference
 		{
-			get => GetProperty(ref _widgetLibraryReference);
-			set => SetProperty(ref _widgetLibraryReference, value);
+			get => GetPropertyValue<inkWidgetLibraryReference>();
+			set => SetPropertyValue<inkWidgetLibraryReference>(value);
+		}
+
+		public TooltipWidgetReference()
+		{
+			WidgetLibraryReference = new() { WidgetLibrary = new() };
 		}
 	}
 }

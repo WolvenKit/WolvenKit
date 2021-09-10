@@ -5,73 +5,70 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameUILocalizationDataPackage : IScriptable
 	{
-		private CArray<CFloat> _floatValues;
-		private CArray<CInt32> _intValues;
-		private CArray<CName> _nameValues;
-		private CArray<CFloat> _statValues;
-		private CArray<CName> _statNames;
-		private CInt32 _paramsCount;
-		private CHandle<textTextParameterSet> _textParams;
-
 		[Ordinal(0)] 
 		[RED("floatValues")] 
 		public CArray<CFloat> FloatValues
 		{
-			get => GetProperty(ref _floatValues);
-			set => SetProperty(ref _floatValues, value);
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("intValues")] 
 		public CArray<CInt32> IntValues
 		{
-			get => GetProperty(ref _intValues);
-			set => SetProperty(ref _intValues, value);
+			get => GetPropertyValue<CArray<CInt32>>();
+			set => SetPropertyValue<CArray<CInt32>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("nameValues")] 
 		public CArray<CName> NameValues
 		{
-			get => GetProperty(ref _nameValues);
-			set => SetProperty(ref _nameValues, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("statValues")] 
 		public CArray<CFloat> StatValues
 		{
-			get => GetProperty(ref _statValues);
-			set => SetProperty(ref _statValues, value);
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("statNames")] 
 		public CArray<CName> StatNames
 		{
-			get => GetProperty(ref _statNames);
-			set => SetProperty(ref _statNames, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("paramsCount")] 
 		public CInt32 ParamsCount
 		{
-			get => GetProperty(ref _paramsCount);
-			set => SetProperty(ref _paramsCount, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("textParams")] 
 		public CHandle<textTextParameterSet> TextParams
 		{
-			get => GetProperty(ref _textParams);
-			set => SetProperty(ref _textParams, value);
+			get => GetPropertyValue<CHandle<textTextParameterSet>>();
+			set => SetPropertyValue<CHandle<textTextParameterSet>>(value);
 		}
 
 		public gameUILocalizationDataPackage()
 		{
-			_paramsCount = -1;
+			FloatValues = new();
+			IntValues = new();
+			NameValues = new();
+			StatValues = new();
+			StatNames = new();
+			ParamsCount = -1;
 		}
 	}
 }

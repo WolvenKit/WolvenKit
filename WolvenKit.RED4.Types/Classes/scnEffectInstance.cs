@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnEffectInstance : RedBaseClass
 	{
-		private scnEffectInstanceId _effectInstanceId;
-		private worldCompiledEffectInfo _compiledEffect;
-
 		[Ordinal(0)] 
 		[RED("effectInstanceId")] 
 		public scnEffectInstanceId EffectInstanceId
 		{
-			get => GetProperty(ref _effectInstanceId);
-			set => SetProperty(ref _effectInstanceId, value);
+			get => GetPropertyValue<scnEffectInstanceId>();
+			set => SetPropertyValue<scnEffectInstanceId>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("compiledEffect")] 
 		public worldCompiledEffectInfo CompiledEffect
 		{
-			get => GetProperty(ref _compiledEffect);
-			set => SetProperty(ref _compiledEffect, value);
+			get => GetPropertyValue<worldCompiledEffectInfo>();
+			set => SetPropertyValue<worldCompiledEffectInfo>(value);
+		}
+
+		public scnEffectInstance()
+		{
+			EffectInstanceId = new() { EffectId = new() { Id = 4294967295 }, Id = 4294967295 };
+			CompiledEffect = new() { PlacementTags = new(), ComponentNames = new(), RelativePositions = new(), RelativeRotations = new(), PlacementInfos = new(), EventsSortedByRUID = new() };
 		}
 	}
 }

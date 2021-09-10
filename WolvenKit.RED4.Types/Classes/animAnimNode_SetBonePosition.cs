@@ -5,23 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_SetBonePosition : animAnimNode_OnePoseInput
 	{
-		private animTransformIndex _bone;
-		private animVectorLink _positionMs;
-
 		[Ordinal(12)] 
 		[RED("bone")] 
 		public animTransformIndex Bone
 		{
-			get => GetProperty(ref _bone);
-			set => SetProperty(ref _bone, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("positionMs")] 
 		public animVectorLink PositionMs
 		{
-			get => GetProperty(ref _positionMs);
-			set => SetProperty(ref _positionMs, value);
+			get => GetPropertyValue<animVectorLink>();
+			set => SetPropertyValue<animVectorLink>(value);
+		}
+
+		public animAnimNode_SetBonePosition()
+		{
+			Id = 4294967295;
+			InputLink = new();
+			Bone = new();
+			PositionMs = new();
 		}
 	}
 }

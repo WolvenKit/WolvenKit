@@ -5,59 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PerkTooltipData : BasePerksMenuTooltipData
 	{
-		private CEnum<gamedataPerkType> _perkType;
-		private CEnum<gamedataPerkArea> _perkArea;
-		private TweakDBID _attributeId;
-		private CEnum<gamedataProficiencyType> _proficiency;
-		private CHandle<PerkDisplayData> _perkData;
-		private CHandle<AttributeData> _attributeData;
-
 		[Ordinal(1)] 
 		[RED("perkType")] 
 		public CEnum<gamedataPerkType> PerkType
 		{
-			get => GetProperty(ref _perkType);
-			set => SetProperty(ref _perkType, value);
+			get => GetPropertyValue<CEnum<gamedataPerkType>>();
+			set => SetPropertyValue<CEnum<gamedataPerkType>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("perkArea")] 
 		public CEnum<gamedataPerkArea> PerkArea
 		{
-			get => GetProperty(ref _perkArea);
-			set => SetProperty(ref _perkArea, value);
+			get => GetPropertyValue<CEnum<gamedataPerkArea>>();
+			set => SetPropertyValue<CEnum<gamedataPerkArea>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("attributeId")] 
 		public TweakDBID AttributeId
 		{
-			get => GetProperty(ref _attributeId);
-			set => SetProperty(ref _attributeId, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("proficiency")] 
 		public CEnum<gamedataProficiencyType> Proficiency
 		{
-			get => GetProperty(ref _proficiency);
-			set => SetProperty(ref _proficiency, value);
+			get => GetPropertyValue<CEnum<gamedataProficiencyType>>();
+			set => SetPropertyValue<CEnum<gamedataProficiencyType>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("perkData")] 
 		public CHandle<PerkDisplayData> PerkData
 		{
-			get => GetProperty(ref _perkData);
-			set => SetProperty(ref _perkData, value);
+			get => GetPropertyValue<CHandle<PerkDisplayData>>();
+			set => SetPropertyValue<CHandle<PerkDisplayData>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("attributeData")] 
 		public CHandle<AttributeData> AttributeData
 		{
-			get => GetProperty(ref _attributeData);
-			set => SetProperty(ref _attributeData, value);
+			get => GetPropertyValue<CHandle<AttributeData>>();
+			set => SetPropertyValue<CHandle<AttributeData>>(value);
 		}
 	}
 }

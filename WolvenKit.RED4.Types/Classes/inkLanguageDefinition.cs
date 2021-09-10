@@ -5,47 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkLanguageDefinition : RedBaseClass
 	{
-		private CName _languageCode;
-		private CName _isoScriptCode;
-		private CEnum<inkETextDirection> _textDirection;
-		private CArray<inkLanguageFont> _fonts;
-
 		[Ordinal(0)] 
 		[RED("languageCode")] 
 		public CName LanguageCode
 		{
-			get => GetProperty(ref _languageCode);
-			set => SetProperty(ref _languageCode, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isoScriptCode")] 
 		public CName IsoScriptCode
 		{
-			get => GetProperty(ref _isoScriptCode);
-			set => SetProperty(ref _isoScriptCode, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("textDirection")] 
 		public CEnum<inkETextDirection> TextDirection
 		{
-			get => GetProperty(ref _textDirection);
-			set => SetProperty(ref _textDirection, value);
+			get => GetPropertyValue<CEnum<inkETextDirection>>();
+			set => SetPropertyValue<CEnum<inkETextDirection>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("fonts")] 
 		public CArray<inkLanguageFont> Fonts
 		{
-			get => GetProperty(ref _fonts);
-			set => SetProperty(ref _fonts, value);
+			get => GetPropertyValue<CArray<inkLanguageFont>>();
+			set => SetPropertyValue<CArray<inkLanguageFont>>(value);
 		}
 
 		public inkLanguageDefinition()
 		{
-			_languageCode = "en-us";
-			_isoScriptCode = "Latn";
+			LanguageCode = "en-us";
+			IsoScriptCode = "Latn";
+			Fonts = new() { new() };
 		}
 	}
 }

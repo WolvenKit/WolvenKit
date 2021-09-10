@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkLayersResource : CResource
 	{
-		private inkLayerDefinitionCollection _layerDefinitions;
-		private inkLayerDefinitionCollection _preGameLayerDefinitions;
-		private inkPermanentLayerDefinitionCollection _permanentLayerDefinitions;
-
 		[Ordinal(1)] 
 		[RED("layerDefinitions")] 
 		public inkLayerDefinitionCollection LayerDefinitions
 		{
-			get => GetProperty(ref _layerDefinitions);
-			set => SetProperty(ref _layerDefinitions, value);
+			get => GetPropertyValue<inkLayerDefinitionCollection>();
+			set => SetPropertyValue<inkLayerDefinitionCollection>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("preGameLayerDefinitions")] 
 		public inkLayerDefinitionCollection PreGameLayerDefinitions
 		{
-			get => GetProperty(ref _preGameLayerDefinitions);
-			set => SetProperty(ref _preGameLayerDefinitions, value);
+			get => GetPropertyValue<inkLayerDefinitionCollection>();
+			set => SetPropertyValue<inkLayerDefinitionCollection>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("permanentLayerDefinitions")] 
 		public inkPermanentLayerDefinitionCollection PermanentLayerDefinitions
 		{
-			get => GetProperty(ref _permanentLayerDefinitions);
-			set => SetProperty(ref _permanentLayerDefinitions, value);
+			get => GetPropertyValue<inkPermanentLayerDefinitionCollection>();
+			set => SetPropertyValue<inkPermanentLayerDefinitionCollection>(value);
+		}
+
+		public inkLayersResource()
+		{
+			LayerDefinitions = new() { MenuLayer = new(), MenuLayerMP = new(), HudLayer = new(), VideoLayer = new(), OffscreenLayer = new(), GameNotificationsLayer = new(), PhotoModeLayer = new(), DebugLayer = new() { Entries = new() } };
+			PreGameLayerDefinitions = new() { MenuLayer = new(), MenuLayerMP = new(), HudLayer = new(), VideoLayer = new(), OffscreenLayer = new(), GameNotificationsLayer = new(), PhotoModeLayer = new(), DebugLayer = new() { Entries = new() } };
+			PermanentLayerDefinitions = new() { LoadingLayer = new(), WatermarksLayer = new(), SysNotificationsLayer = new(), WaitingSignLayerDefinition = new() };
 		}
 	}
 }

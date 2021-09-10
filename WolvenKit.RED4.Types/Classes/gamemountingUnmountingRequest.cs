@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamemountingUnmountingRequest : IScriptable
 	{
-		private gamemountingMountingInfo _lowLevelMountingInfo;
-		private CHandle<gameMountEventData> _mountData;
-
 		[Ordinal(0)] 
 		[RED("lowLevelMountingInfo")] 
 		public gamemountingMountingInfo LowLevelMountingInfo
 		{
-			get => GetProperty(ref _lowLevelMountingInfo);
-			set => SetProperty(ref _lowLevelMountingInfo, value);
+			get => GetPropertyValue<gamemountingMountingInfo>();
+			set => SetPropertyValue<gamemountingMountingInfo>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("mountData")] 
 		public CHandle<gameMountEventData> MountData
 		{
-			get => GetProperty(ref _mountData);
-			set => SetProperty(ref _mountData, value);
+			get => GetPropertyValue<CHandle<gameMountEventData>>();
+			set => SetPropertyValue<CHandle<gameMountEventData>>(value);
+		}
+
+		public gamemountingUnmountingRequest()
+		{
+			LowLevelMountingInfo = new() { ChildId = new(), ParentId = new(), SlotId = new() };
 		}
 	}
 }

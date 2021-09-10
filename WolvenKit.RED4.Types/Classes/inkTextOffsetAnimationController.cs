@@ -5,19 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkTextOffsetAnimationController : inkTextAnimationController
 	{
-		private CFloat _timeToSkip;
-
 		[Ordinal(8)] 
 		[RED("timeToSkip")] 
 		public CFloat TimeToSkip
 		{
-			get => GetProperty(ref _timeToSkip);
-			set => SetProperty(ref _timeToSkip, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public inkTextOffsetAnimationController()
 		{
-			_timeToSkip = 0.050000F;
+			PlayOnInitialize = true;
+			UseDefaultAnimation = true;
+			EndValue = 1.000000F;
+			TimeToSkip = 0.050000F;
 		}
 	}
 }

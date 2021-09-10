@@ -1,10 +1,42 @@
+using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace WolvenKit.RED4.Types
 {
-    public class CUInt64 : BaseFundamental<ulong>
+    [RED("Uint64")]
+    [DebuggerDisplay("{_value,nq}", Type = "CUInt64")]
+    public readonly struct CUInt64 : IRedPrimitive<ulong>, IEquatable<CUInt64>
     {
-        public static implicit operator CUInt64(ulong value) => new() { Value = value };
-        public static implicit operator ulong(CUInt64 value) => value.Value;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private readonly ulong _value;
+
+        private CUInt64(ulong value)
+        {
+            _value = value;
+        }
+
+        public static implicit operator CUInt64(ulong value) => new(value);
+        public static implicit operator ulong(CUInt64 value) => value._value;
+
+        public static CUInt64 operator +(CUInt64 objA, CUInt64 objB) => new(objA._value + objB._value);
+        public static CUInt64 operator -(CUInt64 objA, CUInt64 objB) => new(objA._value - objB._value);
+        public static CUInt64 operator *(CUInt64 objA, CUInt64 objB) => new(objA._value * objB._value);
+        public static CUInt64 operator /(CUInt64 objA, CUInt64 objB) => new(objA._value / objB._value);
+
+
+        public override int GetHashCode() => _value.GetHashCode();
+
+        public override bool Equals(object obj)
+        {
+            if (obj is CUInt64 cObj)
+            {
+                return Equals(cObj);
+            }
+
+            return false;
+        }
+
+        public bool Equals(CUInt64 other) => Equals(_value, other._value);
     }
 }

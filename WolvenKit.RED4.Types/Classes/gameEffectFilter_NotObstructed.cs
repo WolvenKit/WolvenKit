@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameEffectFilter_NotObstructed : gameEffectObjectSingleFilter
 	{
-		private CFloat _forwardOffset;
-		private CHandle<physicsFilterData> _filterData;
-
 		[Ordinal(0)] 
 		[RED("forwardOffset")] 
 		public CFloat ForwardOffset
 		{
-			get => GetProperty(ref _forwardOffset);
-			set => SetProperty(ref _forwardOffset, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("filterData")] 
 		public CHandle<physicsFilterData> FilterData
 		{
-			get => GetProperty(ref _filterData);
-			set => SetProperty(ref _filterData, value);
+			get => GetPropertyValue<CHandle<physicsFilterData>>();
+			set => SetPropertyValue<CHandle<physicsFilterData>>(value);
 		}
 	}
 }

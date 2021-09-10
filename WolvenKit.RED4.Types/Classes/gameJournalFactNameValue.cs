@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameJournalFactNameValue : RedBaseClass
 	{
-		private CName _factName;
-		private CInt32 _factValue;
-
 		[Ordinal(0)] 
 		[RED("factName")] 
 		public CName FactName
 		{
-			get => GetProperty(ref _factName);
-			set => SetProperty(ref _factName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("factValue")] 
 		public CInt32 FactValue
 		{
-			get => GetProperty(ref _factValue);
-			set => SetProperty(ref _factValue, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		public gameJournalFactNameValue()
 		{
-			_factValue = 1;
+			FactValue = 1;
 		}
 	}
 }

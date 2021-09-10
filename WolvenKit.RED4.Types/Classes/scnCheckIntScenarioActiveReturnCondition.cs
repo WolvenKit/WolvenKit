@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnCheckIntScenarioActiveReturnCondition : scnIReturnCondition
 	{
-		private scnCheckIntScenarioActiveReturnConditionParams _params;
-
 		[Ordinal(0)] 
 		[RED("params")] 
 		public scnCheckIntScenarioActiveReturnConditionParams Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<scnCheckIntScenarioActiveReturnConditionParams>();
+			set => SetPropertyValue<scnCheckIntScenarioActiveReturnConditionParams>(value);
+		}
+
+		public scnCheckIntScenarioActiveReturnCondition()
+		{
+			Params = new();
 		}
 	}
 }

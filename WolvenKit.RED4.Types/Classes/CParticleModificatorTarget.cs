@@ -5,46 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CParticleModificatorTarget : IParticleModificator
 	{
-		private CHandle<IEvaluatorVector> _position;
-		private CHandle<IEvaluatorFloat> _forceScale;
-		private CHandle<IEvaluatorFloat> _killRadius;
-		private CFloat _maxForce;
-
 		[Ordinal(4)] 
 		[RED("position")] 
 		public CHandle<IEvaluatorVector> Position
 		{
-			get => GetProperty(ref _position);
-			set => SetProperty(ref _position, value);
+			get => GetPropertyValue<CHandle<IEvaluatorVector>>();
+			set => SetPropertyValue<CHandle<IEvaluatorVector>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("forceScale")] 
 		public CHandle<IEvaluatorFloat> ForceScale
 		{
-			get => GetProperty(ref _forceScale);
-			set => SetProperty(ref _forceScale, value);
+			get => GetPropertyValue<CHandle<IEvaluatorFloat>>();
+			set => SetPropertyValue<CHandle<IEvaluatorFloat>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("killRadius")] 
 		public CHandle<IEvaluatorFloat> KillRadius
 		{
-			get => GetProperty(ref _killRadius);
-			set => SetProperty(ref _killRadius, value);
+			get => GetPropertyValue<CHandle<IEvaluatorFloat>>();
+			set => SetPropertyValue<CHandle<IEvaluatorFloat>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("maxForce")] 
 		public CFloat MaxForce
 		{
-			get => GetProperty(ref _maxForce);
-			set => SetProperty(ref _maxForce, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public CParticleModificatorTarget()
 		{
-			_maxForce = 100.000000F;
+			EditorName = "Target";
+			EditorGroup = "Velocity";
+			IsEnabled = true;
+			MaxForce = 100.000000F;
 		}
 	}
 }

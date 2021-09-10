@@ -5,66 +5,62 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ScannerSkillCheckItemLogicController : inkWidgetLogicController
 	{
-		private inkTextWidgetReference _nameRef;
-		private inkCompoundWidgetReference _conditionDataListRef;
-		private CArray<CWeakHandle<inkWidget>> _conditionDataItems;
-		private CName _conditionDataItemName;
-		private CName _passedStateName;
-		private CName _failedStateName;
-
 		[Ordinal(1)] 
 		[RED("NameRef")] 
 		public inkTextWidgetReference NameRef
 		{
-			get => GetProperty(ref _nameRef);
-			set => SetProperty(ref _nameRef, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ConditionDataListRef")] 
 		public inkCompoundWidgetReference ConditionDataListRef
 		{
-			get => GetProperty(ref _conditionDataListRef);
-			set => SetProperty(ref _conditionDataListRef, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("ConditionDataItems")] 
 		public CArray<CWeakHandle<inkWidget>> ConditionDataItems
 		{
-			get => GetProperty(ref _conditionDataItems);
-			set => SetProperty(ref _conditionDataItems, value);
+			get => GetPropertyValue<CArray<CWeakHandle<inkWidget>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<inkWidget>>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("ConditionDataItemName")] 
 		public CName ConditionDataItemName
 		{
-			get => GetProperty(ref _conditionDataItemName);
-			set => SetProperty(ref _conditionDataItemName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("PassedStateName")] 
 		public CName PassedStateName
 		{
-			get => GetProperty(ref _passedStateName);
-			set => SetProperty(ref _passedStateName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("FailedStateName")] 
 		public CName FailedStateName
 		{
-			get => GetProperty(ref _failedStateName);
-			set => SetProperty(ref _failedStateName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public ScannerSkillCheckItemLogicController()
 		{
-			_conditionDataItemName = "ConditionDataItem";
-			_passedStateName = "Passed";
-			_failedStateName = "Failed";
+			NameRef = new();
+			ConditionDataListRef = new();
+			ConditionDataItems = new();
+			ConditionDataItemName = "ConditionDataItem";
+			PassedStateName = "Passed";
+			FailedStateName = "Failed";
 		}
 	}
 }

@@ -5,59 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIActionSlideParams : RedBaseClass
 	{
-		private CFloat _distance;
-		private CFloat _directionAngle;
-		private CFloat _duration;
-		private CFloat _offset;
-		private CBool _slideToTarget;
-		private CBool _debugDrawSlideLines;
-
 		[Ordinal(0)] 
 		[RED("distance")] 
 		public CFloat Distance
 		{
-			get => GetProperty(ref _distance);
-			set => SetProperty(ref _distance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("directionAngle")] 
 		public CFloat DirectionAngle
 		{
-			get => GetProperty(ref _directionAngle);
-			set => SetProperty(ref _directionAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get => GetProperty(ref _duration);
-			set => SetProperty(ref _duration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("offset")] 
 		public CFloat Offset
 		{
-			get => GetProperty(ref _offset);
-			set => SetProperty(ref _offset, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("slideToTarget")] 
 		public CBool SlideToTarget
 		{
-			get => GetProperty(ref _slideToTarget);
-			set => SetProperty(ref _slideToTarget, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("debugDrawSlideLines")] 
 		public CBool DebugDrawSlideLines
 		{
-			get => GetProperty(ref _debugDrawSlideLines);
-			set => SetProperty(ref _debugDrawSlideLines, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

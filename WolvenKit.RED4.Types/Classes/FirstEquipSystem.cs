@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class FirstEquipSystem : gameScriptableSystem
 	{
-		private CArray<EFirstEquipData> _equipDataArray;
-
 		[Ordinal(0)] 
 		[RED("equipDataArray")] 
 		public CArray<EFirstEquipData> EquipDataArray
 		{
-			get => GetProperty(ref _equipDataArray);
-			set => SetProperty(ref _equipDataArray, value);
+			get => GetPropertyValue<CArray<EFirstEquipData>>();
+			set => SetPropertyValue<CArray<EFirstEquipData>>(value);
+		}
+
+		public FirstEquipSystem()
+		{
+			EquipDataArray = new();
 		}
 	}
 }

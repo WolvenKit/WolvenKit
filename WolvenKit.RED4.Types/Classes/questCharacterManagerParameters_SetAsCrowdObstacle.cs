@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questCharacterManagerParameters_SetAsCrowdObstacle : questICharacterManagerParameters_NodeSubType
 	{
-		private CArray<questSetAsCrowdObstacle_NodeTypeParams> _params;
-
 		[Ordinal(0)] 
 		[RED("params")] 
 		public CArray<questSetAsCrowdObstacle_NodeTypeParams> Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<CArray<questSetAsCrowdObstacle_NodeTypeParams>>();
+			set => SetPropertyValue<CArray<questSetAsCrowdObstacle_NodeTypeParams>>(value);
+		}
+
+		public questCharacterManagerParameters_SetAsCrowdObstacle()
+		{
+			Params = new() { new() };
 		}
 	}
 }

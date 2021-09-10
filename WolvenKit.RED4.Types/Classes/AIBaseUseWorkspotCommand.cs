@@ -5,68 +5,65 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIBaseUseWorkspotCommand : AICommand
 	{
-		private CBool _moveToWorkspot;
-		private CName _forceEntryAnimName;
-		private CArray<workWorkEntryId> _workExcludedGestures;
-		private workWorkEntryId _infiniteSequenceEntryId;
-		private CBool _idleOnlyMode;
-		private CBool _continueInCombat;
-		private CEnum<moveMovementType> _movementType;
-
 		[Ordinal(4)] 
 		[RED("moveToWorkspot")] 
 		public CBool MoveToWorkspot
 		{
-			get => GetProperty(ref _moveToWorkspot);
-			set => SetProperty(ref _moveToWorkspot, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("forceEntryAnimName")] 
 		public CName ForceEntryAnimName
 		{
-			get => GetProperty(ref _forceEntryAnimName);
-			set => SetProperty(ref _forceEntryAnimName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("workExcludedGestures")] 
 		public CArray<workWorkEntryId> WorkExcludedGestures
 		{
-			get => GetProperty(ref _workExcludedGestures);
-			set => SetProperty(ref _workExcludedGestures, value);
+			get => GetPropertyValue<CArray<workWorkEntryId>>();
+			set => SetPropertyValue<CArray<workWorkEntryId>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("infiniteSequenceEntryId")] 
 		public workWorkEntryId InfiniteSequenceEntryId
 		{
-			get => GetProperty(ref _infiniteSequenceEntryId);
-			set => SetProperty(ref _infiniteSequenceEntryId, value);
+			get => GetPropertyValue<workWorkEntryId>();
+			set => SetPropertyValue<workWorkEntryId>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("idleOnlyMode")] 
 		public CBool IdleOnlyMode
 		{
-			get => GetProperty(ref _idleOnlyMode);
-			set => SetProperty(ref _idleOnlyMode, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("continueInCombat")] 
 		public CBool ContinueInCombat
 		{
-			get => GetProperty(ref _continueInCombat);
-			set => SetProperty(ref _continueInCombat, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("movementType")] 
 		public CEnum<moveMovementType> MovementType
 		{
-			get => GetProperty(ref _movementType);
-			set => SetProperty(ref _movementType, value);
+			get => GetPropertyValue<CEnum<moveMovementType>>();
+			set => SetPropertyValue<CEnum<moveMovementType>>(value);
+		}
+
+		public AIBaseUseWorkspotCommand()
+		{
+			Id = 4294967295;
 		}
 	}
 }

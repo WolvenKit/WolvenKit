@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VehicleQuestHornEvent : redEvent
 	{
-		private CFloat _honkTime;
-
 		[Ordinal(0)] 
 		[RED("honkTime")] 
 		public CFloat HonkTime
 		{
-			get => GetProperty(ref _honkTime);
-			set => SetProperty(ref _honkTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameEntitySpawnerComponent : gameComponent
 	{
-		private CArray<gameEntitySpawnerSlotData> _slotDataArray;
-
 		[Ordinal(4)] 
 		[RED("slotDataArray")] 
 		public CArray<gameEntitySpawnerSlotData> SlotDataArray
 		{
-			get => GetProperty(ref _slotDataArray);
-			set => SetProperty(ref _slotDataArray, value);
+			get => GetPropertyValue<CArray<gameEntitySpawnerSlotData>>();
+			set => SetPropertyValue<CArray<gameEntitySpawnerSlotData>>(value);
+		}
+
+		public gameEntitySpawnerComponent()
+		{
+			SlotDataArray = new();
 		}
 	}
 }

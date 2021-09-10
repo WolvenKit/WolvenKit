@@ -5,77 +5,76 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldSpeedSplineNode : worldSplineNode
 	{
-		private CArray<worldSpeedSplineNodeSpeedChangeSection> _speedChangeSections;
-		private CBool _useDeprecated;
-		private CArray<worldSpeedSplineNodeSpeedRestriction> _deprecatedSpeedRestrictions;
-		private CFloat _deprecatedDefaultSpeed;
-		private CFloat _deprecatedDefaultAdjustTime;
-		private CArray<worldSpeedSplineNodeOrientationChangeSection> _orientationChangeSections;
-		private CArray<worldSpeedSplineNodeRoadAdjustmentFactorChangeSection> _roadAdjustmentFactorChangeSections;
-		private CBool _ignoreTerrain;
-
 		[Ordinal(9)] 
 		[RED("speedChangeSections")] 
 		public CArray<worldSpeedSplineNodeSpeedChangeSection> SpeedChangeSections
 		{
-			get => GetProperty(ref _speedChangeSections);
-			set => SetProperty(ref _speedChangeSections, value);
+			get => GetPropertyValue<CArray<worldSpeedSplineNodeSpeedChangeSection>>();
+			set => SetPropertyValue<CArray<worldSpeedSplineNodeSpeedChangeSection>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("useDeprecated")] 
 		public CBool UseDeprecated
 		{
-			get => GetProperty(ref _useDeprecated);
-			set => SetProperty(ref _useDeprecated, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("deprecatedSpeedRestrictions")] 
 		public CArray<worldSpeedSplineNodeSpeedRestriction> DeprecatedSpeedRestrictions
 		{
-			get => GetProperty(ref _deprecatedSpeedRestrictions);
-			set => SetProperty(ref _deprecatedSpeedRestrictions, value);
+			get => GetPropertyValue<CArray<worldSpeedSplineNodeSpeedRestriction>>();
+			set => SetPropertyValue<CArray<worldSpeedSplineNodeSpeedRestriction>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("deprecatedDefaultSpeed")] 
 		public CFloat DeprecatedDefaultSpeed
 		{
-			get => GetProperty(ref _deprecatedDefaultSpeed);
-			set => SetProperty(ref _deprecatedDefaultSpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("deprecatedDefaultAdjustTime")] 
 		public CFloat DeprecatedDefaultAdjustTime
 		{
-			get => GetProperty(ref _deprecatedDefaultAdjustTime);
-			set => SetProperty(ref _deprecatedDefaultAdjustTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("orientationChangeSections")] 
 		public CArray<worldSpeedSplineNodeOrientationChangeSection> OrientationChangeSections
 		{
-			get => GetProperty(ref _orientationChangeSections);
-			set => SetProperty(ref _orientationChangeSections, value);
+			get => GetPropertyValue<CArray<worldSpeedSplineNodeOrientationChangeSection>>();
+			set => SetPropertyValue<CArray<worldSpeedSplineNodeOrientationChangeSection>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("roadAdjustmentFactorChangeSections")] 
 		public CArray<worldSpeedSplineNodeRoadAdjustmentFactorChangeSection> RoadAdjustmentFactorChangeSections
 		{
-			get => GetProperty(ref _roadAdjustmentFactorChangeSections);
-			set => SetProperty(ref _roadAdjustmentFactorChangeSections, value);
+			get => GetPropertyValue<CArray<worldSpeedSplineNodeRoadAdjustmentFactorChangeSection>>();
+			set => SetPropertyValue<CArray<worldSpeedSplineNodeRoadAdjustmentFactorChangeSection>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("ignoreTerrain")] 
 		public CBool IgnoreTerrain
 		{
-			get => GetProperty(ref _ignoreTerrain);
-			set => SetProperty(ref _ignoreTerrain, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public worldSpeedSplineNode()
+		{
+			SpeedChangeSections = new();
+			DeprecatedSpeedRestrictions = new();
+			OrientationChangeSections = new();
+			RoadAdjustmentFactorChangeSections = new();
 		}
 	}
 }

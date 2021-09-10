@@ -5,86 +5,86 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CMaterialTemplate : IMaterialDefinition
 	{
-		private CName _name;
-		private CArrayFixedSize<CArray<CHandle<CMaterialParameter>>> _parameters;
-		private CArray<MaterialTechnique> _techniques;
-		private CArrayFixedSize<CArray<SamplerStateInfo>> _samplerStates;
-		private CArrayFixedSize<CArray<MaterialUsedParameter>> _usedParameters;
-		private CEnum<EMaterialPriority> _materialPriority;
-		private CEnum<ERenderMaterialType> _materialType;
-		private CName _audioTag;
-		private CUInt8 _resourceVersion;
-
 		[Ordinal(8)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get => GetProperty(ref _name);
-			set => SetProperty(ref _name, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("parameters", 3)] 
 		public CArrayFixedSize<CArray<CHandle<CMaterialParameter>>> Parameters
 		{
-			get => GetProperty(ref _parameters);
-			set => SetProperty(ref _parameters, value);
+			get => GetPropertyValue<CArrayFixedSize<CArray<CHandle<CMaterialParameter>>>>();
+			set => SetPropertyValue<CArrayFixedSize<CArray<CHandle<CMaterialParameter>>>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("techniques")] 
 		public CArray<MaterialTechnique> Techniques
 		{
-			get => GetProperty(ref _techniques);
-			set => SetProperty(ref _techniques, value);
+			get => GetPropertyValue<CArray<MaterialTechnique>>();
+			set => SetPropertyValue<CArray<MaterialTechnique>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("samplerStates", 3)] 
 		public CArrayFixedSize<CArray<SamplerStateInfo>> SamplerStates
 		{
-			get => GetProperty(ref _samplerStates);
-			set => SetProperty(ref _samplerStates, value);
+			get => GetPropertyValue<CArrayFixedSize<CArray<SamplerStateInfo>>>();
+			set => SetPropertyValue<CArrayFixedSize<CArray<SamplerStateInfo>>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("usedParameters", 3)] 
 		public CArrayFixedSize<CArray<MaterialUsedParameter>> UsedParameters
 		{
-			get => GetProperty(ref _usedParameters);
-			set => SetProperty(ref _usedParameters, value);
+			get => GetPropertyValue<CArrayFixedSize<CArray<MaterialUsedParameter>>>();
+			set => SetPropertyValue<CArrayFixedSize<CArray<MaterialUsedParameter>>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("materialPriority")] 
 		public CEnum<EMaterialPriority> MaterialPriority
 		{
-			get => GetProperty(ref _materialPriority);
-			set => SetProperty(ref _materialPriority, value);
+			get => GetPropertyValue<CEnum<EMaterialPriority>>();
+			set => SetPropertyValue<CEnum<EMaterialPriority>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("materialType")] 
 		public CEnum<ERenderMaterialType> MaterialType
 		{
-			get => GetProperty(ref _materialType);
-			set => SetProperty(ref _materialType, value);
+			get => GetPropertyValue<CEnum<ERenderMaterialType>>();
+			set => SetPropertyValue<CEnum<ERenderMaterialType>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("audioTag")] 
 		public CName AudioTag
 		{
-			get => GetProperty(ref _audioTag);
-			set => SetProperty(ref _audioTag, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("resourceVersion")] 
 		public CUInt8 ResourceVersion
 		{
-			get => GetProperty(ref _resourceVersion);
-			set => SetProperty(ref _resourceVersion, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
+		}
+
+		public CMaterialTemplate()
+		{
+			ParamBlockSize = new(3);
+			VertexFactories = new();
+			Parameters = new(3);
+			Techniques = new();
+			SamplerStates = new(3);
+			UsedParameters = new(3);
 		}
 	}
 }

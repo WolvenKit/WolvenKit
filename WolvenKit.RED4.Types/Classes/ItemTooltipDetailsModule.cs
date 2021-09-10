@@ -5,86 +5,89 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ItemTooltipDetailsModule : ItemTooltipModuleController
 	{
-		private inkWidgetReference _statsLine;
-		private inkWidgetReference _statsWrapper;
-		private inkCompoundWidgetReference _statsContainer;
-		private inkWidgetReference _dedicatedModsLine;
-		private inkWidgetReference _dedicatedModsWrapper;
-		private inkCompoundWidgetReference _dedicatedModsContainer;
-		private inkWidgetReference _modsLine;
-		private inkWidgetReference _modsWrapper;
-		private inkCompoundWidgetReference _modsContainer;
-
 		[Ordinal(2)] 
 		[RED("statsLine")] 
 		public inkWidgetReference StatsLine
 		{
-			get => GetProperty(ref _statsLine);
-			set => SetProperty(ref _statsLine, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("statsWrapper")] 
 		public inkWidgetReference StatsWrapper
 		{
-			get => GetProperty(ref _statsWrapper);
-			set => SetProperty(ref _statsWrapper, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("statsContainer")] 
 		public inkCompoundWidgetReference StatsContainer
 		{
-			get => GetProperty(ref _statsContainer);
-			set => SetProperty(ref _statsContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("dedicatedModsLine")] 
 		public inkWidgetReference DedicatedModsLine
 		{
-			get => GetProperty(ref _dedicatedModsLine);
-			set => SetProperty(ref _dedicatedModsLine, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("dedicatedModsWrapper")] 
 		public inkWidgetReference DedicatedModsWrapper
 		{
-			get => GetProperty(ref _dedicatedModsWrapper);
-			set => SetProperty(ref _dedicatedModsWrapper, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("dedicatedModsContainer")] 
 		public inkCompoundWidgetReference DedicatedModsContainer
 		{
-			get => GetProperty(ref _dedicatedModsContainer);
-			set => SetProperty(ref _dedicatedModsContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("modsLine")] 
 		public inkWidgetReference ModsLine
 		{
-			get => GetProperty(ref _modsLine);
-			set => SetProperty(ref _modsLine, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("modsWrapper")] 
 		public inkWidgetReference ModsWrapper
 		{
-			get => GetProperty(ref _modsWrapper);
-			set => SetProperty(ref _modsWrapper, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("modsContainer")] 
 		public inkCompoundWidgetReference ModsContainer
 		{
-			get => GetProperty(ref _modsContainer);
-			set => SetProperty(ref _modsContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		public ItemTooltipDetailsModule()
+		{
+			StatsLine = new();
+			StatsWrapper = new();
+			StatsContainer = new();
+			DedicatedModsLine = new();
+			DedicatedModsWrapper = new();
+			DedicatedModsContainer = new();
+			ModsLine = new();
+			ModsWrapper = new();
+			ModsContainer = new();
 		}
 	}
 }

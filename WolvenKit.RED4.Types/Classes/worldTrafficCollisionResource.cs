@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldTrafficCollisionResource : CResource
 	{
-		private CHandle<worldTrafficStaticCollisionData> _data;
-
 		[Ordinal(1)] 
 		[RED("data")] 
 		public CHandle<worldTrafficStaticCollisionData> Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<CHandle<worldTrafficStaticCollisionData>>();
+			set => SetPropertyValue<CHandle<worldTrafficStaticCollisionData>>(value);
 		}
 	}
 }

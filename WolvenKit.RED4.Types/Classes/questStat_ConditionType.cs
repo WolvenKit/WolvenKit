@@ -5,55 +5,50 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questStat_ConditionType : questIStatsConditionType
 	{
-		private gameEntityReference _objectRef;
-		private CBool _isPlayer;
-		private CEnum<gamedataStatType> _statType;
-		private CFloat _value;
-		private CEnum<EComparisonType> _comparisonType;
-
 		[Ordinal(0)] 
 		[RED("objectRef")] 
 		public gameEntityReference ObjectRef
 		{
-			get => GetProperty(ref _objectRef);
-			set => SetProperty(ref _objectRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isPlayer")] 
 		public CBool IsPlayer
 		{
-			get => GetProperty(ref _isPlayer);
-			set => SetProperty(ref _isPlayer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("statType")] 
 		public CEnum<gamedataStatType> StatType
 		{
-			get => GetProperty(ref _statType);
-			set => SetProperty(ref _statType, value);
+			get => GetPropertyValue<CEnum<gamedataStatType>>();
+			set => SetPropertyValue<CEnum<gamedataStatType>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("value")] 
 		public CFloat Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("comparisonType")] 
 		public CEnum<EComparisonType> ComparisonType
 		{
-			get => GetProperty(ref _comparisonType);
-			set => SetProperty(ref _comparisonType, value);
+			get => GetPropertyValue<CEnum<EComparisonType>>();
+			set => SetPropertyValue<CEnum<EComparisonType>>(value);
 		}
 
 		public questStat_ConditionType()
 		{
-			_statType = new() { Value = Enums.gamedataStatType.Invalid };
+			ObjectRef = new() { Names = new() };
+			StatType = Enums.gamedataStatType.Invalid;
 		}
 	}
 }

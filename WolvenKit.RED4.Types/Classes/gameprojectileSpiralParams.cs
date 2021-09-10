@@ -5,113 +5,101 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameprojectileSpiralParams : IScriptable
 	{
-		private CBool _enabled;
-		private CFloat _radius;
-		private CFloat _cycleTimeMin;
-		private CFloat _cycleTimeMax;
-		private CFloat _rampUpDistanceStart;
-		private CFloat _rampUpDistanceEnd;
-		private CFloat _rampDownDistanceStart;
-		private CFloat _rampDownDistanceEnd;
-		private CFloat _rampDownFactor;
-		private CBool _randomizePhase;
-		private CBool _randomizeDirection;
-
 		[Ordinal(0)] 
 		[RED("enabled")] 
 		public CBool Enabled
 		{
-			get => GetProperty(ref _enabled);
-			set => SetProperty(ref _enabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get => GetProperty(ref _radius);
-			set => SetProperty(ref _radius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("cycleTimeMin")] 
 		public CFloat CycleTimeMin
 		{
-			get => GetProperty(ref _cycleTimeMin);
-			set => SetProperty(ref _cycleTimeMin, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("cycleTimeMax")] 
 		public CFloat CycleTimeMax
 		{
-			get => GetProperty(ref _cycleTimeMax);
-			set => SetProperty(ref _cycleTimeMax, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("rampUpDistanceStart")] 
 		public CFloat RampUpDistanceStart
 		{
-			get => GetProperty(ref _rampUpDistanceStart);
-			set => SetProperty(ref _rampUpDistanceStart, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("rampUpDistanceEnd")] 
 		public CFloat RampUpDistanceEnd
 		{
-			get => GetProperty(ref _rampUpDistanceEnd);
-			set => SetProperty(ref _rampUpDistanceEnd, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("rampDownDistanceStart")] 
 		public CFloat RampDownDistanceStart
 		{
-			get => GetProperty(ref _rampDownDistanceStart);
-			set => SetProperty(ref _rampDownDistanceStart, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("rampDownDistanceEnd")] 
 		public CFloat RampDownDistanceEnd
 		{
-			get => GetProperty(ref _rampDownDistanceEnd);
-			set => SetProperty(ref _rampDownDistanceEnd, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("rampDownFactor")] 
 		public CFloat RampDownFactor
 		{
-			get => GetProperty(ref _rampDownFactor);
-			set => SetProperty(ref _rampDownFactor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("randomizePhase")] 
 		public CBool RandomizePhase
 		{
-			get => GetProperty(ref _randomizePhase);
-			set => SetProperty(ref _randomizePhase, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("randomizeDirection")] 
 		public CBool RandomizeDirection
 		{
-			get => GetProperty(ref _randomizeDirection);
-			set => SetProperty(ref _randomizeDirection, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public gameprojectileSpiralParams()
 		{
-			_cycleTimeMin = 0.100000F;
-			_cycleTimeMax = 0.100000F;
-			_rampUpDistanceEnd = 1.000000F;
-			_rampDownDistanceStart = 1.000000F;
-			_rampDownDistanceEnd = 2.000000F;
+			CycleTimeMin = 0.100000F;
+			CycleTimeMax = 0.100000F;
+			RampUpDistanceEnd = 1.000000F;
+			RampDownDistanceStart = 1.000000F;
+			RampDownDistanceEnd = 2.000000F;
 		}
 	}
 }

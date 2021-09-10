@@ -5,109 +5,100 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class Vendor : IScriptable
 	{
-		private ScriptGameInstance _gameInstance;
-		private CWeakHandle<gameObject> _vendorObject;
-		private TweakDBID _tweakID;
-		private CFloat _lastInteractionTime;
-		private CArray<gameSItemStack> _stock;
-		private CFloat _priceMultiplier;
-		private gamePersistentID _vendorPersistentID;
-		private CBool _stockInit;
-		private CBool _inventoryInit;
-		private CBool _inventoryReinitWithPlayerStats;
-		private CWeakHandle<gamedataVendor_Record> _vendorRecord;
-
 		[Ordinal(0)] 
 		[RED("gameInstance")] 
 		public ScriptGameInstance GameInstance
 		{
-			get => GetProperty(ref _gameInstance);
-			set => SetProperty(ref _gameInstance, value);
+			get => GetPropertyValue<ScriptGameInstance>();
+			set => SetPropertyValue<ScriptGameInstance>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("vendorObject")] 
 		public CWeakHandle<gameObject> VendorObject
 		{
-			get => GetProperty(ref _vendorObject);
-			set => SetProperty(ref _vendorObject, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("tweakID")] 
 		public TweakDBID TweakID
 		{
-			get => GetProperty(ref _tweakID);
-			set => SetProperty(ref _tweakID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("lastInteractionTime")] 
 		public CFloat LastInteractionTime
 		{
-			get => GetProperty(ref _lastInteractionTime);
-			set => SetProperty(ref _lastInteractionTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("stock")] 
 		public CArray<gameSItemStack> Stock
 		{
-			get => GetProperty(ref _stock);
-			set => SetProperty(ref _stock, value);
+			get => GetPropertyValue<CArray<gameSItemStack>>();
+			set => SetPropertyValue<CArray<gameSItemStack>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("priceMultiplier")] 
 		public CFloat PriceMultiplier
 		{
-			get => GetProperty(ref _priceMultiplier);
-			set => SetProperty(ref _priceMultiplier, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("vendorPersistentID")] 
 		public gamePersistentID VendorPersistentID
 		{
-			get => GetProperty(ref _vendorPersistentID);
-			set => SetProperty(ref _vendorPersistentID, value);
+			get => GetPropertyValue<gamePersistentID>();
+			set => SetPropertyValue<gamePersistentID>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("stockInit")] 
 		public CBool StockInit
 		{
-			get => GetProperty(ref _stockInit);
-			set => SetProperty(ref _stockInit, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("inventoryInit")] 
 		public CBool InventoryInit
 		{
-			get => GetProperty(ref _inventoryInit);
-			set => SetProperty(ref _inventoryInit, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("inventoryReinitWithPlayerStats")] 
 		public CBool InventoryReinitWithPlayerStats
 		{
-			get => GetProperty(ref _inventoryReinitWithPlayerStats);
-			set => SetProperty(ref _inventoryReinitWithPlayerStats, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("vendorRecord")] 
 		public CWeakHandle<gamedataVendor_Record> VendorRecord
 		{
-			get => GetProperty(ref _vendorRecord);
-			set => SetProperty(ref _vendorRecord, value);
+			get => GetPropertyValue<CWeakHandle<gamedataVendor_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataVendor_Record>>(value);
 		}
 
 		public Vendor()
 		{
-			_priceMultiplier = 1.000000F;
+			GameInstance = new();
+			Stock = new();
+			PriceMultiplier = 1.000000F;
+			VendorPersistentID = new();
 		}
 	}
 }

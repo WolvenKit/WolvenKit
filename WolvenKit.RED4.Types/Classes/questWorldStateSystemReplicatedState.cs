@@ -5,41 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questWorldStateSystemReplicatedState : RedBaseClass
 	{
-		private CArray<questNodeVisibilityMapArrayElement> _nodeVisibilityMapArray;
-		private CArray<questIsInMirrorsAreaMapArrayElement> _isInMirrorsAreaMapArray;
-		private CArray<questNodeCollisionMapArrayElement> _nodeCollisionMapArray;
-		private CArray<questPrefabVariantMapArrayElement> _prefabVariants;
-
 		[Ordinal(0)] 
 		[RED("nodeVisibilityMapArray")] 
 		public CArray<questNodeVisibilityMapArrayElement> NodeVisibilityMapArray
 		{
-			get => GetProperty(ref _nodeVisibilityMapArray);
-			set => SetProperty(ref _nodeVisibilityMapArray, value);
+			get => GetPropertyValue<CArray<questNodeVisibilityMapArrayElement>>();
+			set => SetPropertyValue<CArray<questNodeVisibilityMapArrayElement>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isInMirrorsAreaMapArray")] 
 		public CArray<questIsInMirrorsAreaMapArrayElement> IsInMirrorsAreaMapArray
 		{
-			get => GetProperty(ref _isInMirrorsAreaMapArray);
-			set => SetProperty(ref _isInMirrorsAreaMapArray, value);
+			get => GetPropertyValue<CArray<questIsInMirrorsAreaMapArrayElement>>();
+			set => SetPropertyValue<CArray<questIsInMirrorsAreaMapArrayElement>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("nodeCollisionMapArray")] 
 		public CArray<questNodeCollisionMapArrayElement> NodeCollisionMapArray
 		{
-			get => GetProperty(ref _nodeCollisionMapArray);
-			set => SetProperty(ref _nodeCollisionMapArray, value);
+			get => GetPropertyValue<CArray<questNodeCollisionMapArrayElement>>();
+			set => SetPropertyValue<CArray<questNodeCollisionMapArrayElement>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("prefabVariants")] 
 		public CArray<questPrefabVariantMapArrayElement> PrefabVariants
 		{
-			get => GetProperty(ref _prefabVariants);
-			set => SetProperty(ref _prefabVariants, value);
+			get => GetPropertyValue<CArray<questPrefabVariantMapArrayElement>>();
+			set => SetPropertyValue<CArray<questPrefabVariantMapArrayElement>>(value);
+		}
+
+		public questWorldStateSystemReplicatedState()
+		{
+			NodeVisibilityMapArray = new();
+			IsInMirrorsAreaMapArray = new();
+			NodeCollisionMapArray = new();
+			PrefabVariants = new();
 		}
 	}
 }

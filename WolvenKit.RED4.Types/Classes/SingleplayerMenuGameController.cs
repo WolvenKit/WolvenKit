@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SingleplayerMenuGameController : gameuiMainMenuGameController
 	{
-		private inkWidgetReference _buttonHintsManagerRef;
-		private inkWidgetReference _gogButtonWidgetRef;
-		private CWeakHandle<ButtonHints> _buttonHintsController;
-		private CInt32 _savesCount;
-
 		[Ordinal(7)] 
 		[RED("buttonHintsManagerRef")] 
 		public inkWidgetReference ButtonHintsManagerRef
 		{
-			get => GetProperty(ref _buttonHintsManagerRef);
-			set => SetProperty(ref _buttonHintsManagerRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("gogButtonWidgetRef")] 
 		public inkWidgetReference GogButtonWidgetRef
 		{
-			get => GetProperty(ref _gogButtonWidgetRef);
-			set => SetProperty(ref _gogButtonWidgetRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
-			get => GetProperty(ref _buttonHintsController);
-			set => SetProperty(ref _buttonHintsController, value);
+			get => GetPropertyValue<CWeakHandle<ButtonHints>>();
+			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("savesCount")] 
 		public CInt32 SavesCount
 		{
-			get => GetProperty(ref _savesCount);
-			set => SetProperty(ref _savesCount, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		public SingleplayerMenuGameController()
+		{
+			ButtonHintsManagerRef = new();
+			GogButtonWidgetRef = new();
 		}
 	}
 }

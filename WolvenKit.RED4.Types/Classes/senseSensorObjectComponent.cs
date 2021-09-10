@@ -5,28 +5,27 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class senseSensorObjectComponent : entIPlacedComponent
 	{
-		private CHandle<senseSensorObject> _sensorObject;
-		private CBool _isEnabled;
-
 		[Ordinal(5)] 
 		[RED("sensorObject")] 
 		public CHandle<senseSensorObject> SensorObject
 		{
-			get => GetProperty(ref _sensorObject);
-			set => SetProperty(ref _sensorObject, value);
+			get => GetPropertyValue<CHandle<senseSensorObject>>();
+			set => SetPropertyValue<CHandle<senseSensorObject>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public senseSensorObjectComponent()
 		{
-			_isEnabled = true;
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			IsEnabled = true;
 		}
 	}
 }

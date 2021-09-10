@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkanimSequenceTargetInfo : ISerializable
 	{
-		private CArray<CUInt32> _path;
-
 		[Ordinal(0)] 
 		[RED("path")] 
 		public CArray<CUInt32> Path
 		{
-			get => GetProperty(ref _path);
-			set => SetProperty(ref _path, value);
+			get => GetPropertyValue<CArray<CUInt32>>();
+			set => SetPropertyValue<CArray<CUInt32>>(value);
+		}
+
+		public inkanimSequenceTargetInfo()
+		{
+			Path = new();
 		}
 	}
 }

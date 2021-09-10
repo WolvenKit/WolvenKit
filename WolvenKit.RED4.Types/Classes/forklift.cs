@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class forklift : InteractiveDevice
 	{
-		private CHandle<AnimFeature_ForkliftDevice> _animFeature;
-		private CHandle<entAnimationControllerComponent> _animationController;
-		private CBool _isPlayerUnder;
-		private CHandle<entPhysicalMeshComponent> _cargoBox;
-
 		[Ordinal(97)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_ForkliftDevice> AnimFeature
 		{
-			get => GetProperty(ref _animFeature);
-			set => SetProperty(ref _animFeature, value);
+			get => GetPropertyValue<CHandle<AnimFeature_ForkliftDevice>>();
+			set => SetPropertyValue<CHandle<AnimFeature_ForkliftDevice>>(value);
 		}
 
 		[Ordinal(98)] 
 		[RED("animationController")] 
 		public CHandle<entAnimationControllerComponent> AnimationController
 		{
-			get => GetProperty(ref _animationController);
-			set => SetProperty(ref _animationController, value);
+			get => GetPropertyValue<CHandle<entAnimationControllerComponent>>();
+			set => SetPropertyValue<CHandle<entAnimationControllerComponent>>(value);
 		}
 
 		[Ordinal(99)] 
 		[RED("isPlayerUnder")] 
 		public CBool IsPlayerUnder
 		{
-			get => GetProperty(ref _isPlayerUnder);
-			set => SetProperty(ref _isPlayerUnder, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(100)] 
 		[RED("cargoBox")] 
 		public CHandle<entPhysicalMeshComponent> CargoBox
 		{
-			get => GetProperty(ref _cargoBox);
-			set => SetProperty(ref _cargoBox, value);
+			get => GetPropertyValue<CHandle<entPhysicalMeshComponent>>();
+			set => SetPropertyValue<CHandle<entPhysicalMeshComponent>>(value);
 		}
 	}
 }

@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questShowNarrativeEvent_NodeType : questIUIManagerNodeType
 	{
-		private CString _eventText;
-		private CColor _textColor;
-		private CFloat _durationSec;
-
 		[Ordinal(0)] 
 		[RED("eventText")] 
 		public CString EventText
 		{
-			get => GetProperty(ref _eventText);
-			set => SetProperty(ref _eventText, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("textColor")] 
 		public CColor TextColor
 		{
-			get => GetProperty(ref _textColor);
-			set => SetProperty(ref _textColor, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("durationSec")] 
 		public CFloat DurationSec
 		{
-			get => GetProperty(ref _durationSec);
-			set => SetProperty(ref _durationSec, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public questShowNarrativeEvent_NodeType()
+		{
+			TextColor = new();
 		}
 	}
 }

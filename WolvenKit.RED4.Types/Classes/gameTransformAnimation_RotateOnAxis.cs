@@ -5,55 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameTransformAnimation_RotateOnAxis : gameTransformAnimationTrackItemImpl
 	{
-		private CEnum<gameTransformAnimation_RotateOnAxisAxis> _axis;
-		private CFloat _numberOfFullRotations;
-		private CFloat _startAngle;
-		private CBool _reverseDirection;
-		private CHandle<gameTransformAnimation_Movement> _movement;
-
 		[Ordinal(0)] 
 		[RED("axis")] 
 		public CEnum<gameTransformAnimation_RotateOnAxisAxis> Axis
 		{
-			get => GetProperty(ref _axis);
-			set => SetProperty(ref _axis, value);
+			get => GetPropertyValue<CEnum<gameTransformAnimation_RotateOnAxisAxis>>();
+			set => SetPropertyValue<CEnum<gameTransformAnimation_RotateOnAxisAxis>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("numberOfFullRotations")] 
 		public CFloat NumberOfFullRotations
 		{
-			get => GetProperty(ref _numberOfFullRotations);
-			set => SetProperty(ref _numberOfFullRotations, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("startAngle")] 
 		public CFloat StartAngle
 		{
-			get => GetProperty(ref _startAngle);
-			set => SetProperty(ref _startAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("reverseDirection")] 
 		public CBool ReverseDirection
 		{
-			get => GetProperty(ref _reverseDirection);
-			set => SetProperty(ref _reverseDirection, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("movement")] 
 		public CHandle<gameTransformAnimation_Movement> Movement
 		{
-			get => GetProperty(ref _movement);
-			set => SetProperty(ref _movement, value);
+			get => GetPropertyValue<CHandle<gameTransformAnimation_Movement>>();
+			set => SetPropertyValue<CHandle<gameTransformAnimation_Movement>>(value);
 		}
 
 		public gameTransformAnimation_RotateOnAxis()
 		{
-			_axis = new() { Value = Enums.gameTransformAnimation_RotateOnAxisAxis.Z };
+			Axis = Enums.gameTransformAnimation_RotateOnAxisAxis.Z;
 		}
 	}
 }

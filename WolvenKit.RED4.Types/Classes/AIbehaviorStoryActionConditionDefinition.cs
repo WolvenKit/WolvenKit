@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorStoryActionConditionDefinition : AIbehaviorConditionDefinition
 	{
-		private CEnum<AIbehaviorStoryActionType> _action;
-
 		[Ordinal(1)] 
 		[RED("action")] 
 		public CEnum<AIbehaviorStoryActionType> Action
 		{
-			get => GetProperty(ref _action);
-			set => SetProperty(ref _action, value);
+			get => GetPropertyValue<CEnum<AIbehaviorStoryActionType>>();
+			set => SetPropertyValue<CEnum<AIbehaviorStoryActionType>>(value);
 		}
 	}
 }

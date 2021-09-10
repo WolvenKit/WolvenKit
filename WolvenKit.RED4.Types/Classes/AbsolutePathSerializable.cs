@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AbsolutePathSerializable : RedBaseClass
 	{
-		private CString _path;
-
 		[Ordinal(0)] 
 		[RED("Path")] 
 		public CString Path
 		{
-			get => GetProperty(ref _path);
-			set => SetProperty(ref _path, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 	}
 }

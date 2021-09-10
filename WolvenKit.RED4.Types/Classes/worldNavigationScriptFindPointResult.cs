@@ -5,28 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldNavigationScriptFindPointResult : RedBaseClass
 	{
-		private CEnum<worldNavigationRequestStatus> _status;
-		private Vector4 _point;
-
 		[Ordinal(0)] 
 		[RED("status")] 
 		public CEnum<worldNavigationRequestStatus> Status
 		{
-			get => GetProperty(ref _status);
-			set => SetProperty(ref _status, value);
+			get => GetPropertyValue<CEnum<worldNavigationRequestStatus>>();
+			set => SetPropertyValue<CEnum<worldNavigationRequestStatus>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("point")] 
 		public Vector4 Point
 		{
-			get => GetProperty(ref _point);
-			set => SetProperty(ref _point, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		public worldNavigationScriptFindPointResult()
 		{
-			_status = new() { Value = Enums.worldNavigationRequestStatus.OtherError };
+			Status = Enums.worldNavigationRequestStatus.OtherError;
+			Point = new();
 		}
 	}
 }

@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class OdaCementBagControllerPS : ScriptableDeviceComponentPS
 	{
-		private CFloat _cementEffectCooldown;
-
 		[Ordinal(104)] 
 		[RED("cementEffectCooldown")] 
 		public CFloat CementEffectCooldown
 		{
-			get => GetProperty(ref _cementEffectCooldown);
-			set => SetProperty(ref _cementEffectCooldown, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public OdaCementBagControllerPS()
+		{
+			DeviceName = "LocKey#17265";
+			TweakDBRecord = new() { Value = 102153496184 };
+			TweakDBDescriptionRecord = new() { Value = 153526934731 };
 		}
 	}
 }

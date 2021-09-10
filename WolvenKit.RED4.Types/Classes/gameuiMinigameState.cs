@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiMinigameState : IScriptable
 	{
-		private CInt32 _currentLives;
-		private CInt32 _currentScore;
-
 		[Ordinal(0)] 
 		[RED("currentLives")] 
 		public CInt32 CurrentLives
 		{
-			get => GetProperty(ref _currentLives);
-			set => SetProperty(ref _currentLives, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("currentScore")] 
 		public CInt32 CurrentScore
 		{
-			get => GetProperty(ref _currentScore);
-			set => SetProperty(ref _currentScore, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

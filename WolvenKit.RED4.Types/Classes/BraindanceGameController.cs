@@ -5,347 +5,326 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class BraindanceGameController : gameuiHUDGameController
 	{
-		private inkWidgetReference _currentTimerMarker;
-		private inkTextWidgetReference _currentTimerText;
-		private inkTextWidgetReference _activeLayer;
-		private inkImageWidgetReference _layerIcon;
-		private inkImageWidgetReference _layerThermalIcon;
-		private inkImageWidgetReference _layerVisualIcon;
-		private inkImageWidgetReference _layerAudioIcon;
-		private inkWidgetReference _cursorPoint;
-		private inkWidgetReference _buttonHintsManagerRef;
-		private CArray<inkCompoundWidgetReference> _clueHolder;
-		private CArray<inkWidgetReference> _clueBarHolder;
-		private CArray<inkWidgetReference> _speedIndicatorManagers;
-		private CArray<CWeakHandle<BraindanceClueLogicController>> _clueArray;
-		private CWeakHandle<ButtonHints> _buttonHintsController;
-		private CFloat _barSize;
-		private CFloat _braindanceDuration;
-		private CFloat _currentTime;
-		private CWeakHandle<inkWidget> _rootWidget;
-		private CEnum<gameuiEBraindanceLayer> _currentLayer;
-		private CEnum<scnPlaySpeed> _currentSpeed;
-		private CEnum<scnPlayDirection> _currentDirection;
-		private CFloat _startingTimerTopMargin;
-		private ScriptGameInstance _gameInstance;
-		private CWeakHandle<gameIBlackboard> _braindanceBB;
-		private CHandle<BraindanceBlackboardDef> _braindanceDef;
-		private CHandle<redCallbackObject> _clueBBID;
-		private CHandle<redCallbackObject> _visionModeBBID;
-		private CHandle<redCallbackObject> _progressBBID;
-		private CHandle<redCallbackObject> _sectionTimeBBID;
-		private CHandle<redCallbackObject> _isActiveBBID;
-		private CHandle<redCallbackObject> _enableExitBBID;
-		private CHandle<redCallbackObject> _isFPPBBID;
-		private CHandle<redCallbackObject> _playbackSpeedID;
-		private CHandle<redCallbackObject> _playbackDirectionID;
-		private CBool _isFPPMode;
-		private CHandle<inkanimProxy> _showTimelineAnimation;
-		private CHandle<inkanimProxy> _hideTimelineAnimation;
-		private CHandle<inkanimProxy> _showWidgetAnimation;
-
 		[Ordinal(9)] 
 		[RED("currentTimerMarker")] 
 		public inkWidgetReference CurrentTimerMarker
 		{
-			get => GetProperty(ref _currentTimerMarker);
-			set => SetProperty(ref _currentTimerMarker, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("currentTimerText")] 
 		public inkTextWidgetReference CurrentTimerText
 		{
-			get => GetProperty(ref _currentTimerText);
-			set => SetProperty(ref _currentTimerText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("activeLayer")] 
 		public inkTextWidgetReference ActiveLayer
 		{
-			get => GetProperty(ref _activeLayer);
-			set => SetProperty(ref _activeLayer, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("layerIcon")] 
 		public inkImageWidgetReference LayerIcon
 		{
-			get => GetProperty(ref _layerIcon);
-			set => SetProperty(ref _layerIcon, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("layerThermalIcon")] 
 		public inkImageWidgetReference LayerThermalIcon
 		{
-			get => GetProperty(ref _layerThermalIcon);
-			set => SetProperty(ref _layerThermalIcon, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("layerVisualIcon")] 
 		public inkImageWidgetReference LayerVisualIcon
 		{
-			get => GetProperty(ref _layerVisualIcon);
-			set => SetProperty(ref _layerVisualIcon, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("layerAudioIcon")] 
 		public inkImageWidgetReference LayerAudioIcon
 		{
-			get => GetProperty(ref _layerAudioIcon);
-			set => SetProperty(ref _layerAudioIcon, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("cursorPoint")] 
 		public inkWidgetReference CursorPoint
 		{
-			get => GetProperty(ref _cursorPoint);
-			set => SetProperty(ref _cursorPoint, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("buttonHintsManagerRef")] 
 		public inkWidgetReference ButtonHintsManagerRef
 		{
-			get => GetProperty(ref _buttonHintsManagerRef);
-			set => SetProperty(ref _buttonHintsManagerRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("clueHolder")] 
 		public CArray<inkCompoundWidgetReference> ClueHolder
 		{
-			get => GetProperty(ref _clueHolder);
-			set => SetProperty(ref _clueHolder, value);
+			get => GetPropertyValue<CArray<inkCompoundWidgetReference>>();
+			set => SetPropertyValue<CArray<inkCompoundWidgetReference>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("clueBarHolder")] 
 		public CArray<inkWidgetReference> ClueBarHolder
 		{
-			get => GetProperty(ref _clueBarHolder);
-			set => SetProperty(ref _clueBarHolder, value);
+			get => GetPropertyValue<CArray<inkWidgetReference>>();
+			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("speedIndicatorManagers")] 
 		public CArray<inkWidgetReference> SpeedIndicatorManagers
 		{
-			get => GetProperty(ref _speedIndicatorManagers);
-			set => SetProperty(ref _speedIndicatorManagers, value);
+			get => GetPropertyValue<CArray<inkWidgetReference>>();
+			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("clueArray")] 
 		public CArray<CWeakHandle<BraindanceClueLogicController>> ClueArray
 		{
-			get => GetProperty(ref _clueArray);
-			set => SetProperty(ref _clueArray, value);
+			get => GetPropertyValue<CArray<CWeakHandle<BraindanceClueLogicController>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<BraindanceClueLogicController>>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
-			get => GetProperty(ref _buttonHintsController);
-			set => SetProperty(ref _buttonHintsController, value);
+			get => GetPropertyValue<CWeakHandle<ButtonHints>>();
+			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("barSize")] 
 		public CFloat BarSize
 		{
-			get => GetProperty(ref _barSize);
-			set => SetProperty(ref _barSize, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("braindanceDuration")] 
 		public CFloat BraindanceDuration
 		{
-			get => GetProperty(ref _braindanceDuration);
-			set => SetProperty(ref _braindanceDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("currentTime")] 
 		public CFloat CurrentTime
 		{
-			get => GetProperty(ref _currentTime);
-			set => SetProperty(ref _currentTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("rootWidget")] 
 		public CWeakHandle<inkWidget> RootWidget
 		{
-			get => GetProperty(ref _rootWidget);
-			set => SetProperty(ref _rootWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("currentLayer")] 
 		public CEnum<gameuiEBraindanceLayer> CurrentLayer
 		{
-			get => GetProperty(ref _currentLayer);
-			set => SetProperty(ref _currentLayer, value);
+			get => GetPropertyValue<CEnum<gameuiEBraindanceLayer>>();
+			set => SetPropertyValue<CEnum<gameuiEBraindanceLayer>>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("currentSpeed")] 
 		public CEnum<scnPlaySpeed> CurrentSpeed
 		{
-			get => GetProperty(ref _currentSpeed);
-			set => SetProperty(ref _currentSpeed, value);
+			get => GetPropertyValue<CEnum<scnPlaySpeed>>();
+			set => SetPropertyValue<CEnum<scnPlaySpeed>>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("currentDirection")] 
 		public CEnum<scnPlayDirection> CurrentDirection
 		{
-			get => GetProperty(ref _currentDirection);
-			set => SetProperty(ref _currentDirection, value);
+			get => GetPropertyValue<CEnum<scnPlayDirection>>();
+			set => SetPropertyValue<CEnum<scnPlayDirection>>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("startingTimerTopMargin")] 
 		public CFloat StartingTimerTopMargin
 		{
-			get => GetProperty(ref _startingTimerTopMargin);
-			set => SetProperty(ref _startingTimerTopMargin, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("gameInstance")] 
 		public ScriptGameInstance GameInstance
 		{
-			get => GetProperty(ref _gameInstance);
-			set => SetProperty(ref _gameInstance, value);
+			get => GetPropertyValue<ScriptGameInstance>();
+			set => SetPropertyValue<ScriptGameInstance>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("braindanceBB")] 
 		public CWeakHandle<gameIBlackboard> BraindanceBB
 		{
-			get => GetProperty(ref _braindanceBB);
-			set => SetProperty(ref _braindanceBB, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("braindanceDef")] 
 		public CHandle<BraindanceBlackboardDef> BraindanceDef
 		{
-			get => GetProperty(ref _braindanceDef);
-			set => SetProperty(ref _braindanceDef, value);
+			get => GetPropertyValue<CHandle<BraindanceBlackboardDef>>();
+			set => SetPropertyValue<CHandle<BraindanceBlackboardDef>>(value);
 		}
 
 		[Ordinal(34)] 
 		[RED("ClueBBID")] 
 		public CHandle<redCallbackObject> ClueBBID
 		{
-			get => GetProperty(ref _clueBBID);
-			set => SetProperty(ref _clueBBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(35)] 
 		[RED("VisionModeBBID")] 
 		public CHandle<redCallbackObject> VisionModeBBID
 		{
-			get => GetProperty(ref _visionModeBBID);
-			set => SetProperty(ref _visionModeBBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(36)] 
 		[RED("ProgressBBID")] 
 		public CHandle<redCallbackObject> ProgressBBID
 		{
-			get => GetProperty(ref _progressBBID);
-			set => SetProperty(ref _progressBBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(37)] 
 		[RED("SectionTimeBBID")] 
 		public CHandle<redCallbackObject> SectionTimeBBID
 		{
-			get => GetProperty(ref _sectionTimeBBID);
-			set => SetProperty(ref _sectionTimeBBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(38)] 
 		[RED("IsActiveBBID")] 
 		public CHandle<redCallbackObject> IsActiveBBID
 		{
-			get => GetProperty(ref _isActiveBBID);
-			set => SetProperty(ref _isActiveBBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(39)] 
 		[RED("EnableExitBBID")] 
 		public CHandle<redCallbackObject> EnableExitBBID
 		{
-			get => GetProperty(ref _enableExitBBID);
-			set => SetProperty(ref _enableExitBBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(40)] 
 		[RED("IsFPPBBID")] 
 		public CHandle<redCallbackObject> IsFPPBBID
 		{
-			get => GetProperty(ref _isFPPBBID);
-			set => SetProperty(ref _isFPPBBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(41)] 
 		[RED("PlaybackSpeedID")] 
 		public CHandle<redCallbackObject> PlaybackSpeedID
 		{
-			get => GetProperty(ref _playbackSpeedID);
-			set => SetProperty(ref _playbackSpeedID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(42)] 
 		[RED("PlaybackDirectionID")] 
 		public CHandle<redCallbackObject> PlaybackDirectionID
 		{
-			get => GetProperty(ref _playbackDirectionID);
-			set => SetProperty(ref _playbackDirectionID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(43)] 
 		[RED("isFPPMode")] 
 		public CBool IsFPPMode
 		{
-			get => GetProperty(ref _isFPPMode);
-			set => SetProperty(ref _isFPPMode, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(44)] 
 		[RED("showTimelineAnimation")] 
 		public CHandle<inkanimProxy> ShowTimelineAnimation
 		{
-			get => GetProperty(ref _showTimelineAnimation);
-			set => SetProperty(ref _showTimelineAnimation, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(45)] 
 		[RED("hideTimelineAnimation")] 
 		public CHandle<inkanimProxy> HideTimelineAnimation
 		{
-			get => GetProperty(ref _hideTimelineAnimation);
-			set => SetProperty(ref _hideTimelineAnimation, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(46)] 
 		[RED("showWidgetAnimation")] 
 		public CHandle<inkanimProxy> ShowWidgetAnimation
 		{
-			get => GetProperty(ref _showWidgetAnimation);
-			set => SetProperty(ref _showWidgetAnimation, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		public BraindanceGameController()
+		{
+			CurrentTimerMarker = new();
+			CurrentTimerText = new();
+			ActiveLayer = new();
+			LayerIcon = new();
+			LayerThermalIcon = new();
+			LayerVisualIcon = new();
+			LayerAudioIcon = new();
+			CursorPoint = new();
+			ButtonHintsManagerRef = new();
+			ClueHolder = new();
+			ClueBarHolder = new();
+			SpeedIndicatorManagers = new();
+			ClueArray = new();
+			GameInstance = new();
 		}
 	}
 }

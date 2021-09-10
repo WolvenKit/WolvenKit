@@ -5,28 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldRaceSplineNode : worldSpeedSplineNode
 	{
-		private CArray<worldRaceSplineNodeOffset> _offsets;
-		private CFloat _offsetDefault;
-
 		[Ordinal(17)] 
 		[RED("offsets")] 
 		public CArray<worldRaceSplineNodeOffset> Offsets
 		{
-			get => GetProperty(ref _offsets);
-			set => SetProperty(ref _offsets, value);
+			get => GetPropertyValue<CArray<worldRaceSplineNodeOffset>>();
+			set => SetPropertyValue<CArray<worldRaceSplineNodeOffset>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("offsetDefault")] 
 		public CFloat OffsetDefault
 		{
-			get => GetProperty(ref _offsetDefault);
-			set => SetProperty(ref _offsetDefault, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public worldRaceSplineNode()
 		{
-			_offsetDefault = 5.000000F;
+			Offsets = new();
+			OffsetDefault = 5.000000F;
 		}
 	}
 }

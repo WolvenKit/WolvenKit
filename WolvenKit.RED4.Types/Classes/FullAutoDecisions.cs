@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class FullAutoDecisions : WeaponTransition
 	{
-		private CHandle<redCallbackObject> _callBackID;
-
 		[Ordinal(3)] 
 		[RED("callBackID")] 
 		public CHandle<redCallbackObject> CallBackID
 		{
-			get => GetProperty(ref _callBackID);
-			set => SetProperty(ref _callBackID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 	}
 }

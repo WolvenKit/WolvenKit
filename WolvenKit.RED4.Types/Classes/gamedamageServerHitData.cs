@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamedamageServerHitData : IScriptable
 	{
-		private CUInt32 _id;
-		private CArray<gameuiDamageInfo> _damageInfos;
-		private CWeakHandle<gameObject> _instigator;
-
 		[Ordinal(0)] 
 		[RED("id")] 
 		public CUInt32 Id
 		{
-			get => GetProperty(ref _id);
-			set => SetProperty(ref _id, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("damageInfos")] 
 		public CArray<gameuiDamageInfo> DamageInfos
 		{
-			get => GetProperty(ref _damageInfos);
-			set => SetProperty(ref _damageInfos, value);
+			get => GetPropertyValue<CArray<gameuiDamageInfo>>();
+			set => SetPropertyValue<CArray<gameuiDamageInfo>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("instigator")] 
 		public CWeakHandle<gameObject> Instigator
 		{
-			get => GetProperty(ref _instigator);
-			set => SetProperty(ref _instigator, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
+		}
+
+		public gamedamageServerHitData()
+		{
+			DamageInfos = new();
 		}
 	}
 }

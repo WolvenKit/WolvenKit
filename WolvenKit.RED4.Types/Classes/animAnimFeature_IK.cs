@@ -5,37 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimFeature_IK : animAnimFeature
 	{
-		private Vector4 _point;
-		private Vector4 _normal;
-		private CFloat _weight;
-
 		[Ordinal(0)] 
 		[RED("point")] 
 		public Vector4 Point
 		{
-			get => GetProperty(ref _point);
-			set => SetProperty(ref _point, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("normal")] 
 		public Vector4 Normal
 		{
-			get => GetProperty(ref _normal);
-			set => SetProperty(ref _normal, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("weight")] 
 		public CFloat Weight
 		{
-			get => GetProperty(ref _weight);
-			set => SetProperty(ref _weight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public animAnimFeature_IK()
 		{
-			_weight = 1.000000F;
+			Point = new() { W = 1.000000F };
+			Normal = new() { Z = 1.000000F };
+			Weight = 1.000000F;
 		}
 	}
 }

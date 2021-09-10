@@ -5,59 +5,60 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class Agent : RedBaseClass
 	{
-		private DeviceLink _link;
-		private CArray<ReprimandData> _reprimands;
-		private CArray<gamePersistentID> _supportingAgents;
-		private CArray<DeviceLink> _areas;
-		private CEnum<EFilterType> _incomingFilter;
-		private CFloat _cachedDelayDuration;
-
 		[Ordinal(0)] 
 		[RED("link")] 
 		public DeviceLink Link
 		{
-			get => GetProperty(ref _link);
-			set => SetProperty(ref _link, value);
+			get => GetPropertyValue<DeviceLink>();
+			set => SetPropertyValue<DeviceLink>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("reprimands")] 
 		public CArray<ReprimandData> Reprimands
 		{
-			get => GetProperty(ref _reprimands);
-			set => SetProperty(ref _reprimands, value);
+			get => GetPropertyValue<CArray<ReprimandData>>();
+			set => SetPropertyValue<CArray<ReprimandData>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("supportingAgents")] 
 		public CArray<gamePersistentID> SupportingAgents
 		{
-			get => GetProperty(ref _supportingAgents);
-			set => SetProperty(ref _supportingAgents, value);
+			get => GetPropertyValue<CArray<gamePersistentID>>();
+			set => SetPropertyValue<CArray<gamePersistentID>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("areas")] 
 		public CArray<DeviceLink> Areas
 		{
-			get => GetProperty(ref _areas);
-			set => SetProperty(ref _areas, value);
+			get => GetPropertyValue<CArray<DeviceLink>>();
+			set => SetPropertyValue<CArray<DeviceLink>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("incomingFilter")] 
 		public CEnum<EFilterType> IncomingFilter
 		{
-			get => GetProperty(ref _incomingFilter);
-			set => SetProperty(ref _incomingFilter, value);
+			get => GetPropertyValue<CEnum<EFilterType>>();
+			set => SetPropertyValue<CEnum<EFilterType>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("cachedDelayDuration")] 
 		public CFloat CachedDelayDuration
 		{
-			get => GetProperty(ref _cachedDelayDuration);
-			set => SetProperty(ref _cachedDelayDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public Agent()
+		{
+			Link = new() { PSID = new() };
+			Reprimands = new();
+			SupportingAgents = new();
+			Areas = new();
 		}
 	}
 }

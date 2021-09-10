@@ -5,50 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class EngagementScreenGameController : gameuiMenuGameController
 	{
-		private inkVideoWidgetReference _backgroundVideo;
-		private inkRichTextBoxWidgetReference _text;
-		private inkRichTextBoxWidgetReference _textShadow;
-		private inkCompoundWidgetReference _textContainer;
-		private CWeakHandle<inkMenuEventDispatcher> _menuEventDispatcher;
-
 		[Ordinal(3)] 
 		[RED("backgroundVideo")] 
 		public inkVideoWidgetReference BackgroundVideo
 		{
-			get => GetProperty(ref _backgroundVideo);
-			set => SetProperty(ref _backgroundVideo, value);
+			get => GetPropertyValue<inkVideoWidgetReference>();
+			set => SetPropertyValue<inkVideoWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("text")] 
 		public inkRichTextBoxWidgetReference Text
 		{
-			get => GetProperty(ref _text);
-			set => SetProperty(ref _text, value);
+			get => GetPropertyValue<inkRichTextBoxWidgetReference>();
+			set => SetPropertyValue<inkRichTextBoxWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("textShadow")] 
 		public inkRichTextBoxWidgetReference TextShadow
 		{
-			get => GetProperty(ref _textShadow);
-			set => SetProperty(ref _textShadow, value);
+			get => GetPropertyValue<inkRichTextBoxWidgetReference>();
+			set => SetPropertyValue<inkRichTextBoxWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("textContainer")] 
 		public inkCompoundWidgetReference TextContainer
 		{
-			get => GetProperty(ref _textContainer);
-			set => SetProperty(ref _textContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("menuEventDispatcher")] 
 		public CWeakHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
-			get => GetProperty(ref _menuEventDispatcher);
-			set => SetProperty(ref _menuEventDispatcher, value);
+			get => GetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>();
+			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
+		}
+
+		public EngagementScreenGameController()
+		{
+			BackgroundVideo = new();
+			Text = new();
+			TextShadow = new();
+			TextContainer = new();
 		}
 	}
 }

@@ -5,93 +5,88 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scneventsBraindanceVisibilityEvent : scnSceneEvent
 	{
-		private scnPerformerId _performerId;
-		private CEnum<ECustomMaterialParam> _customMaterialParam;
-		private CUInt32 _parameterIndex;
-		private CBool _override;
-		private CUInt8 _priority;
-		private CFloat _eventStartEndBlend;
-		private CFloat _perspectiveBlend;
-		private WorldRenderAreaSettings _renderSettingsFPP;
-		private WorldRenderAreaSettings _renderSettingsTPP;
-
 		[Ordinal(6)] 
 		[RED("performerId")] 
 		public scnPerformerId PerformerId
 		{
-			get => GetProperty(ref _performerId);
-			set => SetProperty(ref _performerId, value);
+			get => GetPropertyValue<scnPerformerId>();
+			set => SetPropertyValue<scnPerformerId>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("customMaterialParam")] 
 		public CEnum<ECustomMaterialParam> CustomMaterialParam
 		{
-			get => GetProperty(ref _customMaterialParam);
-			set => SetProperty(ref _customMaterialParam, value);
+			get => GetPropertyValue<CEnum<ECustomMaterialParam>>();
+			set => SetPropertyValue<CEnum<ECustomMaterialParam>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("parameterIndex")] 
 		public CUInt32 ParameterIndex
 		{
-			get => GetProperty(ref _parameterIndex);
-			set => SetProperty(ref _parameterIndex, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("override")] 
 		public CBool Override
 		{
-			get => GetProperty(ref _override);
-			set => SetProperty(ref _override, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("priority")] 
 		public CUInt8 Priority
 		{
-			get => GetProperty(ref _priority);
-			set => SetProperty(ref _priority, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("eventStartEndBlend")] 
 		public CFloat EventStartEndBlend
 		{
-			get => GetProperty(ref _eventStartEndBlend);
-			set => SetProperty(ref _eventStartEndBlend, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("perspectiveBlend")] 
 		public CFloat PerspectiveBlend
 		{
-			get => GetProperty(ref _perspectiveBlend);
-			set => SetProperty(ref _perspectiveBlend, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("renderSettingsFPP")] 
 		public WorldRenderAreaSettings RenderSettingsFPP
 		{
-			get => GetProperty(ref _renderSettingsFPP);
-			set => SetProperty(ref _renderSettingsFPP, value);
+			get => GetPropertyValue<WorldRenderAreaSettings>();
+			set => SetPropertyValue<WorldRenderAreaSettings>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("renderSettingsTPP")] 
 		public WorldRenderAreaSettings RenderSettingsTPP
 		{
-			get => GetProperty(ref _renderSettingsTPP);
-			set => SetProperty(ref _renderSettingsTPP, value);
+			get => GetPropertyValue<WorldRenderAreaSettings>();
+			set => SetPropertyValue<WorldRenderAreaSettings>(value);
 		}
 
 		public scneventsBraindanceVisibilityEvent()
 		{
-			_customMaterialParam = new() { Value = Enums.ECustomMaterialParam.ECMP_CustomParam0 };
-			_priority = 7;
-			_perspectiveBlend = 0.500000F;
+			Id = new() { Id = 18446744073709551615 };
+			Duration = 1000;
+			PerformerId = new() { Id = 4294967040 };
+			CustomMaterialParam = Enums.ECustomMaterialParam.ECMP_CustomParam0;
+			Priority = 7;
+			PerspectiveBlend = 0.500000F;
+			RenderSettingsFPP = new() { AreaParameters = new() };
+			RenderSettingsTPP = new() { AreaParameters = new() };
 		}
 	}
 }

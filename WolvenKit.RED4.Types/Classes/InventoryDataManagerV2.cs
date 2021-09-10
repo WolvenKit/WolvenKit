@@ -5,321 +5,295 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class InventoryDataManagerV2 : IScriptable
 	{
-		private CWeakHandle<gameuiHUDGameController> _owner;
-		private CWeakHandle<PlayerPuppet> _player;
-		private CWeakHandle<gameTransactionSystem> _transactionSystem;
-		private CWeakHandle<EquipmentSystem> _equipmentSystem;
-		private CWeakHandle<gameStatsSystem> _statsSystem;
-		private CWeakHandle<ItemModificationSystem> _itemModificationSystem;
-		private CHandle<UILocalizationMap> _locMgr;
-		private CArray<InventoryItemData> _inventoryItemsData;
-		private CArray<InventoryItemData> _inventoryItemsDataWithoutEquipment;
-		private CArray<InventoryItemData> _equipmentItemsData;
-		private CArray<InventoryItemData> _weaponItemsData;
-		private CArray<InventoryItemData> _quickSlotsData;
-		private CArray<InventoryItemData> _consumablesSlotsData;
-		private CBool _toRebuild;
-		private CBool _toRebuildItemsWithEquipped;
-		private CBool _toRebuildWeapons;
-		private CBool _toRebuildEquipment;
-		private CBool _toRebuildQuickSlots;
-		private CBool _toRebuildConsumables;
-		private gameItemID _activeWeapon;
-		private CArray<CHandle<gamedataEquipmentArea_Record>> _equipRecords;
-		private CEnum<gameItemIconGender> _itemIconGender;
-		private CWeakHandle<gameIBlackboard> _weaponUIBlackboard;
-		private CWeakHandle<gameIBlackboard> _uIBBEquipmentBlackboard;
-		private CWeakHandle<gameIBlackboard> _uIBBItemModBlackbord;
-		private CHandle<UI_EquipmentDef> _uIBBEquipment;
-		private CHandle<UI_ItemModSystemDef> _uIBBItemMod;
-		private CHandle<redCallbackObject> _inventoryBBID;
-		private CHandle<redCallbackObject> _equipmentBBID;
-		private CHandle<redCallbackObject> _subEquipmentBBID;
-		private CHandle<redCallbackObject> _itemModBBID;
-		private CHandle<redCallbackObject> _bBWeaponList;
-		private CArray<CHandle<InventoryItemDataWrapper>> _inventoryItemDataWrappers;
-		private CHandle<inkScriptWeakHashMap> _hashMapCache;
-
 		[Ordinal(0)] 
 		[RED("owner")] 
 		public CWeakHandle<gameuiHUDGameController> Owner
 		{
-			get => GetProperty(ref _owner);
-			set => SetProperty(ref _owner, value);
+			get => GetPropertyValue<CWeakHandle<gameuiHUDGameController>>();
+			set => SetPropertyValue<CWeakHandle<gameuiHUDGameController>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("Player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
-			get => GetProperty(ref _player);
-			set => SetProperty(ref _player, value);
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("TransactionSystem")] 
 		public CWeakHandle<gameTransactionSystem> TransactionSystem
 		{
-			get => GetProperty(ref _transactionSystem);
-			set => SetProperty(ref _transactionSystem, value);
+			get => GetPropertyValue<CWeakHandle<gameTransactionSystem>>();
+			set => SetPropertyValue<CWeakHandle<gameTransactionSystem>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("EquipmentSystem")] 
 		public CWeakHandle<EquipmentSystem> EquipmentSystem
 		{
-			get => GetProperty(ref _equipmentSystem);
-			set => SetProperty(ref _equipmentSystem, value);
+			get => GetPropertyValue<CWeakHandle<EquipmentSystem>>();
+			set => SetPropertyValue<CWeakHandle<EquipmentSystem>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("StatsSystem")] 
 		public CWeakHandle<gameStatsSystem> StatsSystem
 		{
-			get => GetProperty(ref _statsSystem);
-			set => SetProperty(ref _statsSystem, value);
+			get => GetPropertyValue<CWeakHandle<gameStatsSystem>>();
+			set => SetPropertyValue<CWeakHandle<gameStatsSystem>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("ItemModificationSystem")] 
 		public CWeakHandle<ItemModificationSystem> ItemModificationSystem
 		{
-			get => GetProperty(ref _itemModificationSystem);
-			set => SetProperty(ref _itemModificationSystem, value);
+			get => GetPropertyValue<CWeakHandle<ItemModificationSystem>>();
+			set => SetPropertyValue<CWeakHandle<ItemModificationSystem>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("LocMgr")] 
 		public CHandle<UILocalizationMap> LocMgr
 		{
-			get => GetProperty(ref _locMgr);
-			set => SetProperty(ref _locMgr, value);
+			get => GetPropertyValue<CHandle<UILocalizationMap>>();
+			set => SetPropertyValue<CHandle<UILocalizationMap>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("InventoryItemsData")] 
 		public CArray<InventoryItemData> InventoryItemsData
 		{
-			get => GetProperty(ref _inventoryItemsData);
-			set => SetProperty(ref _inventoryItemsData, value);
+			get => GetPropertyValue<CArray<InventoryItemData>>();
+			set => SetPropertyValue<CArray<InventoryItemData>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("InventoryItemsDataWithoutEquipment")] 
 		public CArray<InventoryItemData> InventoryItemsDataWithoutEquipment
 		{
-			get => GetProperty(ref _inventoryItemsDataWithoutEquipment);
-			set => SetProperty(ref _inventoryItemsDataWithoutEquipment, value);
+			get => GetPropertyValue<CArray<InventoryItemData>>();
+			set => SetPropertyValue<CArray<InventoryItemData>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("EquipmentItemsData")] 
 		public CArray<InventoryItemData> EquipmentItemsData
 		{
-			get => GetProperty(ref _equipmentItemsData);
-			set => SetProperty(ref _equipmentItemsData, value);
+			get => GetPropertyValue<CArray<InventoryItemData>>();
+			set => SetPropertyValue<CArray<InventoryItemData>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("WeaponItemsData")] 
 		public CArray<InventoryItemData> WeaponItemsData
 		{
-			get => GetProperty(ref _weaponItemsData);
-			set => SetProperty(ref _weaponItemsData, value);
+			get => GetPropertyValue<CArray<InventoryItemData>>();
+			set => SetPropertyValue<CArray<InventoryItemData>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("QuickSlotsData")] 
 		public CArray<InventoryItemData> QuickSlotsData
 		{
-			get => GetProperty(ref _quickSlotsData);
-			set => SetProperty(ref _quickSlotsData, value);
+			get => GetPropertyValue<CArray<InventoryItemData>>();
+			set => SetPropertyValue<CArray<InventoryItemData>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("ConsumablesSlotsData")] 
 		public CArray<InventoryItemData> ConsumablesSlotsData
 		{
-			get => GetProperty(ref _consumablesSlotsData);
-			set => SetProperty(ref _consumablesSlotsData, value);
+			get => GetPropertyValue<CArray<InventoryItemData>>();
+			set => SetPropertyValue<CArray<InventoryItemData>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("ToRebuild")] 
 		public CBool ToRebuild
 		{
-			get => GetProperty(ref _toRebuild);
-			set => SetProperty(ref _toRebuild, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("ToRebuildItemsWithEquipped")] 
 		public CBool ToRebuildItemsWithEquipped
 		{
-			get => GetProperty(ref _toRebuildItemsWithEquipped);
-			set => SetProperty(ref _toRebuildItemsWithEquipped, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("ToRebuildWeapons")] 
 		public CBool ToRebuildWeapons
 		{
-			get => GetProperty(ref _toRebuildWeapons);
-			set => SetProperty(ref _toRebuildWeapons, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("ToRebuildEquipment")] 
 		public CBool ToRebuildEquipment
 		{
-			get => GetProperty(ref _toRebuildEquipment);
-			set => SetProperty(ref _toRebuildEquipment, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("ToRebuildQuickSlots")] 
 		public CBool ToRebuildQuickSlots
 		{
-			get => GetProperty(ref _toRebuildQuickSlots);
-			set => SetProperty(ref _toRebuildQuickSlots, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("ToRebuildConsumables")] 
 		public CBool ToRebuildConsumables
 		{
-			get => GetProperty(ref _toRebuildConsumables);
-			set => SetProperty(ref _toRebuildConsumables, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("ActiveWeapon")] 
 		public gameItemID ActiveWeapon
 		{
-			get => GetProperty(ref _activeWeapon);
-			set => SetProperty(ref _activeWeapon, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("EquipRecords")] 
 		public CArray<CHandle<gamedataEquipmentArea_Record>> EquipRecords
 		{
-			get => GetProperty(ref _equipRecords);
-			set => SetProperty(ref _equipRecords, value);
+			get => GetPropertyValue<CArray<CHandle<gamedataEquipmentArea_Record>>>();
+			set => SetPropertyValue<CArray<CHandle<gamedataEquipmentArea_Record>>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("ItemIconGender")] 
 		public CEnum<gameItemIconGender> ItemIconGender
 		{
-			get => GetProperty(ref _itemIconGender);
-			set => SetProperty(ref _itemIconGender, value);
+			get => GetPropertyValue<CEnum<gameItemIconGender>>();
+			set => SetPropertyValue<CEnum<gameItemIconGender>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("WeaponUIBlackboard")] 
 		public CWeakHandle<gameIBlackboard> WeaponUIBlackboard
 		{
-			get => GetProperty(ref _weaponUIBlackboard);
-			set => SetProperty(ref _weaponUIBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("UIBBEquipmentBlackboard")] 
 		public CWeakHandle<gameIBlackboard> UIBBEquipmentBlackboard
 		{
-			get => GetProperty(ref _uIBBEquipmentBlackboard);
-			set => SetProperty(ref _uIBBEquipmentBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("UIBBItemModBlackbord")] 
 		public CWeakHandle<gameIBlackboard> UIBBItemModBlackbord
 		{
-			get => GetProperty(ref _uIBBItemModBlackbord);
-			set => SetProperty(ref _uIBBItemModBlackbord, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("UIBBEquipment")] 
 		public CHandle<UI_EquipmentDef> UIBBEquipment
 		{
-			get => GetProperty(ref _uIBBEquipment);
-			set => SetProperty(ref _uIBBEquipment, value);
+			get => GetPropertyValue<CHandle<UI_EquipmentDef>>();
+			set => SetPropertyValue<CHandle<UI_EquipmentDef>>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("UIBBItemMod")] 
 		public CHandle<UI_ItemModSystemDef> UIBBItemMod
 		{
-			get => GetProperty(ref _uIBBItemMod);
-			set => SetProperty(ref _uIBBItemMod, value);
+			get => GetPropertyValue<CHandle<UI_ItemModSystemDef>>();
+			set => SetPropertyValue<CHandle<UI_ItemModSystemDef>>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("InventoryBBID")] 
 		public CHandle<redCallbackObject> InventoryBBID
 		{
-			get => GetProperty(ref _inventoryBBID);
-			set => SetProperty(ref _inventoryBBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("EquipmentBBID")] 
 		public CHandle<redCallbackObject> EquipmentBBID
 		{
-			get => GetProperty(ref _equipmentBBID);
-			set => SetProperty(ref _equipmentBBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("SubEquipmentBBID")] 
 		public CHandle<redCallbackObject> SubEquipmentBBID
 		{
-			get => GetProperty(ref _subEquipmentBBID);
-			set => SetProperty(ref _subEquipmentBBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("ItemModBBID")] 
 		public CHandle<redCallbackObject> ItemModBBID
 		{
-			get => GetProperty(ref _itemModBBID);
-			set => SetProperty(ref _itemModBBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("BBWeaponList")] 
 		public CHandle<redCallbackObject> BBWeaponList
 		{
-			get => GetProperty(ref _bBWeaponList);
-			set => SetProperty(ref _bBWeaponList, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("InventoryItemDataWrappers")] 
 		public CArray<CHandle<InventoryItemDataWrapper>> InventoryItemDataWrappers
 		{
-			get => GetProperty(ref _inventoryItemDataWrappers);
-			set => SetProperty(ref _inventoryItemDataWrappers, value);
+			get => GetPropertyValue<CArray<CHandle<InventoryItemDataWrapper>>>();
+			set => SetPropertyValue<CArray<CHandle<InventoryItemDataWrapper>>>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("HashMapCache")] 
 		public CHandle<inkScriptWeakHashMap> HashMapCache
 		{
-			get => GetProperty(ref _hashMapCache);
-			set => SetProperty(ref _hashMapCache, value);
+			get => GetPropertyValue<CHandle<inkScriptWeakHashMap>>();
+			set => SetPropertyValue<CHandle<inkScriptWeakHashMap>>(value);
 		}
 
 		public InventoryDataManagerV2()
 		{
-			_toRebuild = true;
-			_toRebuildItemsWithEquipped = true;
-			_toRebuildWeapons = true;
-			_toRebuildEquipment = true;
-			_toRebuildQuickSlots = true;
-			_toRebuildConsumables = true;
+			InventoryItemsData = new();
+			InventoryItemsDataWithoutEquipment = new();
+			EquipmentItemsData = new();
+			WeaponItemsData = new();
+			QuickSlotsData = new();
+			ConsumablesSlotsData = new();
+			ToRebuild = true;
+			ToRebuildItemsWithEquipped = true;
+			ToRebuildWeapons = true;
+			ToRebuildEquipment = true;
+			ToRebuildQuickSlots = true;
+			ToRebuildConsumables = true;
+			ActiveWeapon = new();
+			EquipRecords = new();
+			InventoryItemDataWrappers = new();
 		}
 	}
 }

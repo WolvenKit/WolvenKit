@@ -5,29 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameAvailableExposureMethodResult : RedBaseClass
 	{
-		private CFloat _distanceToTarget;
-		private CEnum<AICoverExposureMethod> _method;
-
 		[Ordinal(0)] 
 		[RED("distanceToTarget")] 
 		public CFloat DistanceToTarget
 		{
-			get => GetProperty(ref _distanceToTarget);
-			set => SetProperty(ref _distanceToTarget, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("method")] 
 		public CEnum<AICoverExposureMethod> Method
 		{
-			get => GetProperty(ref _method);
-			set => SetProperty(ref _method, value);
+			get => GetPropertyValue<CEnum<AICoverExposureMethod>>();
+			set => SetPropertyValue<CEnum<AICoverExposureMethod>>(value);
 		}
 
 		public gameAvailableExposureMethodResult()
 		{
-			_distanceToTarget = 340282346638528859811704183484516925440.000000F;
-			_method = new() { Value = Enums.AICoverExposureMethod.Count };
+			DistanceToTarget = 340282346638528859811704183484516925440.000000F;
+			Method = Enums.AICoverExposureMethod.Count;
 		}
 	}
 }

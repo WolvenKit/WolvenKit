@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PerksSkillsLevelDisplayController : inkWidgetLogicController
 	{
-		private inkWidgetReference _tint;
-
 		[Ordinal(1)] 
 		[RED("tint")] 
 		public inkWidgetReference Tint
 		{
-			get => GetProperty(ref _tint);
-			set => SetProperty(ref _tint, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		public PerksSkillsLevelDisplayController()
+		{
+			Tint = new();
 		}
 	}
 }

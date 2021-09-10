@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_NameHashConstant : animAnimNode_IntValue
 	{
-		private CName _value;
-
 		[Ordinal(11)] 
 		[RED("value")] 
 		public CName Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public animAnimNode_NameHashConstant()
+		{
+			Id = 4294967295;
 		}
 	}
 }

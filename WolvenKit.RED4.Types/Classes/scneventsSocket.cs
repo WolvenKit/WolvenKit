@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scneventsSocket : scnSceneEvent
 	{
-		private scnOutputSocketStamp _osockStamp;
-
 		[Ordinal(6)] 
 		[RED("osockStamp")] 
 		public scnOutputSocketStamp OsockStamp
 		{
-			get => GetProperty(ref _osockStamp);
-			set => SetProperty(ref _osockStamp, value);
+			get => GetPropertyValue<scnOutputSocketStamp>();
+			set => SetPropertyValue<scnOutputSocketStamp>(value);
+		}
+
+		public scneventsSocket()
+		{
+			Id = new() { Id = 18446744073709551615 };
+			OsockStamp = new() { Name = 65535, Ordinal = 65535 };
 		}
 	}
 }

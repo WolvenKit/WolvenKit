@@ -5,214 +5,194 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldInstancedDestructibleMeshNode : worldMeshNode
 	{
-		private CResourceAsyncReference<CMesh> _staticMesh;
-		private CName _staticMeshAppearance;
-		private CEnum<physicsSimulationType> _simulationType;
-		private CEnum<physicsFilterDataSource> _filterDataSource;
-		private CBool _startInactive;
-		private CBool _turnDynamicOnImpulse;
-		private CBool _useAggregate;
-		private CBool _enableSelfCollisionInAggregate;
-		private CBool _isDestructible;
-		private CHandle<physicsFilterData> _filterData;
-		private CFloat _damageThreshold;
-		private CFloat _damageEndurance;
-		private CBool _accumulateDamage;
-		private CFloat _impulseToDamage;
-		private CResourceAsyncReference<worldEffect> _fracturingEffect;
-		private CResourceAsyncReference<worldEffect> _idleEffect;
-		private CArray<Transform> _instanceTransforms;
-		private worldTransformBuffer _cookedInstanceTransforms;
-		private CBool _isPierceable;
-		private CBool _isWorkspot;
-		private NavGenNavigationSetting _navigationSetting;
-		private CBool _useMeshNavmeshSettings;
-
 		[Ordinal(1000)] 
 		[RED("staticMesh")] 
 		public CResourceAsyncReference<CMesh> StaticMesh
 		{
-			get => GetProperty(ref _staticMesh);
-			set => SetProperty(ref _staticMesh, value);
+			get => GetPropertyValue<CResourceAsyncReference<CMesh>>();
+			set => SetPropertyValue<CResourceAsyncReference<CMesh>>(value);
 		}
 
 		[Ordinal(1001)] 
 		[RED("staticMeshAppearance")] 
 		public CName StaticMeshAppearance
 		{
-			get => GetProperty(ref _staticMeshAppearance);
-			set => SetProperty(ref _staticMeshAppearance, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1002)] 
 		[RED("simulationType")] 
 		public CEnum<physicsSimulationType> SimulationType
 		{
-			get => GetProperty(ref _simulationType);
-			set => SetProperty(ref _simulationType, value);
+			get => GetPropertyValue<CEnum<physicsSimulationType>>();
+			set => SetPropertyValue<CEnum<physicsSimulationType>>(value);
 		}
 
 		[Ordinal(1003)] 
 		[RED("filterDataSource")] 
 		public CEnum<physicsFilterDataSource> FilterDataSource
 		{
-			get => GetProperty(ref _filterDataSource);
-			set => SetProperty(ref _filterDataSource, value);
+			get => GetPropertyValue<CEnum<physicsFilterDataSource>>();
+			set => SetPropertyValue<CEnum<physicsFilterDataSource>>(value);
 		}
 
 		[Ordinal(1004)] 
 		[RED("startInactive")] 
 		public CBool StartInactive
 		{
-			get => GetProperty(ref _startInactive);
-			set => SetProperty(ref _startInactive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1005)] 
 		[RED("turnDynamicOnImpulse")] 
 		public CBool TurnDynamicOnImpulse
 		{
-			get => GetProperty(ref _turnDynamicOnImpulse);
-			set => SetProperty(ref _turnDynamicOnImpulse, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1006)] 
 		[RED("useAggregate")] 
 		public CBool UseAggregate
 		{
-			get => GetProperty(ref _useAggregate);
-			set => SetProperty(ref _useAggregate, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1007)] 
 		[RED("enableSelfCollisionInAggregate")] 
 		public CBool EnableSelfCollisionInAggregate
 		{
-			get => GetProperty(ref _enableSelfCollisionInAggregate);
-			set => SetProperty(ref _enableSelfCollisionInAggregate, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1008)] 
 		[RED("isDestructible")] 
 		public CBool IsDestructible
 		{
-			get => GetProperty(ref _isDestructible);
-			set => SetProperty(ref _isDestructible, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1009)] 
 		[RED("filterData")] 
 		public CHandle<physicsFilterData> FilterData
 		{
-			get => GetProperty(ref _filterData);
-			set => SetProperty(ref _filterData, value);
+			get => GetPropertyValue<CHandle<physicsFilterData>>();
+			set => SetPropertyValue<CHandle<physicsFilterData>>(value);
 		}
 
 		[Ordinal(1010)] 
 		[RED("damageThreshold")] 
 		public CFloat DamageThreshold
 		{
-			get => GetProperty(ref _damageThreshold);
-			set => SetProperty(ref _damageThreshold, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1011)] 
 		[RED("damageEndurance")] 
 		public CFloat DamageEndurance
 		{
-			get => GetProperty(ref _damageEndurance);
-			set => SetProperty(ref _damageEndurance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1012)] 
 		[RED("accumulateDamage")] 
 		public CBool AccumulateDamage
 		{
-			get => GetProperty(ref _accumulateDamage);
-			set => SetProperty(ref _accumulateDamage, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1013)] 
 		[RED("impulseToDamage")] 
 		public CFloat ImpulseToDamage
 		{
-			get => GetProperty(ref _impulseToDamage);
-			set => SetProperty(ref _impulseToDamage, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1014)] 
 		[RED("fracturingEffect")] 
 		public CResourceAsyncReference<worldEffect> FracturingEffect
 		{
-			get => GetProperty(ref _fracturingEffect);
-			set => SetProperty(ref _fracturingEffect, value);
+			get => GetPropertyValue<CResourceAsyncReference<worldEffect>>();
+			set => SetPropertyValue<CResourceAsyncReference<worldEffect>>(value);
 		}
 
 		[Ordinal(1015)] 
 		[RED("idleEffect")] 
 		public CResourceAsyncReference<worldEffect> IdleEffect
 		{
-			get => GetProperty(ref _idleEffect);
-			set => SetProperty(ref _idleEffect, value);
+			get => GetPropertyValue<CResourceAsyncReference<worldEffect>>();
+			set => SetPropertyValue<CResourceAsyncReference<worldEffect>>(value);
 		}
 
 		[Ordinal(1016)] 
 		[RED("instanceTransforms")] 
 		public CArray<Transform> InstanceTransforms
 		{
-			get => GetProperty(ref _instanceTransforms);
-			set => SetProperty(ref _instanceTransforms, value);
+			get => GetPropertyValue<CArray<Transform>>();
+			set => SetPropertyValue<CArray<Transform>>(value);
 		}
 
 		[Ordinal(1017)] 
 		[RED("cookedInstanceTransforms")] 
 		public worldTransformBuffer CookedInstanceTransforms
 		{
-			get => GetProperty(ref _cookedInstanceTransforms);
-			set => SetProperty(ref _cookedInstanceTransforms, value);
+			get => GetPropertyValue<worldTransformBuffer>();
+			set => SetPropertyValue<worldTransformBuffer>(value);
 		}
 
 		[Ordinal(1018)] 
 		[RED("isPierceable")] 
 		public CBool IsPierceable
 		{
-			get => GetProperty(ref _isPierceable);
-			set => SetProperty(ref _isPierceable, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1019)] 
 		[RED("isWorkspot")] 
 		public CBool IsWorkspot
 		{
-			get => GetProperty(ref _isWorkspot);
-			set => SetProperty(ref _isWorkspot, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1020)] 
 		[RED("navigationSetting")] 
 		public NavGenNavigationSetting NavigationSetting
 		{
-			get => GetProperty(ref _navigationSetting);
-			set => SetProperty(ref _navigationSetting, value);
+			get => GetPropertyValue<NavGenNavigationSetting>();
+			set => SetPropertyValue<NavGenNavigationSetting>(value);
 		}
 
 		[Ordinal(1021)] 
 		[RED("useMeshNavmeshSettings")] 
 		public CBool UseMeshNavmeshSettings
 		{
-			get => GetProperty(ref _useMeshNavmeshSettings);
-			set => SetProperty(ref _useMeshNavmeshSettings, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public worldInstancedDestructibleMeshNode()
 		{
-			_simulationType = new() { Value = Enums.physicsSimulationType.Dynamic };
-			_startInactive = true;
-			_damageThreshold = 1.000000F;
-			_damageEndurance = 10.000000F;
-			_accumulateDamage = true;
-			_impulseToDamage = 1.000000F;
-			_useMeshNavmeshSettings = true;
+			SimulationType = Enums.physicsSimulationType.Dynamic;
+			StartInactive = true;
+			DamageThreshold = 1.000000F;
+			DamageEndurance = 10.000000F;
+			AccumulateDamage = true;
+			ImpulseToDamage = 1.000000F;
+			InstanceTransforms = new();
+			CookedInstanceTransforms = new();
+			NavigationSetting = new() { NavmeshImpact = Enums.NavGenNavmeshImpact.Blocking };
+			UseMeshNavmeshSettings = true;
 		}
 	}
 }

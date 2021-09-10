@@ -5,55 +5,53 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CParticleInitializerSpawnCircle : IParticleInitializer
 	{
-		private CHandle<IEvaluatorFloat> _innerRadius;
-		private CHandle<IEvaluatorFloat> _outerRadius;
-		private CBool _surfaceOnly;
-		private CBool _worldSpace;
-		private CMatrix _spawnToLocal;
-
 		[Ordinal(4)] 
 		[RED("innerRadius")] 
 		public CHandle<IEvaluatorFloat> InnerRadius
 		{
-			get => GetProperty(ref _innerRadius);
-			set => SetProperty(ref _innerRadius, value);
+			get => GetPropertyValue<CHandle<IEvaluatorFloat>>();
+			set => SetPropertyValue<CHandle<IEvaluatorFloat>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("outerRadius")] 
 		public CHandle<IEvaluatorFloat> OuterRadius
 		{
-			get => GetProperty(ref _outerRadius);
-			set => SetProperty(ref _outerRadius, value);
+			get => GetPropertyValue<CHandle<IEvaluatorFloat>>();
+			set => SetPropertyValue<CHandle<IEvaluatorFloat>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("surfaceOnly")] 
 		public CBool SurfaceOnly
 		{
-			get => GetProperty(ref _surfaceOnly);
-			set => SetProperty(ref _surfaceOnly, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("worldSpace")] 
 		public CBool WorldSpace
 		{
-			get => GetProperty(ref _worldSpace);
-			set => SetProperty(ref _worldSpace, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("spawnToLocal")] 
 		public CMatrix SpawnToLocal
 		{
-			get => GetProperty(ref _spawnToLocal);
-			set => SetProperty(ref _spawnToLocal, value);
+			get => GetPropertyValue<CMatrix>();
+			set => SetPropertyValue<CMatrix>(value);
 		}
 
 		public CParticleInitializerSpawnCircle()
 		{
-			_worldSpace = true;
+			EditorName = "Spawn circle";
+			EditorGroup = "Deprecated";
+			IsEnabled = true;
+			WorldSpace = true;
+			SpawnToLocal = new();
 		}
 	}
 }

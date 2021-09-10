@@ -5,220 +5,201 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ProgressBarSimpleWidgetLogicController : inkWidgetLogicController
 	{
-		private CFloat _width;
-		private CFloat _height;
-		private CFloat _currentValue;
-		private CFloat _previousValue;
-		private CFloat _maxCNBarFlashSize;
-		private inkWidgetReference _fullBar;
-		private inkWidgetReference _changePBar;
-		private inkWidgetReference _changeNBar;
-		private inkWidgetReference _emptyBar;
-		private inkWidgetReference _barCap;
-		private CBool _showBarCap;
-		private CFloat _animDuration;
-		private CHandle<inkanimProxy> _full_anim_proxy;
-		private CHandle<inkanimDefinition> _full_anim;
-		private CHandle<inkanimProxy> _empty_anim_proxy;
-		private CHandle<inkanimDefinition> _empty_anim;
-		private CHandle<inkanimProxy> _changeP_anim_proxy;
-		private CHandle<inkanimDefinition> _changeP_anim;
-		private CHandle<inkanimProxy> _changeN_anim_proxy;
-		private CHandle<inkanimDefinition> _changeN_anim;
-		private CHandle<inkanimProxy> _barCap_anim_proxy;
-		private CHandle<inkanimDefinition> _barCap_anim;
-		private CWeakHandle<inkCompoundWidget> _rootWidget;
-
 		[Ordinal(1)] 
 		[RED("width")] 
 		public CFloat Width
 		{
-			get => GetProperty(ref _width);
-			set => SetProperty(ref _width, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("height")] 
 		public CFloat Height
 		{
-			get => GetProperty(ref _height);
-			set => SetProperty(ref _height, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("currentValue")] 
 		public CFloat CurrentValue
 		{
-			get => GetProperty(ref _currentValue);
-			set => SetProperty(ref _currentValue, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("previousValue")] 
 		public CFloat PreviousValue
 		{
-			get => GetProperty(ref _previousValue);
-			set => SetProperty(ref _previousValue, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("MaxCNBarFlashSize")] 
 		public CFloat MaxCNBarFlashSize
 		{
-			get => GetProperty(ref _maxCNBarFlashSize);
-			set => SetProperty(ref _maxCNBarFlashSize, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("fullBar")] 
 		public inkWidgetReference FullBar
 		{
-			get => GetProperty(ref _fullBar);
-			set => SetProperty(ref _fullBar, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("changePBar")] 
 		public inkWidgetReference ChangePBar
 		{
-			get => GetProperty(ref _changePBar);
-			set => SetProperty(ref _changePBar, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("changeNBar")] 
 		public inkWidgetReference ChangeNBar
 		{
-			get => GetProperty(ref _changeNBar);
-			set => SetProperty(ref _changeNBar, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("emptyBar")] 
 		public inkWidgetReference EmptyBar
 		{
-			get => GetProperty(ref _emptyBar);
-			set => SetProperty(ref _emptyBar, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("barCap")] 
 		public inkWidgetReference BarCap
 		{
-			get => GetProperty(ref _barCap);
-			set => SetProperty(ref _barCap, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("showBarCap")] 
 		public CBool ShowBarCap
 		{
-			get => GetProperty(ref _showBarCap);
-			set => SetProperty(ref _showBarCap, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("animDuration")] 
 		public CFloat AnimDuration
 		{
-			get => GetProperty(ref _animDuration);
-			set => SetProperty(ref _animDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("full_anim_proxy")] 
 		public CHandle<inkanimProxy> Full_anim_proxy
 		{
-			get => GetProperty(ref _full_anim_proxy);
-			set => SetProperty(ref _full_anim_proxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("full_anim")] 
 		public CHandle<inkanimDefinition> Full_anim
 		{
-			get => GetProperty(ref _full_anim);
-			set => SetProperty(ref _full_anim, value);
+			get => GetPropertyValue<CHandle<inkanimDefinition>>();
+			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("empty_anim_proxy")] 
 		public CHandle<inkanimProxy> Empty_anim_proxy
 		{
-			get => GetProperty(ref _empty_anim_proxy);
-			set => SetProperty(ref _empty_anim_proxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("empty_anim")] 
 		public CHandle<inkanimDefinition> Empty_anim
 		{
-			get => GetProperty(ref _empty_anim);
-			set => SetProperty(ref _empty_anim, value);
+			get => GetPropertyValue<CHandle<inkanimDefinition>>();
+			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("changeP_anim_proxy")] 
 		public CHandle<inkanimProxy> ChangeP_anim_proxy
 		{
-			get => GetProperty(ref _changeP_anim_proxy);
-			set => SetProperty(ref _changeP_anim_proxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("changeP_anim")] 
 		public CHandle<inkanimDefinition> ChangeP_anim
 		{
-			get => GetProperty(ref _changeP_anim);
-			set => SetProperty(ref _changeP_anim, value);
+			get => GetPropertyValue<CHandle<inkanimDefinition>>();
+			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("changeN_anim_proxy")] 
 		public CHandle<inkanimProxy> ChangeN_anim_proxy
 		{
-			get => GetProperty(ref _changeN_anim_proxy);
-			set => SetProperty(ref _changeN_anim_proxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("changeN_anim")] 
 		public CHandle<inkanimDefinition> ChangeN_anim
 		{
-			get => GetProperty(ref _changeN_anim);
-			set => SetProperty(ref _changeN_anim, value);
+			get => GetPropertyValue<CHandle<inkanimDefinition>>();
+			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("barCap_anim_proxy")] 
 		public CHandle<inkanimProxy> BarCap_anim_proxy
 		{
-			get => GetProperty(ref _barCap_anim_proxy);
-			set => SetProperty(ref _barCap_anim_proxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("barCap_anim")] 
 		public CHandle<inkanimDefinition> BarCap_anim
 		{
-			get => GetProperty(ref _barCap_anim);
-			set => SetProperty(ref _barCap_anim, value);
+			get => GetPropertyValue<CHandle<inkanimDefinition>>();
+			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("rootWidget")] 
 		public CWeakHandle<inkCompoundWidget> RootWidget
 		{
-			get => GetProperty(ref _rootWidget);
-			set => SetProperty(ref _rootWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkCompoundWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkCompoundWidget>>(value);
 		}
 
 		public ProgressBarSimpleWidgetLogicController()
 		{
-			_currentValue = 1.000000F;
-			_previousValue = 1.000000F;
-			_maxCNBarFlashSize = 500.000000F;
-			_animDuration = 2.000000F;
+			CurrentValue = 1.000000F;
+			PreviousValue = 1.000000F;
+			MaxCNBarFlashSize = 500.000000F;
+			FullBar = new();
+			ChangePBar = new();
+			ChangeNBar = new();
+			EmptyBar = new();
+			BarCap = new();
+			AnimDuration = 2.000000F;
 		}
 	}
 }

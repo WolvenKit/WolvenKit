@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MediaDeviceData : RedBaseClass
 	{
-		private CInt32 _initialStation;
-		private CInt32 _amountOfStations;
-		private CString _activeChannelName;
-		private CBool _isInteractive;
-
 		[Ordinal(0)] 
 		[RED("initialStation")] 
 		public CInt32 InitialStation
 		{
-			get => GetProperty(ref _initialStation);
-			set => SetProperty(ref _initialStation, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("amountOfStations")] 
 		public CInt32 AmountOfStations
 		{
-			get => GetProperty(ref _amountOfStations);
-			set => SetProperty(ref _amountOfStations, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("activeChannelName")] 
 		public CString ActiveChannelName
 		{
-			get => GetProperty(ref _activeChannelName);
-			set => SetProperty(ref _activeChannelName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isInteractive")] 
 		public CBool IsInteractive
 		{
-			get => GetProperty(ref _isInteractive);
-			set => SetProperty(ref _isInteractive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

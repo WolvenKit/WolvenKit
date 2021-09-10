@@ -5,50 +5,51 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class cpGameplayLightComponent : entLightComponent
 	{
-		private CBool _reactToTime;
-		private GameTime _begin;
-		private GameTime _end;
-		private CFloat _probability;
-		private GameTime _delayRange;
-
 		[Ordinal(54)] 
 		[RED("reactToTime")] 
 		public CBool ReactToTime
 		{
-			get => GetProperty(ref _reactToTime);
-			set => SetProperty(ref _reactToTime, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(55)] 
 		[RED("begin")] 
 		public GameTime Begin
 		{
-			get => GetProperty(ref _begin);
-			set => SetProperty(ref _begin, value);
+			get => GetPropertyValue<GameTime>();
+			set => SetPropertyValue<GameTime>(value);
 		}
 
 		[Ordinal(56)] 
 		[RED("end")] 
 		public GameTime End
 		{
-			get => GetProperty(ref _end);
-			set => SetProperty(ref _end, value);
+			get => GetPropertyValue<GameTime>();
+			set => SetPropertyValue<GameTime>(value);
 		}
 
 		[Ordinal(57)] 
 		[RED("probability")] 
 		public CFloat Probability
 		{
-			get => GetProperty(ref _probability);
-			set => SetProperty(ref _probability, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(58)] 
 		[RED("delayRange")] 
 		public GameTime DelayRange
 		{
-			get => GetProperty(ref _delayRange);
-			set => SetProperty(ref _delayRange, value);
+			get => GetPropertyValue<GameTime>();
+			set => SetPropertyValue<GameTime>(value);
+		}
+
+		public cpGameplayLightComponent()
+		{
+			Begin = new();
+			End = new();
+			DelayRange = new();
 		}
 	}
 }

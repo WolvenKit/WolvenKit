@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UIScriptableSystemSetVendorPanelPlayerSorting : gameScriptableSystemRequest
 	{
-		private CInt32 _sortMode;
-
 		[Ordinal(0)] 
 		[RED("sortMode")] 
 		public CInt32 SortMode
 		{
-			get => GetProperty(ref _sortMode);
-			set => SetProperty(ref _sortMode, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

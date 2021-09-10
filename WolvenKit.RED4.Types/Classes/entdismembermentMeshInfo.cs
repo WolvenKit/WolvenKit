@@ -5,103 +5,96 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entdismembermentMeshInfo : RedBaseClass
 	{
-		private CResourceAsyncReference<CMesh> _mesh;
-		private CName _meshAppearance;
-		private CArray<entdismembermentAppearanceMatch> _appearanceMap;
-		private CBool _shouldReceiveDecal;
-		private CEnum<physicsRagdollBodyPartE> _bodyPartMask;
-		private CEnum<entdismembermentWoundTypeE> _woundType;
-		private CEnum<entdismembermentWoundTypeE> _cullMesh;
-		private Transform _offset;
-		private Vector3 _scale;
-		private entdismembermentPhysicsInfo _physics;
-
 		[Ordinal(0)] 
 		[RED("Mesh")] 
 		public CResourceAsyncReference<CMesh> Mesh
 		{
-			get => GetProperty(ref _mesh);
-			set => SetProperty(ref _mesh, value);
+			get => GetPropertyValue<CResourceAsyncReference<CMesh>>();
+			set => SetPropertyValue<CResourceAsyncReference<CMesh>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("MeshAppearance")] 
 		public CName MeshAppearance
 		{
-			get => GetProperty(ref _meshAppearance);
-			set => SetProperty(ref _meshAppearance, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("AppearanceMap")] 
 		public CArray<entdismembermentAppearanceMatch> AppearanceMap
 		{
-			get => GetProperty(ref _appearanceMap);
-			set => SetProperty(ref _appearanceMap, value);
+			get => GetPropertyValue<CArray<entdismembermentAppearanceMatch>>();
+			set => SetPropertyValue<CArray<entdismembermentAppearanceMatch>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("ShouldReceiveDecal")] 
 		public CBool ShouldReceiveDecal
 		{
-			get => GetProperty(ref _shouldReceiveDecal);
-			set => SetProperty(ref _shouldReceiveDecal, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("BodyPartMask")] 
-		public CEnum<physicsRagdollBodyPartE> BodyPartMask
+		public CBitField<physicsRagdollBodyPartE> BodyPartMask
 		{
-			get => GetProperty(ref _bodyPartMask);
-			set => SetProperty(ref _bodyPartMask, value);
+			get => GetPropertyValue<CBitField<physicsRagdollBodyPartE>>();
+			set => SetPropertyValue<CBitField<physicsRagdollBodyPartE>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("WoundType")] 
-		public CEnum<entdismembermentWoundTypeE> WoundType
+		public CBitField<entdismembermentWoundTypeE> WoundType
 		{
-			get => GetProperty(ref _woundType);
-			set => SetProperty(ref _woundType, value);
+			get => GetPropertyValue<CBitField<entdismembermentWoundTypeE>>();
+			set => SetPropertyValue<CBitField<entdismembermentWoundTypeE>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("CullMesh")] 
-		public CEnum<entdismembermentWoundTypeE> CullMesh
+		public CBitField<entdismembermentWoundTypeE> CullMesh
 		{
-			get => GetProperty(ref _cullMesh);
-			set => SetProperty(ref _cullMesh, value);
+			get => GetPropertyValue<CBitField<entdismembermentWoundTypeE>>();
+			set => SetPropertyValue<CBitField<entdismembermentWoundTypeE>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("Offset")] 
 		public Transform Offset
 		{
-			get => GetProperty(ref _offset);
-			set => SetProperty(ref _offset, value);
+			get => GetPropertyValue<Transform>();
+			set => SetPropertyValue<Transform>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("Scale")] 
 		public Vector3 Scale
 		{
-			get => GetProperty(ref _scale);
-			set => SetProperty(ref _scale, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("Physics")] 
 		public entdismembermentPhysicsInfo Physics
 		{
-			get => GetProperty(ref _physics);
-			set => SetProperty(ref _physics, value);
+			get => GetPropertyValue<entdismembermentPhysicsInfo>();
+			set => SetPropertyValue<entdismembermentPhysicsInfo>(value);
 		}
 
 		public entdismembermentMeshInfo()
 		{
-			_meshAppearance = "default";
-			_shouldReceiveDecal = true;
-			_woundType = new() { Value = Enums.entdismembermentWoundTypeE.CLEAN | Enums.entdismembermentWoundTypeE.COARSE };
-			_cullMesh = new() { Value = Enums.entdismembermentWoundTypeE.CLEAN };
+			MeshAppearance = "default";
+			AppearanceMap = new();
+			ShouldReceiveDecal = true;
+			WoundType = Enums.entdismembermentWoundTypeE.CLEAN | Enums.entdismembermentWoundTypeE.COARSE;
+			CullMesh = Enums.entdismembermentWoundTypeE.CLEAN;
+			Offset = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			Scale = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
+			Physics = new() { DensityScale = 1.000000F };
 		}
 	}
 }

@@ -5,59 +5,59 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class Speaker : InteractiveDevice
 	{
-		private CBool _soundEventPlaying;
-		private CName _soundEvent;
-		private gameEffectRef _effectRef;
-		private CHandle<gameEffectInstance> _deafGameEffect;
-		private CArray<CWeakHandle<ScriptedPuppet>> _targets;
-		private TweakDBID _statusEffect;
-
 		[Ordinal(97)] 
 		[RED("soundEventPlaying")] 
 		public CBool SoundEventPlaying
 		{
-			get => GetProperty(ref _soundEventPlaying);
-			set => SetProperty(ref _soundEventPlaying, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(98)] 
 		[RED("soundEvent")] 
 		public CName SoundEvent
 		{
-			get => GetProperty(ref _soundEvent);
-			set => SetProperty(ref _soundEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(99)] 
 		[RED("effectRef")] 
 		public gameEffectRef EffectRef
 		{
-			get => GetProperty(ref _effectRef);
-			set => SetProperty(ref _effectRef, value);
+			get => GetPropertyValue<gameEffectRef>();
+			set => SetPropertyValue<gameEffectRef>(value);
 		}
 
 		[Ordinal(100)] 
 		[RED("deafGameEffect")] 
 		public CHandle<gameEffectInstance> DeafGameEffect
 		{
-			get => GetProperty(ref _deafGameEffect);
-			set => SetProperty(ref _deafGameEffect, value);
+			get => GetPropertyValue<CHandle<gameEffectInstance>>();
+			set => SetPropertyValue<CHandle<gameEffectInstance>>(value);
 		}
 
 		[Ordinal(101)] 
 		[RED("targets")] 
 		public CArray<CWeakHandle<ScriptedPuppet>> Targets
 		{
-			get => GetProperty(ref _targets);
-			set => SetProperty(ref _targets, value);
+			get => GetPropertyValue<CArray<CWeakHandle<ScriptedPuppet>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<ScriptedPuppet>>>(value);
 		}
 
 		[Ordinal(102)] 
 		[RED("statusEffect")] 
 		public TweakDBID StatusEffect
 		{
-			get => GetProperty(ref _statusEffect);
-			set => SetProperty(ref _statusEffect, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
+		public Speaker()
+		{
+			ControllerTypeName = "SpeakerController";
+			EffectRef = new();
+			Targets = new();
 		}
 	}
 }

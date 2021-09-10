@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CIESDataResource : CResource
 	{
-		private CArrayFixedSize<CUInt8> _samples;
-
 		[Ordinal(1)] 
 		[RED("samples", 128)] 
 		public CArrayFixedSize<CUInt8> Samples
 		{
-			get => GetProperty(ref _samples);
-			set => SetProperty(ref _samples, value);
+			get => GetPropertyValue<CArrayFixedSize<CUInt8>>();
+			set => SetPropertyValue<CArrayFixedSize<CUInt8>>(value);
+		}
+
+		public CIESDataResource()
+		{
+			Samples = new(128);
 		}
 	}
 }

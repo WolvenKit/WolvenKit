@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkFontFamilyResource : CResource
 	{
-		private CName _familyName;
-		private CArray<inkFontStyle> _fontStyles;
-
 		[Ordinal(1)] 
 		[RED("familyName")] 
 		public CName FamilyName
 		{
-			get => GetProperty(ref _familyName);
-			set => SetProperty(ref _familyName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("fontStyles")] 
 		public CArray<inkFontStyle> FontStyles
 		{
-			get => GetProperty(ref _fontStyles);
-			set => SetProperty(ref _fontStyles, value);
+			get => GetPropertyValue<CArray<inkFontStyle>>();
+			set => SetPropertyValue<CArray<inkFontStyle>>(value);
+		}
+
+		public inkFontFamilyResource()
+		{
+			FontStyles = new();
 		}
 	}
 }

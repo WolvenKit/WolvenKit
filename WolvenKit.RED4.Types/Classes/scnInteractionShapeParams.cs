@@ -5,84 +5,77 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnInteractionShapeParams : ISerializable
 	{
-		private CEnum<scnChoiceNodeNsSizePreset> _preset;
-		private Vector3 _offset;
-		private Quaternion _rotation;
-		private CFloat _customIndicationRange;
-		private CFloat _customActivationRange;
-		private CFloat _activationYawLimit;
-		private CFloat _activationBaseLength;
-		private CFloat _activationHeight;
-
 		[Ordinal(0)] 
 		[RED("preset")] 
 		public CEnum<scnChoiceNodeNsSizePreset> Preset
 		{
-			get => GetProperty(ref _preset);
-			set => SetProperty(ref _preset, value);
+			get => GetPropertyValue<CEnum<scnChoiceNodeNsSizePreset>>();
+			set => SetPropertyValue<CEnum<scnChoiceNodeNsSizePreset>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("offset")] 
 		public Vector3 Offset
 		{
-			get => GetProperty(ref _offset);
-			set => SetProperty(ref _offset, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("rotation")] 
 		public Quaternion Rotation
 		{
-			get => GetProperty(ref _rotation);
-			set => SetProperty(ref _rotation, value);
+			get => GetPropertyValue<Quaternion>();
+			set => SetPropertyValue<Quaternion>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("customIndicationRange")] 
 		public CFloat CustomIndicationRange
 		{
-			get => GetProperty(ref _customIndicationRange);
-			set => SetProperty(ref _customIndicationRange, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("customActivationRange")] 
 		public CFloat CustomActivationRange
 		{
-			get => GetProperty(ref _customActivationRange);
-			set => SetProperty(ref _customActivationRange, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("activationYawLimit")] 
 		public CFloat ActivationYawLimit
 		{
-			get => GetProperty(ref _activationYawLimit);
-			set => SetProperty(ref _activationYawLimit, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("activationBaseLength")] 
 		public CFloat ActivationBaseLength
 		{
-			get => GetProperty(ref _activationBaseLength);
-			set => SetProperty(ref _activationBaseLength, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("activationHeight")] 
 		public CFloat ActivationHeight
 		{
-			get => GetProperty(ref _activationHeight);
-			set => SetProperty(ref _activationHeight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public scnInteractionShapeParams()
 		{
-			_preset = new() { Value = Enums.scnChoiceNodeNsSizePreset.normal };
-			_activationBaseLength = 1.000000F;
-			_activationHeight = 3.000000F;
+			Preset = Enums.scnChoiceNodeNsSizePreset.normal;
+			Offset = new();
+			Rotation = new() { R = 1.000000F };
+			ActivationBaseLength = 1.000000F;
+			ActivationHeight = 3.000000F;
 		}
 	}
 }

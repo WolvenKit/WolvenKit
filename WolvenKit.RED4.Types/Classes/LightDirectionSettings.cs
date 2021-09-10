@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class LightDirectionSettings : IAreaSettings
 	{
-		private GlobalLightingTrajectoryOverride _direction;
-
 		[Ordinal(2)] 
 		[RED("direction")] 
 		public GlobalLightingTrajectoryOverride Direction
 		{
-			get => GetProperty(ref _direction);
-			set => SetProperty(ref _direction, value);
+			get => GetPropertyValue<GlobalLightingTrajectoryOverride>();
+			set => SetPropertyValue<GlobalLightingTrajectoryOverride>(value);
+		}
+
+		public LightDirectionSettings()
+		{
+			Enable = true;
+			Direction = new() { TimeOfYearSeason = Enums.ETimeOfYearSeason.ETOYS_Summer };
 		}
 	}
 }

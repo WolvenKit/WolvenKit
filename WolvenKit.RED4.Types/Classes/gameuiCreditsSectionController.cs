@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiCreditsSectionController : inkWidgetLogicController
 	{
-		private inkTextWidgetReference _sectionName;
-
 		[Ordinal(1)] 
 		[RED("sectionName")] 
 		public inkTextWidgetReference SectionName
 		{
-			get => GetProperty(ref _sectionName);
-			set => SetProperty(ref _sectionName, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		public gameuiCreditsSectionController()
+		{
+			SectionName = new();
 		}
 	}
 }

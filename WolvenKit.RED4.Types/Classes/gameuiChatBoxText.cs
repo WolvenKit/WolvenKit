@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiChatBoxText : RedBaseClass
 	{
-		private CString _text;
-		private CInt32 _id;
-		private CColor _color;
-
 		[Ordinal(0)] 
 		[RED("text")] 
 		public CString Text
 		{
-			get => GetProperty(ref _text);
-			set => SetProperty(ref _text, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("id")] 
 		public CInt32 Id
 		{
-			get => GetProperty(ref _id);
-			set => SetProperty(ref _id, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("color")] 
 		public CColor Color
 		{
-			get => GetProperty(ref _color);
-			set => SetProperty(ref _color, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
+		}
+
+		public gameuiChatBoxText()
+		{
+			Color = new();
 		}
 	}
 }

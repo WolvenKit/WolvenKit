@@ -5,137 +5,127 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entAnimatedComponent : entISkinableComponent
 	{
-		private CHandle<entAnimationControlBinding> _controlBinding;
-		private CResourceReference<animRig> _rig;
-		private CResourceReference<animAnimGraph> _graph;
-		private animAnimSetup _animations;
-		private redTagList _animTags;
-		private CName _audioAltName;
-		private CBool _useLongRangeVisibility;
-		private CResourceAsyncReference<animFacialSetup> _facialSetup;
-		private CBool _calculateAccelerationWs;
-		private CArray<entAnimTrackParameter> _animParameters;
-		private CInt32 _serverForcedLod;
-		private CInt32 _clientForcedLod;
-		private CBool _serverForcedVisibility;
-		private CBool _clientForcedVisibility;
-
 		[Ordinal(5)] 
 		[RED("controlBinding")] 
 		public CHandle<entAnimationControlBinding> ControlBinding
 		{
-			get => GetProperty(ref _controlBinding);
-			set => SetProperty(ref _controlBinding, value);
+			get => GetPropertyValue<CHandle<entAnimationControlBinding>>();
+			set => SetPropertyValue<CHandle<entAnimationControlBinding>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("rig")] 
 		public CResourceReference<animRig> Rig
 		{
-			get => GetProperty(ref _rig);
-			set => SetProperty(ref _rig, value);
+			get => GetPropertyValue<CResourceReference<animRig>>();
+			set => SetPropertyValue<CResourceReference<animRig>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("graph")] 
 		public CResourceReference<animAnimGraph> Graph
 		{
-			get => GetProperty(ref _graph);
-			set => SetProperty(ref _graph, value);
+			get => GetPropertyValue<CResourceReference<animAnimGraph>>();
+			set => SetPropertyValue<CResourceReference<animAnimGraph>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("animations")] 
 		public animAnimSetup Animations
 		{
-			get => GetProperty(ref _animations);
-			set => SetProperty(ref _animations, value);
+			get => GetPropertyValue<animAnimSetup>();
+			set => SetPropertyValue<animAnimSetup>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("animTags")] 
 		public redTagList AnimTags
 		{
-			get => GetProperty(ref _animTags);
-			set => SetProperty(ref _animTags, value);
+			get => GetPropertyValue<redTagList>();
+			set => SetPropertyValue<redTagList>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("audioAltName")] 
 		public CName AudioAltName
 		{
-			get => GetProperty(ref _audioAltName);
-			set => SetProperty(ref _audioAltName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("useLongRangeVisibility")] 
 		public CBool UseLongRangeVisibility
 		{
-			get => GetProperty(ref _useLongRangeVisibility);
-			set => SetProperty(ref _useLongRangeVisibility, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("facialSetup")] 
 		public CResourceAsyncReference<animFacialSetup> FacialSetup
 		{
-			get => GetProperty(ref _facialSetup);
-			set => SetProperty(ref _facialSetup, value);
+			get => GetPropertyValue<CResourceAsyncReference<animFacialSetup>>();
+			set => SetPropertyValue<CResourceAsyncReference<animFacialSetup>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("calculateAccelerationWs")] 
 		public CBool CalculateAccelerationWs
 		{
-			get => GetProperty(ref _calculateAccelerationWs);
-			set => SetProperty(ref _calculateAccelerationWs, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("animParameters")] 
 		public CArray<entAnimTrackParameter> AnimParameters
 		{
-			get => GetProperty(ref _animParameters);
-			set => SetProperty(ref _animParameters, value);
+			get => GetPropertyValue<CArray<entAnimTrackParameter>>();
+			set => SetPropertyValue<CArray<entAnimTrackParameter>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("serverForcedLod")] 
 		public CInt32 ServerForcedLod
 		{
-			get => GetProperty(ref _serverForcedLod);
-			set => SetProperty(ref _serverForcedLod, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("clientForcedLod")] 
 		public CInt32 ClientForcedLod
 		{
-			get => GetProperty(ref _clientForcedLod);
-			set => SetProperty(ref _clientForcedLod, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("serverForcedVisibility")] 
 		public CBool ServerForcedVisibility
 		{
-			get => GetProperty(ref _serverForcedVisibility);
-			set => SetProperty(ref _serverForcedVisibility, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("clientForcedVisibility")] 
 		public CBool ClientForcedVisibility
 		{
-			get => GetProperty(ref _clientForcedVisibility);
-			set => SetProperty(ref _clientForcedVisibility, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public entAnimatedComponent()
 		{
-			_serverForcedLod = -1;
-			_clientForcedLod = -1;
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			Animations = new() { Cinematics = new(), Gameplay = new() };
+			AnimTags = new() { Tags = new() };
+			AnimParameters = new();
+			ServerForcedLod = -1;
+			ClientForcedLod = -1;
 		}
 	}
 }

@@ -5,59 +5,61 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ItemTooltipStatController : inkWidgetLogicController
 	{
-		private inkTextWidgetReference _statName;
-		private inkTextWidgetReference _statValue;
-		private inkWidgetReference _statComparedContainer;
-		private inkTextWidgetReference _statComparedValue;
-		private inkImageWidgetReference _arrow;
-		private CEnum<EMeasurementUnit> _measurementUnit;
-
 		[Ordinal(1)] 
 		[RED("statName")] 
 		public inkTextWidgetReference StatName
 		{
-			get => GetProperty(ref _statName);
-			set => SetProperty(ref _statName, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("statValue")] 
 		public inkTextWidgetReference StatValue
 		{
-			get => GetProperty(ref _statValue);
-			set => SetProperty(ref _statValue, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("statComparedContainer")] 
 		public inkWidgetReference StatComparedContainer
 		{
-			get => GetProperty(ref _statComparedContainer);
-			set => SetProperty(ref _statComparedContainer, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("statComparedValue")] 
 		public inkTextWidgetReference StatComparedValue
 		{
-			get => GetProperty(ref _statComparedValue);
-			set => SetProperty(ref _statComparedValue, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("arrow")] 
 		public inkImageWidgetReference Arrow
 		{
-			get => GetProperty(ref _arrow);
-			set => SetProperty(ref _arrow, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("measurementUnit")] 
 		public CEnum<EMeasurementUnit> MeasurementUnit
 		{
-			get => GetProperty(ref _measurementUnit);
-			set => SetProperty(ref _measurementUnit, value);
+			get => GetPropertyValue<CEnum<EMeasurementUnit>>();
+			set => SetPropertyValue<CEnum<EMeasurementUnit>>(value);
+		}
+
+		public ItemTooltipStatController()
+		{
+			StatName = new();
+			StatValue = new();
+			StatComparedContainer = new();
+			StatComparedValue = new();
+			Arrow = new();
 		}
 	}
 }

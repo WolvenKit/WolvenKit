@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ScriptLightSettings : RedBaseClass
 	{
-		private CFloat _strength;
-		private CColor _color;
-
 		[Ordinal(0)] 
 		[RED("strength")] 
 		public CFloat Strength
 		{
-			get => GetProperty(ref _strength);
-			set => SetProperty(ref _strength, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("color")] 
 		public CColor Color
 		{
-			get => GetProperty(ref _color);
-			set => SetProperty(ref _color, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
+		}
+
+		public ScriptLightSettings()
+		{
+			Color = new();
 		}
 	}
 }

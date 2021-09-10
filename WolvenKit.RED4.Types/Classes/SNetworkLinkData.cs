@@ -5,184 +5,170 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SNetworkLinkData : RedBaseClass
 	{
-		private CHandle<gameFxInstance> _beam;
-		private gameFxResource _fxResource;
-		private entEntityID _slaveID;
-		private entEntityID _masterID;
-		private Vector4 _slavePos;
-		private Vector4 _masterPos;
-		private CBool _drawLink;
-		private CBool _isActive;
-		private CBool _isDynamic;
-		private CBool _revealMaster;
-		private CBool _revealSlave;
-		private CBool _permanent;
-		private CBool _isPing;
-		private CBool _isNetrunner;
-		private CEnum<ELinkType> _linkType;
-		private CEnum<EPriority> _priority;
-		private CFloat _lifetime;
-		private gameDelayID _delayID;
-		private CBool _weakLink;
-
 		[Ordinal(0)] 
 		[RED("beam")] 
 		public CHandle<gameFxInstance> Beam
 		{
-			get => GetProperty(ref _beam);
-			set => SetProperty(ref _beam, value);
+			get => GetPropertyValue<CHandle<gameFxInstance>>();
+			set => SetPropertyValue<CHandle<gameFxInstance>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("fxResource")] 
 		public gameFxResource FxResource
 		{
-			get => GetProperty(ref _fxResource);
-			set => SetProperty(ref _fxResource, value);
+			get => GetPropertyValue<gameFxResource>();
+			set => SetPropertyValue<gameFxResource>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("slaveID")] 
 		public entEntityID SlaveID
 		{
-			get => GetProperty(ref _slaveID);
-			set => SetProperty(ref _slaveID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("masterID")] 
 		public entEntityID MasterID
 		{
-			get => GetProperty(ref _masterID);
-			set => SetProperty(ref _masterID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("slavePos")] 
 		public Vector4 SlavePos
 		{
-			get => GetProperty(ref _slavePos);
-			set => SetProperty(ref _slavePos, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("masterPos")] 
 		public Vector4 MasterPos
 		{
-			get => GetProperty(ref _masterPos);
-			set => SetProperty(ref _masterPos, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("drawLink")] 
 		public CBool DrawLink
 		{
-			get => GetProperty(ref _drawLink);
-			set => SetProperty(ref _drawLink, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get => GetProperty(ref _isActive);
-			set => SetProperty(ref _isActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("isDynamic")] 
 		public CBool IsDynamic
 		{
-			get => GetProperty(ref _isDynamic);
-			set => SetProperty(ref _isDynamic, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("revealMaster")] 
 		public CBool RevealMaster
 		{
-			get => GetProperty(ref _revealMaster);
-			set => SetProperty(ref _revealMaster, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("revealSlave")] 
 		public CBool RevealSlave
 		{
-			get => GetProperty(ref _revealSlave);
-			set => SetProperty(ref _revealSlave, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("permanent")] 
 		public CBool Permanent
 		{
-			get => GetProperty(ref _permanent);
-			set => SetProperty(ref _permanent, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("isPing")] 
 		public CBool IsPing
 		{
-			get => GetProperty(ref _isPing);
-			set => SetProperty(ref _isPing, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("isNetrunner")] 
 		public CBool IsNetrunner
 		{
-			get => GetProperty(ref _isNetrunner);
-			set => SetProperty(ref _isNetrunner, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("linkType")] 
 		public CEnum<ELinkType> LinkType
 		{
-			get => GetProperty(ref _linkType);
-			set => SetProperty(ref _linkType, value);
+			get => GetPropertyValue<CEnum<ELinkType>>();
+			set => SetPropertyValue<CEnum<ELinkType>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("priority")] 
 		public CEnum<EPriority> Priority
 		{
-			get => GetProperty(ref _priority);
-			set => SetProperty(ref _priority, value);
+			get => GetPropertyValue<CEnum<EPriority>>();
+			set => SetPropertyValue<CEnum<EPriority>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("lifetime")] 
 		public CFloat Lifetime
 		{
-			get => GetProperty(ref _lifetime);
-			set => SetProperty(ref _lifetime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("delayID")] 
 		public gameDelayID DelayID
 		{
-			get => GetProperty(ref _delayID);
-			set => SetProperty(ref _delayID, value);
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("weakLink")] 
 		public CBool WeakLink
 		{
-			get => GetProperty(ref _weakLink);
-			set => SetProperty(ref _weakLink, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public SNetworkLinkData()
 		{
-			_drawLink = true;
-			_revealMaster = true;
-			_revealSlave = true;
-			_lifetime = -1.000000F;
+			FxResource = new();
+			SlaveID = new();
+			MasterID = new();
+			SlavePos = new();
+			MasterPos = new();
+			DrawLink = true;
+			RevealMaster = true;
+			RevealSlave = true;
+			Lifetime = -1.000000F;
+			DelayID = new();
 		}
 	}
 }

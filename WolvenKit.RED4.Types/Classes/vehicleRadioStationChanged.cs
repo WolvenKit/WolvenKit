@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class vehicleRadioStationChanged : redEvent
 	{
-		private CBool _isActive;
-		private CUInt32 _radioIndex;
-		private CName _radioStationName;
-		private CName _radioSongName;
-
 		[Ordinal(0)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get => GetProperty(ref _isActive);
-			set => SetProperty(ref _isActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("radioIndex")] 
 		public CUInt32 RadioIndex
 		{
-			get => GetProperty(ref _radioIndex);
-			set => SetProperty(ref _radioIndex, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("radioStationName")] 
 		public CName RadioStationName
 		{
-			get => GetProperty(ref _radioStationName);
-			set => SetProperty(ref _radioStationName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("radioSongName")] 
 		public CName RadioSongName
 		{
-			get => GetProperty(ref _radioSongName);
-			set => SetProperty(ref _radioSongName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 	}
 }

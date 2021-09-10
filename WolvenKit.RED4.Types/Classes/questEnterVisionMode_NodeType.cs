@@ -5,28 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questEnterVisionMode_NodeType : questIVisionModeNodeType
 	{
-		private gameEntityReference _objectRef;
-		private CEnum<gameVisionModeType> _visionModeType;
-
 		[Ordinal(0)] 
 		[RED("objectRef")] 
 		public gameEntityReference ObjectRef
 		{
-			get => GetProperty(ref _objectRef);
-			set => SetProperty(ref _objectRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("visionModeType")] 
 		public CEnum<gameVisionModeType> VisionModeType
 		{
-			get => GetProperty(ref _visionModeType);
-			set => SetProperty(ref _visionModeType, value);
+			get => GetPropertyValue<CEnum<gameVisionModeType>>();
+			set => SetPropertyValue<CEnum<gameVisionModeType>>(value);
 		}
 
 		public questEnterVisionMode_NodeType()
 		{
-			_visionModeType = new() { Value = Enums.gameVisionModeType.Focus };
+			ObjectRef = new() { Names = new() };
+			VisionModeType = Enums.gameVisionModeType.Focus;
 		}
 	}
 }

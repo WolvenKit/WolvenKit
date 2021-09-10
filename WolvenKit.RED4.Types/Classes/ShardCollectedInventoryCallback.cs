@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ShardCollectedInventoryCallback : gameInventoryScriptCallback
 	{
-		private CWeakHandle<JournalNotificationQueue> _notificationQueue;
-		private CWeakHandle<gameJournalManager> _journalManager;
-
 		[Ordinal(1)] 
 		[RED("notificationQueue")] 
 		public CWeakHandle<JournalNotificationQueue> NotificationQueue
 		{
-			get => GetProperty(ref _notificationQueue);
-			set => SetProperty(ref _notificationQueue, value);
+			get => GetPropertyValue<CWeakHandle<JournalNotificationQueue>>();
+			set => SetPropertyValue<CWeakHandle<JournalNotificationQueue>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("journalManager")] 
 		public CWeakHandle<gameJournalManager> JournalManager
 		{
-			get => GetProperty(ref _journalManager);
-			set => SetProperty(ref _journalManager, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalManager>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
 		}
 	}
 }

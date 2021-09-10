@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNodeSourceChannel_FloatTrack : animIAnimNodeSourceChannel_Float
 	{
-		private animNamedTrackIndex _floatTrack;
-		private CBool _useComplementValue;
-
 		[Ordinal(0)] 
 		[RED("floatTrack")] 
 		public animNamedTrackIndex FloatTrack
 		{
-			get => GetProperty(ref _floatTrack);
-			set => SetProperty(ref _floatTrack, value);
+			get => GetPropertyValue<animNamedTrackIndex>();
+			set => SetPropertyValue<animNamedTrackIndex>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("useComplementValue")] 
 		public CBool UseComplementValue
 		{
-			get => GetProperty(ref _useComplementValue);
-			set => SetProperty(ref _useComplementValue, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public animAnimNodeSourceChannel_FloatTrack()
+		{
+			FloatTrack = new();
 		}
 	}
 }

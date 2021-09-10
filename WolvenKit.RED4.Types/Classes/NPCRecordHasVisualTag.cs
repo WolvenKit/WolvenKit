@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class NPCRecordHasVisualTag : gameIScriptablePrereq
 	{
-		private CName _visualTag;
-		private CBool _hasTag;
-
 		[Ordinal(0)] 
 		[RED("visualTag")] 
 		public CName VisualTag
 		{
-			get => GetProperty(ref _visualTag);
-			set => SetProperty(ref _visualTag, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hasTag")] 
 		public CBool HasTag
 		{
-			get => GetProperty(ref _hasTag);
-			set => SetProperty(ref _hasTag, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

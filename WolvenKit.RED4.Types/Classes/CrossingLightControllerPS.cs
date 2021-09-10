@@ -5,14 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CrossingLightControllerPS : TrafficLightControllerPS
 	{
-		private CrossingLightSetup _crossingLightSFXSetup;
-
 		[Ordinal(104)] 
 		[RED("crossingLightSFXSetup")] 
 		public CrossingLightSetup CrossingLightSFXSetup
 		{
-			get => GetProperty(ref _crossingLightSFXSetup);
-			set => SetProperty(ref _crossingLightSFXSetup, value);
+			get => GetPropertyValue<CrossingLightSetup>();
+			set => SetPropertyValue<CrossingLightSetup>(value);
+		}
+
+		public CrossingLightControllerPS()
+		{
+			DeviceName = "LocKey#125";
+			TweakDBRecord = new() { Value = 92771606930 };
+			TweakDBDescriptionRecord = new() { Value = 144804359263 };
+			CrossingLightSFXSetup = new();
 		}
 	}
 }

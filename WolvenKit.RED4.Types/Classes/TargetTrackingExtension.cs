@@ -5,68 +5,68 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TargetTrackingExtension : AITargetTrackerComponent
 	{
-		private DroppedThreatData _droppedThreatData;
-		private CArray<CHandle<AICombatSquadScriptInterface>> _trackedCombatSquads;
-		private CArray<CInt32> _trackedCombatSquadsCounters;
-		private ThreatPersistanceMemory _threatPersistanceMemory;
-		private CBool _hasBeenSeenByPlayer;
-		private CBool _canBeAddedToBossHealthbar;
-		private CWeakHandle<gameObject> _playerPuppet;
-
 		[Ordinal(5)] 
 		[RED("droppedThreatData")] 
 		public DroppedThreatData DroppedThreatData
 		{
-			get => GetProperty(ref _droppedThreatData);
-			set => SetProperty(ref _droppedThreatData, value);
+			get => GetPropertyValue<DroppedThreatData>();
+			set => SetPropertyValue<DroppedThreatData>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("trackedCombatSquads")] 
 		public CArray<CHandle<AICombatSquadScriptInterface>> TrackedCombatSquads
 		{
-			get => GetProperty(ref _trackedCombatSquads);
-			set => SetProperty(ref _trackedCombatSquads, value);
+			get => GetPropertyValue<CArray<CHandle<AICombatSquadScriptInterface>>>();
+			set => SetPropertyValue<CArray<CHandle<AICombatSquadScriptInterface>>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("trackedCombatSquadsCounters")] 
 		public CArray<CInt32> TrackedCombatSquadsCounters
 		{
-			get => GetProperty(ref _trackedCombatSquadsCounters);
-			set => SetProperty(ref _trackedCombatSquadsCounters, value);
+			get => GetPropertyValue<CArray<CInt32>>();
+			set => SetPropertyValue<CArray<CInt32>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("threatPersistanceMemory")] 
 		public ThreatPersistanceMemory ThreatPersistanceMemory
 		{
-			get => GetProperty(ref _threatPersistanceMemory);
-			set => SetProperty(ref _threatPersistanceMemory, value);
+			get => GetPropertyValue<ThreatPersistanceMemory>();
+			set => SetPropertyValue<ThreatPersistanceMemory>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("hasBeenSeenByPlayer")] 
 		public CBool HasBeenSeenByPlayer
 		{
-			get => GetProperty(ref _hasBeenSeenByPlayer);
-			set => SetProperty(ref _hasBeenSeenByPlayer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("canBeAddedToBossHealthbar")] 
 		public CBool CanBeAddedToBossHealthbar
 		{
-			get => GetProperty(ref _canBeAddedToBossHealthbar);
-			set => SetProperty(ref _canBeAddedToBossHealthbar, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("playerPuppet")] 
 		public CWeakHandle<gameObject> PlayerPuppet
 		{
-			get => GetProperty(ref _playerPuppet);
-			set => SetProperty(ref _playerPuppet, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
+		}
+
+		public TargetTrackingExtension()
+		{
+			DroppedThreatData = new() { Position = new() };
+			TrackedCombatSquads = new();
+			TrackedCombatSquadsCounters = new();
+			ThreatPersistanceMemory = new() { Threats = new(), IsPersistent = new() };
 		}
 	}
 }

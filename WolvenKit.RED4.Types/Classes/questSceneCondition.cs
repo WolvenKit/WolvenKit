@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questSceneCondition : questTypedCondition
 	{
-		private CHandle<questISceneConditionType> _type;
-
 		[Ordinal(0)] 
 		[RED("type")] 
 		public CHandle<questISceneConditionType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CHandle<questISceneConditionType>>();
+			set => SetPropertyValue<CHandle<questISceneConditionType>>(value);
 		}
 	}
 }

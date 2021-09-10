@@ -5,92 +5,84 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiStealthIndicatorPartLogicController : gameuiBaseDirectionalIndicatorPartLogicController
 	{
-		private inkImageWidgetReference _arrowFrontWidget;
-		private inkCompoundWidgetReference _wrapper;
-		private CFloat _stealthIndicatorDeadZoneAngle;
-		private CFloat _slowestFlashTime;
-		private CWeakHandle<inkCompoundWidget> _rootWidget;
-		private CFloat _lastValue;
-		private CHandle<inkanimProxy> _animProxy;
-		private CHandle<inkanimProxy> _flashAnimProxy;
-		private CHandle<inkanimDefinition> _scaleAnimDef;
-
 		[Ordinal(3)] 
 		[RED("arrowFrontWidget")] 
 		public inkImageWidgetReference ArrowFrontWidget
 		{
-			get => GetProperty(ref _arrowFrontWidget);
-			set => SetProperty(ref _arrowFrontWidget, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("wrapper")] 
 		public inkCompoundWidgetReference Wrapper
 		{
-			get => GetProperty(ref _wrapper);
-			set => SetProperty(ref _wrapper, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("stealthIndicatorDeadZoneAngle")] 
 		public CFloat StealthIndicatorDeadZoneAngle
 		{
-			get => GetProperty(ref _stealthIndicatorDeadZoneAngle);
-			set => SetProperty(ref _stealthIndicatorDeadZoneAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("slowestFlashTime")] 
 		public CFloat SlowestFlashTime
 		{
-			get => GetProperty(ref _slowestFlashTime);
-			set => SetProperty(ref _slowestFlashTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("rootWidget")] 
 		public CWeakHandle<inkCompoundWidget> RootWidget
 		{
-			get => GetProperty(ref _rootWidget);
-			set => SetProperty(ref _rootWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkCompoundWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkCompoundWidget>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("lastValue")] 
 		public CFloat LastValue
 		{
-			get => GetProperty(ref _lastValue);
-			set => SetProperty(ref _lastValue, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
-			get => GetProperty(ref _animProxy);
-			set => SetProperty(ref _animProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("flashAnimProxy")] 
 		public CHandle<inkanimProxy> FlashAnimProxy
 		{
-			get => GetProperty(ref _flashAnimProxy);
-			set => SetProperty(ref _flashAnimProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("scaleAnimDef")] 
 		public CHandle<inkanimDefinition> ScaleAnimDef
 		{
-			get => GetProperty(ref _scaleAnimDef);
-			set => SetProperty(ref _scaleAnimDef, value);
+			get => GetPropertyValue<CHandle<inkanimDefinition>>();
+			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
 		public gameuiStealthIndicatorPartLogicController()
 		{
-			_stealthIndicatorDeadZoneAngle = 40.000000F;
-			_slowestFlashTime = 0.500000F;
+			ArrowFrontWidget = new();
+			Wrapper = new();
+			StealthIndicatorDeadZoneAngle = 40.000000F;
+			SlowestFlashTime = 0.500000F;
 		}
 	}
 }

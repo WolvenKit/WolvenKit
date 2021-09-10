@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VendorJunkSellItem : IScriptable
 	{
-		private CWeakHandle<gameItemData> _item;
-		private CInt32 _quantity;
-
 		[Ordinal(0)] 
 		[RED("item")] 
 		public CWeakHandle<gameItemData> Item
 		{
-			get => GetProperty(ref _item);
-			set => SetProperty(ref _item, value);
+			get => GetPropertyValue<CWeakHandle<gameItemData>>();
+			set => SetPropertyValue<CWeakHandle<gameItemData>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("quantity")] 
 		public CInt32 Quantity
 		{
-			get => GetProperty(ref _quantity);
-			set => SetProperty(ref _quantity, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

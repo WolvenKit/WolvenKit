@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entAnimTargetAddEvent : redEvent
 	{
-		private CHandle<entIPositionProvider> _targetPositionProvider;
-		private CName _bodyPart;
-
 		[Ordinal(0)] 
 		[RED("targetPositionProvider")] 
 		public CHandle<entIPositionProvider> TargetPositionProvider
 		{
-			get => GetProperty(ref _targetPositionProvider);
-			set => SetProperty(ref _targetPositionProvider, value);
+			get => GetPropertyValue<CHandle<entIPositionProvider>>();
+			set => SetPropertyValue<CHandle<entIPositionProvider>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("bodyPart")] 
 		public CName BodyPart
 		{
-			get => GetProperty(ref _bodyPart);
-			set => SetProperty(ref _bodyPart, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 	}
 }

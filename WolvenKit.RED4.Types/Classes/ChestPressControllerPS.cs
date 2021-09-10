@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ChestPressControllerPS : ScriptableDeviceComponentPS
 	{
-		private CHandle<EngDemoContainer> _chestPressSkillChecks;
-		private CName _factOnQHack;
-		private CBool _wasWeighHacked;
-
 		[Ordinal(104)] 
 		[RED("chestPressSkillChecks")] 
 		public CHandle<EngDemoContainer> ChestPressSkillChecks
 		{
-			get => GetProperty(ref _chestPressSkillChecks);
-			set => SetProperty(ref _chestPressSkillChecks, value);
+			get => GetPropertyValue<CHandle<EngDemoContainer>>();
+			set => SetPropertyValue<CHandle<EngDemoContainer>>(value);
 		}
 
 		[Ordinal(105)] 
 		[RED("factOnQHack")] 
 		public CName FactOnQHack
 		{
-			get => GetProperty(ref _factOnQHack);
-			set => SetProperty(ref _factOnQHack, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(106)] 
 		[RED("wasWeighHacked")] 
 		public CBool WasWeighHacked
 		{
-			get => GetProperty(ref _wasWeighHacked);
-			set => SetProperty(ref _wasWeighHacked, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public ChestPressControllerPS()
+		{
+			DeviceName = "LocKey#601";
+			TweakDBRecord = new() { Value = 80274358199 };
+			TweakDBDescriptionRecord = new() { Value = 129856552116 };
 		}
 	}
 }

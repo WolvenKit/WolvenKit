@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ItemTooltipEvolutionModule : ItemTooltipModuleController
 	{
-		private inkImageWidgetReference _weaponEvolutionIcon;
-		private inkTextWidgetReference _weaponEvolutionName;
-		private inkTextWidgetReference _weaponEvolutionDescription;
-
 		[Ordinal(2)] 
 		[RED("weaponEvolutionIcon")] 
 		public inkImageWidgetReference WeaponEvolutionIcon
 		{
-			get => GetProperty(ref _weaponEvolutionIcon);
-			set => SetProperty(ref _weaponEvolutionIcon, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("weaponEvolutionName")] 
 		public inkTextWidgetReference WeaponEvolutionName
 		{
-			get => GetProperty(ref _weaponEvolutionName);
-			set => SetProperty(ref _weaponEvolutionName, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("weaponEvolutionDescription")] 
 		public inkTextWidgetReference WeaponEvolutionDescription
 		{
-			get => GetProperty(ref _weaponEvolutionDescription);
-			set => SetProperty(ref _weaponEvolutionDescription, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		public ItemTooltipEvolutionModule()
+		{
+			WeaponEvolutionIcon = new();
+			WeaponEvolutionName = new();
+			WeaponEvolutionDescription = new();
 		}
 	}
 }

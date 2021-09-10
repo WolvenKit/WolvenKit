@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class Stillage : InteractiveDevice
 	{
-		private CHandle<entIPlacedComponent> _collider;
-
 		[Ordinal(97)] 
 		[RED("collider")] 
 		public CHandle<entIPlacedComponent> Collider
 		{
-			get => GetProperty(ref _collider);
-			set => SetProperty(ref _collider, value);
+			get => GetPropertyValue<CHandle<entIPlacedComponent>>();
+			set => SetPropertyValue<CHandle<entIPlacedComponent>>(value);
+		}
+
+		public Stillage()
+		{
+			ControllerTypeName = "StillageController";
 		}
 	}
 }

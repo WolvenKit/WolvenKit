@@ -5,120 +5,110 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameActionMoveToSmartObjectState : gameActionMoveToState
 	{
-		private CUInt64 _targetHash;
-		private CBool _usePathfinding;
-		private CBool _useStart;
-		private CBool _useStop;
-		private CEnum<gameSmartObjectInstanceEntryType> _entryType;
-		private CEnum<moveMovementType> _movementType;
-		private CWeakHandle<gameObject> _strafingTarget;
-		private Vector3 _entryDirection;
-		private Vector3 _entryPointPos;
-		private Vector4 _entryPointDir;
-		private CName _animationName;
-		private CBool _isInSmartObject;
-
 		[Ordinal(9)] 
 		[RED("targetHash")] 
 		public CUInt64 TargetHash
 		{
-			get => GetProperty(ref _targetHash);
-			set => SetProperty(ref _targetHash, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("usePathfinding")] 
 		public CBool UsePathfinding
 		{
-			get => GetProperty(ref _usePathfinding);
-			set => SetProperty(ref _usePathfinding, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("useStart")] 
 		public CBool UseStart
 		{
-			get => GetProperty(ref _useStart);
-			set => SetProperty(ref _useStart, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("useStop")] 
 		public CBool UseStop
 		{
-			get => GetProperty(ref _useStop);
-			set => SetProperty(ref _useStop, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("entryType")] 
 		public CEnum<gameSmartObjectInstanceEntryType> EntryType
 		{
-			get => GetProperty(ref _entryType);
-			set => SetProperty(ref _entryType, value);
+			get => GetPropertyValue<CEnum<gameSmartObjectInstanceEntryType>>();
+			set => SetPropertyValue<CEnum<gameSmartObjectInstanceEntryType>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("movementType")] 
 		public CEnum<moveMovementType> MovementType
 		{
-			get => GetProperty(ref _movementType);
-			set => SetProperty(ref _movementType, value);
+			get => GetPropertyValue<CEnum<moveMovementType>>();
+			set => SetPropertyValue<CEnum<moveMovementType>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("strafingTarget")] 
 		public CWeakHandle<gameObject> StrafingTarget
 		{
-			get => GetProperty(ref _strafingTarget);
-			set => SetProperty(ref _strafingTarget, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("entryDirection")] 
 		public Vector3 EntryDirection
 		{
-			get => GetProperty(ref _entryDirection);
-			set => SetProperty(ref _entryDirection, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("entryPointPos")] 
 		public Vector3 EntryPointPos
 		{
-			get => GetProperty(ref _entryPointPos);
-			set => SetProperty(ref _entryPointPos, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("entryPointDir")] 
 		public Vector4 EntryPointDir
 		{
-			get => GetProperty(ref _entryPointDir);
-			set => SetProperty(ref _entryPointDir, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("animationName")] 
 		public CName AnimationName
 		{
-			get => GetProperty(ref _animationName);
-			set => SetProperty(ref _animationName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("isInSmartObject")] 
 		public CBool IsInSmartObject
 		{
-			get => GetProperty(ref _isInSmartObject);
-			set => SetProperty(ref _isInSmartObject, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public gameActionMoveToSmartObjectState()
 		{
-			_usePathfinding = true;
-			_useStart = true;
-			_useStop = true;
+			UsePathfinding = true;
+			UseStart = true;
+			UseStop = true;
+			EntryDirection = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
+			EntryPointPos = new();
+			EntryPointDir = new();
 		}
 	}
 }

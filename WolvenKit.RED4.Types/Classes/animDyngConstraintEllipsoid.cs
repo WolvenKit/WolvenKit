@@ -5,57 +5,53 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animDyngConstraintEllipsoid : animIDyngConstraint
 	{
-		private animTransformIndex _bone;
-		private QsTransform _ellipsoidTransformLS;
-		private CFloat _constraintRadius;
-		private CFloat _constraintScale1;
-		private CFloat _constraintScale2;
-
 		[Ordinal(1)] 
 		[RED("bone")] 
 		public animTransformIndex Bone
 		{
-			get => GetProperty(ref _bone);
-			set => SetProperty(ref _bone, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ellipsoidTransformLS")] 
 		public QsTransform EllipsoidTransformLS
 		{
-			get => GetProperty(ref _ellipsoidTransformLS);
-			set => SetProperty(ref _ellipsoidTransformLS, value);
+			get => GetPropertyValue<QsTransform>();
+			set => SetPropertyValue<QsTransform>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("constraintRadius")] 
 		public CFloat ConstraintRadius
 		{
-			get => GetProperty(ref _constraintRadius);
-			set => SetProperty(ref _constraintRadius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("constraintScale1")] 
 		public CFloat ConstraintScale1
 		{
-			get => GetProperty(ref _constraintScale1);
-			set => SetProperty(ref _constraintScale1, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("constraintScale2")] 
 		public CFloat ConstraintScale2
 		{
-			get => GetProperty(ref _constraintScale2);
-			set => SetProperty(ref _constraintScale2, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public animDyngConstraintEllipsoid()
 		{
-			_constraintRadius = 1.000000F;
-			_constraintScale1 = 1.000000F;
-			_constraintScale2 = 1.000000F;
+			Bone = new();
+			EllipsoidTransformLS = new() { Translation = new() { W = 1.000000F }, Rotation = new() { R = 1.000000F }, Scale = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F } };
+			ConstraintRadius = 1.000000F;
+			ConstraintScale1 = 1.000000F;
+			ConstraintScale2 = 1.000000F;
 		}
 	}
 }

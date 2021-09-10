@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameEffectSet : CResource
 	{
-		private CArray<gameEffectDefinition> _effects;
-
 		[Ordinal(1)] 
 		[RED("effects")] 
 		public CArray<gameEffectDefinition> Effects
 		{
-			get => GetProperty(ref _effects);
-			set => SetProperty(ref _effects, value);
+			get => GetPropertyValue<CArray<gameEffectDefinition>>();
+			set => SetPropertyValue<CArray<gameEffectDefinition>>(value);
+		}
+
+		public gameEffectSet()
+		{
+			Effects = new();
 		}
 	}
 }

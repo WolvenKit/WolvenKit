@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameCookedGpsMappinData : RedBaseClass
 	{
-		private CUInt32 _journalPathHash;
-		private CArray<Vector3> _positions;
-
 		[Ordinal(0)] 
 		[RED("journalPathHash")] 
 		public CUInt32 JournalPathHash
 		{
-			get => GetProperty(ref _journalPathHash);
-			set => SetProperty(ref _journalPathHash, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("positions")] 
 		public CArray<Vector3> Positions
 		{
-			get => GetProperty(ref _positions);
-			set => SetProperty(ref _positions, value);
+			get => GetPropertyValue<CArray<Vector3>>();
+			set => SetPropertyValue<CArray<Vector3>>(value);
+		}
+
+		public gameCookedGpsMappinData()
+		{
+			Positions = new();
 		}
 	}
 }

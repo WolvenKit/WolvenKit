@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questAudioEventPrefetchNode : questIAudioNodeType
 	{
-		private CArray<questAudioEventPrefetchStruct> _prefetchEvents;
-
 		[Ordinal(0)] 
 		[RED("prefetchEvents")] 
 		public CArray<questAudioEventPrefetchStruct> PrefetchEvents
 		{
-			get => GetProperty(ref _prefetchEvents);
-			set => SetProperty(ref _prefetchEvents, value);
+			get => GetPropertyValue<CArray<questAudioEventPrefetchStruct>>();
+			set => SetPropertyValue<CArray<questAudioEventPrefetchStruct>>(value);
+		}
+
+		public questAudioEventPrefetchNode()
+		{
+			PrefetchEvents = new();
 		}
 	}
 }

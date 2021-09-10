@@ -5,91 +5,81 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIAnimationTask : AIbehaviortaskScript
 	{
-		private TweakDBID _record;
-		private CHandle<AIArgumentMapping> _animVariation;
-		private CWeakHandle<gamedataAIAction_Record> _actionRecord;
-		private CString _actionDebugName;
-		private CInt32 _animVariationValue;
-		private CWeakHandle<gamedataAIActionPhase_Record> _phaseRecord;
-		private CEnum<EAIActionPhase> _actionPhase;
-		private CFloat _phaseActivationTime;
-		private CFloat _phaseDuration;
-
 		[Ordinal(0)] 
 		[RED("record")] 
 		public TweakDBID Record
 		{
-			get => GetProperty(ref _record);
-			set => SetProperty(ref _record, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("animVariation")] 
 		public CHandle<AIArgumentMapping> AnimVariation
 		{
-			get => GetProperty(ref _animVariation);
-			set => SetProperty(ref _animVariation, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("actionRecord")] 
 		public CWeakHandle<gamedataAIAction_Record> ActionRecord
 		{
-			get => GetProperty(ref _actionRecord);
-			set => SetProperty(ref _actionRecord, value);
+			get => GetPropertyValue<CWeakHandle<gamedataAIAction_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataAIAction_Record>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("actionDebugName")] 
 		public CString ActionDebugName
 		{
-			get => GetProperty(ref _actionDebugName);
-			set => SetProperty(ref _actionDebugName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("animVariationValue")] 
 		public CInt32 AnimVariationValue
 		{
-			get => GetProperty(ref _animVariationValue);
-			set => SetProperty(ref _animVariationValue, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("phaseRecord")] 
 		public CWeakHandle<gamedataAIActionPhase_Record> PhaseRecord
 		{
-			get => GetProperty(ref _phaseRecord);
-			set => SetProperty(ref _phaseRecord, value);
+			get => GetPropertyValue<CWeakHandle<gamedataAIActionPhase_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataAIActionPhase_Record>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("actionPhase")] 
 		public CEnum<EAIActionPhase> ActionPhase
 		{
-			get => GetProperty(ref _actionPhase);
-			set => SetProperty(ref _actionPhase, value);
+			get => GetPropertyValue<CEnum<EAIActionPhase>>();
+			set => SetPropertyValue<CEnum<EAIActionPhase>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("phaseActivationTime")] 
 		public CFloat PhaseActivationTime
 		{
-			get => GetProperty(ref _phaseActivationTime);
-			set => SetProperty(ref _phaseActivationTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("phaseDuration")] 
 		public CFloat PhaseDuration
 		{
-			get => GetProperty(ref _phaseDuration);
-			set => SetProperty(ref _phaseDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public AIAnimationTask()
 		{
-			_animVariationValue = -1;
+			AnimVariationValue = -1;
 		}
 	}
 }

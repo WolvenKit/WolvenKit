@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UnregisterTrafficRunner : AIbehaviortaskScript
 	{
-		private CBool _onDeactivation;
-
 		[Ordinal(0)] 
 		[RED("onDeactivation")] 
 		public CBool OnDeactivation
 		{
-			get => GetProperty(ref _onDeactivation);
-			set => SetProperty(ref _onDeactivation, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

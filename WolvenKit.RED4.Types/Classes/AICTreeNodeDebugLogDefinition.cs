@@ -5,39 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AICTreeNodeDebugLogDefinition : AICTreeExtendableNodeDefinition
 	{
-		private CString _text;
-		private CFloat _timeOnScreen;
-		private CBool _useVisualDebug;
-
 		[Ordinal(1)] 
 		[RED("text")] 
 		public CString Text
 		{
-			get => GetProperty(ref _text);
-			set => SetProperty(ref _text, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("timeOnScreen")] 
 		public CFloat TimeOnScreen
 		{
-			get => GetProperty(ref _timeOnScreen);
-			set => SetProperty(ref _timeOnScreen, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("useVisualDebug")] 
 		public CBool UseVisualDebug
 		{
-			get => GetProperty(ref _useVisualDebug);
-			set => SetProperty(ref _useVisualDebug, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public AICTreeNodeDebugLogDefinition()
 		{
-			_text = new() { Text = "Activated!" };
-			_timeOnScreen = 2.000000F;
-			_useVisualDebug = true;
+			Text = "Activated!";
+			TimeOnScreen = 2.000000F;
+			UseVisualDebug = true;
 		}
 	}
 }

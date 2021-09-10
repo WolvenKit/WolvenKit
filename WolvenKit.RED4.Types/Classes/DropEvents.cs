@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DropEvents : CarriedObjectEvents
 	{
-		private CBool _ragdollReenabled;
-
 		[Ordinal(9)] 
 		[RED("ragdollReenabled")] 
 		public CBool RagdollReenabled
 		{
-			get => GetProperty(ref _ragdollReenabled);
-			set => SetProperty(ref _ragdollReenabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public DropEvents()
+		{
+			StyleName = "CarriedObject.Style";
+			ForceStyleName = "CarriedObject.ForcedStyle";
 		}
 	}
 }

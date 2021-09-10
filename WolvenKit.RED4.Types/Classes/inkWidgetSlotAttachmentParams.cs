@@ -5,37 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkWidgetSlotAttachmentParams : RedBaseClass
 	{
-		private CName _slotID;
-		private CBool _useSlotLayout;
-		private inkWidgetLayout _layoutOverride;
-
 		[Ordinal(0)] 
 		[RED("slotID")] 
 		public CName SlotID
 		{
-			get => GetProperty(ref _slotID);
-			set => SetProperty(ref _slotID, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("useSlotLayout")] 
 		public CBool UseSlotLayout
 		{
-			get => GetProperty(ref _useSlotLayout);
-			set => SetProperty(ref _useSlotLayout, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("layoutOverride")] 
 		public inkWidgetLayout LayoutOverride
 		{
-			get => GetProperty(ref _layoutOverride);
-			set => SetProperty(ref _layoutOverride, value);
+			get => GetPropertyValue<inkWidgetLayout>();
+			set => SetPropertyValue<inkWidgetLayout>(value);
 		}
 
 		public inkWidgetSlotAttachmentParams()
 		{
-			_useSlotLayout = true;
+			UseSlotLayout = true;
+			LayoutOverride = new() { Padding = new(), Margin = new(), AnchorPoint = new(), SizeCoefficient = 1.000000F };
 		}
 	}
 }

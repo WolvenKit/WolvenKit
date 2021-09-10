@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class BossHealthStatListener : gameScriptStatPoolsListener
 	{
-		private CWeakHandle<BossHealthBarGameController> _healthbar;
-
 		[Ordinal(0)] 
 		[RED("healthbar")] 
 		public CWeakHandle<BossHealthBarGameController> Healthbar
 		{
-			get => GetProperty(ref _healthbar);
-			set => SetProperty(ref _healthbar, value);
+			get => GetPropertyValue<CWeakHandle<BossHealthBarGameController>>();
+			set => SetPropertyValue<CWeakHandle<BossHealthBarGameController>>(value);
 		}
 	}
 }

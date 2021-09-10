@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class BlacklistEntry : IScriptable
 	{
-		private entEntityID _entryID;
-		private CEnum<BlacklistReason> _entryReason;
-		private CInt32 _warningsCount;
-		private CInt32 _reprimandID;
-
 		[Ordinal(0)] 
 		[RED("entryID")] 
 		public entEntityID EntryID
 		{
-			get => GetProperty(ref _entryID);
-			set => SetProperty(ref _entryID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("entryReason")] 
 		public CEnum<BlacklistReason> EntryReason
 		{
-			get => GetProperty(ref _entryReason);
-			set => SetProperty(ref _entryReason, value);
+			get => GetPropertyValue<CEnum<BlacklistReason>>();
+			set => SetPropertyValue<CEnum<BlacklistReason>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("warningsCount")] 
 		public CInt32 WarningsCount
 		{
-			get => GetProperty(ref _warningsCount);
-			set => SetProperty(ref _warningsCount, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("reprimandID")] 
 		public CInt32 ReprimandID
 		{
-			get => GetProperty(ref _reprimandID);
-			set => SetProperty(ref _reprimandID, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		public BlacklistEntry()
+		{
+			EntryID = new();
 		}
 	}
 }

@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_TransformLatch : animAnimNode_TransformValue
 	{
-		private animTransformLink _input;
-
 		[Ordinal(11)] 
 		[RED("input")] 
 		public animTransformLink Input
 		{
-			get => GetProperty(ref _input);
-			set => SetProperty(ref _input, value);
+			get => GetPropertyValue<animTransformLink>();
+			set => SetPropertyValue<animTransformLink>(value);
+		}
+
+		public animAnimNode_TransformLatch()
+		{
+			Id = 4294967295;
+			Input = new();
 		}
 	}
 }

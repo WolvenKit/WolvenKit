@@ -5,39 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class FoliageShadowConfig : RedBaseClass
 	{
-		private CFloat _foliageShadowCascadeGradient;
-		private CFloat _foliageShadowCascadeFilterScale;
-		private CFloat _foliageShadowCascadeGradientDistanceRange;
-
 		[Ordinal(0)] 
 		[RED("foliageShadowCascadeGradient")] 
 		public CFloat FoliageShadowCascadeGradient
 		{
-			get => GetProperty(ref _foliageShadowCascadeGradient);
-			set => SetProperty(ref _foliageShadowCascadeGradient, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("foliageShadowCascadeFilterScale")] 
 		public CFloat FoliageShadowCascadeFilterScale
 		{
-			get => GetProperty(ref _foliageShadowCascadeFilterScale);
-			set => SetProperty(ref _foliageShadowCascadeFilterScale, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("foliageShadowCascadeGradientDistanceRange")] 
 		public CFloat FoliageShadowCascadeGradientDistanceRange
 		{
-			get => GetProperty(ref _foliageShadowCascadeGradientDistanceRange);
-			set => SetProperty(ref _foliageShadowCascadeGradientDistanceRange, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public FoliageShadowConfig()
 		{
-			_foliageShadowCascadeGradient = 0.100000F;
-			_foliageShadowCascadeFilterScale = 0.100000F;
-			_foliageShadowCascadeGradientDistanceRange = 50.000000F;
+			FoliageShadowCascadeGradient = 0.100000F;
+			FoliageShadowCascadeFilterScale = 0.100000F;
+			FoliageShadowCascadeGradientDistanceRange = 50.000000F;
 		}
 	}
 }

@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VendingMachineDeviceBlackboardDef : DeviceBaseBlackboardDef
 	{
-		private gamebbScriptID_Variant _actionStatus;
-		private gamebbScriptID_Bool _soldOut;
-
 		[Ordinal(7)] 
 		[RED("ActionStatus")] 
 		public gamebbScriptID_Variant ActionStatus
 		{
-			get => GetProperty(ref _actionStatus);
-			set => SetProperty(ref _actionStatus, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("SoldOut")] 
 		public gamebbScriptID_Bool SoldOut
 		{
-			get => GetProperty(ref _soldOut);
-			set => SetProperty(ref _soldOut, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		public VendingMachineDeviceBlackboardDef()
+		{
+			ActionStatus = new();
+			SoldOut = new();
 		}
 	}
 }

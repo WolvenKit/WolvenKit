@@ -5,91 +5,85 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class Multilayer_LayerTemplate : CResource
 	{
-		private Multilayer_LayerTemplateOverrides _overrides;
-		private Multilayer_LayerOverrideSelection _defaultOverrides;
-		private CResourceReference<CBitmapTexture> _colorTexture;
-		private CResourceReference<CBitmapTexture> _normalTexture;
-		private CResourceReference<CBitmapTexture> _roughnessTexture;
-		private CResourceReference<CBitmapTexture> _metalnessTexture;
-		private CFloat _tilingMultiplier;
-		private CArrayFixedSize<CFloat> _colorMaskLevelsIn;
-		private CArrayFixedSize<CFloat> _colorMaskLevelsOut;
-
 		[Ordinal(1)] 
 		[RED("overrides")] 
 		public Multilayer_LayerTemplateOverrides Overrides
 		{
-			get => GetProperty(ref _overrides);
-			set => SetProperty(ref _overrides, value);
+			get => GetPropertyValue<Multilayer_LayerTemplateOverrides>();
+			set => SetPropertyValue<Multilayer_LayerTemplateOverrides>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("defaultOverrides")] 
 		public Multilayer_LayerOverrideSelection DefaultOverrides
 		{
-			get => GetProperty(ref _defaultOverrides);
-			set => SetProperty(ref _defaultOverrides, value);
+			get => GetPropertyValue<Multilayer_LayerOverrideSelection>();
+			set => SetPropertyValue<Multilayer_LayerOverrideSelection>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("colorTexture")] 
 		public CResourceReference<CBitmapTexture> ColorTexture
 		{
-			get => GetProperty(ref _colorTexture);
-			set => SetProperty(ref _colorTexture, value);
+			get => GetPropertyValue<CResourceReference<CBitmapTexture>>();
+			set => SetPropertyValue<CResourceReference<CBitmapTexture>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("normalTexture")] 
 		public CResourceReference<CBitmapTexture> NormalTexture
 		{
-			get => GetProperty(ref _normalTexture);
-			set => SetProperty(ref _normalTexture, value);
+			get => GetPropertyValue<CResourceReference<CBitmapTexture>>();
+			set => SetPropertyValue<CResourceReference<CBitmapTexture>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("roughnessTexture")] 
 		public CResourceReference<CBitmapTexture> RoughnessTexture
 		{
-			get => GetProperty(ref _roughnessTexture);
-			set => SetProperty(ref _roughnessTexture, value);
+			get => GetPropertyValue<CResourceReference<CBitmapTexture>>();
+			set => SetPropertyValue<CResourceReference<CBitmapTexture>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("metalnessTexture")] 
 		public CResourceReference<CBitmapTexture> MetalnessTexture
 		{
-			get => GetProperty(ref _metalnessTexture);
-			set => SetProperty(ref _metalnessTexture, value);
+			get => GetPropertyValue<CResourceReference<CBitmapTexture>>();
+			set => SetPropertyValue<CResourceReference<CBitmapTexture>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("tilingMultiplier")] 
 		public CFloat TilingMultiplier
 		{
-			get => GetProperty(ref _tilingMultiplier);
-			set => SetProperty(ref _tilingMultiplier, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("colorMaskLevelsIn", 2)] 
 		public CArrayFixedSize<CFloat> ColorMaskLevelsIn
 		{
-			get => GetProperty(ref _colorMaskLevelsIn);
-			set => SetProperty(ref _colorMaskLevelsIn, value);
+			get => GetPropertyValue<CArrayFixedSize<CFloat>>();
+			set => SetPropertyValue<CArrayFixedSize<CFloat>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("colorMaskLevelsOut", 2)] 
 		public CArrayFixedSize<CFloat> ColorMaskLevelsOut
 		{
-			get => GetProperty(ref _colorMaskLevelsOut);
-			set => SetProperty(ref _colorMaskLevelsOut, value);
+			get => GetPropertyValue<CArrayFixedSize<CFloat>>();
+			set => SetPropertyValue<CArrayFixedSize<CFloat>>(value);
 		}
 
 		public Multilayer_LayerTemplate()
 		{
-			_tilingMultiplier = 1.000000F;
+			Overrides = new() { ColorScale = new(), RoughLevelsIn = new(), RoughLevelsOut = new(), MetalLevelsIn = new(), MetalLevelsOut = new(), NormalStrength = new() };
+			DefaultOverrides = new() { ColorScale = "null_null", NormalStrength = "null", RoughLevelsIn = "null", RoughLevelsOut = "null", MetalLevelsIn = "null", MetalLevelsOut = "null" };
+			TilingMultiplier = 1.000000F;
+			ColorMaskLevelsIn = new(2);
+			ColorMaskLevelsOut = new(2);
 		}
 	}
 }

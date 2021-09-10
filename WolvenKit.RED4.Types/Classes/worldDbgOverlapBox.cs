@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldDbgOverlapBox : RedBaseClass
 	{
-		private Box _box;
-		private Transform _transform;
-		private CUInt32 _level;
-		private CBool _isHit;
-
 		[Ordinal(0)] 
 		[RED("box")] 
 		public Box Box
 		{
-			get => GetProperty(ref _box);
-			set => SetProperty(ref _box, value);
+			get => GetPropertyValue<Box>();
+			set => SetPropertyValue<Box>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("transform")] 
 		public Transform Transform
 		{
-			get => GetProperty(ref _transform);
-			set => SetProperty(ref _transform, value);
+			get => GetPropertyValue<Transform>();
+			set => SetPropertyValue<Transform>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("level")] 
 		public CUInt32 Level
 		{
-			get => GetProperty(ref _level);
-			set => SetProperty(ref _level, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isHit")] 
 		public CBool IsHit
 		{
-			get => GetProperty(ref _isHit);
-			set => SetProperty(ref _isHit, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public worldDbgOverlapBox()
+		{
+			Box = new() { Min = new(), Max = new() };
+			Transform = new() { Position = new(), Orientation = new() { R = 1.000000F } };
 		}
 	}
 }

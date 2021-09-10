@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_IntLatch : animAnimNode_IntValue
 	{
-		private animIntLink _input;
-
 		[Ordinal(11)] 
 		[RED("input")] 
 		public animIntLink Input
 		{
-			get => GetProperty(ref _input);
-			set => SetProperty(ref _input, value);
+			get => GetPropertyValue<animIntLink>();
+			set => SetPropertyValue<animIntLink>(value);
+		}
+
+		public animAnimNode_IntLatch()
+		{
+			Id = 4294967295;
+			Input = new();
 		}
 	}
 }

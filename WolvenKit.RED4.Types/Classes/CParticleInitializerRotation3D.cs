@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CParticleInitializerRotation3D : IParticleInitializer
 	{
-		private CHandle<IEvaluatorVector> _rotation;
-
 		[Ordinal(4)] 
 		[RED("rotation")] 
 		public CHandle<IEvaluatorVector> Rotation
 		{
-			get => GetProperty(ref _rotation);
-			set => SetProperty(ref _rotation, value);
+			get => GetPropertyValue<CHandle<IEvaluatorVector>>();
+			set => SetPropertyValue<CHandle<IEvaluatorVector>>(value);
+		}
+
+		public CParticleInitializerRotation3D()
+		{
+			EditorName = "Inital rotation 3D";
+			EditorGroup = "Rotation";
+			IsEnabled = true;
 		}
 	}
 }

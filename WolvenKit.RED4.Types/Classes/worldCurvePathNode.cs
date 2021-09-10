@@ -5,112 +5,103 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldCurvePathNode : worldSplineNode
 	{
-		private animCurvePathBakerUserInput _userInput;
-		private Vector4 _defaultForwardVector;
-		private CFloat _globalInBlendTime;
-		private CFloat _globalOutBlendTime;
-		private CName _defaultPoseAnimationName;
-		private CFloat _defaultPoseSampleTime;
-		private CFloat _initialDiffYaw;
-		private CBool _turnCharacterToMatchVelocity;
-		private CResourceReference<animRig> _rig;
-		private CArray<CResourceReference<animAnimSet>> _animSets;
-		private CFloat _timeDeltaMultiplier;
-
 		[Ordinal(9)] 
 		[RED("userInput")] 
 		public animCurvePathBakerUserInput UserInput
 		{
-			get => GetProperty(ref _userInput);
-			set => SetProperty(ref _userInput, value);
+			get => GetPropertyValue<animCurvePathBakerUserInput>();
+			set => SetPropertyValue<animCurvePathBakerUserInput>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("defaultForwardVector")] 
 		public Vector4 DefaultForwardVector
 		{
-			get => GetProperty(ref _defaultForwardVector);
-			set => SetProperty(ref _defaultForwardVector, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("globalInBlendTime")] 
 		public CFloat GlobalInBlendTime
 		{
-			get => GetProperty(ref _globalInBlendTime);
-			set => SetProperty(ref _globalInBlendTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("globalOutBlendTime")] 
 		public CFloat GlobalOutBlendTime
 		{
-			get => GetProperty(ref _globalOutBlendTime);
-			set => SetProperty(ref _globalOutBlendTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("defaultPoseAnimationName")] 
 		public CName DefaultPoseAnimationName
 		{
-			get => GetProperty(ref _defaultPoseAnimationName);
-			set => SetProperty(ref _defaultPoseAnimationName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("defaultPoseSampleTime")] 
 		public CFloat DefaultPoseSampleTime
 		{
-			get => GetProperty(ref _defaultPoseSampleTime);
-			set => SetProperty(ref _defaultPoseSampleTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("initialDiffYaw")] 
 		public CFloat InitialDiffYaw
 		{
-			get => GetProperty(ref _initialDiffYaw);
-			set => SetProperty(ref _initialDiffYaw, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("turnCharacterToMatchVelocity")] 
 		public CBool TurnCharacterToMatchVelocity
 		{
-			get => GetProperty(ref _turnCharacterToMatchVelocity);
-			set => SetProperty(ref _turnCharacterToMatchVelocity, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("rig")] 
 		public CResourceReference<animRig> Rig
 		{
-			get => GetProperty(ref _rig);
-			set => SetProperty(ref _rig, value);
+			get => GetPropertyValue<CResourceReference<animRig>>();
+			set => SetPropertyValue<CResourceReference<animRig>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("animSets")] 
 		public CArray<CResourceReference<animAnimSet>> AnimSets
 		{
-			get => GetProperty(ref _animSets);
-			set => SetProperty(ref _animSets, value);
+			get => GetPropertyValue<CArray<CResourceReference<animAnimSet>>>();
+			set => SetPropertyValue<CArray<CResourceReference<animAnimSet>>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("timeDeltaMultiplier")] 
 		public CFloat TimeDeltaMultiplier
 		{
-			get => GetProperty(ref _timeDeltaMultiplier);
-			set => SetProperty(ref _timeDeltaMultiplier, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public worldCurvePathNode()
 		{
-			_globalInBlendTime = 0.200000F;
-			_globalOutBlendTime = 0.200000F;
-			_turnCharacterToMatchVelocity = true;
-			_timeDeltaMultiplier = 1.000000F;
+			UserInput = new();
+			DefaultForwardVector = new() { Y = 1.000000F };
+			GlobalInBlendTime = 0.200000F;
+			GlobalOutBlendTime = 0.200000F;
+			TurnCharacterToMatchVelocity = true;
+			AnimSets = new();
+			TimeDeltaMultiplier = 1.000000F;
 		}
 	}
 }

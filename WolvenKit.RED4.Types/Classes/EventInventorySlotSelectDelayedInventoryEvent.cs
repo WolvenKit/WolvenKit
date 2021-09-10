@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class EventInventorySlotSelectDelayedInventoryEvent : redEvent
 	{
-		private InventoryItemData _controller;
-		private CWeakHandle<inkWidget> _target;
-
 		[Ordinal(0)] 
 		[RED("controller")] 
 		public InventoryItemData Controller
 		{
-			get => GetProperty(ref _controller);
-			set => SetProperty(ref _controller, value);
+			get => GetPropertyValue<InventoryItemData>();
+			set => SetPropertyValue<InventoryItemData>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("target")] 
 		public CWeakHandle<inkWidget> Target
 		{
-			get => GetProperty(ref _target);
-			set => SetProperty(ref _target, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
+		}
+
+		public EventInventorySlotSelectDelayedInventoryEvent()
+		{
+			Controller = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
 		}
 	}
 }

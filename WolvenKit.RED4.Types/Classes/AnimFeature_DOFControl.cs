@@ -5,68 +5,60 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AnimFeature_DOFControl : animAnimFeature
 	{
-		private CFloat _dofIntensity;
-		private CFloat _dofNearBlur;
-		private CFloat _dofNearFocus;
-		private CFloat _dofFarBlur;
-		private CFloat _dofFarFocus;
-		private CFloat _dofBlendInTime;
-		private CFloat _dofBlendOutTime;
-
 		[Ordinal(0)] 
 		[RED("dofIntensity")] 
 		public CFloat DofIntensity
 		{
-			get => GetProperty(ref _dofIntensity);
-			set => SetProperty(ref _dofIntensity, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("dofNearBlur")] 
 		public CFloat DofNearBlur
 		{
-			get => GetProperty(ref _dofNearBlur);
-			set => SetProperty(ref _dofNearBlur, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("dofNearFocus")] 
 		public CFloat DofNearFocus
 		{
-			get => GetProperty(ref _dofNearFocus);
-			set => SetProperty(ref _dofNearFocus, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("dofFarBlur")] 
 		public CFloat DofFarBlur
 		{
-			get => GetProperty(ref _dofFarBlur);
-			set => SetProperty(ref _dofFarBlur, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("dofFarFocus")] 
 		public CFloat DofFarFocus
 		{
-			get => GetProperty(ref _dofFarFocus);
-			set => SetProperty(ref _dofFarFocus, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("dofBlendInTime")] 
 		public CFloat DofBlendInTime
 		{
-			get => GetProperty(ref _dofBlendInTime);
-			set => SetProperty(ref _dofBlendInTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("dofBlendOutTime")] 
 		public CFloat DofBlendOutTime
 		{
-			get => GetProperty(ref _dofBlendOutTime);
-			set => SetProperty(ref _dofBlendOutTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

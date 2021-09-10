@@ -5,167 +5,154 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MonoDisc : BaseProjectile
 	{
-		private CEnum<ThrowType> _throwtype;
-		private CBool _targetAcquired;
-		private CWeakHandle<gameObject> _player;
-		private CWeakHandle<gameObject> _disc;
-		private CWeakHandle<gameObject> _target;
-		private CWeakHandle<gameIBlackboard> _blackboard;
-		private Vector4 _discSpawnPoint;
-		private Vector4 _discPosition;
-		private CInt32 _collisionCount;
-		private CFloat _airTime;
-		private CFloat _destroyTimer;
-		private CBool _returningToPlayer;
-		private CBool _catchingPlayer;
-		private CBool _discCaught;
-		private CBool _discLodgedToSurface;
-		private CHandle<redCallbackObject> _onProjectileCaughtCallback;
-		private CBool _wasNPCHit;
-		private CHandle<entAnimationControllerComponent> _animationController;
-
 		[Ordinal(51)] 
 		[RED("throwtype")] 
 		public CEnum<ThrowType> Throwtype
 		{
-			get => GetProperty(ref _throwtype);
-			set => SetProperty(ref _throwtype, value);
+			get => GetPropertyValue<CEnum<ThrowType>>();
+			set => SetPropertyValue<CEnum<ThrowType>>(value);
 		}
 
 		[Ordinal(52)] 
 		[RED("targetAcquired")] 
 		public CBool TargetAcquired
 		{
-			get => GetProperty(ref _targetAcquired);
-			set => SetProperty(ref _targetAcquired, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(53)] 
 		[RED("player")] 
 		public CWeakHandle<gameObject> Player
 		{
-			get => GetProperty(ref _player);
-			set => SetProperty(ref _player, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(54)] 
 		[RED("disc")] 
 		public CWeakHandle<gameObject> Disc
 		{
-			get => GetProperty(ref _disc);
-			set => SetProperty(ref _disc, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(55)] 
 		[RED("target")] 
 		public CWeakHandle<gameObject> Target
 		{
-			get => GetProperty(ref _target);
-			set => SetProperty(ref _target, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(56)] 
 		[RED("blackboard")] 
 		public CWeakHandle<gameIBlackboard> Blackboard
 		{
-			get => GetProperty(ref _blackboard);
-			set => SetProperty(ref _blackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(57)] 
 		[RED("discSpawnPoint")] 
 		public Vector4 DiscSpawnPoint
 		{
-			get => GetProperty(ref _discSpawnPoint);
-			set => SetProperty(ref _discSpawnPoint, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(58)] 
 		[RED("discPosition")] 
 		public Vector4 DiscPosition
 		{
-			get => GetProperty(ref _discPosition);
-			set => SetProperty(ref _discPosition, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(59)] 
 		[RED("collisionCount")] 
 		public CInt32 CollisionCount
 		{
-			get => GetProperty(ref _collisionCount);
-			set => SetProperty(ref _collisionCount, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(60)] 
 		[RED("airTime")] 
 		public CFloat AirTime
 		{
-			get => GetProperty(ref _airTime);
-			set => SetProperty(ref _airTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(61)] 
 		[RED("destroyTimer")] 
 		public CFloat DestroyTimer
 		{
-			get => GetProperty(ref _destroyTimer);
-			set => SetProperty(ref _destroyTimer, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(62)] 
 		[RED("returningToPlayer")] 
 		public CBool ReturningToPlayer
 		{
-			get => GetProperty(ref _returningToPlayer);
-			set => SetProperty(ref _returningToPlayer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(63)] 
 		[RED("catchingPlayer")] 
 		public CBool CatchingPlayer
 		{
-			get => GetProperty(ref _catchingPlayer);
-			set => SetProperty(ref _catchingPlayer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(64)] 
 		[RED("discCaught")] 
 		public CBool DiscCaught
 		{
-			get => GetProperty(ref _discCaught);
-			set => SetProperty(ref _discCaught, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(65)] 
 		[RED("discLodgedToSurface")] 
 		public CBool DiscLodgedToSurface
 		{
-			get => GetProperty(ref _discLodgedToSurface);
-			set => SetProperty(ref _discLodgedToSurface, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(66)] 
 		[RED("OnProjectileCaughtCallback")] 
 		public CHandle<redCallbackObject> OnProjectileCaughtCallback
 		{
-			get => GetProperty(ref _onProjectileCaughtCallback);
-			set => SetProperty(ref _onProjectileCaughtCallback, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(67)] 
 		[RED("wasNPCHit")] 
 		public CBool WasNPCHit
 		{
-			get => GetProperty(ref _wasNPCHit);
-			set => SetProperty(ref _wasNPCHit, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(68)] 
 		[RED("animationController")] 
 		public CHandle<entAnimationControllerComponent> AnimationController
 		{
-			get => GetProperty(ref _animationController);
-			set => SetProperty(ref _animationController, value);
+			get => GetPropertyValue<CHandle<entAnimationControllerComponent>>();
+			set => SetPropertyValue<CHandle<entAnimationControllerComponent>>(value);
+		}
+
+		public MonoDisc()
+		{
+			DiscSpawnPoint = new();
+			DiscPosition = new();
 		}
 	}
 }

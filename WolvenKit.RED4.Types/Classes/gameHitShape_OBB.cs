@@ -5,14 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameHitShape_OBB : gameHitShapeBase
 	{
-		private Vector3 _dimensions;
-
 		[Ordinal(3)] 
 		[RED("dimensions")] 
 		public Vector3 Dimensions
 		{
-			get => GetProperty(ref _dimensions);
-			set => SetProperty(ref _dimensions, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
+		}
+
+		public gameHitShape_OBB()
+		{
+			Translation = new();
+			Rotation = new() { R = 1.000000F };
+			LocalTransform = new();
+			Dimensions = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
 		}
 	}
 }

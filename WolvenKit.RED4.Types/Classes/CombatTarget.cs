@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CombatTarget : RedBaseClass
 	{
-		private CWeakHandle<ScriptedPuppet> _puppet;
-		private CBool _hasTime;
-		private CFloat _highlightTime;
-
 		[Ordinal(0)] 
 		[RED("puppet")] 
 		public CWeakHandle<ScriptedPuppet> Puppet
 		{
-			get => GetProperty(ref _puppet);
-			set => SetProperty(ref _puppet, value);
+			get => GetPropertyValue<CWeakHandle<ScriptedPuppet>>();
+			set => SetPropertyValue<CWeakHandle<ScriptedPuppet>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hasTime")] 
 		public CBool HasTime
 		{
-			get => GetProperty(ref _hasTime);
-			set => SetProperty(ref _hasTime, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("highlightTime")] 
 		public CFloat HighlightTime
 		{
-			get => GetProperty(ref _highlightTime);
-			set => SetProperty(ref _highlightTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

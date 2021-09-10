@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entPhysicalTriggerComponent : entIPlacedComponent
 	{
-		private CEnum<physicsSimulationType> _simulationType;
-		private physicsTriggerShape _shape;
-		private CHandle<physicsFilterData> _filterData;
-		private CBool _isEnabled;
-
 		[Ordinal(5)] 
 		[RED("simulationType")] 
 		public CEnum<physicsSimulationType> SimulationType
 		{
-			get => GetProperty(ref _simulationType);
-			set => SetProperty(ref _simulationType, value);
+			get => GetPropertyValue<CEnum<physicsSimulationType>>();
+			set => SetPropertyValue<CEnum<physicsSimulationType>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("shape")] 
 		public physicsTriggerShape Shape
 		{
-			get => GetProperty(ref _shape);
-			set => SetProperty(ref _shape, value);
+			get => GetPropertyValue<physicsTriggerShape>();
+			set => SetPropertyValue<physicsTriggerShape>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("filterData")] 
 		public CHandle<physicsFilterData> FilterData
 		{
-			get => GetProperty(ref _filterData);
-			set => SetProperty(ref _filterData, value);
+			get => GetPropertyValue<CHandle<physicsFilterData>>();
+			set => SetPropertyValue<CHandle<physicsFilterData>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

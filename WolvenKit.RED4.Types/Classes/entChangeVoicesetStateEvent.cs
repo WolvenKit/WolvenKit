@@ -5,38 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entChangeVoicesetStateEvent : redEvent
 	{
-		private CBool _enableVoicesetLines;
-		private CBool _enableVoicesetGrunts;
-		private CArray<entVoicesetInputToBlock> _inputsToBlock;
-
 		[Ordinal(0)] 
 		[RED("enableVoicesetLines")] 
 		public CBool EnableVoicesetLines
 		{
-			get => GetProperty(ref _enableVoicesetLines);
-			set => SetProperty(ref _enableVoicesetLines, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("enableVoicesetGrunts")] 
 		public CBool EnableVoicesetGrunts
 		{
-			get => GetProperty(ref _enableVoicesetGrunts);
-			set => SetProperty(ref _enableVoicesetGrunts, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("inputsToBlock")] 
 		public CArray<entVoicesetInputToBlock> InputsToBlock
 		{
-			get => GetProperty(ref _inputsToBlock);
-			set => SetProperty(ref _inputsToBlock, value);
+			get => GetPropertyValue<CArray<entVoicesetInputToBlock>>();
+			set => SetPropertyValue<CArray<entVoicesetInputToBlock>>(value);
 		}
 
 		public entChangeVoicesetStateEvent()
 		{
-			_enableVoicesetLines = true;
-			_enableVoicesetGrunts = true;
+			EnableVoicesetLines = true;
+			EnableVoicesetGrunts = true;
+			InputsToBlock = new();
 		}
 	}
 }

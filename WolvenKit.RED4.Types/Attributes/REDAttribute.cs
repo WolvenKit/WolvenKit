@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
     /// <summary>
     /// Marks a field as serializable for redengine files.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
     public class REDAttribute : Attribute
     {
         #region Constructors
@@ -132,5 +132,21 @@ namespace WolvenKit.RED4.Types
         }
 
         #endregion Methods
+    }
+
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    public sealed class REDClassAttribute : Attribute
+    {
+        internal REDClassAttribute() { }
+
+        public bool SerializeDefault { get; set; } = false;
+    }
+
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    public sealed class REDPropertyAttribute : Attribute
+    {
+        internal REDPropertyAttribute() { }
+
+        public bool IsIgnored { get; set; } = false;
     }
 }

@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class meshMeshParamTerrain : meshMeshParameter
 	{
-		private CArray<Box> _chunkBoundingBoxes;
-
 		[Ordinal(0)] 
 		[RED("chunkBoundingBoxes")] 
 		public CArray<Box> ChunkBoundingBoxes
 		{
-			get => GetProperty(ref _chunkBoundingBoxes);
-			set => SetProperty(ref _chunkBoundingBoxes, value);
+			get => GetPropertyValue<CArray<Box>>();
+			set => SetPropertyValue<CArray<Box>>(value);
+		}
+
+		public meshMeshParamTerrain()
+		{
+			ChunkBoundingBoxes = new();
 		}
 	}
 }

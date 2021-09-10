@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class BaseChunkGameController : gameuiWidgetGameController
 	{
-		private CWeakHandle<gameIBlackboard> _chunkBlackboard;
-		private CHandle<UI_ScannerModulesDef> _chunkBlackboardDef;
-		private CHandle<UI_ScannerDef> _questClueBlackboardDef;
-
 		[Ordinal(2)] 
 		[RED("chunkBlackboard")] 
 		public CWeakHandle<gameIBlackboard> ChunkBlackboard
 		{
-			get => GetProperty(ref _chunkBlackboard);
-			set => SetProperty(ref _chunkBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("chunkBlackboardDef")] 
 		public CHandle<UI_ScannerModulesDef> ChunkBlackboardDef
 		{
-			get => GetProperty(ref _chunkBlackboardDef);
-			set => SetProperty(ref _chunkBlackboardDef, value);
+			get => GetPropertyValue<CHandle<UI_ScannerModulesDef>>();
+			set => SetPropertyValue<CHandle<UI_ScannerModulesDef>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("questClueBlackboardDef")] 
 		public CHandle<UI_ScannerDef> QuestClueBlackboardDef
 		{
-			get => GetProperty(ref _questClueBlackboardDef);
-			set => SetProperty(ref _questClueBlackboardDef, value);
+			get => GetPropertyValue<CHandle<UI_ScannerDef>>();
+			set => SetPropertyValue<CHandle<UI_ScannerDef>>(value);
 		}
 	}
 }

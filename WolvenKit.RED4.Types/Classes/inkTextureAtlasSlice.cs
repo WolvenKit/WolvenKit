@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkTextureAtlasSlice : RedBaseClass
 	{
-		private CName _partName;
-		private RectF _nineSliceScaleRect;
-
 		[Ordinal(0)] 
 		[RED("partName")] 
 		public CName PartName
 		{
-			get => GetProperty(ref _partName);
-			set => SetProperty(ref _partName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("nineSliceScaleRect")] 
 		public RectF NineSliceScaleRect
 		{
-			get => GetProperty(ref _nineSliceScaleRect);
-			set => SetProperty(ref _nineSliceScaleRect, value);
+			get => GetPropertyValue<RectF>();
+			set => SetPropertyValue<RectF>(value);
+		}
+
+		public inkTextureAtlasSlice()
+		{
+			NineSliceScaleRect = new();
 		}
 	}
 }

@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimFeature_Aim : animAnimFeature_BasicAim
 	{
-		private Vector4 _aimPoint;
-
 		[Ordinal(2)] 
 		[RED("aimPoint")] 
 		public Vector4 AimPoint
 		{
-			get => GetProperty(ref _aimPoint);
-			set => SetProperty(ref _aimPoint, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
+		}
+
+		public animAnimFeature_Aim()
+		{
+			AimPoint = new() { Y = 1.000000F, W = 1.000000F };
 		}
 	}
 }

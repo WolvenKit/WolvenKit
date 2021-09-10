@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameinteractionsCSharedDataDefinition : RedBaseClass
 	{
-		private CArray<CString> _defaultChoices;
-		private CHandle<gameuiIChoiceVisualizer> _visualizer;
-
 		[Ordinal(0)] 
 		[RED("defaultChoices")] 
 		public CArray<CString> DefaultChoices
 		{
-			get => GetProperty(ref _defaultChoices);
-			set => SetProperty(ref _defaultChoices, value);
+			get => GetPropertyValue<CArray<CString>>();
+			set => SetPropertyValue<CArray<CString>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("visualizer")] 
 		public CHandle<gameuiIChoiceVisualizer> Visualizer
 		{
-			get => GetProperty(ref _visualizer);
-			set => SetProperty(ref _visualizer, value);
+			get => GetPropertyValue<CHandle<gameuiIChoiceVisualizer>>();
+			set => SetPropertyValue<CHandle<gameuiIChoiceVisualizer>>(value);
+		}
+
+		public gameinteractionsCSharedDataDefinition()
+		{
+			DefaultChoices = new();
 		}
 	}
 }

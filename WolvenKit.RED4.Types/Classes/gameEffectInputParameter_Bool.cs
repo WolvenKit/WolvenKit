@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameEffectInputParameter_Bool : RedBaseClass
 	{
-		private CHandle<gameIEffectParameter_BoolEvaluator> _evaluator;
-
 		[Ordinal(0)] 
 		[RED("evaluator")] 
 		public CHandle<gameIEffectParameter_BoolEvaluator> Evaluator
 		{
-			get => GetProperty(ref _evaluator);
-			set => SetProperty(ref _evaluator, value);
+			get => GetPropertyValue<CHandle<gameIEffectParameter_BoolEvaluator>>();
+			set => SetPropertyValue<CHandle<gameIEffectParameter_BoolEvaluator>>(value);
 		}
 	}
 }

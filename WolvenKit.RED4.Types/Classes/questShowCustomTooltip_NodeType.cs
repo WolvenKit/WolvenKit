@@ -5,56 +5,51 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questShowCustomTooltip_NodeType : questIUIManagerNodeType
 	{
-		private CBool _setTooltip;
-		private LocalizationString _text;
-		private CString _inputAction;
-		private CEnum<inkInputHintHoldIndicationType> _holdIndicationType;
-		private CInt32 _queuePriority;
-
 		[Ordinal(0)] 
 		[RED("setTooltip")] 
 		public CBool SetTooltip
 		{
-			get => GetProperty(ref _setTooltip);
-			set => SetProperty(ref _setTooltip, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("text")] 
 		public LocalizationString Text
 		{
-			get => GetProperty(ref _text);
-			set => SetProperty(ref _text, value);
+			get => GetPropertyValue<LocalizationString>();
+			set => SetPropertyValue<LocalizationString>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("inputAction")] 
 		public CString InputAction
 		{
-			get => GetProperty(ref _inputAction);
-			set => SetProperty(ref _inputAction, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("holdIndicationType")] 
 		public CEnum<inkInputHintHoldIndicationType> HoldIndicationType
 		{
-			get => GetProperty(ref _holdIndicationType);
-			set => SetProperty(ref _holdIndicationType, value);
+			get => GetPropertyValue<CEnum<inkInputHintHoldIndicationType>>();
+			set => SetPropertyValue<CEnum<inkInputHintHoldIndicationType>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("queuePriority")] 
 		public CInt32 QueuePriority
 		{
-			get => GetProperty(ref _queuePriority);
-			set => SetProperty(ref _queuePriority, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		public questShowCustomTooltip_NodeType()
 		{
-			_setTooltip = true;
-			_queuePriority = -1;
+			SetTooltip = true;
+			Text = new() { Unk1 = 0, Value = "" };
+			QueuePriority = -1;
 		}
 	}
 }

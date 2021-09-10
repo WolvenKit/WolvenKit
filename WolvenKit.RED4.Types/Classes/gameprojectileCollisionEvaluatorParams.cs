@@ -5,68 +5,65 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameprojectileCollisionEvaluatorParams : IScriptable
 	{
-		private CWeakHandle<gameObject> _target;
-		private CBool _isPiercableSurface;
-		private CFloat _angle;
-		private CUInt32 _numBounces;
-		private Vector4 _position;
-		private CName _projectilePenetration;
-		private CBool _isTechPiercing;
-
 		[Ordinal(0)] 
 		[RED("target")] 
 		public CWeakHandle<gameObject> Target
 		{
-			get => GetProperty(ref _target);
-			set => SetProperty(ref _target, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isPiercableSurface")] 
 		public CBool IsPiercableSurface
 		{
-			get => GetProperty(ref _isPiercableSurface);
-			set => SetProperty(ref _isPiercableSurface, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("angle")] 
 		public CFloat Angle
 		{
-			get => GetProperty(ref _angle);
-			set => SetProperty(ref _angle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("numBounces")] 
 		public CUInt32 NumBounces
 		{
-			get => GetProperty(ref _numBounces);
-			set => SetProperty(ref _numBounces, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("position")] 
 		public Vector4 Position
 		{
-			get => GetProperty(ref _position);
-			set => SetProperty(ref _position, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("projectilePenetration")] 
 		public CName ProjectilePenetration
 		{
-			get => GetProperty(ref _projectilePenetration);
-			set => SetProperty(ref _projectilePenetration, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isTechPiercing")] 
 		public CBool IsTechPiercing
 		{
-			get => GetProperty(ref _isTechPiercing);
-			set => SetProperty(ref _isTechPiercing, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public gameprojectileCollisionEvaluatorParams()
+		{
+			Position = new();
 		}
 	}
 }

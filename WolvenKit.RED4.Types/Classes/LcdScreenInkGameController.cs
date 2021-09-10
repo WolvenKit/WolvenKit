@@ -5,86 +5,76 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class LcdScreenInkGameController : DeviceInkGameControllerBase
 	{
-		private CWeakHandle<inkCanvasWidget> _defaultUI;
-		private CWeakHandle<inkVideoWidget> _mainDisplayWidget;
-		private CWeakHandle<inkTextWidget> _messegeWidget;
-		private CWeakHandle<inkLeafWidget> _backgroundWidget;
-		private CWeakHandle<gamedataScreenMessageData_Record> _messegeRecord;
-		private CBool _replaceTextWithCustomNumber;
-		private CInt32 _customNumber;
-		private CHandle<redCallbackObject> _onGlitchingStateChangedListener;
-		private CHandle<redCallbackObject> _onMessegeChangedListener;
-
 		[Ordinal(16)] 
 		[RED("defaultUI")] 
 		public CWeakHandle<inkCanvasWidget> DefaultUI
 		{
-			get => GetProperty(ref _defaultUI);
-			set => SetProperty(ref _defaultUI, value);
+			get => GetPropertyValue<CWeakHandle<inkCanvasWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkCanvasWidget>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("mainDisplayWidget")] 
 		public CWeakHandle<inkVideoWidget> MainDisplayWidget
 		{
-			get => GetProperty(ref _mainDisplayWidget);
-			set => SetProperty(ref _mainDisplayWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkVideoWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkVideoWidget>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("messegeWidget")] 
 		public CWeakHandle<inkTextWidget> MessegeWidget
 		{
-			get => GetProperty(ref _messegeWidget);
-			set => SetProperty(ref _messegeWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkTextWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("backgroundWidget")] 
 		public CWeakHandle<inkLeafWidget> BackgroundWidget
 		{
-			get => GetProperty(ref _backgroundWidget);
-			set => SetProperty(ref _backgroundWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkLeafWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkLeafWidget>>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("messegeRecord")] 
 		public CWeakHandle<gamedataScreenMessageData_Record> MessegeRecord
 		{
-			get => GetProperty(ref _messegeRecord);
-			set => SetProperty(ref _messegeRecord, value);
+			get => GetPropertyValue<CWeakHandle<gamedataScreenMessageData_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataScreenMessageData_Record>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("replaceTextWithCustomNumber")] 
 		public CBool ReplaceTextWithCustomNumber
 		{
-			get => GetProperty(ref _replaceTextWithCustomNumber);
-			set => SetProperty(ref _replaceTextWithCustomNumber, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("customNumber")] 
 		public CInt32 CustomNumber
 		{
-			get => GetProperty(ref _customNumber);
-			set => SetProperty(ref _customNumber, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("onGlitchingStateChangedListener")] 
 		public CHandle<redCallbackObject> OnGlitchingStateChangedListener
 		{
-			get => GetProperty(ref _onGlitchingStateChangedListener);
-			set => SetProperty(ref _onGlitchingStateChangedListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("onMessegeChangedListener")] 
 		public CHandle<redCallbackObject> OnMessegeChangedListener
 		{
-			get => GetProperty(ref _onMessegeChangedListener);
-			set => SetProperty(ref _onMessegeChangedListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 	}
 }

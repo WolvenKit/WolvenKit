@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class StimEventTaskData : gameScriptTaskData
 	{
-		private CHandle<senseStimuliEvent> _cachedEvt;
-
 		[Ordinal(0)] 
 		[RED("cachedEvt")] 
 		public CHandle<senseStimuliEvent> CachedEvt
 		{
-			get => GetProperty(ref _cachedEvt);
-			set => SetProperty(ref _cachedEvt, value);
+			get => GetPropertyValue<CHandle<senseStimuliEvent>>();
+			set => SetPropertyValue<CHandle<senseStimuliEvent>>(value);
 		}
 	}
 }

@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameJournalQuestTitleModifier : gameJournalEntry
 	{
-		private LocalizationString _title;
-
 		[Ordinal(1)] 
 		[RED("title")] 
 		public LocalizationString Title
 		{
-			get => GetProperty(ref _title);
-			set => SetProperty(ref _title, value);
+			get => GetPropertyValue<LocalizationString>();
+			set => SetPropertyValue<LocalizationString>(value);
+		}
+
+		public gameJournalQuestTitleModifier()
+		{
+			Title = new() { Unk1 = 0, Value = "" };
 		}
 	}
 }

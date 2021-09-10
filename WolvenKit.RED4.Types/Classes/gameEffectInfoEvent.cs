@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameEffectInfoEvent : redEvent
 	{
-		private CString _tag;
-		private CUInt32 _entitiesGathered;
-		private CUInt32 _entitiesFiltered;
-		private CUInt32 _entitiesProcessed;
-
 		[Ordinal(0)] 
 		[RED("tag")] 
 		public CString Tag
 		{
-			get => GetProperty(ref _tag);
-			set => SetProperty(ref _tag, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("entitiesGathered")] 
 		public CUInt32 EntitiesGathered
 		{
-			get => GetProperty(ref _entitiesGathered);
-			set => SetProperty(ref _entitiesGathered, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("entitiesFiltered")] 
 		public CUInt32 EntitiesFiltered
 		{
-			get => GetProperty(ref _entitiesFiltered);
-			set => SetProperty(ref _entitiesFiltered, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("entitiesProcessed")] 
 		public CUInt32 EntitiesProcessed
 		{
-			get => GetProperty(ref _entitiesProcessed);
-			set => SetProperty(ref _entitiesProcessed, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 	}
 }

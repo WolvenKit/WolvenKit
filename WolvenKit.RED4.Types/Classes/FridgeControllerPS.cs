@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class FridgeControllerPS : ScriptableDeviceComponentPS
 	{
-		private CBool _isOpen;
-
 		[Ordinal(104)] 
 		[RED("isOpen")] 
 		public CBool IsOpen
 		{
-			get => GetProperty(ref _isOpen);
-			set => SetProperty(ref _isOpen, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public FridgeControllerPS()
+		{
+			DeviceName = "LocKey#79";
+			TweakDBRecord = new() { Value = 63072019199 };
+			TweakDBDescriptionRecord = new() { Value = 115920876132 };
 		}
 	}
 }

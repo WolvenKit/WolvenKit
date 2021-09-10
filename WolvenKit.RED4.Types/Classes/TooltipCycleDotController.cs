@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TooltipCycleDotController : inkWidgetLogicController
 	{
-		private inkWidgetReference _slotBorder;
-		private inkWidgetReference _slotBackground;
-
 		[Ordinal(1)] 
 		[RED("slotBorder")] 
 		public inkWidgetReference SlotBorder
 		{
-			get => GetProperty(ref _slotBorder);
-			set => SetProperty(ref _slotBorder, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("slotBackground")] 
 		public inkWidgetReference SlotBackground
 		{
-			get => GetProperty(ref _slotBackground);
-			set => SetProperty(ref _slotBackground, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		public TooltipCycleDotController()
+		{
+			SlotBorder = new();
+			SlotBackground = new();
 		}
 	}
 }

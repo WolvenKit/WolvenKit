@@ -5,119 +5,107 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkImageWidget : inkLeafWidget
 	{
-		private CBool _useExternalDynamicTexture;
-		private CName _externalDynamicTexture;
-		private CBool _useNineSliceScale;
-		private inkMargin _nineSliceScale;
-		private CEnum<inkBrushMirrorType> _mirrorType;
-		private CEnum<inkBrushTileType> _tileType;
-		private CResourceAsyncReference<inkTextureAtlas> _textureAtlas;
-		private CName _texturePart;
-		private CEnum<inkEHorizontalAlign> _contentHAlign;
-		private CEnum<inkEVerticalAlign> _contentVAlign;
-		private CEnum<inkEHorizontalAlign> _tileHAlign;
-		private CEnum<inkEVerticalAlign> _tileVAlign;
-
 		[Ordinal(20)] 
 		[RED("useExternalDynamicTexture")] 
 		public CBool UseExternalDynamicTexture
 		{
-			get => GetProperty(ref _useExternalDynamicTexture);
-			set => SetProperty(ref _useExternalDynamicTexture, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("externalDynamicTexture")] 
 		public CName ExternalDynamicTexture
 		{
-			get => GetProperty(ref _externalDynamicTexture);
-			set => SetProperty(ref _externalDynamicTexture, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("useNineSliceScale")] 
 		public CBool UseNineSliceScale
 		{
-			get => GetProperty(ref _useNineSliceScale);
-			set => SetProperty(ref _useNineSliceScale, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("nineSliceScale")] 
 		public inkMargin NineSliceScale
 		{
-			get => GetProperty(ref _nineSliceScale);
-			set => SetProperty(ref _nineSliceScale, value);
+			get => GetPropertyValue<inkMargin>();
+			set => SetPropertyValue<inkMargin>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("mirrorType")] 
 		public CEnum<inkBrushMirrorType> MirrorType
 		{
-			get => GetProperty(ref _mirrorType);
-			set => SetProperty(ref _mirrorType, value);
+			get => GetPropertyValue<CEnum<inkBrushMirrorType>>();
+			set => SetPropertyValue<CEnum<inkBrushMirrorType>>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("tileType")] 
 		public CEnum<inkBrushTileType> TileType
 		{
-			get => GetProperty(ref _tileType);
-			set => SetProperty(ref _tileType, value);
+			get => GetPropertyValue<CEnum<inkBrushTileType>>();
+			set => SetPropertyValue<CEnum<inkBrushTileType>>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("textureAtlas")] 
 		public CResourceAsyncReference<inkTextureAtlas> TextureAtlas
 		{
-			get => GetProperty(ref _textureAtlas);
-			set => SetProperty(ref _textureAtlas, value);
+			get => GetPropertyValue<CResourceAsyncReference<inkTextureAtlas>>();
+			set => SetPropertyValue<CResourceAsyncReference<inkTextureAtlas>>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("texturePart")] 
 		public CName TexturePart
 		{
-			get => GetProperty(ref _texturePart);
-			set => SetProperty(ref _texturePart, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("contentHAlign")] 
 		public CEnum<inkEHorizontalAlign> ContentHAlign
 		{
-			get => GetProperty(ref _contentHAlign);
-			set => SetProperty(ref _contentHAlign, value);
+			get => GetPropertyValue<CEnum<inkEHorizontalAlign>>();
+			set => SetPropertyValue<CEnum<inkEHorizontalAlign>>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("contentVAlign")] 
 		public CEnum<inkEVerticalAlign> ContentVAlign
 		{
-			get => GetProperty(ref _contentVAlign);
-			set => SetProperty(ref _contentVAlign, value);
+			get => GetPropertyValue<CEnum<inkEVerticalAlign>>();
+			set => SetPropertyValue<CEnum<inkEVerticalAlign>>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("tileHAlign")] 
 		public CEnum<inkEHorizontalAlign> TileHAlign
 		{
-			get => GetProperty(ref _tileHAlign);
-			set => SetProperty(ref _tileHAlign, value);
+			get => GetPropertyValue<CEnum<inkEHorizontalAlign>>();
+			set => SetPropertyValue<CEnum<inkEHorizontalAlign>>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("tileVAlign")] 
 		public CEnum<inkEVerticalAlign> TileVAlign
 		{
-			get => GetProperty(ref _tileVAlign);
-			set => SetProperty(ref _tileVAlign, value);
+			get => GetPropertyValue<CEnum<inkEVerticalAlign>>();
+			set => SetPropertyValue<CEnum<inkEVerticalAlign>>(value);
 		}
 
 		public inkImageWidget()
 		{
-			_tileHAlign = new() { Value = Enums.inkEHorizontalAlign.Left };
-			_tileVAlign = new() { Value = Enums.inkEVerticalAlign.Top };
+			NineSliceScale = new();
+			TileHAlign = Enums.inkEHorizontalAlign.Left;
+			TileVAlign = Enums.inkEVerticalAlign.Top;
 		}
 	}
 }

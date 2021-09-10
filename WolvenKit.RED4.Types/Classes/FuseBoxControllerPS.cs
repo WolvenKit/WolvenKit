@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class FuseBoxControllerPS : MasterControllerPS
 	{
-		private CHandle<EngineeringContainer> _fuseBoxSkillChecks;
-		private CBool _isGenerator;
-		private CBool _isOverloaded;
-
 		[Ordinal(105)] 
 		[RED("fuseBoxSkillChecks")] 
 		public CHandle<EngineeringContainer> FuseBoxSkillChecks
 		{
-			get => GetProperty(ref _fuseBoxSkillChecks);
-			set => SetProperty(ref _fuseBoxSkillChecks, value);
+			get => GetPropertyValue<CHandle<EngineeringContainer>>();
+			set => SetPropertyValue<CHandle<EngineeringContainer>>(value);
 		}
 
 		[Ordinal(106)] 
 		[RED("isGenerator")] 
 		public CBool IsGenerator
 		{
-			get => GetProperty(ref _isGenerator);
-			set => SetProperty(ref _isGenerator, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(107)] 
 		[RED("isOverloaded")] 
 		public CBool IsOverloaded
 		{
-			get => GetProperty(ref _isOverloaded);
-			set => SetProperty(ref _isOverloaded, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public FuseBoxControllerPS()
+		{
+			DeviceName = "LocKey#2013";
+			TweakDBRecord = new() { Value = 68366184403 };
+			TweakDBDescriptionRecord = new() { Value = 118337989519 };
 		}
 	}
 }

@@ -5,352 +5,315 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VehicleComponent : ScriptableDC
 	{
-		private CHandle<gameinteractionsComponent> _interaction;
-		private CHandle<gameScanningComponent> _scanningComponent;
-		private CInt32 _damageLevel;
-		private CBool _coolerDestro;
-		private CBool _submerged;
-		private CInt32 _bumperFrontState;
-		private CInt32 _bumperBackState;
-		private CBool _visualDestructionSet;
-		private CHandle<VehicleHealthStatPoolListener> _healthStatPoolListener;
-		private CWeakHandle<gameIBlackboard> _vehicleBlackboard;
-		private CBool _radioState;
-		private CBool _mounted;
-		private CFloat _enterTime;
-		private gameNewMappinID _mappinID;
-		private CBool _ignoreAutoDoorClose;
-		private CUInt32 _timeSystemCallbackID;
-		private CHandle<redCallbackObject> _vehicleTPPCallbackID;
-		private CHandle<redCallbackObject> _vehicleSpeedCallbackID;
-		private CHandle<redCallbackObject> _vehicleRPMCallbackID;
-		private CBool _broadcasting;
-		private CBool _hasSpoiler;
-		private CFloat _spoilerUp;
-		private CFloat _spoilerDown;
-		private CBool _spoilerDeployed;
-		private CBool _hasTurboCharger;
-		private CHandle<worldEffectBlackboard> _overheatEffectBlackboard;
-		private CBool _overheatActive;
-		private CBool _hornOn;
-		private CBool _hasSiren;
-		private CFloat _hornPressTime;
-		private CFloat _radioPressTime;
-		private gameDelayID _raceClockTickID;
-		private CHandle<gameObjectActionsCallbackController> _objectActionsCallbackCtrl;
-		private CWeakHandle<gameObject> _trunkNpcBody;
-		private CWeakHandle<PlayerPuppet> _mountedPlayer;
-		private CBool _isIgnoredInTargetingSystem;
-		private CBool _arePlayerHitShapesEnabled;
-		private CHandle<vehicleController> _vehicleController;
-
 		[Ordinal(4)] 
 		[RED("interaction")] 
 		public CHandle<gameinteractionsComponent> Interaction
 		{
-			get => GetProperty(ref _interaction);
-			set => SetProperty(ref _interaction, value);
+			get => GetPropertyValue<CHandle<gameinteractionsComponent>>();
+			set => SetPropertyValue<CHandle<gameinteractionsComponent>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("scanningComponent")] 
 		public CHandle<gameScanningComponent> ScanningComponent
 		{
-			get => GetProperty(ref _scanningComponent);
-			set => SetProperty(ref _scanningComponent, value);
+			get => GetPropertyValue<CHandle<gameScanningComponent>>();
+			set => SetPropertyValue<CHandle<gameScanningComponent>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("damageLevel")] 
 		public CInt32 DamageLevel
 		{
-			get => GetProperty(ref _damageLevel);
-			set => SetProperty(ref _damageLevel, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("coolerDestro")] 
 		public CBool CoolerDestro
 		{
-			get => GetProperty(ref _coolerDestro);
-			set => SetProperty(ref _coolerDestro, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("submerged")] 
 		public CBool Submerged
 		{
-			get => GetProperty(ref _submerged);
-			set => SetProperty(ref _submerged, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("bumperFrontState")] 
 		public CInt32 BumperFrontState
 		{
-			get => GetProperty(ref _bumperFrontState);
-			set => SetProperty(ref _bumperFrontState, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("bumperBackState")] 
 		public CInt32 BumperBackState
 		{
-			get => GetProperty(ref _bumperBackState);
-			set => SetProperty(ref _bumperBackState, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("visualDestructionSet")] 
 		public CBool VisualDestructionSet
 		{
-			get => GetProperty(ref _visualDestructionSet);
-			set => SetProperty(ref _visualDestructionSet, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("healthStatPoolListener")] 
 		public CHandle<VehicleHealthStatPoolListener> HealthStatPoolListener
 		{
-			get => GetProperty(ref _healthStatPoolListener);
-			set => SetProperty(ref _healthStatPoolListener, value);
+			get => GetPropertyValue<CHandle<VehicleHealthStatPoolListener>>();
+			set => SetPropertyValue<CHandle<VehicleHealthStatPoolListener>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("vehicleBlackboard")] 
 		public CWeakHandle<gameIBlackboard> VehicleBlackboard
 		{
-			get => GetProperty(ref _vehicleBlackboard);
-			set => SetProperty(ref _vehicleBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("radioState")] 
 		public CBool RadioState
 		{
-			get => GetProperty(ref _radioState);
-			set => SetProperty(ref _radioState, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("mounted")] 
 		public CBool Mounted
 		{
-			get => GetProperty(ref _mounted);
-			set => SetProperty(ref _mounted, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("enterTime")] 
 		public CFloat EnterTime
 		{
-			get => GetProperty(ref _enterTime);
-			set => SetProperty(ref _enterTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("mappinID")] 
 		public gameNewMappinID MappinID
 		{
-			get => GetProperty(ref _mappinID);
-			set => SetProperty(ref _mappinID, value);
+			get => GetPropertyValue<gameNewMappinID>();
+			set => SetPropertyValue<gameNewMappinID>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("ignoreAutoDoorClose")] 
 		public CBool IgnoreAutoDoorClose
 		{
-			get => GetProperty(ref _ignoreAutoDoorClose);
-			set => SetProperty(ref _ignoreAutoDoorClose, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("timeSystemCallbackID")] 
 		public CUInt32 TimeSystemCallbackID
 		{
-			get => GetProperty(ref _timeSystemCallbackID);
-			set => SetProperty(ref _timeSystemCallbackID, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("vehicleTPPCallbackID")] 
 		public CHandle<redCallbackObject> VehicleTPPCallbackID
 		{
-			get => GetProperty(ref _vehicleTPPCallbackID);
-			set => SetProperty(ref _vehicleTPPCallbackID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("vehicleSpeedCallbackID")] 
 		public CHandle<redCallbackObject> VehicleSpeedCallbackID
 		{
-			get => GetProperty(ref _vehicleSpeedCallbackID);
-			set => SetProperty(ref _vehicleSpeedCallbackID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("vehicleRPMCallbackID")] 
 		public CHandle<redCallbackObject> VehicleRPMCallbackID
 		{
-			get => GetProperty(ref _vehicleRPMCallbackID);
-			set => SetProperty(ref _vehicleRPMCallbackID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("broadcasting")] 
 		public CBool Broadcasting
 		{
-			get => GetProperty(ref _broadcasting);
-			set => SetProperty(ref _broadcasting, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("hasSpoiler")] 
 		public CBool HasSpoiler
 		{
-			get => GetProperty(ref _hasSpoiler);
-			set => SetProperty(ref _hasSpoiler, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("spoilerUp")] 
 		public CFloat SpoilerUp
 		{
-			get => GetProperty(ref _spoilerUp);
-			set => SetProperty(ref _spoilerUp, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("spoilerDown")] 
 		public CFloat SpoilerDown
 		{
-			get => GetProperty(ref _spoilerDown);
-			set => SetProperty(ref _spoilerDown, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("spoilerDeployed")] 
 		public CBool SpoilerDeployed
 		{
-			get => GetProperty(ref _spoilerDeployed);
-			set => SetProperty(ref _spoilerDeployed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("hasTurboCharger")] 
 		public CBool HasTurboCharger
 		{
-			get => GetProperty(ref _hasTurboCharger);
-			set => SetProperty(ref _hasTurboCharger, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("overheatEffectBlackboard")] 
 		public CHandle<worldEffectBlackboard> OverheatEffectBlackboard
 		{
-			get => GetProperty(ref _overheatEffectBlackboard);
-			set => SetProperty(ref _overheatEffectBlackboard, value);
+			get => GetPropertyValue<CHandle<worldEffectBlackboard>>();
+			set => SetPropertyValue<CHandle<worldEffectBlackboard>>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("overheatActive")] 
 		public CBool OverheatActive
 		{
-			get => GetProperty(ref _overheatActive);
-			set => SetProperty(ref _overheatActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("hornOn")] 
 		public CBool HornOn
 		{
-			get => GetProperty(ref _hornOn);
-			set => SetProperty(ref _hornOn, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("hasSiren")] 
 		public CBool HasSiren
 		{
-			get => GetProperty(ref _hasSiren);
-			set => SetProperty(ref _hasSiren, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("hornPressTime")] 
 		public CFloat HornPressTime
 		{
-			get => GetProperty(ref _hornPressTime);
-			set => SetProperty(ref _hornPressTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(34)] 
 		[RED("radioPressTime")] 
 		public CFloat RadioPressTime
 		{
-			get => GetProperty(ref _radioPressTime);
-			set => SetProperty(ref _radioPressTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(35)] 
 		[RED("raceClockTickID")] 
 		public gameDelayID RaceClockTickID
 		{
-			get => GetProperty(ref _raceClockTickID);
-			set => SetProperty(ref _raceClockTickID, value);
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
 		}
 
 		[Ordinal(36)] 
 		[RED("objectActionsCallbackCtrl")] 
 		public CHandle<gameObjectActionsCallbackController> ObjectActionsCallbackCtrl
 		{
-			get => GetProperty(ref _objectActionsCallbackCtrl);
-			set => SetProperty(ref _objectActionsCallbackCtrl, value);
+			get => GetPropertyValue<CHandle<gameObjectActionsCallbackController>>();
+			set => SetPropertyValue<CHandle<gameObjectActionsCallbackController>>(value);
 		}
 
 		[Ordinal(37)] 
 		[RED("trunkNpcBody")] 
 		public CWeakHandle<gameObject> TrunkNpcBody
 		{
-			get => GetProperty(ref _trunkNpcBody);
-			set => SetProperty(ref _trunkNpcBody, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(38)] 
 		[RED("mountedPlayer")] 
 		public CWeakHandle<PlayerPuppet> MountedPlayer
 		{
-			get => GetProperty(ref _mountedPlayer);
-			set => SetProperty(ref _mountedPlayer, value);
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
 		[Ordinal(39)] 
 		[RED("isIgnoredInTargetingSystem")] 
 		public CBool IsIgnoredInTargetingSystem
 		{
-			get => GetProperty(ref _isIgnoredInTargetingSystem);
-			set => SetProperty(ref _isIgnoredInTargetingSystem, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(40)] 
 		[RED("arePlayerHitShapesEnabled")] 
 		public CBool ArePlayerHitShapesEnabled
 		{
-			get => GetProperty(ref _arePlayerHitShapesEnabled);
-			set => SetProperty(ref _arePlayerHitShapesEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(41)] 
 		[RED("vehicleController")] 
 		public CHandle<vehicleController> VehicleController
 		{
-			get => GetProperty(ref _vehicleController);
-			set => SetProperty(ref _vehicleController, value);
+			get => GetPropertyValue<CHandle<vehicleController>>();
+			set => SetPropertyValue<CHandle<vehicleController>>(value);
 		}
 
 		public VehicleComponent()
 		{
-			_arePlayerHitShapesEnabled = true;
+			MappinID = new();
+			RaceClockTickID = new();
+			ArePlayerHitShapesEnabled = true;
 		}
 	}
 }

@@ -5,77 +5,68 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WorldMapTooltipData : RedBaseClass
 	{
-		private CWeakHandle<gameuiBaseWorldMapMappinController> _controller;
-		private CWeakHandle<gamemappinsIMappin> _mappin;
-		private CWeakHandle<gameJournalEntry> _journalEntry;
-		private CBool _fastTravelEnabled;
-		private CBool _readJournal;
-		private CEnum<gamedataDistrict> _district;
-		private CBool _isCollection;
-		private CInt32 _collectionCount;
-
 		[Ordinal(0)] 
 		[RED("controller")] 
 		public CWeakHandle<gameuiBaseWorldMapMappinController> Controller
 		{
-			get => GetProperty(ref _controller);
-			set => SetProperty(ref _controller, value);
+			get => GetPropertyValue<CWeakHandle<gameuiBaseWorldMapMappinController>>();
+			set => SetPropertyValue<CWeakHandle<gameuiBaseWorldMapMappinController>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("mappin")] 
 		public CWeakHandle<gamemappinsIMappin> Mappin
 		{
-			get => GetProperty(ref _mappin);
-			set => SetProperty(ref _mappin, value);
+			get => GetPropertyValue<CWeakHandle<gamemappinsIMappin>>();
+			set => SetPropertyValue<CWeakHandle<gamemappinsIMappin>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("journalEntry")] 
 		public CWeakHandle<gameJournalEntry> JournalEntry
 		{
-			get => GetProperty(ref _journalEntry);
-			set => SetProperty(ref _journalEntry, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalEntry>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalEntry>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("fastTravelEnabled")] 
 		public CBool FastTravelEnabled
 		{
-			get => GetProperty(ref _fastTravelEnabled);
-			set => SetProperty(ref _fastTravelEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("readJournal")] 
 		public CBool ReadJournal
 		{
-			get => GetProperty(ref _readJournal);
-			set => SetProperty(ref _readJournal, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("district")] 
 		public CEnum<gamedataDistrict> District
 		{
-			get => GetProperty(ref _district);
-			set => SetProperty(ref _district, value);
+			get => GetPropertyValue<CEnum<gamedataDistrict>>();
+			set => SetPropertyValue<CEnum<gamedataDistrict>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isCollection")] 
 		public CBool IsCollection
 		{
-			get => GetProperty(ref _isCollection);
-			set => SetProperty(ref _isCollection, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("collectionCount")] 
 		public CInt32 CollectionCount
 		{
-			get => GetProperty(ref _collectionCount);
-			set => SetProperty(ref _collectionCount, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

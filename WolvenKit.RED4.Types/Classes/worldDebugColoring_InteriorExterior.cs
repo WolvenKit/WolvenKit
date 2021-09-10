@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldDebugColoring_InteriorExterior : worldEditorDebugColoringSettings
 	{
-		private CColor _interiorColor;
-		private CColor _openInteriorColor;
-		private CColor _exteriorColor;
-
 		[Ordinal(0)] 
 		[RED("interiorColor")] 
 		public CColor InteriorColor
 		{
-			get => GetProperty(ref _interiorColor);
-			set => SetProperty(ref _interiorColor, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("openInteriorColor")] 
 		public CColor OpenInteriorColor
 		{
-			get => GetProperty(ref _openInteriorColor);
-			set => SetProperty(ref _openInteriorColor, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("exteriorColor")] 
 		public CColor ExteriorColor
 		{
-			get => GetProperty(ref _exteriorColor);
-			set => SetProperty(ref _exteriorColor, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
+		}
+
+		public worldDebugColoring_InteriorExterior()
+		{
+			InteriorColor = new();
+			OpenInteriorColor = new();
+			ExteriorColor = new();
 		}
 	}
 }

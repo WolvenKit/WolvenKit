@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class NpcNameplateVisualData : RedBaseClass
 	{
-		private gameuiNPCNextToTheCrosshair _npcNextToCrosshair;
-		private CArray<gameuiBuffInfo> _buffList;
-		private CArray<gameuiBuffInfo> _debuffList;
-
 		[Ordinal(0)] 
 		[RED("npcNextToCrosshair")] 
 		public gameuiNPCNextToTheCrosshair NpcNextToCrosshair
 		{
-			get => GetProperty(ref _npcNextToCrosshair);
-			set => SetProperty(ref _npcNextToCrosshair, value);
+			get => GetPropertyValue<gameuiNPCNextToTheCrosshair>();
+			set => SetPropertyValue<gameuiNPCNextToTheCrosshair>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("buffList")] 
 		public CArray<gameuiBuffInfo> BuffList
 		{
-			get => GetProperty(ref _buffList);
-			set => SetProperty(ref _buffList, value);
+			get => GetPropertyValue<CArray<gameuiBuffInfo>>();
+			set => SetPropertyValue<CArray<gameuiBuffInfo>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("debuffList")] 
 		public CArray<gameuiBuffInfo> DebuffList
 		{
-			get => GetProperty(ref _debuffList);
-			set => SetProperty(ref _debuffList, value);
+			get => GetPropertyValue<CArray<gameuiBuffInfo>>();
+			set => SetPropertyValue<CArray<gameuiBuffInfo>>(value);
+		}
+
+		public NpcNameplateVisualData()
+		{
+			NpcNextToCrosshair = new() { Attitude = Enums.EAIAttitude.AIA_Neutral, HighLevelState = Enums.gamedataNPCHighLevelState.Any };
+			BuffList = new();
+			DebuffList = new();
 		}
 	}
 }

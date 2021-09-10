@@ -5,37 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AddItemToVendorRequest : gameScriptableSystemRequest
 	{
-		private TweakDBID _vendorID;
-		private TweakDBID _itemToAddID;
-		private CInt32 _quantity;
-
 		[Ordinal(0)] 
 		[RED("vendorID")] 
 		public TweakDBID VendorID
 		{
-			get => GetProperty(ref _vendorID);
-			set => SetProperty(ref _vendorID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("itemToAddID")] 
 		public TweakDBID ItemToAddID
 		{
-			get => GetProperty(ref _itemToAddID);
-			set => SetProperty(ref _itemToAddID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("quantity")] 
 		public CInt32 Quantity
 		{
-			get => GetProperty(ref _quantity);
-			set => SetProperty(ref _quantity, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		public AddItemToVendorRequest()
 		{
-			_quantity = 1;
+			Quantity = 1;
 		}
 	}
 }

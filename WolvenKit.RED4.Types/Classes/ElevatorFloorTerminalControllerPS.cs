@@ -5,32 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ElevatorFloorTerminalControllerPS : TerminalControllerPS
 	{
-		private ElevatorFloorSetup _elevatorFloorSetup;
-		private CBool _hasDirectInteration;
-		private CBool _isElevatorAtThisFloor;
-
 		[Ordinal(114)] 
 		[RED("elevatorFloorSetup")] 
 		public ElevatorFloorSetup ElevatorFloorSetup
 		{
-			get => GetProperty(ref _elevatorFloorSetup);
-			set => SetProperty(ref _elevatorFloorSetup, value);
+			get => GetPropertyValue<ElevatorFloorSetup>();
+			set => SetPropertyValue<ElevatorFloorSetup>(value);
 		}
 
 		[Ordinal(115)] 
 		[RED("hasDirectInteration")] 
 		public CBool HasDirectInteration
 		{
-			get => GetProperty(ref _hasDirectInteration);
-			set => SetProperty(ref _hasDirectInteration, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(116)] 
 		[RED("isElevatorAtThisFloor")] 
 		public CBool IsElevatorAtThisFloor
 		{
-			get => GetProperty(ref _isElevatorAtThisFloor);
-			set => SetProperty(ref _isElevatorAtThisFloor, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public ElevatorFloorTerminalControllerPS()
+		{
+			DeviceName = "LocKey#88";
+			TweakDBRecord = new() { Value = 127337775259 };
+			TweakDBDescriptionRecord = new() { Value = 179291460156 };
+			ElevatorFloorSetup = new() { DoorShouldOpenFrontLeftRight = new() };
 		}
 	}
 }

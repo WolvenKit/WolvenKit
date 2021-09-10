@@ -5,95 +5,88 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameSlotWeaponData : RedBaseClass
 	{
-		private gameItemID _weaponID;
-		private CInt32 _ammoCurrent;
-		private CInt32 _magazineCap;
-		private gameItemID _ammoId;
-		private CEnum<gamedataTriggerMode> _triggerModeCurrent;
-		private CArray<CEnum<gamedataTriggerMode>> _triggerModeList;
-		private CEnum<gamedataWeaponEvolution> _evolution;
-		private CBool _isActive;
-		private CBool _isFirstEquip;
-
 		[Ordinal(0)] 
 		[RED("weaponID")] 
 		public gameItemID WeaponID
 		{
-			get => GetProperty(ref _weaponID);
-			set => SetProperty(ref _weaponID, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ammoCurrent")] 
 		public CInt32 AmmoCurrent
 		{
-			get => GetProperty(ref _ammoCurrent);
-			set => SetProperty(ref _ammoCurrent, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("magazineCap")] 
 		public CInt32 MagazineCap
 		{
-			get => GetProperty(ref _magazineCap);
-			set => SetProperty(ref _magazineCap, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("ammoId")] 
 		public gameItemID AmmoId
 		{
-			get => GetProperty(ref _ammoId);
-			set => SetProperty(ref _ammoId, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("triggerModeCurrent")] 
 		public CEnum<gamedataTriggerMode> TriggerModeCurrent
 		{
-			get => GetProperty(ref _triggerModeCurrent);
-			set => SetProperty(ref _triggerModeCurrent, value);
+			get => GetPropertyValue<CEnum<gamedataTriggerMode>>();
+			set => SetPropertyValue<CEnum<gamedataTriggerMode>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("triggerModeList")] 
 		public CArray<CEnum<gamedataTriggerMode>> TriggerModeList
 		{
-			get => GetProperty(ref _triggerModeList);
-			set => SetProperty(ref _triggerModeList, value);
+			get => GetPropertyValue<CArray<CEnum<gamedataTriggerMode>>>();
+			set => SetPropertyValue<CArray<CEnum<gamedataTriggerMode>>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("evolution")] 
 		public CEnum<gamedataWeaponEvolution> Evolution
 		{
-			get => GetProperty(ref _evolution);
-			set => SetProperty(ref _evolution, value);
+			get => GetPropertyValue<CEnum<gamedataWeaponEvolution>>();
+			set => SetPropertyValue<CEnum<gamedataWeaponEvolution>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get => GetProperty(ref _isActive);
-			set => SetProperty(ref _isActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("isFirstEquip")] 
 		public CBool IsFirstEquip
 		{
-			get => GetProperty(ref _isFirstEquip);
-			set => SetProperty(ref _isFirstEquip, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public gameSlotWeaponData()
 		{
-			_ammoCurrent = -1;
-			_magazineCap = -1;
-			_triggerModeCurrent = new() { Value = Enums.gamedataTriggerMode.Invalid };
-			_evolution = new() { Value = Enums.gamedataWeaponEvolution.Invalid };
-			_isFirstEquip = true;
+			WeaponID = new();
+			AmmoCurrent = -1;
+			MagazineCap = -1;
+			AmmoId = new();
+			TriggerModeCurrent = Enums.gamedataTriggerMode.Invalid;
+			TriggerModeList = new();
+			Evolution = Enums.gamedataWeaponEvolution.Invalid;
+			IsFirstEquip = true;
 		}
 	}
 }

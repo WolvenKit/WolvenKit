@@ -5,50 +5,53 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animImportFacialCorrectivePoseDataDesc : RedBaseClass
 	{
-		private CArray<animImportFacialTransform> _transforms;
-		private CArray<animImportFacialTransformNoScale> _transformsNoScale;
-		private CArray<CUInt16> _transformIds;
-		private CArray<CName> _transformNames;
-		private CArray<CFloat> _parentsWeights;
-
 		[Ordinal(0)] 
 		[RED("transforms")] 
 		public CArray<animImportFacialTransform> Transforms
 		{
-			get => GetProperty(ref _transforms);
-			set => SetProperty(ref _transforms, value);
+			get => GetPropertyValue<CArray<animImportFacialTransform>>();
+			set => SetPropertyValue<CArray<animImportFacialTransform>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("transformsNoScale")] 
 		public CArray<animImportFacialTransformNoScale> TransformsNoScale
 		{
-			get => GetProperty(ref _transformsNoScale);
-			set => SetProperty(ref _transformsNoScale, value);
+			get => GetPropertyValue<CArray<animImportFacialTransformNoScale>>();
+			set => SetPropertyValue<CArray<animImportFacialTransformNoScale>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("transformIds")] 
 		public CArray<CUInt16> TransformIds
 		{
-			get => GetProperty(ref _transformIds);
-			set => SetProperty(ref _transformIds, value);
+			get => GetPropertyValue<CArray<CUInt16>>();
+			set => SetPropertyValue<CArray<CUInt16>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("transformNames")] 
 		public CArray<CName> TransformNames
 		{
-			get => GetProperty(ref _transformNames);
-			set => SetProperty(ref _transformNames, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("parentsWeights")] 
 		public CArray<CFloat> ParentsWeights
 		{
-			get => GetProperty(ref _parentsWeights);
-			set => SetProperty(ref _parentsWeights, value);
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
+		}
+
+		public animImportFacialCorrectivePoseDataDesc()
+		{
+			Transforms = new();
+			TransformsNoScale = new();
+			TransformIds = new();
+			TransformNames = new();
+			ParentsWeights = new();
 		}
 	}
 }

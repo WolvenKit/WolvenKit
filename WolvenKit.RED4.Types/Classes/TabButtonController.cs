@@ -5,50 +5,50 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TabButtonController : inkToggleController
 	{
-		private inkTextWidgetReference _label;
-		private inkImageWidgetReference _icon;
-		private CInt32 _data;
-		private CString _labelSet;
-		private CString _iconSet;
-
 		[Ordinal(13)] 
 		[RED("label")] 
 		public inkTextWidgetReference Label
 		{
-			get => GetProperty(ref _label);
-			set => SetProperty(ref _label, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("icon")] 
 		public inkImageWidgetReference Icon
 		{
-			get => GetProperty(ref _icon);
-			set => SetProperty(ref _icon, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("data")] 
 		public CInt32 Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("labelSet")] 
 		public CString LabelSet
 		{
-			get => GetProperty(ref _labelSet);
-			set => SetProperty(ref _labelSet, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("iconSet")] 
 		public CString IconSet
 		{
-			get => GetProperty(ref _iconSet);
-			set => SetProperty(ref _iconSet, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		public TabButtonController()
+		{
+			Label = new();
+			Icon = new();
 		}
 	}
 }

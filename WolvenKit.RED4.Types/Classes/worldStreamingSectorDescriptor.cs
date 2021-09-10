@@ -5,73 +5,67 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldStreamingSectorDescriptor : RedBaseClass
 	{
-		private CResourceAsyncReference<worldStreamingSector> _data;
-		private Box _streamingBox;
-		private NodeRef _questPrefabNodeRef;
-		private CUInt32 _numNodeRanges;
-		private CArray<worldStreamingSectorVariant> _variants;
-		private CUInt32 _sectorIndex;
-		private CUInt32 _level;
-
 		[Ordinal(0)] 
 		[RED("data")] 
 		public CResourceAsyncReference<worldStreamingSector> Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<CResourceAsyncReference<worldStreamingSector>>();
+			set => SetPropertyValue<CResourceAsyncReference<worldStreamingSector>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("streamingBox")] 
 		public Box StreamingBox
 		{
-			get => GetProperty(ref _streamingBox);
-			set => SetProperty(ref _streamingBox, value);
+			get => GetPropertyValue<Box>();
+			set => SetPropertyValue<Box>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("questPrefabNodeRef")] 
 		public NodeRef QuestPrefabNodeRef
 		{
-			get => GetProperty(ref _questPrefabNodeRef);
-			set => SetProperty(ref _questPrefabNodeRef, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("numNodeRanges")] 
 		public CUInt32 NumNodeRanges
 		{
-			get => GetProperty(ref _numNodeRanges);
-			set => SetProperty(ref _numNodeRanges, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("variants")] 
 		public CArray<worldStreamingSectorVariant> Variants
 		{
-			get => GetProperty(ref _variants);
-			set => SetProperty(ref _variants, value);
+			get => GetPropertyValue<CArray<worldStreamingSectorVariant>>();
+			set => SetPropertyValue<CArray<worldStreamingSectorVariant>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("sectorIndex")] 
 		public CUInt32 SectorIndex
 		{
-			get => GetProperty(ref _sectorIndex);
-			set => SetProperty(ref _sectorIndex, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("level")] 
 		public CUInt32 Level
 		{
-			get => GetProperty(ref _level);
-			set => SetProperty(ref _level, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		public worldStreamingSectorDescriptor()
 		{
-			_sectorIndex = 4294967295;
+			StreamingBox = new() { Min = new() { X = 340282346638528859811704183484516925440.000000F, Y = 340282346638528859811704183484516925440.000000F, Z = 340282346638528859811704183484516925440.000000F, W = 340282346638528859811704183484516925440.000000F }, Max = new() { X = -340282346638528859811704183484516925440.000000F, Y = -340282346638528859811704183484516925440.000000F, Z = -340282346638528859811704183484516925440.000000F, W = -340282346638528859811704183484516925440.000000F } };
+			Variants = new();
+			SectorIndex = 4294967295;
 		}
 	}
 }

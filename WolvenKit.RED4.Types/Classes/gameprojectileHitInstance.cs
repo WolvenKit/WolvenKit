@@ -5,95 +5,95 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameprojectileHitInstance : RedBaseClass
 	{
-		private physicsTraceResult _traceResult;
-		private Vector4 _position;
-		private Vector4 _projectilePosition;
-		private Vector4 _projectileSourcePosition;
-		private Vector4 _forward;
-		private Vector4 _velocity;
-		private CWeakHandle<entEntity> _hitObject;
-		private CWeakHandle<gameWeakspotObject> _hitWeakspot;
-		private gameQueryResult _hitRepresentationResult;
-		private CInt32 _numRicochetBounces;
-
 		[Ordinal(0)] 
 		[RED("traceResult")] 
 		public physicsTraceResult TraceResult
 		{
-			get => GetProperty(ref _traceResult);
-			set => SetProperty(ref _traceResult, value);
+			get => GetPropertyValue<physicsTraceResult>();
+			set => SetPropertyValue<physicsTraceResult>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("position")] 
 		public Vector4 Position
 		{
-			get => GetProperty(ref _position);
-			set => SetProperty(ref _position, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("projectilePosition")] 
 		public Vector4 ProjectilePosition
 		{
-			get => GetProperty(ref _projectilePosition);
-			set => SetProperty(ref _projectilePosition, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("projectileSourcePosition")] 
 		public Vector4 ProjectileSourcePosition
 		{
-			get => GetProperty(ref _projectileSourcePosition);
-			set => SetProperty(ref _projectileSourcePosition, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("forward")] 
 		public Vector4 Forward
 		{
-			get => GetProperty(ref _forward);
-			set => SetProperty(ref _forward, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("velocity")] 
 		public Vector4 Velocity
 		{
-			get => GetProperty(ref _velocity);
-			set => SetProperty(ref _velocity, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("hitObject")] 
 		public CWeakHandle<entEntity> HitObject
 		{
-			get => GetProperty(ref _hitObject);
-			set => SetProperty(ref _hitObject, value);
+			get => GetPropertyValue<CWeakHandle<entEntity>>();
+			set => SetPropertyValue<CWeakHandle<entEntity>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("hitWeakspot")] 
 		public CWeakHandle<gameWeakspotObject> HitWeakspot
 		{
-			get => GetProperty(ref _hitWeakspot);
-			set => SetProperty(ref _hitWeakspot, value);
+			get => GetPropertyValue<CWeakHandle<gameWeakspotObject>>();
+			set => SetPropertyValue<CWeakHandle<gameWeakspotObject>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("hitRepresentationResult")] 
 		public gameQueryResult HitRepresentationResult
 		{
-			get => GetProperty(ref _hitRepresentationResult);
-			set => SetProperty(ref _hitRepresentationResult, value);
+			get => GetPropertyValue<gameQueryResult>();
+			set => SetPropertyValue<gameQueryResult>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("numRicochetBounces")] 
 		public CInt32 NumRicochetBounces
 		{
-			get => GetProperty(ref _numRicochetBounces);
-			set => SetProperty(ref _numRicochetBounces, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		public gameprojectileHitInstance()
+		{
+			TraceResult = new() { Position = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity }, Normal = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity } };
+			Position = new() { X = 340282346638528859811704183484516925440.000000F, Y = 340282346638528859811704183484516925440.000000F, Z = 340282346638528859811704183484516925440.000000F, W = 340282346638528859811704183484516925440.000000F };
+			ProjectilePosition = new();
+			ProjectileSourcePosition = new();
+			Forward = new();
+			Velocity = new();
+			HitRepresentationResult = new() { HitShapes = new() };
 		}
 	}
 }

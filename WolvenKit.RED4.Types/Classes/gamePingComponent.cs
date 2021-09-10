@@ -5,19 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamePingComponent : entIPlacedComponent
 	{
-		private CEnum<gamedataPingType> _associatedPingType;
-
 		[Ordinal(5)] 
 		[RED("associatedPingType")] 
 		public CEnum<gamedataPingType> AssociatedPingType
 		{
-			get => GetProperty(ref _associatedPingType);
-			set => SetProperty(ref _associatedPingType, value);
+			get => GetPropertyValue<CEnum<gamedataPingType>>();
+			set => SetPropertyValue<CEnum<gamedataPingType>>(value);
 		}
 
 		public gamePingComponent()
 		{
-			_associatedPingType = new() { Value = Enums.gamedataPingType.Invalid };
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			AssociatedPingType = Enums.gamedataPingType.Invalid;
 		}
 	}
 }

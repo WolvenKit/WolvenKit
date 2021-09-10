@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_MathExpressionQuaternion : animAnimNode_QuaternionValue
 	{
-		private animMathExpressionNodeData _expressionData;
-
 		[Ordinal(11)] 
 		[RED("expressionData")] 
 		public animMathExpressionNodeData ExpressionData
 		{
-			get => GetProperty(ref _expressionData);
-			set => SetProperty(ref _expressionData, value);
+			get => GetPropertyValue<animMathExpressionNodeData>();
+			set => SetPropertyValue<animMathExpressionNodeData>(value);
+		}
+
+		public animAnimNode_MathExpressionQuaternion()
+		{
+			Id = 4294967295;
+			ExpressionData = new() { FloatSockets = new(), VectorSockets = new(), QuaternionSockets = new() };
 		}
 	}
 }

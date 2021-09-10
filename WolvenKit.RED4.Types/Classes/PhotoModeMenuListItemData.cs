@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PhotoModeMenuListItemData : ListItemData
 	{
-		private CUInt32 _attributeKey;
-
 		[Ordinal(1)] 
 		[RED("attributeKey")] 
 		public CUInt32 AttributeKey
 		{
-			get => GetProperty(ref _attributeKey);
-			set => SetProperty(ref _attributeKey, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 	}
 }

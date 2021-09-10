@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameVisionModeEvent : redEvent
 	{
-		private CBool _activated;
-		private CEnum<gameVisionModeType> _type;
-
 		[Ordinal(0)] 
 		[RED("activated")] 
 		public CBool Activated
 		{
-			get => GetProperty(ref _activated);
-			set => SetProperty(ref _activated, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("type")] 
 		public CEnum<gameVisionModeType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<gameVisionModeType>>();
+			set => SetPropertyValue<CEnum<gameVisionModeType>>(value);
 		}
 	}
 }

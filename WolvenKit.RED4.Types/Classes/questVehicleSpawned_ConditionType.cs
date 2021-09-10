@@ -5,59 +5,57 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questVehicleSpawned_ConditionType : questIVehicleConditionType
 	{
-		private CEnum<questSpawnedVehicleType> _vehicleType;
-		private gameEntityReference _vehicleRef;
-		private CUInt32 _count;
-		private CEnum<EComparisonType> _comparisonType;
-		private CString _vehicleName;
-		private CName _vehicleGlobalName;
-
 		[Ordinal(0)] 
 		[RED("vehicleType")] 
 		public CEnum<questSpawnedVehicleType> VehicleType
 		{
-			get => GetProperty(ref _vehicleType);
-			set => SetProperty(ref _vehicleType, value);
+			get => GetPropertyValue<CEnum<questSpawnedVehicleType>>();
+			set => SetPropertyValue<CEnum<questSpawnedVehicleType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("vehicleRef")] 
 		public gameEntityReference VehicleRef
 		{
-			get => GetProperty(ref _vehicleRef);
-			set => SetProperty(ref _vehicleRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("count")] 
 		public CUInt32 Count
 		{
-			get => GetProperty(ref _count);
-			set => SetProperty(ref _count, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("comparisonType")] 
 		public CEnum<EComparisonType> ComparisonType
 		{
-			get => GetProperty(ref _comparisonType);
-			set => SetProperty(ref _comparisonType, value);
+			get => GetPropertyValue<CEnum<EComparisonType>>();
+			set => SetPropertyValue<CEnum<EComparisonType>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("vehicleName")] 
 		public CString VehicleName
 		{
-			get => GetProperty(ref _vehicleName);
-			set => SetProperty(ref _vehicleName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("vehicleGlobalName")] 
 		public CName VehicleGlobalName
 		{
-			get => GetProperty(ref _vehicleGlobalName);
-			set => SetProperty(ref _vehicleGlobalName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public questVehicleSpawned_ConditionType()
+		{
+			VehicleRef = new() { Names = new() };
 		}
 	}
 }

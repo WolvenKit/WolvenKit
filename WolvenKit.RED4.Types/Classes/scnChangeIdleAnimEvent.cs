@@ -5,64 +5,66 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnChangeIdleAnimEvent : scnPlayAnimEvent
 	{
-		private CName _idleAnimName;
-		private CName _addIdleAnimName;
-		private CBool _isEnabled;
-		private CName _animName;
-		private animFacialEmotionTransitionBaked _bakedFacialTransition;
-		private CBool _facialInstantTransition;
-
 		[Ordinal(15)] 
 		[RED("idleAnimName")] 
 		public CName IdleAnimName
 		{
-			get => GetProperty(ref _idleAnimName);
-			set => SetProperty(ref _idleAnimName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("addIdleAnimName")] 
 		public CName AddIdleAnimName
 		{
-			get => GetProperty(ref _addIdleAnimName);
-			set => SetProperty(ref _addIdleAnimName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("animName")] 
 		public CName AnimName
 		{
-			get => GetProperty(ref _animName);
-			set => SetProperty(ref _animName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("bakedFacialTransition")] 
 		public animFacialEmotionTransitionBaked BakedFacialTransition
 		{
-			get => GetProperty(ref _bakedFacialTransition);
-			set => SetProperty(ref _bakedFacialTransition, value);
+			get => GetPropertyValue<animFacialEmotionTransitionBaked>();
+			set => SetPropertyValue<animFacialEmotionTransitionBaked>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("facialInstantTransition")] 
 		public CBool FacialInstantTransition
 		{
-			get => GetProperty(ref _facialInstantTransition);
-			set => SetProperty(ref _facialInstantTransition, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public scnChangeIdleAnimEvent()
 		{
-			_isEnabled = true;
+			Id = new() { Id = 18446744073709551615 };
+			Duration = 1000;
+			AnimData = new() { Basic = new() { Stretch = 1.000000F, BlendInCurve = Enums.scnEasingType.SinusoidalEaseInOut, BlendOutCurve = Enums.scnEasingType.SinusoidalEaseInOut }, Weight = 1.000000F };
+			Performer = new() { Id = 4294967040 };
+			NeckWeight = 1.000000F;
+			UpperFaceBlendAdditive = true;
+			LowerFaceBlendAdditive = true;
+			EyesBlendAdditive = true;
+			IsEnabled = true;
+			BakedFacialTransition = new() { TransitionType = Enums.animFacialEmotionTransitionType.Fast, ToIdleWeight = 1.000000F };
 		}
 	}
 }

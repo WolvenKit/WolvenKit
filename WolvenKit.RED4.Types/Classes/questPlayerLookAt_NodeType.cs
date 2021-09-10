@@ -5,146 +5,133 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questPlayerLookAt_NodeType : questISceneManagerNodeType
 	{
-		private gameEntityReference _objectRef;
-		private CName _slotName;
-		private Vector3 _offsetPos;
-		private CFloat _duration;
-		private CBool _adjustPitch;
-		private CBool _adjustYaw;
-		private CBool _endOnTargetReached;
-		private CBool _endOnCameraInputApplied;
-		private CBool _endOnTimeExceeded;
-		private CFloat _cameraInputMagToBreak;
-		private CFloat _precision;
-		private CFloat _maxDuration;
-		private CBool _easeIn;
-		private CBool _easeOut;
-
 		[Ordinal(0)] 
 		[RED("objectRef")] 
 		public gameEntityReference ObjectRef
 		{
-			get => GetProperty(ref _objectRef);
-			set => SetProperty(ref _objectRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("slotName")] 
 		public CName SlotName
 		{
-			get => GetProperty(ref _slotName);
-			set => SetProperty(ref _slotName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("offsetPos")] 
 		public Vector3 OffsetPos
 		{
-			get => GetProperty(ref _offsetPos);
-			set => SetProperty(ref _offsetPos, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get => GetProperty(ref _duration);
-			set => SetProperty(ref _duration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("adjustPitch")] 
 		public CBool AdjustPitch
 		{
-			get => GetProperty(ref _adjustPitch);
-			set => SetProperty(ref _adjustPitch, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("adjustYaw")] 
 		public CBool AdjustYaw
 		{
-			get => GetProperty(ref _adjustYaw);
-			set => SetProperty(ref _adjustYaw, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("endOnTargetReached")] 
 		public CBool EndOnTargetReached
 		{
-			get => GetProperty(ref _endOnTargetReached);
-			set => SetProperty(ref _endOnTargetReached, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("endOnCameraInputApplied")] 
 		public CBool EndOnCameraInputApplied
 		{
-			get => GetProperty(ref _endOnCameraInputApplied);
-			set => SetProperty(ref _endOnCameraInputApplied, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("endOnTimeExceeded")] 
 		public CBool EndOnTimeExceeded
 		{
-			get => GetProperty(ref _endOnTimeExceeded);
-			set => SetProperty(ref _endOnTimeExceeded, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("cameraInputMagToBreak")] 
 		public CFloat CameraInputMagToBreak
 		{
-			get => GetProperty(ref _cameraInputMagToBreak);
-			set => SetProperty(ref _cameraInputMagToBreak, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("precision")] 
 		public CFloat Precision
 		{
-			get => GetProperty(ref _precision);
-			set => SetProperty(ref _precision, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("maxDuration")] 
 		public CFloat MaxDuration
 		{
-			get => GetProperty(ref _maxDuration);
-			set => SetProperty(ref _maxDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("easeIn")] 
 		public CBool EaseIn
 		{
-			get => GetProperty(ref _easeIn);
-			set => SetProperty(ref _easeIn, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("easeOut")] 
 		public CBool EaseOut
 		{
-			get => GetProperty(ref _easeOut);
-			set => SetProperty(ref _easeOut, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public questPlayerLookAt_NodeType()
 		{
-			_duration = 0.250000F;
-			_adjustPitch = true;
-			_adjustYaw = true;
-			_endOnTargetReached = true;
-			_endOnCameraInputApplied = true;
-			_endOnTimeExceeded = true;
-			_cameraInputMagToBreak = 0.200000F;
-			_precision = 0.100000F;
-			_maxDuration = 2.000000F;
-			_easeIn = true;
-			_easeOut = true;
+			ObjectRef = new() { Names = new() };
+			OffsetPos = new();
+			Duration = 0.250000F;
+			AdjustPitch = true;
+			AdjustYaw = true;
+			EndOnTargetReached = true;
+			EndOnCameraInputApplied = true;
+			EndOnTimeExceeded = true;
+			CameraInputMagToBreak = 0.200000F;
+			Precision = 0.100000F;
+			MaxDuration = 2.000000F;
+			EaseIn = true;
+			EaseOut = true;
 		}
 	}
 }

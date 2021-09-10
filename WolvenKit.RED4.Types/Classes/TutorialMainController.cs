@@ -5,50 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TutorialMainController : gameuiWidgetGameController
 	{
-		private inkWidgetReference _instructionPanel;
-		private inkTextWidgetReference _instructionDesc;
-		private inkWidgetReference _pointer;
-		private CBool _tutorialActive;
-		private TutorialStep _currentTutorialStep;
-
 		[Ordinal(2)] 
 		[RED("instructionPanel")] 
 		public inkWidgetReference InstructionPanel
 		{
-			get => GetProperty(ref _instructionPanel);
-			set => SetProperty(ref _instructionPanel, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("instructionDesc")] 
 		public inkTextWidgetReference InstructionDesc
 		{
-			get => GetProperty(ref _instructionDesc);
-			set => SetProperty(ref _instructionDesc, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("pointer")] 
 		public inkWidgetReference Pointer
 		{
-			get => GetProperty(ref _pointer);
-			set => SetProperty(ref _pointer, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("tutorialActive")] 
 		public CBool TutorialActive
 		{
-			get => GetProperty(ref _tutorialActive);
-			set => SetProperty(ref _tutorialActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("currentTutorialStep")] 
 		public TutorialStep CurrentTutorialStep
 		{
-			get => GetProperty(ref _currentTutorialStep);
-			set => SetProperty(ref _currentTutorialStep, value);
+			get => GetPropertyValue<TutorialStep>();
+			set => SetPropertyValue<TutorialStep>(value);
+		}
+
+		public TutorialMainController()
+		{
+			InstructionPanel = new();
+			InstructionDesc = new();
+			Pointer = new();
+			CurrentTutorialStep = new() { AllowedActions = new() };
 		}
 	}
 }

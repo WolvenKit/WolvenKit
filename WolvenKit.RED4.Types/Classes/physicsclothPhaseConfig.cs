@@ -5,49 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class physicsclothPhaseConfig : RedBaseClass
 	{
-		private CFloat _stiffness;
-		private CFloat _stiffnessMultiplier;
-		private CFloat _compressionLimit;
-		private CFloat _stretchLimit;
-
 		[Ordinal(0)] 
 		[RED("stiffness")] 
 		public CFloat Stiffness
 		{
-			get => GetProperty(ref _stiffness);
-			set => SetProperty(ref _stiffness, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("stiffnessMultiplier")] 
 		public CFloat StiffnessMultiplier
 		{
-			get => GetProperty(ref _stiffnessMultiplier);
-			set => SetProperty(ref _stiffnessMultiplier, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("compressionLimit")] 
 		public CFloat CompressionLimit
 		{
-			get => GetProperty(ref _compressionLimit);
-			set => SetProperty(ref _compressionLimit, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("stretchLimit")] 
 		public CFloat StretchLimit
 		{
-			get => GetProperty(ref _stretchLimit);
-			set => SetProperty(ref _stretchLimit, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public physicsclothPhaseConfig()
 		{
-			_stiffness = 1.000000F;
-			_stiffnessMultiplier = 1.000000F;
-			_compressionLimit = 1.000000F;
-			_stretchLimit = 1.000000F;
+			Stiffness = 1.000000F;
+			StiffnessMultiplier = 1.000000F;
+			CompressionLimit = 1.000000F;
+			StretchLimit = 1.000000F;
 		}
 	}
 }

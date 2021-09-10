@@ -5,59 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questVehicleCommandParams : questAICommandParams
 	{
-		private CEnum<questVehicleCommandType> _type;
-		private CHandle<questvehicleOnSplineParams> _additionalParamsOnSpline;
-		private CHandle<questvehicleFollowParams> _additionalParamsFollow;
-		private CHandle<questvehicleToNodeParams> _additionalParamsToNode;
-		private CHandle<questvehicleRacingParams> _additionalParamsRacing;
-		private CHandle<questvehicleJoinTrafficParams> _additionalParamsJoinTraffic;
-
 		[Ordinal(0)] 
 		[RED("type")] 
 		public CEnum<questVehicleCommandType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<questVehicleCommandType>>();
+			set => SetPropertyValue<CEnum<questVehicleCommandType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("additionalParamsOnSpline")] 
 		public CHandle<questvehicleOnSplineParams> AdditionalParamsOnSpline
 		{
-			get => GetProperty(ref _additionalParamsOnSpline);
-			set => SetProperty(ref _additionalParamsOnSpline, value);
+			get => GetPropertyValue<CHandle<questvehicleOnSplineParams>>();
+			set => SetPropertyValue<CHandle<questvehicleOnSplineParams>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("additionalParamsFollow")] 
 		public CHandle<questvehicleFollowParams> AdditionalParamsFollow
 		{
-			get => GetProperty(ref _additionalParamsFollow);
-			set => SetProperty(ref _additionalParamsFollow, value);
+			get => GetPropertyValue<CHandle<questvehicleFollowParams>>();
+			set => SetPropertyValue<CHandle<questvehicleFollowParams>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("additionalParamsToNode")] 
 		public CHandle<questvehicleToNodeParams> AdditionalParamsToNode
 		{
-			get => GetProperty(ref _additionalParamsToNode);
-			set => SetProperty(ref _additionalParamsToNode, value);
+			get => GetPropertyValue<CHandle<questvehicleToNodeParams>>();
+			set => SetPropertyValue<CHandle<questvehicleToNodeParams>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("additionalParamsRacing")] 
 		public CHandle<questvehicleRacingParams> AdditionalParamsRacing
 		{
-			get => GetProperty(ref _additionalParamsRacing);
-			set => SetProperty(ref _additionalParamsRacing, value);
+			get => GetPropertyValue<CHandle<questvehicleRacingParams>>();
+			set => SetPropertyValue<CHandle<questvehicleRacingParams>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("additionalParamsJoinTraffic")] 
 		public CHandle<questvehicleJoinTrafficParams> AdditionalParamsJoinTraffic
 		{
-			get => GetProperty(ref _additionalParamsJoinTraffic);
-			set => SetProperty(ref _additionalParamsJoinTraffic, value);
+			get => GetPropertyValue<CHandle<questvehicleJoinTrafficParams>>();
+			set => SetPropertyValue<CHandle<questvehicleJoinTrafficParams>>(value);
 		}
 	}
 }

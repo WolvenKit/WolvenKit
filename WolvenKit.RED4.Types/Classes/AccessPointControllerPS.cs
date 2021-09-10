@@ -5,59 +5,65 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AccessPointControllerPS : MasterControllerPS
 	{
-		private CArray<CString> _rewardNotificationIcons;
-		private CString _rewardNotificationString;
-		private CHandle<HackingContainer> _accessPointSkillChecks;
-		private CBool _isBreached;
-		private CBool _isVirtual;
-		private CArray<CName> _pingedSquads;
-
 		[Ordinal(105)] 
 		[RED("rewardNotificationIcons")] 
 		public CArray<CString> RewardNotificationIcons
 		{
-			get => GetProperty(ref _rewardNotificationIcons);
-			set => SetProperty(ref _rewardNotificationIcons, value);
+			get => GetPropertyValue<CArray<CString>>();
+			set => SetPropertyValue<CArray<CString>>(value);
 		}
 
 		[Ordinal(106)] 
 		[RED("rewardNotificationString")] 
 		public CString RewardNotificationString
 		{
-			get => GetProperty(ref _rewardNotificationString);
-			set => SetProperty(ref _rewardNotificationString, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(107)] 
 		[RED("accessPointSkillChecks")] 
 		public CHandle<HackingContainer> AccessPointSkillChecks
 		{
-			get => GetProperty(ref _accessPointSkillChecks);
-			set => SetProperty(ref _accessPointSkillChecks, value);
+			get => GetPropertyValue<CHandle<HackingContainer>>();
+			set => SetPropertyValue<CHandle<HackingContainer>>(value);
 		}
 
 		[Ordinal(108)] 
 		[RED("isBreached")] 
 		public CBool IsBreached
 		{
-			get => GetProperty(ref _isBreached);
-			set => SetProperty(ref _isBreached, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(109)] 
 		[RED("isVirtual")] 
 		public CBool IsVirtual
 		{
-			get => GetProperty(ref _isVirtual);
-			set => SetProperty(ref _isVirtual, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(110)] 
 		[RED("pingedSquads")] 
 		public CArray<CName> PingedSquads
 		{
-			get => GetProperty(ref _pingedSquads);
-			set => SetProperty(ref _pingedSquads, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
+		public AccessPointControllerPS()
+		{
+			RevealDevicesGrid = false;
+			HasNetworkBackdoor = true;
+			DeviceName = "LocKey#138";
+			TweakDBRecord = new() { Value = 84949555524 };
+			TweakDBDescriptionRecord = new() { Value = 134736165949 };
+			HasPersonalLinkSlot = true;
+			ShouldScannerShowNetwork = false;
+			RewardNotificationIcons = new();
+			PingedSquads = new();
 		}
 	}
 }

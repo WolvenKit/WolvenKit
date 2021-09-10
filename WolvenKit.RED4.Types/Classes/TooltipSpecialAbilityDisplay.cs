@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TooltipSpecialAbilityDisplay : inkWidgetLogicController
 	{
-		private inkImageWidgetReference _abilityIcon;
-		private inkTextWidgetReference _abilityDescription;
-		private inkWidgetReference _qualityRoot;
-
 		[Ordinal(1)] 
 		[RED("AbilityIcon")] 
 		public inkImageWidgetReference AbilityIcon
 		{
-			get => GetProperty(ref _abilityIcon);
-			set => SetProperty(ref _abilityIcon, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("AbilityDescription")] 
 		public inkTextWidgetReference AbilityDescription
 		{
-			get => GetProperty(ref _abilityDescription);
-			set => SetProperty(ref _abilityDescription, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("QualityRoot")] 
 		public inkWidgetReference QualityRoot
 		{
-			get => GetProperty(ref _qualityRoot);
-			set => SetProperty(ref _qualityRoot, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		public TooltipSpecialAbilityDisplay()
+		{
+			AbilityIcon = new();
+			AbilityDescription = new();
+			QualityRoot = new();
 		}
 	}
 }

@@ -5,74 +5,66 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiHUDGameController : gameuiWidgetGameController
 	{
-		private CHandle<inkanimDefinition> _showAnimDef;
-		private CHandle<inkanimDefinition> _hideAnimDef;
-		private CName _showAnimationName;
-		private CName _hideAnimationName;
-		private CBool _moduleShown;
-		private CHandle<inkanimProxy> _showAnimProxy;
-		private CHandle<inkanimProxy> _hideAnimProxy;
-
 		[Ordinal(2)] 
 		[RED("showAnimDef")] 
 		public CHandle<inkanimDefinition> ShowAnimDef
 		{
-			get => GetProperty(ref _showAnimDef);
-			set => SetProperty(ref _showAnimDef, value);
+			get => GetPropertyValue<CHandle<inkanimDefinition>>();
+			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("hideAnimDef")] 
 		public CHandle<inkanimDefinition> HideAnimDef
 		{
-			get => GetProperty(ref _hideAnimDef);
-			set => SetProperty(ref _hideAnimDef, value);
+			get => GetPropertyValue<CHandle<inkanimDefinition>>();
+			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("showAnimationName")] 
 		public CName ShowAnimationName
 		{
-			get => GetProperty(ref _showAnimationName);
-			set => SetProperty(ref _showAnimationName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("hideAnimationName")] 
 		public CName HideAnimationName
 		{
-			get => GetProperty(ref _hideAnimationName);
-			set => SetProperty(ref _hideAnimationName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("moduleShown")] 
 		public CBool ModuleShown
 		{
-			get => GetProperty(ref _moduleShown);
-			set => SetProperty(ref _moduleShown, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("showAnimProxy")] 
 		public CHandle<inkanimProxy> ShowAnimProxy
 		{
-			get => GetProperty(ref _showAnimProxy);
-			set => SetProperty(ref _showAnimProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("hideAnimProxy")] 
 		public CHandle<inkanimProxy> HideAnimProxy
 		{
-			get => GetProperty(ref _hideAnimProxy);
-			set => SetProperty(ref _hideAnimProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		public gameuiHUDGameController()
 		{
-			_showAnimationName = "unfold";
-			_hideAnimationName = "fold";
+			ShowAnimationName = "unfold";
+			HideAnimationName = "fold";
 		}
 	}
 }

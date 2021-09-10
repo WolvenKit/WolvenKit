@@ -5,59 +5,59 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questCheckpointNodeDefinition : questSignalStoppingNodeDefinition
 	{
-		private CBool _saveLock;
-		private CBool _ignoreSaveLocks;
-		private CBool _pointOfNoReturn;
-		private CBool _endGameSave;
-		private CArray<TweakDBID> _additionalEndGameRewardsTweak;
-		private CString _debugString;
-
 		[Ordinal(2)] 
 		[RED("saveLock")] 
 		public CBool SaveLock
 		{
-			get => GetProperty(ref _saveLock);
-			set => SetProperty(ref _saveLock, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("ignoreSaveLocks")] 
 		public CBool IgnoreSaveLocks
 		{
-			get => GetProperty(ref _ignoreSaveLocks);
-			set => SetProperty(ref _ignoreSaveLocks, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("pointOfNoReturn")] 
 		public CBool PointOfNoReturn
 		{
-			get => GetProperty(ref _pointOfNoReturn);
-			set => SetProperty(ref _pointOfNoReturn, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("endGameSave")] 
 		public CBool EndGameSave
 		{
-			get => GetProperty(ref _endGameSave);
-			set => SetProperty(ref _endGameSave, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("additionalEndGameRewardsTweak")] 
 		public CArray<TweakDBID> AdditionalEndGameRewardsTweak
 		{
-			get => GetProperty(ref _additionalEndGameRewardsTweak);
-			set => SetProperty(ref _additionalEndGameRewardsTweak, value);
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("debugString")] 
 		public CString DebugString
 		{
-			get => GetProperty(ref _debugString);
-			set => SetProperty(ref _debugString, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		public questCheckpointNodeDefinition()
+		{
+			Sockets = new();
+			Id = 65535;
+			AdditionalEndGameRewardsTweak = new();
 		}
 	}
 }

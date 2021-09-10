@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ReleaseSlotEvent : redEvent
 	{
-		private CInt32 _slotID;
-
 		[Ordinal(0)] 
 		[RED("slotID")] 
 		public CInt32 SlotID
 		{
-			get => GetProperty(ref _slotID);
-			set => SetProperty(ref _slotID, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

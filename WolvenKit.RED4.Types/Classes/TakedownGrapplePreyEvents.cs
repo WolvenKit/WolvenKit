@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TakedownGrapplePreyEvents : LocomotionTakedownEvents
 	{
-		private CBool _isGrappleReactionVOPlayed;
-
 		[Ordinal(4)] 
 		[RED("isGrappleReactionVOPlayed")] 
 		public CBool IsGrappleReactionVOPlayed
 		{
-			get => GetProperty(ref _isGrappleReactionVOPlayed);
-			set => SetProperty(ref _isGrappleReactionVOPlayed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

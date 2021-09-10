@@ -5,59 +5,58 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ProgressBarButton : inkWidgetLogicController
 	{
-		private inkWidgetReference _craftingFill;
-		private inkTextWidgetReference _craftingLabel;
-		private CWeakHandle<inkButtonController> _buttonController;
-		private CWeakHandle<ProgressBarsController> _progressController;
-		private CBool _available;
-		private CFloat _progress;
-
 		[Ordinal(1)] 
 		[RED("craftingFill")] 
 		public inkWidgetReference CraftingFill
 		{
-			get => GetProperty(ref _craftingFill);
-			set => SetProperty(ref _craftingFill, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("craftingLabel")] 
 		public inkTextWidgetReference CraftingLabel
 		{
-			get => GetProperty(ref _craftingLabel);
-			set => SetProperty(ref _craftingLabel, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("ButtonController")] 
 		public CWeakHandle<inkButtonController> ButtonController
 		{
-			get => GetProperty(ref _buttonController);
-			set => SetProperty(ref _buttonController, value);
+			get => GetPropertyValue<CWeakHandle<inkButtonController>>();
+			set => SetPropertyValue<CWeakHandle<inkButtonController>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("progressController")] 
 		public CWeakHandle<ProgressBarsController> ProgressController
 		{
-			get => GetProperty(ref _progressController);
-			set => SetProperty(ref _progressController, value);
+			get => GetPropertyValue<CWeakHandle<ProgressBarsController>>();
+			set => SetPropertyValue<CWeakHandle<ProgressBarsController>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("available")] 
 		public CBool Available
 		{
-			get => GetProperty(ref _available);
-			set => SetProperty(ref _available, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("progress")] 
 		public CFloat Progress
 		{
-			get => GetProperty(ref _progress);
-			set => SetProperty(ref _progress, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public ProgressBarButton()
+		{
+			CraftingFill = new();
+			CraftingLabel = new();
 		}
 	}
 }

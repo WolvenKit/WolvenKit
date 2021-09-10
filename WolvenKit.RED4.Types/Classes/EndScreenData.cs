@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class EndScreenData : RedBaseClass
 	{
-		private CArray<ProgramData> _unlockedPrograms;
-		private CEnum<OutcomeMessage> _outcome;
-
 		[Ordinal(0)] 
 		[RED("unlockedPrograms")] 
 		public CArray<ProgramData> UnlockedPrograms
 		{
-			get => GetProperty(ref _unlockedPrograms);
-			set => SetProperty(ref _unlockedPrograms, value);
+			get => GetPropertyValue<CArray<ProgramData>>();
+			set => SetPropertyValue<CArray<ProgramData>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("outcome")] 
 		public CEnum<OutcomeMessage> Outcome
 		{
-			get => GetProperty(ref _outcome);
-			set => SetProperty(ref _outcome, value);
+			get => GetPropertyValue<CEnum<OutcomeMessage>>();
+			set => SetPropertyValue<CEnum<OutcomeMessage>>(value);
+		}
+
+		public EndScreenData()
+		{
+			UnlockedPrograms = new();
 		}
 	}
 }

@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class communityArea : ISerializable
 	{
-		private CArray<communityCommunityEntrySpotsData> _entriesData;
-
 		[Ordinal(0)] 
 		[RED("entriesData")] 
 		public CArray<communityCommunityEntrySpotsData> EntriesData
 		{
-			get => GetProperty(ref _entriesData);
-			set => SetProperty(ref _entriesData, value);
+			get => GetPropertyValue<CArray<communityCommunityEntrySpotsData>>();
+			set => SetPropertyValue<CArray<communityCommunityEntrySpotsData>>(value);
+		}
+
+		public communityArea()
+		{
+			EntriesData = new();
 		}
 	}
 }

@@ -5,77 +5,75 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class tachometerLogicController : IVehicleModuleController
 	{
-		private inkTextWidgetReference _rpmValueWidget;
-		private inkRectangleWidgetReference _rpmGaugeForegroundWidget;
-		private CBool _scaleX;
-		private CHandle<redCallbackObject> _rpmValueBBConnectionId;
-		private CWeakHandle<gameIBlackboard> _vehBB;
-		private Vector2 _rpmGaugeMaxSize;
-		private CFloat _rpmMaxValue;
-		private CFloat _rpmMinValue;
-
 		[Ordinal(1)] 
 		[RED("rpmValueWidget")] 
 		public inkTextWidgetReference RpmValueWidget
 		{
-			get => GetProperty(ref _rpmValueWidget);
-			set => SetProperty(ref _rpmValueWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("rpmGaugeForegroundWidget")] 
 		public inkRectangleWidgetReference RpmGaugeForegroundWidget
 		{
-			get => GetProperty(ref _rpmGaugeForegroundWidget);
-			set => SetProperty(ref _rpmGaugeForegroundWidget, value);
+			get => GetPropertyValue<inkRectangleWidgetReference>();
+			set => SetPropertyValue<inkRectangleWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("scaleX")] 
 		public CBool ScaleX
 		{
-			get => GetProperty(ref _scaleX);
-			set => SetProperty(ref _scaleX, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("rpmValueBBConnectionId")] 
 		public CHandle<redCallbackObject> RpmValueBBConnectionId
 		{
-			get => GetProperty(ref _rpmValueBBConnectionId);
-			set => SetProperty(ref _rpmValueBBConnectionId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("vehBB")] 
 		public CWeakHandle<gameIBlackboard> VehBB
 		{
-			get => GetProperty(ref _vehBB);
-			set => SetProperty(ref _vehBB, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("rpmGaugeMaxSize")] 
 		public Vector2 RpmGaugeMaxSize
 		{
-			get => GetProperty(ref _rpmGaugeMaxSize);
-			set => SetProperty(ref _rpmGaugeMaxSize, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("rpmMaxValue")] 
 		public CFloat RpmMaxValue
 		{
-			get => GetProperty(ref _rpmMaxValue);
-			set => SetProperty(ref _rpmMaxValue, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("rpmMinValue")] 
 		public CFloat RpmMinValue
 		{
-			get => GetProperty(ref _rpmMinValue);
-			set => SetProperty(ref _rpmMinValue, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public tachometerLogicController()
+		{
+			RpmValueWidget = new();
+			RpmGaugeForegroundWidget = new();
+			RpmGaugeMaxSize = new();
 		}
 	}
 }

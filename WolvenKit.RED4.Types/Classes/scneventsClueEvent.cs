@@ -5,65 +5,61 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scneventsClueEvent : scnSceneEvent
 	{
-		private gameEntityReference _clueEntity;
-		private CBool _markedOnTimeline;
-		private CName _clueName;
-		private CEnum<gameuiEBraindanceLayer> _layer;
-		private CBool _overrideFact;
-		private CName _factName;
-
 		[Ordinal(6)] 
 		[RED("clueEntity")] 
 		public gameEntityReference ClueEntity
 		{
-			get => GetProperty(ref _clueEntity);
-			set => SetProperty(ref _clueEntity, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("markedOnTimeline")] 
 		public CBool MarkedOnTimeline
 		{
-			get => GetProperty(ref _markedOnTimeline);
-			set => SetProperty(ref _markedOnTimeline, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("clueName")] 
 		public CName ClueName
 		{
-			get => GetProperty(ref _clueName);
-			set => SetProperty(ref _clueName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("layer")] 
 		public CEnum<gameuiEBraindanceLayer> Layer
 		{
-			get => GetProperty(ref _layer);
-			set => SetProperty(ref _layer, value);
+			get => GetPropertyValue<CEnum<gameuiEBraindanceLayer>>();
+			set => SetPropertyValue<CEnum<gameuiEBraindanceLayer>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("overrideFact")] 
 		public CBool OverrideFact
 		{
-			get => GetProperty(ref _overrideFact);
-			set => SetProperty(ref _overrideFact, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("factName")] 
 		public CName FactName
 		{
-			get => GetProperty(ref _factName);
-			set => SetProperty(ref _factName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public scneventsClueEvent()
 		{
-			_markedOnTimeline = true;
-			_overrideFact = true;
+			Id = new() { Id = 18446744073709551615 };
+			Duration = 1000;
+			ClueEntity = new() { Names = new() };
+			MarkedOnTimeline = true;
+			OverrideFact = true;
 		}
 	}
 }

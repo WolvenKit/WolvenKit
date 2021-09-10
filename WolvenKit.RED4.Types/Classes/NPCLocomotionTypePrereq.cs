@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class NPCLocomotionTypePrereq : gameIScriptablePrereq
 	{
-		private CArray<CEnum<gamedataLocomotionMode>> _locomotionMode;
-		private CBool _invert;
-
 		[Ordinal(0)] 
 		[RED("locomotionMode")] 
 		public CArray<CEnum<gamedataLocomotionMode>> LocomotionMode
 		{
-			get => GetProperty(ref _locomotionMode);
-			set => SetProperty(ref _locomotionMode, value);
+			get => GetPropertyValue<CArray<CEnum<gamedataLocomotionMode>>>();
+			set => SetPropertyValue<CArray<CEnum<gamedataLocomotionMode>>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("invert")] 
 		public CBool Invert
 		{
-			get => GetProperty(ref _invert);
-			set => SetProperty(ref _invert, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public NPCLocomotionTypePrereq()
+		{
+			LocomotionMode = new();
 		}
 	}
 }

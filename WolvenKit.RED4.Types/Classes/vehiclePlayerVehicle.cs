@@ -5,46 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class vehiclePlayerVehicle : RedBaseClass
 	{
-		private CName _name;
-		private TweakDBID _recordID;
-		private CEnum<gamedataVehicleType> _vehicleType;
-		private CBool _isUnlocked;
-
 		[Ordinal(0)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get => GetProperty(ref _name);
-			set => SetProperty(ref _name, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("recordID")] 
 		public TweakDBID RecordID
 		{
-			get => GetProperty(ref _recordID);
-			set => SetProperty(ref _recordID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("vehicleType")] 
 		public CEnum<gamedataVehicleType> VehicleType
 		{
-			get => GetProperty(ref _vehicleType);
-			set => SetProperty(ref _vehicleType, value);
+			get => GetPropertyValue<CEnum<gamedataVehicleType>>();
+			set => SetPropertyValue<CEnum<gamedataVehicleType>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isUnlocked")] 
 		public CBool IsUnlocked
 		{
-			get => GetProperty(ref _isUnlocked);
-			set => SetProperty(ref _isUnlocked, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public vehiclePlayerVehicle()
 		{
-			_vehicleType = new() { Value = Enums.gamedataVehicleType.Invalid };
+			VehicleType = Enums.gamedataVehicleType.Invalid;
 		}
 	}
 }

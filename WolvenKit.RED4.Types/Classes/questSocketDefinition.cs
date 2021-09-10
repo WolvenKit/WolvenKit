@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questSocketDefinition : graphGraphSocketDefinition
 	{
-		private CEnum<questSocketType> _type;
-
 		[Ordinal(2)] 
 		[RED("type")] 
 		public CEnum<questSocketType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<questSocketType>>();
+			set => SetPropertyValue<CEnum<questSocketType>>(value);
+		}
+
+		public questSocketDefinition()
+		{
+			Connections = new();
 		}
 	}
 }

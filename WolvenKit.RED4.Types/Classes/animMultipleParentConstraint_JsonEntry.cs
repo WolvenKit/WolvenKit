@@ -5,68 +5,65 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animMultipleParentConstraint_JsonEntry : RedBaseClass
 	{
-		private CName _parentTransform;
-		private CEnum<animConstraintWeightMode> _parentWeightMode;
-		private CFloat _parentStaticWeight;
-		private CName _parentTrackWeight;
-		private CBool _useComplementWeight;
-		private CBool _useOffset;
-		private QsTransform _offset;
-
 		[Ordinal(0)] 
 		[RED("parentTransform")] 
 		public CName ParentTransform
 		{
-			get => GetProperty(ref _parentTransform);
-			set => SetProperty(ref _parentTransform, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("parentWeightMode")] 
 		public CEnum<animConstraintWeightMode> ParentWeightMode
 		{
-			get => GetProperty(ref _parentWeightMode);
-			set => SetProperty(ref _parentWeightMode, value);
+			get => GetPropertyValue<CEnum<animConstraintWeightMode>>();
+			set => SetPropertyValue<CEnum<animConstraintWeightMode>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("parentStaticWeight")] 
 		public CFloat ParentStaticWeight
 		{
-			get => GetProperty(ref _parentStaticWeight);
-			set => SetProperty(ref _parentStaticWeight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("parentTrackWeight")] 
 		public CName ParentTrackWeight
 		{
-			get => GetProperty(ref _parentTrackWeight);
-			set => SetProperty(ref _parentTrackWeight, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("useComplementWeight")] 
 		public CBool UseComplementWeight
 		{
-			get => GetProperty(ref _useComplementWeight);
-			set => SetProperty(ref _useComplementWeight, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("useOffset")] 
 		public CBool UseOffset
 		{
-			get => GetProperty(ref _useOffset);
-			set => SetProperty(ref _useOffset, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("offset")] 
 		public QsTransform Offset
 		{
-			get => GetProperty(ref _offset);
-			set => SetProperty(ref _offset, value);
+			get => GetPropertyValue<QsTransform>();
+			set => SetPropertyValue<QsTransform>(value);
+		}
+
+		public animMultipleParentConstraint_JsonEntry()
+		{
+			Offset = new() { Translation = new() { W = 1.000000F }, Rotation = new() { R = 1.000000F }, Scale = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F } };
 		}
 	}
 }

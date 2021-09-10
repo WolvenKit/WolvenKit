@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AddRecipeRequest : gamePlayerScriptableSystemRequest
 	{
-		private TweakDBID _recipe;
-		private CInt32 _amount;
-		private CArray<CWeakHandle<gamedataItem_Record>> _hideOnItemsAdded;
-
 		[Ordinal(1)] 
 		[RED("recipe")] 
 		public TweakDBID Recipe
 		{
-			get => GetProperty(ref _recipe);
-			set => SetProperty(ref _recipe, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("amount")] 
 		public CInt32 Amount
 		{
-			get => GetProperty(ref _amount);
-			set => SetProperty(ref _amount, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("hideOnItemsAdded")] 
 		public CArray<CWeakHandle<gamedataItem_Record>> HideOnItemsAdded
 		{
-			get => GetProperty(ref _hideOnItemsAdded);
-			set => SetProperty(ref _hideOnItemsAdded, value);
+			get => GetPropertyValue<CArray<CWeakHandle<gamedataItem_Record>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<gamedataItem_Record>>>(value);
+		}
+
+		public AddRecipeRequest()
+		{
+			HideOnItemsAdded = new();
 		}
 	}
 }

@@ -5,65 +5,59 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnMarker : RedBaseClass
 	{
-		private CEnum<scnMarkerType> _type;
-		private CName _localMarkerId;
-		private NodeRef _nodeRef;
-		private gameEntityReference _entityRef;
-		private CName _slotName;
-		private CBool _isMounted;
-
 		[Ordinal(0)] 
 		[RED("type")] 
 		public CEnum<scnMarkerType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<scnMarkerType>>();
+			set => SetPropertyValue<CEnum<scnMarkerType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("localMarkerId")] 
 		public CName LocalMarkerId
 		{
-			get => GetProperty(ref _localMarkerId);
-			set => SetProperty(ref _localMarkerId, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("nodeRef")] 
 		public NodeRef NodeRef
 		{
-			get => GetProperty(ref _nodeRef);
-			set => SetProperty(ref _nodeRef, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("entityRef")] 
 		public gameEntityReference EntityRef
 		{
-			get => GetProperty(ref _entityRef);
-			set => SetProperty(ref _entityRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("slotName")] 
 		public CName SlotName
 		{
-			get => GetProperty(ref _slotName);
-			set => SetProperty(ref _slotName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("isMounted")] 
 		public CBool IsMounted
 		{
-			get => GetProperty(ref _isMounted);
-			set => SetProperty(ref _isMounted, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public scnMarker()
 		{
-			_type = new() { Value = Enums.scnMarkerType.Global };
-			_isMounted = true;
+			Type = Enums.scnMarkerType.Global;
+			EntityRef = new() { Names = new() };
+			IsMounted = true;
 		}
 	}
 }

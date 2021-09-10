@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameReplicatedShotData : RedBaseClass
 	{
-		private netTime _timeStamp;
-		private TweakDBID _attackId;
-		private CWeakHandle<gameObject> _target;
-		private Vector3 _targetLocalOffset;
-
 		[Ordinal(0)] 
 		[RED("timeStamp")] 
 		public netTime TimeStamp
 		{
-			get => GetProperty(ref _timeStamp);
-			set => SetProperty(ref _timeStamp, value);
+			get => GetPropertyValue<netTime>();
+			set => SetPropertyValue<netTime>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("attackId")] 
 		public TweakDBID AttackId
 		{
-			get => GetProperty(ref _attackId);
-			set => SetProperty(ref _attackId, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("target")] 
 		public CWeakHandle<gameObject> Target
 		{
-			get => GetProperty(ref _target);
-			set => SetProperty(ref _target, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("targetLocalOffset")] 
 		public Vector3 TargetLocalOffset
 		{
-			get => GetProperty(ref _targetLocalOffset);
-			set => SetProperty(ref _targetLocalOffset, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
+		}
+
+		public gameReplicatedShotData()
+		{
+			TimeStamp = new() { MilliSecs = 18446744073709551615 };
+			TargetLocalOffset = new();
 		}
 	}
 }

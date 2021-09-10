@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AddForceHighlightTargetEvent : redEvent
 	{
-		private entEntityID _targetID;
-		private CName _effecName;
-
 		[Ordinal(0)] 
 		[RED("targetID")] 
 		public entEntityID TargetID
 		{
-			get => GetProperty(ref _targetID);
-			set => SetProperty(ref _targetID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("effecName")] 
 		public CName EffecName
 		{
-			get => GetProperty(ref _effecName);
-			set => SetProperty(ref _effecName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public AddForceHighlightTargetEvent()
+		{
+			TargetID = new();
 		}
 	}
 }

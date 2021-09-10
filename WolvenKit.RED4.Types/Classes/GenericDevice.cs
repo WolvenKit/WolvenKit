@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class GenericDevice : InteractiveDevice
 	{
-		private CHandle<AIOffMeshConnectionComponent> _offMeshConnectionComponent;
-		private CHandle<CustomDeviceAction> _currentSpiderbotAction;
-
 		[Ordinal(97)] 
 		[RED("offMeshConnectionComponent")] 
 		public CHandle<AIOffMeshConnectionComponent> OffMeshConnectionComponent
 		{
-			get => GetProperty(ref _offMeshConnectionComponent);
-			set => SetProperty(ref _offMeshConnectionComponent, value);
+			get => GetPropertyValue<CHandle<AIOffMeshConnectionComponent>>();
+			set => SetPropertyValue<CHandle<AIOffMeshConnectionComponent>>(value);
 		}
 
 		[Ordinal(98)] 
 		[RED("currentSpiderbotAction")] 
 		public CHandle<CustomDeviceAction> CurrentSpiderbotAction
 		{
-			get => GetProperty(ref _currentSpiderbotAction);
-			set => SetProperty(ref _currentSpiderbotAction, value);
+			get => GetPropertyValue<CHandle<CustomDeviceAction>>();
+			set => SetPropertyValue<CHandle<CustomDeviceAction>>(value);
+		}
+
+		public GenericDevice()
+		{
+			ControllerTypeName = "GenericDeviceController";
 		}
 	}
 }

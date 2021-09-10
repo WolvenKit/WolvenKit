@@ -5,41 +5,46 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnRewindableSectionNode : scnSceneGraphNode
 	{
-		private CArray<CHandle<scnSceneEvent>> _events;
-		private scnSceneTime _sectionDuration;
-		private CArray<scnSectionInternalsActorBehavior> _actorBehaviors;
-		private scnRewindableSectionPlaySpeedModifiers _playSpeedModifiers;
-
 		[Ordinal(3)] 
 		[RED("events")] 
 		public CArray<CHandle<scnSceneEvent>> Events
 		{
-			get => GetProperty(ref _events);
-			set => SetProperty(ref _events, value);
+			get => GetPropertyValue<CArray<CHandle<scnSceneEvent>>>();
+			set => SetPropertyValue<CArray<CHandle<scnSceneEvent>>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("sectionDuration")] 
 		public scnSceneTime SectionDuration
 		{
-			get => GetProperty(ref _sectionDuration);
-			set => SetProperty(ref _sectionDuration, value);
+			get => GetPropertyValue<scnSceneTime>();
+			set => SetPropertyValue<scnSceneTime>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("actorBehaviors")] 
 		public CArray<scnSectionInternalsActorBehavior> ActorBehaviors
 		{
-			get => GetProperty(ref _actorBehaviors);
-			set => SetProperty(ref _actorBehaviors, value);
+			get => GetPropertyValue<CArray<scnSectionInternalsActorBehavior>>();
+			set => SetPropertyValue<CArray<scnSectionInternalsActorBehavior>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("playSpeedModifiers")] 
 		public scnRewindableSectionPlaySpeedModifiers PlaySpeedModifiers
 		{
-			get => GetProperty(ref _playSpeedModifiers);
-			set => SetProperty(ref _playSpeedModifiers, value);
+			get => GetPropertyValue<scnRewindableSectionPlaySpeedModifiers>();
+			set => SetPropertyValue<scnRewindableSectionPlaySpeedModifiers>(value);
+		}
+
+		public scnRewindableSectionNode()
+		{
+			NodeId = new() { Id = 4294967295 };
+			OutputSockets = new();
+			Events = new();
+			SectionDuration = new();
+			ActorBehaviors = new();
+			PlaySpeedModifiers = new() { ForwardVeryFast = 6.000000F, ForwardFast = 3.000000F, ForwardSlow = 0.500000F, BackwardVeryFast = 6.000000F, BackwardFast = 3.000000F, BackwardSlow = 0.500000F };
 		}
 	}
 }

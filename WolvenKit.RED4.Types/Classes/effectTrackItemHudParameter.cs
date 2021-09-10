@@ -5,47 +5,45 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class effectTrackItemHudParameter : effectTrackItem
 	{
-		private CFloat _scale;
-		private effectEffectParameterEvaluator _glitchParameter;
-		private CFloat _scale1;
-		private effectEffectParameterEvaluator _glitchParameter1;
-
 		[Ordinal(3)] 
 		[RED("scale")] 
 		public CFloat Scale
 		{
-			get => GetProperty(ref _scale);
-			set => SetProperty(ref _scale, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("glitchParameter")] 
 		public effectEffectParameterEvaluator GlitchParameter
 		{
-			get => GetProperty(ref _glitchParameter);
-			set => SetProperty(ref _glitchParameter, value);
+			get => GetPropertyValue<effectEffectParameterEvaluator>();
+			set => SetPropertyValue<effectEffectParameterEvaluator>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("scale1")] 
 		public CFloat Scale1
 		{
-			get => GetProperty(ref _scale1);
-			set => SetProperty(ref _scale1, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("glitchParameter1")] 
 		public effectEffectParameterEvaluator GlitchParameter1
 		{
-			get => GetProperty(ref _glitchParameter1);
-			set => SetProperty(ref _glitchParameter1, value);
+			get => GetPropertyValue<effectEffectParameterEvaluator>();
+			set => SetPropertyValue<effectEffectParameterEvaluator>(value);
 		}
 
 		public effectTrackItemHudParameter()
 		{
-			_scale = 1.000000F;
-			_scale1 = 1.000000F;
+			TimeDuration = 1.000000F;
+			Scale = 1.000000F;
+			GlitchParameter = new();
+			Scale1 = 1.000000F;
+			GlitchParameter1 = new();
 		}
 	}
 }

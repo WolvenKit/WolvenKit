@@ -5,317 +5,285 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MeleeAttackData : IScriptable
 	{
-		private CString _attackName;
-		private CFloat _attackSpeed;
-		private CFloat _attackWindowOpen;
-		private CFloat _attackWindowClosed;
-		private CFloat _idleTransitionTime;
-		private CFloat _holdTransitionTime;
-		private CFloat _blockTransitionTime;
-		private CName _attackEffectDirection;
-		private CFloat _attackEffectDuration;
-		private CFloat _attackEffectDelay;
-		private CName _impactFxSlot;
-		private CFloat _impulseDelay;
-		private CFloat _cameraSpaceImpulse;
-		private CFloat _forwardImpulse;
-		private CFloat _upImpulse;
-		private CBool _useAdjustmentInsteadOfImpulse;
-		private CBool _enableAdjustingPlayerPositionToTarget;
-		private Vector4 _startPosition;
-		private Vector4 _endPosition;
-		private CFloat _staminaCost;
-		private CFloat _chargeCost;
-		private CBool _hasDeflectAnim;
-		private CBool _hasHitAnim;
-		private CFloat _trailStartDelay;
-		private CFloat _trailStopDelay;
-		private CString _trailAttackSide;
-		private CBool _incrementsCombo;
-		private CFloat _startupDuration;
-		private CFloat _activeDuration;
-		private CFloat _recoverDuration;
-		private CFloat _activeHitDuration;
-		private CFloat _recoverHitDuration;
-		private CFloat _standUpDelay;
-		private Vector3 _ikOffset;
-
 		[Ordinal(0)] 
 		[RED("attackName")] 
 		public CString AttackName
 		{
-			get => GetProperty(ref _attackName);
-			set => SetProperty(ref _attackName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("attackSpeed")] 
 		public CFloat AttackSpeed
 		{
-			get => GetProperty(ref _attackSpeed);
-			set => SetProperty(ref _attackSpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("attackWindowOpen")] 
 		public CFloat AttackWindowOpen
 		{
-			get => GetProperty(ref _attackWindowOpen);
-			set => SetProperty(ref _attackWindowOpen, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("attackWindowClosed")] 
 		public CFloat AttackWindowClosed
 		{
-			get => GetProperty(ref _attackWindowClosed);
-			set => SetProperty(ref _attackWindowClosed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("idleTransitionTime")] 
 		public CFloat IdleTransitionTime
 		{
-			get => GetProperty(ref _idleTransitionTime);
-			set => SetProperty(ref _idleTransitionTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("holdTransitionTime")] 
 		public CFloat HoldTransitionTime
 		{
-			get => GetProperty(ref _holdTransitionTime);
-			set => SetProperty(ref _holdTransitionTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("blockTransitionTime")] 
 		public CFloat BlockTransitionTime
 		{
-			get => GetProperty(ref _blockTransitionTime);
-			set => SetProperty(ref _blockTransitionTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("attackEffectDirection")] 
 		public CName AttackEffectDirection
 		{
-			get => GetProperty(ref _attackEffectDirection);
-			set => SetProperty(ref _attackEffectDirection, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("attackEffectDuration")] 
 		public CFloat AttackEffectDuration
 		{
-			get => GetProperty(ref _attackEffectDuration);
-			set => SetProperty(ref _attackEffectDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("attackEffectDelay")] 
 		public CFloat AttackEffectDelay
 		{
-			get => GetProperty(ref _attackEffectDelay);
-			set => SetProperty(ref _attackEffectDelay, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("impactFxSlot")] 
 		public CName ImpactFxSlot
 		{
-			get => GetProperty(ref _impactFxSlot);
-			set => SetProperty(ref _impactFxSlot, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("impulseDelay")] 
 		public CFloat ImpulseDelay
 		{
-			get => GetProperty(ref _impulseDelay);
-			set => SetProperty(ref _impulseDelay, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("cameraSpaceImpulse")] 
 		public CFloat CameraSpaceImpulse
 		{
-			get => GetProperty(ref _cameraSpaceImpulse);
-			set => SetProperty(ref _cameraSpaceImpulse, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("forwardImpulse")] 
 		public CFloat ForwardImpulse
 		{
-			get => GetProperty(ref _forwardImpulse);
-			set => SetProperty(ref _forwardImpulse, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("upImpulse")] 
 		public CFloat UpImpulse
 		{
-			get => GetProperty(ref _upImpulse);
-			set => SetProperty(ref _upImpulse, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("useAdjustmentInsteadOfImpulse")] 
 		public CBool UseAdjustmentInsteadOfImpulse
 		{
-			get => GetProperty(ref _useAdjustmentInsteadOfImpulse);
-			set => SetProperty(ref _useAdjustmentInsteadOfImpulse, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("enableAdjustingPlayerPositionToTarget")] 
 		public CBool EnableAdjustingPlayerPositionToTarget
 		{
-			get => GetProperty(ref _enableAdjustingPlayerPositionToTarget);
-			set => SetProperty(ref _enableAdjustingPlayerPositionToTarget, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("startPosition")] 
 		public Vector4 StartPosition
 		{
-			get => GetProperty(ref _startPosition);
-			set => SetProperty(ref _startPosition, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("endPosition")] 
 		public Vector4 EndPosition
 		{
-			get => GetProperty(ref _endPosition);
-			set => SetProperty(ref _endPosition, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("staminaCost")] 
 		public CFloat StaminaCost
 		{
-			get => GetProperty(ref _staminaCost);
-			set => SetProperty(ref _staminaCost, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("chargeCost")] 
 		public CFloat ChargeCost
 		{
-			get => GetProperty(ref _chargeCost);
-			set => SetProperty(ref _chargeCost, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("hasDeflectAnim")] 
 		public CBool HasDeflectAnim
 		{
-			get => GetProperty(ref _hasDeflectAnim);
-			set => SetProperty(ref _hasDeflectAnim, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("hasHitAnim")] 
 		public CBool HasHitAnim
 		{
-			get => GetProperty(ref _hasHitAnim);
-			set => SetProperty(ref _hasHitAnim, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("trailStartDelay")] 
 		public CFloat TrailStartDelay
 		{
-			get => GetProperty(ref _trailStartDelay);
-			set => SetProperty(ref _trailStartDelay, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("trailStopDelay")] 
 		public CFloat TrailStopDelay
 		{
-			get => GetProperty(ref _trailStopDelay);
-			set => SetProperty(ref _trailStopDelay, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("trailAttackSide")] 
 		public CString TrailAttackSide
 		{
-			get => GetProperty(ref _trailAttackSide);
-			set => SetProperty(ref _trailAttackSide, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("incrementsCombo")] 
 		public CBool IncrementsCombo
 		{
-			get => GetProperty(ref _incrementsCombo);
-			set => SetProperty(ref _incrementsCombo, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("startupDuration")] 
 		public CFloat StartupDuration
 		{
-			get => GetProperty(ref _startupDuration);
-			set => SetProperty(ref _startupDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("activeDuration")] 
 		public CFloat ActiveDuration
 		{
-			get => GetProperty(ref _activeDuration);
-			set => SetProperty(ref _activeDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("recoverDuration")] 
 		public CFloat RecoverDuration
 		{
-			get => GetProperty(ref _recoverDuration);
-			set => SetProperty(ref _recoverDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("activeHitDuration")] 
 		public CFloat ActiveHitDuration
 		{
-			get => GetProperty(ref _activeHitDuration);
-			set => SetProperty(ref _activeHitDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("recoverHitDuration")] 
 		public CFloat RecoverHitDuration
 		{
-			get => GetProperty(ref _recoverHitDuration);
-			set => SetProperty(ref _recoverHitDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("standUpDelay")] 
 		public CFloat StandUpDelay
 		{
-			get => GetProperty(ref _standUpDelay);
-			set => SetProperty(ref _standUpDelay, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("ikOffset")] 
 		public Vector3 IkOffset
 		{
-			get => GetProperty(ref _ikOffset);
-			set => SetProperty(ref _ikOffset, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		public MeleeAttackData()
 		{
-			_trailStartDelay = 0.100000F;
-			_trailStopDelay = 0.500000F;
+			StartPosition = new();
+			EndPosition = new();
+			TrailStartDelay = 0.100000F;
+			TrailStopDelay = 0.500000F;
+			IkOffset = new();
 		}
 	}
 }

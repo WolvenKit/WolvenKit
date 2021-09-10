@@ -5,39 +5,37 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class workPauseClip : workIEntry
 	{
-		private CFloat _timeMin;
-		private CFloat _timeMax;
-		private CFloat _blendOutTime;
-
 		[Ordinal(2)] 
 		[RED("timeMin")] 
 		public CFloat TimeMin
 		{
-			get => GetProperty(ref _timeMin);
-			set => SetProperty(ref _timeMin, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("timeMax")] 
 		public CFloat TimeMax
 		{
-			get => GetProperty(ref _timeMax);
-			set => SetProperty(ref _timeMax, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("blendOutTime")] 
 		public CFloat BlendOutTime
 		{
-			get => GetProperty(ref _blendOutTime);
-			set => SetProperty(ref _blendOutTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public workPauseClip()
 		{
-			_timeMin = 2.000000F;
-			_timeMax = 5.000000F;
-			_blendOutTime = 0.500000F;
+			Id = new() { Id = 4294967295 };
+			Flags = 32;
+			TimeMin = 2.000000F;
+			TimeMax = 5.000000F;
+			BlendOutTime = 0.500000F;
 		}
 	}
 }

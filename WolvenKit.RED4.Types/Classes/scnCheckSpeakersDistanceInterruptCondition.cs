@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnCheckSpeakersDistanceInterruptCondition : scnIInterruptCondition
 	{
-		private scnCheckSpeakersDistanceInterruptConditionParams _params;
-
 		[Ordinal(0)] 
 		[RED("params")] 
 		public scnCheckSpeakersDistanceInterruptConditionParams Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<scnCheckSpeakersDistanceInterruptConditionParams>();
+			set => SetPropertyValue<scnCheckSpeakersDistanceInterruptConditionParams>(value);
+		}
+
+		public scnCheckSpeakersDistanceInterruptCondition()
+		{
+			Params = new() { Distance = 6.000000F };
 		}
 	}
 }

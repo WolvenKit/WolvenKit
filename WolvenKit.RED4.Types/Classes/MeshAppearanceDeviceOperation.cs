@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MeshAppearanceDeviceOperation : DeviceOperationBase
 	{
-		private CName _meshesAppearence;
-
 		[Ordinal(5)] 
 		[RED("meshesAppearence")] 
 		public CName MeshesAppearence
 		{
-			get => GetProperty(ref _meshesAppearence);
-			set => SetProperty(ref _meshesAppearence, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public MeshAppearanceDeviceOperation()
+		{
+			IsEnabled = true;
+			ToggleOperations = new();
 		}
 	}
 }

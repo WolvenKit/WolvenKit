@@ -5,113 +5,114 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animImportFacialSetupDesc : RedBaseClass
 	{
-		private CArray<animImportFacialInitialPoseEntryDesc> _initialPose;
-		private animImportFacialInitialControlsDesc _initialControls;
-		private CArray<animImportFacialMainPoseDesc> _mainPoses;
-		private CArray<animSermoPoseInfo> _mainPosesInfo;
-		private CArray<CInt16> _jawAreaTrackIndices;
-		private CArray<CInt16> _lipsAreaTrackIndices;
-		private CArray<CInt16> _eyesAreaTrackIndices;
-		private CUInt16 _numCachedPoseTracks;
-		private CArray<animImportFacialCorrectivePoseDesc> _correctivePoses;
-		private CArray<animPoseLimitWeights> _globalPoseLimits;
-		private CUInt16 _wrinkleStartingIndex;
-		private CArray<CUInt16> _wrinkleMapping;
-
 		[Ordinal(0)] 
 		[RED("initialPose")] 
 		public CArray<animImportFacialInitialPoseEntryDesc> InitialPose
 		{
-			get => GetProperty(ref _initialPose);
-			set => SetProperty(ref _initialPose, value);
+			get => GetPropertyValue<CArray<animImportFacialInitialPoseEntryDesc>>();
+			set => SetPropertyValue<CArray<animImportFacialInitialPoseEntryDesc>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("initialControls")] 
 		public animImportFacialInitialControlsDesc InitialControls
 		{
-			get => GetProperty(ref _initialControls);
-			set => SetProperty(ref _initialControls, value);
+			get => GetPropertyValue<animImportFacialInitialControlsDesc>();
+			set => SetPropertyValue<animImportFacialInitialControlsDesc>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("mainPoses")] 
 		public CArray<animImportFacialMainPoseDesc> MainPoses
 		{
-			get => GetProperty(ref _mainPoses);
-			set => SetProperty(ref _mainPoses, value);
+			get => GetPropertyValue<CArray<animImportFacialMainPoseDesc>>();
+			set => SetPropertyValue<CArray<animImportFacialMainPoseDesc>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("mainPosesInfo")] 
 		public CArray<animSermoPoseInfo> MainPosesInfo
 		{
-			get => GetProperty(ref _mainPosesInfo);
-			set => SetProperty(ref _mainPosesInfo, value);
+			get => GetPropertyValue<CArray<animSermoPoseInfo>>();
+			set => SetPropertyValue<CArray<animSermoPoseInfo>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("jawAreaTrackIndices")] 
 		public CArray<CInt16> JawAreaTrackIndices
 		{
-			get => GetProperty(ref _jawAreaTrackIndices);
-			set => SetProperty(ref _jawAreaTrackIndices, value);
+			get => GetPropertyValue<CArray<CInt16>>();
+			set => SetPropertyValue<CArray<CInt16>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("lipsAreaTrackIndices")] 
 		public CArray<CInt16> LipsAreaTrackIndices
 		{
-			get => GetProperty(ref _lipsAreaTrackIndices);
-			set => SetProperty(ref _lipsAreaTrackIndices, value);
+			get => GetPropertyValue<CArray<CInt16>>();
+			set => SetPropertyValue<CArray<CInt16>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("eyesAreaTrackIndices")] 
 		public CArray<CInt16> EyesAreaTrackIndices
 		{
-			get => GetProperty(ref _eyesAreaTrackIndices);
-			set => SetProperty(ref _eyesAreaTrackIndices, value);
+			get => GetPropertyValue<CArray<CInt16>>();
+			set => SetPropertyValue<CArray<CInt16>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("numCachedPoseTracks")] 
 		public CUInt16 NumCachedPoseTracks
 		{
-			get => GetProperty(ref _numCachedPoseTracks);
-			set => SetProperty(ref _numCachedPoseTracks, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("correctivePoses")] 
 		public CArray<animImportFacialCorrectivePoseDesc> CorrectivePoses
 		{
-			get => GetProperty(ref _correctivePoses);
-			set => SetProperty(ref _correctivePoses, value);
+			get => GetPropertyValue<CArray<animImportFacialCorrectivePoseDesc>>();
+			set => SetPropertyValue<CArray<animImportFacialCorrectivePoseDesc>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("globalPoseLimits")] 
 		public CArray<animPoseLimitWeights> GlobalPoseLimits
 		{
-			get => GetProperty(ref _globalPoseLimits);
-			set => SetProperty(ref _globalPoseLimits, value);
+			get => GetPropertyValue<CArray<animPoseLimitWeights>>();
+			set => SetPropertyValue<CArray<animPoseLimitWeights>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("wrinkleStartingIndex")] 
 		public CUInt16 WrinkleStartingIndex
 		{
-			get => GetProperty(ref _wrinkleStartingIndex);
-			set => SetProperty(ref _wrinkleStartingIndex, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("wrinkleMapping")] 
 		public CArray<CUInt16> WrinkleMapping
 		{
-			get => GetProperty(ref _wrinkleMapping);
-			set => SetProperty(ref _wrinkleMapping, value);
+			get => GetPropertyValue<CArray<CUInt16>>();
+			set => SetPropertyValue<CArray<CUInt16>>(value);
+		}
+
+		public animImportFacialSetupDesc()
+		{
+			InitialPose = new();
+			InitialControls = new() { TransformIds = new(), TransformNames = new(), TransformRegions = new() };
+			MainPoses = new();
+			MainPosesInfo = new();
+			JawAreaTrackIndices = new();
+			LipsAreaTrackIndices = new();
+			EyesAreaTrackIndices = new();
+			CorrectivePoses = new();
+			GlobalPoseLimits = new();
+			WrinkleMapping = new();
 		}
 	}
 }

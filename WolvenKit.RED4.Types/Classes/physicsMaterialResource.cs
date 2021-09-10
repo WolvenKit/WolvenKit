@@ -5,85 +5,78 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class physicsMaterialResource : CResource
 	{
-		private CFloat _staticFriction;
-		private CFloat _dynamicFriction;
-		private CFloat _restitution;
-		private CEnum<physicsMaterialFriction> _frictionMode;
-		private CFloat _density;
-		private physicsMaterialTags _tags;
-		private CColor _color;
-		private CUInt64 _id;
-
 		[Ordinal(1)] 
 		[RED("staticFriction")] 
 		public CFloat StaticFriction
 		{
-			get => GetProperty(ref _staticFriction);
-			set => SetProperty(ref _staticFriction, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("dynamicFriction")] 
 		public CFloat DynamicFriction
 		{
-			get => GetProperty(ref _dynamicFriction);
-			set => SetProperty(ref _dynamicFriction, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("restitution")] 
 		public CFloat Restitution
 		{
-			get => GetProperty(ref _restitution);
-			set => SetProperty(ref _restitution, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("frictionMode")] 
 		public CEnum<physicsMaterialFriction> FrictionMode
 		{
-			get => GetProperty(ref _frictionMode);
-			set => SetProperty(ref _frictionMode, value);
+			get => GetPropertyValue<CEnum<physicsMaterialFriction>>();
+			set => SetPropertyValue<CEnum<physicsMaterialFriction>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("density")] 
 		public CFloat Density
 		{
-			get => GetProperty(ref _density);
-			set => SetProperty(ref _density, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("tags")] 
 		public physicsMaterialTags Tags
 		{
-			get => GetProperty(ref _tags);
-			set => SetProperty(ref _tags, value);
+			get => GetPropertyValue<physicsMaterialTags>();
+			set => SetPropertyValue<physicsMaterialTags>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("color")] 
 		public CColor Color
 		{
-			get => GetProperty(ref _color);
-			set => SetProperty(ref _color, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("id")] 
 		public CUInt64 Id
 		{
-			get => GetProperty(ref _id);
-			set => SetProperty(ref _id, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		public physicsMaterialResource()
 		{
-			_staticFriction = 0.500000F;
-			_dynamicFriction = 0.300000F;
-			_restitution = 0.200000F;
-			_density = 1000.000000F;
+			StaticFriction = 0.500000F;
+			DynamicFriction = 0.300000F;
+			Restitution = 0.200000F;
+			Density = 1000.000000F;
+			Tags = new();
+			Color = new();
 		}
 	}
 }

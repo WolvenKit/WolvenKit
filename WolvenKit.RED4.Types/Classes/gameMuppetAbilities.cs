@@ -5,77 +5,80 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameMuppetAbilities : RedBaseClass
 	{
-		private gameMuppetAbility _canLook;
-		private gameMuppetAbility _canMove;
-		private gameMuppetAbility _canCrouch;
-		private gameMuppetAbility _canSprint;
-		private gameMuppetAbility _canSwitchWeapon;
-		private gameMuppetAbility _canHoldWeapon;
-		private gameMuppetAbility _canShoot;
-		private gameMuppetAbility _canAimDownSight;
-
 		[Ordinal(0)] 
 		[RED("canLook")] 
 		public gameMuppetAbility CanLook
 		{
-			get => GetProperty(ref _canLook);
-			set => SetProperty(ref _canLook, value);
+			get => GetPropertyValue<gameMuppetAbility>();
+			set => SetPropertyValue<gameMuppetAbility>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("canMove")] 
 		public gameMuppetAbility CanMove
 		{
-			get => GetProperty(ref _canMove);
-			set => SetProperty(ref _canMove, value);
+			get => GetPropertyValue<gameMuppetAbility>();
+			set => SetPropertyValue<gameMuppetAbility>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("canCrouch")] 
 		public gameMuppetAbility CanCrouch
 		{
-			get => GetProperty(ref _canCrouch);
-			set => SetProperty(ref _canCrouch, value);
+			get => GetPropertyValue<gameMuppetAbility>();
+			set => SetPropertyValue<gameMuppetAbility>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("canSprint")] 
 		public gameMuppetAbility CanSprint
 		{
-			get => GetProperty(ref _canSprint);
-			set => SetProperty(ref _canSprint, value);
+			get => GetPropertyValue<gameMuppetAbility>();
+			set => SetPropertyValue<gameMuppetAbility>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("canSwitchWeapon")] 
 		public gameMuppetAbility CanSwitchWeapon
 		{
-			get => GetProperty(ref _canSwitchWeapon);
-			set => SetProperty(ref _canSwitchWeapon, value);
+			get => GetPropertyValue<gameMuppetAbility>();
+			set => SetPropertyValue<gameMuppetAbility>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("canHoldWeapon")] 
 		public gameMuppetAbility CanHoldWeapon
 		{
-			get => GetProperty(ref _canHoldWeapon);
-			set => SetProperty(ref _canHoldWeapon, value);
+			get => GetPropertyValue<gameMuppetAbility>();
+			set => SetPropertyValue<gameMuppetAbility>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("canShoot")] 
 		public gameMuppetAbility CanShoot
 		{
-			get => GetProperty(ref _canShoot);
-			set => SetProperty(ref _canShoot, value);
+			get => GetPropertyValue<gameMuppetAbility>();
+			set => SetPropertyValue<gameMuppetAbility>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("canAimDownSight")] 
 		public gameMuppetAbility CanAimDownSight
 		{
-			get => GetProperty(ref _canAimDownSight);
-			set => SetProperty(ref _canAimDownSight, value);
+			get => GetPropertyValue<gameMuppetAbility>();
+			set => SetPropertyValue<gameMuppetAbility>(value);
+		}
+
+		public gameMuppetAbilities()
+		{
+			CanLook = new();
+			CanMove = new();
+			CanCrouch = new();
+			CanSprint = new();
+			CanSwitchWeapon = new();
+			CanHoldWeapon = new();
+			CanShoot = new();
+			CanAimDownSight = new();
 		}
 	}
 }

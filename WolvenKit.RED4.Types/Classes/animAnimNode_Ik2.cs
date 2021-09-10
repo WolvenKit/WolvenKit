@@ -5,177 +5,169 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_Ik2 : animAnimNode_Base
 	{
-		private animTransformIndex _firstBone;
-		private animTransformIndex _secondBone;
-		private animTransformIndex _endBone;
-		private CEnum<animAxis> _hingeAxis;
-		private CFloat _minHingeAngleDegrees;
-		private CFloat _maxHingeAngleDegrees;
-		private CFloat _firstBoneIkGain;
-		private CFloat _secondBoneIkGain;
-		private CFloat _endBoneIkGain;
-		private CBool _enforceEndPosition;
-		private CBool _enforceEndOrientation;
-		private Vector4 _endBoneOffsetPositionLS;
-		private animTransformIndex _bone;
-		private animNamedTrackIndex _floatTrack;
-		private animPoseLink _inputPoseNode;
-		private animFloatLink _weightNode;
-		private animVectorLink _endTargetPositionNode;
-		private animQuaternionLink _endTargetOrientationNode;
-
 		[Ordinal(11)] 
 		[RED("firstBone")] 
 		public animTransformIndex FirstBone
 		{
-			get => GetProperty(ref _firstBone);
-			set => SetProperty(ref _firstBone, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("secondBone")] 
 		public animTransformIndex SecondBone
 		{
-			get => GetProperty(ref _secondBone);
-			set => SetProperty(ref _secondBone, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("endBone")] 
 		public animTransformIndex EndBone
 		{
-			get => GetProperty(ref _endBone);
-			set => SetProperty(ref _endBone, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("hingeAxis")] 
 		public CEnum<animAxis> HingeAxis
 		{
-			get => GetProperty(ref _hingeAxis);
-			set => SetProperty(ref _hingeAxis, value);
+			get => GetPropertyValue<CEnum<animAxis>>();
+			set => SetPropertyValue<CEnum<animAxis>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("minHingeAngleDegrees")] 
 		public CFloat MinHingeAngleDegrees
 		{
-			get => GetProperty(ref _minHingeAngleDegrees);
-			set => SetProperty(ref _minHingeAngleDegrees, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("maxHingeAngleDegrees")] 
 		public CFloat MaxHingeAngleDegrees
 		{
-			get => GetProperty(ref _maxHingeAngleDegrees);
-			set => SetProperty(ref _maxHingeAngleDegrees, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("firstBoneIkGain")] 
 		public CFloat FirstBoneIkGain
 		{
-			get => GetProperty(ref _firstBoneIkGain);
-			set => SetProperty(ref _firstBoneIkGain, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("secondBoneIkGain")] 
 		public CFloat SecondBoneIkGain
 		{
-			get => GetProperty(ref _secondBoneIkGain);
-			set => SetProperty(ref _secondBoneIkGain, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("endBoneIkGain")] 
 		public CFloat EndBoneIkGain
 		{
-			get => GetProperty(ref _endBoneIkGain);
-			set => SetProperty(ref _endBoneIkGain, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("enforceEndPosition")] 
 		public CBool EnforceEndPosition
 		{
-			get => GetProperty(ref _enforceEndPosition);
-			set => SetProperty(ref _enforceEndPosition, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("enforceEndOrientation")] 
 		public CBool EnforceEndOrientation
 		{
-			get => GetProperty(ref _enforceEndOrientation);
-			set => SetProperty(ref _enforceEndOrientation, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("endBoneOffsetPositionLS")] 
 		public Vector4 EndBoneOffsetPositionLS
 		{
-			get => GetProperty(ref _endBoneOffsetPositionLS);
-			set => SetProperty(ref _endBoneOffsetPositionLS, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("bone")] 
 		public animTransformIndex Bone
 		{
-			get => GetProperty(ref _bone);
-			set => SetProperty(ref _bone, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("floatTrack")] 
 		public animNamedTrackIndex FloatTrack
 		{
-			get => GetProperty(ref _floatTrack);
-			set => SetProperty(ref _floatTrack, value);
+			get => GetPropertyValue<animNamedTrackIndex>();
+			set => SetPropertyValue<animNamedTrackIndex>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("inputPoseNode")] 
 		public animPoseLink InputPoseNode
 		{
-			get => GetProperty(ref _inputPoseNode);
-			set => SetProperty(ref _inputPoseNode, value);
+			get => GetPropertyValue<animPoseLink>();
+			set => SetPropertyValue<animPoseLink>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("weightNode")] 
 		public animFloatLink WeightNode
 		{
-			get => GetProperty(ref _weightNode);
-			set => SetProperty(ref _weightNode, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("endTargetPositionNode")] 
 		public animVectorLink EndTargetPositionNode
 		{
-			get => GetProperty(ref _endTargetPositionNode);
-			set => SetProperty(ref _endTargetPositionNode, value);
+			get => GetPropertyValue<animVectorLink>();
+			set => SetPropertyValue<animVectorLink>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("endTargetOrientationNode")] 
 		public animQuaternionLink EndTargetOrientationNode
 		{
-			get => GetProperty(ref _endTargetOrientationNode);
-			set => SetProperty(ref _endTargetOrientationNode, value);
+			get => GetPropertyValue<animQuaternionLink>();
+			set => SetPropertyValue<animQuaternionLink>(value);
 		}
 
 		public animAnimNode_Ik2()
 		{
-			_hingeAxis = new() { Value = Enums.animAxis.Y };
-			_maxHingeAngleDegrees = 180.000000F;
-			_firstBoneIkGain = 1.000000F;
-			_secondBoneIkGain = 1.000000F;
-			_endBoneIkGain = 1.000000F;
-			_enforceEndPosition = true;
+			Id = 4294967295;
+			FirstBone = new();
+			SecondBone = new();
+			EndBone = new();
+			HingeAxis = Enums.animAxis.Y;
+			MaxHingeAngleDegrees = 180.000000F;
+			FirstBoneIkGain = 1.000000F;
+			SecondBoneIkGain = 1.000000F;
+			EndBoneIkGain = 1.000000F;
+			EnforceEndPosition = true;
+			EndBoneOffsetPositionLS = new();
+			Bone = new();
+			FloatTrack = new();
+			InputPoseNode = new();
+			WeightNode = new();
+			EndTargetPositionNode = new();
+			EndTargetOrientationNode = new();
 		}
 	}
 }

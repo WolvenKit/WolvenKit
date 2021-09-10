@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_SkPhaseSlotWithDurationAnim : animAnimNode_SkPhaseWithDurationAnim
 	{
-		private CName _animFeatureName;
-		private CResourceReference<animActionAnimDatabase> _actionAnimDatabaseRef;
-
 		[Ordinal(32)] 
 		[RED("animFeatureName")] 
 		public CName AnimFeatureName
 		{
-			get => GetProperty(ref _animFeatureName);
-			set => SetProperty(ref _animFeatureName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("actionAnimDatabaseRef")] 
 		public CResourceReference<animActionAnimDatabase> ActionAnimDatabaseRef
 		{
-			get => GetProperty(ref _actionAnimDatabaseRef);
-			set => SetProperty(ref _actionAnimDatabaseRef, value);
+			get => GetPropertyValue<CResourceReference<animActionAnimDatabase>>();
+			set => SetPropertyValue<CResourceReference<animActionAnimDatabase>>(value);
 		}
 	}
 }

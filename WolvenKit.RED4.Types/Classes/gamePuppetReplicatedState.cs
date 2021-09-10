@@ -5,95 +5,84 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamePuppetReplicatedState : netIEntityState
 	{
-		private EulerAngles _initialOrientation;
-		private Vector3 _initialLocation;
-		private CName _initialAppearance;
-		private gameActionsReplicationBuffer _actionsBuffer;
-		private CFloat _health;
-		private CFloat _armor;
-		private CBool _hasCPOMissionData;
-		private CArray<CName> _cPOMissionVotedHistory;
-		private gameReplicatedAnimControllerEventsState _animEventsState;
-		private gameReplicatedEntityEventsState _entityEventsState;
-
 		[Ordinal(2)] 
 		[RED("initialOrientation")] 
 		public EulerAngles InitialOrientation
 		{
-			get => GetProperty(ref _initialOrientation);
-			set => SetProperty(ref _initialOrientation, value);
+			get => GetPropertyValue<EulerAngles>();
+			set => SetPropertyValue<EulerAngles>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("initialLocation")] 
 		public Vector3 InitialLocation
 		{
-			get => GetProperty(ref _initialLocation);
-			set => SetProperty(ref _initialLocation, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("initialAppearance")] 
 		public CName InitialAppearance
 		{
-			get => GetProperty(ref _initialAppearance);
-			set => SetProperty(ref _initialAppearance, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("actionsBuffer")] 
 		public gameActionsReplicationBuffer ActionsBuffer
 		{
-			get => GetProperty(ref _actionsBuffer);
-			set => SetProperty(ref _actionsBuffer, value);
+			get => GetPropertyValue<gameActionsReplicationBuffer>();
+			set => SetPropertyValue<gameActionsReplicationBuffer>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("health")] 
 		public CFloat Health
 		{
-			get => GetProperty(ref _health);
-			set => SetProperty(ref _health, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("armor")] 
 		public CFloat Armor
 		{
-			get => GetProperty(ref _armor);
-			set => SetProperty(ref _armor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("hasCPOMissionData")] 
 		public CBool HasCPOMissionData
 		{
-			get => GetProperty(ref _hasCPOMissionData);
-			set => SetProperty(ref _hasCPOMissionData, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("CPOMissionVotedHistory")] 
 		public CArray<CName> CPOMissionVotedHistory
 		{
-			get => GetProperty(ref _cPOMissionVotedHistory);
-			set => SetProperty(ref _cPOMissionVotedHistory, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("animEventsState")] 
 		public gameReplicatedAnimControllerEventsState AnimEventsState
 		{
-			get => GetProperty(ref _animEventsState);
-			set => SetProperty(ref _animEventsState, value);
+			get => GetPropertyValue<gameReplicatedAnimControllerEventsState>();
+			set => SetPropertyValue<gameReplicatedAnimControllerEventsState>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("entityEventsState")] 
 		public gameReplicatedEntityEventsState EntityEventsState
 		{
-			get => GetProperty(ref _entityEventsState);
-			set => SetProperty(ref _entityEventsState, value);
+			get => GetPropertyValue<gameReplicatedEntityEventsState>();
+			set => SetPropertyValue<gameReplicatedEntityEventsState>(value);
 		}
 	}
 }

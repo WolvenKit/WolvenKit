@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TrackQuestNotificationAction : GenericNotificationBaseAction
 	{
-		private CWeakHandle<gameJournalQuest> _questEntry;
-		private CWeakHandle<gameJournalManager> _journalMgr;
-
 		[Ordinal(0)] 
 		[RED("questEntry")] 
 		public CWeakHandle<gameJournalQuest> QuestEntry
 		{
-			get => GetProperty(ref _questEntry);
-			set => SetProperty(ref _questEntry, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalQuest>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalQuest>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("journalMgr")] 
 		public CWeakHandle<gameJournalManager> JournalMgr
 		{
-			get => GetProperty(ref _journalMgr);
-			set => SetProperty(ref _journalMgr, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalManager>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
 		}
 	}
 }

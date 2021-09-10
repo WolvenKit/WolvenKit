@@ -5,50 +5,53 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class Crosshair_Melee_Knife : gameuiCrosshairBaseGameController
 	{
-		private inkWidgetReference _targetColorChange;
-		private inkWidgetReference _leftPart;
-		private inkWidgetReference _rightPart;
-		private inkWidgetReference _topPart;
-		private inkWidgetReference _botPart;
-
 		[Ordinal(18)] 
 		[RED("targetColorChange")] 
 		public inkWidgetReference TargetColorChange
 		{
-			get => GetProperty(ref _targetColorChange);
-			set => SetProperty(ref _targetColorChange, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("leftPart")] 
 		public inkWidgetReference LeftPart
 		{
-			get => GetProperty(ref _leftPart);
-			set => SetProperty(ref _leftPart, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("rightPart")] 
 		public inkWidgetReference RightPart
 		{
-			get => GetProperty(ref _rightPart);
-			set => SetProperty(ref _rightPart, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("topPart")] 
 		public inkWidgetReference TopPart
 		{
-			get => GetProperty(ref _topPart);
-			set => SetProperty(ref _topPart, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("botPart")] 
 		public inkWidgetReference BotPart
 		{
-			get => GetProperty(ref _botPart);
-			set => SetProperty(ref _botPart, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		public Crosshair_Melee_Knife()
+		{
+			TargetColorChange = new();
+			LeftPart = new();
+			RightPart = new();
+			TopPart = new();
+			BotPart = new();
 		}
 	}
 }

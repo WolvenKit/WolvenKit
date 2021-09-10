@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animLookAtRef : RedBaseClass
 	{
-		private CInt32 _id;
-		private CName _part;
-
 		[Ordinal(0)] 
 		[RED("id")] 
 		public CInt32 Id
 		{
-			get => GetProperty(ref _id);
-			set => SetProperty(ref _id, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("part")] 
 		public CName Part
 		{
-			get => GetProperty(ref _part);
-			set => SetProperty(ref _part, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public animLookAtRef()
 		{
-			_id = -1;
+			Id = -1;
 		}
 	}
 }

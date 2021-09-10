@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameIComparisonPrereq : gameIPrereq
 	{
-		private CEnum<gameComparisonType> _comparisonType;
-
 		[Ordinal(0)] 
 		[RED("comparisonType")] 
 		public CEnum<gameComparisonType> ComparisonType
 		{
-			get => GetProperty(ref _comparisonType);
-			set => SetProperty(ref _comparisonType, value);
+			get => GetPropertyValue<CEnum<gameComparisonType>>();
+			set => SetPropertyValue<CEnum<gameComparisonType>>(value);
 		}
 	}
 }

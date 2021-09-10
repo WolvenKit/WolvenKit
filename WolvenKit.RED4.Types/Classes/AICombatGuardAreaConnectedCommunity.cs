@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AICombatGuardAreaConnectedCommunity : RedBaseClass
 	{
-		private gameEntityReference _communityArea;
-		private CArray<CHandle<AIICombatGuardAreaCondition>> _conditions;
-
 		[Ordinal(0)] 
 		[RED("communityArea")] 
 		public gameEntityReference CommunityArea
 		{
-			get => GetProperty(ref _communityArea);
-			set => SetProperty(ref _communityArea, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("conditions")] 
 		public CArray<CHandle<AIICombatGuardAreaCondition>> Conditions
 		{
-			get => GetProperty(ref _conditions);
-			set => SetProperty(ref _conditions, value);
+			get => GetPropertyValue<CArray<CHandle<AIICombatGuardAreaCondition>>>();
+			set => SetPropertyValue<CArray<CHandle<AIICombatGuardAreaCondition>>>(value);
+		}
+
+		public AICombatGuardAreaConnectedCommunity()
+		{
+			CommunityArea = new() { Names = new() };
+			Conditions = new();
 		}
 	}
 }

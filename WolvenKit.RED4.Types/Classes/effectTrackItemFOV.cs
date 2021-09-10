@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class effectTrackItemFOV : effectTrackItem
 	{
-		private effectEffectParameterEvaluatorFloat _fOV;
-
 		[Ordinal(3)] 
 		[RED("FOV")] 
 		public effectEffectParameterEvaluatorFloat FOV
 		{
-			get => GetProperty(ref _fOV);
-			set => SetProperty(ref _fOV, value);
+			get => GetPropertyValue<effectEffectParameterEvaluatorFloat>();
+			set => SetPropertyValue<effectEffectParameterEvaluatorFloat>(value);
+		}
+
+		public effectTrackItemFOV()
+		{
+			TimeDuration = 1.000000F;
+			FOV = new();
 		}
 	}
 }

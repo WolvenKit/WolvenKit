@@ -5,118 +5,110 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MessengerNotification : GenericNotificationController
 	{
-		private inkTextWidgetReference _messageText;
-		private inkImageWidgetReference _avatar;
-		private inkTextWidgetReference _descriptionText;
-		private inkImageWidgetReference _mappinIcon;
-		private inkWidgetReference _envelopIcon;
-		private CWeakHandle<gameIBlackboard> _interactionsBlackboard;
-		private CHandle<redCallbackObject> _bbListenerId;
-		private CHandle<gameuiPhoneMessageNotificationViewData> _messageData;
-		private CHandle<inkanimProxy> _animProxy;
-		private CInt32 _textSizeLimit;
-		private CWeakHandle<gameJournalManager> _journalMgr;
-		private CWeakHandle<gamemappinsMappinSystem> _mappinSystem;
-
 		[Ordinal(12)] 
 		[RED("messageText")] 
 		public inkTextWidgetReference MessageText
 		{
-			get => GetProperty(ref _messageText);
-			set => SetProperty(ref _messageText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("avatar")] 
 		public inkImageWidgetReference Avatar
 		{
-			get => GetProperty(ref _avatar);
-			set => SetProperty(ref _avatar, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("descriptionText")] 
 		public inkTextWidgetReference DescriptionText
 		{
-			get => GetProperty(ref _descriptionText);
-			set => SetProperty(ref _descriptionText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("mappinIcon")] 
 		public inkImageWidgetReference MappinIcon
 		{
-			get => GetProperty(ref _mappinIcon);
-			set => SetProperty(ref _mappinIcon, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("envelopIcon")] 
 		public inkWidgetReference EnvelopIcon
 		{
-			get => GetProperty(ref _envelopIcon);
-			set => SetProperty(ref _envelopIcon, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("interactionsBlackboard")] 
 		public CWeakHandle<gameIBlackboard> InteractionsBlackboard
 		{
-			get => GetProperty(ref _interactionsBlackboard);
-			set => SetProperty(ref _interactionsBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("bbListenerId")] 
 		public CHandle<redCallbackObject> BbListenerId
 		{
-			get => GetProperty(ref _bbListenerId);
-			set => SetProperty(ref _bbListenerId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("messageData")] 
 		public CHandle<gameuiPhoneMessageNotificationViewData> MessageData
 		{
-			get => GetProperty(ref _messageData);
-			set => SetProperty(ref _messageData, value);
+			get => GetPropertyValue<CHandle<gameuiPhoneMessageNotificationViewData>>();
+			set => SetPropertyValue<CHandle<gameuiPhoneMessageNotificationViewData>>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
-			get => GetProperty(ref _animProxy);
-			set => SetProperty(ref _animProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("textSizeLimit")] 
 		public CInt32 TextSizeLimit
 		{
-			get => GetProperty(ref _textSizeLimit);
-			set => SetProperty(ref _textSizeLimit, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("journalMgr")] 
 		public CWeakHandle<gameJournalManager> JournalMgr
 		{
-			get => GetProperty(ref _journalMgr);
-			set => SetProperty(ref _journalMgr, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalManager>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("mappinSystem")] 
 		public CWeakHandle<gamemappinsMappinSystem> MappinSystem
 		{
-			get => GetProperty(ref _mappinSystem);
-			set => SetProperty(ref _mappinSystem, value);
+			get => GetPropertyValue<CWeakHandle<gamemappinsMappinSystem>>();
+			set => SetPropertyValue<CWeakHandle<gamemappinsMappinSystem>>(value);
 		}
 
 		public MessengerNotification()
 		{
-			_textSizeLimit = 40;
+			MessageText = new();
+			Avatar = new();
+			DescriptionText = new();
+			MappinIcon = new();
+			EnvelopIcon = new();
+			TextSizeLimit = 40;
 		}
 	}
 }

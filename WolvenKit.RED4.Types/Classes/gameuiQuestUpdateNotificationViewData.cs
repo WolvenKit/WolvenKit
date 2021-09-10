@@ -5,86 +5,76 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiQuestUpdateNotificationViewData : gameuiGenericNotificationViewData
 	{
-		private CString _questEntryId;
-		private CBool _canBeMerged;
-		private CName _animation;
-		private CString _sMSText;
-		private CBool _dontRemoveOnRequest;
-		private CInt32 _entryHash;
-		private CInt32 _rewardSC;
-		private CInt32 _rewardXP;
-		private CEnum<EGenericNotificationPriority> _priority;
-
 		[Ordinal(5)] 
 		[RED("questEntryId")] 
 		public CString QuestEntryId
 		{
-			get => GetProperty(ref _questEntryId);
-			set => SetProperty(ref _questEntryId, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("canBeMerged")] 
 		public CBool CanBeMerged
 		{
-			get => GetProperty(ref _canBeMerged);
-			set => SetProperty(ref _canBeMerged, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("animation")] 
 		public CName Animation
 		{
-			get => GetProperty(ref _animation);
-			set => SetProperty(ref _animation, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("SMSText")] 
 		public CString SMSText
 		{
-			get => GetProperty(ref _sMSText);
-			set => SetProperty(ref _sMSText, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("dontRemoveOnRequest")] 
 		public CBool DontRemoveOnRequest
 		{
-			get => GetProperty(ref _dontRemoveOnRequest);
-			set => SetProperty(ref _dontRemoveOnRequest, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("entryHash")] 
 		public CInt32 EntryHash
 		{
-			get => GetProperty(ref _entryHash);
-			set => SetProperty(ref _entryHash, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("rewardSC")] 
 		public CInt32 RewardSC
 		{
-			get => GetProperty(ref _rewardSC);
-			set => SetProperty(ref _rewardSC, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("rewardXP")] 
 		public CInt32 RewardXP
 		{
-			get => GetProperty(ref _rewardXP);
-			set => SetProperty(ref _rewardXP, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("priority")] 
 		public CEnum<EGenericNotificationPriority> Priority
 		{
-			get => GetProperty(ref _priority);
-			set => SetProperty(ref _priority, value);
+			get => GetPropertyValue<CEnum<EGenericNotificationPriority>>();
+			set => SetPropertyValue<CEnum<EGenericNotificationPriority>>(value);
 		}
 	}
 }

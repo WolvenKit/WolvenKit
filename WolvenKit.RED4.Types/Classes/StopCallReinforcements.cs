@@ -5,37 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class StopCallReinforcements : AIbehaviortaskScript
 	{
-		private CWeakHandle<ScriptedPuppet> _puppet;
-		private CHandle<PauseResumePhoneCallEvent> _pauseResumePhoneCallEvent;
-		private CEnum<gamedataStatPoolType> _statPoolType;
-
 		[Ordinal(0)] 
 		[RED("puppet")] 
 		public CWeakHandle<ScriptedPuppet> Puppet
 		{
-			get => GetProperty(ref _puppet);
-			set => SetProperty(ref _puppet, value);
+			get => GetPropertyValue<CWeakHandle<ScriptedPuppet>>();
+			set => SetPropertyValue<CWeakHandle<ScriptedPuppet>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("pauseResumePhoneCallEvent")] 
 		public CHandle<PauseResumePhoneCallEvent> PauseResumePhoneCallEvent
 		{
-			get => GetProperty(ref _pauseResumePhoneCallEvent);
-			set => SetProperty(ref _pauseResumePhoneCallEvent, value);
+			get => GetPropertyValue<CHandle<PauseResumePhoneCallEvent>>();
+			set => SetPropertyValue<CHandle<PauseResumePhoneCallEvent>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("statPoolType")] 
 		public CEnum<gamedataStatPoolType> StatPoolType
 		{
-			get => GetProperty(ref _statPoolType);
-			set => SetProperty(ref _statPoolType, value);
+			get => GetPropertyValue<CEnum<gamedataStatPoolType>>();
+			set => SetPropertyValue<CEnum<gamedataStatPoolType>>(value);
 		}
 
 		public StopCallReinforcements()
 		{
-			_statPoolType = new() { Value = Enums.gamedataStatPoolType.CallReinforcementProgress };
+			StatPoolType = Enums.gamedataStatPoolType.CallReinforcementProgress;
 		}
 	}
 }

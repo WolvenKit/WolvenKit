@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class BackpackEquipSlotChooserCloseData : inkGameNotificationData
 	{
-		private CBool _confirm;
-		private InventoryItemData _itemData;
-		private CInt32 _slotIndex;
-
 		[Ordinal(6)] 
 		[RED("confirm")] 
 		public CBool Confirm
 		{
-			get => GetProperty(ref _confirm);
-			set => SetProperty(ref _confirm, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("itemData")] 
 		public InventoryItemData ItemData
 		{
-			get => GetProperty(ref _itemData);
-			set => SetProperty(ref _itemData, value);
+			get => GetPropertyValue<InventoryItemData>();
+			set => SetPropertyValue<InventoryItemData>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("slotIndex")] 
 		public CInt32 SlotIndex
 		{
-			get => GetProperty(ref _slotIndex);
-			set => SetProperty(ref _slotIndex, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		public BackpackEquipSlotChooserCloseData()
+		{
+			ItemData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
 		}
 	}
 }

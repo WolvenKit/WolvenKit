@@ -5,19 +5,21 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class QuestForceCameraZoom : ActionBool
 	{
-		private CBool _useWorkspot;
-
 		[Ordinal(25)] 
 		[RED("useWorkspot")] 
 		public CBool UseWorkspot
 		{
-			get => GetProperty(ref _useWorkspot);
-			set => SetProperty(ref _useWorkspot, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public QuestForceCameraZoom()
 		{
-			_useWorkspot = true;
+			RequesterID = new();
+			InteractionChoice = new() { CaptionParts = new() { Parts = new() }, Data = new(), ChoiceMetaData = new() { Type = new() }, LookAtDescriptor = new() { Offset = new(), OrbId = new() } };
+			ActionWidgetPackage = new() { DependendActions = new() };
+			CanTriggerStim = true;
+			UseWorkspot = true;
 		}
 	}
 }

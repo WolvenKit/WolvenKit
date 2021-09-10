@@ -1,40 +1,42 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace WolvenKit.RED4.Types
 {
     [RED("CGUID")]
-    public class CGUID : IRedPrimitive, IEquatable<CGUID>
+    [DebuggerDisplay("{_value,nq}", Type = "CGuid")]
+    public readonly struct CGuid : IRedPrimitive<Guid>, IEquatable<CGuid>
     {
-        public byte[] Value { get; set; }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private readonly Guid _value;
 
-        public static implicit operator CGUID(byte[] value)
+        private CGuid(byte[] value)
         {
-            if (value == null || value.Length != 16)
-                throw new ArgumentException(nameof(value));
-            return new() { Value = value };
+            _value = new(value);
         }
 
-        public static implicit operator byte[](CGUID value) => value.Value;
-
-
-        public override bool Equals(object value)
+        private CGuid(Guid value)
         {
-            if (value is CGUID cObj)
+            _value = value;
+        }
+
+        public static implicit operator CGuid(byte[] value) => new(value);
+        public static implicit operator byte[](CGuid value) => value._value.ToByteArray();
+
+
+        public override int GetHashCode() => _value.GetHashCode();
+
+        public override bool Equals(object obj)
+        {
+            if (obj is CGuid cObj)
             {
                 return Equals(cObj);
             }
+
             return false;
         }
 
-        public bool Equals(CGUID other)
-        {
-            if (other == null)
-            {
-                return false;
-            }
-
-            return Value.SequenceEqual(other.Value);
-        }
+        public bool Equals(CGuid other) => Equals(_value, other._value);
     }
 }

@@ -5,29 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PlayerHandicapSystem : gameScriptableSystem
 	{
-		private CBool _canDropHealingConsumable;
-		private CBool _canDropAmmo;
-
 		[Ordinal(0)] 
 		[RED("canDropHealingConsumable")] 
 		public CBool CanDropHealingConsumable
 		{
-			get => GetProperty(ref _canDropHealingConsumable);
-			set => SetProperty(ref _canDropHealingConsumable, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("canDropAmmo")] 
 		public CBool CanDropAmmo
 		{
-			get => GetProperty(ref _canDropAmmo);
-			set => SetProperty(ref _canDropAmmo, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public PlayerHandicapSystem()
 		{
-			_canDropHealingConsumable = true;
-			_canDropAmmo = true;
+			CanDropHealingConsumable = true;
+			CanDropAmmo = true;
 		}
 	}
 }

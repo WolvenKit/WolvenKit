@@ -5,59 +5,63 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WorldWidgetComponent : IWorldWidgetComponent
 	{
-		private CResourceReference<inkWidgetLibraryResource> _cursorResource;
-		private CResourceAsyncReference<inkWidgetLibraryResource> _widgetResource;
-		private CName _itemNameToSpawn;
-		private CResourceAsyncReference<CBitmapTexture> _staticTextureResource;
-		private worlduiSceneWidgetProperties _sceneWidgetProperties;
-		private SUIScreenDefinition _screenDefinition;
-
 		[Ordinal(10)] 
 		[RED("cursorResource")] 
 		public CResourceReference<inkWidgetLibraryResource> CursorResource
 		{
-			get => GetProperty(ref _cursorResource);
-			set => SetProperty(ref _cursorResource, value);
+			get => GetPropertyValue<CResourceReference<inkWidgetLibraryResource>>();
+			set => SetPropertyValue<CResourceReference<inkWidgetLibraryResource>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("widgetResource")] 
 		public CResourceAsyncReference<inkWidgetLibraryResource> WidgetResource
 		{
-			get => GetProperty(ref _widgetResource);
-			set => SetProperty(ref _widgetResource, value);
+			get => GetPropertyValue<CResourceAsyncReference<inkWidgetLibraryResource>>();
+			set => SetPropertyValue<CResourceAsyncReference<inkWidgetLibraryResource>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("itemNameToSpawn")] 
 		public CName ItemNameToSpawn
 		{
-			get => GetProperty(ref _itemNameToSpawn);
-			set => SetProperty(ref _itemNameToSpawn, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("staticTextureResource")] 
 		public CResourceAsyncReference<CBitmapTexture> StaticTextureResource
 		{
-			get => GetProperty(ref _staticTextureResource);
-			set => SetProperty(ref _staticTextureResource, value);
+			get => GetPropertyValue<CResourceAsyncReference<CBitmapTexture>>();
+			set => SetPropertyValue<CResourceAsyncReference<CBitmapTexture>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("sceneWidgetProperties")] 
 		public worlduiSceneWidgetProperties SceneWidgetProperties
 		{
-			get => GetProperty(ref _sceneWidgetProperties);
-			set => SetProperty(ref _sceneWidgetProperties, value);
+			get => GetPropertyValue<worlduiSceneWidgetProperties>();
+			set => SetPropertyValue<worlduiSceneWidgetProperties>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("screenDefinition")] 
 		public SUIScreenDefinition ScreenDefinition
 		{
-			get => GetProperty(ref _screenDefinition);
-			set => SetProperty(ref _screenDefinition, value);
+			get => GetPropertyValue<SUIScreenDefinition>();
+			set => SetPropertyValue<SUIScreenDefinition>(value);
+		}
+
+		public WorldWidgetComponent()
+		{
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			TintColor = new();
+			ScreenAreaMultiplier = 1.000000F;
+			IsEnabled = true;
+			SceneWidgetProperties = new() { ProjectionPlaneSize = new() { X = 1.000000F, Y = 1.000000F }, FaceVector = new() };
+			ScreenDefinition = new();
 		}
 	}
 }

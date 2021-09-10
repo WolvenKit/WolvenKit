@@ -5,59 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiPinInfo : RedBaseClass
 	{
-		private CBool _shouldShow;
-		private CBool _showFloorAbove;
-		private CBool _showFloorBelow;
-		private CInt32 _iconType;
-		private CFloat _offset;
-		private CString _displayText;
-
 		[Ordinal(0)] 
 		[RED("shouldShow")] 
 		public CBool ShouldShow
 		{
-			get => GetProperty(ref _shouldShow);
-			set => SetProperty(ref _shouldShow, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("showFloorAbove")] 
 		public CBool ShowFloorAbove
 		{
-			get => GetProperty(ref _showFloorAbove);
-			set => SetProperty(ref _showFloorAbove, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("showFloorBelow")] 
 		public CBool ShowFloorBelow
 		{
-			get => GetProperty(ref _showFloorBelow);
-			set => SetProperty(ref _showFloorBelow, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("iconType")] 
 		public CInt32 IconType
 		{
-			get => GetProperty(ref _iconType);
-			set => SetProperty(ref _iconType, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("offset")] 
 		public CFloat Offset
 		{
-			get => GetProperty(ref _offset);
-			set => SetProperty(ref _offset, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("displayText")] 
 		public CString DisplayText
 		{
-			get => GetProperty(ref _displayText);
-			set => SetProperty(ref _displayText, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 	}
 }

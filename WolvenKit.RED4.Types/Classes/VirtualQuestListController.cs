@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VirtualQuestListController : inkVirtualCompoundItemController
 	{
-		private inkWidgetReference _questList;
-
 		[Ordinal(15)] 
 		[RED("questList")] 
 		public inkWidgetReference QuestList
 		{
-			get => GetProperty(ref _questList);
-			set => SetProperty(ref _questList, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		public VirtualQuestListController()
+		{
+			QuestList = new();
 		}
 	}
 }

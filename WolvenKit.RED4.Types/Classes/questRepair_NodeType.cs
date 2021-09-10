@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questRepair_NodeType : questIVehicleManagerNodeType
 	{
-		private gameEntityReference _vehicleRef;
-
 		[Ordinal(0)] 
 		[RED("vehicleRef")] 
 		public gameEntityReference VehicleRef
 		{
-			get => GetProperty(ref _vehicleRef);
-			set => SetProperty(ref _vehicleRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
+		}
+
+		public questRepair_NodeType()
+		{
+			VehicleRef = new() { Names = new() };
 		}
 	}
 }

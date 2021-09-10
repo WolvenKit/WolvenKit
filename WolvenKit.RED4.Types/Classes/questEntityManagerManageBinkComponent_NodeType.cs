@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questEntityManagerManageBinkComponent_NodeType : questIEntityManager_NodeType
 	{
-		private CArray<questEntityManagerManageBinkComponent_NodeTypeParams> _params;
-
 		[Ordinal(0)] 
 		[RED("params")] 
 		public CArray<questEntityManagerManageBinkComponent_NodeTypeParams> Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<CArray<questEntityManagerManageBinkComponent_NodeTypeParams>>();
+			set => SetPropertyValue<CArray<questEntityManagerManageBinkComponent_NodeTypeParams>>(value);
+		}
+
+		public questEntityManagerManageBinkComponent_NodeType()
+		{
+			Params = new() { new() };
 		}
 	}
 }

@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameSlotDataHolder : IScriptable
 	{
-		private CArray<gameAmmoData> _ammoData;
-		private gameSlotWeaponData _weapon;
-
 		[Ordinal(0)] 
 		[RED("ammoData")] 
 		public CArray<gameAmmoData> AmmoData
 		{
-			get => GetProperty(ref _ammoData);
-			set => SetProperty(ref _ammoData, value);
+			get => GetPropertyValue<CArray<gameAmmoData>>();
+			set => SetPropertyValue<CArray<gameAmmoData>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("weapon")] 
 		public gameSlotWeaponData Weapon
 		{
-			get => GetProperty(ref _weapon);
-			set => SetProperty(ref _weapon, value);
+			get => GetPropertyValue<gameSlotWeaponData>();
+			set => SetPropertyValue<gameSlotWeaponData>(value);
+		}
+
+		public gameSlotDataHolder()
+		{
+			AmmoData = new();
+			Weapon = new() { WeaponID = new(), AmmoCurrent = -1, MagazineCap = -1, AmmoId = new(), TriggerModeCurrent = Enums.gamedataTriggerMode.Invalid, TriggerModeList = new(), Evolution = Enums.gamedataWeaponEvolution.Invalid, IsFirstEquip = true };
 		}
 	}
 }

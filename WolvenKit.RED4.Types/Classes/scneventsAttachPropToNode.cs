@@ -5,41 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scneventsAttachPropToNode : scnSceneEvent
 	{
-		private scnPropId _propId;
-		private NodeRef _nodeRef;
-		private Vector3 _customOffsetPos;
-		private Quaternion _customOffsetRot;
-
 		[Ordinal(6)] 
 		[RED("propId")] 
 		public scnPropId PropId
 		{
-			get => GetProperty(ref _propId);
-			set => SetProperty(ref _propId, value);
+			get => GetPropertyValue<scnPropId>();
+			set => SetPropertyValue<scnPropId>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("nodeRef")] 
 		public NodeRef NodeRef
 		{
-			get => GetProperty(ref _nodeRef);
-			set => SetProperty(ref _nodeRef, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("customOffsetPos")] 
 		public Vector3 CustomOffsetPos
 		{
-			get => GetProperty(ref _customOffsetPos);
-			set => SetProperty(ref _customOffsetPos, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("customOffsetRot")] 
 		public Quaternion CustomOffsetRot
 		{
-			get => GetProperty(ref _customOffsetRot);
-			set => SetProperty(ref _customOffsetRot, value);
+			get => GetPropertyValue<Quaternion>();
+			set => SetPropertyValue<Quaternion>(value);
+		}
+
+		public scneventsAttachPropToNode()
+		{
+			Id = new() { Id = 18446744073709551615 };
+			PropId = new() { Id = 4294967295 };
+			CustomOffsetPos = new();
+			CustomOffsetRot = new() { R = 1.000000F };
 		}
 	}
 }

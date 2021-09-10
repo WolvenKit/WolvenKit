@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ArmorEquipInventoryItemController : inkButtonDpadSupportedController
 	{
-		private gameItemID _itemID;
-		private CHandle<gameItemData> _itemData;
-		private CBool _empty;
-
 		[Ordinal(26)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get => GetProperty(ref _itemID);
-			set => SetProperty(ref _itemID, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("itemData")] 
 		public CHandle<gameItemData> ItemData
 		{
-			get => GetProperty(ref _itemData);
-			set => SetProperty(ref _itemData, value);
+			get => GetPropertyValue<CHandle<gameItemData>>();
+			set => SetPropertyValue<CHandle<gameItemData>>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("empty")] 
 		public CBool Empty
 		{
-			get => GetProperty(ref _empty);
-			set => SetProperty(ref _empty, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public ArmorEquipInventoryItemController()
+		{
+			ItemID = new();
 		}
 	}
 }

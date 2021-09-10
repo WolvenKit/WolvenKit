@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CooldownRequest : IScriptable
 	{
-		private CHandle<BaseScriptableAction> _action;
-		private CArray<PSOwnerData> _contactBook;
-		private CEnum<RequestType> _requestTriggerType;
-
 		[Ordinal(0)] 
 		[RED("action")] 
 		public CHandle<BaseScriptableAction> Action
 		{
-			get => GetProperty(ref _action);
-			set => SetProperty(ref _action, value);
+			get => GetPropertyValue<CHandle<BaseScriptableAction>>();
+			set => SetPropertyValue<CHandle<BaseScriptableAction>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("contactBook")] 
 		public CArray<PSOwnerData> ContactBook
 		{
-			get => GetProperty(ref _contactBook);
-			set => SetProperty(ref _contactBook, value);
+			get => GetPropertyValue<CArray<PSOwnerData>>();
+			set => SetPropertyValue<CArray<PSOwnerData>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("requestTriggerType")] 
 		public CEnum<RequestType> RequestTriggerType
 		{
-			get => GetProperty(ref _requestTriggerType);
-			set => SetProperty(ref _requestTriggerType, value);
+			get => GetPropertyValue<CEnum<RequestType>>();
+			set => SetPropertyValue<CEnum<RequestType>>(value);
+		}
+
+		public CooldownRequest()
+		{
+			ContactBook = new();
 		}
 	}
 }

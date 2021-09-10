@@ -5,41 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnRidResource : CResource
 	{
-		private CArray<scnActorRid> _actors;
-		private CArray<scnCameraRid> _cameras;
-		private scnRidSerialNumber _nextSerialNumber;
-		private CUInt32 _version;
-
 		[Ordinal(1)] 
 		[RED("actors")] 
 		public CArray<scnActorRid> Actors
 		{
-			get => GetProperty(ref _actors);
-			set => SetProperty(ref _actors, value);
+			get => GetPropertyValue<CArray<scnActorRid>>();
+			set => SetPropertyValue<CArray<scnActorRid>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("cameras")] 
 		public CArray<scnCameraRid> Cameras
 		{
-			get => GetProperty(ref _cameras);
-			set => SetProperty(ref _cameras, value);
+			get => GetPropertyValue<CArray<scnCameraRid>>();
+			set => SetPropertyValue<CArray<scnCameraRid>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("nextSerialNumber")] 
 		public scnRidSerialNumber NextSerialNumber
 		{
-			get => GetProperty(ref _nextSerialNumber);
-			set => SetProperty(ref _nextSerialNumber, value);
+			get => GetPropertyValue<scnRidSerialNumber>();
+			set => SetPropertyValue<scnRidSerialNumber>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("version")] 
 		public CUInt32 Version
 		{
-			get => GetProperty(ref _version);
-			set => SetProperty(ref _version, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		public scnRidResource()
+		{
+			Actors = new();
+			Cameras = new();
+			NextSerialNumber = new();
 		}
 	}
 }

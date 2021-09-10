@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameVisionModePrereq : gameIPrereq
 	{
-		private CEnum<gameVisionModeType> _type;
-
 		[Ordinal(0)] 
 		[RED("type")] 
 		public CEnum<gameVisionModeType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<gameVisionModeType>>();
+			set => SetPropertyValue<CEnum<gameVisionModeType>>(value);
 		}
 	}
 }

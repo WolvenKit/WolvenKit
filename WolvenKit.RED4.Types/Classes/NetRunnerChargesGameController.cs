@@ -5,113 +5,109 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class NetRunnerChargesGameController : gameuiWidgetGameController
 	{
-		private inkTextWidgetReference _header;
-		private inkCompoundWidgetReference _list;
-		private inkWidgetReference _bar;
-		private inkTextWidgetReference _value;
-		private CWeakHandle<gameIBlackboard> _blackboard;
-		private CHandle<UI_PlayerBioMonitorDef> _bbDefinition;
-		private CUInt32 _netrunnerCapacityId;
-		private CHandle<redCallbackObject> _netrunnerCurrentId;
-		private CInt32 _currentCharges;
-		private CInt32 _maxCharges;
-		private CArray<CWeakHandle<NetRunnerListItem>> _chargesList;
-		private CWeakHandle<inkWidget> _root;
-
 		[Ordinal(2)] 
 		[RED("header")] 
 		public inkTextWidgetReference Header
 		{
-			get => GetProperty(ref _header);
-			set => SetProperty(ref _header, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("list")] 
 		public inkCompoundWidgetReference List
 		{
-			get => GetProperty(ref _list);
-			set => SetProperty(ref _list, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("bar")] 
 		public inkWidgetReference Bar
 		{
-			get => GetProperty(ref _bar);
-			set => SetProperty(ref _bar, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("value")] 
 		public inkTextWidgetReference Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("blackboard")] 
 		public CWeakHandle<gameIBlackboard> Blackboard
 		{
-			get => GetProperty(ref _blackboard);
-			set => SetProperty(ref _blackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("bbDefinition")] 
 		public CHandle<UI_PlayerBioMonitorDef> BbDefinition
 		{
-			get => GetProperty(ref _bbDefinition);
-			set => SetProperty(ref _bbDefinition, value);
+			get => GetPropertyValue<CHandle<UI_PlayerBioMonitorDef>>();
+			set => SetPropertyValue<CHandle<UI_PlayerBioMonitorDef>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("netrunnerCapacityId")] 
 		public CUInt32 NetrunnerCapacityId
 		{
-			get => GetProperty(ref _netrunnerCapacityId);
-			set => SetProperty(ref _netrunnerCapacityId, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("netrunnerCurrentId")] 
 		public CHandle<redCallbackObject> NetrunnerCurrentId
 		{
-			get => GetProperty(ref _netrunnerCurrentId);
-			set => SetProperty(ref _netrunnerCurrentId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("currentCharges")] 
 		public CInt32 CurrentCharges
 		{
-			get => GetProperty(ref _currentCharges);
-			set => SetProperty(ref _currentCharges, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("maxCharges")] 
 		public CInt32 MaxCharges
 		{
-			get => GetProperty(ref _maxCharges);
-			set => SetProperty(ref _maxCharges, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("chargesList")] 
 		public CArray<CWeakHandle<NetRunnerListItem>> ChargesList
 		{
-			get => GetProperty(ref _chargesList);
-			set => SetProperty(ref _chargesList, value);
+			get => GetPropertyValue<CArray<CWeakHandle<NetRunnerListItem>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<NetRunnerListItem>>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("root")] 
 		public CWeakHandle<inkWidget> Root
 		{
-			get => GetProperty(ref _root);
-			set => SetProperty(ref _root, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
+		}
+
+		public NetRunnerChargesGameController()
+		{
+			Header = new();
+			List = new();
+			Bar = new();
+			Value = new();
+			ChargesList = new();
 		}
 	}
 }

@@ -5,86 +5,85 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AINavigationSystemResult : RedBaseClass
 	{
-		private CBool _hasFailed;
-		private CBool _hasPath;
-		private CBool _hasClosestPointOnNavmesh;
-		private CBool _hasClosestReachablePoint;
-		private WorldPosition _lastSourcePosition;
-		private WorldPosition _lastTargetPosition;
-		private WorldPosition _adjustedTargetPosition;
-		private WorldPosition _closestPointOnNavmesh;
-		private WorldPosition _closestReachablePoint;
-
 		[Ordinal(0)] 
 		[RED("hasFailed")] 
 		public CBool HasFailed
 		{
-			get => GetProperty(ref _hasFailed);
-			set => SetProperty(ref _hasFailed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hasPath")] 
 		public CBool HasPath
 		{
-			get => GetProperty(ref _hasPath);
-			set => SetProperty(ref _hasPath, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("hasClosestPointOnNavmesh")] 
 		public CBool HasClosestPointOnNavmesh
 		{
-			get => GetProperty(ref _hasClosestPointOnNavmesh);
-			set => SetProperty(ref _hasClosestPointOnNavmesh, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("hasClosestReachablePoint")] 
 		public CBool HasClosestReachablePoint
 		{
-			get => GetProperty(ref _hasClosestReachablePoint);
-			set => SetProperty(ref _hasClosestReachablePoint, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("lastSourcePosition")] 
 		public WorldPosition LastSourcePosition
 		{
-			get => GetProperty(ref _lastSourcePosition);
-			set => SetProperty(ref _lastSourcePosition, value);
+			get => GetPropertyValue<WorldPosition>();
+			set => SetPropertyValue<WorldPosition>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("lastTargetPosition")] 
 		public WorldPosition LastTargetPosition
 		{
-			get => GetProperty(ref _lastTargetPosition);
-			set => SetProperty(ref _lastTargetPosition, value);
+			get => GetPropertyValue<WorldPosition>();
+			set => SetPropertyValue<WorldPosition>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("adjustedTargetPosition")] 
 		public WorldPosition AdjustedTargetPosition
 		{
-			get => GetProperty(ref _adjustedTargetPosition);
-			set => SetProperty(ref _adjustedTargetPosition, value);
+			get => GetPropertyValue<WorldPosition>();
+			set => SetPropertyValue<WorldPosition>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("closestPointOnNavmesh")] 
 		public WorldPosition ClosestPointOnNavmesh
 		{
-			get => GetProperty(ref _closestPointOnNavmesh);
-			set => SetProperty(ref _closestPointOnNavmesh, value);
+			get => GetPropertyValue<WorldPosition>();
+			set => SetPropertyValue<WorldPosition>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("closestReachablePoint")] 
 		public WorldPosition ClosestReachablePoint
 		{
-			get => GetProperty(ref _closestReachablePoint);
-			set => SetProperty(ref _closestReachablePoint, value);
+			get => GetPropertyValue<WorldPosition>();
+			set => SetPropertyValue<WorldPosition>(value);
+		}
+
+		public AINavigationSystemResult()
+		{
+			LastSourcePosition = new() { X = new(), Y = new(), Z = new() };
+			LastTargetPosition = new() { X = new(), Y = new(), Z = new() };
+			AdjustedTargetPosition = new() { X = new(), Y = new(), Z = new() };
+			ClosestPointOnNavmesh = new() { X = new(), Y = new(), Z = new() };
+			ClosestReachablePoint = new() { X = new(), Y = new(), Z = new() };
 		}
 	}
 }

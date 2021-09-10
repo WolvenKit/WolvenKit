@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class meshMeshParamCompiledPhysics : meshMeshParameter
 	{
-		private CHandle<physicsDeferredCollection> _collection;
-
 		[Ordinal(0)] 
 		[RED("collection")] 
 		public CHandle<physicsDeferredCollection> Collection
 		{
-			get => GetProperty(ref _collection);
-			set => SetProperty(ref _collection, value);
+			get => GetPropertyValue<CHandle<physicsDeferredCollection>>();
+			set => SetPropertyValue<CHandle<physicsDeferredCollection>>(value);
 		}
 	}
 }

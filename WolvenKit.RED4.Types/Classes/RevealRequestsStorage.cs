@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RevealRequestsStorage : IScriptable
 	{
-		private CInt32 _currentRequestersAmount;
-		private CArray<entEntityID> _requestersList;
-
 		[Ordinal(0)] 
 		[RED("currentRequestersAmount")] 
 		public CInt32 CurrentRequestersAmount
 		{
-			get => GetProperty(ref _currentRequestersAmount);
-			set => SetProperty(ref _currentRequestersAmount, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("requestersList")] 
 		public CArray<entEntityID> RequestersList
 		{
-			get => GetProperty(ref _requestersList);
-			set => SetProperty(ref _requestersList, value);
+			get => GetPropertyValue<CArray<entEntityID>>();
+			set => SetPropertyValue<CArray<entEntityID>>(value);
+		}
+
+		public RevealRequestsStorage()
+		{
+			RequestersList = new();
 		}
 	}
 }

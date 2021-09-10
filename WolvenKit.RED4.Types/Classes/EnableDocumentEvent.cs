@@ -5,55 +5,50 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class EnableDocumentEvent : redEvent
 	{
-		private CEnum<EDocumentType> _documentType;
-		private CName _documentName;
-		private SDocumentAdress _documentAdress;
-		private CBool _enable;
-		private CBool _entireFolder;
-
 		[Ordinal(0)] 
 		[RED("documentType")] 
 		public CEnum<EDocumentType> DocumentType
 		{
-			get => GetProperty(ref _documentType);
-			set => SetProperty(ref _documentType, value);
+			get => GetPropertyValue<CEnum<EDocumentType>>();
+			set => SetPropertyValue<CEnum<EDocumentType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("documentName")] 
 		public CName DocumentName
 		{
-			get => GetProperty(ref _documentName);
-			set => SetProperty(ref _documentName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("documentAdress")] 
 		public SDocumentAdress DocumentAdress
 		{
-			get => GetProperty(ref _documentAdress);
-			set => SetProperty(ref _documentAdress, value);
+			get => GetPropertyValue<SDocumentAdress>();
+			set => SetPropertyValue<SDocumentAdress>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("enable")] 
 		public CBool Enable
 		{
-			get => GetProperty(ref _enable);
-			set => SetProperty(ref _enable, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("entireFolder")] 
 		public CBool EntireFolder
 		{
-			get => GetProperty(ref _entireFolder);
-			set => SetProperty(ref _entireFolder, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public EnableDocumentEvent()
 		{
-			_enable = true;
+			DocumentAdress = new() { FolderID = -1, DocumentID = -1 };
+			Enable = true;
 		}
 	}
 }

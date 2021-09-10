@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIArgumentCNameValue : AIArgumentDefinition
 	{
-		private CEnum<AIArgumentType> _type;
-		private CName _defaultValue;
-
 		[Ordinal(3)] 
 		[RED("type")] 
 		public CEnum<AIArgumentType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<AIArgumentType>>();
+			set => SetPropertyValue<CEnum<AIArgumentType>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("defaultValue")] 
 		public CName DefaultValue
 		{
-			get => GetProperty(ref _defaultValue);
-			set => SetProperty(ref _defaultValue, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public AIArgumentCNameValue()
 		{
-			_type = new() { Value = Enums.AIArgumentType.CName };
+			Type = Enums.AIArgumentType.CName;
 		}
 	}
 }

@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameAttachmentSlots : entIComponent
 	{
-		private CArray<gameAnimParamSlotsOption> _animParams;
-
 		[Ordinal(3)] 
 		[RED("animParams")] 
 		public CArray<gameAnimParamSlotsOption> AnimParams
 		{
-			get => GetProperty(ref _animParams);
-			set => SetProperty(ref _animParams, value);
+			get => GetPropertyValue<CArray<gameAnimParamSlotsOption>>();
+			set => SetPropertyValue<CArray<gameAnimParamSlotsOption>>(value);
+		}
+
+		public gameAttachmentSlots()
+		{
+			Name = "Component";
+			AnimParams = new();
 		}
 	}
 }

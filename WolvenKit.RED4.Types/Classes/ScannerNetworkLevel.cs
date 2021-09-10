@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ScannerNetworkLevel : ScannerChunk
 	{
-		private CInt32 _networkLevel;
-
 		[Ordinal(0)] 
 		[RED("networkLevel")] 
 		public CInt32 NetworkLevel
 		{
-			get => GetProperty(ref _networkLevel);
-			set => SetProperty(ref _networkLevel, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

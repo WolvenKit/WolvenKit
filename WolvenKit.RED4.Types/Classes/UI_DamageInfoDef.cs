@@ -5,68 +5,71 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UI_DamageInfoDef : gamebbScriptDefinition
 	{
-		private gamebbScriptID_Variant _damageList;
-		private gamebbScriptID_Variant _killList;
-		private gamebbScriptID_Variant _digitsMode;
-		private gamebbScriptID_Bool _digitsInterpolationOn;
-		private gamebbScriptID_Variant _digitsStickingMode;
-		private gamebbScriptID_Bool _hitIndicatorEnabled;
-		private gamebbScriptID_Variant _dmgIndicatorMode;
-
 		[Ordinal(0)] 
 		[RED("DamageList")] 
 		public gamebbScriptID_Variant DamageList
 		{
-			get => GetProperty(ref _damageList);
-			set => SetProperty(ref _damageList, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("KillList")] 
 		public gamebbScriptID_Variant KillList
 		{
-			get => GetProperty(ref _killList);
-			set => SetProperty(ref _killList, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("DigitsMode")] 
 		public gamebbScriptID_Variant DigitsMode
 		{
-			get => GetProperty(ref _digitsMode);
-			set => SetProperty(ref _digitsMode, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("DigitsInterpolationOn")] 
 		public gamebbScriptID_Bool DigitsInterpolationOn
 		{
-			get => GetProperty(ref _digitsInterpolationOn);
-			set => SetProperty(ref _digitsInterpolationOn, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("DigitsStickingMode")] 
 		public gamebbScriptID_Variant DigitsStickingMode
 		{
-			get => GetProperty(ref _digitsStickingMode);
-			set => SetProperty(ref _digitsStickingMode, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("HitIndicatorEnabled")] 
 		public gamebbScriptID_Bool HitIndicatorEnabled
 		{
-			get => GetProperty(ref _hitIndicatorEnabled);
-			set => SetProperty(ref _hitIndicatorEnabled, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("DmgIndicatorMode")] 
 		public gamebbScriptID_Variant DmgIndicatorMode
 		{
-			get => GetProperty(ref _dmgIndicatorMode);
-			set => SetProperty(ref _dmgIndicatorMode, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
+		}
+
+		public UI_DamageInfoDef()
+		{
+			DamageList = new();
+			KillList = new();
+			DigitsMode = new();
+			DigitsInterpolationOn = new();
+			DigitsStickingMode = new();
+			HitIndicatorEnabled = new();
+			DmgIndicatorMode = new();
 		}
 	}
 }

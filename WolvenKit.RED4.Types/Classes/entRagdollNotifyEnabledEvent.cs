@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entRagdollNotifyEnabledEvent : redEvent
 	{
-		private entEntityID _instigator;
-
 		[Ordinal(0)] 
 		[RED("instigator")] 
 		public entEntityID Instigator
 		{
-			get => GetProperty(ref _instigator);
-			set => SetProperty(ref _instigator, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
+		}
+
+		public entRagdollNotifyEnabledEvent()
+		{
+			Instigator = new();
 		}
 	}
 }

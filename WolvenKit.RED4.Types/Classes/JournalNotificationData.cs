@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class JournalNotificationData : inkGameNotificationData
 	{
-		private CWeakHandle<gameJournalEntry> _journalEntry;
-		private CEnum<gameJournalEntryState> _journalEntryState;
-		private CName _className;
-		private CBool _menuMode;
-
 		[Ordinal(6)] 
 		[RED("journalEntry")] 
 		public CWeakHandle<gameJournalEntry> JournalEntry
 		{
-			get => GetProperty(ref _journalEntry);
-			set => SetProperty(ref _journalEntry, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalEntry>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalEntry>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("journalEntryState")] 
 		public CEnum<gameJournalEntryState> JournalEntryState
 		{
-			get => GetProperty(ref _journalEntryState);
-			set => SetProperty(ref _journalEntryState, value);
+			get => GetPropertyValue<CEnum<gameJournalEntryState>>();
+			set => SetPropertyValue<CEnum<gameJournalEntryState>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("className")] 
 		public CName ClassName
 		{
-			get => GetProperty(ref _className);
-			set => SetProperty(ref _className, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("menuMode")] 
 		public CBool MenuMode
 		{
-			get => GetProperty(ref _menuMode);
-			set => SetProperty(ref _menuMode, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

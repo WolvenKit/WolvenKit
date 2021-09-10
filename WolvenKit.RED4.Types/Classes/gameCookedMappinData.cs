@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameCookedMappinData : RedBaseClass
 	{
-		private CUInt32 _journalPathHash;
-		private Vector3 _position;
-		private CHandle<gamemappinsIMappinVolume> _volume;
-
 		[Ordinal(0)] 
 		[RED("journalPathHash")] 
 		public CUInt32 JournalPathHash
 		{
-			get => GetProperty(ref _journalPathHash);
-			set => SetProperty(ref _journalPathHash, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("position")] 
 		public Vector3 Position
 		{
-			get => GetProperty(ref _position);
-			set => SetProperty(ref _position, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("volume")] 
 		public CHandle<gamemappinsIMappinVolume> Volume
 		{
-			get => GetProperty(ref _volume);
-			set => SetProperty(ref _volume, value);
+			get => GetPropertyValue<CHandle<gamemappinsIMappinVolume>>();
+			set => SetPropertyValue<CHandle<gamemappinsIMappinVolume>>(value);
+		}
+
+		public gameCookedMappinData()
+		{
+			Position = new();
 		}
 	}
 }

@@ -5,118 +5,112 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SecurityAreaControllerPS : MasterControllerPS
 	{
-		private CHandle<SecuritySystemControllerPS> _system;
-		private CArray<AreaEntry> _usersInPerimeter;
-		private CBool _isPlayerInside;
-		private CEnum<ESecurityAccessLevel> _securityAccessLevel;
-		private CEnum<ESecurityAreaType> _securityAreaType;
-		private EventsFilters _eventsFilters;
-		private CArray<AreaTypeTransition> _areaTransitions;
-		private CBool _pendingDisableRequest;
-		private OutputPersistentData _lastOutput;
-		private CBool _questPlayerHasTriggeredCombat;
-		private CBool _hasThisAreaReceivedCombatNotification;
-		private CBool _pendingNotifyPlayerAboutTransition;
-
 		[Ordinal(105)] 
 		[RED("system")] 
 		public CHandle<SecuritySystemControllerPS> System
 		{
-			get => GetProperty(ref _system);
-			set => SetProperty(ref _system, value);
+			get => GetPropertyValue<CHandle<SecuritySystemControllerPS>>();
+			set => SetPropertyValue<CHandle<SecuritySystemControllerPS>>(value);
 		}
 
 		[Ordinal(106)] 
 		[RED("usersInPerimeter")] 
 		public CArray<AreaEntry> UsersInPerimeter
 		{
-			get => GetProperty(ref _usersInPerimeter);
-			set => SetProperty(ref _usersInPerimeter, value);
+			get => GetPropertyValue<CArray<AreaEntry>>();
+			set => SetPropertyValue<CArray<AreaEntry>>(value);
 		}
 
 		[Ordinal(107)] 
 		[RED("isPlayerInside")] 
 		public CBool IsPlayerInside
 		{
-			get => GetProperty(ref _isPlayerInside);
-			set => SetProperty(ref _isPlayerInside, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(108)] 
 		[RED("securityAccessLevel")] 
 		public CEnum<ESecurityAccessLevel> SecurityAccessLevel
 		{
-			get => GetProperty(ref _securityAccessLevel);
-			set => SetProperty(ref _securityAccessLevel, value);
+			get => GetPropertyValue<CEnum<ESecurityAccessLevel>>();
+			set => SetPropertyValue<CEnum<ESecurityAccessLevel>>(value);
 		}
 
 		[Ordinal(109)] 
 		[RED("securityAreaType")] 
 		public CEnum<ESecurityAreaType> SecurityAreaType
 		{
-			get => GetProperty(ref _securityAreaType);
-			set => SetProperty(ref _securityAreaType, value);
+			get => GetPropertyValue<CEnum<ESecurityAreaType>>();
+			set => SetPropertyValue<CEnum<ESecurityAreaType>>(value);
 		}
 
 		[Ordinal(110)] 
 		[RED("eventsFilters")] 
 		public EventsFilters EventsFilters
 		{
-			get => GetProperty(ref _eventsFilters);
-			set => SetProperty(ref _eventsFilters, value);
+			get => GetPropertyValue<EventsFilters>();
+			set => SetPropertyValue<EventsFilters>(value);
 		}
 
 		[Ordinal(111)] 
 		[RED("areaTransitions")] 
 		public CArray<AreaTypeTransition> AreaTransitions
 		{
-			get => GetProperty(ref _areaTransitions);
-			set => SetProperty(ref _areaTransitions, value);
+			get => GetPropertyValue<CArray<AreaTypeTransition>>();
+			set => SetPropertyValue<CArray<AreaTypeTransition>>(value);
 		}
 
 		[Ordinal(112)] 
 		[RED("pendingDisableRequest")] 
 		public CBool PendingDisableRequest
 		{
-			get => GetProperty(ref _pendingDisableRequest);
-			set => SetProperty(ref _pendingDisableRequest, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(113)] 
 		[RED("lastOutput")] 
 		public OutputPersistentData LastOutput
 		{
-			get => GetProperty(ref _lastOutput);
-			set => SetProperty(ref _lastOutput, value);
+			get => GetPropertyValue<OutputPersistentData>();
+			set => SetPropertyValue<OutputPersistentData>(value);
 		}
 
 		[Ordinal(114)] 
 		[RED("questPlayerHasTriggeredCombat")] 
 		public CBool QuestPlayerHasTriggeredCombat
 		{
-			get => GetProperty(ref _questPlayerHasTriggeredCombat);
-			set => SetProperty(ref _questPlayerHasTriggeredCombat, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(115)] 
 		[RED("hasThisAreaReceivedCombatNotification")] 
 		public CBool HasThisAreaReceivedCombatNotification
 		{
-			get => GetProperty(ref _hasThisAreaReceivedCombatNotification);
-			set => SetProperty(ref _hasThisAreaReceivedCombatNotification, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(116)] 
 		[RED("pendingNotifyPlayerAboutTransition")] 
 		public CBool PendingNotifyPlayerAboutTransition
 		{
-			get => GetProperty(ref _pendingNotifyPlayerAboutTransition);
-			set => SetProperty(ref _pendingNotifyPlayerAboutTransition, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public SecurityAreaControllerPS()
 		{
-			_securityAreaType = new() { Value = Enums.ESecurityAreaType.DANGEROUS };
+			RevealDevicesGrid = false;
+			TweakDBRecord = new() { Value = 87550704395 };
+			TweakDBDescriptionRecord = new() { Value = 138700257142 };
+			UsersInPerimeter = new();
+			SecurityAreaType = Enums.ESecurityAreaType.DANGEROUS;
+			EventsFilters = new() { IncomingEventsFilter = Enums.EFilterType.ALLOW_ALL, OutgoingEventsFilter = Enums.EFilterType.ALLOW_ALL };
+			AreaTransitions = new();
+			LastOutput = new() { LastKnownPosition = new(), ObjectOfInterest = new(), WhoBreached = new(), Reporter = new() };
 		}
 	}
 }

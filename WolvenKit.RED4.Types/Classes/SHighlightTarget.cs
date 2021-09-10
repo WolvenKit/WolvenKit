@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SHighlightTarget : RedBaseClass
 	{
-		private entEntityID _targetID;
-		private CEnum<EFocusForcedHighlightType> _highlightType;
-
 		[Ordinal(0)] 
 		[RED("targetID")] 
 		public entEntityID TargetID
 		{
-			get => GetProperty(ref _targetID);
-			set => SetProperty(ref _targetID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("highlightType")] 
 		public CEnum<EFocusForcedHighlightType> HighlightType
 		{
-			get => GetProperty(ref _highlightType);
-			set => SetProperty(ref _highlightType, value);
+			get => GetPropertyValue<CEnum<EFocusForcedHighlightType>>();
+			set => SetPropertyValue<CEnum<EFocusForcedHighlightType>>(value);
+		}
+
+		public SHighlightTarget()
+		{
+			TargetID = new();
 		}
 	}
 }

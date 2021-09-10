@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class workSetSequenceCategoriesCommandData : workIWorkspotCommandData
 	{
-		private gameCategorySelectionProbability _sequenceCategories;
-
 		[Ordinal(0)] 
 		[RED("sequenceCategories")] 
 		public gameCategorySelectionProbability SequenceCategories
 		{
-			get => GetProperty(ref _sequenceCategories);
-			set => SetProperty(ref _sequenceCategories, value);
+			get => GetPropertyValue<gameCategorySelectionProbability>();
+			set => SetPropertyValue<gameCategorySelectionProbability>(value);
+		}
+
+		public workSetSequenceCategoriesCommandData()
+		{
+			SequenceCategories = new() { Probabilities = new() };
 		}
 	}
 }

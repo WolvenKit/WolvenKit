@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnChoiceNodeNsAttachToActorParams : RedBaseClass
 	{
-		private scnActorId _actorId;
-		private CEnum<scnChoiceNodeNsVisualizerStyle> _visualizerStyle;
-
 		[Ordinal(0)] 
 		[RED("actorId")] 
 		public scnActorId ActorId
 		{
-			get => GetProperty(ref _actorId);
-			set => SetProperty(ref _actorId, value);
+			get => GetPropertyValue<scnActorId>();
+			set => SetPropertyValue<scnActorId>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("visualizerStyle")] 
 		public CEnum<scnChoiceNodeNsVisualizerStyle> VisualizerStyle
 		{
-			get => GetProperty(ref _visualizerStyle);
-			set => SetProperty(ref _visualizerStyle, value);
+			get => GetPropertyValue<CEnum<scnChoiceNodeNsVisualizerStyle>>();
+			set => SetPropertyValue<CEnum<scnChoiceNodeNsVisualizerStyle>>(value);
+		}
+
+		public scnChoiceNodeNsAttachToActorParams()
+		{
+			ActorId = new() { Id = 4294967295 };
 		}
 	}
 }

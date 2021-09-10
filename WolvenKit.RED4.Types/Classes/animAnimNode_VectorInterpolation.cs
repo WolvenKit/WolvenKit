@@ -5,32 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_VectorInterpolation : animAnimNode_VectorValue
 	{
-		private animVectorLink _firstInput;
-		private animVectorLink _secondInput;
-		private animFloatLink _weight;
-
 		[Ordinal(11)] 
 		[RED("firstInput")] 
 		public animVectorLink FirstInput
 		{
-			get => GetProperty(ref _firstInput);
-			set => SetProperty(ref _firstInput, value);
+			get => GetPropertyValue<animVectorLink>();
+			set => SetPropertyValue<animVectorLink>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("secondInput")] 
 		public animVectorLink SecondInput
 		{
-			get => GetProperty(ref _secondInput);
-			set => SetProperty(ref _secondInput, value);
+			get => GetPropertyValue<animVectorLink>();
+			set => SetPropertyValue<animVectorLink>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("weight")] 
 		public animFloatLink Weight
 		{
-			get => GetProperty(ref _weight);
-			set => SetProperty(ref _weight, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
+		}
+
+		public animAnimNode_VectorInterpolation()
+		{
+			Id = 4294967295;
+			FirstInput = new();
+			SecondInput = new();
+			Weight = new();
 		}
 	}
 }

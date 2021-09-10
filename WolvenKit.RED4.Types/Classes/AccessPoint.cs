@@ -5,55 +5,50 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AccessPoint : InteractiveMasterDevice
 	{
-		private CString _networkName;
-		private CBool _isPlayerInBreachView;
-		private CBool _isRevealed;
-		private CHandle<BreachViewTimeListener> _breachViewTimeListener;
-		private CUInt32 _upload_program_listener_id;
-
 		[Ordinal(97)] 
 		[RED("networkName")] 
 		public CString NetworkName
 		{
-			get => GetProperty(ref _networkName);
-			set => SetProperty(ref _networkName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(98)] 
 		[RED("isPlayerInBreachView")] 
 		public CBool IsPlayerInBreachView
 		{
-			get => GetProperty(ref _isPlayerInBreachView);
-			set => SetProperty(ref _isPlayerInBreachView, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(99)] 
 		[RED("isRevealed")] 
 		public CBool IsRevealed
 		{
-			get => GetProperty(ref _isRevealed);
-			set => SetProperty(ref _isRevealed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(100)] 
 		[RED("breachViewTimeListener")] 
 		public CHandle<BreachViewTimeListener> BreachViewTimeListener
 		{
-			get => GetProperty(ref _breachViewTimeListener);
-			set => SetProperty(ref _breachViewTimeListener, value);
+			get => GetPropertyValue<CHandle<BreachViewTimeListener>>();
+			set => SetPropertyValue<CHandle<BreachViewTimeListener>>(value);
 		}
 
 		[Ordinal(101)] 
 		[RED("upload_program_listener_id")] 
 		public CUInt32 Upload_program_listener_id
 		{
-			get => GetProperty(ref _upload_program_listener_id);
-			set => SetProperty(ref _upload_program_listener_id, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		public AccessPoint()
 		{
-			_networkName = new() { Text = "Local Network 1" };
+			ControllerTypeName = "AccessPointController";
+			NetworkName = "Local Network 1";
 		}
 	}
 }

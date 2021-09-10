@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class EffectExecutor_Spread : gameEffectExecutor_Scripted
 	{
-		private CWeakHandle<gamedataObjectAction_Record> _objectActionRecord;
-		private CWeakHandle<entEntity> _prevEntity;
-		private CWeakHandle<PlayerPuppet> _player;
-		private CBool _spreadToAllTargetsInTheArea;
-
 		[Ordinal(1)] 
 		[RED("objectActionRecord")] 
 		public CWeakHandle<gamedataObjectAction_Record> ObjectActionRecord
 		{
-			get => GetProperty(ref _objectActionRecord);
-			set => SetProperty(ref _objectActionRecord, value);
+			get => GetPropertyValue<CWeakHandle<gamedataObjectAction_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataObjectAction_Record>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("prevEntity")] 
 		public CWeakHandle<entEntity> PrevEntity
 		{
-			get => GetProperty(ref _prevEntity);
-			set => SetProperty(ref _prevEntity, value);
+			get => GetPropertyValue<CWeakHandle<entEntity>>();
+			set => SetPropertyValue<CWeakHandle<entEntity>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
-			get => GetProperty(ref _player);
-			set => SetProperty(ref _player, value);
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("spreadToAllTargetsInTheArea")] 
 		public CBool SpreadToAllTargetsInTheArea
 		{
-			get => GetProperty(ref _spreadToAllTargetsInTheArea);
-			set => SetProperty(ref _spreadToAllTargetsInTheArea, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

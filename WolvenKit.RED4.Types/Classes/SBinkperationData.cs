@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SBinkperationData : RedBaseClass
 	{
-		private CName _componentName;
-		private redResourceReferenceScriptToken _binkPath;
-		private CBool _loop;
-		private CEnum<EBinkOperationType> _operationType;
-
 		[Ordinal(0)] 
 		[RED("componentName")] 
 		public CName ComponentName
 		{
-			get => GetProperty(ref _componentName);
-			set => SetProperty(ref _componentName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("binkPath")] 
 		public redResourceReferenceScriptToken BinkPath
 		{
-			get => GetProperty(ref _binkPath);
-			set => SetProperty(ref _binkPath, value);
+			get => GetPropertyValue<redResourceReferenceScriptToken>();
+			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("loop")] 
 		public CBool Loop
 		{
-			get => GetProperty(ref _loop);
-			set => SetProperty(ref _loop, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("operationType")] 
 		public CEnum<EBinkOperationType> OperationType
 		{
-			get => GetProperty(ref _operationType);
-			set => SetProperty(ref _operationType, value);
+			get => GetPropertyValue<CEnum<EBinkOperationType>>();
+			set => SetPropertyValue<CEnum<EBinkOperationType>>(value);
+		}
+
+		public SBinkperationData()
+		{
+			BinkPath = new();
 		}
 	}
 }

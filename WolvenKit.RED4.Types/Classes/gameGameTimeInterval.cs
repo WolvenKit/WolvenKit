@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameGameTimeInterval : RedBaseClass
 	{
-		private GameTime _begin;
-		private GameTime _end;
-		private CBool _ignoreDays;
-
 		[Ordinal(0)] 
 		[RED("begin")] 
 		public GameTime Begin
 		{
-			get => GetProperty(ref _begin);
-			set => SetProperty(ref _begin, value);
+			get => GetPropertyValue<GameTime>();
+			set => SetPropertyValue<GameTime>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("end")] 
 		public GameTime End
 		{
-			get => GetProperty(ref _end);
-			set => SetProperty(ref _end, value);
+			get => GetPropertyValue<GameTime>();
+			set => SetPropertyValue<GameTime>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ignoreDays")] 
 		public CBool IgnoreDays
 		{
-			get => GetProperty(ref _ignoreDays);
-			set => SetProperty(ref _ignoreDays, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public gameGameTimeInterval()
+		{
+			Begin = new();
+			End = new();
 		}
 	}
 }

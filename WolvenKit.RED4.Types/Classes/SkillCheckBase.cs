@@ -5,95 +5,84 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SkillCheckBase : IScriptable
 	{
-		private TweakDBID _alternativeName;
-		private CEnum<EGameplayChallengeLevel> _difficulty;
-		private CHandle<GameplayConditionContainer> _additionalRequirements;
-		private CFloat _duration;
-		private CBool _isActive;
-		private CBool _wasPassed;
-		private CBool _skillCheckPerformed;
-		private CEnum<EDeviceChallengeSkill> _skillToCheck;
-		private CHandle<GameplaySkillCondition> _baseSkill;
-		private CBool _isDynamic;
-
 		[Ordinal(0)] 
 		[RED("alternativeName")] 
 		public TweakDBID AlternativeName
 		{
-			get => GetProperty(ref _alternativeName);
-			set => SetProperty(ref _alternativeName, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("difficulty")] 
 		public CEnum<EGameplayChallengeLevel> Difficulty
 		{
-			get => GetProperty(ref _difficulty);
-			set => SetProperty(ref _difficulty, value);
+			get => GetPropertyValue<CEnum<EGameplayChallengeLevel>>();
+			set => SetPropertyValue<CEnum<EGameplayChallengeLevel>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("additionalRequirements")] 
 		public CHandle<GameplayConditionContainer> AdditionalRequirements
 		{
-			get => GetProperty(ref _additionalRequirements);
-			set => SetProperty(ref _additionalRequirements, value);
+			get => GetPropertyValue<CHandle<GameplayConditionContainer>>();
+			set => SetPropertyValue<CHandle<GameplayConditionContainer>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get => GetProperty(ref _duration);
-			set => SetProperty(ref _duration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get => GetProperty(ref _isActive);
-			set => SetProperty(ref _isActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("wasPassed")] 
 		public CBool WasPassed
 		{
-			get => GetProperty(ref _wasPassed);
-			set => SetProperty(ref _wasPassed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("skillCheckPerformed")] 
 		public CBool SkillCheckPerformed
 		{
-			get => GetProperty(ref _skillCheckPerformed);
-			set => SetProperty(ref _skillCheckPerformed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("skillToCheck")] 
 		public CEnum<EDeviceChallengeSkill> SkillToCheck
 		{
-			get => GetProperty(ref _skillToCheck);
-			set => SetProperty(ref _skillToCheck, value);
+			get => GetPropertyValue<CEnum<EDeviceChallengeSkill>>();
+			set => SetPropertyValue<CEnum<EDeviceChallengeSkill>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("baseSkill")] 
 		public CHandle<GameplaySkillCondition> BaseSkill
 		{
-			get => GetProperty(ref _baseSkill);
-			set => SetProperty(ref _baseSkill, value);
+			get => GetPropertyValue<CHandle<GameplaySkillCondition>>();
+			set => SetPropertyValue<CHandle<GameplaySkillCondition>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("isDynamic")] 
 		public CBool IsDynamic
 		{
-			get => GetProperty(ref _isDynamic);
-			set => SetProperty(ref _isDynamic, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

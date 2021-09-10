@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RegisterToListListener : gameScriptableSystemRequest
 	{
-		private CWeakHandle<gameObject> _object;
-		private CName _funcName;
-
 		[Ordinal(0)] 
 		[RED("object")] 
 		public CWeakHandle<gameObject> Object
 		{
-			get => GetProperty(ref _object);
-			set => SetProperty(ref _object, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("funcName")] 
 		public CName FuncName
 		{
-			get => GetProperty(ref _funcName);
-			set => SetProperty(ref _funcName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 	}
 }

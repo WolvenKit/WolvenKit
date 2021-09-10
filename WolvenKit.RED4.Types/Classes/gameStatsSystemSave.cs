@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameStatsSystemSave : ISerializable
 	{
-		private CArray<gameStatsSeedKey> _statsObjectsData;
-		private CArray<gameStatModifierSave> _statModifiersData;
-
 		[Ordinal(0)] 
 		[RED("statsObjectsData")] 
 		public CArray<gameStatsSeedKey> StatsObjectsData
 		{
-			get => GetProperty(ref _statsObjectsData);
-			set => SetProperty(ref _statsObjectsData, value);
+			get => GetPropertyValue<CArray<gameStatsSeedKey>>();
+			set => SetPropertyValue<CArray<gameStatsSeedKey>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("statModifiersData")] 
 		public CArray<gameStatModifierSave> StatModifiersData
 		{
-			get => GetProperty(ref _statModifiersData);
-			set => SetProperty(ref _statModifiersData, value);
+			get => GetPropertyValue<CArray<gameStatModifierSave>>();
+			set => SetPropertyValue<CArray<gameStatModifierSave>>(value);
+		}
+
+		public gameStatsSystemSave()
+		{
+			StatsObjectsData = new();
+			StatModifiersData = new();
 		}
 	}
 }

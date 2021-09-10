@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DeviceActionWidgetControllerBase : DeviceButtonLogicControllerBase
 	{
-		private CArray<CWeakHandle<gamedeviceAction>> _actions;
-		private CHandle<ResolveActionData> _actionData;
-		private CBool _isInactive;
-
 		[Ordinal(26)] 
 		[RED("actions")] 
 		public CArray<CWeakHandle<gamedeviceAction>> Actions
 		{
-			get => GetProperty(ref _actions);
-			set => SetProperty(ref _actions, value);
+			get => GetPropertyValue<CArray<CWeakHandle<gamedeviceAction>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<gamedeviceAction>>>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("actionData")] 
 		public CHandle<ResolveActionData> ActionData
 		{
-			get => GetProperty(ref _actionData);
-			set => SetProperty(ref _actionData, value);
+			get => GetPropertyValue<CHandle<ResolveActionData>>();
+			set => SetPropertyValue<CHandle<ResolveActionData>>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("isInactive")] 
 		public CBool IsInactive
 		{
-			get => GetProperty(ref _isInactive);
-			set => SetProperty(ref _isInactive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public DeviceActionWidgetControllerBase()
+		{
+			Actions = new();
 		}
 	}
 }

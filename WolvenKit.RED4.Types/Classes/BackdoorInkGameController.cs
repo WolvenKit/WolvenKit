@@ -5,95 +5,90 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class BackdoorInkGameController : MasterDeviceInkGameControllerBase
 	{
-		private inkWidgetReference _idleGroup;
-		private inkWidgetReference _connectedGroup;
-		private CName _introAnimationName;
-		private CName _idleAnimationName;
-		private CName _glitchAnimationName;
-		private CHandle<inkanimProxy> _runningAnimation;
-		private CHandle<redCallbackObject> _onGlitchingListener;
-		private CHandle<redCallbackObject> _onIsInDefaultStateListener;
-		private CHandle<redCallbackObject> _onShutdownModuleListener;
-		private CHandle<redCallbackObject> _onBootModuleListener;
-
 		[Ordinal(18)] 
 		[RED("IdleGroup")] 
 		public inkWidgetReference IdleGroup
 		{
-			get => GetProperty(ref _idleGroup);
-			set => SetProperty(ref _idleGroup, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("ConnectedGroup")] 
 		public inkWidgetReference ConnectedGroup
 		{
-			get => GetProperty(ref _connectedGroup);
-			set => SetProperty(ref _connectedGroup, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("IntroAnimationName")] 
 		public CName IntroAnimationName
 		{
-			get => GetProperty(ref _introAnimationName);
-			set => SetProperty(ref _introAnimationName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("IdleAnimationName")] 
 		public CName IdleAnimationName
 		{
-			get => GetProperty(ref _idleAnimationName);
-			set => SetProperty(ref _idleAnimationName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("GlitchAnimationName")] 
 		public CName GlitchAnimationName
 		{
-			get => GetProperty(ref _glitchAnimationName);
-			set => SetProperty(ref _glitchAnimationName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("RunningAnimation")] 
 		public CHandle<inkanimProxy> RunningAnimation
 		{
-			get => GetProperty(ref _runningAnimation);
-			set => SetProperty(ref _runningAnimation, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("onGlitchingListener")] 
 		public CHandle<redCallbackObject> OnGlitchingListener
 		{
-			get => GetProperty(ref _onGlitchingListener);
-			set => SetProperty(ref _onGlitchingListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("onIsInDefaultStateListener")] 
 		public CHandle<redCallbackObject> OnIsInDefaultStateListener
 		{
-			get => GetProperty(ref _onIsInDefaultStateListener);
-			set => SetProperty(ref _onIsInDefaultStateListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("onShutdownModuleListener")] 
 		public CHandle<redCallbackObject> OnShutdownModuleListener
 		{
-			get => GetProperty(ref _onShutdownModuleListener);
-			set => SetProperty(ref _onShutdownModuleListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("onBootModuleListener")] 
 		public CHandle<redCallbackObject> OnBootModuleListener
 		{
-			get => GetProperty(ref _onBootModuleListener);
-			set => SetProperty(ref _onBootModuleListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		public BackdoorInkGameController()
+		{
+			IdleGroup = new();
+			ConnectedGroup = new();
 		}
 	}
 }

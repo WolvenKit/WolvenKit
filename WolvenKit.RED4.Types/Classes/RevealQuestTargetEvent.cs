@@ -5,47 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RevealQuestTargetEvent : redEvent
 	{
-		private CName _sourceName;
-		private CEnum<ERevealDurationType> _durationType;
-		private CBool _reveal;
-		private CFloat _timeout;
-
 		[Ordinal(0)] 
 		[RED("sourceName")] 
 		public CName SourceName
 		{
-			get => GetProperty(ref _sourceName);
-			set => SetProperty(ref _sourceName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("durationType")] 
 		public CEnum<ERevealDurationType> DurationType
 		{
-			get => GetProperty(ref _durationType);
-			set => SetProperty(ref _durationType, value);
+			get => GetPropertyValue<CEnum<ERevealDurationType>>();
+			set => SetPropertyValue<CEnum<ERevealDurationType>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("reveal")] 
 		public CBool Reveal
 		{
-			get => GetProperty(ref _reveal);
-			set => SetProperty(ref _reveal, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("timeout")] 
 		public CFloat Timeout
 		{
-			get => GetProperty(ref _timeout);
-			set => SetProperty(ref _timeout, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public RevealQuestTargetEvent()
 		{
-			_reveal = true;
-			_timeout = 4.000000F;
+			Reveal = true;
+			Timeout = 4.000000F;
 		}
 	}
 }

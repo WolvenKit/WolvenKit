@@ -5,105 +5,96 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_SpringDamp : animAnimNode_FloatValue
 	{
-		private CFloat _massFactor;
-		private CFloat _springFactor;
-		private CFloat _dampFactor;
-		private CBool _startFromDefaultValue;
-		private CFloat _defaultInitialValue;
-		private CBool _wrapAroundRange;
-		private CFloat _rangeMin;
-		private CFloat _rangeMax;
-		private CFloat _timeStep;
-		private animFloatLink _inputNode;
-
 		[Ordinal(11)] 
 		[RED("massFactor")] 
 		public CFloat MassFactor
 		{
-			get => GetProperty(ref _massFactor);
-			set => SetProperty(ref _massFactor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("springFactor")] 
 		public CFloat SpringFactor
 		{
-			get => GetProperty(ref _springFactor);
-			set => SetProperty(ref _springFactor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("dampFactor")] 
 		public CFloat DampFactor
 		{
-			get => GetProperty(ref _dampFactor);
-			set => SetProperty(ref _dampFactor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("startFromDefaultValue")] 
 		public CBool StartFromDefaultValue
 		{
-			get => GetProperty(ref _startFromDefaultValue);
-			set => SetProperty(ref _startFromDefaultValue, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("defaultInitialValue")] 
 		public CFloat DefaultInitialValue
 		{
-			get => GetProperty(ref _defaultInitialValue);
-			set => SetProperty(ref _defaultInitialValue, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("wrapAroundRange")] 
 		public CBool WrapAroundRange
 		{
-			get => GetProperty(ref _wrapAroundRange);
-			set => SetProperty(ref _wrapAroundRange, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("rangeMin")] 
 		public CFloat RangeMin
 		{
-			get => GetProperty(ref _rangeMin);
-			set => SetProperty(ref _rangeMin, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("rangeMax")] 
 		public CFloat RangeMax
 		{
-			get => GetProperty(ref _rangeMax);
-			set => SetProperty(ref _rangeMax, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("timeStep")] 
 		public CFloat TimeStep
 		{
-			get => GetProperty(ref _timeStep);
-			set => SetProperty(ref _timeStep, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("inputNode")] 
 		public animFloatLink InputNode
 		{
-			get => GetProperty(ref _inputNode);
-			set => SetProperty(ref _inputNode, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		public animAnimNode_SpringDamp()
 		{
-			_massFactor = 1.000000F;
-			_springFactor = 1.000000F;
-			_dampFactor = 1.000000F;
-			_rangeMin = -180.000000F;
-			_rangeMax = 180.000000F;
-			_timeStep = 0.005000F;
+			Id = 4294967295;
+			MassFactor = 1.000000F;
+			SpringFactor = 1.000000F;
+			DampFactor = 1.000000F;
+			RangeMin = -180.000000F;
+			RangeMax = 180.000000F;
+			TimeStep = 0.005000F;
+			InputNode = new();
 		}
 	}
 }

@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class effectTrackItem : effectBaseItem
 	{
-		private CFloat _timeBegin;
-		private CFloat _timeDuration;
-		private CRUID _ruid;
-
 		[Ordinal(0)] 
 		[RED("timeBegin")] 
 		public CFloat TimeBegin
 		{
-			get => GetProperty(ref _timeBegin);
-			set => SetProperty(ref _timeBegin, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("timeDuration")] 
 		public CFloat TimeDuration
 		{
-			get => GetProperty(ref _timeDuration);
-			set => SetProperty(ref _timeDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ruid")] 
 		public CRUID Ruid
 		{
-			get => GetProperty(ref _ruid);
-			set => SetProperty(ref _ruid, value);
+			get => GetPropertyValue<CRUID>();
+			set => SetPropertyValue<CRUID>(value);
 		}
 	}
 }

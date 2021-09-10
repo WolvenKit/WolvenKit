@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class NPCGodModeListener : gameScriptStatsListener
 	{
-		private CWeakHandle<NPCPuppet> _owner;
-
 		[Ordinal(0)] 
 		[RED("owner")] 
 		public CWeakHandle<NPCPuppet> Owner
 		{
-			get => GetProperty(ref _owner);
-			set => SetProperty(ref _owner, value);
+			get => GetPropertyValue<CWeakHandle<NPCPuppet>>();
+			set => SetPropertyValue<CWeakHandle<NPCPuppet>>(value);
 		}
 	}
 }

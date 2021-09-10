@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnRidTag : RedBaseClass
 	{
-		private CName _signature;
-		private scnRidSerialNumber _serialNumber;
-
 		[Ordinal(0)] 
 		[RED("signature")] 
 		public CName Signature
 		{
-			get => GetProperty(ref _signature);
-			set => SetProperty(ref _signature, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("serialNumber")] 
 		public scnRidSerialNumber SerialNumber
 		{
-			get => GetProperty(ref _serialNumber);
-			set => SetProperty(ref _serialNumber, value);
+			get => GetPropertyValue<scnRidSerialNumber>();
+			set => SetPropertyValue<scnRidSerialNumber>(value);
+		}
+
+		public scnRidTag()
+		{
+			SerialNumber = new() { SerialNumber = 4294967295 };
 		}
 	}
 }

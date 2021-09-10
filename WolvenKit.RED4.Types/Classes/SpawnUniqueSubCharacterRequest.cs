@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SpawnUniqueSubCharacterRequest : gameScriptableSystemRequest
 	{
-		private TweakDBID _subCharacterID;
-		private CFloat _desiredDistance;
-
 		[Ordinal(0)] 
 		[RED("subCharacterID")] 
 		public TweakDBID SubCharacterID
 		{
-			get => GetProperty(ref _subCharacterID);
-			set => SetProperty(ref _subCharacterID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("desiredDistance")] 
 		public CFloat DesiredDistance
 		{
-			get => GetProperty(ref _desiredDistance);
-			set => SetProperty(ref _desiredDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public SpawnUniqueSubCharacterRequest()
 		{
-			_desiredDistance = 3.000000F;
+			DesiredDistance = 3.000000F;
 		}
 	}
 }

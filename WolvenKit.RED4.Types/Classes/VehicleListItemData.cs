@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VehicleListItemData : IScriptable
 	{
-		private CName _displayName;
-		private vehiclePlayerVehicle _data;
-		private CWeakHandle<gamedataUIIcon_Record> _icon;
-
 		[Ordinal(0)] 
 		[RED("displayName")] 
 		public CName DisplayName
 		{
-			get => GetProperty(ref _displayName);
-			set => SetProperty(ref _displayName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("data")] 
 		public vehiclePlayerVehicle Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<vehiclePlayerVehicle>();
+			set => SetPropertyValue<vehiclePlayerVehicle>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("icon")] 
 		public CWeakHandle<gamedataUIIcon_Record> Icon
 		{
-			get => GetProperty(ref _icon);
-			set => SetProperty(ref _icon, value);
+			get => GetPropertyValue<CWeakHandle<gamedataUIIcon_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataUIIcon_Record>>(value);
+		}
+
+		public VehicleListItemData()
+		{
+			Data = new() { VehicleType = Enums.gamedataVehicleType.Invalid };
 		}
 	}
 }

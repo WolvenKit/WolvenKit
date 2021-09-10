@@ -5,37 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scneventsCameraEvent : scnSceneEvent
 	{
-		private NodeRef _cameraRef;
-		private CBool _isBlendIn;
-		private CFloat _blendTime;
-
 		[Ordinal(6)] 
 		[RED("cameraRef")] 
 		public NodeRef CameraRef
 		{
-			get => GetProperty(ref _cameraRef);
-			set => SetProperty(ref _cameraRef, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("isBlendIn")] 
 		public CBool IsBlendIn
 		{
-			get => GetProperty(ref _isBlendIn);
-			set => SetProperty(ref _isBlendIn, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("blendTime")] 
 		public CFloat BlendTime
 		{
-			get => GetProperty(ref _blendTime);
-			set => SetProperty(ref _blendTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public scneventsCameraEvent()
 		{
-			_isBlendIn = true;
+			Id = new() { Id = 18446744073709551615 };
+			IsBlendIn = true;
 		}
 	}
 }

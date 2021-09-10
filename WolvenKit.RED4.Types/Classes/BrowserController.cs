@@ -5,113 +5,109 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class BrowserController : inkWidgetLogicController
 	{
-		private inkWidgetReference _homeButton;
-		private CWeakHandle<LinkController> _homeButtonCoontroller;
-		private inkTextWidgetReference _addressText;
-		private inkWidgetReference _pageContentRoot;
-		private redResourceReferenceScriptToken _spinnerPath;
-		private CName _webPageLibraryID;
-		private CString _defaultDevicePage;
-		private CWeakHandle<BrowserGameController> _gameController;
-		private CArray<CWeakHandle<gameJournalInternetPage>> _websiteData;
-		private CWeakHandle<gameJournalInternetPage> _currentRequestedPage;
-		private CWeakHandle<inkCompoundWidget> _currentPage;
-		private CWeakHandle<inkWidget> _spinner;
-
 		[Ordinal(1)] 
 		[RED("homeButton")] 
 		public inkWidgetReference HomeButton
 		{
-			get => GetProperty(ref _homeButton);
-			set => SetProperty(ref _homeButton, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("homeButtonCoontroller")] 
 		public CWeakHandle<LinkController> HomeButtonCoontroller
 		{
-			get => GetProperty(ref _homeButtonCoontroller);
-			set => SetProperty(ref _homeButtonCoontroller, value);
+			get => GetPropertyValue<CWeakHandle<LinkController>>();
+			set => SetPropertyValue<CWeakHandle<LinkController>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("addressText")] 
 		public inkTextWidgetReference AddressText
 		{
-			get => GetProperty(ref _addressText);
-			set => SetProperty(ref _addressText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("pageContentRoot")] 
 		public inkWidgetReference PageContentRoot
 		{
-			get => GetProperty(ref _pageContentRoot);
-			set => SetProperty(ref _pageContentRoot, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("spinnerPath")] 
 		public redResourceReferenceScriptToken SpinnerPath
 		{
-			get => GetProperty(ref _spinnerPath);
-			set => SetProperty(ref _spinnerPath, value);
+			get => GetPropertyValue<redResourceReferenceScriptToken>();
+			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("webPageLibraryID")] 
 		public CName WebPageLibraryID
 		{
-			get => GetProperty(ref _webPageLibraryID);
-			set => SetProperty(ref _webPageLibraryID, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("defaultDevicePage")] 
 		public CString DefaultDevicePage
 		{
-			get => GetProperty(ref _defaultDevicePage);
-			set => SetProperty(ref _defaultDevicePage, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("gameController")] 
 		public CWeakHandle<BrowserGameController> GameController
 		{
-			get => GetProperty(ref _gameController);
-			set => SetProperty(ref _gameController, value);
+			get => GetPropertyValue<CWeakHandle<BrowserGameController>>();
+			set => SetPropertyValue<CWeakHandle<BrowserGameController>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("websiteData")] 
 		public CArray<CWeakHandle<gameJournalInternetPage>> WebsiteData
 		{
-			get => GetProperty(ref _websiteData);
-			set => SetProperty(ref _websiteData, value);
+			get => GetPropertyValue<CArray<CWeakHandle<gameJournalInternetPage>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<gameJournalInternetPage>>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("currentRequestedPage")] 
 		public CWeakHandle<gameJournalInternetPage> CurrentRequestedPage
 		{
-			get => GetProperty(ref _currentRequestedPage);
-			set => SetProperty(ref _currentRequestedPage, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalInternetPage>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalInternetPage>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("currentPage")] 
 		public CWeakHandle<inkCompoundWidget> CurrentPage
 		{
-			get => GetProperty(ref _currentPage);
-			set => SetProperty(ref _currentPage, value);
+			get => GetPropertyValue<CWeakHandle<inkCompoundWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkCompoundWidget>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("spinner")] 
 		public CWeakHandle<inkWidget> Spinner
 		{
-			get => GetProperty(ref _spinner);
-			set => SetProperty(ref _spinner, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
+		}
+
+		public BrowserController()
+		{
+			HomeButton = new();
+			AddressText = new();
+			PageContentRoot = new();
+			SpinnerPath = new();
+			WebsiteData = new();
 		}
 	}
 }

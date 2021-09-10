@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameprojectileLaunchEvent : redEvent
 	{
-		private gameprojectileLaunchParams _launchParams;
-		private CWeakHandle<gameObject> _owner;
-		private CWeakHandle<gameObject> _weapon;
-		private gameprojectileWeaponParams _projectileParams;
-
 		[Ordinal(0)] 
 		[RED("launchParams")] 
 		public gameprojectileLaunchParams LaunchParams
 		{
-			get => GetProperty(ref _launchParams);
-			set => SetProperty(ref _launchParams, value);
+			get => GetPropertyValue<gameprojectileLaunchParams>();
+			set => SetPropertyValue<gameprojectileLaunchParams>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("owner")] 
 		public CWeakHandle<gameObject> Owner
 		{
-			get => GetProperty(ref _owner);
-			set => SetProperty(ref _owner, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("weapon")] 
 		public CWeakHandle<gameObject> Weapon
 		{
-			get => GetProperty(ref _weapon);
-			set => SetProperty(ref _weapon, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("projectileParams")] 
 		public gameprojectileWeaponParams ProjectileParams
 		{
-			get => GetProperty(ref _projectileParams);
-			set => SetProperty(ref _projectileParams, value);
+			get => GetPropertyValue<gameprojectileWeaponParams>();
+			set => SetPropertyValue<gameprojectileWeaponParams>(value);
+		}
+
+		public gameprojectileLaunchEvent()
+		{
+			LaunchParams = new();
+			ProjectileParams = new() { TargetPosition = new() { X = 340282346638528859811704183484516925440.000000F, Y = 340282346638528859811704183484516925440.000000F, Z = 340282346638528859811704183484516925440.000000F, W = 340282346638528859811704183484516925440.000000F }, SmartGunSpreadOnHitPlane = new(), SmartGunAccuracy = 1.000000F, SmartGunIsProjectileGuided = true, HitPlaneOffset = new(), IgnoreWeaponOwnerCollision = true, RicochetData = new(), Range = -1.000000F };
 		}
 	}
 }

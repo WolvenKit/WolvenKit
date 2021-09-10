@@ -5,37 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questBlockTokenActivation_NodeSubType : questIContentTokenManager_NodeSubType
 	{
-		private CEnum<questBlockAction> _action;
-		private CName _source;
-		private CBool _resetTokenSpawnTimer;
-
 		[Ordinal(0)] 
 		[RED("action")] 
 		public CEnum<questBlockAction> Action
 		{
-			get => GetProperty(ref _action);
-			set => SetProperty(ref _action, value);
+			get => GetPropertyValue<CEnum<questBlockAction>>();
+			set => SetPropertyValue<CEnum<questBlockAction>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("source")] 
 		public CName Source
 		{
-			get => GetProperty(ref _source);
-			set => SetProperty(ref _source, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("resetTokenSpawnTimer")] 
 		public CBool ResetTokenSpawnTimer
 		{
-			get => GetProperty(ref _resetTokenSpawnTimer);
-			set => SetProperty(ref _resetTokenSpawnTimer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public questBlockTokenActivation_NodeSubType()
 		{
-			_resetTokenSpawnTimer = true;
+			ResetTokenSpawnTimer = true;
 		}
 	}
 }

@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameHitRepresentationOverride : ISerializable
 	{
-		private gameHitShapeContainer _represenationOverride;
-
 		[Ordinal(0)] 
 		[RED("represenationOverride")] 
 		public gameHitShapeContainer RepresenationOverride
 		{
-			get => GetProperty(ref _represenationOverride);
-			set => SetProperty(ref _represenationOverride, value);
+			get => GetPropertyValue<gameHitShapeContainer>();
+			set => SetPropertyValue<gameHitShapeContainer>(value);
+		}
+
+		public gameHitRepresentationOverride()
+		{
+			RepresenationOverride = new() { Color = new(), PhysicsMaterial = new() };
 		}
 	}
 }

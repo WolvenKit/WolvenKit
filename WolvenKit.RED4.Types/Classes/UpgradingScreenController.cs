@@ -5,68 +5,69 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UpgradingScreenController : CraftingMainLogicController
 	{
-		private CArray<CWeakHandle<AGenericTooltipController>> _itemTooltipControllers;
-		private CArray<CHandle<InventoryTooltipData>> _tooltipDatas;
-		private CArray<CEnum<gamedataItemType>> _weaponAreas;
-		private CArray<CEnum<gamedataEquipmentArea>> _equipAreas;
-		private CHandle<gameItemData> _newItem;
-		private CHandle<gameStatModifierData_Deprecated> _statMod;
-		private CHandle<gameStatModifierData_Deprecated> _levelMod;
-
 		[Ordinal(39)] 
 		[RED("itemTooltipControllers")] 
 		public CArray<CWeakHandle<AGenericTooltipController>> ItemTooltipControllers
 		{
-			get => GetProperty(ref _itemTooltipControllers);
-			set => SetProperty(ref _itemTooltipControllers, value);
+			get => GetPropertyValue<CArray<CWeakHandle<AGenericTooltipController>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<AGenericTooltipController>>>(value);
 		}
 
 		[Ordinal(40)] 
 		[RED("tooltipDatas")] 
 		public CArray<CHandle<InventoryTooltipData>> TooltipDatas
 		{
-			get => GetProperty(ref _tooltipDatas);
-			set => SetProperty(ref _tooltipDatas, value);
+			get => GetPropertyValue<CArray<CHandle<InventoryTooltipData>>>();
+			set => SetPropertyValue<CArray<CHandle<InventoryTooltipData>>>(value);
 		}
 
 		[Ordinal(41)] 
 		[RED("WeaponAreas")] 
 		public CArray<CEnum<gamedataItemType>> WeaponAreas
 		{
-			get => GetProperty(ref _weaponAreas);
-			set => SetProperty(ref _weaponAreas, value);
+			get => GetPropertyValue<CArray<CEnum<gamedataItemType>>>();
+			set => SetPropertyValue<CArray<CEnum<gamedataItemType>>>(value);
 		}
 
 		[Ordinal(42)] 
 		[RED("EquipAreas")] 
 		public CArray<CEnum<gamedataEquipmentArea>> EquipAreas
 		{
-			get => GetProperty(ref _equipAreas);
-			set => SetProperty(ref _equipAreas, value);
+			get => GetPropertyValue<CArray<CEnum<gamedataEquipmentArea>>>();
+			set => SetPropertyValue<CArray<CEnum<gamedataEquipmentArea>>>(value);
 		}
 
 		[Ordinal(43)] 
 		[RED("newItem")] 
 		public CHandle<gameItemData> NewItem
 		{
-			get => GetProperty(ref _newItem);
-			set => SetProperty(ref _newItem, value);
+			get => GetPropertyValue<CHandle<gameItemData>>();
+			set => SetPropertyValue<CHandle<gameItemData>>(value);
 		}
 
 		[Ordinal(44)] 
 		[RED("statMod")] 
 		public CHandle<gameStatModifierData_Deprecated> StatMod
 		{
-			get => GetProperty(ref _statMod);
-			set => SetProperty(ref _statMod, value);
+			get => GetPropertyValue<CHandle<gameStatModifierData_Deprecated>>();
+			set => SetPropertyValue<CHandle<gameStatModifierData_Deprecated>>(value);
 		}
 
 		[Ordinal(45)] 
 		[RED("levelMod")] 
 		public CHandle<gameStatModifierData_Deprecated> LevelMod
 		{
-			get => GetProperty(ref _levelMod);
-			set => SetProperty(ref _levelMod, value);
+			get => GetPropertyValue<CHandle<gameStatModifierData_Deprecated>>();
+			set => SetPropertyValue<CHandle<gameStatModifierData_Deprecated>>(value);
+		}
+
+		public UpgradingScreenController()
+		{
+			MaxIngredientCount = 8;
+			ItemTooltipControllers = new();
+			TooltipDatas = new();
+			WeaponAreas = new();
+			EquipAreas = new();
 		}
 	}
 }

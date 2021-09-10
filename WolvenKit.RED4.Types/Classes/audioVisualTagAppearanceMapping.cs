@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioVisualTagAppearanceMapping : audioAudioMetadata
 	{
-		private CArray<audioVisualTagAppearanceGroup> _mappings;
-
 		[Ordinal(1)] 
 		[RED("mappings")] 
 		public CArray<audioVisualTagAppearanceGroup> Mappings
 		{
-			get => GetProperty(ref _mappings);
-			set => SetProperty(ref _mappings, value);
+			get => GetPropertyValue<CArray<audioVisualTagAppearanceGroup>>();
+			set => SetPropertyValue<CArray<audioVisualTagAppearanceGroup>>(value);
+		}
+
+		public audioVisualTagAppearanceMapping()
+		{
+			Mappings = new();
 		}
 	}
 }

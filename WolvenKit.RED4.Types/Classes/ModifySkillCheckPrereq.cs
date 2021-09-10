@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ModifySkillCheckPrereq : gamePlayerScriptableSystemRequest
 	{
-		private CBool _register;
-		private CHandle<SkillCheckPrereqState> _skillCheckState;
-
 		[Ordinal(1)] 
 		[RED("register")] 
 		public CBool Register
 		{
-			get => GetProperty(ref _register);
-			set => SetProperty(ref _register, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("skillCheckState")] 
 		public CHandle<SkillCheckPrereqState> SkillCheckState
 		{
-			get => GetProperty(ref _skillCheckState);
-			set => SetProperty(ref _skillCheckState, value);
+			get => GetPropertyValue<CHandle<SkillCheckPrereqState>>();
+			set => SetPropertyValue<CHandle<SkillCheckPrereqState>>(value);
 		}
 	}
 }

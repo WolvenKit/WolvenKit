@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ActionUploadListener : gameCustomValueStatPoolsListener
 	{
-		private CHandle<ScriptableDeviceAction> _action;
-		private ScriptGameInstance _gameInstance;
-
 		[Ordinal(0)] 
 		[RED("action")] 
 		public CHandle<ScriptableDeviceAction> Action
 		{
-			get => GetProperty(ref _action);
-			set => SetProperty(ref _action, value);
+			get => GetPropertyValue<CHandle<ScriptableDeviceAction>>();
+			set => SetPropertyValue<CHandle<ScriptableDeviceAction>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("gameInstance")] 
 		public ScriptGameInstance GameInstance
 		{
-			get => GetProperty(ref _gameInstance);
-			set => SetProperty(ref _gameInstance, value);
+			get => GetPropertyValue<ScriptGameInstance>();
+			set => SetPropertyValue<ScriptGameInstance>(value);
+		}
+
+		public ActionUploadListener()
+		{
+			GameInstance = new();
 		}
 	}
 }

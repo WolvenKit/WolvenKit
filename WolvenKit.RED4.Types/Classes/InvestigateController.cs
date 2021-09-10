@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class InvestigateController : AIbehaviorconditionScript
 	{
-		private senseStimInvestigateData _investigateData;
-
 		[Ordinal(0)] 
 		[RED("investigateData")] 
 		public senseStimInvestigateData InvestigateData
 		{
-			get => GetProperty(ref _investigateData);
-			set => SetProperty(ref _investigateData, value);
+			get => GetPropertyValue<senseStimInvestigateData>();
+			set => SetPropertyValue<senseStimInvestigateData>(value);
+		}
+
+		public InvestigateController()
+		{
+			InvestigateData = new() { DistrationPoint = new(), AttackInstigatorPosition = new(), InvestigationSpots = new() };
 		}
 	}
 }

@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ListItemStateMapper : inkWidgetLogicController
 	{
-		private CBool _toggled;
-		private CBool _selected;
-		private CBool _new;
-		private CWeakHandle<inkWidget> _widget;
-
 		[Ordinal(1)] 
 		[RED("toggled")] 
 		public CBool Toggled
 		{
-			get => GetProperty(ref _toggled);
-			set => SetProperty(ref _toggled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("selected")] 
 		public CBool Selected
 		{
-			get => GetProperty(ref _selected);
-			set => SetProperty(ref _selected, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("new")] 
 		public CBool New
 		{
-			get => GetProperty(ref _new);
-			set => SetProperty(ref _new, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("widget")] 
 		public CWeakHandle<inkWidget> Widget
 		{
-			get => GetProperty(ref _widget);
-			set => SetProperty(ref _widget, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 	}
 }

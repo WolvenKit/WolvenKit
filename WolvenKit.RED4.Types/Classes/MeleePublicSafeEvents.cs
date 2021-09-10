@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MeleePublicSafeEvents : MeleeEventsTransition
 	{
-		private CFloat _unequipTime;
-
 		[Ordinal(0)] 
 		[RED("unequipTime")] 
 		public CFloat UnequipTime
 		{
-			get => GetProperty(ref _unequipTime);
-			set => SetProperty(ref _unequipTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

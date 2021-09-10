@@ -5,23 +5,29 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WeaponVendingMachineControllerPS : VendingMachineControllerPS
 	{
-		private WeaponVendingMachineSetup _weaponVendingMachineSetup;
-		private WeaponVendingMachineSFX _weaponVendingMachineSFX;
-
 		[Ordinal(112)] 
 		[RED("weaponVendingMachineSetup")] 
 		public WeaponVendingMachineSetup WeaponVendingMachineSetup
 		{
-			get => GetProperty(ref _weaponVendingMachineSetup);
-			set => SetProperty(ref _weaponVendingMachineSetup, value);
+			get => GetPropertyValue<WeaponVendingMachineSetup>();
+			set => SetPropertyValue<WeaponVendingMachineSetup>(value);
 		}
 
 		[Ordinal(113)] 
 		[RED("weaponVendingMachineSFX")] 
 		public WeaponVendingMachineSFX WeaponVendingMachineSFX
 		{
-			get => GetProperty(ref _weaponVendingMachineSFX);
-			set => SetProperty(ref _weaponVendingMachineSFX, value);
+			get => GetPropertyValue<WeaponVendingMachineSFX>();
+			set => SetPropertyValue<WeaponVendingMachineSFX>(value);
+		}
+
+		public WeaponVendingMachineControllerPS()
+		{
+			DeviceName = "LocKey#17883";
+			TweakDBRecord = new() { Value = 124293458313 };
+			TweakDBDescriptionRecord = new() { Value = 174063646172 };
+			WeaponVendingMachineSetup = new() { TimeToCompletePurchase = 3.000000F };
+			WeaponVendingMachineSFX = new() { Processing = "dev_vending_machine_processing" };
 		}
 	}
 }

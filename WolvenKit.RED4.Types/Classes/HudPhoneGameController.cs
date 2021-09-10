@@ -5,323 +5,296 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class HudPhoneGameController : gameuiProjectedHUDGameController
 	{
-		private inkWidgetReference _avatarControllerRef;
-		private CWeakHandle<HudPhoneAvatarController> _avatarController;
-		private CWeakHandle<inkWidget> _rootWidget;
-		private CName _soundNameActionOnOpen;
-		private CName _soundNameActionOnClose;
-		private CName _audioInitiateCallPositiveEvent;
-		private CName _audioInitiateCallNegativeEvent;
-		private CName _audioInitiateCallEvent;
-		private CName _audioPhoneOnEvent;
-		private CName _audioPhoneOffEvent;
-		private inkWidgetReference _holder;
-		private CWeakHandle<gameObject> _owner;
-		private CArray<CWeakHandle<gameJournalPhoneMessage>> _unreadMessages;
-		private CEnum<EHudPhoneFunction> _currentFunction;
-		private questPhoneCallInformation _currentCallInformation;
-		private CWeakHandle<gameJournalContact> _currentPhoneCallContact;
-		private CWeakHandle<gameDelaySystem> _delaySystem;
-		private CWeakHandle<PhoneSystem> _phoneSystem;
-		private CWeakHandle<gameJournalManager> _journalMgr;
-		private CArray<CName> _gameplayRestrictions;
-		private CWeakHandle<gameIBlackboard> _blackboard;
-		private CHandle<UI_ComDeviceDef> _blackboardDef;
-		private CHandle<redCallbackObject> _callInformationBBID;
-		private CHandle<redCallbackObject> _statusNameBBID;
-		private CHandle<redCallbackObject> _minimizedListener;
-		private gameDelayID _delayedCallbackId;
-		private gameDelayID _delayedTimeoutCallbackId;
-		private CFloat _timeoutPeroid;
-		private CHandle<inkanimProxy> _portraitIntroAnim;
-		private CHandle<inkanimProxy> _portraitOutroAnim;
-		private CHandle<inkanimProxy> _portraitLoopAnim;
-		private inkanimPlaybackOptions _options;
-		private CHandle<inkScreenProjection> _updatesProjection;
-		private CBool _buttonPressed;
-
 		[Ordinal(9)] 
 		[RED("AvatarControllerRef")] 
 		public inkWidgetReference AvatarControllerRef
 		{
-			get => GetProperty(ref _avatarControllerRef);
-			set => SetProperty(ref _avatarControllerRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("AvatarController")] 
 		public CWeakHandle<HudPhoneAvatarController> AvatarController
 		{
-			get => GetProperty(ref _avatarController);
-			set => SetProperty(ref _avatarController, value);
+			get => GetPropertyValue<CWeakHandle<HudPhoneAvatarController>>();
+			set => SetPropertyValue<CWeakHandle<HudPhoneAvatarController>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("RootWidget")] 
 		public CWeakHandle<inkWidget> RootWidget
 		{
-			get => GetProperty(ref _rootWidget);
-			set => SetProperty(ref _rootWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("SoundNameActionOnOpen")] 
 		public CName SoundNameActionOnOpen
 		{
-			get => GetProperty(ref _soundNameActionOnOpen);
-			set => SetProperty(ref _soundNameActionOnOpen, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("SoundNameActionOnClose")] 
 		public CName SoundNameActionOnClose
 		{
-			get => GetProperty(ref _soundNameActionOnClose);
-			set => SetProperty(ref _soundNameActionOnClose, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("AudioInitiateCallPositiveEvent")] 
 		public CName AudioInitiateCallPositiveEvent
 		{
-			get => GetProperty(ref _audioInitiateCallPositiveEvent);
-			set => SetProperty(ref _audioInitiateCallPositiveEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("AudioInitiateCallNegativeEvent")] 
 		public CName AudioInitiateCallNegativeEvent
 		{
-			get => GetProperty(ref _audioInitiateCallNegativeEvent);
-			set => SetProperty(ref _audioInitiateCallNegativeEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("AudioInitiateCallEvent")] 
 		public CName AudioInitiateCallEvent
 		{
-			get => GetProperty(ref _audioInitiateCallEvent);
-			set => SetProperty(ref _audioInitiateCallEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("AudioPhoneOnEvent")] 
 		public CName AudioPhoneOnEvent
 		{
-			get => GetProperty(ref _audioPhoneOnEvent);
-			set => SetProperty(ref _audioPhoneOnEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("AudioPhoneOffEvent")] 
 		public CName AudioPhoneOffEvent
 		{
-			get => GetProperty(ref _audioPhoneOffEvent);
-			set => SetProperty(ref _audioPhoneOffEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("Holder")] 
 		public inkWidgetReference Holder
 		{
-			get => GetProperty(ref _holder);
-			set => SetProperty(ref _holder, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("Owner")] 
 		public CWeakHandle<gameObject> Owner
 		{
-			get => GetProperty(ref _owner);
-			set => SetProperty(ref _owner, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("UnreadMessages")] 
 		public CArray<CWeakHandle<gameJournalPhoneMessage>> UnreadMessages
 		{
-			get => GetProperty(ref _unreadMessages);
-			set => SetProperty(ref _unreadMessages, value);
+			get => GetPropertyValue<CArray<CWeakHandle<gameJournalPhoneMessage>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<gameJournalPhoneMessage>>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("CurrentFunction")] 
 		public CEnum<EHudPhoneFunction> CurrentFunction
 		{
-			get => GetProperty(ref _currentFunction);
-			set => SetProperty(ref _currentFunction, value);
+			get => GetPropertyValue<CEnum<EHudPhoneFunction>>();
+			set => SetPropertyValue<CEnum<EHudPhoneFunction>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("CurrentCallInformation")] 
 		public questPhoneCallInformation CurrentCallInformation
 		{
-			get => GetProperty(ref _currentCallInformation);
-			set => SetProperty(ref _currentCallInformation, value);
+			get => GetPropertyValue<questPhoneCallInformation>();
+			set => SetPropertyValue<questPhoneCallInformation>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("CurrentPhoneCallContact")] 
 		public CWeakHandle<gameJournalContact> CurrentPhoneCallContact
 		{
-			get => GetProperty(ref _currentPhoneCallContact);
-			set => SetProperty(ref _currentPhoneCallContact, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalContact>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalContact>>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("DelaySystem")] 
 		public CWeakHandle<gameDelaySystem> DelaySystem
 		{
-			get => GetProperty(ref _delaySystem);
-			set => SetProperty(ref _delaySystem, value);
+			get => GetPropertyValue<CWeakHandle<gameDelaySystem>>();
+			set => SetPropertyValue<CWeakHandle<gameDelaySystem>>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("PhoneSystem")] 
 		public CWeakHandle<PhoneSystem> PhoneSystem
 		{
-			get => GetProperty(ref _phoneSystem);
-			set => SetProperty(ref _phoneSystem, value);
+			get => GetPropertyValue<CWeakHandle<PhoneSystem>>();
+			set => SetPropertyValue<CWeakHandle<PhoneSystem>>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("JournalMgr")] 
 		public CWeakHandle<gameJournalManager> JournalMgr
 		{
-			get => GetProperty(ref _journalMgr);
-			set => SetProperty(ref _journalMgr, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalManager>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("gameplayRestrictions")] 
 		public CArray<CName> GameplayRestrictions
 		{
-			get => GetProperty(ref _gameplayRestrictions);
-			set => SetProperty(ref _gameplayRestrictions, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("Blackboard")] 
 		public CWeakHandle<gameIBlackboard> Blackboard
 		{
-			get => GetProperty(ref _blackboard);
-			set => SetProperty(ref _blackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("BlackboardDef")] 
 		public CHandle<UI_ComDeviceDef> BlackboardDef
 		{
-			get => GetProperty(ref _blackboardDef);
-			set => SetProperty(ref _blackboardDef, value);
+			get => GetPropertyValue<CHandle<UI_ComDeviceDef>>();
+			set => SetPropertyValue<CHandle<UI_ComDeviceDef>>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("CallInformationBBID")] 
 		public CHandle<redCallbackObject> CallInformationBBID
 		{
-			get => GetProperty(ref _callInformationBBID);
-			set => SetProperty(ref _callInformationBBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("StatusNameBBID")] 
 		public CHandle<redCallbackObject> StatusNameBBID
 		{
-			get => GetProperty(ref _statusNameBBID);
-			set => SetProperty(ref _statusNameBBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("MinimizedListener")] 
 		public CHandle<redCallbackObject> MinimizedListener
 		{
-			get => GetProperty(ref _minimizedListener);
-			set => SetProperty(ref _minimizedListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(34)] 
 		[RED("DelayedCallbackId")] 
 		public gameDelayID DelayedCallbackId
 		{
-			get => GetProperty(ref _delayedCallbackId);
-			set => SetProperty(ref _delayedCallbackId, value);
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
 		}
 
 		[Ordinal(35)] 
 		[RED("DelayedTimeoutCallbackId")] 
 		public gameDelayID DelayedTimeoutCallbackId
 		{
-			get => GetProperty(ref _delayedTimeoutCallbackId);
-			set => SetProperty(ref _delayedTimeoutCallbackId, value);
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
 		}
 
 		[Ordinal(36)] 
 		[RED("TimeoutPeroid")] 
 		public CFloat TimeoutPeroid
 		{
-			get => GetProperty(ref _timeoutPeroid);
-			set => SetProperty(ref _timeoutPeroid, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(37)] 
 		[RED("portraitIntroAnim")] 
 		public CHandle<inkanimProxy> PortraitIntroAnim
 		{
-			get => GetProperty(ref _portraitIntroAnim);
-			set => SetProperty(ref _portraitIntroAnim, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(38)] 
 		[RED("portraitOutroAnim")] 
 		public CHandle<inkanimProxy> PortraitOutroAnim
 		{
-			get => GetProperty(ref _portraitOutroAnim);
-			set => SetProperty(ref _portraitOutroAnim, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(39)] 
 		[RED("portraitLoopAnim")] 
 		public CHandle<inkanimProxy> PortraitLoopAnim
 		{
-			get => GetProperty(ref _portraitLoopAnim);
-			set => SetProperty(ref _portraitLoopAnim, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(40)] 
 		[RED("options")] 
 		public inkanimPlaybackOptions Options
 		{
-			get => GetProperty(ref _options);
-			set => SetProperty(ref _options, value);
+			get => GetPropertyValue<inkanimPlaybackOptions>();
+			set => SetPropertyValue<inkanimPlaybackOptions>(value);
 		}
 
 		[Ordinal(41)] 
 		[RED("updatesProjection")] 
 		public CHandle<inkScreenProjection> UpdatesProjection
 		{
-			get => GetProperty(ref _updatesProjection);
-			set => SetProperty(ref _updatesProjection, value);
+			get => GetPropertyValue<CHandle<inkScreenProjection>>();
+			set => SetPropertyValue<CHandle<inkScreenProjection>>(value);
 		}
 
 		[Ordinal(42)] 
 		[RED("buttonPressed")] 
 		public CBool ButtonPressed
 		{
-			get => GetProperty(ref _buttonPressed);
-			set => SetProperty(ref _buttonPressed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public HudPhoneGameController()
 		{
-			_soundNameActionOnOpen = "OnOpen";
-			_soundNameActionOnClose = "OnOpen";
-			_audioInitiateCallPositiveEvent = "PhoneCallPopup";
-			_audioInitiateCallNegativeEvent = "PhoneCallPopup";
-			_audioInitiateCallEvent = "PhoneCallPopup";
-			_audioPhoneOnEvent = "PhoneCallPopup";
-			_audioPhoneOffEvent = "PhoneCallPopup";
-			_timeoutPeroid = 8.000000F;
+			AvatarControllerRef = new();
+			SoundNameActionOnOpen = "OnOpen";
+			SoundNameActionOnClose = "OnOpen";
+			AudioInitiateCallPositiveEvent = "PhoneCallPopup";
+			AudioInitiateCallNegativeEvent = "PhoneCallPopup";
+			AudioInitiateCallEvent = "PhoneCallPopup";
+			AudioPhoneOnEvent = "PhoneCallPopup";
+			AudioPhoneOffEvent = "PhoneCallPopup";
+			Holder = new();
+			UnreadMessages = new();
+			CurrentCallInformation = new();
+			GameplayRestrictions = new();
+			DelayedCallbackId = new();
+			DelayedTimeoutCallbackId = new();
+			TimeoutPeroid = 8.000000F;
+			Options = new();
 		}
 	}
 }

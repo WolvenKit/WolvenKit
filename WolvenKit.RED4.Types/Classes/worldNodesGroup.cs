@@ -5,136 +5,127 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldNodesGroup : ISerializable
 	{
-		private CName _name;
-		private CUInt64 _id;
-		private CRUID _groupUniqueId;
-		private CArray<CHandle<worldNode>> _nodes;
-		private CArray<CHandle<worldNodesGroup>> _subGroups;
-		private CEnum<worldNodeGroupType> _type;
-		private CBool _keepPosition;
-		private Transform _transform;
-		private CBool _transformCalculated;
-		private Transform _customPivotOffset;
-		private worldProxyMeshGroupBuildParams _proxyMeshGroupBuildParams;
-		private CResourceAsyncReference<CMesh> _proxyMesh;
-		private CFloat _proxyDistanceFactor;
-		private CArray<CHandle<worldPrefabMetadata>> _metadataArray;
-
 		[Ordinal(0)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get => GetProperty(ref _name);
-			set => SetProperty(ref _name, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("id")] 
 		public CUInt64 Id
 		{
-			get => GetProperty(ref _id);
-			set => SetProperty(ref _id, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("groupUniqueId")] 
 		public CRUID GroupUniqueId
 		{
-			get => GetProperty(ref _groupUniqueId);
-			set => SetProperty(ref _groupUniqueId, value);
+			get => GetPropertyValue<CRUID>();
+			set => SetPropertyValue<CRUID>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("nodes")] 
 		public CArray<CHandle<worldNode>> Nodes
 		{
-			get => GetProperty(ref _nodes);
-			set => SetProperty(ref _nodes, value);
+			get => GetPropertyValue<CArray<CHandle<worldNode>>>();
+			set => SetPropertyValue<CArray<CHandle<worldNode>>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("subGroups")] 
 		public CArray<CHandle<worldNodesGroup>> SubGroups
 		{
-			get => GetProperty(ref _subGroups);
-			set => SetProperty(ref _subGroups, value);
+			get => GetPropertyValue<CArray<CHandle<worldNodesGroup>>>();
+			set => SetPropertyValue<CArray<CHandle<worldNodesGroup>>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("type")] 
 		public CEnum<worldNodeGroupType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<worldNodeGroupType>>();
+			set => SetPropertyValue<CEnum<worldNodeGroupType>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("keepPosition")] 
 		public CBool KeepPosition
 		{
-			get => GetProperty(ref _keepPosition);
-			set => SetProperty(ref _keepPosition, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("transform")] 
 		public Transform Transform
 		{
-			get => GetProperty(ref _transform);
-			set => SetProperty(ref _transform, value);
+			get => GetPropertyValue<Transform>();
+			set => SetPropertyValue<Transform>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("transformCalculated")] 
 		public CBool TransformCalculated
 		{
-			get => GetProperty(ref _transformCalculated);
-			set => SetProperty(ref _transformCalculated, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("customPivotOffset")] 
 		public Transform CustomPivotOffset
 		{
-			get => GetProperty(ref _customPivotOffset);
-			set => SetProperty(ref _customPivotOffset, value);
+			get => GetPropertyValue<Transform>();
+			set => SetPropertyValue<Transform>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("proxyMeshGroupBuildParams")] 
 		public worldProxyMeshGroupBuildParams ProxyMeshGroupBuildParams
 		{
-			get => GetProperty(ref _proxyMeshGroupBuildParams);
-			set => SetProperty(ref _proxyMeshGroupBuildParams, value);
+			get => GetPropertyValue<worldProxyMeshGroupBuildParams>();
+			set => SetPropertyValue<worldProxyMeshGroupBuildParams>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("proxyMesh")] 
 		public CResourceAsyncReference<CMesh> ProxyMesh
 		{
-			get => GetProperty(ref _proxyMesh);
-			set => SetProperty(ref _proxyMesh, value);
+			get => GetPropertyValue<CResourceAsyncReference<CMesh>>();
+			set => SetPropertyValue<CResourceAsyncReference<CMesh>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("proxyDistanceFactor")] 
 		public CFloat ProxyDistanceFactor
 		{
-			get => GetProperty(ref _proxyDistanceFactor);
-			set => SetProperty(ref _proxyDistanceFactor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("metadataArray")] 
 		public CArray<CHandle<worldPrefabMetadata>> MetadataArray
 		{
-			get => GetProperty(ref _metadataArray);
-			set => SetProperty(ref _metadataArray, value);
+			get => GetPropertyValue<CArray<CHandle<worldPrefabMetadata>>>();
+			set => SetPropertyValue<CArray<CHandle<worldPrefabMetadata>>>(value);
 		}
 
 		public worldNodesGroup()
 		{
-			_proxyDistanceFactor = 1.000000F;
+			Nodes = new();
+			SubGroups = new();
+			Transform = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			CustomPivotOffset = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			ProxyMeshGroupBuildParams = new() { BuildParams = new() };
+			ProxyDistanceFactor = 1.000000F;
+			MetadataArray = new();
 		}
 	}
 }

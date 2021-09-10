@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class vehicleChangeStateEvent : redEvent
 	{
-		private CEnum<vehicleEState> _state;
-
 		[Ordinal(0)] 
 		[RED("state")] 
 		public CEnum<vehicleEState> State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<CEnum<vehicleEState>>();
+			set => SetPropertyValue<CEnum<vehicleEState>>(value);
 		}
 
 		public vehicleChangeStateEvent()
 		{
-			_state = new() { Value = Enums.vehicleEState.Default };
+			State = Enums.vehicleEState.Default;
 		}
 	}
 }

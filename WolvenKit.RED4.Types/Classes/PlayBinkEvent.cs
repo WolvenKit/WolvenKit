@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PlayBinkEvent : redEvent
 	{
-		private SBinkperationData _data;
-
 		[Ordinal(0)] 
 		[RED("data")] 
 		public SBinkperationData Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<SBinkperationData>();
+			set => SetPropertyValue<SBinkperationData>(value);
+		}
+
+		public PlayBinkEvent()
+		{
+			Data = new() { BinkPath = new() };
 		}
 	}
 }

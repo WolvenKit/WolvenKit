@@ -5,104 +5,102 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class NetworkMinigameElementController : inkWidgetLogicController
 	{
-		private ElementData _data;
-		private inkTextWidgetReference _text;
-		private CColor _textNormalColor;
-		private CColor _textHighlightColor;
-		private inkRectangleWidgetReference _bg;
-		private inkWidgetReference _colorAccent;
-		private CFloat _dimmedOpacity;
-		private CFloat _notDimmedOpacity;
-		private CInt32 _defaultFontSize;
-		private CBool _wasConsumed;
-		private CWeakHandle<inkWidget> _root;
-
 		[Ordinal(1)] 
 		[RED("data")] 
 		public ElementData Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<ElementData>();
+			set => SetPropertyValue<ElementData>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("text")] 
 		public inkTextWidgetReference Text
 		{
-			get => GetProperty(ref _text);
-			set => SetProperty(ref _text, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("textNormalColor")] 
 		public CColor TextNormalColor
 		{
-			get => GetProperty(ref _textNormalColor);
-			set => SetProperty(ref _textNormalColor, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("textHighlightColor")] 
 		public CColor TextHighlightColor
 		{
-			get => GetProperty(ref _textHighlightColor);
-			set => SetProperty(ref _textHighlightColor, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("bg")] 
 		public inkRectangleWidgetReference Bg
 		{
-			get => GetProperty(ref _bg);
-			set => SetProperty(ref _bg, value);
+			get => GetPropertyValue<inkRectangleWidgetReference>();
+			set => SetPropertyValue<inkRectangleWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("colorAccent")] 
 		public inkWidgetReference ColorAccent
 		{
-			get => GetProperty(ref _colorAccent);
-			set => SetProperty(ref _colorAccent, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("dimmedOpacity")] 
 		public CFloat DimmedOpacity
 		{
-			get => GetProperty(ref _dimmedOpacity);
-			set => SetProperty(ref _dimmedOpacity, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("notDimmedOpacity")] 
 		public CFloat NotDimmedOpacity
 		{
-			get => GetProperty(ref _notDimmedOpacity);
-			set => SetProperty(ref _notDimmedOpacity, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("defaultFontSize")] 
 		public CInt32 DefaultFontSize
 		{
-			get => GetProperty(ref _defaultFontSize);
-			set => SetProperty(ref _defaultFontSize, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("wasConsumed")] 
 		public CBool WasConsumed
 		{
-			get => GetProperty(ref _wasConsumed);
-			set => SetProperty(ref _wasConsumed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("root")] 
 		public CWeakHandle<inkWidget> Root
 		{
-			get => GetProperty(ref _root);
-			set => SetProperty(ref _root, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
+		}
+
+		public NetworkMinigameElementController()
+		{
+			Data = new();
+			Text = new();
+			TextNormalColor = new();
+			TextHighlightColor = new();
+			Bg = new();
+			ColorAccent = new();
 		}
 	}
 }

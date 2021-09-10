@@ -5,29 +5,27 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entTransformHistoryComponent : entIComponent
 	{
-		private CFloat _historyLength;
-		private CUInt32 _samplesAmount;
-
 		[Ordinal(3)] 
 		[RED("historyLength")] 
 		public CFloat HistoryLength
 		{
-			get => GetProperty(ref _historyLength);
-			set => SetProperty(ref _historyLength, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("samplesAmount")] 
 		public CUInt32 SamplesAmount
 		{
-			get => GetProperty(ref _samplesAmount);
-			set => SetProperty(ref _samplesAmount, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		public entTransformHistoryComponent()
 		{
-			_historyLength = 30.000000F;
-			_samplesAmount = 60;
+			Name = "Component";
+			HistoryLength = 30.000000F;
+			SamplesAmount = 60;
 		}
 	}
 }

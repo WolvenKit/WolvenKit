@@ -5,48 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animLookAtRequestForPart : RedBaseClass
 	{
-		private CName _bodyPart;
-		private animLookAtRequest _request;
-		private CInt32 _attachLeftHandToRightHand;
-		private CInt32 _attachRightHandToLeftHand;
-
 		[Ordinal(0)] 
 		[RED("bodyPart")] 
 		public CName BodyPart
 		{
-			get => GetProperty(ref _bodyPart);
-			set => SetProperty(ref _bodyPart, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("request")] 
 		public animLookAtRequest Request
 		{
-			get => GetProperty(ref _request);
-			set => SetProperty(ref _request, value);
+			get => GetPropertyValue<animLookAtRequest>();
+			set => SetPropertyValue<animLookAtRequest>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("attachLeftHandToRightHand")] 
 		public CInt32 AttachLeftHandToRightHand
 		{
-			get => GetProperty(ref _attachLeftHandToRightHand);
-			set => SetProperty(ref _attachLeftHandToRightHand, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("attachRightHandToLeftHand")] 
 		public CInt32 AttachRightHandToLeftHand
 		{
-			get => GetProperty(ref _attachRightHandToLeftHand);
-			set => SetProperty(ref _attachRightHandToLeftHand, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		public animLookAtRequestForPart()
 		{
-			_bodyPart = "Eyes";
-			_attachLeftHandToRightHand = -1;
-			_attachRightHandToLeftHand = -1;
+			BodyPart = "Eyes";
+			Request = new() { TransitionSpeed = 60.000000F, OutTransitionSpeed = 60.000000F, FollowingSpeedFactorOverride = -1.000000F, Limits = new() { SoftLimitDegrees = 360.000000F, HardLimitDegrees = 360.000000F, HardLimitDistance = 1000000.000000F, BackLimitDegrees = 180.000000F }, AdditionalParts = new(0) };
+			AttachLeftHandToRightHand = -1;
+			AttachRightHandToLeftHand = -1;
 		}
 	}
 }

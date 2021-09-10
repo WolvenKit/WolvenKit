@@ -5,73 +5,67 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questMoveOnSplineAndKeepDistance_NodeType : questIVehicleManagerNodeType
 	{
-		private gameEntityReference _vehicleRef;
-		private gameEntityReference _keepDistanceFromRef;
-		private NodeRef _splineRef;
-		private CFloat _distance;
-		private CFloat _blendTime;
-		private CFloat _minSpeed;
-		private CBool _reduceSpeedOnTurns;
-
 		[Ordinal(0)] 
 		[RED("vehicleRef")] 
 		public gameEntityReference VehicleRef
 		{
-			get => GetProperty(ref _vehicleRef);
-			set => SetProperty(ref _vehicleRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("keepDistanceFromRef")] 
 		public gameEntityReference KeepDistanceFromRef
 		{
-			get => GetProperty(ref _keepDistanceFromRef);
-			set => SetProperty(ref _keepDistanceFromRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("splineRef")] 
 		public NodeRef SplineRef
 		{
-			get => GetProperty(ref _splineRef);
-			set => SetProperty(ref _splineRef, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("distance")] 
 		public CFloat Distance
 		{
-			get => GetProperty(ref _distance);
-			set => SetProperty(ref _distance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("blendTime")] 
 		public CFloat BlendTime
 		{
-			get => GetProperty(ref _blendTime);
-			set => SetProperty(ref _blendTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("minSpeed")] 
 		public CFloat MinSpeed
 		{
-			get => GetProperty(ref _minSpeed);
-			set => SetProperty(ref _minSpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("reduceSpeedOnTurns")] 
 		public CBool ReduceSpeedOnTurns
 		{
-			get => GetProperty(ref _reduceSpeedOnTurns);
-			set => SetProperty(ref _reduceSpeedOnTurns, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public questMoveOnSplineAndKeepDistance_NodeType()
 		{
-			_reduceSpeedOnTurns = true;
+			VehicleRef = new() { Names = new() };
+			KeepDistanceFromRef = new() { Names = new() };
+			ReduceSpeedOnTurns = true;
 		}
 	}
 }

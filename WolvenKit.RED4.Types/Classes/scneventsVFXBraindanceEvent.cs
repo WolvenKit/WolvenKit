@@ -5,68 +5,68 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scneventsVFXBraindanceEvent : scnSceneEvent
 	{
-		private scnPerformerId _performerId;
-		private NodeRef _nodeRef;
-		private scnEffectEntry _effectEntry;
-		private CUInt32 _sequenceShift;
-		private scnEffectEntry _glitchEffectEntry;
-		private CUInt32 _glitchSequenceShift;
-		private CBool _fullyRewindable;
-
 		[Ordinal(6)] 
 		[RED("performerId")] 
 		public scnPerformerId PerformerId
 		{
-			get => GetProperty(ref _performerId);
-			set => SetProperty(ref _performerId, value);
+			get => GetPropertyValue<scnPerformerId>();
+			set => SetPropertyValue<scnPerformerId>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("nodeRef")] 
 		public NodeRef NodeRef
 		{
-			get => GetProperty(ref _nodeRef);
-			set => SetProperty(ref _nodeRef, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("effectEntry")] 
 		public scnEffectEntry EffectEntry
 		{
-			get => GetProperty(ref _effectEntry);
-			set => SetProperty(ref _effectEntry, value);
+			get => GetPropertyValue<scnEffectEntry>();
+			set => SetPropertyValue<scnEffectEntry>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("sequenceShift")] 
 		public CUInt32 SequenceShift
 		{
-			get => GetProperty(ref _sequenceShift);
-			set => SetProperty(ref _sequenceShift, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("glitchEffectEntry")] 
 		public scnEffectEntry GlitchEffectEntry
 		{
-			get => GetProperty(ref _glitchEffectEntry);
-			set => SetProperty(ref _glitchEffectEntry, value);
+			get => GetPropertyValue<scnEffectEntry>();
+			set => SetPropertyValue<scnEffectEntry>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("glitchSequenceShift")] 
 		public CUInt32 GlitchSequenceShift
 		{
-			get => GetProperty(ref _glitchSequenceShift);
-			set => SetProperty(ref _glitchSequenceShift, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("fullyRewindable")] 
 		public CBool FullyRewindable
 		{
-			get => GetProperty(ref _fullyRewindable);
-			set => SetProperty(ref _fullyRewindable, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public scneventsVFXBraindanceEvent()
+		{
+			Id = new() { Id = 18446744073709551615 };
+			PerformerId = new() { Id = 4294967040 };
+			EffectEntry = new() { EffectInstanceId = new() { EffectId = new() { Id = 4294967295 }, Id = 4294967295 } };
+			GlitchEffectEntry = new() { EffectInstanceId = new() { EffectId = new() { Id = 4294967295 }, Id = 4294967295 } };
 		}
 	}
 }

@@ -5,105 +5,98 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioVehicleWheelData : RedBaseClass
 	{
-		private CArray<CName> _wheelStartEvents;
-		private CArray<CName> _wheelStopEvents;
-		private CArray<CName> _wheelRegularSuspensionImpacts;
-		private CArray<CName> _wheelLandingSuspensionImpacts;
-		private CFloat _suspensionPressureMultiplier;
-		private CFloat _landingSuspensionPressureMultiplier;
-		private CFloat _suspensionPressureLimit;
-		private CFloat _minSuspensionPressureThreshold;
-		private CFloat _suspensionImpactCooldown;
-		private CFloat _minWheelTimeInAirBeforeLanding;
-
 		[Ordinal(0)] 
 		[RED("wheelStartEvents")] 
 		public CArray<CName> WheelStartEvents
 		{
-			get => GetProperty(ref _wheelStartEvents);
-			set => SetProperty(ref _wheelStartEvents, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("wheelStopEvents")] 
 		public CArray<CName> WheelStopEvents
 		{
-			get => GetProperty(ref _wheelStopEvents);
-			set => SetProperty(ref _wheelStopEvents, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("wheelRegularSuspensionImpacts")] 
 		public CArray<CName> WheelRegularSuspensionImpacts
 		{
-			get => GetProperty(ref _wheelRegularSuspensionImpacts);
-			set => SetProperty(ref _wheelRegularSuspensionImpacts, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("wheelLandingSuspensionImpacts")] 
 		public CArray<CName> WheelLandingSuspensionImpacts
 		{
-			get => GetProperty(ref _wheelLandingSuspensionImpacts);
-			set => SetProperty(ref _wheelLandingSuspensionImpacts, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("suspensionPressureMultiplier")] 
 		public CFloat SuspensionPressureMultiplier
 		{
-			get => GetProperty(ref _suspensionPressureMultiplier);
-			set => SetProperty(ref _suspensionPressureMultiplier, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("landingSuspensionPressureMultiplier")] 
 		public CFloat LandingSuspensionPressureMultiplier
 		{
-			get => GetProperty(ref _landingSuspensionPressureMultiplier);
-			set => SetProperty(ref _landingSuspensionPressureMultiplier, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("suspensionPressureLimit")] 
 		public CFloat SuspensionPressureLimit
 		{
-			get => GetProperty(ref _suspensionPressureLimit);
-			set => SetProperty(ref _suspensionPressureLimit, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("minSuspensionPressureThreshold")] 
 		public CFloat MinSuspensionPressureThreshold
 		{
-			get => GetProperty(ref _minSuspensionPressureThreshold);
-			set => SetProperty(ref _minSuspensionPressureThreshold, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("suspensionImpactCooldown")] 
 		public CFloat SuspensionImpactCooldown
 		{
-			get => GetProperty(ref _suspensionImpactCooldown);
-			set => SetProperty(ref _suspensionImpactCooldown, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("minWheelTimeInAirBeforeLanding")] 
 		public CFloat MinWheelTimeInAirBeforeLanding
 		{
-			get => GetProperty(ref _minWheelTimeInAirBeforeLanding);
-			set => SetProperty(ref _minWheelTimeInAirBeforeLanding, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public audioVehicleWheelData()
 		{
-			_suspensionPressureMultiplier = 2.000000F;
-			_landingSuspensionPressureMultiplier = 1.000000F;
-			_suspensionPressureLimit = 1.000000F;
-			_minSuspensionPressureThreshold = 0.100000F;
-			_suspensionImpactCooldown = 0.200000F;
-			_minWheelTimeInAirBeforeLanding = 0.500000F;
+			WheelStartEvents = new();
+			WheelStopEvents = new();
+			WheelRegularSuspensionImpacts = new();
+			WheelLandingSuspensionImpacts = new();
+			SuspensionPressureMultiplier = 2.000000F;
+			LandingSuspensionPressureMultiplier = 1.000000F;
+			SuspensionPressureLimit = 1.000000F;
+			MinSuspensionPressureThreshold = 0.100000F;
+			SuspensionImpactCooldown = 0.200000F;
+			MinWheelTimeInAirBeforeLanding = 0.500000F;
 		}
 	}
 }

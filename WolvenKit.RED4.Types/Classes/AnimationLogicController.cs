@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AnimationLogicController : inkWidgetLogicController
 	{
-		private inkImageWidgetReference _imageView;
-
 		[Ordinal(1)] 
 		[RED("imageView")] 
 		public inkImageWidgetReference ImageView
 		{
-			get => GetProperty(ref _imageView);
-			set => SetProperty(ref _imageView, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		public AnimationLogicController()
+		{
+			ImageView = new();
 		}
 	}
 }

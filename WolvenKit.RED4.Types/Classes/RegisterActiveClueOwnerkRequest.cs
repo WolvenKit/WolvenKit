@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RegisterActiveClueOwnerkRequest : gameScriptableSystemRequest
 	{
-		private entEntityID _ownerID;
-
 		[Ordinal(0)] 
 		[RED("ownerID")] 
 		public entEntityID OwnerID
 		{
-			get => GetProperty(ref _ownerID);
-			set => SetProperty(ref _ownerID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
+		}
+
+		public RegisterActiveClueOwnerkRequest()
+		{
+			OwnerID = new();
 		}
 	}
 }

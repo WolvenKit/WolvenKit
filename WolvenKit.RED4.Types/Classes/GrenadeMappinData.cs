@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class GrenadeMappinData : gamemappinsMappinScriptData
 	{
-		private CEnum<EGrenadeType> _grenadeType;
-		private TweakDBID _iconID;
-
 		[Ordinal(1)] 
 		[RED("grenadeType")] 
 		public CEnum<EGrenadeType> GrenadeType
 		{
-			get => GetProperty(ref _grenadeType);
-			set => SetProperty(ref _grenadeType, value);
+			get => GetPropertyValue<CEnum<EGrenadeType>>();
+			set => SetPropertyValue<CEnum<EGrenadeType>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("iconID")] 
 		public TweakDBID IconID
 		{
-			get => GetProperty(ref _iconID);
-			set => SetProperty(ref _iconID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 	}
 }

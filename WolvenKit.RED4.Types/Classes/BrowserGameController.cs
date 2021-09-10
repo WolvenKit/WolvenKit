@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class BrowserGameController : gameuiWidgetGameController
 	{
-		private inkWidgetReference _logicControllerRef;
-		private CWeakHandle<gameJournalManager> _journalManager;
-		private CArray<CName> _locationTags;
-
 		[Ordinal(2)] 
 		[RED("logicControllerRef")] 
 		public inkWidgetReference LogicControllerRef
 		{
-			get => GetProperty(ref _logicControllerRef);
-			set => SetProperty(ref _logicControllerRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("journalManager")] 
 		public CWeakHandle<gameJournalManager> JournalManager
 		{
-			get => GetProperty(ref _journalManager);
-			set => SetProperty(ref _journalManager, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalManager>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("locationTags")] 
 		public CArray<CName> LocationTags
 		{
-			get => GetProperty(ref _locationTags);
-			set => SetProperty(ref _locationTags, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
+		public BrowserGameController()
+		{
+			LogicControllerRef = new();
+			LocationTags = new();
 		}
 	}
 }

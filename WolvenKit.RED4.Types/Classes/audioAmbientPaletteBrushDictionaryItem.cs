@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioAmbientPaletteBrushDictionaryItem : audioInlinedAudioMetadata
 	{
-		private CName _key;
-		private audioAmbientPaletteBrush _value;
-
 		[Ordinal(1)] 
 		[RED("key")] 
 		public CName Key
 		{
-			get => GetProperty(ref _key);
-			set => SetProperty(ref _key, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("value")] 
 		public audioAmbientPaletteBrush Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<audioAmbientPaletteBrush>();
+			set => SetPropertyValue<audioAmbientPaletteBrush>(value);
+		}
+
+		public audioAmbientPaletteBrushDictionaryItem()
+		{
+			Value = new() { DistributionBucketSize = 10.000000F, VirtualHearingRadius = 10.000000F, HearingDistanceCooldown = 1.000000F, EventsPool = new() };
 		}
 	}
 }

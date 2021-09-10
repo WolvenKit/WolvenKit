@@ -5,86 +5,81 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class FocusForcedHighlightPersistentData : IScriptable
 	{
-		private entEntityID _sourceID;
-		private CName _sourceName;
-		private CEnum<EFocusForcedHighlightType> _highlightType;
-		private CEnum<EFocusOutlineType> _outlineType;
-		private CEnum<EPriority> _priority;
-		private CFloat _inTransitionTime;
-		private CFloat _outTransitionTime;
-		private CBool _isRevealed;
-		private CEnum<gameVisionModePatternType> _patternType;
-
 		[Ordinal(0)] 
 		[RED("sourceID")] 
 		public entEntityID SourceID
 		{
-			get => GetProperty(ref _sourceID);
-			set => SetProperty(ref _sourceID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("sourceName")] 
 		public CName SourceName
 		{
-			get => GetProperty(ref _sourceName);
-			set => SetProperty(ref _sourceName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("highlightType")] 
 		public CEnum<EFocusForcedHighlightType> HighlightType
 		{
-			get => GetProperty(ref _highlightType);
-			set => SetProperty(ref _highlightType, value);
+			get => GetPropertyValue<CEnum<EFocusForcedHighlightType>>();
+			set => SetPropertyValue<CEnum<EFocusForcedHighlightType>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("outlineType")] 
 		public CEnum<EFocusOutlineType> OutlineType
 		{
-			get => GetProperty(ref _outlineType);
-			set => SetProperty(ref _outlineType, value);
+			get => GetPropertyValue<CEnum<EFocusOutlineType>>();
+			set => SetPropertyValue<CEnum<EFocusOutlineType>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("priority")] 
 		public CEnum<EPriority> Priority
 		{
-			get => GetProperty(ref _priority);
-			set => SetProperty(ref _priority, value);
+			get => GetPropertyValue<CEnum<EPriority>>();
+			set => SetPropertyValue<CEnum<EPriority>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("inTransitionTime")] 
 		public CFloat InTransitionTime
 		{
-			get => GetProperty(ref _inTransitionTime);
-			set => SetProperty(ref _inTransitionTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("outTransitionTime")] 
 		public CFloat OutTransitionTime
 		{
-			get => GetProperty(ref _outTransitionTime);
-			set => SetProperty(ref _outTransitionTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("isRevealed")] 
 		public CBool IsRevealed
 		{
-			get => GetProperty(ref _isRevealed);
-			set => SetProperty(ref _isRevealed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("patternType")] 
 		public CEnum<gameVisionModePatternType> PatternType
 		{
-			get => GetProperty(ref _patternType);
-			set => SetProperty(ref _patternType, value);
+			get => GetPropertyValue<CEnum<gameVisionModePatternType>>();
+			set => SetPropertyValue<CEnum<gameVisionModePatternType>>(value);
+		}
+
+		public FocusForcedHighlightPersistentData()
+		{
+			SourceID = new();
 		}
 	}
 }

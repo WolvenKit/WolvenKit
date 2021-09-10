@@ -5,46 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class GamepadHoldIndicatorGameController : gameuiHoldIndicatorGameController
 	{
-		private inkImageWidgetReference _image;
-		private CString _partName;
-		private CInt32 _progress;
-		private CHandle<inkanimProxy> _animProxy;
-
 		[Ordinal(6)] 
 		[RED("image")] 
 		public inkImageWidgetReference Image
 		{
-			get => GetProperty(ref _image);
-			set => SetProperty(ref _image, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("partName")] 
 		public CString PartName
 		{
-			get => GetProperty(ref _partName);
-			set => SetProperty(ref _partName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("progress")] 
 		public CInt32 Progress
 		{
-			get => GetProperty(ref _progress);
-			set => SetProperty(ref _progress, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
-			get => GetProperty(ref _animProxy);
-			set => SetProperty(ref _animProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		public GamepadHoldIndicatorGameController()
 		{
-			_partName = new() { Text = "icon_circle_anim_" };
+			Image = new();
+			PartName = "icon_circle_anim_";
 		}
 	}
 }

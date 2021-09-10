@@ -5,95 +5,92 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class OutputPersistentData : RedBaseClass
 	{
-		private CEnum<ESecuritySystemState> _currentSecurityState;
-		private CEnum<EBreachOrigin> _breachOrigin;
-		private CBool _securityStateChanged;
-		private Vector4 _lastKnownPosition;
-		private CEnum<ESecurityNotificationType> _type;
-		private CEnum<ESecurityAreaType> _areaType;
-		private entEntityID _objectOfInterest;
-		private entEntityID _whoBreached;
-		private gamePersistentID _reporter;
-		private CInt32 _id;
-
 		[Ordinal(0)] 
 		[RED("currentSecurityState")] 
 		public CEnum<ESecuritySystemState> CurrentSecurityState
 		{
-			get => GetProperty(ref _currentSecurityState);
-			set => SetProperty(ref _currentSecurityState, value);
+			get => GetPropertyValue<CEnum<ESecuritySystemState>>();
+			set => SetPropertyValue<CEnum<ESecuritySystemState>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("breachOrigin")] 
 		public CEnum<EBreachOrigin> BreachOrigin
 		{
-			get => GetProperty(ref _breachOrigin);
-			set => SetProperty(ref _breachOrigin, value);
+			get => GetPropertyValue<CEnum<EBreachOrigin>>();
+			set => SetPropertyValue<CEnum<EBreachOrigin>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("securityStateChanged")] 
 		public CBool SecurityStateChanged
 		{
-			get => GetProperty(ref _securityStateChanged);
-			set => SetProperty(ref _securityStateChanged, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("lastKnownPosition")] 
 		public Vector4 LastKnownPosition
 		{
-			get => GetProperty(ref _lastKnownPosition);
-			set => SetProperty(ref _lastKnownPosition, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("type")] 
 		public CEnum<ESecurityNotificationType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<ESecurityNotificationType>>();
+			set => SetPropertyValue<CEnum<ESecurityNotificationType>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("areaType")] 
 		public CEnum<ESecurityAreaType> AreaType
 		{
-			get => GetProperty(ref _areaType);
-			set => SetProperty(ref _areaType, value);
+			get => GetPropertyValue<CEnum<ESecurityAreaType>>();
+			set => SetPropertyValue<CEnum<ESecurityAreaType>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("objectOfInterest")] 
 		public entEntityID ObjectOfInterest
 		{
-			get => GetProperty(ref _objectOfInterest);
-			set => SetProperty(ref _objectOfInterest, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("whoBreached")] 
 		public entEntityID WhoBreached
 		{
-			get => GetProperty(ref _whoBreached);
-			set => SetProperty(ref _whoBreached, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("reporter")] 
 		public gamePersistentID Reporter
 		{
-			get => GetProperty(ref _reporter);
-			set => SetProperty(ref _reporter, value);
+			get => GetPropertyValue<gamePersistentID>();
+			set => SetPropertyValue<gamePersistentID>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("id")] 
 		public CInt32 Id
 		{
-			get => GetProperty(ref _id);
-			set => SetProperty(ref _id, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		public OutputPersistentData()
+		{
+			LastKnownPosition = new();
+			ObjectOfInterest = new();
+			WhoBreached = new();
+			Reporter = new();
 		}
 	}
 }

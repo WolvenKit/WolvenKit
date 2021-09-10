@@ -5,113 +5,105 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiEntityPreviewCameraSettings : RedBaseClass
 	{
-		private CBool _autoEnable;
-		private CEnum<ERenderingMode> _renderingMode;
-		private CFloat _panSpeed;
-		private EulerAngles _rotationSpeed;
-		private EulerAngles _rotationMin;
-		private EulerAngles _rotationMax;
-		private EulerAngles _rotationDefault;
-		private CFloat _zoomSpeed;
-		private CFloat _zoomMin;
-		private CFloat _zoomMax;
-		private CFloat _zoomDefault;
-
 		[Ordinal(0)] 
 		[RED("autoEnable")] 
 		public CBool AutoEnable
 		{
-			get => GetProperty(ref _autoEnable);
-			set => SetProperty(ref _autoEnable, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("renderingMode")] 
 		public CEnum<ERenderingMode> RenderingMode
 		{
-			get => GetProperty(ref _renderingMode);
-			set => SetProperty(ref _renderingMode, value);
+			get => GetPropertyValue<CEnum<ERenderingMode>>();
+			set => SetPropertyValue<CEnum<ERenderingMode>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("panSpeed")] 
 		public CFloat PanSpeed
 		{
-			get => GetProperty(ref _panSpeed);
-			set => SetProperty(ref _panSpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("rotationSpeed")] 
 		public EulerAngles RotationSpeed
 		{
-			get => GetProperty(ref _rotationSpeed);
-			set => SetProperty(ref _rotationSpeed, value);
+			get => GetPropertyValue<EulerAngles>();
+			set => SetPropertyValue<EulerAngles>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("rotationMin")] 
 		public EulerAngles RotationMin
 		{
-			get => GetProperty(ref _rotationMin);
-			set => SetProperty(ref _rotationMin, value);
+			get => GetPropertyValue<EulerAngles>();
+			set => SetPropertyValue<EulerAngles>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("rotationMax")] 
 		public EulerAngles RotationMax
 		{
-			get => GetProperty(ref _rotationMax);
-			set => SetProperty(ref _rotationMax, value);
+			get => GetPropertyValue<EulerAngles>();
+			set => SetPropertyValue<EulerAngles>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("rotationDefault")] 
 		public EulerAngles RotationDefault
 		{
-			get => GetProperty(ref _rotationDefault);
-			set => SetProperty(ref _rotationDefault, value);
+			get => GetPropertyValue<EulerAngles>();
+			set => SetPropertyValue<EulerAngles>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("zoomSpeed")] 
 		public CFloat ZoomSpeed
 		{
-			get => GetProperty(ref _zoomSpeed);
-			set => SetProperty(ref _zoomSpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("zoomMin")] 
 		public CFloat ZoomMin
 		{
-			get => GetProperty(ref _zoomMin);
-			set => SetProperty(ref _zoomMin, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("zoomMax")] 
 		public CFloat ZoomMax
 		{
-			get => GetProperty(ref _zoomMax);
-			set => SetProperty(ref _zoomMax, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("zoomDefault")] 
 		public CFloat ZoomDefault
 		{
-			get => GetProperty(ref _zoomDefault);
-			set => SetProperty(ref _zoomDefault, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public gameuiEntityPreviewCameraSettings()
 		{
-			_panSpeed = 0.500000F;
-			_zoomSpeed = 0.500000F;
-			_zoomMin = 25.000000F;
-			_zoomMax = 100.000000F;
-			_zoomDefault = 50.000000F;
+			PanSpeed = 0.500000F;
+			RotationSpeed = new() { Pitch = 1.250000F, Yaw = 1.250000F };
+			RotationMin = new() { Pitch = -85.000000F, Yaw = -360.000000F };
+			RotationMax = new() { Pitch = -10.000000F, Yaw = 360.000000F };
+			RotationDefault = new() { Pitch = -70.000000F, Yaw = -90.000000F };
+			ZoomSpeed = 0.500000F;
+			ZoomMin = 25.000000F;
+			ZoomMax = 100.000000F;
+			ZoomDefault = 50.000000F;
 		}
 	}
 }

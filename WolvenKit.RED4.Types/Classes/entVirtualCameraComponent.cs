@@ -5,59 +5,56 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entVirtualCameraComponent : entBaseCameraComponent
 	{
-		private CName _virtualCameraName;
-		private CUInt32 _resolutionWidth;
-		private CUInt32 _resolutionHeight;
-		private CBool _drawBackground;
-		private CBool _isEnabled;
-
 		[Ordinal(10)] 
 		[RED("virtualCameraName")] 
 		public CName VirtualCameraName
 		{
-			get => GetProperty(ref _virtualCameraName);
-			set => SetProperty(ref _virtualCameraName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("resolutionWidth")] 
 		public CUInt32 ResolutionWidth
 		{
-			get => GetProperty(ref _resolutionWidth);
-			set => SetProperty(ref _resolutionWidth, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("resolutionHeight")] 
 		public CUInt32 ResolutionHeight
 		{
-			get => GetProperty(ref _resolutionHeight);
-			set => SetProperty(ref _resolutionHeight, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("drawBackground")] 
 		public CBool DrawBackground
 		{
-			get => GetProperty(ref _drawBackground);
-			set => SetProperty(ref _drawBackground, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public entVirtualCameraComponent()
 		{
-			_virtualCameraName = "Component";
-			_resolutionWidth = 1920;
-			_resolutionHeight = 1080;
-			_drawBackground = true;
-			_isEnabled = true;
+			Fov = 75.000000F;
+			NearPlaneOverride = 0.100000F;
+			FarPlaneOverride = 1000.000000F;
+			VirtualCameraName = "Component";
+			ResolutionWidth = 1920;
+			ResolutionHeight = 1080;
+			DrawBackground = true;
+			IsEnabled = true;
 		}
 	}
 }

@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameTelemetryEnemyDown : RedBaseClass
 	{
-		private gameTelemetryEnemy _enemy;
-		private CEnum<gameTelemetryDamageSituation> _situation;
-		private CEnum<gameKillType> _killType;
-
 		[Ordinal(0)] 
 		[RED("enemy")] 
 		public gameTelemetryEnemy Enemy
 		{
-			get => GetProperty(ref _enemy);
-			set => SetProperty(ref _enemy, value);
+			get => GetPropertyValue<gameTelemetryEnemy>();
+			set => SetPropertyValue<gameTelemetryEnemy>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("situation")] 
 		public CEnum<gameTelemetryDamageSituation> Situation
 		{
-			get => GetProperty(ref _situation);
-			set => SetProperty(ref _situation, value);
+			get => GetPropertyValue<CEnum<gameTelemetryDamageSituation>>();
+			set => SetPropertyValue<CEnum<gameTelemetryDamageSituation>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("killType")] 
 		public CEnum<gameKillType> KillType
 		{
-			get => GetProperty(ref _killType);
-			set => SetProperty(ref _killType, value);
+			get => GetPropertyValue<CEnum<gameKillType>>();
+			set => SetPropertyValue<CEnum<gameKillType>>(value);
+		}
+
+		public gameTelemetryEnemyDown()
+		{
+			Enemy = new() { EnemyEntityID = new(), Archetype = Enums.gamedataArchetypeType.Invalid, Level = -1 };
 		}
 	}
 }

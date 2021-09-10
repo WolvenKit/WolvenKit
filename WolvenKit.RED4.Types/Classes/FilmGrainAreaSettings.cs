@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class FilmGrainAreaSettings : IAreaSettings
 	{
-		private CLegacySingleChannelCurve<Vector4> _strength;
-		private CLegacySingleChannelCurve<CFloat> _luminanceBias;
-		private Vector3 _grainSize;
-		private CBool _applyAfterUpsampling;
-
 		[Ordinal(2)] 
 		[RED("strength")] 
 		public CLegacySingleChannelCurve<Vector4> Strength
 		{
-			get => GetProperty(ref _strength);
-			set => SetProperty(ref _strength, value);
+			get => GetPropertyValue<CLegacySingleChannelCurve<Vector4>>();
+			set => SetPropertyValue<CLegacySingleChannelCurve<Vector4>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("luminanceBias")] 
 		public CLegacySingleChannelCurve<CFloat> LuminanceBias
 		{
-			get => GetProperty(ref _luminanceBias);
-			set => SetProperty(ref _luminanceBias, value);
+			get => GetPropertyValue<CLegacySingleChannelCurve<CFloat>>();
+			set => SetPropertyValue<CLegacySingleChannelCurve<CFloat>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("grainSize")] 
 		public Vector3 GrainSize
 		{
-			get => GetProperty(ref _grainSize);
-			set => SetProperty(ref _grainSize, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("applyAfterUpsampling")] 
 		public CBool ApplyAfterUpsampling
 		{
-			get => GetProperty(ref _applyAfterUpsampling);
-			set => SetProperty(ref _applyAfterUpsampling, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public FilmGrainAreaSettings()
+		{
+			Enable = true;
+			GrainSize = new() { X = 0.500000F, Y = 0.500000F, Z = 0.500000F };
 		}
 	}
 }

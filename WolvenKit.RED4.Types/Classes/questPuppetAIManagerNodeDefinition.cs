@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questPuppetAIManagerNodeDefinition : questDisableableNodeDefinition
 	{
-		private CArray<questPuppetAIManagerNodeDefinitionEntry> _entries;
-
 		[Ordinal(2)] 
 		[RED("entries")] 
 		public CArray<questPuppetAIManagerNodeDefinitionEntry> Entries
 		{
-			get => GetProperty(ref _entries);
-			set => SetProperty(ref _entries, value);
+			get => GetPropertyValue<CArray<questPuppetAIManagerNodeDefinitionEntry>>();
+			set => SetPropertyValue<CArray<questPuppetAIManagerNodeDefinitionEntry>>(value);
+		}
+
+		public questPuppetAIManagerNodeDefinition()
+		{
+			Sockets = new();
+			Id = 65535;
+			Entries = new() { new() };
 		}
 	}
 }

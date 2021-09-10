@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questOutputNodeDefinition : questIONodeDefinition
 	{
-		private CEnum<questExitType> _type;
-
 		[Ordinal(3)] 
 		[RED("type")] 
 		public CEnum<questExitType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<questExitType>>();
+			set => SetPropertyValue<CEnum<questExitType>>(value);
+		}
+
+		public questOutputNodeDefinition()
+		{
+			Sockets = new();
+			Id = 65535;
 		}
 	}
 }

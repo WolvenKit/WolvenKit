@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ItemDisplayHoverOverEvent : redEvent
 	{
-		private InventoryItemData _itemData;
-		private CWeakHandle<InventoryItemDisplayController> _display;
-		private CWeakHandle<inkWidget> _widget;
-		private CBool _isBuybackStack;
-
 		[Ordinal(0)] 
 		[RED("itemData")] 
 		public InventoryItemData ItemData
 		{
-			get => GetProperty(ref _itemData);
-			set => SetProperty(ref _itemData, value);
+			get => GetPropertyValue<InventoryItemData>();
+			set => SetPropertyValue<InventoryItemData>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("display")] 
 		public CWeakHandle<InventoryItemDisplayController> Display
 		{
-			get => GetProperty(ref _display);
-			set => SetProperty(ref _display, value);
+			get => GetPropertyValue<CWeakHandle<InventoryItemDisplayController>>();
+			set => SetPropertyValue<CWeakHandle<InventoryItemDisplayController>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("widget")] 
 		public CWeakHandle<inkWidget> Widget
 		{
-			get => GetProperty(ref _widget);
-			set => SetProperty(ref _widget, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isBuybackStack")] 
 		public CBool IsBuybackStack
 		{
-			get => GetProperty(ref _isBuybackStack);
-			set => SetProperty(ref _isBuybackStack, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public ItemDisplayHoverOverEvent()
+		{
+			ItemData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
 		}
 	}
 }

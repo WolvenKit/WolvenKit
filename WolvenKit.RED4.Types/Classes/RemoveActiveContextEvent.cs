@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RemoveActiveContextEvent : redEvent
 	{
-		private CEnum<gamedeviceRequestType> _context;
-
 		[Ordinal(0)] 
 		[RED("context")] 
 		public CEnum<gamedeviceRequestType> Context
 		{
-			get => GetProperty(ref _context);
-			set => SetProperty(ref _context, value);
+			get => GetPropertyValue<CEnum<gamedeviceRequestType>>();
+			set => SetPropertyValue<CEnum<gamedeviceRequestType>>(value);
 		}
 	}
 }

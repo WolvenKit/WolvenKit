@@ -5,87 +5,80 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questProximityProgressBar_NodeType : questIUIManagerNodeType
 	{
-		private CBool _show;
-		private CFloat _duration;
-		private CBool _reset;
-		private CFloat _distance;
-		private CEnum<EComparisonType> _distanceComparisonType;
-		private gameEntityReference _target;
-		private CBool _isPlayerActivator;
-		private gameEntityReference _activator;
-
 		[Ordinal(0)] 
 		[RED("show")] 
 		public CBool Show
 		{
-			get => GetProperty(ref _show);
-			set => SetProperty(ref _show, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get => GetProperty(ref _duration);
-			set => SetProperty(ref _duration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("reset")] 
 		public CBool Reset
 		{
-			get => GetProperty(ref _reset);
-			set => SetProperty(ref _reset, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("distance")] 
 		public CFloat Distance
 		{
-			get => GetProperty(ref _distance);
-			set => SetProperty(ref _distance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("distanceComparisonType")] 
 		public CEnum<EComparisonType> DistanceComparisonType
 		{
-			get => GetProperty(ref _distanceComparisonType);
-			set => SetProperty(ref _distanceComparisonType, value);
+			get => GetPropertyValue<CEnum<EComparisonType>>();
+			set => SetPropertyValue<CEnum<EComparisonType>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("target")] 
 		public gameEntityReference Target
 		{
-			get => GetProperty(ref _target);
-			set => SetProperty(ref _target, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isPlayerActivator")] 
 		public CBool IsPlayerActivator
 		{
-			get => GetProperty(ref _isPlayerActivator);
-			set => SetProperty(ref _isPlayerActivator, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("activator")] 
 		public gameEntityReference Activator
 		{
-			get => GetProperty(ref _activator);
-			set => SetProperty(ref _activator, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		public questProximityProgressBar_NodeType()
 		{
-			_show = true;
-			_duration = 10.000000F;
-			_reset = true;
-			_distance = 10.000000F;
-			_distanceComparisonType = new() { Value = Enums.EComparisonType.Less };
-			_isPlayerActivator = true;
+			Show = true;
+			Duration = 10.000000F;
+			Reset = true;
+			Distance = 10.000000F;
+			DistanceComparisonType = Enums.EComparisonType.Less;
+			Target = new() { Names = new() };
+			IsPlayerActivator = true;
+			Activator = new() { Names = new() };
 		}
 	}
 }

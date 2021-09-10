@@ -5,37 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WeaponVendingMachineSetup : RedBaseClass
 	{
-		private TweakDBID _vendorTweakID;
-		private TweakDBID _junkItemID;
-		private CFloat _timeToCompletePurchase;
-
 		[Ordinal(0)] 
 		[RED("vendorTweakID")] 
 		public TweakDBID VendorTweakID
 		{
-			get => GetProperty(ref _vendorTweakID);
-			set => SetProperty(ref _vendorTweakID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("junkItemID")] 
 		public TweakDBID JunkItemID
 		{
-			get => GetProperty(ref _junkItemID);
-			set => SetProperty(ref _junkItemID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("timeToCompletePurchase")] 
 		public CFloat TimeToCompletePurchase
 		{
-			get => GetProperty(ref _timeToCompletePurchase);
-			set => SetProperty(ref _timeToCompletePurchase, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public WeaponVendingMachineSetup()
 		{
-			_timeToCompletePurchase = 3.000000F;
+			TimeToCompletePurchase = 3.000000F;
 		}
 	}
 }

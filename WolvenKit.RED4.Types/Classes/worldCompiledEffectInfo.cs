@@ -5,59 +5,62 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldCompiledEffectInfo : RedBaseClass
 	{
-		private CArray<CName> _placementTags;
-		private CArray<CName> _componentNames;
-		private CArray<Vector3> _relativePositions;
-		private CArray<Quaternion> _relativeRotations;
-		private CArray<worldCompiledEffectPlacementInfo> _placementInfos;
-		private CArray<worldCompiledEffectEventInfo> _eventsSortedByRUID;
-
 		[Ordinal(0)] 
 		[RED("placementTags")] 
 		public CArray<CName> PlacementTags
 		{
-			get => GetProperty(ref _placementTags);
-			set => SetProperty(ref _placementTags, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("componentNames")] 
 		public CArray<CName> ComponentNames
 		{
-			get => GetProperty(ref _componentNames);
-			set => SetProperty(ref _componentNames, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("relativePositions")] 
 		public CArray<Vector3> RelativePositions
 		{
-			get => GetProperty(ref _relativePositions);
-			set => SetProperty(ref _relativePositions, value);
+			get => GetPropertyValue<CArray<Vector3>>();
+			set => SetPropertyValue<CArray<Vector3>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("relativeRotations")] 
 		public CArray<Quaternion> RelativeRotations
 		{
-			get => GetProperty(ref _relativeRotations);
-			set => SetProperty(ref _relativeRotations, value);
+			get => GetPropertyValue<CArray<Quaternion>>();
+			set => SetPropertyValue<CArray<Quaternion>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("placementInfos")] 
 		public CArray<worldCompiledEffectPlacementInfo> PlacementInfos
 		{
-			get => GetProperty(ref _placementInfos);
-			set => SetProperty(ref _placementInfos, value);
+			get => GetPropertyValue<CArray<worldCompiledEffectPlacementInfo>>();
+			set => SetPropertyValue<CArray<worldCompiledEffectPlacementInfo>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("eventsSortedByRUID")] 
 		public CArray<worldCompiledEffectEventInfo> EventsSortedByRUID
 		{
-			get => GetProperty(ref _eventsSortedByRUID);
-			set => SetProperty(ref _eventsSortedByRUID, value);
+			get => GetPropertyValue<CArray<worldCompiledEffectEventInfo>>();
+			set => SetPropertyValue<CArray<worldCompiledEffectEventInfo>>(value);
+		}
+
+		public worldCompiledEffectInfo()
+		{
+			PlacementTags = new();
+			ComponentNames = new();
+			RelativePositions = new();
+			RelativeRotations = new();
+			PlacementInfos = new();
+			EventsSortedByRUID = new();
 		}
 	}
 }

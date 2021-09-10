@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questSetFOV_NodeType : questISceneManagerNodeType
 	{
-		private CFloat _fOV;
-
 		[Ordinal(0)] 
 		[RED("FOV")] 
 		public CFloat FOV
 		{
-			get => GetProperty(ref _fOV);
-			set => SetProperty(ref _fOV, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public questSetFOV_NodeType()
 		{
-			_fOV = 60.000000F;
+			FOV = 60.000000F;
 		}
 	}
 }

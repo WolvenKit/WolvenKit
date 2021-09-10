@@ -5,37 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_FloatMathOp : animAnimNode_FloatValue
 	{
-		private CEnum<animEAnimGraphMathOp> _operationType;
-		private animFloatLink _firstInputNode;
-		private animFloatLink _secondInputNode;
-
 		[Ordinal(11)] 
 		[RED("operationType")] 
 		public CEnum<animEAnimGraphMathOp> OperationType
 		{
-			get => GetProperty(ref _operationType);
-			set => SetProperty(ref _operationType, value);
+			get => GetPropertyValue<CEnum<animEAnimGraphMathOp>>();
+			set => SetPropertyValue<CEnum<animEAnimGraphMathOp>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("firstInputNode")] 
 		public animFloatLink FirstInputNode
 		{
-			get => GetProperty(ref _firstInputNode);
-			set => SetProperty(ref _firstInputNode, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("secondInputNode")] 
 		public animFloatLink SecondInputNode
 		{
-			get => GetProperty(ref _secondInputNode);
-			set => SetProperty(ref _secondInputNode, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		public animAnimNode_FloatMathOp()
 		{
-			_operationType = new() { Value = Enums.animEAnimGraphMathOp.AGMO_Abs };
+			Id = 4294967295;
+			OperationType = Enums.animEAnimGraphMathOp.AGMO_Abs;
+			FirstInputNode = new();
+			SecondInputNode = new();
 		}
 	}
 }

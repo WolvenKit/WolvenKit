@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RadioStationsMap : RedBaseClass
 	{
-		private CName _soundEvent;
-		private CString _channelName;
-		private CEnum<ERadioStationList> _stationID;
-
 		[Ordinal(0)] 
 		[RED("soundEvent")] 
 		public CName SoundEvent
 		{
-			get => GetProperty(ref _soundEvent);
-			set => SetProperty(ref _soundEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("channelName")] 
 		public CString ChannelName
 		{
-			get => GetProperty(ref _channelName);
-			set => SetProperty(ref _channelName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("stationID")] 
 		public CEnum<ERadioStationList> StationID
 		{
-			get => GetProperty(ref _stationID);
-			set => SetProperty(ref _stationID, value);
+			get => GetPropertyValue<CEnum<ERadioStationList>>();
+			set => SetPropertyValue<CEnum<ERadioStationList>>(value);
 		}
 	}
 }

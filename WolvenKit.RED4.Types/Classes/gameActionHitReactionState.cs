@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameActionHitReactionState : gameActionReplicatedState
 	{
-		private CHandle<animAnimFeature_HitReactionsData> _animFeature;
-
 		[Ordinal(5)] 
 		[RED("animFeature")] 
 		public CHandle<animAnimFeature_HitReactionsData> AnimFeature
 		{
-			get => GetProperty(ref _animFeature);
-			set => SetProperty(ref _animFeature, value);
+			get => GetPropertyValue<CHandle<animAnimFeature_HitReactionsData>>();
+			set => SetPropertyValue<CHandle<animAnimFeature_HitReactionsData>>(value);
 		}
 	}
 }

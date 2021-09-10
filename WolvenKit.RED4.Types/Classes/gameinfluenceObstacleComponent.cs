@@ -5,46 +5,45 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameinfluenceObstacleComponent : entIPlacedComponent
 	{
-		private CEnum<gameinfluenceEBoundingBoxType> _boundingBoxType;
-		private Box _customBoundingBox;
-		private gameinfluenceObstacleAgent _obstacleAgent;
-		private CBool _isEnabled;
-
 		[Ordinal(5)] 
 		[RED("boundingBoxType")] 
 		public CEnum<gameinfluenceEBoundingBoxType> BoundingBoxType
 		{
-			get => GetProperty(ref _boundingBoxType);
-			set => SetProperty(ref _boundingBoxType, value);
+			get => GetPropertyValue<CEnum<gameinfluenceEBoundingBoxType>>();
+			set => SetPropertyValue<CEnum<gameinfluenceEBoundingBoxType>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("customBoundingBox")] 
 		public Box CustomBoundingBox
 		{
-			get => GetProperty(ref _customBoundingBox);
-			set => SetProperty(ref _customBoundingBox, value);
+			get => GetPropertyValue<Box>();
+			set => SetPropertyValue<Box>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("obstacleAgent")] 
 		public gameinfluenceObstacleAgent ObstacleAgent
 		{
-			get => GetProperty(ref _obstacleAgent);
-			set => SetProperty(ref _obstacleAgent, value);
+			get => GetPropertyValue<gameinfluenceObstacleAgent>();
+			set => SetPropertyValue<gameinfluenceObstacleAgent>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public gameinfluenceObstacleComponent()
 		{
-			_isEnabled = true;
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			CustomBoundingBox = new() { Min = new() { X = 340282346638528859811704183484516925440.000000F, Y = 340282346638528859811704183484516925440.000000F, Z = 340282346638528859811704183484516925440.000000F, W = 340282346638528859811704183484516925440.000000F }, Max = new() { X = -340282346638528859811704183484516925440.000000F, Y = -340282346638528859811704183484516925440.000000F, Z = -340282346638528859811704183484516925440.000000F, W = -340282346638528859811704183484516925440.000000F } };
+			ObstacleAgent = new() { UseMeshes = true };
+			IsEnabled = true;
 		}
 	}
 }

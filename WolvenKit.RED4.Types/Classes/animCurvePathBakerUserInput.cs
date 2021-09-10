@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animCurvePathBakerUserInput : RedBaseClass
 	{
-		private CName _controllersSetupName;
-		private CBool _useStart;
-		private CBool _useStop;
-		private CFloat _blendTime;
-
 		[Ordinal(0)] 
 		[RED("controllersSetupName")] 
 		public CName ControllersSetupName
 		{
-			get => GetProperty(ref _controllersSetupName);
-			set => SetProperty(ref _controllersSetupName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("useStart")] 
 		public CBool UseStart
 		{
-			get => GetProperty(ref _useStart);
-			set => SetProperty(ref _useStart, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("useStop")] 
 		public CBool UseStop
 		{
-			get => GetProperty(ref _useStop);
-			set => SetProperty(ref _useStop, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("blendTime")] 
 		public CFloat BlendTime
 		{
-			get => GetProperty(ref _blendTime);
-			set => SetProperty(ref _blendTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

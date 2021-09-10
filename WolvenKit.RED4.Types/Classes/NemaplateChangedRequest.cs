@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class NemaplateChangedRequest : gameScriptableSystemRequest
 	{
-		private entEntityID _playerTarget;
-
 		[Ordinal(0)] 
 		[RED("playerTarget")] 
 		public entEntityID PlayerTarget
 		{
-			get => GetProperty(ref _playerTarget);
-			set => SetProperty(ref _playerTarget, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
+		}
+
+		public NemaplateChangedRequest()
+		{
+			PlayerTarget = new();
 		}
 	}
 }

@@ -5,77 +5,73 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class KeyboardHintItemController : AHintItemController
 	{
-		private inkTextWidgetReference _numberText;
-		private inkImageWidgetReference _frame;
-		private CName _disabledStateName;
-		private CName _selectedStateName;
-		private CName _frameSelectedName;
-		private CName _frameUnselectedName;
-		private CName _animationName;
-
 		[Ordinal(4)] 
 		[RED("NumberText")] 
 		public inkTextWidgetReference NumberText
 		{
-			get => GetProperty(ref _numberText);
-			set => SetProperty(ref _numberText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("Frame")] 
 		public inkImageWidgetReference Frame
 		{
-			get => GetProperty(ref _frame);
-			set => SetProperty(ref _frame, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("DisabledStateName")] 
 		public CName DisabledStateName
 		{
-			get => GetProperty(ref _disabledStateName);
-			set => SetProperty(ref _disabledStateName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("SelectedStateName")] 
 		public CName SelectedStateName
 		{
-			get => GetProperty(ref _selectedStateName);
-			set => SetProperty(ref _selectedStateName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("FrameSelectedName")] 
 		public CName FrameSelectedName
 		{
-			get => GetProperty(ref _frameSelectedName);
-			set => SetProperty(ref _frameSelectedName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("FrameUnselectedName")] 
 		public CName FrameUnselectedName
 		{
-			get => GetProperty(ref _frameUnselectedName);
-			set => SetProperty(ref _frameUnselectedName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("AnimationName")] 
 		public CName AnimationName
 		{
-			get => GetProperty(ref _animationName);
-			set => SetProperty(ref _animationName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public KeyboardHintItemController()
 		{
-			_disabledStateName = "Disabled";
-			_selectedStateName = "Selected";
-			_frameSelectedName = "top_button_selected";
-			_frameUnselectedName = "top_button";
-			_animationName = "AnimRootOnThenOff";
+			Icon = new();
+			UnavaliableText = new();
+			NumberText = new();
+			Frame = new();
+			DisabledStateName = "Disabled";
+			SelectedStateName = "Selected";
+			FrameSelectedName = "top_button_selected";
+			FrameUnselectedName = "top_button";
+			AnimationName = "AnimRootOnThenOff";
 		}
 	}
 }

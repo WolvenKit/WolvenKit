@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioLanguageMapItem : audioAudioMetadata
 	{
-		private audioLanguage _language;
-
 		[Ordinal(1)] 
 		[RED("language")] 
 		public audioLanguage Language
 		{
-			get => GetProperty(ref _language);
-			set => SetProperty(ref _language, value);
+			get => GetPropertyValue<audioLanguage>();
+			set => SetPropertyValue<audioLanguage>(value);
+		}
+
+		public audioLanguageMapItem()
+		{
+			Language = new();
 		}
 	}
 }

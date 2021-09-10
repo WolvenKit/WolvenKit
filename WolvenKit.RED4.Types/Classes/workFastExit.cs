@@ -5,38 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class workFastExit : workIEntry
 	{
-		private CName _animName;
-		private CFloat _forcedBlendIn;
-		private CEnum<moveMovementType> _movementType;
-
 		[Ordinal(2)] 
 		[RED("animName")] 
 		public CName AnimName
 		{
-			get => GetProperty(ref _animName);
-			set => SetProperty(ref _animName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("forcedBlendIn")] 
 		public CFloat ForcedBlendIn
 		{
-			get => GetProperty(ref _forcedBlendIn);
-			set => SetProperty(ref _forcedBlendIn, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("movementType")] 
 		public CEnum<moveMovementType> MovementType
 		{
-			get => GetProperty(ref _movementType);
-			set => SetProperty(ref _movementType, value);
+			get => GetPropertyValue<CEnum<moveMovementType>>();
+			set => SetPropertyValue<CEnum<moveMovementType>>(value);
 		}
 
 		public workFastExit()
 		{
-			_forcedBlendIn = 0.200000F;
-			_movementType = new() { Value = Enums.moveMovementType.Stand };
+			Id = new() { Id = 4294967295 };
+			Flags = 32772;
+			ForcedBlendIn = 0.200000F;
+			MovementType = Enums.moveMovementType.Stand;
 		}
 	}
 }

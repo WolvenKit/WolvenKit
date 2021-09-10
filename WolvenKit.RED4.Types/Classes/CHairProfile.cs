@@ -5,37 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CHairProfile : CResource
 	{
-		private CUInt16 _sampleCount;
-		private CArray<rendGradientEntry> _gradientEntriesID;
-		private CArray<rendGradientEntry> _gradientEntriesRootToTip;
-
 		[Ordinal(1)] 
 		[RED("sampleCount")] 
 		public CUInt16 SampleCount
 		{
-			get => GetProperty(ref _sampleCount);
-			set => SetProperty(ref _sampleCount, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("gradientEntriesID")] 
 		public CArray<rendGradientEntry> GradientEntriesID
 		{
-			get => GetProperty(ref _gradientEntriesID);
-			set => SetProperty(ref _gradientEntriesID, value);
+			get => GetPropertyValue<CArray<rendGradientEntry>>();
+			set => SetPropertyValue<CArray<rendGradientEntry>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("gradientEntriesRootToTip")] 
 		public CArray<rendGradientEntry> GradientEntriesRootToTip
 		{
-			get => GetProperty(ref _gradientEntriesRootToTip);
-			set => SetProperty(ref _gradientEntriesRootToTip, value);
+			get => GetPropertyValue<CArray<rendGradientEntry>>();
+			set => SetPropertyValue<CArray<rendGradientEntry>>(value);
 		}
 
 		public CHairProfile()
 		{
-			_sampleCount = 64;
+			SampleCount = 64;
+			GradientEntriesID = new() { new(), new() };
+			GradientEntriesRootToTip = new() { new(), new() };
 		}
 	}
 }

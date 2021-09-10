@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questInjectLoot_NodeType : questIItemManagerNodeType
 	{
-		private CArray<questInjectLoot_NodeTypeParams> _params;
-
 		[Ordinal(0)] 
 		[RED("params")] 
 		public CArray<questInjectLoot_NodeTypeParams> Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<CArray<questInjectLoot_NodeTypeParams>>();
+			set => SetPropertyValue<CArray<questInjectLoot_NodeTypeParams>>(value);
+		}
+
+		public questInjectLoot_NodeType()
+		{
+			Params = new();
 		}
 	}
 }

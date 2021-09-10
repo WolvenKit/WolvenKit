@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioContextualAudEventMap : audioAudioMetadata
 	{
-		private CArray<audioContextualAudEventMapItem> _contextualAudEventMapItems;
-
 		[Ordinal(1)] 
 		[RED("contextualAudEventMapItems")] 
 		public CArray<audioContextualAudEventMapItem> ContextualAudEventMapItems
 		{
-			get => GetProperty(ref _contextualAudEventMapItems);
-			set => SetProperty(ref _contextualAudEventMapItems, value);
+			get => GetPropertyValue<CArray<audioContextualAudEventMapItem>>();
+			set => SetPropertyValue<CArray<audioContextualAudEventMapItem>>(value);
+		}
+
+		public audioContextualAudEventMap()
+		{
+			ContextualAudEventMapItems = new();
 		}
 	}
 }

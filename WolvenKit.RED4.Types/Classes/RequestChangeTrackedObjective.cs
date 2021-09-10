@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RequestChangeTrackedObjective : redEvent
 	{
-		private CWeakHandle<gameJournalQuestObjective> _objective;
-		private CWeakHandle<gameJournalQuest> _quest;
-
 		[Ordinal(0)] 
 		[RED("objective")] 
 		public CWeakHandle<gameJournalQuestObjective> Objective
 		{
-			get => GetProperty(ref _objective);
-			set => SetProperty(ref _objective, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalQuestObjective>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalQuestObjective>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("quest")] 
 		public CWeakHandle<gameJournalQuest> Quest
 		{
-			get => GetProperty(ref _quest);
-			set => SetProperty(ref _quest, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalQuest>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalQuest>>(value);
 		}
 	}
 }

@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldCableMeshNode : worldBendedMeshNode
 	{
-		private CArrayFixedSize<CUInt64> _destructionHashes;
-		private CFloat _cableLength;
-		private CFloat _cableRadius;
-
 		[Ordinal(13)] 
 		[RED("destructionHashes", 2)] 
 		public CArrayFixedSize<CUInt64> DestructionHashes
 		{
-			get => GetProperty(ref _destructionHashes);
-			set => SetProperty(ref _destructionHashes, value);
+			get => GetPropertyValue<CArrayFixedSize<CUInt64>>();
+			set => SetPropertyValue<CArrayFixedSize<CUInt64>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("cableLength")] 
 		public CFloat CableLength
 		{
-			get => GetProperty(ref _cableLength);
-			set => SetProperty(ref _cableLength, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("cableRadius")] 
 		public CFloat CableRadius
 		{
-			get => GetProperty(ref _cableRadius);
-			set => SetProperty(ref _cableRadius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public worldCableMeshNode()
+		{
+			DestructionHashes = new(2);
 		}
 	}
 }

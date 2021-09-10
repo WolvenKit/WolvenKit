@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CyberwareDataWrapper : IScriptable
 	{
-		private InventoryItemData _inventoryItem;
-		private CBool _isVendor;
-		private CInt32 _playerMoney;
-
 		[Ordinal(0)] 
 		[RED("InventoryItem")] 
 		public InventoryItemData InventoryItem
 		{
-			get => GetProperty(ref _inventoryItem);
-			set => SetProperty(ref _inventoryItem, value);
+			get => GetPropertyValue<InventoryItemData>();
+			set => SetPropertyValue<InventoryItemData>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("IsVendor")] 
 		public CBool IsVendor
 		{
-			get => GetProperty(ref _isVendor);
-			set => SetProperty(ref _isVendor, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("PlayerMoney")] 
 		public CInt32 PlayerMoney
 		{
-			get => GetProperty(ref _playerMoney);
-			set => SetProperty(ref _playerMoney, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		public CyberwareDataWrapper()
+		{
+			InventoryItem = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
 		}
 	}
 }

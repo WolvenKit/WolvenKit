@@ -5,46 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AICommand : IScriptable
 	{
-		private CUInt32 _id;
-		private CEnum<AICommandState> _state;
-		private CUInt64 _questBlockId;
-		private CName _category;
-
 		[Ordinal(0)] 
 		[RED("id")] 
 		public CUInt32 Id
 		{
-			get => GetProperty(ref _id);
-			set => SetProperty(ref _id, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("state")] 
 		public CEnum<AICommandState> State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<CEnum<AICommandState>>();
+			set => SetPropertyValue<CEnum<AICommandState>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("questBlockId")] 
 		public CUInt64 QuestBlockId
 		{
-			get => GetProperty(ref _questBlockId);
-			set => SetProperty(ref _questBlockId, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("category")] 
 		public CName Category
 		{
-			get => GetProperty(ref _category);
-			set => SetProperty(ref _category, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public AICommand()
 		{
-			_id = 4294967295;
+			Id = 4294967295;
 		}
 	}
 }

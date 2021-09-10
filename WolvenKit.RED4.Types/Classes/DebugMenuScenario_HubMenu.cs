@@ -5,29 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DebugMenuScenario_HubMenu : MenuScenario_BaseMenu
 	{
-		private CName _defaultMenu;
-		private CName _cpoDefaultMenu;
-
 		[Ordinal(4)] 
 		[RED("defaultMenu")] 
 		public CName DefaultMenu
 		{
-			get => GetProperty(ref _defaultMenu);
-			set => SetProperty(ref _defaultMenu, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("cpoDefaultMenu")] 
 		public CName CpoDefaultMenu
 		{
-			get => GetProperty(ref _cpoDefaultMenu);
-			set => SetProperty(ref _cpoDefaultMenu, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public DebugMenuScenario_HubMenu()
 		{
-			_defaultMenu = "builds_panel";
-			_cpoDefaultMenu = "builds_panel";
+			DefaultMenu = "builds_panel";
+			CpoDefaultMenu = "builds_panel";
 		}
 	}
 }

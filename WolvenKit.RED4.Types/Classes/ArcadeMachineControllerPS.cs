@@ -5,14 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ArcadeMachineControllerPS : ScriptableDeviceComponentPS
 	{
-		private CArray<redResourceReferenceScriptToken> _gameVideosPaths;
-
 		[Ordinal(104)] 
 		[RED("gameVideosPaths")] 
 		public CArray<redResourceReferenceScriptToken> GameVideosPaths
 		{
-			get => GetProperty(ref _gameVideosPaths);
-			set => SetProperty(ref _gameVideosPaths, value);
+			get => GetPropertyValue<CArray<redResourceReferenceScriptToken>>();
+			set => SetPropertyValue<CArray<redResourceReferenceScriptToken>>(value);
+		}
+
+		public ArcadeMachineControllerPS()
+		{
+			DeviceName = "LocKey#1635";
+			TweakDBRecord = new() { Value = 93060634862 };
+			TweakDBDescriptionRecord = new() { Value = 143953089827 };
+			GameVideosPaths = new();
 		}
 	}
 }

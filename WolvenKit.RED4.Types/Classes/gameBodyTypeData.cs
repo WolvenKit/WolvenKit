@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameBodyTypeData : RedBaseClass
 	{
-		private CUInt64 _rigHash;
-		private CArray<CUInt64> _animsetHashes;
-		private CArray<gameAnimsetOverrideData> _overrides;
-
 		[Ordinal(0)] 
 		[RED("rigHash")] 
 		public CUInt64 RigHash
 		{
-			get => GetProperty(ref _rigHash);
-			set => SetProperty(ref _rigHash, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("animsetHashes")] 
 		public CArray<CUInt64> AnimsetHashes
 		{
-			get => GetProperty(ref _animsetHashes);
-			set => SetProperty(ref _animsetHashes, value);
+			get => GetPropertyValue<CArray<CUInt64>>();
+			set => SetPropertyValue<CArray<CUInt64>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("overrides")] 
 		public CArray<gameAnimsetOverrideData> Overrides
 		{
-			get => GetProperty(ref _overrides);
-			set => SetProperty(ref _overrides, value);
+			get => GetPropertyValue<CArray<gameAnimsetOverrideData>>();
+			set => SetPropertyValue<CArray<gameAnimsetOverrideData>>(value);
+		}
+
+		public gameBodyTypeData()
+		{
+			AnimsetHashes = new();
+			Overrides = new();
 		}
 	}
 }

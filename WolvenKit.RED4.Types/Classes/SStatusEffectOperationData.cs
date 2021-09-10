@@ -5,46 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SStatusEffectOperationData : RedBaseClass
 	{
-		private CFloat _range;
-		private CFloat _duration;
-		private Vector4 _offset;
-		private gameStatusEffectTDBPicker _effect;
-
 		[Ordinal(0)] 
 		[RED("range")] 
 		public CFloat Range
 		{
-			get => GetProperty(ref _range);
-			set => SetProperty(ref _range, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get => GetProperty(ref _duration);
-			set => SetProperty(ref _duration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("offset")] 
 		public Vector4 Offset
 		{
-			get => GetProperty(ref _offset);
-			set => SetProperty(ref _offset, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("effect")] 
 		public gameStatusEffectTDBPicker Effect
 		{
-			get => GetProperty(ref _effect);
-			set => SetProperty(ref _effect, value);
+			get => GetPropertyValue<gameStatusEffectTDBPicker>();
+			set => SetPropertyValue<gameStatusEffectTDBPicker>(value);
 		}
 
 		public SStatusEffectOperationData()
 		{
-			_range = 1.000000F;
+			Range = 1.000000F;
+			Offset = new();
+			Effect = new();
 		}
 	}
 }

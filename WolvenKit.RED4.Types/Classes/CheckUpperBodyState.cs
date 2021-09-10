@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CheckUpperBodyState : AINPCUpperBodyStateCheck
 	{
-		private CEnum<gamedataNPCUpperBodyState> _state;
-
 		[Ordinal(0)] 
 		[RED("state")] 
 		public CEnum<gamedataNPCUpperBodyState> State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<CEnum<gamedataNPCUpperBodyState>>();
+			set => SetPropertyValue<CEnum<gamedataNPCUpperBodyState>>(value);
 		}
 	}
 }

@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questElevator_ManageNPCAttachment_NodeType : questIInteractiveObjectManagerNodeType
 	{
-		private CArray<questElevator_ManageNPCAttachment_NodeTypeParams> _params;
-
 		[Ordinal(0)] 
 		[RED("params")] 
 		public CArray<questElevator_ManageNPCAttachment_NodeTypeParams> Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<CArray<questElevator_ManageNPCAttachment_NodeTypeParams>>();
+			set => SetPropertyValue<CArray<questElevator_ManageNPCAttachment_NodeTypeParams>>(value);
+		}
+
+		public questElevator_ManageNPCAttachment_NodeType()
+		{
+			Params = new() { new() };
 		}
 	}
 }

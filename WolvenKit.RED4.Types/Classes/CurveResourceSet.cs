@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CurveResourceSet : CResource
 	{
-		private CArray<CurveResourceSetEntry> _curveResources;
-
 		[Ordinal(1)] 
 		[RED("curveResources")] 
 		public CArray<CurveResourceSetEntry> CurveResources
 		{
-			get => GetProperty(ref _curveResources);
-			set => SetProperty(ref _curveResources, value);
+			get => GetPropertyValue<CArray<CurveResourceSetEntry>>();
+			set => SetPropertyValue<CArray<CurveResourceSetEntry>>(value);
+		}
+
+		public CurveResourceSet()
+		{
+			CurveResources = new();
 		}
 	}
 }

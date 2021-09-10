@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PuppetReactionDef : gamebbScriptDefinition
 	{
-		private gamebbScriptID_Bool _exitReactionFlag;
-		private gamebbScriptID_Bool _blockReactionFlag;
-
 		[Ordinal(0)] 
 		[RED("exitReactionFlag")] 
 		public gamebbScriptID_Bool ExitReactionFlag
 		{
-			get => GetProperty(ref _exitReactionFlag);
-			set => SetProperty(ref _exitReactionFlag, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("blockReactionFlag")] 
 		public gamebbScriptID_Bool BlockReactionFlag
 		{
-			get => GetProperty(ref _blockReactionFlag);
-			set => SetProperty(ref _blockReactionFlag, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		public PuppetReactionDef()
+		{
+			ExitReactionFlag = new();
+			BlockReactionFlag = new();
 		}
 	}
 }

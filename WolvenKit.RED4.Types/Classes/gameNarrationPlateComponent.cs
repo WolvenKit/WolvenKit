@@ -5,37 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameNarrationPlateComponent : entIComponent
 	{
-		private CName _narrationCaption;
-		private CName _narrationText;
-		private CBool _isEnabled;
-
 		[Ordinal(3)] 
 		[RED("narrationCaption")] 
 		public CName NarrationCaption
 		{
-			get => GetProperty(ref _narrationCaption);
-			set => SetProperty(ref _narrationCaption, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("narrationText")] 
 		public CName NarrationText
 		{
-			get => GetProperty(ref _narrationText);
-			set => SetProperty(ref _narrationText, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public gameNarrationPlateComponent()
 		{
-			_isEnabled = true;
+			Name = "Component";
+			IsEnabled = true;
 		}
 	}
 }

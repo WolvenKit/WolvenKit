@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questWorldDataManagerNodeDefinition : questSignalStoppingNodeDefinition
 	{
-		private CHandle<questIWorldDataManagerNodeType> _type;
-
 		[Ordinal(2)] 
 		[RED("type")] 
 		public CHandle<questIWorldDataManagerNodeType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CHandle<questIWorldDataManagerNodeType>>();
+			set => SetPropertyValue<CHandle<questIWorldDataManagerNodeType>>(value);
+		}
+
+		public questWorldDataManagerNodeDefinition()
+		{
+			Sockets = new();
+			Id = 65535;
 		}
 	}
 }

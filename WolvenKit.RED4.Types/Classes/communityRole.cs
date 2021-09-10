@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class communityRole : ISerializable
 	{
-		private CName _roleName;
-
 		[Ordinal(0)] 
 		[RED("roleName")] 
 		public CName RoleName
 		{
-			get => GetProperty(ref _roleName);
-			set => SetProperty(ref _roleName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public communityRole()
 		{
-			_roleName = "default";
+			RoleName = "default";
 		}
 	}
 }

@@ -5,38 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class STransformAnimationPlayEventData : RedBaseClass
 	{
-		private CFloat _timeScale;
-		private CBool _looping;
-		private CUInt32 _timesPlayed;
-
 		[Ordinal(0)] 
 		[RED("timeScale")] 
 		public CFloat TimeScale
 		{
-			get => GetProperty(ref _timeScale);
-			set => SetProperty(ref _timeScale, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("looping")] 
 		public CBool Looping
 		{
-			get => GetProperty(ref _looping);
-			set => SetProperty(ref _looping, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("timesPlayed")] 
 		public CUInt32 TimesPlayed
 		{
-			get => GetProperty(ref _timesPlayed);
-			set => SetProperty(ref _timesPlayed, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		public STransformAnimationPlayEventData()
 		{
-			_timeScale = 1.000000F;
-			_timesPlayed = 1;
+			TimeScale = 1.000000F;
+			TimesPlayed = 1;
 		}
 	}
 }

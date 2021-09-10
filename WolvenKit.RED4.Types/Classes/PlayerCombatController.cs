@@ -5,86 +5,88 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PlayerCombatController : IScriptable
 	{
-		private PlayerCombatControllerRefreshPolicy _gameplayActiveFlagsRefreshPolicy;
-		private PlayerCombatControllerBBIds _blackboardIds;
-		private PlayerCombatControllerBBValuesIds _blackboardValuesIds;
-		private PlayerCombatControllerBlackboardListenersFunctions _blackboardListenersFunctions;
-		private PlayerCombatControllerBBListeners _blackboardListeners;
-		private PlayerCombatControllerDelayCallbacksIds _delayEventsIds;
-		private PlayerCombatControllerActiveFlags _gameplayActiveFlags;
-		private PlayerCombatControllerOtherVars _otherVars;
-		private CWeakHandle<gameObject> _owner;
-
 		[Ordinal(0)] 
 		[RED("gameplayActiveFlagsRefreshPolicy")] 
 		public PlayerCombatControllerRefreshPolicy GameplayActiveFlagsRefreshPolicy
 		{
-			get => GetProperty(ref _gameplayActiveFlagsRefreshPolicy);
-			set => SetProperty(ref _gameplayActiveFlagsRefreshPolicy, value);
+			get => GetPropertyValue<PlayerCombatControllerRefreshPolicy>();
+			set => SetPropertyValue<PlayerCombatControllerRefreshPolicy>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("blackboardIds")] 
 		public PlayerCombatControllerBBIds BlackboardIds
 		{
-			get => GetProperty(ref _blackboardIds);
-			set => SetProperty(ref _blackboardIds, value);
+			get => GetPropertyValue<PlayerCombatControllerBBIds>();
+			set => SetPropertyValue<PlayerCombatControllerBBIds>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("blackboardValuesIds")] 
 		public PlayerCombatControllerBBValuesIds BlackboardValuesIds
 		{
-			get => GetProperty(ref _blackboardValuesIds);
-			set => SetProperty(ref _blackboardValuesIds, value);
+			get => GetPropertyValue<PlayerCombatControllerBBValuesIds>();
+			set => SetPropertyValue<PlayerCombatControllerBBValuesIds>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("blackboardListenersFunctions")] 
 		public PlayerCombatControllerBlackboardListenersFunctions BlackboardListenersFunctions
 		{
-			get => GetProperty(ref _blackboardListenersFunctions);
-			set => SetProperty(ref _blackboardListenersFunctions, value);
+			get => GetPropertyValue<PlayerCombatControllerBlackboardListenersFunctions>();
+			set => SetPropertyValue<PlayerCombatControllerBlackboardListenersFunctions>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("blackboardListeners")] 
 		public PlayerCombatControllerBBListeners BlackboardListeners
 		{
-			get => GetProperty(ref _blackboardListeners);
-			set => SetProperty(ref _blackboardListeners, value);
+			get => GetPropertyValue<PlayerCombatControllerBBListeners>();
+			set => SetPropertyValue<PlayerCombatControllerBBListeners>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("delayEventsIds")] 
 		public PlayerCombatControllerDelayCallbacksIds DelayEventsIds
 		{
-			get => GetProperty(ref _delayEventsIds);
-			set => SetProperty(ref _delayEventsIds, value);
+			get => GetPropertyValue<PlayerCombatControllerDelayCallbacksIds>();
+			set => SetPropertyValue<PlayerCombatControllerDelayCallbacksIds>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("gameplayActiveFlags")] 
 		public PlayerCombatControllerActiveFlags GameplayActiveFlags
 		{
-			get => GetProperty(ref _gameplayActiveFlags);
-			set => SetProperty(ref _gameplayActiveFlags, value);
+			get => GetPropertyValue<PlayerCombatControllerActiveFlags>();
+			set => SetPropertyValue<PlayerCombatControllerActiveFlags>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("otherVars")] 
 		public PlayerCombatControllerOtherVars OtherVars
 		{
-			get => GetProperty(ref _otherVars);
-			set => SetProperty(ref _otherVars, value);
+			get => GetPropertyValue<PlayerCombatControllerOtherVars>();
+			set => SetPropertyValue<PlayerCombatControllerOtherVars>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("owner")] 
 		public CWeakHandle<gameObject> Owner
 		{
-			get => GetProperty(ref _owner);
-			set => SetProperty(ref _owner, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
+		}
+
+		public PlayerCombatController()
+		{
+			GameplayActiveFlagsRefreshPolicy = new();
+			BlackboardIds = new();
+			BlackboardValuesIds = new() { CrouchActive = new() };
+			BlackboardListenersFunctions = new();
+			BlackboardListeners = new();
+			DelayEventsIds = new() { Crouch = new() };
+			GameplayActiveFlags = new();
+			OtherVars = new();
 		}
 	}
 }

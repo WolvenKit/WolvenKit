@@ -5,59 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PassiveCombatConditions : PassiveAutonomousCondition
 	{
-		private CUInt32 _combatCommandCbId;
-		private CUInt32 _roleCbId;
-		private CUInt32 _threatCbId;
-		private CUInt32 _playerCombatCbId;
-		private CUInt32 _activeCombatConditionCbId;
-		private CUInt32 _delayEvaluationCbId;
-
 		[Ordinal(0)] 
 		[RED("combatCommandCbId")] 
 		public CUInt32 CombatCommandCbId
 		{
-			get => GetProperty(ref _combatCommandCbId);
-			set => SetProperty(ref _combatCommandCbId, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("roleCbId")] 
 		public CUInt32 RoleCbId
 		{
-			get => GetProperty(ref _roleCbId);
-			set => SetProperty(ref _roleCbId, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("threatCbId")] 
 		public CUInt32 ThreatCbId
 		{
-			get => GetProperty(ref _threatCbId);
-			set => SetProperty(ref _threatCbId, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("playerCombatCbId")] 
 		public CUInt32 PlayerCombatCbId
 		{
-			get => GetProperty(ref _playerCombatCbId);
-			set => SetProperty(ref _playerCombatCbId, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("activeCombatConditionCbId")] 
 		public CUInt32 ActiveCombatConditionCbId
 		{
-			get => GetProperty(ref _activeCombatConditionCbId);
-			set => SetProperty(ref _activeCombatConditionCbId, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("delayEvaluationCbId")] 
 		public CUInt32 DelayEvaluationCbId
 		{
-			get => GetProperty(ref _delayEvaluationCbId);
-			set => SetProperty(ref _delayEvaluationCbId, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 	}
 }

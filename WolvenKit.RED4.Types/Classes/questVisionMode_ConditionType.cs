@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questVisionMode_ConditionType : questISystemConditionType
 	{
-		private CFloat _timeInterval;
-		private CEnum<questVisionModeType> _visionModeType;
-
 		[Ordinal(0)] 
 		[RED("timeInterval")] 
 		public CFloat TimeInterval
 		{
-			get => GetProperty(ref _timeInterval);
-			set => SetProperty(ref _timeInterval, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("visionModeType")] 
 		public CEnum<questVisionModeType> VisionModeType
 		{
-			get => GetProperty(ref _visionModeType);
-			set => SetProperty(ref _visionModeType, value);
+			get => GetPropertyValue<CEnum<questVisionModeType>>();
+			set => SetPropertyValue<CEnum<questVisionModeType>>(value);
 		}
 
 		public questVisionMode_ConditionType()
 		{
-			_timeInterval = 1.000000F;
+			TimeInterval = 1.000000F;
 		}
 	}
 }

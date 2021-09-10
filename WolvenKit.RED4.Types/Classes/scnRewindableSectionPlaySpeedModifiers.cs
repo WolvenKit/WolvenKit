@@ -5,69 +5,62 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnRewindableSectionPlaySpeedModifiers : RedBaseClass
 	{
-		private CFloat _forwardVeryFast;
-		private CFloat _forwardFast;
-		private CFloat _forwardSlow;
-		private CFloat _backwardVeryFast;
-		private CFloat _backwardFast;
-		private CFloat _backwardSlow;
-
 		[Ordinal(0)] 
 		[RED("forwardVeryFast")] 
 		public CFloat ForwardVeryFast
 		{
-			get => GetProperty(ref _forwardVeryFast);
-			set => SetProperty(ref _forwardVeryFast, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("forwardFast")] 
 		public CFloat ForwardFast
 		{
-			get => GetProperty(ref _forwardFast);
-			set => SetProperty(ref _forwardFast, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("forwardSlow")] 
 		public CFloat ForwardSlow
 		{
-			get => GetProperty(ref _forwardSlow);
-			set => SetProperty(ref _forwardSlow, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("backwardVeryFast")] 
 		public CFloat BackwardVeryFast
 		{
-			get => GetProperty(ref _backwardVeryFast);
-			set => SetProperty(ref _backwardVeryFast, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("backwardFast")] 
 		public CFloat BackwardFast
 		{
-			get => GetProperty(ref _backwardFast);
-			set => SetProperty(ref _backwardFast, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("backwardSlow")] 
 		public CFloat BackwardSlow
 		{
-			get => GetProperty(ref _backwardSlow);
-			set => SetProperty(ref _backwardSlow, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public scnRewindableSectionPlaySpeedModifiers()
 		{
-			_forwardVeryFast = 6.000000F;
-			_forwardFast = 3.000000F;
-			_forwardSlow = 0.500000F;
-			_backwardVeryFast = 6.000000F;
-			_backwardFast = 3.000000F;
-			_backwardSlow = 0.500000F;
+			ForwardVeryFast = 6.000000F;
+			ForwardFast = 3.000000F;
+			ForwardSlow = 0.500000F;
+			BackwardVeryFast = 6.000000F;
+			BackwardFast = 3.000000F;
+			BackwardSlow = 0.500000F;
 		}
 	}
 }

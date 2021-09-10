@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class locVoLanguageDataEntry : RedBaseClass
 	{
-		private CName _languageCode;
-		private CResourceAsyncReference<JsonResource> _voiceverMapReport;
-		private CResourceAsyncReference<JsonResource> _lenghtMapReport;
-		private CArray<CResourceAsyncReference<JsonResource>> _voMapChunks;
-
 		[Ordinal(0)] 
 		[RED("languageCode")] 
 		public CName LanguageCode
 		{
-			get => GetProperty(ref _languageCode);
-			set => SetProperty(ref _languageCode, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("voiceverMapReport")] 
 		public CResourceAsyncReference<JsonResource> VoiceverMapReport
 		{
-			get => GetProperty(ref _voiceverMapReport);
-			set => SetProperty(ref _voiceverMapReport, value);
+			get => GetPropertyValue<CResourceAsyncReference<JsonResource>>();
+			set => SetPropertyValue<CResourceAsyncReference<JsonResource>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("lenghtMapReport")] 
 		public CResourceAsyncReference<JsonResource> LenghtMapReport
 		{
-			get => GetProperty(ref _lenghtMapReport);
-			set => SetProperty(ref _lenghtMapReport, value);
+			get => GetPropertyValue<CResourceAsyncReference<JsonResource>>();
+			set => SetPropertyValue<CResourceAsyncReference<JsonResource>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("voMapChunks")] 
 		public CArray<CResourceAsyncReference<JsonResource>> VoMapChunks
 		{
-			get => GetProperty(ref _voMapChunks);
-			set => SetProperty(ref _voMapChunks, value);
+			get => GetPropertyValue<CArray<CResourceAsyncReference<JsonResource>>>();
+			set => SetPropertyValue<CArray<CResourceAsyncReference<JsonResource>>>(value);
+		}
+
+		public locVoLanguageDataEntry()
+		{
+			VoMapChunks = new();
 		}
 	}
 }

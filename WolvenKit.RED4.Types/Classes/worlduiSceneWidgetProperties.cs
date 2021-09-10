@@ -5,68 +5,66 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worlduiSceneWidgetProperties : RedBaseClass
 	{
-		private Vector2 _projectionPlaneSize;
-		private CEnum<ERenderingPlane> _renderingPlane;
-		private CBool _isInteractable;
-		private CBool _isInteractableFromBehind;
-		private CFloat _maxInteractionDistance;
-		private CBool _useCustomFaceVector;
-		private Vector3 _faceVector;
-
 		[Ordinal(0)] 
 		[RED("projectionPlaneSize")] 
 		public Vector2 ProjectionPlaneSize
 		{
-			get => GetProperty(ref _projectionPlaneSize);
-			set => SetProperty(ref _projectionPlaneSize, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("renderingPlane")] 
 		public CEnum<ERenderingPlane> RenderingPlane
 		{
-			get => GetProperty(ref _renderingPlane);
-			set => SetProperty(ref _renderingPlane, value);
+			get => GetPropertyValue<CEnum<ERenderingPlane>>();
+			set => SetPropertyValue<CEnum<ERenderingPlane>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isInteractable")] 
 		public CBool IsInteractable
 		{
-			get => GetProperty(ref _isInteractable);
-			set => SetProperty(ref _isInteractable, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isInteractableFromBehind")] 
 		public CBool IsInteractableFromBehind
 		{
-			get => GetProperty(ref _isInteractableFromBehind);
-			set => SetProperty(ref _isInteractableFromBehind, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("maxInteractionDistance")] 
 		public CFloat MaxInteractionDistance
 		{
-			get => GetProperty(ref _maxInteractionDistance);
-			set => SetProperty(ref _maxInteractionDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("useCustomFaceVector")] 
 		public CBool UseCustomFaceVector
 		{
-			get => GetProperty(ref _useCustomFaceVector);
-			set => SetProperty(ref _useCustomFaceVector, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("faceVector")] 
 		public Vector3 FaceVector
 		{
-			get => GetProperty(ref _faceVector);
-			set => SetProperty(ref _faceVector, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
+		}
+
+		public worlduiSceneWidgetProperties()
+		{
+			ProjectionPlaneSize = new() { X = 1.000000F, Y = 1.000000F };
+			FaceVector = new();
 		}
 	}
 }

@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VendorUserData : IScriptable
 	{
-		private CHandle<questVendorPanelData> _vendorData;
-		private CString _menu;
-
 		[Ordinal(0)] 
 		[RED("vendorData")] 
 		public CHandle<questVendorPanelData> VendorData
 		{
-			get => GetProperty(ref _vendorData);
-			set => SetProperty(ref _vendorData, value);
+			get => GetPropertyValue<CHandle<questVendorPanelData>>();
+			set => SetPropertyValue<CHandle<questVendorPanelData>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("menu")] 
 		public CString Menu
 		{
-			get => GetProperty(ref _menu);
-			set => SetProperty(ref _menu, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 	}
 }

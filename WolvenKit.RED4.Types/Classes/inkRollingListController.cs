@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkRollingListController : inkListController
 	{
-		private CInt32 _itemsToDisplay;
-		private CFloat _convexity;
-		private CFloat _verticalCompression;
-		private CFloat _scrollTime;
-
 		[Ordinal(6)] 
 		[RED("itemsToDisplay")] 
 		public CInt32 ItemsToDisplay
 		{
-			get => GetProperty(ref _itemsToDisplay);
-			set => SetProperty(ref _itemsToDisplay, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("convexity")] 
 		public CFloat Convexity
 		{
-			get => GetProperty(ref _convexity);
-			set => SetProperty(ref _convexity, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("verticalCompression")] 
 		public CFloat VerticalCompression
 		{
-			get => GetProperty(ref _verticalCompression);
-			set => SetProperty(ref _verticalCompression, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("scrollTime")] 
 		public CFloat ScrollTime
 		{
-			get => GetProperty(ref _scrollTime);
-			set => SetProperty(ref _scrollTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

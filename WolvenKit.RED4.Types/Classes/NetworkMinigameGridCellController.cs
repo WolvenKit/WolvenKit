@@ -5,59 +5,59 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class NetworkMinigameGridCellController : inkButtonController
 	{
-		private CellData _cellData;
-		private CWeakHandle<NetworkMinigameGridController> _grid;
-		private inkWidgetReference _slotsContainer;
-		private CWeakHandle<NetworkMinigameElementController> _slotsContent;
-		private CName _elementLibraryName;
-		private HDRColor _defaultColor;
-
 		[Ordinal(10)] 
 		[RED("cellData")] 
 		public CellData CellData
 		{
-			get => GetProperty(ref _cellData);
-			set => SetProperty(ref _cellData, value);
+			get => GetPropertyValue<CellData>();
+			set => SetPropertyValue<CellData>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("grid")] 
 		public CWeakHandle<NetworkMinigameGridController> Grid
 		{
-			get => GetProperty(ref _grid);
-			set => SetProperty(ref _grid, value);
+			get => GetPropertyValue<CWeakHandle<NetworkMinigameGridController>>();
+			set => SetPropertyValue<CWeakHandle<NetworkMinigameGridController>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("slotsContainer")] 
 		public inkWidgetReference SlotsContainer
 		{
-			get => GetProperty(ref _slotsContainer);
-			set => SetProperty(ref _slotsContainer, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("slotsContent")] 
 		public CWeakHandle<NetworkMinigameElementController> SlotsContent
 		{
-			get => GetProperty(ref _slotsContent);
-			set => SetProperty(ref _slotsContent, value);
+			get => GetPropertyValue<CWeakHandle<NetworkMinigameElementController>>();
+			set => SetPropertyValue<CWeakHandle<NetworkMinigameElementController>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("elementLibraryName")] 
 		public CName ElementLibraryName
 		{
-			get => GetProperty(ref _elementLibraryName);
-			set => SetProperty(ref _elementLibraryName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("defaultColor")] 
 		public HDRColor DefaultColor
 		{
-			get => GetProperty(ref _defaultColor);
-			set => SetProperty(ref _defaultColor, value);
+			get => GetPropertyValue<HDRColor>();
+			set => SetPropertyValue<HDRColor>(value);
+		}
+
+		public NetworkMinigameGridCellController()
+		{
+			CellData = new() { Position = new(), Element = new(), Properties = new() { Traps = new() } };
+			SlotsContainer = new();
+			DefaultColor = new();
 		}
 	}
 }

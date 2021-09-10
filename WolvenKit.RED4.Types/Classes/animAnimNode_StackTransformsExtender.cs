@@ -5,77 +5,81 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_StackTransformsExtender : animAnimNode_OnePoseInput
 	{
-		private CName _tag;
-		private CArray<animTransformInfo> _transformInfos;
-		private CArray<CEnum<animStackTransformsExtender_SnapToBoneMethod>> _snapMethods;
-		private CArray<CBool> _snapToReferenceValues;
-		private CArray<animTransformIndex> _snapTargetBones;
-		private CArray<CBool> _offsetToReferenceValues;
-		private CArray<animTransformIndex> _offsetSpaceBones;
-		private CArray<QsTransform> _offsets;
-
 		[Ordinal(12)] 
 		[RED("tag")] 
 		public CName Tag
 		{
-			get => GetProperty(ref _tag);
-			set => SetProperty(ref _tag, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("transformInfos")] 
 		public CArray<animTransformInfo> TransformInfos
 		{
-			get => GetProperty(ref _transformInfos);
-			set => SetProperty(ref _transformInfos, value);
+			get => GetPropertyValue<CArray<animTransformInfo>>();
+			set => SetPropertyValue<CArray<animTransformInfo>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("snapMethods")] 
 		public CArray<CEnum<animStackTransformsExtender_SnapToBoneMethod>> SnapMethods
 		{
-			get => GetProperty(ref _snapMethods);
-			set => SetProperty(ref _snapMethods, value);
+			get => GetPropertyValue<CArray<CEnum<animStackTransformsExtender_SnapToBoneMethod>>>();
+			set => SetPropertyValue<CArray<CEnum<animStackTransformsExtender_SnapToBoneMethod>>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("snapToReferenceValues")] 
 		public CArray<CBool> SnapToReferenceValues
 		{
-			get => GetProperty(ref _snapToReferenceValues);
-			set => SetProperty(ref _snapToReferenceValues, value);
+			get => GetPropertyValue<CArray<CBool>>();
+			set => SetPropertyValue<CArray<CBool>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("snapTargetBones")] 
 		public CArray<animTransformIndex> SnapTargetBones
 		{
-			get => GetProperty(ref _snapTargetBones);
-			set => SetProperty(ref _snapTargetBones, value);
+			get => GetPropertyValue<CArray<animTransformIndex>>();
+			set => SetPropertyValue<CArray<animTransformIndex>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("offsetToReferenceValues")] 
 		public CArray<CBool> OffsetToReferenceValues
 		{
-			get => GetProperty(ref _offsetToReferenceValues);
-			set => SetProperty(ref _offsetToReferenceValues, value);
+			get => GetPropertyValue<CArray<CBool>>();
+			set => SetPropertyValue<CArray<CBool>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("offsetSpaceBones")] 
 		public CArray<animTransformIndex> OffsetSpaceBones
 		{
-			get => GetProperty(ref _offsetSpaceBones);
-			set => SetProperty(ref _offsetSpaceBones, value);
+			get => GetPropertyValue<CArray<animTransformIndex>>();
+			set => SetPropertyValue<CArray<animTransformIndex>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("offsets")] 
 		public CArray<QsTransform> Offsets
 		{
-			get => GetProperty(ref _offsets);
-			set => SetProperty(ref _offsets, value);
+			get => GetPropertyValue<CArray<QsTransform>>();
+			set => SetPropertyValue<CArray<QsTransform>>(value);
+		}
+
+		public animAnimNode_StackTransformsExtender()
+		{
+			Id = 4294967295;
+			InputLink = new();
+			TransformInfos = new();
+			SnapMethods = new();
+			SnapToReferenceValues = new();
+			SnapTargetBones = new();
+			OffsetToReferenceValues = new();
+			OffsetSpaceBones = new();
+			Offsets = new();
 		}
 	}
 }

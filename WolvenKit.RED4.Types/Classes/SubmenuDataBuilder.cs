@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SubmenuDataBuilder : IScriptable
 	{
-		private CHandle<MenuDataBuilder> _menuBuilder;
-		private CInt32 _menuDataIndex;
-
 		[Ordinal(0)] 
 		[RED("menuBuilder")] 
 		public CHandle<MenuDataBuilder> MenuBuilder
 		{
-			get => GetProperty(ref _menuBuilder);
-			set => SetProperty(ref _menuBuilder, value);
+			get => GetPropertyValue<CHandle<MenuDataBuilder>>();
+			set => SetPropertyValue<CHandle<MenuDataBuilder>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("menuDataIndex")] 
 		public CInt32 MenuDataIndex
 		{
-			get => GetProperty(ref _menuDataIndex);
-			set => SetProperty(ref _menuDataIndex, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

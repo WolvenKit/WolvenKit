@@ -5,28 +5,29 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entLightBlockingComponent : entIVisualComponent
 	{
-		private CFloat _radius;
-		private CUInt8 _lightBlockerComponentVersion;
-
 		[Ordinal(8)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get => GetProperty(ref _radius);
-			set => SetProperty(ref _radius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("lightBlockerComponentVersion")] 
 		public CUInt8 LightBlockerComponentVersion
 		{
-			get => GetProperty(ref _lightBlockerComponentVersion);
-			set => SetProperty(ref _lightBlockerComponentVersion, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		public entLightBlockingComponent()
 		{
-			_radius = 0.100000F;
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
+			ForceLODLevel = -1;
+			Radius = 0.100000F;
 		}
 	}
 }

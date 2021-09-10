@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entColliderComponentConvex : entColliderComponentShape
 	{
-		private CResourceReference<CMesh> _mesh;
-
 		[Ordinal(1)] 
 		[RED("mesh")] 
 		public CResourceReference<CMesh> Mesh
 		{
-			get => GetProperty(ref _mesh);
-			set => SetProperty(ref _mesh, value);
+			get => GetPropertyValue<CResourceReference<CMesh>>();
+			set => SetPropertyValue<CResourceReference<CMesh>>(value);
+		}
+
+		public entColliderComponentConvex()
+		{
+			LocalToBody = new() { Position = new(), Orientation = new() { R = 1.000000F } };
 		}
 	}
 }

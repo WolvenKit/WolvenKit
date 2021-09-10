@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkCreditsSectionEntry : RedBaseClass
 	{
-		private CString _sectionTitle;
-		private CArray<CString> _names;
-		private CEnum<inkDisplayMode> _displayMode;
-
 		[Ordinal(0)] 
 		[RED("sectionTitle")] 
 		public CString SectionTitle
 		{
-			get => GetProperty(ref _sectionTitle);
-			set => SetProperty(ref _sectionTitle, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("names")] 
 		public CArray<CString> Names
 		{
-			get => GetProperty(ref _names);
-			set => SetProperty(ref _names, value);
+			get => GetPropertyValue<CArray<CString>>();
+			set => SetPropertyValue<CArray<CString>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("displayMode")] 
 		public CEnum<inkDisplayMode> DisplayMode
 		{
-			get => GetProperty(ref _displayMode);
-			set => SetProperty(ref _displayMode, value);
+			get => GetPropertyValue<CEnum<inkDisplayMode>>();
+			set => SetPropertyValue<CEnum<inkDisplayMode>>(value);
+		}
+
+		public inkCreditsSectionEntry()
+		{
+			Names = new();
 		}
 	}
 }

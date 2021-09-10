@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class GateSignalInstance : RedBaseClass
 	{
-		private CHandle<GateSignal> _gateSignal;
-		private CFloat _timeStamp;
-		private CArray<CName> _consumeTags;
-
 		[Ordinal(0)] 
 		[RED("gateSignal")] 
 		public CHandle<GateSignal> GateSignal
 		{
-			get => GetProperty(ref _gateSignal);
-			set => SetProperty(ref _gateSignal, value);
+			get => GetPropertyValue<CHandle<GateSignal>>();
+			set => SetPropertyValue<CHandle<GateSignal>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("timeStamp")] 
 		public CFloat TimeStamp
 		{
-			get => GetProperty(ref _timeStamp);
-			set => SetProperty(ref _timeStamp, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("consumeTags")] 
 		public CArray<CName> ConsumeTags
 		{
-			get => GetProperty(ref _consumeTags);
-			set => SetProperty(ref _consumeTags, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
+		public GateSignalInstance()
+		{
+			ConsumeTags = new();
 		}
 	}
 }

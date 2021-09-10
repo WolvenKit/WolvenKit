@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questEntityManagerNodeDefinition : questDisableableNodeDefinition
 	{
-		private CHandle<questIEntityManager_NodeType> _type;
-
 		[Ordinal(2)] 
 		[RED("type")] 
 		public CHandle<questIEntityManager_NodeType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CHandle<questIEntityManager_NodeType>>();
+			set => SetPropertyValue<CHandle<questIEntityManager_NodeType>>(value);
+		}
+
+		public questEntityManagerNodeDefinition()
+		{
+			Sockets = new();
+			Id = 65535;
 		}
 	}
 }

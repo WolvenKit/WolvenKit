@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animStackTransformsExtender_JsonProperties : ISerializable
 	{
-		private CArray<animStackTransformsExtender_JsonEntry> _entries;
-
 		[Ordinal(0)] 
 		[RED("entries")] 
 		public CArray<animStackTransformsExtender_JsonEntry> Entries
 		{
-			get => GetProperty(ref _entries);
-			set => SetProperty(ref _entries, value);
+			get => GetPropertyValue<CArray<animStackTransformsExtender_JsonEntry>>();
+			set => SetPropertyValue<CArray<animStackTransformsExtender_JsonEntry>>(value);
+		}
+
+		public animStackTransformsExtender_JsonProperties()
+		{
+			Entries = new();
 		}
 	}
 }

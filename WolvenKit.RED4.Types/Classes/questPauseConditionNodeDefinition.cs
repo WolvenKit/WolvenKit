@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questPauseConditionNodeDefinition : questSignalStoppingNodeDefinition
 	{
-		private CHandle<questIBaseCondition> _condition;
-
 		[Ordinal(2)] 
 		[RED("condition")] 
 		public CHandle<questIBaseCondition> Condition
 		{
-			get => GetProperty(ref _condition);
-			set => SetProperty(ref _condition, value);
+			get => GetPropertyValue<CHandle<questIBaseCondition>>();
+			set => SetPropertyValue<CHandle<questIBaseCondition>>(value);
+		}
+
+		public questPauseConditionNodeDefinition()
+		{
+			Sockets = new();
+			Id = 65535;
 		}
 	}
 }

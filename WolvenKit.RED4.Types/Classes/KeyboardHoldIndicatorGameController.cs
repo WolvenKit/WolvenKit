@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class KeyboardHoldIndicatorGameController : gameuiHoldIndicatorGameController
 	{
-		private inkImageWidgetReference _progress;
-
 		[Ordinal(6)] 
 		[RED("progress")] 
 		public inkImageWidgetReference Progress
 		{
-			get => GetProperty(ref _progress);
-			set => SetProperty(ref _progress, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		public KeyboardHoldIndicatorGameController()
+		{
+			Progress = new();
 		}
 	}
 }

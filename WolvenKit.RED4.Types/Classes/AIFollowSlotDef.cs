@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIFollowSlotDef : gamebbScriptDefinition
 	{
-		private gamebbScriptID_Int32 _slotID;
-		private gamebbScriptID_Variant _slotTransform;
-
 		[Ordinal(0)] 
 		[RED("slotID")] 
 		public gamebbScriptID_Int32 SlotID
 		{
-			get => GetProperty(ref _slotID);
-			set => SetProperty(ref _slotID, value);
+			get => GetPropertyValue<gamebbScriptID_Int32>();
+			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("slotTransform")] 
 		public gamebbScriptID_Variant SlotTransform
 		{
-			get => GetProperty(ref _slotTransform);
-			set => SetProperty(ref _slotTransform, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
+		}
+
+		public AIFollowSlotDef()
+		{
+			SlotID = new();
+			SlotTransform = new();
 		}
 	}
 }

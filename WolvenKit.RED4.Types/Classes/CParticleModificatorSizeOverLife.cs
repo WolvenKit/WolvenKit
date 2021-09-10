@@ -5,38 +5,37 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CParticleModificatorSizeOverLife : IParticleModificator
 	{
-		private CHandle<IEvaluatorVector> _size;
-		private CFloat _scale;
-		private CBool _modulate;
-
 		[Ordinal(4)] 
 		[RED("size")] 
 		public CHandle<IEvaluatorVector> Size
 		{
-			get => GetProperty(ref _size);
-			set => SetProperty(ref _size, value);
+			get => GetPropertyValue<CHandle<IEvaluatorVector>>();
+			set => SetPropertyValue<CHandle<IEvaluatorVector>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("scale")] 
 		public CFloat Scale
 		{
-			get => GetProperty(ref _scale);
-			set => SetProperty(ref _scale, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("modulate")] 
 		public CBool Modulate
 		{
-			get => GetProperty(ref _modulate);
-			set => SetProperty(ref _modulate, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public CParticleModificatorSizeOverLife()
 		{
-			_scale = 1.000000F;
-			_modulate = true;
+			EditorName = "Size over life";
+			EditorGroup = "Size";
+			IsEnabled = true;
+			Scale = 1.000000F;
+			Modulate = true;
 		}
 	}
 }

@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CraftItemRequest : gamePlayerScriptableSystemRequest
 	{
-		private CWeakHandle<gameObject> _target;
-		private CHandle<gamedataItem_Record> _itemRecord;
-		private CInt32 _amount;
-		private CInt32 _bulletAmount;
-
 		[Ordinal(1)] 
 		[RED("target")] 
 		public CWeakHandle<gameObject> Target
 		{
-			get => GetProperty(ref _target);
-			set => SetProperty(ref _target, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("itemRecord")] 
 		public CHandle<gamedataItem_Record> ItemRecord
 		{
-			get => GetProperty(ref _itemRecord);
-			set => SetProperty(ref _itemRecord, value);
+			get => GetPropertyValue<CHandle<gamedataItem_Record>>();
+			set => SetPropertyValue<CHandle<gamedataItem_Record>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("amount")] 
 		public CInt32 Amount
 		{
-			get => GetProperty(ref _amount);
-			set => SetProperty(ref _amount, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("bulletAmount")] 
 		public CInt32 BulletAmount
 		{
-			get => GetProperty(ref _bulletAmount);
-			set => SetProperty(ref _bulletAmount, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

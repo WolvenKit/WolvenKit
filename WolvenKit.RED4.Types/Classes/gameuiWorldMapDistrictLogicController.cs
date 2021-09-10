@@ -5,59 +5,58 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiWorldMapDistrictLogicController : inkWidgetLogicController
 	{
-		private CWeakHandle<gamedataDistrict_Record> _record;
-		private CEnum<gamedataDistrict> _type;
-		private CBool _selected;
-		private inkLinePatternWidgetReference _outlineWidget;
-		private inkImageWidgetReference _iconWidget;
-		private CHandle<inkanimProxy> _selectAnim;
-
 		[Ordinal(1)] 
 		[RED("record")] 
 		public CWeakHandle<gamedataDistrict_Record> Record
 		{
-			get => GetProperty(ref _record);
-			set => SetProperty(ref _record, value);
+			get => GetPropertyValue<CWeakHandle<gamedataDistrict_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataDistrict_Record>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("type")] 
 		public CEnum<gamedataDistrict> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<gamedataDistrict>>();
+			set => SetPropertyValue<CEnum<gamedataDistrict>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("selected")] 
 		public CBool Selected
 		{
-			get => GetProperty(ref _selected);
-			set => SetProperty(ref _selected, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("outlineWidget")] 
 		public inkLinePatternWidgetReference OutlineWidget
 		{
-			get => GetProperty(ref _outlineWidget);
-			set => SetProperty(ref _outlineWidget, value);
+			get => GetPropertyValue<inkLinePatternWidgetReference>();
+			set => SetPropertyValue<inkLinePatternWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("iconWidget")] 
 		public inkImageWidgetReference IconWidget
 		{
-			get => GetProperty(ref _iconWidget);
-			set => SetProperty(ref _iconWidget, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("selectAnim")] 
 		public CHandle<inkanimProxy> SelectAnim
 		{
-			get => GetProperty(ref _selectAnim);
-			set => SetProperty(ref _selectAnim, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		public gameuiWorldMapDistrictLogicController()
+		{
+			OutlineWidget = new();
+			IconWidget = new();
 		}
 	}
 }

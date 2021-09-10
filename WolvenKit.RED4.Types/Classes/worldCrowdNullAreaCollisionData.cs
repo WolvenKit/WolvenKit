@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldCrowdNullAreaCollisionData : RedBaseClass
 	{
-		private CUInt64 _areaID;
-		private CArray<worldTrafficStaticCollisionSphere> _collisions;
-
 		[Ordinal(0)] 
 		[RED("areaID")] 
 		public CUInt64 AreaID
 		{
-			get => GetProperty(ref _areaID);
-			set => SetProperty(ref _areaID, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("collisions")] 
 		public CArray<worldTrafficStaticCollisionSphere> Collisions
 		{
-			get => GetProperty(ref _collisions);
-			set => SetProperty(ref _collisions, value);
+			get => GetPropertyValue<CArray<worldTrafficStaticCollisionSphere>>();
+			set => SetPropertyValue<CArray<worldTrafficStaticCollisionSphere>>(value);
+		}
+
+		public worldCrowdNullAreaCollisionData()
+		{
+			Collisions = new();
 		}
 	}
 }

@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scneventsPlayerLookAtEvent : scnSceneEvent
 	{
-		private scnPerformerId _performer;
-		private NodeRef _nodeRef;
-		private scneventsPlayerLookAtEventParams _lookAtParams;
-
 		[Ordinal(6)] 
 		[RED("performer")] 
 		public scnPerformerId Performer
 		{
-			get => GetProperty(ref _performer);
-			set => SetProperty(ref _performer, value);
+			get => GetPropertyValue<scnPerformerId>();
+			set => SetPropertyValue<scnPerformerId>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("nodeRef")] 
 		public NodeRef NodeRef
 		{
-			get => GetProperty(ref _nodeRef);
-			set => SetProperty(ref _nodeRef, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("lookAtParams")] 
 		public scneventsPlayerLookAtEventParams LookAtParams
 		{
-			get => GetProperty(ref _lookAtParams);
-			set => SetProperty(ref _lookAtParams, value);
+			get => GetPropertyValue<scneventsPlayerLookAtEventParams>();
+			set => SetPropertyValue<scneventsPlayerLookAtEventParams>(value);
+		}
+
+		public scneventsPlayerLookAtEvent()
+		{
+			Id = new() { Id = 18446744073709551615 };
+			Performer = new() { Id = 4294967040 };
+			LookAtParams = new() { OffsetPos = new(), Duration = 0.250000F, EaseIn = true, EaseOut = true };
 		}
 	}
 }

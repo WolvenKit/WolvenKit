@@ -5,50 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class IntercomControllerPS : ScriptableDeviceComponentPS
 	{
-		private CBool _isCalling;
-		private CBool _sceneStarted;
-		private CBool _endingCall;
-		private entEntityID _forceLookAt;
-		private CBool _forceFollow;
-
 		[Ordinal(104)] 
 		[RED("isCalling")] 
 		public CBool IsCalling
 		{
-			get => GetProperty(ref _isCalling);
-			set => SetProperty(ref _isCalling, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(105)] 
 		[RED("sceneStarted")] 
 		public CBool SceneStarted
 		{
-			get => GetProperty(ref _sceneStarted);
-			set => SetProperty(ref _sceneStarted, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(106)] 
 		[RED("endingCall")] 
 		public CBool EndingCall
 		{
-			get => GetProperty(ref _endingCall);
-			set => SetProperty(ref _endingCall, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(107)] 
 		[RED("forceLookAt")] 
 		public entEntityID ForceLookAt
 		{
-			get => GetProperty(ref _forceLookAt);
-			set => SetProperty(ref _forceLookAt, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(108)] 
 		[RED("forceFollow")] 
 		public CBool ForceFollow
 		{
-			get => GetProperty(ref _forceFollow);
-			set => SetProperty(ref _forceFollow, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public IntercomControllerPS()
+		{
+			DeviceName = "LocKey#163";
+			TweakDBRecord = new() { Value = 71462547290 };
+			TweakDBDescriptionRecord = new() { Value = 123510029761 };
+			ForceLookAt = new();
 		}
 	}
 }

@@ -5,320 +5,292 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MenuHubGameController : gameuiMenuGameController
 	{
-		private CHandle<MenuDataBuilder> _menusData;
-		private CWeakHandle<inkMenuEventDispatcher> _menuEventDispatcher;
-		private CWeakHandle<MenuHubLogicController> _menuCtrl;
-		private CWeakHandle<MetaQuestLogicController> _metaCtrl;
-		private CWeakHandle<SubMenuPanelLogicController> _subMenuCtrl;
-		private CWeakHandle<HubTimeSkipController> _timeCtrl;
-		private CWeakHandle<PlayerPuppet> _player;
-		private CHandle<PlayerDevelopmentSystem> _playerDevSystem;
-		private CHandle<gameTransactionSystem> _transaction;
-		private CWeakHandle<gameIBlackboard> _playerStatsBlackboard;
-		private CWeakHandle<gameIBlackboard> _hubMenuBlackboard;
-		private CHandle<redCallbackObject> _characterCredListener;
-		private CHandle<redCallbackObject> _characterLevelListener;
-		private CHandle<redCallbackObject> _characterCurrentXPListener;
-		private CHandle<redCallbackObject> _characterCredPointsListener;
-		private CHandle<redCallbackObject> _weightListener;
-		private CHandle<redCallbackObject> _maxWeightListener;
-		private CHandle<redCallbackObject> _submenuHiddenListener;
-		private CHandle<redCallbackObject> _metaQuestStatusListener;
-		private CWeakHandle<gameJournalManager> _journalManager;
-		private CWeakHandle<gameJournalQuestObjective> _trackedEntry;
-		private CWeakHandle<gameJournalQuestPhase> _trackedPhase;
-		private CWeakHandle<gameJournalQuest> _trackedQuest;
-		private inkWidgetReference _notificationRoot;
-		private inkWidgetReference _buttonHintsManagerRef;
-		private inkWidgetReference _bgFluff;
-		private CHandle<PlayerDevelopmentDataManager> _dataManager;
-		private CWeakHandle<ButtonHints> _buttonHintsController;
-		private inkWidgetReference _gameTimeContainer;
-		private CWeakHandle<gameuiTimeDisplayLogicController> _gameTimeController;
-		private CHandle<gameInventoryScriptListener> _inventoryListener;
-		private CHandle<CurrencyUpdateCallback> _callback;
-		private CUInt32 _hubMenuInstanceID;
-		private CHandle<OpenMenuRequest> _previousRequest;
-		private CHandle<OpenMenuRequest> _currentRequest;
-
 		[Ordinal(3)] 
 		[RED("menusData")] 
 		public CHandle<MenuDataBuilder> MenusData
 		{
-			get => GetProperty(ref _menusData);
-			set => SetProperty(ref _menusData, value);
+			get => GetPropertyValue<CHandle<MenuDataBuilder>>();
+			set => SetPropertyValue<CHandle<MenuDataBuilder>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("menuEventDispatcher")] 
 		public CWeakHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
-			get => GetProperty(ref _menuEventDispatcher);
-			set => SetProperty(ref _menuEventDispatcher, value);
+			get => GetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>();
+			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("menuCtrl")] 
 		public CWeakHandle<MenuHubLogicController> MenuCtrl
 		{
-			get => GetProperty(ref _menuCtrl);
-			set => SetProperty(ref _menuCtrl, value);
+			get => GetPropertyValue<CWeakHandle<MenuHubLogicController>>();
+			set => SetPropertyValue<CWeakHandle<MenuHubLogicController>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("metaCtrl")] 
 		public CWeakHandle<MetaQuestLogicController> MetaCtrl
 		{
-			get => GetProperty(ref _metaCtrl);
-			set => SetProperty(ref _metaCtrl, value);
+			get => GetPropertyValue<CWeakHandle<MetaQuestLogicController>>();
+			set => SetPropertyValue<CWeakHandle<MetaQuestLogicController>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("subMenuCtrl")] 
 		public CWeakHandle<SubMenuPanelLogicController> SubMenuCtrl
 		{
-			get => GetProperty(ref _subMenuCtrl);
-			set => SetProperty(ref _subMenuCtrl, value);
+			get => GetPropertyValue<CWeakHandle<SubMenuPanelLogicController>>();
+			set => SetPropertyValue<CWeakHandle<SubMenuPanelLogicController>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("timeCtrl")] 
 		public CWeakHandle<HubTimeSkipController> TimeCtrl
 		{
-			get => GetProperty(ref _timeCtrl);
-			set => SetProperty(ref _timeCtrl, value);
+			get => GetPropertyValue<CWeakHandle<HubTimeSkipController>>();
+			set => SetPropertyValue<CWeakHandle<HubTimeSkipController>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
-			get => GetProperty(ref _player);
-			set => SetProperty(ref _player, value);
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("playerDevSystem")] 
 		public CHandle<PlayerDevelopmentSystem> PlayerDevSystem
 		{
-			get => GetProperty(ref _playerDevSystem);
-			set => SetProperty(ref _playerDevSystem, value);
+			get => GetPropertyValue<CHandle<PlayerDevelopmentSystem>>();
+			set => SetPropertyValue<CHandle<PlayerDevelopmentSystem>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("transaction")] 
 		public CHandle<gameTransactionSystem> Transaction
 		{
-			get => GetProperty(ref _transaction);
-			set => SetProperty(ref _transaction, value);
+			get => GetPropertyValue<CHandle<gameTransactionSystem>>();
+			set => SetPropertyValue<CHandle<gameTransactionSystem>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("playerStatsBlackboard")] 
 		public CWeakHandle<gameIBlackboard> PlayerStatsBlackboard
 		{
-			get => GetProperty(ref _playerStatsBlackboard);
-			set => SetProperty(ref _playerStatsBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("hubMenuBlackboard")] 
 		public CWeakHandle<gameIBlackboard> HubMenuBlackboard
 		{
-			get => GetProperty(ref _hubMenuBlackboard);
-			set => SetProperty(ref _hubMenuBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("characterCredListener")] 
 		public CHandle<redCallbackObject> CharacterCredListener
 		{
-			get => GetProperty(ref _characterCredListener);
-			set => SetProperty(ref _characterCredListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("characterLevelListener")] 
 		public CHandle<redCallbackObject> CharacterLevelListener
 		{
-			get => GetProperty(ref _characterLevelListener);
-			set => SetProperty(ref _characterLevelListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("characterCurrentXPListener")] 
 		public CHandle<redCallbackObject> CharacterCurrentXPListener
 		{
-			get => GetProperty(ref _characterCurrentXPListener);
-			set => SetProperty(ref _characterCurrentXPListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("characterCredPointsListener")] 
 		public CHandle<redCallbackObject> CharacterCredPointsListener
 		{
-			get => GetProperty(ref _characterCredPointsListener);
-			set => SetProperty(ref _characterCredPointsListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("weightListener")] 
 		public CHandle<redCallbackObject> WeightListener
 		{
-			get => GetProperty(ref _weightListener);
-			set => SetProperty(ref _weightListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("maxWeightListener")] 
 		public CHandle<redCallbackObject> MaxWeightListener
 		{
-			get => GetProperty(ref _maxWeightListener);
-			set => SetProperty(ref _maxWeightListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("submenuHiddenListener")] 
 		public CHandle<redCallbackObject> SubmenuHiddenListener
 		{
-			get => GetProperty(ref _submenuHiddenListener);
-			set => SetProperty(ref _submenuHiddenListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("metaQuestStatusListener")] 
 		public CHandle<redCallbackObject> MetaQuestStatusListener
 		{
-			get => GetProperty(ref _metaQuestStatusListener);
-			set => SetProperty(ref _metaQuestStatusListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("journalManager")] 
 		public CWeakHandle<gameJournalManager> JournalManager
 		{
-			get => GetProperty(ref _journalManager);
-			set => SetProperty(ref _journalManager, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalManager>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("trackedEntry")] 
 		public CWeakHandle<gameJournalQuestObjective> TrackedEntry
 		{
-			get => GetProperty(ref _trackedEntry);
-			set => SetProperty(ref _trackedEntry, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalQuestObjective>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalQuestObjective>>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("trackedPhase")] 
 		public CWeakHandle<gameJournalQuestPhase> TrackedPhase
 		{
-			get => GetProperty(ref _trackedPhase);
-			set => SetProperty(ref _trackedPhase, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalQuestPhase>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalQuestPhase>>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("trackedQuest")] 
 		public CWeakHandle<gameJournalQuest> TrackedQuest
 		{
-			get => GetProperty(ref _trackedQuest);
-			set => SetProperty(ref _trackedQuest, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalQuest>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalQuest>>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("notificationRoot")] 
 		public inkWidgetReference NotificationRoot
 		{
-			get => GetProperty(ref _notificationRoot);
-			set => SetProperty(ref _notificationRoot, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("buttonHintsManagerRef")] 
 		public inkWidgetReference ButtonHintsManagerRef
 		{
-			get => GetProperty(ref _buttonHintsManagerRef);
-			set => SetProperty(ref _buttonHintsManagerRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("bgFluff")] 
 		public inkWidgetReference BgFluff
 		{
-			get => GetProperty(ref _bgFluff);
-			set => SetProperty(ref _bgFluff, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("dataManager")] 
 		public CHandle<PlayerDevelopmentDataManager> DataManager
 		{
-			get => GetProperty(ref _dataManager);
-			set => SetProperty(ref _dataManager, value);
+			get => GetPropertyValue<CHandle<PlayerDevelopmentDataManager>>();
+			set => SetPropertyValue<CHandle<PlayerDevelopmentDataManager>>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
-			get => GetProperty(ref _buttonHintsController);
-			set => SetProperty(ref _buttonHintsController, value);
+			get => GetPropertyValue<CWeakHandle<ButtonHints>>();
+			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("gameTimeContainer")] 
 		public inkWidgetReference GameTimeContainer
 		{
-			get => GetProperty(ref _gameTimeContainer);
-			set => SetProperty(ref _gameTimeContainer, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("gameTimeController")] 
 		public CWeakHandle<gameuiTimeDisplayLogicController> GameTimeController
 		{
-			get => GetProperty(ref _gameTimeController);
-			set => SetProperty(ref _gameTimeController, value);
+			get => GetPropertyValue<CWeakHandle<gameuiTimeDisplayLogicController>>();
+			set => SetPropertyValue<CWeakHandle<gameuiTimeDisplayLogicController>>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("inventoryListener")] 
 		public CHandle<gameInventoryScriptListener> InventoryListener
 		{
-			get => GetProperty(ref _inventoryListener);
-			set => SetProperty(ref _inventoryListener, value);
+			get => GetPropertyValue<CHandle<gameInventoryScriptListener>>();
+			set => SetPropertyValue<CHandle<gameInventoryScriptListener>>(value);
 		}
 
 		[Ordinal(34)] 
 		[RED("callback")] 
 		public CHandle<CurrencyUpdateCallback> Callback
 		{
-			get => GetProperty(ref _callback);
-			set => SetProperty(ref _callback, value);
+			get => GetPropertyValue<CHandle<CurrencyUpdateCallback>>();
+			set => SetPropertyValue<CHandle<CurrencyUpdateCallback>>(value);
 		}
 
 		[Ordinal(35)] 
 		[RED("hubMenuInstanceID")] 
 		public CUInt32 HubMenuInstanceID
 		{
-			get => GetProperty(ref _hubMenuInstanceID);
-			set => SetProperty(ref _hubMenuInstanceID, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(36)] 
 		[RED("previousRequest")] 
 		public CHandle<OpenMenuRequest> PreviousRequest
 		{
-			get => GetProperty(ref _previousRequest);
-			set => SetProperty(ref _previousRequest, value);
+			get => GetPropertyValue<CHandle<OpenMenuRequest>>();
+			set => SetPropertyValue<CHandle<OpenMenuRequest>>(value);
 		}
 
 		[Ordinal(37)] 
 		[RED("currentRequest")] 
 		public CHandle<OpenMenuRequest> CurrentRequest
 		{
-			get => GetProperty(ref _currentRequest);
-			set => SetProperty(ref _currentRequest, value);
+			get => GetPropertyValue<CHandle<OpenMenuRequest>>();
+			set => SetPropertyValue<CHandle<OpenMenuRequest>>(value);
+		}
+
+		public MenuHubGameController()
+		{
+			NotificationRoot = new();
+			ButtonHintsManagerRef = new();
+			BgFluff = new();
+			GameTimeContainer = new();
 		}
 	}
 }

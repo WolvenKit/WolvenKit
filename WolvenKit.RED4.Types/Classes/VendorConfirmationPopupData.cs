@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VendorConfirmationPopupData : inkGameNotificationData
 	{
-		private InventoryItemData _itemData;
-		private CInt32 _quantity;
-		private CEnum<VendorConfirmationPopupType> _type;
-		private CInt32 _price;
-
 		[Ordinal(6)] 
 		[RED("itemData")] 
 		public InventoryItemData ItemData
 		{
-			get => GetProperty(ref _itemData);
-			set => SetProperty(ref _itemData, value);
+			get => GetPropertyValue<InventoryItemData>();
+			set => SetPropertyValue<InventoryItemData>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("quantity")] 
 		public CInt32 Quantity
 		{
-			get => GetProperty(ref _quantity);
-			set => SetProperty(ref _quantity, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("type")] 
 		public CEnum<VendorConfirmationPopupType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<VendorConfirmationPopupType>>();
+			set => SetPropertyValue<CEnum<VendorConfirmationPopupType>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("price")] 
 		public CInt32 Price
 		{
-			get => GetProperty(ref _price);
-			set => SetProperty(ref _price, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		public VendorConfirmationPopupData()
+		{
+			ItemData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
 		}
 	}
 }

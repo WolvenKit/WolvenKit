@@ -5,146 +5,130 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WeakspotOnDestroyProperties : RedBaseClass
 	{
-		private CBool _isInternal;
-		private CBool _disableInteraction;
-		private CBool _destroyMesh;
-		private CBool _disableCollider;
-		private CName _hideMeshParameterValue;
-		private CBool _playHitFxFromOwnerEntity;
-		private CBool _playDestroyedFxFromOwnerEntity;
-		private CBool _playBrokenFxFromOwnerEntity;
-		private CName _addFact;
-		private CName _sendAIActionAnimFeatureName;
-		private CInt32 _sendAIActionAnimFeatureState;
-		private CFloat _destroyDelay;
-		private CBool _useWeakspotDestroyStageVFX;
-		private TweakDBID _attackRecordID;
-		private TweakDBID _statusEffectOnDestroyID;
-
 		[Ordinal(0)] 
 		[RED("isInternal")] 
 		public CBool IsInternal
 		{
-			get => GetProperty(ref _isInternal);
-			set => SetProperty(ref _isInternal, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("disableInteraction")] 
 		public CBool DisableInteraction
 		{
-			get => GetProperty(ref _disableInteraction);
-			set => SetProperty(ref _disableInteraction, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("destroyMesh")] 
 		public CBool DestroyMesh
 		{
-			get => GetProperty(ref _destroyMesh);
-			set => SetProperty(ref _destroyMesh, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("disableCollider")] 
 		public CBool DisableCollider
 		{
-			get => GetProperty(ref _disableCollider);
-			set => SetProperty(ref _disableCollider, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("hideMeshParameterValue")] 
 		public CName HideMeshParameterValue
 		{
-			get => GetProperty(ref _hideMeshParameterValue);
-			set => SetProperty(ref _hideMeshParameterValue, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("playHitFxFromOwnerEntity")] 
 		public CBool PlayHitFxFromOwnerEntity
 		{
-			get => GetProperty(ref _playHitFxFromOwnerEntity);
-			set => SetProperty(ref _playHitFxFromOwnerEntity, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("playDestroyedFxFromOwnerEntity")] 
 		public CBool PlayDestroyedFxFromOwnerEntity
 		{
-			get => GetProperty(ref _playDestroyedFxFromOwnerEntity);
-			set => SetProperty(ref _playDestroyedFxFromOwnerEntity, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("playBrokenFxFromOwnerEntity")] 
 		public CBool PlayBrokenFxFromOwnerEntity
 		{
-			get => GetProperty(ref _playBrokenFxFromOwnerEntity);
-			set => SetProperty(ref _playBrokenFxFromOwnerEntity, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("addFact")] 
 		public CName AddFact
 		{
-			get => GetProperty(ref _addFact);
-			set => SetProperty(ref _addFact, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("sendAIActionAnimFeatureName")] 
 		public CName SendAIActionAnimFeatureName
 		{
-			get => GetProperty(ref _sendAIActionAnimFeatureName);
-			set => SetProperty(ref _sendAIActionAnimFeatureName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("sendAIActionAnimFeatureState")] 
 		public CInt32 SendAIActionAnimFeatureState
 		{
-			get => GetProperty(ref _sendAIActionAnimFeatureState);
-			set => SetProperty(ref _sendAIActionAnimFeatureState, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("destroyDelay")] 
 		public CFloat DestroyDelay
 		{
-			get => GetProperty(ref _destroyDelay);
-			set => SetProperty(ref _destroyDelay, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("useWeakspotDestroyStageVFX")] 
 		public CBool UseWeakspotDestroyStageVFX
 		{
-			get => GetProperty(ref _useWeakspotDestroyStageVFX);
-			set => SetProperty(ref _useWeakspotDestroyStageVFX, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("attackRecordID")] 
 		public TweakDBID AttackRecordID
 		{
-			get => GetProperty(ref _attackRecordID);
-			set => SetProperty(ref _attackRecordID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("StatusEffectOnDestroyID")] 
 		public TweakDBID StatusEffectOnDestroyID
 		{
-			get => GetProperty(ref _statusEffectOnDestroyID);
-			set => SetProperty(ref _statusEffectOnDestroyID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		public WeakspotOnDestroyProperties()
 		{
-			_disableInteraction = true;
-			_destroyMesh = true;
+			DisableInteraction = true;
+			DestroyMesh = true;
 		}
 	}
 }

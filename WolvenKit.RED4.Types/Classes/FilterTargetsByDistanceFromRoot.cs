@@ -5,29 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class FilterTargetsByDistanceFromRoot : gameEffectObjectSingleFilter_Scripted
 	{
-		private CFloat _rootOffset_Z;
-		private CFloat _tollerance;
-
 		[Ordinal(0)] 
 		[RED("rootOffset_Z")] 
 		public CFloat RootOffset_Z
 		{
-			get => GetProperty(ref _rootOffset_Z);
-			set => SetProperty(ref _rootOffset_Z, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("tollerance")] 
 		public CFloat Tollerance
 		{
-			get => GetProperty(ref _tollerance);
-			set => SetProperty(ref _tollerance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public FilterTargetsByDistanceFromRoot()
 		{
-			_rootOffset_Z = 1.000000F;
-			_tollerance = 0.500000F;
+			RootOffset_Z = 1.000000F;
+			Tollerance = 0.500000F;
 		}
 	}
 }

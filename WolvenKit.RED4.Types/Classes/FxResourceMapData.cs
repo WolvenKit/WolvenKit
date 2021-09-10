@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class FxResourceMapData : RedBaseClass
 	{
-		private CName _key;
-		private gameFxResource _resource;
-
 		[Ordinal(0)] 
 		[RED("key")] 
 		public CName Key
 		{
-			get => GetProperty(ref _key);
-			set => SetProperty(ref _key, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("resource")] 
 		public gameFxResource Resource
 		{
-			get => GetProperty(ref _resource);
-			set => SetProperty(ref _resource, value);
+			get => GetPropertyValue<gameFxResource>();
+			set => SetPropertyValue<gameFxResource>(value);
+		}
+
+		public FxResourceMapData()
+		{
+			Resource = new();
 		}
 	}
 }

@@ -5,56 +5,50 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimationImportInfo : RedBaseClass
 	{
-		private CEnum<animAnimationType> _animationType;
-		private CEnum<animcompressionBufferTypePreset> _bufferType;
-		private CEnum<animcompressionQualityPreset> _compressionPreset;
-		private CEnum<animcompressionFrameratePreset> _frameratePreset;
-		private CEnum<animEMotionExtractionCompressionType> _motionExtractionCompression;
-
 		[Ordinal(0)] 
 		[RED("AnimationType")] 
 		public CEnum<animAnimationType> AnimationType
 		{
-			get => GetProperty(ref _animationType);
-			set => SetProperty(ref _animationType, value);
+			get => GetPropertyValue<CEnum<animAnimationType>>();
+			set => SetPropertyValue<CEnum<animAnimationType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("BufferType")] 
 		public CEnum<animcompressionBufferTypePreset> BufferType
 		{
-			get => GetProperty(ref _bufferType);
-			set => SetProperty(ref _bufferType, value);
+			get => GetPropertyValue<CEnum<animcompressionBufferTypePreset>>();
+			set => SetPropertyValue<CEnum<animcompressionBufferTypePreset>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("CompressionPreset")] 
 		public CEnum<animcompressionQualityPreset> CompressionPreset
 		{
-			get => GetProperty(ref _compressionPreset);
-			set => SetProperty(ref _compressionPreset, value);
+			get => GetPropertyValue<CEnum<animcompressionQualityPreset>>();
+			set => SetPropertyValue<CEnum<animcompressionQualityPreset>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("FrameratePreset")] 
 		public CEnum<animcompressionFrameratePreset> FrameratePreset
 		{
-			get => GetProperty(ref _frameratePreset);
-			set => SetProperty(ref _frameratePreset, value);
+			get => GetPropertyValue<CEnum<animcompressionFrameratePreset>>();
+			set => SetPropertyValue<CEnum<animcompressionFrameratePreset>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("MotionExtractionCompression")] 
 		public CEnum<animEMotionExtractionCompressionType> MotionExtractionCompression
 		{
-			get => GetProperty(ref _motionExtractionCompression);
-			set => SetProperty(ref _motionExtractionCompression, value);
+			get => GetPropertyValue<CEnum<animEMotionExtractionCompressionType>>();
+			set => SetPropertyValue<CEnum<animEMotionExtractionCompressionType>>(value);
 		}
 
 		public animAnimationImportInfo()
 		{
-			_compressionPreset = new() { Value = Enums.animcompressionQualityPreset.MID };
-			_motionExtractionCompression = new() { Value = Enums.animEMotionExtractionCompressionType.EMECT_SPLINE_MID };
+			CompressionPreset = Enums.animcompressionQualityPreset.MID;
+			MotionExtractionCompression = Enums.animEMotionExtractionCompressionType.EMECT_SPLINE_MID;
 		}
 	}
 }

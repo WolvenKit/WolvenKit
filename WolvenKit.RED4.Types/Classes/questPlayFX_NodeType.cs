@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questPlayFX_NodeType : questIFXManagerNodeType
 	{
-		private CArray<questPlayFX_NodeTypeParams> _params;
-
 		[Ordinal(0)] 
 		[RED("params")] 
 		public CArray<questPlayFX_NodeTypeParams> Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<CArray<questPlayFX_NodeTypeParams>>();
+			set => SetPropertyValue<CArray<questPlayFX_NodeTypeParams>>(value);
+		}
+
+		public questPlayFX_NodeType()
+		{
+			Params = new() { new() };
 		}
 	}
 }

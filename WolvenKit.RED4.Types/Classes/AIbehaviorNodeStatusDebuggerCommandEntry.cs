@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorNodeStatusDebuggerCommandEntry : RedBaseClass
 	{
-		private CGUID _nodeId;
-		private CEnum<AIbehaviorDebugNodeStatus> _status;
-		private CUInt32 _generation;
-		private CHandle<gamedebugFailure> _failure;
-
 		[Ordinal(0)] 
 		[RED("nodeId")] 
-		public CGUID NodeId
+		public CGuid NodeId
 		{
-			get => GetProperty(ref _nodeId);
-			set => SetProperty(ref _nodeId, value);
+			get => GetPropertyValue<CGuid>();
+			set => SetPropertyValue<CGuid>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("status")] 
 		public CEnum<AIbehaviorDebugNodeStatus> Status
 		{
-			get => GetProperty(ref _status);
-			set => SetProperty(ref _status, value);
+			get => GetPropertyValue<CEnum<AIbehaviorDebugNodeStatus>>();
+			set => SetPropertyValue<CEnum<AIbehaviorDebugNodeStatus>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("generation")] 
 		public CUInt32 Generation
 		{
-			get => GetProperty(ref _generation);
-			set => SetProperty(ref _generation, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("failure")] 
 		public CHandle<gamedebugFailure> Failure
 		{
-			get => GetProperty(ref _failure);
-			set => SetProperty(ref _failure, value);
+			get => GetPropertyValue<CHandle<gamedebugFailure>>();
+			set => SetPropertyValue<CHandle<gamedebugFailure>>(value);
 		}
 	}
 }

@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_HumanIk : animAnimNode_OnePoseInput
 	{
-		private CArray<animTEMP_IKTargetsControllerBodyType> _ikTargetsControllers;
-
 		[Ordinal(12)] 
 		[RED("ikTargetsControllers")] 
 		public CArray<animTEMP_IKTargetsControllerBodyType> IkTargetsControllers
 		{
-			get => GetProperty(ref _ikTargetsControllers);
-			set => SetProperty(ref _ikTargetsControllers, value);
+			get => GetPropertyValue<CArray<animTEMP_IKTargetsControllerBodyType>>();
+			set => SetPropertyValue<CArray<animTEMP_IKTargetsControllerBodyType>>(value);
+		}
+
+		public animAnimNode_HumanIk()
+		{
+			Id = 4294967295;
+			InputLink = new();
+			IkTargetsControllers = new();
 		}
 	}
 }

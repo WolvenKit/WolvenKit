@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioWeaponHandlingSettings : RedBaseClass
 	{
-		private CName _equipEvent;
-		private CName _unequipStartedEvent;
-		private CName _unequippedEvent;
-
 		[Ordinal(0)] 
 		[RED("equipEvent")] 
 		public CName EquipEvent
 		{
-			get => GetProperty(ref _equipEvent);
-			set => SetProperty(ref _equipEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("unequipStartedEvent")] 
 		public CName UnequipStartedEvent
 		{
-			get => GetProperty(ref _unequipStartedEvent);
-			set => SetProperty(ref _unequipStartedEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("unequippedEvent")] 
 		public CName UnequippedEvent
 		{
-			get => GetProperty(ref _unequippedEvent);
-			set => SetProperty(ref _unequippedEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 	}
 }

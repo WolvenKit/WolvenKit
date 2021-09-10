@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameJournalPhoneConversation : gameJournalContainerEntry
 	{
-		private LocalizationString _title;
-
 		[Ordinal(2)] 
 		[RED("title")] 
 		public LocalizationString Title
 		{
-			get => GetProperty(ref _title);
-			set => SetProperty(ref _title, value);
+			get => GetPropertyValue<LocalizationString>();
+			set => SetPropertyValue<LocalizationString>(value);
+		}
+
+		public gameJournalPhoneConversation()
+		{
+			Entries = new();
+			Title = new() { Unk1 = 0, Value = "" };
 		}
 	}
 }

@@ -5,46 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animCorrectivePoseEntry : RedBaseClass
 	{
-		private CName _comparePose;
-		private CName _correctivePose;
-		private CArray<CName> _jointsToCompare;
-		private CBool _enabled;
-
 		[Ordinal(0)] 
 		[RED("comparePose")] 
 		public CName ComparePose
 		{
-			get => GetProperty(ref _comparePose);
-			set => SetProperty(ref _comparePose, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("correctivePose")] 
 		public CName CorrectivePose
 		{
-			get => GetProperty(ref _correctivePose);
-			set => SetProperty(ref _correctivePose, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("jointsToCompare")] 
 		public CArray<CName> JointsToCompare
 		{
-			get => GetProperty(ref _jointsToCompare);
-			set => SetProperty(ref _jointsToCompare, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("enabled")] 
 		public CBool Enabled
 		{
-			get => GetProperty(ref _enabled);
-			set => SetProperty(ref _enabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public animCorrectivePoseEntry()
 		{
-			_enabled = true;
+			JointsToCompare = new();
+			Enabled = true;
 		}
 	}
 }

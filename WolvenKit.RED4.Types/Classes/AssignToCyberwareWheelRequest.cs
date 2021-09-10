@@ -5,28 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AssignToCyberwareWheelRequest : gamePlayerScriptableSystemRequest
 	{
-		private gameItemID _itemID;
-		private CInt32 _slotIndex;
-
 		[Ordinal(1)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get => GetProperty(ref _itemID);
-			set => SetProperty(ref _itemID, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("slotIndex")] 
 		public CInt32 SlotIndex
 		{
-			get => GetProperty(ref _slotIndex);
-			set => SetProperty(ref _slotIndex, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		public AssignToCyberwareWheelRequest()
 		{
-			_slotIndex = -1;
+			ItemID = new();
+			SlotIndex = -1;
 		}
 	}
 }

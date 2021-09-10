@@ -5,75 +5,72 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entSkinnedClothComponent : entISkinTargetComponent
 	{
-		private CResourceAsyncReference<CMesh> _graphicsMesh;
-		private CResourceAsyncReference<CMesh> _physicalMesh;
-		private CBool _isEnabled;
-		private CEnum<entMeshComponentLODMode> _lODMode;
-		private CName _meshAppearance;
-		private CUInt64 _chunkMask;
-		private meshCookedClothMeshTopologyData _compiledTopologyData;
-
 		[Ordinal(10)] 
 		[RED("graphicsMesh")] 
 		public CResourceAsyncReference<CMesh> GraphicsMesh
 		{
-			get => GetProperty(ref _graphicsMesh);
-			set => SetProperty(ref _graphicsMesh, value);
+			get => GetPropertyValue<CResourceAsyncReference<CMesh>>();
+			set => SetPropertyValue<CResourceAsyncReference<CMesh>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("physicalMesh")] 
 		public CResourceAsyncReference<CMesh> PhysicalMesh
 		{
-			get => GetProperty(ref _physicalMesh);
-			set => SetProperty(ref _physicalMesh, value);
+			get => GetPropertyValue<CResourceAsyncReference<CMesh>>();
+			set => SetPropertyValue<CResourceAsyncReference<CMesh>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("LODMode")] 
 		public CEnum<entMeshComponentLODMode> LODMode
 		{
-			get => GetProperty(ref _lODMode);
-			set => SetProperty(ref _lODMode, value);
+			get => GetPropertyValue<CEnum<entMeshComponentLODMode>>();
+			set => SetPropertyValue<CEnum<entMeshComponentLODMode>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("meshAppearance")] 
 		public CName MeshAppearance
 		{
-			get => GetProperty(ref _meshAppearance);
-			set => SetProperty(ref _meshAppearance, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("chunkMask")] 
 		public CUInt64 ChunkMask
 		{
-			get => GetProperty(ref _chunkMask);
-			set => SetProperty(ref _chunkMask, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("compiledTopologyData")] 
 		public meshCookedClothMeshTopologyData CompiledTopologyData
 		{
-			get => GetProperty(ref _compiledTopologyData);
-			set => SetProperty(ref _compiledTopologyData, value);
+			get => GetPropertyValue<meshCookedClothMeshTopologyData>();
+			set => SetPropertyValue<meshCookedClothMeshTopologyData>(value);
 		}
 
 		public entSkinnedClothComponent()
 		{
-			_isEnabled = true;
-			_meshAppearance = "default";
-			_chunkMask = 18446744073709551615;
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
+			ForceLODLevel = -1;
+			IsEnabled = true;
+			MeshAppearance = "default";
+			ChunkMask = 18446744073709551615;
+			CompiledTopologyData = new() { GfxIndexToTriangles = new(), PhxIndexToTriangles = new(), GfxBarycentrics = new(), PhxBarycentrics = new(), PhxLodSwitchData = new(), PhxSimulated = new() };
 		}
 	}
 }

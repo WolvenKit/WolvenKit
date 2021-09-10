@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameeventsUserEnteredCoverEvent : redEvent
 	{
-		private CArray<WorldTransform> _actionsPoints;
-
 		[Ordinal(0)] 
 		[RED("actionsPoints")] 
 		public CArray<WorldTransform> ActionsPoints
 		{
-			get => GetProperty(ref _actionsPoints);
-			set => SetProperty(ref _actionsPoints, value);
+			get => GetPropertyValue<CArray<WorldTransform>>();
+			set => SetPropertyValue<CArray<WorldTransform>>(value);
+		}
+
+		public gameeventsUserEnteredCoverEvent()
+		{
+			ActionsPoints = new();
 		}
 	}
 }

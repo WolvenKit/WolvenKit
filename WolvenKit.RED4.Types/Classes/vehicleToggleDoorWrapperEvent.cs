@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class vehicleToggleDoorWrapperEvent : redEvent
 	{
-		private CEnum<vehicleEQuestVehicleDoorState> _action;
-		private CEnum<vehicleEVehicleDoor> _door;
-
 		[Ordinal(0)] 
 		[RED("action")] 
 		public CEnum<vehicleEQuestVehicleDoorState> Action
 		{
-			get => GetProperty(ref _action);
-			set => SetProperty(ref _action, value);
+			get => GetPropertyValue<CEnum<vehicleEQuestVehicleDoorState>>();
+			set => SetPropertyValue<CEnum<vehicleEQuestVehicleDoorState>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("door")] 
 		public CEnum<vehicleEVehicleDoor> Door
 		{
-			get => GetProperty(ref _door);
-			set => SetProperty(ref _door, value);
+			get => GetPropertyValue<CEnum<vehicleEVehicleDoor>>();
+			set => SetPropertyValue<CEnum<vehicleEVehicleDoor>>(value);
 		}
 	}
 }

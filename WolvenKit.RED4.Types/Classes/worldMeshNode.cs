@@ -5,115 +5,103 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldMeshNode : worldNode
 	{
-		private CResourceAsyncReference<CMesh> _mesh;
-		private CName _meshAppearance;
-		private CFloat _forceAutoHideDistance;
-		private CEnum<visWorldOccluderType> _occluderType;
-		private CUInt8 _occluderAutohideDistanceScale;
-		private CBool _castShadows;
-		private CBool _castLocalShadows;
-		private CBool _windImpulseEnabled;
-		private CBool _removeFromRainMap;
-		private CEnum<RenderSceneLayerMask> _renderSceneLayerMask;
-		private CUInt32 _lodLevelScales;
-
 		[Ordinal(4)] 
 		[RED("mesh")] 
 		public CResourceAsyncReference<CMesh> Mesh
 		{
-			get => GetProperty(ref _mesh);
-			set => SetProperty(ref _mesh, value);
+			get => GetPropertyValue<CResourceAsyncReference<CMesh>>();
+			set => SetPropertyValue<CResourceAsyncReference<CMesh>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("meshAppearance")] 
 		public CName MeshAppearance
 		{
-			get => GetProperty(ref _meshAppearance);
-			set => SetProperty(ref _meshAppearance, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("forceAutoHideDistance")] 
 		public CFloat ForceAutoHideDistance
 		{
-			get => GetProperty(ref _forceAutoHideDistance);
-			set => SetProperty(ref _forceAutoHideDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("occluderType")] 
 		public CEnum<visWorldOccluderType> OccluderType
 		{
-			get => GetProperty(ref _occluderType);
-			set => SetProperty(ref _occluderType, value);
+			get => GetPropertyValue<CEnum<visWorldOccluderType>>();
+			set => SetPropertyValue<CEnum<visWorldOccluderType>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("occluderAutohideDistanceScale")] 
 		public CUInt8 OccluderAutohideDistanceScale
 		{
-			get => GetProperty(ref _occluderAutohideDistanceScale);
-			set => SetProperty(ref _occluderAutohideDistanceScale, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("castShadows")] 
 		public CBool CastShadows
 		{
-			get => GetProperty(ref _castShadows);
-			set => SetProperty(ref _castShadows, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("castLocalShadows")] 
 		public CBool CastLocalShadows
 		{
-			get => GetProperty(ref _castLocalShadows);
-			set => SetProperty(ref _castLocalShadows, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("windImpulseEnabled")] 
 		public CBool WindImpulseEnabled
 		{
-			get => GetProperty(ref _windImpulseEnabled);
-			set => SetProperty(ref _windImpulseEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("removeFromRainMap")] 
 		public CBool RemoveFromRainMap
 		{
-			get => GetProperty(ref _removeFromRainMap);
-			set => SetProperty(ref _removeFromRainMap, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("renderSceneLayerMask")] 
-		public CEnum<RenderSceneLayerMask> RenderSceneLayerMask
+		public CBitField<RenderSceneLayerMask> RenderSceneLayerMask
 		{
-			get => GetProperty(ref _renderSceneLayerMask);
-			set => SetProperty(ref _renderSceneLayerMask, value);
+			get => GetPropertyValue<CBitField<RenderSceneLayerMask>>();
+			set => SetPropertyValue<CBitField<RenderSceneLayerMask>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("lodLevelScales")] 
 		public CUInt32 LodLevelScales
 		{
-			get => GetProperty(ref _lodLevelScales);
-			set => SetProperty(ref _lodLevelScales, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		public worldMeshNode()
 		{
-			_meshAppearance = "default";
-			_occluderAutohideDistanceScale = 255;
-			_castShadows = true;
-			_castLocalShadows = true;
-			_windImpulseEnabled = true;
-			_renderSceneLayerMask = new() { Value = Enums.RenderSceneLayerMask.Default };
-			_lodLevelScales = 4294967295;
+			MeshAppearance = "default";
+			OccluderAutohideDistanceScale = 255;
+			CastShadows = true;
+			CastLocalShadows = true;
+			WindImpulseEnabled = true;
+			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
+			LodLevelScales = 4294967295;
 		}
 	}
 }

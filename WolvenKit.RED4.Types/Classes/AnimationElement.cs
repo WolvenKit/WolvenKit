@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AnimationElement : RedBaseClass
 	{
-		private CName _animation;
-		private inkanimPlaybackOptions _animOptions;
-
 		[Ordinal(0)] 
 		[RED("animation")] 
 		public CName Animation
 		{
-			get => GetProperty(ref _animation);
-			set => SetProperty(ref _animation, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("animOptions")] 
 		public inkanimPlaybackOptions AnimOptions
 		{
-			get => GetProperty(ref _animOptions);
-			set => SetProperty(ref _animOptions, value);
+			get => GetPropertyValue<inkanimPlaybackOptions>();
+			set => SetPropertyValue<inkanimPlaybackOptions>(value);
+		}
+
+		public AnimationElement()
+		{
+			AnimOptions = new();
 		}
 	}
 }

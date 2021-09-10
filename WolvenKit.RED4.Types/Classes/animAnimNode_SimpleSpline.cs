@@ -5,82 +5,80 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_SimpleSpline : animAnimNode_OnePoseInput
 	{
-		private CBool _areSourceChannelsResaved;
-		private animTransformIndex _startTransform;
-		private animTransformIndex _middleTransform;
-		private animTransformIndex _endTransform;
-		private animTransformIndex _constrainedTransform;
-		private CEnum<animConstraintWeightMode> _progressMode;
-		private CFloat _defaultProgress;
-		private animNamedTrackIndex _progressTrack;
-
 		[Ordinal(12)] 
 		[RED("areSourceChannelsResaved")] 
 		public CBool AreSourceChannelsResaved
 		{
-			get => GetProperty(ref _areSourceChannelsResaved);
-			set => SetProperty(ref _areSourceChannelsResaved, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("startTransform")] 
 		public animTransformIndex StartTransform
 		{
-			get => GetProperty(ref _startTransform);
-			set => SetProperty(ref _startTransform, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("middleTransform")] 
 		public animTransformIndex MiddleTransform
 		{
-			get => GetProperty(ref _middleTransform);
-			set => SetProperty(ref _middleTransform, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("endTransform")] 
 		public animTransformIndex EndTransform
 		{
-			get => GetProperty(ref _endTransform);
-			set => SetProperty(ref _endTransform, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("constrainedTransform")] 
 		public animTransformIndex ConstrainedTransform
 		{
-			get => GetProperty(ref _constrainedTransform);
-			set => SetProperty(ref _constrainedTransform, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("progressMode")] 
 		public CEnum<animConstraintWeightMode> ProgressMode
 		{
-			get => GetProperty(ref _progressMode);
-			set => SetProperty(ref _progressMode, value);
+			get => GetPropertyValue<CEnum<animConstraintWeightMode>>();
+			set => SetPropertyValue<CEnum<animConstraintWeightMode>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("defaultProgress")] 
 		public CFloat DefaultProgress
 		{
-			get => GetProperty(ref _defaultProgress);
-			set => SetProperty(ref _defaultProgress, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("progressTrack")] 
 		public animNamedTrackIndex ProgressTrack
 		{
-			get => GetProperty(ref _progressTrack);
-			set => SetProperty(ref _progressTrack, value);
+			get => GetPropertyValue<animNamedTrackIndex>();
+			set => SetPropertyValue<animNamedTrackIndex>(value);
 		}
 
 		public animAnimNode_SimpleSpline()
 		{
-			_defaultProgress = 0.500000F;
+			Id = 4294967295;
+			InputLink = new();
+			StartTransform = new();
+			MiddleTransform = new();
+			EndTransform = new();
+			ConstrainedTransform = new();
+			DefaultProgress = 0.500000F;
+			ProgressTrack = new();
 		}
 	}
 }

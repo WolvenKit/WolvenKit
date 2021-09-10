@@ -5,19 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_SetRequiredDistanceCategory : animAnimNode_OnePoseInput
 	{
-		private CUInt32 _requiredQualityDistanceCategory;
-
 		[Ordinal(12)] 
 		[RED("requiredQualityDistanceCategory")] 
 		public CUInt32 RequiredQualityDistanceCategory
 		{
-			get => GetProperty(ref _requiredQualityDistanceCategory);
-			set => SetProperty(ref _requiredQualityDistanceCategory, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		public animAnimNode_SetRequiredDistanceCategory()
 		{
-			_requiredQualityDistanceCategory = 4;
+			Id = 4294967295;
+			InputLink = new();
+			RequiredQualityDistanceCategory = 4;
 		}
 	}
 }

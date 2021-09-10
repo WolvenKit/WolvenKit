@@ -5,23 +5,30 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SearchPatternMappingLookat : AISearchingLookat
 	{
-		private CHandle<AIArgumentMapping> _targetObjectMapping;
-		private CWeakHandle<gameObject> _lookatTargetObject;
-
 		[Ordinal(14)] 
 		[RED("targetObjectMapping")] 
 		public CHandle<AIArgumentMapping> TargetObjectMapping
 		{
-			get => GetProperty(ref _targetObjectMapping);
-			set => SetProperty(ref _targetObjectMapping, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("lookatTargetObject")] 
 		public CWeakHandle<gameObject> LookatTargetObject
 		{
-			get => GetProperty(ref _lookatTargetObject);
-			set => SetProperty(ref _lookatTargetObject, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
+		}
+
+		public SearchPatternMappingLookat()
+		{
+			LookatTarget = new();
+			CurrentLookatTarget = new();
+			CurrentTarget = new();
+			LastTarget = new();
+			SideHorizontal = 1;
+			SideVertical = 1;
 		}
 	}
 }

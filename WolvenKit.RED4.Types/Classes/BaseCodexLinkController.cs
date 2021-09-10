@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class BaseCodexLinkController : inkWidgetLogicController
 	{
-		private inkImageWidgetReference _linkImage;
-		private inkTextWidgetReference _linkLabel;
-		private CHandle<inkanimProxy> _animProxy;
-		private CBool _isInteractive;
-
 		[Ordinal(1)] 
 		[RED("linkImage")] 
 		public inkImageWidgetReference LinkImage
 		{
-			get => GetProperty(ref _linkImage);
-			set => SetProperty(ref _linkImage, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("linkLabel")] 
 		public inkTextWidgetReference LinkLabel
 		{
-			get => GetProperty(ref _linkLabel);
-			set => SetProperty(ref _linkLabel, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
-			get => GetProperty(ref _animProxy);
-			set => SetProperty(ref _animProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("isInteractive")] 
 		public CBool IsInteractive
 		{
-			get => GetProperty(ref _isInteractive);
-			set => SetProperty(ref _isInteractive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public BaseCodexLinkController()
+		{
+			LinkImage = new();
+			LinkLabel = new();
 		}
 	}
 }

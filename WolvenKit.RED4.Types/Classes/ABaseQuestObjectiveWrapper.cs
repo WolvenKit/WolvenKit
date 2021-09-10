@@ -5,50 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ABaseQuestObjectiveWrapper : AJournalEntryWrapper
 	{
-		private CWeakHandle<gameJournalQuestObjectiveBase> _questObjective;
-		private CEnum<gameJournalEntryState> _objectiveStatus;
-		private CBool _isTracked;
-		private CInt32 _currentCounter;
-		private CInt32 _totalCounter;
-
 		[Ordinal(1)] 
 		[RED("questObjective")] 
 		public CWeakHandle<gameJournalQuestObjectiveBase> QuestObjective
 		{
-			get => GetProperty(ref _questObjective);
-			set => SetProperty(ref _questObjective, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalQuestObjectiveBase>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalQuestObjectiveBase>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("objectiveStatus")] 
 		public CEnum<gameJournalEntryState> ObjectiveStatus
 		{
-			get => GetProperty(ref _objectiveStatus);
-			set => SetProperty(ref _objectiveStatus, value);
+			get => GetPropertyValue<CEnum<gameJournalEntryState>>();
+			set => SetPropertyValue<CEnum<gameJournalEntryState>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isTracked")] 
 		public CBool IsTracked
 		{
-			get => GetProperty(ref _isTracked);
-			set => SetProperty(ref _isTracked, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("currentCounter")] 
 		public CInt32 CurrentCounter
 		{
-			get => GetProperty(ref _currentCounter);
-			set => SetProperty(ref _currentCounter, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("totalCounter")] 
 		public CInt32 TotalCounter
 		{
-			get => GetProperty(ref _totalCounter);
-			set => SetProperty(ref _totalCounter, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

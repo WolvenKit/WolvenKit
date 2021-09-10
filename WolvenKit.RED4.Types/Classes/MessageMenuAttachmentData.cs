@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MessageMenuAttachmentData : IScriptable
 	{
-		private CInt32 _entryHash;
-
 		[Ordinal(0)] 
 		[RED("entryHash")] 
 		public CInt32 EntryHash
 		{
-			get => GetProperty(ref _entryHash);
-			set => SetProperty(ref _entryHash, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

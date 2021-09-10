@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameJournalCodexCategory : gameJournalFileEntry
 	{
-		private LocalizationString _categoryName;
-
 		[Ordinal(2)] 
 		[RED("categoryName")] 
 		public LocalizationString CategoryName
 		{
-			get => GetProperty(ref _categoryName);
-			set => SetProperty(ref _categoryName, value);
+			get => GetPropertyValue<LocalizationString>();
+			set => SetPropertyValue<LocalizationString>(value);
+		}
+
+		public gameJournalCodexCategory()
+		{
+			Entries = new();
+			CategoryName = new() { Unk1 = 0, Value = "" };
 		}
 	}
 }

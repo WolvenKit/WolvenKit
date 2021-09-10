@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorFSMTreeNodeDefinition : AIbehaviorTreeNodeDefinition
 	{
-		private CArray<CHandle<AIbehaviorFSMStateDefinition>> _states;
-		private CArray<CHandle<AIbehaviorFSMTransitionDefinition>> _transitions;
-		private CHandle<AIbehaviorFSMStateDefinition> _initialState;
-
 		[Ordinal(0)] 
 		[RED("states")] 
 		public CArray<CHandle<AIbehaviorFSMStateDefinition>> States
 		{
-			get => GetProperty(ref _states);
-			set => SetProperty(ref _states, value);
+			get => GetPropertyValue<CArray<CHandle<AIbehaviorFSMStateDefinition>>>();
+			set => SetPropertyValue<CArray<CHandle<AIbehaviorFSMStateDefinition>>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("transitions")] 
 		public CArray<CHandle<AIbehaviorFSMTransitionDefinition>> Transitions
 		{
-			get => GetProperty(ref _transitions);
-			set => SetProperty(ref _transitions, value);
+			get => GetPropertyValue<CArray<CHandle<AIbehaviorFSMTransitionDefinition>>>();
+			set => SetPropertyValue<CArray<CHandle<AIbehaviorFSMTransitionDefinition>>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("initialState")] 
 		public CHandle<AIbehaviorFSMStateDefinition> InitialState
 		{
-			get => GetProperty(ref _initialState);
-			set => SetProperty(ref _initialState, value);
+			get => GetPropertyValue<CHandle<AIbehaviorFSMStateDefinition>>();
+			set => SetPropertyValue<CHandle<AIbehaviorFSMStateDefinition>>(value);
+		}
+
+		public AIbehaviorFSMTreeNodeDefinition()
+		{
+			States = new();
+			Transitions = new();
 		}
 	}
 }

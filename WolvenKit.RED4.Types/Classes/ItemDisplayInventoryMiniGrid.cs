@@ -5,41 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ItemDisplayInventoryMiniGrid : inkWidgetLogicController
 	{
-		private inkCompoundWidgetReference _gridList;
-		private inkTextWidgetReference _label;
-		private CInt32 _gridWidth;
-		private CArray<CWeakHandle<InventoryItemDisplayController>> _gridData;
-
 		[Ordinal(1)] 
 		[RED("gridList")] 
 		public inkCompoundWidgetReference GridList
 		{
-			get => GetProperty(ref _gridList);
-			set => SetProperty(ref _gridList, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("label")] 
 		public inkTextWidgetReference Label
 		{
-			get => GetProperty(ref _label);
-			set => SetProperty(ref _label, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("gridWidth")] 
 		public CInt32 GridWidth
 		{
-			get => GetProperty(ref _gridWidth);
-			set => SetProperty(ref _gridWidth, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("gridData")] 
 		public CArray<CWeakHandle<InventoryItemDisplayController>> GridData
 		{
-			get => GetProperty(ref _gridData);
-			set => SetProperty(ref _gridData, value);
+			get => GetPropertyValue<CArray<CWeakHandle<InventoryItemDisplayController>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<InventoryItemDisplayController>>>(value);
+		}
+
+		public ItemDisplayInventoryMiniGrid()
+		{
+			GridList = new();
+			Label = new();
+			GridData = new();
 		}
 	}
 }

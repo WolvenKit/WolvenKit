@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DeviceDebugDef : gamebbScriptDefinition
 	{
-		private gamebbScriptID_CName _currentlyDebuggedDevice;
-		private gamebbScriptID_String _debuggedEntityIDAsString;
-
 		[Ordinal(0)] 
 		[RED("CurrentlyDebuggedDevice")] 
 		public gamebbScriptID_CName CurrentlyDebuggedDevice
 		{
-			get => GetProperty(ref _currentlyDebuggedDevice);
-			set => SetProperty(ref _currentlyDebuggedDevice, value);
+			get => GetPropertyValue<gamebbScriptID_CName>();
+			set => SetPropertyValue<gamebbScriptID_CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("DebuggedEntityIDAsString")] 
 		public gamebbScriptID_String DebuggedEntityIDAsString
 		{
-			get => GetProperty(ref _debuggedEntityIDAsString);
-			set => SetProperty(ref _debuggedEntityIDAsString, value);
+			get => GetPropertyValue<gamebbScriptID_String>();
+			set => SetPropertyValue<gamebbScriptID_String>(value);
+		}
+
+		public DeviceDebugDef()
+		{
+			CurrentlyDebuggedDevice = new();
+			DebuggedEntityIDAsString = new();
 		}
 	}
 }

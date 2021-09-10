@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameGodModeSharedState : gameIGameSystemReplicatedState
 	{
-		private CArray<gameGodModeSharedStateData> _datas;
-
 		[Ordinal(0)] 
 		[RED("datas")] 
 		public CArray<gameGodModeSharedStateData> Datas
 		{
-			get => GetProperty(ref _datas);
-			set => SetProperty(ref _datas, value);
+			get => GetPropertyValue<CArray<gameGodModeSharedStateData>>();
+			set => SetPropertyValue<CArray<gameGodModeSharedStateData>>(value);
+		}
+
+		public gameGodModeSharedState()
+		{
+			Datas = new();
 		}
 	}
 }

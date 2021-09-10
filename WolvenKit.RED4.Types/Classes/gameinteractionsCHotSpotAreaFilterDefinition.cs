@@ -5,50 +5,51 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameinteractionsCHotSpotAreaFilterDefinition : gameinteractionsNodeDefinition
 	{
-		private CName _slotName;
-		private Transform _transform;
-		private CHandle<gameinteractionsCFunctorDefinition> _functor;
-		private CArray<CHandle<gameinteractionsIShapeDefinition>> _shapes;
-		private CArray<CHandle<gameinteractionsIShapeDefinition>> _negativeShapes;
-
 		[Ordinal(0)] 
 		[RED("slotName")] 
 		public CName SlotName
 		{
-			get => GetProperty(ref _slotName);
-			set => SetProperty(ref _slotName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("transform")] 
 		public Transform Transform
 		{
-			get => GetProperty(ref _transform);
-			set => SetProperty(ref _transform, value);
+			get => GetPropertyValue<Transform>();
+			set => SetPropertyValue<Transform>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("functor")] 
 		public CHandle<gameinteractionsCFunctorDefinition> Functor
 		{
-			get => GetProperty(ref _functor);
-			set => SetProperty(ref _functor, value);
+			get => GetPropertyValue<CHandle<gameinteractionsCFunctorDefinition>>();
+			set => SetPropertyValue<CHandle<gameinteractionsCFunctorDefinition>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("shapes")] 
 		public CArray<CHandle<gameinteractionsIShapeDefinition>> Shapes
 		{
-			get => GetProperty(ref _shapes);
-			set => SetProperty(ref _shapes, value);
+			get => GetPropertyValue<CArray<CHandle<gameinteractionsIShapeDefinition>>>();
+			set => SetPropertyValue<CArray<CHandle<gameinteractionsIShapeDefinition>>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("negativeShapes")] 
 		public CArray<CHandle<gameinteractionsIShapeDefinition>> NegativeShapes
 		{
-			get => GetProperty(ref _negativeShapes);
-			set => SetProperty(ref _negativeShapes, value);
+			get => GetPropertyValue<CArray<CHandle<gameinteractionsIShapeDefinition>>>();
+			set => SetPropertyValue<CArray<CHandle<gameinteractionsIShapeDefinition>>>(value);
+		}
+
+		public gameinteractionsCHotSpotAreaFilterDefinition()
+		{
+			Transform = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			Shapes = new();
+			NegativeShapes = new();
 		}
 	}
 }

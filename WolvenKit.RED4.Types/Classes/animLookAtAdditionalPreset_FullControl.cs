@@ -5,56 +5,51 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animLookAtAdditionalPreset_FullControl : animLookAtAdditionalPreset
 	{
-		private CBool _useRightHand;
-		private CBool _attachHandToOtherOne;
-		private animLookAtLimits _limits;
-		private CFloat _suppress;
-		private CInt32 _mode;
-
 		[Ordinal(0)] 
 		[RED("useRightHand")] 
 		public CBool UseRightHand
 		{
-			get => GetProperty(ref _useRightHand);
-			set => SetProperty(ref _useRightHand, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("attachHandToOtherOne")] 
 		public CBool AttachHandToOtherOne
 		{
-			get => GetProperty(ref _attachHandToOtherOne);
-			set => SetProperty(ref _attachHandToOtherOne, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("limits")] 
 		public animLookAtLimits Limits
 		{
-			get => GetProperty(ref _limits);
-			set => SetProperty(ref _limits, value);
+			get => GetPropertyValue<animLookAtLimits>();
+			set => SetPropertyValue<animLookAtLimits>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("suppress")] 
 		public CFloat Suppress
 		{
-			get => GetProperty(ref _suppress);
-			set => SetProperty(ref _suppress, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("mode")] 
 		public CInt32 Mode
 		{
-			get => GetProperty(ref _mode);
-			set => SetProperty(ref _mode, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		public animLookAtAdditionalPreset_FullControl()
 		{
-			_useRightHand = true;
-			_suppress = 1.000000F;
+			UseRightHand = true;
+			Limits = new() { SoftLimitDegrees = 360.000000F, HardLimitDegrees = 360.000000F, HardLimitDistance = 1000000.000000F, BackLimitDegrees = 180.000000F };
+			Suppress = 1.000000F;
 		}
 	}
 }

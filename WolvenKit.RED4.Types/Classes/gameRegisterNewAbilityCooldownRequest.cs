@@ -5,77 +5,73 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameRegisterNewAbilityCooldownRequest : RedBaseClass
 	{
-		private CWeakHandle<entEntity> _owner;
-		private gameItemID _ownerItemId;
-		private TweakDBID _ownerRecord;
-		private CName _cooldownName;
-		private CFloat _duration;
-		private CEnum<gamedataStatType> _type;
-		private CBool _modifiable;
-		private CEnum<gamedataStatType> _abilityType;
-
 		[Ordinal(0)] 
 		[RED("owner")] 
 		public CWeakHandle<entEntity> Owner
 		{
-			get => GetProperty(ref _owner);
-			set => SetProperty(ref _owner, value);
+			get => GetPropertyValue<CWeakHandle<entEntity>>();
+			set => SetPropertyValue<CWeakHandle<entEntity>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ownerItemId")] 
 		public gameItemID OwnerItemId
 		{
-			get => GetProperty(ref _ownerItemId);
-			set => SetProperty(ref _ownerItemId, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ownerRecord")] 
 		public TweakDBID OwnerRecord
 		{
-			get => GetProperty(ref _ownerRecord);
-			set => SetProperty(ref _ownerRecord, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("cooldownName")] 
 		public CName CooldownName
 		{
-			get => GetProperty(ref _cooldownName);
-			set => SetProperty(ref _cooldownName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get => GetProperty(ref _duration);
-			set => SetProperty(ref _duration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("type")] 
 		public CEnum<gamedataStatType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<gamedataStatType>>();
+			set => SetPropertyValue<CEnum<gamedataStatType>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("modifiable")] 
 		public CBool Modifiable
 		{
-			get => GetProperty(ref _modifiable);
-			set => SetProperty(ref _modifiable, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("abilityType")] 
 		public CEnum<gamedataStatType> AbilityType
 		{
-			get => GetProperty(ref _abilityType);
-			set => SetProperty(ref _abilityType, value);
+			get => GetPropertyValue<CEnum<gamedataStatType>>();
+			set => SetPropertyValue<CEnum<gamedataStatType>>(value);
+		}
+
+		public gameRegisterNewAbilityCooldownRequest()
+		{
+			OwnerItemId = new();
 		}
 	}
 }

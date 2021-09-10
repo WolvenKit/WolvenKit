@@ -5,160 +5,149 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entMeshComponent : entIVisualComponent
 	{
-		private CResourceAsyncReference<CMesh> _mesh;
-		private CName _meshAppearance;
-		private CBool _castShadows;
-		private CBool _castLocalShadows;
-		private CFloat _motionBlurScale;
-		private Vector3 _visualScale;
-		private CEnum<ERenderingPlane> _renderingPlane;
-		private CEnum<ERenderObjectType> _objectTypeID;
-		private CUInt32 _numInstances;
-		private CUInt64 _chunkMask;
-		private CUInt8 _order;
-		private CBool _isEnabled;
-		private CEnum<entMeshComponentLODMode> _lODMode;
-		private CEnum<entForcedLodDistance> _forcedLodDistance;
-		private CBool _overrideMeshNavigationImpact;
-		private NavGenNavigationSetting _navigationImpact;
-
 		[Ordinal(8)] 
 		[RED("mesh")] 
 		public CResourceAsyncReference<CMesh> Mesh
 		{
-			get => GetProperty(ref _mesh);
-			set => SetProperty(ref _mesh, value);
+			get => GetPropertyValue<CResourceAsyncReference<CMesh>>();
+			set => SetPropertyValue<CResourceAsyncReference<CMesh>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("meshAppearance")] 
 		public CName MeshAppearance
 		{
-			get => GetProperty(ref _meshAppearance);
-			set => SetProperty(ref _meshAppearance, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("castShadows")] 
 		public CBool CastShadows
 		{
-			get => GetProperty(ref _castShadows);
-			set => SetProperty(ref _castShadows, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("castLocalShadows")] 
 		public CBool CastLocalShadows
 		{
-			get => GetProperty(ref _castLocalShadows);
-			set => SetProperty(ref _castLocalShadows, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("motionBlurScale")] 
 		public CFloat MotionBlurScale
 		{
-			get => GetProperty(ref _motionBlurScale);
-			set => SetProperty(ref _motionBlurScale, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("visualScale")] 
 		public Vector3 VisualScale
 		{
-			get => GetProperty(ref _visualScale);
-			set => SetProperty(ref _visualScale, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("renderingPlane")] 
 		public CEnum<ERenderingPlane> RenderingPlane
 		{
-			get => GetProperty(ref _renderingPlane);
-			set => SetProperty(ref _renderingPlane, value);
+			get => GetPropertyValue<CEnum<ERenderingPlane>>();
+			set => SetPropertyValue<CEnum<ERenderingPlane>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("objectTypeID")] 
 		public CEnum<ERenderObjectType> ObjectTypeID
 		{
-			get => GetProperty(ref _objectTypeID);
-			set => SetProperty(ref _objectTypeID, value);
+			get => GetPropertyValue<CEnum<ERenderObjectType>>();
+			set => SetPropertyValue<CEnum<ERenderObjectType>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("numInstances")] 
 		public CUInt32 NumInstances
 		{
-			get => GetProperty(ref _numInstances);
-			set => SetProperty(ref _numInstances, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("chunkMask")] 
 		public CUInt64 ChunkMask
 		{
-			get => GetProperty(ref _chunkMask);
-			set => SetProperty(ref _chunkMask, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("order")] 
 		public CUInt8 Order
 		{
-			get => GetProperty(ref _order);
-			set => SetProperty(ref _order, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("LODMode")] 
 		public CEnum<entMeshComponentLODMode> LODMode
 		{
-			get => GetProperty(ref _lODMode);
-			set => SetProperty(ref _lODMode, value);
+			get => GetPropertyValue<CEnum<entMeshComponentLODMode>>();
+			set => SetPropertyValue<CEnum<entMeshComponentLODMode>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("forcedLodDistance")] 
 		public CEnum<entForcedLodDistance> ForcedLodDistance
 		{
-			get => GetProperty(ref _forcedLodDistance);
-			set => SetProperty(ref _forcedLodDistance, value);
+			get => GetPropertyValue<CEnum<entForcedLodDistance>>();
+			set => SetPropertyValue<CEnum<entForcedLodDistance>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("overrideMeshNavigationImpact")] 
 		public CBool OverrideMeshNavigationImpact
 		{
-			get => GetProperty(ref _overrideMeshNavigationImpact);
-			set => SetProperty(ref _overrideMeshNavigationImpact, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("navigationImpact")] 
 		public NavGenNavigationSetting NavigationImpact
 		{
-			get => GetProperty(ref _navigationImpact);
-			set => SetProperty(ref _navigationImpact, value);
+			get => GetPropertyValue<NavGenNavigationSetting>();
+			set => SetPropertyValue<NavGenNavigationSetting>(value);
 		}
 
 		public entMeshComponent()
 		{
-			_meshAppearance = "default";
-			_castShadows = true;
-			_castLocalShadows = true;
-			_motionBlurScale = 1.000000F;
-			_chunkMask = 18446744073709551615;
-			_isEnabled = true;
-			_overrideMeshNavigationImpact = true;
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
+			ForceLODLevel = -1;
+			MeshAppearance = "default";
+			CastShadows = true;
+			CastLocalShadows = true;
+			MotionBlurScale = 1.000000F;
+			VisualScale = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
+			ChunkMask = 18446744073709551615;
+			IsEnabled = true;
+			OverrideMeshNavigationImpact = true;
+			NavigationImpact = new() { NavmeshImpact = Enums.NavGenNavmeshImpact.Ignored };
 		}
 	}
 }

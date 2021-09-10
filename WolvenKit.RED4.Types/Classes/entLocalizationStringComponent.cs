@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entLocalizationStringComponent : entIComponent
 	{
-		private CArray<entLocalizationStringMapEntry> _strings;
-
 		[Ordinal(3)] 
 		[RED("Strings")] 
 		public CArray<entLocalizationStringMapEntry> Strings
 		{
-			get => GetProperty(ref _strings);
-			set => SetProperty(ref _strings, value);
+			get => GetPropertyValue<CArray<entLocalizationStringMapEntry>>();
+			set => SetPropertyValue<CArray<entLocalizationStringMapEntry>>(value);
+		}
+
+		public entLocalizationStringComponent()
+		{
+			Name = "Component";
+			Strings = new();
 		}
 	}
 }

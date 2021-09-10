@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SoldItemsCache : IScriptable
 	{
-		private CArray<CHandle<SoldItem>> _cache;
-
 		[Ordinal(0)] 
 		[RED("cache")] 
 		public CArray<CHandle<SoldItem>> Cache
 		{
-			get => GetProperty(ref _cache);
-			set => SetProperty(ref _cache, value);
+			get => GetPropertyValue<CArray<CHandle<SoldItem>>>();
+			set => SetPropertyValue<CArray<CHandle<SoldItem>>>(value);
+		}
+
+		public SoldItemsCache()
+		{
+			Cache = new();
 		}
 	}
 }

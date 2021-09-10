@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameEffectExecutor_AnimFeature : gameEffectExecutor
 	{
-		private CName _key;
-		private CHandle<animAnimFeature> _animFeature;
-		private CEnum<gameEffectExecutor_AnimFeatureApplyTo> _applyTo;
-
 		[Ordinal(1)] 
 		[RED("key")] 
 		public CName Key
 		{
-			get => GetProperty(ref _key);
-			set => SetProperty(ref _key, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("animFeature")] 
 		public CHandle<animAnimFeature> AnimFeature
 		{
-			get => GetProperty(ref _animFeature);
-			set => SetProperty(ref _animFeature, value);
+			get => GetPropertyValue<CHandle<animAnimFeature>>();
+			set => SetPropertyValue<CHandle<animAnimFeature>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("applyTo")] 
 		public CEnum<gameEffectExecutor_AnimFeatureApplyTo> ApplyTo
 		{
-			get => GetProperty(ref _applyTo);
-			set => SetProperty(ref _applyTo, value);
+			get => GetPropertyValue<CEnum<gameEffectExecutor_AnimFeatureApplyTo>>();
+			set => SetPropertyValue<CEnum<gameEffectExecutor_AnimFeatureApplyTo>>(value);
 		}
 	}
 }

@@ -5,28 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CameraTagEnemyLimitDataModule : GameSessionDataModule
 	{
-		private CInt32 _cameraLimit;
-		private CArray<CWeakHandle<SurveillanceCamera>> _cameraList;
-
 		[Ordinal(1)] 
 		[RED("cameraLimit")] 
 		public CInt32 CameraLimit
 		{
-			get => GetProperty(ref _cameraLimit);
-			set => SetProperty(ref _cameraLimit, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("cameraList")] 
 		public CArray<CWeakHandle<SurveillanceCamera>> CameraList
 		{
-			get => GetProperty(ref _cameraList);
-			set => SetProperty(ref _cameraList, value);
+			get => GetPropertyValue<CArray<CWeakHandle<SurveillanceCamera>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<SurveillanceCamera>>>(value);
 		}
 
 		public CameraTagEnemyLimitDataModule()
 		{
-			_cameraLimit = 5;
+			CameraLimit = 5;
+			CameraList = new();
 		}
 	}
 }

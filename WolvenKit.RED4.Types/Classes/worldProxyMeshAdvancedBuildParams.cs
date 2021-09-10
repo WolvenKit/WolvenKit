@@ -5,56 +5,53 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldProxyMeshAdvancedBuildParams : RedBaseClass
 	{
-		private worldProxyBoundingBoxSyncParams _boundingBoxSyncParams;
-		private worldProxySurfaceFlattenParams _surfaceFlattenParams;
-		private worldProxyMiscAdvancedParams _misc;
-		private CFloat _rayBias;
-		private CFloat _rayMaxDistance;
-
 		[Ordinal(0)] 
 		[RED("boundingBoxSyncParams")] 
 		public worldProxyBoundingBoxSyncParams BoundingBoxSyncParams
 		{
-			get => GetProperty(ref _boundingBoxSyncParams);
-			set => SetProperty(ref _boundingBoxSyncParams, value);
+			get => GetPropertyValue<worldProxyBoundingBoxSyncParams>();
+			set => SetPropertyValue<worldProxyBoundingBoxSyncParams>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("surfaceFlattenParams")] 
 		public worldProxySurfaceFlattenParams SurfaceFlattenParams
 		{
-			get => GetProperty(ref _surfaceFlattenParams);
-			set => SetProperty(ref _surfaceFlattenParams, value);
+			get => GetPropertyValue<worldProxySurfaceFlattenParams>();
+			set => SetPropertyValue<worldProxySurfaceFlattenParams>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("misc")] 
 		public worldProxyMiscAdvancedParams Misc
 		{
-			get => GetProperty(ref _misc);
-			set => SetProperty(ref _misc, value);
+			get => GetPropertyValue<worldProxyMiscAdvancedParams>();
+			set => SetPropertyValue<worldProxyMiscAdvancedParams>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("rayBias")] 
 		public CFloat RayBias
 		{
-			get => GetProperty(ref _rayBias);
-			set => SetProperty(ref _rayBias, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("rayMaxDistance")] 
 		public CFloat RayMaxDistance
 		{
-			get => GetProperty(ref _rayMaxDistance);
-			set => SetProperty(ref _rayMaxDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public worldProxyMeshAdvancedBuildParams()
 		{
-			_rayBias = 2.100000F;
-			_rayMaxDistance = -1.000000F;
+			BoundingBoxSyncParams = new() { PullRange = 0.050000F, StackOffset = new() };
+			SurfaceFlattenParams = new() { GroupingStepAngle = Enums.worldProxyNormalAngleStepSize.STEP_45 };
+			Misc = new() { UseLod1 = true, BlurCutout = 20, OcclusionRatio = 40, FillHolesBeforeReduceRatio = 1.500000F, FillHolesAfterReduceRatio = 0.400000F, RsAxisPrecision = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F }, RsAxisExpand = new(), RsAliasingReduction = 1.000000F, BcMergeRange = 0.800000F, BcSizeCutoff = 120.000000F, BcIterations = 0.500000F, BcMaxSize = 120.000000F, BcMinSize = 2.000000F, BcMergeSensitivity = 50.000000F, BcMinScale = 1.000000F, BcGridSize = 120.000000F, BcFilterSensitivity = 0.250000F, BcBoundsRatioLimit = 0.250000F, RemoveIslands = true, BackgroundColor = new() };
+			RayBias = 2.100000F;
+			RayMaxDistance = -1.000000F;
 		}
 	}
 }

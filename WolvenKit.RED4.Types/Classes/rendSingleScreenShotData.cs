@@ -5,75 +5,69 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class rendSingleScreenShotData : ISerializable
 	{
-		private CEnum<rendScreenshotMode> _mode;
-		private AbsolutePathSerializable _outputPath;
-		private CEnum<renddimEPreset> _resolution;
-		private CEnum<rendResolutionMultiplier> _resolutionMultiplier;
-		private CArray<CEnum<EEnvManagerModifier>> _emmModes;
-		private CBool _forceLOD0;
-		private CEnum<ESaveFormat> _saveFormat;
-
 		[Ordinal(0)] 
 		[RED("mode")] 
 		public CEnum<rendScreenshotMode> Mode
 		{
-			get => GetProperty(ref _mode);
-			set => SetProperty(ref _mode, value);
+			get => GetPropertyValue<CEnum<rendScreenshotMode>>();
+			set => SetPropertyValue<CEnum<rendScreenshotMode>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("outputPath")] 
 		public AbsolutePathSerializable OutputPath
 		{
-			get => GetProperty(ref _outputPath);
-			set => SetProperty(ref _outputPath, value);
+			get => GetPropertyValue<AbsolutePathSerializable>();
+			set => SetPropertyValue<AbsolutePathSerializable>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("resolution")] 
 		public CEnum<renddimEPreset> Resolution
 		{
-			get => GetProperty(ref _resolution);
-			set => SetProperty(ref _resolution, value);
+			get => GetPropertyValue<CEnum<renddimEPreset>>();
+			set => SetPropertyValue<CEnum<renddimEPreset>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("resolutionMultiplier")] 
 		public CEnum<rendResolutionMultiplier> ResolutionMultiplier
 		{
-			get => GetProperty(ref _resolutionMultiplier);
-			set => SetProperty(ref _resolutionMultiplier, value);
+			get => GetPropertyValue<CEnum<rendResolutionMultiplier>>();
+			set => SetPropertyValue<CEnum<rendResolutionMultiplier>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("emmModes")] 
 		public CArray<CEnum<EEnvManagerModifier>> EmmModes
 		{
-			get => GetProperty(ref _emmModes);
-			set => SetProperty(ref _emmModes, value);
+			get => GetPropertyValue<CArray<CEnum<EEnvManagerModifier>>>();
+			set => SetPropertyValue<CArray<CEnum<EEnvManagerModifier>>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("forceLOD0")] 
 		public CBool ForceLOD0
 		{
-			get => GetProperty(ref _forceLOD0);
-			set => SetProperty(ref _forceLOD0, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("saveFormat")] 
 		public CEnum<ESaveFormat> SaveFormat
 		{
-			get => GetProperty(ref _saveFormat);
-			set => SetProperty(ref _saveFormat, value);
+			get => GetPropertyValue<CEnum<ESaveFormat>>();
+			set => SetPropertyValue<CEnum<ESaveFormat>>(value);
 		}
 
 		public rendSingleScreenShotData()
 		{
-			_resolution = new() { Value = Enums.renddimEPreset._1920x1080 };
-			_resolutionMultiplier = new() { Value = Enums.rendResolutionMultiplier.X2 };
-			_saveFormat = new() { Value = Enums.ESaveFormat.SF_PNG };
+			OutputPath = new();
+			Resolution = Enums.renddimEPreset._1920x1080;
+			ResolutionMultiplier = Enums.rendResolutionMultiplier.X2;
+			EmmModes = new();
+			SaveFormat = Enums.ESaveFormat.SF_PNG;
 		}
 	}
 }

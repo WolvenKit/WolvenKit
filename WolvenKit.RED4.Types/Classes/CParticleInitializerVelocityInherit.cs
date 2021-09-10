@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CParticleInitializerVelocityInherit : IParticleInitializer
 	{
-		private CHandle<IEvaluatorFloat> _scale;
-
 		[Ordinal(4)] 
 		[RED("scale")] 
 		public CHandle<IEvaluatorFloat> Scale
 		{
-			get => GetProperty(ref _scale);
-			set => SetProperty(ref _scale, value);
+			get => GetPropertyValue<CHandle<IEvaluatorFloat>>();
+			set => SetPropertyValue<CHandle<IEvaluatorFloat>>(value);
+		}
+
+		public CParticleInitializerVelocityInherit()
+		{
+			EditorName = "Inherit velocity";
+			EditorGroup = "Velocity";
+			IsEnabled = true;
 		}
 	}
 }

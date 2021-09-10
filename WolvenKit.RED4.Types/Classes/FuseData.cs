@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class FuseData : RedBaseClass
 	{
-		private PSOwnerData _psOwnerData;
-		private CArray<SDeviceTimetableEntry> _timeTable;
-		private CInt32 _lights;
-
 		[Ordinal(0)] 
 		[RED("psOwnerData")] 
 		public PSOwnerData PsOwnerData
 		{
-			get => GetProperty(ref _psOwnerData);
-			set => SetProperty(ref _psOwnerData, value);
+			get => GetPropertyValue<PSOwnerData>();
+			set => SetPropertyValue<PSOwnerData>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("timeTable")] 
 		public CArray<SDeviceTimetableEntry> TimeTable
 		{
-			get => GetProperty(ref _timeTable);
-			set => SetProperty(ref _timeTable, value);
+			get => GetPropertyValue<CArray<SDeviceTimetableEntry>>();
+			set => SetPropertyValue<CArray<SDeviceTimetableEntry>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("lights")] 
 		public CInt32 Lights
 		{
-			get => GetProperty(ref _lights);
-			set => SetProperty(ref _lights, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		public FuseData()
+		{
+			PsOwnerData = new() { Id = new() };
+			TimeTable = new();
 		}
 	}
 }

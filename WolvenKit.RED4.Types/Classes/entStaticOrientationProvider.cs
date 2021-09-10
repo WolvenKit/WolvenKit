@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entStaticOrientationProvider : entIOrientationProvider
 	{
-		private Quaternion _staticOrientation;
-
 		[Ordinal(0)] 
 		[RED("staticOrientation")] 
 		public Quaternion StaticOrientation
 		{
-			get => GetProperty(ref _staticOrientation);
-			set => SetProperty(ref _staticOrientation, value);
+			get => GetPropertyValue<Quaternion>();
+			set => SetPropertyValue<Quaternion>(value);
+		}
+
+		public entStaticOrientationProvider()
+		{
+			StaticOrientation = new() { R = 1.000000F };
 		}
 	}
 }

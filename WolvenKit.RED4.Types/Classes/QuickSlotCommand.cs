@@ -5,181 +5,164 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class QuickSlotCommand : RedBaseClass
 	{
-		private CEnum<QuickSlotActionType> _actionType;
-		private CBool _isSlotUnlocked;
-		private CBool _isLocked;
-		private CName _atlasPath;
-		private CName _iconName;
-		private CInt32 _maxTier;
-		private CInt32 _vehicleState;
-		private gameItemID _itemId;
-		private CString _title;
-		private CString _type;
-		private CString _description;
-		private CBool _isEquipped;
-		private CInt32 _intData;
-		private vehiclePlayerVehicle _playerVehicleData;
-		private CEnum<QuickSlotItemType> _itemType;
-		private CEnum<gamedataEquipmentArea> _equipType;
-		private CInt32 _slotIndex;
-		private CHandle<gamedeviceAction> _interactiveAction;
-		private entEntityID _interactiveActionOwner;
-
 		[Ordinal(0)] 
 		[RED("ActionType")] 
 		public CEnum<QuickSlotActionType> ActionType
 		{
-			get => GetProperty(ref _actionType);
-			set => SetProperty(ref _actionType, value);
+			get => GetPropertyValue<CEnum<QuickSlotActionType>>();
+			set => SetPropertyValue<CEnum<QuickSlotActionType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("IsSlotUnlocked")] 
 		public CBool IsSlotUnlocked
 		{
-			get => GetProperty(ref _isSlotUnlocked);
-			set => SetProperty(ref _isSlotUnlocked, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("IsLocked")] 
 		public CBool IsLocked
 		{
-			get => GetProperty(ref _isLocked);
-			set => SetProperty(ref _isLocked, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("AtlasPath")] 
 		public CName AtlasPath
 		{
-			get => GetProperty(ref _atlasPath);
-			set => SetProperty(ref _atlasPath, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("IconName")] 
 		public CName IconName
 		{
-			get => GetProperty(ref _iconName);
-			set => SetProperty(ref _iconName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("MaxTier")] 
 		public CInt32 MaxTier
 		{
-			get => GetProperty(ref _maxTier);
-			set => SetProperty(ref _maxTier, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("VehicleState")] 
 		public CInt32 VehicleState
 		{
-			get => GetProperty(ref _vehicleState);
-			set => SetProperty(ref _vehicleState, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("ItemId")] 
 		public gameItemID ItemId
 		{
-			get => GetProperty(ref _itemId);
-			set => SetProperty(ref _itemId, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("Title")] 
 		public CString Title
 		{
-			get => GetProperty(ref _title);
-			set => SetProperty(ref _title, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("Type")] 
 		public CString Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("Description")] 
 		public CString Description
 		{
-			get => GetProperty(ref _description);
-			set => SetProperty(ref _description, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("IsEquipped")] 
 		public CBool IsEquipped
 		{
-			get => GetProperty(ref _isEquipped);
-			set => SetProperty(ref _isEquipped, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("intData")] 
 		public CInt32 IntData
 		{
-			get => GetProperty(ref _intData);
-			set => SetProperty(ref _intData, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("playerVehicleData")] 
 		public vehiclePlayerVehicle PlayerVehicleData
 		{
-			get => GetProperty(ref _playerVehicleData);
-			set => SetProperty(ref _playerVehicleData, value);
+			get => GetPropertyValue<vehiclePlayerVehicle>();
+			set => SetPropertyValue<vehiclePlayerVehicle>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("itemType")] 
 		public CEnum<QuickSlotItemType> ItemType
 		{
-			get => GetProperty(ref _itemType);
-			set => SetProperty(ref _itemType, value);
+			get => GetPropertyValue<CEnum<QuickSlotItemType>>();
+			set => SetPropertyValue<CEnum<QuickSlotItemType>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("equipType")] 
 		public CEnum<gamedataEquipmentArea> EquipType
 		{
-			get => GetProperty(ref _equipType);
-			set => SetProperty(ref _equipType, value);
+			get => GetPropertyValue<CEnum<gamedataEquipmentArea>>();
+			set => SetPropertyValue<CEnum<gamedataEquipmentArea>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("slotIndex")] 
 		public CInt32 SlotIndex
 		{
-			get => GetProperty(ref _slotIndex);
-			set => SetProperty(ref _slotIndex, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("interactiveAction")] 
 		public CHandle<gamedeviceAction> InteractiveAction
 		{
-			get => GetProperty(ref _interactiveAction);
-			set => SetProperty(ref _interactiveAction, value);
+			get => GetPropertyValue<CHandle<gamedeviceAction>>();
+			set => SetPropertyValue<CHandle<gamedeviceAction>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("interactiveActionOwner")] 
 		public entEntityID InteractiveActionOwner
 		{
-			get => GetProperty(ref _interactiveActionOwner);
-			set => SetProperty(ref _interactiveActionOwner, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		public QuickSlotCommand()
 		{
-			_isSlotUnlocked = true;
+			IsSlotUnlocked = true;
+			ItemId = new();
+			PlayerVehicleData = new() { VehicleType = Enums.gamedataVehicleType.Invalid };
+			InteractiveActionOwner = new();
 		}
 	}
 }

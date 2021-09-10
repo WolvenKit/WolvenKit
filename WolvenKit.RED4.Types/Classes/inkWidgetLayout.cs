@@ -5,82 +5,76 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkWidgetLayout : RedBaseClass
 	{
-		private inkMargin _padding;
-		private inkMargin _margin;
-		private CEnum<inkEHorizontalAlign> _hAlign;
-		private CEnum<inkEVerticalAlign> _vAlign;
-		private CEnum<inkEAnchor> _anchor;
-		private Vector2 _anchorPoint;
-		private CEnum<inkESizeRule> _sizeRule;
-		private CFloat _sizeCoefficient;
-
 		[Ordinal(0)] 
 		[RED("padding")] 
 		public inkMargin Padding
 		{
-			get => GetProperty(ref _padding);
-			set => SetProperty(ref _padding, value);
+			get => GetPropertyValue<inkMargin>();
+			set => SetPropertyValue<inkMargin>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("margin")] 
 		public inkMargin Margin
 		{
-			get => GetProperty(ref _margin);
-			set => SetProperty(ref _margin, value);
+			get => GetPropertyValue<inkMargin>();
+			set => SetPropertyValue<inkMargin>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("HAlign")] 
 		public CEnum<inkEHorizontalAlign> HAlign
 		{
-			get => GetProperty(ref _hAlign);
-			set => SetProperty(ref _hAlign, value);
+			get => GetPropertyValue<CEnum<inkEHorizontalAlign>>();
+			set => SetPropertyValue<CEnum<inkEHorizontalAlign>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("VAlign")] 
 		public CEnum<inkEVerticalAlign> VAlign
 		{
-			get => GetProperty(ref _vAlign);
-			set => SetProperty(ref _vAlign, value);
+			get => GetPropertyValue<CEnum<inkEVerticalAlign>>();
+			set => SetPropertyValue<CEnum<inkEVerticalAlign>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("anchor")] 
 		public CEnum<inkEAnchor> Anchor
 		{
-			get => GetProperty(ref _anchor);
-			set => SetProperty(ref _anchor, value);
+			get => GetPropertyValue<CEnum<inkEAnchor>>();
+			set => SetPropertyValue<CEnum<inkEAnchor>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("anchorPoint")] 
 		public Vector2 AnchorPoint
 		{
-			get => GetProperty(ref _anchorPoint);
-			set => SetProperty(ref _anchorPoint, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("sizeRule")] 
 		public CEnum<inkESizeRule> SizeRule
 		{
-			get => GetProperty(ref _sizeRule);
-			set => SetProperty(ref _sizeRule, value);
+			get => GetPropertyValue<CEnum<inkESizeRule>>();
+			set => SetPropertyValue<CEnum<inkESizeRule>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("sizeCoefficient")] 
 		public CFloat SizeCoefficient
 		{
-			get => GetProperty(ref _sizeCoefficient);
-			set => SetProperty(ref _sizeCoefficient, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public inkWidgetLayout()
 		{
-			_sizeCoefficient = 1.000000F;
+			Padding = new();
+			Margin = new();
+			AnchorPoint = new();
+			SizeCoefficient = 1.000000F;
 		}
 	}
 }

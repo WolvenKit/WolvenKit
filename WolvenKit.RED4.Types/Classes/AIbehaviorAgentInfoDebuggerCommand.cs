@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorAgentInfoDebuggerCommand : AIbehaviorIDebuggerCommand
 	{
-		private entEntityID _entityId;
-		private CString _agentName;
-		private CBool _isSelected;
-		private CArray<AIbehaviorAgentInfoDebuggerCommandEntry> _entries;
-
 		[Ordinal(0)] 
 		[RED("entityId")] 
 		public entEntityID EntityId
 		{
-			get => GetProperty(ref _entityId);
-			set => SetProperty(ref _entityId, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("agentName")] 
 		public CString AgentName
 		{
-			get => GetProperty(ref _agentName);
-			set => SetProperty(ref _agentName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isSelected")] 
 		public CBool IsSelected
 		{
-			get => GetProperty(ref _isSelected);
-			set => SetProperty(ref _isSelected, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("entries")] 
 		public CArray<AIbehaviorAgentInfoDebuggerCommandEntry> Entries
 		{
-			get => GetProperty(ref _entries);
-			set => SetProperty(ref _entries, value);
+			get => GetPropertyValue<CArray<AIbehaviorAgentInfoDebuggerCommandEntry>>();
+			set => SetPropertyValue<CArray<AIbehaviorAgentInfoDebuggerCommandEntry>>(value);
+		}
+
+		public AIbehaviorAgentInfoDebuggerCommand()
+		{
+			EntityId = new();
+			Entries = new();
 		}
 	}
 }

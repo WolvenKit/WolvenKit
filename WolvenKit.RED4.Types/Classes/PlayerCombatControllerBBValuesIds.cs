@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PlayerCombatControllerBBValuesIds : RedBaseClass
 	{
-		private gamebbScriptID_Int32 _crouchActive;
-
 		[Ordinal(0)] 
 		[RED("crouchActive")] 
 		public gamebbScriptID_Int32 CrouchActive
 		{
-			get => GetProperty(ref _crouchActive);
-			set => SetProperty(ref _crouchActive, value);
+			get => GetPropertyValue<gamebbScriptID_Int32>();
+			set => SetPropertyValue<gamebbScriptID_Int32>(value);
+		}
+
+		public PlayerCombatControllerBBValuesIds()
+		{
+			CrouchActive = new();
 		}
 	}
 }

@@ -5,50 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameStatusEffectComponentPS : gameComponentPS
 	{
-		private CArray<gameStatusEffect> _statusEffectArray;
-		private CHandle<gameDelayedFunctionsScheduler> _delayedFunctions;
-		private CHandle<gameDelayedFunctionsScheduler> _delayedFunctionsNoTd;
-		private CBool _isPlayerControlled;
-		private CBool _tickComponent;
-
 		[Ordinal(0)] 
 		[RED("statusEffectArray")] 
 		public CArray<gameStatusEffect> StatusEffectArray
 		{
-			get => GetProperty(ref _statusEffectArray);
-			set => SetProperty(ref _statusEffectArray, value);
+			get => GetPropertyValue<CArray<gameStatusEffect>>();
+			set => SetPropertyValue<CArray<gameStatusEffect>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("delayedFunctions")] 
 		public CHandle<gameDelayedFunctionsScheduler> DelayedFunctions
 		{
-			get => GetProperty(ref _delayedFunctions);
-			set => SetProperty(ref _delayedFunctions, value);
+			get => GetPropertyValue<CHandle<gameDelayedFunctionsScheduler>>();
+			set => SetPropertyValue<CHandle<gameDelayedFunctionsScheduler>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("delayedFunctionsNoTd")] 
 		public CHandle<gameDelayedFunctionsScheduler> DelayedFunctionsNoTd
 		{
-			get => GetProperty(ref _delayedFunctionsNoTd);
-			set => SetProperty(ref _delayedFunctionsNoTd, value);
+			get => GetPropertyValue<CHandle<gameDelayedFunctionsScheduler>>();
+			set => SetPropertyValue<CHandle<gameDelayedFunctionsScheduler>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isPlayerControlled")] 
 		public CBool IsPlayerControlled
 		{
-			get => GetProperty(ref _isPlayerControlled);
-			set => SetProperty(ref _isPlayerControlled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("tickComponent")] 
 		public CBool TickComponent
 		{
-			get => GetProperty(ref _tickComponent);
-			set => SetProperty(ref _tickComponent, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public gameStatusEffectComponentPS()
+		{
+			StatusEffectArray = new();
 		}
 	}
 }

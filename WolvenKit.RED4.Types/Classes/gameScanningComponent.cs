@@ -5,228 +5,207 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameScanningComponent : gameComponent
 	{
-		private CArray<gameScanningTooltipElementDef> _scannableData;
-		private CFloat _timeNeeded;
-		private CBool _autoGenerateBoundingSphere;
-		private Sphere _boundingSphere;
-		private CBool _ignoresScanningDistanceLimit;
-		private CBool _cpoEnableMultiplePlayersScanningModifier;
-		private CBool _isBraindanceClue;
-		private CEnum<braindanceVisionMode> _braindanceLayer;
-		private CBool _isBraindanceBlocked;
-		private CBool _isBraindanceLayerUnlocked;
-		private CBool _isBraindanceTimelineUnlocked;
-		private CBool _isBraindanceActive;
-		private CInt32 _currentBraindanceLayer;
-		private CArray<FocusClueDefinition> _clues;
-		private CHandle<ObjectScanningDescription> _objectDescription;
-		private TweakDBID _scanningBarText;
-		private CBool _isFocusModeActive;
-		private CHandle<FocusForcedHighlightData> _currentHighlight;
-		private CBool _isHudManagerInitialized;
-		private CBool _isBeingScanned;
-		private CBool _isScanningCluesBlocked;
-		private CBool _isEntityVisible;
-		private CHandle<redCallbackObject> _onBraindanceVisionModeChangeCallback;
-		private CHandle<redCallbackObject> _onBraindanceFppChangeCallback;
-
 		[Ordinal(4)] 
 		[RED("scannableData")] 
 		public CArray<gameScanningTooltipElementDef> ScannableData
 		{
-			get => GetProperty(ref _scannableData);
-			set => SetProperty(ref _scannableData, value);
+			get => GetPropertyValue<CArray<gameScanningTooltipElementDef>>();
+			set => SetPropertyValue<CArray<gameScanningTooltipElementDef>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("timeNeeded")] 
 		public CFloat TimeNeeded
 		{
-			get => GetProperty(ref _timeNeeded);
-			set => SetProperty(ref _timeNeeded, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("autoGenerateBoundingSphere")] 
 		public CBool AutoGenerateBoundingSphere
 		{
-			get => GetProperty(ref _autoGenerateBoundingSphere);
-			set => SetProperty(ref _autoGenerateBoundingSphere, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("boundingSphere")] 
 		public Sphere BoundingSphere
 		{
-			get => GetProperty(ref _boundingSphere);
-			set => SetProperty(ref _boundingSphere, value);
+			get => GetPropertyValue<Sphere>();
+			set => SetPropertyValue<Sphere>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("ignoresScanningDistanceLimit")] 
 		public CBool IgnoresScanningDistanceLimit
 		{
-			get => GetProperty(ref _ignoresScanningDistanceLimit);
-			set => SetProperty(ref _ignoresScanningDistanceLimit, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("cpoEnableMultiplePlayersScanningModifier")] 
 		public CBool CpoEnableMultiplePlayersScanningModifier
 		{
-			get => GetProperty(ref _cpoEnableMultiplePlayersScanningModifier);
-			set => SetProperty(ref _cpoEnableMultiplePlayersScanningModifier, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("isBraindanceClue")] 
 		public CBool IsBraindanceClue
 		{
-			get => GetProperty(ref _isBraindanceClue);
-			set => SetProperty(ref _isBraindanceClue, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("BraindanceLayer")] 
 		public CEnum<braindanceVisionMode> BraindanceLayer
 		{
-			get => GetProperty(ref _braindanceLayer);
-			set => SetProperty(ref _braindanceLayer, value);
+			get => GetPropertyValue<CEnum<braindanceVisionMode>>();
+			set => SetPropertyValue<CEnum<braindanceVisionMode>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("isBraindanceBlocked")] 
 		public CBool IsBraindanceBlocked
 		{
-			get => GetProperty(ref _isBraindanceBlocked);
-			set => SetProperty(ref _isBraindanceBlocked, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("isBraindanceLayerUnlocked")] 
 		public CBool IsBraindanceLayerUnlocked
 		{
-			get => GetProperty(ref _isBraindanceLayerUnlocked);
-			set => SetProperty(ref _isBraindanceLayerUnlocked, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("isBraindanceTimelineUnlocked")] 
 		public CBool IsBraindanceTimelineUnlocked
 		{
-			get => GetProperty(ref _isBraindanceTimelineUnlocked);
-			set => SetProperty(ref _isBraindanceTimelineUnlocked, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("isBraindanceActive")] 
 		public CBool IsBraindanceActive
 		{
-			get => GetProperty(ref _isBraindanceActive);
-			set => SetProperty(ref _isBraindanceActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("currentBraindanceLayer")] 
 		public CInt32 CurrentBraindanceLayer
 		{
-			get => GetProperty(ref _currentBraindanceLayer);
-			set => SetProperty(ref _currentBraindanceLayer, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("clues")] 
 		public CArray<FocusClueDefinition> Clues
 		{
-			get => GetProperty(ref _clues);
-			set => SetProperty(ref _clues, value);
+			get => GetPropertyValue<CArray<FocusClueDefinition>>();
+			set => SetPropertyValue<CArray<FocusClueDefinition>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("objectDescription")] 
 		public CHandle<ObjectScanningDescription> ObjectDescription
 		{
-			get => GetProperty(ref _objectDescription);
-			set => SetProperty(ref _objectDescription, value);
+			get => GetPropertyValue<CHandle<ObjectScanningDescription>>();
+			set => SetPropertyValue<CHandle<ObjectScanningDescription>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("scanningBarText")] 
 		public TweakDBID ScanningBarText
 		{
-			get => GetProperty(ref _scanningBarText);
-			set => SetProperty(ref _scanningBarText, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("isFocusModeActive")] 
 		public CBool IsFocusModeActive
 		{
-			get => GetProperty(ref _isFocusModeActive);
-			set => SetProperty(ref _isFocusModeActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("currentHighlight")] 
 		public CHandle<FocusForcedHighlightData> CurrentHighlight
 		{
-			get => GetProperty(ref _currentHighlight);
-			set => SetProperty(ref _currentHighlight, value);
+			get => GetPropertyValue<CHandle<FocusForcedHighlightData>>();
+			set => SetPropertyValue<CHandle<FocusForcedHighlightData>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("isHudManagerInitialized")] 
 		public CBool IsHudManagerInitialized
 		{
-			get => GetProperty(ref _isHudManagerInitialized);
-			set => SetProperty(ref _isHudManagerInitialized, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("isBeingScanned")] 
 		public CBool IsBeingScanned
 		{
-			get => GetProperty(ref _isBeingScanned);
-			set => SetProperty(ref _isBeingScanned, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("isScanningCluesBlocked")] 
 		public CBool IsScanningCluesBlocked
 		{
-			get => GetProperty(ref _isScanningCluesBlocked);
-			set => SetProperty(ref _isScanningCluesBlocked, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("isEntityVisible")] 
 		public CBool IsEntityVisible
 		{
-			get => GetProperty(ref _isEntityVisible);
-			set => SetProperty(ref _isEntityVisible, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("OnBraindanceVisionModeChangeCallback")] 
 		public CHandle<redCallbackObject> OnBraindanceVisionModeChangeCallback
 		{
-			get => GetProperty(ref _onBraindanceVisionModeChangeCallback);
-			set => SetProperty(ref _onBraindanceVisionModeChangeCallback, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("OnBraindanceFppChangeCallback")] 
 		public CHandle<redCallbackObject> OnBraindanceFppChangeCallback
 		{
-			get => GetProperty(ref _onBraindanceFppChangeCallback);
-			set => SetProperty(ref _onBraindanceFppChangeCallback, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		public gameScanningComponent()
 		{
-			_autoGenerateBoundingSphere = true;
-			_cpoEnableMultiplePlayersScanningModifier = true;
-			_isEntityVisible = true;
+			Name = "scanning";
+			ScannableData = new();
+			AutoGenerateBoundingSphere = true;
+			BoundingSphere = new() { CenterRadius2 = new() { W = -1.000000F } };
+			CpoEnableMultiplePlayersScanningModifier = true;
+			Clues = new();
+			IsEntityVisible = true;
 		}
 	}
 }

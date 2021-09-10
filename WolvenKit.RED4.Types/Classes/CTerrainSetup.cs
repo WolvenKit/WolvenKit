@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CTerrainSetup : CResource
 	{
-		private CArray<CFloat> _tiling;
-		private CArray<CName> _physicalMaterial;
-
 		[Ordinal(1)] 
 		[RED("tiling")] 
 		public CArray<CFloat> Tiling
 		{
-			get => GetProperty(ref _tiling);
-			set => SetProperty(ref _tiling, value);
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("physicalMaterial")] 
 		public CArray<CName> PhysicalMaterial
 		{
-			get => GetProperty(ref _physicalMaterial);
-			set => SetProperty(ref _physicalMaterial, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
+		public CTerrainSetup()
+		{
+			Tiling = new();
+			PhysicalMaterial = new();
 		}
 	}
 }

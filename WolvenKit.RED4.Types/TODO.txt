@@ -1,5 +1,7 @@
 - Unify type names...
 - CStatic -> CStaticArray
-- Split CEenum into CEnum and CBitField
-- Custom props
 - Check what really needs to be here, what can move to WolvenKit.Core
+- Clean up the interfaces -.-
+
+- Read_smartobjects
+- Read_streamingsector

@@ -5,38 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CMaterialParameterScalar : CMaterialParameter
 	{
-		private CFloat _scalar;
-		private CFloat _min;
-		private CFloat _max;
-
 		[Ordinal(2)] 
 		[RED("scalar")] 
 		public CFloat Scalar
 		{
-			get => GetProperty(ref _scalar);
-			set => SetProperty(ref _scalar, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("min")] 
 		public CFloat Min
 		{
-			get => GetProperty(ref _min);
-			set => SetProperty(ref _min, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("max")] 
 		public CFloat Max
 		{
-			get => GetProperty(ref _max);
-			set => SetProperty(ref _max, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public CMaterialParameterScalar()
 		{
-			_min = -340282346638528859811704183484516925440.000000F;
-			_max = 340282346638528859811704183484516925440.000000F;
+			Min = -340282346638528859811704183484516925440.000000F;
+			Max = 340282346638528859811704183484516925440.000000F;
 		}
 	}
 }

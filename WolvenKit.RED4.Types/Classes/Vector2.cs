@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class Vector2 : RedBaseClass
 	{
-		private CFloat _x;
-		private CFloat _y;
-
 		[Ordinal(0)] 
 		[RED("X")] 
 		public CFloat X
 		{
-			get => GetProperty(ref _x);
-			set => SetProperty(ref _x, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("Y")] 
 		public CFloat Y
 		{
-			get => GetProperty(ref _y);
-			set => SetProperty(ref _y, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

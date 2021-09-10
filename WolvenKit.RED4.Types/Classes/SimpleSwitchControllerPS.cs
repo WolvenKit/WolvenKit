@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SimpleSwitchControllerPS : MasterControllerPS
 	{
-		private CEnum<ESwitchAction> _switchAction;
-		private TweakDBID _nameForON;
-		private TweakDBID _nameForOFF;
-
 		[Ordinal(105)] 
 		[RED("switchAction")] 
 		public CEnum<ESwitchAction> SwitchAction
 		{
-			get => GetProperty(ref _switchAction);
-			set => SetProperty(ref _switchAction, value);
+			get => GetPropertyValue<CEnum<ESwitchAction>>();
+			set => SetPropertyValue<CEnum<ESwitchAction>>(value);
 		}
 
 		[Ordinal(106)] 
 		[RED("nameForON")] 
 		public TweakDBID NameForON
 		{
-			get => GetProperty(ref _nameForON);
-			set => SetProperty(ref _nameForON, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(107)] 
 		[RED("nameForOFF")] 
 		public TweakDBID NameForOFF
 		{
-			get => GetProperty(ref _nameForOFF);
-			set => SetProperty(ref _nameForOFF, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
+		public SimpleSwitchControllerPS()
+		{
+			DeviceName = "LocKey#115";
+			TweakDBRecord = new() { Value = 87940692723 };
+			TweakDBDescriptionRecord = new() { Value = 138796611214 };
 		}
 	}
 }

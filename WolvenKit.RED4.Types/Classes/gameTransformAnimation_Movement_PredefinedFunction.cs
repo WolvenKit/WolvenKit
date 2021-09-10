@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameTransformAnimation_Movement_PredefinedFunction : gameTransformAnimation_Movement
 	{
-		private EasingFunction _function;
-
 		[Ordinal(0)] 
 		[RED("function")] 
 		public EasingFunction Function
 		{
-			get => GetProperty(ref _function);
-			set => SetProperty(ref _function, value);
+			get => GetPropertyValue<EasingFunction>();
+			set => SetPropertyValue<EasingFunction>(value);
+		}
+
+		public gameTransformAnimation_Movement_PredefinedFunction()
+		{
+			Function = new();
 		}
 	}
 }

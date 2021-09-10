@@ -5,59 +5,61 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TvDeviceWidgetController : DeviceWidgetControllerBase
 	{
-		private inkVideoWidgetReference _videoWidget;
-		private inkBasePanelWidgetReference _globalTVChannelSlot;
-		private inkTextWidgetReference _messegeWidget;
-		private inkLeafWidgetReference _messageBackgroundWidget;
-		private CWeakHandle<inkWidget> _globalTVChannel;
-		private redResourceReferenceScriptToken _activeVideo;
-
 		[Ordinal(10)] 
 		[RED("videoWidget")] 
 		public inkVideoWidgetReference VideoWidget
 		{
-			get => GetProperty(ref _videoWidget);
-			set => SetProperty(ref _videoWidget, value);
+			get => GetPropertyValue<inkVideoWidgetReference>();
+			set => SetPropertyValue<inkVideoWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("globalTVChannelSlot")] 
 		public inkBasePanelWidgetReference GlobalTVChannelSlot
 		{
-			get => GetProperty(ref _globalTVChannelSlot);
-			set => SetProperty(ref _globalTVChannelSlot, value);
+			get => GetPropertyValue<inkBasePanelWidgetReference>();
+			set => SetPropertyValue<inkBasePanelWidgetReference>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("messegeWidget")] 
 		public inkTextWidgetReference MessegeWidget
 		{
-			get => GetProperty(ref _messegeWidget);
-			set => SetProperty(ref _messegeWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("messageBackgroundWidget")] 
 		public inkLeafWidgetReference MessageBackgroundWidget
 		{
-			get => GetProperty(ref _messageBackgroundWidget);
-			set => SetProperty(ref _messageBackgroundWidget, value);
+			get => GetPropertyValue<inkLeafWidgetReference>();
+			set => SetPropertyValue<inkLeafWidgetReference>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("globalTVChannel")] 
 		public CWeakHandle<inkWidget> GlobalTVChannel
 		{
-			get => GetProperty(ref _globalTVChannel);
-			set => SetProperty(ref _globalTVChannel, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("activeVideo")] 
 		public redResourceReferenceScriptToken ActiveVideo
 		{
-			get => GetProperty(ref _activeVideo);
-			set => SetProperty(ref _activeVideo, value);
+			get => GetPropertyValue<redResourceReferenceScriptToken>();
+			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
+		}
+
+		public TvDeviceWidgetController()
+		{
+			VideoWidget = new();
+			GlobalTVChannelSlot = new();
+			MessegeWidget = new();
+			MessageBackgroundWidget = new();
+			ActiveVideo = new();
 		}
 	}
 }

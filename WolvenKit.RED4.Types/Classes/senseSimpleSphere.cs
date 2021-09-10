@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class senseSimpleSphere : senseIShape
 	{
-		private Sphere _sphere;
-
 		[Ordinal(1)] 
 		[RED("sphere")] 
 		public Sphere Sphere
 		{
-			get => GetProperty(ref _sphere);
-			set => SetProperty(ref _sphere, value);
+			get => GetPropertyValue<Sphere>();
+			set => SetPropertyValue<Sphere>(value);
+		}
+
+		public senseSimpleSphere()
+		{
+			Sphere = new() { CenterRadius2 = new() };
 		}
 	}
 }

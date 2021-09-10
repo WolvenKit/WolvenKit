@@ -5,59 +5,58 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animCollisionRoundedShape : RedBaseClass
 	{
-		private animTransformIndex _bone;
-		private QsTransform _transformLS;
-		private CFloat _roundedCornerRadius;
-		private CFloat _xBoxExtent;
-		private CFloat _yBoxExtent;
-		private CFloat _zBoxExtent;
-
 		[Ordinal(0)] 
 		[RED("bone")] 
 		public animTransformIndex Bone
 		{
-			get => GetProperty(ref _bone);
-			set => SetProperty(ref _bone, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("transformLS")] 
 		public QsTransform TransformLS
 		{
-			get => GetProperty(ref _transformLS);
-			set => SetProperty(ref _transformLS, value);
+			get => GetPropertyValue<QsTransform>();
+			set => SetPropertyValue<QsTransform>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("roundedCornerRadius")] 
 		public CFloat RoundedCornerRadius
 		{
-			get => GetProperty(ref _roundedCornerRadius);
-			set => SetProperty(ref _roundedCornerRadius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("xBoxExtent")] 
 		public CFloat XBoxExtent
 		{
-			get => GetProperty(ref _xBoxExtent);
-			set => SetProperty(ref _xBoxExtent, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("yBoxExtent")] 
 		public CFloat YBoxExtent
 		{
-			get => GetProperty(ref _yBoxExtent);
-			set => SetProperty(ref _yBoxExtent, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("zBoxExtent")] 
 		public CFloat ZBoxExtent
 		{
-			get => GetProperty(ref _zBoxExtent);
-			set => SetProperty(ref _zBoxExtent, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public animCollisionRoundedShape()
+		{
+			Bone = new();
+			TransformLS = new() { Translation = new() { W = 1.000000F }, Rotation = new() { R = 1.000000F }, Scale = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F } };
 		}
 	}
 }

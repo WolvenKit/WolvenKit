@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questPlayEnv_OverrideGlobalLight : questIEnvironmentManagerNodeType
 	{
-		private worldWorldGlobalLightOverrideWithColorParameters _params;
-
 		[Ordinal(0)] 
 		[RED("params")] 
 		public worldWorldGlobalLightOverrideWithColorParameters Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<worldWorldGlobalLightOverrideWithColorParameters>();
+			set => SetPropertyValue<worldWorldGlobalLightOverrideWithColorParameters>(value);
+		}
+
+		public questPlayEnv_OverrideGlobalLight()
+		{
+			Params = new() { LightDirOverride = new() { TimeOfYearSeason = Enums.ETimeOfYearSeason.ETOYS_Summer }, LightColorOverride = new() };
 		}
 	}
 }

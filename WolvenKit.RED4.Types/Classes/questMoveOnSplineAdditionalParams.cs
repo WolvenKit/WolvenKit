@@ -5,41 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questMoveOnSplineAdditionalParams : ISerializable
 	{
-		private CEnum<questMoveOnSplineType> _type;
-		private questSimpleMoveOnSplineParams _simpleParams;
-		private questAnimMoveOnSplineParams _animParams;
-		private questWithCompanionMoveOnSplineParams _withCompanionParams;
-
 		[Ordinal(0)] 
 		[RED("type")] 
 		public CEnum<questMoveOnSplineType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<questMoveOnSplineType>>();
+			set => SetPropertyValue<CEnum<questMoveOnSplineType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("simpleParams")] 
 		public questSimpleMoveOnSplineParams SimpleParams
 		{
-			get => GetProperty(ref _simpleParams);
-			set => SetProperty(ref _simpleParams, value);
+			get => GetPropertyValue<questSimpleMoveOnSplineParams>();
+			set => SetPropertyValue<questSimpleMoveOnSplineParams>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("animParams")] 
 		public questAnimMoveOnSplineParams AnimParams
 		{
-			get => GetProperty(ref _animParams);
-			set => SetProperty(ref _animParams, value);
+			get => GetPropertyValue<questAnimMoveOnSplineParams>();
+			set => SetPropertyValue<questAnimMoveOnSplineParams>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("withCompanionParams")] 
 		public questWithCompanionMoveOnSplineParams WithCompanionParams
 		{
-			get => GetProperty(ref _withCompanionParams);
-			set => SetProperty(ref _withCompanionParams, value);
+			get => GetPropertyValue<questWithCompanionMoveOnSplineParams>();
+			set => SetPropertyValue<questWithCompanionMoveOnSplineParams>(value);
+		}
+
+		public questMoveOnSplineAdditionalParams()
+		{
+			SimpleParams = new() { SnapToTerrain = true };
+			AnimParams = new() { ControllersSetupName = "Walk" };
+			WithCompanionParams = new() { MovementType = new() { UseNPCMovementParams = true }, CompanionDistancePreset = Enums.gamedataCompanionDistancePreset.Medium, CatchUpWithCompanion = true, TeleportToCompanion = true, MinSearchAngle = 22.500000F, MaxSearchAngle = 60.000000F, InterruptCapability = Enums.scnInterruptCapability.NotInterruptable };
 		}
 	}
 }

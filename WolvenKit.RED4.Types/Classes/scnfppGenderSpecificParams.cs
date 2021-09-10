@@ -5,59 +5,62 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnfppGenderSpecificParams : RedBaseClass
 	{
-		private scnGenderMask _genderMask;
-		private CArray<EulerAngles> _transitionBlendInTrajectorySpaceAngles;
-		private CArray<CFloat> _transitionBlendInCameraSpace;
-		private CArray<EulerAngles> _transitionEndInputAngles;
-		private EulerAngles _idleCameraLs;
-		private EulerAngles _idleControlCameraMs;
-
 		[Ordinal(0)] 
 		[RED("genderMask")] 
 		public scnGenderMask GenderMask
 		{
-			get => GetProperty(ref _genderMask);
-			set => SetProperty(ref _genderMask, value);
+			get => GetPropertyValue<scnGenderMask>();
+			set => SetPropertyValue<scnGenderMask>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("transitionBlendInTrajectorySpaceAngles")] 
 		public CArray<EulerAngles> TransitionBlendInTrajectorySpaceAngles
 		{
-			get => GetProperty(ref _transitionBlendInTrajectorySpaceAngles);
-			set => SetProperty(ref _transitionBlendInTrajectorySpaceAngles, value);
+			get => GetPropertyValue<CArray<EulerAngles>>();
+			set => SetPropertyValue<CArray<EulerAngles>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("transitionBlendInCameraSpace")] 
 		public CArray<CFloat> TransitionBlendInCameraSpace
 		{
-			get => GetProperty(ref _transitionBlendInCameraSpace);
-			set => SetProperty(ref _transitionBlendInCameraSpace, value);
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("transitionEndInputAngles")] 
 		public CArray<EulerAngles> TransitionEndInputAngles
 		{
-			get => GetProperty(ref _transitionEndInputAngles);
-			set => SetProperty(ref _transitionEndInputAngles, value);
+			get => GetPropertyValue<CArray<EulerAngles>>();
+			set => SetPropertyValue<CArray<EulerAngles>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("idleCameraLs")] 
 		public EulerAngles IdleCameraLs
 		{
-			get => GetProperty(ref _idleCameraLs);
-			set => SetProperty(ref _idleCameraLs, value);
+			get => GetPropertyValue<EulerAngles>();
+			set => SetPropertyValue<EulerAngles>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("idleControlCameraMs")] 
 		public EulerAngles IdleControlCameraMs
 		{
-			get => GetProperty(ref _idleControlCameraMs);
-			set => SetProperty(ref _idleControlCameraMs, value);
+			get => GetPropertyValue<EulerAngles>();
+			set => SetPropertyValue<EulerAngles>(value);
+		}
+
+		public scnfppGenderSpecificParams()
+		{
+			GenderMask = new() { Mask = 4 };
+			TransitionBlendInTrajectorySpaceAngles = new();
+			TransitionBlendInCameraSpace = new();
+			TransitionEndInputAngles = new();
+			IdleCameraLs = new();
+			IdleControlCameraMs = new();
 		}
 	}
 }

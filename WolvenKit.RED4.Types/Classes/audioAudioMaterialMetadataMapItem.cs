@@ -5,95 +5,84 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioAudioMaterialMetadataMapItem : audioAudioMetadata
 	{
-		private CName _footstepsMetadata;
-		private CName _ragdollMetadata;
-		private CName _physicalMaterial;
-		private CName _obstructionData;
-		private CName _reflectionParams;
-		private CName _meleeMaterialName;
-		private CName _vehicleMaterialName;
-		private CName _foliageMaterialName;
-		private CName _foliagePaletteTag;
-		private CEnum<audioMeleeMaterialType> _meleeMaterialType;
-
 		[Ordinal(1)] 
 		[RED("footstepsMetadata")] 
 		public CName FootstepsMetadata
 		{
-			get => GetProperty(ref _footstepsMetadata);
-			set => SetProperty(ref _footstepsMetadata, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ragdollMetadata")] 
 		public CName RagdollMetadata
 		{
-			get => GetProperty(ref _ragdollMetadata);
-			set => SetProperty(ref _ragdollMetadata, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("physicalMaterial")] 
 		public CName PhysicalMaterial
 		{
-			get => GetProperty(ref _physicalMaterial);
-			set => SetProperty(ref _physicalMaterial, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("obstructionData")] 
 		public CName ObstructionData
 		{
-			get => GetProperty(ref _obstructionData);
-			set => SetProperty(ref _obstructionData, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("reflectionParams")] 
 		public CName ReflectionParams
 		{
-			get => GetProperty(ref _reflectionParams);
-			set => SetProperty(ref _reflectionParams, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("meleeMaterialName")] 
 		public CName MeleeMaterialName
 		{
-			get => GetProperty(ref _meleeMaterialName);
-			set => SetProperty(ref _meleeMaterialName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("vehicleMaterialName")] 
 		public CName VehicleMaterialName
 		{
-			get => GetProperty(ref _vehicleMaterialName);
-			set => SetProperty(ref _vehicleMaterialName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("foliageMaterialName")] 
 		public CName FoliageMaterialName
 		{
-			get => GetProperty(ref _foliageMaterialName);
-			set => SetProperty(ref _foliageMaterialName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("foliagePaletteTag")] 
 		public CName FoliagePaletteTag
 		{
-			get => GetProperty(ref _foliagePaletteTag);
-			set => SetProperty(ref _foliagePaletteTag, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("meleeMaterialType")] 
 		public CEnum<audioMeleeMaterialType> MeleeMaterialType
 		{
-			get => GetProperty(ref _meleeMaterialType);
-			set => SetProperty(ref _meleeMaterialType, value);
+			get => GetPropertyValue<CEnum<audioMeleeMaterialType>>();
+			set => SetPropertyValue<CEnum<audioMeleeMaterialType>>(value);
 		}
 	}
 }

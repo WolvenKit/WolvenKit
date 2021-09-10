@@ -5,41 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DeviceTakeControlDef : gamebbScriptDefinition
 	{
-		private gamebbScriptID_Variant _devicesChain;
-		private gamebbScriptID_EntityID _activeDevice;
-		private gamebbScriptID_Bool _isDeviceWorking;
-		private gamebbScriptID_Bool _chainLocked;
-
 		[Ordinal(0)] 
 		[RED("DevicesChain")] 
 		public gamebbScriptID_Variant DevicesChain
 		{
-			get => GetProperty(ref _devicesChain);
-			set => SetProperty(ref _devicesChain, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ActiveDevice")] 
 		public gamebbScriptID_EntityID ActiveDevice
 		{
-			get => GetProperty(ref _activeDevice);
-			set => SetProperty(ref _activeDevice, value);
+			get => GetPropertyValue<gamebbScriptID_EntityID>();
+			set => SetPropertyValue<gamebbScriptID_EntityID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("IsDeviceWorking")] 
 		public gamebbScriptID_Bool IsDeviceWorking
 		{
-			get => GetProperty(ref _isDeviceWorking);
-			set => SetProperty(ref _isDeviceWorking, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("ChainLocked")] 
 		public gamebbScriptID_Bool ChainLocked
 		{
-			get => GetProperty(ref _chainLocked);
-			set => SetProperty(ref _chainLocked, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		public DeviceTakeControlDef()
+		{
+			DevicesChain = new();
+			ActiveDevice = new();
+			IsDeviceWorking = new();
+			ChainLocked = new();
 		}
 	}
 }

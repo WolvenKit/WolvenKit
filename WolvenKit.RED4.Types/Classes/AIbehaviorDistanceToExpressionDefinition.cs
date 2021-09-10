@@ -5,37 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorDistanceToExpressionDefinition : AIbehaviorPassiveExpressionDefinition
 	{
-		private CHandle<AIbehaviorExpressionSocket> _target;
-		private CFloat _tolerance;
-		private CFloat _updatePeriod;
-
 		[Ordinal(0)] 
 		[RED("target")] 
 		public CHandle<AIbehaviorExpressionSocket> Target
 		{
-			get => GetProperty(ref _target);
-			set => SetProperty(ref _target, value);
+			get => GetPropertyValue<CHandle<AIbehaviorExpressionSocket>>();
+			set => SetPropertyValue<CHandle<AIbehaviorExpressionSocket>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("tolerance")] 
 		public CFloat Tolerance
 		{
-			get => GetProperty(ref _tolerance);
-			set => SetProperty(ref _tolerance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("updatePeriod")] 
 		public CFloat UpdatePeriod
 		{
-			get => GetProperty(ref _updatePeriod);
-			set => SetProperty(ref _updatePeriod, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public AIbehaviorDistanceToExpressionDefinition()
 		{
-			_tolerance = 0.100000F;
+			Tolerance = 0.100000F;
 		}
 	}
 }

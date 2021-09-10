@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkMenuResource : CResource
 	{
-		private CArray<inkMenuEntry> _menusEntries;
-		private CArray<CName> _scenariosNames;
-		private CName _initialScenarioName;
-
 		[Ordinal(1)] 
 		[RED("menusEntries")] 
 		public CArray<inkMenuEntry> MenusEntries
 		{
-			get => GetProperty(ref _menusEntries);
-			set => SetProperty(ref _menusEntries, value);
+			get => GetPropertyValue<CArray<inkMenuEntry>>();
+			set => SetPropertyValue<CArray<inkMenuEntry>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("scenariosNames")] 
 		public CArray<CName> ScenariosNames
 		{
-			get => GetProperty(ref _scenariosNames);
-			set => SetProperty(ref _scenariosNames, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("initialScenarioName")] 
 		public CName InitialScenarioName
 		{
-			get => GetProperty(ref _initialScenarioName);
-			set => SetProperty(ref _initialScenarioName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public inkMenuResource()
+		{
+			MenusEntries = new();
+			ScenariosNames = new();
 		}
 	}
 }

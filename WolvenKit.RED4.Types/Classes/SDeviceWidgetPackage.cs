@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SDeviceWidgetPackage : SWidgetPackage
 	{
-		private CString _deviceStatus;
-		private CEnum<EDeviceStatus> _deviceState;
-		private CArray<SActionWidgetPackage> _actionWidgets;
-
 		[Ordinal(17)] 
 		[RED("deviceStatus")] 
 		public CString DeviceStatus
 		{
-			get => GetProperty(ref _deviceStatus);
-			set => SetProperty(ref _deviceStatus, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("deviceState")] 
 		public CEnum<EDeviceStatus> DeviceState
 		{
-			get => GetProperty(ref _deviceState);
-			set => SetProperty(ref _deviceState, value);
+			get => GetPropertyValue<CEnum<EDeviceStatus>>();
+			set => SetPropertyValue<CEnum<EDeviceStatus>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("actionWidgets")] 
 		public CArray<SActionWidgetPackage> ActionWidgets
 		{
-			get => GetProperty(ref _actionWidgets);
-			set => SetProperty(ref _actionWidgets, value);
+			get => GetPropertyValue<CArray<SActionWidgetPackage>>();
+			set => SetPropertyValue<CArray<SActionWidgetPackage>>(value);
+		}
+
+		public SDeviceWidgetPackage()
+		{
+			ActionWidgets = new();
 		}
 	}
 }

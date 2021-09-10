@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animLookAtPartInfo : RedBaseClass
 	{
-		private CName _partName;
-		private CName _defaultPositionBoneName;
-
 		[Ordinal(0)] 
 		[RED("partName")] 
 		public CName PartName
 		{
-			get => GetProperty(ref _partName);
-			set => SetProperty(ref _partName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("defaultPositionBoneName")] 
 		public CName DefaultPositionBoneName
 		{
-			get => GetProperty(ref _defaultPositionBoneName);
-			set => SetProperty(ref _defaultPositionBoneName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 	}
 }

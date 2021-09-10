@@ -5,50 +5,51 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class QuestDetailsObjectiveController : inkWidgetLogicController
 	{
-		private inkTextWidgetReference _objectiveName;
-		private inkWidgetReference _trackingMarker;
-		private inkWidgetReference _root;
-		private CWeakHandle<gameJournalQuestObjective> _objective;
-		private CBool _hovered;
-
 		[Ordinal(1)] 
 		[RED("objectiveName")] 
 		public inkTextWidgetReference ObjectiveName
 		{
-			get => GetProperty(ref _objectiveName);
-			set => SetProperty(ref _objectiveName, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("trackingMarker")] 
 		public inkWidgetReference TrackingMarker
 		{
-			get => GetProperty(ref _trackingMarker);
-			set => SetProperty(ref _trackingMarker, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("root")] 
 		public inkWidgetReference Root
 		{
-			get => GetProperty(ref _root);
-			set => SetProperty(ref _root, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("objective")] 
 		public CWeakHandle<gameJournalQuestObjective> Objective
 		{
-			get => GetProperty(ref _objective);
-			set => SetProperty(ref _objective, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalQuestObjective>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalQuestObjective>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("hovered")] 
 		public CBool Hovered
 		{
-			get => GetProperty(ref _hovered);
-			set => SetProperty(ref _hovered, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public QuestDetailsObjectiveController()
+		{
+			ObjectiveName = new();
+			TrackingMarker = new();
+			Root = new();
 		}
 	}
 }

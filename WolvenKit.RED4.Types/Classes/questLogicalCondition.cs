@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questLogicalCondition : questCondition
 	{
-		private CEnum<questLogicalOperation> _operation;
-		private CArray<CHandle<questIBaseCondition>> _conditions;
-
 		[Ordinal(0)] 
 		[RED("operation")] 
 		public CEnum<questLogicalOperation> Operation
 		{
-			get => GetProperty(ref _operation);
-			set => SetProperty(ref _operation, value);
+			get => GetPropertyValue<CEnum<questLogicalOperation>>();
+			set => SetPropertyValue<CEnum<questLogicalOperation>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("conditions")] 
 		public CArray<CHandle<questIBaseCondition>> Conditions
 		{
-			get => GetProperty(ref _conditions);
-			set => SetProperty(ref _conditions, value);
+			get => GetPropertyValue<CArray<CHandle<questIBaseCondition>>>();
+			set => SetPropertyValue<CArray<CHandle<questIBaseCondition>>>(value);
+		}
+
+		public questLogicalCondition()
+		{
+			Conditions = new() { null, null };
 		}
 	}
 }

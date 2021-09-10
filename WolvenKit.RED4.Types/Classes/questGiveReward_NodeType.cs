@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questGiveReward_NodeType : questIRewardManagerNodeType
 	{
-		private CArray<TweakDBID> _rewards;
-
 		[Ordinal(0)] 
 		[RED("rewards")] 
 		public CArray<TweakDBID> Rewards
 		{
-			get => GetProperty(ref _rewards);
-			set => SetProperty(ref _rewards, value);
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
+		}
+
+		public questGiveReward_NodeType()
+		{
+			Rewards = new() { null };
 		}
 	}
 }

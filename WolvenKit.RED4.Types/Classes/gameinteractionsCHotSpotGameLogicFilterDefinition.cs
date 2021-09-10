@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameinteractionsCHotSpotGameLogicFilterDefinition : ISerializable
 	{
-		private CHandle<gameIPrereq> _hotSpotPrereq;
-		private CHandle<gameIPrereq> _activatorPrereq;
-		private CHandle<gameinteractionsInteractionScriptedCondition> _scriptedConditionClass;
-
 		[Ordinal(0)] 
 		[RED("hotSpotPrereq")] 
 		public CHandle<gameIPrereq> HotSpotPrereq
 		{
-			get => GetProperty(ref _hotSpotPrereq);
-			set => SetProperty(ref _hotSpotPrereq, value);
+			get => GetPropertyValue<CHandle<gameIPrereq>>();
+			set => SetPropertyValue<CHandle<gameIPrereq>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("activatorPrereq")] 
 		public CHandle<gameIPrereq> ActivatorPrereq
 		{
-			get => GetProperty(ref _activatorPrereq);
-			set => SetProperty(ref _activatorPrereq, value);
+			get => GetPropertyValue<CHandle<gameIPrereq>>();
+			set => SetPropertyValue<CHandle<gameIPrereq>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("scriptedConditionClass")] 
 		public CHandle<gameinteractionsInteractionScriptedCondition> ScriptedConditionClass
 		{
-			get => GetProperty(ref _scriptedConditionClass);
-			set => SetProperty(ref _scriptedConditionClass, value);
+			get => GetPropertyValue<CHandle<gameinteractionsInteractionScriptedCondition>>();
+			set => SetPropertyValue<CHandle<gameinteractionsInteractionScriptedCondition>>(value);
 		}
 	}
 }

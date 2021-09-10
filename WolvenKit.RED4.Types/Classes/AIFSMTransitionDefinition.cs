@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIFSMTransitionDefinition : RedBaseClass
 	{
-		private CUInt16 _destination;
-		private CUInt16 _condition;
-
 		[Ordinal(0)] 
 		[RED("destination")] 
 		public CUInt16 Destination
 		{
-			get => GetProperty(ref _destination);
-			set => SetProperty(ref _destination, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("condition")] 
 		public CUInt16 Condition
 		{
-			get => GetProperty(ref _condition);
-			set => SetProperty(ref _condition, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		public AIFSMTransitionDefinition()
 		{
-			_destination = 65535;
+			Destination = 65535;
 		}
 	}
 }

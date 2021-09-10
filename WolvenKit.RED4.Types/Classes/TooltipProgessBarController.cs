@@ -5,86 +5,87 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TooltipProgessBarController : inkWidgetLogicController
 	{
-		private inkWidgetReference _progressFill;
-		private inkWidgetReference _hintHolder;
-		private inkWidgetReference _progressHolder;
-		private inkWidgetReference _postprogressHolder;
-		private inkCompoundWidgetReference _hintTextHolder;
-		private inkWidgetLibraryReference _libraryPath;
-		private inkTextWidgetReference _postprogressText;
-		private CBool _isCraftable;
-		private CBool _isCrafted;
-
 		[Ordinal(1)] 
 		[RED("progressFill")] 
 		public inkWidgetReference ProgressFill
 		{
-			get => GetProperty(ref _progressFill);
-			set => SetProperty(ref _progressFill, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("hintHolder")] 
 		public inkWidgetReference HintHolder
 		{
-			get => GetProperty(ref _hintHolder);
-			set => SetProperty(ref _hintHolder, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("progressHolder")] 
 		public inkWidgetReference ProgressHolder
 		{
-			get => GetProperty(ref _progressHolder);
-			set => SetProperty(ref _progressHolder, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("postprogressHolder")] 
 		public inkWidgetReference PostprogressHolder
 		{
-			get => GetProperty(ref _postprogressHolder);
-			set => SetProperty(ref _postprogressHolder, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("hintTextHolder")] 
 		public inkCompoundWidgetReference HintTextHolder
 		{
-			get => GetProperty(ref _hintTextHolder);
-			set => SetProperty(ref _hintTextHolder, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("libraryPath")] 
 		public inkWidgetLibraryReference LibraryPath
 		{
-			get => GetProperty(ref _libraryPath);
-			set => SetProperty(ref _libraryPath, value);
+			get => GetPropertyValue<inkWidgetLibraryReference>();
+			set => SetPropertyValue<inkWidgetLibraryReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("postprogressText")] 
 		public inkTextWidgetReference PostprogressText
 		{
-			get => GetProperty(ref _postprogressText);
-			set => SetProperty(ref _postprogressText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("isCraftable")] 
 		public CBool IsCraftable
 		{
-			get => GetProperty(ref _isCraftable);
-			set => SetProperty(ref _isCraftable, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("isCrafted")] 
 		public CBool IsCrafted
 		{
-			get => GetProperty(ref _isCrafted);
-			set => SetProperty(ref _isCrafted, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public TooltipProgessBarController()
+		{
+			ProgressFill = new();
+			HintHolder = new();
+			ProgressHolder = new();
+			PostprogressHolder = new();
+			HintTextHolder = new();
+			LibraryPath = new() { WidgetLibrary = new() };
+			PostprogressText = new();
 		}
 	}
 }

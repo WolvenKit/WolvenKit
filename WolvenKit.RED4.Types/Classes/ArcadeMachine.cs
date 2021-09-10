@@ -5,68 +5,67 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ArcadeMachine : InteractiveDevice
 	{
-		private CBool _isShortGlitchActive;
-		private gameDelayID _shortGlitchDelayID;
-		private redResourceReferenceScriptToken _currentGame;
-		private CName _currentGameAudio;
-		private CName _currentGameAudioStop;
-		private CName _meshAppearanceOn;
-		private CName _meshAppearanceOff;
-
 		[Ordinal(97)] 
 		[RED("isShortGlitchActive")] 
 		public CBool IsShortGlitchActive
 		{
-			get => GetProperty(ref _isShortGlitchActive);
-			set => SetProperty(ref _isShortGlitchActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(98)] 
 		[RED("shortGlitchDelayID")] 
 		public gameDelayID ShortGlitchDelayID
 		{
-			get => GetProperty(ref _shortGlitchDelayID);
-			set => SetProperty(ref _shortGlitchDelayID, value);
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
 		}
 
 		[Ordinal(99)] 
 		[RED("currentGame")] 
 		public redResourceReferenceScriptToken CurrentGame
 		{
-			get => GetProperty(ref _currentGame);
-			set => SetProperty(ref _currentGame, value);
+			get => GetPropertyValue<redResourceReferenceScriptToken>();
+			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
 		[Ordinal(100)] 
 		[RED("currentGameAudio")] 
 		public CName CurrentGameAudio
 		{
-			get => GetProperty(ref _currentGameAudio);
-			set => SetProperty(ref _currentGameAudio, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(101)] 
 		[RED("currentGameAudioStop")] 
 		public CName CurrentGameAudioStop
 		{
-			get => GetProperty(ref _currentGameAudioStop);
-			set => SetProperty(ref _currentGameAudioStop, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(102)] 
 		[RED("meshAppearanceOn")] 
 		public CName MeshAppearanceOn
 		{
-			get => GetProperty(ref _meshAppearanceOn);
-			set => SetProperty(ref _meshAppearanceOn, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(103)] 
 		[RED("meshAppearanceOff")] 
 		public CName MeshAppearanceOff
 		{
-			get => GetProperty(ref _meshAppearanceOff);
-			set => SetProperty(ref _meshAppearanceOff, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public ArcadeMachine()
+		{
+			ControllerTypeName = "ArcadeMachineController";
+			ShortGlitchDelayID = new();
+			CurrentGame = new();
 		}
 	}
 }

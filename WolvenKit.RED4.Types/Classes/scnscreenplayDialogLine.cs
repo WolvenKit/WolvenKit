@@ -5,68 +5,69 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnscreenplayDialogLine : RedBaseClass
 	{
-		private scnscreenplayItemId _itemId;
-		private scnActorId _speaker;
-		private scnActorId _addressee;
-		private scnscreenplayLineUsage _usage;
-		private scnlocLocstringId _locstringId;
-		private CName _maleLipsyncAnimationName;
-		private CName _femaleLipsyncAnimationName;
-
 		[Ordinal(0)] 
 		[RED("itemId")] 
 		public scnscreenplayItemId ItemId
 		{
-			get => GetProperty(ref _itemId);
-			set => SetProperty(ref _itemId, value);
+			get => GetPropertyValue<scnscreenplayItemId>();
+			set => SetPropertyValue<scnscreenplayItemId>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("speaker")] 
 		public scnActorId Speaker
 		{
-			get => GetProperty(ref _speaker);
-			set => SetProperty(ref _speaker, value);
+			get => GetPropertyValue<scnActorId>();
+			set => SetPropertyValue<scnActorId>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("addressee")] 
 		public scnActorId Addressee
 		{
-			get => GetProperty(ref _addressee);
-			set => SetProperty(ref _addressee, value);
+			get => GetPropertyValue<scnActorId>();
+			set => SetPropertyValue<scnActorId>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("usage")] 
 		public scnscreenplayLineUsage Usage
 		{
-			get => GetProperty(ref _usage);
-			set => SetProperty(ref _usage, value);
+			get => GetPropertyValue<scnscreenplayLineUsage>();
+			set => SetPropertyValue<scnscreenplayLineUsage>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("locstringId")] 
 		public scnlocLocstringId LocstringId
 		{
-			get => GetProperty(ref _locstringId);
-			set => SetProperty(ref _locstringId, value);
+			get => GetPropertyValue<scnlocLocstringId>();
+			set => SetPropertyValue<scnlocLocstringId>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("maleLipsyncAnimationName")] 
 		public CName MaleLipsyncAnimationName
 		{
-			get => GetProperty(ref _maleLipsyncAnimationName);
-			set => SetProperty(ref _maleLipsyncAnimationName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("femaleLipsyncAnimationName")] 
 		public CName FemaleLipsyncAnimationName
 		{
-			get => GetProperty(ref _femaleLipsyncAnimationName);
-			set => SetProperty(ref _femaleLipsyncAnimationName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public scnscreenplayDialogLine()
+		{
+			ItemId = new() { Id = 4294967040 };
+			Speaker = new() { Id = 4294967295 };
+			Addressee = new() { Id = 4294967295 };
+			Usage = new() { PlayerGenderMask = new() { Mask = 128 } };
+			LocstringId = new();
 		}
 	}
 }

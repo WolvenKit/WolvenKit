@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questVehicleNodeDefinition : questSignalStoppingNodeDefinition
 	{
-		private CHandle<questIVehicleManagerNodeType> _type;
-
 		[Ordinal(2)] 
 		[RED("type")] 
 		public CHandle<questIVehicleManagerNodeType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CHandle<questIVehicleManagerNodeType>>();
+			set => SetPropertyValue<CHandle<questIVehicleManagerNodeType>>(value);
+		}
+
+		public questVehicleNodeDefinition()
+		{
+			Sockets = new();
+			Id = 65535;
 		}
 	}
 }

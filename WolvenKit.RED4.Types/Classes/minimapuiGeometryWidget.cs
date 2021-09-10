@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class minimapuiGeometryWidget : inkCanvasWidget
 	{
-		private CArray<inkWidgetReference> _widgetTemplates;
-		private minimapuiSettings _settings;
-
 		[Ordinal(23)] 
 		[RED("widgetTemplates")] 
 		public CArray<inkWidgetReference> WidgetTemplates
 		{
-			get => GetProperty(ref _widgetTemplates);
-			set => SetProperty(ref _widgetTemplates, value);
+			get => GetPropertyValue<CArray<inkWidgetReference>>();
+			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("settings")] 
 		public minimapuiSettings Settings
 		{
-			get => GetProperty(ref _settings);
-			set => SetProperty(ref _settings, value);
+			get => GetPropertyValue<minimapuiSettings>();
+			set => SetPropertyValue<minimapuiSettings>(value);
+		}
+
+		public minimapuiGeometryWidget()
+		{
+			WidgetTemplates = new() { new(), new(), new(), new(), new(), new(), new() };
+			Settings = new() { ShowTime = 0.300000F, HideTime = 0.250000F };
 		}
 	}
 }

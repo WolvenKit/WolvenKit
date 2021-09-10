@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animActionAnimDatabase_DatabaseRow : RedBaseClass
 	{
-		private CName _animFeatureName;
-		private CInt32 _state;
-		private CInt32 _animVariation;
-		private animActionAnimDatabase_AnimationData _animationData;
-
 		[Ordinal(0)] 
 		[RED("animFeatureName")] 
 		public CName AnimFeatureName
 		{
-			get => GetProperty(ref _animFeatureName);
-			set => SetProperty(ref _animFeatureName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("state")] 
 		public CInt32 State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("animVariation")] 
 		public CInt32 AnimVariation
 		{
-			get => GetProperty(ref _animVariation);
-			set => SetProperty(ref _animVariation, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("animationData")] 
 		public animActionAnimDatabase_AnimationData AnimationData
 		{
-			get => GetProperty(ref _animationData);
-			set => SetProperty(ref _animationData, value);
+			get => GetPropertyValue<animActionAnimDatabase_AnimationData>();
+			set => SetPropertyValue<animActionAnimDatabase_AnimationData>(value);
+		}
+
+		public animActionAnimDatabase_DatabaseRow()
+		{
+			AnimationData = new();
 		}
 	}
 }

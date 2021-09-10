@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldAutoFoliageMappingItem : RedBaseClass
 	{
-		private CName _material;
-		private CUInt32 _layerIndex;
-		private CResourceAsyncReference<worldFoliageBrush> _foliageBrush;
-
 		[Ordinal(0)] 
 		[RED("Material")] 
 		public CName Material
 		{
-			get => GetProperty(ref _material);
-			set => SetProperty(ref _material, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("LayerIndex")] 
 		public CUInt32 LayerIndex
 		{
-			get => GetProperty(ref _layerIndex);
-			set => SetProperty(ref _layerIndex, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("FoliageBrush")] 
 		public CResourceAsyncReference<worldFoliageBrush> FoliageBrush
 		{
-			get => GetProperty(ref _foliageBrush);
-			set => SetProperty(ref _foliageBrush, value);
+			get => GetPropertyValue<CResourceAsyncReference<worldFoliageBrush>>();
+			set => SetPropertyValue<CResourceAsyncReference<worldFoliageBrush>>(value);
 		}
 	}
 }

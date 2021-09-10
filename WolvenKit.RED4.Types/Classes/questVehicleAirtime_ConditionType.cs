@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questVehicleAirtime_ConditionType : questIVehicleConditionType
 	{
-		private CFloat _seconds;
-
 		[Ordinal(0)] 
 		[RED("seconds")] 
 		public CFloat Seconds
 		{
-			get => GetProperty(ref _seconds);
-			set => SetProperty(ref _seconds, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public questVehicleAirtime_ConditionType()
 		{
-			_seconds = 1.000000F;
+			Seconds = 1.000000F;
 		}
 	}
 }

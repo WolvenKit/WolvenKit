@@ -5,103 +5,94 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimFeature_Cover : animAnimFeature
 	{
-		private Vector4 _coverPosition;
-		private Vector4 _coverDirection;
-		private CInt32 _coverState;
-		private CFloat _coverAngleToAction;
-		private CInt32 _stance;
-		private CInt32 _behavior;
-		private CInt32 _coverAction;
-		private CFloat _behaviorTime_PreAction;
-		private CFloat _behaviorTime_Action;
-		private CFloat _behaviorTime_PostAction;
-
 		[Ordinal(0)] 
 		[RED("coverPosition")] 
 		public Vector4 CoverPosition
 		{
-			get => GetProperty(ref _coverPosition);
-			set => SetProperty(ref _coverPosition, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("coverDirection")] 
 		public Vector4 CoverDirection
 		{
-			get => GetProperty(ref _coverDirection);
-			set => SetProperty(ref _coverDirection, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("coverState")] 
 		public CInt32 CoverState
 		{
-			get => GetProperty(ref _coverState);
-			set => SetProperty(ref _coverState, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("coverAngleToAction")] 
 		public CFloat CoverAngleToAction
 		{
-			get => GetProperty(ref _coverAngleToAction);
-			set => SetProperty(ref _coverAngleToAction, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("stance")] 
 		public CInt32 Stance
 		{
-			get => GetProperty(ref _stance);
-			set => SetProperty(ref _stance, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("behavior")] 
 		public CInt32 Behavior
 		{
-			get => GetProperty(ref _behavior);
-			set => SetProperty(ref _behavior, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("coverAction")] 
 		public CInt32 CoverAction
 		{
-			get => GetProperty(ref _coverAction);
-			set => SetProperty(ref _coverAction, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("behaviorTime_PreAction")] 
 		public CFloat BehaviorTime_PreAction
 		{
-			get => GetProperty(ref _behaviorTime_PreAction);
-			set => SetProperty(ref _behaviorTime_PreAction, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("behaviorTime_Action")] 
 		public CFloat BehaviorTime_Action
 		{
-			get => GetProperty(ref _behaviorTime_Action);
-			set => SetProperty(ref _behaviorTime_Action, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("behaviorTime_PostAction")] 
 		public CFloat BehaviorTime_PostAction
 		{
-			get => GetProperty(ref _behaviorTime_PostAction);
-			set => SetProperty(ref _behaviorTime_PostAction, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public animAnimFeature_Cover()
 		{
-			_coverState = 1;
-			_behaviorTime_PreAction = 1.000000F;
-			_behaviorTime_Action = 1.000000F;
-			_behaviorTime_PostAction = 1.000000F;
+			CoverPosition = new();
+			CoverDirection = new();
+			CoverState = 1;
+			BehaviorTime_PreAction = 1.000000F;
+			BehaviorTime_Action = 1.000000F;
+			BehaviorTime_PostAction = 1.000000F;
 		}
 	}
 }

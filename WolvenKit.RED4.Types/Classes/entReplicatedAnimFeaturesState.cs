@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entReplicatedAnimFeaturesState : RedBaseClass
 	{
-		private CArray<entReplicatedAnimFeature> _items;
-		private netTime _lastAppliedActionsTime;
-
 		[Ordinal(0)] 
 		[RED("items")] 
 		public CArray<entReplicatedAnimFeature> Items
 		{
-			get => GetProperty(ref _items);
-			set => SetProperty(ref _items, value);
+			get => GetPropertyValue<CArray<entReplicatedAnimFeature>>();
+			set => SetPropertyValue<CArray<entReplicatedAnimFeature>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("lastAppliedActionsTime")] 
 		public netTime LastAppliedActionsTime
 		{
-			get => GetProperty(ref _lastAppliedActionsTime);
-			set => SetProperty(ref _lastAppliedActionsTime, value);
+			get => GetPropertyValue<netTime>();
+			set => SetPropertyValue<netTime>(value);
+		}
+
+		public entReplicatedAnimFeaturesState()
+		{
+			Items = new();
+			LastAppliedActionsTime = new();
 		}
 	}
 }

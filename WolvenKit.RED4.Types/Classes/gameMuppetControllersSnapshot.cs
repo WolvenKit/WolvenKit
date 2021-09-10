@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameMuppetControllersSnapshot : RedBaseClass
 	{
-		private CArray<gameMuppetControllerSnapshot> _controllers;
-
 		[Ordinal(0)] 
 		[RED("controllers")] 
 		public CArray<gameMuppetControllerSnapshot> Controllers
 		{
-			get => GetProperty(ref _controllers);
-			set => SetProperty(ref _controllers, value);
+			get => GetPropertyValue<CArray<gameMuppetControllerSnapshot>>();
+			set => SetPropertyValue<CArray<gameMuppetControllerSnapshot>>(value);
+		}
+
+		public gameMuppetControllersSnapshot()
+		{
+			Controllers = new();
 		}
 	}
 }

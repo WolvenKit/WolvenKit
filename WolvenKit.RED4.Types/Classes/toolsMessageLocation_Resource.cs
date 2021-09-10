@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class toolsMessageLocation_Resource : toolsIMessageLocation
 	{
-		private MessageResourcePath _path;
-
 		[Ordinal(0)] 
 		[RED("path")] 
 		public MessageResourcePath Path
 		{
-			get => GetProperty(ref _path);
-			set => SetProperty(ref _path, value);
+			get => GetPropertyValue<MessageResourcePath>();
+			set => SetPropertyValue<MessageResourcePath>(value);
 		}
 	}
 }

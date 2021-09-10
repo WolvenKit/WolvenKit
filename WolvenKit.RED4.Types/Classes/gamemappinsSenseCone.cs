@@ -5,50 +5,50 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamemappinsSenseCone : RedBaseClass
 	{
-		private CFloat _length;
-		private CFloat _width;
-		private CFloat _angleDegrees;
-		private Vector4 _position1;
-		private Vector4 _position2;
-
 		[Ordinal(0)] 
 		[RED("length")] 
 		public CFloat Length
 		{
-			get => GetProperty(ref _length);
-			set => SetProperty(ref _length, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("width")] 
 		public CFloat Width
 		{
-			get => GetProperty(ref _width);
-			set => SetProperty(ref _width, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("angleDegrees")] 
 		public CFloat AngleDegrees
 		{
-			get => GetProperty(ref _angleDegrees);
-			set => SetProperty(ref _angleDegrees, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("position1")] 
 		public Vector4 Position1
 		{
-			get => GetProperty(ref _position1);
-			set => SetProperty(ref _position1, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("position2")] 
 		public Vector4 Position2
 		{
-			get => GetProperty(ref _position2);
-			set => SetProperty(ref _position2, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
+		}
+
+		public gamemappinsSenseCone()
+		{
+			Position1 = new();
+			Position2 = new();
 		}
 	}
 }

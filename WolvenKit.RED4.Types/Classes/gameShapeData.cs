@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameShapeData : RedBaseClass
 	{
-		private gameHitResult _result;
-		private CHandle<gameHitShapeUserData> _userData;
-		private CName _physicsMaterial;
-		private CName _hitShapeName;
-
 		[Ordinal(0)] 
 		[RED("result")] 
 		public gameHitResult Result
 		{
-			get => GetProperty(ref _result);
-			set => SetProperty(ref _result, value);
+			get => GetPropertyValue<gameHitResult>();
+			set => SetPropertyValue<gameHitResult>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("userData")] 
 		public CHandle<gameHitShapeUserData> UserData
 		{
-			get => GetProperty(ref _userData);
-			set => SetProperty(ref _userData, value);
+			get => GetPropertyValue<CHandle<gameHitShapeUserData>>();
+			set => SetPropertyValue<CHandle<gameHitShapeUserData>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("physicsMaterial")] 
 		public CName PhysicsMaterial
 		{
-			get => GetProperty(ref _physicsMaterial);
-			set => SetProperty(ref _physicsMaterial, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("hitShapeName")] 
 		public CName HitShapeName
 		{
-			get => GetProperty(ref _hitShapeName);
-			set => SetProperty(ref _hitShapeName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public gameShapeData()
+		{
+			Result = new() { HitPositionEnter = new(), HitPositionExit = new() };
 		}
 	}
 }

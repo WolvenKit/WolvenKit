@@ -5,77 +5,76 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CyclableRadialSlot : WeaponRadialSlot
 	{
-		private inkWidgetReference _leftArrowEmpty;
-		private inkWidgetReference _leftArrowFull;
-		private inkWidgetReference _rightArrowEmpty;
-		private inkWidgetReference _rightArrowFull;
-		private CBool _canCycle;
-		private CBool _isCycling;
-		private CBool _wasCyclingRight;
-		private CEnum<gameEHotkey> _hotkey;
-
 		[Ordinal(11)] 
 		[RED("leftArrowEmpty")] 
 		public inkWidgetReference LeftArrowEmpty
 		{
-			get => GetProperty(ref _leftArrowEmpty);
-			set => SetProperty(ref _leftArrowEmpty, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("leftArrowFull")] 
 		public inkWidgetReference LeftArrowFull
 		{
-			get => GetProperty(ref _leftArrowFull);
-			set => SetProperty(ref _leftArrowFull, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("rightArrowEmpty")] 
 		public inkWidgetReference RightArrowEmpty
 		{
-			get => GetProperty(ref _rightArrowEmpty);
-			set => SetProperty(ref _rightArrowEmpty, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("rightArrowFull")] 
 		public inkWidgetReference RightArrowFull
 		{
-			get => GetProperty(ref _rightArrowFull);
-			set => SetProperty(ref _rightArrowFull, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("canCycle")] 
 		public CBool CanCycle
 		{
-			get => GetProperty(ref _canCycle);
-			set => SetProperty(ref _canCycle, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("isCycling")] 
 		public CBool IsCycling
 		{
-			get => GetProperty(ref _isCycling);
-			set => SetProperty(ref _isCycling, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("wasCyclingRight")] 
 		public CBool WasCyclingRight
 		{
-			get => GetProperty(ref _wasCyclingRight);
-			set => SetProperty(ref _wasCyclingRight, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("hotkey")] 
 		public CEnum<gameEHotkey> Hotkey
 		{
-			get => GetProperty(ref _hotkey);
-			set => SetProperty(ref _hotkey, value);
+			get => GetPropertyValue<CEnum<gameEHotkey>>();
+			set => SetPropertyValue<CEnum<gameEHotkey>>(value);
+		}
+
+		public CyclableRadialSlot()
+		{
+			LeftArrowEmpty = new();
+			LeftArrowFull = new();
+			RightArrowEmpty = new();
+			RightArrowFull = new();
 		}
 	}
 }

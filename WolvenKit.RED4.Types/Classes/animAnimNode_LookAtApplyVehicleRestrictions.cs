@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_LookAtApplyVehicleRestrictions : animAnimNode_OnePoseInput
 	{
-		private CName _group;
-		private CName _name;
-		private animTransformIndex _referenceBone;
-
 		[Ordinal(12)] 
 		[RED("group")] 
 		public CName Group
 		{
-			get => GetProperty(ref _group);
-			set => SetProperty(ref _group, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get => GetProperty(ref _name);
-			set => SetProperty(ref _name, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("referenceBone")] 
 		public animTransformIndex ReferenceBone
 		{
-			get => GetProperty(ref _referenceBone);
-			set => SetProperty(ref _referenceBone, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
+		}
+
+		public animAnimNode_LookAtApplyVehicleRestrictions()
+		{
+			Id = 4294967295;
+			InputLink = new();
+			ReferenceBone = new();
 		}
 	}
 }

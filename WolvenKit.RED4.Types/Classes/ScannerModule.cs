@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ScannerModule : HUDModule
 	{
-		private CArray<CHandle<ScanInstance>> _activeScans;
-
 		[Ordinal(3)] 
 		[RED("activeScans")] 
 		public CArray<CHandle<ScanInstance>> ActiveScans
 		{
-			get => GetProperty(ref _activeScans);
-			set => SetProperty(ref _activeScans, value);
+			get => GetPropertyValue<CArray<CHandle<ScanInstance>>>();
+			set => SetPropertyValue<CArray<CHandle<ScanInstance>>>(value);
+		}
+
+		public ScannerModule()
+		{
+			InstancesList = new();
+			ActiveScans = new();
 		}
 	}
 }

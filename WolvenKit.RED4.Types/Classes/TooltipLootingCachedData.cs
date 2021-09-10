@@ -5,50 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TooltipLootingCachedData : IScriptable
 	{
-		private CWeakHandle<gameItemData> _externalItemData;
-		private CWeakHandle<gamedataItem_Record> _itemRecord;
-		private CWeakHandle<gameItemData> _comparisonItemData;
-		private gameItemID _comparisonItemId;
-		private CHandle<MinimalLootingListItemData> _lootingData;
-
 		[Ordinal(0)] 
 		[RED("externalItemData")] 
 		public CWeakHandle<gameItemData> ExternalItemData
 		{
-			get => GetProperty(ref _externalItemData);
-			set => SetProperty(ref _externalItemData, value);
+			get => GetPropertyValue<CWeakHandle<gameItemData>>();
+			set => SetPropertyValue<CWeakHandle<gameItemData>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("itemRecord")] 
 		public CWeakHandle<gamedataItem_Record> ItemRecord
 		{
-			get => GetProperty(ref _itemRecord);
-			set => SetProperty(ref _itemRecord, value);
+			get => GetPropertyValue<CWeakHandle<gamedataItem_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataItem_Record>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("comparisonItemData")] 
 		public CWeakHandle<gameItemData> ComparisonItemData
 		{
-			get => GetProperty(ref _comparisonItemData);
-			set => SetProperty(ref _comparisonItemData, value);
+			get => GetPropertyValue<CWeakHandle<gameItemData>>();
+			set => SetPropertyValue<CWeakHandle<gameItemData>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("comparisonItemId")] 
 		public gameItemID ComparisonItemId
 		{
-			get => GetProperty(ref _comparisonItemId);
-			set => SetProperty(ref _comparisonItemId, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("lootingData")] 
 		public CHandle<MinimalLootingListItemData> LootingData
 		{
-			get => GetProperty(ref _lootingData);
-			set => SetProperty(ref _lootingData, value);
+			get => GetPropertyValue<CHandle<MinimalLootingListItemData>>();
+			set => SetPropertyValue<CHandle<MinimalLootingListItemData>>(value);
+		}
+
+		public TooltipLootingCachedData()
+		{
+			ComparisonItemId = new();
 		}
 	}
 }

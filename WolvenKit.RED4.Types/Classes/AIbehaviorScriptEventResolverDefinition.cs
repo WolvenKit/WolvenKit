@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorScriptEventResolverDefinition : AIbehaviorEventResolverDefinition
 	{
-		private CHandle<AIbehavioreventResolverScript> _script;
-
 		[Ordinal(0)] 
 		[RED("script")] 
 		public CHandle<AIbehavioreventResolverScript> Script
 		{
-			get => GetProperty(ref _script);
-			set => SetProperty(ref _script, value);
+			get => GetPropertyValue<CHandle<AIbehavioreventResolverScript>>();
+			set => SetPropertyValue<CHandle<AIbehavioreventResolverScript>>(value);
 		}
 	}
 }

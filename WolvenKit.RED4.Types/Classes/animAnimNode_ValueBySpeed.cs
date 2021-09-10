@@ -5,66 +5,61 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_ValueBySpeed : animAnimNode_FloatValue
 	{
-		private CFloat _defaultValue;
-		private CEnum<animClampType> _clampType;
-		private CFloat _rangeMin;
-		private CFloat _rangeMax;
-		private CBool _resetOnActivation;
-		private animFloatLink _speed;
-
 		[Ordinal(11)] 
 		[RED("defaultValue")] 
 		public CFloat DefaultValue
 		{
-			get => GetProperty(ref _defaultValue);
-			set => SetProperty(ref _defaultValue, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("clampType")] 
 		public CEnum<animClampType> ClampType
 		{
-			get => GetProperty(ref _clampType);
-			set => SetProperty(ref _clampType, value);
+			get => GetPropertyValue<CEnum<animClampType>>();
+			set => SetPropertyValue<CEnum<animClampType>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("rangeMin")] 
 		public CFloat RangeMin
 		{
-			get => GetProperty(ref _rangeMin);
-			set => SetProperty(ref _rangeMin, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("rangeMax")] 
 		public CFloat RangeMax
 		{
-			get => GetProperty(ref _rangeMax);
-			set => SetProperty(ref _rangeMax, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("resetOnActivation")] 
 		public CBool ResetOnActivation
 		{
-			get => GetProperty(ref _resetOnActivation);
-			set => SetProperty(ref _resetOnActivation, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("speed")] 
 		public animFloatLink Speed
 		{
-			get => GetProperty(ref _speed);
-			set => SetProperty(ref _speed, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		public animAnimNode_ValueBySpeed()
 		{
-			_clampType = new() { Value = Enums.animClampType.Clamp };
-			_rangeMax = 1.000000F;
-			_resetOnActivation = true;
+			Id = 4294967295;
+			ClampType = Enums.animClampType.Clamp;
+			RangeMax = 1.000000F;
+			ResetOnActivation = true;
+			Speed = new();
 		}
 	}
 }

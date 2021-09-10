@@ -5,64 +5,58 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RewireComponent : gameScriptableComponent
 	{
-		private redResourceReferenceScriptToken _miniGameVideoPath;
-		private CName _miniGameAudioEvent;
-		private CFloat _miniGameVideoLenght;
-		private CHandle<RewireEvent> _rewireEvent;
-		private CFloat _rewireCurrentLenght;
-		private CBool _isActive;
-
 		[Ordinal(5)] 
 		[RED("miniGameVideoPath")] 
 		public redResourceReferenceScriptToken MiniGameVideoPath
 		{
-			get => GetProperty(ref _miniGameVideoPath);
-			set => SetProperty(ref _miniGameVideoPath, value);
+			get => GetPropertyValue<redResourceReferenceScriptToken>();
+			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("miniGameAudioEvent")] 
 		public CName MiniGameAudioEvent
 		{
-			get => GetProperty(ref _miniGameAudioEvent);
-			set => SetProperty(ref _miniGameAudioEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("miniGameVideoLenght")] 
 		public CFloat MiniGameVideoLenght
 		{
-			get => GetProperty(ref _miniGameVideoLenght);
-			set => SetProperty(ref _miniGameVideoLenght, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("rewireEvent")] 
 		public CHandle<RewireEvent> RewireEvent
 		{
-			get => GetProperty(ref _rewireEvent);
-			set => SetProperty(ref _rewireEvent, value);
+			get => GetPropertyValue<CHandle<RewireEvent>>();
+			set => SetPropertyValue<CHandle<RewireEvent>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("rewireCurrentLenght")] 
 		public CFloat RewireCurrentLenght
 		{
-			get => GetProperty(ref _rewireCurrentLenght);
-			set => SetProperty(ref _rewireCurrentLenght, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get => GetProperty(ref _isActive);
-			set => SetProperty(ref _isActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public RewireComponent()
 		{
-			_miniGameVideoLenght = 5.000000F;
+			MiniGameVideoPath = new();
+			MiniGameVideoLenght = 5.000000F;
 		}
 	}
 }

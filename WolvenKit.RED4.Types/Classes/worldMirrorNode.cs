@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldMirrorNode : worldMeshNode
 	{
-		private Vector3 _cullingBoxExtents;
-		private Vector3 _cullingBoxOffset;
-
 		[Ordinal(15)] 
 		[RED("cullingBoxExtents")] 
 		public Vector3 CullingBoxExtents
 		{
-			get => GetProperty(ref _cullingBoxExtents);
-			set => SetProperty(ref _cullingBoxExtents, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("cullingBoxOffset")] 
 		public Vector3 CullingBoxOffset
 		{
-			get => GetProperty(ref _cullingBoxOffset);
-			set => SetProperty(ref _cullingBoxOffset, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
+		}
+
+		public worldMirrorNode()
+		{
+			CullingBoxExtents = new() { X = 20.000000F, Y = 20.000000F, Z = 20.000000F };
+			CullingBoxOffset = new();
 		}
 	}
 }

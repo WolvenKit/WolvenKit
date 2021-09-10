@@ -5,32 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_TransformConstant : animAnimNode_TransformValue
 	{
-		private Vector4 _pos;
-		private Quaternion _rotation;
-		private Vector4 _scale;
-
 		[Ordinal(11)] 
 		[RED("pos")] 
 		public Vector4 Pos
 		{
-			get => GetProperty(ref _pos);
-			set => SetProperty(ref _pos, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("rotation")] 
 		public Quaternion Rotation
 		{
-			get => GetProperty(ref _rotation);
-			set => SetProperty(ref _rotation, value);
+			get => GetPropertyValue<Quaternion>();
+			set => SetPropertyValue<Quaternion>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("scale")] 
 		public Vector4 Scale
 		{
-			get => GetProperty(ref _scale);
-			set => SetProperty(ref _scale, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
+		}
+
+		public animAnimNode_TransformConstant()
+		{
+			Id = 4294967295;
+			Pos = new() { W = 1.000000F };
+			Rotation = new() { R = 1.000000F };
+			Scale = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F };
 		}
 	}
 }

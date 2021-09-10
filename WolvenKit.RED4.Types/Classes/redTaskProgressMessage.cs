@@ -5,37 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class redTaskProgressMessage : RedBaseClass
 	{
-		private CUInt32 _id;
-		private CFloat _progress;
-		private CFloat _processingTime;
-
 		[Ordinal(0)] 
 		[RED("id")] 
 		public CUInt32 Id
 		{
-			get => GetProperty(ref _id);
-			set => SetProperty(ref _id, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("progress")] 
 		public CFloat Progress
 		{
-			get => GetProperty(ref _progress);
-			set => SetProperty(ref _progress, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("processingTime")] 
 		public CFloat ProcessingTime
 		{
-			get => GetProperty(ref _processingTime);
-			set => SetProperty(ref _processingTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public redTaskProgressMessage()
 		{
-			_id = 4294967295;
+			Id = 4294967295;
 		}
 	}
 }

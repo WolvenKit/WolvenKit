@@ -5,96 +5,89 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameinfluenceBumpComponent : entIPlacedComponent
 	{
-		private CBool _isPlayerControlled;
-		private CFloat _movementSpreadDistance;
-		private CFloat _movementSpreadRadius;
-		private CFloat _distanceToReactBack;
-		private CFloat _distanceToReactFront;
-		private CArray<gameinfluenceBumpReactionSetting> _reactionSettings;
-		private CBool _autoPlayBumpAnimation;
-		private CBool _isEnabled;
-		private CBool _isBumpable;
-
 		[Ordinal(5)] 
 		[RED("isPlayerControlled")] 
 		public CBool IsPlayerControlled
 		{
-			get => GetProperty(ref _isPlayerControlled);
-			set => SetProperty(ref _isPlayerControlled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("movementSpreadDistance")] 
 		public CFloat MovementSpreadDistance
 		{
-			get => GetProperty(ref _movementSpreadDistance);
-			set => SetProperty(ref _movementSpreadDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("movementSpreadRadius")] 
 		public CFloat MovementSpreadRadius
 		{
-			get => GetProperty(ref _movementSpreadRadius);
-			set => SetProperty(ref _movementSpreadRadius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("distanceToReactBack")] 
 		public CFloat DistanceToReactBack
 		{
-			get => GetProperty(ref _distanceToReactBack);
-			set => SetProperty(ref _distanceToReactBack, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("distanceToReactFront")] 
 		public CFloat DistanceToReactFront
 		{
-			get => GetProperty(ref _distanceToReactFront);
-			set => SetProperty(ref _distanceToReactFront, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("reactionSettings")] 
 		public CArray<gameinfluenceBumpReactionSetting> ReactionSettings
 		{
-			get => GetProperty(ref _reactionSettings);
-			set => SetProperty(ref _reactionSettings, value);
+			get => GetPropertyValue<CArray<gameinfluenceBumpReactionSetting>>();
+			set => SetPropertyValue<CArray<gameinfluenceBumpReactionSetting>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("autoPlayBumpAnimation")] 
 		public CBool AutoPlayBumpAnimation
 		{
-			get => GetProperty(ref _autoPlayBumpAnimation);
-			set => SetProperty(ref _autoPlayBumpAnimation, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("isBumpable")] 
 		public CBool IsBumpable
 		{
-			get => GetProperty(ref _isBumpable);
-			set => SetProperty(ref _isBumpable, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public gameinfluenceBumpComponent()
 		{
-			_movementSpreadDistance = 2.000000F;
-			_movementSpreadRadius = 0.750000F;
-			_distanceToReactBack = 0.600000F;
-			_distanceToReactFront = 1.000000F;
-			_autoPlayBumpAnimation = true;
-			_isEnabled = true;
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			MovementSpreadDistance = 2.000000F;
+			MovementSpreadRadius = 0.750000F;
+			DistanceToReactBack = 0.600000F;
+			DistanceToReactFront = 1.000000F;
+			ReactionSettings = new();
+			AutoPlayBumpAnimation = true;
+			IsEnabled = true;
 		}
 	}
 }

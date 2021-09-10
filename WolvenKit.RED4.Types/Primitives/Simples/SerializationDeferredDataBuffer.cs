@@ -5,27 +5,43 @@ namespace WolvenKit.RED4.Types
     [RED("serializationDeferredDataBuffer")]
     public class SerializationDeferredDataBuffer : IRedPrimitive, IEquatable<SerializationDeferredDataBuffer>
     {
-        public CUInt16 Buffer { get; set; }
-
-
-        public override bool Equals(object obj)
-        {
-            if (obj is SerializationDeferredDataBuffer cObj)
-            {
-                return Equals(cObj);
-            }
-
-            return false;
-        }
+        public ushort Buffer { get; set; }
 
         public bool Equals(SerializationDeferredDataBuffer other)
         {
-            if (other == null)
+            if (ReferenceEquals(null, other))
             {
                 return false;
             }
 
-            return Buffer.Equals(other.Buffer);
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            return Buffer == other.Buffer;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((SerializationDeferredDataBuffer)obj);
+        }
+
+        public override int GetHashCode() => Buffer.GetHashCode();
     }
 }

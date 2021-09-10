@@ -5,200 +5,181 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DamageDigitsGameController : gameuiProjectedHUDGameController
 	{
-		private CInt32 _maxVisible;
-		private CInt32 _maxAccumulatedVisible;
-		private CWeakHandle<gameObject> _realOwner;
-		private CHandle<inkScriptFIFOQueue> _digitsQueue;
-		private CBool _isBeingUsed;
-		private gameSlotWeaponData _activeWeapon;
-		private CHandle<gameSlotDataHolder> _bufferedRosterData;
-		private CArray<CWeakHandle<DamageDigitLogicController>> _individualControllerArray;
-		private CArray<AccumulatedDamageDigitsNode> _accumulatedControllerArray;
-		private CEnum<gameuiDamageDigitsMode> _damageDigitsMode;
-		private CBool _showDigitsIndividual;
-		private CBool _showDigitsAccumulated;
-		private CEnum<gameuiDamageDigitsStickingMode> _damageDigitsStickingMode;
-		private CInt32 _spawnedDigits;
-		private CInt32 _spawnedAccumulatedDigitsDigits;
-		private CWeakHandle<gameIBlackboard> _damageInfoBB;
-		private CWeakHandle<gameIBlackboard> _uIBlackboard;
-		private CHandle<redCallbackObject> _damageListBlackboardId;
-		private CHandle<redCallbackObject> _bBWeaponListBlackboardId;
-		private CHandle<redCallbackObject> _damageDigitsModeBlackboardId;
-		private CHandle<redCallbackObject> _damageDigitsStickingModeBlackboardId;
-
 		[Ordinal(9)] 
 		[RED("maxVisible")] 
 		public CInt32 MaxVisible
 		{
-			get => GetProperty(ref _maxVisible);
-			set => SetProperty(ref _maxVisible, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("maxAccumulatedVisible")] 
 		public CInt32 MaxAccumulatedVisible
 		{
-			get => GetProperty(ref _maxAccumulatedVisible);
-			set => SetProperty(ref _maxAccumulatedVisible, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("realOwner")] 
 		public CWeakHandle<gameObject> RealOwner
 		{
-			get => GetProperty(ref _realOwner);
-			set => SetProperty(ref _realOwner, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("digitsQueue")] 
 		public CHandle<inkScriptFIFOQueue> DigitsQueue
 		{
-			get => GetProperty(ref _digitsQueue);
-			set => SetProperty(ref _digitsQueue, value);
+			get => GetPropertyValue<CHandle<inkScriptFIFOQueue>>();
+			set => SetPropertyValue<CHandle<inkScriptFIFOQueue>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("isBeingUsed")] 
 		public CBool IsBeingUsed
 		{
-			get => GetProperty(ref _isBeingUsed);
-			set => SetProperty(ref _isBeingUsed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("ActiveWeapon")] 
 		public gameSlotWeaponData ActiveWeapon
 		{
-			get => GetProperty(ref _activeWeapon);
-			set => SetProperty(ref _activeWeapon, value);
+			get => GetPropertyValue<gameSlotWeaponData>();
+			set => SetPropertyValue<gameSlotWeaponData>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("BufferedRosterData")] 
 		public CHandle<gameSlotDataHolder> BufferedRosterData
 		{
-			get => GetProperty(ref _bufferedRosterData);
-			set => SetProperty(ref _bufferedRosterData, value);
+			get => GetPropertyValue<CHandle<gameSlotDataHolder>>();
+			set => SetPropertyValue<CHandle<gameSlotDataHolder>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("individualControllerArray")] 
 		public CArray<CWeakHandle<DamageDigitLogicController>> IndividualControllerArray
 		{
-			get => GetProperty(ref _individualControllerArray);
-			set => SetProperty(ref _individualControllerArray, value);
+			get => GetPropertyValue<CArray<CWeakHandle<DamageDigitLogicController>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<DamageDigitLogicController>>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("accumulatedControllerArray")] 
 		public CArray<AccumulatedDamageDigitsNode> AccumulatedControllerArray
 		{
-			get => GetProperty(ref _accumulatedControllerArray);
-			set => SetProperty(ref _accumulatedControllerArray, value);
+			get => GetPropertyValue<CArray<AccumulatedDamageDigitsNode>>();
+			set => SetPropertyValue<CArray<AccumulatedDamageDigitsNode>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("damageDigitsMode")] 
 		public CEnum<gameuiDamageDigitsMode> DamageDigitsMode
 		{
-			get => GetProperty(ref _damageDigitsMode);
-			set => SetProperty(ref _damageDigitsMode, value);
+			get => GetPropertyValue<CEnum<gameuiDamageDigitsMode>>();
+			set => SetPropertyValue<CEnum<gameuiDamageDigitsMode>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("showDigitsIndividual")] 
 		public CBool ShowDigitsIndividual
 		{
-			get => GetProperty(ref _showDigitsIndividual);
-			set => SetProperty(ref _showDigitsIndividual, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("showDigitsAccumulated")] 
 		public CBool ShowDigitsAccumulated
 		{
-			get => GetProperty(ref _showDigitsAccumulated);
-			set => SetProperty(ref _showDigitsAccumulated, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("damageDigitsStickingMode")] 
 		public CEnum<gameuiDamageDigitsStickingMode> DamageDigitsStickingMode
 		{
-			get => GetProperty(ref _damageDigitsStickingMode);
-			set => SetProperty(ref _damageDigitsStickingMode, value);
+			get => GetPropertyValue<CEnum<gameuiDamageDigitsStickingMode>>();
+			set => SetPropertyValue<CEnum<gameuiDamageDigitsStickingMode>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("spawnedDigits")] 
 		public CInt32 SpawnedDigits
 		{
-			get => GetProperty(ref _spawnedDigits);
-			set => SetProperty(ref _spawnedDigits, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("spawnedAccumulatedDigitsDigits")] 
 		public CInt32 SpawnedAccumulatedDigitsDigits
 		{
-			get => GetProperty(ref _spawnedAccumulatedDigitsDigits);
-			set => SetProperty(ref _spawnedAccumulatedDigitsDigits, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("damageInfoBB")] 
 		public CWeakHandle<gameIBlackboard> DamageInfoBB
 		{
-			get => GetProperty(ref _damageInfoBB);
-			set => SetProperty(ref _damageInfoBB, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("UIBlackboard")] 
 		public CWeakHandle<gameIBlackboard> UIBlackboard
 		{
-			get => GetProperty(ref _uIBlackboard);
-			set => SetProperty(ref _uIBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("damageListBlackboardId")] 
 		public CHandle<redCallbackObject> DamageListBlackboardId
 		{
-			get => GetProperty(ref _damageListBlackboardId);
-			set => SetProperty(ref _damageListBlackboardId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("BBWeaponListBlackboardId")] 
 		public CHandle<redCallbackObject> BBWeaponListBlackboardId
 		{
-			get => GetProperty(ref _bBWeaponListBlackboardId);
-			set => SetProperty(ref _bBWeaponListBlackboardId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("damageDigitsModeBlackboardId")] 
 		public CHandle<redCallbackObject> DamageDigitsModeBlackboardId
 		{
-			get => GetProperty(ref _damageDigitsModeBlackboardId);
-			set => SetProperty(ref _damageDigitsModeBlackboardId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("damageDigitsStickingModeBlackboardId")] 
 		public CHandle<redCallbackObject> DamageDigitsStickingModeBlackboardId
 		{
-			get => GetProperty(ref _damageDigitsStickingModeBlackboardId);
-			set => SetProperty(ref _damageDigitsStickingModeBlackboardId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		public DamageDigitsGameController()
 		{
-			_maxVisible = 50;
-			_maxAccumulatedVisible = 10;
+			MaxVisible = 50;
+			MaxAccumulatedVisible = 10;
+			ActiveWeapon = new() { WeaponID = new(), AmmoCurrent = -1, MagazineCap = -1, AmmoId = new(), TriggerModeCurrent = Enums.gamedataTriggerMode.Invalid, TriggerModeList = new(), Evolution = Enums.gamedataWeaponEvolution.Invalid, IsFirstEquip = true };
+			IndividualControllerArray = new();
+			AccumulatedControllerArray = new();
 		}
 	}
 }

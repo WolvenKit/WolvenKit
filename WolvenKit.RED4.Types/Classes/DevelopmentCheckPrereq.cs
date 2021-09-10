@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DevelopmentCheckPrereq : gameIScriptablePrereq
 	{
-		private CFloat _requiredLevel;
-
 		[Ordinal(0)] 
 		[RED("requiredLevel")] 
 		public CFloat RequiredLevel
 		{
-			get => GetProperty(ref _requiredLevel);
-			set => SetProperty(ref _requiredLevel, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

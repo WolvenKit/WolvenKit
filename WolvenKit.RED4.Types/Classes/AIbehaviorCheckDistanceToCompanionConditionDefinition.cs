@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorCheckDistanceToCompanionConditionDefinition : AIbehaviorCompanionConditionDefinition
 	{
-		private CHandle<AIArgumentMapping> _distance;
-		private CEnum<EComparisonType> _comparisonOperator;
-
 		[Ordinal(3)] 
 		[RED("distance")] 
 		public CHandle<AIArgumentMapping> Distance
 		{
-			get => GetProperty(ref _distance);
-			set => SetProperty(ref _distance, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("comparisonOperator")] 
 		public CEnum<EComparisonType> ComparisonOperator
 		{
-			get => GetProperty(ref _comparisonOperator);
-			set => SetProperty(ref _comparisonOperator, value);
+			get => GetPropertyValue<CEnum<EComparisonType>>();
+			set => SetPropertyValue<CEnum<EComparisonType>>(value);
 		}
 
 		public AIbehaviorCheckDistanceToCompanionConditionDefinition()
 		{
-			_comparisonOperator = new() { Value = Enums.EComparisonType.Less };
+			ComparisonOperator = Enums.EComparisonType.Less;
 		}
 	}
 }

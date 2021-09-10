@@ -5,59 +5,57 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ScannerHintInkGameController : gameuiWidgetGameController
 	{
-		private CWeakHandle<inkTextWidget> _messegeWidget;
-		private CWeakHandle<inkWidget> _root;
-		private inkImageWidgetReference _iconWidget;
-		private CHandle<redCallbackObject> _onShowMessegeCallback;
-		private CHandle<redCallbackObject> _onMessegeUpdateCallback;
-		private CHandle<redCallbackObject> _onVisionModeChangedCallback;
-
 		[Ordinal(2)] 
 		[RED("messegeWidget")] 
 		public CWeakHandle<inkTextWidget> MessegeWidget
 		{
-			get => GetProperty(ref _messegeWidget);
-			set => SetProperty(ref _messegeWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkTextWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("root")] 
 		public CWeakHandle<inkWidget> Root
 		{
-			get => GetProperty(ref _root);
-			set => SetProperty(ref _root, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("iconWidget")] 
 		public inkImageWidgetReference IconWidget
 		{
-			get => GetProperty(ref _iconWidget);
-			set => SetProperty(ref _iconWidget, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("OnShowMessegeCallback")] 
 		public CHandle<redCallbackObject> OnShowMessegeCallback
 		{
-			get => GetProperty(ref _onShowMessegeCallback);
-			set => SetProperty(ref _onShowMessegeCallback, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("OnMessegeUpdateCallback")] 
 		public CHandle<redCallbackObject> OnMessegeUpdateCallback
 		{
-			get => GetProperty(ref _onMessegeUpdateCallback);
-			set => SetProperty(ref _onMessegeUpdateCallback, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("OnVisionModeChangedCallback")] 
 		public CHandle<redCallbackObject> OnVisionModeChangedCallback
 		{
-			get => GetProperty(ref _onVisionModeChangedCallback);
-			set => SetProperty(ref _onVisionModeChangedCallback, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		public ScannerHintInkGameController()
+		{
+			IconWidget = new();
 		}
 	}
 }

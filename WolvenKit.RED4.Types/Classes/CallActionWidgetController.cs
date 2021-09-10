@@ -5,47 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CallActionWidgetController : DeviceActionWidgetControllerBase
 	{
-		private inkTextWidgetReference _statusText;
-		private CName _callingAnimName;
-		private CName _talkingAnimName;
-		private CEnum<IntercomStatus> _status;
-
 		[Ordinal(29)] 
 		[RED("statusText")] 
 		public inkTextWidgetReference StatusText
 		{
-			get => GetProperty(ref _statusText);
-			set => SetProperty(ref _statusText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("callingAnimName")] 
 		public CName CallingAnimName
 		{
-			get => GetProperty(ref _callingAnimName);
-			set => SetProperty(ref _callingAnimName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("talkingAnimName")] 
 		public CName TalkingAnimName
 		{
-			get => GetProperty(ref _talkingAnimName);
-			set => SetProperty(ref _talkingAnimName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("status")] 
 		public CEnum<IntercomStatus> Status
 		{
-			get => GetProperty(ref _status);
-			set => SetProperty(ref _status, value);
+			get => GetPropertyValue<CEnum<IntercomStatus>>();
+			set => SetPropertyValue<CEnum<IntercomStatus>>(value);
 		}
 
 		public CallActionWidgetController()
 		{
-			_callingAnimName = "calling_animation_maelstrom";
-			_talkingAnimName = "talking_animation_maelstrom";
+			StatusText = new();
+			CallingAnimName = "calling_animation_maelstrom";
+			TalkingAnimName = "talking_animation_maelstrom";
 		}
 	}
 }

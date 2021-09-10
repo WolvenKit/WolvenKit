@@ -5,37 +5,38 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DispenceItemFromVendor : ActionBool
 	{
-		private gameItemID _itemID;
-		private CInt32 _price;
-		private CName _atlasTexture;
-
 		[Ordinal(25)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get => GetProperty(ref _itemID);
-			set => SetProperty(ref _itemID, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("price")] 
 		public CInt32 Price
 		{
-			get => GetProperty(ref _price);
-			set => SetProperty(ref _price, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("atlasTexture")] 
 		public CName AtlasTexture
 		{
-			get => GetProperty(ref _atlasTexture);
-			set => SetProperty(ref _atlasTexture, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public DispenceItemFromVendor()
 		{
-			_price = -1;
+			RequesterID = new();
+			InteractionChoice = new() { CaptionParts = new() { Parts = new() }, Data = new(), ChoiceMetaData = new() { Type = new() }, LookAtDescriptor = new() { Offset = new(), OrbId = new() } };
+			ActionWidgetPackage = new() { DependendActions = new() };
+			CanTriggerStim = true;
+			ItemID = new();
+			Price = -1;
 		}
 	}
 }

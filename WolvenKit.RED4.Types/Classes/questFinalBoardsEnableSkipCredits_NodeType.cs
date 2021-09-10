@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questFinalBoardsEnableSkipCredits_NodeType : questIUIManagerNodeType
 	{
-		private CBool _enableSkipping;
-
 		[Ordinal(0)] 
 		[RED("enableSkipping")] 
 		public CBool EnableSkipping
 		{
-			get => GetProperty(ref _enableSkipping);
-			set => SetProperty(ref _enableSkipping, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public questFinalBoardsEnableSkipCredits_NodeType()
 		{
-			_enableSkipping = true;
+			EnableSkipping = true;
 		}
 	}
 }

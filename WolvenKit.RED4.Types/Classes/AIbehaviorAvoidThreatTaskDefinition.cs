@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorAvoidThreatTaskDefinition : AIbehaviorTaskDefinition
 	{
-		private CHandle<AIArgumentMapping> _threatObject;
-		private CHandle<AIArgumentMapping> _threatRadius;
-
 		[Ordinal(1)] 
 		[RED("threatObject")] 
 		public CHandle<AIArgumentMapping> ThreatObject
 		{
-			get => GetProperty(ref _threatObject);
-			set => SetProperty(ref _threatObject, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("threatRadius")] 
 		public CHandle<AIArgumentMapping> ThreatRadius
 		{
-			get => GetProperty(ref _threatRadius);
-			set => SetProperty(ref _threatRadius, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 	}
 }

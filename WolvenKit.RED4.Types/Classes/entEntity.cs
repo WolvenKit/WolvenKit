@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entEntity : IScriptable
 	{
-		private CEnum<ECustomCameraTarget> _customCameraTarget;
-		private CEnum<RenderSceneLayerMask> _renderSceneLayerMask;
-
 		[Ordinal(0)] 
 		[RED("customCameraTarget")] 
 		public CEnum<ECustomCameraTarget> CustomCameraTarget
 		{
-			get => GetProperty(ref _customCameraTarget);
-			set => SetProperty(ref _customCameraTarget, value);
+			get => GetPropertyValue<CEnum<ECustomCameraTarget>>();
+			set => SetPropertyValue<CEnum<ECustomCameraTarget>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("renderSceneLayerMask")] 
-		public CEnum<RenderSceneLayerMask> RenderSceneLayerMask
+		public CBitField<RenderSceneLayerMask> RenderSceneLayerMask
 		{
-			get => GetProperty(ref _renderSceneLayerMask);
-			set => SetProperty(ref _renderSceneLayerMask, value);
+			get => GetPropertyValue<CBitField<RenderSceneLayerMask>>();
+			set => SetPropertyValue<CBitField<RenderSceneLayerMask>>(value);
 		}
 
 		public entEntity()
 		{
-			_renderSceneLayerMask = new() { Value = Enums.RenderSceneLayerMask.Default };
+			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
 		}
 	}
 }

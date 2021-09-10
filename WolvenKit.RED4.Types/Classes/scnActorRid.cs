@@ -5,41 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnActorRid : RedBaseClass
 	{
-		private scnRidTag _tag;
-		private CArray<scnAnimationRid> _animations;
-		private CArray<scnAnimationRid> _facialAnimations;
-		private CArray<scnAnimationRid> _cyberwareAnimations;
-
 		[Ordinal(0)] 
 		[RED("tag")] 
 		public scnRidTag Tag
 		{
-			get => GetProperty(ref _tag);
-			set => SetProperty(ref _tag, value);
+			get => GetPropertyValue<scnRidTag>();
+			set => SetPropertyValue<scnRidTag>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("animations")] 
 		public CArray<scnAnimationRid> Animations
 		{
-			get => GetProperty(ref _animations);
-			set => SetProperty(ref _animations, value);
+			get => GetPropertyValue<CArray<scnAnimationRid>>();
+			set => SetPropertyValue<CArray<scnAnimationRid>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("facialAnimations")] 
 		public CArray<scnAnimationRid> FacialAnimations
 		{
-			get => GetProperty(ref _facialAnimations);
-			set => SetProperty(ref _facialAnimations, value);
+			get => GetPropertyValue<CArray<scnAnimationRid>>();
+			set => SetPropertyValue<CArray<scnAnimationRid>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("cyberwareAnimations")] 
 		public CArray<scnAnimationRid> CyberwareAnimations
 		{
-			get => GetProperty(ref _cyberwareAnimations);
-			set => SetProperty(ref _cyberwareAnimations, value);
+			get => GetPropertyValue<CArray<scnAnimationRid>>();
+			set => SetPropertyValue<CArray<scnAnimationRid>>(value);
+		}
+
+		public scnActorRid()
+		{
+			Tag = new() { SerialNumber = new() { SerialNumber = 4294967295 } };
+			Animations = new();
+			FacialAnimations = new();
+			CyberwareAnimations = new();
 		}
 	}
 }

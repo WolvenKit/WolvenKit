@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CheckFreeWorkspot : AIbehaviorconditionScript
 	{
-		private CEnum<gamedataWorkspotActionType> _aIAction;
-		private CWeakHandle<gameObject> _workspotObject;
-		private CHandle<WorkspotEntryData> _workspotData;
-		private worldGlobalNodeRef _globalRef;
-
 		[Ordinal(0)] 
 		[RED("AIAction")] 
 		public CEnum<gamedataWorkspotActionType> AIAction
 		{
-			get => GetProperty(ref _aIAction);
-			set => SetProperty(ref _aIAction, value);
+			get => GetPropertyValue<CEnum<gamedataWorkspotActionType>>();
+			set => SetPropertyValue<CEnum<gamedataWorkspotActionType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("workspotObject")] 
 		public CWeakHandle<gameObject> WorkspotObject
 		{
-			get => GetProperty(ref _workspotObject);
-			set => SetProperty(ref _workspotObject, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("workspotData")] 
 		public CHandle<WorkspotEntryData> WorkspotData
 		{
-			get => GetProperty(ref _workspotData);
-			set => SetProperty(ref _workspotData, value);
+			get => GetPropertyValue<CHandle<WorkspotEntryData>>();
+			set => SetPropertyValue<CHandle<WorkspotEntryData>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("globalRef")] 
 		public worldGlobalNodeRef GlobalRef
 		{
-			get => GetProperty(ref _globalRef);
-			set => SetProperty(ref _globalRef, value);
+			get => GetPropertyValue<worldGlobalNodeRef>();
+			set => SetPropertyValue<worldGlobalNodeRef>(value);
+		}
+
+		public CheckFreeWorkspot()
+		{
+			GlobalRef = new();
 		}
 	}
 }

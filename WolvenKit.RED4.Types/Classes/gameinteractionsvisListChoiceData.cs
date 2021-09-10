@@ -5,50 +5,50 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameinteractionsvisListChoiceData : RedBaseClass
 	{
-		private CString _localizedName;
-		private gameinteractionsChoiceTypeWrapper _type;
-		private CName _inputActionName;
-		private gameinteractionsChoiceCaption _captionParts;
-		private CWeakHandle<gameinteractionsvisIVisualizerTimeProvider> _timeProvider;
-
 		[Ordinal(0)] 
 		[RED("localizedName")] 
 		public CString LocalizedName
 		{
-			get => GetProperty(ref _localizedName);
-			set => SetProperty(ref _localizedName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("type")] 
 		public gameinteractionsChoiceTypeWrapper Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<gameinteractionsChoiceTypeWrapper>();
+			set => SetPropertyValue<gameinteractionsChoiceTypeWrapper>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("inputActionName")] 
 		public CName InputActionName
 		{
-			get => GetProperty(ref _inputActionName);
-			set => SetProperty(ref _inputActionName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("captionParts")] 
 		public gameinteractionsChoiceCaption CaptionParts
 		{
-			get => GetProperty(ref _captionParts);
-			set => SetProperty(ref _captionParts, value);
+			get => GetPropertyValue<gameinteractionsChoiceCaption>();
+			set => SetPropertyValue<gameinteractionsChoiceCaption>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("timeProvider")] 
 		public CWeakHandle<gameinteractionsvisIVisualizerTimeProvider> TimeProvider
 		{
-			get => GetProperty(ref _timeProvider);
-			set => SetProperty(ref _timeProvider, value);
+			get => GetPropertyValue<CWeakHandle<gameinteractionsvisIVisualizerTimeProvider>>();
+			set => SetPropertyValue<CWeakHandle<gameinteractionsvisIVisualizerTimeProvider>>(value);
+		}
+
+		public gameinteractionsvisListChoiceData()
+		{
+			Type = new();
+			CaptionParts = new() { Parts = new() };
 		}
 	}
 }

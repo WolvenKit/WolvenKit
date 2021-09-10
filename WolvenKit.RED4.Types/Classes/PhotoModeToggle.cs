@@ -5,68 +5,68 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PhotoModeToggle : inkToggleController
 	{
-		private inkWidgetReference _selectedWidget;
-		private inkWidgetReference _frameWidget;
-		private inkImageWidgetReference _iconWidget;
-		private inkTextWidgetReference _labelWidget;
-		private CWeakHandle<PhotoModeTopBarController> _photoModeGroupController;
-		private CHandle<inkanimProxy> _fadeAnim;
-		private CHandle<inkanimProxy> _fade2Anim;
-
 		[Ordinal(13)] 
 		[RED("SelectedWidget")] 
 		public inkWidgetReference SelectedWidget
 		{
-			get => GetProperty(ref _selectedWidget);
-			set => SetProperty(ref _selectedWidget, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("FrameWidget")] 
 		public inkWidgetReference FrameWidget
 		{
-			get => GetProperty(ref _frameWidget);
-			set => SetProperty(ref _frameWidget, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("IconWidget")] 
 		public inkImageWidgetReference IconWidget
 		{
-			get => GetProperty(ref _iconWidget);
-			set => SetProperty(ref _iconWidget, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("LabelWidget")] 
 		public inkTextWidgetReference LabelWidget
 		{
-			get => GetProperty(ref _labelWidget);
-			set => SetProperty(ref _labelWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("photoModeGroupController")] 
 		public CWeakHandle<PhotoModeTopBarController> PhotoModeGroupController
 		{
-			get => GetProperty(ref _photoModeGroupController);
-			set => SetProperty(ref _photoModeGroupController, value);
+			get => GetPropertyValue<CWeakHandle<PhotoModeTopBarController>>();
+			set => SetPropertyValue<CWeakHandle<PhotoModeTopBarController>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("fadeAnim")] 
 		public CHandle<inkanimProxy> FadeAnim
 		{
-			get => GetProperty(ref _fadeAnim);
-			set => SetProperty(ref _fadeAnim, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("fade2Anim")] 
 		public CHandle<inkanimProxy> Fade2Anim
 		{
-			get => GetProperty(ref _fade2Anim);
-			set => SetProperty(ref _fade2Anim, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		public PhotoModeToggle()
+		{
+			SelectedWidget = new();
+			FrameWidget = new();
+			IconWidget = new();
+			LabelWidget = new();
 		}
 	}
 }

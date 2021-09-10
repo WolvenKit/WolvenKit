@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class StimDeviceOperation : DeviceOperationBase
 	{
-		private CArray<SStimOperationData> _stims;
-
 		[Ordinal(5)] 
 		[RED("stims")] 
 		public CArray<SStimOperationData> Stims
 		{
-			get => GetProperty(ref _stims);
-			set => SetProperty(ref _stims, value);
+			get => GetPropertyValue<CArray<SStimOperationData>>();
+			set => SetPropertyValue<CArray<SStimOperationData>>(value);
+		}
+
+		public StimDeviceOperation()
+		{
+			IsEnabled = true;
+			ToggleOperations = new();
+			Stims = new();
 		}
 	}
 }

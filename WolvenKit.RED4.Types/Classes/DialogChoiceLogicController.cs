@@ -5,391 +5,362 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DialogChoiceLogicController : inkWidgetLogicController
 	{
-		private inkWidgetReference _inputViewRef;
-		private inkWidgetReference _verticalLineWidget;
-		private inkTextWidgetReference _activeTextRef;
-		private inkTextWidgetReference _inActiveTextRef;
-		private inkWidgetReference _inActiveTextRootRef;
-		private inkWidgetReference _textFlexRef;
-		private inkWidgetReference _selectedBgRef;
-		private inkWidgetReference _selectedBgRefJohnny;
-		private inkCompoundWidgetReference _captionHolder;
-		private inkCompoundWidgetReference _secondaryCaptionHolder;
-		private CWeakHandle<inkCompoundWidget> _rootWidget;
-		private CFloat _animationTime;
-		private CFloat _animationSpeed;
-		private CBool _useConstantSpeed;
-		private inkWidgetReference _phoneIcon;
-		private CWeakHandle<inkWidget> _textFlex;
-		private CWeakHandle<inkWidget> _inActiveTextRoot;
-		private CWeakHandle<inkWidget> _selectedBg;
-		private CWeakHandle<inkWidget> _selectedBgJohnny;
-		private CWeakHandle<InteractionsInputView> _inputView;
-		private CArray<CWeakHandle<CaptionImageIconsLogicController>> _captionControllers;
-		private CArray<CWeakHandle<CaptionImageIconsLogicController>> _secondaryCaptionControllers;
-		private gameinteractionsChoiceTypeWrapper _type;
-		private CBool _isSelected;
-		private CBool _prevIsSelected;
-		private CBool _hasDedicatedInput;
-		private CBool _overriddenInput;
-		private CBool _isPreserveSelectionFadeOut;
-		private CBool _isPhoneLockActive;
-		private CName _dedicatedInputName;
-		private CName _active;
-		private CName _inactive;
-		private CName _black;
-		private CName _questColor;
-		private CName _possessedDialog;
-		private CInt32 _controllerPromptLimit;
-		private CFloat _fadingOptionEndTransparency;
-		private CHandle<inkanimProxy> _animSelectedBgProxy;
-		private CHandle<inkanimProxy> _animSelectedJohnnyBgProxy;
-		private CHandle<inkanimProxy> _animActiveTextProxy;
-		private CHandle<inkanimProxy> _animfFadingOutProxy;
-		private CHandle<inkanimProxy> _animIntroProxy;
-
 		[Ordinal(1)] 
 		[RED("InputViewRef")] 
 		public inkWidgetReference InputViewRef
 		{
-			get => GetProperty(ref _inputViewRef);
-			set => SetProperty(ref _inputViewRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("VerticalLineWidget")] 
 		public inkWidgetReference VerticalLineWidget
 		{
-			get => GetProperty(ref _verticalLineWidget);
-			set => SetProperty(ref _verticalLineWidget, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("ActiveTextRef")] 
 		public inkTextWidgetReference ActiveTextRef
 		{
-			get => GetProperty(ref _activeTextRef);
-			set => SetProperty(ref _activeTextRef, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("InActiveTextRef")] 
 		public inkTextWidgetReference InActiveTextRef
 		{
-			get => GetProperty(ref _inActiveTextRef);
-			set => SetProperty(ref _inActiveTextRef, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("InActiveTextRootRef")] 
 		public inkWidgetReference InActiveTextRootRef
 		{
-			get => GetProperty(ref _inActiveTextRootRef);
-			set => SetProperty(ref _inActiveTextRootRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("TextFlexRef")] 
 		public inkWidgetReference TextFlexRef
 		{
-			get => GetProperty(ref _textFlexRef);
-			set => SetProperty(ref _textFlexRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("SelectedBgRef")] 
 		public inkWidgetReference SelectedBgRef
 		{
-			get => GetProperty(ref _selectedBgRef);
-			set => SetProperty(ref _selectedBgRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("SelectedBgRefJohnny")] 
 		public inkWidgetReference SelectedBgRefJohnny
 		{
-			get => GetProperty(ref _selectedBgRefJohnny);
-			set => SetProperty(ref _selectedBgRefJohnny, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("CaptionHolder")] 
 		public inkCompoundWidgetReference CaptionHolder
 		{
-			get => GetProperty(ref _captionHolder);
-			set => SetProperty(ref _captionHolder, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("SecondaryCaptionHolder")] 
 		public inkCompoundWidgetReference SecondaryCaptionHolder
 		{
-			get => GetProperty(ref _secondaryCaptionHolder);
-			set => SetProperty(ref _secondaryCaptionHolder, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("RootWidget")] 
 		public CWeakHandle<inkCompoundWidget> RootWidget
 		{
-			get => GetProperty(ref _rootWidget);
-			set => SetProperty(ref _rootWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkCompoundWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkCompoundWidget>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("AnimationTime")] 
 		public CFloat AnimationTime
 		{
-			get => GetProperty(ref _animationTime);
-			set => SetProperty(ref _animationTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("AnimationSpeed")] 
 		public CFloat AnimationSpeed
 		{
-			get => GetProperty(ref _animationSpeed);
-			set => SetProperty(ref _animationSpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("UseConstantSpeed")] 
 		public CBool UseConstantSpeed
 		{
-			get => GetProperty(ref _useConstantSpeed);
-			set => SetProperty(ref _useConstantSpeed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("phoneIcon")] 
 		public inkWidgetReference PhoneIcon
 		{
-			get => GetProperty(ref _phoneIcon);
-			set => SetProperty(ref _phoneIcon, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("TextFlex")] 
 		public CWeakHandle<inkWidget> TextFlex
 		{
-			get => GetProperty(ref _textFlex);
-			set => SetProperty(ref _textFlex, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("InActiveTextRoot")] 
 		public CWeakHandle<inkWidget> InActiveTextRoot
 		{
-			get => GetProperty(ref _inActiveTextRoot);
-			set => SetProperty(ref _inActiveTextRoot, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("SelectedBg")] 
 		public CWeakHandle<inkWidget> SelectedBg
 		{
-			get => GetProperty(ref _selectedBg);
-			set => SetProperty(ref _selectedBg, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("SelectedBgJohnny")] 
 		public CWeakHandle<inkWidget> SelectedBgJohnny
 		{
-			get => GetProperty(ref _selectedBgJohnny);
-			set => SetProperty(ref _selectedBgJohnny, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("InputView")] 
 		public CWeakHandle<InteractionsInputView> InputView
 		{
-			get => GetProperty(ref _inputView);
-			set => SetProperty(ref _inputView, value);
+			get => GetPropertyValue<CWeakHandle<InteractionsInputView>>();
+			set => SetPropertyValue<CWeakHandle<InteractionsInputView>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("CaptionControllers")] 
 		public CArray<CWeakHandle<CaptionImageIconsLogicController>> CaptionControllers
 		{
-			get => GetProperty(ref _captionControllers);
-			set => SetProperty(ref _captionControllers, value);
+			get => GetPropertyValue<CArray<CWeakHandle<CaptionImageIconsLogicController>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<CaptionImageIconsLogicController>>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("SecondaryCaptionControllers")] 
 		public CArray<CWeakHandle<CaptionImageIconsLogicController>> SecondaryCaptionControllers
 		{
-			get => GetProperty(ref _secondaryCaptionControllers);
-			set => SetProperty(ref _secondaryCaptionControllers, value);
+			get => GetPropertyValue<CArray<CWeakHandle<CaptionImageIconsLogicController>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<CaptionImageIconsLogicController>>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("type")] 
 		public gameinteractionsChoiceTypeWrapper Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<gameinteractionsChoiceTypeWrapper>();
+			set => SetPropertyValue<gameinteractionsChoiceTypeWrapper>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("isSelected")] 
 		public CBool IsSelected
 		{
-			get => GetProperty(ref _isSelected);
-			set => SetProperty(ref _isSelected, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("prevIsSelected")] 
 		public CBool PrevIsSelected
 		{
-			get => GetProperty(ref _prevIsSelected);
-			set => SetProperty(ref _prevIsSelected, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("hasDedicatedInput")] 
 		public CBool HasDedicatedInput
 		{
-			get => GetProperty(ref _hasDedicatedInput);
-			set => SetProperty(ref _hasDedicatedInput, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("overriddenInput")] 
 		public CBool OverriddenInput
 		{
-			get => GetProperty(ref _overriddenInput);
-			set => SetProperty(ref _overriddenInput, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("isPreserveSelectionFadeOut")] 
 		public CBool IsPreserveSelectionFadeOut
 		{
-			get => GetProperty(ref _isPreserveSelectionFadeOut);
-			set => SetProperty(ref _isPreserveSelectionFadeOut, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("isPhoneLockActive")] 
 		public CBool IsPhoneLockActive
 		{
-			get => GetProperty(ref _isPhoneLockActive);
-			set => SetProperty(ref _isPhoneLockActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("dedicatedInputName")] 
 		public CName DedicatedInputName
 		{
-			get => GetProperty(ref _dedicatedInputName);
-			set => SetProperty(ref _dedicatedInputName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("Active")] 
 		public CName Active
 		{
-			get => GetProperty(ref _active);
-			set => SetProperty(ref _active, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("Inactive")] 
 		public CName Inactive
 		{
-			get => GetProperty(ref _inactive);
-			set => SetProperty(ref _inactive, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("Black")] 
 		public CName Black
 		{
-			get => GetProperty(ref _black);
-			set => SetProperty(ref _black, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(34)] 
 		[RED("questColor")] 
 		public CName QuestColor
 		{
-			get => GetProperty(ref _questColor);
-			set => SetProperty(ref _questColor, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(35)] 
 		[RED("possessedDialog")] 
 		public CName PossessedDialog
 		{
-			get => GetProperty(ref _possessedDialog);
-			set => SetProperty(ref _possessedDialog, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(36)] 
 		[RED("ControllerPromptLimit")] 
 		public CInt32 ControllerPromptLimit
 		{
-			get => GetProperty(ref _controllerPromptLimit);
-			set => SetProperty(ref _controllerPromptLimit, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(37)] 
 		[RED("fadingOptionEndTransparency")] 
 		public CFloat FadingOptionEndTransparency
 		{
-			get => GetProperty(ref _fadingOptionEndTransparency);
-			set => SetProperty(ref _fadingOptionEndTransparency, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(38)] 
 		[RED("animSelectedBgProxy")] 
 		public CHandle<inkanimProxy> AnimSelectedBgProxy
 		{
-			get => GetProperty(ref _animSelectedBgProxy);
-			set => SetProperty(ref _animSelectedBgProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(39)] 
 		[RED("animSelectedJohnnyBgProxy")] 
 		public CHandle<inkanimProxy> AnimSelectedJohnnyBgProxy
 		{
-			get => GetProperty(ref _animSelectedJohnnyBgProxy);
-			set => SetProperty(ref _animSelectedJohnnyBgProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(40)] 
 		[RED("animActiveTextProxy")] 
 		public CHandle<inkanimProxy> AnimActiveTextProxy
 		{
-			get => GetProperty(ref _animActiveTextProxy);
-			set => SetProperty(ref _animActiveTextProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(41)] 
 		[RED("animfFadingOutProxy")] 
 		public CHandle<inkanimProxy> AnimfFadingOutProxy
 		{
-			get => GetProperty(ref _animfFadingOutProxy);
-			set => SetProperty(ref _animfFadingOutProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(42)] 
 		[RED("animIntroProxy")] 
 		public CHandle<inkanimProxy> AnimIntroProxy
 		{
-			get => GetProperty(ref _animIntroProxy);
-			set => SetProperty(ref _animIntroProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		public DialogChoiceLogicController()
 		{
-			_animationTime = 0.150000F;
-			_animationSpeed = 500.000000F;
-			_controllerPromptLimit = 3;
-			_fadingOptionEndTransparency = 0.100000F;
+			InputViewRef = new();
+			VerticalLineWidget = new();
+			ActiveTextRef = new();
+			InActiveTextRef = new();
+			InActiveTextRootRef = new();
+			TextFlexRef = new();
+			SelectedBgRef = new();
+			SelectedBgRefJohnny = new();
+			CaptionHolder = new();
+			SecondaryCaptionHolder = new();
+			AnimationTime = 0.150000F;
+			AnimationSpeed = 500.000000F;
+			PhoneIcon = new();
+			CaptionControllers = new();
+			SecondaryCaptionControllers = new();
+			Type = new();
+			ControllerPromptLimit = 3;
+			FadingOptionEndTransparency = 0.100000F;
 		}
 	}
 }

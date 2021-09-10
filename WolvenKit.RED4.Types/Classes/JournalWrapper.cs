@@ -5,50 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class JournalWrapper : ABaseWrapper
 	{
-		private CWeakHandle<gameJournalManager> _journalManager;
-		private gameJournalRequestContext _journalContext;
-		private gameJournalRequestContext _journalSubQuestContext;
-		private CArray<CWeakHandle<gameJournalEntry>> _listOfJournalEntries;
-		private ScriptGameInstance _gameInstance;
-
 		[Ordinal(0)] 
 		[RED("journalManager")] 
 		public CWeakHandle<gameJournalManager> JournalManager
 		{
-			get => GetProperty(ref _journalManager);
-			set => SetProperty(ref _journalManager, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalManager>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("journalContext")] 
 		public gameJournalRequestContext JournalContext
 		{
-			get => GetProperty(ref _journalContext);
-			set => SetProperty(ref _journalContext, value);
+			get => GetPropertyValue<gameJournalRequestContext>();
+			set => SetPropertyValue<gameJournalRequestContext>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("journalSubQuestContext")] 
 		public gameJournalRequestContext JournalSubQuestContext
 		{
-			get => GetProperty(ref _journalSubQuestContext);
-			set => SetProperty(ref _journalSubQuestContext, value);
+			get => GetPropertyValue<gameJournalRequestContext>();
+			set => SetPropertyValue<gameJournalRequestContext>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("listOfJournalEntries")] 
 		public CArray<CWeakHandle<gameJournalEntry>> ListOfJournalEntries
 		{
-			get => GetProperty(ref _listOfJournalEntries);
-			set => SetProperty(ref _listOfJournalEntries, value);
+			get => GetPropertyValue<CArray<CWeakHandle<gameJournalEntry>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<gameJournalEntry>>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("gameInstance")] 
 		public ScriptGameInstance GameInstance
 		{
-			get => GetProperty(ref _gameInstance);
-			set => SetProperty(ref _gameInstance, value);
+			get => GetPropertyValue<ScriptGameInstance>();
+			set => SetPropertyValue<ScriptGameInstance>(value);
+		}
+
+		public JournalWrapper()
+		{
+			JournalContext = new() { StateFilter = new(), ClassFilter = new() };
+			JournalSubQuestContext = new() { StateFilter = new(), ClassFilter = new() };
+			ListOfJournalEntries = new();
+			GameInstance = new();
 		}
 	}
 }

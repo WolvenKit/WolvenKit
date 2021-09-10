@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ActionCooldownEvent : redEvent
 	{
-		private CooldownStorageID _storageID;
-
 		[Ordinal(0)] 
 		[RED("storageID")] 
 		public CooldownStorageID StorageID
 		{
-			get => GetProperty(ref _storageID);
-			set => SetProperty(ref _storageID, value);
+			get => GetPropertyValue<CooldownStorageID>();
+			set => SetPropertyValue<CooldownStorageID>(value);
+		}
+
+		public ActionCooldownEvent()
+		{
+			StorageID = new();
 		}
 	}
 }

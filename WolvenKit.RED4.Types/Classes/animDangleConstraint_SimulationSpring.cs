@@ -5,192 +5,184 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animDangleConstraint_SimulationSpring : animDangleConstraint_SimulationSingleBone
 	{
-		private CFloat _constraintSphereRadius;
-		private CFloat _constraintScale1;
-		private CFloat _constraintScale2;
-		private CFloat _mass;
-		private CFloat _damping;
-		private CFloat _pullForceFactor;
-		private Vector3 _externalForceWS;
-		private animVectorLink _externalForceWsLink;
-		private CFloat _collisionSphereRadius;
-		private CFloat _invertedMass;
-		private CFloat _simulationFps;
-		private CFloat _gravityWS;
-		private Vector3 _pullForceOriginLS;
-		private CEnum<animSpringProjectionType> _projectionType;
-		private Vector2 _constraintOrientation;
-		private CFloat _cosOfHalfXAngle;
-		private CFloat _cosOfHalfYAngle;
-		private CFloat _sinOfHalfXAngle;
-		private CFloat _sinOfHalfYAngle;
-
 		[Ordinal(14)] 
 		[RED("constraintSphereRadius")] 
 		public CFloat ConstraintSphereRadius
 		{
-			get => GetProperty(ref _constraintSphereRadius);
-			set => SetProperty(ref _constraintSphereRadius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("constraintScale1")] 
 		public CFloat ConstraintScale1
 		{
-			get => GetProperty(ref _constraintScale1);
-			set => SetProperty(ref _constraintScale1, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("constraintScale2")] 
 		public CFloat ConstraintScale2
 		{
-			get => GetProperty(ref _constraintScale2);
-			set => SetProperty(ref _constraintScale2, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("mass")] 
 		public CFloat Mass
 		{
-			get => GetProperty(ref _mass);
-			set => SetProperty(ref _mass, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("damping")] 
 		public CFloat Damping
 		{
-			get => GetProperty(ref _damping);
-			set => SetProperty(ref _damping, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("pullForceFactor")] 
 		public CFloat PullForceFactor
 		{
-			get => GetProperty(ref _pullForceFactor);
-			set => SetProperty(ref _pullForceFactor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("externalForceWS")] 
 		public Vector3 ExternalForceWS
 		{
-			get => GetProperty(ref _externalForceWS);
-			set => SetProperty(ref _externalForceWS, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("externalForceWsLink")] 
 		public animVectorLink ExternalForceWsLink
 		{
-			get => GetProperty(ref _externalForceWsLink);
-			set => SetProperty(ref _externalForceWsLink, value);
+			get => GetPropertyValue<animVectorLink>();
+			set => SetPropertyValue<animVectorLink>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("collisionSphereRadius")] 
 		public CFloat CollisionSphereRadius
 		{
-			get => GetProperty(ref _collisionSphereRadius);
-			set => SetProperty(ref _collisionSphereRadius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("invertedMass")] 
 		public CFloat InvertedMass
 		{
-			get => GetProperty(ref _invertedMass);
-			set => SetProperty(ref _invertedMass, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("simulationFps")] 
 		public CFloat SimulationFps
 		{
-			get => GetProperty(ref _simulationFps);
-			set => SetProperty(ref _simulationFps, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("gravityWS")] 
 		public CFloat GravityWS
 		{
-			get => GetProperty(ref _gravityWS);
-			set => SetProperty(ref _gravityWS, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("pullForceOriginLS")] 
 		public Vector3 PullForceOriginLS
 		{
-			get => GetProperty(ref _pullForceOriginLS);
-			set => SetProperty(ref _pullForceOriginLS, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("projectionType")] 
 		public CEnum<animSpringProjectionType> ProjectionType
 		{
-			get => GetProperty(ref _projectionType);
-			set => SetProperty(ref _projectionType, value);
+			get => GetPropertyValue<CEnum<animSpringProjectionType>>();
+			set => SetPropertyValue<CEnum<animSpringProjectionType>>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("constraintOrientation")] 
 		public Vector2 ConstraintOrientation
 		{
-			get => GetProperty(ref _constraintOrientation);
-			set => SetProperty(ref _constraintOrientation, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("cosOfHalfXAngle")] 
 		public CFloat CosOfHalfXAngle
 		{
-			get => GetProperty(ref _cosOfHalfXAngle);
-			set => SetProperty(ref _cosOfHalfXAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("cosOfHalfYAngle")] 
 		public CFloat CosOfHalfYAngle
 		{
-			get => GetProperty(ref _cosOfHalfYAngle);
-			set => SetProperty(ref _cosOfHalfYAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("sinOfHalfXAngle")] 
 		public CFloat SinOfHalfXAngle
 		{
-			get => GetProperty(ref _sinOfHalfXAngle);
-			set => SetProperty(ref _sinOfHalfXAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("sinOfHalfYAngle")] 
 		public CFloat SinOfHalfYAngle
 		{
-			get => GetProperty(ref _sinOfHalfYAngle);
-			set => SetProperty(ref _sinOfHalfYAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public animDangleConstraint_SimulationSpring()
 		{
-			_constraintSphereRadius = 0.500000F;
-			_constraintScale1 = 1.000000F;
-			_constraintScale2 = 1.000000F;
-			_mass = 1.000000F;
-			_damping = 1.000000F;
-			_invertedMass = 1.000000F;
-			_simulationFps = 10.000000F;
-			_gravityWS = 9.810000F;
-			_projectionType = new() { Value = Enums.animSpringProjectionType.ShortestPath };
-			_cosOfHalfXAngle = 1.000000F;
-			_cosOfHalfYAngle = 0.707107F;
-			_sinOfHalfYAngle = 0.707107F;
+			CollisionRoundedShapes = new();
+			JsonCollisionShapesLoadedSuccessfully = true;
+			Alpha = 1.000000F;
+			RotateParentToLookAtDangle = true;
+			ParentRotationAltersTransformsOfDangleAndItsChildren = true;
+			ParentRotationAltersTransformsOfNonDanglesAndItsChildren = true;
+			DangleAltersTransformsOfItsChildren = true;
+			DangleBone = new();
+			ConstraintSphereRadius = 0.500000F;
+			ConstraintScale1 = 1.000000F;
+			ConstraintScale2 = 1.000000F;
+			Mass = 1.000000F;
+			Damping = 1.000000F;
+			ExternalForceWS = new();
+			ExternalForceWsLink = new();
+			InvertedMass = 1.000000F;
+			SimulationFps = 10.000000F;
+			GravityWS = 9.810000F;
+			PullForceOriginLS = new();
+			ProjectionType = Enums.animSpringProjectionType.ShortestPath;
+			ConstraintOrientation = new() { Y = 90.000000F };
+			CosOfHalfXAngle = 1.000000F;
+			CosOfHalfYAngle = 0.707107F;
+			SinOfHalfYAngle = 0.707107F;
 		}
 	}
 }

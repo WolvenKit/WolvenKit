@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CheckRemovedItemWithSlotActiveItem : gamePlayerScriptableSystemRequest
 	{
-		private gameItemID _itemID;
-
 		[Ordinal(1)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get => GetProperty(ref _itemID);
-			set => SetProperty(ref _itemID, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
+		}
+
+		public CheckRemovedItemWithSlotActiveItem()
+		{
+			ItemID = new();
 		}
 	}
 }

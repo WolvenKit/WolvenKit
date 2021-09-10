@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamemountingMountingRelationship : RedBaseClass
 	{
-		private CEnum<gameMountingObjectType> _otherMountableType;
-		private CWeakHandle<gameObject> _otherObject;
-		private CEnum<gameMountingRelationshipType> _relationshipType;
-		private gamemountingMountingSlotId _slotId;
-
 		[Ordinal(0)] 
 		[RED("otherMountableType")] 
 		public CEnum<gameMountingObjectType> OtherMountableType
 		{
-			get => GetProperty(ref _otherMountableType);
-			set => SetProperty(ref _otherMountableType, value);
+			get => GetPropertyValue<CEnum<gameMountingObjectType>>();
+			set => SetPropertyValue<CEnum<gameMountingObjectType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("otherObject")] 
 		public CWeakHandle<gameObject> OtherObject
 		{
-			get => GetProperty(ref _otherObject);
-			set => SetProperty(ref _otherObject, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("relationshipType")] 
 		public CEnum<gameMountingRelationshipType> RelationshipType
 		{
-			get => GetProperty(ref _relationshipType);
-			set => SetProperty(ref _relationshipType, value);
+			get => GetPropertyValue<CEnum<gameMountingRelationshipType>>();
+			set => SetPropertyValue<CEnum<gameMountingRelationshipType>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("slotId")] 
 		public gamemountingMountingSlotId SlotId
 		{
-			get => GetProperty(ref _slotId);
-			set => SetProperty(ref _slotId, value);
+			get => GetPropertyValue<gamemountingMountingSlotId>();
+			set => SetPropertyValue<gamemountingMountingSlotId>(value);
+		}
+
+		public gamemountingMountingRelationship()
+		{
+			SlotId = new();
 		}
 	}
 }

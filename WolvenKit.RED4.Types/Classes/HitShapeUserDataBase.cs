@@ -5,68 +5,60 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class HitShapeUserDataBase : gameHitShapeUserData
 	{
-		private CName _hitShapeTag;
-		private CEnum<EHitShapeType> _hitShapeType;
-		private CEnum<EHitReactionZone> _hitReactionZone;
-		private CEnum<EAIDismembermentBodyPart> _dismembermentPart;
-		private CBool _isProtectionLayer;
-		private CBool _isInternalWeakspot;
-		private CFloat _hitShapeDamageMod;
-
 		[Ordinal(0)] 
 		[RED("hitShapeTag")] 
 		public CName HitShapeTag
 		{
-			get => GetProperty(ref _hitShapeTag);
-			set => SetProperty(ref _hitShapeTag, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hitShapeType")] 
 		public CEnum<EHitShapeType> HitShapeType
 		{
-			get => GetProperty(ref _hitShapeType);
-			set => SetProperty(ref _hitShapeType, value);
+			get => GetPropertyValue<CEnum<EHitShapeType>>();
+			set => SetPropertyValue<CEnum<EHitShapeType>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("hitReactionZone")] 
 		public CEnum<EHitReactionZone> HitReactionZone
 		{
-			get => GetProperty(ref _hitReactionZone);
-			set => SetProperty(ref _hitReactionZone, value);
+			get => GetPropertyValue<CEnum<EHitReactionZone>>();
+			set => SetPropertyValue<CEnum<EHitReactionZone>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("dismembermentPart")] 
 		public CEnum<EAIDismembermentBodyPart> DismembermentPart
 		{
-			get => GetProperty(ref _dismembermentPart);
-			set => SetProperty(ref _dismembermentPart, value);
+			get => GetPropertyValue<CEnum<EAIDismembermentBodyPart>>();
+			set => SetPropertyValue<CEnum<EAIDismembermentBodyPart>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("isProtectionLayer")] 
 		public CBool IsProtectionLayer
 		{
-			get => GetProperty(ref _isProtectionLayer);
-			set => SetProperty(ref _isProtectionLayer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("isInternalWeakspot")] 
 		public CBool IsInternalWeakspot
 		{
-			get => GetProperty(ref _isInternalWeakspot);
-			set => SetProperty(ref _isInternalWeakspot, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("hitShapeDamageMod")] 
 		public CFloat HitShapeDamageMod
 		{
-			get => GetProperty(ref _hitShapeDamageMod);
-			set => SetProperty(ref _hitShapeDamageMod, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

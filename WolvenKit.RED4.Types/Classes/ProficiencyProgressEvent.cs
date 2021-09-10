@@ -5,59 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ProficiencyProgressEvent : redEvent
 	{
-		private CEnum<gamedataProficiencyType> _type;
-		private CInt32 _expValue;
-		private CInt32 _remainingXP;
-		private CInt32 _delta;
-		private CInt32 _currentLevel;
-		private CBool _isLevelMaxed;
-
 		[Ordinal(0)] 
 		[RED("type")] 
 		public CEnum<gamedataProficiencyType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<gamedataProficiencyType>>();
+			set => SetPropertyValue<CEnum<gamedataProficiencyType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("expValue")] 
 		public CInt32 ExpValue
 		{
-			get => GetProperty(ref _expValue);
-			set => SetProperty(ref _expValue, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("remainingXP")] 
 		public CInt32 RemainingXP
 		{
-			get => GetProperty(ref _remainingXP);
-			set => SetProperty(ref _remainingXP, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("delta")] 
 		public CInt32 Delta
 		{
-			get => GetProperty(ref _delta);
-			set => SetProperty(ref _delta, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("currentLevel")] 
 		public CInt32 CurrentLevel
 		{
-			get => GetProperty(ref _currentLevel);
-			set => SetProperty(ref _currentLevel, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("isLevelMaxed")] 
 		public CBool IsLevelMaxed
 		{
-			get => GetProperty(ref _isLevelMaxed);
-			set => SetProperty(ref _isLevelMaxed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

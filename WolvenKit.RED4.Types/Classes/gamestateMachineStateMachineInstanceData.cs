@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamestateMachineStateMachineInstanceData : RedBaseClass
 	{
-		private CName _referenceName;
-		private CUInt32 _priority;
-		private CHandle<IScriptable> _initData;
-
 		[Ordinal(0)] 
 		[RED("referenceName")] 
 		public CName ReferenceName
 		{
-			get => GetProperty(ref _referenceName);
-			set => SetProperty(ref _referenceName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("priority")] 
 		public CUInt32 Priority
 		{
-			get => GetProperty(ref _priority);
-			set => SetProperty(ref _priority, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("initData")] 
 		public CHandle<IScriptable> InitData
 		{
-			get => GetProperty(ref _initData);
-			set => SetProperty(ref _initData, value);
+			get => GetPropertyValue<CHandle<IScriptable>>();
+			set => SetPropertyValue<CHandle<IScriptable>>(value);
 		}
 	}
 }

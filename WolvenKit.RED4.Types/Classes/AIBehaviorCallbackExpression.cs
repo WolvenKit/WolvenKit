@@ -5,50 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIBehaviorCallbackExpression : AIbehaviorexpressionScript
 	{
-		private CName _callbackName;
-		private CBool _initialValue;
-		private CEnum<ECallbackExpressionActions> _callbackAction;
-		private CUInt32 _callbackId;
-		private CBool _value;
-
 		[Ordinal(0)] 
 		[RED("callbackName")] 
 		public CName CallbackName
 		{
-			get => GetProperty(ref _callbackName);
-			set => SetProperty(ref _callbackName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("initialValue")] 
 		public CBool InitialValue
 		{
-			get => GetProperty(ref _initialValue);
-			set => SetProperty(ref _initialValue, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("callbackAction")] 
 		public CEnum<ECallbackExpressionActions> CallbackAction
 		{
-			get => GetProperty(ref _callbackAction);
-			set => SetProperty(ref _callbackAction, value);
+			get => GetPropertyValue<CEnum<ECallbackExpressionActions>>();
+			set => SetPropertyValue<CEnum<ECallbackExpressionActions>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("callbackId")] 
 		public CUInt32 CallbackId
 		{
-			get => GetProperty(ref _callbackId);
-			set => SetProperty(ref _callbackId, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("value")] 
 		public CBool Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

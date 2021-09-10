@@ -5,55 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questInputHintGroup_NodeType : questIUIManagerNodeType
 	{
-		private CBool _show;
-		private TweakDBID _iconID;
-		private CName _groupId;
-		private CString _localizedTitle;
-		private CString _localizedDescription;
-
 		[Ordinal(0)] 
 		[RED("show")] 
 		public CBool Show
 		{
-			get => GetProperty(ref _show);
-			set => SetProperty(ref _show, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("iconID")] 
 		public TweakDBID IconID
 		{
-			get => GetProperty(ref _iconID);
-			set => SetProperty(ref _iconID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("groupId")] 
 		public CName GroupId
 		{
-			get => GetProperty(ref _groupId);
-			set => SetProperty(ref _groupId, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("localizedTitle")] 
 		public CString LocalizedTitle
 		{
-			get => GetProperty(ref _localizedTitle);
-			set => SetProperty(ref _localizedTitle, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("localizedDescription")] 
 		public CString LocalizedDescription
 		{
-			get => GetProperty(ref _localizedDescription);
-			set => SetProperty(ref _localizedDescription, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		public questInputHintGroup_NodeType()
 		{
-			_show = true;
+			Show = true;
 		}
 	}
 }

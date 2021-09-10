@@ -5,156 +5,153 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_FootStepAdjuster : animAnimNode_OnePoseInput
 	{
-		private animTransformIndex _leftToeName;
-		private animTransformIndex _rightToeName;
-		private animTransformIndex _leftFootName;
-		private animTransformIndex _rightFootName;
-		private animTransformIndex _leftCalfName;
-		private animTransformIndex _rightCalfName;
-		private animTransformIndex _leftThighName;
-		private animTransformIndex _rightThighName;
-		private animTransformIndex _pelvisBoneName;
-		private Vector4 _calfHingeAxis;
-		private CFloat _iKBlendTime;
-		private CFloat _pelvisAdjustmentBlendSpeed;
-		private CBool _adjustPelvisVertically;
-		private CFloat _stepAdjustmentInterval;
-		private animFloatLink _controlValueNode;
-		private animVectorLink _controlVectorNode;
-
 		[Ordinal(12)] 
 		[RED("leftToeName")] 
 		public animTransformIndex LeftToeName
 		{
-			get => GetProperty(ref _leftToeName);
-			set => SetProperty(ref _leftToeName, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("rightToeName")] 
 		public animTransformIndex RightToeName
 		{
-			get => GetProperty(ref _rightToeName);
-			set => SetProperty(ref _rightToeName, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("leftFootName")] 
 		public animTransformIndex LeftFootName
 		{
-			get => GetProperty(ref _leftFootName);
-			set => SetProperty(ref _leftFootName, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("rightFootName")] 
 		public animTransformIndex RightFootName
 		{
-			get => GetProperty(ref _rightFootName);
-			set => SetProperty(ref _rightFootName, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("leftCalfName")] 
 		public animTransformIndex LeftCalfName
 		{
-			get => GetProperty(ref _leftCalfName);
-			set => SetProperty(ref _leftCalfName, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("rightCalfName")] 
 		public animTransformIndex RightCalfName
 		{
-			get => GetProperty(ref _rightCalfName);
-			set => SetProperty(ref _rightCalfName, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("leftThighName")] 
 		public animTransformIndex LeftThighName
 		{
-			get => GetProperty(ref _leftThighName);
-			set => SetProperty(ref _leftThighName, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("rightThighName")] 
 		public animTransformIndex RightThighName
 		{
-			get => GetProperty(ref _rightThighName);
-			set => SetProperty(ref _rightThighName, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("pelvisBoneName")] 
 		public animTransformIndex PelvisBoneName
 		{
-			get => GetProperty(ref _pelvisBoneName);
-			set => SetProperty(ref _pelvisBoneName, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("calfHingeAxis")] 
 		public Vector4 CalfHingeAxis
 		{
-			get => GetProperty(ref _calfHingeAxis);
-			set => SetProperty(ref _calfHingeAxis, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("IKBlendTime")] 
 		public CFloat IKBlendTime
 		{
-			get => GetProperty(ref _iKBlendTime);
-			set => SetProperty(ref _iKBlendTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("pelvisAdjustmentBlendSpeed")] 
 		public CFloat PelvisAdjustmentBlendSpeed
 		{
-			get => GetProperty(ref _pelvisAdjustmentBlendSpeed);
-			set => SetProperty(ref _pelvisAdjustmentBlendSpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("adjustPelvisVertically")] 
 		public CBool AdjustPelvisVertically
 		{
-			get => GetProperty(ref _adjustPelvisVertically);
-			set => SetProperty(ref _adjustPelvisVertically, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("stepAdjustmentInterval")] 
 		public CFloat StepAdjustmentInterval
 		{
-			get => GetProperty(ref _stepAdjustmentInterval);
-			set => SetProperty(ref _stepAdjustmentInterval, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("controlValueNode")] 
 		public animFloatLink ControlValueNode
 		{
-			get => GetProperty(ref _controlValueNode);
-			set => SetProperty(ref _controlValueNode, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("controlVectorNode")] 
 		public animVectorLink ControlVectorNode
 		{
-			get => GetProperty(ref _controlVectorNode);
-			set => SetProperty(ref _controlVectorNode, value);
+			get => GetPropertyValue<animVectorLink>();
+			set => SetPropertyValue<animVectorLink>(value);
 		}
 
 		public animAnimNode_FootStepAdjuster()
 		{
-			_iKBlendTime = 0.200000F;
-			_pelvisAdjustmentBlendSpeed = 0.200000F;
-			_stepAdjustmentInterval = 1.000000F;
+			Id = 4294967295;
+			InputLink = new();
+			LeftToeName = new();
+			RightToeName = new();
+			LeftFootName = new();
+			RightFootName = new();
+			LeftCalfName = new();
+			RightCalfName = new();
+			LeftThighName = new();
+			RightThighName = new();
+			PelvisBoneName = new();
+			CalfHingeAxis = new() { Z = 1.000000F, W = 1.000000F };
+			IKBlendTime = 0.200000F;
+			PelvisAdjustmentBlendSpeed = 0.200000F;
+			StepAdjustmentInterval = 1.000000F;
+			ControlValueNode = new();
+			ControlVectorNode = new();
 		}
 	}
 }

@@ -5,65 +5,59 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_BlendSpace_InternalsBlendSpacePoint : RedBaseClass
 	{
-		private CName _animationName;
-		private CBool _useFixedCoordinates;
-		private CArray<CFloat> _fixedCoordinates;
-		private CBool _useStaticPose;
-		private CFloat _staticPoseTime;
-		private CFloat _staticPoseProgress;
-
 		[Ordinal(0)] 
 		[RED("animationName")] 
 		public CName AnimationName
 		{
-			get => GetProperty(ref _animationName);
-			set => SetProperty(ref _animationName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("useFixedCoordinates")] 
 		public CBool UseFixedCoordinates
 		{
-			get => GetProperty(ref _useFixedCoordinates);
-			set => SetProperty(ref _useFixedCoordinates, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("fixedCoordinates")] 
 		public CArray<CFloat> FixedCoordinates
 		{
-			get => GetProperty(ref _fixedCoordinates);
-			set => SetProperty(ref _fixedCoordinates, value);
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("useStaticPose")] 
 		public CBool UseStaticPose
 		{
-			get => GetProperty(ref _useStaticPose);
-			set => SetProperty(ref _useStaticPose, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("staticPoseTime")] 
 		public CFloat StaticPoseTime
 		{
-			get => GetProperty(ref _staticPoseTime);
-			set => SetProperty(ref _staticPoseTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("staticPoseProgress")] 
 		public CFloat StaticPoseProgress
 		{
-			get => GetProperty(ref _staticPoseProgress);
-			set => SetProperty(ref _staticPoseProgress, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public animAnimNode_BlendSpace_InternalsBlendSpacePoint()
 		{
-			_useFixedCoordinates = true;
-			_staticPoseProgress = -1.000000F;
+			UseFixedCoordinates = true;
+			FixedCoordinates = new();
+			StaticPoseProgress = -1.000000F;
 		}
 	}
 }

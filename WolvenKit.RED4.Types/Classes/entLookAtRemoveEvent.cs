@@ -5,37 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entLookAtRemoveEvent : redEvent
 	{
-		private animLookAtRef _lookAtRef;
-		private CBool _hasOutTransition;
-		private CFloat _outTransitionSpeed;
-
 		[Ordinal(0)] 
 		[RED("lookAtRef")] 
 		public animLookAtRef LookAtRef
 		{
-			get => GetProperty(ref _lookAtRef);
-			set => SetProperty(ref _lookAtRef, value);
+			get => GetPropertyValue<animLookAtRef>();
+			set => SetPropertyValue<animLookAtRef>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hasOutTransition")] 
 		public CBool HasOutTransition
 		{
-			get => GetProperty(ref _hasOutTransition);
-			set => SetProperty(ref _hasOutTransition, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("outTransitionSpeed")] 
 		public CFloat OutTransitionSpeed
 		{
-			get => GetProperty(ref _outTransitionSpeed);
-			set => SetProperty(ref _outTransitionSpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public entLookAtRemoveEvent()
 		{
-			_outTransitionSpeed = 60.000000F;
+			LookAtRef = new() { Id = -1 };
+			OutTransitionSpeed = 60.000000F;
 		}
 	}
 }

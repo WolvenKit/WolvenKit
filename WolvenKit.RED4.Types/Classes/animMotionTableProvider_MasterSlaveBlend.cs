@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animMotionTableProvider_MasterSlaveBlend : animIMotionTableProvider
 	{
-		private CUInt8 _masterInputIdx;
-
 		[Ordinal(5)] 
 		[RED("masterInputIdx")] 
 		public CUInt8 MasterInputIdx
 		{
-			get => GetProperty(ref _masterInputIdx);
-			set => SetProperty(ref _masterInputIdx, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
+		}
+
+		public animMotionTableProvider_MasterSlaveBlend()
+		{
+			Id = -1;
+			ParentId = -1;
 		}
 	}
 }

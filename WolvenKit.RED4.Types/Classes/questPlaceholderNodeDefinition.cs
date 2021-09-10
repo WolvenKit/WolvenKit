@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questPlaceholderNodeDefinition : questDisableableNodeDefinition
 	{
-		private CName _replacedNodeClassName;
-		private CArray<questPlaceholderNodeSocketInfo> _copiedSockets;
-		private CHandle<ISerializable> _clipboardHolder;
-
 		[Ordinal(2)] 
 		[RED("replacedNodeClassName")] 
 		public CName ReplacedNodeClassName
 		{
-			get => GetProperty(ref _replacedNodeClassName);
-			set => SetProperty(ref _replacedNodeClassName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("copiedSockets")] 
 		public CArray<questPlaceholderNodeSocketInfo> CopiedSockets
 		{
-			get => GetProperty(ref _copiedSockets);
-			set => SetProperty(ref _copiedSockets, value);
+			get => GetPropertyValue<CArray<questPlaceholderNodeSocketInfo>>();
+			set => SetPropertyValue<CArray<questPlaceholderNodeSocketInfo>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("clipboardHolder")] 
 		public CHandle<ISerializable> ClipboardHolder
 		{
-			get => GetProperty(ref _clipboardHolder);
-			set => SetProperty(ref _clipboardHolder, value);
+			get => GetPropertyValue<CHandle<ISerializable>>();
+			set => SetPropertyValue<CHandle<ISerializable>>(value);
+		}
+
+		public questPlaceholderNodeDefinition()
+		{
+			Sockets = new();
+			Id = 65535;
+			CopiedSockets = new();
 		}
 	}
 }

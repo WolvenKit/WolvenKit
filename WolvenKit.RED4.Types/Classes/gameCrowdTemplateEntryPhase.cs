@@ -5,75 +5,69 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameCrowdTemplateEntryPhase : RedBaseClass
 	{
-		private CName _phaseName;
-		private CArray<gameCrowdPhaseTimePeriod> _timePeriods;
-		private CFloat _density;
-		private CArray<gameCrowdTemplateCharacterData> _charactersData;
-		private CBool _legacy;
-		private CBool _legacyDensityInTimePeriods;
-		private CBool _legacyCharactersData;
-
 		[Ordinal(0)] 
 		[RED("phaseName")] 
 		public CName PhaseName
 		{
-			get => GetProperty(ref _phaseName);
-			set => SetProperty(ref _phaseName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("timePeriods")] 
 		public CArray<gameCrowdPhaseTimePeriod> TimePeriods
 		{
-			get => GetProperty(ref _timePeriods);
-			set => SetProperty(ref _timePeriods, value);
+			get => GetPropertyValue<CArray<gameCrowdPhaseTimePeriod>>();
+			set => SetPropertyValue<CArray<gameCrowdPhaseTimePeriod>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("density")] 
 		public CFloat Density
 		{
-			get => GetProperty(ref _density);
-			set => SetProperty(ref _density, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("charactersData")] 
 		public CArray<gameCrowdTemplateCharacterData> CharactersData
 		{
-			get => GetProperty(ref _charactersData);
-			set => SetProperty(ref _charactersData, value);
+			get => GetPropertyValue<CArray<gameCrowdTemplateCharacterData>>();
+			set => SetPropertyValue<CArray<gameCrowdTemplateCharacterData>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("legacy")] 
 		public CBool Legacy
 		{
-			get => GetProperty(ref _legacy);
-			set => SetProperty(ref _legacy, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("legacyDensityInTimePeriods")] 
 		public CBool LegacyDensityInTimePeriods
 		{
-			get => GetProperty(ref _legacyDensityInTimePeriods);
-			set => SetProperty(ref _legacyDensityInTimePeriods, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("legacyCharactersData")] 
 		public CBool LegacyCharactersData
 		{
-			get => GetProperty(ref _legacyCharactersData);
-			set => SetProperty(ref _legacyCharactersData, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public gameCrowdTemplateEntryPhase()
 		{
-			_legacy = true;
-			_legacyDensityInTimePeriods = true;
-			_legacyCharactersData = true;
+			TimePeriods = new() { new() { Density_52 = 0.500000F, Density_56 = "Zero", WorkspotsUsage = 0.500000F, CharactersData = new(), ReducedCharactersData = new(), UseDensityPreset = true } };
+			CharactersData = new();
+			Legacy = true;
+			LegacyDensityInTimePeriods = true;
+			LegacyCharactersData = true;
 		}
 	}
 }

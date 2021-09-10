@@ -5,59 +5,57 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TutorialStep : RedBaseClass
 	{
-		private CString _description;
-		private CBool _showPointer;
-		private CFloat _pointerRotation;
-		private CFloat _pointerXPos;
-		private CFloat _pointerYPos;
-		private CArray<CName> _allowedActions;
-
 		[Ordinal(0)] 
 		[RED("description")] 
 		public CString Description
 		{
-			get => GetProperty(ref _description);
-			set => SetProperty(ref _description, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("showPointer")] 
 		public CBool ShowPointer
 		{
-			get => GetProperty(ref _showPointer);
-			set => SetProperty(ref _showPointer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("pointerRotation")] 
 		public CFloat PointerRotation
 		{
-			get => GetProperty(ref _pointerRotation);
-			set => SetProperty(ref _pointerRotation, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("pointerXPos")] 
 		public CFloat PointerXPos
 		{
-			get => GetProperty(ref _pointerXPos);
-			set => SetProperty(ref _pointerXPos, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("pointerYPos")] 
 		public CFloat PointerYPos
 		{
-			get => GetProperty(ref _pointerYPos);
-			set => SetProperty(ref _pointerYPos, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("allowedActions")] 
 		public CArray<CName> AllowedActions
 		{
-			get => GetProperty(ref _allowedActions);
-			set => SetProperty(ref _allowedActions, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
+		public TutorialStep()
+		{
+			AllowedActions = new();
 		}
 	}
 }

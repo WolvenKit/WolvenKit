@@ -5,75 +5,69 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class appearancePartComponentOverrides : RedBaseClass
 	{
-		private CName _componentName;
-		private CName _meshAppearance;
-		private CUInt64 _chunkMask;
-		private CBool _useCustomTransform;
-		private Transform _initialTransform;
-		private Vector3 _visualScale;
-		private CBool _acceptDismemberment;
-
 		[Ordinal(0)] 
 		[RED("componentName")] 
 		public CName ComponentName
 		{
-			get => GetProperty(ref _componentName);
-			set => SetProperty(ref _componentName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("meshAppearance")] 
 		public CName MeshAppearance
 		{
-			get => GetProperty(ref _meshAppearance);
-			set => SetProperty(ref _meshAppearance, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("chunkMask")] 
 		public CUInt64 ChunkMask
 		{
-			get => GetProperty(ref _chunkMask);
-			set => SetProperty(ref _chunkMask, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("useCustomTransform")] 
 		public CBool UseCustomTransform
 		{
-			get => GetProperty(ref _useCustomTransform);
-			set => SetProperty(ref _useCustomTransform, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("initialTransform")] 
 		public Transform InitialTransform
 		{
-			get => GetProperty(ref _initialTransform);
-			set => SetProperty(ref _initialTransform, value);
+			get => GetPropertyValue<Transform>();
+			set => SetPropertyValue<Transform>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("visualScale")] 
 		public Vector3 VisualScale
 		{
-			get => GetProperty(ref _visualScale);
-			set => SetProperty(ref _visualScale, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("acceptDismemberment")] 
 		public CBool AcceptDismemberment
 		{
-			get => GetProperty(ref _acceptDismemberment);
-			set => SetProperty(ref _acceptDismemberment, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public appearancePartComponentOverrides()
 		{
-			_meshAppearance = "default";
-			_chunkMask = 18446744073709551615;
-			_acceptDismemberment = true;
+			MeshAppearance = "default";
+			ChunkMask = 18446744073709551615;
+			InitialTransform = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			VisualScale = new();
+			AcceptDismemberment = true;
 		}
 	}
 }

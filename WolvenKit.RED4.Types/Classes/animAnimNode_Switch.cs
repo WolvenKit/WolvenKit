@@ -5,91 +5,84 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_Switch : animAnimNode_MotionTableSwitch
 	{
-		private CUInt32 _numInputs;
-		private CFloat _blendTime;
-		private CBool _timeWarpingEnabled;
-		private CHandle<animISyncMethod> _syncMethod;
-		private CHandle<animIMotionTableProvider> _motionProvider;
-		private animFloatLink _weightNode;
-		private CArray<animPoseLink> _inputNodes;
-		private CName _pushDataByTag;
-		private CBool _canRequestInertialization;
-
 		[Ordinal(11)] 
 		[RED("numInputs")] 
 		public CUInt32 NumInputs
 		{
-			get => GetProperty(ref _numInputs);
-			set => SetProperty(ref _numInputs, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("blendTime")] 
 		public CFloat BlendTime
 		{
-			get => GetProperty(ref _blendTime);
-			set => SetProperty(ref _blendTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("timeWarpingEnabled")] 
 		public CBool TimeWarpingEnabled
 		{
-			get => GetProperty(ref _timeWarpingEnabled);
-			set => SetProperty(ref _timeWarpingEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("syncMethod")] 
 		public CHandle<animISyncMethod> SyncMethod
 		{
-			get => GetProperty(ref _syncMethod);
-			set => SetProperty(ref _syncMethod, value);
+			get => GetPropertyValue<CHandle<animISyncMethod>>();
+			set => SetPropertyValue<CHandle<animISyncMethod>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("motionProvider")] 
 		public CHandle<animIMotionTableProvider> MotionProvider
 		{
-			get => GetProperty(ref _motionProvider);
-			set => SetProperty(ref _motionProvider, value);
+			get => GetPropertyValue<CHandle<animIMotionTableProvider>>();
+			set => SetPropertyValue<CHandle<animIMotionTableProvider>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("weightNode")] 
 		public animFloatLink WeightNode
 		{
-			get => GetProperty(ref _weightNode);
-			set => SetProperty(ref _weightNode, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("inputNodes")] 
 		public CArray<animPoseLink> InputNodes
 		{
-			get => GetProperty(ref _inputNodes);
-			set => SetProperty(ref _inputNodes, value);
+			get => GetPropertyValue<CArray<animPoseLink>>();
+			set => SetPropertyValue<CArray<animPoseLink>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("pushDataByTag")] 
 		public CName PushDataByTag
 		{
-			get => GetProperty(ref _pushDataByTag);
-			set => SetProperty(ref _pushDataByTag, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("canRequestInertialization")] 
 		public CBool CanRequestInertialization
 		{
-			get => GetProperty(ref _canRequestInertialization);
-			set => SetProperty(ref _canRequestInertialization, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public animAnimNode_Switch()
 		{
-			_blendTime = 0.100000F;
+			Id = 4294967295;
+			BlendTime = 0.100000F;
+			WeightNode = new();
+			InputNodes = new();
 		}
 	}
 }

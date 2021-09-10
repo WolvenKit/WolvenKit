@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questGOGReward_ConditionType : questISystemConditionType
 	{
-		private TweakDBID _rewardRecordId;
-
 		[Ordinal(0)] 
 		[RED("rewardRecordId")] 
 		public TweakDBID RewardRecordId
 		{
-			get => GetProperty(ref _rewardRecordId);
-			set => SetProperty(ref _rewardRecordId, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 	}
 }

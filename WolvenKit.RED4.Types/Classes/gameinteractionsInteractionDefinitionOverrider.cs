@@ -5,46 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameinteractionsInteractionDefinitionOverrider : RedBaseClass
 	{
-		private CName _tag;
-		private CArray<CHandle<gameinteractionsIShapeDefinition>> _shapes;
-		private CArray<CHandle<gameinteractionsIShapeDefinition>> _negativeShapes;
-		private CFloat _priorityMultiplier;
-
 		[Ordinal(0)] 
 		[RED("tag")] 
 		public CName Tag
 		{
-			get => GetProperty(ref _tag);
-			set => SetProperty(ref _tag, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("shapes")] 
 		public CArray<CHandle<gameinteractionsIShapeDefinition>> Shapes
 		{
-			get => GetProperty(ref _shapes);
-			set => SetProperty(ref _shapes, value);
+			get => GetPropertyValue<CArray<CHandle<gameinteractionsIShapeDefinition>>>();
+			set => SetPropertyValue<CArray<CHandle<gameinteractionsIShapeDefinition>>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("negativeShapes")] 
 		public CArray<CHandle<gameinteractionsIShapeDefinition>> NegativeShapes
 		{
-			get => GetProperty(ref _negativeShapes);
-			set => SetProperty(ref _negativeShapes, value);
+			get => GetPropertyValue<CArray<CHandle<gameinteractionsIShapeDefinition>>>();
+			set => SetPropertyValue<CArray<CHandle<gameinteractionsIShapeDefinition>>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("priorityMultiplier")] 
 		public CFloat PriorityMultiplier
 		{
-			get => GetProperty(ref _priorityMultiplier);
-			set => SetProperty(ref _priorityMultiplier, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public gameinteractionsInteractionDefinitionOverrider()
 		{
-			_priorityMultiplier = 1.000000F;
+			Shapes = new();
+			NegativeShapes = new();
+			PriorityMultiplier = 1.000000F;
 		}
 	}
 }

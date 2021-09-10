@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class StatsDetailViewController : inkWidgetLogicController
 	{
-		private inkTextWidgetReference _statLabelRef;
-		private inkTextWidgetReference _statValueRef;
-
 		[Ordinal(1)] 
 		[RED("StatLabelRef")] 
 		public inkTextWidgetReference StatLabelRef
 		{
-			get => GetProperty(ref _statLabelRef);
-			set => SetProperty(ref _statLabelRef, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("StatValueRef")] 
 		public inkTextWidgetReference StatValueRef
 		{
-			get => GetProperty(ref _statValueRef);
-			set => SetProperty(ref _statValueRef, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		public StatsDetailViewController()
+		{
+			StatLabelRef = new();
+			StatValueRef = new();
 		}
 	}
 }

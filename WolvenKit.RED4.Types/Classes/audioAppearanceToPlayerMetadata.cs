@@ -5,37 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioAppearanceToPlayerMetadata : RedBaseClass
 	{
-		private CArray<CName> _appearances;
-		private CName _foleyPlayerMetadata;
-		private CEnum<audioFoleyItemPriority> _priority;
-
 		[Ordinal(0)] 
 		[RED("appearances")] 
 		public CArray<CName> Appearances
 		{
-			get => GetProperty(ref _appearances);
-			set => SetProperty(ref _appearances, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("foleyPlayerMetadata")] 
 		public CName FoleyPlayerMetadata
 		{
-			get => GetProperty(ref _foleyPlayerMetadata);
-			set => SetProperty(ref _foleyPlayerMetadata, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("priority")] 
 		public CEnum<audioFoleyItemPriority> Priority
 		{
-			get => GetProperty(ref _priority);
-			set => SetProperty(ref _priority, value);
+			get => GetPropertyValue<CEnum<audioFoleyItemPriority>>();
+			set => SetPropertyValue<CEnum<audioFoleyItemPriority>>(value);
 		}
 
 		public audioAppearanceToPlayerMetadata()
 		{
-			_priority = new() { Value = Enums.audioFoleyItemPriority.P6 };
+			Appearances = new();
+			Priority = Enums.audioFoleyItemPriority.P6;
 		}
 	}
 }

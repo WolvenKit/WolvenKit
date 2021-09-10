@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questCrowdManagerNodeType_ControlCrowd : questICrowdManager_NodeType
 	{
-		private CEnum<questControlCrowdAction> _action;
-		private CName _debugSource;
-
 		[Ordinal(0)] 
 		[RED("action")] 
 		public CEnum<questControlCrowdAction> Action
 		{
-			get => GetProperty(ref _action);
-			set => SetProperty(ref _action, value);
+			get => GetPropertyValue<CEnum<questControlCrowdAction>>();
+			set => SetPropertyValue<CEnum<questControlCrowdAction>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("debugSource")] 
 		public CName DebugSource
 		{
-			get => GetProperty(ref _debugSource);
-			set => SetProperty(ref _debugSource, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 	}
 }

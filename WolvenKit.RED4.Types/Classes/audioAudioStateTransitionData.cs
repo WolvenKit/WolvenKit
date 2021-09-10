@@ -5,73 +5,67 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioAudioStateTransitionData : RedBaseClass
 	{
-		private CUInt8 _targetStateId;
-		private CBool _allConditionsFulfilled;
-		private CFloat _transitionTime;
-		private CFloat _exitTime;
-		private CName _exitSignal;
-		private CArray<audioAudioSceneVariableReadActionData> _readVariableActions;
-		private CArray<CName> _conditions;
-
 		[Ordinal(0)] 
 		[RED("targetStateId")] 
 		public CUInt8 TargetStateId
 		{
-			get => GetProperty(ref _targetStateId);
-			set => SetProperty(ref _targetStateId, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("allConditionsFulfilled")] 
 		public CBool AllConditionsFulfilled
 		{
-			get => GetProperty(ref _allConditionsFulfilled);
-			set => SetProperty(ref _allConditionsFulfilled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("transitionTime")] 
 		public CFloat TransitionTime
 		{
-			get => GetProperty(ref _transitionTime);
-			set => SetProperty(ref _transitionTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("exitTime")] 
 		public CFloat ExitTime
 		{
-			get => GetProperty(ref _exitTime);
-			set => SetProperty(ref _exitTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("exitSignal")] 
 		public CName ExitSignal
 		{
-			get => GetProperty(ref _exitSignal);
-			set => SetProperty(ref _exitSignal, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("readVariableActions")] 
 		public CArray<audioAudioSceneVariableReadActionData> ReadVariableActions
 		{
-			get => GetProperty(ref _readVariableActions);
-			set => SetProperty(ref _readVariableActions, value);
+			get => GetPropertyValue<CArray<audioAudioSceneVariableReadActionData>>();
+			set => SetPropertyValue<CArray<audioAudioSceneVariableReadActionData>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("conditions")] 
 		public CArray<CName> Conditions
 		{
-			get => GetProperty(ref _conditions);
-			set => SetProperty(ref _conditions, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		public audioAudioStateTransitionData()
 		{
-			_allConditionsFulfilled = true;
+			AllConditionsFulfilled = true;
+			ReadVariableActions = new();
+			Conditions = new();
 		}
 	}
 }

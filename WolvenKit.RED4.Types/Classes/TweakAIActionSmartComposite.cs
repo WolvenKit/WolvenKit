@@ -5,104 +5,99 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TweakAIActionSmartComposite : TweakAIActionAbstract
 	{
-		private TweakDBID _smartComposite;
-		private CWeakHandle<gamedataAIActionSmartComposite_Record> _smartCompositeRecord;
-		private CBool _interruptionRequested;
-		private CFloat _conditionSuccessfulCheckTimeStamp;
-		private CFloat _conditionCheckTimeStamp;
-		private CFloat _conditionCheckRandomizedInterval;
-		private CUInt32 _iteration;
-		private CInt32 _nodeIterator;
-		private CInt32 _currentNodeIterator;
-		private CEnum<ETweakAINodeType> _currentNodeType;
-		private CWeakHandle<gamedataAINode_Record> _currentNode;
-
 		[Ordinal(27)] 
 		[RED("smartComposite")] 
 		public TweakDBID SmartComposite
 		{
-			get => GetProperty(ref _smartComposite);
-			set => SetProperty(ref _smartComposite, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("smartCompositeRecord")] 
 		public CWeakHandle<gamedataAIActionSmartComposite_Record> SmartCompositeRecord
 		{
-			get => GetProperty(ref _smartCompositeRecord);
-			set => SetProperty(ref _smartCompositeRecord, value);
+			get => GetPropertyValue<CWeakHandle<gamedataAIActionSmartComposite_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataAIActionSmartComposite_Record>>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("interruptionRequested")] 
 		public CBool InterruptionRequested
 		{
-			get => GetProperty(ref _interruptionRequested);
-			set => SetProperty(ref _interruptionRequested, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("conditionSuccessfulCheckTimeStamp")] 
 		public CFloat ConditionSuccessfulCheckTimeStamp
 		{
-			get => GetProperty(ref _conditionSuccessfulCheckTimeStamp);
-			set => SetProperty(ref _conditionSuccessfulCheckTimeStamp, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("conditionCheckTimeStamp")] 
 		public CFloat ConditionCheckTimeStamp
 		{
-			get => GetProperty(ref _conditionCheckTimeStamp);
-			set => SetProperty(ref _conditionCheckTimeStamp, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("conditionCheckRandomizedInterval")] 
 		public CFloat ConditionCheckRandomizedInterval
 		{
-			get => GetProperty(ref _conditionCheckRandomizedInterval);
-			set => SetProperty(ref _conditionCheckRandomizedInterval, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("iteration")] 
 		public CUInt32 Iteration
 		{
-			get => GetProperty(ref _iteration);
-			set => SetProperty(ref _iteration, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(34)] 
 		[RED("nodeIterator")] 
 		public CInt32 NodeIterator
 		{
-			get => GetProperty(ref _nodeIterator);
-			set => SetProperty(ref _nodeIterator, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(35)] 
 		[RED("currentNodeIterator")] 
 		public CInt32 CurrentNodeIterator
 		{
-			get => GetProperty(ref _currentNodeIterator);
-			set => SetProperty(ref _currentNodeIterator, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(36)] 
 		[RED("currentNodeType")] 
 		public CEnum<ETweakAINodeType> CurrentNodeType
 		{
-			get => GetProperty(ref _currentNodeType);
-			set => SetProperty(ref _currentNodeType, value);
+			get => GetPropertyValue<CEnum<ETweakAINodeType>>();
+			set => SetPropertyValue<CEnum<ETweakAINodeType>>(value);
 		}
 
 		[Ordinal(37)] 
 		[RED("currentNode")] 
 		public CWeakHandle<gamedataAINode_Record> CurrentNode
 		{
-			get => GetProperty(ref _currentNode);
-			set => SetProperty(ref _currentNode, value);
+			get => GetPropertyValue<CWeakHandle<gamedataAINode_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataAINode_Record>>(value);
+		}
+
+		public TweakAIActionSmartComposite()
+		{
+			LookatEvents = new();
+			GeneralSubActionsResults = new(8);
+			PhaseSubActionsResults = new(8);
 		}
 	}
 }

@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldClothMeshNode : worldMeshNode
 	{
-		private CBool _affectedByWind;
-		private CEnum<physicsEClothCollisionMaskEnum> _collisionMask;
-
 		[Ordinal(15)] 
 		[RED("affectedByWind")] 
 		public CBool AffectedByWind
 		{
-			get => GetProperty(ref _affectedByWind);
-			set => SetProperty(ref _affectedByWind, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("collisionMask")] 
-		public CEnum<physicsEClothCollisionMaskEnum> CollisionMask
+		public CBitField<physicsEClothCollisionMaskEnum> CollisionMask
 		{
-			get => GetProperty(ref _collisionMask);
-			set => SetProperty(ref _collisionMask, value);
+			get => GetPropertyValue<CBitField<physicsEClothCollisionMaskEnum>>();
+			set => SetPropertyValue<CBitField<physicsEClothCollisionMaskEnum>>(value);
 		}
 	}
 }

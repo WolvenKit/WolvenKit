@@ -5,59 +5,59 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scneventsVFXEvent : scnSceneEvent
 	{
-		private scnEffectEntry _effectEntry;
-		private CEnum<scneventsVFXActionType> _action;
-		private CUInt32 _sequenceShift;
-		private scnPerformerId _performerId;
-		private NodeRef _nodeRef;
-		private CBool _muteSound;
-
 		[Ordinal(6)] 
 		[RED("effectEntry")] 
 		public scnEffectEntry EffectEntry
 		{
-			get => GetProperty(ref _effectEntry);
-			set => SetProperty(ref _effectEntry, value);
+			get => GetPropertyValue<scnEffectEntry>();
+			set => SetPropertyValue<scnEffectEntry>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("action")] 
 		public CEnum<scneventsVFXActionType> Action
 		{
-			get => GetProperty(ref _action);
-			set => SetProperty(ref _action, value);
+			get => GetPropertyValue<CEnum<scneventsVFXActionType>>();
+			set => SetPropertyValue<CEnum<scneventsVFXActionType>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("sequenceShift")] 
 		public CUInt32 SequenceShift
 		{
-			get => GetProperty(ref _sequenceShift);
-			set => SetProperty(ref _sequenceShift, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("performerId")] 
 		public scnPerformerId PerformerId
 		{
-			get => GetProperty(ref _performerId);
-			set => SetProperty(ref _performerId, value);
+			get => GetPropertyValue<scnPerformerId>();
+			set => SetPropertyValue<scnPerformerId>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("nodeRef")] 
 		public NodeRef NodeRef
 		{
-			get => GetProperty(ref _nodeRef);
-			set => SetProperty(ref _nodeRef, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("muteSound")] 
 		public CBool MuteSound
 		{
-			get => GetProperty(ref _muteSound);
-			set => SetProperty(ref _muteSound, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public scneventsVFXEvent()
+		{
+			Id = new() { Id = 18446744073709551615 };
+			EffectEntry = new() { EffectInstanceId = new() { EffectId = new() { Id = 4294967295 }, Id = 4294967295 } };
+			PerformerId = new() { Id = 4294967040 };
 		}
 	}
 }

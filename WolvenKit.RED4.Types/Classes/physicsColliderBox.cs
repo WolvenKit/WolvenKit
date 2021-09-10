@@ -5,23 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class physicsColliderBox : physicsICollider
 	{
-		private Vector3 _halfExtents;
-		private CBool _isObstacle;
-
 		[Ordinal(8)] 
 		[RED("halfExtents")] 
 		public Vector3 HalfExtents
 		{
-			get => GetProperty(ref _halfExtents);
-			set => SetProperty(ref _halfExtents, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("isObstacle")] 
 		public CBool IsObstacle
 		{
-			get => GetProperty(ref _isObstacle);
-			set => SetProperty(ref _isObstacle, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public physicsColliderBox()
+		{
+			LocalToBody = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			MaterialApperanceOverrides = new();
+			VolumeModifier = 1.000000F;
+			HalfExtents = new();
 		}
 	}
 }

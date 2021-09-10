@@ -5,28 +5,27 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class LibTreeDefTreeVariableCName : LibTreeDefTreeVariable
 	{
-		private CBool _exportAsProperty;
-		private CName _defaultValue;
-
 		[Ordinal(2)] 
 		[RED("exportAsProperty")] 
 		public CBool ExportAsProperty
 		{
-			get => GetProperty(ref _exportAsProperty);
-			set => SetProperty(ref _exportAsProperty, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("defaultValue")] 
 		public CName DefaultValue
 		{
-			get => GetProperty(ref _defaultValue);
-			set => SetProperty(ref _defaultValue, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public LibTreeDefTreeVariableCName()
 		{
-			_exportAsProperty = true;
+			Id = 65535;
+			ReadableName = "TreeVar";
+			ExportAsProperty = true;
 		}
 	}
 }

@@ -5,55 +5,53 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnEventBlendWorkspotSetupParameters : ISerializable
 	{
-		private scnSceneWorkspotInstanceId _workspotId;
-		private workWorkEntryId _sequenceEntryId;
-		private CBool _idleOnlyMode;
-		private CArray<workWorkEntryId> _workExcludedGestures;
-		private workWorkspotItemOverride _itemOverride;
-
 		[Ordinal(0)] 
 		[RED("workspotId")] 
 		public scnSceneWorkspotInstanceId WorkspotId
 		{
-			get => GetProperty(ref _workspotId);
-			set => SetProperty(ref _workspotId, value);
+			get => GetPropertyValue<scnSceneWorkspotInstanceId>();
+			set => SetPropertyValue<scnSceneWorkspotInstanceId>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("sequenceEntryId")] 
 		public workWorkEntryId SequenceEntryId
 		{
-			get => GetProperty(ref _sequenceEntryId);
-			set => SetProperty(ref _sequenceEntryId, value);
+			get => GetPropertyValue<workWorkEntryId>();
+			set => SetPropertyValue<workWorkEntryId>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("idleOnlyMode")] 
 		public CBool IdleOnlyMode
 		{
-			get => GetProperty(ref _idleOnlyMode);
-			set => SetProperty(ref _idleOnlyMode, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("workExcludedGestures")] 
 		public CArray<workWorkEntryId> WorkExcludedGestures
 		{
-			get => GetProperty(ref _workExcludedGestures);
-			set => SetProperty(ref _workExcludedGestures, value);
+			get => GetPropertyValue<CArray<workWorkEntryId>>();
+			set => SetPropertyValue<CArray<workWorkEntryId>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("itemOverride")] 
 		public workWorkspotItemOverride ItemOverride
 		{
-			get => GetProperty(ref _itemOverride);
-			set => SetProperty(ref _itemOverride, value);
+			get => GetPropertyValue<workWorkspotItemOverride>();
+			set => SetPropertyValue<workWorkspotItemOverride>(value);
 		}
 
 		public scnEventBlendWorkspotSetupParameters()
 		{
-			_idleOnlyMode = true;
+			WorkspotId = new() { Id = 4294967295 };
+			SequenceEntryId = new() { Id = 4294967295 };
+			IdleOnlyMode = true;
+			WorkExcludedGestures = new();
+			ItemOverride = new() { PropOverrides = new(), ItemOverrides = new() };
 		}
 	}
 }

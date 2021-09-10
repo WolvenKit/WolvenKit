@@ -5,103 +5,96 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_DampFloat : animAnimNode_FloatValue
 	{
-		private CFloat _defaultIncreaseSpeed;
-		private CFloat _defaultDecreaseSpeed;
-		private CBool _startFromDefaultValue;
-		private CFloat _defaultInitialValue;
-		private CBool _wrapAroundRange;
-		private CFloat _rangeMin;
-		private CFloat _rangeMax;
-		private animFloatLink _inputNode;
-		private animFloatLink _increaseSpeedNode;
-		private animFloatLink _decreaseSpeedNode;
-
 		[Ordinal(11)] 
 		[RED("defaultIncreaseSpeed")] 
 		public CFloat DefaultIncreaseSpeed
 		{
-			get => GetProperty(ref _defaultIncreaseSpeed);
-			set => SetProperty(ref _defaultIncreaseSpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("defaultDecreaseSpeed")] 
 		public CFloat DefaultDecreaseSpeed
 		{
-			get => GetProperty(ref _defaultDecreaseSpeed);
-			set => SetProperty(ref _defaultDecreaseSpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("startFromDefaultValue")] 
 		public CBool StartFromDefaultValue
 		{
-			get => GetProperty(ref _startFromDefaultValue);
-			set => SetProperty(ref _startFromDefaultValue, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("defaultInitialValue")] 
 		public CFloat DefaultInitialValue
 		{
-			get => GetProperty(ref _defaultInitialValue);
-			set => SetProperty(ref _defaultInitialValue, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("wrapAroundRange")] 
 		public CBool WrapAroundRange
 		{
-			get => GetProperty(ref _wrapAroundRange);
-			set => SetProperty(ref _wrapAroundRange, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("rangeMin")] 
 		public CFloat RangeMin
 		{
-			get => GetProperty(ref _rangeMin);
-			set => SetProperty(ref _rangeMin, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("rangeMax")] 
 		public CFloat RangeMax
 		{
-			get => GetProperty(ref _rangeMax);
-			set => SetProperty(ref _rangeMax, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("inputNode")] 
 		public animFloatLink InputNode
 		{
-			get => GetProperty(ref _inputNode);
-			set => SetProperty(ref _inputNode, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("increaseSpeedNode")] 
 		public animFloatLink IncreaseSpeedNode
 		{
-			get => GetProperty(ref _increaseSpeedNode);
-			set => SetProperty(ref _increaseSpeedNode, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("decreaseSpeedNode")] 
 		public animFloatLink DecreaseSpeedNode
 		{
-			get => GetProperty(ref _decreaseSpeedNode);
-			set => SetProperty(ref _decreaseSpeedNode, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		public animAnimNode_DampFloat()
 		{
-			_defaultIncreaseSpeed = 1.000000F;
-			_defaultDecreaseSpeed = 1.000000F;
-			_rangeMin = -180.000000F;
-			_rangeMax = 180.000000F;
+			Id = 4294967295;
+			DefaultIncreaseSpeed = 1.000000F;
+			DefaultDecreaseSpeed = 1.000000F;
+			RangeMin = -180.000000F;
+			RangeMax = 180.000000F;
+			InputNode = new();
+			IncreaseSpeedNode = new();
+			DecreaseSpeedNode = new();
 		}
 	}
 }

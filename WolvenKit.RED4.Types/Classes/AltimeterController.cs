@@ -5,101 +5,95 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AltimeterController : inkWidgetLogicController
 	{
-		private inkWidgetReference _faceUp;
-		private inkWidgetReference _faceDown;
-		private inkTextWidgetReference _textWidget;
-		private CUInt32 _decimalPrecision;
-		private Vector2 _faceUpStartPosition;
-		private Vector2 _faceDownStartPosition;
-		private CWeakHandle<gameObject> _playerPuppet;
-		private CFloat _warpDistance;
-		private CFloat _alitimeterValue;
-		private CFloat _precisionEpsilon;
-
 		[Ordinal(1)] 
 		[RED("faceUp")] 
 		public inkWidgetReference FaceUp
 		{
-			get => GetProperty(ref _faceUp);
-			set => SetProperty(ref _faceUp, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("faceDown")] 
 		public inkWidgetReference FaceDown
 		{
-			get => GetProperty(ref _faceDown);
-			set => SetProperty(ref _faceDown, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("textWidget")] 
 		public inkTextWidgetReference TextWidget
 		{
-			get => GetProperty(ref _textWidget);
-			set => SetProperty(ref _textWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("decimalPrecision")] 
 		public CUInt32 DecimalPrecision
 		{
-			get => GetProperty(ref _decimalPrecision);
-			set => SetProperty(ref _decimalPrecision, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("faceUpStartPosition")] 
 		public Vector2 FaceUpStartPosition
 		{
-			get => GetProperty(ref _faceUpStartPosition);
-			set => SetProperty(ref _faceUpStartPosition, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("faceDownStartPosition")] 
 		public Vector2 FaceDownStartPosition
 		{
-			get => GetProperty(ref _faceDownStartPosition);
-			set => SetProperty(ref _faceDownStartPosition, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("playerPuppet")] 
 		public CWeakHandle<gameObject> PlayerPuppet
 		{
-			get => GetProperty(ref _playerPuppet);
-			set => SetProperty(ref _playerPuppet, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("warpDistance")] 
 		public CFloat WarpDistance
 		{
-			get => GetProperty(ref _warpDistance);
-			set => SetProperty(ref _warpDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("alitimeterValue")] 
 		public CFloat AlitimeterValue
 		{
-			get => GetProperty(ref _alitimeterValue);
-			set => SetProperty(ref _alitimeterValue, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("precisionEpsilon")] 
 		public CFloat PrecisionEpsilon
 		{
-			get => GetProperty(ref _precisionEpsilon);
-			set => SetProperty(ref _precisionEpsilon, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public AltimeterController()
 		{
-			_decimalPrecision = 2;
-			_warpDistance = 2.000000F;
+			FaceUp = new();
+			FaceDown = new();
+			TextWidget = new();
+			DecimalPrecision = 2;
+			FaceUpStartPosition = new();
+			FaceDownStartPosition = new();
+			WarpDistance = 2.000000F;
 		}
 	}
 }

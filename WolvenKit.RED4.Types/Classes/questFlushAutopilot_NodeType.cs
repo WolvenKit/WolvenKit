@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questFlushAutopilot_NodeType : questIVehicleManagerNodeType
 	{
-		private gameEntityReference _vehicleRef;
-		private CBool _playerVehicle;
-
 		[Ordinal(0)] 
 		[RED("vehicleRef")] 
 		public gameEntityReference VehicleRef
 		{
-			get => GetProperty(ref _vehicleRef);
-			set => SetProperty(ref _vehicleRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("playerVehicle")] 
 		public CBool PlayerVehicle
 		{
-			get => GetProperty(ref _playerVehicle);
-			set => SetProperty(ref _playerVehicle, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public questFlushAutopilot_NodeType()
+		{
+			VehicleRef = new() { Names = new() };
 		}
 	}
 }

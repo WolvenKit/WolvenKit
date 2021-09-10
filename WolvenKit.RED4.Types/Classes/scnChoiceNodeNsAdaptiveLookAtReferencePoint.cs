@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnChoiceNodeNsAdaptiveLookAtReferencePoint : RedBaseClass
 	{
-		private scnReferencePointId _referencePoint;
-		private CFloat _constantWeight;
-
 		[Ordinal(0)] 
 		[RED("referencePoint")] 
 		public scnReferencePointId ReferencePoint
 		{
-			get => GetProperty(ref _referencePoint);
-			set => SetProperty(ref _referencePoint, value);
+			get => GetPropertyValue<scnReferencePointId>();
+			set => SetPropertyValue<scnReferencePointId>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("constantWeight")] 
 		public CFloat ConstantWeight
 		{
-			get => GetProperty(ref _constantWeight);
-			set => SetProperty(ref _constantWeight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public scnChoiceNodeNsAdaptiveLookAtReferencePoint()
+		{
+			ReferencePoint = new() { Id = 4294967295 };
 		}
 	}
 }

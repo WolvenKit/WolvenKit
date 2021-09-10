@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MenuItemData : IScriptable
 	{
-		private MenuData _menuData;
-
 		[Ordinal(0)] 
 		[RED("menuData")] 
 		public MenuData MenuData
 		{
-			get => GetProperty(ref _menuData);
-			set => SetProperty(ref _menuData, value);
+			get => GetPropertyValue<MenuData>();
+			set => SetPropertyValue<MenuData>(value);
+		}
+
+		public MenuItemData()
+		{
+			MenuData = new() { Identifier = -1, SubMenus = new() };
 		}
 	}
 }

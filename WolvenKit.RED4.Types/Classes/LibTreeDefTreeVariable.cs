@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class LibTreeDefTreeVariable : ISerializable
 	{
-		private CUInt16 _id;
-		private CName _readableName;
-
 		[Ordinal(0)] 
 		[RED("id")] 
 		public CUInt16 Id
 		{
-			get => GetProperty(ref _id);
-			set => SetProperty(ref _id, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("readableName")] 
 		public CName ReadableName
 		{
-			get => GetProperty(ref _readableName);
-			set => SetProperty(ref _readableName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 	}
 }

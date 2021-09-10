@@ -5,41 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiMinimapRemotePlayerMappinController : gameuiBaseMinimapMappinController
 	{
-		private inkWidgetReference _rootWidget;
-		private inkWidgetReference _shapeWidget;
-		private inkWidgetReference _dataWidget;
-		private CWeakHandle<gamemappinsRemotePlayerMappin> _playerMappin;
-
 		[Ordinal(14)] 
 		[RED("rootWidget")] 
 		public inkWidgetReference RootWidget
 		{
-			get => GetProperty(ref _rootWidget);
-			set => SetProperty(ref _rootWidget, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("shapeWidget")] 
 		public inkWidgetReference ShapeWidget
 		{
-			get => GetProperty(ref _shapeWidget);
-			set => SetProperty(ref _shapeWidget, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("dataWidget")] 
 		public inkWidgetReference DataWidget
 		{
-			get => GetProperty(ref _dataWidget);
-			set => SetProperty(ref _dataWidget, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("playerMappin")] 
 		public CWeakHandle<gamemappinsRemotePlayerMappin> PlayerMappin
 		{
-			get => GetProperty(ref _playerMappin);
-			set => SetProperty(ref _playerMappin, value);
+			get => GetPropertyValue<CWeakHandle<gamemappinsRemotePlayerMappin>>();
+			set => SetPropertyValue<CWeakHandle<gamemappinsRemotePlayerMappin>>(value);
+		}
+
+		public gameuiMinimapRemotePlayerMappinController()
+		{
+			RootWidget = new();
+			ShapeWidget = new();
+			DataWidget = new();
 		}
 	}
 }

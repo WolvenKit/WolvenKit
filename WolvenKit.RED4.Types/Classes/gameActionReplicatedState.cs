@@ -5,56 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameActionReplicatedState : RedBaseClass
 	{
-		private CUInt32 _replicationId;
-		private CUInt16 _type;
-		private netTime _startTimeStamp;
-		private netTime _stopTimeStamp;
-		private CUInt8 _updateBucket;
-
 		[Ordinal(0)] 
 		[RED("replicationId")] 
 		public CUInt32 ReplicationId
 		{
-			get => GetProperty(ref _replicationId);
-			set => SetProperty(ref _replicationId, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("type")] 
 		public CUInt16 Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("startTimeStamp")] 
 		public netTime StartTimeStamp
 		{
-			get => GetProperty(ref _startTimeStamp);
-			set => SetProperty(ref _startTimeStamp, value);
+			get => GetPropertyValue<netTime>();
+			set => SetPropertyValue<netTime>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("stopTimeStamp")] 
 		public netTime StopTimeStamp
 		{
-			get => GetProperty(ref _stopTimeStamp);
-			set => SetProperty(ref _stopTimeStamp, value);
+			get => GetPropertyValue<netTime>();
+			set => SetPropertyValue<netTime>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("updateBucket")] 
 		public CUInt8 UpdateBucket
 		{
-			get => GetProperty(ref _updateBucket);
-			set => SetProperty(ref _updateBucket, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		public gameActionReplicatedState()
 		{
-			_type = 69;
-			_updateBucket = 2;
+			Type = 69;
+			StartTimeStamp = new() { MilliSecs = 18446744073709551615 };
+			StopTimeStamp = new() { MilliSecs = 18446744073709551615 };
+			UpdateBucket = 2;
 		}
 	}
 }

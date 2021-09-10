@@ -5,119 +5,110 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiChatBoxGameController : gameuiHUDGameController
 	{
-		private CWeakHandle<gamePuppetBase> _player;
-		private CHandle<redCallbackObject> _chatBoxBlackboardId;
-		private inkWidgetReference _chatBox;
-		private inkTextInputWidgetReference _enteredText;
-		private CBool _chatBoxOpen;
-		private CArray<CWeakHandle<inkWidget>> _recentChatsShown;
-		private CWeakHandle<inkVerticalPanelWidget> _recentContainer;
-		private CWeakHandle<inkVerticalPanelWidget> _historyContainer;
-		private CArray<gameuiChatBoxText> _chatHistory;
-		private CInt32 _lastChatId;
-		private CInt32 _maxChatsDisplayed;
-		private CInt32 _maxChatHistory;
-
 		[Ordinal(9)] 
 		[RED("player")] 
 		public CWeakHandle<gamePuppetBase> Player
 		{
-			get => GetProperty(ref _player);
-			set => SetProperty(ref _player, value);
+			get => GetPropertyValue<CWeakHandle<gamePuppetBase>>();
+			set => SetPropertyValue<CWeakHandle<gamePuppetBase>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("chatBoxBlackboardId")] 
 		public CHandle<redCallbackObject> ChatBoxBlackboardId
 		{
-			get => GetProperty(ref _chatBoxBlackboardId);
-			set => SetProperty(ref _chatBoxBlackboardId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("chatBox")] 
 		public inkWidgetReference ChatBox
 		{
-			get => GetProperty(ref _chatBox);
-			set => SetProperty(ref _chatBox, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("enteredText")] 
 		public inkTextInputWidgetReference EnteredText
 		{
-			get => GetProperty(ref _enteredText);
-			set => SetProperty(ref _enteredText, value);
+			get => GetPropertyValue<inkTextInputWidgetReference>();
+			set => SetPropertyValue<inkTextInputWidgetReference>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("chatBoxOpen")] 
 		public CBool ChatBoxOpen
 		{
-			get => GetProperty(ref _chatBoxOpen);
-			set => SetProperty(ref _chatBoxOpen, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("recentChatsShown")] 
 		public CArray<CWeakHandle<inkWidget>> RecentChatsShown
 		{
-			get => GetProperty(ref _recentChatsShown);
-			set => SetProperty(ref _recentChatsShown, value);
+			get => GetPropertyValue<CArray<CWeakHandle<inkWidget>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<inkWidget>>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("recentContainer")] 
 		public CWeakHandle<inkVerticalPanelWidget> RecentContainer
 		{
-			get => GetProperty(ref _recentContainer);
-			set => SetProperty(ref _recentContainer, value);
+			get => GetPropertyValue<CWeakHandle<inkVerticalPanelWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkVerticalPanelWidget>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("historyContainer")] 
 		public CWeakHandle<inkVerticalPanelWidget> HistoryContainer
 		{
-			get => GetProperty(ref _historyContainer);
-			set => SetProperty(ref _historyContainer, value);
+			get => GetPropertyValue<CWeakHandle<inkVerticalPanelWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkVerticalPanelWidget>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("chatHistory")] 
 		public CArray<gameuiChatBoxText> ChatHistory
 		{
-			get => GetProperty(ref _chatHistory);
-			set => SetProperty(ref _chatHistory, value);
+			get => GetPropertyValue<CArray<gameuiChatBoxText>>();
+			set => SetPropertyValue<CArray<gameuiChatBoxText>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("lastChatId")] 
 		public CInt32 LastChatId
 		{
-			get => GetProperty(ref _lastChatId);
-			set => SetProperty(ref _lastChatId, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("maxChatsDisplayed")] 
 		public CInt32 MaxChatsDisplayed
 		{
-			get => GetProperty(ref _maxChatsDisplayed);
-			set => SetProperty(ref _maxChatsDisplayed, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("maxChatHistory")] 
 		public CInt32 MaxChatHistory
 		{
-			get => GetProperty(ref _maxChatHistory);
-			set => SetProperty(ref _maxChatHistory, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		public gameuiChatBoxGameController()
 		{
-			_maxChatsDisplayed = 7;
-			_maxChatHistory = 100;
+			ChatBox = new();
+			EnteredText = new();
+			RecentChatsShown = new();
+			ChatHistory = new();
+			MaxChatsDisplayed = 7;
+			MaxChatHistory = 100;
 		}
 	}
 }

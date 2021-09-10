@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PhotoModeDef : gamebbScriptDefinition
 	{
-		private gamebbScriptID_Bool _isActive;
-		private gamebbScriptID_Uint32 _playerHealthState;
-
 		[Ordinal(0)] 
 		[RED("IsActive")] 
 		public gamebbScriptID_Bool IsActive
 		{
-			get => GetProperty(ref _isActive);
-			set => SetProperty(ref _isActive, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("PlayerHealthState")] 
 		public gamebbScriptID_Uint32 PlayerHealthState
 		{
-			get => GetProperty(ref _playerHealthState);
-			set => SetProperty(ref _playerHealthState, value);
+			get => GetPropertyValue<gamebbScriptID_Uint32>();
+			set => SetPropertyValue<gamebbScriptID_Uint32>(value);
+		}
+
+		public PhotoModeDef()
+		{
+			IsActive = new();
+			PlayerHealthState = new();
 		}
 	}
 }

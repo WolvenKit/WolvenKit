@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SetRandomIntArgument : AIRandomTasks
 	{
-		private CInt32 _maxValue;
-		private CInt32 _minValue;
-		private CName _argumentName;
-
 		[Ordinal(0)] 
 		[RED("MaxValue")] 
 		public CInt32 MaxValue
 		{
-			get => GetProperty(ref _maxValue);
-			set => SetProperty(ref _maxValue, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("MinValue")] 
 		public CInt32 MinValue
 		{
-			get => GetProperty(ref _minValue);
-			set => SetProperty(ref _minValue, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ArgumentName")] 
 		public CName ArgumentName
 		{
-			get => GetProperty(ref _argumentName);
-			set => SetProperty(ref _argumentName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 	}
 }

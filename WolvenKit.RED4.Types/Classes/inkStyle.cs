@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkStyle : RedBaseClass
 	{
-		private CName _styleID;
-		private CName _state;
-		private CArray<inkStyleProperty> _properties;
-
 		[Ordinal(0)] 
 		[RED("styleID")] 
 		public CName StyleID
 		{
-			get => GetProperty(ref _styleID);
-			set => SetProperty(ref _styleID, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("state")] 
 		public CName State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("properties")] 
 		public CArray<inkStyleProperty> Properties
 		{
-			get => GetProperty(ref _properties);
-			set => SetProperty(ref _properties, value);
+			get => GetPropertyValue<CArray<inkStyleProperty>>();
+			set => SetPropertyValue<CArray<inkStyleProperty>>(value);
+		}
+
+		public inkStyle()
+		{
+			Properties = new();
 		}
 	}
 }

@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnPlaySkAnimEvent : scnPlayFPPControlAnimEvent
 	{
-		private CHandle<scnAnimName> _animName;
-		private CHandle<scnEventBlendWorkspotSetupParameters> _poseBlendOutWorkspot;
-		private scnPlaySkAnimRootMotionData _rootMotionData;
-		private scnPlayerAnimData _playerData;
-
 		[Ordinal(31)] 
 		[RED("animName")] 
 		public CHandle<scnAnimName> AnimName
 		{
-			get => GetProperty(ref _animName);
-			set => SetProperty(ref _animName, value);
+			get => GetPropertyValue<CHandle<scnAnimName>>();
+			set => SetPropertyValue<CHandle<scnAnimName>>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("poseBlendOutWorkspot")] 
 		public CHandle<scnEventBlendWorkspotSetupParameters> PoseBlendOutWorkspot
 		{
-			get => GetProperty(ref _poseBlendOutWorkspot);
-			set => SetProperty(ref _poseBlendOutWorkspot, value);
+			get => GetPropertyValue<CHandle<scnEventBlendWorkspotSetupParameters>>();
+			set => SetPropertyValue<CHandle<scnEventBlendWorkspotSetupParameters>>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("rootMotionData")] 
 		public scnPlaySkAnimRootMotionData RootMotionData
 		{
-			get => GetProperty(ref _rootMotionData);
-			set => SetProperty(ref _rootMotionData, value);
+			get => GetPropertyValue<scnPlaySkAnimRootMotionData>();
+			set => SetPropertyValue<scnPlaySkAnimRootMotionData>(value);
 		}
 
 		[Ordinal(34)] 
 		[RED("playerData")] 
 		public scnPlayerAnimData PlayerData
 		{
-			get => GetProperty(ref _playerData);
-			set => SetProperty(ref _playerData, value);
+			get => GetPropertyValue<scnPlayerAnimData>();
+			set => SetPropertyValue<scnPlayerAnimData>(value);
+		}
+
+		public scnPlaySkAnimEvent()
+		{
+			RootMotionData = new() { OriginMarker = new() { Type = Enums.scnMarkerType.Global, EntityRef = new() { Names = new() }, IsMounted = true }, OriginOffset = new() { Position = new(), Orientation = new() { R = 1.000000F } }, CustomBlendInTime = -1.000000F, CustomBlendInCurve = Enums.scnEasingType.SinusoidalEaseInOut, RemovePitchRollRotation = true, MeshDissolvingEnabled = true, VehicleChangePhysicsState = true, VehicleEnabledPhysicsOnEnd = true, TrajectoryLOD = new() };
+			PlayerData = new() { UnmountBodyCarry = true };
 		}
 	}
 }

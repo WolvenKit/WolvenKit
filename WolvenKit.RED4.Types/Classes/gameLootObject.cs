@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameLootObject : gameObject
 	{
-		private TweakDBID _lootID;
-		private CBool _isInIconForcedVisibilityRange;
-		private CName _activeQualityRangeInteraction;
-
 		[Ordinal(40)] 
 		[RED("lootID")] 
 		public TweakDBID LootID
 		{
-			get => GetProperty(ref _lootID);
-			set => SetProperty(ref _lootID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(41)] 
 		[RED("isInIconForcedVisibilityRange")] 
 		public CBool IsInIconForcedVisibilityRange
 		{
-			get => GetProperty(ref _isInIconForcedVisibilityRange);
-			set => SetProperty(ref _isInIconForcedVisibilityRange, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(42)] 
 		[RED("activeQualityRangeInteraction")] 
 		public CName ActiveQualityRangeInteraction
 		{
-			get => GetProperty(ref _activeQualityRangeInteraction);
-			set => SetProperty(ref _activeQualityRangeInteraction, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 	}
 }

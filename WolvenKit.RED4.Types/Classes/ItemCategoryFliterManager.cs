@@ -5,41 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ItemCategoryFliterManager : IScriptable
 	{
-		private CArray<CEnum<ItemFilterCategory>> _filtersToCheck;
-		private CArray<CEnum<ItemFilterCategory>> _filters;
-		private CArray<CEnum<ItemFilterCategory>> _sharedFiltersToCheck;
-		private CBool _isOrderDirty;
-
 		[Ordinal(0)] 
 		[RED("filtersToCheck")] 
 		public CArray<CEnum<ItemFilterCategory>> FiltersToCheck
 		{
-			get => GetProperty(ref _filtersToCheck);
-			set => SetProperty(ref _filtersToCheck, value);
+			get => GetPropertyValue<CArray<CEnum<ItemFilterCategory>>>();
+			set => SetPropertyValue<CArray<CEnum<ItemFilterCategory>>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("filters")] 
 		public CArray<CEnum<ItemFilterCategory>> Filters
 		{
-			get => GetProperty(ref _filters);
-			set => SetProperty(ref _filters, value);
+			get => GetPropertyValue<CArray<CEnum<ItemFilterCategory>>>();
+			set => SetPropertyValue<CArray<CEnum<ItemFilterCategory>>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("sharedFiltersToCheck")] 
 		public CArray<CEnum<ItemFilterCategory>> SharedFiltersToCheck
 		{
-			get => GetProperty(ref _sharedFiltersToCheck);
-			set => SetProperty(ref _sharedFiltersToCheck, value);
+			get => GetPropertyValue<CArray<CEnum<ItemFilterCategory>>>();
+			set => SetPropertyValue<CArray<CEnum<ItemFilterCategory>>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isOrderDirty")] 
 		public CBool IsOrderDirty
 		{
-			get => GetProperty(ref _isOrderDirty);
-			set => SetProperty(ref _isOrderDirty, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public ItemCategoryFliterManager()
+		{
+			FiltersToCheck = new();
+			Filters = new();
+			SharedFiltersToCheck = new();
 		}
 	}
 }

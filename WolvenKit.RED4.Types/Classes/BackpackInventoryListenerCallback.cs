@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class BackpackInventoryListenerCallback : gameInventoryScriptCallback
 	{
-		private CWeakHandle<gameuiBackpackMainGameController> _backpackInstance;
-
 		[Ordinal(1)] 
 		[RED("backpackInstance")] 
 		public CWeakHandle<gameuiBackpackMainGameController> BackpackInstance
 		{
-			get => GetProperty(ref _backpackInstance);
-			set => SetProperty(ref _backpackInstance, value);
+			get => GetPropertyValue<CWeakHandle<gameuiBackpackMainGameController>>();
+			set => SetPropertyValue<CWeakHandle<gameuiBackpackMainGameController>>(value);
 		}
 	}
 }

@@ -5,59 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ProjectileLauncherRoundCollisionEvaluator : gameprojectileScriptCollisionEvaluator
 	{
-		private CEnum<gamedataProjectileOnCollisionAction> _collisionAction;
-		private CBool _projectileStopped;
-		private CInt32 _maxBounceCount;
-		private CBool _projectileBounced;
-		private CBool _projectileStopAndStick;
-		private CBool _projectilePierced;
-
 		[Ordinal(0)] 
 		[RED("collisionAction")] 
 		public CEnum<gamedataProjectileOnCollisionAction> CollisionAction
 		{
-			get => GetProperty(ref _collisionAction);
-			set => SetProperty(ref _collisionAction, value);
+			get => GetPropertyValue<CEnum<gamedataProjectileOnCollisionAction>>();
+			set => SetPropertyValue<CEnum<gamedataProjectileOnCollisionAction>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("projectileStopped")] 
 		public CBool ProjectileStopped
 		{
-			get => GetProperty(ref _projectileStopped);
-			set => SetProperty(ref _projectileStopped, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("maxBounceCount")] 
 		public CInt32 MaxBounceCount
 		{
-			get => GetProperty(ref _maxBounceCount);
-			set => SetProperty(ref _maxBounceCount, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("projectileBounced")] 
 		public CBool ProjectileBounced
 		{
-			get => GetProperty(ref _projectileBounced);
-			set => SetProperty(ref _projectileBounced, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("projectileStopAndStick")] 
 		public CBool ProjectileStopAndStick
 		{
-			get => GetProperty(ref _projectileStopAndStick);
-			set => SetProperty(ref _projectileStopAndStick, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("projectilePierced")] 
 		public CBool ProjectilePierced
 		{
-			get => GetProperty(ref _projectilePierced);
-			set => SetProperty(ref _projectilePierced, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

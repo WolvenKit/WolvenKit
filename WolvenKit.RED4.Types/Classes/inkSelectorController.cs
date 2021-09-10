@@ -5,141 +5,128 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkSelectorController : inkWidgetLogicController
 	{
-		private CInt32 _index;
-		private CArray<CString> _values;
-		private CBool _cycledNavigation;
-		private inkSelectionChangeCallback _selectionChanged;
-		private CName _labelPath;
-		private CName _valuePath;
-		private CName _leftArrowPath;
-		private CName _rightArrowPath;
-		private CWeakHandle<inkTextWidget> _label;
-		private CWeakHandle<inkTextWidget> _value;
-		private CWeakHandle<inkWidget> _leftArrow;
-		private CWeakHandle<inkWidget> _rightArrow;
-		private CWeakHandle<inkButtonController> _rightArrowButton;
-		private CWeakHandle<inkButtonController> _leftArrowButton;
-
 		[Ordinal(1)] 
 		[RED("index")] 
 		public CInt32 Index
 		{
-			get => GetProperty(ref _index);
-			set => SetProperty(ref _index, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("values")] 
 		public CArray<CString> Values
 		{
-			get => GetProperty(ref _values);
-			set => SetProperty(ref _values, value);
+			get => GetPropertyValue<CArray<CString>>();
+			set => SetPropertyValue<CArray<CString>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("cycledNavigation")] 
 		public CBool CycledNavigation
 		{
-			get => GetProperty(ref _cycledNavigation);
-			set => SetProperty(ref _cycledNavigation, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("SelectionChanged")] 
 		public inkSelectionChangeCallback SelectionChanged
 		{
-			get => GetProperty(ref _selectionChanged);
-			set => SetProperty(ref _selectionChanged, value);
+			get => GetPropertyValue<inkSelectionChangeCallback>();
+			set => SetPropertyValue<inkSelectionChangeCallback>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("labelPath")] 
 		public CName LabelPath
 		{
-			get => GetProperty(ref _labelPath);
-			set => SetProperty(ref _labelPath, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("valuePath")] 
 		public CName ValuePath
 		{
-			get => GetProperty(ref _valuePath);
-			set => SetProperty(ref _valuePath, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("leftArrowPath")] 
 		public CName LeftArrowPath
 		{
-			get => GetProperty(ref _leftArrowPath);
-			set => SetProperty(ref _leftArrowPath, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("rightArrowPath")] 
 		public CName RightArrowPath
 		{
-			get => GetProperty(ref _rightArrowPath);
-			set => SetProperty(ref _rightArrowPath, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("label")] 
 		public CWeakHandle<inkTextWidget> Label
 		{
-			get => GetProperty(ref _label);
-			set => SetProperty(ref _label, value);
+			get => GetPropertyValue<CWeakHandle<inkTextWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("value")] 
 		public CWeakHandle<inkTextWidget> Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<CWeakHandle<inkTextWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("leftArrow")] 
 		public CWeakHandle<inkWidget> LeftArrow
 		{
-			get => GetProperty(ref _leftArrow);
-			set => SetProperty(ref _leftArrow, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("rightArrow")] 
 		public CWeakHandle<inkWidget> RightArrow
 		{
-			get => GetProperty(ref _rightArrow);
-			set => SetProperty(ref _rightArrow, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("rightArrowButton")] 
 		public CWeakHandle<inkButtonController> RightArrowButton
 		{
-			get => GetProperty(ref _rightArrowButton);
-			set => SetProperty(ref _rightArrowButton, value);
+			get => GetPropertyValue<CWeakHandle<inkButtonController>>();
+			set => SetPropertyValue<CWeakHandle<inkButtonController>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("leftArrowButton")] 
 		public CWeakHandle<inkButtonController> LeftArrowButton
 		{
-			get => GetProperty(ref _leftArrowButton);
-			set => SetProperty(ref _leftArrowButton, value);
+			get => GetPropertyValue<CWeakHandle<inkButtonController>>();
+			set => SetPropertyValue<CWeakHandle<inkButtonController>>(value);
 		}
 
 		public inkSelectorController()
 		{
-			_index = -1;
-			_cycledNavigation = true;
-			_labelPath = "Panel/Label";
-			_valuePath = "Panel/Value";
-			_leftArrowPath = "Panel/LeftArrow";
-			_rightArrowPath = "Panel/RightArrow";
+			Index = -1;
+			Values = new();
+			CycledNavigation = true;
+			SelectionChanged = new();
+			LabelPath = "Panel/Label";
+			ValuePath = "Panel/Value";
+			LeftArrowPath = "Panel/LeftArrow";
+			RightArrowPath = "Panel/RightArrow";
 		}
 	}
 }

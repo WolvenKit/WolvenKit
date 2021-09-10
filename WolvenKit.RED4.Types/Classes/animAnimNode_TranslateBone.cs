@@ -5,73 +5,71 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_TranslateBone : animAnimNode_Base
 	{
-		private animPoseLink _inputNode;
-		private animVectorLink _inputTranslation;
-		private Vector4 _scale;
-		private Vector4 _biasValue;
-		private animTransformIndex _bone;
-		private CBool _useIncrementalMode;
-		private CBool _resetOnActivation;
-
 		[Ordinal(11)] 
 		[RED("inputNode")] 
 		public animPoseLink InputNode
 		{
-			get => GetProperty(ref _inputNode);
-			set => SetProperty(ref _inputNode, value);
+			get => GetPropertyValue<animPoseLink>();
+			set => SetPropertyValue<animPoseLink>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("inputTranslation")] 
 		public animVectorLink InputTranslation
 		{
-			get => GetProperty(ref _inputTranslation);
-			set => SetProperty(ref _inputTranslation, value);
+			get => GetPropertyValue<animVectorLink>();
+			set => SetPropertyValue<animVectorLink>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("scale")] 
 		public Vector4 Scale
 		{
-			get => GetProperty(ref _scale);
-			set => SetProperty(ref _scale, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("biasValue")] 
 		public Vector4 BiasValue
 		{
-			get => GetProperty(ref _biasValue);
-			set => SetProperty(ref _biasValue, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("bone")] 
 		public animTransformIndex Bone
 		{
-			get => GetProperty(ref _bone);
-			set => SetProperty(ref _bone, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("useIncrementalMode")] 
 		public CBool UseIncrementalMode
 		{
-			get => GetProperty(ref _useIncrementalMode);
-			set => SetProperty(ref _useIncrementalMode, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("resetOnActivation")] 
 		public CBool ResetOnActivation
 		{
-			get => GetProperty(ref _resetOnActivation);
-			set => SetProperty(ref _resetOnActivation, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public animAnimNode_TranslateBone()
 		{
-			_resetOnActivation = true;
+			Id = 4294967295;
+			InputNode = new();
+			InputTranslation = new();
+			Scale = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F };
+			BiasValue = new();
+			Bone = new();
+			ResetOnActivation = true;
 		}
 	}
 }

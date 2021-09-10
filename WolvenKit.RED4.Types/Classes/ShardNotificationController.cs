@@ -5,136 +5,130 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ShardNotificationController : gameuiWidgetGameController
 	{
-		private inkTextWidgetReference _titleRef;
-		private inkTextWidgetReference _shortTextRef;
-		private inkTextWidgetReference _longTextRef;
-		private inkWidgetReference _shortTextHolderRef;
-		private inkWidgetReference _longTextHolderRef;
-		private inkWidgetReference _buttonHintsManagerRef;
-		private inkWidgetReference _buttonHintsManagerParentRef;
-		private inkWidgetReference _buttonHintsSecondaryManagerRef;
-		private inkWidgetReference _buttonHintsSecondaryManagerParentRef;
-		private CHandle<ShardReadPopupData> _data;
-		private CInt32 _longTextTrashold;
-		private CHandle<inkanimProxy> _animationProxy;
-		private CWeakHandle<PlayerPuppet> _player;
-		private CWeakHandle<gameIBlackboard> _mingameBB;
-
 		[Ordinal(2)] 
 		[RED("titleRef")] 
 		public inkTextWidgetReference TitleRef
 		{
-			get => GetProperty(ref _titleRef);
-			set => SetProperty(ref _titleRef, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("shortTextRef")] 
 		public inkTextWidgetReference ShortTextRef
 		{
-			get => GetProperty(ref _shortTextRef);
-			set => SetProperty(ref _shortTextRef, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("longTextRef")] 
 		public inkTextWidgetReference LongTextRef
 		{
-			get => GetProperty(ref _longTextRef);
-			set => SetProperty(ref _longTextRef, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("shortTextHolderRef")] 
 		public inkWidgetReference ShortTextHolderRef
 		{
-			get => GetProperty(ref _shortTextHolderRef);
-			set => SetProperty(ref _shortTextHolderRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("longTextHolderRef")] 
 		public inkWidgetReference LongTextHolderRef
 		{
-			get => GetProperty(ref _longTextHolderRef);
-			set => SetProperty(ref _longTextHolderRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("buttonHintsManagerRef")] 
 		public inkWidgetReference ButtonHintsManagerRef
 		{
-			get => GetProperty(ref _buttonHintsManagerRef);
-			set => SetProperty(ref _buttonHintsManagerRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("buttonHintsManagerParentRef")] 
 		public inkWidgetReference ButtonHintsManagerParentRef
 		{
-			get => GetProperty(ref _buttonHintsManagerParentRef);
-			set => SetProperty(ref _buttonHintsManagerParentRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("buttonHintsSecondaryManagerRef")] 
 		public inkWidgetReference ButtonHintsSecondaryManagerRef
 		{
-			get => GetProperty(ref _buttonHintsSecondaryManagerRef);
-			set => SetProperty(ref _buttonHintsSecondaryManagerRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("buttonHintsSecondaryManagerParentRef")] 
 		public inkWidgetReference ButtonHintsSecondaryManagerParentRef
 		{
-			get => GetProperty(ref _buttonHintsSecondaryManagerParentRef);
-			set => SetProperty(ref _buttonHintsSecondaryManagerParentRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("data")] 
 		public CHandle<ShardReadPopupData> Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<CHandle<ShardReadPopupData>>();
+			set => SetPropertyValue<CHandle<ShardReadPopupData>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("longTextTrashold")] 
 		public CInt32 LongTextTrashold
 		{
-			get => GetProperty(ref _longTextTrashold);
-			set => SetProperty(ref _longTextTrashold, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{
-			get => GetProperty(ref _animationProxy);
-			set => SetProperty(ref _animationProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
-			get => GetProperty(ref _player);
-			set => SetProperty(ref _player, value);
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("mingameBB")] 
 		public CWeakHandle<gameIBlackboard> MingameBB
 		{
-			get => GetProperty(ref _mingameBB);
-			set => SetProperty(ref _mingameBB, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		public ShardNotificationController()
 		{
-			_longTextTrashold = 1000;
+			TitleRef = new();
+			ShortTextRef = new();
+			LongTextRef = new();
+			ShortTextHolderRef = new();
+			LongTextHolderRef = new();
+			ButtonHintsManagerRef = new();
+			ButtonHintsManagerParentRef = new();
+			ButtonHintsSecondaryManagerRef = new();
+			ButtonHintsSecondaryManagerParentRef = new();
+			LongTextTrashold = 1000;
 		}
 	}
 }

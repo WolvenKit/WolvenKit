@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioAudioFoliageMaterialDictionaryItem : audioInlinedAudioMetadata
 	{
-		private CName _key;
-		private audioAudioFoliageMaterial _value;
-
 		[Ordinal(1)] 
 		[RED("key")] 
 		public CName Key
 		{
-			get => GetProperty(ref _key);
-			set => SetProperty(ref _key, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("value")] 
 		public audioAudioFoliageMaterial Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<audioAudioFoliageMaterial>();
+			set => SetPropertyValue<audioAudioFoliageMaterial>(value);
+		}
+
+		public audioAudioFoliageMaterialDictionaryItem()
+		{
+			Value = new();
 		}
 	}
 }

@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameSceneTier2Data : gameSceneTierData
 	{
-		private CEnum<Tier2WalkType> _walkType;
-
 		[Ordinal(2)] 
 		[RED("walkType")] 
 		public CEnum<Tier2WalkType> WalkType
 		{
-			get => GetProperty(ref _walkType);
-			set => SetProperty(ref _walkType, value);
+			get => GetPropertyValue<CEnum<Tier2WalkType>>();
+			set => SetPropertyValue<CEnum<Tier2WalkType>>(value);
+		}
+
+		public gameSceneTier2Data()
+		{
+			Tier = Enums.GameplayTier.Tier2_StagedGameplay;
 		}
 	}
 }

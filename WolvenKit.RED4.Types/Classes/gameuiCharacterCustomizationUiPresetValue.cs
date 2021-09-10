@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiCharacterCustomizationUiPresetValue : RedBaseClass
 	{
-		private CName _optionName;
-		private CBool _isActive;
-		private CUInt32 _value;
-
 		[Ordinal(0)] 
 		[RED("optionName")] 
 		public CName OptionName
 		{
-			get => GetProperty(ref _optionName);
-			set => SetProperty(ref _optionName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get => GetProperty(ref _isActive);
-			set => SetProperty(ref _isActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("value")] 
 		public CUInt32 Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 	}
 }

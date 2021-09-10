@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class Time : RedBaseClass
 	{
-		private CInt32 _days;
-		private CInt32 _hours;
-		private CInt32 _minutes;
-
 		[Ordinal(0)] 
 		[RED("days")] 
 		public CInt32 Days
 		{
-			get => GetProperty(ref _days);
-			set => SetProperty(ref _days, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hours")] 
 		public CInt32 Hours
 		{
-			get => GetProperty(ref _hours);
-			set => SetProperty(ref _hours, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("minutes")] 
 		public CInt32 Minutes
 		{
-			get => GetProperty(ref _minutes);
-			set => SetProperty(ref _minutes, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

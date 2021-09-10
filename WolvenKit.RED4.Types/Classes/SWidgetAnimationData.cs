@@ -5,95 +5,89 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SWidgetAnimationData : RedBaseClass
 	{
-		private CName _animationName;
-		private inkanimPlaybackOptions _playbackOptions;
-		private CBool _lockWhenActive;
-		private CHandle<inkanimProxy> _animProxy;
-		private CName _onFinish;
-		private CName _onStart;
-		private CName _onPasue;
-		private CName _onResume;
-		private CName _onStartLoop;
-		private CName _onEndLoop;
-
 		[Ordinal(0)] 
 		[RED("animationName")] 
 		public CName AnimationName
 		{
-			get => GetProperty(ref _animationName);
-			set => SetProperty(ref _animationName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("playbackOptions")] 
 		public inkanimPlaybackOptions PlaybackOptions
 		{
-			get => GetProperty(ref _playbackOptions);
-			set => SetProperty(ref _playbackOptions, value);
+			get => GetPropertyValue<inkanimPlaybackOptions>();
+			set => SetPropertyValue<inkanimPlaybackOptions>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("lockWhenActive")] 
 		public CBool LockWhenActive
 		{
-			get => GetProperty(ref _lockWhenActive);
-			set => SetProperty(ref _lockWhenActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
-			get => GetProperty(ref _animProxy);
-			set => SetProperty(ref _animProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("onFinish")] 
 		public CName OnFinish
 		{
-			get => GetProperty(ref _onFinish);
-			set => SetProperty(ref _onFinish, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("onStart")] 
 		public CName OnStart
 		{
-			get => GetProperty(ref _onStart);
-			set => SetProperty(ref _onStart, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("onPasue")] 
 		public CName OnPasue
 		{
-			get => GetProperty(ref _onPasue);
-			set => SetProperty(ref _onPasue, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("onResume")] 
 		public CName OnResume
 		{
-			get => GetProperty(ref _onResume);
-			set => SetProperty(ref _onResume, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("onStartLoop")] 
 		public CName OnStartLoop
 		{
-			get => GetProperty(ref _onStartLoop);
-			set => SetProperty(ref _onStartLoop, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("onEndLoop")] 
 		public CName OnEndLoop
 		{
-			get => GetProperty(ref _onEndLoop);
-			set => SetProperty(ref _onEndLoop, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public SWidgetAnimationData()
+		{
+			PlaybackOptions = new();
 		}
 	}
 }

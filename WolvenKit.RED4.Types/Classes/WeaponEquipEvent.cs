@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WeaponEquipEvent : redEvent
 	{
-		private CHandle<AnimFeature_EquipType> _animFeature;
-		private CWeakHandle<gameItemObject> _item;
-
 		[Ordinal(0)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_EquipType> AnimFeature
 		{
-			get => GetProperty(ref _animFeature);
-			set => SetProperty(ref _animFeature, value);
+			get => GetPropertyValue<CHandle<AnimFeature_EquipType>>();
+			set => SetPropertyValue<CHandle<AnimFeature_EquipType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("item")] 
 		public CWeakHandle<gameItemObject> Item
 		{
-			get => GetProperty(ref _item);
-			set => SetProperty(ref _item, value);
+			get => GetPropertyValue<CWeakHandle<gameItemObject>>();
+			set => SetPropertyValue<CWeakHandle<gameItemObject>>(value);
 		}
 	}
 }

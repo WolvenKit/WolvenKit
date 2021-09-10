@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameprojectileProjectilePreviewEvent : gameprojectileSpawnerPreviewEvent
 	{
-		private Transform _visualOffset;
-
 		[Ordinal(1)] 
 		[RED("visualOffset")] 
 		public Transform VisualOffset
 		{
-			get => GetProperty(ref _visualOffset);
-			set => SetProperty(ref _visualOffset, value);
+			get => GetPropertyValue<Transform>();
+			set => SetPropertyValue<Transform>(value);
+		}
+
+		public gameprojectileProjectilePreviewEvent()
+		{
+			VisualOffset = new() { Position = new(), Orientation = new() { R = 1.000000F } };
 		}
 	}
 }

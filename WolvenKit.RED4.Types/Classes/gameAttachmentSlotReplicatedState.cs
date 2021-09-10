@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameAttachmentSlotReplicatedState : RedBaseClass
 	{
-		private TweakDBID _slotID;
-		private gameItemID _activeItemID;
-		private CBool _hasItemObject;
-
 		[Ordinal(0)] 
 		[RED("slotID")] 
 		public TweakDBID SlotID
 		{
-			get => GetProperty(ref _slotID);
-			set => SetProperty(ref _slotID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("activeItemID")] 
 		public gameItemID ActiveItemID
 		{
-			get => GetProperty(ref _activeItemID);
-			set => SetProperty(ref _activeItemID, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("hasItemObject")] 
 		public CBool HasItemObject
 		{
-			get => GetProperty(ref _hasItemObject);
-			set => SetProperty(ref _hasItemObject, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public gameAttachmentSlotReplicatedState()
+		{
+			ActiveItemID = new();
 		}
 	}
 }

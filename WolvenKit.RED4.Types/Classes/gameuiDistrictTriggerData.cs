@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiDistrictTriggerData : RedBaseClass
 	{
-		private CEnum<gamedataDistrict> _district;
-		private CName _triggerName;
-
 		[Ordinal(0)] 
 		[RED("district")] 
 		public CEnum<gamedataDistrict> District
 		{
-			get => GetProperty(ref _district);
-			set => SetProperty(ref _district, value);
+			get => GetPropertyValue<CEnum<gamedataDistrict>>();
+			set => SetPropertyValue<CEnum<gamedataDistrict>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("triggerName")] 
 		public CName TriggerName
 		{
-			get => GetProperty(ref _triggerName);
-			set => SetProperty(ref _triggerName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public gameuiDistrictTriggerData()
 		{
-			_district = new() { Value = Enums.gamedataDistrict.Invalid };
+			District = Enums.gamedataDistrict.Invalid;
 		}
 	}
 }

@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WallScreen : TV
 	{
-		private SMovementPattern _movementPattern;
-		private CName _factOnFullyOpened;
-		private CHandle<ObjectMoverComponent> _objectMover;
-
 		[Ordinal(106)] 
 		[RED("movementPattern")] 
 		public SMovementPattern MovementPattern
 		{
-			get => GetProperty(ref _movementPattern);
-			set => SetProperty(ref _movementPattern, value);
+			get => GetPropertyValue<SMovementPattern>();
+			set => SetPropertyValue<SMovementPattern>(value);
 		}
 
 		[Ordinal(107)] 
 		[RED("factOnFullyOpened")] 
 		public CName FactOnFullyOpened
 		{
-			get => GetProperty(ref _factOnFullyOpened);
-			set => SetProperty(ref _factOnFullyOpened, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(108)] 
 		[RED("objectMover")] 
 		public CHandle<ObjectMoverComponent> ObjectMover
 		{
-			get => GetProperty(ref _objectMover);
-			set => SetProperty(ref _objectMover, value);
+			get => GetPropertyValue<CHandle<ObjectMoverComponent>>();
+			set => SetPropertyValue<CHandle<ObjectMoverComponent>>(value);
+		}
+
+		public WallScreen()
+		{
+			ControllerTypeName = "WallScreenController";
+			MovementPattern = new() { Speed = 2.000000F };
 		}
 	}
 }

@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SampleComponentWithCounterPS : gameComponentPS
 	{
-		private CInt32 _counter;
-
 		[Ordinal(0)] 
 		[RED("counter")] 
 		public CInt32 Counter
 		{
-			get => GetProperty(ref _counter);
-			set => SetProperty(ref _counter, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		public SampleComponentWithCounterPS()
 		{
-			_counter = 1000;
+			Counter = 1000;
 		}
 	}
 }

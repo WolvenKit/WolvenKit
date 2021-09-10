@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animIKChainSettings : RedBaseClass
 	{
-		private CName _chainName;
-		private CName _enableFloatTrack;
-		private Vector3 _ikEndPointOffset;
-		private Quaternion _ikEndRotationOffset;
-
 		[Ordinal(0)] 
 		[RED("chainName")] 
 		public CName ChainName
 		{
-			get => GetProperty(ref _chainName);
-			set => SetProperty(ref _chainName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("enableFloatTrack")] 
 		public CName EnableFloatTrack
 		{
-			get => GetProperty(ref _enableFloatTrack);
-			set => SetProperty(ref _enableFloatTrack, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ikEndPointOffset")] 
 		public Vector3 IkEndPointOffset
 		{
-			get => GetProperty(ref _ikEndPointOffset);
-			set => SetProperty(ref _ikEndPointOffset, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("ikEndRotationOffset")] 
 		public Quaternion IkEndRotationOffset
 		{
-			get => GetProperty(ref _ikEndRotationOffset);
-			set => SetProperty(ref _ikEndRotationOffset, value);
+			get => GetPropertyValue<Quaternion>();
+			set => SetPropertyValue<Quaternion>(value);
+		}
+
+		public animIKChainSettings()
+		{
+			IkEndPointOffset = new();
+			IkEndRotationOffset = new() { R = 1.000000F };
 		}
 	}
 }

@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioLocomotionStateEventDictionaryItem : audioInlinedAudioMetadata
 	{
-		private CName _key;
-		private CName _value;
-
 		[Ordinal(1)] 
 		[RED("key")] 
 		public CName Key
 		{
-			get => GetProperty(ref _key);
-			set => SetProperty(ref _key, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("value")] 
 		public CName Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 	}
 }

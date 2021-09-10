@@ -5,98 +5,88 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldProxyWindowsParams : RedBaseClass
 	{
-		private CEnum<worldProxWindowsType> _windowsType;
-		private CFloat _distance;
-		private CFloat _distanceAboveProxy;
-		private CBool _boolean;
-		private CFloat _removeSmallerThan;
-		private CFloat _distantWindowsEmissive;
-		private CFloat _distantWindowsSize;
-		private CFloat _distantWindowsSaturation;
-		private CFloat _distantWindowsTurnedOf;
-
 		[Ordinal(0)] 
 		[RED("windowsType")] 
 		public CEnum<worldProxWindowsType> WindowsType
 		{
-			get => GetProperty(ref _windowsType);
-			set => SetProperty(ref _windowsType, value);
+			get => GetPropertyValue<CEnum<worldProxWindowsType>>();
+			set => SetPropertyValue<CEnum<worldProxWindowsType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("distance")] 
 		public CFloat Distance
 		{
-			get => GetProperty(ref _distance);
-			set => SetProperty(ref _distance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("distanceAboveProxy")] 
 		public CFloat DistanceAboveProxy
 		{
-			get => GetProperty(ref _distanceAboveProxy);
-			set => SetProperty(ref _distanceAboveProxy, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("boolean")] 
 		public CBool Boolean
 		{
-			get => GetProperty(ref _boolean);
-			set => SetProperty(ref _boolean, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("removeSmallerThan")] 
 		public CFloat RemoveSmallerThan
 		{
-			get => GetProperty(ref _removeSmallerThan);
-			set => SetProperty(ref _removeSmallerThan, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("distantWindowsEmissive")] 
 		public CFloat DistantWindowsEmissive
 		{
-			get => GetProperty(ref _distantWindowsEmissive);
-			set => SetProperty(ref _distantWindowsEmissive, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("distantWindowsSize")] 
 		public CFloat DistantWindowsSize
 		{
-			get => GetProperty(ref _distantWindowsSize);
-			set => SetProperty(ref _distantWindowsSize, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("distantWindowsSaturation")] 
 		public CFloat DistantWindowsSaturation
 		{
-			get => GetProperty(ref _distantWindowsSaturation);
-			set => SetProperty(ref _distantWindowsSaturation, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("distantWindowsTurnedOf")] 
 		public CFloat DistantWindowsTurnedOf
 		{
-			get => GetProperty(ref _distantWindowsTurnedOf);
-			set => SetProperty(ref _distantWindowsTurnedOf, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public worldProxyWindowsParams()
 		{
-			_windowsType = new() { Value = Enums.worldProxWindowsType.PropagateWindows };
-			_distance = 0.400000F;
-			_distanceAboveProxy = 0.020000F;
-			_removeSmallerThan = 0.300000F;
-			_distantWindowsEmissive = 1.000000F;
-			_distantWindowsSize = 3.000000F;
-			_distantWindowsSaturation = 0.750000F;
-			_distantWindowsTurnedOf = 0.450000F;
+			WindowsType = Enums.worldProxWindowsType.PropagateWindows;
+			Distance = 0.400000F;
+			DistanceAboveProxy = 0.020000F;
+			RemoveSmallerThan = 0.300000F;
+			DistantWindowsEmissive = 1.000000F;
+			DistantWindowsSize = 3.000000F;
+			DistantWindowsSaturation = 0.750000F;
+			DistantWindowsTurnedOf = 0.450000F;
 		}
 	}
 }

@@ -5,5 +5,10 @@ namespace WolvenKit.RED4.Types
 	public partial class worldTerrainProxyMeshNode : worldPrefabProxyMeshNode
 	{
 
+		public worldTerrainProxyMeshNode()
+		{
+			AncestorPrefabProxyMeshNodeID = new();
+			OwnerPrefabNodeId = new();
+		}
 	}
 }

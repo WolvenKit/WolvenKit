@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animPoleVectorDetails : RedBaseClass
 	{
-		private animTransformIndex _targetBone;
-		private Vector3 _positionOffset;
-
 		[Ordinal(0)] 
 		[RED("targetBone")] 
 		public animTransformIndex TargetBone
 		{
-			get => GetProperty(ref _targetBone);
-			set => SetProperty(ref _targetBone, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("positionOffset")] 
 		public Vector3 PositionOffset
 		{
-			get => GetProperty(ref _positionOffset);
-			set => SetProperty(ref _positionOffset, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
+		}
+
+		public animPoleVectorDetails()
+		{
+			TargetBone = new();
+			PositionOffset = new();
 		}
 	}
 }

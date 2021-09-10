@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entFootPlantedEvent : redEvent
 	{
-		private CName _customAction;
-		private CEnum<animEventSide> _footSide;
-
 		[Ordinal(0)] 
 		[RED("customAction")] 
 		public CName CustomAction
 		{
-			get => GetProperty(ref _customAction);
-			set => SetProperty(ref _customAction, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("footSide")] 
 		public CEnum<animEventSide> FootSide
 		{
-			get => GetProperty(ref _footSide);
-			set => SetProperty(ref _footSide, value);
+			get => GetPropertyValue<CEnum<animEventSide>>();
+			set => SetPropertyValue<CEnum<animEventSide>>(value);
 		}
 	}
 }

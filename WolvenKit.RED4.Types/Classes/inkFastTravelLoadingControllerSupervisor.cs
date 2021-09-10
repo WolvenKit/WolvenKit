@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkFastTravelLoadingControllerSupervisor : gameuiWidgetGameController
 	{
-		private CResourceReference<worldEffect> _glitchEffect;
-
 		[Ordinal(2)] 
 		[RED("glitchEffect")] 
 		public CResourceReference<worldEffect> GlitchEffect
 		{
-			get => GetProperty(ref _glitchEffect);
-			set => SetProperty(ref _glitchEffect, value);
+			get => GetPropertyValue<CResourceReference<worldEffect>>();
+			set => SetPropertyValue<CResourceReference<worldEffect>>(value);
 		}
 	}
 }

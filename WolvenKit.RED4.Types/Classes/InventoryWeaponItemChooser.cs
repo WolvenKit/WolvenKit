@@ -5,104 +5,107 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class InventoryWeaponItemChooser : InventoryGenericItemChooser
 	{
-		private inkCompoundWidgetReference _scopeRootContainer;
-		private inkCompoundWidgetReference _magazineRootContainer;
-		private inkCompoundWidgetReference _silencerRootContainer;
-		private inkCompoundWidgetReference _scopeContainer;
-		private inkCompoundWidgetReference _magazineContainer;
-		private inkCompoundWidgetReference _silencerContainer;
-		private inkTextWidgetReference _attachmentsLabel;
-		private inkWidgetReference _attachmentsContainer;
-		private inkTextWidgetReference _softwareModsLabel;
-		private inkWidgetReference _softwareModsPush;
-		private inkWidgetReference _softwareModsContainer;
-
 		[Ordinal(13)] 
 		[RED("scopeRootContainer")] 
 		public inkCompoundWidgetReference ScopeRootContainer
 		{
-			get => GetProperty(ref _scopeRootContainer);
-			set => SetProperty(ref _scopeRootContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("magazineRootContainer")] 
 		public inkCompoundWidgetReference MagazineRootContainer
 		{
-			get => GetProperty(ref _magazineRootContainer);
-			set => SetProperty(ref _magazineRootContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("silencerRootContainer")] 
 		public inkCompoundWidgetReference SilencerRootContainer
 		{
-			get => GetProperty(ref _silencerRootContainer);
-			set => SetProperty(ref _silencerRootContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("scopeContainer")] 
 		public inkCompoundWidgetReference ScopeContainer
 		{
-			get => GetProperty(ref _scopeContainer);
-			set => SetProperty(ref _scopeContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("magazineContainer")] 
 		public inkCompoundWidgetReference MagazineContainer
 		{
-			get => GetProperty(ref _magazineContainer);
-			set => SetProperty(ref _magazineContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("silencerContainer")] 
 		public inkCompoundWidgetReference SilencerContainer
 		{
-			get => GetProperty(ref _silencerContainer);
-			set => SetProperty(ref _silencerContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("attachmentsLabel")] 
 		public inkTextWidgetReference AttachmentsLabel
 		{
-			get => GetProperty(ref _attachmentsLabel);
-			set => SetProperty(ref _attachmentsLabel, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("attachmentsContainer")] 
 		public inkWidgetReference AttachmentsContainer
 		{
-			get => GetProperty(ref _attachmentsContainer);
-			set => SetProperty(ref _attachmentsContainer, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("softwareModsLabel")] 
 		public inkTextWidgetReference SoftwareModsLabel
 		{
-			get => GetProperty(ref _softwareModsLabel);
-			set => SetProperty(ref _softwareModsLabel, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("softwareModsPush")] 
 		public inkWidgetReference SoftwareModsPush
 		{
-			get => GetProperty(ref _softwareModsPush);
-			set => SetProperty(ref _softwareModsPush, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("softwareModsContainer")] 
 		public inkWidgetReference SoftwareModsContainer
 		{
-			get => GetProperty(ref _softwareModsContainer);
-			set => SetProperty(ref _softwareModsContainer, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		public InventoryWeaponItemChooser()
+		{
+			ScopeRootContainer = new();
+			MagazineRootContainer = new();
+			SilencerRootContainer = new();
+			ScopeContainer = new();
+			MagazineContainer = new();
+			SilencerContainer = new();
+			AttachmentsLabel = new();
+			AttachmentsContainer = new();
+			SoftwareModsLabel = new();
+			SoftwareModsPush = new();
+			SoftwareModsContainer = new();
 		}
 	}
 }

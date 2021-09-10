@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiContraPlatform : gameuiSideScrollerMiniGameDynObjectLogicAdvanced
 	{
-		private inkImageWidgetReference _image;
-
 		[Ordinal(1)] 
 		[RED("image")] 
 		public inkImageWidgetReference Image
 		{
-			get => GetProperty(ref _image);
-			set => SetProperty(ref _image, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		public gameuiContraPlatform()
+		{
+			Image = new();
 		}
 	}
 }

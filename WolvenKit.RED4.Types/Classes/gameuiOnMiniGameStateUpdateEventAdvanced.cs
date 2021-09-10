@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiOnMiniGameStateUpdateEventAdvanced : redEvent
 	{
-		private CHandle<gameuiSideScrollerMiniGameStateAdvanced> _gameState;
-		private CArray<CName> _propertyNames;
-
 		[Ordinal(0)] 
 		[RED("gameState")] 
 		public CHandle<gameuiSideScrollerMiniGameStateAdvanced> GameState
 		{
-			get => GetProperty(ref _gameState);
-			set => SetProperty(ref _gameState, value);
+			get => GetPropertyValue<CHandle<gameuiSideScrollerMiniGameStateAdvanced>>();
+			set => SetPropertyValue<CHandle<gameuiSideScrollerMiniGameStateAdvanced>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("propertyNames")] 
 		public CArray<CName> PropertyNames
 		{
-			get => GetProperty(ref _propertyNames);
-			set => SetProperty(ref _propertyNames, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
+		public gameuiOnMiniGameStateUpdateEventAdvanced()
+		{
+			PropertyNames = new();
 		}
 	}
 }

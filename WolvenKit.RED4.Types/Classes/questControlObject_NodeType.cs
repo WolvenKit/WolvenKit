@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questControlObject_NodeType : questIGameManagerNonSignalStoppingNodeType
 	{
-		private gameEntityReference _objectRef;
-
 		[Ordinal(0)] 
 		[RED("objectRef")] 
 		public gameEntityReference ObjectRef
 		{
-			get => GetProperty(ref _objectRef);
-			set => SetProperty(ref _objectRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
+		}
+
+		public questControlObject_NodeType()
+		{
+			ObjectRef = new() { Names = new() };
 		}
 	}
 }

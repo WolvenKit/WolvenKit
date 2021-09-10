@@ -5,39 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkColorCorrectionEffect : inkIEffect
 	{
-		private CFloat _brightness;
-		private CFloat _contrast;
-		private CFloat _saturation;
-
 		[Ordinal(2)] 
 		[RED("brightness")] 
 		public CFloat Brightness
 		{
-			get => GetProperty(ref _brightness);
-			set => SetProperty(ref _brightness, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("contrast")] 
 		public CFloat Contrast
 		{
-			get => GetProperty(ref _contrast);
-			set => SetProperty(ref _contrast, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("saturation")] 
 		public CFloat Saturation
 		{
-			get => GetProperty(ref _saturation);
-			set => SetProperty(ref _saturation, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public inkColorCorrectionEffect()
 		{
-			_brightness = 1.000000F;
-			_contrast = 1.000000F;
-			_saturation = 1.000000F;
+			Brightness = 1.000000F;
+			Contrast = 1.000000F;
+			Saturation = 1.000000F;
 		}
 	}
 }

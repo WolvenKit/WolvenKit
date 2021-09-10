@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIHoldPositionCommandParams : questScriptedAICommandParams
 	{
-		private CFloat _duration;
-
 		[Ordinal(0)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get => GetProperty(ref _duration);
-			set => SetProperty(ref _duration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public AIHoldPositionCommandParams()
 		{
-			_duration = -1.000000F;
+			Duration = -1.000000F;
 		}
 	}
 }

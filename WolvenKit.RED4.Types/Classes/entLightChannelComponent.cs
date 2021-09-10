@@ -5,38 +5,38 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entLightChannelComponent : entIVisualComponent
 	{
-		private CBool _isEnabled;
-		private CEnum<rendLightChannel> _channels;
-		private CHandle<GeometryShape> _shape;
-
 		[Ordinal(8)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("channels")] 
-		public CEnum<rendLightChannel> Channels
+		public CBitField<rendLightChannel> Channels
 		{
-			get => GetProperty(ref _channels);
-			set => SetProperty(ref _channels, value);
+			get => GetPropertyValue<CBitField<rendLightChannel>>();
+			set => SetPropertyValue<CBitField<rendLightChannel>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("shape")] 
 		public CHandle<GeometryShape> Shape
 		{
-			get => GetProperty(ref _shape);
-			set => SetProperty(ref _shape, value);
+			get => GetPropertyValue<CHandle<GeometryShape>>();
+			set => SetPropertyValue<CHandle<GeometryShape>>(value);
 		}
 
 		public entLightChannelComponent()
 		{
-			_isEnabled = true;
-			_channels = new() { Value = Enums.rendLightChannel.LC_Channel1 };
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
+			ForceLODLevel = -1;
+			IsEnabled = true;
+			Channels = Enums.rendLightChannel.LC_Channel1;
 		}
 	}
 }

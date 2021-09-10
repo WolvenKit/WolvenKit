@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ReactiveEventSender : AISignalSenderTask
 	{
-		private CName _behaviorArgumentNameTag;
-		private CName _behaviorArgumentFloatPriority;
-		private CName _behaviorArgumentNameFlag;
-		private CName _reactiveType;
-
 		[Ordinal(4)] 
 		[RED("behaviorArgumentNameTag")] 
 		public CName BehaviorArgumentNameTag
 		{
-			get => GetProperty(ref _behaviorArgumentNameTag);
-			set => SetProperty(ref _behaviorArgumentNameTag, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("behaviorArgumentFloatPriority")] 
 		public CName BehaviorArgumentFloatPriority
 		{
-			get => GetProperty(ref _behaviorArgumentFloatPriority);
-			set => SetProperty(ref _behaviorArgumentFloatPriority, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("behaviorArgumentNameFlag")] 
 		public CName BehaviorArgumentNameFlag
 		{
-			get => GetProperty(ref _behaviorArgumentNameFlag);
-			set => SetProperty(ref _behaviorArgumentNameFlag, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("reactiveType")] 
 		public CName ReactiveType
 		{
-			get => GetProperty(ref _reactiveType);
-			set => SetProperty(ref _reactiveType, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public ReactiveEventSender()
+		{
+			Tags = new();
+			Flags = new();
 		}
 	}
 }

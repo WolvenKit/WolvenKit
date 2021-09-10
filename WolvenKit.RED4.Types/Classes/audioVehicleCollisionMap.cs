@@ -5,133 +5,120 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioVehicleCollisionMap : audioAudioMetadata
 	{
-		private CFloat _minImpactVelocityThreshold;
-		private CFloat _minRumbleVelocityThreshold;
-		private CFloat _rumbleCooldown;
-		private CFloat _scrapingMinTangentialVelocityThreshold;
-		private CFloat _scrapingMaxCollisionCooldown;
-		private CFloat _scrapingMinVehicleUpCollisionContactAngle;
-		private CBool _useScrapingMinVehicleUpCollisionContactAngle;
-		private CName _explosionEvent;
-		private CName _bigFireEvent;
-		private CName _engineFireEvent;
-		private CName _coolerDamageEvent;
-		private CName _interiorCollisionEvent;
-		private CArray<audioVehicleCollisionMapItem> _collisionSettings;
-
 		[Ordinal(1)] 
 		[RED("minImpactVelocityThreshold")] 
 		public CFloat MinImpactVelocityThreshold
 		{
-			get => GetProperty(ref _minImpactVelocityThreshold);
-			set => SetProperty(ref _minImpactVelocityThreshold, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("minRumbleVelocityThreshold")] 
 		public CFloat MinRumbleVelocityThreshold
 		{
-			get => GetProperty(ref _minRumbleVelocityThreshold);
-			set => SetProperty(ref _minRumbleVelocityThreshold, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("rumbleCooldown")] 
 		public CFloat RumbleCooldown
 		{
-			get => GetProperty(ref _rumbleCooldown);
-			set => SetProperty(ref _rumbleCooldown, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("scrapingMinTangentialVelocityThreshold")] 
 		public CFloat ScrapingMinTangentialVelocityThreshold
 		{
-			get => GetProperty(ref _scrapingMinTangentialVelocityThreshold);
-			set => SetProperty(ref _scrapingMinTangentialVelocityThreshold, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("scrapingMaxCollisionCooldown")] 
 		public CFloat ScrapingMaxCollisionCooldown
 		{
-			get => GetProperty(ref _scrapingMaxCollisionCooldown);
-			set => SetProperty(ref _scrapingMaxCollisionCooldown, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("scrapingMinVehicleUpCollisionContactAngle")] 
 		public CFloat ScrapingMinVehicleUpCollisionContactAngle
 		{
-			get => GetProperty(ref _scrapingMinVehicleUpCollisionContactAngle);
-			set => SetProperty(ref _scrapingMinVehicleUpCollisionContactAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("useScrapingMinVehicleUpCollisionContactAngle")] 
 		public CBool UseScrapingMinVehicleUpCollisionContactAngle
 		{
-			get => GetProperty(ref _useScrapingMinVehicleUpCollisionContactAngle);
-			set => SetProperty(ref _useScrapingMinVehicleUpCollisionContactAngle, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("explosionEvent")] 
 		public CName ExplosionEvent
 		{
-			get => GetProperty(ref _explosionEvent);
-			set => SetProperty(ref _explosionEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("bigFireEvent")] 
 		public CName BigFireEvent
 		{
-			get => GetProperty(ref _bigFireEvent);
-			set => SetProperty(ref _bigFireEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("engineFireEvent")] 
 		public CName EngineFireEvent
 		{
-			get => GetProperty(ref _engineFireEvent);
-			set => SetProperty(ref _engineFireEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("coolerDamageEvent")] 
 		public CName CoolerDamageEvent
 		{
-			get => GetProperty(ref _coolerDamageEvent);
-			set => SetProperty(ref _coolerDamageEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("interiorCollisionEvent")] 
 		public CName InteriorCollisionEvent
 		{
-			get => GetProperty(ref _interiorCollisionEvent);
-			set => SetProperty(ref _interiorCollisionEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("collisionSettings")] 
 		public CArray<audioVehicleCollisionMapItem> CollisionSettings
 		{
-			get => GetProperty(ref _collisionSettings);
-			set => SetProperty(ref _collisionSettings, value);
+			get => GetPropertyValue<CArray<audioVehicleCollisionMapItem>>();
+			set => SetPropertyValue<CArray<audioVehicleCollisionMapItem>>(value);
 		}
 
 		public audioVehicleCollisionMap()
 		{
-			_minImpactVelocityThreshold = 0.800000F;
-			_minRumbleVelocityThreshold = 0.800000F;
-			_rumbleCooldown = 0.600000F;
-			_scrapingMinTangentialVelocityThreshold = 5.000000F;
-			_scrapingMaxCollisionCooldown = 0.200000F;
-			_scrapingMinVehicleUpCollisionContactAngle = 30.000000F;
-			_useScrapingMinVehicleUpCollisionContactAngle = true;
+			MinImpactVelocityThreshold = 0.800000F;
+			MinRumbleVelocityThreshold = 0.800000F;
+			RumbleCooldown = 0.600000F;
+			ScrapingMinTangentialVelocityThreshold = 5.000000F;
+			ScrapingMaxCollisionCooldown = 0.200000F;
+			ScrapingMinVehicleUpCollisionContactAngle = 30.000000F;
+			UseScrapingMinVehicleUpCollisionContactAngle = true;
+			CollisionSettings = new();
 		}
 	}
 }

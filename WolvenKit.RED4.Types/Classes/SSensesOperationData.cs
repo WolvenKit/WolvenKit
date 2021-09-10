@@ -5,50 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SSensesOperationData : RedBaseClass
 	{
-		private CBool _isActivatorPlayer;
-		private CBool _isActivatorNPC;
-		private CName _attitudeGroup;
-		private CEnum<ETriggerOperationType> _operationType;
-		private SBaseDeviceOperationData _operation;
-
 		[Ordinal(0)] 
 		[RED("isActivatorPlayer")] 
 		public CBool IsActivatorPlayer
 		{
-			get => GetProperty(ref _isActivatorPlayer);
-			set => SetProperty(ref _isActivatorPlayer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isActivatorNPC")] 
 		public CBool IsActivatorNPC
 		{
-			get => GetProperty(ref _isActivatorNPC);
-			set => SetProperty(ref _isActivatorNPC, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("attitudeGroup")] 
 		public CName AttitudeGroup
 		{
-			get => GetProperty(ref _attitudeGroup);
-			set => SetProperty(ref _attitudeGroup, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("operationType")] 
 		public CEnum<ETriggerOperationType> OperationType
 		{
-			get => GetProperty(ref _operationType);
-			set => SetProperty(ref _operationType, value);
+			get => GetPropertyValue<CEnum<ETriggerOperationType>>();
+			set => SetPropertyValue<CEnum<ETriggerOperationType>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("operation")] 
 		public SBaseDeviceOperationData Operation
 		{
-			get => GetProperty(ref _operation);
-			set => SetProperty(ref _operation, value);
+			get => GetPropertyValue<SBaseDeviceOperationData>();
+			set => SetPropertyValue<SBaseDeviceOperationData>(value);
+		}
+
+		public SSensesOperationData()
+		{
+			Operation = new() { IsEnabled = true, TransformAnimations = new(), VFXs = new(), SFXs = new(), Facts = new(), Components = new(), Stims = new(), StatusEffects = new(), Damages = new(), Items = new(), Teleport = new(), PlayerWorkspot = new(), ToggleOperations = new(), DelayID = new() };
 		}
 	}
 }

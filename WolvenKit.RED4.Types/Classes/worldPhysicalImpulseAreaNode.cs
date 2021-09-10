@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldPhysicalImpulseAreaNode : worldPhysicalTriggerAreaNode
 	{
-		private Vector3 _impulse;
-		private CFloat _impulseRadius;
-
 		[Ordinal(7)] 
 		[RED("impulse")] 
 		public Vector3 Impulse
 		{
-			get => GetProperty(ref _impulse);
-			set => SetProperty(ref _impulse, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("impulseRadius")] 
 		public CFloat ImpulseRadius
 		{
-			get => GetProperty(ref _impulseRadius);
-			set => SetProperty(ref _impulseRadius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public worldPhysicalImpulseAreaNode()
+		{
+			Impulse = new();
 		}
 	}
 }

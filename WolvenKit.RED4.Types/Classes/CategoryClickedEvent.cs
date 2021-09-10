@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CategoryClickedEvent : redEvent
 	{
-		private gameStatViewData _statsData;
-
 		[Ordinal(0)] 
 		[RED("statsData")] 
 		public gameStatViewData StatsData
 		{
-			get => GetProperty(ref _statsData);
-			set => SetProperty(ref _statsData, value);
+			get => GetPropertyValue<gameStatViewData>();
+			set => SetPropertyValue<gameStatViewData>(value);
+		}
+
+		public CategoryClickedEvent()
+		{
+			StatsData = new() { Type = Enums.gamedataStatType.Invalid };
 		}
 	}
 }

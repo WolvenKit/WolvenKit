@@ -5,59 +5,58 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AnimFeature_ProceduralIronsightData : animAnimFeature
 	{
-		private CBool _hasScope;
-		private CBool _isEnabled;
-		private CFloat _offset;
-		private CFloat _scopeOffset;
-		private Vector4 _position;
-		private Quaternion _rotation;
-
 		[Ordinal(0)] 
 		[RED("hasScope")] 
 		public CBool HasScope
 		{
-			get => GetProperty(ref _hasScope);
-			set => SetProperty(ref _hasScope, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("offset")] 
 		public CFloat Offset
 		{
-			get => GetProperty(ref _offset);
-			set => SetProperty(ref _offset, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("scopeOffset")] 
 		public CFloat ScopeOffset
 		{
-			get => GetProperty(ref _scopeOffset);
-			set => SetProperty(ref _scopeOffset, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("position")] 
 		public Vector4 Position
 		{
-			get => GetProperty(ref _position);
-			set => SetProperty(ref _position, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("rotation")] 
 		public Quaternion Rotation
 		{
-			get => GetProperty(ref _rotation);
-			set => SetProperty(ref _rotation, value);
+			get => GetPropertyValue<Quaternion>();
+			set => SetPropertyValue<Quaternion>(value);
+		}
+
+		public AnimFeature_ProceduralIronsightData()
+		{
+			Position = new();
+			Rotation = new() { R = 1.000000F };
 		}
 	}
 }

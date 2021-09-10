@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questQuickItemsManager_NodeType : questIUIManagerNodeType
 	{
-		private CEnum<questQuickItemsSet> _set;
-
 		[Ordinal(0)] 
 		[RED("set")] 
 		public CEnum<questQuickItemsSet> Set
 		{
-			get => GetProperty(ref _set);
-			set => SetProperty(ref _set, value);
+			get => GetPropertyValue<CEnum<questQuickItemsSet>>();
+			set => SetPropertyValue<CEnum<questQuickItemsSet>>(value);
 		}
 
 		public questQuickItemsManager_NodeType()
 		{
-			_set = new() { Value = Enums.questQuickItemsSet.Q003_All };
+			Set = Enums.questQuickItemsSet.Q003_All;
 		}
 	}
 }

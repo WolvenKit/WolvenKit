@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class HitOperations : DeviceOperations
 	{
-		private CArray<SHitOperationData> _hitOperations;
-
 		[Ordinal(2)] 
 		[RED("hitOperations")] 
 		public CArray<SHitOperationData> HitOperations_
 		{
-			get => GetProperty(ref _hitOperations);
-			set => SetProperty(ref _hitOperations, value);
+			get => GetPropertyValue<CArray<SHitOperationData>>();
+			set => SetPropertyValue<CArray<SHitOperationData>>(value);
+		}
+
+		public HitOperations()
+		{
+			Components = new();
+			FxInstances = new();
+			HitOperations_ = new();
 		}
 	}
 }

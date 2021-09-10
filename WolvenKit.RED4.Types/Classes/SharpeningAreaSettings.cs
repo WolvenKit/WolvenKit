@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SharpeningAreaSettings : IAreaSettings
 	{
-		private CFloat _sharpeningStrength;
-
 		[Ordinal(2)] 
 		[RED("sharpeningStrength")] 
 		public CFloat SharpeningStrength
 		{
-			get => GetProperty(ref _sharpeningStrength);
-			set => SetProperty(ref _sharpeningStrength, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public SharpeningAreaSettings()
+		{
+			Enable = true;
 		}
 	}
 }

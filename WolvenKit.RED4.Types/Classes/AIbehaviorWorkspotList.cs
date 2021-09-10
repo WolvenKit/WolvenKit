@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorWorkspotList : IScriptable
 	{
-		private CArray<NodeRef> _spots;
-
 		[Ordinal(0)] 
 		[RED("spots")] 
 		public CArray<NodeRef> Spots
 		{
-			get => GetProperty(ref _spots);
-			set => SetProperty(ref _spots, value);
+			get => GetPropertyValue<CArray<NodeRef>>();
+			set => SetPropertyValue<CArray<NodeRef>>(value);
+		}
+
+		public AIbehaviorWorkspotList()
+		{
+			Spots = new();
 		}
 	}
 }

@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimStateTransitionCondition_CompositeSimultaneous : animIAnimStateTransitionCondition
 	{
-		private CArray<CHandle<animIAnimStateTransitionCondition>> _conditions;
-
 		[Ordinal(0)] 
 		[RED("conditions")] 
 		public CArray<CHandle<animIAnimStateTransitionCondition>> Conditions
 		{
-			get => GetProperty(ref _conditions);
-			set => SetProperty(ref _conditions, value);
+			get => GetPropertyValue<CArray<CHandle<animIAnimStateTransitionCondition>>>();
+			set => SetPropertyValue<CArray<CHandle<animIAnimStateTransitionCondition>>>(value);
+		}
+
+		public animAnimStateTransitionCondition_CompositeSimultaneous()
+		{
+			Conditions = new();
 		}
 	}
 }

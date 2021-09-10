@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animImportFacialTransformNoScale : RedBaseClass
 	{
-		private Quaternion _rotation;
-		private Vector3 _translation;
-
 		[Ordinal(0)] 
 		[RED("rotation")] 
 		public Quaternion Rotation
 		{
-			get => GetProperty(ref _rotation);
-			set => SetProperty(ref _rotation, value);
+			get => GetPropertyValue<Quaternion>();
+			set => SetPropertyValue<Quaternion>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("translation")] 
 		public Vector3 Translation
 		{
-			get => GetProperty(ref _translation);
-			set => SetProperty(ref _translation, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
+		}
+
+		public animImportFacialTransformNoScale()
+		{
+			Rotation = new() { R = 1.000000F };
+			Translation = new();
 		}
 	}
 }

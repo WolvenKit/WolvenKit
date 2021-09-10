@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnSceneEventId : RedBaseClass
 	{
-		private CUInt64 _id;
-
 		[Ordinal(0)] 
 		[RED("id")] 
 		public CUInt64 Id
 		{
-			get => GetProperty(ref _id);
-			set => SetProperty(ref _id, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		public scnSceneEventId()
 		{
-			_id = 18446744073709551615;
+			Id = 18446744073709551615;
 		}
 	}
 }

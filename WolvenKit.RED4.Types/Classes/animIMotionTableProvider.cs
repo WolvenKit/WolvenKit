@@ -5,50 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animIMotionTableProvider : ISerializable
 	{
-		private CInt32 _id;
-		private CInt32 _parentId;
-		private CEnum<animMotionTableType> _type;
-		private CEnum<animMotionTableAction> _action;
-		private CEnum<animParentStaticSwitchBranch> _parentStaticSwitchBranch;
-
 		[Ordinal(0)] 
 		[RED("id")] 
 		public CInt32 Id
 		{
-			get => GetProperty(ref _id);
-			set => SetProperty(ref _id, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("parentId")] 
 		public CInt32 ParentId
 		{
-			get => GetProperty(ref _parentId);
-			set => SetProperty(ref _parentId, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("type")] 
 		public CEnum<animMotionTableType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<animMotionTableType>>();
+			set => SetPropertyValue<CEnum<animMotionTableType>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("action")] 
 		public CEnum<animMotionTableAction> Action
 		{
-			get => GetProperty(ref _action);
-			set => SetProperty(ref _action, value);
+			get => GetPropertyValue<CEnum<animMotionTableAction>>();
+			set => SetPropertyValue<CEnum<animMotionTableAction>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("parentStaticSwitchBranch")] 
 		public CEnum<animParentStaticSwitchBranch> ParentStaticSwitchBranch
 		{
-			get => GetProperty(ref _parentStaticSwitchBranch);
-			set => SetProperty(ref _parentStaticSwitchBranch, value);
+			get => GetPropertyValue<CEnum<animParentStaticSwitchBranch>>();
+			set => SetPropertyValue<CEnum<animParentStaticSwitchBranch>>(value);
 		}
 	}
 }

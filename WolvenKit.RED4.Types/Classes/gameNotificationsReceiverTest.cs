@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameNotificationsReceiverTest : gameuiWidgetGameController
 	{
-		private CHandle<inkGameNotificationToken> _token;
-
 		[Ordinal(2)] 
 		[RED("token")] 
 		public CHandle<inkGameNotificationToken> Token
 		{
-			get => GetProperty(ref _token);
-			set => SetProperty(ref _token, value);
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 	}
 }

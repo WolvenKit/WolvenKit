@@ -5,64 +5,57 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameinteractionsCHotSpotLayerDefinition : gameinteractionsNodeDefinition
 	{
-		private CBool _enabled;
-		private CName _tag;
-		private CEnum<gameinteractionsEGroupType> _group;
-		private CFloat _priorityMultiplier;
-		private CHandle<gameinteractionsCHotSpotAreaFilterDefinition> _areaFilterDefinition;
-		private CHandle<gameinteractionsCHotSpotGameLogicFilterDefinition> _gameLogicFilterDefinition;
-
 		[Ordinal(0)] 
 		[RED("enabled")] 
 		public CBool Enabled
 		{
-			get => GetProperty(ref _enabled);
-			set => SetProperty(ref _enabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("tag")] 
 		public CName Tag
 		{
-			get => GetProperty(ref _tag);
-			set => SetProperty(ref _tag, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("group")] 
 		public CEnum<gameinteractionsEGroupType> Group
 		{
-			get => GetProperty(ref _group);
-			set => SetProperty(ref _group, value);
+			get => GetPropertyValue<CEnum<gameinteractionsEGroupType>>();
+			set => SetPropertyValue<CEnum<gameinteractionsEGroupType>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("priorityMultiplier")] 
 		public CFloat PriorityMultiplier
 		{
-			get => GetProperty(ref _priorityMultiplier);
-			set => SetProperty(ref _priorityMultiplier, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("areaFilterDefinition")] 
 		public CHandle<gameinteractionsCHotSpotAreaFilterDefinition> AreaFilterDefinition
 		{
-			get => GetProperty(ref _areaFilterDefinition);
-			set => SetProperty(ref _areaFilterDefinition, value);
+			get => GetPropertyValue<CHandle<gameinteractionsCHotSpotAreaFilterDefinition>>();
+			set => SetPropertyValue<CHandle<gameinteractionsCHotSpotAreaFilterDefinition>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("gameLogicFilterDefinition")] 
 		public CHandle<gameinteractionsCHotSpotGameLogicFilterDefinition> GameLogicFilterDefinition
 		{
-			get => GetProperty(ref _gameLogicFilterDefinition);
-			set => SetProperty(ref _gameLogicFilterDefinition, value);
+			get => GetPropertyValue<CHandle<gameinteractionsCHotSpotGameLogicFilterDefinition>>();
+			set => SetPropertyValue<CHandle<gameinteractionsCHotSpotGameLogicFilterDefinition>>(value);
 		}
 
 		public gameinteractionsCHotSpotLayerDefinition()
 		{
-			_priorityMultiplier = 1.000000F;
+			PriorityMultiplier = 1.000000F;
 		}
 	}
 }

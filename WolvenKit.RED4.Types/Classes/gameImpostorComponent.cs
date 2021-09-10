@@ -5,48 +5,45 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameImpostorComponent : entIComponent
 	{
-		private CBool _isCharacterReplica;
-		private CBool _addHead;
-		private CBool _ignorePlayerHeadSlot;
-		private CArray<TweakDBID> _slotIDsToOmit;
-
 		[Ordinal(3)] 
 		[RED("isCharacterReplica")] 
 		public CBool IsCharacterReplica
 		{
-			get => GetProperty(ref _isCharacterReplica);
-			set => SetProperty(ref _isCharacterReplica, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("addHead")] 
 		public CBool AddHead
 		{
-			get => GetProperty(ref _addHead);
-			set => SetProperty(ref _addHead, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("ignorePlayerHeadSlot")] 
 		public CBool IgnorePlayerHeadSlot
 		{
-			get => GetProperty(ref _ignorePlayerHeadSlot);
-			set => SetProperty(ref _ignorePlayerHeadSlot, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("slotIDsToOmit")] 
 		public CArray<TweakDBID> SlotIDsToOmit
 		{
-			get => GetProperty(ref _slotIDsToOmit);
-			set => SetProperty(ref _slotIDsToOmit, value);
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 
 		public gameImpostorComponent()
 		{
-			_isCharacterReplica = true;
-			_addHead = true;
-			_ignorePlayerHeadSlot = true;
+			Name = "Component";
+			IsCharacterReplica = true;
+			AddHead = true;
+			IgnorePlayerHeadSlot = true;
+			SlotIDsToOmit = new();
 		}
 	}
 }

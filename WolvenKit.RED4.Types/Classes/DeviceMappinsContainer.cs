@@ -5,46 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DeviceMappinsContainer : IScriptable
 	{
-		private CArray<SDeviceMappinData> _mappins;
-		private SDeviceMappinData _newNewFocusMappin;
-		private CBool _useNewFocusMappin;
-		private CFloat _offsetValue;
-
 		[Ordinal(0)] 
 		[RED("mappins")] 
 		public CArray<SDeviceMappinData> Mappins
 		{
-			get => GetProperty(ref _mappins);
-			set => SetProperty(ref _mappins, value);
+			get => GetPropertyValue<CArray<SDeviceMappinData>>();
+			set => SetPropertyValue<CArray<SDeviceMappinData>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("newNewFocusMappin")] 
 		public SDeviceMappinData NewNewFocusMappin
 		{
-			get => GetProperty(ref _newNewFocusMappin);
-			set => SetProperty(ref _newNewFocusMappin, value);
+			get => GetPropertyValue<SDeviceMappinData>();
+			set => SetPropertyValue<SDeviceMappinData>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("useNewFocusMappin")] 
 		public CBool UseNewFocusMappin
 		{
-			get => GetProperty(ref _useNewFocusMappin);
-			set => SetProperty(ref _useNewFocusMappin, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("offsetValue")] 
 		public CFloat OffsetValue
 		{
-			get => GetProperty(ref _offsetValue);
-			set => SetProperty(ref _offsetValue, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public DeviceMappinsContainer()
 		{
-			_offsetValue = 0.200000F;
+			Mappins = new();
+			NewNewFocusMappin = new() { Enabled = true, Range = 30.000000F, Offset = new(), Position = new(), CheckIfIsTarget = true, Id = new() };
+			OffsetValue = 0.200000F;
 		}
 	}
 }

@@ -5,68 +5,60 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AnimFeature_LeftHandCyberware : animAnimFeature
 	{
-		private CFloat _actionDuration;
-		private CInt32 _state;
-		private CBool _isQuickAction;
-		private CBool _isChargeAction;
-		private CBool _isLoopAction;
-		private CBool _isCatchAction;
-		private CBool _isSafeAction;
-
 		[Ordinal(0)] 
 		[RED("actionDuration")] 
 		public CFloat ActionDuration
 		{
-			get => GetProperty(ref _actionDuration);
-			set => SetProperty(ref _actionDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("state")] 
 		public CInt32 State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isQuickAction")] 
 		public CBool IsQuickAction
 		{
-			get => GetProperty(ref _isQuickAction);
-			set => SetProperty(ref _isQuickAction, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isChargeAction")] 
 		public CBool IsChargeAction
 		{
-			get => GetProperty(ref _isChargeAction);
-			set => SetProperty(ref _isChargeAction, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("isLoopAction")] 
 		public CBool IsLoopAction
 		{
-			get => GetProperty(ref _isLoopAction);
-			set => SetProperty(ref _isLoopAction, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("isCatchAction")] 
 		public CBool IsCatchAction
 		{
-			get => GetProperty(ref _isCatchAction);
-			set => SetProperty(ref _isCatchAction, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isSafeAction")] 
 		public CBool IsSafeAction
 		{
-			get => GetProperty(ref _isSafeAction);
-			set => SetProperty(ref _isSafeAction, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

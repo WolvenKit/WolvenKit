@@ -5,29 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimFeature_VehiclePassengerAnimSetup : animAnimFeature
 	{
-		private CBool _enableAdditiveAnim;
-		private CFloat _additiveScale;
-
 		[Ordinal(0)] 
 		[RED("enableAdditiveAnim")] 
 		public CBool EnableAdditiveAnim
 		{
-			get => GetProperty(ref _enableAdditiveAnim);
-			set => SetProperty(ref _enableAdditiveAnim, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("additiveScale")] 
 		public CFloat AdditiveScale
 		{
-			get => GetProperty(ref _additiveScale);
-			set => SetProperty(ref _additiveScale, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public animAnimFeature_VehiclePassengerAnimSetup()
 		{
-			_enableAdditiveAnim = true;
-			_additiveScale = 1.000000F;
+			EnableAdditiveAnim = true;
+			AdditiveScale = 1.000000F;
 		}
 	}
 }

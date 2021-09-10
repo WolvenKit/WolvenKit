@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UI_VisionModeDef : gamebbScriptDefinition
 	{
-		private gamebbScriptID_Bool _isEnabled;
-
 		[Ordinal(0)] 
 		[RED("isEnabled")] 
 		public gamebbScriptID_Bool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		public UI_VisionModeDef()
+		{
+			IsEnabled = new();
 		}
 	}
 }

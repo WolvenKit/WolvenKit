@@ -5,194 +5,184 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class vehicleUIGameController : gameuiHUDGameController
 	{
-		private CWeakHandle<gameIBlackboard> _vehicleBlackboard;
-		private CWeakHandle<vehicleBaseObject> _vehicle;
-		private CHandle<VehicleComponentPS> _vehiclePS;
-		private CHandle<redCallbackObject> _vehicleBBStateConectionId;
-		private CHandle<redCallbackObject> _vehicleCollisionBBStateID;
-		private CHandle<redCallbackObject> _vehicleBBUIActivId;
-		private CWeakHandle<inkWidget> _rootWidget;
-		private CBool _uIEnabled;
-		private CHandle<inkanimProxy> _startAnimProxy;
-		private CHandle<inkanimProxy> _loopAnimProxy;
-		private CHandle<inkanimProxy> _endAnimProxy;
-		private CHandle<inkanimProxy> _loopingBootProxy;
-		private inkWidgetReference _speedometerWidget;
-		private inkWidgetReference _tachometerWidget;
-		private inkWidgetReference _timeWidget;
-		private inkWidgetReference _instruments;
-		private inkWidgetReference _gearBox;
-		private inkWidgetReference _radio;
-		private inkWidgetReference _analogTachWidget;
-		private inkWidgetReference _analogSpeedWidget;
-		private CBool _isVehicleReady;
-
 		[Ordinal(9)] 
 		[RED("vehicleBlackboard")] 
 		public CWeakHandle<gameIBlackboard> VehicleBlackboard
 		{
-			get => GetProperty(ref _vehicleBlackboard);
-			set => SetProperty(ref _vehicleBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("vehicle")] 
 		public CWeakHandle<vehicleBaseObject> Vehicle
 		{
-			get => GetProperty(ref _vehicle);
-			set => SetProperty(ref _vehicle, value);
+			get => GetPropertyValue<CWeakHandle<vehicleBaseObject>>();
+			set => SetPropertyValue<CWeakHandle<vehicleBaseObject>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("vehiclePS")] 
 		public CHandle<VehicleComponentPS> VehiclePS
 		{
-			get => GetProperty(ref _vehiclePS);
-			set => SetProperty(ref _vehiclePS, value);
+			get => GetPropertyValue<CHandle<VehicleComponentPS>>();
+			set => SetPropertyValue<CHandle<VehicleComponentPS>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("vehicleBBStateConectionId")] 
 		public CHandle<redCallbackObject> VehicleBBStateConectionId
 		{
-			get => GetProperty(ref _vehicleBBStateConectionId);
-			set => SetProperty(ref _vehicleBBStateConectionId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("vehicleCollisionBBStateID")] 
 		public CHandle<redCallbackObject> VehicleCollisionBBStateID
 		{
-			get => GetProperty(ref _vehicleCollisionBBStateID);
-			set => SetProperty(ref _vehicleCollisionBBStateID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("vehicleBBUIActivId")] 
 		public CHandle<redCallbackObject> VehicleBBUIActivId
 		{
-			get => GetProperty(ref _vehicleBBUIActivId);
-			set => SetProperty(ref _vehicleBBUIActivId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("rootWidget")] 
 		public CWeakHandle<inkWidget> RootWidget
 		{
-			get => GetProperty(ref _rootWidget);
-			set => SetProperty(ref _rootWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("UIEnabled")] 
 		public CBool UIEnabled
 		{
-			get => GetProperty(ref _uIEnabled);
-			set => SetProperty(ref _uIEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("startAnimProxy")] 
 		public CHandle<inkanimProxy> StartAnimProxy
 		{
-			get => GetProperty(ref _startAnimProxy);
-			set => SetProperty(ref _startAnimProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("loopAnimProxy")] 
 		public CHandle<inkanimProxy> LoopAnimProxy
 		{
-			get => GetProperty(ref _loopAnimProxy);
-			set => SetProperty(ref _loopAnimProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("endAnimProxy")] 
 		public CHandle<inkanimProxy> EndAnimProxy
 		{
-			get => GetProperty(ref _endAnimProxy);
-			set => SetProperty(ref _endAnimProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("loopingBootProxy")] 
 		public CHandle<inkanimProxy> LoopingBootProxy
 		{
-			get => GetProperty(ref _loopingBootProxy);
-			set => SetProperty(ref _loopingBootProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("speedometerWidget")] 
 		public inkWidgetReference SpeedometerWidget
 		{
-			get => GetProperty(ref _speedometerWidget);
-			set => SetProperty(ref _speedometerWidget, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("tachometerWidget")] 
 		public inkWidgetReference TachometerWidget
 		{
-			get => GetProperty(ref _tachometerWidget);
-			set => SetProperty(ref _tachometerWidget, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("timeWidget")] 
 		public inkWidgetReference TimeWidget
 		{
-			get => GetProperty(ref _timeWidget);
-			set => SetProperty(ref _timeWidget, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("instruments")] 
 		public inkWidgetReference Instruments
 		{
-			get => GetProperty(ref _instruments);
-			set => SetProperty(ref _instruments, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("gearBox")] 
 		public inkWidgetReference GearBox
 		{
-			get => GetProperty(ref _gearBox);
-			set => SetProperty(ref _gearBox, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("radio")] 
 		public inkWidgetReference Radio
 		{
-			get => GetProperty(ref _radio);
-			set => SetProperty(ref _radio, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("analogTachWidget")] 
 		public inkWidgetReference AnalogTachWidget
 		{
-			get => GetProperty(ref _analogTachWidget);
-			set => SetProperty(ref _analogTachWidget, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("analogSpeedWidget")] 
 		public inkWidgetReference AnalogSpeedWidget
 		{
-			get => GetProperty(ref _analogSpeedWidget);
-			set => SetProperty(ref _analogSpeedWidget, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("isVehicleReady")] 
 		public CBool IsVehicleReady
 		{
-			get => GetProperty(ref _isVehicleReady);
-			set => SetProperty(ref _isVehicleReady, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public vehicleUIGameController()
+		{
+			SpeedometerWidget = new();
+			TachometerWidget = new();
+			TimeWidget = new();
+			Instruments = new();
+			GearBox = new();
+			Radio = new();
+			AnalogTachWidget = new();
+			AnalogSpeedWidget = new();
 		}
 	}
 }

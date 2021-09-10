@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnSetupSyncWorkspotRelationshipsEvent : scnSceneEvent
 	{
-		private CStatic<scnSceneWorkspotInstanceId> _syncedWorkspotIds;
-
 		[Ordinal(6)] 
 		[RED("syncedWorkspotIds", 4)] 
 		public CStatic<scnSceneWorkspotInstanceId> SyncedWorkspotIds
 		{
-			get => GetProperty(ref _syncedWorkspotIds);
-			set => SetProperty(ref _syncedWorkspotIds, value);
+			get => GetPropertyValue<CStatic<scnSceneWorkspotInstanceId>>();
+			set => SetPropertyValue<CStatic<scnSceneWorkspotInstanceId>>(value);
+		}
+
+		public scnSetupSyncWorkspotRelationshipsEvent()
+		{
+			Id = new() { Id = 18446744073709551615 };
+			SyncedWorkspotIds = new(0);
 		}
 	}
 }

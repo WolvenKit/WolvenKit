@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class JournalEntryListItemData : IScriptable
 	{
-		private CWeakHandle<gameJournalEntry> _entry;
-		private CHandle<IScriptable> _extraData;
-
 		[Ordinal(0)] 
 		[RED("entry")] 
 		public CWeakHandle<gameJournalEntry> Entry
 		{
-			get => GetProperty(ref _entry);
-			set => SetProperty(ref _entry, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalEntry>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalEntry>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("extraData")] 
 		public CHandle<IScriptable> ExtraData
 		{
-			get => GetProperty(ref _extraData);
-			set => SetProperty(ref _extraData, value);
+			get => GetPropertyValue<CHandle<IScriptable>>();
+			set => SetPropertyValue<CHandle<IScriptable>>(value);
 		}
 	}
 }

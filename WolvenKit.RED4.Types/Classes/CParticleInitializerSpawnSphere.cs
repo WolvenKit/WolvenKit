@@ -5,124 +5,114 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CParticleInitializerSpawnSphere : IParticleInitializer
 	{
-		private CHandle<IEvaluatorFloat> _innerRadius;
-		private CHandle<IEvaluatorFloat> _outerRadius;
-		private CBool _surfaceOnly;
-		private CBool _spawnPositiveX;
-		private CBool _spawnNegativeX;
-		private CBool _spawnPositiveY;
-		private CBool _spawnNegativeY;
-		private CBool _spawnPositiveZ;
-		private CBool _spawnNegativeZ;
-		private CBool _velocity;
-		private CBool _worldSpace;
-		private CHandle<IEvaluatorFloat> _forceScale;
-
 		[Ordinal(4)] 
 		[RED("innerRadius")] 
 		public CHandle<IEvaluatorFloat> InnerRadius
 		{
-			get => GetProperty(ref _innerRadius);
-			set => SetProperty(ref _innerRadius, value);
+			get => GetPropertyValue<CHandle<IEvaluatorFloat>>();
+			set => SetPropertyValue<CHandle<IEvaluatorFloat>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("outerRadius")] 
 		public CHandle<IEvaluatorFloat> OuterRadius
 		{
-			get => GetProperty(ref _outerRadius);
-			set => SetProperty(ref _outerRadius, value);
+			get => GetPropertyValue<CHandle<IEvaluatorFloat>>();
+			set => SetPropertyValue<CHandle<IEvaluatorFloat>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("surfaceOnly")] 
 		public CBool SurfaceOnly
 		{
-			get => GetProperty(ref _surfaceOnly);
-			set => SetProperty(ref _surfaceOnly, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("spawnPositiveX")] 
 		public CBool SpawnPositiveX
 		{
-			get => GetProperty(ref _spawnPositiveX);
-			set => SetProperty(ref _spawnPositiveX, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("spawnNegativeX")] 
 		public CBool SpawnNegativeX
 		{
-			get => GetProperty(ref _spawnNegativeX);
-			set => SetProperty(ref _spawnNegativeX, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("spawnPositiveY")] 
 		public CBool SpawnPositiveY
 		{
-			get => GetProperty(ref _spawnPositiveY);
-			set => SetProperty(ref _spawnPositiveY, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("spawnNegativeY")] 
 		public CBool SpawnNegativeY
 		{
-			get => GetProperty(ref _spawnNegativeY);
-			set => SetProperty(ref _spawnNegativeY, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("spawnPositiveZ")] 
 		public CBool SpawnPositiveZ
 		{
-			get => GetProperty(ref _spawnPositiveZ);
-			set => SetProperty(ref _spawnPositiveZ, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("spawnNegativeZ")] 
 		public CBool SpawnNegativeZ
 		{
-			get => GetProperty(ref _spawnNegativeZ);
-			set => SetProperty(ref _spawnNegativeZ, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("velocity")] 
 		public CBool Velocity
 		{
-			get => GetProperty(ref _velocity);
-			set => SetProperty(ref _velocity, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("worldSpace")] 
 		public CBool WorldSpace
 		{
-			get => GetProperty(ref _worldSpace);
-			set => SetProperty(ref _worldSpace, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("forceScale")] 
 		public CHandle<IEvaluatorFloat> ForceScale
 		{
-			get => GetProperty(ref _forceScale);
-			set => SetProperty(ref _forceScale, value);
+			get => GetPropertyValue<CHandle<IEvaluatorFloat>>();
+			set => SetPropertyValue<CHandle<IEvaluatorFloat>>(value);
 		}
 
 		public CParticleInitializerSpawnSphere()
 		{
-			_spawnPositiveX = true;
-			_spawnNegativeX = true;
-			_spawnPositiveY = true;
-			_spawnNegativeY = true;
-			_spawnPositiveZ = true;
-			_spawnNegativeZ = true;
-			_worldSpace = true;
+			EditorName = "Spawn sphere";
+			EditorGroup = "Location";
+			IsEnabled = true;
+			SpawnPositiveX = true;
+			SpawnNegativeX = true;
+			SpawnPositiveY = true;
+			SpawnNegativeY = true;
+			SpawnPositiveZ = true;
+			SpawnNegativeZ = true;
+			WorldSpace = true;
 		}
 	}
 }

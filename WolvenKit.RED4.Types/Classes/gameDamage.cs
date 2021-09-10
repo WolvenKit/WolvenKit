@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameDamage : IScriptable
 	{
-		private CEnum<gamedataDamageType> _damageType;
-		private CFloat _value;
-
 		[Ordinal(0)] 
 		[RED("damageType")] 
 		public CEnum<gamedataDamageType> DamageType
 		{
-			get => GetProperty(ref _damageType);
-			set => SetProperty(ref _damageType, value);
+			get => GetPropertyValue<CEnum<gamedataDamageType>>();
+			set => SetPropertyValue<CEnum<gamedataDamageType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("value")] 
 		public CFloat Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public gameDamage()
 		{
-			_damageType = new() { Value = Enums.gamedataDamageType.Physical };
+			DamageType = Enums.gamedataDamageType.Physical;
 		}
 	}
 }

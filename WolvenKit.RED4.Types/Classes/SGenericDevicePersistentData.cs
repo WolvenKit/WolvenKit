@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SGenericDevicePersistentData : RedBaseClass
 	{
-		private SGenericDeviceActionsData _genericActions;
-		private SCustomDeviceActionsData _customActions;
-
 		[Ordinal(0)] 
 		[RED("genericActions")] 
 		public SGenericDeviceActionsData GenericActions
 		{
-			get => GetProperty(ref _genericActions);
-			set => SetProperty(ref _genericActions, value);
+			get => GetPropertyValue<SGenericDeviceActionsData>();
+			set => SetPropertyValue<SGenericDeviceActionsData>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("customActions")] 
 		public SCustomDeviceActionsData CustomActions
 		{
-			get => GetProperty(ref _customActions);
-			set => SetProperty(ref _customActions, value);
+			get => GetPropertyValue<SCustomDeviceActionsData>();
+			set => SetPropertyValue<SCustomDeviceActionsData>(value);
+		}
+
+		public SGenericDevicePersistentData()
+		{
+			GenericActions = new() { ToggleON = new(), TogglePower = new() };
+			CustomActions = new() { Actions = new() };
 		}
 	}
 }

@@ -4,13 +4,23 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
   <ItemGroup>
+    <Folder Include="ClassesExt\CustomData\" />
     <Folder Include="Classes\" />
     <Folder Include="Enums\" />
+    <Folder Include="Extensions\" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FastMember" Version="1.5.0" />
+    <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_QuaternionWsToMs : animAnimNode_QuaternionValue
 	{
-		private animQuaternionLink _quaternionWs;
-
 		[Ordinal(11)] 
 		[RED("quaternionWs")] 
 		public animQuaternionLink QuaternionWs
 		{
-			get => GetProperty(ref _quaternionWs);
-			set => SetProperty(ref _quaternionWs, value);
+			get => GetPropertyValue<animQuaternionLink>();
+			set => SetPropertyValue<animQuaternionLink>(value);
+		}
+
+		public animAnimNode_QuaternionWsToMs()
+		{
+			Id = 4294967295;
+			QuaternionWs = new();
 		}
 	}
 }

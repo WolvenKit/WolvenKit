@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class StatsPlayTimeController : inkWidgetLogicController
 	{
-		private inkTextWidgetReference _playTimeRef;
-		private inkTextWidgetReference _lifePathRef;
-		private inkImageWidgetReference _lifePathIconRef;
-
 		[Ordinal(1)] 
 		[RED("playTimeRef")] 
 		public inkTextWidgetReference PlayTimeRef
 		{
-			get => GetProperty(ref _playTimeRef);
-			set => SetProperty(ref _playTimeRef, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("lifePathRef")] 
 		public inkTextWidgetReference LifePathRef
 		{
-			get => GetProperty(ref _lifePathRef);
-			set => SetProperty(ref _lifePathRef, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("lifePathIconRef")] 
 		public inkImageWidgetReference LifePathIconRef
 		{
-			get => GetProperty(ref _lifePathIconRef);
-			set => SetProperty(ref _lifePathIconRef, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		public StatsPlayTimeController()
+		{
+			PlayTimeRef = new();
+			LifePathRef = new();
+			LifePathIconRef = new();
 		}
 	}
 }

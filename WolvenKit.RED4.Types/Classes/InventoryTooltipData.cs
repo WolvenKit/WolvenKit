@@ -5,424 +5,388 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class InventoryTooltipData : ATooltipData
 	{
-		private gameItemID _itemID;
-		private CBool _isEquipped;
-		private CBool _isLocked;
-		private CBool _isVendorItem;
-		private CBool _isCraftable;
-		private CName _qualityStateName;
-		private CString _description;
-		private CString _additionalDescription;
-		private CString _category;
-		private CString _quality;
-		private CString _itemName;
-		private CFloat _price;
-		private CFloat _buyPrice;
-		private CFloat _unlockProgress;
-		private CArray<InventoryTooltipData_StatData> _primaryStats;
-		private CArray<InventoryTooltipData_StatData> _comparedStats;
-		private CArray<InventoryTooltipData_StatData> _additionalStats;
-		private CArray<InventoryTooltipData_StatData> _randomDamageTypes;
-		private CArray<InventoryTooltipData_StatData> _recipeAdditionalStats;
-		private CEnum<gamedataDamageType> _damageType;
-		private CBool _isBroken;
-		private CInt32 _levelRequired;
-		private CArray<CName> _attachments;
-		private CArray<gameInventoryItemAbility> _specialAbilities;
-		private CEnum<gamedataEquipmentArea> _equipArea;
-		private CBool _showCyclingDots;
-		private CInt32 _numberOfCyclingDots;
-		private CInt32 _selectedCyclingDot;
-		private CEnum<gamedataQuality> _comparedQuality;
-		private CBool _showIcon;
-		private CInt32 _randomizedStatQuantity;
-		private CEnum<gamedataItemType> _itemType;
-		private CBool _hasPlayerSmartGunLink;
-		private CInt32 _playerLevel;
-		private CInt32 _playerStrenght;
-		private CInt32 _playerReflexes;
-		private CInt32 _playerStreetCred;
-		private CArray<InventoryItemAttachments> _itemAttachments;
-		private InventoryItemData _inventoryItemData;
-		private CBool _overrideRarity;
-		private InventoryTooltipData_QuickhackData _quickhackData;
-		private CHandle<InventoryTooltiData_GrenadeData> _grenadeData;
-		private CEnum<InventoryTooltipDisplayContext> _displayContext;
-		private CWeakHandle<gameItemData> _parentItemData;
-		private TweakDBID _slotID;
-		private CHandle<DEBUG_IconErrorInfo> _dEBUG_iconErrorInfo;
-
 		[Ordinal(0)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get => GetProperty(ref _itemID);
-			set => SetProperty(ref _itemID, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isEquipped")] 
 		public CBool IsEquipped
 		{
-			get => GetProperty(ref _isEquipped);
-			set => SetProperty(ref _isEquipped, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isLocked")] 
 		public CBool IsLocked
 		{
-			get => GetProperty(ref _isLocked);
-			set => SetProperty(ref _isLocked, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isVendorItem")] 
 		public CBool IsVendorItem
 		{
-			get => GetProperty(ref _isVendorItem);
-			set => SetProperty(ref _isVendorItem, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("isCraftable")] 
 		public CBool IsCraftable
 		{
-			get => GetProperty(ref _isCraftable);
-			set => SetProperty(ref _isCraftable, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("qualityStateName")] 
 		public CName QualityStateName
 		{
-			get => GetProperty(ref _qualityStateName);
-			set => SetProperty(ref _qualityStateName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("description")] 
 		public CString Description
 		{
-			get => GetProperty(ref _description);
-			set => SetProperty(ref _description, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("additionalDescription")] 
 		public CString AdditionalDescription
 		{
-			get => GetProperty(ref _additionalDescription);
-			set => SetProperty(ref _additionalDescription, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("category")] 
 		public CString Category
 		{
-			get => GetProperty(ref _category);
-			set => SetProperty(ref _category, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("quality")] 
 		public CString Quality
 		{
-			get => GetProperty(ref _quality);
-			set => SetProperty(ref _quality, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("itemName")] 
 		public CString ItemName
 		{
-			get => GetProperty(ref _itemName);
-			set => SetProperty(ref _itemName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("price")] 
 		public CFloat Price
 		{
-			get => GetProperty(ref _price);
-			set => SetProperty(ref _price, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("buyPrice")] 
 		public CFloat BuyPrice
 		{
-			get => GetProperty(ref _buyPrice);
-			set => SetProperty(ref _buyPrice, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("unlockProgress")] 
 		public CFloat UnlockProgress
 		{
-			get => GetProperty(ref _unlockProgress);
-			set => SetProperty(ref _unlockProgress, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("primaryStats")] 
 		public CArray<InventoryTooltipData_StatData> PrimaryStats
 		{
-			get => GetProperty(ref _primaryStats);
-			set => SetProperty(ref _primaryStats, value);
+			get => GetPropertyValue<CArray<InventoryTooltipData_StatData>>();
+			set => SetPropertyValue<CArray<InventoryTooltipData_StatData>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("comparedStats")] 
 		public CArray<InventoryTooltipData_StatData> ComparedStats
 		{
-			get => GetProperty(ref _comparedStats);
-			set => SetProperty(ref _comparedStats, value);
+			get => GetPropertyValue<CArray<InventoryTooltipData_StatData>>();
+			set => SetPropertyValue<CArray<InventoryTooltipData_StatData>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("additionalStats")] 
 		public CArray<InventoryTooltipData_StatData> AdditionalStats
 		{
-			get => GetProperty(ref _additionalStats);
-			set => SetProperty(ref _additionalStats, value);
+			get => GetPropertyValue<CArray<InventoryTooltipData_StatData>>();
+			set => SetPropertyValue<CArray<InventoryTooltipData_StatData>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("randomDamageTypes")] 
 		public CArray<InventoryTooltipData_StatData> RandomDamageTypes
 		{
-			get => GetProperty(ref _randomDamageTypes);
-			set => SetProperty(ref _randomDamageTypes, value);
+			get => GetPropertyValue<CArray<InventoryTooltipData_StatData>>();
+			set => SetPropertyValue<CArray<InventoryTooltipData_StatData>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("recipeAdditionalStats")] 
 		public CArray<InventoryTooltipData_StatData> RecipeAdditionalStats
 		{
-			get => GetProperty(ref _recipeAdditionalStats);
-			set => SetProperty(ref _recipeAdditionalStats, value);
+			get => GetPropertyValue<CArray<InventoryTooltipData_StatData>>();
+			set => SetPropertyValue<CArray<InventoryTooltipData_StatData>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("damageType")] 
 		public CEnum<gamedataDamageType> DamageType
 		{
-			get => GetProperty(ref _damageType);
-			set => SetProperty(ref _damageType, value);
+			get => GetPropertyValue<CEnum<gamedataDamageType>>();
+			set => SetPropertyValue<CEnum<gamedataDamageType>>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("isBroken")] 
 		public CBool IsBroken
 		{
-			get => GetProperty(ref _isBroken);
-			set => SetProperty(ref _isBroken, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("levelRequired")] 
 		public CInt32 LevelRequired
 		{
-			get => GetProperty(ref _levelRequired);
-			set => SetProperty(ref _levelRequired, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("attachments")] 
 		public CArray<CName> Attachments
 		{
-			get => GetProperty(ref _attachments);
-			set => SetProperty(ref _attachments, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("specialAbilities")] 
 		public CArray<gameInventoryItemAbility> SpecialAbilities
 		{
-			get => GetProperty(ref _specialAbilities);
-			set => SetProperty(ref _specialAbilities, value);
+			get => GetPropertyValue<CArray<gameInventoryItemAbility>>();
+			set => SetPropertyValue<CArray<gameInventoryItemAbility>>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("equipArea")] 
 		public CEnum<gamedataEquipmentArea> EquipArea
 		{
-			get => GetProperty(ref _equipArea);
-			set => SetProperty(ref _equipArea, value);
+			get => GetPropertyValue<CEnum<gamedataEquipmentArea>>();
+			set => SetPropertyValue<CEnum<gamedataEquipmentArea>>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("showCyclingDots")] 
 		public CBool ShowCyclingDots
 		{
-			get => GetProperty(ref _showCyclingDots);
-			set => SetProperty(ref _showCyclingDots, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("numberOfCyclingDots")] 
 		public CInt32 NumberOfCyclingDots
 		{
-			get => GetProperty(ref _numberOfCyclingDots);
-			set => SetProperty(ref _numberOfCyclingDots, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("selectedCyclingDot")] 
 		public CInt32 SelectedCyclingDot
 		{
-			get => GetProperty(ref _selectedCyclingDot);
-			set => SetProperty(ref _selectedCyclingDot, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("comparedQuality")] 
 		public CEnum<gamedataQuality> ComparedQuality
 		{
-			get => GetProperty(ref _comparedQuality);
-			set => SetProperty(ref _comparedQuality, value);
+			get => GetPropertyValue<CEnum<gamedataQuality>>();
+			set => SetPropertyValue<CEnum<gamedataQuality>>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("showIcon")] 
 		public CBool ShowIcon
 		{
-			get => GetProperty(ref _showIcon);
-			set => SetProperty(ref _showIcon, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("randomizedStatQuantity")] 
 		public CInt32 RandomizedStatQuantity
 		{
-			get => GetProperty(ref _randomizedStatQuantity);
-			set => SetProperty(ref _randomizedStatQuantity, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("itemType")] 
 		public CEnum<gamedataItemType> ItemType
 		{
-			get => GetProperty(ref _itemType);
-			set => SetProperty(ref _itemType, value);
+			get => GetPropertyValue<CEnum<gamedataItemType>>();
+			set => SetPropertyValue<CEnum<gamedataItemType>>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("HasPlayerSmartGunLink")] 
 		public CBool HasPlayerSmartGunLink
 		{
-			get => GetProperty(ref _hasPlayerSmartGunLink);
-			set => SetProperty(ref _hasPlayerSmartGunLink, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("PlayerLevel")] 
 		public CInt32 PlayerLevel
 		{
-			get => GetProperty(ref _playerLevel);
-			set => SetProperty(ref _playerLevel, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(34)] 
 		[RED("PlayerStrenght")] 
 		public CInt32 PlayerStrenght
 		{
-			get => GetProperty(ref _playerStrenght);
-			set => SetProperty(ref _playerStrenght, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(35)] 
 		[RED("PlayerReflexes")] 
 		public CInt32 PlayerReflexes
 		{
-			get => GetProperty(ref _playerReflexes);
-			set => SetProperty(ref _playerReflexes, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(36)] 
 		[RED("PlayerStreetCred")] 
 		public CInt32 PlayerStreetCred
 		{
-			get => GetProperty(ref _playerStreetCred);
-			set => SetProperty(ref _playerStreetCred, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(37)] 
 		[RED("itemAttachments")] 
 		public CArray<InventoryItemAttachments> ItemAttachments
 		{
-			get => GetProperty(ref _itemAttachments);
-			set => SetProperty(ref _itemAttachments, value);
+			get => GetPropertyValue<CArray<InventoryItemAttachments>>();
+			set => SetPropertyValue<CArray<InventoryItemAttachments>>(value);
 		}
 
 		[Ordinal(38)] 
 		[RED("inventoryItemData")] 
 		public InventoryItemData InventoryItemData
 		{
-			get => GetProperty(ref _inventoryItemData);
-			set => SetProperty(ref _inventoryItemData, value);
+			get => GetPropertyValue<InventoryItemData>();
+			set => SetPropertyValue<InventoryItemData>(value);
 		}
 
 		[Ordinal(39)] 
 		[RED("overrideRarity")] 
 		public CBool OverrideRarity
 		{
-			get => GetProperty(ref _overrideRarity);
-			set => SetProperty(ref _overrideRarity, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(40)] 
 		[RED("quickhackData")] 
 		public InventoryTooltipData_QuickhackData QuickhackData
 		{
-			get => GetProperty(ref _quickhackData);
-			set => SetProperty(ref _quickhackData, value);
+			get => GetPropertyValue<InventoryTooltipData_QuickhackData>();
+			set => SetPropertyValue<InventoryTooltipData_QuickhackData>(value);
 		}
 
 		[Ordinal(41)] 
 		[RED("grenadeData")] 
 		public CHandle<InventoryTooltiData_GrenadeData> GrenadeData
 		{
-			get => GetProperty(ref _grenadeData);
-			set => SetProperty(ref _grenadeData, value);
+			get => GetPropertyValue<CHandle<InventoryTooltiData_GrenadeData>>();
+			set => SetPropertyValue<CHandle<InventoryTooltiData_GrenadeData>>(value);
 		}
 
 		[Ordinal(42)] 
 		[RED("displayContext")] 
 		public CEnum<InventoryTooltipDisplayContext> DisplayContext
 		{
-			get => GetProperty(ref _displayContext);
-			set => SetProperty(ref _displayContext, value);
+			get => GetPropertyValue<CEnum<InventoryTooltipDisplayContext>>();
+			set => SetPropertyValue<CEnum<InventoryTooltipDisplayContext>>(value);
 		}
 
 		[Ordinal(43)] 
 		[RED("parentItemData")] 
 		public CWeakHandle<gameItemData> ParentItemData
 		{
-			get => GetProperty(ref _parentItemData);
-			set => SetProperty(ref _parentItemData, value);
+			get => GetPropertyValue<CWeakHandle<gameItemData>>();
+			set => SetPropertyValue<CWeakHandle<gameItemData>>(value);
 		}
 
 		[Ordinal(44)] 
 		[RED("slotID")] 
 		public TweakDBID SlotID
 		{
-			get => GetProperty(ref _slotID);
-			set => SetProperty(ref _slotID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(45)] 
 		[RED("DEBUG_iconErrorInfo")] 
 		public CHandle<DEBUG_IconErrorInfo> DEBUG_iconErrorInfo
 		{
-			get => GetProperty(ref _dEBUG_iconErrorInfo);
-			set => SetProperty(ref _dEBUG_iconErrorInfo, value);
+			get => GetPropertyValue<CHandle<DEBUG_IconErrorInfo>>();
+			set => SetPropertyValue<CHandle<DEBUG_IconErrorInfo>>(value);
 		}
 
 		public InventoryTooltipData()
 		{
-			_itemType = new() { Value = Enums.gamedataItemType.Invalid };
+			ItemID = new();
+			PrimaryStats = new();
+			ComparedStats = new();
+			AdditionalStats = new();
+			RandomDamageTypes = new();
+			RecipeAdditionalStats = new();
+			Attachments = new();
+			SpecialAbilities = new();
+			ItemType = Enums.gamedataItemType.Invalid;
+			ItemAttachments = new();
+			InventoryItemData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
+			QuickhackData = new() { AttackEffects = new() };
 		}
 	}
 }

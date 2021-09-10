@@ -5,28 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animPoseCorrectionParams : RedBaseClass
 	{
-		private animPoseCorrectionGroup _poseCorrectionGroup;
-		private CFloat _blendDuration;
-
 		[Ordinal(0)] 
 		[RED("poseCorrectionGroup")] 
 		public animPoseCorrectionGroup PoseCorrectionGroup
 		{
-			get => GetProperty(ref _poseCorrectionGroup);
-			set => SetProperty(ref _poseCorrectionGroup, value);
+			get => GetPropertyValue<animPoseCorrectionGroup>();
+			set => SetPropertyValue<animPoseCorrectionGroup>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("blendDuration")] 
 		public CFloat BlendDuration
 		{
-			get => GetProperty(ref _blendDuration);
-			set => SetProperty(ref _blendDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public animPoseCorrectionParams()
 		{
-			_blendDuration = 0.200000F;
+			PoseCorrectionGroup = new() { PoseCorrections = new(0) };
+			BlendDuration = 0.200000F;
 		}
 	}
 }

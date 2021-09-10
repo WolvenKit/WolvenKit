@@ -5,95 +5,91 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class InteractiveDevice : Device
 	{
-		private CHandle<gameinteractionsComponent> _interaction;
-		private CHandle<gameLightComponent> _interactionIndicator;
-		private gameDelayID _disableAreaIndicatorID;
-		private gameDelayID _delayedUIRefreshID;
-		private CBool _isPlayerAround;
-		private CBool _disableAreaIndicatorDelayActive;
-		private CHandle<gameObjectActionsCallbackController> _objectActionsCallbackCtrl;
-		private CArray<Vector4> _investigationPositionsArray;
-		private CWeakHandle<gameIBlackboard> _actionRestrictionPlayerBB;
-		private CHandle<redCallbackObject> _actionRestrictionCallbackID;
-
 		[Ordinal(87)] 
 		[RED("interaction")] 
 		public CHandle<gameinteractionsComponent> Interaction
 		{
-			get => GetProperty(ref _interaction);
-			set => SetProperty(ref _interaction, value);
+			get => GetPropertyValue<CHandle<gameinteractionsComponent>>();
+			set => SetPropertyValue<CHandle<gameinteractionsComponent>>(value);
 		}
 
 		[Ordinal(88)] 
 		[RED("interactionIndicator")] 
 		public CHandle<gameLightComponent> InteractionIndicator
 		{
-			get => GetProperty(ref _interactionIndicator);
-			set => SetProperty(ref _interactionIndicator, value);
+			get => GetPropertyValue<CHandle<gameLightComponent>>();
+			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
 		[Ordinal(89)] 
 		[RED("disableAreaIndicatorID")] 
 		public gameDelayID DisableAreaIndicatorID
 		{
-			get => GetProperty(ref _disableAreaIndicatorID);
-			set => SetProperty(ref _disableAreaIndicatorID, value);
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
 		}
 
 		[Ordinal(90)] 
 		[RED("delayedUIRefreshID")] 
 		public gameDelayID DelayedUIRefreshID
 		{
-			get => GetProperty(ref _delayedUIRefreshID);
-			set => SetProperty(ref _delayedUIRefreshID, value);
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
 		}
 
 		[Ordinal(91)] 
 		[RED("isPlayerAround")] 
 		public CBool IsPlayerAround
 		{
-			get => GetProperty(ref _isPlayerAround);
-			set => SetProperty(ref _isPlayerAround, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(92)] 
 		[RED("disableAreaIndicatorDelayActive")] 
 		public CBool DisableAreaIndicatorDelayActive
 		{
-			get => GetProperty(ref _disableAreaIndicatorDelayActive);
-			set => SetProperty(ref _disableAreaIndicatorDelayActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(93)] 
 		[RED("objectActionsCallbackCtrl")] 
 		public CHandle<gameObjectActionsCallbackController> ObjectActionsCallbackCtrl
 		{
-			get => GetProperty(ref _objectActionsCallbackCtrl);
-			set => SetProperty(ref _objectActionsCallbackCtrl, value);
+			get => GetPropertyValue<CHandle<gameObjectActionsCallbackController>>();
+			set => SetPropertyValue<CHandle<gameObjectActionsCallbackController>>(value);
 		}
 
 		[Ordinal(94)] 
 		[RED("investigationPositionsArray")] 
 		public CArray<Vector4> InvestigationPositionsArray
 		{
-			get => GetProperty(ref _investigationPositionsArray);
-			set => SetProperty(ref _investigationPositionsArray, value);
+			get => GetPropertyValue<CArray<Vector4>>();
+			set => SetPropertyValue<CArray<Vector4>>(value);
 		}
 
 		[Ordinal(95)] 
 		[RED("actionRestrictionPlayerBB")] 
 		public CWeakHandle<gameIBlackboard> ActionRestrictionPlayerBB
 		{
-			get => GetProperty(ref _actionRestrictionPlayerBB);
-			set => SetProperty(ref _actionRestrictionPlayerBB, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(96)] 
 		[RED("actionRestrictionCallbackID")] 
 		public CHandle<redCallbackObject> ActionRestrictionCallbackID
 		{
-			get => GetProperty(ref _actionRestrictionCallbackID);
-			set => SetProperty(ref _actionRestrictionCallbackID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		public InteractiveDevice()
+		{
+			DisableAreaIndicatorID = new();
+			DelayedUIRefreshID = new();
+			InvestigationPositionsArray = new();
 		}
 	}
 }

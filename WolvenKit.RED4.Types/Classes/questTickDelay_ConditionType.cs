@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questTickDelay_ConditionType : questITimeConditionType
 	{
-		private CUInt32 _tickCount;
-
 		[Ordinal(0)] 
 		[RED("tickCount")] 
 		public CUInt32 TickCount
 		{
-			get => GetProperty(ref _tickCount);
-			set => SetProperty(ref _tickCount, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		public questTickDelay_ConditionType()
 		{
-			_tickCount = 1;
+			TickCount = 1;
 		}
 	}
 }

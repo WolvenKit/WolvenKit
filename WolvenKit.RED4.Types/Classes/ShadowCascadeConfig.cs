@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ShadowCascadeConfig : RedBaseClass
 	{
-		private CFloat _range;
-		private CFloat _filterSize;
-		private CFloat _blendRange;
-		private CFloat _biasOffset;
-
 		[Ordinal(0)] 
 		[RED("range")] 
 		public CFloat Range
 		{
-			get => GetProperty(ref _range);
-			set => SetProperty(ref _range, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("filterSize")] 
 		public CFloat FilterSize
 		{
-			get => GetProperty(ref _filterSize);
-			set => SetProperty(ref _filterSize, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("blendRange")] 
 		public CFloat BlendRange
 		{
-			get => GetProperty(ref _blendRange);
-			set => SetProperty(ref _blendRange, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("biasOffset")] 
 		public CFloat BiasOffset
 		{
-			get => GetProperty(ref _biasOffset);
-			set => SetProperty(ref _biasOffset, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

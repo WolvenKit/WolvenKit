@@ -5,68 +5,70 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questCharacterControlledObjectHit_ConditionType : questICharacterConditionType
 	{
-		private gameEntityReference _attackerRef;
-		private gameEntityReference _targetRef;
-		private CBool _isTargetPlayer;
-		private CArray<CEnum<questCharacterHitEventType>> _includeHitTypes;
-		private CArray<CEnum<questCharacterHitEventType>> _excludeHitTypes;
-		private CArray<CName> _includeHitShapes;
-		private CArray<CName> _excludeHitShapes;
-
 		[Ordinal(0)] 
 		[RED("attackerRef")] 
 		public gameEntityReference AttackerRef
 		{
-			get => GetProperty(ref _attackerRef);
-			set => SetProperty(ref _attackerRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("targetRef")] 
 		public gameEntityReference TargetRef
 		{
-			get => GetProperty(ref _targetRef);
-			set => SetProperty(ref _targetRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isTargetPlayer")] 
 		public CBool IsTargetPlayer
 		{
-			get => GetProperty(ref _isTargetPlayer);
-			set => SetProperty(ref _isTargetPlayer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("includeHitTypes")] 
 		public CArray<CEnum<questCharacterHitEventType>> IncludeHitTypes
 		{
-			get => GetProperty(ref _includeHitTypes);
-			set => SetProperty(ref _includeHitTypes, value);
+			get => GetPropertyValue<CArray<CEnum<questCharacterHitEventType>>>();
+			set => SetPropertyValue<CArray<CEnum<questCharacterHitEventType>>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("excludeHitTypes")] 
 		public CArray<CEnum<questCharacterHitEventType>> ExcludeHitTypes
 		{
-			get => GetProperty(ref _excludeHitTypes);
-			set => SetProperty(ref _excludeHitTypes, value);
+			get => GetPropertyValue<CArray<CEnum<questCharacterHitEventType>>>();
+			set => SetPropertyValue<CArray<CEnum<questCharacterHitEventType>>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("includeHitShapes")] 
 		public CArray<CName> IncludeHitShapes
 		{
-			get => GetProperty(ref _includeHitShapes);
-			set => SetProperty(ref _includeHitShapes, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("excludeHitShapes")] 
 		public CArray<CName> ExcludeHitShapes
 		{
-			get => GetProperty(ref _excludeHitShapes);
-			set => SetProperty(ref _excludeHitShapes, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
+		public questCharacterControlledObjectHit_ConditionType()
+		{
+			AttackerRef = new() { Names = new() };
+			TargetRef = new() { Names = new() };
+			IncludeHitTypes = new();
+			ExcludeHitTypes = new();
+			IncludeHitShapes = new();
+			ExcludeHitShapes = new();
 		}
 	}
 }

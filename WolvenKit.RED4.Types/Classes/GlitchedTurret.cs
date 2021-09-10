@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class GlitchedTurret : Device
 	{
-		private CHandle<AnimFeature_SensorDevice> _animFeature;
-
 		[Ordinal(87)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_SensorDevice> AnimFeature
 		{
-			get => GetProperty(ref _animFeature);
-			set => SetProperty(ref _animFeature, value);
+			get => GetPropertyValue<CHandle<AnimFeature_SensorDevice>>();
+			set => SetPropertyValue<CHandle<AnimFeature_SensorDevice>>(value);
+		}
+
+		public GlitchedTurret()
+		{
+			ControllerTypeName = "GlitchedTurretController";
 		}
 	}
 }

@@ -5,68 +5,66 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DropdownListController : inkWidgetLogicController
 	{
-		private inkCompoundWidgetReference _listContainer;
-		private CWeakHandle<IScriptable> _ownerController;
-		private CWeakHandle<DropdownButtonController> _triggerButton;
-		private CEnum<DropdownDisplayContext> _displayContext;
-		private CWeakHandle<DropdownElementController> _activeElement;
-		private CBool _listOpened;
-		private CArray<CHandle<DropdownItemData>> _data;
-
 		[Ordinal(1)] 
 		[RED("listContainer")] 
 		public inkCompoundWidgetReference ListContainer
 		{
-			get => GetProperty(ref _listContainer);
-			set => SetProperty(ref _listContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ownerController")] 
 		public CWeakHandle<IScriptable> OwnerController
 		{
-			get => GetProperty(ref _ownerController);
-			set => SetProperty(ref _ownerController, value);
+			get => GetPropertyValue<CWeakHandle<IScriptable>>();
+			set => SetPropertyValue<CWeakHandle<IScriptable>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("triggerButton")] 
 		public CWeakHandle<DropdownButtonController> TriggerButton
 		{
-			get => GetProperty(ref _triggerButton);
-			set => SetProperty(ref _triggerButton, value);
+			get => GetPropertyValue<CWeakHandle<DropdownButtonController>>();
+			set => SetPropertyValue<CWeakHandle<DropdownButtonController>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("displayContext")] 
 		public CEnum<DropdownDisplayContext> DisplayContext
 		{
-			get => GetProperty(ref _displayContext);
-			set => SetProperty(ref _displayContext, value);
+			get => GetPropertyValue<CEnum<DropdownDisplayContext>>();
+			set => SetPropertyValue<CEnum<DropdownDisplayContext>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("activeElement")] 
 		public CWeakHandle<DropdownElementController> ActiveElement
 		{
-			get => GetProperty(ref _activeElement);
-			set => SetProperty(ref _activeElement, value);
+			get => GetPropertyValue<CWeakHandle<DropdownElementController>>();
+			set => SetPropertyValue<CWeakHandle<DropdownElementController>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("listOpened")] 
 		public CBool ListOpened
 		{
-			get => GetProperty(ref _listOpened);
-			set => SetProperty(ref _listOpened, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("data")] 
 		public CArray<CHandle<DropdownItemData>> Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<CArray<CHandle<DropdownItemData>>>();
+			set => SetPropertyValue<CArray<CHandle<DropdownItemData>>>(value);
+		}
+
+		public DropdownListController()
+		{
+			ListContainer = new();
+			Data = new();
 		}
 	}
 }

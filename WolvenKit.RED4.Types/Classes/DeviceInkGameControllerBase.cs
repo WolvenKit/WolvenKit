@@ -5,131 +5,124 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DeviceInkGameControllerBase : gameuiWidgetGameController
 	{
-		private CHandle<WidgetAnimationManager> _animationManager;
-		private CWeakHandle<inkCanvasWidget> _rootWidget;
-		private CArray<SActionWidgetPackage> _actionWidgetsData;
-		private CArray<SDeviceWidgetPackage> _deviceWidgetsData;
-		private CArray<SBreadcrumbElementData> _breadcrumbStack;
-		private CEnum<EDeviceStatus> _cashedState;
-		private CBool _isInitialized;
-		private CBool _hasUICameraZoom;
-		private SBreadcrumbElementData _activeBreadcrumb;
-		private CHandle<redCallbackObject> _onRefreshListener;
-		private CHandle<redCallbackObject> _onActionWidgetsUpdateListener;
-		private CHandle<redCallbackObject> _onDeviceWidgetsUpdateListener;
-		private CHandle<redCallbackObject> _onBreadcrumbBarUpdateListener;
-		private CBool _bbCallbacksRegistered;
-
 		[Ordinal(2)] 
 		[RED("animationManager")] 
 		public CHandle<WidgetAnimationManager> AnimationManager
 		{
-			get => GetProperty(ref _animationManager);
-			set => SetProperty(ref _animationManager, value);
+			get => GetPropertyValue<CHandle<WidgetAnimationManager>>();
+			set => SetPropertyValue<CHandle<WidgetAnimationManager>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("rootWidget")] 
 		public CWeakHandle<inkCanvasWidget> RootWidget
 		{
-			get => GetProperty(ref _rootWidget);
-			set => SetProperty(ref _rootWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkCanvasWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkCanvasWidget>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("actionWidgetsData")] 
 		public CArray<SActionWidgetPackage> ActionWidgetsData
 		{
-			get => GetProperty(ref _actionWidgetsData);
-			set => SetProperty(ref _actionWidgetsData, value);
+			get => GetPropertyValue<CArray<SActionWidgetPackage>>();
+			set => SetPropertyValue<CArray<SActionWidgetPackage>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("deviceWidgetsData")] 
 		public CArray<SDeviceWidgetPackage> DeviceWidgetsData
 		{
-			get => GetProperty(ref _deviceWidgetsData);
-			set => SetProperty(ref _deviceWidgetsData, value);
+			get => GetPropertyValue<CArray<SDeviceWidgetPackage>>();
+			set => SetPropertyValue<CArray<SDeviceWidgetPackage>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("breadcrumbStack")] 
 		public CArray<SBreadcrumbElementData> BreadcrumbStack
 		{
-			get => GetProperty(ref _breadcrumbStack);
-			set => SetProperty(ref _breadcrumbStack, value);
+			get => GetPropertyValue<CArray<SBreadcrumbElementData>>();
+			set => SetPropertyValue<CArray<SBreadcrumbElementData>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("cashedState")] 
 		public CEnum<EDeviceStatus> CashedState
 		{
-			get => GetProperty(ref _cashedState);
-			set => SetProperty(ref _cashedState, value);
+			get => GetPropertyValue<CEnum<EDeviceStatus>>();
+			set => SetPropertyValue<CEnum<EDeviceStatus>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("isInitialized")] 
 		public CBool IsInitialized
 		{
-			get => GetProperty(ref _isInitialized);
-			set => SetProperty(ref _isInitialized, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("hasUICameraZoom")] 
 		public CBool HasUICameraZoom
 		{
-			get => GetProperty(ref _hasUICameraZoom);
-			set => SetProperty(ref _hasUICameraZoom, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("activeBreadcrumb")] 
 		public SBreadcrumbElementData ActiveBreadcrumb
 		{
-			get => GetProperty(ref _activeBreadcrumb);
-			set => SetProperty(ref _activeBreadcrumb, value);
+			get => GetPropertyValue<SBreadcrumbElementData>();
+			set => SetPropertyValue<SBreadcrumbElementData>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("onRefreshListener")] 
 		public CHandle<redCallbackObject> OnRefreshListener
 		{
-			get => GetProperty(ref _onRefreshListener);
-			set => SetProperty(ref _onRefreshListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("onActionWidgetsUpdateListener")] 
 		public CHandle<redCallbackObject> OnActionWidgetsUpdateListener
 		{
-			get => GetProperty(ref _onActionWidgetsUpdateListener);
-			set => SetProperty(ref _onActionWidgetsUpdateListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("onDeviceWidgetsUpdateListener")] 
 		public CHandle<redCallbackObject> OnDeviceWidgetsUpdateListener
 		{
-			get => GetProperty(ref _onDeviceWidgetsUpdateListener);
-			set => SetProperty(ref _onDeviceWidgetsUpdateListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("onBreadcrumbBarUpdateListener")] 
 		public CHandle<redCallbackObject> OnBreadcrumbBarUpdateListener
 		{
-			get => GetProperty(ref _onBreadcrumbBarUpdateListener);
-			set => SetProperty(ref _onBreadcrumbBarUpdateListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("bbCallbacksRegistered")] 
 		public CBool BbCallbacksRegistered
 		{
-			get => GetProperty(ref _bbCallbacksRegistered);
-			set => SetProperty(ref _bbCallbacksRegistered, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public DeviceInkGameControllerBase()
+		{
+			ActionWidgetsData = new();
+			DeviceWidgetsData = new();
+			BreadcrumbStack = new();
+			ActiveBreadcrumb = new();
 		}
 	}
 }

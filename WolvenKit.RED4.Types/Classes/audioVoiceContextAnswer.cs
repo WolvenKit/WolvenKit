@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioVoiceContextAnswer : RedBaseClass
 	{
-		private CName _answerContext;
-		private CFloat _radius;
-
 		[Ordinal(0)] 
 		[RED("answerContext")] 
 		public CName AnswerContext
 		{
-			get => GetProperty(ref _answerContext);
-			set => SetProperty(ref _answerContext, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get => GetProperty(ref _radius);
-			set => SetProperty(ref _radius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

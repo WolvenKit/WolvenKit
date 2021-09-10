@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DrillerUIEvent : redEvent
 	{
-		private gameinteractionsChoice _actionChosen;
-		private CWeakHandle<gameObject> _activator;
-
 		[Ordinal(0)] 
 		[RED("actionChosen")] 
 		public gameinteractionsChoice ActionChosen
 		{
-			get => GetProperty(ref _actionChosen);
-			set => SetProperty(ref _actionChosen, value);
+			get => GetPropertyValue<gameinteractionsChoice>();
+			set => SetPropertyValue<gameinteractionsChoice>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("activator")] 
 		public CWeakHandle<gameObject> Activator
 		{
-			get => GetProperty(ref _activator);
-			set => SetProperty(ref _activator, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
+		}
+
+		public DrillerUIEvent()
+		{
+			ActionChosen = new() { CaptionParts = new() { Parts = new() }, Data = new(), ChoiceMetaData = new() { Type = new() }, LookAtDescriptor = new() { Offset = new(), OrbId = new() } };
 		}
 	}
 }

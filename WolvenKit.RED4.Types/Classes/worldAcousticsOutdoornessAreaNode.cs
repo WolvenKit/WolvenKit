@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldAcousticsOutdoornessAreaNode : worldAreaShapeNode
 	{
-		private CFloat _outdoor;
-
 		[Ordinal(6)] 
 		[RED("outdoor")] 
 		public CFloat Outdoor
 		{
-			get => GetProperty(ref _outdoor);
-			set => SetProperty(ref _outdoor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

@@ -5,64 +5,59 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questMoveOnSplineControlRubberbanding_NodeType : questIVehicleManagerNodeType
 	{
-		private CBool _enable;
-		private gameEntityReference _vehicleRef;
-		private gameEntityReference _keepDistanceFromRef;
-		private CFloat _distance;
-		private CFloat _minSpeed;
-		private CBool _reduceSpeedOnTurns;
-
 		[Ordinal(0)] 
 		[RED("enable")] 
 		public CBool Enable
 		{
-			get => GetProperty(ref _enable);
-			set => SetProperty(ref _enable, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("vehicleRef")] 
 		public gameEntityReference VehicleRef
 		{
-			get => GetProperty(ref _vehicleRef);
-			set => SetProperty(ref _vehicleRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("keepDistanceFromRef")] 
 		public gameEntityReference KeepDistanceFromRef
 		{
-			get => GetProperty(ref _keepDistanceFromRef);
-			set => SetProperty(ref _keepDistanceFromRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("distance")] 
 		public CFloat Distance
 		{
-			get => GetProperty(ref _distance);
-			set => SetProperty(ref _distance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("minSpeed")] 
 		public CFloat MinSpeed
 		{
-			get => GetProperty(ref _minSpeed);
-			set => SetProperty(ref _minSpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("reduceSpeedOnTurns")] 
 		public CBool ReduceSpeedOnTurns
 		{
-			get => GetProperty(ref _reduceSpeedOnTurns);
-			set => SetProperty(ref _reduceSpeedOnTurns, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public questMoveOnSplineControlRubberbanding_NodeType()
 		{
-			_reduceSpeedOnTurns = true;
+			VehicleRef = new() { Names = new() };
+			KeepDistanceFromRef = new() { Names = new() };
+			ReduceSpeedOnTurns = true;
 		}
 	}
 }

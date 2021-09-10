@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MissingWorkspotComponentFailsafeEvent : redEvent
 	{
-		private entEntityID _playerEntityID;
-
 		[Ordinal(0)] 
 		[RED("playerEntityID")] 
 		public entEntityID PlayerEntityID
 		{
-			get => GetProperty(ref _playerEntityID);
-			set => SetProperty(ref _playerEntityID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
+		}
+
+		public MissingWorkspotComponentFailsafeEvent()
+		{
+			PlayerEntityID = new();
 		}
 	}
 }

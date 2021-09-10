@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VendingMachineFinishedEvent : redEvent
 	{
-		private gameItemID _itemID;
-		private CBool _isFree;
-		private CBool _isReady;
-
 		[Ordinal(0)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get => GetProperty(ref _itemID);
-			set => SetProperty(ref _itemID, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isFree")] 
 		public CBool IsFree
 		{
-			get => GetProperty(ref _isFree);
-			set => SetProperty(ref _isFree, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isReady")] 
 		public CBool IsReady
 		{
-			get => GetProperty(ref _isReady);
-			set => SetProperty(ref _isReady, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public VendingMachineFinishedEvent()
+		{
+			ItemID = new();
 		}
 	}
 }

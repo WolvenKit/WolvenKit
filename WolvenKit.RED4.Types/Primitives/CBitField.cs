@@ -1,17 +1,32 @@
 using System;
+using System.Diagnostics;
 
 namespace WolvenKit.RED4.Types
 {
-    public class CBitField<T> : IRedEnum<T>, IEquatable<CBitField<T>> where T : Enum
+    [DebuggerDisplay("{Value}")]
+    public class CBitField<T> : IRedBitField<T>, IEquatable<CBitField<T>> where T : struct, Enum
     {
         public T Value { get; set; }
 
-        public Enum GetValue() => Value;
-        public void SetValue(object value) => Value = (T)value;
+        public CBitField() { }
 
-        public static implicit operator CBitField<T>(T value) => new() { Value = value };
-        public static implicit operator Enum(CBitField<T> value) => value.Value;
+        private CBitField(T value)
+        {
+            Value = value;
+        }
 
+        public static implicit operator CBitField<T>(T value) => new(value);
+        public static implicit operator T(CBitField<T> value) => value.Value;
+
+        public static implicit operator CBitField<T>(Enum value) => new((T)value);
+        public static implicit operator Enum(CBitField<T> value) => (Enum)value.Value;
+
+        public string ToBitFieldString()
+        {
+            return Value.ToString();
+        }
+
+        public override int GetHashCode() => Value.GetHashCode();
 
         public override bool Equals(object obj)
         {
@@ -23,14 +38,6 @@ namespace WolvenKit.RED4.Types
             return false;
         }
 
-        public bool Equals(CBitField<T> other)
-        {
-            if (other == null)
-            {
-                return false;
-            }
-
-            return Value.Equals(other.Value);
-        }
+        public bool Equals(CBitField<T> other) => Equals(Value, other.Value);
     }
 }

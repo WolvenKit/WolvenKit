@@ -5,77 +5,68 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class sampleUIEventTestLogicController : inkWidgetLogicController
 	{
-		private CName _eventTextWidgetPath;
-		private CName _eventVerticalPanelPath;
-		private CName _callbackTextWidgetPath;
-		private CName _callbackVerticalPanelPath;
-		private CName _customCallbackName;
-		private CWeakHandle<inkTextWidget> _textWidget;
-		private CWeakHandle<inkVerticalPanelWidget> _verticalPanelWidget;
-		private CBool _isEnabled;
-
 		[Ordinal(1)] 
 		[RED("eventTextWidgetPath")] 
 		public CName EventTextWidgetPath
 		{
-			get => GetProperty(ref _eventTextWidgetPath);
-			set => SetProperty(ref _eventTextWidgetPath, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("eventVerticalPanelPath")] 
 		public CName EventVerticalPanelPath
 		{
-			get => GetProperty(ref _eventVerticalPanelPath);
-			set => SetProperty(ref _eventVerticalPanelPath, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("callbackTextWidgetPath")] 
 		public CName CallbackTextWidgetPath
 		{
-			get => GetProperty(ref _callbackTextWidgetPath);
-			set => SetProperty(ref _callbackTextWidgetPath, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("callbackVerticalPanelPath")] 
 		public CName CallbackVerticalPanelPath
 		{
-			get => GetProperty(ref _callbackVerticalPanelPath);
-			set => SetProperty(ref _callbackVerticalPanelPath, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("customCallbackName")] 
 		public CName CustomCallbackName
 		{
-			get => GetProperty(ref _customCallbackName);
-			set => SetProperty(ref _customCallbackName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("textWidget")] 
 		public CWeakHandle<inkTextWidget> TextWidget
 		{
-			get => GetProperty(ref _textWidget);
-			set => SetProperty(ref _textWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkTextWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("verticalPanelWidget")] 
 		public CWeakHandle<inkVerticalPanelWidget> VerticalPanelWidget
 		{
-			get => GetProperty(ref _verticalPanelWidget);
-			set => SetProperty(ref _verticalPanelWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkVerticalPanelWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkVerticalPanelWidget>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

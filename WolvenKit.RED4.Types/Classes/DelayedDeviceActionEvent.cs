@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DelayedDeviceActionEvent : redEvent
 	{
-		private CHandle<ScriptableDeviceAction> _action;
-
 		[Ordinal(0)] 
 		[RED("action")] 
 		public CHandle<ScriptableDeviceAction> Action
 		{
-			get => GetProperty(ref _action);
-			set => SetProperty(ref _action, value);
+			get => GetPropertyValue<CHandle<ScriptableDeviceAction>>();
+			set => SetPropertyValue<CHandle<ScriptableDeviceAction>>(value);
 		}
 	}
 }

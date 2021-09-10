@@ -5,83 +5,76 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameinteractionsBumpEvent : redEvent
 	{
-		private CEnum<gameinteractionsBumpSide> _side;
-		private CEnum<gameinteractionsBumpLocation> _sourceLocation;
-		private Vector4 _direction;
-		private Vector4 _sourcePosition;
-		private CFloat _sourceSquaredDistance;
-		private CFloat _sourceSpeed;
-		private CBool _isMounted;
-		private CFloat _sourceRadius;
-
 		[Ordinal(0)] 
 		[RED("side")] 
 		public CEnum<gameinteractionsBumpSide> Side
 		{
-			get => GetProperty(ref _side);
-			set => SetProperty(ref _side, value);
+			get => GetPropertyValue<CEnum<gameinteractionsBumpSide>>();
+			set => SetPropertyValue<CEnum<gameinteractionsBumpSide>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("sourceLocation")] 
 		public CEnum<gameinteractionsBumpLocation> SourceLocation
 		{
-			get => GetProperty(ref _sourceLocation);
-			set => SetProperty(ref _sourceLocation, value);
+			get => GetPropertyValue<CEnum<gameinteractionsBumpLocation>>();
+			set => SetPropertyValue<CEnum<gameinteractionsBumpLocation>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("direction")] 
 		public Vector4 Direction
 		{
-			get => GetProperty(ref _direction);
-			set => SetProperty(ref _direction, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("sourcePosition")] 
 		public Vector4 SourcePosition
 		{
-			get => GetProperty(ref _sourcePosition);
-			set => SetProperty(ref _sourcePosition, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("sourceSquaredDistance")] 
 		public CFloat SourceSquaredDistance
 		{
-			get => GetProperty(ref _sourceSquaredDistance);
-			set => SetProperty(ref _sourceSquaredDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("sourceSpeed")] 
 		public CFloat SourceSpeed
 		{
-			get => GetProperty(ref _sourceSpeed);
-			set => SetProperty(ref _sourceSpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isMounted")] 
 		public CBool IsMounted
 		{
-			get => GetProperty(ref _isMounted);
-			set => SetProperty(ref _isMounted, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("sourceRadius")] 
 		public CFloat SourceRadius
 		{
-			get => GetProperty(ref _sourceRadius);
-			set => SetProperty(ref _sourceRadius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public gameinteractionsBumpEvent()
 		{
-			_sourceSquaredDistance = float.PositiveInfinity;
-            _sourceRadius = 0.400000F;
+			Direction = new();
+			SourcePosition = new();
+			SourceSquaredDistance = float.PositiveInfinity;
+			SourceRadius = 0.400000F;
 		}
 	}
 }

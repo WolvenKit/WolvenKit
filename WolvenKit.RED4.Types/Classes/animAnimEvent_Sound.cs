@@ -5,68 +5,67 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimEvent_Sound : animAnimEvent
 	{
-		private CArray<audioAudSwitch> _switches;
-		private CArray<audioAudParameter> _params;
-		private CArray<CName> _dynamicParams;
-		private CName _metadataContext;
-		private CName _onlyPlayOn;
-		private CName _dontPlayOn;
-		private CEnum<animAnimEventGenderAlt> _playerGenderAlt;
-
 		[Ordinal(3)] 
 		[RED("switches")] 
 		public CArray<audioAudSwitch> Switches
 		{
-			get => GetProperty(ref _switches);
-			set => SetProperty(ref _switches, value);
+			get => GetPropertyValue<CArray<audioAudSwitch>>();
+			set => SetPropertyValue<CArray<audioAudSwitch>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("params")] 
 		public CArray<audioAudParameter> Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<CArray<audioAudParameter>>();
+			set => SetPropertyValue<CArray<audioAudParameter>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("dynamicParams")] 
 		public CArray<CName> DynamicParams
 		{
-			get => GetProperty(ref _dynamicParams);
-			set => SetProperty(ref _dynamicParams, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("metadataContext")] 
 		public CName MetadataContext
 		{
-			get => GetProperty(ref _metadataContext);
-			set => SetProperty(ref _metadataContext, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("onlyPlayOn")] 
 		public CName OnlyPlayOn
 		{
-			get => GetProperty(ref _onlyPlayOn);
-			set => SetProperty(ref _onlyPlayOn, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("dontPlayOn")] 
 		public CName DontPlayOn
 		{
-			get => GetProperty(ref _dontPlayOn);
-			set => SetProperty(ref _dontPlayOn, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("playerGenderAlt")] 
 		public CEnum<animAnimEventGenderAlt> PlayerGenderAlt
 		{
-			get => GetProperty(ref _playerGenderAlt);
-			set => SetProperty(ref _playerGenderAlt, value);
+			get => GetPropertyValue<CEnum<animAnimEventGenderAlt>>();
+			set => SetPropertyValue<CEnum<animAnimEventGenderAlt>>(value);
+		}
+
+		public animAnimEvent_Sound()
+		{
+			Switches = new();
+			Params = new();
+			DynamicParams = new();
 		}
 	}
 }

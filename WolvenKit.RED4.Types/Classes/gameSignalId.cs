@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameSignalId : RedBaseClass
 	{
-		private CUInt16 _value;
-
 		[Ordinal(0)] 
 		[RED("value")] 
 		public CUInt16 Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		public gameSignalId()
 		{
-			_value = 65535;
+			Value = 65535;
 		}
 	}
 }

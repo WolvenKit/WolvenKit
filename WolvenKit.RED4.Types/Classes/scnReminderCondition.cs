@@ -5,104 +5,103 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnReminderCondition : ISerializable
 	{
-		private CBool _useCustomReminder;
-		private scnActorId _reminderActor;
-		private scnSceneTime _waitTimeForReminderA;
-		private scnSceneTime _waitTimeForReminderB;
-		private scnSceneTime _waitTimeForReminderC;
-		private scnSceneTime _waitTimeForLooping;
-		private scnSceneTime _startTime;
-		private CEnum<scnReminderConditionProcessStep> _processStep;
-		private CBool _playing;
-		private CBool _running;
-		private scnChoiceNodeNsReminderParams _reminderParams;
-
 		[Ordinal(0)] 
 		[RED("useCustomReminder")] 
 		public CBool UseCustomReminder
 		{
-			get => GetProperty(ref _useCustomReminder);
-			set => SetProperty(ref _useCustomReminder, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("reminderActor")] 
 		public scnActorId ReminderActor
 		{
-			get => GetProperty(ref _reminderActor);
-			set => SetProperty(ref _reminderActor, value);
+			get => GetPropertyValue<scnActorId>();
+			set => SetPropertyValue<scnActorId>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("waitTimeForReminderA")] 
 		public scnSceneTime WaitTimeForReminderA
 		{
-			get => GetProperty(ref _waitTimeForReminderA);
-			set => SetProperty(ref _waitTimeForReminderA, value);
+			get => GetPropertyValue<scnSceneTime>();
+			set => SetPropertyValue<scnSceneTime>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("waitTimeForReminderB")] 
 		public scnSceneTime WaitTimeForReminderB
 		{
-			get => GetProperty(ref _waitTimeForReminderB);
-			set => SetProperty(ref _waitTimeForReminderB, value);
+			get => GetPropertyValue<scnSceneTime>();
+			set => SetPropertyValue<scnSceneTime>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("waitTimeForReminderC")] 
 		public scnSceneTime WaitTimeForReminderC
 		{
-			get => GetProperty(ref _waitTimeForReminderC);
-			set => SetProperty(ref _waitTimeForReminderC, value);
+			get => GetPropertyValue<scnSceneTime>();
+			set => SetPropertyValue<scnSceneTime>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("waitTimeForLooping")] 
 		public scnSceneTime WaitTimeForLooping
 		{
-			get => GetProperty(ref _waitTimeForLooping);
-			set => SetProperty(ref _waitTimeForLooping, value);
+			get => GetPropertyValue<scnSceneTime>();
+			set => SetPropertyValue<scnSceneTime>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("startTime")] 
 		public scnSceneTime StartTime
 		{
-			get => GetProperty(ref _startTime);
-			set => SetProperty(ref _startTime, value);
+			get => GetPropertyValue<scnSceneTime>();
+			set => SetPropertyValue<scnSceneTime>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("processStep")] 
 		public CEnum<scnReminderConditionProcessStep> ProcessStep
 		{
-			get => GetProperty(ref _processStep);
-			set => SetProperty(ref _processStep, value);
+			get => GetPropertyValue<CEnum<scnReminderConditionProcessStep>>();
+			set => SetPropertyValue<CEnum<scnReminderConditionProcessStep>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("playing")] 
 		public CBool Playing
 		{
-			get => GetProperty(ref _playing);
-			set => SetProperty(ref _playing, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("running")] 
 		public CBool Running
 		{
-			get => GetProperty(ref _running);
-			set => SetProperty(ref _running, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("reminderParams")] 
 		public scnChoiceNodeNsReminderParams ReminderParams
 		{
-			get => GetProperty(ref _reminderParams);
-			set => SetProperty(ref _reminderParams, value);
+			get => GetPropertyValue<scnChoiceNodeNsReminderParams>();
+			set => SetPropertyValue<scnChoiceNodeNsReminderParams>(value);
+		}
+
+		public scnReminderCondition()
+		{
+			ReminderActor = new() { Id = 4294967295 };
+			WaitTimeForReminderA = new();
+			WaitTimeForReminderB = new();
+			WaitTimeForReminderC = new();
+			WaitTimeForLooping = new();
+			StartTime = new();
+			ReminderParams = new() { ReminderActor = new() { Id = 4294967295 }, WaitTimeForReminderA = new(), WaitTimeForReminderB = new(), WaitTimeForReminderC = new(), WaitTimeForLooping = new() };
 		}
 	}
 }

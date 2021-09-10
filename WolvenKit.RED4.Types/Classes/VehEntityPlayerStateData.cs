@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VehEntityPlayerStateData : RedBaseClass
 	{
-		private entEntityID _entID;
-		private CInt32 _state;
-
 		[Ordinal(0)] 
 		[RED("entID")] 
 		public entEntityID EntID
 		{
-			get => GetProperty(ref _entID);
-			set => SetProperty(ref _entID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("state")] 
 		public CInt32 State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		public VehEntityPlayerStateData()
+		{
+			EntID = new();
 		}
 	}
 }

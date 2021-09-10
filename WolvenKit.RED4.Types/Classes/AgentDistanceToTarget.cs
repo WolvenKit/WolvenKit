@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AgentDistanceToTarget : RedBaseClass
 	{
-		private CFloat _distance;
-		private CInt32 _index;
-
 		[Ordinal(0)] 
 		[RED("distance")] 
 		public CFloat Distance
 		{
-			get => GetProperty(ref _distance);
-			set => SetProperty(ref _distance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("index")] 
 		public CInt32 Index
 		{
-			get => GetProperty(ref _index);
-			set => SetProperty(ref _index, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

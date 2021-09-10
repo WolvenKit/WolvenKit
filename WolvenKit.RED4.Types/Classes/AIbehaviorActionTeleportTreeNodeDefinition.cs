@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorActionTeleportTreeNodeDefinition : AIbehaviorActionTreeNodeDefinition
 	{
-		private CHandle<AIArgumentMapping> _destinationPoint;
-		private CHandle<AIArgumentMapping> _doNavTest;
-		private CHandle<AIArgumentMapping> _rotation;
-
 		[Ordinal(1)] 
 		[RED("destinationPoint")] 
 		public CHandle<AIArgumentMapping> DestinationPoint
 		{
-			get => GetProperty(ref _destinationPoint);
-			set => SetProperty(ref _destinationPoint, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("doNavTest")] 
 		public CHandle<AIArgumentMapping> DoNavTest
 		{
-			get => GetProperty(ref _doNavTest);
-			set => SetProperty(ref _doNavTest, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("rotation")] 
 		public CHandle<AIArgumentMapping> Rotation
 		{
-			get => GetProperty(ref _rotation);
-			set => SetProperty(ref _rotation, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 	}
 }

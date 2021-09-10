@@ -5,137 +5,122 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiNPCNextToTheCrosshair : RedBaseClass
 	{
-		private CWeakHandle<gameObject> _npc;
-		private CString _name;
-		private CInt32 _currentHealth;
-		private CInt32 _maximumHealth;
-		private CInt32 _currentCyberwarePct;
-		private CInt32 _level;
-		private CInt32 _quickHackUpload;
-		private CEnum<EAIAttitude> _attitude;
-		private CEnum<gameScanningState> _scanningState;
-		private CBool _isTagged;
-		private CEnum<gamedataNPCHighLevelState> _highLevelState;
-		private CBool _canSeePlayer;
-		private CBool _playerDetectionAboveZero;
-		private CBool _playerDetectionAtMax;
-
 		[Ordinal(0)] 
 		[RED("npc")] 
 		public CWeakHandle<gameObject> Npc
 		{
-			get => GetProperty(ref _npc);
-			set => SetProperty(ref _npc, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("name")] 
 		public CString Name
 		{
-			get => GetProperty(ref _name);
-			set => SetProperty(ref _name, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("currentHealth")] 
 		public CInt32 CurrentHealth
 		{
-			get => GetProperty(ref _currentHealth);
-			set => SetProperty(ref _currentHealth, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("maximumHealth")] 
 		public CInt32 MaximumHealth
 		{
-			get => GetProperty(ref _maximumHealth);
-			set => SetProperty(ref _maximumHealth, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("currentCyberwarePct")] 
 		public CInt32 CurrentCyberwarePct
 		{
-			get => GetProperty(ref _currentCyberwarePct);
-			set => SetProperty(ref _currentCyberwarePct, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("level")] 
 		public CInt32 Level
 		{
-			get => GetProperty(ref _level);
-			set => SetProperty(ref _level, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("quickHackUpload")] 
 		public CInt32 QuickHackUpload
 		{
-			get => GetProperty(ref _quickHackUpload);
-			set => SetProperty(ref _quickHackUpload, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("attitude")] 
 		public CEnum<EAIAttitude> Attitude
 		{
-			get => GetProperty(ref _attitude);
-			set => SetProperty(ref _attitude, value);
+			get => GetPropertyValue<CEnum<EAIAttitude>>();
+			set => SetPropertyValue<CEnum<EAIAttitude>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("scanningState")] 
 		public CEnum<gameScanningState> ScanningState
 		{
-			get => GetProperty(ref _scanningState);
-			set => SetProperty(ref _scanningState, value);
+			get => GetPropertyValue<CEnum<gameScanningState>>();
+			set => SetPropertyValue<CEnum<gameScanningState>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("isTagged")] 
 		public CBool IsTagged
 		{
-			get => GetProperty(ref _isTagged);
-			set => SetProperty(ref _isTagged, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("highLevelState")] 
 		public CEnum<gamedataNPCHighLevelState> HighLevelState
 		{
-			get => GetProperty(ref _highLevelState);
-			set => SetProperty(ref _highLevelState, value);
+			get => GetPropertyValue<CEnum<gamedataNPCHighLevelState>>();
+			set => SetPropertyValue<CEnum<gamedataNPCHighLevelState>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("canSeePlayer")] 
 		public CBool CanSeePlayer
 		{
-			get => GetProperty(ref _canSeePlayer);
-			set => SetProperty(ref _canSeePlayer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("playerDetectionAboveZero")] 
 		public CBool PlayerDetectionAboveZero
 		{
-			get => GetProperty(ref _playerDetectionAboveZero);
-			set => SetProperty(ref _playerDetectionAboveZero, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("playerDetectionAtMax")] 
 		public CBool PlayerDetectionAtMax
 		{
-			get => GetProperty(ref _playerDetectionAtMax);
-			set => SetProperty(ref _playerDetectionAtMax, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public gameuiNPCNextToTheCrosshair()
 		{
-			_attitude = new() { Value = Enums.EAIAttitude.AIA_Neutral };
-			_highLevelState = new() { Value = Enums.gamedataNPCHighLevelState.Any };
+			Attitude = Enums.EAIAttitude.AIA_Neutral;
+			HighLevelState = Enums.gamedataNPCHighLevelState.Any;
 		}
 	}
 }

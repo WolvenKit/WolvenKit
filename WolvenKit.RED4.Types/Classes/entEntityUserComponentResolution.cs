@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entEntityUserComponentResolution : RedBaseClass
 	{
-		private CRUID _id;
-		private CResourceAsyncReference<entEntityTemplate> _include;
-		private CEnum<entEntityUserComponentResolutionMode> _mode;
-
 		[Ordinal(0)] 
 		[RED("id")] 
 		public CRUID Id
 		{
-			get => GetProperty(ref _id);
-			set => SetProperty(ref _id, value);
+			get => GetPropertyValue<CRUID>();
+			set => SetPropertyValue<CRUID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("include")] 
 		public CResourceAsyncReference<entEntityTemplate> Include
 		{
-			get => GetProperty(ref _include);
-			set => SetProperty(ref _include, value);
+			get => GetPropertyValue<CResourceAsyncReference<entEntityTemplate>>();
+			set => SetPropertyValue<CResourceAsyncReference<entEntityTemplate>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("mode")] 
 		public CEnum<entEntityUserComponentResolutionMode> Mode
 		{
-			get => GetProperty(ref _mode);
-			set => SetProperty(ref _mode, value);
+			get => GetPropertyValue<CEnum<entEntityUserComponentResolutionMode>>();
+			set => SetPropertyValue<CEnum<entEntityUserComponentResolutionMode>>(value);
 		}
 	}
 }

@@ -2,32 +2,49 @@ using System;
 
 namespace WolvenKit.RED4.Types
 {
-    public class CWeakHandle<T> : IRedHandle<T>, IEquatable<CWeakHandle<T>> where T : IRedClass
+    [RED("whandle")]
+    public class CWeakHandle<T> : IRedWeakHandle<T>, IEquatable<CWeakHandle<T>> where T : IRedClass
     {
         public int Pointer { get; set; }
 
         public int GetValue() => Pointer;
         public void SetValue(int value) => Pointer = value;
 
-
-        public override bool Equals(object obj)
-        {
-            if (obj is CWeakHandle<T> cObj)
-            {
-                return Equals(cObj);
-            }
-
-            return false;
-        }
-
         public bool Equals(CWeakHandle<T> other)
         {
-            if (other == null)
+            if (ReferenceEquals(null, other))
             {
                 return false;
             }
 
-            return Pointer.Equals(other.Pointer);
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            return Pointer == other.Pointer;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((CWeakHandle<T>)obj);
+        }
+
+        public override int GetHashCode() => Pointer;
     }
 }

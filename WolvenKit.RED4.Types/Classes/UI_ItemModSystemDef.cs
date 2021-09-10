@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UI_ItemModSystemDef : gamebbScriptDefinition
 	{
-		private gamebbScriptID_Variant _itemModSystemUpdated;
-
 		[Ordinal(0)] 
 		[RED("ItemModSystemUpdated")] 
 		public gamebbScriptID_Variant ItemModSystemUpdated
 		{
-			get => GetProperty(ref _itemModSystemUpdated);
-			set => SetProperty(ref _itemModSystemUpdated, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
+		}
+
+		public UI_ItemModSystemDef()
+		{
+			ItemModSystemUpdated = new();
 		}
 	}
 }

@@ -5,129 +5,121 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_BlendSpace_InternalsBlendSpace : RedBaseClass
 	{
-		private CUInt32 _spaceDimension;
-		private CArray<animAnimNode_BlendSpace_InternalsBlendSpaceCoordinateDescription> _coordinatesDescriptions;
-		private CArray<animAnimNode_BlendSpace_InternalsBlendSpacePoint> _spacePoints;
-		private CUInt32 _boundaryPointsCount;
-		private CBool _fireAnimEndEvent;
-		private CName _animEndEventName;
-		private CBool _isLooped;
-		private CBool _needsRuntimeTriangulation;
-		private CBool _wasRuntimeTriangulationResaveDone;
-		private CArray<CFloat> _cachedSpacePoints_coordinates;
-		private CArray<CUInt32> _cachedSpaceSimplexes_pointsIndices;
-		private CArray<CInt32> _cachedSamplesForGridPoints_simplexIndex;
-		private CArray<CFloat> _cachedSamplesForGridPoints_weightsForPoints;
-
 		[Ordinal(0)] 
 		[RED("spaceDimension")] 
 		public CUInt32 SpaceDimension
 		{
-			get => GetProperty(ref _spaceDimension);
-			set => SetProperty(ref _spaceDimension, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("coordinatesDescriptions")] 
 		public CArray<animAnimNode_BlendSpace_InternalsBlendSpaceCoordinateDescription> CoordinatesDescriptions
 		{
-			get => GetProperty(ref _coordinatesDescriptions);
-			set => SetProperty(ref _coordinatesDescriptions, value);
+			get => GetPropertyValue<CArray<animAnimNode_BlendSpace_InternalsBlendSpaceCoordinateDescription>>();
+			set => SetPropertyValue<CArray<animAnimNode_BlendSpace_InternalsBlendSpaceCoordinateDescription>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("spacePoints")] 
 		public CArray<animAnimNode_BlendSpace_InternalsBlendSpacePoint> SpacePoints
 		{
-			get => GetProperty(ref _spacePoints);
-			set => SetProperty(ref _spacePoints, value);
+			get => GetPropertyValue<CArray<animAnimNode_BlendSpace_InternalsBlendSpacePoint>>();
+			set => SetPropertyValue<CArray<animAnimNode_BlendSpace_InternalsBlendSpacePoint>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("boundaryPointsCount")] 
 		public CUInt32 BoundaryPointsCount
 		{
-			get => GetProperty(ref _boundaryPointsCount);
-			set => SetProperty(ref _boundaryPointsCount, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("fireAnimEndEvent")] 
 		public CBool FireAnimEndEvent
 		{
-			get => GetProperty(ref _fireAnimEndEvent);
-			set => SetProperty(ref _fireAnimEndEvent, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("animEndEventName")] 
 		public CName AnimEndEventName
 		{
-			get => GetProperty(ref _animEndEventName);
-			set => SetProperty(ref _animEndEventName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isLooped")] 
 		public CBool IsLooped
 		{
-			get => GetProperty(ref _isLooped);
-			set => SetProperty(ref _isLooped, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("needsRuntimeTriangulation")] 
 		public CBool NeedsRuntimeTriangulation
 		{
-			get => GetProperty(ref _needsRuntimeTriangulation);
-			set => SetProperty(ref _needsRuntimeTriangulation, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("wasRuntimeTriangulationResaveDone")] 
 		public CBool WasRuntimeTriangulationResaveDone
 		{
-			get => GetProperty(ref _wasRuntimeTriangulationResaveDone);
-			set => SetProperty(ref _wasRuntimeTriangulationResaveDone, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("cachedSpacePoints_coordinates")] 
 		public CArray<CFloat> CachedSpacePoints_coordinates
 		{
-			get => GetProperty(ref _cachedSpacePoints_coordinates);
-			set => SetProperty(ref _cachedSpacePoints_coordinates, value);
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("cachedSpaceSimplexes_pointsIndices")] 
 		public CArray<CUInt32> CachedSpaceSimplexes_pointsIndices
 		{
-			get => GetProperty(ref _cachedSpaceSimplexes_pointsIndices);
-			set => SetProperty(ref _cachedSpaceSimplexes_pointsIndices, value);
+			get => GetPropertyValue<CArray<CUInt32>>();
+			set => SetPropertyValue<CArray<CUInt32>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("cachedSamplesForGridPoints_simplexIndex")] 
 		public CArray<CInt32> CachedSamplesForGridPoints_simplexIndex
 		{
-			get => GetProperty(ref _cachedSamplesForGridPoints_simplexIndex);
-			set => SetProperty(ref _cachedSamplesForGridPoints_simplexIndex, value);
+			get => GetPropertyValue<CArray<CInt32>>();
+			set => SetPropertyValue<CArray<CInt32>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("cachedSamplesForGridPoints_weightsForPoints")] 
 		public CArray<CFloat> CachedSamplesForGridPoints_weightsForPoints
 		{
-			get => GetProperty(ref _cachedSamplesForGridPoints_weightsForPoints);
-			set => SetProperty(ref _cachedSamplesForGridPoints_weightsForPoints, value);
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
 		public animAnimNode_BlendSpace_InternalsBlendSpace()
 		{
-			_spaceDimension = 1;
-			_isLooped = true;
-			_needsRuntimeTriangulation = true;
+			SpaceDimension = 1;
+			CoordinatesDescriptions = new() { new() };
+			SpacePoints = new();
+			IsLooped = true;
+			NeedsRuntimeTriangulation = true;
+			CachedSpacePoints_coordinates = new();
+			CachedSpaceSimplexes_pointsIndices = new();
+			CachedSamplesForGridPoints_simplexIndex = new();
+			CachedSamplesForGridPoints_weightsForPoints = new();
 		}
 	}
 }

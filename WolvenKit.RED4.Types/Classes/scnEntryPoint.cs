@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnEntryPoint : RedBaseClass
 	{
-		private CName _name;
-		private scnNodeId _nodeId;
-
 		[Ordinal(0)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get => GetProperty(ref _name);
-			set => SetProperty(ref _name, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("nodeId")] 
 		public scnNodeId NodeId
 		{
-			get => GetProperty(ref _nodeId);
-			set => SetProperty(ref _nodeId, value);
+			get => GetPropertyValue<scnNodeId>();
+			set => SetPropertyValue<scnNodeId>(value);
+		}
+
+		public scnEntryPoint()
+		{
+			NodeId = new() { Id = 4294967295 };
 		}
 	}
 }

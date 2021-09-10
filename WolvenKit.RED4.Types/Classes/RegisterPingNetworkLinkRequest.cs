@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RegisterPingNetworkLinkRequest : gameScriptableSystemRequest
 	{
-		private CArray<SNetworkLinkData> _linksData;
-
 		[Ordinal(0)] 
 		[RED("linksData")] 
 		public CArray<SNetworkLinkData> LinksData
 		{
-			get => GetProperty(ref _linksData);
-			set => SetProperty(ref _linksData, value);
+			get => GetPropertyValue<CArray<SNetworkLinkData>>();
+			set => SetPropertyValue<CArray<SNetworkLinkData>>(value);
+		}
+
+		public RegisterPingNetworkLinkRequest()
+		{
+			LinksData = new();
 		}
 	}
 }

@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class HighlightInstance : ModuleInstance
 	{
-		private CEnum<HighlightContext> _context;
-		private CBool _instant;
-
 		[Ordinal(6)] 
 		[RED("context")] 
 		public CEnum<HighlightContext> Context
 		{
-			get => GetProperty(ref _context);
-			set => SetProperty(ref _context, value);
+			get => GetPropertyValue<CEnum<HighlightContext>>();
+			set => SetPropertyValue<CEnum<HighlightContext>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("instant")] 
 		public CBool Instant
 		{
-			get => GetProperty(ref _instant);
-			set => SetProperty(ref _instant, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

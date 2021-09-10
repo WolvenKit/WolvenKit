@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimMathExpressionFloatSocket : RedBaseClass
 	{
-		private animFloatLink _link;
-		private CUInt16 _expressionVarId;
-		private animNamedTrackIndex _inputFloatTrack;
-
 		[Ordinal(0)] 
 		[RED("link")] 
 		public animFloatLink Link
 		{
-			get => GetProperty(ref _link);
-			set => SetProperty(ref _link, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("expressionVarId")] 
 		public CUInt16 ExpressionVarId
 		{
-			get => GetProperty(ref _expressionVarId);
-			set => SetProperty(ref _expressionVarId, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("inputFloatTrack")] 
 		public animNamedTrackIndex InputFloatTrack
 		{
-			get => GetProperty(ref _inputFloatTrack);
-			set => SetProperty(ref _inputFloatTrack, value);
+			get => GetPropertyValue<animNamedTrackIndex>();
+			set => SetPropertyValue<animNamedTrackIndex>(value);
+		}
+
+		public animAnimMathExpressionFloatSocket()
+		{
+			Link = new();
+			InputFloatTrack = new();
 		}
 	}
 }

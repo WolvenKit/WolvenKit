@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameeventsRevealObjectEvent : redEvent
 	{
-		private CBool _reveal;
-		private gameVisionModeSystemRevealIdentifier _reason;
-		private CFloat _lifetime;
-
 		[Ordinal(0)] 
 		[RED("reveal")] 
 		public CBool Reveal
 		{
-			get => GetProperty(ref _reveal);
-			set => SetProperty(ref _reveal, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("reason")] 
 		public gameVisionModeSystemRevealIdentifier Reason
 		{
-			get => GetProperty(ref _reason);
-			set => SetProperty(ref _reason, value);
+			get => GetPropertyValue<gameVisionModeSystemRevealIdentifier>();
+			set => SetPropertyValue<gameVisionModeSystemRevealIdentifier>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("lifetime")] 
 		public CFloat Lifetime
 		{
-			get => GetProperty(ref _lifetime);
-			set => SetProperty(ref _lifetime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public gameeventsRevealObjectEvent()
+		{
+			Reason = new() { SourceEntityId = new() };
 		}
 	}
 }

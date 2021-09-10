@@ -5,46 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldFoliageBrushItem : ISerializable
 	{
-		private CResourceReference<CMesh> _mesh;
-		private CName _meshAppearance;
-		private worldFoliageBrushParams _params;
-		private CBool _selected;
-
 		[Ordinal(0)] 
 		[RED("Mesh")] 
 		public CResourceReference<CMesh> Mesh
 		{
-			get => GetProperty(ref _mesh);
-			set => SetProperty(ref _mesh, value);
+			get => GetPropertyValue<CResourceReference<CMesh>>();
+			set => SetPropertyValue<CResourceReference<CMesh>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("MeshAppearance")] 
 		public CName MeshAppearance
 		{
-			get => GetProperty(ref _meshAppearance);
-			set => SetProperty(ref _meshAppearance, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("Params")] 
 		public worldFoliageBrushParams Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<worldFoliageBrushParams>();
+			set => SetPropertyValue<worldFoliageBrushParams>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("Selected")] 
 		public CBool Selected
 		{
-			get => GetProperty(ref _selected);
-			set => SetProperty(ref _selected, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public worldFoliageBrushItem()
 		{
-			_selected = true;
+			Params = new() { Proximity = 1.000000F, Scale = 1.000000F, ScaleVariation = 0.100000F };
+			Selected = true;
 		}
 	}
 }

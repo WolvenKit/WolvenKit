@@ -5,68 +5,60 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UpdateDebuggerRequest : gameScriptableSystemRequest
 	{
-		private CHandle<SecuritySystemControllerPS> _system;
-		private CFloat _time;
-		private CBool _instructionAttached;
-		private CBool _inputAttached;
-		private CName _callstack;
-		private CEnum<EReprimandInstructions> _instruction;
-		private CHandle<SecuritySystemInput> _recentInput;
-
 		[Ordinal(0)] 
 		[RED("system")] 
 		public CHandle<SecuritySystemControllerPS> System
 		{
-			get => GetProperty(ref _system);
-			set => SetProperty(ref _system, value);
+			get => GetPropertyValue<CHandle<SecuritySystemControllerPS>>();
+			set => SetPropertyValue<CHandle<SecuritySystemControllerPS>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("time")] 
 		public CFloat Time
 		{
-			get => GetProperty(ref _time);
-			set => SetProperty(ref _time, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("instructionAttached")] 
 		public CBool InstructionAttached
 		{
-			get => GetProperty(ref _instructionAttached);
-			set => SetProperty(ref _instructionAttached, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("inputAttached")] 
 		public CBool InputAttached
 		{
-			get => GetProperty(ref _inputAttached);
-			set => SetProperty(ref _inputAttached, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("callstack")] 
 		public CName Callstack
 		{
-			get => GetProperty(ref _callstack);
-			set => SetProperty(ref _callstack, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("instruction")] 
 		public CEnum<EReprimandInstructions> Instruction
 		{
-			get => GetProperty(ref _instruction);
-			set => SetProperty(ref _instruction, value);
+			get => GetPropertyValue<CEnum<EReprimandInstructions>>();
+			set => SetPropertyValue<CEnum<EReprimandInstructions>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("recentInput")] 
 		public CHandle<SecuritySystemInput> RecentInput
 		{
-			get => GetProperty(ref _recentInput);
-			set => SetProperty(ref _recentInput, value);
+			get => GetPropertyValue<CHandle<SecuritySystemInput>>();
+			set => SetPropertyValue<CHandle<SecuritySystemInput>>(value);
 		}
 	}
 }

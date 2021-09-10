@@ -5,32 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameTPPRepresentationComponent : entIComponent
 	{
-		private CArray<gameFppRepDetachedObjectInfo> _detachedObjectInfo;
-		private CArray<gameTppRepAttachedObjectInfo> _attachedObjectInfo;
-		private CArray<TweakDBID> _affectedAppearanceSlots;
-
 		[Ordinal(3)] 
 		[RED("detachedObjectInfo")] 
 		public CArray<gameFppRepDetachedObjectInfo> DetachedObjectInfo
 		{
-			get => GetProperty(ref _detachedObjectInfo);
-			set => SetProperty(ref _detachedObjectInfo, value);
+			get => GetPropertyValue<CArray<gameFppRepDetachedObjectInfo>>();
+			set => SetPropertyValue<CArray<gameFppRepDetachedObjectInfo>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("attachedObjectInfo")] 
 		public CArray<gameTppRepAttachedObjectInfo> AttachedObjectInfo
 		{
-			get => GetProperty(ref _attachedObjectInfo);
-			set => SetProperty(ref _attachedObjectInfo, value);
+			get => GetPropertyValue<CArray<gameTppRepAttachedObjectInfo>>();
+			set => SetPropertyValue<CArray<gameTppRepAttachedObjectInfo>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("affectedAppearanceSlots")] 
 		public CArray<TweakDBID> AffectedAppearanceSlots
 		{
-			get => GetProperty(ref _affectedAppearanceSlots);
-			set => SetProperty(ref _affectedAppearanceSlots, value);
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
+		}
+
+		public gameTPPRepresentationComponent()
+		{
+			Name = "Component";
+			DetachedObjectInfo = new();
+			AttachedObjectInfo = new();
+			AffectedAppearanceSlots = new();
 		}
 	}
 }

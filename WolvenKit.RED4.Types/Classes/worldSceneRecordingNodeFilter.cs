@@ -5,46 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldSceneRecordingNodeFilter : RedBaseClass
 	{
-		private CFloat _streamInNodesWithStreamingDistanceMoreThan;
-		private CFloat _streamOutPrefabProxyMeshesWithStreamingDistanceMoreThan;
-		private CBool _meshNodesOnly;
-		private worldSceneRecordingNodeMeshResourceFilter _meshResourceFilter;
-
 		[Ordinal(0)] 
 		[RED("streamInNodesWithStreamingDistanceMoreThan")] 
 		public CFloat StreamInNodesWithStreamingDistanceMoreThan
 		{
-			get => GetProperty(ref _streamInNodesWithStreamingDistanceMoreThan);
-			set => SetProperty(ref _streamInNodesWithStreamingDistanceMoreThan, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("streamOutPrefabProxyMeshesWithStreamingDistanceMoreThan")] 
 		public CFloat StreamOutPrefabProxyMeshesWithStreamingDistanceMoreThan
 		{
-			get => GetProperty(ref _streamOutPrefabProxyMeshesWithStreamingDistanceMoreThan);
-			set => SetProperty(ref _streamOutPrefabProxyMeshesWithStreamingDistanceMoreThan, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("meshNodesOnly")] 
 		public CBool MeshNodesOnly
 		{
-			get => GetProperty(ref _meshNodesOnly);
-			set => SetProperty(ref _meshNodesOnly, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("meshResourceFilter")] 
 		public worldSceneRecordingNodeMeshResourceFilter MeshResourceFilter
 		{
-			get => GetProperty(ref _meshResourceFilter);
-			set => SetProperty(ref _meshResourceFilter, value);
+			get => GetPropertyValue<worldSceneRecordingNodeMeshResourceFilter>();
+			set => SetPropertyValue<worldSceneRecordingNodeMeshResourceFilter>(value);
 		}
 
 		public worldSceneRecordingNodeFilter()
 		{
-			_meshNodesOnly = true;
+			MeshNodesOnly = true;
+			MeshResourceFilter = new() { ForceFilterIgnore = new(), ForceFilterMatch = new() };
 		}
 	}
 }

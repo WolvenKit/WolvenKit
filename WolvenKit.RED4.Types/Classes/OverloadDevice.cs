@@ -5,19 +5,21 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class OverloadDevice : ActionBool
 	{
-		private CFloat _killDelay;
-
 		[Ordinal(25)] 
 		[RED("killDelay")] 
 		public CFloat KillDelay
 		{
-			get => GetProperty(ref _killDelay);
-			set => SetProperty(ref _killDelay, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public OverloadDevice()
 		{
-			_killDelay = 1.000000F;
+			RequesterID = new();
+			InteractionChoice = new() { CaptionParts = new() { Parts = new() }, Data = new(), ChoiceMetaData = new() { Type = new() }, LookAtDescriptor = new() { Offset = new(), OrbId = new() } };
+			ActionWidgetPackage = new() { DependendActions = new() };
+			CanTriggerStim = true;
+			KillDelay = 1.000000F;
 		}
 	}
 }

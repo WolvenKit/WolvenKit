@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameEffectPostAction_Beam_RicochetPreview : gameEffectPostAction
 	{
-		private gameEffectPostAction_Beam_RicochetPreviewPreviewEffect _ricocheted;
-		private gameEffectPostAction_Beam_RicochetPreviewPreviewEffect _fromMuzzle;
-
 		[Ordinal(0)] 
 		[RED("ricocheted")] 
 		public gameEffectPostAction_Beam_RicochetPreviewPreviewEffect Ricocheted
 		{
-			get => GetProperty(ref _ricocheted);
-			set => SetProperty(ref _ricocheted, value);
+			get => GetPropertyValue<gameEffectPostAction_Beam_RicochetPreviewPreviewEffect>();
+			set => SetPropertyValue<gameEffectPostAction_Beam_RicochetPreviewPreviewEffect>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("fromMuzzle")] 
 		public gameEffectPostAction_Beam_RicochetPreviewPreviewEffect FromMuzzle
 		{
-			get => GetProperty(ref _fromMuzzle);
-			set => SetProperty(ref _fromMuzzle, value);
+			get => GetPropertyValue<gameEffectPostAction_Beam_RicochetPreviewPreviewEffect>();
+			set => SetPropertyValue<gameEffectPostAction_Beam_RicochetPreviewPreviewEffect>(value);
+		}
+
+		public gameEffectPostAction_Beam_RicochetPreview()
+		{
+			Ricocheted = new();
+			FromMuzzle = new();
 		}
 	}
 }

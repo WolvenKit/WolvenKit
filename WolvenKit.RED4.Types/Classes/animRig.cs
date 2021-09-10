@@ -5,163 +5,160 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animRig : CResource
 	{
-		private CArray<CName> _boneNames;
-		private CArray<CName> _trackNames;
-		private CArray<animFloatTrackInfo> _rigExtraTracks;
-		private CArray<CInt16> _levelOfDetailStartIndices;
-		private CArray<CInt16> _distanceCategoryToLodMap;
-		private CInt32 _turnOffLOD;
-		private CBool _turningOffUpdateAndSample;
-		private CArray<CFloat> _referenceTracks;
-		private CArray<QsTransform> _referencePoseMS;
-		private CArray<QsTransform> _aPoseLS;
-		private CArray<QsTransform> _aPoseMS;
-		private redTagList _tags;
-		private CArray<animRigPart> _parts;
-		private CArray<animRigRetarget> _retargets;
-		private CArray<CHandle<animIRigIkSetup>> _ikSetups;
-		private CArray<physicsRagdollBodyInfo> _ragdollDesc;
-		private CArray<physicsRagdollBodyNames> _ragdollNames;
-
 		[Ordinal(1)] 
 		[RED("boneNames")] 
 		public CArray<CName> BoneNames
 		{
-			get => GetProperty(ref _boneNames);
-			set => SetProperty(ref _boneNames, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("trackNames")] 
 		public CArray<CName> TrackNames
 		{
-			get => GetProperty(ref _trackNames);
-			set => SetProperty(ref _trackNames, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("rigExtraTracks")] 
 		public CArray<animFloatTrackInfo> RigExtraTracks
 		{
-			get => GetProperty(ref _rigExtraTracks);
-			set => SetProperty(ref _rigExtraTracks, value);
+			get => GetPropertyValue<CArray<animFloatTrackInfo>>();
+			set => SetPropertyValue<CArray<animFloatTrackInfo>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("levelOfDetailStartIndices")] 
 		public CArray<CInt16> LevelOfDetailStartIndices
 		{
-			get => GetProperty(ref _levelOfDetailStartIndices);
-			set => SetProperty(ref _levelOfDetailStartIndices, value);
+			get => GetPropertyValue<CArray<CInt16>>();
+			set => SetPropertyValue<CArray<CInt16>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("distanceCategoryToLodMap")] 
 		public CArray<CInt16> DistanceCategoryToLodMap
 		{
-			get => GetProperty(ref _distanceCategoryToLodMap);
-			set => SetProperty(ref _distanceCategoryToLodMap, value);
+			get => GetPropertyValue<CArray<CInt16>>();
+			set => SetPropertyValue<CArray<CInt16>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("turnOffLOD")] 
 		public CInt32 TurnOffLOD
 		{
-			get => GetProperty(ref _turnOffLOD);
-			set => SetProperty(ref _turnOffLOD, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("turningOffUpdateAndSample")] 
 		public CBool TurningOffUpdateAndSample
 		{
-			get => GetProperty(ref _turningOffUpdateAndSample);
-			set => SetProperty(ref _turningOffUpdateAndSample, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("referenceTracks")] 
 		public CArray<CFloat> ReferenceTracks
 		{
-			get => GetProperty(ref _referenceTracks);
-			set => SetProperty(ref _referenceTracks, value);
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("referencePoseMS")] 
 		public CArray<QsTransform> ReferencePoseMS
 		{
-			get => GetProperty(ref _referencePoseMS);
-			set => SetProperty(ref _referencePoseMS, value);
+			get => GetPropertyValue<CArray<QsTransform>>();
+			set => SetPropertyValue<CArray<QsTransform>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("aPoseLS")] 
 		public CArray<QsTransform> APoseLS
 		{
-			get => GetProperty(ref _aPoseLS);
-			set => SetProperty(ref _aPoseLS, value);
+			get => GetPropertyValue<CArray<QsTransform>>();
+			set => SetPropertyValue<CArray<QsTransform>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("aPoseMS")] 
 		public CArray<QsTransform> APoseMS
 		{
-			get => GetProperty(ref _aPoseMS);
-			set => SetProperty(ref _aPoseMS, value);
+			get => GetPropertyValue<CArray<QsTransform>>();
+			set => SetPropertyValue<CArray<QsTransform>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("tags")] 
 		public redTagList Tags
 		{
-			get => GetProperty(ref _tags);
-			set => SetProperty(ref _tags, value);
+			get => GetPropertyValue<redTagList>();
+			set => SetPropertyValue<redTagList>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("parts")] 
 		public CArray<animRigPart> Parts
 		{
-			get => GetProperty(ref _parts);
-			set => SetProperty(ref _parts, value);
+			get => GetPropertyValue<CArray<animRigPart>>();
+			set => SetPropertyValue<CArray<animRigPart>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("retargets")] 
 		public CArray<animRigRetarget> Retargets
 		{
-			get => GetProperty(ref _retargets);
-			set => SetProperty(ref _retargets, value);
+			get => GetPropertyValue<CArray<animRigRetarget>>();
+			set => SetPropertyValue<CArray<animRigRetarget>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("ikSetups")] 
 		public CArray<CHandle<animIRigIkSetup>> IkSetups
 		{
-			get => GetProperty(ref _ikSetups);
-			set => SetProperty(ref _ikSetups, value);
+			get => GetPropertyValue<CArray<CHandle<animIRigIkSetup>>>();
+			set => SetPropertyValue<CArray<CHandle<animIRigIkSetup>>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("ragdollDesc")] 
 		public CArray<physicsRagdollBodyInfo> RagdollDesc
 		{
-			get => GetProperty(ref _ragdollDesc);
-			set => SetProperty(ref _ragdollDesc, value);
+			get => GetPropertyValue<CArray<physicsRagdollBodyInfo>>();
+			set => SetPropertyValue<CArray<physicsRagdollBodyInfo>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("ragdollNames")] 
 		public CArray<physicsRagdollBodyNames> RagdollNames
 		{
-			get => GetProperty(ref _ragdollNames);
-			set => SetProperty(ref _ragdollNames, value);
+			get => GetPropertyValue<CArray<physicsRagdollBodyNames>>();
+			set => SetPropertyValue<CArray<physicsRagdollBodyNames>>(value);
 		}
 
 		public animRig()
 		{
-			_turnOffLOD = -1;
+			BoneNames = new();
+			TrackNames = new();
+			RigExtraTracks = new();
+			LevelOfDetailStartIndices = new();
+			DistanceCategoryToLodMap = new();
+			TurnOffLOD = -1;
+			ReferenceTracks = new();
+			ReferencePoseMS = new();
+			APoseLS = new();
+			APoseMS = new();
+			Tags = new() { Tags = new() };
+			Parts = new();
+			Retargets = new();
+			IkSetups = new();
+			RagdollDesc = new();
+			RagdollNames = new();
 		}
 	}
 }

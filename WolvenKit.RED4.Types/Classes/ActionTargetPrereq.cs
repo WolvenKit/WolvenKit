@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ActionTargetPrereq : gameIScriptablePrereq
 	{
-		private CWeakHandle<gamedataAIActionTarget_Record> _targetRecord;
-		private CBool _invert;
-
 		[Ordinal(0)] 
 		[RED("targetRecord")] 
 		public CWeakHandle<gamedataAIActionTarget_Record> TargetRecord
 		{
-			get => GetProperty(ref _targetRecord);
-			set => SetProperty(ref _targetRecord, value);
+			get => GetPropertyValue<CWeakHandle<gamedataAIActionTarget_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataAIActionTarget_Record>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("invert")] 
 		public CBool Invert
 		{
-			get => GetProperty(ref _invert);
-			set => SetProperty(ref _invert, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

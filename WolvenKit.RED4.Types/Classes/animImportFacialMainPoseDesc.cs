@@ -5,104 +5,102 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animImportFacialMainPoseDesc : RedBaseClass
 	{
-		private CArray<CName> _influencedBy;
-		private CArray<CUInt16> _influenceMainWeightIndices;
-		private CArray<animImportFacialPoseDesc> _poses;
-		private CArray<CUInt16> _poseIndices;
-		private CArray<CFloat> _weights;
-		private CArray<CFloat> _inBetweenScopeMultipliers;
-		private CName _name;
-		private CUInt16 _index;
-		private CUInt8 _influenceType;
-		private CUInt8 _side;
-		private CUInt8 _facePart;
-
 		[Ordinal(0)] 
 		[RED("influencedBy")] 
 		public CArray<CName> InfluencedBy
 		{
-			get => GetProperty(ref _influencedBy);
-			set => SetProperty(ref _influencedBy, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("influenceMainWeightIndices")] 
 		public CArray<CUInt16> InfluenceMainWeightIndices
 		{
-			get => GetProperty(ref _influenceMainWeightIndices);
-			set => SetProperty(ref _influenceMainWeightIndices, value);
+			get => GetPropertyValue<CArray<CUInt16>>();
+			set => SetPropertyValue<CArray<CUInt16>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("poses")] 
 		public CArray<animImportFacialPoseDesc> Poses
 		{
-			get => GetProperty(ref _poses);
-			set => SetProperty(ref _poses, value);
+			get => GetPropertyValue<CArray<animImportFacialPoseDesc>>();
+			set => SetPropertyValue<CArray<animImportFacialPoseDesc>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("poseIndices")] 
 		public CArray<CUInt16> PoseIndices
 		{
-			get => GetProperty(ref _poseIndices);
-			set => SetProperty(ref _poseIndices, value);
+			get => GetPropertyValue<CArray<CUInt16>>();
+			set => SetPropertyValue<CArray<CUInt16>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("weights")] 
 		public CArray<CFloat> Weights
 		{
-			get => GetProperty(ref _weights);
-			set => SetProperty(ref _weights, value);
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("inBetweenScopeMultipliers")] 
 		public CArray<CFloat> InBetweenScopeMultipliers
 		{
-			get => GetProperty(ref _inBetweenScopeMultipliers);
-			set => SetProperty(ref _inBetweenScopeMultipliers, value);
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get => GetProperty(ref _name);
-			set => SetProperty(ref _name, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("index")] 
 		public CUInt16 Index
 		{
-			get => GetProperty(ref _index);
-			set => SetProperty(ref _index, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("influenceType")] 
 		public CUInt8 InfluenceType
 		{
-			get => GetProperty(ref _influenceType);
-			set => SetProperty(ref _influenceType, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("side")] 
 		public CUInt8 Side
 		{
-			get => GetProperty(ref _side);
-			set => SetProperty(ref _side, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("facePart")] 
 		public CUInt8 FacePart
 		{
-			get => GetProperty(ref _facePart);
-			set => SetProperty(ref _facePart, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
+		}
+
+		public animImportFacialMainPoseDesc()
+		{
+			InfluencedBy = new();
+			InfluenceMainWeightIndices = new();
+			Poses = new();
+			PoseIndices = new();
+			Weights = new();
+			InBetweenScopeMultipliers = new();
 		}
 	}
 }

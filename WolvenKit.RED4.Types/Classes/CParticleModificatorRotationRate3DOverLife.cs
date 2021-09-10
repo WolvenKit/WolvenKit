@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CParticleModificatorRotationRate3DOverLife : IParticleModificator
 	{
-		private CHandle<IEvaluatorVector> _rotationRate;
-
 		[Ordinal(4)] 
 		[RED("rotationRate")] 
 		public CHandle<IEvaluatorVector> RotationRate
 		{
-			get => GetProperty(ref _rotationRate);
-			set => SetProperty(ref _rotationRate, value);
+			get => GetPropertyValue<CHandle<IEvaluatorVector>>();
+			set => SetPropertyValue<CHandle<IEvaluatorVector>>(value);
+		}
+
+		public CParticleModificatorRotationRate3DOverLife()
+		{
+			EditorName = "3D rotation rate over life";
+			EditorGroup = "Rotation";
+			IsEnabled = true;
 		}
 	}
 }

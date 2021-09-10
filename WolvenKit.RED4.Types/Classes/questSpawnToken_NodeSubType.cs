@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questSpawnToken_NodeSubType : questIContentTokenManager_NodeSubType
 	{
-		private CBool _immediate;
-
 		[Ordinal(0)] 
 		[RED("immediate")] 
 		public CBool Immediate
 		{
-			get => GetProperty(ref _immediate);
-			set => SetProperty(ref _immediate, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

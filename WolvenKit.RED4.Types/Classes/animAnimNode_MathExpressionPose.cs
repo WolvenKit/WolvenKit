@@ -5,23 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_MathExpressionPose : animAnimNode_OnePoseInput
 	{
-		private animMathExpressionNodeData _expressionData;
-		private animNamedTrackIndex _outputFloatTrack;
-
 		[Ordinal(12)] 
 		[RED("expressionData")] 
 		public animMathExpressionNodeData ExpressionData
 		{
-			get => GetProperty(ref _expressionData);
-			set => SetProperty(ref _expressionData, value);
+			get => GetPropertyValue<animMathExpressionNodeData>();
+			set => SetPropertyValue<animMathExpressionNodeData>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("outputFloatTrack")] 
 		public animNamedTrackIndex OutputFloatTrack
 		{
-			get => GetProperty(ref _outputFloatTrack);
-			set => SetProperty(ref _outputFloatTrack, value);
+			get => GetPropertyValue<animNamedTrackIndex>();
+			set => SetPropertyValue<animNamedTrackIndex>(value);
+		}
+
+		public animAnimNode_MathExpressionPose()
+		{
+			Id = 4294967295;
+			InputLink = new();
+			ExpressionData = new() { FloatSockets = new(), VectorSockets = new(), QuaternionSockets = new() };
+			OutputFloatTrack = new();
 		}
 	}
 }

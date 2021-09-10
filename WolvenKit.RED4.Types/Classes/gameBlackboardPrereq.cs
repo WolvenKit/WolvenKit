@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameBlackboardPrereq : gameIComparisonPrereq
 	{
-		private gameBlackboardPropertyBindingDefinition _blackboardValue;
-		private CVariant _value;
-
 		[Ordinal(1)] 
 		[RED("blackboardValue")] 
 		public gameBlackboardPropertyBindingDefinition BlackboardValue
 		{
-			get => GetProperty(ref _blackboardValue);
-			set => SetProperty(ref _blackboardValue, value);
+			get => GetPropertyValue<gameBlackboardPropertyBindingDefinition>();
+			set => SetPropertyValue<gameBlackboardPropertyBindingDefinition>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("value")] 
 		public CVariant Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<CVariant>();
+			set => SetPropertyValue<CVariant>(value);
+		}
+
+		public gameBlackboardPrereq()
+		{
+			BlackboardValue = new() { SerializableID = new(), PropertyPath = new() };
 		}
 	}
 }

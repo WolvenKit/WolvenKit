@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIUnequipCommand : AICommand
 	{
-		private TweakDBID _slotId;
-		private CFloat _durationOverride;
-
 		[Ordinal(4)] 
 		[RED("slotId")] 
 		public TweakDBID SlotId
 		{
-			get => GetProperty(ref _slotId);
-			set => SetProperty(ref _slotId, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("durationOverride")] 
 		public CFloat DurationOverride
 		{
-			get => GetProperty(ref _durationOverride);
-			set => SetProperty(ref _durationOverride, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public AIUnequipCommand()
 		{
-			_durationOverride = -1.000000F;
+			DurationOverride = -1.000000F;
 		}
 	}
 }

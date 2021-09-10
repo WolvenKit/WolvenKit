@@ -5,39 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameprojectileVelocityParams : RedBaseClass
 	{
-		private CFloat _xFactor;
-		private CFloat _yFactor;
-		private CFloat _zFactor;
-
 		[Ordinal(0)] 
 		[RED("xFactor")] 
 		public CFloat XFactor
 		{
-			get => GetProperty(ref _xFactor);
-			set => SetProperty(ref _xFactor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("yFactor")] 
 		public CFloat YFactor
 		{
-			get => GetProperty(ref _yFactor);
-			set => SetProperty(ref _yFactor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("zFactor")] 
 		public CFloat ZFactor
 		{
-			get => GetProperty(ref _zFactor);
-			set => SetProperty(ref _zFactor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public gameprojectileVelocityParams()
 		{
-			_xFactor = 1.000000F;
-			_yFactor = 1.000000F;
-			_zFactor = 1.000000F;
+			XFactor = 1.000000F;
+			YFactor = 1.000000F;
+			ZFactor = 1.000000F;
 		}
 	}
 }

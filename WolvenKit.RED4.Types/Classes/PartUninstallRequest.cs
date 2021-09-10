@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PartUninstallRequest : gamePlayerScriptableSystemRequest
 	{
-		private gameItemID _itemID;
-		private gameItemID _partID;
-
 		[Ordinal(1)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get => GetProperty(ref _itemID);
-			set => SetProperty(ref _itemID, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("partID")] 
 		public gameItemID PartID
 		{
-			get => GetProperty(ref _partID);
-			set => SetProperty(ref _partID, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
+		}
+
+		public PartUninstallRequest()
+		{
+			ItemID = new();
+			PartID = new();
 		}
 	}
 }

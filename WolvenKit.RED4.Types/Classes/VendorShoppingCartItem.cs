@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VendorShoppingCartItem : RedBaseClass
 	{
-		private CWeakHandle<gameItemData> _itemData;
-		private CInt32 _amount;
-
 		[Ordinal(0)] 
 		[RED("itemData")] 
 		public CWeakHandle<gameItemData> ItemData
 		{
-			get => GetProperty(ref _itemData);
-			set => SetProperty(ref _itemData, value);
+			get => GetPropertyValue<CWeakHandle<gameItemData>>();
+			set => SetPropertyValue<CWeakHandle<gameItemData>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("amount")] 
 		public CInt32 Amount
 		{
-			get => GetProperty(ref _amount);
-			set => SetProperty(ref _amount, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

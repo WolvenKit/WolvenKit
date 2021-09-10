@@ -5,68 +5,68 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioDoorsSettings : audioDeviceSettings
 	{
-		private CName _openEvent;
-		private CName _openFailedEvent;
-		private CName _closeEvent;
-		private CName _lockEvent;
-		private CName _unlockEvent;
-		private CName _sealEvent;
-		private CName _soundBank;
-
 		[Ordinal(7)] 
 		[RED("openEvent")] 
 		public CName OpenEvent
 		{
-			get => GetProperty(ref _openEvent);
-			set => SetProperty(ref _openEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("openFailedEvent")] 
 		public CName OpenFailedEvent
 		{
-			get => GetProperty(ref _openFailedEvent);
-			set => SetProperty(ref _openFailedEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("closeEvent")] 
 		public CName CloseEvent
 		{
-			get => GetProperty(ref _closeEvent);
-			set => SetProperty(ref _closeEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("lockEvent")] 
 		public CName LockEvent
 		{
-			get => GetProperty(ref _lockEvent);
-			set => SetProperty(ref _lockEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("unlockEvent")] 
 		public CName UnlockEvent
 		{
-			get => GetProperty(ref _unlockEvent);
-			set => SetProperty(ref _unlockEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("sealEvent")] 
 		public CName SealEvent
 		{
-			get => GetProperty(ref _sealEvent);
-			set => SetProperty(ref _sealEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("soundBank")] 
 		public CName SoundBank
 		{
-			get => GetProperty(ref _soundBank);
-			set => SetProperty(ref _soundBank, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public audioDoorsSettings()
+		{
+			CommonSettings = new() { StopAllSoundsOnDetach = true };
+			ScanningSettings = new();
+			AuxiliaryMetadata = new();
+			DeviceSettings = new();
 		}
 	}
 }

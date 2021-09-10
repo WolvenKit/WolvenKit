@@ -5,67 +5,62 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CSkinProfile : CResource
 	{
-		private CFloat _blurSize;
-		private CColor _diffuse;
-		private CColor _falloff;
-		private CFloat _roughness0;
-		private CFloat _roughness1;
-		private CFloat _lobeMix;
-
 		[Ordinal(1)] 
 		[RED("blurSize")] 
 		public CFloat BlurSize
 		{
-			get => GetProperty(ref _blurSize);
-			set => SetProperty(ref _blurSize, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("diffuse")] 
 		public CColor Diffuse
 		{
-			get => GetProperty(ref _diffuse);
-			set => SetProperty(ref _diffuse, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("falloff")] 
 		public CColor Falloff
 		{
-			get => GetProperty(ref _falloff);
-			set => SetProperty(ref _falloff, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("roughness0")] 
 		public CFloat Roughness0
 		{
-			get => GetProperty(ref _roughness0);
-			set => SetProperty(ref _roughness0, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("roughness1")] 
 		public CFloat Roughness1
 		{
-			get => GetProperty(ref _roughness1);
-			set => SetProperty(ref _roughness1, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("lobeMix")] 
 		public CFloat LobeMix
 		{
-			get => GetProperty(ref _lobeMix);
-			set => SetProperty(ref _lobeMix, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public CSkinProfile()
 		{
-			_blurSize = 1.200000F;
-			_roughness0 = 0.750000F;
-			_roughness1 = 1.250000F;
-			_lobeMix = 0.800000F;
+			BlurSize = 1.200000F;
+			Diffuse = new();
+			Falloff = new();
+			Roughness0 = 0.750000F;
+			Roughness1 = 1.250000F;
+			LobeMix = 0.800000F;
 		}
 	}
 }

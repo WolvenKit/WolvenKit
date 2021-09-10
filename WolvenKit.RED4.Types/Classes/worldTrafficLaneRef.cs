@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldTrafficLaneRef : RedBaseClass
 	{
-		private NodeRef _nodeRef;
-		private CUInt16 _laneNumber;
-		private CBool _isReversed;
-
 		[Ordinal(0)] 
 		[RED("nodeRef")] 
 		public NodeRef NodeRef
 		{
-			get => GetProperty(ref _nodeRef);
-			set => SetProperty(ref _nodeRef, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("laneNumber")] 
 		public CUInt16 LaneNumber
 		{
-			get => GetProperty(ref _laneNumber);
-			set => SetProperty(ref _laneNumber, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isReversed")] 
 		public CBool IsReversed
 		{
-			get => GetProperty(ref _isReversed);
-			set => SetProperty(ref _isReversed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

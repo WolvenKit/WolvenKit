@@ -5,86 +5,85 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_FloatComparator : animAnimNode_FloatValue
 	{
-		private CFloat _firstValue;
-		private CFloat _secondValue;
-		private CFloat _trueValue;
-		private CFloat _falseValue;
-		private CEnum<animEAnimGraphCompareFunc> _operation;
-		private animFloatLink _firstInputLink;
-		private animFloatLink _secondInputLink;
-		private animFloatLink _trueInputLink;
-		private animFloatLink _falseInputLink;
-
 		[Ordinal(11)] 
 		[RED("firstValue")] 
 		public CFloat FirstValue
 		{
-			get => GetProperty(ref _firstValue);
-			set => SetProperty(ref _firstValue, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("secondValue")] 
 		public CFloat SecondValue
 		{
-			get => GetProperty(ref _secondValue);
-			set => SetProperty(ref _secondValue, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("trueValue")] 
 		public CFloat TrueValue
 		{
-			get => GetProperty(ref _trueValue);
-			set => SetProperty(ref _trueValue, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("falseValue")] 
 		public CFloat FalseValue
 		{
-			get => GetProperty(ref _falseValue);
-			set => SetProperty(ref _falseValue, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("operation")] 
 		public CEnum<animEAnimGraphCompareFunc> Operation
 		{
-			get => GetProperty(ref _operation);
-			set => SetProperty(ref _operation, value);
+			get => GetPropertyValue<CEnum<animEAnimGraphCompareFunc>>();
+			set => SetPropertyValue<CEnum<animEAnimGraphCompareFunc>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("firstInputLink")] 
 		public animFloatLink FirstInputLink
 		{
-			get => GetProperty(ref _firstInputLink);
-			set => SetProperty(ref _firstInputLink, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("secondInputLink")] 
 		public animFloatLink SecondInputLink
 		{
-			get => GetProperty(ref _secondInputLink);
-			set => SetProperty(ref _secondInputLink, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("trueInputLink")] 
 		public animFloatLink TrueInputLink
 		{
-			get => GetProperty(ref _trueInputLink);
-			set => SetProperty(ref _trueInputLink, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("falseInputLink")] 
 		public animFloatLink FalseInputLink
 		{
-			get => GetProperty(ref _falseInputLink);
-			set => SetProperty(ref _falseInputLink, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
+		}
+
+		public animAnimNode_FloatComparator()
+		{
+			Id = 4294967295;
+			FirstInputLink = new();
+			SecondInputLink = new();
+			TrueInputLink = new();
+			FalseInputLink = new();
 		}
 	}
 }

@@ -5,50 +5,51 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ProficiencyButtonController : inkButtonController
 	{
-		private inkTextWidgetReference _labelText;
-		private inkTextWidgetReference _levelText;
-		private inkWidgetReference _frameHovered;
-		private CHandle<inkanimProxy> _transparencyAnimationProxy;
-		private CInt32 _index;
-
 		[Ordinal(10)] 
 		[RED("labelText")] 
 		public inkTextWidgetReference LabelText
 		{
-			get => GetProperty(ref _labelText);
-			set => SetProperty(ref _labelText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("levelText")] 
 		public inkTextWidgetReference LevelText
 		{
-			get => GetProperty(ref _levelText);
-			set => SetProperty(ref _levelText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("frameHovered")] 
 		public inkWidgetReference FrameHovered
 		{
-			get => GetProperty(ref _frameHovered);
-			set => SetProperty(ref _frameHovered, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("transparencyAnimationProxy")] 
 		public CHandle<inkanimProxy> TransparencyAnimationProxy
 		{
-			get => GetProperty(ref _transparencyAnimationProxy);
-			set => SetProperty(ref _transparencyAnimationProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("index")] 
 		public CInt32 Index
 		{
-			get => GetProperty(ref _index);
-			set => SetProperty(ref _index, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		public ProficiencyButtonController()
+		{
+			LabelText = new();
+			LevelText = new();
+			FrameHovered = new();
 		}
 	}
 }

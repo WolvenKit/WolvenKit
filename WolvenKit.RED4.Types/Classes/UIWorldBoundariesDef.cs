@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UIWorldBoundariesDef : gamebbScriptDefinition
 	{
-		private gamebbScriptID_Bool _isPlayerCloseToBoundary;
-		private gamebbScriptID_Bool _isPlayerGoingDeeper;
-
 		[Ordinal(0)] 
 		[RED("IsPlayerCloseToBoundary")] 
 		public gamebbScriptID_Bool IsPlayerCloseToBoundary
 		{
-			get => GetProperty(ref _isPlayerCloseToBoundary);
-			set => SetProperty(ref _isPlayerCloseToBoundary, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("IsPlayerGoingDeeper")] 
 		public gamebbScriptID_Bool IsPlayerGoingDeeper
 		{
-			get => GetProperty(ref _isPlayerGoingDeeper);
-			set => SetProperty(ref _isPlayerGoingDeeper, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		public UIWorldBoundariesDef()
+		{
+			IsPlayerCloseToBoundary = new();
+			IsPlayerGoingDeeper = new();
 		}
 	}
 }

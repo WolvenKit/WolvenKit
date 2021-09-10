@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class Plane : RedBaseClass
 	{
-		private Vector4 _normalDistance;
-
 		[Ordinal(0)] 
 		[RED("NormalDistance")] 
 		public Vector4 NormalDistance
 		{
-			get => GetProperty(ref _normalDistance);
-			set => SetProperty(ref _normalDistance, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
+		}
+
+		public Plane()
+		{
+			NormalDistance = new();
 		}
 	}
 }

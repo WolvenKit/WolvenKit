@@ -5,77 +5,68 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animDangleConstraint_Simulation : ISerializable
 	{
-		private CArray<animCollisionRoundedShape> _collisionRoundedShapes;
-		private CResourceReference<JsonResource> _jsonCollisionShapes;
-		private CBool _jsonCollisionShapesLoadedSuccessfully;
-		private CFloat _alpha;
-		private CBool _rotateParentToLookAtDangle;
-		private CBool _parentRotationAltersTransformsOfDangleAndItsChildren;
-		private CBool _parentRotationAltersTransformsOfNonDanglesAndItsChildren;
-		private CBool _dangleAltersTransformsOfItsChildren;
-
 		[Ordinal(0)] 
 		[RED("collisionRoundedShapes")] 
 		public CArray<animCollisionRoundedShape> CollisionRoundedShapes
 		{
-			get => GetProperty(ref _collisionRoundedShapes);
-			set => SetProperty(ref _collisionRoundedShapes, value);
+			get => GetPropertyValue<CArray<animCollisionRoundedShape>>();
+			set => SetPropertyValue<CArray<animCollisionRoundedShape>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("jsonCollisionShapes")] 
 		public CResourceReference<JsonResource> JsonCollisionShapes
 		{
-			get => GetProperty(ref _jsonCollisionShapes);
-			set => SetProperty(ref _jsonCollisionShapes, value);
+			get => GetPropertyValue<CResourceReference<JsonResource>>();
+			set => SetPropertyValue<CResourceReference<JsonResource>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("jsonCollisionShapesLoadedSuccessfully")] 
 		public CBool JsonCollisionShapesLoadedSuccessfully
 		{
-			get => GetProperty(ref _jsonCollisionShapesLoadedSuccessfully);
-			set => SetProperty(ref _jsonCollisionShapesLoadedSuccessfully, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("alpha")] 
 		public CFloat Alpha
 		{
-			get => GetProperty(ref _alpha);
-			set => SetProperty(ref _alpha, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("rotateParentToLookAtDangle")] 
 		public CBool RotateParentToLookAtDangle
 		{
-			get => GetProperty(ref _rotateParentToLookAtDangle);
-			set => SetProperty(ref _rotateParentToLookAtDangle, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("parentRotationAltersTransformsOfDangleAndItsChildren")] 
 		public CBool ParentRotationAltersTransformsOfDangleAndItsChildren
 		{
-			get => GetProperty(ref _parentRotationAltersTransformsOfDangleAndItsChildren);
-			set => SetProperty(ref _parentRotationAltersTransformsOfDangleAndItsChildren, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("parentRotationAltersTransformsOfNonDanglesAndItsChildren")] 
 		public CBool ParentRotationAltersTransformsOfNonDanglesAndItsChildren
 		{
-			get => GetProperty(ref _parentRotationAltersTransformsOfNonDanglesAndItsChildren);
-			set => SetProperty(ref _parentRotationAltersTransformsOfNonDanglesAndItsChildren, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("dangleAltersTransformsOfItsChildren")] 
 		public CBool DangleAltersTransformsOfItsChildren
 		{
-			get => GetProperty(ref _dangleAltersTransformsOfItsChildren);
-			set => SetProperty(ref _dangleAltersTransformsOfItsChildren, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

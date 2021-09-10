@@ -5,235 +5,226 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SensorDeviceControllerPS : ExplosiveDeviceControllerPS
 	{
-		private CBool _isRecognizableBySenses;
-		private TargetingBehaviour _targetingBehaviour;
-		private DetectionParameters _detectionParameters;
-		private TweakDBID _lookAtPresetVert;
-		private TweakDBID _lookAtPresetHor;
-		private gameEffectRef _scanGameEffectRef;
-		private gameEffectRef _visionConeEffectRef;
-		private gameEffectRef _visionConeFriendlyEffectRef;
-		private gameEffectRef _idleActiveRef;
-		private gameEffectRef _idleFriendlyRef;
-		private CBool _canTagEnemies;
-		private CBool _tagLockFromSystem;
-		private entEntityID _netrunnerID;
-		private entEntityID _netrunnerProxyID;
-		private entEntityID _netrunnerTargetID;
-		private LinkedStatusEffect _linkedStatusEffect;
-		private entEntityID _questForcedTargetID;
-		private CBool _isInFollowMode;
-		private CBool _isAttitudeChanged;
-		private CBool _isInTagKillMode;
-		private CBool _isIdleForced;
-		private entEntityID _questTargetToSpot;
-		private CBool _questTargetSpotted;
-		private CBool _isAnyTargetIsLocked;
-		private CBool _isPartOfPrevention;
-
 		[Ordinal(120)] 
 		[RED("isRecognizableBySenses")] 
 		public CBool IsRecognizableBySenses
 		{
-			get => GetProperty(ref _isRecognizableBySenses);
-			set => SetProperty(ref _isRecognizableBySenses, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(121)] 
 		[RED("targetingBehaviour")] 
 		public TargetingBehaviour TargetingBehaviour
 		{
-			get => GetProperty(ref _targetingBehaviour);
-			set => SetProperty(ref _targetingBehaviour, value);
+			get => GetPropertyValue<TargetingBehaviour>();
+			set => SetPropertyValue<TargetingBehaviour>(value);
 		}
 
 		[Ordinal(122)] 
 		[RED("detectionParameters")] 
 		public DetectionParameters DetectionParameters
 		{
-			get => GetProperty(ref _detectionParameters);
-			set => SetProperty(ref _detectionParameters, value);
+			get => GetPropertyValue<DetectionParameters>();
+			set => SetPropertyValue<DetectionParameters>(value);
 		}
 
 		[Ordinal(123)] 
 		[RED("lookAtPresetVert")] 
 		public TweakDBID LookAtPresetVert
 		{
-			get => GetProperty(ref _lookAtPresetVert);
-			set => SetProperty(ref _lookAtPresetVert, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(124)] 
 		[RED("lookAtPresetHor")] 
 		public TweakDBID LookAtPresetHor
 		{
-			get => GetProperty(ref _lookAtPresetHor);
-			set => SetProperty(ref _lookAtPresetHor, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(125)] 
 		[RED("scanGameEffectRef")] 
 		public gameEffectRef ScanGameEffectRef
 		{
-			get => GetProperty(ref _scanGameEffectRef);
-			set => SetProperty(ref _scanGameEffectRef, value);
+			get => GetPropertyValue<gameEffectRef>();
+			set => SetPropertyValue<gameEffectRef>(value);
 		}
 
 		[Ordinal(126)] 
 		[RED("visionConeEffectRef")] 
 		public gameEffectRef VisionConeEffectRef
 		{
-			get => GetProperty(ref _visionConeEffectRef);
-			set => SetProperty(ref _visionConeEffectRef, value);
+			get => GetPropertyValue<gameEffectRef>();
+			set => SetPropertyValue<gameEffectRef>(value);
 		}
 
 		[Ordinal(127)] 
 		[RED("visionConeFriendlyEffectRef")] 
 		public gameEffectRef VisionConeFriendlyEffectRef
 		{
-			get => GetProperty(ref _visionConeFriendlyEffectRef);
-			set => SetProperty(ref _visionConeFriendlyEffectRef, value);
+			get => GetPropertyValue<gameEffectRef>();
+			set => SetPropertyValue<gameEffectRef>(value);
 		}
 
 		[Ordinal(128)] 
 		[RED("idleActiveRef")] 
 		public gameEffectRef IdleActiveRef
 		{
-			get => GetProperty(ref _idleActiveRef);
-			set => SetProperty(ref _idleActiveRef, value);
+			get => GetPropertyValue<gameEffectRef>();
+			set => SetPropertyValue<gameEffectRef>(value);
 		}
 
 		[Ordinal(129)] 
 		[RED("idleFriendlyRef")] 
 		public gameEffectRef IdleFriendlyRef
 		{
-			get => GetProperty(ref _idleFriendlyRef);
-			set => SetProperty(ref _idleFriendlyRef, value);
+			get => GetPropertyValue<gameEffectRef>();
+			set => SetPropertyValue<gameEffectRef>(value);
 		}
 
 		[Ordinal(130)] 
 		[RED("canTagEnemies")] 
 		public CBool CanTagEnemies
 		{
-			get => GetProperty(ref _canTagEnemies);
-			set => SetProperty(ref _canTagEnemies, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(131)] 
 		[RED("tagLockFromSystem")] 
 		public CBool TagLockFromSystem
 		{
-			get => GetProperty(ref _tagLockFromSystem);
-			set => SetProperty(ref _tagLockFromSystem, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(132)] 
 		[RED("netrunnerID")] 
 		public entEntityID NetrunnerID
 		{
-			get => GetProperty(ref _netrunnerID);
-			set => SetProperty(ref _netrunnerID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(133)] 
 		[RED("netrunnerProxyID")] 
 		public entEntityID NetrunnerProxyID
 		{
-			get => GetProperty(ref _netrunnerProxyID);
-			set => SetProperty(ref _netrunnerProxyID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(134)] 
 		[RED("netrunnerTargetID")] 
 		public entEntityID NetrunnerTargetID
 		{
-			get => GetProperty(ref _netrunnerTargetID);
-			set => SetProperty(ref _netrunnerTargetID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(135)] 
 		[RED("linkedStatusEffect")] 
 		public LinkedStatusEffect LinkedStatusEffect
 		{
-			get => GetProperty(ref _linkedStatusEffect);
-			set => SetProperty(ref _linkedStatusEffect, value);
+			get => GetPropertyValue<LinkedStatusEffect>();
+			set => SetPropertyValue<LinkedStatusEffect>(value);
 		}
 
 		[Ordinal(136)] 
 		[RED("questForcedTargetID")] 
 		public entEntityID QuestForcedTargetID
 		{
-			get => GetProperty(ref _questForcedTargetID);
-			set => SetProperty(ref _questForcedTargetID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(137)] 
 		[RED("isInFollowMode")] 
 		public CBool IsInFollowMode
 		{
-			get => GetProperty(ref _isInFollowMode);
-			set => SetProperty(ref _isInFollowMode, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(138)] 
 		[RED("isAttitudeChanged")] 
 		public CBool IsAttitudeChanged
 		{
-			get => GetProperty(ref _isAttitudeChanged);
-			set => SetProperty(ref _isAttitudeChanged, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(139)] 
 		[RED("isInTagKillMode")] 
 		public CBool IsInTagKillMode
 		{
-			get => GetProperty(ref _isInTagKillMode);
-			set => SetProperty(ref _isInTagKillMode, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(140)] 
 		[RED("isIdleForced")] 
 		public CBool IsIdleForced
 		{
-			get => GetProperty(ref _isIdleForced);
-			set => SetProperty(ref _isIdleForced, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(141)] 
 		[RED("questTargetToSpot")] 
 		public entEntityID QuestTargetToSpot
 		{
-			get => GetProperty(ref _questTargetToSpot);
-			set => SetProperty(ref _questTargetToSpot, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(142)] 
 		[RED("questTargetSpotted")] 
 		public CBool QuestTargetSpotted
 		{
-			get => GetProperty(ref _questTargetSpotted);
-			set => SetProperty(ref _questTargetSpotted, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(143)] 
 		[RED("isAnyTargetIsLocked")] 
 		public CBool IsAnyTargetIsLocked
 		{
-			get => GetProperty(ref _isAnyTargetIsLocked);
-			set => SetProperty(ref _isAnyTargetIsLocked, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(144)] 
 		[RED("isPartOfPrevention")] 
 		public CBool IsPartOfPrevention
 		{
-			get => GetProperty(ref _isPartOfPrevention);
-			set => SetProperty(ref _isPartOfPrevention, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public SensorDeviceControllerPS()
 		{
-			_isRecognizableBySenses = true;
+			DeviceName = "Sensor Device";
+			CanPlayerTakeOverControl = true;
+			ShouldScannerShowStatus = true;
+			ShouldScannerShowAttitude = true;
+			IsRecognizableBySenses = true;
+			TargetingBehaviour = new() { CanRotate = true, LostTargetLookAtTime = 2.000000F, LostTargetSearchTime = 10.000000F };
+			DetectionParameters = new() { CanDetectIntruders = true, TimeToActionAfterSpot = 2.000000F, MaxRotationAngle = 90.000000F, PitchAngle = -15.000000F, RotationSpeed = 5.000000F };
+			ScanGameEffectRef = new();
+			VisionConeEffectRef = new();
+			VisionConeFriendlyEffectRef = new();
+			IdleActiveRef = new();
+			IdleFriendlyRef = new();
+			NetrunnerID = new();
+			NetrunnerProxyID = new();
+			NetrunnerTargetID = new();
+			LinkedStatusEffect = new() { NetrunnerIDs = new(), TargetID = new(), StatusEffectList = new() };
+			QuestForcedTargetID = new();
+			QuestTargetToSpot = new();
 		}
 	}
 }

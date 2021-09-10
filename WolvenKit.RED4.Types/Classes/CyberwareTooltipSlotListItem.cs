@@ -5,41 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CyberwareTooltipSlotListItem : AGenericTooltipController
 	{
-		private inkImageWidgetReference _icon;
-		private inkTextWidgetReference _label;
-		private inkTextWidgetReference _desc;
-		private CHandle<CyberwareSlotTooltipData> _data;
-
 		[Ordinal(2)] 
 		[RED("icon")] 
 		public inkImageWidgetReference Icon
 		{
-			get => GetProperty(ref _icon);
-			set => SetProperty(ref _icon, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("label")] 
 		public inkTextWidgetReference Label
 		{
-			get => GetProperty(ref _label);
-			set => SetProperty(ref _label, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("desc")] 
 		public inkTextWidgetReference Desc
 		{
-			get => GetProperty(ref _desc);
-			set => SetProperty(ref _desc, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("data")] 
 		public CHandle<CyberwareSlotTooltipData> Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<CHandle<CyberwareSlotTooltipData>>();
+			set => SetPropertyValue<CHandle<CyberwareSlotTooltipData>>(value);
+		}
+
+		public CyberwareTooltipSlotListItem()
+		{
+			Icon = new();
+			Label = new();
+			Desc = new();
 		}
 	}
 }

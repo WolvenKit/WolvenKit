@@ -7,25 +7,41 @@ namespace WolvenKit.RED4.Types
         public ulong Unk1 { get; set; }
         public string Value { get; set; }
 
-
-        public override bool Equals(object obj)
-        {
-            if (obj is LocalizationString cObj)
-            {
-                return Equals(cObj);
-            }
-
-            return false;
-        }
-
         public bool Equals(LocalizationString other)
         {
-            if (other == null)
+            if (ReferenceEquals(null, other))
             {
                 return false;
             }
 
-            return Unk1.Equals(other.Unk1) && Value.Equals(other.Value);
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            return Unk1 == other.Unk1 && Value == other.Value;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((LocalizationString)obj);
+        }
+
+        public override int GetHashCode() => HashCode.Combine(Unk1, Value);
     }
 }

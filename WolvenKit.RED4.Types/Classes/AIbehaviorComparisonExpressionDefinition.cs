@@ -5,37 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorComparisonExpressionDefinition : AIbehaviorPassiveExpressionDefinition
 	{
-		private CHandle<AIbehaviorExpressionSocket> _leftHandSide;
-		private CEnum<EComparisonType> _operator;
-		private CHandle<AIbehaviorExpressionSocket> _rightHandSide;
-
 		[Ordinal(0)] 
 		[RED("leftHandSide")] 
 		public CHandle<AIbehaviorExpressionSocket> LeftHandSide
 		{
-			get => GetProperty(ref _leftHandSide);
-			set => SetProperty(ref _leftHandSide, value);
+			get => GetPropertyValue<CHandle<AIbehaviorExpressionSocket>>();
+			set => SetPropertyValue<CHandle<AIbehaviorExpressionSocket>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("operator")] 
 		public CEnum<EComparisonType> Operator
 		{
-			get => GetProperty(ref _operator);
-			set => SetProperty(ref _operator, value);
+			get => GetPropertyValue<CEnum<EComparisonType>>();
+			set => SetPropertyValue<CEnum<EComparisonType>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("rightHandSide")] 
 		public CHandle<AIbehaviorExpressionSocket> RightHandSide
 		{
-			get => GetProperty(ref _rightHandSide);
-			set => SetProperty(ref _rightHandSide, value);
+			get => GetPropertyValue<CHandle<AIbehaviorExpressionSocket>>();
+			set => SetPropertyValue<CHandle<AIbehaviorExpressionSocket>>(value);
 		}
 
 		public AIbehaviorComparisonExpressionDefinition()
 		{
-			_operator = new() { Value = Enums.EComparisonType.Equal };
+			Operator = Enums.EComparisonType.Equal;
 		}
 	}
 }

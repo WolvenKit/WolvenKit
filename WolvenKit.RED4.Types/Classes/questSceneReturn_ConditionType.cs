@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questSceneReturn_ConditionType : questISceneConditionType
 	{
-		private CResourceAsyncReference<scnSceneResource> _sceneFile;
-		private CEnum<scnSceneVersionCheck> _sceneVersion;
-		private CArray<CHandle<scnIReturnCondition>> _returnConditions;
-
 		[Ordinal(0)] 
 		[RED("sceneFile")] 
 		public CResourceAsyncReference<scnSceneResource> SceneFile
 		{
-			get => GetProperty(ref _sceneFile);
-			set => SetProperty(ref _sceneFile, value);
+			get => GetPropertyValue<CResourceAsyncReference<scnSceneResource>>();
+			set => SetPropertyValue<CResourceAsyncReference<scnSceneResource>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("SceneVersion")] 
 		public CEnum<scnSceneVersionCheck> SceneVersion
 		{
-			get => GetProperty(ref _sceneVersion);
-			set => SetProperty(ref _sceneVersion, value);
+			get => GetPropertyValue<CEnum<scnSceneVersionCheck>>();
+			set => SetPropertyValue<CEnum<scnSceneVersionCheck>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("returnConditions")] 
 		public CArray<CHandle<scnIReturnCondition>> ReturnConditions
 		{
-			get => GetProperty(ref _returnConditions);
-			set => SetProperty(ref _returnConditions, value);
+			get => GetPropertyValue<CArray<CHandle<scnIReturnCondition>>>();
+			set => SetPropertyValue<CArray<CHandle<scnIReturnCondition>>>(value);
+		}
+
+		public questSceneReturn_ConditionType()
+		{
+			ReturnConditions = new();
 		}
 	}
 }

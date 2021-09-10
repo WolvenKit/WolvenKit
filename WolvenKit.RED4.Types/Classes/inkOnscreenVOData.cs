@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkOnscreenVOData : RedBaseClass
 	{
-		private CRUID _text;
-
 		[Ordinal(0)] 
 		[RED("text")] 
 		public CRUID Text
 		{
-			get => GetProperty(ref _text);
-			set => SetProperty(ref _text, value);
+			get => GetPropertyValue<CRUID>();
+			set => SetPropertyValue<CRUID>(value);
 		}
 	}
 }

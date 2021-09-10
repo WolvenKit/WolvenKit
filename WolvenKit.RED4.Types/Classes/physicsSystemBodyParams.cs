@@ -5,114 +5,104 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class physicsSystemBodyParams : RedBaseClass
 	{
-		private CEnum<physicsSimulationType> _simulationType;
-		private CFloat _linearDamping;
-		private CFloat _angularDamping;
-		private CUInt32 _solverIterationsCountPosition;
-		private CUInt32 _solverIterationsCountVelocity;
-		private CFloat _maxDepenetrationVelocity;
-		private CFloat _maxAngularVelocity;
-		private CFloat _maxContactImpulse;
-		private CFloat _mass;
-		private Vector3 _inertia;
-		private Transform _comOffset;
-
 		[Ordinal(0)] 
 		[RED("simulationType")] 
 		public CEnum<physicsSimulationType> SimulationType
 		{
-			get => GetProperty(ref _simulationType);
-			set => SetProperty(ref _simulationType, value);
+			get => GetPropertyValue<CEnum<physicsSimulationType>>();
+			set => SetPropertyValue<CEnum<physicsSimulationType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("linearDamping")] 
 		public CFloat LinearDamping
 		{
-			get => GetProperty(ref _linearDamping);
-			set => SetProperty(ref _linearDamping, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("angularDamping")] 
 		public CFloat AngularDamping
 		{
-			get => GetProperty(ref _angularDamping);
-			set => SetProperty(ref _angularDamping, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("solverIterationsCountPosition")] 
 		public CUInt32 SolverIterationsCountPosition
 		{
-			get => GetProperty(ref _solverIterationsCountPosition);
-			set => SetProperty(ref _solverIterationsCountPosition, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("solverIterationsCountVelocity")] 
 		public CUInt32 SolverIterationsCountVelocity
 		{
-			get => GetProperty(ref _solverIterationsCountVelocity);
-			set => SetProperty(ref _solverIterationsCountVelocity, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("maxDepenetrationVelocity")] 
 		public CFloat MaxDepenetrationVelocity
 		{
-			get => GetProperty(ref _maxDepenetrationVelocity);
-			set => SetProperty(ref _maxDepenetrationVelocity, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("maxAngularVelocity")] 
 		public CFloat MaxAngularVelocity
 		{
-			get => GetProperty(ref _maxAngularVelocity);
-			set => SetProperty(ref _maxAngularVelocity, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("maxContactImpulse")] 
 		public CFloat MaxContactImpulse
 		{
-			get => GetProperty(ref _maxContactImpulse);
-			set => SetProperty(ref _maxContactImpulse, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("mass")] 
 		public CFloat Mass
 		{
-			get => GetProperty(ref _mass);
-			set => SetProperty(ref _mass, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("inertia")] 
 		public Vector3 Inertia
 		{
-			get => GetProperty(ref _inertia);
-			set => SetProperty(ref _inertia, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("comOffset")] 
 		public Transform ComOffset
 		{
-			get => GetProperty(ref _comOffset);
-			set => SetProperty(ref _comOffset, value);
+			get => GetPropertyValue<Transform>();
+			set => SetPropertyValue<Transform>(value);
 		}
 
 		public physicsSystemBodyParams()
 		{
-			_simulationType = new() { Value = Enums.physicsSimulationType.Dynamic };
-			_solverIterationsCountPosition = 4;
-			_solverIterationsCountVelocity = 1;
-			_maxDepenetrationVelocity = -1.000000F;
-			_maxAngularVelocity = -1.000000F;
-			_maxContactImpulse = -1.000000F;
+			SimulationType = Enums.physicsSimulationType.Dynamic;
+			SolverIterationsCountPosition = 4;
+			SolverIterationsCountVelocity = 1;
+			MaxDepenetrationVelocity = -1.000000F;
+			MaxAngularVelocity = -1.000000F;
+			MaxContactImpulse = -1.000000F;
+			Inertia = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
+			ComOffset = new() { Position = new(), Orientation = new() { R = 1.000000F } };
 		}
 	}
 }

@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UnlockMinigameProgramEffector : gameEffector
 	{
-		private gameuiMinigameProgramData _minigameProgram;
-
 		[Ordinal(0)] 
 		[RED("minigameProgram")] 
 		public gameuiMinigameProgramData MinigameProgram
 		{
-			get => GetProperty(ref _minigameProgram);
-			set => SetProperty(ref _minigameProgram, value);
+			get => GetPropertyValue<gameuiMinigameProgramData>();
+			set => SetPropertyValue<gameuiMinigameProgramData>(value);
+		}
+
+		public UnlockMinigameProgramEffector()
+		{
+			MinigameProgram = new();
 		}
 	}
 }

@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UIScriptableSystemInventoryRemoveItem : gameScriptableSystemRequest
 	{
-		private gameItemID _itemID;
-
 		[Ordinal(0)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get => GetProperty(ref _itemID);
-			set => SetProperty(ref _itemID, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
+		}
+
+		public UIScriptableSystemInventoryRemoveItem()
+		{
+			ItemID = new();
 		}
 	}
 }

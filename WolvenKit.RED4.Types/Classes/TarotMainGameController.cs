@@ -5,118 +5,108 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TarotMainGameController : gameuiMenuGameController
 	{
-		private inkWidgetReference _buttonHintsManagerRef;
-		private inkWidgetReference _tooltipsManagerRef;
-		private inkCompoundWidgetReference _list;
-		private CWeakHandle<gameJournalManager> _journalManager;
-		private CWeakHandle<ButtonHints> _buttonHintsController;
-		private CWeakHandle<gameuiTooltipsManager> _tooltipsManager;
-		private CWeakHandle<tarotCardLogicController> _selectedTarotCard;
-		private CWeakHandle<TarotPreviewGameController> _fullscreenPreviewController;
-		private CWeakHandle<inkMenuEventDispatcher> _menuEventDispatcher;
-		private CHandle<inkGameNotificationToken> _tarotPreviewPopupToken;
-		private CBool _afterCloseRequest;
-		private CInt32 _numberOfCardsInTarotDeck;
-
 		[Ordinal(3)] 
 		[RED("buttonHintsManagerRef")] 
 		public inkWidgetReference ButtonHintsManagerRef
 		{
-			get => GetProperty(ref _buttonHintsManagerRef);
-			set => SetProperty(ref _buttonHintsManagerRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("TooltipsManagerRef")] 
 		public inkWidgetReference TooltipsManagerRef
 		{
-			get => GetProperty(ref _tooltipsManagerRef);
-			set => SetProperty(ref _tooltipsManagerRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("list")] 
 		public inkCompoundWidgetReference List
 		{
-			get => GetProperty(ref _list);
-			set => SetProperty(ref _list, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("journalManager")] 
 		public CWeakHandle<gameJournalManager> JournalManager
 		{
-			get => GetProperty(ref _journalManager);
-			set => SetProperty(ref _journalManager, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalManager>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
-			get => GetProperty(ref _buttonHintsController);
-			set => SetProperty(ref _buttonHintsController, value);
+			get => GetPropertyValue<CWeakHandle<ButtonHints>>();
+			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("TooltipsManager")] 
 		public CWeakHandle<gameuiTooltipsManager> TooltipsManager
 		{
-			get => GetProperty(ref _tooltipsManager);
-			set => SetProperty(ref _tooltipsManager, value);
+			get => GetPropertyValue<CWeakHandle<gameuiTooltipsManager>>();
+			set => SetPropertyValue<CWeakHandle<gameuiTooltipsManager>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("selectedTarotCard")] 
 		public CWeakHandle<tarotCardLogicController> SelectedTarotCard
 		{
-			get => GetProperty(ref _selectedTarotCard);
-			set => SetProperty(ref _selectedTarotCard, value);
+			get => GetPropertyValue<CWeakHandle<tarotCardLogicController>>();
+			set => SetPropertyValue<CWeakHandle<tarotCardLogicController>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("fullscreenPreviewController")] 
 		public CWeakHandle<TarotPreviewGameController> FullscreenPreviewController
 		{
-			get => GetProperty(ref _fullscreenPreviewController);
-			set => SetProperty(ref _fullscreenPreviewController, value);
+			get => GetPropertyValue<CWeakHandle<TarotPreviewGameController>>();
+			set => SetPropertyValue<CWeakHandle<TarotPreviewGameController>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("menuEventDispatcher")] 
 		public CWeakHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
-			get => GetProperty(ref _menuEventDispatcher);
-			set => SetProperty(ref _menuEventDispatcher, value);
+			get => GetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>();
+			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("tarotPreviewPopupToken")] 
 		public CHandle<inkGameNotificationToken> TarotPreviewPopupToken
 		{
-			get => GetProperty(ref _tarotPreviewPopupToken);
-			set => SetProperty(ref _tarotPreviewPopupToken, value);
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("afterCloseRequest")] 
 		public CBool AfterCloseRequest
 		{
-			get => GetProperty(ref _afterCloseRequest);
-			set => SetProperty(ref _afterCloseRequest, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("numberOfCardsInTarotDeck")] 
 		public CInt32 NumberOfCardsInTarotDeck
 		{
-			get => GetProperty(ref _numberOfCardsInTarotDeck);
-			set => SetProperty(ref _numberOfCardsInTarotDeck, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		public TarotMainGameController()
 		{
-			_numberOfCardsInTarotDeck = 22;
+			ButtonHintsManagerRef = new();
+			TooltipsManagerRef = new();
+			List = new();
+			NumberOfCardsInTarotDeck = 22;
 		}
 	}
 }

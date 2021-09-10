@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RequestDocumentThumbnailWidgetsUpdateEvent : RequestWidgetUpdateEvent
 	{
-		private CEnum<EDocumentType> _documentType;
-
 		[Ordinal(2)] 
 		[RED("documentType")] 
 		public CEnum<EDocumentType> DocumentType
 		{
-			get => GetProperty(ref _documentType);
-			set => SetProperty(ref _documentType, value);
+			get => GetPropertyValue<CEnum<EDocumentType>>();
+			set => SetPropertyValue<CEnum<EDocumentType>>(value);
 		}
 	}
 }

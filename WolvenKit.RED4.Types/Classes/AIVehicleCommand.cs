@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIVehicleCommand : AICommand
 	{
-		private CBool _useKinematic;
-		private CBool _needDriver;
-
 		[Ordinal(4)] 
 		[RED("useKinematic")] 
 		public CBool UseKinematic
 		{
-			get => GetProperty(ref _useKinematic);
-			set => SetProperty(ref _useKinematic, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("needDriver")] 
 		public CBool NeedDriver
 		{
-			get => GetProperty(ref _needDriver);
-			set => SetProperty(ref _needDriver, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public AIVehicleCommand()
+		{
+			Id = 4294967295;
 		}
 	}
 }

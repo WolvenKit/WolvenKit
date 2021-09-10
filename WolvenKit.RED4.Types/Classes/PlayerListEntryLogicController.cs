@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PlayerListEntryLogicController : inkWidgetLogicController
 	{
-		private inkWidgetReference _playerNameLabel;
-		private inkImageWidgetReference _playerClassIcon;
-
 		[Ordinal(1)] 
 		[RED("playerNameLabel")] 
 		public inkWidgetReference PlayerNameLabel
 		{
-			get => GetProperty(ref _playerNameLabel);
-			set => SetProperty(ref _playerNameLabel, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("playerClassIcon")] 
 		public inkImageWidgetReference PlayerClassIcon
 		{
-			get => GetProperty(ref _playerClassIcon);
-			set => SetProperty(ref _playerClassIcon, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		public PlayerListEntryLogicController()
+		{
+			PlayerNameLabel = new();
+			PlayerClassIcon = new();
 		}
 	}
 }

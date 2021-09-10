@@ -5,37 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameaudioAcousticPortalComponent : entIPlacedComponent
 	{
-		private CUInt8 _radius;
-		private CUInt8 _nominalRadius;
-		private CBool _initialyOpen;
-
 		[Ordinal(5)] 
 		[RED("radius")] 
 		public CUInt8 Radius
 		{
-			get => GetProperty(ref _radius);
-			set => SetProperty(ref _radius, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("nominalRadius")] 
 		public CUInt8 NominalRadius
 		{
-			get => GetProperty(ref _nominalRadius);
-			set => SetProperty(ref _nominalRadius, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("initialyOpen")] 
 		public CBool InitialyOpen
 		{
-			get => GetProperty(ref _initialyOpen);
-			set => SetProperty(ref _initialyOpen, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public gameaudioAcousticPortalComponent()
 		{
-			_initialyOpen = true;
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			InitialyOpen = true;
 		}
 	}
 }

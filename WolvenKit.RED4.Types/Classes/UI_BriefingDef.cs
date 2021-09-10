@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UI_BriefingDef : gamebbScriptDefinition
 	{
-		private gamebbScriptID_String _briefingToOpen;
-		private gamebbScriptID_Variant _briefingSize;
-		private gamebbScriptID_Variant _briefingAlignment;
-
 		[Ordinal(0)] 
 		[RED("BriefingToOpen")] 
 		public gamebbScriptID_String BriefingToOpen
 		{
-			get => GetProperty(ref _briefingToOpen);
-			set => SetProperty(ref _briefingToOpen, value);
+			get => GetPropertyValue<gamebbScriptID_String>();
+			set => SetPropertyValue<gamebbScriptID_String>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("BriefingSize")] 
 		public gamebbScriptID_Variant BriefingSize
 		{
-			get => GetProperty(ref _briefingSize);
-			set => SetProperty(ref _briefingSize, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("BriefingAlignment")] 
 		public gamebbScriptID_Variant BriefingAlignment
 		{
-			get => GetProperty(ref _briefingAlignment);
-			set => SetProperty(ref _briefingAlignment, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
+		}
+
+		public UI_BriefingDef()
+		{
+			BriefingToOpen = new();
+			BriefingSize = new();
+			BriefingAlignment = new();
 		}
 	}
 }

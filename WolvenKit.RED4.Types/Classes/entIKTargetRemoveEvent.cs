@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entIKTargetRemoveEvent : redEvent
 	{
-		private animIKTargetRef _ikTargetRef;
-
 		[Ordinal(0)] 
 		[RED("ikTargetRef")] 
 		public animIKTargetRef IkTargetRef
 		{
-			get => GetProperty(ref _ikTargetRef);
-			set => SetProperty(ref _ikTargetRef, value);
+			get => GetPropertyValue<animIKTargetRef>();
+			set => SetPropertyValue<animIKTargetRef>(value);
+		}
+
+		public entIKTargetRemoveEvent()
+		{
+			IkTargetRef = new() { Id = -1 };
 		}
 	}
 }

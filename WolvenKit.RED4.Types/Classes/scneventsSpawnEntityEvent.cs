@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scneventsSpawnEntityEvent : scnSceneEvent
 	{
-		private scneventsSpawnEntityEventParams _params;
-
 		[Ordinal(6)] 
 		[RED("params")] 
 		public scneventsSpawnEntityEventParams Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<scneventsSpawnEntityEventParams>();
+			set => SetPropertyValue<scneventsSpawnEntityEventParams>(value);
+		}
+
+		public scneventsSpawnEntityEvent()
+		{
+			Id = new() { Id = 18446744073709551615 };
+			Params = new() { Performer = new() { Id = 4294967040 }, ReferencePerformer = new() { Id = 4294967040 }, FallbackCachedBones = new(0) };
 		}
 	}
 }

@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MountCommandHandlerTask : AIbehaviortaskScript
 	{
-		private CHandle<AIArgumentMapping> _command;
-		private CHandle<AIArgumentMapping> _mountEventData;
-		private CName _callbackName;
-
 		[Ordinal(0)] 
 		[RED("command")] 
 		public CHandle<AIArgumentMapping> Command
 		{
-			get => GetProperty(ref _command);
-			set => SetProperty(ref _command, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("mountEventData")] 
 		public CHandle<AIArgumentMapping> MountEventData
 		{
-			get => GetProperty(ref _mountEventData);
-			set => SetProperty(ref _mountEventData, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("callbackName")] 
 		public CName CallbackName
 		{
-			get => GetProperty(ref _callbackName);
-			set => SetProperty(ref _callbackName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 	}
 }

@@ -5,185 +5,175 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class HUDSignalProgressBarController : gameuiHUDGameController
 	{
-		private inkWidgetReference _bar;
-		private inkWidgetReference _completed;
-		private inkWidgetReference _signalLost;
-		private inkTextWidgetReference _percent;
-		private CArray<inkWidgetReference> _signalBars;
-		private CWeakHandle<inkWidget> _rootWidget;
-		private CWeakHandle<gameIBlackboard> _progressBarBB;
-		private CHandle<UI_HUDSignalProgressBarDef> _progressBarDef;
-		private CHandle<redCallbackObject> _stateBBID;
-		private CHandle<redCallbackObject> _progressBBID;
-		private CHandle<redCallbackObject> _signalStrengthBBID;
-		private HUDProgressBarData _data;
-		private CHandle<inkanimProxy> _outroAnimation;
-		private CHandle<inkanimProxy> _signalLostAnimation;
-		private CHandle<inkanimProxy> _introAnimation;
-		private CHandle<inkanimDefinition> _alpha_fadein;
-		private CHandle<inkanimProxy> _animProxy;
-		private inkanimPlaybackOptions _animOptions;
-		private CHandle<inkanimTransparencyInterpolator> _alphaInterpolator;
-		private CFloat _tick;
-
 		[Ordinal(9)] 
 		[RED("bar")] 
 		public inkWidgetReference Bar
 		{
-			get => GetProperty(ref _bar);
-			set => SetProperty(ref _bar, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("completed")] 
 		public inkWidgetReference Completed
 		{
-			get => GetProperty(ref _completed);
-			set => SetProperty(ref _completed, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("signalLost")] 
 		public inkWidgetReference SignalLost
 		{
-			get => GetProperty(ref _signalLost);
-			set => SetProperty(ref _signalLost, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("percent")] 
 		public inkTextWidgetReference Percent
 		{
-			get => GetProperty(ref _percent);
-			set => SetProperty(ref _percent, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("signalBars")] 
 		public CArray<inkWidgetReference> SignalBars
 		{
-			get => GetProperty(ref _signalBars);
-			set => SetProperty(ref _signalBars, value);
+			get => GetPropertyValue<CArray<inkWidgetReference>>();
+			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("rootWidget")] 
 		public CWeakHandle<inkWidget> RootWidget
 		{
-			get => GetProperty(ref _rootWidget);
-			set => SetProperty(ref _rootWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("progressBarBB")] 
 		public CWeakHandle<gameIBlackboard> ProgressBarBB
 		{
-			get => GetProperty(ref _progressBarBB);
-			set => SetProperty(ref _progressBarBB, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("progressBarDef")] 
 		public CHandle<UI_HUDSignalProgressBarDef> ProgressBarDef
 		{
-			get => GetProperty(ref _progressBarDef);
-			set => SetProperty(ref _progressBarDef, value);
+			get => GetPropertyValue<CHandle<UI_HUDSignalProgressBarDef>>();
+			set => SetPropertyValue<CHandle<UI_HUDSignalProgressBarDef>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("stateBBID")] 
 		public CHandle<redCallbackObject> StateBBID
 		{
-			get => GetProperty(ref _stateBBID);
-			set => SetProperty(ref _stateBBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("progressBBID")] 
 		public CHandle<redCallbackObject> ProgressBBID
 		{
-			get => GetProperty(ref _progressBBID);
-			set => SetProperty(ref _progressBBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("signalStrengthBBID")] 
 		public CHandle<redCallbackObject> SignalStrengthBBID
 		{
-			get => GetProperty(ref _signalStrengthBBID);
-			set => SetProperty(ref _signalStrengthBBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("data")] 
 		public HUDProgressBarData Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<HUDProgressBarData>();
+			set => SetPropertyValue<HUDProgressBarData>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("OutroAnimation")] 
 		public CHandle<inkanimProxy> OutroAnimation
 		{
-			get => GetProperty(ref _outroAnimation);
-			set => SetProperty(ref _outroAnimation, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("SignalLostAnimation")] 
 		public CHandle<inkanimProxy> SignalLostAnimation
 		{
-			get => GetProperty(ref _signalLostAnimation);
-			set => SetProperty(ref _signalLostAnimation, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("IntroAnimation")] 
 		public CHandle<inkanimProxy> IntroAnimation
 		{
-			get => GetProperty(ref _introAnimation);
-			set => SetProperty(ref _introAnimation, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("alpha_fadein")] 
 		public CHandle<inkanimDefinition> Alpha_fadein
 		{
-			get => GetProperty(ref _alpha_fadein);
-			set => SetProperty(ref _alpha_fadein, value);
+			get => GetPropertyValue<CHandle<inkanimDefinition>>();
+			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("AnimProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
-			get => GetProperty(ref _animProxy);
-			set => SetProperty(ref _animProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("AnimOptions")] 
 		public inkanimPlaybackOptions AnimOptions
 		{
-			get => GetProperty(ref _animOptions);
-			set => SetProperty(ref _animOptions, value);
+			get => GetPropertyValue<inkanimPlaybackOptions>();
+			set => SetPropertyValue<inkanimPlaybackOptions>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("alphaInterpolator")] 
 		public CHandle<inkanimTransparencyInterpolator> AlphaInterpolator
 		{
-			get => GetProperty(ref _alphaInterpolator);
-			set => SetProperty(ref _alphaInterpolator, value);
+			get => GetPropertyValue<CHandle<inkanimTransparencyInterpolator>>();
+			set => SetPropertyValue<CHandle<inkanimTransparencyInterpolator>>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("tick")] 
 		public CFloat Tick
 		{
-			get => GetProperty(ref _tick);
-			set => SetProperty(ref _tick, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public HUDSignalProgressBarController()
+		{
+			Bar = new();
+			Completed = new();
+			SignalLost = new();
+			Percent = new();
+			SignalBars = new();
+			Data = new();
+			AnimOptions = new();
 		}
 	}
 }

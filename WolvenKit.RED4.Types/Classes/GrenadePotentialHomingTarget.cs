@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class GrenadePotentialHomingTarget : RedBaseClass
 	{
-		private CWeakHandle<ScriptedPuppet> _entity;
-		private CName _targetSlot;
-
 		[Ordinal(0)] 
 		[RED("entity")] 
 		public CWeakHandle<ScriptedPuppet> Entity
 		{
-			get => GetProperty(ref _entity);
-			set => SetProperty(ref _entity, value);
+			get => GetPropertyValue<CWeakHandle<ScriptedPuppet>>();
+			set => SetPropertyValue<CWeakHandle<ScriptedPuppet>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("targetSlot")] 
 		public CName TargetSlot
 		{
-			get => GetProperty(ref _targetSlot);
-			set => SetProperty(ref _targetSlot, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 	}
 }

@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TvDeviceWidgetCustomData : WidgetCustomData
 	{
-		private redResourceReferenceScriptToken _videoPath;
-		private TweakDBID _channelID;
-		private TweakDBID _messageRecordID;
-		private CBool _looped;
-
 		[Ordinal(0)] 
 		[RED("videoPath")] 
 		public redResourceReferenceScriptToken VideoPath
 		{
-			get => GetProperty(ref _videoPath);
-			set => SetProperty(ref _videoPath, value);
+			get => GetPropertyValue<redResourceReferenceScriptToken>();
+			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("channelID")] 
 		public TweakDBID ChannelID
 		{
-			get => GetProperty(ref _channelID);
-			set => SetProperty(ref _channelID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("messageRecordID")] 
 		public TweakDBID MessageRecordID
 		{
-			get => GetProperty(ref _messageRecordID);
-			set => SetProperty(ref _messageRecordID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("looped")] 
 		public CBool Looped
 		{
-			get => GetProperty(ref _looped);
-			set => SetProperty(ref _looped, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public TvDeviceWidgetCustomData()
+		{
+			VideoPath = new();
 		}
 	}
 }

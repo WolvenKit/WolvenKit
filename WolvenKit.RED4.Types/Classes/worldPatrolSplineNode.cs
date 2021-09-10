@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldPatrolSplineNode : worldSplineNode
 	{
-		private CArray<CHandle<worldPatrolSplinePointDefinition>> _patrolPointDefs;
-		private CArray<NodeRef> _patrolPoints;
-		private CArray<CHandle<worldTrafficSpotDefinition>> _spots;
-
 		[Ordinal(9)] 
 		[RED("patrolPointDefs")] 
 		public CArray<CHandle<worldPatrolSplinePointDefinition>> PatrolPointDefs
 		{
-			get => GetProperty(ref _patrolPointDefs);
-			set => SetProperty(ref _patrolPointDefs, value);
+			get => GetPropertyValue<CArray<CHandle<worldPatrolSplinePointDefinition>>>();
+			set => SetPropertyValue<CArray<CHandle<worldPatrolSplinePointDefinition>>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("patrolPoints")] 
 		public CArray<NodeRef> PatrolPoints
 		{
-			get => GetProperty(ref _patrolPoints);
-			set => SetProperty(ref _patrolPoints, value);
+			get => GetPropertyValue<CArray<NodeRef>>();
+			set => SetPropertyValue<CArray<NodeRef>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("spots")] 
 		public CArray<CHandle<worldTrafficSpotDefinition>> Spots
 		{
-			get => GetProperty(ref _spots);
-			set => SetProperty(ref _spots, value);
+			get => GetPropertyValue<CArray<CHandle<worldTrafficSpotDefinition>>>();
+			set => SetPropertyValue<CArray<CHandle<worldTrafficSpotDefinition>>>(value);
+		}
+
+		public worldPatrolSplineNode()
+		{
+			PatrolPointDefs = new();
+			PatrolPoints = new();
+			Spots = new();
 		}
 	}
 }

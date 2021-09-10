@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIRotateToCommand : AIMoveCommand
 	{
-		private AIPositionSpec _target;
-		private CFloat _angleTolerance;
-		private CFloat _angleOffset;
-		private CFloat _speed;
-
 		[Ordinal(7)] 
 		[RED("target")] 
 		public AIPositionSpec Target
 		{
-			get => GetProperty(ref _target);
-			set => SetProperty(ref _target, value);
+			get => GetPropertyValue<AIPositionSpec>();
+			set => SetPropertyValue<AIPositionSpec>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("angleTolerance")] 
 		public CFloat AngleTolerance
 		{
-			get => GetProperty(ref _angleTolerance);
-			set => SetProperty(ref _angleTolerance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("angleOffset")] 
 		public CFloat AngleOffset
 		{
-			get => GetProperty(ref _angleOffset);
-			set => SetProperty(ref _angleOffset, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("speed")] 
 		public CFloat Speed
 		{
-			get => GetProperty(ref _speed);
-			set => SetProperty(ref _speed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public AIRotateToCommand()
+		{
+			Target = new() { WorldPosition = new() { X = new(), Y = new(), Z = new() } };
 		}
 	}
 }

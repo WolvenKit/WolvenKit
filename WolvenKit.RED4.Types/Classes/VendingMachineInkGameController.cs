@@ -5,86 +5,84 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VendingMachineInkGameController : DeviceInkGameControllerBase
 	{
-		private inkHorizontalPanelWidgetReference _actionsPanel;
-		private inkTextWidgetReference _priceText;
-		private inkCompoundWidgetReference _noMoneyPanel;
-		private inkCompoundWidgetReference _soldOutPanel;
-		private CEnum<PaymentStatus> _state;
-		private CBool _soldOut;
-		private CHandle<redCallbackObject> _onUpdateStatusListener;
-		private CHandle<redCallbackObject> _onGlitchingStateChangedListener;
-		private CHandle<redCallbackObject> _onSoldOutListener;
-
 		[Ordinal(16)] 
 		[RED("ActionsPanel")] 
 		public inkHorizontalPanelWidgetReference ActionsPanel
 		{
-			get => GetProperty(ref _actionsPanel);
-			set => SetProperty(ref _actionsPanel, value);
+			get => GetPropertyValue<inkHorizontalPanelWidgetReference>();
+			set => SetPropertyValue<inkHorizontalPanelWidgetReference>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("priceText")] 
 		public inkTextWidgetReference PriceText
 		{
-			get => GetProperty(ref _priceText);
-			set => SetProperty(ref _priceText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("noMoneyPanel")] 
 		public inkCompoundWidgetReference NoMoneyPanel
 		{
-			get => GetProperty(ref _noMoneyPanel);
-			set => SetProperty(ref _noMoneyPanel, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("soldOutPanel")] 
 		public inkCompoundWidgetReference SoldOutPanel
 		{
-			get => GetProperty(ref _soldOutPanel);
-			set => SetProperty(ref _soldOutPanel, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("state")] 
 		public CEnum<PaymentStatus> State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<CEnum<PaymentStatus>>();
+			set => SetPropertyValue<CEnum<PaymentStatus>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("soldOut")] 
 		public CBool SoldOut
 		{
-			get => GetProperty(ref _soldOut);
-			set => SetProperty(ref _soldOut, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("onUpdateStatusListener")] 
 		public CHandle<redCallbackObject> OnUpdateStatusListener
 		{
-			get => GetProperty(ref _onUpdateStatusListener);
-			set => SetProperty(ref _onUpdateStatusListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("onGlitchingStateChangedListener")] 
 		public CHandle<redCallbackObject> OnGlitchingStateChangedListener
 		{
-			get => GetProperty(ref _onGlitchingStateChangedListener);
-			set => SetProperty(ref _onGlitchingStateChangedListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("onSoldOutListener")] 
 		public CHandle<redCallbackObject> OnSoldOutListener
 		{
-			get => GetProperty(ref _onSoldOutListener);
-			set => SetProperty(ref _onSoldOutListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		public VendingMachineInkGameController()
+		{
+			ActionsPanel = new();
+			PriceText = new();
+			NoMoneyPanel = new();
+			SoldOutPanel = new();
 		}
 	}
 }

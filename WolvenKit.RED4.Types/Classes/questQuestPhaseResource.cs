@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questQuestPhaseResource : graphGraphResource
 	{
-		private CArray<questQuestPrefabEntry> _phasePrefabs;
-
 		[Ordinal(2)] 
 		[RED("phasePrefabs")] 
 		public CArray<questQuestPrefabEntry> PhasePrefabs
 		{
-			get => GetProperty(ref _phasePrefabs);
-			set => SetProperty(ref _phasePrefabs, value);
+			get => GetPropertyValue<CArray<questQuestPrefabEntry>>();
+			set => SetPropertyValue<CArray<questQuestPrefabEntry>>(value);
+		}
+
+		public questQuestPhaseResource()
+		{
+			PhasePrefabs = new();
 		}
 	}
 }

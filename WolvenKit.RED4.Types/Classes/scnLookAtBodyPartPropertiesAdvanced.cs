@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnLookAtBodyPartPropertiesAdvanced : RedBaseClass
 	{
-		private CName _bodyPartName;
-
 		[Ordinal(0)] 
 		[RED("bodyPartName")] 
 		public CName BodyPartName
 		{
-			get => GetProperty(ref _bodyPartName);
-			set => SetProperty(ref _bodyPartName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public scnLookAtBodyPartPropertiesAdvanced()
 		{
-			_bodyPartName = "Head";
+			BodyPartName = "Head";
 		}
 	}
 }

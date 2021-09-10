@@ -5,29 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SecurityGateResponseProperties : RedBaseClass
 	{
-		private CEnum<ESecurityGateResponseType> _securityGateResponseType;
-		private CEnum<ESecurityAccessLevel> _securityLevelAccessGranted;
-
 		[Ordinal(0)] 
 		[RED("securityGateResponseType")] 
 		public CEnum<ESecurityGateResponseType> SecurityGateResponseType
 		{
-			get => GetProperty(ref _securityGateResponseType);
-			set => SetProperty(ref _securityGateResponseType, value);
+			get => GetPropertyValue<CEnum<ESecurityGateResponseType>>();
+			set => SetPropertyValue<CEnum<ESecurityGateResponseType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("securityLevelAccessGranted")] 
 		public CEnum<ESecurityAccessLevel> SecurityLevelAccessGranted
 		{
-			get => GetProperty(ref _securityLevelAccessGranted);
-			set => SetProperty(ref _securityLevelAccessGranted, value);
+			get => GetPropertyValue<CEnum<ESecurityAccessLevel>>();
+			set => SetPropertyValue<CEnum<ESecurityAccessLevel>>(value);
 		}
 
 		public SecurityGateResponseProperties()
 		{
-			_securityGateResponseType = new() { Value = Enums.ESecurityGateResponseType.SEC_SYS_REPRIMAND };
-			_securityLevelAccessGranted = new() { Value = Enums.ESecurityAccessLevel.ESL_3 };
+			SecurityGateResponseType = Enums.ESecurityGateResponseType.SEC_SYS_REPRIMAND;
+			SecurityLevelAccessGranted = Enums.ESecurityAccessLevel.ESL_3;
 		}
 	}
 }

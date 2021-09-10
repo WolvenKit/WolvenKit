@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class garmentBendingParams : RedBaseClass
 	{
-		private CFloat _bendPowerOffsetInCM;
-
 		[Ordinal(0)] 
 		[RED("bendPowerOffsetInCM")] 
 		public CFloat BendPowerOffsetInCM
 		{
-			get => GetProperty(ref _bendPowerOffsetInCM);
-			set => SetProperty(ref _bendPowerOffsetInCM, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public garmentBendingParams()
 		{
-			_bendPowerOffsetInCM = 1.000000F;
+			BendPowerOffsetInCM = 1.000000F;
 		}
 	}
 }

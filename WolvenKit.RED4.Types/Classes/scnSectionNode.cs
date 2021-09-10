@@ -5,41 +5,45 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnSectionNode : scnSceneGraphNode
 	{
-		private CArray<CHandle<scnSceneEvent>> _events;
-		private scnSceneTime _sectionDuration;
-		private CArray<scnSectionInternalsActorBehavior> _actorBehaviors;
-		private CBool _isFocusClue;
-
 		[Ordinal(3)] 
 		[RED("events")] 
 		public CArray<CHandle<scnSceneEvent>> Events
 		{
-			get => GetProperty(ref _events);
-			set => SetProperty(ref _events, value);
+			get => GetPropertyValue<CArray<CHandle<scnSceneEvent>>>();
+			set => SetPropertyValue<CArray<CHandle<scnSceneEvent>>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("sectionDuration")] 
 		public scnSceneTime SectionDuration
 		{
-			get => GetProperty(ref _sectionDuration);
-			set => SetProperty(ref _sectionDuration, value);
+			get => GetPropertyValue<scnSceneTime>();
+			set => SetPropertyValue<scnSceneTime>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("actorBehaviors")] 
 		public CArray<scnSectionInternalsActorBehavior> ActorBehaviors
 		{
-			get => GetProperty(ref _actorBehaviors);
-			set => SetProperty(ref _actorBehaviors, value);
+			get => GetPropertyValue<CArray<scnSectionInternalsActorBehavior>>();
+			set => SetPropertyValue<CArray<scnSectionInternalsActorBehavior>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isFocusClue")] 
 		public CBool IsFocusClue
 		{
-			get => GetProperty(ref _isFocusClue);
-			set => SetProperty(ref _isFocusClue, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public scnSectionNode()
+		{
+			NodeId = new() { Id = 4294967295 };
+			OutputSockets = new();
+			Events = new();
+			SectionDuration = new();
+			ActorBehaviors = new();
 		}
 	}
 }

@@ -5,19 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class moveMotionPlannerComponent : moveIMotionPlannerComponent
 	{
-		private CBool _snapToGround;
-
 		[Ordinal(3)] 
 		[RED("snapToGround")] 
 		public CBool SnapToGround
 		{
-			get => GetProperty(ref _snapToGround);
-			set => SetProperty(ref _snapToGround, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public moveMotionPlannerComponent()
 		{
-			_snapToGround = true;
+			Name = "Component";
+			SnapToGround = true;
 		}
 	}
 }

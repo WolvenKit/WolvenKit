@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class StopSFXEffector : gameEffector
 	{
-		private CName _sfxName;
-		private CWeakHandle<gameObject> _owner;
-
 		[Ordinal(0)] 
 		[RED("sfxName")] 
 		public CName SfxName
 		{
-			get => GetProperty(ref _sfxName);
-			set => SetProperty(ref _sfxName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("owner")] 
 		public CWeakHandle<gameObject> Owner
 		{
-			get => GetProperty(ref _owner);
-			set => SetProperty(ref _owner, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 	}
 }

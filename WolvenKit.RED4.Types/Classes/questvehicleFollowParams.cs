@@ -5,84 +5,78 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questvehicleFollowParams : questVehicleSpecificCommandParams
 	{
-		private gameEntityReference _targetEntRef;
-		private CFloat _distanceMin;
-		private CFloat _distanceMax;
-		private CBool _isPlayer;
-		private CBool _stopWhenTargetReached;
-		private CBool _useTraffic;
-		private CBool _trafficTryNeighborsForStart;
-		private CBool _trafficTryNeighborsForEnd;
-
 		[Ordinal(3)] 
 		[RED("targetEntRef")] 
 		public gameEntityReference TargetEntRef
 		{
-			get => GetProperty(ref _targetEntRef);
-			set => SetProperty(ref _targetEntRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("distanceMin")] 
 		public CFloat DistanceMin
 		{
-			get => GetProperty(ref _distanceMin);
-			set => SetProperty(ref _distanceMin, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("distanceMax")] 
 		public CFloat DistanceMax
 		{
-			get => GetProperty(ref _distanceMax);
-			set => SetProperty(ref _distanceMax, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isPlayer")] 
 		public CBool IsPlayer
 		{
-			get => GetProperty(ref _isPlayer);
-			set => SetProperty(ref _isPlayer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("stopWhenTargetReached")] 
 		public CBool StopWhenTargetReached
 		{
-			get => GetProperty(ref _stopWhenTargetReached);
-			set => SetProperty(ref _stopWhenTargetReached, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("useTraffic")] 
 		public CBool UseTraffic
 		{
-			get => GetProperty(ref _useTraffic);
-			set => SetProperty(ref _useTraffic, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("trafficTryNeighborsForStart")] 
 		public CBool TrafficTryNeighborsForStart
 		{
-			get => GetProperty(ref _trafficTryNeighborsForStart);
-			set => SetProperty(ref _trafficTryNeighborsForStart, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("trafficTryNeighborsForEnd")] 
 		public CBool TrafficTryNeighborsForEnd
 		{
-			get => GetProperty(ref _trafficTryNeighborsForEnd);
-			set => SetProperty(ref _trafficTryNeighborsForEnd, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public questvehicleFollowParams()
 		{
-			_distanceMin = 1.000000F;
-			_distanceMax = 5.000000F;
-			_useTraffic = true;
+			PushOtherVehiclesAside = true;
+			SecureTimeOut = 60.000000F;
+			TargetEntRef = new() { Names = new() };
+			DistanceMin = 1.000000F;
+			DistanceMax = 5.000000F;
+			UseTraffic = true;
 		}
 	}
 }

@@ -5,38 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnAddIdleAnimEvent : scnSceneEvent
 	{
-		private scnPerformerId _performerId;
-		private CName _actorComponent;
-		private CFloat _weight;
-
 		[Ordinal(6)] 
 		[RED("performerId")] 
 		public scnPerformerId PerformerId
 		{
-			get => GetProperty(ref _performerId);
-			set => SetProperty(ref _performerId, value);
+			get => GetPropertyValue<scnPerformerId>();
+			set => SetPropertyValue<scnPerformerId>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("actorComponent")] 
 		public CName ActorComponent
 		{
-			get => GetProperty(ref _actorComponent);
-			set => SetProperty(ref _actorComponent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("weight")] 
 		public CFloat Weight
 		{
-			get => GetProperty(ref _weight);
-			set => SetProperty(ref _weight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public scnAddIdleAnimEvent()
 		{
-			_actorComponent = "body";
-			_weight = 1.000000F;
+			Id = new() { Id = 18446744073709551615 };
+			PerformerId = new() { Id = 4294967040 };
+			ActorComponent = "body";
+			Weight = 1.000000F;
 		}
 	}
 }

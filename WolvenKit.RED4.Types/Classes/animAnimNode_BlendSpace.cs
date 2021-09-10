@@ -5,64 +5,61 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_BlendSpace : animAnimNode_Base
 	{
-		private CArray<animFloatLink> _inputLinks;
-		private animAnimNode_BlendSpace_InternalsBlendSpace _blendSpace;
-		private animFloatLink _progressLink;
-		private CBool _fireAnimEndEvent;
-		private CName _animEndEventName;
-		private CBool _isLooped;
-
 		[Ordinal(11)] 
 		[RED("inputLinks")] 
 		public CArray<animFloatLink> InputLinks
 		{
-			get => GetProperty(ref _inputLinks);
-			set => SetProperty(ref _inputLinks, value);
+			get => GetPropertyValue<CArray<animFloatLink>>();
+			set => SetPropertyValue<CArray<animFloatLink>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("blendSpace")] 
 		public animAnimNode_BlendSpace_InternalsBlendSpace BlendSpace
 		{
-			get => GetProperty(ref _blendSpace);
-			set => SetProperty(ref _blendSpace, value);
+			get => GetPropertyValue<animAnimNode_BlendSpace_InternalsBlendSpace>();
+			set => SetPropertyValue<animAnimNode_BlendSpace_InternalsBlendSpace>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("progressLink")] 
 		public animFloatLink ProgressLink
 		{
-			get => GetProperty(ref _progressLink);
-			set => SetProperty(ref _progressLink, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("fireAnimEndEvent")] 
 		public CBool FireAnimEndEvent
 		{
-			get => GetProperty(ref _fireAnimEndEvent);
-			set => SetProperty(ref _fireAnimEndEvent, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("animEndEventName")] 
 		public CName AnimEndEventName
 		{
-			get => GetProperty(ref _animEndEventName);
-			set => SetProperty(ref _animEndEventName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("isLooped")] 
 		public CBool IsLooped
 		{
-			get => GetProperty(ref _isLooped);
-			set => SetProperty(ref _isLooped, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public animAnimNode_BlendSpace()
 		{
-			_isLooped = true;
+			Id = 4294967295;
+			InputLinks = new() { new() };
+			BlendSpace = new() { SpaceDimension = 1, CoordinatesDescriptions = new() { new() }, SpacePoints = new(), IsLooped = true, NeedsRuntimeTriangulation = true, CachedSpacePoints_coordinates = new(), CachedSpaceSimplexes_pointsIndices = new(), CachedSamplesForGridPoints_simplexIndex = new(), CachedSamplesForGridPoints_weightsForPoints = new() };
+			ProgressLink = new();
+			IsLooped = true;
 		}
 	}
 }

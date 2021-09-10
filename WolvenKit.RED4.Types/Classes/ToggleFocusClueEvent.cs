@@ -5,46 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ToggleFocusClueEvent : redEvent
 	{
-		private CInt32 _clueIndex;
-		private CBool _isEnabled;
-		private CEnum<EFocusClueInvestigationState> _investigationState;
-		private CBool _updatePS;
-
 		[Ordinal(0)] 
 		[RED("clueIndex")] 
 		public CInt32 ClueIndex
 		{
-			get => GetProperty(ref _clueIndex);
-			set => SetProperty(ref _clueIndex, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("investigationState")] 
 		public CEnum<EFocusClueInvestigationState> InvestigationState
 		{
-			get => GetProperty(ref _investigationState);
-			set => SetProperty(ref _investigationState, value);
+			get => GetPropertyValue<CEnum<EFocusClueInvestigationState>>();
+			set => SetPropertyValue<CEnum<EFocusClueInvestigationState>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("updatePS")] 
 		public CBool UpdatePS
 		{
-			get => GetProperty(ref _updatePS);
-			set => SetProperty(ref _updatePS, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public ToggleFocusClueEvent()
 		{
-			_updatePS = true;
+			UpdatePS = true;
 		}
 	}
 }

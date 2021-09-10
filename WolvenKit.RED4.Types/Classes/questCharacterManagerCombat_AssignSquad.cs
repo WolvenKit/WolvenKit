@@ -5,38 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questCharacterManagerCombat_AssignSquad : questICharacterManagerCombat_NodeSubType
 	{
-		private TweakDBID _presetID;
-		private gameEntityReference _puppetRef;
-		private CEnum<AISquadType> _squadType;
-
 		[Ordinal(0)] 
 		[RED("presetID")] 
 		public TweakDBID PresetID
 		{
-			get => GetProperty(ref _presetID);
-			set => SetProperty(ref _presetID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("puppetRef")] 
 		public gameEntityReference PuppetRef
 		{
-			get => GetProperty(ref _puppetRef);
-			set => SetProperty(ref _puppetRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("squadType")] 
 		public CEnum<AISquadType> SquadType
 		{
-			get => GetProperty(ref _squadType);
-			set => SetProperty(ref _squadType, value);
+			get => GetPropertyValue<CEnum<AISquadType>>();
+			set => SetPropertyValue<CEnum<AISquadType>>(value);
 		}
 
 		public questCharacterManagerCombat_AssignSquad()
 		{
-			_presetID = new() { Value = 130861404206 };
-			_squadType = new() { Value = Enums.AISquadType.Combat };
+			PresetID = new() { Value = 130861404206 };
+			PuppetRef = new() { Names = new() };
+			SquadType = Enums.AISquadType.Combat;
 		}
 	}
 }

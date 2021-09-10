@@ -5,46 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questNPCLookAt_NodeType : questISceneManagerNodeType
 	{
-		private gameEntityReference _puppetRef;
-		private gameEntityReference _lookAtTargetRef;
-		private CBool _assignLookAt;
-		private CBool _refPlayer;
-
 		[Ordinal(0)] 
 		[RED("puppetRef")] 
 		public gameEntityReference PuppetRef
 		{
-			get => GetProperty(ref _puppetRef);
-			set => SetProperty(ref _puppetRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("lookAtTargetRef")] 
 		public gameEntityReference LookAtTargetRef
 		{
-			get => GetProperty(ref _lookAtTargetRef);
-			set => SetProperty(ref _lookAtTargetRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("assignLookAt")] 
 		public CBool AssignLookAt
 		{
-			get => GetProperty(ref _assignLookAt);
-			set => SetProperty(ref _assignLookAt, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("refPlayer")] 
 		public CBool RefPlayer
 		{
-			get => GetProperty(ref _refPlayer);
-			set => SetProperty(ref _refPlayer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public questNPCLookAt_NodeType()
 		{
-			_assignLookAt = true;
+			PuppetRef = new() { Names = new() };
+			LookAtTargetRef = new() { Names = new() };
+			AssignLookAt = true;
 		}
 	}
 }

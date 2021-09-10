@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CheckThreat : AIbehaviorconditionScript
 	{
-		private CHandle<AIArgumentMapping> _targetObjectMapping;
-		private CWeakHandle<gameObject> _targetThreat;
-
 		[Ordinal(0)] 
 		[RED("targetObjectMapping")] 
 		public CHandle<AIArgumentMapping> TargetObjectMapping
 		{
-			get => GetProperty(ref _targetObjectMapping);
-			set => SetProperty(ref _targetObjectMapping, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("targetThreat")] 
 		public CWeakHandle<gameObject> TargetThreat
 		{
-			get => GetProperty(ref _targetThreat);
-			set => SetProperty(ref _targetThreat, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 	}
 }

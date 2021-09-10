@@ -5,41 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WindowBlindersControllerPS : ScriptableDeviceComponentPS
 	{
-		private CHandle<EngDemoContainer> _windowBlindersSkillChecks;
-		private WindowBlindersData _windowBlindersData;
-		private CEnum<EWindowBlindersStates> _cachedState;
-		private CBool _alarmRaised;
-
 		[Ordinal(104)] 
 		[RED("windowBlindersSkillChecks")] 
 		public CHandle<EngDemoContainer> WindowBlindersSkillChecks
 		{
-			get => GetProperty(ref _windowBlindersSkillChecks);
-			set => SetProperty(ref _windowBlindersSkillChecks, value);
+			get => GetPropertyValue<CHandle<EngDemoContainer>>();
+			set => SetPropertyValue<CHandle<EngDemoContainer>>(value);
 		}
 
 		[Ordinal(105)] 
 		[RED("windowBlindersData")] 
 		public WindowBlindersData WindowBlindersData
 		{
-			get => GetProperty(ref _windowBlindersData);
-			set => SetProperty(ref _windowBlindersData, value);
+			get => GetPropertyValue<WindowBlindersData>();
+			set => SetPropertyValue<WindowBlindersData>(value);
 		}
 
 		[Ordinal(106)] 
 		[RED("cachedState")] 
 		public CEnum<EWindowBlindersStates> CachedState
 		{
-			get => GetProperty(ref _cachedState);
-			set => SetProperty(ref _cachedState, value);
+			get => GetPropertyValue<CEnum<EWindowBlindersStates>>();
+			set => SetPropertyValue<CEnum<EWindowBlindersStates>>(value);
 		}
 
 		[Ordinal(107)] 
 		[RED("alarmRaised")] 
 		public CBool AlarmRaised
 		{
-			get => GetProperty(ref _alarmRaised);
-			set => SetProperty(ref _alarmRaised, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public WindowBlindersControllerPS()
+		{
+			DeviceName = "LocKey#104";
+			TweakDBRecord = new() { Value = 96252370147 };
+			TweakDBDescriptionRecord = new() { Value = 148393279395 };
+			WindowBlindersData = new() { WindowBlindersState = Enums.EWindowBlindersStates.Closed, HasOpenInteraction = true, HasQuickHack = true };
 		}
 	}
 }

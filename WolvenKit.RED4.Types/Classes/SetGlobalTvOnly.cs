@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SetGlobalTvOnly : redEvent
 	{
-		private CBool _isGlobalTvOnly;
-
 		[Ordinal(0)] 
 		[RED("isGlobalTvOnly")] 
 		public CBool IsGlobalTvOnly
 		{
-			get => GetProperty(ref _isGlobalTvOnly);
-			set => SetProperty(ref _isGlobalTvOnly, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

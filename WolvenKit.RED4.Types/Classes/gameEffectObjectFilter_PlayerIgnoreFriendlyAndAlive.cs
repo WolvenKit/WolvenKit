@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameEffectObjectFilter_PlayerIgnoreFriendlyAndAlive : gameEffectObjectGroupFilter
 	{
-		private TweakDBID _ignoreCharacterRecord;
-
 		[Ordinal(0)] 
 		[RED("ignoreCharacterRecord")] 
 		public TweakDBID IgnoreCharacterRecord
 		{
-			get => GetProperty(ref _ignoreCharacterRecord);
-			set => SetProperty(ref _ignoreCharacterRecord, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 	}
 }

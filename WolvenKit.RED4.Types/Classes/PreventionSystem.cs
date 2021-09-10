@@ -5,518 +5,481 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PreventionSystem : gameScriptableSystem
 	{
-		private CHandle<DistrictManager> _districtManager;
-		private CWeakHandle<PlayerPuppet> _player;
-		private CWeakHandle<gamedataDistrictPreventionData_Record> _preventionPreset;
-		private CBool _hiddenReaction;
-		private CBool _systemDisabled;
-		private CArray<CName> _systemLockSources;
-		private CBool _deescalationZeroLockExecution;
-		private CEnum<EPreventionHeatStage> _heatStage;
-		private CArray<gamePersistentID> _playerIsInSecurityArea;
-		private CArray<gamePersistentID> _policeSecuritySystems;
-		private CInt32 _policeman100SpawnHits;
-		private CArray<CHandle<PreventionAgents>> _agentGroupsList;
-		private CArray<entEntityID> _agentsWhoSeePlayer;
-		private CArray<SHitNPC> _hitNPC;
-		private CArray<CWeakHandle<ScriptedPuppet>> _spawnedAgents;
-		private Vector4 _lastCrimePoint;
-		private Vector4 _lastBodyPosition;
-		private CFloat _dEBUG_lastCrimeDistance;
-		private CInt32 _policemanRandPercent;
-		private CInt32 _policemabProbabilityPercent;
-		private CFloat _generalPercent;
-		private CFloat _partGeneralPercent;
-		private CFloat _newDamageValue;
-		private CFloat _gameTimeStampPrevious;
-		private CFloat _gameTimeStampLastPoliceRise;
-		private CFloat _gameTimeStampDeescalationZero;
-		private gameDelayID _deescalationZeroDelayID;
-		private CBool _deescalationZeroCheck;
-		private gameDelayID _policemenSpawnDelayID;
-		private gameDelayID _preventionTickDelayID;
-		private CBool _preventionTickCheck;
-		private gameDelayID _securityAreaResetDelayID;
-		private CBool _securityAreaResetCheck;
-		private CBool _hadOngoingSpawnRequest;
-		private CEnum<EPreventionDebugProcessReason> _debug_PorcessReason;
-		private CEnum<EPreventionPsychoLogicType> _debug_PsychoLogicType;
-		private TweakDBID _currentPreventionPreset;
-		private TweakDBID _failsafePoliceRecordT1;
-		private TweakDBID _failsafePoliceRecordT2;
-		private TweakDBID _failsafePoliceRecordT3;
-		private CArray<CName> _blinkReasonsStack;
-		private CWeakHandle<gameIBlackboard> _wantedBarBlackboard;
-		private CHandle<redCallbackObject> _onPlayerChoiceCallID;
-		private CUInt32 _playerAttachedCallbackID;
-		private CUInt32 _playerDetachedCallbackID;
-		private CHandle<redCallbackObject> _playerHLSID;
-		private CHandle<redCallbackObject> _playerVehicleStateID;
-		private CEnum<gamePSMHighLevel> _playerHLS;
-		private CEnum<gamePSMVehicle> _playerVehicleState;
-		private CBool _currentStageFallbackUnitSpawned;
-		private CInt32 _unhandledInputsReceived;
-		private gameDelayID _inputlockDelayID;
-		private CBool _preventionUnitKilledDuringLock;
-		private CBool _reconDeployed;
-		private CArray<CWeakHandle<vehicleBaseObject>> _vehicles;
-		private CArray<CWeakHandle<gameObject>> _viewers;
-		private CBool _hasViewers;
-
 		[Ordinal(0)] 
 		[RED("districtManager")] 
 		public CHandle<DistrictManager> DistrictManager
 		{
-			get => GetProperty(ref _districtManager);
-			set => SetProperty(ref _districtManager, value);
+			get => GetPropertyValue<CHandle<DistrictManager>>();
+			set => SetPropertyValue<CHandle<DistrictManager>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
-			get => GetProperty(ref _player);
-			set => SetProperty(ref _player, value);
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("preventionPreset")] 
 		public CWeakHandle<gamedataDistrictPreventionData_Record> PreventionPreset
 		{
-			get => GetProperty(ref _preventionPreset);
-			set => SetProperty(ref _preventionPreset, value);
+			get => GetPropertyValue<CWeakHandle<gamedataDistrictPreventionData_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataDistrictPreventionData_Record>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("hiddenReaction")] 
 		public CBool HiddenReaction
 		{
-			get => GetProperty(ref _hiddenReaction);
-			set => SetProperty(ref _hiddenReaction, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("systemDisabled")] 
 		public CBool SystemDisabled
 		{
-			get => GetProperty(ref _systemDisabled);
-			set => SetProperty(ref _systemDisabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("systemLockSources")] 
 		public CArray<CName> SystemLockSources
 		{
-			get => GetProperty(ref _systemLockSources);
-			set => SetProperty(ref _systemLockSources, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("deescalationZeroLockExecution")] 
 		public CBool DeescalationZeroLockExecution
 		{
-			get => GetProperty(ref _deescalationZeroLockExecution);
-			set => SetProperty(ref _deescalationZeroLockExecution, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("heatStage")] 
 		public CEnum<EPreventionHeatStage> HeatStage
 		{
-			get => GetProperty(ref _heatStage);
-			set => SetProperty(ref _heatStage, value);
+			get => GetPropertyValue<CEnum<EPreventionHeatStage>>();
+			set => SetPropertyValue<CEnum<EPreventionHeatStage>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("playerIsInSecurityArea")] 
 		public CArray<gamePersistentID> PlayerIsInSecurityArea
 		{
-			get => GetProperty(ref _playerIsInSecurityArea);
-			set => SetProperty(ref _playerIsInSecurityArea, value);
+			get => GetPropertyValue<CArray<gamePersistentID>>();
+			set => SetPropertyValue<CArray<gamePersistentID>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("policeSecuritySystems")] 
 		public CArray<gamePersistentID> PoliceSecuritySystems
 		{
-			get => GetProperty(ref _policeSecuritySystems);
-			set => SetProperty(ref _policeSecuritySystems, value);
+			get => GetPropertyValue<CArray<gamePersistentID>>();
+			set => SetPropertyValue<CArray<gamePersistentID>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("policeman100SpawnHits")] 
 		public CInt32 Policeman100SpawnHits
 		{
-			get => GetProperty(ref _policeman100SpawnHits);
-			set => SetProperty(ref _policeman100SpawnHits, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("agentGroupsList")] 
 		public CArray<CHandle<PreventionAgents>> AgentGroupsList
 		{
-			get => GetProperty(ref _agentGroupsList);
-			set => SetProperty(ref _agentGroupsList, value);
+			get => GetPropertyValue<CArray<CHandle<PreventionAgents>>>();
+			set => SetPropertyValue<CArray<CHandle<PreventionAgents>>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("agentsWhoSeePlayer")] 
 		public CArray<entEntityID> AgentsWhoSeePlayer
 		{
-			get => GetProperty(ref _agentsWhoSeePlayer);
-			set => SetProperty(ref _agentsWhoSeePlayer, value);
+			get => GetPropertyValue<CArray<entEntityID>>();
+			set => SetPropertyValue<CArray<entEntityID>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("hitNPC")] 
 		public CArray<SHitNPC> HitNPC
 		{
-			get => GetProperty(ref _hitNPC);
-			set => SetProperty(ref _hitNPC, value);
+			get => GetPropertyValue<CArray<SHitNPC>>();
+			set => SetPropertyValue<CArray<SHitNPC>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("spawnedAgents")] 
 		public CArray<CWeakHandle<ScriptedPuppet>> SpawnedAgents
 		{
-			get => GetProperty(ref _spawnedAgents);
-			set => SetProperty(ref _spawnedAgents, value);
+			get => GetPropertyValue<CArray<CWeakHandle<ScriptedPuppet>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<ScriptedPuppet>>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("lastCrimePoint")] 
 		public Vector4 LastCrimePoint
 		{
-			get => GetProperty(ref _lastCrimePoint);
-			set => SetProperty(ref _lastCrimePoint, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("lastBodyPosition")] 
 		public Vector4 LastBodyPosition
 		{
-			get => GetProperty(ref _lastBodyPosition);
-			set => SetProperty(ref _lastBodyPosition, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("DEBUG_lastCrimeDistance")] 
 		public CFloat DEBUG_lastCrimeDistance
 		{
-			get => GetProperty(ref _dEBUG_lastCrimeDistance);
-			set => SetProperty(ref _dEBUG_lastCrimeDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("policemanRandPercent")] 
 		public CInt32 PolicemanRandPercent
 		{
-			get => GetProperty(ref _policemanRandPercent);
-			set => SetProperty(ref _policemanRandPercent, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("policemabProbabilityPercent")] 
 		public CInt32 PolicemabProbabilityPercent
 		{
-			get => GetProperty(ref _policemabProbabilityPercent);
-			set => SetProperty(ref _policemabProbabilityPercent, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("generalPercent")] 
 		public CFloat GeneralPercent
 		{
-			get => GetProperty(ref _generalPercent);
-			set => SetProperty(ref _generalPercent, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("partGeneralPercent")] 
 		public CFloat PartGeneralPercent
 		{
-			get => GetProperty(ref _partGeneralPercent);
-			set => SetProperty(ref _partGeneralPercent, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("newDamageValue")] 
 		public CFloat NewDamageValue
 		{
-			get => GetProperty(ref _newDamageValue);
-			set => SetProperty(ref _newDamageValue, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("gameTimeStampPrevious")] 
 		public CFloat GameTimeStampPrevious
 		{
-			get => GetProperty(ref _gameTimeStampPrevious);
-			set => SetProperty(ref _gameTimeStampPrevious, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("gameTimeStampLastPoliceRise")] 
 		public CFloat GameTimeStampLastPoliceRise
 		{
-			get => GetProperty(ref _gameTimeStampLastPoliceRise);
-			set => SetProperty(ref _gameTimeStampLastPoliceRise, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("gameTimeStampDeescalationZero")] 
 		public CFloat GameTimeStampDeescalationZero
 		{
-			get => GetProperty(ref _gameTimeStampDeescalationZero);
-			set => SetProperty(ref _gameTimeStampDeescalationZero, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("deescalationZeroDelayID")] 
 		public gameDelayID DeescalationZeroDelayID
 		{
-			get => GetProperty(ref _deescalationZeroDelayID);
-			set => SetProperty(ref _deescalationZeroDelayID, value);
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("deescalationZeroCheck")] 
 		public CBool DeescalationZeroCheck
 		{
-			get => GetProperty(ref _deescalationZeroCheck);
-			set => SetProperty(ref _deescalationZeroCheck, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("policemenSpawnDelayID")] 
 		public gameDelayID PolicemenSpawnDelayID
 		{
-			get => GetProperty(ref _policemenSpawnDelayID);
-			set => SetProperty(ref _policemenSpawnDelayID, value);
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("preventionTickDelayID")] 
 		public gameDelayID PreventionTickDelayID
 		{
-			get => GetProperty(ref _preventionTickDelayID);
-			set => SetProperty(ref _preventionTickDelayID, value);
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("preventionTickCheck")] 
 		public CBool PreventionTickCheck
 		{
-			get => GetProperty(ref _preventionTickCheck);
-			set => SetProperty(ref _preventionTickCheck, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("securityAreaResetDelayID")] 
 		public gameDelayID SecurityAreaResetDelayID
 		{
-			get => GetProperty(ref _securityAreaResetDelayID);
-			set => SetProperty(ref _securityAreaResetDelayID, value);
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("securityAreaResetCheck")] 
 		public CBool SecurityAreaResetCheck
 		{
-			get => GetProperty(ref _securityAreaResetCheck);
-			set => SetProperty(ref _securityAreaResetCheck, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("hadOngoingSpawnRequest")] 
 		public CBool HadOngoingSpawnRequest
 		{
-			get => GetProperty(ref _hadOngoingSpawnRequest);
-			set => SetProperty(ref _hadOngoingSpawnRequest, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(34)] 
 		[RED("Debug_PorcessReason")] 
 		public CEnum<EPreventionDebugProcessReason> Debug_PorcessReason
 		{
-			get => GetProperty(ref _debug_PorcessReason);
-			set => SetProperty(ref _debug_PorcessReason, value);
+			get => GetPropertyValue<CEnum<EPreventionDebugProcessReason>>();
+			set => SetPropertyValue<CEnum<EPreventionDebugProcessReason>>(value);
 		}
 
 		[Ordinal(35)] 
 		[RED("Debug_PsychoLogicType")] 
 		public CEnum<EPreventionPsychoLogicType> Debug_PsychoLogicType
 		{
-			get => GetProperty(ref _debug_PsychoLogicType);
-			set => SetProperty(ref _debug_PsychoLogicType, value);
+			get => GetPropertyValue<CEnum<EPreventionPsychoLogicType>>();
+			set => SetPropertyValue<CEnum<EPreventionPsychoLogicType>>(value);
 		}
 
 		[Ordinal(36)] 
 		[RED("currentPreventionPreset")] 
 		public TweakDBID CurrentPreventionPreset
 		{
-			get => GetProperty(ref _currentPreventionPreset);
-			set => SetProperty(ref _currentPreventionPreset, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(37)] 
 		[RED("failsafePoliceRecordT1")] 
 		public TweakDBID FailsafePoliceRecordT1
 		{
-			get => GetProperty(ref _failsafePoliceRecordT1);
-			set => SetProperty(ref _failsafePoliceRecordT1, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(38)] 
 		[RED("failsafePoliceRecordT2")] 
 		public TweakDBID FailsafePoliceRecordT2
 		{
-			get => GetProperty(ref _failsafePoliceRecordT2);
-			set => SetProperty(ref _failsafePoliceRecordT2, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(39)] 
 		[RED("failsafePoliceRecordT3")] 
 		public TweakDBID FailsafePoliceRecordT3
 		{
-			get => GetProperty(ref _failsafePoliceRecordT3);
-			set => SetProperty(ref _failsafePoliceRecordT3, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(40)] 
 		[RED("blinkReasonsStack")] 
 		public CArray<CName> BlinkReasonsStack
 		{
-			get => GetProperty(ref _blinkReasonsStack);
-			set => SetProperty(ref _blinkReasonsStack, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(41)] 
 		[RED("wantedBarBlackboard")] 
 		public CWeakHandle<gameIBlackboard> WantedBarBlackboard
 		{
-			get => GetProperty(ref _wantedBarBlackboard);
-			set => SetProperty(ref _wantedBarBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(42)] 
 		[RED("onPlayerChoiceCallID")] 
 		public CHandle<redCallbackObject> OnPlayerChoiceCallID
 		{
-			get => GetProperty(ref _onPlayerChoiceCallID);
-			set => SetProperty(ref _onPlayerChoiceCallID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(43)] 
 		[RED("playerAttachedCallbackID")] 
 		public CUInt32 PlayerAttachedCallbackID
 		{
-			get => GetProperty(ref _playerAttachedCallbackID);
-			set => SetProperty(ref _playerAttachedCallbackID, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(44)] 
 		[RED("playerDetachedCallbackID")] 
 		public CUInt32 PlayerDetachedCallbackID
 		{
-			get => GetProperty(ref _playerDetachedCallbackID);
-			set => SetProperty(ref _playerDetachedCallbackID, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(45)] 
 		[RED("playerHLSID")] 
 		public CHandle<redCallbackObject> PlayerHLSID
 		{
-			get => GetProperty(ref _playerHLSID);
-			set => SetProperty(ref _playerHLSID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(46)] 
 		[RED("playerVehicleStateID")] 
 		public CHandle<redCallbackObject> PlayerVehicleStateID
 		{
-			get => GetProperty(ref _playerVehicleStateID);
-			set => SetProperty(ref _playerVehicleStateID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(47)] 
 		[RED("playerHLS")] 
 		public CEnum<gamePSMHighLevel> PlayerHLS
 		{
-			get => GetProperty(ref _playerHLS);
-			set => SetProperty(ref _playerHLS, value);
+			get => GetPropertyValue<CEnum<gamePSMHighLevel>>();
+			set => SetPropertyValue<CEnum<gamePSMHighLevel>>(value);
 		}
 
 		[Ordinal(48)] 
 		[RED("playerVehicleState")] 
 		public CEnum<gamePSMVehicle> PlayerVehicleState
 		{
-			get => GetProperty(ref _playerVehicleState);
-			set => SetProperty(ref _playerVehicleState, value);
+			get => GetPropertyValue<CEnum<gamePSMVehicle>>();
+			set => SetPropertyValue<CEnum<gamePSMVehicle>>(value);
 		}
 
 		[Ordinal(49)] 
 		[RED("currentStageFallbackUnitSpawned")] 
 		public CBool CurrentStageFallbackUnitSpawned
 		{
-			get => GetProperty(ref _currentStageFallbackUnitSpawned);
-			set => SetProperty(ref _currentStageFallbackUnitSpawned, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(50)] 
 		[RED("unhandledInputsReceived")] 
 		public CInt32 UnhandledInputsReceived
 		{
-			get => GetProperty(ref _unhandledInputsReceived);
-			set => SetProperty(ref _unhandledInputsReceived, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(51)] 
 		[RED("inputlockDelayID")] 
 		public gameDelayID InputlockDelayID
 		{
-			get => GetProperty(ref _inputlockDelayID);
-			set => SetProperty(ref _inputlockDelayID, value);
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
 		}
 
 		[Ordinal(52)] 
 		[RED("preventionUnitKilledDuringLock")] 
 		public CBool PreventionUnitKilledDuringLock
 		{
-			get => GetProperty(ref _preventionUnitKilledDuringLock);
-			set => SetProperty(ref _preventionUnitKilledDuringLock, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(53)] 
 		[RED("reconDeployed")] 
 		public CBool ReconDeployed
 		{
-			get => GetProperty(ref _reconDeployed);
-			set => SetProperty(ref _reconDeployed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(54)] 
 		[RED("vehicles")] 
 		public CArray<CWeakHandle<vehicleBaseObject>> Vehicles
 		{
-			get => GetProperty(ref _vehicles);
-			set => SetProperty(ref _vehicles, value);
+			get => GetPropertyValue<CArray<CWeakHandle<vehicleBaseObject>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<vehicleBaseObject>>>(value);
 		}
 
 		[Ordinal(55)] 
 		[RED("viewers")] 
 		public CArray<CWeakHandle<gameObject>> Viewers
 		{
-			get => GetProperty(ref _viewers);
-			set => SetProperty(ref _viewers, value);
+			get => GetPropertyValue<CArray<CWeakHandle<gameObject>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<gameObject>>>(value);
 		}
 
 		[Ordinal(56)] 
 		[RED("hasViewers")] 
 		public CBool HasViewers
 		{
-			get => GetProperty(ref _hasViewers);
-			set => SetProperty(ref _hasViewers, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public PreventionSystem()
+		{
+			SystemLockSources = new();
+			PlayerIsInSecurityArea = new();
+			PoliceSecuritySystems = new();
+			AgentGroupsList = new();
+			AgentsWhoSeePlayer = new();
+			HitNPC = new();
+			SpawnedAgents = new();
+			LastCrimePoint = new();
+			LastBodyPosition = new();
+			DeescalationZeroDelayID = new();
+			PolicemenSpawnDelayID = new();
+			PreventionTickDelayID = new();
+			SecurityAreaResetDelayID = new();
+			BlinkReasonsStack = new();
+			InputlockDelayID = new();
+			Vehicles = new();
+			Viewers = new();
 		}
 	}
 }

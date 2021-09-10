@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiMinimapDeviceMappinController : gameuiBaseMinimapMappinController
 	{
-		private inkCircleWidgetReference _effectAreaWidget;
-
 		[Ordinal(14)] 
 		[RED("effectAreaWidget")] 
 		public inkCircleWidgetReference EffectAreaWidget
 		{
-			get => GetProperty(ref _effectAreaWidget);
-			set => SetProperty(ref _effectAreaWidget, value);
+			get => GetPropertyValue<inkCircleWidgetReference>();
+			set => SetPropertyValue<inkCircleWidgetReference>(value);
+		}
+
+		public gameuiMinimapDeviceMappinController()
+		{
+			EffectAreaWidget = new();
 		}
 	}
 }

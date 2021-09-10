@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SocialPanelContactsListItem : inkToggleController
 	{
-		private inkTextWidgetReference _label;
-		private SocialPanelContactInfo _contactInfo;
-
 		[Ordinal(13)] 
 		[RED("Label")] 
 		public inkTextWidgetReference Label
 		{
-			get => GetProperty(ref _label);
-			set => SetProperty(ref _label, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("ContactInfo")] 
 		public SocialPanelContactInfo ContactInfo
 		{
-			get => GetProperty(ref _contactInfo);
-			set => SetProperty(ref _contactInfo, value);
+			get => GetPropertyValue<SocialPanelContactInfo>();
+			set => SetPropertyValue<SocialPanelContactInfo>(value);
+		}
+
+		public SocialPanelContactsListItem()
+		{
+			Label = new();
+			ContactInfo = new();
 		}
 	}
 }

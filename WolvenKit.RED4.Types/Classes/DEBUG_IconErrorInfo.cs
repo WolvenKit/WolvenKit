@@ -5,59 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DEBUG_IconErrorInfo : IScriptable
 	{
-		private CString _itemName;
-		private CString _innerItemName;
-		private CString _resolvedIconName;
-		private CString _errorMessage;
-		private CEnum<inkIconResult> _errorType;
-		private CBool _isManuallySet;
-
 		[Ordinal(0)] 
 		[RED("itemName")] 
 		public CString ItemName
 		{
-			get => GetProperty(ref _itemName);
-			set => SetProperty(ref _itemName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("innerItemName")] 
 		public CString InnerItemName
 		{
-			get => GetProperty(ref _innerItemName);
-			set => SetProperty(ref _innerItemName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("resolvedIconName")] 
 		public CString ResolvedIconName
 		{
-			get => GetProperty(ref _resolvedIconName);
-			set => SetProperty(ref _resolvedIconName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("errorMessage")] 
 		public CString ErrorMessage
 		{
-			get => GetProperty(ref _errorMessage);
-			set => SetProperty(ref _errorMessage, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("errorType")] 
 		public CEnum<inkIconResult> ErrorType
 		{
-			get => GetProperty(ref _errorType);
-			set => SetProperty(ref _errorType, value);
+			get => GetPropertyValue<CEnum<inkIconResult>>();
+			set => SetPropertyValue<CEnum<inkIconResult>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("isManuallySet")] 
 		public CBool IsManuallySet
 		{
-			get => GetProperty(ref _isManuallySet);
-			set => SetProperty(ref _isManuallySet, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

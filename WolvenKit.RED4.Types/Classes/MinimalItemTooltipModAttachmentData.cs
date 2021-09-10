@@ -5,50 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MinimalItemTooltipModAttachmentData : MinimalItemTooltipModData
 	{
-		private CBool _isEmpty;
-		private CString _slotName;
-		private CName _qualityName;
-		private CInt32 _abilitiesSize;
-		private CArray<gameInventoryItemAbility> _abilities;
-
 		[Ordinal(0)] 
 		[RED("isEmpty")] 
 		public CBool IsEmpty
 		{
-			get => GetProperty(ref _isEmpty);
-			set => SetProperty(ref _isEmpty, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("slotName")] 
 		public CString SlotName
 		{
-			get => GetProperty(ref _slotName);
-			set => SetProperty(ref _slotName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("qualityName")] 
 		public CName QualityName
 		{
-			get => GetProperty(ref _qualityName);
-			set => SetProperty(ref _qualityName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("abilitiesSize")] 
 		public CInt32 AbilitiesSize
 		{
-			get => GetProperty(ref _abilitiesSize);
-			set => SetProperty(ref _abilitiesSize, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("abilities")] 
 		public CArray<gameInventoryItemAbility> Abilities
 		{
-			get => GetProperty(ref _abilities);
-			set => SetProperty(ref _abilities, value);
+			get => GetPropertyValue<CArray<gameInventoryItemAbility>>();
+			set => SetPropertyValue<CArray<gameInventoryItemAbility>>(value);
+		}
+
+		public MinimalItemTooltipModAttachmentData()
+		{
+			Abilities = new();
 		}
 	}
 }

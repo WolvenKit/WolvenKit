@@ -5,260 +5,236 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldProxyMiscAdvancedParams : RedBaseClass
 	{
-		private CBool _useLod1;
-		private CBool _smoothVolume;
-		private CUInt8 _blurCutout;
-		private CUInt8 _occlusionRatio;
-		private CBool _capTop;
-		private CBool _capBottom;
-		private CFloat _fillHolesBeforeReduceRatio;
-		private CFloat _fillHolesAfterReduceRatio;
-		private CInt32 _rsSweepOrder;
-		private CFloat _rsDetailDrop;
-		private Vector3 _rsAxisPrecision;
-		private Vector3 _rsAxisExpand;
-		private CFloat _rsAliasingReduction;
-		private CFloat _bcMergeRange;
-		private CFloat _bcSizeCutoff;
-		private CFloat _bcIterations;
-		private CFloat _bcMaxSize;
-		private CFloat _bcMinSize;
-		private CFloat _bcMergeSensitivity;
-		private CFloat _bcMinScale;
-		private CFloat _bcGridSize;
-		private CFloat _bcFilterSensitivity;
-		private CFloat _bcBoundsRatioLimit;
-		private CBool _useClosestPointOnMesh;
-		private CBool _removeIslands;
-		private CColor _backgroundColor;
-
 		[Ordinal(0)] 
 		[RED("useLod1")] 
 		public CBool UseLod1
 		{
-			get => GetProperty(ref _useLod1);
-			set => SetProperty(ref _useLod1, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("smoothVolume")] 
 		public CBool SmoothVolume
 		{
-			get => GetProperty(ref _smoothVolume);
-			set => SetProperty(ref _smoothVolume, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("blurCutout")] 
 		public CUInt8 BlurCutout
 		{
-			get => GetProperty(ref _blurCutout);
-			set => SetProperty(ref _blurCutout, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("occlusionRatio")] 
 		public CUInt8 OcclusionRatio
 		{
-			get => GetProperty(ref _occlusionRatio);
-			set => SetProperty(ref _occlusionRatio, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("capTop")] 
 		public CBool CapTop
 		{
-			get => GetProperty(ref _capTop);
-			set => SetProperty(ref _capTop, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("capBottom")] 
 		public CBool CapBottom
 		{
-			get => GetProperty(ref _capBottom);
-			set => SetProperty(ref _capBottom, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("fillHolesBeforeReduceRatio")] 
 		public CFloat FillHolesBeforeReduceRatio
 		{
-			get => GetProperty(ref _fillHolesBeforeReduceRatio);
-			set => SetProperty(ref _fillHolesBeforeReduceRatio, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("fillHolesAfterReduceRatio")] 
 		public CFloat FillHolesAfterReduceRatio
 		{
-			get => GetProperty(ref _fillHolesAfterReduceRatio);
-			set => SetProperty(ref _fillHolesAfterReduceRatio, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("rsSweepOrder")] 
 		public CInt32 RsSweepOrder
 		{
-			get => GetProperty(ref _rsSweepOrder);
-			set => SetProperty(ref _rsSweepOrder, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("rsDetailDrop")] 
 		public CFloat RsDetailDrop
 		{
-			get => GetProperty(ref _rsDetailDrop);
-			set => SetProperty(ref _rsDetailDrop, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("rsAxisPrecision")] 
 		public Vector3 RsAxisPrecision
 		{
-			get => GetProperty(ref _rsAxisPrecision);
-			set => SetProperty(ref _rsAxisPrecision, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("rsAxisExpand")] 
 		public Vector3 RsAxisExpand
 		{
-			get => GetProperty(ref _rsAxisExpand);
-			set => SetProperty(ref _rsAxisExpand, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("rsAliasingReduction")] 
 		public CFloat RsAliasingReduction
 		{
-			get => GetProperty(ref _rsAliasingReduction);
-			set => SetProperty(ref _rsAliasingReduction, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("bcMergeRange")] 
 		public CFloat BcMergeRange
 		{
-			get => GetProperty(ref _bcMergeRange);
-			set => SetProperty(ref _bcMergeRange, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("bcSizeCutoff")] 
 		public CFloat BcSizeCutoff
 		{
-			get => GetProperty(ref _bcSizeCutoff);
-			set => SetProperty(ref _bcSizeCutoff, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("bcIterations")] 
 		public CFloat BcIterations
 		{
-			get => GetProperty(ref _bcIterations);
-			set => SetProperty(ref _bcIterations, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("bcMaxSize")] 
 		public CFloat BcMaxSize
 		{
-			get => GetProperty(ref _bcMaxSize);
-			set => SetProperty(ref _bcMaxSize, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("bcMinSize")] 
 		public CFloat BcMinSize
 		{
-			get => GetProperty(ref _bcMinSize);
-			set => SetProperty(ref _bcMinSize, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("bcMergeSensitivity")] 
 		public CFloat BcMergeSensitivity
 		{
-			get => GetProperty(ref _bcMergeSensitivity);
-			set => SetProperty(ref _bcMergeSensitivity, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("bcMinScale")] 
 		public CFloat BcMinScale
 		{
-			get => GetProperty(ref _bcMinScale);
-			set => SetProperty(ref _bcMinScale, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("bcGridSize")] 
 		public CFloat BcGridSize
 		{
-			get => GetProperty(ref _bcGridSize);
-			set => SetProperty(ref _bcGridSize, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("bcFilterSensitivity")] 
 		public CFloat BcFilterSensitivity
 		{
-			get => GetProperty(ref _bcFilterSensitivity);
-			set => SetProperty(ref _bcFilterSensitivity, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("bcBoundsRatioLimit")] 
 		public CFloat BcBoundsRatioLimit
 		{
-			get => GetProperty(ref _bcBoundsRatioLimit);
-			set => SetProperty(ref _bcBoundsRatioLimit, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("useClosestPointOnMesh")] 
 		public CBool UseClosestPointOnMesh
 		{
-			get => GetProperty(ref _useClosestPointOnMesh);
-			set => SetProperty(ref _useClosestPointOnMesh, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("removeIslands")] 
 		public CBool RemoveIslands
 		{
-			get => GetProperty(ref _removeIslands);
-			set => SetProperty(ref _removeIslands, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("backgroundColor")] 
 		public CColor BackgroundColor
 		{
-			get => GetProperty(ref _backgroundColor);
-			set => SetProperty(ref _backgroundColor, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		public worldProxyMiscAdvancedParams()
 		{
-			_useLod1 = true;
-			_blurCutout = 20;
-			_occlusionRatio = 40;
-			_fillHolesBeforeReduceRatio = 1.500000F;
-			_fillHolesAfterReduceRatio = 0.400000F;
-			_rsAliasingReduction = 1.000000F;
-			_bcMergeRange = 0.800000F;
-			_bcSizeCutoff = 120.000000F;
-			_bcIterations = 0.500000F;
-			_bcMaxSize = 120.000000F;
-			_bcMinSize = 2.000000F;
-			_bcMergeSensitivity = 50.000000F;
-			_bcMinScale = 1.000000F;
-			_bcGridSize = 120.000000F;
-			_bcFilterSensitivity = 0.250000F;
-			_bcBoundsRatioLimit = 0.250000F;
-			_removeIslands = true;
+			UseLod1 = true;
+			BlurCutout = 20;
+			OcclusionRatio = 40;
+			FillHolesBeforeReduceRatio = 1.500000F;
+			FillHolesAfterReduceRatio = 0.400000F;
+			RsAxisPrecision = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
+			RsAxisExpand = new();
+			RsAliasingReduction = 1.000000F;
+			BcMergeRange = 0.800000F;
+			BcSizeCutoff = 120.000000F;
+			BcIterations = 0.500000F;
+			BcMaxSize = 120.000000F;
+			BcMinSize = 2.000000F;
+			BcMergeSensitivity = 50.000000F;
+			BcMinScale = 1.000000F;
+			BcGridSize = 120.000000F;
+			BcFilterSensitivity = 0.250000F;
+			BcBoundsRatioLimit = 0.250000F;
+			RemoveIslands = true;
+			BackgroundColor = new();
 		}
 	}
 }

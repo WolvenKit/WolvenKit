@@ -5,50 +5,51 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class QuestListHeaderController : inkWidgetLogicController
 	{
-		private inkTextWidgetReference _title;
-		private inkWidgetReference _arrow;
-		private inkWidgetReference _root;
-		private CInt32 _questType;
-		private CBool _hovered;
-
 		[Ordinal(1)] 
 		[RED("title")] 
 		public inkTextWidgetReference Title
 		{
-			get => GetProperty(ref _title);
-			set => SetProperty(ref _title, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("arrow")] 
 		public inkWidgetReference Arrow
 		{
-			get => GetProperty(ref _arrow);
-			set => SetProperty(ref _arrow, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("root")] 
 		public inkWidgetReference Root
 		{
-			get => GetProperty(ref _root);
-			set => SetProperty(ref _root, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("questType")] 
 		public CInt32 QuestType
 		{
-			get => GetProperty(ref _questType);
-			set => SetProperty(ref _questType, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("hovered")] 
 		public CBool Hovered
 		{
-			get => GetProperty(ref _hovered);
-			set => SetProperty(ref _hovered, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public QuestListHeaderController()
+		{
+			Title = new();
+			Arrow = new();
+			Root = new();
 		}
 	}
 }

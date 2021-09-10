@@ -5,85 +5,79 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WaterAreaSettings : IAreaSettings
 	{
-		private CFloat _blurMin;
-		private CFloat _blurMax;
-		private CFloat _blurExponent;
-		private CFloat _depth;
-		private CFloat _density;
-		private HDRColor _lightAbsorptionColor;
-		private HDRColor _lightDecayColor;
-		private CResourceReference<CBitmapTexture> _globalWaterMask;
-
 		[Ordinal(2)] 
 		[RED("blurMin")] 
 		public CFloat BlurMin
 		{
-			get => GetProperty(ref _blurMin);
-			set => SetProperty(ref _blurMin, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("blurMax")] 
 		public CFloat BlurMax
 		{
-			get => GetProperty(ref _blurMax);
-			set => SetProperty(ref _blurMax, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("blurExponent")] 
 		public CFloat BlurExponent
 		{
-			get => GetProperty(ref _blurExponent);
-			set => SetProperty(ref _blurExponent, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("depth")] 
 		public CFloat Depth
 		{
-			get => GetProperty(ref _depth);
-			set => SetProperty(ref _depth, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("density")] 
 		public CFloat Density
 		{
-			get => GetProperty(ref _density);
-			set => SetProperty(ref _density, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("lightAbsorptionColor")] 
 		public HDRColor LightAbsorptionColor
 		{
-			get => GetProperty(ref _lightAbsorptionColor);
-			set => SetProperty(ref _lightAbsorptionColor, value);
+			get => GetPropertyValue<HDRColor>();
+			set => SetPropertyValue<HDRColor>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("lightDecayColor")] 
 		public HDRColor LightDecayColor
 		{
-			get => GetProperty(ref _lightDecayColor);
-			set => SetProperty(ref _lightDecayColor, value);
+			get => GetPropertyValue<HDRColor>();
+			set => SetPropertyValue<HDRColor>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("globalWaterMask")] 
 		public CResourceReference<CBitmapTexture> GlobalWaterMask
 		{
-			get => GetProperty(ref _globalWaterMask);
-			set => SetProperty(ref _globalWaterMask, value);
+			get => GetPropertyValue<CResourceReference<CBitmapTexture>>();
+			set => SetPropertyValue<CResourceReference<CBitmapTexture>>(value);
 		}
 
 		public WaterAreaSettings()
 		{
-			_blurMax = 10.000000F;
-			_blurExponent = 1.000000F;
-			_depth = 50.000000F;
-			_density = 10.000000F;
+			Enable = true;
+			BlurMax = 10.000000F;
+			BlurExponent = 1.000000F;
+			Depth = 50.000000F;
+			Density = 10.000000F;
+			LightAbsorptionColor = new() { Red = 0.100000F, Green = 0.500000F, Blue = 1.000000F, Alpha = 1.000000F };
+			LightDecayColor = new() { Red = 0.100000F, Green = 0.130000F, Blue = 0.130000F, Alpha = 1.000000F };
 		}
 	}
 }

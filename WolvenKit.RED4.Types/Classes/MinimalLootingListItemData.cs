@@ -5,95 +5,84 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MinimalLootingListItemData : IScriptable
 	{
-		private CWeakHandle<gameItemData> _gameItemData;
-		private CString _itemName;
-		private CEnum<gamedataItemType> _itemType;
-		private CEnum<gamedataEquipmentArea> _equipmentArea;
-		private CEnum<gamedataQuality> _quality;
-		private CBool _isIconic;
-		private CInt32 _quantity;
-		private CEnum<gameLootItemType> _lootItemType;
-		private CFloat _dpsDiff;
-		private CFloat _armorDiff;
-
 		[Ordinal(0)] 
 		[RED("gameItemData")] 
 		public CWeakHandle<gameItemData> GameItemData
 		{
-			get => GetProperty(ref _gameItemData);
-			set => SetProperty(ref _gameItemData, value);
+			get => GetPropertyValue<CWeakHandle<gameItemData>>();
+			set => SetPropertyValue<CWeakHandle<gameItemData>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("itemName")] 
 		public CString ItemName
 		{
-			get => GetProperty(ref _itemName);
-			set => SetProperty(ref _itemName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("itemType")] 
 		public CEnum<gamedataItemType> ItemType
 		{
-			get => GetProperty(ref _itemType);
-			set => SetProperty(ref _itemType, value);
+			get => GetPropertyValue<CEnum<gamedataItemType>>();
+			set => SetPropertyValue<CEnum<gamedataItemType>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("equipmentArea")] 
 		public CEnum<gamedataEquipmentArea> EquipmentArea
 		{
-			get => GetProperty(ref _equipmentArea);
-			set => SetProperty(ref _equipmentArea, value);
+			get => GetPropertyValue<CEnum<gamedataEquipmentArea>>();
+			set => SetPropertyValue<CEnum<gamedataEquipmentArea>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("quality")] 
 		public CEnum<gamedataQuality> Quality
 		{
-			get => GetProperty(ref _quality);
-			set => SetProperty(ref _quality, value);
+			get => GetPropertyValue<CEnum<gamedataQuality>>();
+			set => SetPropertyValue<CEnum<gamedataQuality>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("isIconic")] 
 		public CBool IsIconic
 		{
-			get => GetProperty(ref _isIconic);
-			set => SetProperty(ref _isIconic, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("quantity")] 
 		public CInt32 Quantity
 		{
-			get => GetProperty(ref _quantity);
-			set => SetProperty(ref _quantity, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("lootItemType")] 
 		public CEnum<gameLootItemType> LootItemType
 		{
-			get => GetProperty(ref _lootItemType);
-			set => SetProperty(ref _lootItemType, value);
+			get => GetPropertyValue<CEnum<gameLootItemType>>();
+			set => SetPropertyValue<CEnum<gameLootItemType>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("dpsDiff")] 
 		public CFloat DpsDiff
 		{
-			get => GetProperty(ref _dpsDiff);
-			set => SetProperty(ref _dpsDiff, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("armorDiff")] 
 		public CFloat ArmorDiff
 		{
-			get => GetProperty(ref _armorDiff);
-			set => SetProperty(ref _armorDiff, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

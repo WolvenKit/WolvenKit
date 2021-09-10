@@ -5,29 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIDebugLogScope : RedBaseClass
 	{
-		private CUInt32 _index;
-		private CUInt32 _id;
-
 		[Ordinal(0)] 
 		[RED("index")] 
 		public CUInt32 Index
 		{
-			get => GetProperty(ref _index);
-			set => SetProperty(ref _index, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("id")] 
 		public CUInt32 Id
 		{
-			get => GetProperty(ref _id);
-			set => SetProperty(ref _id, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		public AIDebugLogScope()
 		{
-			_index = 4294967295;
-			_id = 4294967295;
+			Index = 4294967295;
+			Id = 4294967295;
 		}
 	}
 }

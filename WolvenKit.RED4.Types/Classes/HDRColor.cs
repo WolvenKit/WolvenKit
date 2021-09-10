@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class HDRColor : RedBaseClass
 	{
-		private CFloat _red;
-		private CFloat _green;
-		private CFloat _blue;
-		private CFloat _alpha;
-
 		[Ordinal(0)] 
 		[RED("Red")] 
 		public CFloat Red
 		{
-			get => GetProperty(ref _red);
-			set => SetProperty(ref _red, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("Green")] 
 		public CFloat Green
 		{
-			get => GetProperty(ref _green);
-			set => SetProperty(ref _green, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("Blue")] 
 		public CFloat Blue
 		{
-			get => GetProperty(ref _blue);
-			set => SetProperty(ref _blue, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("Alpha")] 
 		public CFloat Alpha
 		{
-			get => GetProperty(ref _alpha);
-			set => SetProperty(ref _alpha, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

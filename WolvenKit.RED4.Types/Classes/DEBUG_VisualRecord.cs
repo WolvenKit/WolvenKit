@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DEBUG_VisualRecord : RedBaseClass
 	{
-		private CArray<CUInt32> _layerIDs;
-		private CWeakHandle<ScriptedPuppet> _puppet;
-		private CBool _infiniteDuration;
-		private CFloat _showDuration;
-
 		[Ordinal(0)] 
 		[RED("layerIDs")] 
 		public CArray<CUInt32> LayerIDs
 		{
-			get => GetProperty(ref _layerIDs);
-			set => SetProperty(ref _layerIDs, value);
+			get => GetPropertyValue<CArray<CUInt32>>();
+			set => SetPropertyValue<CArray<CUInt32>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("puppet")] 
 		public CWeakHandle<ScriptedPuppet> Puppet
 		{
-			get => GetProperty(ref _puppet);
-			set => SetProperty(ref _puppet, value);
+			get => GetPropertyValue<CWeakHandle<ScriptedPuppet>>();
+			set => SetPropertyValue<CWeakHandle<ScriptedPuppet>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("infiniteDuration")] 
 		public CBool InfiniteDuration
 		{
-			get => GetProperty(ref _infiniteDuration);
-			set => SetProperty(ref _infiniteDuration, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("showDuration")] 
 		public CFloat ShowDuration
 		{
-			get => GetProperty(ref _showDuration);
-			set => SetProperty(ref _showDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public DEBUG_VisualRecord()
+		{
+			LayerIDs = new();
 		}
 	}
 }

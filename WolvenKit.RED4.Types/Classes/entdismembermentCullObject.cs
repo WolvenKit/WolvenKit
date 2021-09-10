@@ -5,84 +5,79 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entdismembermentCullObject : RedBaseClass
 	{
-		private Plane _plane;
-		private Plane _plane1;
-		private Vector3 _capsulePointA;
-		private Vector3 _capsulePointB;
-		private CFloat _capsuleRadius;
-		private CName _nearestAnimBoneName;
-		private CInt16 _nearestAnimIndex;
-		private CUInt16 _ragdollBodyIndex;
-
 		[Ordinal(0)] 
 		[RED("Plane")] 
 		public Plane Plane
 		{
-			get => GetProperty(ref _plane);
-			set => SetProperty(ref _plane, value);
+			get => GetPropertyValue<Plane>();
+			set => SetPropertyValue<Plane>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("Plane1")] 
 		public Plane Plane1
 		{
-			get => GetProperty(ref _plane1);
-			set => SetProperty(ref _plane1, value);
+			get => GetPropertyValue<Plane>();
+			set => SetPropertyValue<Plane>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("CapsulePointA")] 
 		public Vector3 CapsulePointA
 		{
-			get => GetProperty(ref _capsulePointA);
-			set => SetProperty(ref _capsulePointA, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("CapsulePointB")] 
 		public Vector3 CapsulePointB
 		{
-			get => GetProperty(ref _capsulePointB);
-			set => SetProperty(ref _capsulePointB, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("CapsuleRadius")] 
 		public CFloat CapsuleRadius
 		{
-			get => GetProperty(ref _capsuleRadius);
-			set => SetProperty(ref _capsuleRadius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("NearestAnimBoneName")] 
 		public CName NearestAnimBoneName
 		{
-			get => GetProperty(ref _nearestAnimBoneName);
-			set => SetProperty(ref _nearestAnimBoneName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("NearestAnimIndex")] 
 		public CInt16 NearestAnimIndex
 		{
-			get => GetProperty(ref _nearestAnimIndex);
-			set => SetProperty(ref _nearestAnimIndex, value);
+			get => GetPropertyValue<CInt16>();
+			set => SetPropertyValue<CInt16>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("RagdollBodyIndex")] 
 		public CUInt16 RagdollBodyIndex
 		{
-			get => GetProperty(ref _ragdollBodyIndex);
-			set => SetProperty(ref _ragdollBodyIndex, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		public entdismembermentCullObject()
 		{
-			_capsuleRadius = 0.100000F;
-			_nearestAnimIndex = -1;
-			_ragdollBodyIndex = 65535;
+			Plane = new() { NormalDistance = new() { Z = 1.000000F, W = -0.000000F } };
+			Plane1 = new() { NormalDistance = new() { Z = 1.000000F, W = -0.000000F } };
+			CapsulePointA = new();
+			CapsulePointB = new();
+			CapsuleRadius = 0.100000F;
+			NearestAnimIndex = -1;
+			RagdollBodyIndex = 65535;
 		}
 	}
 }

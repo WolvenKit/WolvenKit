@@ -5,64 +5,59 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldStreamingQueryRoadData : RedBaseClass
 	{
-		private Transform _transform;
-		private CHandle<Spline> _splineData;
-		private worldGlobalNodeID _roadGlobalNodeId;
-		private CFloat _totalRoadWidth;
-		private CUInt16 _connectedRoadsStartIndex;
-		private CUInt16 _connectedRoadsCount;
-
 		[Ordinal(0)] 
 		[RED("transform")] 
 		public Transform Transform
 		{
-			get => GetProperty(ref _transform);
-			set => SetProperty(ref _transform, value);
+			get => GetPropertyValue<Transform>();
+			set => SetPropertyValue<Transform>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("splineData")] 
 		public CHandle<Spline> SplineData
 		{
-			get => GetProperty(ref _splineData);
-			set => SetProperty(ref _splineData, value);
+			get => GetPropertyValue<CHandle<Spline>>();
+			set => SetPropertyValue<CHandle<Spline>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("roadGlobalNodeId")] 
 		public worldGlobalNodeID RoadGlobalNodeId
 		{
-			get => GetProperty(ref _roadGlobalNodeId);
-			set => SetProperty(ref _roadGlobalNodeId, value);
+			get => GetPropertyValue<worldGlobalNodeID>();
+			set => SetPropertyValue<worldGlobalNodeID>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("totalRoadWidth")] 
 		public CFloat TotalRoadWidth
 		{
-			get => GetProperty(ref _totalRoadWidth);
-			set => SetProperty(ref _totalRoadWidth, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("connectedRoadsStartIndex")] 
 		public CUInt16 ConnectedRoadsStartIndex
 		{
-			get => GetProperty(ref _connectedRoadsStartIndex);
-			set => SetProperty(ref _connectedRoadsStartIndex, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("connectedRoadsCount")] 
 		public CUInt16 ConnectedRoadsCount
 		{
-			get => GetProperty(ref _connectedRoadsCount);
-			set => SetProperty(ref _connectedRoadsCount, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		public worldStreamingQueryRoadData()
 		{
-			_connectedRoadsStartIndex = 65535;
+			Transform = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			RoadGlobalNodeId = new();
+			ConnectedRoadsStartIndex = 65535;
 		}
 	}
 }

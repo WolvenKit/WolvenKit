@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MasterDeviceInkGameControllerBase : DeviceInkGameControllerBase
 	{
-		private CArray<SThumbnailWidgetPackage> _thumbnailWidgetsData;
-		private CHandle<redCallbackObject> _onThumbnailWidgetsUpdateListener;
-
 		[Ordinal(16)] 
 		[RED("thumbnailWidgetsData")] 
 		public CArray<SThumbnailWidgetPackage> ThumbnailWidgetsData
 		{
-			get => GetProperty(ref _thumbnailWidgetsData);
-			set => SetProperty(ref _thumbnailWidgetsData, value);
+			get => GetPropertyValue<CArray<SThumbnailWidgetPackage>>();
+			set => SetPropertyValue<CArray<SThumbnailWidgetPackage>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("onThumbnailWidgetsUpdateListener")] 
 		public CHandle<redCallbackObject> OnThumbnailWidgetsUpdateListener
 		{
-			get => GetProperty(ref _onThumbnailWidgetsUpdateListener);
-			set => SetProperty(ref _onThumbnailWidgetsUpdateListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		public MasterDeviceInkGameControllerBase()
+		{
+			ThumbnailWidgetsData = new();
 		}
 	}
 }

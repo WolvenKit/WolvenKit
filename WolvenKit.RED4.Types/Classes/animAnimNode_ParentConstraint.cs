@@ -5,110 +5,106 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_ParentConstraint : animAnimNode_OnePoseInput
 	{
-		private CHandle<animIAnimNodeSourceChannel_QsTransform> _parentTransform;
-		private CBool _isParentTransformResaved;
-		private animTransformIndex _parentTransformIndex;
-		private animTransformIndex _transformIndex;
-		private CEnum<animEInterpolationType> _interpolationType;
-		private CFloat _weight;
-		private animNamedTrackIndex _weightFloatTrack;
-		private CBool _useBoneReferencePoseAsDefaultOffset;
-		private animFloatLink _weightNode;
-		private animVectorLink _offsetTranslationLS;
-		private animVectorLink _offsetEulerRotationLS;
-
 		[Ordinal(12)] 
 		[RED("parentTransform")] 
 		public CHandle<animIAnimNodeSourceChannel_QsTransform> ParentTransform
 		{
-			get => GetProperty(ref _parentTransform);
-			set => SetProperty(ref _parentTransform, value);
+			get => GetPropertyValue<CHandle<animIAnimNodeSourceChannel_QsTransform>>();
+			set => SetPropertyValue<CHandle<animIAnimNodeSourceChannel_QsTransform>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("isParentTransformResaved")] 
 		public CBool IsParentTransformResaved
 		{
-			get => GetProperty(ref _isParentTransformResaved);
-			set => SetProperty(ref _isParentTransformResaved, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("parentTransformIndex")] 
 		public animTransformIndex ParentTransformIndex
 		{
-			get => GetProperty(ref _parentTransformIndex);
-			set => SetProperty(ref _parentTransformIndex, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("transformIndex")] 
 		public animTransformIndex TransformIndex
 		{
-			get => GetProperty(ref _transformIndex);
-			set => SetProperty(ref _transformIndex, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("interpolationType")] 
 		public CEnum<animEInterpolationType> InterpolationType
 		{
-			get => GetProperty(ref _interpolationType);
-			set => SetProperty(ref _interpolationType, value);
+			get => GetPropertyValue<CEnum<animEInterpolationType>>();
+			set => SetPropertyValue<CEnum<animEInterpolationType>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("weight")] 
 		public CFloat Weight
 		{
-			get => GetProperty(ref _weight);
-			set => SetProperty(ref _weight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("weightFloatTrack")] 
 		public animNamedTrackIndex WeightFloatTrack
 		{
-			get => GetProperty(ref _weightFloatTrack);
-			set => SetProperty(ref _weightFloatTrack, value);
+			get => GetPropertyValue<animNamedTrackIndex>();
+			set => SetPropertyValue<animNamedTrackIndex>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("useBoneReferencePoseAsDefaultOffset")] 
 		public CBool UseBoneReferencePoseAsDefaultOffset
 		{
-			get => GetProperty(ref _useBoneReferencePoseAsDefaultOffset);
-			set => SetProperty(ref _useBoneReferencePoseAsDefaultOffset, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("weightNode")] 
 		public animFloatLink WeightNode
 		{
-			get => GetProperty(ref _weightNode);
-			set => SetProperty(ref _weightNode, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("offsetTranslationLS")] 
 		public animVectorLink OffsetTranslationLS
 		{
-			get => GetProperty(ref _offsetTranslationLS);
-			set => SetProperty(ref _offsetTranslationLS, value);
+			get => GetPropertyValue<animVectorLink>();
+			set => SetPropertyValue<animVectorLink>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("offsetEulerRotationLS")] 
 		public animVectorLink OffsetEulerRotationLS
 		{
-			get => GetProperty(ref _offsetEulerRotationLS);
-			set => SetProperty(ref _offsetEulerRotationLS, value);
+			get => GetPropertyValue<animVectorLink>();
+			set => SetPropertyValue<animVectorLink>(value);
 		}
 
 		public animAnimNode_ParentConstraint()
 		{
-			_interpolationType = new() { Value = Enums.animEInterpolationType.Slerp };
-			_weight = 1.000000F;
+			Id = 4294967295;
+			InputLink = new();
+			ParentTransformIndex = new();
+			TransformIndex = new();
+			InterpolationType = Enums.animEInterpolationType.Slerp;
+			Weight = 1.000000F;
+			WeightFloatTrack = new();
+			WeightNode = new();
+			OffsetTranslationLS = new();
+			OffsetEulerRotationLS = new();
 		}
 	}
 }

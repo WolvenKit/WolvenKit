@@ -5,86 +5,84 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class hudDroneController : gameuiHUDGameController
 	{
-		private inkTextWidgetReference _date;
-		private inkTextWidgetReference _timer;
-		private inkTextWidgetReference _cameraID;
-		private CWeakHandle<gameIBlackboard> _scanBlackboard;
-		private CWeakHandle<gameIBlackboard> _psmBlackboard;
-		private CHandle<redCallbackObject> _pSM_BBID;
-		private CWeakHandle<inkCompoundWidget> _root;
-		private CFloat _currentZoom;
-		private GameTime _currentTime;
-
 		[Ordinal(9)] 
 		[RED("Date")] 
 		public inkTextWidgetReference Date
 		{
-			get => GetProperty(ref _date);
-			set => SetProperty(ref _date, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("Timer")] 
 		public inkTextWidgetReference Timer
 		{
-			get => GetProperty(ref _timer);
-			set => SetProperty(ref _timer, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("CameraID")] 
 		public inkTextWidgetReference CameraID
 		{
-			get => GetProperty(ref _cameraID);
-			set => SetProperty(ref _cameraID, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("scanBlackboard")] 
 		public CWeakHandle<gameIBlackboard> ScanBlackboard
 		{
-			get => GetProperty(ref _scanBlackboard);
-			set => SetProperty(ref _scanBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("psmBlackboard")] 
 		public CWeakHandle<gameIBlackboard> PsmBlackboard
 		{
-			get => GetProperty(ref _psmBlackboard);
-			set => SetProperty(ref _psmBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("PSM_BBID")] 
 		public CHandle<redCallbackObject> PSM_BBID
 		{
-			get => GetProperty(ref _pSM_BBID);
-			set => SetProperty(ref _pSM_BBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("root")] 
 		public CWeakHandle<inkCompoundWidget> Root
 		{
-			get => GetProperty(ref _root);
-			set => SetProperty(ref _root, value);
+			get => GetPropertyValue<CWeakHandle<inkCompoundWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkCompoundWidget>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("currentZoom")] 
 		public CFloat CurrentZoom
 		{
-			get => GetProperty(ref _currentZoom);
-			set => SetProperty(ref _currentZoom, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("currentTime")] 
 		public GameTime CurrentTime
 		{
-			get => GetProperty(ref _currentTime);
-			set => SetProperty(ref _currentTime, value);
+			get => GetPropertyValue<GameTime>();
+			set => SetPropertyValue<GameTime>(value);
+		}
+
+		public hudDroneController()
+		{
+			Date = new();
+			Timer = new();
+			CameraID = new();
+			CurrentTime = new();
 		}
 	}
 }

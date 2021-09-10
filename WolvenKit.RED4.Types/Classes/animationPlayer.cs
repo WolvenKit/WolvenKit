@@ -5,94 +5,85 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animationPlayer : inkWidgetLogicController
 	{
-		private CName _animName;
-		private CEnum<inkanimLoopType> _loopType;
-		private CFloat _delay;
-		private CBool _playInfinite;
-		private CUInt32 _loopsAmount;
-		private CBool _playReversed;
-		private inkWidgetReference _animTarget;
-		private CBool _autoPlay;
-		private CHandle<inkanimProxy> _anim;
-
 		[Ordinal(1)] 
 		[RED("animName")] 
 		public CName AnimName
 		{
-			get => GetProperty(ref _animName);
-			set => SetProperty(ref _animName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("loopType")] 
 		public CEnum<inkanimLoopType> LoopType
 		{
-			get => GetProperty(ref _loopType);
-			set => SetProperty(ref _loopType, value);
+			get => GetPropertyValue<CEnum<inkanimLoopType>>();
+			set => SetPropertyValue<CEnum<inkanimLoopType>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("delay")] 
 		public CFloat Delay
 		{
-			get => GetProperty(ref _delay);
-			set => SetProperty(ref _delay, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("playInfinite")] 
 		public CBool PlayInfinite
 		{
-			get => GetProperty(ref _playInfinite);
-			set => SetProperty(ref _playInfinite, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("loopsAmount")] 
 		public CUInt32 LoopsAmount
 		{
-			get => GetProperty(ref _loopsAmount);
-			set => SetProperty(ref _loopsAmount, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("playReversed")] 
 		public CBool PlayReversed
 		{
-			get => GetProperty(ref _playReversed);
-			set => SetProperty(ref _playReversed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("animTarget")] 
 		public inkWidgetReference AnimTarget
 		{
-			get => GetProperty(ref _animTarget);
-			set => SetProperty(ref _animTarget, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("autoPlay")] 
 		public CBool AutoPlay
 		{
-			get => GetProperty(ref _autoPlay);
-			set => SetProperty(ref _autoPlay, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("anim")] 
 		public CHandle<inkanimProxy> Anim
 		{
-			get => GetProperty(ref _anim);
-			set => SetProperty(ref _anim, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		public animationPlayer()
 		{
-			_loopType = new() { Value = Enums.inkanimLoopType.Cycle };
-			_playInfinite = true;
-			_loopsAmount = 1;
-			_autoPlay = true;
+			LoopType = Enums.inkanimLoopType.Cycle;
+			PlayInfinite = true;
+			LoopsAmount = 1;
+			AnimTarget = new();
+			AutoPlay = true;
 		}
 	}
 }

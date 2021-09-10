@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldDebugColoring_SameResourceName : worldEditorDebugColoringSettings
 	{
-		private CUInt8 _alpha;
-
 		[Ordinal(0)] 
 		[RED("alpha")] 
 		public CUInt8 Alpha
 		{
-			get => GetProperty(ref _alpha);
-			set => SetProperty(ref _alpha, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		public worldDebugColoring_SameResourceName()
 		{
-			_alpha = 192;
+			Alpha = 192;
 		}
 	}
 }

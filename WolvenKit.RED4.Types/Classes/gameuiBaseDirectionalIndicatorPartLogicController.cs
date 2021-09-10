@@ -5,29 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiBaseDirectionalIndicatorPartLogicController : inkWidgetLogicController
 	{
-		private CFloat _defaultForwardFovRange;
-		private CFloat _adjustedForwardFovRange;
-
 		[Ordinal(1)] 
 		[RED("defaultForwardFovRange")] 
 		public CFloat DefaultForwardFovRange
 		{
-			get => GetProperty(ref _defaultForwardFovRange);
-			set => SetProperty(ref _defaultForwardFovRange, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("adjustedForwardFovRange")] 
 		public CFloat AdjustedForwardFovRange
 		{
-			get => GetProperty(ref _adjustedForwardFovRange);
-			set => SetProperty(ref _adjustedForwardFovRange, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public gameuiBaseDirectionalIndicatorPartLogicController()
 		{
-			_defaultForwardFovRange = 80.000000F;
-			_adjustedForwardFovRange = 160.000000F;
+			DefaultForwardFovRange = 80.000000F;
+			AdjustedForwardFovRange = 160.000000F;
 		}
 	}
 }

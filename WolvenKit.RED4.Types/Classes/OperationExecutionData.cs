@@ -5,50 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class OperationExecutionData : IScriptable
 	{
-		private CName _operationName;
-		private CFloat _delay;
-		private CBool _resetDelay;
-		private gameDelayID _delayID;
-		private CBool _isDelayActive;
-
 		[Ordinal(0)] 
 		[RED("operationName")] 
 		public CName OperationName
 		{
-			get => GetProperty(ref _operationName);
-			set => SetProperty(ref _operationName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("delay")] 
 		public CFloat Delay
 		{
-			get => GetProperty(ref _delay);
-			set => SetProperty(ref _delay, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("resetDelay")] 
 		public CBool ResetDelay
 		{
-			get => GetProperty(ref _resetDelay);
-			set => SetProperty(ref _resetDelay, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("delayID")] 
 		public gameDelayID DelayID
 		{
-			get => GetProperty(ref _delayID);
-			set => SetProperty(ref _delayID, value);
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("isDelayActive")] 
 		public CBool IsDelayActive
 		{
-			get => GetProperty(ref _isDelayActive);
-			set => SetProperty(ref _isDelayActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public OperationExecutionData()
+		{
+			DelayID = new();
 		}
 	}
 }

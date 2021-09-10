@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class EmitterGroupAreaParams : RedBaseClass
 	{
-		private CEnum<EEmitterGroup> _group;
-		private CLegacySingleChannelCurve<CFloat> _emissionScale;
-		private CLegacySingleChannelCurve<CFloat> _opacityScale;
-
 		[Ordinal(0)] 
 		[RED("group")] 
 		public CEnum<EEmitterGroup> Group
 		{
-			get => GetProperty(ref _group);
-			set => SetProperty(ref _group, value);
+			get => GetPropertyValue<CEnum<EEmitterGroup>>();
+			set => SetPropertyValue<CEnum<EEmitterGroup>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("emissionScale")] 
 		public CLegacySingleChannelCurve<CFloat> EmissionScale
 		{
-			get => GetProperty(ref _emissionScale);
-			set => SetProperty(ref _emissionScale, value);
+			get => GetPropertyValue<CLegacySingleChannelCurve<CFloat>>();
+			set => SetPropertyValue<CLegacySingleChannelCurve<CFloat>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("opacityScale")] 
 		public CLegacySingleChannelCurve<CFloat> OpacityScale
 		{
-			get => GetProperty(ref _opacityScale);
-			set => SetProperty(ref _opacityScale, value);
+			get => GetPropertyValue<CLegacySingleChannelCurve<CFloat>>();
+			set => SetPropertyValue<CLegacySingleChannelCurve<CFloat>>(value);
 		}
 	}
 }

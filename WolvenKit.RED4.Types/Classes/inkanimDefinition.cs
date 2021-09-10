@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkanimDefinition : IScriptable
 	{
-		private CArray<CHandle<inkanimInterpolator>> _interpolators;
-		private CArray<CHandle<inkanimEvent>> _events;
-
 		[Ordinal(0)] 
 		[RED("interpolators")] 
 		public CArray<CHandle<inkanimInterpolator>> Interpolators
 		{
-			get => GetProperty(ref _interpolators);
-			set => SetProperty(ref _interpolators, value);
+			get => GetPropertyValue<CArray<CHandle<inkanimInterpolator>>>();
+			set => SetPropertyValue<CArray<CHandle<inkanimInterpolator>>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("events")] 
 		public CArray<CHandle<inkanimEvent>> Events
 		{
-			get => GetProperty(ref _events);
-			set => SetProperty(ref _events, value);
+			get => GetPropertyValue<CArray<CHandle<inkanimEvent>>>();
+			set => SetPropertyValue<CArray<CHandle<inkanimEvent>>>(value);
+		}
+
+		public inkanimDefinition()
+		{
+			Interpolators = new();
+			Events = new();
 		}
 	}
 }

@@ -5,37 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiPhotoModeOptionGridButtonData : RedBaseClass
 	{
-		private CName _imagePart;
-		private redResourceReferenceScriptToken _atlasResource;
-		private CInt32 _optionData;
-
 		[Ordinal(0)] 
 		[RED("imagePart")] 
 		public CName ImagePart
 		{
-			get => GetProperty(ref _imagePart);
-			set => SetProperty(ref _imagePart, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("atlasResource")] 
 		public redResourceReferenceScriptToken AtlasResource
 		{
-			get => GetProperty(ref _atlasResource);
-			set => SetProperty(ref _atlasResource, value);
+			get => GetPropertyValue<redResourceReferenceScriptToken>();
+			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("optionData")] 
 		public CInt32 OptionData
 		{
-			get => GetProperty(ref _optionData);
-			set => SetProperty(ref _optionData, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		public gameuiPhotoModeOptionGridButtonData()
 		{
-			_optionData = -1;
+			AtlasResource = new();
+			OptionData = -1;
 		}
 	}
 }

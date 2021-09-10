@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class FixedPoint : RedBaseClass
 	{
-		private CInt32 _bits;
-
 		[Ordinal(0)] 
 		[RED("Bits")] 
 		public CInt32 Bits
 		{
-			get => GetProperty(ref _bits);
-			set => SetProperty(ref _bits, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

@@ -5,193 +5,180 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkWidget : IScriptable
 	{
-		private CHandle<inkWidgetLogicController> _logicController;
-		private CArray<CHandle<inkWidgetLogicController>> _secondaryControllers;
-		private CArray<CHandle<inkUserData>> _userData;
-		private CName _name;
-		private CName _state;
-		private CBool _visible;
-		private CBool _affectsLayoutWhenHidden;
-		private CBool _isInteractive;
-		private CBool _canSupportFocus;
-		private CHandle<inkStyleResourceWrapper> _style;
-		private CWeakHandle<inkWidget> _parentWidget;
-		private CHandle<inkPropertyManager> _propertyManager;
-		private CBool _fitToContent;
-		private inkWidgetLayout _layout;
-		private CFloat _opacity;
-		private HDRColor _tintColor;
-		private Vector2 _size;
-		private Vector2 _renderTransformPivot;
-		private inkUITransform _renderTransform;
-		private CArray<CHandle<inkIEffect>> _effects;
-
 		[Ordinal(0)] 
 		[RED("logicController")] 
 		public CHandle<inkWidgetLogicController> LogicController
 		{
-			get => GetProperty(ref _logicController);
-			set => SetProperty(ref _logicController, value);
+			get => GetPropertyValue<CHandle<inkWidgetLogicController>>();
+			set => SetPropertyValue<CHandle<inkWidgetLogicController>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("secondaryControllers")] 
 		public CArray<CHandle<inkWidgetLogicController>> SecondaryControllers
 		{
-			get => GetProperty(ref _secondaryControllers);
-			set => SetProperty(ref _secondaryControllers, value);
+			get => GetPropertyValue<CArray<CHandle<inkWidgetLogicController>>>();
+			set => SetPropertyValue<CArray<CHandle<inkWidgetLogicController>>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("userData")] 
 		public CArray<CHandle<inkUserData>> UserData
 		{
-			get => GetProperty(ref _userData);
-			set => SetProperty(ref _userData, value);
+			get => GetPropertyValue<CArray<CHandle<inkUserData>>>();
+			set => SetPropertyValue<CArray<CHandle<inkUserData>>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get => GetProperty(ref _name);
-			set => SetProperty(ref _name, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("state")] 
 		public CName State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("visible")] 
 		public CBool Visible
 		{
-			get => GetProperty(ref _visible);
-			set => SetProperty(ref _visible, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("affectsLayoutWhenHidden")] 
 		public CBool AffectsLayoutWhenHidden
 		{
-			get => GetProperty(ref _affectsLayoutWhenHidden);
-			set => SetProperty(ref _affectsLayoutWhenHidden, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("isInteractive")] 
 		public CBool IsInteractive
 		{
-			get => GetProperty(ref _isInteractive);
-			set => SetProperty(ref _isInteractive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("canSupportFocus")] 
 		public CBool CanSupportFocus
 		{
-			get => GetProperty(ref _canSupportFocus);
-			set => SetProperty(ref _canSupportFocus, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("style")] 
 		public CHandle<inkStyleResourceWrapper> Style
 		{
-			get => GetProperty(ref _style);
-			set => SetProperty(ref _style, value);
+			get => GetPropertyValue<CHandle<inkStyleResourceWrapper>>();
+			set => SetPropertyValue<CHandle<inkStyleResourceWrapper>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("parentWidget")] 
 		public CWeakHandle<inkWidget> ParentWidget
 		{
-			get => GetProperty(ref _parentWidget);
-			set => SetProperty(ref _parentWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("propertyManager")] 
 		public CHandle<inkPropertyManager> PropertyManager
 		{
-			get => GetProperty(ref _propertyManager);
-			set => SetProperty(ref _propertyManager, value);
+			get => GetPropertyValue<CHandle<inkPropertyManager>>();
+			set => SetPropertyValue<CHandle<inkPropertyManager>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("fitToContent")] 
 		public CBool FitToContent
 		{
-			get => GetProperty(ref _fitToContent);
-			set => SetProperty(ref _fitToContent, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("layout")] 
 		public inkWidgetLayout Layout
 		{
-			get => GetProperty(ref _layout);
-			set => SetProperty(ref _layout, value);
+			get => GetPropertyValue<inkWidgetLayout>();
+			set => SetPropertyValue<inkWidgetLayout>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("opacity")] 
 		public CFloat Opacity
 		{
-			get => GetProperty(ref _opacity);
-			set => SetProperty(ref _opacity, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("tintColor")] 
 		public HDRColor TintColor
 		{
-			get => GetProperty(ref _tintColor);
-			set => SetProperty(ref _tintColor, value);
+			get => GetPropertyValue<HDRColor>();
+			set => SetPropertyValue<HDRColor>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("size")] 
 		public Vector2 Size
 		{
-			get => GetProperty(ref _size);
-			set => SetProperty(ref _size, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("renderTransformPivot")] 
 		public Vector2 RenderTransformPivot
 		{
-			get => GetProperty(ref _renderTransformPivot);
-			set => SetProperty(ref _renderTransformPivot, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("renderTransform")] 
 		public inkUITransform RenderTransform
 		{
-			get => GetProperty(ref _renderTransform);
-			set => SetProperty(ref _renderTransform, value);
+			get => GetPropertyValue<inkUITransform>();
+			set => SetPropertyValue<inkUITransform>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("effects")] 
 		public CArray<CHandle<inkIEffect>> Effects
 		{
-			get => GetProperty(ref _effects);
-			set => SetProperty(ref _effects, value);
+			get => GetPropertyValue<CArray<CHandle<inkIEffect>>>();
+			set => SetPropertyValue<CArray<CHandle<inkIEffect>>>(value);
 		}
 
 		public inkWidget()
 		{
-			_name = "UNINITIALIZED_WIDGET";
-			_state = "Default";
-			_visible = true;
-			_opacity = 1.000000F;
+			SecondaryControllers = new();
+			UserData = new();
+			Name = "UNINITIALIZED_WIDGET";
+			State = "Default";
+			Visible = true;
+			Layout = new() { Padding = new(), Margin = new(), AnchorPoint = new(), SizeCoefficient = 1.000000F };
+			Opacity = 1.000000F;
+			TintColor = new() { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Alpha = 1.000000F };
+			Size = new();
+			RenderTransformPivot = new() { X = 0.500000F, Y = 0.500000F };
+			RenderTransform = new() { Translation = new(), Scale = new() { X = 1.000000F, Y = 1.000000F }, Shear = new() };
+			Effects = new();
 		}
 	}
 }

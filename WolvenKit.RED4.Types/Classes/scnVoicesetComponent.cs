@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnVoicesetComponent : gameComponent
 	{
-		private CName _combatVoSettingsName;
-
 		[Ordinal(4)] 
 		[RED("combatVoSettingsName")] 
 		public CName CombatVoSettingsName
 		{
-			get => GetProperty(ref _combatVoSettingsName);
-			set => SetProperty(ref _combatVoSettingsName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public scnVoicesetComponent()
+		{
+			Name = "VoicesetComponent";
 		}
 	}
 }

@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questUnequipItemParams : RedBaseClass
 	{
-		private TweakDBID _slotId;
-		private CFloat _unequipDurationOverride;
-
 		[Ordinal(0)] 
 		[RED("slotId")] 
 		public TweakDBID SlotId
 		{
-			get => GetProperty(ref _slotId);
-			set => SetProperty(ref _slotId, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("unequipDurationOverride")] 
 		public CFloat UnequipDurationOverride
 		{
-			get => GetProperty(ref _unequipDurationOverride);
-			set => SetProperty(ref _unequipDurationOverride, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public questUnequipItemParams()
 		{
-			_unequipDurationOverride = -1.000000F;
+			UnequipDurationOverride = -1.000000F;
 		}
 	}
 }

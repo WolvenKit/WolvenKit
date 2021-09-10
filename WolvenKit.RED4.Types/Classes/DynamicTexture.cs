@@ -5,76 +5,68 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DynamicTexture : ITexture
 	{
-		private CUInt32 _width;
-		private CUInt32 _height;
-		private CBool _scaleToViewport;
-		private CBool _mipChain;
-		private CUInt8 _samplesCount;
-		private CEnum<DynamicTextureDataFormat> _dataFormat;
-		private CHandle<IDynamicTextureGenerator> _generator;
-
 		[Ordinal(1)] 
 		[RED("width")] 
 		public CUInt32 Width
 		{
-			get => GetProperty(ref _width);
-			set => SetProperty(ref _width, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("height")] 
 		public CUInt32 Height
 		{
-			get => GetProperty(ref _height);
-			set => SetProperty(ref _height, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("scaleToViewport")] 
 		public CBool ScaleToViewport
 		{
-			get => GetProperty(ref _scaleToViewport);
-			set => SetProperty(ref _scaleToViewport, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("mipChain")] 
 		public CBool MipChain
 		{
-			get => GetProperty(ref _mipChain);
-			set => SetProperty(ref _mipChain, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("samplesCount")] 
 		public CUInt8 SamplesCount
 		{
-			get => GetProperty(ref _samplesCount);
-			set => SetProperty(ref _samplesCount, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("dataFormat")] 
 		public CEnum<DynamicTextureDataFormat> DataFormat
 		{
-			get => GetProperty(ref _dataFormat);
-			set => SetProperty(ref _dataFormat, value);
+			get => GetPropertyValue<CEnum<DynamicTextureDataFormat>>();
+			set => SetPropertyValue<CEnum<DynamicTextureDataFormat>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("generator")] 
 		public CHandle<IDynamicTextureGenerator> Generator
 		{
-			get => GetProperty(ref _generator);
-			set => SetProperty(ref _generator, value);
+			get => GetPropertyValue<CHandle<IDynamicTextureGenerator>>();
+			set => SetPropertyValue<CHandle<IDynamicTextureGenerator>>(value);
 		}
 
 		public DynamicTexture()
 		{
-			_width = 256;
-			_height = 256;
-			_samplesCount = 1;
-			_dataFormat = new() { Value = Enums.DynamicTextureDataFormat.RGBA_Uint8_SRGB };
+			Width = 256;
+			Height = 256;
+			SamplesCount = 1;
+			DataFormat = Enums.DynamicTextureDataFormat.RGBA_Uint8_SRGB;
 		}
 	}
 }

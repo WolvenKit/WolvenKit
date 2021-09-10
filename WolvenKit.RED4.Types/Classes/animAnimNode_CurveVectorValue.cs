@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_CurveVectorValue : animAnimNode_VectorValue
 	{
-		private CLegacySingleChannelCurve<Vector4> _curveData;
-		private animFloatLink _argument;
-
 		[Ordinal(11)] 
 		[RED("curveData")] 
 		public CLegacySingleChannelCurve<Vector4> CurveData
 		{
-			get => GetProperty(ref _curveData);
-			set => SetProperty(ref _curveData, value);
+			get => GetPropertyValue<CLegacySingleChannelCurve<Vector4>>();
+			set => SetPropertyValue<CLegacySingleChannelCurve<Vector4>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("argument")] 
 		public animFloatLink Argument
 		{
-			get => GetProperty(ref _argument);
-			set => SetProperty(ref _argument, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
+		}
+
+		public animAnimNode_CurveVectorValue()
+		{
+			Id = 4294967295;
+			Argument = new();
 		}
 	}
 }

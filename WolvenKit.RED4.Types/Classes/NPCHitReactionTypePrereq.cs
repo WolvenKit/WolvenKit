@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class NPCHitReactionTypePrereq : gameIScriptablePrereq
 	{
-		private CEnum<animHitReactionType> _hitReactionType;
-		private CBool _invert;
-
 		[Ordinal(0)] 
 		[RED("hitReactionType")] 
 		public CEnum<animHitReactionType> HitReactionType
 		{
-			get => GetProperty(ref _hitReactionType);
-			set => SetProperty(ref _hitReactionType, value);
+			get => GetPropertyValue<CEnum<animHitReactionType>>();
+			set => SetPropertyValue<CEnum<animHitReactionType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("invert")] 
 		public CBool Invert
 		{
-			get => GetProperty(ref _invert);
-			set => SetProperty(ref _invert, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

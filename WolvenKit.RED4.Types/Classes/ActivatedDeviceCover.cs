@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ActivatedDeviceCover : ActivatedDeviceTransfromAnim
 	{
-		private CHandle<AIOffMeshConnectionComponent> _offMeshConnection;
-
 		[Ordinal(98)] 
 		[RED("offMeshConnection")] 
 		public CHandle<AIOffMeshConnectionComponent> OffMeshConnection
 		{
-			get => GetProperty(ref _offMeshConnection);
-			set => SetProperty(ref _offMeshConnection, value);
+			get => GetPropertyValue<CHandle<AIOffMeshConnectionComponent>>();
+			set => SetPropertyValue<CHandle<AIOffMeshConnectionComponent>>(value);
 		}
 	}
 }

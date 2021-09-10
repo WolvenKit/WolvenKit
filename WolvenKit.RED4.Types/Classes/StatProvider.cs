@@ -5,46 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class StatProvider : IScriptable
 	{
-		private CWeakHandle<gameItemData> _gameItemData;
-		private gameInnerItemData _partData;
-		private InventoryItemData _inventoryItemData;
-		private CEnum<gameEStatProviderDataSource> _dataSource;
-
 		[Ordinal(0)] 
 		[RED("GameItemData")] 
 		public CWeakHandle<gameItemData> GameItemData
 		{
-			get => GetProperty(ref _gameItemData);
-			set => SetProperty(ref _gameItemData, value);
+			get => GetPropertyValue<CWeakHandle<gameItemData>>();
+			set => SetPropertyValue<CWeakHandle<gameItemData>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("PartData")] 
 		public gameInnerItemData PartData
 		{
-			get => GetProperty(ref _partData);
-			set => SetProperty(ref _partData, value);
+			get => GetPropertyValue<gameInnerItemData>();
+			set => SetPropertyValue<gameInnerItemData>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("InventoryItemData")] 
 		public InventoryItemData InventoryItemData
 		{
-			get => GetProperty(ref _inventoryItemData);
-			set => SetProperty(ref _inventoryItemData, value);
+			get => GetPropertyValue<InventoryItemData>();
+			set => SetPropertyValue<InventoryItemData>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("dataSource")] 
 		public CEnum<gameEStatProviderDataSource> DataSource
 		{
-			get => GetProperty(ref _dataSource);
-			set => SetProperty(ref _dataSource, value);
+			get => GetPropertyValue<CEnum<gameEStatProviderDataSource>>();
+			set => SetPropertyValue<CEnum<gameEStatProviderDataSource>>(value);
 		}
 
 		public StatProvider()
 		{
-			_dataSource = new() { Value = Enums.gameEStatProviderDataSource.Invalid };
+			PartData = new();
+			InventoryItemData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
+			DataSource = Enums.gameEStatProviderDataSource.Invalid;
 		}
 	}
 }

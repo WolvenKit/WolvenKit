@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CodexSystem : gameScriptableSystem
 	{
-		private CArray<SCodexRecord> _codex;
-		private CWeakHandle<gameIBlackboard> _blackboard;
-
 		[Ordinal(0)] 
 		[RED("codex")] 
 		public CArray<SCodexRecord> Codex
 		{
-			get => GetProperty(ref _codex);
-			set => SetProperty(ref _codex, value);
+			get => GetPropertyValue<CArray<SCodexRecord>>();
+			set => SetPropertyValue<CArray<SCodexRecord>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("blackboard")] 
 		public CWeakHandle<gameIBlackboard> Blackboard
 		{
-			get => GetProperty(ref _blackboard);
-			set => SetProperty(ref _blackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
+		public CodexSystem()
+		{
+			Codex = new();
 		}
 	}
 }

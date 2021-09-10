@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questTransferItems_NodeTypeParams_OperationData : RedBaseClass
 	{
-		private TweakDBID _itemTDBID;
-		private CInt32 _quantity;
-
 		[Ordinal(0)] 
 		[RED("itemTDBID")] 
 		public TweakDBID ItemTDBID
 		{
-			get => GetProperty(ref _itemTDBID);
-			set => SetProperty(ref _itemTDBID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("quantity")] 
 		public CInt32 Quantity
 		{
-			get => GetProperty(ref _quantity);
-			set => SetProperty(ref _quantity, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		public questTransferItems_NodeTypeParams_OperationData()
 		{
-			_quantity = 1;
+			Quantity = 1;
 		}
 	}
 }

@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SetBountyObjectEvent : redEvent
 	{
-		private Bounty _bounty;
-
 		[Ordinal(0)] 
 		[RED("bounty")] 
 		public Bounty Bounty
 		{
-			get => GetProperty(ref _bounty);
-			set => SetProperty(ref _bounty, value);
+			get => GetPropertyValue<Bounty>();
+			set => SetPropertyValue<Bounty>(value);
+		}
+
+		public SetBountyObjectEvent()
+		{
+			Bounty = new() { Transgressions = new() };
 		}
 	}
 }

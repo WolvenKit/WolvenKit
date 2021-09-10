@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class vehicleAnimFeature_VehicleProceduralCamera : animAnimFeature
 	{
-		private Vector4 _cameraTranslationVS;
-		private Quaternion _cameraOrientationVS;
-
 		[Ordinal(0)] 
 		[RED("cameraTranslationVS")] 
 		public Vector4 CameraTranslationVS
 		{
-			get => GetProperty(ref _cameraTranslationVS);
-			set => SetProperty(ref _cameraTranslationVS, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("cameraOrientationVS")] 
 		public Quaternion CameraOrientationVS
 		{
-			get => GetProperty(ref _cameraOrientationVS);
-			set => SetProperty(ref _cameraOrientationVS, value);
+			get => GetPropertyValue<Quaternion>();
+			set => SetPropertyValue<Quaternion>(value);
+		}
+
+		public vehicleAnimFeature_VehicleProceduralCamera()
+		{
+			CameraTranslationVS = new();
+			CameraOrientationVS = new() { R = 1.000000F };
 		}
 	}
 }

@@ -5,38 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamePatrolSplineProgress : ISerializable
 	{
-		private CArray<gamePatrolSplineControlPoint> _currentControlPoints;
-		private CFloat _entrySplineParam;
-		private CUInt32 _controlPointIndex;
-
 		[Ordinal(0)] 
 		[RED("currentControlPoints")] 
 		public CArray<gamePatrolSplineControlPoint> CurrentControlPoints
 		{
-			get => GetProperty(ref _currentControlPoints);
-			set => SetProperty(ref _currentControlPoints, value);
+			get => GetPropertyValue<CArray<gamePatrolSplineControlPoint>>();
+			set => SetPropertyValue<CArray<gamePatrolSplineControlPoint>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("entrySplineParam")] 
 		public CFloat EntrySplineParam
 		{
-			get => GetProperty(ref _entrySplineParam);
-			set => SetProperty(ref _entrySplineParam, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("controlPointIndex")] 
 		public CUInt32 ControlPointIndex
 		{
-			get => GetProperty(ref _controlPointIndex);
-			set => SetProperty(ref _controlPointIndex, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		public gamePatrolSplineProgress()
 		{
-			_entrySplineParam = -1.000000F;
-			_controlPointIndex = 4294967295;
+			CurrentControlPoints = new();
+			EntrySplineParam = -1.000000F;
+			ControlPointIndex = 4294967295;
 		}
 	}
 }

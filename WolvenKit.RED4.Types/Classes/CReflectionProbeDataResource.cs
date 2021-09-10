@@ -5,55 +5,51 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CReflectionProbeDataResource : resStreamedResource
 	{
-		private DataBuffer _data;
-		private rendRenderTextureResource _textureData;
-		private CUInt64 _dataHash;
-		private CBool _haveSkyData;
-		private CArrayFixedSize<CFloat> _faceDepth;
-
 		[Ordinal(1)] 
 		[RED("data")] 
 		public DataBuffer Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<DataBuffer>();
+			set => SetPropertyValue<DataBuffer>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("textureData")] 
 		public rendRenderTextureResource TextureData
 		{
-			get => GetProperty(ref _textureData);
-			set => SetProperty(ref _textureData, value);
+			get => GetPropertyValue<rendRenderTextureResource>();
+			set => SetPropertyValue<rendRenderTextureResource>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("dataHash")] 
 		public CUInt64 DataHash
 		{
-			get => GetProperty(ref _dataHash);
-			set => SetProperty(ref _dataHash, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("haveSkyData")] 
 		public CBool HaveSkyData
 		{
-			get => GetProperty(ref _haveSkyData);
-			set => SetProperty(ref _haveSkyData, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("faceDepth", 6)] 
 		public CArrayFixedSize<CFloat> FaceDepth
 		{
-			get => GetProperty(ref _faceDepth);
-			set => SetProperty(ref _faceDepth, value);
+			get => GetPropertyValue<CArrayFixedSize<CFloat>>();
+			set => SetPropertyValue<CArrayFixedSize<CFloat>>(value);
 		}
 
 		public CReflectionProbeDataResource()
 		{
-			_haveSkyData = true;
+			TextureData = new();
+			HaveSkyData = true;
+			FaceDepth = new(6);
 		}
 	}
 }

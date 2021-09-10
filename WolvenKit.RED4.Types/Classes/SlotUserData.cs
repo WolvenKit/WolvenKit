@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SlotUserData : IScriptable
 	{
-		private InventoryItemData _itemData;
-		private CInt32 _index;
-		private CEnum<gamedataEquipmentArea> _area;
-
 		[Ordinal(0)] 
 		[RED("itemData")] 
 		public InventoryItemData ItemData
 		{
-			get => GetProperty(ref _itemData);
-			set => SetProperty(ref _itemData, value);
+			get => GetPropertyValue<InventoryItemData>();
+			set => SetPropertyValue<InventoryItemData>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("index")] 
 		public CInt32 Index
 		{
-			get => GetProperty(ref _index);
-			set => SetProperty(ref _index, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("area")] 
 		public CEnum<gamedataEquipmentArea> Area
 		{
-			get => GetProperty(ref _area);
-			set => SetProperty(ref _area, value);
+			get => GetPropertyValue<CEnum<gamedataEquipmentArea>>();
+			set => SetPropertyValue<CEnum<gamedataEquipmentArea>>(value);
+		}
+
+		public SlotUserData()
+		{
+			ItemData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
 		}
 	}
 }

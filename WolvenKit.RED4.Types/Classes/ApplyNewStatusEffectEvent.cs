@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ApplyNewStatusEffectEvent : redEvent
 	{
-		private TweakDBID _effectID;
-		private TweakDBID _instigatorID;
-
 		[Ordinal(0)] 
 		[RED("effectID")] 
 		public TweakDBID EffectID
 		{
-			get => GetProperty(ref _effectID);
-			set => SetProperty(ref _effectID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("instigatorID")] 
 		public TweakDBID InstigatorID
 		{
-			get => GetProperty(ref _instigatorID);
-			set => SetProperty(ref _instigatorID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 	}
 }

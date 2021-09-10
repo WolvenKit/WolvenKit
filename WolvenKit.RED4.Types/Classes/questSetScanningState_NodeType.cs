@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questSetScanningState_NodeType : questIVisionModeNodeType
 	{
-		private gameEntityReference _objectRef;
-		private CEnum<questScanningState> _state;
-
 		[Ordinal(0)] 
 		[RED("objectRef")] 
 		public gameEntityReference ObjectRef
 		{
-			get => GetProperty(ref _objectRef);
-			set => SetProperty(ref _objectRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("state")] 
 		public CEnum<questScanningState> State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<CEnum<questScanningState>>();
+			set => SetPropertyValue<CEnum<questScanningState>>(value);
+		}
+
+		public questSetScanningState_NodeType()
+		{
+			ObjectRef = new() { Names = new() };
 		}
 	}
 }

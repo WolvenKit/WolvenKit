@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_CoordinateFromVector : animAnimNode_FloatValue
 	{
-		private CEnum<animVectorCoordinateType> _vectorCoodrinateType;
-		private animVectorLink _input;
-
 		[Ordinal(11)] 
 		[RED("vectorCoodrinateType")] 
 		public CEnum<animVectorCoordinateType> VectorCoodrinateType
 		{
-			get => GetProperty(ref _vectorCoodrinateType);
-			set => SetProperty(ref _vectorCoodrinateType, value);
+			get => GetPropertyValue<CEnum<animVectorCoordinateType>>();
+			set => SetPropertyValue<CEnum<animVectorCoordinateType>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("input")] 
 		public animVectorLink Input
 		{
-			get => GetProperty(ref _input);
-			set => SetProperty(ref _input, value);
+			get => GetPropertyValue<animVectorLink>();
+			set => SetPropertyValue<animVectorLink>(value);
+		}
+
+		public animAnimNode_CoordinateFromVector()
+		{
+			Id = 4294967295;
+			Input = new();
 		}
 	}
 }

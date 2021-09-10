@@ -5,103 +5,92 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameGrenadeThrowQueryParams : RedBaseClass
 	{
-		private CWeakHandle<gameObject> _requester;
-		private CWeakHandle<gameObject> _target;
-		private CHandle<entIPositionProvider> _targetPositionProvider;
-		private CFloat _minRadius;
-		private CFloat _maxRadius;
-		private CFloat _friendlyAvoidanceRadius;
-		private CFloat _throwAngleDegrees;
-		private CFloat _gravitySimulation;
-		private CFloat _minTargetAngleDegrees;
-		private CFloat _maxTargetAngleDegrees;
-
 		[Ordinal(0)] 
 		[RED("requester")] 
 		public CWeakHandle<gameObject> Requester
 		{
-			get => GetProperty(ref _requester);
-			set => SetProperty(ref _requester, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("target")] 
 		public CWeakHandle<gameObject> Target
 		{
-			get => GetProperty(ref _target);
-			set => SetProperty(ref _target, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("targetPositionProvider")] 
 		public CHandle<entIPositionProvider> TargetPositionProvider
 		{
-			get => GetProperty(ref _targetPositionProvider);
-			set => SetProperty(ref _targetPositionProvider, value);
+			get => GetPropertyValue<CHandle<entIPositionProvider>>();
+			set => SetPropertyValue<CHandle<entIPositionProvider>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("minRadius")] 
 		public CFloat MinRadius
 		{
-			get => GetProperty(ref _minRadius);
-			set => SetProperty(ref _minRadius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("maxRadius")] 
 		public CFloat MaxRadius
 		{
-			get => GetProperty(ref _maxRadius);
-			set => SetProperty(ref _maxRadius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("friendlyAvoidanceRadius")] 
 		public CFloat FriendlyAvoidanceRadius
 		{
-			get => GetProperty(ref _friendlyAvoidanceRadius);
-			set => SetProperty(ref _friendlyAvoidanceRadius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("throwAngleDegrees")] 
 		public CFloat ThrowAngleDegrees
 		{
-			get => GetProperty(ref _throwAngleDegrees);
-			set => SetProperty(ref _throwAngleDegrees, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("gravitySimulation")] 
 		public CFloat GravitySimulation
 		{
-			get => GetProperty(ref _gravitySimulation);
-			set => SetProperty(ref _gravitySimulation, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("minTargetAngleDegrees")] 
 		public CFloat MinTargetAngleDegrees
 		{
-			get => GetProperty(ref _minTargetAngleDegrees);
-			set => SetProperty(ref _minTargetAngleDegrees, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("maxTargetAngleDegrees")] 
 		public CFloat MaxTargetAngleDegrees
 		{
-			get => GetProperty(ref _maxTargetAngleDegrees);
-			set => SetProperty(ref _maxTargetAngleDegrees, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public gameGrenadeThrowQueryParams()
 		{
-			_throwAngleDegrees = -1.000000F;
-			_gravitySimulation = -9.800000F;
-			_minTargetAngleDegrees = -180.000000F;
-			_maxTargetAngleDegrees = 180.000000F;
+			ThrowAngleDegrees = -1.000000F;
+			GravitySimulation = -9.800000F;
+			MinTargetAngleDegrees = -180.000000F;
+			MaxTargetAngleDegrees = 180.000000F;
 		}
 	}
 }

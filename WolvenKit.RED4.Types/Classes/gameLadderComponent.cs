@@ -5,89 +5,81 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameLadderComponent : entIComponent
 	{
-		private CFloat _heightOfBottomPart;
-		private CFloat _exitStepTop;
-		private CFloat _verticalStepTop;
-		private CFloat _exitStepBottom;
-		private CFloat _verticalStepBottom;
-		private CFloat _exitStepJump;
-		private CFloat _verticalStepJump;
-		private CFloat _enterOffset;
-
 		[Ordinal(3)] 
 		[RED("heightOfBottomPart")] 
 		public CFloat HeightOfBottomPart
 		{
-			get => GetProperty(ref _heightOfBottomPart);
-			set => SetProperty(ref _heightOfBottomPart, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("exitStepTop")] 
 		public CFloat ExitStepTop
 		{
-			get => GetProperty(ref _exitStepTop);
-			set => SetProperty(ref _exitStepTop, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("verticalStepTop")] 
 		public CFloat VerticalStepTop
 		{
-			get => GetProperty(ref _verticalStepTop);
-			set => SetProperty(ref _verticalStepTop, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("exitStepBottom")] 
 		public CFloat ExitStepBottom
 		{
-			get => GetProperty(ref _exitStepBottom);
-			set => SetProperty(ref _exitStepBottom, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("verticalStepBottom")] 
 		public CFloat VerticalStepBottom
 		{
-			get => GetProperty(ref _verticalStepBottom);
-			set => SetProperty(ref _verticalStepBottom, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("exitStepJump")] 
 		public CFloat ExitStepJump
 		{
-			get => GetProperty(ref _exitStepJump);
-			set => SetProperty(ref _exitStepJump, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("verticalStepJump")] 
 		public CFloat VerticalStepJump
 		{
-			get => GetProperty(ref _verticalStepJump);
-			set => SetProperty(ref _verticalStepJump, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("enterOffset")] 
 		public CFloat EnterOffset
 		{
-			get => GetProperty(ref _enterOffset);
-			set => SetProperty(ref _enterOffset, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public gameLadderComponent()
 		{
-			_heightOfBottomPart = 3.700000F;
-			_exitStepTop = -1.000000F;
-			_verticalStepTop = -1.000000F;
-			_exitStepBottom = 0.600000F;
-			_verticalStepBottom = 0.400000F;
-			_exitStepJump = 0.600000F;
-			_verticalStepJump = 0.200000F;
-			_enterOffset = 0.500000F;
+			Name = "Component";
+			HeightOfBottomPart = 3.700000F;
+			ExitStepTop = -1.000000F;
+			VerticalStepTop = -1.000000F;
+			ExitStepBottom = 0.600000F;
+			VerticalStepBottom = 0.400000F;
+			ExitStepJump = 0.600000F;
+			VerticalStepJump = 0.200000F;
+			EnterOffset = 0.500000F;
 		}
 	}
 }

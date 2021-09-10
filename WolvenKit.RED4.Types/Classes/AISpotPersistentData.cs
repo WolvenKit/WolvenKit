@@ -5,46 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AISpotPersistentData : RedBaseClass
 	{
-		private WorldPosition _worldPosition;
-		private worldGlobalNodeID _globalNodeId;
-		private CFloat _yaw;
-		private CBool _isEnabled;
-
 		[Ordinal(0)] 
 		[RED("worldPosition")] 
 		public WorldPosition WorldPosition
 		{
-			get => GetProperty(ref _worldPosition);
-			set => SetProperty(ref _worldPosition, value);
+			get => GetPropertyValue<WorldPosition>();
+			set => SetPropertyValue<WorldPosition>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("globalNodeId")] 
 		public worldGlobalNodeID GlobalNodeId
 		{
-			get => GetProperty(ref _globalNodeId);
-			set => SetProperty(ref _globalNodeId, value);
+			get => GetPropertyValue<worldGlobalNodeID>();
+			set => SetPropertyValue<worldGlobalNodeID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("yaw")] 
 		public CFloat Yaw
 		{
-			get => GetProperty(ref _yaw);
-			set => SetProperty(ref _yaw, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public AISpotPersistentData()
 		{
-			_isEnabled = true;
+			WorldPosition = new() { X = new(), Y = new(), Z = new() };
+			GlobalNodeId = new();
+			IsEnabled = true;
 		}
 	}
 }

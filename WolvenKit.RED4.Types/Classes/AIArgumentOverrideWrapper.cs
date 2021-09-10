@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIArgumentOverrideWrapper : RedBaseClass
 	{
-		private CName _name;
-		private CEnum<AIArgumentType> _type;
-		private CHandle<AIArgumentDefinition> _definition;
-
 		[Ordinal(0)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get => GetProperty(ref _name);
-			set => SetProperty(ref _name, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("type")] 
 		public CEnum<AIArgumentType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<AIArgumentType>>();
+			set => SetPropertyValue<CEnum<AIArgumentType>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("definition")] 
 		public CHandle<AIArgumentDefinition> Definition
 		{
-			get => GetProperty(ref _definition);
-			set => SetProperty(ref _definition, value);
+			get => GetPropertyValue<CHandle<AIArgumentDefinition>>();
+			set => SetPropertyValue<CHandle<AIArgumentDefinition>>(value);
 		}
 	}
 }

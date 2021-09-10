@@ -5,32 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SpeakerControllerPS : ScriptableDeviceComponentPS
 	{
-		private SpeakerSetup _speakerSetup;
-		private CName _currentValue;
-		private CName _previousValue;
-
 		[Ordinal(104)] 
 		[RED("speakerSetup")] 
 		public SpeakerSetup SpeakerSetup
 		{
-			get => GetProperty(ref _speakerSetup);
-			set => SetProperty(ref _speakerSetup, value);
+			get => GetPropertyValue<SpeakerSetup>();
+			set => SetPropertyValue<SpeakerSetup>(value);
 		}
 
 		[Ordinal(105)] 
 		[RED("currentValue")] 
 		public CName CurrentValue
 		{
-			get => GetProperty(ref _currentValue);
-			set => SetProperty(ref _currentValue, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(106)] 
 		[RED("previousValue")] 
 		public CName PreviousValue
 		{
-			get => GetProperty(ref _previousValue);
-			set => SetProperty(ref _previousValue, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public SpeakerControllerPS()
+		{
+			DeviceName = "LocKey#166";
+			TweakDBRecord = new() { Value = 67691775111 };
+			TweakDBDescriptionRecord = new() { Value = 118735618267 };
+			SpeakerSetup = new() { Range = 10.000000F, GlitchSFX = "dev_radio_ditraction_glitching" };
 		}
 	}
 }

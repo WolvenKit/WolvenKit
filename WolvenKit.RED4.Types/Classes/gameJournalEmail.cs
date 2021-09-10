@@ -5,59 +5,60 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameJournalEmail : gameJournalEntry
 	{
-		private LocalizationString _sender;
-		private LocalizationString _addressee;
-		private LocalizationString _title;
-		private LocalizationString _content;
-		private CResourceAsyncReference<Bink> _videoResource;
-		private TweakDBID _pictureTweak;
-
 		[Ordinal(1)] 
 		[RED("sender")] 
 		public LocalizationString Sender
 		{
-			get => GetProperty(ref _sender);
-			set => SetProperty(ref _sender, value);
+			get => GetPropertyValue<LocalizationString>();
+			set => SetPropertyValue<LocalizationString>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("addressee")] 
 		public LocalizationString Addressee
 		{
-			get => GetProperty(ref _addressee);
-			set => SetProperty(ref _addressee, value);
+			get => GetPropertyValue<LocalizationString>();
+			set => SetPropertyValue<LocalizationString>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("title")] 
 		public LocalizationString Title
 		{
-			get => GetProperty(ref _title);
-			set => SetProperty(ref _title, value);
+			get => GetPropertyValue<LocalizationString>();
+			set => SetPropertyValue<LocalizationString>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("content")] 
 		public LocalizationString Content
 		{
-			get => GetProperty(ref _content);
-			set => SetProperty(ref _content, value);
+			get => GetPropertyValue<LocalizationString>();
+			set => SetPropertyValue<LocalizationString>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("videoResource")] 
 		public CResourceAsyncReference<Bink> VideoResource
 		{
-			get => GetProperty(ref _videoResource);
-			set => SetProperty(ref _videoResource, value);
+			get => GetPropertyValue<CResourceAsyncReference<Bink>>();
+			set => SetPropertyValue<CResourceAsyncReference<Bink>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("pictureTweak")] 
 		public TweakDBID PictureTweak
 		{
-			get => GetProperty(ref _pictureTweak);
-			set => SetProperty(ref _pictureTweak, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
+		public gameJournalEmail()
+		{
+			Sender = new() { Unk1 = 0, Value = "" };
+			Addressee = new() { Unk1 = 0, Value = "" };
+			Title = new() { Unk1 = 0, Value = "" };
+			Content = new() { Unk1 = 0, Value = "" };
 		}
 	}
 }

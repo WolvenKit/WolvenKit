@@ -5,64 +5,58 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameinteractionsvisInteractionChoiceHubData : RedBaseClass
 	{
-		private CInt32 _id;
-		private CEnum<gameinteractionsvisEVisualizerDefinitionFlags> _flags;
-		private CBool _active;
-		private CString _title;
-		private CArray<gameinteractionsvisInteractionChoiceData> _choices;
-		private CWeakHandle<gameinteractionsvisIVisualizerTimeProvider> _timeProvider;
-
 		[Ordinal(0)] 
 		[RED("id")] 
 		public CInt32 Id
 		{
-			get => GetProperty(ref _id);
-			set => SetProperty(ref _id, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("flags")] 
 		public CEnum<gameinteractionsvisEVisualizerDefinitionFlags> Flags
 		{
-			get => GetProperty(ref _flags);
-			set => SetProperty(ref _flags, value);
+			get => GetPropertyValue<CEnum<gameinteractionsvisEVisualizerDefinitionFlags>>();
+			set => SetPropertyValue<CEnum<gameinteractionsvisEVisualizerDefinitionFlags>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("active")] 
 		public CBool Active
 		{
-			get => GetProperty(ref _active);
-			set => SetProperty(ref _active, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("title")] 
 		public CString Title
 		{
-			get => GetProperty(ref _title);
-			set => SetProperty(ref _title, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("choices")] 
 		public CArray<gameinteractionsvisInteractionChoiceData> Choices
 		{
-			get => GetProperty(ref _choices);
-			set => SetProperty(ref _choices, value);
+			get => GetPropertyValue<CArray<gameinteractionsvisInteractionChoiceData>>();
+			set => SetPropertyValue<CArray<gameinteractionsvisInteractionChoiceData>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("timeProvider")] 
 		public CWeakHandle<gameinteractionsvisIVisualizerTimeProvider> TimeProvider
 		{
-			get => GetProperty(ref _timeProvider);
-			set => SetProperty(ref _timeProvider, value);
+			get => GetPropertyValue<CWeakHandle<gameinteractionsvisIVisualizerTimeProvider>>();
+			set => SetPropertyValue<CWeakHandle<gameinteractionsvisIVisualizerTimeProvider>>(value);
 		}
 
 		public gameinteractionsvisInteractionChoiceHubData()
 		{
-			_id = -1;
+			Id = -1;
+			Choices = new();
 		}
 	}
 }

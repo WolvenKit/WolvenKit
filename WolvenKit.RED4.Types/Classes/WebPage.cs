@@ -5,74 +5,70 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WebPage : inkWidgetLogicController
 	{
-		private CArray<inkTextWidgetReference> _textList;
-		private CArray<inkRectangleWidgetReference> _rectangleList;
-		private CArray<inkImageWidgetReference> _imageList;
-		private CArray<inkVideoWidgetReference> _videoList;
-		private CString _lastClickedLinkAddress;
-		private CString _hOME_IMAGE_NAME;
-		private CString _hOME_TEXT_NAME;
-
 		[Ordinal(1)] 
 		[RED("textList")] 
 		public CArray<inkTextWidgetReference> TextList
 		{
-			get => GetProperty(ref _textList);
-			set => SetProperty(ref _textList, value);
+			get => GetPropertyValue<CArray<inkTextWidgetReference>>();
+			set => SetPropertyValue<CArray<inkTextWidgetReference>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("rectangleList")] 
 		public CArray<inkRectangleWidgetReference> RectangleList
 		{
-			get => GetProperty(ref _rectangleList);
-			set => SetProperty(ref _rectangleList, value);
+			get => GetPropertyValue<CArray<inkRectangleWidgetReference>>();
+			set => SetPropertyValue<CArray<inkRectangleWidgetReference>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("imageList")] 
 		public CArray<inkImageWidgetReference> ImageList
 		{
-			get => GetProperty(ref _imageList);
-			set => SetProperty(ref _imageList, value);
+			get => GetPropertyValue<CArray<inkImageWidgetReference>>();
+			set => SetPropertyValue<CArray<inkImageWidgetReference>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("videoList")] 
 		public CArray<inkVideoWidgetReference> VideoList
 		{
-			get => GetProperty(ref _videoList);
-			set => SetProperty(ref _videoList, value);
+			get => GetPropertyValue<CArray<inkVideoWidgetReference>>();
+			set => SetPropertyValue<CArray<inkVideoWidgetReference>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("lastClickedLinkAddress")] 
 		public CString LastClickedLinkAddress
 		{
-			get => GetProperty(ref _lastClickedLinkAddress);
-			set => SetProperty(ref _lastClickedLinkAddress, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("HOME_IMAGE_NAME")] 
 		public CString HOME_IMAGE_NAME
 		{
-			get => GetProperty(ref _hOME_IMAGE_NAME);
-			set => SetProperty(ref _hOME_IMAGE_NAME, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("HOME_TEXT_NAME")] 
 		public CString HOME_TEXT_NAME
 		{
-			get => GetProperty(ref _hOME_TEXT_NAME);
-			set => SetProperty(ref _hOME_TEXT_NAME, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		public WebPage()
 		{
-			_hOME_IMAGE_NAME = new() { Text = "ImageLink" };
-			_hOME_TEXT_NAME = new() { Text = "TextLink" };
+			TextList = new();
+			RectangleList = new();
+			ImageList = new();
+			VideoList = new();
+			HOME_IMAGE_NAME = "ImageLink";
+			HOME_TEXT_NAME = "TextLink";
 		}
 	}
 }

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31613.86
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31612.314
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.RED4.CR2W", "WolvenKit.RED4.CR2W\WolvenKit.RED4.CR2W.csproj", "{9A7C09A8-112A-4324-9B48-931AA835E9B5}"
 EndProject
@@ -53,7 +53,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXTex", "DirectXTexSha
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.RED4.Types", "WolvenKit.RED4.Types\WolvenKit.RED4.Types.csproj", "{0C939ED1-2DC4-4C87-B628-64BE1FCB71B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.RED4.NewCR2W", "WolvenKit.RED4.NewCR2W\WolvenKit.RED4.NewCR2W.csproj", "{1F7EFA8C-0FAC-4F88-BE14-EAB6177AE1B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.RED4.Archive", "WolvenKit.RED4.Archive\WolvenKit.RED4.Archive.csproj", "{1F7EFA8C-0FAC-4F88-BE14-EAB6177AE1B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

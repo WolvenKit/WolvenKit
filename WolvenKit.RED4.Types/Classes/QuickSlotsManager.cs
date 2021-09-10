@@ -5,199 +5,192 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class QuickSlotsManager : gameScriptableComponent
 	{
-		private CWeakHandle<PlayerPuppet> _player;
-		private CWeakHandle<gameIBlackboard> _quickSlotsBB;
-		private CBool _isPlayerInCar;
-		private entEntityID _playerVehicleID;
-		private CArray<QuickSlotCommand> _quickDpadCommands;
-		private CArray<QuickSlotCommand> _quickDpadCommands_Vehicle;
-		private CArray<QuickSlotCommand> _defaultHoldCommands;
-		private CArray<QuickSlotCommand> _defaultHoldCommands_Vehicle;
-		private CInt32 _numberOfItemsPerWheel;
-		private CArray<QuickSlotCommand> _quickKeyboardCommands;
-		private CArray<QuickSlotCommand> _quickKeyboardCommands_Vehicle;
-		private CHandle<QuickSlotButtonHoldEndEvent> _lastPressAndHoldBtn;
-		private CArray<QuickSlotCommand> _wheelList_Vehicles;
-		private QuickSlotCommand _currentWheelItem;
-		private QuickSlotCommand _currentWeaponWheelItem;
-		private QuickSlotCommand _currentGadgetWheelConsumable;
-		private QuickSlotCommand _currentGadgetWheelGadget;
-		private QuickSlotCommand _currentVehicleWheelItem;
-		private QuickSlotCommand _currentGadgetWheelItem;
-		private QuickSlotCommand _currentInteractionWheelItem;
-		private CHandle<redCallbackObject> _onVehPlayerStateDataChangedCallback;
-
 		[Ordinal(5)] 
 		[RED("Player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
-			get => GetProperty(ref _player);
-			set => SetProperty(ref _player, value);
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("QuickSlotsBB")] 
 		public CWeakHandle<gameIBlackboard> QuickSlotsBB
 		{
-			get => GetProperty(ref _quickSlotsBB);
-			set => SetProperty(ref _quickSlotsBB, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("IsPlayerInCar")] 
 		public CBool IsPlayerInCar
 		{
-			get => GetProperty(ref _isPlayerInCar);
-			set => SetProperty(ref _isPlayerInCar, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("PlayerVehicleID")] 
 		public entEntityID PlayerVehicleID
 		{
-			get => GetProperty(ref _playerVehicleID);
-			set => SetProperty(ref _playerVehicleID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("QuickDpadCommands")] 
 		public CArray<QuickSlotCommand> QuickDpadCommands
 		{
-			get => GetProperty(ref _quickDpadCommands);
-			set => SetProperty(ref _quickDpadCommands, value);
+			get => GetPropertyValue<CArray<QuickSlotCommand>>();
+			set => SetPropertyValue<CArray<QuickSlotCommand>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("QuickDpadCommands_Vehicle")] 
 		public CArray<QuickSlotCommand> QuickDpadCommands_Vehicle
 		{
-			get => GetProperty(ref _quickDpadCommands_Vehicle);
-			set => SetProperty(ref _quickDpadCommands_Vehicle, value);
+			get => GetPropertyValue<CArray<QuickSlotCommand>>();
+			set => SetPropertyValue<CArray<QuickSlotCommand>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("DefaultHoldCommands")] 
 		public CArray<QuickSlotCommand> DefaultHoldCommands
 		{
-			get => GetProperty(ref _defaultHoldCommands);
-			set => SetProperty(ref _defaultHoldCommands, value);
+			get => GetPropertyValue<CArray<QuickSlotCommand>>();
+			set => SetPropertyValue<CArray<QuickSlotCommand>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("DefaultHoldCommands_Vehicle")] 
 		public CArray<QuickSlotCommand> DefaultHoldCommands_Vehicle
 		{
-			get => GetProperty(ref _defaultHoldCommands_Vehicle);
-			set => SetProperty(ref _defaultHoldCommands_Vehicle, value);
+			get => GetPropertyValue<CArray<QuickSlotCommand>>();
+			set => SetPropertyValue<CArray<QuickSlotCommand>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("NumberOfItemsPerWheel")] 
 		public CInt32 NumberOfItemsPerWheel
 		{
-			get => GetProperty(ref _numberOfItemsPerWheel);
-			set => SetProperty(ref _numberOfItemsPerWheel, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("QuickKeyboardCommands")] 
 		public CArray<QuickSlotCommand> QuickKeyboardCommands
 		{
-			get => GetProperty(ref _quickKeyboardCommands);
-			set => SetProperty(ref _quickKeyboardCommands, value);
+			get => GetPropertyValue<CArray<QuickSlotCommand>>();
+			set => SetPropertyValue<CArray<QuickSlotCommand>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("QuickKeyboardCommands_Vehicle")] 
 		public CArray<QuickSlotCommand> QuickKeyboardCommands_Vehicle
 		{
-			get => GetProperty(ref _quickKeyboardCommands_Vehicle);
-			set => SetProperty(ref _quickKeyboardCommands_Vehicle, value);
+			get => GetPropertyValue<CArray<QuickSlotCommand>>();
+			set => SetPropertyValue<CArray<QuickSlotCommand>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("lastPressAndHoldBtn")] 
 		public CHandle<QuickSlotButtonHoldEndEvent> LastPressAndHoldBtn
 		{
-			get => GetProperty(ref _lastPressAndHoldBtn);
-			set => SetProperty(ref _lastPressAndHoldBtn, value);
+			get => GetPropertyValue<CHandle<QuickSlotButtonHoldEndEvent>>();
+			set => SetPropertyValue<CHandle<QuickSlotButtonHoldEndEvent>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("WheelList_Vehicles")] 
 		public CArray<QuickSlotCommand> WheelList_Vehicles
 		{
-			get => GetProperty(ref _wheelList_Vehicles);
-			set => SetProperty(ref _wheelList_Vehicles, value);
+			get => GetPropertyValue<CArray<QuickSlotCommand>>();
+			set => SetPropertyValue<CArray<QuickSlotCommand>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("currentWheelItem")] 
 		public QuickSlotCommand CurrentWheelItem
 		{
-			get => GetProperty(ref _currentWheelItem);
-			set => SetProperty(ref _currentWheelItem, value);
+			get => GetPropertyValue<QuickSlotCommand>();
+			set => SetPropertyValue<QuickSlotCommand>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("currentWeaponWheelItem")] 
 		public QuickSlotCommand CurrentWeaponWheelItem
 		{
-			get => GetProperty(ref _currentWeaponWheelItem);
-			set => SetProperty(ref _currentWeaponWheelItem, value);
+			get => GetPropertyValue<QuickSlotCommand>();
+			set => SetPropertyValue<QuickSlotCommand>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("currentGadgetWheelConsumable")] 
 		public QuickSlotCommand CurrentGadgetWheelConsumable
 		{
-			get => GetProperty(ref _currentGadgetWheelConsumable);
-			set => SetProperty(ref _currentGadgetWheelConsumable, value);
+			get => GetPropertyValue<QuickSlotCommand>();
+			set => SetPropertyValue<QuickSlotCommand>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("currentGadgetWheelGadget")] 
 		public QuickSlotCommand CurrentGadgetWheelGadget
 		{
-			get => GetProperty(ref _currentGadgetWheelGadget);
-			set => SetProperty(ref _currentGadgetWheelGadget, value);
+			get => GetPropertyValue<QuickSlotCommand>();
+			set => SetPropertyValue<QuickSlotCommand>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("currentVehicleWheelItem")] 
 		public QuickSlotCommand CurrentVehicleWheelItem
 		{
-			get => GetProperty(ref _currentVehicleWheelItem);
-			set => SetProperty(ref _currentVehicleWheelItem, value);
+			get => GetPropertyValue<QuickSlotCommand>();
+			set => SetPropertyValue<QuickSlotCommand>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("currentGadgetWheelItem")] 
 		public QuickSlotCommand CurrentGadgetWheelItem
 		{
-			get => GetProperty(ref _currentGadgetWheelItem);
-			set => SetProperty(ref _currentGadgetWheelItem, value);
+			get => GetPropertyValue<QuickSlotCommand>();
+			set => SetPropertyValue<QuickSlotCommand>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("currentInteractionWheelItem")] 
 		public QuickSlotCommand CurrentInteractionWheelItem
 		{
-			get => GetProperty(ref _currentInteractionWheelItem);
-			set => SetProperty(ref _currentInteractionWheelItem, value);
+			get => GetPropertyValue<QuickSlotCommand>();
+			set => SetPropertyValue<QuickSlotCommand>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("OnVehPlayerStateDataChangedCallback")] 
 		public CHandle<redCallbackObject> OnVehPlayerStateDataChangedCallback
 		{
-			get => GetProperty(ref _onVehPlayerStateDataChangedCallback);
-			set => SetProperty(ref _onVehPlayerStateDataChangedCallback, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		public QuickSlotsManager()
 		{
-			_numberOfItemsPerWheel = 8;
+			PlayerVehicleID = new();
+			QuickDpadCommands = new();
+			QuickDpadCommands_Vehicle = new();
+			DefaultHoldCommands = new();
+			DefaultHoldCommands_Vehicle = new();
+			NumberOfItemsPerWheel = 8;
+			QuickKeyboardCommands = new();
+			QuickKeyboardCommands_Vehicle = new();
+			WheelList_Vehicles = new();
+			CurrentWheelItem = new() { IsSlotUnlocked = true, ItemId = new(), PlayerVehicleData = new() { VehicleType = Enums.gamedataVehicleType.Invalid }, InteractiveActionOwner = new() };
+			CurrentWeaponWheelItem = new() { IsSlotUnlocked = true, ItemId = new(), PlayerVehicleData = new() { VehicleType = Enums.gamedataVehicleType.Invalid }, InteractiveActionOwner = new() };
+			CurrentGadgetWheelConsumable = new() { IsSlotUnlocked = true, ItemId = new(), PlayerVehicleData = new() { VehicleType = Enums.gamedataVehicleType.Invalid }, InteractiveActionOwner = new() };
+			CurrentGadgetWheelGadget = new() { IsSlotUnlocked = true, ItemId = new(), PlayerVehicleData = new() { VehicleType = Enums.gamedataVehicleType.Invalid }, InteractiveActionOwner = new() };
+			CurrentVehicleWheelItem = new() { IsSlotUnlocked = true, ItemId = new(), PlayerVehicleData = new() { VehicleType = Enums.gamedataVehicleType.Invalid }, InteractiveActionOwner = new() };
+			CurrentGadgetWheelItem = new() { IsSlotUnlocked = true, ItemId = new(), PlayerVehicleData = new() { VehicleType = Enums.gamedataVehicleType.Invalid }, InteractiveActionOwner = new() };
+			CurrentInteractionWheelItem = new() { IsSlotUnlocked = true, ItemId = new(), PlayerVehicleData = new() { VehicleType = Enums.gamedataVehicleType.Invalid }, InteractiveActionOwner = new() };
 		}
 	}
 }

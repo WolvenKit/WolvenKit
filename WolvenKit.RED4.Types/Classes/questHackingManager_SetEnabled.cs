@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questHackingManager_SetEnabled : questHackingManager_ActionType
 	{
-		private CBool _enabled;
-
 		[Ordinal(0)] 
 		[RED("enabled")] 
 		public CBool Enabled
 		{
-			get => GetProperty(ref _enabled);
-			set => SetProperty(ref _enabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

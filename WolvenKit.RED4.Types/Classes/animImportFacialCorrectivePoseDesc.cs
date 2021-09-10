@@ -5,136 +5,128 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animImportFacialCorrectivePoseDesc : RedBaseClass
 	{
-		private CArray<CName> _influencedBy;
-		private CArray<CUInt16> _influenceMainWeightIndices;
-		private CArray<animImportFacialCorrectivePoseDataDesc> _poses;
-		private CArray<CInt16> _parentsInBetweenIndices;
-		private CArray<CUInt16> _parentIndices;
-		private CName _name;
-		private CUInt16 _index;
-		private CUInt8 _influencedBySpeed;
-		private CUInt8 _poseType;
-		private CUInt8 _poseLOD;
-		private CArray<CFloat> _weights;
-		private CArray<CFloat> _inBetweenScopeMultipliers;
-		private CBool _linearCorrection;
-		private CBool _useGlobalWeight;
-
 		[Ordinal(0)] 
 		[RED("influencedBy")] 
 		public CArray<CName> InfluencedBy
 		{
-			get => GetProperty(ref _influencedBy);
-			set => SetProperty(ref _influencedBy, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("influenceMainWeightIndices")] 
 		public CArray<CUInt16> InfluenceMainWeightIndices
 		{
-			get => GetProperty(ref _influenceMainWeightIndices);
-			set => SetProperty(ref _influenceMainWeightIndices, value);
+			get => GetPropertyValue<CArray<CUInt16>>();
+			set => SetPropertyValue<CArray<CUInt16>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("poses")] 
 		public CArray<animImportFacialCorrectivePoseDataDesc> Poses
 		{
-			get => GetProperty(ref _poses);
-			set => SetProperty(ref _poses, value);
+			get => GetPropertyValue<CArray<animImportFacialCorrectivePoseDataDesc>>();
+			set => SetPropertyValue<CArray<animImportFacialCorrectivePoseDataDesc>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("parentsInBetweenIndices")] 
 		public CArray<CInt16> ParentsInBetweenIndices
 		{
-			get => GetProperty(ref _parentsInBetweenIndices);
-			set => SetProperty(ref _parentsInBetweenIndices, value);
+			get => GetPropertyValue<CArray<CInt16>>();
+			set => SetPropertyValue<CArray<CInt16>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("parentIndices")] 
 		public CArray<CUInt16> ParentIndices
 		{
-			get => GetProperty(ref _parentIndices);
-			set => SetProperty(ref _parentIndices, value);
+			get => GetPropertyValue<CArray<CUInt16>>();
+			set => SetPropertyValue<CArray<CUInt16>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get => GetProperty(ref _name);
-			set => SetProperty(ref _name, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("index")] 
 		public CUInt16 Index
 		{
-			get => GetProperty(ref _index);
-			set => SetProperty(ref _index, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("influencedBySpeed")] 
 		public CUInt8 InfluencedBySpeed
 		{
-			get => GetProperty(ref _influencedBySpeed);
-			set => SetProperty(ref _influencedBySpeed, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("poseType")] 
 		public CUInt8 PoseType
 		{
-			get => GetProperty(ref _poseType);
-			set => SetProperty(ref _poseType, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("poseLOD")] 
 		public CUInt8 PoseLOD
 		{
-			get => GetProperty(ref _poseLOD);
-			set => SetProperty(ref _poseLOD, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("weights")] 
 		public CArray<CFloat> Weights
 		{
-			get => GetProperty(ref _weights);
-			set => SetProperty(ref _weights, value);
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("inBetweenScopeMultipliers")] 
 		public CArray<CFloat> InBetweenScopeMultipliers
 		{
-			get => GetProperty(ref _inBetweenScopeMultipliers);
-			set => SetProperty(ref _inBetweenScopeMultipliers, value);
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("linearCorrection")] 
 		public CBool LinearCorrection
 		{
-			get => GetProperty(ref _linearCorrection);
-			set => SetProperty(ref _linearCorrection, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("useGlobalWeight")] 
 		public CBool UseGlobalWeight
 		{
-			get => GetProperty(ref _useGlobalWeight);
-			set => SetProperty(ref _useGlobalWeight, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public animImportFacialCorrectivePoseDesc()
 		{
-			_useGlobalWeight = true;
+			InfluencedBy = new();
+			InfluenceMainWeightIndices = new();
+			Poses = new();
+			ParentsInBetweenIndices = new();
+			ParentIndices = new();
+			Weights = new();
+			InBetweenScopeMultipliers = new();
+			UseGlobalWeight = true;
 		}
 	}
 }

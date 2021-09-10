@@ -5,37 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CParticleModificatorAcceleration : IParticleModificator
 	{
-		private CHandle<IEvaluatorVector> _direction;
-		private CHandle<IEvaluatorFloat> _scale;
-		private CBool _worldSpace;
-
 		[Ordinal(4)] 
 		[RED("direction")] 
 		public CHandle<IEvaluatorVector> Direction
 		{
-			get => GetProperty(ref _direction);
-			set => SetProperty(ref _direction, value);
+			get => GetPropertyValue<CHandle<IEvaluatorVector>>();
+			set => SetPropertyValue<CHandle<IEvaluatorVector>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("scale")] 
 		public CHandle<IEvaluatorFloat> Scale
 		{
-			get => GetProperty(ref _scale);
-			set => SetProperty(ref _scale, value);
+			get => GetPropertyValue<CHandle<IEvaluatorFloat>>();
+			set => SetPropertyValue<CHandle<IEvaluatorFloat>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("worldSpace")] 
 		public CBool WorldSpace
 		{
-			get => GetProperty(ref _worldSpace);
-			set => SetProperty(ref _worldSpace, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public CParticleModificatorAcceleration()
 		{
-			_worldSpace = true;
+			EditorName = "Acceleration";
+			EditorGroup = "Velocity";
+			IsEnabled = true;
+			WorldSpace = true;
 		}
 	}
 }

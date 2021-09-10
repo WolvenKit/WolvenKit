@@ -5,41 +5,46 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class physicsColliderConvex : physicsICollider
 	{
-		private CArray<Vector3> _vertices;
-		private CArray<CUInt8> _indexBuffer;
-		private CArray<CUInt16> _polygonVertices;
-		private DataBuffer _compiledGeometryBuffer;
-
 		[Ordinal(8)] 
 		[RED("vertices")] 
 		public CArray<Vector3> Vertices
 		{
-			get => GetProperty(ref _vertices);
-			set => SetProperty(ref _vertices, value);
+			get => GetPropertyValue<CArray<Vector3>>();
+			set => SetPropertyValue<CArray<Vector3>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("indexBuffer")] 
 		public CArray<CUInt8> IndexBuffer
 		{
-			get => GetProperty(ref _indexBuffer);
-			set => SetProperty(ref _indexBuffer, value);
+			get => GetPropertyValue<CArray<CUInt8>>();
+			set => SetPropertyValue<CArray<CUInt8>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("polygonVertices")] 
 		public CArray<CUInt16> PolygonVertices
 		{
-			get => GetProperty(ref _polygonVertices);
-			set => SetProperty(ref _polygonVertices, value);
+			get => GetPropertyValue<CArray<CUInt16>>();
+			set => SetPropertyValue<CArray<CUInt16>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("compiledGeometryBuffer")] 
 		public DataBuffer CompiledGeometryBuffer
 		{
-			get => GetProperty(ref _compiledGeometryBuffer);
-			set => SetProperty(ref _compiledGeometryBuffer, value);
+			get => GetPropertyValue<DataBuffer>();
+			set => SetPropertyValue<DataBuffer>(value);
+		}
+
+		public physicsColliderConvex()
+		{
+			LocalToBody = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			MaterialApperanceOverrides = new();
+			VolumeModifier = 1.000000F;
+			Vertices = new();
+			IndexBuffer = new();
+			PolygonVertices = new();
 		}
 	}
 }

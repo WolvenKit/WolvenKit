@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SetInvestigationPositionsArrayEvent : redEvent
 	{
-		private CArray<Vector4> _investigationPositionsArray;
-
 		[Ordinal(0)] 
 		[RED("investigationPositionsArray")] 
 		public CArray<Vector4> InvestigationPositionsArray
 		{
-			get => GetProperty(ref _investigationPositionsArray);
-			set => SetProperty(ref _investigationPositionsArray, value);
+			get => GetPropertyValue<CArray<Vector4>>();
+			set => SetPropertyValue<CArray<Vector4>>(value);
+		}
+
+		public SetInvestigationPositionsArrayEvent()
+		{
+			InvestigationPositionsArray = new();
 		}
 	}
 }

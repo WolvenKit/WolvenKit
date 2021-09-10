@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class vehicleGridDestructionEvent : redEvent
 	{
-		private CArrayFixedSize<CFloat> _state;
-		private CArrayFixedSize<CFloat> _rawChange;
-		private CArrayFixedSize<CFloat> _desiredChange;
-
 		[Ordinal(0)] 
 		[RED("state", 16)] 
 		public CArrayFixedSize<CFloat> State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<CArrayFixedSize<CFloat>>();
+			set => SetPropertyValue<CArrayFixedSize<CFloat>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("rawChange", 16)] 
 		public CArrayFixedSize<CFloat> RawChange
 		{
-			get => GetProperty(ref _rawChange);
-			set => SetProperty(ref _rawChange, value);
+			get => GetPropertyValue<CArrayFixedSize<CFloat>>();
+			set => SetPropertyValue<CArrayFixedSize<CFloat>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("desiredChange", 16)] 
 		public CArrayFixedSize<CFloat> DesiredChange
 		{
-			get => GetProperty(ref _desiredChange);
-			set => SetProperty(ref _desiredChange, value);
+			get => GetPropertyValue<CArrayFixedSize<CFloat>>();
+			set => SetPropertyValue<CArrayFixedSize<CFloat>>(value);
+		}
+
+		public vehicleGridDestructionEvent()
+		{
+			State = new(16);
+			RawChange = new(16);
+			DesiredChange = new(16);
 		}
 	}
 }

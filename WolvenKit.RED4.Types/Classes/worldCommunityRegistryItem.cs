@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldCommunityRegistryItem : RedBaseClass
 	{
-		private CArray<worldCommunityEntryInitialState> _entriesInitialState;
-		private CHandle<communityCommunityTemplateData> _template;
-		private gameCommunityID _communityId;
-		private CBool _communityIsBackground;
-
 		[Ordinal(0)] 
 		[RED("entriesInitialState")] 
 		public CArray<worldCommunityEntryInitialState> EntriesInitialState
 		{
-			get => GetProperty(ref _entriesInitialState);
-			set => SetProperty(ref _entriesInitialState, value);
+			get => GetPropertyValue<CArray<worldCommunityEntryInitialState>>();
+			set => SetPropertyValue<CArray<worldCommunityEntryInitialState>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("template")] 
 		public CHandle<communityCommunityTemplateData> Template
 		{
-			get => GetProperty(ref _template);
-			set => SetProperty(ref _template, value);
+			get => GetPropertyValue<CHandle<communityCommunityTemplateData>>();
+			set => SetPropertyValue<CHandle<communityCommunityTemplateData>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("communityId")] 
 		public gameCommunityID CommunityId
 		{
-			get => GetProperty(ref _communityId);
-			set => SetProperty(ref _communityId, value);
+			get => GetPropertyValue<gameCommunityID>();
+			set => SetPropertyValue<gameCommunityID>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("communityIsBackground")] 
 		public CBool CommunityIsBackground
 		{
-			get => GetProperty(ref _communityIsBackground);
-			set => SetProperty(ref _communityIsBackground, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public worldCommunityRegistryItem()
+		{
+			EntriesInitialState = new();
+			CommunityId = new() { EntityId = new() };
 		}
 	}
 }

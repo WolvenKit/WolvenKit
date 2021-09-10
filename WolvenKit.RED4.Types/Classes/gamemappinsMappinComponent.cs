@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamemappinsMappinComponent : entIPlacedComponent
 	{
-		private gamemappinsMappinData _data;
-
 		[Ordinal(5)] 
 		[RED("data")] 
 		public gamemappinsMappinData Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<gamemappinsMappinData>();
+			set => SetPropertyValue<gamemappinsMappinData>(value);
+		}
+
+		public gamemappinsMappinComponent()
+		{
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			Data = new() { Variant = Enums.gamedataMappinVariant.DefaultQuestVariant, Active = true, LocalizedCaption = new() { Unk1 = 0, Value = "" }, VisibleThroughWalls = true };
 		}
 	}
 }

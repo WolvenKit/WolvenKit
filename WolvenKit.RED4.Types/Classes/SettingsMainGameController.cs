@@ -5,266 +5,257 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SettingsMainGameController : gameuiMenuGameController
 	{
-		private inkWidgetReference _scrollPanel;
-		private inkWidgetReference _selectorWidget;
-		private inkWidgetReference _buttonHintsManagerRef;
-		private inkCompoundWidgetReference _settingsOptionsList;
-		private inkWidgetReference _applyButton;
-		private inkWidgetReference _resetButton;
-		private inkWidgetReference _defaultButton;
-		private inkWidgetReference _brightnessButton;
-		private inkWidgetReference _hdrButton;
-		private inkWidgetReference _controllerButton;
-		private inkTextWidgetReference _descriptionText;
-		private inkWidgetReference _previousButtonHint;
-		private inkWidgetReference _nextButtonHint;
-		private CWeakHandle<inkMenuEventDispatcher> _menuEventDispatcher;
-		private CArray<CWeakHandle<inkSettingsSelectorController>> _settingsElements;
-		private CWeakHandle<ButtonHints> _buttonHintsController;
-		private CArray<SettingsCategory> _data;
-		private CArray<CName> _menusList;
-		private CArray<CName> _eventsList;
-		private CHandle<SettingsVarListener> _settingsListener;
-		private CHandle<SettingsNotificationListener> _settingsNotificationListener;
-		private CHandle<userSettingsUserSettings> _settings;
-		private CBool _isPreGame;
-		private CBool _applyButtonEnabled;
-		private CBool _resetButtonEnabled;
-		private CBool _closeSettingsRequest;
-		private CBool _resetSettingsRequest;
-		private CBool _isDlcSettings;
-		private CWeakHandle<inkListController> _selectorCtrl;
-
 		[Ordinal(3)] 
 		[RED("scrollPanel")] 
 		public inkWidgetReference ScrollPanel
 		{
-			get => GetProperty(ref _scrollPanel);
-			set => SetProperty(ref _scrollPanel, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("selectorWidget")] 
 		public inkWidgetReference SelectorWidget
 		{
-			get => GetProperty(ref _selectorWidget);
-			set => SetProperty(ref _selectorWidget, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("buttonHintsManagerRef")] 
 		public inkWidgetReference ButtonHintsManagerRef
 		{
-			get => GetProperty(ref _buttonHintsManagerRef);
-			set => SetProperty(ref _buttonHintsManagerRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("settingsOptionsList")] 
 		public inkCompoundWidgetReference SettingsOptionsList
 		{
-			get => GetProperty(ref _settingsOptionsList);
-			set => SetProperty(ref _settingsOptionsList, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("applyButton")] 
 		public inkWidgetReference ApplyButton
 		{
-			get => GetProperty(ref _applyButton);
-			set => SetProperty(ref _applyButton, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("resetButton")] 
 		public inkWidgetReference ResetButton
 		{
-			get => GetProperty(ref _resetButton);
-			set => SetProperty(ref _resetButton, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("defaultButton")] 
 		public inkWidgetReference DefaultButton
 		{
-			get => GetProperty(ref _defaultButton);
-			set => SetProperty(ref _defaultButton, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("brightnessButton")] 
 		public inkWidgetReference BrightnessButton
 		{
-			get => GetProperty(ref _brightnessButton);
-			set => SetProperty(ref _brightnessButton, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("hdrButton")] 
 		public inkWidgetReference HdrButton
 		{
-			get => GetProperty(ref _hdrButton);
-			set => SetProperty(ref _hdrButton, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("controllerButton")] 
 		public inkWidgetReference ControllerButton
 		{
-			get => GetProperty(ref _controllerButton);
-			set => SetProperty(ref _controllerButton, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("descriptionText")] 
 		public inkTextWidgetReference DescriptionText
 		{
-			get => GetProperty(ref _descriptionText);
-			set => SetProperty(ref _descriptionText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("previousButtonHint")] 
 		public inkWidgetReference PreviousButtonHint
 		{
-			get => GetProperty(ref _previousButtonHint);
-			set => SetProperty(ref _previousButtonHint, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("nextButtonHint")] 
 		public inkWidgetReference NextButtonHint
 		{
-			get => GetProperty(ref _nextButtonHint);
-			set => SetProperty(ref _nextButtonHint, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("menuEventDispatcher")] 
 		public CWeakHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
-			get => GetProperty(ref _menuEventDispatcher);
-			set => SetProperty(ref _menuEventDispatcher, value);
+			get => GetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>();
+			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("settingsElements")] 
 		public CArray<CWeakHandle<inkSettingsSelectorController>> SettingsElements
 		{
-			get => GetProperty(ref _settingsElements);
-			set => SetProperty(ref _settingsElements, value);
+			get => GetPropertyValue<CArray<CWeakHandle<inkSettingsSelectorController>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<inkSettingsSelectorController>>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
-			get => GetProperty(ref _buttonHintsController);
-			set => SetProperty(ref _buttonHintsController, value);
+			get => GetPropertyValue<CWeakHandle<ButtonHints>>();
+			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("data")] 
 		public CArray<SettingsCategory> Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<CArray<SettingsCategory>>();
+			set => SetPropertyValue<CArray<SettingsCategory>>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("menusList")] 
 		public CArray<CName> MenusList
 		{
-			get => GetProperty(ref _menusList);
-			set => SetProperty(ref _menusList, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("eventsList")] 
 		public CArray<CName> EventsList
 		{
-			get => GetProperty(ref _eventsList);
-			set => SetProperty(ref _eventsList, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("settingsListener")] 
 		public CHandle<SettingsVarListener> SettingsListener
 		{
-			get => GetProperty(ref _settingsListener);
-			set => SetProperty(ref _settingsListener, value);
+			get => GetPropertyValue<CHandle<SettingsVarListener>>();
+			set => SetPropertyValue<CHandle<SettingsVarListener>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("settingsNotificationListener")] 
 		public CHandle<SettingsNotificationListener> SettingsNotificationListener
 		{
-			get => GetProperty(ref _settingsNotificationListener);
-			set => SetProperty(ref _settingsNotificationListener, value);
+			get => GetPropertyValue<CHandle<SettingsNotificationListener>>();
+			set => SetPropertyValue<CHandle<SettingsNotificationListener>>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("settings")] 
 		public CHandle<userSettingsUserSettings> Settings
 		{
-			get => GetProperty(ref _settings);
-			set => SetProperty(ref _settings, value);
+			get => GetPropertyValue<CHandle<userSettingsUserSettings>>();
+			set => SetPropertyValue<CHandle<userSettingsUserSettings>>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("isPreGame")] 
 		public CBool IsPreGame
 		{
-			get => GetProperty(ref _isPreGame);
-			set => SetProperty(ref _isPreGame, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("applyButtonEnabled")] 
 		public CBool ApplyButtonEnabled
 		{
-			get => GetProperty(ref _applyButtonEnabled);
-			set => SetProperty(ref _applyButtonEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("resetButtonEnabled")] 
 		public CBool ResetButtonEnabled
 		{
-			get => GetProperty(ref _resetButtonEnabled);
-			set => SetProperty(ref _resetButtonEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("closeSettingsRequest")] 
 		public CBool CloseSettingsRequest
 		{
-			get => GetProperty(ref _closeSettingsRequest);
-			set => SetProperty(ref _closeSettingsRequest, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("resetSettingsRequest")] 
 		public CBool ResetSettingsRequest
 		{
-			get => GetProperty(ref _resetSettingsRequest);
-			set => SetProperty(ref _resetSettingsRequest, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("isDlcSettings")] 
 		public CBool IsDlcSettings
 		{
-			get => GetProperty(ref _isDlcSettings);
-			set => SetProperty(ref _isDlcSettings, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("selectorCtrl")] 
 		public CWeakHandle<inkListController> SelectorCtrl
 		{
-			get => GetProperty(ref _selectorCtrl);
-			set => SetProperty(ref _selectorCtrl, value);
+			get => GetPropertyValue<CWeakHandle<inkListController>>();
+			set => SetPropertyValue<CWeakHandle<inkListController>>(value);
+		}
+
+		public SettingsMainGameController()
+		{
+			ScrollPanel = new();
+			SelectorWidget = new();
+			ButtonHintsManagerRef = new();
+			SettingsOptionsList = new();
+			ApplyButton = new();
+			ResetButton = new();
+			DefaultButton = new();
+			BrightnessButton = new();
+			HdrButton = new();
+			ControllerButton = new();
+			DescriptionText = new();
+			PreviousButtonHint = new();
+			NextButtonHint = new();
+			SettingsElements = new();
+			Data = new();
+			MenusList = new();
+			EventsList = new();
 		}
 	}
 }

@@ -5,59 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questParamRubberbanding : ISerializable
 	{
-		private CHandle<questUniversalRef> _targetRef;
-		private CFloat _minDistance;
-		private CFloat _maxDistance;
-		private CBool _stopAndWait;
-		private CBool _teleportToCatchUp;
-		private CBool _stayInFront;
-
 		[Ordinal(0)] 
 		[RED("targetRef")] 
 		public CHandle<questUniversalRef> TargetRef
 		{
-			get => GetProperty(ref _targetRef);
-			set => SetProperty(ref _targetRef, value);
+			get => GetPropertyValue<CHandle<questUniversalRef>>();
+			set => SetPropertyValue<CHandle<questUniversalRef>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("minDistance")] 
 		public CFloat MinDistance
 		{
-			get => GetProperty(ref _minDistance);
-			set => SetProperty(ref _minDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("maxDistance")] 
 		public CFloat MaxDistance
 		{
-			get => GetProperty(ref _maxDistance);
-			set => SetProperty(ref _maxDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("stopAndWait")] 
 		public CBool StopAndWait
 		{
-			get => GetProperty(ref _stopAndWait);
-			set => SetProperty(ref _stopAndWait, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("teleportToCatchUp")] 
 		public CBool TeleportToCatchUp
 		{
-			get => GetProperty(ref _teleportToCatchUp);
-			set => SetProperty(ref _teleportToCatchUp, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("stayInFront")] 
 		public CBool StayInFront
 		{
-			get => GetProperty(ref _stayInFront);
-			set => SetProperty(ref _stayInFront, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

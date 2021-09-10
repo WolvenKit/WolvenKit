@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIPosition : RedBaseClass
 	{
-		private Vector3 _position;
-
 		[Ordinal(0)] 
 		[RED("position")] 
 		public Vector3 Position
 		{
-			get => GetProperty(ref _position);
-			set => SetProperty(ref _position, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
+		}
+
+		public AIPosition()
+		{
+			Position = new() { X = -340282346638528859811704183484516925440.000000F, Y = -340282346638528859811704183484516925440.000000F, Z = -340282346638528859811704183484516925440.000000F };
 		}
 	}
 }

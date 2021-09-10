@@ -5,37 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamestateMachineparameterTypeItemEquipRequest : IScriptable
 	{
-		private TweakDBID _slotId;
-		private gameItemID _itemId;
-		private CEnum<ERenderingPlane> _startingRenderingPlane;
-
 		[Ordinal(0)] 
 		[RED("slotId")] 
 		public TweakDBID SlotId
 		{
-			get => GetProperty(ref _slotId);
-			set => SetProperty(ref _slotId, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("itemId")] 
 		public gameItemID ItemId
 		{
-			get => GetProperty(ref _itemId);
-			set => SetProperty(ref _itemId, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("startingRenderingPlane")] 
 		public CEnum<ERenderingPlane> StartingRenderingPlane
 		{
-			get => GetProperty(ref _startingRenderingPlane);
-			set => SetProperty(ref _startingRenderingPlane, value);
+			get => GetPropertyValue<CEnum<ERenderingPlane>>();
+			set => SetPropertyValue<CEnum<ERenderingPlane>>(value);
 		}
 
 		public gamestateMachineparameterTypeItemEquipRequest()
 		{
-			_startingRenderingPlane = new() { Value = Enums.ERenderingPlane.RPl_Weapon };
+			ItemId = new();
+			StartingRenderingPlane = Enums.ERenderingPlane.RPl_Weapon;
 		}
 	}
 }

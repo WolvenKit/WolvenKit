@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class sampleVisWireMaster : gameObject
 	{
-		private CArray<NodeRef> _dependableEntities;
-		private CBool _inFocus;
-		private CBool _found;
-		private CBool _lookedAt;
-
 		[Ordinal(40)] 
 		[RED("dependableEntities")] 
 		public CArray<NodeRef> DependableEntities
 		{
-			get => GetProperty(ref _dependableEntities);
-			set => SetProperty(ref _dependableEntities, value);
+			get => GetPropertyValue<CArray<NodeRef>>();
+			set => SetPropertyValue<CArray<NodeRef>>(value);
 		}
 
 		[Ordinal(41)] 
 		[RED("inFocus")] 
 		public CBool InFocus
 		{
-			get => GetProperty(ref _inFocus);
-			set => SetProperty(ref _inFocus, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(42)] 
 		[RED("found")] 
 		public CBool Found
 		{
-			get => GetProperty(ref _found);
-			set => SetProperty(ref _found, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(43)] 
 		[RED("lookedAt")] 
 		public CBool LookedAt
 		{
-			get => GetProperty(ref _lookedAt);
-			set => SetProperty(ref _lookedAt, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public sampleVisWireMaster()
+		{
+			DependableEntities = new();
 		}
 	}
 }

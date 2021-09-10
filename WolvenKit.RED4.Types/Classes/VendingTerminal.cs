@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VendingTerminal : InteractiveDevice
 	{
-		private Vector4 _position;
-		private CHandle<entMeshComponent> _canMeshComponent;
-		private CArray<CEnum<EVendorMode>> _vendingBlacklist;
-
 		[Ordinal(97)] 
 		[RED("position")] 
 		public Vector4 Position
 		{
-			get => GetProperty(ref _position);
-			set => SetProperty(ref _position, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(98)] 
 		[RED("canMeshComponent")] 
 		public CHandle<entMeshComponent> CanMeshComponent
 		{
-			get => GetProperty(ref _canMeshComponent);
-			set => SetProperty(ref _canMeshComponent, value);
+			get => GetPropertyValue<CHandle<entMeshComponent>>();
+			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
 		[Ordinal(99)] 
 		[RED("vendingBlacklist")] 
 		public CArray<CEnum<EVendorMode>> VendingBlacklist
 		{
-			get => GetProperty(ref _vendingBlacklist);
-			set => SetProperty(ref _vendingBlacklist, value);
+			get => GetPropertyValue<CArray<CEnum<EVendorMode>>>();
+			set => SetPropertyValue<CArray<CEnum<EVendorMode>>>(value);
+		}
+
+		public VendingTerminal()
+		{
+			ControllerTypeName = "VendingTerminalController";
+			Position = new();
+			VendingBlacklist = new();
 		}
 	}
 }

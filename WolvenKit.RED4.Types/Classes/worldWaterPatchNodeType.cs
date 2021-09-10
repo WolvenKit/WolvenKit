@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldWaterPatchNodeType : RedBaseClass
 	{
-		private CName _typeName;
-
 		[Ordinal(0)] 
 		[RED("typeName")] 
 		public CName TypeName
 		{
-			get => GetProperty(ref _typeName);
-			set => SetProperty(ref _typeName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public worldWaterPatchNodeType()
 		{
-			_typeName = "Grid_100x100";
+			TypeName = "Grid_100x100";
 		}
 	}
 }

@@ -5,173 +5,167 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnPlayerActorDef : RedBaseClass
 	{
-		private scnActorId _actorId;
-		private CName _specTemplate;
-		private TweakDBID _specCharacterRecordId;
-		private CName _specAppearance;
-		private scnVoicetagId _voicetagId;
-		private CArray<scnSRRefId> _animSets;
-		private scnLipsyncAnimSetSRRefId _lipsyncAnimSet;
-		private CArray<scnRidFacialAnimSetSRRefId> _facialAnimSets;
-		private CArray<scnRidCyberwareAnimSetSRRefId> _cyberwareAnimSets;
-		private CArray<scnRidDeformationAnimSetSRRefId> _deformationAnimSets;
-		private CArray<scnCinematicAnimSetSRRefId> _bodyCinematicAnimSets;
-		private CArray<scnCinematicAnimSetSRRefId> _facialCinematicAnimSets;
-		private CArray<scnCinematicAnimSetSRRefId> _cyberwareCinematicAnimSets;
-		private CArray<scnDynamicAnimSetSRRefId> _dynamicAnimSets;
-		private CEnum<scnEntityAcquisitionPlan> _acquisitionPlan;
-		private scnFindNetworkPlayerParams _findNetworkPlayerParams;
-		private scnFindEntityInContextParams _findActorInContextParams;
-		private CString _playerName;
-
 		[Ordinal(0)] 
 		[RED("actorId")] 
 		public scnActorId ActorId
 		{
-			get => GetProperty(ref _actorId);
-			set => SetProperty(ref _actorId, value);
+			get => GetPropertyValue<scnActorId>();
+			set => SetPropertyValue<scnActorId>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("specTemplate")] 
 		public CName SpecTemplate
 		{
-			get => GetProperty(ref _specTemplate);
-			set => SetProperty(ref _specTemplate, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("specCharacterRecordId")] 
 		public TweakDBID SpecCharacterRecordId
 		{
-			get => GetProperty(ref _specCharacterRecordId);
-			set => SetProperty(ref _specCharacterRecordId, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("specAppearance")] 
 		public CName SpecAppearance
 		{
-			get => GetProperty(ref _specAppearance);
-			set => SetProperty(ref _specAppearance, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("voicetagId")] 
 		public scnVoicetagId VoicetagId
 		{
-			get => GetProperty(ref _voicetagId);
-			set => SetProperty(ref _voicetagId, value);
+			get => GetPropertyValue<scnVoicetagId>();
+			set => SetPropertyValue<scnVoicetagId>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("animSets")] 
 		public CArray<scnSRRefId> AnimSets
 		{
-			get => GetProperty(ref _animSets);
-			set => SetProperty(ref _animSets, value);
+			get => GetPropertyValue<CArray<scnSRRefId>>();
+			set => SetPropertyValue<CArray<scnSRRefId>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("lipsyncAnimSet")] 
 		public scnLipsyncAnimSetSRRefId LipsyncAnimSet
 		{
-			get => GetProperty(ref _lipsyncAnimSet);
-			set => SetProperty(ref _lipsyncAnimSet, value);
+			get => GetPropertyValue<scnLipsyncAnimSetSRRefId>();
+			set => SetPropertyValue<scnLipsyncAnimSetSRRefId>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("facialAnimSets")] 
 		public CArray<scnRidFacialAnimSetSRRefId> FacialAnimSets
 		{
-			get => GetProperty(ref _facialAnimSets);
-			set => SetProperty(ref _facialAnimSets, value);
+			get => GetPropertyValue<CArray<scnRidFacialAnimSetSRRefId>>();
+			set => SetPropertyValue<CArray<scnRidFacialAnimSetSRRefId>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("cyberwareAnimSets")] 
 		public CArray<scnRidCyberwareAnimSetSRRefId> CyberwareAnimSets
 		{
-			get => GetProperty(ref _cyberwareAnimSets);
-			set => SetProperty(ref _cyberwareAnimSets, value);
+			get => GetPropertyValue<CArray<scnRidCyberwareAnimSetSRRefId>>();
+			set => SetPropertyValue<CArray<scnRidCyberwareAnimSetSRRefId>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("deformationAnimSets")] 
 		public CArray<scnRidDeformationAnimSetSRRefId> DeformationAnimSets
 		{
-			get => GetProperty(ref _deformationAnimSets);
-			set => SetProperty(ref _deformationAnimSets, value);
+			get => GetPropertyValue<CArray<scnRidDeformationAnimSetSRRefId>>();
+			set => SetPropertyValue<CArray<scnRidDeformationAnimSetSRRefId>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("bodyCinematicAnimSets")] 
 		public CArray<scnCinematicAnimSetSRRefId> BodyCinematicAnimSets
 		{
-			get => GetProperty(ref _bodyCinematicAnimSets);
-			set => SetProperty(ref _bodyCinematicAnimSets, value);
+			get => GetPropertyValue<CArray<scnCinematicAnimSetSRRefId>>();
+			set => SetPropertyValue<CArray<scnCinematicAnimSetSRRefId>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("facialCinematicAnimSets")] 
 		public CArray<scnCinematicAnimSetSRRefId> FacialCinematicAnimSets
 		{
-			get => GetProperty(ref _facialCinematicAnimSets);
-			set => SetProperty(ref _facialCinematicAnimSets, value);
+			get => GetPropertyValue<CArray<scnCinematicAnimSetSRRefId>>();
+			set => SetPropertyValue<CArray<scnCinematicAnimSetSRRefId>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("cyberwareCinematicAnimSets")] 
 		public CArray<scnCinematicAnimSetSRRefId> CyberwareCinematicAnimSets
 		{
-			get => GetProperty(ref _cyberwareCinematicAnimSets);
-			set => SetProperty(ref _cyberwareCinematicAnimSets, value);
+			get => GetPropertyValue<CArray<scnCinematicAnimSetSRRefId>>();
+			set => SetPropertyValue<CArray<scnCinematicAnimSetSRRefId>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("dynamicAnimSets")] 
 		public CArray<scnDynamicAnimSetSRRefId> DynamicAnimSets
 		{
-			get => GetProperty(ref _dynamicAnimSets);
-			set => SetProperty(ref _dynamicAnimSets, value);
+			get => GetPropertyValue<CArray<scnDynamicAnimSetSRRefId>>();
+			set => SetPropertyValue<CArray<scnDynamicAnimSetSRRefId>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("acquisitionPlan")] 
 		public CEnum<scnEntityAcquisitionPlan> AcquisitionPlan
 		{
-			get => GetProperty(ref _acquisitionPlan);
-			set => SetProperty(ref _acquisitionPlan, value);
+			get => GetPropertyValue<CEnum<scnEntityAcquisitionPlan>>();
+			set => SetPropertyValue<CEnum<scnEntityAcquisitionPlan>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("findNetworkPlayerParams")] 
 		public scnFindNetworkPlayerParams FindNetworkPlayerParams
 		{
-			get => GetProperty(ref _findNetworkPlayerParams);
-			set => SetProperty(ref _findNetworkPlayerParams, value);
+			get => GetPropertyValue<scnFindNetworkPlayerParams>();
+			set => SetPropertyValue<scnFindNetworkPlayerParams>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("findActorInContextParams")] 
 		public scnFindEntityInContextParams FindActorInContextParams
 		{
-			get => GetProperty(ref _findActorInContextParams);
-			set => SetProperty(ref _findActorInContextParams, value);
+			get => GetPropertyValue<scnFindEntityInContextParams>();
+			set => SetPropertyValue<scnFindEntityInContextParams>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("playerName")] 
 		public CString PlayerName
 		{
-			get => GetProperty(ref _playerName);
-			set => SetProperty(ref _playerName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		public scnPlayerActorDef()
 		{
-			_specTemplate = "(None)";
-			_specAppearance = "default";
+			ActorId = new() { Id = 4294967295 };
+			SpecTemplate = "(None)";
+			SpecAppearance = "default";
+			VoicetagId = new();
+			AnimSets = new();
+			LipsyncAnimSet = new() { Id = 4294967295 };
+			FacialAnimSets = new();
+			CyberwareAnimSets = new();
+			DeformationAnimSets = new();
+			BodyCinematicAnimSets = new();
+			FacialCinematicAnimSets = new();
+			CyberwareCinematicAnimSets = new();
+			DynamicAnimSets = new();
+			FindNetworkPlayerParams = new();
+			FindActorInContextParams = new() { VoiceVagId = new() };
 		}
 	}
 }

@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class grsGatherAreaReplicatedInfo : RedBaseClass
 	{
-		private CStatic<netPeerID> _enteredPlayerIDs;
-		private CBool _hasActiveQuestListener;
-		private CBool _enabled;
-
 		[Ordinal(0)] 
 		[RED("enteredPlayerIDs", 7)] 
 		public CStatic<netPeerID> EnteredPlayerIDs
 		{
-			get => GetProperty(ref _enteredPlayerIDs);
-			set => SetProperty(ref _enteredPlayerIDs, value);
+			get => GetPropertyValue<CStatic<netPeerID>>();
+			set => SetPropertyValue<CStatic<netPeerID>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hasActiveQuestListener")] 
 		public CBool HasActiveQuestListener
 		{
-			get => GetProperty(ref _hasActiveQuestListener);
-			set => SetProperty(ref _hasActiveQuestListener, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("enabled")] 
 		public CBool Enabled
 		{
-			get => GetProperty(ref _enabled);
-			set => SetProperty(ref _enabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public grsGatherAreaReplicatedInfo()
+		{
+			EnteredPlayerIDs = new(0);
 		}
 	}
 }

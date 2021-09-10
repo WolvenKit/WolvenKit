@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class StatusEffectEvents : LocomotionGroundEvents
 	{
-		private CWeakHandle<gamedataStatusEffect_Record> _statusEffectRecord;
-		private CWeakHandle<gamedataStatusEffectPlayerData_Record> _playerStatusEffectRecordData;
-		private CHandle<AnimFeature_StatusEffect> _animFeatureStatusEffect;
-
 		[Ordinal(3)] 
 		[RED("statusEffectRecord")] 
 		public CWeakHandle<gamedataStatusEffect_Record> StatusEffectRecord
 		{
-			get => GetProperty(ref _statusEffectRecord);
-			set => SetProperty(ref _statusEffectRecord, value);
+			get => GetPropertyValue<CWeakHandle<gamedataStatusEffect_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataStatusEffect_Record>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("playerStatusEffectRecordData")] 
 		public CWeakHandle<gamedataStatusEffectPlayerData_Record> PlayerStatusEffectRecordData
 		{
-			get => GetProperty(ref _playerStatusEffectRecordData);
-			set => SetProperty(ref _playerStatusEffectRecordData, value);
+			get => GetPropertyValue<CWeakHandle<gamedataStatusEffectPlayerData_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataStatusEffectPlayerData_Record>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("animFeatureStatusEffect")] 
 		public CHandle<AnimFeature_StatusEffect> AnimFeatureStatusEffect
 		{
-			get => GetProperty(ref _animFeatureStatusEffect);
-			set => SetProperty(ref _animFeatureStatusEffect, value);
+			get => GetPropertyValue<CHandle<AnimFeature_StatusEffect>>();
+			set => SetPropertyValue<CHandle<AnimFeature_StatusEffect>>(value);
 		}
 	}
 }

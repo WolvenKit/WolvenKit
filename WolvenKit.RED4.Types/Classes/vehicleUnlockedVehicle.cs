@@ -5,28 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class vehicleUnlockedVehicle : RedBaseClass
 	{
-		private vehicleGarageVehicleID _vehicleID;
-		private CFloat _health;
-
 		[Ordinal(0)] 
 		[RED("vehicleID")] 
 		public vehicleGarageVehicleID VehicleID
 		{
-			get => GetProperty(ref _vehicleID);
-			set => SetProperty(ref _vehicleID, value);
+			get => GetPropertyValue<vehicleGarageVehicleID>();
+			set => SetPropertyValue<vehicleGarageVehicleID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("health")] 
 		public CFloat Health
 		{
-			get => GetProperty(ref _health);
-			set => SetProperty(ref _health, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public vehicleUnlockedVehicle()
 		{
-			_health = 100.000000F;
+			VehicleID = new();
+			Health = 100.000000F;
 		}
 	}
 }

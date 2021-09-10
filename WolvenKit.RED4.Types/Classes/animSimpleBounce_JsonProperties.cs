@@ -5,95 +5,93 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animSimpleBounce_JsonProperties : ISerializable
 	{
-		private CFloat _multiplier;
-		private CFloat _negativeMultiplier;
-		private CFloat _smoothStep;
-		private CFloat _offset;
-		private CFloat _delay;
-		private animTransformIndex _startTransform;
-		private animTransformIndex _endTransform;
-		private CArray<animSimpleBounceTransformOutput> _transformOutputs;
-		private CArray<animSimpleBounceTrackOutput> _trackOutputs;
-		private animNamedTrackIndex _outputDriverTrack;
-
 		[Ordinal(0)] 
 		[RED("multiplier")] 
 		public CFloat Multiplier
 		{
-			get => GetProperty(ref _multiplier);
-			set => SetProperty(ref _multiplier, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("negativeMultiplier")] 
 		public CFloat NegativeMultiplier
 		{
-			get => GetProperty(ref _negativeMultiplier);
-			set => SetProperty(ref _negativeMultiplier, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("smoothStep")] 
 		public CFloat SmoothStep
 		{
-			get => GetProperty(ref _smoothStep);
-			set => SetProperty(ref _smoothStep, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("offset")] 
 		public CFloat Offset
 		{
-			get => GetProperty(ref _offset);
-			set => SetProperty(ref _offset, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("delay")] 
 		public CFloat Delay
 		{
-			get => GetProperty(ref _delay);
-			set => SetProperty(ref _delay, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("startTransform")] 
 		public animTransformIndex StartTransform
 		{
-			get => GetProperty(ref _startTransform);
-			set => SetProperty(ref _startTransform, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("endTransform")] 
 		public animTransformIndex EndTransform
 		{
-			get => GetProperty(ref _endTransform);
-			set => SetProperty(ref _endTransform, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("transformOutputs")] 
 		public CArray<animSimpleBounceTransformOutput> TransformOutputs
 		{
-			get => GetProperty(ref _transformOutputs);
-			set => SetProperty(ref _transformOutputs, value);
+			get => GetPropertyValue<CArray<animSimpleBounceTransformOutput>>();
+			set => SetPropertyValue<CArray<animSimpleBounceTransformOutput>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("trackOutputs")] 
 		public CArray<animSimpleBounceTrackOutput> TrackOutputs
 		{
-			get => GetProperty(ref _trackOutputs);
-			set => SetProperty(ref _trackOutputs, value);
+			get => GetPropertyValue<CArray<animSimpleBounceTrackOutput>>();
+			set => SetPropertyValue<CArray<animSimpleBounceTrackOutput>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("outputDriverTrack")] 
 		public animNamedTrackIndex OutputDriverTrack
 		{
-			get => GetProperty(ref _outputDriverTrack);
-			set => SetProperty(ref _outputDriverTrack, value);
+			get => GetPropertyValue<animNamedTrackIndex>();
+			set => SetPropertyValue<animNamedTrackIndex>(value);
+		}
+
+		public animSimpleBounce_JsonProperties()
+		{
+			StartTransform = new();
+			EndTransform = new();
+			TransformOutputs = new();
+			TrackOutputs = new();
+			OutputDriverTrack = new();
 		}
 	}
 }

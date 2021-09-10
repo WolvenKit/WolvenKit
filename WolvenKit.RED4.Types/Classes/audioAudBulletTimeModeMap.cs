@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioAudBulletTimeModeMap : audioAudioMetadata
 	{
-		private CArray<audioAudBulletTimeModeMapItem> _bulletTimeMapItems;
-
 		[Ordinal(1)] 
 		[RED("bulletTimeMapItems")] 
 		public CArray<audioAudBulletTimeModeMapItem> BulletTimeMapItems
 		{
-			get => GetProperty(ref _bulletTimeMapItems);
-			set => SetProperty(ref _bulletTimeMapItems, value);
+			get => GetPropertyValue<CArray<audioAudBulletTimeModeMapItem>>();
+			set => SetPropertyValue<CArray<audioAudBulletTimeModeMapItem>>(value);
+		}
+
+		public audioAudBulletTimeModeMap()
+		{
+			BulletTimeMapItems = new();
 		}
 	}
 }

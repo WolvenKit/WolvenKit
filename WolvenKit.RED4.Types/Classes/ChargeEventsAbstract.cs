@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ChargeEventsAbstract : WeaponEventsTransition
 	{
-		private CUInt32 _layerId;
-
 		[Ordinal(3)] 
 		[RED("layerId")] 
 		public CUInt32 LayerId
 		{
-			get => GetProperty(ref _layerId);
-			set => SetProperty(ref _layerId, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 	}
 }

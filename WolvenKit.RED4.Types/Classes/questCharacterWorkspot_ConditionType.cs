@@ -5,50 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questCharacterWorkspot_ConditionType : questICharacterConditionType
 	{
-		private gameEntityReference _puppetRef;
-		private CBool _isPlayer;
-		private NodeRef _spotRef;
-		private CName _animationName;
-		private CBool _waitForAnimEnd;
-
 		[Ordinal(0)] 
 		[RED("puppetRef")] 
 		public gameEntityReference PuppetRef
 		{
-			get => GetProperty(ref _puppetRef);
-			set => SetProperty(ref _puppetRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isPlayer")] 
 		public CBool IsPlayer
 		{
-			get => GetProperty(ref _isPlayer);
-			set => SetProperty(ref _isPlayer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("spotRef")] 
 		public NodeRef SpotRef
 		{
-			get => GetProperty(ref _spotRef);
-			set => SetProperty(ref _spotRef, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("animationName")] 
 		public CName AnimationName
 		{
-			get => GetProperty(ref _animationName);
-			set => SetProperty(ref _animationName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("waitForAnimEnd")] 
 		public CBool WaitForAnimEnd
 		{
-			get => GetProperty(ref _waitForAnimEnd);
-			set => SetProperty(ref _waitForAnimEnd, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public questCharacterWorkspot_ConditionType()
+		{
+			PuppetRef = new() { Names = new() };
 		}
 	}
 }

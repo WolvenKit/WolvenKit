@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class Stash : InteractiveDevice
 	{
-		private CHandle<gameInventory> _inventory;
-
 		[Ordinal(97)] 
 		[RED("inventory")] 
 		public CHandle<gameInventory> Inventory
 		{
-			get => GetProperty(ref _inventory);
-			set => SetProperty(ref _inventory, value);
+			get => GetPropertyValue<CHandle<gameInventory>>();
+			set => SetPropertyValue<CHandle<gameInventory>>(value);
+		}
+
+		public Stash()
+		{
+			ControllerTypeName = "StashController";
 		}
 	}
 }

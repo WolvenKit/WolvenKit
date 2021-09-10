@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimWrapperVariableDescription : RedBaseClass
 	{
-		private CName _variableName;
-		private CFloat _defaultValue;
-
 		[Ordinal(0)] 
 		[RED("variableName")] 
 		public CName VariableName
 		{
-			get => GetProperty(ref _variableName);
-			set => SetProperty(ref _variableName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("defaultValue")] 
 		public CFloat DefaultValue
 		{
-			get => GetProperty(ref _defaultValue);
-			set => SetProperty(ref _defaultValue, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

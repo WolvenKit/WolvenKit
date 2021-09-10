@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class vgVectorGraphicShape_Text : vgBaseVectorGraphicShape
 	{
-		private CString _xt;
-
 		[Ordinal(2)] 
 		[RED("xt")] 
 		public CString Xt
 		{
-			get => GetProperty(ref _xt);
-			set => SetProperty(ref _xt, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		public vgVectorGraphicShape_Text()
+		{
+			CalTransform = new();
 		}
 	}
 }

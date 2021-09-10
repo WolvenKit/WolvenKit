@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class NonStealthQuickHackVictimEvent : redEvent
 	{
-		private entEntityID _instigatorID;
-
 		[Ordinal(0)] 
 		[RED("instigatorID")] 
 		public entEntityID InstigatorID
 		{
-			get => GetProperty(ref _instigatorID);
-			set => SetProperty(ref _instigatorID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
+		}
+
+		public NonStealthQuickHackVictimEvent()
+		{
+			InstigatorID = new();
 		}
 	}
 }

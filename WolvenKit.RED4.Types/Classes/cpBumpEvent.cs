@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class cpBumpEvent : redEvent
 	{
-		private CUInt32 _amount;
-
 		[Ordinal(0)] 
 		[RED("amount")] 
 		public CUInt32 Amount
 		{
-			get => GetProperty(ref _amount);
-			set => SetProperty(ref _amount, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		public cpBumpEvent()
 		{
-			_amount = 1;
+			Amount = 1;
 		}
 	}
 }

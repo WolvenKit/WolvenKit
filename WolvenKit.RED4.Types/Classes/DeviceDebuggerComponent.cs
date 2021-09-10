@@ -5,83 +5,76 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DeviceDebuggerComponent : gameScriptableComponent
 	{
-		private CBool _isActive;
-		private CBool _exclusiveModeTriggered;
-		private DebuggerProperties _currentDeviceProperties;
-		private CWeakHandle<Device> _debuggedDevice;
-		private CEnum<EDebuggerColor> _debuggerColor;
-		private CString _previousContext;
-		private CString _cachedContext;
-		private CArray<CUInt32> _layerIDs;
-
 		[Ordinal(5)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get => GetProperty(ref _isActive);
-			set => SetProperty(ref _isActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("exclusiveModeTriggered")] 
 		public CBool ExclusiveModeTriggered
 		{
-			get => GetProperty(ref _exclusiveModeTriggered);
-			set => SetProperty(ref _exclusiveModeTriggered, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("currentDeviceProperties")] 
 		public DebuggerProperties CurrentDeviceProperties
 		{
-			get => GetProperty(ref _currentDeviceProperties);
-			set => SetProperty(ref _currentDeviceProperties, value);
+			get => GetPropertyValue<DebuggerProperties>();
+			set => SetPropertyValue<DebuggerProperties>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("debuggedDevice")] 
 		public CWeakHandle<Device> DebuggedDevice
 		{
-			get => GetProperty(ref _debuggedDevice);
-			set => SetProperty(ref _debuggedDevice, value);
+			get => GetPropertyValue<CWeakHandle<Device>>();
+			set => SetPropertyValue<CWeakHandle<Device>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("debuggerColor")] 
 		public CEnum<EDebuggerColor> DebuggerColor
 		{
-			get => GetProperty(ref _debuggerColor);
-			set => SetProperty(ref _debuggerColor, value);
+			get => GetPropertyValue<CEnum<EDebuggerColor>>();
+			set => SetPropertyValue<CEnum<EDebuggerColor>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("previousContext")] 
 		public CString PreviousContext
 		{
-			get => GetProperty(ref _previousContext);
-			set => SetProperty(ref _previousContext, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("cachedContext")] 
 		public CString CachedContext
 		{
-			get => GetProperty(ref _cachedContext);
-			set => SetProperty(ref _cachedContext, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("layerIDs")] 
 		public CArray<CUInt32> LayerIDs
 		{
-			get => GetProperty(ref _layerIDs);
-			set => SetProperty(ref _layerIDs, value);
+			get => GetPropertyValue<CArray<CUInt32>>();
+			set => SetPropertyValue<CArray<CUInt32>>(value);
 		}
 
 		public DeviceDebuggerComponent()
 		{
-			_previousContext = new() { Text = "NONE" };
-			_cachedContext = new() { Text = "NONE" };
+			CurrentDeviceProperties = new() { LayerIDs = new() };
+			PreviousContext = "NONE";
+			CachedContext = "NONE";
+			LayerIDs = new();
 		}
 	}
 }

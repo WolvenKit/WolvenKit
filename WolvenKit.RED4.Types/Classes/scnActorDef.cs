@@ -5,199 +5,194 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnActorDef : RedBaseClass
 	{
-		private scnActorId _actorId;
-		private scnVoicetagId _voicetagId;
-		private CEnum<scnEntityAcquisitionPlan> _acquisitionPlan;
-		private scnFindEntityInContextParams _findActorInContextParams;
-		private scnFindEntityInWorldParams _findActorInWorldParams;
-		private scnSpawnDespawnEntityParams _spawnDespawnParams;
-		private scnSpawnSetParams _spawnSetParams;
-		private scnCommunityParams _communityParams;
-		private scnSpawnerParams _spawnerParams;
-		private CArray<scnSRRefId> _animSets;
-		private scnLipsyncAnimSetSRRefId _lipsyncAnimSet;
-		private CArray<scnRidFacialAnimSetSRRefId> _facialAnimSets;
-		private CArray<scnRidCyberwareAnimSetSRRefId> _cyberwareAnimSets;
-		private CArray<scnRidDeformationAnimSetSRRefId> _deformationAnimSets;
-		private CArray<scnCinematicAnimSetSRRefId> _bodyCinematicAnimSets;
-		private CArray<scnCinematicAnimSetSRRefId> _facialCinematicAnimSets;
-		private CArray<scnCinematicAnimSetSRRefId> _cyberwareCinematicAnimSets;
-		private CArray<scnDynamicAnimSetSRRefId> _dynamicAnimSets;
-		private CString _actorName;
-		private TweakDBID _specCharacterRecordId;
-		private CName _specAppearance;
-
 		[Ordinal(0)] 
 		[RED("actorId")] 
 		public scnActorId ActorId
 		{
-			get => GetProperty(ref _actorId);
-			set => SetProperty(ref _actorId, value);
+			get => GetPropertyValue<scnActorId>();
+			set => SetPropertyValue<scnActorId>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("voicetagId")] 
 		public scnVoicetagId VoicetagId
 		{
-			get => GetProperty(ref _voicetagId);
-			set => SetProperty(ref _voicetagId, value);
+			get => GetPropertyValue<scnVoicetagId>();
+			set => SetPropertyValue<scnVoicetagId>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("acquisitionPlan")] 
 		public CEnum<scnEntityAcquisitionPlan> AcquisitionPlan
 		{
-			get => GetProperty(ref _acquisitionPlan);
-			set => SetProperty(ref _acquisitionPlan, value);
+			get => GetPropertyValue<CEnum<scnEntityAcquisitionPlan>>();
+			set => SetPropertyValue<CEnum<scnEntityAcquisitionPlan>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("findActorInContextParams")] 
 		public scnFindEntityInContextParams FindActorInContextParams
 		{
-			get => GetProperty(ref _findActorInContextParams);
-			set => SetProperty(ref _findActorInContextParams, value);
+			get => GetPropertyValue<scnFindEntityInContextParams>();
+			set => SetPropertyValue<scnFindEntityInContextParams>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("findActorInWorldParams")] 
 		public scnFindEntityInWorldParams FindActorInWorldParams
 		{
-			get => GetProperty(ref _findActorInWorldParams);
-			set => SetProperty(ref _findActorInWorldParams, value);
+			get => GetPropertyValue<scnFindEntityInWorldParams>();
+			set => SetPropertyValue<scnFindEntityInWorldParams>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("spawnDespawnParams")] 
 		public scnSpawnDespawnEntityParams SpawnDespawnParams
 		{
-			get => GetProperty(ref _spawnDespawnParams);
-			set => SetProperty(ref _spawnDespawnParams, value);
+			get => GetPropertyValue<scnSpawnDespawnEntityParams>();
+			set => SetPropertyValue<scnSpawnDespawnEntityParams>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("spawnSetParams")] 
 		public scnSpawnSetParams SpawnSetParams
 		{
-			get => GetProperty(ref _spawnSetParams);
-			set => SetProperty(ref _spawnSetParams, value);
+			get => GetPropertyValue<scnSpawnSetParams>();
+			set => SetPropertyValue<scnSpawnSetParams>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("communityParams")] 
 		public scnCommunityParams CommunityParams
 		{
-			get => GetProperty(ref _communityParams);
-			set => SetProperty(ref _communityParams, value);
+			get => GetPropertyValue<scnCommunityParams>();
+			set => SetPropertyValue<scnCommunityParams>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("spawnerParams")] 
 		public scnSpawnerParams SpawnerParams
 		{
-			get => GetProperty(ref _spawnerParams);
-			set => SetProperty(ref _spawnerParams, value);
+			get => GetPropertyValue<scnSpawnerParams>();
+			set => SetPropertyValue<scnSpawnerParams>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("animSets")] 
 		public CArray<scnSRRefId> AnimSets
 		{
-			get => GetProperty(ref _animSets);
-			set => SetProperty(ref _animSets, value);
+			get => GetPropertyValue<CArray<scnSRRefId>>();
+			set => SetPropertyValue<CArray<scnSRRefId>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("lipsyncAnimSet")] 
 		public scnLipsyncAnimSetSRRefId LipsyncAnimSet
 		{
-			get => GetProperty(ref _lipsyncAnimSet);
-			set => SetProperty(ref _lipsyncAnimSet, value);
+			get => GetPropertyValue<scnLipsyncAnimSetSRRefId>();
+			set => SetPropertyValue<scnLipsyncAnimSetSRRefId>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("facialAnimSets")] 
 		public CArray<scnRidFacialAnimSetSRRefId> FacialAnimSets
 		{
-			get => GetProperty(ref _facialAnimSets);
-			set => SetProperty(ref _facialAnimSets, value);
+			get => GetPropertyValue<CArray<scnRidFacialAnimSetSRRefId>>();
+			set => SetPropertyValue<CArray<scnRidFacialAnimSetSRRefId>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("cyberwareAnimSets")] 
 		public CArray<scnRidCyberwareAnimSetSRRefId> CyberwareAnimSets
 		{
-			get => GetProperty(ref _cyberwareAnimSets);
-			set => SetProperty(ref _cyberwareAnimSets, value);
+			get => GetPropertyValue<CArray<scnRidCyberwareAnimSetSRRefId>>();
+			set => SetPropertyValue<CArray<scnRidCyberwareAnimSetSRRefId>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("deformationAnimSets")] 
 		public CArray<scnRidDeformationAnimSetSRRefId> DeformationAnimSets
 		{
-			get => GetProperty(ref _deformationAnimSets);
-			set => SetProperty(ref _deformationAnimSets, value);
+			get => GetPropertyValue<CArray<scnRidDeformationAnimSetSRRefId>>();
+			set => SetPropertyValue<CArray<scnRidDeformationAnimSetSRRefId>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("bodyCinematicAnimSets")] 
 		public CArray<scnCinematicAnimSetSRRefId> BodyCinematicAnimSets
 		{
-			get => GetProperty(ref _bodyCinematicAnimSets);
-			set => SetProperty(ref _bodyCinematicAnimSets, value);
+			get => GetPropertyValue<CArray<scnCinematicAnimSetSRRefId>>();
+			set => SetPropertyValue<CArray<scnCinematicAnimSetSRRefId>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("facialCinematicAnimSets")] 
 		public CArray<scnCinematicAnimSetSRRefId> FacialCinematicAnimSets
 		{
-			get => GetProperty(ref _facialCinematicAnimSets);
-			set => SetProperty(ref _facialCinematicAnimSets, value);
+			get => GetPropertyValue<CArray<scnCinematicAnimSetSRRefId>>();
+			set => SetPropertyValue<CArray<scnCinematicAnimSetSRRefId>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("cyberwareCinematicAnimSets")] 
 		public CArray<scnCinematicAnimSetSRRefId> CyberwareCinematicAnimSets
 		{
-			get => GetProperty(ref _cyberwareCinematicAnimSets);
-			set => SetProperty(ref _cyberwareCinematicAnimSets, value);
+			get => GetPropertyValue<CArray<scnCinematicAnimSetSRRefId>>();
+			set => SetPropertyValue<CArray<scnCinematicAnimSetSRRefId>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("dynamicAnimSets")] 
 		public CArray<scnDynamicAnimSetSRRefId> DynamicAnimSets
 		{
-			get => GetProperty(ref _dynamicAnimSets);
-			set => SetProperty(ref _dynamicAnimSets, value);
+			get => GetPropertyValue<CArray<scnDynamicAnimSetSRRefId>>();
+			set => SetPropertyValue<CArray<scnDynamicAnimSetSRRefId>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("actorName")] 
 		public CString ActorName
 		{
-			get => GetProperty(ref _actorName);
-			set => SetProperty(ref _actorName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("specCharacterRecordId")] 
 		public TweakDBID SpecCharacterRecordId
 		{
-			get => GetProperty(ref _specCharacterRecordId);
-			set => SetProperty(ref _specCharacterRecordId, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("specAppearance")] 
 		public CName SpecAppearance
 		{
-			get => GetProperty(ref _specAppearance);
-			set => SetProperty(ref _specAppearance, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public scnActorDef()
 		{
-			_specAppearance = "default";
+			ActorId = new() { Id = 4294967295 };
+			VoicetagId = new();
+			FindActorInContextParams = new() { VoiceVagId = new() };
+			FindActorInWorldParams = new() { ActorRef = new() { Names = new() } };
+			SpawnDespawnParams = new() { SpawnOffset = new() { Position = new(), Orientation = new() { R = 1.000000F } }, ItemOwnerId = new() { Id = 4294967040 }, SpawnOnStart = true, IsEnabled = true, ValidateSpawnPostion = true };
+			SpawnSetParams = new();
+			CommunityParams = new();
+			SpawnerParams = new();
+			AnimSets = new();
+			LipsyncAnimSet = new() { Id = 4294967295 };
+			FacialAnimSets = new();
+			CyberwareAnimSets = new();
+			DeformationAnimSets = new();
+			BodyCinematicAnimSets = new();
+			FacialCinematicAnimSets = new();
+			CyberwareCinematicAnimSets = new();
+			DynamicAnimSets = new();
+			SpecAppearance = "default";
 		}
 	}
 }

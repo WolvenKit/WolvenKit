@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameeventsCoverHitEvent : gameeventsHitEvent
 	{
-		private CWeakHandle<gameObject> _cover;
-
 		[Ordinal(12)] 
 		[RED("cover")] 
 		public CWeakHandle<gameObject> Cover
 		{
-			get => GetProperty(ref _cover);
-			set => SetProperty(ref _cover, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 	}
 }

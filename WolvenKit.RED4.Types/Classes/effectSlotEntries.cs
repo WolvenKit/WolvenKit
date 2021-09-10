@@ -5,28 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class effectSlotEntries : effectIPlacementEntries
 	{
-		private CBool _inheritRotation;
-		private CArray<effectSlotEntry> _slots;
-
 		[Ordinal(0)] 
 		[RED("inheritRotation")] 
 		public CBool InheritRotation
 		{
-			get => GetProperty(ref _inheritRotation);
-			set => SetProperty(ref _inheritRotation, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("slots")] 
 		public CArray<effectSlotEntry> Slots
 		{
-			get => GetProperty(ref _slots);
-			set => SetProperty(ref _slots, value);
+			get => GetPropertyValue<CArray<effectSlotEntry>>();
+			set => SetPropertyValue<CArray<effectSlotEntry>>(value);
 		}
 
 		public effectSlotEntries()
 		{
-			_inheritRotation = true;
+			InheritRotation = true;
+			Slots = new();
 		}
 	}
 }

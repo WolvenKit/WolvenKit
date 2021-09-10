@@ -5,73 +5,68 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questEntityManagerSetAttachment_ToActor : questIEntityManagerSetAttachment_NodeSubType
 	{
-		private NodeRef _attachmentRef;
-		private gameEntityReference _objectRef;
-		private CBool _isPlayer;
-		private CName _slot;
-		private CEnum<questAttachmentOffsetMode> _offsetMode;
-		private Vector3 _customOffsetPos;
-		private Quaternion _customOffsetRot;
-
 		[Ordinal(0)] 
 		[RED("attachmentRef")] 
 		public NodeRef AttachmentRef
 		{
-			get => GetProperty(ref _attachmentRef);
-			set => SetProperty(ref _attachmentRef, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("objectRef")] 
 		public gameEntityReference ObjectRef
 		{
-			get => GetProperty(ref _objectRef);
-			set => SetProperty(ref _objectRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isPlayer")] 
 		public CBool IsPlayer
 		{
-			get => GetProperty(ref _isPlayer);
-			set => SetProperty(ref _isPlayer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("slot")] 
 		public CName Slot
 		{
-			get => GetProperty(ref _slot);
-			set => SetProperty(ref _slot, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("offsetMode")] 
 		public CEnum<questAttachmentOffsetMode> OffsetMode
 		{
-			get => GetProperty(ref _offsetMode);
-			set => SetProperty(ref _offsetMode, value);
+			get => GetPropertyValue<CEnum<questAttachmentOffsetMode>>();
+			set => SetPropertyValue<CEnum<questAttachmentOffsetMode>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("customOffsetPos")] 
 		public Vector3 CustomOffsetPos
 		{
-			get => GetProperty(ref _customOffsetPos);
-			set => SetProperty(ref _customOffsetPos, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("customOffsetRot")] 
 		public Quaternion CustomOffsetRot
 		{
-			get => GetProperty(ref _customOffsetRot);
-			set => SetProperty(ref _customOffsetRot, value);
+			get => GetPropertyValue<Quaternion>();
+			set => SetPropertyValue<Quaternion>(value);
 		}
 
 		public questEntityManagerSetAttachment_ToActor()
 		{
-			_isPlayer = true;
+			ObjectRef = new() { Names = new() };
+			IsPlayer = true;
+			CustomOffsetPos = new();
+			CustomOffsetRot = new() { R = 1.000000F };
 		}
 	}
 }

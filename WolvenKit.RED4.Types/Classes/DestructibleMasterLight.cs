@@ -5,23 +5,27 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DestructibleMasterLight : DestructibleMasterDevice
 	{
-		private CArray<CHandle<gameLightComponent>> _lightComponents;
-		private CArray<gamedataLightPreset> _lightDefinitions;
-
 		[Ordinal(97)] 
 		[RED("lightComponents")] 
 		public CArray<CHandle<gameLightComponent>> LightComponents
 		{
-			get => GetProperty(ref _lightComponents);
-			set => SetProperty(ref _lightComponents, value);
+			get => GetPropertyValue<CArray<CHandle<gameLightComponent>>>();
+			set => SetPropertyValue<CArray<CHandle<gameLightComponent>>>(value);
 		}
 
 		[Ordinal(98)] 
 		[RED("lightDefinitions")] 
 		public CArray<gamedataLightPreset> LightDefinitions
 		{
-			get => GetProperty(ref _lightDefinitions);
-			set => SetProperty(ref _lightDefinitions, value);
+			get => GetPropertyValue<CArray<gamedataLightPreset>>();
+			set => SetPropertyValue<CArray<gamedataLightPreset>>(value);
+		}
+
+		public DestructibleMasterLight()
+		{
+			ControllerTypeName = "DestructibleMasterLightController";
+			LightComponents = new();
+			LightDefinitions = new();
 		}
 	}
 }

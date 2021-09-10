@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameEnvironmentDamageReceiverBox : gameEnvironmentDamageReceiverShape
 	{
-		private Vector3 _dimensions;
-
 		[Ordinal(1)] 
 		[RED("dimensions")] 
 		public Vector3 Dimensions
 		{
-			get => GetProperty(ref _dimensions);
-			set => SetProperty(ref _dimensions, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
+		}
+
+		public gameEnvironmentDamageReceiverBox()
+		{
+			Transform = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			Dimensions = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
 		}
 	}
 }

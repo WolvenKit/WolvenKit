@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameJournalCodexDescription : gameJournalEntry
 	{
-		private LocalizationString _subTitle;
-		private LocalizationString _textContent;
-
 		[Ordinal(1)] 
 		[RED("subTitle")] 
 		public LocalizationString SubTitle
 		{
-			get => GetProperty(ref _subTitle);
-			set => SetProperty(ref _subTitle, value);
+			get => GetPropertyValue<LocalizationString>();
+			set => SetPropertyValue<LocalizationString>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("textContent")] 
 		public LocalizationString TextContent
 		{
-			get => GetProperty(ref _textContent);
-			set => SetProperty(ref _textContent, value);
+			get => GetPropertyValue<LocalizationString>();
+			set => SetPropertyValue<LocalizationString>(value);
+		}
+
+		public gameJournalCodexDescription()
+		{
+			SubTitle = new() { Unk1 = 0, Value = "" };
+			TextContent = new() { Unk1 = 0, Value = "" };
 		}
 	}
 }

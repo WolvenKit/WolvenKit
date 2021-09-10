@@ -5,261 +5,250 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_ConeLimit : animAnimNode_OnePoseInput
 	{
-		private animTransformIndex _coneTransform;
-		private animTransformIndex _constrainedTransform;
-		private Vector3 _coneAxisLs;
-		private Vector3 _coneAxisNormalizedLs;
-		private Vector3 _coneOffsetMs;
-		private animVectorLink _coneOffsetMsLink;
-		private CLegacySingleChannelCurve<CFloat> _marginEaseOutCurve;
-		private CFloat _limit1;
-		private animFloatLink _limit1Link;
-		private animNamedTrackIndex _limit1FloatTrack;
-		private CFloat _paraboloidRadius1;
-		private CFloat _limit2;
-		private animFloatLink _limit2Link;
-		private animNamedTrackIndex _limit2FloatTrack;
-		private CFloat _paraboloidRadius2;
-		private CFloat _limit3;
-		private animFloatLink _limit3Link;
-		private animNamedTrackIndex _limit3FloatTrack;
-		private CFloat _paraboloidRadius3;
-		private CFloat _limit4;
-		private animFloatLink _limit4Link;
-		private animNamedTrackIndex _limit4FloatTrack;
-		private CFloat _paraboloidRadius4;
-		private animNamedTrackIndex _coneLimitReached;
-		private CBool _debug;
-		private CBool _colorfulCone;
-		private CBool _applyDebugConeScalling;
-
 		[Ordinal(12)] 
 		[RED("coneTransform")] 
 		public animTransformIndex ConeTransform
 		{
-			get => GetProperty(ref _coneTransform);
-			set => SetProperty(ref _coneTransform, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("constrainedTransform")] 
 		public animTransformIndex ConstrainedTransform
 		{
-			get => GetProperty(ref _constrainedTransform);
-			set => SetProperty(ref _constrainedTransform, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("coneAxisLs")] 
 		public Vector3 ConeAxisLs
 		{
-			get => GetProperty(ref _coneAxisLs);
-			set => SetProperty(ref _coneAxisLs, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("coneAxisNormalizedLs")] 
 		public Vector3 ConeAxisNormalizedLs
 		{
-			get => GetProperty(ref _coneAxisNormalizedLs);
-			set => SetProperty(ref _coneAxisNormalizedLs, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("coneOffsetMs")] 
 		public Vector3 ConeOffsetMs
 		{
-			get => GetProperty(ref _coneOffsetMs);
-			set => SetProperty(ref _coneOffsetMs, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("coneOffsetMsLink")] 
 		public animVectorLink ConeOffsetMsLink
 		{
-			get => GetProperty(ref _coneOffsetMsLink);
-			set => SetProperty(ref _coneOffsetMsLink, value);
+			get => GetPropertyValue<animVectorLink>();
+			set => SetPropertyValue<animVectorLink>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("marginEaseOutCurve")] 
 		public CLegacySingleChannelCurve<CFloat> MarginEaseOutCurve
 		{
-			get => GetProperty(ref _marginEaseOutCurve);
-			set => SetProperty(ref _marginEaseOutCurve, value);
+			get => GetPropertyValue<CLegacySingleChannelCurve<CFloat>>();
+			set => SetPropertyValue<CLegacySingleChannelCurve<CFloat>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("limit1")] 
 		public CFloat Limit1
 		{
-			get => GetProperty(ref _limit1);
-			set => SetProperty(ref _limit1, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("limit1Link")] 
 		public animFloatLink Limit1Link
 		{
-			get => GetProperty(ref _limit1Link);
-			set => SetProperty(ref _limit1Link, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("limit1FloatTrack")] 
 		public animNamedTrackIndex Limit1FloatTrack
 		{
-			get => GetProperty(ref _limit1FloatTrack);
-			set => SetProperty(ref _limit1FloatTrack, value);
+			get => GetPropertyValue<animNamedTrackIndex>();
+			set => SetPropertyValue<animNamedTrackIndex>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("paraboloidRadius1")] 
 		public CFloat ParaboloidRadius1
 		{
-			get => GetProperty(ref _paraboloidRadius1);
-			set => SetProperty(ref _paraboloidRadius1, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("limit2")] 
 		public CFloat Limit2
 		{
-			get => GetProperty(ref _limit2);
-			set => SetProperty(ref _limit2, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("limit2Link")] 
 		public animFloatLink Limit2Link
 		{
-			get => GetProperty(ref _limit2Link);
-			set => SetProperty(ref _limit2Link, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("limit2FloatTrack")] 
 		public animNamedTrackIndex Limit2FloatTrack
 		{
-			get => GetProperty(ref _limit2FloatTrack);
-			set => SetProperty(ref _limit2FloatTrack, value);
+			get => GetPropertyValue<animNamedTrackIndex>();
+			set => SetPropertyValue<animNamedTrackIndex>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("paraboloidRadius2")] 
 		public CFloat ParaboloidRadius2
 		{
-			get => GetProperty(ref _paraboloidRadius2);
-			set => SetProperty(ref _paraboloidRadius2, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("limit3")] 
 		public CFloat Limit3
 		{
-			get => GetProperty(ref _limit3);
-			set => SetProperty(ref _limit3, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("limit3Link")] 
 		public animFloatLink Limit3Link
 		{
-			get => GetProperty(ref _limit3Link);
-			set => SetProperty(ref _limit3Link, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("limit3FloatTrack")] 
 		public animNamedTrackIndex Limit3FloatTrack
 		{
-			get => GetProperty(ref _limit3FloatTrack);
-			set => SetProperty(ref _limit3FloatTrack, value);
+			get => GetPropertyValue<animNamedTrackIndex>();
+			set => SetPropertyValue<animNamedTrackIndex>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("paraboloidRadius3")] 
 		public CFloat ParaboloidRadius3
 		{
-			get => GetProperty(ref _paraboloidRadius3);
-			set => SetProperty(ref _paraboloidRadius3, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("limit4")] 
 		public CFloat Limit4
 		{
-			get => GetProperty(ref _limit4);
-			set => SetProperty(ref _limit4, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("limit4Link")] 
 		public animFloatLink Limit4Link
 		{
-			get => GetProperty(ref _limit4Link);
-			set => SetProperty(ref _limit4Link, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("limit4FloatTrack")] 
 		public animNamedTrackIndex Limit4FloatTrack
 		{
-			get => GetProperty(ref _limit4FloatTrack);
-			set => SetProperty(ref _limit4FloatTrack, value);
+			get => GetPropertyValue<animNamedTrackIndex>();
+			set => SetPropertyValue<animNamedTrackIndex>(value);
 		}
 
 		[Ordinal(34)] 
 		[RED("paraboloidRadius4")] 
 		public CFloat ParaboloidRadius4
 		{
-			get => GetProperty(ref _paraboloidRadius4);
-			set => SetProperty(ref _paraboloidRadius4, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(35)] 
 		[RED("coneLimitReached")] 
 		public animNamedTrackIndex ConeLimitReached
 		{
-			get => GetProperty(ref _coneLimitReached);
-			set => SetProperty(ref _coneLimitReached, value);
+			get => GetPropertyValue<animNamedTrackIndex>();
+			set => SetPropertyValue<animNamedTrackIndex>(value);
 		}
 
 		[Ordinal(36)] 
 		[RED("debug")] 
 		public CBool Debug
 		{
-			get => GetProperty(ref _debug);
-			set => SetProperty(ref _debug, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(37)] 
 		[RED("colorfulCone")] 
 		public CBool ColorfulCone
 		{
-			get => GetProperty(ref _colorfulCone);
-			set => SetProperty(ref _colorfulCone, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(38)] 
 		[RED("applyDebugConeScalling")] 
 		public CBool ApplyDebugConeScalling
 		{
-			get => GetProperty(ref _applyDebugConeScalling);
-			set => SetProperty(ref _applyDebugConeScalling, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public animAnimNode_ConeLimit()
 		{
-			_limit1 = 45.000000F;
-			_paraboloidRadius1 = 0.050000F;
-			_limit2 = 45.000000F;
-			_paraboloidRadius2 = 0.050000F;
-			_limit3 = 45.000000F;
-			_paraboloidRadius3 = 0.050000F;
-			_limit4 = 45.000000F;
-			_paraboloidRadius4 = 0.050000F;
-			_applyDebugConeScalling = true;
+			Id = 4294967295;
+			InputLink = new();
+			ConeTransform = new();
+			ConstrainedTransform = new();
+			ConeAxisLs = new() { Y = 1.000000F };
+			ConeAxisNormalizedLs = new() { Y = 1.000000F };
+			ConeOffsetMs = new();
+			ConeOffsetMsLink = new();
+			Limit1 = 45.000000F;
+			Limit1Link = new();
+			Limit1FloatTrack = new();
+			ParaboloidRadius1 = 0.050000F;
+			Limit2 = 45.000000F;
+			Limit2Link = new();
+			Limit2FloatTrack = new();
+			ParaboloidRadius2 = 0.050000F;
+			Limit3 = 45.000000F;
+			Limit3Link = new();
+			Limit3FloatTrack = new();
+			ParaboloidRadius3 = 0.050000F;
+			Limit4 = 45.000000F;
+			Limit4Link = new();
+			Limit4FloatTrack = new();
+			ParaboloidRadius4 = 0.050000F;
+			ConeLimitReached = new();
+			ApplyDebugConeScalling = true;
 		}
 	}
 }

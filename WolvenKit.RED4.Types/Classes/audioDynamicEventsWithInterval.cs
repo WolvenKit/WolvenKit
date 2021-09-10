@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioDynamicEventsWithInterval : RedBaseClass
 	{
-		private CArray<CName> _events;
-		private CFloat _interval;
-
 		[Ordinal(0)] 
 		[RED("events")] 
 		public CArray<CName> Events
 		{
-			get => GetProperty(ref _events);
-			set => SetProperty(ref _events, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("interval")] 
 		public CFloat Interval
 		{
-			get => GetProperty(ref _interval);
-			set => SetProperty(ref _interval, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public audioDynamicEventsWithInterval()
+		{
+			Events = new();
 		}
 	}
 }

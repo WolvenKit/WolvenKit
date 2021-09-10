@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameJournalSharedStateData : RedBaseClass
 	{
-		private CUInt32 _pathHash;
-		private CEnum<gameJournalEntryState> _entryState;
-
 		[Ordinal(0)] 
 		[RED("pathHash")] 
 		public CUInt32 PathHash
 		{
-			get => GetProperty(ref _pathHash);
-			set => SetProperty(ref _pathHash, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("entryState")] 
 		public CEnum<gameJournalEntryState> EntryState
 		{
-			get => GetProperty(ref _entryState);
-			set => SetProperty(ref _entryState, value);
+			get => GetPropertyValue<CEnum<gameJournalEntryState>>();
+			set => SetPropertyValue<CEnum<gameJournalEntryState>>(value);
 		}
 	}
 }

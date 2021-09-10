@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioFoleyGlobalMetadata : audioAudioMetadata
 	{
-		private CFloat _fadeoutTime;
-		private CName _fadeoutRtpc;
-
 		[Ordinal(1)] 
 		[RED("fadeoutTime")] 
 		public CFloat FadeoutTime
 		{
-			get => GetProperty(ref _fadeoutTime);
-			set => SetProperty(ref _fadeoutTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("fadeoutRtpc")] 
 		public CName FadeoutRtpc
 		{
-			get => GetProperty(ref _fadeoutRtpc);
-			set => SetProperty(ref _fadeoutRtpc, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public audioFoleyGlobalMetadata()
 		{
-			_fadeoutTime = 20.000000F;
+			FadeoutTime = 20.000000F;
 		}
 	}
 }

@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AnimFeature_LadderEnterStyleData : animAnimFeature
 	{
-		private CInt32 _enterStyle;
-
 		[Ordinal(0)] 
 		[RED("enterStyle")] 
 		public CInt32 EnterStyle
 		{
-			get => GetProperty(ref _enterStyle);
-			set => SetProperty(ref _enterStyle, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

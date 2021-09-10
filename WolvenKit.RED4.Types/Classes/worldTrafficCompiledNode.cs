@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldTrafficCompiledNode : worldNode
 	{
-		private Box _aabb;
-
 		[Ordinal(4)] 
 		[RED("aabb")] 
 		public Box Aabb
 		{
-			get => GetProperty(ref _aabb);
-			set => SetProperty(ref _aabb, value);
+			get => GetPropertyValue<Box>();
+			set => SetPropertyValue<Box>(value);
+		}
+
+		public worldTrafficCompiledNode()
+		{
+			Aabb = new() { Min = new() { X = 340282346638528859811704183484516925440.000000F, Y = 340282346638528859811704183484516925440.000000F, Z = 340282346638528859811704183484516925440.000000F, W = 340282346638528859811704183484516925440.000000F }, Max = new() { X = -340282346638528859811704183484516925440.000000F, Y = -340282346638528859811704183484516925440.000000F, Z = -340282346638528859811704183484516925440.000000F, W = -340282346638528859811704183484516925440.000000F } };
 		}
 	}
 }

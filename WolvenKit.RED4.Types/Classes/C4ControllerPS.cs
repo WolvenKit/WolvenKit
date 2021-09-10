@@ -5,19 +5,21 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class C4ControllerPS : ExplosiveDeviceControllerPS
 	{
-		private CName _itemTweakDBString;
-
 		[Ordinal(120)] 
 		[RED("itemTweakDBString")] 
 		public CName ItemTweakDBString
 		{
-			get => GetProperty(ref _itemTweakDBString);
-			set => SetProperty(ref _itemTweakDBString, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public C4ControllerPS()
 		{
-			_itemTweakDBString = "C4";
+			IsScanned = true;
+			ExposeQuickHacks = true;
+			TweakDBRecord = new() { Value = 44966449988 };
+			TweakDBDescriptionRecord = new() { Value = 97999174197 };
+			ItemTweakDBString = "C4";
 		}
 	}
 }

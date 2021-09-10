@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamePhotoModeBackgroundViewComponent : entIComponent
 	{
-		private NodeRef _backgroundPrefabRef;
-		private NodeRef _targetPointRef;
-
 		[Ordinal(3)] 
 		[RED("backgroundPrefabRef")] 
 		public NodeRef BackgroundPrefabRef
 		{
-			get => GetProperty(ref _backgroundPrefabRef);
-			set => SetProperty(ref _backgroundPrefabRef, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("targetPointRef")] 
 		public NodeRef TargetPointRef
 		{
-			get => GetProperty(ref _targetPointRef);
-			set => SetProperty(ref _targetPointRef, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
+		}
+
+		public gamePhotoModeBackgroundViewComponent()
+		{
+			Name = "Component";
 		}
 	}
 }

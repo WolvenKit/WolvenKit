@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkLanguageFontMapper : ISerializable
 	{
-		private CArray<inkLanguageFontMapping> _mappings;
-
 		[Ordinal(0)] 
 		[RED("mappings")] 
 		public CArray<inkLanguageFontMapping> Mappings
 		{
-			get => GetProperty(ref _mappings);
-			set => SetProperty(ref _mappings, value);
+			get => GetPropertyValue<CArray<inkLanguageFontMapping>>();
+			set => SetPropertyValue<CArray<inkLanguageFontMapping>>(value);
+		}
+
+		public inkLanguageFontMapper()
+		{
+			Mappings = new();
 		}
 	}
 }

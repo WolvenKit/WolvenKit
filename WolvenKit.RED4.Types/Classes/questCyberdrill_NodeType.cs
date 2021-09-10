@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questCyberdrill_NodeType : questIInteractiveObjectManagerNodeType
 	{
-		private CArray<questCyberdrill_NodeTypeParams> _params;
-
 		[Ordinal(0)] 
 		[RED("params")] 
 		public CArray<questCyberdrill_NodeTypeParams> Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<CArray<questCyberdrill_NodeTypeParams>>();
+			set => SetPropertyValue<CArray<questCyberdrill_NodeTypeParams>>(value);
+		}
+
+		public questCyberdrill_NodeType()
+		{
+			Params = new() { new() };
 		}
 	}
 }

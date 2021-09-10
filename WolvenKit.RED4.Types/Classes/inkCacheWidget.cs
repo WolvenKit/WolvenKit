@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkCacheWidget : inkCompoundWidget
 	{
-		private Vector2 _innerScale;
-		private CEnum<inkCacheMode> _mode;
-		private CName _externalDynamicTexture;
-
 		[Ordinal(23)] 
 		[RED("innerScale")] 
 		public Vector2 InnerScale
 		{
-			get => GetProperty(ref _innerScale);
-			set => SetProperty(ref _innerScale, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("mode")] 
 		public CEnum<inkCacheMode> Mode
 		{
-			get => GetProperty(ref _mode);
-			set => SetProperty(ref _mode, value);
+			get => GetPropertyValue<CEnum<inkCacheMode>>();
+			set => SetPropertyValue<CEnum<inkCacheMode>>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("externalDynamicTexture")] 
 		public CName ExternalDynamicTexture
 		{
-			get => GetProperty(ref _externalDynamicTexture);
-			set => SetProperty(ref _externalDynamicTexture, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public inkCacheWidget()
+		{
+			InnerScale = new() { X = 1.000000F, Y = 1.000000F };
 		}
 	}
 }

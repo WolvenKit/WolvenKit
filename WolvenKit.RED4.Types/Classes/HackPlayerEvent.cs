@@ -5,55 +5,51 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class HackPlayerEvent : redEvent
 	{
-		private entEntityID _netrunnerID;
-		private entEntityID _targetID;
-		private CWeakHandle<gamedataObjectAction_Record> _objectRecord;
-		private CBool _showDirectionalIndicator;
-		private CBool _revealPositionAction;
-
 		[Ordinal(0)] 
 		[RED("netrunnerID")] 
 		public entEntityID NetrunnerID
 		{
-			get => GetProperty(ref _netrunnerID);
-			set => SetProperty(ref _netrunnerID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("targetID")] 
 		public entEntityID TargetID
 		{
-			get => GetProperty(ref _targetID);
-			set => SetProperty(ref _targetID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("objectRecord")] 
 		public CWeakHandle<gamedataObjectAction_Record> ObjectRecord
 		{
-			get => GetProperty(ref _objectRecord);
-			set => SetProperty(ref _objectRecord, value);
+			get => GetPropertyValue<CWeakHandle<gamedataObjectAction_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataObjectAction_Record>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("showDirectionalIndicator")] 
 		public CBool ShowDirectionalIndicator
 		{
-			get => GetProperty(ref _showDirectionalIndicator);
-			set => SetProperty(ref _showDirectionalIndicator, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("revealPositionAction")] 
 		public CBool RevealPositionAction
 		{
-			get => GetProperty(ref _revealPositionAction);
-			set => SetProperty(ref _revealPositionAction, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public HackPlayerEvent()
 		{
-			_showDirectionalIndicator = true;
+			NetrunnerID = new();
+			TargetID = new();
+			ShowDirectionalIndicator = true;
 		}
 	}
 }

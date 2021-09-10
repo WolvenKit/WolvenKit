@@ -5,68 +5,67 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameinteractionsvisInteractionChoiceData : RedBaseClass
 	{
-		private CName _inputAction;
-		private CEnum<EInputKey> _rawInputKey;
-		private CBool _isHoldAction;
-		private CString _localizedName;
-		private gameinteractionsChoiceTypeWrapper _type;
-		private CArray<CVariant> _data;
-		private gameinteractionsChoiceCaption _captionParts;
-
 		[Ordinal(0)] 
 		[RED("inputAction")] 
 		public CName InputAction
 		{
-			get => GetProperty(ref _inputAction);
-			set => SetProperty(ref _inputAction, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("rawInputKey")] 
 		public CEnum<EInputKey> RawInputKey
 		{
-			get => GetProperty(ref _rawInputKey);
-			set => SetProperty(ref _rawInputKey, value);
+			get => GetPropertyValue<CEnum<EInputKey>>();
+			set => SetPropertyValue<CEnum<EInputKey>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isHoldAction")] 
 		public CBool IsHoldAction
 		{
-			get => GetProperty(ref _isHoldAction);
-			set => SetProperty(ref _isHoldAction, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("localizedName")] 
 		public CString LocalizedName
 		{
-			get => GetProperty(ref _localizedName);
-			set => SetProperty(ref _localizedName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("type")] 
 		public gameinteractionsChoiceTypeWrapper Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<gameinteractionsChoiceTypeWrapper>();
+			set => SetPropertyValue<gameinteractionsChoiceTypeWrapper>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("data")] 
 		public CArray<CVariant> Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<CArray<CVariant>>();
+			set => SetPropertyValue<CArray<CVariant>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("captionParts")] 
 		public gameinteractionsChoiceCaption CaptionParts
 		{
-			get => GetProperty(ref _captionParts);
-			set => SetProperty(ref _captionParts, value);
+			get => GetPropertyValue<gameinteractionsChoiceCaption>();
+			set => SetPropertyValue<gameinteractionsChoiceCaption>(value);
+		}
+
+		public gameinteractionsvisInteractionChoiceData()
+		{
+			Type = new();
+			Data = new();
+			CaptionParts = new() { Parts = new() };
 		}
 	}
 }

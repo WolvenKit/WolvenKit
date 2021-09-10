@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiShowCustomTooltipEvent : redEvent
 	{
-		private CString _text;
-		private CString _inputAction;
-
 		[Ordinal(0)] 
 		[RED("text")] 
 		public CString Text
 		{
-			get => GetProperty(ref _text);
-			set => SetProperty(ref _text, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("inputAction")] 
 		public CString InputAction
 		{
-			get => GetProperty(ref _inputAction);
-			set => SetProperty(ref _inputAction, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 	}
 }

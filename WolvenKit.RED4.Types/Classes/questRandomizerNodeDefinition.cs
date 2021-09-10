@@ -5,23 +5,27 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questRandomizerNodeDefinition : questDisableableNodeDefinition
 	{
-		private CEnum<questRandomizerMode> _mode;
-		private CArray<CUInt8> _outputWeights;
-
 		[Ordinal(2)] 
 		[RED("mode")] 
 		public CEnum<questRandomizerMode> Mode
 		{
-			get => GetProperty(ref _mode);
-			set => SetProperty(ref _mode, value);
+			get => GetPropertyValue<CEnum<questRandomizerMode>>();
+			set => SetPropertyValue<CEnum<questRandomizerMode>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("outputWeights")] 
 		public CArray<CUInt8> OutputWeights
 		{
-			get => GetProperty(ref _outputWeights);
-			set => SetProperty(ref _outputWeights, value);
+			get => GetPropertyValue<CArray<CUInt8>>();
+			set => SetPropertyValue<CArray<CUInt8>>(value);
+		}
+
+		public questRandomizerNodeDefinition()
+		{
+			Sockets = new();
+			Id = 65535;
+			OutputWeights = new() { 1, 1 };
 		}
 	}
 }

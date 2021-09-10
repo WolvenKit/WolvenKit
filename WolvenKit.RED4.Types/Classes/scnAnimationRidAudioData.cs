@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnAnimationRidAudioData : ISerializable
 	{
-		private CArray<CHandle<animAnimEvent>> _events;
-
 		[Ordinal(0)] 
 		[RED("events")] 
 		public CArray<CHandle<animAnimEvent>> Events
 		{
-			get => GetProperty(ref _events);
-			set => SetProperty(ref _events, value);
+			get => GetPropertyValue<CArray<CHandle<animAnimEvent>>>();
+			set => SetPropertyValue<CArray<CHandle<animAnimEvent>>>(value);
+		}
+
+		public scnAnimationRidAudioData()
+		{
+			Events = new();
 		}
 	}
 }

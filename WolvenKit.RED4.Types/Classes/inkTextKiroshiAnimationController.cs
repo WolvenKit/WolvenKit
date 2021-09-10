@@ -5,64 +5,64 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkTextKiroshiAnimationController : inkTextAnimationController
 	{
-		private CFloat _timeToSkip;
-		private CString _nativeText;
-		private inkTextWidgetReference _preTranslatedTextWidget;
-		private inkTextWidgetReference _postTranslatedTextWidget;
-		private inkRichTextBoxWidgetReference _nativeTextWidget;
-		private inkTextWidgetReference _translatedTextWidget;
-
 		[Ordinal(8)] 
 		[RED("timeToSkip")] 
 		public CFloat TimeToSkip
 		{
-			get => GetProperty(ref _timeToSkip);
-			set => SetProperty(ref _timeToSkip, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("nativeText")] 
 		public CString NativeText
 		{
-			get => GetProperty(ref _nativeText);
-			set => SetProperty(ref _nativeText, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("preTranslatedTextWidget")] 
 		public inkTextWidgetReference PreTranslatedTextWidget
 		{
-			get => GetProperty(ref _preTranslatedTextWidget);
-			set => SetProperty(ref _preTranslatedTextWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("postTranslatedTextWidget")] 
 		public inkTextWidgetReference PostTranslatedTextWidget
 		{
-			get => GetProperty(ref _postTranslatedTextWidget);
-			set => SetProperty(ref _postTranslatedTextWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("nativeTextWidget")] 
 		public inkRichTextBoxWidgetReference NativeTextWidget
 		{
-			get => GetProperty(ref _nativeTextWidget);
-			set => SetProperty(ref _nativeTextWidget, value);
+			get => GetPropertyValue<inkRichTextBoxWidgetReference>();
+			set => SetPropertyValue<inkRichTextBoxWidgetReference>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("translatedTextWidget")] 
 		public inkTextWidgetReference TranslatedTextWidget
 		{
-			get => GetProperty(ref _translatedTextWidget);
-			set => SetProperty(ref _translatedTextWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		public inkTextKiroshiAnimationController()
 		{
-			_timeToSkip = 0.050000F;
+			PlayOnInitialize = true;
+			UseDefaultAnimation = true;
+			EndValue = 1.000000F;
+			TimeToSkip = 0.050000F;
+			PreTranslatedTextWidget = new();
+			PostTranslatedTextWidget = new();
+			NativeTextWidget = new();
+			TranslatedTextWidget = new();
 		}
 	}
 }

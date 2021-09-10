@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_ConditionalSegmentBegin : animAnimNode_OnePoseInput
 	{
-		private animConditionalSegmentCondition _condition;
-
 		[Ordinal(13)] 
 		[RED("condition")] 
 		public animConditionalSegmentCondition Condition
 		{
-			get => GetProperty(ref _condition);
-			set => SetProperty(ref _condition, value);
+			get => GetPropertyValue<animConditionalSegmentCondition>();
+			set => SetPropertyValue<animConditionalSegmentCondition>(value);
+		}
+
+		public animAnimNode_ConditionalSegmentBegin()
+		{
+			Id = 4294967295;
+			InputLink = new();
+			Condition = new() { Lod = -1 };
 		}
 	}
 }

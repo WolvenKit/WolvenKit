@@ -5,75 +5,73 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entFogVolumeComponent : entIVisualComponent
 	{
-		private CFloat _densityFalloff;
-		private CFloat _blendFalloff;
-		private CFloat _densityFactor;
-		private CColor _color;
-		private CFloat _absorption;
-		private Vector3 _size;
-		private CBool _isEnabled;
-
 		[Ordinal(8)] 
 		[RED("densityFalloff")] 
 		public CFloat DensityFalloff
 		{
-			get => GetProperty(ref _densityFalloff);
-			set => SetProperty(ref _densityFalloff, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("blendFalloff")] 
 		public CFloat BlendFalloff
 		{
-			get => GetProperty(ref _blendFalloff);
-			set => SetProperty(ref _blendFalloff, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("densityFactor")] 
 		public CFloat DensityFactor
 		{
-			get => GetProperty(ref _densityFactor);
-			set => SetProperty(ref _densityFactor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("color")] 
 		public CColor Color
 		{
-			get => GetProperty(ref _color);
-			set => SetProperty(ref _color, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("absorption")] 
 		public CFloat Absorption
 		{
-			get => GetProperty(ref _absorption);
-			set => SetProperty(ref _absorption, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("size")] 
 		public Vector3 Size
 		{
-			get => GetProperty(ref _size);
-			set => SetProperty(ref _size, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public entFogVolumeComponent()
 		{
-			_densityFactor = 100.000000F;
-			_absorption = -1.000000F;
-			_isEnabled = true;
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
+			ForceLODLevel = -1;
+			DensityFactor = 100.000000F;
+			Color = new();
+			Absorption = -1.000000F;
+			Size = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
+			IsEnabled = true;
 		}
 	}
 }

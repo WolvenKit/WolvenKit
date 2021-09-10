@@ -5,59 +5,62 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class rendRenderMorphTargetMeshBlobTextureData : RedBaseClass
 	{
-		private CStatic<Vector4> _targetDiffScale;
-		private CStatic<Vector4> _targetDiffOffset;
-		private CStatic<CUInt32> _targetDiffsDataOffset;
-		private CStatic<CUInt32> _targetDiffsDataSize;
-		private CStatic<CUInt16> _targetDiffsWidth;
-		private CStatic<CUInt8> _targetDiffsMipLevelCounts;
-
 		[Ordinal(0)] 
 		[RED("targetDiffScale", 3)] 
 		public CStatic<Vector4> TargetDiffScale
 		{
-			get => GetProperty(ref _targetDiffScale);
-			set => SetProperty(ref _targetDiffScale, value);
+			get => GetPropertyValue<CStatic<Vector4>>();
+			set => SetPropertyValue<CStatic<Vector4>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("targetDiffOffset", 3)] 
 		public CStatic<Vector4> TargetDiffOffset
 		{
-			get => GetProperty(ref _targetDiffOffset);
-			set => SetProperty(ref _targetDiffOffset, value);
+			get => GetPropertyValue<CStatic<Vector4>>();
+			set => SetPropertyValue<CStatic<Vector4>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("targetDiffsDataOffset", 3)] 
 		public CStatic<CUInt32> TargetDiffsDataOffset
 		{
-			get => GetProperty(ref _targetDiffsDataOffset);
-			set => SetProperty(ref _targetDiffsDataOffset, value);
+			get => GetPropertyValue<CStatic<CUInt32>>();
+			set => SetPropertyValue<CStatic<CUInt32>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("targetDiffsDataSize", 3)] 
 		public CStatic<CUInt32> TargetDiffsDataSize
 		{
-			get => GetProperty(ref _targetDiffsDataSize);
-			set => SetProperty(ref _targetDiffsDataSize, value);
+			get => GetPropertyValue<CStatic<CUInt32>>();
+			set => SetPropertyValue<CStatic<CUInt32>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("targetDiffsWidth", 3)] 
 		public CStatic<CUInt16> TargetDiffsWidth
 		{
-			get => GetProperty(ref _targetDiffsWidth);
-			set => SetProperty(ref _targetDiffsWidth, value);
+			get => GetPropertyValue<CStatic<CUInt16>>();
+			set => SetPropertyValue<CStatic<CUInt16>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("targetDiffsMipLevelCounts", 3)] 
 		public CStatic<CUInt8> TargetDiffsMipLevelCounts
 		{
-			get => GetProperty(ref _targetDiffsMipLevelCounts);
-			set => SetProperty(ref _targetDiffsMipLevelCounts, value);
+			get => GetPropertyValue<CStatic<CUInt8>>();
+			set => SetPropertyValue<CStatic<CUInt8>>(value);
+		}
+
+		public rendRenderMorphTargetMeshBlobTextureData()
+		{
+			TargetDiffScale = new(3);
+			TargetDiffOffset = new(3);
+			TargetDiffsDataOffset = new(3);
+			TargetDiffsDataSize = new(3);
+			TargetDiffsWidth = new(3);
+			TargetDiffsMipLevelCounts = new(3);
 		}
 	}
 }

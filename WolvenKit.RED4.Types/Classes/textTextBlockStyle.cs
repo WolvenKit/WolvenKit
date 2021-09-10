@@ -5,55 +5,53 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class textTextBlockStyle : RedBaseClass
 	{
-		private HDRColor _tintColor;
-		private Vector2 _shadowOffset;
-		private HDRColor _shadowColor;
-		private textTextBlockFontStyle _fontStyle;
-		private CUInt16 _fontSize;
-
 		[Ordinal(0)] 
 		[RED("tintColor")] 
 		public HDRColor TintColor
 		{
-			get => GetProperty(ref _tintColor);
-			set => SetProperty(ref _tintColor, value);
+			get => GetPropertyValue<HDRColor>();
+			set => SetPropertyValue<HDRColor>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("shadowOffset")] 
 		public Vector2 ShadowOffset
 		{
-			get => GetProperty(ref _shadowOffset);
-			set => SetProperty(ref _shadowOffset, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("shadowColor")] 
 		public HDRColor ShadowColor
 		{
-			get => GetProperty(ref _shadowColor);
-			set => SetProperty(ref _shadowColor, value);
+			get => GetPropertyValue<HDRColor>();
+			set => SetPropertyValue<HDRColor>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("fontStyle")] 
 		public textTextBlockFontStyle FontStyle
 		{
-			get => GetProperty(ref _fontStyle);
-			set => SetProperty(ref _fontStyle, value);
+			get => GetPropertyValue<textTextBlockFontStyle>();
+			set => SetPropertyValue<textTextBlockFontStyle>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("fontSize")] 
 		public CUInt16 FontSize
 		{
-			get => GetProperty(ref _fontSize);
-			set => SetProperty(ref _fontSize, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		public textTextBlockStyle()
 		{
-			_fontSize = 22;
+			TintColor = new() { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Alpha = 1.000000F };
+			ShadowOffset = new();
+			ShadowColor = new() { Alpha = 1.000000F };
+			FontStyle = new() { OutlineColor = new() { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Alpha = 1.000000F } };
+			FontSize = 22;
 		}
 	}
 }

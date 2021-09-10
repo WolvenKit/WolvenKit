@@ -5,64 +5,59 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkHoverResizeController : inkWidgetLogicController
 	{
-		private CWeakHandle<inkWidget> _root;
-		private CHandle<inkanimDefinition> _animToNew;
-		private CHandle<inkanimDefinition> _animToOld;
-		private Vector2 _vectorNewSize;
-		private Vector2 _vectorOldSize;
-		private CFloat _animationDuration;
-
 		[Ordinal(1)] 
 		[RED("root")] 
 		public CWeakHandle<inkWidget> Root
 		{
-			get => GetProperty(ref _root);
-			set => SetProperty(ref _root, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("animToNew")] 
 		public CHandle<inkanimDefinition> AnimToNew
 		{
-			get => GetProperty(ref _animToNew);
-			set => SetProperty(ref _animToNew, value);
+			get => GetPropertyValue<CHandle<inkanimDefinition>>();
+			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("animToOld")] 
 		public CHandle<inkanimDefinition> AnimToOld
 		{
-			get => GetProperty(ref _animToOld);
-			set => SetProperty(ref _animToOld, value);
+			get => GetPropertyValue<CHandle<inkanimDefinition>>();
+			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("vectorNewSize")] 
 		public Vector2 VectorNewSize
 		{
-			get => GetProperty(ref _vectorNewSize);
-			set => SetProperty(ref _vectorNewSize, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("vectorOldSize")] 
 		public Vector2 VectorOldSize
 		{
-			get => GetProperty(ref _vectorOldSize);
-			set => SetProperty(ref _vectorOldSize, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("animationDuration")] 
 		public CFloat AnimationDuration
 		{
-			get => GetProperty(ref _animationDuration);
-			set => SetProperty(ref _animationDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public inkHoverResizeController()
 		{
-			_animationDuration = 0.100000F;
+			VectorNewSize = new();
+			VectorOldSize = new();
+			AnimationDuration = 0.100000F;
 		}
 	}
 }

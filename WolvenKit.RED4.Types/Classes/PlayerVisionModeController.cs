@@ -5,104 +5,106 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PlayerVisionModeController : IScriptable
 	{
-		private PlayerVisionModeControllerRefreshPolicy _gameplayActiveFlagsRefreshPolicy;
-		private PlayerVisionModeControllerBBIds _blackboardIds;
-		private PlayerVisionModeControllerBBValuesIds _blackboardValuesIds;
-		private PlayerVisionModeControllerBlackboardListenersFunctions _blackboardListenersFunctions;
-		private PlayerVisionModeControllerBBListeners _blackboardListeners;
-		private PlayerVisionModeControllerActiveFlags _gameplayActiveFlags;
-		private PlayerVisionModeControllerInputActionsNames _inputActionsNames;
-		private PlayerVisionModeControllerInputListeners _inputListeners;
-		private PlayerVisionModeControllerInputActiveFlags _inputActiveFlags;
-		private PlayerVisionModeControllerOtherVars _otherVars;
-		private CWeakHandle<gameObject> _owner;
-
 		[Ordinal(0)] 
 		[RED("gameplayActiveFlagsRefreshPolicy")] 
 		public PlayerVisionModeControllerRefreshPolicy GameplayActiveFlagsRefreshPolicy
 		{
-			get => GetProperty(ref _gameplayActiveFlagsRefreshPolicy);
-			set => SetProperty(ref _gameplayActiveFlagsRefreshPolicy, value);
+			get => GetPropertyValue<PlayerVisionModeControllerRefreshPolicy>();
+			set => SetPropertyValue<PlayerVisionModeControllerRefreshPolicy>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("blackboardIds")] 
 		public PlayerVisionModeControllerBBIds BlackboardIds
 		{
-			get => GetProperty(ref _blackboardIds);
-			set => SetProperty(ref _blackboardIds, value);
+			get => GetPropertyValue<PlayerVisionModeControllerBBIds>();
+			set => SetPropertyValue<PlayerVisionModeControllerBBIds>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("blackboardValuesIds")] 
 		public PlayerVisionModeControllerBBValuesIds BlackboardValuesIds
 		{
-			get => GetProperty(ref _blackboardValuesIds);
-			set => SetProperty(ref _blackboardValuesIds, value);
+			get => GetPropertyValue<PlayerVisionModeControllerBBValuesIds>();
+			set => SetPropertyValue<PlayerVisionModeControllerBBValuesIds>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("blackboardListenersFunctions")] 
 		public PlayerVisionModeControllerBlackboardListenersFunctions BlackboardListenersFunctions
 		{
-			get => GetProperty(ref _blackboardListenersFunctions);
-			set => SetProperty(ref _blackboardListenersFunctions, value);
+			get => GetPropertyValue<PlayerVisionModeControllerBlackboardListenersFunctions>();
+			set => SetPropertyValue<PlayerVisionModeControllerBlackboardListenersFunctions>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("blackboardListeners")] 
 		public PlayerVisionModeControllerBBListeners BlackboardListeners
 		{
-			get => GetProperty(ref _blackboardListeners);
-			set => SetProperty(ref _blackboardListeners, value);
+			get => GetPropertyValue<PlayerVisionModeControllerBBListeners>();
+			set => SetPropertyValue<PlayerVisionModeControllerBBListeners>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("gameplayActiveFlags")] 
 		public PlayerVisionModeControllerActiveFlags GameplayActiveFlags
 		{
-			get => GetProperty(ref _gameplayActiveFlags);
-			set => SetProperty(ref _gameplayActiveFlags, value);
+			get => GetPropertyValue<PlayerVisionModeControllerActiveFlags>();
+			set => SetPropertyValue<PlayerVisionModeControllerActiveFlags>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("inputActionsNames")] 
 		public PlayerVisionModeControllerInputActionsNames InputActionsNames
 		{
-			get => GetProperty(ref _inputActionsNames);
-			set => SetProperty(ref _inputActionsNames, value);
+			get => GetPropertyValue<PlayerVisionModeControllerInputActionsNames>();
+			set => SetPropertyValue<PlayerVisionModeControllerInputActionsNames>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("inputListeners")] 
 		public PlayerVisionModeControllerInputListeners InputListeners
 		{
-			get => GetProperty(ref _inputListeners);
-			set => SetProperty(ref _inputListeners, value);
+			get => GetPropertyValue<PlayerVisionModeControllerInputListeners>();
+			set => SetPropertyValue<PlayerVisionModeControllerInputListeners>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("inputActiveFlags")] 
 		public PlayerVisionModeControllerInputActiveFlags InputActiveFlags
 		{
-			get => GetProperty(ref _inputActiveFlags);
-			set => SetProperty(ref _inputActiveFlags, value);
+			get => GetPropertyValue<PlayerVisionModeControllerInputActiveFlags>();
+			set => SetPropertyValue<PlayerVisionModeControllerInputActiveFlags>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("otherVars")] 
 		public PlayerVisionModeControllerOtherVars OtherVars
 		{
-			get => GetProperty(ref _otherVars);
-			set => SetProperty(ref _otherVars, value);
+			get => GetPropertyValue<PlayerVisionModeControllerOtherVars>();
+			set => SetPropertyValue<PlayerVisionModeControllerOtherVars>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("owner")] 
 		public CWeakHandle<gameObject> Owner
 		{
-			get => GetProperty(ref _owner);
-			set => SetProperty(ref _owner, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
+		}
+
+		public PlayerVisionModeController()
+		{
+			GameplayActiveFlagsRefreshPolicy = new();
+			BlackboardIds = new();
+			BlackboardValuesIds = new() { Kerenzikov = new(), RestrictedScene = new(), Dead = new(), Takedown = new(), DeviceTakeover = new(), BraindanceFPP = new(), BraindanceActive = new(), VeryHardLanding = new() };
+			BlackboardListenersFunctions = new();
+			BlackboardListeners = new();
+			GameplayActiveFlags = new();
+			InputActionsNames = new();
+			InputListeners = new();
+			InputActiveFlags = new();
+			OtherVars = new();
 		}
 	}
 }

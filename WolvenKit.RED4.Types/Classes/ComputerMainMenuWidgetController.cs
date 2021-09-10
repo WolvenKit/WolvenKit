@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ComputerMainMenuWidgetController : inkWidgetLogicController
 	{
-		private inkWidgetReference _menuButtonsListWidget;
-		private CBool _isInitialized;
-		private CArray<SComputerMenuButtonWidgetPackage> _computerMenuButtonWidgetsData;
-
 		[Ordinal(1)] 
 		[RED("menuButtonsListWidget")] 
 		public inkWidgetReference MenuButtonsListWidget
 		{
-			get => GetProperty(ref _menuButtonsListWidget);
-			set => SetProperty(ref _menuButtonsListWidget, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isInitialized")] 
 		public CBool IsInitialized
 		{
-			get => GetProperty(ref _isInitialized);
-			set => SetProperty(ref _isInitialized, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("computerMenuButtonWidgetsData")] 
 		public CArray<SComputerMenuButtonWidgetPackage> ComputerMenuButtonWidgetsData
 		{
-			get => GetProperty(ref _computerMenuButtonWidgetsData);
-			set => SetProperty(ref _computerMenuButtonWidgetsData, value);
+			get => GetPropertyValue<CArray<SComputerMenuButtonWidgetPackage>>();
+			set => SetPropertyValue<CArray<SComputerMenuButtonWidgetPackage>>(value);
+		}
+
+		public ComputerMainMenuWidgetController()
+		{
+			MenuButtonsListWidget = new();
+			ComputerMenuButtonWidgetsData = new();
 		}
 	}
 }

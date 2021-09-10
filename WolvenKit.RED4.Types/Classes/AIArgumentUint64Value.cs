@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIArgumentUint64Value : AIArgumentDefinition
 	{
-		private CEnum<AIArgumentType> _type;
-		private CUInt64 _defaultValue;
-
 		[Ordinal(3)] 
 		[RED("type")] 
 		public CEnum<AIArgumentType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<AIArgumentType>>();
+			set => SetPropertyValue<CEnum<AIArgumentType>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("defaultValue")] 
 		public CUInt64 DefaultValue
 		{
-			get => GetProperty(ref _defaultValue);
-			set => SetProperty(ref _defaultValue, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		public AIArgumentUint64Value()
 		{
-			_type = new() { Value = Enums.AIArgumentType.Uint64 };
+			Type = Enums.AIArgumentType.Uint64;
 		}
 	}
 }

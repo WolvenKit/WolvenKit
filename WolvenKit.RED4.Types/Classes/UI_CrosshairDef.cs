@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UI_CrosshairDef : gamebbScriptDefinition
 	{
-		private gamebbScriptID_Variant _enemyNeutralized;
-
 		[Ordinal(0)] 
 		[RED("EnemyNeutralized")] 
 		public gamebbScriptID_Variant EnemyNeutralized
 		{
-			get => GetProperty(ref _enemyNeutralized);
-			set => SetProperty(ref _enemyNeutralized, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
+		}
+
+		public UI_CrosshairDef()
+		{
+			EnemyNeutralized = new();
 		}
 	}
 }

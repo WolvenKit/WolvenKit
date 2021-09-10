@@ -5,203 +5,185 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questUseWorkspotParamsV1 : questAICommandParams
 	{
-		private CEnum<questUseWorkspotNodeFunctions> _function;
-		private NodeRef _workspotNode;
-		private CBool _teleport;
-		private CBool _finishAnimation;
-		private CName _forceEntryAnimName;
-		private CBool _jumpToEntry;
-		private workWorkEntryId _entryId;
-		private CName _entryTag;
-		private CBool _changeWorkspot;
-		private CBool _enableIdleMode;
-		private workWorkEntryId _exitEntryId;
-		private CName _exitAnimName;
-		private CBool _instant;
-		private CBool _isWorkspotInfinite;
-		private CBool _isPlayer;
-		private questUseWorkspotPlayerParams _playerParams;
-		private CBool _repeatCommandOnInterrupt;
-		private CArray<workWorkEntryId> _workExcludedGestures;
-		private CEnum<moveMovementType> _movementType;
-		private CBool _continueInCombat;
-		private CFloat _maxAnimTimeLimit;
-
 		[Ordinal(0)] 
 		[RED("function")] 
 		public CEnum<questUseWorkspotNodeFunctions> Function
 		{
-			get => GetProperty(ref _function);
-			set => SetProperty(ref _function, value);
+			get => GetPropertyValue<CEnum<questUseWorkspotNodeFunctions>>();
+			set => SetPropertyValue<CEnum<questUseWorkspotNodeFunctions>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("workspotNode")] 
 		public NodeRef WorkspotNode
 		{
-			get => GetProperty(ref _workspotNode);
-			set => SetProperty(ref _workspotNode, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("teleport")] 
 		public CBool Teleport
 		{
-			get => GetProperty(ref _teleport);
-			set => SetProperty(ref _teleport, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("finishAnimation")] 
 		public CBool FinishAnimation
 		{
-			get => GetProperty(ref _finishAnimation);
-			set => SetProperty(ref _finishAnimation, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("forceEntryAnimName")] 
 		public CName ForceEntryAnimName
 		{
-			get => GetProperty(ref _forceEntryAnimName);
-			set => SetProperty(ref _forceEntryAnimName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("jumpToEntry")] 
 		public CBool JumpToEntry
 		{
-			get => GetProperty(ref _jumpToEntry);
-			set => SetProperty(ref _jumpToEntry, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("entryId")] 
 		public workWorkEntryId EntryId
 		{
-			get => GetProperty(ref _entryId);
-			set => SetProperty(ref _entryId, value);
+			get => GetPropertyValue<workWorkEntryId>();
+			set => SetPropertyValue<workWorkEntryId>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("entryTag")] 
 		public CName EntryTag
 		{
-			get => GetProperty(ref _entryTag);
-			set => SetProperty(ref _entryTag, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("changeWorkspot")] 
 		public CBool ChangeWorkspot
 		{
-			get => GetProperty(ref _changeWorkspot);
-			set => SetProperty(ref _changeWorkspot, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("enableIdleMode")] 
 		public CBool EnableIdleMode
 		{
-			get => GetProperty(ref _enableIdleMode);
-			set => SetProperty(ref _enableIdleMode, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("exitEntryId")] 
 		public workWorkEntryId ExitEntryId
 		{
-			get => GetProperty(ref _exitEntryId);
-			set => SetProperty(ref _exitEntryId, value);
+			get => GetPropertyValue<workWorkEntryId>();
+			set => SetPropertyValue<workWorkEntryId>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("exitAnimName")] 
 		public CName ExitAnimName
 		{
-			get => GetProperty(ref _exitAnimName);
-			set => SetProperty(ref _exitAnimName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("instant")] 
 		public CBool Instant
 		{
-			get => GetProperty(ref _instant);
-			set => SetProperty(ref _instant, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("isWorkspotInfinite")] 
 		public CBool IsWorkspotInfinite
 		{
-			get => GetProperty(ref _isWorkspotInfinite);
-			set => SetProperty(ref _isWorkspotInfinite, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("isPlayer")] 
 		public CBool IsPlayer
 		{
-			get => GetProperty(ref _isPlayer);
-			set => SetProperty(ref _isPlayer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("playerParams")] 
 		public questUseWorkspotPlayerParams PlayerParams
 		{
-			get => GetProperty(ref _playerParams);
-			set => SetProperty(ref _playerParams, value);
+			get => GetPropertyValue<questUseWorkspotPlayerParams>();
+			set => SetPropertyValue<questUseWorkspotPlayerParams>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("repeatCommandOnInterrupt")] 
 		public CBool RepeatCommandOnInterrupt
 		{
-			get => GetProperty(ref _repeatCommandOnInterrupt);
-			set => SetProperty(ref _repeatCommandOnInterrupt, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("workExcludedGestures")] 
 		public CArray<workWorkEntryId> WorkExcludedGestures
 		{
-			get => GetProperty(ref _workExcludedGestures);
-			set => SetProperty(ref _workExcludedGestures, value);
+			get => GetPropertyValue<CArray<workWorkEntryId>>();
+			set => SetPropertyValue<CArray<workWorkEntryId>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("movementType")] 
 		public CEnum<moveMovementType> MovementType
 		{
-			get => GetProperty(ref _movementType);
-			set => SetProperty(ref _movementType, value);
+			get => GetPropertyValue<CEnum<moveMovementType>>();
+			set => SetPropertyValue<CEnum<moveMovementType>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("continueInCombat")] 
 		public CBool ContinueInCombat
 		{
-			get => GetProperty(ref _continueInCombat);
-			set => SetProperty(ref _continueInCombat, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("maxAnimTimeLimit")] 
 		public CFloat MaxAnimTimeLimit
 		{
-			get => GetProperty(ref _maxAnimTimeLimit);
-			set => SetProperty(ref _maxAnimTimeLimit, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public questUseWorkspotParamsV1()
 		{
-			_teleport = true;
-			_finishAnimation = true;
-			_changeWorkspot = true;
-			_isWorkspotInfinite = true;
-			_repeatCommandOnInterrupt = true;
+			Teleport = true;
+			FinishAnimation = true;
+			EntryId = new() { Id = 4294967295 };
+			ChangeWorkspot = true;
+			ExitEntryId = new() { Id = 4294967295 };
+			IsWorkspotInfinite = true;
+			PlayerParams = new() { CameraSettings = new() { YawLeftLimit = 60.000000F, YawRightLimit = 60.000000F, PitchTopLimit = 60.000000F, PitchBottomLimit = 45.000000F, PitchSpeedMultiplier = 1.000000F, YawSpeedMultiplier = 1.000000F }, CameraUseTrajectorySpace = true, VehicleProceduralCameraWeight = 1.000000F, ParallaxWeight = 1.000000F };
+			RepeatCommandOnInterrupt = true;
+			WorkExcludedGestures = new();
 		}
 	}
 }

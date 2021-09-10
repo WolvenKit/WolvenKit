@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SpecialProperties : RedBaseClass
 	{
-		private CBool _enemyMarker;
-		private CArray<CEnum<ETrap>> _traps;
-
 		[Ordinal(0)] 
 		[RED("enemyMarker")] 
 		public CBool EnemyMarker
 		{
-			get => GetProperty(ref _enemyMarker);
-			set => SetProperty(ref _enemyMarker, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("traps")] 
 		public CArray<CEnum<ETrap>> Traps
 		{
-			get => GetProperty(ref _traps);
-			set => SetProperty(ref _traps, value);
+			get => GetPropertyValue<CArray<CEnum<ETrap>>>();
+			set => SetPropertyValue<CArray<CEnum<ETrap>>>(value);
+		}
+
+		public SpecialProperties()
+		{
+			Traps = new();
 		}
 	}
 }

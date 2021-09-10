@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class GlitchData : RedBaseClass
 	{
-		private CFloat _intensity;
-		private CEnum<EGlitchState> _state;
-
 		[Ordinal(0)] 
 		[RED("intensity")] 
 		public CFloat Intensity
 		{
-			get => GetProperty(ref _intensity);
-			set => SetProperty(ref _intensity, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("state")] 
 		public CEnum<EGlitchState> State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<CEnum<EGlitchState>>();
+			set => SetPropertyValue<CEnum<EGlitchState>>(value);
 		}
 	}
 }

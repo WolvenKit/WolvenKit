@@ -5,59 +5,60 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class physicsSystemBody : physicsISystemObject
 	{
-		private physicsSystemBodyParams _params;
-		private Transform _localToModel;
-		private CArray<CHandle<physicsICollider>> _collisionShapes;
-		private CName _mappedBoneName;
-		private Transform _mappedBoneToBody;
-		private CBool _isQueryBodyOnly;
-
 		[Ordinal(1)] 
 		[RED("params")] 
 		public physicsSystemBodyParams Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<physicsSystemBodyParams>();
+			set => SetPropertyValue<physicsSystemBodyParams>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("localToModel")] 
 		public Transform LocalToModel
 		{
-			get => GetProperty(ref _localToModel);
-			set => SetProperty(ref _localToModel, value);
+			get => GetPropertyValue<Transform>();
+			set => SetPropertyValue<Transform>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("collisionShapes")] 
 		public CArray<CHandle<physicsICollider>> CollisionShapes
 		{
-			get => GetProperty(ref _collisionShapes);
-			set => SetProperty(ref _collisionShapes, value);
+			get => GetPropertyValue<CArray<CHandle<physicsICollider>>>();
+			set => SetPropertyValue<CArray<CHandle<physicsICollider>>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("mappedBoneName")] 
 		public CName MappedBoneName
 		{
-			get => GetProperty(ref _mappedBoneName);
-			set => SetProperty(ref _mappedBoneName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("mappedBoneToBody")] 
 		public Transform MappedBoneToBody
 		{
-			get => GetProperty(ref _mappedBoneToBody);
-			set => SetProperty(ref _mappedBoneToBody, value);
+			get => GetPropertyValue<Transform>();
+			set => SetPropertyValue<Transform>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isQueryBodyOnly")] 
 		public CBool IsQueryBodyOnly
 		{
-			get => GetProperty(ref _isQueryBodyOnly);
-			set => SetProperty(ref _isQueryBodyOnly, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public physicsSystemBody()
+		{
+			Params = new() { SimulationType = Enums.physicsSimulationType.Dynamic, SolverIterationsCountPosition = 4, SolverIterationsCountVelocity = 1, MaxDepenetrationVelocity = -1.000000F, MaxAngularVelocity = -1.000000F, MaxContactImpulse = -1.000000F, Inertia = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F }, ComOffset = new() { Position = new(), Orientation = new() { R = 1.000000F } } };
+			LocalToModel = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			CollisionShapes = new();
+			MappedBoneToBody = new() { Position = new(), Orientation = new() { R = 1.000000F } };
 		}
 	}
 }

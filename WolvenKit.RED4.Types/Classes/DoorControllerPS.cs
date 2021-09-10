@@ -5,95 +5,93 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DoorControllerPS : ScriptableDeviceComponentPS
 	{
-		private DoorSetup _doorProperties;
-		private CHandle<EngDemoContainer> _doorSkillChecks;
-		private CBool _isOpened;
-		private CBool _isLocked;
-		private CBool _isSealed;
-		private CBool _alarmRaised;
-		private CBool _isBusy;
-		private CBool _isLiftDoor;
-		private CBool _isPlayerAuthorised;
-		private CArray<entEntityID> _openingTokens;
-
 		[Ordinal(104)] 
 		[RED("doorProperties")] 
 		public DoorSetup DoorProperties
 		{
-			get => GetProperty(ref _doorProperties);
-			set => SetProperty(ref _doorProperties, value);
+			get => GetPropertyValue<DoorSetup>();
+			set => SetPropertyValue<DoorSetup>(value);
 		}
 
 		[Ordinal(105)] 
 		[RED("doorSkillChecks")] 
 		public CHandle<EngDemoContainer> DoorSkillChecks
 		{
-			get => GetProperty(ref _doorSkillChecks);
-			set => SetProperty(ref _doorSkillChecks, value);
+			get => GetPropertyValue<CHandle<EngDemoContainer>>();
+			set => SetPropertyValue<CHandle<EngDemoContainer>>(value);
 		}
 
 		[Ordinal(106)] 
 		[RED("isOpened")] 
 		public CBool IsOpened
 		{
-			get => GetProperty(ref _isOpened);
-			set => SetProperty(ref _isOpened, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(107)] 
 		[RED("isLocked")] 
 		public CBool IsLocked
 		{
-			get => GetProperty(ref _isLocked);
-			set => SetProperty(ref _isLocked, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(108)] 
 		[RED("isSealed")] 
 		public CBool IsSealed
 		{
-			get => GetProperty(ref _isSealed);
-			set => SetProperty(ref _isSealed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(109)] 
 		[RED("alarmRaised")] 
 		public CBool AlarmRaised
 		{
-			get => GetProperty(ref _alarmRaised);
-			set => SetProperty(ref _alarmRaised, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(110)] 
 		[RED("isBusy")] 
 		public CBool IsBusy
 		{
-			get => GetProperty(ref _isBusy);
-			set => SetProperty(ref _isBusy, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(111)] 
 		[RED("isLiftDoor")] 
 		public CBool IsLiftDoor
 		{
-			get => GetProperty(ref _isLiftDoor);
-			set => SetProperty(ref _isLiftDoor, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(112)] 
 		[RED("isPlayerAuthorised")] 
 		public CBool IsPlayerAuthorised
 		{
-			get => GetProperty(ref _isPlayerAuthorised);
-			set => SetProperty(ref _isPlayerAuthorised, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(113)] 
 		[RED("openingTokens")] 
 		public CArray<entEntityID> OpeningTokens
 		{
-			get => GetProperty(ref _openingTokens);
-			set => SetProperty(ref _openingTokens, value);
+			get => GetPropertyValue<CArray<entEntityID>>();
+			set => SetPropertyValue<CArray<entEntityID>>(value);
+		}
+
+		public DoorControllerPS()
+		{
+			DeviceName = "LocKey#69";
+			TweakDBRecord = new() { Value = 52036287653 };
+			TweakDBDescriptionRecord = new() { Value = 104841659775 };
+			DoorProperties = new() { DoorType = Enums.EDoorType.INTERACTIVE, AutomaticallyClosesItself = true, OpeningSpeed = 1.000000F, DoorOpeningTime = 1.000000F, DoorOpeningStimRange = 5.000000F };
+			OpeningTokens = new();
 		}
 	}
 }

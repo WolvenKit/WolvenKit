@@ -5,94 +5,84 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animFacialEmotionTransitionEditData : RedBaseClass
 	{
-		private CName _toIdleMale;
-		private CName _facialKeyMale;
-		private CName _toIdleFemale;
-		private CName _facialKeyFemale;
-		private CEnum<animFacialEmotionTransitionType> _transitionType;
-		private CFloat _toIdleWeight;
-		private CFloat _toIdleNeckWeight;
-		private CFloat _facialKeyWeight;
-		private CName _customTransitionAnim;
-
 		[Ordinal(0)] 
 		[RED("toIdleMale")] 
 		public CName ToIdleMale
 		{
-			get => GetProperty(ref _toIdleMale);
-			set => SetProperty(ref _toIdleMale, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("facialKeyMale")] 
 		public CName FacialKeyMale
 		{
-			get => GetProperty(ref _facialKeyMale);
-			set => SetProperty(ref _facialKeyMale, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("toIdleFemale")] 
 		public CName ToIdleFemale
 		{
-			get => GetProperty(ref _toIdleFemale);
-			set => SetProperty(ref _toIdleFemale, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("facialKeyFemale")] 
 		public CName FacialKeyFemale
 		{
-			get => GetProperty(ref _facialKeyFemale);
-			set => SetProperty(ref _facialKeyFemale, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("transitionType")] 
 		public CEnum<animFacialEmotionTransitionType> TransitionType
 		{
-			get => GetProperty(ref _transitionType);
-			set => SetProperty(ref _transitionType, value);
+			get => GetPropertyValue<CEnum<animFacialEmotionTransitionType>>();
+			set => SetPropertyValue<CEnum<animFacialEmotionTransitionType>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("toIdleWeight")] 
 		public CFloat ToIdleWeight
 		{
-			get => GetProperty(ref _toIdleWeight);
-			set => SetProperty(ref _toIdleWeight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("toIdleNeckWeight")] 
 		public CFloat ToIdleNeckWeight
 		{
-			get => GetProperty(ref _toIdleNeckWeight);
-			set => SetProperty(ref _toIdleNeckWeight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("facialKeyWeight")] 
 		public CFloat FacialKeyWeight
 		{
-			get => GetProperty(ref _facialKeyWeight);
-			set => SetProperty(ref _facialKeyWeight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("customTransitionAnim")] 
 		public CName CustomTransitionAnim
 		{
-			get => GetProperty(ref _customTransitionAnim);
-			set => SetProperty(ref _customTransitionAnim, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public animFacialEmotionTransitionEditData()
 		{
-			_transitionType = new() { Value = Enums.animFacialEmotionTransitionType.Fast };
-			_toIdleWeight = 1.000000F;
-			_toIdleNeckWeight = 1.000000F;
-			_facialKeyWeight = 1.000000F;
+			TransitionType = Enums.animFacialEmotionTransitionType.Fast;
+			ToIdleWeight = 1.000000F;
+			ToIdleNeckWeight = 1.000000F;
+			FacialKeyWeight = 1.000000F;
 		}
 	}
 }

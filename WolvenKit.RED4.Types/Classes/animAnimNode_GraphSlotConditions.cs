@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_GraphSlotConditions : animAnimNode_GraphSlot
 	{
-		private CArray<animGraphSlotCondition> _conditions;
-
 		[Ordinal(14)] 
 		[RED("conditions")] 
 		public CArray<animGraphSlotCondition> Conditions
 		{
-			get => GetProperty(ref _conditions);
-			set => SetProperty(ref _conditions, value);
+			get => GetPropertyValue<CArray<animGraphSlotCondition>>();
+			set => SetPropertyValue<CArray<animGraphSlotCondition>>(value);
+		}
+
+		public animAnimNode_GraphSlotConditions()
+		{
+			Conditions = new();
 		}
 	}
 }

@@ -5,67 +5,61 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioDefaultMixingSignposts : audioAudioMetadata
 	{
-		private CName _endOfCombat;
-		private CName _inCombat;
-		private CName _inStealth;
-		private CName _aiAlerted;
-		private CName _sceneBootstrapSignpost;
-		private CArray<CName> _reservedSignposts;
-
 		[Ordinal(1)] 
 		[RED("endOfCombat")] 
 		public CName EndOfCombat
 		{
-			get => GetProperty(ref _endOfCombat);
-			set => SetProperty(ref _endOfCombat, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("inCombat")] 
 		public CName InCombat
 		{
-			get => GetProperty(ref _inCombat);
-			set => SetProperty(ref _inCombat, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("inStealth")] 
 		public CName InStealth
 		{
-			get => GetProperty(ref _inStealth);
-			set => SetProperty(ref _inStealth, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("aiAlerted")] 
 		public CName AiAlerted
 		{
-			get => GetProperty(ref _aiAlerted);
-			set => SetProperty(ref _aiAlerted, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("sceneBootstrapSignpost")] 
 		public CName SceneBootstrapSignpost
 		{
-			get => GetProperty(ref _sceneBootstrapSignpost);
-			set => SetProperty(ref _sceneBootstrapSignpost, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("reservedSignposts")] 
 		public CArray<CName> ReservedSignposts
 		{
-			get => GetProperty(ref _reservedSignposts);
-			set => SetProperty(ref _reservedSignposts, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		public audioDefaultMixingSignposts()
 		{
-			_endOfCombat = "combat_ended";
-			_inCombat = "in_combat";
-			_inStealth = "in_stealth";
-			_aiAlerted = "ai_alerted";
+			EndOfCombat = "combat_ended";
+			InCombat = "in_combat";
+			InStealth = "in_stealth";
+			AiAlerted = "ai_alerted";
+			ReservedSignposts = new();
 		}
 	}
 }

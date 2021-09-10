@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldTrafficLaneCrowdCreationInfo : RedBaseClass
 	{
-		private CArray<worldTrafficLaneCrowdFragment> _connectedFragments;
-
 		[Ordinal(0)] 
 		[RED("connectedFragments")] 
 		public CArray<worldTrafficLaneCrowdFragment> ConnectedFragments
 		{
-			get => GetProperty(ref _connectedFragments);
-			set => SetProperty(ref _connectedFragments, value);
+			get => GetPropertyValue<CArray<worldTrafficLaneCrowdFragment>>();
+			set => SetPropertyValue<CArray<worldTrafficLaneCrowdFragment>>(value);
+		}
+
+		public worldTrafficLaneCrowdCreationInfo()
+		{
+			ConnectedFragments = new();
 		}
 	}
 }

@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questHackingManager_NodeType : questIInteractiveObjectManagerNodeType
 	{
-		private CArray<questHackingManager_NodeTypeParams> _params;
-
 		[Ordinal(0)] 
 		[RED("params")] 
 		public CArray<questHackingManager_NodeTypeParams> Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<CArray<questHackingManager_NodeTypeParams>>();
+			set => SetPropertyValue<CArray<questHackingManager_NodeTypeParams>>(value);
+		}
+
+		public questHackingManager_NodeType()
+		{
+			Params = new() { new() };
 		}
 	}
 }

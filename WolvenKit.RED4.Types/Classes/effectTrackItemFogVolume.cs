@@ -5,64 +5,58 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class effectTrackItemFogVolume : effectTrackItem
 	{
-		private CUInt8 _priority;
-		private CFloat _densityFalloff;
-		private CFloat _blendFalloff;
-		private CHandle<IEvaluatorFloat> _density;
-		private CHandle<IEvaluatorVector> _size;
-		private CHandle<IEvaluatorColor> _color;
-
 		[Ordinal(3)] 
 		[RED("priority")] 
 		public CUInt8 Priority
 		{
-			get => GetProperty(ref _priority);
-			set => SetProperty(ref _priority, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("densityFalloff")] 
 		public CFloat DensityFalloff
 		{
-			get => GetProperty(ref _densityFalloff);
-			set => SetProperty(ref _densityFalloff, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("blendFalloff")] 
 		public CFloat BlendFalloff
 		{
-			get => GetProperty(ref _blendFalloff);
-			set => SetProperty(ref _blendFalloff, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("density")] 
 		public CHandle<IEvaluatorFloat> Density
 		{
-			get => GetProperty(ref _density);
-			set => SetProperty(ref _density, value);
+			get => GetPropertyValue<CHandle<IEvaluatorFloat>>();
+			set => SetPropertyValue<CHandle<IEvaluatorFloat>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("size")] 
 		public CHandle<IEvaluatorVector> Size
 		{
-			get => GetProperty(ref _size);
-			set => SetProperty(ref _size, value);
+			get => GetPropertyValue<CHandle<IEvaluatorVector>>();
+			set => SetPropertyValue<CHandle<IEvaluatorVector>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("color")] 
 		public CHandle<IEvaluatorColor> Color
 		{
-			get => GetProperty(ref _color);
-			set => SetProperty(ref _color, value);
+			get => GetPropertyValue<CHandle<IEvaluatorColor>>();
+			set => SetPropertyValue<CHandle<IEvaluatorColor>>(value);
 		}
 
 		public effectTrackItemFogVolume()
 		{
-			_priority = 5;
+			TimeDuration = 1.000000F;
+			Priority = 5;
 		}
 	}
 }

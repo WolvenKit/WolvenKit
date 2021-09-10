@@ -5,73 +5,68 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiMappinsContainerController : gameuiProjectedHUDGameController
 	{
-		private CEnum<gamePSMVision> _psmVision;
-		private CEnum<gamePSMCombat> _psmCombat;
-		private CEnum<gamePSMZones> _psmZone;
-		private CEnum<GameplayTier> _tier;
-		private inkWidgetPath _spawnContainerPath;
-		private inkLinePatternWidgetReference _gpsQuestPathWidget;
-		private inkLinePatternWidgetReference _gpsPlayerTrackedPathWidget;
-
 		[Ordinal(9)] 
 		[RED("psmVision")] 
 		public CEnum<gamePSMVision> PsmVision
 		{
-			get => GetProperty(ref _psmVision);
-			set => SetProperty(ref _psmVision, value);
+			get => GetPropertyValue<CEnum<gamePSMVision>>();
+			set => SetPropertyValue<CEnum<gamePSMVision>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("psmCombat")] 
 		public CEnum<gamePSMCombat> PsmCombat
 		{
-			get => GetProperty(ref _psmCombat);
-			set => SetProperty(ref _psmCombat, value);
+			get => GetPropertyValue<CEnum<gamePSMCombat>>();
+			set => SetPropertyValue<CEnum<gamePSMCombat>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("psmZone")] 
 		public CEnum<gamePSMZones> PsmZone
 		{
-			get => GetProperty(ref _psmZone);
-			set => SetProperty(ref _psmZone, value);
+			get => GetPropertyValue<CEnum<gamePSMZones>>();
+			set => SetPropertyValue<CEnum<gamePSMZones>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("tier")] 
 		public CEnum<GameplayTier> Tier
 		{
-			get => GetProperty(ref _tier);
-			set => SetProperty(ref _tier, value);
+			get => GetPropertyValue<CEnum<GameplayTier>>();
+			set => SetPropertyValue<CEnum<GameplayTier>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("spawnContainerPath")] 
 		public inkWidgetPath SpawnContainerPath
 		{
-			get => GetProperty(ref _spawnContainerPath);
-			set => SetProperty(ref _spawnContainerPath, value);
+			get => GetPropertyValue<inkWidgetPath>();
+			set => SetPropertyValue<inkWidgetPath>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("gpsQuestPathWidget")] 
 		public inkLinePatternWidgetReference GpsQuestPathWidget
 		{
-			get => GetProperty(ref _gpsQuestPathWidget);
-			set => SetProperty(ref _gpsQuestPathWidget, value);
+			get => GetPropertyValue<inkLinePatternWidgetReference>();
+			set => SetPropertyValue<inkLinePatternWidgetReference>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("gpsPlayerTrackedPathWidget")] 
 		public inkLinePatternWidgetReference GpsPlayerTrackedPathWidget
 		{
-			get => GetProperty(ref _gpsPlayerTrackedPathWidget);
-			set => SetProperty(ref _gpsPlayerTrackedPathWidget, value);
+			get => GetPropertyValue<inkLinePatternWidgetReference>();
+			set => SetPropertyValue<inkLinePatternWidgetReference>(value);
 		}
 
 		public gameuiMappinsContainerController()
 		{
-			_tier = new() { Value = Enums.GameplayTier.Tier1_FullGameplay };
+			Tier = Enums.GameplayTier.Tier1_FullGameplay;
+			SpawnContainerPath = new() { Names = new() };
+			GpsQuestPathWidget = new();
+			GpsPlayerTrackedPathWidget = new();
 		}
 	}
 }

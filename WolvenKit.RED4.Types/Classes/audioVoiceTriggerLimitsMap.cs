@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioVoiceTriggerLimitsMap : audioAudioMetadata
 	{
-		private CArray<CName> _includes;
-		private CArray<audioVoiceTriggerLimitsMapItem> _triggers;
-
 		[Ordinal(1)] 
 		[RED("includes")] 
 		public CArray<CName> Includes
 		{
-			get => GetProperty(ref _includes);
-			set => SetProperty(ref _includes, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("triggers")] 
 		public CArray<audioVoiceTriggerLimitsMapItem> Triggers
 		{
-			get => GetProperty(ref _triggers);
-			set => SetProperty(ref _triggers, value);
+			get => GetPropertyValue<CArray<audioVoiceTriggerLimitsMapItem>>();
+			set => SetPropertyValue<CArray<audioVoiceTriggerLimitsMapItem>>(value);
+		}
+
+		public audioVoiceTriggerLimitsMap()
+		{
+			Includes = new();
+			Triggers = new();
 		}
 	}
 }

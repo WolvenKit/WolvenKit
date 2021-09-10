@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questShowDialogIndicator_NodeType : questIUIManagerNodeType
 	{
-		private CArray<questShowDialogIndicator_NodeTypeParams> _params;
-
 		[Ordinal(0)] 
 		[RED("params")] 
 		public CArray<questShowDialogIndicator_NodeTypeParams> Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<CArray<questShowDialogIndicator_NodeTypeParams>>();
+			set => SetPropertyValue<CArray<questShowDialogIndicator_NodeTypeParams>>(value);
+		}
+
+		public questShowDialogIndicator_NodeType()
+		{
+			Params = new() { new() };
 		}
 	}
 }

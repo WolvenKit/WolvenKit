@@ -5,122 +5,113 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ComputerSetup : TerminalSetup
 	{
-		private CEnum<EComputerMenuType> _startingMenu;
-		private CBool _mailsMenu;
-		private CBool _filesMenu;
-		private CBool _systemMenu;
-		private CBool _internetMenu;
-		private CBool _newsFeedMenu;
-		private CArray<gamedeviceGenericDataContent> _mailsStructure;
-		private CArray<gamedeviceGenericDataContent> _filesStructure;
-		private CArray<SNewsFeedElementData> _newsFeed;
-		private CFloat _newsFeedInterval;
-		private SInternetData _internetSubnet;
-		private CEnum<EComputerAnimationState> _animationState;
-
 		[Ordinal(4)] 
 		[RED("startingMenu")] 
 		public CEnum<EComputerMenuType> StartingMenu
 		{
-			get => GetProperty(ref _startingMenu);
-			set => SetProperty(ref _startingMenu, value);
+			get => GetPropertyValue<CEnum<EComputerMenuType>>();
+			set => SetPropertyValue<CEnum<EComputerMenuType>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("mailsMenu")] 
 		public CBool MailsMenu
 		{
-			get => GetProperty(ref _mailsMenu);
-			set => SetProperty(ref _mailsMenu, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("filesMenu")] 
 		public CBool FilesMenu
 		{
-			get => GetProperty(ref _filesMenu);
-			set => SetProperty(ref _filesMenu, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("systemMenu")] 
 		public CBool SystemMenu
 		{
-			get => GetProperty(ref _systemMenu);
-			set => SetProperty(ref _systemMenu, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("internetMenu")] 
 		public CBool InternetMenu
 		{
-			get => GetProperty(ref _internetMenu);
-			set => SetProperty(ref _internetMenu, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("newsFeedMenu")] 
 		public CBool NewsFeedMenu
 		{
-			get => GetProperty(ref _newsFeedMenu);
-			set => SetProperty(ref _newsFeedMenu, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("mailsStructure")] 
 		public CArray<gamedeviceGenericDataContent> MailsStructure
 		{
-			get => GetProperty(ref _mailsStructure);
-			set => SetProperty(ref _mailsStructure, value);
+			get => GetPropertyValue<CArray<gamedeviceGenericDataContent>>();
+			set => SetPropertyValue<CArray<gamedeviceGenericDataContent>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("filesStructure")] 
 		public CArray<gamedeviceGenericDataContent> FilesStructure
 		{
-			get => GetProperty(ref _filesStructure);
-			set => SetProperty(ref _filesStructure, value);
+			get => GetPropertyValue<CArray<gamedeviceGenericDataContent>>();
+			set => SetPropertyValue<CArray<gamedeviceGenericDataContent>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("newsFeed")] 
 		public CArray<SNewsFeedElementData> NewsFeed
 		{
-			get => GetProperty(ref _newsFeed);
-			set => SetProperty(ref _newsFeed, value);
+			get => GetPropertyValue<CArray<SNewsFeedElementData>>();
+			set => SetPropertyValue<CArray<SNewsFeedElementData>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("newsFeedInterval")] 
 		public CFloat NewsFeedInterval
 		{
-			get => GetProperty(ref _newsFeedInterval);
-			set => SetProperty(ref _newsFeedInterval, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("internetSubnet")] 
 		public SInternetData InternetSubnet
 		{
-			get => GetProperty(ref _internetSubnet);
-			set => SetProperty(ref _internetSubnet, value);
+			get => GetPropertyValue<SInternetData>();
+			set => SetPropertyValue<SInternetData>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("animationState")] 
 		public CEnum<EComputerAnimationState> AnimationState
 		{
-			get => GetProperty(ref _animationState);
-			set => SetProperty(ref _animationState, value);
+			get => GetPropertyValue<CEnum<EComputerAnimationState>>();
+			set => SetPropertyValue<CEnum<EComputerAnimationState>>(value);
 		}
 
 		public ComputerSetup()
 		{
-			_mailsMenu = true;
-			_filesMenu = true;
-			_systemMenu = true;
-			_internetMenu = true;
-			_newsFeedInterval = 5.000000F;
+			MailsMenu = true;
+			FilesMenu = true;
+			SystemMenu = true;
+			InternetMenu = true;
+			MailsStructure = new();
+			FilesStructure = new();
+			NewsFeed = new();
+			NewsFeedInterval = 5.000000F;
+			InternetSubnet = new();
 		}
 	}
 }

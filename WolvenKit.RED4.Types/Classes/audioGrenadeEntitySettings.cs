@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioGrenadeEntitySettings : audioEntitySettings
 	{
-		private CName _explosionSound;
-
 		[Ordinal(6)] 
 		[RED("explosionSound")] 
 		public CName ExplosionSound
 		{
-			get => GetProperty(ref _explosionSound);
-			set => SetProperty(ref _explosionSound, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public audioGrenadeEntitySettings()
+		{
+			CommonSettings = new() { StopAllSoundsOnDetach = true };
+			ScanningSettings = new();
+			AuxiliaryMetadata = new();
 		}
 	}
 }

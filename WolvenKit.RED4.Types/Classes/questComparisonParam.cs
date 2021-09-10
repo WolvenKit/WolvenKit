@@ -5,38 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questComparisonParam : ISerializable
 	{
-		private CBool _entireCommunity;
-		private CUInt32 _count;
-		private CEnum<EComparisonType> _comparisonType;
-
 		[Ordinal(0)] 
 		[RED("entireCommunity")] 
 		public CBool EntireCommunity
 		{
-			get => GetProperty(ref _entireCommunity);
-			set => SetProperty(ref _entireCommunity, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("count")] 
 		public CUInt32 Count
 		{
-			get => GetProperty(ref _count);
-			set => SetProperty(ref _count, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("comparisonType")] 
 		public CEnum<EComparisonType> ComparisonType
 		{
-			get => GetProperty(ref _comparisonType);
-			set => SetProperty(ref _comparisonType, value);
+			get => GetPropertyValue<CEnum<EComparisonType>>();
+			set => SetPropertyValue<CEnum<EComparisonType>>(value);
 		}
 
 		public questComparisonParam()
 		{
-			_entireCommunity = true;
-			_comparisonType = new() { Value = Enums.EComparisonType.Equal };
+			EntireCommunity = true;
+			ComparisonType = Enums.EComparisonType.Equal;
 		}
 	}
 }

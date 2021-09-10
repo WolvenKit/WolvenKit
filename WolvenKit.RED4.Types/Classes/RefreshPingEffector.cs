@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RefreshPingEffector : gameEffector
 	{
-		private CArray<entEntityID> _squadMembers;
-		private CWeakHandle<gameObject> _owner;
-
 		[Ordinal(0)] 
 		[RED("squadMembers")] 
 		public CArray<entEntityID> SquadMembers
 		{
-			get => GetProperty(ref _squadMembers);
-			set => SetProperty(ref _squadMembers, value);
+			get => GetPropertyValue<CArray<entEntityID>>();
+			set => SetPropertyValue<CArray<entEntityID>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("owner")] 
 		public CWeakHandle<gameObject> Owner
 		{
-			get => GetProperty(ref _owner);
-			set => SetProperty(ref _owner, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
+		}
+
+		public RefreshPingEffector()
+		{
+			SquadMembers = new();
 		}
 	}
 }

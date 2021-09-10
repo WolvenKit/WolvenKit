@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class meshMeshParamPhysics : meshMeshParameter
 	{
-		private CHandle<physicsSystemResource> _physicsData;
-
 		[Ordinal(0)] 
 		[RED("physicsData")] 
 		public CHandle<physicsSystemResource> PhysicsData
 		{
-			get => GetProperty(ref _physicsData);
-			set => SetProperty(ref _physicsData, value);
+			get => GetPropertyValue<CHandle<physicsSystemResource>>();
+			set => SetPropertyValue<CHandle<physicsSystemResource>>(value);
 		}
 	}
 }

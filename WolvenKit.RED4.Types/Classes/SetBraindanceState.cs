@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SetBraindanceState : gameScriptableSystemRequest
 	{
-		private CBool _newState;
-
 		[Ordinal(0)] 
 		[RED("newState")] 
 		public CBool NewState
 		{
-			get => GetProperty(ref _newState);
-			set => SetProperty(ref _newState, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnUnmountEvent : scnSceneEvent
 	{
-		private scnPerformerId _performer;
-
 		[Ordinal(6)] 
 		[RED("performer")] 
 		public scnPerformerId Performer
 		{
-			get => GetProperty(ref _performer);
-			set => SetProperty(ref _performer, value);
+			get => GetPropertyValue<scnPerformerId>();
+			set => SetPropertyValue<scnPerformerId>(value);
+		}
+
+		public scnUnmountEvent()
+		{
+			Id = new() { Id = 18446744073709551615 };
+			Performer = new() { Id = 4294967040 };
 		}
 	}
 }

@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ActionWeightCondition : AIbehaviorconditionScript
 	{
-		private CHandle<AIArgumentMapping> _selectedActionIndex;
-		private CInt32 _thisIndex;
-
 		[Ordinal(0)] 
 		[RED("selectedActionIndex")] 
 		public CHandle<AIArgumentMapping> SelectedActionIndex
 		{
-			get => GetProperty(ref _selectedActionIndex);
-			set => SetProperty(ref _selectedActionIndex, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("thisIndex")] 
 		public CInt32 ThisIndex
 		{
-			get => GetProperty(ref _thisIndex);
-			set => SetProperty(ref _thisIndex, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

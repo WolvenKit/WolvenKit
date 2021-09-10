@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questBehaviourManagerNodeDefinition : questSignalStoppingNodeDefinition
 	{
-		private gameEntityReference _puppet;
-		private CHandle<workIWorkspotQuestAction> _type;
-		private CHandle<questIBehaviourManager_NodeType> _newType;
-
 		[Ordinal(2)] 
 		[RED("puppet")] 
 		public gameEntityReference Puppet
 		{
-			get => GetProperty(ref _puppet);
-			set => SetProperty(ref _puppet, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("type")] 
 		public CHandle<workIWorkspotQuestAction> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CHandle<workIWorkspotQuestAction>>();
+			set => SetPropertyValue<CHandle<workIWorkspotQuestAction>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("newType")] 
 		public CHandle<questIBehaviourManager_NodeType> NewType
 		{
-			get => GetProperty(ref _newType);
-			set => SetProperty(ref _newType, value);
+			get => GetPropertyValue<CHandle<questIBehaviourManager_NodeType>>();
+			set => SetPropertyValue<CHandle<questIBehaviourManager_NodeType>>(value);
+		}
+
+		public questBehaviourManagerNodeDefinition()
+		{
+			Sockets = new();
+			Id = 65535;
+			Puppet = new() { Names = new() };
 		}
 	}
 }

@@ -5,82 +5,79 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameAudioEmitterComponent : entIPlacedComponent
 	{
-		private CName _emitterName;
-		private CEnum<audioEntityEmitterContextType> _emitterType;
-		private gameAudioSyncs _onAttach;
-		private gameAudioSyncs _onDetach;
-		private CFloat _updateDistance;
-		private CName _emitterMetadataName;
-		private CArray<CName> _tags;
-		private redTagList _tagList;
-
 		[Ordinal(5)] 
 		[RED("EmitterName")] 
 		public CName EmitterName
 		{
-			get => GetProperty(ref _emitterName);
-			set => SetProperty(ref _emitterName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("EmitterType")] 
 		public CEnum<audioEntityEmitterContextType> EmitterType
 		{
-			get => GetProperty(ref _emitterType);
-			set => SetProperty(ref _emitterType, value);
+			get => GetPropertyValue<CEnum<audioEntityEmitterContextType>>();
+			set => SetPropertyValue<CEnum<audioEntityEmitterContextType>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("OnAttach")] 
 		public gameAudioSyncs OnAttach
 		{
-			get => GetProperty(ref _onAttach);
-			set => SetProperty(ref _onAttach, value);
+			get => GetPropertyValue<gameAudioSyncs>();
+			set => SetPropertyValue<gameAudioSyncs>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("OnDetach")] 
 		public gameAudioSyncs OnDetach
 		{
-			get => GetProperty(ref _onDetach);
-			set => SetProperty(ref _onDetach, value);
+			get => GetPropertyValue<gameAudioSyncs>();
+			set => SetPropertyValue<gameAudioSyncs>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("updateDistance")] 
 		public CFloat UpdateDistance
 		{
-			get => GetProperty(ref _updateDistance);
-			set => SetProperty(ref _updateDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("emitterMetadataName")] 
 		public CName EmitterMetadataName
 		{
-			get => GetProperty(ref _emitterMetadataName);
-			set => SetProperty(ref _emitterMetadataName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("Tags")] 
 		public CArray<CName> Tags
 		{
-			get => GetProperty(ref _tags);
-			set => SetProperty(ref _tags, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("TagList")] 
 		public redTagList TagList
 		{
-			get => GetProperty(ref _tagList);
-			set => SetProperty(ref _tagList, value);
+			get => GetPropertyValue<redTagList>();
+			set => SetPropertyValue<redTagList>(value);
 		}
 
 		public gameAudioEmitterComponent()
 		{
-			_updateDistance = 100.000000F;
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			OnAttach = new() { SwitchEvents = new(), PlayEvents = new(), StopEvents = new(), ParameterEvents = new() };
+			OnDetach = new() { SwitchEvents = new(), PlayEvents = new(), StopEvents = new(), ParameterEvents = new() };
+			UpdateDistance = 100.000000F;
+			Tags = new();
+			TagList = new() { Tags = new() };
 		}
 	}
 }

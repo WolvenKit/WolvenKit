@@ -5,119 +5,112 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_BlendOverride : animAnimNode_Base
 	{
-		private animPoseLink _inputNode;
-		private animPoseLink _overrideInputNode;
-		private animFloatLink _weightNode;
-		private CArray<animOverrideBlendBoneInfo> _bones;
-		private CBool _blendAllTracks;
-		private CEnum<animEBlendTracksMode> _blendTrackMode;
-		private CArray<animOverrideBlendTrackInfo> _tracks;
-		private CBool _getDeltaMotionFromOverride;
-		private CBool _timeWarpingEnabled;
-		private CHandle<animISyncMethod> _syncMethod;
-		private CHandle<animIPoseBlendMethod> _blendMethod;
-		private CHandle<animIAnimNode_PostProcess> _postProcess;
-
 		[Ordinal(11)] 
 		[RED("inputNode")] 
 		public animPoseLink InputNode
 		{
-			get => GetProperty(ref _inputNode);
-			set => SetProperty(ref _inputNode, value);
+			get => GetPropertyValue<animPoseLink>();
+			set => SetPropertyValue<animPoseLink>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("overrideInputNode")] 
 		public animPoseLink OverrideInputNode
 		{
-			get => GetProperty(ref _overrideInputNode);
-			set => SetProperty(ref _overrideInputNode, value);
+			get => GetPropertyValue<animPoseLink>();
+			set => SetPropertyValue<animPoseLink>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("weightNode")] 
 		public animFloatLink WeightNode
 		{
-			get => GetProperty(ref _weightNode);
-			set => SetProperty(ref _weightNode, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("bones")] 
 		public CArray<animOverrideBlendBoneInfo> Bones
 		{
-			get => GetProperty(ref _bones);
-			set => SetProperty(ref _bones, value);
+			get => GetPropertyValue<CArray<animOverrideBlendBoneInfo>>();
+			set => SetPropertyValue<CArray<animOverrideBlendBoneInfo>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("blendAllTracks")] 
 		public CBool BlendAllTracks
 		{
-			get => GetProperty(ref _blendAllTracks);
-			set => SetProperty(ref _blendAllTracks, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("blendTrackMode")] 
 		public CEnum<animEBlendTracksMode> BlendTrackMode
 		{
-			get => GetProperty(ref _blendTrackMode);
-			set => SetProperty(ref _blendTrackMode, value);
+			get => GetPropertyValue<CEnum<animEBlendTracksMode>>();
+			set => SetPropertyValue<CEnum<animEBlendTracksMode>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("tracks")] 
 		public CArray<animOverrideBlendTrackInfo> Tracks
 		{
-			get => GetProperty(ref _tracks);
-			set => SetProperty(ref _tracks, value);
+			get => GetPropertyValue<CArray<animOverrideBlendTrackInfo>>();
+			set => SetPropertyValue<CArray<animOverrideBlendTrackInfo>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("getDeltaMotionFromOverride")] 
 		public CBool GetDeltaMotionFromOverride
 		{
-			get => GetProperty(ref _getDeltaMotionFromOverride);
-			set => SetProperty(ref _getDeltaMotionFromOverride, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("timeWarpingEnabled")] 
 		public CBool TimeWarpingEnabled
 		{
-			get => GetProperty(ref _timeWarpingEnabled);
-			set => SetProperty(ref _timeWarpingEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("syncMethod")] 
 		public CHandle<animISyncMethod> SyncMethod
 		{
-			get => GetProperty(ref _syncMethod);
-			set => SetProperty(ref _syncMethod, value);
+			get => GetPropertyValue<CHandle<animISyncMethod>>();
+			set => SetPropertyValue<CHandle<animISyncMethod>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("blendMethod")] 
 		public CHandle<animIPoseBlendMethod> BlendMethod
 		{
-			get => GetProperty(ref _blendMethod);
-			set => SetProperty(ref _blendMethod, value);
+			get => GetPropertyValue<CHandle<animIPoseBlendMethod>>();
+			set => SetPropertyValue<CHandle<animIPoseBlendMethod>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("postProcess")] 
 		public CHandle<animIAnimNode_PostProcess> PostProcess
 		{
-			get => GetProperty(ref _postProcess);
-			set => SetProperty(ref _postProcess, value);
+			get => GetPropertyValue<CHandle<animIAnimNode_PostProcess>>();
+			set => SetPropertyValue<CHandle<animIAnimNode_PostProcess>>(value);
 		}
 
 		public animAnimNode_BlendOverride()
 		{
-			_blendAllTracks = true;
-			_blendTrackMode = new() { Value = Enums.animEBlendTracksMode.AGBT_Interpolate };
+			Id = 4294967295;
+			InputNode = new();
+			OverrideInputNode = new();
+			WeightNode = new();
+			Bones = new();
+			BlendAllTracks = true;
+			BlendTrackMode = Enums.animEBlendTracksMode.AGBT_Interpolate;
+			Tracks = new();
 		}
 	}
 }

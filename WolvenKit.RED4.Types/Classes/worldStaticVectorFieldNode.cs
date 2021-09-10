@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldStaticVectorFieldNode : worldNode
 	{
-		private Vector3 _direction;
-		private CFloat _autoHideDistance;
-
 		[Ordinal(4)] 
 		[RED("direction")] 
 		public Vector3 Direction
 		{
-			get => GetProperty(ref _direction);
-			set => SetProperty(ref _direction, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("autoHideDistance")] 
 		public CFloat AutoHideDistance
 		{
-			get => GetProperty(ref _autoHideDistance);
-			set => SetProperty(ref _autoHideDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public worldStaticVectorFieldNode()
+		{
+			Direction = new();
 		}
 	}
 }

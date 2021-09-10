@@ -5,46 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldDebugColoring_PrefabProxy : worldEditorDebugColoringSettings
 	{
-		private CColor _regularMeshColor;
-		private CColor _instancedMeshColor;
-		private CColor _prefabProxyMeshColor;
-		private CBool _distinguishInstancedMesh;
-
 		[Ordinal(0)] 
 		[RED("regularMeshColor")] 
 		public CColor RegularMeshColor
 		{
-			get => GetProperty(ref _regularMeshColor);
-			set => SetProperty(ref _regularMeshColor, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("instancedMeshColor")] 
 		public CColor InstancedMeshColor
 		{
-			get => GetProperty(ref _instancedMeshColor);
-			set => SetProperty(ref _instancedMeshColor, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("prefabProxyMeshColor")] 
 		public CColor PrefabProxyMeshColor
 		{
-			get => GetProperty(ref _prefabProxyMeshColor);
-			set => SetProperty(ref _prefabProxyMeshColor, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("distinguishInstancedMesh")] 
 		public CBool DistinguishInstancedMesh
 		{
-			get => GetProperty(ref _distinguishInstancedMesh);
-			set => SetProperty(ref _distinguishInstancedMesh, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public worldDebugColoring_PrefabProxy()
 		{
-			_distinguishInstancedMesh = true;
+			RegularMeshColor = new();
+			InstancedMeshColor = new();
+			PrefabProxyMeshColor = new();
+			DistinguishInstancedMesh = true;
 		}
 	}
 }

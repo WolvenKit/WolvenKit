@@ -5,23 +5,27 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_ReadIkRequest : animAnimNode_OnePoseInput
 	{
-		private CName _ikChain;
-		private animTransformIndex _outTransform;
-
 		[Ordinal(12)] 
 		[RED("ikChain")] 
 		public CName IkChain
 		{
-			get => GetProperty(ref _ikChain);
-			set => SetProperty(ref _ikChain, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("outTransform")] 
 		public animTransformIndex OutTransform
 		{
-			get => GetProperty(ref _outTransform);
-			set => SetProperty(ref _outTransform, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
+		}
+
+		public animAnimNode_ReadIkRequest()
+		{
+			Id = 4294967295;
+			InputLink = new();
+			OutTransform = new();
 		}
 	}
 }

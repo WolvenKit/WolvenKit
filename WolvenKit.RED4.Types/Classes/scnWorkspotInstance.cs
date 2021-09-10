@@ -5,50 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnWorkspotInstance : RedBaseClass
 	{
-		private scnSceneWorkspotInstanceId _workspotInstanceId;
-		private scnSceneWorkspotDataId _dataId;
-		private Transform _localTransform;
-		private CBool _playAtActorLocation;
-		private scnMarker _originMarker;
-
 		[Ordinal(0)] 
 		[RED("workspotInstanceId")] 
 		public scnSceneWorkspotInstanceId WorkspotInstanceId
 		{
-			get => GetProperty(ref _workspotInstanceId);
-			set => SetProperty(ref _workspotInstanceId, value);
+			get => GetPropertyValue<scnSceneWorkspotInstanceId>();
+			set => SetPropertyValue<scnSceneWorkspotInstanceId>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("dataId")] 
 		public scnSceneWorkspotDataId DataId
 		{
-			get => GetProperty(ref _dataId);
-			set => SetProperty(ref _dataId, value);
+			get => GetPropertyValue<scnSceneWorkspotDataId>();
+			set => SetPropertyValue<scnSceneWorkspotDataId>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("localTransform")] 
 		public Transform LocalTransform
 		{
-			get => GetProperty(ref _localTransform);
-			set => SetProperty(ref _localTransform, value);
+			get => GetPropertyValue<Transform>();
+			set => SetPropertyValue<Transform>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("playAtActorLocation")] 
 		public CBool PlayAtActorLocation
 		{
-			get => GetProperty(ref _playAtActorLocation);
-			set => SetProperty(ref _playAtActorLocation, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("originMarker")] 
 		public scnMarker OriginMarker
 		{
-			get => GetProperty(ref _originMarker);
-			set => SetProperty(ref _originMarker, value);
+			get => GetPropertyValue<scnMarker>();
+			set => SetPropertyValue<scnMarker>(value);
+		}
+
+		public scnWorkspotInstance()
+		{
+			WorkspotInstanceId = new() { Id = 4294967295 };
+			DataId = new() { Id = 4294967295 };
+			LocalTransform = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			OriginMarker = new() { Type = Enums.scnMarkerType.Global, EntityRef = new() { Names = new() }, IsMounted = true };
 		}
 	}
 }

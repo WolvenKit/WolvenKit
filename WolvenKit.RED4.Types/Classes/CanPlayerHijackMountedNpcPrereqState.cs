@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CanPlayerHijackMountedNpcPrereqState : gamePrereqState
 	{
-		private CHandle<gameScriptedPrereqMountingListenerWrapper> _mountingListener;
-
 		[Ordinal(0)] 
 		[RED("mountingListener")] 
 		public CHandle<gameScriptedPrereqMountingListenerWrapper> MountingListener
 		{
-			get => GetProperty(ref _mountingListener);
-			set => SetProperty(ref _mountingListener, value);
+			get => GetPropertyValue<CHandle<gameScriptedPrereqMountingListenerWrapper>>();
+			set => SetPropertyValue<CHandle<gameScriptedPrereqMountingListenerWrapper>>(value);
 		}
 	}
 }

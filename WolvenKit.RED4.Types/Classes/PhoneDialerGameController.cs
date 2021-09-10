@@ -5,209 +5,191 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PhoneDialerGameController : gameuiHUDGameController
 	{
-		private inkWidgetReference _contactsList;
-		private inkImageWidgetReference _avatarImage;
-		private inkWidgetReference _hintMessenger;
-		private inkScrollAreaWidgetReference _scrollArea;
-		private inkWidgetReference _scrollControllerWidget;
-		private CHandle<gameJournalManager> _journalManager;
-		private CWeakHandle<PhoneSystem> _phoneSystem;
-		private CBool _active;
-		private CWeakHandle<inkVirtualListController> _listController;
-		private CHandle<inkScriptableDataSourceWrapper> _dataSource;
-		private CHandle<DialerContactDataView> _dataView;
-		private CHandle<DialerContactTemplateClassifier> _templateClassifier;
-		private CWeakHandle<inkScrollController> _scrollController;
-		private CName _soundName;
-		private CName _audioPhoneNavigation;
-		private CWeakHandle<gameIBlackboard> _phoneBlackboard;
-		private CHandle<UI_ComDeviceDef> _phoneBBDefinition;
-		private CHandle<redCallbackObject> _contactOpensBBID;
-		private CHandle<inkanimProxy> _switchAnimProxy;
-		private CHandle<inkanimProxy> _transitionAnimProxy;
-		private CBool _repeatingScrollActionEnabled;
-		private CBool _firstInit;
-
 		[Ordinal(9)] 
 		[RED("contactsList")] 
 		public inkWidgetReference ContactsList
 		{
-			get => GetProperty(ref _contactsList);
-			set => SetProperty(ref _contactsList, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("avatarImage")] 
 		public inkImageWidgetReference AvatarImage
 		{
-			get => GetProperty(ref _avatarImage);
-			set => SetProperty(ref _avatarImage, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("hintMessenger")] 
 		public inkWidgetReference HintMessenger
 		{
-			get => GetProperty(ref _hintMessenger);
-			set => SetProperty(ref _hintMessenger, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("scrollArea")] 
 		public inkScrollAreaWidgetReference ScrollArea
 		{
-			get => GetProperty(ref _scrollArea);
-			set => SetProperty(ref _scrollArea, value);
+			get => GetPropertyValue<inkScrollAreaWidgetReference>();
+			set => SetPropertyValue<inkScrollAreaWidgetReference>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("scrollControllerWidget")] 
 		public inkWidgetReference ScrollControllerWidget
 		{
-			get => GetProperty(ref _scrollControllerWidget);
-			set => SetProperty(ref _scrollControllerWidget, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("journalManager")] 
 		public CHandle<gameJournalManager> JournalManager
 		{
-			get => GetProperty(ref _journalManager);
-			set => SetProperty(ref _journalManager, value);
+			get => GetPropertyValue<CHandle<gameJournalManager>>();
+			set => SetPropertyValue<CHandle<gameJournalManager>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("phoneSystem")] 
 		public CWeakHandle<PhoneSystem> PhoneSystem
 		{
-			get => GetProperty(ref _phoneSystem);
-			set => SetProperty(ref _phoneSystem, value);
+			get => GetPropertyValue<CWeakHandle<PhoneSystem>>();
+			set => SetPropertyValue<CWeakHandle<PhoneSystem>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("active")] 
 		public CBool Active
 		{
-			get => GetProperty(ref _active);
-			set => SetProperty(ref _active, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("listController")] 
 		public CWeakHandle<inkVirtualListController> ListController
 		{
-			get => GetProperty(ref _listController);
-			set => SetProperty(ref _listController, value);
+			get => GetPropertyValue<CWeakHandle<inkVirtualListController>>();
+			set => SetPropertyValue<CWeakHandle<inkVirtualListController>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("dataSource")] 
 		public CHandle<inkScriptableDataSourceWrapper> DataSource
 		{
-			get => GetProperty(ref _dataSource);
-			set => SetProperty(ref _dataSource, value);
+			get => GetPropertyValue<CHandle<inkScriptableDataSourceWrapper>>();
+			set => SetPropertyValue<CHandle<inkScriptableDataSourceWrapper>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("dataView")] 
 		public CHandle<DialerContactDataView> DataView
 		{
-			get => GetProperty(ref _dataView);
-			set => SetProperty(ref _dataView, value);
+			get => GetPropertyValue<CHandle<DialerContactDataView>>();
+			set => SetPropertyValue<CHandle<DialerContactDataView>>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("templateClassifier")] 
 		public CHandle<DialerContactTemplateClassifier> TemplateClassifier
 		{
-			get => GetProperty(ref _templateClassifier);
-			set => SetProperty(ref _templateClassifier, value);
+			get => GetPropertyValue<CHandle<DialerContactTemplateClassifier>>();
+			set => SetPropertyValue<CHandle<DialerContactTemplateClassifier>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("scrollController")] 
 		public CWeakHandle<inkScrollController> ScrollController
 		{
-			get => GetProperty(ref _scrollController);
-			set => SetProperty(ref _scrollController, value);
+			get => GetPropertyValue<CWeakHandle<inkScrollController>>();
+			set => SetPropertyValue<CWeakHandle<inkScrollController>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("soundName")] 
 		public CName SoundName
 		{
-			get => GetProperty(ref _soundName);
-			set => SetProperty(ref _soundName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("audioPhoneNavigation")] 
 		public CName AudioPhoneNavigation
 		{
-			get => GetProperty(ref _audioPhoneNavigation);
-			set => SetProperty(ref _audioPhoneNavigation, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("phoneBlackboard")] 
 		public CWeakHandle<gameIBlackboard> PhoneBlackboard
 		{
-			get => GetProperty(ref _phoneBlackboard);
-			set => SetProperty(ref _phoneBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("phoneBBDefinition")] 
 		public CHandle<UI_ComDeviceDef> PhoneBBDefinition
 		{
-			get => GetProperty(ref _phoneBBDefinition);
-			set => SetProperty(ref _phoneBBDefinition, value);
+			get => GetPropertyValue<CHandle<UI_ComDeviceDef>>();
+			set => SetPropertyValue<CHandle<UI_ComDeviceDef>>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("contactOpensBBID")] 
 		public CHandle<redCallbackObject> ContactOpensBBID
 		{
-			get => GetProperty(ref _contactOpensBBID);
-			set => SetProperty(ref _contactOpensBBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("switchAnimProxy")] 
 		public CHandle<inkanimProxy> SwitchAnimProxy
 		{
-			get => GetProperty(ref _switchAnimProxy);
-			set => SetProperty(ref _switchAnimProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("transitionAnimProxy")] 
 		public CHandle<inkanimProxy> TransitionAnimProxy
 		{
-			get => GetProperty(ref _transitionAnimProxy);
-			set => SetProperty(ref _transitionAnimProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("repeatingScrollActionEnabled")] 
 		public CBool RepeatingScrollActionEnabled
 		{
-			get => GetProperty(ref _repeatingScrollActionEnabled);
-			set => SetProperty(ref _repeatingScrollActionEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("firstInit")] 
 		public CBool FirstInit
 		{
-			get => GetProperty(ref _firstInit);
-			set => SetProperty(ref _firstInit, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public PhoneDialerGameController()
 		{
-			_soundName = "Phone";
-			_audioPhoneNavigation = "ui_phone_navigation";
+			ContactsList = new();
+			AvatarImage = new();
+			HintMessenger = new();
+			ScrollArea = new();
+			ScrollControllerWidget = new();
+			SoundName = "Phone";
+			AudioPhoneNavigation = "ui_phone_navigation";
 		}
 	}
 }

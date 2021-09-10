@@ -5,59 +5,60 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class QuestListController : inkWidgetLogicController
 	{
-		private inkTextWidgetReference _categoryName;
-		private inkImageWidgetReference _icon;
-		private inkCompoundWidgetReference _questListRef;
-		private CEnum<gameJournalQuestType> _questType;
-		private CArray<CWeakHandle<QuestItemController>> _questItems;
-		private CWeakHandle<QuestDataWrapper> _lastQuestData;
-
 		[Ordinal(1)] 
 		[RED("CategoryName")] 
 		public inkTextWidgetReference CategoryName
 		{
-			get => GetProperty(ref _categoryName);
-			set => SetProperty(ref _categoryName, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("icon")] 
 		public inkImageWidgetReference Icon
 		{
-			get => GetProperty(ref _icon);
-			set => SetProperty(ref _icon, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("QuestListRef")] 
 		public inkCompoundWidgetReference QuestListRef
 		{
-			get => GetProperty(ref _questListRef);
-			set => SetProperty(ref _questListRef, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("QuestType")] 
 		public CEnum<gameJournalQuestType> QuestType
 		{
-			get => GetProperty(ref _questType);
-			set => SetProperty(ref _questType, value);
+			get => GetPropertyValue<CEnum<gameJournalQuestType>>();
+			set => SetPropertyValue<CEnum<gameJournalQuestType>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("QuestItems")] 
 		public CArray<CWeakHandle<QuestItemController>> QuestItems
 		{
-			get => GetProperty(ref _questItems);
-			set => SetProperty(ref _questItems, value);
+			get => GetPropertyValue<CArray<CWeakHandle<QuestItemController>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<QuestItemController>>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("LastQuestData")] 
 		public CWeakHandle<QuestDataWrapper> LastQuestData
 		{
-			get => GetProperty(ref _lastQuestData);
-			set => SetProperty(ref _lastQuestData, value);
+			get => GetPropertyValue<CWeakHandle<QuestDataWrapper>>();
+			set => SetPropertyValue<CWeakHandle<QuestDataWrapper>>(value);
+		}
+
+		public QuestListController()
+		{
+			CategoryName = new();
+			Icon = new();
+			QuestListRef = new();
+			QuestItems = new();
 		}
 	}
 }

@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioAudioSceneVariableReadActionData : RedBaseClass
 	{
-		private CName _name;
-		private CEnum<audioNumberComparer> _comparer;
-		private CInt32 _value;
-
 		[Ordinal(0)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get => GetProperty(ref _name);
-			set => SetProperty(ref _name, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("comparer")] 
 		public CEnum<audioNumberComparer> Comparer
 		{
-			get => GetProperty(ref _comparer);
-			set => SetProperty(ref _comparer, value);
+			get => GetPropertyValue<CEnum<audioNumberComparer>>();
+			set => SetPropertyValue<CEnum<audioNumberComparer>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("value")] 
 		public CInt32 Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

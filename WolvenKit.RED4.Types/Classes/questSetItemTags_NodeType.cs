@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questSetItemTags_NodeType : questIItemManagerNodeType
 	{
-		private CArray<questSetItemTags_NodeTypeParams> _params;
-
 		[Ordinal(0)] 
 		[RED("params")] 
 		public CArray<questSetItemTags_NodeTypeParams> Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<CArray<questSetItemTags_NodeTypeParams>>();
+			set => SetPropertyValue<CArray<questSetItemTags_NodeTypeParams>>(value);
+		}
+
+		public questSetItemTags_NodeType()
+		{
+			Params = new();
 		}
 	}
 }

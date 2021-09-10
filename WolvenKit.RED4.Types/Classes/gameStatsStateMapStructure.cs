@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameStatsStateMapStructure : RedBaseClass
 	{
-		private CArray<gameStatsObjectID> _keys;
-		private CArray<gameSavedStatsData> _values;
-
 		[Ordinal(0)] 
 		[RED("keys")] 
 		public CArray<gameStatsObjectID> Keys
 		{
-			get => GetProperty(ref _keys);
-			set => SetProperty(ref _keys, value);
+			get => GetPropertyValue<CArray<gameStatsObjectID>>();
+			set => SetPropertyValue<CArray<gameStatsObjectID>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("values")] 
 		public CArray<gameSavedStatsData> Values
 		{
-			get => GetProperty(ref _values);
-			set => SetProperty(ref _values, value);
+			get => GetPropertyValue<CArray<gameSavedStatsData>>();
+			set => SetPropertyValue<CArray<gameSavedStatsData>>(value);
+		}
+
+		public gameStatsStateMapStructure()
+		{
+			Keys = new();
+			Values = new();
 		}
 	}
 }

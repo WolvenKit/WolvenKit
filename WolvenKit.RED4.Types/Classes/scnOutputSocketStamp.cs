@@ -5,29 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnOutputSocketStamp : RedBaseClass
 	{
-		private CUInt16 _name;
-		private CUInt16 _ordinal;
-
 		[Ordinal(0)] 
 		[RED("name")] 
 		public CUInt16 Name
 		{
-			get => GetProperty(ref _name);
-			set => SetProperty(ref _name, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ordinal")] 
 		public CUInt16 Ordinal
 		{
-			get => GetProperty(ref _ordinal);
-			set => SetProperty(ref _ordinal, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		public scnOutputSocketStamp()
 		{
-			_name = 65535;
-			_ordinal = 65535;
+			Name = 65535;
+			Ordinal = 65535;
 		}
 	}
 }

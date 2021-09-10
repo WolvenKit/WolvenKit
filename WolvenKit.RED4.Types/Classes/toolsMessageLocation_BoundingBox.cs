@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class toolsMessageLocation_BoundingBox : toolsIMessageLocation
 	{
-		private MessageResourcePath _resourcePath;
-		private Box _box;
-
 		[Ordinal(0)] 
 		[RED("resourcePath")] 
 		public MessageResourcePath ResourcePath
 		{
-			get => GetProperty(ref _resourcePath);
-			set => SetProperty(ref _resourcePath, value);
+			get => GetPropertyValue<MessageResourcePath>();
+			set => SetPropertyValue<MessageResourcePath>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("box")] 
 		public Box Box
 		{
-			get => GetProperty(ref _box);
-			set => SetProperty(ref _box, value);
+			get => GetPropertyValue<Box>();
+			set => SetPropertyValue<Box>(value);
+		}
+
+		public toolsMessageLocation_BoundingBox()
+		{
+			Box = new() { Min = new(), Max = new() };
 		}
 	}
 }

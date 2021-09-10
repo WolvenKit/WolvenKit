@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CheckCurrentStatusEffect : AIStatusEffectCondition
 	{
-		private CEnum<gamedataStatusEffectType> _statusEffectTypeToCompare;
-		private CName _statusEffectTagToCompare;
-
 		[Ordinal(0)] 
 		[RED("statusEffectTypeToCompare")] 
 		public CEnum<gamedataStatusEffectType> StatusEffectTypeToCompare
 		{
-			get => GetProperty(ref _statusEffectTypeToCompare);
-			set => SetProperty(ref _statusEffectTypeToCompare, value);
+			get => GetPropertyValue<CEnum<gamedataStatusEffectType>>();
+			set => SetPropertyValue<CEnum<gamedataStatusEffectType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("statusEffectTagToCompare")] 
 		public CName StatusEffectTagToCompare
 		{
-			get => GetProperty(ref _statusEffectTagToCompare);
-			set => SetProperty(ref _statusEffectTagToCompare, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 	}
 }

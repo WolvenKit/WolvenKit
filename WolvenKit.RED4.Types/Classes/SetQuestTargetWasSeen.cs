@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SetQuestTargetWasSeen : redEvent
 	{
-		private CBool _wasSeen;
-
 		[Ordinal(0)] 
 		[RED("wasSeen")] 
 		public CBool WasSeen
 		{
-			get => GetProperty(ref _wasSeen);
-			set => SetProperty(ref _wasSeen, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

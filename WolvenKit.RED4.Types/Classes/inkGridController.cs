@@ -5,50 +5,54 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkGridController : inkVirtualCompoundController
 	{
-		private CUInt32 _height;
-		private CUInt32 _width;
-		private CArray<inkGridItem> _items;
-		private Vector2 _slotSize;
-		private CArray<inkGridItemTemplate> _itemTemplates;
-
 		[Ordinal(7)] 
 		[RED("height")] 
 		public CUInt32 Height
 		{
-			get => GetProperty(ref _height);
-			set => SetProperty(ref _height, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("width")] 
 		public CUInt32 Width
 		{
-			get => GetProperty(ref _width);
-			set => SetProperty(ref _width, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("items")] 
 		public CArray<inkGridItem> Items
 		{
-			get => GetProperty(ref _items);
-			set => SetProperty(ref _items, value);
+			get => GetPropertyValue<CArray<inkGridItem>>();
+			set => SetPropertyValue<CArray<inkGridItem>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("slotSize")] 
 		public Vector2 SlotSize
 		{
-			get => GetProperty(ref _slotSize);
-			set => SetProperty(ref _slotSize, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("itemTemplates")] 
 		public CArray<inkGridItemTemplate> ItemTemplates
 		{
-			get => GetProperty(ref _itemTemplates);
-			set => SetProperty(ref _itemTemplates, value);
+			get => GetPropertyValue<CArray<inkGridItemTemplate>>();
+			set => SetPropertyValue<CArray<inkGridItemTemplate>>(value);
+		}
+
+		public inkGridController()
+		{
+			ItemSelected = new();
+			ItemActivated = new();
+			AllElementsSpawned = new();
+			Items = new();
+			SlotSize = new();
+			ItemTemplates = new();
 		}
 	}
 }

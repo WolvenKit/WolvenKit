@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnCheckDistractedReturnCondition : scnIReturnCondition
 	{
-		private scnCheckDistractedReturnConditionParams _params;
-
 		[Ordinal(0)] 
 		[RED("params")] 
 		public scnCheckDistractedReturnConditionParams Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<scnCheckDistractedReturnConditionParams>();
+			set => SetPropertyValue<scnCheckDistractedReturnConditionParams>(value);
+		}
+
+		public scnCheckDistractedReturnCondition()
+		{
+			Params = new();
 		}
 	}
 }

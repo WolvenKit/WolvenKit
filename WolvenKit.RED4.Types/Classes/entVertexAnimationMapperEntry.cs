@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entVertexAnimationMapperEntry : RedBaseClass
 	{
-		private CStatic<entVertexAnimationMapperSource> _sources;
-		private entVertexAnimationMapperDestination _destination;
-
 		[Ordinal(0)] 
 		[RED("sources", 4)] 
 		public CStatic<entVertexAnimationMapperSource> Sources
 		{
-			get => GetProperty(ref _sources);
-			set => SetProperty(ref _sources, value);
+			get => GetPropertyValue<CStatic<entVertexAnimationMapperSource>>();
+			set => SetPropertyValue<CStatic<entVertexAnimationMapperSource>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("destination")] 
 		public entVertexAnimationMapperDestination Destination
 		{
-			get => GetProperty(ref _destination);
-			set => SetProperty(ref _destination, value);
+			get => GetPropertyValue<entVertexAnimationMapperDestination>();
+			set => SetPropertyValue<entVertexAnimationMapperDestination>(value);
+		}
+
+		public entVertexAnimationMapperEntry()
+		{
+			Sources = new(4);
+			Destination = new();
 		}
 	}
 }

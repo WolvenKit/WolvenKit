@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class HackingRewardNotificationEvent : redEvent
 	{
-		private CString _text;
-		private CArray<CString> _icons;
-
 		[Ordinal(0)] 
 		[RED("text")] 
 		public CString Text
 		{
-			get => GetProperty(ref _text);
-			set => SetProperty(ref _text, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("icons")] 
 		public CArray<CString> Icons
 		{
-			get => GetProperty(ref _icons);
-			set => SetProperty(ref _icons, value);
+			get => GetPropertyValue<CArray<CString>>();
+			set => SetPropertyValue<CArray<CString>>(value);
+		}
+
+		public HackingRewardNotificationEvent()
+		{
+			Icons = new();
 		}
 	}
 }

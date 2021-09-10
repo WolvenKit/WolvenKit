@@ -5,50 +5,53 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameprojectileShootEvent : gameprojectileSetUpEvent
 	{
-		private CMatrix _localToWorld;
-		private Vector4 _startPoint;
-		private Vector4 _startVelocity;
-		private Vector4 _weaponVelocity;
-		private gameprojectileWeaponParams _params;
-
 		[Ordinal(4)] 
 		[RED("localToWorld")] 
 		public CMatrix LocalToWorld
 		{
-			get => GetProperty(ref _localToWorld);
-			set => SetProperty(ref _localToWorld, value);
+			get => GetPropertyValue<CMatrix>();
+			set => SetPropertyValue<CMatrix>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("startPoint")] 
 		public Vector4 StartPoint
 		{
-			get => GetProperty(ref _startPoint);
-			set => SetProperty(ref _startPoint, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("startVelocity")] 
 		public Vector4 StartVelocity
 		{
-			get => GetProperty(ref _startVelocity);
-			set => SetProperty(ref _startVelocity, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("weaponVelocity")] 
 		public Vector4 WeaponVelocity
 		{
-			get => GetProperty(ref _weaponVelocity);
-			set => SetProperty(ref _weaponVelocity, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("params")] 
 		public gameprojectileWeaponParams Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<gameprojectileWeaponParams>();
+			set => SetPropertyValue<gameprojectileWeaponParams>(value);
+		}
+
+		public gameprojectileShootEvent()
+		{
+			LocalToWorld = new();
+			StartPoint = new() { X = 340282346638528859811704183484516925440.000000F, Y = 340282346638528859811704183484516925440.000000F, Z = 340282346638528859811704183484516925440.000000F, W = 340282346638528859811704183484516925440.000000F };
+			StartVelocity = new();
+			WeaponVelocity = new();
+			Params = new() { TargetPosition = new() { X = 340282346638528859811704183484516925440.000000F, Y = 340282346638528859811704183484516925440.000000F, Z = 340282346638528859811704183484516925440.000000F, W = 340282346638528859811704183484516925440.000000F }, SmartGunSpreadOnHitPlane = new(), SmartGunAccuracy = 1.000000F, SmartGunIsProjectileGuided = true, HitPlaneOffset = new(), IgnoreWeaponOwnerCollision = true, RicochetData = new(), Range = -1.000000F };
 		}
 	}
 }

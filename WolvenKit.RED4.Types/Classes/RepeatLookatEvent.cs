@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RepeatLookatEvent : redEvent
 	{
-		private CWeakHandle<entEntity> _target;
-
 		[Ordinal(0)] 
 		[RED("target")] 
 		public CWeakHandle<entEntity> Target
 		{
-			get => GetProperty(ref _target);
-			set => SetProperty(ref _target, value);
+			get => GetPropertyValue<CWeakHandle<entEntity>>();
+			set => SetPropertyValue<CWeakHandle<entEntity>>(value);
 		}
 	}
 }

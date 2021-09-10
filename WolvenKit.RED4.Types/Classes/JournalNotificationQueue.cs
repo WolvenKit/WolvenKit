@@ -5,286 +5,255 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class JournalNotificationQueue : gameuiGenericNotificationGameController
 	{
-		private CFloat _showDuration;
-		private CName _currencyNotification;
-		private CName _shardNotification;
-		private CName _itemNotification;
-		private CName _questNotification;
-		private CName _genericNotification;
-		private CName _messageNotification;
-		private CWeakHandle<gameJournalManager> _journalMgr;
-		private CWeakHandle<gameIBlackboard> _newAreablackboard;
-		private CHandle<UI_MapDef> _newAreaDef;
-		private CHandle<redCallbackObject> _newAreaID;
-		private CWeakHandle<gameIBlackboard> _tutorialBlackboard;
-		private CHandle<UIGameDataDef> _tutorialDef;
-		private CHandle<redCallbackObject> _tutorialID;
-		private CHandle<redCallbackObject> _tutorialDataID;
-		private CBool _isHiddenByTutorial;
-		private CHandle<redCallbackObject> _customQuestNotificationblackBoardID;
-		private CHandle<UI_CustomQuestNotificationDef> _customQuestNotificationblackboardDef;
-		private CWeakHandle<gameIBlackboard> _customQuestNotificationblackboard;
-		private CWeakHandle<gameTransactionSystem> _transactionSystem;
-		private CWeakHandle<gameObject> _playerPuppet;
-		private CWeakHandle<gameIBlackboard> _activeVehicleBlackboard;
-		private CHandle<redCallbackObject> _mountBBConnectionId;
-		private CBool _isPlayerMounted;
-		private CWeakHandle<gameIBlackboard> _blackboard;
-		private CHandle<UI_SystemDef> _uiSystemBB;
-		private CHandle<redCallbackObject> _uiSystemId;
-		private CHandle<redCallbackObject> _trackedMappinId;
-		private CHandle<gameuiGameSystemUI> _uiSystem;
-		private CWeakHandle<gameInventoryScriptListener> _shardTransactionListener;
-
 		[Ordinal(2)] 
 		[RED("showDuration")] 
 		public CFloat ShowDuration
 		{
-			get => GetProperty(ref _showDuration);
-			set => SetProperty(ref _showDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("currencyNotification")] 
 		public CName CurrencyNotification
 		{
-			get => GetProperty(ref _currencyNotification);
-			set => SetProperty(ref _currencyNotification, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("shardNotification")] 
 		public CName ShardNotification
 		{
-			get => GetProperty(ref _shardNotification);
-			set => SetProperty(ref _shardNotification, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("itemNotification")] 
 		public CName ItemNotification
 		{
-			get => GetProperty(ref _itemNotification);
-			set => SetProperty(ref _itemNotification, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("questNotification")] 
 		public CName QuestNotification
 		{
-			get => GetProperty(ref _questNotification);
-			set => SetProperty(ref _questNotification, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("genericNotification")] 
 		public CName GenericNotification
 		{
-			get => GetProperty(ref _genericNotification);
-			set => SetProperty(ref _genericNotification, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("messageNotification")] 
 		public CName MessageNotification
 		{
-			get => GetProperty(ref _messageNotification);
-			set => SetProperty(ref _messageNotification, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("journalMgr")] 
 		public CWeakHandle<gameJournalManager> JournalMgr
 		{
-			get => GetProperty(ref _journalMgr);
-			set => SetProperty(ref _journalMgr, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalManager>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("newAreablackboard")] 
 		public CWeakHandle<gameIBlackboard> NewAreablackboard
 		{
-			get => GetProperty(ref _newAreablackboard);
-			set => SetProperty(ref _newAreablackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("newAreaDef")] 
 		public CHandle<UI_MapDef> NewAreaDef
 		{
-			get => GetProperty(ref _newAreaDef);
-			set => SetProperty(ref _newAreaDef, value);
+			get => GetPropertyValue<CHandle<UI_MapDef>>();
+			set => SetPropertyValue<CHandle<UI_MapDef>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("newAreaID")] 
 		public CHandle<redCallbackObject> NewAreaID
 		{
-			get => GetProperty(ref _newAreaID);
-			set => SetProperty(ref _newAreaID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("tutorialBlackboard")] 
 		public CWeakHandle<gameIBlackboard> TutorialBlackboard
 		{
-			get => GetProperty(ref _tutorialBlackboard);
-			set => SetProperty(ref _tutorialBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("tutorialDef")] 
 		public CHandle<UIGameDataDef> TutorialDef
 		{
-			get => GetProperty(ref _tutorialDef);
-			set => SetProperty(ref _tutorialDef, value);
+			get => GetPropertyValue<CHandle<UIGameDataDef>>();
+			set => SetPropertyValue<CHandle<UIGameDataDef>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("tutorialID")] 
 		public CHandle<redCallbackObject> TutorialID
 		{
-			get => GetProperty(ref _tutorialID);
-			set => SetProperty(ref _tutorialID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("tutorialDataID")] 
 		public CHandle<redCallbackObject> TutorialDataID
 		{
-			get => GetProperty(ref _tutorialDataID);
-			set => SetProperty(ref _tutorialDataID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("isHiddenByTutorial")] 
 		public CBool IsHiddenByTutorial
 		{
-			get => GetProperty(ref _isHiddenByTutorial);
-			set => SetProperty(ref _isHiddenByTutorial, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("customQuestNotificationblackBoardID")] 
 		public CHandle<redCallbackObject> CustomQuestNotificationblackBoardID
 		{
-			get => GetProperty(ref _customQuestNotificationblackBoardID);
-			set => SetProperty(ref _customQuestNotificationblackBoardID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("customQuestNotificationblackboardDef")] 
 		public CHandle<UI_CustomQuestNotificationDef> CustomQuestNotificationblackboardDef
 		{
-			get => GetProperty(ref _customQuestNotificationblackboardDef);
-			set => SetProperty(ref _customQuestNotificationblackboardDef, value);
+			get => GetPropertyValue<CHandle<UI_CustomQuestNotificationDef>>();
+			set => SetPropertyValue<CHandle<UI_CustomQuestNotificationDef>>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("customQuestNotificationblackboard")] 
 		public CWeakHandle<gameIBlackboard> CustomQuestNotificationblackboard
 		{
-			get => GetProperty(ref _customQuestNotificationblackboard);
-			set => SetProperty(ref _customQuestNotificationblackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("transactionSystem")] 
 		public CWeakHandle<gameTransactionSystem> TransactionSystem
 		{
-			get => GetProperty(ref _transactionSystem);
-			set => SetProperty(ref _transactionSystem, value);
+			get => GetPropertyValue<CWeakHandle<gameTransactionSystem>>();
+			set => SetPropertyValue<CWeakHandle<gameTransactionSystem>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("playerPuppet")] 
 		public CWeakHandle<gameObject> PlayerPuppet
 		{
-			get => GetProperty(ref _playerPuppet);
-			set => SetProperty(ref _playerPuppet, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("activeVehicleBlackboard")] 
 		public CWeakHandle<gameIBlackboard> ActiveVehicleBlackboard
 		{
-			get => GetProperty(ref _activeVehicleBlackboard);
-			set => SetProperty(ref _activeVehicleBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("mountBBConnectionId")] 
 		public CHandle<redCallbackObject> MountBBConnectionId
 		{
-			get => GetProperty(ref _mountBBConnectionId);
-			set => SetProperty(ref _mountBBConnectionId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("isPlayerMounted")] 
 		public CBool IsPlayerMounted
 		{
-			get => GetProperty(ref _isPlayerMounted);
-			set => SetProperty(ref _isPlayerMounted, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("blackboard")] 
 		public CWeakHandle<gameIBlackboard> Blackboard
 		{
-			get => GetProperty(ref _blackboard);
-			set => SetProperty(ref _blackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("uiSystemBB")] 
 		public CHandle<UI_SystemDef> UiSystemBB
 		{
-			get => GetProperty(ref _uiSystemBB);
-			set => SetProperty(ref _uiSystemBB, value);
+			get => GetPropertyValue<CHandle<UI_SystemDef>>();
+			set => SetPropertyValue<CHandle<UI_SystemDef>>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("uiSystemId")] 
 		public CHandle<redCallbackObject> UiSystemId
 		{
-			get => GetProperty(ref _uiSystemId);
-			set => SetProperty(ref _uiSystemId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("trackedMappinId")] 
 		public CHandle<redCallbackObject> TrackedMappinId
 		{
-			get => GetProperty(ref _trackedMappinId);
-			set => SetProperty(ref _trackedMappinId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("uiSystem")] 
 		public CHandle<gameuiGameSystemUI> UiSystem
 		{
-			get => GetProperty(ref _uiSystem);
-			set => SetProperty(ref _uiSystem, value);
+			get => GetPropertyValue<CHandle<gameuiGameSystemUI>>();
+			set => SetPropertyValue<CHandle<gameuiGameSystemUI>>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("shardTransactionListener")] 
 		public CWeakHandle<gameInventoryScriptListener> ShardTransactionListener
 		{
-			get => GetProperty(ref _shardTransactionListener);
-			set => SetProperty(ref _shardTransactionListener, value);
+			get => GetPropertyValue<CWeakHandle<gameInventoryScriptListener>>();
+			set => SetPropertyValue<CWeakHandle<gameInventoryScriptListener>>(value);
 		}
 
 		public JournalNotificationQueue()
 		{
-			_showDuration = 6.000000F;
-			_currencyNotification = "notification_currency";
-			_shardNotification = "notification_shard";
-			_itemNotification = "Item_Received_SMALL";
-			_questNotification = "notification_quest";
-			_genericNotification = "notification";
-			_messageNotification = "notification_message";
+			ShowDuration = 6.000000F;
+			CurrencyNotification = "notification_currency";
+			ShardNotification = "notification_shard";
+			ItemNotification = "Item_Received_SMALL";
+			QuestNotification = "notification_quest";
+			GenericNotification = "notification";
+			MessageNotification = "notification_message";
 		}
 	}
 }

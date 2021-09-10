@@ -5,68 +5,67 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamesmartGunUIParameters : IScriptable
 	{
-		private CArray<gamesmartGunUITargetParameters> _targets;
-		private gamesmartGunUISightParameters _sight;
-		private Vector2 _crosshairPos;
-		private CBool _hasRequiredCyberware;
-		private CFloat _timeToRemoveOccludedTarget;
-		private CFloat _timeToLock;
-		private CFloat _timeToUnlock;
-
 		[Ordinal(0)] 
 		[RED("targets")] 
 		public CArray<gamesmartGunUITargetParameters> Targets
 		{
-			get => GetProperty(ref _targets);
-			set => SetProperty(ref _targets, value);
+			get => GetPropertyValue<CArray<gamesmartGunUITargetParameters>>();
+			set => SetPropertyValue<CArray<gamesmartGunUITargetParameters>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("sight")] 
 		public gamesmartGunUISightParameters Sight
 		{
-			get => GetProperty(ref _sight);
-			set => SetProperty(ref _sight, value);
+			get => GetPropertyValue<gamesmartGunUISightParameters>();
+			set => SetPropertyValue<gamesmartGunUISightParameters>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("crosshairPos")] 
 		public Vector2 CrosshairPos
 		{
-			get => GetProperty(ref _crosshairPos);
-			set => SetProperty(ref _crosshairPos, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("hasRequiredCyberware")] 
 		public CBool HasRequiredCyberware
 		{
-			get => GetProperty(ref _hasRequiredCyberware);
-			set => SetProperty(ref _hasRequiredCyberware, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("timeToRemoveOccludedTarget")] 
 		public CFloat TimeToRemoveOccludedTarget
 		{
-			get => GetProperty(ref _timeToRemoveOccludedTarget);
-			set => SetProperty(ref _timeToRemoveOccludedTarget, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("timeToLock")] 
 		public CFloat TimeToLock
 		{
-			get => GetProperty(ref _timeToLock);
-			set => SetProperty(ref _timeToLock, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("timeToUnlock")] 
 		public CFloat TimeToUnlock
 		{
-			get => GetProperty(ref _timeToUnlock);
-			set => SetProperty(ref _timeToUnlock, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public gamesmartGunUIParameters()
+		{
+			Targets = new();
+			Sight = new() { Center = new(), TargetableRegionSize = new(), ReticleSize = new() };
+			CrosshairPos = new();
 		}
 	}
 }

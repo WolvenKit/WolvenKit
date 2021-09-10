@@ -5,56 +5,51 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questEntityManagerSetStat_NodeType : questIEntityManager_NodeType
 	{
-		private gameEntityReference _objectRef;
-		private CBool _isPlayer;
-		private CEnum<gamedataStatType> _statType;
-		private CFloat _value;
-		private CBool _setExactValue;
-
 		[Ordinal(0)] 
 		[RED("objectRef")] 
 		public gameEntityReference ObjectRef
 		{
-			get => GetProperty(ref _objectRef);
-			set => SetProperty(ref _objectRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isPlayer")] 
 		public CBool IsPlayer
 		{
-			get => GetProperty(ref _isPlayer);
-			set => SetProperty(ref _isPlayer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("statType")] 
 		public CEnum<gamedataStatType> StatType
 		{
-			get => GetProperty(ref _statType);
-			set => SetProperty(ref _statType, value);
+			get => GetPropertyValue<CEnum<gamedataStatType>>();
+			set => SetPropertyValue<CEnum<gamedataStatType>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("value")] 
 		public CFloat Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("setExactValue")] 
 		public CBool SetExactValue
 		{
-			get => GetProperty(ref _setExactValue);
-			set => SetProperty(ref _setExactValue, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public questEntityManagerSetStat_NodeType()
 		{
-			_statType = new() { Value = Enums.gamedataStatType.Invalid };
-			_setExactValue = true;
+			ObjectRef = new() { Names = new() };
+			StatType = Enums.gamedataStatType.Invalid;
+			SetExactValue = true;
 		}
 	}
 }

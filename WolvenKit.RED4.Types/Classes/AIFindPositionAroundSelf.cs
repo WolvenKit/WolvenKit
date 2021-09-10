@@ -5,59 +5,57 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIFindPositionAroundSelf : AIbehaviortaskScript
 	{
-		private CHandle<AIArgumentMapping> _distanceMin;
-		private CHandle<AIArgumentMapping> _distanceMax;
-		private CFloat _angle;
-		private CFloat _angleOffset;
-		private CHandle<AIArgumentMapping> _outPositionArgument;
-		private Vector4 _finalPosition;
-
 		[Ordinal(0)] 
 		[RED("distanceMin")] 
 		public CHandle<AIArgumentMapping> DistanceMin
 		{
-			get => GetProperty(ref _distanceMin);
-			set => SetProperty(ref _distanceMin, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("distanceMax")] 
 		public CHandle<AIArgumentMapping> DistanceMax
 		{
-			get => GetProperty(ref _distanceMax);
-			set => SetProperty(ref _distanceMax, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("angle")] 
 		public CFloat Angle
 		{
-			get => GetProperty(ref _angle);
-			set => SetProperty(ref _angle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("angleOffset")] 
 		public CFloat AngleOffset
 		{
-			get => GetProperty(ref _angleOffset);
-			set => SetProperty(ref _angleOffset, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("outPositionArgument")] 
 		public CHandle<AIArgumentMapping> OutPositionArgument
 		{
-			get => GetProperty(ref _outPositionArgument);
-			set => SetProperty(ref _outPositionArgument, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("finalPosition")] 
 		public Vector4 FinalPosition
 		{
-			get => GetProperty(ref _finalPosition);
-			set => SetProperty(ref _finalPosition, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
+		}
+
+		public AIFindPositionAroundSelf()
+		{
+			FinalPosition = new();
 		}
 	}
 }

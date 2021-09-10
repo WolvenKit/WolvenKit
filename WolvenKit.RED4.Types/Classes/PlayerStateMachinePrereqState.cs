@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PlayerStateMachinePrereqState : gamePrereqState
 	{
-		private CWeakHandle<gameObject> _owner;
-		private CHandle<redCallbackObject> _listenerInt;
-		private CInt32 _prevValue;
-
 		[Ordinal(0)] 
 		[RED("owner")] 
 		public CWeakHandle<gameObject> Owner
 		{
-			get => GetProperty(ref _owner);
-			set => SetProperty(ref _owner, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("listenerInt")] 
 		public CHandle<redCallbackObject> ListenerInt
 		{
-			get => GetProperty(ref _listenerInt);
-			set => SetProperty(ref _listenerInt, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("prevValue")] 
 		public CInt32 PrevValue
 		{
-			get => GetProperty(ref _prevValue);
-			set => SetProperty(ref _prevValue, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

@@ -5,47 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VendorComponent : gameScriptableComponent
 	{
-		private TweakDBID _vendorTweakID;
-		private CArray<JunkItemRecord> _junkItemArray;
-		private CName _brandProcessingSFX;
-		private CName _itemFallSFX;
-
 		[Ordinal(5)] 
 		[RED("vendorTweakID")] 
 		public TweakDBID VendorTweakID
 		{
-			get => GetProperty(ref _vendorTweakID);
-			set => SetProperty(ref _vendorTweakID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("junkItemArray")] 
 		public CArray<JunkItemRecord> JunkItemArray
 		{
-			get => GetProperty(ref _junkItemArray);
-			set => SetProperty(ref _junkItemArray, value);
+			get => GetPropertyValue<CArray<JunkItemRecord>>();
+			set => SetPropertyValue<CArray<JunkItemRecord>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("brandProcessingSFX")] 
 		public CName BrandProcessingSFX
 		{
-			get => GetProperty(ref _brandProcessingSFX);
-			set => SetProperty(ref _brandProcessingSFX, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("itemFallSFX")] 
 		public CName ItemFallSFX
 		{
-			get => GetProperty(ref _itemFallSFX);
-			set => SetProperty(ref _itemFallSFX, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public VendorComponent()
 		{
-			_brandProcessingSFX = "dev_vending_machine_processing";
-			_itemFallSFX = "dev_vending_machine_can_falls";
+			JunkItemArray = new();
+			BrandProcessingSFX = "dev_vending_machine_processing";
+			ItemFallSFX = "dev_vending_machine_can_falls";
 		}
 	}
 }

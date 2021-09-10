@@ -5,47 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questShowOnscreen_NodeType : questIUIManagerNodeType
 	{
-		private CString _message;
-		private LocalizationString _localizedMessage;
-		private CFloat _duration;
-		private CBool _show;
-
 		[Ordinal(0)] 
 		[RED("message")] 
 		public CString Message
 		{
-			get => GetProperty(ref _message);
-			set => SetProperty(ref _message, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("localizedMessage")] 
 		public LocalizationString LocalizedMessage
 		{
-			get => GetProperty(ref _localizedMessage);
-			set => SetProperty(ref _localizedMessage, value);
+			get => GetPropertyValue<LocalizationString>();
+			set => SetPropertyValue<LocalizationString>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get => GetProperty(ref _duration);
-			set => SetProperty(ref _duration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("show")] 
 		public CBool Show
 		{
-			get => GetProperty(ref _show);
-			set => SetProperty(ref _show, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public questShowOnscreen_NodeType()
 		{
-			_duration = 3.000000F;
-			_show = true;
+			LocalizedMessage = new() { Unk1 = 0, Value = "" };
+			Duration = 3.000000F;
+			Show = true;
 		}
 	}
 }

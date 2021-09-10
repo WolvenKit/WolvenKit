@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scriptOptimizationsHandleWithValue : RedBaseClass
 	{
-		private CFloat _value;
-		private CHandle<IScriptable> _handle;
-
 		[Ordinal(0)] 
 		[RED("value")] 
 		public CFloat Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("handle")] 
 		public CHandle<IScriptable> Handle
 		{
-			get => GetProperty(ref _handle);
-			set => SetProperty(ref _handle, value);
+			get => GetPropertyValue<CHandle<IScriptable>>();
+			set => SetPropertyValue<CHandle<IScriptable>>(value);
 		}
 	}
 }

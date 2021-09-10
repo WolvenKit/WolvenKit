@@ -5,122 +5,119 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimSet : CResource
 	{
-		private CArray<CHandle<animAnimSetEntry>> _animations;
-		private CArray<animAnimDataChunk> _animationDataChunks;
-		private CArray<CUInt16> _fallbackDataAddresses;
-		private CArray<CUInt8> _fallbackDataAddressIndexes;
-		private CArray<animAnimFallbackFrameDesc> _fallbackAnimFrameDescs;
-		private CArray<CUInt8> _fallbackAnimDescIndexes;
-		private DataBuffer _fallbackAnimDataBuffer;
-		private CUInt16 _fallbackNumPositionData;
-		private CUInt16 _fallbackNumRotationData;
-		private CResourceReference<animRig> _rig;
-		private redTagList _tags;
-		private CResourceReference<CResource> _correspondingArchetype;
-		private CUInt32 _version;
-
 		[Ordinal(1)] 
 		[RED("animations")] 
 		public CArray<CHandle<animAnimSetEntry>> Animations
 		{
-			get => GetProperty(ref _animations);
-			set => SetProperty(ref _animations, value);
+			get => GetPropertyValue<CArray<CHandle<animAnimSetEntry>>>();
+			set => SetPropertyValue<CArray<CHandle<animAnimSetEntry>>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("animationDataChunks")] 
 		public CArray<animAnimDataChunk> AnimationDataChunks
 		{
-			get => GetProperty(ref _animationDataChunks);
-			set => SetProperty(ref _animationDataChunks, value);
+			get => GetPropertyValue<CArray<animAnimDataChunk>>();
+			set => SetPropertyValue<CArray<animAnimDataChunk>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("fallbackDataAddresses")] 
 		public CArray<CUInt16> FallbackDataAddresses
 		{
-			get => GetProperty(ref _fallbackDataAddresses);
-			set => SetProperty(ref _fallbackDataAddresses, value);
+			get => GetPropertyValue<CArray<CUInt16>>();
+			set => SetPropertyValue<CArray<CUInt16>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("fallbackDataAddressIndexes")] 
 		public CArray<CUInt8> FallbackDataAddressIndexes
 		{
-			get => GetProperty(ref _fallbackDataAddressIndexes);
-			set => SetProperty(ref _fallbackDataAddressIndexes, value);
+			get => GetPropertyValue<CArray<CUInt8>>();
+			set => SetPropertyValue<CArray<CUInt8>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("fallbackAnimFrameDescs")] 
 		public CArray<animAnimFallbackFrameDesc> FallbackAnimFrameDescs
 		{
-			get => GetProperty(ref _fallbackAnimFrameDescs);
-			set => SetProperty(ref _fallbackAnimFrameDescs, value);
+			get => GetPropertyValue<CArray<animAnimFallbackFrameDesc>>();
+			set => SetPropertyValue<CArray<animAnimFallbackFrameDesc>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("fallbackAnimDescIndexes")] 
 		public CArray<CUInt8> FallbackAnimDescIndexes
 		{
-			get => GetProperty(ref _fallbackAnimDescIndexes);
-			set => SetProperty(ref _fallbackAnimDescIndexes, value);
+			get => GetPropertyValue<CArray<CUInt8>>();
+			set => SetPropertyValue<CArray<CUInt8>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("fallbackAnimDataBuffer")] 
 		public DataBuffer FallbackAnimDataBuffer
 		{
-			get => GetProperty(ref _fallbackAnimDataBuffer);
-			set => SetProperty(ref _fallbackAnimDataBuffer, value);
+			get => GetPropertyValue<DataBuffer>();
+			set => SetPropertyValue<DataBuffer>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("fallbackNumPositionData")] 
 		public CUInt16 FallbackNumPositionData
 		{
-			get => GetProperty(ref _fallbackNumPositionData);
-			set => SetProperty(ref _fallbackNumPositionData, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("fallbackNumRotationData")] 
 		public CUInt16 FallbackNumRotationData
 		{
-			get => GetProperty(ref _fallbackNumRotationData);
-			set => SetProperty(ref _fallbackNumRotationData, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("rig")] 
 		public CResourceReference<animRig> Rig
 		{
-			get => GetProperty(ref _rig);
-			set => SetProperty(ref _rig, value);
+			get => GetPropertyValue<CResourceReference<animRig>>();
+			set => SetPropertyValue<CResourceReference<animRig>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("tags")] 
 		public redTagList Tags
 		{
-			get => GetProperty(ref _tags);
-			set => SetProperty(ref _tags, value);
+			get => GetPropertyValue<redTagList>();
+			set => SetPropertyValue<redTagList>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("correspondingArchetype")] 
 		public CResourceReference<CResource> CorrespondingArchetype
 		{
-			get => GetProperty(ref _correspondingArchetype);
-			set => SetProperty(ref _correspondingArchetype, value);
+			get => GetPropertyValue<CResourceReference<CResource>>();
+			set => SetPropertyValue<CResourceReference<CResource>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("version")] 
 		public CUInt32 Version
 		{
-			get => GetProperty(ref _version);
-			set => SetProperty(ref _version, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		public animAnimSet()
+		{
+			Animations = new();
+			AnimationDataChunks = new();
+			FallbackDataAddresses = new();
+			FallbackDataAddressIndexes = new();
+			FallbackAnimFrameDescs = new();
+			FallbackAnimDescIndexes = new();
+			Tags = new() { Tags = new() };
 		}
 	}
 }

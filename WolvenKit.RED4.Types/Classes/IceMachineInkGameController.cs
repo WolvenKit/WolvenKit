@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class IceMachineInkGameController : DeviceInkGameControllerBase
 	{
-		private inkWidgetReference _buttonContainer;
-
 		[Ordinal(16)] 
 		[RED("buttonContainer")] 
 		public inkWidgetReference ButtonContainer
 		{
-			get => GetProperty(ref _buttonContainer);
-			set => SetProperty(ref _buttonContainer, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		public IceMachineInkGameController()
+		{
+			ButtonContainer = new();
 		}
 	}
 }

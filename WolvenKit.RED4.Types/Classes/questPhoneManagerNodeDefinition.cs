@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questPhoneManagerNodeDefinition : questSignalStoppingNodeDefinition
 	{
-		private CHandle<questIPhoneManagerNodeType> _type;
-
 		[Ordinal(2)] 
 		[RED("type")] 
 		public CHandle<questIPhoneManagerNodeType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CHandle<questIPhoneManagerNodeType>>();
+			set => SetPropertyValue<CHandle<questIPhoneManagerNodeType>>(value);
+		}
+
+		public questPhoneManagerNodeDefinition()
+		{
+			Sockets = new();
+			Id = 65535;
 		}
 	}
 }

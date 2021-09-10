@@ -5,274 +5,258 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class NetworkInkGameController : gameuiWidgetGameController
 	{
-		private CString _turn;
-		private CInt32 _dimension;
-		private CInt32 _steps;
-		private CArray<CString> _symbols;
-		private CArray<CInt32> _symbolProbabilities;
-		private CBool _endGame;
-		private CBool _initRound;
-		private CInt32 _oldPickX;
-		private CInt32 _oldPickY;
-		private CInt32 _pickX;
-		private CInt32 _pickY;
-		private CBool _regenGrid;
-		private CArray<CString> _trapsDelayed;
-		private NetworkMinigameData _networkData;
-		private CWeakHandle<NetworkMinigameVisualController> _visualController;
-		private CWeakHandle<gamedataHackingMiniGame_Record> _miniGameRecord;
-		private CBool _officerBreach;
-		private CArray<ElementData> _bufferElements;
-		private CArray<ElementData> _enemyBufferElements;
-		private CArray<CString> _completedPrograms;
-		private CArray<ProgramData> _completedProgramsPD;
-		private CArray<CString> _enemyCompletedPrograms;
-		private CArray<ProgramData> _enemyCompletedProgramsPD;
-		private CArray<ProgramProgressData> _playerProgramsCompletion;
-		private CArray<ProgramProgressData> _enemyProgramsCompletion;
-		private ProgramProgressData _basicAccessCompletion;
-		private CArray<CEnum<ExtraEffect>> _appliedViruses;
-		private CHandle<redCallbackObject> _onBreachingNetworkListener;
-		private CHandle<redCallbackObject> _onDevicesCountChangedListener;
-
 		[Ordinal(2)] 
 		[RED("turn")] 
 		public CString Turn
 		{
-			get => GetProperty(ref _turn);
-			set => SetProperty(ref _turn, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("dimension")] 
 		public CInt32 Dimension
 		{
-			get => GetProperty(ref _dimension);
-			set => SetProperty(ref _dimension, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("steps")] 
 		public CInt32 Steps
 		{
-			get => GetProperty(ref _steps);
-			set => SetProperty(ref _steps, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("symbols")] 
 		public CArray<CString> Symbols
 		{
-			get => GetProperty(ref _symbols);
-			set => SetProperty(ref _symbols, value);
+			get => GetPropertyValue<CArray<CString>>();
+			set => SetPropertyValue<CArray<CString>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("symbolProbabilities")] 
 		public CArray<CInt32> SymbolProbabilities
 		{
-			get => GetProperty(ref _symbolProbabilities);
-			set => SetProperty(ref _symbolProbabilities, value);
+			get => GetPropertyValue<CArray<CInt32>>();
+			set => SetPropertyValue<CArray<CInt32>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("endGame")] 
 		public CBool EndGame
 		{
-			get => GetProperty(ref _endGame);
-			set => SetProperty(ref _endGame, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("initRound")] 
 		public CBool InitRound
 		{
-			get => GetProperty(ref _initRound);
-			set => SetProperty(ref _initRound, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("oldPickX")] 
 		public CInt32 OldPickX
 		{
-			get => GetProperty(ref _oldPickX);
-			set => SetProperty(ref _oldPickX, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("oldPickY")] 
 		public CInt32 OldPickY
 		{
-			get => GetProperty(ref _oldPickY);
-			set => SetProperty(ref _oldPickY, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("pickX")] 
 		public CInt32 PickX
 		{
-			get => GetProperty(ref _pickX);
-			set => SetProperty(ref _pickX, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("pickY")] 
 		public CInt32 PickY
 		{
-			get => GetProperty(ref _pickY);
-			set => SetProperty(ref _pickY, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("regenGrid")] 
 		public CBool RegenGrid
 		{
-			get => GetProperty(ref _regenGrid);
-			set => SetProperty(ref _regenGrid, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("trapsDelayed")] 
 		public CArray<CString> TrapsDelayed
 		{
-			get => GetProperty(ref _trapsDelayed);
-			set => SetProperty(ref _trapsDelayed, value);
+			get => GetPropertyValue<CArray<CString>>();
+			set => SetPropertyValue<CArray<CString>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("networkData")] 
 		public NetworkMinigameData NetworkData
 		{
-			get => GetProperty(ref _networkData);
-			set => SetProperty(ref _networkData, value);
+			get => GetPropertyValue<NetworkMinigameData>();
+			set => SetPropertyValue<NetworkMinigameData>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("visualController")] 
 		public CWeakHandle<NetworkMinigameVisualController> VisualController
 		{
-			get => GetProperty(ref _visualController);
-			set => SetProperty(ref _visualController, value);
+			get => GetPropertyValue<CWeakHandle<NetworkMinigameVisualController>>();
+			set => SetPropertyValue<CWeakHandle<NetworkMinigameVisualController>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("miniGameRecord")] 
 		public CWeakHandle<gamedataHackingMiniGame_Record> MiniGameRecord
 		{
-			get => GetProperty(ref _miniGameRecord);
-			set => SetProperty(ref _miniGameRecord, value);
+			get => GetPropertyValue<CWeakHandle<gamedataHackingMiniGame_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataHackingMiniGame_Record>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("officerBreach")] 
 		public CBool OfficerBreach
 		{
-			get => GetProperty(ref _officerBreach);
-			set => SetProperty(ref _officerBreach, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("bufferElements")] 
 		public CArray<ElementData> BufferElements
 		{
-			get => GetProperty(ref _bufferElements);
-			set => SetProperty(ref _bufferElements, value);
+			get => GetPropertyValue<CArray<ElementData>>();
+			set => SetPropertyValue<CArray<ElementData>>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("enemyBufferElements")] 
 		public CArray<ElementData> EnemyBufferElements
 		{
-			get => GetProperty(ref _enemyBufferElements);
-			set => SetProperty(ref _enemyBufferElements, value);
+			get => GetPropertyValue<CArray<ElementData>>();
+			set => SetPropertyValue<CArray<ElementData>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("completedPrograms")] 
 		public CArray<CString> CompletedPrograms
 		{
-			get => GetProperty(ref _completedPrograms);
-			set => SetProperty(ref _completedPrograms, value);
+			get => GetPropertyValue<CArray<CString>>();
+			set => SetPropertyValue<CArray<CString>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("completedProgramsPD")] 
 		public CArray<ProgramData> CompletedProgramsPD
 		{
-			get => GetProperty(ref _completedProgramsPD);
-			set => SetProperty(ref _completedProgramsPD, value);
+			get => GetPropertyValue<CArray<ProgramData>>();
+			set => SetPropertyValue<CArray<ProgramData>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("enemyCompletedPrograms")] 
 		public CArray<CString> EnemyCompletedPrograms
 		{
-			get => GetProperty(ref _enemyCompletedPrograms);
-			set => SetProperty(ref _enemyCompletedPrograms, value);
+			get => GetPropertyValue<CArray<CString>>();
+			set => SetPropertyValue<CArray<CString>>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("enemyCompletedProgramsPD")] 
 		public CArray<ProgramData> EnemyCompletedProgramsPD
 		{
-			get => GetProperty(ref _enemyCompletedProgramsPD);
-			set => SetProperty(ref _enemyCompletedProgramsPD, value);
+			get => GetPropertyValue<CArray<ProgramData>>();
+			set => SetPropertyValue<CArray<ProgramData>>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("playerProgramsCompletion")] 
 		public CArray<ProgramProgressData> PlayerProgramsCompletion
 		{
-			get => GetProperty(ref _playerProgramsCompletion);
-			set => SetProperty(ref _playerProgramsCompletion, value);
+			get => GetPropertyValue<CArray<ProgramProgressData>>();
+			set => SetPropertyValue<CArray<ProgramProgressData>>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("enemyProgramsCompletion")] 
 		public CArray<ProgramProgressData> EnemyProgramsCompletion
 		{
-			get => GetProperty(ref _enemyProgramsCompletion);
-			set => SetProperty(ref _enemyProgramsCompletion, value);
+			get => GetPropertyValue<CArray<ProgramProgressData>>();
+			set => SetPropertyValue<CArray<ProgramProgressData>>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("basicAccessCompletion")] 
 		public ProgramProgressData BasicAccessCompletion
 		{
-			get => GetProperty(ref _basicAccessCompletion);
-			set => SetProperty(ref _basicAccessCompletion, value);
+			get => GetPropertyValue<ProgramProgressData>();
+			set => SetPropertyValue<ProgramProgressData>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("appliedViruses")] 
 		public CArray<CEnum<ExtraEffect>> AppliedViruses
 		{
-			get => GetProperty(ref _appliedViruses);
-			set => SetProperty(ref _appliedViruses, value);
+			get => GetPropertyValue<CArray<CEnum<ExtraEffect>>>();
+			set => SetPropertyValue<CArray<CEnum<ExtraEffect>>>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("onBreachingNetworkListener")] 
 		public CHandle<redCallbackObject> OnBreachingNetworkListener
 		{
-			get => GetProperty(ref _onBreachingNetworkListener);
-			set => SetProperty(ref _onBreachingNetworkListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("onDevicesCountChangedListener")] 
 		public CHandle<redCallbackObject> OnDevicesCountChangedListener
 		{
-			get => GetProperty(ref _onDevicesCountChangedListener);
-			set => SetProperty(ref _onDevicesCountChangedListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		public NetworkInkGameController()
 		{
-			_turn = new() { Text = "Initial" };
-			_dimension = 5;
-			_steps = 6;
-			_initRound = true;
+			Turn = "Initial";
+			Dimension = 5;
+			Steps = 6;
+			Symbols = new();
+			SymbolProbabilities = new();
+			InitRound = true;
+			TrapsDelayed = new();
+			NetworkData = new() { GridData = new(), BasicAccess = new() { CommandLists = new(), Effects = new() }, PlayerPrograms = new(), EnemyLockNetwork = new() { CommandLists = new(), Effects = new() }, EnemyPrograms = new() };
+			BufferElements = new();
+			EnemyBufferElements = new();
+			CompletedPrograms = new();
+			CompletedProgramsPD = new();
+			EnemyCompletedPrograms = new();
+			EnemyCompletedProgramsPD = new();
+			PlayerProgramsCompletion = new();
+			EnemyProgramsCompletion = new();
+			BasicAccessCompletion = new() { CompletionProgress = new() };
+			AppliedViruses = new();
 		}
 	}
 }

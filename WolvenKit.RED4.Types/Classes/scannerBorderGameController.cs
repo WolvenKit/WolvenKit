@@ -5,464 +5,437 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scannerBorderGameController : gameuiProjectedHUDGameController
 	{
-		private inkCompoundWidgetReference _zoomMovingContainer;
-		private inkCompoundWidgetReference _distanceMovingContainer;
-		private inkCompoundWidgetReference _distanceParentContainer;
-		private inkCompoundWidgetReference _crosshairProjection;
-		private inkCompoundWidgetReference _loadingBarCanvas;
-		private inkCompoundWidgetReference _crosshairContainer;
-		private inkTextWidgetReference _zoomNumber;
-		private inkTextWidgetReference _distanceNumber;
-		private inkImageWidgetReference _distanceImageRuler;
-		private inkImageWidgetReference _zoomMoveBracketL;
-		private inkImageWidgetReference _zoomMoveBracketR;
-		private inkCompoundWidgetReference _scannerBarWidget;
-		private inkTextWidgetReference _scannerBarFluffText;
-		private inkImageWidgetReference _scannerBarFill;
-		private CArray<inkWidgetReference> _deviceFluffs;
-		private CHandle<inkanimProxy> _lockOnAnimProxy;
-		private CHandle<inkanimProxy> _idleAnimProxy;
-		private CHandle<inkanimProxy> _bracketsAppearAnimProxy;
-		private CBool _lockOutAnimWasPlayed;
-		private CWeakHandle<inkCompoundWidget> _root;
-		private entEntityID _currentTarget;
-		private CBool _isTakeControllActive;
-		private CWeakHandle<gameObject> _ownerObject;
-		private entEntityID _currentTargetBuffered;
-		private scannerDataStructure _scannerData;
-		private CBool _shouldShowScanner;
-		private CBool _isFullyScanned;
-		private CWeakHandle<ScannerCrosshairLogicController> _projectionLogicController;
-		private Vector2 _originalScannerBarFillSize;
-		private CHandle<inkanimProxy> _zoomUpAnim;
-		private CHandle<inkanimProxy> _animLockOn;
-		private CHandle<inkanimProxy> _zoomDownAnim;
-		private CHandle<inkanimProxy> _animLockOff;
-		private CHandle<inkanimProxy> _exclusiveFocusAnim;
-		private CBool _isExclusiveFocus;
-		private CFloat _argZoomBuffered;
-		private CArray<CWeakHandle<inkImageWidget>> _squares;
-		private CArray<CWeakHandle<inkImageWidget>> _squaresFilled;
-		private CWeakHandle<gameIBlackboard> _scanBlackboard;
-		private CWeakHandle<gameIBlackboard> _psmBlackboard;
-		private CWeakHandle<gameIBlackboard> _tcsBlackboard;
-		private CHandle<redCallbackObject> _bBID_ScanObject;
-		private CHandle<redCallbackObject> _bBID_ScanObject_Data;
-		private CHandle<redCallbackObject> _bBID_ScanObject_Position;
-		private CHandle<redCallbackObject> _bBID_ScanState;
-		private CHandle<redCallbackObject> _bBID_ProgressNum;
-		private CHandle<redCallbackObject> _bBID_ProgressText;
-		private CHandle<redCallbackObject> _bBID_ExclusiveFocus;
-		private CHandle<redCallbackObject> _pSM_BBID;
-		private CHandle<redCallbackObject> _tcs_BBID;
-		private CHandle<redCallbackObject> _visionStateBlackboardId;
-
 		[Ordinal(9)] 
 		[RED("ZoomMovingContainer")] 
 		public inkCompoundWidgetReference ZoomMovingContainer
 		{
-			get => GetProperty(ref _zoomMovingContainer);
-			set => SetProperty(ref _zoomMovingContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("DistanceMovingContainer")] 
 		public inkCompoundWidgetReference DistanceMovingContainer
 		{
-			get => GetProperty(ref _distanceMovingContainer);
-			set => SetProperty(ref _distanceMovingContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("DistanceParentContainer")] 
 		public inkCompoundWidgetReference DistanceParentContainer
 		{
-			get => GetProperty(ref _distanceParentContainer);
-			set => SetProperty(ref _distanceParentContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("CrosshairProjection")] 
 		public inkCompoundWidgetReference CrosshairProjection
 		{
-			get => GetProperty(ref _crosshairProjection);
-			set => SetProperty(ref _crosshairProjection, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("loadingBarCanvas")] 
 		public inkCompoundWidgetReference LoadingBarCanvas
 		{
-			get => GetProperty(ref _loadingBarCanvas);
-			set => SetProperty(ref _loadingBarCanvas, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("crosshairContainer")] 
 		public inkCompoundWidgetReference CrosshairContainer
 		{
-			get => GetProperty(ref _crosshairContainer);
-			set => SetProperty(ref _crosshairContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("ZoomNumber")] 
 		public inkTextWidgetReference ZoomNumber
 		{
-			get => GetProperty(ref _zoomNumber);
-			set => SetProperty(ref _zoomNumber, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("DistanceNumber")] 
 		public inkTextWidgetReference DistanceNumber
 		{
-			get => GetProperty(ref _distanceNumber);
-			set => SetProperty(ref _distanceNumber, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("DistanceImageRuler")] 
 		public inkImageWidgetReference DistanceImageRuler
 		{
-			get => GetProperty(ref _distanceImageRuler);
-			set => SetProperty(ref _distanceImageRuler, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("ZoomMoveBracketL")] 
 		public inkImageWidgetReference ZoomMoveBracketL
 		{
-			get => GetProperty(ref _zoomMoveBracketL);
-			set => SetProperty(ref _zoomMoveBracketL, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("ZoomMoveBracketR")] 
 		public inkImageWidgetReference ZoomMoveBracketR
 		{
-			get => GetProperty(ref _zoomMoveBracketR);
-			set => SetProperty(ref _zoomMoveBracketR, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("scannerBarWidget")] 
 		public inkCompoundWidgetReference ScannerBarWidget
 		{
-			get => GetProperty(ref _scannerBarWidget);
-			set => SetProperty(ref _scannerBarWidget, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("scannerBarFluffText")] 
 		public inkTextWidgetReference ScannerBarFluffText
 		{
-			get => GetProperty(ref _scannerBarFluffText);
-			set => SetProperty(ref _scannerBarFluffText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("scannerBarFill")] 
 		public inkImageWidgetReference ScannerBarFill
 		{
-			get => GetProperty(ref _scannerBarFill);
-			set => SetProperty(ref _scannerBarFill, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("deviceFluffs")] 
 		public CArray<inkWidgetReference> DeviceFluffs
 		{
-			get => GetProperty(ref _deviceFluffs);
-			set => SetProperty(ref _deviceFluffs, value);
+			get => GetPropertyValue<CArray<inkWidgetReference>>();
+			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("LockOnAnimProxy")] 
 		public CHandle<inkanimProxy> LockOnAnimProxy
 		{
-			get => GetProperty(ref _lockOnAnimProxy);
-			set => SetProperty(ref _lockOnAnimProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("IdleAnimProxy")] 
 		public CHandle<inkanimProxy> IdleAnimProxy
 		{
-			get => GetProperty(ref _idleAnimProxy);
-			set => SetProperty(ref _idleAnimProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("BracketsAppearAnimProxy")] 
 		public CHandle<inkanimProxy> BracketsAppearAnimProxy
 		{
-			get => GetProperty(ref _bracketsAppearAnimProxy);
-			set => SetProperty(ref _bracketsAppearAnimProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("lockOutAnimWasPlayed")] 
 		public CBool LockOutAnimWasPlayed
 		{
-			get => GetProperty(ref _lockOutAnimWasPlayed);
-			set => SetProperty(ref _lockOutAnimWasPlayed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("root")] 
 		public CWeakHandle<inkCompoundWidget> Root
 		{
-			get => GetProperty(ref _root);
-			set => SetProperty(ref _root, value);
+			get => GetPropertyValue<CWeakHandle<inkCompoundWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkCompoundWidget>>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("currentTarget")] 
 		public entEntityID CurrentTarget
 		{
-			get => GetProperty(ref _currentTarget);
-			set => SetProperty(ref _currentTarget, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("isTakeControllActive")] 
 		public CBool IsTakeControllActive
 		{
-			get => GetProperty(ref _isTakeControllActive);
-			set => SetProperty(ref _isTakeControllActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("ownerObject")] 
 		public CWeakHandle<gameObject> OwnerObject
 		{
-			get => GetProperty(ref _ownerObject);
-			set => SetProperty(ref _ownerObject, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("currentTargetBuffered")] 
 		public entEntityID CurrentTargetBuffered
 		{
-			get => GetProperty(ref _currentTargetBuffered);
-			set => SetProperty(ref _currentTargetBuffered, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("scannerData")] 
 		public scannerDataStructure ScannerData
 		{
-			get => GetProperty(ref _scannerData);
-			set => SetProperty(ref _scannerData, value);
+			get => GetPropertyValue<scannerDataStructure>();
+			set => SetPropertyValue<scannerDataStructure>(value);
 		}
 
 		[Ordinal(34)] 
 		[RED("shouldShowScanner")] 
 		public CBool ShouldShowScanner
 		{
-			get => GetProperty(ref _shouldShowScanner);
-			set => SetProperty(ref _shouldShowScanner, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(35)] 
 		[RED("isFullyScanned")] 
 		public CBool IsFullyScanned
 		{
-			get => GetProperty(ref _isFullyScanned);
-			set => SetProperty(ref _isFullyScanned, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(36)] 
 		[RED("ProjectionLogicController")] 
 		public CWeakHandle<ScannerCrosshairLogicController> ProjectionLogicController
 		{
-			get => GetProperty(ref _projectionLogicController);
-			set => SetProperty(ref _projectionLogicController, value);
+			get => GetPropertyValue<CWeakHandle<ScannerCrosshairLogicController>>();
+			set => SetPropertyValue<CWeakHandle<ScannerCrosshairLogicController>>(value);
 		}
 
 		[Ordinal(37)] 
 		[RED("OriginalScannerBarFillSize")] 
 		public Vector2 OriginalScannerBarFillSize
 		{
-			get => GetProperty(ref _originalScannerBarFillSize);
-			set => SetProperty(ref _originalScannerBarFillSize, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(38)] 
 		[RED("zoomUpAnim")] 
 		public CHandle<inkanimProxy> ZoomUpAnim
 		{
-			get => GetProperty(ref _zoomUpAnim);
-			set => SetProperty(ref _zoomUpAnim, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(39)] 
 		[RED("animLockOn")] 
 		public CHandle<inkanimProxy> AnimLockOn
 		{
-			get => GetProperty(ref _animLockOn);
-			set => SetProperty(ref _animLockOn, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(40)] 
 		[RED("zoomDownAnim")] 
 		public CHandle<inkanimProxy> ZoomDownAnim
 		{
-			get => GetProperty(ref _zoomDownAnim);
-			set => SetProperty(ref _zoomDownAnim, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(41)] 
 		[RED("animLockOff")] 
 		public CHandle<inkanimProxy> AnimLockOff
 		{
-			get => GetProperty(ref _animLockOff);
-			set => SetProperty(ref _animLockOff, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(42)] 
 		[RED("exclusiveFocusAnim")] 
 		public CHandle<inkanimProxy> ExclusiveFocusAnim
 		{
-			get => GetProperty(ref _exclusiveFocusAnim);
-			set => SetProperty(ref _exclusiveFocusAnim, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(43)] 
 		[RED("isExclusiveFocus")] 
 		public CBool IsExclusiveFocus
 		{
-			get => GetProperty(ref _isExclusiveFocus);
-			set => SetProperty(ref _isExclusiveFocus, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(44)] 
 		[RED("argZoomBuffered")] 
 		public CFloat ArgZoomBuffered
 		{
-			get => GetProperty(ref _argZoomBuffered);
-			set => SetProperty(ref _argZoomBuffered, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(45)] 
 		[RED("squares")] 
 		public CArray<CWeakHandle<inkImageWidget>> Squares
 		{
-			get => GetProperty(ref _squares);
-			set => SetProperty(ref _squares, value);
+			get => GetPropertyValue<CArray<CWeakHandle<inkImageWidget>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<inkImageWidget>>>(value);
 		}
 
 		[Ordinal(46)] 
 		[RED("squaresFilled")] 
 		public CArray<CWeakHandle<inkImageWidget>> SquaresFilled
 		{
-			get => GetProperty(ref _squaresFilled);
-			set => SetProperty(ref _squaresFilled, value);
+			get => GetPropertyValue<CArray<CWeakHandle<inkImageWidget>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<inkImageWidget>>>(value);
 		}
 
 		[Ordinal(47)] 
 		[RED("scanBlackboard")] 
 		public CWeakHandle<gameIBlackboard> ScanBlackboard
 		{
-			get => GetProperty(ref _scanBlackboard);
-			set => SetProperty(ref _scanBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(48)] 
 		[RED("psmBlackboard")] 
 		public CWeakHandle<gameIBlackboard> PsmBlackboard
 		{
-			get => GetProperty(ref _psmBlackboard);
-			set => SetProperty(ref _psmBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(49)] 
 		[RED("tcsBlackboard")] 
 		public CWeakHandle<gameIBlackboard> TcsBlackboard
 		{
-			get => GetProperty(ref _tcsBlackboard);
-			set => SetProperty(ref _tcsBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(50)] 
 		[RED("BBID_ScanObject")] 
 		public CHandle<redCallbackObject> BBID_ScanObject
 		{
-			get => GetProperty(ref _bBID_ScanObject);
-			set => SetProperty(ref _bBID_ScanObject, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(51)] 
 		[RED("BBID_ScanObject_Data")] 
 		public CHandle<redCallbackObject> BBID_ScanObject_Data
 		{
-			get => GetProperty(ref _bBID_ScanObject_Data);
-			set => SetProperty(ref _bBID_ScanObject_Data, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(52)] 
 		[RED("BBID_ScanObject_Position")] 
 		public CHandle<redCallbackObject> BBID_ScanObject_Position
 		{
-			get => GetProperty(ref _bBID_ScanObject_Position);
-			set => SetProperty(ref _bBID_ScanObject_Position, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(53)] 
 		[RED("BBID_ScanState")] 
 		public CHandle<redCallbackObject> BBID_ScanState
 		{
-			get => GetProperty(ref _bBID_ScanState);
-			set => SetProperty(ref _bBID_ScanState, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(54)] 
 		[RED("BBID_ProgressNum")] 
 		public CHandle<redCallbackObject> BBID_ProgressNum
 		{
-			get => GetProperty(ref _bBID_ProgressNum);
-			set => SetProperty(ref _bBID_ProgressNum, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(55)] 
 		[RED("BBID_ProgressText")] 
 		public CHandle<redCallbackObject> BBID_ProgressText
 		{
-			get => GetProperty(ref _bBID_ProgressText);
-			set => SetProperty(ref _bBID_ProgressText, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(56)] 
 		[RED("BBID_ExclusiveFocus")] 
 		public CHandle<redCallbackObject> BBID_ExclusiveFocus
 		{
-			get => GetProperty(ref _bBID_ExclusiveFocus);
-			set => SetProperty(ref _bBID_ExclusiveFocus, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(57)] 
 		[RED("PSM_BBID")] 
 		public CHandle<redCallbackObject> PSM_BBID
 		{
-			get => GetProperty(ref _pSM_BBID);
-			set => SetProperty(ref _pSM_BBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(58)] 
 		[RED("tcs_BBID")] 
 		public CHandle<redCallbackObject> Tcs_BBID
 		{
-			get => GetProperty(ref _tcs_BBID);
-			set => SetProperty(ref _tcs_BBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(59)] 
 		[RED("VisionStateBlackboardId")] 
 		public CHandle<redCallbackObject> VisionStateBlackboardId
 		{
-			get => GetProperty(ref _visionStateBlackboardId);
-			set => SetProperty(ref _visionStateBlackboardId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		public scannerBorderGameController()
+		{
+			ZoomMovingContainer = new();
+			DistanceMovingContainer = new();
+			DistanceParentContainer = new();
+			CrosshairProjection = new();
+			LoadingBarCanvas = new();
+			CrosshairContainer = new();
+			ZoomNumber = new();
+			DistanceNumber = new();
+			DistanceImageRuler = new();
+			ZoomMoveBracketL = new();
+			ZoomMoveBracketR = new();
+			ScannerBarWidget = new();
+			ScannerBarFluffText = new();
+			ScannerBarFill = new();
+			DeviceFluffs = new();
+			CurrentTarget = new();
+			CurrentTargetBuffered = new();
+			ScannerData = new() { QuestEntries = new() };
+			OriginalScannerBarFillSize = new();
+			Squares = new();
+			SquaresFilled = new();
 		}
 	}
 }

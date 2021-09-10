@@ -5,57 +5,56 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entDebug_ShapeComponent : entIVisualComponent
 	{
-		private CEnum<entDebug_ShapeType> _shape;
-		private CFloat _radius;
-		private CFloat _halfHeight;
-		private CColor _color;
-		private CBool _isEnabled;
-
 		[Ordinal(8)] 
 		[RED("shape")] 
 		public CEnum<entDebug_ShapeType> Shape
 		{
-			get => GetProperty(ref _shape);
-			set => SetProperty(ref _shape, value);
+			get => GetPropertyValue<CEnum<entDebug_ShapeType>>();
+			set => SetPropertyValue<CEnum<entDebug_ShapeType>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get => GetProperty(ref _radius);
-			set => SetProperty(ref _radius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("halfHeight")] 
 		public CFloat HalfHeight
 		{
-			get => GetProperty(ref _halfHeight);
-			set => SetProperty(ref _halfHeight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("color")] 
 		public CColor Color
 		{
-			get => GetProperty(ref _color);
-			set => SetProperty(ref _color, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public entDebug_ShapeComponent()
 		{
-			_radius = 0.500000F;
-			_halfHeight = 0.500000F;
-			_isEnabled = true;
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
+			ForceLODLevel = -1;
+			Radius = 0.500000F;
+			HalfHeight = 0.500000F;
+			Color = new();
+			IsEnabled = true;
 		}
 	}
 }

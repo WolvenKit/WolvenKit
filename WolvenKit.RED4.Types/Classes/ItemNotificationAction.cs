@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ItemNotificationAction : GenericNotificationBaseAction
 	{
-		private CWeakHandle<worlduiIWidgetGameController> _eventDispatcher;
-
 		[Ordinal(0)] 
 		[RED("eventDispatcher")] 
 		public CWeakHandle<worlduiIWidgetGameController> EventDispatcher
 		{
-			get => GetProperty(ref _eventDispatcher);
-			set => SetProperty(ref _eventDispatcher, value);
+			get => GetPropertyValue<CWeakHandle<worlduiIWidgetGameController>>();
+			set => SetPropertyValue<CWeakHandle<worlduiIWidgetGameController>>(value);
 		}
 	}
 }

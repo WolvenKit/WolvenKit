@@ -5,104 +5,107 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioFoleyNPCMetadata : audioAudioMetadata
 	{
-		private audioMeleeSound _fastHeavy;
-		private audioMeleeSound _fastMedium;
-		private audioMeleeSound _fastLight;
-		private audioMeleeSound _normalHeavy;
-		private audioMeleeSound _normalMedium;
-		private audioMeleeSound _normalLight;
-		private audioMeleeSound _slowHeavy;
-		private audioMeleeSound _slowMedium;
-		private audioMeleeSound _slowLight;
-		private audioMeleeSound _walk;
-		private audioMeleeSound _run;
-
 		[Ordinal(1)] 
 		[RED("fastHeavy")] 
 		public audioMeleeSound FastHeavy
 		{
-			get => GetProperty(ref _fastHeavy);
-			set => SetProperty(ref _fastHeavy, value);
+			get => GetPropertyValue<audioMeleeSound>();
+			set => SetPropertyValue<audioMeleeSound>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("fastMedium")] 
 		public audioMeleeSound FastMedium
 		{
-			get => GetProperty(ref _fastMedium);
-			set => SetProperty(ref _fastMedium, value);
+			get => GetPropertyValue<audioMeleeSound>();
+			set => SetPropertyValue<audioMeleeSound>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("fastLight")] 
 		public audioMeleeSound FastLight
 		{
-			get => GetProperty(ref _fastLight);
-			set => SetProperty(ref _fastLight, value);
+			get => GetPropertyValue<audioMeleeSound>();
+			set => SetPropertyValue<audioMeleeSound>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("normalHeavy")] 
 		public audioMeleeSound NormalHeavy
 		{
-			get => GetProperty(ref _normalHeavy);
-			set => SetProperty(ref _normalHeavy, value);
+			get => GetPropertyValue<audioMeleeSound>();
+			set => SetPropertyValue<audioMeleeSound>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("normalMedium")] 
 		public audioMeleeSound NormalMedium
 		{
-			get => GetProperty(ref _normalMedium);
-			set => SetProperty(ref _normalMedium, value);
+			get => GetPropertyValue<audioMeleeSound>();
+			set => SetPropertyValue<audioMeleeSound>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("normalLight")] 
 		public audioMeleeSound NormalLight
 		{
-			get => GetProperty(ref _normalLight);
-			set => SetProperty(ref _normalLight, value);
+			get => GetPropertyValue<audioMeleeSound>();
+			set => SetPropertyValue<audioMeleeSound>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("slowHeavy")] 
 		public audioMeleeSound SlowHeavy
 		{
-			get => GetProperty(ref _slowHeavy);
-			set => SetProperty(ref _slowHeavy, value);
+			get => GetPropertyValue<audioMeleeSound>();
+			set => SetPropertyValue<audioMeleeSound>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("slowMedium")] 
 		public audioMeleeSound SlowMedium
 		{
-			get => GetProperty(ref _slowMedium);
-			set => SetProperty(ref _slowMedium, value);
+			get => GetPropertyValue<audioMeleeSound>();
+			set => SetPropertyValue<audioMeleeSound>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("slowLight")] 
 		public audioMeleeSound SlowLight
 		{
-			get => GetProperty(ref _slowLight);
-			set => SetProperty(ref _slowLight, value);
+			get => GetPropertyValue<audioMeleeSound>();
+			set => SetPropertyValue<audioMeleeSound>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("walk")] 
 		public audioMeleeSound Walk
 		{
-			get => GetProperty(ref _walk);
-			set => SetProperty(ref _walk, value);
+			get => GetPropertyValue<audioMeleeSound>();
+			set => SetPropertyValue<audioMeleeSound>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("run")] 
 		public audioMeleeSound Run
 		{
-			get => GetProperty(ref _run);
-			set => SetProperty(ref _run, value);
+			get => GetPropertyValue<audioMeleeSound>();
+			set => SetPropertyValue<audioMeleeSound>(value);
+		}
+
+		public audioFoleyNPCMetadata()
+		{
+			FastHeavy = new() { Events = new() };
+			FastMedium = new() { Events = new() };
+			FastLight = new() { Events = new() };
+			NormalHeavy = new() { Events = new() };
+			NormalMedium = new() { Events = new() };
+			NormalLight = new() { Events = new() };
+			SlowHeavy = new() { Events = new() };
+			SlowMedium = new() { Events = new() };
+			SlowLight = new() { Events = new() };
+			Walk = new() { Events = new() };
+			Run = new() { Events = new() };
 		}
 	}
 }

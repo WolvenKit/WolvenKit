@@ -5,50 +5,53 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PuppetDef : gamebbScriptDefinition
 	{
-		private gamebbScriptID_Bool _isCrowd;
-		private gamebbScriptID_Bool _hideNameplate;
-		private gamebbScriptID_Bool _forceFriendlyCarry;
-		private gamebbScriptID_Int32 _forcedCarryStyle;
-		private gamebbScriptID_Bool _hasCPOMissionData;
-
 		[Ordinal(0)] 
 		[RED("IsCrowd")] 
 		public gamebbScriptID_Bool IsCrowd
 		{
-			get => GetProperty(ref _isCrowd);
-			set => SetProperty(ref _isCrowd, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("HideNameplate")] 
 		public gamebbScriptID_Bool HideNameplate
 		{
-			get => GetProperty(ref _hideNameplate);
-			set => SetProperty(ref _hideNameplate, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ForceFriendlyCarry")] 
 		public gamebbScriptID_Bool ForceFriendlyCarry
 		{
-			get => GetProperty(ref _forceFriendlyCarry);
-			set => SetProperty(ref _forceFriendlyCarry, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("ForcedCarryStyle")] 
 		public gamebbScriptID_Int32 ForcedCarryStyle
 		{
-			get => GetProperty(ref _forcedCarryStyle);
-			set => SetProperty(ref _forcedCarryStyle, value);
+			get => GetPropertyValue<gamebbScriptID_Int32>();
+			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("HasCPOMissionData")] 
 		public gamebbScriptID_Bool HasCPOMissionData
 		{
-			get => GetProperty(ref _hasCPOMissionData);
-			set => SetProperty(ref _hasCPOMissionData, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		public PuppetDef()
+		{
+			IsCrowd = new();
+			HideNameplate = new();
+			ForceFriendlyCarry = new();
+			ForcedCarryStyle = new();
+			HasCPOMissionData = new();
 		}
 	}
 }

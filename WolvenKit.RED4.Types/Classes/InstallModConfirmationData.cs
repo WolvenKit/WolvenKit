@@ -5,50 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class InstallModConfirmationData : IScriptable
 	{
-		private gameItemID _itemId;
-		private gameItemID _partId;
-		private TweakDBID _slotID;
-		private gameTelemetryInventoryItem _telemetryItemData;
-		private gameTelemetryInventoryItem _telemetryPartData;
-
 		[Ordinal(0)] 
 		[RED("itemId")] 
 		public gameItemID ItemId
 		{
-			get => GetProperty(ref _itemId);
-			set => SetProperty(ref _itemId, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("partId")] 
 		public gameItemID PartId
 		{
-			get => GetProperty(ref _partId);
-			set => SetProperty(ref _partId, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("slotID")] 
 		public TweakDBID SlotID
 		{
-			get => GetProperty(ref _slotID);
-			set => SetProperty(ref _slotID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("telemetryItemData")] 
 		public gameTelemetryInventoryItem TelemetryItemData
 		{
-			get => GetProperty(ref _telemetryItemData);
-			set => SetProperty(ref _telemetryItemData, value);
+			get => GetPropertyValue<gameTelemetryInventoryItem>();
+			set => SetPropertyValue<gameTelemetryInventoryItem>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("telemetryPartData")] 
 		public gameTelemetryInventoryItem TelemetryPartData
 		{
-			get => GetProperty(ref _telemetryPartData);
-			set => SetProperty(ref _telemetryPartData, value);
+			get => GetPropertyValue<gameTelemetryInventoryItem>();
+			set => SetPropertyValue<gameTelemetryInventoryItem>(value);
+		}
+
+		public InstallModConfirmationData()
+		{
+			ItemId = new();
+			PartId = new();
+			TelemetryItemData = new() { ItemID = new(), Quality = -1, ItemType = Enums.gamedataItemType.Invalid, ItemLevel = -1 };
+			TelemetryPartData = new() { ItemID = new(), Quality = -1, ItemType = Enums.gamedataItemType.Invalid, ItemLevel = -1 };
 		}
 	}
 }

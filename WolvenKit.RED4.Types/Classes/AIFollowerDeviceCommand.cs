@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIFollowerDeviceCommand : AIFollowerCommand
 	{
-		private CWeakHandle<gameObject> _target;
-		private CWeakHandle<gameObject> _overrideMovementTarget;
-
 		[Ordinal(5)] 
 		[RED("target")] 
 		public CWeakHandle<gameObject> Target
 		{
-			get => GetProperty(ref _target);
-			set => SetProperty(ref _target, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("overrideMovementTarget")] 
 		public CWeakHandle<gameObject> OverrideMovementTarget
 		{
-			get => GetProperty(ref _overrideMovementTarget);
-			set => SetProperty(ref _overrideMovementTarget, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 	}
 }

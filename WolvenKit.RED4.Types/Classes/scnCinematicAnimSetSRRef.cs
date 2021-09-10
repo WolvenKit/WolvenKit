@@ -5,37 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnCinematicAnimSetSRRef : RedBaseClass
 	{
-		private CResourceAsyncReference<animAnimSet> _asyncAnimSet;
-		private CUInt8 _priority;
-		private CBool _isOverride;
-
 		[Ordinal(0)] 
 		[RED("asyncAnimSet")] 
 		public CResourceAsyncReference<animAnimSet> AsyncAnimSet
 		{
-			get => GetProperty(ref _asyncAnimSet);
-			set => SetProperty(ref _asyncAnimSet, value);
+			get => GetPropertyValue<CResourceAsyncReference<animAnimSet>>();
+			set => SetPropertyValue<CResourceAsyncReference<animAnimSet>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("priority")] 
 		public CUInt8 Priority
 		{
-			get => GetProperty(ref _priority);
-			set => SetProperty(ref _priority, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isOverride")] 
 		public CBool IsOverride
 		{
-			get => GetProperty(ref _isOverride);
-			set => SetProperty(ref _isOverride, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public scnCinematicAnimSetSRRef()
 		{
-			_priority = 128;
+			Priority = 128;
 		}
 	}
 }

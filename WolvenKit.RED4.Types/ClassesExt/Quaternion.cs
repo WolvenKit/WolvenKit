@@ -1,7 +1,8 @@
 namespace WolvenKit.RED4.Types
 {
+    [REDClass(SerializeDefault = true)]
     public partial class Quaternion
     {
-        public override string ToString() => $"Quaternion, i = {I.Value}, j = {J.Value}, k = {K.Value}, r = {R.Value}";
+        public override string ToString() => $"Quaternion, i = {I}, j = {J}, k = {K}, r = {R}";
     }
 }

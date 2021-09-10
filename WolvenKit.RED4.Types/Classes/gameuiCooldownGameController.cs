@@ -5,104 +5,101 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiCooldownGameController : gameuiWidgetGameController
 	{
-		private CInt32 _maxCooldowns;
-		private inkCompoundWidgetReference _cooldownContainer;
-		private inkCompoundWidgetReference _poolHolder;
-		private CEnum<ECooldownGameControllerMode> _mode;
-		private CArray<CEnum<gamedataStatusEffectType>> _effectTypes;
-		private CArray<CWeakHandle<SingleCooldownManager>> _cooldownPool;
-		private CArray<CWeakHandle<SingleCooldownManager>> _matchBuffer;
-		private CHandle<redCallbackObject> _buffsCallback;
-		private CHandle<redCallbackObject> _debuffsCallback;
-		private CHandle<UI_PlayerBioMonitorDef> _blackboardDef;
-		private CWeakHandle<gameIBlackboard> _blackboard;
-
 		[Ordinal(2)] 
 		[RED("maxCooldowns")] 
 		public CInt32 MaxCooldowns
 		{
-			get => GetProperty(ref _maxCooldowns);
-			set => SetProperty(ref _maxCooldowns, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("cooldownContainer")] 
 		public inkCompoundWidgetReference CooldownContainer
 		{
-			get => GetProperty(ref _cooldownContainer);
-			set => SetProperty(ref _cooldownContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("poolHolder")] 
 		public inkCompoundWidgetReference PoolHolder
 		{
-			get => GetProperty(ref _poolHolder);
-			set => SetProperty(ref _poolHolder, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("mode")] 
 		public CEnum<ECooldownGameControllerMode> Mode
 		{
-			get => GetProperty(ref _mode);
-			set => SetProperty(ref _mode, value);
+			get => GetPropertyValue<CEnum<ECooldownGameControllerMode>>();
+			set => SetPropertyValue<CEnum<ECooldownGameControllerMode>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("effectTypes")] 
 		public CArray<CEnum<gamedataStatusEffectType>> EffectTypes
 		{
-			get => GetProperty(ref _effectTypes);
-			set => SetProperty(ref _effectTypes, value);
+			get => GetPropertyValue<CArray<CEnum<gamedataStatusEffectType>>>();
+			set => SetPropertyValue<CArray<CEnum<gamedataStatusEffectType>>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("cooldownPool")] 
 		public CArray<CWeakHandle<SingleCooldownManager>> CooldownPool
 		{
-			get => GetProperty(ref _cooldownPool);
-			set => SetProperty(ref _cooldownPool, value);
+			get => GetPropertyValue<CArray<CWeakHandle<SingleCooldownManager>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<SingleCooldownManager>>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("matchBuffer")] 
 		public CArray<CWeakHandle<SingleCooldownManager>> MatchBuffer
 		{
-			get => GetProperty(ref _matchBuffer);
-			set => SetProperty(ref _matchBuffer, value);
+			get => GetPropertyValue<CArray<CWeakHandle<SingleCooldownManager>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<SingleCooldownManager>>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("buffsCallback")] 
 		public CHandle<redCallbackObject> BuffsCallback
 		{
-			get => GetProperty(ref _buffsCallback);
-			set => SetProperty(ref _buffsCallback, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("debuffsCallback")] 
 		public CHandle<redCallbackObject> DebuffsCallback
 		{
-			get => GetProperty(ref _debuffsCallback);
-			set => SetProperty(ref _debuffsCallback, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("blackboardDef")] 
 		public CHandle<UI_PlayerBioMonitorDef> BlackboardDef
 		{
-			get => GetProperty(ref _blackboardDef);
-			set => SetProperty(ref _blackboardDef, value);
+			get => GetPropertyValue<CHandle<UI_PlayerBioMonitorDef>>();
+			set => SetPropertyValue<CHandle<UI_PlayerBioMonitorDef>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("blackboard")] 
 		public CWeakHandle<gameIBlackboard> Blackboard
 		{
-			get => GetProperty(ref _blackboard);
-			set => SetProperty(ref _blackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
+		public gameuiCooldownGameController()
+		{
+			CooldownContainer = new();
+			PoolHolder = new();
+			EffectTypes = new();
+			CooldownPool = new();
+			MatchBuffer = new();
 		}
 	}
 }

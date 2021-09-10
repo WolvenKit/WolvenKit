@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameinfluenceSeparationAgent : gameinfluenceIAgent
 	{
-		private CFloat _radius;
-
 		[Ordinal(0)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get => GetProperty(ref _radius);
-			set => SetProperty(ref _radius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public gameinfluenceSeparationAgent()
 		{
-			_radius = 0.250000F;
+			Radius = 0.250000F;
 		}
 	}
 }

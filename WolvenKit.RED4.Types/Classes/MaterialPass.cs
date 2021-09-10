@@ -5,95 +5,91 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MaterialPass : RedBaseClass
 	{
-		private CName _stagePassNameRegular;
-		private CName _stagePassNameDiscarded;
-		private PSODescDepthStencilModeDesc _depthStencilMode;
-		private PSODescRasterizerModeDesc _rasterizerMode;
-		private PSODescBlendModeDesc _blendMode;
-		private CUInt8 _stencilReadMask;
-		private CUInt8 _stencilWriteMask;
-		private CUInt8 _stencilRef;
-		private CUInt8 _orderIndex;
-		private CBool _enablePixelShader;
-
 		[Ordinal(0)] 
 		[RED("stagePassNameRegular")] 
 		public CName StagePassNameRegular
 		{
-			get => GetProperty(ref _stagePassNameRegular);
-			set => SetProperty(ref _stagePassNameRegular, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("stagePassNameDiscarded")] 
 		public CName StagePassNameDiscarded
 		{
-			get => GetProperty(ref _stagePassNameDiscarded);
-			set => SetProperty(ref _stagePassNameDiscarded, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("depthStencilMode")] 
 		public PSODescDepthStencilModeDesc DepthStencilMode
 		{
-			get => GetProperty(ref _depthStencilMode);
-			set => SetProperty(ref _depthStencilMode, value);
+			get => GetPropertyValue<PSODescDepthStencilModeDesc>();
+			set => SetPropertyValue<PSODescDepthStencilModeDesc>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("rasterizerMode")] 
 		public PSODescRasterizerModeDesc RasterizerMode
 		{
-			get => GetProperty(ref _rasterizerMode);
-			set => SetProperty(ref _rasterizerMode, value);
+			get => GetPropertyValue<PSODescRasterizerModeDesc>();
+			set => SetPropertyValue<PSODescRasterizerModeDesc>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("blendMode")] 
 		public PSODescBlendModeDesc BlendMode
 		{
-			get => GetProperty(ref _blendMode);
-			set => SetProperty(ref _blendMode, value);
+			get => GetPropertyValue<PSODescBlendModeDesc>();
+			set => SetPropertyValue<PSODescBlendModeDesc>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("stencilReadMask")] 
 		public CUInt8 StencilReadMask
 		{
-			get => GetProperty(ref _stencilReadMask);
-			set => SetProperty(ref _stencilReadMask, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("stencilWriteMask")] 
 		public CUInt8 StencilWriteMask
 		{
-			get => GetProperty(ref _stencilWriteMask);
-			set => SetProperty(ref _stencilWriteMask, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("stencilRef")] 
 		public CUInt8 StencilRef
 		{
-			get => GetProperty(ref _stencilRef);
-			set => SetProperty(ref _stencilRef, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("orderIndex")] 
 		public CUInt8 OrderIndex
 		{
-			get => GetProperty(ref _orderIndex);
-			set => SetProperty(ref _orderIndex, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("enablePixelShader")] 
 		public CBool EnablePixelShader
 		{
-			get => GetProperty(ref _enablePixelShader);
-			set => SetProperty(ref _enablePixelShader, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public MaterialPass()
+		{
+			DepthStencilMode = new() { FrontFace = new() };
+			RasterizerMode = new();
+			BlendMode = new() { NumTargets = 1, RenderTarget = new(8) };
 		}
 	}
 }

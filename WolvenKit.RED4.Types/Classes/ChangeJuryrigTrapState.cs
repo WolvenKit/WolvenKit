@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ChangeJuryrigTrapState : redEvent
 	{
-		private CEnum<EJuryrigTrapState> _newState;
-
 		[Ordinal(0)] 
 		[RED("newState")] 
 		public CEnum<EJuryrigTrapState> NewState
 		{
-			get => GetProperty(ref _newState);
-			set => SetProperty(ref _newState, value);
+			get => GetPropertyValue<CEnum<EJuryrigTrapState>>();
+			set => SetPropertyValue<CEnum<EJuryrigTrapState>>(value);
 		}
 	}
 }

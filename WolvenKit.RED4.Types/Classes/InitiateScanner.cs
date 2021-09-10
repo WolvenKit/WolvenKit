@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class InitiateScanner : redEvent
 	{
-		private CInt32 _trespasserEntryIndex;
-
 		[Ordinal(0)] 
 		[RED("trespasserEntryIndex")] 
 		public CInt32 TrespasserEntryIndex
 		{
-			get => GetProperty(ref _trespasserEntryIndex);
-			set => SetProperty(ref _trespasserEntryIndex, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

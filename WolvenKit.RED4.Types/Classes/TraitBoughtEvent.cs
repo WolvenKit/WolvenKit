@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TraitBoughtEvent : redEvent
 	{
-		private CEnum<gamedataTraitType> _traitType;
-
 		[Ordinal(0)] 
 		[RED("traitType")] 
 		public CEnum<gamedataTraitType> TraitType
 		{
-			get => GetProperty(ref _traitType);
-			set => SetProperty(ref _traitType, value);
+			get => GetPropertyValue<CEnum<gamedataTraitType>>();
+			set => SetPropertyValue<CEnum<gamedataTraitType>>(value);
 		}
 	}
 }

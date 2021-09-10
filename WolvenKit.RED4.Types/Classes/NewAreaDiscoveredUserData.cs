@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class NewAreaDiscoveredUserData : inkGameNotificationData
 	{
-		private CString _data;
-
 		[Ordinal(6)] 
 		[RED("data")] 
 		public CString Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 	}
 }

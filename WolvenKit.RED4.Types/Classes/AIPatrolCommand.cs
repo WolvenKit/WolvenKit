@@ -5,59 +5,57 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIPatrolCommand : AIMoveCommand
 	{
-		private CHandle<AIPatrolPathParameters> _pathParams;
-		private CHandle<AIPatrolPathParameters> _alertedPathParams;
-		private CFloat _alertedRadius;
-		private CArray<NodeRef> _alertedSpots;
-		private CBool _patrolWithWeapon;
-		private TweakDBID _patrolAction;
-
 		[Ordinal(7)] 
 		[RED("pathParams")] 
 		public CHandle<AIPatrolPathParameters> PathParams
 		{
-			get => GetProperty(ref _pathParams);
-			set => SetProperty(ref _pathParams, value);
+			get => GetPropertyValue<CHandle<AIPatrolPathParameters>>();
+			set => SetPropertyValue<CHandle<AIPatrolPathParameters>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("alertedPathParams")] 
 		public CHandle<AIPatrolPathParameters> AlertedPathParams
 		{
-			get => GetProperty(ref _alertedPathParams);
-			set => SetProperty(ref _alertedPathParams, value);
+			get => GetPropertyValue<CHandle<AIPatrolPathParameters>>();
+			set => SetPropertyValue<CHandle<AIPatrolPathParameters>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("alertedRadius")] 
 		public CFloat AlertedRadius
 		{
-			get => GetProperty(ref _alertedRadius);
-			set => SetProperty(ref _alertedRadius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("alertedSpots")] 
 		public CArray<NodeRef> AlertedSpots
 		{
-			get => GetProperty(ref _alertedSpots);
-			set => SetProperty(ref _alertedSpots, value);
+			get => GetPropertyValue<CArray<NodeRef>>();
+			set => SetPropertyValue<CArray<NodeRef>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("patrolWithWeapon")] 
 		public CBool PatrolWithWeapon
 		{
-			get => GetProperty(ref _patrolWithWeapon);
-			set => SetProperty(ref _patrolWithWeapon, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("patrolAction")] 
 		public TweakDBID PatrolAction
 		{
-			get => GetProperty(ref _patrolAction);
-			set => SetProperty(ref _patrolAction, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
+		public AIPatrolCommand()
+		{
+			AlertedSpots = new();
 		}
 	}
 }

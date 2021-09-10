@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questPrefabVariantMapArrayElement : RedBaseClass
 	{
-		private worldGlobalNodeRef _globalNodeRef;
-		private CArray<questPrefabVariantReplicatedInfo> _prefabVariantsReplicatedInfos;
-
 		[Ordinal(0)] 
 		[RED("globalNodeRef")] 
 		public worldGlobalNodeRef GlobalNodeRef
 		{
-			get => GetProperty(ref _globalNodeRef);
-			set => SetProperty(ref _globalNodeRef, value);
+			get => GetPropertyValue<worldGlobalNodeRef>();
+			set => SetPropertyValue<worldGlobalNodeRef>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("PrefabVariantsReplicatedInfos")] 
 		public CArray<questPrefabVariantReplicatedInfo> PrefabVariantsReplicatedInfos
 		{
-			get => GetProperty(ref _prefabVariantsReplicatedInfos);
-			set => SetProperty(ref _prefabVariantsReplicatedInfos, value);
+			get => GetPropertyValue<CArray<questPrefabVariantReplicatedInfo>>();
+			set => SetPropertyValue<CArray<questPrefabVariantReplicatedInfo>>(value);
+		}
+
+		public questPrefabVariantMapArrayElement()
+		{
+			GlobalNodeRef = new();
+			PrefabVariantsReplicatedInfos = new();
 		}
 	}
 }

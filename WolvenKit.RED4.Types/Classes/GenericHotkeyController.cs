@@ -5,95 +5,90 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class GenericHotkeyController : gameuiHUDGameController
 	{
-		private inkImageWidgetReference _hotkeyBackground;
-		private inkWidgetReference _buttonHint;
-		private CEnum<gameEHotkey> _hotkey;
-		private CBool _pressStarted;
-		private CWeakHandle<inkInputDisplayController> _buttonHintController;
-		private CName _questActivatingFact;
-		private CArray<CName> _restrictions;
-		private CHandle<HotkeyWidgetStatsListener> _statusEffectsListener;
-		private CArray<CUInt32> _debugCommands;
-		private CUInt32 _factListenerId;
-
 		[Ordinal(9)] 
 		[RED("hotkeyBackground")] 
 		public inkImageWidgetReference HotkeyBackground
 		{
-			get => GetProperty(ref _hotkeyBackground);
-			set => SetProperty(ref _hotkeyBackground, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("buttonHint")] 
 		public inkWidgetReference ButtonHint
 		{
-			get => GetProperty(ref _buttonHint);
-			set => SetProperty(ref _buttonHint, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("hotkey")] 
 		public CEnum<gameEHotkey> Hotkey
 		{
-			get => GetProperty(ref _hotkey);
-			set => SetProperty(ref _hotkey, value);
+			get => GetPropertyValue<CEnum<gameEHotkey>>();
+			set => SetPropertyValue<CEnum<gameEHotkey>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("pressStarted")] 
 		public CBool PressStarted
 		{
-			get => GetProperty(ref _pressStarted);
-			set => SetProperty(ref _pressStarted, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("buttonHintController")] 
 		public CWeakHandle<inkInputDisplayController> ButtonHintController
 		{
-			get => GetProperty(ref _buttonHintController);
-			set => SetProperty(ref _buttonHintController, value);
+			get => GetPropertyValue<CWeakHandle<inkInputDisplayController>>();
+			set => SetPropertyValue<CWeakHandle<inkInputDisplayController>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("questActivatingFact")] 
 		public CName QuestActivatingFact
 		{
-			get => GetProperty(ref _questActivatingFact);
-			set => SetProperty(ref _questActivatingFact, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("restrictions")] 
 		public CArray<CName> Restrictions
 		{
-			get => GetProperty(ref _restrictions);
-			set => SetProperty(ref _restrictions, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("statusEffectsListener")] 
 		public CHandle<HotkeyWidgetStatsListener> StatusEffectsListener
 		{
-			get => GetProperty(ref _statusEffectsListener);
-			set => SetProperty(ref _statusEffectsListener, value);
+			get => GetPropertyValue<CHandle<HotkeyWidgetStatsListener>>();
+			set => SetPropertyValue<CHandle<HotkeyWidgetStatsListener>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("debugCommands")] 
 		public CArray<CUInt32> DebugCommands
 		{
-			get => GetProperty(ref _debugCommands);
-			set => SetProperty(ref _debugCommands, value);
+			get => GetPropertyValue<CArray<CUInt32>>();
+			set => SetPropertyValue<CArray<CUInt32>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("factListenerId")] 
 		public CUInt32 FactListenerId
 		{
-			get => GetProperty(ref _factListenerId);
-			set => SetProperty(ref _factListenerId, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		public GenericHotkeyController()
+		{
+			ShowAnimationName = "unfold";
+			HideAnimationName = "fold";
 		}
 	}
 }

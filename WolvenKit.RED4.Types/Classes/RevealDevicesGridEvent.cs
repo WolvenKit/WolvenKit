@@ -5,56 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RevealDevicesGridEvent : redEvent
 	{
-		private CBool _shouldDraw;
-		private Vector4 _ownerEntityPosition;
-		private gameFxResource _fxDefault;
-		private CBool _revealSlave;
-		private CBool _revealMaster;
-
 		[Ordinal(0)] 
 		[RED("shouldDraw")] 
 		public CBool ShouldDraw
 		{
-			get => GetProperty(ref _shouldDraw);
-			set => SetProperty(ref _shouldDraw, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ownerEntityPosition")] 
 		public Vector4 OwnerEntityPosition
 		{
-			get => GetProperty(ref _ownerEntityPosition);
-			set => SetProperty(ref _ownerEntityPosition, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("fxDefault")] 
 		public gameFxResource FxDefault
 		{
-			get => GetProperty(ref _fxDefault);
-			set => SetProperty(ref _fxDefault, value);
+			get => GetPropertyValue<gameFxResource>();
+			set => SetPropertyValue<gameFxResource>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("revealSlave")] 
 		public CBool RevealSlave
 		{
-			get => GetProperty(ref _revealSlave);
-			set => SetProperty(ref _revealSlave, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("revealMaster")] 
 		public CBool RevealMaster
 		{
-			get => GetProperty(ref _revealMaster);
-			set => SetProperty(ref _revealMaster, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public RevealDevicesGridEvent()
 		{
-			_revealSlave = true;
-			_revealMaster = true;
+			OwnerEntityPosition = new();
+			FxDefault = new();
+			RevealSlave = true;
+			RevealMaster = true;
 		}
 	}
 }

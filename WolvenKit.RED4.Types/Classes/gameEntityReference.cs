@@ -5,59 +5,57 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameEntityReference : RedBaseClass
 	{
-		private CEnum<gameEntityReferenceType> _type;
-		private NodeRef _reference;
-		private CArray<CName> _names;
-		private CName _slotName;
-		private CName _sceneActorContextName;
-		private CName _dynamicEntityUniqueName;
-
 		[Ordinal(0)] 
 		[RED("type")] 
 		public CEnum<gameEntityReferenceType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<gameEntityReferenceType>>();
+			set => SetPropertyValue<CEnum<gameEntityReferenceType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("reference")] 
 		public NodeRef Reference
 		{
-			get => GetProperty(ref _reference);
-			set => SetProperty(ref _reference, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("names")] 
 		public CArray<CName> Names
 		{
-			get => GetProperty(ref _names);
-			set => SetProperty(ref _names, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("slotName")] 
 		public CName SlotName
 		{
-			get => GetProperty(ref _slotName);
-			set => SetProperty(ref _slotName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("sceneActorContextName")] 
 		public CName SceneActorContextName
 		{
-			get => GetProperty(ref _sceneActorContextName);
-			set => SetProperty(ref _sceneActorContextName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("dynamicEntityUniqueName")] 
 		public CName DynamicEntityUniqueName
 		{
-			get => GetProperty(ref _dynamicEntityUniqueName);
-			set => SetProperty(ref _dynamicEntityUniqueName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public gameEntityReference()
+		{
+			Names = new();
 		}
 	}
 }

@@ -5,46 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameWeaponReplicationHistory : RedBaseClass
 	{
-		private TweakDBID _weaponSlot;
-		private CStatic<gameReplicatedShotData> _shots;
-		private CUInt32 _latestShotId;
-		private gameReplicatedContinuousAttack _continuousAttack;
-
 		[Ordinal(0)] 
 		[RED("weaponSlot")] 
 		public TweakDBID WeaponSlot
 		{
-			get => GetProperty(ref _weaponSlot);
-			set => SetProperty(ref _weaponSlot, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("shots", 8)] 
 		public CStatic<gameReplicatedShotData> Shots
 		{
-			get => GetProperty(ref _shots);
-			set => SetProperty(ref _shots, value);
+			get => GetPropertyValue<CStatic<gameReplicatedShotData>>();
+			set => SetPropertyValue<CStatic<gameReplicatedShotData>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("latestShotId")] 
 		public CUInt32 LatestShotId
 		{
-			get => GetProperty(ref _latestShotId);
-			set => SetProperty(ref _latestShotId, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("continuousAttack")] 
 		public gameReplicatedContinuousAttack ContinuousAttack
 		{
-			get => GetProperty(ref _continuousAttack);
-			set => SetProperty(ref _continuousAttack, value);
+			get => GetPropertyValue<gameReplicatedContinuousAttack>();
+			set => SetPropertyValue<gameReplicatedContinuousAttack>(value);
 		}
 
 		public gameWeaponReplicationHistory()
 		{
-			_latestShotId = 8;
+			Shots = new(0);
+			LatestShotId = 8;
+			ContinuousAttack = new() { StartTimeStamp = new() { MilliSecs = 18446744073709551615 }, StopTimeStamp = new() { MilliSecs = 18446744073709551615 } };
 		}
 	}
 }

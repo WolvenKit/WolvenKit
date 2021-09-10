@@ -5,59 +5,58 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RagdollDamagePollData : RedBaseClass
 	{
-		private WorldPosition _worldPosition;
-		private Vector4 _worldNormal;
-		private CFloat _maxForceMagnitude;
-		private CFloat _maxImpulseMagnitude;
-		private CFloat _maxVelocityChange;
-		private CFloat _maxZDiff;
-
 		[Ordinal(0)] 
 		[RED("worldPosition")] 
 		public WorldPosition WorldPosition
 		{
-			get => GetProperty(ref _worldPosition);
-			set => SetProperty(ref _worldPosition, value);
+			get => GetPropertyValue<WorldPosition>();
+			set => SetPropertyValue<WorldPosition>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("worldNormal")] 
 		public Vector4 WorldNormal
 		{
-			get => GetProperty(ref _worldNormal);
-			set => SetProperty(ref _worldNormal, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("maxForceMagnitude")] 
 		public CFloat MaxForceMagnitude
 		{
-			get => GetProperty(ref _maxForceMagnitude);
-			set => SetProperty(ref _maxForceMagnitude, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("maxImpulseMagnitude")] 
 		public CFloat MaxImpulseMagnitude
 		{
-			get => GetProperty(ref _maxImpulseMagnitude);
-			set => SetProperty(ref _maxImpulseMagnitude, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("maxVelocityChange")] 
 		public CFloat MaxVelocityChange
 		{
-			get => GetProperty(ref _maxVelocityChange);
-			set => SetProperty(ref _maxVelocityChange, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("maxZDiff")] 
 		public CFloat MaxZDiff
 		{
-			get => GetProperty(ref _maxZDiff);
-			set => SetProperty(ref _maxZDiff, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public RagdollDamagePollData()
+		{
+			WorldPosition = new() { X = new(), Y = new(), Z = new() };
+			WorldNormal = new();
 		}
 	}
 }

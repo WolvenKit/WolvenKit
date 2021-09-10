@@ -5,145 +5,132 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiBaseWorldMapMappinController : gameuiInteractionMappinController
 	{
-		private CBool _selected;
-		private CBool _inZoomLevel;
-		private CBool _inCustomFilter;
-		private CBool _hasCustomFilter;
-		private CBool _isFastTravelEnabled;
-		private CBool _isVisibleInFilterAndZoom;
-		private CEnum<gameuiMappinGroupState> _groupState;
-		private CUInt8 _collectionCount;
-		private inkWidgetReference _groupContainerWidget;
-		private inkTextWidgetReference _groupCountTextWidget;
-		private inkWidgetReference _isNewContainer;
-		private CWeakHandle<gamemappinsIMappin> _mappin;
-		private CBool _isCompletedPhase;
-		private CHandle<inkanimProxy> _fadeAnim;
-		private CHandle<inkanimProxy> _selectAnim;
-
 		[Ordinal(11)] 
 		[RED("selected")] 
 		public CBool Selected
 		{
-			get => GetProperty(ref _selected);
-			set => SetProperty(ref _selected, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("inZoomLevel")] 
 		public CBool InZoomLevel
 		{
-			get => GetProperty(ref _inZoomLevel);
-			set => SetProperty(ref _inZoomLevel, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("inCustomFilter")] 
 		public CBool InCustomFilter
 		{
-			get => GetProperty(ref _inCustomFilter);
-			set => SetProperty(ref _inCustomFilter, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("hasCustomFilter")] 
 		public CBool HasCustomFilter
 		{
-			get => GetProperty(ref _hasCustomFilter);
-			set => SetProperty(ref _hasCustomFilter, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("isFastTravelEnabled")] 
 		public CBool IsFastTravelEnabled
 		{
-			get => GetProperty(ref _isFastTravelEnabled);
-			set => SetProperty(ref _isFastTravelEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("isVisibleInFilterAndZoom")] 
 		public CBool IsVisibleInFilterAndZoom
 		{
-			get => GetProperty(ref _isVisibleInFilterAndZoom);
-			set => SetProperty(ref _isVisibleInFilterAndZoom, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("groupState")] 
 		public CEnum<gameuiMappinGroupState> GroupState
 		{
-			get => GetProperty(ref _groupState);
-			set => SetProperty(ref _groupState, value);
+			get => GetPropertyValue<CEnum<gameuiMappinGroupState>>();
+			set => SetPropertyValue<CEnum<gameuiMappinGroupState>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("collectionCount")] 
 		public CUInt8 CollectionCount
 		{
-			get => GetProperty(ref _collectionCount);
-			set => SetProperty(ref _collectionCount, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("groupContainerWidget")] 
 		public inkWidgetReference GroupContainerWidget
 		{
-			get => GetProperty(ref _groupContainerWidget);
-			set => SetProperty(ref _groupContainerWidget, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("groupCountTextWidget")] 
 		public inkTextWidgetReference GroupCountTextWidget
 		{
-			get => GetProperty(ref _groupCountTextWidget);
-			set => SetProperty(ref _groupCountTextWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("isNewContainer")] 
 		public inkWidgetReference IsNewContainer
 		{
-			get => GetProperty(ref _isNewContainer);
-			set => SetProperty(ref _isNewContainer, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("mappin")] 
 		public CWeakHandle<gamemappinsIMappin> Mappin
 		{
-			get => GetProperty(ref _mappin);
-			set => SetProperty(ref _mappin, value);
+			get => GetPropertyValue<CWeakHandle<gamemappinsIMappin>>();
+			set => SetPropertyValue<CWeakHandle<gamemappinsIMappin>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("isCompletedPhase")] 
 		public CBool IsCompletedPhase
 		{
-			get => GetProperty(ref _isCompletedPhase);
-			set => SetProperty(ref _isCompletedPhase, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("fadeAnim")] 
 		public CHandle<inkanimProxy> FadeAnim
 		{
-			get => GetProperty(ref _fadeAnim);
-			set => SetProperty(ref _fadeAnim, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("selectAnim")] 
 		public CHandle<inkanimProxy> SelectAnim
 		{
-			get => GetProperty(ref _selectAnim);
-			set => SetProperty(ref _selectAnim, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		public gameuiBaseWorldMapMappinController()
 		{
-			_collectionCount = 1;
+			CollectionCount = 1;
+			GroupContainerWidget = new();
+			GroupCountTextWidget = new();
+			IsNewContainer = new();
 		}
 	}
 }

@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CleanEnvironmentalHazardEvent : redEvent
 	{
-		private CHandle<senseStimuliEvent> _stimEvent;
-
 		[Ordinal(0)] 
 		[RED("stimEvent")] 
 		public CHandle<senseStimuliEvent> StimEvent
 		{
-			get => GetProperty(ref _stimEvent);
-			set => SetProperty(ref _stimEvent, value);
+			get => GetPropertyValue<CHandle<senseStimuliEvent>>();
+			set => SetPropertyValue<CHandle<senseStimuliEvent>>(value);
 		}
 	}
 }

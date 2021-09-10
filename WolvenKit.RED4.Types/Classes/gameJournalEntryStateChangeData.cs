@@ -5,92 +5,82 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameJournalEntryStateChangeData : RedBaseClass
 	{
-		private CHandle<gameJournalPath> _entryPath;
-		private CString _entryName;
-		private CName _entryType;
-		private CBool _isEntryTracked;
-		private CBool _isQuestEntryTracked;
-		private CEnum<gameJournalEntryState> _oldState;
-		private CEnum<gameJournalEntryState> _newState;
-		private CEnum<gameJournalNotifyOption> _notifyOption;
-		private CEnum<gameJournalChangeType> _changeType;
-
 		[Ordinal(0)] 
 		[RED("entryPath")] 
 		public CHandle<gameJournalPath> EntryPath
 		{
-			get => GetProperty(ref _entryPath);
-			set => SetProperty(ref _entryPath, value);
+			get => GetPropertyValue<CHandle<gameJournalPath>>();
+			set => SetPropertyValue<CHandle<gameJournalPath>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("entryName")] 
 		public CString EntryName
 		{
-			get => GetProperty(ref _entryName);
-			set => SetProperty(ref _entryName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("entryType")] 
 		public CName EntryType
 		{
-			get => GetProperty(ref _entryType);
-			set => SetProperty(ref _entryType, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isEntryTracked")] 
 		public CBool IsEntryTracked
 		{
-			get => GetProperty(ref _isEntryTracked);
-			set => SetProperty(ref _isEntryTracked, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("isQuestEntryTracked")] 
 		public CBool IsQuestEntryTracked
 		{
-			get => GetProperty(ref _isQuestEntryTracked);
-			set => SetProperty(ref _isQuestEntryTracked, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("oldState")] 
 		public CEnum<gameJournalEntryState> OldState
 		{
-			get => GetProperty(ref _oldState);
-			set => SetProperty(ref _oldState, value);
+			get => GetPropertyValue<CEnum<gameJournalEntryState>>();
+			set => SetPropertyValue<CEnum<gameJournalEntryState>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("newState")] 
 		public CEnum<gameJournalEntryState> NewState
 		{
-			get => GetProperty(ref _newState);
-			set => SetProperty(ref _newState, value);
+			get => GetPropertyValue<CEnum<gameJournalEntryState>>();
+			set => SetPropertyValue<CEnum<gameJournalEntryState>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("notifyOption")] 
 		public CEnum<gameJournalNotifyOption> NotifyOption
 		{
-			get => GetProperty(ref _notifyOption);
-			set => SetProperty(ref _notifyOption, value);
+			get => GetPropertyValue<CEnum<gameJournalNotifyOption>>();
+			set => SetPropertyValue<CEnum<gameJournalNotifyOption>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("changeType")] 
 		public CEnum<gameJournalChangeType> ChangeType
 		{
-			get => GetProperty(ref _changeType);
-			set => SetProperty(ref _changeType, value);
+			get => GetPropertyValue<CEnum<gameJournalChangeType>>();
+			set => SetPropertyValue<CEnum<gameJournalChangeType>>(value);
 		}
 
 		public gameJournalEntryStateChangeData()
 		{
-			_notifyOption = new() { Value = Enums.gameJournalNotifyOption.DoNotNotify };
-			_changeType = new() { Value = Enums.gameJournalChangeType.Direct };
+			NotifyOption = Enums.gameJournalNotifyOption.DoNotNotify;
+			ChangeType = Enums.gameJournalChangeType.Direct;
 		}
 	}
 }

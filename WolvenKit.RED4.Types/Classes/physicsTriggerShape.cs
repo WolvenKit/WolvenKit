@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class physicsTriggerShape : RedBaseClass
 	{
-		private CEnum<physicsShapeType> _shapeType;
-		private Vector3 _shapeSize;
-		private Transform _shapeLocalPose;
-
 		[Ordinal(0)] 
 		[RED("shapeType")] 
 		public CEnum<physicsShapeType> ShapeType
 		{
-			get => GetProperty(ref _shapeType);
-			set => SetProperty(ref _shapeType, value);
+			get => GetPropertyValue<CEnum<physicsShapeType>>();
+			set => SetPropertyValue<CEnum<physicsShapeType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("shapeSize")] 
 		public Vector3 ShapeSize
 		{
-			get => GetProperty(ref _shapeSize);
-			set => SetProperty(ref _shapeSize, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("shapeLocalPose")] 
 		public Transform ShapeLocalPose
 		{
-			get => GetProperty(ref _shapeLocalPose);
-			set => SetProperty(ref _shapeLocalPose, value);
+			get => GetPropertyValue<Transform>();
+			set => SetPropertyValue<Transform>(value);
+		}
+
+		public physicsTriggerShape()
+		{
+			ShapeSize = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
+			ShapeLocalPose = new() { Position = new(), Orientation = new() { R = 1.000000F } };
 		}
 	}
 }

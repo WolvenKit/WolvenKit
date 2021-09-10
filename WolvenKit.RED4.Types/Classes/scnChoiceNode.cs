@@ -5,254 +5,238 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnChoiceNode : scnSceneGraphNode
 	{
-		private CString _displayNameOverride;
-		private LocalizationString _localizedDisplayNameOverride;
-		private CArray<scnChoiceNodeOption> _options;
-		private CEnum<scnChoiceNodeNsOperationMode> _mode;
-		private CArray<scnSceneEventId> _persistentLineEvents;
-		private scnscreenplayItemId _customPersistentLine;
-		private CHandle<scnChoiceNodeNsTimedParams> _timedParams;
-		private CHandle<scnChoiceNodeNsActorReminderParams> _reminderParams;
-		private CHandle<scnInteractionShapeParams> _shapeParams;
-		private CHandle<scnChoiceNodeNsLookAtParams> _lookAtParams;
-		private CHandle<questIBaseCondition> _forceAttachToScreenCondition;
-		private CName _choiceGroup;
-		private CBool _cpoHoldInputActionSection;
-		private scnChoiceNodeNsAttachToActorParams _ataParams;
-		private scnChoiceNodeNsAttachToPropParams _atpParams;
-		private scnChoiceNodeNsAttachToGameObjectParams _atgoParams;
-		private scnChoiceNodeNsAttachToScreenParams _atsParams;
-		private scnChoiceNodeNsAttachToWorldParams _atwParams;
-		private CUInt8 _choicePriority;
-		private CUInt8 _hubPriority;
-		private CHandle<scnChoiceNodeNsMappinParams> _mappinParams;
-		private CEnum<scnInterruptCapability> _interruptCapability;
-		private scnActorId _interruptionSpeakerOverride;
-		private CEnum<scnChoiceNodeNsChoiceNodeBitFlags> _choiceFlags;
-		private CBool _alwaysUseBrainGender;
-		private CHandle<scnTimedCondition> _timedSectionCondition;
-		private CHandle<scnReminderCondition> _reminderCondition;
-
 		[Ordinal(3)] 
 		[RED("displayNameOverride")] 
 		public CString DisplayNameOverride
 		{
-			get => GetProperty(ref _displayNameOverride);
-			set => SetProperty(ref _displayNameOverride, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("localizedDisplayNameOverride")] 
 		public LocalizationString LocalizedDisplayNameOverride
 		{
-			get => GetProperty(ref _localizedDisplayNameOverride);
-			set => SetProperty(ref _localizedDisplayNameOverride, value);
+			get => GetPropertyValue<LocalizationString>();
+			set => SetPropertyValue<LocalizationString>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("options")] 
 		public CArray<scnChoiceNodeOption> Options
 		{
-			get => GetProperty(ref _options);
-			set => SetProperty(ref _options, value);
+			get => GetPropertyValue<CArray<scnChoiceNodeOption>>();
+			set => SetPropertyValue<CArray<scnChoiceNodeOption>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("mode")] 
 		public CEnum<scnChoiceNodeNsOperationMode> Mode
 		{
-			get => GetProperty(ref _mode);
-			set => SetProperty(ref _mode, value);
+			get => GetPropertyValue<CEnum<scnChoiceNodeNsOperationMode>>();
+			set => SetPropertyValue<CEnum<scnChoiceNodeNsOperationMode>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("persistentLineEvents")] 
 		public CArray<scnSceneEventId> PersistentLineEvents
 		{
-			get => GetProperty(ref _persistentLineEvents);
-			set => SetProperty(ref _persistentLineEvents, value);
+			get => GetPropertyValue<CArray<scnSceneEventId>>();
+			set => SetPropertyValue<CArray<scnSceneEventId>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("customPersistentLine")] 
 		public scnscreenplayItemId CustomPersistentLine
 		{
-			get => GetProperty(ref _customPersistentLine);
-			set => SetProperty(ref _customPersistentLine, value);
+			get => GetPropertyValue<scnscreenplayItemId>();
+			set => SetPropertyValue<scnscreenplayItemId>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("timedParams")] 
 		public CHandle<scnChoiceNodeNsTimedParams> TimedParams
 		{
-			get => GetProperty(ref _timedParams);
-			set => SetProperty(ref _timedParams, value);
+			get => GetPropertyValue<CHandle<scnChoiceNodeNsTimedParams>>();
+			set => SetPropertyValue<CHandle<scnChoiceNodeNsTimedParams>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("reminderParams")] 
 		public CHandle<scnChoiceNodeNsActorReminderParams> ReminderParams
 		{
-			get => GetProperty(ref _reminderParams);
-			set => SetProperty(ref _reminderParams, value);
+			get => GetPropertyValue<CHandle<scnChoiceNodeNsActorReminderParams>>();
+			set => SetPropertyValue<CHandle<scnChoiceNodeNsActorReminderParams>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("shapeParams")] 
 		public CHandle<scnInteractionShapeParams> ShapeParams
 		{
-			get => GetProperty(ref _shapeParams);
-			set => SetProperty(ref _shapeParams, value);
+			get => GetPropertyValue<CHandle<scnInteractionShapeParams>>();
+			set => SetPropertyValue<CHandle<scnInteractionShapeParams>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("lookAtParams")] 
 		public CHandle<scnChoiceNodeNsLookAtParams> LookAtParams
 		{
-			get => GetProperty(ref _lookAtParams);
-			set => SetProperty(ref _lookAtParams, value);
+			get => GetPropertyValue<CHandle<scnChoiceNodeNsLookAtParams>>();
+			set => SetPropertyValue<CHandle<scnChoiceNodeNsLookAtParams>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("forceAttachToScreenCondition")] 
 		public CHandle<questIBaseCondition> ForceAttachToScreenCondition
 		{
-			get => GetProperty(ref _forceAttachToScreenCondition);
-			set => SetProperty(ref _forceAttachToScreenCondition, value);
+			get => GetPropertyValue<CHandle<questIBaseCondition>>();
+			set => SetPropertyValue<CHandle<questIBaseCondition>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("choiceGroup")] 
 		public CName ChoiceGroup
 		{
-			get => GetProperty(ref _choiceGroup);
-			set => SetProperty(ref _choiceGroup, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("cpoHoldInputActionSection")] 
 		public CBool CpoHoldInputActionSection
 		{
-			get => GetProperty(ref _cpoHoldInputActionSection);
-			set => SetProperty(ref _cpoHoldInputActionSection, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("ataParams")] 
 		public scnChoiceNodeNsAttachToActorParams AtaParams
 		{
-			get => GetProperty(ref _ataParams);
-			set => SetProperty(ref _ataParams, value);
+			get => GetPropertyValue<scnChoiceNodeNsAttachToActorParams>();
+			set => SetPropertyValue<scnChoiceNodeNsAttachToActorParams>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("atpParams")] 
 		public scnChoiceNodeNsAttachToPropParams AtpParams
 		{
-			get => GetProperty(ref _atpParams);
-			set => SetProperty(ref _atpParams, value);
+			get => GetPropertyValue<scnChoiceNodeNsAttachToPropParams>();
+			set => SetPropertyValue<scnChoiceNodeNsAttachToPropParams>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("atgoParams")] 
 		public scnChoiceNodeNsAttachToGameObjectParams AtgoParams
 		{
-			get => GetProperty(ref _atgoParams);
-			set => SetProperty(ref _atgoParams, value);
+			get => GetPropertyValue<scnChoiceNodeNsAttachToGameObjectParams>();
+			set => SetPropertyValue<scnChoiceNodeNsAttachToGameObjectParams>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("atsParams")] 
 		public scnChoiceNodeNsAttachToScreenParams AtsParams
 		{
-			get => GetProperty(ref _atsParams);
-			set => SetProperty(ref _atsParams, value);
+			get => GetPropertyValue<scnChoiceNodeNsAttachToScreenParams>();
+			set => SetPropertyValue<scnChoiceNodeNsAttachToScreenParams>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("atwParams")] 
 		public scnChoiceNodeNsAttachToWorldParams AtwParams
 		{
-			get => GetProperty(ref _atwParams);
-			set => SetProperty(ref _atwParams, value);
+			get => GetPropertyValue<scnChoiceNodeNsAttachToWorldParams>();
+			set => SetPropertyValue<scnChoiceNodeNsAttachToWorldParams>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("choicePriority")] 
 		public CUInt8 ChoicePriority
 		{
-			get => GetProperty(ref _choicePriority);
-			set => SetProperty(ref _choicePriority, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("hubPriority")] 
 		public CUInt8 HubPriority
 		{
-			get => GetProperty(ref _hubPriority);
-			set => SetProperty(ref _hubPriority, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("mappinParams")] 
 		public CHandle<scnChoiceNodeNsMappinParams> MappinParams
 		{
-			get => GetProperty(ref _mappinParams);
-			set => SetProperty(ref _mappinParams, value);
+			get => GetPropertyValue<CHandle<scnChoiceNodeNsMappinParams>>();
+			set => SetPropertyValue<CHandle<scnChoiceNodeNsMappinParams>>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("interruptCapability")] 
 		public CEnum<scnInterruptCapability> InterruptCapability
 		{
-			get => GetProperty(ref _interruptCapability);
-			set => SetProperty(ref _interruptCapability, value);
+			get => GetPropertyValue<CEnum<scnInterruptCapability>>();
+			set => SetPropertyValue<CEnum<scnInterruptCapability>>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("interruptionSpeakerOverride")] 
 		public scnActorId InterruptionSpeakerOverride
 		{
-			get => GetProperty(ref _interruptionSpeakerOverride);
-			set => SetProperty(ref _interruptionSpeakerOverride, value);
+			get => GetPropertyValue<scnActorId>();
+			set => SetPropertyValue<scnActorId>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("choiceFlags")] 
-		public CEnum<scnChoiceNodeNsChoiceNodeBitFlags> ChoiceFlags
+		public CBitField<scnChoiceNodeNsChoiceNodeBitFlags> ChoiceFlags
 		{
-			get => GetProperty(ref _choiceFlags);
-			set => SetProperty(ref _choiceFlags, value);
+			get => GetPropertyValue<CBitField<scnChoiceNodeNsChoiceNodeBitFlags>>();
+			set => SetPropertyValue<CBitField<scnChoiceNodeNsChoiceNodeBitFlags>>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("alwaysUseBrainGender")] 
 		public CBool AlwaysUseBrainGender
 		{
-			get => GetProperty(ref _alwaysUseBrainGender);
-			set => SetProperty(ref _alwaysUseBrainGender, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("timedSectionCondition")] 
 		public CHandle<scnTimedCondition> TimedSectionCondition
 		{
-			get => GetProperty(ref _timedSectionCondition);
-			set => SetProperty(ref _timedSectionCondition, value);
+			get => GetPropertyValue<CHandle<scnTimedCondition>>();
+			set => SetPropertyValue<CHandle<scnTimedCondition>>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("reminderCondition")] 
 		public CHandle<scnReminderCondition> ReminderCondition
 		{
-			get => GetProperty(ref _reminderCondition);
-			set => SetProperty(ref _reminderCondition, value);
+			get => GetPropertyValue<CHandle<scnReminderCondition>>();
+			set => SetPropertyValue<CHandle<scnReminderCondition>>(value);
 		}
 
 		public scnChoiceNode()
 		{
-			_mode = new() { Value = Enums.scnChoiceNodeNsOperationMode.attachToScreen };
-			_interruptCapability = new() { Value = Enums.scnInterruptCapability.Interruptable };
+			NodeId = new() { Id = 4294967295 };
+			OutputSockets = new();
+			LocalizedDisplayNameOverride = new() { Unk1 = 0, Value = "" };
+			Options = new();
+			Mode = Enums.scnChoiceNodeNsOperationMode.attachToScreen;
+			PersistentLineEvents = new();
+			CustomPersistentLine = new() { Id = 4294967040 };
+			AtaParams = new() { ActorId = new() { Id = 4294967295 } };
+			AtpParams = new() { PropId = new() { Id = 4294967295 }, VisualizerStyle = Enums.scnChoiceNodeNsVisualizerStyle.inWorld };
+			AtgoParams = new() { VisualizerStyle = Enums.scnChoiceNodeNsVisualizerStyle.inWorld };
+			AtsParams = new();
+			AtwParams = new() { EntityPosition = new(), EntityOrientation = new() { R = 1.000000F } };
+			InterruptCapability = Enums.scnInterruptCapability.Interruptable;
+			InterruptionSpeakerOverride = new() { Id = 4294967295 };
 		}
 	}
 }

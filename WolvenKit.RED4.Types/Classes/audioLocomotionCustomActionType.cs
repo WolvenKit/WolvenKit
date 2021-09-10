@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioLocomotionCustomActionType : audioAudioMetadata
 	{
-		private CBool _void;
-
 		[Ordinal(1)] 
 		[RED("void")] 
 		public CBool Void
 		{
-			get => GetProperty(ref _void);
-			set => SetProperty(ref _void, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

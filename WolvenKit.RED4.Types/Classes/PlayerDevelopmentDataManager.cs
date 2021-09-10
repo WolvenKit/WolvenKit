@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PlayerDevelopmentDataManager : IScriptable
 	{
-		private CWeakHandle<PlayerPuppet> _player;
-		private CHandle<PlayerDevelopmentSystem> _playerDevSystem;
-		private CWeakHandle<gameuiWidgetGameController> _parentGameCtrl;
-
 		[Ordinal(0)] 
 		[RED("player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
-			get => GetProperty(ref _player);
-			set => SetProperty(ref _player, value);
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("playerDevSystem")] 
 		public CHandle<PlayerDevelopmentSystem> PlayerDevSystem
 		{
-			get => GetProperty(ref _playerDevSystem);
-			set => SetProperty(ref _playerDevSystem, value);
+			get => GetPropertyValue<CHandle<PlayerDevelopmentSystem>>();
+			set => SetPropertyValue<CHandle<PlayerDevelopmentSystem>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("parentGameCtrl")] 
 		public CWeakHandle<gameuiWidgetGameController> ParentGameCtrl
 		{
-			get => GetProperty(ref _parentGameCtrl);
-			set => SetProperty(ref _parentGameCtrl, value);
+			get => GetPropertyValue<CWeakHandle<gameuiWidgetGameController>>();
+			set => SetPropertyValue<CWeakHandle<gameuiWidgetGameController>>(value);
 		}
 	}
 }

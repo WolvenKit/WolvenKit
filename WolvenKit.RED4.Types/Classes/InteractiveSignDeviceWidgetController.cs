@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class InteractiveSignDeviceWidgetController : DeviceWidgetControllerBase
 	{
-		private CName _messageWidgetPath;
-		private CName _backgroundWidgetPath;
-		private CWeakHandle<inkTextWidget> _messageWidget;
-		private CWeakHandle<inkWidget> _backgroundWidget;
-
 		[Ordinal(10)] 
 		[RED("messageWidgetPath")] 
 		public CName MessageWidgetPath
 		{
-			get => GetProperty(ref _messageWidgetPath);
-			set => SetProperty(ref _messageWidgetPath, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("backgroundWidgetPath")] 
 		public CName BackgroundWidgetPath
 		{
-			get => GetProperty(ref _backgroundWidgetPath);
-			set => SetProperty(ref _backgroundWidgetPath, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("messageWidget")] 
 		public CWeakHandle<inkTextWidget> MessageWidget
 		{
-			get => GetProperty(ref _messageWidget);
-			set => SetProperty(ref _messageWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkTextWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("backgroundWidget")] 
 		public CWeakHandle<inkWidget> BackgroundWidget
 		{
-			get => GetProperty(ref _backgroundWidget);
-			set => SetProperty(ref _backgroundWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 	}
 }

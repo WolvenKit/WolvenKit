@@ -5,59 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameprojectileLaunchParams : RedBaseClass
 	{
-		private CEnum<gameprojectileELaunchMode> _launchMode;
-		private CHandle<entIPositionProvider> _logicalPositionProvider;
-		private CHandle<entIOrientationProvider> _logicalOrientationProvider;
-		private CHandle<entIPositionProvider> _visualPositionProvider;
-		private CHandle<entIOrientationProvider> _visualOrientationProvider;
-		private CHandle<entIVelocityProvider> _ownerVelocityProvider;
-
 		[Ordinal(0)] 
 		[RED("launchMode")] 
 		public CEnum<gameprojectileELaunchMode> LaunchMode
 		{
-			get => GetProperty(ref _launchMode);
-			set => SetProperty(ref _launchMode, value);
+			get => GetPropertyValue<CEnum<gameprojectileELaunchMode>>();
+			set => SetPropertyValue<CEnum<gameprojectileELaunchMode>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("logicalPositionProvider")] 
 		public CHandle<entIPositionProvider> LogicalPositionProvider
 		{
-			get => GetProperty(ref _logicalPositionProvider);
-			set => SetProperty(ref _logicalPositionProvider, value);
+			get => GetPropertyValue<CHandle<entIPositionProvider>>();
+			set => SetPropertyValue<CHandle<entIPositionProvider>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("logicalOrientationProvider")] 
 		public CHandle<entIOrientationProvider> LogicalOrientationProvider
 		{
-			get => GetProperty(ref _logicalOrientationProvider);
-			set => SetProperty(ref _logicalOrientationProvider, value);
+			get => GetPropertyValue<CHandle<entIOrientationProvider>>();
+			set => SetPropertyValue<CHandle<entIOrientationProvider>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("visualPositionProvider")] 
 		public CHandle<entIPositionProvider> VisualPositionProvider
 		{
-			get => GetProperty(ref _visualPositionProvider);
-			set => SetProperty(ref _visualPositionProvider, value);
+			get => GetPropertyValue<CHandle<entIPositionProvider>>();
+			set => SetPropertyValue<CHandle<entIPositionProvider>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("visualOrientationProvider")] 
 		public CHandle<entIOrientationProvider> VisualOrientationProvider
 		{
-			get => GetProperty(ref _visualOrientationProvider);
-			set => SetProperty(ref _visualOrientationProvider, value);
+			get => GetPropertyValue<CHandle<entIOrientationProvider>>();
+			set => SetPropertyValue<CHandle<entIOrientationProvider>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("ownerVelocityProvider")] 
 		public CHandle<entIVelocityProvider> OwnerVelocityProvider
 		{
-			get => GetProperty(ref _ownerVelocityProvider);
-			set => SetProperty(ref _ownerVelocityProvider, value);
+			get => GetPropertyValue<CHandle<entIVelocityProvider>>();
+			set => SetPropertyValue<CHandle<entIVelocityProvider>>(value);
 		}
 	}
 }

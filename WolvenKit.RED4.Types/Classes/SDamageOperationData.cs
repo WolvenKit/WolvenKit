@@ -5,37 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SDamageOperationData : RedBaseClass
 	{
-		private CFloat _range;
-		private Vector4 _offset;
-		private TweakDBID _damageType;
-
 		[Ordinal(0)] 
 		[RED("range")] 
 		public CFloat Range
 		{
-			get => GetProperty(ref _range);
-			set => SetProperty(ref _range, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("offset")] 
 		public Vector4 Offset
 		{
-			get => GetProperty(ref _offset);
-			set => SetProperty(ref _offset, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("damageType")] 
 		public TweakDBID DamageType
 		{
-			get => GetProperty(ref _damageType);
-			set => SetProperty(ref _damageType, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		public SDamageOperationData()
 		{
-			_range = -1.000000F;
+			Range = -1.000000F;
+			Offset = new();
 		}
 	}
 }

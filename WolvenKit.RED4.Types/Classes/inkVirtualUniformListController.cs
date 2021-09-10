@@ -5,14 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkVirtualUniformListController : inkVirtualCompoundController
 	{
-		private inkWidgetLibraryReference _itemTemplate;
-
 		[Ordinal(7)] 
 		[RED("itemTemplate")] 
 		public inkWidgetLibraryReference ItemTemplate
 		{
-			get => GetProperty(ref _itemTemplate);
-			set => SetProperty(ref _itemTemplate, value);
+			get => GetPropertyValue<inkWidgetLibraryReference>();
+			set => SetPropertyValue<inkWidgetLibraryReference>(value);
+		}
+
+		public inkVirtualUniformListController()
+		{
+			ItemSelected = new();
+			ItemActivated = new();
+			AllElementsSpawned = new();
+			ItemTemplate = new() { WidgetLibrary = new() };
 		}
 	}
 }

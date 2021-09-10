@@ -5,32 +5,37 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RadioControllerPS : MediaDeviceControllerPS
 	{
-		private RadioSetup _radioSetup;
-		private CArray<RadioStationsMap> _stations;
-		private CBool _stationsInitialized;
-
 		[Ordinal(109)] 
 		[RED("radioSetup")] 
 		public RadioSetup RadioSetup
 		{
-			get => GetProperty(ref _radioSetup);
-			set => SetProperty(ref _radioSetup, value);
+			get => GetPropertyValue<RadioSetup>();
+			set => SetPropertyValue<RadioSetup>(value);
 		}
 
 		[Ordinal(110)] 
 		[RED("stations")] 
 		public CArray<RadioStationsMap> Stations
 		{
-			get => GetProperty(ref _stations);
-			set => SetProperty(ref _stations, value);
+			get => GetPropertyValue<CArray<RadioStationsMap>>();
+			set => SetPropertyValue<CArray<RadioStationsMap>>(value);
 		}
 
 		[Ordinal(111)] 
 		[RED("stationsInitialized")] 
 		public CBool StationsInitialized
 		{
-			get => GetProperty(ref _stationsInitialized);
-			set => SetProperty(ref _stationsInitialized, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public RadioControllerPS()
+		{
+			DeviceName = "LocKey#96";
+			TweakDBRecord = new() { Value = 55896600565 };
+			TweakDBDescriptionRecord = new() { Value = 109081313862 };
+			RadioSetup = new();
+			Stations = new();
 		}
 	}
 }

@@ -5,28 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameStatData : RedBaseClass
 	{
-		private CArray<gameStatModifierHandle> _modifiers;
-		private CEnum<gamedataStatType> _statType;
-
 		[Ordinal(0)] 
 		[RED("modifiers")] 
 		public CArray<gameStatModifierHandle> Modifiers
 		{
-			get => GetProperty(ref _modifiers);
-			set => SetProperty(ref _modifiers, value);
+			get => GetPropertyValue<CArray<gameStatModifierHandle>>();
+			set => SetPropertyValue<CArray<gameStatModifierHandle>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("statType")] 
 		public CEnum<gamedataStatType> StatType
 		{
-			get => GetProperty(ref _statType);
-			set => SetProperty(ref _statType, value);
+			get => GetPropertyValue<CEnum<gamedataStatType>>();
+			set => SetPropertyValue<CEnum<gamedataStatType>>(value);
 		}
 
 		public gameStatData()
 		{
-			_statType = new() { Value = Enums.gamedataStatType.Invalid };
+			Modifiers = new();
+			StatType = Enums.gamedataStatType.Invalid;
 		}
 	}
 }

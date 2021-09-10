@@ -5,74 +5,67 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entEffectDesc : ISerializable
 	{
-		private CRUID _id;
-		private CName _effectName;
-		private CResourceAsyncReference<worldEffect> _effect;
-		private worldCompiledEffectInfo _compiledEffectInfo;
-		private CName _autoSpawnTag;
-		private CBool _isAutoSpawn;
-		private CUInt8 _randomWeight;
-
 		[Ordinal(0)] 
 		[RED("id")] 
 		public CRUID Id
 		{
-			get => GetProperty(ref _id);
-			set => SetProperty(ref _id, value);
+			get => GetPropertyValue<CRUID>();
+			set => SetPropertyValue<CRUID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("effectName")] 
 		public CName EffectName
 		{
-			get => GetProperty(ref _effectName);
-			set => SetProperty(ref _effectName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("effect")] 
 		public CResourceAsyncReference<worldEffect> Effect
 		{
-			get => GetProperty(ref _effect);
-			set => SetProperty(ref _effect, value);
+			get => GetPropertyValue<CResourceAsyncReference<worldEffect>>();
+			set => SetPropertyValue<CResourceAsyncReference<worldEffect>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("compiledEffectInfo")] 
 		public worldCompiledEffectInfo CompiledEffectInfo
 		{
-			get => GetProperty(ref _compiledEffectInfo);
-			set => SetProperty(ref _compiledEffectInfo, value);
+			get => GetPropertyValue<worldCompiledEffectInfo>();
+			set => SetPropertyValue<worldCompiledEffectInfo>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("autoSpawnTag")] 
 		public CName AutoSpawnTag
 		{
-			get => GetProperty(ref _autoSpawnTag);
-			set => SetProperty(ref _autoSpawnTag, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("isAutoSpawn")] 
 		public CBool IsAutoSpawn
 		{
-			get => GetProperty(ref _isAutoSpawn);
-			set => SetProperty(ref _isAutoSpawn, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("randomWeight")] 
 		public CUInt8 RandomWeight
 		{
-			get => GetProperty(ref _randomWeight);
-			set => SetProperty(ref _randomWeight, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		public entEffectDesc()
 		{
-			_autoSpawnTag = "_autospawn";
-			_randomWeight = 1;
+			CompiledEffectInfo = new() { PlacementTags = new(), ComponentNames = new(), RelativePositions = new(), RelativeRotations = new(), PlacementInfos = new(), EventsSortedByRUID = new() };
+			AutoSpawnTag = "_autospawn";
+			RandomWeight = 1;
 		}
 	}
 }

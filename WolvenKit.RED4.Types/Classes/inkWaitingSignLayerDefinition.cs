@@ -5,86 +5,76 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkWaitingSignLayerDefinition : inkLayerDefinition
 	{
-		private CName _introAnimName;
-		private CName _waitingAnimName;
-		private CName _outroAnimName;
-		private CFloat _delayTime;
-		private CFloat _introTime;
-		private CFloat _waitingTime;
-		private CFloat _postWaitTime;
-		private CFloat _outroTime;
-		private CFloat _layerInitTime;
-
 		[Ordinal(8)] 
 		[RED("introAnimName")] 
 		public CName IntroAnimName
 		{
-			get => GetProperty(ref _introAnimName);
-			set => SetProperty(ref _introAnimName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("waitingAnimName")] 
 		public CName WaitingAnimName
 		{
-			get => GetProperty(ref _waitingAnimName);
-			set => SetProperty(ref _waitingAnimName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("outroAnimName")] 
 		public CName OutroAnimName
 		{
-			get => GetProperty(ref _outroAnimName);
-			set => SetProperty(ref _outroAnimName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("delayTime")] 
 		public CFloat DelayTime
 		{
-			get => GetProperty(ref _delayTime);
-			set => SetProperty(ref _delayTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("introTime")] 
 		public CFloat IntroTime
 		{
-			get => GetProperty(ref _introTime);
-			set => SetProperty(ref _introTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("waitingTime")] 
 		public CFloat WaitingTime
 		{
-			get => GetProperty(ref _waitingTime);
-			set => SetProperty(ref _waitingTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("postWaitTime")] 
 		public CFloat PostWaitTime
 		{
-			get => GetProperty(ref _postWaitTime);
-			set => SetProperty(ref _postWaitTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("outroTime")] 
 		public CFloat OutroTime
 		{
-			get => GetProperty(ref _outroTime);
-			set => SetProperty(ref _outroTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("layerInitTime")] 
 		public CFloat LayerInitTime
 		{
-			get => GetProperty(ref _layerInitTime);
-			set => SetProperty(ref _layerInitTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

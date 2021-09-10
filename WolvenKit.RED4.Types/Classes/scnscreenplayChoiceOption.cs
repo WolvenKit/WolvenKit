@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnscreenplayChoiceOption : RedBaseClass
 	{
-		private scnscreenplayItemId _itemId;
-		private scnscreenplayOptionUsage _usage;
-		private scnlocLocstringId _locstringId;
-
 		[Ordinal(0)] 
 		[RED("itemId")] 
 		public scnscreenplayItemId ItemId
 		{
-			get => GetProperty(ref _itemId);
-			set => SetProperty(ref _itemId, value);
+			get => GetPropertyValue<scnscreenplayItemId>();
+			set => SetPropertyValue<scnscreenplayItemId>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("usage")] 
 		public scnscreenplayOptionUsage Usage
 		{
-			get => GetProperty(ref _usage);
-			set => SetProperty(ref _usage, value);
+			get => GetPropertyValue<scnscreenplayOptionUsage>();
+			set => SetPropertyValue<scnscreenplayOptionUsage>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("locstringId")] 
 		public scnlocLocstringId LocstringId
 		{
-			get => GetProperty(ref _locstringId);
-			set => SetProperty(ref _locstringId, value);
+			get => GetPropertyValue<scnlocLocstringId>();
+			set => SetPropertyValue<scnlocLocstringId>(value);
+		}
+
+		public scnscreenplayChoiceOption()
+		{
+			ItemId = new() { Id = 4294967040 };
+			Usage = new() { PlayerGenderMask = new() { Mask = 128 } };
+			LocstringId = new();
 		}
 	}
 }

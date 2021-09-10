@@ -5,82 +5,74 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameinteractionsvisListChoiceHubData : RedBaseClass
 	{
-		private CInt32 _id;
-		private CEnum<gameinteractionsvisEVisualizerActivityState> _activityState;
-		private CEnum<gameinteractionsvisEVisualizerDefinitionFlags> _flags;
-		private CBool _isPhoneLockActive;
-		private CString _title;
-		private CArray<gameinteractionsvisListChoiceData> _choices;
-		private CWeakHandle<gameinteractionsvisIVisualizerTimeProvider> _timeProvider;
-		private CUInt8 _hubPriority;
-
 		[Ordinal(0)] 
 		[RED("id")] 
 		public CInt32 Id
 		{
-			get => GetProperty(ref _id);
-			set => SetProperty(ref _id, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("activityState")] 
 		public CEnum<gameinteractionsvisEVisualizerActivityState> ActivityState
 		{
-			get => GetProperty(ref _activityState);
-			set => SetProperty(ref _activityState, value);
+			get => GetPropertyValue<CEnum<gameinteractionsvisEVisualizerActivityState>>();
+			set => SetPropertyValue<CEnum<gameinteractionsvisEVisualizerActivityState>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("flags")] 
 		public CEnum<gameinteractionsvisEVisualizerDefinitionFlags> Flags
 		{
-			get => GetProperty(ref _flags);
-			set => SetProperty(ref _flags, value);
+			get => GetPropertyValue<CEnum<gameinteractionsvisEVisualizerDefinitionFlags>>();
+			set => SetPropertyValue<CEnum<gameinteractionsvisEVisualizerDefinitionFlags>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isPhoneLockActive")] 
 		public CBool IsPhoneLockActive
 		{
-			get => GetProperty(ref _isPhoneLockActive);
-			set => SetProperty(ref _isPhoneLockActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("title")] 
 		public CString Title
 		{
-			get => GetProperty(ref _title);
-			set => SetProperty(ref _title, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("choices")] 
 		public CArray<gameinteractionsvisListChoiceData> Choices
 		{
-			get => GetProperty(ref _choices);
-			set => SetProperty(ref _choices, value);
+			get => GetPropertyValue<CArray<gameinteractionsvisListChoiceData>>();
+			set => SetPropertyValue<CArray<gameinteractionsvisListChoiceData>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("timeProvider")] 
 		public CWeakHandle<gameinteractionsvisIVisualizerTimeProvider> TimeProvider
 		{
-			get => GetProperty(ref _timeProvider);
-			set => SetProperty(ref _timeProvider, value);
+			get => GetPropertyValue<CWeakHandle<gameinteractionsvisIVisualizerTimeProvider>>();
+			set => SetPropertyValue<CWeakHandle<gameinteractionsvisIVisualizerTimeProvider>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("hubPriority")] 
 		public CUInt8 HubPriority
 		{
-			get => GetProperty(ref _hubPriority);
-			set => SetProperty(ref _hubPriority, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		public gameinteractionsvisListChoiceHubData()
 		{
-			_id = -1;
+			Id = -1;
+			Choices = new();
 		}
 	}
 }

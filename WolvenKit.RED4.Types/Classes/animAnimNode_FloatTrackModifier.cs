@@ -5,50 +5,53 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_FloatTrackModifier : animAnimNode_Base
 	{
-		private animNamedTrackIndex _floatTrack;
-		private CEnum<animFloatTrackOperationType> _operationType;
-		private animNamedTrackIndex _inputFloatTrack;
-		private animPoseLink _poseInputNode;
-		private animFloatLink _floatInputNode;
-
 		[Ordinal(11)] 
 		[RED("floatTrack")] 
 		public animNamedTrackIndex FloatTrack
 		{
-			get => GetProperty(ref _floatTrack);
-			set => SetProperty(ref _floatTrack, value);
+			get => GetPropertyValue<animNamedTrackIndex>();
+			set => SetPropertyValue<animNamedTrackIndex>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("operationType")] 
 		public CEnum<animFloatTrackOperationType> OperationType
 		{
-			get => GetProperty(ref _operationType);
-			set => SetProperty(ref _operationType, value);
+			get => GetPropertyValue<CEnum<animFloatTrackOperationType>>();
+			set => SetPropertyValue<CEnum<animFloatTrackOperationType>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("inputFloatTrack")] 
 		public animNamedTrackIndex InputFloatTrack
 		{
-			get => GetProperty(ref _inputFloatTrack);
-			set => SetProperty(ref _inputFloatTrack, value);
+			get => GetPropertyValue<animNamedTrackIndex>();
+			set => SetPropertyValue<animNamedTrackIndex>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("poseInputNode")] 
 		public animPoseLink PoseInputNode
 		{
-			get => GetProperty(ref _poseInputNode);
-			set => SetProperty(ref _poseInputNode, value);
+			get => GetPropertyValue<animPoseLink>();
+			set => SetPropertyValue<animPoseLink>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("floatInputNode")] 
 		public animFloatLink FloatInputNode
 		{
-			get => GetProperty(ref _floatInputNode);
-			set => SetProperty(ref _floatInputNode, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
+		}
+
+		public animAnimNode_FloatTrackModifier()
+		{
+			Id = 4294967295;
+			FloatTrack = new();
+			InputFloatTrack = new();
+			PoseInputNode = new();
+			FloatInputNode = new();
 		}
 	}
 }

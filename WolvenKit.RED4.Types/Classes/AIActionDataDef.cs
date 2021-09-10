@@ -5,212 +5,215 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIActionDataDef : AIBlackboardDef
 	{
-		private gamebbScriptID_Int32 _ownerMeleeAttackBlockedCount;
-		private gamebbScriptID_Int32 _ownerMeleeAttackParriedCount;
-		private gamebbScriptID_Int32 _ownerMeleeAttackDodgedCount;
-		private gamebbScriptID_Float _ownerLastAttackTimeStamp;
-		private gamebbScriptID_CName _ownerLastAttackName;
-		private gamebbScriptID_Bool _ownerCurrentAnimVariationSet;
-		private gamebbScriptID_Int32 _ownerLastAnimVariation;
-		private gamebbScriptID_Variant _ownerItemsToEquip;
-		private gamebbScriptID_Variant _ownerItemsUnequipped;
-		private gamebbScriptID_Variant _ownerItemsForceUnequipped;
-		private gamebbScriptID_Variant _ownerLastEquippedItems;
-		private gamebbScriptID_Float _ownerLastUnequipTimestamp;
-		private gamebbScriptID_Float _ownerEquipItemTime;
-		private gamebbScriptID_Float _ownerEquipDuration;
-		private gamebbScriptID_Bool _dropItemOnUnequip;
-		private gamebbScriptID_Bool _archetypeEffectorsApplied;
-		private gamebbScriptID_Float _ownerTimeDilation;
-		private gamebbScriptID_Bool _operationHasBeenProcessed;
-		private gamebbScriptID_Bool _weaponTrailInitialised;
-		private gamebbScriptID_Bool _weaponTrailAborted;
-		private gamebbScriptID_Variant _netrunner;
-		private gamebbScriptID_Variant _netrunnerProxy;
-		private gamebbScriptID_Variant _netrunnerTarget;
-
 		[Ordinal(0)] 
 		[RED("ownerMeleeAttackBlockedCount")] 
 		public gamebbScriptID_Int32 OwnerMeleeAttackBlockedCount
 		{
-			get => GetProperty(ref _ownerMeleeAttackBlockedCount);
-			set => SetProperty(ref _ownerMeleeAttackBlockedCount, value);
+			get => GetPropertyValue<gamebbScriptID_Int32>();
+			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ownerMeleeAttackParriedCount")] 
 		public gamebbScriptID_Int32 OwnerMeleeAttackParriedCount
 		{
-			get => GetProperty(ref _ownerMeleeAttackParriedCount);
-			set => SetProperty(ref _ownerMeleeAttackParriedCount, value);
+			get => GetPropertyValue<gamebbScriptID_Int32>();
+			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ownerMeleeAttackDodgedCount")] 
 		public gamebbScriptID_Int32 OwnerMeleeAttackDodgedCount
 		{
-			get => GetProperty(ref _ownerMeleeAttackDodgedCount);
-			set => SetProperty(ref _ownerMeleeAttackDodgedCount, value);
+			get => GetPropertyValue<gamebbScriptID_Int32>();
+			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("ownerLastAttackTimeStamp")] 
 		public gamebbScriptID_Float OwnerLastAttackTimeStamp
 		{
-			get => GetProperty(ref _ownerLastAttackTimeStamp);
-			set => SetProperty(ref _ownerLastAttackTimeStamp, value);
+			get => GetPropertyValue<gamebbScriptID_Float>();
+			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("ownerLastAttackName")] 
 		public gamebbScriptID_CName OwnerLastAttackName
 		{
-			get => GetProperty(ref _ownerLastAttackName);
-			set => SetProperty(ref _ownerLastAttackName, value);
+			get => GetPropertyValue<gamebbScriptID_CName>();
+			set => SetPropertyValue<gamebbScriptID_CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("ownerCurrentAnimVariationSet")] 
 		public gamebbScriptID_Bool OwnerCurrentAnimVariationSet
 		{
-			get => GetProperty(ref _ownerCurrentAnimVariationSet);
-			set => SetProperty(ref _ownerCurrentAnimVariationSet, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("ownerLastAnimVariation")] 
 		public gamebbScriptID_Int32 OwnerLastAnimVariation
 		{
-			get => GetProperty(ref _ownerLastAnimVariation);
-			set => SetProperty(ref _ownerLastAnimVariation, value);
+			get => GetPropertyValue<gamebbScriptID_Int32>();
+			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("ownerItemsToEquip")] 
 		public gamebbScriptID_Variant OwnerItemsToEquip
 		{
-			get => GetProperty(ref _ownerItemsToEquip);
-			set => SetProperty(ref _ownerItemsToEquip, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("ownerItemsUnequipped")] 
 		public gamebbScriptID_Variant OwnerItemsUnequipped
 		{
-			get => GetProperty(ref _ownerItemsUnequipped);
-			set => SetProperty(ref _ownerItemsUnequipped, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("ownerItemsForceUnequipped")] 
 		public gamebbScriptID_Variant OwnerItemsForceUnequipped
 		{
-			get => GetProperty(ref _ownerItemsForceUnequipped);
-			set => SetProperty(ref _ownerItemsForceUnequipped, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("ownerLastEquippedItems")] 
 		public gamebbScriptID_Variant OwnerLastEquippedItems
 		{
-			get => GetProperty(ref _ownerLastEquippedItems);
-			set => SetProperty(ref _ownerLastEquippedItems, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("ownerLastUnequipTimestamp")] 
 		public gamebbScriptID_Float OwnerLastUnequipTimestamp
 		{
-			get => GetProperty(ref _ownerLastUnequipTimestamp);
-			set => SetProperty(ref _ownerLastUnequipTimestamp, value);
+			get => GetPropertyValue<gamebbScriptID_Float>();
+			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("ownerEquipItemTime")] 
 		public gamebbScriptID_Float OwnerEquipItemTime
 		{
-			get => GetProperty(ref _ownerEquipItemTime);
-			set => SetProperty(ref _ownerEquipItemTime, value);
+			get => GetPropertyValue<gamebbScriptID_Float>();
+			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("ownerEquipDuration")] 
 		public gamebbScriptID_Float OwnerEquipDuration
 		{
-			get => GetProperty(ref _ownerEquipDuration);
-			set => SetProperty(ref _ownerEquipDuration, value);
+			get => GetPropertyValue<gamebbScriptID_Float>();
+			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("dropItemOnUnequip")] 
 		public gamebbScriptID_Bool DropItemOnUnequip
 		{
-			get => GetProperty(ref _dropItemOnUnequip);
-			set => SetProperty(ref _dropItemOnUnequip, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("archetypeEffectorsApplied")] 
 		public gamebbScriptID_Bool ArchetypeEffectorsApplied
 		{
-			get => GetProperty(ref _archetypeEffectorsApplied);
-			set => SetProperty(ref _archetypeEffectorsApplied, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("ownerTimeDilation")] 
 		public gamebbScriptID_Float OwnerTimeDilation
 		{
-			get => GetProperty(ref _ownerTimeDilation);
-			set => SetProperty(ref _ownerTimeDilation, value);
+			get => GetPropertyValue<gamebbScriptID_Float>();
+			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("operationHasBeenProcessed")] 
 		public gamebbScriptID_Bool OperationHasBeenProcessed
 		{
-			get => GetProperty(ref _operationHasBeenProcessed);
-			set => SetProperty(ref _operationHasBeenProcessed, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("weaponTrailInitialised")] 
 		public gamebbScriptID_Bool WeaponTrailInitialised
 		{
-			get => GetProperty(ref _weaponTrailInitialised);
-			set => SetProperty(ref _weaponTrailInitialised, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("weaponTrailAborted")] 
 		public gamebbScriptID_Bool WeaponTrailAborted
 		{
-			get => GetProperty(ref _weaponTrailAborted);
-			set => SetProperty(ref _weaponTrailAborted, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("netrunner")] 
 		public gamebbScriptID_Variant Netrunner
 		{
-			get => GetProperty(ref _netrunner);
-			set => SetProperty(ref _netrunner, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("netrunnerProxy")] 
 		public gamebbScriptID_Variant NetrunnerProxy
 		{
-			get => GetProperty(ref _netrunnerProxy);
-			set => SetProperty(ref _netrunnerProxy, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("netrunnerTarget")] 
 		public gamebbScriptID_Variant NetrunnerTarget
 		{
-			get => GetProperty(ref _netrunnerTarget);
-			set => SetProperty(ref _netrunnerTarget, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
+		}
+
+		public AIActionDataDef()
+		{
+			OwnerMeleeAttackBlockedCount = new();
+			OwnerMeleeAttackParriedCount = new();
+			OwnerMeleeAttackDodgedCount = new();
+			OwnerLastAttackTimeStamp = new();
+			OwnerLastAttackName = new();
+			OwnerCurrentAnimVariationSet = new();
+			OwnerLastAnimVariation = new();
+			OwnerItemsToEquip = new();
+			OwnerItemsUnequipped = new();
+			OwnerItemsForceUnequipped = new();
+			OwnerLastEquippedItems = new();
+			OwnerLastUnequipTimestamp = new();
+			OwnerEquipItemTime = new();
+			OwnerEquipDuration = new();
+			DropItemOnUnequip = new();
+			ArchetypeEffectorsApplied = new();
+			OwnerTimeDilation = new();
+			OperationHasBeenProcessed = new();
+			WeaponTrailInitialised = new();
+			WeaponTrailAborted = new();
+			Netrunner = new();
+			NetrunnerProxy = new();
+			NetrunnerTarget = new();
 		}
 	}
 }

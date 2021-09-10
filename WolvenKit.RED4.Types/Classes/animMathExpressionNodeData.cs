@@ -5,41 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animMathExpressionNodeData : RedBaseClass
 	{
-		private CHandle<mathExprExpression> _expression;
-		private CArray<animAnimMathExpressionFloatSocket> _floatSockets;
-		private CArray<animAnimMathExpressionVectorSocket> _vectorSockets;
-		private CArray<animAnimMathExpressionQuaternionSocket> _quaternionSockets;
-
 		[Ordinal(0)] 
 		[RED("expression")] 
 		public CHandle<mathExprExpression> Expression
 		{
-			get => GetProperty(ref _expression);
-			set => SetProperty(ref _expression, value);
+			get => GetPropertyValue<CHandle<mathExprExpression>>();
+			set => SetPropertyValue<CHandle<mathExprExpression>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("floatSockets")] 
 		public CArray<animAnimMathExpressionFloatSocket> FloatSockets
 		{
-			get => GetProperty(ref _floatSockets);
-			set => SetProperty(ref _floatSockets, value);
+			get => GetPropertyValue<CArray<animAnimMathExpressionFloatSocket>>();
+			set => SetPropertyValue<CArray<animAnimMathExpressionFloatSocket>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("vectorSockets")] 
 		public CArray<animAnimMathExpressionVectorSocket> VectorSockets
 		{
-			get => GetProperty(ref _vectorSockets);
-			set => SetProperty(ref _vectorSockets, value);
+			get => GetPropertyValue<CArray<animAnimMathExpressionVectorSocket>>();
+			set => SetPropertyValue<CArray<animAnimMathExpressionVectorSocket>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("quaternionSockets")] 
 		public CArray<animAnimMathExpressionQuaternionSocket> QuaternionSockets
 		{
-			get => GetProperty(ref _quaternionSockets);
-			set => SetProperty(ref _quaternionSockets, value);
+			get => GetPropertyValue<CArray<animAnimMathExpressionQuaternionSocket>>();
+			set => SetPropertyValue<CArray<animAnimMathExpressionQuaternionSocket>>(value);
+		}
+
+		public animMathExpressionNodeData()
+		{
+			FloatSockets = new();
+			VectorSockets = new();
+			QuaternionSockets = new();
 		}
 	}
 }

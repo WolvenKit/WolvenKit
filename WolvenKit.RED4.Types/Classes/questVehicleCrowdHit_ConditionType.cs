@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questVehicleCrowdHit_ConditionType : questIVehicleConditionType
 	{
-		private CBool _lethal;
-
 		[Ordinal(0)] 
 		[RED("lethal")] 
 		public CBool Lethal
 		{
-			get => GetProperty(ref _lethal);
-			set => SetProperty(ref _lethal, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public questVehicleCrowdHit_ConditionType()
 		{
-			_lethal = true;
+			Lethal = true;
 		}
 	}
 }

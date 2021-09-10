@@ -5,38 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class physicsPhysicsJointAngularLimitPair : physicsPhysicsJointLimitBase
 	{
-		private CEnum<physicsPhysicsJointMotion> _twist;
-		private CFloat _upper;
-		private CFloat _lower;
-
 		[Ordinal(5)] 
 		[RED("twist")] 
 		public CEnum<physicsPhysicsJointMotion> Twist
 		{
-			get => GetProperty(ref _twist);
-			set => SetProperty(ref _twist, value);
+			get => GetPropertyValue<CEnum<physicsPhysicsJointMotion>>();
+			set => SetPropertyValue<CEnum<physicsPhysicsJointMotion>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("upper")] 
 		public CFloat Upper
 		{
-			get => GetProperty(ref _upper);
-			set => SetProperty(ref _upper, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("lower")] 
 		public CFloat Lower
 		{
-			get => GetProperty(ref _lower);
-			set => SetProperty(ref _lower, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public physicsPhysicsJointAngularLimitPair()
 		{
-			_upper = 180.000000F;
-			_lower = -180.000000F;
+			Upper = 180.000000F;
+			Lower = -180.000000F;
 		}
 	}
 }

@@ -5,68 +5,60 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AimAssistSettingsListener : userSettingsVarListener
 	{
-		private CWeakHandle<PlayerPuppet> _ctrl;
-		private CHandle<userSettingsUserSettings> _settings;
-		private CHandle<userSettingsGroup> _settingsGroup;
-		private CEnum<EAimAssistLevel> _aimAssistLevel;
-		private CEnum<EAimAssistLevel> _aimAssistMeleeLevel;
-		private CString _currentConfigString;
-		private CHandle<gamedataAimAssistSettings_Record> _settingsRecord;
-
 		[Ordinal(0)] 
 		[RED("ctrl")] 
 		public CWeakHandle<PlayerPuppet> Ctrl
 		{
-			get => GetProperty(ref _ctrl);
-			set => SetProperty(ref _ctrl, value);
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("settings")] 
 		public CHandle<userSettingsUserSettings> Settings
 		{
-			get => GetProperty(ref _settings);
-			set => SetProperty(ref _settings, value);
+			get => GetPropertyValue<CHandle<userSettingsUserSettings>>();
+			set => SetPropertyValue<CHandle<userSettingsUserSettings>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("settingsGroup")] 
 		public CHandle<userSettingsGroup> SettingsGroup
 		{
-			get => GetProperty(ref _settingsGroup);
-			set => SetProperty(ref _settingsGroup, value);
+			get => GetPropertyValue<CHandle<userSettingsGroup>>();
+			set => SetPropertyValue<CHandle<userSettingsGroup>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("aimAssistLevel")] 
 		public CEnum<EAimAssistLevel> AimAssistLevel
 		{
-			get => GetProperty(ref _aimAssistLevel);
-			set => SetProperty(ref _aimAssistLevel, value);
+			get => GetPropertyValue<CEnum<EAimAssistLevel>>();
+			set => SetPropertyValue<CEnum<EAimAssistLevel>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("aimAssistMeleeLevel")] 
 		public CEnum<EAimAssistLevel> AimAssistMeleeLevel
 		{
-			get => GetProperty(ref _aimAssistMeleeLevel);
-			set => SetProperty(ref _aimAssistMeleeLevel, value);
+			get => GetPropertyValue<CEnum<EAimAssistLevel>>();
+			set => SetPropertyValue<CEnum<EAimAssistLevel>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("currentConfigString")] 
 		public CString CurrentConfigString
 		{
-			get => GetProperty(ref _currentConfigString);
-			set => SetProperty(ref _currentConfigString, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("settingsRecord")] 
 		public CHandle<gamedataAimAssistSettings_Record> SettingsRecord
 		{
-			get => GetProperty(ref _settingsRecord);
-			set => SetProperty(ref _settingsRecord, value);
+			get => GetPropertyValue<CHandle<gamedataAimAssistSettings_Record>>();
+			set => SetPropertyValue<CHandle<gamedataAimAssistSettings_Record>>(value);
 		}
 	}
 }

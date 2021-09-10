@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CandleControllerPS : ScriptableDeviceComponentPS
 	{
-		private CHandle<EngDemoContainer> _candleSkillChecks;
-
 		[Ordinal(104)] 
 		[RED("candleSkillChecks")] 
 		public CHandle<EngDemoContainer> CandleSkillChecks
 		{
-			get => GetProperty(ref _candleSkillChecks);
-			set => SetProperty(ref _candleSkillChecks, value);
+			get => GetPropertyValue<CHandle<EngDemoContainer>>();
+			set => SetPropertyValue<CHandle<EngDemoContainer>>(value);
+		}
+
+		public CandleControllerPS()
+		{
+			DeviceName = "LocKey#45725";
+			TweakDBRecord = new() { Value = 62927945580 };
+			TweakDBDescriptionRecord = new() { Value = 115775549431 };
 		}
 	}
 }

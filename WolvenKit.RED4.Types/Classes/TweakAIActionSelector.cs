@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TweakAIActionSelector : TweakAIActionAbstract
 	{
-		private TweakDBID _selector;
-		private CWeakHandle<gamedataAIActionSelector_Record> _selectorRecord;
-		private CInt32 _nodeIterator;
-
 		[Ordinal(27)] 
 		[RED("selector")] 
 		public TweakDBID Selector
 		{
-			get => GetProperty(ref _selector);
-			set => SetProperty(ref _selector, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("selectorRecord")] 
 		public CWeakHandle<gamedataAIActionSelector_Record> SelectorRecord
 		{
-			get => GetProperty(ref _selectorRecord);
-			set => SetProperty(ref _selectorRecord, value);
+			get => GetPropertyValue<CWeakHandle<gamedataAIActionSelector_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataAIActionSelector_Record>>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("nodeIterator")] 
 		public CInt32 NodeIterator
 		{
-			get => GetProperty(ref _nodeIterator);
-			set => SetProperty(ref _nodeIterator, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		public TweakAIActionSelector()
+		{
+			LookatEvents = new();
+			GeneralSubActionsResults = new(8);
+			PhaseSubActionsResults = new(8);
 		}
 	}
 }

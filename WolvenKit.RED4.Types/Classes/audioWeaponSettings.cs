@@ -5,86 +5,76 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioWeaponSettings : audioAudioMetadata
 	{
-		private CEnum<audioWeaponBulletType> _bulletType;
-		private CEnum<audioWeaponShellCasingType> _shellCasingType;
-		private audioWeaponHandlingSettings _weaponHandlingSettings;
-		private CBool _singleShotInSandevistan;
-		private CName _chargeStartSound;
-		private CName _chargeReadySound;
-		private CName _chargeOverchargeSound;
-		private CName _chargeDischargeSound;
-		private audioWeaponFireModeSounds _fireModeSounds;
-
 		[Ordinal(1)] 
 		[RED("bulletType")] 
 		public CEnum<audioWeaponBulletType> BulletType
 		{
-			get => GetProperty(ref _bulletType);
-			set => SetProperty(ref _bulletType, value);
+			get => GetPropertyValue<CEnum<audioWeaponBulletType>>();
+			set => SetPropertyValue<CEnum<audioWeaponBulletType>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("shellCasingType")] 
 		public CEnum<audioWeaponShellCasingType> ShellCasingType
 		{
-			get => GetProperty(ref _shellCasingType);
-			set => SetProperty(ref _shellCasingType, value);
+			get => GetPropertyValue<CEnum<audioWeaponShellCasingType>>();
+			set => SetPropertyValue<CEnum<audioWeaponShellCasingType>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("weaponHandlingSettings")] 
 		public audioWeaponHandlingSettings WeaponHandlingSettings
 		{
-			get => GetProperty(ref _weaponHandlingSettings);
-			set => SetProperty(ref _weaponHandlingSettings, value);
+			get => GetPropertyValue<audioWeaponHandlingSettings>();
+			set => SetPropertyValue<audioWeaponHandlingSettings>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("singleShotInSandevistan")] 
 		public CBool SingleShotInSandevistan
 		{
-			get => GetProperty(ref _singleShotInSandevistan);
-			set => SetProperty(ref _singleShotInSandevistan, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("chargeStartSound")] 
 		public CName ChargeStartSound
 		{
-			get => GetProperty(ref _chargeStartSound);
-			set => SetProperty(ref _chargeStartSound, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("chargeReadySound")] 
 		public CName ChargeReadySound
 		{
-			get => GetProperty(ref _chargeReadySound);
-			set => SetProperty(ref _chargeReadySound, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("chargeOverchargeSound")] 
 		public CName ChargeOverchargeSound
 		{
-			get => GetProperty(ref _chargeOverchargeSound);
-			set => SetProperty(ref _chargeOverchargeSound, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("chargeDischargeSound")] 
 		public CName ChargeDischargeSound
 		{
-			get => GetProperty(ref _chargeDischargeSound);
-			set => SetProperty(ref _chargeDischargeSound, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("fireModeSounds")] 
 		public audioWeaponFireModeSounds FireModeSounds
 		{
-			get => GetProperty(ref _fireModeSounds);
-			set => SetProperty(ref _fireModeSounds, value);
+			get => GetPropertyValue<audioWeaponFireModeSounds>();
+			set => SetPropertyValue<audioWeaponFireModeSounds>(value);
 		}
 	}
 }

@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkCompositionTransition : RedBaseClass
 	{
-		private CName _targetState;
-		private CArray<inkCompositionInterpolator> _interpolators;
-
 		[Ordinal(0)] 
 		[RED("targetState")] 
 		public CName TargetState
 		{
-			get => GetProperty(ref _targetState);
-			set => SetProperty(ref _targetState, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("interpolators")] 
 		public CArray<inkCompositionInterpolator> Interpolators
 		{
-			get => GetProperty(ref _interpolators);
-			set => SetProperty(ref _interpolators, value);
+			get => GetPropertyValue<CArray<inkCompositionInterpolator>>();
+			set => SetPropertyValue<CArray<inkCompositionInterpolator>>(value);
+		}
+
+		public inkCompositionTransition()
+		{
+			Interpolators = new();
 		}
 	}
 }

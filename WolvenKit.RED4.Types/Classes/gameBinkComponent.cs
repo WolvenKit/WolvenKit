@@ -5,74 +5,70 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameBinkComponent : entIVisualComponent
 	{
-		private CHandle<gameBinkMeshTargetBinding> _meshTargetBinding;
-		private CName _videoPlayerName;
-		private CResourceAsyncReference<Bink> _binkResource;
-		private CName _audioEvent;
-		private CBool _loopVideo;
-		private CBool _forceVideoFrameRate;
-		private CBool _isEnabled;
-
 		[Ordinal(8)] 
 		[RED("meshTargetBinding")] 
 		public CHandle<gameBinkMeshTargetBinding> MeshTargetBinding
 		{
-			get => GetProperty(ref _meshTargetBinding);
-			set => SetProperty(ref _meshTargetBinding, value);
+			get => GetPropertyValue<CHandle<gameBinkMeshTargetBinding>>();
+			set => SetPropertyValue<CHandle<gameBinkMeshTargetBinding>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("videoPlayerName")] 
 		public CName VideoPlayerName
 		{
-			get => GetProperty(ref _videoPlayerName);
-			set => SetProperty(ref _videoPlayerName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("binkResource")] 
 		public CResourceAsyncReference<Bink> BinkResource
 		{
-			get => GetProperty(ref _binkResource);
-			set => SetProperty(ref _binkResource, value);
+			get => GetPropertyValue<CResourceAsyncReference<Bink>>();
+			set => SetPropertyValue<CResourceAsyncReference<Bink>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("audioEvent")] 
 		public CName AudioEvent
 		{
-			get => GetProperty(ref _audioEvent);
-			set => SetProperty(ref _audioEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("loopVideo")] 
 		public CBool LoopVideo
 		{
-			get => GetProperty(ref _loopVideo);
-			set => SetProperty(ref _loopVideo, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("forceVideoFrameRate")] 
 		public CBool ForceVideoFrameRate
 		{
-			get => GetProperty(ref _forceVideoFrameRate);
-			set => SetProperty(ref _forceVideoFrameRate, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public gameBinkComponent()
 		{
-			_videoPlayerName = "DefaultVideoPlayerName";
-			_isEnabled = true;
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
+			ForceLODLevel = -1;
+			VideoPlayerName = "DefaultVideoPlayerName";
+			IsEnabled = true;
 		}
 	}
 }

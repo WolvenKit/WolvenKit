@@ -2,14 +2,21 @@ using System;
 
 namespace WolvenKit.RED4.Types
 {
-    public interface IRedEnum
+    public interface IRedBitField : IRedType
     {
-        public Enum GetValue();
-        public void SetValue(object value);
+        public string ToBitFieldString();
     }
 
-    public interface IRedEnum<T> : IRedPrimitive<T>, IRedEnum where T : Enum
+    public interface IRedBitField<T> : IRedBitField, IRedPrimitive<T>, IRedGenericType<T> where T : struct, Enum
     {
+    }
 
+    public interface IRedEnum : IRedType
+    {
+        public string ToEnumString();
+    }
+
+    public interface IRedEnum<T> : IRedEnum, IRedPrimitive<T>, IRedGenericType<T> where T : struct, Enum
+    {
     }
 }

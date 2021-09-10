@@ -5,57 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameStimuliMergeInfo : RedBaseClass
 	{
-		private Vector4 _position;
-		private CWeakHandle<gameObject> _instigator;
-		private CFloat _radius;
-		private CEnum<gamedataStimType> _type;
-		private CEnum<gamedataStimPropagation> _propagationType;
-
 		[Ordinal(0)] 
 		[RED("position")] 
 		public Vector4 Position
 		{
-			get => GetProperty(ref _position);
-			set => SetProperty(ref _position, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("instigator")] 
 		public CWeakHandle<gameObject> Instigator
 		{
-			get => GetProperty(ref _instigator);
-			set => SetProperty(ref _instigator, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get => GetProperty(ref _radius);
-			set => SetProperty(ref _radius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("type")] 
 		public CEnum<gamedataStimType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<gamedataStimType>>();
+			set => SetPropertyValue<CEnum<gamedataStimType>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("propagationType")] 
 		public CEnum<gamedataStimPropagation> PropagationType
 		{
-			get => GetProperty(ref _propagationType);
-			set => SetProperty(ref _propagationType, value);
+			get => GetPropertyValue<CEnum<gamedataStimPropagation>>();
+			set => SetPropertyValue<CEnum<gamedataStimPropagation>>(value);
 		}
 
 		public gameStimuliMergeInfo()
 		{
-			_radius = -1.000000F;
-			_type = new() { Value = Enums.gamedataStimType.Invalid };
-			_propagationType = new() { Value = Enums.gamedataStimPropagation.Invalid };
+			Position = new();
+			Radius = -1.000000F;
+			Type = Enums.gamedataStimType.Invalid;
+			PropagationType = Enums.gamedataStimPropagation.Invalid;
 		}
 	}
 }

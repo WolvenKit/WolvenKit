@@ -5,75 +5,67 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animRigIk2Setup : animIRigIkSetup
 	{
-		private CName _firstBone;
-		private CName _secondBone;
-		private CName _endBone;
-		private CEnum<animAxis> _hingeAxis;
-		private CInt16 _firstBoneIdx;
-		private CInt16 _secondBoneIdx;
-		private CInt16 _endBoneIdx;
-
 		[Ordinal(1)] 
 		[RED("firstBone")] 
 		public CName FirstBone
 		{
-			get => GetProperty(ref _firstBone);
-			set => SetProperty(ref _firstBone, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("secondBone")] 
 		public CName SecondBone
 		{
-			get => GetProperty(ref _secondBone);
-			set => SetProperty(ref _secondBone, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("endBone")] 
 		public CName EndBone
 		{
-			get => GetProperty(ref _endBone);
-			set => SetProperty(ref _endBone, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("hingeAxis")] 
 		public CEnum<animAxis> HingeAxis
 		{
-			get => GetProperty(ref _hingeAxis);
-			set => SetProperty(ref _hingeAxis, value);
+			get => GetPropertyValue<CEnum<animAxis>>();
+			set => SetPropertyValue<CEnum<animAxis>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("firstBoneIdx")] 
 		public CInt16 FirstBoneIdx
 		{
-			get => GetProperty(ref _firstBoneIdx);
-			set => SetProperty(ref _firstBoneIdx, value);
+			get => GetPropertyValue<CInt16>();
+			set => SetPropertyValue<CInt16>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("secondBoneIdx")] 
 		public CInt16 SecondBoneIdx
 		{
-			get => GetProperty(ref _secondBoneIdx);
-			set => SetProperty(ref _secondBoneIdx, value);
+			get => GetPropertyValue<CInt16>();
+			set => SetPropertyValue<CInt16>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("endBoneIdx")] 
 		public CInt16 EndBoneIdx
 		{
-			get => GetProperty(ref _endBoneIdx);
-			set => SetProperty(ref _endBoneIdx, value);
+			get => GetPropertyValue<CInt16>();
+			set => SetPropertyValue<CInt16>(value);
 		}
 
 		public animRigIk2Setup()
 		{
-			_firstBoneIdx = -1;
-			_secondBoneIdx = -1;
-			_endBoneIdx = -1;
+			FirstBoneIdx = -1;
+			SecondBoneIdx = -1;
+			EndBoneIdx = -1;
 		}
 	}
 }

@@ -5,92 +5,89 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_MultipleParentConstraint : animAnimNode_OnePoseInput
 	{
-		private CArray<CHandle<animIAnimNodeSourceChannel_QsTransform>> _parentsTransform;
-		private CArray<CHandle<animIAnimNodeSourceChannel_Float>> _parentsWeight;
-		private CBool _areSourceChannelsResaved;
-		private CArray<animAnimNode_MultipleParentConstraint_ParentInfo> _parentsTransforms;
-		private animTransformIndex _transformIndex;
-		private CEnum<animEInterpolationType> _interpolationType;
-		private CEnum<animConstraintWeightMode> _weightMode;
-		private CFloat _weight;
-		private animNamedTrackIndex _weightFloatTrack;
-
 		[Ordinal(12)] 
 		[RED("parentsTransform")] 
 		public CArray<CHandle<animIAnimNodeSourceChannel_QsTransform>> ParentsTransform
 		{
-			get => GetProperty(ref _parentsTransform);
-			set => SetProperty(ref _parentsTransform, value);
+			get => GetPropertyValue<CArray<CHandle<animIAnimNodeSourceChannel_QsTransform>>>();
+			set => SetPropertyValue<CArray<CHandle<animIAnimNodeSourceChannel_QsTransform>>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("parentsWeight")] 
 		public CArray<CHandle<animIAnimNodeSourceChannel_Float>> ParentsWeight
 		{
-			get => GetProperty(ref _parentsWeight);
-			set => SetProperty(ref _parentsWeight, value);
+			get => GetPropertyValue<CArray<CHandle<animIAnimNodeSourceChannel_Float>>>();
+			set => SetPropertyValue<CArray<CHandle<animIAnimNodeSourceChannel_Float>>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("areSourceChannelsResaved")] 
 		public CBool AreSourceChannelsResaved
 		{
-			get => GetProperty(ref _areSourceChannelsResaved);
-			set => SetProperty(ref _areSourceChannelsResaved, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("parentsTransforms")] 
 		public CArray<animAnimNode_MultipleParentConstraint_ParentInfo> ParentsTransforms
 		{
-			get => GetProperty(ref _parentsTransforms);
-			set => SetProperty(ref _parentsTransforms, value);
+			get => GetPropertyValue<CArray<animAnimNode_MultipleParentConstraint_ParentInfo>>();
+			set => SetPropertyValue<CArray<animAnimNode_MultipleParentConstraint_ParentInfo>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("transformIndex")] 
 		public animTransformIndex TransformIndex
 		{
-			get => GetProperty(ref _transformIndex);
-			set => SetProperty(ref _transformIndex, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("interpolationType")] 
 		public CEnum<animEInterpolationType> InterpolationType
 		{
-			get => GetProperty(ref _interpolationType);
-			set => SetProperty(ref _interpolationType, value);
+			get => GetPropertyValue<CEnum<animEInterpolationType>>();
+			set => SetPropertyValue<CEnum<animEInterpolationType>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("weightMode")] 
 		public CEnum<animConstraintWeightMode> WeightMode
 		{
-			get => GetProperty(ref _weightMode);
-			set => SetProperty(ref _weightMode, value);
+			get => GetPropertyValue<CEnum<animConstraintWeightMode>>();
+			set => SetPropertyValue<CEnum<animConstraintWeightMode>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("weight")] 
 		public CFloat Weight
 		{
-			get => GetProperty(ref _weight);
-			set => SetProperty(ref _weight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("weightFloatTrack")] 
 		public animNamedTrackIndex WeightFloatTrack
 		{
-			get => GetProperty(ref _weightFloatTrack);
-			set => SetProperty(ref _weightFloatTrack, value);
+			get => GetPropertyValue<animNamedTrackIndex>();
+			set => SetPropertyValue<animNamedTrackIndex>(value);
 		}
 
 		public animAnimNode_MultipleParentConstraint()
 		{
-			_interpolationType = new() { Value = Enums.animEInterpolationType.Slerp };
-			_weight = 1.000000F;
+			Id = 4294967295;
+			InputLink = new();
+			ParentsTransform = new();
+			ParentsWeight = new();
+			ParentsTransforms = new();
+			TransformIndex = new();
+			InterpolationType = Enums.animEInterpolationType.Slerp;
+			Weight = 1.000000F;
+			WeightFloatTrack = new();
 		}
 	}
 }

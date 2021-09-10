@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiInputHintController : inkWidgetLogicController
 	{
-		private inkWidgetLibraryReference _inputDisplayLibRef;
-		private inkCompoundWidgetReference _inputDisplayContainer;
-		private inkTextWidgetReference _textWidgetRef;
-
 		[Ordinal(1)] 
 		[RED("inputDisplayLibRef")] 
 		public inkWidgetLibraryReference InputDisplayLibRef
 		{
-			get => GetProperty(ref _inputDisplayLibRef);
-			set => SetProperty(ref _inputDisplayLibRef, value);
+			get => GetPropertyValue<inkWidgetLibraryReference>();
+			set => SetPropertyValue<inkWidgetLibraryReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("inputDisplayContainer")] 
 		public inkCompoundWidgetReference InputDisplayContainer
 		{
-			get => GetProperty(ref _inputDisplayContainer);
-			set => SetProperty(ref _inputDisplayContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("textWidgetRef")] 
 		public inkTextWidgetReference TextWidgetRef
 		{
-			get => GetProperty(ref _textWidgetRef);
-			set => SetProperty(ref _textWidgetRef, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		public gameuiInputHintController()
+		{
+			InputDisplayLibRef = new() { WidgetLibrary = new() };
+			InputDisplayContainer = new();
+			TextWidgetRef = new();
 		}
 	}
 }

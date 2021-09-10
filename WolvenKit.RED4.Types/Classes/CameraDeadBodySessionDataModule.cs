@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CameraDeadBodySessionDataModule : GameSessionDataModule
 	{
-		private CArray<CHandle<CameraDeadBodyInternalData>> _cameraDeadBodyData;
-
 		[Ordinal(1)] 
 		[RED("cameraDeadBodyData")] 
 		public CArray<CHandle<CameraDeadBodyInternalData>> CameraDeadBodyData
 		{
-			get => GetProperty(ref _cameraDeadBodyData);
-			set => SetProperty(ref _cameraDeadBodyData, value);
+			get => GetPropertyValue<CArray<CHandle<CameraDeadBodyInternalData>>>();
+			set => SetPropertyValue<CArray<CHandle<CameraDeadBodyInternalData>>>(value);
+		}
+
+		public CameraDeadBodySessionDataModule()
+		{
+			CameraDeadBodyData = new();
 		}
 	}
 }

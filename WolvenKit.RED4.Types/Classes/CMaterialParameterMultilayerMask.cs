@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CMaterialParameterMultilayerMask : CMaterialParameter
 	{
-		private CResourceReference<Multilayer_Mask> _mask;
-
 		[Ordinal(2)] 
 		[RED("mask")] 
 		public CResourceReference<Multilayer_Mask> Mask
 		{
-			get => GetProperty(ref _mask);
-			set => SetProperty(ref _mask, value);
+			get => GetPropertyValue<CResourceReference<Multilayer_Mask>>();
+			set => SetPropertyValue<CResourceReference<Multilayer_Mask>>(value);
 		}
 	}
 }

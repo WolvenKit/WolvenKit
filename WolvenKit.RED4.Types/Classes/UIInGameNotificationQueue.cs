@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UIInGameNotificationQueue : gameuiGenericNotificationGameController
 	{
-		private CFloat _duration;
-
 		[Ordinal(2)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get => GetProperty(ref _duration);
-			set => SetProperty(ref _duration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public UIInGameNotificationQueue()
 		{
-			_duration = 5.000000F;
+			Duration = 5.000000F;
 		}
 	}
 }

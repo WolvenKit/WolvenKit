@@ -5,59 +5,61 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animRigPart : RedBaseClass
 	{
-		private CName _name;
-		private CArray<animRigPartBone> _singleBones;
-		private CArray<animRigPartBoneTree> _treeBones;
-		private CArray<CName> _bonesWithRotationInModelSpace;
-		private CArray<animTransformMask> _mask;
-		private CArray<CInt32> _maskRotMS;
-
 		[Ordinal(0)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get => GetProperty(ref _name);
-			set => SetProperty(ref _name, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("singleBones")] 
 		public CArray<animRigPartBone> SingleBones
 		{
-			get => GetProperty(ref _singleBones);
-			set => SetProperty(ref _singleBones, value);
+			get => GetPropertyValue<CArray<animRigPartBone>>();
+			set => SetPropertyValue<CArray<animRigPartBone>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("treeBones")] 
 		public CArray<animRigPartBoneTree> TreeBones
 		{
-			get => GetProperty(ref _treeBones);
-			set => SetProperty(ref _treeBones, value);
+			get => GetPropertyValue<CArray<animRigPartBoneTree>>();
+			set => SetPropertyValue<CArray<animRigPartBoneTree>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("bonesWithRotationInModelSpace")] 
 		public CArray<CName> BonesWithRotationInModelSpace
 		{
-			get => GetProperty(ref _bonesWithRotationInModelSpace);
-			set => SetProperty(ref _bonesWithRotationInModelSpace, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("mask")] 
 		public CArray<animTransformMask> Mask
 		{
-			get => GetProperty(ref _mask);
-			set => SetProperty(ref _mask, value);
+			get => GetPropertyValue<CArray<animTransformMask>>();
+			set => SetPropertyValue<CArray<animTransformMask>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("maskRotMS")] 
 		public CArray<CInt32> MaskRotMS
 		{
-			get => GetProperty(ref _maskRotMS);
-			set => SetProperty(ref _maskRotMS, value);
+			get => GetPropertyValue<CArray<CInt32>>();
+			set => SetPropertyValue<CArray<CInt32>>(value);
+		}
+
+		public animRigPart()
+		{
+			SingleBones = new();
+			TreeBones = new();
+			BonesWithRotationInModelSpace = new();
+			Mask = new();
+			MaskRotMS = new();
 		}
 	}
 }

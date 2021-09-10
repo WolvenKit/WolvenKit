@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class GameplayPerkCondition : GameplayConditionBase
 	{
-		private TweakDBID _perkToCheck;
-		private CEnum<EGameplayChallengeLevel> _difficulty;
-
 		[Ordinal(1)] 
 		[RED("perkToCheck")] 
 		public TweakDBID PerkToCheck
 		{
-			get => GetProperty(ref _perkToCheck);
-			set => SetProperty(ref _perkToCheck, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("difficulty")] 
 		public CEnum<EGameplayChallengeLevel> Difficulty
 		{
-			get => GetProperty(ref _difficulty);
-			set => SetProperty(ref _difficulty, value);
+			get => GetPropertyValue<CEnum<EGameplayChallengeLevel>>();
+			set => SetPropertyValue<CEnum<EGameplayChallengeLevel>>(value);
+		}
+
+		public GameplayPerkCondition()
+		{
+			EntityID = new();
 		}
 	}
 }

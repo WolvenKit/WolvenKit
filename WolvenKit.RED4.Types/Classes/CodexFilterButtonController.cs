@@ -5,50 +5,50 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CodexFilterButtonController : inkWidgetLogicController
 	{
-		private inkWidgetReference _root;
-		private inkImageWidgetReference _image;
-		private CEnum<CodexCategoryType> _category;
-		private CBool _toggled;
-		private CBool _hovered;
-
 		[Ordinal(1)] 
 		[RED("root")] 
 		public inkWidgetReference Root
 		{
-			get => GetProperty(ref _root);
-			set => SetProperty(ref _root, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("image")] 
 		public inkImageWidgetReference Image
 		{
-			get => GetProperty(ref _image);
-			set => SetProperty(ref _image, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("category")] 
 		public CEnum<CodexCategoryType> Category
 		{
-			get => GetProperty(ref _category);
-			set => SetProperty(ref _category, value);
+			get => GetPropertyValue<CEnum<CodexCategoryType>>();
+			set => SetPropertyValue<CEnum<CodexCategoryType>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("toggled")] 
 		public CBool Toggled
 		{
-			get => GetProperty(ref _toggled);
-			set => SetProperty(ref _toggled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("hovered")] 
 		public CBool Hovered
 		{
-			get => GetProperty(ref _hovered);
-			set => SetProperty(ref _hovered, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public CodexFilterButtonController()
+		{
+			Root = new();
+			Image = new();
 		}
 	}
 }

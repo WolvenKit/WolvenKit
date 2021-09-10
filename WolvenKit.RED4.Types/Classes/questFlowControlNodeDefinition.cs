@@ -5,37 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questFlowControlNodeDefinition : questDisableableNodeDefinition
 	{
-		private CBool _isOpen;
-		private CUInt16 _opensAt;
-		private CUInt16 _closesAt;
-
 		[Ordinal(2)] 
 		[RED("isOpen")] 
 		public CBool IsOpen
 		{
-			get => GetProperty(ref _isOpen);
-			set => SetProperty(ref _isOpen, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("opensAt")] 
 		public CUInt16 OpensAt
 		{
-			get => GetProperty(ref _opensAt);
-			set => SetProperty(ref _opensAt, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("closesAt")] 
 		public CUInt16 ClosesAt
 		{
-			get => GetProperty(ref _closesAt);
-			set => SetProperty(ref _closesAt, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		public questFlowControlNodeDefinition()
 		{
-			_isOpen = true;
+			Sockets = new();
+			Id = 65535;
+			IsOpen = true;
 		}
 	}
 }

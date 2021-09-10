@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnCameraAnimationRid : RedBaseClass
 	{
-		private scnRidTag _tag;
-		private CHandle<animIAnimationBuffer> _animation;
-		private scnCameraAnimationLOD _cameraAnimationLOD;
-
 		[Ordinal(0)] 
 		[RED("tag")] 
 		public scnRidTag Tag
 		{
-			get => GetProperty(ref _tag);
-			set => SetProperty(ref _tag, value);
+			get => GetPropertyValue<scnRidTag>();
+			set => SetPropertyValue<scnRidTag>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("animation")] 
 		public CHandle<animIAnimationBuffer> Animation
 		{
-			get => GetProperty(ref _animation);
-			set => SetProperty(ref _animation, value);
+			get => GetPropertyValue<CHandle<animIAnimationBuffer>>();
+			set => SetPropertyValue<CHandle<animIAnimationBuffer>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("cameraAnimationLOD")] 
 		public scnCameraAnimationLOD CameraAnimationLOD
 		{
-			get => GetProperty(ref _cameraAnimationLOD);
-			set => SetProperty(ref _cameraAnimationLOD, value);
+			get => GetPropertyValue<scnCameraAnimationLOD>();
+			set => SetPropertyValue<scnCameraAnimationLOD>(value);
+		}
+
+		public scnCameraAnimationRid()
+		{
+			Tag = new() { SerialNumber = new() { SerialNumber = 4294967295 } };
+			CameraAnimationLOD = new() { Trajectory = new(0), Tracks = new(0) };
 		}
 	}
 }

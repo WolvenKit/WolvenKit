@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_FloatJoin : animAnimNode_FloatValue
 	{
-		private animFloatLink _input;
-
 		[Ordinal(11)] 
 		[RED("input")] 
 		public animFloatLink Input
 		{
-			get => GetProperty(ref _input);
-			set => SetProperty(ref _input, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
+		}
+
+		public animAnimNode_FloatJoin()
+		{
+			Id = 4294967295;
+			Input = new();
 		}
 	}
 }

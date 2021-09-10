@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PerkBoughtEvent : redEvent
 	{
-		private CEnum<gamedataPerkType> _perkType;
-
 		[Ordinal(0)] 
 		[RED("perkType")] 
 		public CEnum<gamedataPerkType> PerkType
 		{
-			get => GetProperty(ref _perkType);
-			set => SetProperty(ref _perkType, value);
+			get => GetPropertyValue<CEnum<gamedataPerkType>>();
+			set => SetPropertyValue<CEnum<gamedataPerkType>>(value);
 		}
 	}
 }

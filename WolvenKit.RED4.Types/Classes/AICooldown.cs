@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AICooldown : AITimeCondition
 	{
-		private CFloat _cooldown;
-		private CFloat _timestamp;
-
 		[Ordinal(0)] 
 		[RED("cooldown")] 
 		public CFloat Cooldown
 		{
-			get => GetProperty(ref _cooldown);
-			set => SetProperty(ref _cooldown, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("timestamp")] 
 		public CFloat Timestamp
 		{
-			get => GetProperty(ref _timestamp);
-			set => SetProperty(ref _timestamp, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldAmbientAreaNode : worldTriggerAreaNode
 	{
-		private CBool _useCustomColor;
-
 		[Ordinal(7)] 
 		[RED("useCustomColor")] 
 		public CBool UseCustomColor
 		{
-			get => GetProperty(ref _useCustomColor);
-			set => SetProperty(ref _useCustomColor, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

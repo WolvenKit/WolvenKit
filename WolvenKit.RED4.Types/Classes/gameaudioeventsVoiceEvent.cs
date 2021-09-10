@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameaudioeventsVoiceEvent : redEvent
 	{
-		private CName _eventName;
-		private CEnum<audioVoGruntType> _gruntType;
-		private CEnum<audioVoGruntInterruptMode> _gruntInterruptMode;
-		private CBool _isV;
-
 		[Ordinal(0)] 
 		[RED("eventName")] 
 		public CName EventName
 		{
-			get => GetProperty(ref _eventName);
-			set => SetProperty(ref _eventName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("gruntType")] 
 		public CEnum<audioVoGruntType> GruntType
 		{
-			get => GetProperty(ref _gruntType);
-			set => SetProperty(ref _gruntType, value);
+			get => GetPropertyValue<CEnum<audioVoGruntType>>();
+			set => SetPropertyValue<CEnum<audioVoGruntType>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("gruntInterruptMode")] 
 		public CEnum<audioVoGruntInterruptMode> GruntInterruptMode
 		{
-			get => GetProperty(ref _gruntInterruptMode);
-			set => SetProperty(ref _gruntInterruptMode, value);
+			get => GetPropertyValue<CEnum<audioVoGruntInterruptMode>>();
+			set => SetPropertyValue<CEnum<audioVoGruntInterruptMode>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isV")] 
 		public CBool IsV
 		{
-			get => GetProperty(ref _isV);
-			set => SetProperty(ref _isV, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

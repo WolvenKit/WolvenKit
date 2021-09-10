@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameSmartObjectAnimationDatabase : ISerializable
 	{
-		private CArray<gameAnimationExtractedData> _animationData;
-		private CArray<gameBodyTypeData> _bodyTypesData;
-
 		[Ordinal(0)] 
 		[RED("animationData")] 
 		public CArray<gameAnimationExtractedData> AnimationData
 		{
-			get => GetProperty(ref _animationData);
-			set => SetProperty(ref _animationData, value);
+			get => GetPropertyValue<CArray<gameAnimationExtractedData>>();
+			set => SetPropertyValue<CArray<gameAnimationExtractedData>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("bodyTypesData")] 
 		public CArray<gameBodyTypeData> BodyTypesData
 		{
-			get => GetProperty(ref _bodyTypesData);
-			set => SetProperty(ref _bodyTypesData, value);
+			get => GetPropertyValue<CArray<gameBodyTypeData>>();
+			set => SetPropertyValue<CArray<gameBodyTypeData>>(value);
+		}
+
+		public gameSmartObjectAnimationDatabase()
+		{
+			AnimationData = new();
+			BodyTypesData = new();
 		}
 	}
 }

@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class vgVectorGraphicStyle : ISerializable
 	{
-		private CArray<vgAttributeTypeValuePair> _attributes;
-
 		[Ordinal(0)] 
 		[RED("attributes")] 
 		public CArray<vgAttributeTypeValuePair> Attributes
 		{
-			get => GetProperty(ref _attributes);
-			set => SetProperty(ref _attributes, value);
+			get => GetPropertyValue<CArray<vgAttributeTypeValuePair>>();
+			set => SetPropertyValue<CArray<vgAttributeTypeValuePair>>(value);
+		}
+
+		public vgVectorGraphicStyle()
+		{
+			Attributes = new();
 		}
 	}
 }

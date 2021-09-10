@@ -5,50 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ApplyStatusEffectByChanceEffector : gameEffector
 	{
-		private entEntityID _targetEntityID;
-		private CString _applicationTarget;
-		private TweakDBID _record;
-		private CBool _removeWithEffector;
-		private CFloat _chance;
-
 		[Ordinal(0)] 
 		[RED("targetEntityID")] 
 		public entEntityID TargetEntityID
 		{
-			get => GetProperty(ref _targetEntityID);
-			set => SetProperty(ref _targetEntityID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("applicationTarget")] 
 		public CString ApplicationTarget
 		{
-			get => GetProperty(ref _applicationTarget);
-			set => SetProperty(ref _applicationTarget, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("record")] 
 		public TweakDBID Record
 		{
-			get => GetProperty(ref _record);
-			set => SetProperty(ref _record, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("removeWithEffector")] 
 		public CBool RemoveWithEffector
 		{
-			get => GetProperty(ref _removeWithEffector);
-			set => SetProperty(ref _removeWithEffector, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("chance")] 
 		public CFloat Chance
 		{
-			get => GetProperty(ref _chance);
-			set => SetProperty(ref _chance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public ApplyStatusEffectByChanceEffector()
+		{
+			TargetEntityID = new();
 		}
 	}
 }

@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioFootwearType : audioAudioMetadata
 	{
-		private CArray<CName> _itemNames;
-
 		[Ordinal(1)] 
 		[RED("itemNames")] 
 		public CArray<CName> ItemNames
 		{
-			get => GetProperty(ref _itemNames);
-			set => SetProperty(ref _itemNames, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
+		public audioFootwearType()
+		{
+			ItemNames = new();
 		}
 	}
 }

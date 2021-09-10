@@ -5,59 +5,63 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class effectTrackItemColorGrade : effectTrackItem
 	{
-		private effectEffectParameterEvaluatorFloat _contrast;
-		private effectEffectParameterEvaluatorFloat _saturate;
-		private effectEffectParameterEvaluatorFloat _brightness;
-		private effectEffectParameterEvaluatorFloat _lutWeight;
-		private ColorGradingLutParams _lutParams;
-		private ColorGradingLutParams _lutParamsHdr;
-
 		[Ordinal(3)] 
 		[RED("contrast")] 
 		public effectEffectParameterEvaluatorFloat Contrast
 		{
-			get => GetProperty(ref _contrast);
-			set => SetProperty(ref _contrast, value);
+			get => GetPropertyValue<effectEffectParameterEvaluatorFloat>();
+			set => SetPropertyValue<effectEffectParameterEvaluatorFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("saturate")] 
 		public effectEffectParameterEvaluatorFloat Saturate
 		{
-			get => GetProperty(ref _saturate);
-			set => SetProperty(ref _saturate, value);
+			get => GetPropertyValue<effectEffectParameterEvaluatorFloat>();
+			set => SetPropertyValue<effectEffectParameterEvaluatorFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("brightness")] 
 		public effectEffectParameterEvaluatorFloat Brightness
 		{
-			get => GetProperty(ref _brightness);
-			set => SetProperty(ref _brightness, value);
+			get => GetPropertyValue<effectEffectParameterEvaluatorFloat>();
+			set => SetPropertyValue<effectEffectParameterEvaluatorFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("lutWeight")] 
 		public effectEffectParameterEvaluatorFloat LutWeight
 		{
-			get => GetProperty(ref _lutWeight);
-			set => SetProperty(ref _lutWeight, value);
+			get => GetPropertyValue<effectEffectParameterEvaluatorFloat>();
+			set => SetPropertyValue<effectEffectParameterEvaluatorFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("lutParams")] 
 		public ColorGradingLutParams LutParams
 		{
-			get => GetProperty(ref _lutParams);
-			set => SetProperty(ref _lutParams, value);
+			get => GetPropertyValue<ColorGradingLutParams>();
+			set => SetPropertyValue<ColorGradingLutParams>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("lutParamsHdr")] 
 		public ColorGradingLutParams LutParamsHdr
 		{
-			get => GetProperty(ref _lutParamsHdr);
-			set => SetProperty(ref _lutParamsHdr, value);
+			get => GetPropertyValue<ColorGradingLutParams>();
+			set => SetPropertyValue<ColorGradingLutParams>(value);
+		}
+
+		public effectTrackItemColorGrade()
+		{
+			TimeDuration = 1.000000F;
+			Contrast = new();
+			Saturate = new();
+			Brightness = new();
+			LutWeight = new();
+			LutParams = new() { InputMapping = Enums.EColorMappingFunction.CMF_sRGB, OutputMapping = Enums.EColorMappingFunction.CMF_sRGB };
+			LutParamsHdr = new() { InputMapping = Enums.EColorMappingFunction.CMF_sRGB, OutputMapping = Enums.EColorMappingFunction.CMF_sRGB };
 		}
 	}
 }

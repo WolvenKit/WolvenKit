@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNodeSourceChannel_StaticQsTransform : animIAnimNodeSourceChannel_QsTransform
 	{
-		private QsTransform _data;
-
 		[Ordinal(0)] 
 		[RED("data")] 
 		public QsTransform Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<QsTransform>();
+			set => SetPropertyValue<QsTransform>(value);
+		}
+
+		public animAnimNodeSourceChannel_StaticQsTransform()
+		{
+			Data = new() { Translation = new(), Rotation = new() { R = 1.000000F }, Scale = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F } };
 		}
 	}
 }

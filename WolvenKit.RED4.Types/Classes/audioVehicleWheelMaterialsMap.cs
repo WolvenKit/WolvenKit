@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioVehicleWheelMaterialsMap : audioAudioMetadata
 	{
-		private CArray<audioVehicleWheelMaterialsMapItem> _vehicleWheelMaterials;
-
 		[Ordinal(1)] 
 		[RED("vehicleWheelMaterials")] 
 		public CArray<audioVehicleWheelMaterialsMapItem> VehicleWheelMaterials
 		{
-			get => GetProperty(ref _vehicleWheelMaterials);
-			set => SetProperty(ref _vehicleWheelMaterials, value);
+			get => GetPropertyValue<CArray<audioVehicleWheelMaterialsMapItem>>();
+			set => SetPropertyValue<CArray<audioVehicleWheelMaterialsMapItem>>(value);
+		}
+
+		public audioVehicleWheelMaterialsMap()
+		{
+			VehicleWheelMaterials = new();
 		}
 	}
 }

@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questEntityManagerToggleMirrorsArea_NodeType : questIEntityManager_NodeType
 	{
-		private gameEntityReference _objectRef;
-		private CBool _isInMirrorsArea;
-
 		[Ordinal(0)] 
 		[RED("objectRef")] 
 		public gameEntityReference ObjectRef
 		{
-			get => GetProperty(ref _objectRef);
-			set => SetProperty(ref _objectRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isInMirrorsArea")] 
 		public CBool IsInMirrorsArea
 		{
-			get => GetProperty(ref _isInMirrorsArea);
-			set => SetProperty(ref _isInMirrorsArea, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public questEntityManagerToggleMirrorsArea_NodeType()
+		{
+			ObjectRef = new() { Names = new() };
 		}
 	}
 }

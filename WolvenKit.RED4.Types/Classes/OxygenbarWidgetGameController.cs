@@ -5,146 +5,133 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class OxygenbarWidgetGameController : gameuiHUDGameController
 	{
-		private inkWidgetReference _oxygenControllerRef;
-		private inkTextWidgetReference _oxygenPercTextPath;
-		private inkTextWidgetReference _oxygenStatusTextPath;
-		private CHandle<redCallbackObject> _bbPSceneTierEventId;
-		private CHandle<redCallbackObject> _swimmingStateBlackboardId;
-		private CWeakHandle<NameplateBarLogicController> _oxygenController;
-		private CWeakHandle<inkWidget> _rootWidget;
-		private CHandle<inkanimDefinition> _animHideTemp;
-		private CHandle<inkanimDefinition> _animShortFade;
-		private CHandle<inkanimDefinition> _animLongFade;
-		private CHandle<inkanimProxy> _animHideOxygenProxy;
-		private CFloat _currentOxygen;
-		private CEnum<GameplayTier> _sceneTier;
-		private CEnum<gamePSMSwimming> _currentSwimmingState;
-		private CHandle<OxygenListener> _oxygenListener;
-
 		[Ordinal(9)] 
 		[RED("oxygenControllerRef")] 
 		public inkWidgetReference OxygenControllerRef
 		{
-			get => GetProperty(ref _oxygenControllerRef);
-			set => SetProperty(ref _oxygenControllerRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("oxygenPercTextPath")] 
 		public inkTextWidgetReference OxygenPercTextPath
 		{
-			get => GetProperty(ref _oxygenPercTextPath);
-			set => SetProperty(ref _oxygenPercTextPath, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("oxygenStatusTextPath")] 
 		public inkTextWidgetReference OxygenStatusTextPath
 		{
-			get => GetProperty(ref _oxygenStatusTextPath);
-			set => SetProperty(ref _oxygenStatusTextPath, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("bbPSceneTierEventId")] 
 		public CHandle<redCallbackObject> BbPSceneTierEventId
 		{
-			get => GetProperty(ref _bbPSceneTierEventId);
-			set => SetProperty(ref _bbPSceneTierEventId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("swimmingStateBlackboardId")] 
 		public CHandle<redCallbackObject> SwimmingStateBlackboardId
 		{
-			get => GetProperty(ref _swimmingStateBlackboardId);
-			set => SetProperty(ref _swimmingStateBlackboardId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("oxygenController")] 
 		public CWeakHandle<NameplateBarLogicController> OxygenController
 		{
-			get => GetProperty(ref _oxygenController);
-			set => SetProperty(ref _oxygenController, value);
+			get => GetPropertyValue<CWeakHandle<NameplateBarLogicController>>();
+			set => SetPropertyValue<CWeakHandle<NameplateBarLogicController>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("RootWidget")] 
 		public CWeakHandle<inkWidget> RootWidget
 		{
-			get => GetProperty(ref _rootWidget);
-			set => SetProperty(ref _rootWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("animHideTemp")] 
 		public CHandle<inkanimDefinition> AnimHideTemp
 		{
-			get => GetProperty(ref _animHideTemp);
-			set => SetProperty(ref _animHideTemp, value);
+			get => GetPropertyValue<CHandle<inkanimDefinition>>();
+			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("animShortFade")] 
 		public CHandle<inkanimDefinition> AnimShortFade
 		{
-			get => GetProperty(ref _animShortFade);
-			set => SetProperty(ref _animShortFade, value);
+			get => GetPropertyValue<CHandle<inkanimDefinition>>();
+			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("animLongFade")] 
 		public CHandle<inkanimDefinition> AnimLongFade
 		{
-			get => GetProperty(ref _animLongFade);
-			set => SetProperty(ref _animLongFade, value);
+			get => GetPropertyValue<CHandle<inkanimDefinition>>();
+			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("animHideOxygenProxy")] 
 		public CHandle<inkanimProxy> AnimHideOxygenProxy
 		{
-			get => GetProperty(ref _animHideOxygenProxy);
-			set => SetProperty(ref _animHideOxygenProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("currentOxygen")] 
 		public CFloat CurrentOxygen
 		{
-			get => GetProperty(ref _currentOxygen);
-			set => SetProperty(ref _currentOxygen, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("sceneTier")] 
 		public CEnum<GameplayTier> SceneTier
 		{
-			get => GetProperty(ref _sceneTier);
-			set => SetProperty(ref _sceneTier, value);
+			get => GetPropertyValue<CEnum<GameplayTier>>();
+			set => SetPropertyValue<CEnum<GameplayTier>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("currentSwimmingState")] 
 		public CEnum<gamePSMSwimming> CurrentSwimmingState
 		{
-			get => GetProperty(ref _currentSwimmingState);
-			set => SetProperty(ref _currentSwimmingState, value);
+			get => GetPropertyValue<CEnum<gamePSMSwimming>>();
+			set => SetPropertyValue<CEnum<gamePSMSwimming>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("oxygenListener")] 
 		public CHandle<OxygenListener> OxygenListener
 		{
-			get => GetProperty(ref _oxygenListener);
-			set => SetProperty(ref _oxygenListener, value);
+			get => GetPropertyValue<CHandle<OxygenListener>>();
+			set => SetPropertyValue<CHandle<OxygenListener>>(value);
 		}
 
 		public OxygenbarWidgetGameController()
 		{
-			_currentOxygen = 100.000000F;
-			_sceneTier = new() { Value = Enums.GameplayTier.Tier1_FullGameplay };
+			OxygenControllerRef = new();
+			OxygenPercTextPath = new();
+			OxygenStatusTextPath = new();
+			CurrentOxygen = 100.000000F;
+			SceneTier = Enums.GameplayTier.Tier1_FullGameplay;
 		}
 	}
 }

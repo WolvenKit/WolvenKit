@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamestateMachineeventPostponedParameterVector : gamestateMachineeventPostponedParameterBase
 	{
-		private Vector4 _value;
-
 		[Ordinal(2)] 
 		[RED("value")] 
 		public Vector4 Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
+		}
+
+		public gamestateMachineeventPostponedParameterVector()
+		{
+			Value = new();
 		}
 	}
 }

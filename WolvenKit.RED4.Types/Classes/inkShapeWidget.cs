@@ -5,146 +5,134 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkShapeWidget : inkBaseShapeWidget
 	{
-		private CResourceReference<inkShapeCollectionResource> _shapeResource;
-		private CName _shapeName;
-		private CEnum<inkEShapeVariant> _shapeVariant;
-		private CBool _keepInBounds;
-		private inkMargin _nineSliceScale;
-		private CBool _useNineSlice;
-		private CEnum<inkEHorizontalAlign> _contentHAlign;
-		private CEnum<inkEVerticalAlign> _contentVAlign;
-		private HDRColor _borderColor;
-		private CFloat _borderOpacity;
-		private CFloat _fillOpacity;
-		private CFloat _lineThickness;
-		private CEnum<inkEEndCapStyle> _endCapStyle;
-		private CEnum<inkEJointStyle> _jointStyle;
-		private CArray<Vector2> _vertexList;
-
 		[Ordinal(20)] 
 		[RED("shapeResource")] 
 		public CResourceReference<inkShapeCollectionResource> ShapeResource
 		{
-			get => GetProperty(ref _shapeResource);
-			set => SetProperty(ref _shapeResource, value);
+			get => GetPropertyValue<CResourceReference<inkShapeCollectionResource>>();
+			set => SetPropertyValue<CResourceReference<inkShapeCollectionResource>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("shapeName")] 
 		public CName ShapeName
 		{
-			get => GetProperty(ref _shapeName);
-			set => SetProperty(ref _shapeName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("shapeVariant")] 
 		public CEnum<inkEShapeVariant> ShapeVariant
 		{
-			get => GetProperty(ref _shapeVariant);
-			set => SetProperty(ref _shapeVariant, value);
+			get => GetPropertyValue<CEnum<inkEShapeVariant>>();
+			set => SetPropertyValue<CEnum<inkEShapeVariant>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("keepInBounds")] 
 		public CBool KeepInBounds
 		{
-			get => GetProperty(ref _keepInBounds);
-			set => SetProperty(ref _keepInBounds, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("nineSliceScale")] 
 		public inkMargin NineSliceScale
 		{
-			get => GetProperty(ref _nineSliceScale);
-			set => SetProperty(ref _nineSliceScale, value);
+			get => GetPropertyValue<inkMargin>();
+			set => SetPropertyValue<inkMargin>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("useNineSlice")] 
 		public CBool UseNineSlice
 		{
-			get => GetProperty(ref _useNineSlice);
-			set => SetProperty(ref _useNineSlice, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("contentHAlign")] 
 		public CEnum<inkEHorizontalAlign> ContentHAlign
 		{
-			get => GetProperty(ref _contentHAlign);
-			set => SetProperty(ref _contentHAlign, value);
+			get => GetPropertyValue<CEnum<inkEHorizontalAlign>>();
+			set => SetPropertyValue<CEnum<inkEHorizontalAlign>>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("contentVAlign")] 
 		public CEnum<inkEVerticalAlign> ContentVAlign
 		{
-			get => GetProperty(ref _contentVAlign);
-			set => SetProperty(ref _contentVAlign, value);
+			get => GetPropertyValue<CEnum<inkEVerticalAlign>>();
+			set => SetPropertyValue<CEnum<inkEVerticalAlign>>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("borderColor")] 
 		public HDRColor BorderColor
 		{
-			get => GetProperty(ref _borderColor);
-			set => SetProperty(ref _borderColor, value);
+			get => GetPropertyValue<HDRColor>();
+			set => SetPropertyValue<HDRColor>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("borderOpacity")] 
 		public CFloat BorderOpacity
 		{
-			get => GetProperty(ref _borderOpacity);
-			set => SetProperty(ref _borderOpacity, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("fillOpacity")] 
 		public CFloat FillOpacity
 		{
-			get => GetProperty(ref _fillOpacity);
-			set => SetProperty(ref _fillOpacity, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("lineThickness")] 
 		public CFloat LineThickness
 		{
-			get => GetProperty(ref _lineThickness);
-			set => SetProperty(ref _lineThickness, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("endCapStyle")] 
 		public CEnum<inkEEndCapStyle> EndCapStyle
 		{
-			get => GetProperty(ref _endCapStyle);
-			set => SetProperty(ref _endCapStyle, value);
+			get => GetPropertyValue<CEnum<inkEEndCapStyle>>();
+			set => SetPropertyValue<CEnum<inkEEndCapStyle>>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("jointStyle")] 
 		public CEnum<inkEJointStyle> JointStyle
 		{
-			get => GetProperty(ref _jointStyle);
-			set => SetProperty(ref _jointStyle, value);
+			get => GetPropertyValue<CEnum<inkEJointStyle>>();
+			set => SetPropertyValue<CEnum<inkEJointStyle>>(value);
 		}
 
 		[Ordinal(34)] 
 		[RED("vertexList")] 
 		public CArray<Vector2> VertexList
 		{
-			get => GetProperty(ref _vertexList);
-			set => SetProperty(ref _vertexList, value);
+			get => GetPropertyValue<CArray<Vector2>>();
+			set => SetPropertyValue<CArray<Vector2>>(value);
 		}
 
 		public inkShapeWidget()
 		{
-			_borderOpacity = 1.000000F;
-			_fillOpacity = 1.000000F;
+			Size = new() { X = 1.000000F, Y = 1.000000F };
+			NineSliceScale = new();
+			BorderColor = new() { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Alpha = 1.000000F };
+			BorderOpacity = 1.000000F;
+			FillOpacity = 1.000000F;
+			VertexList = new();
 		}
 	}
 }

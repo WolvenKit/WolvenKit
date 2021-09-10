@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class workWorkspotItemOverride : RedBaseClass
 	{
-		private CArray<workWorkspotItemOverridePropOverride> _propOverrides;
-		private CArray<workWorkspotItemOverrideItemOverride> _itemOverrides;
-
 		[Ordinal(0)] 
 		[RED("propOverrides")] 
 		public CArray<workWorkspotItemOverridePropOverride> PropOverrides
 		{
-			get => GetProperty(ref _propOverrides);
-			set => SetProperty(ref _propOverrides, value);
+			get => GetPropertyValue<CArray<workWorkspotItemOverridePropOverride>>();
+			set => SetPropertyValue<CArray<workWorkspotItemOverridePropOverride>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("itemOverrides")] 
 		public CArray<workWorkspotItemOverrideItemOverride> ItemOverrides
 		{
-			get => GetProperty(ref _itemOverrides);
-			set => SetProperty(ref _itemOverrides, value);
+			get => GetPropertyValue<CArray<workWorkspotItemOverrideItemOverride>>();
+			set => SetPropertyValue<CArray<workWorkspotItemOverrideItemOverride>>(value);
+		}
+
+		public workWorkspotItemOverride()
+		{
+			PropOverrides = new();
+			ItemOverrides = new();
 		}
 	}
 }

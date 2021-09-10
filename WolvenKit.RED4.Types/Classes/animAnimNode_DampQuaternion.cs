@@ -5,55 +5,54 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_DampQuaternion : animAnimNode_QuaternionValue
 	{
-		private CFloat _defaultRotationSpeed;
-		private EulerAngles _defaultInitialValue;
-		private animQuaternionLink _inputNode;
-		private animQuaternionLink _initialValueNode;
-		private animFloatLink _rotationSpeedNode;
-
 		[Ordinal(11)] 
 		[RED("defaultRotationSpeed")] 
 		public CFloat DefaultRotationSpeed
 		{
-			get => GetProperty(ref _defaultRotationSpeed);
-			set => SetProperty(ref _defaultRotationSpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("defaultInitialValue")] 
 		public EulerAngles DefaultInitialValue
 		{
-			get => GetProperty(ref _defaultInitialValue);
-			set => SetProperty(ref _defaultInitialValue, value);
+			get => GetPropertyValue<EulerAngles>();
+			set => SetPropertyValue<EulerAngles>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("inputNode")] 
 		public animQuaternionLink InputNode
 		{
-			get => GetProperty(ref _inputNode);
-			set => SetProperty(ref _inputNode, value);
+			get => GetPropertyValue<animQuaternionLink>();
+			set => SetPropertyValue<animQuaternionLink>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("initialValueNode")] 
 		public animQuaternionLink InitialValueNode
 		{
-			get => GetProperty(ref _initialValueNode);
-			set => SetProperty(ref _initialValueNode, value);
+			get => GetPropertyValue<animQuaternionLink>();
+			set => SetPropertyValue<animQuaternionLink>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("rotationSpeedNode")] 
 		public animFloatLink RotationSpeedNode
 		{
-			get => GetProperty(ref _rotationSpeedNode);
-			set => SetProperty(ref _rotationSpeedNode, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		public animAnimNode_DampQuaternion()
 		{
-			_defaultRotationSpeed = 180.000000F;
+			Id = 4294967295;
+			DefaultRotationSpeed = 180.000000F;
+			DefaultInitialValue = new();
+			InputNode = new();
+			InitialValueNode = new();
+			RotationSpeedNode = new();
 		}
 	}
 }

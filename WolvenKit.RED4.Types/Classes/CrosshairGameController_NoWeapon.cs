@@ -5,176 +5,167 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CrosshairGameController_NoWeapon : gameuiCrosshairBaseGameController
 	{
-		private inkCompoundWidgetReference _aimDownSightContainer;
-		private inkCompoundWidgetReference _zoomMovingContainer;
-		private inkTextWidgetReference _zoomNumber;
-		private inkTextWidgetReference _zoomNumberR;
-		private inkImageWidgetReference _distanceImageRuler;
-		private inkImageWidgetReference _zoomMoveBracketL;
-		private inkImageWidgetReference _zoomMoveBracketR;
-		private CString _zoomLevelString;
-		private CWeakHandle<gameIBlackboard> _playerSMBB;
-		private CHandle<redCallbackObject> _zoomLevelBBID;
-		private CHandle<redCallbackObject> _sceneTierBlackboardId;
-		private CEnum<gamePSMHighLevel> _sceneTier;
-		private CHandle<inkanimProxy> _zoomUpAnim;
-		private CHandle<inkanimProxy> _animLockOn;
-		private CHandle<inkanimProxy> _zoomDownAnim;
-		private CHandle<inkanimProxy> _animLockOff;
-		private CHandle<inkanimProxy> _zoomShowAnim;
-		private CHandle<inkanimProxy> _zoomHideAnim;
-		private CFloat _argZoomBuffered;
-
 		[Ordinal(18)] 
 		[RED("AimDownSightContainer")] 
 		public inkCompoundWidgetReference AimDownSightContainer
 		{
-			get => GetProperty(ref _aimDownSightContainer);
-			set => SetProperty(ref _aimDownSightContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("ZoomMovingContainer")] 
 		public inkCompoundWidgetReference ZoomMovingContainer
 		{
-			get => GetProperty(ref _zoomMovingContainer);
-			set => SetProperty(ref _zoomMovingContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("ZoomNumber")] 
 		public inkTextWidgetReference ZoomNumber
 		{
-			get => GetProperty(ref _zoomNumber);
-			set => SetProperty(ref _zoomNumber, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("ZoomNumberR")] 
 		public inkTextWidgetReference ZoomNumberR
 		{
-			get => GetProperty(ref _zoomNumberR);
-			set => SetProperty(ref _zoomNumberR, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("DistanceImageRuler")] 
 		public inkImageWidgetReference DistanceImageRuler
 		{
-			get => GetProperty(ref _distanceImageRuler);
-			set => SetProperty(ref _distanceImageRuler, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("ZoomMoveBracketL")] 
 		public inkImageWidgetReference ZoomMoveBracketL
 		{
-			get => GetProperty(ref _zoomMoveBracketL);
-			set => SetProperty(ref _zoomMoveBracketL, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("ZoomMoveBracketR")] 
 		public inkImageWidgetReference ZoomMoveBracketR
 		{
-			get => GetProperty(ref _zoomMoveBracketR);
-			set => SetProperty(ref _zoomMoveBracketR, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("ZoomLevelString")] 
 		public CString ZoomLevelString
 		{
-			get => GetProperty(ref _zoomLevelString);
-			set => SetProperty(ref _zoomLevelString, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("PlayerSMBB")] 
 		public CWeakHandle<gameIBlackboard> PlayerSMBB
 		{
-			get => GetProperty(ref _playerSMBB);
-			set => SetProperty(ref _playerSMBB, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("ZoomLevelBBID")] 
 		public CHandle<redCallbackObject> ZoomLevelBBID
 		{
-			get => GetProperty(ref _zoomLevelBBID);
-			set => SetProperty(ref _zoomLevelBBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("sceneTierBlackboardId")] 
 		public CHandle<redCallbackObject> SceneTierBlackboardId
 		{
-			get => GetProperty(ref _sceneTierBlackboardId);
-			set => SetProperty(ref _sceneTierBlackboardId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("sceneTier")] 
 		public CEnum<gamePSMHighLevel> SceneTier
 		{
-			get => GetProperty(ref _sceneTier);
-			set => SetProperty(ref _sceneTier, value);
+			get => GetPropertyValue<CEnum<gamePSMHighLevel>>();
+			set => SetPropertyValue<CEnum<gamePSMHighLevel>>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("zoomUpAnim")] 
 		public CHandle<inkanimProxy> ZoomUpAnim
 		{
-			get => GetProperty(ref _zoomUpAnim);
-			set => SetProperty(ref _zoomUpAnim, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("animLockOn")] 
 		public CHandle<inkanimProxy> AnimLockOn
 		{
-			get => GetProperty(ref _animLockOn);
-			set => SetProperty(ref _animLockOn, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("zoomDownAnim")] 
 		public CHandle<inkanimProxy> ZoomDownAnim
 		{
-			get => GetProperty(ref _zoomDownAnim);
-			set => SetProperty(ref _zoomDownAnim, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("animLockOff")] 
 		public CHandle<inkanimProxy> AnimLockOff
 		{
-			get => GetProperty(ref _animLockOff);
-			set => SetProperty(ref _animLockOff, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(34)] 
 		[RED("zoomShowAnim")] 
 		public CHandle<inkanimProxy> ZoomShowAnim
 		{
-			get => GetProperty(ref _zoomShowAnim);
-			set => SetProperty(ref _zoomShowAnim, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(35)] 
 		[RED("zoomHideAnim")] 
 		public CHandle<inkanimProxy> ZoomHideAnim
 		{
-			get => GetProperty(ref _zoomHideAnim);
-			set => SetProperty(ref _zoomHideAnim, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(36)] 
 		[RED("argZoomBuffered")] 
 		public CFloat ArgZoomBuffered
 		{
-			get => GetProperty(ref _argZoomBuffered);
-			set => SetProperty(ref _argZoomBuffered, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public CrosshairGameController_NoWeapon()
+		{
+			AimDownSightContainer = new();
+			ZoomMovingContainer = new();
+			ZoomNumber = new();
+			ZoomNumberR = new();
+			DistanceImageRuler = new();
+			ZoomMoveBracketL = new();
+			ZoomMoveBracketR = new();
 		}
 	}
 }

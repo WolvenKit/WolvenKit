@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class NPCRarityPrereq : gameIScriptablePrereq
 	{
-		private CEnum<gamedataNPCRarity> _rarity;
-		private CBool _invert;
-
 		[Ordinal(0)] 
 		[RED("rarity")] 
 		public CEnum<gamedataNPCRarity> Rarity
 		{
-			get => GetProperty(ref _rarity);
-			set => SetProperty(ref _rarity, value);
+			get => GetPropertyValue<CEnum<gamedataNPCRarity>>();
+			set => SetPropertyValue<CEnum<gamedataNPCRarity>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("invert")] 
 		public CBool Invert
 		{
-			get => GetProperty(ref _invert);
-			set => SetProperty(ref _invert, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questVehicleCondition : questTypedCondition
 	{
-		private CHandle<questIVehicleConditionType> _type;
-
 		[Ordinal(0)] 
 		[RED("type")] 
 		public CHandle<questIVehicleConditionType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CHandle<questIVehicleConditionType>>();
+			set => SetPropertyValue<CHandle<questIVehicleConditionType>>(value);
 		}
 	}
 }

@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ProgramTooltipStatController : inkWidgetLogicController
 	{
-		private inkImageWidgetReference _arrow;
-		private inkTextWidgetReference _value;
-		private inkTextWidgetReference _diffValue;
-
 		[Ordinal(1)] 
 		[RED("arrow")] 
 		public inkImageWidgetReference Arrow
 		{
-			get => GetProperty(ref _arrow);
-			set => SetProperty(ref _arrow, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("value")] 
 		public inkTextWidgetReference Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("diffValue")] 
 		public inkTextWidgetReference DiffValue
 		{
-			get => GetProperty(ref _diffValue);
-			set => SetProperty(ref _diffValue, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		public ProgramTooltipStatController()
+		{
+			Arrow = new();
+			Value = new();
+			DiffValue = new();
 		}
 	}
 }

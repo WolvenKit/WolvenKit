@@ -5,59 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameTelemetryLevelGained : RedBaseClass
 	{
-		private CWeakHandle<gameObject> _playerPuppet;
-		private CEnum<gamedataProficiencyType> _proficiencyType;
-		private CInt32 _proficiencyValue;
-		private CInt32 _perkPointsAwarded;
-		private CInt32 _attributePointsAwarded;
-		private CBool _isDebugEvt;
-
 		[Ordinal(0)] 
 		[RED("playerPuppet")] 
 		public CWeakHandle<gameObject> PlayerPuppet
 		{
-			get => GetProperty(ref _playerPuppet);
-			set => SetProperty(ref _playerPuppet, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("proficiencyType")] 
 		public CEnum<gamedataProficiencyType> ProficiencyType
 		{
-			get => GetProperty(ref _proficiencyType);
-			set => SetProperty(ref _proficiencyType, value);
+			get => GetPropertyValue<CEnum<gamedataProficiencyType>>();
+			set => SetPropertyValue<CEnum<gamedataProficiencyType>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("proficiencyValue")] 
 		public CInt32 ProficiencyValue
 		{
-			get => GetProperty(ref _proficiencyValue);
-			set => SetProperty(ref _proficiencyValue, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("perkPointsAwarded")] 
 		public CInt32 PerkPointsAwarded
 		{
-			get => GetProperty(ref _perkPointsAwarded);
-			set => SetProperty(ref _perkPointsAwarded, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("attributePointsAwarded")] 
 		public CInt32 AttributePointsAwarded
 		{
-			get => GetProperty(ref _attributePointsAwarded);
-			set => SetProperty(ref _attributePointsAwarded, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("isDebugEvt")] 
 		public CBool IsDebugEvt
 		{
-			get => GetProperty(ref _isDebugEvt);
-			set => SetProperty(ref _isDebugEvt, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ComputerMenuButtonController : DeviceButtonLogicControllerBase
 	{
-		private inkTextWidgetReference _counterWidget;
-		private inkWidgetReference _notificationidget;
-		private CString _menuID;
-
 		[Ordinal(26)] 
 		[RED("counterWidget")] 
 		public inkTextWidgetReference CounterWidget
 		{
-			get => GetProperty(ref _counterWidget);
-			set => SetProperty(ref _counterWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("notificationidget")] 
 		public inkWidgetReference Notificationidget
 		{
-			get => GetProperty(ref _notificationidget);
-			set => SetProperty(ref _notificationidget, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("menuID")] 
 		public CString MenuID
 		{
-			get => GetProperty(ref _menuID);
-			set => SetProperty(ref _menuID, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		public ComputerMenuButtonController()
+		{
+			CounterWidget = new();
+			Notificationidget = new();
 		}
 	}
 }

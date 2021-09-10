@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameVisionModeMappinEvent : redEvent
 	{
-		private CBool _show;
-
 		[Ordinal(0)] 
 		[RED("show")] 
 		public CBool Show
 		{
-			get => GetProperty(ref _show);
-			set => SetProperty(ref _show, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public gameVisionModeMappinEvent()
 		{
-			_show = true;
+			Show = true;
 		}
 	}
 }

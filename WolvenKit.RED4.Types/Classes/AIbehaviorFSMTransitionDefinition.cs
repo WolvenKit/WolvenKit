@@ -5,68 +5,68 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorFSMTransitionDefinition : AIbehaviorBehaviorComponentDefinition
 	{
-		private CUInt16 _inState;
-		private CUInt16 _outState;
-		private CInt32 _evaluationOrder;
-		private CArray<CHandle<AIbehaviorInstantConditionDefinition>> _instantConditions;
-		private CArray<CHandle<AIbehaviorMonitorConditionDefinition>> _monitorConditions;
-		private CArray<CHandle<AIbehaviorEventConditionDefinition>> _eventConditions;
-		private CArray<CHandle<AIbehaviorExpressionSocket>> _passiveConditions;
-
 		[Ordinal(0)] 
 		[RED("inState")] 
 		public CUInt16 InState
 		{
-			get => GetProperty(ref _inState);
-			set => SetProperty(ref _inState, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("outState")] 
 		public CUInt16 OutState
 		{
-			get => GetProperty(ref _outState);
-			set => SetProperty(ref _outState, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("evaluationOrder")] 
 		public CInt32 EvaluationOrder
 		{
-			get => GetProperty(ref _evaluationOrder);
-			set => SetProperty(ref _evaluationOrder, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("instantConditions")] 
 		public CArray<CHandle<AIbehaviorInstantConditionDefinition>> InstantConditions
 		{
-			get => GetProperty(ref _instantConditions);
-			set => SetProperty(ref _instantConditions, value);
+			get => GetPropertyValue<CArray<CHandle<AIbehaviorInstantConditionDefinition>>>();
+			set => SetPropertyValue<CArray<CHandle<AIbehaviorInstantConditionDefinition>>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("monitorConditions")] 
 		public CArray<CHandle<AIbehaviorMonitorConditionDefinition>> MonitorConditions
 		{
-			get => GetProperty(ref _monitorConditions);
-			set => SetProperty(ref _monitorConditions, value);
+			get => GetPropertyValue<CArray<CHandle<AIbehaviorMonitorConditionDefinition>>>();
+			set => SetPropertyValue<CArray<CHandle<AIbehaviorMonitorConditionDefinition>>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("eventConditions")] 
 		public CArray<CHandle<AIbehaviorEventConditionDefinition>> EventConditions
 		{
-			get => GetProperty(ref _eventConditions);
-			set => SetProperty(ref _eventConditions, value);
+			get => GetPropertyValue<CArray<CHandle<AIbehaviorEventConditionDefinition>>>();
+			set => SetPropertyValue<CArray<CHandle<AIbehaviorEventConditionDefinition>>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("passiveConditions")] 
 		public CArray<CHandle<AIbehaviorExpressionSocket>> PassiveConditions
 		{
-			get => GetProperty(ref _passiveConditions);
-			set => SetProperty(ref _passiveConditions, value);
+			get => GetPropertyValue<CArray<CHandle<AIbehaviorExpressionSocket>>>();
+			set => SetPropertyValue<CArray<CHandle<AIbehaviorExpressionSocket>>>(value);
+		}
+
+		public AIbehaviorFSMTransitionDefinition()
+		{
+			InstantConditions = new();
+			MonitorConditions = new();
+			EventConditions = new();
+			PassiveConditions = new();
 		}
 	}
 }

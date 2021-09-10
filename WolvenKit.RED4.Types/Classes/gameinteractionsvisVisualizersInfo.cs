@@ -5,28 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameinteractionsvisVisualizersInfo : RedBaseClass
 	{
-		private CInt32 _activeVisId;
-		private CArray<CInt32> _visIds;
-
 		[Ordinal(0)] 
 		[RED("activeVisId")] 
 		public CInt32 ActiveVisId
 		{
-			get => GetProperty(ref _activeVisId);
-			set => SetProperty(ref _activeVisId, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("visIds")] 
 		public CArray<CInt32> VisIds
 		{
-			get => GetProperty(ref _visIds);
-			set => SetProperty(ref _visIds, value);
+			get => GetPropertyValue<CArray<CInt32>>();
+			set => SetPropertyValue<CArray<CInt32>>(value);
 		}
 
 		public gameinteractionsvisVisualizersInfo()
 		{
-			_activeVisId = -1;
+			ActiveVisId = -1;
+			VisIds = new();
 		}
 	}
 }

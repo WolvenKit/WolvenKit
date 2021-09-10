@@ -5,50 +5,53 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UI_CompassInfoDef : gamebbScriptDefinition
 	{
-		private gamebbScriptID_Float _northOffset;
-		private gamebbScriptID_Float _southOffset;
-		private gamebbScriptID_Float _eastOffset;
-		private gamebbScriptID_Float _westOffset;
-		private gamebbScriptID_Variant _pins;
-
 		[Ordinal(0)] 
 		[RED("NorthOffset")] 
 		public gamebbScriptID_Float NorthOffset
 		{
-			get => GetProperty(ref _northOffset);
-			set => SetProperty(ref _northOffset, value);
+			get => GetPropertyValue<gamebbScriptID_Float>();
+			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("SouthOffset")] 
 		public gamebbScriptID_Float SouthOffset
 		{
-			get => GetProperty(ref _southOffset);
-			set => SetProperty(ref _southOffset, value);
+			get => GetPropertyValue<gamebbScriptID_Float>();
+			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("EastOffset")] 
 		public gamebbScriptID_Float EastOffset
 		{
-			get => GetProperty(ref _eastOffset);
-			set => SetProperty(ref _eastOffset, value);
+			get => GetPropertyValue<gamebbScriptID_Float>();
+			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("WestOffset")] 
 		public gamebbScriptID_Float WestOffset
 		{
-			get => GetProperty(ref _westOffset);
-			set => SetProperty(ref _westOffset, value);
+			get => GetPropertyValue<gamebbScriptID_Float>();
+			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("Pins")] 
 		public gamebbScriptID_Variant Pins
 		{
-			get => GetProperty(ref _pins);
-			set => SetProperty(ref _pins, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
+		}
+
+		public UI_CompassInfoDef()
+		{
+			NorthOffset = new();
+			SouthOffset = new();
+			EastOffset = new();
+			WestOffset = new();
+			Pins = new();
 		}
 	}
 }

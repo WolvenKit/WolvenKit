@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AddDevelopmentPointEffector : gameEffector
 	{
-		private CInt32 _amount;
-		private CEnum<gamedataDevelopmentPointType> _type;
-		private TweakDBID _tdbid;
-
 		[Ordinal(0)] 
 		[RED("amount")] 
 		public CInt32 Amount
 		{
-			get => GetProperty(ref _amount);
-			set => SetProperty(ref _amount, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("type")] 
 		public CEnum<gamedataDevelopmentPointType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<gamedataDevelopmentPointType>>();
+			set => SetPropertyValue<CEnum<gamedataDevelopmentPointType>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("tdbid")] 
 		public TweakDBID Tdbid
 		{
-			get => GetProperty(ref _tdbid);
-			set => SetProperty(ref _tdbid, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 	}
 }

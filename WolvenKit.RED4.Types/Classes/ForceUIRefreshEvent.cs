@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ForceUIRefreshEvent : redEvent
 	{
-		private entEntityID _ownerID;
-
 		[Ordinal(0)] 
 		[RED("ownerID")] 
 		public entEntityID OwnerID
 		{
-			get => GetProperty(ref _ownerID);
-			set => SetProperty(ref _ownerID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
+		}
+
+		public ForceUIRefreshEvent()
+		{
+			OwnerID = new();
 		}
 	}
 }

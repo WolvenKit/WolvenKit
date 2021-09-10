@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ActivateNetworkLinkTaskData : gameScriptTaskData
 	{
-		private CInt32 _linkIndex;
-
 		[Ordinal(0)] 
 		[RED("linkIndex")] 
 		public CInt32 LinkIndex
 		{
-			get => GetProperty(ref _linkIndex);
-			set => SetProperty(ref _linkIndex, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

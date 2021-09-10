@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameSItemStackRequirementData : RedBaseClass
 	{
-		private CEnum<gamedataStatType> _statType;
-		private CFloat _requiredValue;
-
 		[Ordinal(0)] 
 		[RED("statType")] 
 		public CEnum<gamedataStatType> StatType
 		{
-			get => GetProperty(ref _statType);
-			set => SetProperty(ref _statType, value);
+			get => GetPropertyValue<CEnum<gamedataStatType>>();
+			set => SetPropertyValue<CEnum<gamedataStatType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("requiredValue")] 
 		public CFloat RequiredValue
 		{
-			get => GetProperty(ref _requiredValue);
-			set => SetProperty(ref _requiredValue, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public gameSItemStackRequirementData()
 		{
-			_statType = new() { Value = Enums.gamedataStatType.Invalid };
+			StatType = Enums.gamedataStatType.Invalid;
 		}
 	}
 }

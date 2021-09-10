@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkTypographyResource : CResource
 	{
-		private CArray<inkLanguageDefinition> _languages;
-
 		[Ordinal(1)] 
 		[RED("languages")] 
 		public CArray<inkLanguageDefinition> Languages
 		{
-			get => GetProperty(ref _languages);
-			set => SetProperty(ref _languages, value);
+			get => GetPropertyValue<CArray<inkLanguageDefinition>>();
+			set => SetPropertyValue<CArray<inkLanguageDefinition>>(value);
+		}
+
+		public inkTypographyResource()
+		{
+			Languages = new() { new() { LanguageCode = "en-us", IsoScriptCode = "Latn", Fonts = new() { new() } } };
 		}
 	}
 }

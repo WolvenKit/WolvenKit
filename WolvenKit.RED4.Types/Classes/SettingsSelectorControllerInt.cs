@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SettingsSelectorControllerInt : SettingsSelectorControllerRange
 	{
-		private CInt32 _newValue;
-		private inkWidgetReference _sliderWidget;
-		private CWeakHandle<inkSliderController> _sliderController;
-
 		[Ordinal(19)] 
 		[RED("newValue")] 
 		public CInt32 NewValue
 		{
-			get => GetProperty(ref _newValue);
-			set => SetProperty(ref _newValue, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("sliderWidget")] 
 		public inkWidgetReference SliderWidget
 		{
-			get => GetProperty(ref _sliderWidget);
-			set => SetProperty(ref _sliderWidget, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("sliderController")] 
 		public CWeakHandle<inkSliderController> SliderController
 		{
-			get => GetProperty(ref _sliderController);
-			set => SetProperty(ref _sliderController, value);
+			get => GetPropertyValue<CWeakHandle<inkSliderController>>();
+			set => SetPropertyValue<CWeakHandle<inkSliderController>>(value);
+		}
+
+		public SettingsSelectorControllerInt()
+		{
+			SliderWidget = new();
 		}
 	}
 }

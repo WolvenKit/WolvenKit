@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ItemLabelController : inkWidgetLogicController
 	{
-		private inkTextWidgetReference _label;
-		private inkImageWidgetReference _moneyIcon;
-		private CEnum<ItemLabelType> _type;
-
 		[Ordinal(1)] 
 		[RED("label")] 
 		public inkTextWidgetReference Label
 		{
-			get => GetProperty(ref _label);
-			set => SetProperty(ref _label, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("moneyIcon")] 
 		public inkImageWidgetReference MoneyIcon
 		{
-			get => GetProperty(ref _moneyIcon);
-			set => SetProperty(ref _moneyIcon, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("type")] 
 		public CEnum<ItemLabelType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<ItemLabelType>>();
+			set => SetPropertyValue<CEnum<ItemLabelType>>(value);
+		}
+
+		public ItemLabelController()
+		{
+			Label = new();
+			MoneyIcon = new();
 		}
 	}
 }

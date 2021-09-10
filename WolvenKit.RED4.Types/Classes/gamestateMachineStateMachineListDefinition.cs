@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamestateMachineStateMachineListDefinition : IScriptable
 	{
-		private CArray<CHandle<gamestateMachineStateMachineDefinition>> _stateMachinesStorage;
-
 		[Ordinal(0)] 
 		[RED("stateMachinesStorage")] 
 		public CArray<CHandle<gamestateMachineStateMachineDefinition>> StateMachinesStorage
 		{
-			get => GetProperty(ref _stateMachinesStorage);
-			set => SetProperty(ref _stateMachinesStorage, value);
+			get => GetPropertyValue<CArray<CHandle<gamestateMachineStateMachineDefinition>>>();
+			set => SetPropertyValue<CArray<CHandle<gamestateMachineStateMachineDefinition>>>(value);
+		}
+
+		public gamestateMachineStateMachineListDefinition()
+		{
+			StateMachinesStorage = new();
 		}
 	}
 }

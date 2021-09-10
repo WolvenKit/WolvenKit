@@ -5,181 +5,177 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class InventoryItemDisplay : BaseButtonView
 	{
-		private inkWidgetReference _rarityRoot;
-		private inkCompoundWidgetReference _modsRoot;
-		private inkWidgetReference _rarityWrapper;
-		private inkImageWidgetReference _iconImage;
-		private inkImageWidgetReference _iconShadowImage;
-		private inkImageWidgetReference _iconFallback;
-		private inkImageWidgetReference _backgroundShape;
-		private inkImageWidgetReference _backgroundHighlight;
-		private inkImageWidgetReference _backgroundFrame;
-		private inkTextWidgetReference _quantityText;
-		private CName _modName;
-		private inkWidgetReference _toggleHighlight;
-		private inkWidgetReference _equippedIcon;
-		private CString _defaultCategoryIconName;
-		private InventoryItemData _itemData;
-		private CArray<CWeakHandle<InventoryItemAttachmentDisplay>> _attachementsDisplay;
-		private Vector2 _smallSize;
-		private Vector2 _bigSize;
-		private CWeakHandle<gameObject> _owner;
-
 		[Ordinal(2)] 
 		[RED("RarityRoot")] 
 		public inkWidgetReference RarityRoot
 		{
-			get => GetProperty(ref _rarityRoot);
-			set => SetProperty(ref _rarityRoot, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("ModsRoot")] 
 		public inkCompoundWidgetReference ModsRoot
 		{
-			get => GetProperty(ref _modsRoot);
-			set => SetProperty(ref _modsRoot, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("RarityWrapper")] 
 		public inkWidgetReference RarityWrapper
 		{
-			get => GetProperty(ref _rarityWrapper);
-			set => SetProperty(ref _rarityWrapper, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("IconImage")] 
 		public inkImageWidgetReference IconImage
 		{
-			get => GetProperty(ref _iconImage);
-			set => SetProperty(ref _iconImage, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("IconShadowImage")] 
 		public inkImageWidgetReference IconShadowImage
 		{
-			get => GetProperty(ref _iconShadowImage);
-			set => SetProperty(ref _iconShadowImage, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("IconFallback")] 
 		public inkImageWidgetReference IconFallback
 		{
-			get => GetProperty(ref _iconFallback);
-			set => SetProperty(ref _iconFallback, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("BackgroundShape")] 
 		public inkImageWidgetReference BackgroundShape
 		{
-			get => GetProperty(ref _backgroundShape);
-			set => SetProperty(ref _backgroundShape, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("BackgroundHighlight")] 
 		public inkImageWidgetReference BackgroundHighlight
 		{
-			get => GetProperty(ref _backgroundHighlight);
-			set => SetProperty(ref _backgroundHighlight, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("BackgroundFrame")] 
 		public inkImageWidgetReference BackgroundFrame
 		{
-			get => GetProperty(ref _backgroundFrame);
-			set => SetProperty(ref _backgroundFrame, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("QuantityText")] 
 		public inkTextWidgetReference QuantityText
 		{
-			get => GetProperty(ref _quantityText);
-			set => SetProperty(ref _quantityText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("ModName")] 
 		public CName ModName
 		{
-			get => GetProperty(ref _modName);
-			set => SetProperty(ref _modName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("toggleHighlight")] 
 		public inkWidgetReference ToggleHighlight
 		{
-			get => GetProperty(ref _toggleHighlight);
-			set => SetProperty(ref _toggleHighlight, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("equippedIcon")] 
 		public inkWidgetReference EquippedIcon
 		{
-			get => GetProperty(ref _equippedIcon);
-			set => SetProperty(ref _equippedIcon, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("DefaultCategoryIconName")] 
 		public CString DefaultCategoryIconName
 		{
-			get => GetProperty(ref _defaultCategoryIconName);
-			set => SetProperty(ref _defaultCategoryIconName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("ItemData")] 
 		public InventoryItemData ItemData
 		{
-			get => GetProperty(ref _itemData);
-			set => SetProperty(ref _itemData, value);
+			get => GetPropertyValue<InventoryItemData>();
+			set => SetPropertyValue<InventoryItemData>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("AttachementsDisplay")] 
 		public CArray<CWeakHandle<InventoryItemAttachmentDisplay>> AttachementsDisplay
 		{
-			get => GetProperty(ref _attachementsDisplay);
-			set => SetProperty(ref _attachementsDisplay, value);
+			get => GetPropertyValue<CArray<CWeakHandle<InventoryItemAttachmentDisplay>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<InventoryItemAttachmentDisplay>>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("smallSize")] 
 		public Vector2 SmallSize
 		{
-			get => GetProperty(ref _smallSize);
-			set => SetProperty(ref _smallSize, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("bigSize")] 
 		public Vector2 BigSize
 		{
-			get => GetProperty(ref _bigSize);
-			set => SetProperty(ref _bigSize, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("owner")] 
 		public CWeakHandle<gameObject> Owner
 		{
-			get => GetProperty(ref _owner);
-			set => SetProperty(ref _owner, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		public InventoryItemDisplay()
 		{
-			_defaultCategoryIconName = new() { Text = "undefined" };
+			RarityRoot = new();
+			ModsRoot = new();
+			RarityWrapper = new();
+			IconImage = new();
+			IconShadowImage = new();
+			IconFallback = new();
+			BackgroundShape = new();
+			BackgroundHighlight = new();
+			BackgroundFrame = new();
+			QuantityText = new();
+			ToggleHighlight = new();
+			EquippedIcon = new();
+			DefaultCategoryIconName = "undefined";
+			ItemData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
+			AttachementsDisplay = new();
+			SmallSize = new();
+			BigSize = new();
 		}
 	}
 }

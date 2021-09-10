@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameEffectVectorEvaluator : ISerializable
 	{
-		private CFloat _modifier;
-
 		[Ordinal(0)] 
 		[RED("modifier")] 
 		public CFloat Modifier
 		{
-			get => GetProperty(ref _modifier);
-			set => SetProperty(ref _modifier, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

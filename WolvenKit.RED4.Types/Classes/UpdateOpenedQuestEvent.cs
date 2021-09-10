@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UpdateOpenedQuestEvent : redEvent
 	{
-		private CWeakHandle<gameJournalQuest> _openedQuest;
-
 		[Ordinal(0)] 
 		[RED("openedQuest")] 
 		public CWeakHandle<gameJournalQuest> OpenedQuest
 		{
-			get => GetProperty(ref _openedQuest);
-			set => SetProperty(ref _openedQuest, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalQuest>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalQuest>>(value);
 		}
 	}
 }

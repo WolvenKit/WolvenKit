@@ -5,84 +5,81 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VendingMachineControllerPS : ScriptableDeviceComponentPS
 	{
-		private VendingMachineSetup _vendingMachineSetup;
-		private VendingMachineSFX _vendingMachineSFX;
-		private CFloat _soldOutProbability;
-		private CBool _isReady;
-		private CBool _isSoldOut;
-		private CInt32 _hackCount;
-		private CArray<gameSItemStack> _shopStock;
-		private CBool _shopStockInit;
-
 		[Ordinal(104)] 
 		[RED("vendingMachineSetup")] 
 		public VendingMachineSetup VendingMachineSetup
 		{
-			get => GetProperty(ref _vendingMachineSetup);
-			set => SetProperty(ref _vendingMachineSetup, value);
+			get => GetPropertyValue<VendingMachineSetup>();
+			set => SetPropertyValue<VendingMachineSetup>(value);
 		}
 
 		[Ordinal(105)] 
 		[RED("vendingMachineSFX")] 
 		public VendingMachineSFX VendingMachineSFX
 		{
-			get => GetProperty(ref _vendingMachineSFX);
-			set => SetProperty(ref _vendingMachineSFX, value);
+			get => GetPropertyValue<VendingMachineSFX>();
+			set => SetPropertyValue<VendingMachineSFX>(value);
 		}
 
 		[Ordinal(106)] 
 		[RED("soldOutProbability")] 
 		public CFloat SoldOutProbability
 		{
-			get => GetProperty(ref _soldOutProbability);
-			set => SetProperty(ref _soldOutProbability, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(107)] 
 		[RED("isReady")] 
 		public CBool IsReady
 		{
-			get => GetProperty(ref _isReady);
-			set => SetProperty(ref _isReady, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(108)] 
 		[RED("isSoldOut")] 
 		public CBool IsSoldOut
 		{
-			get => GetProperty(ref _isSoldOut);
-			set => SetProperty(ref _isSoldOut, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(109)] 
 		[RED("hackCount")] 
 		public CInt32 HackCount
 		{
-			get => GetProperty(ref _hackCount);
-			set => SetProperty(ref _hackCount, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(110)] 
 		[RED("shopStock")] 
 		public CArray<gameSItemStack> ShopStock
 		{
-			get => GetProperty(ref _shopStock);
-			set => SetProperty(ref _shopStock, value);
+			get => GetPropertyValue<CArray<gameSItemStack>>();
+			set => SetPropertyValue<CArray<gameSItemStack>>(value);
 		}
 
 		[Ordinal(111)] 
 		[RED("shopStockInit")] 
 		public CBool ShopStockInit
 		{
-			get => GetProperty(ref _shopStockInit);
-			set => SetProperty(ref _shopStockInit, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public VendingMachineControllerPS()
 		{
-			_soldOutProbability = 0.050000F;
-			_isReady = true;
-			_hackCount = 2;
+			DeviceName = "LocKey#176";
+			TweakDBRecord = new() { Value = 98753771029 };
+			TweakDBDescriptionRecord = new() { Value = 146495886677 };
+			VendingMachineSetup = new() { TimeToCompletePurchase = 0.100000F };
+			VendingMachineSFX = new() { GlitchingStart = "amb_int_custom_megabuilding_01_adverts_interactive_nicola_01_select_q110", GlitchingStop = "amb_int_custom_megabuilding_01_adverts_interactive_nicola_01_select_q110_stop" };
+			SoldOutProbability = 0.050000F;
+			IsReady = true;
+			HackCount = 2;
+			ShopStock = new();
 		}
 	}
 }

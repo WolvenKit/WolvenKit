@@ -5,113 +5,109 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animFacialCustomizationSet : CResource
 	{
-		private CResourceReference<animFacialSetup> _baseSetup;
-		private CArray<CResourceAsyncReference<animFacialSetup>> _targetSetups;
-		private CArray<animFacialCustomizationTargetEntryTemp> _targetSetupsTemp;
-		private CUInt32 _numTargets;
-		private animFacialSetup_PosesBufferInfo _posesInfo;
-		private CArray<CUInt8> _jointRegions;
-		private DataBuffer _mainPosesData;
-		private CArray<CUInt16> _usedTransformIndices;
-		private DataBuffer _correctivePosesData;
-		private CUInt32 _numJoints;
-		private DataBuffer _rigReferencePosesData;
-		private CBool _isCooked;
-
 		[Ordinal(1)] 
 		[RED("baseSetup")] 
 		public CResourceReference<animFacialSetup> BaseSetup
 		{
-			get => GetProperty(ref _baseSetup);
-			set => SetProperty(ref _baseSetup, value);
+			get => GetPropertyValue<CResourceReference<animFacialSetup>>();
+			set => SetPropertyValue<CResourceReference<animFacialSetup>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("targetSetups")] 
 		public CArray<CResourceAsyncReference<animFacialSetup>> TargetSetups
 		{
-			get => GetProperty(ref _targetSetups);
-			set => SetProperty(ref _targetSetups, value);
+			get => GetPropertyValue<CArray<CResourceAsyncReference<animFacialSetup>>>();
+			set => SetPropertyValue<CArray<CResourceAsyncReference<animFacialSetup>>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("targetSetupsTemp")] 
 		public CArray<animFacialCustomizationTargetEntryTemp> TargetSetupsTemp
 		{
-			get => GetProperty(ref _targetSetupsTemp);
-			set => SetProperty(ref _targetSetupsTemp, value);
+			get => GetPropertyValue<CArray<animFacialCustomizationTargetEntryTemp>>();
+			set => SetPropertyValue<CArray<animFacialCustomizationTargetEntryTemp>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("numTargets")] 
 		public CUInt32 NumTargets
 		{
-			get => GetProperty(ref _numTargets);
-			set => SetProperty(ref _numTargets, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("posesInfo")] 
 		public animFacialSetup_PosesBufferInfo PosesInfo
 		{
-			get => GetProperty(ref _posesInfo);
-			set => SetProperty(ref _posesInfo, value);
+			get => GetPropertyValue<animFacialSetup_PosesBufferInfo>();
+			set => SetPropertyValue<animFacialSetup_PosesBufferInfo>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("jointRegions")] 
 		public CArray<CUInt8> JointRegions
 		{
-			get => GetProperty(ref _jointRegions);
-			set => SetProperty(ref _jointRegions, value);
+			get => GetPropertyValue<CArray<CUInt8>>();
+			set => SetPropertyValue<CArray<CUInt8>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("mainPosesData")] 
 		public DataBuffer MainPosesData
 		{
-			get => GetProperty(ref _mainPosesData);
-			set => SetProperty(ref _mainPosesData, value);
+			get => GetPropertyValue<DataBuffer>();
+			set => SetPropertyValue<DataBuffer>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("usedTransformIndices")] 
 		public CArray<CUInt16> UsedTransformIndices
 		{
-			get => GetProperty(ref _usedTransformIndices);
-			set => SetProperty(ref _usedTransformIndices, value);
+			get => GetPropertyValue<CArray<CUInt16>>();
+			set => SetPropertyValue<CArray<CUInt16>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("correctivePosesData")] 
 		public DataBuffer CorrectivePosesData
 		{
-			get => GetProperty(ref _correctivePosesData);
-			set => SetProperty(ref _correctivePosesData, value);
+			get => GetPropertyValue<DataBuffer>();
+			set => SetPropertyValue<DataBuffer>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("numJoints")] 
 		public CUInt32 NumJoints
 		{
-			get => GetProperty(ref _numJoints);
-			set => SetProperty(ref _numJoints, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("rigReferencePosesData")] 
 		public DataBuffer RigReferencePosesData
 		{
-			get => GetProperty(ref _rigReferencePosesData);
-			set => SetProperty(ref _rigReferencePosesData, value);
+			get => GetPropertyValue<DataBuffer>();
+			set => SetPropertyValue<DataBuffer>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("isCooked")] 
 		public CBool IsCooked
 		{
-			get => GetProperty(ref _isCooked);
-			set => SetProperty(ref _isCooked, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public animFacialCustomizationSet()
+		{
+			TargetSetups = new();
+			TargetSetupsTemp = new();
+			PosesInfo = new() { Face = new(), Tongue = new(), Eyes = new() };
+			JointRegions = new();
+			UsedTransformIndices = new();
 		}
 	}
 }

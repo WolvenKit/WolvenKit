@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CrosshairModule : HUDModule
 	{
-		private CArray<CHandle<Crosshair>> _activeCrosshairs;
-
 		[Ordinal(3)] 
 		[RED("activeCrosshairs")] 
 		public CArray<CHandle<Crosshair>> ActiveCrosshairs
 		{
-			get => GetProperty(ref _activeCrosshairs);
-			set => SetProperty(ref _activeCrosshairs, value);
+			get => GetPropertyValue<CArray<CHandle<Crosshair>>>();
+			set => SetPropertyValue<CArray<CHandle<Crosshair>>>(value);
+		}
+
+		public CrosshairModule()
+		{
+			InstancesList = new();
+			ActiveCrosshairs = new();
 		}
 	}
 }

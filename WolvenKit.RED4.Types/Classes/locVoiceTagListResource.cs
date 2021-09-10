@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class locVoiceTagListResource : CResource
 	{
-		private CArray<locVoiceTag> _voiceTags;
-
 		[Ordinal(1)] 
 		[RED("voiceTags")] 
 		public CArray<locVoiceTag> VoiceTags
 		{
-			get => GetProperty(ref _voiceTags);
-			set => SetProperty(ref _voiceTags, value);
+			get => GetPropertyValue<CArray<locVoiceTag>>();
+			set => SetPropertyValue<CArray<locVoiceTag>>(value);
+		}
+
+		public locVoiceTagListResource()
+		{
+			VoiceTags = new();
 		}
 	}
 }

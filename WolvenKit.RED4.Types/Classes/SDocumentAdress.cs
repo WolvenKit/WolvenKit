@@ -5,29 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SDocumentAdress : RedBaseClass
 	{
-		private CInt32 _folderID;
-		private CInt32 _documentID;
-
 		[Ordinal(0)] 
 		[RED("folderID")] 
 		public CInt32 FolderID
 		{
-			get => GetProperty(ref _folderID);
-			set => SetProperty(ref _folderID, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("documentID")] 
 		public CInt32 DocumentID
 		{
-			get => GetProperty(ref _documentID);
-			set => SetProperty(ref _documentID, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		public SDocumentAdress()
 		{
-			_folderID = -1;
-			_documentID = -1;
+			FolderID = -1;
+			DocumentID = -1;
 		}
 	}
 }

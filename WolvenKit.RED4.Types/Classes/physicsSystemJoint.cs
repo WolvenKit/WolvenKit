@@ -5,191 +5,182 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class physicsSystemJoint : physicsISystemObject
 	{
-		private CMatrix _localToWorld;
-		private CHandle<physicsPhysicalJointPin> _pinA;
-		private CHandle<physicsPhysicalJointPin> _pinB;
-		private physicsPhysicsJointLinearLimit _linearLimit;
-		private physicsPhysicsJointAngularLimitPair _twistLimit;
-		private physicsPhysicsJointLimitConePair _swingLimit;
-		private physicsPhysicsJointDrive _driveY;
-		private physicsPhysicsJointDrive _driveX;
-		private physicsPhysicsJointDrive _driveZ;
-		private physicsPhysicsJointDrive _driveTwist;
-		private physicsPhysicsJointDrive _driveSwing;
-		private physicsPhysicsJointDrive _driveSLERP;
-		private physicsPhysicsJointDriveVelocity _driveVelocity;
-		private CMatrix _drivePosition;
-		private CBool _projectionEnabled;
-		private CFloat _linearTolerance;
-		private CFloat _angularTolerance;
-		private CBool _isBreakable;
-		private CFloat _breakingForce;
-		private CFloat _breakingTorque;
-
 		[Ordinal(1)] 
 		[RED("localToWorld")] 
 		public CMatrix LocalToWorld
 		{
-			get => GetProperty(ref _localToWorld);
-			set => SetProperty(ref _localToWorld, value);
+			get => GetPropertyValue<CMatrix>();
+			set => SetPropertyValue<CMatrix>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("pinA")] 
 		public CHandle<physicsPhysicalJointPin> PinA
 		{
-			get => GetProperty(ref _pinA);
-			set => SetProperty(ref _pinA, value);
+			get => GetPropertyValue<CHandle<physicsPhysicalJointPin>>();
+			set => SetPropertyValue<CHandle<physicsPhysicalJointPin>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("pinB")] 
 		public CHandle<physicsPhysicalJointPin> PinB
 		{
-			get => GetProperty(ref _pinB);
-			set => SetProperty(ref _pinB, value);
+			get => GetPropertyValue<CHandle<physicsPhysicalJointPin>>();
+			set => SetPropertyValue<CHandle<physicsPhysicalJointPin>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("linearLimit")] 
 		public physicsPhysicsJointLinearLimit LinearLimit
 		{
-			get => GetProperty(ref _linearLimit);
-			set => SetProperty(ref _linearLimit, value);
+			get => GetPropertyValue<physicsPhysicsJointLinearLimit>();
+			set => SetPropertyValue<physicsPhysicsJointLinearLimit>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("twistLimit")] 
 		public physicsPhysicsJointAngularLimitPair TwistLimit
 		{
-			get => GetProperty(ref _twistLimit);
-			set => SetProperty(ref _twistLimit, value);
+			get => GetPropertyValue<physicsPhysicsJointAngularLimitPair>();
+			set => SetPropertyValue<physicsPhysicsJointAngularLimitPair>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("swingLimit")] 
 		public physicsPhysicsJointLimitConePair SwingLimit
 		{
-			get => GetProperty(ref _swingLimit);
-			set => SetProperty(ref _swingLimit, value);
+			get => GetPropertyValue<physicsPhysicsJointLimitConePair>();
+			set => SetPropertyValue<physicsPhysicsJointLimitConePair>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("driveY")] 
 		public physicsPhysicsJointDrive DriveY
 		{
-			get => GetProperty(ref _driveY);
-			set => SetProperty(ref _driveY, value);
+			get => GetPropertyValue<physicsPhysicsJointDrive>();
+			set => SetPropertyValue<physicsPhysicsJointDrive>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("driveX")] 
 		public physicsPhysicsJointDrive DriveX
 		{
-			get => GetProperty(ref _driveX);
-			set => SetProperty(ref _driveX, value);
+			get => GetPropertyValue<physicsPhysicsJointDrive>();
+			set => SetPropertyValue<physicsPhysicsJointDrive>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("driveZ")] 
 		public physicsPhysicsJointDrive DriveZ
 		{
-			get => GetProperty(ref _driveZ);
-			set => SetProperty(ref _driveZ, value);
+			get => GetPropertyValue<physicsPhysicsJointDrive>();
+			set => SetPropertyValue<physicsPhysicsJointDrive>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("driveTwist")] 
 		public physicsPhysicsJointDrive DriveTwist
 		{
-			get => GetProperty(ref _driveTwist);
-			set => SetProperty(ref _driveTwist, value);
+			get => GetPropertyValue<physicsPhysicsJointDrive>();
+			set => SetPropertyValue<physicsPhysicsJointDrive>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("driveSwing")] 
 		public physicsPhysicsJointDrive DriveSwing
 		{
-			get => GetProperty(ref _driveSwing);
-			set => SetProperty(ref _driveSwing, value);
+			get => GetPropertyValue<physicsPhysicsJointDrive>();
+			set => SetPropertyValue<physicsPhysicsJointDrive>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("driveSLERP")] 
 		public physicsPhysicsJointDrive DriveSLERP
 		{
-			get => GetProperty(ref _driveSLERP);
-			set => SetProperty(ref _driveSLERP, value);
+			get => GetPropertyValue<physicsPhysicsJointDrive>();
+			set => SetPropertyValue<physicsPhysicsJointDrive>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("driveVelocity")] 
 		public physicsPhysicsJointDriveVelocity DriveVelocity
 		{
-			get => GetProperty(ref _driveVelocity);
-			set => SetProperty(ref _driveVelocity, value);
+			get => GetPropertyValue<physicsPhysicsJointDriveVelocity>();
+			set => SetPropertyValue<physicsPhysicsJointDriveVelocity>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("drivePosition")] 
 		public CMatrix DrivePosition
 		{
-			get => GetProperty(ref _drivePosition);
-			set => SetProperty(ref _drivePosition, value);
+			get => GetPropertyValue<CMatrix>();
+			set => SetPropertyValue<CMatrix>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("projectionEnabled")] 
 		public CBool ProjectionEnabled
 		{
-			get => GetProperty(ref _projectionEnabled);
-			set => SetProperty(ref _projectionEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("linearTolerance")] 
 		public CFloat LinearTolerance
 		{
-			get => GetProperty(ref _linearTolerance);
-			set => SetProperty(ref _linearTolerance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("angularTolerance")] 
 		public CFloat AngularTolerance
 		{
-			get => GetProperty(ref _angularTolerance);
-			set => SetProperty(ref _angularTolerance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("isBreakable")] 
 		public CBool IsBreakable
 		{
-			get => GetProperty(ref _isBreakable);
-			set => SetProperty(ref _isBreakable, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("breakingForce")] 
 		public CFloat BreakingForce
 		{
-			get => GetProperty(ref _breakingForce);
-			set => SetProperty(ref _breakingForce, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("breakingTorque")] 
 		public CFloat BreakingTorque
 		{
-			get => GetProperty(ref _breakingTorque);
-			set => SetProperty(ref _breakingTorque, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public physicsSystemJoint()
 		{
-			_linearTolerance = 10000000000.000000F;
-			_angularTolerance = 3.141593F;
+			LocalToWorld = new();
+			LinearLimit = new();
+			TwistLimit = new() { Upper = 180.000000F, Lower = -180.000000F };
+			SwingLimit = new();
+			DriveY = new();
+			DriveX = new();
+			DriveZ = new();
+			DriveTwist = new();
+			DriveSwing = new();
+			DriveSLERP = new();
+			DriveVelocity = new() { LinearVelocity = new() { W = 1.000000F }, AngularVelocity = new() { W = 1.000000F } };
+			DrivePosition = new();
+			LinearTolerance = 10000000000.000000F;
+			AngularTolerance = 3.141593F;
 		}
 	}
 }

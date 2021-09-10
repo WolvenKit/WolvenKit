@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WindAreaSettings : IAreaSettings
 	{
-		private CLegacySingleChannelCurve<CFloat> _strength;
-		private CLegacySingleChannelCurve<Vector4> _direction;
-
 		[Ordinal(2)] 
 		[RED("strength")] 
 		public CLegacySingleChannelCurve<CFloat> Strength
 		{
-			get => GetProperty(ref _strength);
-			set => SetProperty(ref _strength, value);
+			get => GetPropertyValue<CLegacySingleChannelCurve<CFloat>>();
+			set => SetPropertyValue<CLegacySingleChannelCurve<CFloat>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("direction")] 
 		public CLegacySingleChannelCurve<Vector4> Direction
 		{
-			get => GetProperty(ref _direction);
-			set => SetProperty(ref _direction, value);
+			get => GetPropertyValue<CLegacySingleChannelCurve<Vector4>>();
+			set => SetPropertyValue<CLegacySingleChannelCurve<Vector4>>(value);
+		}
+
+		public WindAreaSettings()
+		{
+			Enable = true;
 		}
 	}
 }

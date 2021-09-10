@@ -5,77 +5,68 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CrouchDecisions : LocomotionGroundDecisions
 	{
-		private CWeakHandle<GameplaySettingsSystem> _gameplaySettings;
-		private CWeakHandle<gameObject> _executionOwner;
-		private CHandle<redCallbackObject> _callbackID;
-		private CHandle<DefaultTransitionStatusEffectListener> _statusEffectListener;
-		private CBool _crouchPressed;
-		private CBool _toggleCrouchPressed;
-		private CBool _forcedCrouch;
-		private CBool _controllingDevice;
-
 		[Ordinal(3)] 
 		[RED("gameplaySettings")] 
 		public CWeakHandle<GameplaySettingsSystem> GameplaySettings
 		{
-			get => GetProperty(ref _gameplaySettings);
-			set => SetProperty(ref _gameplaySettings, value);
+			get => GetPropertyValue<CWeakHandle<GameplaySettingsSystem>>();
+			set => SetPropertyValue<CWeakHandle<GameplaySettingsSystem>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("executionOwner")] 
 		public CWeakHandle<gameObject> ExecutionOwner
 		{
-			get => GetProperty(ref _executionOwner);
-			set => SetProperty(ref _executionOwner, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("callbackID")] 
 		public CHandle<redCallbackObject> CallbackID
 		{
-			get => GetProperty(ref _callbackID);
-			set => SetProperty(ref _callbackID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("statusEffectListener")] 
 		public CHandle<DefaultTransitionStatusEffectListener> StatusEffectListener
 		{
-			get => GetProperty(ref _statusEffectListener);
-			set => SetProperty(ref _statusEffectListener, value);
+			get => GetPropertyValue<CHandle<DefaultTransitionStatusEffectListener>>();
+			set => SetPropertyValue<CHandle<DefaultTransitionStatusEffectListener>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("crouchPressed")] 
 		public CBool CrouchPressed
 		{
-			get => GetProperty(ref _crouchPressed);
-			set => SetProperty(ref _crouchPressed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("toggleCrouchPressed")] 
 		public CBool ToggleCrouchPressed
 		{
-			get => GetProperty(ref _toggleCrouchPressed);
-			set => SetProperty(ref _toggleCrouchPressed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("forcedCrouch")] 
 		public CBool ForcedCrouch
 		{
-			get => GetProperty(ref _forcedCrouch);
-			set => SetProperty(ref _forcedCrouch, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("controllingDevice")] 
 		public CBool ControllingDevice
 		{
-			get => GetProperty(ref _controllingDevice);
-			set => SetProperty(ref _controllingDevice, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

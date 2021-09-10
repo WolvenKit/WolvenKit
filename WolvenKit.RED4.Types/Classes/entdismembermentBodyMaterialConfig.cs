@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entdismembermentBodyMaterialConfig : RedBaseClass
 	{
-		private CEnum<physicsRagdollBodyPartE> _fleshBodyMask;
-		private CEnum<physicsRagdollBodyPartE> _cyberBodyMask;
-
 		[Ordinal(0)] 
 		[RED("FleshBodyMask")] 
-		public CEnum<physicsRagdollBodyPartE> FleshBodyMask
+		public CBitField<physicsRagdollBodyPartE> FleshBodyMask
 		{
-			get => GetProperty(ref _fleshBodyMask);
-			set => SetProperty(ref _fleshBodyMask, value);
+			get => GetPropertyValue<CBitField<physicsRagdollBodyPartE>>();
+			set => SetPropertyValue<CBitField<physicsRagdollBodyPartE>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("CyberBodyMask")] 
-		public CEnum<physicsRagdollBodyPartE> CyberBodyMask
+		public CBitField<physicsRagdollBodyPartE> CyberBodyMask
 		{
-			get => GetProperty(ref _cyberBodyMask);
-			set => SetProperty(ref _cyberBodyMask, value);
+			get => GetPropertyValue<CBitField<physicsRagdollBodyPartE>>();
+			set => SetPropertyValue<CBitField<physicsRagdollBodyPartE>>(value);
 		}
 	}
 }

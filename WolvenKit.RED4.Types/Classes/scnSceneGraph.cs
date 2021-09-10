@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnSceneGraph : ISerializable
 	{
-		private CArray<CHandle<scnSceneGraphNode>> _graph;
-		private CArray<scnNodeId> _startNodes;
-		private CArray<scnNodeId> _endNodes;
-
 		[Ordinal(0)] 
 		[RED("graph")] 
 		public CArray<CHandle<scnSceneGraphNode>> Graph
 		{
-			get => GetProperty(ref _graph);
-			set => SetProperty(ref _graph, value);
+			get => GetPropertyValue<CArray<CHandle<scnSceneGraphNode>>>();
+			set => SetPropertyValue<CArray<CHandle<scnSceneGraphNode>>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("startNodes")] 
 		public CArray<scnNodeId> StartNodes
 		{
-			get => GetProperty(ref _startNodes);
-			set => SetProperty(ref _startNodes, value);
+			get => GetPropertyValue<CArray<scnNodeId>>();
+			set => SetPropertyValue<CArray<scnNodeId>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("endNodes")] 
 		public CArray<scnNodeId> EndNodes
 		{
-			get => GetProperty(ref _endNodes);
-			set => SetProperty(ref _endNodes, value);
+			get => GetPropertyValue<CArray<scnNodeId>>();
+			set => SetPropertyValue<CArray<scnNodeId>>(value);
+		}
+
+		public scnSceneGraph()
+		{
+			Graph = new();
+			StartNodes = new();
+			EndNodes = new();
 		}
 	}
 }

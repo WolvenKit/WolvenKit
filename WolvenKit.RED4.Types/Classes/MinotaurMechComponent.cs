@@ -5,77 +5,68 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MinotaurMechComponent : gameScriptableComponent
 	{
-		private TweakDBID _deathAttackRecordID;
-		private CWeakHandle<NPCPuppet> _owner;
-		private CHandle<MinotaurOnStatusEffectAppliedListener> _statusEffectListener;
-		private CHandle<entSimpleColliderComponent> _npcCollisionComponent;
-		private CHandle<entSimpleColliderComponent> _npcDeathCollisionComponent;
-		private CHandle<entSimpleColliderComponent> _npcSystemCollapseCollisionComponent;
-		private CEnum<MechanicalScanType> _currentScanType;
-		private CName _currentScanAnimation;
-
 		[Ordinal(5)] 
 		[RED("deathAttackRecordID")] 
 		public TweakDBID DeathAttackRecordID
 		{
-			get => GetProperty(ref _deathAttackRecordID);
-			set => SetProperty(ref _deathAttackRecordID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("owner")] 
 		public CWeakHandle<NPCPuppet> Owner
 		{
-			get => GetProperty(ref _owner);
-			set => SetProperty(ref _owner, value);
+			get => GetPropertyValue<CWeakHandle<NPCPuppet>>();
+			set => SetPropertyValue<CWeakHandle<NPCPuppet>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("statusEffectListener")] 
 		public CHandle<MinotaurOnStatusEffectAppliedListener> StatusEffectListener
 		{
-			get => GetProperty(ref _statusEffectListener);
-			set => SetProperty(ref _statusEffectListener, value);
+			get => GetPropertyValue<CHandle<MinotaurOnStatusEffectAppliedListener>>();
+			set => SetPropertyValue<CHandle<MinotaurOnStatusEffectAppliedListener>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("npcCollisionComponent")] 
 		public CHandle<entSimpleColliderComponent> NpcCollisionComponent
 		{
-			get => GetProperty(ref _npcCollisionComponent);
-			set => SetProperty(ref _npcCollisionComponent, value);
+			get => GetPropertyValue<CHandle<entSimpleColliderComponent>>();
+			set => SetPropertyValue<CHandle<entSimpleColliderComponent>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("npcDeathCollisionComponent")] 
 		public CHandle<entSimpleColliderComponent> NpcDeathCollisionComponent
 		{
-			get => GetProperty(ref _npcDeathCollisionComponent);
-			set => SetProperty(ref _npcDeathCollisionComponent, value);
+			get => GetPropertyValue<CHandle<entSimpleColliderComponent>>();
+			set => SetPropertyValue<CHandle<entSimpleColliderComponent>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("npcSystemCollapseCollisionComponent")] 
 		public CHandle<entSimpleColliderComponent> NpcSystemCollapseCollisionComponent
 		{
-			get => GetProperty(ref _npcSystemCollapseCollisionComponent);
-			set => SetProperty(ref _npcSystemCollapseCollisionComponent, value);
+			get => GetPropertyValue<CHandle<entSimpleColliderComponent>>();
+			set => SetPropertyValue<CHandle<entSimpleColliderComponent>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("currentScanType")] 
 		public CEnum<MechanicalScanType> CurrentScanType
 		{
-			get => GetProperty(ref _currentScanType);
-			set => SetProperty(ref _currentScanType, value);
+			get => GetPropertyValue<CEnum<MechanicalScanType>>();
+			set => SetPropertyValue<CEnum<MechanicalScanType>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("currentScanAnimation")] 
 		public CName CurrentScanAnimation
 		{
-			get => GetProperty(ref _currentScanAnimation);
-			set => SetProperty(ref _currentScanAnimation, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 	}
 }

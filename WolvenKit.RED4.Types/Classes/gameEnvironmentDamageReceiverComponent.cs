@@ -5,23 +5,27 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameEnvironmentDamageReceiverComponent : entIPlacedComponent
 	{
-		private CFloat _cooldown;
-		private CArray<CHandle<gameEnvironmentDamageReceiverShape>> _shapes;
-
 		[Ordinal(5)] 
 		[RED("cooldown")] 
 		public CFloat Cooldown
 		{
-			get => GetProperty(ref _cooldown);
-			set => SetProperty(ref _cooldown, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("shapes")] 
 		public CArray<CHandle<gameEnvironmentDamageReceiverShape>> Shapes
 		{
-			get => GetProperty(ref _shapes);
-			set => SetProperty(ref _shapes, value);
+			get => GetPropertyValue<CArray<CHandle<gameEnvironmentDamageReceiverShape>>>();
+			set => SetPropertyValue<CArray<CHandle<gameEnvironmentDamageReceiverShape>>>(value);
+		}
+
+		public gameEnvironmentDamageReceiverComponent()
+		{
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			Shapes = new();
 		}
 	}
 }

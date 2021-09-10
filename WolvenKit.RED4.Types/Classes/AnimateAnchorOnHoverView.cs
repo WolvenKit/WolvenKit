@@ -5,55 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AnimateAnchorOnHoverView : inkWidgetLogicController
 	{
-		private inkWidgetReference _raycaster;
-		private CHandle<inkanimProxy> _animProxy;
-		private Vector2 _hoverAnchor;
-		private Vector2 _normalAnchor;
-		private CFloat _animTime;
-
 		[Ordinal(1)] 
 		[RED("Raycaster")] 
 		public inkWidgetReference Raycaster
 		{
-			get => GetProperty(ref _raycaster);
-			set => SetProperty(ref _raycaster, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("AnimProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
-			get => GetProperty(ref _animProxy);
-			set => SetProperty(ref _animProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("HoverAnchor")] 
 		public Vector2 HoverAnchor
 		{
-			get => GetProperty(ref _hoverAnchor);
-			set => SetProperty(ref _hoverAnchor, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("NormalAnchor")] 
 		public Vector2 NormalAnchor
 		{
-			get => GetProperty(ref _normalAnchor);
-			set => SetProperty(ref _normalAnchor, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("AnimTime")] 
 		public CFloat AnimTime
 		{
-			get => GetProperty(ref _animTime);
-			set => SetProperty(ref _animTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public AnimateAnchorOnHoverView()
 		{
-			_animTime = 0.100000F;
+			Raycaster = new();
+			HoverAnchor = new();
+			NormalAnchor = new();
+			AnimTime = 0.100000F;
 		}
 	}
 }

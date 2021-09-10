@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldDebugColoring_Discarded : worldEditorDebugColoringSettings
 	{
-		private CColor _color;
-
 		[Ordinal(0)] 
 		[RED("color")] 
 		public CColor Color
 		{
-			get => GetProperty(ref _color);
-			set => SetProperty(ref _color, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
+		}
+
+		public worldDebugColoring_Discarded()
+		{
+			Color = new();
 		}
 	}
 }

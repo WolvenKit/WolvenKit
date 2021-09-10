@@ -5,38 +5,37 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CParticleInitializerVelocity : IParticleInitializer
 	{
-		private CHandle<IEvaluatorVector> _velocity;
-		private CFloat _scale;
-		private CBool _worldSpace;
-
 		[Ordinal(4)] 
 		[RED("velocity")] 
 		public CHandle<IEvaluatorVector> Velocity
 		{
-			get => GetProperty(ref _velocity);
-			set => SetProperty(ref _velocity, value);
+			get => GetPropertyValue<CHandle<IEvaluatorVector>>();
+			set => SetPropertyValue<CHandle<IEvaluatorVector>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("scale")] 
 		public CFloat Scale
 		{
-			get => GetProperty(ref _scale);
-			set => SetProperty(ref _scale, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("worldSpace")] 
 		public CBool WorldSpace
 		{
-			get => GetProperty(ref _worldSpace);
-			set => SetProperty(ref _worldSpace, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public CParticleInitializerVelocity()
 		{
-			_scale = 1.000000F;
-			_worldSpace = true;
+			EditorName = "Initial velocity";
+			EditorGroup = "Velocity";
+			IsEnabled = true;
+			Scale = 1.000000F;
+			WorldSpace = true;
 		}
 	}
 }

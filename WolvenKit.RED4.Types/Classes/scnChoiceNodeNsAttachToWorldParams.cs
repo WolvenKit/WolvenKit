@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnChoiceNodeNsAttachToWorldParams : RedBaseClass
 	{
-		private Vector3 _entityPosition;
-		private Quaternion _entityOrientation;
-		private CFloat _customEntityRadius;
-		private CEnum<scnChoiceNodeNsVisualizerStyle> _visualizerStyle;
-
 		[Ordinal(0)] 
 		[RED("entityPosition")] 
 		public Vector3 EntityPosition
 		{
-			get => GetProperty(ref _entityPosition);
-			set => SetProperty(ref _entityPosition, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("entityOrientation")] 
 		public Quaternion EntityOrientation
 		{
-			get => GetProperty(ref _entityOrientation);
-			set => SetProperty(ref _entityOrientation, value);
+			get => GetPropertyValue<Quaternion>();
+			set => SetPropertyValue<Quaternion>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("customEntityRadius")] 
 		public CFloat CustomEntityRadius
 		{
-			get => GetProperty(ref _customEntityRadius);
-			set => SetProperty(ref _customEntityRadius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("visualizerStyle")] 
 		public CEnum<scnChoiceNodeNsVisualizerStyle> VisualizerStyle
 		{
-			get => GetProperty(ref _visualizerStyle);
-			set => SetProperty(ref _visualizerStyle, value);
+			get => GetPropertyValue<CEnum<scnChoiceNodeNsVisualizerStyle>>();
+			set => SetPropertyValue<CEnum<scnChoiceNodeNsVisualizerStyle>>(value);
+		}
+
+		public scnChoiceNodeNsAttachToWorldParams()
+		{
+			EntityPosition = new();
+			EntityOrientation = new() { R = 1.000000F };
 		}
 	}
 }

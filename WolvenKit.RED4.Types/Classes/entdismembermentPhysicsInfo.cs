@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entdismembermentPhysicsInfo : RedBaseClass
 	{
-		private CFloat _densityScale;
-
 		[Ordinal(0)] 
 		[RED("DensityScale")] 
 		public CFloat DensityScale
 		{
-			get => GetProperty(ref _densityScale);
-			set => SetProperty(ref _densityScale, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public entdismembermentPhysicsInfo()
 		{
-			_densityScale = 1.000000F;
+			DensityScale = 1.000000F;
 		}
 	}
 }

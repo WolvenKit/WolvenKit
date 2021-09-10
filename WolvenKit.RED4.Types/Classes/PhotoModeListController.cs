@@ -5,86 +5,82 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PhotoModeListController : inkListController
 	{
-		private inkWidgetReference _logoWidget;
-		private inkVerticalPanelWidgetReference _panel;
-		private CHandle<inkanimProxy> _fadeAnim;
-		private CBool _isAnimating;
-		private CFloat _animationTime;
-		private CFloat _animationTarget;
-		private CFloat _elementsAnimationTime;
-		private CFloat _elementsAnimationDelay;
-		private CInt32 _currentElementAnimation;
-
 		[Ordinal(6)] 
 		[RED("LogoWidget")] 
 		public inkWidgetReference LogoWidget
 		{
-			get => GetProperty(ref _logoWidget);
-			set => SetProperty(ref _logoWidget, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("Panel")] 
 		public inkVerticalPanelWidgetReference Panel
 		{
-			get => GetProperty(ref _panel);
-			set => SetProperty(ref _panel, value);
+			get => GetPropertyValue<inkVerticalPanelWidgetReference>();
+			set => SetPropertyValue<inkVerticalPanelWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("fadeAnim")] 
 		public CHandle<inkanimProxy> FadeAnim
 		{
-			get => GetProperty(ref _fadeAnim);
-			set => SetProperty(ref _fadeAnim, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("isAnimating")] 
 		public CBool IsAnimating
 		{
-			get => GetProperty(ref _isAnimating);
-			set => SetProperty(ref _isAnimating, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("animationTime")] 
 		public CFloat AnimationTime
 		{
-			get => GetProperty(ref _animationTime);
-			set => SetProperty(ref _animationTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("animationTarget")] 
 		public CFloat AnimationTarget
 		{
-			get => GetProperty(ref _animationTarget);
-			set => SetProperty(ref _animationTarget, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("elementsAnimationTime")] 
 		public CFloat ElementsAnimationTime
 		{
-			get => GetProperty(ref _elementsAnimationTime);
-			set => SetProperty(ref _elementsAnimationTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("elementsAnimationDelay")] 
 		public CFloat ElementsAnimationDelay
 		{
-			get => GetProperty(ref _elementsAnimationDelay);
-			set => SetProperty(ref _elementsAnimationDelay, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("currentElementAnimation")] 
 		public CInt32 CurrentElementAnimation
 		{
-			get => GetProperty(ref _currentElementAnimation);
-			set => SetProperty(ref _currentElementAnimation, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		public PhotoModeListController()
+		{
+			LogoWidget = new();
+			Panel = new();
 		}
 	}
 }

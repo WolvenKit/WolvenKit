@@ -5,159 +5,145 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class rendCaptureParameters : RedBaseClass
 	{
-		private CBool _enable;
-		private CEnum<rendScreenshotMode> _mode;
-		private CBool _videoRecordingMode;
-		private CBool _audioRecordingMode;
-		private CArray<CEnum<EEnvManagerModifier>> _emmModes;
-		private CUInt32 _initialFrameNumber;
-		private CUInt32 _outputDirectoryIndex;
-		private CString _outputDirectoryName;
-		private CString _outputDirectoryNameSuffix;
-		private CUInt32 _recordingFPS;
-		private Point _customResolution;
-		private CEnum<rendResolutionMultiplier> _resolutionMultiplier;
-		private AbsolutePathSerializable _outputPath;
-		private CFloat _fovMultiplier;
-		private CEnum<rendCaptureContextType> _captureContextType;
-		private CEnum<ESaveFormat> _saveFormat;
-
 		[Ordinal(0)] 
 		[RED("enable")] 
 		public CBool Enable
 		{
-			get => GetProperty(ref _enable);
-			set => SetProperty(ref _enable, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("mode")] 
 		public CEnum<rendScreenshotMode> Mode
 		{
-			get => GetProperty(ref _mode);
-			set => SetProperty(ref _mode, value);
+			get => GetPropertyValue<CEnum<rendScreenshotMode>>();
+			set => SetPropertyValue<CEnum<rendScreenshotMode>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("videoRecordingMode")] 
 		public CBool VideoRecordingMode
 		{
-			get => GetProperty(ref _videoRecordingMode);
-			set => SetProperty(ref _videoRecordingMode, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("audioRecordingMode")] 
 		public CBool AudioRecordingMode
 		{
-			get => GetProperty(ref _audioRecordingMode);
-			set => SetProperty(ref _audioRecordingMode, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("emmModes")] 
 		public CArray<CEnum<EEnvManagerModifier>> EmmModes
 		{
-			get => GetProperty(ref _emmModes);
-			set => SetProperty(ref _emmModes, value);
+			get => GetPropertyValue<CArray<CEnum<EEnvManagerModifier>>>();
+			set => SetPropertyValue<CArray<CEnum<EEnvManagerModifier>>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("initialFrameNumber")] 
 		public CUInt32 InitialFrameNumber
 		{
-			get => GetProperty(ref _initialFrameNumber);
-			set => SetProperty(ref _initialFrameNumber, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("outputDirectoryIndex")] 
 		public CUInt32 OutputDirectoryIndex
 		{
-			get => GetProperty(ref _outputDirectoryIndex);
-			set => SetProperty(ref _outputDirectoryIndex, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("outputDirectoryName")] 
 		public CString OutputDirectoryName
 		{
-			get => GetProperty(ref _outputDirectoryName);
-			set => SetProperty(ref _outputDirectoryName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("outputDirectoryNameSuffix")] 
 		public CString OutputDirectoryNameSuffix
 		{
-			get => GetProperty(ref _outputDirectoryNameSuffix);
-			set => SetProperty(ref _outputDirectoryNameSuffix, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("recordingFPS")] 
 		public CUInt32 RecordingFPS
 		{
-			get => GetProperty(ref _recordingFPS);
-			set => SetProperty(ref _recordingFPS, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("customResolution")] 
 		public Point CustomResolution
 		{
-			get => GetProperty(ref _customResolution);
-			set => SetProperty(ref _customResolution, value);
+			get => GetPropertyValue<Point>();
+			set => SetPropertyValue<Point>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("resolutionMultiplier")] 
 		public CEnum<rendResolutionMultiplier> ResolutionMultiplier
 		{
-			get => GetProperty(ref _resolutionMultiplier);
-			set => SetProperty(ref _resolutionMultiplier, value);
+			get => GetPropertyValue<CEnum<rendResolutionMultiplier>>();
+			set => SetPropertyValue<CEnum<rendResolutionMultiplier>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("outputPath")] 
 		public AbsolutePathSerializable OutputPath
 		{
-			get => GetProperty(ref _outputPath);
-			set => SetProperty(ref _outputPath, value);
+			get => GetPropertyValue<AbsolutePathSerializable>();
+			set => SetPropertyValue<AbsolutePathSerializable>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("fovMultiplier")] 
 		public CFloat FovMultiplier
 		{
-			get => GetProperty(ref _fovMultiplier);
-			set => SetProperty(ref _fovMultiplier, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("captureContextType")] 
 		public CEnum<rendCaptureContextType> CaptureContextType
 		{
-			get => GetProperty(ref _captureContextType);
-			set => SetProperty(ref _captureContextType, value);
+			get => GetPropertyValue<CEnum<rendCaptureContextType>>();
+			set => SetPropertyValue<CEnum<rendCaptureContextType>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("saveFormat")] 
 		public CEnum<ESaveFormat> SaveFormat
 		{
-			get => GetProperty(ref _saveFormat);
-			set => SetProperty(ref _saveFormat, value);
+			get => GetPropertyValue<CEnum<ESaveFormat>>();
+			set => SetPropertyValue<CEnum<ESaveFormat>>(value);
 		}
 
 		public rendCaptureParameters()
 		{
-			_enable = true;
-			_outputDirectoryName = new() { Text = "Scene" };
-			_recordingFPS = 30;
-			_resolutionMultiplier = new() { Value = Enums.rendResolutionMultiplier.X2 };
-			_fovMultiplier = 1.000000F;
-			_saveFormat = new() { Value = Enums.ESaveFormat.SF_PNG };
+			Enable = true;
+			EmmModes = new();
+			OutputDirectoryName = "Scene";
+			RecordingFPS = 30;
+			CustomResolution = new();
+			ResolutionMultiplier = Enums.rendResolutionMultiplier.X2;
+			OutputPath = new();
+			FovMultiplier = 1.000000F;
+			SaveFormat = Enums.ESaveFormat.SF_PNG;
 		}
 	}
 }

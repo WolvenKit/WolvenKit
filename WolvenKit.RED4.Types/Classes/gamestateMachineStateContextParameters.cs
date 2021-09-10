@@ -5,77 +5,80 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamestateMachineStateContextParameters : RedBaseClass
 	{
-		private CStatic<gamestateMachineActionParameterBool> _boolParameters;
-		private CStatic<gamestateMachineActionParameterInt> _intParameters;
-		private CStatic<gamestateMachineActionParameterFloat> _floatParameters;
-		private CStatic<gamestateMachineActionParameterDouble> _doubleParameters;
-		private CStatic<gamestateMachineActionParameterVector> _vectorParameters;
-		private CStatic<gamestateMachineActionParameterCName> _cNameParameters;
-		private CStatic<gamestateMachineActionParameterIScriptable> _iScriptableParameters;
-		private CStatic<gamestateMachineActionParameterTweakDBID> _tweakDBIDParameters;
-
 		[Ordinal(0)] 
 		[RED("boolParameters", 128)] 
 		public CStatic<gamestateMachineActionParameterBool> BoolParameters
 		{
-			get => GetProperty(ref _boolParameters);
-			set => SetProperty(ref _boolParameters, value);
+			get => GetPropertyValue<CStatic<gamestateMachineActionParameterBool>>();
+			set => SetPropertyValue<CStatic<gamestateMachineActionParameterBool>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("intParameters", 128)] 
 		public CStatic<gamestateMachineActionParameterInt> IntParameters
 		{
-			get => GetProperty(ref _intParameters);
-			set => SetProperty(ref _intParameters, value);
+			get => GetPropertyValue<CStatic<gamestateMachineActionParameterInt>>();
+			set => SetPropertyValue<CStatic<gamestateMachineActionParameterInt>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("floatParameters", 128)] 
 		public CStatic<gamestateMachineActionParameterFloat> FloatParameters
 		{
-			get => GetProperty(ref _floatParameters);
-			set => SetProperty(ref _floatParameters, value);
+			get => GetPropertyValue<CStatic<gamestateMachineActionParameterFloat>>();
+			set => SetPropertyValue<CStatic<gamestateMachineActionParameterFloat>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("doubleParameters", 128)] 
 		public CStatic<gamestateMachineActionParameterDouble> DoubleParameters
 		{
-			get => GetProperty(ref _doubleParameters);
-			set => SetProperty(ref _doubleParameters, value);
+			get => GetPropertyValue<CStatic<gamestateMachineActionParameterDouble>>();
+			set => SetPropertyValue<CStatic<gamestateMachineActionParameterDouble>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("vectorParameters", 128)] 
 		public CStatic<gamestateMachineActionParameterVector> VectorParameters
 		{
-			get => GetProperty(ref _vectorParameters);
-			set => SetProperty(ref _vectorParameters, value);
+			get => GetPropertyValue<CStatic<gamestateMachineActionParameterVector>>();
+			set => SetPropertyValue<CStatic<gamestateMachineActionParameterVector>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("CNameParameters", 128)] 
 		public CStatic<gamestateMachineActionParameterCName> CNameParameters
 		{
-			get => GetProperty(ref _cNameParameters);
-			set => SetProperty(ref _cNameParameters, value);
+			get => GetPropertyValue<CStatic<gamestateMachineActionParameterCName>>();
+			set => SetPropertyValue<CStatic<gamestateMachineActionParameterCName>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("IScriptableParameters", 128)] 
 		public CStatic<gamestateMachineActionParameterIScriptable> IScriptableParameters
 		{
-			get => GetProperty(ref _iScriptableParameters);
-			set => SetProperty(ref _iScriptableParameters, value);
+			get => GetPropertyValue<CStatic<gamestateMachineActionParameterIScriptable>>();
+			set => SetPropertyValue<CStatic<gamestateMachineActionParameterIScriptable>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("tweakDBIDParameters", 128)] 
 		public CStatic<gamestateMachineActionParameterTweakDBID> TweakDBIDParameters
 		{
-			get => GetProperty(ref _tweakDBIDParameters);
-			set => SetProperty(ref _tweakDBIDParameters, value);
+			get => GetPropertyValue<CStatic<gamestateMachineActionParameterTweakDBID>>();
+			set => SetPropertyValue<CStatic<gamestateMachineActionParameterTweakDBID>>(value);
+		}
+
+		public gamestateMachineStateContextParameters()
+		{
+			BoolParameters = new(0);
+			IntParameters = new(0);
+			FloatParameters = new(0);
+			DoubleParameters = new(0);
+			VectorParameters = new(0);
+			CNameParameters = new(0);
+			IScriptableParameters = new(0);
+			TweakDBIDParameters = new(0);
 		}
 	}
 }

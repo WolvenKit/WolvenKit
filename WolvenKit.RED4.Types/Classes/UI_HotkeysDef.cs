@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UI_HotkeysDef : gamebbScriptDefinition
 	{
-		private gamebbScriptID_Variant _modifiedHotkey;
-
 		[Ordinal(0)] 
 		[RED("ModifiedHotkey")] 
 		public gamebbScriptID_Variant ModifiedHotkey
 		{
-			get => GetProperty(ref _modifiedHotkey);
-			set => SetProperty(ref _modifiedHotkey, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
+		}
+
+		public UI_HotkeysDef()
+		{
+			ModifiedHotkey = new();
 		}
 	}
 }

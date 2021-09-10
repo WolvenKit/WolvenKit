@@ -5,163 +5,152 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioCombatVoManagerSettings : audioAudioMetadata
 	{
-		private CFloat _thresholdDbForCombatDialog;
-		private CFloat _maxVoHearableHorizontalDistance;
-		private CFloat _maxVoHearableVerticalDistance;
-		private CFloat _maxVoVisibleDistance;
-		private CFloat _triggerVoEventBufferTime;
-		private CFloat _triggerIdleChattersTime;
-		private CFloat _minNoVOTimeNeededToTryPlayingGenericVO;
-		private CFloat _specificVoicesetVoVariationMinRepeatTime;
-		private CFloat _forceApucVoiceTagSelectionProbability;
-		private CFloat _voiceTagSelectionRandomTimeOffset;
-		private CArray<CName> _genericRelaxedVOContexts;
-		private CArray<CName> _genericFearVOContexts;
-		private CArray<CName> _genericAlertedVOContexts;
-		private CArray<CName> _genericCombatVOContexts;
-		private CArray<CName> _genericCombatLosingVOContexts;
-		private CArray<CName> _genericCombatSingleEnemyVOContexts;
-
 		[Ordinal(1)] 
 		[RED("thresholdDbForCombatDialog")] 
 		public CFloat ThresholdDbForCombatDialog
 		{
-			get => GetProperty(ref _thresholdDbForCombatDialog);
-			set => SetProperty(ref _thresholdDbForCombatDialog, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("maxVoHearableHorizontalDistance")] 
 		public CFloat MaxVoHearableHorizontalDistance
 		{
-			get => GetProperty(ref _maxVoHearableHorizontalDistance);
-			set => SetProperty(ref _maxVoHearableHorizontalDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("maxVoHearableVerticalDistance")] 
 		public CFloat MaxVoHearableVerticalDistance
 		{
-			get => GetProperty(ref _maxVoHearableVerticalDistance);
-			set => SetProperty(ref _maxVoHearableVerticalDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("maxVoVisibleDistance")] 
 		public CFloat MaxVoVisibleDistance
 		{
-			get => GetProperty(ref _maxVoVisibleDistance);
-			set => SetProperty(ref _maxVoVisibleDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("triggerVoEventBufferTime")] 
 		public CFloat TriggerVoEventBufferTime
 		{
-			get => GetProperty(ref _triggerVoEventBufferTime);
-			set => SetProperty(ref _triggerVoEventBufferTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("triggerIdleChattersTime")] 
 		public CFloat TriggerIdleChattersTime
 		{
-			get => GetProperty(ref _triggerIdleChattersTime);
-			set => SetProperty(ref _triggerIdleChattersTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("minNoVOTimeNeededToTryPlayingGenericVO")] 
 		public CFloat MinNoVOTimeNeededToTryPlayingGenericVO
 		{
-			get => GetProperty(ref _minNoVOTimeNeededToTryPlayingGenericVO);
-			set => SetProperty(ref _minNoVOTimeNeededToTryPlayingGenericVO, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("specificVoicesetVoVariationMinRepeatTime")] 
 		public CFloat SpecificVoicesetVoVariationMinRepeatTime
 		{
-			get => GetProperty(ref _specificVoicesetVoVariationMinRepeatTime);
-			set => SetProperty(ref _specificVoicesetVoVariationMinRepeatTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("forceApucVoiceTagSelectionProbability")] 
 		public CFloat ForceApucVoiceTagSelectionProbability
 		{
-			get => GetProperty(ref _forceApucVoiceTagSelectionProbability);
-			set => SetProperty(ref _forceApucVoiceTagSelectionProbability, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("voiceTagSelectionRandomTimeOffset")] 
 		public CFloat VoiceTagSelectionRandomTimeOffset
 		{
-			get => GetProperty(ref _voiceTagSelectionRandomTimeOffset);
-			set => SetProperty(ref _voiceTagSelectionRandomTimeOffset, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("genericRelaxedVOContexts")] 
 		public CArray<CName> GenericRelaxedVOContexts
 		{
-			get => GetProperty(ref _genericRelaxedVOContexts);
-			set => SetProperty(ref _genericRelaxedVOContexts, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("genericFearVOContexts")] 
 		public CArray<CName> GenericFearVOContexts
 		{
-			get => GetProperty(ref _genericFearVOContexts);
-			set => SetProperty(ref _genericFearVOContexts, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("genericAlertedVOContexts")] 
 		public CArray<CName> GenericAlertedVOContexts
 		{
-			get => GetProperty(ref _genericAlertedVOContexts);
-			set => SetProperty(ref _genericAlertedVOContexts, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("genericCombatVOContexts")] 
 		public CArray<CName> GenericCombatVOContexts
 		{
-			get => GetProperty(ref _genericCombatVOContexts);
-			set => SetProperty(ref _genericCombatVOContexts, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("genericCombatLosingVOContexts")] 
 		public CArray<CName> GenericCombatLosingVOContexts
 		{
-			get => GetProperty(ref _genericCombatLosingVOContexts);
-			set => SetProperty(ref _genericCombatLosingVOContexts, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("genericCombatSingleEnemyVOContexts")] 
 		public CArray<CName> GenericCombatSingleEnemyVOContexts
 		{
-			get => GetProperty(ref _genericCombatSingleEnemyVOContexts);
-			set => SetProperty(ref _genericCombatSingleEnemyVOContexts, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		public audioCombatVoManagerSettings()
 		{
-			_thresholdDbForCombatDialog = -200.000000F;
-			_maxVoHearableHorizontalDistance = 8.000000F;
-			_maxVoHearableVerticalDistance = 3.000000F;
-			_maxVoVisibleDistance = 30.000000F;
-			_triggerVoEventBufferTime = 0.200000F;
-			_triggerIdleChattersTime = 1.000000F;
-			_minNoVOTimeNeededToTryPlayingGenericVO = 12.000000F;
-			_specificVoicesetVoVariationMinRepeatTime = 60.000000F;
-			_forceApucVoiceTagSelectionProbability = 0.500000F;
-			_voiceTagSelectionRandomTimeOffset = 1.000000F;
+			ThresholdDbForCombatDialog = -200.000000F;
+			MaxVoHearableHorizontalDistance = 8.000000F;
+			MaxVoHearableVerticalDistance = 3.000000F;
+			MaxVoVisibleDistance = 30.000000F;
+			TriggerVoEventBufferTime = 0.200000F;
+			TriggerIdleChattersTime = 1.000000F;
+			MinNoVOTimeNeededToTryPlayingGenericVO = 12.000000F;
+			SpecificVoicesetVoVariationMinRepeatTime = 60.000000F;
+			ForceApucVoiceTagSelectionProbability = 0.500000F;
+			VoiceTagSelectionRandomTimeOffset = 1.000000F;
+			GenericRelaxedVOContexts = new();
+			GenericFearVOContexts = new();
+			GenericAlertedVOContexts = new();
+			GenericCombatVOContexts = new();
+			GenericCombatLosingVOContexts = new();
+			GenericCombatSingleEnemyVOContexts = new();
 		}
 	}
 }

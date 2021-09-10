@@ -5,28 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PlayPauseActionWidgetController : NextPreviousActionWidgetController
 	{
-		private inkWidgetReference _playContainer;
-		private CBool _isPlaying;
-
 		[Ordinal(33)] 
 		[RED("playContainer")] 
 		public inkWidgetReference PlayContainer
 		{
-			get => GetProperty(ref _playContainer);
-			set => SetProperty(ref _playContainer, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(34)] 
 		[RED("isPlaying")] 
 		public CBool IsPlaying
 		{
-			get => GetProperty(ref _isPlaying);
-			set => SetProperty(ref _isPlaying, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public PlayPauseActionWidgetController()
 		{
-			_isPlaying = true;
+			PlayContainer = new();
+			IsPlaying = true;
 		}
 	}
 }

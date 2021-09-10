@@ -5,50 +5,53 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class tempshitMapPinManagerNodeDefinition : questDisableableNodeDefinition
 	{
-		private CName _mapPinName;
-		private CEnum<tempshitMapPinOperation> _operation;
-		private gameEntityReference _nodeRef;
-		private Vector3 _position;
-		private LocalizationString _forceCaption;
-
 		[Ordinal(2)] 
 		[RED("mapPinName")] 
 		public CName MapPinName
 		{
-			get => GetProperty(ref _mapPinName);
-			set => SetProperty(ref _mapPinName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("operation")] 
 		public CEnum<tempshitMapPinOperation> Operation
 		{
-			get => GetProperty(ref _operation);
-			set => SetProperty(ref _operation, value);
+			get => GetPropertyValue<CEnum<tempshitMapPinOperation>>();
+			set => SetPropertyValue<CEnum<tempshitMapPinOperation>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("nodeRef")] 
 		public gameEntityReference NodeRef
 		{
-			get => GetProperty(ref _nodeRef);
-			set => SetProperty(ref _nodeRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("position")] 
 		public Vector3 Position
 		{
-			get => GetProperty(ref _position);
-			set => SetProperty(ref _position, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("forceCaption")] 
 		public LocalizationString ForceCaption
 		{
-			get => GetProperty(ref _forceCaption);
-			set => SetProperty(ref _forceCaption, value);
+			get => GetPropertyValue<LocalizationString>();
+			set => SetPropertyValue<LocalizationString>(value);
+		}
+
+		public tempshitMapPinManagerNodeDefinition()
+		{
+			Sockets = new();
+			Id = 65535;
+			NodeRef = new() { Names = new() };
+			Position = new();
+			ForceCaption = new() { Unk1 = 0, Value = "" };
 		}
 	}
 }

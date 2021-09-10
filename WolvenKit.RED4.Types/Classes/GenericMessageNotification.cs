@@ -5,149 +5,147 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class GenericMessageNotification : gameuiWidgetGameController
 	{
-		private inkTextWidgetReference _title;
-		private inkTextWidgetReference _message;
-		private inkWidgetReference _buttonConfirm;
-		private inkWidgetReference _buttonCancel;
-		private inkWidgetReference _buttonOk;
-		private inkWidgetReference _buttonYes;
-		private inkWidgetReference _buttonNo;
-		private inkWidgetReference _root;
-		private inkWidgetReference _background;
-		private inkWidgetReference _buttonHintsRoot;
-		private CWeakHandle<ButtonHints> _buttonHintsController;
-		private CHandle<GenericMessageNotificationData> _data;
-		private CBool _isNegativeHovered;
-		private CBool _isPositiveHovered;
-		private inkWidgetLibraryReference _libraryPath;
-		private CHandle<GenericMessageNotificationCloseData> _closeData;
-
 		[Ordinal(2)] 
 		[RED("title")] 
 		public inkTextWidgetReference Title
 		{
-			get => GetProperty(ref _title);
-			set => SetProperty(ref _title, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("message")] 
 		public inkTextWidgetReference Message
 		{
-			get => GetProperty(ref _message);
-			set => SetProperty(ref _message, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("buttonConfirm")] 
 		public inkWidgetReference ButtonConfirm
 		{
-			get => GetProperty(ref _buttonConfirm);
-			set => SetProperty(ref _buttonConfirm, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("buttonCancel")] 
 		public inkWidgetReference ButtonCancel
 		{
-			get => GetProperty(ref _buttonCancel);
-			set => SetProperty(ref _buttonCancel, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("buttonOk")] 
 		public inkWidgetReference ButtonOk
 		{
-			get => GetProperty(ref _buttonOk);
-			set => SetProperty(ref _buttonOk, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("buttonYes")] 
 		public inkWidgetReference ButtonYes
 		{
-			get => GetProperty(ref _buttonYes);
-			set => SetProperty(ref _buttonYes, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("buttonNo")] 
 		public inkWidgetReference ButtonNo
 		{
-			get => GetProperty(ref _buttonNo);
-			set => SetProperty(ref _buttonNo, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("root")] 
 		public inkWidgetReference Root
 		{
-			get => GetProperty(ref _root);
-			set => SetProperty(ref _root, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("background")] 
 		public inkWidgetReference Background
 		{
-			get => GetProperty(ref _background);
-			set => SetProperty(ref _background, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("buttonHintsRoot")] 
 		public inkWidgetReference ButtonHintsRoot
 		{
-			get => GetProperty(ref _buttonHintsRoot);
-			set => SetProperty(ref _buttonHintsRoot, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
-			get => GetProperty(ref _buttonHintsController);
-			set => SetProperty(ref _buttonHintsController, value);
+			get => GetPropertyValue<CWeakHandle<ButtonHints>>();
+			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("data")] 
 		public CHandle<GenericMessageNotificationData> Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<CHandle<GenericMessageNotificationData>>();
+			set => SetPropertyValue<CHandle<GenericMessageNotificationData>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("isNegativeHovered")] 
 		public CBool IsNegativeHovered
 		{
-			get => GetProperty(ref _isNegativeHovered);
-			set => SetProperty(ref _isNegativeHovered, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("isPositiveHovered")] 
 		public CBool IsPositiveHovered
 		{
-			get => GetProperty(ref _isPositiveHovered);
-			set => SetProperty(ref _isPositiveHovered, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("libraryPath")] 
 		public inkWidgetLibraryReference LibraryPath
 		{
-			get => GetProperty(ref _libraryPath);
-			set => SetProperty(ref _libraryPath, value);
+			get => GetPropertyValue<inkWidgetLibraryReference>();
+			set => SetPropertyValue<inkWidgetLibraryReference>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("closeData")] 
 		public CHandle<GenericMessageNotificationCloseData> CloseData
 		{
-			get => GetProperty(ref _closeData);
-			set => SetProperty(ref _closeData, value);
+			get => GetPropertyValue<CHandle<GenericMessageNotificationCloseData>>();
+			set => SetPropertyValue<CHandle<GenericMessageNotificationCloseData>>(value);
+		}
+
+		public GenericMessageNotification()
+		{
+			Title = new();
+			Message = new();
+			ButtonConfirm = new();
+			ButtonCancel = new();
+			ButtonOk = new();
+			ButtonYes = new();
+			ButtonNo = new();
+			Root = new();
+			Background = new();
+			ButtonHintsRoot = new();
+			LibraryPath = new() { WidgetLibrary = new() };
 		}
 	}
 }

@@ -5,59 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ActionSkillCheck : ActionBool
 	{
-		private CHandle<SkillCheckBase> _skillCheck;
-		private CEnum<EDeviceChallengeSkill> _skillCheckName;
-		private CString _localizedName;
-		private UIInteractionSkillCheck _skillcheckDescription;
-		private CBool _wasPassed;
-		private CBool _availableUnpowered;
-
 		[Ordinal(25)] 
 		[RED("skillCheck")] 
 		public CHandle<SkillCheckBase> SkillCheck
 		{
-			get => GetProperty(ref _skillCheck);
-			set => SetProperty(ref _skillCheck, value);
+			get => GetPropertyValue<CHandle<SkillCheckBase>>();
+			set => SetPropertyValue<CHandle<SkillCheckBase>>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("skillCheckName")] 
 		public CEnum<EDeviceChallengeSkill> SkillCheckName
 		{
-			get => GetProperty(ref _skillCheckName);
-			set => SetProperty(ref _skillCheckName, value);
+			get => GetPropertyValue<CEnum<EDeviceChallengeSkill>>();
+			set => SetPropertyValue<CEnum<EDeviceChallengeSkill>>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("localizedName")] 
 		public CString LocalizedName
 		{
-			get => GetProperty(ref _localizedName);
-			set => SetProperty(ref _localizedName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("skillcheckDescription")] 
 		public UIInteractionSkillCheck SkillcheckDescription
 		{
-			get => GetProperty(ref _skillcheckDescription);
-			set => SetProperty(ref _skillcheckDescription, value);
+			get => GetPropertyValue<UIInteractionSkillCheck>();
+			set => SetPropertyValue<UIInteractionSkillCheck>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("wasPassed")] 
 		public CBool WasPassed
 		{
-			get => GetProperty(ref _wasPassed);
-			set => SetProperty(ref _wasPassed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("availableUnpowered")] 
 		public CBool AvailableUnpowered
 		{
-			get => GetProperty(ref _availableUnpowered);
-			set => SetProperty(ref _availableUnpowered, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

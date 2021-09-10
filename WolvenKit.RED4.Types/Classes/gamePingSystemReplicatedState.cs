@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamePingSystemReplicatedState : gameIGameSystemReplicatedState
 	{
-		private CArray<gamePingEntry> _replicatedPingEntries;
-
 		[Ordinal(0)] 
 		[RED("replicatedPingEntries")] 
 		public CArray<gamePingEntry> ReplicatedPingEntries
 		{
-			get => GetProperty(ref _replicatedPingEntries);
-			set => SetProperty(ref _replicatedPingEntries, value);
+			get => GetPropertyValue<CArray<gamePingEntry>>();
+			set => SetPropertyValue<CArray<gamePingEntry>>(value);
+		}
+
+		public gamePingSystemReplicatedState()
+		{
+			ReplicatedPingEntries = new();
 		}
 	}
 }

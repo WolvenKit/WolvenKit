@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioMaterialOverride : RedBaseClass
 	{
-		private CName _base;
-		private CName _override;
-
 		[Ordinal(0)] 
 		[RED("base")] 
 		public CName Base
 		{
-			get => GetProperty(ref _base);
-			set => SetProperty(ref _base, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("override")] 
 		public CName Override
 		{
-			get => GetProperty(ref _override);
-			set => SetProperty(ref _override, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 	}
 }

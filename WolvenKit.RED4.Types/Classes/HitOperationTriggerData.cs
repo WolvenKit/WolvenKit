@@ -5,66 +5,59 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class HitOperationTriggerData : DeviceOperationTriggerData
 	{
-		private CBool _isAttackerPlayer;
-		private CBool _isAttackerNPC;
-		private CBool _bullets;
-		private CBool _explosions;
-		private CBool _melee;
-		private CFloat _healthPercentage;
-
 		[Ordinal(1)] 
 		[RED("isAttackerPlayer")] 
 		public CBool IsAttackerPlayer
 		{
-			get => GetProperty(ref _isAttackerPlayer);
-			set => SetProperty(ref _isAttackerPlayer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isAttackerNPC")] 
 		public CBool IsAttackerNPC
 		{
-			get => GetProperty(ref _isAttackerNPC);
-			set => SetProperty(ref _isAttackerNPC, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("bullets")] 
 		public CBool Bullets
 		{
-			get => GetProperty(ref _bullets);
-			set => SetProperty(ref _bullets, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("explosions")] 
 		public CBool Explosions
 		{
-			get => GetProperty(ref _explosions);
-			set => SetProperty(ref _explosions, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("melee")] 
 		public CBool Melee
 		{
-			get => GetProperty(ref _melee);
-			set => SetProperty(ref _melee, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("healthPercentage")] 
 		public CFloat HealthPercentage
 		{
-			get => GetProperty(ref _healthPercentage);
-			set => SetProperty(ref _healthPercentage, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public HitOperationTriggerData()
 		{
-			_isAttackerPlayer = true;
-			_bullets = true;
-			_healthPercentage = 100.000000F;
+			IsAttackerPlayer = true;
+			Bullets = true;
+			HealthPercentage = 100.000000F;
 		}
 	}
 }

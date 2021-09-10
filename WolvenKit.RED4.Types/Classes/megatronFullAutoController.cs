@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class megatronFullAutoController : AmmoLogicController
 	{
-		private CWeakHandle<inkTextWidget> _ammoCountText;
-		private CWeakHandle<inkImageWidget> _ammoBar;
-
 		[Ordinal(3)] 
 		[RED("ammoCountText")] 
 		public CWeakHandle<inkTextWidget> AmmoCountText
 		{
-			get => GetProperty(ref _ammoCountText);
-			set => SetProperty(ref _ammoCountText, value);
+			get => GetPropertyValue<CWeakHandle<inkTextWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("ammoBar")] 
 		public CWeakHandle<inkImageWidget> AmmoBar
 		{
-			get => GetProperty(ref _ammoBar);
-			set => SetProperty(ref _ammoBar, value);
+			get => GetPropertyValue<CWeakHandle<inkImageWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkImageWidget>>(value);
 		}
 	}
 }

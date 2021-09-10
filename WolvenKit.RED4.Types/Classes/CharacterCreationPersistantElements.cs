@@ -5,147 +5,142 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CharacterCreationPersistantElements : inkWidgetLogicController
 	{
-		private inkCompoundWidgetReference _headerHolder;
-		private inkWidgetReference _lBBtn;
-		private inkWidgetReference _rBBtn;
-		private inkCompoundWidgetReference _fluffHolderRight;
-		private inkCompoundWidgetReference _fluffHolderDown;
-		private inkCompoundWidgetReference _fluffHolderLeft;
-		private inkTextWidgetReference _fluffText1;
-		private inkTextWidgetReference _fluffTextRight;
-		private inkTextWidgetReference _fluffTextDown;
-		private inkTextWidgetReference _fluffTextLeft;
-		private CArray<CWeakHandle<CharacterCreationTopBarHeader>> _headers;
-		private CWeakHandle<CharacterCreationTopBarHeader> _selectedHeader;
-		private CFloat _c_fluffMaxX;
-		private CFloat _c_fluffMinY;
-		private CFloat _c_fluffMaxY;
-
 		[Ordinal(1)] 
 		[RED("headerHolder")] 
 		public inkCompoundWidgetReference HeaderHolder
 		{
-			get => GetProperty(ref _headerHolder);
-			set => SetProperty(ref _headerHolder, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("LBBtn")] 
 		public inkWidgetReference LBBtn
 		{
-			get => GetProperty(ref _lBBtn);
-			set => SetProperty(ref _lBBtn, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("RBBtn")] 
 		public inkWidgetReference RBBtn
 		{
-			get => GetProperty(ref _rBBtn);
-			set => SetProperty(ref _rBBtn, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("fluffHolderRight")] 
 		public inkCompoundWidgetReference FluffHolderRight
 		{
-			get => GetProperty(ref _fluffHolderRight);
-			set => SetProperty(ref _fluffHolderRight, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("fluffHolderDown")] 
 		public inkCompoundWidgetReference FluffHolderDown
 		{
-			get => GetProperty(ref _fluffHolderDown);
-			set => SetProperty(ref _fluffHolderDown, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("fluffHolderLeft")] 
 		public inkCompoundWidgetReference FluffHolderLeft
 		{
-			get => GetProperty(ref _fluffHolderLeft);
-			set => SetProperty(ref _fluffHolderLeft, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("fluffText1")] 
 		public inkTextWidgetReference FluffText1
 		{
-			get => GetProperty(ref _fluffText1);
-			set => SetProperty(ref _fluffText1, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("fluffTextRight")] 
 		public inkTextWidgetReference FluffTextRight
 		{
-			get => GetProperty(ref _fluffTextRight);
-			set => SetProperty(ref _fluffTextRight, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("fluffTextDown")] 
 		public inkTextWidgetReference FluffTextDown
 		{
-			get => GetProperty(ref _fluffTextDown);
-			set => SetProperty(ref _fluffTextDown, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("fluffTextLeft")] 
 		public inkTextWidgetReference FluffTextLeft
 		{
-			get => GetProperty(ref _fluffTextLeft);
-			set => SetProperty(ref _fluffTextLeft, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("headers")] 
 		public CArray<CWeakHandle<CharacterCreationTopBarHeader>> Headers
 		{
-			get => GetProperty(ref _headers);
-			set => SetProperty(ref _headers, value);
+			get => GetPropertyValue<CArray<CWeakHandle<CharacterCreationTopBarHeader>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<CharacterCreationTopBarHeader>>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("selectedHeader")] 
 		public CWeakHandle<CharacterCreationTopBarHeader> SelectedHeader
 		{
-			get => GetProperty(ref _selectedHeader);
-			set => SetProperty(ref _selectedHeader, value);
+			get => GetPropertyValue<CWeakHandle<CharacterCreationTopBarHeader>>();
+			set => SetPropertyValue<CWeakHandle<CharacterCreationTopBarHeader>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("c_fluffMaxX")] 
 		public CFloat C_fluffMaxX
 		{
-			get => GetProperty(ref _c_fluffMaxX);
-			set => SetProperty(ref _c_fluffMaxX, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("c_fluffMinY")] 
 		public CFloat C_fluffMinY
 		{
-			get => GetProperty(ref _c_fluffMinY);
-			set => SetProperty(ref _c_fluffMinY, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("c_fluffMaxY")] 
 		public CFloat C_fluffMaxY
 		{
-			get => GetProperty(ref _c_fluffMaxY);
-			set => SetProperty(ref _c_fluffMaxY, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public CharacterCreationPersistantElements()
 		{
-			_c_fluffMaxX = 1800.000000F;
-			_c_fluffMinY = 300.000000F;
-			_c_fluffMaxY = 2000.000000F;
+			HeaderHolder = new();
+			LBBtn = new();
+			RBBtn = new();
+			FluffHolderRight = new();
+			FluffHolderDown = new();
+			FluffHolderLeft = new();
+			FluffText1 = new();
+			FluffTextRight = new();
+			FluffTextDown = new();
+			FluffTextLeft = new();
+			Headers = new();
+			C_fluffMaxX = 1800.000000F;
+			C_fluffMinY = 300.000000F;
+			C_fluffMaxY = 2000.000000F;
 		}
 	}
 }

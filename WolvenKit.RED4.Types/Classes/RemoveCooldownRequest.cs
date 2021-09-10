@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RemoveCooldownRequest : gameScriptableSystemRequest
 	{
-		private CInt32 _cid;
-
 		[Ordinal(0)] 
 		[RED("cid")] 
 		public CInt32 Cid
 		{
-			get => GetProperty(ref _cid);
-			set => SetProperty(ref _cid, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

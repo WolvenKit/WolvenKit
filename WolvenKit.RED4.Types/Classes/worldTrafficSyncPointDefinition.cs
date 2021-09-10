@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldTrafficSyncPointDefinition : RedBaseClass
 	{
-		private CArray<NodeRef> _laneRefs;
-		private CArray<CFloat> _lanePositions;
-		private CFloat _length;
-
 		[Ordinal(0)] 
 		[RED("laneRefs")] 
 		public CArray<NodeRef> LaneRefs
 		{
-			get => GetProperty(ref _laneRefs);
-			set => SetProperty(ref _laneRefs, value);
+			get => GetPropertyValue<CArray<NodeRef>>();
+			set => SetPropertyValue<CArray<NodeRef>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("lanePositions")] 
 		public CArray<CFloat> LanePositions
 		{
-			get => GetProperty(ref _lanePositions);
-			set => SetProperty(ref _lanePositions, value);
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("length")] 
 		public CFloat Length
 		{
-			get => GetProperty(ref _length);
-			set => SetProperty(ref _length, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public worldTrafficSyncPointDefinition()
+		{
+			LaneRefs = new();
+			LanePositions = new();
 		}
 	}
 }

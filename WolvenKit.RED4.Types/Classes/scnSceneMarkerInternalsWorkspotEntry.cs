@@ -5,41 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnSceneMarkerInternalsWorkspotEntry : RedBaseClass
 	{
-		private CRUID _instanceId;
-		private Transform _instanceOrigin;
-		private CArray<scnSceneMarkerInternalsWorkspotEntrySocket> _entries;
-		private CArray<scnSceneMarkerInternalsWorkspotEntrySocket> _exits;
-
 		[Ordinal(0)] 
 		[RED("instanceId")] 
 		public CRUID InstanceId
 		{
-			get => GetProperty(ref _instanceId);
-			set => SetProperty(ref _instanceId, value);
+			get => GetPropertyValue<CRUID>();
+			set => SetPropertyValue<CRUID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("instanceOrigin")] 
 		public Transform InstanceOrigin
 		{
-			get => GetProperty(ref _instanceOrigin);
-			set => SetProperty(ref _instanceOrigin, value);
+			get => GetPropertyValue<Transform>();
+			set => SetPropertyValue<Transform>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("entries")] 
 		public CArray<scnSceneMarkerInternalsWorkspotEntrySocket> Entries
 		{
-			get => GetProperty(ref _entries);
-			set => SetProperty(ref _entries, value);
+			get => GetPropertyValue<CArray<scnSceneMarkerInternalsWorkspotEntrySocket>>();
+			set => SetPropertyValue<CArray<scnSceneMarkerInternalsWorkspotEntrySocket>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("exits")] 
 		public CArray<scnSceneMarkerInternalsWorkspotEntrySocket> Exits
 		{
-			get => GetProperty(ref _exits);
-			set => SetProperty(ref _exits, value);
+			get => GetPropertyValue<CArray<scnSceneMarkerInternalsWorkspotEntrySocket>>();
+			set => SetPropertyValue<CArray<scnSceneMarkerInternalsWorkspotEntrySocket>>(value);
+		}
+
+		public scnSceneMarkerInternalsWorkspotEntry()
+		{
+			InstanceOrigin = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			Entries = new();
+			Exits = new();
 		}
 	}
 }

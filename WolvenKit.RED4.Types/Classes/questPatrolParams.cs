@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questPatrolParams : questAICommandParams
 	{
-		private CHandle<AIPatrolPathParameters> _pathParams;
-		private CBool _repeatCommandOnInterrupt;
-
 		[Ordinal(0)] 
 		[RED("pathParams")] 
 		public CHandle<AIPatrolPathParameters> PathParams
 		{
-			get => GetProperty(ref _pathParams);
-			set => SetProperty(ref _pathParams, value);
+			get => GetPropertyValue<CHandle<AIPatrolPathParameters>>();
+			set => SetPropertyValue<CHandle<AIPatrolPathParameters>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("repeatCommandOnInterrupt")] 
 		public CBool RepeatCommandOnInterrupt
 		{
-			get => GetProperty(ref _repeatCommandOnInterrupt);
-			set => SetProperty(ref _repeatCommandOnInterrupt, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public questPatrolParams()
 		{
-			_repeatCommandOnInterrupt = true;
+			RepeatCommandOnInterrupt = true;
 		}
 	}
 }

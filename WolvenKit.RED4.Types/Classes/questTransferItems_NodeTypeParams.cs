@@ -5,50 +5,50 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questTransferItems_NodeTypeParams : RedBaseClass
 	{
-		private CHandle<questUniversalRef> _giver;
-		private CHandle<questUniversalRef> _receiver;
-		private CHandle<questTransferItems_NodeTypeParams_TransferAllOperationData> _transferAllOperation;
-		private CArray<questTransferItems_NodeTypeParams_OperationData> _itemOperations;
-		private CArray<questTransferItems_NodeTypeParams_TagOperationData> _tagOperations;
-
 		[Ordinal(0)] 
 		[RED("giver")] 
 		public CHandle<questUniversalRef> Giver
 		{
-			get => GetProperty(ref _giver);
-			set => SetProperty(ref _giver, value);
+			get => GetPropertyValue<CHandle<questUniversalRef>>();
+			set => SetPropertyValue<CHandle<questUniversalRef>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("receiver")] 
 		public CHandle<questUniversalRef> Receiver
 		{
-			get => GetProperty(ref _receiver);
-			set => SetProperty(ref _receiver, value);
+			get => GetPropertyValue<CHandle<questUniversalRef>>();
+			set => SetPropertyValue<CHandle<questUniversalRef>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("transferAllOperation")] 
 		public CHandle<questTransferItems_NodeTypeParams_TransferAllOperationData> TransferAllOperation
 		{
-			get => GetProperty(ref _transferAllOperation);
-			set => SetProperty(ref _transferAllOperation, value);
+			get => GetPropertyValue<CHandle<questTransferItems_NodeTypeParams_TransferAllOperationData>>();
+			set => SetPropertyValue<CHandle<questTransferItems_NodeTypeParams_TransferAllOperationData>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("itemOperations")] 
 		public CArray<questTransferItems_NodeTypeParams_OperationData> ItemOperations
 		{
-			get => GetProperty(ref _itemOperations);
-			set => SetProperty(ref _itemOperations, value);
+			get => GetPropertyValue<CArray<questTransferItems_NodeTypeParams_OperationData>>();
+			set => SetPropertyValue<CArray<questTransferItems_NodeTypeParams_OperationData>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("tagOperations")] 
 		public CArray<questTransferItems_NodeTypeParams_TagOperationData> TagOperations
 		{
-			get => GetProperty(ref _tagOperations);
-			set => SetProperty(ref _tagOperations, value);
+			get => GetPropertyValue<CArray<questTransferItems_NodeTypeParams_TagOperationData>>();
+			set => SetPropertyValue<CArray<questTransferItems_NodeTypeParams_TagOperationData>>(value);
+		}
+
+		public questTransferItems_NodeTypeParams()
+		{
+			ItemOperations = new();
+			TagOperations = new();
 		}
 	}
 }

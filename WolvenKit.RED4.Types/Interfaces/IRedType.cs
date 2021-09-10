@@ -9,6 +9,13 @@ namespace WolvenKit.RED4.Types
 
     public interface IRedType<T> : IRedType
     {
-        T Value { get; set; }
+    }
+
+    public interface IRedGenericType : IRedType
+    {
+    }
+
+    public interface IRedGenericType<T> : IRedGenericType
+    {
     }
 }

@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class NamedTooltipController : IScriptable
 	{
-		private CName _identifier;
-		private CWeakHandle<AGenericTooltipController> _controller;
-
 		[Ordinal(0)] 
 		[RED("identifier")] 
 		public CName Identifier
 		{
-			get => GetProperty(ref _identifier);
-			set => SetProperty(ref _identifier, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("controller")] 
 		public CWeakHandle<AGenericTooltipController> Controller
 		{
-			get => GetProperty(ref _controller);
-			set => SetProperty(ref _controller, value);
+			get => GetPropertyValue<CWeakHandle<AGenericTooltipController>>();
+			set => SetPropertyValue<CWeakHandle<AGenericTooltipController>>(value);
 		}
 	}
 }

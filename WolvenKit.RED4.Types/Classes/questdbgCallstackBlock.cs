@@ -5,29 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questdbgCallstackBlock : RedBaseClass
 	{
-		private CUInt64 _id;
-		private CUInt64 _parentId;
-
 		[Ordinal(0)] 
 		[RED("id")] 
 		public CUInt64 Id
 		{
-			get => GetProperty(ref _id);
-			set => SetProperty(ref _id, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("parentId")] 
 		public CUInt64 ParentId
 		{
-			get => GetProperty(ref _parentId);
-			set => SetProperty(ref _parentId, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		public questdbgCallstackBlock()
 		{
-			_id = 18446744073709551615;
-			_parentId = 18446744073709551615;
+			Id = 18446744073709551615;
+			ParentId = 18446744073709551615;
 		}
 	}
 }

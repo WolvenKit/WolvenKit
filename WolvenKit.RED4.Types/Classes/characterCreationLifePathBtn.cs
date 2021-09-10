@@ -5,86 +5,85 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class characterCreationLifePathBtn : inkButtonController
 	{
-		private inkWidgetReference _selector;
-		private inkTextWidgetReference _desc;
-		private inkImageWidgetReference _image;
-		private inkTextWidgetReference _label;
-		private inkVideoWidgetReference _video;
-		private CHandle<inkanimProxy> _animationProxy;
-		private CWeakHandle<inkWidget> _root;
-		private CWeakHandle<inkTextReplaceAnimationController> _translationAnimationCtrl;
-		private CString _localizedText;
-
 		[Ordinal(10)] 
 		[RED("selector")] 
 		public inkWidgetReference Selector
 		{
-			get => GetProperty(ref _selector);
-			set => SetProperty(ref _selector, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("desc")] 
 		public inkTextWidgetReference Desc
 		{
-			get => GetProperty(ref _desc);
-			set => SetProperty(ref _desc, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("image")] 
 		public inkImageWidgetReference Image
 		{
-			get => GetProperty(ref _image);
-			set => SetProperty(ref _image, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("label")] 
 		public inkTextWidgetReference Label
 		{
-			get => GetProperty(ref _label);
-			set => SetProperty(ref _label, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("video")] 
 		public inkVideoWidgetReference Video
 		{
-			get => GetProperty(ref _video);
-			set => SetProperty(ref _video, value);
+			get => GetPropertyValue<inkVideoWidgetReference>();
+			set => SetPropertyValue<inkVideoWidgetReference>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{
-			get => GetProperty(ref _animationProxy);
-			set => SetProperty(ref _animationProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("root")] 
 		public CWeakHandle<inkWidget> Root
 		{
-			get => GetProperty(ref _root);
-			set => SetProperty(ref _root, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("translationAnimationCtrl")] 
 		public CWeakHandle<inkTextReplaceAnimationController> TranslationAnimationCtrl
 		{
-			get => GetProperty(ref _translationAnimationCtrl);
-			set => SetProperty(ref _translationAnimationCtrl, value);
+			get => GetPropertyValue<CWeakHandle<inkTextReplaceAnimationController>>();
+			set => SetPropertyValue<CWeakHandle<inkTextReplaceAnimationController>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("localizedText")] 
 		public CString LocalizedText
 		{
-			get => GetProperty(ref _localizedText);
-			set => SetProperty(ref _localizedText, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		public characterCreationLifePathBtn()
+		{
+			Selector = new();
+			Desc = new();
+			Image = new();
+			Label = new();
+			Video = new();
 		}
 	}
 }

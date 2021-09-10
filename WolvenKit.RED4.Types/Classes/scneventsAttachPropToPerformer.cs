@@ -5,64 +5,62 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scneventsAttachPropToPerformer : scnSceneEvent
 	{
-		private scnPropId _propId;
-		private scnPerformerId _performerId;
-		private CName _slot;
-		private CEnum<scnOffsetMode> _offsetMode;
-		private Vector3 _customOffsetPos;
-		private Quaternion _customOffsetRot;
-
 		[Ordinal(6)] 
 		[RED("propId")] 
 		public scnPropId PropId
 		{
-			get => GetProperty(ref _propId);
-			set => SetProperty(ref _propId, value);
+			get => GetPropertyValue<scnPropId>();
+			set => SetPropertyValue<scnPropId>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("performerId")] 
 		public scnPerformerId PerformerId
 		{
-			get => GetProperty(ref _performerId);
-			set => SetProperty(ref _performerId, value);
+			get => GetPropertyValue<scnPerformerId>();
+			set => SetPropertyValue<scnPerformerId>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("slot")] 
 		public CName Slot
 		{
-			get => GetProperty(ref _slot);
-			set => SetProperty(ref _slot, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("offsetMode")] 
 		public CEnum<scnOffsetMode> OffsetMode
 		{
-			get => GetProperty(ref _offsetMode);
-			set => SetProperty(ref _offsetMode, value);
+			get => GetPropertyValue<CEnum<scnOffsetMode>>();
+			set => SetPropertyValue<CEnum<scnOffsetMode>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("customOffsetPos")] 
 		public Vector3 CustomOffsetPos
 		{
-			get => GetProperty(ref _customOffsetPos);
-			set => SetProperty(ref _customOffsetPos, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("customOffsetRot")] 
 		public Quaternion CustomOffsetRot
 		{
-			get => GetProperty(ref _customOffsetRot);
-			set => SetProperty(ref _customOffsetRot, value);
+			get => GetPropertyValue<Quaternion>();
+			set => SetPropertyValue<Quaternion>(value);
 		}
 
 		public scneventsAttachPropToPerformer()
 		{
-			_slot = "(Root)";
+			Id = new() { Id = 18446744073709551615 };
+			PropId = new() { Id = 4294967295 };
+			PerformerId = new() { Id = 4294967040 };
+			Slot = "(Root)";
+			CustomOffsetPos = new();
+			CustomOffsetRot = new() { R = 1.000000F };
 		}
 	}
 }

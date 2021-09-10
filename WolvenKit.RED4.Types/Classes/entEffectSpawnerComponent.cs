@@ -5,14 +5,21 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entEffectSpawnerComponent : entIVisualComponent
 	{
-		private CArray<CHandle<entEffectDesc>> _effectDescs;
-
 		[Ordinal(8)] 
 		[RED("effectDescs")] 
 		public CArray<CHandle<entEffectDesc>> EffectDescs
 		{
-			get => GetProperty(ref _effectDescs);
-			set => SetProperty(ref _effectDescs, value);
+			get => GetPropertyValue<CArray<CHandle<entEffectDesc>>>();
+			set => SetPropertyValue<CArray<CHandle<entEffectDesc>>>(value);
+		}
+
+		public entEffectSpawnerComponent()
+		{
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
+			ForceLODLevel = -1;
+			EffectDescs = new();
 		}
 	}
 }

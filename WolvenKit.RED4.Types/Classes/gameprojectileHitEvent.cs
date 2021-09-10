@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameprojectileHitEvent : redEvent
 	{
-		private CArray<gameprojectileHitInstance> _hitInstances;
-
 		[Ordinal(0)] 
 		[RED("hitInstances")] 
 		public CArray<gameprojectileHitInstance> HitInstances
 		{
-			get => GetProperty(ref _hitInstances);
-			set => SetProperty(ref _hitInstances, value);
+			get => GetPropertyValue<CArray<gameprojectileHitInstance>>();
+			set => SetPropertyValue<CArray<gameprojectileHitInstance>>(value);
+		}
+
+		public gameprojectileHitEvent()
+		{
+			HitInstances = new();
 		}
 	}
 }

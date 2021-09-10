@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameMuppetStateMachineSnapshot : RedBaseClass
 	{
-		private CName _stateMachineId;
-		private CName _stateId;
-
 		[Ordinal(0)] 
 		[RED("stateMachineId")] 
 		public CName StateMachineId
 		{
-			get => GetProperty(ref _stateMachineId);
-			set => SetProperty(ref _stateMachineId, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("stateId")] 
 		public CName StateId
 		{
-			get => GetProperty(ref _stateId);
-			set => SetProperty(ref _stateId, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 	}
 }

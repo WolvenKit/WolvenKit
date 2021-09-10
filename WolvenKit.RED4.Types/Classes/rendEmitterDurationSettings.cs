@@ -5,37 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class rendEmitterDurationSettings : RedBaseClass
 	{
-		private CFloat _emitterDuration;
-		private CFloat _emitterDurationLow;
-		private CBool _useEmitterDurationRange;
-
 		[Ordinal(0)] 
 		[RED("emitterDuration")] 
 		public CFloat EmitterDuration
 		{
-			get => GetProperty(ref _emitterDuration);
-			set => SetProperty(ref _emitterDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("emitterDurationLow")] 
 		public CFloat EmitterDurationLow
 		{
-			get => GetProperty(ref _emitterDurationLow);
-			set => SetProperty(ref _emitterDurationLow, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("useEmitterDurationRange")] 
 		public CBool UseEmitterDurationRange
 		{
-			get => GetProperty(ref _useEmitterDurationRange);
-			set => SetProperty(ref _useEmitterDurationRange, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public rendEmitterDurationSettings()
 		{
-			_emitterDuration = 1.000000F;
+			EmitterDuration = 1.000000F;
 		}
 	}
 }

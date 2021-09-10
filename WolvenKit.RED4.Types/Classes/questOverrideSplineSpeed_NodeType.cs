@@ -5,37 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questOverrideSplineSpeed_NodeType : questIVehicleManagerNodeType
 	{
-		private gameEntityReference _vehicleRef;
-		private CFloat _speed;
-		private CFloat _adjustTime;
-
 		[Ordinal(0)] 
 		[RED("vehicleRef")] 
 		public gameEntityReference VehicleRef
 		{
-			get => GetProperty(ref _vehicleRef);
-			set => SetProperty(ref _vehicleRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("speed")] 
 		public CFloat Speed
 		{
-			get => GetProperty(ref _speed);
-			set => SetProperty(ref _speed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("adjustTime")] 
 		public CFloat AdjustTime
 		{
-			get => GetProperty(ref _adjustTime);
-			set => SetProperty(ref _adjustTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public questOverrideSplineSpeed_NodeType()
 		{
-			_speed = -1.000000F;
+			VehicleRef = new() { Names = new() };
+			Speed = -1.000000F;
 		}
 	}
 }

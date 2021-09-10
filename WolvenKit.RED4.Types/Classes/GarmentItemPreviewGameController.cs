@@ -5,50 +5,50 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class GarmentItemPreviewGameController : gameuiInventoryPuppetPreviewGameController
 	{
-		private CHandle<InventoryItemPreviewData> _data;
-		private TweakDBID _placementSlot;
-		private gameItemID _initialItem;
-		private gameItemID _givenItem;
-		private CBool _isMouseDown;
-
 		[Ordinal(14)] 
 		[RED("data")] 
 		public CHandle<InventoryItemPreviewData> Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<CHandle<InventoryItemPreviewData>>();
+			set => SetPropertyValue<CHandle<InventoryItemPreviewData>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("placementSlot")] 
 		public TweakDBID PlacementSlot
 		{
-			get => GetProperty(ref _placementSlot);
-			set => SetProperty(ref _placementSlot, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("initialItem")] 
 		public gameItemID InitialItem
 		{
-			get => GetProperty(ref _initialItem);
-			set => SetProperty(ref _initialItem, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("givenItem")] 
 		public gameItemID GivenItem
 		{
-			get => GetProperty(ref _givenItem);
-			set => SetProperty(ref _givenItem, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("isMouseDown")] 
 		public CBool IsMouseDown
 		{
-			get => GetProperty(ref _isMouseDown);
-			set => SetProperty(ref _isMouseDown, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public GarmentItemPreviewGameController()
+		{
+			InitialItem = new();
+			GivenItem = new();
 		}
 	}
 }

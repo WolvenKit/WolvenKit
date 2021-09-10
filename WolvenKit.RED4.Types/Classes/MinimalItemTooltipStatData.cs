@@ -5,86 +5,76 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MinimalItemTooltipStatData : IScriptable
 	{
-		private CFloat _value;
-		private CFloat _diff;
-		private CString _statName;
-		private CEnum<gamedataStatType> _type;
-		private CBool _isPercentage;
-		private CBool _roundValue;
-		private CBool _displayPlus;
-		private CBool _inMeters;
-		private CBool _inSeconds;
-
 		[Ordinal(0)] 
 		[RED("value")] 
 		public CFloat Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("diff")] 
 		public CFloat Diff
 		{
-			get => GetProperty(ref _diff);
-			set => SetProperty(ref _diff, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("statName")] 
 		public CString StatName
 		{
-			get => GetProperty(ref _statName);
-			set => SetProperty(ref _statName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("type")] 
 		public CEnum<gamedataStatType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<gamedataStatType>>();
+			set => SetPropertyValue<CEnum<gamedataStatType>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("isPercentage")] 
 		public CBool IsPercentage
 		{
-			get => GetProperty(ref _isPercentage);
-			set => SetProperty(ref _isPercentage, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("roundValue")] 
 		public CBool RoundValue
 		{
-			get => GetProperty(ref _roundValue);
-			set => SetProperty(ref _roundValue, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("displayPlus")] 
 		public CBool DisplayPlus
 		{
-			get => GetProperty(ref _displayPlus);
-			set => SetProperty(ref _displayPlus, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("inMeters")] 
 		public CBool InMeters
 		{
-			get => GetProperty(ref _inMeters);
-			set => SetProperty(ref _inMeters, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("inSeconds")] 
 		public CBool InSeconds
 		{
-			get => GetProperty(ref _inSeconds);
-			set => SetProperty(ref _inSeconds, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

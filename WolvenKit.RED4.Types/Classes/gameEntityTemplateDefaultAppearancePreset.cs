@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameEntityTemplateDefaultAppearancePreset : ISerializable
 	{
-		private CArray<gameDefaultAppearancePreset_Entity> _defaultAppearancePresets;
-
 		[Ordinal(0)] 
 		[RED("defaultAppearancePresets")] 
 		public CArray<gameDefaultAppearancePreset_Entity> DefaultAppearancePresets
 		{
-			get => GetProperty(ref _defaultAppearancePresets);
-			set => SetProperty(ref _defaultAppearancePresets, value);
+			get => GetPropertyValue<CArray<gameDefaultAppearancePreset_Entity>>();
+			set => SetPropertyValue<CArray<gameDefaultAppearancePreset_Entity>>(value);
+		}
+
+		public gameEntityTemplateDefaultAppearancePreset()
+		{
+			DefaultAppearancePresets = new();
 		}
 	}
 }

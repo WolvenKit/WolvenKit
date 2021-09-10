@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PreventionAgents : IScriptable
 	{
-		private CName _groupName;
-		private CArray<CHandle<SPreventionAgentData>> _requsteredAgents;
-
 		[Ordinal(0)] 
 		[RED("groupName")] 
 		public CName GroupName
 		{
-			get => GetProperty(ref _groupName);
-			set => SetProperty(ref _groupName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("requsteredAgents")] 
 		public CArray<CHandle<SPreventionAgentData>> RequsteredAgents
 		{
-			get => GetProperty(ref _requsteredAgents);
-			set => SetProperty(ref _requsteredAgents, value);
+			get => GetPropertyValue<CArray<CHandle<SPreventionAgentData>>>();
+			set => SetPropertyValue<CArray<CHandle<SPreventionAgentData>>>(value);
+		}
+
+		public PreventionAgents()
+		{
+			RequsteredAgents = new();
 		}
 	}
 }

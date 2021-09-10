@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CParticleDrawerMotionBlur : IParticleDrawer
 	{
-		private CFloat _stretchPerVelocity;
-		private CBool _isGPUBased;
-
 		[Ordinal(1)] 
 		[RED("stretchPerVelocity")] 
 		public CFloat StretchPerVelocity
 		{
-			get => GetProperty(ref _stretchPerVelocity);
-			set => SetProperty(ref _stretchPerVelocity, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isGPUBased")] 
 		public CBool IsGPUBased
 		{
-			get => GetProperty(ref _isGPUBased);
-			set => SetProperty(ref _isGPUBased, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public CParticleDrawerMotionBlur()
 		{
-			_stretchPerVelocity = 0.500000F;
+			StretchPerVelocity = 0.500000F;
 		}
 	}
 }

@@ -5,46 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class physicsPhysicalJointPin : ISerializable
 	{
-		private CHandle<physicsISystemObject> _object;
-		private CInt32 _featureIndex;
-		private Vector3 _localPosition;
-		private Quaternion _localRotation;
-
 		[Ordinal(0)] 
 		[RED("object")] 
 		public CHandle<physicsISystemObject> Object
 		{
-			get => GetProperty(ref _object);
-			set => SetProperty(ref _object, value);
+			get => GetPropertyValue<CHandle<physicsISystemObject>>();
+			set => SetPropertyValue<CHandle<physicsISystemObject>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("featureIndex")] 
 		public CInt32 FeatureIndex
 		{
-			get => GetProperty(ref _featureIndex);
-			set => SetProperty(ref _featureIndex, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("localPosition")] 
 		public Vector3 LocalPosition
 		{
-			get => GetProperty(ref _localPosition);
-			set => SetProperty(ref _localPosition, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("localRotation")] 
 		public Quaternion LocalRotation
 		{
-			get => GetProperty(ref _localRotation);
-			set => SetProperty(ref _localRotation, value);
+			get => GetPropertyValue<Quaternion>();
+			set => SetPropertyValue<Quaternion>(value);
 		}
 
 		public physicsPhysicalJointPin()
 		{
-			_featureIndex = -1;
+			FeatureIndex = -1;
+			LocalPosition = new();
+			LocalRotation = new() { R = 1.000000F };
 		}
 	}
 }

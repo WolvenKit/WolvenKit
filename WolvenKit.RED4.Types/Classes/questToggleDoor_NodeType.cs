@@ -5,57 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questToggleDoor_NodeType : questIVehicleManagerNodeType
 	{
-		private gameEntityReference _vehicleRef;
-		private CEnum<vehicleEQuestVehicleDoorState> _doorAction;
-		private CEnum<vehicleEVehicleDoor> _door;
-		private CBool _toOpen;
-		private CName _doorID;
-
 		[Ordinal(0)] 
 		[RED("vehicleRef")] 
 		public gameEntityReference VehicleRef
 		{
-			get => GetProperty(ref _vehicleRef);
-			set => SetProperty(ref _vehicleRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("doorAction")] 
 		public CEnum<vehicleEQuestVehicleDoorState> DoorAction
 		{
-			get => GetProperty(ref _doorAction);
-			set => SetProperty(ref _doorAction, value);
+			get => GetPropertyValue<CEnum<vehicleEQuestVehicleDoorState>>();
+			set => SetPropertyValue<CEnum<vehicleEQuestVehicleDoorState>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("door")] 
 		public CEnum<vehicleEVehicleDoor> Door
 		{
-			get => GetProperty(ref _door);
-			set => SetProperty(ref _door, value);
+			get => GetPropertyValue<CEnum<vehicleEVehicleDoor>>();
+			set => SetPropertyValue<CEnum<vehicleEVehicleDoor>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("toOpen")] 
 		public CBool ToOpen
 		{
-			get => GetProperty(ref _toOpen);
-			set => SetProperty(ref _toOpen, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("doorID")] 
 		public CName DoorID
 		{
-			get => GetProperty(ref _doorID);
-			set => SetProperty(ref _doorID, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public questToggleDoor_NodeType()
 		{
-			_doorAction = new() { Value = Enums.vehicleEQuestVehicleDoorState.Invalid };
-			_door = new() { Value = Enums.vehicleEVehicleDoor.invalid };
-			_toOpen = true;
+			VehicleRef = new() { Names = new() };
+			DoorAction = Enums.vehicleEQuestVehicleDoorState.Invalid;
+			Door = Enums.vehicleEVehicleDoor.invalid;
+			ToOpen = true;
 		}
 	}
 }

@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameSmartObjectTransformDictionary : ISerializable
 	{
-		private CArray<gameSmartObjectTransformDictionaryTransformEntry> _transforms;
-
 		[Ordinal(0)] 
 		[RED("transforms")] 
 		public CArray<gameSmartObjectTransformDictionaryTransformEntry> Transforms
 		{
-			get => GetProperty(ref _transforms);
-			set => SetProperty(ref _transforms, value);
+			get => GetPropertyValue<CArray<gameSmartObjectTransformDictionaryTransformEntry>>();
+			set => SetPropertyValue<CArray<gameSmartObjectTransformDictionaryTransformEntry>>(value);
+		}
+
+		public gameSmartObjectTransformDictionary()
+		{
+			Transforms = new();
 		}
 	}
 }

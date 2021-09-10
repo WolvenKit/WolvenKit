@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questAssignConvoy_NodeType : questIVehicleManagerNodeType
 	{
-		private CArray<gameEntityReference> _followers;
-		private gameEntityReference _vehicleLeaderRef;
-
 		[Ordinal(0)] 
 		[RED("Followers")] 
 		public CArray<gameEntityReference> Followers
 		{
-			get => GetProperty(ref _followers);
-			set => SetProperty(ref _followers, value);
+			get => GetPropertyValue<CArray<gameEntityReference>>();
+			set => SetPropertyValue<CArray<gameEntityReference>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("vehicleLeaderRef")] 
 		public gameEntityReference VehicleLeaderRef
 		{
-			get => GetProperty(ref _vehicleLeaderRef);
-			set => SetProperty(ref _vehicleLeaderRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
+		}
+
+		public questAssignConvoy_NodeType()
+		{
+			Followers = new();
+			VehicleLeaderRef = new() { Names = new() };
 		}
 	}
 }

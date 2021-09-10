@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ChangeLoopCurveEvent : redEvent
 	{
-		private CFloat _loopTime;
-		private CName _loopCurve;
-
 		[Ordinal(0)] 
 		[RED("loopTime")] 
 		public CFloat LoopTime
 		{
-			get => GetProperty(ref _loopTime);
-			set => SetProperty(ref _loopTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("loopCurve")] 
 		public CName LoopCurve
 		{
-			get => GetProperty(ref _loopCurve);
-			set => SetProperty(ref _loopCurve, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 	}
 }

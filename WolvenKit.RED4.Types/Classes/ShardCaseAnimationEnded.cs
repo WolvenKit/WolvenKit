@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ShardCaseAnimationEnded : redEvent
 	{
-		private CWeakHandle<gameObject> _activator;
-		private gameItemID _item;
-		private CBool _read;
-
 		[Ordinal(0)] 
 		[RED("activator")] 
 		public CWeakHandle<gameObject> Activator
 		{
-			get => GetProperty(ref _activator);
-			set => SetProperty(ref _activator, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("item")] 
 		public gameItemID Item
 		{
-			get => GetProperty(ref _item);
-			set => SetProperty(ref _item, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("read")] 
 		public CBool Read_
 		{
-			get => GetProperty(ref _read);
-			set => SetProperty(ref _read, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public ShardCaseAnimationEnded()
+		{
+			Item = new();
 		}
 	}
 }

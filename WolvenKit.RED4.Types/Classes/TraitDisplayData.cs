@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TraitDisplayData : BasePerkDisplayData
 	{
-		private CEnum<gamedataTraitType> _type;
-
 		[Ordinal(10)] 
 		[RED("type")] 
 		public CEnum<gamedataTraitType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<gamedataTraitType>>();
+			set => SetPropertyValue<CEnum<gamedataTraitType>>(value);
 		}
 	}
 }

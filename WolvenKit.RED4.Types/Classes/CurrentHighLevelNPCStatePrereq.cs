@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CurrentHighLevelNPCStatePrereq : gameIScriptablePrereq
 	{
-		private CEnum<gamedataNPCHighLevelState> _valueToCheck;
-		private CBool _invert;
-
 		[Ordinal(0)] 
 		[RED("valueToCheck")] 
 		public CEnum<gamedataNPCHighLevelState> ValueToCheck
 		{
-			get => GetProperty(ref _valueToCheck);
-			set => SetProperty(ref _valueToCheck, value);
+			get => GetPropertyValue<CEnum<gamedataNPCHighLevelState>>();
+			set => SetPropertyValue<CEnum<gamedataNPCHighLevelState>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("invert")] 
 		public CBool Invert
 		{
-			get => GetProperty(ref _invert);
-			set => SetProperty(ref _invert, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

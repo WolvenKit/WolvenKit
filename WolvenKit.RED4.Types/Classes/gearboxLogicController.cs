@@ -5,50 +5,51 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gearboxLogicController : IVehicleModuleController
 	{
-		private inkImageWidgetReference _gearboxRImageWidget;
-		private inkImageWidgetReference _gearboxNImageWidget;
-		private inkImageWidgetReference _gearboxDImageWidget;
-		private CHandle<redCallbackObject> _gearboxBBConnectionId;
-		private CWeakHandle<gameIBlackboard> _vehBB;
-
 		[Ordinal(1)] 
 		[RED("gearboxRImageWidget")] 
 		public inkImageWidgetReference GearboxRImageWidget
 		{
-			get => GetProperty(ref _gearboxRImageWidget);
-			set => SetProperty(ref _gearboxRImageWidget, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("gearboxNImageWidget")] 
 		public inkImageWidgetReference GearboxNImageWidget
 		{
-			get => GetProperty(ref _gearboxNImageWidget);
-			set => SetProperty(ref _gearboxNImageWidget, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("gearboxDImageWidget")] 
 		public inkImageWidgetReference GearboxDImageWidget
 		{
-			get => GetProperty(ref _gearboxDImageWidget);
-			set => SetProperty(ref _gearboxDImageWidget, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("gearboxBBConnectionId")] 
 		public CHandle<redCallbackObject> GearboxBBConnectionId
 		{
-			get => GetProperty(ref _gearboxBBConnectionId);
-			set => SetProperty(ref _gearboxBBConnectionId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("vehBB")] 
 		public CWeakHandle<gameIBlackboard> VehBB
 		{
-			get => GetProperty(ref _vehBB);
-			set => SetProperty(ref _vehBB, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
+		public gearboxLogicController()
+		{
+			GearboxRImageWidget = new();
+			GearboxNImageWidget = new();
+			GearboxDImageWidget = new();
 		}
 	}
 }

@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioPlaylistMetadata : audioAudioMetadata
 	{
-		private CUInt8 _broadcastChannel;
-		private CArray<CName> _tracks;
-
 		[Ordinal(1)] 
 		[RED("broadcastChannel")] 
 		public CUInt8 BroadcastChannel
 		{
-			get => GetProperty(ref _broadcastChannel);
-			set => SetProperty(ref _broadcastChannel, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("tracks")] 
 		public CArray<CName> Tracks
 		{
-			get => GetProperty(ref _tracks);
-			set => SetProperty(ref _tracks, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
+		public audioPlaylistMetadata()
+		{
+			Tracks = new();
 		}
 	}
 }

@@ -5,194 +5,180 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiPopupsManager : gameuiWidgetGameController
 	{
-		private inkCompoundWidgetReference _bracketsContainer;
-		private inkCompoundWidgetReference _tutorialOverlayContainer;
-		private CName _bracketLibraryID;
-		private CWeakHandle<gameIBlackboard> _blackboard;
-		private CHandle<UIGameDataDef> _bbDefinition;
-		private CWeakHandle<gameJournalManager> _journalManager;
-		private CWeakHandle<gameIBlackboard> _uiSystemBB;
-		private CHandle<UI_SystemDef> _uiSystemBBDef;
-		private CHandle<redCallbackObject> _uiSystemId;
-		private CHandle<redCallbackObject> _isShownBbId;
-		private CHandle<redCallbackObject> _dataBbId;
-		private CBool _tutorialOnHold;
-		private gamePopupData _tutorialData;
-		private gamePopupSettings _tutorialSettings;
-		private CHandle<inkGameNotificationToken> _tutorialToken;
-		private CHandle<inkGameNotificationToken> _phoneMessageToken;
-		private CHandle<inkGameNotificationToken> _shardToken;
-		private CHandle<inkGameNotificationToken> _vehiclesManagerToken;
-		private CHandle<inkGameNotificationToken> _vehicleRadioToken;
-		private CHandle<inkGameNotificationToken> _codexToken;
-		private CHandle<inkGameNotificationToken> _ponrToken;
-
 		[Ordinal(2)] 
 		[RED("bracketsContainer")] 
 		public inkCompoundWidgetReference BracketsContainer
 		{
-			get => GetProperty(ref _bracketsContainer);
-			set => SetProperty(ref _bracketsContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("tutorialOverlayContainer")] 
 		public inkCompoundWidgetReference TutorialOverlayContainer
 		{
-			get => GetProperty(ref _tutorialOverlayContainer);
-			set => SetProperty(ref _tutorialOverlayContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("bracketLibraryID")] 
 		public CName BracketLibraryID
 		{
-			get => GetProperty(ref _bracketLibraryID);
-			set => SetProperty(ref _bracketLibraryID, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("blackboard")] 
 		public CWeakHandle<gameIBlackboard> Blackboard
 		{
-			get => GetProperty(ref _blackboard);
-			set => SetProperty(ref _blackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("bbDefinition")] 
 		public CHandle<UIGameDataDef> BbDefinition
 		{
-			get => GetProperty(ref _bbDefinition);
-			set => SetProperty(ref _bbDefinition, value);
+			get => GetPropertyValue<CHandle<UIGameDataDef>>();
+			set => SetPropertyValue<CHandle<UIGameDataDef>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("journalManager")] 
 		public CWeakHandle<gameJournalManager> JournalManager
 		{
-			get => GetProperty(ref _journalManager);
-			set => SetProperty(ref _journalManager, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalManager>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("uiSystemBB")] 
 		public CWeakHandle<gameIBlackboard> UiSystemBB
 		{
-			get => GetProperty(ref _uiSystemBB);
-			set => SetProperty(ref _uiSystemBB, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("uiSystemBBDef")] 
 		public CHandle<UI_SystemDef> UiSystemBBDef
 		{
-			get => GetProperty(ref _uiSystemBBDef);
-			set => SetProperty(ref _uiSystemBBDef, value);
+			get => GetPropertyValue<CHandle<UI_SystemDef>>();
+			set => SetPropertyValue<CHandle<UI_SystemDef>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("uiSystemId")] 
 		public CHandle<redCallbackObject> UiSystemId
 		{
-			get => GetProperty(ref _uiSystemId);
-			set => SetProperty(ref _uiSystemId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("isShownBbId")] 
 		public CHandle<redCallbackObject> IsShownBbId
 		{
-			get => GetProperty(ref _isShownBbId);
-			set => SetProperty(ref _isShownBbId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("dataBbId")] 
 		public CHandle<redCallbackObject> DataBbId
 		{
-			get => GetProperty(ref _dataBbId);
-			set => SetProperty(ref _dataBbId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("tutorialOnHold")] 
 		public CBool TutorialOnHold
 		{
-			get => GetProperty(ref _tutorialOnHold);
-			set => SetProperty(ref _tutorialOnHold, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("tutorialData")] 
 		public gamePopupData TutorialData
 		{
-			get => GetProperty(ref _tutorialData);
-			set => SetProperty(ref _tutorialData, value);
+			get => GetPropertyValue<gamePopupData>();
+			set => SetPropertyValue<gamePopupData>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("tutorialSettings")] 
 		public gamePopupSettings TutorialSettings
 		{
-			get => GetProperty(ref _tutorialSettings);
-			set => SetProperty(ref _tutorialSettings, value);
+			get => GetPropertyValue<gamePopupSettings>();
+			set => SetPropertyValue<gamePopupSettings>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("tutorialToken")] 
 		public CHandle<inkGameNotificationToken> TutorialToken
 		{
-			get => GetProperty(ref _tutorialToken);
-			set => SetProperty(ref _tutorialToken, value);
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("phoneMessageToken")] 
 		public CHandle<inkGameNotificationToken> PhoneMessageToken
 		{
-			get => GetProperty(ref _phoneMessageToken);
-			set => SetProperty(ref _phoneMessageToken, value);
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("shardToken")] 
 		public CHandle<inkGameNotificationToken> ShardToken
 		{
-			get => GetProperty(ref _shardToken);
-			set => SetProperty(ref _shardToken, value);
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("vehiclesManagerToken")] 
 		public CHandle<inkGameNotificationToken> VehiclesManagerToken
 		{
-			get => GetProperty(ref _vehiclesManagerToken);
-			set => SetProperty(ref _vehiclesManagerToken, value);
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("vehicleRadioToken")] 
 		public CHandle<inkGameNotificationToken> VehicleRadioToken
 		{
-			get => GetProperty(ref _vehicleRadioToken);
-			set => SetProperty(ref _vehicleRadioToken, value);
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("codexToken")] 
 		public CHandle<inkGameNotificationToken> CodexToken
 		{
-			get => GetProperty(ref _codexToken);
-			set => SetProperty(ref _codexToken, value);
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("ponrToken")] 
 		public CHandle<inkGameNotificationToken> PonrToken
 		{
-			get => GetProperty(ref _ponrToken);
-			set => SetProperty(ref _ponrToken, value);
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
+		}
+
+		public gameuiPopupsManager()
+		{
+			BracketsContainer = new();
+			TutorialOverlayContainer = new();
+			TutorialData = new() { VideoType = Enums.gameVideoType.Unknown };
+			TutorialSettings = new() { CloseAtInput = true, Position = Enums.gamePopupPosition.Center, Margin = new() };
 		}
 	}
 }

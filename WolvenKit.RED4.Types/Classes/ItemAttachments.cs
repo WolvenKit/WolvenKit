@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ItemAttachments : RedBaseClass
 	{
-		private gameItemID _itemID;
-		private TweakDBID _attachmentSlotID;
-
 		[Ordinal(0)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get => GetProperty(ref _itemID);
-			set => SetProperty(ref _itemID, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("attachmentSlotID")] 
 		public TweakDBID AttachmentSlotID
 		{
-			get => GetProperty(ref _attachmentSlotID);
-			set => SetProperty(ref _attachmentSlotID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
+		public ItemAttachments()
+		{
+			ItemID = new();
 		}
 	}
 }

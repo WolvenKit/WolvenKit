@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorConditionDefinition : AIbehaviorBehaviorComponentDefinition
 	{
-		private CBool _isInverted;
-
 		[Ordinal(0)] 
 		[RED("isInverted")] 
 		public CBool IsInverted
 		{
-			get => GetProperty(ref _isInverted);
-			set => SetProperty(ref _isInverted, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

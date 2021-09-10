@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class effectTrackItemWeaponPlaneBlur : effectTrackItem
 	{
-		private effectEffectParameterEvaluatorFloat _farPlaneMultiplier;
-		private CBool _override;
-
 		[Ordinal(3)] 
 		[RED("farPlaneMultiplier")] 
 		public effectEffectParameterEvaluatorFloat FarPlaneMultiplier
 		{
-			get => GetProperty(ref _farPlaneMultiplier);
-			set => SetProperty(ref _farPlaneMultiplier, value);
+			get => GetPropertyValue<effectEffectParameterEvaluatorFloat>();
+			set => SetPropertyValue<effectEffectParameterEvaluatorFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("override")] 
 		public CBool Override
 		{
-			get => GetProperty(ref _override);
-			set => SetProperty(ref _override, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public effectTrackItemWeaponPlaneBlur()
+		{
+			TimeDuration = 1.000000F;
+			FarPlaneMultiplier = new();
 		}
 	}
 }

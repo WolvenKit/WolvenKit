@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CraftBook : IScriptable
 	{
-		private CArray<ItemRecipe> _knownRecipes;
-		private CArray<TweakDBID> _newRecipes;
-		private CWeakHandle<gameObject> _owner;
-
 		[Ordinal(0)] 
 		[RED("knownRecipes")] 
 		public CArray<ItemRecipe> KnownRecipes
 		{
-			get => GetProperty(ref _knownRecipes);
-			set => SetProperty(ref _knownRecipes, value);
+			get => GetPropertyValue<CArray<ItemRecipe>>();
+			set => SetPropertyValue<CArray<ItemRecipe>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("newRecipes")] 
 		public CArray<TweakDBID> NewRecipes
 		{
-			get => GetProperty(ref _newRecipes);
-			set => SetProperty(ref _newRecipes, value);
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("owner")] 
 		public CWeakHandle<gameObject> Owner
 		{
-			get => GetProperty(ref _owner);
-			set => SetProperty(ref _owner, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
+		}
+
+		public CraftBook()
+		{
+			KnownRecipes = new();
+			NewRecipes = new();
 		}
 	}
 }

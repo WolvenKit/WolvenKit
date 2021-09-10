@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CMaterialParameterTextureArray : CMaterialParameter
 	{
-		private CResourceReference<ITexture> _texture;
-
 		[Ordinal(2)] 
 		[RED("texture")] 
 		public CResourceReference<ITexture> Texture
 		{
-			get => GetProperty(ref _texture);
-			set => SetProperty(ref _texture, value);
+			get => GetPropertyValue<CResourceReference<ITexture>>();
+			set => SetPropertyValue<CResourceReference<ITexture>>(value);
 		}
 	}
 }

@@ -5,37 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorLimiterNodeDefinition : AIbehaviorDecoratorNodeDefinition
 	{
-		private CUInt32 _activationLimitPerFrame;
-		private CBool _delayChildActivation;
-		private CBool _delayChildActivationIfAttaching;
-
 		[Ordinal(1)] 
 		[RED("activationLimitPerFrame")] 
 		public CUInt32 ActivationLimitPerFrame
 		{
-			get => GetProperty(ref _activationLimitPerFrame);
-			set => SetProperty(ref _activationLimitPerFrame, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("delayChildActivation")] 
 		public CBool DelayChildActivation
 		{
-			get => GetProperty(ref _delayChildActivation);
-			set => SetProperty(ref _delayChildActivation, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("delayChildActivationIfAttaching")] 
 		public CBool DelayChildActivationIfAttaching
 		{
-			get => GetProperty(ref _delayChildActivationIfAttaching);
-			set => SetProperty(ref _delayChildActivationIfAttaching, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public AIbehaviorLimiterNodeDefinition()
 		{
-			_activationLimitPerFrame = 1;
+			ActivationLimitPerFrame = 1;
 		}
 	}
 }

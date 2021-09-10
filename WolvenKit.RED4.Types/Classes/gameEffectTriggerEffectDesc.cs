@@ -5,64 +5,58 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameEffectTriggerEffectDesc : ISerializable
 	{
-		private CResourceAsyncReference<worldEffect> _effect;
-		private CEnum<gameEffectTriggerPositioningType> _positionType;
-		private CEnum<gameEffectTriggerRotationType> _rotationType;
-		private Vector3 _offset;
-		private CUInt32 _playFromHour;
-		private CUInt32 _playTillHour;
-
 		[Ordinal(0)] 
 		[RED("effect")] 
 		public CResourceAsyncReference<worldEffect> Effect
 		{
-			get => GetProperty(ref _effect);
-			set => SetProperty(ref _effect, value);
+			get => GetPropertyValue<CResourceAsyncReference<worldEffect>>();
+			set => SetPropertyValue<CResourceAsyncReference<worldEffect>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("positionType")] 
 		public CEnum<gameEffectTriggerPositioningType> PositionType
 		{
-			get => GetProperty(ref _positionType);
-			set => SetProperty(ref _positionType, value);
+			get => GetPropertyValue<CEnum<gameEffectTriggerPositioningType>>();
+			set => SetPropertyValue<CEnum<gameEffectTriggerPositioningType>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("rotationType")] 
 		public CEnum<gameEffectTriggerRotationType> RotationType
 		{
-			get => GetProperty(ref _rotationType);
-			set => SetProperty(ref _rotationType, value);
+			get => GetPropertyValue<CEnum<gameEffectTriggerRotationType>>();
+			set => SetPropertyValue<CEnum<gameEffectTriggerRotationType>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("offset")] 
 		public Vector3 Offset
 		{
-			get => GetProperty(ref _offset);
-			set => SetProperty(ref _offset, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("playFromHour")] 
 		public CUInt32 PlayFromHour
 		{
-			get => GetProperty(ref _playFromHour);
-			set => SetProperty(ref _playFromHour, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("playTillHour")] 
 		public CUInt32 PlayTillHour
 		{
-			get => GetProperty(ref _playTillHour);
-			set => SetProperty(ref _playTillHour, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		public gameEffectTriggerEffectDesc()
 		{
-			_playTillHour = 24;
+			Offset = new();
+			PlayTillHour = 24;
 		}
 	}
 }

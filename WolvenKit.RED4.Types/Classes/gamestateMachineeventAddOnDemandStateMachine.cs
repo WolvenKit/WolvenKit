@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamestateMachineeventAddOnDemandStateMachine : redEvent
 	{
-		private CName _stateMachineName;
-		private gamestateMachineStateMachineInstanceData _instanceData;
-		private CBool _tryHotSwap;
-		private CWeakHandle<gameObject> _owner;
-
 		[Ordinal(0)] 
 		[RED("stateMachineName")] 
 		public CName StateMachineName
 		{
-			get => GetProperty(ref _stateMachineName);
-			set => SetProperty(ref _stateMachineName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("instanceData")] 
 		public gamestateMachineStateMachineInstanceData InstanceData
 		{
-			get => GetProperty(ref _instanceData);
-			set => SetProperty(ref _instanceData, value);
+			get => GetPropertyValue<gamestateMachineStateMachineInstanceData>();
+			set => SetPropertyValue<gamestateMachineStateMachineInstanceData>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("tryHotSwap")] 
 		public CBool TryHotSwap
 		{
-			get => GetProperty(ref _tryHotSwap);
-			set => SetProperty(ref _tryHotSwap, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("owner")] 
 		public CWeakHandle<gameObject> Owner
 		{
-			get => GetProperty(ref _owner);
-			set => SetProperty(ref _owner, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
+		}
+
+		public gamestateMachineeventAddOnDemandStateMachine()
+		{
+			InstanceData = new();
 		}
 	}
 }

@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entHitRepresentationDataParameter : entEntityParameter
 	{
-		private CArray<gameHitRepresentationOverride> _hitRepresentationOverrides;
-
 		[Ordinal(0)] 
 		[RED("hitRepresentationOverrides")] 
 		public CArray<gameHitRepresentationOverride> HitRepresentationOverrides
 		{
-			get => GetProperty(ref _hitRepresentationOverrides);
-			set => SetProperty(ref _hitRepresentationOverrides, value);
+			get => GetPropertyValue<CArray<gameHitRepresentationOverride>>();
+			set => SetPropertyValue<CArray<gameHitRepresentationOverride>>(value);
+		}
+
+		public entHitRepresentationDataParameter()
+		{
+			HitRepresentationOverrides = new();
 		}
 	}
 }

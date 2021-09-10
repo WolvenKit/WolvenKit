@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ModifyNPCTelemetryVariable : gamePlayerScriptableSystemRequest
 	{
-		private CEnum<ENPCTelemetryData> _dataTrackingFact;
-		private CInt32 _value;
-
 		[Ordinal(1)] 
 		[RED("dataTrackingFact")] 
 		public CEnum<ENPCTelemetryData> DataTrackingFact
 		{
-			get => GetProperty(ref _dataTrackingFact);
-			set => SetProperty(ref _dataTrackingFact, value);
+			get => GetPropertyValue<CEnum<ENPCTelemetryData>>();
+			set => SetPropertyValue<CEnum<ENPCTelemetryData>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("value")] 
 		public CInt32 Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		public ModifyNPCTelemetryVariable()
 		{
-			_value = 1;
+			Value = 1;
 		}
 	}
 }

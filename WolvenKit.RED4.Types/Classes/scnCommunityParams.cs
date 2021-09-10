@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnCommunityParams : RedBaseClass
 	{
-		private NodeRef _reference;
-		private CName _entryName;
-		private CBool _forceMaxVisibility;
-
 		[Ordinal(0)] 
 		[RED("reference")] 
 		public NodeRef Reference
 		{
-			get => GetProperty(ref _reference);
-			set => SetProperty(ref _reference, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("entryName")] 
 		public CName EntryName
 		{
-			get => GetProperty(ref _entryName);
-			set => SetProperty(ref _entryName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("forceMaxVisibility")] 
 		public CBool ForceMaxVisibility
 		{
-			get => GetProperty(ref _forceMaxVisibility);
-			set => SetProperty(ref _forceMaxVisibility, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TestMappinScriptData : gamemappinsMappinScriptData
 	{
-		private CInt32 _test;
-
 		[Ordinal(1)] 
 		[RED("test")] 
 		public CInt32 Test
 		{
-			get => GetProperty(ref _test);
-			set => SetProperty(ref _test, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

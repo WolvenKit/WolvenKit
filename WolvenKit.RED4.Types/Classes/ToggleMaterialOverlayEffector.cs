@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ToggleMaterialOverlayEffector : gameEffector
 	{
-		private CString _effectPath;
-		private CName _effectTag;
-		private CHandle<gameEffectInstance> _effectInstance;
-		private CWeakHandle<gameObject> _owner;
-
 		[Ordinal(0)] 
 		[RED("effectPath")] 
 		public CString EffectPath
 		{
-			get => GetProperty(ref _effectPath);
-			set => SetProperty(ref _effectPath, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("effectTag")] 
 		public CName EffectTag
 		{
-			get => GetProperty(ref _effectTag);
-			set => SetProperty(ref _effectTag, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("effectInstance")] 
 		public CHandle<gameEffectInstance> EffectInstance
 		{
-			get => GetProperty(ref _effectInstance);
-			set => SetProperty(ref _effectInstance, value);
+			get => GetPropertyValue<CHandle<gameEffectInstance>>();
+			set => SetPropertyValue<CHandle<gameEffectInstance>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("owner")] 
 		public CWeakHandle<gameObject> Owner
 		{
-			get => GetProperty(ref _owner);
-			set => SetProperty(ref _owner, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 	}
 }

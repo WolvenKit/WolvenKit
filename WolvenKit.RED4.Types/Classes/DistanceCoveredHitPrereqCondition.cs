@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DistanceCoveredHitPrereqCondition : BaseHitPrereqCondition
 	{
-		private CFloat _distanceRequired;
-		private CEnum<EComparisonType> _comparisonType;
-
 		[Ordinal(1)] 
 		[RED("distanceRequired")] 
 		public CFloat DistanceRequired
 		{
-			get => GetProperty(ref _distanceRequired);
-			set => SetProperty(ref _distanceRequired, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("comparisonType")] 
 		public CEnum<EComparisonType> ComparisonType
 		{
-			get => GetProperty(ref _comparisonType);
-			set => SetProperty(ref _comparisonType, value);
+			get => GetPropertyValue<CEnum<EComparisonType>>();
+			set => SetPropertyValue<CEnum<EComparisonType>>(value);
 		}
 	}
 }

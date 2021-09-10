@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ScannerBountySystem : ScannerChunk
 	{
-		private BountyUI _bounty;
-
 		[Ordinal(0)] 
 		[RED("bounty")] 
 		public BountyUI Bounty
 		{
-			get => GetProperty(ref _bounty);
-			set => SetProperty(ref _bounty, value);
+			get => GetPropertyValue<BountyUI>();
+			set => SetPropertyValue<BountyUI>(value);
+		}
+
+		public ScannerBountySystem()
+		{
+			Bounty = new() { Transgressions = new() };
 		}
 	}
 }

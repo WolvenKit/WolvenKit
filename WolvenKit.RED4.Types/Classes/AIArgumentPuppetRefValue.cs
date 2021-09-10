@@ -5,28 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIArgumentPuppetRefValue : AIArgumentDefinition
 	{
-		private CEnum<AIArgumentType> _type;
-		private gameEntityReference _defaultValue;
-
 		[Ordinal(3)] 
 		[RED("type")] 
 		public CEnum<AIArgumentType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<AIArgumentType>>();
+			set => SetPropertyValue<CEnum<AIArgumentType>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("defaultValue")] 
 		public gameEntityReference DefaultValue
 		{
-			get => GetProperty(ref _defaultValue);
-			set => SetProperty(ref _defaultValue, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		public AIArgumentPuppetRefValue()
 		{
-			_type = new() { Value = Enums.AIArgumentType.PuppetRef };
+			Type = Enums.AIArgumentType.PuppetRef;
+			DefaultValue = new() { Names = new() };
 		}
 	}
 }

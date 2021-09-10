@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PlayVFXEffector : gameEffector
 	{
-		private CName _vfxName;
-		private CBool _startOnUninitialize;
-		private CBool _fireAndForget;
-		private CWeakHandle<gameObject> _owner;
-
 		[Ordinal(0)] 
 		[RED("vfxName")] 
 		public CName VfxName
 		{
-			get => GetProperty(ref _vfxName);
-			set => SetProperty(ref _vfxName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("startOnUninitialize")] 
 		public CBool StartOnUninitialize
 		{
-			get => GetProperty(ref _startOnUninitialize);
-			set => SetProperty(ref _startOnUninitialize, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("fireAndForget")] 
 		public CBool FireAndForget
 		{
-			get => GetProperty(ref _fireAndForget);
-			set => SetProperty(ref _fireAndForget, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("owner")] 
 		public CWeakHandle<gameObject> Owner
 		{
-			get => GetProperty(ref _owner);
-			set => SetProperty(ref _owner, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 	}
 }

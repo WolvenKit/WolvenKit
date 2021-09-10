@@ -5,38 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamemappinsDistrictEnteredEvent : gameScriptableSystemRequest
 	{
-		private CBool _entered;
-		private CBool _sendNewLocationNotification;
-		private TweakDBID _district;
-
 		[Ordinal(0)] 
 		[RED("entered")] 
 		public CBool Entered
 		{
-			get => GetProperty(ref _entered);
-			set => SetProperty(ref _entered, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("sendNewLocationNotification")] 
 		public CBool SendNewLocationNotification
 		{
-			get => GetProperty(ref _sendNewLocationNotification);
-			set => SetProperty(ref _sendNewLocationNotification, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("district")] 
 		public TweakDBID District
 		{
-			get => GetProperty(ref _district);
-			set => SetProperty(ref _district, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		public gamemappinsDistrictEnteredEvent()
 		{
-			_entered = true;
-			_sendNewLocationNotification = true;
+			Entered = true;
+			SendNewLocationNotification = true;
 		}
 	}
 }

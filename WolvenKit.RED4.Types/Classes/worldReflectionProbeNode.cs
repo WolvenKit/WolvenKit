@@ -5,256 +5,232 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldReflectionProbeNode : worldNode
 	{
-		private CResourceAsyncReference<CReflectionProbeDataResource> _probeDataRef;
-		private CUInt8 _priority;
-		private CBool _globalProbe;
-		private CBool _boxProjection;
-		private CEnum<envUtilsNeighborMode> _neighborMode;
-		private Vector3 _edgeScale;
-		private CEnum<rendLightChannel> _lightChannels;
-		private CFloat _emissiveScale;
-		private CFloat _reflectionDimming;
-		private HDRColor _simpleFogColor;
-		private CFloat _simpleFogDensity;
-		private CFloat _skyScale;
-		private CBool _allInShadow;
-		private CBool _hideSkyColor;
-		private CBool _volFogAmbient;
-		private CInt8 _brightnessEVClamp;
-		private CEnum<envUtilsReflectionProbeAmbientContributionMode> _ambientMode;
-		private Vector3 _captureOffset;
-		private CFloat _nearClipDistance;
-		private CFloat _farClipDistance;
-		private CEnum<rendLightChannel> _volumeChannels;
-		private CUInt8 _blendRange;
-		private CFloat _streamingDistance;
-		private CFloat _streamingHeight;
-		private CBool _subScene;
-		private CBool _noFadeBlend;
-
 		[Ordinal(4)] 
 		[RED("probeDataRef")] 
 		public CResourceAsyncReference<CReflectionProbeDataResource> ProbeDataRef
 		{
-			get => GetProperty(ref _probeDataRef);
-			set => SetProperty(ref _probeDataRef, value);
+			get => GetPropertyValue<CResourceAsyncReference<CReflectionProbeDataResource>>();
+			set => SetPropertyValue<CResourceAsyncReference<CReflectionProbeDataResource>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("priority")] 
 		public CUInt8 Priority
 		{
-			get => GetProperty(ref _priority);
-			set => SetProperty(ref _priority, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("globalProbe")] 
 		public CBool GlobalProbe
 		{
-			get => GetProperty(ref _globalProbe);
-			set => SetProperty(ref _globalProbe, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("boxProjection")] 
 		public CBool BoxProjection
 		{
-			get => GetProperty(ref _boxProjection);
-			set => SetProperty(ref _boxProjection, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("neighborMode")] 
 		public CEnum<envUtilsNeighborMode> NeighborMode
 		{
-			get => GetProperty(ref _neighborMode);
-			set => SetProperty(ref _neighborMode, value);
+			get => GetPropertyValue<CEnum<envUtilsNeighborMode>>();
+			set => SetPropertyValue<CEnum<envUtilsNeighborMode>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("edgeScale")] 
 		public Vector3 EdgeScale
 		{
-			get => GetProperty(ref _edgeScale);
-			set => SetProperty(ref _edgeScale, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("lightChannels")] 
-		public CEnum<rendLightChannel> LightChannels
+		public CBitField<rendLightChannel> LightChannels
 		{
-			get => GetProperty(ref _lightChannels);
-			set => SetProperty(ref _lightChannels, value);
+			get => GetPropertyValue<CBitField<rendLightChannel>>();
+			set => SetPropertyValue<CBitField<rendLightChannel>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("emissiveScale")] 
 		public CFloat EmissiveScale
 		{
-			get => GetProperty(ref _emissiveScale);
-			set => SetProperty(ref _emissiveScale, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("reflectionDimming")] 
 		public CFloat ReflectionDimming
 		{
-			get => GetProperty(ref _reflectionDimming);
-			set => SetProperty(ref _reflectionDimming, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("simpleFogColor")] 
 		public HDRColor SimpleFogColor
 		{
-			get => GetProperty(ref _simpleFogColor);
-			set => SetProperty(ref _simpleFogColor, value);
+			get => GetPropertyValue<HDRColor>();
+			set => SetPropertyValue<HDRColor>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("simpleFogDensity")] 
 		public CFloat SimpleFogDensity
 		{
-			get => GetProperty(ref _simpleFogDensity);
-			set => SetProperty(ref _simpleFogDensity, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("skyScale")] 
 		public CFloat SkyScale
 		{
-			get => GetProperty(ref _skyScale);
-			set => SetProperty(ref _skyScale, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("allInShadow")] 
 		public CBool AllInShadow
 		{
-			get => GetProperty(ref _allInShadow);
-			set => SetProperty(ref _allInShadow, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("hideSkyColor")] 
 		public CBool HideSkyColor
 		{
-			get => GetProperty(ref _hideSkyColor);
-			set => SetProperty(ref _hideSkyColor, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("volFogAmbient")] 
 		public CBool VolFogAmbient
 		{
-			get => GetProperty(ref _volFogAmbient);
-			set => SetProperty(ref _volFogAmbient, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("brightnessEVClamp")] 
 		public CInt8 BrightnessEVClamp
 		{
-			get => GetProperty(ref _brightnessEVClamp);
-			set => SetProperty(ref _brightnessEVClamp, value);
+			get => GetPropertyValue<CInt8>();
+			set => SetPropertyValue<CInt8>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("ambientMode")] 
 		public CEnum<envUtilsReflectionProbeAmbientContributionMode> AmbientMode
 		{
-			get => GetProperty(ref _ambientMode);
-			set => SetProperty(ref _ambientMode, value);
+			get => GetPropertyValue<CEnum<envUtilsReflectionProbeAmbientContributionMode>>();
+			set => SetPropertyValue<CEnum<envUtilsReflectionProbeAmbientContributionMode>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("captureOffset")] 
 		public Vector3 CaptureOffset
 		{
-			get => GetProperty(ref _captureOffset);
-			set => SetProperty(ref _captureOffset, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("nearClipDistance")] 
 		public CFloat NearClipDistance
 		{
-			get => GetProperty(ref _nearClipDistance);
-			set => SetProperty(ref _nearClipDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("farClipDistance")] 
 		public CFloat FarClipDistance
 		{
-			get => GetProperty(ref _farClipDistance);
-			set => SetProperty(ref _farClipDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("volumeChannels")] 
-		public CEnum<rendLightChannel> VolumeChannels
+		public CBitField<rendLightChannel> VolumeChannels
 		{
-			get => GetProperty(ref _volumeChannels);
-			set => SetProperty(ref _volumeChannels, value);
+			get => GetPropertyValue<CBitField<rendLightChannel>>();
+			set => SetPropertyValue<CBitField<rendLightChannel>>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("blendRange")] 
 		public CUInt8 BlendRange
 		{
-			get => GetProperty(ref _blendRange);
-			set => SetProperty(ref _blendRange, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("streamingDistance")] 
 		public CFloat StreamingDistance
 		{
-			get => GetProperty(ref _streamingDistance);
-			set => SetProperty(ref _streamingDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("streamingHeight")] 
 		public CFloat StreamingHeight
 		{
-			get => GetProperty(ref _streamingHeight);
-			set => SetProperty(ref _streamingHeight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("subScene")] 
 		public CBool SubScene
 		{
-			get => GetProperty(ref _subScene);
-			set => SetProperty(ref _subScene, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("noFadeBlend")] 
 		public CBool NoFadeBlend
 		{
-			get => GetProperty(ref _noFadeBlend);
-			set => SetProperty(ref _noFadeBlend, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public worldReflectionProbeNode()
 		{
-			_priority = 2;
-			_boxProjection = true;
-			_neighborMode = new() { Value = Enums.envUtilsNeighborMode.eONLY_SELF };
-			_emissiveScale = 1.000000F;
-			_reflectionDimming = 1.000000F;
-			_skyScale = 1.000000F;
-			_volFogAmbient = true;
-			_brightnessEVClamp = 8;
-			_nearClipDistance = 0.010000F;
-			_farClipDistance = 4000.000000F;
-			_blendRange = 20;
-			_streamingDistance = 64.000000F;
-			_streamingHeight = -1.000000F;
+			Priority = 2;
+			BoxProjection = true;
+			NeighborMode = Enums.envUtilsNeighborMode.eONLY_SELF;
+			EdgeScale = new() { X = 0.980000F, Y = 0.980000F, Z = 0.980000F };
+			EmissiveScale = 1.000000F;
+			ReflectionDimming = 1.000000F;
+			SimpleFogColor = new() { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Alpha = 1.000000F };
+			SkyScale = 1.000000F;
+			VolFogAmbient = true;
+			BrightnessEVClamp = 8;
+			CaptureOffset = new();
+			NearClipDistance = 0.010000F;
+			FarClipDistance = 4000.000000F;
+			BlendRange = 20;
+			StreamingDistance = 64.000000F;
+			StreamingHeight = -1.000000F;
 		}
 	}
 }

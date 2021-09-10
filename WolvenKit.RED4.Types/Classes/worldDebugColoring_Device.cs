@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldDebugColoring_Device : worldEditorDebugColoringSettings
 	{
-		private CColor _defaultColor;
-
 		[Ordinal(0)] 
 		[RED("defaultColor")] 
 		public CColor DefaultColor
 		{
-			get => GetProperty(ref _defaultColor);
-			set => SetProperty(ref _defaultColor, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
+		}
+
+		public worldDebugColoring_Device()
+		{
+			DefaultColor = new();
 		}
 	}
 }

@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WallScreenControllerPS : TVControllerPS
 	{
-		private CBool _isShown;
-
 		[Ordinal(114)] 
 		[RED("isShown")] 
 		public CBool IsShown
 		{
-			get => GetProperty(ref _isShown);
-			set => SetProperty(ref _isShown, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public WallScreenControllerPS()
+		{
+			TweakDBRecord = new() { Value = 78369534372 };
+			TweakDBDescriptionRecord = new() { Value = 131860853415 };
 		}
 	}
 }

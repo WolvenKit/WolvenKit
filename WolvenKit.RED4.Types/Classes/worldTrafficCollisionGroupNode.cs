@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldTrafficCollisionGroupNode : worldNode
 	{
-		private CArray<worldCollisionGroupEntry> _collisionEntries;
-
 		[Ordinal(4)] 
 		[RED("collisionEntries")] 
 		public CArray<worldCollisionGroupEntry> CollisionEntries
 		{
-			get => GetProperty(ref _collisionEntries);
-			set => SetProperty(ref _collisionEntries, value);
+			get => GetPropertyValue<CArray<worldCollisionGroupEntry>>();
+			set => SetPropertyValue<CArray<worldCollisionGroupEntry>>(value);
+		}
+
+		public worldTrafficCollisionGroupNode()
+		{
+			CollisionEntries = new();
 		}
 	}
 }

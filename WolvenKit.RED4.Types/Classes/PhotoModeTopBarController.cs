@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PhotoModeTopBarController : inkRadioGroupController
 	{
-		private CArray<inkWidgetReference> _photoModeTogglesArray;
-
 		[Ordinal(5)] 
 		[RED("photoModeTogglesArray")] 
 		public CArray<inkWidgetReference> PhotoModeTogglesArray
 		{
-			get => GetProperty(ref _photoModeTogglesArray);
-			set => SetProperty(ref _photoModeTogglesArray, value);
+			get => GetPropertyValue<CArray<inkWidgetReference>>();
+			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
+		}
+
+		public PhotoModeTopBarController()
+		{
+			PhotoModeTogglesArray = new();
 		}
 	}
 }

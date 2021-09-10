@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnChoiceNodeNsTimedParams : ISerializable
 	{
-		private CEnum<scnChoiceNodeNsTimedAction> _action;
-		private CBool _timeLimitedFinish;
-		private scnSceneTime _duration;
-
 		[Ordinal(0)] 
 		[RED("action")] 
 		public CEnum<scnChoiceNodeNsTimedAction> Action
 		{
-			get => GetProperty(ref _action);
-			set => SetProperty(ref _action, value);
+			get => GetPropertyValue<CEnum<scnChoiceNodeNsTimedAction>>();
+			set => SetPropertyValue<CEnum<scnChoiceNodeNsTimedAction>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("timeLimitedFinish")] 
 		public CBool TimeLimitedFinish
 		{
-			get => GetProperty(ref _timeLimitedFinish);
-			set => SetProperty(ref _timeLimitedFinish, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("duration")] 
 		public scnSceneTime Duration
 		{
-			get => GetProperty(ref _duration);
-			set => SetProperty(ref _duration, value);
+			get => GetPropertyValue<scnSceneTime>();
+			set => SetPropertyValue<scnSceneTime>(value);
+		}
+
+		public scnChoiceNodeNsTimedParams()
+		{
+			Duration = new();
 		}
 	}
 }

@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamestateMachineeventPostponedParameterScriptable : gamestateMachineeventPostponedParameterBase
 	{
-		private CHandle<IScriptable> _value;
-
 		[Ordinal(2)] 
 		[RED("value")] 
 		public CHandle<IScriptable> Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<CHandle<IScriptable>>();
+			set => SetPropertyValue<CHandle<IScriptable>>(value);
 		}
 	}
 }

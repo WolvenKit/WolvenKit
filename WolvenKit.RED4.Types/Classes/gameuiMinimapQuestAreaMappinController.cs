@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiMinimapQuestAreaMappinController : gameuiBaseMinimapMappinController
 	{
-		private inkShapeWidgetReference _areaShapeWidget;
-
 		[Ordinal(14)] 
 		[RED("areaShapeWidget")] 
 		public inkShapeWidgetReference AreaShapeWidget
 		{
-			get => GetProperty(ref _areaShapeWidget);
-			set => SetProperty(ref _areaShapeWidget, value);
+			get => GetPropertyValue<inkShapeWidgetReference>();
+			set => SetPropertyValue<inkShapeWidgetReference>(value);
+		}
+
+		public gameuiMinimapQuestAreaMappinController()
+		{
+			AreaShapeWidget = new();
 		}
 	}
 }

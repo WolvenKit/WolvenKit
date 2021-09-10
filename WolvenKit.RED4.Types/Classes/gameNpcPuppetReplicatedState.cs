@@ -5,14 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameNpcPuppetReplicatedState : gamePuppetReplicatedState
 	{
-		private gameWeaponsReplicatedState _weaponStates;
-
 		[Ordinal(12)] 
 		[RED("weaponStates")] 
 		public gameWeaponsReplicatedState WeaponStates
 		{
-			get => GetProperty(ref _weaponStates);
-			set => SetProperty(ref _weaponStates, value);
+			get => GetPropertyValue<gameWeaponsReplicatedState>();
+			set => SetPropertyValue<gameWeaponsReplicatedState>(value);
+		}
+
+		public gameNpcPuppetReplicatedState()
+		{
+			InitialOrientation = new();
+			InitialLocation = new();
+			ActionsBuffer = new();
+			Health = -1.000000F;
+			Armor = -1.000000F;
+			CPOMissionVotedHistory = new();
+			AnimEventsState = new() { Items = new(), LastAppliedActionsTime = new() };
+			EntityEventsState = new() { Items = new(), LastAppliedActionsTime = new() };
+			WeaponStates = new();
 		}
 	}
 }

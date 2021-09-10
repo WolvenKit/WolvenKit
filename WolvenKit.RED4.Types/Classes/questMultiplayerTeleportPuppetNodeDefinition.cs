@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questMultiplayerTeleportPuppetNodeDefinition : questSignalStoppingNodeDefinition
 	{
-		private questMultiplayerTeleportPuppetParams _params;
-
 		[Ordinal(2)] 
 		[RED("params")] 
 		public questMultiplayerTeleportPuppetParams Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<questMultiplayerTeleportPuppetParams>();
+			set => SetPropertyValue<questMultiplayerTeleportPuppetParams>(value);
+		}
+
+		public questMultiplayerTeleportPuppetNodeDefinition()
+		{
+			Sockets = new();
+			Id = 65535;
+			Params = new() { DestinationRef = new() { Names = new() }, DestinationOffset = new(), AreaNodeTriggerRef = new() { Names = new() } };
 		}
 	}
 }

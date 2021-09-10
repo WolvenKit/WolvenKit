@@ -5,29 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VendingMachineSFX : RedBaseClass
 	{
-		private CName _glitchingStart;
-		private CName _glitchingStop;
-
 		[Ordinal(0)] 
 		[RED("glitchingStart")] 
 		public CName GlitchingStart
 		{
-			get => GetProperty(ref _glitchingStart);
-			set => SetProperty(ref _glitchingStart, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("glitchingStop")] 
 		public CName GlitchingStop
 		{
-			get => GetProperty(ref _glitchingStop);
-			set => SetProperty(ref _glitchingStop, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public VendingMachineSFX()
 		{
-			_glitchingStart = "amb_int_custom_megabuilding_01_adverts_interactive_nicola_01_select_q110";
-			_glitchingStop = "amb_int_custom_megabuilding_01_adverts_interactive_nicola_01_select_q110_stop";
+			GlitchingStart = "amb_int_custom_megabuilding_01_adverts_interactive_nicola_01_select_q110";
+			GlitchingStop = "amb_int_custom_megabuilding_01_adverts_interactive_nicola_01_select_q110_stop";
 		}
 	}
 }

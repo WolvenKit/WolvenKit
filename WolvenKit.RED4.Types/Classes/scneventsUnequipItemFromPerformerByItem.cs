@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scneventsUnequipItemFromPerformerByItem : scnSceneEvent
 	{
-		private scnPerformerId _performerId;
-		private TweakDBID _itemId;
-		private CBool _restoreGameplayItem;
-
 		[Ordinal(6)] 
 		[RED("performerId")] 
 		public scnPerformerId PerformerId
 		{
-			get => GetProperty(ref _performerId);
-			set => SetProperty(ref _performerId, value);
+			get => GetPropertyValue<scnPerformerId>();
+			set => SetPropertyValue<scnPerformerId>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("itemId")] 
 		public TweakDBID ItemId
 		{
-			get => GetProperty(ref _itemId);
-			set => SetProperty(ref _itemId, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("restoreGameplayItem")] 
 		public CBool RestoreGameplayItem
 		{
-			get => GetProperty(ref _restoreGameplayItem);
-			set => SetProperty(ref _restoreGameplayItem, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public scneventsUnequipItemFromPerformerByItem()
+		{
+			Id = new() { Id = 18446744073709551615 };
+			PerformerId = new() { Id = 4294967040 };
 		}
 	}
 }

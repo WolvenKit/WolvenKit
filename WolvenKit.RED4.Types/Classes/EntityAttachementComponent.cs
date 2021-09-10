@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class EntityAttachementComponent : gameScriptableComponent
 	{
-		private EntityAttachementData _parentAttachementData;
-
 		[Ordinal(5)] 
 		[RED("parentAttachementData")] 
 		public EntityAttachementData ParentAttachementData
 		{
-			get => GetProperty(ref _parentAttachementData);
-			set => SetProperty(ref _parentAttachementData, value);
+			get => GetPropertyValue<EntityAttachementData>();
+			set => SetPropertyValue<EntityAttachementData>(value);
+		}
+
+		public EntityAttachementComponent()
+		{
+			ParentAttachementData = new() { AttachementComponentName = "EntityAttachementComponent", OwnerID = new() };
 		}
 	}
 }

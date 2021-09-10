@@ -5,64 +5,58 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RoadBlock : InteractiveDevice
 	{
-		private CFloat _openingSpeed;
-		private CHandle<entAnimationControllerComponent> _animationController;
-		private CHandle<AIOffMeshConnectionComponent> _offMeshConnection;
-		private CHandle<AnimFeature_RoadBlock> _animFeature;
-		private CEnum<EAnimationType> _animationType;
-		private CBool _forceEnableLink;
-
 		[Ordinal(97)] 
 		[RED("openingSpeed")] 
 		public CFloat OpeningSpeed
 		{
-			get => GetProperty(ref _openingSpeed);
-			set => SetProperty(ref _openingSpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(98)] 
 		[RED("animationController")] 
 		public CHandle<entAnimationControllerComponent> AnimationController
 		{
-			get => GetProperty(ref _animationController);
-			set => SetProperty(ref _animationController, value);
+			get => GetPropertyValue<CHandle<entAnimationControllerComponent>>();
+			set => SetPropertyValue<CHandle<entAnimationControllerComponent>>(value);
 		}
 
 		[Ordinal(99)] 
 		[RED("offMeshConnection")] 
 		public CHandle<AIOffMeshConnectionComponent> OffMeshConnection
 		{
-			get => GetProperty(ref _offMeshConnection);
-			set => SetProperty(ref _offMeshConnection, value);
+			get => GetPropertyValue<CHandle<AIOffMeshConnectionComponent>>();
+			set => SetPropertyValue<CHandle<AIOffMeshConnectionComponent>>(value);
 		}
 
 		[Ordinal(100)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_RoadBlock> AnimFeature
 		{
-			get => GetProperty(ref _animFeature);
-			set => SetProperty(ref _animFeature, value);
+			get => GetPropertyValue<CHandle<AnimFeature_RoadBlock>>();
+			set => SetPropertyValue<CHandle<AnimFeature_RoadBlock>>(value);
 		}
 
 		[Ordinal(101)] 
 		[RED("animationType")] 
 		public CEnum<EAnimationType> AnimationType
 		{
-			get => GetProperty(ref _animationType);
-			set => SetProperty(ref _animationType, value);
+			get => GetPropertyValue<CEnum<EAnimationType>>();
+			set => SetPropertyValue<CEnum<EAnimationType>>(value);
 		}
 
 		[Ordinal(102)] 
 		[RED("forceEnableLink")] 
 		public CBool ForceEnableLink
 		{
-			get => GetProperty(ref _forceEnableLink);
-			set => SetProperty(ref _forceEnableLink, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public RoadBlock()
 		{
-			_openingSpeed = 2.000000F;
+			ControllerTypeName = "RoadBlockController";
+			OpeningSpeed = 2.000000F;
 		}
 	}
 }

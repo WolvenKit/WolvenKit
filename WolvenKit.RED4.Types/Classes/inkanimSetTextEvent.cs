@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkanimSetTextEvent : inkanimEvent
 	{
-		private CString _localizationString;
-
 		[Ordinal(1)] 
 		[RED("localizationString")] 
 		public CString LocalizationString
 		{
-			get => GetProperty(ref _localizationString);
-			set => SetProperty(ref _localizationString, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 	}
 }

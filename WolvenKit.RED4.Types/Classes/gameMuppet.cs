@@ -5,59 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameMuppet : gamePuppetBase
 	{
-		private CHandle<entSlotComponent> _hitRepresantation;
-		private CHandle<entSlotComponent> _slotComponent;
-		private CFloat _highDamageThreshold;
-		private CFloat _medDamageThreshold;
-		private CFloat _lowDamageThreshold;
-		private CFloat _effectTimeStamp;
-
 		[Ordinal(40)] 
 		[RED("hitRepresantation")] 
 		public CHandle<entSlotComponent> HitRepresantation
 		{
-			get => GetProperty(ref _hitRepresantation);
-			set => SetProperty(ref _hitRepresantation, value);
+			get => GetPropertyValue<CHandle<entSlotComponent>>();
+			set => SetPropertyValue<CHandle<entSlotComponent>>(value);
 		}
 
 		[Ordinal(41)] 
 		[RED("slotComponent")] 
 		public CHandle<entSlotComponent> SlotComponent
 		{
-			get => GetProperty(ref _slotComponent);
-			set => SetProperty(ref _slotComponent, value);
+			get => GetPropertyValue<CHandle<entSlotComponent>>();
+			set => SetPropertyValue<CHandle<entSlotComponent>>(value);
 		}
 
 		[Ordinal(42)] 
 		[RED("highDamageThreshold")] 
 		public CFloat HighDamageThreshold
 		{
-			get => GetProperty(ref _highDamageThreshold);
-			set => SetProperty(ref _highDamageThreshold, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(43)] 
 		[RED("medDamageThreshold")] 
 		public CFloat MedDamageThreshold
 		{
-			get => GetProperty(ref _medDamageThreshold);
-			set => SetProperty(ref _medDamageThreshold, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(44)] 
 		[RED("lowDamageThreshold")] 
 		public CFloat LowDamageThreshold
 		{
-			get => GetProperty(ref _lowDamageThreshold);
-			set => SetProperty(ref _lowDamageThreshold, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(45)] 
 		[RED("effectTimeStamp")] 
 		public CFloat EffectTimeStamp
 		{
-			get => GetProperty(ref _effectTimeStamp);
-			set => SetProperty(ref _effectTimeStamp, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

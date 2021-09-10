@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SendScoreRequest : gameScriptableSystemRequest
 	{
-		private CInt32 _score;
-		private CString _gameName;
-
 		[Ordinal(0)] 
 		[RED("score")] 
 		public CInt32 Score
 		{
-			get => GetProperty(ref _score);
-			set => SetProperty(ref _score, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("gameName")] 
 		public CString GameName
 		{
-			get => GetProperty(ref _gameName);
-			set => SetProperty(ref _gameName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 	}
 }

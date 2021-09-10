@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class sampleUIAnchorController : inkWidgetLogicController
 	{
-		private inkRectangleWidgetReference _rectangleAnchor;
-
 		[Ordinal(1)] 
 		[RED("rectangleAnchor")] 
 		public inkRectangleWidgetReference RectangleAnchor
 		{
-			get => GetProperty(ref _rectangleAnchor);
-			set => SetProperty(ref _rectangleAnchor, value);
+			get => GetPropertyValue<inkRectangleWidgetReference>();
+			set => SetPropertyValue<inkRectangleWidgetReference>(value);
+		}
+
+		public sampleUIAnchorController()
+		{
+			RectangleAnchor = new();
 		}
 	}
 }

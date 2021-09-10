@@ -5,37 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questRotateToParams : questAICommandParams
 	{
-		private CHandle<questUniversalRef> _facingTargetRef;
-		private CFloat _angleOffset;
-		private CFloat _speed;
-
 		[Ordinal(0)] 
 		[RED("facingTargetRef")] 
 		public CHandle<questUniversalRef> FacingTargetRef
 		{
-			get => GetProperty(ref _facingTargetRef);
-			set => SetProperty(ref _facingTargetRef, value);
+			get => GetPropertyValue<CHandle<questUniversalRef>>();
+			set => SetPropertyValue<CHandle<questUniversalRef>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("angleOffset")] 
 		public CFloat AngleOffset
 		{
-			get => GetProperty(ref _angleOffset);
-			set => SetProperty(ref _angleOffset, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("speed")] 
 		public CFloat Speed
 		{
-			get => GetProperty(ref _speed);
-			set => SetProperty(ref _speed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public questRotateToParams()
 		{
-			_speed = 180.000000F;
+			Speed = 180.000000F;
 		}
 	}
 }

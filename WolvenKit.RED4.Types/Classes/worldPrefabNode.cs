@@ -5,128 +5,115 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldPrefabNode : worldNode
 	{
-		private CResourceAsyncReference<worldPrefab> _prefab;
-		private CHandle<worldPrefabInstanceData> _instanceData;
-		private CHandle<worldPrefabVariantsList> _enabledVariants;
-		private CBool _canBeToggledInGame;
-		private CBool _noCollision;
-		private CBool _enableRenderSceneLayerOverride;
-		private CEnum<RenderSceneLayerMask> _renderSceneLayerMask;
-		private CBool _ignoreMeshEmbeddedOccluders;
-		private CBool _ignoreAllOccluders;
-		private CUInt8 _occluderAutoHideDistanceScale;
-		private CEnum<worldPrefabProxyMeshOnly> _proxyMeshOnly;
-		private CBool _proxyScaleOverride;
-		private Vector3 _proxyScale;
-
 		[Ordinal(4)] 
 		[RED("prefab")] 
 		public CResourceAsyncReference<worldPrefab> Prefab
 		{
-			get => GetProperty(ref _prefab);
-			set => SetProperty(ref _prefab, value);
+			get => GetPropertyValue<CResourceAsyncReference<worldPrefab>>();
+			set => SetPropertyValue<CResourceAsyncReference<worldPrefab>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("instanceData")] 
 		public CHandle<worldPrefabInstanceData> InstanceData
 		{
-			get => GetProperty(ref _instanceData);
-			set => SetProperty(ref _instanceData, value);
+			get => GetPropertyValue<CHandle<worldPrefabInstanceData>>();
+			set => SetPropertyValue<CHandle<worldPrefabInstanceData>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("enabledVariants")] 
 		public CHandle<worldPrefabVariantsList> EnabledVariants
 		{
-			get => GetProperty(ref _enabledVariants);
-			set => SetProperty(ref _enabledVariants, value);
+			get => GetPropertyValue<CHandle<worldPrefabVariantsList>>();
+			set => SetPropertyValue<CHandle<worldPrefabVariantsList>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("canBeToggledInGame")] 
 		public CBool CanBeToggledInGame
 		{
-			get => GetProperty(ref _canBeToggledInGame);
-			set => SetProperty(ref _canBeToggledInGame, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("noCollision")] 
 		public CBool NoCollision
 		{
-			get => GetProperty(ref _noCollision);
-			set => SetProperty(ref _noCollision, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("enableRenderSceneLayerOverride")] 
 		public CBool EnableRenderSceneLayerOverride
 		{
-			get => GetProperty(ref _enableRenderSceneLayerOverride);
-			set => SetProperty(ref _enableRenderSceneLayerOverride, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("renderSceneLayerMask")] 
-		public CEnum<RenderSceneLayerMask> RenderSceneLayerMask
+		public CBitField<RenderSceneLayerMask> RenderSceneLayerMask
 		{
-			get => GetProperty(ref _renderSceneLayerMask);
-			set => SetProperty(ref _renderSceneLayerMask, value);
+			get => GetPropertyValue<CBitField<RenderSceneLayerMask>>();
+			set => SetPropertyValue<CBitField<RenderSceneLayerMask>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("ignoreMeshEmbeddedOccluders")] 
 		public CBool IgnoreMeshEmbeddedOccluders
 		{
-			get => GetProperty(ref _ignoreMeshEmbeddedOccluders);
-			set => SetProperty(ref _ignoreMeshEmbeddedOccluders, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("ignoreAllOccluders")] 
 		public CBool IgnoreAllOccluders
 		{
-			get => GetProperty(ref _ignoreAllOccluders);
-			set => SetProperty(ref _ignoreAllOccluders, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("occluderAutoHideDistanceScale")] 
 		public CUInt8 OccluderAutoHideDistanceScale
 		{
-			get => GetProperty(ref _occluderAutoHideDistanceScale);
-			set => SetProperty(ref _occluderAutoHideDistanceScale, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("proxyMeshOnly")] 
 		public CEnum<worldPrefabProxyMeshOnly> ProxyMeshOnly
 		{
-			get => GetProperty(ref _proxyMeshOnly);
-			set => SetProperty(ref _proxyMeshOnly, value);
+			get => GetPropertyValue<CEnum<worldPrefabProxyMeshOnly>>();
+			set => SetPropertyValue<CEnum<worldPrefabProxyMeshOnly>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("proxyScaleOverride")] 
 		public CBool ProxyScaleOverride
 		{
-			get => GetProperty(ref _proxyScaleOverride);
-			set => SetProperty(ref _proxyScaleOverride, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("proxyScale")] 
 		public Vector3 ProxyScale
 		{
-			get => GetProperty(ref _proxyScale);
-			set => SetProperty(ref _proxyScale, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		public worldPrefabNode()
 		{
-			_renderSceneLayerMask = new() { Value = Enums.RenderSceneLayerMask.Default };
-			_occluderAutoHideDistanceScale = 255;
+			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
+			OccluderAutoHideDistanceScale = 255;
+			ProxyScale = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
 		}
 	}
 }

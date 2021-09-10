@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiPanzerBonus : gameuiSideScrollerMiniGameDynObjectLogicAdvanced
 	{
-		private CFloat _fallingSpeed;
-
 		[Ordinal(1)] 
 		[RED("fallingSpeed")] 
 		public CFloat FallingSpeed
 		{
-			get => GetProperty(ref _fallingSpeed);
-			set => SetProperty(ref _fallingSpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

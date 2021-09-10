@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questCharacterManagerParameters_SetAttitudeGroupForPuppet : questICharacterManagerParameters_NodeSubType
 	{
-		private gameEntityReference _puppetRef;
-		private CBool _isPlayer;
-		private CName _groupName;
-
 		[Ordinal(0)] 
 		[RED("puppetRef")] 
 		public gameEntityReference PuppetRef
 		{
-			get => GetProperty(ref _puppetRef);
-			set => SetProperty(ref _puppetRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isPlayer")] 
 		public CBool IsPlayer
 		{
-			get => GetProperty(ref _isPlayer);
-			set => SetProperty(ref _isPlayer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("groupName")] 
 		public CName GroupName
 		{
-			get => GetProperty(ref _groupName);
-			set => SetProperty(ref _groupName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public questCharacterManagerParameters_SetAttitudeGroupForPuppet()
+		{
+			PuppetRef = new() { Names = new() };
 		}
 	}
 }

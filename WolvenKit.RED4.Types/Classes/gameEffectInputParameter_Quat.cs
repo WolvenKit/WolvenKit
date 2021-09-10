@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameEffectInputParameter_Quat : RedBaseClass
 	{
-		private CHandle<gameIEffectParameter_QuatEvaluator> _evaluator;
-
 		[Ordinal(0)] 
 		[RED("evaluator")] 
 		public CHandle<gameIEffectParameter_QuatEvaluator> Evaluator
 		{
-			get => GetProperty(ref _evaluator);
-			set => SetProperty(ref _evaluator, value);
+			get => GetPropertyValue<CHandle<gameIEffectParameter_QuatEvaluator>>();
+			set => SetPropertyValue<CHandle<gameIEffectParameter_QuatEvaluator>>(value);
 		}
 	}
 }

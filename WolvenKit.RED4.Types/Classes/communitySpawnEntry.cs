@@ -5,50 +5,50 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class communitySpawnEntry : ISerializable
 	{
-		private CName _entryName;
-		private TweakDBID _characterRecordId;
-		private CArray<CHandle<communitySpawnPhase>> _phases;
-		private CEnum<gameSpawnInViewState> _spawnInView;
-		private CArray<CHandle<communitySpawnInitializer>> _initializers;
-
 		[Ordinal(0)] 
 		[RED("entryName")] 
 		public CName EntryName
 		{
-			get => GetProperty(ref _entryName);
-			set => SetProperty(ref _entryName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("characterRecordId")] 
 		public TweakDBID CharacterRecordId
 		{
-			get => GetProperty(ref _characterRecordId);
-			set => SetProperty(ref _characterRecordId, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("phases")] 
 		public CArray<CHandle<communitySpawnPhase>> Phases
 		{
-			get => GetProperty(ref _phases);
-			set => SetProperty(ref _phases, value);
+			get => GetPropertyValue<CArray<CHandle<communitySpawnPhase>>>();
+			set => SetPropertyValue<CArray<CHandle<communitySpawnPhase>>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("spawnInView")] 
 		public CEnum<gameSpawnInViewState> SpawnInView
 		{
-			get => GetProperty(ref _spawnInView);
-			set => SetProperty(ref _spawnInView, value);
+			get => GetPropertyValue<CEnum<gameSpawnInViewState>>();
+			set => SetPropertyValue<CEnum<gameSpawnInViewState>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("initializers")] 
 		public CArray<CHandle<communitySpawnInitializer>> Initializers
 		{
-			get => GetProperty(ref _initializers);
-			set => SetProperty(ref _initializers, value);
+			get => GetPropertyValue<CArray<CHandle<communitySpawnInitializer>>>();
+			set => SetPropertyValue<CArray<CHandle<communitySpawnInitializer>>>(value);
+		}
+
+		public communitySpawnEntry()
+		{
+			Phases = new() { null };
+			Initializers = new();
 		}
 	}
 }

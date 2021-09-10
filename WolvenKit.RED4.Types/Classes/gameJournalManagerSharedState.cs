@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameJournalManagerSharedState : gameIGameSystemReplicatedState
 	{
-		private CArray<gameJournalSharedStateData> _entryData;
-		private CUInt32 _trackedQuestPath;
-
 		[Ordinal(0)] 
 		[RED("entryData")] 
 		public CArray<gameJournalSharedStateData> EntryData
 		{
-			get => GetProperty(ref _entryData);
-			set => SetProperty(ref _entryData, value);
+			get => GetPropertyValue<CArray<gameJournalSharedStateData>>();
+			set => SetPropertyValue<CArray<gameJournalSharedStateData>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("trackedQuestPath")] 
 		public CUInt32 TrackedQuestPath
 		{
-			get => GetProperty(ref _trackedQuestPath);
-			set => SetProperty(ref _trackedQuestPath, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		public gameJournalManagerSharedState()
+		{
+			EntryData = new();
 		}
 	}
 }

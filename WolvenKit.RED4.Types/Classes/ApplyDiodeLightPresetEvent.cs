@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ApplyDiodeLightPresetEvent : redEvent
 	{
-		private DiodeLightPreset _preset;
-		private CFloat _delay;
-		private CFloat _duration;
-		private CBool _force;
-
 		[Ordinal(0)] 
 		[RED("preset")] 
 		public DiodeLightPreset Preset
 		{
-			get => GetProperty(ref _preset);
-			set => SetProperty(ref _preset, value);
+			get => GetPropertyValue<DiodeLightPreset>();
+			set => SetPropertyValue<DiodeLightPreset>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("delay")] 
 		public CFloat Delay
 		{
-			get => GetProperty(ref _delay);
-			set => SetProperty(ref _delay, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get => GetProperty(ref _duration);
-			set => SetProperty(ref _duration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("force")] 
 		public CBool Force
 		{
-			get => GetProperty(ref _force);
-			set => SetProperty(ref _force, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public ApplyDiodeLightPresetEvent()
+		{
+			Preset = new() { State = true, ColorMax = new(), ColorMin = new(), OverrideColorMin = true, Strength = 1.000000F };
 		}
 	}
 }

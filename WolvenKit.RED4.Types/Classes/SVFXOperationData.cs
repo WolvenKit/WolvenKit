@@ -5,59 +5,57 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SVFXOperationData : RedBaseClass
 	{
-		private CName _vfxName;
-		private gameFxResource _vfxResource;
-		private CBool _shouldPersist;
-		private CFloat _size;
-		private NodeRef _nodeRef;
-		private CEnum<EEffectOperationType> _operationType;
-
 		[Ordinal(0)] 
 		[RED("vfxName")] 
 		public CName VfxName
 		{
-			get => GetProperty(ref _vfxName);
-			set => SetProperty(ref _vfxName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("vfxResource")] 
 		public gameFxResource VfxResource
 		{
-			get => GetProperty(ref _vfxResource);
-			set => SetProperty(ref _vfxResource, value);
+			get => GetPropertyValue<gameFxResource>();
+			set => SetPropertyValue<gameFxResource>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("shouldPersist")] 
 		public CBool ShouldPersist
 		{
-			get => GetProperty(ref _shouldPersist);
-			set => SetProperty(ref _shouldPersist, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("size")] 
 		public CFloat Size
 		{
-			get => GetProperty(ref _size);
-			set => SetProperty(ref _size, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("nodeRef")] 
 		public NodeRef NodeRef
 		{
-			get => GetProperty(ref _nodeRef);
-			set => SetProperty(ref _nodeRef, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("operationType")] 
 		public CEnum<EEffectOperationType> OperationType
 		{
-			get => GetProperty(ref _operationType);
-			set => SetProperty(ref _operationType, value);
+			get => GetPropertyValue<CEnum<EEffectOperationType>>();
+			set => SetPropertyValue<CEnum<EEffectOperationType>>(value);
+		}
+
+		public SVFXOperationData()
+		{
+			VfxResource = new();
 		}
 	}
 }

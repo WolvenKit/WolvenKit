@@ -5,84 +5,76 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioMixingActionData : RedBaseClass
 	{
-		private CEnum<audioMixingActionType> _actionType;
-		private CEnum<locVoiceoverContext> _voContext;
-		private CName _tagValue;
-		private CFloat _dbOffset;
-		private CFloat _distanceRolloffFactor;
-		private CName _voEventOverride;
-		private CUInt64 _customParametersSetKey;
-		private CArray<audioAudSimpleParameter> _customParameters;
-
 		[Ordinal(0)] 
 		[RED("actionType")] 
 		public CEnum<audioMixingActionType> ActionType
 		{
-			get => GetProperty(ref _actionType);
-			set => SetProperty(ref _actionType, value);
+			get => GetPropertyValue<CEnum<audioMixingActionType>>();
+			set => SetPropertyValue<CEnum<audioMixingActionType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("voContext")] 
 		public CEnum<locVoiceoverContext> VoContext
 		{
-			get => GetProperty(ref _voContext);
-			set => SetProperty(ref _voContext, value);
+			get => GetPropertyValue<CEnum<locVoiceoverContext>>();
+			set => SetPropertyValue<CEnum<locVoiceoverContext>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("tagValue")] 
 		public CName TagValue
 		{
-			get => GetProperty(ref _tagValue);
-			set => SetProperty(ref _tagValue, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("dbOffset")] 
 		public CFloat DbOffset
 		{
-			get => GetProperty(ref _dbOffset);
-			set => SetProperty(ref _dbOffset, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("distanceRolloffFactor")] 
 		public CFloat DistanceRolloffFactor
 		{
-			get => GetProperty(ref _distanceRolloffFactor);
-			set => SetProperty(ref _distanceRolloffFactor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("voEventOverride")] 
 		public CName VoEventOverride
 		{
-			get => GetProperty(ref _voEventOverride);
-			set => SetProperty(ref _voEventOverride, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("customParametersSetKey")] 
 		public CUInt64 CustomParametersSetKey
 		{
-			get => GetProperty(ref _customParametersSetKey);
-			set => SetProperty(ref _customParametersSetKey, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("customParameters")] 
 		public CArray<audioAudSimpleParameter> CustomParameters
 		{
-			get => GetProperty(ref _customParameters);
-			set => SetProperty(ref _customParameters, value);
+			get => GetPropertyValue<CArray<audioAudSimpleParameter>>();
+			set => SetPropertyValue<CArray<audioAudSimpleParameter>>(value);
 		}
 
 		public audioMixingActionData()
 		{
-			_actionType = new() { Value = Enums.audioMixingActionType.EmitterTag };
-			_voContext = new() { Value = Enums.locVoiceoverContext.Vo_Context_Community };
-			_distanceRolloffFactor = 1.000000F;
+			ActionType = Enums.audioMixingActionType.EmitterTag;
+			VoContext = Enums.locVoiceoverContext.Vo_Context_Community;
+			DistanceRolloffFactor = 1.000000F;
+			CustomParameters = new();
 		}
 	}
 }

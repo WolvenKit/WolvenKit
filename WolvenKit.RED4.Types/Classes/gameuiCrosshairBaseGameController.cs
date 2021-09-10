@@ -5,149 +5,132 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiCrosshairBaseGameController : gameuiWidgetGameController
 	{
-		private CWeakHandle<inkWidget> _rootWidget;
-		private CEnum<gamePSMCrosshairStates> _crosshairState;
-		private CEnum<gamePSMVision> _visionState;
-		private CHandle<redCallbackObject> _crosshairStateBlackboardId;
-		private CHandle<redCallbackObject> _bulletSpreedBlackboardId;
-		private CUInt32 _bbNPCStatsId;
-		private CBool _isTargetDead;
-		private CUInt64 _lastGUIStateUpdateFrame;
-		private CWeakHandle<gameIBlackboard> _targetBB;
-		private CWeakHandle<gameIBlackboard> _weaponBB;
-		private CHandle<redCallbackObject> _currentAimTargetBBID;
-		private CHandle<redCallbackObject> _targetDistanceBBID;
-		private CHandle<redCallbackObject> _targetAttitudeBBID;
-		private CWeakHandle<entEntity> _targetEntity;
-		private CHandle<CrosshairHealthChangeListener> _healthListener;
-		private CBool _isActive;
-
 		[Ordinal(2)] 
 		[RED("rootWidget")] 
 		public CWeakHandle<inkWidget> RootWidget
 		{
-			get => GetProperty(ref _rootWidget);
-			set => SetProperty(ref _rootWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("crosshairState")] 
 		public CEnum<gamePSMCrosshairStates> CrosshairState
 		{
-			get => GetProperty(ref _crosshairState);
-			set => SetProperty(ref _crosshairState, value);
+			get => GetPropertyValue<CEnum<gamePSMCrosshairStates>>();
+			set => SetPropertyValue<CEnum<gamePSMCrosshairStates>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("visionState")] 
 		public CEnum<gamePSMVision> VisionState
 		{
-			get => GetProperty(ref _visionState);
-			set => SetProperty(ref _visionState, value);
+			get => GetPropertyValue<CEnum<gamePSMVision>>();
+			set => SetPropertyValue<CEnum<gamePSMVision>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("crosshairStateBlackboardId")] 
 		public CHandle<redCallbackObject> CrosshairStateBlackboardId
 		{
-			get => GetProperty(ref _crosshairStateBlackboardId);
-			set => SetProperty(ref _crosshairStateBlackboardId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("bulletSpreedBlackboardId")] 
 		public CHandle<redCallbackObject> BulletSpreedBlackboardId
 		{
-			get => GetProperty(ref _bulletSpreedBlackboardId);
-			set => SetProperty(ref _bulletSpreedBlackboardId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("bbNPCStatsId")] 
 		public CUInt32 BbNPCStatsId
 		{
-			get => GetProperty(ref _bbNPCStatsId);
-			set => SetProperty(ref _bbNPCStatsId, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("isTargetDead")] 
 		public CBool IsTargetDead
 		{
-			get => GetProperty(ref _isTargetDead);
-			set => SetProperty(ref _isTargetDead, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("lastGUIStateUpdateFrame")] 
 		public CUInt64 LastGUIStateUpdateFrame
 		{
-			get => GetProperty(ref _lastGUIStateUpdateFrame);
-			set => SetProperty(ref _lastGUIStateUpdateFrame, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("targetBB")] 
 		public CWeakHandle<gameIBlackboard> TargetBB
 		{
-			get => GetProperty(ref _targetBB);
-			set => SetProperty(ref _targetBB, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("weaponBB")] 
 		public CWeakHandle<gameIBlackboard> WeaponBB
 		{
-			get => GetProperty(ref _weaponBB);
-			set => SetProperty(ref _weaponBB, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("currentAimTargetBBID")] 
 		public CHandle<redCallbackObject> CurrentAimTargetBBID
 		{
-			get => GetProperty(ref _currentAimTargetBBID);
-			set => SetProperty(ref _currentAimTargetBBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("targetDistanceBBID")] 
 		public CHandle<redCallbackObject> TargetDistanceBBID
 		{
-			get => GetProperty(ref _targetDistanceBBID);
-			set => SetProperty(ref _targetDistanceBBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("targetAttitudeBBID")] 
 		public CHandle<redCallbackObject> TargetAttitudeBBID
 		{
-			get => GetProperty(ref _targetAttitudeBBID);
-			set => SetProperty(ref _targetAttitudeBBID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("targetEntity")] 
 		public CWeakHandle<entEntity> TargetEntity
 		{
-			get => GetProperty(ref _targetEntity);
-			set => SetProperty(ref _targetEntity, value);
+			get => GetPropertyValue<CWeakHandle<entEntity>>();
+			set => SetPropertyValue<CWeakHandle<entEntity>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("healthListener")] 
 		public CHandle<CrosshairHealthChangeListener> HealthListener
 		{
-			get => GetProperty(ref _healthListener);
-			set => SetProperty(ref _healthListener, value);
+			get => GetPropertyValue<CHandle<CrosshairHealthChangeListener>>();
+			set => SetPropertyValue<CHandle<CrosshairHealthChangeListener>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get => GetProperty(ref _isActive);
-			set => SetProperty(ref _isActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

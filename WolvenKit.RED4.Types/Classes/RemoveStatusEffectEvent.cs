@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RemoveStatusEffectEvent : redEvent
 	{
-		private TweakDBID _effectID;
-		private CUInt32 _removeCount;
-
 		[Ordinal(0)] 
 		[RED("effectID")] 
 		public TweakDBID EffectID
 		{
-			get => GetProperty(ref _effectID);
-			set => SetProperty(ref _effectID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("removeCount")] 
 		public CUInt32 RemoveCount
 		{
-			get => GetProperty(ref _removeCount);
-			set => SetProperty(ref _removeCount, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 	}
 }

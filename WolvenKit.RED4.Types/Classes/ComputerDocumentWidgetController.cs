@@ -5,113 +5,115 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ComputerDocumentWidgetController : DeviceInkLogicControllerBase
 	{
-		private inkTextWidgetReference _titleWidget;
-		private inkTextWidgetReference _ownerNameWidget;
-		private inkTextWidgetReference _dateWidget;
-		private inkTextWidgetReference _datePanelWidget;
-		private inkTextWidgetReference _ownerPanelWidget;
-		private inkTextWidgetReference _textContentWidget;
-		private inkWidgetReference _textContentHolder;
-		private inkVideoWidgetReference _videoContentWidget;
-		private inkImageWidgetReference _imageContentWidget;
-		private inkWidgetReference _closeButtonWidget;
-		private CEnum<EDocumentType> _documentType;
-		private redResourceReferenceScriptToken _lastPlayedVideo;
-
 		[Ordinal(5)] 
 		[RED("titleWidget")] 
 		public inkTextWidgetReference TitleWidget
 		{
-			get => GetProperty(ref _titleWidget);
-			set => SetProperty(ref _titleWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("ownerNameWidget")] 
 		public inkTextWidgetReference OwnerNameWidget
 		{
-			get => GetProperty(ref _ownerNameWidget);
-			set => SetProperty(ref _ownerNameWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("dateWidget")] 
 		public inkTextWidgetReference DateWidget
 		{
-			get => GetProperty(ref _dateWidget);
-			set => SetProperty(ref _dateWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("datePanelWidget")] 
 		public inkTextWidgetReference DatePanelWidget
 		{
-			get => GetProperty(ref _datePanelWidget);
-			set => SetProperty(ref _datePanelWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("ownerPanelWidget")] 
 		public inkTextWidgetReference OwnerPanelWidget
 		{
-			get => GetProperty(ref _ownerPanelWidget);
-			set => SetProperty(ref _ownerPanelWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("textContentWidget")] 
 		public inkTextWidgetReference TextContentWidget
 		{
-			get => GetProperty(ref _textContentWidget);
-			set => SetProperty(ref _textContentWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("textContentHolder")] 
 		public inkWidgetReference TextContentHolder
 		{
-			get => GetProperty(ref _textContentHolder);
-			set => SetProperty(ref _textContentHolder, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("videoContentWidget")] 
 		public inkVideoWidgetReference VideoContentWidget
 		{
-			get => GetProperty(ref _videoContentWidget);
-			set => SetProperty(ref _videoContentWidget, value);
+			get => GetPropertyValue<inkVideoWidgetReference>();
+			set => SetPropertyValue<inkVideoWidgetReference>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("imageContentWidget")] 
 		public inkImageWidgetReference ImageContentWidget
 		{
-			get => GetProperty(ref _imageContentWidget);
-			set => SetProperty(ref _imageContentWidget, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("closeButtonWidget")] 
 		public inkWidgetReference CloseButtonWidget
 		{
-			get => GetProperty(ref _closeButtonWidget);
-			set => SetProperty(ref _closeButtonWidget, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("documentType")] 
 		public CEnum<EDocumentType> DocumentType
 		{
-			get => GetProperty(ref _documentType);
-			set => SetProperty(ref _documentType, value);
+			get => GetPropertyValue<CEnum<EDocumentType>>();
+			set => SetPropertyValue<CEnum<EDocumentType>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("lastPlayedVideo")] 
 		public redResourceReferenceScriptToken LastPlayedVideo
 		{
-			get => GetProperty(ref _lastPlayedVideo);
-			set => SetProperty(ref _lastPlayedVideo, value);
+			get => GetPropertyValue<redResourceReferenceScriptToken>();
+			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
+		}
+
+		public ComputerDocumentWidgetController()
+		{
+			TitleWidget = new();
+			OwnerNameWidget = new();
+			DateWidget = new();
+			DatePanelWidget = new();
+			OwnerPanelWidget = new();
+			TextContentWidget = new();
+			TextContentHolder = new();
+			VideoContentWidget = new();
+			ImageContentWidget = new();
+			CloseButtonWidget = new();
+			LastPlayedVideo = new();
 		}
 	}
 }

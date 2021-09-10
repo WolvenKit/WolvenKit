@@ -5,37 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TextSpawnerController : inkWidgetLogicController
 	{
-		private CInt32 _amountOfRows;
-		private CName _lineTextWidgetID;
-		private CArray<CWeakHandle<inkWidget>> _texts;
-
 		[Ordinal(1)] 
 		[RED("amountOfRows")] 
 		public CInt32 AmountOfRows
 		{
-			get => GetProperty(ref _amountOfRows);
-			set => SetProperty(ref _amountOfRows, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("lineTextWidgetID")] 
 		public CName LineTextWidgetID
 		{
-			get => GetProperty(ref _lineTextWidgetID);
-			set => SetProperty(ref _lineTextWidgetID, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("texts")] 
 		public CArray<CWeakHandle<inkWidget>> Texts
 		{
-			get => GetProperty(ref _texts);
-			set => SetProperty(ref _texts, value);
+			get => GetPropertyValue<CArray<CWeakHandle<inkWidget>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<inkWidget>>>(value);
 		}
 
 		public TextSpawnerController()
 		{
-			_amountOfRows = 6;
+			AmountOfRows = 6;
+			Texts = new();
 		}
 	}
 }

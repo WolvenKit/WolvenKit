@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PreloadAnimationsEvent : redEvent
 	{
-		private CName _streamingContextName;
-		private CBool _highPriority;
-
 		[Ordinal(0)] 
 		[RED("streamingContextName")] 
 		public CName StreamingContextName
 		{
-			get => GetProperty(ref _streamingContextName);
-			set => SetProperty(ref _streamingContextName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("highPriority")] 
 		public CBool HighPriority
 		{
-			get => GetProperty(ref _highPriority);
-			set => SetProperty(ref _highPriority, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

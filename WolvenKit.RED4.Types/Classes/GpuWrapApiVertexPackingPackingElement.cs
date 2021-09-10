@@ -5,50 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class GpuWrapApiVertexPackingPackingElement : RedBaseClass
 	{
-		private CEnum<GpuWrapApiVertexPackingePackingType> _type;
-		private CEnum<GpuWrapApiVertexPackingePackingUsage> _usage;
-		private CUInt8 _usageIndex;
-		private CUInt8 _streamIndex;
-		private CEnum<GpuWrapApiVertexPackingEStreamType> _streamType;
-
 		[Ordinal(0)] 
 		[RED("type")] 
 		public CEnum<GpuWrapApiVertexPackingePackingType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<GpuWrapApiVertexPackingePackingType>>();
+			set => SetPropertyValue<CEnum<GpuWrapApiVertexPackingePackingType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("usage")] 
 		public CEnum<GpuWrapApiVertexPackingePackingUsage> Usage
 		{
-			get => GetProperty(ref _usage);
-			set => SetProperty(ref _usage, value);
+			get => GetPropertyValue<CEnum<GpuWrapApiVertexPackingePackingUsage>>();
+			set => SetPropertyValue<CEnum<GpuWrapApiVertexPackingePackingUsage>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("usageIndex")] 
 		public CUInt8 UsageIndex
 		{
-			get => GetProperty(ref _usageIndex);
-			set => SetProperty(ref _usageIndex, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("streamIndex")] 
 		public CUInt8 StreamIndex
 		{
-			get => GetProperty(ref _streamIndex);
-			set => SetProperty(ref _streamIndex, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("streamType")] 
 		public CEnum<GpuWrapApiVertexPackingEStreamType> StreamType
 		{
-			get => GetProperty(ref _streamType);
-			set => SetProperty(ref _streamType, value);
+			get => GetPropertyValue<CEnum<GpuWrapApiVertexPackingEStreamType>>();
+			set => SetPropertyValue<CEnum<GpuWrapApiVertexPackingEStreamType>>(value);
 		}
 	}
 }

@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animSBehaviorConstraintNodeFloorIKMaintainLookBoneData : RedBaseClass
 	{
-		private CName _bone;
-		private CFloat _amountOfRotation;
-
 		[Ordinal(0)] 
 		[RED("bone")] 
 		public CName Bone
 		{
-			get => GetProperty(ref _bone);
-			set => SetProperty(ref _bone, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("amountOfRotation")] 
 		public CFloat AmountOfRotation
 		{
-			get => GetProperty(ref _amountOfRotation);
-			set => SetProperty(ref _amountOfRotation, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public animSBehaviorConstraintNodeFloorIKMaintainLookBoneData()
 		{
-			_amountOfRotation = 0.500000F;
+			AmountOfRotation = 0.500000F;
 		}
 	}
 }

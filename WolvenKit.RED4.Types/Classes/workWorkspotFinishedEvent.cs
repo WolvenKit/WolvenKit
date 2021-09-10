@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class workWorkspotFinishedEvent : redEvent
 	{
-		private worldGlobalNodeID _nodeId;
-		private CArray<CName> _tags;
-		private TweakDBID _statusEffectID;
-
 		[Ordinal(0)] 
 		[RED("nodeId")] 
 		public worldGlobalNodeID NodeId
 		{
-			get => GetProperty(ref _nodeId);
-			set => SetProperty(ref _nodeId, value);
+			get => GetPropertyValue<worldGlobalNodeID>();
+			set => SetPropertyValue<worldGlobalNodeID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("tags")] 
 		public CArray<CName> Tags
 		{
-			get => GetProperty(ref _tags);
-			set => SetProperty(ref _tags, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("statusEffectID")] 
 		public TweakDBID StatusEffectID
 		{
-			get => GetProperty(ref _statusEffectID);
-			set => SetProperty(ref _statusEffectID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
+		public workWorkspotFinishedEvent()
+		{
+			NodeId = new();
+			Tags = new();
 		}
 	}
 }

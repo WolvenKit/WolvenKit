@@ -5,28 +5,29 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AddItemForPlayerToPickUp : ScriptableDeviceAction
 	{
-		private TweakDBID _lootTable;
-		private CBool _shouldAdd;
-
 		[Ordinal(25)] 
 		[RED("lootTable")] 
 		public TweakDBID LootTable
 		{
-			get => GetProperty(ref _lootTable);
-			set => SetProperty(ref _lootTable, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("shouldAdd")] 
 		public CBool ShouldAdd
 		{
-			get => GetProperty(ref _shouldAdd);
-			set => SetProperty(ref _shouldAdd, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public AddItemForPlayerToPickUp()
 		{
-			_shouldAdd = true;
+			RequesterID = new();
+			InteractionChoice = new() { CaptionParts = new() { Parts = new() }, Data = new(), ChoiceMetaData = new() { Type = new() }, LookAtDescriptor = new() { Offset = new(), OrbId = new() } };
+			ActionWidgetPackage = new() { DependendActions = new() };
+			CanTriggerStim = true;
+			ShouldAdd = true;
 		}
 	}
 }

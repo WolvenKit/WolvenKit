@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ElevatorDeviceBlackboardDef : DeviceBaseBlackboardDef
 	{
-		private gamebbScriptID_String _currentFloor;
-		private gamebbScriptID_Bool _isPlayerScanned;
-		private gamebbScriptID_Bool _isPaused;
-
 		[Ordinal(7)] 
 		[RED("CurrentFloor")] 
 		public gamebbScriptID_String CurrentFloor
 		{
-			get => GetProperty(ref _currentFloor);
-			set => SetProperty(ref _currentFloor, value);
+			get => GetPropertyValue<gamebbScriptID_String>();
+			set => SetPropertyValue<gamebbScriptID_String>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("isPlayerScanned")] 
 		public gamebbScriptID_Bool IsPlayerScanned
 		{
-			get => GetProperty(ref _isPlayerScanned);
-			set => SetProperty(ref _isPlayerScanned, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("isPaused")] 
 		public gamebbScriptID_Bool IsPaused
 		{
-			get => GetProperty(ref _isPaused);
-			set => SetProperty(ref _isPaused, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		public ElevatorDeviceBlackboardDef()
+		{
+			CurrentFloor = new();
+			IsPlayerScanned = new();
+			IsPaused = new();
 		}
 	}
 }

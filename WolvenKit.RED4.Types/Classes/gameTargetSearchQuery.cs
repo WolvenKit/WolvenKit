@@ -5,64 +5,59 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameTargetSearchQuery : RedBaseClass
 	{
-		private CEnum<gameTargetingSet> _testedSet;
-		private gameTargetSearchFilter _searchFilter;
-		private CBool _includeSecondaryTargets;
-		private CBool _ignoreInstigator;
-		private CFloat _maxDistance;
-		private entEntityID _queryTarget;
-
 		[Ordinal(0)] 
 		[RED("testedSet")] 
 		public CEnum<gameTargetingSet> TestedSet
 		{
-			get => GetProperty(ref _testedSet);
-			set => SetProperty(ref _testedSet, value);
+			get => GetPropertyValue<CEnum<gameTargetingSet>>();
+			set => SetPropertyValue<CEnum<gameTargetingSet>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("searchFilter")] 
 		public gameTargetSearchFilter SearchFilter
 		{
-			get => GetProperty(ref _searchFilter);
-			set => SetProperty(ref _searchFilter, value);
+			get => GetPropertyValue<gameTargetSearchFilter>();
+			set => SetPropertyValue<gameTargetSearchFilter>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("includeSecondaryTargets")] 
 		public CBool IncludeSecondaryTargets
 		{
-			get => GetProperty(ref _includeSecondaryTargets);
-			set => SetProperty(ref _includeSecondaryTargets, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("ignoreInstigator")] 
 		public CBool IgnoreInstigator
 		{
-			get => GetProperty(ref _ignoreInstigator);
-			set => SetProperty(ref _ignoreInstigator, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("maxDistance")] 
 		public CFloat MaxDistance
 		{
-			get => GetProperty(ref _maxDistance);
-			set => SetProperty(ref _maxDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("queryTarget")] 
 		public entEntityID QueryTarget
 		{
-			get => GetProperty(ref _queryTarget);
-			set => SetProperty(ref _queryTarget, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		public gameTargetSearchQuery()
 		{
-			_includeSecondaryTargets = true;
+			SearchFilter = new();
+			IncludeSecondaryTargets = true;
+			QueryTarget = new();
 		}
 	}
 }

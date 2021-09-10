@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorMonitorConditionDefinition : ISerializable
 	{
-		private CHandle<AIbehaviorConditionDefinition> _condition;
-		private CFloat _timeout;
-
 		[Ordinal(0)] 
 		[RED("condition")] 
 		public CHandle<AIbehaviorConditionDefinition> Condition
 		{
-			get => GetProperty(ref _condition);
-			set => SetProperty(ref _condition, value);
+			get => GetPropertyValue<CHandle<AIbehaviorConditionDefinition>>();
+			set => SetPropertyValue<CHandle<AIbehaviorConditionDefinition>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("timeout")] 
 		public CFloat Timeout
 		{
-			get => GetProperty(ref _timeout);
-			set => SetProperty(ref _timeout, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

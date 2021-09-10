@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ScrollingText : RedBaseClass
 	{
-		private CArray<CString> _textArray;
-
 		[Ordinal(0)] 
 		[RED("textArray")] 
 		public CArray<CString> TextArray
 		{
-			get => GetProperty(ref _textArray);
-			set => SetProperty(ref _textArray, value);
+			get => GetPropertyValue<CArray<CString>>();
+			set => SetPropertyValue<CArray<CString>>(value);
+		}
+
+		public ScrollingText()
+		{
+			TextArray = new();
 		}
 	}
 }

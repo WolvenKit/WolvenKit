@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PresetTimetableEvent : redEvent
 	{
-		private CInt32 _arrayPosition;
-
 		[Ordinal(0)] 
 		[RED("arrayPosition")] 
 		public CInt32 ArrayPosition
 		{
-			get => GetProperty(ref _arrayPosition);
-			set => SetProperty(ref _arrayPosition, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

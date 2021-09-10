@@ -5,77 +5,78 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioAudioSceneData : audioAudioMetadata
 	{
-		private CArrayFixedSize<audioAudioStateData> _anyStateArray;
-		private CArray<audioAudioStateData> _states;
-		private CArray<audioAnyStateTransitionEntry> _anyStateTransitionsTable;
-		private CArray<audioVoLineSignal> _voLineSignals;
-		private CName _signalLeadingToShutdown;
-		private CName _templateScene;
-		private CArray<audioAudioSceneStateOverride> _templateSceneStateOverrides;
-		private CArray<audioAudioSceneSignalOverride> _templateSceneSignalOverrides;
-
 		[Ordinal(1)] 
 		[RED("anyStateArray", 1)] 
 		public CArrayFixedSize<audioAudioStateData> AnyStateArray
 		{
-			get => GetProperty(ref _anyStateArray);
-			set => SetProperty(ref _anyStateArray, value);
+			get => GetPropertyValue<CArrayFixedSize<audioAudioStateData>>();
+			set => SetPropertyValue<CArrayFixedSize<audioAudioStateData>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("states")] 
 		public CArray<audioAudioStateData> States
 		{
-			get => GetProperty(ref _states);
-			set => SetProperty(ref _states, value);
+			get => GetPropertyValue<CArray<audioAudioStateData>>();
+			set => SetPropertyValue<CArray<audioAudioStateData>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("anyStateTransitionsTable")] 
 		public CArray<audioAnyStateTransitionEntry> AnyStateTransitionsTable
 		{
-			get => GetProperty(ref _anyStateTransitionsTable);
-			set => SetProperty(ref _anyStateTransitionsTable, value);
+			get => GetPropertyValue<CArray<audioAnyStateTransitionEntry>>();
+			set => SetPropertyValue<CArray<audioAnyStateTransitionEntry>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("voLineSignals")] 
 		public CArray<audioVoLineSignal> VoLineSignals
 		{
-			get => GetProperty(ref _voLineSignals);
-			set => SetProperty(ref _voLineSignals, value);
+			get => GetPropertyValue<CArray<audioVoLineSignal>>();
+			set => SetPropertyValue<CArray<audioVoLineSignal>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("signalLeadingToShutdown")] 
 		public CName SignalLeadingToShutdown
 		{
-			get => GetProperty(ref _signalLeadingToShutdown);
-			set => SetProperty(ref _signalLeadingToShutdown, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("templateScene")] 
 		public CName TemplateScene
 		{
-			get => GetProperty(ref _templateScene);
-			set => SetProperty(ref _templateScene, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("templateSceneStateOverrides")] 
 		public CArray<audioAudioSceneStateOverride> TemplateSceneStateOverrides
 		{
-			get => GetProperty(ref _templateSceneStateOverrides);
-			set => SetProperty(ref _templateSceneStateOverrides, value);
+			get => GetPropertyValue<CArray<audioAudioSceneStateOverride>>();
+			set => SetPropertyValue<CArray<audioAudioSceneStateOverride>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("templateSceneSignalOverrides")] 
 		public CArray<audioAudioSceneSignalOverride> TemplateSceneSignalOverrides
 		{
-			get => GetProperty(ref _templateSceneSignalOverrides);
-			set => SetProperty(ref _templateSceneSignalOverrides, value);
+			get => GetPropertyValue<CArray<audioAudioSceneSignalOverride>>();
+			set => SetPropertyValue<CArray<audioAudioSceneSignalOverride>>(value);
+		}
+
+		public audioAudioSceneData()
+		{
+			AnyStateArray = new(1);
+			States = new();
+			AnyStateTransitionsTable = new();
+			VoLineSignals = new();
+			TemplateSceneStateOverrides = new();
+			TemplateSceneSignalOverrides = new();
 		}
 	}
 }

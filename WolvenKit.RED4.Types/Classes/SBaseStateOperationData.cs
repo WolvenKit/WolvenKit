@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SBaseStateOperationData : RedBaseClass
 	{
-		private CEnum<EDeviceStatus> _state;
-		private SBaseDeviceOperationData _operation;
-
 		[Ordinal(0)] 
 		[RED("state")] 
 		public CEnum<EDeviceStatus> State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<CEnum<EDeviceStatus>>();
+			set => SetPropertyValue<CEnum<EDeviceStatus>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("operation")] 
 		public SBaseDeviceOperationData Operation
 		{
-			get => GetProperty(ref _operation);
-			set => SetProperty(ref _operation, value);
+			get => GetPropertyValue<SBaseDeviceOperationData>();
+			set => SetPropertyValue<SBaseDeviceOperationData>(value);
+		}
+
+		public SBaseStateOperationData()
+		{
+			Operation = new() { IsEnabled = true, TransformAnimations = new(), VFXs = new(), SFXs = new(), Facts = new(), Components = new(), Stims = new(), StatusEffects = new(), Damages = new(), Items = new(), Teleport = new(), PlayerWorkspot = new(), ToggleOperations = new(), DelayID = new() };
 		}
 	}
 }

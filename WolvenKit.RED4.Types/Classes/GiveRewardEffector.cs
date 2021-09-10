@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class GiveRewardEffector : gameEffector
 	{
-		private TweakDBID _reward;
-		private entEntityID _target;
-
 		[Ordinal(0)] 
 		[RED("reward")] 
 		public TweakDBID Reward
 		{
-			get => GetProperty(ref _reward);
-			set => SetProperty(ref _reward, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("target")] 
 		public entEntityID Target
 		{
-			get => GetProperty(ref _target);
-			set => SetProperty(ref _target, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
+		}
+
+		public GiveRewardEffector()
+		{
+			Target = new();
 		}
 	}
 }

@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entAnimationSetupExtensionComponent : entIComponent
 	{
-		private animAnimSetup _animations;
-		private CHandle<entAnimationControlBinding> _controlBinding;
-
 		[Ordinal(3)] 
 		[RED("animations")] 
 		public animAnimSetup Animations
 		{
-			get => GetProperty(ref _animations);
-			set => SetProperty(ref _animations, value);
+			get => GetPropertyValue<animAnimSetup>();
+			set => SetPropertyValue<animAnimSetup>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("controlBinding")] 
 		public CHandle<entAnimationControlBinding> ControlBinding
 		{
-			get => GetProperty(ref _controlBinding);
-			set => SetProperty(ref _controlBinding, value);
+			get => GetPropertyValue<CHandle<entAnimationControlBinding>>();
+			set => SetPropertyValue<CHandle<entAnimationControlBinding>>(value);
+		}
+
+		public entAnimationSetupExtensionComponent()
+		{
+			Name = "Component";
+			Animations = new() { Cinematics = new(), Gameplay = new() };
 		}
 	}
 }

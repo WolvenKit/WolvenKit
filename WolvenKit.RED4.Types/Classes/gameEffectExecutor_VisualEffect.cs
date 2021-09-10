@@ -5,50 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameEffectExecutor_VisualEffect : gameEffectExecutor
 	{
-		private CResourceAsyncReference<worldEffect> _effect;
-		private CBool _attached;
-		private CBool _breakLoopOnDetach;
-		private CName _effectTag;
-		private CHandle<gameEffectVectorEvaluator> _vectorEvaluator;
-
 		[Ordinal(1)] 
 		[RED("effect")] 
 		public CResourceAsyncReference<worldEffect> Effect
 		{
-			get => GetProperty(ref _effect);
-			set => SetProperty(ref _effect, value);
+			get => GetPropertyValue<CResourceAsyncReference<worldEffect>>();
+			set => SetPropertyValue<CResourceAsyncReference<worldEffect>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("attached")] 
 		public CBool Attached
 		{
-			get => GetProperty(ref _attached);
-			set => SetProperty(ref _attached, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("breakLoopOnDetach")] 
 		public CBool BreakLoopOnDetach
 		{
-			get => GetProperty(ref _breakLoopOnDetach);
-			set => SetProperty(ref _breakLoopOnDetach, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("effectTag")] 
 		public CName EffectTag
 		{
-			get => GetProperty(ref _effectTag);
-			set => SetProperty(ref _effectTag, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("vectorEvaluator")] 
 		public CHandle<gameEffectVectorEvaluator> VectorEvaluator
 		{
-			get => GetProperty(ref _vectorEvaluator);
-			set => SetProperty(ref _vectorEvaluator, value);
+			get => GetPropertyValue<CHandle<gameEffectVectorEvaluator>>();
+			set => SetPropertyValue<CHandle<gameEffectVectorEvaluator>>(value);
 		}
 	}
 }

@@ -4,27 +4,44 @@ namespace WolvenKit.RED4.Types
 {
     public class DataBuffer : IRedPrimitive, IEquatable<DataBuffer>
     {
-        public ushort Buffer { get; set; }
-
-
-        public override bool Equals(object obj)
-        {
-            if (obj is DataBuffer cObj)
-            {
-                return Equals(cObj);
-            }
-
-            return false;
-        }
+        public byte[] Buffer { get; set; }
+        public int Pointer { get; set; } = -1;
 
         public bool Equals(DataBuffer other)
         {
-            if (other == null)
+            if (ReferenceEquals(null, other))
             {
                 return false;
             }
 
-            return Buffer.Equals(other.Buffer);
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            return Equals(Buffer, other.Buffer) && Pointer == other.Pointer;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((DataBuffer)obj);
+        }
+
+        public override int GetHashCode() => HashCode.Combine(Buffer, Pointer);
     }
 }

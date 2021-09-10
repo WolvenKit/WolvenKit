@@ -5,37 +5,37 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questTeleportVehicleNodeDefinition : questDisableableNodeDefinition
 	{
-		private gameEntityReference _entityReference;
-		private questTeleportPuppetParams _params;
-		private CBool _resetVelocities;
-
 		[Ordinal(2)] 
 		[RED("entityReference")] 
 		public gameEntityReference EntityReference
 		{
-			get => GetProperty(ref _entityReference);
-			set => SetProperty(ref _entityReference, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("params")] 
 		public questTeleportPuppetParams Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<questTeleportPuppetParams>();
+			set => SetPropertyValue<questTeleportPuppetParams>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("resetVelocities")] 
 		public CBool ResetVelocities
 		{
-			get => GetProperty(ref _resetVelocities);
-			set => SetProperty(ref _resetVelocities, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public questTeleportVehicleNodeDefinition()
 		{
-			_resetVelocities = true;
+			Sockets = new();
+			Id = 65535;
+			EntityReference = new() { Names = new() };
+			Params = new() { DestinationOffset = new() };
+			ResetVelocities = true;
 		}
 	}
 }

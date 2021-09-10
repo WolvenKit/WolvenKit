@@ -5,55 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameMuppetPhysicalState : RedBaseClass
 	{
-		private Vector4 _position;
-		private CFloat _worldYaw;
-		private Vector4 _velocity;
-		private CBool _isOnGround;
-		private Vector4 _groundNormal;
-
 		[Ordinal(0)] 
 		[RED("position")] 
 		public Vector4 Position
 		{
-			get => GetProperty(ref _position);
-			set => SetProperty(ref _position, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("worldYaw")] 
 		public CFloat WorldYaw
 		{
-			get => GetProperty(ref _worldYaw);
-			set => SetProperty(ref _worldYaw, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("velocity")] 
 		public Vector4 Velocity
 		{
-			get => GetProperty(ref _velocity);
-			set => SetProperty(ref _velocity, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isOnGround")] 
 		public CBool IsOnGround
 		{
-			get => GetProperty(ref _isOnGround);
-			set => SetProperty(ref _isOnGround, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("groundNormal")] 
 		public Vector4 GroundNormal
 		{
-			get => GetProperty(ref _groundNormal);
-			set => SetProperty(ref _groundNormal, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		public gameMuppetPhysicalState()
 		{
-			_isOnGround = true;
+			Position = new();
+			Velocity = new();
+			IsOnGround = true;
+			GroundNormal = new() { Z = 1.000000F };
 		}
 	}
 }

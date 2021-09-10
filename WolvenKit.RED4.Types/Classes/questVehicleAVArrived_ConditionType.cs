@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questVehicleAVArrived_ConditionType : questIVehicleConditionType
 	{
-		private gameEntityReference _vehicleRef;
-
 		[Ordinal(0)] 
 		[RED("vehicleRef")] 
 		public gameEntityReference VehicleRef
 		{
-			get => GetProperty(ref _vehicleRef);
-			set => SetProperty(ref _vehicleRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
+		}
+
+		public questVehicleAVArrived_ConditionType()
+		{
+			VehicleRef = new() { Names = new() };
 		}
 	}
 }

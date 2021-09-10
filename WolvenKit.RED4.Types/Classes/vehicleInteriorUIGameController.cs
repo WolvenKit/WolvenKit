@@ -5,230 +5,214 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class vehicleInteriorUIGameController : gameuiHUDGameController
 	{
-		private CWeakHandle<gameIBlackboard> _vehicleBlackboard;
-		private CHandle<redCallbackObject> _vehicleBBStateConectionId;
-		private CHandle<redCallbackObject> _vehicleBBReadyConectionId;
-		private CHandle<redCallbackObject> _vehicleBBUIActivId;
-		private CHandle<redCallbackObject> _speedBBConnectionId;
-		private CHandle<redCallbackObject> _gearBBConnectionId;
-		private CHandle<redCallbackObject> _rpmValueBBConnectionId;
-		private CHandle<redCallbackObject> _rpmMaxBBConnectionId;
-		private CHandle<redCallbackObject> _autopilotOnId;
-		private CWeakHandle<inkCanvasWidget> _rootWidget;
-		private inkTextWidgetReference _speedTextWidget;
-		private inkTextWidgetReference _gearTextWidget;
-		private inkTextWidgetReference _rpmValueWidget;
-		private inkRectangleWidgetReference _rpmGaugeForegroundWidget;
-		private inkTextWidgetReference _autopilotTextWidget;
-		private CInt32 _activeChunks;
-		private CInt32 _chunksNumber;
-		private CName _dynamicRpmPath;
-		private CInt32 _rpmPerChunk;
-		private CBool _hasRevMax;
-		private Vector2 _rpmGaugeMaxSize;
-		private CFloat _rpmMaxValue;
-		private CBool _isInAutoPilot;
-		private CBool _isVehicleReady;
-		private CHandle<inkanimProxy> _hudRedLineAnimation;
-
 		[Ordinal(9)] 
 		[RED("vehicleBlackboard")] 
 		public CWeakHandle<gameIBlackboard> VehicleBlackboard
 		{
-			get => GetProperty(ref _vehicleBlackboard);
-			set => SetProperty(ref _vehicleBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("vehicleBBStateConectionId")] 
 		public CHandle<redCallbackObject> VehicleBBStateConectionId
 		{
-			get => GetProperty(ref _vehicleBBStateConectionId);
-			set => SetProperty(ref _vehicleBBStateConectionId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("vehicleBBReadyConectionId")] 
 		public CHandle<redCallbackObject> VehicleBBReadyConectionId
 		{
-			get => GetProperty(ref _vehicleBBReadyConectionId);
-			set => SetProperty(ref _vehicleBBReadyConectionId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("vehicleBBUIActivId")] 
 		public CHandle<redCallbackObject> VehicleBBUIActivId
 		{
-			get => GetProperty(ref _vehicleBBUIActivId);
-			set => SetProperty(ref _vehicleBBUIActivId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("speedBBConnectionId")] 
 		public CHandle<redCallbackObject> SpeedBBConnectionId
 		{
-			get => GetProperty(ref _speedBBConnectionId);
-			set => SetProperty(ref _speedBBConnectionId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("gearBBConnectionId")] 
 		public CHandle<redCallbackObject> GearBBConnectionId
 		{
-			get => GetProperty(ref _gearBBConnectionId);
-			set => SetProperty(ref _gearBBConnectionId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("rpmValueBBConnectionId")] 
 		public CHandle<redCallbackObject> RpmValueBBConnectionId
 		{
-			get => GetProperty(ref _rpmValueBBConnectionId);
-			set => SetProperty(ref _rpmValueBBConnectionId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("rpmMaxBBConnectionId")] 
 		public CHandle<redCallbackObject> RpmMaxBBConnectionId
 		{
-			get => GetProperty(ref _rpmMaxBBConnectionId);
-			set => SetProperty(ref _rpmMaxBBConnectionId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("autopilotOnId")] 
 		public CHandle<redCallbackObject> AutopilotOnId
 		{
-			get => GetProperty(ref _autopilotOnId);
-			set => SetProperty(ref _autopilotOnId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("rootWidget")] 
 		public CWeakHandle<inkCanvasWidget> RootWidget
 		{
-			get => GetProperty(ref _rootWidget);
-			set => SetProperty(ref _rootWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkCanvasWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkCanvasWidget>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("speedTextWidget")] 
 		public inkTextWidgetReference SpeedTextWidget
 		{
-			get => GetProperty(ref _speedTextWidget);
-			set => SetProperty(ref _speedTextWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("gearTextWidget")] 
 		public inkTextWidgetReference GearTextWidget
 		{
-			get => GetProperty(ref _gearTextWidget);
-			set => SetProperty(ref _gearTextWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("rpmValueWidget")] 
 		public inkTextWidgetReference RpmValueWidget
 		{
-			get => GetProperty(ref _rpmValueWidget);
-			set => SetProperty(ref _rpmValueWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("rpmGaugeForegroundWidget")] 
 		public inkRectangleWidgetReference RpmGaugeForegroundWidget
 		{
-			get => GetProperty(ref _rpmGaugeForegroundWidget);
-			set => SetProperty(ref _rpmGaugeForegroundWidget, value);
+			get => GetPropertyValue<inkRectangleWidgetReference>();
+			set => SetPropertyValue<inkRectangleWidgetReference>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("autopilotTextWidget")] 
 		public inkTextWidgetReference AutopilotTextWidget
 		{
-			get => GetProperty(ref _autopilotTextWidget);
-			set => SetProperty(ref _autopilotTextWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("activeChunks")] 
 		public CInt32 ActiveChunks
 		{
-			get => GetProperty(ref _activeChunks);
-			set => SetProperty(ref _activeChunks, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("chunksNumber")] 
 		public CInt32 ChunksNumber
 		{
-			get => GetProperty(ref _chunksNumber);
-			set => SetProperty(ref _chunksNumber, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("dynamicRpmPath")] 
 		public CName DynamicRpmPath
 		{
-			get => GetProperty(ref _dynamicRpmPath);
-			set => SetProperty(ref _dynamicRpmPath, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("rpmPerChunk")] 
 		public CInt32 RpmPerChunk
 		{
-			get => GetProperty(ref _rpmPerChunk);
-			set => SetProperty(ref _rpmPerChunk, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("hasRevMax")] 
 		public CBool HasRevMax
 		{
-			get => GetProperty(ref _hasRevMax);
-			set => SetProperty(ref _hasRevMax, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("rpmGaugeMaxSize")] 
 		public Vector2 RpmGaugeMaxSize
 		{
-			get => GetProperty(ref _rpmGaugeMaxSize);
-			set => SetProperty(ref _rpmGaugeMaxSize, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("rpmMaxValue")] 
 		public CFloat RpmMaxValue
 		{
-			get => GetProperty(ref _rpmMaxValue);
-			set => SetProperty(ref _rpmMaxValue, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("isInAutoPilot")] 
 		public CBool IsInAutoPilot
 		{
-			get => GetProperty(ref _isInAutoPilot);
-			set => SetProperty(ref _isInAutoPilot, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("isVehicleReady")] 
 		public CBool IsVehicleReady
 		{
-			get => GetProperty(ref _isVehicleReady);
-			set => SetProperty(ref _isVehicleReady, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("HudRedLineAnimation")] 
 		public CHandle<inkanimProxy> HudRedLineAnimation
 		{
-			get => GetProperty(ref _hudRedLineAnimation);
-			set => SetProperty(ref _hudRedLineAnimation, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		public vehicleInteriorUIGameController()
+		{
+			SpeedTextWidget = new();
+			GearTextWidget = new();
+			RpmValueWidget = new();
+			RpmGaugeForegroundWidget = new();
+			AutopilotTextWidget = new();
+			RpmGaugeMaxSize = new();
 		}
 	}
 }

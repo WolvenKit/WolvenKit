@@ -5,59 +5,61 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class physicsGeometryCache : CResource
 	{
-		private CArray<SerializationDeferredDataBuffer> _bufferTableSectors;
-		private CArray<physicsSectorEntry> _sectorEntries;
-		private CArray<physicsGeometryKey> _sectorGeometries;
-		private CArray<physicsSectorCacheEntry> _sectorCacheEntries;
-		private physicsSectorEntry _alwaysLoadedSector;
-		private SerializationDeferredDataBuffer _alwaysLoadedSectorDDB;
-
 		[Ordinal(1)] 
 		[RED("bufferTableSectors")] 
 		public CArray<SerializationDeferredDataBuffer> BufferTableSectors
 		{
-			get => GetProperty(ref _bufferTableSectors);
-			set => SetProperty(ref _bufferTableSectors, value);
+			get => GetPropertyValue<CArray<SerializationDeferredDataBuffer>>();
+			set => SetPropertyValue<CArray<SerializationDeferredDataBuffer>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("sectorEntries")] 
 		public CArray<physicsSectorEntry> SectorEntries
 		{
-			get => GetProperty(ref _sectorEntries);
-			set => SetProperty(ref _sectorEntries, value);
+			get => GetPropertyValue<CArray<physicsSectorEntry>>();
+			set => SetPropertyValue<CArray<physicsSectorEntry>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("sectorGeometries")] 
 		public CArray<physicsGeometryKey> SectorGeometries
 		{
-			get => GetProperty(ref _sectorGeometries);
-			set => SetProperty(ref _sectorGeometries, value);
+			get => GetPropertyValue<CArray<physicsGeometryKey>>();
+			set => SetPropertyValue<CArray<physicsGeometryKey>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("sectorCacheEntries")] 
 		public CArray<physicsSectorCacheEntry> SectorCacheEntries
 		{
-			get => GetProperty(ref _sectorCacheEntries);
-			set => SetProperty(ref _sectorCacheEntries, value);
+			get => GetPropertyValue<CArray<physicsSectorCacheEntry>>();
+			set => SetPropertyValue<CArray<physicsSectorCacheEntry>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("alwaysLoadedSector")] 
 		public physicsSectorEntry AlwaysLoadedSector
 		{
-			get => GetProperty(ref _alwaysLoadedSector);
-			set => SetProperty(ref _alwaysLoadedSector, value);
+			get => GetPropertyValue<physicsSectorEntry>();
+			set => SetPropertyValue<physicsSectorEntry>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("alwaysLoadedSectorDDB")] 
 		public SerializationDeferredDataBuffer AlwaysLoadedSectorDDB
 		{
-			get => GetProperty(ref _alwaysLoadedSectorDDB);
-			set => SetProperty(ref _alwaysLoadedSectorDDB, value);
+			get => GetPropertyValue<SerializationDeferredDataBuffer>();
+			set => SetPropertyValue<SerializationDeferredDataBuffer>(value);
+		}
+
+		public physicsGeometryCache()
+		{
+			BufferTableSectors = new();
+			SectorEntries = new();
+			SectorGeometries = new();
+			SectorCacheEntries = new();
+			AlwaysLoadedSector = new() { SectorBounds = new() { Min = new(), Max = new() } };
 		}
 	}
 }

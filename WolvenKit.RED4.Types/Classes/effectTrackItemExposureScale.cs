@@ -5,59 +5,58 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class effectTrackItemExposureScale : effectTrackItem
 	{
-		private effectEffectParameterEvaluatorFloat _scale;
-		private CBool _useInitialCameraPosDirForFadeout;
-		private CFloat _fullEffectRadius;
-		private CFloat _fadeOutRadius;
-		private CFloat _fullyVisibleAngle;
-		private CFloat _fadeOutAngle;
-
 		[Ordinal(3)] 
 		[RED("scale")] 
 		public effectEffectParameterEvaluatorFloat Scale
 		{
-			get => GetProperty(ref _scale);
-			set => SetProperty(ref _scale, value);
+			get => GetPropertyValue<effectEffectParameterEvaluatorFloat>();
+			set => SetPropertyValue<effectEffectParameterEvaluatorFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("useInitialCameraPosDirForFadeout")] 
 		public CBool UseInitialCameraPosDirForFadeout
 		{
-			get => GetProperty(ref _useInitialCameraPosDirForFadeout);
-			set => SetProperty(ref _useInitialCameraPosDirForFadeout, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("fullEffectRadius")] 
 		public CFloat FullEffectRadius
 		{
-			get => GetProperty(ref _fullEffectRadius);
-			set => SetProperty(ref _fullEffectRadius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("fadeOutRadius")] 
 		public CFloat FadeOutRadius
 		{
-			get => GetProperty(ref _fadeOutRadius);
-			set => SetProperty(ref _fadeOutRadius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("fullyVisibleAngle")] 
 		public CFloat FullyVisibleAngle
 		{
-			get => GetProperty(ref _fullyVisibleAngle);
-			set => SetProperty(ref _fullyVisibleAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("fadeOutAngle")] 
 		public CFloat FadeOutAngle
 		{
-			get => GetProperty(ref _fadeOutAngle);
-			set => SetProperty(ref _fadeOutAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public effectTrackItemExposureScale()
+		{
+			TimeDuration = 1.000000F;
+			Scale = new();
 		}
 	}
 }

@@ -5,85 +5,78 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questEntityManagerMountPuppet_NodeType : questIEntityManager_NodeType
 	{
-		private gameEntityReference _parentRef;
-		private gameEntityReference _childRef;
-		private CBool _isParentPlayer;
-		private CName _slotName;
-		private CBool _assign;
-		private CBool _isInstant;
-		private CEnum<gamePSMBodyCarryingStyle> _forcedCarryStyle;
-		private CBool _removePitchRollRotation;
-
 		[Ordinal(0)] 
 		[RED("parentRef")] 
 		public gameEntityReference ParentRef
 		{
-			get => GetProperty(ref _parentRef);
-			set => SetProperty(ref _parentRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("childRef")] 
 		public gameEntityReference ChildRef
 		{
-			get => GetProperty(ref _childRef);
-			set => SetProperty(ref _childRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isParentPlayer")] 
 		public CBool IsParentPlayer
 		{
-			get => GetProperty(ref _isParentPlayer);
-			set => SetProperty(ref _isParentPlayer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("slotName")] 
 		public CName SlotName
 		{
-			get => GetProperty(ref _slotName);
-			set => SetProperty(ref _slotName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("assign")] 
 		public CBool Assign
 		{
-			get => GetProperty(ref _assign);
-			set => SetProperty(ref _assign, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("isInstant")] 
 		public CBool IsInstant
 		{
-			get => GetProperty(ref _isInstant);
-			set => SetProperty(ref _isInstant, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("forcedCarryStyle")] 
 		public CEnum<gamePSMBodyCarryingStyle> ForcedCarryStyle
 		{
-			get => GetProperty(ref _forcedCarryStyle);
-			set => SetProperty(ref _forcedCarryStyle, value);
+			get => GetPropertyValue<CEnum<gamePSMBodyCarryingStyle>>();
+			set => SetPropertyValue<CEnum<gamePSMBodyCarryingStyle>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("removePitchRollRotation")] 
 		public CBool RemovePitchRollRotation
 		{
-			get => GetProperty(ref _removePitchRollRotation);
-			set => SetProperty(ref _removePitchRollRotation, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public questEntityManagerMountPuppet_NodeType()
 		{
-			_assign = true;
-			_isInstant = true;
-			_forcedCarryStyle = new() { Value = Enums.gamePSMBodyCarryingStyle.Friendly };
-			_removePitchRollRotation = true;
+			ParentRef = new() { Names = new() };
+			ChildRef = new() { Names = new() };
+			Assign = true;
+			IsInstant = true;
+			ForcedCarryStyle = Enums.gamePSMBodyCarryingStyle.Friendly;
+			RemovePitchRollRotation = true;
 		}
 	}
 }

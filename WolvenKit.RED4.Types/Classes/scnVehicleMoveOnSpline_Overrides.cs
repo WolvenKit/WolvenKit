@@ -5,83 +5,78 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnVehicleMoveOnSpline_Overrides : questIVehicleMoveOnSpline_Overrides
 	{
-		private CBool _useEntry;
-		private CBool _useExit;
-		private CFloat _entrySpeed;
-		private CFloat _exitSpeed;
-		private Transform _entryTransform;
-		private Transform _exitTransform;
-		private scnMarker _entryMarker;
-		private scnMarker _exitMarker;
-
 		[Ordinal(0)] 
 		[RED("useEntry")] 
 		public CBool UseEntry
 		{
-			get => GetProperty(ref _useEntry);
-			set => SetProperty(ref _useEntry, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("useExit")] 
 		public CBool UseExit
 		{
-			get => GetProperty(ref _useExit);
-			set => SetProperty(ref _useExit, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("entrySpeed")] 
 		public CFloat EntrySpeed
 		{
-			get => GetProperty(ref _entrySpeed);
-			set => SetProperty(ref _entrySpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("exitSpeed")] 
 		public CFloat ExitSpeed
 		{
-			get => GetProperty(ref _exitSpeed);
-			set => SetProperty(ref _exitSpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("entryTransform")] 
 		public Transform EntryTransform
 		{
-			get => GetProperty(ref _entryTransform);
-			set => SetProperty(ref _entryTransform, value);
+			get => GetPropertyValue<Transform>();
+			set => SetPropertyValue<Transform>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("exitTransform")] 
 		public Transform ExitTransform
 		{
-			get => GetProperty(ref _exitTransform);
-			set => SetProperty(ref _exitTransform, value);
+			get => GetPropertyValue<Transform>();
+			set => SetPropertyValue<Transform>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("entryMarker")] 
 		public scnMarker EntryMarker
 		{
-			get => GetProperty(ref _entryMarker);
-			set => SetProperty(ref _entryMarker, value);
+			get => GetPropertyValue<scnMarker>();
+			set => SetPropertyValue<scnMarker>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("exitMarker")] 
 		public scnMarker ExitMarker
 		{
-			get => GetProperty(ref _exitMarker);
-			set => SetProperty(ref _exitMarker, value);
+			get => GetPropertyValue<scnMarker>();
+			set => SetPropertyValue<scnMarker>(value);
 		}
 
 		public scnVehicleMoveOnSpline_Overrides()
 		{
-			_entrySpeed = -1.000000F;
-			_exitSpeed = -1.000000F;
+			EntrySpeed = -1.000000F;
+			ExitSpeed = -1.000000F;
+			EntryTransform = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			ExitTransform = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			EntryMarker = new() { Type = Enums.scnMarkerType.Global, EntityRef = new() { Names = new() }, IsMounted = true };
+			ExitMarker = new() { Type = Enums.scnMarkerType.Global, EntityRef = new() { Names = new() }, IsMounted = true };
 		}
 	}
 }

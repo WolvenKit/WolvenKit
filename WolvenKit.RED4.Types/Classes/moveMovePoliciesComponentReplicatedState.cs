@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class moveMovePoliciesComponentReplicatedState : netIComponentState
 	{
-		private moveReplicatedMovePoliciesState _movePolicies;
-
 		[Ordinal(2)] 
 		[RED("movePolicies")] 
 		public moveReplicatedMovePoliciesState MovePolicies
 		{
-			get => GetProperty(ref _movePolicies);
-			set => SetProperty(ref _movePolicies, value);
+			get => GetPropertyValue<moveReplicatedMovePoliciesState>();
+			set => SetPropertyValue<moveReplicatedMovePoliciesState>(value);
+		}
+
+		public moveMovePoliciesComponentReplicatedState()
+		{
+			Enabled = true;
+			MovePolicies = new() { Items = new(), LastAppliedActionsTime = new() };
 		}
 	}
 }

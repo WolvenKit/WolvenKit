@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimStateTransitionCondition_Timed : animIAnimStateTransitionCondition
 	{
-		private CFloat _timeToFireTransition;
-
 		[Ordinal(0)] 
 		[RED("timeToFireTransition")] 
 		public CFloat TimeToFireTransition
 		{
-			get => GetProperty(ref _timeToFireTransition);
-			set => SetProperty(ref _timeToFireTransition, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public animAnimStateTransitionCondition_Timed()
 		{
-			_timeToFireTransition = 1.000000F;
+			TimeToFireTransition = 1.000000F;
 		}
 	}
 }

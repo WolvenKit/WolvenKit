@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameinteractionsInteractionDescriptorResource : CResource
 	{
-		private gameinteractionsCHotSpotDefinition _definition;
-
 		[Ordinal(1)] 
 		[RED("definition")] 
 		public gameinteractionsCHotSpotDefinition Definition
 		{
-			get => GetProperty(ref _definition);
-			set => SetProperty(ref _definition, value);
+			get => GetPropertyValue<gameinteractionsCHotSpotDefinition>();
+			set => SetPropertyValue<gameinteractionsCHotSpotDefinition>(value);
+		}
+
+		public gameinteractionsInteractionDescriptorResource()
+		{
+			Definition = new() { LayersDefinition = new() { null } };
 		}
 	}
 }

@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questPreloadFX_NodeType : questIFXManagerNodeType
 	{
-		private CArray<questPreloadFX_NodeTypeParams> _params;
-
 		[Ordinal(0)] 
 		[RED("params")] 
 		public CArray<questPreloadFX_NodeTypeParams> Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<CArray<questPreloadFX_NodeTypeParams>>();
+			set => SetPropertyValue<CArray<questPreloadFX_NodeTypeParams>>(value);
+		}
+
+		public questPreloadFX_NodeType()
+		{
+			Params = new() { new() };
 		}
 	}
 }

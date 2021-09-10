@@ -5,19 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AITargetTrackerComponent : gameComponent
 	{
-		private CBool _triggersCombat;
-
 		[Ordinal(4)] 
 		[RED("TriggersCombat")] 
 		public CBool TriggersCombat
 		{
-			get => GetProperty(ref _triggersCombat);
-			set => SetProperty(ref _triggersCombat, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public AITargetTrackerComponent()
 		{
-			_triggersCombat = true;
+			Name = "TargetTracker";
+			TriggersCombat = true;
 		}
 	}
 }

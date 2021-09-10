@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CommunicationEvent : redEvent
 	{
-		private CName _name;
-		private entEntityID _sender;
-
 		[Ordinal(0)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get => GetProperty(ref _name);
-			set => SetProperty(ref _name, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("sender")] 
 		public entEntityID Sender
 		{
-			get => GetProperty(ref _sender);
-			set => SetProperty(ref _sender, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
+		}
+
+		public CommunicationEvent()
+		{
+			Sender = new();
 		}
 	}
 }

@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ItemTooltipModEntryController : inkWidgetLogicController
 	{
-		private inkTextWidgetReference _modName;
-
 		[Ordinal(1)] 
 		[RED("modName")] 
 		public inkTextWidgetReference ModName
 		{
-			get => GetProperty(ref _modName);
-			set => SetProperty(ref _modName, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		public ItemTooltipModEntryController()
+		{
+			ModName = new();
 		}
 	}
 }

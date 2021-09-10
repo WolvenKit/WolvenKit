@@ -5,32 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ToggleNetrunnerDive : ActionBool
 	{
-		private CBool _skipMinigame;
-		private CInt32 _attempt;
-		private CBool _isRemote;
-
 		[Ordinal(25)] 
 		[RED("skipMinigame")] 
 		public CBool SkipMinigame
 		{
-			get => GetProperty(ref _skipMinigame);
-			set => SetProperty(ref _skipMinigame, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("attempt")] 
 		public CInt32 Attempt
 		{
-			get => GetProperty(ref _attempt);
-			set => SetProperty(ref _attempt, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("isRemote")] 
 		public CBool IsRemote
 		{
-			get => GetProperty(ref _isRemote);
-			set => SetProperty(ref _isRemote, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public ToggleNetrunnerDive()
+		{
+			RequesterID = new();
+			InteractionChoice = new() { CaptionParts = new() { Parts = new() }, Data = new(), ChoiceMetaData = new() { Type = new() }, LookAtDescriptor = new() { Offset = new(), OrbId = new() } };
+			ActionWidgetPackage = new() { DependendActions = new() };
+			CanTriggerStim = true;
 		}
 	}
 }

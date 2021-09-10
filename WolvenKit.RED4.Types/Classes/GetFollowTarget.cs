@@ -5,56 +5,50 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class GetFollowTarget : FollowVehicleTask
 	{
-		private CHandle<gameIBlackboard> _blackboard;
-		private CWeakHandle<vehicleBaseObject> _vehicle;
-		private CFloat _lastTime;
-		private CFloat _timeout;
-		private CFloat _timeoutDuration;
-
 		[Ordinal(0)] 
 		[RED("blackboard")] 
 		public CHandle<gameIBlackboard> Blackboard
 		{
-			get => GetProperty(ref _blackboard);
-			set => SetProperty(ref _blackboard, value);
+			get => GetPropertyValue<CHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("vehicle")] 
 		public CWeakHandle<vehicleBaseObject> Vehicle
 		{
-			get => GetProperty(ref _vehicle);
-			set => SetProperty(ref _vehicle, value);
+			get => GetPropertyValue<CWeakHandle<vehicleBaseObject>>();
+			set => SetPropertyValue<CWeakHandle<vehicleBaseObject>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("lastTime")] 
 		public CFloat LastTime
 		{
-			get => GetProperty(ref _lastTime);
-			set => SetProperty(ref _lastTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("timeout")] 
 		public CFloat Timeout
 		{
-			get => GetProperty(ref _timeout);
-			set => SetProperty(ref _timeout, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("timeoutDuration")] 
 		public CFloat TimeoutDuration
 		{
-			get => GetProperty(ref _timeoutDuration);
-			set => SetProperty(ref _timeoutDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public GetFollowTarget()
 		{
-			_lastTime = -1.000000F;
-			_timeoutDuration = 0.100000F;
+			LastTime = -1.000000F;
+			TimeoutDuration = 0.100000F;
 		}
 	}
 }

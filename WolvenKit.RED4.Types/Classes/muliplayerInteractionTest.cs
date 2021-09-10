@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class muliplayerInteractionTest : gameObject
 	{
-		private CInt32 _counter;
-
 		[Ordinal(40)] 
 		[RED("counter")] 
 		public CInt32 Counter
 		{
-			get => GetProperty(ref _counter);
-			set => SetProperty(ref _counter, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

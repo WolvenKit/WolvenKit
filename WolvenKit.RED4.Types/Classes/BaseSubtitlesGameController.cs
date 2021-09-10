@@ -5,190 +5,173 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class BaseSubtitlesGameController : gameuiProjectedHUDGameController
 	{
-		private CArray<subtitleLineMapEntry> _lineMap;
-		private CArray<CRUID> _pendingShowLines;
-		private CArray<CRUID> _pendingHideLines;
-		private CHandle<userSettingsUserSettings> _settings;
-		private CHandle<SubtitlesSettingsListener> _settingsListener;
-		private CName _groupPath;
-		private ScriptGameInstance _gameInstance;
-		private CWeakHandle<gameIBlackboard> _uiBlackboard;
-		private CHandle<redCallbackObject> _bbCbShowDialogLine;
-		private CHandle<redCallbackObject> _bbCbHideDialogLine;
-		private CHandle<redCallbackObject> _bbCbHideDialogLineByData;
-		private CHandle<redCallbackObject> _bbCbShowBackground;
-		private CBool _showBackgroud;
-		private CBool _isCreoleUnlocked;
-		private CBool _isPlayerJohnny;
-		private CBool _disabledBySettings;
-		private CBool _forceForeignLines;
-		private CFloat _backgroundOpacity;
-		private CInt32 _fontSize;
-		private CUInt32 _factlistenerId;
-
 		[Ordinal(9)] 
 		[RED("lineMap")] 
 		public CArray<subtitleLineMapEntry> LineMap
 		{
-			get => GetProperty(ref _lineMap);
-			set => SetProperty(ref _lineMap, value);
+			get => GetPropertyValue<CArray<subtitleLineMapEntry>>();
+			set => SetPropertyValue<CArray<subtitleLineMapEntry>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("pendingShowLines")] 
 		public CArray<CRUID> PendingShowLines
 		{
-			get => GetProperty(ref _pendingShowLines);
-			set => SetProperty(ref _pendingShowLines, value);
+			get => GetPropertyValue<CArray<CRUID>>();
+			set => SetPropertyValue<CArray<CRUID>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("pendingHideLines")] 
 		public CArray<CRUID> PendingHideLines
 		{
-			get => GetProperty(ref _pendingHideLines);
-			set => SetProperty(ref _pendingHideLines, value);
+			get => GetPropertyValue<CArray<CRUID>>();
+			set => SetPropertyValue<CArray<CRUID>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("settings")] 
 		public CHandle<userSettingsUserSettings> Settings
 		{
-			get => GetProperty(ref _settings);
-			set => SetProperty(ref _settings, value);
+			get => GetPropertyValue<CHandle<userSettingsUserSettings>>();
+			set => SetPropertyValue<CHandle<userSettingsUserSettings>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("settingsListener")] 
 		public CHandle<SubtitlesSettingsListener> SettingsListener
 		{
-			get => GetProperty(ref _settingsListener);
-			set => SetProperty(ref _settingsListener, value);
+			get => GetPropertyValue<CHandle<SubtitlesSettingsListener>>();
+			set => SetPropertyValue<CHandle<SubtitlesSettingsListener>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("groupPath")] 
 		public CName GroupPath
 		{
-			get => GetProperty(ref _groupPath);
-			set => SetProperty(ref _groupPath, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("gameInstance")] 
 		public ScriptGameInstance GameInstance
 		{
-			get => GetProperty(ref _gameInstance);
-			set => SetProperty(ref _gameInstance, value);
+			get => GetPropertyValue<ScriptGameInstance>();
+			set => SetPropertyValue<ScriptGameInstance>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("uiBlackboard")] 
 		public CWeakHandle<gameIBlackboard> UiBlackboard
 		{
-			get => GetProperty(ref _uiBlackboard);
-			set => SetProperty(ref _uiBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("bbCbShowDialogLine")] 
 		public CHandle<redCallbackObject> BbCbShowDialogLine
 		{
-			get => GetProperty(ref _bbCbShowDialogLine);
-			set => SetProperty(ref _bbCbShowDialogLine, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("bbCbHideDialogLine")] 
 		public CHandle<redCallbackObject> BbCbHideDialogLine
 		{
-			get => GetProperty(ref _bbCbHideDialogLine);
-			set => SetProperty(ref _bbCbHideDialogLine, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("bbCbHideDialogLineByData")] 
 		public CHandle<redCallbackObject> BbCbHideDialogLineByData
 		{
-			get => GetProperty(ref _bbCbHideDialogLineByData);
-			set => SetProperty(ref _bbCbHideDialogLineByData, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("bbCbShowBackground")] 
 		public CHandle<redCallbackObject> BbCbShowBackground
 		{
-			get => GetProperty(ref _bbCbShowBackground);
-			set => SetProperty(ref _bbCbShowBackground, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("showBackgroud")] 
 		public CBool ShowBackgroud
 		{
-			get => GetProperty(ref _showBackgroud);
-			set => SetProperty(ref _showBackgroud, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("isCreoleUnlocked")] 
 		public CBool IsCreoleUnlocked
 		{
-			get => GetProperty(ref _isCreoleUnlocked);
-			set => SetProperty(ref _isCreoleUnlocked, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("isPlayerJohnny")] 
 		public CBool IsPlayerJohnny
 		{
-			get => GetProperty(ref _isPlayerJohnny);
-			set => SetProperty(ref _isPlayerJohnny, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("disabledBySettings")] 
 		public CBool DisabledBySettings
 		{
-			get => GetProperty(ref _disabledBySettings);
-			set => SetProperty(ref _disabledBySettings, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("forceForeignLines")] 
 		public CBool ForceForeignLines
 		{
-			get => GetProperty(ref _forceForeignLines);
-			set => SetProperty(ref _forceForeignLines, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("backgroundOpacity")] 
 		public CFloat BackgroundOpacity
 		{
-			get => GetProperty(ref _backgroundOpacity);
-			set => SetProperty(ref _backgroundOpacity, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("fontSize")] 
 		public CInt32 FontSize
 		{
-			get => GetProperty(ref _fontSize);
-			set => SetProperty(ref _fontSize, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("factlistenerId")] 
 		public CUInt32 FactlistenerId
 		{
-			get => GetProperty(ref _factlistenerId);
-			set => SetProperty(ref _factlistenerId, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		public BaseSubtitlesGameController()
 		{
-			_groupPath = "/audio/subtitles";
+			LineMap = new();
+			PendingShowLines = new();
+			PendingHideLines = new();
+			GroupPath = "/audio/subtitles";
+			GameInstance = new();
 		}
 	}
 }

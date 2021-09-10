@@ -5,5 +5,9 @@ namespace WolvenKit.RED4.Types
 	public partial class HighlightModule : HUDModule
 	{
 
+		public HighlightModule()
+		{
+			InstancesList = new();
+		}
 	}
 }

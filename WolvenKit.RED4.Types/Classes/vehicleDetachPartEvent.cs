@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class vehicleDetachPartEvent : redEvent
 	{
-		private CName _partName;
-
 		[Ordinal(0)] 
 		[RED("partName")] 
 		public CName PartName
 		{
-			get => GetProperty(ref _partName);
-			set => SetProperty(ref _partName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 	}
 }

@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TurretInitData : IScriptable
 	{
-		private CWeakHandle<gameObject> _turret;
-
 		[Ordinal(0)] 
 		[RED("turret")] 
 		public CWeakHandle<gameObject> Turret
 		{
-			get => GetProperty(ref _turret);
-			set => SetProperty(ref _turret, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 	}
 }

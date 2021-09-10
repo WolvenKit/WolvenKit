@@ -5,73 +5,70 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_LookAt : animAnimNode_OnePoseInput
 	{
-		private animTransformIndex _transform;
-		private CEnum<animAxis> _forwardAxis;
-		private CBool _useLimits;
-		private CEnum<animAxis> _limitAxis;
-		private CFloat _limitAngle;
-		private animVectorLink _targetNode;
-		private animFloatLink _weightNode;
-
 		[Ordinal(12)] 
 		[RED("transform")] 
 		public animTransformIndex Transform
 		{
-			get => GetProperty(ref _transform);
-			set => SetProperty(ref _transform, value);
+			get => GetPropertyValue<animTransformIndex>();
+			set => SetPropertyValue<animTransformIndex>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("forwardAxis")] 
 		public CEnum<animAxis> ForwardAxis
 		{
-			get => GetProperty(ref _forwardAxis);
-			set => SetProperty(ref _forwardAxis, value);
+			get => GetPropertyValue<CEnum<animAxis>>();
+			set => SetPropertyValue<CEnum<animAxis>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("useLimits")] 
 		public CBool UseLimits
 		{
-			get => GetProperty(ref _useLimits);
-			set => SetProperty(ref _useLimits, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("limitAxis")] 
 		public CEnum<animAxis> LimitAxis
 		{
-			get => GetProperty(ref _limitAxis);
-			set => SetProperty(ref _limitAxis, value);
+			get => GetPropertyValue<CEnum<animAxis>>();
+			set => SetPropertyValue<CEnum<animAxis>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("limitAngle")] 
 		public CFloat LimitAngle
 		{
-			get => GetProperty(ref _limitAngle);
-			set => SetProperty(ref _limitAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("targetNode")] 
 		public animVectorLink TargetNode
 		{
-			get => GetProperty(ref _targetNode);
-			set => SetProperty(ref _targetNode, value);
+			get => GetPropertyValue<animVectorLink>();
+			set => SetPropertyValue<animVectorLink>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("weightNode")] 
 		public animFloatLink WeightNode
 		{
-			get => GetProperty(ref _weightNode);
-			set => SetProperty(ref _weightNode, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
 		}
 
 		public animAnimNode_LookAt()
 		{
-			_limitAngle = 90.000000F;
+			Id = 4294967295;
+			InputLink = new();
+			Transform = new();
+			LimitAngle = 90.000000F;
+			TargetNode = new();
+			WeightNode = new();
 		}
 	}
 }

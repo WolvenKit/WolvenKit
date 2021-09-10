@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questMultiplayerChoiceTokenParams : RedBaseClass
 	{
-		private CUInt32 _timeout;
-		private CName _compatibleDeviceName;
-
 		[Ordinal(0)] 
 		[RED("timeout")] 
 		public CUInt32 Timeout
 		{
-			get => GetProperty(ref _timeout);
-			set => SetProperty(ref _timeout, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("compatibleDeviceName")] 
 		public CName CompatibleDeviceName
 		{
-			get => GetProperty(ref _compatibleDeviceName);
-			set => SetProperty(ref _compatibleDeviceName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public questMultiplayerChoiceTokenParams()
 		{
-			_timeout = 15;
+			Timeout = 15;
 		}
 	}
 }

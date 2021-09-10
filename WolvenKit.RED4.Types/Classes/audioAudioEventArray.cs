@@ -5,77 +5,79 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioAudioEventArray : ISerializable
 	{
-		private CBool _isSortedByRedHash;
-		private CArray<audioAudioEventMetadataArrayElement> _events;
-		private CArray<audioAudioEventMetadataArrayElement> _switchGroup;
-		private CArray<audioAudioEventMetadataArrayElement> _switch;
-		private CArray<audioAudioEventMetadataArrayElement> _stateGroup;
-		private CArray<audioAudioEventMetadataArrayElement> _state;
-		private CArray<audioAudioEventMetadataArrayElement> _gameParameter;
-		private CArray<audioAudioEventMetadataArrayElement> _bus;
-
 		[Ordinal(0)] 
 		[RED("isSortedByRedHash")] 
 		public CBool IsSortedByRedHash
 		{
-			get => GetProperty(ref _isSortedByRedHash);
-			set => SetProperty(ref _isSortedByRedHash, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("events")] 
 		public CArray<audioAudioEventMetadataArrayElement> Events
 		{
-			get => GetProperty(ref _events);
-			set => SetProperty(ref _events, value);
+			get => GetPropertyValue<CArray<audioAudioEventMetadataArrayElement>>();
+			set => SetPropertyValue<CArray<audioAudioEventMetadataArrayElement>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("switchGroup")] 
 		public CArray<audioAudioEventMetadataArrayElement> SwitchGroup
 		{
-			get => GetProperty(ref _switchGroup);
-			set => SetProperty(ref _switchGroup, value);
+			get => GetPropertyValue<CArray<audioAudioEventMetadataArrayElement>>();
+			set => SetPropertyValue<CArray<audioAudioEventMetadataArrayElement>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("switch")] 
 		public CArray<audioAudioEventMetadataArrayElement> Switch
 		{
-			get => GetProperty(ref _switch);
-			set => SetProperty(ref _switch, value);
+			get => GetPropertyValue<CArray<audioAudioEventMetadataArrayElement>>();
+			set => SetPropertyValue<CArray<audioAudioEventMetadataArrayElement>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("stateGroup")] 
 		public CArray<audioAudioEventMetadataArrayElement> StateGroup
 		{
-			get => GetProperty(ref _stateGroup);
-			set => SetProperty(ref _stateGroup, value);
+			get => GetPropertyValue<CArray<audioAudioEventMetadataArrayElement>>();
+			set => SetPropertyValue<CArray<audioAudioEventMetadataArrayElement>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("state")] 
 		public CArray<audioAudioEventMetadataArrayElement> State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<CArray<audioAudioEventMetadataArrayElement>>();
+			set => SetPropertyValue<CArray<audioAudioEventMetadataArrayElement>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("gameParameter")] 
 		public CArray<audioAudioEventMetadataArrayElement> GameParameter
 		{
-			get => GetProperty(ref _gameParameter);
-			set => SetProperty(ref _gameParameter, value);
+			get => GetPropertyValue<CArray<audioAudioEventMetadataArrayElement>>();
+			set => SetPropertyValue<CArray<audioAudioEventMetadataArrayElement>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("bus")] 
 		public CArray<audioAudioEventMetadataArrayElement> Bus
 		{
-			get => GetProperty(ref _bus);
-			set => SetProperty(ref _bus, value);
+			get => GetPropertyValue<CArray<audioAudioEventMetadataArrayElement>>();
+			set => SetPropertyValue<CArray<audioAudioEventMetadataArrayElement>>(value);
+		}
+
+		public audioAudioEventArray()
+		{
+			Events = new();
+			SwitchGroup = new();
+			Switch = new();
+			StateGroup = new();
+			State = new();
+			GameParameter = new();
+			Bus = new();
 		}
 	}
 }

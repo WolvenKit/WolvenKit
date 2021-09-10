@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questRemoveAllContacts_NodeType : questIPhoneManagerNodeType
 	{
-		private CArray<CHandle<gameJournalPath>> _excludedContacts;
-
 		[Ordinal(0)] 
 		[RED("excludedContacts")] 
 		public CArray<CHandle<gameJournalPath>> ExcludedContacts
 		{
-			get => GetProperty(ref _excludedContacts);
-			set => SetProperty(ref _excludedContacts, value);
+			get => GetPropertyValue<CArray<CHandle<gameJournalPath>>>();
+			set => SetPropertyValue<CArray<CHandle<gameJournalPath>>>(value);
+		}
+
+		public questRemoveAllContacts_NodeType()
+		{
+			ExcludedContacts = new();
 		}
 	}
 }

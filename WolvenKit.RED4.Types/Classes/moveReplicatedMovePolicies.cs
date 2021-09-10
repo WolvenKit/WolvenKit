@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class moveReplicatedMovePolicies : entReplicatedItem
 	{
-		private CUInt64 _key;
-		private CHandle<movePolicies> _policies;
-
 		[Ordinal(2)] 
 		[RED("key")] 
 		public CUInt64 Key
 		{
-			get => GetProperty(ref _key);
-			set => SetProperty(ref _key, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("policies")] 
 		public CHandle<movePolicies> Policies
 		{
-			get => GetProperty(ref _policies);
-			set => SetProperty(ref _policies, value);
+			get => GetPropertyValue<CHandle<movePolicies>>();
+			set => SetPropertyValue<CHandle<movePolicies>>(value);
 		}
 	}
 }

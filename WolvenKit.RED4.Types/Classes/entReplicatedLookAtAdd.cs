@@ -5,46 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entReplicatedLookAtAdd : entReplicatedLookAtData
 	{
-		private CName _bodyPart;
-		private animLookAtRequest _request;
-		private CHandle<entIPositionProvider> _targetPositionProvider;
-		private animLookAtRef _ref;
-
 		[Ordinal(1)] 
 		[RED("bodyPart")] 
 		public CName BodyPart
 		{
-			get => GetProperty(ref _bodyPart);
-			set => SetProperty(ref _bodyPart, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("request")] 
 		public animLookAtRequest Request
 		{
-			get => GetProperty(ref _request);
-			set => SetProperty(ref _request, value);
+			get => GetPropertyValue<animLookAtRequest>();
+			set => SetPropertyValue<animLookAtRequest>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("targetPositionProvider")] 
 		public CHandle<entIPositionProvider> TargetPositionProvider
 		{
-			get => GetProperty(ref _targetPositionProvider);
-			set => SetProperty(ref _targetPositionProvider, value);
+			get => GetPropertyValue<CHandle<entIPositionProvider>>();
+			set => SetPropertyValue<CHandle<entIPositionProvider>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("ref")] 
 		public animLookAtRef Ref
 		{
-			get => GetProperty(ref _ref);
-			set => SetProperty(ref _ref, value);
+			get => GetPropertyValue<animLookAtRef>();
+			set => SetPropertyValue<animLookAtRef>(value);
 		}
 
 		public entReplicatedLookAtAdd()
 		{
-			_bodyPart = "Eyes";
+			BodyPart = "Eyes";
+			Request = new() { TransitionSpeed = 60.000000F, OutTransitionSpeed = 60.000000F, FollowingSpeedFactorOverride = -1.000000F, Limits = new() { SoftLimitDegrees = 360.000000F, HardLimitDegrees = 360.000000F, HardLimitDistance = 1000000.000000F, BackLimitDegrees = 180.000000F }, AdditionalParts = new(0) };
+			Ref = new() { Id = -1 };
 		}
 	}
 }

@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiAdvertGlitchEvent : redEvent
 	{
-		private CFloat _glitchValue;
-
 		[Ordinal(0)] 
 		[RED("glitchValue")] 
 		public CFloat GlitchValue
 		{
-			get => GetProperty(ref _glitchValue);
-			set => SetProperty(ref _glitchValue, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public gameuiAdvertGlitchEvent()
 		{
-			_glitchValue = 1.000000F;
+			GlitchValue = 1.000000F;
 		}
 	}
 }

@@ -5,38 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldStaticQuestMarkerNode : worldNode
 	{
-		private CEnum<worldQuestType> _questType;
-		private CString _questLabel;
-		private CFloat _questMarkerHeight;
-
 		[Ordinal(4)] 
 		[RED("questType")] 
 		public CEnum<worldQuestType> QuestType
 		{
-			get => GetProperty(ref _questType);
-			set => SetProperty(ref _questType, value);
+			get => GetPropertyValue<CEnum<worldQuestType>>();
+			set => SetPropertyValue<CEnum<worldQuestType>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("questLabel")] 
 		public CString QuestLabel
 		{
-			get => GetProperty(ref _questLabel);
-			set => SetProperty(ref _questLabel, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("questMarkerHeight")] 
 		public CFloat QuestMarkerHeight
 		{
-			get => GetProperty(ref _questMarkerHeight);
-			set => SetProperty(ref _questMarkerHeight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public worldStaticQuestMarkerNode()
 		{
-			_questLabel = new() { Text = "Temporary Quest Label" };
-			_questMarkerHeight = 500.000000F;
+			QuestLabel = "Temporary Quest Label";
+			QuestMarkerHeight = 500.000000F;
 		}
 	}
 }

@@ -5,82 +5,81 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ComputerControllerPS : TerminalControllerPS
 	{
-		private ComputerSetup _computerSetup;
-		private ComputerQuickHackData _quickHackSetup;
-		private CEnum<EToggleActivationTypeComputer> _activatorActionSetup;
-		private CHandle<HackEngContainer> _computerSkillChecks;
-		private SDocumentAdress _openedMailAdress;
-		private SDocumentAdress _openedFileAdress;
-		private CBool _quickhackPerformed;
-		private CBool _isInSleepMode;
-
 		[Ordinal(114)] 
 		[RED("computerSetup")] 
 		public ComputerSetup ComputerSetup
 		{
-			get => GetProperty(ref _computerSetup);
-			set => SetProperty(ref _computerSetup, value);
+			get => GetPropertyValue<ComputerSetup>();
+			set => SetPropertyValue<ComputerSetup>(value);
 		}
 
 		[Ordinal(115)] 
 		[RED("quickHackSetup")] 
 		public ComputerQuickHackData QuickHackSetup
 		{
-			get => GetProperty(ref _quickHackSetup);
-			set => SetProperty(ref _quickHackSetup, value);
+			get => GetPropertyValue<ComputerQuickHackData>();
+			set => SetPropertyValue<ComputerQuickHackData>(value);
 		}
 
 		[Ordinal(116)] 
 		[RED("activatorActionSetup")] 
 		public CEnum<EToggleActivationTypeComputer> ActivatorActionSetup
 		{
-			get => GetProperty(ref _activatorActionSetup);
-			set => SetProperty(ref _activatorActionSetup, value);
+			get => GetPropertyValue<CEnum<EToggleActivationTypeComputer>>();
+			set => SetPropertyValue<CEnum<EToggleActivationTypeComputer>>(value);
 		}
 
 		[Ordinal(117)] 
 		[RED("computerSkillChecks")] 
 		public CHandle<HackEngContainer> ComputerSkillChecks
 		{
-			get => GetProperty(ref _computerSkillChecks);
-			set => SetProperty(ref _computerSkillChecks, value);
+			get => GetPropertyValue<CHandle<HackEngContainer>>();
+			set => SetPropertyValue<CHandle<HackEngContainer>>(value);
 		}
 
 		[Ordinal(118)] 
 		[RED("openedMailAdress")] 
 		public SDocumentAdress OpenedMailAdress
 		{
-			get => GetProperty(ref _openedMailAdress);
-			set => SetProperty(ref _openedMailAdress, value);
+			get => GetPropertyValue<SDocumentAdress>();
+			set => SetPropertyValue<SDocumentAdress>(value);
 		}
 
 		[Ordinal(119)] 
 		[RED("openedFileAdress")] 
 		public SDocumentAdress OpenedFileAdress
 		{
-			get => GetProperty(ref _openedFileAdress);
-			set => SetProperty(ref _openedFileAdress, value);
+			get => GetPropertyValue<SDocumentAdress>();
+			set => SetPropertyValue<SDocumentAdress>(value);
 		}
 
 		[Ordinal(120)] 
 		[RED("quickhackPerformed")] 
 		public CBool QuickhackPerformed
 		{
-			get => GetProperty(ref _quickhackPerformed);
-			set => SetProperty(ref _quickhackPerformed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(121)] 
 		[RED("isInSleepMode")] 
 		public CBool IsInSleepMode
 		{
-			get => GetProperty(ref _isInSleepMode);
-			set => SetProperty(ref _isInSleepMode, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public ComputerControllerPS()
 		{
-			_isInSleepMode = true;
+			DeviceName = "LocKey#48";
+			TweakDBRecord = new() { Value = 72666897332 };
+			TweakDBDescriptionRecord = new() { Value = 122573441327 };
+			HasUICameraZoom = true;
+			ComputerSetup = new() { MailsMenu = true, FilesMenu = true, SystemMenu = true, InternetMenu = true, MailsStructure = new(), FilesStructure = new(), NewsFeed = new(), NewsFeedInterval = 5.000000F, InternetSubnet = new() };
+			QuickHackSetup = new();
+			OpenedMailAdress = new() { FolderID = -1, DocumentID = -1 };
+			OpenedFileAdress = new() { FolderID = -1, DocumentID = -1 };
+			IsInSleepMode = true;
 		}
 	}
 }

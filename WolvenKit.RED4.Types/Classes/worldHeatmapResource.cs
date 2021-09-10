@@ -5,41 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldHeatmapResource : CResource
 	{
-		private worldHeatmapSetup _setup;
-		private CString _name;
-		private CArray<CString> _layerNames;
-		private CArray<CResourceAsyncReference<worldHeatmapLayer>> _layers;
-
 		[Ordinal(1)] 
 		[RED("setup")] 
 		public worldHeatmapSetup Setup
 		{
-			get => GetProperty(ref _setup);
-			set => SetProperty(ref _setup, value);
+			get => GetPropertyValue<worldHeatmapSetup>();
+			set => SetPropertyValue<worldHeatmapSetup>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("name")] 
 		public CString Name
 		{
-			get => GetProperty(ref _name);
-			set => SetProperty(ref _name, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("layerNames")] 
 		public CArray<CString> LayerNames
 		{
-			get => GetProperty(ref _layerNames);
-			set => SetProperty(ref _layerNames, value);
+			get => GetPropertyValue<CArray<CString>>();
+			set => SetPropertyValue<CArray<CString>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("layers")] 
 		public CArray<CResourceAsyncReference<worldHeatmapLayer>> Layers
 		{
-			get => GetProperty(ref _layers);
-			set => SetProperty(ref _layers, value);
+			get => GetPropertyValue<CArray<CResourceAsyncReference<worldHeatmapLayer>>>();
+			set => SetPropertyValue<CArray<CResourceAsyncReference<worldHeatmapLayer>>>(value);
+		}
+
+		public worldHeatmapResource()
+		{
+			Setup = new() { VolumeBox = new() { Min = new() { X = 340282346638528859811704183484516925440.000000F, Y = 340282346638528859811704183484516925440.000000F, Z = 340282346638528859811704183484516925440.000000F, W = 340282346638528859811704183484516925440.000000F }, Max = new() { X = -340282346638528859811704183484516925440.000000F, Y = -340282346638528859811704183484516925440.000000F, Z = -340282346638528859811704183484516925440.000000F, W = -340282346638528859811704183484516925440.000000F } } };
+			LayerNames = new();
+			Layers = new();
 		}
 	}
 }

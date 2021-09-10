@@ -5,50 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class rendRenderMorphTargetMeshBlob : IRenderResourceBlob
 	{
-		private rendRenderMorphTargetMeshBlobHeader _header;
-		private DataBuffer _diffsBuffer;
-		private DataBuffer _mappingBuffer;
-		private SerializationDeferredDataBuffer _textureDiffsBuffer;
-		private CHandle<IRenderResourceBlob> _baseBlob;
-
 		[Ordinal(0)] 
 		[RED("header")] 
 		public rendRenderMorphTargetMeshBlobHeader Header
 		{
-			get => GetProperty(ref _header);
-			set => SetProperty(ref _header, value);
+			get => GetPropertyValue<rendRenderMorphTargetMeshBlobHeader>();
+			set => SetPropertyValue<rendRenderMorphTargetMeshBlobHeader>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("diffsBuffer")] 
 		public DataBuffer DiffsBuffer
 		{
-			get => GetProperty(ref _diffsBuffer);
-			set => SetProperty(ref _diffsBuffer, value);
+			get => GetPropertyValue<DataBuffer>();
+			set => SetPropertyValue<DataBuffer>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("mappingBuffer")] 
 		public DataBuffer MappingBuffer
 		{
-			get => GetProperty(ref _mappingBuffer);
-			set => SetProperty(ref _mappingBuffer, value);
+			get => GetPropertyValue<DataBuffer>();
+			set => SetPropertyValue<DataBuffer>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("textureDiffsBuffer")] 
 		public SerializationDeferredDataBuffer TextureDiffsBuffer
 		{
-			get => GetProperty(ref _textureDiffsBuffer);
-			set => SetProperty(ref _textureDiffsBuffer, value);
+			get => GetPropertyValue<SerializationDeferredDataBuffer>();
+			set => SetPropertyValue<SerializationDeferredDataBuffer>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("baseBlob")] 
 		public CHandle<IRenderResourceBlob> BaseBlob
 		{
-			get => GetProperty(ref _baseBlob);
-			set => SetProperty(ref _baseBlob, value);
+			get => GetPropertyValue<CHandle<IRenderResourceBlob>>();
+			set => SetPropertyValue<CHandle<IRenderResourceBlob>>(value);
+		}
+
+		public rendRenderMorphTargetMeshBlob()
+		{
+			Header = new() { TargetStartsInVertexDiffs = new(), TargetStartsInVertexDiffsMapping = new(), TargetPositionDiffScale = new(), TargetPositionDiffOffset = new(), NumVertexDiffsInEachChunk = new(), NumVertexDiffsMappingInEachChunk = new(), TargetTextureDiffsData = new() };
 		}
 	}
 }

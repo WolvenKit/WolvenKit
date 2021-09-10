@@ -5,84 +5,76 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questUseWorkspotPlayerParams : RedBaseClass
 	{
-		private CEnum<questUseWorkspotTier> _tier;
-		private gameTier3CameraSettings _cameraSettings;
-		private CBool _emptyHands;
-		private CBool _cameraUseTrajectorySpace;
-		private CBool _applyCameraParams;
-		private CFloat _vehicleProceduralCameraWeight;
-		private CFloat _parallaxWeight;
-		private CEnum<questCameraParallaxSpace> _parallaxSpace;
-
 		[Ordinal(0)] 
 		[RED("tier")] 
 		public CEnum<questUseWorkspotTier> Tier
 		{
-			get => GetProperty(ref _tier);
-			set => SetProperty(ref _tier, value);
+			get => GetPropertyValue<CEnum<questUseWorkspotTier>>();
+			set => SetPropertyValue<CEnum<questUseWorkspotTier>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("cameraSettings")] 
 		public gameTier3CameraSettings CameraSettings
 		{
-			get => GetProperty(ref _cameraSettings);
-			set => SetProperty(ref _cameraSettings, value);
+			get => GetPropertyValue<gameTier3CameraSettings>();
+			set => SetPropertyValue<gameTier3CameraSettings>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("emptyHands")] 
 		public CBool EmptyHands
 		{
-			get => GetProperty(ref _emptyHands);
-			set => SetProperty(ref _emptyHands, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("cameraUseTrajectorySpace")] 
 		public CBool CameraUseTrajectorySpace
 		{
-			get => GetProperty(ref _cameraUseTrajectorySpace);
-			set => SetProperty(ref _cameraUseTrajectorySpace, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("applyCameraParams")] 
 		public CBool ApplyCameraParams
 		{
-			get => GetProperty(ref _applyCameraParams);
-			set => SetProperty(ref _applyCameraParams, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("vehicleProceduralCameraWeight")] 
 		public CFloat VehicleProceduralCameraWeight
 		{
-			get => GetProperty(ref _vehicleProceduralCameraWeight);
-			set => SetProperty(ref _vehicleProceduralCameraWeight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("parallaxWeight")] 
 		public CFloat ParallaxWeight
 		{
-			get => GetProperty(ref _parallaxWeight);
-			set => SetProperty(ref _parallaxWeight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("parallaxSpace")] 
 		public CEnum<questCameraParallaxSpace> ParallaxSpace
 		{
-			get => GetProperty(ref _parallaxSpace);
-			set => SetProperty(ref _parallaxSpace, value);
+			get => GetPropertyValue<CEnum<questCameraParallaxSpace>>();
+			set => SetPropertyValue<CEnum<questCameraParallaxSpace>>(value);
 		}
 
 		public questUseWorkspotPlayerParams()
 		{
-			_cameraUseTrajectorySpace = true;
-			_vehicleProceduralCameraWeight = 1.000000F;
-			_parallaxWeight = 1.000000F;
+			CameraSettings = new() { YawLeftLimit = 60.000000F, YawRightLimit = 60.000000F, PitchTopLimit = 60.000000F, PitchBottomLimit = 45.000000F, PitchSpeedMultiplier = 1.000000F, YawSpeedMultiplier = 1.000000F };
+			CameraUseTrajectorySpace = true;
+			VehicleProceduralCameraWeight = 1.000000F;
+			ParallaxWeight = 1.000000F;
 		}
 	}
 }

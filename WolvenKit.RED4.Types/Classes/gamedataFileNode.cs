@@ -5,50 +5,51 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamedataFileNode : gamedataDataNode
 	{
-		private CString _packageName;
-		private CStatic<CWeakHandle<gamedataPackageNode>> _packageDependencies;
-		private CWeakHandle<gamedataPackageNode> _package;
-		private CArray<CHandle<gamedataVariableNode>> _variables;
-		private CArray<CHandle<gamedataGroupNode>> _groups;
-
 		[Ordinal(3)] 
 		[RED("packageName")] 
 		public CString PackageName
 		{
-			get => GetProperty(ref _packageName);
-			set => SetProperty(ref _packageName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("packageDependencies", 16)] 
 		public CStatic<CWeakHandle<gamedataPackageNode>> PackageDependencies
 		{
-			get => GetProperty(ref _packageDependencies);
-			set => SetProperty(ref _packageDependencies, value);
+			get => GetPropertyValue<CStatic<CWeakHandle<gamedataPackageNode>>>();
+			set => SetPropertyValue<CStatic<CWeakHandle<gamedataPackageNode>>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("package")] 
 		public CWeakHandle<gamedataPackageNode> Package
 		{
-			get => GetProperty(ref _package);
-			set => SetProperty(ref _package, value);
+			get => GetPropertyValue<CWeakHandle<gamedataPackageNode>>();
+			set => SetPropertyValue<CWeakHandle<gamedataPackageNode>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("variables")] 
 		public CArray<CHandle<gamedataVariableNode>> Variables
 		{
-			get => GetProperty(ref _variables);
-			set => SetProperty(ref _variables, value);
+			get => GetPropertyValue<CArray<CHandle<gamedataVariableNode>>>();
+			set => SetPropertyValue<CArray<CHandle<gamedataVariableNode>>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("groups")] 
 		public CArray<CHandle<gamedataGroupNode>> Groups
 		{
-			get => GetProperty(ref _groups);
-			set => SetProperty(ref _groups, value);
+			get => GetPropertyValue<CArray<CHandle<gamedataGroupNode>>>();
+			set => SetPropertyValue<CArray<CHandle<gamedataGroupNode>>>(value);
+		}
+
+		public gamedataFileNode()
+		{
+			PackageDependencies = new(0);
+			Variables = new();
+			Groups = new();
 		}
 	}
 }

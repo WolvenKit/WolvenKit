@@ -5,57 +5,55 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entParticlesComponent : entIVisualComponent
 	{
-		private CFloat _emissionRate;
-		private CResourceReference<CParticleSystem> _particleSystem;
-		private CFloat _autoHideRange;
-		private CEnum<RenderSceneLayerMask> _renderLayerMask;
-		private CBool _isEnabled;
-
 		[Ordinal(8)] 
 		[RED("emissionRate")] 
 		public CFloat EmissionRate
 		{
-			get => GetProperty(ref _emissionRate);
-			set => SetProperty(ref _emissionRate, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("particleSystem")] 
 		public CResourceReference<CParticleSystem> ParticleSystem
 		{
-			get => GetProperty(ref _particleSystem);
-			set => SetProperty(ref _particleSystem, value);
+			get => GetPropertyValue<CResourceReference<CParticleSystem>>();
+			set => SetPropertyValue<CResourceReference<CParticleSystem>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("autoHideRange")] 
 		public CFloat AutoHideRange
 		{
-			get => GetProperty(ref _autoHideRange);
-			set => SetProperty(ref _autoHideRange, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("renderLayerMask")] 
-		public CEnum<RenderSceneLayerMask> RenderLayerMask
+		public CBitField<RenderSceneLayerMask> RenderLayerMask
 		{
-			get => GetProperty(ref _renderLayerMask);
-			set => SetProperty(ref _renderLayerMask, value);
+			get => GetPropertyValue<CBitField<RenderSceneLayerMask>>();
+			set => SetPropertyValue<CBitField<RenderSceneLayerMask>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
-			get => GetProperty(ref _isEnabled);
-			set => SetProperty(ref _isEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public entParticlesComponent()
 		{
-			_emissionRate = 1.000000F;
-			_renderLayerMask = new() { Value = Enums.RenderSceneLayerMask.Default };
-			_isEnabled = true;
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
+			ForceLODLevel = -1;
+			EmissionRate = 1.000000F;
+			RenderLayerMask = Enums.RenderSceneLayerMask.Default;
+			IsEnabled = true;
 		}
 	}
 }

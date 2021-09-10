@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiMappinUIProfile : RedBaseClass
 	{
-		private redResourceReferenceScriptToken _widgetResource;
-		private CName _widgetLibraryID;
-		private CHandle<gamedataMappinUISpawnProfile_Record> _spawn;
-		private CHandle<gamedataMappinUIRuntimeProfile_Record> _runtime;
-
 		[Ordinal(0)] 
 		[RED("widgetResource")] 
 		public redResourceReferenceScriptToken WidgetResource
 		{
-			get => GetProperty(ref _widgetResource);
-			set => SetProperty(ref _widgetResource, value);
+			get => GetPropertyValue<redResourceReferenceScriptToken>();
+			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("widgetLibraryID")] 
 		public CName WidgetLibraryID
 		{
-			get => GetProperty(ref _widgetLibraryID);
-			set => SetProperty(ref _widgetLibraryID, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("spawn")] 
 		public CHandle<gamedataMappinUISpawnProfile_Record> Spawn
 		{
-			get => GetProperty(ref _spawn);
-			set => SetProperty(ref _spawn, value);
+			get => GetPropertyValue<CHandle<gamedataMappinUISpawnProfile_Record>>();
+			set => SetPropertyValue<CHandle<gamedataMappinUISpawnProfile_Record>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("runtime")] 
 		public CHandle<gamedataMappinUIRuntimeProfile_Record> Runtime
 		{
-			get => GetProperty(ref _runtime);
-			set => SetProperty(ref _runtime, value);
+			get => GetPropertyValue<CHandle<gamedataMappinUIRuntimeProfile_Record>>();
+			set => SetPropertyValue<CHandle<gamedataMappinUIRuntimeProfile_Record>>(value);
+		}
+
+		public gameuiMappinUIProfile()
+		{
+			WidgetResource = new();
 		}
 	}
 }

@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameStatsObjectID : RedBaseClass
 	{
-		private CUInt64 _entityHash;
-		private CEnum<gameStatIDType> _idType;
-
 		[Ordinal(0)] 
 		[RED("entityHash")] 
 		public CUInt64 EntityHash
 		{
-			get => GetProperty(ref _entityHash);
-			set => SetProperty(ref _entityHash, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("idType")] 
 		public CEnum<gameStatIDType> IdType
 		{
-			get => GetProperty(ref _idType);
-			set => SetProperty(ref _idType, value);
+			get => GetPropertyValue<CEnum<gameStatIDType>>();
+			set => SetPropertyValue<CEnum<gameStatIDType>>(value);
 		}
 
 		public gameStatsObjectID()
 		{
-			_idType = new() { Value = Enums.gameStatIDType.Invalid };
+			IdType = Enums.gameStatIDType.Invalid;
 		}
 	}
 }

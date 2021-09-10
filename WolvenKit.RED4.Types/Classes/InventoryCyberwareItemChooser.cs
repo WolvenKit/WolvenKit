@@ -5,41 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class InventoryCyberwareItemChooser : InventoryGenericItemChooser
 	{
-		private inkCompoundWidgetReference _leftSlotsContainer;
-		private inkCompoundWidgetReference _rightSlotsContainer;
-		private InventoryItemData _itemData;
-		private CArray<InventoryItemData> _itemDatas;
-
 		[Ordinal(13)] 
 		[RED("leftSlotsContainer")] 
 		public inkCompoundWidgetReference LeftSlotsContainer
 		{
-			get => GetProperty(ref _leftSlotsContainer);
-			set => SetProperty(ref _leftSlotsContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("rightSlotsContainer")] 
 		public inkCompoundWidgetReference RightSlotsContainer
 		{
-			get => GetProperty(ref _rightSlotsContainer);
-			set => SetProperty(ref _rightSlotsContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("itemData")] 
 		public InventoryItemData ItemData
 		{
-			get => GetProperty(ref _itemData);
-			set => SetProperty(ref _itemData, value);
+			get => GetPropertyValue<InventoryItemData>();
+			set => SetPropertyValue<InventoryItemData>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("itemDatas")] 
 		public CArray<InventoryItemData> ItemDatas
 		{
-			get => GetProperty(ref _itemDatas);
-			set => SetProperty(ref _itemDatas, value);
+			get => GetPropertyValue<CArray<InventoryItemData>>();
+			set => SetPropertyValue<CArray<InventoryItemData>>(value);
+		}
+
+		public InventoryCyberwareItemChooser()
+		{
+			LeftSlotsContainer = new();
+			RightSlotsContainer = new();
+			ItemData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
+			ItemDatas = new();
 		}
 	}
 }

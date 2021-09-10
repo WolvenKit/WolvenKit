@@ -5,37 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameeventsStartTakedownEvent : redEvent
 	{
-		private CWeakHandle<gameObject> _target;
-		private CFloat _slideTime;
-		private CName _actionName;
-
 		[Ordinal(0)] 
 		[RED("target")] 
 		public CWeakHandle<gameObject> Target
 		{
-			get => GetProperty(ref _target);
-			set => SetProperty(ref _target, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("slideTime")] 
 		public CFloat SlideTime
 		{
-			get => GetProperty(ref _slideTime);
-			set => SetProperty(ref _slideTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("actionName")] 
 		public CName ActionName
 		{
-			get => GetProperty(ref _actionName);
-			set => SetProperty(ref _actionName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public gameeventsStartTakedownEvent()
 		{
-			_slideTime = -1.000000F;
+			SlideTime = -1.000000F;
 		}
 	}
 }

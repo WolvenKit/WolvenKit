@@ -5,39 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameCoveringArc : RedBaseClass
 	{
-		private CFloat _leftAngle;
-		private CFloat _rightAngle;
-		private CFloat _verticalAngle;
-
 		[Ordinal(0)] 
 		[RED("leftAngle")] 
 		public CFloat LeftAngle
 		{
-			get => GetProperty(ref _leftAngle);
-			set => SetProperty(ref _leftAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("rightAngle")] 
 		public CFloat RightAngle
 		{
-			get => GetProperty(ref _rightAngle);
-			set => SetProperty(ref _rightAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("verticalAngle")] 
 		public CFloat VerticalAngle
 		{
-			get => GetProperty(ref _verticalAngle);
-			set => SetProperty(ref _verticalAngle, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public gameCoveringArc()
 		{
-			_leftAngle = -1.000000F;
-			_rightAngle = -1.000000F;
-			_verticalAngle = -1.000000F;
+			LeftAngle = -1.000000F;
+			RightAngle = -1.000000F;
+			VerticalAngle = -1.000000F;
 		}
 	}
 }

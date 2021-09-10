@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ApartmentScreenInkGameController : LcdScreenInkGameController
 	{
-		private CWeakHandle<inkImageWidget> _backgroundFrameWidget;
-
 		[Ordinal(25)] 
 		[RED("backgroundFrameWidget")] 
 		public CWeakHandle<inkImageWidget> BackgroundFrameWidget
 		{
-			get => GetProperty(ref _backgroundFrameWidget);
-			set => SetProperty(ref _backgroundFrameWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkImageWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkImageWidget>>(value);
 		}
 	}
 }

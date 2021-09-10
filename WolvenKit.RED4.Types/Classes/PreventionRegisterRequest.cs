@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PreventionRegisterRequest : gameScriptableSystemRequest
 	{
-		private CHandle<gamePersistentState> _requester;
-		private CName _attitudeGroup;
-		private CBool _register;
-
 		[Ordinal(0)] 
 		[RED("requester")] 
 		public CHandle<gamePersistentState> Requester
 		{
-			get => GetProperty(ref _requester);
-			set => SetProperty(ref _requester, value);
+			get => GetPropertyValue<CHandle<gamePersistentState>>();
+			set => SetPropertyValue<CHandle<gamePersistentState>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("attitudeGroup")] 
 		public CName AttitudeGroup
 		{
-			get => GetProperty(ref _attitudeGroup);
-			set => SetProperty(ref _attitudeGroup, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("register")] 
 		public CBool Register
 		{
-			get => GetProperty(ref _register);
-			set => SetProperty(ref _register, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

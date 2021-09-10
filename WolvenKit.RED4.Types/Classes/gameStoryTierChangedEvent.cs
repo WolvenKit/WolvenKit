@@ -5,19 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameStoryTierChangedEvent : AIAIEvent
 	{
-		private CEnum<gameStoryTier> _newTier;
-
 		[Ordinal(2)] 
 		[RED("newTier")] 
 		public CEnum<gameStoryTier> NewTier
 		{
-			get => GetProperty(ref _newTier);
-			set => SetProperty(ref _newTier, value);
+			get => GetPropertyValue<CEnum<gameStoryTier>>();
+			set => SetPropertyValue<CEnum<gameStoryTier>>(value);
 		}
 
 		public gameStoryTierChangedEvent()
 		{
-			_newTier = new() { Value = Enums.gameStoryTier.Cinematic };
+			Name = "StoryTierChanged";
+			NewTier = Enums.gameStoryTier.Cinematic;
 		}
 	}
 }

@@ -5,50 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class BaseAnimatedDeviceControllerPS : ScriptableDeviceComponentPS
 	{
-		private CBool _isActive;
-		private CBool _hasInteraction;
-		private CBool _randomizeAnimationTime;
-		private TweakDBID _nameForActivation;
-		private TweakDBID _nameForDeactivation;
-
 		[Ordinal(104)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get => GetProperty(ref _isActive);
-			set => SetProperty(ref _isActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(105)] 
 		[RED("hasInteraction")] 
 		public CBool HasInteraction
 		{
-			get => GetProperty(ref _hasInteraction);
-			set => SetProperty(ref _hasInteraction, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(106)] 
 		[RED("randomizeAnimationTime")] 
 		public CBool RandomizeAnimationTime
 		{
-			get => GetProperty(ref _randomizeAnimationTime);
-			set => SetProperty(ref _randomizeAnimationTime, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(107)] 
 		[RED("nameForActivation")] 
 		public TweakDBID NameForActivation
 		{
-			get => GetProperty(ref _nameForActivation);
-			set => SetProperty(ref _nameForActivation, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(108)] 
 		[RED("nameForDeactivation")] 
 		public TweakDBID NameForDeactivation
 		{
-			get => GetProperty(ref _nameForDeactivation);
-			set => SetProperty(ref _nameForDeactivation, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
+		public BaseAnimatedDeviceControllerPS()
+		{
+			DeviceName = "Gameplay-Devices-DisplayNames-RoadBlock";
 		}
 	}
 }

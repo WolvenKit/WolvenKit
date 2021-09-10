@@ -5,111 +5,101 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animLookAtRequest : RedBaseClass
 	{
-		private CFloat _transitionSpeed;
-		private CBool _hasOutTransition;
-		private CFloat _outTransitionSpeed;
-		private CFloat _followingSpeedFactorOverride;
-		private animLookAtLimits _limits;
-		private CFloat _suppress;
-		private CInt32 _mode;
-		private CBool _calculatePositionInParentSpace;
-		private CInt32 _priority;
-		private CStatic<animLookAtPartRequest> _additionalParts;
-		private CBool _invalid;
-
 		[Ordinal(0)] 
 		[RED("transitionSpeed")] 
 		public CFloat TransitionSpeed
 		{
-			get => GetProperty(ref _transitionSpeed);
-			set => SetProperty(ref _transitionSpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hasOutTransition")] 
 		public CBool HasOutTransition
 		{
-			get => GetProperty(ref _hasOutTransition);
-			set => SetProperty(ref _hasOutTransition, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("outTransitionSpeed")] 
 		public CFloat OutTransitionSpeed
 		{
-			get => GetProperty(ref _outTransitionSpeed);
-			set => SetProperty(ref _outTransitionSpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("followingSpeedFactorOverride")] 
 		public CFloat FollowingSpeedFactorOverride
 		{
-			get => GetProperty(ref _followingSpeedFactorOverride);
-			set => SetProperty(ref _followingSpeedFactorOverride, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("limits")] 
 		public animLookAtLimits Limits
 		{
-			get => GetProperty(ref _limits);
-			set => SetProperty(ref _limits, value);
+			get => GetPropertyValue<animLookAtLimits>();
+			set => SetPropertyValue<animLookAtLimits>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("suppress")] 
 		public CFloat Suppress
 		{
-			get => GetProperty(ref _suppress);
-			set => SetProperty(ref _suppress, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("mode")] 
 		public CInt32 Mode
 		{
-			get => GetProperty(ref _mode);
-			set => SetProperty(ref _mode, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("calculatePositionInParentSpace")] 
 		public CBool CalculatePositionInParentSpace
 		{
-			get => GetProperty(ref _calculatePositionInParentSpace);
-			set => SetProperty(ref _calculatePositionInParentSpace, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("priority")] 
 		public CInt32 Priority
 		{
-			get => GetProperty(ref _priority);
-			set => SetProperty(ref _priority, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("additionalParts", 2)] 
 		public CStatic<animLookAtPartRequest> AdditionalParts
 		{
-			get => GetProperty(ref _additionalParts);
-			set => SetProperty(ref _additionalParts, value);
+			get => GetPropertyValue<CStatic<animLookAtPartRequest>>();
+			set => SetPropertyValue<CStatic<animLookAtPartRequest>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("invalid")] 
 		public CBool Invalid
 		{
-			get => GetProperty(ref _invalid);
-			set => SetProperty(ref _invalid, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public animLookAtRequest()
 		{
-			_transitionSpeed = 60.000000F;
-			_outTransitionSpeed = 60.000000F;
-			_followingSpeedFactorOverride = -1.000000F;
+			TransitionSpeed = 60.000000F;
+			OutTransitionSpeed = 60.000000F;
+			FollowingSpeedFactorOverride = -1.000000F;
+			Limits = new() { SoftLimitDegrees = 360.000000F, HardLimitDegrees = 360.000000F, HardLimitDistance = 1000000.000000F, BackLimitDegrees = 180.000000F };
+			AdditionalParts = new(0);
 		}
 	}
 }

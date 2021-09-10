@@ -5,29 +5,27 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameTargetingLocalizedEffectComponent : entIComponent
 	{
-		private CFloat _streamingDistance;
-		private CFloat _visibleTargetRange;
-
 		[Ordinal(3)] 
 		[RED("streamingDistance")] 
 		public CFloat StreamingDistance
 		{
-			get => GetProperty(ref _streamingDistance);
-			set => SetProperty(ref _streamingDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("visibleTargetRange")] 
 		public CFloat VisibleTargetRange
 		{
-			get => GetProperty(ref _visibleTargetRange);
-			set => SetProperty(ref _visibleTargetRange, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public gameTargetingLocalizedEffectComponent()
 		{
-			_streamingDistance = 50.000000F;
-			_visibleTargetRange = -1.000000F;
+			Name = "Component";
+			StreamingDistance = 50.000000F;
+			VisibleTargetRange = -1.000000F;
 		}
 	}
 }

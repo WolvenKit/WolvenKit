@@ -5,28 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questReplacer_NodeType : questIGameManagerNonSignalStoppingNodeType
 	{
-		private CBool _enable;
-		private gameEntityReference _objectRef;
-
 		[Ordinal(0)] 
 		[RED("enable")] 
 		public CBool Enable
 		{
-			get => GetProperty(ref _enable);
-			set => SetProperty(ref _enable, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("objectRef")] 
 		public gameEntityReference ObjectRef
 		{
-			get => GetProperty(ref _objectRef);
-			set => SetProperty(ref _objectRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		public questReplacer_NodeType()
 		{
-			_enable = true;
+			Enable = true;
+			ObjectRef = new() { Names = new() };
 		}
 	}
 }

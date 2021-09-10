@@ -5,316 +5,291 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RadialWheelController : gameuiHUDGameController
 	{
-		private CArray<CHandle<WeaponRadialSlot>> _radialWeapons;
-		private CHandle<RadialSlot> _inputHintController;
-		private CHandle<RadialSlot> _activeSlotTooltip;
-		private CHandle<RadialSlot> _statusEffects;
-		private inkWidgetReference _pointerRef;
-		private CHandle<WeaponRadialSlot> _activeSlot;
-		private CWeakHandle<PointerController> _pointer;
-		private CInt32 _activeIndex;
-		private CBool _initialized;
-		private CBool _isActive;
-		private CInt32 _pendingRadialSlotAsyncSpawnCount;
-		private InventoryItemData _consSlotCachedData;
-		private InventoryItemData _gadgetSlotCachedData;
-		private CName _cyclingActionRegistered;
-		private CArray<gameuiInputHintData> _registeredInputHints;
-		private gameuiInputHintData _applyInputHint;
-		private gameuiInputHintData _cycleInputHintDataLeft;
-		private gameuiInputHintData _cycleInputHintDataRight;
-		private CEnum<ERadialMode> _radialMode;
-		private CHandle<InventoryDataManagerV2> _inventoryManager;
-		private CWeakHandle<EquipmentSystem> _equipmentSystem;
-		private CWeakHandle<gameTransactionSystem> _transactionSystem;
-		private CWeakHandle<gameIBlackboard> _quickSlotBlackboard;
-		private CHandle<UI_QuickSlotsDataDef> _quickSlotBlackboardDef;
-		private CHandle<redCallbackObject> _axisInputCallbackID;
-		private CWeakHandle<gameIBlackboard> _uISystemBB;
-		private CHandle<UI_SystemDef> _uISystemDef;
-		private CHandle<redCallbackObject> _isInMenuCallbackID;
-		private CWeakHandle<gameIBlackboard> _equipmentUIBlackboard;
-		private CHandle<UI_EquipmentDef> _equipmentBlackboardDef;
-		private CHandle<redCallbackObject> _equipmentUICallbackID;
-		private CInt32 _dbg_int;
-		private CArray<CUInt32> _dbg_layers;
-		private CArray<CUInt32> _dbg_activeSlotLayers;
-
 		[Ordinal(9)] 
 		[RED("radialWeapons")] 
 		public CArray<CHandle<WeaponRadialSlot>> RadialWeapons
 		{
-			get => GetProperty(ref _radialWeapons);
-			set => SetProperty(ref _radialWeapons, value);
+			get => GetPropertyValue<CArray<CHandle<WeaponRadialSlot>>>();
+			set => SetPropertyValue<CArray<CHandle<WeaponRadialSlot>>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("inputHintController")] 
 		public CHandle<RadialSlot> InputHintController
 		{
-			get => GetProperty(ref _inputHintController);
-			set => SetProperty(ref _inputHintController, value);
+			get => GetPropertyValue<CHandle<RadialSlot>>();
+			set => SetPropertyValue<CHandle<RadialSlot>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("activeSlotTooltip")] 
 		public CHandle<RadialSlot> ActiveSlotTooltip
 		{
-			get => GetProperty(ref _activeSlotTooltip);
-			set => SetProperty(ref _activeSlotTooltip, value);
+			get => GetPropertyValue<CHandle<RadialSlot>>();
+			set => SetPropertyValue<CHandle<RadialSlot>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("statusEffects")] 
 		public CHandle<RadialSlot> StatusEffects
 		{
-			get => GetProperty(ref _statusEffects);
-			set => SetProperty(ref _statusEffects, value);
+			get => GetPropertyValue<CHandle<RadialSlot>>();
+			set => SetPropertyValue<CHandle<RadialSlot>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("pointerRef")] 
 		public inkWidgetReference PointerRef
 		{
-			get => GetProperty(ref _pointerRef);
-			set => SetProperty(ref _pointerRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("activeSlot")] 
 		public CHandle<WeaponRadialSlot> ActiveSlot
 		{
-			get => GetProperty(ref _activeSlot);
-			set => SetProperty(ref _activeSlot, value);
+			get => GetPropertyValue<CHandle<WeaponRadialSlot>>();
+			set => SetPropertyValue<CHandle<WeaponRadialSlot>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("pointer")] 
 		public CWeakHandle<PointerController> Pointer
 		{
-			get => GetProperty(ref _pointer);
-			set => SetProperty(ref _pointer, value);
+			get => GetPropertyValue<CWeakHandle<PointerController>>();
+			set => SetPropertyValue<CWeakHandle<PointerController>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("activeIndex")] 
 		public CInt32 ActiveIndex
 		{
-			get => GetProperty(ref _activeIndex);
-			set => SetProperty(ref _activeIndex, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("initialized")] 
 		public CBool Initialized
 		{
-			get => GetProperty(ref _initialized);
-			set => SetProperty(ref _initialized, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get => GetProperty(ref _isActive);
-			set => SetProperty(ref _isActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("pendingRadialSlotAsyncSpawnCount")] 
 		public CInt32 PendingRadialSlotAsyncSpawnCount
 		{
-			get => GetProperty(ref _pendingRadialSlotAsyncSpawnCount);
-			set => SetProperty(ref _pendingRadialSlotAsyncSpawnCount, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("consSlotCachedData")] 
 		public InventoryItemData ConsSlotCachedData
 		{
-			get => GetProperty(ref _consSlotCachedData);
-			set => SetProperty(ref _consSlotCachedData, value);
+			get => GetPropertyValue<InventoryItemData>();
+			set => SetPropertyValue<InventoryItemData>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("gadgetSlotCachedData")] 
 		public InventoryItemData GadgetSlotCachedData
 		{
-			get => GetProperty(ref _gadgetSlotCachedData);
-			set => SetProperty(ref _gadgetSlotCachedData, value);
+			get => GetPropertyValue<InventoryItemData>();
+			set => SetPropertyValue<InventoryItemData>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("cyclingActionRegistered")] 
 		public CName CyclingActionRegistered
 		{
-			get => GetProperty(ref _cyclingActionRegistered);
-			set => SetProperty(ref _cyclingActionRegistered, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("registeredInputHints")] 
 		public CArray<gameuiInputHintData> RegisteredInputHints
 		{
-			get => GetProperty(ref _registeredInputHints);
-			set => SetProperty(ref _registeredInputHints, value);
+			get => GetPropertyValue<CArray<gameuiInputHintData>>();
+			set => SetPropertyValue<CArray<gameuiInputHintData>>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("applyInputHint")] 
 		public gameuiInputHintData ApplyInputHint
 		{
-			get => GetProperty(ref _applyInputHint);
-			set => SetProperty(ref _applyInputHint, value);
+			get => GetPropertyValue<gameuiInputHintData>();
+			set => SetPropertyValue<gameuiInputHintData>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("cycleInputHintDataLeft")] 
 		public gameuiInputHintData CycleInputHintDataLeft
 		{
-			get => GetProperty(ref _cycleInputHintDataLeft);
-			set => SetProperty(ref _cycleInputHintDataLeft, value);
+			get => GetPropertyValue<gameuiInputHintData>();
+			set => SetPropertyValue<gameuiInputHintData>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("cycleInputHintDataRight")] 
 		public gameuiInputHintData CycleInputHintDataRight
 		{
-			get => GetProperty(ref _cycleInputHintDataRight);
-			set => SetProperty(ref _cycleInputHintDataRight, value);
+			get => GetPropertyValue<gameuiInputHintData>();
+			set => SetPropertyValue<gameuiInputHintData>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("radialMode")] 
 		public CEnum<ERadialMode> RadialMode
 		{
-			get => GetProperty(ref _radialMode);
-			set => SetProperty(ref _radialMode, value);
+			get => GetPropertyValue<CEnum<ERadialMode>>();
+			set => SetPropertyValue<CEnum<ERadialMode>>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("inventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
-			get => GetProperty(ref _inventoryManager);
-			set => SetProperty(ref _inventoryManager, value);
+			get => GetPropertyValue<CHandle<InventoryDataManagerV2>>();
+			set => SetPropertyValue<CHandle<InventoryDataManagerV2>>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("equipmentSystem")] 
 		public CWeakHandle<EquipmentSystem> EquipmentSystem
 		{
-			get => GetProperty(ref _equipmentSystem);
-			set => SetProperty(ref _equipmentSystem, value);
+			get => GetPropertyValue<CWeakHandle<EquipmentSystem>>();
+			set => SetPropertyValue<CWeakHandle<EquipmentSystem>>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("transactionSystem")] 
 		public CWeakHandle<gameTransactionSystem> TransactionSystem
 		{
-			get => GetProperty(ref _transactionSystem);
-			set => SetProperty(ref _transactionSystem, value);
+			get => GetPropertyValue<CWeakHandle<gameTransactionSystem>>();
+			set => SetPropertyValue<CWeakHandle<gameTransactionSystem>>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("quickSlotBlackboard")] 
 		public CWeakHandle<gameIBlackboard> QuickSlotBlackboard
 		{
-			get => GetProperty(ref _quickSlotBlackboard);
-			set => SetProperty(ref _quickSlotBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("QuickSlotBlackboardDef")] 
 		public CHandle<UI_QuickSlotsDataDef> QuickSlotBlackboardDef
 		{
-			get => GetProperty(ref _quickSlotBlackboardDef);
-			set => SetProperty(ref _quickSlotBlackboardDef, value);
+			get => GetPropertyValue<CHandle<UI_QuickSlotsDataDef>>();
+			set => SetPropertyValue<CHandle<UI_QuickSlotsDataDef>>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("axisInputCallbackID")] 
 		public CHandle<redCallbackObject> AxisInputCallbackID
 		{
-			get => GetProperty(ref _axisInputCallbackID);
-			set => SetProperty(ref _axisInputCallbackID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(34)] 
 		[RED("UISystemBB")] 
 		public CWeakHandle<gameIBlackboard> UISystemBB
 		{
-			get => GetProperty(ref _uISystemBB);
-			set => SetProperty(ref _uISystemBB, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(35)] 
 		[RED("UISystemDef")] 
 		public CHandle<UI_SystemDef> UISystemDef
 		{
-			get => GetProperty(ref _uISystemDef);
-			set => SetProperty(ref _uISystemDef, value);
+			get => GetPropertyValue<CHandle<UI_SystemDef>>();
+			set => SetPropertyValue<CHandle<UI_SystemDef>>(value);
 		}
 
 		[Ordinal(36)] 
 		[RED("isInMenuCallbackID")] 
 		public CHandle<redCallbackObject> IsInMenuCallbackID
 		{
-			get => GetProperty(ref _isInMenuCallbackID);
-			set => SetProperty(ref _isInMenuCallbackID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(37)] 
 		[RED("equipmentUIBlackboard")] 
 		public CWeakHandle<gameIBlackboard> EquipmentUIBlackboard
 		{
-			get => GetProperty(ref _equipmentUIBlackboard);
-			set => SetProperty(ref _equipmentUIBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(38)] 
 		[RED("EquipmentBlackboardDef")] 
 		public CHandle<UI_EquipmentDef> EquipmentBlackboardDef
 		{
-			get => GetProperty(ref _equipmentBlackboardDef);
-			set => SetProperty(ref _equipmentBlackboardDef, value);
+			get => GetPropertyValue<CHandle<UI_EquipmentDef>>();
+			set => SetPropertyValue<CHandle<UI_EquipmentDef>>(value);
 		}
 
 		[Ordinal(39)] 
 		[RED("equipmentUICallbackID")] 
 		public CHandle<redCallbackObject> EquipmentUICallbackID
 		{
-			get => GetProperty(ref _equipmentUICallbackID);
-			set => SetProperty(ref _equipmentUICallbackID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(40)] 
 		[RED("dbg_int")] 
 		public CInt32 Dbg_int
 		{
-			get => GetProperty(ref _dbg_int);
-			set => SetProperty(ref _dbg_int, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(41)] 
 		[RED("dbg_layers")] 
 		public CArray<CUInt32> Dbg_layers
 		{
-			get => GetProperty(ref _dbg_layers);
-			set => SetProperty(ref _dbg_layers, value);
+			get => GetPropertyValue<CArray<CUInt32>>();
+			set => SetPropertyValue<CArray<CUInt32>>(value);
 		}
 
 		[Ordinal(42)] 
 		[RED("dbg_activeSlotLayers")] 
 		public CArray<CUInt32> Dbg_activeSlotLayers
 		{
-			get => GetProperty(ref _dbg_activeSlotLayers);
-			set => SetProperty(ref _dbg_activeSlotLayers, value);
+			get => GetPropertyValue<CArray<CUInt32>>();
+			set => SetPropertyValue<CArray<CUInt32>>(value);
 		}
 
 		public RadialWheelController()
 		{
-			_radialMode = new() { Value = Enums.ERadialMode.ApplyActiveSlotAndConsumables };
+			RadialWeapons = new();
+			PointerRef = new();
+			ConsSlotCachedData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
+			GadgetSlotCachedData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
+			RegisteredInputHints = new();
+			ApplyInputHint = new();
+			CycleInputHintDataLeft = new();
+			CycleInputHintDataRight = new();
+			RadialMode = Enums.ERadialMode.ApplyActiveSlotAndConsumables;
+			Dbg_layers = new();
+			Dbg_activeSlotLayers = new();
 		}
 	}
 }

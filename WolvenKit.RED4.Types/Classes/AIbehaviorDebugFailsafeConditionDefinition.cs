@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorDebugFailsafeConditionDefinition : AIbehaviorConditionDefinition
 	{
-		private CHandle<AIArgumentMapping> _logMessage;
-
 		[Ordinal(1)] 
 		[RED("logMessage")] 
 		public CHandle<AIArgumentMapping> LogMessage
 		{
-			get => GetProperty(ref _logMessage);
-			set => SetProperty(ref _logMessage, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 	}
 }

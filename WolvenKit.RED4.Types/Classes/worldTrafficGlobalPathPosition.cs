@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldTrafficGlobalPathPosition : ISerializable
 	{
-		private Vector3 _worldPosition;
-		private CUInt32 _pathIdx;
-
 		[Ordinal(0)] 
 		[RED("worldPosition")] 
 		public Vector3 WorldPosition
 		{
-			get => GetProperty(ref _worldPosition);
-			set => SetProperty(ref _worldPosition, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("pathIdx")] 
 		public CUInt32 PathIdx
 		{
-			get => GetProperty(ref _pathIdx);
-			set => SetProperty(ref _pathIdx, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		public worldTrafficGlobalPathPosition()
+		{
+			WorldPosition = new();
 		}
 	}
 }

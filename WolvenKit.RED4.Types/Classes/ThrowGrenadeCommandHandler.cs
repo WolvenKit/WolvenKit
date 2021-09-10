@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ThrowGrenadeCommandHandler : AIbehaviortaskScript
 	{
-		private CHandle<AIArgumentMapping> _inCommand;
-		private CWeakHandle<AIThrowGrenadeCommand> _currentCommand;
-
 		[Ordinal(0)] 
 		[RED("inCommand")] 
 		public CHandle<AIArgumentMapping> InCommand
 		{
-			get => GetProperty(ref _inCommand);
-			set => SetProperty(ref _inCommand, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("currentCommand")] 
 		public CWeakHandle<AIThrowGrenadeCommand> CurrentCommand
 		{
-			get => GetProperty(ref _currentCommand);
-			set => SetProperty(ref _currentCommand, value);
+			get => GetPropertyValue<CWeakHandle<AIThrowGrenadeCommand>>();
+			set => SetPropertyValue<CWeakHandle<AIThrowGrenadeCommand>>(value);
 		}
 	}
 }

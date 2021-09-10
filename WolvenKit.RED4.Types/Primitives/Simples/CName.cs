@@ -1,17 +1,44 @@
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Text;
+using WolvenKit.Common.FNV1A;
 
 namespace WolvenKit.RED4.Types
 {
-    public class CName : IRedPrimitive, IEquatable<CName>
+    [RED("CName")]
+    [DebuggerDisplay("{_value}", Type = "CName")]
+    public readonly struct CName : IRedPrimitive<string>, IEquatable<CName>
     {
-        public string Text { get; set; }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private readonly string _value;
 
-        public static implicit operator CName(string value) => new() { Text = value };
-        public static implicit operator string(CName value) => value.Text;
+        private CName(string value)
+        {
+            _value = value;
+        }
 
-        public override string ToString() => $"CName, Text = '{Text}'";
+        public int Length => _value.Length;
 
+        public uint GetRedHash()
+        {
+            var hash64 = string.IsNullOrEmpty(_value) ? 0 : FNV1A64HashAlgorithm.HashString(_value, Encoding.GetEncoding("iso-8859-1"), false, true);
+
+            return (uint)((hash64 >> 32) ^ (uint)hash64);
+        }
+
+        [Obsolete("Use GetRedHash instead")]
+        public uint GetOldRedHash()
+        {
+            var hash64 = string.IsNullOrEmpty(_value) ? 0 : FNV1A64HashAlgorithm.HashString(_value, Encoding.GetEncoding("iso-8859-1"), false, true);
+
+            return (uint)(hash64 & 0xFFFFFFFF);
+        }
+
+        public static implicit operator CName(string value) => new(value);
+        public static implicit operator string(CName value) => value._value;
+
+        public override int GetHashCode() => _value.GetHashCode();
 
         public override bool Equals(object obj)
         {
@@ -23,14 +50,6 @@ namespace WolvenKit.RED4.Types
             return false;
         }
 
-        public bool Equals(CName other)
-        {
-            if (other == null)
-            {
-                return false;
-            }
-
-            return string.Equals(Text, other.Text);
-        }
+        public bool Equals(CName other) => Equals(_value, other._value);
     }
 }

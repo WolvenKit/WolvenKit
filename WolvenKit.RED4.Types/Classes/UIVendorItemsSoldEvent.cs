@@ -5,41 +5,43 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UIVendorItemsSoldEvent : redEvent
 	{
-		private CInt32 _requestID;
-		private CArray<gameItemID> _itemsID;
-		private CArray<CInt32> _quantity;
-		private CArray<CInt32> _piecesPrice;
-
 		[Ordinal(0)] 
 		[RED("requestID")] 
 		public CInt32 RequestID
 		{
-			get => GetProperty(ref _requestID);
-			set => SetProperty(ref _requestID, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("itemsID")] 
 		public CArray<gameItemID> ItemsID
 		{
-			get => GetProperty(ref _itemsID);
-			set => SetProperty(ref _itemsID, value);
+			get => GetPropertyValue<CArray<gameItemID>>();
+			set => SetPropertyValue<CArray<gameItemID>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("quantity")] 
 		public CArray<CInt32> Quantity
 		{
-			get => GetProperty(ref _quantity);
-			set => SetProperty(ref _quantity, value);
+			get => GetPropertyValue<CArray<CInt32>>();
+			set => SetPropertyValue<CArray<CInt32>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("piecesPrice")] 
 		public CArray<CInt32> PiecesPrice
 		{
-			get => GetProperty(ref _piecesPrice);
-			set => SetProperty(ref _piecesPrice, value);
+			get => GetPropertyValue<CArray<CInt32>>();
+			set => SetPropertyValue<CArray<CInt32>>(value);
+		}
+
+		public UIVendorItemsSoldEvent()
+		{
+			ItemsID = new();
+			Quantity = new();
+			PiecesPrice = new();
 		}
 	}
 }

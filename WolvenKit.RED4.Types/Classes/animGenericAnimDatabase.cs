@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animGenericAnimDatabase : CResource
 	{
-		private CArray<animGenericAnimDatabase_DatabaseRow> _rows;
-
 		[Ordinal(1)] 
 		[RED("rows")] 
 		public CArray<animGenericAnimDatabase_DatabaseRow> Rows
 		{
-			get => GetProperty(ref _rows);
-			set => SetProperty(ref _rows, value);
+			get => GetPropertyValue<CArray<animGenericAnimDatabase_DatabaseRow>>();
+			set => SetPropertyValue<CArray<animGenericAnimDatabase_DatabaseRow>>(value);
+		}
+
+		public animGenericAnimDatabase()
+		{
+			Rows = new();
 		}
 	}
 }

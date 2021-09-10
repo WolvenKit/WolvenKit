@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnCheckPlayerTargetEntityDistanceReturnCondition : scnIReturnCondition
 	{
-		private scnCheckPlayerTargetEntityDistanceReturnConditionParams _params;
-
 		[Ordinal(0)] 
 		[RED("params")] 
 		public scnCheckPlayerTargetEntityDistanceReturnConditionParams Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<scnCheckPlayerTargetEntityDistanceReturnConditionParams>();
+			set => SetPropertyValue<scnCheckPlayerTargetEntityDistanceReturnConditionParams>(value);
+		}
+
+		public scnCheckPlayerTargetEntityDistanceReturnCondition()
+		{
+			Params = new() { Distance = 5.000000F, ComparisonType = Enums.EComparisonType.Less, TargetEntity = new() { Names = new() } };
 		}
 	}
 }

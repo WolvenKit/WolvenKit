@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorAgentInfoDebuggerCommandEntry : RedBaseClass
 	{
-		private AIbehaviorBehaviorInstanceCallStack _callStack;
-		private CString _behaviorResourcePath;
-
 		[Ordinal(0)] 
 		[RED("callStack")] 
 		public AIbehaviorBehaviorInstanceCallStack CallStack
 		{
-			get => GetProperty(ref _callStack);
-			set => SetProperty(ref _callStack, value);
+			get => GetPropertyValue<AIbehaviorBehaviorInstanceCallStack>();
+			set => SetPropertyValue<AIbehaviorBehaviorInstanceCallStack>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("behaviorResourcePath")] 
 		public CString BehaviorResourcePath
 		{
-			get => GetProperty(ref _behaviorResourcePath);
-			set => SetProperty(ref _behaviorResourcePath, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		public AIbehaviorAgentInfoDebuggerCommandEntry()
+		{
+			CallStack = new() { ResourceHashes = new() };
 		}
 	}
 }

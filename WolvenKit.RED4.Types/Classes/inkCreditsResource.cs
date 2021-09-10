@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkCreditsResource : CResource
 	{
-		private CArray<inkCreditsSectionEntry> _sections;
-
 		[Ordinal(1)] 
 		[RED("sections")] 
 		public CArray<inkCreditsSectionEntry> Sections
 		{
-			get => GetProperty(ref _sections);
-			set => SetProperty(ref _sections, value);
+			get => GetPropertyValue<CArray<inkCreditsSectionEntry>>();
+			set => SetPropertyValue<CArray<inkCreditsSectionEntry>>(value);
+		}
+
+		public inkCreditsResource()
+		{
+			Sections = new();
 		}
 	}
 }

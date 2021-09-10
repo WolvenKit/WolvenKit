@@ -5,59 +5,62 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CyberwareAttributes_ResistancesStruct : RedBaseClass
 	{
-		private inkFlexWidgetReference _widgetHealth;
-		private inkFlexWidgetReference _widgetPhysical;
-		private inkFlexWidgetReference _widgetThermal;
-		private inkFlexWidgetReference _widgetEMP;
-		private inkFlexWidgetReference _widgetChemical;
-		private inkFlexWidgetReference _resistanceTooltip;
-
 		[Ordinal(0)] 
 		[RED("widgetHealth")] 
 		public inkFlexWidgetReference WidgetHealth
 		{
-			get => GetProperty(ref _widgetHealth);
-			set => SetProperty(ref _widgetHealth, value);
+			get => GetPropertyValue<inkFlexWidgetReference>();
+			set => SetPropertyValue<inkFlexWidgetReference>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("widgetPhysical")] 
 		public inkFlexWidgetReference WidgetPhysical
 		{
-			get => GetProperty(ref _widgetPhysical);
-			set => SetProperty(ref _widgetPhysical, value);
+			get => GetPropertyValue<inkFlexWidgetReference>();
+			set => SetPropertyValue<inkFlexWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("widgetThermal")] 
 		public inkFlexWidgetReference WidgetThermal
 		{
-			get => GetProperty(ref _widgetThermal);
-			set => SetProperty(ref _widgetThermal, value);
+			get => GetPropertyValue<inkFlexWidgetReference>();
+			set => SetPropertyValue<inkFlexWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("widgetEMP")] 
 		public inkFlexWidgetReference WidgetEMP
 		{
-			get => GetProperty(ref _widgetEMP);
-			set => SetProperty(ref _widgetEMP, value);
+			get => GetPropertyValue<inkFlexWidgetReference>();
+			set => SetPropertyValue<inkFlexWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("widgetChemical")] 
 		public inkFlexWidgetReference WidgetChemical
 		{
-			get => GetProperty(ref _widgetChemical);
-			set => SetProperty(ref _widgetChemical, value);
+			get => GetPropertyValue<inkFlexWidgetReference>();
+			set => SetPropertyValue<inkFlexWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("resistanceTooltip")] 
 		public inkFlexWidgetReference ResistanceTooltip
 		{
-			get => GetProperty(ref _resistanceTooltip);
-			set => SetProperty(ref _resistanceTooltip, value);
+			get => GetPropertyValue<inkFlexWidgetReference>();
+			set => SetPropertyValue<inkFlexWidgetReference>(value);
+		}
+
+		public CyberwareAttributes_ResistancesStruct()
+		{
+			WidgetHealth = new();
+			WidgetPhysical = new();
+			WidgetThermal = new();
+			WidgetEMP = new();
+			WidgetChemical = new();
+			ResistanceTooltip = new();
 		}
 	}
 }

@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameprojectileBroadPhaseHitEvent : redEvent
 	{
-		private physicsTraceResult _traceResult;
-		private Vector4 _position;
-		private CWeakHandle<entEntity> _hitObject;
-		private CWeakHandle<entIComponent> _hitComponent;
-
 		[Ordinal(0)] 
 		[RED("traceResult")] 
 		public physicsTraceResult TraceResult
 		{
-			get => GetProperty(ref _traceResult);
-			set => SetProperty(ref _traceResult, value);
+			get => GetPropertyValue<physicsTraceResult>();
+			set => SetPropertyValue<physicsTraceResult>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("position")] 
 		public Vector4 Position
 		{
-			get => GetProperty(ref _position);
-			set => SetProperty(ref _position, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("hitObject")] 
 		public CWeakHandle<entEntity> HitObject
 		{
-			get => GetProperty(ref _hitObject);
-			set => SetProperty(ref _hitObject, value);
+			get => GetPropertyValue<CWeakHandle<entEntity>>();
+			set => SetPropertyValue<CWeakHandle<entEntity>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("hitComponent")] 
 		public CWeakHandle<entIComponent> HitComponent
 		{
-			get => GetProperty(ref _hitComponent);
-			set => SetProperty(ref _hitComponent, value);
+			get => GetPropertyValue<CWeakHandle<entIComponent>>();
+			set => SetPropertyValue<CWeakHandle<entIComponent>>(value);
+		}
+
+		public gameprojectileBroadPhaseHitEvent()
+		{
+			TraceResult = new() { Position = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity }, Normal = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity } };
+			Position = new();
 		}
 	}
 }

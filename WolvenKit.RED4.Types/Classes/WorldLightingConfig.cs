@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WorldLightingConfig : RedBaseClass
 	{
-		private CFloat _lightAttenuationClamp;
-
 		[Ordinal(0)] 
 		[RED("lightAttenuationClamp")] 
 		public CFloat LightAttenuationClamp
 		{
-			get => GetProperty(ref _lightAttenuationClamp);
-			set => SetProperty(ref _lightAttenuationClamp, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public WorldLightingConfig()
 		{
-			_lightAttenuationClamp = 96.000000F;
+			LightAttenuationClamp = 96.000000F;
 		}
 	}
 }

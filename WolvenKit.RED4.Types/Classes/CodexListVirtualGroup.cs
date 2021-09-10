@@ -5,86 +5,83 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CodexListVirtualGroup : inkVirtualCompoundItemController
 	{
-		private inkTextWidgetReference _title;
-		private inkWidgetReference _arrow;
-		private inkWidgetReference _newWrapper;
-		private CHandle<CodexEntryData> _entryData;
-		private CHandle<VirutalNestedListData> _nestedListData;
-		private CWeakHandle<CodexListSyncData> _activeItemSync;
-		private CBool _isActive;
-		private CBool _isItemHovered;
-		private CBool _isItemToggled;
-
 		[Ordinal(15)] 
 		[RED("title")] 
 		public inkTextWidgetReference Title
 		{
-			get => GetProperty(ref _title);
-			set => SetProperty(ref _title, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("arrow")] 
 		public inkWidgetReference Arrow
 		{
-			get => GetProperty(ref _arrow);
-			set => SetProperty(ref _arrow, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("newWrapper")] 
 		public inkWidgetReference NewWrapper
 		{
-			get => GetProperty(ref _newWrapper);
-			set => SetProperty(ref _newWrapper, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("entryData")] 
 		public CHandle<CodexEntryData> EntryData
 		{
-			get => GetProperty(ref _entryData);
-			set => SetProperty(ref _entryData, value);
+			get => GetPropertyValue<CHandle<CodexEntryData>>();
+			set => SetPropertyValue<CHandle<CodexEntryData>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("nestedListData")] 
 		public CHandle<VirutalNestedListData> NestedListData
 		{
-			get => GetProperty(ref _nestedListData);
-			set => SetProperty(ref _nestedListData, value);
+			get => GetPropertyValue<CHandle<VirutalNestedListData>>();
+			set => SetPropertyValue<CHandle<VirutalNestedListData>>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("activeItemSync")] 
 		public CWeakHandle<CodexListSyncData> ActiveItemSync
 		{
-			get => GetProperty(ref _activeItemSync);
-			set => SetProperty(ref _activeItemSync, value);
+			get => GetPropertyValue<CWeakHandle<CodexListSyncData>>();
+			set => SetPropertyValue<CWeakHandle<CodexListSyncData>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get => GetProperty(ref _isActive);
-			set => SetProperty(ref _isActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("isItemHovered")] 
 		public CBool IsItemHovered
 		{
-			get => GetProperty(ref _isItemHovered);
-			set => SetProperty(ref _isItemHovered, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("isItemToggled")] 
 		public CBool IsItemToggled
 		{
-			get => GetProperty(ref _isItemToggled);
-			set => SetProperty(ref _isItemToggled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public CodexListVirtualGroup()
+		{
+			Title = new();
+			Arrow = new();
+			NewWrapper = new();
 		}
 	}
 }

@@ -5,253 +5,229 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldPrefab : resStreamedResource
 	{
-		private CHandle<worldNodesGroup> _mainGroup;
-		private CEnum<worldPrefabType> _type;
-		private CEnum<worldPrefabOwnership> _teamOwnership;
-		private CEnum<worldPrefabStreamingOcclusion> _streamingOcclusion;
-		private CHandle<worldPrefabVariantsList> _defaultVariants;
-		private CBool _isLocked;
-		private Box _maxBounds;
-		private CResourceAsyncReference<worldEnvironmentDefinition> _environmentDefinition;
-		private CResourceAsyncReference<Multilayer_Setup> _terrainMultilayerSetup;
-		private CResourceAsyncReference<worldAutoFoliageMapping> _foliageBrushToTerrainLayerMapping;
-		private CRUID _prefabUniqueId;
-		private CArray<CHandle<worldPrefabMetadata>> _metadataArray;
-		private CBool _isMerged;
-		private worldProxyMeshBuildParams _proxyMeshBuildParams;
-		private CBool _isProxyMeshOnly;
-		private CResourceAsyncReference<CMesh> _proxyMesh;
-		private Vector3 _proxyScale;
-		private CFloat _proxyDistanceFactor;
-		private CBool _boostInnerNodesToProxyDistance;
-		private CBool _ignoreMeshEmbeddedOccluders;
-		private CBool _ignoreAllOccluders;
-		private CBool _excludeOnConsole;
-		private CBool _isTerrainPrefab;
-		private CEnum<worldPrefabMinimapContribution> _minimapContribution;
-		private CResourceAsyncReference<worldPrefab> _booleanProxyHelper;
-		private CResourceAsyncReference<worldPrefab> _proxyLimiterHelper;
-		private CResourceAsyncReference<CMesh> _customProxyMeshHelper;
-
 		[Ordinal(1)] 
 		[RED("mainGroup")] 
 		public CHandle<worldNodesGroup> MainGroup
 		{
-			get => GetProperty(ref _mainGroup);
-			set => SetProperty(ref _mainGroup, value);
+			get => GetPropertyValue<CHandle<worldNodesGroup>>();
+			set => SetPropertyValue<CHandle<worldNodesGroup>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("type")] 
 		public CEnum<worldPrefabType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<worldPrefabType>>();
+			set => SetPropertyValue<CEnum<worldPrefabType>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("teamOwnership")] 
 		public CEnum<worldPrefabOwnership> TeamOwnership
 		{
-			get => GetProperty(ref _teamOwnership);
-			set => SetProperty(ref _teamOwnership, value);
+			get => GetPropertyValue<CEnum<worldPrefabOwnership>>();
+			set => SetPropertyValue<CEnum<worldPrefabOwnership>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("streamingOcclusion")] 
 		public CEnum<worldPrefabStreamingOcclusion> StreamingOcclusion
 		{
-			get => GetProperty(ref _streamingOcclusion);
-			set => SetProperty(ref _streamingOcclusion, value);
+			get => GetPropertyValue<CEnum<worldPrefabStreamingOcclusion>>();
+			set => SetPropertyValue<CEnum<worldPrefabStreamingOcclusion>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("defaultVariants")] 
 		public CHandle<worldPrefabVariantsList> DefaultVariants
 		{
-			get => GetProperty(ref _defaultVariants);
-			set => SetProperty(ref _defaultVariants, value);
+			get => GetPropertyValue<CHandle<worldPrefabVariantsList>>();
+			set => SetPropertyValue<CHandle<worldPrefabVariantsList>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isLocked")] 
 		public CBool IsLocked
 		{
-			get => GetProperty(ref _isLocked);
-			set => SetProperty(ref _isLocked, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("maxBounds")] 
 		public Box MaxBounds
 		{
-			get => GetProperty(ref _maxBounds);
-			set => SetProperty(ref _maxBounds, value);
+			get => GetPropertyValue<Box>();
+			set => SetPropertyValue<Box>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("environmentDefinition")] 
 		public CResourceAsyncReference<worldEnvironmentDefinition> EnvironmentDefinition
 		{
-			get => GetProperty(ref _environmentDefinition);
-			set => SetProperty(ref _environmentDefinition, value);
+			get => GetPropertyValue<CResourceAsyncReference<worldEnvironmentDefinition>>();
+			set => SetPropertyValue<CResourceAsyncReference<worldEnvironmentDefinition>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("terrainMultilayerSetup")] 
 		public CResourceAsyncReference<Multilayer_Setup> TerrainMultilayerSetup
 		{
-			get => GetProperty(ref _terrainMultilayerSetup);
-			set => SetProperty(ref _terrainMultilayerSetup, value);
+			get => GetPropertyValue<CResourceAsyncReference<Multilayer_Setup>>();
+			set => SetPropertyValue<CResourceAsyncReference<Multilayer_Setup>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("foliageBrushToTerrainLayerMapping")] 
 		public CResourceAsyncReference<worldAutoFoliageMapping> FoliageBrushToTerrainLayerMapping
 		{
-			get => GetProperty(ref _foliageBrushToTerrainLayerMapping);
-			set => SetProperty(ref _foliageBrushToTerrainLayerMapping, value);
+			get => GetPropertyValue<CResourceAsyncReference<worldAutoFoliageMapping>>();
+			set => SetPropertyValue<CResourceAsyncReference<worldAutoFoliageMapping>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("prefabUniqueId")] 
 		public CRUID PrefabUniqueId
 		{
-			get => GetProperty(ref _prefabUniqueId);
-			set => SetProperty(ref _prefabUniqueId, value);
+			get => GetPropertyValue<CRUID>();
+			set => SetPropertyValue<CRUID>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("metadataArray")] 
 		public CArray<CHandle<worldPrefabMetadata>> MetadataArray
 		{
-			get => GetProperty(ref _metadataArray);
-			set => SetProperty(ref _metadataArray, value);
+			get => GetPropertyValue<CArray<CHandle<worldPrefabMetadata>>>();
+			set => SetPropertyValue<CArray<CHandle<worldPrefabMetadata>>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("isMerged")] 
 		public CBool IsMerged
 		{
-			get => GetProperty(ref _isMerged);
-			set => SetProperty(ref _isMerged, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("proxyMeshBuildParams")] 
 		public worldProxyMeshBuildParams ProxyMeshBuildParams
 		{
-			get => GetProperty(ref _proxyMeshBuildParams);
-			set => SetProperty(ref _proxyMeshBuildParams, value);
+			get => GetPropertyValue<worldProxyMeshBuildParams>();
+			set => SetPropertyValue<worldProxyMeshBuildParams>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("isProxyMeshOnly")] 
 		public CBool IsProxyMeshOnly
 		{
-			get => GetProperty(ref _isProxyMeshOnly);
-			set => SetProperty(ref _isProxyMeshOnly, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("proxyMesh")] 
 		public CResourceAsyncReference<CMesh> ProxyMesh
 		{
-			get => GetProperty(ref _proxyMesh);
-			set => SetProperty(ref _proxyMesh, value);
+			get => GetPropertyValue<CResourceAsyncReference<CMesh>>();
+			set => SetPropertyValue<CResourceAsyncReference<CMesh>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("proxyScale")] 
 		public Vector3 ProxyScale
 		{
-			get => GetProperty(ref _proxyScale);
-			set => SetProperty(ref _proxyScale, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("proxyDistanceFactor")] 
 		public CFloat ProxyDistanceFactor
 		{
-			get => GetProperty(ref _proxyDistanceFactor);
-			set => SetProperty(ref _proxyDistanceFactor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("boostInnerNodesToProxyDistance")] 
 		public CBool BoostInnerNodesToProxyDistance
 		{
-			get => GetProperty(ref _boostInnerNodesToProxyDistance);
-			set => SetProperty(ref _boostInnerNodesToProxyDistance, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("ignoreMeshEmbeddedOccluders")] 
 		public CBool IgnoreMeshEmbeddedOccluders
 		{
-			get => GetProperty(ref _ignoreMeshEmbeddedOccluders);
-			set => SetProperty(ref _ignoreMeshEmbeddedOccluders, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("ignoreAllOccluders")] 
 		public CBool IgnoreAllOccluders
 		{
-			get => GetProperty(ref _ignoreAllOccluders);
-			set => SetProperty(ref _ignoreAllOccluders, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("excludeOnConsole")] 
 		public CBool ExcludeOnConsole
 		{
-			get => GetProperty(ref _excludeOnConsole);
-			set => SetProperty(ref _excludeOnConsole, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("isTerrainPrefab")] 
 		public CBool IsTerrainPrefab
 		{
-			get => GetProperty(ref _isTerrainPrefab);
-			set => SetProperty(ref _isTerrainPrefab, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("minimapContribution")] 
 		public CEnum<worldPrefabMinimapContribution> MinimapContribution
 		{
-			get => GetProperty(ref _minimapContribution);
-			set => SetProperty(ref _minimapContribution, value);
+			get => GetPropertyValue<CEnum<worldPrefabMinimapContribution>>();
+			set => SetPropertyValue<CEnum<worldPrefabMinimapContribution>>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("booleanProxyHelper")] 
 		public CResourceAsyncReference<worldPrefab> BooleanProxyHelper
 		{
-			get => GetProperty(ref _booleanProxyHelper);
-			set => SetProperty(ref _booleanProxyHelper, value);
+			get => GetPropertyValue<CResourceAsyncReference<worldPrefab>>();
+			set => SetPropertyValue<CResourceAsyncReference<worldPrefab>>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("proxyLimiterHelper")] 
 		public CResourceAsyncReference<worldPrefab> ProxyLimiterHelper
 		{
-			get => GetProperty(ref _proxyLimiterHelper);
-			set => SetProperty(ref _proxyLimiterHelper, value);
+			get => GetPropertyValue<CResourceAsyncReference<worldPrefab>>();
+			set => SetPropertyValue<CResourceAsyncReference<worldPrefab>>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("customProxyMeshHelper")] 
 		public CResourceAsyncReference<CMesh> CustomProxyMeshHelper
 		{
-			get => GetProperty(ref _customProxyMeshHelper);
-			set => SetProperty(ref _customProxyMeshHelper, value);
+			get => GetPropertyValue<CResourceAsyncReference<CMesh>>();
+			set => SetPropertyValue<CResourceAsyncReference<CMesh>>(value);
 		}
 
 		public worldPrefab()
 		{
-			_proxyDistanceFactor = 1.500000F;
+			MaxBounds = new() { Min = new() { X = -340282346638528859811704183484516925440.000000F, Y = -340282346638528859811704183484516925440.000000F, Z = -340282346638528859811704183484516925440.000000F, W = -340282346638528859811704183484516925440.000000F }, Max = new() { X = 340282346638528859811704183484516925440.000000F, Y = 340282346638528859811704183484516925440.000000F, Z = 340282346638528859811704183484516925440.000000F, W = 340282346638528859811704183484516925440.000000F } };
+			MetadataArray = new();
+			ProxyMeshBuildParams = new() { Resolution = 5, Polycount = 500, PolycountPercentage = 5.000000F, CoreAxis = Enums.worldProxyCoreAxis.Z, GroupingNormals = Enums.worldProxyGroupingNormals.Around_All_Axes, Windows = new() { WindowsType = Enums.worldProxWindowsType.PropagateWindows, Distance = 0.400000F, DistanceAboveProxy = 0.020000F, RemoveSmallerThan = 0.300000F, DistantWindowsEmissive = 1.000000F, DistantWindowsSize = 3.000000F, DistantWindowsSaturation = 0.750000F, DistantWindowsTurnedOf = 0.450000F }, Textures = new() { AlbedoTextureResolution = Enums.worldProxyMeshTexRes.RES_256, GenerateAlbedo = true, NormalTextureResolution = Enums.worldProxyMeshTexRes.RES_128, RoughnessTextureResolution = Enums.worldProxyMeshTexRes.RES_128, GenerateRoughness = true, MetalnessTextureResolution = Enums.worldProxyMeshTexRes.RES_128, DiffuseAlphaAsEmissive = true }, CustomGeometry = new() { UvType = Enums.worldProxyMeshUVType.UvGenerateNew }, AdvancedParams = new() { BoundingBoxSyncParams = new() { PullRange = 0.050000F, StackOffset = new() }, SurfaceFlattenParams = new() { GroupingStepAngle = Enums.worldProxyNormalAngleStepSize.STEP_45 }, Misc = new() { UseLod1 = true, BlurCutout = 20, OcclusionRatio = 40, FillHolesBeforeReduceRatio = 1.500000F, FillHolesAfterReduceRatio = 0.400000F, RsAxisPrecision = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F }, RsAxisExpand = new(), RsAliasingReduction = 1.000000F, BcMergeRange = 0.800000F, BcSizeCutoff = 120.000000F, BcIterations = 0.500000F, BcMaxSize = 120.000000F, BcMinSize = 2.000000F, BcMergeSensitivity = 50.000000F, BcMinScale = 1.000000F, BcGridSize = 120.000000F, BcFilterSensitivity = 0.250000F, BcBoundsRatioLimit = 0.250000F, RemoveIslands = true, BackgroundColor = new() }, RayBias = 2.100000F, RayMaxDistance = -1.000000F } };
+			ProxyScale = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
+			ProxyDistanceFactor = 1.500000F;
 		}
 	}
 }

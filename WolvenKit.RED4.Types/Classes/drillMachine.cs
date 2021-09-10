@@ -5,77 +5,68 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class drillMachine : gameweaponObject
 	{
-		private CHandle<RewireComponent> _rewireComponent;
-		private CWeakHandle<gameObject> _player;
-		private CHandle<DrillMachineScanManager> _scanManager;
-		private CHandle<entIVisualComponent> _screen_postprocess;
-		private CHandle<entIVisualComponent> _screen_backside;
-		private CBool _isScanning;
-		private CBool _isActive;
-		private CWeakHandle<gameObject> _targetDevice;
-
 		[Ordinal(62)] 
 		[RED("rewireComponent")] 
 		public CHandle<RewireComponent> RewireComponent
 		{
-			get => GetProperty(ref _rewireComponent);
-			set => SetProperty(ref _rewireComponent, value);
+			get => GetPropertyValue<CHandle<RewireComponent>>();
+			set => SetPropertyValue<CHandle<RewireComponent>>(value);
 		}
 
 		[Ordinal(63)] 
 		[RED("player")] 
 		public CWeakHandle<gameObject> Player
 		{
-			get => GetProperty(ref _player);
-			set => SetProperty(ref _player, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(64)] 
 		[RED("scanManager")] 
 		public CHandle<DrillMachineScanManager> ScanManager
 		{
-			get => GetProperty(ref _scanManager);
-			set => SetProperty(ref _scanManager, value);
+			get => GetPropertyValue<CHandle<DrillMachineScanManager>>();
+			set => SetPropertyValue<CHandle<DrillMachineScanManager>>(value);
 		}
 
 		[Ordinal(65)] 
 		[RED("screen_postprocess")] 
 		public CHandle<entIVisualComponent> Screen_postprocess
 		{
-			get => GetProperty(ref _screen_postprocess);
-			set => SetProperty(ref _screen_postprocess, value);
+			get => GetPropertyValue<CHandle<entIVisualComponent>>();
+			set => SetPropertyValue<CHandle<entIVisualComponent>>(value);
 		}
 
 		[Ordinal(66)] 
 		[RED("screen_backside")] 
 		public CHandle<entIVisualComponent> Screen_backside
 		{
-			get => GetProperty(ref _screen_backside);
-			set => SetProperty(ref _screen_backside, value);
+			get => GetPropertyValue<CHandle<entIVisualComponent>>();
+			set => SetPropertyValue<CHandle<entIVisualComponent>>(value);
 		}
 
 		[Ordinal(67)] 
 		[RED("isScanning")] 
 		public CBool IsScanning
 		{
-			get => GetProperty(ref _isScanning);
-			set => SetProperty(ref _isScanning, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(68)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get => GetProperty(ref _isActive);
-			set => SetProperty(ref _isActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(69)] 
 		[RED("targetDevice")] 
 		public CWeakHandle<gameObject> TargetDevice
 		{
-			get => GetProperty(ref _targetDevice);
-			set => SetProperty(ref _targetDevice, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 	}
 }

@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class NewCycleEvent : redEvent
 	{
-		private CUInt16 _cyclesCount;
-
 		[Ordinal(0)] 
 		[RED("cyclesCount")] 
 		public CUInt16 CyclesCount
 		{
-			get => GetProperty(ref _cyclesCount);
-			set => SetProperty(ref _cyclesCount, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 	}
 }

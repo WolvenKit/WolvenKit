@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RefreshInteractionTaskData : gameScriptTaskData
 	{
-		private CEnum<gamedeviceRequestType> _requestType;
-		private CWeakHandle<gameObject> _executor;
-
 		[Ordinal(0)] 
 		[RED("requestType")] 
 		public CEnum<gamedeviceRequestType> RequestType
 		{
-			get => GetProperty(ref _requestType);
-			set => SetProperty(ref _requestType, value);
+			get => GetPropertyValue<CEnum<gamedeviceRequestType>>();
+			set => SetPropertyValue<CEnum<gamedeviceRequestType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("executor")] 
 		public CWeakHandle<gameObject> Executor
 		{
-			get => GetProperty(ref _executor);
-			set => SetProperty(ref _executor, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 	}
 }

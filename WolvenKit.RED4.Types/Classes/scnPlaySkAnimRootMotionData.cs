@@ -5,114 +5,105 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnPlaySkAnimRootMotionData : RedBaseClass
 	{
-		private CBool _enabled;
-		private CEnum<scnRootMotionAnimPlacementMode> _placementMode;
-		private scnMarker _originMarker;
-		private Transform _originOffset;
-		private CFloat _customBlendInTime;
-		private CEnum<scnEasingType> _customBlendInCurve;
-		private CBool _removePitchRollRotation;
-		private CBool _meshDissolvingEnabled;
-		private CBool _vehicleChangePhysicsState;
-		private CBool _vehicleEnabledPhysicsOnEnd;
-		private CArray<scnAnimationMotionSample> _trajectoryLOD;
-
 		[Ordinal(0)] 
 		[RED("enabled")] 
 		public CBool Enabled
 		{
-			get => GetProperty(ref _enabled);
-			set => SetProperty(ref _enabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("placementMode")] 
 		public CEnum<scnRootMotionAnimPlacementMode> PlacementMode
 		{
-			get => GetProperty(ref _placementMode);
-			set => SetProperty(ref _placementMode, value);
+			get => GetPropertyValue<CEnum<scnRootMotionAnimPlacementMode>>();
+			set => SetPropertyValue<CEnum<scnRootMotionAnimPlacementMode>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("originMarker")] 
 		public scnMarker OriginMarker
 		{
-			get => GetProperty(ref _originMarker);
-			set => SetProperty(ref _originMarker, value);
+			get => GetPropertyValue<scnMarker>();
+			set => SetPropertyValue<scnMarker>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("originOffset")] 
 		public Transform OriginOffset
 		{
-			get => GetProperty(ref _originOffset);
-			set => SetProperty(ref _originOffset, value);
+			get => GetPropertyValue<Transform>();
+			set => SetPropertyValue<Transform>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("customBlendInTime")] 
 		public CFloat CustomBlendInTime
 		{
-			get => GetProperty(ref _customBlendInTime);
-			set => SetProperty(ref _customBlendInTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("customBlendInCurve")] 
 		public CEnum<scnEasingType> CustomBlendInCurve
 		{
-			get => GetProperty(ref _customBlendInCurve);
-			set => SetProperty(ref _customBlendInCurve, value);
+			get => GetPropertyValue<CEnum<scnEasingType>>();
+			set => SetPropertyValue<CEnum<scnEasingType>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("removePitchRollRotation")] 
 		public CBool RemovePitchRollRotation
 		{
-			get => GetProperty(ref _removePitchRollRotation);
-			set => SetProperty(ref _removePitchRollRotation, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("meshDissolvingEnabled")] 
 		public CBool MeshDissolvingEnabled
 		{
-			get => GetProperty(ref _meshDissolvingEnabled);
-			set => SetProperty(ref _meshDissolvingEnabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("vehicleChangePhysicsState")] 
 		public CBool VehicleChangePhysicsState
 		{
-			get => GetProperty(ref _vehicleChangePhysicsState);
-			set => SetProperty(ref _vehicleChangePhysicsState, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("vehicleEnabledPhysicsOnEnd")] 
 		public CBool VehicleEnabledPhysicsOnEnd
 		{
-			get => GetProperty(ref _vehicleEnabledPhysicsOnEnd);
-			set => SetProperty(ref _vehicleEnabledPhysicsOnEnd, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("trajectoryLOD")] 
 		public CArray<scnAnimationMotionSample> TrajectoryLOD
 		{
-			get => GetProperty(ref _trajectoryLOD);
-			set => SetProperty(ref _trajectoryLOD, value);
+			get => GetPropertyValue<CArray<scnAnimationMotionSample>>();
+			set => SetPropertyValue<CArray<scnAnimationMotionSample>>(value);
 		}
 
 		public scnPlaySkAnimRootMotionData()
 		{
-			_customBlendInTime = -1.000000F;
-			_customBlendInCurve = new() { Value = Enums.scnEasingType.SinusoidalEaseInOut };
-			_removePitchRollRotation = true;
-			_meshDissolvingEnabled = true;
-			_vehicleChangePhysicsState = true;
-			_vehicleEnabledPhysicsOnEnd = true;
+			OriginMarker = new() { Type = Enums.scnMarkerType.Global, EntityRef = new() { Names = new() }, IsMounted = true };
+			OriginOffset = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			CustomBlendInTime = -1.000000F;
+			CustomBlendInCurve = Enums.scnEasingType.SinusoidalEaseInOut;
+			RemovePitchRollRotation = true;
+			MeshDissolvingEnabled = true;
+			VehicleChangePhysicsState = true;
+			VehicleEnabledPhysicsOnEnd = true;
+			TrajectoryLOD = new();
 		}
 	}
 }

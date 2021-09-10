@@ -5,19 +5,21 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PingDevice : ActionBool
 	{
-		private CBool _shouldForward;
-
 		[Ordinal(25)] 
 		[RED("shouldForward")] 
 		public CBool ShouldForward
 		{
-			get => GetProperty(ref _shouldForward);
-			set => SetProperty(ref _shouldForward, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public PingDevice()
 		{
-			_shouldForward = true;
+			RequesterID = new();
+			InteractionChoice = new() { CaptionParts = new() { Parts = new() }, Data = new(), ChoiceMetaData = new() { Type = new() }, LookAtDescriptor = new() { Offset = new(), OrbId = new() } };
+			ActionWidgetPackage = new() { DependendActions = new() };
+			CanTriggerStim = true;
+			ShouldForward = true;
 		}
 	}
 }

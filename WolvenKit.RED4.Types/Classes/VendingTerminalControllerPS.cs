@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VendingTerminalControllerPS : ScriptableDeviceComponentPS
 	{
-		private VendingTerminalSetup _vendingTerminalSetup;
-		private CBool _isReady;
-		private CHandle<VendorDataManager> _vendorDataManager;
-
 		[Ordinal(104)] 
 		[RED("vendingTerminalSetup")] 
 		public VendingTerminalSetup VendingTerminalSetup
 		{
-			get => GetProperty(ref _vendingTerminalSetup);
-			set => SetProperty(ref _vendingTerminalSetup, value);
+			get => GetPropertyValue<VendingTerminalSetup>();
+			set => SetPropertyValue<VendingTerminalSetup>(value);
 		}
 
 		[Ordinal(105)] 
 		[RED("isReady")] 
 		public CBool IsReady
 		{
-			get => GetProperty(ref _isReady);
-			set => SetProperty(ref _isReady, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(106)] 
 		[RED("VendorDataManager")] 
 		public CHandle<VendorDataManager> VendorDataManager
 		{
-			get => GetProperty(ref _vendorDataManager);
-			set => SetProperty(ref _vendorDataManager, value);
+			get => GetPropertyValue<CHandle<VendorDataManager>>();
+			set => SetPropertyValue<CHandle<VendorDataManager>>(value);
+		}
+
+		public VendingTerminalControllerPS()
+		{
+			TweakDBRecord = new() { Value = 98928467386 };
+			TweakDBDescriptionRecord = new() { Value = 152448345865 };
+			VendingTerminalSetup = new() { VendingBlacklist = new(), TimeToCompletePurchase = 3.000000F };
 		}
 	}
 }

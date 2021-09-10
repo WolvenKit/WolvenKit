@@ -5,50 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorActionEquipItemNodeDefinition : AIbehaviorActionItemHandlingNodeDefinition
 	{
-		private CHandle<AIArgumentMapping> _slotId;
-		private CHandle<AIArgumentMapping> _itemId;
-		private CHandle<AIArgumentMapping> _duration;
-		private CHandle<AIArgumentMapping> _failIfItemNotFound;
-		private CHandle<AIArgumentMapping> _spawnDelay;
-
 		[Ordinal(1)] 
 		[RED("slotId")] 
 		public CHandle<AIArgumentMapping> SlotId
 		{
-			get => GetProperty(ref _slotId);
-			set => SetProperty(ref _slotId, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("itemId")] 
 		public CHandle<AIArgumentMapping> ItemId
 		{
-			get => GetProperty(ref _itemId);
-			set => SetProperty(ref _itemId, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("duration")] 
 		public CHandle<AIArgumentMapping> Duration
 		{
-			get => GetProperty(ref _duration);
-			set => SetProperty(ref _duration, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("failIfItemNotFound")] 
 		public CHandle<AIArgumentMapping> FailIfItemNotFound
 		{
-			get => GetProperty(ref _failIfItemNotFound);
-			set => SetProperty(ref _failIfItemNotFound, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("spawnDelay")] 
 		public CHandle<AIArgumentMapping> SpawnDelay
 		{
-			get => GetProperty(ref _spawnDelay);
-			set => SetProperty(ref _spawnDelay, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 	}
 }

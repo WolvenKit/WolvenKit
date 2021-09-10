@@ -5,14 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PresetAction : ActionBool
 	{
-		private CHandle<SmartHousePreset> _preset;
-
 		[Ordinal(25)] 
 		[RED("preset")] 
 		public CHandle<SmartHousePreset> Preset
 		{
-			get => GetProperty(ref _preset);
-			set => SetProperty(ref _preset, value);
+			get => GetPropertyValue<CHandle<SmartHousePreset>>();
+			set => SetPropertyValue<CHandle<SmartHousePreset>>(value);
+		}
+
+		public PresetAction()
+		{
+			RequesterID = new();
+			InteractionChoice = new() { CaptionParts = new() { Parts = new() }, Data = new(), ChoiceMetaData = new() { Type = new() }, LookAtDescriptor = new() { Offset = new(), OrbId = new() } };
+			ActionWidgetPackage = new() { DependendActions = new() };
+			CanTriggerStim = true;
 		}
 	}
 }

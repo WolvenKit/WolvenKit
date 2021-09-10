@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PauseResumePhoneCallEvent : redEvent
 	{
-		private CFloat _callDuration;
-		private CBool _pauseCall;
-		private CEnum<gamedataStatPoolType> _statPoolType;
-
 		[Ordinal(0)] 
 		[RED("callDuration")] 
 		public CFloat CallDuration
 		{
-			get => GetProperty(ref _callDuration);
-			set => SetProperty(ref _callDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("pauseCall")] 
 		public CBool PauseCall
 		{
-			get => GetProperty(ref _pauseCall);
-			set => SetProperty(ref _pauseCall, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("statPoolType")] 
 		public CEnum<gamedataStatPoolType> StatPoolType
 		{
-			get => GetProperty(ref _statPoolType);
-			set => SetProperty(ref _statPoolType, value);
+			get => GetPropertyValue<CEnum<gamedataStatPoolType>>();
+			set => SetPropertyValue<CEnum<gamedataStatPoolType>>(value);
 		}
 	}
 }

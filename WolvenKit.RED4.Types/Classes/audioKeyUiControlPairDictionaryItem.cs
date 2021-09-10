@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioKeyUiControlPairDictionaryItem : audioInlinedAudioMetadata
 	{
-		private CName _key;
-		private audioUiControl _value;
-
 		[Ordinal(1)] 
 		[RED("key")] 
 		public CName Key
 		{
-			get => GetProperty(ref _key);
-			set => SetProperty(ref _key, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("value")] 
 		public audioUiControl Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<audioUiControl>();
+			set => SetPropertyValue<audioUiControl>(value);
+		}
+
+		public audioKeyUiControlPairDictionaryItem()
+		{
+			Value = new();
 		}
 	}
 }

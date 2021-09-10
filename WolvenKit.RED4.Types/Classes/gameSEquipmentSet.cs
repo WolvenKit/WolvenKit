@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameSEquipmentSet : RedBaseClass
 	{
-		private CArray<gameSItemInfo> _setItems;
-		private CName _setName;
-		private CEnum<gameEquipmentSetType> _setType;
-
 		[Ordinal(0)] 
 		[RED("setItems")] 
 		public CArray<gameSItemInfo> SetItems
 		{
-			get => GetProperty(ref _setItems);
-			set => SetProperty(ref _setItems, value);
+			get => GetPropertyValue<CArray<gameSItemInfo>>();
+			set => SetPropertyValue<CArray<gameSItemInfo>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("setName")] 
 		public CName SetName
 		{
-			get => GetProperty(ref _setName);
-			set => SetProperty(ref _setName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("setType")] 
 		public CEnum<gameEquipmentSetType> SetType
 		{
-			get => GetProperty(ref _setType);
-			set => SetProperty(ref _setType, value);
+			get => GetPropertyValue<CEnum<gameEquipmentSetType>>();
+			set => SetPropertyValue<CEnum<gameEquipmentSetType>>(value);
+		}
+
+		public gameSEquipmentSet()
+		{
+			SetItems = new();
 		}
 	}
 }

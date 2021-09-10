@@ -5,221 +5,203 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioVehicleMetadata : audioCustomEmitterMetadata
 	{
-		private audioVehicleGeneralData _generalData;
-		private audioVehicleMechanicalData _mechanicalData;
-		private audioVehicleWheelData _wheelData;
-		private audioVehicleEmitterPositionData _emitterPositionData;
-		private CFloat _minRpm;
-		private CFloat _maxRpm;
-		private CName _vehicleCollisionSettings;
-		private CName _vehicleGridDestructionSettings;
-		private CName _vehiclePartSettings;
-		private CFloat _collisionCooldown;
-		private CFloat _maxPlayingDistance;
-		private CFloat _dopplerFactor;
-		private CFloat _suspensionSqueekTimeout;
-		private CFloat _exitDelay;
-		private CArray<CName> _gearSweeteners;
-		private CBool _testWheelMaterial;
-		private CBool _hasRadioReceiver;
-		private CBool _usesPoliceRadioStation;
-		private CFloat _acousticIsolationFactor;
-		private CName _trafficEmitterMetadata;
-		private CName _radioReceiverType;
-		private CArray<CName> _matchingStartupRadioStations;
-		private CFloat _radioPlaysWhenEngineStartsProbability;
-
 		[Ordinal(1)] 
 		[RED("generalData")] 
 		public audioVehicleGeneralData GeneralData
 		{
-			get => GetProperty(ref _generalData);
-			set => SetProperty(ref _generalData, value);
+			get => GetPropertyValue<audioVehicleGeneralData>();
+			set => SetPropertyValue<audioVehicleGeneralData>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("mechanicalData")] 
 		public audioVehicleMechanicalData MechanicalData
 		{
-			get => GetProperty(ref _mechanicalData);
-			set => SetProperty(ref _mechanicalData, value);
+			get => GetPropertyValue<audioVehicleMechanicalData>();
+			set => SetPropertyValue<audioVehicleMechanicalData>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("wheelData")] 
 		public audioVehicleWheelData WheelData
 		{
-			get => GetProperty(ref _wheelData);
-			set => SetProperty(ref _wheelData, value);
+			get => GetPropertyValue<audioVehicleWheelData>();
+			set => SetPropertyValue<audioVehicleWheelData>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("emitterPositionData")] 
 		public audioVehicleEmitterPositionData EmitterPositionData
 		{
-			get => GetProperty(ref _emitterPositionData);
-			set => SetProperty(ref _emitterPositionData, value);
+			get => GetPropertyValue<audioVehicleEmitterPositionData>();
+			set => SetPropertyValue<audioVehicleEmitterPositionData>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("minRpm")] 
 		public CFloat MinRpm
 		{
-			get => GetProperty(ref _minRpm);
-			set => SetProperty(ref _minRpm, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("maxRpm")] 
 		public CFloat MaxRpm
 		{
-			get => GetProperty(ref _maxRpm);
-			set => SetProperty(ref _maxRpm, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("vehicleCollisionSettings")] 
 		public CName VehicleCollisionSettings
 		{
-			get => GetProperty(ref _vehicleCollisionSettings);
-			set => SetProperty(ref _vehicleCollisionSettings, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("vehicleGridDestructionSettings")] 
 		public CName VehicleGridDestructionSettings
 		{
-			get => GetProperty(ref _vehicleGridDestructionSettings);
-			set => SetProperty(ref _vehicleGridDestructionSettings, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("vehiclePartSettings")] 
 		public CName VehiclePartSettings
 		{
-			get => GetProperty(ref _vehiclePartSettings);
-			set => SetProperty(ref _vehiclePartSettings, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("collisionCooldown")] 
 		public CFloat CollisionCooldown
 		{
-			get => GetProperty(ref _collisionCooldown);
-			set => SetProperty(ref _collisionCooldown, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("maxPlayingDistance")] 
 		public CFloat MaxPlayingDistance
 		{
-			get => GetProperty(ref _maxPlayingDistance);
-			set => SetProperty(ref _maxPlayingDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("dopplerFactor")] 
 		public CFloat DopplerFactor
 		{
-			get => GetProperty(ref _dopplerFactor);
-			set => SetProperty(ref _dopplerFactor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("suspensionSqueekTimeout")] 
 		public CFloat SuspensionSqueekTimeout
 		{
-			get => GetProperty(ref _suspensionSqueekTimeout);
-			set => SetProperty(ref _suspensionSqueekTimeout, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("exitDelay")] 
 		public CFloat ExitDelay
 		{
-			get => GetProperty(ref _exitDelay);
-			set => SetProperty(ref _exitDelay, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("gearSweeteners")] 
 		public CArray<CName> GearSweeteners
 		{
-			get => GetProperty(ref _gearSweeteners);
-			set => SetProperty(ref _gearSweeteners, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("testWheelMaterial")] 
 		public CBool TestWheelMaterial
 		{
-			get => GetProperty(ref _testWheelMaterial);
-			set => SetProperty(ref _testWheelMaterial, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("hasRadioReceiver")] 
 		public CBool HasRadioReceiver
 		{
-			get => GetProperty(ref _hasRadioReceiver);
-			set => SetProperty(ref _hasRadioReceiver, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("usesPoliceRadioStation")] 
 		public CBool UsesPoliceRadioStation
 		{
-			get => GetProperty(ref _usesPoliceRadioStation);
-			set => SetProperty(ref _usesPoliceRadioStation, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("acousticIsolationFactor")] 
 		public CFloat AcousticIsolationFactor
 		{
-			get => GetProperty(ref _acousticIsolationFactor);
-			set => SetProperty(ref _acousticIsolationFactor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("trafficEmitterMetadata")] 
 		public CName TrafficEmitterMetadata
 		{
-			get => GetProperty(ref _trafficEmitterMetadata);
-			set => SetProperty(ref _trafficEmitterMetadata, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("radioReceiverType")] 
 		public CName RadioReceiverType
 		{
-			get => GetProperty(ref _radioReceiverType);
-			set => SetProperty(ref _radioReceiverType, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("matchingStartupRadioStations")] 
 		public CArray<CName> MatchingStartupRadioStations
 		{
-			get => GetProperty(ref _matchingStartupRadioStations);
-			set => SetProperty(ref _matchingStartupRadioStations, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("radioPlaysWhenEngineStartsProbability")] 
 		public CFloat RadioPlaysWhenEngineStartsProbability
 		{
-			get => GetProperty(ref _radioPlaysWhenEngineStartsProbability);
-			set => SetProperty(ref _radioPlaysWhenEngineStartsProbability, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public audioVehicleMetadata()
 		{
-			_dopplerFactor = 1.000000F;
-			_acousticIsolationFactor = 1.000000F;
-			_trafficEmitterMetadata = "acousticsemitter_default_occl_obstr_ignore_5m";
-			_radioReceiverType = "radio_car";
-			_radioPlaysWhenEngineStartsProbability = 0.300000F;
+			GeneralData = new() { VehicleDoorsSettings = new() { Door = new(), Trunk = new(), Hood = new() }, VehicleInteriorParameterData = new() { EnterCurveType = Enums.audioESoundCurveType.Linear, EnterCurveTime = 3.000000F, EnterDelayTime = 2.000000F, ExitCurveType = Enums.audioESoundCurveType.Linear, ExitCurveTime = 3.000000F, ExitDelayTime = 2.000000F }, VehicleTemperatureSettings = new() { RpmThreshold = 3.000000F, TimeToActivateTemperature = 8.000000F, CooldownTime = 10.000000F } };
+			MechanicalData = new();
+			WheelData = new() { WheelStartEvents = new(), WheelStopEvents = new(), WheelRegularSuspensionImpacts = new(), WheelLandingSuspensionImpacts = new(), SuspensionPressureMultiplier = 2.000000F, LandingSuspensionPressureMultiplier = 1.000000F, SuspensionPressureLimit = 1.000000F, MinSuspensionPressureThreshold = 0.100000F, SuspensionImpactCooldown = 0.200000F, MinWheelTimeInAirBeforeLanding = 0.500000F };
+			EmitterPositionData = new() { EngineEmitterPosition = new(), ExaustEmitterPosition = new(), CentralEmitterPosition = new(), HoodEmitterPosition = new(), TrunkEmitterPosition = new(), Wheel1Position = new(), Wheel2Position = new(), Wheel3Position = new(), Wheel4Position = new() };
+			DopplerFactor = 1.000000F;
+			GearSweeteners = new();
+			AcousticIsolationFactor = 1.000000F;
+			TrafficEmitterMetadata = "acousticsemitter_default_occl_obstr_ignore_5m";
+			RadioReceiverType = "radio_car";
+			MatchingStartupRadioStations = new();
+			RadioPlaysWhenEngineStartsProbability = 0.300000F;
 		}
 	}
 }

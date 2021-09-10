@@ -5,50 +5,50 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SetDestinationWaypoint : AIActionHelperTask
 	{
-		private CEnum<EAITargetType> _refTargetType;
-		private CBool _findClosest;
-		private CName _waypointsName;
-		private CArray<Vector4> _destinations;
-		private CArray<Vector4> _finalDestinations;
-
 		[Ordinal(5)] 
 		[RED("refTargetType")] 
 		public CEnum<EAITargetType> RefTargetType
 		{
-			get => GetProperty(ref _refTargetType);
-			set => SetProperty(ref _refTargetType, value);
+			get => GetPropertyValue<CEnum<EAITargetType>>();
+			set => SetPropertyValue<CEnum<EAITargetType>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("findClosest")] 
 		public CBool FindClosest
 		{
-			get => GetProperty(ref _findClosest);
-			set => SetProperty(ref _findClosest, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("waypointsName")] 
 		public CName WaypointsName
 		{
-			get => GetProperty(ref _waypointsName);
-			set => SetProperty(ref _waypointsName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("destinations")] 
 		public CArray<Vector4> Destinations
 		{
-			get => GetProperty(ref _destinations);
-			set => SetProperty(ref _destinations, value);
+			get => GetPropertyValue<CArray<Vector4>>();
+			set => SetPropertyValue<CArray<Vector4>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("finalDestinations")] 
 		public CArray<Vector4> FinalDestinations
 		{
-			get => GetProperty(ref _finalDestinations);
-			set => SetProperty(ref _finalDestinations, value);
+			get => GetPropertyValue<CArray<Vector4>>();
+			set => SetPropertyValue<CArray<Vector4>>(value);
+		}
+
+		public SetDestinationWaypoint()
+		{
+			Destinations = new();
+			FinalDestinations = new();
 		}
 	}
 }

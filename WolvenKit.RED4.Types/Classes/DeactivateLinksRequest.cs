@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DeactivateLinksRequest : gameScriptableSystemRequest
 	{
-		private CArray<CInt32> _linksIDs;
-		private CBool _instant;
-
 		[Ordinal(0)] 
 		[RED("linksIDs")] 
 		public CArray<CInt32> LinksIDs
 		{
-			get => GetProperty(ref _linksIDs);
-			set => SetProperty(ref _linksIDs, value);
+			get => GetPropertyValue<CArray<CInt32>>();
+			set => SetPropertyValue<CArray<CInt32>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("instant")] 
 		public CBool Instant
 		{
-			get => GetProperty(ref _instant);
-			set => SetProperty(ref _instant, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public DeactivateLinksRequest()
+		{
+			LinksIDs = new();
 		}
 	}
 }

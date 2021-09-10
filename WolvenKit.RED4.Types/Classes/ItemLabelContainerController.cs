@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ItemLabelContainerController : inkWidgetLogicController
 	{
-		private CArray<CWeakHandle<ItemLabelController>> _items;
-
 		[Ordinal(1)] 
 		[RED("items")] 
 		public CArray<CWeakHandle<ItemLabelController>> Items
 		{
-			get => GetProperty(ref _items);
-			set => SetProperty(ref _items, value);
+			get => GetPropertyValue<CArray<CWeakHandle<ItemLabelController>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<ItemLabelController>>>(value);
+		}
+
+		public ItemLabelContainerController()
+		{
+			Items = new();
 		}
 	}
 }

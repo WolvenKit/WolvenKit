@@ -5,104 +5,95 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entDynamicActorRepellingComponent : entIPlacedComponent
 	{
-		private CEnum<entRepellingType> _type;
-		private CEnum<entRepellingShape> _shape;
-		private CFloat _magnitude;
-		private CFloat _bendIntensity;
-		private CEnum<rendWindShapeAnchorPointVert> _anchorPointVert;
-		private CEnum<rendWindShapeAnchorPointHorz> _anchorPointHorz;
-		private CEnum<rendWindShapeAnchorPointDepth> _anchorPointDepth;
-		private CFloat _radius;
-		private CFloat _capsuleRadius;
-		private CFloat _capsuleHeight;
-
 		[Ordinal(5)] 
 		[RED("type")] 
 		public CEnum<entRepellingType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<entRepellingType>>();
+			set => SetPropertyValue<CEnum<entRepellingType>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("shape")] 
 		public CEnum<entRepellingShape> Shape
 		{
-			get => GetProperty(ref _shape);
-			set => SetProperty(ref _shape, value);
+			get => GetPropertyValue<CEnum<entRepellingShape>>();
+			set => SetPropertyValue<CEnum<entRepellingShape>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("magnitude")] 
 		public CFloat Magnitude
 		{
-			get => GetProperty(ref _magnitude);
-			set => SetProperty(ref _magnitude, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("bendIntensity")] 
 		public CFloat BendIntensity
 		{
-			get => GetProperty(ref _bendIntensity);
-			set => SetProperty(ref _bendIntensity, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("anchorPointVert")] 
 		public CEnum<rendWindShapeAnchorPointVert> AnchorPointVert
 		{
-			get => GetProperty(ref _anchorPointVert);
-			set => SetProperty(ref _anchorPointVert, value);
+			get => GetPropertyValue<CEnum<rendWindShapeAnchorPointVert>>();
+			set => SetPropertyValue<CEnum<rendWindShapeAnchorPointVert>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("anchorPointHorz")] 
 		public CEnum<rendWindShapeAnchorPointHorz> AnchorPointHorz
 		{
-			get => GetProperty(ref _anchorPointHorz);
-			set => SetProperty(ref _anchorPointHorz, value);
+			get => GetPropertyValue<CEnum<rendWindShapeAnchorPointHorz>>();
+			set => SetPropertyValue<CEnum<rendWindShapeAnchorPointHorz>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("anchorPointDepth")] 
 		public CEnum<rendWindShapeAnchorPointDepth> AnchorPointDepth
 		{
-			get => GetProperty(ref _anchorPointDepth);
-			set => SetProperty(ref _anchorPointDepth, value);
+			get => GetPropertyValue<CEnum<rendWindShapeAnchorPointDepth>>();
+			set => SetPropertyValue<CEnum<rendWindShapeAnchorPointDepth>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get => GetProperty(ref _radius);
-			set => SetProperty(ref _radius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("capsuleRadius")] 
 		public CFloat CapsuleRadius
 		{
-			get => GetProperty(ref _capsuleRadius);
-			set => SetProperty(ref _capsuleRadius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("capsuleHeight")] 
 		public CFloat CapsuleHeight
 		{
-			get => GetProperty(ref _capsuleHeight);
-			set => SetProperty(ref _capsuleHeight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public entDynamicActorRepellingComponent()
 		{
-			_magnitude = 5.000000F;
-			_bendIntensity = 1.000000F;
-			_radius = 1.000000F;
-			_capsuleRadius = 1.000000F;
-			_capsuleHeight = 2.000000F;
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			Magnitude = 5.000000F;
+			BendIntensity = 1.000000F;
+			Radius = 1.000000F;
+			CapsuleRadius = 1.000000F;
+			CapsuleHeight = 2.000000F;
 		}
 	}
 }

@@ -5,50 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DPADActionPerformed : redEvent
 	{
-		private entEntityID _ownerID;
-		private CEnum<EUIActionState> _state;
-		private CInt32 _stateInt;
-		private CEnum<gameEHotkey> _action;
-		private CBool _successful;
-
 		[Ordinal(0)] 
 		[RED("ownerID")] 
 		public entEntityID OwnerID
 		{
-			get => GetProperty(ref _ownerID);
-			set => SetProperty(ref _ownerID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("state")] 
 		public CEnum<EUIActionState> State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<CEnum<EUIActionState>>();
+			set => SetPropertyValue<CEnum<EUIActionState>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("stateInt")] 
 		public CInt32 StateInt
 		{
-			get => GetProperty(ref _stateInt);
-			set => SetProperty(ref _stateInt, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("action")] 
 		public CEnum<gameEHotkey> Action
 		{
-			get => GetProperty(ref _action);
-			set => SetProperty(ref _action, value);
+			get => GetPropertyValue<CEnum<gameEHotkey>>();
+			set => SetPropertyValue<CEnum<gameEHotkey>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("successful")] 
 		public CBool Successful
 		{
-			get => GetProperty(ref _successful);
-			set => SetProperty(ref _successful, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public DPADActionPerformed()
+		{
+			OwnerID = new();
 		}
 	}
 }

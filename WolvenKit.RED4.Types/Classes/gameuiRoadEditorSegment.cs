@@ -5,50 +5,50 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiRoadEditorSegment : RedBaseClass
 	{
-		private CUInt32 _length;
-		private CFloat _curve;
-		private CBool _hasCheckpoint;
-		private CArray<gameuiRoadEditorObstacleSettings> _obstacleSettings;
-		private CArray<gameuiRoadEditorDecorationSettings> _decorationSettings;
-
 		[Ordinal(0)] 
 		[RED("length")] 
 		public CUInt32 Length
 		{
-			get => GetProperty(ref _length);
-			set => SetProperty(ref _length, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("curve")] 
 		public CFloat Curve
 		{
-			get => GetProperty(ref _curve);
-			set => SetProperty(ref _curve, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("hasCheckpoint")] 
 		public CBool HasCheckpoint
 		{
-			get => GetProperty(ref _hasCheckpoint);
-			set => SetProperty(ref _hasCheckpoint, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("obstacleSettings")] 
 		public CArray<gameuiRoadEditorObstacleSettings> ObstacleSettings
 		{
-			get => GetProperty(ref _obstacleSettings);
-			set => SetProperty(ref _obstacleSettings, value);
+			get => GetPropertyValue<CArray<gameuiRoadEditorObstacleSettings>>();
+			set => SetPropertyValue<CArray<gameuiRoadEditorObstacleSettings>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("decorationSettings")] 
 		public CArray<gameuiRoadEditorDecorationSettings> DecorationSettings
 		{
-			get => GetProperty(ref _decorationSettings);
-			set => SetProperty(ref _decorationSettings, value);
+			get => GetPropertyValue<CArray<gameuiRoadEditorDecorationSettings>>();
+			set => SetPropertyValue<CArray<gameuiRoadEditorDecorationSettings>>(value);
+		}
+
+		public gameuiRoadEditorSegment()
+		{
+			ObstacleSettings = new();
+			DecorationSettings = new();
 		}
 	}
 }

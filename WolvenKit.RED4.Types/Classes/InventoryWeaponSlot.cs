@@ -5,50 +5,51 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class InventoryWeaponSlot : InventoryEquipmentSlot
 	{
-		private inkWidgetReference _damageIndicatorRef;
-		private inkWidgetReference _dPSRef;
-		private inkTextWidgetReference _dPSValueLabel;
-		private CWeakHandle<DamageTypeIndicator> _damageTypeIndicator;
-		private CBool _introPlayed;
-
 		[Ordinal(17)] 
 		[RED("DamageIndicatorRef")] 
 		public inkWidgetReference DamageIndicatorRef
 		{
-			get => GetProperty(ref _damageIndicatorRef);
-			set => SetProperty(ref _damageIndicatorRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("DPSRef")] 
 		public inkWidgetReference DPSRef
 		{
-			get => GetProperty(ref _dPSRef);
-			set => SetProperty(ref _dPSRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("DPSValueLabel")] 
 		public inkTextWidgetReference DPSValueLabel
 		{
-			get => GetProperty(ref _dPSValueLabel);
-			set => SetProperty(ref _dPSValueLabel, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("DamageTypeIndicator")] 
 		public CWeakHandle<DamageTypeIndicator> DamageTypeIndicator
 		{
-			get => GetProperty(ref _damageTypeIndicator);
-			set => SetProperty(ref _damageTypeIndicator, value);
+			get => GetPropertyValue<CWeakHandle<DamageTypeIndicator>>();
+			set => SetPropertyValue<CWeakHandle<DamageTypeIndicator>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("IntroPlayed")] 
 		public CBool IntroPlayed
 		{
-			get => GetProperty(ref _introPlayed);
-			set => SetProperty(ref _introPlayed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public InventoryWeaponSlot()
+		{
+			DamageIndicatorRef = new();
+			DPSRef = new();
+			DPSValueLabel = new();
 		}
 	}
 }

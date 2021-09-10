@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UIMenuNotificationEvent : redEvent
 	{
-		private CEnum<UIMenuNotificationType> _notificationType;
-		private CVariant _additionalInfo;
-
 		[Ordinal(0)] 
 		[RED("notificationType")] 
 		public CEnum<UIMenuNotificationType> NotificationType
 		{
-			get => GetProperty(ref _notificationType);
-			set => SetProperty(ref _notificationType, value);
+			get => GetPropertyValue<CEnum<UIMenuNotificationType>>();
+			set => SetPropertyValue<CEnum<UIMenuNotificationType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("additionalInfo")] 
 		public CVariant AdditionalInfo
 		{
-			get => GetProperty(ref _additionalInfo);
-			set => SetProperty(ref _additionalInfo, value);
+			get => GetPropertyValue<CVariant>();
+			set => SetPropertyValue<CVariant>(value);
 		}
 	}
 }

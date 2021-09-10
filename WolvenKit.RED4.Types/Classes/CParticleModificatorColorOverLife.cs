@@ -5,28 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CParticleModificatorColorOverLife : IParticleModificator
 	{
-		private CHandle<IEvaluatorColor> _color;
-		private CBool _modulate;
-
 		[Ordinal(4)] 
 		[RED("color")] 
 		public CHandle<IEvaluatorColor> Color
 		{
-			get => GetProperty(ref _color);
-			set => SetProperty(ref _color, value);
+			get => GetPropertyValue<CHandle<IEvaluatorColor>>();
+			set => SetPropertyValue<CHandle<IEvaluatorColor>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("modulate")] 
 		public CBool Modulate
 		{
-			get => GetProperty(ref _modulate);
-			set => SetProperty(ref _modulate, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public CParticleModificatorColorOverLife()
 		{
-			_modulate = true;
+			EditorName = "Color over life";
+			EditorGroup = "Material";
+			IsEnabled = true;
+			Modulate = true;
 		}
 	}
 }

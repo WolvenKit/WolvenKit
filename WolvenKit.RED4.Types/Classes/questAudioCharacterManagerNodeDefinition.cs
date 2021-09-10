@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questAudioCharacterManagerNodeDefinition : questDisableableNodeDefinition
 	{
-		private CHandle<questIAudioCharacterManager_NodeType> _type;
-
 		[Ordinal(2)] 
 		[RED("type")] 
 		public CHandle<questIAudioCharacterManager_NodeType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CHandle<questIAudioCharacterManager_NodeType>>();
+			set => SetPropertyValue<CHandle<questIAudioCharacterManager_NodeType>>(value);
+		}
+
+		public questAudioCharacterManagerNodeDefinition()
+		{
+			Sockets = new();
+			Id = 65535;
 		}
 	}
 }

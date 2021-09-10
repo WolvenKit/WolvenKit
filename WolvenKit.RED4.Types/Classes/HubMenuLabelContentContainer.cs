@@ -5,68 +5,69 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class HubMenuLabelContentContainer : inkWidgetLogicController
 	{
-		private inkTextWidgetReference _label;
-		private inkImageWidgetReference _icon;
-		private inkWidgetReference _desiredSizeWrapper;
-		private inkBorderWidgetReference _border;
-		private CInt32 _carouselPosition;
-		private CString _labelName;
-		private MenuData _data;
-
 		[Ordinal(1)] 
 		[RED("label")] 
 		public inkTextWidgetReference Label
 		{
-			get => GetProperty(ref _label);
-			set => SetProperty(ref _label, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("icon")] 
 		public inkImageWidgetReference Icon
 		{
-			get => GetProperty(ref _icon);
-			set => SetProperty(ref _icon, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("desiredSizeWrapper")] 
 		public inkWidgetReference DesiredSizeWrapper
 		{
-			get => GetProperty(ref _desiredSizeWrapper);
-			set => SetProperty(ref _desiredSizeWrapper, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("border")] 
 		public inkBorderWidgetReference Border
 		{
-			get => GetProperty(ref _border);
-			set => SetProperty(ref _border, value);
+			get => GetPropertyValue<inkBorderWidgetReference>();
+			set => SetPropertyValue<inkBorderWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("carouselPosition")] 
 		public CInt32 CarouselPosition
 		{
-			get => GetProperty(ref _carouselPosition);
-			set => SetProperty(ref _carouselPosition, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("labelName")] 
 		public CString LabelName
 		{
-			get => GetProperty(ref _labelName);
-			set => SetProperty(ref _labelName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("data")] 
 		public MenuData Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<MenuData>();
+			set => SetPropertyValue<MenuData>(value);
+		}
+
+		public HubMenuLabelContentContainer()
+		{
+			Label = new();
+			Icon = new();
+			DesiredSizeWrapper = new();
+			Border = new();
+			Data = new() { Identifier = -1, SubMenus = new() };
 		}
 	}
 }

@@ -5,168 +5,160 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ColorGradingAreaSettings : IAreaSettings
 	{
-		private CFloat _contrast;
-		private CFloat _contrastPivot;
-		private CFloat _saturation;
-		private CFloat _hue;
-		private CFloat _brightness;
-		private ColorBalance _lift;
-		private ColorBalance _gammaValue;
-		private ColorBalance _gain;
-		private ColorBalance _offset;
-		private CFloat _lowRange;
-		private ColorBalance _shadowOffset;
-		private ColorBalance _midtoneOffset;
-		private CFloat _highRange;
-		private ColorBalance _highlightOffset;
-		private ColorGradingLutParams _ldrLut;
-		private ColorGradingLutParams _hdrLut;
-		private CBool _forceHdrLut;
-
 		[Ordinal(2)] 
 		[RED("contrast")] 
 		public CFloat Contrast
 		{
-			get => GetProperty(ref _contrast);
-			set => SetProperty(ref _contrast, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("contrastPivot")] 
 		public CFloat ContrastPivot
 		{
-			get => GetProperty(ref _contrastPivot);
-			set => SetProperty(ref _contrastPivot, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("saturation")] 
 		public CFloat Saturation
 		{
-			get => GetProperty(ref _saturation);
-			set => SetProperty(ref _saturation, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("hue")] 
 		public CFloat Hue
 		{
-			get => GetProperty(ref _hue);
-			set => SetProperty(ref _hue, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("brightness")] 
 		public CFloat Brightness
 		{
-			get => GetProperty(ref _brightness);
-			set => SetProperty(ref _brightness, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("lift")] 
 		public ColorBalance Lift
 		{
-			get => GetProperty(ref _lift);
-			set => SetProperty(ref _lift, value);
+			get => GetPropertyValue<ColorBalance>();
+			set => SetPropertyValue<ColorBalance>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("gammaValue")] 
 		public ColorBalance GammaValue
 		{
-			get => GetProperty(ref _gammaValue);
-			set => SetProperty(ref _gammaValue, value);
+			get => GetPropertyValue<ColorBalance>();
+			set => SetPropertyValue<ColorBalance>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("gain")] 
 		public ColorBalance Gain
 		{
-			get => GetProperty(ref _gain);
-			set => SetProperty(ref _gain, value);
+			get => GetPropertyValue<ColorBalance>();
+			set => SetPropertyValue<ColorBalance>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("offset")] 
 		public ColorBalance Offset
 		{
-			get => GetProperty(ref _offset);
-			set => SetProperty(ref _offset, value);
+			get => GetPropertyValue<ColorBalance>();
+			set => SetPropertyValue<ColorBalance>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("lowRange")] 
 		public CFloat LowRange
 		{
-			get => GetProperty(ref _lowRange);
-			set => SetProperty(ref _lowRange, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("shadowOffset")] 
 		public ColorBalance ShadowOffset
 		{
-			get => GetProperty(ref _shadowOffset);
-			set => SetProperty(ref _shadowOffset, value);
+			get => GetPropertyValue<ColorBalance>();
+			set => SetPropertyValue<ColorBalance>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("midtoneOffset")] 
 		public ColorBalance MidtoneOffset
 		{
-			get => GetProperty(ref _midtoneOffset);
-			set => SetProperty(ref _midtoneOffset, value);
+			get => GetPropertyValue<ColorBalance>();
+			set => SetPropertyValue<ColorBalance>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("highRange")] 
 		public CFloat HighRange
 		{
-			get => GetProperty(ref _highRange);
-			set => SetProperty(ref _highRange, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("highlightOffset")] 
 		public ColorBalance HighlightOffset
 		{
-			get => GetProperty(ref _highlightOffset);
-			set => SetProperty(ref _highlightOffset, value);
+			get => GetPropertyValue<ColorBalance>();
+			set => SetPropertyValue<ColorBalance>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("ldrLut")] 
 		public ColorGradingLutParams LdrLut
 		{
-			get => GetProperty(ref _ldrLut);
-			set => SetProperty(ref _ldrLut, value);
+			get => GetPropertyValue<ColorGradingLutParams>();
+			set => SetPropertyValue<ColorGradingLutParams>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("hdrLut")] 
 		public ColorGradingLutParams HdrLut
 		{
-			get => GetProperty(ref _hdrLut);
-			set => SetProperty(ref _hdrLut, value);
+			get => GetPropertyValue<ColorGradingLutParams>();
+			set => SetPropertyValue<ColorGradingLutParams>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("forceHdrLut")] 
 		public CBool ForceHdrLut
 		{
-			get => GetProperty(ref _forceHdrLut);
-			set => SetProperty(ref _forceHdrLut, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public ColorGradingAreaSettings()
 		{
-			_contrast = 1.000000F;
-			_contrastPivot = 0.435000F;
-			_saturation = 1.000000F;
-			_brightness = 1.000000F;
-			_lowRange = 0.100000F;
-			_highRange = 0.450000F;
+			Enable = true;
+			Contrast = 1.000000F;
+			ContrastPivot = 0.435000F;
+			Saturation = 1.000000F;
+			Brightness = 1.000000F;
+			Lift = new();
+			GammaValue = new() { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Luminance = 1.000000F };
+			Gain = new() { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Luminance = 1.000000F };
+			Offset = new();
+			LowRange = 0.100000F;
+			ShadowOffset = new();
+			MidtoneOffset = new();
+			HighRange = 0.450000F;
+			HighlightOffset = new();
+			LdrLut = new() { InputMapping = Enums.EColorMappingFunction.CMF_sRGB, OutputMapping = Enums.EColorMappingFunction.CMF_sRGB };
+			HdrLut = new() { InputMapping = Enums.EColorMappingFunction.CMF_sRGB, OutputMapping = Enums.EColorMappingFunction.CMF_sRGB };
 		}
 	}
 }

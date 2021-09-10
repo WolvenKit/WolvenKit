@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldRelativeNodePathElement : RedBaseClass
 	{
-		private CString _prefab;
-		private CUInt64 _nodeID;
-
 		[Ordinal(0)] 
 		[RED("prefab")] 
 		public CString Prefab
 		{
-			get => GetProperty(ref _prefab);
-			set => SetProperty(ref _prefab, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("nodeID")] 
 		public CUInt64 NodeID
 		{
-			get => GetProperty(ref _nodeID);
-			set => SetProperty(ref _nodeID, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 	}
 }

@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIArgumentFloatValue : AIArgumentDefinition
 	{
-		private CEnum<AIArgumentType> _type;
-		private CFloat _defaultValue;
-
 		[Ordinal(3)] 
 		[RED("type")] 
 		public CEnum<AIArgumentType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<AIArgumentType>>();
+			set => SetPropertyValue<CEnum<AIArgumentType>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("defaultValue")] 
 		public CFloat DefaultValue
 		{
-			get => GetProperty(ref _defaultValue);
-			set => SetProperty(ref _defaultValue, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public AIArgumentFloatValue()
 		{
-			_type = new() { Value = Enums.AIArgumentType.Float };
+			Type = Enums.AIArgumentType.Float;
 		}
 	}
 }

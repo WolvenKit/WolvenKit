@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameReplicatedEntityEventsState : RedBaseClass
 	{
-		private CArray<gameReplicatedEntityEvent> _items;
-		private netTime _lastAppliedActionsTime;
-
 		[Ordinal(0)] 
 		[RED("items")] 
 		public CArray<gameReplicatedEntityEvent> Items
 		{
-			get => GetProperty(ref _items);
-			set => SetProperty(ref _items, value);
+			get => GetPropertyValue<CArray<gameReplicatedEntityEvent>>();
+			set => SetPropertyValue<CArray<gameReplicatedEntityEvent>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("lastAppliedActionsTime")] 
 		public netTime LastAppliedActionsTime
 		{
-			get => GetProperty(ref _lastAppliedActionsTime);
-			set => SetProperty(ref _lastAppliedActionsTime, value);
+			get => GetPropertyValue<netTime>();
+			set => SetPropertyValue<netTime>(value);
+		}
+
+		public gameReplicatedEntityEventsState()
+		{
+			Items = new();
+			LastAppliedActionsTime = new();
 		}
 	}
 }

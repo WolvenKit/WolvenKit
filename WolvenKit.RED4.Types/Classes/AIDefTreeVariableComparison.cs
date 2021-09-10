@@ -5,74 +5,68 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIDefTreeVariableComparison : LibTreeDefTreeVariableBoolBase
 	{
-		private CBool _exportAsProperty;
-		private CUInt16 _referenceVariableId;
-		private CName _referenceVariableName;
-		private CName _referenceVariableShortName;
-		private CName _referenceType;
-		private CEnum<EComparisonType> _operator;
-		private CVariant _referenceValue;
-
 		[Ordinal(2)] 
 		[RED("exportAsProperty")] 
 		public CBool ExportAsProperty
 		{
-			get => GetProperty(ref _exportAsProperty);
-			set => SetProperty(ref _exportAsProperty, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("referenceVariableId")] 
 		public CUInt16 ReferenceVariableId
 		{
-			get => GetProperty(ref _referenceVariableId);
-			set => SetProperty(ref _referenceVariableId, value);
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("referenceVariableName")] 
 		public CName ReferenceVariableName
 		{
-			get => GetProperty(ref _referenceVariableName);
-			set => SetProperty(ref _referenceVariableName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("referenceVariableShortName")] 
 		public CName ReferenceVariableShortName
 		{
-			get => GetProperty(ref _referenceVariableShortName);
-			set => SetProperty(ref _referenceVariableShortName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("referenceType")] 
 		public CName ReferenceType
 		{
-			get => GetProperty(ref _referenceType);
-			set => SetProperty(ref _referenceType, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("operator")] 
 		public CEnum<EComparisonType> Operator
 		{
-			get => GetProperty(ref _operator);
-			set => SetProperty(ref _operator, value);
+			get => GetPropertyValue<CEnum<EComparisonType>>();
+			set => SetPropertyValue<CEnum<EComparisonType>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("referenceValue")] 
 		public CVariant ReferenceValue
 		{
-			get => GetProperty(ref _referenceValue);
-			set => SetProperty(ref _referenceValue, value);
+			get => GetPropertyValue<CVariant>();
+			set => SetPropertyValue<CVariant>(value);
 		}
 
 		public AIDefTreeVariableComparison()
 		{
-			_referenceVariableId = 65535;
-			_operator = new() { Value = Enums.EComparisonType.Equal };
+			Id = 65535;
+			ReadableName = "TreeVar";
+			ReferenceVariableId = 65535;
+			Operator = Enums.EComparisonType.Equal;
 		}
 	}
 }

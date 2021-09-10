@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class GameTime : RedBaseClass
 	{
-		private CInt32 _seconds;
-
 		[Ordinal(0)] 
 		[RED("seconds")] 
 		public CInt32 Seconds
 		{
-			get => GetProperty(ref _seconds);
-			set => SetProperty(ref _seconds, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

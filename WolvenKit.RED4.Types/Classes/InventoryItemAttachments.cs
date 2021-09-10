@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class InventoryItemAttachments : RedBaseClass
 	{
-		private TweakDBID _slotID;
-		private InventoryItemData _itemData;
-		private CString _slotName;
-		private CEnum<gameInventoryItemAttachmentType> _slotType;
-
 		[Ordinal(0)] 
 		[RED("SlotID")] 
 		public TweakDBID SlotID
 		{
-			get => GetProperty(ref _slotID);
-			set => SetProperty(ref _slotID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ItemData")] 
 		public InventoryItemData ItemData
 		{
-			get => GetProperty(ref _itemData);
-			set => SetProperty(ref _itemData, value);
+			get => GetPropertyValue<InventoryItemData>();
+			set => SetPropertyValue<InventoryItemData>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("SlotName")] 
 		public CString SlotName
 		{
-			get => GetProperty(ref _slotName);
-			set => SetProperty(ref _slotName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("SlotType")] 
 		public CEnum<gameInventoryItemAttachmentType> SlotType
 		{
-			get => GetProperty(ref _slotType);
-			set => SetProperty(ref _slotType, value);
+			get => GetPropertyValue<CEnum<gameInventoryItemAttachmentType>>();
+			set => SetPropertyValue<CEnum<gameInventoryItemAttachmentType>>(value);
+		}
+
+		public InventoryItemAttachments()
+		{
+			ItemData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
 		}
 	}
 }

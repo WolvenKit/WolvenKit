@@ -5,68 +5,62 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CameraAreaSettings : IAreaSettings
 	{
-		private CFloat _cameraNearPlane;
-		private CFloat _cameraFarPlane;
-		private CBool _automated;
-		private CUInt32 _iSO;
-		private CFloat _shutterTime;
-		private CFloat _fStop;
-
 		[Ordinal(2)] 
 		[RED("cameraNearPlane")] 
 		public CFloat CameraNearPlane
 		{
-			get => GetProperty(ref _cameraNearPlane);
-			set => SetProperty(ref _cameraNearPlane, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("cameraFarPlane")] 
 		public CFloat CameraFarPlane
 		{
-			get => GetProperty(ref _cameraFarPlane);
-			set => SetProperty(ref _cameraFarPlane, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("automated")] 
 		public CBool Automated
 		{
-			get => GetProperty(ref _automated);
-			set => SetProperty(ref _automated, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("ISO")] 
 		public CUInt32 ISO
 		{
-			get => GetProperty(ref _iSO);
-			set => SetProperty(ref _iSO, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("shutterTime")] 
 		public CFloat ShutterTime
 		{
-			get => GetProperty(ref _shutterTime);
-			set => SetProperty(ref _shutterTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("fStop")] 
 		public CFloat FStop
 		{
-			get => GetProperty(ref _fStop);
-			set => SetProperty(ref _fStop, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public CameraAreaSettings()
 		{
-			_cameraNearPlane = 0.400000F;
-			_cameraFarPlane = 8000.000000F;
-			_iSO = 100;
-			_shutterTime = 125.000000F;
-			_fStop = 8.000000F;
+			Enable = true;
+			CameraNearPlane = 0.400000F;
+			CameraFarPlane = 8000.000000F;
+			ISO = 100;
+			ShutterTime = 125.000000F;
+			FStop = 8.000000F;
 		}
 	}
 }

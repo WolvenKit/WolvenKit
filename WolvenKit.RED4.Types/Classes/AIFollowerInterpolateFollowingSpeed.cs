@@ -5,91 +5,81 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIFollowerInterpolateFollowingSpeed : AIbehaviortaskScript
 	{
-		private TweakDBID _enterCondition;
-		private TweakDBID _exitCondition;
-		private CFloat _minInterpolationDistanceToDestination;
-		private CFloat _maxInterpolationDistanceToDestination;
-		private CFloat _maxTimeDilation;
-		private CWeakHandle<gamedataAIActionCondition_Record> _enterConditionInstance;
-		private CWeakHandle<gamedataAIActionCondition_Record> _exitConditionInstace;
-		private CBool _isActive;
-		private CName _reason;
-
 		[Ordinal(0)] 
 		[RED("enterCondition")] 
 		public TweakDBID EnterCondition
 		{
-			get => GetProperty(ref _enterCondition);
-			set => SetProperty(ref _enterCondition, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("exitCondition")] 
 		public TweakDBID ExitCondition
 		{
-			get => GetProperty(ref _exitCondition);
-			set => SetProperty(ref _exitCondition, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("minInterpolationDistanceToDestination")] 
 		public CFloat MinInterpolationDistanceToDestination
 		{
-			get => GetProperty(ref _minInterpolationDistanceToDestination);
-			set => SetProperty(ref _minInterpolationDistanceToDestination, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("maxInterpolationDistanceToDestination")] 
 		public CFloat MaxInterpolationDistanceToDestination
 		{
-			get => GetProperty(ref _maxInterpolationDistanceToDestination);
-			set => SetProperty(ref _maxInterpolationDistanceToDestination, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("maxTimeDilation")] 
 		public CFloat MaxTimeDilation
 		{
-			get => GetProperty(ref _maxTimeDilation);
-			set => SetProperty(ref _maxTimeDilation, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("enterConditionInstance")] 
 		public CWeakHandle<gamedataAIActionCondition_Record> EnterConditionInstance
 		{
-			get => GetProperty(ref _enterConditionInstance);
-			set => SetProperty(ref _enterConditionInstance, value);
+			get => GetPropertyValue<CWeakHandle<gamedataAIActionCondition_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataAIActionCondition_Record>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("exitConditionInstace")] 
 		public CWeakHandle<gamedataAIActionCondition_Record> ExitConditionInstace
 		{
-			get => GetProperty(ref _exitConditionInstace);
-			set => SetProperty(ref _exitConditionInstace, value);
+			get => GetPropertyValue<CWeakHandle<gamedataAIActionCondition_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataAIActionCondition_Record>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get => GetProperty(ref _isActive);
-			set => SetProperty(ref _isActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("reason")] 
 		public CName Reason
 		{
-			get => GetProperty(ref _reason);
-			set => SetProperty(ref _reason, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public AIFollowerInterpolateFollowingSpeed()
 		{
-			_reason = "Following";
+			Reason = "Following";
 		}
 	}
 }

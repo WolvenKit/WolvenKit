@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questForceModule_NodeType : questIVisionModeNodeType
 	{
-		private CArray<questForceVMModule_NodeTypeParams> _params;
-
 		[Ordinal(0)] 
 		[RED("params")] 
 		public CArray<questForceVMModule_NodeTypeParams> Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<CArray<questForceVMModule_NodeTypeParams>>();
+			set => SetPropertyValue<CArray<questForceVMModule_NodeTypeParams>>(value);
+		}
+
+		public questForceModule_NodeType()
+		{
+			Params = new() { new() };
 		}
 	}
 }

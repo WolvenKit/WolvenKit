@@ -5,41 +5,45 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CarHotkeyController : GenericHotkeyController
 	{
-		private inkImageWidgetReference _carIconSlot;
-		private CWeakHandle<gameVehicleSystem> _vehicleSystem;
-		private CWeakHandle<gameIBlackboard> _psmBB;
-		private CHandle<redCallbackObject> _bbListener;
-
 		[Ordinal(19)] 
 		[RED("carIconSlot")] 
 		public inkImageWidgetReference CarIconSlot
 		{
-			get => GetProperty(ref _carIconSlot);
-			set => SetProperty(ref _carIconSlot, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("vehicleSystem")] 
 		public CWeakHandle<gameVehicleSystem> VehicleSystem
 		{
-			get => GetProperty(ref _vehicleSystem);
-			set => SetProperty(ref _vehicleSystem, value);
+			get => GetPropertyValue<CWeakHandle<gameVehicleSystem>>();
+			set => SetPropertyValue<CWeakHandle<gameVehicleSystem>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("psmBB")] 
 		public CWeakHandle<gameIBlackboard> PsmBB
 		{
-			get => GetProperty(ref _psmBB);
-			set => SetProperty(ref _psmBB, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("bbListener")] 
 		public CHandle<redCallbackObject> BbListener
 		{
-			get => GetProperty(ref _bbListener);
-			set => SetProperty(ref _bbListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		public CarHotkeyController()
+		{
+			HotkeyBackground = new();
+			ButtonHint = new();
+			Restrictions = new();
+			DebugCommands = new();
+			CarIconSlot = new();
 		}
 	}
 }

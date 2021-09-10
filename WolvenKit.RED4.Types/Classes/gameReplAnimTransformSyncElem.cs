@@ -5,67 +5,60 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameReplAnimTransformSyncElem : RedBaseClass
 	{
-		private CInt32 _definitionId;
-		private CFloat _currentTime;
-		private CFloat _timeScale;
-		private CFloat _duration;
-		private CInt32 _timesToPlay;
-		private CBool _playing;
-
 		[Ordinal(0)] 
 		[RED("definitionId")] 
 		public CInt32 DefinitionId
 		{
-			get => GetProperty(ref _definitionId);
-			set => SetProperty(ref _definitionId, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("currentTime")] 
 		public CFloat CurrentTime
 		{
-			get => GetProperty(ref _currentTime);
-			set => SetProperty(ref _currentTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("timeScale")] 
 		public CFloat TimeScale
 		{
-			get => GetProperty(ref _timeScale);
-			set => SetProperty(ref _timeScale, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get => GetProperty(ref _duration);
-			set => SetProperty(ref _duration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("timesToPlay")] 
 		public CInt32 TimesToPlay
 		{
-			get => GetProperty(ref _timesToPlay);
-			set => SetProperty(ref _timesToPlay, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("playing")] 
 		public CBool Playing
 		{
-			get => GetProperty(ref _playing);
-			set => SetProperty(ref _playing, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public gameReplAnimTransformSyncElem()
 		{
-			_definitionId = -1;
-			_currentTime = -1.000000F;
-			_timeScale = 1.000000F;
-			_timesToPlay = -1;
+			DefinitionId = -1;
+			CurrentTime = -1.000000F;
+			TimeScale = 1.000000F;
+			TimesToPlay = -1;
 		}
 	}
 }

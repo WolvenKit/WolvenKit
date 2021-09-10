@@ -5,284 +5,270 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class StatsMainGameController : gameuiMenuGameController
 	{
-		private inkWidgetReference _mainViewRoot;
-		private inkCompoundWidgetReference _statsList;
-		private inkWidgetReference _tooltipsManagerRef;
-		private inkWidgetReference _levelControllerRef;
-		private inkWidgetReference _streetCredControllerRef;
-		private inkWidgetReference _detailListControllerRef;
-		private inkWidgetReference _statsStreetCredRewardRef;
-		private inkWidgetReference _statsPlayTimeControllerdRef;
-		private inkWidgetReference _btnInventory;
-		private inkWidgetReference _buttonHintsManagerRef;
-		private CWeakHandle<gameuiTooltipsManager> _tooltipsManager;
-		private CHandle<InventoryDataManagerV2> _inventoryManager;
-		private CWeakHandle<PlayerPuppet> _player;
-		private CArray<gameStatViewData> _healthStatsData;
-		private CArray<gameStatViewData> _dPSStatsData;
-		private CArray<gameStatViewData> _armorStatsData;
-		private CArray<gameStatViewData> _otherStatsData;
-		private CWeakHandle<gameIBlackboard> _playerStatsBlackboard;
-		private CHandle<redCallbackObject> _currencyListener;
-		private CHandle<redCallbackObject> _characterCredListener;
-		private CHandle<redCallbackObject> _characterLevelListener;
-		private CHandle<redCallbackObject> _characterCurrentXPListener;
-		private CHandle<redCallbackObject> _characterCredPointsListener;
-		private CHandle<PlayerDevelopmentSystem> _pDS;
-		private CWeakHandle<StatsProgressController> _levelController;
-		private CWeakHandle<StatsProgressController> _streetCredController;
-		private CWeakHandle<StatsDetailListController> _detailListController;
-		private CWeakHandle<StatsStreetCredReward> _statsStreetCredReward;
-		private CWeakHandle<StatsPlayTimeController> _statsPlayTimeController;
-		private CHandle<PreviousMenuData> _previousMenuData;
-		private CWeakHandle<ButtonHints> _buttonHintsController;
-
 		[Ordinal(3)] 
 		[RED("MainViewRoot")] 
 		public inkWidgetReference MainViewRoot
 		{
-			get => GetProperty(ref _mainViewRoot);
-			set => SetProperty(ref _mainViewRoot, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("statsList")] 
 		public inkCompoundWidgetReference StatsList
 		{
-			get => GetProperty(ref _statsList);
-			set => SetProperty(ref _statsList, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("TooltipsManagerRef")] 
 		public inkWidgetReference TooltipsManagerRef
 		{
-			get => GetProperty(ref _tooltipsManagerRef);
-			set => SetProperty(ref _tooltipsManagerRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("levelControllerRef")] 
 		public inkWidgetReference LevelControllerRef
 		{
-			get => GetProperty(ref _levelControllerRef);
-			set => SetProperty(ref _levelControllerRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("streetCredControllerRef")] 
 		public inkWidgetReference StreetCredControllerRef
 		{
-			get => GetProperty(ref _streetCredControllerRef);
-			set => SetProperty(ref _streetCredControllerRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("detailListControllerRef")] 
 		public inkWidgetReference DetailListControllerRef
 		{
-			get => GetProperty(ref _detailListControllerRef);
-			set => SetProperty(ref _detailListControllerRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("statsStreetCredRewardRef")] 
 		public inkWidgetReference StatsStreetCredRewardRef
 		{
-			get => GetProperty(ref _statsStreetCredRewardRef);
-			set => SetProperty(ref _statsStreetCredRewardRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("statsPlayTimeControllerdRef")] 
 		public inkWidgetReference StatsPlayTimeControllerdRef
 		{
-			get => GetProperty(ref _statsPlayTimeControllerdRef);
-			set => SetProperty(ref _statsPlayTimeControllerdRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("btnInventory")] 
 		public inkWidgetReference BtnInventory
 		{
-			get => GetProperty(ref _btnInventory);
-			set => SetProperty(ref _btnInventory, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("buttonHintsManagerRef")] 
 		public inkWidgetReference ButtonHintsManagerRef
 		{
-			get => GetProperty(ref _buttonHintsManagerRef);
-			set => SetProperty(ref _buttonHintsManagerRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("TooltipsManager")] 
 		public CWeakHandle<gameuiTooltipsManager> TooltipsManager
 		{
-			get => GetProperty(ref _tooltipsManager);
-			set => SetProperty(ref _tooltipsManager, value);
+			get => GetPropertyValue<CWeakHandle<gameuiTooltipsManager>>();
+			set => SetPropertyValue<CWeakHandle<gameuiTooltipsManager>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("InventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
-			get => GetProperty(ref _inventoryManager);
-			set => SetProperty(ref _inventoryManager, value);
+			get => GetPropertyValue<CHandle<InventoryDataManagerV2>>();
+			set => SetPropertyValue<CHandle<InventoryDataManagerV2>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
-			get => GetProperty(ref _player);
-			set => SetProperty(ref _player, value);
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("healthStatsData")] 
 		public CArray<gameStatViewData> HealthStatsData
 		{
-			get => GetProperty(ref _healthStatsData);
-			set => SetProperty(ref _healthStatsData, value);
+			get => GetPropertyValue<CArray<gameStatViewData>>();
+			set => SetPropertyValue<CArray<gameStatViewData>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("DPSStatsData")] 
 		public CArray<gameStatViewData> DPSStatsData
 		{
-			get => GetProperty(ref _dPSStatsData);
-			set => SetProperty(ref _dPSStatsData, value);
+			get => GetPropertyValue<CArray<gameStatViewData>>();
+			set => SetPropertyValue<CArray<gameStatViewData>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("armorStatsData")] 
 		public CArray<gameStatViewData> ArmorStatsData
 		{
-			get => GetProperty(ref _armorStatsData);
-			set => SetProperty(ref _armorStatsData, value);
+			get => GetPropertyValue<CArray<gameStatViewData>>();
+			set => SetPropertyValue<CArray<gameStatViewData>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("otherStatsData")] 
 		public CArray<gameStatViewData> OtherStatsData
 		{
-			get => GetProperty(ref _otherStatsData);
-			set => SetProperty(ref _otherStatsData, value);
+			get => GetPropertyValue<CArray<gameStatViewData>>();
+			set => SetPropertyValue<CArray<gameStatViewData>>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("playerStatsBlackboard")] 
 		public CWeakHandle<gameIBlackboard> PlayerStatsBlackboard
 		{
-			get => GetProperty(ref _playerStatsBlackboard);
-			set => SetProperty(ref _playerStatsBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("currencyListener")] 
 		public CHandle<redCallbackObject> CurrencyListener
 		{
-			get => GetProperty(ref _currencyListener);
-			set => SetProperty(ref _currencyListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("characterCredListener")] 
 		public CHandle<redCallbackObject> CharacterCredListener
 		{
-			get => GetProperty(ref _characterCredListener);
-			set => SetProperty(ref _characterCredListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("characterLevelListener")] 
 		public CHandle<redCallbackObject> CharacterLevelListener
 		{
-			get => GetProperty(ref _characterLevelListener);
-			set => SetProperty(ref _characterLevelListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("characterCurrentXPListener")] 
 		public CHandle<redCallbackObject> CharacterCurrentXPListener
 		{
-			get => GetProperty(ref _characterCurrentXPListener);
-			set => SetProperty(ref _characterCurrentXPListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("characterCredPointsListener")] 
 		public CHandle<redCallbackObject> CharacterCredPointsListener
 		{
-			get => GetProperty(ref _characterCredPointsListener);
-			set => SetProperty(ref _characterCredPointsListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("PDS")] 
 		public CHandle<PlayerDevelopmentSystem> PDS
 		{
-			get => GetProperty(ref _pDS);
-			set => SetProperty(ref _pDS, value);
+			get => GetPropertyValue<CHandle<PlayerDevelopmentSystem>>();
+			set => SetPropertyValue<CHandle<PlayerDevelopmentSystem>>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("levelController")] 
 		public CWeakHandle<StatsProgressController> LevelController
 		{
-			get => GetProperty(ref _levelController);
-			set => SetProperty(ref _levelController, value);
+			get => GetPropertyValue<CWeakHandle<StatsProgressController>>();
+			set => SetPropertyValue<CWeakHandle<StatsProgressController>>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("streetCredController")] 
 		public CWeakHandle<StatsProgressController> StreetCredController
 		{
-			get => GetProperty(ref _streetCredController);
-			set => SetProperty(ref _streetCredController, value);
+			get => GetPropertyValue<CWeakHandle<StatsProgressController>>();
+			set => SetPropertyValue<CWeakHandle<StatsProgressController>>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("detailListController")] 
 		public CWeakHandle<StatsDetailListController> DetailListController
 		{
-			get => GetProperty(ref _detailListController);
-			set => SetProperty(ref _detailListController, value);
+			get => GetPropertyValue<CWeakHandle<StatsDetailListController>>();
+			set => SetPropertyValue<CWeakHandle<StatsDetailListController>>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("statsStreetCredReward")] 
 		public CWeakHandle<StatsStreetCredReward> StatsStreetCredReward
 		{
-			get => GetProperty(ref _statsStreetCredReward);
-			set => SetProperty(ref _statsStreetCredReward, value);
+			get => GetPropertyValue<CWeakHandle<StatsStreetCredReward>>();
+			set => SetPropertyValue<CWeakHandle<StatsStreetCredReward>>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("statsPlayTimeController")] 
 		public CWeakHandle<StatsPlayTimeController> StatsPlayTimeController
 		{
-			get => GetProperty(ref _statsPlayTimeController);
-			set => SetProperty(ref _statsPlayTimeController, value);
+			get => GetPropertyValue<CWeakHandle<StatsPlayTimeController>>();
+			set => SetPropertyValue<CWeakHandle<StatsPlayTimeController>>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("previousMenuData")] 
 		public CHandle<PreviousMenuData> PreviousMenuData
 		{
-			get => GetProperty(ref _previousMenuData);
-			set => SetProperty(ref _previousMenuData, value);
+			get => GetPropertyValue<CHandle<PreviousMenuData>>();
+			set => SetPropertyValue<CHandle<PreviousMenuData>>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
-			get => GetProperty(ref _buttonHintsController);
-			set => SetProperty(ref _buttonHintsController, value);
+			get => GetPropertyValue<CWeakHandle<ButtonHints>>();
+			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
+		}
+
+		public StatsMainGameController()
+		{
+			MainViewRoot = new();
+			StatsList = new();
+			TooltipsManagerRef = new();
+			LevelControllerRef = new();
+			StreetCredControllerRef = new();
+			DetailListControllerRef = new();
+			StatsStreetCredRewardRef = new();
+			StatsPlayTimeControllerdRef = new();
+			BtnInventory = new();
+			ButtonHintsManagerRef = new();
+			HealthStatsData = new();
+			DPSStatsData = new();
+			ArmorStatsData = new();
+			OtherStatsData = new();
 		}
 	}
 }

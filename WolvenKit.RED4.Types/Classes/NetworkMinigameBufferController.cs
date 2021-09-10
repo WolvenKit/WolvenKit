@@ -5,95 +5,92 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class NetworkMinigameBufferController : inkWidgetLogicController
 	{
-		private inkWidgetReference _bufferSlotsContainer;
-		private CName _elementLibraryName;
-		private CArray<CWeakHandle<NetworkMinigameElementController>> _slotList;
-		private inkWidgetReference _blinker;
-		private CInt32 _count;
-		private CHandle<inkanimProxy> _animProxy;
-		private inkanimPlaybackOptions _animOptions;
-		private CHandle<inkanimDefinition> _alpha_fadein;
-		private CFloat _currentAlpha;
-		private CFloat _nextAlpha;
-
 		[Ordinal(1)] 
 		[RED("bufferSlotsContainer")] 
 		public inkWidgetReference BufferSlotsContainer
 		{
-			get => GetProperty(ref _bufferSlotsContainer);
-			set => SetProperty(ref _bufferSlotsContainer, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("elementLibraryName")] 
 		public CName ElementLibraryName
 		{
-			get => GetProperty(ref _elementLibraryName);
-			set => SetProperty(ref _elementLibraryName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("slotList")] 
 		public CArray<CWeakHandle<NetworkMinigameElementController>> SlotList
 		{
-			get => GetProperty(ref _slotList);
-			set => SetProperty(ref _slotList, value);
+			get => GetPropertyValue<CArray<CWeakHandle<NetworkMinigameElementController>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<NetworkMinigameElementController>>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("blinker")] 
 		public inkWidgetReference Blinker
 		{
-			get => GetProperty(ref _blinker);
-			set => SetProperty(ref _blinker, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("count")] 
 		public CInt32 Count
 		{
-			get => GetProperty(ref _count);
-			set => SetProperty(ref _count, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("AnimProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
-			get => GetProperty(ref _animProxy);
-			set => SetProperty(ref _animProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("AnimOptions")] 
 		public inkanimPlaybackOptions AnimOptions
 		{
-			get => GetProperty(ref _animOptions);
-			set => SetProperty(ref _animOptions, value);
+			get => GetPropertyValue<inkanimPlaybackOptions>();
+			set => SetPropertyValue<inkanimPlaybackOptions>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("alpha_fadein")] 
 		public CHandle<inkanimDefinition> Alpha_fadein
 		{
-			get => GetProperty(ref _alpha_fadein);
-			set => SetProperty(ref _alpha_fadein, value);
+			get => GetPropertyValue<CHandle<inkanimDefinition>>();
+			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("currentAlpha")] 
 		public CFloat CurrentAlpha
 		{
-			get => GetProperty(ref _currentAlpha);
-			set => SetProperty(ref _currentAlpha, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("nextAlpha")] 
 		public CFloat NextAlpha
 		{
-			get => GetProperty(ref _nextAlpha);
-			set => SetProperty(ref _nextAlpha, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public NetworkMinigameBufferController()
+		{
+			BufferSlotsContainer = new();
+			SlotList = new();
+			Blinker = new();
+			AnimOptions = new();
 		}
 	}
 }

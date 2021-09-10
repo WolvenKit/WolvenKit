@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UnregisterFastTravelPointRequest : gameScriptableSystemRequest
 	{
-		private CHandle<gameFastTravelPointData> _pointData;
-		private entEntityID _requesterID;
-
 		[Ordinal(0)] 
 		[RED("pointData")] 
 		public CHandle<gameFastTravelPointData> PointData
 		{
-			get => GetProperty(ref _pointData);
-			set => SetProperty(ref _pointData, value);
+			get => GetPropertyValue<CHandle<gameFastTravelPointData>>();
+			set => SetPropertyValue<CHandle<gameFastTravelPointData>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("requesterID")] 
 		public entEntityID RequesterID
 		{
-			get => GetProperty(ref _requesterID);
-			set => SetProperty(ref _requesterID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
+		}
+
+		public UnregisterFastTravelPointRequest()
+		{
+			RequesterID = new();
 		}
 	}
 }

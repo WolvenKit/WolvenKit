@@ -5,41 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entAnimationControllerReplicatedState : netIComponentState
 	{
-		private entReplicatedAnimWrapperVars _animWrapperVarsState;
-		private CUInt32 _lookAtReqs_m_replicatedVersionId;
-		private entReplicatedAnimFeaturesState _animFeaturesState;
-		private entReplicatedInputSetters _inputSettersState;
-
 		[Ordinal(2)] 
 		[RED("animWrapperVarsState")] 
 		public entReplicatedAnimWrapperVars AnimWrapperVarsState
 		{
-			get => GetProperty(ref _animWrapperVarsState);
-			set => SetProperty(ref _animWrapperVarsState, value);
+			get => GetPropertyValue<entReplicatedAnimWrapperVars>();
+			set => SetPropertyValue<entReplicatedAnimWrapperVars>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("lookAtReqs.m_replicatedVersionId")] 
 		public CUInt32 LookAtReqs_m_replicatedVersionId
 		{
-			get => GetProperty(ref _lookAtReqs_m_replicatedVersionId);
-			set => SetProperty(ref _lookAtReqs_m_replicatedVersionId, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("animFeaturesState")] 
 		public entReplicatedAnimFeaturesState AnimFeaturesState
 		{
-			get => GetProperty(ref _animFeaturesState);
-			set => SetProperty(ref _animFeaturesState, value);
+			get => GetPropertyValue<entReplicatedAnimFeaturesState>();
+			set => SetPropertyValue<entReplicatedAnimFeaturesState>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("inputSettersState")] 
 		public entReplicatedInputSetters InputSettersState
 		{
-			get => GetProperty(ref _inputSettersState);
-			set => SetProperty(ref _inputSettersState, value);
+			get => GetPropertyValue<entReplicatedInputSetters>();
+			set => SetPropertyValue<entReplicatedInputSetters>(value);
+		}
+
+		public entAnimationControllerReplicatedState()
+		{
+			Enabled = true;
+			AnimWrapperVarsState = new() { ServerReplicatedTime = new(), Data = new() };
+			AnimFeaturesState = new() { Items = new(), LastAppliedActionsTime = new() };
+			InputSettersState = new() { ServerReplicatedTime = new() };
 		}
 	}
 }

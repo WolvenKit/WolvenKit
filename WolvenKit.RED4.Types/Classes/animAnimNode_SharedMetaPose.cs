@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_SharedMetaPose : animAnimNode_OnePoseInput
 	{
-		private animFloatLink _weightLink;
-
 		[Ordinal(12)] 
 		[RED("weightLink")] 
 		public animFloatLink WeightLink
 		{
-			get => GetProperty(ref _weightLink);
-			set => SetProperty(ref _weightLink, value);
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
+		}
+
+		public animAnimNode_SharedMetaPose()
+		{
+			Id = 4294967295;
+			InputLink = new();
+			WeightLink = new();
 		}
 	}
 }

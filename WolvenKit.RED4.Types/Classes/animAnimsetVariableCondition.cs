@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimsetVariableCondition : animIRuntimeCondition
 	{
-		private CName _variableToCompare;
-		private CFloat _valueToCompare;
-
 		[Ordinal(0)] 
 		[RED("variableToCompare")] 
 		public CName VariableToCompare
 		{
-			get => GetProperty(ref _variableToCompare);
-			set => SetProperty(ref _variableToCompare, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("valueToCompare")] 
 		public CFloat ValueToCompare
 		{
-			get => GetProperty(ref _valueToCompare);
-			set => SetProperty(ref _valueToCompare, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public animAnimsetVariableCondition()
 		{
-			_valueToCompare = 0.500000F;
+			ValueToCompare = 0.500000F;
 		}
 	}
 }

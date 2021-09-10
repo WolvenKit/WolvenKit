@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class IntercomBlackboardDef : DeviceBaseBlackboardDef
 	{
-		private gamebbScriptID_String _displayString;
-		private gamebbScriptID_Bool _enableActions;
-		private gamebbScriptID_Variant _status;
-
 		[Ordinal(7)] 
 		[RED("DisplayString")] 
 		public gamebbScriptID_String DisplayString
 		{
-			get => GetProperty(ref _displayString);
-			set => SetProperty(ref _displayString, value);
+			get => GetPropertyValue<gamebbScriptID_String>();
+			set => SetPropertyValue<gamebbScriptID_String>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("EnableActions")] 
 		public gamebbScriptID_Bool EnableActions
 		{
-			get => GetProperty(ref _enableActions);
-			set => SetProperty(ref _enableActions, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("Status")] 
 		public gamebbScriptID_Variant Status
 		{
-			get => GetProperty(ref _status);
-			set => SetProperty(ref _status, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
+		}
+
+		public IntercomBlackboardDef()
+		{
+			DisplayString = new();
+			EnableActions = new();
+			Status = new();
 		}
 	}
 }

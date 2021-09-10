@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldNavigationTileResource : resStreamedResource
 	{
-		private Box _localBoundingBox;
-		private CArray<worldNavigationTileData> _tilesData;
-
 		[Ordinal(1)] 
 		[RED("localBoundingBox")] 
 		public Box LocalBoundingBox
 		{
-			get => GetProperty(ref _localBoundingBox);
-			set => SetProperty(ref _localBoundingBox, value);
+			get => GetPropertyValue<Box>();
+			set => SetPropertyValue<Box>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("tilesData")] 
 		public CArray<worldNavigationTileData> TilesData
 		{
-			get => GetProperty(ref _tilesData);
-			set => SetProperty(ref _tilesData, value);
+			get => GetPropertyValue<CArray<worldNavigationTileData>>();
+			set => SetPropertyValue<CArray<worldNavigationTileData>>(value);
+		}
+
+		public worldNavigationTileResource()
+		{
+			LocalBoundingBox = new() { Min = new(), Max = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F } };
+			TilesData = new();
 		}
 	}
 }

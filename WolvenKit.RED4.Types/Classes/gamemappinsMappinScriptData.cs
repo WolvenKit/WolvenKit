@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamemappinsMappinScriptData : IScriptable
 	{
-		private CEnum<gamedataStatPoolType> _statPoolType;
-
 		[Ordinal(0)] 
 		[RED("statPoolType")] 
 		public CEnum<gamedataStatPoolType> StatPoolType
 		{
-			get => GetProperty(ref _statPoolType);
-			set => SetProperty(ref _statPoolType, value);
+			get => GetPropertyValue<CEnum<gamedataStatPoolType>>();
+			set => SetPropertyValue<CEnum<gamedataStatPoolType>>(value);
 		}
 
 		public gamemappinsMappinScriptData()
 		{
-			_statPoolType = new() { Value = Enums.gamedataStatPoolType.Invalid };
+			StatPoolType = Enums.gamedataStatPoolType.Invalid;
 		}
 	}
 }

@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnFindEntityInWorldParams : RedBaseClass
 	{
-		private gameEntityReference _actorRef;
-		private CBool _forceMaxVisibility;
-
 		[Ordinal(0)] 
 		[RED("actorRef")] 
 		public gameEntityReference ActorRef
 		{
-			get => GetProperty(ref _actorRef);
-			set => SetProperty(ref _actorRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("forceMaxVisibility")] 
 		public CBool ForceMaxVisibility
 		{
-			get => GetProperty(ref _forceMaxVisibility);
-			set => SetProperty(ref _forceMaxVisibility, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public scnFindEntityInWorldParams()
+		{
+			ActorRef = new() { Names = new() };
 		}
 	}
 }

@@ -5,86 +5,82 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CompanionHealthBarGameController : gameuiHUDGameController
 	{
-		private inkWidgetReference _healthbar;
-		private CWeakHandle<inkWidget> _root;
-		private CHandle<redCallbackObject> _flatheadListener;
-		private CBool _isActive;
-		private CFloat _maxHealth;
-		private CHandle<CompanionHealthStatListener> _healthStatListener;
-		private CWeakHandle<gameIBlackboard> _companionBlackboard;
-		private ScriptGameInstance _gameInstance;
-		private CHandle<gameStatPoolsSystem> _statPoolsSystem;
-
 		[Ordinal(9)] 
 		[RED("healthbar")] 
 		public inkWidgetReference Healthbar
 		{
-			get => GetProperty(ref _healthbar);
-			set => SetProperty(ref _healthbar, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("root")] 
 		public CWeakHandle<inkWidget> Root
 		{
-			get => GetProperty(ref _root);
-			set => SetProperty(ref _root, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("flatheadListener")] 
 		public CHandle<redCallbackObject> FlatheadListener
 		{
-			get => GetProperty(ref _flatheadListener);
-			set => SetProperty(ref _flatheadListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
-			get => GetProperty(ref _isActive);
-			set => SetProperty(ref _isActive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("maxHealth")] 
 		public CFloat MaxHealth
 		{
-			get => GetProperty(ref _maxHealth);
-			set => SetProperty(ref _maxHealth, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("healthStatListener")] 
 		public CHandle<CompanionHealthStatListener> HealthStatListener
 		{
-			get => GetProperty(ref _healthStatListener);
-			set => SetProperty(ref _healthStatListener, value);
+			get => GetPropertyValue<CHandle<CompanionHealthStatListener>>();
+			set => SetPropertyValue<CHandle<CompanionHealthStatListener>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("companionBlackboard")] 
 		public CWeakHandle<gameIBlackboard> CompanionBlackboard
 		{
-			get => GetProperty(ref _companionBlackboard);
-			set => SetProperty(ref _companionBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("gameInstance")] 
 		public ScriptGameInstance GameInstance
 		{
-			get => GetProperty(ref _gameInstance);
-			set => SetProperty(ref _gameInstance, value);
+			get => GetPropertyValue<ScriptGameInstance>();
+			set => SetPropertyValue<ScriptGameInstance>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("statPoolsSystem")] 
 		public CHandle<gameStatPoolsSystem> StatPoolsSystem
 		{
-			get => GetProperty(ref _statPoolsSystem);
-			set => SetProperty(ref _statPoolsSystem, value);
+			get => GetPropertyValue<CHandle<gameStatPoolsSystem>>();
+			set => SetPropertyValue<CHandle<gameStatPoolsSystem>>(value);
+		}
+
+		public CompanionHealthBarGameController()
+		{
+			Healthbar = new();
+			GameInstance = new();
 		}
 	}
 }

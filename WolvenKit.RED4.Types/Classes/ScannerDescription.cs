@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ScannerDescription : ScannerChunk
 	{
-		private CString _defaultFluffDescription;
-		private CArray<CString> _customDescriptions;
-
 		[Ordinal(0)] 
 		[RED("defaultFluffDescription")] 
 		public CString DefaultFluffDescription
 		{
-			get => GetProperty(ref _defaultFluffDescription);
-			set => SetProperty(ref _defaultFluffDescription, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("customDescriptions")] 
 		public CArray<CString> CustomDescriptions
 		{
-			get => GetProperty(ref _customDescriptions);
-			set => SetProperty(ref _customDescriptions, value);
+			get => GetPropertyValue<CArray<CString>>();
+			set => SetPropertyValue<CArray<CString>>(value);
+		}
+
+		public ScannerDescription()
+		{
+			CustomDescriptions = new();
 		}
 	}
 }

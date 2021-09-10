@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CMaterialParameterVector : CMaterialParameter
 	{
-		private Vector4 _vector;
-
 		[Ordinal(2)] 
 		[RED("vector")] 
 		public Vector4 Vector
 		{
-			get => GetProperty(ref _vector);
-			set => SetProperty(ref _vector, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
+		}
+
+		public CMaterialParameterVector()
+		{
+			Vector = new();
 		}
 	}
 }

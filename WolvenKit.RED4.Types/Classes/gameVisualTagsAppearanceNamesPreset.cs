@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameVisualTagsAppearanceNamesPreset : ISerializable
 	{
-		private CArray<gameVisualTagsAppearanceNamesPreset_Entity> _presets;
-
 		[Ordinal(0)] 
 		[RED("presets")] 
 		public CArray<gameVisualTagsAppearanceNamesPreset_Entity> Presets
 		{
-			get => GetProperty(ref _presets);
-			set => SetProperty(ref _presets, value);
+			get => GetPropertyValue<CArray<gameVisualTagsAppearanceNamesPreset_Entity>>();
+			set => SetPropertyValue<CArray<gameVisualTagsAppearanceNamesPreset_Entity>>(value);
+		}
+
+		public gameVisualTagsAppearanceNamesPreset()
+		{
+			Presets = new();
 		}
 	}
 }

@@ -5,50 +5,51 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class FastTravelButtonLogicController : inkButtonController
 	{
-		private inkTextWidgetReference _districtName;
-		private inkTextWidgetReference _locationName;
-		private SSoundData _soundData;
-		private CBool _isInitialized;
-		private CWeakHandle<gameFastTravelPointData> _fastTravelPointData;
-
 		[Ordinal(10)] 
 		[RED("districtName")] 
 		public inkTextWidgetReference DistrictName
 		{
-			get => GetProperty(ref _districtName);
-			set => SetProperty(ref _districtName, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("locationName")] 
 		public inkTextWidgetReference LocationName
 		{
-			get => GetProperty(ref _locationName);
-			set => SetProperty(ref _locationName, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("soundData")] 
 		public SSoundData SoundData
 		{
-			get => GetProperty(ref _soundData);
-			set => SetProperty(ref _soundData, value);
+			get => GetPropertyValue<SSoundData>();
+			set => SetPropertyValue<SSoundData>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("isInitialized")] 
 		public CBool IsInitialized
 		{
-			get => GetProperty(ref _isInitialized);
-			set => SetProperty(ref _isInitialized, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("fastTravelPointData")] 
 		public CWeakHandle<gameFastTravelPointData> FastTravelPointData
 		{
-			get => GetProperty(ref _fastTravelPointData);
-			set => SetProperty(ref _fastTravelPointData, value);
+			get => GetPropertyValue<CWeakHandle<gameFastTravelPointData>>();
+			set => SetPropertyValue<CWeakHandle<gameFastTravelPointData>>(value);
+		}
+
+		public FastTravelButtonLogicController()
+		{
+			DistrictName = new();
+			LocationName = new();
+			SoundData = new() { WidgetAudioName = "Button" };
 		}
 	}
 }

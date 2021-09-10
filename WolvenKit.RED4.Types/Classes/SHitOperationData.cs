@@ -5,75 +5,68 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SHitOperationData : RedBaseClass
 	{
-		private CBool _isAttackerPlayer;
-		private CBool _isAttackerNPC;
-		private CBool _bullets;
-		private CBool _explosions;
-		private CBool _melee;
-		private CFloat _healthPercentage;
-		private SBaseDeviceOperationData _operation;
-
 		[Ordinal(0)] 
 		[RED("isAttackerPlayer")] 
 		public CBool IsAttackerPlayer
 		{
-			get => GetProperty(ref _isAttackerPlayer);
-			set => SetProperty(ref _isAttackerPlayer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isAttackerNPC")] 
 		public CBool IsAttackerNPC
 		{
-			get => GetProperty(ref _isAttackerNPC);
-			set => SetProperty(ref _isAttackerNPC, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("bullets")] 
 		public CBool Bullets
 		{
-			get => GetProperty(ref _bullets);
-			set => SetProperty(ref _bullets, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("explosions")] 
 		public CBool Explosions
 		{
-			get => GetProperty(ref _explosions);
-			set => SetProperty(ref _explosions, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("melee")] 
 		public CBool Melee
 		{
-			get => GetProperty(ref _melee);
-			set => SetProperty(ref _melee, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("healthPercentage")] 
 		public CFloat HealthPercentage
 		{
-			get => GetProperty(ref _healthPercentage);
-			set => SetProperty(ref _healthPercentage, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("operation")] 
 		public SBaseDeviceOperationData Operation
 		{
-			get => GetProperty(ref _operation);
-			set => SetProperty(ref _operation, value);
+			get => GetPropertyValue<SBaseDeviceOperationData>();
+			set => SetPropertyValue<SBaseDeviceOperationData>(value);
 		}
 
 		public SHitOperationData()
 		{
-			_isAttackerPlayer = true;
-			_bullets = true;
-			_healthPercentage = 100.000000F;
+			IsAttackerPlayer = true;
+			Bullets = true;
+			HealthPercentage = 100.000000F;
+			Operation = new() { IsEnabled = true, TransformAnimations = new(), VFXs = new(), SFXs = new(), Facts = new(), Components = new(), Stims = new(), StatusEffects = new(), Damages = new(), Items = new(), Teleport = new(), PlayerWorkspot = new(), ToggleOperations = new(), DelayID = new() };
 		}
 	}
 }

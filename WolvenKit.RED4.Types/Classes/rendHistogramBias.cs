@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class rendHistogramBias : RedBaseClass
 	{
-		private Vector3 _mulCoef;
-		private Vector3 _addCoef;
-
 		[Ordinal(0)] 
 		[RED("mulCoef")] 
 		public Vector3 MulCoef
 		{
-			get => GetProperty(ref _mulCoef);
-			set => SetProperty(ref _mulCoef, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("addCoef")] 
 		public Vector3 AddCoef
 		{
-			get => GetProperty(ref _addCoef);
-			set => SetProperty(ref _addCoef, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
+		}
+
+		public rendHistogramBias()
+		{
+			MulCoef = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
+			AddCoef = new();
 		}
 	}
 }

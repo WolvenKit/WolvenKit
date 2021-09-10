@@ -5,41 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CustomCentaurBlackboardDef : CustomBlackboardDef
 	{
-		private gamebbScriptID_Int32 _shieldState;
-		private gamebbScriptID_Float _weakSpotHitTimeStamp;
-		private gamebbScriptID_EntityID _shieldTarget;
-		private gamebbScriptID_Float _woundedStateHPThreshold;
-
 		[Ordinal(0)] 
 		[RED("ShieldState")] 
 		public gamebbScriptID_Int32 ShieldState
 		{
-			get => GetProperty(ref _shieldState);
-			set => SetProperty(ref _shieldState, value);
+			get => GetPropertyValue<gamebbScriptID_Int32>();
+			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("WeakSpotHitTimeStamp")] 
 		public gamebbScriptID_Float WeakSpotHitTimeStamp
 		{
-			get => GetProperty(ref _weakSpotHitTimeStamp);
-			set => SetProperty(ref _weakSpotHitTimeStamp, value);
+			get => GetPropertyValue<gamebbScriptID_Float>();
+			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ShieldTarget")] 
 		public gamebbScriptID_EntityID ShieldTarget
 		{
-			get => GetProperty(ref _shieldTarget);
-			set => SetProperty(ref _shieldTarget, value);
+			get => GetPropertyValue<gamebbScriptID_EntityID>();
+			set => SetPropertyValue<gamebbScriptID_EntityID>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("WoundedStateHPThreshold")] 
 		public gamebbScriptID_Float WoundedStateHPThreshold
 		{
-			get => GetProperty(ref _woundedStateHPThreshold);
-			set => SetProperty(ref _woundedStateHPThreshold, value);
+			get => GetPropertyValue<gamebbScriptID_Float>();
+			set => SetPropertyValue<gamebbScriptID_Float>(value);
+		}
+
+		public CustomCentaurBlackboardDef()
+		{
+			ShieldState = new();
+			WeakSpotHitTimeStamp = new();
+			ShieldTarget = new();
+			WoundedStateHPThreshold = new();
 		}
 	}
 }

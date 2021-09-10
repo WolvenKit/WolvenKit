@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioUiSpecificControlSettingsMap : audioAudioMetadata
 	{
-		private CArray<audioUiSpecificControlSettingsMapItem> _specificControlSettingsMatrix;
-
 		[Ordinal(1)] 
 		[RED("specificControlSettingsMatrix")] 
 		public CArray<audioUiSpecificControlSettingsMapItem> SpecificControlSettingsMatrix
 		{
-			get => GetProperty(ref _specificControlSettingsMatrix);
-			set => SetProperty(ref _specificControlSettingsMatrix, value);
+			get => GetPropertyValue<CArray<audioUiSpecificControlSettingsMapItem>>();
+			set => SetPropertyValue<CArray<audioUiSpecificControlSettingsMapItem>>(value);
+		}
+
+		public audioUiSpecificControlSettingsMap()
+		{
+			SpecificControlSettingsMatrix = new();
 		}
 	}
 }

@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CEvaluatorColorStartEnd : IEvaluatorColor
 	{
-		private CColor _start;
-		private CColor _end;
-
 		[Ordinal(0)] 
 		[RED("start")] 
 		public CColor Start
 		{
-			get => GetProperty(ref _start);
-			set => SetProperty(ref _start, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("end")] 
 		public CColor End
 		{
-			get => GetProperty(ref _end);
-			set => SetProperty(ref _end, value);
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
+		}
+
+		public CEvaluatorColorStartEnd()
+		{
+			Start = new();
+			End = new();
 		}
 	}
 }

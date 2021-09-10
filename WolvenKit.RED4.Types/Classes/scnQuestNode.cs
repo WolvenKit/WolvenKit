@@ -5,32 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnQuestNode : scnSceneGraphNode
 	{
-		private CHandle<questNodeDefinition> _questNode;
-		private CArray<CName> _isockMappings;
-		private CArray<CName> _osockMappings;
-
 		[Ordinal(3)] 
 		[RED("questNode")] 
 		public CHandle<questNodeDefinition> QuestNode
 		{
-			get => GetProperty(ref _questNode);
-			set => SetProperty(ref _questNode, value);
+			get => GetPropertyValue<CHandle<questNodeDefinition>>();
+			set => SetPropertyValue<CHandle<questNodeDefinition>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("isockMappings")] 
 		public CArray<CName> IsockMappings
 		{
-			get => GetProperty(ref _isockMappings);
-			set => SetProperty(ref _isockMappings, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("osockMappings")] 
 		public CArray<CName> OsockMappings
 		{
-			get => GetProperty(ref _osockMappings);
-			set => SetProperty(ref _osockMappings, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
+		public scnQuestNode()
+		{
+			NodeId = new() { Id = 4294967295 };
+			OutputSockets = new();
+			IsockMappings = new();
+			OsockMappings = new();
 		}
 	}
 }

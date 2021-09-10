@@ -5,59 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameJournalQuestObjectiveBase : gameJournalContainerEntry
 	{
-		private LocalizationString _description;
-		private CUInt32 _counter;
-		private CBool _optional;
-		private NodeRef _locationPrefabRef;
-		private TweakDBID _itemID;
-		private CString _districtID;
-
 		[Ordinal(2)] 
 		[RED("description")] 
 		public LocalizationString Description
 		{
-			get => GetProperty(ref _description);
-			set => SetProperty(ref _description, value);
+			get => GetPropertyValue<LocalizationString>();
+			set => SetPropertyValue<LocalizationString>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("counter")] 
 		public CUInt32 Counter
 		{
-			get => GetProperty(ref _counter);
-			set => SetProperty(ref _counter, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("optional")] 
 		public CBool Optional
 		{
-			get => GetProperty(ref _optional);
-			set => SetProperty(ref _optional, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("locationPrefabRef")] 
 		public NodeRef LocationPrefabRef
 		{
-			get => GetProperty(ref _locationPrefabRef);
-			set => SetProperty(ref _locationPrefabRef, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("itemID")] 
 		public TweakDBID ItemID
 		{
-			get => GetProperty(ref _itemID);
-			set => SetProperty(ref _itemID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("districtID")] 
 		public CString DistrictID
 		{
-			get => GetProperty(ref _districtID);
-			set => SetProperty(ref _districtID, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 	}
 }

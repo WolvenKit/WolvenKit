@@ -5,41 +5,41 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ItemCraftingData : IScriptable
 	{
-		private InventoryItemData _inventoryItem;
-		private CBool _isUpgradable;
-		private CBool _isNew;
-		private CBool _isSelected;
-
 		[Ordinal(0)] 
 		[RED("inventoryItem")] 
 		public InventoryItemData InventoryItem
 		{
-			get => GetProperty(ref _inventoryItem);
-			set => SetProperty(ref _inventoryItem, value);
+			get => GetPropertyValue<InventoryItemData>();
+			set => SetPropertyValue<InventoryItemData>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isUpgradable")] 
 		public CBool IsUpgradable
 		{
-			get => GetProperty(ref _isUpgradable);
-			set => SetProperty(ref _isUpgradable, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isNew")] 
 		public CBool IsNew
 		{
-			get => GetProperty(ref _isNew);
-			set => SetProperty(ref _isNew, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isSelected")] 
 		public CBool IsSelected
 		{
-			get => GetProperty(ref _isSelected);
-			set => SetProperty(ref _isSelected, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public ItemCraftingData()
+		{
+			InventoryItem = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
 		}
 	}
 }

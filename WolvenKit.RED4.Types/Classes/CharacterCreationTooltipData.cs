@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CharacterCreationTooltipData : MessageTooltipData
 	{
-		private CString _attribiuteLevel;
-		private CString _maxedOrMinimumLabelText;
-
 		[Ordinal(4)] 
 		[RED("attribiuteLevel")] 
 		public CString AttribiuteLevel
 		{
-			get => GetProperty(ref _attribiuteLevel);
-			set => SetProperty(ref _attribiuteLevel, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("maxedOrMinimumLabelText")] 
 		public CString MaxedOrMinimumLabelText
 		{
-			get => GetProperty(ref _maxedOrMinimumLabelText);
-			set => SetProperty(ref _maxedOrMinimumLabelText, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 	}
 }

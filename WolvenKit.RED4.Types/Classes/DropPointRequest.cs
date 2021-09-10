@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DropPointRequest : gameScriptableSystemRequest
 	{
-		private TweakDBID _record;
-		private CEnum<DropPointPackageStatus> _status;
-		private gamePersistentID _holder;
-
 		[Ordinal(0)] 
 		[RED("record")] 
 		public TweakDBID Record
 		{
-			get => GetProperty(ref _record);
-			set => SetProperty(ref _record, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("status")] 
 		public CEnum<DropPointPackageStatus> Status
 		{
-			get => GetProperty(ref _status);
-			set => SetProperty(ref _status, value);
+			get => GetPropertyValue<CEnum<DropPointPackageStatus>>();
+			set => SetPropertyValue<CEnum<DropPointPackageStatus>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("holder")] 
 		public gamePersistentID Holder
 		{
-			get => GetProperty(ref _holder);
-			set => SetProperty(ref _holder, value);
+			get => GetPropertyValue<gamePersistentID>();
+			set => SetPropertyValue<gamePersistentID>(value);
+		}
+
+		public DropPointRequest()
+		{
+			Holder = new();
 		}
 	}
 }

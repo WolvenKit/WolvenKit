@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CParticleInitializerLifeTime : IParticleInitializer
 	{
-		private CHandle<IEvaluatorFloat> _lifeTime;
-
 		[Ordinal(4)] 
 		[RED("lifeTime")] 
 		public CHandle<IEvaluatorFloat> LifeTime
 		{
-			get => GetProperty(ref _lifeTime);
-			set => SetProperty(ref _lifeTime, value);
+			get => GetPropertyValue<CHandle<IEvaluatorFloat>>();
+			set => SetPropertyValue<CHandle<IEvaluatorFloat>>(value);
+		}
+
+		public CParticleInitializerLifeTime()
+		{
+			EditorName = "Life time";
+			EditorGroup = "Default";
+			IsEnabled = true;
 		}
 	}
 }

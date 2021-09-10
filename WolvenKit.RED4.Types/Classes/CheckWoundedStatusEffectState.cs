@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CheckWoundedStatusEffectState : AIStatusEffectCondition
 	{
-		private CEnum<EstatusEffectsState> _stateToCheck;
-
 		[Ordinal(0)] 
 		[RED("stateToCheck")] 
 		public CEnum<EstatusEffectsState> StateToCheck
 		{
-			get => GetProperty(ref _stateToCheck);
-			set => SetProperty(ref _stateToCheck, value);
+			get => GetPropertyValue<CEnum<EstatusEffectsState>>();
+			set => SetPropertyValue<CEnum<EstatusEffectsState>>(value);
 		}
 
 		public CheckWoundedStatusEffectState()
 		{
-			_stateToCheck = new() { Value = Enums.EstatusEffectsState.Activating };
+			StateToCheck = Enums.EstatusEffectsState.Activating;
 		}
 	}
 }

@@ -5,55 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkScrollAreaWidget : inkCompoundWidget
 	{
-		private CFloat _horizontalScrolling;
-		private CFloat _verticalScrolling;
-		private CBool _constrainContentPosition;
-		private CEnum<inkFitToContentDirection> _fitToContentDirection;
-		private CBool _useInternalMask;
-
 		[Ordinal(23)] 
 		[RED("horizontalScrolling")] 
 		public CFloat HorizontalScrolling
 		{
-			get => GetProperty(ref _horizontalScrolling);
-			set => SetProperty(ref _horizontalScrolling, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("verticalScrolling")] 
 		public CFloat VerticalScrolling
 		{
-			get => GetProperty(ref _verticalScrolling);
-			set => SetProperty(ref _verticalScrolling, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("constrainContentPosition")] 
 		public CBool ConstrainContentPosition
 		{
-			get => GetProperty(ref _constrainContentPosition);
-			set => SetProperty(ref _constrainContentPosition, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("fitToContentDirection")] 
 		public CEnum<inkFitToContentDirection> FitToContentDirection
 		{
-			get => GetProperty(ref _fitToContentDirection);
-			set => SetProperty(ref _fitToContentDirection, value);
+			get => GetPropertyValue<CEnum<inkFitToContentDirection>>();
+			set => SetPropertyValue<CEnum<inkFitToContentDirection>>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("useInternalMask")] 
 		public CBool UseInternalMask
 		{
-			get => GetProperty(ref _useInternalMask);
-			set => SetProperty(ref _useInternalMask, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public inkScrollAreaWidget()
 		{
-			_useInternalMask = true;
+			UseInternalMask = true;
 		}
 	}
 }

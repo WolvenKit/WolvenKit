@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamemappinsPointOfInterestMappinData : gamemappinsIMappinData
 	{
-		private CHandle<gamemappinsIPointOfInterestVariant> _typedVariant;
-		private CBool _active;
-
 		[Ordinal(0)] 
 		[RED("typedVariant")] 
 		public CHandle<gamemappinsIPointOfInterestVariant> TypedVariant
 		{
-			get => GetProperty(ref _typedVariant);
-			set => SetProperty(ref _typedVariant, value);
+			get => GetPropertyValue<CHandle<gamemappinsIPointOfInterestVariant>>();
+			set => SetPropertyValue<CHandle<gamemappinsIPointOfInterestVariant>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("active")] 
 		public CBool Active
 		{
-			get => GetProperty(ref _active);
-			set => SetProperty(ref _active, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public gamemappinsPointOfInterestMappinData()
 		{
-			_active = true;
+			Active = true;
 		}
 	}
 }

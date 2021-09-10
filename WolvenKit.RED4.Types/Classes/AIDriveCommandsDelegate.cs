@@ -5,338 +5,300 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIDriveCommandsDelegate : AIbehaviorScriptBehaviorDelegate
 	{
-		private CBool _useKinematic;
-		private CBool _needDriver;
-		private NodeRef _splineRef;
-		private CFloat _secureTimeOut;
-		private CFloat _forcedStartSpeed;
-		private CBool _stopAtPathEnd;
-		private CBool _driveBackwards;
-		private CBool _reverseSpline;
-		private CBool _startFromClosest;
-		private CBool _keepDistanceBool;
-		private CWeakHandle<gameObject> _keepDistanceCompanion;
-		private CFloat _keepDistanceDistance;
-		private CBool _rubberBandingBool;
-		private CWeakHandle<gameObject> _rubberBandingTargetRef;
-		private CFloat _rubberBandingMinDistance;
-		private CFloat _rubberBandingMaxDistance;
-		private CBool _rubberBandingStopAndWait;
-		private CBool _rubberBandingTeleportToCatchUp;
-		private CBool _rubberBandingStayInFront;
-		private CBool _allowStubMovement;
-		private CHandle<AIVehicleOnSplineCommand> _driveOnSplineCommand;
-		private CBool _useTraffic;
-		private CFloat _speedInTraffic;
-		private CWeakHandle<gameObject> _target;
-		private CFloat _distanceMin;
-		private CFloat _distanceMax;
-		private CBool _stopWhenTargetReached;
-		private CBool _trafficTryNeighborsForStart;
-		private CBool _trafficTryNeighborsForEnd;
-		private CHandle<AIVehicleFollowCommand> _driveFollowCommand;
-		private NodeRef _nodeRef;
-		private CBool _isPlayer;
-		private CBool _forceGreenLights;
-		private CHandle<vehiclePortalsList> _portals;
-		private CHandle<AIVehicleToNodeCommand> _driveToNodeCommand;
-		private CHandle<AIVehicleRacingCommand> _driveRacingCommand;
-		private CHandle<AIVehicleJoinTrafficCommand> _driveJoinTrafficCommand;
-
 		[Ordinal(0)] 
 		[RED("useKinematic")] 
 		public CBool UseKinematic
 		{
-			get => GetProperty(ref _useKinematic);
-			set => SetProperty(ref _useKinematic, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("needDriver")] 
 		public CBool NeedDriver
 		{
-			get => GetProperty(ref _needDriver);
-			set => SetProperty(ref _needDriver, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("splineRef")] 
 		public NodeRef SplineRef
 		{
-			get => GetProperty(ref _splineRef);
-			set => SetProperty(ref _splineRef, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("secureTimeOut")] 
 		public CFloat SecureTimeOut
 		{
-			get => GetProperty(ref _secureTimeOut);
-			set => SetProperty(ref _secureTimeOut, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("forcedStartSpeed")] 
 		public CFloat ForcedStartSpeed
 		{
-			get => GetProperty(ref _forcedStartSpeed);
-			set => SetProperty(ref _forcedStartSpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("stopAtPathEnd")] 
 		public CBool StopAtPathEnd
 		{
-			get => GetProperty(ref _stopAtPathEnd);
-			set => SetProperty(ref _stopAtPathEnd, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("driveBackwards")] 
 		public CBool DriveBackwards
 		{
-			get => GetProperty(ref _driveBackwards);
-			set => SetProperty(ref _driveBackwards, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("reverseSpline")] 
 		public CBool ReverseSpline
 		{
-			get => GetProperty(ref _reverseSpline);
-			set => SetProperty(ref _reverseSpline, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("startFromClosest")] 
 		public CBool StartFromClosest
 		{
-			get => GetProperty(ref _startFromClosest);
-			set => SetProperty(ref _startFromClosest, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("keepDistanceBool")] 
 		public CBool KeepDistanceBool
 		{
-			get => GetProperty(ref _keepDistanceBool);
-			set => SetProperty(ref _keepDistanceBool, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("keepDistanceCompanion")] 
 		public CWeakHandle<gameObject> KeepDistanceCompanion
 		{
-			get => GetProperty(ref _keepDistanceCompanion);
-			set => SetProperty(ref _keepDistanceCompanion, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("keepDistanceDistance")] 
 		public CFloat KeepDistanceDistance
 		{
-			get => GetProperty(ref _keepDistanceDistance);
-			set => SetProperty(ref _keepDistanceDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("rubberBandingBool")] 
 		public CBool RubberBandingBool
 		{
-			get => GetProperty(ref _rubberBandingBool);
-			set => SetProperty(ref _rubberBandingBool, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("rubberBandingTargetRef")] 
 		public CWeakHandle<gameObject> RubberBandingTargetRef
 		{
-			get => GetProperty(ref _rubberBandingTargetRef);
-			set => SetProperty(ref _rubberBandingTargetRef, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("rubberBandingMinDistance")] 
 		public CFloat RubberBandingMinDistance
 		{
-			get => GetProperty(ref _rubberBandingMinDistance);
-			set => SetProperty(ref _rubberBandingMinDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("rubberBandingMaxDistance")] 
 		public CFloat RubberBandingMaxDistance
 		{
-			get => GetProperty(ref _rubberBandingMaxDistance);
-			set => SetProperty(ref _rubberBandingMaxDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("rubberBandingStopAndWait")] 
 		public CBool RubberBandingStopAndWait
 		{
-			get => GetProperty(ref _rubberBandingStopAndWait);
-			set => SetProperty(ref _rubberBandingStopAndWait, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("rubberBandingTeleportToCatchUp")] 
 		public CBool RubberBandingTeleportToCatchUp
 		{
-			get => GetProperty(ref _rubberBandingTeleportToCatchUp);
-			set => SetProperty(ref _rubberBandingTeleportToCatchUp, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("rubberBandingStayInFront")] 
 		public CBool RubberBandingStayInFront
 		{
-			get => GetProperty(ref _rubberBandingStayInFront);
-			set => SetProperty(ref _rubberBandingStayInFront, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("allowStubMovement")] 
 		public CBool AllowStubMovement
 		{
-			get => GetProperty(ref _allowStubMovement);
-			set => SetProperty(ref _allowStubMovement, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("driveOnSplineCommand")] 
 		public CHandle<AIVehicleOnSplineCommand> DriveOnSplineCommand
 		{
-			get => GetProperty(ref _driveOnSplineCommand);
-			set => SetProperty(ref _driveOnSplineCommand, value);
+			get => GetPropertyValue<CHandle<AIVehicleOnSplineCommand>>();
+			set => SetPropertyValue<CHandle<AIVehicleOnSplineCommand>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("useTraffic")] 
 		public CBool UseTraffic
 		{
-			get => GetProperty(ref _useTraffic);
-			set => SetProperty(ref _useTraffic, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("speedInTraffic")] 
 		public CFloat SpeedInTraffic
 		{
-			get => GetProperty(ref _speedInTraffic);
-			set => SetProperty(ref _speedInTraffic, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("target")] 
 		public CWeakHandle<gameObject> Target
 		{
-			get => GetProperty(ref _target);
-			set => SetProperty(ref _target, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("distanceMin")] 
 		public CFloat DistanceMin
 		{
-			get => GetProperty(ref _distanceMin);
-			set => SetProperty(ref _distanceMin, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("distanceMax")] 
 		public CFloat DistanceMax
 		{
-			get => GetProperty(ref _distanceMax);
-			set => SetProperty(ref _distanceMax, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("stopWhenTargetReached")] 
 		public CBool StopWhenTargetReached
 		{
-			get => GetProperty(ref _stopWhenTargetReached);
-			set => SetProperty(ref _stopWhenTargetReached, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("trafficTryNeighborsForStart")] 
 		public CBool TrafficTryNeighborsForStart
 		{
-			get => GetProperty(ref _trafficTryNeighborsForStart);
-			set => SetProperty(ref _trafficTryNeighborsForStart, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("trafficTryNeighborsForEnd")] 
 		public CBool TrafficTryNeighborsForEnd
 		{
-			get => GetProperty(ref _trafficTryNeighborsForEnd);
-			set => SetProperty(ref _trafficTryNeighborsForEnd, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("driveFollowCommand")] 
 		public CHandle<AIVehicleFollowCommand> DriveFollowCommand
 		{
-			get => GetProperty(ref _driveFollowCommand);
-			set => SetProperty(ref _driveFollowCommand, value);
+			get => GetPropertyValue<CHandle<AIVehicleFollowCommand>>();
+			set => SetPropertyValue<CHandle<AIVehicleFollowCommand>>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("nodeRef")] 
 		public NodeRef NodeRef
 		{
-			get => GetProperty(ref _nodeRef);
-			set => SetProperty(ref _nodeRef, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("isPlayer")] 
 		public CBool IsPlayer
 		{
-			get => GetProperty(ref _isPlayer);
-			set => SetProperty(ref _isPlayer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("forceGreenLights")] 
 		public CBool ForceGreenLights
 		{
-			get => GetProperty(ref _forceGreenLights);
-			set => SetProperty(ref _forceGreenLights, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("portals")] 
 		public CHandle<vehiclePortalsList> Portals
 		{
-			get => GetProperty(ref _portals);
-			set => SetProperty(ref _portals, value);
+			get => GetPropertyValue<CHandle<vehiclePortalsList>>();
+			set => SetPropertyValue<CHandle<vehiclePortalsList>>(value);
 		}
 
 		[Ordinal(34)] 
 		[RED("driveToNodeCommand")] 
 		public CHandle<AIVehicleToNodeCommand> DriveToNodeCommand
 		{
-			get => GetProperty(ref _driveToNodeCommand);
-			set => SetProperty(ref _driveToNodeCommand, value);
+			get => GetPropertyValue<CHandle<AIVehicleToNodeCommand>>();
+			set => SetPropertyValue<CHandle<AIVehicleToNodeCommand>>(value);
 		}
 
 		[Ordinal(35)] 
 		[RED("driveRacingCommand")] 
 		public CHandle<AIVehicleRacingCommand> DriveRacingCommand
 		{
-			get => GetProperty(ref _driveRacingCommand);
-			set => SetProperty(ref _driveRacingCommand, value);
+			get => GetPropertyValue<CHandle<AIVehicleRacingCommand>>();
+			set => SetPropertyValue<CHandle<AIVehicleRacingCommand>>(value);
 		}
 
 		[Ordinal(36)] 
 		[RED("driveJoinTrafficCommand")] 
 		public CHandle<AIVehicleJoinTrafficCommand> DriveJoinTrafficCommand
 		{
-			get => GetProperty(ref _driveJoinTrafficCommand);
-			set => SetProperty(ref _driveJoinTrafficCommand, value);
+			get => GetPropertyValue<CHandle<AIVehicleJoinTrafficCommand>>();
+			set => SetPropertyValue<CHandle<AIVehicleJoinTrafficCommand>>(value);
 		}
 	}
 }

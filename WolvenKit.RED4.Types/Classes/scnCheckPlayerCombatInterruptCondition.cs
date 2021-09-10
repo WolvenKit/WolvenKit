@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnCheckPlayerCombatInterruptCondition : scnIInterruptCondition
 	{
-		private scnCheckPlayerCombatInterruptConditionParams _params;
-
 		[Ordinal(0)] 
 		[RED("params")] 
 		public scnCheckPlayerCombatInterruptConditionParams Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<scnCheckPlayerCombatInterruptConditionParams>();
+			set => SetPropertyValue<scnCheckPlayerCombatInterruptConditionParams>(value);
+		}
+
+		public scnCheckPlayerCombatInterruptCondition()
+		{
+			Params = new() { IsInCombat = true };
 		}
 	}
 }

@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ActivatedDeviceAnimSetup : RedBaseClass
 	{
-		private CFloat _animationTime;
-
 		[Ordinal(0)] 
 		[RED("animationTime")] 
 		public CFloat AnimationTime
 		{
-			get => GetProperty(ref _animationTime);
-			set => SetProperty(ref _animationTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public ActivatedDeviceAnimSetup()
 		{
-			_animationTime = 0.500000F;
+			AnimationTime = 0.500000F;
 		}
 	}
 }

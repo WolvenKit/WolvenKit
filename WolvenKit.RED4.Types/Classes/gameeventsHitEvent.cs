@@ -5,113 +5,107 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameeventsHitEvent : redEvent
 	{
-		private CHandle<gamedamageAttackData> _attackData;
-		private CWeakHandle<gameObject> _target;
-		private Vector4 _hitPosition;
-		private Vector4 _hitDirection;
-		private CWeakHandle<entIPlacedComponent> _hitComponent;
-		private CName _hitColliderTag;
-		private gameQueryResult _hitRepresentationResult;
-		private CFloat _attackPentration;
-		private CBool _hasPiercedTechSurface;
-		private CHandle<gameAttackComputed> _attackComputed;
-		private CBool _wasAliveBeforeHit;
-		private CBool _projectionPipeline;
-
 		[Ordinal(0)] 
 		[RED("attackData")] 
 		public CHandle<gamedamageAttackData> AttackData
 		{
-			get => GetProperty(ref _attackData);
-			set => SetProperty(ref _attackData, value);
+			get => GetPropertyValue<CHandle<gamedamageAttackData>>();
+			set => SetPropertyValue<CHandle<gamedamageAttackData>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("target")] 
 		public CWeakHandle<gameObject> Target
 		{
-			get => GetProperty(ref _target);
-			set => SetProperty(ref _target, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("hitPosition")] 
 		public Vector4 HitPosition
 		{
-			get => GetProperty(ref _hitPosition);
-			set => SetProperty(ref _hitPosition, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("hitDirection")] 
 		public Vector4 HitDirection
 		{
-			get => GetProperty(ref _hitDirection);
-			set => SetProperty(ref _hitDirection, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("hitComponent")] 
 		public CWeakHandle<entIPlacedComponent> HitComponent
 		{
-			get => GetProperty(ref _hitComponent);
-			set => SetProperty(ref _hitComponent, value);
+			get => GetPropertyValue<CWeakHandle<entIPlacedComponent>>();
+			set => SetPropertyValue<CWeakHandle<entIPlacedComponent>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("hitColliderTag")] 
 		public CName HitColliderTag
 		{
-			get => GetProperty(ref _hitColliderTag);
-			set => SetProperty(ref _hitColliderTag, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("hitRepresentationResult")] 
 		public gameQueryResult HitRepresentationResult
 		{
-			get => GetProperty(ref _hitRepresentationResult);
-			set => SetProperty(ref _hitRepresentationResult, value);
+			get => GetPropertyValue<gameQueryResult>();
+			set => SetPropertyValue<gameQueryResult>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("attackPentration")] 
 		public CFloat AttackPentration
 		{
-			get => GetProperty(ref _attackPentration);
-			set => SetProperty(ref _attackPentration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("hasPiercedTechSurface")] 
 		public CBool HasPiercedTechSurface
 		{
-			get => GetProperty(ref _hasPiercedTechSurface);
-			set => SetProperty(ref _hasPiercedTechSurface, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("attackComputed")] 
 		public CHandle<gameAttackComputed> AttackComputed
 		{
-			get => GetProperty(ref _attackComputed);
-			set => SetProperty(ref _attackComputed, value);
+			get => GetPropertyValue<CHandle<gameAttackComputed>>();
+			set => SetPropertyValue<CHandle<gameAttackComputed>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("wasAliveBeforeHit")] 
 		public CBool WasAliveBeforeHit
 		{
-			get => GetProperty(ref _wasAliveBeforeHit);
-			set => SetProperty(ref _wasAliveBeforeHit, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("projectionPipeline")] 
 		public CBool ProjectionPipeline
 		{
-			get => GetProperty(ref _projectionPipeline);
-			set => SetProperty(ref _projectionPipeline, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public gameeventsHitEvent()
+		{
+			HitPosition = new();
+			HitDirection = new();
+			HitRepresentationResult = new() { HitShapes = new() };
 		}
 	}
 }

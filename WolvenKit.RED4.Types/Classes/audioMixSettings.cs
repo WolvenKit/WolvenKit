@@ -5,68 +5,61 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioMixSettings : audioAudioMetadata
 	{
-		private CFloat _masterVolume;
-		private CFloat _sfxVolume;
-		private CFloat _musicVolume;
-		private CFloat _voVolume;
-		private CFloat _uiMenuVolume;
-		private CName _onStartupEvent;
-
 		[Ordinal(1)] 
 		[RED("masterVolume")] 
 		public CFloat MasterVolume
 		{
-			get => GetProperty(ref _masterVolume);
-			set => SetProperty(ref _masterVolume, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("sfxVolume")] 
 		public CFloat SfxVolume
 		{
-			get => GetProperty(ref _sfxVolume);
-			set => SetProperty(ref _sfxVolume, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("musicVolume")] 
 		public CFloat MusicVolume
 		{
-			get => GetProperty(ref _musicVolume);
-			set => SetProperty(ref _musicVolume, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("voVolume")] 
 		public CFloat VoVolume
 		{
-			get => GetProperty(ref _voVolume);
-			set => SetProperty(ref _voVolume, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("uiMenuVolume")] 
 		public CFloat UiMenuVolume
 		{
-			get => GetProperty(ref _uiMenuVolume);
-			set => SetProperty(ref _uiMenuVolume, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("onStartupEvent")] 
 		public CName OnStartupEvent
 		{
-			get => GetProperty(ref _onStartupEvent);
-			set => SetProperty(ref _onStartupEvent, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public audioMixSettings()
 		{
-			_masterVolume = 10.000000F;
-			_sfxVolume = 10.000000F;
-			_musicVolume = 10.000000F;
-			_voVolume = 10.000000F;
-			_uiMenuVolume = 10.000000F;
+			MasterVolume = 10.000000F;
+			SfxVolume = 10.000000F;
+			MusicVolume = 10.000000F;
+			VoVolume = 10.000000F;
+			UiMenuVolume = 10.000000F;
 		}
 	}
 }

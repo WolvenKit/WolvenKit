@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animCollisionShapesCollection : ISerializable
 	{
-		private CArray<animCollisionRoundedShape> _collisionRoundedShapes;
-
 		[Ordinal(0)] 
 		[RED("collisionRoundedShapes")] 
 		public CArray<animCollisionRoundedShape> CollisionRoundedShapes
 		{
-			get => GetProperty(ref _collisionRoundedShapes);
-			set => SetProperty(ref _collisionRoundedShapes, value);
+			get => GetPropertyValue<CArray<animCollisionRoundedShape>>();
+			set => SetPropertyValue<CArray<animCollisionRoundedShape>>(value);
+		}
+
+		public animCollisionShapesCollection()
+		{
+			CollisionRoundedShapes = new();
 		}
 	}
 }

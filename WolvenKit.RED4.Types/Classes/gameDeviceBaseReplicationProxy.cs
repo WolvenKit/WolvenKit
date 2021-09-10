@@ -5,50 +5,51 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameDeviceBaseReplicationProxy : netIEntityState
 	{
-		private CHandle<gameDeviceReplicatedState> _scriptState;
-		private CUInt32 _versionId;
-		private netTime _versionTimestamp;
-		private EulerAngles _initialOrientation;
-		private Vector3 _initialLocation;
-
 		[Ordinal(2)] 
 		[RED("scriptState")] 
 		public CHandle<gameDeviceReplicatedState> ScriptState
 		{
-			get => GetProperty(ref _scriptState);
-			set => SetProperty(ref _scriptState, value);
+			get => GetPropertyValue<CHandle<gameDeviceReplicatedState>>();
+			set => SetPropertyValue<CHandle<gameDeviceReplicatedState>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("versionId")] 
 		public CUInt32 VersionId
 		{
-			get => GetProperty(ref _versionId);
-			set => SetProperty(ref _versionId, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("versionTimestamp")] 
 		public netTime VersionTimestamp
 		{
-			get => GetProperty(ref _versionTimestamp);
-			set => SetProperty(ref _versionTimestamp, value);
+			get => GetPropertyValue<netTime>();
+			set => SetPropertyValue<netTime>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("initialOrientation")] 
 		public EulerAngles InitialOrientation
 		{
-			get => GetProperty(ref _initialOrientation);
-			set => SetProperty(ref _initialOrientation, value);
+			get => GetPropertyValue<EulerAngles>();
+			set => SetPropertyValue<EulerAngles>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("initialLocation")] 
 		public Vector3 InitialLocation
 		{
-			get => GetProperty(ref _initialLocation);
-			set => SetProperty(ref _initialLocation, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
+		}
+
+		public gameDeviceBaseReplicationProxy()
+		{
+			VersionTimestamp = new() { MilliSecs = 18446744073709551615 };
+			InitialOrientation = new();
+			InitialLocation = new();
 		}
 	}
 }

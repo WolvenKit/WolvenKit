@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class rendIRenderTextureBlob : IRenderResourceBlob
 	{
-		private rendRenderTextureBlobHeader _header;
-		private SerializationDeferredDataBuffer _textureData;
-
 		[Ordinal(0)] 
 		[RED("header")] 
 		public rendRenderTextureBlobHeader Header
 		{
-			get => GetProperty(ref _header);
-			set => SetProperty(ref _header, value);
+			get => GetPropertyValue<rendRenderTextureBlobHeader>();
+			set => SetPropertyValue<rendRenderTextureBlobHeader>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("textureData")] 
 		public SerializationDeferredDataBuffer TextureData
 		{
-			get => GetProperty(ref _textureData);
-			set => SetProperty(ref _textureData, value);
+			get => GetPropertyValue<SerializationDeferredDataBuffer>();
+			set => SetPropertyValue<SerializationDeferredDataBuffer>(value);
+		}
+
+		public rendIRenderTextureBlob()
+		{
+			Header = new() { SizeInfo = new() { Depth = 1 }, TextureInfo = new(), MipMapInfo = new(), HistogramData = new() };
 		}
 	}
 }

@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questGameManagerNodeDefinition : questTypedSignalStoppingNodeDefinition
 	{
-		private CHandle<questIGameManagerNodeType> _type;
-
 		[Ordinal(2)] 
 		[RED("type")] 
 		public CHandle<questIGameManagerNodeType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CHandle<questIGameManagerNodeType>>();
+			set => SetPropertyValue<CHandle<questIGameManagerNodeType>>(value);
+		}
+
+		public questGameManagerNodeDefinition()
+		{
+			Sockets = new();
+			Id = 65535;
 		}
 	}
 }

@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldStaticParticleNodeInstance : worldINodeInstance
 	{
-		private CEnum<RenderSceneLayerMask> _renderLayerMask;
-
 		[Ordinal(0)] 
 		[RED("renderLayerMask")] 
-		public CEnum<RenderSceneLayerMask> RenderLayerMask
+		public CBitField<RenderSceneLayerMask> RenderLayerMask
 		{
-			get => GetProperty(ref _renderLayerMask);
-			set => SetProperty(ref _renderLayerMask, value);
+			get => GetPropertyValue<CBitField<RenderSceneLayerMask>>();
+			set => SetPropertyValue<CBitField<RenderSceneLayerMask>>(value);
 		}
 
 		public worldStaticParticleNodeInstance()
 		{
-			_renderLayerMask = new() { Value = Enums.RenderSceneLayerMask.Default };
+			RenderLayerMask = Enums.RenderSceneLayerMask.Default;
 		}
 	}
 }

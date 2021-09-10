@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AbilityUserData : IScriptable
 	{
-		private TweakDBID _abilityID;
-		private CName _locKeyName;
-		private CWeakHandle<inkAsyncSpawnRequest> _asyncSpawnRequest;
-
 		[Ordinal(0)] 
 		[RED("abilityID")] 
 		public TweakDBID AbilityID
 		{
-			get => GetProperty(ref _abilityID);
-			set => SetProperty(ref _abilityID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("locKeyName")] 
 		public CName LocKeyName
 		{
-			get => GetProperty(ref _locKeyName);
-			set => SetProperty(ref _locKeyName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("asyncSpawnRequest")] 
 		public CWeakHandle<inkAsyncSpawnRequest> AsyncSpawnRequest
 		{
-			get => GetProperty(ref _asyncSpawnRequest);
-			set => SetProperty(ref _asyncSpawnRequest, value);
+			get => GetPropertyValue<CWeakHandle<inkAsyncSpawnRequest>>();
+			set => SetPropertyValue<CWeakHandle<inkAsyncSpawnRequest>>(value);
 		}
 	}
 }

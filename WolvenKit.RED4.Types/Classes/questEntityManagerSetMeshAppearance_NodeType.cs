@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questEntityManagerSetMeshAppearance_NodeType : questIEntityManager_NodeType
 	{
-		private CArray<questEntityManagerSetMeshAppearance_NodeTypeParams> _params;
-
 		[Ordinal(0)] 
 		[RED("params")] 
 		public CArray<questEntityManagerSetMeshAppearance_NodeTypeParams> Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<CArray<questEntityManagerSetMeshAppearance_NodeTypeParams>>();
+			set => SetPropertyValue<CArray<questEntityManagerSetMeshAppearance_NodeTypeParams>>(value);
+		}
+
+		public questEntityManagerSetMeshAppearance_NodeType()
+		{
+			Params = new() { new() };
 		}
 	}
 }

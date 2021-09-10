@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PullSquadSyncRequest : AIAIEvent
 	{
-		private CEnum<AISquadType> _squadType;
-
 		[Ordinal(2)] 
 		[RED("squadType")] 
 		public CEnum<AISquadType> SquadType
 		{
-			get => GetProperty(ref _squadType);
-			set => SetProperty(ref _squadType, value);
+			get => GetPropertyValue<CEnum<AISquadType>>();
+			set => SetPropertyValue<CEnum<AISquadType>>(value);
 		}
 	}
 }

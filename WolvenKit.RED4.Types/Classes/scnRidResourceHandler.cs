@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnRidResourceHandler : RedBaseClass
 	{
-		private scnRidResourceId _id;
-		private CResourceReference<scnRidResource> _ridResource;
-
 		[Ordinal(0)] 
 		[RED("id")] 
 		public scnRidResourceId Id
 		{
-			get => GetProperty(ref _id);
-			set => SetProperty(ref _id, value);
+			get => GetPropertyValue<scnRidResourceId>();
+			set => SetPropertyValue<scnRidResourceId>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ridResource")] 
 		public CResourceReference<scnRidResource> RidResource
 		{
-			get => GetProperty(ref _ridResource);
-			set => SetProperty(ref _ridResource, value);
+			get => GetPropertyValue<CResourceReference<scnRidResource>>();
+			set => SetPropertyValue<CResourceReference<scnRidResource>>(value);
+		}
+
+		public scnRidResourceHandler()
+		{
+			Id = new() { Id = 4294967295 };
 		}
 	}
 }

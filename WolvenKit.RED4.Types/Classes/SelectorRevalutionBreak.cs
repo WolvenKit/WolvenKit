@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SelectorRevalutionBreak : AIbehaviortaskScript
 	{
-		private CFloat _reevaluationDuration;
-		private CFloat _activationTimeStamp;
-
 		[Ordinal(0)] 
 		[RED("reevaluationDuration")] 
 		public CFloat ReevaluationDuration
 		{
-			get => GetProperty(ref _reevaluationDuration);
-			set => SetProperty(ref _reevaluationDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("activationTimeStamp")] 
 		public CFloat ActivationTimeStamp
 		{
-			get => GetProperty(ref _activationTimeStamp);
-			set => SetProperty(ref _activationTimeStamp, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public SelectorRevalutionBreak()
 		{
-			_reevaluationDuration = 0.100000F;
+			ReevaluationDuration = 0.100000F;
 		}
 	}
 }

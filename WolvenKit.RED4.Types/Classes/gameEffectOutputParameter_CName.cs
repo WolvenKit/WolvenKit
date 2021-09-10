@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameEffectOutputParameter_CName : RedBaseClass
 	{
-		private gameBlackboardPropertyBindingDefinition _blackboardProperty;
-
 		[Ordinal(0)] 
 		[RED("blackboardProperty")] 
 		public gameBlackboardPropertyBindingDefinition BlackboardProperty
 		{
-			get => GetProperty(ref _blackboardProperty);
-			set => SetProperty(ref _blackboardProperty, value);
+			get => GetPropertyValue<gameBlackboardPropertyBindingDefinition>();
+			set => SetPropertyValue<gameBlackboardPropertyBindingDefinition>(value);
+		}
+
+		public gameEffectOutputParameter_CName()
+		{
+			BlackboardProperty = new() { SerializableID = new(), PropertyPath = new() };
 		}
 	}
 }

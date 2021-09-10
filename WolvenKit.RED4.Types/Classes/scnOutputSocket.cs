@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnOutputSocket : RedBaseClass
 	{
-		private scnOutputSocketStamp _stamp;
-		private CArray<scnInputSocketId> _destinations;
-
 		[Ordinal(0)] 
 		[RED("stamp")] 
 		public scnOutputSocketStamp Stamp
 		{
-			get => GetProperty(ref _stamp);
-			set => SetProperty(ref _stamp, value);
+			get => GetPropertyValue<scnOutputSocketStamp>();
+			set => SetPropertyValue<scnOutputSocketStamp>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("destinations")] 
 		public CArray<scnInputSocketId> Destinations
 		{
-			get => GetProperty(ref _destinations);
-			set => SetProperty(ref _destinations, value);
+			get => GetPropertyValue<CArray<scnInputSocketId>>();
+			set => SetPropertyValue<CArray<scnInputSocketId>>(value);
+		}
+
+		public scnOutputSocket()
+		{
+			Stamp = new() { Name = 65535, Ordinal = 65535 };
+			Destinations = new();
 		}
 	}
 }

@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TweakAIAction : TweakAIActionAbstract
 	{
-		private TweakDBID _record;
-
 		[Ordinal(27)] 
 		[RED("record")] 
 		public TweakDBID Record
 		{
-			get => GetProperty(ref _record);
-			set => SetProperty(ref _record, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
+		public TweakAIAction()
+		{
+			LookatEvents = new();
+			GeneralSubActionsResults = new(8);
+			PhaseSubActionsResults = new(8);
 		}
 	}
 }

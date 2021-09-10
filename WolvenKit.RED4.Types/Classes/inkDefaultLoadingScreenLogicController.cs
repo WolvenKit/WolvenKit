@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class inkDefaultLoadingScreenLogicController : inkILoadingLogicController
 	{
-		private inkWidgetReference _progressBarRoot;
-		private CWeakHandle<LoadingScreenProgressBarController> _progressBarController;
-
 		[Ordinal(1)] 
 		[RED("progressBarRoot")] 
 		public inkWidgetReference ProgressBarRoot
 		{
-			get => GetProperty(ref _progressBarRoot);
-			set => SetProperty(ref _progressBarRoot, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("progressBarController")] 
 		public CWeakHandle<LoadingScreenProgressBarController> ProgressBarController
 		{
-			get => GetProperty(ref _progressBarController);
-			set => SetProperty(ref _progressBarController, value);
+			get => GetPropertyValue<CWeakHandle<LoadingScreenProgressBarController>>();
+			set => SetPropertyValue<CWeakHandle<LoadingScreenProgressBarController>>(value);
+		}
+
+		public inkDefaultLoadingScreenLogicController()
+		{
+			ProgressBarRoot = new();
 		}
 	}
 }

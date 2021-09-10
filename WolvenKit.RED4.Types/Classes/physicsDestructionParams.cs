@@ -5,255 +5,228 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class physicsDestructionParams : RedBaseClass
 	{
-		private CBool _startInactive;
-		private CEnum<physicsSimulationType> _simulationType;
-		private CBool _markEdgeChunks;
-		private CBool _useAggregatesForClusters;
-		private CBool _turnDynamicOnImpulse;
-		private CBool _buildConvexForClusters;
-		private CFloat _damageThreshold;
-		private CFloat _damageEndurance;
-		private CFloat _bondEndurance;
-		private CBool _accumulateDamage;
-		private CFloat _impulseToDamage;
-		private CFloat _contactToDamage;
-		private CFloat _maxContactImpulseRatio;
-		private CFloat _impulseChildPropagationFactor;
-		private CFloat _impulsePropagationFactor;
-		private CFloat _impulseDiminishingFactor;
-		private CBool _breakBonds;
-		private CBool _debrisTimeout;
-		private CFloat _debrisTimeoutMin;
-		private CFloat _debrisTimeoutMax;
-		private CFloat _fadeOutTime;
-		private CFloat _debrisMaxSeparation;
-		private CBool _visualsRemain;
-		private CBool _debrisDestructible;
-		private CBool _supportDamage;
-		private CFloat _maxAngularVelocity;
-
 		[Ordinal(0)] 
 		[RED("startInactive")] 
 		public CBool StartInactive
 		{
-			get => GetProperty(ref _startInactive);
-			set => SetProperty(ref _startInactive, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("simulationType")] 
 		public CEnum<physicsSimulationType> SimulationType
 		{
-			get => GetProperty(ref _simulationType);
-			set => SetProperty(ref _simulationType, value);
+			get => GetPropertyValue<CEnum<physicsSimulationType>>();
+			set => SetPropertyValue<CEnum<physicsSimulationType>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("markEdgeChunks")] 
 		public CBool MarkEdgeChunks
 		{
-			get => GetProperty(ref _markEdgeChunks);
-			set => SetProperty(ref _markEdgeChunks, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("useAggregatesForClusters")] 
 		public CBool UseAggregatesForClusters
 		{
-			get => GetProperty(ref _useAggregatesForClusters);
-			set => SetProperty(ref _useAggregatesForClusters, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("turnDynamicOnImpulse")] 
 		public CBool TurnDynamicOnImpulse
 		{
-			get => GetProperty(ref _turnDynamicOnImpulse);
-			set => SetProperty(ref _turnDynamicOnImpulse, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("buildConvexForClusters")] 
 		public CBool BuildConvexForClusters
 		{
-			get => GetProperty(ref _buildConvexForClusters);
-			set => SetProperty(ref _buildConvexForClusters, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("damageThreshold")] 
 		public CFloat DamageThreshold
 		{
-			get => GetProperty(ref _damageThreshold);
-			set => SetProperty(ref _damageThreshold, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("damageEndurance")] 
 		public CFloat DamageEndurance
 		{
-			get => GetProperty(ref _damageEndurance);
-			set => SetProperty(ref _damageEndurance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("bondEndurance")] 
 		public CFloat BondEndurance
 		{
-			get => GetProperty(ref _bondEndurance);
-			set => SetProperty(ref _bondEndurance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("accumulateDamage")] 
 		public CBool AccumulateDamage
 		{
-			get => GetProperty(ref _accumulateDamage);
-			set => SetProperty(ref _accumulateDamage, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("impulseToDamage")] 
 		public CFloat ImpulseToDamage
 		{
-			get => GetProperty(ref _impulseToDamage);
-			set => SetProperty(ref _impulseToDamage, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("contactToDamage")] 
 		public CFloat ContactToDamage
 		{
-			get => GetProperty(ref _contactToDamage);
-			set => SetProperty(ref _contactToDamage, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("maxContactImpulseRatio")] 
 		public CFloat MaxContactImpulseRatio
 		{
-			get => GetProperty(ref _maxContactImpulseRatio);
-			set => SetProperty(ref _maxContactImpulseRatio, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("impulseChildPropagationFactor")] 
 		public CFloat ImpulseChildPropagationFactor
 		{
-			get => GetProperty(ref _impulseChildPropagationFactor);
-			set => SetProperty(ref _impulseChildPropagationFactor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("impulsePropagationFactor")] 
 		public CFloat ImpulsePropagationFactor
 		{
-			get => GetProperty(ref _impulsePropagationFactor);
-			set => SetProperty(ref _impulsePropagationFactor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("impulseDiminishingFactor")] 
 		public CFloat ImpulseDiminishingFactor
 		{
-			get => GetProperty(ref _impulseDiminishingFactor);
-			set => SetProperty(ref _impulseDiminishingFactor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("breakBonds")] 
 		public CBool BreakBonds
 		{
-			get => GetProperty(ref _breakBonds);
-			set => SetProperty(ref _breakBonds, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("debrisTimeout")] 
 		public CBool DebrisTimeout
 		{
-			get => GetProperty(ref _debrisTimeout);
-			set => SetProperty(ref _debrisTimeout, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("debrisTimeoutMin")] 
 		public CFloat DebrisTimeoutMin
 		{
-			get => GetProperty(ref _debrisTimeoutMin);
-			set => SetProperty(ref _debrisTimeoutMin, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("debrisTimeoutMax")] 
 		public CFloat DebrisTimeoutMax
 		{
-			get => GetProperty(ref _debrisTimeoutMax);
-			set => SetProperty(ref _debrisTimeoutMax, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("fadeOutTime")] 
 		public CFloat FadeOutTime
 		{
-			get => GetProperty(ref _fadeOutTime);
-			set => SetProperty(ref _fadeOutTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("debrisMaxSeparation")] 
 		public CFloat DebrisMaxSeparation
 		{
-			get => GetProperty(ref _debrisMaxSeparation);
-			set => SetProperty(ref _debrisMaxSeparation, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("visualsRemain")] 
 		public CBool VisualsRemain
 		{
-			get => GetProperty(ref _visualsRemain);
-			set => SetProperty(ref _visualsRemain, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("debrisDestructible")] 
 		public CBool DebrisDestructible
 		{
-			get => GetProperty(ref _debrisDestructible);
-			set => SetProperty(ref _debrisDestructible, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("supportDamage")] 
 		public CBool SupportDamage
 		{
-			get => GetProperty(ref _supportDamage);
-			set => SetProperty(ref _supportDamage, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("maxAngularVelocity")] 
 		public CFloat MaxAngularVelocity
 		{
-			get => GetProperty(ref _maxAngularVelocity);
-			set => SetProperty(ref _maxAngularVelocity, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public physicsDestructionParams()
 		{
-			_damageThreshold = 25.000000F;
-			_damageEndurance = 10.000000F;
-			_bondEndurance = 20.000000F;
-			_accumulateDamage = true;
-			_impulseToDamage = 1.000000F;
-			_contactToDamage = 10.000000F;
-			_maxContactImpulseRatio = 1.000000F;
-			_impulseChildPropagationFactor = 1.000000F;
-			_impulsePropagationFactor = 0.500000F;
-			_impulseDiminishingFactor = 0.500000F;
-			_debrisMaxSeparation = 50.000000F;
-			_maxAngularVelocity = -1.000000F;
+			DamageThreshold = 25.000000F;
+			DamageEndurance = 10.000000F;
+			BondEndurance = 20.000000F;
+			AccumulateDamage = true;
+			ImpulseToDamage = 1.000000F;
+			ContactToDamage = 10.000000F;
+			MaxContactImpulseRatio = 1.000000F;
+			ImpulseChildPropagationFactor = 1.000000F;
+			ImpulsePropagationFactor = 0.500000F;
+			ImpulseDiminishingFactor = 0.500000F;
+			DebrisMaxSeparation = 50.000000F;
+			MaxAngularVelocity = -1.000000F;
 		}
 	}
 }

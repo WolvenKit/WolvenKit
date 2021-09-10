@@ -5,55 +5,50 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnSceneSharedState : ISerializable
 	{
-		private CName _entrypoint;
-		private CArray<scnSyncNodeSignal> _syncNodesVisited;
-		private CUInt64 _instanceHash;
-		private CBool _finishedOnServer;
-		private CBool _finishedOnClient;
-
 		[Ordinal(0)] 
 		[RED("entrypoint")] 
 		public CName Entrypoint
 		{
-			get => GetProperty(ref _entrypoint);
-			set => SetProperty(ref _entrypoint, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("syncNodesVisited")] 
 		public CArray<scnSyncNodeSignal> SyncNodesVisited
 		{
-			get => GetProperty(ref _syncNodesVisited);
-			set => SetProperty(ref _syncNodesVisited, value);
+			get => GetPropertyValue<CArray<scnSyncNodeSignal>>();
+			set => SetPropertyValue<CArray<scnSyncNodeSignal>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("instanceHash")] 
 		public CUInt64 InstanceHash
 		{
-			get => GetProperty(ref _instanceHash);
-			set => SetProperty(ref _instanceHash, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("finishedOnServer")] 
 		public CBool FinishedOnServer
 		{
-			get => GetProperty(ref _finishedOnServer);
-			set => SetProperty(ref _finishedOnServer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("finishedOnClient")] 
 		public CBool FinishedOnClient
 		{
-			get => GetProperty(ref _finishedOnClient);
-			set => SetProperty(ref _finishedOnClient, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public scnSceneSharedState()
 		{
-			_instanceHash = 6242570315725555409;
+			SyncNodesVisited = new();
+			InstanceHash = 6242570315725555409;
 		}
 	}
 }

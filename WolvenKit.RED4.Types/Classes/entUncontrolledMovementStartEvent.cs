@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class entUncontrolledMovementStartEvent : redEvent
 	{
-		private CFloat _ragdollNoGroundThreshold;
-		private CBool _ragdollOnCollision;
-
 		[Ordinal(0)] 
 		[RED("ragdollNoGroundThreshold")] 
 		public CFloat RagdollNoGroundThreshold
 		{
-			get => GetProperty(ref _ragdollNoGroundThreshold);
-			set => SetProperty(ref _ragdollNoGroundThreshold, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("ragdollOnCollision")] 
 		public CBool RagdollOnCollision
 		{
-			get => GetProperty(ref _ragdollOnCollision);
-			set => SetProperty(ref _ragdollOnCollision, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public entUncontrolledMovementStartEvent()
 		{
-			_ragdollOnCollision = true;
+			RagdollOnCollision = true;
 		}
 	}
 }

@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class rendVertexBufferChunk : RedBaseClass
 	{
-		private GpuWrapApiVertexLayoutDesc _vertexLayout;
-		private CStatic<CUInt32> _byteOffsets;
-
 		[Ordinal(0)] 
 		[RED("vertexLayout")] 
 		public GpuWrapApiVertexLayoutDesc VertexLayout
 		{
-			get => GetProperty(ref _vertexLayout);
-			set => SetProperty(ref _vertexLayout, value);
+			get => GetPropertyValue<GpuWrapApiVertexLayoutDesc>();
+			set => SetPropertyValue<GpuWrapApiVertexLayoutDesc>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("byteOffsets", 5)] 
 		public CStatic<CUInt32> ByteOffsets
 		{
-			get => GetProperty(ref _byteOffsets);
-			set => SetProperty(ref _byteOffsets, value);
+			get => GetPropertyValue<CStatic<CUInt32>>();
+			set => SetPropertyValue<CStatic<CUInt32>>(value);
+		}
+
+		public rendVertexBufferChunk()
+		{
+			VertexLayout = new() { Elements = new(0), SlotStrides = new(0), Hash = 4294967295 };
+			ByteOffsets = new(0);
 		}
 	}
 }

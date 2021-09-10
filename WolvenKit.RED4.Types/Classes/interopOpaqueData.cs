@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class interopOpaqueData : RedBaseClass
 	{
-		private CString _description;
-		private CString _payload;
-		private CInt32 _version;
-
 		[Ordinal(0)] 
 		[RED("description")] 
 		public CString Description
 		{
-			get => GetProperty(ref _description);
-			set => SetProperty(ref _description, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("payload")] 
 		public CString Payload
 		{
-			get => GetProperty(ref _payload);
-			set => SetProperty(ref _payload, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("version")] 
 		public CInt32 Version
 		{
-			get => GetProperty(ref _version);
-			set => SetProperty(ref _version, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

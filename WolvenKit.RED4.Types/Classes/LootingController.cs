@@ -5,352 +5,331 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class LootingController : inkWidgetLogicController
 	{
-		private CWeakHandle<inkWidget> _root;
-		private inkCompoundWidgetReference _itemsListContainer;
-		private inkCompoundWidgetReference _titleContainer;
-		private inkWidgetReference _upArrow;
-		private inkWidgetReference _downArrow;
-		private inkWidgetReference _listWrapper;
-		private inkCompoundWidgetReference _actionsListV;
-		private inkWidgetReference _lockedStatusContainer;
-		private CArray<CWeakHandle<inkWidget>> _widgetsPoolList;
-		private CInt32 _requestedWidgetsPoolItems;
-		private CArray<CWeakHandle<inkWidget>> _lootList;
-		private CInt32 _requestedItemsPoolItems;
-		private CWeakHandle<InventoryDataManagerV2> _dataManager;
-		private ScriptGameInstance _gameInstance;
-		private CInt32 _maxItemsNum;
-		private CWeakHandle<TooltipProvider> _tooltipProvider;
-		private CHandle<ATooltipData> _cachedTooltipData;
-		private CInt32 _startIndex;
-		private CInt32 _selectedItemIndex;
-		private CInt32 _itemsToCompare;
-		private CBool _isShown;
-		private gameItemID _currentComparisonItemId;
-		private gameItemID _lastTooltipItemId;
-		private gameItemID _currentTooltipItemId;
-		private CHandle<TooltipLootingCachedData> _currentTooltipLootingData;
-		private entEntityID _lastItemOwnerId;
-		private entEntityID _currentItemOwnerId;
-		private CEnum<gamedataEquipmentArea> _currentComparisonEquipmentArea;
-		private CBool _lastListOpenedState;
-		private CBool _isComaprisonDirty;
-		private entEntityID _bufferedOwnerId;
-		private CHandle<inkanimProxy> _introAnimProxy;
-		private gameinteractionsvisLootData _currendData;
-		private InventoryItemData _activeWeapon;
-		private CBool _isLocked;
-		private CInt32 _currentWidgetRequestVersion;
-		private CInt32 _currentItemRequestVersion;
-		private CInt32 _requestsCounter;
-
 		[Ordinal(1)] 
 		[RED("root")] 
 		public CWeakHandle<inkWidget> Root
 		{
-			get => GetProperty(ref _root);
-			set => SetProperty(ref _root, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("itemsListContainer")] 
 		public inkCompoundWidgetReference ItemsListContainer
 		{
-			get => GetProperty(ref _itemsListContainer);
-			set => SetProperty(ref _itemsListContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("titleContainer")] 
 		public inkCompoundWidgetReference TitleContainer
 		{
-			get => GetProperty(ref _titleContainer);
-			set => SetProperty(ref _titleContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("upArrow")] 
 		public inkWidgetReference UpArrow
 		{
-			get => GetProperty(ref _upArrow);
-			set => SetProperty(ref _upArrow, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("downArrow")] 
 		public inkWidgetReference DownArrow
 		{
-			get => GetProperty(ref _downArrow);
-			set => SetProperty(ref _downArrow, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("listWrapper")] 
 		public inkWidgetReference ListWrapper
 		{
-			get => GetProperty(ref _listWrapper);
-			set => SetProperty(ref _listWrapper, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("actionsListV")] 
 		public inkCompoundWidgetReference ActionsListV
 		{
-			get => GetProperty(ref _actionsListV);
-			set => SetProperty(ref _actionsListV, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("lockedStatusContainer")] 
 		public inkWidgetReference LockedStatusContainer
 		{
-			get => GetProperty(ref _lockedStatusContainer);
-			set => SetProperty(ref _lockedStatusContainer, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("widgetsPoolList")] 
 		public CArray<CWeakHandle<inkWidget>> WidgetsPoolList
 		{
-			get => GetProperty(ref _widgetsPoolList);
-			set => SetProperty(ref _widgetsPoolList, value);
+			get => GetPropertyValue<CArray<CWeakHandle<inkWidget>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<inkWidget>>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("requestedWidgetsPoolItems")] 
 		public CInt32 RequestedWidgetsPoolItems
 		{
-			get => GetProperty(ref _requestedWidgetsPoolItems);
-			set => SetProperty(ref _requestedWidgetsPoolItems, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("lootList")] 
 		public CArray<CWeakHandle<inkWidget>> LootList
 		{
-			get => GetProperty(ref _lootList);
-			set => SetProperty(ref _lootList, value);
+			get => GetPropertyValue<CArray<CWeakHandle<inkWidget>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<inkWidget>>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("requestedItemsPoolItems")] 
 		public CInt32 RequestedItemsPoolItems
 		{
-			get => GetProperty(ref _requestedItemsPoolItems);
-			set => SetProperty(ref _requestedItemsPoolItems, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("dataManager")] 
 		public CWeakHandle<InventoryDataManagerV2> DataManager
 		{
-			get => GetProperty(ref _dataManager);
-			set => SetProperty(ref _dataManager, value);
+			get => GetPropertyValue<CWeakHandle<InventoryDataManagerV2>>();
+			set => SetPropertyValue<CWeakHandle<InventoryDataManagerV2>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("gameInstance")] 
 		public ScriptGameInstance GameInstance
 		{
-			get => GetProperty(ref _gameInstance);
-			set => SetProperty(ref _gameInstance, value);
+			get => GetPropertyValue<ScriptGameInstance>();
+			set => SetPropertyValue<ScriptGameInstance>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("maxItemsNum")] 
 		public CInt32 MaxItemsNum
 		{
-			get => GetProperty(ref _maxItemsNum);
-			set => SetProperty(ref _maxItemsNum, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("tooltipProvider")] 
 		public CWeakHandle<TooltipProvider> TooltipProvider
 		{
-			get => GetProperty(ref _tooltipProvider);
-			set => SetProperty(ref _tooltipProvider, value);
+			get => GetPropertyValue<CWeakHandle<TooltipProvider>>();
+			set => SetPropertyValue<CWeakHandle<TooltipProvider>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("cachedTooltipData")] 
 		public CHandle<ATooltipData> CachedTooltipData
 		{
-			get => GetProperty(ref _cachedTooltipData);
-			set => SetProperty(ref _cachedTooltipData, value);
+			get => GetPropertyValue<CHandle<ATooltipData>>();
+			set => SetPropertyValue<CHandle<ATooltipData>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("startIndex")] 
 		public CInt32 StartIndex
 		{
-			get => GetProperty(ref _startIndex);
-			set => SetProperty(ref _startIndex, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("selectedItemIndex")] 
 		public CInt32 SelectedItemIndex
 		{
-			get => GetProperty(ref _selectedItemIndex);
-			set => SetProperty(ref _selectedItemIndex, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("itemsToCompare")] 
 		public CInt32 ItemsToCompare
 		{
-			get => GetProperty(ref _itemsToCompare);
-			set => SetProperty(ref _itemsToCompare, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("isShown")] 
 		public CBool IsShown
 		{
-			get => GetProperty(ref _isShown);
-			set => SetProperty(ref _isShown, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("currentComparisonItemId")] 
 		public gameItemID CurrentComparisonItemId
 		{
-			get => GetProperty(ref _currentComparisonItemId);
-			set => SetProperty(ref _currentComparisonItemId, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("lastTooltipItemId")] 
 		public gameItemID LastTooltipItemId
 		{
-			get => GetProperty(ref _lastTooltipItemId);
-			set => SetProperty(ref _lastTooltipItemId, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("currentTooltipItemId")] 
 		public gameItemID CurrentTooltipItemId
 		{
-			get => GetProperty(ref _currentTooltipItemId);
-			set => SetProperty(ref _currentTooltipItemId, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("currentTooltipLootingData")] 
 		public CHandle<TooltipLootingCachedData> CurrentTooltipLootingData
 		{
-			get => GetProperty(ref _currentTooltipLootingData);
-			set => SetProperty(ref _currentTooltipLootingData, value);
+			get => GetPropertyValue<CHandle<TooltipLootingCachedData>>();
+			set => SetPropertyValue<CHandle<TooltipLootingCachedData>>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("lastItemOwnerId")] 
 		public entEntityID LastItemOwnerId
 		{
-			get => GetProperty(ref _lastItemOwnerId);
-			set => SetProperty(ref _lastItemOwnerId, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("currentItemOwnerId")] 
 		public entEntityID CurrentItemOwnerId
 		{
-			get => GetProperty(ref _currentItemOwnerId);
-			set => SetProperty(ref _currentItemOwnerId, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("currentComparisonEquipmentArea")] 
 		public CEnum<gamedataEquipmentArea> CurrentComparisonEquipmentArea
 		{
-			get => GetProperty(ref _currentComparisonEquipmentArea);
-			set => SetProperty(ref _currentComparisonEquipmentArea, value);
+			get => GetPropertyValue<CEnum<gamedataEquipmentArea>>();
+			set => SetPropertyValue<CEnum<gamedataEquipmentArea>>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("lastListOpenedState")] 
 		public CBool LastListOpenedState
 		{
-			get => GetProperty(ref _lastListOpenedState);
-			set => SetProperty(ref _lastListOpenedState, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("isComaprisonDirty")] 
 		public CBool IsComaprisonDirty
 		{
-			get => GetProperty(ref _isComaprisonDirty);
-			set => SetProperty(ref _isComaprisonDirty, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("bufferedOwnerId")] 
 		public entEntityID BufferedOwnerId
 		{
-			get => GetProperty(ref _bufferedOwnerId);
-			set => SetProperty(ref _bufferedOwnerId, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("introAnimProxy")] 
 		public CHandle<inkanimProxy> IntroAnimProxy
 		{
-			get => GetProperty(ref _introAnimProxy);
-			set => SetProperty(ref _introAnimProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("currendData")] 
 		public gameinteractionsvisLootData CurrendData
 		{
-			get => GetProperty(ref _currendData);
-			set => SetProperty(ref _currendData, value);
+			get => GetPropertyValue<gameinteractionsvisLootData>();
+			set => SetPropertyValue<gameinteractionsvisLootData>(value);
 		}
 
 		[Ordinal(34)] 
 		[RED("activeWeapon")] 
 		public InventoryItemData ActiveWeapon
 		{
-			get => GetProperty(ref _activeWeapon);
-			set => SetProperty(ref _activeWeapon, value);
+			get => GetPropertyValue<InventoryItemData>();
+			set => SetPropertyValue<InventoryItemData>(value);
 		}
 
 		[Ordinal(35)] 
 		[RED("isLocked")] 
 		public CBool IsLocked
 		{
-			get => GetProperty(ref _isLocked);
-			set => SetProperty(ref _isLocked, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(36)] 
 		[RED("currentWidgetRequestVersion")] 
 		public CInt32 CurrentWidgetRequestVersion
 		{
-			get => GetProperty(ref _currentWidgetRequestVersion);
-			set => SetProperty(ref _currentWidgetRequestVersion, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(37)] 
 		[RED("currentItemRequestVersion")] 
 		public CInt32 CurrentItemRequestVersion
 		{
-			get => GetProperty(ref _currentItemRequestVersion);
-			set => SetProperty(ref _currentItemRequestVersion, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(38)] 
 		[RED("requestsCounter")] 
 		public CInt32 RequestsCounter
 		{
-			get => GetProperty(ref _requestsCounter);
-			set => SetProperty(ref _requestsCounter, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		public LootingController()
 		{
-			_maxItemsNum = 3;
+			ItemsListContainer = new();
+			TitleContainer = new();
+			UpArrow = new();
+			DownArrow = new();
+			ListWrapper = new();
+			ActionsListV = new();
+			LockedStatusContainer = new();
+			WidgetsPoolList = new();
+			LootList = new();
+			GameInstance = new();
+			MaxItemsNum = 3;
+			CurrentComparisonItemId = new();
+			LastTooltipItemId = new();
+			CurrentTooltipItemId = new();
+			LastItemOwnerId = new();
+			CurrentItemOwnerId = new();
+			BufferedOwnerId = new();
+			CurrendData = new() { IsListOpen = true, Choices = new(), ItemIDs = new(), OwnerId = new() };
+			ActiveWeapon = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
 		}
 	}
 }

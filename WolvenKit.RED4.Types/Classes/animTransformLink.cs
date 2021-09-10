@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animTransformLink : RedBaseClass
 	{
-		private CWeakHandle<animAnimNode_TransformValue> _node;
-
 		[Ordinal(0)] 
 		[RED("node")] 
 		public CWeakHandle<animAnimNode_TransformValue> Node
 		{
-			get => GetProperty(ref _node);
-			set => SetProperty(ref _node, value);
+			get => GetPropertyValue<CWeakHandle<animAnimNode_TransformValue>>();
+			set => SetPropertyValue<CWeakHandle<animAnimNode_TransformValue>>(value);
 		}
 	}
 }

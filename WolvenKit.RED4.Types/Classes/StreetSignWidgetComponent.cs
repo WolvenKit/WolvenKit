@@ -5,50 +5,53 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class StreetSignWidgetComponent : IWorldWidgetComponent
 	{
-		private TweakDBID _streetSignTDBID;
-		private CBool _isAStreetName;
-		private TweakDBID _streetNameSignTDBID;
-		private CHandle<inkTweakDBIDSelector> _signSelector;
-		private CUInt32 _signVersion;
-
 		[Ordinal(10)] 
 		[RED("streetSignTDBID")] 
 		public TweakDBID StreetSignTDBID
 		{
-			get => GetProperty(ref _streetSignTDBID);
-			set => SetProperty(ref _streetSignTDBID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("isAStreetName")] 
 		public CBool IsAStreetName
 		{
-			get => GetProperty(ref _isAStreetName);
-			set => SetProperty(ref _isAStreetName, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("streetNameSignTDBID")] 
 		public TweakDBID StreetNameSignTDBID
 		{
-			get => GetProperty(ref _streetNameSignTDBID);
-			set => SetProperty(ref _streetNameSignTDBID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("signSelector")] 
 		public CHandle<inkTweakDBIDSelector> SignSelector
 		{
-			get => GetProperty(ref _signSelector);
-			set => SetProperty(ref _signSelector, value);
+			get => GetPropertyValue<CHandle<inkTweakDBIDSelector>>();
+			set => SetPropertyValue<CHandle<inkTweakDBIDSelector>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("signVersion")] 
 		public CUInt32 SignVersion
 		{
-			get => GetProperty(ref _signVersion);
-			set => SetProperty(ref _signVersion, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		public StreetSignWidgetComponent()
+		{
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			TintColor = new();
+			ScreenAreaMultiplier = 1.000000F;
+			IsEnabled = true;
 		}
 	}
 }

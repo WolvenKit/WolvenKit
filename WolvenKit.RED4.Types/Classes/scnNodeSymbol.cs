@@ -5,37 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnNodeSymbol : RedBaseClass
 	{
-		private scnNodeId _nodeId;
-		private scnNodeId _editorNodeId;
-		private CUInt64 _editorEventId;
-
 		[Ordinal(0)] 
 		[RED("nodeId")] 
 		public scnNodeId NodeId
 		{
-			get => GetProperty(ref _nodeId);
-			set => SetProperty(ref _nodeId, value);
+			get => GetPropertyValue<scnNodeId>();
+			set => SetPropertyValue<scnNodeId>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("editorNodeId")] 
 		public scnNodeId EditorNodeId
 		{
-			get => GetProperty(ref _editorNodeId);
-			set => SetProperty(ref _editorNodeId, value);
+			get => GetPropertyValue<scnNodeId>();
+			set => SetPropertyValue<scnNodeId>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("editorEventId")] 
 		public CUInt64 EditorEventId
 		{
-			get => GetProperty(ref _editorEventId);
-			set => SetProperty(ref _editorEventId, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		public scnNodeSymbol()
 		{
-			_editorEventId = 18446744073709551615;
+			NodeId = new() { Id = 4294967295 };
+			EditorNodeId = new() { Id = 4294967295 };
+			EditorEventId = 18446744073709551615;
 		}
 	}
 }

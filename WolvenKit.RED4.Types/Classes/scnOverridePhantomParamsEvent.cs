@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnOverridePhantomParamsEvent : scnSceneEvent
 	{
-		private scnOverridePhantomParamsEventParams _params;
-
 		[Ordinal(6)] 
 		[RED("params")] 
 		public scnOverridePhantomParamsEventParams Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<scnOverridePhantomParamsEventParams>();
+			set => SetPropertyValue<scnOverridePhantomParamsEventParams>(value);
+		}
+
+		public scnOverridePhantomParamsEvent()
+		{
+			Id = new() { Id = 18446744073709551615 };
+			Params = new() { Performer = new() { Id = 4294967040 } };
 		}
 	}
 }

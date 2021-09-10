@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class HideSingleMappinEvent : redEvent
 	{
-		private CInt32 _index;
-
 		[Ordinal(0)] 
 		[RED("index")] 
 		public CInt32 Index
 		{
-			get => GetProperty(ref _index);
-			set => SetProperty(ref _index, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 	}
 }

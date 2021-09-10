@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorAttachToElevatorCommandTaskDefinition : AIbehaviorTaskDefinition
 	{
-		private CHandle<AIArgumentMapping> _command;
-
 		[Ordinal(1)] 
 		[RED("command")] 
 		public CHandle<AIArgumentMapping> Command
 		{
-			get => GetProperty(ref _command);
-			set => SetProperty(ref _command, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 	}
 }

@@ -5,28 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameMuppetInventoryState : RedBaseClass
 	{
-		private CArray<gameMuppetInventorySlotInfo> _slots;
-		private CInt32 _activeSlot;
-
 		[Ordinal(0)] 
 		[RED("slots")] 
 		public CArray<gameMuppetInventorySlotInfo> Slots
 		{
-			get => GetProperty(ref _slots);
-			set => SetProperty(ref _slots, value);
+			get => GetPropertyValue<CArray<gameMuppetInventorySlotInfo>>();
+			set => SetPropertyValue<CArray<gameMuppetInventorySlotInfo>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("activeSlot")] 
 		public CInt32 ActiveSlot
 		{
-			get => GetProperty(ref _activeSlot);
-			set => SetProperty(ref _activeSlot, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		public gameMuppetInventoryState()
 		{
-			_activeSlot = -1;
+			Slots = new();
+			ActiveSlot = -1;
 		}
 	}
 }

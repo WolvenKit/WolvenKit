@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiPanzerScoreBoard : gameuiSideScrollerMiniGameDynObjectLogicAdvanced
 	{
-		private inkVerticalPanelWidgetReference _scoreboardList;
-		private CArray<gameuiPanzerScoreRecordData> _champions;
-		private CName _recordWidgetLibraryName;
-
 		[Ordinal(1)] 
 		[RED("scoreboardList")] 
 		public inkVerticalPanelWidgetReference ScoreboardList
 		{
-			get => GetProperty(ref _scoreboardList);
-			set => SetProperty(ref _scoreboardList, value);
+			get => GetPropertyValue<inkVerticalPanelWidgetReference>();
+			set => SetPropertyValue<inkVerticalPanelWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("champions")] 
 		public CArray<gameuiPanzerScoreRecordData> Champions
 		{
-			get => GetProperty(ref _champions);
-			set => SetProperty(ref _champions, value);
+			get => GetPropertyValue<CArray<gameuiPanzerScoreRecordData>>();
+			set => SetPropertyValue<CArray<gameuiPanzerScoreRecordData>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("recordWidgetLibraryName")] 
 		public CName RecordWidgetLibraryName
 		{
-			get => GetProperty(ref _recordWidgetLibraryName);
-			set => SetProperty(ref _recordWidgetLibraryName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public gameuiPanzerScoreBoard()
+		{
+			ScoreboardList = new();
+			Champions = new();
 		}
 	}
 }

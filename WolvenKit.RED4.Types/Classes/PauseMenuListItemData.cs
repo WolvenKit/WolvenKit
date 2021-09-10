@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PauseMenuListItemData : ListItemData
 	{
-		private CName _eventName;
-		private CEnum<PauseMenuAction> _action;
-
 		[Ordinal(1)] 
 		[RED("eventName")] 
 		public CName EventName
 		{
-			get => GetProperty(ref _eventName);
-			set => SetProperty(ref _eventName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("action")] 
 		public CEnum<PauseMenuAction> Action
 		{
-			get => GetProperty(ref _action);
-			set => SetProperty(ref _action, value);
+			get => GetPropertyValue<CEnum<PauseMenuAction>>();
+			set => SetPropertyValue<CEnum<PauseMenuAction>>(value);
 		}
 	}
 }

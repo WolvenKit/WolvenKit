@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class EquipCycleInitDecisions : EquipmentBaseDecisions
 	{
-		private gamestateMachineStateMachineInstanceData _stateMachineInstanceData;
-
 		[Ordinal(0)] 
 		[RED("stateMachineInstanceData")] 
 		public gamestateMachineStateMachineInstanceData StateMachineInstanceData
 		{
-			get => GetProperty(ref _stateMachineInstanceData);
-			set => SetProperty(ref _stateMachineInstanceData, value);
+			get => GetPropertyValue<gamestateMachineStateMachineInstanceData>();
+			set => SetPropertyValue<gamestateMachineStateMachineInstanceData>(value);
+		}
+
+		public EquipCycleInitDecisions()
+		{
+			StateMachineInstanceData = new();
 		}
 	}
 }

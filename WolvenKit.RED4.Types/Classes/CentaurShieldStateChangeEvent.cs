@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CentaurShieldStateChangeEvent : redEvent
 	{
-		private CEnum<ECentaurShieldState> _newState;
-
 		[Ordinal(0)] 
 		[RED("newState")] 
 		public CEnum<ECentaurShieldState> NewState
 		{
-			get => GetProperty(ref _newState);
-			set => SetProperty(ref _newState, value);
+			get => GetPropertyValue<CEnum<ECentaurShieldState>>();
+			set => SetPropertyValue<CEnum<ECentaurShieldState>>(value);
 		}
 	}
 }

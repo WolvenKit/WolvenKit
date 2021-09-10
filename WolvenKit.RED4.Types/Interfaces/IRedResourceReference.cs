@@ -1,12 +1,12 @@
 namespace WolvenKit.RED4.Types
 {
-    public interface IRedResourceReference
+    public interface IRedResourceReference : IRedType
     {
-        public ushort GetValue();
-        public void SetValue(ushort value);
+        public string DepotPath { get; set; }
+        public InternalEnums.EImportFlags Flags { get; set; }
     }
 
-    public interface IRedResourceReference<T> : IRedPrimitive<T>, IRedResourceReference
+    public interface IRedResourceReference<T> : IRedResourceReference, IRedType<T>, IRedGenericType<T>
     {
 
     }

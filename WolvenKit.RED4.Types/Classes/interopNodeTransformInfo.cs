@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class interopNodeTransformInfo : RedBaseClass
 	{
-		private interopStringWithID _id;
-		private interopTransformInfo _transformInfo;
-
 		[Ordinal(0)] 
 		[RED("id")] 
 		public interopStringWithID Id
 		{
-			get => GetProperty(ref _id);
-			set => SetProperty(ref _id, value);
+			get => GetPropertyValue<interopStringWithID>();
+			set => SetPropertyValue<interopStringWithID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("transformInfo")] 
 		public interopTransformInfo TransformInfo
 		{
-			get => GetProperty(ref _transformInfo);
-			set => SetProperty(ref _transformInfo, value);
+			get => GetPropertyValue<interopTransformInfo>();
+			set => SetPropertyValue<interopTransformInfo>(value);
+		}
+
+		public interopNodeTransformInfo()
+		{
+			Id = new();
+			TransformInfo = new() { Translation = new(), Rotation = new() };
 		}
 	}
 }

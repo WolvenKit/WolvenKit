@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questClearForcedBehavioursNodeDefinition : questSignalStoppingNodeDefinition
 	{
-		private gameEntityReference _puppet;
-
 		[Ordinal(2)] 
 		[RED("puppet")] 
 		public gameEntityReference Puppet
 		{
-			get => GetProperty(ref _puppet);
-			set => SetProperty(ref _puppet, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
+		}
+
+		public questClearForcedBehavioursNodeDefinition()
+		{
+			Sockets = new();
+			Id = 65535;
+			Puppet = new() { Names = new() };
 		}
 	}
 }

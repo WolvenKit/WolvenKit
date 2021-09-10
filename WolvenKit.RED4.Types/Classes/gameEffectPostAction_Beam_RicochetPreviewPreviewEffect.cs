@@ -5,50 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameEffectPostAction_Beam_RicochetPreviewPreviewEffect : RedBaseClass
 	{
-		private CResourceAsyncReference<worldEffect> _effect;
-		private CName _effectTag;
-		private CResourceAsyncReference<worldEffect> _effectSnap;
-		private CName _effectSnapTag;
-		private CFloat _forwardOffset;
-
 		[Ordinal(0)] 
 		[RED("effect")] 
 		public CResourceAsyncReference<worldEffect> Effect
 		{
-			get => GetProperty(ref _effect);
-			set => SetProperty(ref _effect, value);
+			get => GetPropertyValue<CResourceAsyncReference<worldEffect>>();
+			set => SetPropertyValue<CResourceAsyncReference<worldEffect>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("effectTag")] 
 		public CName EffectTag
 		{
-			get => GetProperty(ref _effectTag);
-			set => SetProperty(ref _effectTag, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("effectSnap")] 
 		public CResourceAsyncReference<worldEffect> EffectSnap
 		{
-			get => GetProperty(ref _effectSnap);
-			set => SetProperty(ref _effectSnap, value);
+			get => GetPropertyValue<CResourceAsyncReference<worldEffect>>();
+			set => SetPropertyValue<CResourceAsyncReference<worldEffect>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("effectSnapTag")] 
 		public CName EffectSnapTag
 		{
-			get => GetProperty(ref _effectSnapTag);
-			set => SetProperty(ref _effectSnapTag, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("forwardOffset")] 
 		public CFloat ForwardOffset
 		{
-			get => GetProperty(ref _forwardOffset);
-			set => SetProperty(ref _forwardOffset, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

@@ -5,41 +5,42 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ScannerAbilitiesGameController : BaseChunkGameController
 	{
-		private inkCompoundWidgetReference _scannerAbilitiesRightPanel;
-		private CHandle<redCallbackObject> _abilitiesCallbackID;
-		private CBool _isValidAbilities;
-		private CArray<CWeakHandle<inkAsyncSpawnRequest>> _asyncSpawnRequests;
-
 		[Ordinal(5)] 
 		[RED("ScannerAbilitiesRightPanel")] 
 		public inkCompoundWidgetReference ScannerAbilitiesRightPanel
 		{
-			get => GetProperty(ref _scannerAbilitiesRightPanel);
-			set => SetProperty(ref _scannerAbilitiesRightPanel, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("abilitiesCallbackID")] 
 		public CHandle<redCallbackObject> AbilitiesCallbackID
 		{
-			get => GetProperty(ref _abilitiesCallbackID);
-			set => SetProperty(ref _abilitiesCallbackID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("isValidAbilities")] 
 		public CBool IsValidAbilities
 		{
-			get => GetProperty(ref _isValidAbilities);
-			set => SetProperty(ref _isValidAbilities, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("asyncSpawnRequests")] 
 		public CArray<CWeakHandle<inkAsyncSpawnRequest>> AsyncSpawnRequests
 		{
-			get => GetProperty(ref _asyncSpawnRequests);
-			set => SetProperty(ref _asyncSpawnRequests, value);
+			get => GetPropertyValue<CArray<CWeakHandle<inkAsyncSpawnRequest>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<inkAsyncSpawnRequest>>>(value);
+		}
+
+		public ScannerAbilitiesGameController()
+		{
+			ScannerAbilitiesRightPanel = new();
+			AsyncSpawnRequests = new();
 		}
 	}
 }

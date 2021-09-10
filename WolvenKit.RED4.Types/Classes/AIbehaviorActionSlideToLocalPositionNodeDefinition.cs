@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorActionSlideToLocalPositionNodeDefinition : AIbehaviorActionSlideNodeDefinition
 	{
-		private CHandle<AIArgumentMapping> _localOffset;
-
 		[Ordinal(4)] 
 		[RED("localOffset")] 
 		public CHandle<AIArgumentMapping> LocalOffset
 		{
-			get => GetProperty(ref _localOffset);
-			set => SetProperty(ref _localOffset, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 	}
 }

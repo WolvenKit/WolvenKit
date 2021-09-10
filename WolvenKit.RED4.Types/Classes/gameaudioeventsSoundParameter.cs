@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameaudioeventsSoundParameter : redEvent
 	{
-		private CName _parameterName;
-		private CFloat _parameterValue;
-
 		[Ordinal(0)] 
 		[RED("parameterName")] 
 		public CName ParameterName
 		{
-			get => GetProperty(ref _parameterName);
-			set => SetProperty(ref _parameterName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("parameterValue")] 
 		public CFloat ParameterValue
 		{
-			get => GetProperty(ref _parameterValue);
-			set => SetProperty(ref _parameterValue, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

@@ -5,95 +5,98 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UI_ComDeviceDef : gamebbScriptDefinition
 	{
-		private gamebbScriptID_CName _comDeviceSetStatusText;
-		private gamebbScriptID_Uint32 _openMessageRequest;
-		private gamebbScriptID_Int32 _closeMessageRequest;
-		private gamebbScriptID_Int32 _showingMessage;
-		private gamebbScriptID_Variant _phoneCallInformation;
-		private gamebbScriptID_Bool _phoneStyle_PlacidePhone;
-		private gamebbScriptID_Bool _phoneStyle_VideoCallInterupt;
-		private gamebbScriptID_Bool _phoneStyle_Minimized;
-		private gamebbScriptID_Bool _isDisplayingMessage;
-		private gamebbScriptID_Bool _contactsActive;
-
 		[Ordinal(0)] 
 		[RED("comDeviceSetStatusText")] 
 		public gamebbScriptID_CName ComDeviceSetStatusText
 		{
-			get => GetProperty(ref _comDeviceSetStatusText);
-			set => SetProperty(ref _comDeviceSetStatusText, value);
+			get => GetPropertyValue<gamebbScriptID_CName>();
+			set => SetPropertyValue<gamebbScriptID_CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("openMessageRequest")] 
 		public gamebbScriptID_Uint32 OpenMessageRequest
 		{
-			get => GetProperty(ref _openMessageRequest);
-			set => SetProperty(ref _openMessageRequest, value);
+			get => GetPropertyValue<gamebbScriptID_Uint32>();
+			set => SetPropertyValue<gamebbScriptID_Uint32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("closeMessageRequest")] 
 		public gamebbScriptID_Int32 CloseMessageRequest
 		{
-			get => GetProperty(ref _closeMessageRequest);
-			set => SetProperty(ref _closeMessageRequest, value);
+			get => GetPropertyValue<gamebbScriptID_Int32>();
+			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("showingMessage")] 
 		public gamebbScriptID_Int32 ShowingMessage
 		{
-			get => GetProperty(ref _showingMessage);
-			set => SetProperty(ref _showingMessage, value);
+			get => GetPropertyValue<gamebbScriptID_Int32>();
+			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("PhoneCallInformation")] 
 		public gamebbScriptID_Variant PhoneCallInformation
 		{
-			get => GetProperty(ref _phoneCallInformation);
-			set => SetProperty(ref _phoneCallInformation, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("PhoneStyle_PlacidePhone")] 
 		public gamebbScriptID_Bool PhoneStyle_PlacidePhone
 		{
-			get => GetProperty(ref _phoneStyle_PlacidePhone);
-			set => SetProperty(ref _phoneStyle_PlacidePhone, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("PhoneStyle_VideoCallInterupt")] 
 		public gamebbScriptID_Bool PhoneStyle_VideoCallInterupt
 		{
-			get => GetProperty(ref _phoneStyle_VideoCallInterupt);
-			set => SetProperty(ref _phoneStyle_VideoCallInterupt, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("PhoneStyle_Minimized")] 
 		public gamebbScriptID_Bool PhoneStyle_Minimized
 		{
-			get => GetProperty(ref _phoneStyle_Minimized);
-			set => SetProperty(ref _phoneStyle_Minimized, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("isDisplayingMessage")] 
 		public gamebbScriptID_Bool IsDisplayingMessage
 		{
-			get => GetProperty(ref _isDisplayingMessage);
-			set => SetProperty(ref _isDisplayingMessage, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("ContactsActive")] 
 		public gamebbScriptID_Bool ContactsActive
 		{
-			get => GetProperty(ref _contactsActive);
-			set => SetProperty(ref _contactsActive, value);
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		public UI_ComDeviceDef()
+		{
+			ComDeviceSetStatusText = new();
+			OpenMessageRequest = new();
+			CloseMessageRequest = new();
+			ShowingMessage = new();
+			PhoneCallInformation = new();
+			PhoneStyle_PlacidePhone = new();
+			PhoneStyle_VideoCallInterupt = new();
+			PhoneStyle_Minimized = new();
+			IsDisplayingMessage = new();
+			ContactsActive = new();
 		}
 	}
 }

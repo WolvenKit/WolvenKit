@@ -5,119 +5,108 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WantedBarGameController : gameuiHUDGameController
 	{
-		private CArray<inkWidgetReference> _starsWidget;
-		private CWeakHandle<gameIBlackboard> _wantedBlackboard;
-		private CHandle<UI_WantedBarDef> _wantedBlackboardDef;
-		private CHandle<redCallbackObject> _wantedCallbackID;
-		private CHandle<inkanimProxy> _animProxy;
-		private CHandle<inkanimProxy> _attentionAnimProxy;
-		private CHandle<inkanimProxy> _bountyAnimProxy;
-		private inkanimPlaybackOptions _animOptionsLoop;
-		private CInt32 _wantedLevel;
-		private CWeakHandle<inkWidget> _rootWidget;
-		private CFloat _wANTED_TIER_1;
-		private CFloat _wANTED_MIN;
-
 		[Ordinal(9)] 
 		[RED("starsWidget")] 
 		public CArray<inkWidgetReference> StarsWidget
 		{
-			get => GetProperty(ref _starsWidget);
-			set => SetProperty(ref _starsWidget, value);
+			get => GetPropertyValue<CArray<inkWidgetReference>>();
+			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("wantedBlackboard")] 
 		public CWeakHandle<gameIBlackboard> WantedBlackboard
 		{
-			get => GetProperty(ref _wantedBlackboard);
-			set => SetProperty(ref _wantedBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("wantedBlackboardDef")] 
 		public CHandle<UI_WantedBarDef> WantedBlackboardDef
 		{
-			get => GetProperty(ref _wantedBlackboardDef);
-			set => SetProperty(ref _wantedBlackboardDef, value);
+			get => GetPropertyValue<CHandle<UI_WantedBarDef>>();
+			set => SetPropertyValue<CHandle<UI_WantedBarDef>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("wantedCallbackID")] 
 		public CHandle<redCallbackObject> WantedCallbackID
 		{
-			get => GetProperty(ref _wantedCallbackID);
-			set => SetProperty(ref _wantedCallbackID, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
-			get => GetProperty(ref _animProxy);
-			set => SetProperty(ref _animProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("attentionAnimProxy")] 
 		public CHandle<inkanimProxy> AttentionAnimProxy
 		{
-			get => GetProperty(ref _attentionAnimProxy);
-			set => SetProperty(ref _attentionAnimProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("bountyAnimProxy")] 
 		public CHandle<inkanimProxy> BountyAnimProxy
 		{
-			get => GetProperty(ref _bountyAnimProxy);
-			set => SetProperty(ref _bountyAnimProxy, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("animOptionsLoop")] 
 		public inkanimPlaybackOptions AnimOptionsLoop
 		{
-			get => GetProperty(ref _animOptionsLoop);
-			set => SetProperty(ref _animOptionsLoop, value);
+			get => GetPropertyValue<inkanimPlaybackOptions>();
+			set => SetPropertyValue<inkanimPlaybackOptions>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("wantedLevel")] 
 		public CInt32 WantedLevel
 		{
-			get => GetProperty(ref _wantedLevel);
-			set => SetProperty(ref _wantedLevel, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("rootWidget")] 
 		public CWeakHandle<inkWidget> RootWidget
 		{
-			get => GetProperty(ref _rootWidget);
-			set => SetProperty(ref _rootWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("WANTED_TIER_1")] 
 		public CFloat WANTED_TIER_1
 		{
-			get => GetProperty(ref _wANTED_TIER_1);
-			set => SetProperty(ref _wANTED_TIER_1, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("WANTED_MIN")] 
 		public CFloat WANTED_MIN
 		{
-			get => GetProperty(ref _wANTED_MIN);
-			set => SetProperty(ref _wANTED_MIN, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public WantedBarGameController()
 		{
-			_wANTED_TIER_1 = 1.000000F;
-			_wANTED_MIN = 0.100000F;
+			StarsWidget = new();
+			AnimOptionsLoop = new();
+			WANTED_TIER_1 = 1.000000F;
+			WANTED_MIN = 0.100000F;
 		}
 	}
 }

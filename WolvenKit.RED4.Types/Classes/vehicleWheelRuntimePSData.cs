@@ -5,58 +5,52 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class vehicleWheelRuntimePSData : RedBaseClass
 	{
-		private CName _previousTouchedMaterial;
-		private CFloat _previousVisualDisplacement;
-		private CFloat _previousLogicalSpringCompression;
-		private CFloat _previousSwaybarDisplacement;
-		private CFloat _previousDampedSpringForce;
-
 		[Ordinal(0)] 
 		[RED("previousTouchedMaterial")] 
 		public CName PreviousTouchedMaterial
 		{
-			get => GetProperty(ref _previousTouchedMaterial);
-			set => SetProperty(ref _previousTouchedMaterial, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("previousVisualDisplacement")] 
 		public CFloat PreviousVisualDisplacement
 		{
-			get => GetProperty(ref _previousVisualDisplacement);
-			set => SetProperty(ref _previousVisualDisplacement, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("previousLogicalSpringCompression")] 
 		public CFloat PreviousLogicalSpringCompression
 		{
-			get => GetProperty(ref _previousLogicalSpringCompression);
-			set => SetProperty(ref _previousLogicalSpringCompression, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("previousSwaybarDisplacement")] 
 		public CFloat PreviousSwaybarDisplacement
 		{
-			get => GetProperty(ref _previousSwaybarDisplacement);
-			set => SetProperty(ref _previousSwaybarDisplacement, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("previousDampedSpringForce")] 
 		public CFloat PreviousDampedSpringForce
 		{
-			get => GetProperty(ref _previousDampedSpringForce);
-			set => SetProperty(ref _previousDampedSpringForce, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public vehicleWheelRuntimePSData()
 		{
-			_previousVisualDisplacement = -340282346638528859811704183484516925440.000000F;
-			_previousLogicalSpringCompression = -340282346638528859811704183484516925440.000000F;
-			_previousSwaybarDisplacement = -340282346638528859811704183484516925440.000000F;
-			_previousDampedSpringForce = -340282346638528859811704183484516925440.000000F;
+			PreviousVisualDisplacement = -340282346638528859811704183484516925440.000000F;
+			PreviousLogicalSpringCompression = -340282346638528859811704183484516925440.000000F;
+			PreviousSwaybarDisplacement = -340282346638528859811704183484516925440.000000F;
+			PreviousDampedSpringForce = -340282346638528859811704183484516925440.000000F;
 		}
 	}
 }

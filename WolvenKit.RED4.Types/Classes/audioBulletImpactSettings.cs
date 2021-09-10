@@ -5,68 +5,67 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioBulletImpactSettings : audioEntitySettings
 	{
-		private CName _lowImpactSound;
-		private CName _medImpactSound;
-		private CName _hiImpactSound;
-		private CName _critImpactSound;
-		private CName _npcImpactSound;
-		private CFloat _mediumDamageDistance;
-		private CFloat _highDamageDistance;
-
 		[Ordinal(6)] 
 		[RED("lowImpactSound")] 
 		public CName LowImpactSound
 		{
-			get => GetProperty(ref _lowImpactSound);
-			set => SetProperty(ref _lowImpactSound, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("medImpactSound")] 
 		public CName MedImpactSound
 		{
-			get => GetProperty(ref _medImpactSound);
-			set => SetProperty(ref _medImpactSound, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("hiImpactSound")] 
 		public CName HiImpactSound
 		{
-			get => GetProperty(ref _hiImpactSound);
-			set => SetProperty(ref _hiImpactSound, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("critImpactSound")] 
 		public CName CritImpactSound
 		{
-			get => GetProperty(ref _critImpactSound);
-			set => SetProperty(ref _critImpactSound, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("npcImpactSound")] 
 		public CName NpcImpactSound
 		{
-			get => GetProperty(ref _npcImpactSound);
-			set => SetProperty(ref _npcImpactSound, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("mediumDamageDistance")] 
 		public CFloat MediumDamageDistance
 		{
-			get => GetProperty(ref _mediumDamageDistance);
-			set => SetProperty(ref _mediumDamageDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("highDamageDistance")] 
 		public CFloat HighDamageDistance
 		{
-			get => GetProperty(ref _highDamageDistance);
-			set => SetProperty(ref _highDamageDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public audioBulletImpactSettings()
+		{
+			CommonSettings = new() { StopAllSoundsOnDetach = true };
+			ScanningSettings = new();
+			AuxiliaryMetadata = new();
 		}
 	}
 }

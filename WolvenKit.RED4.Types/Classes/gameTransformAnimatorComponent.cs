@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameTransformAnimatorComponent : entIPlacedComponent
 	{
-		private CArray<gameTransformAnimationDefinition> _animations;
-
 		[Ordinal(5)] 
 		[RED("animations")] 
 		public CArray<gameTransformAnimationDefinition> Animations
 		{
-			get => GetProperty(ref _animations);
-			set => SetProperty(ref _animations, value);
+			get => GetPropertyValue<CArray<gameTransformAnimationDefinition>>();
+			set => SetPropertyValue<CArray<gameTransformAnimationDefinition>>(value);
+		}
+
+		public gameTransformAnimatorComponent()
+		{
+			Name = "Component";
+			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			Animations = new();
 		}
 	}
 }

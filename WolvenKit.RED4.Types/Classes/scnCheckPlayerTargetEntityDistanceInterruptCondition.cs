@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnCheckPlayerTargetEntityDistanceInterruptCondition : scnIInterruptCondition
 	{
-		private scnCheckPlayerTargetEntityDistanceInterruptConditionParams _params;
-
 		[Ordinal(0)] 
 		[RED("params")] 
 		public scnCheckPlayerTargetEntityDistanceInterruptConditionParams Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<scnCheckPlayerTargetEntityDistanceInterruptConditionParams>();
+			set => SetPropertyValue<scnCheckPlayerTargetEntityDistanceInterruptConditionParams>(value);
+		}
+
+		public scnCheckPlayerTargetEntityDistanceInterruptCondition()
+		{
+			Params = new() { Distance = 6.000000F, TargetEntity = new() { Names = new() } };
 		}
 	}
 }

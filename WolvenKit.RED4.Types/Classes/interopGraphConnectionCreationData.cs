@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class interopGraphConnectionCreationData : RedBaseClass
 	{
-		private CString _data;
-		private CArray<CString> _extraData;
-
 		[Ordinal(0)] 
 		[RED("data")] 
 		public CString Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("extraData")] 
 		public CArray<CString> ExtraData
 		{
-			get => GetProperty(ref _extraData);
-			set => SetProperty(ref _extraData, value);
+			get => GetPropertyValue<CArray<CString>>();
+			set => SetPropertyValue<CArray<CString>>(value);
+		}
+
+		public interopGraphConnectionCreationData()
+		{
+			ExtraData = new();
 		}
 	}
 }

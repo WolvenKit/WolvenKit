@@ -5,68 +5,68 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class LcdScreenILogicController : inkWidgetLogicController
 	{
-		private inkWidgetReference _defaultUI;
-		private inkVideoWidgetReference _mainDisplayWidget;
-		private inkTextWidgetReference _messegeWidget;
-		private inkImageWidgetReference _backgroundWidget;
-		private CWeakHandle<gamedataScreenMessageData_Record> _messegeRecord;
-		private CBool _replaceTextWithCustomNumber;
-		private CInt32 _customNumber;
-
 		[Ordinal(1)] 
 		[RED("defaultUI")] 
 		public inkWidgetReference DefaultUI
 		{
-			get => GetProperty(ref _defaultUI);
-			set => SetProperty(ref _defaultUI, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("mainDisplayWidget")] 
 		public inkVideoWidgetReference MainDisplayWidget
 		{
-			get => GetProperty(ref _mainDisplayWidget);
-			set => SetProperty(ref _mainDisplayWidget, value);
+			get => GetPropertyValue<inkVideoWidgetReference>();
+			set => SetPropertyValue<inkVideoWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("messegeWidget")] 
 		public inkTextWidgetReference MessegeWidget
 		{
-			get => GetProperty(ref _messegeWidget);
-			set => SetProperty(ref _messegeWidget, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("backgroundWidget")] 
 		public inkImageWidgetReference BackgroundWidget
 		{
-			get => GetProperty(ref _backgroundWidget);
-			set => SetProperty(ref _backgroundWidget, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("messegeRecord")] 
 		public CWeakHandle<gamedataScreenMessageData_Record> MessegeRecord
 		{
-			get => GetProperty(ref _messegeRecord);
-			set => SetProperty(ref _messegeRecord, value);
+			get => GetPropertyValue<CWeakHandle<gamedataScreenMessageData_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataScreenMessageData_Record>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("replaceTextWithCustomNumber")] 
 		public CBool ReplaceTextWithCustomNumber
 		{
-			get => GetProperty(ref _replaceTextWithCustomNumber);
-			set => SetProperty(ref _replaceTextWithCustomNumber, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("customNumber")] 
 		public CInt32 CustomNumber
 		{
-			get => GetProperty(ref _customNumber);
-			set => SetProperty(ref _customNumber, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		public LcdScreenILogicController()
+		{
+			DefaultUI = new();
+			MainDisplayWidget = new();
+			MessegeWidget = new();
+			BackgroundWidget = new();
 		}
 	}
 }

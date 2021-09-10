@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameMuppetInputActionRangedAttack : gameIMuppetInputAction
 	{
-		private CEnum<gameMuppetInputActionType> _actionType;
-
 		[Ordinal(0)] 
 		[RED("actionType")] 
 		public CEnum<gameMuppetInputActionType> ActionType
 		{
-			get => GetProperty(ref _actionType);
-			set => SetProperty(ref _actionType, value);
+			get => GetPropertyValue<CEnum<gameMuppetInputActionType>>();
+			set => SetPropertyValue<CEnum<gameMuppetInputActionType>>(value);
 		}
 
 		public gameMuppetInputActionRangedAttack()
 		{
-			_actionType = new() { Value = Enums.gameMuppetInputActionType.Press };
+			ActionType = Enums.gameMuppetInputActionType.Press;
 		}
 	}
 }

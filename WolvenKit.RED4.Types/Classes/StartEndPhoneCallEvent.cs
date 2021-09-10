@@ -5,50 +5,44 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class StartEndPhoneCallEvent : redEvent
 	{
-		private CFloat _callDuration;
-		private CBool _startCall;
-		private CEnum<gamedataStatType> _statType;
-		private CEnum<gamedataStatPoolType> _statPoolType;
-		private CString _statPoolName;
-
 		[Ordinal(0)] 
 		[RED("callDuration")] 
 		public CFloat CallDuration
 		{
-			get => GetProperty(ref _callDuration);
-			set => SetProperty(ref _callDuration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("startCall")] 
 		public CBool StartCall
 		{
-			get => GetProperty(ref _startCall);
-			set => SetProperty(ref _startCall, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("statType")] 
 		public CEnum<gamedataStatType> StatType
 		{
-			get => GetProperty(ref _statType);
-			set => SetProperty(ref _statType, value);
+			get => GetPropertyValue<CEnum<gamedataStatType>>();
+			set => SetPropertyValue<CEnum<gamedataStatType>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("statPoolType")] 
 		public CEnum<gamedataStatPoolType> StatPoolType
 		{
-			get => GetProperty(ref _statPoolType);
-			set => SetProperty(ref _statPoolType, value);
+			get => GetPropertyValue<CEnum<gamedataStatPoolType>>();
+			set => SetPropertyValue<CEnum<gamedataStatPoolType>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("statPoolName")] 
 		public CString StatPoolName
 		{
-			get => GetProperty(ref _statPoolName);
-			set => SetProperty(ref _statPoolName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 	}
 }

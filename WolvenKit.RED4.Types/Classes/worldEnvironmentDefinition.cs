@@ -5,59 +5,61 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldEnvironmentDefinition : CResource
 	{
-		private WorldRenderAreaSettings _worldRenderSettings;
-		private WorldShadowConfig _worldShadowConfig;
-		private WorldLightingConfig _worldLightingConfig;
-		private CArray<worldWeatherState> _weatherStates;
-		private CArray<CResourceReference<worldEnvironmentAreaParameters>> _areaEnvironmentParameterLayers;
-		private CBool _resaved;
-
 		[Ordinal(1)] 
 		[RED("worldRenderSettings")] 
 		public WorldRenderAreaSettings WorldRenderSettings
 		{
-			get => GetProperty(ref _worldRenderSettings);
-			set => SetProperty(ref _worldRenderSettings, value);
+			get => GetPropertyValue<WorldRenderAreaSettings>();
+			set => SetPropertyValue<WorldRenderAreaSettings>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("worldShadowConfig")] 
 		public WorldShadowConfig WorldShadowConfig
 		{
-			get => GetProperty(ref _worldShadowConfig);
-			set => SetProperty(ref _worldShadowConfig, value);
+			get => GetPropertyValue<WorldShadowConfig>();
+			set => SetPropertyValue<WorldShadowConfig>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("worldLightingConfig")] 
 		public WorldLightingConfig WorldLightingConfig
 		{
-			get => GetProperty(ref _worldLightingConfig);
-			set => SetProperty(ref _worldLightingConfig, value);
+			get => GetPropertyValue<WorldLightingConfig>();
+			set => SetPropertyValue<WorldLightingConfig>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("weatherStates")] 
 		public CArray<worldWeatherState> WeatherStates
 		{
-			get => GetProperty(ref _weatherStates);
-			set => SetProperty(ref _weatherStates, value);
+			get => GetPropertyValue<CArray<worldWeatherState>>();
+			set => SetPropertyValue<CArray<worldWeatherState>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("areaEnvironmentParameterLayers")] 
 		public CArray<CResourceReference<worldEnvironmentAreaParameters>> AreaEnvironmentParameterLayers
 		{
-			get => GetProperty(ref _areaEnvironmentParameterLayers);
-			set => SetProperty(ref _areaEnvironmentParameterLayers, value);
+			get => GetPropertyValue<CArray<CResourceReference<worldEnvironmentAreaParameters>>>();
+			set => SetPropertyValue<CArray<CResourceReference<worldEnvironmentAreaParameters>>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("resaved")] 
 		public CBool Resaved
 		{
-			get => GetProperty(ref _resaved);
-			set => SetProperty(ref _resaved, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public worldEnvironmentDefinition()
+		{
+			WorldRenderSettings = new() { AreaParameters = new() { null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null } };
+			WorldShadowConfig = new() { ContactShadows = new() { Range = 0.050000F, RangeLimit = 0.075000F, ScreenEdgeFadeRange = 0.150000F, DistanceFadeLimit = 3.000000F, DistanceFadeRange = 1.000000F }, DistantShadowsNumLevels = 3, DistantShadowsBaseLevelRadius = 250.000000F, FoliageShadowConfig = new() { FoliageShadowCascadeGradient = 0.100000F, FoliageShadowCascadeFilterScale = 0.100000F, FoliageShadowCascadeGradientDistanceRange = 50.000000F } };
+			WorldLightingConfig = new() { LightAttenuationClamp = 96.000000F };
+			WeatherStates = new();
+			AreaEnvironmentParameterLayers = new();
 		}
 	}
 }

@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CParticleModificatorTextureAnimation : IParticleModificator
 	{
-		private CHandle<IEvaluatorFloat> _initialFrame;
-		private CHandle<IEvaluatorFloat> _animationSpeed;
-		private CEnum<ETextureAnimationMode> _animationMode;
-
 		[Ordinal(4)] 
 		[RED("initialFrame")] 
 		public CHandle<IEvaluatorFloat> InitialFrame
 		{
-			get => GetProperty(ref _initialFrame);
-			set => SetProperty(ref _initialFrame, value);
+			get => GetPropertyValue<CHandle<IEvaluatorFloat>>();
+			set => SetPropertyValue<CHandle<IEvaluatorFloat>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("animationSpeed")] 
 		public CHandle<IEvaluatorFloat> AnimationSpeed
 		{
-			get => GetProperty(ref _animationSpeed);
-			set => SetProperty(ref _animationSpeed, value);
+			get => GetPropertyValue<CHandle<IEvaluatorFloat>>();
+			set => SetPropertyValue<CHandle<IEvaluatorFloat>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("animationMode")] 
 		public CEnum<ETextureAnimationMode> AnimationMode
 		{
-			get => GetProperty(ref _animationMode);
-			set => SetProperty(ref _animationMode, value);
+			get => GetPropertyValue<CEnum<ETextureAnimationMode>>();
+			set => SetPropertyValue<CEnum<ETextureAnimationMode>>(value);
+		}
+
+		public CParticleModificatorTextureAnimation()
+		{
+			EditorName = "Texture animation";
+			EditorGroup = "Material";
+			IsEnabled = true;
 		}
 	}
 }

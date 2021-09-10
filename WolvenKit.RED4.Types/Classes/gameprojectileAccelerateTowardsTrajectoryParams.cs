@@ -5,115 +5,105 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameprojectileAccelerateTowardsTrajectoryParams : gameprojectileTrajectoryParams
 	{
-		private CFloat _accelerationSpeed;
-		private CFloat _maxSpeed;
-		private CFloat _decelerateTowardsTargetPositionDistance;
-		private CFloat _maxRotationSpeed;
-		private CFloat _minRotationSpeed;
-		private CFloat _diffForMaxRotation;
-		private CWeakHandle<gameObject> _target;
-		private CWeakHandle<entIPlacedComponent> _targetComponent;
-		private Vector4 _targetPosition;
-		private Vector4 _targetOffset;
-		private CFloat _accuracy;
-
 		[Ordinal(0)] 
 		[RED("accelerationSpeed")] 
 		public CFloat AccelerationSpeed
 		{
-			get => GetProperty(ref _accelerationSpeed);
-			set => SetProperty(ref _accelerationSpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("maxSpeed")] 
 		public CFloat MaxSpeed
 		{
-			get => GetProperty(ref _maxSpeed);
-			set => SetProperty(ref _maxSpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("decelerateTowardsTargetPositionDistance")] 
 		public CFloat DecelerateTowardsTargetPositionDistance
 		{
-			get => GetProperty(ref _decelerateTowardsTargetPositionDistance);
-			set => SetProperty(ref _decelerateTowardsTargetPositionDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("maxRotationSpeed")] 
 		public CFloat MaxRotationSpeed
 		{
-			get => GetProperty(ref _maxRotationSpeed);
-			set => SetProperty(ref _maxRotationSpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("minRotationSpeed")] 
 		public CFloat MinRotationSpeed
 		{
-			get => GetProperty(ref _minRotationSpeed);
-			set => SetProperty(ref _minRotationSpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("diffForMaxRotation")] 
 		public CFloat DiffForMaxRotation
 		{
-			get => GetProperty(ref _diffForMaxRotation);
-			set => SetProperty(ref _diffForMaxRotation, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("target")] 
 		public CWeakHandle<gameObject> Target
 		{
-			get => GetProperty(ref _target);
-			set => SetProperty(ref _target, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("targetComponent")] 
 		public CWeakHandle<entIPlacedComponent> TargetComponent
 		{
-			get => GetProperty(ref _targetComponent);
-			set => SetProperty(ref _targetComponent, value);
+			get => GetPropertyValue<CWeakHandle<entIPlacedComponent>>();
+			set => SetPropertyValue<CWeakHandle<entIPlacedComponent>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("targetPosition")] 
 		public Vector4 TargetPosition
 		{
-			get => GetProperty(ref _targetPosition);
-			set => SetProperty(ref _targetPosition, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("targetOffset")] 
 		public Vector4 TargetOffset
 		{
-			get => GetProperty(ref _targetOffset);
-			set => SetProperty(ref _targetOffset, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("accuracy")] 
 		public CFloat Accuracy
 		{
-			get => GetProperty(ref _accuracy);
-			set => SetProperty(ref _accuracy, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public gameprojectileAccelerateTowardsTrajectoryParams()
 		{
-			_accelerationSpeed = 2.000000F;
-			_maxSpeed = 4.000000F;
-			_decelerateTowardsTargetPositionDistance = -1.000000F;
-			_maxRotationSpeed = 360.000000F;
-			_minRotationSpeed = 180.000000F;
-			_diffForMaxRotation = 120.000000F;
-			_accuracy = 1.000000F;
+			AccelerationSpeed = 2.000000F;
+			MaxSpeed = 4.000000F;
+			DecelerateTowardsTargetPositionDistance = -1.000000F;
+			MaxRotationSpeed = 360.000000F;
+			MinRotationSpeed = 180.000000F;
+			DiffForMaxRotation = 120.000000F;
+			TargetPosition = new();
+			TargetOffset = new();
+			Accuracy = 1.000000F;
 		}
 	}
 }

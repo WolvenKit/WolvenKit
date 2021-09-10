@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DelayedOperationEvent : redEvent
 	{
-		private CHandle<DeviceOperations> _operationHandler;
-		private SBaseDeviceOperationData _operation;
-
 		[Ordinal(0)] 
 		[RED("operationHandler")] 
 		public CHandle<DeviceOperations> OperationHandler
 		{
-			get => GetProperty(ref _operationHandler);
-			set => SetProperty(ref _operationHandler, value);
+			get => GetPropertyValue<CHandle<DeviceOperations>>();
+			set => SetPropertyValue<CHandle<DeviceOperations>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("operation")] 
 		public SBaseDeviceOperationData Operation
 		{
-			get => GetProperty(ref _operation);
-			set => SetProperty(ref _operation, value);
+			get => GetPropertyValue<SBaseDeviceOperationData>();
+			set => SetPropertyValue<SBaseDeviceOperationData>(value);
+		}
+
+		public DelayedOperationEvent()
+		{
+			Operation = new() { IsEnabled = true, TransformAnimations = new(), VFXs = new(), SFXs = new(), Facts = new(), Components = new(), Stims = new(), StatusEffects = new(), Damages = new(), Items = new(), Teleport = new(), PlayerWorkspot = new(), ToggleOperations = new(), DelayID = new() };
 		}
 	}
 }

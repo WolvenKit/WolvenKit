@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_LODBegin : animAnimNode_OnePoseInput
 	{
-		private CUInt32 _levelOfDetail;
-
 		[Ordinal(12)] 
 		[RED("levelOfDetail")] 
 		public CUInt32 LevelOfDetail
 		{
-			get => GetProperty(ref _levelOfDetail);
-			set => SetProperty(ref _levelOfDetail, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		public animAnimNode_LODBegin()
+		{
+			Id = 4294967295;
+			InputLink = new();
 		}
 	}
 }

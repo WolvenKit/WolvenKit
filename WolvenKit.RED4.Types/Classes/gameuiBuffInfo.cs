@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiBuffInfo : RedBaseClass
 	{
-		private TweakDBID _buffID;
-		private CFloat _timeRemaining;
-
 		[Ordinal(0)] 
 		[RED("buffID")] 
 		public TweakDBID BuffID
 		{
-			get => GetProperty(ref _buffID);
-			set => SetProperty(ref _buffID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("timeRemaining")] 
 		public CFloat TimeRemaining
 		{
-			get => GetProperty(ref _timeRemaining);
-			set => SetProperty(ref _timeRemaining, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

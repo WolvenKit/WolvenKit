@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UI_ItemLogDef : gamebbScriptDefinition
 	{
-		private gamebbScriptID_Variant _itemLogItem;
-
 		[Ordinal(0)] 
 		[RED("ItemLogItem")] 
 		public gamebbScriptID_Variant ItemLogItem
 		{
-			get => GetProperty(ref _itemLogItem);
-			set => SetProperty(ref _itemLogItem, value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
+		}
+
+		public UI_ItemLogDef()
+		{
+			ItemLogItem = new();
 		}
 	}
 }

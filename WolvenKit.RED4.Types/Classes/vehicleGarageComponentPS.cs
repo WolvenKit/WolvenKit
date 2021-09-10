@@ -5,59 +5,61 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class vehicleGarageComponentPS : gameComponentPS
 	{
-		private CArray<vehicleGarageComponentVehicleData> _spawnedVehiclesData;
-		private CArray<vehicleGarageVehicleID> _unlockedVehicles;
-		private CArray<vehicleUnlockedVehicle> _unlockedVehicleArray;
-		private CStatic<vehicleGarageVehicleID> _activeVehicles;
-		private vehicleGarageComponentVehicleData _mountedVehicleData;
-		private CBool _mountedVehicleStolen;
-
 		[Ordinal(0)] 
 		[RED("spawnedVehiclesData")] 
 		public CArray<vehicleGarageComponentVehicleData> SpawnedVehiclesData
 		{
-			get => GetProperty(ref _spawnedVehiclesData);
-			set => SetProperty(ref _spawnedVehiclesData, value);
+			get => GetPropertyValue<CArray<vehicleGarageComponentVehicleData>>();
+			set => SetPropertyValue<CArray<vehicleGarageComponentVehicleData>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("unlockedVehicles")] 
 		public CArray<vehicleGarageVehicleID> UnlockedVehicles
 		{
-			get => GetProperty(ref _unlockedVehicles);
-			set => SetProperty(ref _unlockedVehicles, value);
+			get => GetPropertyValue<CArray<vehicleGarageVehicleID>>();
+			set => SetPropertyValue<CArray<vehicleGarageVehicleID>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("unlockedVehicleArray")] 
 		public CArray<vehicleUnlockedVehicle> UnlockedVehicleArray
 		{
-			get => GetProperty(ref _unlockedVehicleArray);
-			set => SetProperty(ref _unlockedVehicleArray, value);
+			get => GetPropertyValue<CArray<vehicleUnlockedVehicle>>();
+			set => SetPropertyValue<CArray<vehicleUnlockedVehicle>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("activeVehicles", 3)] 
 		public CStatic<vehicleGarageVehicleID> ActiveVehicles
 		{
-			get => GetProperty(ref _activeVehicles);
-			set => SetProperty(ref _activeVehicles, value);
+			get => GetPropertyValue<CStatic<vehicleGarageVehicleID>>();
+			set => SetPropertyValue<CStatic<vehicleGarageVehicleID>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("mountedVehicleData")] 
 		public vehicleGarageComponentVehicleData MountedVehicleData
 		{
-			get => GetProperty(ref _mountedVehicleData);
-			set => SetProperty(ref _mountedVehicleData, value);
+			get => GetPropertyValue<vehicleGarageComponentVehicleData>();
+			set => SetPropertyValue<vehicleGarageComponentVehicleData>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("mountedVehicleStolen")] 
 		public CBool MountedVehicleStolen
 		{
-			get => GetProperty(ref _mountedVehicleStolen);
-			set => SetProperty(ref _mountedVehicleStolen, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public vehicleGarageComponentPS()
+		{
+			SpawnedVehiclesData = new();
+			UnlockedVehicles = new();
+			UnlockedVehicleArray = new();
+			ActiveVehicles = new(3);
+			MountedVehicleData = new() { EntityID = new() };
 		}
 	}
 }

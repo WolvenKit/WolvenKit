@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameGodModeSaveData : ISerializable
 	{
-		private CArray<gameGodModeSaveEntityData> _gods;
-
 		[Ordinal(0)] 
 		[RED("gods")] 
 		public CArray<gameGodModeSaveEntityData> Gods
 		{
-			get => GetProperty(ref _gods);
-			set => SetProperty(ref _gods, value);
+			get => GetPropertyValue<CArray<gameGodModeSaveEntityData>>();
+			set => SetPropertyValue<CArray<gameGodModeSaveEntityData>>(value);
+		}
+
+		public gameGodModeSaveData()
+		{
+			Gods = new();
 		}
 	}
 }

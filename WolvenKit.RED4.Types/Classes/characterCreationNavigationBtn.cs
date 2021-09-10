@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class characterCreationNavigationBtn : inkButtonController
 	{
-		private inkWidgetReference _icon1;
-		private CBool _shouldPlaySoundOnHover;
-		private CWeakHandle<inkWidget> _root;
-
 		[Ordinal(10)] 
 		[RED("icon1")] 
 		public inkWidgetReference Icon1
 		{
-			get => GetProperty(ref _icon1);
-			set => SetProperty(ref _icon1, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("shouldPlaySoundOnHover")] 
 		public CBool ShouldPlaySoundOnHover
 		{
-			get => GetProperty(ref _shouldPlaySoundOnHover);
-			set => SetProperty(ref _shouldPlaySoundOnHover, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("root")] 
 		public CWeakHandle<inkWidget> Root
 		{
-			get => GetProperty(ref _root);
-			set => SetProperty(ref _root, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
+		}
+
+		public characterCreationNavigationBtn()
+		{
+			Icon1 = new();
 		}
 	}
 }

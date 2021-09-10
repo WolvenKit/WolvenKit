@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameDamageSystem : gameIDamageSystem
 	{
-		private previewTargetStruct _previewTarget;
-		private CBool _previewLock;
-		private ScriptReentrantRWLock _previewRWLockTemp;
-
 		[Ordinal(0)] 
 		[RED("previewTarget")] 
 		public previewTargetStruct PreviewTarget
 		{
-			get => GetProperty(ref _previewTarget);
-			set => SetProperty(ref _previewTarget, value);
+			get => GetPropertyValue<previewTargetStruct>();
+			set => SetPropertyValue<previewTargetStruct>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("previewLock")] 
 		public CBool PreviewLock
 		{
-			get => GetProperty(ref _previewLock);
-			set => SetProperty(ref _previewLock, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("previewRWLockTemp")] 
 		public ScriptReentrantRWLock PreviewRWLockTemp
 		{
-			get => GetProperty(ref _previewRWLockTemp);
-			set => SetProperty(ref _previewRWLockTemp, value);
+			get => GetPropertyValue<ScriptReentrantRWLock>();
+			set => SetPropertyValue<ScriptReentrantRWLock>(value);
+		}
+
+		public gameDamageSystem()
+		{
+			PreviewTarget = new();
+			PreviewRWLockTemp = new();
 		}
 	}
 }

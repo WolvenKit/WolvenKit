@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorRandomConditionDefinition : AIbehaviorConditionDefinition
 	{
-		private CFloat _chance;
-
 		[Ordinal(1)] 
 		[RED("chance")] 
 		public CFloat Chance
 		{
-			get => GetProperty(ref _chance);
-			set => SetProperty(ref _chance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public AIbehaviorRandomConditionDefinition()
 		{
-			_chance = 0.500000F;
+			Chance = 0.500000F;
 		}
 	}
 }

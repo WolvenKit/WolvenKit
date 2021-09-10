@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiUpdateInputHintMultipleEvent : redEvent
 	{
-		private CArray<gameuiInputHintData> _data;
-		private CArray<CBool> _show;
-		private CName _targetHintContainer;
-
 		[Ordinal(0)] 
 		[RED("data")] 
 		public CArray<gameuiInputHintData> Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<CArray<gameuiInputHintData>>();
+			set => SetPropertyValue<CArray<gameuiInputHintData>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("show")] 
 		public CArray<CBool> Show
 		{
-			get => GetProperty(ref _show);
-			set => SetProperty(ref _show, value);
+			get => GetPropertyValue<CArray<CBool>>();
+			set => SetPropertyValue<CArray<CBool>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("targetHintContainer")] 
 		public CName TargetHintContainer
 		{
-			get => GetProperty(ref _targetHintContainer);
-			set => SetProperty(ref _targetHintContainer, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public gameuiUpdateInputHintMultipleEvent()
+		{
+			Data = new();
+			Show = new();
 		}
 	}
 }

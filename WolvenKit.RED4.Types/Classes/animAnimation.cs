@@ -5,110 +5,101 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimation : ISerializable
 	{
-		private redTagList _tags;
-		private CName _name;
-		private CFloat _duration;
-		private CEnum<animAnimationType> _animationType;
-		private CHandle<animIAnimationBuffer> _animBuffer;
-		private animAdditionalTransformContainer _additionalTransforms;
-		private animAdditionalFloatTrackContainer _additionalTracks;
-		private CHandle<animIMotionExtraction> _motionExtraction;
-		private CBool _frameClamping;
-		private CInt8 _frameClampingStartFrame;
-		private CInt8 _frameClampingEndFrame;
-
 		[Ordinal(0)] 
 		[RED("tags")] 
 		public redTagList Tags
 		{
-			get => GetProperty(ref _tags);
-			set => SetProperty(ref _tags, value);
+			get => GetPropertyValue<redTagList>();
+			set => SetPropertyValue<redTagList>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("name")] 
 		public CName Name
 		{
-			get => GetProperty(ref _name);
-			set => SetProperty(ref _name, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get => GetProperty(ref _duration);
-			set => SetProperty(ref _duration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("animationType")] 
 		public CEnum<animAnimationType> AnimationType
 		{
-			get => GetProperty(ref _animationType);
-			set => SetProperty(ref _animationType, value);
+			get => GetPropertyValue<CEnum<animAnimationType>>();
+			set => SetPropertyValue<CEnum<animAnimationType>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("animBuffer")] 
 		public CHandle<animIAnimationBuffer> AnimBuffer
 		{
-			get => GetProperty(ref _animBuffer);
-			set => SetProperty(ref _animBuffer, value);
+			get => GetPropertyValue<CHandle<animIAnimationBuffer>>();
+			set => SetPropertyValue<CHandle<animIAnimationBuffer>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("additionalTransforms")] 
 		public animAdditionalTransformContainer AdditionalTransforms
 		{
-			get => GetProperty(ref _additionalTransforms);
-			set => SetProperty(ref _additionalTransforms, value);
+			get => GetPropertyValue<animAdditionalTransformContainer>();
+			set => SetPropertyValue<animAdditionalTransformContainer>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("additionalTracks")] 
 		public animAdditionalFloatTrackContainer AdditionalTracks
 		{
-			get => GetProperty(ref _additionalTracks);
-			set => SetProperty(ref _additionalTracks, value);
+			get => GetPropertyValue<animAdditionalFloatTrackContainer>();
+			set => SetPropertyValue<animAdditionalFloatTrackContainer>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("motionExtraction")] 
 		public CHandle<animIMotionExtraction> MotionExtraction
 		{
-			get => GetProperty(ref _motionExtraction);
-			set => SetProperty(ref _motionExtraction, value);
+			get => GetPropertyValue<CHandle<animIMotionExtraction>>();
+			set => SetPropertyValue<CHandle<animIMotionExtraction>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("frameClamping")] 
 		public CBool FrameClamping
 		{
-			get => GetProperty(ref _frameClamping);
-			set => SetProperty(ref _frameClamping, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("frameClampingStartFrame")] 
 		public CInt8 FrameClampingStartFrame
 		{
-			get => GetProperty(ref _frameClampingStartFrame);
-			set => SetProperty(ref _frameClampingStartFrame, value);
+			get => GetPropertyValue<CInt8>();
+			set => SetPropertyValue<CInt8>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("frameClampingEndFrame")] 
 		public CInt8 FrameClampingEndFrame
 		{
-			get => GetProperty(ref _frameClampingEndFrame);
-			set => SetProperty(ref _frameClampingEndFrame, value);
+			get => GetPropertyValue<CInt8>();
+			set => SetPropertyValue<CInt8>(value);
 		}
 
 		public animAnimation()
 		{
-			_frameClampingStartFrame = -1;
-			_frameClampingEndFrame = -1;
+			Tags = new() { Tags = new() };
+			AdditionalTransforms = new() { Entries = new() };
+			AdditionalTracks = new() { Entries = new(), OverwriteExistingValues = true };
+			FrameClampingStartFrame = -1;
+			FrameClampingEndFrame = -1;
 		}
 	}
 }

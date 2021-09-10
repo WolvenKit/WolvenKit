@@ -5,95 +5,92 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldTerrainCollisionNode : worldNode
 	{
-		private CArray<CName> _materials;
-		private CArray<CUInt8> _materialIndices;
-		private SerializationDeferredDataBuffer _heightfieldGeometry;
-		private WorldTransform _actorTransform;
-		private Vector4 _extents;
-		private CFloat _streamingDistance;
-		private CFloat _rowScale;
-		private CFloat _columnScale;
-		private CFloat _heightScale;
-		private CBool _increaseStreamingDistance;
-
 		[Ordinal(4)] 
 		[RED("materials")] 
 		public CArray<CName> Materials
 		{
-			get => GetProperty(ref _materials);
-			set => SetProperty(ref _materials, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("materialIndices")] 
 		public CArray<CUInt8> MaterialIndices
 		{
-			get => GetProperty(ref _materialIndices);
-			set => SetProperty(ref _materialIndices, value);
+			get => GetPropertyValue<CArray<CUInt8>>();
+			set => SetPropertyValue<CArray<CUInt8>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("heightfieldGeometry")] 
 		public SerializationDeferredDataBuffer HeightfieldGeometry
 		{
-			get => GetProperty(ref _heightfieldGeometry);
-			set => SetProperty(ref _heightfieldGeometry, value);
+			get => GetPropertyValue<SerializationDeferredDataBuffer>();
+			set => SetPropertyValue<SerializationDeferredDataBuffer>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("actorTransform")] 
 		public WorldTransform ActorTransform
 		{
-			get => GetProperty(ref _actorTransform);
-			set => SetProperty(ref _actorTransform, value);
+			get => GetPropertyValue<WorldTransform>();
+			set => SetPropertyValue<WorldTransform>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("extents")] 
 		public Vector4 Extents
 		{
-			get => GetProperty(ref _extents);
-			set => SetProperty(ref _extents, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("streamingDistance")] 
 		public CFloat StreamingDistance
 		{
-			get => GetProperty(ref _streamingDistance);
-			set => SetProperty(ref _streamingDistance, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("rowScale")] 
 		public CFloat RowScale
 		{
-			get => GetProperty(ref _rowScale);
-			set => SetProperty(ref _rowScale, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("columnScale")] 
 		public CFloat ColumnScale
 		{
-			get => GetProperty(ref _columnScale);
-			set => SetProperty(ref _columnScale, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("heightScale")] 
 		public CFloat HeightScale
 		{
-			get => GetProperty(ref _heightScale);
-			set => SetProperty(ref _heightScale, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("increaseStreamingDistance")] 
 		public CBool IncreaseStreamingDistance
 		{
-			get => GetProperty(ref _increaseStreamingDistance);
-			set => SetProperty(ref _increaseStreamingDistance, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public worldTerrainCollisionNode()
+		{
+			Materials = new();
+			MaterialIndices = new();
+			ActorTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			Extents = new();
 		}
 	}
 }

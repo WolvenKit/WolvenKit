@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ApplyEffectorEffector : gameEffector
 	{
-		private entEntityID _target;
-		private CString _applicationTarget;
-		private TweakDBID _effectorToApply;
-
 		[Ordinal(0)] 
 		[RED("target")] 
 		public entEntityID Target
 		{
-			get => GetProperty(ref _target);
-			set => SetProperty(ref _target, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("applicationTarget")] 
 		public CString ApplicationTarget
 		{
-			get => GetProperty(ref _applicationTarget);
-			set => SetProperty(ref _applicationTarget, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("effectorToApply")] 
 		public TweakDBID EffectorToApply
 		{
-			get => GetProperty(ref _effectorToApply);
-			set => SetProperty(ref _effectorToApply, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
+		public ApplyEffectorEffector()
+		{
+			Target = new();
 		}
 	}
 }

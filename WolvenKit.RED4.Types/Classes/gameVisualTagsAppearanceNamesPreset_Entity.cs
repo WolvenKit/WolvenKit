@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameVisualTagsAppearanceNamesPreset_Entity : ISerializable
 	{
-		private CUInt64 _entityPathHash;
-		private CName _debugEntityPath;
-		private CArray<gameVisualTagsAppearanceNamesPreset_TagsAppearances> _tagsToAppearances;
-
 		[Ordinal(0)] 
 		[RED("entityPathHash")] 
 		public CUInt64 EntityPathHash
 		{
-			get => GetProperty(ref _entityPathHash);
-			set => SetProperty(ref _entityPathHash, value);
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("debugEntityPath")] 
 		public CName DebugEntityPath
 		{
-			get => GetProperty(ref _debugEntityPath);
-			set => SetProperty(ref _debugEntityPath, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("tagsToAppearances")] 
 		public CArray<gameVisualTagsAppearanceNamesPreset_TagsAppearances> TagsToAppearances
 		{
-			get => GetProperty(ref _tagsToAppearances);
-			set => SetProperty(ref _tagsToAppearances, value);
+			get => GetPropertyValue<CArray<gameVisualTagsAppearanceNamesPreset_TagsAppearances>>();
+			set => SetPropertyValue<CArray<gameVisualTagsAppearanceNamesPreset_TagsAppearances>>(value);
+		}
+
+		public gameVisualTagsAppearanceNamesPreset_Entity()
+		{
+			TagsToAppearances = new();
 		}
 	}
 }

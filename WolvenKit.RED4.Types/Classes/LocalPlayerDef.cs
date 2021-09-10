@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class LocalPlayerDef : gamebbScriptDefinition
 	{
-		private gamebbScriptID_Int32 _insideVehicleForbiddenAreasCount;
-
 		[Ordinal(0)] 
 		[RED("InsideVehicleForbiddenAreasCount")] 
 		public gamebbScriptID_Int32 InsideVehicleForbiddenAreasCount
 		{
-			get => GetProperty(ref _insideVehicleForbiddenAreasCount);
-			set => SetProperty(ref _insideVehicleForbiddenAreasCount, value);
+			get => GetPropertyValue<gamebbScriptID_Int32>();
+			set => SetPropertyValue<gamebbScriptID_Int32>(value);
+		}
+
+		public LocalPlayerDef()
+		{
+			InsideVehicleForbiddenAreasCount = new();
 		}
 	}
 }

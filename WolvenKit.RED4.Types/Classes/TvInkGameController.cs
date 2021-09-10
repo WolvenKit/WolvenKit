@@ -5,192 +5,173 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TvInkGameController : DeviceInkGameControllerBase
 	{
-		private CWeakHandle<inkCanvasWidget> _defaultUI;
-		private CWeakHandle<inkCanvasWidget> _securedUI;
-		private CWeakHandle<inkTextWidget> _channellTextWidget;
-		private CWeakHandle<inkTextWidget> _securedTextWidget;
-		private CWeakHandle<inkVideoWidget> _mainDisplayWidget;
-		private CWeakHandle<inkWidget> _actionsList;
-		private CInt32 _activeChannelIDX;
-		private CArray<SequenceVideo> _activeSequence;
-		private CInt32 _activeSequenceVideo;
-		private CArray<CWeakHandle<inkWidget>> _globalTVChannels;
-		private CWeakHandle<inkTextWidget> _messegeWidget;
-		private CWeakHandle<inkLeafWidget> _backgroundWidget;
-		private CInt32 _previousGlobalTVChannelID;
-		private CInt32 _globalTVchanellsCount;
-		private CInt32 _globalTVchanellsSpawned;
-		private CWeakHandle<inkWidget> _globalTVslot;
-		private CName _activeAudio;
-		private CWeakHandle<gamedataScreenMessageData_Record> _activeMessage;
-		private CHandle<redCallbackObject> _onChangeChannelListener;
-		private CHandle<redCallbackObject> _onGlitchingStateChangedListener;
-
 		[Ordinal(16)] 
 		[RED("defaultUI")] 
 		public CWeakHandle<inkCanvasWidget> DefaultUI
 		{
-			get => GetProperty(ref _defaultUI);
-			set => SetProperty(ref _defaultUI, value);
+			get => GetPropertyValue<CWeakHandle<inkCanvasWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkCanvasWidget>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("securedUI")] 
 		public CWeakHandle<inkCanvasWidget> SecuredUI
 		{
-			get => GetProperty(ref _securedUI);
-			set => SetProperty(ref _securedUI, value);
+			get => GetPropertyValue<CWeakHandle<inkCanvasWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkCanvasWidget>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("channellTextWidget")] 
 		public CWeakHandle<inkTextWidget> ChannellTextWidget
 		{
-			get => GetProperty(ref _channellTextWidget);
-			set => SetProperty(ref _channellTextWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkTextWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("securedTextWidget")] 
 		public CWeakHandle<inkTextWidget> SecuredTextWidget
 		{
-			get => GetProperty(ref _securedTextWidget);
-			set => SetProperty(ref _securedTextWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkTextWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("mainDisplayWidget")] 
 		public CWeakHandle<inkVideoWidget> MainDisplayWidget
 		{
-			get => GetProperty(ref _mainDisplayWidget);
-			set => SetProperty(ref _mainDisplayWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkVideoWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkVideoWidget>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("actionsList")] 
 		public CWeakHandle<inkWidget> ActionsList
 		{
-			get => GetProperty(ref _actionsList);
-			set => SetProperty(ref _actionsList, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("activeChannelIDX")] 
 		public CInt32 ActiveChannelIDX
 		{
-			get => GetProperty(ref _activeChannelIDX);
-			set => SetProperty(ref _activeChannelIDX, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("activeSequence")] 
 		public CArray<SequenceVideo> ActiveSequence
 		{
-			get => GetProperty(ref _activeSequence);
-			set => SetProperty(ref _activeSequence, value);
+			get => GetPropertyValue<CArray<SequenceVideo>>();
+			set => SetPropertyValue<CArray<SequenceVideo>>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("activeSequenceVideo")] 
 		public CInt32 ActiveSequenceVideo
 		{
-			get => GetProperty(ref _activeSequenceVideo);
-			set => SetProperty(ref _activeSequenceVideo, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("globalTVChannels")] 
 		public CArray<CWeakHandle<inkWidget>> GlobalTVChannels
 		{
-			get => GetProperty(ref _globalTVChannels);
-			set => SetProperty(ref _globalTVChannels, value);
+			get => GetPropertyValue<CArray<CWeakHandle<inkWidget>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<inkWidget>>>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("messegeWidget")] 
 		public CWeakHandle<inkTextWidget> MessegeWidget
 		{
-			get => GetProperty(ref _messegeWidget);
-			set => SetProperty(ref _messegeWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkTextWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("backgroundWidget")] 
 		public CWeakHandle<inkLeafWidget> BackgroundWidget
 		{
-			get => GetProperty(ref _backgroundWidget);
-			set => SetProperty(ref _backgroundWidget, value);
+			get => GetPropertyValue<CWeakHandle<inkLeafWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkLeafWidget>>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("previousGlobalTVChannelID")] 
 		public CInt32 PreviousGlobalTVChannelID
 		{
-			get => GetProperty(ref _previousGlobalTVChannelID);
-			set => SetProperty(ref _previousGlobalTVChannelID, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("globalTVchanellsCount")] 
 		public CInt32 GlobalTVchanellsCount
 		{
-			get => GetProperty(ref _globalTVchanellsCount);
-			set => SetProperty(ref _globalTVchanellsCount, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("globalTVchanellsSpawned")] 
 		public CInt32 GlobalTVchanellsSpawned
 		{
-			get => GetProperty(ref _globalTVchanellsSpawned);
-			set => SetProperty(ref _globalTVchanellsSpawned, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("globalTVslot")] 
 		public CWeakHandle<inkWidget> GlobalTVslot
 		{
-			get => GetProperty(ref _globalTVslot);
-			set => SetProperty(ref _globalTVslot, value);
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("activeAudio")] 
 		public CName ActiveAudio
 		{
-			get => GetProperty(ref _activeAudio);
-			set => SetProperty(ref _activeAudio, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("activeMessage")] 
 		public CWeakHandle<gamedataScreenMessageData_Record> ActiveMessage
 		{
-			get => GetProperty(ref _activeMessage);
-			set => SetProperty(ref _activeMessage, value);
+			get => GetPropertyValue<CWeakHandle<gamedataScreenMessageData_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataScreenMessageData_Record>>(value);
 		}
 
 		[Ordinal(34)] 
 		[RED("onChangeChannelListener")] 
 		public CHandle<redCallbackObject> OnChangeChannelListener
 		{
-			get => GetProperty(ref _onChangeChannelListener);
-			set => SetProperty(ref _onChangeChannelListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(35)] 
 		[RED("onGlitchingStateChangedListener")] 
 		public CHandle<redCallbackObject> OnGlitchingStateChangedListener
 		{
-			get => GetProperty(ref _onGlitchingStateChangedListener);
-			set => SetProperty(ref _onGlitchingStateChangedListener, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		public TvInkGameController()
 		{
-			_activeChannelIDX = -1;
-			_previousGlobalTVChannelID = -1;
-			_globalTVchanellsCount = -1;
+			ActiveChannelIDX = -1;
+			ActiveSequence = new();
+			GlobalTVChannels = new();
+			PreviousGlobalTVChannelID = -1;
+			GlobalTVchanellsCount = -1;
 		}
 	}
 }

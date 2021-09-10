@@ -5,173 +5,164 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SecurityTurret : SensorDevice
 	{
-		private CHandle<AnimFeature_SecurityTurretData> _animFeature;
-		private CName _animFeatureName;
-		private CHandle<entSlotComponent> _lookAtSlot;
-		private CHandle<entMeshComponent> _laserMesh;
-		private CHandle<gameTargetingComponent> _targetingComp;
-		private CHandle<gameStaticTriggerAreaComponent> _triggerSideOne;
-		private CHandle<gameStaticTriggerAreaComponent> _triggerSideTwo;
-		private CWeakHandle<gameweaponObject> _weapon;
-		private gameItemID _itemID;
-		private CHandle<gameEffectInstance> _laserGameEffect;
-		private CName _laserFXSlotName;
-		private gameDelayID _burstDelayEvtID;
-		private CBool _isBurstDelayOngoing;
-		private gameDelayID _nextShootCycleDelayEvtID;
-		private CBool _isShootingOngoing;
-		private CFloat _timeToNextShot;
-		private CInt32 _optim_CheckTargetParametersShots;
-		private CHandle<SecurityTurretReplicatedState> _netClientCurrentlyAppliedState;
-
 		[Ordinal(192)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_SecurityTurretData> AnimFeature
 		{
-			get => GetProperty(ref _animFeature);
-			set => SetProperty(ref _animFeature, value);
+			get => GetPropertyValue<CHandle<AnimFeature_SecurityTurretData>>();
+			set => SetPropertyValue<CHandle<AnimFeature_SecurityTurretData>>(value);
 		}
 
 		[Ordinal(193)] 
 		[RED("animFeatureName")] 
 		public CName AnimFeatureName
 		{
-			get => GetProperty(ref _animFeatureName);
-			set => SetProperty(ref _animFeatureName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(194)] 
 		[RED("lookAtSlot")] 
 		public CHandle<entSlotComponent> LookAtSlot
 		{
-			get => GetProperty(ref _lookAtSlot);
-			set => SetProperty(ref _lookAtSlot, value);
+			get => GetPropertyValue<CHandle<entSlotComponent>>();
+			set => SetPropertyValue<CHandle<entSlotComponent>>(value);
 		}
 
 		[Ordinal(195)] 
 		[RED("laserMesh")] 
 		public CHandle<entMeshComponent> LaserMesh
 		{
-			get => GetProperty(ref _laserMesh);
-			set => SetProperty(ref _laserMesh, value);
+			get => GetPropertyValue<CHandle<entMeshComponent>>();
+			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
 		[Ordinal(196)] 
 		[RED("targetingComp")] 
 		public CHandle<gameTargetingComponent> TargetingComp
 		{
-			get => GetProperty(ref _targetingComp);
-			set => SetProperty(ref _targetingComp, value);
+			get => GetPropertyValue<CHandle<gameTargetingComponent>>();
+			set => SetPropertyValue<CHandle<gameTargetingComponent>>(value);
 		}
 
 		[Ordinal(197)] 
 		[RED("triggerSideOne")] 
 		public CHandle<gameStaticTriggerAreaComponent> TriggerSideOne
 		{
-			get => GetProperty(ref _triggerSideOne);
-			set => SetProperty(ref _triggerSideOne, value);
+			get => GetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>();
+			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
 		[Ordinal(198)] 
 		[RED("triggerSideTwo")] 
 		public CHandle<gameStaticTriggerAreaComponent> TriggerSideTwo
 		{
-			get => GetProperty(ref _triggerSideTwo);
-			set => SetProperty(ref _triggerSideTwo, value);
+			get => GetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>();
+			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
 		[Ordinal(199)] 
 		[RED("weapon")] 
 		public CWeakHandle<gameweaponObject> Weapon
 		{
-			get => GetProperty(ref _weapon);
-			set => SetProperty(ref _weapon, value);
+			get => GetPropertyValue<CWeakHandle<gameweaponObject>>();
+			set => SetPropertyValue<CWeakHandle<gameweaponObject>>(value);
 		}
 
 		[Ordinal(200)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get => GetProperty(ref _itemID);
-			set => SetProperty(ref _itemID, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(201)] 
 		[RED("laserGameEffect")] 
 		public CHandle<gameEffectInstance> LaserGameEffect
 		{
-			get => GetProperty(ref _laserGameEffect);
-			set => SetProperty(ref _laserGameEffect, value);
+			get => GetPropertyValue<CHandle<gameEffectInstance>>();
+			set => SetPropertyValue<CHandle<gameEffectInstance>>(value);
 		}
 
 		[Ordinal(202)] 
 		[RED("laserFXSlotName")] 
 		public CName LaserFXSlotName
 		{
-			get => GetProperty(ref _laserFXSlotName);
-			set => SetProperty(ref _laserFXSlotName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(203)] 
 		[RED("burstDelayEvtID")] 
 		public gameDelayID BurstDelayEvtID
 		{
-			get => GetProperty(ref _burstDelayEvtID);
-			set => SetProperty(ref _burstDelayEvtID, value);
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
 		}
 
 		[Ordinal(204)] 
 		[RED("isBurstDelayOngoing")] 
 		public CBool IsBurstDelayOngoing
 		{
-			get => GetProperty(ref _isBurstDelayOngoing);
-			set => SetProperty(ref _isBurstDelayOngoing, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(205)] 
 		[RED("nextShootCycleDelayEvtID")] 
 		public gameDelayID NextShootCycleDelayEvtID
 		{
-			get => GetProperty(ref _nextShootCycleDelayEvtID);
-			set => SetProperty(ref _nextShootCycleDelayEvtID, value);
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
 		}
 
 		[Ordinal(206)] 
 		[RED("isShootingOngoing")] 
 		public CBool IsShootingOngoing
 		{
-			get => GetProperty(ref _isShootingOngoing);
-			set => SetProperty(ref _isShootingOngoing, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(207)] 
 		[RED("timeToNextShot")] 
 		public CFloat TimeToNextShot
 		{
-			get => GetProperty(ref _timeToNextShot);
-			set => SetProperty(ref _timeToNextShot, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(208)] 
 		[RED("optim_CheckTargetParametersShots")] 
 		public CInt32 Optim_CheckTargetParametersShots
 		{
-			get => GetProperty(ref _optim_CheckTargetParametersShots);
-			set => SetProperty(ref _optim_CheckTargetParametersShots, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(209)] 
 		[RED("netClientCurrentlyAppliedState")] 
 		public CHandle<SecurityTurretReplicatedState> NetClientCurrentlyAppliedState
 		{
-			get => GetProperty(ref _netClientCurrentlyAppliedState);
-			set => SetProperty(ref _netClientCurrentlyAppliedState, value);
+			get => GetPropertyValue<CHandle<SecurityTurretReplicatedState>>();
+			set => SetPropertyValue<CHandle<SecurityTurretReplicatedState>>(value);
 		}
 
 		public SecurityTurret()
 		{
-			_animFeatureName = "SecurityTurretData";
-			_laserFXSlotName = "laser";
+			ControllerTypeName = "SecurityTurretController";
+			DefaultSensePreset = new() { Value = 77796192748 };
+			IdleSound = "idleStart";
+			IdleSoundStop = "idleStop";
+			SoundDeviceON = "activated";
+			SoundDeviceOFF = "deactivated";
+			SoundDeviceDestroyed = "destroyed";
+			AnimFeatureName = "SecurityTurretData";
+			ItemID = new();
+			LaserFXSlotName = "laser";
+			BurstDelayEvtID = new();
+			NextShootCycleDelayEvtID = new();
 		}
 	}
 }

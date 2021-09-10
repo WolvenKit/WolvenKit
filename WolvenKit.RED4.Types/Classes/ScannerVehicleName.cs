@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ScannerVehicleName : ScannerChunk
 	{
-		private CString _vehicleName;
-
 		[Ordinal(0)] 
 		[RED("vehicleName")] 
 		public CString VehicleName
 		{
-			get => GetProperty(ref _vehicleName);
-			set => SetProperty(ref _vehicleName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 	}
 }

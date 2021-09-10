@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AirHoverDecisions : LocomotionAirDecisions
 	{
-		private CWeakHandle<gameObject> _executionOwner;
-		private CHandle<DefaultTransitionStatusEffectListener> _statusEffectListener;
-		private CBool _hasStatusEffect;
-
 		[Ordinal(3)] 
 		[RED("executionOwner")] 
 		public CWeakHandle<gameObject> ExecutionOwner
 		{
-			get => GetProperty(ref _executionOwner);
-			set => SetProperty(ref _executionOwner, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("statusEffectListener")] 
 		public CHandle<DefaultTransitionStatusEffectListener> StatusEffectListener
 		{
-			get => GetProperty(ref _statusEffectListener);
-			set => SetProperty(ref _statusEffectListener, value);
+			get => GetPropertyValue<CHandle<DefaultTransitionStatusEffectListener>>();
+			set => SetPropertyValue<CHandle<DefaultTransitionStatusEffectListener>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("hasStatusEffect")] 
 		public CBool HasStatusEffect
 		{
-			get => GetProperty(ref _hasStatusEffect);
-			set => SetProperty(ref _hasStatusEffect, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

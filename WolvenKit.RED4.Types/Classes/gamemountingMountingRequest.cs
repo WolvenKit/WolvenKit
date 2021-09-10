@@ -5,37 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamemountingMountingRequest : IScriptable
 	{
-		private gamemountingMountingInfo _lowLevelMountingInfo;
-		private CBool _preservePositionAfterMounting;
-		private CHandle<gameMountEventData> _mountData;
-
 		[Ordinal(0)] 
 		[RED("lowLevelMountingInfo")] 
 		public gamemountingMountingInfo LowLevelMountingInfo
 		{
-			get => GetProperty(ref _lowLevelMountingInfo);
-			set => SetProperty(ref _lowLevelMountingInfo, value);
+			get => GetPropertyValue<gamemountingMountingInfo>();
+			set => SetPropertyValue<gamemountingMountingInfo>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("preservePositionAfterMounting")] 
 		public CBool PreservePositionAfterMounting
 		{
-			get => GetProperty(ref _preservePositionAfterMounting);
-			set => SetProperty(ref _preservePositionAfterMounting, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("mountData")] 
 		public CHandle<gameMountEventData> MountData
 		{
-			get => GetProperty(ref _mountData);
-			set => SetProperty(ref _mountData, value);
+			get => GetPropertyValue<CHandle<gameMountEventData>>();
+			set => SetPropertyValue<CHandle<gameMountEventData>>(value);
 		}
 
 		public gamemountingMountingRequest()
 		{
-			_preservePositionAfterMounting = true;
+			LowLevelMountingInfo = new() { ChildId = new(), ParentId = new(), SlotId = new() };
+			PreservePositionAfterMounting = true;
 		}
 	}
 }

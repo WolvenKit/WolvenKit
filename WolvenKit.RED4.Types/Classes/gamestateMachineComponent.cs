@@ -5,19 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamestateMachineComponent : gamePlayerControlledComponent
 	{
-		private CString _packageName;
-
 		[Ordinal(3)] 
 		[RED("packageName")] 
 		public CString PackageName
 		{
-			get => GetProperty(ref _packageName);
-			set => SetProperty(ref _packageName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		public gamestateMachineComponent()
 		{
-			_packageName = new() { Text = "playerStateMachine" };
+			Name = "StateMachine";
+			PackageName = "playerStateMachine";
 		}
 	}
 }

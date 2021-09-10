@@ -5,65 +5,65 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PhoneHotkeyController : GenericHotkeyController
 	{
-		private inkImageWidgetReference _mainIcon;
-		private inkTextWidgetReference _messagePrompt;
-		private inkTextWidgetReference _messageCounter;
-		private CWeakHandle<gameJournalManager> _journalManager;
-		private CString _phoneIconAtlas;
-		private CName _phoneIconName;
-
 		[Ordinal(19)] 
 		[RED("mainIcon")] 
 		public inkImageWidgetReference MainIcon
 		{
-			get => GetProperty(ref _mainIcon);
-			set => SetProperty(ref _mainIcon, value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("messagePrompt")] 
 		public inkTextWidgetReference MessagePrompt
 		{
-			get => GetProperty(ref _messagePrompt);
-			set => SetProperty(ref _messagePrompt, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("messageCounter")] 
 		public inkTextWidgetReference MessageCounter
 		{
-			get => GetProperty(ref _messageCounter);
-			set => SetProperty(ref _messageCounter, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("journalManager")] 
 		public CWeakHandle<gameJournalManager> JournalManager
 		{
-			get => GetProperty(ref _journalManager);
-			set => SetProperty(ref _journalManager, value);
+			get => GetPropertyValue<CWeakHandle<gameJournalManager>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("phoneIconAtlas")] 
 		public CString PhoneIconAtlas
 		{
-			get => GetProperty(ref _phoneIconAtlas);
-			set => SetProperty(ref _phoneIconAtlas, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("phoneIconName")] 
 		public CName PhoneIconName
 		{
-			get => GetProperty(ref _phoneIconName);
-			set => SetProperty(ref _phoneIconName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public PhoneHotkeyController()
 		{
-			_phoneIconAtlas = new() { Text = @"base\gameplay\gui\common\icons\atlas_common.inkatlas" };
-			_phoneIconName = "ico_phone";
+			HotkeyBackground = new();
+			ButtonHint = new();
+			Restrictions = new();
+			DebugCommands = new();
+			MainIcon = new();
+			MessagePrompt = new();
+			MessageCounter = new();
+			PhoneIconAtlas = "base\\gameplay\\gui\\common\\icons\\atlas_common.inkatlas";
+			PhoneIconName = "ico_phone";
 		}
 	}
 }

@@ -5,32 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamesmartGunUISightParameters : RedBaseClass
 	{
-		private Vector2 _center;
-		private Vector2 _targetableRegionSize;
-		private Vector2 _reticleSize;
-
 		[Ordinal(0)] 
 		[RED("center")] 
 		public Vector2 Center
 		{
-			get => GetProperty(ref _center);
-			set => SetProperty(ref _center, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("targetableRegionSize")] 
 		public Vector2 TargetableRegionSize
 		{
-			get => GetProperty(ref _targetableRegionSize);
-			set => SetProperty(ref _targetableRegionSize, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("reticleSize")] 
 		public Vector2 ReticleSize
 		{
-			get => GetProperty(ref _reticleSize);
-			set => SetProperty(ref _reticleSize, value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
+		}
+
+		public gamesmartGunUISightParameters()
+		{
+			Center = new();
+			TargetableRegionSize = new();
+			ReticleSize = new();
 		}
 	}
 }

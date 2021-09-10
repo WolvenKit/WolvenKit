@@ -5,19 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameHitShape_Sphere : gameHitShapeBase
 	{
-		private CFloat _radius;
-
 		[Ordinal(3)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
-			get => GetProperty(ref _radius);
-			set => SetProperty(ref _radius, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public gameHitShape_Sphere()
 		{
-			_radius = 0.200000F;
+			Translation = new();
+			Rotation = new() { R = 1.000000F };
+			LocalTransform = new();
+			Radius = 0.200000F;
 		}
 	}
 }

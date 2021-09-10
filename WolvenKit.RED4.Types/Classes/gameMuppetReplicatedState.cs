@@ -5,56 +5,53 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameMuppetReplicatedState : netIEntityState
 	{
-		private gameMuppetState _state;
-		private EulerAngles _initialOrientation;
-		private Vector3 _initialLocation;
-		private CFloat _health;
-		private CFloat _armor;
-
 		[Ordinal(2)] 
 		[RED("state")] 
 		public gameMuppetState State
 		{
-			get => GetProperty(ref _state);
-			set => SetProperty(ref _state, value);
+			get => GetPropertyValue<gameMuppetState>();
+			set => SetPropertyValue<gameMuppetState>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("initialOrientation")] 
 		public EulerAngles InitialOrientation
 		{
-			get => GetProperty(ref _initialOrientation);
-			set => SetProperty(ref _initialOrientation, value);
+			get => GetPropertyValue<EulerAngles>();
+			set => SetPropertyValue<EulerAngles>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("initialLocation")] 
 		public Vector3 InitialLocation
 		{
-			get => GetProperty(ref _initialLocation);
-			set => SetProperty(ref _initialLocation, value);
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("health")] 
 		public CFloat Health
 		{
-			get => GetProperty(ref _health);
-			set => SetProperty(ref _health, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("armor")] 
 		public CFloat Armor
 		{
-			get => GetProperty(ref _armor);
-			set => SetProperty(ref _armor, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public gameMuppetReplicatedState()
 		{
-			_health = -1.000000F;
-			_armor = -1.000000F;
+			State = new() { FrameId = 4294967295, HighLevelState = new() { DeathFrameId = 4294967295 }, HealthState = new(), PhysicalMoveState = new() { Position = new(), Velocity = new(), IsOnGround = true, GroundNormal = new() { Z = 1.000000F } }, LookState = new() { LookDir = new() }, MoveState = new() { JumpStartFrameId = 4294967295, LandFrameId = 4294967295 }, UpperBodyState = new() { CurrentWeapon = new(), WantedWeapon = new(), InProgressWeapon = new(), LogicWantedWeapon = new(), CurrentWeaponAmmo = 10, CurrentWeaponAmmoCapacity = 10, SelectedConsumable = new() }, ScanningState = new(), InventoryState = new() { Slots = new(), ActiveSlot = -1 }, Abilities = new() { CanLook = new(), CanMove = new(), CanCrouch = new(), CanSprint = new(), CanSwitchWeapon = new(), CanHoldWeapon = new(), CanShoot = new(), CanAimDownSight = new() }, StateMachinesSnapshot = new() { StateMachines = new() }, ControllersSnapshot = new() { Controllers = new() }, SnapFrameId = 4294967295 };
+			InitialOrientation = new();
+			InitialLocation = new();
+			Health = -1.000000F;
+			Armor = -1.000000F;
 		}
 	}
 }

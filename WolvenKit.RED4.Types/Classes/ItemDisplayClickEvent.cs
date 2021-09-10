@@ -5,50 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ItemDisplayClickEvent : redEvent
 	{
-		private InventoryItemData _itemData;
-		private CHandle<inkActionName> _actionName;
-		private CEnum<gameItemDisplayContext> _displayContext;
-		private CBool _isBuybackStack;
-		private CHandle<inkPointerEvent> _evt;
-
 		[Ordinal(0)] 
 		[RED("itemData")] 
 		public InventoryItemData ItemData
 		{
-			get => GetProperty(ref _itemData);
-			set => SetProperty(ref _itemData, value);
+			get => GetPropertyValue<InventoryItemData>();
+			set => SetPropertyValue<InventoryItemData>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("actionName")] 
 		public CHandle<inkActionName> ActionName
 		{
-			get => GetProperty(ref _actionName);
-			set => SetProperty(ref _actionName, value);
+			get => GetPropertyValue<CHandle<inkActionName>>();
+			set => SetPropertyValue<CHandle<inkActionName>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("displayContext")] 
 		public CEnum<gameItemDisplayContext> DisplayContext
 		{
-			get => GetProperty(ref _displayContext);
-			set => SetProperty(ref _displayContext, value);
+			get => GetPropertyValue<CEnum<gameItemDisplayContext>>();
+			set => SetPropertyValue<CEnum<gameItemDisplayContext>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isBuybackStack")] 
 		public CBool IsBuybackStack
 		{
-			get => GetProperty(ref _isBuybackStack);
-			set => SetProperty(ref _isBuybackStack, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("evt")] 
 		public CHandle<inkPointerEvent> Evt
 		{
-			get => GetProperty(ref _evt);
-			set => SetProperty(ref _evt, value);
+			get => GetPropertyValue<CHandle<inkPointerEvent>>();
+			set => SetPropertyValue<CHandle<inkPointerEvent>>(value);
+		}
+
+		public ItemDisplayClickEvent()
+		{
+			ItemData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
 		}
 	}
 }

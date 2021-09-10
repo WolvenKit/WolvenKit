@@ -5,19 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiDamageIndicatorGameController : gameuiHUDGameController
 	{
-		private CUInt8 _maxVisibleParts;
-
 		[Ordinal(9)] 
 		[RED("maxVisibleParts")] 
 		public CUInt8 MaxVisibleParts
 		{
-			get => GetProperty(ref _maxVisibleParts);
-			set => SetProperty(ref _maxVisibleParts, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		public gameuiDamageIndicatorGameController()
 		{
-			_maxVisibleParts = 6;
+			MaxVisibleParts = 6;
 		}
 	}
 }

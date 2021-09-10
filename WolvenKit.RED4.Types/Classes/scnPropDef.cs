@@ -5,131 +5,131 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnPropDef : RedBaseClass
 	{
-		private scnPropId _propId;
-		private CString _propName;
-		private TweakDBID _specPropRecordId;
-		private CArray<scnRidAnimSetSRRefId> _animSets;
-		private CArray<scnCinematicAnimSetSRRefId> _cinematicAnimSets;
-		private CArray<scnDynamicAnimSetSRRefId> _dynamicAnimSets;
-		private CEnum<scnEntityAcquisitionPlan> _entityAcquisitionPlan;
-		private scnFindEntityInEntityParams _findEntityInEntityParams;
-		private scnSpawnDespawnEntityParams _spawnDespawnParams;
-		private scnSpawnSetParams _spawnSetParams;
-		private scnCommunityParams _communityParams;
-		private scnSpawnerParams _spawnerParams;
-		private scnFindEntityInNodeParams _findEntityInNodeParams;
-		private scnFindEntityInWorldParams _findEntityInWorldParams;
-
 		[Ordinal(0)] 
 		[RED("propId")] 
 		public scnPropId PropId
 		{
-			get => GetProperty(ref _propId);
-			set => SetProperty(ref _propId, value);
+			get => GetPropertyValue<scnPropId>();
+			set => SetPropertyValue<scnPropId>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("propName")] 
 		public CString PropName
 		{
-			get => GetProperty(ref _propName);
-			set => SetProperty(ref _propName, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("specPropRecordId")] 
 		public TweakDBID SpecPropRecordId
 		{
-			get => GetProperty(ref _specPropRecordId);
-			set => SetProperty(ref _specPropRecordId, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("animSets")] 
 		public CArray<scnRidAnimSetSRRefId> AnimSets
 		{
-			get => GetProperty(ref _animSets);
-			set => SetProperty(ref _animSets, value);
+			get => GetPropertyValue<CArray<scnRidAnimSetSRRefId>>();
+			set => SetPropertyValue<CArray<scnRidAnimSetSRRefId>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("cinematicAnimSets")] 
 		public CArray<scnCinematicAnimSetSRRefId> CinematicAnimSets
 		{
-			get => GetProperty(ref _cinematicAnimSets);
-			set => SetProperty(ref _cinematicAnimSets, value);
+			get => GetPropertyValue<CArray<scnCinematicAnimSetSRRefId>>();
+			set => SetPropertyValue<CArray<scnCinematicAnimSetSRRefId>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("dynamicAnimSets")] 
 		public CArray<scnDynamicAnimSetSRRefId> DynamicAnimSets
 		{
-			get => GetProperty(ref _dynamicAnimSets);
-			set => SetProperty(ref _dynamicAnimSets, value);
+			get => GetPropertyValue<CArray<scnDynamicAnimSetSRRefId>>();
+			set => SetPropertyValue<CArray<scnDynamicAnimSetSRRefId>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("entityAcquisitionPlan")] 
 		public CEnum<scnEntityAcquisitionPlan> EntityAcquisitionPlan
 		{
-			get => GetProperty(ref _entityAcquisitionPlan);
-			set => SetProperty(ref _entityAcquisitionPlan, value);
+			get => GetPropertyValue<CEnum<scnEntityAcquisitionPlan>>();
+			set => SetPropertyValue<CEnum<scnEntityAcquisitionPlan>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("findEntityInEntityParams")] 
 		public scnFindEntityInEntityParams FindEntityInEntityParams
 		{
-			get => GetProperty(ref _findEntityInEntityParams);
-			set => SetProperty(ref _findEntityInEntityParams, value);
+			get => GetPropertyValue<scnFindEntityInEntityParams>();
+			set => SetPropertyValue<scnFindEntityInEntityParams>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("spawnDespawnParams")] 
 		public scnSpawnDespawnEntityParams SpawnDespawnParams
 		{
-			get => GetProperty(ref _spawnDespawnParams);
-			set => SetProperty(ref _spawnDespawnParams, value);
+			get => GetPropertyValue<scnSpawnDespawnEntityParams>();
+			set => SetPropertyValue<scnSpawnDespawnEntityParams>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("spawnSetParams")] 
 		public scnSpawnSetParams SpawnSetParams
 		{
-			get => GetProperty(ref _spawnSetParams);
-			set => SetProperty(ref _spawnSetParams, value);
+			get => GetPropertyValue<scnSpawnSetParams>();
+			set => SetPropertyValue<scnSpawnSetParams>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("communityParams")] 
 		public scnCommunityParams CommunityParams
 		{
-			get => GetProperty(ref _communityParams);
-			set => SetProperty(ref _communityParams, value);
+			get => GetPropertyValue<scnCommunityParams>();
+			set => SetPropertyValue<scnCommunityParams>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("spawnerParams")] 
 		public scnSpawnerParams SpawnerParams
 		{
-			get => GetProperty(ref _spawnerParams);
-			set => SetProperty(ref _spawnerParams, value);
+			get => GetPropertyValue<scnSpawnerParams>();
+			set => SetPropertyValue<scnSpawnerParams>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("findEntityInNodeParams")] 
 		public scnFindEntityInNodeParams FindEntityInNodeParams
 		{
-			get => GetProperty(ref _findEntityInNodeParams);
-			set => SetProperty(ref _findEntityInNodeParams, value);
+			get => GetPropertyValue<scnFindEntityInNodeParams>();
+			set => SetPropertyValue<scnFindEntityInNodeParams>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("findEntityInWorldParams")] 
 		public scnFindEntityInWorldParams FindEntityInWorldParams
 		{
-			get => GetProperty(ref _findEntityInWorldParams);
-			set => SetProperty(ref _findEntityInWorldParams, value);
+			get => GetPropertyValue<scnFindEntityInWorldParams>();
+			set => SetPropertyValue<scnFindEntityInWorldParams>(value);
+		}
+
+		public scnPropDef()
+		{
+			PropId = new() { Id = 4294967295 };
+			AnimSets = new();
+			CinematicAnimSets = new();
+			DynamicAnimSets = new();
+			FindEntityInEntityParams = new() { ActorId = new() { Id = 4294967295 }, PerformerId = new() { Id = 4294967040 }, OwnershipTransferOptions = new() { DettachFromSlot = true, RemoveFromInventory = true } };
+			SpawnDespawnParams = new() { SpawnOffset = new() { Position = new(), Orientation = new() { R = 1.000000F } }, ItemOwnerId = new() { Id = 4294967040 }, SpawnOnStart = true, IsEnabled = true, ValidateSpawnPostion = true };
+			SpawnSetParams = new();
+			CommunityParams = new();
+			SpawnerParams = new();
+			FindEntityInNodeParams = new();
+			FindEntityInWorldParams = new() { ActorRef = new() { Names = new() } };
 		}
 	}
 }

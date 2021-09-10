@@ -5,23 +5,20 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiCharacterCustomizationAction : RedBaseClass
 	{
-		private CEnum<gameuiCharacterCustomizationActionType> _type;
-		private CString _params;
-
 		[Ordinal(0)] 
 		[RED("type")] 
 		public CEnum<gameuiCharacterCustomizationActionType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<gameuiCharacterCustomizationActionType>>();
+			set => SetPropertyValue<CEnum<gameuiCharacterCustomizationActionType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("params")] 
 		public CString Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 	}
 }

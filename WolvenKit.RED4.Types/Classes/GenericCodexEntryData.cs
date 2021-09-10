@@ -5,95 +5,91 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class GenericCodexEntryData : IScriptable
 	{
-		private CInt32 _hash;
-		private CString _title;
-		private CString _description;
-		private TweakDBID _imageId;
-		private CInt32 _counter;
-		private GameTime _timeStamp;
-		private CBool _isNew;
-		private CArray<CInt32> _newEntries;
-		private gameItemID _itemID;
-		private CWeakHandle<CodexListSyncData> _activeDataSync;
-
 		[Ordinal(0)] 
 		[RED("hash")] 
 		public CInt32 Hash
 		{
-			get => GetProperty(ref _hash);
-			set => SetProperty(ref _hash, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("title")] 
 		public CString Title
 		{
-			get => GetProperty(ref _title);
-			set => SetProperty(ref _title, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("description")] 
 		public CString Description
 		{
-			get => GetProperty(ref _description);
-			set => SetProperty(ref _description, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("imageId")] 
 		public TweakDBID ImageId
 		{
-			get => GetProperty(ref _imageId);
-			set => SetProperty(ref _imageId, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("counter")] 
 		public CInt32 Counter
 		{
-			get => GetProperty(ref _counter);
-			set => SetProperty(ref _counter, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("timeStamp")] 
 		public GameTime TimeStamp
 		{
-			get => GetProperty(ref _timeStamp);
-			set => SetProperty(ref _timeStamp, value);
+			get => GetPropertyValue<GameTime>();
+			set => SetPropertyValue<GameTime>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("isNew")] 
 		public CBool IsNew
 		{
-			get => GetProperty(ref _isNew);
-			set => SetProperty(ref _isNew, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("newEntries")] 
 		public CArray<CInt32> NewEntries
 		{
-			get => GetProperty(ref _newEntries);
-			set => SetProperty(ref _newEntries, value);
+			get => GetPropertyValue<CArray<CInt32>>();
+			set => SetPropertyValue<CArray<CInt32>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
-			get => GetProperty(ref _itemID);
-			set => SetProperty(ref _itemID, value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("activeDataSync")] 
 		public CWeakHandle<CodexListSyncData> ActiveDataSync
 		{
-			get => GetProperty(ref _activeDataSync);
-			set => SetProperty(ref _activeDataSync, value);
+			get => GetPropertyValue<CWeakHandle<CodexListSyncData>>();
+			set => SetPropertyValue<CWeakHandle<CodexListSyncData>>(value);
+		}
+
+		public GenericCodexEntryData()
+		{
+			TimeStamp = new();
+			NewEntries = new();
+			ItemID = new();
 		}
 	}
 }

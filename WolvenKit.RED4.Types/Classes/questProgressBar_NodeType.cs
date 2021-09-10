@@ -5,38 +5,35 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questProgressBar_NodeType : questIUIManagerNodeType
 	{
-		private CBool _show;
-		private CFloat _duration;
-		private LocalizationString _text;
-
 		[Ordinal(0)] 
 		[RED("show")] 
 		public CBool Show
 		{
-			get => GetProperty(ref _show);
-			set => SetProperty(ref _show, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
-			get => GetProperty(ref _duration);
-			set => SetProperty(ref _duration, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("text")] 
 		public LocalizationString Text
 		{
-			get => GetProperty(ref _text);
-			set => SetProperty(ref _text, value);
+			get => GetPropertyValue<LocalizationString>();
+			set => SetPropertyValue<LocalizationString>(value);
 		}
 
 		public questProgressBar_NodeType()
 		{
-			_show = true;
-			_duration = 3.000000F;
+			Show = true;
+			Duration = 3.000000F;
+			Text = new() { Unk1 = 0, Value = "" };
 		}
 	}
 }

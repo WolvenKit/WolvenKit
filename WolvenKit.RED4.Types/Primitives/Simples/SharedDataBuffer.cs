@@ -7,24 +7,41 @@ namespace WolvenKit.RED4.Types
     {
         public byte[] Buffer { get; set; }
 
-
-        public override bool Equals(object value)
-        {
-            if (value is SharedDataBuffer cObj)
-            {
-                return Equals(cObj);
-            }
-            return false;
-        }
-
         public bool Equals(SharedDataBuffer other)
         {
-            if (other == null)
+            if (ReferenceEquals(null, other))
             {
                 return false;
             }
 
-            return Buffer.SequenceEqual(other.Buffer);
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            return Equals(Buffer, other.Buffer);
         }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((SharedDataBuffer)obj);
+        }
+
+        public override int GetHashCode() => (Buffer != null ? Buffer.GetHashCode() : 0);
     }
 }

@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorActionRotateToObjectTreeNodeDefinition : AIbehaviorActionRotateBaseTreeNodeDefinition
 	{
-		private CHandle<AIArgumentMapping> _completeWhenRotated;
-
 		[Ordinal(5)] 
 		[RED("completeWhenRotated")] 
 		public CHandle<AIArgumentMapping> CompleteWhenRotated
 		{
-			get => GetProperty(ref _completeWhenRotated);
-			set => SetProperty(ref _completeWhenRotated, value);
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 	}
 }

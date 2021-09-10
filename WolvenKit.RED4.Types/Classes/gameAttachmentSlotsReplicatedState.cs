@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameAttachmentSlotsReplicatedState : netIComponentState
 	{
-		private CUInt32 _stateVersion;
-		private CArray<gameAttachmentSlotReplicatedState> _slots;
-
 		[Ordinal(2)] 
 		[RED("stateVersion")] 
 		public CUInt32 StateVersion
 		{
-			get => GetProperty(ref _stateVersion);
-			set => SetProperty(ref _stateVersion, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("slots")] 
 		public CArray<gameAttachmentSlotReplicatedState> Slots
 		{
-			get => GetProperty(ref _slots);
-			set => SetProperty(ref _slots, value);
+			get => GetPropertyValue<CArray<gameAttachmentSlotReplicatedState>>();
+			set => SetPropertyValue<CArray<gameAttachmentSlotReplicatedState>>(value);
+		}
+
+		public gameAttachmentSlotsReplicatedState()
+		{
+			Enabled = true;
+			Slots = new();
 		}
 	}
 }

@@ -5,56 +5,50 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questRewindableSectionTimeJump_NodeType : questISceneManagerNodeType
 	{
-		private CResourceAsyncReference<scnSceneResource> _sceneFile;
-		private CUInt32 _jumpTargetTime;
-		private CFloat _jumpSpeed;
-		private CEnum<scnPlayDirection> _postJumpPlayDirection;
-		private CEnum<scnPlaySpeed> _postJumpPlaySpeed;
-
 		[Ordinal(0)] 
 		[RED("sceneFile")] 
 		public CResourceAsyncReference<scnSceneResource> SceneFile
 		{
-			get => GetProperty(ref _sceneFile);
-			set => SetProperty(ref _sceneFile, value);
+			get => GetPropertyValue<CResourceAsyncReference<scnSceneResource>>();
+			set => SetPropertyValue<CResourceAsyncReference<scnSceneResource>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("jumpTargetTime")] 
 		public CUInt32 JumpTargetTime
 		{
-			get => GetProperty(ref _jumpTargetTime);
-			set => SetProperty(ref _jumpTargetTime, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("jumpSpeed")] 
 		public CFloat JumpSpeed
 		{
-			get => GetProperty(ref _jumpSpeed);
-			set => SetProperty(ref _jumpSpeed, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("postJumpPlayDirection")] 
 		public CEnum<scnPlayDirection> PostJumpPlayDirection
 		{
-			get => GetProperty(ref _postJumpPlayDirection);
-			set => SetProperty(ref _postJumpPlayDirection, value);
+			get => GetPropertyValue<CEnum<scnPlayDirection>>();
+			set => SetPropertyValue<CEnum<scnPlayDirection>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("postJumpPlaySpeed")] 
 		public CEnum<scnPlaySpeed> PostJumpPlaySpeed
 		{
-			get => GetProperty(ref _postJumpPlaySpeed);
-			set => SetProperty(ref _postJumpPlaySpeed, value);
+			get => GetPropertyValue<CEnum<scnPlaySpeed>>();
+			set => SetPropertyValue<CEnum<scnPlaySpeed>>(value);
 		}
 
 		public questRewindableSectionTimeJump_NodeType()
 		{
-			_jumpSpeed = 100.000000F;
-			_postJumpPlaySpeed = new() { Value = Enums.scnPlaySpeed.Normal };
+			JumpSpeed = 100.000000F;
+			PostJumpPlaySpeed = Enums.scnPlaySpeed.Normal;
 		}
 	}
 }

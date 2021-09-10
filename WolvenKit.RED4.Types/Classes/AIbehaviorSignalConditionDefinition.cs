@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIbehaviorSignalConditionDefinition : AIbehaviorConditionDefinition
 	{
-		private CName _signalName;
-		private CEnum<AIbehaviorSignalConditionModes> _mode;
-		private CBool _tagSignal;
-
 		[Ordinal(1)] 
 		[RED("signalName")] 
 		public CName SignalName
 		{
-			get => GetProperty(ref _signalName);
-			set => SetProperty(ref _signalName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("mode")] 
 		public CEnum<AIbehaviorSignalConditionModes> Mode
 		{
-			get => GetProperty(ref _mode);
-			set => SetProperty(ref _mode, value);
+			get => GetPropertyValue<CEnum<AIbehaviorSignalConditionModes>>();
+			set => SetPropertyValue<CEnum<AIbehaviorSignalConditionModes>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("tagSignal")] 
 		public CBool TagSignal
 		{
-			get => GetProperty(ref _tagSignal);
-			set => SetProperty(ref _tagSignal, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

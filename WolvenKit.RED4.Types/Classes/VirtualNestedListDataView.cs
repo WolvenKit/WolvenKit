@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VirtualNestedListDataView : inkScriptableDataViewWrapper
 	{
-		private CHandle<CompareBuilder> _compareBuilder;
-		private CBool _defaultCollapsed;
-		private CArray<CInt32> _toggledLevels;
-
 		[Ordinal(0)] 
 		[RED("compareBuilder")] 
 		public CHandle<CompareBuilder> CompareBuilder
 		{
-			get => GetProperty(ref _compareBuilder);
-			set => SetProperty(ref _compareBuilder, value);
+			get => GetPropertyValue<CHandle<CompareBuilder>>();
+			set => SetPropertyValue<CHandle<CompareBuilder>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("defaultCollapsed")] 
 		public CBool DefaultCollapsed
 		{
-			get => GetProperty(ref _defaultCollapsed);
-			set => SetProperty(ref _defaultCollapsed, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("toggledLevels")] 
 		public CArray<CInt32> ToggledLevels
 		{
-			get => GetProperty(ref _toggledLevels);
-			set => SetProperty(ref _toggledLevels, value);
+			get => GetPropertyValue<CArray<CInt32>>();
+			set => SetPropertyValue<CArray<CInt32>>(value);
+		}
+
+		public VirtualNestedListDataView()
+		{
+			ToggledLevels = new();
 		}
 	}
 }

@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questOpenBriefing_NodeType : questIUIManagerNodeType
 	{
-		private CHandle<gameJournalPath> _briefingPath;
-
 		[Ordinal(0)] 
 		[RED("briefingPath")] 
 		public CHandle<gameJournalPath> BriefingPath
 		{
-			get => GetProperty(ref _briefingPath);
-			set => SetProperty(ref _briefingPath, value);
+			get => GetPropertyValue<CHandle<gameJournalPath>>();
+			set => SetPropertyValue<CHandle<gameJournalPath>>(value);
 		}
 	}
 }

@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class scnWorkspotData_EmbeddedWorkspotTree : scnWorkspotData
 	{
-		private CHandle<workWorkspotTree> _workspotTree;
-
 		[Ordinal(1)] 
 		[RED("workspotTree")] 
 		public CHandle<workWorkspotTree> WorkspotTree
 		{
-			get => GetProperty(ref _workspotTree);
-			set => SetProperty(ref _workspotTree, value);
+			get => GetPropertyValue<CHandle<workWorkspotTree>>();
+			set => SetPropertyValue<CHandle<workWorkspotTree>>(value);
+		}
+
+		public scnWorkspotData_EmbeddedWorkspotTree()
+		{
+			DataId = new() { Id = 4294967295 };
 		}
 	}
 }

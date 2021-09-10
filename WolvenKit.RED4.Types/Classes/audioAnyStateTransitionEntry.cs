@@ -5,41 +5,36 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class audioAnyStateTransitionEntry : RedBaseClass
 	{
-		private CBool _isDisabled;
-		private CUInt8 _sourceStateId;
-		private CUInt8 _targetStateId;
-		private CFloat _transitionTime;
-
 		[Ordinal(0)] 
 		[RED("isDisabled")] 
 		public CBool IsDisabled
 		{
-			get => GetProperty(ref _isDisabled);
-			set => SetProperty(ref _isDisabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("sourceStateId")] 
 		public CUInt8 SourceStateId
 		{
-			get => GetProperty(ref _sourceStateId);
-			set => SetProperty(ref _sourceStateId, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("targetStateId")] 
 		public CUInt8 TargetStateId
 		{
-			get => GetProperty(ref _targetStateId);
-			set => SetProperty(ref _targetStateId, value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("transitionTime")] 
 		public CFloat TransitionTime
 		{
-			get => GetProperty(ref _transitionTime);
-			set => SetProperty(ref _transitionTime, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

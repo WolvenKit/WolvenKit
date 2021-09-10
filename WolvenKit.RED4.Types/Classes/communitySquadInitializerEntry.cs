@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class communitySquadInitializerEntry : RedBaseClass
 	{
-		private CEnum<communityESquadType> _type;
-		private CName _value;
-
 		[Ordinal(0)] 
 		[RED("type")] 
 		public CEnum<communityESquadType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<communityESquadType>>();
+			set => SetPropertyValue<CEnum<communityESquadType>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("value")] 
 		public CName Value
 		{
-			get => GetProperty(ref _value);
-			set => SetProperty(ref _value, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public communitySquadInitializerEntry()
 		{
-			_type = new() { Value = Enums.communityESquadType.Unknown };
+			Type = Enums.communityESquadType.Unknown;
 		}
 	}
 }

@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DelayedVisibilityInAnimSystemRequest : gameScriptableSystemRequest
 	{
-		private CHandle<ForcedVisibilityInAnimSystemData> _data;
-		private CBool _isVisible;
-		private entEntityID _entityID;
-
 		[Ordinal(0)] 
 		[RED("data")] 
 		public CHandle<ForcedVisibilityInAnimSystemData> Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<CHandle<ForcedVisibilityInAnimSystemData>>();
+			set => SetPropertyValue<CHandle<ForcedVisibilityInAnimSystemData>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("isVisible")] 
 		public CBool IsVisible
 		{
-			get => GetProperty(ref _isVisible);
-			set => SetProperty(ref _isVisible, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("entityID")] 
 		public entEntityID EntityID
 		{
-			get => GetProperty(ref _entityID);
-			set => SetProperty(ref _entityID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
+		}
+
+		public DelayedVisibilityInAnimSystemRequest()
+		{
+			EntityID = new();
 		}
 	}
 }

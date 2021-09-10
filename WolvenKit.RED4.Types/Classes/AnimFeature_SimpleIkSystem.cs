@@ -5,82 +5,77 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AnimFeature_SimpleIkSystem : animAnimFeature
 	{
-		private CBool _isEnable;
-		private CFloat _weight;
-		private CBool _setPosition;
-		private Vector4 _position;
-		private Vector4 _positionOffset;
-		private CBool _setRotation;
-		private Quaternion _rotation;
-		private Quaternion _rotationOffset;
-
 		[Ordinal(0)] 
 		[RED("isEnable")] 
 		public CBool IsEnable
 		{
-			get => GetProperty(ref _isEnable);
-			set => SetProperty(ref _isEnable, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("weight")] 
 		public CFloat Weight
 		{
-			get => GetProperty(ref _weight);
-			set => SetProperty(ref _weight, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("setPosition")] 
 		public CBool SetPosition
 		{
-			get => GetProperty(ref _setPosition);
-			set => SetProperty(ref _setPosition, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("position")] 
 		public Vector4 Position
 		{
-			get => GetProperty(ref _position);
-			set => SetProperty(ref _position, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("positionOffset")] 
 		public Vector4 PositionOffset
 		{
-			get => GetProperty(ref _positionOffset);
-			set => SetProperty(ref _positionOffset, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("setRotation")] 
 		public CBool SetRotation
 		{
-			get => GetProperty(ref _setRotation);
-			set => SetProperty(ref _setRotation, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("rotation")] 
 		public Quaternion Rotation
 		{
-			get => GetProperty(ref _rotation);
-			set => SetProperty(ref _rotation, value);
+			get => GetPropertyValue<Quaternion>();
+			set => SetPropertyValue<Quaternion>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("rotationOffset")] 
 		public Quaternion RotationOffset
 		{
-			get => GetProperty(ref _rotationOffset);
-			set => SetProperty(ref _rotationOffset, value);
+			get => GetPropertyValue<Quaternion>();
+			set => SetPropertyValue<Quaternion>(value);
 		}
 
 		public AnimFeature_SimpleIkSystem()
 		{
-			_weight = 1.000000F;
+			Weight = 1.000000F;
+			Position = new();
+			PositionOffset = new();
+			Rotation = new() { R = 1.000000F };
+			RotationOffset = new() { R = 1.000000F };
 		}
 	}
 }

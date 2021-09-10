@@ -5,32 +5,33 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CodexListItemController : inkListItemController
 	{
-		private CBool _doMarkNew;
-		private inkWidgetReference _stateMapperRef;
-		private CWeakHandle<ListItemStateMapper> _stateMapper;
-
 		[Ordinal(16)] 
 		[RED("doMarkNew")] 
 		public CBool DoMarkNew
 		{
-			get => GetProperty(ref _doMarkNew);
-			set => SetProperty(ref _doMarkNew, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("stateMapperRef")] 
 		public inkWidgetReference StateMapperRef
 		{
-			get => GetProperty(ref _stateMapperRef);
-			set => SetProperty(ref _stateMapperRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("stateMapper")] 
 		public CWeakHandle<ListItemStateMapper> StateMapper
 		{
-			get => GetProperty(ref _stateMapper);
-			set => SetProperty(ref _stateMapper, value);
+			get => GetPropertyValue<CWeakHandle<ListItemStateMapper>>();
+			set => SetPropertyValue<CWeakHandle<ListItemStateMapper>>(value);
+		}
+
+		public CodexListItemController()
+		{
+			StateMapperRef = new();
 		}
 	}
 }

@@ -5,86 +5,83 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class HubTimeSkipController : inkWidgetLogicController
 	{
-		private inkTextWidgetReference _gameTimeText;
-		private inkWidgetReference _cantSkipTimeContainer;
-		private inkWidgetReference _timeSkipButton;
-		private CWeakHandle<gameuiMenuGameController> _gameCtrlRef;
-		private CWeakHandle<gameTimeSystem> _timeSystem;
-		private CHandle<inkGameNotificationToken> _timeSkipPopupToken;
-		private CHandle<inkanimProxy> _cantSkipTimeAnim;
-		private CHandle<textTextParameterSet> _gameTimeTextParams;
-		private CBool _canSkipTime;
-
 		[Ordinal(1)] 
 		[RED("gameTimeText")] 
 		public inkTextWidgetReference GameTimeText
 		{
-			get => GetProperty(ref _gameTimeText);
-			set => SetProperty(ref _gameTimeText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("cantSkipTimeContainer")] 
 		public inkWidgetReference CantSkipTimeContainer
 		{
-			get => GetProperty(ref _cantSkipTimeContainer);
-			set => SetProperty(ref _cantSkipTimeContainer, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("timeSkipButton")] 
 		public inkWidgetReference TimeSkipButton
 		{
-			get => GetProperty(ref _timeSkipButton);
-			set => SetProperty(ref _timeSkipButton, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("gameCtrlRef")] 
 		public CWeakHandle<gameuiMenuGameController> GameCtrlRef
 		{
-			get => GetProperty(ref _gameCtrlRef);
-			set => SetProperty(ref _gameCtrlRef, value);
+			get => GetPropertyValue<CWeakHandle<gameuiMenuGameController>>();
+			set => SetPropertyValue<CWeakHandle<gameuiMenuGameController>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("timeSystem")] 
 		public CWeakHandle<gameTimeSystem> TimeSystem
 		{
-			get => GetProperty(ref _timeSystem);
-			set => SetProperty(ref _timeSystem, value);
+			get => GetPropertyValue<CWeakHandle<gameTimeSystem>>();
+			set => SetPropertyValue<CWeakHandle<gameTimeSystem>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("timeSkipPopupToken")] 
 		public CHandle<inkGameNotificationToken> TimeSkipPopupToken
 		{
-			get => GetProperty(ref _timeSkipPopupToken);
-			set => SetProperty(ref _timeSkipPopupToken, value);
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("cantSkipTimeAnim")] 
 		public CHandle<inkanimProxy> CantSkipTimeAnim
 		{
-			get => GetProperty(ref _cantSkipTimeAnim);
-			set => SetProperty(ref _cantSkipTimeAnim, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("gameTimeTextParams")] 
 		public CHandle<textTextParameterSet> GameTimeTextParams
 		{
-			get => GetProperty(ref _gameTimeTextParams);
-			set => SetProperty(ref _gameTimeTextParams, value);
+			get => GetPropertyValue<CHandle<textTextParameterSet>>();
+			set => SetPropertyValue<CHandle<textTextParameterSet>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("canSkipTime")] 
 		public CBool CanSkipTime
 		{
-			get => GetProperty(ref _canSkipTime);
-			set => SetProperty(ref _canSkipTime, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public HubTimeSkipController()
+		{
+			GameTimeText = new();
+			CantSkipTimeContainer = new();
+			TimeSkipButton = new();
 		}
 	}
 }

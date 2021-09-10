@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameReplAnimTransformRequestBase : RedBaseClass
 	{
-		private netTime _applyServerTime;
-
 		[Ordinal(0)] 
 		[RED("applyServerTime")] 
 		public netTime ApplyServerTime
 		{
-			get => GetProperty(ref _applyServerTime);
-			set => SetProperty(ref _applyServerTime, value);
+			get => GetPropertyValue<netTime>();
+			set => SetPropertyValue<netTime>(value);
+		}
+
+		public gameReplAnimTransformRequestBase()
+		{
+			ApplyServerTime = new() { MilliSecs = 18446744073709551615 };
 		}
 	}
 }

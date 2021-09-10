@@ -5,14 +5,19 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ToggleComponentsDeviceOperation : DeviceOperationBase
 	{
-		private CArray<SComponentOperationData> _components;
-
 		[Ordinal(5)] 
 		[RED("components")] 
 		public CArray<SComponentOperationData> Components
 		{
-			get => GetProperty(ref _components);
-			set => SetProperty(ref _components, value);
+			get => GetPropertyValue<CArray<SComponentOperationData>>();
+			set => SetPropertyValue<CArray<SComponentOperationData>>(value);
+		}
+
+		public ToggleComponentsDeviceOperation()
+		{
+			IsEnabled = true;
+			ToggleOperations = new();
+			Components = new();
 		}
 	}
 }

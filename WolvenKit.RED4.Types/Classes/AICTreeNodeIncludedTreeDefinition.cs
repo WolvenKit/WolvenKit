@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AICTreeNodeIncludedTreeDefinition : AICTreeNodeDefinition
 	{
-		private LibTreeDefTree _tree;
-
 		[Ordinal(0)] 
 		[RED("tree")] 
 		public LibTreeDefTree Tree
 		{
-			get => GetProperty(ref _tree);
-			set => SetProperty(ref _tree, value);
+			get => GetPropertyValue<LibTreeDefTree>();
+			set => SetPropertyValue<LibTreeDefTree>(value);
+		}
+
+		public AICTreeNodeIncludedTreeDefinition()
+		{
+			Tree = new() { VariableId = 65535 };
 		}
 	}
 }

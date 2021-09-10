@@ -5,185 +5,172 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class LootingGameController : gameuiWidgetGameController
 	{
-		private CHandle<InventoryDataManagerV2> _dataManager;
-		private CWeakHandle<gameIBlackboard> _bbInteractions;
-		private CWeakHandle<gameIBlackboard> _bbEquipmentData;
-		private CWeakHandle<gameIBlackboard> _bbEquipment;
-		private CHandle<UIInteractionsDef> _bbInteractionsDefinition;
-		private CHandle<UI_EquipmentDataDef> _bbEquipmentDataDefinition;
-		private CHandle<UI_EquipmentDef> _bbEquipmentDefinition;
-		private CHandle<redCallbackObject> _dataListenerId;
-		private CHandle<redCallbackObject> _activeListenerId;
-		private CHandle<redCallbackObject> _activeHubListenerId;
-		private CHandle<redCallbackObject> _weaponDataListenerId;
-		private CHandle<redCallbackObject> _itemEquippedListenerId;
-		private CWeakHandle<LootingController> _controller;
-		private CWeakHandle<PlayerPuppet> _player;
-		private CHandle<inkanimProxy> _introAnim;
-		private CHandle<inkanimProxy> _outroAnim;
-		private gameSlotWeaponData _lastActiveWeapon;
-		private InventoryItemData _lastActiveWeaponData;
-		private gameinteractionsvisLootData _previousData;
-		private entEntityID _lastActiveOwnerId;
-
 		[Ordinal(2)] 
 		[RED("dataManager")] 
 		public CHandle<InventoryDataManagerV2> DataManager
 		{
-			get => GetProperty(ref _dataManager);
-			set => SetProperty(ref _dataManager, value);
+			get => GetPropertyValue<CHandle<InventoryDataManagerV2>>();
+			set => SetPropertyValue<CHandle<InventoryDataManagerV2>>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("bbInteractions")] 
 		public CWeakHandle<gameIBlackboard> BbInteractions
 		{
-			get => GetProperty(ref _bbInteractions);
-			set => SetProperty(ref _bbInteractions, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("bbEquipmentData")] 
 		public CWeakHandle<gameIBlackboard> BbEquipmentData
 		{
-			get => GetProperty(ref _bbEquipmentData);
-			set => SetProperty(ref _bbEquipmentData, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("bbEquipment")] 
 		public CWeakHandle<gameIBlackboard> BbEquipment
 		{
-			get => GetProperty(ref _bbEquipment);
-			set => SetProperty(ref _bbEquipment, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("bbInteractionsDefinition")] 
 		public CHandle<UIInteractionsDef> BbInteractionsDefinition
 		{
-			get => GetProperty(ref _bbInteractionsDefinition);
-			set => SetProperty(ref _bbInteractionsDefinition, value);
+			get => GetPropertyValue<CHandle<UIInteractionsDef>>();
+			set => SetPropertyValue<CHandle<UIInteractionsDef>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("bbEquipmentDataDefinition")] 
 		public CHandle<UI_EquipmentDataDef> BbEquipmentDataDefinition
 		{
-			get => GetProperty(ref _bbEquipmentDataDefinition);
-			set => SetProperty(ref _bbEquipmentDataDefinition, value);
+			get => GetPropertyValue<CHandle<UI_EquipmentDataDef>>();
+			set => SetPropertyValue<CHandle<UI_EquipmentDataDef>>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("bbEquipmentDefinition")] 
 		public CHandle<UI_EquipmentDef> BbEquipmentDefinition
 		{
-			get => GetProperty(ref _bbEquipmentDefinition);
-			set => SetProperty(ref _bbEquipmentDefinition, value);
+			get => GetPropertyValue<CHandle<UI_EquipmentDef>>();
+			set => SetPropertyValue<CHandle<UI_EquipmentDef>>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("dataListenerId")] 
 		public CHandle<redCallbackObject> DataListenerId
 		{
-			get => GetProperty(ref _dataListenerId);
-			set => SetProperty(ref _dataListenerId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("activeListenerId")] 
 		public CHandle<redCallbackObject> ActiveListenerId
 		{
-			get => GetProperty(ref _activeListenerId);
-			set => SetProperty(ref _activeListenerId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("activeHubListenerId")] 
 		public CHandle<redCallbackObject> ActiveHubListenerId
 		{
-			get => GetProperty(ref _activeHubListenerId);
-			set => SetProperty(ref _activeHubListenerId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("weaponDataListenerId")] 
 		public CHandle<redCallbackObject> WeaponDataListenerId
 		{
-			get => GetProperty(ref _weaponDataListenerId);
-			set => SetProperty(ref _weaponDataListenerId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("itemEquippedListenerId")] 
 		public CHandle<redCallbackObject> ItemEquippedListenerId
 		{
-			get => GetProperty(ref _itemEquippedListenerId);
-			set => SetProperty(ref _itemEquippedListenerId, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("controller")] 
 		public CWeakHandle<LootingController> Controller
 		{
-			get => GetProperty(ref _controller);
-			set => SetProperty(ref _controller, value);
+			get => GetPropertyValue<CWeakHandle<LootingController>>();
+			set => SetPropertyValue<CWeakHandle<LootingController>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
-			get => GetProperty(ref _player);
-			set => SetProperty(ref _player, value);
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("introAnim")] 
 		public CHandle<inkanimProxy> IntroAnim
 		{
-			get => GetProperty(ref _introAnim);
-			set => SetProperty(ref _introAnim, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("outroAnim")] 
 		public CHandle<inkanimProxy> OutroAnim
 		{
-			get => GetProperty(ref _outroAnim);
-			set => SetProperty(ref _outroAnim, value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("lastActiveWeapon")] 
 		public gameSlotWeaponData LastActiveWeapon
 		{
-			get => GetProperty(ref _lastActiveWeapon);
-			set => SetProperty(ref _lastActiveWeapon, value);
+			get => GetPropertyValue<gameSlotWeaponData>();
+			set => SetPropertyValue<gameSlotWeaponData>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("lastActiveWeaponData")] 
 		public InventoryItemData LastActiveWeaponData
 		{
-			get => GetProperty(ref _lastActiveWeaponData);
-			set => SetProperty(ref _lastActiveWeaponData, value);
+			get => GetPropertyValue<InventoryItemData>();
+			set => SetPropertyValue<InventoryItemData>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("previousData")] 
 		public gameinteractionsvisLootData PreviousData
 		{
-			get => GetProperty(ref _previousData);
-			set => SetProperty(ref _previousData, value);
+			get => GetPropertyValue<gameinteractionsvisLootData>();
+			set => SetPropertyValue<gameinteractionsvisLootData>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("lastActiveOwnerId")] 
 		public entEntityID LastActiveOwnerId
 		{
-			get => GetProperty(ref _lastActiveOwnerId);
-			set => SetProperty(ref _lastActiveOwnerId, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
+		}
+
+		public LootingGameController()
+		{
+			LastActiveWeapon = new() { WeaponID = new(), AmmoCurrent = -1, MagazineCap = -1, AmmoId = new(), TriggerModeCurrent = Enums.gamedataTriggerMode.Invalid, TriggerModeList = new(), Evolution = Enums.gamedataWeaponEvolution.Invalid, IsFirstEquip = true };
+			LastActiveWeaponData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
+			PreviousData = new() { IsListOpen = true, Choices = new(), ItemIDs = new(), OwnerId = new() };
+			LastActiveOwnerId = new();
 		}
 	}
 }

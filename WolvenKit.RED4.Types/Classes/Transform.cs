@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class Transform : RedBaseClass
 	{
-		private Vector4 _position;
-		private Quaternion _orientation;
-
 		[Ordinal(0)] 
 		[RED("position")] 
 		public Vector4 Position
 		{
-			get => GetProperty(ref _position);
-			set => SetProperty(ref _position, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("orientation")] 
 		public Quaternion Orientation
 		{
-			get => GetProperty(ref _orientation);
-			set => SetProperty(ref _orientation, value);
+			get => GetPropertyValue<Quaternion>();
+			set => SetPropertyValue<Quaternion>(value);
+		}
+
+		public Transform()
+		{
+			Position = new();
+			Orientation = new() { R = 1.000000F };
 		}
 	}
 }

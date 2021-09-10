@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ExperiencePointsEvent : redEvent
 	{
-		private CInt32 _amount;
-		private CEnum<gamedataProficiencyType> _type;
-		private CBool _isDebug;
-
 		[Ordinal(0)] 
 		[RED("amount")] 
 		public CInt32 Amount
 		{
-			get => GetProperty(ref _amount);
-			set => SetProperty(ref _amount, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("type")] 
 		public CEnum<gamedataProficiencyType> Type
 		{
-			get => GetProperty(ref _type);
-			set => SetProperty(ref _type, value);
+			get => GetPropertyValue<CEnum<gamedataProficiencyType>>();
+			set => SetPropertyValue<CEnum<gamedataProficiencyType>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isDebug")] 
 		public CBool IsDebug
 		{
-			get => GetProperty(ref _isDebug);
-			set => SetProperty(ref _isDebug, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

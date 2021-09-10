@@ -5,410 +5,379 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class InventoryItemModeLogicController : inkWidgetLogicController
 	{
-		private inkCompoundWidgetReference _itemCategoryList;
-		private inkTextWidgetReference _itemCategoryHeader;
-		private inkCompoundWidgetReference _mainWrapper;
-		private inkTextWidgetReference _emptyInventoryText;
-		private inkCompoundWidgetReference _filterButtonsGrid;
-		private inkWidgetReference _itemGridContainer;
-		private inkWidgetReference _cyberwareGridContainer;
-		private inkWidgetReference _itemGridScrollControllerWidget;
-		private CWeakHandle<ButtonHints> _buttonHintsController;
-		private CWeakHandle<gameuiTooltipsManager> _tooltipsManager;
-		private CHandle<InventoryDataManagerV2> _inventoryManager;
-		private CWeakHandle<PlayerPuppet> _player;
-		private CWeakHandle<EquipmentSystem> _equipmentSystem;
-		private CWeakHandle<gameTransactionSystem> _transactionSystem;
-		private CWeakHandle<UIScriptableSystem> _uiScriptableSystem;
-		private CWeakHandle<InventoryGenericItemChooser> _itemChooser;
-		private CArray<CEnum<gamedataEquipmentArea>> _lastEquipmentAreas;
-		private CEnum<gameEHotkey> _currentHotkey;
-		private CWeakHandle<gameuiInventoryGameController> _inventoryController;
-		private CHandle<ItemPositionProvider> _itemsPositionProvider;
-		private CWeakHandle<gameIBlackboard> _equipmentBlackboard;
-		private CWeakHandle<gameIBlackboard> _itemModsBlackboard;
-		private CHandle<redCallbackObject> _equipmentBlackboardCallback;
-		private CHandle<redCallbackObject> _itemModsBlackboardCallback;
-		private CHandle<ItemModeGridClassifier> _itemGridClassifier;
-		private CHandle<ItemModeGridView> _itemGridDataView;
-		private CHandle<inkScriptableDataSourceWrapper> _itemGridDataSource;
-		private CWeakHandle<BackpackFilterButtonController> _activeFilter;
-		private CHandle<ItemCategoryFliterManager> _filterManager;
-		private CEnum<ItemFilterCategory> _savedFilter;
-		private CWeakHandle<InventoryItemDisplayController> _lastSelectedDisplay;
-		private CHandle<ItemModeInventoryListenerCallback> _itemModeInventoryListenerCallback;
-		private CHandle<gameInventoryScriptListener> _itemModeInventoryListener;
-		private CBool _itemModeInventoryListenerRegistered;
-		private CWeakHandle<ItemModeGridContainer> _itemGridContainerController;
-		private CWeakHandle<ItemModeGridContainer> _cyberwareGridContainerController;
-		private CHandle<ItemPreferredComparisonResolver> _comparisonResolver;
-		private CBool _isE3Demo;
-		private CBool _isShown;
-		private CArray<gameItemModParams> _itemDropQueue;
-		private CHandle<ItemDisplayHoverOverEvent> _lastItemHoverOverEvent;
-		private CBool _isComparisionDisabled;
-		private CHandle<inkGameNotificationToken> _replaceModNotification;
-		private CHandle<InstallModConfirmationData> _installModData;
-		private CHandle<ItemDisplayClickEvent> _hACK_lastItemDisplayEvent;
-
 		[Ordinal(1)] 
 		[RED("itemCategoryList")] 
 		public inkCompoundWidgetReference ItemCategoryList
 		{
-			get => GetProperty(ref _itemCategoryList);
-			set => SetProperty(ref _itemCategoryList, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("itemCategoryHeader")] 
 		public inkTextWidgetReference ItemCategoryHeader
 		{
-			get => GetProperty(ref _itemCategoryHeader);
-			set => SetProperty(ref _itemCategoryHeader, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("mainWrapper")] 
 		public inkCompoundWidgetReference MainWrapper
 		{
-			get => GetProperty(ref _mainWrapper);
-			set => SetProperty(ref _mainWrapper, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("emptyInventoryText")] 
 		public inkTextWidgetReference EmptyInventoryText
 		{
-			get => GetProperty(ref _emptyInventoryText);
-			set => SetProperty(ref _emptyInventoryText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("filterButtonsGrid")] 
 		public inkCompoundWidgetReference FilterButtonsGrid
 		{
-			get => GetProperty(ref _filterButtonsGrid);
-			set => SetProperty(ref _filterButtonsGrid, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("itemGridContainer")] 
 		public inkWidgetReference ItemGridContainer
 		{
-			get => GetProperty(ref _itemGridContainer);
-			set => SetProperty(ref _itemGridContainer, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("cyberwareGridContainer")] 
 		public inkWidgetReference CyberwareGridContainer
 		{
-			get => GetProperty(ref _cyberwareGridContainer);
-			set => SetProperty(ref _cyberwareGridContainer, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("itemGridScrollControllerWidget")] 
 		public inkWidgetReference ItemGridScrollControllerWidget
 		{
-			get => GetProperty(ref _itemGridScrollControllerWidget);
-			set => SetProperty(ref _itemGridScrollControllerWidget, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
-			get => GetProperty(ref _buttonHintsController);
-			set => SetProperty(ref _buttonHintsController, value);
+			get => GetPropertyValue<CWeakHandle<ButtonHints>>();
+			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("TooltipsManager")] 
 		public CWeakHandle<gameuiTooltipsManager> TooltipsManager
 		{
-			get => GetProperty(ref _tooltipsManager);
-			set => SetProperty(ref _tooltipsManager, value);
+			get => GetPropertyValue<CWeakHandle<gameuiTooltipsManager>>();
+			set => SetPropertyValue<CWeakHandle<gameuiTooltipsManager>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("InventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
-			get => GetProperty(ref _inventoryManager);
-			set => SetProperty(ref _inventoryManager, value);
+			get => GetPropertyValue<CHandle<InventoryDataManagerV2>>();
+			set => SetPropertyValue<CHandle<InventoryDataManagerV2>>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
-			get => GetProperty(ref _player);
-			set => SetProperty(ref _player, value);
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("equipmentSystem")] 
 		public CWeakHandle<EquipmentSystem> EquipmentSystem
 		{
-			get => GetProperty(ref _equipmentSystem);
-			set => SetProperty(ref _equipmentSystem, value);
+			get => GetPropertyValue<CWeakHandle<EquipmentSystem>>();
+			set => SetPropertyValue<CWeakHandle<EquipmentSystem>>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("transactionSystem")] 
 		public CWeakHandle<gameTransactionSystem> TransactionSystem
 		{
-			get => GetProperty(ref _transactionSystem);
-			set => SetProperty(ref _transactionSystem, value);
+			get => GetPropertyValue<CWeakHandle<gameTransactionSystem>>();
+			set => SetPropertyValue<CWeakHandle<gameTransactionSystem>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("uiScriptableSystem")] 
 		public CWeakHandle<UIScriptableSystem> UiScriptableSystem
 		{
-			get => GetProperty(ref _uiScriptableSystem);
-			set => SetProperty(ref _uiScriptableSystem, value);
+			get => GetPropertyValue<CWeakHandle<UIScriptableSystem>>();
+			set => SetPropertyValue<CWeakHandle<UIScriptableSystem>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("itemChooser")] 
 		public CWeakHandle<InventoryGenericItemChooser> ItemChooser
 		{
-			get => GetProperty(ref _itemChooser);
-			set => SetProperty(ref _itemChooser, value);
+			get => GetPropertyValue<CWeakHandle<InventoryGenericItemChooser>>();
+			set => SetPropertyValue<CWeakHandle<InventoryGenericItemChooser>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("lastEquipmentAreas")] 
 		public CArray<CEnum<gamedataEquipmentArea>> LastEquipmentAreas
 		{
-			get => GetProperty(ref _lastEquipmentAreas);
-			set => SetProperty(ref _lastEquipmentAreas, value);
+			get => GetPropertyValue<CArray<CEnum<gamedataEquipmentArea>>>();
+			set => SetPropertyValue<CArray<CEnum<gamedataEquipmentArea>>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("currentHotkey")] 
 		public CEnum<gameEHotkey> CurrentHotkey
 		{
-			get => GetProperty(ref _currentHotkey);
-			set => SetProperty(ref _currentHotkey, value);
+			get => GetPropertyValue<CEnum<gameEHotkey>>();
+			set => SetPropertyValue<CEnum<gameEHotkey>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("inventoryController")] 
 		public CWeakHandle<gameuiInventoryGameController> InventoryController
 		{
-			get => GetProperty(ref _inventoryController);
-			set => SetProperty(ref _inventoryController, value);
+			get => GetPropertyValue<CWeakHandle<gameuiInventoryGameController>>();
+			set => SetPropertyValue<CWeakHandle<gameuiInventoryGameController>>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("itemsPositionProvider")] 
 		public CHandle<ItemPositionProvider> ItemsPositionProvider
 		{
-			get => GetProperty(ref _itemsPositionProvider);
-			set => SetProperty(ref _itemsPositionProvider, value);
+			get => GetPropertyValue<CHandle<ItemPositionProvider>>();
+			set => SetPropertyValue<CHandle<ItemPositionProvider>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("equipmentBlackboard")] 
 		public CWeakHandle<gameIBlackboard> EquipmentBlackboard
 		{
-			get => GetProperty(ref _equipmentBlackboard);
-			set => SetProperty(ref _equipmentBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("itemModsBlackboard")] 
 		public CWeakHandle<gameIBlackboard> ItemModsBlackboard
 		{
-			get => GetProperty(ref _itemModsBlackboard);
-			set => SetProperty(ref _itemModsBlackboard, value);
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("equipmentBlackboardCallback")] 
 		public CHandle<redCallbackObject> EquipmentBlackboardCallback
 		{
-			get => GetProperty(ref _equipmentBlackboardCallback);
-			set => SetProperty(ref _equipmentBlackboardCallback, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(24)] 
 		[RED("itemModsBlackboardCallback")] 
 		public CHandle<redCallbackObject> ItemModsBlackboardCallback
 		{
-			get => GetProperty(ref _itemModsBlackboardCallback);
-			set => SetProperty(ref _itemModsBlackboardCallback, value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(25)] 
 		[RED("itemGridClassifier")] 
 		public CHandle<ItemModeGridClassifier> ItemGridClassifier
 		{
-			get => GetProperty(ref _itemGridClassifier);
-			set => SetProperty(ref _itemGridClassifier, value);
+			get => GetPropertyValue<CHandle<ItemModeGridClassifier>>();
+			set => SetPropertyValue<CHandle<ItemModeGridClassifier>>(value);
 		}
 
 		[Ordinal(26)] 
 		[RED("itemGridDataView")] 
 		public CHandle<ItemModeGridView> ItemGridDataView
 		{
-			get => GetProperty(ref _itemGridDataView);
-			set => SetProperty(ref _itemGridDataView, value);
+			get => GetPropertyValue<CHandle<ItemModeGridView>>();
+			set => SetPropertyValue<CHandle<ItemModeGridView>>(value);
 		}
 
 		[Ordinal(27)] 
 		[RED("itemGridDataSource")] 
 		public CHandle<inkScriptableDataSourceWrapper> ItemGridDataSource
 		{
-			get => GetProperty(ref _itemGridDataSource);
-			set => SetProperty(ref _itemGridDataSource, value);
+			get => GetPropertyValue<CHandle<inkScriptableDataSourceWrapper>>();
+			set => SetPropertyValue<CHandle<inkScriptableDataSourceWrapper>>(value);
 		}
 
 		[Ordinal(28)] 
 		[RED("activeFilter")] 
 		public CWeakHandle<BackpackFilterButtonController> ActiveFilter
 		{
-			get => GetProperty(ref _activeFilter);
-			set => SetProperty(ref _activeFilter, value);
+			get => GetPropertyValue<CWeakHandle<BackpackFilterButtonController>>();
+			set => SetPropertyValue<CWeakHandle<BackpackFilterButtonController>>(value);
 		}
 
 		[Ordinal(29)] 
 		[RED("filterManager")] 
 		public CHandle<ItemCategoryFliterManager> FilterManager
 		{
-			get => GetProperty(ref _filterManager);
-			set => SetProperty(ref _filterManager, value);
+			get => GetPropertyValue<CHandle<ItemCategoryFliterManager>>();
+			set => SetPropertyValue<CHandle<ItemCategoryFliterManager>>(value);
 		}
 
 		[Ordinal(30)] 
 		[RED("savedFilter")] 
 		public CEnum<ItemFilterCategory> SavedFilter
 		{
-			get => GetProperty(ref _savedFilter);
-			set => SetProperty(ref _savedFilter, value);
+			get => GetPropertyValue<CEnum<ItemFilterCategory>>();
+			set => SetPropertyValue<CEnum<ItemFilterCategory>>(value);
 		}
 
 		[Ordinal(31)] 
 		[RED("lastSelectedDisplay")] 
 		public CWeakHandle<InventoryItemDisplayController> LastSelectedDisplay
 		{
-			get => GetProperty(ref _lastSelectedDisplay);
-			set => SetProperty(ref _lastSelectedDisplay, value);
+			get => GetPropertyValue<CWeakHandle<InventoryItemDisplayController>>();
+			set => SetPropertyValue<CWeakHandle<InventoryItemDisplayController>>(value);
 		}
 
 		[Ordinal(32)] 
 		[RED("itemModeInventoryListenerCallback")] 
 		public CHandle<ItemModeInventoryListenerCallback> ItemModeInventoryListenerCallback
 		{
-			get => GetProperty(ref _itemModeInventoryListenerCallback);
-			set => SetProperty(ref _itemModeInventoryListenerCallback, value);
+			get => GetPropertyValue<CHandle<ItemModeInventoryListenerCallback>>();
+			set => SetPropertyValue<CHandle<ItemModeInventoryListenerCallback>>(value);
 		}
 
 		[Ordinal(33)] 
 		[RED("itemModeInventoryListener")] 
 		public CHandle<gameInventoryScriptListener> ItemModeInventoryListener
 		{
-			get => GetProperty(ref _itemModeInventoryListener);
-			set => SetProperty(ref _itemModeInventoryListener, value);
+			get => GetPropertyValue<CHandle<gameInventoryScriptListener>>();
+			set => SetPropertyValue<CHandle<gameInventoryScriptListener>>(value);
 		}
 
 		[Ordinal(34)] 
 		[RED("itemModeInventoryListenerRegistered")] 
 		public CBool ItemModeInventoryListenerRegistered
 		{
-			get => GetProperty(ref _itemModeInventoryListenerRegistered);
-			set => SetProperty(ref _itemModeInventoryListenerRegistered, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(35)] 
 		[RED("itemGridContainerController")] 
 		public CWeakHandle<ItemModeGridContainer> ItemGridContainerController
 		{
-			get => GetProperty(ref _itemGridContainerController);
-			set => SetProperty(ref _itemGridContainerController, value);
+			get => GetPropertyValue<CWeakHandle<ItemModeGridContainer>>();
+			set => SetPropertyValue<CWeakHandle<ItemModeGridContainer>>(value);
 		}
 
 		[Ordinal(36)] 
 		[RED("cyberwareGridContainerController")] 
 		public CWeakHandle<ItemModeGridContainer> CyberwareGridContainerController
 		{
-			get => GetProperty(ref _cyberwareGridContainerController);
-			set => SetProperty(ref _cyberwareGridContainerController, value);
+			get => GetPropertyValue<CWeakHandle<ItemModeGridContainer>>();
+			set => SetPropertyValue<CWeakHandle<ItemModeGridContainer>>(value);
 		}
 
 		[Ordinal(37)] 
 		[RED("comparisonResolver")] 
 		public CHandle<ItemPreferredComparisonResolver> ComparisonResolver
 		{
-			get => GetProperty(ref _comparisonResolver);
-			set => SetProperty(ref _comparisonResolver, value);
+			get => GetPropertyValue<CHandle<ItemPreferredComparisonResolver>>();
+			set => SetPropertyValue<CHandle<ItemPreferredComparisonResolver>>(value);
 		}
 
 		[Ordinal(38)] 
 		[RED("isE3Demo")] 
 		public CBool IsE3Demo
 		{
-			get => GetProperty(ref _isE3Demo);
-			set => SetProperty(ref _isE3Demo, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(39)] 
 		[RED("isShown")] 
 		public CBool IsShown
 		{
-			get => GetProperty(ref _isShown);
-			set => SetProperty(ref _isShown, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(40)] 
 		[RED("itemDropQueue")] 
 		public CArray<gameItemModParams> ItemDropQueue
 		{
-			get => GetProperty(ref _itemDropQueue);
-			set => SetProperty(ref _itemDropQueue, value);
+			get => GetPropertyValue<CArray<gameItemModParams>>();
+			set => SetPropertyValue<CArray<gameItemModParams>>(value);
 		}
 
 		[Ordinal(41)] 
 		[RED("lastItemHoverOverEvent")] 
 		public CHandle<ItemDisplayHoverOverEvent> LastItemHoverOverEvent
 		{
-			get => GetProperty(ref _lastItemHoverOverEvent);
-			set => SetProperty(ref _lastItemHoverOverEvent, value);
+			get => GetPropertyValue<CHandle<ItemDisplayHoverOverEvent>>();
+			set => SetPropertyValue<CHandle<ItemDisplayHoverOverEvent>>(value);
 		}
 
 		[Ordinal(42)] 
 		[RED("isComparisionDisabled")] 
 		public CBool IsComparisionDisabled
 		{
-			get => GetProperty(ref _isComparisionDisabled);
-			set => SetProperty(ref _isComparisionDisabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(43)] 
 		[RED("replaceModNotification")] 
 		public CHandle<inkGameNotificationToken> ReplaceModNotification
 		{
-			get => GetProperty(ref _replaceModNotification);
-			set => SetProperty(ref _replaceModNotification, value);
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
 		[Ordinal(44)] 
 		[RED("installModData")] 
 		public CHandle<InstallModConfirmationData> InstallModData
 		{
-			get => GetProperty(ref _installModData);
-			set => SetProperty(ref _installModData, value);
+			get => GetPropertyValue<CHandle<InstallModConfirmationData>>();
+			set => SetPropertyValue<CHandle<InstallModConfirmationData>>(value);
 		}
 
 		[Ordinal(45)] 
 		[RED("HACK_lastItemDisplayEvent")] 
 		public CHandle<ItemDisplayClickEvent> HACK_lastItemDisplayEvent
 		{
-			get => GetProperty(ref _hACK_lastItemDisplayEvent);
-			set => SetProperty(ref _hACK_lastItemDisplayEvent, value);
+			get => GetPropertyValue<CHandle<ItemDisplayClickEvent>>();
+			set => SetPropertyValue<CHandle<ItemDisplayClickEvent>>(value);
+		}
+
+		public InventoryItemModeLogicController()
+		{
+			ItemCategoryList = new();
+			ItemCategoryHeader = new();
+			MainWrapper = new();
+			EmptyInventoryText = new();
+			FilterButtonsGrid = new();
+			ItemGridContainer = new();
+			CyberwareGridContainer = new();
+			ItemGridScrollControllerWidget = new();
+			LastEquipmentAreas = new();
+			CurrentHotkey = Enums.gameEHotkey.INVALID;
+			ItemDropQueue = new();
 		}
 	}
 }

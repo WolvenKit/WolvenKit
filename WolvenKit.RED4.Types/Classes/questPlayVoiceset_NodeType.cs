@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questPlayVoiceset_NodeType : questIVoicesetManager_NodeType
 	{
-		private CArray<questPlayVoiceset_NodeTypeParams> _params;
-
 		[Ordinal(0)] 
 		[RED("params")] 
 		public CArray<questPlayVoiceset_NodeTypeParams> Params
 		{
-			get => GetProperty(ref _params);
-			set => SetProperty(ref _params, value);
+			get => GetPropertyValue<CArray<questPlayVoiceset_NodeTypeParams>>();
+			set => SetPropertyValue<CArray<questPlayVoiceset_NodeTypeParams>>(value);
+		}
+
+		public questPlayVoiceset_NodeType()
+		{
+			Params = new() { new() };
 		}
 	}
 }

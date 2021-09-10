@@ -5,95 +5,84 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SDeviceActionData : RedBaseClass
 	{
-		private CBool _hasInteraction;
-		private CBool _hasUI;
-		private CBool _isQuickHack;
-		private CBool _isSpiderbotAction;
-		private NodeRef _spiderbotLocationOverrideReference;
-		private CEnum<EDeviceChallengeSkill> _attachedToSkillCheck;
-		private TweakDBID _widgetRecord;
-		private TweakDBID _objectActionRecord;
-		private CName _currentDisplayName;
-		private CString _interactionRecord;
-
 		[Ordinal(0)] 
 		[RED("hasInteraction")] 
 		public CBool HasInteraction
 		{
-			get => GetProperty(ref _hasInteraction);
-			set => SetProperty(ref _hasInteraction, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hasUI")] 
 		public CBool HasUI
 		{
-			get => GetProperty(ref _hasUI);
-			set => SetProperty(ref _hasUI, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("isQuickHack")] 
 		public CBool IsQuickHack
 		{
-			get => GetProperty(ref _isQuickHack);
-			set => SetProperty(ref _isQuickHack, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isSpiderbotAction")] 
 		public CBool IsSpiderbotAction
 		{
-			get => GetProperty(ref _isSpiderbotAction);
-			set => SetProperty(ref _isSpiderbotAction, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("spiderbotLocationOverrideReference")] 
 		public NodeRef SpiderbotLocationOverrideReference
 		{
-			get => GetProperty(ref _spiderbotLocationOverrideReference);
-			set => SetProperty(ref _spiderbotLocationOverrideReference, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("attachedToSkillCheck")] 
 		public CEnum<EDeviceChallengeSkill> AttachedToSkillCheck
 		{
-			get => GetProperty(ref _attachedToSkillCheck);
-			set => SetProperty(ref _attachedToSkillCheck, value);
+			get => GetPropertyValue<CEnum<EDeviceChallengeSkill>>();
+			set => SetPropertyValue<CEnum<EDeviceChallengeSkill>>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("widgetRecord")] 
 		public TweakDBID WidgetRecord
 		{
-			get => GetProperty(ref _widgetRecord);
-			set => SetProperty(ref _widgetRecord, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("objectActionRecord")] 
 		public TweakDBID ObjectActionRecord
 		{
-			get => GetProperty(ref _objectActionRecord);
-			set => SetProperty(ref _objectActionRecord, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("currentDisplayName")] 
 		public CName CurrentDisplayName
 		{
-			get => GetProperty(ref _currentDisplayName);
-			set => SetProperty(ref _currentDisplayName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("interactionRecord")] 
 		public CString InteractionRecord
 		{
-			get => GetProperty(ref _interactionRecord);
-			set => SetProperty(ref _interactionRecord, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 	}
 }

@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class questCharacterManagerParameters_SetReactionPreset : questICharacterManagerParameters_NodeSubType
 	{
-		private gameEntityReference _puppetRef;
-		private CHandle<questReactionPresetRecordSelector> _recordSelector;
-
 		[Ordinal(0)] 
 		[RED("puppetRef")] 
 		public gameEntityReference PuppetRef
 		{
-			get => GetProperty(ref _puppetRef);
-			set => SetProperty(ref _puppetRef, value);
+			get => GetPropertyValue<gameEntityReference>();
+			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("recordSelector")] 
 		public CHandle<questReactionPresetRecordSelector> RecordSelector
 		{
-			get => GetProperty(ref _recordSelector);
-			set => SetProperty(ref _recordSelector, value);
+			get => GetPropertyValue<CHandle<questReactionPresetRecordSelector>>();
+			set => SetPropertyValue<CHandle<questReactionPresetRecordSelector>>(value);
+		}
+
+		public questCharacterManagerParameters_SetReactionPreset()
+		{
+			PuppetRef = new() { Names = new() };
 		}
 	}
 }

@@ -5,14 +5,12 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class UIMenuNotificationViewData : gameuiGenericNotificationViewData
 	{
-		private CBool _canBeMerged;
-
 		[Ordinal(5)] 
 		[RED("canBeMerged")] 
 		public CBool CanBeMerged
 		{
-			get => GetProperty(ref _canBeMerged);
-			set => SetProperty(ref _canBeMerged, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

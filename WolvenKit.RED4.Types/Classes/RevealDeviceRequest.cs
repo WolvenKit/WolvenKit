@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class RevealDeviceRequest : redEvent
 	{
-		private CBool _shouldReveal;
-		private entEntityID _sourceID;
-		private SNetworkLinkData _linkData;
-
 		[Ordinal(0)] 
 		[RED("shouldReveal")] 
 		public CBool ShouldReveal
 		{
-			get => GetProperty(ref _shouldReveal);
-			set => SetProperty(ref _shouldReveal, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("sourceID")] 
 		public entEntityID SourceID
 		{
-			get => GetProperty(ref _sourceID);
-			set => SetProperty(ref _sourceID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("linkData")] 
 		public SNetworkLinkData LinkData
 		{
-			get => GetProperty(ref _linkData);
-			set => SetProperty(ref _linkData, value);
+			get => GetPropertyValue<SNetworkLinkData>();
+			set => SetPropertyValue<SNetworkLinkData>(value);
+		}
+
+		public RevealDeviceRequest()
+		{
+			SourceID = new();
+			LinkData = new() { FxResource = new(), SlaveID = new(), MasterID = new(), SlavePos = new(), MasterPos = new(), DrawLink = true, RevealMaster = true, RevealSlave = true, Lifetime = -1.000000F, DelayID = new() };
 		}
 	}
 }

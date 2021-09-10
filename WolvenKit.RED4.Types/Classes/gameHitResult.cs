@@ -5,32 +5,34 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameHitResult : RedBaseClass
 	{
-		private Vector4 _hitPositionEnter;
-		private Vector4 _hitPositionExit;
-		private CFloat _enterDistanceFromOriginSq;
-
 		[Ordinal(0)] 
 		[RED("hitPositionEnter")] 
 		public Vector4 HitPositionEnter
 		{
-			get => GetProperty(ref _hitPositionEnter);
-			set => SetProperty(ref _hitPositionEnter, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("hitPositionExit")] 
 		public Vector4 HitPositionExit
 		{
-			get => GetProperty(ref _hitPositionExit);
-			set => SetProperty(ref _hitPositionExit, value);
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("enterDistanceFromOriginSq")] 
 		public CFloat EnterDistanceFromOriginSq
 		{
-			get => GetProperty(ref _enterDistanceFromOriginSq);
-			set => SetProperty(ref _enterDistanceFromOriginSq, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public gameHitResult()
+		{
+			HitPositionEnter = new();
+			HitPositionExit = new();
 		}
 	}
 }

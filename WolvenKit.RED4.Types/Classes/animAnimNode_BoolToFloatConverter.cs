@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class animAnimNode_BoolToFloatConverter : animAnimNode_FloatValue
 	{
-		private animBoolLink _inputNode;
-
 		[Ordinal(11)] 
 		[RED("inputNode")] 
 		public animBoolLink InputNode
 		{
-			get => GetProperty(ref _inputNode);
-			set => SetProperty(ref _inputNode, value);
+			get => GetPropertyValue<animBoolLink>();
+			set => SetPropertyValue<animBoolLink>(value);
+		}
+
+		public animAnimNode_BoolToFloatConverter()
+		{
+			Id = 4294967295;
+			InputNode = new();
 		}
 	}
 }

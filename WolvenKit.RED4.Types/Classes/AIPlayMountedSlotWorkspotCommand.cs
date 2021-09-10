@@ -5,14 +5,17 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AIPlayMountedSlotWorkspotCommand : AICommand
 	{
-		private gameMountDescriptor _mountData;
-
 		[Ordinal(4)] 
 		[RED("mountData")] 
 		public gameMountDescriptor MountData
 		{
-			get => GetProperty(ref _mountData);
-			set => SetProperty(ref _mountData, value);
+			get => GetPropertyValue<gameMountDescriptor>();
+			set => SetPropertyValue<gameMountDescriptor>(value);
+		}
+
+		public AIPlayMountedSlotWorkspotCommand()
+		{
+			MountData = new() { ParentId = new(), InitialTransform = new() { Position = new(), Orientation = new() { R = 1.000000F } }, MountType = Enums.gameMountDescriptorMountType.KeepState };
 		}
 	}
 }

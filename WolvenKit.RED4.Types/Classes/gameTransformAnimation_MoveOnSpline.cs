@@ -5,55 +5,49 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameTransformAnimation_MoveOnSpline : gameTransformAnimationTrackItemImpl
 	{
-		private NodeRef _splineNode;
-		private CFloat _from;
-		private CFloat _to;
-		private CEnum<gameTransformAnimation_MoveOnSplineRotationMode> _rotationMode;
-		private CHandle<gameTransformAnimation_Movement> _movement;
-
 		[Ordinal(0)] 
 		[RED("splineNode")] 
 		public NodeRef SplineNode
 		{
-			get => GetProperty(ref _splineNode);
-			set => SetProperty(ref _splineNode, value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("from")] 
 		public CFloat From
 		{
-			get => GetProperty(ref _from);
-			set => SetProperty(ref _from, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("to")] 
 		public CFloat To
 		{
-			get => GetProperty(ref _to);
-			set => SetProperty(ref _to, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("rotationMode")] 
 		public CEnum<gameTransformAnimation_MoveOnSplineRotationMode> RotationMode
 		{
-			get => GetProperty(ref _rotationMode);
-			set => SetProperty(ref _rotationMode, value);
+			get => GetPropertyValue<CEnum<gameTransformAnimation_MoveOnSplineRotationMode>>();
+			set => SetPropertyValue<CEnum<gameTransformAnimation_MoveOnSplineRotationMode>>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("movement")] 
 		public CHandle<gameTransformAnimation_Movement> Movement
 		{
-			get => GetProperty(ref _movement);
-			set => SetProperty(ref _movement, value);
+			get => GetPropertyValue<CHandle<gameTransformAnimation_Movement>>();
+			set => SetPropertyValue<CHandle<gameTransformAnimation_Movement>>(value);
 		}
 
 		public gameTransformAnimation_MoveOnSpline()
 		{
-			_rotationMode = new() { Value = Enums.gameTransformAnimation_MoveOnSplineRotationMode.Yaw };
+			RotationMode = Enums.gameTransformAnimation_MoveOnSplineRotationMode.Yaw;
 		}
 	}
 }

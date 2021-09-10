@@ -5,23 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class vehicleUnmountPosition : RedBaseClass
 	{
-		private CEnum<vehicleExitDirection> _direction;
-		private WorldPosition _position;
-
 		[Ordinal(0)] 
 		[RED("direction")] 
 		public CEnum<vehicleExitDirection> Direction
 		{
-			get => GetProperty(ref _direction);
-			set => SetProperty(ref _direction, value);
+			get => GetPropertyValue<CEnum<vehicleExitDirection>>();
+			set => SetPropertyValue<CEnum<vehicleExitDirection>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("position")] 
 		public WorldPosition Position
 		{
-			get => GetProperty(ref _position);
-			set => SetProperty(ref _position, value);
+			get => GetPropertyValue<WorldPosition>();
+			set => SetPropertyValue<WorldPosition>(value);
+		}
+
+		public vehicleUnmountPosition()
+		{
+			Position = new() { X = new(), Y = new(), Z = new() };
 		}
 	}
 }

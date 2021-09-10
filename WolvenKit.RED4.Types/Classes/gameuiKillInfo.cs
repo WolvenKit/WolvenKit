@@ -5,32 +5,28 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiKillInfo : RedBaseClass
 	{
-		private CWeakHandle<gameObject> _killerEntity;
-		private CWeakHandle<gameObject> _victimEntity;
-		private CEnum<gameKillType> _killType;
-
 		[Ordinal(0)] 
 		[RED("killerEntity")] 
 		public CWeakHandle<gameObject> KillerEntity
 		{
-			get => GetProperty(ref _killerEntity);
-			set => SetProperty(ref _killerEntity, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("victimEntity")] 
 		public CWeakHandle<gameObject> VictimEntity
 		{
-			get => GetProperty(ref _victimEntity);
-			set => SetProperty(ref _victimEntity, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("killType")] 
 		public CEnum<gameKillType> KillType
 		{
-			get => GetProperty(ref _killType);
-			set => SetProperty(ref _killType, value);
+			get => GetPropertyValue<CEnum<gameKillType>>();
+			set => SetPropertyValue<CEnum<gameKillType>>(value);
 		}
 	}
 }

@@ -5,68 +5,71 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WorldMapDistrictTooltipController : WorldMapTooltipBaseController
 	{
-		private inkTextWidgetReference _titleText;
-		private inkTextWidgetReference _levelRangeText;
-		private inkTextWidgetReference _threatText;
-		private inkTextWidgetReference _completionText;
-		private inkWidgetReference _gangsContainer;
-		private inkCompoundWidgetReference _gangsList;
-		private CArray<CWeakHandle<WorldMapGangItemController>> _gangControllers;
-
 		[Ordinal(5)] 
 		[RED("titleText")] 
 		public inkTextWidgetReference TitleText
 		{
-			get => GetProperty(ref _titleText);
-			set => SetProperty(ref _titleText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("levelRangeText")] 
 		public inkTextWidgetReference LevelRangeText
 		{
-			get => GetProperty(ref _levelRangeText);
-			set => SetProperty(ref _levelRangeText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("threatText")] 
 		public inkTextWidgetReference ThreatText
 		{
-			get => GetProperty(ref _threatText);
-			set => SetProperty(ref _threatText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("completionText")] 
 		public inkTextWidgetReference CompletionText
 		{
-			get => GetProperty(ref _completionText);
-			set => SetProperty(ref _completionText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("gangsContainer")] 
 		public inkWidgetReference GangsContainer
 		{
-			get => GetProperty(ref _gangsContainer);
-			set => SetProperty(ref _gangsContainer, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("gangsList")] 
 		public inkCompoundWidgetReference GangsList
 		{
-			get => GetProperty(ref _gangsList);
-			set => SetProperty(ref _gangsList, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("gangControllers")] 
 		public CArray<CWeakHandle<WorldMapGangItemController>> GangControllers
 		{
-			get => GetProperty(ref _gangControllers);
-			set => SetProperty(ref _gangControllers, value);
+			get => GetPropertyValue<CArray<CWeakHandle<WorldMapGangItemController>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<WorldMapGangItemController>>>(value);
+		}
+
+		public WorldMapDistrictTooltipController()
+		{
+			TitleText = new();
+			LevelRangeText = new();
+			ThreatText = new();
+			CompletionText = new();
+			GangsContainer = new();
+			GangsList = new();
+			GangControllers = new();
 		}
 	}
 }

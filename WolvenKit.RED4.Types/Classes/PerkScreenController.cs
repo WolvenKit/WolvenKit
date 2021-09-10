@@ -5,212 +5,207 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PerkScreenController : inkWidgetLogicController
 	{
-		private inkWidgetReference _hubSelector;
-		private inkCompoundWidgetReference _connectionLinesContainer;
-		private inkCompoundWidgetReference _boughtConnectionLinesContainer;
-		private inkCompoundWidgetReference _maxedConnectionLinesContainer;
-		private inkCanvasWidgetReference _boughtMaskContainer;
-		private inkCanvasWidgetReference _maxedMaskContainer;
-		private inkTextWidgetReference _attributeNameText;
-		private inkTextWidgetReference _attributeLevelText;
-		private inkWidgetReference _levelControllerRef;
-		private inkWidgetReference _rewardsControllerRef;
-		private inkWidgetReference _tooltipsManagerRef;
-		private inkWidgetReference _proficiencyRootRef;
-		private inkTextWidgetReference _proficiencyDescriptionText;
-		private CHandle<PlayerDevelopmentDataManager> _dataManager;
-		private CHandle<AttributeDisplayData> _displayData;
-		private CWeakHandle<TabRadioGroup> _proficiencyRoot;
-		private CArray<CWeakHandle<PerkDisplayContainerController>> _widgetMap;
-		private CWeakHandle<PerkDisplayContainerController> _traitController;
-		private CInt32 _currentIndex;
-		private CArrayFixedSize<CInt32> _connectionLines;
-		private CWeakHandle<StatsProgressController> _levelController;
-		private CWeakHandle<StatsStreetCredReward> _rewardsController;
-		private CWeakHandle<gameuiTooltipsManager> _tooltipsManager;
-
 		[Ordinal(1)] 
 		[RED("hubSelector")] 
 		public inkWidgetReference HubSelector
 		{
-			get => GetProperty(ref _hubSelector);
-			set => SetProperty(ref _hubSelector, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("connectionLinesContainer")] 
 		public inkCompoundWidgetReference ConnectionLinesContainer
 		{
-			get => GetProperty(ref _connectionLinesContainer);
-			set => SetProperty(ref _connectionLinesContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("boughtConnectionLinesContainer")] 
 		public inkCompoundWidgetReference BoughtConnectionLinesContainer
 		{
-			get => GetProperty(ref _boughtConnectionLinesContainer);
-			set => SetProperty(ref _boughtConnectionLinesContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("maxedConnectionLinesContainer")] 
 		public inkCompoundWidgetReference MaxedConnectionLinesContainer
 		{
-			get => GetProperty(ref _maxedConnectionLinesContainer);
-			set => SetProperty(ref _maxedConnectionLinesContainer, value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("boughtMaskContainer")] 
 		public inkCanvasWidgetReference BoughtMaskContainer
 		{
-			get => GetProperty(ref _boughtMaskContainer);
-			set => SetProperty(ref _boughtMaskContainer, value);
+			get => GetPropertyValue<inkCanvasWidgetReference>();
+			set => SetPropertyValue<inkCanvasWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("maxedMaskContainer")] 
 		public inkCanvasWidgetReference MaxedMaskContainer
 		{
-			get => GetProperty(ref _maxedMaskContainer);
-			set => SetProperty(ref _maxedMaskContainer, value);
+			get => GetPropertyValue<inkCanvasWidgetReference>();
+			set => SetPropertyValue<inkCanvasWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("attributeNameText")] 
 		public inkTextWidgetReference AttributeNameText
 		{
-			get => GetProperty(ref _attributeNameText);
-			set => SetProperty(ref _attributeNameText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("attributeLevelText")] 
 		public inkTextWidgetReference AttributeLevelText
 		{
-			get => GetProperty(ref _attributeLevelText);
-			set => SetProperty(ref _attributeLevelText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("levelControllerRef")] 
 		public inkWidgetReference LevelControllerRef
 		{
-			get => GetProperty(ref _levelControllerRef);
-			set => SetProperty(ref _levelControllerRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("rewardsControllerRef")] 
 		public inkWidgetReference RewardsControllerRef
 		{
-			get => GetProperty(ref _rewardsControllerRef);
-			set => SetProperty(ref _rewardsControllerRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("TooltipsManagerRef")] 
 		public inkWidgetReference TooltipsManagerRef
 		{
-			get => GetProperty(ref _tooltipsManagerRef);
-			set => SetProperty(ref _tooltipsManagerRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(12)] 
 		[RED("proficiencyRootRef")] 
 		public inkWidgetReference ProficiencyRootRef
 		{
-			get => GetProperty(ref _proficiencyRootRef);
-			set => SetProperty(ref _proficiencyRootRef, value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("proficiencyDescriptionText")] 
 		public inkTextWidgetReference ProficiencyDescriptionText
 		{
-			get => GetProperty(ref _proficiencyDescriptionText);
-			set => SetProperty(ref _proficiencyDescriptionText, value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(14)] 
 		[RED("dataManager")] 
 		public CHandle<PlayerDevelopmentDataManager> DataManager
 		{
-			get => GetProperty(ref _dataManager);
-			set => SetProperty(ref _dataManager, value);
+			get => GetPropertyValue<CHandle<PlayerDevelopmentDataManager>>();
+			set => SetPropertyValue<CHandle<PlayerDevelopmentDataManager>>(value);
 		}
 
 		[Ordinal(15)] 
 		[RED("displayData")] 
 		public CHandle<AttributeDisplayData> DisplayData
 		{
-			get => GetProperty(ref _displayData);
-			set => SetProperty(ref _displayData, value);
+			get => GetPropertyValue<CHandle<AttributeDisplayData>>();
+			set => SetPropertyValue<CHandle<AttributeDisplayData>>(value);
 		}
 
 		[Ordinal(16)] 
 		[RED("proficiencyRoot")] 
 		public CWeakHandle<TabRadioGroup> ProficiencyRoot
 		{
-			get => GetProperty(ref _proficiencyRoot);
-			set => SetProperty(ref _proficiencyRoot, value);
+			get => GetPropertyValue<CWeakHandle<TabRadioGroup>>();
+			set => SetPropertyValue<CWeakHandle<TabRadioGroup>>(value);
 		}
 
 		[Ordinal(17)] 
 		[RED("widgetMap")] 
 		public CArray<CWeakHandle<PerkDisplayContainerController>> WidgetMap
 		{
-			get => GetProperty(ref _widgetMap);
-			set => SetProperty(ref _widgetMap, value);
+			get => GetPropertyValue<CArray<CWeakHandle<PerkDisplayContainerController>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<PerkDisplayContainerController>>>(value);
 		}
 
 		[Ordinal(18)] 
 		[RED("traitController")] 
 		public CWeakHandle<PerkDisplayContainerController> TraitController
 		{
-			get => GetProperty(ref _traitController);
-			set => SetProperty(ref _traitController, value);
+			get => GetPropertyValue<CWeakHandle<PerkDisplayContainerController>>();
+			set => SetPropertyValue<CWeakHandle<PerkDisplayContainerController>>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("currentIndex")] 
 		public CInt32 CurrentIndex
 		{
-			get => GetProperty(ref _currentIndex);
-			set => SetProperty(ref _currentIndex, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(20)] 
 		[RED("connectionLines", 45)] 
 		public CArrayFixedSize<CInt32> ConnectionLines
 		{
-			get => GetProperty(ref _connectionLines);
-			set => SetProperty(ref _connectionLines, value);
+			get => GetPropertyValue<CArrayFixedSize<CInt32>>();
+			set => SetPropertyValue<CArrayFixedSize<CInt32>>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("levelController")] 
 		public CWeakHandle<StatsProgressController> LevelController
 		{
-			get => GetProperty(ref _levelController);
-			set => SetProperty(ref _levelController, value);
+			get => GetPropertyValue<CWeakHandle<StatsProgressController>>();
+			set => SetPropertyValue<CWeakHandle<StatsProgressController>>(value);
 		}
 
 		[Ordinal(22)] 
 		[RED("rewardsController")] 
 		public CWeakHandle<StatsStreetCredReward> RewardsController
 		{
-			get => GetProperty(ref _rewardsController);
-			set => SetProperty(ref _rewardsController, value);
+			get => GetPropertyValue<CWeakHandle<StatsStreetCredReward>>();
+			set => SetPropertyValue<CWeakHandle<StatsStreetCredReward>>(value);
 		}
 
 		[Ordinal(23)] 
 		[RED("tooltipsManager")] 
 		public CWeakHandle<gameuiTooltipsManager> TooltipsManager
 		{
-			get => GetProperty(ref _tooltipsManager);
-			set => SetProperty(ref _tooltipsManager, value);
+			get => GetPropertyValue<CWeakHandle<gameuiTooltipsManager>>();
+			set => SetPropertyValue<CWeakHandle<gameuiTooltipsManager>>(value);
+		}
+
+		public PerkScreenController()
+		{
+			HubSelector = new();
+			ConnectionLinesContainer = new();
+			BoughtConnectionLinesContainer = new();
+			MaxedConnectionLinesContainer = new();
+			BoughtMaskContainer = new();
+			MaxedMaskContainer = new();
+			AttributeNameText = new();
+			AttributeLevelText = new();
+			LevelControllerRef = new();
+			RewardsControllerRef = new();
+			TooltipsManagerRef = new();
+			ProficiencyRootRef = new();
+			ProficiencyDescriptionText = new();
+			WidgetMap = new();
+			ConnectionLines = new(45);
 		}
 	}
 }

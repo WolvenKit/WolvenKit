@@ -5,77 +5,68 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class BaseScriptableAction : gamedeviceAction
 	{
-		private entEntityID _requesterID;
-		private CWeakHandle<gameObject> _executor;
-		private TweakDBID _objectActionID;
-		private CWeakHandle<gamedataObjectAction_Record> _objectActionRecord;
-		private TweakDBID _inkWidgetID;
-		private gameinteractionsChoice _interactionChoice;
-		private CName _interactionLayer;
-		private CBool _isActionRPGCheckDissabled;
-
 		[Ordinal(3)] 
 		[RED("requesterID")] 
 		public entEntityID RequesterID
 		{
-			get => GetProperty(ref _requesterID);
-			set => SetProperty(ref _requesterID, value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("executor")] 
 		public CWeakHandle<gameObject> Executor
 		{
-			get => GetProperty(ref _executor);
-			set => SetProperty(ref _executor, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("objectActionID")] 
 		public TweakDBID ObjectActionID
 		{
-			get => GetProperty(ref _objectActionID);
-			set => SetProperty(ref _objectActionID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("objectActionRecord")] 
 		public CWeakHandle<gamedataObjectAction_Record> ObjectActionRecord
 		{
-			get => GetProperty(ref _objectActionRecord);
-			set => SetProperty(ref _objectActionRecord, value);
+			get => GetPropertyValue<CWeakHandle<gamedataObjectAction_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataObjectAction_Record>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("inkWidgetID")] 
 		public TweakDBID InkWidgetID
 		{
-			get => GetProperty(ref _inkWidgetID);
-			set => SetProperty(ref _inkWidgetID, value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(8)] 
 		[RED("interactionChoice")] 
 		public gameinteractionsChoice InteractionChoice
 		{
-			get => GetProperty(ref _interactionChoice);
-			set => SetProperty(ref _interactionChoice, value);
+			get => GetPropertyValue<gameinteractionsChoice>();
+			set => SetPropertyValue<gameinteractionsChoice>(value);
 		}
 
 		[Ordinal(9)] 
 		[RED("interactionLayer")] 
 		public CName InteractionLayer
 		{
-			get => GetProperty(ref _interactionLayer);
-			set => SetProperty(ref _interactionLayer, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("isActionRPGCheckDissabled")] 
 		public CBool IsActionRPGCheckDissabled
 		{
-			get => GetProperty(ref _isActionRPGCheckDissabled);
-			set => SetProperty(ref _isActionRPGCheckDissabled, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

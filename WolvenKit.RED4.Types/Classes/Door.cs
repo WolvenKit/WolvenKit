@@ -5,399 +5,359 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class Door : InteractiveDevice
 	{
-		private CHandle<entAnimationControllerComponent> _animationController;
-		private CHandle<gameStaticTriggerAreaComponent> _triggerComponent;
-		private CHandle<gameStaticTriggerAreaComponent> _triggerSideOne;
-		private CHandle<gameStaticTriggerAreaComponent> _triggerSideTwo;
-		private CHandle<AIOffMeshConnectionComponent> _offMeshConnectionComponent;
-		private CHandle<entMeshComponent> _strongSoloFrame;
-		private CHandle<entMeshComponent> _terminalNetrunner1;
-		private CHandle<entMeshComponent> _terminalNetrunner2;
-		private CHandle<entMeshComponent> _terminalTechie1;
-		private CHandle<entMeshComponent> _terminalTechie2;
-		private CHandle<gameLightComponent> _ledTechie1;
-		private CHandle<gameLightComponent> _ledTechie2;
-		private CHandle<gameLightComponent> _ledNetrunner1;
-		private CHandle<gameLightComponent> _ledNetrunner2;
-		private CHandle<gameLightComponent> _led1;
-		private CHandle<gameLightComponent> _led2;
-		private CHandle<gameLightComponent> _ledHandle1;
-		private CHandle<gameLightComponent> _ledHandle2;
-		private CHandle<gameLightComponent> _ledHandle1a;
-		private CHandle<gameLightComponent> _ledHandle2a;
-		private CHandle<entIPlacedComponent> _occluder;
-		private CHandle<gameLightComponent> _portalLight1;
-		private CHandle<gameLightComponent> _portalLight2;
-		private CHandle<gameLightComponent> _portalLight3;
-		private CHandle<gameLightComponent> _portalLight4;
-		private CHandle<entColliderComponent> _playerBlocker;
-		private CHandle<AnimFeatureDoor> _animFeatureDoor;
-		private CBool _isVisuallyOpened;
-		private CInt32 _lastDoorSide;
-		private CString _bankToLoad_TEMP;
-		private LedColors _colors;
-		private CArray<CHandle<gameLightComponent>> _activeSkillcheckLights;
-		private CArray<CHandle<gameLightComponent>> _allActiveLights;
-		private CFloat _closingAnimationLength;
-		private CFloat _automaticCloseDelay;
-		private CEnum<EDoorOpeningType> _doorOpeningType;
-		private CEnum<EAnimationType> _animationType;
-		private CEnum<EDoorTriggerSide> _doorTriggerSide;
-		private CWeakHandle<gameObject> _whoOpened;
-		private CBool _openedUsingForce;
-		private CBool _illegalOpen;
-		private CName _componentName;
-		private CWeakHandle<PlayerPuppet> _playerInWorkspot;
-
 		[Ordinal(97)] 
 		[RED("animationController")] 
 		public CHandle<entAnimationControllerComponent> AnimationController
 		{
-			get => GetProperty(ref _animationController);
-			set => SetProperty(ref _animationController, value);
+			get => GetPropertyValue<CHandle<entAnimationControllerComponent>>();
+			set => SetPropertyValue<CHandle<entAnimationControllerComponent>>(value);
 		}
 
 		[Ordinal(98)] 
 		[RED("triggerComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> TriggerComponent
 		{
-			get => GetProperty(ref _triggerComponent);
-			set => SetProperty(ref _triggerComponent, value);
+			get => GetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>();
+			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
 		[Ordinal(99)] 
 		[RED("triggerSideOne")] 
 		public CHandle<gameStaticTriggerAreaComponent> TriggerSideOne
 		{
-			get => GetProperty(ref _triggerSideOne);
-			set => SetProperty(ref _triggerSideOne, value);
+			get => GetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>();
+			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
 		[Ordinal(100)] 
 		[RED("triggerSideTwo")] 
 		public CHandle<gameStaticTriggerAreaComponent> TriggerSideTwo
 		{
-			get => GetProperty(ref _triggerSideTwo);
-			set => SetProperty(ref _triggerSideTwo, value);
+			get => GetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>();
+			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
 		[Ordinal(101)] 
 		[RED("offMeshConnectionComponent")] 
 		public CHandle<AIOffMeshConnectionComponent> OffMeshConnectionComponent
 		{
-			get => GetProperty(ref _offMeshConnectionComponent);
-			set => SetProperty(ref _offMeshConnectionComponent, value);
+			get => GetPropertyValue<CHandle<AIOffMeshConnectionComponent>>();
+			set => SetPropertyValue<CHandle<AIOffMeshConnectionComponent>>(value);
 		}
 
 		[Ordinal(102)] 
 		[RED("strongSoloFrame")] 
 		public CHandle<entMeshComponent> StrongSoloFrame
 		{
-			get => GetProperty(ref _strongSoloFrame);
-			set => SetProperty(ref _strongSoloFrame, value);
+			get => GetPropertyValue<CHandle<entMeshComponent>>();
+			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
 		[Ordinal(103)] 
 		[RED("terminalNetrunner1")] 
 		public CHandle<entMeshComponent> TerminalNetrunner1
 		{
-			get => GetProperty(ref _terminalNetrunner1);
-			set => SetProperty(ref _terminalNetrunner1, value);
+			get => GetPropertyValue<CHandle<entMeshComponent>>();
+			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
 		[Ordinal(104)] 
 		[RED("terminalNetrunner2")] 
 		public CHandle<entMeshComponent> TerminalNetrunner2
 		{
-			get => GetProperty(ref _terminalNetrunner2);
-			set => SetProperty(ref _terminalNetrunner2, value);
+			get => GetPropertyValue<CHandle<entMeshComponent>>();
+			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
 		[Ordinal(105)] 
 		[RED("terminalTechie1")] 
 		public CHandle<entMeshComponent> TerminalTechie1
 		{
-			get => GetProperty(ref _terminalTechie1);
-			set => SetProperty(ref _terminalTechie1, value);
+			get => GetPropertyValue<CHandle<entMeshComponent>>();
+			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
 		[Ordinal(106)] 
 		[RED("terminalTechie2")] 
 		public CHandle<entMeshComponent> TerminalTechie2
 		{
-			get => GetProperty(ref _terminalTechie2);
-			set => SetProperty(ref _terminalTechie2, value);
+			get => GetPropertyValue<CHandle<entMeshComponent>>();
+			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
 		[Ordinal(107)] 
 		[RED("ledTechie1")] 
 		public CHandle<gameLightComponent> LedTechie1
 		{
-			get => GetProperty(ref _ledTechie1);
-			set => SetProperty(ref _ledTechie1, value);
+			get => GetPropertyValue<CHandle<gameLightComponent>>();
+			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
 		[Ordinal(108)] 
 		[RED("ledTechie2")] 
 		public CHandle<gameLightComponent> LedTechie2
 		{
-			get => GetProperty(ref _ledTechie2);
-			set => SetProperty(ref _ledTechie2, value);
+			get => GetPropertyValue<CHandle<gameLightComponent>>();
+			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
 		[Ordinal(109)] 
 		[RED("ledNetrunner1")] 
 		public CHandle<gameLightComponent> LedNetrunner1
 		{
-			get => GetProperty(ref _ledNetrunner1);
-			set => SetProperty(ref _ledNetrunner1, value);
+			get => GetPropertyValue<CHandle<gameLightComponent>>();
+			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
 		[Ordinal(110)] 
 		[RED("ledNetrunner2")] 
 		public CHandle<gameLightComponent> LedNetrunner2
 		{
-			get => GetProperty(ref _ledNetrunner2);
-			set => SetProperty(ref _ledNetrunner2, value);
+			get => GetPropertyValue<CHandle<gameLightComponent>>();
+			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
 		[Ordinal(111)] 
 		[RED("led1")] 
 		public CHandle<gameLightComponent> Led1
 		{
-			get => GetProperty(ref _led1);
-			set => SetProperty(ref _led1, value);
+			get => GetPropertyValue<CHandle<gameLightComponent>>();
+			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
 		[Ordinal(112)] 
 		[RED("led2")] 
 		public CHandle<gameLightComponent> Led2
 		{
-			get => GetProperty(ref _led2);
-			set => SetProperty(ref _led2, value);
+			get => GetPropertyValue<CHandle<gameLightComponent>>();
+			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
 		[Ordinal(113)] 
 		[RED("ledHandle1")] 
 		public CHandle<gameLightComponent> LedHandle1
 		{
-			get => GetProperty(ref _ledHandle1);
-			set => SetProperty(ref _ledHandle1, value);
+			get => GetPropertyValue<CHandle<gameLightComponent>>();
+			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
 		[Ordinal(114)] 
 		[RED("ledHandle2")] 
 		public CHandle<gameLightComponent> LedHandle2
 		{
-			get => GetProperty(ref _ledHandle2);
-			set => SetProperty(ref _ledHandle2, value);
+			get => GetPropertyValue<CHandle<gameLightComponent>>();
+			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
 		[Ordinal(115)] 
 		[RED("ledHandle1a")] 
 		public CHandle<gameLightComponent> LedHandle1a
 		{
-			get => GetProperty(ref _ledHandle1a);
-			set => SetProperty(ref _ledHandle1a, value);
+			get => GetPropertyValue<CHandle<gameLightComponent>>();
+			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
 		[Ordinal(116)] 
 		[RED("ledHandle2a")] 
 		public CHandle<gameLightComponent> LedHandle2a
 		{
-			get => GetProperty(ref _ledHandle2a);
-			set => SetProperty(ref _ledHandle2a, value);
+			get => GetPropertyValue<CHandle<gameLightComponent>>();
+			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
 		[Ordinal(117)] 
 		[RED("occluder")] 
 		public CHandle<entIPlacedComponent> Occluder
 		{
-			get => GetProperty(ref _occluder);
-			set => SetProperty(ref _occluder, value);
+			get => GetPropertyValue<CHandle<entIPlacedComponent>>();
+			set => SetPropertyValue<CHandle<entIPlacedComponent>>(value);
 		}
 
 		[Ordinal(118)] 
 		[RED("portalLight1")] 
 		public CHandle<gameLightComponent> PortalLight1
 		{
-			get => GetProperty(ref _portalLight1);
-			set => SetProperty(ref _portalLight1, value);
+			get => GetPropertyValue<CHandle<gameLightComponent>>();
+			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
 		[Ordinal(119)] 
 		[RED("portalLight2")] 
 		public CHandle<gameLightComponent> PortalLight2
 		{
-			get => GetProperty(ref _portalLight2);
-			set => SetProperty(ref _portalLight2, value);
+			get => GetPropertyValue<CHandle<gameLightComponent>>();
+			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
 		[Ordinal(120)] 
 		[RED("portalLight3")] 
 		public CHandle<gameLightComponent> PortalLight3
 		{
-			get => GetProperty(ref _portalLight3);
-			set => SetProperty(ref _portalLight3, value);
+			get => GetPropertyValue<CHandle<gameLightComponent>>();
+			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
 		[Ordinal(121)] 
 		[RED("portalLight4")] 
 		public CHandle<gameLightComponent> PortalLight4
 		{
-			get => GetProperty(ref _portalLight4);
-			set => SetProperty(ref _portalLight4, value);
+			get => GetPropertyValue<CHandle<gameLightComponent>>();
+			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
 		[Ordinal(122)] 
 		[RED("playerBlocker")] 
 		public CHandle<entColliderComponent> PlayerBlocker
 		{
-			get => GetProperty(ref _playerBlocker);
-			set => SetProperty(ref _playerBlocker, value);
+			get => GetPropertyValue<CHandle<entColliderComponent>>();
+			set => SetPropertyValue<CHandle<entColliderComponent>>(value);
 		}
 
 		[Ordinal(123)] 
 		[RED("animFeatureDoor")] 
 		public CHandle<AnimFeatureDoor> AnimFeatureDoor
 		{
-			get => GetProperty(ref _animFeatureDoor);
-			set => SetProperty(ref _animFeatureDoor, value);
+			get => GetPropertyValue<CHandle<AnimFeatureDoor>>();
+			set => SetPropertyValue<CHandle<AnimFeatureDoor>>(value);
 		}
 
 		[Ordinal(124)] 
 		[RED("isVisuallyOpened")] 
 		public CBool IsVisuallyOpened
 		{
-			get => GetProperty(ref _isVisuallyOpened);
-			set => SetProperty(ref _isVisuallyOpened, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(125)] 
 		[RED("lastDoorSide")] 
 		public CInt32 LastDoorSide
 		{
-			get => GetProperty(ref _lastDoorSide);
-			set => SetProperty(ref _lastDoorSide, value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(126)] 
 		[RED("bankToLoad_TEMP")] 
 		public CString BankToLoad_TEMP
 		{
-			get => GetProperty(ref _bankToLoad_TEMP);
-			set => SetProperty(ref _bankToLoad_TEMP, value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(127)] 
 		[RED("colors")] 
 		public LedColors Colors
 		{
-			get => GetProperty(ref _colors);
-			set => SetProperty(ref _colors, value);
+			get => GetPropertyValue<LedColors>();
+			set => SetPropertyValue<LedColors>(value);
 		}
 
 		[Ordinal(128)] 
 		[RED("activeSkillcheckLights")] 
 		public CArray<CHandle<gameLightComponent>> ActiveSkillcheckLights
 		{
-			get => GetProperty(ref _activeSkillcheckLights);
-			set => SetProperty(ref _activeSkillcheckLights, value);
+			get => GetPropertyValue<CArray<CHandle<gameLightComponent>>>();
+			set => SetPropertyValue<CArray<CHandle<gameLightComponent>>>(value);
 		}
 
 		[Ordinal(129)] 
 		[RED("allActiveLights")] 
 		public CArray<CHandle<gameLightComponent>> AllActiveLights
 		{
-			get => GetProperty(ref _allActiveLights);
-			set => SetProperty(ref _allActiveLights, value);
+			get => GetPropertyValue<CArray<CHandle<gameLightComponent>>>();
+			set => SetPropertyValue<CArray<CHandle<gameLightComponent>>>(value);
 		}
 
 		[Ordinal(130)] 
 		[RED("closingAnimationLength")] 
 		public CFloat ClosingAnimationLength
 		{
-			get => GetProperty(ref _closingAnimationLength);
-			set => SetProperty(ref _closingAnimationLength, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(131)] 
 		[RED("automaticCloseDelay")] 
 		public CFloat AutomaticCloseDelay
 		{
-			get => GetProperty(ref _automaticCloseDelay);
-			set => SetProperty(ref _automaticCloseDelay, value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(132)] 
 		[RED("doorOpeningType")] 
 		public CEnum<EDoorOpeningType> DoorOpeningType
 		{
-			get => GetProperty(ref _doorOpeningType);
-			set => SetProperty(ref _doorOpeningType, value);
+			get => GetPropertyValue<CEnum<EDoorOpeningType>>();
+			set => SetPropertyValue<CEnum<EDoorOpeningType>>(value);
 		}
 
 		[Ordinal(133)] 
 		[RED("animationType")] 
 		public CEnum<EAnimationType> AnimationType
 		{
-			get => GetProperty(ref _animationType);
-			set => SetProperty(ref _animationType, value);
+			get => GetPropertyValue<CEnum<EAnimationType>>();
+			set => SetPropertyValue<CEnum<EAnimationType>>(value);
 		}
 
 		[Ordinal(134)] 
 		[RED("doorTriggerSide")] 
 		public CEnum<EDoorTriggerSide> DoorTriggerSide
 		{
-			get => GetProperty(ref _doorTriggerSide);
-			set => SetProperty(ref _doorTriggerSide, value);
+			get => GetPropertyValue<CEnum<EDoorTriggerSide>>();
+			set => SetPropertyValue<CEnum<EDoorTriggerSide>>(value);
 		}
 
 		[Ordinal(135)] 
 		[RED("whoOpened")] 
 		public CWeakHandle<gameObject> WhoOpened
 		{
-			get => GetProperty(ref _whoOpened);
-			set => SetProperty(ref _whoOpened, value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(136)] 
 		[RED("openedUsingForce")] 
 		public CBool OpenedUsingForce
 		{
-			get => GetProperty(ref _openedUsingForce);
-			set => SetProperty(ref _openedUsingForce, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(137)] 
 		[RED("illegalOpen")] 
 		public CBool IllegalOpen
 		{
-			get => GetProperty(ref _illegalOpen);
-			set => SetProperty(ref _illegalOpen, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(138)] 
 		[RED("componentName")] 
 		public CName ComponentName
 		{
-			get => GetProperty(ref _componentName);
-			set => SetProperty(ref _componentName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(139)] 
 		[RED("playerInWorkspot")] 
 		public CWeakHandle<PlayerPuppet> PlayerInWorkspot
 		{
-			get => GetProperty(ref _playerInWorkspot);
-			set => SetProperty(ref _playerInWorkspot, value);
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
 		public Door()
 		{
-			_bankToLoad_TEMP = new() { Text = "dev_door_sliding_generic" };
-			_closingAnimationLength = 1.100000F;
-			_automaticCloseDelay = 3.000000F;
+			ControllerTypeName = "DoorController";
+			BankToLoad_TEMP = "dev_door_sliding_generic";
+			Colors = new() { Off = new() { Color = new() }, Red = new() { Color = new() }, Green = new() { Color = new() } };
+			ActiveSkillcheckLights = new();
+			AllActiveLights = new();
+			ClosingAnimationLength = 1.100000F;
+			AutomaticCloseDelay = 3.000000F;
 		}
 	}
 }

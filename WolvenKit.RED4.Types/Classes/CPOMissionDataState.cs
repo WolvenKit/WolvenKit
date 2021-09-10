@@ -5,68 +5,65 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CPOMissionDataState : IScriptable
 	{
-		private CName _cPOMissionDataDamagesPreset;
-		private CName _compatibleDeviceName;
-		private CBool _ownerDecidesOnTransfer;
-		private CBool _isChoiceToken;
-		private CUInt32 _choiceTokenTimeout;
-		private gameDelayID _delayedGiveChoiceTokenEventId;
-		private CUInt32 _dataDamageTextLayerId;
-
 		[Ordinal(0)] 
 		[RED("CPOMissionDataDamagesPreset")] 
 		public CName CPOMissionDataDamagesPreset
 		{
-			get => GetProperty(ref _cPOMissionDataDamagesPreset);
-			set => SetProperty(ref _cPOMissionDataDamagesPreset, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("compatibleDeviceName")] 
 		public CName CompatibleDeviceName
 		{
-			get => GetProperty(ref _compatibleDeviceName);
-			set => SetProperty(ref _compatibleDeviceName, value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(2)] 
 		[RED("ownerDecidesOnTransfer")] 
 		public CBool OwnerDecidesOnTransfer
 		{
-			get => GetProperty(ref _ownerDecidesOnTransfer);
-			set => SetProperty(ref _ownerDecidesOnTransfer, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(3)] 
 		[RED("isChoiceToken")] 
 		public CBool IsChoiceToken
 		{
-			get => GetProperty(ref _isChoiceToken);
-			set => SetProperty(ref _isChoiceToken, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(4)] 
 		[RED("choiceTokenTimeout")] 
 		public CUInt32 ChoiceTokenTimeout
 		{
-			get => GetProperty(ref _choiceTokenTimeout);
-			set => SetProperty(ref _choiceTokenTimeout, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		[Ordinal(5)] 
 		[RED("delayedGiveChoiceTokenEventId")] 
 		public gameDelayID DelayedGiveChoiceTokenEventId
 		{
-			get => GetProperty(ref _delayedGiveChoiceTokenEventId);
-			set => SetProperty(ref _delayedGiveChoiceTokenEventId, value);
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
 		}
 
 		[Ordinal(6)] 
 		[RED("dataDamageTextLayerId")] 
 		public CUInt32 DataDamageTextLayerId
 		{
-			get => GetProperty(ref _dataDamageTextLayerId);
-			set => SetProperty(ref _dataDamageTextLayerId, value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		public CPOMissionDataState()
+		{
+			DelayedGiveChoiceTokenEventId = new();
 		}
 	}
 }

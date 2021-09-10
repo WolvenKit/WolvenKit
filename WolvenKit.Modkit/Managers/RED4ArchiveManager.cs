@@ -16,7 +16,6 @@ namespace WolvenKit.Common
     {
         public RED4ArchiveManager()
         {
-            RedReflection.BuildCache();
         }
     }
 }

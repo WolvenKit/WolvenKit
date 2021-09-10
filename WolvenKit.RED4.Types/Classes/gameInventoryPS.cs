@@ -5,28 +5,25 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameInventoryPS : gameComponentPS
 	{
-		private CBool _isRegisteredShared;
-		private CBool _accessible;
-
 		[Ordinal(0)] 
 		[RED("isRegisteredShared")] 
 		public CBool IsRegisteredShared
 		{
-			get => GetProperty(ref _isRegisteredShared);
-			set => SetProperty(ref _isRegisteredShared, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("accessible")] 
 		public CBool Accessible
 		{
-			get => GetProperty(ref _accessible);
-			set => SetProperty(ref _accessible, value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public gameInventoryPS()
 		{
-			_accessible = true;
+			Accessible = true;
 		}
 	}
 }

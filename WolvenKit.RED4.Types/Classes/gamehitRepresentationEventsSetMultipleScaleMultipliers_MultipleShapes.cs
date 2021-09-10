@@ -5,23 +5,26 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamehitRepresentationEventsSetMultipleScaleMultipliers_MultipleShapes : redEvent
 	{
-		private CArray<Vector4> _scaleMultipliers;
-		private CArray<CName> _shapeNames;
-
 		[Ordinal(0)] 
 		[RED("scaleMultipliers")] 
 		public CArray<Vector4> ScaleMultipliers
 		{
-			get => GetProperty(ref _scaleMultipliers);
-			set => SetProperty(ref _scaleMultipliers, value);
+			get => GetPropertyValue<CArray<Vector4>>();
+			set => SetPropertyValue<CArray<Vector4>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("shapeNames")] 
 		public CArray<CName> ShapeNames
 		{
-			get => GetProperty(ref _shapeNames);
-			set => SetProperty(ref _shapeNames, value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
+		public gamehitRepresentationEventsSetMultipleScaleMultipliers_MultipleShapes()
+		{
+			ScaleMultipliers = new();
+			ShapeNames = new();
 		}
 	}
 }

@@ -5,14 +5,18 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gamedataComplexValueNode : gamedataValueDataNode
 	{
-		private CArray<CString> _data;
-
 		[Ordinal(3)] 
 		[RED("data")] 
 		public CArray<CString> Data
 		{
-			get => GetProperty(ref _data);
-			set => SetProperty(ref _data, value);
+			get => GetPropertyValue<CArray<CString>>();
+			set => SetPropertyValue<CArray<CString>>(value);
+		}
+
+		public gamedataComplexValueNode()
+		{
+			NodeType = Enums.gamedataDataNodeType.ComplexValue;
+			Data = new();
 		}
 	}
 }
