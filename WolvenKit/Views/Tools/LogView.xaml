@@ -15,7 +15,17 @@
      d:DesignHeight="450"
      d:DesignWidth="800"
      mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=tools:LogViewModel}"
  >
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <hc:ThemeResources RequestedTheme="Dark" />
+                <hc:Theme />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
 
     <Grid>
         <Grid.Resources>
@@ -30,24 +40,26 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
-        <syncfusion:SfDataGrid x:Name="ListView"
-                               AutoGenerateColumns="False"
-                               ColumnSizer="AutoLastColumnFill"
-                               AllowResizingColumns="True"
-                               AllowFiltering="True"
-                               AllowEditing="False"
-                               AllowSorting="True"
-                               ItemsSource="{Binding LogEntries}"
-                               RowStyle="{StaticResource CustomRowStyle}"
-        >
-            <syncfusion:SfDataGrid.Columns>
+        <!-- <syncfusion:SfDataGrid x:Name="ListView" -->
+        <!--                        AutoGenerateColumns="False" -->
+        <!--                        ColumnSizer="AutoLastColumnFill" -->
+        <!--                        AllowResizingColumns="True" -->
+        <!--                        AllowFiltering="True" -->
+        <!--                        AllowEditing="False" -->
+        <!--                        AllowSorting="True" -->
+        <!--                        ItemsSource="{Binding LogEntries}" -->
+        <!--                        RowStyle="{StaticResource CustomRowStyle}" -->
+        <!-- > -->
+        <!--     <syncfusion:SfDataGrid.Columns> -->
+        <!-- -->
+        <!--         <syncfusion:GridTextColumn MappingName="Level" /> -->
+        <!-- -->
+        <!--         <syncfusion:GridTextColumn MappingName="Message" /> -->
+        <!-- -->
+        <!--     </syncfusion:SfDataGrid.Columns> -->
+        <!-- </syncfusion:SfDataGrid> -->
 
-                <syncfusion:GridTextColumn MappingName="Level" />
-
-                <syncfusion:GridTextColumn MappingName="Message" />
-
-            </syncfusion:SfDataGrid.Columns>
-        </syncfusion:SfDataGrid>
+        <RichTextBox VerticalScrollBarVisibility="Visible" Grid.Row="0" x:Name="LogRichTextBox" IsReadOnly="True" />
 
         <hc:UniformSpacingPanel
          Grid.Row="1"

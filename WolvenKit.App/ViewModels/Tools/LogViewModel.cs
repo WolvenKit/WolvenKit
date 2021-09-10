@@ -2,9 +2,10 @@ using System;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-
+using System.Windows.Documents;
 using DynamicData;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Services;
 
 namespace WolvenKit.ViewModels.Tools
@@ -28,8 +29,10 @@ namespace WolvenKit.ViewModels.Tools
 
         private readonly ILoggerService _loggerService;
 
-        private readonly ReadOnlyObservableCollection<LogEntry> _logEntries;
-        public ReadOnlyObservableCollection<LogEntry> LogEntries => _logEntries;
+        // private readonly ReadOnlyObservableCollection<LogEntry> _logEntries;
+        // public ReadOnlyObservableCollection<LogEntry> LogEntries => _logEntries;
+
+        [Reactive] public FlowDocument Document { get; set; } = new();
 
         #endregion Fields
 
@@ -44,31 +47,23 @@ namespace WolvenKit.ViewModels.Tools
             SetupToolDefaults();
 
             //filter, sort and populate reactive list,
-            _loggerService.Connect() //connect to the cache
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(out _logEntries)
-                .Subscribe();
+            // _loggerService.Connect() //connect to the cache
+            //     .ObserveOn(RxApp.MainThreadScheduler)
+            //     .Bind(out _logEntries)
+            //     .Subscribe(OnNext);
         }
+
+
 
         #endregion constructors
 
         #region properties
 
-        /// <summary>
-        /// The application log.
-        /// Bound to the logview, implements OnPropertyRaised through Fody
-        /// </summary>
-        public string Log { get; set; }
-
         #endregion properties
 
         #region methods
 
-        /// <summary>
-        /// Initialize Avalondock specific defaults that are specific to this tool window.
-        /// </summary>
-        private void SetupToolDefaults() => ContentId = ToolContentId;           // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
-
+        private void SetupToolDefaults() => ContentId = ToolContentId;
         #endregion methods
     }
 }

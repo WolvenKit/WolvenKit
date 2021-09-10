@@ -121,7 +121,7 @@ namespace WolvenKit.MVVM.Model
                 if (!string.IsNullOrEmpty(e.Data))
                 {
                     errorLog.Add(e.Data);
-                    loggerService.LogString($"ERR: {e.Data}", Logtype.Error);
+                    loggerService.Error($"ERR: {e.Data}");
                 }
             };
             //process.OutputDataReceived += (sender, e) =>

@@ -240,8 +240,8 @@ namespace WolvenKit.ViewModels.Shell
             }
             catch (Exception ex)
             {
-                _loggerService.LogString(ex.Message, Logtype.Error);
-                _loggerService.LogString("Failed to delete recent project", Logtype.Error);
+                _loggerService.Error(ex.Message);
+                _loggerService.Error("Failed to delete recent project");
             }
         }
 
@@ -403,7 +403,7 @@ namespace WolvenKit.ViewModels.Shell
                             break;
                         }
                         default:
-                            _loggerService.LogString("Invalid project path!", Logtype.Error);
+                            _loggerService.Error("Invalid project path!");
                             break;
                     }
                 }
@@ -437,8 +437,8 @@ namespace WolvenKit.ViewModels.Shell
             }
             catch (Exception ex)
             {
-                _loggerService.LogString(ex.Message, Logtype.Error);
-                _loggerService.LogString("Failed to create a new project!", Logtype.Error);
+                _loggerService.Error(ex.Message);
+                _loggerService.Error("Failed to create a new project!");
             }
 
             return Unit.Default;
@@ -1024,7 +1024,7 @@ namespace WolvenKit.ViewModels.Shell
                 catch (Win32Exception)
                 {
                     // eat this: no default app set for filetype
-                    _loggerService.LogString($"No default prgram set in Windows to open file extension {Path.GetExtension(path)}", Logtype.Error);
+                    _loggerService.Error($"No default prgram set in Windows to open file extension {Path.GetExtension(path)}");
                 }
             }
 

@@ -19,9 +19,9 @@ namespace WolvenKit.Functionality.Services
             File.WriteAllText(outPath, string.Empty);
         }
 
-        public void LogString(string msg, Logtype type)
+        private void LogString(string msg, Logtype type)
         {
-            var x = new LogEntry(msg, type);
+            var x = new LogEntry(msg, type, DateTime.Now);
             if (_log.Count > s_limit)
             {
                 _log.RemoveAt(0);
@@ -62,9 +62,11 @@ namespace WolvenKit.Functionality.Services
         public void Error(string msg) => LogString(msg, Logtype.Error);
         public void Error(Exception exception)
         {
-            Info("========================");
-            Error(exception.ToString());
-            Info("========================");
+            var msg =
+                $"========================\r\n" +
+                $"{exception.ToString()}" +
+                $"\r\n========================";
+            Error(msg);
         }
     }
 }
