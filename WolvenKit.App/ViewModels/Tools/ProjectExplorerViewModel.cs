@@ -88,7 +88,7 @@ namespace WolvenKit.ViewModels.Tools
 
         }
 
-       
+
         #endregion constructors
 
         #region properties
@@ -98,7 +98,7 @@ namespace WolvenKit.ViewModels.Tools
         public ReactiveCommand<Unit, Unit> CollapseChildren { get; private set; }
         public ReactiveCommand<Unit, Unit> ExpandChildren { get; private set; }
 
-        
+
         [Reactive] public ObservableCollection<FileModel> BindGrid1 { get; private set; } = new();
 
         [Reactive] public FileModel SelectedItem { get; set; }
@@ -128,7 +128,7 @@ namespace WolvenKit.ViewModels.Tools
 
         }
 
-        
+
 
 
         /// <summary>
@@ -220,7 +220,7 @@ namespace WolvenKit.ViewModels.Tools
                 }
                 catch (Exception)
                 {
-                    _loggerService.LogString("Failed to delete " + fullpath + ".\r\n", Logtype.Error);
+                    _loggerService.Error("Failed to delete " + fullpath + ".\r\n");
                 }
             }
         }
@@ -331,7 +331,7 @@ namespace WolvenKit.ViewModels.Tools
             {
             }
 
-            
+
         }
 
         #endregion general commands

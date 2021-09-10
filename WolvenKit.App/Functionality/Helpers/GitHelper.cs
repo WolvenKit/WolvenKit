@@ -52,7 +52,7 @@ namespace WolvenKit.MVVM.Model
             }
             catch (Exception ex)
             {
-                loggerService.LogString($"Error creating git archive: {ex.ToString()}", Logtype.Error);
+                loggerService.Error($"Error creating git archive: {ex.ToString()}");
             }
             return false;
         }
@@ -67,7 +67,7 @@ namespace WolvenKit.MVVM.Model
             }
             catch (Exception ex)
             {
-                loggerService.LogString($"Error creating commit for git repository: {ex.ToString()}", Logtype.Error);
+                loggerService.Error($"Error creating commit for git repository: {ex.ToString()}");
             }
             return false;
         }
@@ -110,7 +110,7 @@ namespace WolvenKit.MVVM.Model
             }
             catch (Exception ex)
             {
-                loggerService.LogString($"Error creating git repository: {ex.ToString()}", Logtype.Error);
+                loggerService.Error($"Error creating git repository: {ex.ToString()}");
             }
             return false;
         }

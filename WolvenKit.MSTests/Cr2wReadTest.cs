@@ -442,7 +442,7 @@ namespace WolvenKit.MSTests
             {
                 try
                 {
-                    var ar = s_bm.Archives[file.Archive.ArchiveAbsolutePath] as Archive;
+                    var ar = s_bm.Archives.Lookup(file.Archive.ArchiveAbsolutePath).Value as Archive;
                     using var ms = new MemoryStream();
                     ar?.CopyFileToStreamWithoutBuffers(ms, file.NameHash64);
 

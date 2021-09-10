@@ -86,7 +86,7 @@ namespace CP77Tools.Tasks
                 var archiveManager = new ArchiveManager(_hashService);
                 archiveManager.LoadFromFolder(basedir);
                 // TODO: use the manager here?
-                archiveFileInfos = archiveManager.Archives.Select(_ => new FileInfo(_.Value.ArchiveAbsolutePath)).ToList();
+                archiveFileInfos = archiveManager.Archives.Items.Select(_ => new FileInfo(_.ArchiveAbsolutePath)).ToList();
             }
             else
             {
@@ -208,7 +208,7 @@ namespace CP77Tools.Tasks
                 var archiveManager = new ArchiveManager(_hashService);
                 archiveManager.LoadFromFolder(basedir);
                 // TODO: use the manager here?
-                archiveFileInfos = archiveManager.Archives.Select(_ => new FileInfo(_.Value.ArchiveAbsolutePath)).ToList();
+                archiveFileInfos = archiveManager.Archives.Items.Select(_ => new FileInfo(_.ArchiveAbsolutePath)).ToList();
             }
             else
             {

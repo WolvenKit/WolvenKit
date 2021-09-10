@@ -47,7 +47,7 @@ namespace WolvenKit.Controls
             {
                 if (System.IO.Directory.Exists(str))
                 {
-                    notification.IsOpen = false;
+                    notification.SetCurrentValue(System.Windows.Controls.Primitives.Popup.IsOpenProperty, false);
                     return HandyControl.Data.OperationResult.Success();
                 }
 
@@ -57,7 +57,7 @@ namespace WolvenKit.Controls
             {
                 if (System.IO.File.Exists(str))
                 {
-                    notification.IsOpen = false;
+                    notification.SetCurrentValue(System.Windows.Controls.Primitives.Popup.IsOpenProperty, false);
                     return HandyControl.Data.OperationResult.Success();
                 }
 
@@ -87,7 +87,7 @@ namespace WolvenKit.Controls
             }
 
 
-            Text = "";
+            SetCurrentValue(TextProperty, "");
             foreach (var s in results)
             {
                 if (_multiselect)
@@ -96,7 +96,7 @@ namespace WolvenKit.Controls
                 }
                 else
                 {
-                    Text = s;
+                    SetCurrentValue(TextProperty, s);
                 }
             }
         }

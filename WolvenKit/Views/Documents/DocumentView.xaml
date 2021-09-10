@@ -429,7 +429,8 @@
                                                    Padding="3,-4,0,0"
                                                    Color="{Binding DisplayColor}"
                                                    SelectedCommand="{Binding SelectedColorCommand}"
-                                                   d:DataContext="{d:DesignInstance shell:RedColorViewModel}" />
+                                                   d:DataContext="{d:DesignInstance shell:RedColorViewModel}"
+                                                   />
                 </DataTemplate>
 
                 <DataTemplate x:Key="RefTemplateView">

@@ -44,7 +44,7 @@ namespace CP77Tools.Tasks
             if (hashes != null)
             {
                 var bm =  new ArchiveManager(_hashService);
-                bm.LoadAll(exe, false);
+                bm.LoadGameArchives(exe, false);
                 foreach (var hash in hashes)
                 {
                     if (!_hashService.Contains(hash))
@@ -52,12 +52,12 @@ namespace CP77Tools.Tasks
                         continue;
                     }
 
-                    var fileEntry = (FileEntry)bm.Items.Lookup(hash).Value;
+                    var fileEntry = (FileEntry)bm.Lookup(hash).Value;
 
                     //foreach (var ifileEntry in file)
                     {
                         //var fileEntry = ifileEntry as FileEntry;
-                        var ar = bm.Archives[fileEntry.Archive.ArchiveAbsolutePath] as Archive;
+                        var ar = bm.Archives.Lookup(fileEntry.Archive.ArchiveAbsolutePath).Value as Archive;
 
                         using var ms = new MemoryStream();
                         ar.CopyFileToStream(ms, fileEntry.NameHash64, false);

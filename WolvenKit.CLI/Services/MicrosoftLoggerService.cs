@@ -1,12 +1,10 @@
 using System;
 using DynamicData;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
-using WolvenKit.Core.Services;
 
-namespace WolvenKit.CLI
+namespace WolvenKit.CLI.Services
 {
     public class MicrosoftLoggerService : ILoggerService
     {
@@ -53,9 +51,11 @@ namespace WolvenKit.CLI
 
         public void Error(Exception exception)
         {
-            Info("========================");
-            Error(exception.ToString());
-            Info("========================");
+            var msg =
+                $"========================\r\n" +
+                $"{exception.ToString()}" +
+                $"\r\n========================";
+            Error(msg);
         }
 
         public void Info(string s) => LogString(s, Logtype.Important);

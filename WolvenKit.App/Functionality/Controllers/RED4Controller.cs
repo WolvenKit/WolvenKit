@@ -34,8 +34,6 @@ namespace WolvenKit.Functionality.Controllers
         private readonly IModTools _modTools;
         private readonly IArchiveManager _archiveManager;
 
-        private readonly SourceList<RedFileSystemModel> _rootCache;
-
         #endregion
 
         public RED4Controller(ILoggerService loggerService,
@@ -53,17 +51,7 @@ namespace WolvenKit.Functionality.Controllers
             _modTools = modTools;
             _archiveManager = gameArchiveManager;
 
-            _rootCache = new SourceList<RedFileSystemModel>();
         }
-
-        #region Properties
-
-        [Reactive] public bool IsManagerLoaded { get; set; }
-
-        //public IObservable<IChangeSet<RedDirectoryViewModel, ulong>> ConnectHierarchy() => _rootCache.Connect();
-        public IObservable<IChangeSet<RedFileSystemModel>> ConnectHierarchy() => _rootCache.Connect();
-
-        #endregion Properties
 
         #region Methods
 
@@ -84,7 +72,7 @@ namespace WolvenKit.Functionality.Controllers
 
         private IArchiveManager LoadArchiveManager()
         {
-            if (_archiveManager != null && IsManagerLoaded)
+            if (_archiveManager != null && _archiveManager.IsManagerLoaded)
             {
                 return _archiveManager;
             }
@@ -114,7 +102,7 @@ namespace WolvenKit.Functionality.Controllers
                     var sw = new Stopwatch();
                     sw.Start();
 
-                    _archiveManager.LoadAll(new FileInfo(_settingsManager.CP77ExecutablePath));
+                    _archiveManager.LoadGameArchives(new FileInfo(_settingsManager.CP77ExecutablePath));
 
                     sw.Stop();
                     var ms = sw.ElapsedMilliseconds;
@@ -143,16 +131,8 @@ namespace WolvenKit.Functionality.Controllers
             }
             finally
             {
-                IsManagerLoaded = true;
                 _loggerService.Success("Finished loading archive manager.");
             }
-
-            _rootCache.Edit(innerCache =>
-            {
-                innerCache.Clear();
-                //innerCache.AddOrUpdate(ArchiveManager.RootNode);
-                innerCache.Add(_archiveManager.RootNode);
-            });
 
 #pragma warning disable 162
             return _archiveManager;
@@ -347,14 +327,14 @@ namespace WolvenKit.Functionality.Controllers
 
         public void AddToMod(ulong hash)
         {
-            var file = _archiveManager.LookupFile(hash);
-            if (file != null)
+            var file = _archiveManager.Lookup(hash);
+            if (file.HasValue)
             {
-                AddToMod(file);
+                AddToMod(file.Value);
             }
         }
 
-        public void AddToMod(IGameFile file)
+        private void AddToMod(IGameFile file)
         {
             var project = _projectManager.ActiveProject;
             switch (project.GameType)
@@ -392,6 +372,8 @@ namespace WolvenKit.Functionality.Controllers
 
                     break;
                 }
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 

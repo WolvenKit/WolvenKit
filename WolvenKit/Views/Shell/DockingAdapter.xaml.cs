@@ -14,6 +14,7 @@ using Splat;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
+using WolvenKit.Functionality.Layout;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models.Docking;

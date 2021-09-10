@@ -9,7 +9,6 @@ using System.Windows;
 using System.Windows.Input;
 using ReactiveUI.Fody.Helpers;
 using DynamicData;
-using HandyControl.Data;
 using ReactiveUI;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
@@ -17,14 +16,10 @@ using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
-using DynamicData.Binding;
 using Microsoft.Extensions.FileSystemGlobbing;
-using WolvenKit.Common.FNV1A;
 using System.IO;
 using System.Text.RegularExpressions;
 using WolvenKit.Common.Interfaces;
-using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.ViewModels.Tools
 {
@@ -56,38 +51,37 @@ namespace WolvenKit.ViewModels.Tools
 
         #region fields
 
-        private readonly ILoggerService _loggerService;
         private readonly INotificationService _notificationService;
-        private readonly IProjectManager _projectManager;
         private readonly IGameControllerFactory _gameController;
-        private readonly IArchiveManager _manager;
+        private readonly IArchiveManager _archiveManager;
+        private readonly ISettingsManager _settings;
 
         private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
 
+        private bool _isModBrowserActive;
 
         #endregion fields
 
         #region ctor
 
         public AssetBrowserViewModel(
-            IProjectManager projectManager,
-            ILoggerService loggerService,
             INotificationService notificationService,
             IGameControllerFactory gameController,
-            IArchiveManager manager
+            IArchiveManager archiveManager,
+            ISettingsManager settings
         ) : base(ToolTitle)
         {
-            _projectManager = projectManager;
-            _loggerService = loggerService;
             _notificationService = notificationService;
             _gameController = gameController;
-            _manager = manager;
+            _archiveManager = archiveManager;
+            _settings = settings;
 
             ContentId = ToolContentId;
 
             TogglePreviewCommand = new RelayCommand(ExecuteTogglePreview, CanTogglePreview);
             OpenFileSystemItemCommand = new RelayCommand(ExecuteOpenFile, CanOpenFile);
             AddSelectedCommand = new RelayCommand(ExecuteAddSelected, CanAddSelected);
+            ToggleModBrowserCommand = new RelayCommand(ExecuteToggleModBrowser, CanToggleModBrowser);
             OpenFileLocationCommand = new RelayCommand(ExecuteOpenFileLocationCommand, CanOpenFileLocationCommand);
 
             ExpandAll = ReactiveCommand.Create(() => { });
@@ -97,8 +91,7 @@ namespace WolvenKit.ViewModels.Tools
 
             AddSearchKeyCommand = ReactiveCommand.Create<string>(x => SearchBarText += $" {x}:");
 
-            var controller = _gameController.GetRed4Controller();
-            controller.ConnectHierarchy()
+            archiveManager.ConnectGameRoot()
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _boundRootNodes)
                 .Subscribe(
@@ -108,19 +101,21 @@ namespace WolvenKit.ViewModels.Tools
                     LeftItems = new ObservableCollection<RedFileSystemModel>(_boundRootNodes);
                 });
 
-            controller
+            archiveManager
                 .WhenAnyValue(x => x.IsManagerLoaded)
                 .Subscribe(b =>
                 {
                     LoadVisibility = b ? Visibility.Collapsed : Visibility.Visible;
                     if (b)
                     {
-                        ReInit(false);
+                        _notificationService.Success($"Asset Browser is initialized");
                     }
                 });
 
 
-           
+            Classes = _gameController
+                .GetController()
+                .GetAvaliableClasses();
         }
 
         #endregion ctor
@@ -128,8 +123,6 @@ namespace WolvenKit.ViewModels.Tools
         #region properties
 
         // binding properties. do not make private
-        [Reactive] public bool PreviewVisible { get; set; }
-
         [Reactive] public GridLength PreviewWidth { get; set; } = new(0, GridUnitType.Pixel);
 
         [Reactive] public Visibility LoadVisibility { get; set; } = Visibility.Visible;
@@ -158,8 +151,6 @@ namespace WolvenKit.ViewModels.Tools
         /// Selected Files in right navigaiton
         /// </summary>
         [Reactive] public ObservableCollection<object> RightSelectedItems { get; set; } = new();
-
-        [Reactive] public List<string> Extensions { get; set; }
         [Reactive] public List<string> Classes { get; set; }
         [Reactive] public string SelectedClass { get; set; }
         [Reactive] public string SelectedExtension { get; set; }
@@ -181,59 +172,73 @@ namespace WolvenKit.ViewModels.Tools
         {
             foreach (var o in RightSelectedItems)
             {
-                if (o is RedFileViewModel fileVm)
+                switch (o)
                 {
-                    AddFile(fileVm);
-                }
-                else if (o is RedDirectoryViewModel dirVm)
-                {
-                    AddFolderRecursive(dirVm.GetModel());
+                    case RedFileViewModel fileVm:
+                        AddFile(fileVm);
+                        break;
+                    case RedDirectoryViewModel dirVm:
+                        AddFolderRecursive(dirVm.GetModel());
+                        break;
                 }
             }
+        }
+
+
+        public ICommand ToggleModBrowserCommand { get; private set; }
+        private bool CanToggleModBrowser() => true;//_archiveManager.IsManagerLoaded;
+        private void ExecuteToggleModBrowser()
+        {
+            if (!_isModBrowserActive)
+            {
+                _archiveManager.LoadModsArchives(new DirectoryInfo(_settings.GetRED4GameModDir()), null);
+                LeftItems = new ObservableCollection<RedFileSystemModel>(_archiveManager.ModRoots);
+            }
+            else
+            {
+                LeftItems = new ObservableCollection<RedFileSystemModel>(_boundRootNodes);
+            }
+
+            RightItems = new ObservableCollection<IFileSystemViewModel>();
+            _isModBrowserActive = !_isModBrowserActive;
         }
 
         public ICommand OpenFileLocationCommand { get; private set; }
         private bool CanOpenFileLocationCommand() => RightSelectedItems != null && RightSelectedItems.OfType<RedFileViewModel>().Any();
         private void ExecuteOpenFileLocationCommand()
         {
-            if (RightSelectedItems.First() is RedFileViewModel fileVm)
+            if (RightSelectedItems.First() is not RedFileViewModel fileVm)
             {
-                var parentPath = fileVm.GetParentPath();
-                var dir = _manager.LookupDirectory(parentPath, true);
-                if (dir != null)
-                {
-                    MoveToFolder(dir);
-                }
+                return;
+            }
+
+            var parentPath = fileVm.GetParentPath();
+            var dir = _archiveManager.LookupDirectory(parentPath, true);
+            if (dir != null)
+            {
+                MoveToFolder(dir);
             }
         }
 
         public ICommand TogglePreviewCommand { get; private set; }
         private bool CanTogglePreview() => true;
-        private void ExecuteTogglePreview()
-        {
-            if (PreviewWidth.GridUnitType != System.Windows.GridUnitType.Pixel)
-            {
-                PreviewWidth = new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel);
-                PreviewVisible = true;
-            }
-            else
-            {
-                PreviewWidth = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star);
-                PreviewVisible = false;
-            }
-        }
+        private void ExecuteTogglePreview() =>
+            PreviewWidth = PreviewWidth.GridUnitType != System.Windows.GridUnitType.Pixel
+                ? new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel)
+                : new System.Windows.GridLength(1, System.Windows.GridUnitType.Star);
 
         public ICommand OpenFileSystemItemCommand { get; private set; }
         private bool CanOpenFile() => true;
         private void ExecuteOpenFile()
         {
-            if (RightSelectedItem is RedFileViewModel fileVm)
+            switch (RightSelectedItem)
             {
-                AddFile(fileVm);
-            }
-            else if (RightSelectedItem is RedDirectoryViewModel dirVm)
-            {
-                MoveToFolder(dirVm);
+                case RedFileViewModel fileVm:
+                    AddFile(fileVm);
+                    break;
+                case RedDirectoryViewModel dirVm:
+                    MoveToFolder(dirVm);
+                    break;
             }
         }
 
@@ -246,41 +251,13 @@ namespace WolvenKit.ViewModels.Tools
 
         #region methods
 
-        /// <summary>
-        /// Initializes the Asset Browser and populates the data nodes.
-        /// Optionally load mods
-        /// </summary>
-        /// <param name="loadmods"></param>
-        public void ReInit(bool loadmods)
-        {
-            Extensions = _manager.Extensions.ToList();
-            Classes = _gameController
-                .GetController()
-                .GetAvaliableClasses();
-            PreviewVisible = false;
+        private void MoveToFolder(RedFileSystemModel dir) => LeftSelectedItem = dir;
 
-            _notificationService.Success($"Asset Browser is initialized");
-        }
+        private void MoveToFolder(RedDirectoryViewModel dir) => LeftSelectedItem = dir.GetModel();
 
-        private void MoveToFolder(RedFileSystemModel dir)
-        {
-            LeftSelectedItem = dir;
-        }
+        private void AddFile(RedFileViewModel item) => Task.Run(() => _gameController.GetController().AddToMod(item.GetGameFile().Key));
 
-        private void MoveToFolder(RedDirectoryViewModel dir)
-        {
-            LeftSelectedItem = dir.GetModel();
-        }
-
-        private void AddFile(RedFileViewModel item)
-        {
-            Task.Run(() => _gameController.GetController().AddToMod(item.GetGameFile()));
-        }
-
-        private void AddFile(ulong hash)
-        {
-            Task.Run(() => _gameController.GetController().AddToMod(hash));
-        }
+        private void AddFile(ulong hash) => Task.Run(() => _gameController.GetController().AddToMod(hash));
 
         private void AddFolderRecursive(RedFileSystemModel item)
         {
@@ -313,23 +290,23 @@ namespace WolvenKit.ViewModels.Tools
         /// <summary>
         /// Parses the search bar and filters all game files by given regex pattern
         /// Glob patterns from the additional search bar are evaluated first
-        /// Sets the right hand filelist to the result 
+        /// Sets the right hand filelist to the result
         /// </summary>
         public void RegexSearch()
         {
             var matcher = new Matcher();
             matcher.AddInclude(OptionsSearchBarText);
 
-            Regex rx = new Regex(SearchBarText,
+            var rx = new Regex(SearchBarText,
                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-            ReadOnlyObservableCollection<RedFileViewModel> list;
-            _manager.Items
+            _archiveManager.Archives
                 .Connect()
+                .TransformMany(x => x.Files.Values, y => y.Key)
                 .Filter(x => string.IsNullOrEmpty(OptionsSearchBarText) || matcher.Match(x.Name).HasMatches)
                 .Filter(x => rx.IsMatch(x.Name))
                 .Transform(x => new RedFileViewModel(x))
-                .Bind(out list)
+                .Bind(out var list)
                 .Subscribe()
                 .Dispose();
 
@@ -350,10 +327,10 @@ namespace WolvenKit.ViewModels.Tools
             }
 
             var inputs = SearchBarText.Split(' ');
-            Dictionary<ESearchKeys, List<string>> KeyDict = Enum
+            var keyDict = Enum
                 .GetValues<ESearchKeys>()
-                .ToDictionary(key => key, key => new List<string>());
-            KeyDict[ESearchKeys.Limit] = new List<string>() { SEARCH_LIMIT.ToString() };
+                .ToDictionary(key => key, _ => new List<string>());
+            keyDict[ESearchKeys.Limit] = new List<string>() { SEARCH_LIMIT.ToString() };
 
             // e.g. judy ext:mesh,ent test:xxx whatever
             // Name < judy,whatever
@@ -379,13 +356,13 @@ namespace WolvenKit.ViewModels.Tools
                         // get multiple
                         var multiple = value.Split(',').ToList();
                         // add to query
-                        KeyDict[ekey] = multiple;
+                        keyDict[ekey] = multiple;
                     }
                 }
                 else
                 {
                     // default to filename search term
-                    KeyDict[ESearchKeys.Name].Add(item);
+                    keyDict[ESearchKeys.Name].Add(item);
                 }
             }
 
@@ -401,31 +378,40 @@ namespace WolvenKit.ViewModels.Tools
             //var debugresult = match.Files.Select(x => x.Path);
 
             // 1. Hash
-            var qhashes = KeyDict[ESearchKeys.Hash]
+            var qhashes = keyDict[ESearchKeys.Hash]
                 .Where(x => ulong.TryParse(x, out _))
                 .Select(ulong.Parse);
             // 2. Extension
-            var qextensions = KeyDict[ESearchKeys.Kind]
+            var qextensions = keyDict[ESearchKeys.Kind]
                 .Where(x => Enum.TryParse<ERedExtension>(x, true, out _))
                 .Select(x => $".{x}");
             // 3. Name
-            var qnames = KeyDict[ESearchKeys.Name];
+            var qnames = keyDict[ESearchKeys.Name];
             // 4. Limit
-            if (!int.TryParse(KeyDict[ESearchKeys.Limit].First(), out var limit))
+            if (!int.TryParse(keyDict[ESearchKeys.Limit].First(), out var limit))
             {
                 limit = SEARCH_LIMIT;
             }
 
-            ReadOnlyObservableCollection<RedFileViewModel> list;
-            _manager.Items
+            _archiveManager.Archives
                 .Connect()
+                .TransformMany(x => x.Files.Values, y => y.Key)
                 .Filter(x => string.IsNullOrEmpty(OptionsSearchBarText) || matcher.Match(x.Name).HasMatches)
-                .Filter(x => !qhashes.Any() || qhashes.Contains(x.Key))
-                .Filter(x => !qextensions.Any() || qextensions.Any(y => y.Equals(x.Extension, StringComparison.OrdinalIgnoreCase)))
+                .Filter(x =>
+                {
+                    var enumerable = qhashes as ulong[] ?? qhashes.ToArray();
+                    return !enumerable.Any() || enumerable.Contains(x.Key);
+                })
+                .Filter(x =>
+                {
+                    var enumerable = qextensions as string[] ?? qextensions.ToArray();
+                    return !enumerable.Any() ||
+                           enumerable.Any(y => y.Equals(x.Extension, StringComparison.OrdinalIgnoreCase));
+                })
                 .Filter(x => !qnames.Any() || qnames.Any(y => x.Name.Contains(y, StringComparison.OrdinalIgnoreCase)))
                 .LimitSizeTo(limit)
                 .Transform(x => new RedFileViewModel(x))
-                .Bind(out list)
+                .Bind(out var list)
                 .Subscribe()
                 .Dispose();
 
@@ -433,7 +419,11 @@ namespace WolvenKit.ViewModels.Tools
             RightItems.AddRange(list);
         }
 
-        public IGameFile LookupGameFile(ulong hash)  => _manager.LookupFile(hash);
+        public IGameFile LookupGameFile(ulong hash)
+        {
+            var f = _archiveManager.Lookup(hash);
+            return f.HasValue ? f.Value : null;
+        }
 
         #endregion methods
     }

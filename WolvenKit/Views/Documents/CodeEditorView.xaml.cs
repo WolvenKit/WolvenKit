@@ -2,7 +2,7 @@ using System.Windows;
 using System.Windows.Media;
 using ReactiveUI;
 using Splat;
-using Syncfusion.Windows.Edit;
+//using Syncfusion.Windows.Edit;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Tools;
 
@@ -44,29 +44,29 @@ namespace WolvenKit.Views.Documents
         // Begin dragging the window
     }
 
-    public class PythonLanguage : ProceduralLanguageBase
+    //public class PythonLanguage : ProceduralLanguageBase
 
-    {
+    //{
 
-        public PythonLanguage(EditControl control)
+    //    public PythonLanguage(EditControl control)
 
-        : base(control)
+    //    : base(control)
 
-        {
+    //    {
 
-            this.Name = "Python";
+    //        this.Name = "Python";
 
-            this.FileExtension = "py";
+    //        this.FileExtension = "py";
 
-            this.ApplyColoring = true;
+    //        this.ApplyColoring = true;
 
-            this.SupportsIntellisense = false;
+    //        this.SupportsIntellisense = false;
 
-            this.SupportsOutlining = true;
+    //        this.SupportsOutlining = true;
 
-            this.TextForeground = Brushes.Black;
+    //        this.TextForeground = Brushes.Black;
 
-        }
+    //    }
 
-    }
+    //}
 }

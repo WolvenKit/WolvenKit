@@ -5,9 +5,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Windows;
 using System.Windows.Threading;
-using HandyControl.Tools;
 using NAudio.Wave;
+using WolvenKit.Functionality.Helpers;
 using WolvenKit.MVVM.Views.Components.Tools.AudioTool;
 using WPFSoundVisualizationLib;
 

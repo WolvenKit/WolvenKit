@@ -1,18 +1,18 @@
 using System.Windows;
-
 using Feather.Controls;
+using HandyControl.Controls;
+using HandyControl.Data;
 using ReactiveUI;
 using Splat;
-using WolvenKit.Functionality.Helpers;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.HomePage;
-using WolvenKit.ViewModels.HomePage.Pages;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.Shell;
 
 namespace WolvenKit.Views.HomePage
 {
-    public partial class HomePageView : ReactiveUserControl<HomePageViewModel>
+    public partial class HomePageView
     {
         #region Fields
 
@@ -50,7 +50,7 @@ namespace WolvenKit.Views.HomePage
                     Content = "This logo also acts as a button, by clicking it you exit the homepage.\n(Same for the button on the bottom of the 'SideMenu') \n\nClick anywhere to continue",
                     Placement = GuidedTourItem.ItemPlacement.Right,
                     Title = "WolvenKit Logo",
-                    AlternateTargets = new[] { FocusGrid }
+                    AlternateTargets = new FrameworkElement[] { FocusGrid }
                 },
                         new GuidedTourItem()
                 {
@@ -65,14 +65,14 @@ namespace WolvenKit.Views.HomePage
                     Content = "On the right you can find a 'quick access panel'.\nLet's start of making a new project.\n\nClick on 'Create Project' to continue\n (The tour will End here, more will be explained in the next version.)",
                     Placement = GuidedTourItem.ItemPlacement.Left,
                     Title = "Quick Access Panel",
-                    AlternateTargets = new[] { WlcmPage.TwitterLinkButton}
+                    AlternateTargets = new FrameworkElement[] { WlcmPage.TwitterLinkButton}
                 }
             });
 
 
             guide.Finished += Guide_Finished;
 
-            if (_settingsManager.ShowGuidedTour)
+            if (_settingsManager is { ShowGuidedTour: true })
             {
                 guide.Visibility = Visibility.Hidden;
 
@@ -98,7 +98,7 @@ namespace WolvenKit.Views.HomePage
         {
             base.OnMouseLeftButtonDown(e);
             var mainWindow = (MainView)Locator.Current.GetService<IViewFor<AppViewModel>>();
-            mainWindow.DragMove();
+            mainWindow?.DragMove();
         }
 
         private void Grid_MouseLeftButtonDown_2(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -121,16 +121,23 @@ namespace WolvenKit.Views.HomePage
             {
                 base.OnMouseLeftButtonDown(e);
                 var mainWindow = (MainView)Locator.Current.GetService<IViewFor<AppViewModel>>();
-                mainWindow.DragMove();
+                mainWindow?.DragMove();
             }
         }
 
         #endregion Methods
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        //private void MenuItem_Click(object sender, RoutedEventArgs e)
+        //{
+        //    guide.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        //    guide.Reset();
+        //}
+
+        private void LeftSideMenu_OnSelectionChanged(object sender, FunctionEventArgs<object> e)
         {
-            guide.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-            guide.Reset();
+            //SwitchItemCmd
+            var header = (e.Info as SideMenuItem)?.Header.ToString();
+            ViewModel?.SwitchItemCmd.SafeExecute(header);
         }
     }
 }

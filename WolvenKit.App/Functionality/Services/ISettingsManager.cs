@@ -65,7 +65,7 @@ namespace WolvenKit.Functionality.Services
 
         string GetRED4GameRootDir();
 
-        string GetRED4GameModDir();
+        public string GetRED4GameModDir();
 
 
         public static string GetAppData()

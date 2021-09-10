@@ -29,6 +29,83 @@
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0-windows|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\WolvenKit.App\WolvenKit.App.csproj" />
+    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ControlzEx" Version="5.0.1" />
+    <PackageReference Include="AdonisUI" Version="1.17.1" />
+    <PackageReference Include="AdonisUI.ClassicTheme" Version="1.17.1" />
+    <PackageReference Include="Fluent.Ribbon" Version="8.0.3" />
+    <PackageReference Include="Ab3d.DXEngine.Wpf" Version="4.4.7874" />
+    <PackageReference Include="Ab3d.DXEngine" Version="4.4.7874" />
+    <PackageReference Include="Ab3d.PowerToys" Version="9.6.7848" />
+    <PackageReference Include="CatFacts.Net" Version="0.1.1" />
+    <PackageReference Include="Discord.Net" Version="2.4.0" />
+    <PackageReference Include="Feather.Controls" Version="1.0.3" />
+    <PackageReference Include="Feather.Core" Version="1.0.0" />
+
+    <PackageReference Include="ReactiveUI" Version="16.2.1" />
+    <PackageReference Include="ReactiveUI.Events.WPF" Version="15.1.1" />
+    <PackageReference Include="ReactiveUI.Fody" Version="16.2.1" />
+    <PackageReference Include="ReactiveUI.WPF" Version="16.2.1" />
+    <PackageReference Include="Splat" Version="13.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
+    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="13.1.1" />
+    <PackageReference Include="Splat.Microsoft.Extensions.Logging" Version="13.1.1" />
+
+    <PackageReference Include="MahApps.Metro" Version="2.4.7" />
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.8.0" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.961.33" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.31" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="NodeNetwork" Version="6.0.0" />
+    <PackageReference Include="NodeNetworkToolkit" Version="6.0.0" />
+    <PackageReference Include="Octokit" Version="0.50.0" />
+
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="19.2.0.60" />
+    <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.2.0.60" />
+    <PackageReference Include="Syncfusion.SfInput.WPF" Version="19.2.0.60" />
+    <PackageReference Include="Syncfusion.SfImageEditor.WPF" Version="19.2.0.60" />
+
+    <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.2.0.60" />
+
+    <PackageReference Include="Syncfusion.SfBarcode.WPF" Version="19.2.0.60" />
+    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="19.2.0.60" />
+    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.2.0.60" />
+    <PackageReference Include="Syncfusion.SfHubTile.WPF" Version="19.2.0.60" />
+    <PackageReference Include="Syncfusion.SfKanban.WPF" Version="19.2.0.60" />
+    <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="19.2.0.60" />
+    <PackageReference Include="Syncfusion.SfRadialMenu.WPF" Version="19.2.0.60" />
+    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="19.2.0.60" />
+    <PackageReference Include="Syncfusion.SfTextInputLayout.WPF" Version="19.2.0.60" />
+    <PackageReference Include="Syncfusion.SfTreeNavigator.WPF" Version="19.2.0.60" />
+    <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="19.2.0.60" />
+
+    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="19.2.0.55" />
+    <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" Version="19.2.0.55" />
+
+
+
+    <PackageReference Include="AvalonEdit" Version="6.1.2.30" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+    <PackageReference Include="SharpVectors.Reloaded" Version="1.7.6" />
+    <PackageReference Include="System.Security.Permissions" Version="5.0.0" />
+    <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" NoWarn="NU1701" />
+    <PackageReference Include="HandyControls" Version="3.3.7" />
+    <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
+    <PackageReference Include="WpfAnalyzers" Version="3.5.4" PrivateAssets="all">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <!--<PackageReference Update="NETStandard.Library" Version="2.0.1" />-->
+  </ItemGroup>
+
+
   <ItemGroup>
     <Compile Remove="Functionality\Behavior\**" />
     <Compile Remove="NewFolder1\**" />
@@ -294,76 +371,7 @@
     <Resource Include="Resources\Media\Images\Application\Somthlikedis.png" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\WolvenKit.App\WolvenKit.App.csproj" />
-    <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
-  </ItemGroup>
 
-  <ItemGroup>
-      <PackageReference Include="ControlzEx" Version="5.0.1" />
-      <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
-      <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="11.1.1" />
-      <PackageReference Include="AdonisUI" Version="1.17.0" />
-      <PackageReference Include="AdonisUI.ClassicTheme" Version="1.17.0" />
-    <PackageReference Include="Fluent.Ribbon" Version="8.0.3" />
-    <PackageReference Include="Ab3d.DXEngine.Wpf" Version="4.3.7763" />
-    <PackageReference Include="Ab3d.DXEngine" Version="4.3.7763" />
-    <PackageReference Include="Ab3d.PowerToys" Version="9.5.7763" />
-    <PackageReference Include="CatFacts.Net" Version="0.1.1" />
-    <PackageReference Include="Discord.Net" Version="2.4.0" />
-    <PackageReference Include="Feather.Controls" Version="1.0.3" />
-    <PackageReference Include="Feather.Core" Version="1.0.0" />
-
-    <PackageReference Include="ReactiveUI" Version="14.1.1" />
-    <PackageReference Include="ReactiveUI.Events.WPF" Version="14.1.1" />
-    <PackageReference Include="ReactiveUI.Fody" Version="14.1.1" />
-    <PackageReference Include="ReactiveUI.WPF" Version="14.1.1" />
-    <PackageReference Include="Splat" Version="11.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
-    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="11.1.1" />
-    <PackageReference Include="Splat.Microsoft.Extensions.Logging" Version="11.1.1" />
-
-    <PackageReference Include="MahApps.Metro" Version="2.4.7" />
-    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.8.0" />
-    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.902.49" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.31" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="NodeNetwork" Version="5.2.0" />
-    <PackageReference Include="NodeNetworkToolkit" Version="5.2.0" />
-    <PackageReference Include="Octokit" Version="0.50.0" />
-
-    <PackageReference Include="Syncfusion.Edit.WPF" Version="19.2.0.49" />
-    <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.2.0.49" />
-    <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.2.0.49" />
-    <PackageReference Include="Syncfusion.SfBarcode.WPF" Version="19.2.0.49" />
-    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="19.2.0.49" />
-    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.2.0.49" />
-    <PackageReference Include="Syncfusion.SfHubTile.WPF" Version="19.2.0.49" />
-    <PackageReference Include="Syncfusion.SfImageEditor.WPF" Version="19.2.0.49" />
-    <PackageReference Include="Syncfusion.SfKanban.WPF" Version="19.2.0.49" />
-    <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="19.2.0.49" />
-    <PackageReference Include="Syncfusion.SfRadialMenu.WPF" Version="19.2.0.49" />
-    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="19.2.0.49" />
-    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="19.2.0.49" />
-    <PackageReference Include="Syncfusion.SfTextInputLayout.WPF" Version="19.2.0.49" />
-    <PackageReference Include="Syncfusion.SfTreeNavigator.WPF" Version="19.2.0.49" />
-    <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="19.2.0.49" />
-    <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" Version="19.2.0.49" />
-    <PackageReference Include="Syncfusion.Themes.Office2019Black.WPF" Version="19.2.0.49" />
-      <PackageReference Include="Syncfusion.Tools.WPF" Version="19.2.0.49" />
-    <PackageReference Include="AvalonEdit" Version="6.1.2.30" />
-    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
-    <PackageReference Include="SharpVectors.Reloaded" Version="1.7.5" />
-    <PackageReference Include="System.Security.Permissions" Version="5.0.0" />
-    <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" NoWarn="NU1701" />
-    <PackageReference Include="HandyControls" Version="3.3.7" />
-    <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
-    <PackageReference Include="WpfAnalyzers" Version="3.5.4" PrivateAssets="all">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-    <!--<PackageReference Update="NETStandard.Library" Version="2.0.1" />-->
-  </ItemGroup>
 
   <ItemGroup>
     <Content Include="Config\__xbmdump_3768555366.csv">
@@ -1765,6 +1773,9 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="PathIcon.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Views\Controls\PathEditorView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="Views\Templates\HandleTemplateView.xaml">

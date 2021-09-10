@@ -15,6 +15,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Functionality.Commands;
+using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
@@ -196,7 +197,7 @@ namespace WolvenKit.ViewModels.Shared
 
         private void ConvertRecentProjects() // Converts Recent projects for the homepage.
         {
-            HandyControl.Tools.DispatcherHelper.RunOnMainThread(() =>
+            DispatcherHelper.RunOnMainThread(() =>
             {
                 FancyProjects.Clear();
             });
@@ -220,7 +221,7 @@ namespace WolvenKit.ViewModels.Shared
                     if (!IsThere)
                     { newfi = "pack://application:,,,/Resources/Media/Images/Application/CpProj.png"; }
                     NewItem = new FancyProjectObject(fi.Name, cd, "Cyberpunk 2077", p, newfi);
-                    HandyControl.Tools.DispatcherHelper.RunOnMainThread(() =>
+                    DispatcherHelper.RunOnMainThread(() =>
                     {
                         FancyProjects.Add(NewItem);
                     });
@@ -231,7 +232,7 @@ namespace WolvenKit.ViewModels.Shared
                     { newfi = "pack://application:,,,/Resources/Media/Images/Application/tw3proj.png"; }
 
                     NewItem = new FancyProjectObject(n, cd, "The Witcher 3", p, newfi);
-                    HandyControl.Tools.DispatcherHelper.RunOnMainThread(() =>
+                    DispatcherHelper.RunOnMainThread(() =>
                     {
                         FancyProjects.Add(NewItem);
                     });

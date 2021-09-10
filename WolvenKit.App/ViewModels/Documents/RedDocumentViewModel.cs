@@ -81,10 +81,9 @@ namespace WolvenKit.ViewModels.Documents
             var depotpath = input.DepotPathStr;
             var key = FNV1A64HashAlgorithm.HashString(depotpath);
 
-            var itemToImport = _archiveManager.Items.Lookup(key).Value;
-            if (itemToImport != null)
+            if (_archiveManager.Lookup(key).HasValue)
             {
-                _gameControllerFactory.GetController().AddToMod(itemToImport);
+                _gameControllerFactory.GetController().AddToMod(key);
             }
         }
 
