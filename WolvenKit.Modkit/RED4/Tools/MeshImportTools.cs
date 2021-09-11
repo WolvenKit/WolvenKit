@@ -154,15 +154,33 @@ namespace WolvenKit.Modkit.RED4
 
             List<uint> indicesList = mesh.Primitives[0].GetIndices().ToList();
 
-            meshContainer.indices = new uint[indicesList.Count];
-
-            // ReSwapping the faces
-            for (int i = 0; i < indicesList.Count; i += 3)
+            if(mesh.Name.ToLower().Contains("double"))
             {
-                meshContainer.indices[i] = indicesList[i + 1];
-                meshContainer.indices[i + 1] = indicesList[i];
-                meshContainer.indices[i + 2] = indicesList[i + 2];
+                meshContainer.indices = new uint[indicesList.Count * 2];
+                for (int i = 0; i < indicesList.Count; i += 3)
+                {
+                    // RHS to LHS face orientations
+                    meshContainer.indices[i] = indicesList[i + 1];
+                    meshContainer.indices[i + 1] = indicesList[i];
+                    meshContainer.indices[i + 2] = indicesList[i + 2];
+
+                    meshContainer.indices[indicesList.Count + i] = indicesList[i];
+                    meshContainer.indices[indicesList.Count + i + 1] = indicesList[i + 1];
+                    meshContainer.indices[indicesList.Count + i + 2] = indicesList[i + 2];
+                }
             }
+            else
+            {
+                meshContainer.indices = new uint[indicesList.Count];
+                for (int i = 0; i < indicesList.Count; i += 3)
+                {
+                    // RHS to LHS face orientations
+                    meshContainer.indices[i] = indicesList[i + 1];
+                    meshContainer.indices[i + 1] = indicesList[i];
+                    meshContainer.indices[i + 2] = indicesList[i + 2];
+                }
+            }
+
 
             List<Vec3> verticesList = mesh.Primitives[0].GetVertices("POSITION").AsVector3Array().ToList();
             List<Vec3> normalsList = mesh.Primitives[0].GetVertices("NORMAL").AsVector3Array().ToList();

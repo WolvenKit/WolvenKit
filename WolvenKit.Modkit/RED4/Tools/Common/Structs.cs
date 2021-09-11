@@ -162,6 +162,13 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
             W = w;
         }
     }
+    public class MatData
+    {
+        public string MaterialRepo { get; set; }
+        public List<RawMaterial> Materials { get; set; }
+        public List<string> TexturesList { get; set; }
+        public List<RawMaterial> MaterialTemplates { get; set; }
+    }
     public class RawMaterial
     {
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

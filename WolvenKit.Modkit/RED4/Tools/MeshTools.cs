@@ -614,6 +614,7 @@ namespace CP77.CR2W
                 meshContainer.colors1 = new Vec4[0];
                 expMeshes.Add(meshContainer);
             }
+            RemoveDoubleFaces(ref expMeshes);
             return expMeshes;
         }
         public static void UpdateMeshJoints(ref List<RawMeshContainer> Meshes, RawArmature newRig, RawArmature oldRig)
@@ -978,6 +979,54 @@ namespace CP77.CR2W
                 return Rig;
             }
             return null;
+        }
+        private static void RemoveDoubleFaces(ref List<RawMeshContainer> Meshes)
+        {
+            for(int i = 0; i < Meshes.Count; i++)
+            {
+                var idx0 = Meshes[i].indices[0];
+                var idx1 = Meshes[i].indices[1];
+                var idx2 = Meshes[i].indices[2];
+
+                bool doubled = false;
+                for (int j = 3; j < Meshes[i].indices.Length; j+= 3)
+                {
+                    var bool0 = (idx0 == Meshes[i].indices[j]) || (idx0 == Meshes[i].indices[j + 1]) || (idx0 == Meshes[i].indices[j + 2]);
+                    var bool1 = (idx1 == Meshes[i].indices[j]) || (idx1 == Meshes[i].indices[j + 1]) || (idx1 == Meshes[i].indices[j + 2]);
+                    var bool2 = (idx2 == Meshes[i].indices[j]) || (idx2 == Meshes[i].indices[j + 1]) || (idx2 == Meshes[i].indices[j + 2]);
+
+                    doubled = bool0 && bool1 && bool2;
+                    if (doubled)
+                    {
+                        break;
+                    }
+                }
+                if(doubled)
+                {
+                    List<uint> indices = new List<uint>();
+                    for (int j = 0; j < Meshes[i].indices.Length; j += 3)
+                    {
+                        var v0 = Meshes[i].positions[Meshes[i].indices[j]];
+                        var v1 = Meshes[i].positions[Meshes[i].indices[j + 1]];
+                        var v2 = Meshes[i].positions[Meshes[i].indices[j + 2]];
+                        var cross = Vec3.Normalize(Vec3.Cross(new Vec3(v1.X - v0.X, v1.Y - v0.Y, v1.Z - v0.Z), new Vec3(v2.X - v1.X, v2.Y - v1.Y, v2.Z - v1.Z)));
+
+                        var n0 = Meshes[i].normals[Meshes[i].indices[j]];
+                        var n1 = Meshes[i].normals[Meshes[i].indices[j + 1]];
+                        var n2 = Meshes[i].normals[Meshes[i].indices[j + 2]];
+                        var avg = Vec3.Normalize(new Vec3((n0.X + n1.X + n2.X) / 3, (n0.Y + n1.Y + n2.Y) / 3, (n0.Z + n1.Z + n2.Z) / 3));
+
+                        if(Vec3.Dot(cross,avg) <= 0)
+                        {
+                            indices.Add(Meshes[i].indices[j]);
+                            indices.Add(Meshes[i].indices[j + 1]);
+                            indices.Add(Meshes[i].indices[j + 2]);
+                        }
+                    }
+                    Meshes[i].indices = indices.ToArray();
+                    Meshes[i].name += "_doubled";
+                }
+            }
         }
         public static void UpdateSkinningParamCloth(ref List<RawMeshContainer> meshes,Stream ms, CR2WFile cr2w)
         {
