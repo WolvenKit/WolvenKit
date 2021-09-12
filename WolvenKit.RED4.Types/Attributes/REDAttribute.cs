@@ -140,6 +140,7 @@ namespace WolvenKit.RED4.Types
         internal REDClassAttribute() { }
 
         public bool SerializeDefault { get; set; } = false;
+        public int ChildLevel { get; set; } = 0;
     }
 
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]

@@ -2,7 +2,7 @@ using WolvenKit.RED4.IO;
 
 namespace WolvenKit.RED4.Types
 {
-    public partial class gameCompiledSmartObjectData : IRedCustomData
+    public partial class AITrafficWorkspotCompiled : IRedCustomData
     {
         private byte[] _buffer;
 

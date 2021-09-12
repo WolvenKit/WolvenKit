@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.IO
         public readonly Dictionary<long, string> CNameRef = new();
         public readonly Dictionary<long, (string, string, ushort)> ImportRef = new();
 
-        private readonly Dictionary<int, List<CName>> _chunkStringList = new();
+        private readonly Dictionary<int, StringInfo> _chunkStringList = new();
         private readonly Dictionary<int, List<(string, CName, ushort)>> _chunkImportList = new();
 
         private readonly List<(int, int, int, int)> _targetList = new();
@@ -212,7 +212,7 @@ namespace WolvenKit.RED4.IO
                 return;
             }
 
-            _chunkStringList.Add(i - 1, StringCacheList.ToList());
+            _chunkStringList.Add(i - 1, new() {List = StringCacheList.ToList() });
             StringCacheList.Clear();
 
             _chunkImportList.Add(i - 1, ImportCacheList.ToList());
@@ -221,7 +221,7 @@ namespace WolvenKit.RED4.IO
 
         public (Dictionary<CName, ushort>, Dictionary<(string, CName, ushort), ushort>) GenerateStringDictionary()
         {
-            _chunkStringList.Add(CurrentChunk, StringCacheList.ToList());
+            _chunkStringList.Add(CurrentChunk, new() { List = StringCacheList.ToList() });
             StringCacheList.Clear();
 
             _chunkImportList.Add(CurrentChunk, ImportCacheList.ToList());
@@ -229,18 +229,26 @@ namespace WolvenKit.RED4.IO
 
             var targetList = new List<(int, int, int, int)>(_targetList);
 
-            GenerateFor(0);
-            while (targetList.Count > 0)
+            var length = _chunkStringList.Count;
+            for (int i = 0; i < length; i++)
             {
-                GenerateFor(targetList[0].Item1);
+                GenerateFor(i);
             }
 
             return (StringCacheList.ToDictionary(), ImportCacheList.ToDictionary());
 
             void GenerateFor(int chunk)
             {
-                var stringCurrentIndex = 0;
+                if (!_chunkStringList.ContainsKey(chunk))
+                {
+                    return;
+                }
+
                 var stringList = _chunkStringList[chunk];
+                if (stringList.List.Contains("questPrefetchStreaming_NodeTypeV2"))
+                {
+
+                }
 
                 var importCurrentIndex = 0;
                 var importList = _chunkImportList[chunk];
@@ -248,23 +256,36 @@ namespace WolvenKit.RED4.IO
                 var list = targetList.Where(x => x.Item1 == chunk).ToList();
                 foreach (var tuple in list)
                 {
-                    StringCacheList.AddRange(stringList.GetRange(stringCurrentIndex, tuple.Item3 - stringCurrentIndex));
-                    stringCurrentIndex = tuple.Item3;
+                    StringCacheList.AddRange(stringList.List.GetRange(stringList.LastIndex, tuple.Item3 - stringList.LastIndex));
+                    stringList.LastIndex = tuple.Item3;
 
                     ImportCacheList.AddRange(importList.GetRange(importCurrentIndex, tuple.Item4 - importCurrentIndex));
                     importCurrentIndex = tuple.Item4;
 
                     targetList.Remove(tuple);
-                    GenerateFor(tuple.Item2 - 1);
+
+                    if ((tuple.Item2 - 1) > chunk)
+                    {
+                        GenerateFor(tuple.Item2 - 1);
+                    }
                 }
-                StringCacheList.AddRange(stringList.GetRange(stringCurrentIndex, stringList.Count - stringCurrentIndex));
+                StringCacheList.AddRange(stringList.List.GetRange(stringList.LastIndex, stringList.List.Count - stringList.LastIndex));
                 ImportCacheList.AddRange(importList.GetRange(importCurrentIndex, importList.Count - importCurrentIndex));
+
+                _chunkStringList.Remove(chunk);
+                _chunkImportList.Remove(chunk);
             }
+        }
+
+        private class StringInfo
+        {
+            public List<CName> List { get; set; }
+            public int LastIndex { get; set; }
         }
 
         #region Fundamentals
 
-        public virtual void Write(CBool val) => _writer.Write(val ? (byte)1 : (byte)0);
+        public virtual void Write(CBool val) => _writer.Write((byte)val);
         public virtual void Write(CDouble val) => _writer.Write(val);
         public virtual void Write(CFloat val) => _writer.Write(val);
         public virtual void Write(CInt8 val) => _writer.Write(val);
@@ -311,7 +332,7 @@ namespace WolvenKit.RED4.IO
 
         public virtual void Write(DataBuffer val)
         {
-            if (val.Pointer > 0)
+            if (val.Pointer >= 0)
             {
                 _writer.Write((uint)(val.Pointer | 0x80000000));
             }
@@ -331,7 +352,6 @@ namespace WolvenKit.RED4.IO
         }
 
         public virtual void Write(MessageResourcePath val) => ThrowNotImplemented();
-        public virtual void Write<T>(MultiChannelCurve<T> val) where T : IRedType => ThrowNotImplemented();
         public virtual void Write(NodeRef val) => WriteLengthPrefixedString(val);
         public virtual void Write(SerializationDeferredDataBuffer val) => _writer.Write(val.Buffer);
         public virtual void Write(SharedDataBuffer val) => _writer.Write(val.Buffer);
@@ -529,6 +549,28 @@ namespace WolvenKit.RED4.IO
                 _writer.Write(curvePoint.GetPoint());
             }
             _writer.Write(instance.Tail);
+        }
+
+        public virtual void Write(IRedMultiChannelCurve instance)
+        {
+            var genericType = instance.GetType().GetGenericTypeDefinition();
+            var innerType = instance.GetType().GetGenericArguments()[0];
+
+            var method = GetMethod("Write", 1, new[] { genericType });
+            var generic = method.MakeGenericMethod(innerType);
+
+            generic.Invoke(this, new object[] { instance });
+        }
+
+        public virtual void Write<T>(MultiChannelCurve<T> instance) where T : IRedType
+        {
+            _writer.Write(instance.NumChannels);
+            _writer.Write((byte)instance.InterPolationType);
+            _writer.Write((byte)instance.LinkType);
+            _writer.Write(instance.Alignment);
+
+            _writer.Write((uint)instance.Data.Length);
+            _writer.Write(instance.Data);
         }
 
         public virtual void Write(IRedResourceReference instance) => ThrowNotImplemented();
@@ -730,6 +772,12 @@ namespace WolvenKit.RED4.IO
             if (typeof(IRedLegacySingleChannelCurve).IsAssignableFrom(type))
             {
                 Write((IRedLegacySingleChannelCurve)genInstance);
+                return;
+            }
+
+            if (typeof(IRedMultiChannelCurve).IsAssignableFrom(type))
+            {
+                Write((IRedMultiChannelCurve)genInstance);
                 return;
             }
 

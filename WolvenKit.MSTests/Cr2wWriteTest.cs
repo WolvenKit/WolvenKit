@@ -31,7 +31,7 @@ namespace WolvenKit.MSTests
         public static void SetupClass(TestContext context) => Setup(context);
 
         private const bool TEST_EXISTING = false;
-        private const bool WRITE_FAILED = true;
+        private const bool WRITE_FAILED = false;
         private const bool DECOMPRESS_BUFFERS = false;
 
         #region test methods
@@ -45,16 +45,19 @@ namespace WolvenKit.MSTests
         //[TestMethod]
         public void Debug()
         {
-            var files = s_groupedFiles[".cookedapp"].ToList();
+            var files = s_groupedFiles[".folbrush"].ToList();
 
             foreach (var file in files)
             {
-                if (!file.Name.Contains("vehicle_a8f017ec6920c5f9_brennan_apollo_v2.cookedapp"))
+                if (!file.Name.Contains("layer6.folbrush"))
                 {
                     continue;
                 }
 
-                var ar = s_bm.Archives[file.Archive.ArchiveAbsolutePath] as Archive;
+                var list = new List<FileEntry>();
+                list.Add(file);
+                Write_Archive_Items(list);
+                /*var ar = s_bm.Archives[file.Archive.ArchiveAbsolutePath] as Archive;
                 using var ms = new MemoryStream();
                 ar?.CopyFileToStream(ms, file.NameHash64, false);
                 //ar?.CopyFileToStreamWithoutBuffers(ms, file.NameHash64);
@@ -65,7 +68,7 @@ namespace WolvenKit.MSTests
 
                 using var ms2 = new MemoryStream();
                 using var writer = new CR2WWriter(ms2);
-                writer.WriteFile(c);
+                writer.WriteFile(c);*/
             }
         }
 
@@ -232,6 +235,12 @@ namespace WolvenKit.MSTests
         }
 
         [TestMethod]
+        public void Write_curveresset()
+        {
+            Test_Extension(".curveresset");
+        }
+
+        [TestMethod]
         public void Write_curveset()
         {
             Test_Extension(".curveset");
@@ -331,6 +340,12 @@ namespace WolvenKit.MSTests
         public void Write_fp()
         {
             Test_Extension(".fp");
+        }
+
+        [TestMethod]
+        public void Write_game()
+        {
+            Test_Extension(".game");
         }
 
         [TestMethod]
@@ -544,6 +559,12 @@ namespace WolvenKit.MSTests
         }
 
         [TestMethod]
+        public void Write_matlib()
+        {
+            Test_Extension(".matlib");
+        }
+
+        [TestMethod]
         public void Write_mesh()
         {
             Test_Extension(".mesh");
@@ -583,12 +604,6 @@ namespace WolvenKit.MSTests
         public void Write_mt()
         {
             Test_Extension(".mt");
-        }
-
-        [TestMethod]
-        public void Write_navmesh()
-        {
-            Test_Extension(".navmesh");
         }
 
         [TestMethod]
@@ -670,6 +685,12 @@ namespace WolvenKit.MSTests
         }
 
         [TestMethod]
+        public void Write_reps()
+        {
+            Test_Extension(".reps");
+        }
+
+        [TestMethod]
         public void Write_reslist()
         {
             Test_Extension(".reslist");
@@ -724,12 +745,6 @@ namespace WolvenKit.MSTests
         }
 
         [TestMethod]
-        public void Write_streamingquerydata()
-        {
-            Test_Extension(".streamingquerydata");
-        }
-
-        [TestMethod]
         public void Write_streamingsector()
         {
             Test_Extension(".streamingsector");
@@ -769,6 +784,18 @@ namespace WolvenKit.MSTests
         public void Write_traffic_persistent()
         {
             Test_Extension(".traffic_persistent");
+        }
+
+        [TestMethod]
+        public void Write_vehcommoncurveset()
+        {
+            Test_Extension(".vehcommoncurveset");
+        }
+
+        [TestMethod]
+        public void Write_vehcurveset()
+        {
+            Test_Extension(".vehcurveset");
         }
 
         [TestMethod]
@@ -832,7 +859,16 @@ namespace WolvenKit.MSTests
                 {
                     if (ulong.TryParse(line.Split(',').First(), out var hash))
                     {
-                        filesToTest.Add(s_bm.Items.Lookup(hash).Value as FileEntry);
+                        foreach (var archive in s_bm.Archives)
+                        {
+                            foreach (var gameFile in archive.Value.Files)
+                            {
+                                if (gameFile.Key == hash)
+                                {
+                                    filesToTest.Add((FileEntry)gameFile.Value);
+                                }
+                            }
+                        }
                     }
                 }
             }

@@ -6,10 +6,12 @@ namespace WolvenKit.RED4.Types
 {
     [RED("String")]
     [DebuggerDisplay("{_value}", Type = "CString")]
-    public readonly struct CString : IRedPrimitive<string>, IEquatable<CString>
+    public sealed class CString : IRedPrimitive<string>, IEquatable<CString>
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly string _value;
+
+        public CString() { }
 
         private CString(string value)
         {

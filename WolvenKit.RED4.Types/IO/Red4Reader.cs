@@ -132,20 +132,32 @@ namespace WolvenKit.RED4.IO
 
         public string ReadNullTerminatedString()
         {
-            var sb = new StringBuilder();
+            var bytes = new List<byte>();
             for (byte b; (b = _reader.ReadByte()) != 0x00;)
             {
-                sb.Append((char)b);
+                bytes.Add(b);
             }
 
-            return sb.ToString();
+            return Encoding.UTF8.GetString(bytes.ToArray());
         }
 
         #endregion
 
+        protected CName GetStringValue(ushort index)
+        {
+            var result = _stringList[index];
+
+            if (result == "idle")
+            {
+
+            }
+
+            return result;
+        }
+
         #region Fundamentals
 
-        public virtual CBool ReadCBool() => _reader.ReadByte() != 0x00;
+        public virtual CBool ReadCBool() => _reader.ReadByte();
         public virtual CDouble ReadCDouble() => _reader.ReadDouble();
         public virtual CFloat ReadCFloat() => _reader.ReadSingle();
         public virtual CInt16 ReadCInt16() => _reader.ReadInt16();
@@ -164,7 +176,7 @@ namespace WolvenKit.RED4.IO
         public virtual CDateTime ReadCDateTime() => _reader.ReadUInt64();
 
         public virtual CGuid ReadCGuid() => _reader.ReadBytes(16);
-        public virtual CName ReadCName() => _stringList[_reader.ReadUInt16()];
+        public virtual CName ReadCName() => GetStringValue(_reader.ReadUInt16());
         public virtual CRUID ReadCRUID() => _reader.ReadUInt64();
         public virtual CString ReadCString() => ReadLengthPrefixedString();
 
@@ -172,7 +184,7 @@ namespace WolvenKit.RED4.IO
         {
             var result = new CVariant();
 
-            var typeName = _stringList[_reader.ReadUInt16()];
+            var typeName = GetStringValue(_reader.ReadUInt16());
             var (type, flags) = RedReflection.GetCSTypeFromRedType(typeName);
             var size = _reader.ReadUInt32() - 4;
             if (size > 0)
@@ -322,7 +334,7 @@ namespace WolvenKit.RED4.IO
                     enumString += ", ";
                 }
 
-                enumString += _stringList[index];
+                enumString += GetStringValue(index);
             }
 
             if (string.IsNullOrEmpty(enumString))
@@ -346,7 +358,7 @@ namespace WolvenKit.RED4.IO
         public virtual CEnum<T> ReadCEnum<T>() where T : struct, Enum
         {
             var index = _reader.ReadUInt16();
-            var enumString = _stringList[index];
+            var enumString = GetStringValue(index);
 
             return CEnum.Parse<T>(enumString);
         }
@@ -522,19 +534,6 @@ namespace WolvenKit.RED4.IO
             }
 
             return instance;
-        }
-
-        public virtual IRedClass ReadAITrafficWorkspotCompiled(uint size)
-        {
-            return new AITrafficWorkspotCompiled
-            {
-                Buffer = _reader.ReadBytes((int)size)
-            };
-        }
-
-        public virtual void ReadChunks()
-        {
-
         }
 
         public virtual IRedType Read(Type type, uint size = 0, Flags flags = null)

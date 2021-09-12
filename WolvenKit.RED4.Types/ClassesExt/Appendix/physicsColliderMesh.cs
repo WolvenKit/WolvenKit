@@ -21,7 +21,17 @@ namespace WolvenKit.RED4.Types
             Appendix = result;
         }
 
-        public void Write(Red4Writer writer) => throw new System.NotImplementedException();
+        public void Write(Red4Writer writer)
+        {
+            var appendix = (physicsColliderMesh_Appendix)Appendix;
+
+            writer.BaseWriter.Write(appendix.Unk1);
+            writer.WriteVLQ(appendix.Unk2.Length);
+            foreach (var entry in appendix.Unk2)
+            {
+                writer.BaseWriter.Write(entry);
+            }
+        }
     }
 
     public class physicsColliderMesh_Appendix

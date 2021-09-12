@@ -11,7 +11,6 @@ namespace WolvenKit.RED4.Types
         {
             var result = new gameLootResourceData_Appendix();
 
-
             var startPos = reader.BaseReader.BaseStream.Position;
 
             result.Unk1 = new ulong[reader.ReadVLQ()];
@@ -26,7 +25,17 @@ namespace WolvenKit.RED4.Types
             Appendix = result;
         }
 
-        public void Write(Red4Writer writer) => throw new System.NotImplementedException();
+        public void Write(Red4Writer writer)
+        {
+            var appendix = (gameLootResourceData_Appendix)Appendix;
+
+            writer.WriteVLQ(appendix.Unk1.Length);
+            foreach (var entry in appendix.Unk1)
+            {
+                writer.BaseWriter.Write(entry);
+            }
+            writer.BaseWriter.Write(appendix.Buffer);
+        }
     }
 
     public class gameLootResourceData_Appendix

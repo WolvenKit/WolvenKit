@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Archive
     public interface ICR2WImport
     {
         public string DepotPath { get; }
-        public ushort Flags { get; }
+        public InternalEnums.EImportFlags Flags { get; }
     }
 
     public interface ICR2WBuffer

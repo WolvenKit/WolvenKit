@@ -3,6 +3,7 @@ using WolvenKit.RED4.IO;
 
 namespace WolvenKit.RED4.Types
 {
+    [REDClass(ChildLevel = 1)]
     public partial class CMaterialTemplate : IRedAppendix
     {
         public object Appendix { get; set; }
@@ -12,6 +13,6 @@ namespace WolvenKit.RED4.Types
             Appendix = new BaseAppendix { Buffer = reader.BaseReader.ReadBytes((int)size) };
         }
 
-        public void Write(Red4Writer writer) => throw new System.NotImplementedException();
+        public void Write(Red4Writer writer) => writer.BaseWriter.Write(((BaseAppendix)Appendix).Buffer);
     }
 }

@@ -18,7 +18,14 @@ namespace WolvenKit.RED4.Types
             Appendix = result;
         }
 
-        public void Write(Red4Writer writer) => throw new System.NotImplementedException();
+        public void Write(Red4Writer writer)
+        {
+            var appendix = (worldStreamingSector_Appendix)Appendix;
+
+            writer.BaseWriter.Write(appendix.Unk1);
+            writer.BaseWriter.Write(appendix.Buffer.Length + 4);
+            writer.BaseWriter.Write(appendix.Buffer);
+        }
     }
 
     public class worldStreamingSector_Appendix

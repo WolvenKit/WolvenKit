@@ -8,15 +8,18 @@ namespace WolvenKit.RED4.Types
     public readonly struct CBool : IRedPrimitive<bool>, IEquatable<CBool>
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private readonly bool _value;
+        private readonly byte _value;
 
-        private CBool(bool value)
+        private CBool(byte value)
         {
             _value = value;
         }
 
-        public static implicit operator CBool(bool value) => new(value);
-        public static implicit operator bool(CBool value) => value._value;
+        public static implicit operator CBool(byte value) => new(value);
+        public static implicit operator byte(CBool value) => value._value;
+
+        public static implicit operator CBool(bool value) => new(value ? (byte)1 : (byte)0);
+        public static implicit operator bool(CBool value) => value._value != 0;
 
         public bool Equals(CBool other) => _value == other._value;
 

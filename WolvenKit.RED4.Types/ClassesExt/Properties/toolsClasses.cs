@@ -38,6 +38,12 @@ namespace WolvenKit.RED4.Types
             get => GetPropertyValue<CUInt64>();
             set => SetPropertyValue<CUInt64>(value);
         }
+
+        public toolsTimeLineBaseDescriptor()
+        {
+            // TODO: Check this value, its not 0
+            TracksRootId = ulong.MaxValue;
+        }
     }
 
     [REDMeta]
@@ -157,6 +163,11 @@ namespace WolvenKit.RED4.Types
         {
             get => GetPropertyValue<CRUID>();
             set => SetPropertyValue<CRUID>(value);
+        }
+
+        public toolsAudioEventDescriptor()
+        {
+            FastForwardSupport = Enums.toolsAudioFastForwardSupport.DontMuteDuringFastForward;
         }
     }
 
@@ -359,6 +370,11 @@ namespace WolvenKit.RED4.Types
             get => GetPropertyValue<CEnum<toolsSocketDirection>>();
             set => SetPropertyValue<CEnum<toolsSocketDirection>>(value);
         }
+
+        public toolsSocketDescription()
+        {
+            Id = uint.MaxValue;
+        }
     }
 
     [REDMeta]
@@ -378,6 +394,15 @@ namespace WolvenKit.RED4.Types
         {
             get => GetPropertyValue<CStatic<CFloat>>();
             set => SetPropertyValue<CStatic<CFloat>>(value);
+        }
+
+        public houdiniVehicleDestructionMeshEntry()
+        {
+            // TODO: Check this
+            Position = new(3);
+            Position[0] = 0F;
+            Position[1] = 0F;
+            Position[2] = 1F;
         }
     }
 
@@ -560,6 +585,11 @@ namespace WolvenKit.RED4.Types
             get => GetPropertyValue<CBool>();
             set => SetPropertyValue<CBool>(value);
         }
+
+        public toolsSocketVisibilityData()
+        {
+            SocketId = uint.MaxValue;
+        }
     }
 
     [REDMeta]
@@ -650,19 +680,19 @@ namespace WolvenKit.RED4.Types
         }
 
         [Ordinal(4)]
-        [RED("locstringId")]
-        public scnblocLocstringId LocstringId
-        {
-            get => GetPropertyValue<scnblocLocstringId>();
-            set => SetPropertyValue<scnblocLocstringId>(value);
-        }
-
-        [Ordinal(5)]
         [RED("usage")]
         public scnbScreenplayLineUsage Usage
         {
             get => GetPropertyValue<scnbScreenplayLineUsage>();
             set => SetPropertyValue<scnbScreenplayLineUsage>(value);
+        }
+
+        [Ordinal(5)]
+        [RED("locstringId")]
+        public scnblocLocstringId LocstringId
+        {
+            get => GetPropertyValue<scnblocLocstringId>();
+            set => SetPropertyValue<scnblocLocstringId>(value);
         }
     }
 
@@ -997,6 +1027,11 @@ namespace WolvenKit.RED4.Types
             get => GetPropertyValue<CUInt64>();
             set => SetPropertyValue<CUInt64>(value);
         }
+
+        public toolsSceneTrackID()
+        {
+            Id = ulong.MaxValue;
+        }
     }
 
     [REDMeta]
@@ -1053,6 +1088,13 @@ namespace WolvenKit.RED4.Types
         {
             get => GetPropertyValue<CArray<CUInt64>>();
             set => SetPropertyValue<CArray<CUInt64>>(value);
+        }
+
+        public toolsTimeLineTrackBaseItem()
+        {
+            // TODO: Check this value, its not 0
+            Id = ulong.MaxValue;
+            ParentId = ulong.MaxValue;
         }
     }
 }

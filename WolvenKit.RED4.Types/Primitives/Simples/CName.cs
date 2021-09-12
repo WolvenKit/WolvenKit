@@ -8,11 +8,12 @@ namespace WolvenKit.RED4.Types
 {
     [RED("CName")]
     [DebuggerDisplay("{_value}", Type = "CName")]
-    public readonly struct CName : IRedPrimitive<string>, IEquatable<CName>
+    public sealed class CName : IRedPrimitive<string>, IEquatable<CName>
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly string _value;
 
+        public CName() { }
         private CName(string value)
         {
             _value = value;
@@ -22,7 +23,14 @@ namespace WolvenKit.RED4.Types
 
         public uint GetRedHash()
         {
-            var hash64 = string.IsNullOrEmpty(_value) ? 0 : FNV1A64HashAlgorithm.HashString(_value, Encoding.GetEncoding("iso-8859-1"), false, true);
+            if (string.IsNullOrEmpty(_value))
+            {
+                return 0;
+            }
+
+            var buffer = Encoding.UTF8.GetBytes(_value);
+            var sBuffer = Array.ConvertAll(buffer, b => b != 0x80 ? (byte)Math.Abs((sbyte)b) : (byte)0x80);
+            var hash64 = FNV1A64HashAlgorithm.HashReadOnlySpan(sBuffer);
 
             return (uint)((hash64 >> 32) ^ (uint)hash64);
         }
@@ -30,7 +38,14 @@ namespace WolvenKit.RED4.Types
         [Obsolete("Use GetRedHash instead")]
         public uint GetOldRedHash()
         {
-            var hash64 = string.IsNullOrEmpty(_value) ? 0 : FNV1A64HashAlgorithm.HashString(_value, Encoding.GetEncoding("iso-8859-1"), false, true);
+            if (string.IsNullOrEmpty(_value))
+            {
+                return 0;
+            }
+
+            var buffer = Encoding.UTF8.GetBytes(_value);
+            var sBuffer = Array.ConvertAll(buffer, b => b != 0x80 ? (byte)Math.Abs((sbyte)b) : (byte)0x80);
+            var hash64 = FNV1A64HashAlgorithm.HashReadOnlySpan(sBuffer);
 
             return (uint)(hash64 & 0xFFFFFFFF);
         }

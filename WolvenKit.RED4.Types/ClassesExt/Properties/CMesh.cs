@@ -1,5 +1,6 @@
 namespace WolvenKit.RED4.Types
 {
+    [REDClass(ChildLevel = 1)]
     public partial class CMesh
     {
         [Ordinal(1)]

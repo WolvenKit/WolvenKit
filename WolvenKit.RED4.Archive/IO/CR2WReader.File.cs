@@ -16,11 +16,14 @@ namespace WolvenKit.RED4.Archive.IO
     public partial class CR2WReader
     {
         private CR2WFile _file;
+        private List<CR2WImport> _importList;
 
         public EFileReadErrorCodes ReadFile(out CR2WFile file, bool decompressBuffers = true)
         {
             file = new CR2WFile();
+
             _file = file;
+            _importList = new();
 
             #region Read Headers
 
@@ -32,6 +35,7 @@ namespace WolvenKit.RED4.Archive.IO
             var fileHeader = BaseStream.ReadStruct<CR2WFileHeader>();
 
             _file.Version = fileHeader.version;
+            _file.BuildVersion = fileHeader.buildVersion;
 
             if (fileHeader.version > 195 || fileHeader.version < 163)
                 return EFileReadErrorCodes.UnsupportedVersion;
@@ -43,6 +47,7 @@ namespace WolvenKit.RED4.Archive.IO
             // read strings - block 1 (index 0)
             var stringDict = ReadStringDict(tableHeaders[0]);
             _stringList = stringDict.Values.ToList();
+            _file.Debug.Strings = new List<CName>(_stringList);
 
             // read the other tables
 
@@ -66,16 +71,19 @@ namespace WolvenKit.RED4.Archive.IO
 
             var namesList = new List<CName>();
 
+            _file.Debug.NameInfos = nameInfoList;
             foreach (var nameInfo in nameInfoList)
             {
                 namesList.Add(ReadName(nameInfo, stringDict));
             }
 
+            _file.Debug.ImportInfos = importInfoList;
             foreach (var importInfo in importInfoList)
             {
-                file.Imports.Add(ReadImport(importInfo, namesList, stringDict));
+                _importList.Add(ReadImport(importInfo, namesList, stringDict));
             }
 
+            _file.Debug.PropertyInfos = propertyInfoList;
             foreach (var propertyInfo in propertyInfoList)
             {
                 file.Properties.Add(ReadProperty(propertyInfo));
@@ -86,16 +94,19 @@ namespace WolvenKit.RED4.Archive.IO
                 throw new TodoException();
             }
 
+            _file.Debug.ChunkInfos = chunkInfoList;
             foreach (var chunkInfo in chunkInfoList)
             {
                 file.Chunks.Add(ReadChunk(chunkInfo, namesList));
             }
 
+            _file.Debug.BufferInfos = bufferInfoList;
             foreach (var bufferInfo in bufferInfoList)
             {
                 file.Buffers.Add(ReadBuffer(bufferInfo, decompressBuffers));
             }
 
+            _file.Debug.EmbeddedInfos = embeddedInfoList;
             foreach (var embeddedInfo in embeddedInfoList)
             {
                 file.Embedded.Add(ReadEmbedded(embeddedInfo));
@@ -129,7 +140,7 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 ClassName = namesList[info.className],
                 DepotPath = stringDict[info.offset],
-                Flags = info.flags
+                Flags = (InternalEnums.EImportFlags)info.flags
             };
         }
 
@@ -145,15 +156,7 @@ namespace WolvenKit.RED4.Archive.IO
             var result = RedTypeManager.Create(namesList[info.className]);
 
             var startPos = BaseStream.Position;
-            if (result is AreaShapeOutline)
-            {
-                ((IRedAppendix)result).Read(this, info.dataSize);
-            }
-            else
-            {
-                ReadClass(result, info.dataSize);
-            }
-
+            ReadClass(result, info.dataSize);
             var bytesRead = BaseStream.Position - startPos;
 
             if (bytesRead < info.dataSize)
@@ -198,7 +201,7 @@ namespace WolvenKit.RED4.Archive.IO
         {
             return new CR2WEmbedded
             {
-                ImportPath = _file.Imports[(int)info.importIndex - 1].DepotPath,
+                ImportPath = _importList[(int)info.importIndex - 1].DepotPath,
                 Export = _file.Chunks[(int)info.chunkIndex]
             };
         }

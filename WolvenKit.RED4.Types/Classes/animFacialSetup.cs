@@ -61,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<DataBuffer>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(10)] 
 		[RED("usedTransformIndices")] 
 		public CArray<CUInt16> UsedTransformIndices
 		{
@@ -69,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CUInt16>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(11)] 
 		[RED("useFemaleAnimSet")] 
 		public CBool UseFemaleAnimSet
 		{
@@ -77,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("version")] 
 		public CUInt32 Version
 		{

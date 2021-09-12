@@ -3,6 +3,7 @@ using WolvenKit.RED4.IO;
 
 namespace WolvenKit.RED4.Types
 {
+    [REDClass(ChildLevel = 1)]
     public partial class CPhysicsDecorationResource : IRedAppendix
     {
         public object Appendix { get; set; }
@@ -17,7 +18,13 @@ namespace WolvenKit.RED4.Types
             Appendix = result;
         }
 
-        public void Write(Red4Writer writer) => throw new System.NotImplementedException();
+        public void Write(Red4Writer writer)
+        {
+            var appendix = (CPhysicsDecorationResource_Appendix)Appendix;
+
+            writer.BaseWriter.Write(appendix.Unk1);
+            writer.Write(appendix.Unk2);
+        }
     }
 
     public class CPhysicsDecorationResource_Appendix

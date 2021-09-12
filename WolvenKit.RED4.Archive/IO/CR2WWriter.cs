@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -28,6 +29,12 @@ namespace WolvenKit.RED4.Archive.IO
 
         public override void WriteClass(IRedClass cls)
         {
+            if (cls is IRedCustomData customCls)
+            {
+                customCls.CustomWrite(this);
+                return;
+            }
+
             _writer.Write((byte)0);
 
             var typeInfo = RedReflection.GetTypeInfo(cls.GetType());
@@ -77,12 +84,12 @@ namespace WolvenKit.RED4.Archive.IO
 
         public override void Write<T>(CArrayFixedSize<T> instance)
         {
-            var count = instance.Count(e => e != null && !e.Equals(default(T)));
+            var count = instance.Count(e => e != null);
 
             _writer.Write((uint)count);
             foreach (var element in instance)
             {
-                if (element == null || element.Equals(default(T)))
+                if (element == null)
                 {
                     continue;
                 }
@@ -128,6 +135,12 @@ namespace WolvenKit.RED4.Archive.IO
 
         public override void Write(IRedResourceAsyncReference instance)
         {
+            if (instance.DepotPath == "")
+            {
+                _writer.Write((ushort)0);
+                return;
+            }
+
             var val = ("", instance.DepotPath, (ushort)instance.Flags);
 
             if (!_imports.Contains(val))

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             BaseStream.WriteStruct(CR2WFile.MAGIC);
 
-            var fileHeader = new CR2WFileHeader { version = 195, numChunks = 6 };
+            var fileHeader = new CR2WFileHeader { version = _file.Version, buildVersion = _file.BuildVersion, numChunks = 6 };
             var tableHeaders = new CR2WTable[10];
 
             var headerPos = BaseStream.Position;
@@ -33,6 +33,15 @@ namespace WolvenKit.RED4.Archive.IO
             Debug.Assert(BaseStream.Position == 160);
 
             var (strings, imports, chunkInfoList, chunkData) = GenerateChunkData();
+
+            foreach (var embedded in _file.Embedded)
+            {
+                var tuple = ("", (CName)embedded.ImportPath, (ushort)8);
+                if (!imports.Contains(tuple))
+                {
+                    imports.Add(tuple);
+                }
+            }
 
             fileHeader.objectsEnd = (uint)BaseStream.Position;
 
@@ -50,7 +59,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             BaseWriter.Write(stringBuffer);
 
-            var afterHeaderPosition = CalculateHeaderLength(strings.Count);
+            var afterHeaderPosition = CalculateHeaderLength(strings.Count, imports.Count);
             fileHeader.objectsEnd += (uint)afterHeaderPosition;
 
             #region Names
@@ -158,7 +167,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             #region Embedded
 
-            var (embeddedInfoList, embeddedData) = GenerateEmbeddedData();
+            var (embeddedInfoList, embeddedData) = GenerateEmbeddedData(imports);
             if (embeddedInfoList.Count > 0)
             {
                 tableHeaders[6].offset = (uint)BaseStream.Position;
@@ -202,6 +211,44 @@ namespace WolvenKit.RED4.Archive.IO
             BaseStream.Position = headerPos;
             BaseStream.WriteStruct(fileHeader);
             BaseStream.WriteStructs(tableHeaders);
+
+            for (int i = 0; i < chunkInfoList.Count; i++)
+            {
+                var newInfo = chunkInfoList[i];
+                var oldInfo = _file.Debug.ChunkInfos[i];
+
+                if ((newInfo.dataOffset + afterHeaderPosition) != oldInfo.dataOffset)
+                {
+
+                }
+
+                if (newInfo.dataSize != oldInfo.dataSize)
+                {
+
+                }
+
+                if (newInfo.parentID != oldInfo.parentID)
+                {
+
+                }
+
+                if (newInfo.className != oldInfo.className)
+                {
+
+                }
+
+                if (newInfo.objectFlags != oldInfo.objectFlags)
+                {
+
+                }
+
+                if (newInfo.template != oldInfo.template)
+                {
+
+                }
+
+                chunkInfoList[i] = oldInfo;
+            }
         }
 
         #region Write Sections
@@ -253,12 +300,12 @@ namespace WolvenKit.RED4.Archive.IO
 
         #region Embedded
 
-        private CR2WEmbeddedInfo WriteEmbedded(CR2WWriter writer, ICR2WEmbedded embeddedData)
+        private CR2WEmbeddedInfo WriteEmbedded(CR2WWriter writer, ICR2WEmbedded embeddedData, IList<(string, CName, ushort)> importsList)
         {
             var importIndex = -1;
-            for (int i = 0; i < _file.Imports.Count; i++)
+            for (int i = 0; i < importsList.Count; i++)
             {
-                if (_file.Imports[i].DepotPath == embeddedData.ImportPath)
+                if (importsList[i].Item2 == embeddedData.ImportPath)
                 {
                     importIndex = i + 1;
                     break;
@@ -288,7 +335,7 @@ namespace WolvenKit.RED4.Archive.IO
             };
         }
 
-        private (List<CR2WEmbeddedInfo>, byte[]) GenerateEmbeddedData()
+        private (List<CR2WEmbeddedInfo>, byte[]) GenerateEmbeddedData(IList<(string, CName, ushort)> importsList)
         {
             using var ms = new MemoryStream();
             using var writer = new CR2WWriter(ms);
@@ -296,7 +343,7 @@ namespace WolvenKit.RED4.Archive.IO
             var embeddedInfoList = new List<CR2WEmbeddedInfo>();
             foreach (var embedded in _file.Embedded)
             {
-                embeddedInfoList.Add(WriteEmbedded(writer, embedded));
+                embeddedInfoList.Add(WriteEmbedded(writer, embedded, importsList));
             }
 
             return (embeddedInfoList, ms.ToArray());
@@ -348,9 +395,14 @@ namespace WolvenKit.RED4.Archive.IO
                 chunkInfo.className = stringDict[RedReflection.GetTypeRedName(_file.Chunks[i].GetType())];
                 chunkInfoList[i] = chunkInfo;
 
-                if (_file.Chunks[i] is CMesh mesh)
+                // TODO: Find a "better" way to determine that
+                if (i != 0 || _file.Chunks[i] is worldFoliageBrush)
                 {
-                    SetParent(i, i);
+                    var typeInfo = RedReflection.GetTypeInfo(_file.Chunks[i].GetType());
+                    if (typeInfo.ChildLevel > 0)
+                    {
+                        SetParent(i, i, typeInfo.ChildLevel);
+                    }
                 }
             }
 
@@ -364,14 +416,14 @@ namespace WolvenKit.RED4.Archive.IO
             foreach (var kvp in file.ImportRef)
             {
                 file.BaseStream.Position = kvp.Key;
-                ushort index = (ushort)(importDict[kvp.Value] + 1);
+                var index = (ushort)(importDict[kvp.Value] + 1);
                 file.BaseWriter.Write(index);
             }
             file.BaseStream.Position = pos;
 
             return (file.StringCacheList.ToList(), file.ImportCacheList.ToList(), chunkInfoList, ms.ToArray());
 
-            void SetParent(int chunkIndex, int parentIndex, int level = 0)
+            void SetParent(int chunkIndex, int parentIndex, int maxLevel = 1, int level = 0)
             {
                 var targets = file.GetTargets(chunkIndex);
                 foreach (var target in targets)
@@ -380,9 +432,9 @@ namespace WolvenKit.RED4.Archive.IO
                     chunkInfo.parentID = (uint)(parentIndex + 1);
                     chunkInfoList[target.Item2 - 1] = chunkInfo;
 
-                    if (level < 1)
+                    if (level < maxLevel)
                     {
-                        SetParent(target.Item2 - 1, parentIndex, level + 1);
+                        SetParent(target.Item2 - 1, parentIndex, maxLevel, level + 1);
                     }
                 }
             }
@@ -403,12 +455,12 @@ namespace WolvenKit.RED4.Archive.IO
             return (bytes.ToArray(), offsetDict);
         }
 
-        private int CalculateHeaderLength(int namesCount)
+        private int CalculateHeaderLength(int namesCount, int importsCount)
         {
             var result = BaseStream.Position;
 
             result += Marshal.SizeOf(typeof(CR2WNameInfo)) * namesCount;
-            result += Marshal.SizeOf(typeof(CR2WImportInfo)) * _file.Imports.Count;
+            result += Marshal.SizeOf(typeof(CR2WImportInfo)) * importsCount;
             result += Marshal.SizeOf(typeof(CR2WPropertyInfo)) * _file.Properties.Count;
             result += Marshal.SizeOf(typeof(CR2WChunkInfo)) * _file.Chunks.Count;
             result += Marshal.SizeOf(typeof(CR2WBufferInfo)) * _file.Buffers.Count;

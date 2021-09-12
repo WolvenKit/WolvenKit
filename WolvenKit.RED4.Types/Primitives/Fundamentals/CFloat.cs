@@ -37,6 +37,6 @@ namespace WolvenKit.RED4.Types
             return false;
         }
 
-        public bool Equals(CFloat other) => Equals(_value, other._value);
+        public bool Equals(CFloat other) => Equals(BitConverter.SingleToInt32Bits(_value), BitConverter.SingleToInt32Bits(other._value));
     }
 }

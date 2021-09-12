@@ -93,88 +93,48 @@ namespace WolvenKit.RED4.Archive.IO
 
         public override void ReadClass(IRedClass cls, uint size)
         {
-            if (cls.GetType() == typeof(AITrafficWorkspotCompiled))
+            if (cls is IRedCustomData customCls)
             {
-                cls = ReadAITrafficWorkspotCompiled(size);
+                customCls.CustomRead(this, size);
                 return;
             }
 
-            var meta = (REDMetaAttribute)Attribute.GetCustomAttribute(cls.GetType(), typeof(REDMetaAttribute));
-            EREDMetaInfo[] tags = meta?.Keywords;
-
             var startpos = _reader.BaseStream.Position;
 
-            // fixed class/struct (no leading null byte), read all properties in order
-            if ((tags ?? throw new InvalidOperationException()).Contains(EREDMetaInfo.REDStruct))
+            #region initial checks
+
+            // ... okay CDPR, is that a joke or what?
+            int zero = _reader.ReadByte();
+            if (zero != 0)
             {
-                // parse all RED variables (normal + buffers)
-                // ReadAllRedVariables<REDAttribute>(file);
+                throw new Exception($"Tried parsing a CVariable: zero read {zero}.");
             }
-            // CVectors
-            else
+
+            #endregion
+
+            _propNames.Clear();
+
+            #region parse sequential variables
+            List<string> dbg_varnames = new List<string>();
+            while (true)
             {
-                #region initial checks
-                int zero = ReadVLQ();
+                var cvar = ReadVariable(cls);
+                if (!cvar)
+                    break;
+            }
+            #endregion
 
-                // ... okay CDPR, is that a joke or what?
-                if (zero != 0)
-                {
-                    if (cls is IRedCustomData customCls)
-                    {
-                        customCls.CustomRead(this, (uint)(size - (BaseStream.Position - startpos)), zero);
-                        return;
-                    }
+            var endpos = _reader.BaseStream.Position;
+            var bytesread = endpos - startpos;
 
-                    /*var pos = _reader.BaseStream.Position;
-                    _reader.BaseStream.Position = startpos;
-                    var buf = _reader.ReadBytes((int)size);
-                    _reader.BaseStream.Position = pos;
-                    File.WriteAllBytes(@"C:\Dev\dump.bin", buf);*/
+            if (cls is IRedAppendix app)
+            {
+                app.Read(this, (uint)(size - bytesread));
+            }
 
-                    throw new Exception($"Tried parsing a CVariable: zero read {zero}.");
-
-                    //Debugger.Break();
-                    switch (zero)
-                    {
-                        case 1:
-                            int joke = _reader.ReadInt32();
-                            break;
-                        case -128:
-                            //var dzero2 = file.BaseReader.ReadBit6();
-                            return;
-                        case 0x07ffffff: // nulled
-                            //IsNulled = true;
-                            break;
-                        default:
-                            throw new Exception($"Tried parsing a CVariable: zero read {zero}.");
-                    }
-                }
-                #endregion
-
-                _propNames.Clear();
-
-                #region parse sequential variables
-                List<string> dbg_varnames = new List<string>();
-                while (true)
-                {
-                    var cvar = ReadVariable(cls);
-                    if (!cvar)
-                        break;
-                }
-                #endregion
-
-                var endpos = _reader.BaseStream.Position;
-                var bytesread = endpos - startpos;
-
-                if (cls is IRedAppendix app)
-                {
-                    app.Read(this, (uint)(size - bytesread));
-                }
-
-                if (bytesread != size)
-                {
-                    //throw new InvalidParsingException($"Read bytes not equal to expected bytes. Difference: {bytesread - size}");
-                }
+            if (bytesread != size)
+            {
+                //throw new InvalidParsingException($"Read bytes not equal to expected bytes. Difference: {bytesread - size}");
             }
 
             if (((RedBaseClass)cls).GetCustomProperties().Count > 0)
@@ -201,12 +161,12 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 return false;
             }
-            var varname = _stringList[nameId];
+            var varname = GetStringValue(nameId);
             _propNames.Add(varname);
 
             // Read Type
             var typeId = _reader.ReadUInt16();
-            var typename = _stringList[typeId];
+            var typename = GetStringValue(typeId);
 
             // Read Size
             var sizepos = _reader.BaseStream.Position;
@@ -246,23 +206,6 @@ namespace WolvenKit.RED4.Archive.IO
             return true;
         }
 
-        public void ReadAreaShapeOutline(IRedClass cls)
-        {
-            var result = new AreaShapeOutline();
-
-            var count = BaseReader.ReadUInt32();
-            for (int i = 0; i < count; i++)
-            {
-                result.Points[i] = new Vector3();
-                result.Points[i].X = BaseReader.ReadSingle();
-                result.Points[i].Y = BaseReader.ReadSingle();
-                result.Points[i].Z = BaseReader.ReadSingle();
-            }
-            result.Height = BaseReader.ReadSingle();
-
-            cls = result;
-        }
-
         public override IRedResourceReference<T> ReadCResourceReference<T>()
         {
             var index = _reader.ReadUInt16();
@@ -271,8 +214,8 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 return new CResourceReference<T>
                 {
-                    DepotPath = _file.Imports[index - 1].DepotPath,
-                    Flags = (InternalEnums.EImportFlags)_file.Imports[index - 1].Flags
+                    DepotPath = _importList[index - 1].DepotPath,
+                    Flags = (InternalEnums.EImportFlags)_importList[index - 1].Flags
                 };
             }
             else
@@ -293,8 +236,8 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 return new CResourceAsyncReference<T>
                 {
-                    DepotPath = _file.Imports[index - 1].DepotPath,
-                    Flags = (InternalEnums.EImportFlags)_file.Imports[index - 1].Flags
+                    DepotPath = _importList[index - 1].DepotPath,
+                    Flags = _importList[index - 1].Flags
                 };
             }
             else

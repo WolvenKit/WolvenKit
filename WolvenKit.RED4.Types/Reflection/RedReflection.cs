@@ -279,16 +279,19 @@ namespace WolvenKit.RED4.Types
         public class ExtendedTypeInfo
         {
             public bool SerializeDefault { get; }
+            public int ChildLevel { get; }
+
             public List<ExtendedPropertyInfo> PropertyInfos { get; } = new();
 
             public ExtendedTypeInfo(Type type)
             {
-                var attrs = type.GetCustomAttributes();
+                var attrs = type.GetCustomAttributes(false);
                 foreach (var attribute in attrs)
                 {
                     if (attribute is REDClassAttribute clsAttr)
                     {
                         SerializeDefault = clsAttr.SerializeDefault;
+                        ChildLevel = clsAttr.ChildLevel;
                     }
                 }
 

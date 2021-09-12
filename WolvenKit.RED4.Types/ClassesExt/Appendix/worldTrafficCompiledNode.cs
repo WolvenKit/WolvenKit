@@ -11,6 +11,6 @@ namespace WolvenKit.RED4.Types
             Appendix = new BaseAppendix { Buffer = reader.BaseReader.ReadBytes((int)size) };
         }
 
-        public void Write(Red4Writer writer) => throw new System.NotImplementedException();
+        public void Write(Red4Writer writer) => writer.BaseWriter.Write(((BaseAppendix)Appendix).Buffer);
     }
 }

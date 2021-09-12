@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using Newtonsoft.Json;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.CR2W
 {
@@ -23,6 +24,6 @@ namespace WolvenKit.RED4.Archive.CR2W
     {
         public string DepotPath { get; set; }
         public string ClassName { get; set; }
-        public ushort Flags { get; set; }
+        public InternalEnums.EImportFlags Flags { get; set; }
     }
 }

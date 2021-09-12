@@ -24,11 +24,13 @@ namespace WolvenKit.RED4.Types
 
         public enum toolsSocketDirection
         {
+            Invalid,
             Output,
         }
 
         public enum toolsSocketPlacement
         {
+            Invalid,
             Bottom,
             Right,
         }
@@ -47,6 +49,7 @@ namespace WolvenKit.RED4.Types
 
         public enum scnbPerformerAcquisitionPlanType
         {
+            Invalid,
             Community,
             SpawnSet
         }

@@ -13,7 +13,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ClassesExt\CustomData\" />
     <Folder Include="Classes\" />
     <Folder Include="Enums\" />
     <Folder Include="Extensions\" />

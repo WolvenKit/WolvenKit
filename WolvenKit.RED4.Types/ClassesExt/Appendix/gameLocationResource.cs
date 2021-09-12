@@ -7,16 +7,7 @@ namespace WolvenKit.RED4.Types
     {
         public object Appendix { get; set; }
 
-        public void Read(Red4Reader reader, uint size)
-        {
-            Appendix = new gameLocationResource_Appendix { Buffer = reader.BaseReader.ReadBytes((int)size) };
-        }
-
-        public void Write(Red4Writer writer) => throw new System.NotImplementedException();
-    }
-
-    public class gameLocationResource_Appendix
-    {
-        public byte[] Buffer { get; set; }
+        public void Read(Red4Reader reader, uint size) => Appendix = new BaseAppendix { Buffer = reader.BaseReader.ReadBytes((int)size) };
+        public void Write(Red4Writer writer) => writer.BaseWriter.Write(((BaseAppendix)Appendix).Buffer);
     }
 }
