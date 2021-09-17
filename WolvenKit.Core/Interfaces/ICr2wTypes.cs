@@ -214,11 +214,13 @@ namespace WolvenKit.Common.Model.Cr2w
     public interface ICurveDataAccessor : IEditableVariable
     {
         string Elementtype { get; }
+
+        public IEnumerable<IREDCurvePoint> GetCurvePoints();
     }
 
     public interface IREDCurvePoint : IREDPrimitive
     {
-
+        public float GetTime();
     }
 
     public interface IMultiChannelCurve : IEditableVariable

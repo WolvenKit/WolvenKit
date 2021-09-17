@@ -21,14 +21,14 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public object GetValue() => new Tuple<IEditableVariable, IEditableVariable>(Value, Point);
 
+        public override List<IEditableVariable> GetEditableVariables() => new() { Point, Value };
 
+        public override string ToString() => $"[{Point.Value}] {Value}";
+
+
+        public float GetTime() => Point.Value;
     }
 
-
-
-    /// <summary>
-    /// A pointer to a chunk within the same cr2w file.
-    /// </summary>
     [REDMeta]
     public class curveData<T> : CVariable, ICurveDataAccessor where T : CVariable
     {
@@ -41,6 +41,7 @@ namespace WolvenKit.RED4.CR2W.Types
         public string Elementtype => REDReflection.GetREDTypeString(typeof(T));
 
         public List<CurvePoint<T>> Elements { get; set; } = new();
+
         public ushort Tail { get; set; }
 
         public override string REDType => REDReflection.GetREDTypeString(GetType());
@@ -58,11 +59,12 @@ namespace WolvenKit.RED4.CR2W.Types
                 var point = new CFloat(cr2w, cpoint, "point") { IsSerialized = true };
                 var element = Create<T>(i.ToString(), new int[0]);
 
+                point.Read(file, 4);
                 // no actual way to find out the elementsize of an array element
                 // bacause cdpr serialized classes have no fixed size
                 // solution? not sure: pass 0 and disable checks?
                 element.ReadAsFixedSize(file, (uint)0);
-                point.Read(file, 4);
+                
 
                 if (element is T te)
                 {
@@ -96,12 +98,9 @@ namespace WolvenKit.RED4.CR2W.Types
             file.Write(Tail);
         }
 
-        public override List<IEditableVariable> GetEditableVariables()
-        {
-            return Elements.Cast<IEditableVariable>().ToList();
-        }
+        public IEnumerable<IREDCurvePoint> GetCurvePoints() => Elements;
 
-
+        //public override List<IEditableVariable> GetEditableVariables() => Elements.Cast<IEditableVariable>().ToList();
     }
 
 
