@@ -240,10 +240,13 @@ namespace WolvenKit.Functionality.Controllers
                 }
 
                 var db = new TweakDB();
-                foreach (var (key, value) in dict)
+                foreach (var (key, value) in dict.Flats)
                 {
                     db.Add(key, value);
                 }
+
+                //TODO: groups
+
                 db.Save(outPath);
             }
         }

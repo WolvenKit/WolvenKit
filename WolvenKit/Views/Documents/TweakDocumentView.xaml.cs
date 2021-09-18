@@ -60,7 +60,7 @@ namespace WolvenKit.Views.Documents
 
                 // LIST VIEW
                 this.OneWayBind(ViewModel,
-                        viewModel => viewModel.Flats,
+                        viewModel => viewModel.Entries,
                         view => view.FlatsTree.ItemsSource)
                     .DisposeWith(disposables);
                 this.Bind(ViewModel,

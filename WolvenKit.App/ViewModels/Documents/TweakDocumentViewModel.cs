@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using ICSharpCode.AvalonEdit.Document;
@@ -20,15 +22,54 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace WolvenKit.ViewModels.Documents
 {
+    public abstract class TweakEntryViewModel : ReactiveObject
+    {
+        public string Name { get; set; }
+
+        public abstract string DisplayString { get; }
+    }
+
+    public sealed class GroupViewModel : TweakEntryViewModel
+    {
+        private readonly TweakRecord _value;
+
+        public GroupViewModel(string name, TweakRecord value)
+        {
+            Name = name;
+            _value = value;
+        }
+
+        
+        public override string DisplayString => _value.ToString();
+
+        public TweakRecord GetValue() => _value;
+    }
+
+    public sealed class FlatViewModel : TweakEntryViewModel
+    {
+        private readonly IType _value;
+
+        public FlatViewModel(string name, IType value)
+        {
+            Name = name;
+            _value = value;
+        }
+
+        public override string DisplayString => _value.ToString();
+
+        public IType GetValue() => _value;
+    }
+
+
     public class TweakDocumentViewModel : DocumentViewModel
     {
 
         public TweakDocumentViewModel(string path) : base(path)
         {
             Document = new TextDocument();
-            Flats = new();
+            TweakDocument = new TweakDocument();
 
-            Types = new(Enum.GetNames<EIType>());
+            Types = new(Enum.GetNames<ETweakType>());
 
             AddFlatCommand = ReactiveCommand.Create(AddFlat);
             DeleteFlatCommand = ReactiveCommand.Create(DeleteFlat);
@@ -37,7 +78,7 @@ namespace WolvenKit.ViewModels.Documents
             var hlManager = HighlightingManager.Instance;
             HighlightingDefinition = hlManager.GetDefinitionByExtension(".json");
 
-
+            
         }
 
         #region properties
@@ -61,9 +102,11 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public ObservableCollection<string> Types { get; set; }
 
-        [Reactive] public ObservableCollection<FlatViewModel> Flats {  get; set; }
+        [Reactive] public TweakDocument TweakDocument {  get; set; }
 
-        [Reactive] public FlatViewModel SelectedItem { get; set; }
+        [Reactive] public IEnumerable<TweakEntryViewModel> Entries { get; set; }
+
+        [Reactive] public TweakEntryViewModel SelectedItem { get; set; }
 
         #endregion
 
@@ -80,31 +123,31 @@ namespace WolvenKit.ViewModels.Documents
             }
 
             // check name
-            if (Flats.Any(_ => _.Name == FlatName))
+            if (TweakDocument.Flats.ContainsKey(FlatName))
             {
                 MessageBox.Show($"A flat with name {FlatName} is already part of your database. Please give a unique name to the item you are adding, or delete the existing item first.",
                     "WolvenKit", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            if (!Serialization.TryParseJsonFlat(SelectedType, ValueString, out var ivalue))
+            if (!Serialization.Json.TryParseJsonFlat(SelectedType, ValueString, out var ivalue))
             {
                 return;
             }
 
             var newFlat = new FlatViewModel(FlatName, ivalue);
-            Flats.Add(newFlat);
+            TweakDocument.Flats.Add(FlatName, newFlat.GetValue());
 
-            var flatsDict = Flats.ToDictionary(x => x.Name, x => x.GetValue());
-            Document.Text = Serialization.Serialize(flatsDict);
+
+
+            GenerateEntries();
+            Document.Text = Serialization.Serialize(TweakDocument);
         }
 
         public ReactiveCommand<Unit, Unit> EditFlatCommand { get; }
         private void EditFlat()
         {
-            if (SelectedItem is null)
-            {
-            }
+           
         }
 
         public ReactiveCommand<Unit, Unit> DeleteFlatCommand { get; }
@@ -115,14 +158,39 @@ namespace WolvenKit.ViewModels.Documents
                 return;
             }
 
-            Flats.Remove(SelectedItem);
+            switch (SelectedItem)
+            {
+                case FlatViewModel fvm:
+                    TweakDocument.Flats.Remove(fvm.Name);
+                    break;
+                case GroupViewModel gvm:
+                    TweakDocument.Groups.Remove(gvm.Name);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            
             SelectedItem = null;
 
-            var flatsDict = Flats.ToDictionary(x => x.Name, x => x.GetValue());
-            Document.Text = Serialization.Serialize(flatsDict);
+            GenerateEntries();
+            Document.Text = Serialization.Serialize(TweakDocument);
         }
 
         #endregion
+
+        #region methods
+
+        private void GenerateEntries()
+        {
+            var flatvms = TweakDocument.Flats
+                .Select(f => new FlatViewModel(f.Key, f.Value))
+                .Cast<TweakEntryViewModel>();
+            var groupvms = TweakDocument.Groups
+                .Select(g => new GroupViewModel(g.Key, g.Value))
+                .Cast<TweakEntryViewModel>();
+            Entries = flatvms.Concat(groupvms);
+        }
 
         public override void OnSave(object parameter)
         {
@@ -132,9 +200,11 @@ namespace WolvenKit.ViewModels.Documents
 
             if (Serialization.Deserialize(Document.Text, out var dict))
             {
-                var list = dict.Select(_ => new FlatViewModel(_.Key, _.Value));
-                Flats = new ObservableCollection<FlatViewModel>(list);
+                TweakDocument = dict;
+                GenerateEntries();
             }
+
+            
 
             //dbg
             //var deltaFilePath = $"{FilePath}.bin";
@@ -200,9 +270,8 @@ namespace WolvenKit.ViewModels.Documents
 
             if (Serialization.Deserialize(Document.Text, out var dict))
             {
-                var list = dict.Select(_ => new FlatViewModel(_.Key, _.Value));
-
-                Flats = new ObservableCollection<FlatViewModel>(list);
+                TweakDocument = dict;
+                GenerateEntries();
             }
             else
             {
@@ -214,23 +283,7 @@ namespace WolvenKit.ViewModels.Documents
             }
         }
 
-        public sealed class FlatViewModel
-        {
-            private readonly IType _value;
-
-            public FlatViewModel(string name, IType value)
-            {
-                Name = name;
-                _value = value;
-            }
-
-            public string Name { get; set; }
-
-            public string DisplayString => _value.ToString();
-
-            public IType GetValue() => _value;
-        }
-
+        #endregion
 
     }
 }

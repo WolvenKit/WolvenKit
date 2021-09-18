@@ -3,7 +3,7 @@ using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.RED4.TweakDB.Types
 {
-    public class CString : IType
+    public class CString : IPrimitive
     {
         public string Name => "String";
         public string Text { get; set; }
@@ -13,5 +13,7 @@ namespace WolvenKit.RED4.TweakDB.Types
         public override string ToString() => $"String, Text = '{Text}'";
 
         public void Serialize(BinaryWriter writer) => writer.WriteLengthPrefixedString(Text);
+
+        public string GetValueString() => Text;
     }
 }
