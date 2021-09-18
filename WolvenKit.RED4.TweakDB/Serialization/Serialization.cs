@@ -15,21 +15,6 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace WolvenKit.RED4.TweakDB.Serialization
 {
-    public sealed class TweakRecord
-    {
-        public string Type { get; set; }
-        public string Inherits { get; set; }
-        public Dictionary<string, IType> Members { get; set; } = new();
-
-        public override string ToString() => $"[:{Inherits}] {string.Join(',', Members.Keys)}";
-    }
-
-    public sealed class TweakDocument
-    {
-        public Dictionary<string, IType> Flats { get; set; } = new();
-        public Dictionary<string, TweakRecord> Groups { get; set; } = new();
-    }
-
     public static class Serialization
     {
         public sealed class Yaml

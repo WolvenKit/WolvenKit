@@ -242,12 +242,16 @@ namespace WolvenKit.Functionality.Controllers
                         continue;
                     }
                     var db = new TweakDB();
+                    //flats
                     foreach (var (key, value) in dict.Flats)
                     {
                         db.Add(key, value);
                     }
-
-                    //TODO: groups
+                    //groups
+                    foreach (var (key, value) in dict.Groups)
+                    {
+                        db.Add(key, value);
+                    }
 
                     db.Save(outPath);
                 }
