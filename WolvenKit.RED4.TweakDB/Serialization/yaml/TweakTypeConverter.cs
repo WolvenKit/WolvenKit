@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -8,6 +9,7 @@ using WolvenKit.RED4.TweakDB.Types;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace WolvenKit.RED4.TweakDB.Serialization.yaml
 {
@@ -15,7 +17,8 @@ namespace WolvenKit.RED4.TweakDB.Serialization.yaml
     {
         private const string s_typeName = "type";
         private const string s_valueName = "value";
-
+        private static readonly Type _sequenceEndType = typeof(SequenceEnd);
+        private static readonly Type _sequenceStartType = typeof(SequenceStart);
 
         public bool Accepts(Type type) => typeof(IType).IsAssignableFrom(type);
 
@@ -34,27 +37,38 @@ namespace WolvenKit.RED4.TweakDB.Serialization.yaml
                 throw new InvalidDataException();
             }
 
-            var enumType = Serialization.GetEnumFromType(type);
-
             if (IsArray(type))
             {
                 var innertype = type.GetGenericArguments()[0];
-
-                var list = Activator.CreateInstance(
+                var list = (IList)Activator.CreateInstance(
                     typeof(List<>).MakeGenericType(
                         new Type[] { innertype }),
                     BindingFlags.Instance | BindingFlags.Public,
                     binder: null,
                     args: null,
                     culture: null);
-
                 if (list is null)
                 {
                     throw new InvalidDataException();
                 }
 
-                //var items = JsonSerializer.Deserialize(jsonObject, list.GetType(), options);
+                // read values
+                parser.SafeReadScalarValue(s_valueName);
+                if (parser.Current.GetType() != _sequenceStartType)
+                {
+                    throw new InvalidDataException("Invalid YAML content.");
+                }
 
+                parser.MoveNext(); // skip the sequence start
+
+                do
+                {
+                    var x = this.ReadYaml(parser, innertype);
+
+                    list.Add(x);
+                } while (parser.Current.GetType() != _sequenceEndType);
+
+                parser.MoveNext(); // skip the mapping end (or crash)
 
                 var array = (IArray)Activator.CreateInstance(
                     typeof(CArray<>).MakeGenericType(
@@ -68,7 +82,7 @@ namespace WolvenKit.RED4.TweakDB.Serialization.yaml
                     throw new InvalidDataException();
                 }
 
-                //array.SetItems(items);
+                array.SetItems(list);
 
                 result = array is IType o ? o : throw new JsonException();
             }
@@ -83,7 +97,7 @@ namespace WolvenKit.RED4.TweakDB.Serialization.yaml
                     parser.SafeReadScalarValue(s_valueName);
                     parser.ReadMappingStart();
 
-                    switch (enumType)
+                    switch (Serialization.GetEnumFromType(type))
                     {
                         case ETweakType.CColor:
                         {
@@ -160,63 +174,84 @@ namespace WolvenKit.RED4.TweakDB.Serialization.yaml
 
             emitter.WriteProperty(s_typeName, itype.Name);
 
-            if (value is IPrimitive fundamental)
+            if (IsArray(type))
             {
-                emitter.WriteProperty(s_valueName, fundamental.GetValueString());
+                if (value is not IArray array)
+                {
+                    throw new YamlException(type.ToString());
+                }
+
+                foreach (var item in array.GetItems())
+                {
+                    if (item is IType i)
+                    {
+                        this.WriteYaml(emitter, i, i.GetType());
+                    }
+                    else
+                    {
+                        throw new YamlException(type.ToString());
+                    }
+                }
+
             }
             else
             {
-                emitter.Emit(new Scalar(null, s_valueName));
-                emitter.Emit(new MappingStart(null, null, false, MappingStyle.Block));
-
-                switch (value)
+                if (value is IPrimitive fundamental)
                 {
-                    case CColor node:
-                    {
-                        emitter.WriteProperty(nameof(CColor.Red), node.Red.Value.ToString(CultureInfo.InvariantCulture));
-                        emitter.WriteProperty(nameof(CColor.Green), node.Green.Value.ToString(CultureInfo.InvariantCulture));
-                        emitter.WriteProperty(nameof(CColor.Blue), node.Blue.Value.ToString(CultureInfo.InvariantCulture));
-                        emitter.WriteProperty(nameof(CColor.Alpha), node.Alpha.Value.ToString(CultureInfo.InvariantCulture));
-                        break;
-                    }
-                    case CEulerAngles node:
-                    {
-                        emitter.WriteProperty(nameof(CEulerAngles.Pitch), node.Pitch.Value.ToString(CultureInfo.InvariantCulture));
-                        emitter.WriteProperty(nameof(CEulerAngles.Yaw), node.Yaw.Value.ToString(CultureInfo.InvariantCulture));
-                        emitter.WriteProperty(nameof(CEulerAngles.Roll), node.Roll.Value.ToString(CultureInfo.InvariantCulture));
-                        break;
-                    }
-                    case CQuaternion node:
-                    {
-                        emitter.WriteProperty(nameof(CQuaternion.I), node.I.Value.ToString(CultureInfo.InvariantCulture));
-                        emitter.WriteProperty(nameof(CQuaternion.J), node.J.Value.ToString(CultureInfo.InvariantCulture));
-                        emitter.WriteProperty(nameof(CQuaternion.K), node.K.Value.ToString(CultureInfo.InvariantCulture));
-                        emitter.WriteProperty(nameof(CQuaternion.R), node.R.Value.ToString(CultureInfo.InvariantCulture));
-                        break;
-                    }
-                    case CVector2 node:
-                    {
-                        emitter.WriteProperty(nameof(CVector2.X), node.X.Value.ToString(CultureInfo.InvariantCulture));
-                        emitter.WriteProperty(nameof(CVector2.Y), node.Y.Value.ToString(CultureInfo.InvariantCulture));
-                        break;
-                    }
-                    case CVector3 node:
-                    {
-                        emitter.WriteProperty(nameof(CVector3.X), node.X.Value.ToString(CultureInfo.InvariantCulture));
-                        emitter.WriteProperty(nameof(CVector3.Y), node.Y.Value.ToString(CultureInfo.InvariantCulture));
-                        emitter.WriteProperty(nameof(CVector3.Z), node.Y.Value.ToString(CultureInfo.InvariantCulture));
-                        break;
-                    }
-
-                    default:
-                        throw new YamlException(type.ToString());
+                    emitter.WriteProperty(s_valueName, fundamental.GetValueString());
                 }
+                else
+                {
+                    emitter.Emit(new Scalar(null, s_valueName));
+                    emitter.Emit(new MappingStart(null, null, false, MappingStyle.Block));
 
-                emitter.Emit(new MappingEnd());
+                    switch (value)
+                    {
+                        case CColor node:
+                        {
+                            emitter.WriteProperty(nameof(CColor.Red), node.Red.Value.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(CColor.Green), node.Green.Value.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(CColor.Blue), node.Blue.Value.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(CColor.Alpha), node.Alpha.Value.ToString(CultureInfo.InvariantCulture));
+                            break;
+                        }
+                        case CEulerAngles node:
+                        {
+                            emitter.WriteProperty(nameof(CEulerAngles.Pitch), node.Pitch.Value.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(CEulerAngles.Yaw), node.Yaw.Value.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(CEulerAngles.Roll), node.Roll.Value.ToString(CultureInfo.InvariantCulture));
+                            break;
+                        }
+                        case CQuaternion node:
+                        {
+                            emitter.WriteProperty(nameof(CQuaternion.I), node.I.Value.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(CQuaternion.J), node.J.Value.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(CQuaternion.K), node.K.Value.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(CQuaternion.R), node.R.Value.ToString(CultureInfo.InvariantCulture));
+                            break;
+                        }
+                        case CVector2 node:
+                        {
+                            emitter.WriteProperty(nameof(CVector2.X), node.X.Value.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(CVector2.Y), node.Y.Value.ToString(CultureInfo.InvariantCulture));
+                            break;
+                        }
+                        case CVector3 node:
+                        {
+                            emitter.WriteProperty(nameof(CVector3.X), node.X.Value.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(CVector3.Y), node.Y.Value.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(CVector3.Z), node.Y.Value.ToString(CultureInfo.InvariantCulture));
+                            break;
+                        }
 
+                        default:
+                            throw new YamlException(type.ToString());
+                    }
+
+                    emitter.Emit(new MappingEnd());
+
+                }
             }
-
-
 
             emitter.Emit(new MappingEnd());
         }

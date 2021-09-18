@@ -11,8 +11,6 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:interactivity="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:system="clr-namespace:System;assembly=netstandard"
     xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=documents:TweakDocumentViewModel}"
@@ -103,10 +101,14 @@
                                    AutoGenerateColumns="False"
                                    AllowEditing="False"
                                    AllowResizingColumns="True"
+                                   AllowSorting="True"
+                                   AllowFiltering="True"
                                    >
                 <syncfusion:SfTreeGrid.Columns>
 
                     <syncfusion:TreeGridTextColumn MappingName="Name" />
+
+                    <syncfusion:TreeGridTextColumn MappingName="DisplayType" HeaderText="Type" />
 
                     <syncfusion:TreeGridTemplateColumn MappingName="DisplayString"
                                                        HeaderText="Value"
@@ -145,6 +147,8 @@
                             </DataTemplate>
                         </syncfusion:TreeGridTemplateColumn.EditTemplate>-->
                     </syncfusion:TreeGridTemplateColumn>
+
+                    
 
                 </syncfusion:SfTreeGrid.Columns>
 

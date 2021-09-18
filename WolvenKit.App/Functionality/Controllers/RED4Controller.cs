@@ -18,6 +18,7 @@ using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.RED4.TweakDB;
+using WolvenKit.RED4.TweakDB.Serialization;
 
 namespace WolvenKit.Functionality.Controllers
 {
@@ -234,20 +235,27 @@ namespace WolvenKit.Functionality.Controllers
                 var filename = Path.GetFileNameWithoutExtension(f) + ".bin";
                 var outPath = Path.Combine(cp77Proj.PackedTweakDirectory, filename);
 
-                if (!RED4.TweakDB.Serialization.Serialization.Deserialize(text, out var dict))
+                try
                 {
+                    if (!Serialization.Deserialize(text, out var dict))
+                    {
+                        continue;
+                    }
+                    var db = new TweakDB();
+                    foreach (var (key, value) in dict.Flats)
+                    {
+                        db.Add(key, value);
+                    }
+
+                    //TODO: groups
+
+                    db.Save(outPath);
+                }
+                catch (Exception e)
+                {
+                    _loggerService.Error(e);
                     continue;
                 }
-
-                var db = new TweakDB();
-                foreach (var (key, value) in dict.Flats)
-                {
-                    db.Add(key, value);
-                }
-
-                //TODO: groups
-
-                db.Save(outPath);
             }
         }
 

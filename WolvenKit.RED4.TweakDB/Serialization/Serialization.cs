@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -19,6 +20,8 @@ namespace WolvenKit.RED4.TweakDB.Serialization
         public string Type { get; set; }
         public string Inherits { get; set; }
         public Dictionary<string, IType> Members { get; set; } = new();
+
+        public override string ToString() => $"[:{Inherits}] {string.Join(',', Members.Keys)}";
     }
 
     public sealed class TweakDocument
@@ -214,21 +217,12 @@ namespace WolvenKit.RED4.TweakDB.Serialization
         /// <returns></returns>
         public static bool Deserialize(string text, out TweakDocument dictionary)
         {
-            dictionary = null;
-            try
-            {
 #if USEYAML
-                dictionary = Yaml.DeserializeYaml(text);
+            dictionary = Yaml.DeserializeYaml(text);
 #else
-                dictionary = DeserializeJson(text);
+            dictionary = DeserializeJson(text);
 #endif
-                return true;
-            }
-            catch (Exception e)
-            {
-                
-                return false;
-            }
+            return true;
         }
 
         public static ETweakType GetEnumFromType(Type t)
@@ -287,7 +281,7 @@ namespace WolvenKit.RED4.TweakDB.Serialization
         {
             if (string.IsNullOrEmpty(redtype))
             {
-                throw new JsonException();
+                throw new ArgumentNullException(nameof(redtype));
             }
 
             var types = Enum.GetValues<ETweakType>().Select(GetTypeFromEnum).ToList();
@@ -317,13 +311,13 @@ namespace WolvenKit.RED4.TweakDB.Serialization
                         culture: null);
                     if (outer == null)
                     {
-                        throw new JsonException();
+                        throw new InvalidDataException();
                     }
                     return outer.GetType();
                 }
                 else
                 {
-                    throw new JsonException();
+                    throw new InvalidDataException();
                 }
             }
 

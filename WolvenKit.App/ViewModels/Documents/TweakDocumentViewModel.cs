@@ -5,8 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Text;
-using System.Text.Json;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using ICSharpCode.AvalonEdit.Document;
@@ -14,55 +12,17 @@ using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Utils;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using Splat;
+using WolvenKit.Common.Services;
 using WolvenKit.RED4.TweakDB;
 using WolvenKit.RED4.TweakDB.Serialization;
-using WolvenKit.RED4.TweakDB.Types;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
 
 namespace WolvenKit.ViewModels.Documents
 {
-    public abstract class TweakEntryViewModel : ReactiveObject
-    {
-        public string Name { get; set; }
-
-        public abstract string DisplayString { get; }
-    }
-
-    public sealed class GroupViewModel : TweakEntryViewModel
-    {
-        private readonly TweakRecord _value;
-
-        public GroupViewModel(string name, TweakRecord value)
-        {
-            Name = name;
-            _value = value;
-        }
-
-        
-        public override string DisplayString => _value.ToString();
-
-        public TweakRecord GetValue() => _value;
-    }
-
-    public sealed class FlatViewModel : TweakEntryViewModel
-    {
-        private readonly IType _value;
-
-        public FlatViewModel(string name, IType value)
-        {
-            Name = name;
-            _value = value;
-        }
-
-        public override string DisplayString => _value.ToString();
-
-        public IType GetValue() => _value;
-    }
-
-
     public class TweakDocumentViewModel : DocumentViewModel
     {
+        private readonly ILoggerService _loggerService;
+
 
         public TweakDocumentViewModel(string path) : base(path)
         {
@@ -78,7 +38,7 @@ namespace WolvenKit.ViewModels.Documents
             var hlManager = HighlightingManager.Instance;
             HighlightingDefinition = hlManager.GetDefinitionByExtension(".json");
 
-            
+            _loggerService = Locator.Current.GetService<ILoggerService>();
         }
 
         #region properties
@@ -198,13 +158,20 @@ namespace WolvenKit.ViewModels.Documents
             using var bw = new StreamWriter(fs);
             bw.Write(Document.Text);
 
-            if (Serialization.Deserialize(Document.Text, out var dict))
+            try
             {
-                TweakDocument = dict;
-                GenerateEntries();
+                if (Serialization.Deserialize(Document.Text, out var dict))
+                {
+                    TweakDocument = dict;
+                    GenerateEntries();
+                }
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error(e);
             }
 
-            
+            _loggerService.Success($"{this.FilePath} saved.");
 
             //dbg
             //var deltaFilePath = $"{FilePath}.bin";
@@ -268,19 +235,28 @@ namespace WolvenKit.ViewModels.Documents
                 return;
             }
 
-            if (Serialization.Deserialize(Document.Text, out var dict))
+            try
             {
-                TweakDocument = dict;
-                GenerateEntries();
-            }
-            else
-            {
-                MessageBox.Show($"The tweak file could not be parsed. Please check the file for errors.",
-                    "WolvenKit",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                if (Serialization.Deserialize(Document.Text, out var dict))
+                {
+                    TweakDocument = dict;
+                    GenerateEntries();
+                }
+                else
+                {
+                    MessageBox.Show($"The tweak file could not be parsed. Please check the file for errors.",
+                        "WolvenKit",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
 
+                }
             }
+            catch (Exception e)
+            {
+                _loggerService.Error(e);
+            }
+
+            
         }
 
         #endregion
