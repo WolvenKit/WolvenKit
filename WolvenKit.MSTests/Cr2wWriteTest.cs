@@ -931,7 +931,6 @@ namespace WolvenKit.MSTests
 
                         using var originalReader = new CR2WReader(originalStream, Encoding.UTF8, true);
                         var readResult = originalReader.ReadFile(out var cr2wFile, DECOMPRESS_BUFFERS);
-                        cr2wFile.MetaData.FileName = file.NameOrHash;
 
                         switch (readResult)
                         {
@@ -956,6 +955,8 @@ namespace WolvenKit.MSTests
 
                             case EFileReadErrorCodes.NoError:
                             {
+                                cr2wFile.MetaData.FileName = file.NameOrHash;
+
                                 using var writeStream = new MemoryStream();
                                 using var writer = new CR2WWriter(writeStream, Encoding.UTF8, true);
                                 //using var bw = new BinaryWriter(writeStream, Encoding.UTF8, true);

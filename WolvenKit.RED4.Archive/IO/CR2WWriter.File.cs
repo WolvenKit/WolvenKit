@@ -72,7 +72,9 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 if (_file.MetaData.HashVersion == EHashVersion.Pre120)
                 {
+#pragma warning disable CS0618 // Typ oder Element ist veraltet
                     BaseStream.WriteStruct(new CR2WNameInfo { hash = str.GetOldRedHash(), offset = stringOffsets[str] }, crc);
+#pragma warning restore CS0618 // Typ oder Element ist veraltet
                 }
                 else
                 {

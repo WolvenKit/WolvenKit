@@ -17,7 +17,7 @@ namespace WolvenKit.RED4.Types
         public T Chunk
         {
             get => (T)File._handleManager.Get(Pointer);
-            set => SetChunk(value);
+            set => File._handleManager.Set(this, value);
         }
 
         internal CHandle(Red4File file, int pointer)
@@ -26,22 +26,7 @@ namespace WolvenKit.RED4.Types
             Pointer = pointer;
         }
 
-        private void SetChunk(T chunk)
-        {
-            var index = File.Chunks.IndexOf(chunk);
-            if (index == -1)
-            {
-                File.Chunks.Add(chunk);
-                index = File.Chunks.Count - 1;
-            }
-
-            Pointer = index;
-        }
-
-        public void Remove()
-        {
-            File._handleManager.RemoveHandle(this);
-        }
+        public void Remove() => File._handleManager.RemoveHandle(this);
 
         public bool Equals(CHandle<T> other)
         {

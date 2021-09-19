@@ -241,7 +241,9 @@ namespace WolvenKit.RED4.Archive.IO
                 return EHashVersion.Latest;
             }
 
+#pragma warning disable CS0618 // Typ oder Element ist veraltet
             if (value.GetOldRedHash() == hash)
+#pragma warning restore CS0618 // Typ oder Element ist veraltet
             {
                 return EHashVersion.Pre120;
             }

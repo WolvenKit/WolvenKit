@@ -42,11 +42,6 @@ namespace WolvenKit.RED4.Types
 
         public CHandle<T> CreateCHandle<T>(int pointer) where T : IRedClass
         {
-            if (pointer == 1)
-            {
-
-            }
-
             var result = new CHandle<T>(_file, pointer);
 
             RegisterHandle(result);
@@ -84,8 +79,10 @@ namespace WolvenKit.RED4.Types
             return _file.Chunks[pointer];
         }
 
-        public int Set(IRedClass cls)
+        public void Set(IRedBaseHandle handle, IRedClass cls)
         {
+            RemoveHandle(handle);
+
             var index = _file.Chunks.IndexOf(cls);
             if (index == -1)
             {
@@ -93,7 +90,8 @@ namespace WolvenKit.RED4.Types
                 index = _file.Chunks.Count - 1;
             }
 
-            return index;
+            handle.Pointer = index;
+            RegisterHandle(handle);
         }
 
         public void RemoveHandle(IRedBaseHandle cHandle)
