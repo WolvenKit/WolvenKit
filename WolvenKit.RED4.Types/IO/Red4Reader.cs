@@ -11,10 +11,11 @@ using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.IO
 {
-    public class Red4Reader : IDisposable
+    public partial class Red4Reader : IDisposable
     {
         protected readonly BinaryReader _reader;
-        protected IList<CName> _stringList;
+
+        protected Red4File _outputFile;
 
         private bool _disposed;
 
@@ -35,63 +36,14 @@ namespace WolvenKit.RED4.IO
             _reader = reader;
         }
 
+        public int CurrentChunk { get; private set; }
+
         public BinaryReader BaseReader => _reader;
         public Stream BaseStream => _reader.BaseStream;
 
         public int Position => (int)_reader.BaseStream.Position;
 
         #region Support
-
-        internal const byte s_VLQ_Continuation = 0b10000000;
-        internal const byte s_VLQ_ValueMask = 0b01111111;
-
-        private bool HasFlag(byte b, byte flag) => (b & flag) == flag;
-
-        public int ReadVLQ()
-        {
-            var b = _reader.ReadByte();
-            var isNegative = HasFlag(b, 0b10000000);
-            // Initial value from the lower 6 bits
-            var value = b & 0b00111111;
-
-            // First octet stores the continuation flag in the 6th bit
-            // Is value larger than 6 bits?
-            if (HasFlag(b, 0b01000000))
-            {
-                b = _reader.ReadByte();
-                // Mask and add the next 7 bits
-                value |= (b & s_VLQ_ValueMask) << 6;
-
-                // Is value larger than 13 bits?
-                if (HasFlag(b, s_VLQ_Continuation))
-                {
-                    b = _reader.ReadByte();
-                    value |= (b & s_VLQ_ValueMask) << 13;
-
-                    // Is value larger than 20 bits?
-                    if (HasFlag(b, s_VLQ_Continuation))
-                    {
-                        b = _reader.ReadByte();
-                        value |= (b & s_VLQ_ValueMask) << 20;
-
-                        // Is value larger than 27 bits?
-                        if (HasFlag(b, s_VLQ_Continuation))
-                        {
-                            b = _reader.ReadByte();
-                            value |= (b & s_VLQ_ValueMask) << 27;
-
-                            // Is value larger than 34 bits? That seems bad
-                            if (HasFlag(b, s_VLQ_Continuation))
-                            {
-                                throw new InvalidDataException($"Continuation bit set on 5th byte");
-                            }
-                        }
-                    }
-                }
-            }
-
-            return isNegative ? -value : value;
-        }
 
         /// <summary>
         /// Reads a string from a BinaryReader Stream
@@ -145,14 +97,12 @@ namespace WolvenKit.RED4.IO
 
         protected CName GetStringValue(ushort index)
         {
-            var result = _stringList[index];
-
-            if (result == "idle")
+            if (index >= _outputFile.Names.Count)
             {
-
+                throw new Exception();
             }
 
-            return result;
+            return _outputFile.Names[index];
         }
 
         #region Fundamentals
@@ -192,11 +142,6 @@ namespace WolvenKit.RED4.IO
                 result.Value = Read(type, size, flags);
             }
 
-            if (result.Value == null)
-            {
-
-            }
-
             return result;
         }
 
@@ -207,8 +152,8 @@ namespace WolvenKit.RED4.IO
             {
                 return new DataBuffer
                 {
-                    Pointer = (int)(bufferSize ^ 0x80000000),
-                    Buffer = Array.Empty<byte>()
+                    File = _outputFile,
+                    Pointer = (int)(bufferSize ^ 0x80000000) - 1
                 };
             }
 
@@ -238,7 +183,7 @@ namespace WolvenKit.RED4.IO
                 throw new InvalidParsingException(nameof(ReadSerializationDeferredDataBuffer));
             }
             
-            return new() { Buffer = _reader.ReadUInt16() };
+            return new() { File = _outputFile, Pointer = (ushort)(_reader.ReadUInt16() - 1) };
         }
 
         public virtual SharedDataBuffer ReadSharedDataBuffer(uint size)
@@ -289,7 +234,23 @@ namespace WolvenKit.RED4.IO
 
         public virtual IRedArray<T> ReadCArray<T>(uint size) where T : IRedType
         {
-            return (IRedArray<T>)ThrowNotImplemented();
+            var array = new CArray<T>();
+
+            var elementCount = _reader.ReadUInt32();
+
+            uint elementSize = 0;
+            if (elementCount > 0)
+            {
+                elementSize = (size - 4) / elementCount;
+            }
+
+            for (var i = 0; i < elementCount; i++)
+            {
+                var element = Read(typeof(T), elementSize, Flags.Empty);
+                array.Add((T)element);
+            }
+
+            return array;
         }
 
         public virtual IRedArrayFixedSize ReadCArrayFixedSize(Type type, uint size, Flags flags)
@@ -304,7 +265,23 @@ namespace WolvenKit.RED4.IO
 
         public virtual IRedArrayFixedSize<T> ReadCArrayFixedSize<T>(uint size, Flags flags) where T : IRedType
         {
-            return (IRedArrayFixedSize<T>)ThrowNotImplemented();
+            var array = new CArrayFixedSize<T>(flags.MoveNext() ? flags.Current : 0);
+
+            var elementCount = _reader.ReadUInt32();
+
+            uint elementSize = 0;
+            if (elementCount > 0)
+            {
+                elementSize = (size - 4) / elementCount;
+            }
+
+            for (var i = 0; i < elementCount; i++)
+            {
+                var element = Read(typeof(T), elementSize, flags.Clone());
+                ((IList<T>)array)[i] = (T)element;
+            }
+
+            return array;
         }
 
         public virtual IRedBitField ReadCBitField(Type type)
@@ -375,9 +352,7 @@ namespace WolvenKit.RED4.IO
 
         public virtual IRedHandle<T> ReadCHandle<T>() where T : IRedClass
         {
-            var instance = new CHandle<T>();
-            instance.SetValue(_reader.ReadInt32());
-            return instance;
+            return _outputFile._handleManager.CreateCHandle<T>(_reader.ReadInt32() - 1);
         }
 
         public virtual IRedLegacySingleChannelCurve ReadCLegacySingleChannelCurve(Type type)
@@ -437,7 +412,22 @@ namespace WolvenKit.RED4.IO
 
         public virtual IRedResourceAsyncReference<T> ReadCResourceAsyncReference<T>() where T : IRedClass
         {
-            return (IRedResourceAsyncReference<T>)ThrowNotImplemented();
+            var index = _reader.ReadUInt16();
+
+            if (index > 0)
+            {
+                return new CResourceAsyncReference<T>
+                {
+                    DepotPath = _outputFile.Imports[index - 1].DepotPath,
+                    Flags = _outputFile.Imports[index - 1].Flags
+                };
+            }
+
+            return new CResourceAsyncReference<T>
+            {
+                DepotPath = "",
+                Flags = InternalEnums.EImportFlags.Default
+            };
         }
 
         public virtual IRedResourceReference ReadCResourceReference(Type type)
@@ -452,7 +442,22 @@ namespace WolvenKit.RED4.IO
 
         public virtual IRedResourceReference<T> ReadCResourceReference<T>() where T : IRedClass
         {
-            return (IRedResourceReference<T>)ThrowNotImplemented();
+            var index = _reader.ReadUInt16();
+
+            if (index > 0)
+            {
+                return new CResourceReference<T>
+                {
+                    DepotPath = _outputFile.Imports[index - 1].DepotPath,
+                    Flags = _outputFile.Imports[index - 1].Flags
+                };
+            }
+
+            return new CResourceReference<T>
+            {
+                DepotPath = "",
+                Flags = InternalEnums.EImportFlags.Default
+            };
         }
 
         public virtual IRedStatic ReadCStaticArray(Type type, uint size, Flags flags)
@@ -467,7 +472,23 @@ namespace WolvenKit.RED4.IO
 
         public virtual IRedStatic<T> ReadCStaticArray<T>(uint size, Flags flags) where T : IRedType
         {
-            return (IRedStatic<T>)ThrowNotImplemented();
+            var array = new CStatic<T>(flags.MoveNext() ? flags.Current : 0);
+
+            var elementCount = _reader.ReadUInt32();
+
+            uint elementSize = 0;
+            if (elementCount > 0)
+            {
+                elementSize = (size - 4) / elementCount;
+            }
+
+            for (var i = 0; i < elementCount; i++)
+            {
+                var element = Read(typeof(T), elementSize, flags.Clone());
+                ((IList<T>)array)[i] = (T)element;
+            }
+
+            return array;
         }
 
         public virtual IRedWeakHandle ReadCWeakHandle(Type type)
@@ -482,9 +503,7 @@ namespace WolvenKit.RED4.IO
 
         public virtual IRedWeakHandle<T> ReadCWeakHandle<T>() where T : IRedClass
         {
-            var instance = new CWeakHandle<T>();
-            instance.SetValue(_reader.ReadInt32());
-            return instance;
+            return _outputFile._handleManager.CreateCWeakHandle<T>(_reader.ReadInt32() - 1);
         }
 
         #endregion General
@@ -502,8 +521,6 @@ namespace WolvenKit.RED4.IO
         }
 
         #endregion
-
-        //public virtual IRedClass ReadClass<T>(T type, uint size) where T : IRedClass => ReadClass(type.GetType(), size);
 
         public virtual IRedClass ReadClass(Type type, uint size)
         {

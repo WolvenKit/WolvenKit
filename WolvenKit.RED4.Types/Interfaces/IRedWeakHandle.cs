@@ -1,12 +1,10 @@
 namespace WolvenKit.RED4.Types
 {
-    public interface IRedWeakHandle : IRedType
+    public interface IRedWeakHandle : IRedBaseHandle, IRedType
     {
-        public int GetValue();
-        public void SetValue(int value);
     }
 
-    public interface IRedWeakHandle<T> : IRedWeakHandle, IRedGenericType<T>
+    public interface IRedWeakHandle<T> : IRedWeakHandle, IRedBaseHandle<T>, IRedGenericType<T> where T : IRedClass
     {
 
     }

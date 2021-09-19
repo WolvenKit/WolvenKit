@@ -71,16 +71,8 @@ namespace WolvenKit.RED4.Types
 
 
     [REDMeta]
-    public class scnbPerformerInScene_NodeType : RedBaseClass
+    public class scnbPerformerInScene_NodeType : questSpawnManagerNodeType
     {
-        [Ordinal(0)]
-        [RED("action")]
-        public CEnum<populationSpawnerObjectCtrlAction> Action
-        {
-            get => GetPropertyValue<CEnum<populationSpawnerObjectCtrlAction>>();
-            set => SetPropertyValue<CEnum<populationSpawnerObjectCtrlAction>>(value);
-        }
-
         [Ordinal(1)]
         [RED("performer")]
         public CRUID Performer
@@ -153,7 +145,7 @@ namespace WolvenKit.RED4.Types
         }
     }
     [REDMeta]
-    public class scnbgraphSectionNode : RedBaseClass
+    public class scnbgraphSectionNode : toolsIGraphNodeDescriptor
     {
         [Ordinal(0)]
         [RED("id")]
@@ -205,7 +197,7 @@ namespace WolvenKit.RED4.Types
     }
 
     [REDMeta]
-    public class scnbeventsVFXBraindanceEventDescriptor : RedBaseClass
+    public class scnbeventsVFXBraindanceEventDescriptor : toolsEventDescriptor
     {
         [Ordinal(0)]
         [RED("id")]
@@ -305,7 +297,7 @@ namespace WolvenKit.RED4.Types
     }
 
     [REDMeta]
-    public class scnbeventsVFXEventDescriptor : RedBaseClass
+    public class scnbeventsVFXEventDescriptor : toolsEventDescriptor
     {
         [Ordinal(0)]
         [RED("id")]
@@ -573,7 +565,7 @@ namespace WolvenKit.RED4.Types
     }
 
     [REDMeta]
-    public class scnbAudioLayer : RedBaseClass
+    public class scnbAudioLayer : ISerializable
     {
         [Ordinal(0)]
         [RED("scenePath")]
@@ -593,7 +585,7 @@ namespace WolvenKit.RED4.Types
     }
 
     [REDMeta]
-    public class scnbPresetsDataWrapper : RedBaseClass
+    public class scnbPresetsDataWrapper : ISerializable
     {
         [Ordinal(0)]
         [RED("data")]
@@ -633,7 +625,7 @@ namespace WolvenKit.RED4.Types
     }
 
     [REDMeta]
-    public class scnbeventsVFXDurationEventDescriptor : RedBaseClass
+    public class scnbeventsVFXDurationEventDescriptor : toolsEventDescriptor
     {
         [Ordinal(0)]
         [RED("id")]

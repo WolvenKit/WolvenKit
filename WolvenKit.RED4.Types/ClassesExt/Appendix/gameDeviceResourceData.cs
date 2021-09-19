@@ -1,4 +1,5 @@
 using System.IO;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.IO;
 
 namespace WolvenKit.RED4.Types
@@ -21,8 +22,8 @@ namespace WolvenKit.RED4.Types
                 result.Unk1[i].Hash = reader.ReadCUInt64();
                 result.Unk1[i].ClassName = reader.ReadCName();
 
-                result.Unk1[i].Children = new CUInt64[reader.ReadVLQ()];
-                result.Unk1[i].Parents = new CUInt64[reader.ReadVLQ()];
+                result.Unk1[i].Children = new CUInt64[reader.BaseReader.ReadVLQInt32()];
+                result.Unk1[i].Parents = new CUInt64[reader.BaseReader.ReadVLQInt32()];
 
                 for (int j = 0; j < result.Unk1[i].Children.Length; j++)
                 {

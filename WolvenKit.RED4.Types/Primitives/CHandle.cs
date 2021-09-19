@@ -1,32 +1,46 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace WolvenKit.RED4.Types
 {
     [RED("handle")]
     public class CHandle<T> : IRedHandle<T>, IEquatable<CHandle<T>> where T : IRedClass
     {
-        private IList<IRedClass> _referenceList;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Red4File File { get; }
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public int Pointer { get; set; }
 
-        public T Reference
+        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+        public T Chunk
         {
-            get
-            {
-                if (_referenceList == null)
-                    return default;
-                return (T)_referenceList[Pointer - 1];
-            }
+            get => (T)File._handleManager.Get(Pointer);
+            set => SetChunk(value);
         }
 
-        public int GetValue() => Pointer;
-        public void SetValue(int value) => Pointer = value;
-
-        public void SetReferenceList(IList<IRedClass> referenceList)
+        internal CHandle(Red4File file, int pointer)
         {
-            _referenceList = referenceList;
+            File = file;
+            Pointer = pointer;
+        }
+
+        private void SetChunk(T chunk)
+        {
+            var index = File.Chunks.IndexOf(chunk);
+            if (index == -1)
+            {
+                File.Chunks.Add(chunk);
+                index = File.Chunks.Count - 1;
+            }
+
+            Pointer = index;
+        }
+
+        public void Remove()
+        {
+            File._handleManager.RemoveHandle(this);
         }
 
         public bool Equals(CHandle<T> other)
@@ -41,7 +55,7 @@ namespace WolvenKit.RED4.Types
                 return true;
             }
 
-            return Pointer == other.Pointer;
+            return EqualityComparer<T>.Default.Equals((T)Chunk, (T)other.Chunk);
         }
 
         public override bool Equals(object obj)
@@ -64,6 +78,6 @@ namespace WolvenKit.RED4.Types
             return Equals((CHandle<T>)obj);
         }
 
-        public override int GetHashCode() => Pointer;
+        public override int GetHashCode() => EqualityComparer<T>.Default.GetHashCode((T)Chunk);
     }
 }

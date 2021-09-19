@@ -10,15 +10,8 @@ using System.Runtime.CompilerServices;
 namespace WolvenKit.RED4.Types
 {
     [REDMeta]
-    //[DebuggerTypeProxy(typeof(RedBaseClassDebugView))]
-    public class RedBaseClass : DynamicObject, IRedClass, IEquatable<RedBaseClass>
+    public class RedBaseClass : DynamicObject, IRedClass
     {
-        public string RedTypeName;
-
-        public RedBaseClass()
-        {
-        }
-
         private string GetRedName(string propertyName)
         {
             var property = RedReflection.GetPropertyByName(this.GetType(), propertyName);
@@ -42,8 +35,7 @@ namespace WolvenKit.RED4.Types
         {
             if (!_properties.ContainsKey(redPropertyName))
             {
-                _properties[redPropertyName] = null;
-                if (typeof(IRedPrimitive).IsAssignableFrom(type))
+                if (type.IsValueType)
                 {
                     if (flags.Equals(Flags.Empty))
                     {
@@ -54,7 +46,11 @@ namespace WolvenKit.RED4.Types
                         var size = flags.MoveNext() ? flags.Current : 0;
                         _properties[redPropertyName] = System.Activator.CreateInstance(type, size);
                     }
+
+                    return _properties[redPropertyName];
                 }
+
+                return null;
             }
 
             return _properties[redPropertyName];
@@ -62,24 +58,17 @@ namespace WolvenKit.RED4.Types
 
         void IRedClass.InternalSetPropertyValue(string redPropertyName, object value, bool native)
         {
-            _properties[redPropertyName] = value;
-
-            if (!native)
+            if (value == null && _properties[redPropertyName] is IRedBaseHandle d)
             {
-                _customProperties[redPropertyName] = value;
+                d.Remove();
             }
-        }
 
-        public IDictionary<string, object> GetCustomProperties()
-        {
-            return _customProperties;
+            _properties[redPropertyName] = value;
         }
 
         #region DynamicObject
 
-        //[DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly IDictionary<string, object> _properties = new Dictionary<string, object>();
-        private readonly IDictionary<string, object> _customProperties = new Dictionary<string, object>();
 
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
@@ -89,11 +78,10 @@ namespace WolvenKit.RED4.Types
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            return base.TryGetMember(binder, out result);
+            return _properties.TryGetValue(binder.Name, out result);
         }
 
         #endregion DynamicObject
-
 
         public override bool Equals(object obj)
         {
@@ -122,7 +110,7 @@ namespace WolvenKit.RED4.Types
             
             foreach (var property in _properties)
             {
-                if (!property.Value.Equals(other._properties[property.Key]))
+                if (!Equals(property.Value, other._properties[property.Key]))
                 {
                     return false;
                 }

@@ -18,9 +18,9 @@ namespace WolvenKit.RED4.Archive.CR2W
         public ulong pathHash;
     }
 
-    public class CR2WEmbedded : ICR2WEmbedded
+    public class CR2WEmbedded : ICR2WEmbeddedFile
     {
-        public string ImportPath { get; set; }
-        public IRedClass Export { get; set; }
+        public string FileName { get; set; }
+        public IRedClass Content { get; set; }
     }
 }

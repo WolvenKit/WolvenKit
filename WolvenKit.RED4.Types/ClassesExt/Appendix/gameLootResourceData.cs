@@ -1,4 +1,5 @@
 using System.IO;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.IO;
 
 namespace WolvenKit.RED4.Types
@@ -13,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
             var startPos = reader.BaseReader.BaseStream.Position;
 
-            result.Unk1 = new ulong[reader.ReadVLQ()];
+            result.Unk1 = new ulong[reader.BaseReader.ReadVLQInt32()];
             for (int i = 0; i < result.Unk1.Length; i++)
             {
                 result.Unk1[i] = reader.BaseReader.ReadUInt64();

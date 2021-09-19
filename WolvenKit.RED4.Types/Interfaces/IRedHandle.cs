@@ -1,19 +1,26 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace WolvenKit.RED4.Types
 {
-    public interface IRedHandle : IRedType
+    public interface IRedBaseHandle
     {
+        public Red4File File { get; }
         public int Pointer { get; set; }
 
-        public int GetValue();
-        public void SetValue(int value);
-
-        public void SetReferenceList(IList<IRedClass> referenceList);
+        public void Remove();
     }
 
-    public interface IRedHandle<T> : IRedHandle, IRedGenericType<T>
+    public interface IRedBaseHandle<T> : IRedBaseHandle where T : IRedClass
+    {
+    }
+
+    public interface IRedHandle : IRedBaseHandle, IRedType
+    {
+    }
+
+    public interface IRedHandle<T> : IRedHandle, IRedBaseHandle<T>, IRedGenericType<T> where T : IRedClass
     {
     }
 }

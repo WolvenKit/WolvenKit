@@ -1,4 +1,5 @@
 using System.IO;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.IO;
 
 namespace WolvenKit.RED4.Types
@@ -11,16 +12,16 @@ namespace WolvenKit.RED4.Types
         {
             var result = new C2dArray_Appendix();
 
-            result.Headers = new string[reader.ReadVLQ()];
+            result.Headers = new string[reader.BaseReader.ReadVLQInt32()];
             for (int i = 0; i < result.Headers.Length; i++)
             {
                 result.Headers[i] = reader.ReadCString();
             }
 
-            result.Rows = new string[reader.ReadVLQ()][];
+            result.Rows = new string[reader.BaseReader.ReadVLQInt32()][];
             for (int i = 0; i < result.Rows.Length; i++)
             {
-                var row = new string[reader.ReadVLQ()];
+                var row = new string[reader.BaseReader.ReadVLQInt32()];
                 for (int j = 0; j < row.Length; j++)
                 {
                     row[j] = reader.ReadCString();

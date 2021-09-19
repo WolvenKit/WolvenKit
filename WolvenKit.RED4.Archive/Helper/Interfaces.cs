@@ -9,25 +9,22 @@ namespace WolvenKit.RED4.Archive
     {
     }
 
-    public interface ICR2WImport
+    public interface ICR2WImport : IRedImport
     {
-        public string DepotPath { get; }
-        public InternalEnums.EImportFlags Flags { get; }
     }
 
-    public interface ICR2WBuffer
+    public interface ICR2WBuffer : IRedBuffer
     {
-        public byte[] Data { get; set; }
         public uint Flags { get; set; }
 
         public bool IsCompressed { get; set; }
         public uint MemSize { get; set; }
     }
 
-    public interface ICR2WEmbedded
+    public interface ICR2WEmbeddedFile
     {
-        public string ImportPath { get; set; }
-        public IRedClass Export { get; set; }
+        public string FileName { get; set; }
+        public IRedClass Content { get; set; }
     }
 
     public interface IEditableVariable

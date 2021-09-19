@@ -57,18 +57,6 @@ namespace WolvenKit.MSTests
                 var list = new List<FileEntry>();
                 list.Add(file);
                 Write_Archive_Items(list);
-                /*var ar = s_bm.Archives[file.Archive.ArchiveAbsolutePath] as Archive;
-                using var ms = new MemoryStream();
-                ar?.CopyFileToStream(ms, file.NameHash64, false);
-                //ar?.CopyFileToStreamWithoutBuffers(ms, file.NameHash64);
-                ms.Seek(0, SeekOrigin.Begin);
-
-                using var reader = new CR2WReader(ms);
-                var readResult = reader.ReadFile(out var c, false);
-
-                using var ms2 = new MemoryStream();
-                using var writer = new CR2WWriter(ms2);
-                writer.WriteFile(c);*/
             }
         }
 
@@ -943,7 +931,7 @@ namespace WolvenKit.MSTests
 
                         using var originalReader = new CR2WReader(originalStream, Encoding.UTF8, true);
                         var readResult = originalReader.ReadFile(out var cr2wFile, DECOMPRESS_BUFFERS);
-                        cr2wFile.FileName = file.NameOrHash;
+                        cr2wFile.MetaData.FileName = file.NameOrHash;
 
                         switch (readResult)
                         {
@@ -995,7 +983,7 @@ namespace WolvenKit.MSTests
                                 if (!isBinaryEqual && WRITE_FAILED)
                                 {
                                     var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
-                                    var filename = Path.Combine(resultDir, Path.GetFileName(cr2wFile.FileName));
+                                    var filename = Path.Combine(resultDir, Path.GetFileName(cr2wFile.MetaData.FileName));
 
                                     using var oFile = new FileStream($"{filename}.o.bin", FileMode.OpenOrCreate, FileAccess.Write);
                                     originalStream.Seek(0, SeekOrigin.Begin);

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             BaseStream.WriteStruct(CR2WFile.MAGIC);
 
-            var fileHeader = new CR2WFileHeader { version = _file.Version, buildVersion = _file.BuildVersion, numChunks = 6 };
+            var fileHeader = new CR2WFileHeader { version = _file.MetaData.Version, buildVersion = _file.MetaData.BuildVersion, numChunks = 6 };
             var tableHeaders = new CR2WTable[10];
 
             var headerPos = BaseStream.Position;
@@ -34,9 +34,9 @@ namespace WolvenKit.RED4.Archive.IO
 
             var (strings, imports, chunkInfoList, chunkData) = GenerateChunkData();
 
-            foreach (var embedded in _file.Embedded)
+            foreach (var embedded in _file.EmbeddedFiles)
             {
-                var tuple = ("", (CName)embedded.ImportPath, (ushort)8);
+                var tuple = ("", (CName)embedded.FileName, (ushort)8);
                 if (!imports.Contains(tuple))
                 {
                     imports.Add(tuple);
@@ -70,7 +70,7 @@ namespace WolvenKit.RED4.Archive.IO
             var crc = new Crc32Algorithm(false);
             foreach (var str in strings)
             {
-                if (_file.HashVersion == EHashVersion.Pre120)
+                if (_file.MetaData.HashVersion == EHashVersion.Pre120)
                 {
                     BaseStream.WriteStruct(new CR2WNameInfo { hash = str.GetOldRedHash(), offset = stringOffsets[str] }, crc);
                 }
@@ -290,7 +290,7 @@ namespace WolvenKit.RED4.Archive.IO
             var bufferInfoList = new List<CR2WBufferInfo>();
             foreach (var buffer in _file.Buffers)
             {
-                bufferInfoList.Add(WriteBuffer(writer, buffer));
+                bufferInfoList.Add(WriteBuffer(writer, (ICR2WBuffer)buffer));
             }
 
             return (bufferInfoList, ms.ToArray());
@@ -300,12 +300,12 @@ namespace WolvenKit.RED4.Archive.IO
 
         #region Embedded
 
-        private CR2WEmbeddedInfo WriteEmbedded(CR2WWriter writer, ICR2WEmbedded embeddedData, IList<(string, CName, ushort)> importsList)
+        private CR2WEmbeddedInfo WriteEmbedded(CR2WWriter writer, ICR2WEmbeddedFile embeddedData, IList<(string, CName, ushort)> importsList)
         {
             var importIndex = -1;
             for (int i = 0; i < importsList.Count; i++)
             {
-                if (importsList[i].Item2 == embeddedData.ImportPath)
+                if (importsList[i].Item2 == embeddedData.FileName)
                 {
                     importIndex = i + 1;
                     break;
@@ -315,7 +315,7 @@ namespace WolvenKit.RED4.Archive.IO
             var chunkIndex = -1;
             for (int i = 0; i < _file.Chunks.Count; i++)
             {
-                if (_file.Chunks[i] == embeddedData.Export)
+                if (_file.Chunks[i] == embeddedData.Content)
                 {
                     chunkIndex = i;
                     break;
@@ -341,7 +341,7 @@ namespace WolvenKit.RED4.Archive.IO
             using var writer = new CR2WWriter(ms);
 
             var embeddedInfoList = new List<CR2WEmbeddedInfo>();
-            foreach (var embedded in _file.Embedded)
+            foreach (var embedded in _file.EmbeddedFiles)
             {
                 embeddedInfoList.Add(WriteEmbedded(writer, embedded, importsList));
             }
@@ -464,7 +464,7 @@ namespace WolvenKit.RED4.Archive.IO
             result += Marshal.SizeOf(typeof(CR2WPropertyInfo)) * _file.Properties.Count;
             result += Marshal.SizeOf(typeof(CR2WChunkInfo)) * _file.Chunks.Count;
             result += Marshal.SizeOf(typeof(CR2WBufferInfo)) * _file.Buffers.Count;
-            result += Marshal.SizeOf(typeof(CR2WEmbeddedInfo)) * _file.Embedded.Count;
+            result += Marshal.SizeOf(typeof(CR2WEmbeddedInfo)) * _file.EmbeddedFiles.Count;
 
             return (int)result;
         }

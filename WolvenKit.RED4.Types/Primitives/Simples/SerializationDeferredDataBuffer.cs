@@ -1,11 +1,23 @@
 using System;
+using System.Diagnostics;
 
 namespace WolvenKit.RED4.Types
 {
     [RED("serializationDeferredDataBuffer")]
     public class SerializationDeferredDataBuffer : IRedPrimitive, IEquatable<SerializationDeferredDataBuffer>
     {
-        public ushort Buffer { get; set; }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Red4File File { get; set; }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public ushort Pointer { get; set; }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+        public byte[] Buffer
+        {
+            get => File.Buffers[Pointer].Data;
+            set => File.Buffers[Pointer].Data = value;
+        }
 
         public bool Equals(SerializationDeferredDataBuffer other)
         {

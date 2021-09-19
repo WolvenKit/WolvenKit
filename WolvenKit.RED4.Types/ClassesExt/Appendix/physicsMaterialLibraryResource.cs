@@ -1,4 +1,5 @@
 using System.IO;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.IO;
 
 namespace WolvenKit.RED4.Types
@@ -11,7 +12,7 @@ namespace WolvenKit.RED4.Types
         {
             var result = new physicsMaterialLibraryResource_Appendix();
 
-            var cnt = reader.ReadVLQ();
+            var cnt = reader.BaseReader.ReadVLQInt32();
 
             result.Unk1 = new CName[cnt];
             for (int i = 0; i < result.Unk1.Length; i++)

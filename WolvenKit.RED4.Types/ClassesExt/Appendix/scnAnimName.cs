@@ -31,7 +31,6 @@ namespace WolvenKit.RED4.Types
             var isNulled = appendix[^1] == "";
             for (int i = 0; i < appendix.Length; i++)
             {
-                writer.CNameRef.Add(writer.BaseStream.Position, appendix[i]);
                 writer.BaseWriter.Write(isNulled ? (ushort)0 : writer.GetStringIndex(appendix[i]));
             }
         }

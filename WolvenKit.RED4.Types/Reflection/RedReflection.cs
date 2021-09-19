@@ -153,8 +153,6 @@ namespace WolvenKit.RED4.Types
                 {
                     type = typeof(CArrayFixedSize<>).MakeGenericType(type);
                 }
-
-                RedTypeManager.UnknownClassList.TryAdd(subType, 0);
             }
 
             flagValues.Reverse();

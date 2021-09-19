@@ -1,4 +1,5 @@
 using System.IO;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.IO;
 
 namespace WolvenKit.RED4.Types
@@ -12,7 +13,7 @@ namespace WolvenKit.RED4.Types
             var result = new physicsColliderMesh_Appendix();
 
             result.Unk1 = reader.BaseReader.ReadUInt16();
-            result.Unk2 = new ushort[reader.ReadVLQ()];
+            result.Unk2 = new ushort[reader.BaseReader.ReadVLQInt32()];
             for (int i = 0; i < result.Unk2.Length; i++)
             {
                 result.Unk2[i] = reader.BaseReader.ReadUInt16();

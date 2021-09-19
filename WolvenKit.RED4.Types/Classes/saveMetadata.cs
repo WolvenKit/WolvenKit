@@ -135,8 +135,8 @@ namespace WolvenKit.RED4.Types
 
 		public saveMetadata()
 		{
-			SaveVersion = 208;
-			GameVersion = 1300;
+			SaveVersion = 209;
+			GameVersion = 1301;
 		}
 	}
 }

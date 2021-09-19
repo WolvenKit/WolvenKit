@@ -5,7 +5,7 @@ using static WolvenKit.RED4.Types.Enums;
 namespace WolvenKit.RED4.Types
 {
     [REDMeta]
-    public class toolsTimeLineBaseDescriptor : RedBaseClass
+    public class toolsTimeLineBaseDescriptor : IBackendData
     {
         [Ordinal(0)]
         [RED("tracks")]
@@ -59,7 +59,7 @@ namespace WolvenKit.RED4.Types
     }
 
     [REDMeta]
-    public class toolsAudioEventDescriptor : RedBaseClass
+    public class toolsAudioEventDescriptor : toolsEventDescriptor
     {
         [Ordinal(0)]
         [RED("id")]
@@ -229,7 +229,7 @@ namespace WolvenKit.RED4.Types
     }
 
     [REDMeta]
-    public class toolsAudioDurationEventDescriptor : RedBaseClass
+    public class toolsAudioDurationEventDescriptor : toolsEventDescriptor
     {
         [Ordinal(0)]
         [RED("id")]
@@ -467,12 +467,12 @@ namespace WolvenKit.RED4.Types
     }
 
     [REDMeta]
-    public class toolsPresetsData : RedBaseClass
+    public class toolsPresetsData : ISerializable
     {
     }
 
     [REDMeta]
-    public class houdiniVehicleDestructionSettings : RedBaseClass
+    public class houdiniVehicleDestructionSettings : ISerializable
     {
         [Ordinal(0)]
         [RED("entity")]
@@ -593,7 +593,7 @@ namespace WolvenKit.RED4.Types
     }
 
     [REDMeta]
-    public class toolsSectionClipboardDataHolder : RedBaseClass
+    public class toolsSectionClipboardDataHolder : ISerializable
     {
         [Ordinal(0)]
         [RED("backendNodeDescriptor")]
@@ -697,7 +697,7 @@ namespace WolvenKit.RED4.Types
     }
 
     [REDMeta]
-    public class toolsRagdollExportData : RedBaseClass
+    public class toolsRagdollExportData : ISerializable
     {
         [Ordinal(0)]
         [RED("ragdollDesc")]
@@ -717,7 +717,7 @@ namespace WolvenKit.RED4.Types
     }
 
     [REDMeta]
-    public class toolsVisualTagsRoot : RedBaseClass
+    public class toolsVisualTagsRoot : ISerializable
     {
         [Ordinal(0)]
         [RED("schemas")]
@@ -729,7 +729,7 @@ namespace WolvenKit.RED4.Types
     }
 
     [REDMeta]
-    public class toolsPartsCategories : RedBaseClass
+    public class toolsPartsCategories : ISerializable
     {
         [Ordinal(0)]
         [RED("categories")]
@@ -741,7 +741,7 @@ namespace WolvenKit.RED4.Types
     }
 
     [REDMeta]
-    public class toolsAppearanceNamingParser : RedBaseClass
+    public class toolsAppearanceNamingParser : ISerializable
     {
         [Ordinal(0)]
         [RED("regex")]
@@ -857,7 +857,7 @@ namespace WolvenKit.RED4.Types
     }
 
     [REDMeta]
-    public class toolsAppearancesConfig : RedBaseClass
+    public class toolsAppearancesConfig : ISerializable
     {
         [Ordinal(0)]
         [RED("mappings")]
@@ -1040,7 +1040,7 @@ namespace WolvenKit.RED4.Types
     }
 
     [REDMeta]
-    public class toolsTimeLineTrackBaseItem : RedBaseClass
+    public class toolsTimeLineTrackBaseItem : toolsTimeLineItemDescription
     {
         [Ordinal(0)]
         [RED("id")]

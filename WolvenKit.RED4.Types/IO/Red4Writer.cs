@@ -245,10 +245,6 @@ namespace WolvenKit.RED4.IO
                 }
 
                 var stringList = _chunkStringList[chunk];
-                if (stringList.List.Contains("questPrefetchStreaming_NodeTypeV2"))
-                {
-
-                }
 
                 var importCurrentIndex = 0;
                 var importList = _chunkImportList[chunk];
@@ -264,9 +260,9 @@ namespace WolvenKit.RED4.IO
 
                     targetList.Remove(tuple);
 
-                    if ((tuple.Item2 - 1) > chunk)
+                    if ((tuple.Item2) > chunk)
                     {
-                        GenerateFor(tuple.Item2 - 1);
+                        GenerateFor(tuple.Item2);
                     }
                 }
                 StringCacheList.AddRange(stringList.List.GetRange(stringList.LastIndex, stringList.List.Count - stringList.LastIndex));
@@ -334,7 +330,7 @@ namespace WolvenKit.RED4.IO
         {
             if (val.Pointer >= 0)
             {
-                _writer.Write((uint)(val.Pointer | 0x80000000));
+                _writer.Write((uint)(val.Pointer | 0x80000000) + 1);
             }
             else
             {
@@ -353,7 +349,7 @@ namespace WolvenKit.RED4.IO
 
         public virtual void Write(MessageResourcePath val) => ThrowNotImplemented();
         public virtual void Write(NodeRef val) => WriteLengthPrefixedString(val);
-        public virtual void Write(SerializationDeferredDataBuffer val) => _writer.Write(val.Buffer);
+        public virtual void Write(SerializationDeferredDataBuffer val) => _writer.Write((ushort)(val.Pointer + 1));
         public virtual void Write(SharedDataBuffer val) => _writer.Write(val.Buffer);
         public virtual void Write(TweakDBID val) => _writer.Write(val.Value);
 
@@ -446,7 +442,11 @@ namespace WolvenKit.RED4.IO
 
         public virtual void Write<T>(CArray<T> instance) where T : IRedType
         {
-            ThrowNotImplemented();
+            _writer.Write((uint)instance.Count);
+            foreach (var element in instance)
+            {
+                Write(element);
+            }
         }
 
         public virtual void Write(IRedArrayFixedSize instance)
@@ -462,7 +462,18 @@ namespace WolvenKit.RED4.IO
 
         public virtual void Write<T>(CArrayFixedSize<T> instance) where T : IRedType
         {
-            ThrowNotImplemented();
+            var count = instance.Count(e => e != null);
+
+            _writer.Write((uint)count);
+            foreach (var element in instance)
+            {
+                if (element == null)
+                {
+                    continue;
+                }
+
+                Write(element);
+            }
         }
 
         public virtual void Write(IRedStatic instance)
@@ -478,7 +489,18 @@ namespace WolvenKit.RED4.IO
 
         public virtual void Write<T>(CStatic<T> instance) where T : IRedType
         {
-            ThrowNotImplemented();
+            var count = instance.Count(e => e != null);
+
+            _writer.Write((uint)count);
+            foreach (var element in instance)
+            {
+                if (element == null)
+                {
+                    continue;
+                }
+
+                Write(element);
+            }
         }
 
         public virtual void Write(IRedBitField instance)
@@ -508,26 +530,22 @@ namespace WolvenKit.RED4.IO
 
         public virtual void Write(IRedHandle instance)
         {
-            var value = instance.GetValue();
-
-            if (value > 0)
+            if (instance.Pointer > 0)
             {
-                _targetList.Add((CurrentChunk, value, StringCacheList.Count, ImportCacheList.Count));
+                _targetList.Add((CurrentChunk, instance.Pointer, StringCacheList.Count, ImportCacheList.Count));
             }
 
-            _writer.Write(value);
+            _writer.Write(instance.Pointer + 1);
         }
 
         public virtual void Write(IRedWeakHandle instance)
         {
-            var value = instance.GetValue();
-
-            if (value > 0)
+            if (instance.Pointer > 0)
             {
-                _targetList.Add((CurrentChunk, value, StringCacheList.Count, ImportCacheList.Count));
+                _targetList.Add((CurrentChunk, instance.Pointer, StringCacheList.Count, ImportCacheList.Count));
             }
 
-            _writer.Write(value);
+            _writer.Write(instance.Pointer + 1);
         }
 
         // TODO
@@ -573,8 +591,33 @@ namespace WolvenKit.RED4.IO
             _writer.Write(instance.Data);
         }
 
-        public virtual void Write(IRedResourceReference instance) => ThrowNotImplemented();
-        public virtual void Write(IRedResourceAsyncReference instance) => ThrowNotImplemented();
+        public virtual void Write(IRedResourceReference instance)
+        {
+            if (instance.DepotPath == "")
+            {
+                _writer.Write((ushort)0);
+                return;
+            }
+
+            var val = ("", instance.DepotPath, (ushort)instance.Flags);
+
+            ImportRef.Add(_writer.BaseStream.Position, val);
+            _writer.Write(GetImportIndex(val));
+        }
+
+        public virtual void Write(IRedResourceAsyncReference instance)
+        {
+            if (instance.DepotPath == "")
+            {
+                _writer.Write((ushort)0);
+                return;
+            }
+
+            var val = ("", instance.DepotPath, (ushort)instance.Flags);
+
+            ImportRef.Add(_writer.BaseStream.Position, val);
+            _writer.Write(GetImportIndex(val));
+        }
 
         #endregion General
 

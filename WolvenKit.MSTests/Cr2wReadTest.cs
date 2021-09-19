@@ -488,7 +488,7 @@ namespace WolvenKit.MSTests
 
                         using var reader = new CR2WReader(ms);
                         var readResult = reader.ReadFile(out var c, DECOMPRESS_BUFFERS);
-                        c.FileName = file.NameOrHash;
+                        c.MetaData.FileName = file.NameOrHash;
 
                         switch (readResult)
                         {
@@ -507,7 +507,7 @@ namespace WolvenKit.MSTests
                                     FileEntry = file,
                                     Success = false,
                                     ReadResult = ReadTestResult.ReadResultType.UnsupportedVersion,
-                                    Message = $"Unsupported Version ({c.Version})"
+                                    Message = $"Unsupported Version ({c.MetaData.Version})"
                                 });
                                 break;
 
@@ -515,7 +515,8 @@ namespace WolvenKit.MSTests
                                 var res = ReadTestResult.ReadResultType.NoError;
                                 var msg = "";
 
-                                var additionalCr2WFileBytes = (int)(reader.BaseStream.Length - reader.BaseStream.Position);
+                                var additionalCr2WFileBytes =
+                                    (int)(reader.BaseStream.Length - reader.BaseStream.Position);
                                 if (additionalCr2WFileBytes > 0)
                                 {
                                     res |= ReadTestResult.ReadResultType.HasAdditionalBytes;
@@ -557,71 +558,6 @@ namespace WolvenKit.MSTests
             return results;
         }
 
-        private static void Missing()
-        {
-            var customClsList = new HashSet<string>();
-            var clsDict = new Dictionary<string, Dictionary<string, object>>();
-
-            foreach (var kvp in RedTypeManager.ClassReferences)
-            {
-                var redClass = kvp.Key as RedBaseClass;
-                if (redClass == null)
-                    continue;
-
-                if (redClass.GetType() == typeof(RedBaseClass))
-                {
-                    customClsList.Add(redClass.RedTypeName);
-                }
-
-                var customProps = redClass.GetCustomProperties();
-                foreach (var customProp in customProps)
-                {
-                    var name = redClass.RedTypeName;
-                    if (string.IsNullOrEmpty(name))
-                    {
-                        name = redClass.GetType().Name;
-                    }
-
-                    if (!clsDict.ContainsKey(name))
-                    {
-                        clsDict.Add(name, new());
-                    }
-
-                    if (!clsDict[name].ContainsKey(customProp.Key))
-                    {
-                        clsDict[name].Add(customProp.Key, customProp.Value);
-                    }
-                }
-            }
-
-            RedTypeManager.ClassReferences.Clear();
-
-            if (customClsList.Count > 0 || clsDict.Count > 0)
-            {
-                var clsDict2 = new Dictionary<string, List<string>>();
-
-                foreach (var kvp in clsDict)
-                {
-                    foreach (var kvp2 in kvp.Value)
-                    {
-                        if (!clsDict2.ContainsKey(kvp2.Key))
-                        {
-                            clsDict2.Add(kvp2.Key, new List<string>());
-                        }
-
-                        if (!clsDict2[kvp2.Key].Contains(kvp.Key))
-                        {
-                            clsDict2[kvp2.Key].Add(kvp.Key);
-                        }
-                    }
-                }
-
-                var tmp = RedTypeManager.UnknownClassList;
-
-                Assert.Fail("Missing properties");
-            }
-        }
-
         private static void Test_Extension(string extension)
         {
             var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
@@ -629,8 +565,6 @@ namespace WolvenKit.MSTests
 
             // Run Test
             var results = Read_Archive_Items(s_groupedFiles[extension]).ToList();
-
-            Missing();
 
             // Write
             if (s_writeToFile)

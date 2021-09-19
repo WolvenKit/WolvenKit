@@ -15,30 +15,32 @@ namespace WolvenKit.RED4.Archive.IO
 {
     public partial class CR2WReader
     {
-        private CR2WFile _file;
-        private List<CR2WImport> _importList;
+        private CR2WFile _cr2wFile => (CR2WFile)_outputFile;
 
         public EFileReadErrorCodes ReadFile(out CR2WFile file, bool decompressBuffers = true)
         {
-            file = new CR2WFile();
-
-            _file = file;
-            _importList = new();
+            _outputFile = new CR2WFile();
 
             #region Read Headers
 
             // read file header
             var id = BaseStream.ReadStruct<uint>();
             if (id != CR2WFile.MAGIC)
+            {
+                file = null;
                 return EFileReadErrorCodes.NoCr2w;
+            }
 
             var fileHeader = BaseStream.ReadStruct<CR2WFileHeader>();
 
-            _file.Version = fileHeader.version;
-            _file.BuildVersion = fileHeader.buildVersion;
+            _cr2wFile.MetaData.Version = fileHeader.version;
+            _cr2wFile.MetaData.BuildVersion = fileHeader.buildVersion;
 
             if (fileHeader.version > 195 || fileHeader.version < 163)
+            {
+                file = null;
                 return EFileReadErrorCodes.UnsupportedVersion;
+            }
 
 
             // Tables [7-9] are not used in cr2w so far.
@@ -46,8 +48,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             // read strings - block 1 (index 0)
             var stringDict = ReadStringDict(tableHeaders[0]);
-            _stringList = stringDict.Values.ToList();
-            _file.Debug.Strings = new List<CName>(_stringList);
+            _cr2wFile.Debug.Strings = new List<CName>(_cr2wFile.Names);
 
             // read the other tables
 
@@ -61,32 +62,30 @@ namespace WolvenKit.RED4.Archive.IO
             #endregion
 
             // use 1 as 0 is always empty
-            _file.HashVersion = IdentifyHash(stringDict[1], nameInfoList[1].hash);
-            if (_file.HashVersion == EHashVersion.Unknown)
+            _cr2wFile.MetaData.HashVersion = IdentifyHash(stringDict[1], nameInfoList[1].hash);
+            if (_cr2wFile.MetaData.HashVersion == EHashVersion.Unknown)
             {
                 throw new Exception();
             }
 
             #region Read Data
 
-            var namesList = new List<CName>();
-
-            _file.Debug.NameInfos = nameInfoList;
+            _cr2wFile.Debug.NameInfos = nameInfoList;
             foreach (var nameInfo in nameInfoList)
             {
-                namesList.Add(ReadName(nameInfo, stringDict));
+                _cr2wFile.Names.Add(ReadName(nameInfo, stringDict));
             }
 
-            _file.Debug.ImportInfos = importInfoList;
+            _cr2wFile.Debug.ImportInfos = importInfoList;
             foreach (var importInfo in importInfoList)
             {
-                _importList.Add(ReadImport(importInfo, namesList, stringDict));
+                _cr2wFile.Imports.Add(ReadImport(importInfo, stringDict));
             }
 
-            _file.Debug.PropertyInfos = propertyInfoList;
+            _cr2wFile.Debug.PropertyInfos = propertyInfoList;
             foreach (var propertyInfo in propertyInfoList)
             {
-                file.Properties.Add(ReadProperty(propertyInfo));
+                _cr2wFile.Properties.Add(ReadProperty(propertyInfo));
             }
 
             if (propertyInfoList.Length > 1)
@@ -94,22 +93,22 @@ namespace WolvenKit.RED4.Archive.IO
                 throw new TodoException();
             }
 
-            _file.Debug.ChunkInfos = chunkInfoList;
+            _cr2wFile.Debug.ChunkInfos = chunkInfoList;
             foreach (var chunkInfo in chunkInfoList)
             {
-                file.Chunks.Add(ReadChunk(chunkInfo, namesList));
+                _cr2wFile.Chunks.Add(ReadChunk(chunkInfo));
             }
 
-            _file.Debug.BufferInfos = bufferInfoList;
+            _cr2wFile.Debug.BufferInfos = bufferInfoList;
             foreach (var bufferInfo in bufferInfoList)
             {
-                file.Buffers.Add(ReadBuffer(bufferInfo, decompressBuffers));
+                _cr2wFile.Buffers.Add(ReadBuffer(bufferInfo, decompressBuffers));
             }
 
-            _file.Debug.EmbeddedInfos = embeddedInfoList;
+            _cr2wFile.Debug.EmbeddedInfos = embeddedInfoList;
             foreach (var embeddedInfo in embeddedInfoList)
             {
-                file.Embedded.Add(ReadEmbedded(embeddedInfo));
+                _cr2wFile.EmbeddedFiles.Add(ReadEmbedded(embeddedInfo));
             }
 
             #endregion Read Data
@@ -119,6 +118,7 @@ namespace WolvenKit.RED4.Archive.IO
                 throw new TodoException();
             }
 
+            file = _cr2wFile;
             return EFileReadErrorCodes.NoError;
         }
 
@@ -134,11 +134,11 @@ namespace WolvenKit.RED4.Archive.IO
             return stringDict[info.offset];
         }
 
-        private CR2WImport ReadImport(CR2WImportInfo info, IList<CName> namesList, IDictionary<uint, CName> stringDict)
+        private CR2WImport ReadImport(CR2WImportInfo info, IDictionary<uint, CName> stringDict)
         {
             return new CR2WImport
             {
-                ClassName = namesList[info.className],
+                ClassName = _cr2wFile.Names[info.className],
                 DepotPath = stringDict[info.offset],
                 Flags = (InternalEnums.EImportFlags)info.flags
             };
@@ -149,11 +149,11 @@ namespace WolvenKit.RED4.Archive.IO
             return new CR2WProperty();
         }
 
-        private IRedClass ReadChunk(CR2WChunkInfo info, IList<CName> namesList)
+        private IRedClass ReadChunk(CR2WChunkInfo info)
         {
             Debug.Assert(BaseStream.Position == info.dataOffset);
 
-            var result = RedTypeManager.Create(namesList[info.className]);
+            var result = RedTypeManager.Create(_cr2wFile.Names[info.className]);
 
             var startPos = BaseStream.Position;
             ReadClass(result, info.dataSize);
@@ -199,10 +199,15 @@ namespace WolvenKit.RED4.Archive.IO
 
         private CR2WEmbedded ReadEmbedded(CR2WEmbeddedInfo info)
         {
+            if (info.pathHash != 0)
+            {
+                throw new TodoException();
+            }
+
             return new CR2WEmbedded
             {
-                ImportPath = _importList[(int)info.importIndex - 1].DepotPath,
-                Export = _file.Chunks[(int)info.chunkIndex]
+                FileName = _cr2wFile.Imports[(int)info.importIndex - 1].DepotPath,
+                Content = _cr2wFile.Chunks[(int)info.chunkIndex]
             };
         }
 

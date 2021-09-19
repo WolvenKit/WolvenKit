@@ -8,9 +8,6 @@ namespace WolvenKit.RED4.Types
 {
     public class RedTypeManager
     {
-        public static readonly ConcurrentDictionary<string, byte> UnknownClassList = new();
-        public static readonly ConcurrentDictionary<IRedClass, byte> ClassReferences = new();
-
         public static IRedClass Create(Type type)
         {
             var instance = (IRedClass)System.Activator.CreateInstance(type);
@@ -30,13 +27,7 @@ namespace WolvenKit.RED4.Types
                 throw new TypeNotFoundException(redTypeName);
             }
 
-            var instance = Create(type);
-            if (instance.GetType() == typeof(RedBaseClass))
-            {
-                ((RedBaseClass)instance).RedTypeName = redTypeName;
-            }
-
-            return instance;
+            return Create(type);
         }
     }
 }

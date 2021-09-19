@@ -11,8 +11,6 @@ namespace WolvenKit.RED4.Archive.IO
 {
     public partial class CR2WWriter : Red4Writer
     {
-        private readonly List<(string, string, ushort)> _imports = new();
-
         public CR2WWriter(Stream output) : base(output)
         {
         }
@@ -24,8 +22,6 @@ namespace WolvenKit.RED4.Archive.IO
         public CR2WWriter(Stream output, Encoding encoding, bool leaveOpen) : base(output, encoding, leaveOpen)
         {
         }
-
-        public List<(string, string, ushort)> GetImportList() => new(_imports);
 
         public override void WriteClass(IRedClass cls)
         {
@@ -50,7 +46,6 @@ namespace WolvenKit.RED4.Archive.IO
 
                 CNameRef.Add(_writer.BaseStream.Position, propertyInfo.RedName);
                 _writer.Write(GetStringIndex(propertyInfo.RedName));
-
                 CNameRef.Add(_writer.BaseStream.Position, redTypeName);
                 _writer.Write(GetStringIndex(redTypeName));
 
@@ -71,85 +66,6 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 app.Write(this);
             }
-        }
-
-        public override void Write<T>(CArray<T> instance)
-        {
-            _writer.Write((uint)instance.Count);
-            foreach (var element in instance)
-            {
-                Write(element);
-            }
-        }
-
-        public override void Write<T>(CArrayFixedSize<T> instance)
-        {
-            var count = instance.Count(e => e != null);
-
-            _writer.Write((uint)count);
-            foreach (var element in instance)
-            {
-                if (element == null)
-                {
-                    continue;
-                }
-
-                Write(element);
-            }
-        }
-
-        public override void Write<T>(CStatic<T> instance)
-        {
-            var count = instance.Count(e =>  e != null);
-
-            _writer.Write((uint)count);
-            foreach (var element in instance)
-            {
-                if (element == null)
-                {
-                    continue;
-                }
-
-                Write(element);
-            }
-        }
-
-        public override void Write(IRedResourceReference instance)
-        {
-            if (instance.DepotPath == "")
-            {
-                _writer.Write((ushort)0);
-                return;
-            }
-
-            var val = ("", instance.DepotPath, (ushort)instance.Flags);
-
-            if (!_imports.Contains(val))
-            {
-                _imports.Add(val);
-            }
-
-            ImportRef.Add(_writer.BaseStream.Position, val);
-            _writer.Write(GetImportIndex(val));
-        }
-
-        public override void Write(IRedResourceAsyncReference instance)
-        {
-            if (instance.DepotPath == "")
-            {
-                _writer.Write((ushort)0);
-                return;
-            }
-
-            var val = ("", instance.DepotPath, (ushort)instance.Flags);
-
-            if (!_imports.Contains(val))
-            {
-                _imports.Add(val);
-            }
-
-            ImportRef.Add(_writer.BaseStream.Position, val);
-            _writer.Write(GetImportIndex(val));
         }
     }
 }

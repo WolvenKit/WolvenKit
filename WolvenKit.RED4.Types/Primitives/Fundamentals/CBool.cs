@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace WolvenKit.RED4.Types
 {
     [RED("Bool")]
-    [DebuggerDisplay("{_value,nq}", Type = "CBool")]
+    [DebuggerDisplay("{(bool)this,nq}", Type = "CBool")]
     public readonly struct CBool : IRedPrimitive<bool>, IEquatable<CBool>
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
