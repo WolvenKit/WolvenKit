@@ -30,10 +30,10 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public override void Write(BinaryWriter file)
         {
-            file.Write((uint)Elements.Count);
+            file.Write((uint)Count);
             base.Write(file);
         }
 
-        
+
     }
 }
