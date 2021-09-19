@@ -10,8 +10,8 @@ using Splat;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Interaction;
-using WolvenKit.ViewModels.Editor;
 using WolvenKit.ViewModels.Shell;
+using WolvenKit.ViewModels.Tools;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Dialogs;
 
@@ -19,6 +19,9 @@ namespace WolvenKit.Views.Shell
 {
     public partial class RibbonView : ReactiveUserControl<RibbonViewModel>
     {
+        private AppViewModel _mainViewModel;
+
+
         public RibbonView()
         {
             ViewModel = Locator.Current.GetService<RibbonViewModel>();
@@ -50,6 +53,9 @@ namespace WolvenKit.Views.Shell
                         viewModel => viewModel._mainViewModel.AssetBrowserVM.AddSelectedCommand,
                         view => view.AddSelectedItemsButton).DisposeWith(disposables);
                 this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.AssetBrowserVM.ToggleModBrowserCommand,
+                        view => view.ModBrowserButton).DisposeWith(disposables);
+                this.BindCommand(ViewModel,
                         viewModel => viewModel._mainViewModel.AssetBrowserVM.OpenFileLocationCommand,
                         view => view.SearchOpenFileLocation).DisposeWith(disposables);
                 this.BindCommand(ViewModel,
@@ -73,6 +79,8 @@ namespace WolvenKit.Views.Shell
                     projectexplorercontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, b));
                 _mainViewModel.AssetBrowserVM.WhenAnyValue(x => x.IsActive).Subscribe(b =>
                     abcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, b));
+                //_mainViewModel.ActiveDocument.WhenAnyValue(x => x != null && x.IsActive).Subscribe(b =>
+                //    documentContextTab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, b));
 
                 #region commands
 
@@ -145,10 +153,10 @@ namespace WolvenKit.Views.Shell
                         viewModel => viewModel.ViewLogCommand,
                         view => view.ViewLogButton)
                     .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.ViewCodeEditorCommand,
-                        view => view.ViewCodeEditorButton)
-                    .DisposeWith(disposables);
+                //this.BindCommand(ViewModel,
+                //        viewModel => viewModel.ViewCodeEditorCommand,
+                //        view => view.ViewCodeEditorButton)
+                //    .DisposeWith(disposables);
 
                 //Options
                 //this.BindCommand(ViewModel,
@@ -204,7 +212,6 @@ namespace WolvenKit.Views.Shell
 
         #region properties
 
-        private AppViewModel _mainViewModel;
 
         #endregion
 
@@ -314,11 +321,11 @@ namespace WolvenKit.Views.Shell
 
         private void collapseSingleAB_Click(object sender, RoutedEventArgs e) => _mainViewModel.AssetBrowserVM.Collapse.Execute().Subscribe();
 
-        /// <summary>
-        /// Closes material drawer
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Button_Click_2(object sender, RoutedEventArgs e) => MatRepoDrawer.SetCurrentValue(HandyControl.Controls.Drawer.IsOpenProperty, false);
+        ///// <summary>
+        ///// Closes material drawer
+        ///// </summary>
+        ///// <param name="sender"></param>
+        ///// <param name="e"></param>
+        //private void Button_Click_2(object sender, RoutedEventArgs e) => MatRepoDrawer.SetCurrentValue(HandyControl.Controls.Drawer.IsOpenProperty, false);
     }
 }

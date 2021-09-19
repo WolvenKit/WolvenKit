@@ -34,6 +34,7 @@ namespace WolvenKit.Views.Templates
             DependencyProperty.Register(nameof(RedChunkPtr), typeof(IREDChunkPtr),
                 typeof(HandleTemplateView), new PropertyMetadata(OnRedChunkPtrChanged));
 
+        public event EventHandler<GoToChunkRequestedEventArgs> GoToChunkRequested;
 
         private static void OnRedChunkPtrChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -54,7 +55,8 @@ namespace WolvenKit.Views.Templates
 
             // get all possible chunks in the cr2w file
             var reftype = AssemblyDictionary.GetTypeByName(iptr.ReferenceType);
-            var available = AssemblyDictionary.GetSubClassesOf(reftype).Select(x => x.Name);
+            var available = AssemblyDictionary.GetSubClassesOf(reftype).Select(x => x.Name).ToList();
+            available.Add(reftype.Name);
 
             var availableChunks = iptr.Cr2wFile.Chunks.Where(x => available.Contains(x.REDType));
 
@@ -65,8 +67,6 @@ namespace WolvenKit.Views.Templates
 
             view.SelectedItem = iptr.GetReference();
         }
-
-
 
         private void ComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -80,7 +80,23 @@ namespace WolvenKit.Views.Templates
             }
 
             RedChunkPtr.SetValue(SelectedItem);
-            RedChunkPtr.IsSerialized = true;
         }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            var target = RedChunkPtr?.GetReference();
+            if (target == null)
+            {
+                return;
+            }
+
+            GoToChunkRequested?.Invoke(this, new GoToChunkRequestedEventArgs() {Export = target});
+
+        }
+    }
+
+    public class GoToChunkRequestedEventArgs : EventArgs
+    {
+        public ICR2WExport Export { get; set; }
     }
 }

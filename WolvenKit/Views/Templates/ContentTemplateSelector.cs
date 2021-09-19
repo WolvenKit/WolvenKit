@@ -19,23 +19,33 @@ namespace WolvenKit.Views.Templates
         public DataTemplate NumericTemplate { get; set; }
         public DataTemplate EnumTemplate { get; set; }
         public DataTemplate HandleTemplateView { get; set; }
-        //public DataTemplate ArrayTemplateView { get; set; }
         public DataTemplate RefTemplateView { get; set; }
+        public DataTemplate ColorTemplateView { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container) =>
             item is not ChunkPropertyViewModel editableVariable
                 ? null
-                : editableVariable.Property switch
-                {
-                    IREDBool => RedboolTemplate,
-                    IREDString => StringTemplateView,
-                    IREDIntegerType => NumericTemplate,
-                    IREDEnum => EnumTemplate,
-                    IREDChunkPtr => HandleTemplateView,
-                    IREDRef => RefTemplateView,
+                : GetTemplate(editableVariable.Property);
 
-                    IREDArray => CommmonTemplate,
-                    _ => CommmonTemplate
-                };
+        private DataTemplate GetTemplate(IEditableVariable variable) =>
+            variable switch
+            {
+                IREDBool => RedboolTemplate,
+                IREDString => StringTemplateView,
+                IREDIntegerType => NumericTemplate,
+                IREDEnum => EnumTemplate,
+                IREDChunkPtr => HandleTemplateView,
+                IREDRef => RefTemplateView,
+                IREDColor x => ColorTemplateView,
+                IREDArray => CommmonTemplate,
+                _ => CommmonTemplate
+            };
+
+        //private DataTemplate GetVariantDataTemplate(IREDVariant variant)
+        //{
+        //    var wrapped = variant.Variant;
+        //    var t = GetTemplate(wrapped);
+        //    return t;
+        //}
     }
 }

@@ -91,9 +91,9 @@ namespace CP77Tools.Tasks
             {
                 var bm = new ArchiveManager(_hashService);
                 bm.LoadFromFolder(new DirectoryInfo(archiveDepot));
-                exportArgs.Get<MeshExportArgs>().Archives = bm.Archives.Values.Cast<Archive>().ToList();
-                exportArgs.Get<MorphTargetExportArgs>().Archives = bm.Archives.Values.Cast<Archive>().ToList();
-                exportArgs.Get<AnimationExportArgs>().Archives = bm.Archives.Values.Cast<Archive>().ToList();
+                exportArgs.Get<MeshExportArgs>().Archives = bm.Archives.Items.Cast<Archive>().ToList();
+                exportArgs.Get<MorphTargetExportArgs>().Archives = bm.Archives.Items.Cast<Archive>().ToList();
+                exportArgs.Get<AnimationExportArgs>().Archives = bm.Archives.Items.Cast<Archive>().ToList();
             }
             else
             {
@@ -102,9 +102,9 @@ namespace CP77Tools.Tasks
                 {
                     var bm = new ArchiveManager(_hashService);
                     bm.LoadFromFolder(new DirectoryInfo(archiveDepot));
-                    exportArgs.Get<MeshExportArgs>().Archives = bm.Archives.Values.Cast<Archive>().ToList();
-                    exportArgs.Get<MorphTargetExportArgs>().Archives = bm.Archives.Values.Cast<Archive>().ToList();
-                    exportArgs.Get<AnimationExportArgs>().Archives = bm.Archives.Values.Cast<Archive>().ToList();
+                    exportArgs.Get<MeshExportArgs>().Archives = bm.Archives.Items.Cast<Archive>().ToList();
+                    exportArgs.Get<MorphTargetExportArgs>().Archives = bm.Archives.Items.Cast<Archive>().ToList();
+                    exportArgs.Get<AnimationExportArgs>().Archives = bm.Archives.Items.Cast<Archive>().ToList();
                 }
                 else
                 {
@@ -113,20 +113,15 @@ namespace CP77Tools.Tasks
                     {
                         var bm = new ArchiveManager(_hashService);
                         bm.LoadFromFolder(new DirectoryInfo(archiveDepot));
-                        exportArgs.Get<MeshExportArgs>().Archives = bm.Archives.Values.Cast<Archive>().ToList();
-                        exportArgs.Get<MorphTargetExportArgs>().Archives = bm.Archives.Values.Cast<Archive>().ToList();
-                        exportArgs.Get<AnimationExportArgs>().Archives = bm.Archives.Values.Cast<Archive>().ToList();
+                        exportArgs.Get<MeshExportArgs>().Archives = bm.Archives.Items.Cast<Archive>().ToList();
+                        exportArgs.Get<MorphTargetExportArgs>().Archives = bm.Archives.Items.Cast<Archive>().ToList();
+                        exportArgs.Get<AnimationExportArgs>().Archives = bm.Archives.Items.Cast<Archive>().ToList();
                     }
                 }
             }
 
             foreach (var fileInfo in filesToExport)
             {
-                if (!Enum.TryParse(inputFileInfo.Extension.TrimStart('.'), true, out ECookedFileFormat extAsEnum))
-                {
-                    continue;
-                }
-
                 var di = string.IsNullOrEmpty(outDir) ? null : new DirectoryInfo(outDir);
                 if (_modTools.Export(fileInfo, exportArgs, basedir, di, forcebuffers))
                 {
@@ -136,7 +131,6 @@ namespace CP77Tools.Tasks
                 {
                     _loggerService.Error($"Failed to export {path}.");
                 }
-
             }
 
             return;

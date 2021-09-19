@@ -72,7 +72,7 @@ namespace WolvenKit.CLI
                 var gameDirectory = Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
                 var exe = new FileInfo(Path.Combine(gameDirectory, "bin", "x64", Constants.Red4Exe));
                 var bm = new ArchiveManager(_hashService);
-                bm.LoadAll(exe, false);
+                bm.LoadGameArchives(exe, false);
                 var groupedFiles = bm.GetGroupedFiles();
                 _logger.LogInformation("ArchiveManager loaded");
 
@@ -106,7 +106,7 @@ namespace WolvenKit.CLI
                     for (var i = 1; i < fileslist.Count + 1; i++)
                     {
                         var file = fileslist[i - 1];
-                        var ar = bm.Archives[file.Archive.ArchiveAbsolutePath] as Archive;
+                        var ar = bm.Archives.Lookup(file.Archive.ArchiveAbsolutePath).Value as Archive;
                         using var ms = new MemoryStream();
                         ar.CopyFileToStreamWithoutBuffers(ms, file.NameHash64);
 
@@ -143,7 +143,7 @@ namespace WolvenKit.CLI
                 var gameDirectory = Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
                 var exe = new FileInfo(Path.Combine(gameDirectory, "bin", "x64", Constants.Red4Exe));
                 var bm = new ArchiveManager(_hashService);
-                bm.LoadAll(exe, false);
+                bm.LoadGameArchives(exe, false);
                 var groupedFiles = bm.GetGroupedFiles();
                 _logger.LogInformation("ArchiveManager loaded");
 
@@ -180,7 +180,7 @@ namespace WolvenKit.CLI
                     for (var i = 1; i < fileslist.Count + 1; i++)
                     {
                         var file = fileslist[i - 1];
-                        var ar = bm.Archives[file.Archive.ArchiveAbsolutePath] as Archive;
+                        var ar = bm.Archives.Lookup(file.Archive.ArchiveAbsolutePath).Value as Archive;
                         using var ms = new MemoryStream();
                         ar.CopyFileToStreamWithoutBuffers(ms, file.NameHash64);
 

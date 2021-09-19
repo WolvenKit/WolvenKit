@@ -53,6 +53,9 @@ namespace WolvenKit.Common.Tools
                             for (var i = 0; i < listOfObjects.Count; i++)
                             {
                                 var jitem = listOfObjects[i];
+
+                                //TODO: bytearrays
+
                                 var element = redArray.GetElementInstance(i.ToString());
                                 // parse the elements according to the array type
                                 element.SetFromJObject(jitem);
@@ -186,6 +189,9 @@ namespace WolvenKit.Common.Tools
                     // serialize curves as array
                     case IREDArray:
                     case ICurveDataAccessor:
+
+                        //TODO: bytearrays
+
                         dynamic array = data;
                         if (array.Elements is not IList dyn)
                         {

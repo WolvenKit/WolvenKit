@@ -51,7 +51,7 @@ namespace WolvenKit.MSTests
                     continue;
                 }
 
-                var ar = s_bm.Archives[file.Archive.ArchiveAbsolutePath] as Archive;
+                var ar = s_bm.Archives.Lookup(file.Archive.ArchiveAbsolutePath).Value as Archive;
                 using var ms = new MemoryStream();
                 ar?.CopyFileToStream(ms, file.NameHash64, false);
                 ms.Seek(0, SeekOrigin.Begin);
@@ -468,7 +468,7 @@ namespace WolvenKit.MSTests
             {
                 var fileList = fileGroup.ToList();
 
-                var ar = s_bm.Archives[fileGroup.Key] as Archive;
+                var ar = s_bm.Archives.Lookup(fileGroup.Key).Value as Archive;
 
                 using var fs = new FileStream(fileGroup.Key, FileMode.Open, FileAccess.Read, FileShare.Read);
                 using var mmf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.Read, HandleInheritability.None, false);

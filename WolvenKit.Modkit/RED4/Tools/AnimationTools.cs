@@ -38,22 +38,30 @@ namespace WolvenKit.Modkit.RED4
                 animStream.DecompressAndCopySegment(ms, b.DiskSize, b.MemSize);
                 animDataBuffers.Add(ms);
             }
-            RawArmature Rig = null;
+
+            var Rig = new RawArmature();
+            var hash = FNV1A64HashAlgorithm.HashString(blob.Rig.DepotPath);
+            foreach (var ar in archives)
             {
-                ulong hash = FNV1A64HashAlgorithm.HashString(blob.Rig.DepotPath);
-                foreach (Archive ar in archives)
+                if (ar.Files.ContainsKey(hash))
                 {
-                    if (ar.Files.ContainsKey(hash))
-                    {
-                        var ms = new MemoryStream();
-                        ModTools.ExtractSingleToStream(ar, hash, ms);
-                        Rig = new RIG(_wolvenkitFileService).ProcessRig(ms);
-                        break;
-                    }
+                    var ms = new MemoryStream();
+                    ModTools.ExtractSingleToStream(ar, hash, ms);
+                    Rig = new RIG(_wolvenkitFileService).ProcessRig(ms);
+                    break;
                 }
             }
-            if (Rig.BoneCount < 1)
+
+            if (Rig is null)
+            {
                 return false;
+            }
+
+            if (Rig.BoneCount < 1)
+            {
+                return false;
+            }
+
             var model = ModelRoot.CreateModel();
             var skin = model.CreateSkin();
             skin.BindJoints(RIG.ExportNodes(ref model, Rig).Values.ToArray());

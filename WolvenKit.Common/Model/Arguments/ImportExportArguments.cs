@@ -231,7 +231,8 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public class XbmImportArgs : ImportArgs
     {
-        public Enums.GpuWrapApieTextureGroup TextureGroup { get; internal set; }
+        public Enums.GpuWrapApieTextureGroup TextureGroup { get; internal set; } =
+            Enums.GpuWrapApieTextureGroup.TEXG_Generic_Color;
 
         /// <summary>
         /// String Override to display info in datagrid.

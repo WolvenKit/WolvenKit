@@ -847,16 +847,7 @@ namespace WolvenKit.MSTests
                 {
                     if (ulong.TryParse(line.Split(',').First(), out var hash))
                     {
-                        foreach (var archive in s_bm.Archives)
-                        {
-                            foreach (var gameFile in archive.Value.Files)
-                            {
-                                if (gameFile.Key == hash)
-                                {
-                                    filesToTest.Add((FileEntry)gameFile.Value);
-                                }
-                            }
-                        }
+                        filesToTest.Add(s_bm.Lookup(hash).Value as FileEntry);
                     }
                 }
             }
@@ -911,7 +902,7 @@ namespace WolvenKit.MSTests
             {
                 var fileList = fileGroup.ToList();
 
-                var ar = s_bm.Archives[fileGroup.Key] as Archive;
+                var ar = s_bm.Archives.Lookup(fileGroup.Key).Value as Archive;
 
                 using var fs = new FileStream(fileGroup.Key, FileMode.Open, FileAccess.Read, FileShare.Read);
                 using var mmf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.Read, HandleInheritability.None, false);

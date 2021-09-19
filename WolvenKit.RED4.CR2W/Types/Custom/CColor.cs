@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.Serialization;
@@ -26,12 +28,12 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public override CVariable SetValue(object val)
         {
-            this.IsSerialized = true;
+            IsSerialized = true;
             Value = val switch
             {
-                Color => Value,
-                CColor cvar => cvar.Value,
-                _ => Value
+                Color color => color,
+                CColor ccolor => ccolor.Value,
+                _ => throw new ArgumentOutOfRangeException()
             };
 
             return this;
@@ -39,5 +41,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public object GetValue() => Value;
 
+        // remove editable sub properties: serialization should have a custom serializer for CColor
+        public override List<IEditableVariable> GetEditableVariables() => new();
     }
 }

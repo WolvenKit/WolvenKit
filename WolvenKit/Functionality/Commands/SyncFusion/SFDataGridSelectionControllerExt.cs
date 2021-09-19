@@ -6,7 +6,6 @@ using Syncfusion.UI.Xaml.Grid.Helpers;
 using Syncfusion.UI.Xaml.ScrollAxis;
 using System.Collections.Specialized;
 using Splat;
-using WolvenKit.ViewModels.Editor;
 using WolvenKit.Common.Interfaces;
 
 namespace WolvenKit
@@ -73,7 +72,7 @@ namespace WolvenKit
         protected override void ProcessSelectedItemsChanged(NotifyCollectionChangedEventArgs e)
         {
             base.ProcessSelectedItemsChanged(e);
-
+            
             if (e.Action == NotifyCollectionChangedAction.Reset)
             {
                 if (DataGrid.SelectedItem is ISelectableViewModel m)

@@ -16,6 +16,7 @@ using WolvenKit.Common.Services;
 using CP77.CR2W;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Modkit.RED4.RigFile;
+
 namespace WolvenKit.Modkit.RED4
 {
     using Vec4 = System.Numerics.Vector4;
@@ -232,7 +233,7 @@ namespace WolvenKit.Modkit.RED4
             for (int i = 0; i < SubMeshC; i++)
             {
                 UInt32 diffsCount = NumVertexDiffsInEachChunk[i];
-                Vec3[] vertexDelta = new Vec3[diffsCount];
+                TargetVec3[] vertexDelta = new TargetVec3[diffsCount];
                 Vec3[] normalDelta = new Vec3[diffsCount];
                 Vec3[] tangentDelta = new Vec3[diffsCount];
 
@@ -248,15 +249,22 @@ namespace WolvenKit.Modkit.RED4
                     }
                 }
 
-
                 for (int e = 0; e < diffsCount; e++)
                 {
-                    Vec4 v = Converters.TenBitUnsigned(diffsbr.ReadUInt32());
-                    vertexDelta[e] = new Vec3((v.X * TargetPositionDiffScale.X + TargetPositionDiffOffset.X), (v.Z * TargetPositionDiffScale.Z + TargetPositionDiffOffset.Z), -(v.Y * TargetPositionDiffScale.Y + TargetPositionDiffOffset.Y));
-                    Vec4 n = Converters.TenBitShifted(diffsbr.ReadUInt32());
-                    normalDelta[e] = new Vec3(n.X, n.Z, -n.Y);
-                    Vec4 t = Converters.TenBitShifted(diffsbr.ReadUInt32());
-                    tangentDelta[e] = new Vec3(t.X, t.Z, -t.Y);
+                    if (diffsbr.BaseStream.Position < (diffsbr.BaseStream.Length - 3))
+                    {
+                        TargetVec4 v = Converters.TenBitUnsigned(diffsbr.ReadUInt32());
+
+                        var x = v.X * TargetPositionDiffScale.X + TargetPositionDiffOffset.X;
+                        var y = v.Y * TargetPositionDiffScale.Y + TargetPositionDiffOffset.Y;
+                        var z = v.Z * TargetPositionDiffScale.Z + TargetPositionDiffOffset.Z;
+
+                        vertexDelta[e] = new TargetVec3(x, z, -y);
+                        Vec4 n = Converters.TenBitShifted(diffsbr.ReadUInt32());
+                        normalDelta[e] = new Vec3(n.X, n.Z, -n.Y);
+                        Vec4 t = Converters.TenBitShifted(diffsbr.ReadUInt32());
+                        tangentDelta[e] = new Vec3(t.X, t.Z, -t.Y);
+                    }                    
                 }
 
                 UInt16[] vertexMapping = new UInt16[diffsCount];
@@ -275,7 +283,10 @@ namespace WolvenKit.Modkit.RED4
 
                 for (int e = 0; e < diffsCount; e++)
                 {
-                    vertexMapping[e] = mappingbr.ReadUInt16();
+                    if (mappingbr.BaseStream.Position < (mappingbr.BaseStream.Length - 1))
+                    {
+                        vertexMapping[e] = mappingbr.ReadUInt16();
+                    }
                 }
 
                 rawtarget[i] = new RawTargetContainer()
@@ -319,7 +330,9 @@ namespace WolvenKit.Modkit.RED4
                 byte[] bytes = texbr.ReadBytes((int)TargetDiffsDataSize[i]);
 
                 MemoryStream ms = new MemoryStream();
-                DDSMetadata metadata = new DDSMetadata(TargetDiffsWidth[i], TargetDiffsWidth[i], TargetDiffsMipLevelCounts[i], EFormat.BC7_UNORM, 16, false, 0, true);
+                DDSMetadata metadata = new DDSMetadata(
+                    TargetDiffsWidth[i], TargetDiffsWidth[i],
+                    1, 1, TargetDiffsMipLevelCounts[i], 0,0, DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 16, true);
                 DDSUtils.GenerateAndWriteHeader(ms, metadata);
                 BinaryWriter bw = new BinaryWriter(ms);
                 bw.Write(bytes);

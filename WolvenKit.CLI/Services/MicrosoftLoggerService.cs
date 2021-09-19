@@ -1,12 +1,10 @@
 using System;
 using DynamicData;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
-using WolvenKit.Core.Services;
 
-namespace WolvenKit.CLI
+namespace WolvenKit.CLI.Services
 {
     public class MicrosoftLoggerService : ILoggerService
     {
@@ -47,9 +45,18 @@ namespace WolvenKit.CLI
         // Normal
         public void Log(string msg, Logtype type = Logtype.Normal) => LogString(msg, type);
 
-        
+
         public void Success(string msg) => LogString(msg, Logtype.Success);
         public IObservable<IChangeSet<LogEntry>> Connect() => throw new NotImplementedException();
+
+        public void Error(Exception exception)
+        {
+            var msg =
+                $"========================\r\n" +
+                $"{exception.ToString()}" +
+                $"\r\n========================";
+            Error(msg);
+        }
 
         public void Info(string s) => LogString(s, Logtype.Important);
         public void Important(string s) => LogString(s, Logtype.Important);

@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using DynamicData;
-using ProtoBuf;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
@@ -15,12 +14,10 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Models;
-using WolvenKit.Modkit.RED4;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.TweakDB;
 
 namespace WolvenKit.Functionality.Controllers
 {
@@ -36,8 +33,6 @@ namespace WolvenKit.Functionality.Controllers
         private readonly IHashService _hashService;
         private readonly IModTools _modTools;
         private readonly IArchiveManager _archiveManager;
-
-        private readonly SourceList<RedFileSystemModel> _rootCache;
 
         #endregion
 
@@ -56,17 +51,7 @@ namespace WolvenKit.Functionality.Controllers
             _modTools = modTools;
             _archiveManager = gameArchiveManager;
 
-            _rootCache = new SourceList<RedFileSystemModel>();
         }
-
-        #region Properties
-
-        [Reactive] public bool IsManagerLoaded { get; set; }
-
-        //public IObservable<IChangeSet<RedDirectoryViewModel, ulong>> ConnectHierarchy() => _rootCache.Connect();
-        public IObservable<IChangeSet<RedFileSystemModel>> ConnectHierarchy() => _rootCache.Connect();
-
-        #endregion Properties
 
         #region Methods
 
@@ -87,7 +72,7 @@ namespace WolvenKit.Functionality.Controllers
 
         private IArchiveManager LoadArchiveManager()
         {
-            if (_archiveManager != null && IsManagerLoaded)
+            if (_archiveManager != null && _archiveManager.IsManagerLoaded)
             {
                 return _archiveManager;
             }
@@ -117,7 +102,7 @@ namespace WolvenKit.Functionality.Controllers
                     var sw = new Stopwatch();
                     sw.Start();
 
-                    _archiveManager.LoadAll(new FileInfo(_settingsManager.CP77ExecutablePath));
+                    _archiveManager.LoadGameArchives(new FileInfo(_settingsManager.CP77ExecutablePath));
 
                     sw.Stop();
                     var ms = sw.ElapsedMilliseconds;
@@ -131,7 +116,7 @@ namespace WolvenKit.Functionality.Controllers
             }
             catch (Exception e)
             {
-                _loggerService.Log(e.Message);
+                _loggerService.Error(e);
                 throw;
 
 
@@ -146,18 +131,12 @@ namespace WolvenKit.Functionality.Controllers
             }
             finally
             {
-                IsManagerLoaded = true;
                 _loggerService.Success("Finished loading archive manager.");
             }
-            
-            _rootCache.Edit(innerCache =>
-            {
-                innerCache.Clear();
-                //innerCache.AddOrUpdate(ArchiveManager.RootNode);
-                innerCache.Add(_archiveManager.RootNode);
-            });
 
+#pragma warning disable 162
             return _archiveManager;
+#pragma warning restore 162
         }
 
         public List<string> GetAvaliableClasses() => CR2WTypeManager.AvailableTypes.ToList();
@@ -213,19 +192,60 @@ namespace WolvenKit.Functionality.Controllers
             {
                 Directory.Delete(cp77Proj.PackedModDirectory, true);
             }
-            catch
+            catch (Exception e)
             {
-
+                _loggerService.Error(e);
             }
 
-            _modTools.Pack(
-                new DirectoryInfo(cp77Proj.ModDirectory),
-                new DirectoryInfo(cp77Proj.PackedModDirectory),
-                $"mod{cp77Proj.Name}");
-            _loggerService.Info("Packing complete!");
+            // pack mod
+            var modfiles = Directory.GetFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
+            if (modfiles.Any())
+            {
+                _modTools.Pack(
+                    new DirectoryInfo(cp77Proj.ModDirectory),
+                    new DirectoryInfo(cp77Proj.PackedModDirectory),
+                    $"mod{cp77Proj.Name}");
+                _loggerService.Info("Packing complete!");
+            }
+
+            // compile tweak files
+            CompileTweakFiles(cp77Proj);
 
             InstallMod();
+
             return Task.FromResult(true);
+        }
+
+        private void CompileTweakFiles(Cp77Project cp77Proj)
+        {
+            try
+            {
+                Directory.Delete(cp77Proj.PackedTweakDirectory, true);
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error(e);
+            }
+
+            var tweakFiles = Directory.GetFiles(cp77Proj.TweakDirectory, "*.tweak", SearchOption.AllDirectories);
+            foreach (var f in tweakFiles)
+            {
+                var text = File.ReadAllText(f);
+                var filename = Path.GetFileNameWithoutExtension(f) + ".bin";
+                var outPath = Path.Combine(cp77Proj.PackedTweakDirectory, filename);
+
+                if (!RED4.TweakDB.Serialization.Serialization.Deserialize(text, out var dict))
+                {
+                    continue;
+                }
+
+                var db = new TweakDB();
+                foreach (var (key, value) in dict)
+                {
+                    db.Add(key, value);
+                }
+                db.Save(outPath);
+            }
         }
 
         /// <summary>
@@ -307,14 +327,14 @@ namespace WolvenKit.Functionality.Controllers
 
         public void AddToMod(ulong hash)
         {
-            var file = _archiveManager.LookupFile(hash);
-            if (file != null)
+            var file = _archiveManager.Lookup(hash);
+            if (file.HasValue)
             {
-                AddToMod(file);
-            } 
+                AddToMod(file.Value);
+            }
         }
 
-        public void AddToMod(IGameFile file)
+        private void AddToMod(IGameFile file)
         {
             var project = _projectManager.ActiveProject;
             switch (project.GameType)
@@ -353,7 +373,7 @@ namespace WolvenKit.Functionality.Controllers
                     break;
                 }
                 default:
-                    break;
+                    throw new ArgumentOutOfRangeException();
             }
         }
 

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<WolvenKitFileDefinitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Categories>
+    <FileCategoryModel>
+      <Name>Redscript</Name>
+      <Files>
+        <AddFileModel>
+          <Name>Redscript file</Name>
+          <Description>A blank redscript file</Description>
+          <Extension>SWIFT</Extension>
+          <Type>Redscript</Type>
+        </AddFileModel>
+      </Files>
+    </FileCategoryModel>
+    <FileCategoryModel>
+      <Name>Tweak DB</Name>
+      <Files>
+        <AddFileModel>
+          <Name>Tweak file</Name>
+          <Description>A blank tweak delta file</Description>
+          <Extension>TWEAK</Extension>
+          <Type>Tweak</Type>
+        </AddFileModel>
+      </Files>
+    </FileCategoryModel>
+  </Categories>
+</WolvenKitFileDefinitions>

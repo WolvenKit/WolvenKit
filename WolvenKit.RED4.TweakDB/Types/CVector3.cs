@@ -1,3 +1,4 @@
+using System;
 using WolvenKit.RED4.TweakDB.Attributes;
 
 namespace WolvenKit.RED4.TweakDB.Types
@@ -15,5 +16,6 @@ namespace WolvenKit.RED4.TweakDB.Types
 
         public override string Name => "Vector3";
         public override string ToString() => $"Vector3, X = {X.Value}, Y = {Y.Value}, Z = {Z.Value}";
+        
     }
 }
