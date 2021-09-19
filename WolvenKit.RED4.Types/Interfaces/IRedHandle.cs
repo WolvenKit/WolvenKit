@@ -4,12 +4,15 @@ using System.Collections.Generic;
 
 namespace WolvenKit.RED4.Types
 {
-    public interface IRedBaseHandle
+    public interface IRedRemoveable
+    {
+        public void Remove();
+    }
+
+    public interface IRedBaseHandle : IRedRemoveable
     {
         public Red4File File { get; }
         public int Pointer { get; set; }
-
-        public void Remove();
     }
 
     public interface IRedBaseHandle<T> : IRedBaseHandle where T : IRedClass
