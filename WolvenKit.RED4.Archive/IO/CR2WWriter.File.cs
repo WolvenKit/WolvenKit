@@ -317,7 +317,7 @@ namespace WolvenKit.RED4.Archive.IO
             var chunkIndex = -1;
             for (int i = 0; i < _file.Chunks.Count; i++)
             {
-                if (_file.Chunks[i] == embeddedData.Content)
+                if (Equals(_file.Chunks[i], embeddedData.Content))
                 {
                     chunkIndex = i;
                     break;

@@ -15,8 +15,8 @@ namespace WolvenKit.RED4.Types
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public byte[] Buffer
         {
-            get => File.Buffers[Pointer].Data;
-            set => File.Buffers[Pointer].Data = value;
+            get => File._buffers[Pointer].Data;
+            set => File._buffers[Pointer].Data = value;
         }
 
         public bool Equals(SerializationDeferredDataBuffer other)

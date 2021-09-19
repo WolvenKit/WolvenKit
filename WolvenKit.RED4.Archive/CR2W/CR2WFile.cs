@@ -36,16 +36,25 @@ namespace WolvenKit.RED4.Archive.CR2W
 
         
         public IList<ICR2WProperty> Properties { get; }
+
+        public IRedClass RootChunk => Chunks[0];
+
+        public IList<IRedClass> Chunks
+        {
+            get => _chunks;
+        }
+
+        public IList<IRedBuffer> Buffers
+        {
+            get => _buffers;
+        }
+
         public IList<ICR2WEmbeddedFile> EmbeddedFiles { get; }
 
 
         public CR2WFile()
         {
-            Names = new List<CName>();     //block 2
-            Imports = new List<IRedImport>();     //block 3
             Properties = new List<ICR2WProperty>();     //block 4
-            Chunks = new List<IRedClass>();             //block 5
-            Buffers = new List<IRedBuffer>();          //block 6
             EmbeddedFiles = new List<ICR2WEmbeddedFile>();       //block 7
         }
     }

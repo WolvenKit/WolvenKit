@@ -16,8 +16,8 @@ namespace WolvenKit.RED4.Types
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public T Chunk
         {
-            get => (T)File._handleManager.Get(Pointer);
-            set => File._handleManager.Set(this, value);
+            get => (T)File.HandleManager.Get(Pointer);
+            set => File.HandleManager.Set(this, value);
         }
 
         internal CWeakHandle(Red4File file, int pointer)
@@ -26,7 +26,7 @@ namespace WolvenKit.RED4.Types
             Pointer = pointer;
         }
 
-        public void Remove() => File._handleManager.RemoveHandle(this);
+        public void Remove() => File.HandleManager.RemoveHandle(this);
 
         public bool Equals(CWeakHandle<T> other)
         {

@@ -16,6 +16,8 @@ namespace WolvenKit.RED4.IO
         protected readonly BinaryReader _reader;
 
         protected Red4File _outputFile;
+        protected List<CName> _namesList = new();
+        protected List<IRedImport> _importsList = new();
 
         private bool _disposed;
 
@@ -97,12 +99,12 @@ namespace WolvenKit.RED4.IO
 
         protected CName GetStringValue(ushort index)
         {
-            if (index >= _outputFile.Names.Count)
+            if (index >= _namesList.Count)
             {
                 throw new Exception();
             }
 
-            return _outputFile.Names[index];
+            return _namesList[index];
         }
 
         #region Fundamentals
@@ -352,7 +354,7 @@ namespace WolvenKit.RED4.IO
 
         public virtual IRedHandle<T> ReadCHandle<T>() where T : IRedClass
         {
-            return _outputFile._handleManager.CreateCHandle<T>(_reader.ReadInt32() - 1);
+            return _outputFile.HandleManager.CreateCHandle<T>(_reader.ReadInt32() - 1);
         }
 
         public virtual IRedLegacySingleChannelCurve ReadCLegacySingleChannelCurve(Type type)
@@ -418,8 +420,8 @@ namespace WolvenKit.RED4.IO
             {
                 return new CResourceAsyncReference<T>
                 {
-                    DepotPath = _outputFile.Imports[index - 1].DepotPath,
-                    Flags = _outputFile.Imports[index - 1].Flags
+                    DepotPath = _importsList[index - 1].DepotPath,
+                    Flags = _importsList[index - 1].Flags
                 };
             }
 
@@ -448,8 +450,8 @@ namespace WolvenKit.RED4.IO
             {
                 return new CResourceReference<T>
                 {
-                    DepotPath = _outputFile.Imports[index - 1].DepotPath,
-                    Flags = _outputFile.Imports[index - 1].Flags
+                    DepotPath = _importsList[index - 1].DepotPath,
+                    Flags = _importsList[index - 1].Flags
                 };
             }
 
@@ -503,7 +505,7 @@ namespace WolvenKit.RED4.IO
 
         public virtual IRedWeakHandle<T> ReadCWeakHandle<T>() where T : IRedClass
         {
-            return _outputFile._handleManager.CreateCWeakHandle<T>(_reader.ReadInt32() - 1);
+            return _outputFile.HandleManager.CreateCWeakHandle<T>(_reader.ReadInt32() - 1);
         }
 
         #endregion General

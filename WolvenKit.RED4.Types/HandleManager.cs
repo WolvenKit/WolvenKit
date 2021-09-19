@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace WolvenKit.RED4.Types
 {
-    internal class HandleManager
+    public sealed class HandleManager
     {
         private Red4File _file;
 
@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.Types
             _file = red4File;
         }
 
-        public void RegisterHandle(IRedBaseHandle handle)
+        internal void RegisterHandle(IRedBaseHandle handle)
         {
             if (_refList.All(x => x.Pointer != handle.Pointer))
             {
@@ -26,11 +26,11 @@ namespace WolvenKit.RED4.Types
 
         public CHandle<T> CreateCHandle<T>(IRedClass cls) where T : IRedClass
         {
-            var pointer = _file.Chunks.IndexOf(cls);
+            var pointer = _file._chunks.IndexOf(cls);
             if (pointer == -1)
             {
-                _file.Chunks.Add(cls);
-                pointer = _file.Chunks.Count - 1;
+                _file._chunks.Add(cls);
+                pointer = _file._chunks.Count - 1;
             }
 
             var result = new CHandle<T>(_file, pointer);
@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.Types
             return result;
         }
 
-        public CHandle<T> CreateCHandle<T>(int pointer) where T : IRedClass
+        internal CHandle<T> CreateCHandle<T>(int pointer) where T : IRedClass
         {
             var result = new CHandle<T>(_file, pointer);
 
@@ -51,11 +51,11 @@ namespace WolvenKit.RED4.Types
 
         public CWeakHandle<T> CreateCWeakHandle<T>(IRedClass cls) where T : IRedClass
         {
-            var pointer = _file.Chunks.IndexOf(cls);
+            var pointer = _file._chunks.IndexOf(cls);
             if (pointer == -1)
             {
-                _file.Chunks.Add(cls);
-                pointer = _file.Chunks.Count - 1;
+                _file._chunks.Add(cls);
+                pointer = _file._chunks.Count - 1;
             }
 
             var result = new CWeakHandle<T>(_file, pointer);
@@ -65,7 +65,7 @@ namespace WolvenKit.RED4.Types
             return result;
         }
 
-        public CWeakHandle<T> CreateCWeakHandle<T>(int pointer) where T : IRedClass
+        internal CWeakHandle<T> CreateCWeakHandle<T>(int pointer) where T : IRedClass
         {
             var result = new CWeakHandle<T>(_file, pointer);
 
@@ -74,27 +74,27 @@ namespace WolvenKit.RED4.Types
             return result;
         }
 
-        public IRedClass Get(int pointer)
+        internal IRedClass Get(int pointer)
         {
-            return _file.Chunks[pointer];
+            return _file._chunks[pointer];
         }
 
-        public void Set(IRedBaseHandle handle, IRedClass cls)
+        internal void Set(IRedBaseHandle handle, IRedClass cls)
         {
             RemoveHandle(handle);
 
-            var index = _file.Chunks.IndexOf(cls);
+            var index = _file._chunks.IndexOf(cls);
             if (index == -1)
             {
-                _file.Chunks.Add(cls);
-                index = _file.Chunks.Count - 1;
+                _file._chunks.Add(cls);
+                index = _file._chunks.Count - 1;
             }
 
             handle.Pointer = index;
             RegisterHandle(handle);
         }
 
-        public void RemoveHandle(IRedBaseHandle cHandle)
+        internal void RemoveHandle(IRedBaseHandle cHandle)
         {
             var chunkRef = _refList.FirstOrDefault(x => x.Pointer == cHandle.Pointer);
             if (chunkRef == null)
@@ -113,7 +113,7 @@ namespace WolvenKit.RED4.Types
 
         private void RemoveChunk(int index)
         {
-            for (int i = index + 1; i < _file.Chunks.Count; i++)
+            for (int i = index + 1; i < _file._chunks.Count; i++)
             {
                 var chunkRef = _refList.FirstOrDefault(x => x.Pointer == i);
                 for (int j = 0; j < chunkRef.Handles.Count; j++)
@@ -121,7 +121,7 @@ namespace WolvenKit.RED4.Types
                     chunkRef.Handles[j].Pointer--;
                 }
             }
-            _file.Chunks.RemoveAt(index);
+            _file._chunks.RemoveAt(index);
             foreach (var chunkRef in _refList)
             {
                 if (chunkRef.Pointer > index)

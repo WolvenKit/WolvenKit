@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             // read strings - block 1 (index 0)
             var stringDict = ReadStringDict(tableHeaders[0]);
-            _cr2wFile.Debug.Strings = new List<CName>(_cr2wFile.Names);
+            _cr2wFile.Debug.Strings = new List<CName>(_namesList);
 
             // read the other tables
 
@@ -73,13 +73,13 @@ namespace WolvenKit.RED4.Archive.IO
             _cr2wFile.Debug.NameInfos = nameInfoList;
             foreach (var nameInfo in nameInfoList)
             {
-                _cr2wFile.Names.Add(ReadName(nameInfo, stringDict));
+                _namesList.Add(ReadName(nameInfo, stringDict));
             }
 
             _cr2wFile.Debug.ImportInfos = importInfoList;
             foreach (var importInfo in importInfoList)
             {
-                _cr2wFile.Imports.Add(ReadImport(importInfo, stringDict));
+                _importsList.Add(ReadImport(importInfo, stringDict));
             }
 
             _cr2wFile.Debug.PropertyInfos = propertyInfoList;
@@ -138,7 +138,7 @@ namespace WolvenKit.RED4.Archive.IO
         {
             return new CR2WImport
             {
-                ClassName = _cr2wFile.Names[info.className],
+                ClassName = _namesList[info.className],
                 DepotPath = stringDict[info.offset],
                 Flags = (InternalEnums.EImportFlags)info.flags
             };
@@ -153,7 +153,7 @@ namespace WolvenKit.RED4.Archive.IO
         {
             Debug.Assert(BaseStream.Position == info.dataOffset);
 
-            var result = RedTypeManager.Create(_cr2wFile.Names[info.className]);
+            var result = RedTypeManager.Create(_namesList[info.className]);
 
             var startPos = BaseStream.Position;
             ReadClass(result, info.dataSize);
@@ -206,7 +206,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             return new CR2WEmbedded
             {
-                FileName = _cr2wFile.Imports[(int)info.importIndex - 1].DepotPath,
+                FileName = _importsList[(int)info.importIndex - 1].DepotPath,
                 Content = _cr2wFile.Chunks[(int)info.chunkIndex]
             };
         }

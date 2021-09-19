@@ -4,16 +4,17 @@ namespace WolvenKit.RED4.Types
 {
     public class Red4File
     {
-        internal HandleManager _handleManager;
+        public HandleManager HandleManager;
 
-        public IList<CName> Names { get; set; }
-        public IList<IRedImport> Imports { get; set; }
-        public IList<IRedClass> Chunks { get; set; }
-        public IList<IRedBuffer> Buffers { get; set; }
+        protected internal IList<IRedClass> _chunks;
+        protected internal IList<IRedBuffer> _buffers;
 
         public Red4File()
         {
-            _handleManager = new(this);
+            HandleManager = new(this);
+
+            _chunks = new List<IRedClass>();
+            _buffers = new List<IRedBuffer>();
         }
     }
 }

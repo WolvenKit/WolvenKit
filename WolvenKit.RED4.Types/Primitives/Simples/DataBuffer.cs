@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
                     return _buffer;
                 }
 
-                return File.Buffers[Pointer].Data;
+                return File._buffers[Pointer].Data;
             }
 
             set
@@ -33,7 +33,7 @@ namespace WolvenKit.RED4.Types
                 }
                 else
                 {
-                    File.Buffers[Pointer].Data = value;
+                    File._buffers[Pointer].Data = value;
                 }
             }
         }
