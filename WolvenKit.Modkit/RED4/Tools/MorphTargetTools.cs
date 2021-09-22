@@ -30,7 +30,26 @@ namespace WolvenKit.Modkit.RED4
             {
                 return false;
             }
+            var morphBlob = cr2w.Chunks.Select(_ => _.Data).OfType<MorphTargetMesh>().First();
 
+            RawArmature Rig = null;
+            {
+                ulong hash = FNV1A64HashAlgorithm.HashString(morphBlob.BaseMesh.DepotPath);
+                MemoryStream meshStream = new MemoryStream();
+                foreach (Archive ar in archives)
+                {
+                    if (ar.Files.ContainsKey(hash))
+                    {
+                        ExtractSingleToStream(ar, hash, meshStream);
+                        break;
+                    }
+                }
+                var meshCr2w = _wolvenkitFileService.TryReadRED4File(meshStream);
+                if (meshCr2w != null && meshCr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() && meshCr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
+                {
+                    Rig = MeshTools.GetOrphanRig(meshCr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First());
+                }
+            }
             var rendblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
 
             var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer.Value - 1];
@@ -42,44 +61,7 @@ namespace WolvenKit.Modkit.RED4
             List<RawMeshContainer> expMeshes = MeshTools.ContainRawMesh(meshbuffer, meshesinfo, true);
 
             var blob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMorphTargetMeshBlob>().First();
-            string baseMeshPath = cr2w.Chunks.Select(_ => _.Data).OfType<MorphTargetMesh>().First().BaseMesh.DepotPath;
-            ulong hash = FNV1A64HashAlgorithm.HashString(baseMeshPath);
 
-            MemoryStream meshStream = new MemoryStream();
-            if(File.Exists(Path.Combine(modFolder,baseMeshPath)))
-            {
-                meshStream = new MemoryStream(File.ReadAllBytes(Path.Combine(modFolder, baseMeshPath)));
-            }
-            else
-            {
-                foreach (Archive ar in archives)
-                {
-                    if (ar.Files.ContainsKey(hash))
-                    {
-                        ExtractSingleToStream(ar, hash, meshStream);
-                        break;
-                    }
-                }
-            }
-            RawArmature Rig = null;
-            {
-                var meshCr2w = _wolvenkitFileService.TryReadRED4File(meshStream);
-                rendblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
-
-                if (meshCr2w != null && meshCr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() && meshCr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
-                {
-                    rendbuffer = meshCr2w.Buffers[rendblob.RenderBuffer.Buffer.Value - 1];
-                    meshStream.Seek(rendbuffer.Offset, SeekOrigin.Begin);
-                    var ms = new MemoryStream();
-                    meshStream.DecompressAndCopySegment(ms, rendbuffer.DiskSize, rendbuffer.MemSize);
-
-                    meshesinfo = MeshTools.GetMeshesinfo(rendblob);
-
-                    expMeshes = MeshTools.ContainRawMesh(ms, meshesinfo, true);
-
-                    Rig = MeshTools.GetOrphanRig(rendblob);
-                }
-            }
             MemoryStream diffsbuffer = new MemoryStream();
             MemoryStream mappingbuffer = new MemoryStream();
             MemoryStream texbuffer = new MemoryStream();
@@ -118,20 +100,14 @@ namespace WolvenKit.Modkit.RED4
                 expTargets.Add(ContainRawTargets(diffsbuffer, mappingbuffer, temp_NumVertexDiffsInEachChunk, temp_NumVertexDiffsMappingInEachChunk, targetsInfo.TargetStartsInVertexDiffs[i], targetsInfo.TargetStartsInVertexDiffsMapping[i], targetsInfo.TargetPositionDiffOffset[i], targetsInfo.TargetPositionDiffScale[i], expMeshes.Count));
             }
 
-            string[] names = new string[targetsInfo.NumTargets];
-            for (int i = 0; i < targetsInfo.NumTargets; i++)
-            {
-                names[i] = targetsInfo.Names[i] + "_" + targetsInfo.RegionNames[i];
-            }
-
             List<MemoryStream> textureStreams = ContainTextureStreams(blob, texbuffer);
-            ModelRoot model = RawTargetsToGLTF(expMeshes, expTargets, names,Rig);
+            ModelRoot model = RawTargetsToGLTF(expMeshes, expTargets, targetsInfo.Names, Rig);
 
             if (WolvenTesting.IsTesting)
             {
                 return true;
             }
-            model.Extras = SharpGLTF.IO.JsonContent.Serialize(new { BaseMesh = targetsInfo.BaseMesh});
+
             if (isGLBinary)
                 model.SaveGLB(outfile.FullName);
             else

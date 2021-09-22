@@ -649,7 +649,7 @@ namespace WolvenKit.Modkit.RED4
                             result = ImportMesh(rawRelative.ToFileInfo(), redFs, args.Archives, args.validationMode, args.importMaterialOnly);
                             break;
                         case GltfImportAsFormat.Morphtarget:
-                            result = ImportTargetBaseMesh(rawRelative.ToFileInfo(), redFs, args.Archives, outDir.FullName, args.validationMode);
+                            result = ImportMorphTargets(rawRelative.ToFileInfo(), redFs, args.Archives, args.validationMode);
                             break;
                     }
 

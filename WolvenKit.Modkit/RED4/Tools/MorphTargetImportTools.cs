@@ -19,12 +19,10 @@ using CP77.CR2W;
 namespace WolvenKit.Modkit.RED4
 {
     using Vec4 = System.Numerics.Vector4;
-    using Vec2 = System.Numerics.Vector2;
     using Vec3 = System.Numerics.Vector3;
     public partial class ModTools
     {
-
-        public bool ImportTargetBaseMesh(FileInfo inGltfFile, Stream intargetStream, List<Archive> archives, string modFolder, ValidationMode vmode = ValidationMode.Strict, Stream outStream = null)
+        public bool ImportMorphTargets(FileInfo inGltfFile, Stream intargetStream, List<Archive> archives, ValidationMode vmode = ValidationMode.Strict, Stream outStream = null)
         {
             var cr2w = _wolvenkitFileService.TryReadRED4File(intargetStream);
             if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<MorphTargetMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
@@ -33,18 +31,10 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var blob = cr2w.Chunks.Select(_ => _.Data).OfType<MorphTargetMesh>().First();
-
-            string baseMeshPath = blob.BaseMesh.DepotPath;
-            ulong hash = FNV1A64HashAlgorithm.HashString(baseMeshPath);
-            baseMeshPath = Path.Combine(modFolder, baseMeshPath);
-            if (!new FileInfo(baseMeshPath).Directory.Exists)
+            RawArmature newRig = null;
             {
-                Directory.CreateDirectory(new FileInfo(baseMeshPath).Directory.FullName);
-            }
-            using FileStream meshStream = new FileStream(baseMeshPath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-            meshStream.Seek(0, SeekOrigin.Begin);
-            if (meshStream.Length == 0)
-            {
+                ulong hash = FNV1A64HashAlgorithm.HashString(blob.BaseMesh.DepotPath);
+                MemoryStream meshStream = new MemoryStream();
                 foreach (Archive ar in archives)
                 {
                     if (ar.Files.ContainsKey(hash))
@@ -52,6 +42,11 @@ namespace WolvenKit.Modkit.RED4
                         ExtractSingleToStream(ar, hash, meshStream);
                         break;
                     }
+                }
+                var meshCr2w = _wolvenkitFileService.TryReadRED4File(meshStream);
+                if (meshCr2w != null && meshCr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() && meshCr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
+                {
+                    newRig = MeshTools.GetOrphanRig(meshCr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First());
                 }
             }
 
@@ -130,7 +125,7 @@ namespace WolvenKit.Modkit.RED4
             Vec4 QuantScale = new Vec4((max.X - min.X) / 2, (max.Y - min.Y) / 2, (max.Z - min.Z) / 2, 0);
             Vec4 QuantTrans = new Vec4((max.X + min.X) / 2, (max.Y + min.Y) / 2, (max.Z + min.Z) / 2, 1);
 
-            RawArmature newRig = MeshTools.GetOrphanRig(cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First());
+
             RawArmature oldRig = null;
             if (model.LogicalSkins.Count != 0)
             {
@@ -167,8 +162,7 @@ namespace WolvenKit.Modkit.RED4
                 intargetStream.SetLength(0);
                 ms.CopyTo(intargetStream);
             }
-            meshStream.Seek(0, SeekOrigin.Begin);
-            return ImportMesh(inGltfFile, meshStream, archives, vmode);
+            return true;
         }
 
         private void WriteTargetBuffer(CR2WFile cr2w, MemoryStream inBuffer, int bufferId)
