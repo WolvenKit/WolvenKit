@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.Serialization;
 using Newtonsoft.Json.Linq;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Cr2w;
@@ -41,7 +41,7 @@ namespace WolvenKit.Common.Tools
                             cVariable.SetValue(enumobj);
                             break;
                         // arrays
-                        case ICurveDataAccessor b:
+                        case ICurveDataAccessor:
 
                             break;
                         case IREDArray redArray:
@@ -71,7 +71,7 @@ namespace WolvenKit.Common.Tools
                     cVariable.SetFromDictionary(jObject.ToObject<Dictionary<string,object>>());
                     break;
                 // does that ever happen?
-                case JToken jToken:
+                case JToken:
                     throw new InvalidParsingException("file format not supported");
                 // primitive types can be set directly
                 default:
@@ -225,7 +225,7 @@ namespace WolvenKit.Common.Tools
 
         public List<CR2WBufferWrapperDto> Buffers { get; set; } = new();
 
-        public bool ShouldSerializeBuffers() => (Buffers.Count > 0);
+        public bool ShouldSerializeBuffers() => Buffers is { Count: > 0 };
 
         public Red4W2rcFileDto()
         {
@@ -241,13 +241,13 @@ namespace WolvenKit.Common.Tools
 
         public CR2WFile ToW2rc()
         {
-            var cr2w = new CR2WFile();
-
-            // buffers
-            cr2w.Buffers = Buffers
-                .OrderBy(_ => _.Index)
-                .Select(_ => _.ToRedBuffer())
-                .ToList();
+            var cr2w = new CR2WFile
+            {
+                Buffers = Buffers
+                    .OrderBy(_ => _.Index)
+                    .Select(_ => _.ToRedBuffer())
+                    .ToList()
+            };
 
             // chunks
             // order so that parent chunks get created first
@@ -271,13 +271,13 @@ namespace WolvenKit.Common.Tools
 
         //public int ChunkIndex { get; set; }
         public int ParentIndex { get; set; }
-        public Dictionary<string,object> Properties { get;set; }
+        public Dictionary<string, object> Properties { get; set; } = new();
 
-        public bool ShouldSerializeProperties() => (Properties.Count > 0);
+        public bool ShouldSerializeProperties() => Properties is { Count: > 0 };
 
         public CR2WExportWrapperDto()
         {
-
+            
         }
 
         public CR2WExportWrapperDto(ICR2WExport cr2WExport)
@@ -290,6 +290,10 @@ namespace WolvenKit.Common.Tools
             if (cvarAsDict is Dictionary<string, object> dict)
             {
                 Properties = dict;
+            }
+            else
+            {
+                throw new SerializationException();
             }
         }
 

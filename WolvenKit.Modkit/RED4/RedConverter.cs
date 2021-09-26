@@ -124,7 +124,7 @@ namespace WolvenKit.Modkit.RED4
         /// <exception cref="SerializationException"></exception>
         public bool ConvertFromAndWrite(FileInfo fileInfo, DirectoryInfo outputDirInfo)
         {
-            var convertExtension = Path.GetExtension(fileInfo.Name);
+            var convertExtension = Path.GetExtension(fileInfo.Name).TrimStart('.').ToLower();
             if (!Enum.TryParse<ETextConvertFormat>(convertExtension, out var textConvertFormat))
             {
                 throw new SerializationException();

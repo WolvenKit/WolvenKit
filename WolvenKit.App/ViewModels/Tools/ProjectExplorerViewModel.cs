@@ -115,9 +115,7 @@ namespace WolvenKit.ViewModels.Tools
         #region general commands
 
         public ICommand OpenFileCommand { get; private set; }
-
         private bool CanOpenFile() => true;
-
         private void ExecuteOpenFile()
         {
             // TODO: Handle command logic here
@@ -128,34 +126,25 @@ namespace WolvenKit.ViewModels.Tools
 
         }
 
-
-
-
         /// <summary>
         /// Copies selected node to the clipboard.
         /// </summary>
         public ICommand CopyFileCommand { get; private set; }
-
         private bool CanCopyFile() => _projectManager.ActiveProject != null && SelectedItem != null;
-
         private void ExecuteCopyRelPath() => Clipboard.SetText(SelectedItem.Name);
 
         /// <summary>
         /// Copies relative path of node.
         /// </summary>
         public ICommand CopyRelPathCommand { get; private set; }
-
         private bool CanCopyRelPath() => _projectManager.ActiveProject != null && SelectedItem != null;
-
         private void CopyFile() => Clipboard.SetText(SelectedItem.FullName);
 
         /// <summary>
         /// Cuts selected node to the clipboard.
         /// </summary>
         public ICommand CutFileCommand { get; private set; }
-
         private bool CanCutFile() => _projectManager.ActiveProject != null && SelectedItem != null;
-
         private void ExecuteCutFile()
         {
         }
@@ -164,7 +153,6 @@ namespace WolvenKit.ViewModels.Tools
         /// Delets selected node.
         /// </summary>
         public ICommand DeleteFileCommand { get; private set; }
-
         private bool CanDeleteFile()
         {
             var b = _projectManager.ActiveProject != null && SelectedItem != null;
@@ -189,7 +177,6 @@ namespace WolvenKit.ViewModels.Tools
 
             return b;
         }
-
         private async void ExecuteDeleteFile()
         {
             var selected = SelectedItems.OfType<FileModel>().ToList();
@@ -229,9 +216,7 @@ namespace WolvenKit.ViewModels.Tools
         /// Opens selected node in File Explorer.
         /// </summary>
         public ICommand OpenInFileExplorerCommand { get; private set; }
-
         private bool CanOpenInFileExplorer() => _projectManager.ActiveProject != null && SelectedItem != null;
-
         private void ExecuteOpenInFileExplorer()
         {
             if (SelectedItem.IsDirectory)
@@ -248,9 +233,7 @@ namespace WolvenKit.ViewModels.Tools
         /// Pastes a file from the clipboard into selected node.
         /// </summary>
         public ICommand PasteFileCommand { get; private set; }
-
         private bool CanPasteFile() => _projectManager.ActiveProject != null && SelectedItem != null && Clipboard.ContainsText();
-
         private void PasteFile()
         {
             if (File.Exists(Clipboard.GetText()))
@@ -295,9 +278,7 @@ namespace WolvenKit.ViewModels.Tools
         /// Renames selected node.
         /// </summary>
         public ICommand RenameFileCommand { get; private set; }
-
         private bool CanRenameFile() => _projectManager.ActiveProject != null && SelectedItem != null && !SelectedItem.IsDirectory;
-
         private async void ExecuteRenameFile()
         {
             var filename = SelectedItem.FullName;
@@ -365,7 +346,6 @@ namespace WolvenKit.ViewModels.Tools
             var process = Process.Start(procInfo);
             process?.WaitForInputIdle();
         }
-
         public ICommand Bk2ExportCommand { get; private set; }
         private bool CanBk2Export() => SelectedItem != null && !IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower().Contains("bk2");
         private void ExecuteBk2Export()
