@@ -488,7 +488,6 @@ namespace WolvenKit.MSTests
 
                         using var reader = new CR2WReader(ms);
                         var readResult = reader.ReadFile(out var c, DECOMPRESS_BUFFERS);
-                        c.MetaData.FileName = file.NameOrHash;
 
                         switch (readResult)
                         {
@@ -512,6 +511,8 @@ namespace WolvenKit.MSTests
                                 break;
 
                             case EFileReadErrorCodes.NoError:
+                                c.MetaData.FileName = file.NameOrHash;
+
                                 var res = ReadTestResult.ReadResultType.NoError;
                                 var msg = "";
 

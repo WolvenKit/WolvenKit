@@ -1,5 +1,4 @@
 using System.Runtime.InteropServices;
-using Newtonsoft.Json;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.CR2W

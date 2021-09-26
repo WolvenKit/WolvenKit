@@ -1,5 +1,4 @@
 using System.Runtime.InteropServices;
-using Newtonsoft.Json;
 
 namespace WolvenKit.RED4.Archive.CR2W
 {
@@ -24,6 +23,6 @@ namespace WolvenKit.RED4.Archive.CR2W
 
     public class CR2WProperty : ICR2WProperty
     {
-        
+
     }
 }
