@@ -25,7 +25,7 @@ namespace WolvenKit.Common
         Nightly
     }
 
-    public enum ESerializeFormat
+    public enum ETextConvertFormat
     {
         json,
         xml

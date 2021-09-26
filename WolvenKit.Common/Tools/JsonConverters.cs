@@ -221,8 +221,6 @@ namespace WolvenKit.Common.Tools
     {
         public const string Magic = "w2rc";
 
-        public string Extension { get; set; }
-
         public Dictionary<int,CR2WExportWrapperDto> Chunks { get; set; } = new();
 
         public List<CR2WBufferWrapperDto> Buffers { get; set; } = new();
@@ -236,7 +234,6 @@ namespace WolvenKit.Common.Tools
 
         public Red4W2rcFileDto(IWolvenkitFile cr2w)
         {
-            Extension = Path.GetExtension(cr2w.FileName);
             Chunks = cr2w.Chunks
                 .ToDictionary(_ => _.ChunkIndex, _ => new CR2WExportWrapperDto(_));
             Buffers = cr2w.Buffers.Select(_ => new CR2WBufferWrapperDto(_)).ToList();

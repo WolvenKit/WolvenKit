@@ -14,6 +14,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
@@ -41,8 +42,8 @@ namespace WolvenKit.ViewModels.Tools
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
         private readonly IWatcherService _watcherService;
-        //private readonly Tw3Controller _tw3Controller;
-        //private readonly AppViewModel _appViewModel;
+        private readonly IModTools _modTools;
+        
 
         private EditorProject ActiveMod => _projectManager.ActiveProject;
         private readonly IObservableList<FileModel> _observableList;
@@ -54,15 +55,14 @@ namespace WolvenKit.ViewModels.Tools
         public ProjectExplorerViewModel(
             IProjectManager projectManager,
             ILoggerService loggerService,
-            IWatcherService watcherService
-            //Tw3Controller tw3Controller
-            //IAppViewModel appViewModel
-            ) : base(ToolTitle)
+            IWatcherService watcherService,
+            IModTools modTools
+        ) : base(ToolTitle)
         {
             _projectManager = projectManager;
             _loggerService = loggerService;
             _watcherService = watcherService;
-            //_tw3Controller = tw3Controller;
+            _modTools = modTools;
 
             SetupCommands();
             SetupToolDefaults();
@@ -338,10 +338,15 @@ namespace WolvenKit.ViewModels.Tools
 
         #region red4
 
+        private bool IsInRawFolder(FileModel model)
+        {
+            var b = model.FullName.Contains(ActiveMod.RawDirectory);
+
+            return b;
+        }
+
         public ICommand Bk2ImportCommand { get; private set; }
-
-        private bool CanBk2Import() => SelectedItem.Extension.ToLower().Contains("avi");
-
+        private bool CanBk2Import() => SelectedItem != null && IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower().Contains("avi");
         private void ExecuteBk2Import()
         {
             var modpath = Path.Combine(ActiveMod.ModDirectory, SelectedItem.GetRelativeName(ActiveMod));
@@ -362,9 +367,7 @@ namespace WolvenKit.ViewModels.Tools
         }
 
         public ICommand Bk2ExportCommand { get; private set; }
-
-        private bool CanBk2Export() => SelectedItem.Extension.ToLower().Contains("bk2");
-
+        private bool CanBk2Export() => SelectedItem != null && !IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower().Contains("bk2");
         private void ExecuteBk2Export()
         {
             var rawpath = Path.Combine(ActiveMod.RawDirectory, SelectedItem.GetRelativeName(ActiveMod));
@@ -385,9 +388,43 @@ namespace WolvenKit.ViewModels.Tools
             process?.WaitForInputIdle();
         }
 
+        public ICommand ConvertToJsonCommand { get; private set; }
+        public ICommand ConvertToXmlCommand { get; private set; }
+
+        private bool CanConvertTo() => SelectedItem != null && !IsInRawFolder(SelectedItem) &&
+                                       Enum.GetNames<ERedExtension>().Contains(SelectedItem.Extension.ToLower());
+        private void ExecuteConvertToJson() => ExecuteConvertTo(ETextConvertFormat.json);
+        private void ExecuteConvertToXml() => ExecuteConvertTo(ETextConvertFormat.xml);
+        private void ExecuteConvertTo(ETextConvertFormat fmt)
+        {
+            var inpath = SelectedItem.FullName;
+            var rawOutPath = Path.Combine(ActiveMod.RawDirectory, SelectedItem.GetRelativeName(ActiveMod));
+            var outDirectoryPath = Path.GetDirectoryName(rawOutPath);
+            if (outDirectoryPath != null)
+            {
+                Directory.CreateDirectory(outDirectoryPath);
+
+                _modTools.ConvertToAndWrite(fmt, inpath, new DirectoryInfo(outDirectoryPath));
+            }
+        }
 
 
+        public ICommand ConvertFromJsonCommand { get; private set; }
+        private bool CanConvertFromJson() =>
+            SelectedItem != null && (IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower()
+                .Equals(ETextConvertFormat.json.ToString(), StringComparison.Ordinal));
+        private void ExecuteConvertFromJson()
+        {
+            var inpath = SelectedItem.FullName;
+            var modPath = Path.Combine(ActiveMod.ModDirectory, SelectedItem.GetRelativeName(ActiveMod));
+            var outDirectoryPath = Path.GetDirectoryName(modPath);
+            if (outDirectoryPath != null)
+            {
+                Directory.CreateDirectory(outDirectoryPath);
 
+                _modTools.ConvertFromAndWrite(new FileInfo(inpath),  new DirectoryInfo(outDirectoryPath));
+            }
+        }
 
         #endregion
 
@@ -502,6 +539,10 @@ namespace WolvenKit.ViewModels.Tools
 
             Bk2ImportCommand = new RelayCommand(ExecuteBk2Import, CanBk2Import);
             Bk2ExportCommand = new RelayCommand(ExecuteBk2Export, CanBk2Export);
+
+            ConvertToJsonCommand = new RelayCommand(ExecuteConvertToJson, CanConvertTo);
+            ConvertToXmlCommand = new RelayCommand(ExecuteConvertToXml, CanConvertTo);
+            ConvertFromJsonCommand = new RelayCommand(ExecuteConvertFromJson, CanConvertFromJson);
 
             //PESearchStartedCommand = new DelegateCommand<object>(ExecutePESearchStartedCommand, CanPESearchStartedCommand);
 
