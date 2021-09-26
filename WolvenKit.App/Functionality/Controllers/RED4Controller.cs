@@ -205,7 +205,7 @@ namespace WolvenKit.Functionality.Controllers
                     new DirectoryInfo(cp77Proj.ModDirectory),
                     new DirectoryInfo(cp77Proj.PackedModDirectory),
                     $"mod{cp77Proj.Name}");
-                _loggerService.Info("Packing complete!");
+                _loggerService.Info("Packing archives complete!");
             }
 
             // compile tweak files

@@ -1,23 +1,21 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
-using WolvenKit.Common.Oodle;
-using WolvenKit.RED4.CR2W;
-using System.Diagnostics;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4.Opus;
-using System.Buffers;
+using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.CR2W.Types;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -204,8 +202,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="rawOutDir">the output directory. the outfile is conbined from the rawoutdir and the relative path</param>
         /// <param name="forcebuffers"></param>
         /// <returns></returns>
-        private bool UncookBuffers(Stream cr2wStream, string relPath, GlobalExportArgs settings,
-            DirectoryInfo rawOutDir, ECookedFileFormat[] forcebuffers = null)
+        private bool UncookBuffers(Stream cr2wStream, string relPath, GlobalExportArgs settings, DirectoryInfo rawOutDir, ECookedFileFormat[] forcebuffers = null)
         {
             var outfile = new FileInfo(Path.Combine(rawOutDir.FullName, relPath));
             if (outfile.Directory == null)
@@ -621,7 +618,7 @@ namespace WolvenKit.Modkit.RED4
 
             DDSUtils.GenerateAndWriteHeader(outstream,
                 new DDSMetadata(width, height, 1, sliceCount, mipCount,
-                    0,0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
+                    0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
 
             var b = cr2w.Buffers[0];
             cr2wStream.Seek(b.Offset, SeekOrigin.Begin);
@@ -790,5 +787,7 @@ namespace WolvenKit.Modkit.RED4
 
             return true;
         }
+
+
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -94,10 +95,12 @@ namespace WolvenKit.Modkit.RED4
                 outfile = Path.Combine(outpath.FullName, $"{modname}.archive");
             }
 
+            var sw = new Stopwatch();
+            sw.Start();
+
             var ar = new Archive { ArchiveAbsolutePath = outfile };
             using var fs = new FileStream(outfile, FileMode.Create);
             using var bw = new BinaryWriter(fs);
-
 
             #region write header
 
@@ -122,7 +125,6 @@ namespace WolvenKit.Modkit.RED4
             #region write files
 
             HashSet<ulong> importsHashSet = new();
-
 
             var progress = 0;
             _progressService.Report(0);
@@ -252,6 +254,7 @@ namespace WolvenKit.Modkit.RED4
 
             ar.Index.Dependencies = importsHashSet.Select(_ => new Dependency(_)).ToList();
 
+
             #endregion write files
 
             #region write footer
@@ -277,6 +280,9 @@ namespace WolvenKit.Modkit.RED4
             bw.BaseStream.Seek(0, SeekOrigin.Begin);
             bw.WriteHeader(ar.Header);
             bw.Write(customDataLength);
+
+            sw.Stop();
+            _loggerService.Info($"Packing archive took {sw.ElapsedMilliseconds}ms.");
 
             return ar;
         }
