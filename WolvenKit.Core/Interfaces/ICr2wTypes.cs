@@ -132,9 +132,14 @@ namespace WolvenKit.Common.Model.Cr2w
         List<int> Flags { get; set; }
 
         string Elementtype { get; set; }
+
         Type InnerType { get; }
 
         public IEditableVariable GetElementInstance(string varName);
+
+        public bool IsByteArray();
+
+        public byte[] GetBytes();
     }
     public interface IREDArray<T> : IREDArray
     {

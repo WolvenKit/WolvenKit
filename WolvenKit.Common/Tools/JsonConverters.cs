@@ -45,23 +45,32 @@ namespace WolvenKit.Common.Tools
                             throw new NotImplementedException();
                             //break;
                         case IREDArray redArray:
-                            var listOfObjects = jArray.ToObject<List<object>>();
-                            if (listOfObjects == null)
+                        {
+                            if (redArray.IsByteArray())
                             {
-                                throw new InvalidParsingException("not a CVariable");
+                                var bytes = jArray.ToObject<byte[]>();
+                                redArray.SetValue(bytes);
                             }
-                            for (var i = 0; i < listOfObjects.Count; i++)
+                            else
                             {
-                                var jitem = listOfObjects[i];
+                                var listOfObjects = jArray.ToObject<List<object>>();
+                                if (listOfObjects == null)
+                                {
+                                    throw new InvalidParsingException("not a CVariable");
+                                }
+                                for (var i = 0; i < listOfObjects.Count; i++)
+                                {
+                                    var jitem = listOfObjects[i];
 
-                                //TODO: bytearrays
-
-                                var element = redArray.GetElementInstance(i.ToString());
-                                // parse the elements according to the array type
-                                element.SetFromJObject(jitem);
-                                redArray.AddVariable(element);
+                                    var element = redArray.GetElementInstance(i.ToString());
+                                    // parse the elements according to the array type
+                                    element.SetFromJObject(jitem);
+                                    redArray.AddVariable(element);
+                                }
                             }
+
                             break;
+                        }
                         default:
                             throw new InvalidParsingException("not a CVariable");
                     }
@@ -187,19 +196,22 @@ namespace WolvenKit.Common.Tools
                         return b.GetValue();
                     // serialize arrays as list of objects
                     // serialize curves as array
-                    case IREDArray:
+                    case IREDArray arr:
                     {
-                        //TODO: bytearrays
-
-                        dynamic array = data;
-                        if (array.Elements is not IList dyn)
+                        if (arr is IList ilist)
                         {
-                            throw new InvalidParsingException("Invalid File");
+                            if (arr.IsByteArray())
+                            {
+                                return arr.GetBytes();
+                            }
+                            else
+                            {
+                                return ilist.Cast<IEditableVariable>().Select(_ => _.ToObject());
+                            }
                         }
-                        return dyn
-                            .Cast<IEditableVariable>()
-                            .Select(_ => _.ToObject());
-                    }
+
+                        throw new InvalidParsingException("Invalid File");
+                }
                     case ICurveDataAccessor:
                     {
                         //TODO: bytearrays
@@ -248,8 +260,7 @@ namespace WolvenKit.Common.Tools
 
         public Red4W2rcFileDto(IWolvenkitFile cr2w)
         {
-            Chunks = cr2w.Chunks
-                .ToDictionary(_ => _.ChunkIndex, _ => new CR2WExportWrapperDto(_));
+            Chunks = cr2w.Chunks.ToDictionary(_ => _.ChunkIndex, _ => new CR2WExportWrapperDto(_));
             Buffers = cr2w.Buffers.Select(_ => new CR2WBufferWrapperDto(_)).ToList();
         }
 
@@ -265,13 +276,12 @@ namespace WolvenKit.Common.Tools
 
             // chunks
             // order so that parent chunks get created first
-            var groupedChunks = Chunks
-                .GroupBy(_ => _.Value.ParentIndex);
-            foreach (var groupedChunk in groupedChunks)
+            var groupedChunks = Chunks.GroupBy(_ => _.Value.ParentIndex);
+            foreach (IGrouping<int, KeyValuePair<int, CR2WExportWrapperDto>> groupedChunk in groupedChunks)
             {
-                foreach (var (key, value) in groupedChunk.OrderBy(_ => _.Key))
+                foreach (var (chunkIndex, chunk) in groupedChunk.OrderBy(_ => _.Key))
                 {
-                    value.CreateChunkInFile(cr2w, key);
+                    chunk.CreateChunkInFile(cr2w, chunkIndex);
                 }
             }
 
@@ -313,9 +323,24 @@ namespace WolvenKit.Common.Tools
 
         public void CreateChunkInFile(CR2WFile cr2WFile, int idx)
         {
-            var parentChunk = ParentIndex == -1
-                ? null
-                : cr2WFile.Chunks.First(_ => idx == ParentIndex);
+            ICR2WExport parentChunk;
+            if (ParentIndex == -1)
+            {
+                parentChunk = null;
+            }
+            else
+            {
+                var foundChunk = cr2WFile.Chunks.FirstOrDefault(_ => _.ChunkIndex == ParentIndex);
+                if (foundChunk is null)
+                {
+                    throw new SerializationException("No parentchunk found");
+                }
+                else
+                {
+                    parentChunk = foundChunk;
+                }
+                
+            }
 
             // create wrapped Cvariable
             var cvar = CR2WTypeManager.Create(Type, Type, cr2WFile, parentChunk?.Data as CVariable);

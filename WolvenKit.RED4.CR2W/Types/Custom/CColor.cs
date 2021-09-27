@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using WolvenKit.RED4.CR2W.Reflection;
@@ -20,10 +21,10 @@ namespace WolvenKit.RED4.CR2W.Types
             get => Color.FromArgb(Alpha.Value, Red.Value, Green.Value, Blue.Value);
             set
             {
-                Red.Value = value.R;
-                Green.Value = value.G;
-                Blue.Value = value.B;
-                Alpha.Value = value.A;
+                Red.SetValue(value.R);
+                Green.SetValue(value.G);
+                Blue.SetValue(value.B);
+                Alpha.SetValue(value.A);
             }
         }
 
@@ -59,5 +60,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
         // remove editable sub properties: serialization should have a custom serializer for CColor
         public override List<IEditableVariable> GetEditableVariables() => new();
+
+        public override void Write(BinaryWriter file) => base.Write(file);
     }
 }

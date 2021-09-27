@@ -1,9 +1,12 @@
-//#define IS_PARALLEL
-#define WRITE
+//#define WRITE
+#define IS_PARALLEL
+
+#if WRITE
+#undef IS_PARALLEL
+#endif
 
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -12,8 +15,6 @@ using System.Threading.Tasks;
 using Catel.IoC;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
-using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Tools;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.Modkit.RED4;
@@ -42,398 +43,398 @@ namespace WolvenKit.MSTests
 
 
         [TestMethod]
-        public void Read_bin() => Test_Extension(".bin");
+        public void Convert_bin() => Test_Extension(".bin");
 
 
 
         [TestMethod]
-        public void Read_acousticdata() => Test_Extension(".acousticdata");
+        public void Convert_acousticdata() => Test_Extension(".acousticdata");
 
         [TestMethod]
-        public void Read_actionanimdb() => Test_Extension(".actionanimdb");
+        public void Convert_actionanimdb() => Test_Extension(".actionanimdb");
 
         [TestMethod]
-        public void Read_aiarch() => Test_Extension(".aiarch");
+        public void Convert_aiarch() => Test_Extension(".aiarch");
 
         [TestMethod]
-        public void Read_animgraph() => Test_Extension(".animgraph");
+        public void Convert_animgraph() => Test_Extension(".animgraph");
 
         [TestMethod]
-        public void Read_anims() => Test_Extension(".anims");
+        public void Convert_anims() => Test_Extension(".anims");
 
         [TestMethod]
-        public void Read_app() => Test_Extension(".app");
+        public void Convert_app() => Test_Extension(".app");
 
         [TestMethod]
-        public void Read_archetypes() => Test_Extension(".archetypes");
+        public void Convert_archetypes() => Test_Extension(".archetypes");
 
         [TestMethod]
-        public void Read_areas() => Test_Extension(".areas");
+        public void Convert_areas() => Test_Extension(".areas");
 
         [TestMethod]
-        public void Read_audio_metadata() => Test_Extension(".audio_metadata");
+        public void Convert_audio_metadata() => Test_Extension(".audio_metadata");
 
         [TestMethod]
-        public void Read_audiovehcurveset() => Test_Extension(".audiovehcurveset");
+        public void Convert_audiovehcurveset() => Test_Extension(".audiovehcurveset");
 
         [TestMethod]
-        public void Read_behavior() => Test_Extension(".behavior");
+        public void Convert_behavior() => Test_Extension(".behavior");
 
         [TestMethod]
-        public void Read_bikecurveset() => Test_Extension(".bikecurveset");
+        public void Convert_bikecurveset() => Test_Extension(".bikecurveset");
 
         [TestMethod]
-        public void Read_bk2() => Test_Extension(".bk2");
+        public void Convert_bk2() => Test_Extension(".bk2");
 
         [TestMethod]
-        public void Read_bnk() => Test_Extension(".bnk");
+        public void Convert_bnk() => Test_Extension(".bnk");
 
         [TestMethod]
-        public void Read_camcurveset() => Test_Extension(".camcurveset");
+        public void Convert_camcurveset() => Test_Extension(".camcurveset");
 
         [TestMethod]
-        public void Read_cfoliage() => Test_Extension(".cfoliage");
+        public void Convert_cfoliage() => Test_Extension(".cfoliage");
 
         [TestMethod]
-        public void Read_charcustpreset() => Test_Extension(".charcustpreset");
+        public void Convert_charcustpreset() => Test_Extension(".charcustpreset");
 
         [TestMethod]
-        public void Read_cminimap() => Test_Extension(".cminimap");
+        public void Convert_cminimap() => Test_Extension(".cminimap");
 
         [TestMethod]
-        public void Read_community() => Test_Extension(".community");
+        public void Convert_community() => Test_Extension(".community");
 
         [TestMethod]
-        public void Read_conversations() => Test_Extension(".conversations");
+        public void Convert_conversations() => Test_Extension(".conversations");
 
         [TestMethod]
-        public void Read_cooked_mlsetup() => Test_Extension(".cooked_mlsetup");
+        public void Convert_cooked_mlsetup() => Test_Extension(".cooked_mlsetup");
 
         [TestMethod]
-        public void Read_cookedanims() => Test_Extension(".cookedanims");
+        public void Convert_cookedanims() => Test_Extension(".cookedanims");
 
         [TestMethod]
-        public void Read_cookedapp() => Test_Extension(".cookedapp");
+        public void Convert_cookedapp() => Test_Extension(".cookedapp");
 
         [TestMethod]
-        public void Read_credits() => Test_Extension(".credits");
+        public void Convert_credits() => Test_Extension(".credits");
 
         [TestMethod]
-        public void Read_csv() => Test_Extension(".csv");
+        public void Convert_csv() => Test_Extension(".csv");
 
         [TestMethod]
-        public void Read_cubemap() => Test_Extension(".cubemap");
+        public void Convert_cubemap() => Test_Extension(".cubemap");
 
         [TestMethod]
-        public void Read_curveresset() => Test_Extension(".curveresset");
+        public void Convert_curveresset() => Test_Extension(".curveresset");
 
         [TestMethod]
-        public void Read_curveset() => Test_Extension(".curveset");
+        public void Convert_curveset() => Test_Extension(".curveset");
 
         [TestMethod]
-        public void Read_dat() => Test_Extension(".dat");
+        public void Convert_dat() => Test_Extension(".dat");
 
         [TestMethod]
-        public void Read_devices() => Test_Extension(".devices");
+        public void Convert_devices() => Test_Extension(".devices");
 
         [TestMethod]
-        public void Read_dtex() => Test_Extension(".dtex");
+        public void Convert_dtex() => Test_Extension(".dtex");
 
         [TestMethod]
-        public void Read_effect() => Test_Extension(".effect");
+        public void Convert_effect() => Test_Extension(".effect");
 
         [TestMethod]
-        public void Read_ent() => Test_Extension(".ent");
+        public void Convert_ent() => Test_Extension(".ent");
 
         [TestMethod]
-        public void Read_env() => Test_Extension(".env");
+        public void Convert_env() => Test_Extension(".env");
 
         [TestMethod]
-        public void Read_envparam() => Test_Extension(".envparam");
+        public void Convert_envparam() => Test_Extension(".envparam");
 
         [TestMethod]
-        public void Read_envprobe() => Test_Extension(".envprobe");
+        public void Convert_envprobe() => Test_Extension(".envprobe");
 
         [TestMethod]
-        public void Read_es() => Test_Extension(".es");
+        public void Convert_es() => Test_Extension(".es");
 
         [TestMethod]
-        public void Read_facialcustom() => Test_Extension(".facialcustom");
+        public void Convert_facialcustom() => Test_Extension(".facialcustom");
 
         [TestMethod]
-        public void Read_facialsetup() => Test_Extension(".facialsetup");
+        public void Convert_facialsetup() => Test_Extension(".facialsetup");
 
         [TestMethod]
-        public void Read_fb2tl() => Test_Extension(".fb2tl");
+        public void Convert_fb2tl() => Test_Extension(".fb2tl");
 
         [TestMethod]
-        public void Read_fnt() => Test_Extension(".fnt");
+        public void Convert_fnt() => Test_Extension(".fnt");
 
         [TestMethod]
-        public void Read_folbrush() => Test_Extension(".folbrush");
+        public void Convert_folbrush() => Test_Extension(".folbrush");
 
         [TestMethod]
-        public void Read_foldest() => Test_Extension(".foldest");
+        public void Convert_foldest() => Test_Extension(".foldest");
 
         [TestMethod]
-        public void Read_fp() => Test_Extension(".fp");
+        public void Convert_fp() => Test_Extension(".fp");
 
         [TestMethod]
-        public void Read_gamed() => Test_Extension(".game");
+        public void Convert_gamed() => Test_Extension(".game");
 
         [TestMethod]
-        public void Read_gamedef() => Test_Extension(".gamedef");
+        public void Convert_gamedef() => Test_Extension(".gamedef");
 
         [TestMethod]
-        public void Read_garmentlayerparams() => Test_Extension(".garmentlayerparams");
+        public void Convert_garmentlayerparams() => Test_Extension(".garmentlayerparams");
 
         [TestMethod]
-        public void Read_genericanimdb() => Test_Extension(".genericanimdb");
+        public void Convert_genericanimdb() => Test_Extension(".genericanimdb");
 
         [TestMethod]
-        public void Read_geometry_cache() => Test_Extension(".geometry_cache");
+        public void Convert_geometry_cache() => Test_Extension(".geometry_cache");
 
         [TestMethod]
-        public void Read_gidata() => Test_Extension(".gidata");
+        public void Convert_gidata() => Test_Extension(".gidata");
 
         [TestMethod]
-        public void Read_gradient() => Test_Extension(".gradient");
+        public void Convert_gradient() => Test_Extension(".gradient");
 
         [TestMethod]
-        public void Read_hitrepresentation() => Test_Extension(".hitrepresentation");
+        public void Convert_hitrepresentation() => Test_Extension(".hitrepresentation");
 
         [TestMethod]
-        public void Read_hp() => Test_Extension(".hp");
+        public void Convert_hp() => Test_Extension(".hp");
 
         [TestMethod]
-        public void Read_ies() => Test_Extension(".ies");
+        public void Convert_ies() => Test_Extension(".ies");
 
         [TestMethod]
-        public void Read_inkanim() => Test_Extension(".inkanim");
+        public void Convert_inkanim() => Test_Extension(".inkanim");
 
         [TestMethod]
-        public void Read_inkatlas() => Test_Extension(".inkatlas");
+        public void Convert_inkatlas() => Test_Extension(".inkatlas");
 
         [TestMethod]
-        public void Read_inkcharcustomization() => Test_Extension(".inkcharcustomization");
+        public void Convert_inkcharcustomization() => Test_Extension(".inkcharcustomization");
 
         [TestMethod]
-        public void Read_inkfontfamily() => Test_Extension(".inkfontfamily");
+        public void Convert_inkfontfamily() => Test_Extension(".inkfontfamily");
 
         [TestMethod]
-        public void Read_inkfullscreencomposition() => Test_Extension(".inkfullscreencomposition");
+        public void Convert_inkfullscreencomposition() => Test_Extension(".inkfullscreencomposition");
 
         [TestMethod]
-        public void Read_inkgamesettings() => Test_Extension(".inkgamesettings");
+        public void Convert_inkgamesettings() => Test_Extension(".inkgamesettings");
 
         [TestMethod]
-        public void Read_inkhud() => Test_Extension(".inkhud");
+        public void Convert_inkhud() => Test_Extension(".inkhud");
 
         [TestMethod]
-        public void Read_inklayers() => Test_Extension(".inklayers");
+        public void Convert_inklayers() => Test_Extension(".inklayers");
 
         [TestMethod]
-        public void Read_inkmenu() => Test_Extension(".inkmenu");
+        public void Convert_inkmenu() => Test_Extension(".inkmenu");
 
         [TestMethod]
-        public void Read_inkshapecollection() => Test_Extension(".inkshapecollection");
+        public void Convert_inkshapecollection() => Test_Extension(".inkshapecollection");
 
         [TestMethod]
-        public void Read_inkstyle() => Test_Extension(".inkstyle");
+        public void Convert_inkstyle() => Test_Extension(".inkstyle");
 
         [TestMethod]
-        public void Read_inktypography() => Test_Extension(".inktypography");
+        public void Convert_inktypography() => Test_Extension(".inktypography");
 
         [TestMethod]
-        public void Read_inkwidget() => Test_Extension(".inkwidget");
+        public void Convert_inkwidget() => Test_Extension(".inkwidget");
 
         [TestMethod]
-        public void Read_interaction() => Test_Extension(".interaction");
+        public void Convert_interaction() => Test_Extension(".interaction");
 
         [TestMethod]
-        public void Read_journal() => Test_Extension(".journal");
+        public void Convert_journal() => Test_Extension(".journal");
 
         [TestMethod]
-        public void Read_journaldesc() => Test_Extension(".journaldesc");
+        public void Convert_journaldesc() => Test_Extension(".journaldesc");
 
         [TestMethod]
-        public void Read_json() => Test_Extension(".json");
+        public void Convert_json() => Test_Extension(".json");
 
         [TestMethod]
-        public void Read_lane_connections() => Test_Extension(".lane_connections");
+        public void Convert_lane_connections() => Test_Extension(".lane_connections");
 
         [TestMethod]
-        public void Read_lane_polygons() => Test_Extension(".lane_polygons");
+        public void Convert_lane_polygons() => Test_Extension(".lane_polygons");
 
         [TestMethod]
-        public void Read_lane_spots() => Test_Extension(".lane_spots");
+        public void Convert_lane_spots() => Test_Extension(".lane_spots");
 
         [TestMethod]
-        public void Read_lights() => Test_Extension(".lights");
+        public void Convert_lights() => Test_Extension(".lights");
 
         [TestMethod]
-        public void Read_lipmap() => Test_Extension(".lipmap");
+        public void Convert_lipmap() => Test_Extension(".lipmap");
 
         [TestMethod]
-        public void Read_location() => Test_Extension(".location");
+        public void Convert_location() => Test_Extension(".location");
 
         [TestMethod]
-        public void Read_locopaths() => Test_Extension(".locopaths");
+        public void Convert_locopaths() => Test_Extension(".locopaths");
 
         [TestMethod]
-        public void Read_loot() => Test_Extension(".loot");
+        public void Convert_loot() => Test_Extension(".loot");
 
         [TestMethod]
-        public void Read_mappins() => Test_Extension(".mappins");
+        public void Convert_mappins() => Test_Extension(".mappins");
 
         [TestMethod]
-        public void Read_matlib() => Test_Extension(".matlib");
+        public void Convert_matlib() => Test_Extension(".matlib");
 
         [TestMethod]
-        public void Read_mesh() => Test_Extension(".mesh");
+        public void Convert_mesh() => Test_Extension(".mesh");
 
         [TestMethod]
-        public void Read_mi() => Test_Extension(".mi");
+        public void Convert_mi() => Test_Extension(".mi");
 
         [TestMethod]
-        public void Read_mlmask() => Test_Extension(".mlmask");
+        public void Convert_mlmask() => Test_Extension(".mlmask");
 
         [TestMethod]
-        public void Read_mlsetup() => Test_Extension(".mlsetup");
+        public void Convert_mlsetup() => Test_Extension(".mlsetup");
 
         [TestMethod]
-        public void Read_mltemplate() => Test_Extension(".mltemplate");
+        public void Convert_mltemplate() => Test_Extension(".mltemplate");
 
         [TestMethod]
-        public void Read_morphtarget() => Test_Extension(".morphtarget");
+        public void Convert_morphtarget() => Test_Extension(".morphtarget");
 
         [TestMethod]
-        public void Read_mt() => Test_Extension(".mt");
+        public void Convert_mt() => Test_Extension(".mt");
 
         // removed in 1.3
         //[TestMethod]
-        //public void Read_navmesh() => Test_Extension(".navmesh");
+        //public void Convert_navmesh() => Test_Extension(".navmesh");
 
         [TestMethod]
-        public void Read_null_areas() => Test_Extension(".null_areas");
+        public void Convert_null_areas() => Test_Extension(".null_areas");
 
         [TestMethod]
-        public void Read_opusinfo() => Test_Extension(".opusinfo");
+        public void Convert_opusinfo() => Test_Extension(".opusinfo");
 
         [TestMethod]
-        public void Read_opuspak() => Test_Extension(".opuspak");
+        public void Convert_opuspak() => Test_Extension(".opuspak");
 
         [TestMethod]
-        public void Read_particle() => Test_Extension(".particle");
+        public void Convert_particle() => Test_Extension(".particle");
 
         [TestMethod]
-        public void Read_phys() => Test_Extension(".phys");
+        public void Convert_phys() => Test_Extension(".phys");
 
         [TestMethod]
-        public void Read_physicalscene() => Test_Extension(".physicalscene");
+        public void Convert_physicalscene() => Test_Extension(".physicalscene");
 
         [TestMethod]
-        public void Read_physmatlib() => Test_Extension(".physmatlib");
+        public void Convert_physmatlib() => Test_Extension(".physmatlib");
 
         [TestMethod]
-        public void Read_poimappins() => Test_Extension(".poimappins");
+        public void Convert_poimappins() => Test_Extension(".poimappins");
 
         [TestMethod]
-        public void Read_psrep() => Test_Extension(".psrep");
+        public void Convert_psrep() => Test_Extension(".psrep");
 
         [TestMethod]
-        public void Read_quest() => Test_Extension(".quest");
+        public void Convert_quest() => Test_Extension(".quest");
 
         [TestMethod]
-        public void Read_questphase() => Test_Extension(".questphase");
+        public void Convert_questphase() => Test_Extension(".questphase");
 
         [TestMethod]
-        public void Read_regionset() => Test_Extension(".regionset");
+        public void Convert_regionset() => Test_Extension(".regionset");
 
         [TestMethod]
-        public void Read_remt() => Test_Extension(".remt");
+        public void Convert_remt() => Test_Extension(".remt");
 
         [TestMethod]
-        public void Read_reps() => Test_Extension(".reps");
+        public void Convert_reps() => Test_Extension(".reps");
 
         [TestMethod]
-        public void Read_reslist() => Test_Extension(".reslist");
+        public void Convert_reslist() => Test_Extension(".reslist");
 
         [TestMethod]
-        public void Read_rig() => Test_Extension(".rig");
+        public void Convert_rig() => Test_Extension(".rig");
 
         [TestMethod]
-        public void Read_scene() => Test_Extension(".scene");
+        public void Convert_scene() => Test_Extension(".scene");
 
         [TestMethod]
-        public void Read_scenerid() => Test_Extension(".scenerid");
+        public void Convert_scenerid() => Test_Extension(".scenerid");
 
         [TestMethod]
-        public void Read_scenesversions() => Test_Extension(".scenesversions");
+        public void Convert_scenesversions() => Test_Extension(".scenesversions");
 
         [TestMethod]
-        public void Read_smartobject() => Test_Extension(".smartobject");
+        public void Convert_smartobject() => Test_Extension(".smartobject");
 
         [TestMethod]
-        public void Read_smartobjects() => Test_Extension(".smartobjects");
+        public void Convert_smartobjects() => Test_Extension(".smartobjects");
 
         [TestMethod]
-        public void Read_sp() => Test_Extension(".sp");
+        public void Convert_sp() => Test_Extension(".sp");
 
         [TestMethod]
-        public void Read_spatial_representation() => Test_Extension(".spatial_representation");
+        public void Convert_spatial_representation() => Test_Extension(".spatial_representation");
 
         // removed in 1.3
         //[TestMethod]
-        //public void Read_streamingquerydata() => Test_Extension(".streamingquerydata");
+        //public void Convert_streamingquerydata() => Test_Extension(".streamingquerydata");
 
         [TestMethod]
-        public void Read_streamingsector() => Test_Extension(".streamingsector");
+        public void Convert_streamingsector() => Test_Extension(".streamingsector");
 
         [TestMethod]
-        public void Read_streamingsector_inplace() => Test_Extension(".streamingsector_inplace");
+        public void Convert_streamingsector_inplace() => Test_Extension(".streamingsector_inplace");
 
         [TestMethod]
-        public void Read_streamingworld() => Test_Extension(".streamingworld");
+        public void Convert_streamingworld() => Test_Extension(".streamingworld");
 
         [TestMethod]
-        public void Read_terrainsetup() => Test_Extension(".terrainsetup");
+        public void Convert_terrainsetup() => Test_Extension(".terrainsetup");
 
         [TestMethod]
-        public void Read_texarray() => Test_Extension(".texarray");
+        public void Convert_texarray() => Test_Extension(".texarray");
 
         [TestMethod]
-        public void Read_traffic_collisions() => Test_Extension(".traffic_collisions");
+        public void Convert_traffic_collisions() => Test_Extension(".traffic_collisions");
 
         [TestMethod]
-        public void Read_traffic_persistent() => Test_Extension(".traffic_persistent");
+        public void Convert_traffic_persistent() => Test_Extension(".traffic_persistent");
 
         [TestMethod]
-        public void Read_vehcommoncurveset() => Test_Extension(".vehcommoncurveset");
+        public void Convert_vehcommoncurveset() => Test_Extension(".vehcommoncurveset");
 
         [TestMethod]
-        public void Read_vehcurveset() => Test_Extension(".vehcurveset");
+        public void Convert_vehcurveset() => Test_Extension(".vehcurveset");
 
         [TestMethod]
-        public void Read_voicetags() => Test_Extension(".voicetags");
+        public void Convert_voicetags() => Test_Extension(".voicetags");
 
         [TestMethod]
-        public void Read_w2mesh() => Test_Extension(".w2mesh");
+        public void Convert_w2mesh() => Test_Extension(".w2mesh");
 
         [TestMethod]
-        public void Read_w2mi() => Test_Extension(".w2mi");
+        public void Convert_w2mi() => Test_Extension(".w2mi");
 
         [TestMethod]
-        public void Read_wem() => Test_Extension(".wem");
+        public void Convert_wem() => Test_Extension(".wem");
 
         [TestMethod]
-        public void Read_workspot() => Test_Extension(".workspot");
+        public void Convert_workspot() => Test_Extension(".workspot");
 
         [TestMethod]
-        public void Read_xbm() => Test_Extension(".xbm");
+        public void Convert_xbm() => Test_Extension(".xbm");
 
         [TestMethod]
-        public void Read_xcube() => Test_Extension(".xcube");
+        public void Convert_xcube() => Test_Extension(".xcube");
 
         #endregion test methods
 
@@ -443,6 +444,10 @@ namespace WolvenKit.MSTests
 
             var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
             Directory.CreateDirectory(resultDir);
+            foreach (var file in Directory.GetFiles(resultDir))
+            {
+                File.Delete(file);
+            }
 
             var results = new ConcurrentBag<ArchiveTestResult>();
             var files = s_groupedFiles[extension].ToList();
@@ -458,7 +463,7 @@ namespace WolvenKit.MSTests
 
                 try
                 {
-#region convert to json
+                    #region convert to json
                     using var originalMemoryStream = new MemoryStream();
                     ModTools.ExtractSingleToStream(archive, hash, originalMemoryStream);
                     var originalFile = parsers.TryReadCr2WFile(originalMemoryStream);
@@ -480,9 +485,9 @@ namespace WolvenKit.MSTests
                         throw new SerializationException();
                     }
 
-#endregion
+                    #endregion
 
-#region convert back from json
+                    #region convert back from json
 
                     var newdto = JsonConvert.DeserializeObject<Red4W2rcFileDto>(json);
                     //Assert.IsNotNull(newdto);
@@ -530,7 +535,7 @@ namespace WolvenKit.MSTests
                                 File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.o.bin"), originalBytes.ToArray());
                                 File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.bin"), newBytes.ToArray());
 #endif
-                                throw new SerializationException();
+                                throw new SerializationException("Exports not equal");
                             }
                             else
                             {
@@ -543,18 +548,18 @@ namespace WolvenKit.MSTests
                             File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.o.bin"), originalBytes.ToArray());
                             File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.bin"), newBytes.ToArray());
 #endif
-                            throw new SerializationException();
+                            throw new SerializationException("Header not equal");
                         }
 
 
-                        
+
                     }
                     else
                     {
 
                     }
 
-#endregion
+                    #endregion
 
                     results.Add(new ArchiveTestResult()
                     {
@@ -565,6 +570,7 @@ namespace WolvenKit.MSTests
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine($"{hash} - {e.Message} - {e.StackTrace}");
                     results.Add(new ArchiveTestResult()
                     {
                         ArchiveName = archive.Name,
@@ -577,7 +583,7 @@ namespace WolvenKit.MSTests
 #if IS_PARALLEL
             });
 #else
-}
+            }
 #endif
 
             var totalCount = files.Count;
