@@ -42,8 +42,8 @@ namespace WolvenKit.Common.Tools
                             break;
                         // arrays
                         case ICurveDataAccessor:
-
-                            break;
+                            throw new NotImplementedException();
+                            //break;
                         case IREDArray redArray:
                             var listOfObjects = jArray.ToObject<List<object>>();
                             if (listOfObjects == null)
@@ -188,8 +188,7 @@ namespace WolvenKit.Common.Tools
                     // serialize arrays as list of objects
                     // serialize curves as array
                     case IREDArray:
-                    case ICurveDataAccessor:
-
+                    {
                         //TODO: bytearrays
 
                         dynamic array = data;
@@ -200,6 +199,21 @@ namespace WolvenKit.Common.Tools
                         return dyn
                             .Cast<IEditableVariable>()
                             .Select(_ => _.ToObject());
+                    }
+                    case ICurveDataAccessor:
+                    {
+                        //TODO: bytearrays
+
+                        dynamic array = data;
+                        if (array.Elements is not IList dyn)
+                        {
+                            throw new InvalidParsingException("Invalid File");
+                        }
+                        return dyn
+                            .Cast<IEditableVariable>()
+                            .Select(_ => _.ToObject());
+                    }
+
                     // serialize complex properties as Dictionary
                     default:
                         var dict = new Dictionary<string, object>();

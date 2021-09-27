@@ -1,4 +1,5 @@
-#define IS_PARALLEL
+//#define IS_PARALLEL
+#define WRITE
 
 using System;
 using System.Collections.Concurrent;
@@ -470,15 +471,6 @@ namespace WolvenKit.MSTests
 #endif
                     }
 
-//                    if (originalFile.Buffers.Count > 0)
-//                    {
-//#if IS_PARALLEL
-//                        return;
-//#else
-//                        continue;
-//#endif
-//                    }
-
                     var dto = new Red4W2rcFileDto(originalFile);
                     var json = JsonConvert.SerializeObject(dto, Formatting.Indented);
 
@@ -534,8 +526,10 @@ namespace WolvenKit.MSTests
                         {
                             if (!originalBytes.Skip(originalExportStartOffset).SequenceEqual(newBytes.Skip(newExportStartOffset)))
                             {
-                                //File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.o.bin"), originalBytes.ToArray());
-                                //File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.bin"), newBytes.ToArray());
+#if WRITE
+                                File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.o.bin"), originalBytes.ToArray());
+                                File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.bin"), newBytes.ToArray());
+#endif
                                 throw new SerializationException();
                             }
                             else
@@ -545,6 +539,10 @@ namespace WolvenKit.MSTests
                         }
                         else
                         {
+#if WRITE
+                            File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.o.bin"), originalBytes.ToArray());
+                            File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.bin"), newBytes.ToArray());
+#endif
                             throw new SerializationException();
                         }
 
