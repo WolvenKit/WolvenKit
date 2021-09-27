@@ -74,6 +74,8 @@ namespace WolvenKit.Common.Model.Cr2w
 
         public void ReadData(BinaryReader file);
         public void WriteData(BinaryWriter file);
+
+        public uint GetOffset();
     }
 
     #endregion

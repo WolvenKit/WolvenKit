@@ -43,7 +43,7 @@ namespace WolvenKit.ViewModels.Tools
         private readonly IProjectManager _projectManager;
         private readonly IWatcherService _watcherService;
         private readonly IModTools _modTools;
-        
+
 
         private EditorProject ActiveMod => _projectManager.ActiveProject;
         private readonly IObservableList<FileModel> _observableList;
@@ -402,7 +402,7 @@ namespace WolvenKit.ViewModels.Tools
             {
                 Directory.CreateDirectory(outDirectoryPath);
 
-                _modTools.ConvertFromAndWrite(new FileInfo(inpath),  new DirectoryInfo(outDirectoryPath));
+                _modTools.ConvertFromAndWrite(new FileInfo(inpath), new DirectoryInfo(outDirectoryPath));
             }
         }
 

@@ -5,17 +5,24 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using Catel.IoC;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
+using WolvenKit.Common.Tools;
+using WolvenKit.Interfaces.Extensions;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.MSTests
 {
     [TestClass]
-    public class Cr2wReadTest : GameUnitTest
+    public class ModkitConvertTests : GameUnitTest
     {
         #region Methods
 
@@ -429,90 +436,142 @@ namespace WolvenKit.MSTests
 
         #endregion test methods
 
-        private static IEnumerable<ReadTestResult> Read_Archive_Items(IEnumerable<FileEntry> files)
+        private static void Test_Extension(string extension)
         {
-            var results = new ConcurrentBag<ReadTestResult>();
+            var parsers = ServiceLocator.Default.ResolveType<Red4ParserService>();
+
+            var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
+            Directory.CreateDirectory(resultDir);
+
+            var results = new ConcurrentBag<ArchiveTestResult>();
+            var files = s_groupedFiles[extension].ToList();
 
 #if IS_PARALLEL
             Parallel.ForEach(files, file =>
 #else
             foreach (var file in files)
-#endif                
+#endif
             {
+                var hash = file.Key;
+                var archive = file.Archive as Archive;
+
                 try
                 {
-                    var ar = s_bm.Archives.Lookup(file.Archive.ArchiveAbsolutePath).Value as Archive;
-                    using var ms = new MemoryStream();
-                    ar?.CopyFileToStreamWithoutBuffers(ms, file.NameHash64);
-
-                    var c = new CR2WFile {FileName = file.NameOrHash};
-                    ms.Seek(0, SeekOrigin.Begin);
-                    var readResult = c.Read(ms);
-
-                    switch (readResult)
+#region convert to json
+                    using var originalMemoryStream = new MemoryStream();
+                    ModTools.ExtractSingleToStream(archive, hash, originalMemoryStream);
+                    var originalFile = parsers.TryReadCr2WFile(originalMemoryStream);
+                    if (originalFile == null)
                     {
-                        case EFileReadErrorCodes.NoCr2w:
-                            results.Add(new ReadTestResult
-                            {
-                                FileEntry = file, Success = true, ReadResult = ReadTestResult.ReadResultType.NoCr2W
-                            });
-                            break;
-
-                        case EFileReadErrorCodes.UnsupportedVersion:
-                            results.Add(new ReadTestResult
-                            {
-                                FileEntry = file,
-                                Success = false,
-                                ReadResult = ReadTestResult.ReadResultType.UnsupportedVersion,
-                                Message = $"Unsupported Version ({c.GetFileHeader().version})"
-                            });
-                            break;
-
-                        case EFileReadErrorCodes.NoError:
-                            var hasAdditionalBytes =
-                                c.AdditionalCr2WFileBytes != null && c.AdditionalCr2WFileBytes.Any();
-
-                            var (unknownTypes, unknownBytes) = c.GetUnknownBytes();
-                            var hasUnknownBytes = unknownBytes > 0;
-
-                            var res = ReadTestResult.ReadResultType.NoError;
-                            var msg = "";
-                            if (hasAdditionalBytes)
-                            {
-                                res |= ReadTestResult.ReadResultType.HasAdditionalBytes;
-                                msg += $"Additional Bytes: {c.AdditionalCr2WFileBytes.Length}";
-                            }
-
-                            if (hasUnknownBytes)
-                            {
-                                res |= ReadTestResult.ReadResultType.HasUnknownBytes;
-                                msg += $"UnknownBytes Bytes: {unknownBytes}";
-                            }
-
-                            results.Add(new ReadTestResult
-                            {
-                                FileEntry = file,
-                                Success = true /*!hasAdditionalBytes && !hasUnknownBytes*/,
-                                ReadResult = res,
-                                Message = msg,
-                                AdditionalBytes = hasAdditionalBytes ? c.AdditionalCr2WFileBytes.Length : 0,
-                                UnknownBytes = hasUnknownBytes ? unknownBytes : 0,
-                                UnknownTypes = hasUnknownBytes ? unknownTypes : null,
-                            });
-
-                            break;
-
-                        default:
-                            throw new ArgumentOutOfRangeException();
+#if IS_PARALLEL
+                        return;
+#else
+                        continue;
+#endif
                     }
+
+//                    if (originalFile.Buffers.Count > 0)
+//                    {
+//#if IS_PARALLEL
+//                        return;
+//#else
+//                        continue;
+//#endif
+//                    }
+
+                    var dto = new Red4W2rcFileDto(originalFile);
+                    var json = JsonConvert.SerializeObject(dto, Formatting.Indented);
+
+                    //Assert.Equals(string.IsNullOrEmpty(json), false);
+                    if (string.IsNullOrEmpty(json))
+                    {
+                        throw new SerializationException();
+                    }
+
+#endregion
+
+#region convert back from json
+
+                    var newdto = JsonConvert.DeserializeObject<Red4W2rcFileDto>(json);
+                    //Assert.IsNotNull(newdto);
+                    if (newdto == null)
+                    {
+                        throw new SerializationException();
+                    }
+
+                    var newFile = newdto.ToW2rc();
+
+                    #endregion
+
+                    #region compare
+
+                    // old file
+                    var header = (originalFile as CR2WFile).Header;
+                    var objectsend = (int)header.objectsEnd;
+                    var originalBytes = originalMemoryStream.ToByteArray().Take(objectsend);
+                    var originalExportStartOffset = (int)originalFile.Chunks.FirstOrDefault().GetOffset();
+
+                    // write the new file
+                    using var newMemoryStream = new MemoryStream();
+                    using var bw = new BinaryWriter(newMemoryStream);
+                    newFile.Write(bw);
+
+                    // hack to compare buffers
+                    var newBytes = newMemoryStream.ToByteArray();
+
+                    newMemoryStream.Seek(0, SeekOrigin.Begin);
+                    var dbg = parsers.TryReadCr2WFileHeaders(newMemoryStream);
+                    var newExportStartOffset = (int)dbg.Chunks.FirstOrDefault().GetOffset();
+
+
+
+
+
+                    if (!originalBytes.Skip(160).SequenceEqual(newBytes.Skip(160)))
+                    {
+                        // check again skipping the tables
+                        if (originalExportStartOffset == newExportStartOffset)
+                        {
+                            if (!originalBytes.Skip(originalExportStartOffset).SequenceEqual(newBytes.Skip(newExportStartOffset)))
+                            {
+                                //File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.o.bin"), originalBytes.ToArray());
+                                //File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.bin"), newBytes.ToArray());
+                                throw new SerializationException();
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                        else
+                        {
+                            throw new SerializationException();
+                        }
+
+
+                        
+                    }
+                    else
+                    {
+
+                    }
+
+#endregion
+
+                    results.Add(new ArchiveTestResult()
+                    {
+                        ArchiveName = archive.Name,
+                        Hash = hash.ToString(),
+                        Success = true
+                    });
                 }
                 catch (Exception e)
                 {
-                    results.Add(new ReadTestResult
+                    results.Add(new ArchiveTestResult()
                     {
-                        FileEntry = file,
+                        ArchiveName = archive.Name,
+                        Hash = hash.ToString(),
                         Success = false,
-                        ReadResult = ReadTestResult.ReadResultType.RuntimeException,
                         ExceptionType = e.GetType(),
                         Message = $"{e.Message}"
                     });
@@ -520,108 +579,23 @@ namespace WolvenKit.MSTests
 #if IS_PARALLEL
             });
 #else
-            }
+}
 #endif
 
-            return results;
-        }
+            var totalCount = files.Count;
 
-        private static void Test_Extension(string extension)
-        {
-            var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
-            Directory.CreateDirectory(resultDir);
-
-            // Run Test
-            var results = Read_Archive_Items(s_groupedFiles[extension]).ToList();
-
-            // Write
-            if (s_writeToFile)
-            {
-                if (results.Any(r => !r.Success))
-                {
-                    var resultPath = Path.Combine(resultDir, $"{extension[1..]}.csv");
-                    var csv = TestResultAsCsv(results.Where(r => !r.Success));
-                    File.WriteAllText(resultPath, csv);
-                    Console.Write(csv);
-                }
-            }
-
-            // Logging
-            // Evaluate
+            // Check success
             var successCount = results.Count(r => r.Success);
-            var totalCount = s_groupedFiles[extension].Count();
             var sb = new StringBuilder();
-            var msg = "";
-
-            var successRead = results.All(r => r.Success);
-            var successUb = !results.All(r => r.UnknownBytes > 0);
-
-            if (successUb && successRead)
+            sb.AppendLine($"Successfully serialized: {successCount} / {totalCount} ({(int)(successCount / (double)totalCount * 100)}%)");
+            var success = results.All(r => r.Success);
+            if (success)
             {
                 return;
             }
 
-            if (!successRead)
-            {
-                msg +=
-                    $"{extension} -> Successful Reads: {successCount} / {totalCount} ({(int)(successCount / (double)totalCount * 100)}%)";
-            }
-
-            var unknownBytes = results.Sum(r => r.UnknownBytes);
-            var additionalBytes = results.Sum(r => r.AdditionalBytes);
-            if (unknownBytes > 0)
-            {
-                msg += $" UnknownBytes: {unknownBytes}. ";
-                var unkownTypes = string.Join('\n', results.SelectMany(_ => _.UnknownTypes).Distinct());
-                msg += $" UnknownTypes: {unkownTypes}";
-            }
-
-            if (additionalBytes > 0)
-            {
-                msg += $" UnknownBytes: {additionalBytes}. ";
-            }
-
-            sb.AppendLine(
-                $"{extension} -> Successful Reads: {successCount} / {totalCount} ({(int)(successCount / (double)totalCount * 100)}%)");
-            sb.AppendLine(msg);
-            var logPath = Path.Combine(resultDir,
-                $"logfile_{(string.IsNullOrEmpty(extension) ? string.Empty : $"{extension[1..]}_")}{DateTime.Now:yyyyMMddHHmmss}.log");
-            File.WriteAllText(logPath, sb.ToString());
-            Console.WriteLine(sb.ToString());
-
+            var msg = $"Successful serialized: {successCount} / {totalCount}. ";
             Assert.Fail(msg);
-        }
-
-        private static string TestResultAsCsv(IEnumerable<ReadTestResult> results)
-        {
-            var sb = new StringBuilder();
-
-            sb.AppendLine(
-                $"{nameof(FileEntry.NameHash64)}," +
-                $"{nameof(FileEntry.FileName)}," +
-                $"{nameof(FileEntry.Archive.Name)}," +
-                $"{nameof(ReadTestResult.ReadResult)}," +
-                $"{nameof(ReadTestResult.Success)}," +
-                $"{nameof(ReadTestResult.AdditionalBytes)}," +
-                $"{nameof(ReadTestResult.UnknownBytes)}," +
-                $"{nameof(ReadTestResult.ExceptionType)}," +
-                $"{nameof(ReadTestResult.Message)}");
-
-            foreach (var r in results)
-            {
-                sb.AppendLine(
-                    $"{string.Format("0x{0:X}", r.FileEntry.NameHash64)}," +
-                    $"{r.FileEntry.FileName}," +
-                    $"{r.FileEntry.Archive.Name}," +
-                    $"{r.ReadResult}," +
-                    $"{r.Success}," +
-                    $"{r.AdditionalBytes}," +
-                    $"{r.UnknownBytes}," +
-                    $"{r.ExceptionType?.FullName}," +
-                    $"{r.Message}");
-            }
-
-            return sb.ToString();
         }
     }
 }

@@ -380,6 +380,9 @@ namespace WolvenKit.Modkit.RED4.Compiled
         }
         public void WriteData(BinaryWriter file)
         { }
+
+        public uint GetOffset() => throw new NotImplementedException();
+
         public Export(CompiledPackage file, string redtype, Export parentchunk, bool cooked = false)
         {
             AdReferences = new List<IREDChunkPtr>();

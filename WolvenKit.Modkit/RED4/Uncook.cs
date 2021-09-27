@@ -411,6 +411,7 @@ namespace WolvenKit.Modkit.RED4
                     throw new ArgumentOutOfRangeException($"Uncooking failed for extension: {extAsEnum}.");
             }
         }
+
         private bool HandleEntity(Stream cr2wStream, FileInfo cr2wFileName, EntityExportArgs entExportArgs)
         {
             try
@@ -432,6 +433,7 @@ namespace WolvenKit.Modkit.RED4
             }
             return false;
         }
+
         private bool HandleOpus(OpusExportArgs opusExportArgs)
         {
             OpusTools opusTools = new(
