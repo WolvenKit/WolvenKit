@@ -1,4 +1,4 @@
-//#define WRITE
+#define WRITE
 #define IS_PARALLEL
 
 #if WRITE
@@ -479,8 +479,6 @@ namespace WolvenKit.MSTests
 
                     var dto = new RedFileDto(originalFile);
                     var json = JsonConvert.SerializeObject(dto, Formatting.Indented);
-
-                    //Assert.Equals(string.IsNullOrEmpty(json), false);
                     if (string.IsNullOrEmpty(json))
                     {
                         throw new SerializationException();
@@ -491,7 +489,6 @@ namespace WolvenKit.MSTests
                     #region convert back from json
 
                     var newdto = JsonConvert.DeserializeObject<RedFileDto>(json);
-                    //Assert.IsNotNull(newdto);
                     if (newdto == null)
                     {
                         throw new SerializationException();

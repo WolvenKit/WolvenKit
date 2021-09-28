@@ -8,20 +8,27 @@ using System.Xml;
 using WolvenKit.RED4.CR2W.Reflection;
 using FastMember;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Core.Exceptions;
 
 namespace WolvenKit.RED4.CR2W.Types
 {
     [REDMeta(EREDMetaInfo.REDStruct)]
     public class CurvePoint<T> : CVariable, IREDCurvePoint where T : CVariable
     {
-        public T Value { get; set; }
-        public CFloat Point { get; set; }
+        [RED] public T Value { get; set; }
+        [RED] public CFloat Point { get; set; }
 
         public CurvePoint(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
         public object GetValue() => new Tuple<IEditableVariable, IEditableVariable>(Value, Point);
 
-
+        public void Init()
+        {
+            Value = Create<T>(nameof(Value));
+            Value.IsSerialized = true;
+            Point = Create<CFloat>(nameof(Point));
+            Point.IsSerialized = true;
+        }
     }
 
 
@@ -96,12 +103,30 @@ namespace WolvenKit.RED4.CR2W.Types
             file.Write(Tail);
         }
 
-        public override List<IEditableVariable> GetEditableVariables()
+        public override List<IEditableVariable> GetEditableVariables() => Elements.Cast<IEditableVariable>().ToList();
+
+        public IEditableVariable GetElementInstance(string varName)
         {
-            return Elements.Cast<IEditableVariable>().ToList();
+            var element = Create<CurvePoint<T>>(varName, Array.Empty<int>());
+            if (element is not IEditableVariable evar)
+            {
+                throw new MissingRTTIException(varName, Elementtype, this.REDType);
+            }
+            element.Init();
+
+            evar.IsSerialized = true;
+            return evar;
         }
 
-
+        public override void AddVariable(IEditableVariable variable)
+        {
+            if (variable is CurvePoint<T> tvar)
+            {
+                variable.SetREDName(Elements.Count.ToString());
+                tvar.IsSerialized = true;
+                Elements.Add(tvar);
+            }
+        }
     }
 
 

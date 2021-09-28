@@ -38,9 +38,25 @@ namespace WolvenKit.Common.Conversion
                             cVariable.SetValue(enumobj);
                             break;
                         // arrays
-                        case ICurveDataAccessor:
-                            throw new NotImplementedException();
-                        //break;
+                        case ICurveDataAccessor curve:
+                        {
+                            var curvePoints = jArray.ToObject<List<object>>();
+                            if (curvePoints == null)
+                            {
+                                throw new InvalidParsingException("not a CVariable");
+                            }
+                            for (var i = 0; i < curvePoints.Count; i++)
+                            {
+                                var jitem = curvePoints[i];
+
+
+                                var element = curve.GetElementInstance(i.ToString());
+                                // parse the elements according to the array type
+                                element.SetFromJObject(jitem);
+                                curve.AddVariable(element);
+                            }
+                            break;
+                        }
                         case IREDArray redArray:
                         {
                             if (redArray.IsByteArray())
@@ -211,8 +227,6 @@ namespace WolvenKit.Common.Conversion
                 }
                 case ICurveDataAccessor:
                 {
-                    //TODO: bytearrays
-
                     dynamic array = data;
                     if (array.Elements is not IList dyn)
                     {

@@ -221,6 +221,8 @@ namespace WolvenKit.Common.Model.Cr2w
     public interface ICurveDataAccessor : IEditableVariable
     {
         string Elementtype { get; }
+
+        public IEditableVariable GetElementInstance(string varName);
     }
 
     public interface IREDCurvePoint : IREDPrimitive
