@@ -66,7 +66,7 @@ Our primary focus at the moment is progressing with support for the new game, Cy
 1. **Download WolvenKit**
 
     | Package | Latest Release | Checks  |
-    | ------- | ------------ | ----------------- |
+    | ------- | ------------ | ------------------ |
     | [WolvenKit Nightly](https://github.com/WolvenKit/WolvenKit-nightly-releases/) | [![GitHub release (latest by date)](https://img.shields.io/github/v/release/WolvenKit/WolvenKit-nightly-releases)](https://github.com/WolvenKit/WolvenKit-nightly-releases/releases/latest) | ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/WolvenKit/WolvenKit/WolvenKit-Nightly?color=green) |
     | [WolvenKit](https://github.com/WolvenKit/WolvenKit/) | [![GitHub release (latest by date)](https://img.shields.io/github/v/release/WolvenKit/WolvenKit)](https://github.com/WolvenKit/WolvenKit/releases/latest) | ![GitHub branch checks state](https://img.shields.io/github/checks-status/WolvenKit/WolvenKit/master) | 
 
