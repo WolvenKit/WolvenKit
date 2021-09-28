@@ -317,6 +317,12 @@ namespace WolvenKit.ViewModels.Tools
 
         private void ExecuteStartPlaying()
         {
+            //Call Stop Playing if the media player is at the end of the track
+            if (mediaPlayer.Position >= mediaPlayer.NaturalDuration.TimeSpan)
+            {
+                ExecuteStopPlaying();
+            }
+
             mediaPlayer.Play();
         }
 
