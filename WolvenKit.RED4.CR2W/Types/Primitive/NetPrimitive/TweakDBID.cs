@@ -40,6 +40,21 @@ namespace WolvenKit.RED4.CR2W.Types
             return var;
         }
 
+        public override CVariable SetValue(object val)
+        {
+            this.IsSerialized = true;
+            this.Value = val switch
+            {
+                ulong o => o,
+                string s => ulong.Parse(s),
+                CUInt64 v => v.Value,
+                _ => this.Value
+            };
+
+            return this;
+        }
+
+
         #endregion
     }
 }
