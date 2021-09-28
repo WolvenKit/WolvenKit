@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using Catel.IoC;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
+using WolvenKit.Common.Conversion;
 using WolvenKit.Common.Tools;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.Modkit.RED4;
@@ -476,7 +477,7 @@ namespace WolvenKit.MSTests
 #endif
                     }
 
-                    var dto = new Red4W2rcFileDto(originalFile);
+                    var dto = new RedFileDto(originalFile);
                     var json = JsonConvert.SerializeObject(dto, Formatting.Indented);
 
                     //Assert.Equals(string.IsNullOrEmpty(json), false);
@@ -489,7 +490,7 @@ namespace WolvenKit.MSTests
 
                     #region convert back from json
 
-                    var newdto = JsonConvert.DeserializeObject<Red4W2rcFileDto>(json);
+                    var newdto = JsonConvert.DeserializeObject<RedFileDto>(json);
                     //Assert.IsNotNull(newdto);
                     if (newdto == null)
                     {

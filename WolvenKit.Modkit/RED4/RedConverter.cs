@@ -1,13 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using WolvenKit.Common;
-using WolvenKit.Common.Tools;
+using WolvenKit.Common.Conversion;
 using WolvenKit.Interfaces.Core;
 using WolvenKit.RED4.CR2W;
 
@@ -33,7 +29,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var json = "";
-            var dto = new Red4W2rcFileDto(cr2w);
+            var dto = new RedFileDto(cr2w);
             json = JsonConvert.SerializeObject(dto, Formatting.Indented);
 
             if (string.IsNullOrEmpty(json))
@@ -47,7 +43,7 @@ namespace WolvenKit.Modkit.RED4
                     return json;
                 case ETextConvertFormat.xml:
                 {
-                    var doc = JsonConvert.DeserializeXmlNode(json, Red4W2rcFileDto.Magic);
+                    var doc = JsonConvert.DeserializeXmlNode(json, RedFileDto.Magic);
                     using var tw = new StringWriter();
                     doc?.Save(tw);
                     return tw.ToString();
@@ -79,7 +75,7 @@ namespace WolvenKit.Modkit.RED4
                         File.WriteAllText(outpath, json);
                         break;
                     case ETextConvertFormat.xml:
-                        var doc = JsonConvert.DeserializeXmlNode(json, Red4W2rcFileDto.Magic);
+                        var doc = JsonConvert.DeserializeXmlNode(json, RedFileDto.Magic);
                         doc?.Save(outpath);
                         break;
                     default:
@@ -112,7 +108,7 @@ namespace WolvenKit.Modkit.RED4
         /// <exception cref="InvalidParsingException"></exception>
         public CR2WFile ConvertFromJson(string json)
         {
-            var newdto = JsonConvert.DeserializeObject<Red4W2rcFileDto>(json);
+            var newdto = JsonConvert.DeserializeObject<RedFileDto>(json);
             return newdto != null ? newdto.ToW2rc() : throw new InvalidParsingException();
         }
 

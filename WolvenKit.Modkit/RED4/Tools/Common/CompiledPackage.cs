@@ -12,6 +12,7 @@ using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.Common;
 using Newtonsoft.Json;
+using WolvenKit.Common.Conversion;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Common.Tools;
 
@@ -176,7 +177,7 @@ namespace WolvenKit.Modkit.RED4.Compiled
         }
         public string ToJson()
         {
-            return JsonConvert.SerializeObject(new Red4W2rcFileDto(this),Formatting.Indented);
+            return JsonConvert.SerializeObject(new RedFileDto(this),Formatting.Indented);
         }
         public IEditableVariable ReadVariable(BinaryReader br, IEditableVariable parent)
         {
