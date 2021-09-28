@@ -223,7 +223,12 @@ namespace WolvenKit.Common.Model.Cr2w
         string Elementtype { get; }
 
         public IEditableVariable GetElementInstance(string varName);
+
         public IEnumerable<IREDCurvePoint> GetCurvePoints();
+
+        public IEditableVariable GetInterpolationType();
+
+        public IEditableVariable GetLinkType();
     }
 
     public interface IREDCurvePoint : IREDPrimitive

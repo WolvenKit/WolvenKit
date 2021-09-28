@@ -140,6 +140,25 @@ namespace WolvenKit.Common.Conversion
                 return;
             }
 
+            if (cvar is ICurveDataAccessor curve)
+            {
+                var interpolationTypeProp = GetRedProperty(cvar, "InterpolationType");
+                interpolationTypeProp.SetFromJObject(dictionary["InterpolationType"]);
+
+                var linkTypeProp = GetRedProperty(cvar, "LinkType");
+                linkTypeProp.SetFromJObject(dictionary["LinkType"]);
+
+                curve.SetFromJObject(dictionary["Elements"]);
+
+                return;
+            }
+
+           
+
+
+            
+
+
             foreach (var (propertyName, value) in dictionary)
             {
                 var redProperty = GetRedProperty(cvar, propertyName);
@@ -225,16 +244,23 @@ namespace WolvenKit.Common.Conversion
 
                     throw new InvalidParsingException("Invalid File");
                 }
-                case ICurveDataAccessor:
+                case ICurveDataAccessor curve:
                 {
                     dynamic array = data;
                     if (array.Elements is not IList dyn)
                     {
                         throw new InvalidParsingException("Invalid File");
                     }
-                    return dyn
+                    var elements = dyn
                         .Cast<IEditableVariable>()
                         .Select(_ => _.ToObject());
+
+                    return new Dictionary<string, object>()
+                    {
+                        {"InterpolationType", curve.GetInterpolationType().ToObject()},
+                        {"LinkType", curve.GetLinkType().ToObject()},
+                        {"Elements", elements}
+                    };
                 }
 
                 // serialize complex properties as Dictionary
