@@ -21,6 +21,7 @@ namespace WolvenKit.Views.Templates
         public DataTemplate HandleTemplateView { get; set; }
         public DataTemplate RefTemplateView { get; set; }
         public DataTemplate ColorTemplateView { get; set; }
+        public DataTemplate SingleChannelCurveTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container) =>
             item is not ChunkPropertyViewModel editableVariable
@@ -38,14 +39,8 @@ namespace WolvenKit.Views.Templates
                 IREDRef => RefTemplateView,
                 IREDColor x => ColorTemplateView,
                 IREDArray => CommmonTemplate,
+                ICurveDataAccessor => SingleChannelCurveTemplate,
                 _ => CommmonTemplate
             };
-
-        //private DataTemplate GetVariantDataTemplate(IREDVariant variant)
-        //{
-        //    var wrapped = variant.Variant;
-        //    var t = GetTemplate(wrapped);
-        //    return t;
-        //}
     }
 }
