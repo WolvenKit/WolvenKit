@@ -66,24 +66,20 @@ namespace WolvenKit.RED4.CR2W.Types
                 var cpoint = new CurvePoint<T>(cr2w, this, i.ToString()) {IsSerialized = true};
 
                 var point = new CFloat(cr2w, cpoint, "point") { IsSerialized = true };
-                var element = Create<T>(i.ToString(), new int[0]);
+                var value = Create<T>(i.ToString(), new int[0]);
 
                 point.Read(file, 4);
                 // no actual way to find out the elementsize of an array element
                 // bacause cdpr serialized classes have no fixed size
                 // solution? not sure: pass 0 and disable checks?
-                element.ReadAsFixedSize(file, (uint)0);
-                
+                value.ReadAsFixedSize(file, (uint)0);
 
-                if (element is T te)
-                {
-                    te.IsSerialized = true;
 
-                    cpoint.Point = point;
-                    cpoint.Value = te;
+                value.IsSerialized = true;
 
-                    Elements.Add(cpoint);
-                }
+                cpoint.Point = point;
+                cpoint.Value = value;
+                Elements.Add(cpoint);
             }
 
             Tail = file.ReadUInt16();
@@ -100,8 +96,8 @@ namespace WolvenKit.RED4.CR2W.Types
 
             foreach (var curvePoint in Elements)
             {
-                curvePoint.Value.WriteAsFixedSize(file);
                 curvePoint.Point.Write(file);
+                curvePoint.Value.WriteAsFixedSize(file);
             }
 
             file.Write(Tail);
