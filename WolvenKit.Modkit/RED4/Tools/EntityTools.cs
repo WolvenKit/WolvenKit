@@ -6,6 +6,7 @@ using System.IO;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Modkit.RED4.Compiled;
 using Newtonsoft.Json;
+using WolvenKit.Common.Conversion;
 using WolvenKit.Common.Tools;
 
 namespace WolvenKit.Modkit.RED4
@@ -49,7 +50,7 @@ namespace WolvenKit.Modkit.RED4
                 CompiledPackage package = new CompiledPackage(_hashService);
                 packageStream.Seek(0, SeekOrigin.Begin);
                 package.Read(new BinaryReader(packageStream));
-                string data = JsonConvert.SerializeObject(new Red4W2rcFileDto(package), Formatting.Indented);
+                string data = JsonConvert.SerializeObject(new RedFileDto(package), Formatting.Indented);
                 File.WriteAllText(outfile, data);
                 return true;
             }
@@ -62,7 +63,7 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
             var blobs = cr2w.Chunks.Select(_ => _.Data).OfType<appearanceAppearanceDefinition>().ToList();
-            List<Red4W2rcFileDto> datas = new List<Red4W2rcFileDto>();
+            List<RedFileDto> datas = new List<RedFileDto>();
             foreach(var blob in blobs)
             {
                 if (blob.CompiledData.IsSerialized)
@@ -76,7 +77,7 @@ namespace WolvenKit.Modkit.RED4
                     CompiledPackage package = new CompiledPackage(_hashService);
                     packageStream.Seek(0, SeekOrigin.Begin);
                     package.Read(new BinaryReader(packageStream));
-                    datas.Add(new Red4W2rcFileDto(package));
+                    datas.Add(new RedFileDto(package));
                 }
             }
             if(datas.Count > 1)

@@ -486,6 +486,12 @@
                       />
                 </DataTemplate>
 
+                <DataTemplate x:Key="SingleChannelCurveTemplate">
+                    <Button x:Name="CurveEditorButton" Content="Open Curve Editor"
+                            d:DataContext="{d:DesignInstance shell:ChunkPropertyViewModel }"
+                            Click="CurveEditorButton_OnClick" Tag="{Binding Property}" />
+                </DataTemplate>
+
                 <templates:EditableVariableDataTemplateSelector
                                 x:Key="DataTemplateSelector"
                                 CommmonTemplate="{StaticResource CommmonTemplate}"
@@ -504,7 +510,7 @@
 
                                 ColorTemplateView="{StaticResource ColorTemplateView}"
 
-                                
+                                SingleChannelCurveTemplate="{StaticResource SingleChannelCurveTemplate}"
                                 />
 
                 <converters1:CellStyleConverter x:Key="converter" />

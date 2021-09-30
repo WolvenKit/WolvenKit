@@ -27,15 +27,15 @@ namespace CP77Tools.Commands
             AddOption(new Option<string>(new[] {"--pattern", "-w"},
                 "Use optional search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized"));
             AddOption(new Option<string>(new[] { "--regex", "-r" }, "Use optional regex pattern."));
-            AddOption(new Option<ESerializeFormat>(new[] {"--format", "-ft"},
+            AddOption(new Option<ETextConvertFormat>(new[] {"--format", "-ft"},
                 "Use optional serialization format. Options are json and xml"));
 
             Handler = CommandHandler
-                .Create<string[], string, bool, bool, string, string, ESerializeFormat, IHost>(Action);
+                .Create<string[], string, bool, bool, string, string, ETextConvertFormat, IHost>(Action);
         }
 
         private void Action(string[] path, string outpath, bool deserialize, bool serialize, string pattern,
-            string regex, ESerializeFormat format, IHost host)
+            string regex, ETextConvertFormat format, IHost host)
         {
             var serviceProvider = host.Services;
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();

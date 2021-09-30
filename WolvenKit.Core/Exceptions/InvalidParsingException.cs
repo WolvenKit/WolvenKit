@@ -6,18 +6,12 @@ namespace WolvenKit.Interfaces.Core
     {
         #region Constructors
 
-        public InvalidParsingException(string message) : base(message)
+        public InvalidParsingException()
         {
+            
         }
 
-        #endregion Constructors
-    }
-
-    public class InvalidSerializationException : Exception
-    {
-        #region Constructors
-
-        public InvalidSerializationException(string message) : base(message)
+        public InvalidParsingException(string message) : base(message)
         {
         }
 

@@ -2,9 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.MemoryMappedFiles;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CP77Tools.Model;
 using WolvenKit.Common.RED4.Archive;
 using WolvenKit.Interfaces.Core;
@@ -15,8 +12,14 @@ namespace WolvenKit.Common.Services
 {
     public static class Red4ParserServiceExtensions
     {
-       public static Archive ReadArchive(string path, IHashService _hashService)
-       {
+        /// <summary>
+        /// Reads an archive file from a given filepath
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="hashService"></param>
+        /// <returns></returns>
+        public static Archive ReadArchive(string path, IHashService hashService)
+        {
             var ar = new Archive()
             {
                 ArchiveAbsolutePath = path
@@ -26,7 +29,7 @@ namespace WolvenKit.Common.Services
 
 
             // read header
-            uint customDataLength = 0;
+            uint customDataLength;
 
             using (var vs = mmf.CreateViewStream(0, Header.EXTENDED_SIZE, MemoryMappedFileAccess.Read))
             using (var br = new BinaryReader(vs))
@@ -44,10 +47,10 @@ namespace WolvenKit.Common.Services
                     using var br = new BinaryReader(vs);
                     if (br.BaseStream.Length >= LxrsFooter.MIN_LENGTH)
                     {
-                        var lxrs = br.ReadLxrsFooter(_hashService);
+                        var lxrs = br.ReadLxrsFooter();
                         foreach (var s in lxrs.FileInfos)
                         {
-                            _hashService.AddCustom(s);
+                            hashService.AddCustom(s);
                         }
                     }
                 }
@@ -63,7 +66,7 @@ namespace WolvenKit.Common.Services
             MemoryMappedFileAccess.Read))
             using (var br = new BinaryReader(vs))
             {
-                ar.Index = ReadIndex(br, _hashService);
+                ar.Index = ReadIndex(br, hashService);
             }
 
             foreach (var file in ar.Index.FileEntries.Values)
@@ -75,16 +78,16 @@ namespace WolvenKit.Common.Services
             return ar;
         }
 
-        private static LxrsFooter ReadLxrsFooter(this BinaryReader br, IHashService _hashService)
-       {
-           var customPaths = new List<string>();
-           var footer = new LxrsFooter(customPaths);
-           footer.Read(br);
+        private static LxrsFooter ReadLxrsFooter(this BinaryReader br)
+        {
+            var customPaths = new List<string>();
+            var footer = new LxrsFooter(customPaths);
+            footer.Read(br);
 
-           return footer;
-       }
+            return footer;
+        }
 
-        private static Index ReadIndex(this BinaryReader br, IHashService _hashService)
+        private static Index ReadIndex(this BinaryReader br, IHashService hashService)
         {
             var index = new Index
             {
@@ -99,7 +102,7 @@ namespace WolvenKit.Common.Services
             // read tables
             for (var i = 0; i < index.FileEntryCount; i++)
             {
-                var entry = ReadFileEntry(br, _hashService);
+                var entry = ReadFileEntry(br, hashService);
 
                 if (!index.FileEntries.ContainsKey(entry.NameHash64))
                 {
@@ -118,7 +121,7 @@ namespace WolvenKit.Common.Services
 
             for (var i = 0; i < index.ResourceDependencyCount; i++)
             {
-                index.Dependencies.Add(ReadDependency(br, _hashService));
+                index.Dependencies.Add(ReadDependency(br));
             }
 
             foreach (var (_, value) in index.FileEntries)
@@ -139,7 +142,7 @@ namespace WolvenKit.Common.Services
             return index;
         }
 
-        public static Header ReadHeader(this BinaryReader br)
+        private static Header ReadHeader(this BinaryReader br)
         {
             var header = new Header()
             {
@@ -159,15 +162,11 @@ namespace WolvenKit.Common.Services
             return header;
         }
 
-        private static Dependency ReadDependency(this BinaryReader br, IHashService _hashService)
-        {
-            var d = new Dependency(_hashService, br.ReadUInt64());            
-            return d;
-        }
+        private static Dependency ReadDependency(this BinaryReader br) => new(br.ReadUInt64());
 
-        private static FileEntry ReadFileEntry(this BinaryReader br, IHashService _hashService)
+        private static FileEntry ReadFileEntry(this BinaryReader br, IHashService hashService)
         {
-            var fileEntry = new FileEntry(_hashService)
+            var fileEntry = new FileEntry(hashService)
             {
                 NameHash64 = br.ReadUInt64(),
                 Timestamp = DateTime.FromFileTime(br.ReadInt64()),
@@ -182,13 +181,12 @@ namespace WolvenKit.Common.Services
             return fileEntry;
         }
 
-        private static FileSegment ReadFileSegment(this BinaryReader br) =>
-            new FileSegment()
-            {
-                Offset = br.ReadUInt64(),
-                ZSize = br.ReadUInt32(),
-                Size = br.ReadUInt32()
-            };
+        private static FileSegment ReadFileSegment(this BinaryReader br) => new()
+        {
+            Offset = br.ReadUInt64(),
+            ZSize = br.ReadUInt32(),
+            Size = br.ReadUInt32()
+        };
     }
 
 }

@@ -25,7 +25,7 @@ namespace WolvenKit.Common
         Nightly
     }
 
-    public enum ESerializeFormat
+    public enum ETextConvertFormat
     {
         json,
         xml
@@ -308,12 +308,12 @@ namespace WolvenKit.Common
     /// </summary>
     public enum EUncookExtension
     {
-        bmp = 0,
-        jpg = 1,
-        png = 2,
-        tga = 3,
-        tiff = 4,
-        dds = 5
+        dds,
+        tga,
+        bmp,
+        jpg,
+        png,
+        tiff
     }
 
     /// <summary>

@@ -11,8 +11,6 @@ using Microsoft.Win32;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using DynamicData;
-using DynamicData.Binding;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -30,8 +28,6 @@ using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using WolvenKit.RED4.CR2W.Types;
-using WolvenKit.ViewModels.Wizards;
 using WolvenManager.Installer.Services;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 using WolvenKit.Common.Model;
@@ -151,7 +147,7 @@ namespace WolvenKit.ViewModels.Shell
 
             _settingsManager
                 .WhenAnyValue(x => x.UpdateChannel)
-                .Subscribe(b =>
+                .Subscribe(_ =>
                 {
                     _updateService.SetUpdateChannel(_settingsManager.UpdateChannel);
                     Task.Run(() => _updateService.CheckForUpdatesAsync());
@@ -170,7 +166,7 @@ namespace WolvenKit.ViewModels.Shell
         private void OnStartup()
         {
             _updateService.SetUpdateChannel(_settingsManager.UpdateChannel);
-            _updateService.Init(new string[] { Constants.UpdateUrl, Constants.UpdateUrlNightly },
+            _updateService.Init(new[] { Constants.UpdateUrl, Constants.UpdateUrlNightly },
                 Constants.AssemblyName,
             delegate (FileInfo path, bool isManaged)
             {
@@ -219,7 +215,7 @@ namespace WolvenKit.ViewModels.Shell
                 return;
             }
 
-            var result = await Interactions.ShowFirstTimeSetup.Handle(Unit.Default);
+            await Interactions.ShowFirstTimeSetup.Handle(Unit.Default);
         }
 
         #endregion init
@@ -232,7 +228,7 @@ namespace WolvenKit.ViewModels.Shell
             try
             {
                 var projectToDel = _recentlyUsedItemsService.Items.Items
-                    .FirstOrDefault(project => project.Name == parameter?.ToString());
+                    .FirstOrDefault(project => project.Name == parameter);
                 if (projectToDel != null)
                 {
                     _recentlyUsedItemsService.RemoveItem(projectToDel);
@@ -318,7 +314,7 @@ namespace WolvenKit.ViewModels.Shell
                 switch (Path.GetExtension(location))
                 {
                     case ".w3modproj":
-                        await _gameControllerFactory.GetController().HandleStartup().ContinueWith(t =>
+                        await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
                         {
                             _notificationService.Success(
                                 "Project " + Path.GetFileNameWithoutExtension(location) +
@@ -328,7 +324,7 @@ namespace WolvenKit.ViewModels.Shell
                         break;
                     case ".cpmodproj":
                         await _gameControllerFactory.GetController().HandleStartup().ContinueWith(
-                            t =>
+                            _ =>
                             {
                                 _notificationService.Success("Project " +
                                                              Path.GetFileNameWithoutExtension(location) +
@@ -336,8 +332,6 @@ namespace WolvenKit.ViewModels.Shell
 
                             },
                             TaskContinuationOptions.OnlyOnRanToCompletion);
-                        break;
-                    default:
                         break;
                 }
 
@@ -412,7 +406,7 @@ namespace WolvenKit.ViewModels.Shell
                 switch (Path.GetExtension(location))
                 {
                     case ".w3modproj":
-                        await _gameControllerFactory.GetController().HandleStartup().ContinueWith(t =>
+                        await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
                         {
                             _notificationService.Success(
                                 "Project " + Path.GetFileNameWithoutExtension(location) +
@@ -422,7 +416,7 @@ namespace WolvenKit.ViewModels.Shell
                         break;
                     case ".cpmodproj":
                         await _gameControllerFactory.GetController().HandleStartup().ContinueWith(
-                            t =>
+                            _ =>
                             {
                                 _notificationService.Success("Project " +
                                                              Path.GetFileNameWithoutExtension(location) +
@@ -430,8 +424,6 @@ namespace WolvenKit.ViewModels.Shell
 
                             },
                             TaskContinuationOptions.OnlyOnRanToCompletion);
-                        break;
-                    default:
                         break;
                 }
             }
@@ -502,8 +494,6 @@ namespace WolvenKit.ViewModels.Shell
                     break;
                 case EWolvenKitFile.Cr2w:
                     CreateCr2wFile(model);
-                    break;
-                default:
                     break;
             }
 
@@ -737,65 +727,10 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         /// <summary>
-        /// Add a new document viewmodel into the collection of files.
-        /// </summary>
-        /// <param name="fileToAdd"></param>
-        //public void AddFile(DocumentViewModel fileToAdd)
-        //{
-        //    if (fileToAdd == null)
-        //    {
-        //        return;
-        //    }
-
-        //    // Don't add this twice
-        //    if (OpenDocuments.Any(f => f.ContentId == fileToAdd.ContentId))
-        //    {
-        //        return;
-        //    }
-
-        //    DockedViews.Add(fileToAdd);
-        //}
-
-        /// <summary>
-        /// Checks if a document can be closed and asks the user whether
-        /// to save before closing if the document appears to be dirty.
-        /// </summary>
-        /// <param name="fileToClose"></param>
-        //public void Close(DocumentViewModel fileToClose)
-        //{
-        //    if (fileToClose.IsDirty)
-        //    {
-        //        var res = MessageBox.Show($"Save changes for file '{fileToClose.FileName}'?", "AvalonDock Test App", MessageBoxButton.YesNoCancel);
-        //        if (res == MessageBoxResult.Cancel)
-        //        {
-        //            return;
-        //        }
-
-        //        if (res == MessageBoxResult.Yes)
-        //        {
-        //            Save(fileToClose);
-        //        }
-        //    }
-
-        //    DockedViews.Remove(fileToClose);
-        //}
-
-        /// <summary>Closing all documents without user interaction to support reload of layout via menu.</summary>
-        //public void CloseAllDocuments()
-        //{
-        //    ActiveDocument = null;
-        //    foreach (var documentViewModel in OpenDocuments)
-        //    {
-        //        DockedViews.Remove(documentViewModel);
-        //    }
-        //}
-
-        /// <summary>
         /// Open a file and return its content in a viewmodel.
         /// </summary>
-        /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<IDocumentViewModel> OpenAsync(string fullPath, EWolvenKitFile type)
+        private async Task<IDocumentViewModel> OpenAsync(string fullPath, EWolvenKitFile type)
         {
             // Check if we have already loaded this file and return it if so
             var fileViewModel = OpenDocuments.FirstOrDefault(fm => fm.ContentId == fullPath);
@@ -805,7 +740,6 @@ namespace WolvenKit.ViewModels.Shell
             }
 
             // open file
-            bool result;
             switch (type)
             {
                 case EWolvenKitFile.Cr2w:
@@ -821,7 +755,7 @@ namespace WolvenKit.ViewModels.Shell
                     break;
             }
 
-            result = await fileViewModel.OpenFileAsync(fullPath);
+            var result = await fileViewModel.OpenFileAsync(fullPath);
 
             if (result)
             {
@@ -859,6 +793,11 @@ namespace WolvenKit.ViewModels.Shell
             ActiveDocument.SaveCommand.SafeExecute();
             ActiveDocument.SetIsDirty(false);
         }
+
+        private bool IsInRawFolder(FileModel model) => IsInRawFolder(model.FullName);
+        private bool IsInRawFolder(string path) => _projectManager.ActiveProject != null &&
+                                                       path.Contains(_projectManager.ActiveProject
+                                                           .RawDirectory);
 
         private async Task RequestFileOpen(string fullpath)
         {
@@ -913,6 +852,7 @@ namespace WolvenKit.ViewModels.Shell
 
             #endregion inspect on single click
 
+
             // double click
             switch (ext)
             {
@@ -946,7 +886,20 @@ namespace WolvenKit.ViewModels.Shell
                 case ".YML":
                 case ".LOG":
                 case ".INI":
-                    ShellExecute(fullpath);
+                    ShellExecute();
+                    break;
+
+                // double file formats
+                case ".CSV":
+                case ".JSON":
+                    if (IsInRawFolder(fullpath))
+                    {
+                        ShellExecute();
+                    }
+                    else
+                    {
+                        await OpenRedengineFile();
+                    }
                     break;
 
                 // VIDEO
@@ -956,7 +909,7 @@ namespace WolvenKit.ViewModels.Shell
                 // AUDIO
 
                 case ".WEM":
-                    OpenAudioFile(fullpath);
+                    OpenAudioFile();
                     break;
 
                 case ".SUBS":
@@ -977,35 +930,40 @@ namespace WolvenKit.ViewModels.Shell
 
                 default:
 
-                    var trimmedExt = ext.TrimStart('.').ToUpper();
-                    EWolvenKitFile type = EWolvenKitFile.Cr2w;
-
-                    var isRedEngineFile = Enum.GetNames<ERedExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal));
-                    if (isRedEngineFile)
-                    {
-                        type = EWolvenKitFile.Cr2w;
-                    }
-                    var isRedscriptFile = Enum.GetNames<ERedScriptExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal));
-                    if (isRedscriptFile)
-                    {
-                        type = EWolvenKitFile.Redscript;
-                    }
-                    var isTweakFile = Enum.GetNames<ETweakExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal));
-                    if (isTweakFile)
-                    {
-                        type = EWolvenKitFile.Tweak;
-                    }
-
-                    if (isRedEngineFile || isRedscriptFile || isTweakFile)
-                    {
-                        /*ActiveDocument =*/ await OpenAsync(fullpath, type);
-                    }
-
+                    await OpenRedengineFile();
 
                     break;
             }
 
-            void OpenAudioFile(string full)
+            async Task OpenRedengineFile()
+            {
+                var trimmedExt = ext.TrimStart('.').ToUpper();
+                var type = EWolvenKitFile.Cr2w;
+
+                var isRedEngineFile = Enum.GetNames<ERedExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal));
+                if (isRedEngineFile)
+                {
+                    type = EWolvenKitFile.Cr2w;
+                }
+                var isRedscriptFile = Enum.GetNames<ERedScriptExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal));
+                if (isRedscriptFile)
+                {
+                    type = EWolvenKitFile.Redscript;
+                }
+                var isTweakFile = Enum.GetNames<ETweakExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal));
+                if (isTweakFile)
+                {
+                    type = EWolvenKitFile.Tweak;
+                }
+
+                if (isRedEngineFile || isRedscriptFile || isTweakFile)
+                {
+                    /*ActiveDocument =*/
+                    await OpenAsync(fullpath, type);
+                }
+            }
+
+            void OpenAudioFile()
             {
                 // commented for testing
 
@@ -1014,17 +972,17 @@ namespace WolvenKit.ViewModels.Shell
                 //z.AddAudioItem(full);
             }
 
-            void ShellExecute(string path)
+            void ShellExecute()
             {
                 try
                 {
-                    var proc = new ProcessStartInfo(path.ToEscapedPath()) { UseShellExecute = true };
+                    var proc = new ProcessStartInfo(fullpath.ToEscapedPath()) { UseShellExecute = true };
                     Process.Start(proc);
                 }
                 catch (Win32Exception)
                 {
                     // eat this: no default app set for filetype
-                    _loggerService.Error($"No default prgram set in Windows to open file extension {Path.GetExtension(path)}");
+                    _loggerService.Error($"No default prgram set in Windows to open file extension {Path.GetExtension(fullpath)}");
                 }
             }
 

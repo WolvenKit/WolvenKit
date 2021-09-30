@@ -616,7 +616,7 @@ namespace WolvenKit.Common.DDS
                     break;
             }
 
-            return uext != EUncookExtension.dds && ConvertFromDdsAndSave(ms, outfilename, (DirectXTexSharp.ESaveFileTypes)uext, vflip);
+            return uext != EUncookExtension.dds && ConvertFromDdsAndSave(ms, outfilename, uext.ToSaveFormat(), vflip);
         }
 
         /// <summary>
@@ -672,7 +672,7 @@ namespace WolvenKit.Common.DDS
         }
 
         /// <summary>
-        ///
+        /// Converts a dds stream to another texture file type and returns an image byte array
         /// </summary>
         public static unsafe byte[] ConvertToDdsMemory(
             Stream ms,
@@ -706,7 +706,7 @@ namespace WolvenKit.Common.DDS
 
 
                     var buffer = DirectXTexSharp.Texconv.ConvertToDdsArray(ptr, span.Length,
-                        (DirectXTexSharp.ESaveFileTypes)filetype,
+                        filetype.ToSaveFormat(),
                         fmt, vflip, hflip);
                     return buffer;
                 }
@@ -721,7 +721,7 @@ namespace WolvenKit.Common.DDS
         }
 
         /// <summary>
-        ///
+        /// Converts an image stream to a dds byte array
         /// </summary>
         public static unsafe byte[] ConvertFromDdsMemory(Stream ms, EUncookExtension filetype, bool vflip = false, bool hflip = false)
         {
@@ -745,7 +745,7 @@ namespace WolvenKit.Common.DDS
                 fixed (byte* ptr = span)
                 {
                     var buffer = DirectXTexSharp.Texconv.ConvertFromDdsArray(ptr, span.Length,
-                        (DirectXTexSharp.ESaveFileTypes)filetype,
+                        filetype.ToSaveFormat(),
                         vflip, hflip);
                     return buffer;
                 }
@@ -759,5 +759,15 @@ namespace WolvenKit.Common.DDS
             }
         }
 
+        private static ESaveFileTypes ToSaveFormat(this EUncookExtension extension) =>
+            extension switch
+            {
+                EUncookExtension.bmp => ESaveFileTypes.BMP,
+                EUncookExtension.jpg => ESaveFileTypes.JPEG,
+                EUncookExtension.png => ESaveFileTypes.PNG,
+                EUncookExtension.tga => ESaveFileTypes.TGA,
+                EUncookExtension.tiff => ESaveFileTypes.TIFF,
+                _ => throw new ArgumentOutOfRangeException(nameof(extension), extension, null)
+            };
     }
 }

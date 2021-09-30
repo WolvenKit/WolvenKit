@@ -34,7 +34,9 @@ namespace WolvenKit.RED4.CR2W.Types
 
         #region methods
 
-        private bool IsByteArray() => typeof(T) == typeof(CUInt8);
+        public bool IsByteArray() => typeof(T) == typeof(CUInt8);
+
+        public byte[] GetBytes() => _buffer;
 
         [Browsable(false)]
         public override string REDType => REDReflection.GetREDTypeString(GetType());
@@ -161,10 +163,24 @@ namespace WolvenKit.RED4.CR2W.Types
         public override CVariable SetValue(object val)
         {
             this.IsSerialized = true;
-            if (val is CArrayBase<T> cvar)
+
+            switch (val)
             {
-                this.Elements = cvar.Elements;
+                case CArrayBase<T> cvar:
+                    this.Elements = cvar.Elements;
+                    break;
+                case byte[] bytes:
+                    this._buffer = bytes;
+                    break;
+                case string base64String:
+                    var b = Convert.FromBase64String(base64String);
+                    this._buffer = b;
+                    break;
+                default:
+                    this.Elements = this.Elements;
+                    break;
             }
+
 
             return this;
         }

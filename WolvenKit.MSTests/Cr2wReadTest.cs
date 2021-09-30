@@ -1,5 +1,4 @@
 #define IS_PARALLEL
-//#undef IS_PARALLEL
 
 using System;
 using System.Collections.Concurrent;
