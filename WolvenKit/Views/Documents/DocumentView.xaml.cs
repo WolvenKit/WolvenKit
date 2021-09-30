@@ -109,11 +109,20 @@ namespace WolvenKit.Views.Documents
         private void CurveEditorButton_OnClick(object sender, RoutedEventArgs e)
         {
             var tag = ((Button)sender).Tag;
-            if (tag is ICurveDataAccessor)
+            if (tag is ICurveDataAccessor redcurve)
             {
-                var iediable = tag as IEditableVariable;
-                var subWindow = new CurveEditorWindow(iediable);
-                subWindow.Show();
+                var curveEditorWindow = new CurveEditorWindow(redcurve);
+                var r = curveEditorWindow.ShowDialog();
+                if (r ?? true)
+                {
+                    var c = curveEditorWindow.GetCurve();
+                    if (c is not null)
+                    {
+                        // set tag data
+                        redcurve.SetInterpolationType(c.Type);
+                        redcurve.SetCurvePoints(c.Points);
+                    }
+                }
 
             }
 

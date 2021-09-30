@@ -2,6 +2,22 @@
 
 namespace WolvenKit.Common
 {
+    public enum EInterpolationType
+    {
+        EIT_Constant,
+        EIT_Linear,
+        EIT_BezierQuadratic,
+        EIT_BezierCubic,
+        EIT_Hermite
+    }
+
+    public enum ESegmentsLinkType
+    {
+        ESLT_Normal,
+        ESLT_Smooth,
+        ESLT_SmoothSymmetric
+    };
+
     public enum EWolvenKitFile
     {
         Cr2w,

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using WolvenKit.Common;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.RED4.CR2W.Reflection;
@@ -36,21 +37,17 @@ namespace WolvenKit.RED4.CR2W.Types
     [REDMeta]
     public class curveData<T> : CVariable, ICurveDataAccessor where T : CVariable
     {
-
-
         public curveData(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name)
         {
-            InterpolationType = Create<CUInt8>(nameof(InterpolationType));
-            LinkType = Create<CUInt8>(nameof(LinkType));
         }
 
         public string Elementtype => REDReflection.GetREDTypeString(typeof(T));
 
-        public List<CurvePoint<T>> Elements { get; set; } = new();
+        private List<CurvePoint<T>> Elements { get; set; } = new();
 
-        [REDBuffer] public CUInt8 InterpolationType { get; set; }
+        private EInterpolationType InterpolationType { get; set; }
 
-        [REDBuffer] public CUInt8 LinkType { get; set; }
+        private ESegmentsLinkType LinkType { get; set; }
 
         public override string REDType => REDReflection.GetREDTypeString(GetType());
 
@@ -81,8 +78,9 @@ namespace WolvenKit.RED4.CR2W.Types
                 Elements.Add(cpoint);
             }
 
-            InterpolationType.Read(file, 1);
-            LinkType.Read(file, 1);
+
+            InterpolationType = (EInterpolationType)file.ReadByte();
+            LinkType = (ESegmentsLinkType)file.ReadByte();
         }
 
         public override void Write(BinaryWriter file)
@@ -95,8 +93,8 @@ namespace WolvenKit.RED4.CR2W.Types
                 curvePoint.Value.WriteAsFixedSize(file);
             }
 
-            InterpolationType.Write(file);
-            LinkType.Write(file);
+            file.Write((byte)InterpolationType);
+            file.Write((byte)LinkType);
         }
 
         public IEditableVariable GetElementInstance(string varName)
@@ -124,13 +122,37 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public IEnumerable<IREDCurvePoint> GetCurvePoints() => Elements;
 
-        public IEditableVariable GetInterpolationType() => InterpolationType;
+        public void SetCurvePoints(IEnumerable<Tuple<double, object>> points)
+        {
+            Elements.Clear();
 
-        public IEditableVariable GetLinkType() => LinkType;
+            var i = 0;
+            foreach (var (t, v) in points)
+            {
+                var cpoint = new CurvePoint<T>(cr2w, this, i.ToString()) { IsSerialized = true };
 
+                var point = new CFloat(cr2w, cpoint, "point") { IsSerialized = true, Value = (float)t };
+                var value = Create<T>(i.ToString(), Array.Empty<int>());
+                value.SetValue(v);
 
+                value.IsSerialized = true;
 
-        //public override List<IEditableVariable> GetEditableVariables() => Elements.Cast<IEditableVariable>().ToList();
+                cpoint.Point = point;
+                cpoint.Value = value;
+                Elements.Add(cpoint);
+
+                i++;
+            }
+
+        }
+
+        public void SetLinkType(ESegmentsLinkType type) => LinkType = type;
+
+        public EInterpolationType GetInterpolationType() => InterpolationType;
+
+        public void SetInterpolationType(EInterpolationType type) => InterpolationType = type;
+
+        public ESegmentsLinkType GetLinkType() => LinkType;
     }
 
 

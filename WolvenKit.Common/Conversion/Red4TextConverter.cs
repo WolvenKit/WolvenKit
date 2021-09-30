@@ -142,22 +142,16 @@ namespace WolvenKit.Common.Conversion
 
             if (cvar is ICurveDataAccessor curve)
             {
-                var interpolationTypeProp = GetRedProperty(cvar, "InterpolationType");
-                interpolationTypeProp.SetFromJObject(dictionary["InterpolationType"]);
+                var interpolation = dictionary["InterpolationType"];
+                curve.SetInterpolationType((EInterpolationType)interpolation);
 
-                var linkTypeProp = GetRedProperty(cvar, "LinkType");
-                linkTypeProp.SetFromJObject(dictionary["LinkType"]);
+                var link = dictionary["LinkType"];
+                curve.SetLinkType((ESegmentsLinkType)link);
 
                 curve.SetFromJObject(dictionary["Elements"]);
 
                 return;
             }
-
-           
-
-
-            
-
 
             foreach (var (propertyName, value) in dictionary)
             {
@@ -257,8 +251,8 @@ namespace WolvenKit.Common.Conversion
 
                     return new Dictionary<string, object>()
                     {
-                        {"InterpolationType", curve.GetInterpolationType().ToObject()},
-                        {"LinkType", curve.GetLinkType().ToObject()},
+                        {"InterpolationType", curve.GetInterpolationType()},
+                        {"LinkType", curve.GetLinkType()},
                         {"Elements", elements}
                     };
                 }
