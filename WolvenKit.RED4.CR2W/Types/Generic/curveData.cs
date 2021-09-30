@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.RED4.CR2W.Reflection;
@@ -12,26 +11,26 @@ namespace WolvenKit.RED4.CR2W.Types
     public class CurvePoint<T> : CVariable, IREDCurvePoint where T : CVariable
     {
         [RED] public T Value { get; set; }
-        [RED] public CFloat Time { get; set; }
+        [RED] public CFloat Point { get; set; }
 
         public CurvePoint(IRed4EngineFile cr2w, CVariable parent, string name) : base(cr2w, parent, name) { }
 
-        public object GetValue() => new Tuple<IEditableVariable, IEditableVariable>(Value, Time);
+        public object GetValue() => new Tuple<IEditableVariable, IEditableVariable>(Value, Point);
 
         public void Init()
         {
             Value = Create<T>(nameof(Value));
             Value.IsSerialized = true;
-            Time = Create<CFloat>(nameof(Time));
-            Time.IsSerialized = true;
+            Point = Create<CFloat>(nameof(Point));
+            Point.IsSerialized = true;
         }
 
-        public override List<IEditableVariable> GetEditableVariables() => new() { Time, Value };
+        public override List<IEditableVariable> GetEditableVariables() => new() { Point, Value };
 
-        public override string ToString() => $"[{Time.Value}] {Value}";
+        public override string ToString() => $"[{Point.Value}] {Value}";
 
 
-        public float GetTime() => Time.Value;
+        public float GetTime() => Point.Value;
     }
 
     [REDMeta]
@@ -65,8 +64,8 @@ namespace WolvenKit.RED4.CR2W.Types
             {
                 var cpoint = new CurvePoint<T>(cr2w, this, i.ToString()) { IsSerialized = true };
 
-                var point = new CFloat(cr2w, cpoint, "time") { IsSerialized = true };
-                var value = Create<T>("value", Array.Empty<int>());
+                var point = new CFloat(cr2w, cpoint, "point") { IsSerialized = true };
+                var value = Create<T>(i.ToString(), new int[0]);
 
                 point.Read(file, 4);
                 // no actual way to find out the elementsize of an array element
@@ -77,7 +76,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
                 value.IsSerialized = true;
 
-                cpoint.Time = point;
+                cpoint.Point = point;
                 cpoint.Value = value;
                 Elements.Add(cpoint);
             }
@@ -92,7 +91,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
             foreach (var curvePoint in Elements)
             {
-                curvePoint.Time.Write(file);
+                curvePoint.Point.Write(file);
                 curvePoint.Value.WriteAsFixedSize(file);
             }
 
@@ -131,7 +130,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
 
 
-        public override List<IEditableVariable> GetEditableVariables() => Elements.Cast<IEditableVariable>().ToList();
+        //public override List<IEditableVariable> GetEditableVariables() => Elements.Cast<IEditableVariable>().ToList();
     }
 
 
