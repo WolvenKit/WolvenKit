@@ -519,7 +519,7 @@ namespace WolvenKit.Views.Editors
                 {
                     case "HDRColor":
                     {
-                        
+                        // TODO
 
 
                         break;
@@ -531,19 +531,19 @@ namespace WolvenKit.Views.Editors
                         return new CurveDto(vec, type);
                     }
                     case "Vector2":
-                    {
-                       
+                    {// TODO
+
                         break;
                     }
                     case "Vector3":
                     {
-                       
+                        // TODO
 
                         break;
                     }
                     case "Vector4":
                     {
-                       
+                        // TODO
 
                         break;
                     }

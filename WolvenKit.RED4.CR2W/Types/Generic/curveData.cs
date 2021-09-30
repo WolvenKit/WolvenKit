@@ -53,9 +53,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public override void Read(BinaryReader file, uint size)
         {
-            var pos = file.BaseStream.Position;
             var count = file.ReadUInt32();
-
 
             for (int i = 0; i < count; i++)
             {
@@ -68,7 +66,7 @@ namespace WolvenKit.RED4.CR2W.Types
                 // no actual way to find out the elementsize of an array element
                 // bacause cdpr serialized classes have no fixed size
                 // solution? not sure: pass 0 and disable checks?
-                value.ReadAsFixedSize(file, (uint)0);
+                value.ReadAsFixedSize(file, 0);
 
 
                 value.IsSerialized = true;

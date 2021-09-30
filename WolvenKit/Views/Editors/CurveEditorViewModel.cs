@@ -13,11 +13,22 @@ using WolvenKit.Common.Annotations;
 
 namespace WolvenKit.Views.Editors
 {
+        /*
+        TODOS:
+        - Constant curve
+        - Hermite curve
+
+        - scrolling
+        - zooming
+
+        - multi channel curves
+        - single channel curves of objects
+        */
+
+
     internal class CurveEditorViewModel : INotifyPropertyChanged
     {
         #region fields
-
-
 
         public const double XMIN = 0;   // TODO fix this at some point
         public const double YMIN = XMIN;
