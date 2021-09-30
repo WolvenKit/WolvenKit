@@ -39,7 +39,7 @@ namespace WolvenKit.Views.Templates
                 IREDRef => RefTemplateView,
                 IREDColor x => ColorTemplateView,
                 IREDArray => CommmonTemplate,
-                ICurveDataAccessor => SingleChannelCurveTemplate,
+                //ICurveDataAccessor => SingleChannelCurveTemplate,
                 _ => CommmonTemplate
             };
     }
