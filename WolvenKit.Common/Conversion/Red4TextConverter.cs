@@ -143,10 +143,13 @@ namespace WolvenKit.Common.Conversion
             if (cvar is ICurveDataAccessor curve)
             {
                 var interpolation = dictionary["InterpolationType"];
-                curve.SetInterpolationType((EInterpolationType)interpolation);
+                var interpolationByte = int.Parse(interpolation.ToString());
+
+                curve.SetInterpolationType((EInterpolationType)interpolationByte);
 
                 var link = dictionary["LinkType"];
-                curve.SetLinkType((ESegmentsLinkType)link);
+                var linkByte = int.Parse(link.ToString());
+                curve.SetLinkType((ESegmentsLinkType)linkByte);
 
                 curve.SetFromJObject(dictionary["Elements"]);
 

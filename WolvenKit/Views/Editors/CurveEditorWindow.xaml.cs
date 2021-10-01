@@ -24,6 +24,8 @@ namespace WolvenKit.Views.Editors
 
         private string _elementType;
 
+        private ICurveDataAccessor _model;
+
         public CurveEditorWindow(IEditableVariable property)
         {
             InitializeComponent();
@@ -32,6 +34,8 @@ namespace WolvenKit.Views.Editors
             {
                 return;
             }
+
+            _model = model;
 
             var points = model.GetCurvePoints().ToArray();
             var times = points.Select(x => (double)x.GetTime()).ToArray();
@@ -51,7 +55,12 @@ namespace WolvenKit.Views.Editors
                     var blue = colors.Select(x => (double)x.Blue.Value).ToArray();
                     var red = colors.Select(x => (double)x.Red.Value).ToArray();
                     var green = colors.Select(x => (double)x.Green.Value).ToArray();
+                    var alpha = colors.Select(x => (double)x.Alpha.Value).ToArray();
 
+                    if (DataContext is CurveEditorViewModel vm)
+                    {
+                        vm.LoadCurve(times, alpha, type);
+                    }
 
                     break;
                 }
@@ -520,9 +529,31 @@ namespace WolvenKit.Views.Editors
                     case "HDRColor":
                     {
                         // TODO
+                        var alpha = vm.Curve.Select(_ => new Tuple<double, object>(_.T, (float)_.V)).ToList();
+                        var type = vm.GetInterpolationTypeEnum();
+
+                        var values = _model.GetCurvePoints()
+                            .Select(x => x.GetValue())
+                            .OfType<Tuple<IEditableVariable, IEditableVariable>>()
+                            .Select(x => x.Item1)
+                            .OfType<HDRColor>()
+                            .ToList();
+
+                        if (alpha.Count != values.Count)
+                        {
+
+                        }
 
 
-                        break;
+                        var vec = new List<Tuple<double, object>>();
+                        for (var i = 0; i < values.Count; i++)
+                        {
+                            var item = values[i];
+                            item.Alpha.SetValue(alpha[i].Item2);
+                            vec.Add(new Tuple<double, object>(alpha[i].Item1, item));
+                        }
+
+                        return new CurveDto(vec, type);
                     }
                     case "Float":
                     {

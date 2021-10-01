@@ -255,6 +255,13 @@ namespace WolvenKit.Views.Editors
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public void LoadCurve(double[] times, double[] values, EInterpolationType type)
         {
+            if (times.Length < 1 || values.Length < 1)
+            {
+                times = new double[] { 0 };
+                values = new double[] { 0 };
+                type = EInterpolationType.EIT_Linear;
+            }
+
             // load curve
             //var c = new List<GeneralizedPoint>
             //{
@@ -273,12 +280,12 @@ namespace WolvenKit.Views.Editors
             InterpolationType = type.ToString();
 
             MinT = c.Min(_ => _.T);
-            MaxT = c.Max(_ => _.T);
+            MaxT = c.Max(_ => _.T) == MinT ? c.Max(_ => _.T) + 1 : c.Max(_ => _.T);
             MinX = MinT;
             MaxX = MaxT;
 
             MinV = c.Min(_ => _.V);
-            MaxV = c.Max(_ => _.V);
+            MaxV = c.Max(_ => _.V) == MinV ? c.Max(_ => _.V) + 1 : c.Max(_ => _.V);
             MinY = MinV;
             MaxY = MaxV;
 
@@ -386,6 +393,11 @@ namespace WolvenKit.Views.Editors
         /// <param name="pos"></param>
         public void AddPoint(Point pos)
         {
+            if (Curve == null)
+            {
+                return;
+            }
+
             // Add single point
             var (t, v) = ToWorldCoordinates(pos.X - XMIN, pos.Y - YMIN);
             var point = new GeneralizedPoint(t, v);

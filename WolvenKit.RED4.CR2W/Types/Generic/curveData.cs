@@ -43,7 +43,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public string Elementtype => REDReflection.GetREDTypeString(typeof(T));
 
-        private List<CurvePoint<T>> Elements { get; set; } = new();
+        public List<CurvePoint<T>> Elements { get; set; } = new();
 
         private EInterpolationType InterpolationType { get; set; }
 
