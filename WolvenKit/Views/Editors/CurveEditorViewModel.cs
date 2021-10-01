@@ -4,34 +4,35 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using WinCopies.Util;
 using WolvenKit.Common;
 using WolvenKit.Common.Annotations;
+using Math = System.Math;
 
 namespace WolvenKit.Views.Editors
 {
-        /*
-        TODOS:
-        - Constant curve
-        - Hermite curve
+    /*
+    TODOS:
+    - Constant curve
+    - Hermite curve
 
-        - scrolling
-        - zooming
+    - scrolling
+    - zooming
 
-        - multi channel curves
-        - single channel curves of objects
-        */
+    - multi channel curves
+    - single channel curves of objects
+    */
 
 
     internal class CurveEditorViewModel : INotifyPropertyChanged
     {
         #region fields
 
-        public const double XMIN = 0;   // TODO fix this at some point
+        public const double XMIN = 0; // TODO fix this at some point
         public const double YMIN = XMIN;
+        private const double TOLERANCE = 0.001;
 
         private string _interpolationType;
         private ObservableCollection<GeneralizedPoint> _curve;
@@ -51,7 +52,7 @@ namespace WolvenKit.Views.Editors
 
         public CurveEditorViewModel()
         {
-            InterpolationTypes = Enum.GetNames<EInterpolationType>().ToList();
+            InterpolationTypes = Enumerable.ToList(Enum.GetNames<EInterpolationType>());
             RenderedPoints = new PointCollection();
             InterpolationType = EInterpolationType.EIT_Linear.ToString();
         }
@@ -61,11 +62,15 @@ namespace WolvenKit.Views.Editors
         public event PropertyChangedEventHandler PropertyChanged;
 
         public event EventHandler CurveReloaded;
+        public event EventHandler CtrlPointsChanged;
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         private void OnCurveReloaded() => CurveReloaded?.Invoke(this, EventArgs.Empty);
+        private void OnCtrlPointsChanged() => CtrlPointsChanged?.Invoke(this, EventArgs.Empty);
+
 
         public bool IsLoaded { get; set; }
 
@@ -79,7 +84,10 @@ namespace WolvenKit.Views.Editors
             set
             {
                 if (value.Equals(_cursor))
+                {
                     return;
+                }
+
                 _cursor = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(CursorPos));
@@ -95,7 +103,7 @@ namespace WolvenKit.Views.Editors
                 _curve = value;
                 OnPropertyChanged();
 
-                RenderCurve();
+                //RenderCurve();
             }
         }
 
@@ -116,7 +124,10 @@ namespace WolvenKit.Views.Editors
             set
             {
                 if (value == _text)
+                {
                     return;
+                }
+
                 _text = value;
                 OnPropertyChanged();
             }
@@ -133,7 +144,7 @@ namespace WolvenKit.Views.Editors
             }
         }
 
-        public List<string> InterpolationTypes { get; } = new();
+        public List<string> InterpolationTypes { get; }
 
         public string InterpolationType
         {
@@ -141,7 +152,10 @@ namespace WolvenKit.Views.Editors
             set
             {
                 if (value == _interpolationType)
+                {
                     return;
+                }
+
                 _interpolationType = value;
                 OnPropertyChanged();
             }
@@ -227,7 +241,6 @@ namespace WolvenKit.Views.Editors
         public double ScaleXInverse => (MaxT - MinT) / Width;
         public double ScaleYInverse => (MaxV - MinV) / Height;
 
-
         #endregion
 
 
@@ -237,11 +250,12 @@ namespace WolvenKit.Views.Editors
             var v = ToWorldCoordinateY(y);
             return (t, v);
         }
+
         public double ToWorldCoordinateX(double x) => (x * ScaleXInverse) + MinT;
         public double ToWorldCoordinateY(double y) => ((Height - y) * ScaleYInverse) + MinV;
 
         public double ToCanvasCoordinateX(double x) => (x - MinT) * ScaleX;
-        public double ToCanvasCoordinateY(double y) => Height - (y - MinV) * ScaleY;
+        public double ToCanvasCoordinateY(double y) => Height - ((y - MinV) * ScaleY);
 
         private double GetCurveMinT() => Curve.Min(_ => _.T);
         private double GetCurveMaxT() => Curve.Max(_ => _.T);
@@ -280,12 +294,12 @@ namespace WolvenKit.Views.Editors
             InterpolationType = type.ToString();
 
             MinT = c.Min(_ => _.T);
-            MaxT = c.Max(_ => _.T) == MinT ? c.Max(_ => _.T) + 1 : c.Max(_ => _.T);
+            MaxT = Math.Abs(c.Max(_ => _.T) - MinT) < TOLERANCE ? c.Max(_ => _.T) + 1 : c.Max(_ => _.T);
             MinX = MinT;
             MaxX = MaxT;
 
             MinV = c.Min(_ => _.V);
-            MaxV = c.Max(_ => _.V) == MinV ? c.Max(_ => _.V) + 1 : c.Max(_ => _.V);
+            MaxV = Math.Abs(c.Max(_ => _.V) - MinV) < TOLERANCE ? c.Max(_ => _.V) + 1 : c.Max(_ => _.V);
             MinY = MinV;
             MaxY = MaxV;
 
@@ -294,8 +308,6 @@ namespace WolvenKit.Views.Editors
             // set control points
             RecalculateControlPoints();
             IsLoaded = true;
-
-            
         }
 
         public void ReLoadCurve()
@@ -316,6 +328,7 @@ namespace WolvenKit.Views.Editors
                     {
                         p.IsControlPoint = false;
                     }
+
                     break;
                 case EInterpolationType.EIT_BezierQuadratic:
                     // every second point is a control point
@@ -323,6 +336,7 @@ namespace WolvenKit.Views.Editors
                     {
                         Curve[i].IsControlPoint = i % 2 != 0;
                     }
+
                     break;
                 case EInterpolationType.EIT_BezierCubic:
                     // every second and third point is a control point
@@ -331,11 +345,14 @@ namespace WolvenKit.Views.Editors
                         Curve[i].IsControlPoint = i % 2 != 0;
                         Curve[i].IsControlPoint = i % 3 != 0;
                     }
+
                     break;
                 case EInterpolationType.EIT_Hermite:
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            OnCtrlPointsChanged();
         }
 
         /// <summary>
@@ -348,6 +365,10 @@ namespace WolvenKit.Views.Editors
 
         private void RenderCurve()
         {
+            // sort points
+            Curve = new ObservableCollection<GeneralizedPoint>(Curve.OrderBy(_ => _.T));
+            
+
             // scale points to canvas
             foreach (var p in _curve)
             {
@@ -358,9 +379,9 @@ namespace WolvenKit.Views.Editors
 
             // verify curve integrity
             if (!VerifyCurve())
+            {
                 throw new ArgumentNullException();
-
-            RecalculateControlPoints();
+            }
 
             List<Point> points;
 
@@ -385,6 +406,8 @@ namespace WolvenKit.Views.Editors
 
             StartPoint = points.First();
             RenderedPoints = new PointCollection(points.Skip(1));
+
+            RecalculateControlPoints();
         }
 
         /// <summary>
@@ -404,7 +427,7 @@ namespace WolvenKit.Views.Editors
 
             // insert
             var idx = Curve.Count;
-            for (int i = 0; i < Curve.Count; i++)
+            for (var i = 0; i < Curve.Count; i++)
             {
                 var p = Curve[i];
                 var thisT = p.T;
@@ -429,6 +452,7 @@ namespace WolvenKit.Views.Editors
                     {
                         return;
                     }
+
                     var previousPoint = Curve[idx - 1];
                     var nextPoint = Curve[idx + 1];
                     switch (previousPoint.IsControlPoint)
@@ -450,6 +474,7 @@ namespace WolvenKit.Views.Editors
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
+
                     break;
                 }
                 case EInterpolationType.EIT_BezierCubic:
@@ -458,6 +483,7 @@ namespace WolvenKit.Views.Editors
                     {
                         return;
                     }
+
                     var previousPoint = Curve[idx - 1];
                     var nextPoint = Curve[idx + 1];
                     switch (previousPoint.IsControlPoint)
@@ -510,7 +536,6 @@ namespace WolvenKit.Views.Editors
             }
 
             Reload();
-
         }
 
         private static Vector AddControllPointAfter(GeneralizedPoint previousPoint, GeneralizedPoint point,
@@ -551,7 +576,6 @@ namespace WolvenKit.Views.Editors
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="pos"></param>
         /// <returns></returns>
@@ -559,10 +583,10 @@ namespace WolvenKit.Views.Editors
         {
             var x = Math.Min(
                 Math.Max(pos.X - XMIN, 0),
-                Width - 2 * XMIN);
+                Width - (2 * XMIN));
             var y = Math.Min(
                 Math.Max(pos.Y - YMIN, 0),
-                Height - 2 * YMIN);
+                Height - (2 * YMIN));
             return new Point(x, y);
         }
 
@@ -571,13 +595,11 @@ namespace WolvenKit.Views.Editors
         {
             var x = Math.Min(
                 Math.Max(pos.X - XMIN, MinT),
-                MaxT - 2 * XMIN);
+                MaxT - (2 * XMIN));
             var y = Math.Min(
                 Math.Max(pos.Y - YMIN, MinV),
-                MaxV - 2 * YMIN);
+                MaxV - (2 * YMIN));
             return new Vector(x, y);
         }
-
-        
     }
 }

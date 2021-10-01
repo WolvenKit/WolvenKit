@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,9 +23,9 @@ namespace WolvenKit.Views.Editors
 
         private Point? _dragStart;
 
-        private string _elementType;
+        private readonly string _elementType;
 
-        private ICurveDataAccessor _model;
+        private readonly ICurveDataAccessor _model;
 
         public CurveEditorWindow(IEditableVariable property)
         {
@@ -114,7 +115,10 @@ namespace WolvenKit.Views.Editors
         private void POnMouseMove(object sender, MouseEventArgs e)
         {
             if (DataContext is not CurveEditorViewModel vm)
+            {
                 return;
+            }
+
             if (_dragStart != null && e.LeftButton == MouseButtonState.Pressed)
             {
                 var element = (UIElement)sender;
@@ -163,7 +167,7 @@ namespace WolvenKit.Views.Editors
             _dragStart = e.GetPosition(element);
             element.CaptureMouse();
 
-            if (element is Ellipse { Tag: GeneralizedPoint point } ell /*&& e.ChangedButton == MouseButton.Right*/ && _isCtrlPressed)
+            if (element is Ellipse { Tag: GeneralizedPoint point } /*&& e.ChangedButton == MouseButton.Right*/ && _isCtrlPressed)
             {
                 //point.IsSelected = !point.IsSelected;
                 //ell.Fill = point.IsSelected ? Brushes.BlueViolet :
@@ -190,6 +194,7 @@ namespace WolvenKit.Views.Editors
             if (DataContext is CurveEditorViewModel vm)
             {
                 vm.CurveReloaded += VmOnCurveReloaded;
+                vm.CtrlPointsChanged += VmOnCtrlPointsChanged;
                 vm.ReLoadCurve();
             }
         }
@@ -293,6 +298,8 @@ namespace WolvenKit.Views.Editors
 
         private void VmOnCurveReloaded(object sender, EventArgs e) => RenderPoints();
 
+        private void VmOnCtrlPointsChanged(object sender, EventArgs e) => UpdatePointColors();
+
         private void HandleInterpolation()
         {
             if (DataContext is not CurveEditorViewModel vm)
@@ -377,6 +384,7 @@ namespace WolvenKit.Views.Editors
             }
 
             HandleInterpolation();
+            UpdatePointColors();
         }
 
         private void DrawAxes()
@@ -385,8 +393,8 @@ namespace WolvenKit.Views.Editors
             {
                 var wxmax = /* vm.MaxT * */CanvasPoints.ActualWidth - CurveEditorViewModel.XMIN;
                 var wymax = /*vm.MaxV * */CanvasPoints.ActualHeight - CurveEditorViewModel.YMIN;
-                var wxmin = /* vm.MaxT * */CanvasPoints.ActualWidth - CurveEditorViewModel.XMIN;
-                var wymin = /*vm.MaxV * */CanvasPoints.ActualHeight - CurveEditorViewModel.YMIN;
+                //var wxmin = /* vm.MaxT * */CanvasPoints.ActualWidth - CurveEditorViewModel.XMIN;
+                //var wymin = /*vm.MaxV * */CanvasPoints.ActualHeight - CurveEditorViewModel.YMIN;
                 const double xstep = 40;
                 const double ystep = 40;
                 const double xtic = 5;
@@ -408,7 +416,7 @@ namespace WolvenKit.Views.Editors
                     xaxisGeom.Children.Add(new LineGeometry(tic0, tic1));
 
                     var t = Math.Round(vm.ToWorldCoordinateX(x), 2);
-                    DrawLabels(CanvasPoints, t.ToString(),
+                    DrawLabels(CanvasPoints, t.ToString(CultureInfo.InvariantCulture),
                         new Point(tic0.X, tic0.Y + 10), 12,
                         HorizontalAlignment.Center,
                         VerticalAlignment.Top);
@@ -417,7 +425,7 @@ namespace WolvenKit.Views.Editors
                     var tic11 = new Point(x, CurveEditorViewModel.XMIN + ytic);
                     xaxisGeom.Children.Add(new LineGeometry(tic01, tic11));
 
-                    DrawLabels(CanvasPoints, t.ToString(),
+                    DrawLabels(CanvasPoints, t.ToString(CultureInfo.InvariantCulture),
                         new Point(tic01.X, tic01.Y - 20), 12,
                         HorizontalAlignment.Center,
                         VerticalAlignment.Top);
@@ -450,17 +458,17 @@ namespace WolvenKit.Views.Editors
 
                     // Label the tic mark's Y coordinate.
                     var v = Math.Round(vm.ToWorldCoordinateY(y), 2);
-                    DrawLabels(CanvasPoints, v.ToString(),
+                    DrawLabels(CanvasPoints, v.ToString(CultureInfo.InvariantCulture),
                         new Point(tic0.X - 15, tic0.Y), 12,
                         HorizontalAlignment.Center,
                         VerticalAlignment.Center);
 
                     var tic01 = new Point(wxmax - xtic, y);
                     var tic11 = new Point(wxmax + xtic, y);
-                    xaxisGeom.Children.Add(new LineGeometry(tic0, tic1));
+                    xaxisGeom.Children.Add(new LineGeometry(tic01, tic11));
 
                     // Label the tic mark's Y coordinate.
-                    DrawLabels(CanvasPoints, v.ToString(),
+                    DrawLabels(CanvasPoints, v.ToString(CultureInfo.InvariantCulture),
                         new Point(tic01.X + 25, tic01.Y), 12,
                         HorizontalAlignment.Center,
                         VerticalAlignment.Center);
@@ -477,7 +485,7 @@ namespace WolvenKit.Views.Editors
             }
         }
 
-        private static void DrawLabels(Canvas can, string text, Point location, double fontSize, HorizontalAlignment halign, VerticalAlignment valign)
+        private static void DrawLabels(Panel can, string text, Point location, double fontSize, HorizontalAlignment halign, VerticalAlignment valign)
         {
             // Make the label.
             var label = new Label
@@ -492,7 +500,7 @@ namespace WolvenKit.Views.Editors
             // Position the label.
             label.Measure(new Size(double.MaxValue, double.MaxValue));
 
-            double x = location.X;
+            var x = location.X;
             switch (halign)
             {
                 case HorizontalAlignment.Center:
@@ -517,13 +525,11 @@ namespace WolvenKit.Views.Editors
             Canvas.SetTop(label, y);
         }
 
-        #endregion
-
         public CurveDto GetCurve()
         {
             if (DataContext is CurveEditorViewModel vm)
             {
-// switch curve type
+                // switch curve type
                 switch (_elementType)
                 {
                     case "HDRColor":
@@ -583,10 +589,25 @@ namespace WolvenKit.Views.Editors
 
 
 
-                
+
             }
 
             return null;
         }
+
+        private void UpdatePointColors()
+        {
+            foreach (var ellipsis in CanvasPoints.Children.OfType<Ellipse>())
+            {
+                if (ellipsis.Tag is GeneralizedPoint generalizedPoint)
+                {
+                    ellipsis.Fill = generalizedPoint.IsSelected ? Brushes.BlueViolet :
+                        generalizedPoint.IsControlPoint ? Brushes.OrangeRed : Brushes.Yellow;
+
+                }
+            }
+        }
+
+        #endregion
     }
 }
