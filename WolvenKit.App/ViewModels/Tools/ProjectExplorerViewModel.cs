@@ -14,6 +14,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
@@ -41,8 +42,8 @@ namespace WolvenKit.ViewModels.Tools
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
         private readonly IWatcherService _watcherService;
-        //private readonly Tw3Controller _tw3Controller;
-        //private readonly AppViewModel _appViewModel;
+        private readonly IModTools _modTools;
+
 
         private EditorProject ActiveMod => _projectManager.ActiveProject;
         private readonly IObservableList<FileModel> _observableList;
@@ -54,15 +55,14 @@ namespace WolvenKit.ViewModels.Tools
         public ProjectExplorerViewModel(
             IProjectManager projectManager,
             ILoggerService loggerService,
-            IWatcherService watcherService
-            //Tw3Controller tw3Controller
-            //IAppViewModel appViewModel
-            ) : base(ToolTitle)
+            IWatcherService watcherService,
+            IModTools modTools
+        ) : base(ToolTitle)
         {
             _projectManager = projectManager;
             _loggerService = loggerService;
             _watcherService = watcherService;
-            //_tw3Controller = tw3Controller;
+            _modTools = modTools;
 
             SetupCommands();
             SetupToolDefaults();
@@ -115,9 +115,7 @@ namespace WolvenKit.ViewModels.Tools
         #region general commands
 
         public ICommand OpenFileCommand { get; private set; }
-
         private bool CanOpenFile() => true;
-
         private void ExecuteOpenFile()
         {
             // TODO: Handle command logic here
@@ -128,34 +126,25 @@ namespace WolvenKit.ViewModels.Tools
 
         }
 
-
-
-
         /// <summary>
         /// Copies selected node to the clipboard.
         /// </summary>
         public ICommand CopyFileCommand { get; private set; }
-
         private bool CanCopyFile() => _projectManager.ActiveProject != null && SelectedItem != null;
-
         private void ExecuteCopyRelPath() => Clipboard.SetText(SelectedItem.Name);
 
         /// <summary>
         /// Copies relative path of node.
         /// </summary>
         public ICommand CopyRelPathCommand { get; private set; }
-
         private bool CanCopyRelPath() => _projectManager.ActiveProject != null && SelectedItem != null;
-
         private void CopyFile() => Clipboard.SetText(SelectedItem.FullName);
 
         /// <summary>
         /// Cuts selected node to the clipboard.
         /// </summary>
         public ICommand CutFileCommand { get; private set; }
-
         private bool CanCutFile() => _projectManager.ActiveProject != null && SelectedItem != null;
-
         private void ExecuteCutFile()
         {
         }
@@ -164,7 +153,6 @@ namespace WolvenKit.ViewModels.Tools
         /// Delets selected node.
         /// </summary>
         public ICommand DeleteFileCommand { get; private set; }
-
         private bool CanDeleteFile()
         {
             var b = _projectManager.ActiveProject != null && SelectedItem != null;
@@ -189,7 +177,6 @@ namespace WolvenKit.ViewModels.Tools
 
             return b;
         }
-
         private async void ExecuteDeleteFile()
         {
             var selected = SelectedItems.OfType<FileModel>().ToList();
@@ -229,9 +216,7 @@ namespace WolvenKit.ViewModels.Tools
         /// Opens selected node in File Explorer.
         /// </summary>
         public ICommand OpenInFileExplorerCommand { get; private set; }
-
         private bool CanOpenInFileExplorer() => _projectManager.ActiveProject != null && SelectedItem != null;
-
         private void ExecuteOpenInFileExplorer()
         {
             if (SelectedItem.IsDirectory)
@@ -248,9 +233,7 @@ namespace WolvenKit.ViewModels.Tools
         /// Pastes a file from the clipboard into selected node.
         /// </summary>
         public ICommand PasteFileCommand { get; private set; }
-
         private bool CanPasteFile() => _projectManager.ActiveProject != null && SelectedItem != null && Clipboard.ContainsText();
-
         private void PasteFile()
         {
             if (File.Exists(Clipboard.GetText()))
@@ -295,9 +278,7 @@ namespace WolvenKit.ViewModels.Tools
         /// Renames selected node.
         /// </summary>
         public ICommand RenameFileCommand { get; private set; }
-
         private bool CanRenameFile() => _projectManager.ActiveProject != null && SelectedItem != null && !SelectedItem.IsDirectory;
-
         private async void ExecuteRenameFile()
         {
             var filename = SelectedItem.FullName;
@@ -338,10 +319,15 @@ namespace WolvenKit.ViewModels.Tools
 
         #region red4
 
+        private bool IsInRawFolder(FileModel model)
+        {
+            var b = model.FullName.Contains(ActiveMod.RawDirectory);
+
+            return b;
+        }
+
         public ICommand Bk2ImportCommand { get; private set; }
-
-        private bool CanBk2Import() => SelectedItem.Extension.ToLower().Contains("avi");
-
+        private bool CanBk2Import() => SelectedItem != null && IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower().Contains("avi");
         private void ExecuteBk2Import()
         {
             var modpath = Path.Combine(ActiveMod.ModDirectory, SelectedItem.GetRelativeName(ActiveMod));
@@ -360,11 +346,8 @@ namespace WolvenKit.ViewModels.Tools
             var process = Process.Start(procInfo);
             process?.WaitForInputIdle();
         }
-
         public ICommand Bk2ExportCommand { get; private set; }
-
-        private bool CanBk2Export() => SelectedItem.Extension.ToLower().Contains("bk2");
-
+        private bool CanBk2Export() => SelectedItem != null && !IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower().Contains("bk2");
         private void ExecuteBk2Export()
         {
             var rawpath = Path.Combine(ActiveMod.RawDirectory, SelectedItem.GetRelativeName(ActiveMod));
@@ -385,9 +368,43 @@ namespace WolvenKit.ViewModels.Tools
             process?.WaitForInputIdle();
         }
 
+        public ICommand ConvertToJsonCommand { get; private set; }
+        public ICommand ConvertToXmlCommand { get; private set; }
+
+        private bool CanConvertTo() => SelectedItem != null && !IsInRawFolder(SelectedItem) &&
+                                       Enum.GetNames<ERedExtension>().Contains(SelectedItem.Extension.ToLower());
+        private void ExecuteConvertToJson() => ExecuteConvertTo(ETextConvertFormat.json);
+        private void ExecuteConvertToXml() => ExecuteConvertTo(ETextConvertFormat.xml);
+        private void ExecuteConvertTo(ETextConvertFormat fmt)
+        {
+            var inpath = SelectedItem.FullName;
+            var rawOutPath = Path.Combine(ActiveMod.RawDirectory, SelectedItem.GetRelativeName(ActiveMod));
+            var outDirectoryPath = Path.GetDirectoryName(rawOutPath);
+            if (outDirectoryPath != null)
+            {
+                Directory.CreateDirectory(outDirectoryPath);
+
+                _modTools.ConvertToAndWrite(fmt, inpath, new DirectoryInfo(outDirectoryPath));
+            }
+        }
 
 
+        public ICommand ConvertFromJsonCommand { get; private set; }
+        private bool CanConvertFromJson() =>
+            SelectedItem != null && (IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower()
+                .Equals(ETextConvertFormat.json.ToString(), StringComparison.Ordinal));
+        private void ExecuteConvertFromJson()
+        {
+            var inpath = SelectedItem.FullName;
+            var modPath = Path.Combine(ActiveMod.ModDirectory, SelectedItem.GetRelativeName(ActiveMod));
+            var outDirectoryPath = Path.GetDirectoryName(modPath);
+            if (outDirectoryPath != null)
+            {
+                Directory.CreateDirectory(outDirectoryPath);
 
+                _modTools.ConvertFromAndWrite(new FileInfo(inpath), new DirectoryInfo(outDirectoryPath));
+            }
+        }
 
         #endregion
 
@@ -502,6 +519,10 @@ namespace WolvenKit.ViewModels.Tools
 
             Bk2ImportCommand = new RelayCommand(ExecuteBk2Import, CanBk2Import);
             Bk2ExportCommand = new RelayCommand(ExecuteBk2Export, CanBk2Export);
+
+            ConvertToJsonCommand = new RelayCommand(ExecuteConvertToJson, CanConvertTo);
+            ConvertToXmlCommand = new RelayCommand(ExecuteConvertToXml, CanConvertTo);
+            ConvertFromJsonCommand = new RelayCommand(ExecuteConvertFromJson, CanConvertFromJson);
 
             //PESearchStartedCommand = new DelegateCommand<object>(ExecutePESearchStartedCommand, CanPESearchStartedCommand);
 

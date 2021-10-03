@@ -241,158 +241,115 @@
         </Grid.ColumnDefinitions>
 
         <!-- Additional Navigation -->
-        <syncfusion:SfNavigationDrawer
-            Grid.Column="0"
-            x:Name="navigationDrawer"
-            DisplayMode="Expanded"
-            IsOpen="False">
+        <Grid Grid.Column="0" >
 
-            <syncfusion:SfNavigationDrawer.ContentView>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-                <Grid>
+            <Grid Grid.Column="0" HorizontalAlignment="Stretch" Margin="2">
 
-                    <Grid x:Name="CHUNKSVISIBILITY">
-                        <syncfusion:SfTreeGrid
-                                    x:Name="TreeView"
-                                    AllowEditing="False"
-                                    AllowFiltering="True"
-                                    AllowResizingColumns="False"
-                                    AutoExpandMode="RootNodesExpanded"
-                                    AutoGenerateColumns="False"
-                                    ChildPropertyName="Children"
-                                    ColumnSizer="FillColumn"
-                                    ItemsSource="{Binding Chunks}"
-                                    SelectedItem="{Binding SelectedChunk}"
-                                    Style="{DynamicResource SyncfusionSfTreeGridStyle}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-                            <syncfusion:SfTreeGrid.Resources>
-                                <Style TargetType="syncfusion:TreeGridCell">
-                                    <Setter Property="BorderBrush" Value="Transparent" />
-                                    <Setter Property="BorderThickness" Value="0" />
-                                </Style>
-                                <Style TargetType="syncfusion:TreeGridExpanderCell">
-                                    <Setter Property="BorderBrush" Value="Transparent" />
-                                    <Setter Property="BorderThickness" Value="0" />
-                                </Style>
-                                <converters1:ExtensionToBitmapConverter x:Key="ExtensionToBmp" />
+                <Button Grid.Column="0" x:Name="ChunksButton"  Height="Auto" Width="Auto" Margin="3" Click="ChunksButton_OnClick" >
+                    <Button.Content>
+                        <iconPacks:PackIconVaadinIcons Kind="Cubes" />
+                    </Button.Content>
+                </Button>
+                <Button Grid.Column="1"  x:Name="ImportsButton"  Height="Auto" Width="Auto" Margin="3" Click="ImportsButton_OnClick" >
+                    <Button.Content>
+                        <iconPacks:PackIconMaterialDesign Kind="ImportExport" />
+                    </Button.Content>
+                </Button>
+                <Button Grid.Column="2"  x:Name="BuffersButton"  Height="Auto" Width="Auto" Margin="3" Click="BuffersButton_OnClick" >
+                    <Button.Content>
+                        <iconPacks:PackIconMaterial Kind="Buffer" />
+                    </Button.Content>
+                </Button>
+            </Grid>
 
-                            </syncfusion:SfTreeGrid.Resources>
 
-                            <syncfusion:SfTreeGrid.Columns>
+            <Grid Grid.Row="1"  x:Name="CHUNKSVISIBILITY">
+                <syncfusion:SfTreeGrid  Margin="2"
+                                        x:Name="TreeView"
+                                        AllowEditing="False"
+                                        AllowFiltering="True"
+                                        AllowResizingColumns="False"
+                                        AutoExpandMode="RootNodesExpanded"
+                                        AutoGenerateColumns="False"
+                                        ChildPropertyName="Children"
+                                        ColumnSizer="FillColumn"
+                                        ItemsSource="{Binding Chunks}"
+                                        SelectedItem="{Binding SelectedChunk}"
+                                        Style="{DynamicResource SyncfusionSfTreeGridStyle}">
 
-                                <syncfusion:TreeGridTextColumn HeaderText="Chunks" MappingName="Name" />
+                    <syncfusion:SfTreeGrid.Resources>
+                        <Style TargetType="syncfusion:TreeGridCell">
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="BorderThickness" Value="0" />
+                        </Style>
+                        <Style TargetType="syncfusion:TreeGridExpanderCell">
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="BorderThickness" Value="0" />
+                        </Style>
+                        <converters1:ExtensionToBitmapConverter x:Key="ExtensionToBmp" />
 
-                            </syncfusion:SfTreeGrid.Columns>
+                    </syncfusion:SfTreeGrid.Resources>
 
-                        </syncfusion:SfTreeGrid>
-                    </Grid>
+                    <syncfusion:SfTreeGrid.Columns>
 
-                    <Grid x:Name="IMPORTSVISISBILITY" Visibility="Collapsed">
-                        <ListView
-                                    Margin="20"
+                        <syncfusion:TreeGridTextColumn HeaderText="Chunks" MappingName="Name" />
+
+                    </syncfusion:SfTreeGrid.Columns>
+
+                </syncfusion:SfTreeGrid>
+            </Grid>
+
+            <Grid Grid.Row="1" x:Name="IMPORTSVISISBILITY" Visibility="Collapsed">
+                <ListView
+                                    Margin="2"
                                     ItemsSource="{Binding Imports}"
                                     SelectedItem="{Binding SelectedImport}">
 
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn DisplayMemberBinding="{Binding DepotPathStr}" Header="Name" />
-                                </GridView>
-                            </ListView.View>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn DisplayMemberBinding="{Binding DepotPathStr}" Header="Name" />
+                        </GridView>
+                    </ListView.View>
 
-                            <hc:Interaction.Triggers>
-                                <hc:EventTrigger EventName="MouseDoubleClick">
-                                    <hc:EventToCommand Command="{Binding OpenImportCommand}" CommandParameter="{Binding SelectedImport}" />
-                                </hc:EventTrigger>
-                            </hc:Interaction.Triggers>
-                        </ListView>
+                    <hc:Interaction.Triggers>
+                        <hc:EventTrigger EventName="MouseDoubleClick">
+                            <hc:EventToCommand Command="{Binding OpenImportCommand}" CommandParameter="{Binding SelectedImport}" />
+                        </hc:EventTrigger>
+                    </hc:Interaction.Triggers>
+                </ListView>
 
-                    </Grid>
+            </Grid>
 
-                    <Grid x:Name="BUFFERSVISIBILITY" Visibility="Collapsed">
-                        <ListView ItemsSource="{Binding Buffers}">
-                            <hc:Interaction.Triggers>
-                                <hc:EventTrigger EventName="MouseDoubleClick">
-                                    <hc:EventToCommand Command="{Binding OpenBufferCommand}" PassEventArgsToCommand="True" />
-                                </hc:EventTrigger>
-                            </hc:Interaction.Triggers>
+            <Grid Grid.Row="1" x:Name="BUFFERSVISIBILITY" Visibility="Collapsed">
+                <ListView ItemsSource="{Binding Buffers}"  Margin="2">
+                    <hc:Interaction.Triggers>
+                        <hc:EventTrigger EventName="MouseDoubleClick">
+                            <hc:EventToCommand Command="{Binding OpenBufferCommand}" PassEventArgsToCommand="True" />
+                        </hc:EventTrigger>
+                    </hc:Interaction.Triggers>
 
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn DisplayMemberBinding="{Binding Index}" Header="Name" />
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                    </Grid>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn DisplayMemberBinding="{Binding Index}" Header="Name" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
 
-                    <!--<Grid x:Name="EDITORSVISIBILITY" Visibility="Collapsed">
-                        <ListView ItemsSource="{Binding Editors}">
-                            <hc:Interaction.Triggers>
-                                <hc:EventTrigger EventName="MouseDoubleClick">
-                                    <hc:EventToCommand Command="{Binding OpenEditorCommand}" PassEventArgsToCommand="True" />
-                                </hc:EventTrigger>
-                            </hc:Interaction.Triggers>
+        </Grid>
 
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Name" />
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                    </Grid>-->
-
-                </Grid>
-
-            </syncfusion:SfNavigationDrawer.ContentView>
-
-            <syncfusion:NavigationItem
-                x:Name="NavigationItemChunks"
-                Header="Chunks"
-                IsExpanded="False"
-                IsSelected="True"
-                MouseLeftButtonDown="NavigationItem_MouseLeftButtonDown"
-                ToolTip="Chunks">
-                <syncfusion:NavigationItem.Icon>
-                    <iconPacks:PackIconVaadinIcons Margin="10,5,5,5" Kind="Cubes" />
-                </syncfusion:NavigationItem.Icon>
-            </syncfusion:NavigationItem>
-
-            <syncfusion:NavigationItem
-                x:Name="NavigationItemImports"
-                Header="Imports"
-                IsExpanded="False"
-                IsSelected="False"
-                MouseLeftButtonDown="NavigationItem_MouseLeftButtonDown_1"
-                ToolTip="Imports">
-                <syncfusion:NavigationItem.Icon>
-                    <iconPacks:PackIconMaterialDesign Margin="10,5,5,5" Kind="ImportExport" />
-                </syncfusion:NavigationItem.Icon>
-            </syncfusion:NavigationItem>
-
-            <syncfusion:NavigationItem
-                Header="Buffers"
-                IsExpanded="False"
-                IsSelected="False"
-                MouseLeftButtonDown="NavigationItem_MouseLeftButtonDown_2"
-                ToolTip="Buffers">
-                <syncfusion:NavigationItem.Icon>
-                    <iconPacks:PackIconMaterial Margin="10,5,5,5" Kind="Buffer" />
-                </syncfusion:NavigationItem.Icon>
-            </syncfusion:NavigationItem>
-
-            <!--<syncfusion:NavigationItem
-                Header="Editors"
-                IsExpanded="False"
-                IsSelected="False"
-                MouseLeftButtonDown="NavigationItem_MouseLeftButtonDown_3"
-                ToolTip="Editors">
-                <syncfusion:NavigationItem.Icon>
-                    <iconPacks:PackIconMaterial Margin="10,5,5,5" Kind="BriefcaseEditOutline" />
-                </syncfusion:NavigationItem.Icon>
-            </syncfusion:NavigationItem>-->
-
-        </syncfusion:SfNavigationDrawer>
-
-        <!-- CR2W TreeGrid -->
+        <!-- Grid Splitter -->
         <syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
 
         <!-- CR2W TreeGrid -->
@@ -486,6 +443,13 @@
                       />
                 </DataTemplate>
 
+                <DataTemplate x:Key="SingleChannelCurveTemplate">
+                    <Button x:Name="CurveEditorButton" Content="Open Curve Editor"
+                            syncfusion:FocusManagerHelper.FocusedElement="True"
+                            d:DataContext="{d:DesignInstance shell:ChunkPropertyViewModel }"
+                            Click="CurveEditorButton_OnClick" Tag="{Binding Property}" />
+                </DataTemplate>
+
                 <templates:EditableVariableDataTemplateSelector
                                 x:Key="DataTemplateSelector"
                                 CommmonTemplate="{StaticResource CommmonTemplate}"
@@ -504,17 +468,12 @@
 
                                 ColorTemplateView="{StaticResource ColorTemplateView}"
 
-                                
+                                SingleChannelCurveTemplate="{StaticResource SingleChannelCurveTemplate}"
                                 />
 
                 <converters1:CellStyleConverter x:Key="converter" />
 
             </Grid.Resources>
-
-            <!--<Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>-->
 
             <syncfusion:SfTreeGrid 
                                    x:Name="MainTreeGrid"

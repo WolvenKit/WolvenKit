@@ -21,7 +21,7 @@ namespace CP77Tools.Tasks
         public void UnbundleTask(string[] path, string outpath, string hash, string pattern, string regex,
             bool DEBUG_decompress = false);
         public void Cr2wTask(string[] path, string outpath, bool deserialize, bool serialize, string pattern,
-            string regex, ESerializeFormat format);
+            string regex, ETextConvertFormat format);
         public void ExportTask(string[] path, string outDir, EUncookExtension? uncookext, bool? flip,
             ECookedFileFormat[] forcebuffers);
         public void ImportTask(string[] path, string outDir, bool keep);
