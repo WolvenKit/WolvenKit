@@ -1,9 +1,7 @@
-using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using ReactiveUI;
-using Syncfusion.UI.Xaml.Grid;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.ViewModels.Documents;
 using WolvenKit.Views.Editors;
@@ -30,25 +28,6 @@ namespace WolvenKit.Views.Documents
         }
 
         #endregion Constructors
-
-        private void NavigationItem_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            SetCollapsedAll();
-            CHUNKSVISIBILITY.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-
-        }
-
-        private void NavigationItem_MouseLeftButtonDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            SetCollapsedAll();
-            IMPORTSVISISBILITY.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-        }
-
-        private void NavigationItem_MouseLeftButtonDown_2(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            SetCollapsedAll();
-            BUFFERSVISIBILITY.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-        }
 
         private void SetCollapsedAll()
         {
@@ -109,15 +88,39 @@ namespace WolvenKit.Views.Documents
         private void CurveEditorButton_OnClick(object sender, RoutedEventArgs e)
         {
             var tag = ((Button)sender).Tag;
-            if (tag is ICurveDataAccessor)
+            if (tag is ICurveDataAccessor redcurve)
             {
-                var iediable = tag as IEditableVariable;
-                var subWindow = new CurveEditorWindow(iediable);
-                subWindow.Show();
-
+                var curveEditorWindow = new CurveEditorWindow(redcurve);
+                var r = curveEditorWindow.ShowDialog();
+                if (r ?? true)
+                {
+                    var c = curveEditorWindow.GetCurve();
+                    if (c is not null)
+                    {
+                        // set tag data
+                        redcurve.SetInterpolationType(c.Type);
+                        redcurve.SetCurvePoints(c.Points);
+                    }
+                }
             }
+        }
 
-            
+        private void ChunksButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            SetCollapsedAll();
+            CHUNKSVISIBILITY.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        }
+
+        private void ImportsButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            SetCollapsedAll();
+            IMPORTSVISISBILITY.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        }
+
+        private void BuffersButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            SetCollapsedAll();
+            BUFFERSVISIBILITY.SetCurrentValue(VisibilityProperty, Visibility.Visible);
         }
     }
 }
