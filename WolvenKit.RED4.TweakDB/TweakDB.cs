@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using RED.CRC32;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Murmur3;
 using WolvenKit.RED4.TweakDB.Serialization;
 using WolvenKit.RED4.TweakDB.Types;
 
@@ -33,6 +35,8 @@ namespace WolvenKit.RED4.TweakDB
         private const uint s_blobVersion = 5;
         private const uint s_parserVersion = 4;
 
+        private const uint s_recordsSeed = 0x5EEDBA5E;
+
         private readonly FlatsPool _flats = new();
         private readonly Dictionary<string, string> _records = new();
 
@@ -52,7 +56,7 @@ namespace WolvenKit.RED4.TweakDB
         {
             foreach (var (key, flat) in record.Members)
             {
-                _flats.Add(key, flat);
+                _flats.Add($"{name}.{key}", flat);
             }
 
             var recordParent = record.Inherits; //unused
@@ -94,7 +98,7 @@ namespace WolvenKit.RED4.TweakDB
 
             // Save records.
             header.Offsets.Records = (uint)writer.BaseStream.Position;
-            writer.Write(0);
+            SerializeRecords(writer);
 
             // Save queries.
             header.Offsets.Queries = (uint)writer.BaseStream.Position;
@@ -107,6 +111,23 @@ namespace WolvenKit.RED4.TweakDB
             // Now the header should be written.
             writer.Seek(0, SeekOrigin.Begin);
             writer.Write(header);
+        }
+
+        private void SerializeRecords(BinaryWriter writer)
+        {
+            writer.Write(_records.Count);
+            foreach (var (name, type) in _records)
+            {
+                // TweakDBID.
+                var hash = Crc32Algorithm.Compute(name);
+                writer.Write(hash);
+                writer.Write((byte)name.Length);
+                writer.Write((byte)0); // TBD offset 0.
+                writer.Write((byte)0); // TBD offset 0.
+                writer.Write((byte)0); // TBD offset 1.
+
+                writer.Write(Murmur32.Hash(type, s_recordsSeed));
+            }
         }
     }
 }

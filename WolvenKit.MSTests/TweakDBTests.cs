@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.RED4.TweakDB;
+using WolvenKit.RED4.TweakDB.Serialization;
 using WolvenKit.RED4.TweakDB.Types;
 
 namespace WolvenKit.MSTests
@@ -144,6 +145,15 @@ namespace WolvenKit.MSTests
             db.Add("FirstItem", new CBool { Value = true });
             db.Add("SecondItem", new CInt32 { Value = 500 });
 
+            db.Add("PhotoModeBackgrounds.bg_new_bg", new TweakRecord
+            {
+                Type = "PhotoModeBackground",
+                Members = new Dictionary<string, IType>
+                {
+                    { "locked", new CBool { Value = true } }
+                }
+            });
+
             db.Save(writer);
 
             var expected = new byte[]
@@ -153,9 +163,9 @@ namespace WolvenKit.MSTests
                 0x04, 0x00, 0x00, 0x00, // Parser version
                 0x00, 0x00, 0x00, 0x00, // Records Checksum
                 0x20, 0x00, 0x00, 0x00, // Flats offset
-                0x69, 0x00, 0x00, 0x00, // Records offset
-                0x6D, 0x00, 0x00, 0x00, // Queries offset
-                0x71, 0x00, 0x00, 0x00, // Group tags offset
+                0x75, 0x00, 0x00, 0x00, // Records offset
+                0x85, 0x00, 0x00, 0x00, // Queries offset
+                0x89, 0x00, 0x00, 0x00, // Group tags offset
 
                 // Flats.
                 0x02, 0x00, 0x00, 0x00, // Types count
@@ -171,8 +181,10 @@ namespace WolvenKit.MSTests
                 // Bool values
                 0x01, 0x00, 0x00, 0x00, // Count
                 0x01, // Bool = true
-                0x01, 0x00, 0x00, 0x00, // Flats count
+                0x02, 0x00, 0x00, 0x00, // Flats count
                 0xED, 0x78, 0x5B, 0xE0, 0x09, 0x00, 0x00, 0x00, // TweakDBID = FirstItem
+                0x00, 0x00, 0x00, 0x00, // Value index
+                0x20, 0x81, 0xD4, 0xCA, 0x25, 0x00, 0x00, 0x00, // TweakDBID = PhotoModeBackgrounds.bg_new_bg.locked
                 0x00, 0x00, 0x00, 0x00, // Value index
 
                 // Int32 values
@@ -183,8 +195,10 @@ namespace WolvenKit.MSTests
                 0x00, 0x00, 0x00, 0x00, // Value index
 
                 // Records
-                0x00, 0x00, 0x00, 0x00, // Count
-
+                0x01, 0x00, 0x00, 0x00, // Count
+                0xDC, 0x3C, 0x3D, 0x36, 0x1E, 0x00, 0x00, 0x00, // TweakDBID = PhotoModeBackgrounds.bg_new_bg
+                0xE1, 0x79, 0x4E, 0xEA,
+                
                 // Queries
                 0x00, 0x00, 0x00, 0x00, // Count
 
