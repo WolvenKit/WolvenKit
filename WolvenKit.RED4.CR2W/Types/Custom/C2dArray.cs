@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using FastMember;
@@ -43,10 +44,55 @@ namespace WolvenKit.RED4.CR2W.Types
         /// Imports data from a csv file
         /// </summary>
         /// <param name="stream"></param>
-        /// <param name="seperator"></param>
-        public void FromCsvStream(Stream stream, char seperator = ',')
+        /// <param name="separator"></param>
+        public void FromCsvStream(Stream stream, char separator = ',')
         {
-            throw new NotImplementedException("FromCsvStream");
+            using var sr = new StreamReader(stream);
+
+            // first line is the header
+            Headers.Clear();
+            var headerline = sr.ReadLine();
+            if (string.IsNullOrEmpty(headerline))
+            {
+                return;
+            }
+
+            var array = headerline.Split(separator);
+            for (var i = 0; i < array.Length; i++)
+            {
+                var item = array[i];
+                var cstring = new CString(cr2w, Headers, i.ToString());
+                cstring.SetValue(item);
+                Headers.Add(cstring);
+            }
+            Headers.IsSerialized = true;
+
+            // read elements
+            string line;
+            var cnt = 0;
+            while ((line = sr.ReadLine()) != null)
+            {
+                // check if same columns as header
+                var columns = line.Split(separator);
+                if (columns.Length != Headers.Count)
+                {
+                    throw new SerializationException();
+                }
+
+                var row = new CArray<CString>(cr2w, Data, cnt.ToString());
+                for (var i = 0; i < columns.Length; i++)
+                {
+                    var item = columns[i];
+                    var cstring = new CString(cr2w, null, i.ToString());
+                    cstring.SetValue(item);
+                    row.Add(cstring);
+                }
+
+                Data.Add(row);
+                cnt++;
+            }
+            Data.IsSerialized = true;
+
         }
 
         public override void Read(BinaryReader file, uint size)
