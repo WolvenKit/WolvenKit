@@ -73,9 +73,48 @@ namespace WolvenKit.Modkit.RED4
                     return ImportTtf(rawRelative, outDir, args.Get<CommonImportArgs>());
                 case ERawFileFormat.wav:
                     return ImportWav(rawRelative, outDir, args.Get<OpusImportArgs>());
+                case ERawFileFormat.csv:
+                    return ImportCsv(rawRelative, outDir, args);
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        private bool ImportCsv(RedRelativePath rawRelative, DirectoryInfo outDir, GlobalImportArgs args)
+        {
+            // community_system2.csv.csv
+            var ext = rawRelative.Extension;
+            if (Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
+            {
+
+                // create redfile
+                var red = new CR2WFile();
+                var c2dArray = new C2dArray(red, null, "C2dArray");
+                c2dArray.CookingPlatform = new CEnum<Enums.ECookingPlatform>(red, c2dArray, "cookingPlatform") { Value = Enums.ECookingPlatform.PLATFORM_PC, IsSerialized = true };
+
+                // from csv
+                using (var infs = new FileStream(rawRelative.FullPath, FileMode.Open))
+                {
+                    c2dArray.FromCsvStream(infs);
+                }
+
+                // add chunk
+                red.CreateChunk(c2dArray);
+
+                // write
+                var outpath = new RedRelativePath(rawRelative)
+                    .ChangeBaseDir(outDir)
+                    .ChangeExtension("");
+                using var fs = new FileStream(outpath.FullPath, FileMode.Create, FileAccess.ReadWrite);
+                //using (var outms = new MemoryStream())
+                using (var bw = new BinaryWriter(fs))
+                {
+                    // write cr2w file
+                    red.Write(bw);
+                }
+            }
+
+            return true;
         }
 
         private bool ImportWav(RedRelativePath rawRelative, DirectoryInfo outDir, OpusImportArgs opusImportArgs)
@@ -83,6 +122,7 @@ namespace WolvenKit.Modkit.RED4
             _loggerService.Success($"Use WolvenKit to import opus.");
             return false;
         }
+
         private bool ImportMlmask(RedRelativePath rawRelative, DirectoryInfo outDir)
         {
             var mlmask = new MLMASK();
@@ -679,7 +719,6 @@ namespace WolvenKit.Modkit.RED4
             _loggerService.Warning($"{rawRelative.Name} - Direct mesh importing is not implemented");
             return false;
         }
-
 
         private static ECookedFileFormat FromRawExtension(ERawFileFormat rawextension) =>
             rawextension switch

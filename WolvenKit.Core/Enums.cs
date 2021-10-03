@@ -232,7 +232,6 @@ namespace WolvenKit.Common
         //ent,
         //json,
         mlmask,
-
         cubemap,
         envprobe,
         texarray,
@@ -258,7 +257,8 @@ namespace WolvenKit.Common
         glb,
         ttf,
         wav,
-        masklist
+        masklist,
+        csv
     }
 
     public enum EConvertableOutput
