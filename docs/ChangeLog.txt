@@ -1,3 +1,41 @@
+CHANGELOG 8.4 - 2021/10/03
+
+Implemented:
+- Import morph targets into a .morphtarget file on exported .glb files.
+- added a toggle button in the ribbon which switches to mod asset browser
+- replace list log with a text log
+- Updated the RTTI types for patch 1.31
+- Add text conversion UI options: convert cr2w to/from json
+- use dds as default texture export format
+- csv import
+- curve editorfor curvedata
+- backend changes
+
+Fixed:
+
+- Exception due to in-use file no longer occurs after import followed by export or vice-versa.
+- LengthPrefixedString methods now support reading and writing UTF8 encoded strings
+- Removed the WolvenKit.Core\RED4\Helpers\___Extensions.cs versions as they were now redundant
+- Updated MSTest.TestAdapter and MSTest.TestFramework libraries from 2.2.4 to 2.2.7 to resolve an issue with the DataRowAttribute mangling data.
+- Fixed: CArrayBase caused an exception when writing certain data types (UInt8) if internal buffer is null.
+- fixed a bug where existing tweak.bin files would not get deleted
+- fixed a bug where sometimes files in archives would not get unbundled correctly
+- fixed a bug where opening empty tweak files would show an error message
+- fixed The error: "unexpected error occured while uncooking: Value cannot be null. (Parameter 'path1')" which occurs when uncooking basegame_4_appearance.archive.
+- some archive service memory opimizations
+- fixed a bug where byte arrays would be written incorrectly
+- fixed a bug where clicking the play button on an audio track wouldnt play the track again if it had previously been played
+- fixed a bug where byte arrays would not be written correctly
+- open raw jsons, csvs as json, csv in default editor
+- fixed a bug where packing would be very slow on certain large cr2w files
+- fixed a bug where CRUIDS would not convert correctly to/from text
+- fixed a bug where TWEAKDBIDs would not convert correctly to/from text
+- fixed a bug where curves would not convert correctly to/from text
+- fixed a bug where Colors would not convert correctly to/from text
+
+
+
+
 CHANGELOG 0.6.0.1 - 2020.05.06
  - COMPLETE GAME FILE READING SUPPORT
  - All the unknownbytes have been figured out apart from some minor ones
