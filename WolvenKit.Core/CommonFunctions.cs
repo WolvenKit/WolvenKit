@@ -72,7 +72,10 @@ namespace WolvenKit.Core
 
                 //var productVersion = FileVersionInfo.GetVersionInfo(assembly.Location).ProductVersion;
 
-                var version = SemVersion.Parse(productVersion);
+                var v = new Version(productVersion);
+                var pv = $"{v.Major}.{v.Minor}.{v.Build}";
+
+                var version = SemVersion.Parse(pv);
                 return version;
             }
 

@@ -79,7 +79,8 @@ namespace WolvenKit.Common
         lang_th_text,
         lang_tr_text,
         //lang_zh-cn_text,
-        //lang_zh-tw_text
+        //lang_zh-tw_text,
+        memoryresident_1_general
     }
 
     public enum ERedExtension
