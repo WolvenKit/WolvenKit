@@ -5,7 +5,6 @@ using System.Linq;
 using Microsoft.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.RED4.TweakDB;
-using WolvenKit.RED4.TweakDB.Serialization;
 using WolvenKit.RED4.TweakDB.Types;
 
 namespace WolvenKit.MSTests
@@ -145,7 +144,7 @@ namespace WolvenKit.MSTests
             db.Add("FirstItem", new CBool { Value = true });
             db.Add("SecondItem", new CInt32 { Value = 500 });
 
-            db.Add("PhotoModeBackgrounds.bg_new_bg", new TweakRecord
+            db.Add("PhotoModeBackgrounds.bg_new_bg", new Record
             {
                 Type = "PhotoModeBackground",
                 Members = new Dictionary<string, IType>

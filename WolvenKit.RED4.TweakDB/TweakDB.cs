@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using RED.CRC32;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Murmur3;
-using WolvenKit.RED4.TweakDB.Serialization;
 using WolvenKit.RED4.TweakDB.Types;
 
 namespace WolvenKit.RED4.TweakDB
@@ -52,7 +50,7 @@ namespace WolvenKit.RED4.TweakDB
         /// </summary>
         /// <param name="name">The flat's name.</param>
         /// <param name="record">The value.</param>
-        public void Add(string name, TweakRecord record)
+        public void Add(string name, Record record)
         {
             foreach (var (key, flat) in record.Members)
             {

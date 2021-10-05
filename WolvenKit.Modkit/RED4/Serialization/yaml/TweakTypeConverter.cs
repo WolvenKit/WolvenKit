@@ -5,13 +5,13 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text.Json;
+using WolvenKit.RED4.TweakDB;
 using WolvenKit.RED4.TweakDB.Types;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
 
-namespace WolvenKit.RED4.TweakDB.Serialization.yaml
+namespace WolvenKit.Modkit.RED4.Serialization.yaml
 {
     public class TweakTypeConverter : IYamlTypeConverter
     {
@@ -63,7 +63,7 @@ namespace WolvenKit.RED4.TweakDB.Serialization.yaml
 
                 do
                 {
-                    var x = this.ReadYaml(parser, innertype);
+                    var x = ReadYaml(parser, innertype);
 
                     list.Add(x);
                 } while (parser.Current.GetType() != _sequenceEndType);
@@ -90,7 +90,7 @@ namespace WolvenKit.RED4.TweakDB.Serialization.yaml
             {
                 if (typeof(IPrimitive).IsAssignableFrom(type))
                 {
-                    result = IPrimitive.Parse(parser.SafeReadScalarProperty(s_valueName), type);
+                    result = Parse(parser.SafeReadScalarProperty(s_valueName), type);
                 }
                 else
                 {
@@ -185,7 +185,7 @@ namespace WolvenKit.RED4.TweakDB.Serialization.yaml
                 {
                     if (item is IType i)
                     {
-                        this.WriteYaml(emitter, i, i.GetType());
+                        WriteYaml(emitter, i, i.GetType());
                     }
                     else
                     {
@@ -198,7 +198,7 @@ namespace WolvenKit.RED4.TweakDB.Serialization.yaml
             {
                 if (value is IPrimitive fundamental)
                 {
-                    emitter.WriteProperty(s_valueName, fundamental.GetValueString());
+                    emitter.WriteProperty(s_valueName, fundamental.ToString());
                 }
                 else
                 {
@@ -258,5 +258,30 @@ namespace WolvenKit.RED4.TweakDB.Serialization.yaml
 
         private static bool IsArray(Type type) =>
             type is not { IsGenericType: false } and { } && type.GetGenericTypeDefinition() == typeof(CArray<>);
+
+        public IType Parse(string s, Type type)
+        {
+            if (typeof(IPrimitive).IsAssignableFrom(type))
+            {
+                return Serialization.GetEnumFromType(type) switch
+                {
+                    ETweakType.CName => (CName)s,
+                    ETweakType.CString => (CString)s,
+                    ETweakType.CFloat => (CFloat)float.Parse(s),
+                    ETweakType.CBool => (CBool)bool.Parse(s),
+                    ETweakType.CUint8 => (CUint8)byte.Parse(s),
+                    ETweakType.CUint16 => (CUint16)ushort.Parse(s),
+                    ETweakType.CUint32 => (CUint32)uint.Parse(s),
+                    ETweakType.CUint64 => (CUint64)ulong.Parse(s),
+                    ETweakType.CInt8 => (CInt8)sbyte.Parse(s),
+                    ETweakType.CInt16 => (CInt16)short.Parse(s),
+                    ETweakType.CInt32 => (CInt32)int.Parse(s),
+                    ETweakType.CInt64 => (CInt64)long.Parse(s),
+                    _ => throw new ArgumentOutOfRangeException()
+                };
+            }
+
+            throw new ArgumentOutOfRangeException();
+        }
     }
 }

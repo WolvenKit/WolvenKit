@@ -5,15 +5,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using WolvenKit.RED4.TweakDB.Serialization.yaml;
+using WolvenKit.Modkit.RED4.Serialization.json;
+using WolvenKit.Modkit.RED4.Serialization.yaml;
+using WolvenKit.RED4.TweakDB;
 using WolvenKit.RED4.TweakDB.Types;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace WolvenKit.RED4.TweakDB.Serialization
+namespace WolvenKit.Modkit.RED4.Serialization
 {
     public static class Serialization
     {
@@ -75,9 +76,9 @@ namespace WolvenKit.RED4.TweakDB.Serialization
 
             };
 
-            private static string SerializeJson(Dictionary<string, IType> dict) => JsonSerializer.Serialize(dict, Serialization.Json.s_options);
+            private static string SerializeJson(Dictionary<string, IType> dict) => JsonSerializer.Serialize(dict, s_options);
 
-            private static Dictionary<string, IType> DeserializeJson(string text) => JsonSerializer.Deserialize<Dictionary<string, IType>>(text, Serialization.Json.s_options);
+            private static Dictionary<string, IType> DeserializeJson(string text) => JsonSerializer.Deserialize<Dictionary<string, IType>>(text, s_options);
 
             /// <summary>
             /// Tries to convert the specified string representation to its IType equivalent.
@@ -134,7 +135,7 @@ namespace WolvenKit.RED4.TweakDB.Serialization
                         break;
                 }
 
-                if (!Serialization.Json.TryParseJsonFlat(Serialization.GetTypeFromEnum(enumType), jsonvalue, out var ivalue))
+                if (!TryParseJsonFlat(GetTypeFromEnum(enumType), jsonvalue, out var ivalue))
                 {
                     return false;
                 }

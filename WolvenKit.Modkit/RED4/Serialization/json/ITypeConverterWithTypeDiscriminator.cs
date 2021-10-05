@@ -4,9 +4,10 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using WolvenKit.RED4.TweakDB;
 using WolvenKit.RED4.TweakDB.Types;
 
-namespace WolvenKit.RED4.TweakDB.Serialization
+namespace WolvenKit.Modkit.RED4.Serialization.json
 {
     /// <summary>
     /// Comverts object implementing the IType interface to a json equivalent
@@ -104,7 +105,7 @@ namespace WolvenKit.RED4.TweakDB.Serialization
 
         }
 
-        
+
 
         private static bool IsArray(Type type) =>
             type is not { IsGenericType: false } and { } && type.GetGenericTypeDefinition() == typeof(CArray<>);

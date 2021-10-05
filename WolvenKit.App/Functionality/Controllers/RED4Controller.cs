@@ -15,10 +15,10 @@ using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
+using WolvenKit.Modkit.RED4.Serialization;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.RED4.TweakDB;
-using WolvenKit.RED4.TweakDB.Serialization;
 
 namespace WolvenKit.Functionality.Controllers
 {

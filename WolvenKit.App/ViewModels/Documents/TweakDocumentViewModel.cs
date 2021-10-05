@@ -14,8 +14,8 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common.Services;
+using WolvenKit.Modkit.RED4.Serialization;
 using WolvenKit.RED4.TweakDB;
-using WolvenKit.RED4.TweakDB.Serialization;
 
 namespace WolvenKit.ViewModels.Documents
 {

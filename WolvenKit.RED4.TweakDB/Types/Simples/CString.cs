@@ -10,10 +10,8 @@ namespace WolvenKit.RED4.TweakDB.Types
 
         public static implicit operator CString(string value) => new() { Text = value };
 
-        public override string ToString() => $"String, Text = '{Text}'";
+        public override string ToString() => Text;
 
         public void Serialize(BinaryWriter writer) => writer.WriteLengthPrefixedString(Text);
-
-        public string GetValueString() => Text;
     }
 }

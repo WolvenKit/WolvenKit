@@ -1,9 +1,8 @@
-using System;
 using System.IO;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 
-namespace WolvenKit.RED4.TweakDB.Serialization.yaml
+namespace WolvenKit.Modkit.RED4.Serialization.yaml
 {
     public static class IParserExtensions
     {
@@ -42,8 +41,8 @@ namespace WolvenKit.RED4.TweakDB.Serialization.yaml
         }
         public static string SafeReadScalarProperty(this IParser parser, string propertyName)
         {
-            SafeReadScalarValue(parser, propertyName);
-            return ReadScalarValue(parser);
+            parser.SafeReadScalarValue(propertyName);
+            return parser.ReadScalarValue();
         }
     }
 }

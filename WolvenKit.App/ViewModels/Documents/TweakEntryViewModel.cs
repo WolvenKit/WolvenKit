@@ -1,5 +1,5 @@
 using ReactiveUI;
-using WolvenKit.RED4.TweakDB.Serialization;
+using WolvenKit.RED4.TweakDB;
 using WolvenKit.RED4.TweakDB.Types;
 
 namespace WolvenKit.ViewModels.Documents
@@ -14,9 +14,9 @@ namespace WolvenKit.ViewModels.Documents
 
     public sealed class GroupViewModel : TweakEntryViewModel
     {
-        private readonly TweakRecord _value;
+        private readonly Record _value;
 
-        public GroupViewModel(string name, TweakRecord value)
+        public GroupViewModel(string name, Record value)
         {
             Name = name;
             _value = value;
@@ -26,7 +26,7 @@ namespace WolvenKit.ViewModels.Documents
         public override string DisplayString => _value.ToString();
         public override string DisplayType => _value.Type;
 
-        public TweakRecord GetValue() => _value;
+        public Record GetValue() => _value;
     }
 
     public sealed class FlatViewModel : TweakEntryViewModel

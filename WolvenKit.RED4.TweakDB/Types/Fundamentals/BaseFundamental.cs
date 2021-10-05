@@ -11,8 +11,6 @@ namespace WolvenKit.RED4.TweakDB.Types
 
         public abstract void Serialize(BinaryWriter writer);
 
-        public override string ToString() => $"{Name}, Value = {Value}";
-
-        public string GetValueString() => Value.ToString();
+        public override string ToString() => Value.ToString();
     }
 }
