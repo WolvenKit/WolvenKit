@@ -1,14 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using WolvenKit.RED4.TweakDB.Types;
 
-namespace WolvenKit.RED4.TweakDB.Serialization
+namespace WolvenKit.Modkit.RED4.Serialization.json
 {
     public sealed class CFloatJsonConverter : JsonConverter<CFloat>
     {

@@ -4,9 +4,10 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using WolvenKit.RED4.TweakDB;
 using WolvenKit.RED4.TweakDB.Types;
 
-namespace WolvenKit.RED4.TweakDB.Serialization
+namespace WolvenKit.Modkit.RED4.Serialization.json
 {
     /// <summary>
     /// Comverts object implementing the IType interface to a json equivalent
@@ -19,7 +20,7 @@ namespace WolvenKit.RED4.TweakDB.Serialization
         public ITypeConverterWithTypeDiscriminator()
         {
             // This is faster than reflection for few types
-            _types = Enum.GetValues<EIType>().Select(Serialization.GetTypeFromEnum);
+            _types = Enum.GetValues<ETweakType>().Select(Serialization.GetTypeFromEnum);
 
             // otherwise use reflection
             //var type = typeof(IType);
@@ -48,7 +49,7 @@ namespace WolvenKit.RED4.TweakDB.Serialization
             {
                 throw new JsonException();
             }
-            var type = GetRedTypeFromString(typeProperty.GetString());
+            var type = Serialization.GetTypeFromRedTypeStr(typeProperty.GetString());
             if (type == null)
             {
                 throw new JsonException();
@@ -104,71 +105,11 @@ namespace WolvenKit.RED4.TweakDB.Serialization
 
         }
 
-        private Type GetRedTypeFromString(string redtype)
-        {
-            if (string.IsNullOrEmpty(redtype))
-            {
-                throw new JsonException();
-            }
 
-            var type = _types.FirstOrDefault(x => x.Name == redtype);
-            if (type == null)
-            {
-                // check simple type
-                var wtype = GetWType(redtype);
-                if (!string.IsNullOrEmpty(wtype))
-                {
-                    type = _types.FirstOrDefault(x => x.Name == wtype);
-                    return type;
-                }
 
-                // check array type
-                var splits = redtype.Split(':');
-                if (splits.Length == 2 && splits[0].Equals("array"))
-                {
-                    var innertype = GetRedTypeFromString(splits[1]);
-                    var outer =  Activator.CreateInstance(
-                        typeof(CArray<>).MakeGenericType(
-                            new Type[] { innertype }),
-                        BindingFlags.Instance | BindingFlags.Public,
-                        binder: null,
-                        args: null,
-                        culture: null);
-                    if (outer == null)
-                    {
-                        throw new JsonException();
-                    }
-                    return outer.GetType();
-                }
-                else
-                {
-                    throw new JsonException();
-                }
-            }
+        private static bool IsArray(Type type) =>
+            type is not { IsGenericType: false } and { } && type.GetGenericTypeDefinition() == typeof(CArray<>);
 
-            return type;
-        }
-
-        private static bool IsArray(Type type)
-        {
-            if (type is { IsGenericType: false })
-            {
-                return false;
-            }
-
-            return type != null && type.GetGenericTypeDefinition() == typeof(CArray<>);
-        }
-
-        private static string GetWType(string redtype)
-        {
-            if (!Enum.TryParse<ERIType>(redtype, out var type))
-            {
-                return null;
-            }
-
-            var wtype = (EIType)type;
-            return wtype.ToString();
-        }
 
         public override void Write(Utf8JsonWriter writer, IType value, JsonSerializerOptions options)
         {

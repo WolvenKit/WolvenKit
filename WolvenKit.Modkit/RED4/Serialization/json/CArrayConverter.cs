@@ -6,7 +6,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using WolvenKit.RED4.TweakDB.Types;
 
-namespace WolvenKit.RED4.TweakDB.Serialization
+namespace WolvenKit.Modkit.RED4.Serialization.json
 {
     /// <summary>
     /// Converts types of CArray where T: IType to json
@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.TweakDB.Serialization
                     new Type[] { keyType }),
                 BindingFlags.Instance | BindingFlags.Public,
                 binder: null,
-                args: new object[] {  options },
+                args: new object[] { options },
                 culture: null);
 
             return converter;

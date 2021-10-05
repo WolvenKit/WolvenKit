@@ -1,8 +1,9 @@
+using System;
 using System.IO;
 
 namespace WolvenKit.RED4.TweakDB.Types
 {
-    public abstract class BaseFundamental<T> : IType
+    public abstract class BaseFundamental<T> : IPrimitive
         where T : struct
     {
         public abstract string Name { get; }
@@ -10,6 +11,6 @@ namespace WolvenKit.RED4.TweakDB.Types
 
         public abstract void Serialize(BinaryWriter writer);
 
-        public override string ToString() => $"{Name}, Value = {Value}";
+        public override string ToString() => Value.ToString();
     }
 }

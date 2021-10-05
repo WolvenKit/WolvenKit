@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace WolvenKit.RED4.TweakDB
 {
 
-    public enum EIType
+    public enum ETweakType
     {
         CName,
         CString,
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.TweakDB
         CVector3
     }
 
-    public enum ERIType
+    public enum ERedType
     {
         CName,
         String,

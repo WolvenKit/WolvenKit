@@ -100,10 +100,14 @@
                                    AutoGenerateColumns="False"
                                    AllowEditing="False"
                                    AllowResizingColumns="True"
+                                   AllowSorting="True"
+                                   AllowFiltering="True"
                                    >
                 <syncfusion:SfTreeGrid.Columns>
 
                     <syncfusion:TreeGridTextColumn MappingName="Name" />
+
+                    <syncfusion:TreeGridTextColumn MappingName="DisplayType" HeaderText="Type" />
 
                     <syncfusion:TreeGridTemplateColumn MappingName="DisplayString"
                                                        HeaderText="Value"
@@ -142,6 +146,8 @@
                             </DataTemplate>
                         </syncfusion:TreeGridTemplateColumn.EditTemplate>-->
                     </syncfusion:TreeGridTemplateColumn>
+
+                    
 
                 </syncfusion:SfTreeGrid.Columns>
 

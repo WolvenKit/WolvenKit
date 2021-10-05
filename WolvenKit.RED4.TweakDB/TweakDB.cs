@@ -1,6 +1,9 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using RED.CRC32;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Murmur3;
 using WolvenKit.RED4.TweakDB.Types;
 
 namespace WolvenKit.RED4.TweakDB
@@ -26,11 +29,14 @@ namespace WolvenKit.RED4.TweakDB
     /// </remarks>
     public class TweakDB
     {
-        private static readonly uint s_magic = 0xBB1DB47;
-        private static readonly uint s_blobVersion = 5;
-        private static readonly uint s_parserVersion = 4;
+        private const uint s_magic = 0xBB1DB47;
+        private const uint s_blobVersion = 5;
+        private const uint s_parserVersion = 4;
+
+        private const uint s_recordsSeed = 0x5EEDBA5E;
 
         private readonly FlatsPool _flats = new();
+        private readonly Dictionary<string, string> _records = new();
 
         /// <summary>
         /// Add a new flat value to the pool.
@@ -38,6 +44,24 @@ namespace WolvenKit.RED4.TweakDB
         /// <param name="name">The flat's name.</param>
         /// <param name="value">The value.</param>
         public void Add(string name, IType value) => _flats.Add(name, value);
+
+        /// <summary>
+        /// Add a new record to the pool.
+        /// </summary>
+        /// <param name="name">The flat's name.</param>
+        /// <param name="record">The value.</param>
+        public void Add(string name, Record record)
+        {
+            foreach (var (key, flat) in record.Members)
+            {
+                _flats.Add($"{name}.{key}", flat);
+            }
+
+            var recordParent = record.Inherits; //unused
+            var recordType = record.Type;
+
+            _records.Add(name, recordType);
+        }
 
         /// <summary>
         /// Save the database to a file.
@@ -72,7 +96,7 @@ namespace WolvenKit.RED4.TweakDB
 
             // Save records.
             header.Offsets.Records = (uint)writer.BaseStream.Position;
-            writer.Write(0);
+            SerializeRecords(writer);
 
             // Save queries.
             header.Offsets.Queries = (uint)writer.BaseStream.Position;
@@ -85,6 +109,23 @@ namespace WolvenKit.RED4.TweakDB
             // Now the header should be written.
             writer.Seek(0, SeekOrigin.Begin);
             writer.Write(header);
+        }
+
+        private void SerializeRecords(BinaryWriter writer)
+        {
+            writer.Write(_records.Count);
+            foreach (var (name, type) in _records)
+            {
+                // TweakDBID.
+                var hash = Crc32Algorithm.Compute(name);
+                writer.Write(hash);
+                writer.Write((byte)name.Length);
+                writer.Write((byte)0); // TBD offset 0.
+                writer.Write((byte)0); // TBD offset 0.
+                writer.Write((byte)0); // TBD offset 1.
+
+                writer.Write(Murmur32.Hash(type, s_recordsSeed));
+            }
         }
     }
 }
