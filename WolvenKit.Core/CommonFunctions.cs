@@ -61,24 +61,22 @@ namespace WolvenKit.Core
                         // We are missing the required dependency assembly.
                         Console.WriteLine($"Error while getting attribute type: {ex.Message}");
                     }
-
-
                 }
 
+                var v = new Version(productVersion);
+                var pv = $"{v.Major}";
+                if (v.Minor != -1)
+                {
+                    pv += $".{ v.Minor}";
+                }
+                if (v.Build != -1)
+                {
+                    pv += $".{ v.Build}";
+                }
 
-                //var attr = assembly
-                //    .CustomAttributes.First(_ => _.AttributeType.Name.Equals(nameof(AssemblyInformationalVersionAttribute)));
-                //var productVersion = "8.2.2"; /*(string)attr.ConstructorArguments.First().Value;*/
-
-                //var productVersion = FileVersionInfo.GetVersionInfo(assembly.Location).ProductVersion;
-
-                var version = SemVersion.Parse(productVersion);
+                var version = SemVersion.Parse(pv);
                 return version;
             }
-
-            //var name = GetAssembly(assemblyName)?.GetName();
-            //return name?.Version;
-
         }
 
         public static string HashFile(FileInfo fInfo, SHA256 mySha256)

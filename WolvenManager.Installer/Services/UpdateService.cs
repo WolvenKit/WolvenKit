@@ -122,23 +122,36 @@ namespace WolvenManager.Installer.Services
                 return;
             }
 
-            var latestVersion = SemVersion.Parse(manifest.Version);
-            var myVersion = CommonFunctions.GetAssemblyVersion(_assemblyName);
-
-            if (latestVersion > myVersion)
+            try
             {
-                IsUpdateAvailable = true;
+                var v = new Version(manifest.Version);
+                var pv = $"{v.Major}.{v.Minor}.{v.Build}";
 
-                // check if portable
-                if (IsManaged())
+                var latestVersion = SemVersion.Parse(pv);
+                var myVersion = CommonFunctions.GetAssemblyVersion(_assemblyName);
+
+                if (latestVersion > myVersion)
                 {
-                    await HandleUpdate(EIncludedFiles.Installer);
-                }
-                else
-                {
-                    await HandleUpdate(EIncludedFiles.Portable);
+                    IsUpdateAvailable = true;
+
+                    // check if portable
+                    if (IsManaged())
+                    {
+                        await HandleUpdate(EIncludedFiles.Installer);
+                    }
+                    else
+                    {
+                        await HandleUpdate(EIncludedFiles.Portable);
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return;
+            }
+
+            
 
 
             async Task HandleUpdate(EIncludedFiles type)
