@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
         #region Properties
 
-        private byte[] _buffer;
+        private List<byte> _buffer = new();
         public List<T> Elements { get; set; } = new();
 
         public List<int> Flags { get; set; }
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
         public bool IsByteArray() => typeof(T) == typeof(CUInt8);
 
-        public byte[] GetBytes() => _buffer;
+        public byte[] GetBytes() => _buffer.ToArray();
 
         [Browsable(false)]
         public override string REDType => REDReflection.GetREDTypeString(GetType());
@@ -67,7 +67,7 @@ namespace WolvenKit.RED4.CR2W.Types
             // read as byte array for perfomance
             if (IsByteArray())
             {
-                _buffer = file.ReadBytes(elementcount);
+                _buffer = file.ReadBytes(elementcount).ToList();
                 return;
             }
 
@@ -99,7 +99,7 @@ namespace WolvenKit.RED4.CR2W.Types
             // read as byte array for perfomance
             if (IsByteArray())
             {
-                _buffer = file.ReadBytes(elementcount);
+                _buffer = file.ReadBytes(elementcount).ToList();
                 return;
             }
 
@@ -130,7 +130,7 @@ namespace WolvenKit.RED4.CR2W.Types
             // write as byte array for perfomance
             if (IsByteArray() && _buffer != null)
             {
-                file.Write(_buffer);
+                file.Write(_buffer.ToArray());
                 return;
             }
 
@@ -145,7 +145,7 @@ namespace WolvenKit.RED4.CR2W.Types
             // write as byte array for perfomance
             if (IsByteArray() && _buffer != null)
             {
-                file.Write(_buffer);
+                file.Write(_buffer.ToArray());
                 return;
             }
 
@@ -170,11 +170,14 @@ namespace WolvenKit.RED4.CR2W.Types
                     this.Elements = cvar.Elements;
                     break;
                 case byte[] bytes:
-                    this._buffer = bytes;
+                    this._buffer = bytes.ToList();
+                    break;
+                case List<byte> bytesList:
+                    this._buffer = bytesList;
                     break;
                 case string base64String:
                     var b = Convert.FromBase64String(base64String);
-                    this._buffer = b;
+                    this._buffer = b.ToList();
                     break;
                 default:
                     this.Elements = this.Elements;
@@ -191,7 +194,14 @@ namespace WolvenKit.RED4.CR2W.Types
         {
             if (IsByteArray())
             {
-                throw new NotImplementedException();
+                if (variable is CUInt8 var)
+                {
+                    _buffer.Add(var.Value);
+                }
+                else
+                {
+                    throw new ArgumentException(nameof(variable));
+                }
             }
 
             if (variable is T tvar)
@@ -250,7 +260,7 @@ namespace WolvenKit.RED4.CR2W.Types
 
             if (IsByteArray())
             {
-                builder.Append(_buffer.Length).Append(" bytes");
+                builder.Append(_buffer.Count).Append(" bytes");
             }
 
             return builder.ToString();
@@ -297,7 +307,7 @@ namespace WolvenKit.RED4.CR2W.Types
         {
             get
             {
-                if (IsByteArray() && _buffer is { Length: > 0 })
+                if (IsByteArray() && _buffer is { Count: > 0 })
                 {
                     // super dumb but without refactoring most of the code this is it
                     var element = Create<T>(index.ToString(), new int[0]);
@@ -317,7 +327,7 @@ namespace WolvenKit.RED4.CR2W.Types
             }
         }
 
-        public int Count => IsByteArray() ? _buffer.Length : Elements.Count;
+        public int Count => IsByteArray() ? _buffer.Count : Elements.Count;
 
         public bool IsReadOnly => ((IList<T>)Elements).IsReadOnly;
 
@@ -331,7 +341,7 @@ namespace WolvenKit.RED4.CR2W.Types
         {
             get
             {
-                if (IsByteArray() && _buffer is { Length: > 0 })
+                if (IsByteArray() && _buffer is { Count: > 0 })
                 {
                     //return _buffer[index];
                     // super dumb but without refactoring most of the code this is it
@@ -396,7 +406,7 @@ namespace WolvenKit.RED4.CR2W.Types
         {
             if (IsByteArray())
             {
-                _buffer = Array.Empty<byte>();
+                _buffer = new List<byte>();
             }
             ((IList<T>)Elements).Clear();
         }
