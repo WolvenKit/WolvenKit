@@ -88,7 +88,7 @@
                             x:Name="ValueTextBox"
                             hc:InfoElement.Title="Value: "
                             hc:InfoElement.TitlePlacement="Left"/>
-                <Button Grid.Row="1" Grid.Column="2" x:Name="AddButton">
+                <Button Grid.Row="1" Grid.Column="2" x:Name="AddButton" ToolTip="Add new flat">
                     <iconPacks:PackIconMaterial Kind="Plus" Foreground="Green"/>
                 </Button>
             </Grid>
