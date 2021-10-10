@@ -189,7 +189,8 @@
                                 Click="ExpandSingleAB_Click"
                                 IconStretch="Fill"
                                 IconType="Icon"
-                                Label="Expand node"
+                                Label="Expand folder"
+                                Padding="4,0,4,0"
                                 SizeForm="Large">
 
                                 <syncfusion:RibbonButton.IconTemplate>
@@ -210,7 +211,8 @@
                                 Click="collapseSingleAB_Click"
                                 IconStretch="Fill"
                                 IconType="Icon"
-                                Label="Collapse node"
+                                Label="Collapse folder"
+                                Padding="4,0,4,0"
                                 SizeForm="Large">
 
                                 <syncfusion:RibbonButton.IconTemplate>
@@ -231,7 +233,8 @@
                                 Click="ExpandAllAB_Click"
                                 IconStretch="Fill"
                                 IconType="Icon"
-                                Label="Expand all nodes"
+                                Label="Expand all folders"
+                                Padding="4,0,4,0"
                                 SizeForm="Large">
 
                                 <syncfusion:RibbonButton.IconTemplate>
@@ -252,7 +255,8 @@
                                 Click="CollapseAllAB_Click"
                                 IconStretch="Fill"
                                 IconType="Icon"
-                                Label="Collapse all nodes"
+                                Label="Collapse all folders"
+                                Padding="4,0,4,0"
                                 SizeForm="Large">
 
                                 <syncfusion:RibbonButton.IconTemplate>
@@ -280,7 +284,8 @@
                                 x:Name="SearchOther"
                                 IconStretch="Fill"
                                 IconType="Icon"
-                                Label="Search options"
+                                Label="Search Options"
+                                Margin="4,0,4,0"
                                 SizeForm="Large"
                                 HorizontalAlignment="Left">
 
@@ -323,7 +328,8 @@
                                 x:Name="SearchOpenFileLocation"
                                 IconStretch="Fill"
                                 IconType="Icon"
-                                Label="Open file Location"
+                                Label="Open File Location"
+                                Padding="4,0,4,0"
                                 SizeForm="Large">
 
                                 <syncfusion:RibbonButton.IconTemplate>
@@ -351,7 +357,7 @@
                                 x:Name="AddSelectedItemsButton"
                                 IconStretch="Fill"
                                 IconType="Icon"
-                                Label="Add selected Item(s) to Project"
+                                Label="Add Selected Item(s) to Project"
                                 SizeForm="Large">
 
                                 <syncfusion:RibbonButton.IconTemplate>
@@ -417,6 +423,7 @@
                                 IconStretch="Fill"
                                 IconType="Icon"
                                 Label="Open"
+                                Padding="4,0,4,0"
                                 SizeForm="Large">
 
                                 <syncfusion:RibbonButton.IconTemplate>
@@ -438,6 +445,7 @@
                                 IconStretch="Fill"
                                 IconType="Icon"
                                 Label="Copy"
+                                Padding="4,0,4,0"
                                 SizeForm="Large">
 
                                 <syncfusion:RibbonButton.IconTemplate>
@@ -459,6 +467,7 @@
                                 IconStretch="Fill"
                                 IconType="Icon"
                                 Label="Paste"
+                                Padding="4,0,4,0"
                                 SizeForm="Large">
 
                                 <syncfusion:RibbonButton.IconTemplate>
@@ -480,6 +489,7 @@
                                 IconStretch="Fill"
                                 IconType="Icon"
                                 Label="Delete"
+                                Padding="4,0,4,0"
                                 SizeForm="Large">
 
                                 <syncfusion:RibbonButton.IconTemplate>
@@ -501,6 +511,7 @@
                                 IconStretch="Fill"
                                 IconType="Icon"
                                 Label="Rename"
+                                Padding="4,0,4,0"
                                 SizeForm="Large">
 
                                 <syncfusion:RibbonButton.IconTemplate>
@@ -524,6 +535,7 @@
                                 IconStretch="Fill"
                                 IconType="Icon"
                                 Label="Open in File Explorer"
+                                Padding="4,0,4,0"
                                 SizeForm="Large">
 
                                 <syncfusion:RibbonButton.IconTemplate>
@@ -545,6 +557,7 @@
                                 IconType="Icon"
                                 IsEnabled="False"
                                 Label="Simple Export"
+                                Padding="4,0,4,0"
                                 SizeForm="Large"
                                 Visibility="Collapsed">
 
@@ -567,6 +580,7 @@
                                 IconType="Icon"
                                 IsEnabled="False"
                                 Label="Advanced Export"
+                                Padding="4,0,4,0"
                                 SizeForm="Large"
                                 Visibility="Collapsed">
 
@@ -593,7 +607,7 @@
                                 Click="ExandAllNodesContext_Click"
                                 IconStretch="Fill"
                                 IconType="Icon"
-                                Label="Expand all nodes"
+                                Label="Expand all folders"
                                 SizeForm="Large">
 
                                 <syncfusion:RibbonButton.IconTemplate>
@@ -614,7 +628,7 @@
                                 Click="collapseAllNodesContext_Click"
                                 IconStretch="Fill"
                                 IconType="Icon"
-                                Label="Collapse all nodes"
+                                Label="Collapse all folders"
                                 SizeForm="Large">
 
                                 <syncfusion:RibbonButton.IconTemplate>
@@ -901,8 +915,7 @@
 
                 <!--  Project bar  -->
                 <syncfusion:RibbonBar
-                    Name="ProjectRibbonBar"
-                    
+                    Name="ProjectRibbonBar"           
                     Header="Project">
 
                     <!--  Open Project Button  -->
@@ -911,6 +924,7 @@
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Open Project"
+                        Padding="4,0,4,0"
                         SizeForm="Large">
                         <syncfusion:RibbonButton.IconTemplate>
                             <DataTemplate>
@@ -931,6 +945,7 @@
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="New Project"
+                        Padding="4,0,4,0"
                         SizeForm="Large">
                         <syncfusion:RibbonButton.IconTemplate>
                             <DataTemplate>
@@ -951,6 +966,7 @@
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Pack Project"
+                        Padding="4,0,4,0"
                         SizeForm="Large">
                         <syncfusion:RibbonButton.IconTemplate>
                             <DataTemplate>
@@ -1035,6 +1051,7 @@
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="New File"
+                        Padding="4,0,4,0"
                         SizeForm="Large">
                         <syncfusion:RibbonButton.IconTemplate>
                             <DataTemplate>
@@ -1054,6 +1071,7 @@
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Save File"
+                        Padding="4,0,4,0"
                         SizeForm="Large">
                         <syncfusion:RibbonButton.IconTemplate>
                             <DataTemplate>
@@ -1074,6 +1092,7 @@
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Save All"
+                        Padding="4,0,4,0"
                         SizeForm="Large">
                         <syncfusion:RibbonButton.IconTemplate>
                             <DataTemplate>
@@ -1442,18 +1461,98 @@
                 Caption="VIEW"
                 IsChecked="False">
 
-                <!--  Utilities bar  -->
+                <!--  View bar  -->
                 <syncfusion:RibbonBar
-                    Name="Utilities"
+                    Name="View"
                     Width="auto"
-                    Header="Utilities">
+                    Header="View">
 
-                    <!--  Import Export Utility Button  -->
+                    <!--  Project Explorer Button  -->
+                    <syncfusion:RibbonButton
+                        x:Name="ViewProjectExplorerButton"
+                        IconStretch="Fill"
+                        IconType="Icon"
+                        Label="Project Explorer"
+                        Padding="4,0,4,0"
+                        SizeForm="Large">
+                        <syncfusion:RibbonButton.IconTemplate>
+                            <DataTemplate>
+                                <iconPacks:PackIconCodicons
+                                    Width="auto"
+                                    Height="auto"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Stretch"
+                                    Kind="Notebook" />
+                            </DataTemplate>
+                        </syncfusion:RibbonButton.IconTemplate>
+                    </syncfusion:RibbonButton>
+
+                    <!--  Asset Browser Button  -->
+                    <syncfusion:RibbonButton
+                        x:Name="ViewAssetBrowserButton"
+                        IconStretch="Fill"
+                        IconType="Icon"
+                        Label="Asset Browser"
+                        Padding="4,0,4,0"
+                        SizeForm="Large">
+                        <syncfusion:RibbonButton.IconTemplate>
+                            <DataTemplate>
+                                <iconPacks:PackIconBootstrapIcons
+                                    Width="auto"
+                                    Height="auto"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Stretch"
+                                    Kind="InboxesFill" />
+                            </DataTemplate>
+                        </syncfusion:RibbonButton.IconTemplate>
+                    </syncfusion:RibbonButton>
+
+                    <!--  Properties Button  -->
+                    <syncfusion:RibbonButton
+                        x:Name="ViewPropertiesButton"
+                        IconStretch="Fill"
+                        IconType="Icon"
+                        Label="Properties"
+                        Padding="4,0,4,0"
+                        SizeForm="Large">
+                        <syncfusion:RibbonButton.IconTemplate>
+                            <DataTemplate>
+                                <iconPacks:PackIconCodicons
+                                    Width="auto"
+                                    Height="auto"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Stretch"
+                                    Kind="SymbolProperty" />
+                            </DataTemplate>
+                        </syncfusion:RibbonButton.IconTemplate>
+                    </syncfusion:RibbonButton>
+
+                    <!--  Project Log Button  -->
+                    <syncfusion:RibbonButton
+                        x:Name="ViewLogButton"
+                        IconStretch="Fill"
+                        IconType="Icon"
+                        Label="Log"
+                        Padding="4,0,4,0"
+                        SizeForm="Large">
+                        <syncfusion:RibbonButton.IconTemplate>
+                            <DataTemplate>
+                                <iconPacks:PackIconCodicons
+                                    Width="auto"
+                                    Height="auto"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Stretch"
+                                    Kind="Notebook" />
+                            </DataTemplate>
+                        </syncfusion:RibbonButton.IconTemplate>
+                    </syncfusion:RibbonButton>
+
                     <syncfusion:RibbonButton
                         x:Name="UtilitiesShowImportExportToolButton"
                         IconStretch="Fill"
                         IconType="Icon"
-                        Label="Import/Export Utility"
+                        Label="Import/Export"
+                        Padding="4,0,4,0"
                         SizeForm="Large">
                         <syncfusion:RibbonButton.IconTemplate>
                             <DataTemplate>
@@ -1466,13 +1565,23 @@
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>
+                    
+                </syncfusion:RibbonBar>
 
+                <!--  Utilities bar  -->
+                <syncfusion:RibbonBar
+                    Name="Utilities"
+                    Width="auto"
+                    Header="Utilities">
+
+                    <!--  Browse Material Repository Button  -->
                     <ToggleButton
                         x:Name="xa"
                         Grid.Row="0"
                         Grid.Column="1"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Center"
+                        Padding="4,0,4,0"
                         hc:IconElement.Geometry="{DynamicResource IntegratedGeo}"
                         hc:IconElement.Height="50"
                         hc:IconElement.Width="50"
@@ -1520,90 +1629,6 @@
 
                 </syncfusion:RibbonBar>
 
-                <!--  View bar  -->
-                <syncfusion:RibbonBar
-                    Name="View"
-                    Width="auto"
-                    Header="View">
-
-                    <!--  Project Explorer Button  -->
-                    <syncfusion:RibbonButton
-                        x:Name="ViewProjectExplorerButton"
-                        IconStretch="Fill"
-                        IconType="Icon"
-                        Label="Project Explorer"
-                        SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconCodicons
-                                    Width="auto"
-                                    Height="auto"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Stretch"
-                                    Kind="Notebook" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
-
-                    <!--  Asset Browser Button  -->
-                    <syncfusion:RibbonButton
-                        x:Name="ViewAssetBrowserButton"
-                        IconStretch="Fill"
-                        IconType="Icon"
-                        Label="Asset Browser"
-                        SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconBootstrapIcons
-                                    Width="auto"
-                                    Height="auto"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Stretch"
-                                    Kind="InboxesFill" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
-
-                    <!--  Properties Button  -->
-                    <syncfusion:RibbonButton
-                        x:Name="ViewPropertiesButton"
-                        IconStretch="Fill"
-                        IconType="Icon"
-                        Label="Properties"
-                        SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconCodicons
-                                    Width="auto"
-                                    Height="auto"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Stretch"
-                                    Kind="SymbolProperty" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
-
-                    <!--  Project Log Button  -->
-                    <syncfusion:RibbonButton
-                        x:Name="ViewLogButton"
-                        IconStretch="Fill"
-                        IconType="Icon"
-                        Label="Log"
-                        SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconCodicons
-                                    Width="auto"
-                                    Height="auto"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Stretch"
-                                    Kind="Notebook" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
-
-                </syncfusion:RibbonBar>
-
             </syncfusion:RibbonTab>
 
             <!--  OPTIONS TAB  -->
@@ -1618,11 +1643,12 @@
                     Header="Options">
 
                     <!--  Settings Button  -->
-                    <!--<syncfusion:RibbonButton
+                    <syncfusion:RibbonButton
                         x:Name="OptionsShowSettingsButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Settings"
+                        Padding="4,0,4,0"
                         SizeForm="Large">
                         <syncfusion:RibbonButton.IconTemplate>
                             <DataTemplate>
@@ -1634,14 +1660,15 @@
                                     Kind="Settings" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>-->
+                    </syncfusion:RibbonButton>
 
                     <!--  Material Depot Settings Button  -->
                     <syncfusion:RibbonButton
                         Click="Button_Click_1"
                         IconStretch="Fill"
                         IconType="Icon"
-                        Label="Material-Repository Settings"
+                        Label="Material Repository"
+                        Padding="4,0,4,0"
                         SizeForm="Large">
                         <syncfusion:RibbonButton.IconTemplate>
                             <DataTemplate>
@@ -1661,6 +1688,7 @@
                     <syncfusion:RibbonCheckBox
                         x:Name="PrevFileInfo"
                         Content="Show File Preview"
+                        Padding="4,0,4,0"
                         IsChecked="{Binding canShowPrev, Mode=TwoWay}" />
                 </syncfusion:RibbonBar>
 
@@ -1674,6 +1702,7 @@
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Reset Layout"
+                        Padding="4,0,4,0"
                         SizeForm="Large">
                         <syncfusion:RibbonButton.IconTemplate>
                             <DataTemplate>
@@ -1701,6 +1730,7 @@
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Bug Report"
+                        Padding="4,0,4,0"
                         SizeForm="Large">
                         <syncfusion:RibbonButton.IconTemplate>
                             <DataTemplate>
@@ -1720,6 +1750,7 @@
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Feedback"
+                        Padding="4,0,4,0"
                         SizeForm="Large">
                         <syncfusion:RibbonButton.IconTemplate>
                             <DataTemplate>
@@ -1772,7 +1803,7 @@
 
         <Border
             Width="70"
-            Height="30"
+            Height="28"
             Margin="0,-2,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="top"

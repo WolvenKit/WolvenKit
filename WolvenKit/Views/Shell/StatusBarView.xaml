@@ -26,7 +26,7 @@
         </Grid.Resources>
 
 
-        <Fluent:StatusBar Background="{DynamicResource MahApps.Brushes.Accent3}" >
+        <Fluent:StatusBar Background="{DynamicResource ContentBackgroundAlt2}" >
 
             <Fluent:StatusBarItem Title="Status"
                           
@@ -45,7 +45,6 @@
 
                     <TextBlock FontSize="11" Text="Current Project : "/>
                     <TextBlock FontSize="11" FontWeight="Bold"
-                                   Foreground="{DynamicResource MahApps.Brushes.AccentBase}"
                                    Text="{Binding CurrentProject}"/>
                 </StackPanel>
             </Fluent:StatusBarItem>

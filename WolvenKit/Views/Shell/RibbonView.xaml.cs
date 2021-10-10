@@ -159,10 +159,10 @@ namespace WolvenKit.Views.Shell
                 //    .DisposeWith(disposables);
 
                 //Options
-                //this.BindCommand(ViewModel,
-                //        viewModel => viewModel.ShowSettingsCommand,
-                //        view => view.OptionsShowSettingsButton)
-                //    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.ShowSettingsCommand,
+                        view => view.OptionsShowSettingsButton)
+                    .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.ShowBugReportCommand,
                         view => view.OptionsShowBugReportButton)
