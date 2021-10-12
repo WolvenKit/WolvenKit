@@ -42,14 +42,26 @@
                 ToolTip="Current Project"
                 Value="Displays current project.">
                 <StackPanel Orientation="Horizontal">
-
-                    <TextBlock FontSize="11" Text="Current Project : "/>
-                    <TextBlock FontSize="11" FontWeight="Bold"
-                                   Text="{Binding CurrentProject}"/>
+                    <TextBlock
+                        FontSize="11"
+                        FontWeight="Bold"
+                        Text="{Binding CurrentProject}"/>
                 </StackPanel>
             </Fluent:StatusBarItem>
 
-            <Separator Width="10" HorizontalAlignment="Right" />
+            <Fluent:StatusBarItem
+                Title="Divider"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Margin="20,0">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        FontSize="14"
+                        FontWeight="Bold"
+                        Foreground="{DynamicResource MahApps.Brushes.AccentBase}"
+                        Text="|"/>
+                </StackPanel>
+            </Fluent:StatusBarItem>
 
             <Fluent:StatusBarItem
                 Title="Version"
@@ -57,8 +69,9 @@
                 ToolTip="Version"
                 Value="Shows the current app version">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock FontSize="11" Text="Version : "/>
-                    <TextBlock FontWeight="Bold" Foreground="{DynamicResource MahApps.Brushes.AccentBase}" Text="{Binding VersionNumber}"/>
+                    <TextBlock
+                        FontSize="12"
+                        Text="{Binding VersionNumber}"/>
                 </StackPanel>
             </Fluent:StatusBarItem>
 

@@ -63,19 +63,6 @@ namespace WolvenKit.Views.HomePage.Pages
                     .DisposeWith(disposables);
 
 
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.SettingsCommand,
-                        view => view.SettingsButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.TutorialsCommand,
-                        view => view.TutorialsButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.WikiCommand,
-                        view => view.WikiButton)
-                    .DisposeWith(disposables);
-
 
             });
 

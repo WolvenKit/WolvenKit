@@ -323,7 +323,7 @@
                                     <TextBlock
                                         Margin="5,0,35,0"
                                         HorizontalAlignment="Right"
-                                        Text="Create Project" />
+                                        Text="New Project" />
                                 </Grid>
                             </Button>
 
@@ -344,58 +344,7 @@
                                         Text="Open Project" />
                                 </Grid>
                             </Button>
-                            <Button
-                                x:Name="SettingsButton"
-                                Width="200"
-                                Height="33"
-                                Margin="2"
-                                HorizontalAlignment="Stretch"
-                                BorderBrush="{DynamicResource ContentBackground}"
-                                BorderThickness="2"
-                                Style="{DynamicResource ButtonDefault}">
-                                <Grid Width="125">
-                                    <iconPacks:PackIconCodicons HorizontalAlignment="Right" Kind="Settings" />
-                                    <TextBlock
-                                        Margin="5,0,35,0"
-                                        HorizontalAlignment="Right"
-                                        Text="Settings" />
-                                </Grid>
-                            </Button>
 
-                            <Button
-                                x:Name="TutorialsButton"
-                                Width="200"
-                                Height="33"
-                                Margin="2"
-                                HorizontalAlignment="Stretch"
-                                BorderBrush="{DynamicResource ContentBackground}"
-                                BorderThickness="2"
-                                Style="{DynamicResource ButtonDefault}">
-                                <Grid Width="125">
-                                    <iconPacks:PackIconCodicons HorizontalAlignment="Right" Kind="Question" />
-                                    <TextBlock
-                                        Margin="5,0,35,0"
-                                        HorizontalAlignment="Right"
-                                        Text="Tutorials" />
-                                </Grid>
-                            </Button>
-                            <Button
-                                x:Name="WikiButton"
-                                Width="200"
-                                Height="33"
-                                Margin="2"
-                                HorizontalAlignment="Stretch"
-                                BorderBrush="{DynamicResource ContentBackground}"
-                                BorderThickness="2"
-                                Style="{DynamicResource ButtonDefault}">
-                                <Grid Width="125">
-                                    <iconPacks:PackIconCodicons HorizontalAlignment="Right" Kind="Info" />
-                                    <TextBlock
-                                        Margin="5,0,35,0"
-                                        HorizontalAlignment="Right"
-                                        Text="Wiki" />
-                                </Grid>
-                            </Button>
                         </hc:ButtonGroup>
                     </StackPanel>
                 </Grid>

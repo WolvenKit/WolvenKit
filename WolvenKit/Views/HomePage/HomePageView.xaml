@@ -33,6 +33,7 @@
             </ResourceDictionary>
         </Grid.Resources>
 
+        <!--  Fullscreen mouse drag grid  -->
         <Grid Background="Transparent" MouseLeftButtonDown="Grid_MouseLeftButtonDown_2" />
 
         <Grid
@@ -40,6 +41,7 @@
             VerticalAlignment="Top"
             MouseLeftButtonDown="Grid_MouseLeftButtonDown_1" />
 
+        <!--  Left sidebar grid  -->
         <Grid
             Margin="15,25,15,15"
             HorizontalAlignment="Left"
@@ -59,111 +61,86 @@
                         ExpandMode="ShowOne"
                         SideBrush="{DynamicResource MahApps.Brushes.AccentBase}"
                         SubSideBrush="{DynamicResource MahApps.Brushes.Accent2}"
-                        SelectionChanged="LeftSideMenu_OnSelectionChanged"
-                        >
+                        SelectionChanged="LeftSideMenu_OnSelectionChanged">
 
                     <hc:SideMenuItem
                             x:Name="SideMenu_GetStartedItem"
                             Margin="0,100,0,0"
                             Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
                             Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                            Header="Get Started"
+                            Header="Home"
                             IsSelected="True">
                             <hc:SideMenuItem.Icon>
                                 <iconPacks:Codicons
                                     Width="25"
                                     Height="25"
-                                    Kind="Tools" />
+                                    Kind="Home" />
                             </hc:SideMenuItem.Icon>
-
-                            <hc:SideMenuItem
-                                x:Name="SideMenu_WelcomeItem"
-                                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                Header="Welcome"
-                                IsSelected="True">
-                                <hc:SideMenuItem.Icon>
-                                    <iconPacks:Codicons
-                                        Width="15"
-                                        Height="15"
-                                        Kind="Pinned" />
-                                </hc:SideMenuItem.Icon>
-                            </hc:SideMenuItem>
-                        </hc:SideMenuItem>
+                        <hc:SideMenuItem Header="Welcome" Visibility="Collapsed" />
+                    </hc:SideMenuItem>
 
 
+                    <hc:SideMenuItem
+                        x:Name="SideMenu_SettingsItem"
+                        Margin="0,0,0,0"
+                        Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
+                        Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                        Header="Settings">
+                        <hc:SideMenuItem.Icon>
+                            <iconPacks:Codicons
+                                Width="24"
+                                Height="24"
+                                Kind="Settings" />
+                        </hc:SideMenuItem.Icon>
+                        <hc:SideMenuItem Header="Settings" Visibility="Collapsed" />
+                    </hc:SideMenuItem>
 
+                    <hc:SideMenuItem
+                        x:Name="SideMenu_WikiItem"
+                        Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
+                        Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                        Header="Wiki">
+                        <hc:SideMenuItem.Icon>
+                            <iconPacks:PackIconBoxIcons
+                                Width="24"
+                                Height="24"
+                                HorizontalAlignment="Center"
+                                Kind="LogosWikipedia" />
+                        </hc:SideMenuItem.Icon>
+                        <hc:SideMenuItem Header="Wiki" Visibility="Collapsed" />
+                    </hc:SideMenuItem>
 
-                        <hc:SideMenuItem
-                            x:Name="SideMenu_SettingsItem"
-                            Margin="0,0,0,0"
-                            Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                            Header="Settings">
-                            <hc:SideMenuItem.Icon>
-                                <iconPacks:Codicons
-                                    Width="25"
-                                    Height="25"
-                                    Kind="Settings" />
-                            </hc:SideMenuItem.Icon>
-                            <hc:SideMenuItem Header="Settings" Visibility="Collapsed" />
-                        </hc:SideMenuItem>
+                    <hc:SideMenuItem
+                        x:Name="SideMenu_GitHubItem"
+                        Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
+                        Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                        Header="GitHub">
+                        <hc:SideMenuItem.Icon>
+                            <iconPacks:PackIconBoxIcons
+                                Width="24"
+                                Height="24"
+                                HorizontalAlignment="Center"
+                                Kind="LogosGithub" />
+                        </hc:SideMenuItem.Icon>
+                        <hc:SideMenuItem Header="Github" Visibility="Collapsed" />
+                    </hc:SideMenuItem>
 
+                    <hc:SideMenuItem
+                        x:Name="SideMenu_WebsiteItem"
+                        Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
+                        Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                        Header="Website">
+                        <hc:SideMenuItem.Icon>
+                            <iconPacks:PackIconCodicons
+                                Width="24"
+                                Height="24"
+                                HorizontalAlignment="Center"
+                                Kind="Cloud" />
+                        </hc:SideMenuItem.Icon>
+                        <hc:SideMenuItem Header="Website" Visibility="Collapsed" />
+                    </hc:SideMenuItem>
 
-
-                        <hc:SideMenuItem
-                            x:Name="SideMenu_InformationItem"
-                            Margin="0,0,0,0"
-                            Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                            Header="Information">
-                            <hc:SideMenuItem.Icon>
-                                <iconPacks:Codicons
-                                    Width="25"
-                                    Height="25"
-                                    Kind="Info" />
-                            </hc:SideMenuItem.Icon>
-
-                            <hc:SideMenuItem
-                                x:Name="SideMenu_WikiItem"
-                                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                Header="Wiki">
-                                <hc:SideMenuItem.Icon>
-                                    <iconPacks:PackIconBoxIcons
-                                        Width="13"
-                                        Height="13"
-                                        HorizontalAlignment="Center"
-                                        Kind="LogosWikipedia" />
-                                </hc:SideMenuItem.Icon>
-                            </hc:SideMenuItem>
-                            <hc:SideMenuItem
-                                x:Name="SideMenu_GitHubItem"
-                                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                Header="Github">
-                                <hc:SideMenuItem.Icon>
-                                    <iconPacks:PackIconBoxIcons
-                                        Width="16"
-                                        Height="13"
-                                        HorizontalAlignment="Center"
-                                        Kind="LogosGithub" />
-                                </hc:SideMenuItem.Icon>
-                            </hc:SideMenuItem>
-
-
-                            <hc:SideMenuItem
-                                x:Name="SideMenu_WebsiteItem"
-                                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                Header="Website">
-                                <hc:SideMenuItem.Icon>
-                                    <iconPacks:PackIconCodicons
-                                        Width="13"
-                                        Height="13"
-                                        HorizontalAlignment="Center"
-                                        Kind="Cloud" />
-                                </hc:SideMenuItem.Icon>
-                            </hc:SideMenuItem>
-                        </hc:SideMenuItem>
-
-                        <hc:SideMenuItem
+                    <hc:SideMenuItem
                             x:Name="SideMenu_DebugItem"
                             Margin="0,30,0,0"
                             Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
@@ -171,14 +148,15 @@
                             Header="DEBUG"
                             IsSelected="False"
                             Visibility="Hidden">
-                            <hc:SideMenuItem.Icon>
-                                <iconPacks:Codicons
+                        <hc:SideMenuItem.Icon>
+                            <iconPacks:Codicons
                                     Width="25"
                                     Height="25"
                                     Kind="Debug" />
-                            </hc:SideMenuItem.Icon>
-                        </hc:SideMenuItem>
-                    </hc:SideMenu>
+                        </hc:SideMenuItem.Icon>
+                    </hc:SideMenuItem>
+
+                </hc:SideMenu>
             </Border>
 
             <!--<Button
