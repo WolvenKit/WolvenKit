@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.NetworkInformation;
@@ -31,8 +32,6 @@ namespace WolvenManager.Installer.Services
         private string _assemblyName;
         private Action<FileInfo, bool> _updateAction;
 
-        private bool _isInitialized;
-
         #endregion
 
         public UpdateService(
@@ -51,6 +50,7 @@ namespace WolvenManager.Installer.Services
 
         public bool IsUpdateAvailable { get; set; }
         public bool IsUpdateReadyToInstall { get; set; }
+        public bool IsInitialized { get; set; }
 
         #endregion
 
@@ -66,11 +66,16 @@ namespace WolvenManager.Installer.Services
         /// <param name="updateAction">action to execute for managed installs</param>
         public void Init(string[] updateUrls, string assemblyName, Action<FileInfo, bool> updateAction)
         {
+            if (updateUrls.Any(x => string.IsNullOrEmpty(x)))
+            {
+                return;
+            }
+
             _remoteUris = updateUrls;
             _assemblyName = assemblyName;
             _updateAction = updateAction;
 
-            _isInitialized = true;
+            IsInitialized = true;
         }
 
         private string GetUpdateUri() => _remoteUris[(int)_updateChannel];
@@ -87,7 +92,7 @@ namespace WolvenManager.Installer.Services
         {
             var manifestUri = GetManifestUri();
 
-            if (!_isInitialized)
+            if (!IsInitialized)
             {
                 return;
             }

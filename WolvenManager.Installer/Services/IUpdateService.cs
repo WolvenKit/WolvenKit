@@ -9,6 +9,8 @@ namespace WolvenManager.Installer.Services
     {
         bool IsUpdateAvailable { get; set; }
         bool IsUpdateReadyToInstall { get; set; }
+        bool IsInitialized { get; set; }
+
         Task CheckForUpdatesAsync();
         public void SetUpdateChannel(EUpdateChannel channel);
 
