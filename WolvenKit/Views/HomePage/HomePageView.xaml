@@ -41,7 +41,7 @@
             VerticalAlignment="Top"
             MouseLeftButtonDown="Grid_MouseLeftButtonDown_1" />
 
-        <!--  Left sidebar grid  -->
+        <!--  Left sidebar   -->
         <Grid
             Margin="15,25,15,15"
             HorizontalAlignment="Left"
@@ -213,7 +213,7 @@
                             Margin="0"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Source="pack://application:,,,/Resources/Media/Images/Application/3.png" />
+                            Source="pack://application:,,,/Resources/Media/Images/Application/Sammy_Home.png" />
                         <Button
                             Width="152"
                             Height="152"
@@ -228,6 +228,7 @@
             </Grid>
         </Grid>
 
+        <!--  Main Area  -->
         <Border
             Margin="230,25,15,15"
             Background="{DynamicResource RegionBrush}"
@@ -306,6 +307,8 @@
                     </Grid>
             </Border>
         </Border>
+
+        <!--  Min/Max/Close Buttons  -->
         <Border
             Height="25"
             Margin="0,25,15,0"
@@ -388,15 +391,15 @@
                     Margin="5"
                     VerticalAlignment="Center"
                     FlowDirection="LeftToRight"
-                    FontSize="10"
-                    Foreground="{DynamicResource Fluent.Ribbon.Brushes.IdealForegroundDisabledBrush}"
+                    FontSize="14"
+                    Foreground="{DynamicResource Fluent.Ribbon.Brushes.AccentBaseColorBrush}"
                     IsEnabled="False"
                     Text="{Binding VersionNumber}" />
                 <iconPacks:PackIconCodicons
                     Width="20"
                     Height="20"
                     VerticalAlignment="Center"
-                    Foreground="{DynamicResource Fluent.Ribbon.Brushes.IdealForegroundDisabledBrush}"
+                    Foreground="{DynamicResource Fluent.Ribbon.Brushes.AccentBaseColorBrush}"
                     Kind="Versions" />
             </StackPanel>
 

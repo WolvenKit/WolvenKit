@@ -217,6 +217,7 @@
     <Content Include="Resources\Media\t5.kark">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\Media\Images\Application\Sammy_Home.png" />
     <Resource Include="Views\Shell\TaskBarIcon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -485,7 +486,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Media\Images\Application\3.png" />
     <Resource Include="Resources\Media\Images\Application\Homelogo.png" />
     <Resource Include="Resources\Media\Images\Application\thankyoumoonded.png" />
     <Resource Include="Resources\Media\Images\Application\TinyTest.png" />
@@ -1603,6 +1603,7 @@
     <None Remove="lib\WolvenManager.Installer.exe" />
     <None Remove="Obsolete.dll" />
     <None Remove="Resources\Media\bkmk.kark" />
+    <None Remove="Resources\Media\Images\Application\Sammy_Home.png" />
     <None Remove="Resources\Media\Images\Icons\Files\acousticdata.bmp" />
     <None Remove="Resources\Media\Images\Icons\Files\acousticdata.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\actionanimdb.bmp" />

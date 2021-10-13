@@ -19,117 +19,265 @@
         x:Name="topGrid"
         Grid.RowSpan="4"
         Grid.ColumnSpan="5"
-        Margin="0">
+        Margin="50">
+
+        <!--  Grid Definition  -->
+        <Grid Grid.Row="0" Background="{DynamicResource ContentBackgroundAlt2}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="500" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
         <Grid.Resources>
             <ResourceDictionary>
-                <DrawingBrush
-                    x:Key="CloudDrawingBrushMain"
-                    o:Freeze="True"
-                    Opacity="0.3"
-                    RenderOptions.CacheInvalidationThresholdMaximum="2.0"
-                    RenderOptions.CacheInvalidationThresholdMinimum="0.5"
-                    RenderOptions.CachingHint="Cache"
-                    Stretch="Uniform"
-                    TileMode="Tile"
-                    Viewport="0,0,77,77"
-                    ViewportUnits="Absolute">
-                    <DrawingBrush.Drawing>
-                        <ImageDrawing
-                            o:Freeze="True"
-                            ImageSource="pack://application:,,,/Resources/Media/Images/Application/cloud.png"
-                            Rect="0,0,15,15" />
-                    </DrawingBrush.Drawing>
-                </DrawingBrush>
+                <Style x:Key="CardViewItemStyle" TargetType="{x:Type syncfusion:CardViewItem}">
+                    <Setter Property="Width" Value="400"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type syncfusion:CardViewItem}">
+                                <Border CornerRadius="30" BorderBrush="#FF6593CF" BorderThickness="0">
+                                    <Grid>
+                                        <!--  Vertical Card Spacing  -->
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="70"/>
+                                        </Grid.RowDefinitions>
+
+                                        <!--  Header Alignment  -->
+                                        <Border
+                                            x:Name="headerBackground"
+                                            Grid.Row="0"
+                                            HorizontalAlignment="Left"
+                                            Margin="0,0"
+                                            CornerRadius="1"
+                                            VerticalAlignment="Center">
+
+                                            <ContentPresenter
+                                                x:Name="PART_HeaderPresenter"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Top"
+                                                ContentTemplate="{Binding HeaderTemplate, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type syncfusion:CardView}}}"
+                                                Content="{TemplateBinding Header}"/>
+                                        </Border>
+
+                                        <ContentPresenter
+                                            x:Name="PART_ContentPresenter"
+                                            Margin="0,0,0,0"
+                                            Grid.Row="0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center" 
+                                            ContentTemplate="{Binding ItemTemplate, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type syncfusion:CardView}}}"
+                                            Content="{TemplateBinding Content}"
+                                            ContentSource="Content"/>
+                                        
+                                    </Grid>
+                                </Border>
+                                
+                                <!--  Highlight for mouseover and selection  -->
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" TargetName="headerBackground">
+                                            <Setter.Value>
+                                                    <SolidColorBrush Color="{DynamicResource MahApps.Colors.Accent3}"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" TargetName="headerBackground">
+                                            <Setter.Value>
+                                                    <SolidColorBrush Color="{DynamicResource MahApps.Colors.Accent2}"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                                
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                
             </ResourceDictionary>
         </Grid.Resources>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="4*" />
-            <RowDefinition Height="3*" />
-            <RowDefinition Height="300" />
-        </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Background="{DynamicResource ContentBackgroundAlt2}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="500" />
-            </Grid.ColumnDefinitions>
 
-            <Grid Grid.Column="0">
+            <!--  Recent Grid  -->
+            <Grid
+                Grid.Column="0"
+                Background="Transparent">
+
+                <!--  Recent Projects Header  -->
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Margin="16,16" Orientation="Horizontal">
+                        <iconPacks:PackIconCodicons
+                        Grid.Row="0"
+                        Width="25"
+                        Height="25"
+                        Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                        Kind="GoToFile"
+                        Spin="False"
+                        SpinAutoReverse="False" />
+
+                        <TextBlock
+                        x:Name="RecentProjectTour"
+                        Margin="10,0,0,0"
+                        FontSize="18"
+                        Text="Recent Projects" />
+                    </StackPanel>
+                    <hc:Divider Margin="0,0,0,0" />
+                </StackPanel>
+
+                <!--  Cards  -->
+                <syncfusion:CardView
+                    Name="cardView"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Left"
+                    Margin="10,54,0,0"
+                    Background="Transparent"
+                    CanSort="False"
+                    ItemsSource="{Binding FancyProjects}"
+                    ItemContainerStyle="{StaticResource CardViewItemStyle}"
+                    ShowHeader="False">
+
+                    <!--  Card Header  -->
+                    <syncfusion:CardView.HeaderTemplate>
+                        <DataTemplate>
+                            
+                            <!--  Main Container Border  -->
+                            <Border
+                                Height="50"
+                                Width="306"
+                                CornerRadius="4"
+                                Background="{DynamicResource MahApps.Brushes.Accent4}">
+                                <Grid Height="40">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border>
+                                            <hc:Tag
+                                                Height="50"
+                                                Margin="2,0"
+                                                HorizontalAlignment="Left"
+                                                HorizontalContentAlignment="Left"
+                                                Background="{x:Null}"
+                                                Selectable="False"
+                                                ShowCloseButton="False">
+                                                <hc:Tag.Header>
+                                                    <Image Source="{Binding Image}" Stretch="Fill">
+                                                        <Image.Effect>
+                                                            <hc:BrightnessEffect Brightness="0.9" />
+                                                        </Image.Effect>
+                                                    </Image>
+                                                </hc:Tag.Header>
+                                            </hc:Tag>
+                                            </Border>
+                                            <TextBlock
+                                                Margin="0,0,0,0"
+                                                Width="200"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                FontSize="12"
+                                                FontWeight="Bold"
+                                                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                                Text="{Binding Path=SafeName}" />
+                                        </StackPanel>
+                                 </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </syncfusion:CardView.HeaderTemplate>
+
+                    <!--  Card Content  -->
+                    <syncfusion:CardView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+
+                                <hc:Divider
+                                    MaxHeight="40"
+                                    Margin="0,0,0,0"
+                                    LineStroke="White"
+                                    LineStrokeThickness="0"
+                                    Orientation="Vertical" />
+
+                                <Button
+                                    x:Name="RUIOpenProjectButton"
+                                    Height="50"
+                                    Foreground="{DynamicResource MahApps.Brushes.Accent3}"
+                                    Background="Transparent"
+                                    BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
+                                    BorderThickness="02"
+                                    Padding="280,0,8,0"
+                                    HorizontalAlignment="Left"
+                                    Command="{Binding ElementName=topGrid, Path=DataContext.OpenProjectCommand}"
+                                    CommandParameter="{Binding ProjectPath}"
+                                    >
+                                    <iconPacks:PackIconCodicons Kind="Edit" />
+                                </Button>
+
+                                <Button
+                                    Background="Transparent"
+                                    BorderBrush="Transparent"
+                                    Height="50"
+                                    HorizontalAlignment="Left"
+                                    Command="{Binding ElementName=topGrid, Path=DataContext.OpenInExplorer}"
+                                    CommandParameter="{Binding ProjectPath}">
+                                    <iconPacks:PackIconCodicons Kind="FolderOpened" />
+                                </Button>
+
+                                <Button
+                                    x:Name="RUIDeleteProjectButton"
+                                    Background="Transparent"
+                                    BorderBrush="Transparent"
+                                    Height="50"
+                                    HorizontalAlignment="Left"
+                                    Command="{Binding ElementName=topGrid, Path=DataContext.DeleteProjectCommand}"
+                                    CommandParameter="{Binding ProjectPath}">
+                                    <iconPacks:PackIconCodicons Kind="ChromeClose" />
+                                </Button>
+
+                                <StackPanel
+                                    Margin="0"
+                                    Orientation="Horizontal">
+                                    <Border
+                                        Height="25"
+                                        VerticalAlignment="Center"
+                                        Background="Transparent"
+                                        CornerRadius="5,2,2,2">
+                                        <StackPanel
+                                            Orientation="Horizontal">
+                                            <TextBlock
+                                                Width="Auto"
+                                                Margin="0"
+                                                VerticalAlignment="Center"
+                                                Text="{Binding CreationDate}" />
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+
+                            </StackPanel>
+                        </DataTemplate>
+                    </syncfusion:CardView.ItemTemplate>
+                </syncfusion:CardView>
+            </Grid>
+
+            <Grid Grid.Column="1">
                 <Grid>
                     <Border
                         HorizontalAlignment="Left"
                         VerticalAlignment="top"
                         BorderBrush="{DynamicResource ContentBackgroundAlt}">
-                        <StackPanel VerticalAlignment="top">
-
-                            <StackPanel
-                                Margin="0,5,0,0"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
-                                Orientation="Horizontal">
-                                <Grid>
-                                    <iconPacks:PackIconCodicons
-                                        Grid.Row="0"
-                                        Width="50"
-                                        Height="50"
-                                        Margin="0,0,0,0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                        Kind="Hubot"
-                                        Spin="False"
-                                        SpinAutoReverse="False" />
-                                </Grid>
-                                <StackPanel VerticalAlignment="Center" Orientation="Vertical">
-                                    <TextBlock
-                                        Grid.Row="0"
-                                        Margin="10,10,0,0"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        FontSize="20"
-                                        Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                        Text="Welcome to WolvenKit" />
-                                    <hc:Divider
-                                        Margin="0,5,0,0"
-                                        HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Stretch" />
-                                </StackPanel>
-                            </StackPanel>
-                            <TextBlock
-                                Width="300"
-                                Margin="15,15,0,0"
-                                HorizontalAlignment="Left"
-                                TextAlignment="Justify"
-                                TextWrapping="Wrap">
-                                We would like to thank every person and enitity who helped and contributed to this ambitious project,<LineBreak />
-                                whom, without their support it wouldn't exist.<LineBreak /><LineBreak />
-                                Happy Modding!  -  RED Modding Tools team</TextBlock>
-
-                            <sync1:SfBarcode
-                                x:Name="barcode"
-                                Width="90"
-                                Height="90"
-                                Margin="15,10,0,0"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Bottom"
-                                DarkBarBrush="Red"
-                                DisplayText="False"
-                                LightBarBrush="{DynamicResource MahApps.Brushes.Accent4}"
-                                Symbology="QRBarcode"
-                                Text="http://www.redmodding.org" />
-                        </StackPanel>
                     </Border>
                 </Grid>
             </Grid>
 
-            <Grid Grid.Column="1">
+            <Grid Grid.Column="2">
                 <Grid HorizontalAlignment="Right">
 
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="2*" />
-                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="200" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
@@ -281,6 +429,7 @@
 
                     <StackPanel
                         Grid.RowSpan="2"
+                        Grid.Row="1"
                         Grid.Column="1"
                         Margin="5,15,10,0"
                         HorizontalAlignment="Right">
@@ -347,247 +496,62 @@
 
                         </hc:ButtonGroup>
                     </StackPanel>
+
+
+                    <Border
+                        x:Name="lokz"
+                        Grid.Row="2"
+                        Grid.Column="2"
+                        Margin="0,0,0,35"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Background="{DynamicResource ContentBackgroundAlt2}"
+                        CornerRadius="2">
+                        
+                        <StackPanel>
+                            <StackPanel
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="0"
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Right">
+                                <StackPanel
+                                Margin="0,0,15,0"
+                                FlowDirection="RightToLeft"
+                                Orientation="Horizontal">
+                                    <iconPacks:PackIconSimpleIcons
+                                    Grid.Row="0"
+                                    Width="25"
+                                    Height="25"
+                                    Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                    Kind="AirPlayVideo"
+                                    Spin="False"
+                                    SpinAutoReverse="False" />
+
+                                    <TextBlock
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    FontSize="18"
+                                    Text="Featured Showcase" />
+                                </StackPanel>
+                            </StackPanel>
+                            <hc:Divider Margin="15,5,15,3" />
+
+                            <wv2:WebView2 x:Name="cal"
+                            Width="414"
+                            Height="{Binding ElementName=lokz, Path=ActualHeight}"
+                            MaxWidth="414"
+                            Margin="0,0,15,0"
+                            />
+                        </StackPanel>
+                    </Border>
+
+
                 </Grid>
             </Grid>
         </Grid>
 
-        <Grid
-            x:Name="HeighBinder"
-            Grid.Row="1"
-            HorizontalAlignment="Stretch"
-            Background="{DynamicResource ContentBackgroundAlt2}">
 
-            <Grid.ColumnDefinitions>
-
-                <ColumnDefinition Width="1*" />
-                <ColumnDefinition Width="500" />
-            </Grid.ColumnDefinitions>
-
-            <Border
-                x:Name="lokz"
-                Grid.Column="1"
-                Margin="0,0,0,35"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                Background="{DynamicResource ContentBackgroundAlt2}"
-                CornerRadius="2">
-
-                <StackPanel>
-
-                    <StackPanel
-                        Grid.Row="0"
-                        Grid.RowSpan="2"
-                        Grid.Column="0"
-                        Margin="0,0,0,0"
-                        HorizontalAlignment="Right">
-                        <StackPanel
-                            Margin="0,0,15,0"
-                            FlowDirection="RightToLeft"
-                            Orientation="Horizontal">
-                            <iconPacks:PackIconSimpleIcons
-                                Grid.Row="0"
-                                Width="25"
-                                Height="25"
-                                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                Kind="AirPlayVideo"
-                                Spin="False"
-                                SpinAutoReverse="False" />
-
-                            <TextBlock
-                                Margin="10,0,0,0"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Center"
-                                FontSize="18"
-                                Text="Featured Showcase" />
-                        </StackPanel>
-                    </StackPanel>
-                    <hc:Divider Margin="15,5,15,3" />
-
-                    <wv2:WebView2 x:Name="cal"
-                        Width="414"
-                        Height="{Binding ElementName=lokz, Path=ActualHeight}"
-                        MaxWidth="414"
-                        Margin="0,0,15,0"
-                        />
-                </StackPanel>
-            </Border>
-        </Grid>
-
-        <Grid Grid.Row="2" Background="{DynamicResource ContentBackgroundAlt2}">
-            <StackPanel Orientation="Vertical">
-
-                <StackPanel Margin="5,8,32,5" Orientation="Horizontal">
-                    <iconPacks:PackIconCodicons
-                        Grid.Row="0"
-                        Width="25"
-                        Height="25"
-                        Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                        Kind="GoToFile"
-                        Spin="False"
-                        SpinAutoReverse="False" />
-
-                    <TextBlock
-                        x:Name="RecentProjectTour"
-                        Margin="10,0,0,0"
-                        FontSize="18"
-                        Text="Recent Projects" />
-                </StackPanel>
-                <hc:Divider Margin="0,0,0,0" />
-            </StackPanel>
-            <syncfusion:CardView
-                Name="cardView"
-                Height="220"
-                Margin="0,60,0,0"
-                Background="Transparent"
-                CanSort="False"
-                ItemsSource="{Binding FancyProjects}"
-                ShowHeader="False">
-
-                <syncfusion:CardView.HeaderTemplate>
-                    <DataTemplate>
-                        <Border Margin="-7,-9,-7,-9" Background="{DynamicResource MahApps.Brushes.Accent4}">
-                            <Border Margin="0" Background="{StaticResource CloudDrawingBrushMain}">
-
-                                <Grid Height="50">
-                                    <StackPanel Orientation="Horizontal">
-                                        <Border>
-                                            <hc:Tag
-                                                Width="42"
-                                                Height="40"
-                                                Margin="0,0,0,0"
-                                                HorizontalAlignment="Center"
-                                                HorizontalContentAlignment="Left"
-                                                Background="{x:Null}"
-                                                Selectable="False"
-                                                ShowCloseButton="False">
-                                                <hc:Tag.Header>
-
-                                                    <Image Source="{Binding Image}" Stretch="Fill">
-                                                        <Image.Effect>
-
-                                                            <hc:BrightnessEffect Brightness="0.9" />
-                                                        </Image.Effect>
-                                                    </Image>
-                                                </hc:Tag.Header>
-                                            </hc:Tag>
-                                        </Border>
-                                        <TextBlock
-                                            Margin="5,0,0,0"
-                                            HorizontalAlignment="Left"
-                                            VerticalAlignment="Center"
-                                            FontSize="12"
-                                            FontWeight="Bold"
-                                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                            Text="{Binding Path=SafeName}" />
-                                    </StackPanel>
-                                </Grid>
-                            </Border>
-                        </Border>
-                    </DataTemplate>
-                </syncfusion:CardView.HeaderTemplate>
-                <syncfusion:CardView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <Border
-                                Width="196"
-                                Margin="0,0,0,0"
-                                Background="{DynamicResource RegionBrush}"
-                                BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
-                                BorderThickness="2,0,2,2"
-                                CornerRadius="0,0,4,4">
-
-                                <Grid>
-                                    <StackPanel Margin="5" Orientation="Vertical">
-                                        <StackPanel Margin="5" Orientation="Horizontal">
-
-                                            <Border
-                                                Height="25"
-                                                VerticalAlignment="Center"
-                                                Background="{DynamicResource RegionBrush}"
-                                                CornerRadius="5,2,2,2">
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock
-                                                        Width="74"
-                                                        Margin="5"
-                                                        VerticalAlignment="Center"
-                                                        Text="Project Type : " />
-                                                    <TextBlock
-                                                        Width="280"
-                                                        Margin="0"
-                                                        VerticalAlignment="Center"
-                                                        Text="{Binding Type}" />
-                                                </StackPanel>
-                                            </Border>
-                                        </StackPanel>
-                                        <StackPanel Margin="5" Orientation="Horizontal">
-
-                                            <Border
-                                                Height="25"
-                                                VerticalAlignment="Center"
-                                                Background="{DynamicResource RegionBrush}"
-                                                CornerRadius="5,2,2,2">
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock
-                                                        Width="50"
-                                                        Margin="5"
-                                                        VerticalAlignment="Center"
-                                                        Text="Created : " />
-                                                    <TextBlock
-                                                        Width="280"
-                                                        Margin="0"
-                                                        VerticalAlignment="Center"
-                                                        Text="{Binding CreationDate}" />
-                                                </StackPanel>
-                                            </Border>
-                                        </StackPanel>
-
-                                        <StackPanel
-                                            Margin="5"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Bottom"
-                                            Orientation="Horizontal">
-                                            <Button
-                                                x:Name="RUIOpenProjectButton"
-                                                Height="35"
-                                                HorizontalAlignment="Left"
-                                                Command="{Binding ElementName=topGrid, Path=DataContext.OpenProjectCommand}"
-                                                CommandParameter="{Binding ProjectPath}"
-                                                >
-                                                <iconPacks:PackIconCodicons Kind="Edit" />
-                                            </Button>
-                                            <hc:Divider
-                                                MaxHeight="16"
-                                                LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
-                                                LineStrokeThickness="2"
-                                                Orientation="Vertical" />
-                                            <Button
-                                                Height="35"
-                                                HorizontalAlignment="Left"
-                                                Command="{Binding ElementName=topGrid, Path=DataContext.OpenInExplorer}"
-                                                CommandParameter="{Binding ProjectPath}">
-                                                <iconPacks:PackIconCodicons Kind="FolderOpened" />
-                                            </Button>
-                                            <hc:Divider
-                                                MaxHeight="16"
-                                                LineStroke="{DynamicResource MahApps.Brushes.Accent3}"
-                                                LineStrokeThickness="2"
-                                                Orientation="Vertical" />
-                                            <Button
-                                                x:Name="RUIDeleteProjectButton"
-                                                Height="35"
-                                                HorizontalAlignment="Left"
-                                                Command="{Binding ElementName=topGrid, Path=DataContext.DeleteProjectCommand}"
-                                                CommandParameter="{Binding ProjectPath}">
-                                                <iconPacks:PackIconCodicons Kind="Trash" />
-                                            </Button>
-                                        </StackPanel>
-                                    </StackPanel>
-                                </Grid>
-                            </Border>
-                        </StackPanel>
-                    </DataTemplate>
-                </syncfusion:CardView.ItemTemplate>
-            </syncfusion:CardView>
-        </Grid>
     </Grid>
 </reactiveUi:ReactiveUserControl>
