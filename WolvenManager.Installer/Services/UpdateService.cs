@@ -11,38 +11,24 @@ using System.Security.Cryptography;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Semver;
-using WolvenKit.Common;
-using WolvenKit.Common.Services;
-using WolvenKit.Core;
-using WolvenKit.Core.Services;
 using WolvenManager.Installer.Models;
 
 namespace WolvenManager.Installer.Services
 {
-    public class UpdateService : IUpdateService
+    public class UpdateService : IUpdateService, IProgress<double>
     {
         #region fields
-
-        private readonly INotificationService _notificationService;
-        private readonly ILoggerService _loggerService;
-        private readonly IProgressService<double> _progressService;
 
         private EUpdateChannel _updateChannel;
         private string[] _remoteUris;
         private string _assemblyName;
         private Action<FileInfo, bool> _updateAction;
+        private Action<string, Func<bool, bool>> _askAction;
 
         #endregion
 
-        public UpdateService(
-            INotificationService notificationService,
-            IProgressService<double> progressService,
-            ILoggerService loggerService)
+        public UpdateService()
         {
-            _loggerService = loggerService;
-            _notificationService = notificationService;
-            _progressService = progressService;
-
             _updateChannel = EUpdateChannel.Stable;
         }
 
@@ -64,7 +50,7 @@ namespace WolvenManager.Installer.Services
         /// <param name="updateUrls">full url to where the manifest is located</param>
         /// <param name="assemblyName">loaded assembly name to check the version against</param>
         /// <param name="updateAction">action to execute for managed installs</param>
-        public void Init(string[] updateUrls, string assemblyName, Action<FileInfo, bool> updateAction)
+        public void Init(string[] updateUrls, string assemblyName, Action<FileInfo, bool> updateAction, Action<string, Func<bool, bool>> askAction)
         {
             if (updateUrls.Any(x => string.IsNullOrEmpty(x)))
             {
@@ -74,6 +60,7 @@ namespace WolvenManager.Installer.Services
             _remoteUris = updateUrls;
             _assemblyName = assemblyName;
             _updateAction = updateAction;
+            _askAction = askAction;
 
             IsInitialized = true;
         }
@@ -109,7 +96,7 @@ namespace WolvenManager.Installer.Services
             }
             catch (Exception ex)
             {
-                _loggerService.Error(ex);
+                Console.WriteLine(ex);
                 return;
             }
 
@@ -133,7 +120,7 @@ namespace WolvenManager.Installer.Services
                 var pv = $"{v.Major}.{v.Minor}.{v.Build}";
 
                 var latestVersion = SemVersion.Parse(pv);
-                var myVersion = CommonFunctions.GetAssemblyVersion(_assemblyName);
+                var myVersion = Helpers.GetAssemblyVersion(_assemblyName);
 
                 if (latestVersion > myVersion)
                 {
@@ -167,7 +154,7 @@ namespace WolvenManager.Installer.Services
                 {
                     using (var mySha256 = SHA256.Create())
                     {
-                        var hash = CommonFunctions.HashFile(physicalPath, mySha256);
+                        var hash = Helpers.HashFile(physicalPath, mySha256);
                         if (manifest.Get(type).Value.Equals(hash))
                         {
                             HandleUpdateFromFile(physicalPath);
@@ -200,11 +187,9 @@ namespace WolvenManager.Installer.Services
 
         private async Task DownloadUpdateAsync(Manifest manifest, EIncludedFiles type)
         {
-            _notificationService.ShowDesktopNotification("test", ENotificationType.Info);
-
             var latestVersion = manifest.Version;
 
-            _notificationService.AskInDesktop($"Update available. Would you like to update to the latest version {latestVersion}?",
+            _askAction($"Update available. Would you like to update to the latest version {latestVersion}?",
                 delegate(bool b)
                 {
                     if (!b)
@@ -225,7 +210,7 @@ namespace WolvenManager.Installer.Services
                             .Select(_ => (double)_.EventArgs.ProgressPercentage)
                             .Subscribe(d =>
                             {
-                                _progressService.Report(d / 100);
+                                Report(d / 100);
                             });
 
                         _ = dlCompleteObservable
@@ -249,12 +234,12 @@ namespace WolvenManager.Installer.Services
         {
             if (e.Cancelled)
             {
-                _loggerService.Info("File download cancelled.");
+                Console.WriteLine("File download cancelled.");
             }
 
             if (e.Error != null)
             {
-                _loggerService.Error(e.Error);
+                Console.WriteLine(e.Error);
             }
 
             // check downloaded file
@@ -263,20 +248,20 @@ namespace WolvenManager.Installer.Services
             {
                 using (var mySha256 = SHA256.Create())
                 {
-                    var hash = CommonFunctions.HashFile(physicalPath, mySha256);
+                    var hash = Helpers.HashFile(physicalPath, mySha256);
                     if (manifest.Get(type).Value.Equals(hash))
                     {
                         HandleUpdateFromFile(physicalPath);
                     }
                     else
                     {
-                        _loggerService.Error("Downloaded file does not match expected file.");
+                        Console.WriteLine("Downloaded file does not match expected file.");
                     }
                 }
             }
             else
             {
-                _loggerService.Error("File download failed.");
+                Console.WriteLine("File download failed.");
             }
         }
 
@@ -286,7 +271,7 @@ namespace WolvenManager.Installer.Services
             IsUpdateReadyToInstall = true;
 
             // ask user to restart
-            _notificationService.AskInDesktop($"Update ready to install - restart?", delegate(bool b)
+            _askAction($"Update ready to install - restart?", delegate(bool b)
             {
                 if (!b)
                 {
@@ -297,6 +282,11 @@ namespace WolvenManager.Installer.Services
 
                 return true;
             });
+        }
+
+        public void Report(double value)
+        {
+
         }
 
         #endregion

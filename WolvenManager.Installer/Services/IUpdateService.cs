@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using WolvenKit.Common;
+using WolvenManager.Installer.Models;
 
 namespace WolvenManager.Installer.Services
 {
@@ -20,6 +20,6 @@ namespace WolvenManager.Installer.Services
         /// <param name="updateUrls"></param>
         /// <param name="assemblyName"></param>
         /// <param name="updateAction"></param>
-        void Init(string[] updateUrls, string assemblyName, Action<FileInfo, bool> updateAction);
+        void Init(string[] updateUrls, string assemblyName, Action<FileInfo, bool> updateAction, Action<string, Func<bool, bool>> askAction);
     }
 }
