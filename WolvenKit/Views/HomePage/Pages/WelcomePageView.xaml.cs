@@ -61,6 +61,10 @@ namespace WolvenKit.Views.HomePage.Pages
                         viewModel => viewModel.OpenProjectCommand,
                         view => view.OpenProjectButton)
                     .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.CloseHomePage,
+                        view => view.ContinueWithoutProjectButton)
+                    .DisposeWith(disposables);
 
 
 

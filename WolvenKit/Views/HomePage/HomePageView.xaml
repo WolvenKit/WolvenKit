@@ -205,6 +205,11 @@
 
             <Grid Margin="0,15,0,0" VerticalAlignment="Top">
                 <Border CornerRadius="0,0,0,0">
+
+                    <Border.OpacityMask>
+                        <ImageBrush ImageSource="/Resources/Media/Images/Application/Sammy_Home.png" Stretch="Uniform"  />
+                    </Border.OpacityMask>
+                    
                     <Grid>
 
                         <Image
@@ -220,10 +225,12 @@
                             Height="140"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
+                            Style="{DynamicResource HeaderButtonStyle}"
+                            Opacity=".15"
                             Background="{DynamicResource TransparentWhiteBrush}"
                             BorderBrush="{DynamicResource TransparentWhiteBrush}"
-                            Command="{Binding CloseHomePage}"
-                            Foreground="{DynamicResource TransparentWhiteBrush}" />
+                            Foreground="{DynamicResource TransparentWhiteBrush}"
+                            Command="{Binding CloseHomePage}"/>
                     </Grid>
                 </Border>
             </Grid>

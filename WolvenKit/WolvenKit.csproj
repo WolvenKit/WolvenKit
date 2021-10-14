@@ -1605,6 +1605,7 @@
     <None Remove="Obsolete.dll" />
     <None Remove="Resources\Media\bkmk.kark" />
     <None Remove="Resources\Media\Images\Application\Sammy_Home.png" />
+    <None Remove="Resources\Media\Images\Application\Sammy_Home_Mask.png" />
     <None Remove="Resources\Media\Images\Application\wkit_logo_text_singlestack_white.png" />
     <None Remove="Resources\Media\Images\Application\wkit_logo_text_singlestack_white.svg" />
     <None Remove="Resources\Media\Images\Application\wk_text_logo_white.svg" />

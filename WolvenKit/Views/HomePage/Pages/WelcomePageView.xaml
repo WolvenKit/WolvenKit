@@ -101,7 +101,7 @@
 
             <Grid Grid.Row="0" Grid.ColumnSpan="3">
                 
-                <!--  Placeholder for WK Text Logo  -->
+                <!-- WK Text Logo  -->
                 <Image Margin="56,10" Source="pack://application:,,,/Resources/Media/Images/Application/wkit_logo_text_singlestack_white.png" HorizontalAlignment="Left"></Image>
 
             </Grid>
@@ -267,9 +267,9 @@
                     Margin="0,24,0,0"
                     BorderBrush="{DynamicResource ContentBackgroundAlt}">
                         <hc:ButtonGroup
-                        Margin="5,5"
-                        Orientation="Vertical"
-                        Style="{DynamicResource ButtonGroupSolid}">
+                            Margin="5,5"
+                            Orientation="Vertical"
+                            Style="{DynamicResource ButtonGroupSolid}">
                             <Button
                             x:Name="NewProjectButton"
                             Width="350"
@@ -283,7 +283,7 @@
                                     <StackPanel Height="70">
                                         <TextBlock
                                             Margin="0,0,50,0"
-                                            Width="200"
+                                            Width="250"
                                             HorizontalAlignment="Center"
                                             FontSize="20"
                                             Text="Create a new project" />
@@ -291,7 +291,7 @@
                                         <TextBlock
                                             Margin="0,4,50,0"
                                             Foreground="Gray"
-                                            Width="200"
+                                            Width="250"
                                             TextWrapping="Wrap"
                                             HorizontalAlignment="Center"
                                             FontSize="12"
@@ -320,7 +320,7 @@
                                     <StackPanel Height="70">
                                         <TextBlock
                                             Margin="0,0,50,0"
-                                            Width="200"
+                                            Width="250"
                                             HorizontalAlignment="Center"
                                             FontSize="20"
                                             Text="Open a project" />
@@ -328,7 +328,7 @@
                                         <TextBlock
                                             Margin="0,4,50,0"
                                             Foreground="Gray"
-                                            Width="200"
+                                            Width="250"
                                             TextWrapping="Wrap"
                                             HorizontalAlignment="Center"
                                             FontSize="12"
@@ -340,11 +340,49 @@
                                         VerticalAlignment="Top"
                                         Height="36"
                                         Width="36"
-                                    Kind="GoToFile" />
+                                        Kind="GoToFile" />
+                                </Grid>
+                            </Button>
+
+                            <Button
+                            x:Name="ContinueWithoutProjectButton"
+                            Width="350"
+                            Height="100"
+                            Margin="2"
+                            HorizontalAlignment="Stretch"
+                            BorderBrush="{DynamicResource ContentBackground}"
+                            BorderThickness="0"
+                            Style="{DynamicResource ButtonDefault}">
+                                <Grid Width="300">
+                                    <StackPanel Height="70">
+                                        <TextBlock
+                                            Margin="0,0,50,0"
+                                            Width="250"
+                                            HorizontalAlignment="Center"
+                                            FontSize="20"
+                                            Text="Continue to editor" />
+
+                                        <TextBlock
+                                            Margin="0,4,50,0"
+                                            Foreground="Gray"
+                                            Width="250"
+                                            TextWrapping="Wrap"
+                                            HorizontalAlignment="Center"
+                                            FontSize="12"
+                                            Text="Access the WolvenKit Editor" />
+                                    </StackPanel>
+                                    <iconPacks:PackIconCodicons
+                                        Margin="0,0,0,0"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Top"
+                                        Height="36"
+                                        Width="36"
+                                        Kind="ArrowRight" />
                                 </Grid>
                             </Button>
 
                         </hc:ButtonGroup>
+                        
                     </Border>
                 </Grid>
             
