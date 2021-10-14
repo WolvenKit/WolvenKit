@@ -1,124 +1,45 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
-using WolvenKit.Common;
-using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.RED4.CR2W;
-using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Documents
 {
+    public enum ERedDocumentItemType
+    {
+        MainFile,
+        W2rcBuffer,
+        PackageBuffer,
+        Editor
+    }
+
+
     public class RedDocumentViewModel : DocumentViewModel
     {
-        private readonly IGameControllerFactory _gameControllerFactory;
-        private readonly IProjectManager _projectManager;
+        
         private readonly ILoggerService _loggerService;
         private readonly Red4ParserService _wolvenkitFileService;
-        private readonly IArchiveManager _archiveManager;
-
+        
 
         public RedDocumentViewModel(string path) : base(path)
         {
             _loggerService = Locator.Current.GetService<ILoggerService>();
-            _gameControllerFactory = Locator.Current.GetService<IGameControllerFactory>();
-            _projectManager = Locator.Current.GetService<IProjectManager>();
             _wolvenkitFileService = Locator.Current.GetService<Red4ParserService>();
-            _archiveManager = Locator.Current.GetService<IArchiveManager>();
-
-
-            OpenEditorCommand = new RelayCommand(ExecuteOpenEditor);
-            OpenBufferCommand = new RelayCommand(ExecuteOpenBuffer);
-            OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport);
-
-            this.WhenAnyValue(x => x.SelectedChunk).Subscribe(chunk =>
-            {
-                if (chunk != null)
-                {
-                    ChunkProperties = new ObservableCollection<ChunkPropertyViewModel>(
-                        SelectedChunk.GetData()
-                            .ChildrEditableVariables
-                            .Select(x => new ChunkPropertyViewModel(x)));
-
-                }
-            });
-
-        }
-
-        public ICommand OpenBufferCommand { get; private set; }
-        private bool CanOpenBuffer() => true;
-        private void ExecuteOpenBuffer()
-        {
-            // TODO: Handle command logic here
-        }
-
-        public ICommand OpenEditorCommand { get; private set; }
-        private bool CanOpenEditor() => true;
-        private void ExecuteOpenEditor()
-        {
-            // TODO: Handle command logic here
-        }
-
-
-
-        public ICommand OpenImportCommand { get; private set; }
-        private void ExecuteOpenImport(ICR2WImport input)
-        {
-            var depotpath = input.DepotPathStr;
-            var key = FNV1A64HashAlgorithm.HashString(depotpath);
-
-            if (_archiveManager.Lookup(key).HasValue)
-            {
-                _gameControllerFactory.GetController().AddToMod(key);
-            }
         }
 
         #region properties
 
-        [Reactive] public ObservableCollection<ChunkPropertyViewModel> ChunkProperties { get; set; } = new();
+        [Reactive] public ObservableCollection<RedDocumentItemViewModel> TabItemViewModels { get; set; } = new();
 
-        /// <summary>
-        /// Gets or sets the editable File.
-        /// </summary>
         [Reactive] public IWolvenkitFile File { get; set; }
-
-        /// <summary>
-        /// Bound to the View
-        /// </summary>
-        public List<ICR2WImport> Imports => File.Imports;
-
-        /// <summary>
-        /// Bound to the View
-        /// </summary>
-        public List<ICR2WBuffer> Buffers => File.Buffers;
-
-        /// <summary>
-        /// Bound to the View
-        /// </summary>
-        public List<ChunkViewModel> Chunks => File.Chunks
-            .Where(_ => _.VirtualParentChunk == null)
-            .Select(_ => new ChunkViewModel(_)).ToList();
-
-        /// <summary>
-        /// Bound to the View via TreeViewBehavior.cs
-        /// </summary>
-        [Reactive] public ChunkViewModel SelectedChunk { get; set; }
-
-        [Reactive] public ICR2WImport SelectedImport { get; set; }
 
         #endregion
 
@@ -131,7 +52,6 @@ namespace WolvenKit.ViewModels.Documents
             using var bw = new BinaryWriter(fs);
             File.Write(bw);
         }
-
 
         public override async Task<bool> OpenFileAsync(string path)
         {
@@ -158,6 +78,8 @@ namespace WolvenKit.ViewModels.Documents
                     IsDirty = false;
                     Title = FileName;
                     _isInitialized = true;
+
+                    PopulateItems();
                 }
 
                 return true;
@@ -170,6 +92,17 @@ namespace WolvenKit.ViewModels.Documents
             }
 
             return false;
+        }
+
+        private void PopulateItems()
+        {
+            TabItemViewModels.Add(new MainFileViewModel(File));
+
+            // TODO reactive?
+            foreach (var buffer in File.Buffers)
+            {
+                TabItemViewModels.Add(new W2rcBufferViewModel(buffer));
+            }
         }
 
         #endregion
