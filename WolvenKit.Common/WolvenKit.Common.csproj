@@ -133,7 +133,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DirectXTexSharp\DirectXTexSharp\DirectXTexSharp_2022.vcxproj" />
+    <ProjectReference Include="..\DirectXTexSharp\DirectXTexSharp\DirectXTexSharp_2019.vcxproj" />
     <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
     <ProjectReference Include="..\WolvenKit.RED4.CR2W\WolvenKit.RED4.CR2W.csproj" />
   </ItemGroup>
