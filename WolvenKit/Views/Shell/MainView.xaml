@@ -28,7 +28,7 @@
         <DrawingBrush
             x:Key="CloudDrawingBrushMain"
             o:Freeze="True"
-            Opacity=".02"
+            Opacity="0.02"
             RenderOptions.CacheInvalidationThresholdMaximum="2.0"
             RenderOptions.CacheInvalidationThresholdMinimum="0.5"
             RenderOptions.CachingHint="Cache"
@@ -39,7 +39,7 @@
             <DrawingBrush.Drawing>
                 <ImageDrawing
                     o:Freeze="True"
-                    ImageSource="pack://application:,,,/Resources/Media/Images/Application/SeeTroughIcon.png"
+                    ImageSource="pack://application:,,,/Resources/Media/Images/Application/Sammy_Grayscale.png"
                     Rect="0,0,70,80" />
             </DrawingBrush.Drawing>
         </DrawingBrush>

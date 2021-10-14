@@ -217,6 +217,8 @@
     <Content Include="Resources\Media\t5.kark">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\Media\Images\Application\Sammy_Alpha_Mask.png" />
+    <Resource Include="Resources\Media\Images\Application\Sammy_Grayscale.png" />
     <Resource Include="Resources\Media\Images\Application\Sammy_Home.png" />
     <Resource Include="Resources\Media\Images\Application\wkit_logo_text_singlestack_white.png" />
     <Resource Include="Views\Shell\TaskBarIcon.ico">
@@ -364,14 +366,7 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Media\Images\Application\cloud.png" />
-    <Resource Include="Resources\Media\Images\Application\cp77proj.png" />
     <Resource Include="Resources\Media\Images\Application\CpProj.png" />
-    <Resource Include="Resources\Media\Images\Application\HomeSickTransp.png" />
-    <Resource Include="Resources\Media\Images\Application\HomeSickTransp2.png" />
-    <Resource Include="Resources\Media\Images\Application\SeeTroughIcon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Media\Images\Application\Somthlikedis.png" />
   </ItemGroup>
 
 
@@ -487,13 +482,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Media\Images\Application\Homelogo.png" />
-    <Resource Include="Resources\Media\Images\Application\thankyoumoonded.png" />
-    <Resource Include="Resources\Media\Images\Application\TinyTest.png" />
+    <Resource Include="Resources\Media\Images\Application\V Male Logo Cropped.png" />
     <Resource Include="Resources\Media\Images\Application\tw3proj.png" />
-    <Resource Include="Resources\Media\Images\Application\whitelogo.png" />
-    <Resource Include="Resources\Media\Images\Application\.cpmodproj.png" />
-    <Resource Include="Resources\Media\Images\Application\.w3modproj.png" />
     <Resource Include="Resources\Media\Images\Application\BlankProfilePicture.png" />
     <Resource Include="Resources\Media\Images\Icons\Files\aiarch.svg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
@@ -1604,8 +1594,20 @@
     <None Remove="lib\WolvenManager.Installer.exe" />
     <None Remove="Obsolete.dll" />
     <None Remove="Resources\Media\bkmk.kark" />
+    <None Remove="Resources\Media\Images\Application\.cpmodproj.png" />
+    <None Remove="Resources\Media\Images\Application\.w3modproj.png" />
+    <None Remove="Resources\Media\Images\Application\cp77proj.png" />
+    <None Remove="Resources\Media\Images\Application\Homelogo.png" />
+    <None Remove="Resources\Media\Images\Application\HomeSickTransp.png" />
+    <None Remove="Resources\Media\Images\Application\HomeSickTransp2.png" />
+    <None Remove="Resources\Media\Images\Application\Sammy_Alpha_Mask.png" />
+    <None Remove="Resources\Media\Images\Application\Sammy_Grayscale.png" />
     <None Remove="Resources\Media\Images\Application\Sammy_Home.png" />
     <None Remove="Resources\Media\Images\Application\Sammy_Home_Mask.png" />
+    <None Remove="Resources\Media\Images\Application\Sammy_Ribbon_Grayscale.png" />
+    <None Remove="Resources\Media\Images\Application\Somthlikedis.png" />
+    <None Remove="Resources\Media\Images\Application\TinyTest.png" />
+    <None Remove="Resources\Media\Images\Application\whitelogo.png" />
     <None Remove="Resources\Media\Images\Application\wkit_logo_text_singlestack_white.png" />
     <None Remove="Resources\Media\Images\Application\wkit_logo_text_singlestack_white.svg" />
     <None Remove="Resources\Media\Images\Application\wk_text_logo_white.svg" />

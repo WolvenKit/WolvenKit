@@ -52,7 +52,7 @@
             <Fluent:StatusBarItem
                 Title="Divider"
                 HorizontalAlignment="Right"
-                VerticalAlignment="Center"
+                VerticalAlignment="Top"
                 Margin="20,0">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock

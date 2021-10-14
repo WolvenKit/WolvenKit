@@ -1825,10 +1825,11 @@
 
                 <Border>
                     <Border.OpacityMask>
-                        <ImageBrush ImageSource="/Resources/Media/Images/Application/SeeTroughIcon.png" />
+                        <ImageBrush ImageSource="/Resources/Media/Images/Application/Sammy_Grayscale.png" />
                     </Border.OpacityMask>
                     <Grid>
 
+                        <!--  Sets Sammy Color  -->
                         <Grid
                             x:Name="HomeHighLighter"
                             Margin="1"
@@ -1850,7 +1851,7 @@
             MouseLeftButtonDown="Border_MouseLeftButtonDown">
             <Border>
                 <Border.OpacityMask>
-                    <ImageBrush ImageSource="/Resources/Media/Images/Application/HomeSickTransp.png" />
+                    <ImageBrush ImageSource="/Resources/Media/Images/Application/Sammy_Alpha_Mask.png" />
                 </Border.OpacityMask>
                 <Grid>
 
@@ -1858,9 +1859,9 @@
 
                         <Grid Margin="0">
                             <Image
-                                Margin="0,-1,0,0"
-                                Source="pack://application:,,,/Resources/Media/Images/Application/HomeSickTransp.png"
-                                Stretch="Fill" />
+                                Margin="0,0,0,0"
+                                Source="pack://application:,,,/Resources/Media/Images/Application/Sammy_Alpha_Mask.png"
+                                Stretch="Uniform" />
                         </Grid>
                     </Grid>
                 </Grid>
