@@ -1,11 +1,15 @@
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using DynamicData.Kernel;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common.Model;
+using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
+using WolvenKit.Modkit.RED4.Compiled;
 using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.ViewModels.Documents
@@ -14,7 +18,7 @@ namespace WolvenKit.ViewModels.Documents
     {
         MainFile,
         W2rcBuffer,
-        PackageBuffer,
+        Buffer,
         Editor
     }
 
@@ -23,20 +27,20 @@ namespace WolvenKit.ViewModels.Documents
     {
 
         private readonly ILoggerService _loggerService;
-        private readonly Red4ParserService _wolvenkitFileService;
+        private readonly Red4ParserService _parser;
+        private readonly IHashService _hashService;
 
 
         public RedDocumentViewModel(string path) : base(path)
         {
             _loggerService = Locator.Current.GetService<ILoggerService>();
-            _wolvenkitFileService = Locator.Current.GetService<Red4ParserService>();
+            _parser = Locator.Current.GetService<Red4ParserService>();
+            _hashService = Locator.Current.GetService<IHashService>();
         }
 
         #region properties
 
         [Reactive] public ObservableCollection<RedDocumentItemViewModel> TabItemViewModels { get; set; } = new();
-
-        [Reactive] public IWolvenkitFile File { get; set; }
 
         [Reactive] public int SelectedIndex { get; set; }
 
@@ -49,7 +53,14 @@ namespace WolvenKit.ViewModels.Documents
         {
             using var fs = new FileStream(FilePath, FileMode.Create, FileAccess.ReadWrite);
             using var bw = new BinaryWriter(fs);
-            File.Write(bw);
+            var file = GetMainFile();
+            if (file.HasValue)
+            {
+                // TODO gather buffers
+
+
+                file.Value.GetFile().Write(bw);
+            }
         }
 
         public override async Task<bool> OpenFileAsync(string path)
@@ -62,7 +73,7 @@ namespace WolvenKit.ViewModels.Documents
                 {
                     using var reader = new BinaryReader(stream);
 
-                    var cr2w = _wolvenkitFileService.TryReadCr2WFile(reader);
+                    var cr2w = _parser.TryReadCr2WFile(reader);
                     if (cr2w == null)
                     {
                         _loggerService.Error($"Failed to read cr2w file {path}");
@@ -70,15 +81,13 @@ namespace WolvenKit.ViewModels.Documents
                     }
                     cr2w.FileName = path;
 
-                    File = cr2w;
-
                     ContentId = path;
                     FilePath = path;
                     IsDirty = false;
                     Title = FileName;
                     _isInitialized = true;
 
-                    PopulateItems();
+                    PopulateItems(cr2w);
                 }
 
                 return true;
@@ -93,14 +102,45 @@ namespace WolvenKit.ViewModels.Documents
             return false;
         }
 
-        private void PopulateItems()
+        private Optional<W2rcFileViewModel> GetMainFile() => Optional<W2rcFileViewModel>.ToOptional(TabItemViewModels
+            .OfType<W2rcFileViewModel>()
+            .Where(x => x.DocumentItemType == ERedDocumentItemType.MainFile)
+            .FirstOrDefault());
+
+        private void PopulateItems(IWolvenkitFile w2rcFile)
         {
-            TabItemViewModels.Add(new W2rcMainFileViewModel(File));
+            TabItemViewModels.Add(new W2rcFileViewModel(w2rcFile));
 
             // TODO reactive?
-            foreach (var buffer in File.Buffers)
+            foreach (var b in w2rcFile.Buffers)
             {
-                TabItemViewModels.Add(new W2rcBufferViewModel(buffer));
+                if (b is CR2WBufferWrapper buffer)
+                {
+                    var data = buffer.GetData();
+
+                    using var uncompressedMS = new MemoryStream();
+                    using (var compressedMs = new MemoryStream(data))
+                    {
+                        OodleHelper.DecompressAndCopySegment(compressedMs, uncompressedMS, b.DiskSize, b.MemSize);
+                    }
+
+                    // try reading as normal cr2w file
+                    var cr2wbuffer = _parser.TryReadCr2WFile(uncompressedMS);
+                    if (cr2wbuffer != null)
+                    {
+                        TabItemViewModels.Add(new W2rcBufferViewModel(b, cr2wbuffer));
+                    }
+                    // try reading as compiled package
+                    else
+                    {
+                        var compiledbuffer = new CompiledPackage(_hashService);
+                        uncompressedMS.Seek(0, SeekOrigin.Begin);
+                        using var br = new BinaryReader(uncompressedMS);
+                        compiledbuffer.Read(br);
+                        TabItemViewModels.Add(new W2rcBufferViewModel(b, compiledbuffer));
+                    }
+                }
+
             }
 
             SelectedIndex = 0;

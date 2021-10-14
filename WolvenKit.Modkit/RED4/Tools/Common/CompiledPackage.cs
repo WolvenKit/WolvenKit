@@ -328,7 +328,7 @@ namespace WolvenKit.Modkit.RED4.Compiled
 
         public IEditableVariable Data { get; set; }
 
-        [JsonIgnore] public string REDName { get; }
+        [JsonIgnore] public string REDName => REDType + " #" + (ChunkIndex);
         [JsonIgnore] public int ChunkIndex { get; set; }
 
         [JsonIgnore] public IEditableVariable UnknownBytes { get; }

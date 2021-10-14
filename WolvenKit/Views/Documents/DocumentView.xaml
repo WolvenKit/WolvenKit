@@ -25,9 +25,7 @@
             </DataTemplate>
 
             <DataTemplate x:Key="BufferTemplate">
-                <Border Background="OrangeRed">
-
-                </Border>
+                <documents1:W2rcMainFileView />
             </DataTemplate>
 
             <templates:RedDocumentTemplateSelector x:Key="RedDocumentTemplateSelector"

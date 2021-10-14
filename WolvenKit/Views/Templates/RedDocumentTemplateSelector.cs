@@ -24,7 +24,6 @@ namespace WolvenKit.Views.Templates
                         return MainTemplate;
                     case ERedDocumentItemType.W2rcBuffer:
                         return BufferTemplate;
-                    case ERedDocumentItemType.PackageBuffer:
                     case ERedDocumentItemType.Editor:
                     default:
                         return null;

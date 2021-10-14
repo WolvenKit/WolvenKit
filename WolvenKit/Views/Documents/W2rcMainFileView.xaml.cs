@@ -1,19 +1,19 @@
-using System.Windows;
-using System.Windows.Controls;
-using WolvenKit.Common.Model.Cr2w;
-using WolvenKit.Views.Editors;
-using WolvenKit.Views.Templates;
-using ReactiveUI;
-using WolvenKit.ViewModels.Documents;
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Windows;
+using System.Windows.Controls;
+using ReactiveUI;
+using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.ViewModels.Documents;
+using WolvenKit.Views.Editors;
+using WolvenKit.Views.Templates;
 
 namespace WolvenKit.Views.Documents
 {
     /// <summary>
     /// Interaction logic for W2rcMainFileView.xaml
     /// </summary>
-    public partial class W2rcMainFileView : ReactiveUserControl<W2rcMainFileViewModel>
+    public partial class W2rcMainFileView : ReactiveUserControl<W2rcFileViewModel>
     {
         public W2rcMainFileView()
         {
@@ -24,7 +24,7 @@ namespace WolvenKit.Views.Documents
 
             this.WhenActivated(disposables =>
             {
-                if (DataContext is W2rcMainFileViewModel vm)
+                if (DataContext is W2rcFileViewModel vm)
                 {
                     SetCurrentValue(ViewModelProperty, vm);
                 }

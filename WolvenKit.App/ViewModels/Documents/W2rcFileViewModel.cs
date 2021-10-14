@@ -16,11 +16,11 @@ using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Documents
 {
-    public class W2rcMainFileViewModel : RedDocumentItemViewModel
+    public class W2rcFileViewModel : RedDocumentItemViewModel
     {
         private readonly IWolvenkitFile _file;
 
-        public W2rcMainFileViewModel(IWolvenkitFile file)
+        public W2rcFileViewModel(IWolvenkitFile file)
         {
             
 
@@ -80,6 +80,8 @@ namespace WolvenKit.ViewModels.Documents
         #endregion
 
         #region methods
+
+        public IWolvenkitFile GetFile() => _file;
 
         public override string ToString() => "MainFile";
 
