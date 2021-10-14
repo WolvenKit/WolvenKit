@@ -1,14 +1,11 @@
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Services;
-using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.ViewModels.Documents
@@ -24,10 +21,10 @@ namespace WolvenKit.ViewModels.Documents
 
     public class RedDocumentViewModel : DocumentViewModel
     {
-        
+
         private readonly ILoggerService _loggerService;
         private readonly Red4ParserService _wolvenkitFileService;
-        
+
 
         public RedDocumentViewModel(string path) : base(path)
         {
@@ -40,6 +37,8 @@ namespace WolvenKit.ViewModels.Documents
         [Reactive] public ObservableCollection<RedDocumentItemViewModel> TabItemViewModels { get; set; } = new();
 
         [Reactive] public IWolvenkitFile File { get; set; }
+
+        [Reactive] public int SelectedIndex { get; set; }
 
         #endregion
 
@@ -96,13 +95,15 @@ namespace WolvenKit.ViewModels.Documents
 
         private void PopulateItems()
         {
-            TabItemViewModels.Add(new MainFileViewModel(File));
+            TabItemViewModels.Add(new W2rcMainFileViewModel(File));
 
             // TODO reactive?
             foreach (var buffer in File.Buffers)
             {
                 TabItemViewModels.Add(new W2rcBufferViewModel(buffer));
             }
+
+            SelectedIndex = 0;
         }
 
         #endregion

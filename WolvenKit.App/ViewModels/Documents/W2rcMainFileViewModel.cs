@@ -16,11 +16,11 @@ using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Documents
 {
-    public class MainFileViewModel : RedDocumentItemViewModel
+    public class W2rcMainFileViewModel : RedDocumentItemViewModel
     {
         private readonly IWolvenkitFile _file;
 
-        public MainFileViewModel(IWolvenkitFile file)
+        public W2rcMainFileViewModel(IWolvenkitFile file)
         {
             
 
