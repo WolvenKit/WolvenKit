@@ -15,7 +15,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:homePage="clr-namespace:WolvenKit.ViewModels.HomePage;assembly=WolvenKit.App"
     d:DataContext="{d:DesignInstance Type=homePage:HomePageViewModel}"
-    MinWidth="1030"
+    MinWidth="960"
     >
 
    
@@ -44,7 +44,7 @@
 
         <!--  Left sidebar   -->
         <Grid
-            Margin="15,25,15,15"
+            Margin="10,25,10,15"
             HorizontalAlignment="Left"
             Effect="{DynamicResource MahApps.DropShadowEffect.Menu}">
 
@@ -55,7 +55,7 @@
                 CornerRadius="15">
                 <hc:SideMenu
                         x:Name="LeftSideMenu"
-                        Width="160"
+                        Width="140"
                         Margin="0,90,0,25"
                         Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
                         BorderThickness="0"
@@ -209,15 +209,15 @@
 
                         <Image
                             x:Name="LogoNavi"
-                            Width="152"
-                            Height="152"
+                            Width="140"
+                            Height="140"
                             Margin="0"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Source="pack://application:,,,/Resources/Media/Images/Application/Sammy_Home.png" />
                         <Button
-                            Width="152"
-                            Height="152"
+                            Width="140"
+                            Height="140"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Background="{DynamicResource TransparentWhiteBrush}"
@@ -231,7 +231,7 @@
 
         <!--  Main Area  -->
         <Border
-            Margin="190,25,15,15"
+            Margin="160,25,15,15"
             Background="{DynamicResource RegionBrush}"
             BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
             BorderThickness="1"

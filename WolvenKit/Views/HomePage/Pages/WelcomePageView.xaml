@@ -24,8 +24,8 @@
         <!--  Grid Definition  -->
         <Grid Grid.Row="0" Background="{DynamicResource ContentBackgroundAlt2}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="420" />
-                <ColumnDefinition Width="*" MinWidth="420" />
+                <ColumnDefinition Width="400" />
+                <ColumnDefinition Width="*" MinWidth="380" />
                 <ColumnDefinition Width="300" />
             </Grid.ColumnDefinitions>
 
@@ -52,7 +52,6 @@
                                         x:Name="headerBackground"
                                         Grid.Row="0"
                                         HorizontalAlignment="Left"
-                                        Margin="0,0"
                                         CornerRadius="1"
                                         VerticalAlignment="Center">
 
@@ -66,7 +65,6 @@
 
                                     <ContentPresenter
                                         x:Name="PART_ContentPresenter"
-                                        Margin="0,0"
                                         Grid.Row="0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center" 
@@ -118,7 +116,7 @@
                 <!--  Recent Projects Header  -->
                 <StackPanel
                     Orientation="Vertical">
-                    <StackPanel Margin="16,4" Orientation="Horizontal">
+                    <StackPanel Margin="12,4" Orientation="Horizontal">
                         <iconPacks:PackIconCodicons
                         Grid.Row="0"
                         Width="25"
@@ -143,7 +141,7 @@
                     Name="cardView"
                     Orientation="Horizontal"
                     HorizontalAlignment="Left"
-                    Margin="10,34,0,0"
+                    Margin="0,34,0,0"
                     Background="Transparent"
                     CanSort="False"
                     ItemsSource="{Binding FancyProjects}"
@@ -212,7 +210,7 @@
                                     Background="Transparent"
                                     BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
                                     BorderThickness="1"
-                                    Margin="0,0,10,0"
+                                    Margin="0,0,4,0"
                                     Padding="278,0,10,0"
                                     Command="{Binding ElementName=topGrid, Path=DataContext.OpenProjectCommand}"
                                     CommandParameter="{Binding ProjectPath}"
@@ -261,15 +259,12 @@
                 </syncfusion:CardView>
             </Grid>
 
-            <Grid
-                Grid.Column="1"
-                Grid.Row="1">
-
+            <Grid Grid.Column="1" Grid.Row="1">
                 <Grid>
                     <Border
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
-                    Margin="24"
+                    Margin="0,24,0,0"
                     BorderBrush="{DynamicResource ContentBackgroundAlt}">
                         <hc:ButtonGroup
                         Margin="5,5"
@@ -395,7 +390,7 @@
                                 FontSize="24"
                                 Text="Socials" />
                         </StackPanel>
-                        <hc:Divider Margin="15,5,15,3" />
+                        <hc:Divider Margin="15,0,15,3" />
                         <hc:ButtonGroup
                             Margin="5,5,5,5"
                             Orientation="Vertical"

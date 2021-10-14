@@ -20,7 +20,7 @@
     ResizeMode="CanResizeWithGrip"
     UseNativeChrome="True"
     Title="WolvenKit"
-    MinWidth="1030"
+    MinWidth="960"
     MinHeight="600"
     >
 
