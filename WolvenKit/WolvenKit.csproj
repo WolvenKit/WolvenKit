@@ -218,6 +218,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Resource Include="Resources\Media\Images\Application\Sammy_Home.png" />
+    <Resource Include="Resources\Media\Images\Application\wkit_logo_text_singlestack_white.png" />
     <Resource Include="Views\Shell\TaskBarIcon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -1604,6 +1605,9 @@
     <None Remove="Obsolete.dll" />
     <None Remove="Resources\Media\bkmk.kark" />
     <None Remove="Resources\Media\Images\Application\Sammy_Home.png" />
+    <None Remove="Resources\Media\Images\Application\wkit_logo_text_singlestack_white.png" />
+    <None Remove="Resources\Media\Images\Application\wkit_logo_text_singlestack_white.svg" />
+    <None Remove="Resources\Media\Images\Application\wk_text_logo_white.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\acousticdata.bmp" />
     <None Remove="Resources\Media\Images\Icons\Files\acousticdata.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\actionanimdb.bmp" />

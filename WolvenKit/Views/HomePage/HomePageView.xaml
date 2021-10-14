@@ -15,6 +15,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:homePage="clr-namespace:WolvenKit.ViewModels.HomePage;assembly=WolvenKit.App"
     d:DataContext="{d:DesignInstance Type=homePage:HomePageViewModel}"
+    MinWidth="1030"
     >
 
    
@@ -54,7 +55,7 @@
                 CornerRadius="15">
                 <hc:SideMenu
                         x:Name="LeftSideMenu"
-                        Width="200"
+                        Width="160"
                         Margin="0,90,0,25"
                         Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
                         BorderThickness="0"
@@ -230,7 +231,7 @@
 
         <!--  Main Area  -->
         <Border
-            Margin="230,25,15,15"
+            Margin="190,25,15,15"
             Background="{DynamicResource RegionBrush}"
             BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
             BorderThickness="1"
