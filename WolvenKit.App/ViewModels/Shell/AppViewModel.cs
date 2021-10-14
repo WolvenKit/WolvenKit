@@ -149,7 +149,7 @@ namespace WolvenKit.ViewModels.Shell
                 .WhenAnyValue(x => x.UpdateChannel)
                 .Subscribe(_ =>
                 {
-                    _updateService.SetUpdateChannel(_settingsManager.UpdateChannel);
+                    _updateService.SetUpdateChannel((WolvenManager.Installer.Models.EUpdateChannel)_settingsManager.UpdateChannel);
                     Task.Run(() => _updateService.CheckForUpdatesAsync());
                 });
         }
@@ -165,7 +165,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private void OnStartup()
         {
-            _updateService.SetUpdateChannel(_settingsManager.UpdateChannel);
+            _updateService.SetUpdateChannel((WolvenManager.Installer.Models.EUpdateChannel)_settingsManager.UpdateChannel);
             _updateService.Init(new[] { Constants.UpdateUrl, Constants.UpdateUrlNightly },
                 Constants.AssemblyName,
             delegate (FileInfo path, bool isManaged)
@@ -202,7 +202,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
 
                 Application.Current.Shutdown();
-            });
+            }, _notificationService.AskInApp);
 
             ShowFirstTimeSetup();
         }
