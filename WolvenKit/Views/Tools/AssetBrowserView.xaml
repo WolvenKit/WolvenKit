@@ -258,7 +258,7 @@
                             <syncfusion:SfTreeGrid.ExpanderContextMenu>
                                 <ContextMenu>
                                     <MenuItem Click="Expand_OnClick" Header="Expand" />
-                                    <MenuItem Click="ExpandAll_OnClick" Header="Expand all" />
+                                    <!--<MenuItem Click="ExpandAll_OnClick" Header="Expand all" />-->
                                     <MenuItem Click="Collapse_OnClick" Header="Collapse" />
                                     <MenuItem Click="CollapseAll_OnClick" Header="Collapse all" />
                                 </ContextMenu>
@@ -1088,10 +1088,32 @@
             Background="#80000000"
             BorderBrush="Black"
             BorderThickness="1"
-            Visibility="{Binding Path=LoadVisibility}">
+            Visibility="{Binding Path=LoadVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
             <Grid>
                 <syncfusion:SfBusyIndicator AnimationType="Ball" Foreground="{DynamicResource MahApps.Brushes.Accent}" />
 
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock
+                        Margin="0,75,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Foreground="#7EFFFFFF"
+                        Text="Loading game archives.."
+                        TextWrapping="Wrap" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border
+            x:Name="NoProjectBorder"
+            Grid.RowSpan="3"
+            Background="Black"
+            BorderBrush="Black"
+            BorderThickness="1"
+            Visibility="{Binding Path=NoProjectBorderVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+            <Grid>
                 <StackPanel VerticalAlignment="Center">
 
                     <TextBlock
@@ -1101,7 +1123,7 @@
                         FontSize="24"
                         FontWeight="Bold"
                         Foreground="#7EFFFFFF"
-                        Text="Loading game archives.."
+                        Text="Create a new mod project to access the asset browser"
                         TextWrapping="Wrap" />
                 </StackPanel>
             </Grid>

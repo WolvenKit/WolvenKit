@@ -16,7 +16,8 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:shell="clr-namespace:WolvenKit.ViewModels.Shell;assembly=WolvenKit.App"
     xmlns:shell1="clr-namespace:WolvenKit.Views.Shell"
-    Panel.ZIndex="-15">
+    Panel.ZIndex="-15"
+    >
 
     <!--  Resources  -->
     <UserControl.Resources>
@@ -136,7 +137,7 @@
             BackStageHeader="MENU"
             ContextAdornerStyle="{StaticResource SyncfusionTemplatedAdornerInternalControlStyle2}"
             EnableMoreCommands="True"
-            
+            LayoutMode="Simplified"
             ShowCustomizeRibbon="True"
             Visibility="Visible"
             VerticalAlignment="Top"
@@ -308,7 +309,7 @@
                             Width="auto"
                             Header="View">
 
-                            <!--  Expand All Folders  -->
+                            <!--  Expand All Folders  --><!--
                             <syncfusion:RibbonButton
                                 x:Name="ExpandAllAB"
                                 Click="ExpandAllAB_Click"
@@ -330,7 +331,7 @@
                                 </syncfusion:RibbonButton.IconTemplate>
                             </syncfusion:RibbonButton>
 
-                            <!--  Collapse All Folders  -->
+                            --><!--  Collapse All Folders  --><!--
                             <syncfusion:RibbonButton
                                 x:Name="collapseAllAB"
                                 Click="CollapseAllAB_Click"
@@ -352,7 +353,7 @@
                                 </syncfusion:RibbonButton.IconTemplate>
                             </syncfusion:RibbonButton>
 
-                            <!--  Expand Single Folder  -->
+                            --><!--  Expand Single Folder  --><!--
                             <syncfusion:RibbonButton
                                 x:Name="ExpandSingleAB"
                                 Click="ExpandSingleAB_Click"
@@ -374,7 +375,7 @@
                                 </syncfusion:RibbonButton.IconTemplate>
                             </syncfusion:RibbonButton>
 
-                            <!--  Collapse Single Folder  -->
+                            --><!--  Collapse Single Folder  --><!--
                             <syncfusion:RibbonButton
                                 x:Name="collapseSingleAB"
                                 Click="collapseSingleAB_Click"
@@ -394,7 +395,7 @@
                                             Kind="MinusSquareOutline" />
                                     </DataTemplate>
                                 </syncfusion:RibbonButton.IconTemplate>
-                            </syncfusion:RibbonButton>
+                            </syncfusion:RibbonButton>-->
                             
                         </syncfusion:RibbonBar>
                         
@@ -611,7 +612,7 @@
                                 IconType="Icon"
                                 Label="Expand all folders"
                                 Padding="8,0"
-                                SizeForm="Large">
+                                SizeForm="Small">
 
                                 <syncfusion:RibbonButton.IconTemplate>
                                     <DataTemplate>
@@ -633,7 +634,7 @@
                                 IconType="Icon"
                                 Label="Collapse all folders"
                                 Padding="8,0"
-                                SizeForm="Large">
+                                SizeForm="Small">
 
                                 <syncfusion:RibbonButton.IconTemplate>
                                     <DataTemplate>
@@ -655,7 +656,7 @@
                                 IconType="Icon"
                                 Label="Expand Children"
                                 Padding="8,0"
-                                SizeForm="Large">
+                                SizeForm="Small">
 
                                 <syncfusion:RibbonButton.IconTemplate>
                                     <DataTemplate>
@@ -677,7 +678,7 @@
                                 IconType="Icon"
                                 Label="Collapse Children"
                                 Padding="8,0"
-                                SizeForm="Large">
+                                SizeForm="Small">
 
                                 <syncfusion:RibbonButton.IconTemplate>
                                     <DataTemplate>
@@ -1265,13 +1266,13 @@
                 >
 
                 <!--  Tools bar  -->
-                <syncfusion:RibbonBar
+                <!--<syncfusion:RibbonBar 
                     Name="Tools"
                     Width="auto"
-                    Header="Tools">
+                    Header="Tools">-->
 
                     <!--  Audio Tool Button  -->
-                    <!--<syncfusion:RibbonButton
+                <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowAudioTool}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1446,7 +1447,7 @@
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>-->
-                </syncfusion:RibbonBar>
+                <!--</syncfusion:RibbonBar>-->
 
                 <!--  Mat Repo bar  -->
                 <syncfusion:RibbonBar
@@ -1456,7 +1457,7 @@
 
                     <!--  Material Depot Settings Button  -->
                     <syncfusion:RibbonButton
-                        Click="Button_Click_1"
+                        Click="GenerateMaterialRepoButton_Click"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Generate Repository"
@@ -1475,7 +1476,25 @@
                     </syncfusion:RibbonButton>
 
                     <!--  Browse Material Repository Button  -->
-                    <ToggleButton
+                    <syncfusion:RibbonButton
+                        IconStretch="Fill"
+                        Command="{Binding OpenMaterialRepositoryCommand}"
+                        IconType="Icon"
+                        Label="Browse Repository"
+                        Padding="12,0"
+                        SizeForm="Large">
+                        <syncfusion:RibbonButton.IconTemplate>
+                            <DataTemplate>
+                                <iconPacks:PackIconCodicons
+                                    Width="auto"
+                                    Height="auto"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Stretch"
+                                    Kind="FolderOpened" />
+                            </DataTemplate>
+                        </syncfusion:RibbonButton.IconTemplate>
+                    </syncfusion:RibbonButton>
+                    <!--<ToggleButton
                         x:Name="xa"
                         Width="80"
                         Grid.Row="0"
@@ -1505,7 +1524,7 @@
                                 VerticalAlignment="Top"
                                 Kind="Image" />
                         </Grid>
-                    </ToggleButton>
+                    </ToggleButton>-->
                     
                 </syncfusion:RibbonBar>
                 

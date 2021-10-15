@@ -98,9 +98,10 @@ namespace WolvenKit.Views.HomePage.Pages
 
             try
             {
-                await FeaturedVideo.EnsureCoreWebView2Async(Helpers.objCoreWebView2Environment);
+                await Task.CompletedTask;
+                //await FeaturedVideo.EnsureCoreWebView2Async(Helpers.objCoreWebView2Environment);
 
-                FeaturedVideo.SetCurrentValue(Microsoft.Web.WebView2.Wpf.WebView2.SourceProperty, (System.Uri)new Uri("https://www.youtube.com/embed/WfEi3QwhTIs"));
+                //FeaturedVideo.SetCurrentValue(Microsoft.Web.WebView2.Wpf.WebView2.SourceProperty, (System.Uri)new Uri("https://www.youtube.com/embed/WfEi3QwhTIs"));
             }
             catch (Exception)
             {

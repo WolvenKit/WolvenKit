@@ -13,29 +13,21 @@
     xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
     xmlns:shared="clr-namespace:WolvenKit.ViewModels.Shared;assembly=WolvenKit.App">
 
-    
 
-    <Grid
-        x:Name="topGrid"
-        Grid.RowSpan="4"
-        Grid.ColumnSpan="5"
-        Margin="0">
+    <Grid Background="{DynamicResource ContentBackgroundAlt2}" x:Name="topGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
-        <!--  Grid Definition  -->
-        <Grid Grid.Row="0" Background="{DynamicResource ContentBackgroundAlt2}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="400" />
-                <ColumnDefinition Width="*" MinWidth="380" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="100" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-        <Grid.Resources>
-            <ResourceDictionary>
+    <Grid.Resources>
+        <ResourceDictionary>
                 <Style x:Key="CardViewItemStyle" TargetType="{x:Type syncfusion:CardViewItem}">
                     <Setter Property="Width" Value="400"/>
                     <Setter Property="Template">
@@ -49,566 +41,529 @@
 
                                     <!--  Header Alignment  -->
                                     <Border
-                                        x:Name="headerBackground"
-                                        Grid.Row="0"
-                                        HorizontalAlignment="Left"
-                                        CornerRadius="1"
-                                        VerticalAlignment="Center">
+                                    x:Name="headerBackground"
+                                    Grid.Row="0"
+                                    HorizontalAlignment="Left"
+                                    CornerRadius="1"
+                                    VerticalAlignment="Center">
 
                                         <ContentPresenter
-                                            x:Name="PART_HeaderPresenter"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Top"
-                                            ContentTemplate="{Binding HeaderTemplate, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type syncfusion:CardView}}}"
-                                            Content="{TemplateBinding Header}"/>
+                                        x:Name="PART_HeaderPresenter"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Top"
+                                        ContentTemplate="{Binding HeaderTemplate, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type syncfusion:CardView}}}"
+                                        Content="{TemplateBinding Header}"/>
                                     </Border>
 
                                     <ContentPresenter
-                                        x:Name="PART_ContentPresenter"
-                                        Grid.Row="0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center" 
-                                        ContentTemplate="{Binding ItemTemplate, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type syncfusion:CardView}}}"
-                                        Content="{TemplateBinding Content}"
-                                        ContentSource="Content"/>
+                                    x:Name="PART_ContentPresenter"
+                                    Grid.Row="0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center" 
+                                    ContentTemplate="{Binding ItemTemplate, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type syncfusion:CardView}}}"
+                                    Content="{TemplateBinding Content}"
+                                    ContentSource="Content"/>
                                 </Grid>
-                                
+
                                 <!--  Highlight for mouseover and selection  -->
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter Property="Background" TargetName="headerBackground">
                                             <Setter.Value>
-                                                    <SolidColorBrush Color="{DynamicResource MahApps.Colors.Accent3}"/>
+                                                <SolidColorBrush Color="{DynamicResource MahApps.Colors.Accent3}"/>
                                             </Setter.Value>
                                         </Setter>
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="True">
                                         <Setter Property="Background" TargetName="headerBackground">
                                             <Setter.Value>
-                                                    <SolidColorBrush Color="{DynamicResource MahApps.Colors.Accent2}"/>
+                                                <SolidColorBrush Color="{DynamicResource MahApps.Colors.Accent2}"/>
                                             </Setter.Value>
                                         </Setter>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
-                                
+
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
                 </Style>
-                
             </ResourceDictionary>
-        </Grid.Resources>
+    </Grid.Resources>
 
-            <Grid Grid.Row="0" Grid.ColumnSpan="3">
+        <!-- WK Text Logo  -->
+        <Grid Grid.Row="0" Grid.ColumnSpan="3">
+            <Image Margin="56,10" Source="pack://application:,,,/Resources/Media/Images/Application/wkit_logo_text_singlestack_white.png" HorizontalAlignment="Left"/>
+        </Grid>
+
+        <!--  Left Column  -->
+        <Grid Grid.Column="0" Grid.Row="1" >
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <!--  Recent Projects Header  -->
+            <StackPanel Orientation="Vertical" Grid.Row="0">
+                <StackPanel Margin="12,4" Orientation="Horizontal">
+                    <iconPacks:PackIconCodicons
+                    Grid.Row="0"
+                    Width="25"
+                    Height="25"
+                    Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                    Kind="GoToFile"
+                    Spin="False"
+                    SpinAutoReverse="False" />
+
+                    <TextBlock
+                    x:Name="RecentProjectTour"
+                    Margin="10,0,0,0"
+                    FontSize="18"
+                    Text="Recent Projects" />
+                </StackPanel>
+                <hc:Divider Margin="0,0,0,0" />
+            </StackPanel>
+
+            <!--  Cards  -->
+            <syncfusion:CardView Grid.Row="1"
+                Name="cardView"
+                Orientation="Horizontal"
+                HorizontalAlignment="Left"
+                Background="Transparent"
+                CanSort="False"
+                ItemsSource="{Binding FancyProjects}"
+                ItemContainerStyle="{StaticResource CardViewItemStyle}"
+                ShowHeader="False">
+
+                <!--  Card Header  -->
+                <syncfusion:CardView.HeaderTemplate>
+                    <DataTemplate>
+                        <!--  Main Container Border  -->
+                        <Border Height="50" Width="306" CornerRadius="4" Background="{DynamicResource MahApps.Brushes.Accent4}">
+                            <Grid Height="40">
+                                <StackPanel Orientation="Horizontal">
+                                    <Border>
+                                        <hc:Tag
+                                            Height="50"
+                                            Margin="2,0"
+                                            HorizontalAlignment="Left"
+                                            HorizontalContentAlignment="Left"
+                                            Background="{x:Null}"
+                                            Selectable="False"
+                                            ShowCloseButton="False">
+                                            <hc:Tag.Header>
+                                                <Image Source="{Binding Image}" Stretch="Fill">
+                                                    <Image.Effect>
+                                                        <hc:BrightnessEffect Brightness="0.9" />
+                                                    </Image.Effect>
+                                                </Image>
+                                            </hc:Tag.Header>
+                                        </hc:Tag>
+                                    </Border>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock
+                                            Width="200"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            FontSize="12"
+                                            FontWeight="Bold"
+                                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                            Text="{Binding Path=SafeName}" />
+                                        <TextBlock
+                                            Width="200"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            FontSize="12"
+                                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                            Text="{Binding Path=ProjectPath}" />
+                                    </StackPanel>
+                                </StackPanel>
+                                </Grid>
+                        </Border>
+                    </DataTemplate>
+                </syncfusion:CardView.HeaderTemplate>
+
+                <!--  Card Content  -->
+                <syncfusion:CardView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel
+                            HorizontalAlignment="Left"
+                            Width="400"
+                            Orientation="Horizontal">
+
+                            <Button
+                                ToolTip="{Binding ProjectPath}"
+                                x:Name="RUIOpenProjectButton"
+                                Height="50"
+                                HorizontalAlignment="Left"
+                                Foreground="{DynamicResource MahApps.Brushes.Accent3}"
+                                Background="Transparent"
+                                BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
+                                BorderThickness="1"
+                                Margin="0,0,4,0"
+                                Padding="278,0,10,0"
+                                Command="{Binding ElementName=topGrid, Path=DataContext.OpenProjectCommand}"
+                                CommandParameter="{Binding ProjectPath}"
+                                >
+                                <iconPacks:PackIconCodicons Kind="Edit" />
+                            </Button>
+
+                            <Button
+                                Height="50"
+                                ToolTip="Find in Explorer"
+                                Background="Transparent"
+                                BorderBrush="Transparent"
+                                HorizontalAlignment="Left"
+                                Command="{Binding ElementName=topGrid, Path=DataContext.OpenInExplorer}"
+                                CommandParameter="{Binding ProjectPath}">
+                                <iconPacks:PackIconCodicons Kind="FolderOpened" />
+                            </Button>
+
+                            <Button
+                                x:Name="RUIDeleteProjectButton"
+                                ToolTip="Remove from Recents"
+                                Height="50"
+                                HorizontalAlignment="Left"
+                                Background="Transparent"
+                                BorderBrush="Transparent"
+                                Command="{Binding ElementName=topGrid, Path=DataContext.DeleteProjectCommand}"
+                                CommandParameter="{Binding ProjectPath}">
+                                <iconPacks:PackIconCodicons Kind="ChromeClose" />
+                            </Button>
+
+                            <!--<StackPanel
+                                Margin="0,0"
+                                Orientation="Horizontal">
+                                    <StackPanel
+                                        Orientation="Horizontal">
+                                        <TextBlock
+                                            Width="Auto"
+                                            Margin="0"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding CreationDate}" />
+                                    </StackPanel>
+                            </StackPanel>-->
+                        </StackPanel>
+                    </DataTemplate>
+                </syncfusion:CardView.ItemTemplate>
+            </syncfusion:CardView>
+            
+        </Grid>
+
+        <!--  Middle Column  -->
+        <hc:ButtonGroup Grid.Column="1" Grid.Row="1"
+                Margin="5,5"
+                Orientation="Vertical"
+                Style="{DynamicResource ButtonGroupSolid}">
+            <Button x:Name="NewProjectButton"
+                Width="350"
+                Height="100"
+                Margin="2"
+                HorizontalAlignment="Stretch"
+                BorderBrush="{DynamicResource ContentBackground}"
+                BorderThickness="0"
+                Style="{DynamicResource ButtonDefault}">
+                <Grid Width="300">
+                    <StackPanel Height="70">
+                        <TextBlock
+                                Margin="0,0,50,0"
+                                Width="250"
+                                HorizontalAlignment="Center"
+                                FontSize="20"
+                                Text="Create a new project" />
+
+                        <TextBlock
+                                Margin="0,4,50,0"
+                                Foreground="Gray"
+                                Width="250"
+                                TextWrapping="Wrap"
+                                HorizontalAlignment="Center"
+                                FontSize="12"
+                                Text="Get started with WolvenKit by creating a new mod project" />
+                    </StackPanel>
+                    <iconPacks:PackIconCodicons
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Height="36"
+                            Width="36"
+                            Kind="Add" />
+                </Grid>
+            </Button>
+
+            <Button x:Name="OpenProjectButton"
+                Width="350"
+                Height="100"
+                Margin="2"
+                HorizontalAlignment="Stretch"
+                BorderBrush="{DynamicResource ContentBackground}"
+                BorderThickness="0"
+                Style="{DynamicResource ButtonDefault}">
+                <Grid Width="300">
+                    <StackPanel Height="70">
+                        <TextBlock
+                                Margin="0,0,50,0"
+                                Width="250"
+                                HorizontalAlignment="Center"
+                                FontSize="20"
+                                Text="Open a project" />
+
+                        <TextBlock
+                                Margin="0,4,50,0"
+                                Foreground="Gray"
+                                Width="250"
+                                TextWrapping="Wrap"
+                                HorizontalAlignment="Center"
+                                FontSize="12"
+                                Text="Open an existing .modproj file" />
+                    </StackPanel>
+                    <iconPacks:PackIconCodicons
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Height="36"
+                            Width="36"
+                            Kind="GoToFile" />
+                </Grid>
+            </Button>
+
+            <Button x:Name="ContinueWithoutProjectButton"
+                Width="350"
+                Height="100"
+                Margin="2"
+                HorizontalAlignment="Stretch"
+                BorderBrush="{DynamicResource ContentBackground}"
+                BorderThickness="0"
+                Style="{DynamicResource ButtonDefault}">
+                <Grid Width="300">
+                    <StackPanel Height="70">
+                        <TextBlock
+                                Margin="0,0,50,0"
+                                Width="250"
+                                HorizontalAlignment="Center"
+                                FontSize="20"
+                                Text="Continue to editor" />
+
+                        <TextBlock
+                                Margin="0,4,50,0"
+                                Foreground="Gray"
+                                Width="250"
+                                TextWrapping="Wrap"
+                                HorizontalAlignment="Center"
+                                FontSize="12"
+                                Text="Access the WolvenKit Editor" />
+                    </StackPanel>
+                    <iconPacks:PackIconCodicons
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Height="36"
+                            Width="36"
+                            Kind="ArrowRight" />
+                </Grid>
+            </Button>
+
+        </hc:ButtonGroup>
+
+        <!--  Right Column  -->
+        <Grid Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right">
                 
-                <!-- WK Text Logo  -->
-                <Image Margin="56,10" Source="pack://application:,,,/Resources/Media/Images/Application/wkit_logo_text_singlestack_white.png" HorizontalAlignment="Left"></Image>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-            </Grid>
-
-            <!--  Recent Grid  -->
-            <Grid Grid.Column="0" Grid.Row="1" Background="Transparent">
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-
-                <!--  Recent Projects Header  -->
+            <!-- Socials Header  -->
+            <StackPanel Grid.Row="0" Margin="16,0" HorizontalAlignment="Right">
                 <StackPanel
-                    Orientation="Vertical">
-                    <StackPanel Margin="12,4" Orientation="Horizontal">
-                        <iconPacks:PackIconCodicons
-                        Grid.Row="0"
-                        Width="25"
-                        Height="25"
+                    Margin="8,0"
+                    FlowDirection="RightToLeft"
+                    Orientation="Horizontal">
+                    <iconPacks:PackIconBoxIcons
+                        Width="24"
+                        Height="24"
                         Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                        Kind="GoToFile"
+                        Kind="RegularNetworkChart"
+                        SpinAutoReverse="False" />
+
+                    <TextBlock
+                        Margin="10,0,5,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        FontSize="24"
+                        Text="Socials" />
+                </StackPanel>
+                <hc:Divider Margin="15,0,15,4" />
+            </StackPanel>
+            <!-- Socials  -->
+            <hc:ButtonGroup Grid.Row="1" HorizontalAlignment="Right"
+                Orientation="Vertical"
+                Style="{DynamicResource ButtonGroupSolid}">
+
+                <Button x:Name="DiscordLinkButton"
+                    Width="250"
+                    Height="40"
+                    HorizontalAlignment="Stretch"
+                    BorderBrush="{DynamicResource ContentBackground}"
+                    BorderThickness="0"
+                    Style="{DynamicResource ButtonDefault}">
+
+                    <Grid Width="200">
+                        <iconPacks:PackIconBoxIcons
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Width="24"
+                            Height="24"
+                            Kind="LogosDiscord" />
+                        <TextBlock
+                            Margin="10,0,5,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            Text="Discord" />
+                    </Grid>
+                </Button>
+
+                <Button x:Name="YoutubeLinkButton"
+                    Width="250"
+                    Height="40"
+                    HorizontalAlignment="Stretch"
+                    BorderBrush="{DynamicResource ContentBackground}"
+                    BorderThickness="0"
+                    Style="{DynamicResource ButtonDefault}">
+
+                    <Grid Width="200">
+                        <iconPacks:PackIconBoxIcons
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Width="24"
+                            Height="24"
+                            Kind="LogosYoutube" />
+                        <TextBlock
+                            Margin="10,0,5,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            Text="YouTube" />
+                    </Grid>
+                </Button>
+            </hc:ButtonGroup>
+
+            <!-- Support Header  -->
+            <StackPanel Grid.Row="2" Margin="16,0" HorizontalAlignment="Right" >
+                <StackPanel
+                    Margin="8,0"
+                    FlowDirection="RightToLeft"
+                    Orientation="Horizontal">
+                    <iconPacks:PackIconBoxIcons
+                        Grid.Row="0"
+                        Width="24"
+                        Height="24"
+                        Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                        Kind="RegularDonateHeart"
                         Spin="False"
                         SpinAutoReverse="False" />
 
-                        <TextBlock
-                        x:Name="RecentProjectTour"
-                        Margin="10,0,0,0"
-                        FontSize="18"
-                        Text="Recent Projects" />
-                    </StackPanel>
-                    <hc:Divider Margin="0,0,0,0" />
+                    <TextBlock
+                        Margin="10,0,5,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        FontSize="24"
+                        Text="Support Us" />
                 </StackPanel>
+                <hc:Divider Margin="0,0,0,0" />
+            </StackPanel>
+            <!-- Support -->
+            <hc:ButtonGroup Grid.Row="3" HorizontalAlignment="Right"
+                    Orientation="Vertical"
+                    Style="{DynamicResource ButtonGroupSolid}">
+                <Button x:Name="OpenCollectiveLinkButton"
+                        Width="250"
+                        Height="40"
+                        HorizontalAlignment="Stretch"
+                        BorderBrush="{DynamicResource ContentBackground}"
+                        BorderThickness="0"
+                        Style="{DynamicResource ButtonDefault}">
 
-                <!--  Cards  -->
-                <syncfusion:CardView
-                    Grid.Row="1"
-                    Name="cardView"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Left"
-                    Margin="0,34,0,0"
-                    Background="Transparent"
-                    CanSort="False"
-                    ItemsSource="{Binding FancyProjects}"
-                    ItemContainerStyle="{StaticResource CardViewItemStyle}"
-                    ShowHeader="False">
-
-                    <!--  Card Header  -->
-                    <syncfusion:CardView.HeaderTemplate>
-                        <DataTemplate>
-                            
-                            <!--  Main Container Border  -->
-                            <Border
-                                Height="50"
-                                Width="306"
-                                Margin="0,0"
-                                CornerRadius="4"
-                                Background="{DynamicResource MahApps.Brushes.Accent4}">
-                                <Grid Height="40">
-                                    <StackPanel Orientation="Horizontal">
-                                        <Border>
-                                            <hc:Tag
-                                                Height="50"
-                                                Margin="2,0"
-                                                HorizontalAlignment="Left"
-                                                HorizontalContentAlignment="Left"
-                                                Background="{x:Null}"
-                                                Selectable="False"
-                                                ShowCloseButton="False">
-                                                <hc:Tag.Header>
-                                                    <Image Source="{Binding Image}" Stretch="Fill">
-                                                        <Image.Effect>
-                                                            <hc:BrightnessEffect Brightness="0.9" />
-                                                        </Image.Effect>
-                                                    </Image>
-                                                </hc:Tag.Header>
-                                            </hc:Tag>
-                                            </Border>
-                                            <TextBlock
-                                                Margin="0,0,0,0"
-                                                Width="200"
-                                                HorizontalAlignment="Left"
-                                                VerticalAlignment="Center"
-                                                FontSize="12"
-                                                FontWeight="Bold"
-                                                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                                Text="{Binding Path=SafeName}" />
-                                        </StackPanel>
-                                 </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </syncfusion:CardView.HeaderTemplate>
-
-                    <!--  Card Content  -->
-                    <syncfusion:CardView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel
-                                HorizontalAlignment="Left"
-                                Width="400"
-                                Orientation="Horizontal">
-
-                                <Button
-                                    x:Name="RUIOpenProjectButton"
-                                    Height="50"
-                                    HorizontalAlignment="Left"
-                                    Foreground="{DynamicResource MahApps.Brushes.Accent3}"
-                                    Background="Transparent"
-                                    BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
-                                    BorderThickness="1"
-                                    Margin="0,0,4,0"
-                                    Padding="278,0,10,0"
-                                    Command="{Binding ElementName=topGrid, Path=DataContext.OpenProjectCommand}"
-                                    CommandParameter="{Binding ProjectPath}"
-                                    >
-                                    <iconPacks:PackIconCodicons Kind="Edit" />
-                                </Button>
-
-                                <Button
-                                    Height="50"
-                                    ToolTip="Find in Explorer"
-                                    Background="Transparent"
-                                    BorderBrush="Transparent"
-                                    HorizontalAlignment="Left"
-                                    Command="{Binding ElementName=topGrid, Path=DataContext.OpenInExplorer}"
-                                    CommandParameter="{Binding ProjectPath}">
-                                    <iconPacks:PackIconCodicons Kind="FolderOpened" />
-                                </Button>
-
-                                <Button
-                                    x:Name="RUIDeleteProjectButton"
-                                    ToolTip="Remove from Recents"
-                                    Height="50"
-                                    HorizontalAlignment="Left"
-                                    Background="Transparent"
-                                    BorderBrush="Transparent"
-                                    Command="{Binding ElementName=topGrid, Path=DataContext.DeleteProjectCommand}"
-                                    CommandParameter="{Binding ProjectPath}">
-                                    <iconPacks:PackIconCodicons Kind="ChromeClose" />
-                                </Button>
-
-                                <!--<StackPanel
-                                    Margin="0,0"
-                                    Orientation="Horizontal">
-                                        <StackPanel
-                                            Orientation="Horizontal">
-                                            <TextBlock
-                                                Width="Auto"
-                                                Margin="0"
-                                                VerticalAlignment="Center"
-                                                Text="{Binding CreationDate}" />
-                                        </StackPanel>
-                                </StackPanel>-->
-                            </StackPanel>
-                        </DataTemplate>
-                    </syncfusion:CardView.ItemTemplate>
-                </syncfusion:CardView>
-            </Grid>
-
-            <Grid Grid.Column="1" Grid.Row="1">
-                <Grid>
-                    <Border
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Top"
-                    Margin="0,24,0,0"
-                    BorderBrush="{DynamicResource ContentBackgroundAlt}">
-                        <hc:ButtonGroup
-                            Margin="5,5"
-                            Orientation="Vertical"
-                            Style="{DynamicResource ButtonGroupSolid}">
-                            <Button
-                            x:Name="NewProjectButton"
-                            Width="350"
-                            Height="100"
-                            Margin="2"
-                            HorizontalAlignment="Stretch"
-                            BorderBrush="{DynamicResource ContentBackground}"
-                            BorderThickness="0"
-                            Style="{DynamicResource ButtonDefault}">
-                                <Grid Width="300">
-                                    <StackPanel Height="70">
-                                        <TextBlock
-                                            Margin="0,0,50,0"
-                                            Width="250"
-                                            HorizontalAlignment="Center"
-                                            FontSize="20"
-                                            Text="Create a new project" />
-
-                                        <TextBlock
-                                            Margin="0,4,50,0"
-                                            Foreground="Gray"
-                                            Width="250"
-                                            TextWrapping="Wrap"
-                                            HorizontalAlignment="Center"
-                                            FontSize="12"
-                                            Text="Get started with WolvenKit by creating a new mod project" />
-                                    </StackPanel>
-                                    <iconPacks:PackIconCodicons
-                                        Margin="0,0,0,0"
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Top"
-                                        Height="36"
-                                        Width="36"
-                                        Kind="Add" />
-                                </Grid>
-                            </Button>
-
-                            <Button
-                            x:Name="OpenProjectButton"
-                            Width="350"
-                            Height="100"
-                            Margin="2"
-                            HorizontalAlignment="Stretch"
-                            BorderBrush="{DynamicResource ContentBackground}"
-                            BorderThickness="0"
-                            Style="{DynamicResource ButtonDefault}">
-                                <Grid Width="300">
-                                    <StackPanel Height="70">
-                                        <TextBlock
-                                            Margin="0,0,50,0"
-                                            Width="250"
-                                            HorizontalAlignment="Center"
-                                            FontSize="20"
-                                            Text="Open a project" />
-
-                                        <TextBlock
-                                            Margin="0,4,50,0"
-                                            Foreground="Gray"
-                                            Width="250"
-                                            TextWrapping="Wrap"
-                                            HorizontalAlignment="Center"
-                                            FontSize="12"
-                                            Text="Open an existing .modproj file" />
-                                    </StackPanel>
-                                    <iconPacks:PackIconCodicons
-                                        Margin="0,0,0,0"
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Top"
-                                        Height="36"
-                                        Width="36"
-                                        Kind="GoToFile" />
-                                </Grid>
-                            </Button>
-
-                            <Button
-                            x:Name="ContinueWithoutProjectButton"
-                            Width="350"
-                            Height="100"
-                            Margin="2"
-                            HorizontalAlignment="Stretch"
-                            BorderBrush="{DynamicResource ContentBackground}"
-                            BorderThickness="0"
-                            Style="{DynamicResource ButtonDefault}">
-                                <Grid Width="300">
-                                    <StackPanel Height="70">
-                                        <TextBlock
-                                            Margin="0,0,50,0"
-                                            Width="250"
-                                            HorizontalAlignment="Center"
-                                            FontSize="20"
-                                            Text="Continue to editor" />
-
-                                        <TextBlock
-                                            Margin="0,4,50,0"
-                                            Foreground="Gray"
-                                            Width="250"
-                                            TextWrapping="Wrap"
-                                            HorizontalAlignment="Center"
-                                            FontSize="12"
-                                            Text="Access the WolvenKit Editor" />
-                                    </StackPanel>
-                                    <iconPacks:PackIconCodicons
-                                        Margin="0,0,0,0"
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Top"
-                                        Height="36"
-                                        Width="36"
-                                        Kind="ArrowRight" />
-                                </Grid>
-                            </Button>
-
-                        </hc:ButtonGroup>
-                        
-                    </Border>
-                </Grid>
-            
-            </Grid>
-
-            <Grid
-                Grid.Column="2"
-                Grid.Row="1">
-                
-                <Grid HorizontalAlignment="Right">
-
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="20" />
-                    </Grid.RowDefinitions>
-
-                    <StackPanel
-                        Margin="16,0"
-                        HorizontalAlignment="Right">
-                        <StackPanel
-                            Margin="8,0"
-                            FlowDirection="RightToLeft"
-                            Orientation="Horizontal">
-                            <iconPacks:PackIconBoxIcons
+                    <Grid Width="200">
+                        <iconPacks:PackIconBoxIcons
+                                HorizontalAlignment="Right"
                                 Width="24"
                                 Height="24"
-                                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                Kind="RegularNetworkChart"
-                                Spin="False"
-                                SpinAutoReverse="False" />
+                                Kind="SolidDonateHeart" />
+                        <TextBlock
+                                Margin="5,0,35,0"
+                                HorizontalAlignment="Center"
+                                FontSize="14"
+                                Text="Open Collective" />
+                    </Grid>
+                </Button>
 
-                            <TextBlock
-                                Margin="10,0,5,0"
+                <Button x:Name="PatreonLinkButton"
+                        Width="250"
+                        Height="40"
+                        HorizontalAlignment="Stretch"
+                        BorderBrush="{DynamicResource ContentBackground}"
+                        BorderThickness="0"
+                        Style="{DynamicResource ButtonDefault}">
+                    <Grid Width="200">
+                        <iconPacks:PackIconBoxIcons
                                 HorizontalAlignment="Right"
-                                VerticalAlignment="Center"
-                                FontSize="24"
-                                Text="Socials" />
-                        </StackPanel>
-                        <hc:Divider Margin="15,0,15,4" />
-                        
-                        <hc:ButtonGroup
-                            Margin="5,5,5,5"
-                            Orientation="Vertical"
-                            Style="{DynamicResource ButtonGroupSolid}">
+                                Width="24"
+                                Height="24"
+                                Kind="LogosPatreon" />
+                        <TextBlock
+                                Margin="5,0,35,0"
+                                HorizontalAlignment="Center"
+                                FontSize="14"
+                                Text="Patreon" />
+                    </Grid>
+                </Button>
+            </hc:ButtonGroup>
 
-                            <Button
-                                x:Name="DiscordLinkButton"
-                                Width="250"
-                                Height="50"
-                                Margin="2"
-                                HorizontalAlignment="Stretch"
-                                BorderBrush="{DynamicResource ContentBackground}"
-                                BorderThickness="0"
-                                Style="{DynamicResource ButtonDefault}">
+            <!-- Showcase Header  --><!--
+            <StackPanel Grid.Row="0" Margin="16,0" HorizontalAlignment="Right" >
+                <StackPanel
+                    Margin="8,0"
+                    FlowDirection="RightToLeft"
+                    Orientation="Horizontal">
+                    <iconPacks:PackIconSimpleIcons
+                        Grid.Row="0"
+                        Width="24"
+                        Height="24"
+                        Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                        Kind="AirPlayVideo"
+                        SpinAutoReverse="False" />
 
-                                <Grid Width="200">
-                                    <iconPacks:PackIconBoxIcons
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Center"
-                                        Width="24"
-                                        Height="24"
-                                        Kind="LogosDiscord" />
-                                    <TextBlock
-                                        Margin="10,0,5,0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        FontSize="18"
-                                        Text="Discord" />
-                                </Grid>
-                            </Button>
-
-                            <Button
-                                x:Name="YoutubeLinkButton"
-                                Width="250"
-                                Height="50"
-                                Margin="2"
-                                HorizontalAlignment="Stretch"
-                                BorderBrush="{DynamicResource ContentBackground}"
-                                BorderThickness="0"
-                                Style="{DynamicResource ButtonDefault}">
-                                
-                                <Grid Width="200">
-                                    <iconPacks:PackIconBoxIcons
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Center"
-                                        Width="24"
-                                        Height="24"
-                                        Kind="LogosYoutube" />
-                                    <TextBlock
-                                        Margin="10,0,5,0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        FontSize="18"
-                                        Text="YouTube" />
-                                </Grid>
-                            </Button>
-                        </hc:ButtonGroup>
-
-                        <StackPanel
-                            HorizontalAlignment="Left">
-                            <StackPanel
-                                Margin="0,0,8,0"
-                                FlowDirection="RightToLeft"
-                                Orientation="Horizontal">
-                                <iconPacks:PackIconBoxIcons
-                                    Grid.Row="0"
-                                    Width="24"
-                                    Height="24"
-                                    Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                    Kind="RegularDonateHeart"
-                                    Spin="False"
-                                    SpinAutoReverse="False" />
-
-                                <TextBlock
-                                    Margin="10,0,5,0"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Center"
-                                    FontSize="24"
-                                    Text="Support Us" />
-                            </StackPanel>
-                            
-                            <hc:Divider Margin="15,5,15,0" />
-                            
-                            <hc:ButtonGroup
-                                Margin="5,5,5,5"
-                                Orientation="Vertical"
-                                Style="{DynamicResource ButtonGroupSolid}">
-                                <Button
-                                    x:Name="OpenCollectiveLinkButton"
-                                    Width="250"
-                                    Height="50"
-                                    Margin="2"
-                                    HorizontalAlignment="Stretch"
-                                    BorderBrush="{DynamicResource ContentBackground}"
-                                    BorderThickness="0"
-                                    Style="{DynamicResource ButtonDefault}">
-
-                                    <Grid Width="200">
-                                        <iconPacks:PackIconBoxIcons
-                                            HorizontalAlignment="Right"
-                                            Width="24"
-                                            Height="24"
-                                            Kind="SolidDonateHeart" />
-                                        <TextBlock
-                                            Margin="5,0,35,0"
-                                            HorizontalAlignment="Center"
-                                            FontSize="16"
-                                            Text="Open Collective" />
-                                    </Grid>
-                                </Button>
-
-                                <Button
-                                    x:Name="PatreonLinkButton"
-                                    Width="250"
-                                    Height="50"
-                                    Margin="2"
-                                    HorizontalAlignment="Stretch"
-                                    BorderBrush="{DynamicResource ContentBackground}"
-                                    BorderThickness="0"
-                                    Style="{DynamicResource ButtonDefault}">
-                                    <Grid Width="200">
-                                        <iconPacks:PackIconBoxIcons
-                                            HorizontalAlignment="Right"
-                                            Width="24"
-                                            Height="24"
-                                            Kind="LogosPatreon" />
-                                        <TextBlock
-                                            Margin="5,0,35,0"
-                                            HorizontalAlignment="Center"
-                                            FontSize="16"
-                                            Text="Patreon" />
-                                    </Grid>
-                                </Button>
-                            </hc:ButtonGroup>
-                        </StackPanel>
-                    </StackPanel>
-
-                    <Border
-                        x:Name="lokz"
-                        Grid.Row="1"
-                        Margin="16,16"
+                    <TextBlock
+                        Margin="10,0,5,0"
                         HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        FontSize="24"
+                        Text="Featured Showcase" />
+                </StackPanel>
+                <hc:Divider Margin="15,5,15,0" />
+            </StackPanel>
+            --><!-- Showcase Video --><!--
+            <Border  Grid.Row="1" HorizontalAlignment="Right"
+                        Margin="16,16"
                         VerticalAlignment="Bottom"
                         Background="{DynamicResource ContentBackgroundAlt2}"
                         CornerRadius="8">
-                        
-                        <StackPanel>
+                <wv2:WebView2
+                        x:Name="FeaturedVideo"
+                        Height="300"
+                        Width="400"
+                        />
+            </Border>-->
+               
+            
 
-                            <StackPanel
-                                HorizontalAlignment="Right">
-                                <StackPanel
-                                    Margin="8,0"
-                                    FlowDirection="RightToLeft"
-                                    Orientation="Horizontal">
-                                    <iconPacks:PackIconSimpleIcons
-                                        Grid.Row="0"
-                                        Width="25"
-                                        Height="25"
-                                        Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                        Kind="AirPlayVideo"
-                                        Spin="False"
-                                        SpinAutoReverse="False" />
-
-                                    <TextBlock
-                                        Margin="8,0"
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Center"
-                                        FontSize="18"
-                                        Text="Featured Showcase" />
-                                </StackPanel>
-                            </StackPanel>
-                            
-                            <hc:Divider Margin="8,8" />
-
-                            <wv2:WebView2
-                                x:Name="FeaturedVideo"
-                                Height="300"
-                                Width="400"
-                                Margin="8,8" />
-                        </StackPanel>
-                        
-                    </Border>
-
-                </Grid>
-            </Grid>
         </Grid>
+        
     </Grid>
 </reactiveUi:ReactiveUserControl>

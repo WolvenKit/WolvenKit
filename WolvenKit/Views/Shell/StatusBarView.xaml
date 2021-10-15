@@ -26,7 +26,7 @@
         </Grid.Resources>
 
 
-        <Fluent:StatusBar Background="{DynamicResource ContentBackgroundAlt2}" >
+        <Fluent:StatusBar Background="{DynamicResource MahApps.Brushes.Accent3}" >
 
             <Fluent:StatusBarItem Title="Status"
                           
