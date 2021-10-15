@@ -65,7 +65,7 @@ namespace WolvenKit.ViewModels.Shell
 
             ShowSettingsCommand = ReactiveCommand.Create(() =>
             {
-
+                BackstageIsOpen = true;
             });
             ShowBugReportCommand = ReactiveCommand.CreateFromTask(async () =>
             {
