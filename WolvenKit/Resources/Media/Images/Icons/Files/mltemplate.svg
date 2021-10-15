@@ -1,1 +1,47 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><defs><style>.cls-1{fill:#4d4d4d;}.cls-2{fill:#f2f2f2;}.cls-3{fill:#29aae2;}</style></defs><g id="Layer_1" data-name="Layer 1"><path class="cls-1" d="M17.25,13.5a3.75,3.75,0,0,0-3.75,3.75h3.75Z" transform="translate(-1 -1)"/><path class="cls-1" d="M17.25,21A3.75,3.75,0,0,0,21,17.25H17.25Z" transform="translate(-1 -1)"/><path class="cls-2" d="M17.25,21a3.75,3.75,0,0,1-3.75-3.75h3.75Z" transform="translate(-1 -1)"/><path class="cls-2" d="M17.25,13.5A3.75,3.75,0,0,1,21,17.25H17.25Z" transform="translate(-1 -1)"/><path class="cls-1" d="M17.25,1A3.75,3.75,0,0,0,13.5,4.75h3.75Z" transform="translate(-1 -1)"/><path class="cls-1" d="M17.25,8.5A3.75,3.75,0,0,0,21,4.75H17.25Z" transform="translate(-1 -1)"/><path class="cls-2" d="M17.25,8.5A3.75,3.75,0,0,1,13.5,4.75h3.75Z" transform="translate(-1 -1)"/><path class="cls-2" d="M17.25,1A3.75,3.75,0,0,1,21,4.75H17.25Z" transform="translate(-1 -1)"/><path class="cls-1" d="M4.75,13.5A3.75,3.75,0,0,0,1,17.25H4.75Z" transform="translate(-1 -1)"/><path class="cls-1" d="M4.75,21A3.75,3.75,0,0,0,8.5,17.25H4.75Z" transform="translate(-1 -1)"/><path class="cls-2" d="M4.75,21A3.75,3.75,0,0,1,1,17.25H4.75Z" transform="translate(-1 -1)"/><path class="cls-2" d="M4.75,13.5A3.75,3.75,0,0,1,8.5,17.25H4.75Z" transform="translate(-1 -1)"/><path class="cls-1" d="M4.75,1A3.75,3.75,0,0,0,1,4.75H4.75Z" transform="translate(-1 -1)"/><path class="cls-1" d="M4.75,8.5A3.75,3.75,0,0,0,8.5,4.75H4.75Z" transform="translate(-1 -1)"/><path class="cls-2" d="M4.75,8.5A3.75,3.75,0,0,1,1,4.75H4.75Z" transform="translate(-1 -1)"/><path class="cls-2" d="M4.75,1A3.75,3.75,0,0,1,8.5,4.75H4.75Z" transform="translate(-1 -1)"/></g><g id="Layer_2" data-name="Layer 2"><path class="cls-3" d="M19.562,11.01a5.54,5.54,0,0,1-.057.878,1.825,1.825,0,0,1-.168.57.777.777,0,0,1-.261.31.591.591,0,0,1-.319.092H12.944V19.2a.57.57,0,0,1-.093.326.741.741,0,0,1-.318.244,2.292,2.292,0,0,1-.6.158,6.4,6.4,0,0,1-.935.056,6.4,6.4,0,0,1-.935-.056,2.292,2.292,0,0,1-.6-.158.808.808,0,0,1-.327-.244.528.528,0,0,1-.1-.326V12.86h-5.8a.551.551,0,0,1-.309-.092.824.824,0,0,1-.252-.31,2.045,2.045,0,0,1-.177-.57,4.9,4.9,0,0,1-.066-.878,5.732,5.732,0,0,1,.057-.87,2.049,2.049,0,0,1,.159-.578.777.777,0,0,1,.233-.309.5.5,0,0,1,.3-.094H9.037V2.841a.621.621,0,0,1,.1-.346.746.746,0,0,1,.327-.261,2.285,2.285,0,0,1,.6-.16A6.541,6.541,0,0,1,11,2.018a6.541,6.541,0,0,1,.935.056,2.285,2.285,0,0,1,.6.16.69.69,0,0,1,.318.261.672.672,0,0,1,.093.346V9.159h5.87a.512.512,0,0,1,.29.094.738.738,0,0,1,.242.309,2.017,2.017,0,0,1,.159.578A5.606,5.606,0,0,1,19.562,11.01Z" transform="translate(-1 -1)"/></g></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Blender, SVG Export for Grease Pencil - v1.0 -->
+
+<svg
+   version="1.0"
+   x="0px"
+   y="0px"
+   width="1680px"
+   height="1680px"
+   viewBox="0 0 1680 1680"
+   id="svg12"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs16">
+    <linearGradient
+       id="linearGradient4643">
+      <stop
+         style="stop-color:#dedede;stop-opacity:1"
+         offset="0"
+         id="stop4639" />
+      <stop
+         style="stop-color:#aa87de;stop-opacity:1"
+         offset="1"
+         id="stop4641" />
+    </linearGradient>
+    <radialGradient
+       xlink:href="#linearGradient4643"
+       id="radialGradient4645"
+       cx="1331.8838"
+       cy="840"
+       fx="1331.8838"
+       fy="840"
+       r="840"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <g
+     id="blender_frame_4">
+    <circle
+       style="fill:url(#radialGradient4645);stroke:none;stroke-width:3;fill-opacity:1"
+       id="path4491"
+       cx="840"
+       cy="840"
+       r="840" />
+  </g>
+</svg>

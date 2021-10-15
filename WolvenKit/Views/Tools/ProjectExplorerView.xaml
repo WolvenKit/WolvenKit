@@ -178,6 +178,10 @@
                                                     <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mlmask.svg}" />
                                                 </DataTrigger>
 
+                                                <DataTrigger Binding="{Binding Extension}" Value="masklist">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mlmask.svg}" />
+                                                </DataTrigger>
+                                                
                                                 <DataTrigger Binding="{Binding Extension}" Value="mltemplate">
                                                     <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mltemplate.svg}" />
                                                 </DataTrigger>
