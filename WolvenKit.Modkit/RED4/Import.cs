@@ -476,7 +476,7 @@ namespace WolvenKit.Modkit.RED4
 
                 // create cr2wfile
                 var red = new CR2WFile();
-                red.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()));
+                red.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer() { flags= 131072 }));
 
                 // create xbm chunk
                 var xbm = new CBitmapTexture(red, null, "CBitmapTexture");
@@ -499,8 +499,8 @@ namespace WolvenKit.Modkit.RED4
                 var header = new rendRenderTextureBlobHeader(red, blob, "header")
                     {
                         IsSerialized = true,
-                        Version = new CUInt32(red, blob.Header, "version").SetValue(2) as CUInt32,
-                        Flags = new CUInt32(red, blob.Header, "flags").SetValue(1) as CUInt32
+                        Version = new CUInt32(red, blob.Header, "version").SetValue((uint)2) as CUInt32,
+                        Flags = new CUInt32(red, blob.Header, "flags").SetValue((uint)1) as CUInt32
                     };
                 // header.SizeInfo
                 var sizeInfo = new rendRenderTextureBlobSizeInfo(red, blob.Header, "sizeInfo")
@@ -534,7 +534,7 @@ namespace WolvenKit.Modkit.RED4
                     {
                         // slicepitch
                         var slicepitch = DDSUtils.ComputeSlicePitch((int)mipsizeW, (int)mipsizeH, fmt);
-                        offset += slicepitch;
+                        
                         //rowpitch
                         var rowpitch = DDSUtils.ComputeRowPitch((int)mipsizeW, (int)mipsizeH, fmt);
 
@@ -542,7 +542,7 @@ namespace WolvenKit.Modkit.RED4
                         info.Layout = new rendRenderTextureBlobMemoryLayout(red, info, "layout")
                         {
                             IsSerialized = true,
-                            RowPitch = new CUInt32(red, info.Layout, "rowPitch").SetValue(rowpitch) as CUInt32,
+                            RowPitch = new CUInt32(red, info.Layout, "rowPitch").SetValue((uint)rowpitch) as CUInt32,
                             SlicePitch = new CUInt32(red, info.Layout, "slicePitch").SetValue((uint)slicepitch) as CUInt32
                         };
                         info.Placement = new rendRenderTextureBlobPlacement(red, info, "placement")
@@ -552,7 +552,7 @@ namespace WolvenKit.Modkit.RED4
                             Size = new CUInt32(red, info.Layout, "size").SetValue((uint)slicepitch) as CUInt32
                         };
 
-
+                        offset += slicepitch;
 
                         mipMapInfo.Add(info);
 
@@ -564,16 +564,19 @@ namespace WolvenKit.Modkit.RED4
                 blob.Header = header;
                 // texdata buffer ref
                 blob.TextureData = new serializationDeferredDataBuffer(red, blob, "textureData")
-                    .SetValue(1) as serializationDeferredDataBuffer;
+                    .SetValue((ushort)1) as serializationDeferredDataBuffer;
 
                 red.CreateChunk(xbm);
-                var parentChunk = red.Chunks.First();
-                red.CreateChunk(blob, 1, parentChunk as CR2WExportWrapper);
+                red.CreateChunk(blob, 1);
 
                 // write
                 var outpath = new RedRelativePath(rawRelative)
                     .ChangeBaseDir(outDir)
                     .ChangeExtension(ERedExtension.xbm.ToString());
+                if (!File.Exists(outpath.FullPath))
+                {
+                    Directory.CreateDirectory(outpath.ToFileInfo().Directory.FullName);
+                }
                 using var fs = new FileStream(outpath.FullPath, FileMode.Create, FileAccess.ReadWrite);
                 //using (var outms = new MemoryStream())
                 using (var bw = new BinaryWriter(fs))

@@ -167,6 +167,13 @@ namespace WolvenKit.Modkit.RED4
             var progress = 0;
             _progressService.Report(0);
 
+            // check hashes before parallel unbundling
+            for (var i = 0; i < finalMatchesList.Count; i++)
+            {
+                var item = finalMatchesList[i];
+                _hashService.Contains(item.Key);
+            }
+
             //foreach (var info in finalMatchesList)
             Parallel.ForEach(finalMatchesList, info =>
             {

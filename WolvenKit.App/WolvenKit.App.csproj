@@ -64,7 +64,6 @@
     <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
     <ProjectReference Include="..\WolvenKit.Modkit\WolvenKit.Modkit.csproj" />
     <ProjectReference Include="..\WolvenKit.RED4.TweakDB\WolvenKit.RED4.TweakDB.csproj" />
-    <ProjectReference Include="..\WolvenManager.Installer\WolvenManager.Installer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -85,7 +84,7 @@
     <PackageReference Include="Pfim" Version="0.10.1" />
     <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
     <PackageReference Include="YamlDotNet" Version="11.2.1" />
-
+    <PackageReference Include="WolvenInstaller" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -104,10 +103,5 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\WolvenKitFileDefinitions.xml" />
   </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="dotnet publish ..\WolvenManager.Installer\WolvenManager.Installer.csproj -o ..\WolvenKit\lib -p:PublishSingleFile=true --no-self-contained -r win-x64 -c Release -f net5.0" />
-  </Target>
-
-
+  
 </Project>

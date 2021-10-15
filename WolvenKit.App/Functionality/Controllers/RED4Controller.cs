@@ -29,6 +29,7 @@ namespace WolvenKit.Functionality.Controllers
         public const string GameVersion = "1.3.0";
 
         private readonly ILoggerService _loggerService;
+        private readonly INotificationService _notificationService;
         private readonly IProjectManager _projectManager;
         private readonly ISettingsManager _settingsManager;
         private readonly IHashService _hashService;
@@ -37,7 +38,9 @@ namespace WolvenKit.Functionality.Controllers
 
         #endregion
 
-        public RED4Controller(ILoggerService loggerService,
+        public RED4Controller(
+            ILoggerService loggerService,
+            INotificationService notificationService,
             IProjectManager projectManager,
             ISettingsManager settingsManager,
             IHashService hashService,
@@ -45,6 +48,7 @@ namespace WolvenKit.Functionality.Controllers
             IArchiveManager gameArchiveManager
             )
         {
+            _notificationService = notificationService;
             _loggerService = loggerService;
             _projectManager = projectManager;
             _settingsManager = settingsManager;
@@ -331,7 +335,8 @@ namespace WolvenKit.Functionality.Controllers
 
                 installlog.Root.Add(fileroot);
                 installlog.Save(logPath);
-                _loggerService.Info(activeMod.Name + " installed!" + "\n");
+                _loggerService.Success($"{activeMod.Name} installed!\n");
+                _notificationService.Success($"{activeMod.Name} installed!");
             }
             catch (Exception ex)
             {

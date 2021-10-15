@@ -63,6 +63,14 @@ namespace WolvenKit.Modkit.RED4
 
             var progress = 0;
 
+            // check hashes before parallel unbundling
+            for (var i = 0; i < finalMatchesList.Count; i++)
+            {
+                var item = finalMatchesList[i];
+                _hashService.Contains(item.Key);
+            }
+
+
             Parallel.ForEach(finalMatchesList, info =>
             {
                 var extracted = ExtractSingle(ar, info.NameHash64, outDir, decompressBuffers, mmf);

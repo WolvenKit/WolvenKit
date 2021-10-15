@@ -213,8 +213,10 @@ namespace WolvenKit.Common.Services
                     continue;
                 }
                 
-
-                hashDict.Add(hash, new SAsciiString(line));
+                if (!hashDict.ContainsKey(hash))
+                {
+                    hashDict.Add(hash, new SAsciiString(line));
+                }
             }
         }
 
