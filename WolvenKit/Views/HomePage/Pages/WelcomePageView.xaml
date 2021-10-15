@@ -26,7 +26,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="400" />
                 <ColumnDefinition Width="*" MinWidth="380" />
-                <ColumnDefinition Width="300" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
@@ -395,27 +395,21 @@
                 <Grid HorizontalAlignment="Right">
 
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="400" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
+                        <RowDefinition Height="20" />
                     </Grid.RowDefinitions>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-
                     <StackPanel
-                        Grid.Row="0"
-                        Grid.RowSpan="2"
                         Margin="16,0"
                         HorizontalAlignment="Right">
                         <StackPanel
-                            Margin="0,0,16,0"
+                            Margin="8,0"
                             FlowDirection="RightToLeft"
                             Orientation="Horizontal">
                             <iconPacks:PackIconBoxIcons
-                                Grid.Row="0"
-                                Width="25"
-                                Height="25"
+                                Width="24"
+                                Height="24"
                                 Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                 Kind="RegularNetworkChart"
                                 Spin="False"
@@ -428,7 +422,8 @@
                                 FontSize="24"
                                 Text="Socials" />
                         </StackPanel>
-                        <hc:Divider Margin="15,0,15,3" />
+                        <hc:Divider Margin="15,0,15,4" />
+                        
                         <hc:ButtonGroup
                             Margin="5,5,5,5"
                             Orientation="Vertical"
@@ -448,6 +443,8 @@
                                     <iconPacks:PackIconBoxIcons
                                         HorizontalAlignment="Right"
                                         VerticalAlignment="Center"
+                                        Width="24"
+                                        Height="24"
                                         Kind="LogosDiscord" />
                                     <TextBlock
                                         Margin="10,0,5,0"
@@ -459,7 +456,7 @@
                             </Button>
 
                             <Button
-                                x:Name="TwitterLinkButton"
+                                x:Name="YoutubeLinkButton"
                                 Width="250"
                                 Height="50"
                                 Margin="2"
@@ -472,29 +469,29 @@
                                     <iconPacks:PackIconBoxIcons
                                         HorizontalAlignment="Right"
                                         VerticalAlignment="Center"
-                                        Kind="LogosTwitter" />
+                                        Width="24"
+                                        Height="24"
+                                        Kind="LogosYoutube" />
                                     <TextBlock
                                         Margin="10,0,5,0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         FontSize="18"
-                                        Text="Twitter" />
+                                        Text="YouTube" />
                                 </Grid>
                             </Button>
                         </hc:ButtonGroup>
 
                         <StackPanel
-                            Grid.Row="1"
-                            Grid.Column="0"
                             HorizontalAlignment="Left">
                             <StackPanel
-                                Margin="0,0,15,0"
+                                Margin="0,0,8,0"
                                 FlowDirection="RightToLeft"
                                 Orientation="Horizontal">
                                 <iconPacks:PackIconBoxIcons
                                     Grid.Row="0"
-                                    Width="25"
-                                    Height="25"
+                                    Width="24"
+                                    Height="24"
                                     Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                     Kind="RegularDonateHeart"
                                     Spin="False"
@@ -525,7 +522,11 @@
                                     Style="{DynamicResource ButtonDefault}">
 
                                     <Grid Width="200">
-                                        <iconPacks:PackIconBoxIcons HorizontalAlignment="Right" Kind="SolidDonateHeart" />
+                                        <iconPacks:PackIconBoxIcons
+                                            HorizontalAlignment="Right"
+                                            Width="24"
+                                            Height="24"
+                                            Kind="SolidDonateHeart" />
                                         <TextBlock
                                             Margin="5,0,35,0"
                                             HorizontalAlignment="Center"
@@ -544,7 +545,11 @@
                                     BorderThickness="0"
                                     Style="{DynamicResource ButtonDefault}">
                                     <Grid Width="200">
-                                        <iconPacks:PackIconBoxIcons HorizontalAlignment="Right" Kind="LogosPatreon" />
+                                        <iconPacks:PackIconBoxIcons
+                                            HorizontalAlignment="Right"
+                                            Width="24"
+                                            Height="24"
+                                            Kind="LogosPatreon" />
                                         <TextBlock
                                             Margin="5,0,35,0"
                                             HorizontalAlignment="Center"
@@ -558,58 +563,52 @@
 
                     <Border
                         x:Name="lokz"
-                        Grid.Row="2"
-                        Grid.Column="0"
-                        Margin="0,0,0,35"
+                        Grid.Row="1"
+                        Margin="16,16"
                         HorizontalAlignment="Right"
-                        VerticalAlignment="Top"
+                        VerticalAlignment="Bottom"
                         Background="{DynamicResource ContentBackgroundAlt2}"
-                        CornerRadius="2">
+                        CornerRadius="8">
                         
                         <StackPanel>
+
                             <StackPanel
-                            Grid.Row="0"
-                            Grid.RowSpan="2"
-                            Grid.Column="0"
-                            Margin="0,0,0,0"
-                            HorizontalAlignment="Right">
+                                HorizontalAlignment="Right">
                                 <StackPanel
-                                Margin="0,0,15,0"
-                                FlowDirection="RightToLeft"
-                                Orientation="Horizontal">
+                                    Margin="8,0"
+                                    FlowDirection="RightToLeft"
+                                    Orientation="Horizontal">
                                     <iconPacks:PackIconSimpleIcons
-                                    Grid.Row="0"
-                                    Width="25"
-                                    Height="25"
-                                    Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                    Kind="AirPlayVideo"
-                                    Spin="False"
-                                    SpinAutoReverse="False" />
+                                        Grid.Row="0"
+                                        Width="25"
+                                        Height="25"
+                                        Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                        Kind="AirPlayVideo"
+                                        Spin="False"
+                                        SpinAutoReverse="False" />
 
                                     <TextBlock
-                                    Margin="10,0,0,0"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Center"
-                                    FontSize="18"
-                                    Text="Featured Showcase" />
+                                        Margin="8,0"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        FontSize="18"
+                                        Text="Featured Showcase" />
                                 </StackPanel>
                             </StackPanel>
-                            <hc:Divider Margin="15,5,15,3" />
+                            
+                            <hc:Divider Margin="8,8" />
 
-                            <wv2:WebView2 x:Name="cal"
-                            Width="414"
-                            Height="{Binding ElementName=lokz, Path=ActualHeight}"
-                            MaxWidth="414"
-                            Margin="5,0,0,0"
-                            />
+                            <wv2:WebView2
+                                x:Name="FeaturedVideo"
+                                Height="300"
+                                Width="400"
+                                Margin="8,8" />
                         </StackPanel>
+                        
                     </Border>
-
 
                 </Grid>
             </Grid>
         </Grid>
-
-
     </Grid>
 </reactiveUi:ReactiveUserControl>

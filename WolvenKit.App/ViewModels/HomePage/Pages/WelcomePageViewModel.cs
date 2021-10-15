@@ -95,6 +95,7 @@ namespace WolvenKit.ViewModels.Shared
         public string OpenCollectiveLink = "https://opencollective.com/redmodding";
         public string PatreonLink = "https://www.patreon.com/m/RedModdingTools";
         public string TwitterLink = "https://twitter.com/ModdingRed";
+        public string YoutubeLink = "https://www.youtube.com/channel/UCl3JpsP49JgYLMYAYQvoaLg";
 
 
         [Reactive] public ObservableCollection<FancyProjectObject> FancyProjects { get; set; } = new();

@@ -39,8 +39,14 @@ namespace WolvenKit.Views.HomePage.Pages
                 this.BindCommand(
                     this.ViewModel,
                     vm => vm.OpenLinkCommand,
-                    v => v.TwitterLinkButton,
-                    vm => vm.TwitterLink);
+                    v => v.YoutubeLinkButton,
+                    vm => vm.YoutubeLink);
+                //Twitter Link Not Used
+                //this.BindCommand(
+                    //this.ViewModel,
+                    //vm => vm.OpenLinkCommand,
+                    //v => v.TwitterLinkButton,
+                    //vm => vm.TwitterLink);
                 this.BindCommand(
                     this.ViewModel,
                     vm => vm.OpenLinkCommand,
@@ -92,9 +98,9 @@ namespace WolvenKit.Views.HomePage.Pages
 
             try
             {
-                await cal.EnsureCoreWebView2Async(Helpers.objCoreWebView2Environment);
+                await FeaturedVideo.EnsureCoreWebView2Async(Helpers.objCoreWebView2Environment);
 
-                cal.SetCurrentValue(Microsoft.Web.WebView2.Wpf.WebView2.SourceProperty, (System.Uri)new Uri("https://www.youtube.com/embed/WfEi3QwhTIs"));
+                FeaturedVideo.SetCurrentValue(Microsoft.Web.WebView2.Wpf.WebView2.SourceProperty, (System.Uri)new Uri("https://www.youtube.com/embed/WfEi3QwhTIs"));
             }
             catch (Exception)
             {
