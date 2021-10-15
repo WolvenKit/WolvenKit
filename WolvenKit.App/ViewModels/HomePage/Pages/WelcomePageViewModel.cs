@@ -35,12 +35,15 @@ namespace WolvenKit.ViewModels.Shared
 
         private readonly ReadOnlyObservableCollection<RecentlyUsedItemModel> _recentlyUsedItems;
 
+        private readonly ISettingsManager _settingsManager;
+
         #endregion Fields
 
         #region Constructors
 
         public WelcomePageViewModel(
             IRecentlyUsedItemsService recentlyUsedItemsService,
+            ISettingsManager settingsManager,
             IProjectManager projectManager
             )
         {
@@ -49,7 +52,9 @@ namespace WolvenKit.ViewModels.Shared
 
             _projectManager = projectManager;
             _recentlyUsedItemsService = recentlyUsedItemsService;
+            _settingsManager = settingsManager;
 
+            CloseHomePage = new RelayCommand(ExecuteHome, CanHome);
 
             SettingsCommand = new RelayCommand(ExecSC, CanSC);
             TutorialsCommand = new RelayCommand(ExecTC, CanTC);
@@ -90,11 +95,15 @@ namespace WolvenKit.ViewModels.Shared
         public string OpenCollectiveLink = "https://opencollective.com/redmodding";
         public string PatreonLink = "https://www.patreon.com/m/RedModdingTools";
         public string TwitterLink = "https://twitter.com/ModdingRed";
+        public string YoutubeLink = "https://www.youtube.com/channel/UCl3JpsP49JgYLMYAYQvoaLg";
 
 
         [Reactive] public ObservableCollection<FancyProjectObject> FancyProjects { get; set; } = new();
 
         [Reactive] public List<RecentlyUsedItemModel> PinnedItems { get; private set; } = new();
+
+        // Close HomePage (Navigates to Project Editor
+        public ICommand CloseHomePage { get; private set; }
 
         public ReactiveCommand<string, Unit> OpenProjectCommand { get; }
         public ReactiveCommand<string, Unit> DeleteProjectCommand { get; }
@@ -255,6 +264,15 @@ namespace WolvenKit.ViewModels.Shared
         private void OnPinItemExecute(string parameter)
         {
             _recentlyUsedItemsService.PinItem(parameter);
+        }
+
+        private bool CanHome() => true;
+
+        private void ExecuteHome()
+        {
+            var ribbon = Locator.Current.GetService<RibbonViewModel>();
+            ribbon.StartScreenShown = false;
+            ribbon.BackstageIsOpen = false;
         }
 
         //private void OnRecentlyUsedItemsServiceUpdated(object sender, EventArgs e)

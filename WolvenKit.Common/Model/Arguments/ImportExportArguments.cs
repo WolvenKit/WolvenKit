@@ -179,7 +179,7 @@ namespace WolvenKit.Common.Model.Arguments
     public abstract class ImportArgs : ImportExportArgs
     {
         [Category("Default Import Settings")]
-        [Display(Name = "Replace original File?")]
+        [Display(Name = "Use existing file")]
         [Description("If checked the file will replace the original file in the archives.")]
         public bool Keep { get; set; } = true;
     }

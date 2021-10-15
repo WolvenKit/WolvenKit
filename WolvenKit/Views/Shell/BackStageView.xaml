@@ -30,7 +30,7 @@
             <DrawingBrush.Drawing>
                 <ImageDrawing
                  o:Freeze="True"
-                 ImageSource="pack://application:,,,/Resources/Media/Images/Application/SeeTroughIcon.png"
+                 ImageSource="pack://application:,,,/Resources/Media/Images/Application/Sammy_Grayscale.png"
                  Rect="0,0,70,80"
                  />
             </DrawingBrush.Drawing>

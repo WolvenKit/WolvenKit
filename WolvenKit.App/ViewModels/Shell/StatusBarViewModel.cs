@@ -12,7 +12,7 @@ namespace WolvenKit.ViewModels.Shell
         #region Fields
 
         private const string s_noProjectLoaded =
-            "No project loaded, create or load an project to be able to view the game files...";
+            "NO PROJECT LOADED | Create a New Project or Open an existing Project to get started with WolvenKit";
 
         private readonly ISettingsManager _settingsManager;
         //private readonly AppViewModel _appViewModel;

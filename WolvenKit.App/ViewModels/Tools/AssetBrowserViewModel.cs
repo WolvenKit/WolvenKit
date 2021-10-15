@@ -55,6 +55,7 @@ namespace WolvenKit.ViewModels.Tools
         private readonly IGameControllerFactory _gameController;
         private readonly IArchiveManager _archiveManager;
         private readonly ISettingsManager _settings;
+        private readonly IProjectManager _projectManager;
 
         private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
 
@@ -65,12 +66,14 @@ namespace WolvenKit.ViewModels.Tools
         #region ctor
 
         public AssetBrowserViewModel(
+            IProjectManager projectManager,
             INotificationService notificationService,
             IGameControllerFactory gameController,
             IArchiveManager archiveManager,
             ISettingsManager settings
         ) : base(ToolTitle)
         {
+            _projectManager = projectManager;
             _notificationService = notificationService;
             _gameController = gameController;
             _archiveManager = archiveManager;
@@ -101,15 +104,22 @@ namespace WolvenKit.ViewModels.Tools
                     LeftItems = new ObservableCollection<RedFileSystemModel>(_boundRootNodes);
                 });
 
-            archiveManager
+            _archiveManager
                 .WhenAnyValue(x => x.IsManagerLoaded)
-                .Subscribe(b =>
+                .Subscribe(loaded =>
                 {
-                    LoadVisibility = b ? Visibility.Collapsed : Visibility.Visible;
-                    if (b)
+                    LoadVisibility = loaded ? Visibility.Collapsed : Visibility.Visible;
+                    if (loaded)
                     {
                         _notificationService.Success($"Asset Browser is initialized");
+                        NoProjectBorderVisibility = Visibility.Collapsed;
                     }
+                });
+            _projectManager
+                .WhenAnyValue(_ => _.IsProjectLoaded)
+                .Subscribe(loaded =>
+                {
+                    NoProjectBorderVisibility = loaded ? Visibility.Collapsed : Visibility.Visible;
                 });
 
 
@@ -122,40 +132,30 @@ namespace WolvenKit.ViewModels.Tools
 
         #region properties
 
-        // binding properties. do not make private
         [Reactive] public GridLength PreviewWidth { get; set; } = new(0, GridUnitType.Pixel);
 
         [Reactive] public Visibility LoadVisibility { get; set; } = Visibility.Visible;
 
-        /// <summary>
-        /// Bound RootNodes to left navigation
-        /// </summary>
+        [Reactive] public Visibility NoProjectBorderVisibility { get; set; } = Visibility.Visible;
+
         [Reactive] public ObservableCollection<RedFileSystemModel> LeftItems { get; set; } = new();
 
-        /// <summary>
-        /// Selected Root node in left navigation
-        /// </summary>
         [Reactive] public object LeftSelectedItem { get; set; }
 
-        /// <summary>
-        /// Selected File in right navigaiton
-        /// </summary>
         [Reactive] public IFileSystemViewModel RightSelectedItem { get; set; }
 
-        /// <summary>
-        /// Items (Files) inside a Node (Folder) bound to right navigation
-        /// </summary>
         [Reactive] public ObservableCollection<IFileSystemViewModel> RightItems { get; set; } = new();
 
-        /// <summary>
-        /// Selected Files in right navigaiton
-        /// </summary>
         [Reactive] public ObservableCollection<object> RightSelectedItems { get; set; } = new();
+
         [Reactive] public List<string> Classes { get; set; }
+
         [Reactive] public string SelectedClass { get; set; }
+
         [Reactive] public string SelectedExtension { get; set; }
 
         [Reactive] public string SearchBarText { get; set; }
+
         [Reactive] public string OptionsSearchBarText { get; set; }
 
         [Reactive] public bool IsRegexSearchEnabled { get; set; }

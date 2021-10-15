@@ -10,6 +10,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
+using WolvenKit.Models;
 
 namespace WolvenKit.ViewModels.Shell
 { // #MVVM
@@ -64,7 +65,7 @@ namespace WolvenKit.ViewModels.Shell
 
             ShowSettingsCommand = ReactiveCommand.Create(() =>
             {
-
+                BackstageIsOpen = true;
             });
             ShowBugReportCommand = ReactiveCommand.CreateFromTask(async () =>
             {
@@ -74,6 +75,13 @@ namespace WolvenKit.ViewModels.Shell
             {
                 var result = await Interactions.ShowFeedback.Handle(Unit.Default);
             });
+
+            OpenMaterialRepositoryCommand = ReactiveCommand.Create(() =>
+            {
+                Commonfunctions.ShowFolderInExplorer(_settingsManager.MaterialRepositoryPath);
+            });
+
+
         }
 
         #endregion constructors
@@ -98,6 +106,8 @@ namespace WolvenKit.ViewModels.Shell
         public ReactiveCommand<Unit, Unit> ShowSettingsCommand { get; }
         public ReactiveCommand<Unit, Unit> ShowBugReportCommand { get; }
         public ReactiveCommand<Unit, Unit> ShowFeedbackCommand { get; }
+
+        public ReactiveCommand<Unit, Unit> OpenMaterialRepositoryCommand { get; }
 
         #endregion
 

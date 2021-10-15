@@ -1,1 +1,62 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22"><defs><style>.cls-1{isolation:isolate;}.cls-2{fill:#4d4d4d;}.cls-3{fill:#f2f2f2;}.cls-4{fill:#c33;mix-blend-mode:multiply;}</style></defs><g class="cls-1"><g id="Layer_1" data-name="Layer 1"><path class="cls-2" d="M11,2a9,9,0,0,0-9,9h9Z" transform="translate(0 0)"/><path class="cls-2" d="M11,20a9,9,0,0,0,9-9H11Z" transform="translate(0 0)"/><path class="cls-3" d="M11,20a9,9,0,0,1-9-9h9Z" transform="translate(0 0)"/><path class="cls-3" d="M11,2a9,9,0,0,1,9,9H11Z" transform="translate(0 0)"/></g><g id="Layer_2" data-name="Layer 2"><rect class="cls-4" width="22" height="22"/></g></g></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Blender, SVG Export for Grease Pencil - v1.0 -->
+
+<svg
+   version="1.0"
+   x="0px"
+   y="0px"
+   width="1680px"
+   height="1680px"
+   viewBox="0 0 1680 1680"
+   id="svg12"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs16">
+    <linearGradient
+       id="linearGradient916">
+      <stop
+         style="stop-color:#000000;stop-opacity:1"
+         offset="0"
+         id="stop912" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="1"
+         id="stop914" />
+    </linearGradient>
+    <linearGradient
+       xlink:href="#linearGradient916"
+       id="linearGradient1247"
+       gradientUnits="userSpaceOnUse"
+       x1="840.26788"
+       y1="1077.3715"
+       x2="840.26776"
+       y2="10" />
+  </defs>
+  <g
+     id="blender_frame_4">
+    <g
+       id="blender_object_GPencil">
+      <!--Layer: Plane Empty_Fills-->
+      <g
+         id="Plane Empty_Fills">
+        <path
+           id="polygon2"
+           style="fill:url(#linearGradient1247);fill-opacity:1"
+           d="M 10.000153,543.68579 840.26776,10 1670.5354,543.68567 840.26788,1077.3715 Z" />
+        <path
+           id="polygon4"
+           style="fill:#e7e7e7"
+           d="m 1555.2805,1062.2778 115.2549,74.0844 -830.26752,533.686 -830.267727,-533.6857 115.255007,-74.0845 715.01272,459.6012 z" />
+        <path
+           id="polygon6"
+           style="fill:#e7e7e7"
+           d="M 1555.2805,765.93945 1670.5356,840.0238 840.26788,1373.7098 10.000153,840.02405 125.25516,765.93957 840.26788,1225.5406 Z" />
+      </g>
+      <!--Layer: Plane Empty_Lines-->
+      <g
+         id="Plane Empty_Lines" />
+    </g>
+  </g>
+</svg>

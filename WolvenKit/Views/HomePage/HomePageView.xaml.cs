@@ -65,7 +65,7 @@ namespace WolvenKit.Views.HomePage
                     Content = "On the right you can find a 'quick access panel'.\nLet's start of making a new project.\n\nClick on 'Create Project' to continue\n (The tour will End here, more will be explained in the next version.)",
                     Placement = GuidedTourItem.ItemPlacement.Left,
                     Title = "Quick Access Panel",
-                    AlternateTargets = new FrameworkElement[] { WlcmPage.TwitterLinkButton}
+                    AlternateTargets = new FrameworkElement[] { WlcmPage.YoutubeLinkButton}
                 }
             });
 
