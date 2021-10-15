@@ -264,7 +264,7 @@ namespace WolvenKit.Modkit.RED4.Compiled
         }
         public void Write(BinaryWriter writer)
         {
-
+            throw new NotImplementedException();
         }
         public ICR2WExport CreateChunk(string type, int chunkindex = 0, ICR2WExport parent = null, ICR2WExport virtualparent = null, IEditableVariable cvar = null)
         {
@@ -380,7 +380,9 @@ namespace WolvenKit.Modkit.RED4.Compiled
             }
         }
         public void WriteData(BinaryWriter file)
-        { }
+        {
+            throw new NotImplementedException();
+        }
 
         public uint GetOffset() => throw new NotImplementedException();
 

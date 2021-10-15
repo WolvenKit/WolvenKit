@@ -131,6 +131,8 @@ namespace WolvenKit.Modkit.RED4
             foreach (var fileInfo in fileInfos)
             {
                 var relpath = fileInfo.FullName.RelativePath(infolder);
+                _loggerService.Log($"packing {relpath}");
+
                 var hash = FNV1A64HashAlgorithm.HashString(relpath);
                 if (fileInfo.Extension.ToLower() == ".bin")
                 {
