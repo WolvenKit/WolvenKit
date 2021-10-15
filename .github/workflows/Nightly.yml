@@ -87,7 +87,7 @@ jobs:
     # create installer
     - run: .\Installers\ISCC\ISCC.exe /O"${{env.FINALOUT}}" /dMyAppBaseDir=".${{env.OUT}}" .\Installers\installer.iss
     # create manifest
-    - run: ${{env.OUT}}/WolvenManager.Installer.exe manifest -a ${{env.OUT}}${{env.NAME}}.exe -i ${{env.FINALOUT}} -o ${{env.FINALOUT}}
+    - run: ${{env.OUT}}lib/WolvenManager.Installer.exe manifest -a ${{env.OUT}}${{env.NAME}}.exe -i ${{env.FINALOUT}} -o ${{env.FINALOUT}}
 
     # PORTABLE
     #- uses: actions/upload-artifact@v2
