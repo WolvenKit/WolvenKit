@@ -11,6 +11,8 @@ using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Common.Oodle;
+using WolvenKit.Common.Services;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W;
@@ -86,7 +88,101 @@ namespace WolvenKit.MSTests
             File.WriteAllText(Path.Combine(resultDir, "classes.txt"), sw.ToString());
         }
 
+        [TestMethod]
+        public void DumpMissingHashes()
+        {
+            var parsers = ServiceLocator.Default.ResolveType<Red4ParserService>();
+            var _hashService = ServiceLocator.Default.ResolveType<IHashService>();
+
+            var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
+            Directory.CreateDirectory(resultDir);
+
+            {
+                List<ulong> used = new();
+                List<ulong> missing = new();
+
+                var archives = s_bm.Archives.KeyValues.Select(_ => _.Value).ToList();
+
+                for (var i = 0; i < archives.Count; i++)
+                {
+                    var ar = archives[i];
+                    foreach (var (hash, fileInfoEntry) in ar.Files)
+                    {
+                        if (fileInfoEntry is FileEntry fe && fe.NameOrHash == hash.ToString())
+                        {
+                            missing.Add(hash);
+                        }
+                        else
+                        {
+                            used.Add(hash);
+                        }
+                    }
+                }
+
+                // write all used and all missing hashes
+
+                var missinghashtxt = Path.Combine(resultDir, "missinghashes.txt");
+
+                using (var missingWriter = File.CreateText(missinghashtxt))
+                {
+                    for (var i = 0; i < missing.Count; i++)
+                    {
+                        var mh = missing[i];
+                        missingWriter.WriteLine(mh);
+                    }
+                }
+
+                var usedhashtxt = Path.Combine(resultDir, "usedhashes.txt");
+
+                using (var usedWriter = File.CreateText(usedhashtxt))
+                {
+                    for (var i = 0; i < used.Count; i++)
+                    {
+                        var mh = used[i];
+                        usedWriter.WriteLine(_hashService.Get(mh));
+                    }
+                }
+
+                var allhashes = _hashService.GetAllHashes().ToList();
+                var unused = allhashes.Except(used).ToList();
+
+                var unusedhashtxt = Path.Combine(resultDir, "unusedhashes.txt");
+                   
+                using (var unusedWriter = File.CreateText(unusedhashtxt))
+                {
+                    for (var i = 0; i < unused.Count; i++)
+                    {
+                        var h = unused[i];
+
+                        unusedWriter.WriteLine(_hashService.Get(h));
+                    }
+                }
+
+                //compress all used and all missing hashes
+                Compress(unusedhashtxt, resultDir);
+                Compress(usedhashtxt, resultDir);
+
+            }
 
 
+        }
+
+
+        private void Compress(string path, string resultDir)
+        {
+            var inbuffer = File.ReadAllBytes(path);
+            IEnumerable<byte> outBuffer = new List<byte>();
+
+            var r = OodleHelper.Compress(
+                inbuffer,
+                inbuffer.Length,
+                ref outBuffer,
+                OodleNative.OodleLZ_Compressor.Kraken,
+                OodleNative.OodleLZ_Compression.Normal,
+                true);
+
+            var filename = $"{Path.GetFileNameWithoutExtension(path)}.kark";
+            File.WriteAllBytes(Path.Combine(resultDir, filename), outBuffer.ToArray());
+        }
     }
 }
