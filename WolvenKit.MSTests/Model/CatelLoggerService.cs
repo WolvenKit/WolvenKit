@@ -1,8 +1,11 @@
 using System;
 using Catel.Logging;
 using DynamicData;
+using WolvenKit.Common;
+using WolvenKit.Common.Services;
+using LogEntry = WolvenKit.Common.Services.LogEntry;
 
-namespace WolvenKit.Common.Services
+namespace WolvenKit.MSTests.Model
 {
     public class CatelLoggerService : ILoggerService
     {
@@ -10,17 +13,13 @@ namespace WolvenKit.Common.Services
 
         public CatelLoggerService()
         {
-
         }
 
         public CatelLoggerService(bool enableConsoleListener)
         {
             if (enableConsoleListener)
             {
-                var logListener = new ConsoleLogListener
-                {
-                    IgnoreCatelLogging = true
-                };
+                var logListener = new ConsoleLogListener { IgnoreCatelLogging = true };
                 LogManager.AddListener(logListener);
             }
         }
@@ -50,12 +49,14 @@ namespace WolvenKit.Common.Services
         }
 
         public void Success(string msg) => LogString(msg, Logtype.Success);
+
         public IObservable<IChangeSet<LogEntry>> Connect() => throw new NotImplementedException();
 
 
         public void Log(string msg, Logtype type = Logtype.Normal) => LogString(msg, type);
 
         public void Error(string msg) => LogString(msg, Logtype.Error);
+
         public void Error(Exception exception)
         {
             Info("========================");

@@ -3,17 +3,11 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Catel.IoC;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using WolvenKit.Common;
-using WolvenKit.Common.Interfaces;
-using WolvenKit.Common.Model;
-using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
-using WolvenKit.Interfaces.Extensions;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
@@ -21,11 +15,8 @@ using WolvenKit.RED4.CR2W.Archive;
 namespace WolvenKit.MSTests
 {
     [TestClass]
-    public class DumpInfoTests : GameUnitTest
+    public class _DumpInfo : GameUnitTest
     {
-        private const string s_LIMIT = "LIMIT";
-        private const string s_KEEP = "KEEP";
-
         [ClassInitialize]
         public static void SetupClass(TestContext context) => Setup(context);
 
@@ -147,7 +138,7 @@ namespace WolvenKit.MSTests
                 var unused = allhashes.Except(used).ToList();
 
                 var unusedhashtxt = Path.Combine(resultDir, "unusedhashes.txt");
-                   
+
                 using (var unusedWriter = File.CreateText(unusedhashtxt))
                 {
                     for (var i = 0; i < unused.Count; i++)
@@ -159,16 +150,15 @@ namespace WolvenKit.MSTests
                 }
 
                 //compress all used and all missing hashes
-                Compress(unusedhashtxt, resultDir);
-                Compress(usedhashtxt, resultDir);
+                CompressFile(unusedhashtxt, resultDir);
+                CompressFile(usedhashtxt, resultDir);
 
             }
 
 
         }
 
-
-        private void Compress(string path, string resultDir)
+        private void CompressFile(string path, string resultDir)
         {
             var inbuffer = File.ReadAllBytes(path);
             IEnumerable<byte> outBuffer = new List<byte>();

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using WolvenKit.RED4.CR2W.Archive;
 
-namespace WolvenKit.MSTests
+namespace WolvenKit.MSTests.Model
 {
     public class ReadTestResult : TestResult
     {
@@ -16,7 +16,7 @@ namespace WolvenKit.MSTests
             UnsupportedVersion,
             RuntimeException,
             HasAdditionalBytes,
-            HasUnknownBytes,
+            HasUnknownBytes
         }
 
         #endregion Enums

@@ -98,6 +98,10 @@ namespace WolvenKit.RED4.CR2W.Archive
                .GroupBy(_ => _.Extension)
                .ToDictionary(_ => _.Key, _ => _.Select(x => x as FileEntry));
 
+        public override IEnumerable<FileEntry> GetFiles() =>
+            Archives.Items
+                .SelectMany(_ => _.Files.Values)
+                .Cast<FileEntry>();
 
         /// <summary>
         /// Loads all archives from a folder

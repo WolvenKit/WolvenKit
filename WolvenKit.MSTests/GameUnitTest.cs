@@ -17,6 +17,7 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.MSTests.Model;
 
 namespace WolvenKit.MSTests
 {

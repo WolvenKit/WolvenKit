@@ -19,6 +19,7 @@ using WolvenKit.Common.Conversion;
 using WolvenKit.Common.Tools;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.MSTests.Model;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 
