@@ -63,18 +63,7 @@ namespace WolvenKit.Core
                     }
                 }
 
-                var v = new Version(productVersion);
-                var pv = $"{v.Major}";
-                if (v.Minor != -1)
-                {
-                    pv += $".{ v.Minor}";
-                }
-                if (v.Build != -1)
-                {
-                    pv += $".{ v.Build}";
-                }
-
-                var version = SemVersion.Parse(pv);
+                var version = SemVersion.Parse(productVersion);
                 return version;
             }
         }

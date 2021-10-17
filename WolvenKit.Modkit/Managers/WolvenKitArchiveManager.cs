@@ -36,7 +36,6 @@ namespace WolvenKit.Common.Model
 
         #endregion
 
-
         public abstract void LoadGameArchives(FileInfo executable, bool rebuildtree = true);
 
         public abstract void LoadArchive(string path, bool ispatch = false);
@@ -134,12 +133,18 @@ namespace WolvenKit.Common.Model
         }
 
         public abstract Optional<IGameFile> Lookup(ulong hash);
+
         public abstract RedFileSystemModel LookupDirectory(string fullpath, bool expandAll = false);
+
         public abstract Dictionary<string, IEnumerable<FileEntry>> GetGroupedFiles();
+
+        public abstract IEnumerable<FileEntry> GetFiles();
+
         public abstract void LoadFromFolder(DirectoryInfo archivedir);
 
 
         public abstract IObservable<IChangeSet<RedFileSystemModel>> ConnectGameRoot();
+
         public abstract IObservable<IChangeSet<RedFileSystemModel>> ConnectModRoot();
     }
 }

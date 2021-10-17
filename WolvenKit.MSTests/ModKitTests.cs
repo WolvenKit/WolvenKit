@@ -13,6 +13,7 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.MSTests.Model;
 using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.MSTests
