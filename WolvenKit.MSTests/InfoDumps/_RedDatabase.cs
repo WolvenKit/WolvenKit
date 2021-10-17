@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using Catel.IoC;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Model.Database;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4;
-using WolvenKit.MSTests.Model;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 
@@ -222,17 +222,24 @@ namespace WolvenKit.MSTests
         [TestMethod]
         public void _TestWhere()
         {
-            var sw = new Stopwatch();
-            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
-
             using var db = new RedDBContext();
 
-            var judy = db.Files.Where(x => x.Name.Contains("judy"));
+            var judy = db.Files
+                .Where(x => x.Name.Contains("judy"))
+                .ToList();
 
             foreach (var item in judy)
             {
+                var hash = item.RedFileId;
+                var x = db.Files
+                    .Where(delegate (RedFile x)
+                    {
+                        return x.Uses != null && x.Uses.Contains(hash);
+                    })
+                    .ToList();
+
                 var uses = item.Uses != null ? string.Join('-', item.Uses) : "";
-                var usedby = item.UsedBy != null ? string.Join('-', item.UsedBy) : "";
+                var usedby = string.Join('-', x.Select(_ => _.RedFileId));
                 Console.WriteLine($"{item.RedFileId}, {item.Archive}, {item.Name}, {uses}, {usedby}");   
             }
         }

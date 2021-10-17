@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace WolvenKit.MSTests.Model
+namespace WolvenKit.Common.Model.Database
 {
     public class RedFile
     {

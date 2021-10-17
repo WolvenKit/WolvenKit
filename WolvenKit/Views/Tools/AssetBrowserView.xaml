@@ -296,12 +296,14 @@
                                 SelectionChanged="InnerList_SelectionChanged"
                                 SelectionMode="Extended"
                                 MouseDoubleClick="InnerList_MouseDoubleClick"
+                                
                                 >
 
                                 <syncfusion:SfDataGrid.RecordContextMenu>
                                     <ContextMenu>
                                         <MenuItem Click="RightContextMenuAddAll_OnClick" Header="Add selected items to Project" />
-                                        <MenuItem Header="BK2">
+                                        <Separator/>
+                                        <MenuItem Header="Video">
                                             <MenuItem
                                                 x:Name="VidPreviewMenuItem"
                                                 Click="VidPreviewMenuItem_Click"
@@ -312,7 +314,9 @@
                                                 Header="Export BK2 to Avi"
                                                 Visibility="Collapsed"/>
                                         </MenuItem>
-                                    </ContextMenu>
+                                    <Separator/>
+                                    <MenuItem Header="Find files using this" x:Name="RightContextMenuFindUsingMenuItem" />
+                                </ContextMenu>
                                 </syncfusion:SfDataGrid.RecordContextMenu>
 
                                 <syncfusion:SfDataGrid.Resources>
@@ -1055,9 +1059,7 @@
 
                                 </syncfusion:SfDataGrid.Columns>
 
-                                <I:Interaction.Behaviors>
-                                    <local:Behaviour />
-                                </I:Interaction.Behaviors>
+                                
 
                                 <hc:Interaction.Triggers>
                                     <hc:EventTrigger EventName="MouseDoubleClick">

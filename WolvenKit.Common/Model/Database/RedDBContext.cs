@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
-namespace WolvenKit.MSTests.Model
+namespace WolvenKit.Common.Model.Database
 {
     public class RedDBContext : DbContext
     {

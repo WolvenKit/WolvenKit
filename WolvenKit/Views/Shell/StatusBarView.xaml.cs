@@ -1,6 +1,4 @@
 using System;
-
-using CatFacts.Net;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Common.Services;

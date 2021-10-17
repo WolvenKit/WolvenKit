@@ -96,6 +96,10 @@ namespace WolvenKit.Views.Tools
                       view => view.InnerList.SelectedItems)
                   .DisposeWith(disposables);
 
+                this.BindCommand(ViewModel,
+                      viewModel => viewModel.FindUsingCommand,
+                      view => view.RightContextMenuFindUsingMenuItem)
+                  .DisposeWith(disposables);
             });
 
         }

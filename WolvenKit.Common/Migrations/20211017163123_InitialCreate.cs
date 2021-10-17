@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace WolvenKit.MSTests.Migrations
+namespace WolvenKit.Common.Migrations
 {
     public partial class InitialCreate : Migration
     {

@@ -44,7 +44,6 @@
     <PackageReference Include="Ab3d.DXEngine.Wpf" Version="4.4.7874" />
     <PackageReference Include="Ab3d.DXEngine" Version="4.4.7874" />
     <PackageReference Include="Ab3d.PowerToys" Version="9.6.7848" />
-    <PackageReference Include="CatFacts.Net" Version="0.1.1" />
     <PackageReference Include="Discord.Net" Version="2.4.0" />
     <PackageReference Include="Feather.Controls" Version="1.0.3" />
     <PackageReference Include="Feather.Core" Version="1.0.0" />
