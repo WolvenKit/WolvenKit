@@ -10,6 +10,7 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:shell="clr-namespace:WolvenKit.ViewModels.Shell;assembly=WolvenKit.App"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
     d:DataContext="{d:DesignInstance Type=shell:StatusBarViewModel}"
     d:DesignWidth="800"
     mc:Ignorable="d">
@@ -28,13 +29,14 @@
 
         <Fluent:StatusBar Background="{DynamicResource MahApps.Brushes.Accent3}" >
 
-            <Fluent:StatusBarItem Title="Status"
-                          
-                          HorizontalAlignment="Left">
+            <Fluent:StatusBarItem Title="Status" HorizontalAlignment="Left">
                 <TextBlock Text="{Binding Status}" Margin="10,0,0,0"/>
             </Fluent:StatusBarItem>
 
-
+            <Fluent:StatusBarItem HorizontalAlignment="Left"  >
+                <syncfusion:SfLinearProgressBar x:Name="StatusBarProgressBar" Height="16" Margin="10,0,0,0" Width="200"
+                                                TrackColor="{DynamicResource ContentBackgroundAlt1}" ProgressColor="{DynamicResource MahApps.Brushes.AccentBase}"/>
+            </Fluent:StatusBarItem>
 
             <Fluent:StatusBarItem
                 Title="Current Project"

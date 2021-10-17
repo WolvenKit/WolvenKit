@@ -66,7 +66,7 @@ namespace WolvenKit
         }
 
         // Application OnStartup Override.
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             Interactions.ShowFirstTimeSetup.RegisterHandler(interaction =>
             {
@@ -88,14 +88,16 @@ namespace WolvenKit
             var loggerService = Locator.Current.GetService<ILoggerService>();
 
             loggerService.Info("Starting application");
+            await Initializations.InitializeWebview2(loggerService);
 
-            Initializations.InitializeWebview2(loggerService);
-
-            loggerService.Info("Initializing Theme Helper");
+            loggerService.Info("Initializing red database");
             Initializations.InitializeThemeHelper();
 
+            loggerService.Info("Initializing Theme Helper");
+            Initializations.InitializeRedDB();
+
             loggerService.Info("Initializing Shell");
-            /*await*/ Initializations.InitializeShell(settings);
+            Initializations.InitializeShell(settings);
 
             loggerService.Info("Initializing Discord RPC API");
             DiscordHelper.InitializeDiscordRPC();
@@ -110,7 +112,7 @@ namespace WolvenKit
             loggerService.Info("Initializing NodeNetwork.");
             NNViewRegistrar.RegisterSplat();
 
-
+            loggerService.Info("Initializing bk");
             Initializations.InitializeBk(settings);
 
 

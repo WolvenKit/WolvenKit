@@ -18,6 +18,7 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Database;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
@@ -57,6 +58,7 @@ namespace WolvenKit.ViewModels.Tools
         private readonly IArchiveManager _archiveManager;
         private readonly ISettingsManager _settings;
         private readonly IProjectManager _projectManager;
+        private readonly IProgressService<double> _progressService;
 
         private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
 
@@ -71,7 +73,8 @@ namespace WolvenKit.ViewModels.Tools
             INotificationService notificationService,
             IGameControllerFactory gameController,
             IArchiveManager archiveManager,
-            ISettingsManager settings
+            ISettingsManager settings,
+            IProgressService<double> progressService
         ) : base(ToolTitle)
         {
             _projectManager = projectManager;
@@ -79,6 +82,7 @@ namespace WolvenKit.ViewModels.Tools
             _gameController = gameController;
             _archiveManager = archiveManager;
             _settings = settings;
+            _progressService = progressService;
 
             ContentId = ToolContentId;
 
@@ -171,9 +175,10 @@ namespace WolvenKit.ViewModels.Tools
         public ReactiveCommand<Unit, Unit> FindUsingCommand { get; }
         private async Task FindUsing()
         {
+            _progressService.IsIndeterminate = true;
+
             await Task.Run(async () =>
             {
-
                 using var db = new RedDBContext();
 
                 if (RightSelectedItem is RedFileViewModel { } file)
@@ -210,8 +215,7 @@ namespace WolvenKit.ViewModels.Tools
 
             });
 
-
-           
+            _progressService.IsIndeterminate = false;
         }
 
         public ICommand AddSelectedCommand { get; private set; }

@@ -22,6 +22,7 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.Shell;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace WolvenKit.Functionality.Initialization
 {
@@ -183,7 +184,7 @@ namespace WolvenKit.Functionality.Initialization
 
         public static bool IsMissingWebView2() => (GetAvailableCoreWebView2BrowserVersionString(null, out string edgeVersion) != 0) || (edgeVersion == null);
 
-        public static async void InitializeWebview2(ILoggerService _loggerService)
+        public static async Task InitializeWebview2(ILoggerService _loggerService)
         {
             // check prerequisites
             // check Webview2
@@ -243,6 +244,18 @@ namespace WolvenKit.Functionality.Initialization
             var webViewData = ISettingsManager.GetWebViewDataPath();
             Directory.CreateDirectory(webViewData);
             Helpers.Helpers.objCoreWebView2Environment = await CoreWebView2Environment.CreateAsync(null, webViewData, null);
+        }
+
+        public static void InitializeRedDB()
+        {
+            var resourcePath = Path.GetFullPath(Path.Combine("Resources", "red.kark"));
+            var destinationPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "red.db");
+            var settings = Splat.Locator.Current.GetService<ISettingsManager>();
+
+            if (!File.Exists(destinationPath))
+            {
+                OodleTask(resourcePath, destinationPath, true, false);
+            }
         }
 
         /// <summary>

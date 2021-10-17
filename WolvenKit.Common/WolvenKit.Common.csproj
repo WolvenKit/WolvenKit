@@ -62,6 +62,7 @@
     <None Remove="lib\vgmstream\test.exe" />
     <None Remove="lib\vgmstream\xmp-vgmstream.dll" />
     <None Remove="Resources\missinghashes.txt" />
+    <None Remove="Resources\red.kark" />
     <None Remove="Resources\unusedhashes.kark" />
     <EmbeddedResource Include="Resources\missinghashes.txt" />
     <EmbeddedResource Include="Resources\unusedhashes.kark" />
@@ -112,6 +113,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="lib\vgmstream\xmp-vgmstream.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\red.kark">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -73,6 +73,8 @@
     <PackageReference Include="Syncfusion.SfInput.WPF" Version="19.2.0.60" />
     <PackageReference Include="Syncfusion.SfImageEditor.WPF" Version="19.2.0.60" />
 
+    <PackageReference Include="Syncfusion.SfProgressBar.WPF" Version="19.3.0.43" />
+
     <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.2.0.60" />
 
     <PackageReference Include="Syncfusion.SfBarcode.WPF" Version="19.2.0.60" />
