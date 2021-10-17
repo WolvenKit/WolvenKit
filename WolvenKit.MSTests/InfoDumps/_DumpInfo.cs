@@ -23,7 +23,7 @@ namespace WolvenKit.MSTests
         [TestMethod]
         public void DumpExtensionInfo()
         {
-            var parsers = ServiceLocator.Default.ResolveType<Red4ParserService>();
+            var parser = ServiceLocator.Default.ResolveType<Red4ParserService>();
 
             var results = new Dictionary<string, ConcurrentDictionary<string, ulong>>();
             foreach (var e in s_groupedFiles)
@@ -31,7 +31,7 @@ namespace WolvenKit.MSTests
                 results.Add(e.Key, new ConcurrentDictionary<string, ulong>());
             }
 
-            var excludedExtensions = new List<string>() { ".wem", ".bin", ".bnk" };
+            var excludedExtensions = new List<string>() { ".wem", ".bin", ".bnk", ".opuspak", ".opusinfo", ".bk2", ".dat" };
 
             // Run Test
             foreach (var item in s_groupedFiles.Where(_ => !excludedExtensions.Contains(_.Key)))
@@ -48,7 +48,7 @@ namespace WolvenKit.MSTests
                     {
                         using var originalMemoryStream = new MemoryStream();
                         ModTools.ExtractSingleToStream(archive, hash, originalMemoryStream);
-                        var originalFile = parsers.TryReadRED4FileHeaders(originalMemoryStream);
+                        var originalFile = parser.TryReadRED4FileHeaders(originalMemoryStream);
                         if (originalFile != null)
                         {
                             var c = originalFile.StringDictionary[1];

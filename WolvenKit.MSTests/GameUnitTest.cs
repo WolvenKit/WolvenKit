@@ -120,7 +120,7 @@ namespace WolvenKit.MSTests
 
             var keyes = s_groupedFiles.Keys.ToList();
             var keystring = string.Join(',', keyes);
-            Console.WriteLine(keystring);
+            //Console.WriteLine(keystring);
         }
 
         #endregion Methods

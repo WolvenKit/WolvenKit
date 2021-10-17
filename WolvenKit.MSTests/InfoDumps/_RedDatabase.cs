@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Catel.IoC;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.Common.FNV1A;
@@ -25,7 +27,6 @@ namespace WolvenKit.MSTests
         public void aGenerateDB()
         {
             using var db = new RedDBContext();
-            db.SaveChanges();
 
             var sw = new Stopwatch();
             var parser = ServiceLocator.Default.ResolveType<Red4ParserService>();
@@ -98,40 +99,93 @@ namespace WolvenKit.MSTests
             db.SaveChanges();
         }
 
+        /// <summary>
+        /// You can use the resources_XXX zip and extract it to <resultDir> to speed up the generation
+        /// </summary>
         [TestMethod]
         public void cSetUses()
         {
             var sw = new Stopwatch();
             var parser = ServiceLocator.Default.ResolveType<Red4ParserService>();
             var hashService = ServiceLocator.Default.ResolveType<IHashService>();
-
+            var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
+            Directory.CreateDirectory(resultDir);
             using var db = new RedDBContext();
 
             // set uses files
             Console.WriteLine($"set uses files...");
             sw.Restart();
-            foreach (var file in db.Files)
+
+            var excludedExtensions = new List<string>() { ".wem", ".bin", ".bnk", ".opuspak", ".opusinfo", ".bk2", ".dat" };
+
+            // Run Test
+            foreach (var (ext, files) in s_groupedFiles.Where(_ => !excludedExtensions.Contains(_.Key)))
             {
-                var hash = file.RedFileId;
-                var bfile = s_bm.Lookup(hash);
-                if (!bfile.HasValue)
+                var dbDict = new ConcurrentDictionary<ulong, ulong[]>();
+
+                var dataFile = Path.Combine(resultDir, $"{ext[1..]}.txt");
+                if (File.Exists(dataFile))
                 {
-                    continue;
+                    var lines = File.ReadAllLines(dataFile);
+                    foreach (var line in lines)
+                    {
+                        var keysplits = line.Split(": ");
+                        var key = ulong.Parse(keysplits[0]);
+                        var uses = keysplits[1].Split(',').Select(x => ulong.Parse(x)).ToArray();
+
+                        dbDict.AddOrUpdate(key, uses, (key, values) => uses);
+                    }
+                }
+                else
+                {
+                    Parallel.ForEach(files, file =>
+                    {
+                        var hash = file.Key;
+                        var archive = file.Archive as Archive;
+
+                        try
+                        {
+                            using var originalMemoryStream = new MemoryStream();
+                            ModTools.ExtractSingleToStream(archive, hash, originalMemoryStream);
+                            var cr2w = parser.TryReadRED4FileHeaders(originalMemoryStream);
+                            if (cr2w != null)
+                            {
+                                if (cr2w.Imports.Any())
+                                {
+                                    var imports = cr2w.Imports.Select(x => FNV1A64HashAlgorithm.HashString(x.DepotPathStr)).ToArray();
+                                    dbDict.AddOrUpdate(hash, imports, (key, oldValue) => imports);
+                                }
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    });
+
+                    using var strw = new StringWriter();
+                    foreach (var (key, uses) in dbDict)
+                    {
+                        strw.WriteLine($"{key}: {string.Join(",", uses)}");
+                    }
+                    File.WriteAllText(Path.Combine(resultDir, $"{ext[1..]}.txt"), strw.ToString());
                 }
 
-                // extract file from bundle manager
-                using var originalMemoryStream = new MemoryStream();
-                ModTools.ExtractSingleToStream(bfile.Value.Archive as Archive, hash, originalMemoryStream);
-                var cr2w = parser.TryReadRED4FileHeaders(originalMemoryStream);
-                if (cr2w is not null)
+                foreach (var info in dbDict)
                 {
-                    if (cr2w.Imports.Any())
+                    var hash = info.Key;
+                    var dbfile = db.Find(typeof(RedFile), hash);
+                    if (dbfile is RedFile redfile)
                     {
-                        var imports = cr2w.Imports.Select(x => FNV1A64HashAlgorithm.HashString(x.DepotPathStr));
-                        file.Uses = imports.ToArray();
+                        redfile.Uses = info.Value;
                     }
                 }
             }
+
             sw.Stop();
             Console.WriteLine($"set uses files: {sw.ElapsedMilliseconds}ms");
 
@@ -166,7 +220,7 @@ namespace WolvenKit.MSTests
         }
 
         [TestMethod]
-        public void _TestDb()
+        public void _TestWhere()
         {
             var sw = new Stopwatch();
             var hashService = ServiceLocator.Default.ResolveType<IHashService>();
@@ -177,8 +231,11 @@ namespace WolvenKit.MSTests
 
             foreach (var item in judy)
             {
-                Console.WriteLine(item.Name);   
+                var uses = item.Uses != null ? string.Join('-', item.Uses) : "";
+                var usedby = item.UsedBy != null ? string.Join('-', item.UsedBy) : "";
+                Console.WriteLine($"{item.RedFileId}, {item.Archive}, {item.Name}, {uses}, {usedby}");   
             }
         }
+        
     }
 }

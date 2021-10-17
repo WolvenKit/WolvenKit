@@ -30,8 +30,12 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="Resources\resourceUses_131.zip" />
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\resourceuses_131.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
