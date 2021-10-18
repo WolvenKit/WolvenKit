@@ -1,48 +1,46 @@
 using System;
-using System.ComponentModel;
+using System.IO;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using CP77.CR2W;
 using HandyControl.Tools;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using NodeNetwork;
 using ProtoBuf.Meta;
 using ReactiveUI;
+using Splat;
+using Splat.Microsoft.Extensions.DependencyInjection;
 using WolvenKit.Common;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
+using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Initialization;
 using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Interaction;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.ViewModels.Shell;
-using WolvenKit.Views.Shell;
-using WolvenManager.Installer.Services;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Splat.Microsoft.Extensions.DependencyInjection;
-using Splat;
 using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.HomePage.Pages;
 using WolvenKit.ViewModels.Shared;
+using WolvenKit.ViewModels.Shell;
+using WolvenKit.ViewModels.Tools;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Dialogs;
-using WolvenKit.Views.Editor;
-using WolvenKit.Views.Documents;
 using WolvenKit.Views.HomePage;
 using WolvenKit.Views.HomePage.Pages;
-using WolvenKit.Views.Wizards;
-using WolvenKit.Common.Interfaces;
-using WolvenKit.Interaction;
+using WolvenKit.Views.Shell;
 using WolvenKit.Views.Tools;
-using WolvenKit.ViewModels.Tools;
+using WolvenKit.Views.Wizards;
+using WolvenManager.Installer.Services;
 
 namespace WolvenKit
 {
@@ -80,12 +78,12 @@ namespace WolvenKit
                 }, RxApp.MainThreadScheduler);
             });
 
-
-            // Startup speed boosting (HC)
-            ApplicationHelper.StartProfileOptimization();
-
             var settings = Locator.Current.GetService<ISettingsManager>();
             var loggerService = Locator.Current.GetService<ILoggerService>();
+
+
+            // Startup speed boosting (HC)
+            ApplicationHelper.StartProfileOptimization();   
 
             loggerService.Info("Starting application");
             await Initializations.InitializeWebview2(loggerService);
@@ -93,11 +91,11 @@ namespace WolvenKit
             loggerService.Info("Initializing red database");
             Initializations.InitializeThemeHelper();
 
-            loggerService.Info("Initializing Theme Helper");
-            Initializations.InitializeRedDB();
 
+            // main app viewmodel
             loggerService.Info("Initializing Shell");
             Initializations.InitializeShell(settings);
+
 
             loggerService.Info("Initializing Discord RPC API");
             DiscordHelper.InitializeDiscordRPC();
@@ -109,13 +107,8 @@ namespace WolvenKit
             loggerService.Info("Calling base.OnStartup");
             base.OnStartup(e);
 
-            loggerService.Info("Initializing NodeNetwork.");
-            NNViewRegistrar.RegisterSplat();
-
-            loggerService.Info("Initializing bk");
-            Initializations.InitializeBk(settings);
-
-
+            //loggerService.Info("Initializing NodeNetwork.");
+            //NNViewRegistrar.RegisterSplat();
         }
 
         private IServiceProvider Container { get; set; }
@@ -166,7 +159,7 @@ namespace WolvenKit
                     services.AddSingleton<MeshTools>();
 
                     services.AddSingleton<IModTools, ModTools>();
-                    services.AddSingleton< RED4Controller>();
+                    services.AddSingleton<RED4Controller>();
 
                     // red3 modding tools
                     //services.AddSingleton<Red3ModTools>();

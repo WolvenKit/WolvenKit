@@ -28,6 +28,8 @@ namespace WolvenKit.Functionality.Services
 
         // red 4
 
+        string ReddbHash { get;set; }
+
         string CP77ExecutablePath { get; set; }
 
         // red 3
@@ -37,7 +39,6 @@ namespace WolvenKit.Functionality.Services
         string WccLitePath { get; set; }
 
         #endregion Properties
-
     }
 
     public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
@@ -176,10 +177,12 @@ namespace WolvenKit.Functionality.Services
         void Save();
 
         Color GetThemeAccent();
+
         void SetThemeAccent(Color color);
 
         string GetVersionNumber();
-        List<string> IsHealthy();
+
+        bool IsHealthy();
 
     }
 }

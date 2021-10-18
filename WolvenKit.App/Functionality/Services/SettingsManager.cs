@@ -22,6 +22,7 @@ namespace WolvenKit.Functionality.Services
         #region fields
 
         private static string GetConfigurationPath() => Path.Combine(ISettingsManager.GetAppData(), "config.json");
+
         private static string GetImagePath() => Path.Combine(ISettingsManager.GetAppData(), "_profile_image.png");
 
         #endregion fields
@@ -83,6 +84,8 @@ namespace WolvenKit.Functionality.Services
 
         [Reactive] public string CP77ExecutablePath { get; set; }
 
+        public string ReddbHash { get; set; }
+
         #endregion red4
 
         #region red3
@@ -121,7 +124,7 @@ namespace WolvenKit.Functionality.Services
             return dir;
         }
 
-        public string GetRED4OodleDll() => Path.Combine(GetRED4GameRootDir(), "bin", "x64", WolvenKit.Core.Constants.Oodle);
+        public string GetRED4OodleDll() => string.IsNullOrEmpty(GetRED4GameRootDir()) ? null : Path.Combine(GetRED4GameRootDir(), "bin", "x64", WolvenKit.Core.Constants.Oodle);
 
         #endregion
 
@@ -143,44 +146,7 @@ namespace WolvenKit.Functionality.Services
         }
 
 
-        public List<string> IsHealthy()
-        {
-            var messages = new List<string>();
-
-            if (!File.Exists(CP77ExecutablePath))
-            {
-                messages.Add("Game exe location was not found.");
-                return messages;
-            }
-
-            if (!File.Exists(GetRED4OodleDll()))
-            {
-                messages.Add($"Oodle dll was not found with the game. Please make sure you have {Core.Constants.Oodle} next to your game executable.");
-            }
-
-            return messages;
-        }
-
-        private static SettingsManager FromDto(SettingsDto settings)
-        {
-            var config = new SettingsManager()
-            {
-                CheckForUpdates = settings.CheckForUpdates,
-                UpdateChannel = settings.UpdateChannel,
-                ShowGuidedTour = settings.ShowGuidedTour,
-                //ProfileImageBrush = settings.ProfileImageBrush,
-                TextLanguage = settings.TextLanguage,
-                ThemeAccentString = settings.ThemeAccentString,
-                ManagerVersions = settings.ManagerVersions,
-                DepotPath = settings.DepotPath,
-                CP77ExecutablePath = settings.CP77ExecutablePath,
-                MaterialRepositoryPath = settings.MaterialRepositoryPath,
-                W3ExecutablePath = settings.W3ExecutablePath,
-                WccLitePath = settings.WccLitePath,
-                CatFactAnimal = settings.CatFactAnimal
-            };
-            return config;
-        }
+        public bool IsHealthy() => File.Exists(CP77ExecutablePath) && File.Exists(GetRED4OodleDll());
 
         public static SettingsManager Load()
         {
@@ -193,7 +159,7 @@ namespace WolvenKit.Functionality.Services
                     var dto = JsonSerializer.Deserialize<SettingsDto>(jsonString);
                     if (dto != null)
                     {
-                        config = FromDto(dto);
+                        config = dto.FromDto();
                     }
                 }
             }
@@ -268,6 +234,7 @@ namespace WolvenKit.Functionality.Services
             ManagerVersions = settings.ManagerVersions;
             DepotPath = settings.DepotPath;
             CP77ExecutablePath = settings.CP77ExecutablePath;
+            ReddbHash = settings.ReddbHash;
             MaterialRepositoryPath = settings.MaterialRepositoryPath;
             W3ExecutablePath = settings.W3ExecutablePath;
             WccLitePath = settings.WccLitePath;
@@ -286,10 +253,33 @@ namespace WolvenKit.Functionality.Services
         public string[] ManagerVersions { get; set; }
         public string DepotPath { get; set; }
         public string CP77ExecutablePath { get; set; }
+        public string ReddbHash { get; set; }
         public string MaterialRepositoryPath { get; set; }
         public string W3ExecutablePath { get; set; }
         public string WccLitePath { get; set; }
 
         public bool ShowGuidedTour { get; set; }
+
+        public SettingsManager FromDto()
+        {
+            var config = new SettingsManager()
+            {
+                CheckForUpdates = this.CheckForUpdates,
+                UpdateChannel = this.UpdateChannel,
+                ShowGuidedTour = this.ShowGuidedTour,
+                //ProfileImageBrush = this.ProfileImageBrush,
+                TextLanguage = this.TextLanguage,
+                ThemeAccentString = this.ThemeAccentString,
+                ManagerVersions = this.ManagerVersions,
+                DepotPath = this.DepotPath,
+                CP77ExecutablePath = this.CP77ExecutablePath,
+                ReddbHash = this.ReddbHash,
+                MaterialRepositoryPath = this.MaterialRepositoryPath,
+                W3ExecutablePath = this.W3ExecutablePath,
+                WccLitePath = this.WccLitePath,
+                CatFactAnimal = this.CatFactAnimal
+            };
+            return config;
+        }
     }
 }

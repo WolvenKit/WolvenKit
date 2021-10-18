@@ -12,8 +12,6 @@ using System.Xml;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.Tools.Controls;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Layout;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
@@ -41,7 +39,7 @@ namespace WolvenKit.Views.Shell
             PART_DockingManager.Loaded += PART_DockingManager_Loaded;
             PART_DockingManager.CloseButtonClick += PART_DockingManagerOnCloseButtonClick;
             PART_DockingManager.DockStateChanging += PART_DockingManagerOnDockStateChanging;
-            
+
 
             viewModel = DataContext as AppViewModel;
         }
@@ -66,7 +64,7 @@ namespace WolvenKit.Views.Shell
                 vm.Close.Execute().Subscribe();
 
                 (ItemsSource as IList).Remove(vm);
-                
+
             }
         }
 
@@ -85,18 +83,16 @@ namespace WolvenKit.Views.Shell
             {
 
             }
-            
         }
 
         private void PART_DockingManager_Loaded(object sender, RoutedEventArgs e)
         {
-            ((DocumentContainer)PART_DockingManager.DocContainer).SetCurrentValue(
-                DocumentContainer.AddTabDocumentAtLastProperty, true);
+            ((DocumentContainer)PART_DockingManager.DocContainer).SetCurrentValue(DocumentContainer.AddTabDocumentAtLastProperty, true);
 
             // Add setting to persist State or not ? ( Load Default Docking on Startup : Yes/No )
             // if (XSETTINGX){ SetLayoutToDefault();}else{
             var settings = Locator.Current.GetService<ISettingsManager>();
-            if (settings.IsHealthy().Any())
+            if (!settings.IsHealthy())
             {
                 SetLayoutToDefault();
             }
@@ -112,8 +108,6 @@ namespace WolvenKit.Views.Shell
                     Trace.WriteLine(ex.Message);
                     //SetLayoutToDefault();
                 }
-                
-                
             }
 
             if (DebuggingLayouts)
@@ -379,7 +373,7 @@ namespace WolvenKit.Views.Shell
                 catch (Exception)
                 {
                 }
-                
+
             }
         }
     }
