@@ -133,11 +133,19 @@ namespace WolvenKit.ViewModels.Documents
                     // try reading as compiled package
                     else
                     {
-                        var compiledbuffer = new CompiledPackage(_hashService);
-                        uncompressedMS.Seek(0, SeekOrigin.Begin);
-                        using var br = new BinaryReader(uncompressedMS);
-                        compiledbuffer.Read(br);
-                        TabItemViewModels.Add(new W2rcBufferViewModel(b, compiledbuffer));
+                        try
+                        {
+                            var compiledbuffer = new CompiledPackage(_hashService);
+                            uncompressedMS.Seek(0, SeekOrigin.Begin);
+                            using var br = new BinaryReader(uncompressedMS);
+                            compiledbuffer.Read(br);
+                            TabItemViewModels.Add(new W2rcBufferViewModel(b, compiledbuffer));
+                        }
+                        catch (Exception e)
+                        {
+                            _loggerService.Error(e);
+                        }
+                        
                     }
                 }
 

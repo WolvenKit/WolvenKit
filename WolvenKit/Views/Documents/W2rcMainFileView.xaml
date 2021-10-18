@@ -68,8 +68,7 @@
             </Grid>
 
             <Grid Grid.Row="1"  x:Name="ChunksView">
-                <syncfusion:SfTreeGrid x:Name="ChunksTreeView"
-                                       Margin="2"
+                <syncfusion:SfTreeGrid x:Name="ChunksTreeView" Margin="2"
                                         AllowEditing="False"
                                         AllowFiltering="True"
                                         AllowResizingColumns="False"
@@ -131,7 +130,7 @@
             <Grid.Resources>
 
                 <DataTemplate x:Key="CommmonTemplate">
-                    <TextBlock Padding="5" Text="{Binding Value}" Foreground="Gray" />
+                    <TextBlock Padding="5" Text="{Binding Value}" Foreground="Gray" syncfusion:FocusManagerHelper.FocusedElement="True"/>
                 </DataTemplate>
 
                 <DataTemplate x:Key="StringTemplateView">
@@ -248,22 +247,25 @@
 
             </Grid.Resources>
 
+              
+            
             <syncfusion:SfTreeGrid x:Name="MainTreeGrid"
                                     AllowFiltering="True"
                                     AllowResizingColumns="True"
-                                    AutoExpandMode="RootNodesExpanded"
+                                    
                                     AutoGenerateColumns="False"
-                                    ChildPropertyName="Children"
+                                    
                                     ColumnSizer="Star"
+                                    
                                     Style="{DynamicResource SyncfusionSfTreeGridStyle}" >
 
                 <syncfusion:SfTreeGrid.Columns>
 
-                    <syncfusion:TreeGridTextColumn
+                    <syncfusion:TreeGridTextColumn MappingName="Name"
                                         AllowEditing="False"
                                         ColumnSizer="SizeToCells"
                                         HeaderText="Name"
-                                        MappingName="Name">
+                                        >
                         <syncfusion:TreeGridTextColumn.CellStyle>
                             <Style TargetType="syncfusion:TreeGridCell">
                                 <Setter Property="Background" Value="{Binding Converter={StaticResource converter}}"/>
@@ -271,22 +273,22 @@
                         </syncfusion:TreeGridTextColumn.CellStyle>
                     </syncfusion:TreeGridTextColumn>
 
-                    <syncfusion:TreeGridTemplateColumn AllowFocus="True"
-                                                           AllowEditing="True"
-                                                           AllowSorting="False"
-                                                           CellTemplateSelector="{StaticResource DataTemplateSelector}"
-                                                           ColumnSizer="FillColumn"
-                                                           HeaderText="Value"
-                                                           MappingName="Property" />
+                    <syncfusion:TreeGridTemplateColumn MappingName="Property"
+                                                       AllowFocus="True"
+                                                        AllowEditing="True"
+                                                        AllowSorting="False"
+                                                        CellTemplateSelector="{StaticResource DataTemplateSelector}"
+                                                        ColumnSizer="FillColumn"
+                                                        HeaderText="Value"
+                                                        />
 
-                    <syncfusion:TreeGridTextColumn
+                    <syncfusion:TreeGridTextColumn MappingName="Type"
                                         AllowEditing="False"
                                         ColumnSizer="SizeToCells"
                                         HeaderText="Type"
-                                        MappingName="Type" />
+                                         />
 
-                    <syncfusion:TreeGridCheckBoxColumn
-                                        MappingName="IsSerialized"
+                    <syncfusion:TreeGridCheckBoxColumn MappingName="IsSerialized"
                                         AllowEditing="true"
                                         HeaderText="Serialized"
                                         ColumnSizer="SizeToHeader"

@@ -3,8 +3,10 @@ using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
 using ReactiveUI;
+using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.ViewModels.Documents;
+using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.Editors;
 using WolvenKit.Views.Templates;
 
@@ -65,6 +67,40 @@ namespace WolvenKit.Views.Documents
 
 
             });
+
+            MainTreeGrid.RequestTreeItems += TreeGrid_RequestTreeItems;
+        }
+
+        
+      
+        private void TreeGrid_RequestTreeItems(object sender, TreeGridRequestTreeItemsEventArgs args)
+        {
+            if (DataContext is W2rcFileViewModel vm)
+            {
+                if (args.ParentItem == null)
+                {
+                    args.ChildItems = vm.ChunkProperties;
+                }
+                else
+                {
+                    if (args.ParentItem is ChunkPropertyViewModel chunk)
+                    {
+                        args.ChildItems = chunk.Children;
+                    }
+                }
+            }
+           
+               
+
+            //else
+            //{
+            //    EmployeeInfo employee = args.ParentItem as EmployeeInfo;
+
+            //    if (employee != null)
+            //    {
+            //        args.ChildItems = ViewModel.GetEmployees().Where(x => x.ReportsTo == employee.ID);
+            //    }
+            //}
         }
 
         private void SetCollapsedAll()
