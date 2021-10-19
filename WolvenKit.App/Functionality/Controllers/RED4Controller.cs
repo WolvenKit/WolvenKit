@@ -99,10 +99,7 @@ namespace WolvenKit.Functionality.Controllers
                 switch (path)
                 {
                     case @"Resources\Media\t1.kark":
-                        if (File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "test.exe")))
-                        {
-                        }
-                        else
+                        if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "test.exe")))
                         {
                             _ = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "test.exe"), true,
                                 false);
@@ -111,10 +108,7 @@ namespace WolvenKit.Functionality.Controllers
                         break;
 
                     case @"Resources\Media\t2.kark":
-                        if (File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "testconv.exe")))
-                        {
-                        }
-                        else
+                        if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "testconv.exe")))
                         {
                             _ = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "testconv.exe"), true,
                                 false);
@@ -123,10 +117,7 @@ namespace WolvenKit.Functionality.Controllers
                         break;
 
                     case @"Resources\Media\t3.kark":
-                        if (File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "testc.exe")))
-                        {
-                        }
-                        else
+                        if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "testc.exe")))
                         {
                             _ = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "testc.exe"), true,
                                 false);
@@ -135,10 +126,7 @@ namespace WolvenKit.Functionality.Controllers
                         break;
 
                     case @"Resources\Media\t4.kark":
-                        if (File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "radutil.dll")))
-                        {
-                        }
-                        else
+                        if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "radutil.dll")))
                         {
                             _ = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "radutil.dll"), true,
                                 false);
@@ -147,10 +135,7 @@ namespace WolvenKit.Functionality.Controllers
                         break;
 
                     case @"Resources\Media\t5.kark":
-                        if (File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "bink2make.dll")))
-                        {
-                        }
-                        else
+                        if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "bink2make.dll")))
                         {
                             _ = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "bink2make.dll"), true,
                                 false);
