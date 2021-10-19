@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using DynamicData;
@@ -21,6 +22,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         public const string Version = "1.1";
 
         private readonly IHashService _hashService;
+        private readonly ILoggerService _logger;
 
         private readonly SourceList<RedFileSystemModel> _rootCache;
 
@@ -30,9 +32,10 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region Constructors
 
-        public ArchiveManager(IHashService hashService)
+        public ArchiveManager(IHashService hashService, ILoggerService logger)
         {
             _hashService = hashService;
+            _logger = logger;
 
             _rootCache = new SourceList<RedFileSystemModel>();
             _modCache = new SourceList<RedFileSystemModel>();
@@ -141,18 +144,13 @@ namespace WolvenKit.RED4.CR2W.Archive
 
             var archivedir = Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "content");
 
-            //var sw = new Stopwatch();
-            //sw.Start();
+            var sw = new Stopwatch();
+            sw.Start();
 
             foreach (var file in Directory.GetFiles(archivedir, "*.archive"))
             {
                 LoadArchive(file);
             }
-
-            //sw.Stop();
-            //var ms = sw.ElapsedMilliseconds;
-
-            //Extensions = Items.KeyValues.Select(_ => _.Value.Extension).Distinct();
 
             if (rebuildtree)
             {
@@ -164,6 +162,10 @@ namespace WolvenKit.RED4.CR2W.Archive
                     innerCache.Add(RootNode);
                 });
             }
+
+            sw.Stop();
+            var ms = sw.ElapsedMilliseconds;
+            _logger.Info($"Archivemanager loaded in {ms}ms");
 
             IsManagerLoaded = true;
         }
@@ -285,9 +287,9 @@ namespace WolvenKit.RED4.CR2W.Archive
             {
                 var s = splits[i];
 
-                if (currentDir.Directories.Any(d => d.Name == s))
+                if (currentDir.Directories.ContainsKey(s))
                 {
-                    currentDir = currentDir.Directories.First(d => d.Name == s);
+                    currentDir = currentDir.Directories[s];
                     if (expandAll)
                     {
                         currentDir.IsExpanded = true;

@@ -2,14 +2,18 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reactive.Disposables;
+using System.Text.RegularExpressions;
 using System.Windows;
 using CP77.CR2W;
+using DynamicData;
 using HandyControl.Data;
 using ReactiveUI;
 using Splat;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.Common;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Functionality.Ab4d;
@@ -17,10 +21,6 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models.Docking;
-using System.Text.RegularExpressions;
-using DynamicData;
-using System.Reactive.Disposables;
-using WolvenKit.Common.Interfaces;
 using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.Views.Tools
@@ -218,7 +218,7 @@ namespace WolvenKit.Views.Tools
             {
                 vm.RightItems.Clear();
                 vm.RightItems.AddRange(model.Directories
-                    .Select(h => new RedDirectoryViewModel(h))
+                    .Select(h => new RedDirectoryViewModel(h.Value))
                     .OrderBy(_ => Regex.Replace(_.Name, @"\d+", n => n.Value.PadLeft(16, '0'))));
                 vm.RightItems.AddRange(model.Files
                     .Select(h => new RedFileViewModel(ViewModel.LookupGameFile(h)))
@@ -290,7 +290,8 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            if (propertiesViewModel.canShowPrev)
+            var settings = Locator.Current.GetService<ISettingsManager>();
+            if (settings.ShowFilePreview)
             {
                 propertiesViewModel.AB_SelectedItem = vm.RightSelectedItem;
             }
@@ -397,7 +398,7 @@ namespace WolvenKit.Views.Tools
 
             var process = Process.Start(procInfo);
             process?.WaitForInputIdle();
-            
+
         }
 
         private void BKExport_Click(object sender, RoutedEventArgs e)

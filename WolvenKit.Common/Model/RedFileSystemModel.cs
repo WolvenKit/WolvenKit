@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using ReactiveUI;
@@ -15,7 +16,9 @@ namespace WolvenKit.Common.Model
 
         public string FullName { get; set; }
 
-        public List<RedFileSystemModel> Directories { get; } = new();
+        public ConcurrentDictionary<string, RedFileSystemModel> Directories { get; } = new();
+
+        public IEnumerable<RedFileSystemModel> RedFileSystemModels => Directories.Values;
 
         public List<ulong> Files { get; } = new();
 
@@ -24,6 +27,7 @@ namespace WolvenKit.Common.Model
             : nameof(ECustomImageKeys.ClosedDirImageKey);
 
         private bool _isExpanded;
+
         public bool IsExpanded
         {
             get => _isExpanded;

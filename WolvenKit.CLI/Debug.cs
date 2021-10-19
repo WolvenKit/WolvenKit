@@ -47,14 +47,17 @@ namespace WolvenKit.CLI
         {
             private readonly ILogger _logger;
             private readonly IHashService _hashService;
+            private readonly IArchiveManager _archiveManager;
 
             public WorkerHostedService(
                 ILogger<WorkerHostedService> logger,
                 IHashService hashService,
+                IArchiveManager archiveManager,
                 IHostApplicationLifetime appLifetime)
             {
                 _logger = logger;
                 _hashService = hashService;
+                _archiveManager = archiveManager;
             }
 
             public Task StartAsync(CancellationToken cancellationToken)
@@ -71,9 +74,8 @@ namespace WolvenKit.CLI
             {
                 var gameDirectory = Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
                 var exe = new FileInfo(Path.Combine(gameDirectory, "bin", "x64", Constants.Red4Exe));
-                var bm = new ArchiveManager(_hashService);
-                bm.LoadGameArchives(exe, false);
-                var groupedFiles = bm.GetGroupedFiles();
+                _archiveManager.LoadGameArchives(exe, false);
+                var groupedFiles = _archiveManager.GetGroupedFiles();
                 _logger.LogInformation("ArchiveManager loaded");
 
                 var exclude = new List<String>()
@@ -86,10 +88,10 @@ namespace WolvenKit.CLI
                     {
                         continue;
                     }
-                    InspectFiles(groupedFiles, bm, key);
+                    InspectFiles(groupedFiles, _archiveManager, key);
                 }
 
-                void InspectFiles(Dictionary<string, IEnumerable<FileEntry>> groupedFiles, ArchiveManager bm, string ext)
+                void InspectFiles(Dictionary<string, IEnumerable<FileEntry>> groupedFiles, IArchiveManager bm, string ext)
                 {
                     var fileslist = groupedFiles[ext].ToList();
                     _logger.LogInformation("Loaded {fileslist.Count} {ext} files", fileslist.Count, ext);
@@ -142,9 +144,8 @@ namespace WolvenKit.CLI
             {
                 var gameDirectory = Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
                 var exe = new FileInfo(Path.Combine(gameDirectory, "bin", "x64", Constants.Red4Exe));
-                var bm = new ArchiveManager(_hashService);
-                bm.LoadGameArchives(exe, false);
-                var groupedFiles = bm.GetGroupedFiles();
+                _archiveManager.LoadGameArchives(exe, false);
+                var groupedFiles = _archiveManager.GetGroupedFiles();
                 _logger.LogInformation("ArchiveManager loaded");
 
 
@@ -160,10 +161,10 @@ namespace WolvenKit.CLI
                     {
                         continue;
                     }
-                    InspectFiles(groupedFiles, bm, key);
+                    InspectFiles(groupedFiles, _archiveManager, key);
                 }
 
-                void InspectFiles(Dictionary<string, IEnumerable<FileEntry>> groupedFiles, ArchiveManager bm, string ext)
+                void InspectFiles(Dictionary<string, IEnumerable<FileEntry>> groupedFiles, IArchiveManager bm, string ext)
                 {
                     var fileslist = groupedFiles[ext].ToList();
                     _logger.LogInformation("Loaded {fileslist.Count} {ext} files", fileslist.Count, ext);

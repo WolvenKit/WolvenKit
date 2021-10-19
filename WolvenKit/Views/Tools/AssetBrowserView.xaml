@@ -159,7 +159,7 @@
                                 AllowTriStateSorting="False"
                                 AutoExpandMode="RootNodesExpanded"
                                 AutoGenerateColumns="False"
-                                ChildPropertyName="Directories"
+                                ChildPropertyName="RedFileSystemModels"
                                 ColumnSizer="FillColumn"
                                 FilterLevel="Extended"
                                 SelectionChanged="LeftNavigation_OnSelectionChanged"

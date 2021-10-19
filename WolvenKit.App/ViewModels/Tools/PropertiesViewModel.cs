@@ -30,6 +30,7 @@ namespace WolvenKit.ViewModels.Tools
         #region fields
 
         private readonly ILoggerService _loggerService;
+        private readonly ISettingsManager _settingsManager;
         private readonly IProjectManager _projectManager;
         private readonly MeshTools _meshTools;
         private readonly IModTools _modTools;
@@ -48,10 +49,12 @@ namespace WolvenKit.ViewModels.Tools
         public PropertiesViewModel(
             IProjectManager projectManager,
             ILoggerService loggerService,
+            ISettingsManager settingsManager,
             MeshTools meshTools,
             IModTools modTools
         ) : base(ToolTitle)
         {
+            _settingsManager = settingsManager;
             _projectManager = projectManager;
             _loggerService = loggerService;
             _meshTools = meshTools;
@@ -72,13 +75,6 @@ namespace WolvenKit.ViewModels.Tools
         
 
         #region properties
-
-
-        /// <summary>
-        /// Selected Item from Project Explorer If Available.
-        /// </summary>
-        ///
-        [Reactive] public bool canShowPrev { get; set; } = true;
 
         [Reactive] public FileModel PE_SelectedItem { get; set; }
 
@@ -148,12 +144,15 @@ namespace WolvenKit.ViewModels.Tools
                 return;
             }
 
-            if (canShowPrev)
+            if (_settingsManager.ShowFilePreview)
             {
                 PE_SelectedItem = model;
             }
             else
-            { return; }
+            {
+                return;
+            }
+
             PE_MeshPreviewVisible = false;
             IsAudioPreviewVisible = false;
             IsImagePreviewVisible = false;

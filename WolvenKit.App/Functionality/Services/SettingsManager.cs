@@ -4,6 +4,7 @@ using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Windows.Media;
+using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
@@ -21,6 +22,8 @@ namespace WolvenKit.Functionality.Services
     {
         #region fields
 
+        private bool _isLoaded;
+
         private static string GetConfigurationPath() => Path.Combine(ISettingsManager.GetAppData(), "config.json");
 
         private static string GetImagePath() => Path.Combine(ISettingsManager.GetAppData(), "_profile_image.png");
@@ -37,6 +40,17 @@ namespace WolvenKit.Functionality.Services
             ManagerVersions = new string[(int)EManagerType.Max];
 
             _assemblyVersion = CommonFunctions.GetAssemblyVersion(Constants.AssemblyName).ToString();
+
+            this.WhenAnyPropertyChanged(
+                  nameof(ShowFilePreview)
+              )
+              .Subscribe(_ =>
+              {
+                  if (_isLoaded)
+                  {
+                      Save();
+                  }
+              });
         }
 
         #endregion constructors
@@ -85,6 +99,8 @@ namespace WolvenKit.Functionality.Services
         [Reactive] public string CP77ExecutablePath { get; set; }
 
         public string ReddbHash { get; set; }
+
+        [Reactive] public bool ShowFilePreview { get; set; }
 
         #endregion red4
 
@@ -174,28 +190,17 @@ namespace WolvenKit.Functionality.Services
                 //VoiceLanguage = "en",
             };
 
-            // TODO: move this?
-            // add a mechanism to update individual cache managers
-            //for (var j = 0; j < config.ManagerVersions.Length; j++)
-            //{
-            //    var savedversions = config.ManagerVersions[j];
-            //    var e = (EManagerType)j;
-            //    var curversion = IGameController.GetManagerVersion(e);
-
-            //    if (savedversions != curversion)
-            //    {
-            //        if (File.Exists(IGameController.GetManagerPath(e)))
-            //        {
-            //            File.Delete(IGameController.GetManagerPath(e));
-            //        }
-            //    }
-            //}
-
+            config._isLoaded = true;
             return config;
         }
 
         public void Save()
         {
+            if (!_isLoaded)
+            {
+                return;
+            }
+
             var src = (System.Windows.Media.Imaging.BitmapSource)ProfileImageBrush?.ImageSource;
             if (src != null)
             {
@@ -234,6 +239,7 @@ namespace WolvenKit.Functionality.Services
             ManagerVersions = settings.ManagerVersions;
             DepotPath = settings.DepotPath;
             CP77ExecutablePath = settings.CP77ExecutablePath;
+            ShowFilePreview = settings.ShowFilePreview;
             ReddbHash = settings.ReddbHash;
             MaterialRepositoryPath = settings.MaterialRepositoryPath;
             W3ExecutablePath = settings.W3ExecutablePath;
@@ -253,6 +259,7 @@ namespace WolvenKit.Functionality.Services
         public string[] ManagerVersions { get; set; }
         public string DepotPath { get; set; }
         public string CP77ExecutablePath { get; set; }
+        public bool ShowFilePreview { get; set; }
         public string ReddbHash { get; set; }
         public string MaterialRepositoryPath { get; set; }
         public string W3ExecutablePath { get; set; }
@@ -273,6 +280,7 @@ namespace WolvenKit.Functionality.Services
                 ManagerVersions = this.ManagerVersions,
                 DepotPath = this.DepotPath,
                 CP77ExecutablePath = this.CP77ExecutablePath,
+                ShowFilePreview = this.ShowFilePreview,
                 ReddbHash = this.ReddbHash,
                 MaterialRepositoryPath = this.MaterialRepositoryPath,
                 W3ExecutablePath = this.W3ExecutablePath,

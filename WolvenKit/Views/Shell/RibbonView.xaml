@@ -1650,7 +1650,7 @@
                         Content="Show File Preview"
                         ToolTip="Toggle interactive file preview for improved performance "
                         Padding="6,0"
-                        IsChecked="{Binding canShowPrev, Mode=TwoWay}" />
+                        IsChecked="{Binding _settingsManager.ShowFilePreview, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </syncfusion:RibbonBar>
                 
                 <!--  Utilities bar  -->

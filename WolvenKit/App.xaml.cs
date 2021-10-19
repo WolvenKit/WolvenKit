@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -7,7 +6,6 @@ using CP77.CR2W;
 using HandyControl.Tools;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NodeNetwork;
 using ProtoBuf.Meta;
 using ReactiveUI;
 using Splat;
@@ -15,7 +13,6 @@ using Splat.Microsoft.Extensions.DependencyInjection;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
-using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Initialization;
@@ -83,28 +80,27 @@ namespace WolvenKit
 
 
             // Startup speed boosting (HC)
-            ApplicationHelper.StartProfileOptimization();   
+            ApplicationHelper.StartProfileOptimization();
 
-            loggerService.Info("Starting application");
+            loggerService.Log("Starting application");
             await Initializations.InitializeWebview2(loggerService);
 
-            loggerService.Info("Initializing red database");
+            loggerService.Log("Initializing red database");
             Initializations.InitializeThemeHelper();
 
 
             // main app viewmodel
-            loggerService.Info("Initializing Shell");
+            loggerService.Log("Initializing Shell");
             Initializations.InitializeShell(settings);
 
 
-            loggerService.Info("Initializing Discord RPC API");
+            loggerService.Log("Initializing Discord RPC API");
             DiscordHelper.InitializeDiscordRPC();
 
-            loggerService.Info("Initializing Github API");
+            loggerService.Log("Initializing Github API");
             Initializations.InitializeGitHub();
 
             // Some things can only be initialized after base.OnStartup(e);
-            loggerService.Info("Calling base.OnStartup");
             base.OnStartup(e);
 
             //loggerService.Info("Initializing NodeNetwork.");

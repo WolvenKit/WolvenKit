@@ -32,6 +32,8 @@ namespace WolvenKit.Functionality.Services
 
         string CP77ExecutablePath { get; set; }
 
+        bool ShowFilePreview { get; set; }
+
         // red 3
 
         string W3ExecutablePath { get; set; }

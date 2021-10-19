@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -17,9 +16,9 @@ using Ab3d.Visuals;
 using Assimp;
 using ReactiveUI;
 using Splat;
+using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Helpers;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Tools;
 using WolvenKit.Views.Editor.AudioTool;
 
@@ -46,8 +45,8 @@ namespace WolvenKit.Views.Tools
             var assimpWpfExporter = new AssimpWpfExporter();
             string[] supportedExportFormats = assimpWpfExporter.ExportFormatDescriptions.Select(f => f.FileExtension).ToArray();
 
-            var themeResources = Application.LoadComponent(new Uri("Resources/Styles/ExpressionDark.xaml", UriKind.Relative)) as ResourceDictionary;
-            Resources.MergedDictionaries.Add(themeResources);
+            //var themeResources = Application.LoadComponent(new Uri("Resources/Styles/ExpressionDark.xaml", UriKind.Relative)) as ResourceDictionary;
+            //Resources.MergedDictionaries.Add(themeResources);
 
             spectrumAnalyzer.RegisterSoundPlayer(NAudioSimpleEngine.Instance);
             waveformTimeline.RegisterSoundPlayer(NAudioSimpleEngine.Instance);
@@ -75,7 +74,18 @@ namespace WolvenKit.Views.Tools
             });
         }
 
-        private static HandyControl.Controls.GlowWindow XoWindow = new HandyControl.Controls.GlowWindow();
+
+        private void PropertyGrid_OnAutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
+        {
+            switch (e.DisplayName)
+            {
+                case nameof(ReactiveObject.Changed):
+                case nameof(ReactiveObject.Changing):
+                case nameof(ReactiveObject.ThrownExceptions):
+                    e.Cancel = true;
+                    break;
+            }
+        }
 
         private Stream StreamFromBitmapSource(BitmapSource writeBmp)
         {

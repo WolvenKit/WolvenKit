@@ -313,11 +313,11 @@ namespace WolvenKit.ViewModels.Tools
 
         private void AddFolderRecursive(RedFileSystemModel item)
         {
-            foreach (var dir in item.Directories)
+            foreach (var (key, dir) in item.Directories)
             {
                 AddFolderRecursive(dir);
             }
-            foreach(var file in item.Files)
+            foreach (var file in item.Files)
             {
                 AddFile(file);
             }

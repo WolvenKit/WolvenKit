@@ -46,9 +46,6 @@ namespace WolvenKit.Views.Shell
                 DeleteFileContext.DataContext = Locator.Current.GetService<ProjectExplorerViewModel>();
                 RenameFileContext.DataContext = Locator.Current.GetService<ProjectExplorerViewModel>();
 
-                // properties
-                PrevFileInfo.DataContext = Locator.Current.GetService<PropertiesViewModel>();
-
                 // asset browser
                 this.BindCommand(ViewModel,
                         viewModel => viewModel._mainViewModel.AssetBrowserVM.AddSelectedCommand,
