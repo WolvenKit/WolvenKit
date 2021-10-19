@@ -2,9 +2,6 @@
 
 namespace WolvenKit.Common
 {
-
-
-
     public enum EInterpolationType
     {
         EIT_Constant,

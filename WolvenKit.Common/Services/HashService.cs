@@ -192,15 +192,11 @@ namespace WolvenKit.Common.Services
             {
                 var hash = ulong.Parse(line);
 
-                if (Contains(hash))
-                {
-
-                }
-                else
+                if (!Contains(hash))
                 {
                     _missing.Add(hash);
                 }
-                
+
             }
         }
 
