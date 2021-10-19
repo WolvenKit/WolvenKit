@@ -206,11 +206,17 @@ namespace WolvenKit.ViewModels.Tools
                         System.StringComparison.OrdinalIgnoreCase))
                     {
                         PE_MeshPreviewVisible = true;
-
-                        var q = _meshTools.ExportMeshWithoutRigPreviewer(PE_SelectedItem.FullName, Path.Combine(ISettingsManager.GetManagerCacheDir(), "Temp_OBJ"));
-                        if (q.Length > 0)
+                        using (var meshStream = new FileStream(PE_SelectedItem.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                         {
-                            LoadModel(q);
+                            meshStream.Seek(0, SeekOrigin.Begin);
+                            string outPath = Path.Combine(ISettingsManager.GetManagerCacheDir(), "Temp_OBJ",Path.GetFileName(PE_SelectedItem.FullName));
+                            outPath = Path.ChangeExtension(outPath, ".glb");
+                            if (_meshTools.ExportMeshPreviewer(meshStream, new FileInfo(outPath)))
+                            {
+                                LoadModel(outPath);
+                            }
+                            meshStream.Dispose();
+                            meshStream.Close();
                         }
                     }
 

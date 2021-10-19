@@ -47,7 +47,7 @@ namespace WolvenKit.Modkit.RED4
                 {
                     var ms = new MemoryStream();
                     ModTools.ExtractSingleToStream(ar, hash, ms);
-                    Rig = new RIG(_wolvenkitFileService).ProcessRig(ms);
+                    Rig = RIG.ProcessRig(_wolvenkitFileService.TryReadRED4File(ms));
                     break;
                 }
             }
