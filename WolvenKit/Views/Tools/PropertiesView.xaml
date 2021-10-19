@@ -337,8 +337,8 @@
                         </Style>
                     </Grid.Resources>
 
-                    <syncfusion:PropertyGrid
-                        x:Name="PEPropGrid"
+                    <syncfusion:PropertyGrid x:Name="PEPropGrid"
+                                             AutoGeneratingPropertyGridItem="PropertyGrid_OnAutoGeneratingPropertyGridItem"
                         EditableBackground="{DynamicResource MahApps.Brushes.Accent3}"
                         EditableFontWeight="SemiBold"
                         IsEnabled="False"
@@ -347,8 +347,8 @@
                         SelectedObject="{Binding PE_SelectedItem, Mode=OneWay}"
                         Visibility="{Binding PE_FileInfoVisible, Converter={StaticResource boolToVisibilityConverter}}" />
 
-                    <syncfusion:PropertyGrid
-                        x:Name="ABPropGrid"
+                    <syncfusion:PropertyGrid x:Name="ABPropGrid"
+                                             AutoGeneratingPropertyGridItem="PropertyGrid_OnAutoGeneratingPropertyGridItem"
                         EditableBackground="{DynamicResource MahApps.Brushes.Accent3}"
                         EditableFontWeight="SemiBold"
                         IsEnabled="False"

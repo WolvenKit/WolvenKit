@@ -1,48 +1,43 @@
 using System;
-using System.ComponentModel;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using CP77.CR2W;
 using HandyControl.Tools;
-using NodeNetwork;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using ProtoBuf.Meta;
 using ReactiveUI;
+using Splat;
+using Splat.Microsoft.Extensions.DependencyInjection;
 using WolvenKit.Common;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Initialization;
 using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Interaction;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.ViewModels.Shell;
-using WolvenKit.Views.Shell;
-using WolvenManager.Installer.Services;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Splat.Microsoft.Extensions.DependencyInjection;
-using Splat;
 using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.HomePage.Pages;
 using WolvenKit.ViewModels.Shared;
+using WolvenKit.ViewModels.Shell;
+using WolvenKit.ViewModels.Tools;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Dialogs;
-using WolvenKit.Views.Editor;
-using WolvenKit.Views.Documents;
 using WolvenKit.Views.HomePage;
 using WolvenKit.Views.HomePage.Pages;
-using WolvenKit.Views.Wizards;
-using WolvenKit.Common.Interfaces;
-using WolvenKit.Interaction;
+using WolvenKit.Views.Shell;
 using WolvenKit.Views.Tools;
-using WolvenKit.ViewModels.Tools;
+using WolvenKit.Views.Wizards;
+using WolvenManager.Installer.Services;
 
 namespace WolvenKit
 {
@@ -66,7 +61,7 @@ namespace WolvenKit
         }
 
         // Application OnStartup Override.
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             Interactions.ShowFirstTimeSetup.RegisterHandler(interaction =>
             {
@@ -80,40 +75,36 @@ namespace WolvenKit
                 }, RxApp.MainThreadScheduler);
             });
 
+            var settings = Locator.Current.GetService<ISettingsManager>();
+            var loggerService = Locator.Current.GetService<ILoggerService>();
+
 
             // Startup speed boosting (HC)
             ApplicationHelper.StartProfileOptimization();
 
-            var settings = Locator.Current.GetService<ISettingsManager>();
-            var loggerService = Locator.Current.GetService<ILoggerService>();
+            loggerService.Log("Starting application");
+            await Initializations.InitializeWebview2(loggerService);
 
-            loggerService.Info("Starting application");
-
-            Initializations.InitializeWebview2(loggerService);
-
-            loggerService.Info("Initializing Theme Helper");
+            loggerService.Log("Initializing red database");
             Initializations.InitializeThemeHelper();
 
-            loggerService.Info("Initializing Shell");
-            /*await*/ Initializations.InitializeShell(settings);
 
-            loggerService.Info("Initializing Discord RPC API");
+            // main app viewmodel
+            loggerService.Log("Initializing Shell");
+            Initializations.InitializeShell(settings);
+
+
+            loggerService.Log("Initializing Discord RPC API");
             DiscordHelper.InitializeDiscordRPC();
 
-            loggerService.Info("Initializing Github API");
+            loggerService.Log("Initializing Github API");
             Initializations.InitializeGitHub();
 
             // Some things can only be initialized after base.OnStartup(e);
-            loggerService.Info("Calling base.OnStartup");
             base.OnStartup(e);
 
-            loggerService.Info("Initializing NodeNetwork.");
-            NNViewRegistrar.RegisterSplat();
-
-
-            Initializations.InitializeBk(settings);
-
-
+            //loggerService.Info("Initializing NodeNetwork.");
+            //NNViewRegistrar.RegisterSplat();
         }
 
         private IServiceProvider Container { get; set; }
@@ -163,7 +154,7 @@ namespace WolvenKit
                     services.AddSingleton<MeshTools>();
 
                     services.AddSingleton<IModTools, ModTools>();
-                    services.AddSingleton< RED4Controller>();
+                    services.AddSingleton<RED4Controller>();
 
                     // red3 modding tools
                     //services.AddSingleton<Red3ModTools>();

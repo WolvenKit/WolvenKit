@@ -44,52 +44,53 @@
     <PackageReference Include="Ab3d.DXEngine.Wpf" Version="4.4.7874" />
     <PackageReference Include="Ab3d.DXEngine" Version="4.4.7874" />
     <PackageReference Include="Ab3d.PowerToys" Version="9.6.7848" />
-    <PackageReference Include="CatFacts.Net" Version="0.1.1" />
     <PackageReference Include="Discord.Net" Version="2.4.0" />
     <PackageReference Include="Feather.Controls" Version="1.0.3" />
     <PackageReference Include="Feather.Core" Version="1.0.0" />
 
-    <PackageReference Include="ReactiveUI" Version="16.2.1" />
+    <PackageReference Include="ReactiveUI" Version="16.2.6" />
     <PackageReference Include="ReactiveUI.Events.WPF" Version="15.1.1" />
-    <PackageReference Include="ReactiveUI.Fody" Version="16.2.1" />
-    <PackageReference Include="ReactiveUI.WPF" Version="16.2.1" />
-    <PackageReference Include="ScottPlot.WPF" Version="4.1.20" />
-    <PackageReference Include="Splat" Version="13.1.1" />
+    <PackageReference Include="ReactiveUI.Fody" Version="16.2.6" />
+    <PackageReference Include="ReactiveUI.WPF" Version="16.2.6" />
+    <PackageReference Include="ScottPlot.WPF" Version="4.1.26" />
+    <PackageReference Include="Splat" Version="13.1.22" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
-    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="13.1.1" />
-    <PackageReference Include="Splat.Microsoft.Extensions.Logging" Version="13.1.1" />
+    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="13.1.22" />
+    <PackageReference Include="Splat.Microsoft.Extensions.Logging" Version="13.1.22" />
 
-    <PackageReference Include="MahApps.Metro" Version="2.4.7" />
-    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.8.0" />
-    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.961.33" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.31" />
+    <PackageReference Include="MahApps.Metro" Version="2.4.9" />
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.10.0" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.992.28" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.37" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="NodeNetwork" Version="6.0.0" />
     <PackageReference Include="NodeNetworkToolkit" Version="6.0.0" />
     <PackageReference Include="Octokit" Version="0.50.0" />
 
-    <PackageReference Include="Syncfusion.Tools.WPF" Version="19.2.0.60" />
-    <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.2.0.60" />
-    <PackageReference Include="Syncfusion.SfInput.WPF" Version="19.2.0.60" />
-    <PackageReference Include="Syncfusion.SfImageEditor.WPF" Version="19.2.0.60" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="19.3.0.45" />
+    <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.3.0.45" />
+    <PackageReference Include="Syncfusion.SfInput.WPF" Version="19.3.0.45" />
+    <PackageReference Include="Syncfusion.SfImageEditor.WPF" Version="19.3.0.45" />
 
-    <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.2.0.60" />
+    <PackageReference Include="Syncfusion.SfProgressBar.WPF" Version="19.3.0.45" />
 
-    <PackageReference Include="Syncfusion.SfBarcode.WPF" Version="19.2.0.60" />
-    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="19.2.0.60" />
-    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.2.0.60" />
-    <PackageReference Include="Syncfusion.SfHubTile.WPF" Version="19.2.0.60" />
-    <PackageReference Include="Syncfusion.SfKanban.WPF" Version="19.2.0.60" />
-    <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="19.2.0.60" />
-    <PackageReference Include="Syncfusion.SfRadialMenu.WPF" Version="19.2.0.60" />
-    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="19.2.0.60" />
-    <PackageReference Include="Syncfusion.SfTextInputLayout.WPF" Version="19.2.0.60" />
-    <PackageReference Include="Syncfusion.SfTreeNavigator.WPF" Version="19.2.0.60" />
-    <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="19.2.0.60" />
+    <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.3.0.45" />
 
-    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="19.2.0.55" />
-    <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" Version="19.2.0.55" />
+    <PackageReference Include="Syncfusion.SfBarcode.WPF" Version="19.3.0.45" />
+    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="19.3.0.45" />
+    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.3.0.45" />
+    <PackageReference Include="Syncfusion.SfHubTile.WPF" Version="19.3.0.45" />
+    <PackageReference Include="Syncfusion.SfKanban.WPF" Version="19.3.0.45" />
+    <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="19.3.0.45" />
+    <PackageReference Include="Syncfusion.SfRadialMenu.WPF" Version="19.3.0.45" />
+    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="19.3.0.45" />
+    <PackageReference Include="Syncfusion.SfTextInputLayout.WPF" Version="19.3.0.45" />
+    <PackageReference Include="Syncfusion.SfTreeNavigator.WPF" Version="19.3.0.45" />
+    <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="19.3.0.45" />
+
+    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="19.3.0.45" />
+    <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" Version="19.3.0.45" />
 
 
 
@@ -98,7 +99,7 @@
     <PackageReference Include="SharpVectors.Reloaded" Version="1.7.6" />
     <PackageReference Include="System.Security.Permissions" Version="5.0.0" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" NoWarn="NU1701" />
-    <PackageReference Include="HandyControls" Version="3.3.7" />
+    <PackageReference Include="HandyControls" Version="3.3.8.1" />
     <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
     <PackageReference Include="WpfAnalyzers" Version="3.5.4" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>

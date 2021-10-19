@@ -68,36 +68,17 @@ namespace WolvenKit.Core
             }
         }
 
-        public static string HashFile(FileInfo fInfo, SHA256 mySha256)
+        
+
+        public static (string, long) HashFileSHA512(string filepath)
         {
-            var hashStr = "";
-            if (!fInfo.Exists)
+            using (SHA512 shaM = new SHA512Managed())
             {
-                Console.WriteLine($"Tried to hash {fInfo.FullName} but no such file exists");
-                return "";
+                using FileStream fileStream = File.OpenRead(filepath);
+                var hash1 = shaM.ComputeHash(fileStream);
+                var hashStr = BitConverter.ToString(hash1).Replace("-", "").ToLowerInvariant();
+                return (hashStr, fileStream.Length);
             }
-
-            try
-            {
-                var fileStream = fInfo.Open(FileMode.Open);
-                fileStream.Position = 0;
-
-                var hashValue = mySha256.ComputeHash(fileStream);
-
-                hashStr = PrettyByteArray(hashValue);
-
-                fileStream.Close();
-            }
-            catch (IOException e)
-            {
-                Console.WriteLine($"I/O Exception: {e.Message}");
-            }
-            catch (UnauthorizedAccessException e)
-            {
-                Console.WriteLine($"Access Exception: {e.Message}");
-            }
-
-            return hashStr;
         }
 
         // Display a byte array in a readable format.

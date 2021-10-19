@@ -22,168 +22,20 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.Shell;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using System.Security.Cryptography;
+using WolvenKit.Core;
 
 namespace WolvenKit.Functionality.Initialization
 {
     public static class Initializations
     {
-        public static void InitializeBk(ISettingsManager settings)
-        {
-            string[] binkhelpers = { @"Resources\Media\t1.kark", @"Resources\Media\t2.kark", @"Resources\Media\t3.kark", @"Resources\Media\t4.kark", @"Resources\Media\t5.kark" };
-
-            if (string.IsNullOrEmpty(settings.GetRED4GameRootDir()))
-            {
-                Trace.WriteLine("That worked to cancel Loading oodle! :D");
-                return;
-            }
-
-            var oodlePath = settings.GetRED4OodleDll();
-
-            if (!File.Exists(settings.GetRED4OodleDll()))
-            {
-                return;
-            }
-
-            OodleLoadLib.Load(oodlePath);
-
-            foreach (var path in binkhelpers)
-            {
-                switch (path)
-                {
-                    case @"Resources\Media\t1.kark":
-                        if (File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "test.exe")))
-                        {
-                        }
-                        else
-                        {
-                            _ = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "test.exe"), true,
-                                false);
-                        }
-
-                        break;
-
-                    case @"Resources\Media\t2.kark":
-                        if (File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "testconv.exe")))
-                        {
-                        }
-                        else
-                        {
-                            _ = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "testconv.exe"), true,
-                                false);
-                        }
-
-                        break;
-
-                    case @"Resources\Media\t3.kark":
-                        if (File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "testc.exe")))
-                        {
-                        }
-                        else
-                        {
-                            _ = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "testc.exe"), true,
-                                false);
-                        }
-
-                        break;
-
-                    case @"Resources\Media\t4.kark":
-                        if (File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "radutil.dll")))
-                        {
-                        }
-                        else
-                        {
-                            _ = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "radutil.dll"), true,
-                                false);
-                        }
-
-                        break;
-
-                    case @"Resources\Media\t5.kark":
-                        if (File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "bink2make.dll")))
-                        {
-                        }
-                        else
-                        {
-                            _ = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "bink2make.dll"), true,
-                                false);
-                        }
-
-                        break;
-                }
-            }
-        }
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="outpath"></param>
-        /// <param name="decompress"></param>
-        /// <param name="compress"></param>
-        /// <returns></returns>
-        private static int OodleTask(string path, string outpath, bool decompress, bool compress)
-        {
-            if (string.IsNullOrEmpty(path))
-            {
-                return 0;
-            }
-
-            if (string.IsNullOrEmpty(outpath))
-            {
-                outpath = Path.ChangeExtension(path, ".kark");
-            }
-
-            if (decompress)
-            {
-                var file = File.ReadAllBytes(path);
-                using var ms = new MemoryStream(file);
-                using var br = new BinaryReader(ms);
-
-                var oodleCompression = br.ReadBytes(4);
-                if (!(oodleCompression.SequenceEqual(new byte[] { 0x4b, 0x41, 0x52, 0x4b })))
-                {
-                    throw new NotImplementedException();
-                }
-
-                var size = br.ReadUInt32();
-
-                var buffer = br.ReadBytes(file.Length - 8);
-
-                byte[] unpacked = new byte[size];
-                long unpackedSize = OodleHelper.Decompress(buffer, unpacked);
-
-                using var msout = new MemoryStream();
-                using var bw = new BinaryWriter(msout);
-                bw.Write(unpacked);
-
-                File.WriteAllBytes($"{outpath}", msout.ToArray());
-            }
-
-            if (compress)
-            {
-                var inbuffer = File.ReadAllBytes(path);
-                IEnumerable<byte> outBuffer = new List<byte>();
-
-                var r = OodleHelper.Compress(
-                    inbuffer,
-                    inbuffer.Length,
-                    ref outBuffer,
-                    OodleNative.OodleLZ_Compressor.Kraken,
-                    OodleNative.OodleLZ_Compression.Normal,
-                    true);
-
-                File.WriteAllBytes(outpath, outBuffer.ToArray());
-            }
-
-            return 1;
-        }
-
         [DllImport("WebView2Loader.dll", CallingConvention = CallingConvention.StdCall)]
         static extern int GetAvailableCoreWebView2BrowserVersionString(string browserExecutableFolder, out string version);
 
         public static bool IsMissingWebView2() => (GetAvailableCoreWebView2BrowserVersionString(null, out string edgeVersion) != 0) || (edgeVersion == null);
 
-        public static async void InitializeWebview2(ILoggerService _loggerService)
+        public static async Task InitializeWebview2(ILoggerService _loggerService)
         {
             // check prerequisites
             // check Webview2

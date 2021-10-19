@@ -35,11 +35,6 @@
             </Style>
         </Grid.Resources>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="auto" />
-        </Grid.RowDefinitions>
-
         <!-- <syncfusion:SfDataGrid x:Name="ListView" -->
         <!--                        AutoGenerateColumns="False" -->
         <!--                        ColumnSizer="AutoLastColumnFill" -->
@@ -59,7 +54,7 @@
         <!--     </syncfusion:SfDataGrid.Columns> -->
         <!-- </syncfusion:SfDataGrid> -->
 
-        <RichTextBox VerticalScrollBarVisibility="Visible" Grid.Row="0" x:Name="LogRichTextBox" IsReadOnly="True" />
+        <RichTextBox VerticalScrollBarVisibility="Visible" x:Name="LogRichTextBox" IsReadOnly="True" />
 
         <hc:UniformSpacingPanel
          Grid.Row="1"

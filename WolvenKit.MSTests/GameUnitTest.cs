@@ -17,6 +17,7 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.MSTests.Model;
 
 namespace WolvenKit.MSTests
 {
@@ -118,7 +119,7 @@ namespace WolvenKit.MSTests
 
             var keyes = s_groupedFiles.Keys.ToList();
             var keystring = string.Join(',', keyes);
-            Console.WriteLine(keystring);
+            //Console.WriteLine(keystring);
         }
 
         #endregion Methods

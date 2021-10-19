@@ -21,7 +21,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
-        private readonly ISettingsManager _settingsManager;
+        public ISettingsManager _settingsManager { get; }
         public readonly AppViewModel _mainViewModel;
 
         #endregion fields

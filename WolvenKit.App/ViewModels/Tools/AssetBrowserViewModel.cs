@@ -1,25 +1,27 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using ReactiveUI.Fody.Helpers;
 using DynamicData;
+using Microsoft.Extensions.FileSystemGlobbing;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
+using WolvenKit.Common.Model.Database;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
-using Microsoft.Extensions.FileSystemGlobbing;
-using System.IO;
-using System.Text.RegularExpressions;
-using WolvenKit.Common.Interfaces;
 
 namespace WolvenKit.ViewModels.Tools
 {
@@ -56,6 +58,7 @@ namespace WolvenKit.ViewModels.Tools
         private readonly IArchiveManager _archiveManager;
         private readonly ISettingsManager _settings;
         private readonly IProjectManager _projectManager;
+        private readonly IProgressService<double> _progressService;
 
         private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
 
@@ -70,7 +73,8 @@ namespace WolvenKit.ViewModels.Tools
             INotificationService notificationService,
             IGameControllerFactory gameController,
             IArchiveManager archiveManager,
-            ISettingsManager settings
+            ISettingsManager settings,
+            IProgressService<double> progressService
         ) : base(ToolTitle)
         {
             _projectManager = projectManager;
@@ -78,6 +82,7 @@ namespace WolvenKit.ViewModels.Tools
             _gameController = gameController;
             _archiveManager = archiveManager;
             _settings = settings;
+            _progressService = progressService;
 
             ContentId = ToolContentId;
 
@@ -93,6 +98,7 @@ namespace WolvenKit.ViewModels.Tools
             Expand = ReactiveCommand.Create(() => { });
 
             AddSearchKeyCommand = ReactiveCommand.Create<string>(x => SearchBarText += $" {x}:");
+            FindUsingCommand = ReactiveCommand.CreateFromTask(FindUsing);
 
             archiveManager.ConnectGameRoot()
                 .ObserveOn(RxApp.MainThreadScheduler)
@@ -165,6 +171,52 @@ namespace WolvenKit.ViewModels.Tools
         #region commands
 
         public ReactiveCommand<string, Unit> AddSearchKeyCommand { get; set; }
+
+        public ReactiveCommand<Unit, Unit> FindUsingCommand { get; }
+        private async Task FindUsing()
+        {
+            _progressService.IsIndeterminate = true;
+
+            await Task.Run(async () =>
+            {
+                using var db = new RedDBContext();
+
+                if (RightSelectedItem is RedFileViewModel { } file)
+                {
+                    var hash = file.GetGameFile().Key;
+                    var item = db.Find(typeof(RedFile), hash);
+                    if (item is RedFile redfile)
+                    {
+                        var usedby = await db.Files.AsQueryable()
+                            .Where(delegate (RedFile x)
+                            {
+                                return x.Uses != null && x.Uses.Contains(hash);
+                            })
+                            .Select(x => x.RedFileId)
+                            .ToAsyncEnumerable()
+                            .ToListAsync();
+
+                        //add all found items to
+                        _archiveManager.Archives
+                            .Connect()
+                            .TransformMany(x => x.Files.Values, y => y.Key)
+                            .Filter(x => usedby.Contains(x.Key))
+                            .Transform(x => new RedFileViewModel(x))
+                            .Bind(out var list)
+                            .Subscribe()
+                            .Dispose();
+
+                        RightItems.Clear();
+                        RightItems.AddRange(list);
+                    }
+                }
+
+                await Task.CompletedTask;
+
+            });
+
+            _progressService.IsIndeterminate = false;
+        }
 
         public ICommand AddSelectedCommand { get; private set; }
         private bool CanAddSelected() => RightSelectedItems != null && RightSelectedItems.Any();
@@ -261,11 +313,11 @@ namespace WolvenKit.ViewModels.Tools
 
         private void AddFolderRecursive(RedFileSystemModel item)
         {
-            foreach (var dir in item.Directories)
+            foreach (var (key, dir) in item.Directories)
             {
                 AddFolderRecursive(dir);
             }
-            foreach(var file in item.Files)
+            foreach (var file in item.Files)
             {
                 AddFile(file);
             }

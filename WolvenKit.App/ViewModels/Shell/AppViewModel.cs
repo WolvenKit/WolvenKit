@@ -122,28 +122,7 @@ namespace WolvenKit.ViewModels.Shell
                 PropertiesViewModel,
                 AssetBrowserVM,
                 ImportExportToolVM,
-
-                //ImportViewModel,
-                //CodeEditorVM,
-                //VisualEditorVM,
-
             };
-
-            //OpenDocuments
-            //    .ToObservableChangeSet()
-            //    .AutoRefreshOnObservable(document => document.Close)
-            //    .Select(_ => WhenAnyDocumentClosed())
-            //    .Switch()
-            //    .Subscribe(x => DockedViews.Remove(x));
-
-            //DockedViews
-            //    //.OfType<IDocumentViewModel>()
-            //    .ToObservableChangeSet()
-            //    .AutoRefreshOnObservable(document => document.Close)
-            //    .Select(_ => WhenAnyDocumentClosed())
-            //    .Switch()
-            //    .Subscribe(x => DockedViews.Remove(x));
-
 
             _settingsManager
                 .WhenAnyValue(x => x.UpdateChannel)
@@ -154,68 +133,65 @@ namespace WolvenKit.ViewModels.Shell
                 });
         }
 
-        //private IObservable<IDocumentViewModel> WhenAnyDocumentClosed() =>
-        //    OpenDocuments
-        //        .Select(x => x.Close.Select(_ => x))
-        //        .Merge();
-
         #endregion constructors
 
         #region init
 
         private void OnStartup()
         {
-            _updateService.SetUpdateChannel((WolvenManager.Installer.Models.EUpdateChannel)_settingsManager.UpdateChannel);
-            _updateService.Init(new[] { Constants.UpdateUrl, Constants.UpdateUrlNightly },
-                Constants.AssemblyName,
-            delegate (FileInfo path, bool isManaged)
-            {
-                if (isManaged)
-                {
-                    _ = Process.Start(path.FullName, "/SILENT /NOCANCEL");      //INNO
-                    //_ = Process.Start(path.FullName, "/qr");                  //Advanced Installer
-                }
-                else
-                {
-                    // move installer helper
-                    var basedir = new DirectoryInfo(Path.GetDirectoryName(System.AppContext.BaseDirectory));
-                    var shippedInstaller = new FileInfo(Path.Combine(basedir.FullName, "lib", Constants.UpdaterName));
-                    var newPath = Path.Combine(ISettingsManager.GetAppData(), Constants.UpdaterName);
-                    try
-                    {
-                        shippedInstaller.MoveTo(newPath, true);
-                    }
-                    catch (Exception e)
-                    {
-                        _loggerService.Error("Could not initialize auto-installer.");
-                        _loggerService.Error(e);
-                        return;
-                    }
-
-                    // start installer helper
-                    var psi = new ProcessStartInfo
-                    {
-                        FileName = "CMD.EXE",
-                        Arguments = $"/K {newPath} install -i \"{path}\" -o \"{basedir.FullName}\" -r {Constants.AppName}"
-                    };
-                    var p = Process.Start(psi);
-                }
-
-                Application.Current.Shutdown();
-            }, _notificationService.AskInApp);
+            InitUpdateService();
 
             ShowFirstTimeSetup();
         }
 
+        private void InitUpdateService()
+        {
+            _updateService.SetUpdateChannel((WolvenManager.Installer.Models.EUpdateChannel)_settingsManager.UpdateChannel);
+            _updateService.Init(new[] { Constants.UpdateUrl, Constants.UpdateUrlNightly },
+                Constants.AssemblyName,
+                delegate (FileInfo path, bool isManaged)
+                {
+                    if (isManaged)
+                    {
+                        _ = Process.Start(path.FullName, "/SILENT /NOCANCEL");      //INNO
+                                                                                    //_ = Process.Start(path.FullName, "/qr");                  //Advanced Installer
+                    }
+                    else
+                    {
+                        // move installer helper
+                        var basedir = new DirectoryInfo(Path.GetDirectoryName(System.AppContext.BaseDirectory));
+                        var shippedInstaller = new FileInfo(Path.Combine(basedir.FullName, "lib", Constants.UpdaterName));
+                        var newPath = Path.Combine(ISettingsManager.GetAppData(), Constants.UpdaterName);
+                        try
+                        {
+                            shippedInstaller.MoveTo(newPath, true);
+                        }
+                        catch (Exception e)
+                        {
+                            _loggerService.Error("Could not initialize auto-installer.");
+                            _loggerService.Error(e);
+                            return;
+                        }
+
+                        // start installer helper
+                        var psi = new ProcessStartInfo
+                        {
+                            FileName = "CMD.EXE",
+                            Arguments = $"/K {newPath} install -i \"{path}\" -o \"{basedir.FullName}\" -r {Constants.AppName}"
+                        };
+                        var p = Process.Start(psi);
+                    }
+
+                    Application.Current.Shutdown();
+                }, _notificationService.AskInApp);
+        }
+
         private async void ShowFirstTimeSetup()
         {
-            var messages = _settingsManager.IsHealthy();
-            if (!messages.Any())
+            if (!_settingsManager.IsHealthy())
             {
-                return;
+                await Interactions.ShowFirstTimeSetup.Handle(Unit.Default);
             }
-
-            await Interactions.ShowFirstTimeSetup.Handle(Unit.Default);
         }
 
         #endregion init
@@ -311,30 +287,11 @@ namespace WolvenKit.ViewModels.Shell
                 ribbon.BackstageIsOpen = false;
 
                 await _projectManager.LoadAsync(location);
-                switch (Path.GetExtension(location))
+
+                await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
                 {
-                    case ".w3modproj":
-                        await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
-                        {
-                            _notificationService.Success(
-                                "Project " + Path.GetFileNameWithoutExtension(location) +
-                                " loaded!");
-
-                        }, TaskContinuationOptions.OnlyOnRanToCompletion);
-                        break;
-                    case ".cpmodproj":
-                        await _gameControllerFactory.GetController().HandleStartup().ContinueWith(
-                            _ =>
-                            {
-                                _notificationService.Success("Project " +
-                                                             Path.GetFileNameWithoutExtension(location) +
-                                                             " loaded!");
-
-                            },
-                            TaskContinuationOptions.OnlyOnRanToCompletion);
-                        break;
-                }
-
+                    _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
+                } , TaskContinuationOptions.OnlyOnRanToCompletion);
             }
             catch (Exception)
             {

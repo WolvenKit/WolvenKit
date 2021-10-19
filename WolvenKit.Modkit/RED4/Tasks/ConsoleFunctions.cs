@@ -39,6 +39,7 @@ namespace CP77Tools.Tasks
         private readonly IHashService _hashService;
         private readonly IProgressService<double> _progressService;
         private readonly Red4ParserService _wolvenkitFileService;
+        private readonly IArchiveManager _archiveManager;
 
         private readonly IOptions<CommonImportArgs> _commonImportArgs;
         private readonly IOptions<XbmImportArgs> _xbmImportArgs;
@@ -57,6 +58,7 @@ namespace CP77Tools.Tasks
             IProgressService<double> progress,
             Red4ParserService wolvenkitFileService,
             IModTools modTools,
+            IArchiveManager archiveManager,
 
             IOptions<CommonImportArgs> commonImportArgs,
             IOptions<XbmImportArgs> xbmImportArgs,
@@ -73,6 +75,7 @@ namespace CP77Tools.Tasks
             _modTools = modTools;
             _progressService = progress;
             _hashService = hashService;
+            _archiveManager = archiveManager;
 
             _commonImportArgs = commonImportArgs;
             _xbmImportArgs = xbmImportArgs;

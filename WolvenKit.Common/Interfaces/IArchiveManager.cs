@@ -35,7 +35,8 @@ namespace WolvenKit.Common
         public void LoadModArchive(string filename);
         public void LoadModsArchives(DirectoryInfo modsDir, DirectoryInfo dlcDir);
 
-        Dictionary<string, IEnumerable<FileEntry>> GetGroupedFiles();
+        public Dictionary<string, IEnumerable<FileEntry>> GetGroupedFiles();
+        public IEnumerable<FileEntry> GetFiles();
         void LoadFromFolder(DirectoryInfo archivedir);
 
         RedFileSystemModel LookupDirectory(string fullpath, bool expandAll = false);

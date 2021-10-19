@@ -9,7 +9,7 @@ using System.Windows.Media;
 
 namespace WolvenKit.Functionality.Converters
 {
-    internal class CellStyleConverter : IValueConverter
+    public class CellStyleConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {

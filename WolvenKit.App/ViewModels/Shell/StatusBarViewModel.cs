@@ -1,7 +1,9 @@
 using System;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 
@@ -15,8 +17,14 @@ namespace WolvenKit.ViewModels.Shell
             "NO PROJECT LOADED | Create a New Project or Open an existing Project to get started with WolvenKit";
 
         private readonly ISettingsManager _settingsManager;
-        //private readonly AppViewModel _appViewModel;
         private readonly IProjectManager _projectManager;
+        private readonly IProgressService<double> _progressService;
+
+        private readonly ObservableAsPropertyHelper<double> _progress;
+
+        private readonly ObservableAsPropertyHelper<bool> _isIndeterminate;
+
+        private readonly ObservableAsPropertyHelper<string> _currentProject;
 
         #endregion Fields
 
@@ -24,20 +32,13 @@ namespace WolvenKit.ViewModels.Shell
 
         public StatusBarViewModel(
             ISettingsManager settingsManager,
-            IProjectManager projectManager
-            //AppViewModel appViewModel
+            IProjectManager projectManager,
+            IProgressService<double> progressService
             )
         {
             _settingsManager = settingsManager;
-            //_appViewModel = appViewModel;
             _projectManager = projectManager;
-
-
-            //var connected = HandyControl.Tools.ApplicationHelper.IsConnectedToInternet();
-            //if (connected)
-            //{
-            //    InternetConnected = "Connected";
-            //}
+            _progressService = progressService;
 
             IsLoading = false;
             LoadingString = "";
@@ -51,34 +52,43 @@ namespace WolvenKit.ViewModels.Shell
                     x => x.CurrentProject,
                     out _currentProject);
 
+            _ = Observable.FromEventPattern<EventHandler<double>, double>(
+                handler => _progressService.ProgressChanged += handler,
+                handler => _progressService.ProgressChanged -= handler)
+                .Select(_ => _.EventArgs * 100)
+                .ToProperty(this, x => x.Progress, out _progress);
 
+            _ = _progressService
+                .WhenAnyValue(x => x.IsIndeterminate)
+                .ToProperty(this, x => x.IsIndeterminate, out _isIndeterminate);
+
+            _ = _progressService.WhenAnyValue(x => x.IsIndeterminate).Subscribe(b =>
+            {
+                IsIndeterminate = b;
+            });
         }
 
         #endregion Constructors
 
         #region Properties
 
+        public double Progress => _progress.Value;
 
+        //public bool IsIndeterminate => _isIndeterminate.Value;
 
+        [Reactive] public bool IsIndeterminate { get; set; }
 
-        //[Reactive] public int FileCount { get; set; } = 0;
-        //public int Column { get; private set; }
-        //public string Heading { get; private set; }
         public string InternetConnected { get; private set; }
-        public bool IsLoading { get; set; }
-        //public bool IsUpdatedInstalled { get; private set; }
-        //public int Line { get; private set; }
-        public string LoadingString { get; set; }
-        //public string ReceivingAutomaticUpdates { get; private set; }
 
-        readonly ObservableAsPropertyHelper<string> _currentProject;
+        public bool IsLoading { get; set; }
+
+        public string LoadingString { get; set; }
+
         public string CurrentProject => _currentProject.Value;
 
         [Reactive] public string Status { get; set; } = "Ready";
 
         public object VersionNumber => _settingsManager.GetVersionNumber();
-
-        //[Reactive] public string SelectedFilename { get; set; }
 
         #endregion Properties
     }

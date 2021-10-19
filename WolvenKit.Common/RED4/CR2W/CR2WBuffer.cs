@@ -137,6 +137,8 @@ namespace WolvenKit.RED4.CR2W
             _buffer.diskSize = (uint)_data.Length;
         }
 
+        public byte[] GetData() => _data;
+
         #endregion methods
     }
 }

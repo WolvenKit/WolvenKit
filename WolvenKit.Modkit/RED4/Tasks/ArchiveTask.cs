@@ -69,10 +69,9 @@ namespace CP77Tools.Tasks
             List<FileInfo> archiveFileInfos;
             if (isDirectory)
             {
-                var archiveManager = new ArchiveManager(_hashService);
-                archiveManager.LoadFromFolder(basedir);
+                _archiveManager.LoadFromFolder(basedir);
                 // TODO: use the manager here?
-                archiveFileInfos = archiveManager.Archives.Items.Select(_ => new FileInfo(_.ArchiveAbsolutePath)).ToList();
+                archiveFileInfos = _archiveManager.Archives.Items.Select(_ => new FileInfo(_.ArchiveAbsolutePath)).ToList();
             }
             else
             {
