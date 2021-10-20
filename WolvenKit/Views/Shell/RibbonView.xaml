@@ -1453,7 +1453,7 @@
                 <syncfusion:RibbonBar
                     Name="MaterialRepository"
                     Width="auto"
-                    Header="Material Repository">
+                    Header="Depot">
 
                     <!--  Material Depot Settings Button  -->
                     <syncfusion:RibbonButton
@@ -1480,7 +1480,7 @@
                         IconStretch="Fill"
                         Command="{Binding OpenMaterialRepositoryCommand}"
                         IconType="Icon"
-                        Label="Browse Repository"
+                        Label="Open Depot"
                         Padding="12,0"
                         SizeForm="Large">
                         <syncfusion:RibbonButton.IconTemplate>
@@ -1491,6 +1491,26 @@
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
                                     Kind="FolderOpened" />
+                            </DataTemplate>
+                        </syncfusion:RibbonButton.IconTemplate>
+                    </syncfusion:RibbonButton>
+
+                    <!--  Browse Material Repository Button  -->
+                    <syncfusion:RibbonButton
+                        IconStretch="Fill"
+                        Command="{Binding UnbundleGameCommand}"
+                        IconType="Icon"
+                        Label="Unbundle Game Files"
+                        Padding="12,0"
+                        SizeForm="Large">
+                        <syncfusion:RibbonButton.IconTemplate>
+                            <DataTemplate>
+                                <iconPacks:PackIconCodicons
+                                    Width="auto"
+                                    Height="auto"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Stretch"
+                                    Kind="CloudDownload" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>
