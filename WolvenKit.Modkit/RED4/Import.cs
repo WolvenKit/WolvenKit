@@ -418,8 +418,16 @@ namespace WolvenKit.Modkit.RED4
                 else
                 {
                     // TODO
-                    var md = DDSUtils.GetMetadataFromTGAFile(infile);
-                    format = md.Format;
+                    if (rawExt == EUncookExtension.tga.ToString())
+                    {
+                        var md = DDSUtils.GetMetadataFromTGAFile(infile);
+                        format = md.Format;
+                    }
+                    else
+                    {
+                        _loggerService.Error($"Direct {rawExt} import is not supported yet.");
+                        return false;
+                    }
                 }
 
 
