@@ -111,12 +111,6 @@ namespace WolvenKit.Views.Tools
 
         #endregion Constructors
 
-        #region Methods
-
-
-
-        #endregion Methods
-
         private void Button_Click(object sender, RoutedEventArgs e) => LogRichTextBox.Document.Blocks.Clear();
     }
 }

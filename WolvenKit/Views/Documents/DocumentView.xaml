@@ -37,7 +37,10 @@
                        ItemsSource="{Binding TabItemViewModels, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                        SelectedIndex="{Binding SelectedIndex}"
                        ContentTemplateSelector="{StaticResource RedDocumentTemplateSelector}"
-                       IsAnimationEnabled="True" ShowCloseButton="False" IsDraggable="False">
+                       IsAnimationEnabled="True"
+                       ShowCloseButton="False"
+                       IsDraggable="False"
+                       >
         </hc:TabControl>
         
        

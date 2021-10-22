@@ -4,10 +4,10 @@ using System.Linq;
 using WolvenKit.RED4.CR2W.Types;
 using System.IO;
 using WolvenKit.Common.Oodle;
-using WolvenKit.Modkit.RED4.Compiled;
 using Newtonsoft.Json;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Common.Tools;
+using WolvenKit.Common.RED4.Compiled;
 
 namespace WolvenKit.Modkit.RED4
 {
