@@ -235,6 +235,29 @@ namespace WolvenKit.Common.RED4.Compiled
                 var lsVal = System.Text.Encoding.GetEncoding("ISO-8859-1").GetString(br.ReadBytes(lslen));
                 lstr.Value.SetValue(lsVal);
             }
+            else if (parent is CColor)
+            {
+                var basePos = br.BaseStream.Position;
+                var numChilds = br.ReadUInt16();
+                var pos = basePos + 2;
+                for (ushort i = 0; i < numChilds; i++)
+                {
+                    br.BaseStream.Position = pos;
+                    var name = br.ReadUInt16();
+                    var varname = Names[name].Str;
+                    var type = br.ReadUInt16();
+                    var typename = Names[type].Str;
+                    var off = br.ReadUInt32();
+                    pos = br.BaseStream.Position;
+                    var parsedvar = parent.GetPropertyByREDName(varname);
+                    if (parsedvar == null || parsedvar.REDType != typename)
+                    {
+                        throw new MissingRTTIException(varname, typename, parent.REDType);
+                    }
+                    br.BaseStream.Position = off + basePos;
+                    parsedvar = ReadVariable(br, parsedvar);
+                }
+            }
             else if (parent.ChildrEditableVariables.Count > 0)
             {
                 var basePos = br.BaseStream.Position;
