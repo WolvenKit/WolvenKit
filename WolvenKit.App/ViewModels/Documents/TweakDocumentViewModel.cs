@@ -32,6 +32,7 @@ namespace WolvenKit.ViewModels.Documents
             Types = new(Enum.GetNames<ETweakType>());
 
             AddFlatCommand = ReactiveCommand.Create(AddFlat);
+            AddGroupCommand = ReactiveCommand.Create(AddGroup);
             DeleteFlatCommand = ReactiveCommand.Create(DeleteFlat);
             EditFlatCommand = ReactiveCommand.Create(EditFlat);
 
@@ -64,13 +65,40 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public TweakDocument TweakDocument {  get; set; }
 
-        [Reactive] public IEnumerable<TweakEntryViewModel> Entries { get; set; }
+        [Reactive] public ObservableCollection<TweakEntryViewModel> Entries { get; set; }
 
         [Reactive] public TweakEntryViewModel SelectedItem { get; set; }
 
         #endregion
 
         #region commands
+
+        public ReactiveCommand<Unit, Unit> AddGroupCommand { get; }
+        private void AddGroup()
+        {
+            if (string.IsNullOrEmpty(FlatName))
+            {
+                return;
+            }
+
+            // check name
+            if (TweakDocument.Groups.ContainsKey(FlatName))
+            {
+                MessageBox.Show($"A group with name {FlatName} is already part of your database. Please give a unique name to the item you are adding, or delete the existing item first.",
+                    "WolvenKit", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            var record = new Record()
+            {
+                Type = "TYPE NOT SET",
+                Inherits = "INHERITS NOT SET (optional)"
+            };
+            TweakDocument.Groups.Add(FlatName, record);
+
+            GenerateEntries();
+            Document.Text = Serialization.Serialize(TweakDocument);
+        }
 
         public ReactiveCommand<Unit, Unit> AddFlatCommand { get; }
         private void AddFlat()
@@ -82,23 +110,36 @@ namespace WolvenKit.ViewModels.Documents
                 return;
             }
 
-            // check name
-            if (TweakDocument.Flats.ContainsKey(FlatName))
-            {
-                MessageBox.Show($"A flat with name {FlatName} is already part of your database. Please give a unique name to the item you are adding, or delete the existing item first.",
-                    "WolvenKit", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
             if (!Serialization.Json.TryParseJsonFlat(SelectedType, ValueString, out var ivalue))
             {
                 return;
             }
 
             var newFlat = new FlatViewModel(FlatName, ivalue);
-            TweakDocument.Flats.Add(FlatName, newFlat.GetValue());
 
-
+            if (SelectedItem is GroupViewModel/* { IsSelected:true }*/ group)
+            {
+                // check name
+                if (group.GetValue().Members.ContainsKey(FlatName))
+                {
+                    MessageBox.Show($"A flat with name {FlatName} is already part of this group. Please give a unique name to the item you are adding, or delete the existing item first.",
+                        "WolvenKit", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                group.GetValue().Members.Add(FlatName, newFlat.GetValue());
+            }
+            else
+            {
+                // check name
+                if (TweakDocument.Flats.ContainsKey(FlatName))
+                {
+                    MessageBox.Show($"A flat with name {FlatName} is already part of your database. Please give a unique name to the item you are adding, or delete the existing item first.",
+                        "WolvenKit", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                TweakDocument.Flats.Add(FlatName, newFlat.GetValue());
+            }
+            
 
             GenerateEntries();
             Document.Text = Serialization.Serialize(TweakDocument);
@@ -121,7 +162,15 @@ namespace WolvenKit.ViewModels.Documents
             switch (SelectedItem)
             {
                 case FlatViewModel fvm:
-                    TweakDocument.Flats.Remove(fvm.Name);
+                    if (string.IsNullOrEmpty(fvm.GroupName))
+                    {
+                        TweakDocument.Flats.Remove(fvm.Name);
+                    }
+                    else
+                    {
+                        TweakDocument.Groups[fvm.GroupName].Members.Remove(fvm.Name);
+                    }
+                    
                     break;
                 case GroupViewModel gvm:
                     TweakDocument.Groups.Remove(gvm.Name);
@@ -149,7 +198,7 @@ namespace WolvenKit.ViewModels.Documents
             var groupvms = TweakDocument.Groups
                 .Select(g => new GroupViewModel(g.Key, g.Value))
                 .Cast<TweakEntryViewModel>();
-            Entries = flatvms.Concat(groupvms);
+            Entries = new ObservableCollection<TweakEntryViewModel>(flatvms.Concat(groupvms));
         }
 
         public override void OnSave(object parameter)

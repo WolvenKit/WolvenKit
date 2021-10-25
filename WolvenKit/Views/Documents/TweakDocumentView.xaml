@@ -56,105 +56,87 @@
 
             <Grid Grid.Row="0" Background="{DynamicResource BorderBrush}">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <hc:TextBox Grid.Column="0"
-                            Margin="10,0,0,0"
-                            x:Name="NameTextBox"
-                            hc:InfoElement.Title="Name: "
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <hc:TextBox Grid.Column="0"
+                            Margin="13,0,0,0"
+                            x:Name="ValueTextBox"
+                            hc:InfoElement.Title="Value: "
                             hc:InfoElement.TitlePlacement="Left"/>
-                <hc:ComboBox Grid.Column="1"
-                             Grid.ColumnSpan="2"
+                    
+                    <hc:ComboBox Grid.Column="1"
                              Margin="10,0,0,0"
                              x:Name="TypeComboBox"
                              hc:InfoElement.Title="Type: "
                              hc:InfoElement.TitlePlacement="Left"
                              ItemsSource="{Binding Types}"
                              SelectedItem="{Binding SelectedType}"/>
+                </Grid>
 
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                <hc:TextBox Grid.Row="1"
-                            Grid.ColumnSpan="2"
-                            Margin="13,0,0,0"
-                            x:Name="ValueTextBox"
-                            hc:InfoElement.Title="Value: "
+                    <hc:TextBox Grid.Column="0"
+                            Margin="10,0,0,0"
+                            x:Name="NameTextBox"
+                            hc:InfoElement.Title="Name: "
                             hc:InfoElement.TitlePlacement="Left"/>
-                <Button Grid.Row="1" Grid.Column="2" x:Name="AddButton" ToolTip="Add new flat">
-                    <iconPacks:PackIconMaterial Kind="Plus" Foreground="Green"/>
-                </Button>
+
+                    <Button Grid.Column="1" x:Name="AddButton" ToolTip="Add new flat" Click="AddButton_Click">
+                        <iconPacks:PackIconMaterial Kind="Plus" Foreground="Green"/>
+                    </Button>
+
+                    <Button Grid.Column="2" x:Name="AddGroupButton" ToolTip="Add new group" Click="AddButton_Click">
+                        <iconPacks:PackIconMaterial Kind="PlusBoxMultiple" Foreground="Purple"/>
+                    </Button>
+                </Grid>
+                
+                
+                
             </Grid>
 
-            <syncfusion:SfTreeGrid Grid.Row="1"
-                                   x:Name="FlatsTree"
-                                   ColumnSizer="FillColumn"
-                                   Margin="0,10,0,0"
-                                   AutoGenerateColumns="False"
-                                   AllowEditing="False"
-                                   AllowResizingColumns="True"
-                                   AllowSorting="True"
-                                   AllowFiltering="True"
-                                   >
-                <syncfusion:SfTreeGrid.Columns>
 
-                    <syncfusion:TreeGridTextColumn MappingName="Name" />
+            <syncfusion:SfTreeView x:Name="FlatsTree" Grid.Row="1"
+                                   ChildPropertyName="Members"
+                                   ShowLines="True"
+                                   ShowRootLines="True"
+                                   AutoExpandMode="AllNodes">
+                <syncfusion:SfTreeView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid  Margin="1,0,0,0" VerticalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
 
-                    <syncfusion:TreeGridTextColumn MappingName="DisplayType" HeaderText="Type" />
+                            <TextBlock Grid.Column="0"  Text="{Binding Name}" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="{Binding DisplayType}" VerticalAlignment="Center" />
 
-                    <syncfusion:TreeGridTemplateColumn MappingName="DisplayString"
-                                                       HeaderText="Value"
-                                                       AllowFocus="True"
-                                                        >
-                        <syncfusion:TreeGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <!--<ColumnDefinition Width="Auto"/>-->
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <TextBlock
-                                        Text="{Binding DisplayString }"
-                                        VerticalAlignment="Center"/>
-                                    <!--<Button Grid.Column="1" x:Name="EditButton" Click="EditButton_OnClick"
-                                            syncfusion:FocusManagerHelper.FocusedElement="True">
-                                        <iconPacks:PackIconCodicons Kind="Edit"/>
-                                    </Button>-->
-                                    <Button Grid.Column="2" x:Name="DeleteButton" Click="DeleteButton_OnClick"
-                                            syncfusion:FocusManagerHelper.FocusedElement="True" >
-                                        <iconPacks:PackIconMaterial Kind="Delete" Foreground="Red"
-                                                                     />
-                                    </Button>
-                                </Grid>
-
-
-                            </DataTemplate>
-                        </syncfusion:TreeGridTemplateColumn.CellTemplate>
-                        <!--<syncfusion:TreeGridTemplateColumn.EditTemplate>
-                            <DataTemplate>
-                                <TextBox Text="{Binding FirstName}"
-                                         syncfusion:FocusManagerHelper.FocusedElement="True"/>
-                            </DataTemplate>
-                        </syncfusion:TreeGridTemplateColumn.EditTemplate>-->
-                    </syncfusion:TreeGridTemplateColumn>
-
-                    
-
-                </syncfusion:SfTreeGrid.Columns>
-
-
-
-            </syncfusion:SfTreeGrid>
-
+                            <Button Grid.Column="2" x:Name="DeleteButton"
+                                    Click="DeleteButton_OnClick"
+                                    syncfusion:FocusManagerHelper.FocusedElement="True"
+                                    Background="Transparent"
+                                    BorderBrush="Transparent">
+                                <iconPacks:PackIconMaterial Kind="Delete" Foreground="Red" Height="12" />
+                            </Button>
+                        </Grid>
+                    </DataTemplate>
+                </syncfusion:SfTreeView.ItemTemplate>
+            </syncfusion:SfTreeView>
         </Grid>
 
     </Grid>
