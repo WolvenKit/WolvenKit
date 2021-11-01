@@ -88,6 +88,11 @@ namespace WolvenKit.Views.Documents
                         view => view.AddButton)
                     .DisposeWith(disposables);
 
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.AddGroupCommand,
+                        view => view.AddGroupButton)
+                    .DisposeWith(disposables);
+
 
                
             });
@@ -101,6 +106,10 @@ namespace WolvenKit.Views.Documents
         private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
         {
             ViewModel?.DeleteFlatCommand.Execute().Subscribe();
+
+            this.FlatsTree.ExpandAll();
         }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e) => this.FlatsTree.ExpandAll();
     }
 }

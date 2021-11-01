@@ -30,9 +30,9 @@
     <Grid>
         <Grid.Resources>
             <converters:LogColorConverter x:Key="Converter"/>
-            <Style TargetType="sfgrid:VirtualizingCellsControl" x:Key="CustomRowStyle">
+            <!--<Style TargetType="sfgrid:VirtualizingCellsControl" x:Key="CustomRowStyle">
                 <Setter Property="Foreground" Value="{Binding Path=Level, Converter={StaticResource Converter}}" />
-            </Style>
+            </Style>-->
         </Grid.Resources>
 
         <!-- <syncfusion:SfDataGrid x:Name="ListView" -->

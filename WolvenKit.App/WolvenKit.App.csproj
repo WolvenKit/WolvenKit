@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0-windows</TargetFramework>
-      <UseWPF>true</UseWPF>
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
       <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
       <Platforms>x64</Platforms>
@@ -80,9 +79,7 @@
     <PackageReference Include="ReactiveUI" Version="16.2.6" />
     <PackageReference Include="ReactiveUI.Fody" Version="16.2.6" />
     <PackageReference Include="ReactiveUI.Validation" Version="2.2.1" />
-    <PackageReference Include="ReactiveUI.WPF" Version="16.2.6" />
     <PackageReference Include="Pfim" Version="0.10.1" />
-    <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
     <PackageReference Include="YamlDotNet" Version="11.2.1" />
     <PackageReference Include="WolvenInstaller" Version="1.0.0" />
   </ItemGroup>

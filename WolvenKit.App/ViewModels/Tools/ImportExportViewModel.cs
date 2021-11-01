@@ -27,6 +27,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Interaction;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.CR2W.Archive;
 
@@ -824,7 +825,11 @@ namespace WolvenKit.ViewModels.Tools
                 catch (Exception ex)
                 {
                     readModel3D = null;
-                    MessageBox.Show("Error importing file:\r\n" + ex.Message);
+                    await Interactions.ShowMessageBoxAsync(
+                        $"Error importing file:\r\n {ex.Message}",
+                        "WolvenKit",
+                        WMessageBoxButtons.Ok,
+                        WMessageBoxImage.Error);
                 }
 
                 if (readModel3D != null)
@@ -855,11 +860,21 @@ namespace WolvenKit.ViewModels.Tools
                         isExported = assimpWpfExporter.Export(test, qaz.EConvertableOutput.ToString());
 
                         if (!isExported)
-                            MessageBox.Show("Not exported");
+                        {
+                            await Interactions.ShowMessageBoxAsync(
+                            "Not exported",
+                            "WolvenKit",
+                            WMessageBoxButtons.Ok,
+                            WMessageBoxImage.Error);
+                        }
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Error exporting:\r\n" + ex.Message);
+                        await Interactions.ShowMessageBoxAsync(
+                            $"Error exporting:\r\n {ex.Message}",
+                            "WolvenKit",
+                            WMessageBoxButtons.Ok,
+                            WMessageBoxImage.Error);
                         isExported = false;
                     }
                 }

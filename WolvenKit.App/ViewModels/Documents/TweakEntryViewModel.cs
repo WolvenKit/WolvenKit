@@ -1,6 +1,8 @@
 using ReactiveUI;
 using WolvenKit.RED4.TweakDB;
 using WolvenKit.RED4.TweakDB.Types;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -10,6 +12,8 @@ namespace WolvenKit.ViewModels.Documents
 
         public abstract string DisplayString { get; }
         public abstract string DisplayType { get; }
+
+        public bool IsSelected { get; set; }
     }
 
     public sealed class GroupViewModel : TweakEntryViewModel
@@ -20,8 +24,14 @@ namespace WolvenKit.ViewModels.Documents
         {
             Name = name;
             _value = value;
-        }
 
+            Members = new ObservableCollection<FlatViewModel>(_value.Members
+                .Select(f => new FlatViewModel(f.Key, f.Value) {
+                    GroupName = Name
+                }));
+            
+        }
+        public ObservableCollection<FlatViewModel> Members { get; set; }
 
         public override string DisplayString => _value.ToString();
         public override string DisplayType => _value.Type;
@@ -43,5 +53,7 @@ namespace WolvenKit.ViewModels.Documents
         public override string DisplayType => _value.Name;
 
         public IType GetValue() => _value;
+
+        public string GroupName { get; set; }
     }
 }

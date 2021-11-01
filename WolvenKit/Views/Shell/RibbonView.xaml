@@ -5,18 +5,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:HomeView="clr-namespace:WolvenKit.Views.HomePage"
     xmlns:reactiveUi="http://reactiveui.net"
-    xmlns:feather="clr-namespace:Feather.Controls;assembly=Feather.Controls"
     xmlns:fluent="urn:fluent-ribbon"
-    xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-    xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:sfskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
     xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:shell="clr-namespace:WolvenKit.ViewModels.Shell;assembly=WolvenKit.App"
-    xmlns:shell1="clr-namespace:WolvenKit.Views.Shell"
-    Panel.ZIndex="-15"
     >
 
     <!--  Resources  -->
@@ -63,20 +57,7 @@
                             </Border>
                             <ControlTemplate.Triggers>
 
-                                <MultiDataTrigger>
-                                    <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:RibbonWindow}}, Path=IsGlassActive}" Value="True" />
-                                        <Condition Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:RibbonWindow}}, Path=WindowState}" Value="Normal" />
-                                    </MultiDataTrigger.Conditions>
-                                    <Setter TargetName="PART_Label" Property="BitmapEffect">
-                                        <Setter.Value>
-                                            <OuterGlowBitmapEffect
-                                                GlowColor="#FFFFFFFF"
-                                                GlowSize="10"
-                                                Opacity="1" />
-                                        </Setter.Value>
-                                    </Setter>
-                                </MultiDataTrigger>
+                                
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
                                         <Condition Binding="{Binding RibbonState, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:Ribbon}}}" Value="Hide" />
@@ -130,7 +111,7 @@
 
         <syncfusion:Ribbon
             x:Name="_ribbon"
-            Margin="0,0,0,0"
+            Margin="60,0,0,0"
             EnableSimplifiedLayoutMode="True" 
             Panel.ZIndex="0"
             BackStageCornerImageVisibility="Collapsed"
@@ -712,7 +693,7 @@
                     <syncfusion:RibbonMenuGroup Header="Project">
 
                         <!--  Recent Projects Button  -->
-                        <ToggleButton
+                        <!--<ToggleButton
                             x:Name="FileDrawer2"
                             Grid.Row="0"
                             Grid.Column="1"
@@ -730,7 +711,7 @@
                                     Kind="GoToFile" />
                                 <TextBlock Margin="2,0,0,0" Text="Recent Projects" />
                             </StackPanel>
-                        </ToggleButton>
+                        </ToggleButton>-->
 
                         <!--  New Project Button  -->
                         <syncfusion:RibbonButton
@@ -921,6 +902,27 @@
 
                 >
 
+                <!--  Project bar  -->
+                <!--<syncfusion:RibbonBar
+                    Name="HomeRibbonBar"           
+                    Header="Home">
+                    --><!--  New Project Button  --><!--
+                    <syncfusion:RibbonButton
+                        x:Name="HomeButton"
+                        IconStretch="Fill"
+                        IconType="Icon"
+                        Label="Home Page"
+                        Padding="12,0"
+                        SizeForm="Large">
+                        <syncfusion:RibbonButton.IconTemplate>
+                            <DataTemplate>
+                                <Image Source="/Resources/Media/Images/Application/Sammy_Home.png"/>
+                            </DataTemplate>
+                        </syncfusion:RibbonButton.IconTemplate>
+                    </syncfusion:RibbonButton>
+                </syncfusion:RibbonBar>-->
+
+                
                 <!--  Project bar  -->
                 <syncfusion:RibbonBar
                     Name="ProjectRibbonBar"           
@@ -1831,7 +1833,7 @@
 
         </syncfusion:Ribbon>
 
-        <StackPanel
+        <!--<StackPanel
             Width="auto"
             Height="20"
             Margin="75,-22,0,0"
@@ -1839,21 +1841,30 @@
             VerticalAlignment="Top"
             Orientation="Horizontal">
             <TextBlock Background="{x:Null}" Text="RED Modding Tools - WolvenKit" />
-        </StackPanel>
+        </StackPanel>-->
 
-        <Border
+        <!--<Border
             Width="70"
             Height="28"
             Margin="0,-2,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="top"
             Background="{DynamicResource ContentBackgroundAlt2}"
-            CornerRadius="0,5,0,0" />
+            CornerRadius="0,5,0,0" />-->
+
+        <Border
+            Width="61"
+            Height="70"
+            Margin="0,-30,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="top"
+            Background="{DynamicResource ContentBackgroundAlt2}"
+             />
 
         <Border
             Width="42"
             Height="51"
-            Margin="13,-30,0,0"
+            Margin="8,4,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Background="Transparent"
@@ -1868,7 +1879,7 @@
                     </Border.OpacityMask>
                     <Grid>
 
-                        <!--  Sets Sammy Color  -->
+                        <!--Sets Sammy Color-->  
                         <Grid
                             x:Name="HomeHighLighter"
                             Margin="1"
@@ -1878,10 +1889,10 @@
             </Grid>
         </Border>
 
-        <Border
+        <Border ToolTip="Home"
             Width="42"
             Height="51"
-            Margin="13,-30,0,0"
+            Margin="8,4,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="top"
             Background="Transparent"

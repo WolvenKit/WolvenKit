@@ -115,7 +115,7 @@ namespace WolvenKit.ViewModels.Documents
 
         private bool CanSaveAs(object parameter) => true/*IsDirty*/;
 
-        public abstract void OnSave(object parameter);
+        public abstract Task OnSave(object parameter);
 
         private void OnSaveAs(object parameter)
         {

@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using DynamicData.Kernel;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Oodle;
+using WolvenKit.Common.RED4.Compiled;
 using WolvenKit.Common.Services;
-using WolvenKit.Modkit.RED4.Compiled;
 using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.ViewModels.Documents
@@ -49,7 +50,7 @@ namespace WolvenKit.ViewModels.Documents
 
         #region methods
 
-        public override void OnSave(object parameter)
+        public override Task OnSave(object parameter)
         {
             using var fs = new FileStream(FilePath, FileMode.Create, FileAccess.ReadWrite);
             using var bw = new BinaryWriter(fs);
@@ -61,6 +62,8 @@ namespace WolvenKit.ViewModels.Documents
 
                 file.Value.GetFile().Write(bw);
             }
+
+            return Task.CompletedTask;
         }
 
         public override async Task<bool> OpenFileAsync(string path)
@@ -111,7 +114,6 @@ namespace WolvenKit.ViewModels.Documents
         {
             TabItemViewModels.Add(new W2rcFileViewModel(w2rcFile));
 
-            // TODO reactive?
             foreach (var b in w2rcFile.Buffers)
             {
                 if (b is CR2WBufferWrapper buffer)
@@ -122,30 +124,30 @@ namespace WolvenKit.ViewModels.Documents
                     using (var compressedMs = new MemoryStream(data))
                     {
                         OodleHelper.DecompressAndCopySegment(compressedMs, uncompressedMS, b.DiskSize, b.MemSize);
+
+                        //dbg
+                        //var bufferpath = $"{w2rcFile.FileName}.{(w2rcFile as CR2WFile).GetBufferIndex(b)}.buffer";
+                        //using (var fs = new FileStream(bufferpath, FileMode.Create, FileAccess.Write))
+                        //{
+                        //    uncompressedMS.CopyTo(fs);
+                        //}
                     }
 
                     // try reading as normal cr2w file
                     var cr2wbuffer = _parser.TryReadCr2WFile(uncompressedMS);
                     if (cr2wbuffer != null)
                     {
-                        TabItemViewModels.Add(new W2rcBufferViewModel(b, cr2wbuffer));
+                        TabItemViewModels.Add(new W2rcBufferViewModel(b, cr2wbuffer, w2rcFile as CR2WFile));
                     }
                     // try reading as compiled package
                     else
                     {
-                        try
+                        uncompressedMS.Seek(0, SeekOrigin.Begin);
+                        var compiledPackage = _parser.TryReadCompiledPackage(uncompressedMS);
+                        if (compiledPackage != null)
                         {
-                            var compiledbuffer = new CompiledPackage(_hashService);
-                            uncompressedMS.Seek(0, SeekOrigin.Begin);
-                            using var br = new BinaryReader(uncompressedMS);
-                            compiledbuffer.Read(br);
-                            TabItemViewModels.Add(new W2rcBufferViewModel(b, compiledbuffer));
+                            TabItemViewModels.Add(new W2rcBufferViewModel(b, compiledPackage, w2rcFile as CR2WFile));
                         }
-                        catch (Exception e)
-                        {
-                            _loggerService.Error(e);
-                        }
-                        
                     }
                 }
 

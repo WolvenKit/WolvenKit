@@ -2,7 +2,6 @@
     x:Class="WolvenKit.Views.Shell.MainView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:adonisControls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
     xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
@@ -11,17 +10,17 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
     syncfusionskin:SfSkinManager.Theme="{syncfusionskin:SkinManagerExtension ThemeName=MaterialDark}"
-    IconAlignment="Right"
+    IconAlignment="Left"
     Icon="TaskBarIcon.ico"
     ShowIcon="False"
-    ShowTitle="False"
-    TitleBarBackground="Transparent"
-    TitleTextAlignment="Right"
+    TitleTextAlignment="Left"
     ResizeMode="CanResizeWithGrip"
     UseNativeChrome="True"
     Title="WolvenKit"
     MinWidth="960"
     MinHeight="600"
+    AllowsTransparency="True"
+    TitleBarBackground="Transparent"
     >
 
     <syncfusion:ChromelessWindow.Resources>
@@ -45,7 +44,7 @@
         </DrawingBrush>
     </syncfusion:ChromelessWindow.Resources>
 
-    <Grid Margin="0,0,0,0" Background="{DynamicResource CloudDrawingBrushMain}">
+    <Grid Background="{DynamicResource CloudDrawingBrushMain}">
         <Grid.Resources>
             <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" />
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
@@ -57,7 +56,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <shell:RibbonView Grid.Row="0" />
+        <shell:RibbonView Margin="0,0,0,0" Grid.Row="0" Panel.ZIndex="5"/>
 
         <shell:DockingAdapter
             x:Name="dockingAdapter"
@@ -67,11 +66,12 @@
 
         <shell:StatusBarView Grid.Row="2" />
 
-        <ScrollViewer Grid.Row="0" Grid.RowSpan="3"  HorizontalAlignment="Right" VerticalScrollBarVisibility="Hidden">
+        <ScrollViewer Grid.Row="0" Grid.RowSpan="3"  HorizontalAlignment="Right" VerticalScrollBarVisibility="Hidden" Panel.ZIndex="10">
             <StackPanel
-                Margin="0,35,10,10"
+                Margin="0,0,10,10"
                 VerticalAlignment="Top"
                 hc:Growl.GrowlParent="True" />
         </ScrollViewer>
+
     </Grid>
 </syncfusion:ChromelessWindow>

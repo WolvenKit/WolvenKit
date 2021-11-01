@@ -166,7 +166,7 @@ namespace WolvenKit.Views.Tools
 
             if (File.Exists(endPath))
             {
-                propertiesViewModel.AddAudioItem(endPath);
+                propertiesViewModel.PreviewAudioCommand.SafeExecute(endPath);
             }
         }
 

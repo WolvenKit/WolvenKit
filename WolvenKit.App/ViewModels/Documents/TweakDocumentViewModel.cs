@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Utils;
@@ -14,6 +13,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common.Services;
+using WolvenKit.Interaction;
 using WolvenKit.Modkit.RED4.Serialization;
 using WolvenKit.RED4.TweakDB;
 
@@ -31,7 +31,8 @@ namespace WolvenKit.ViewModels.Documents
 
             Types = new(Enum.GetNames<ETweakType>());
 
-            AddFlatCommand = ReactiveCommand.Create(AddFlat);
+            AddFlatCommand = ReactiveCommand.CreateFromTask(AddFlat);
+            AddGroupCommand = ReactiveCommand.CreateFromTask(AddGroup);
             DeleteFlatCommand = ReactiveCommand.Create(DeleteFlat);
             EditFlatCommand = ReactiveCommand.Create(EditFlat);
 
@@ -43,7 +44,7 @@ namespace WolvenKit.ViewModels.Documents
 
         #region properties
 
-        [Reactive] public TextDocument Document {  get; set; }
+        [Reactive] public TextDocument Document { get; set; }
 
         [Reactive] public IHighlightingDefinition HighlightingDefinition { get; set; }
 
@@ -62,9 +63,9 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public ObservableCollection<string> Types { get; set; }
 
-        [Reactive] public TweakDocument TweakDocument {  get; set; }
+        [Reactive] public TweakDocument TweakDocument { get; set; }
 
-        [Reactive] public IEnumerable<TweakEntryViewModel> Entries { get; set; }
+        [Reactive] public ObservableCollection<TweakEntryViewModel> Entries { get; set; }
 
         [Reactive] public TweakEntryViewModel SelectedItem { get; set; }
 
@@ -72,21 +73,41 @@ namespace WolvenKit.ViewModels.Documents
 
         #region commands
 
-        public ReactiveCommand<Unit, Unit> AddFlatCommand { get; }
-        private void AddFlat()
+        public ReactiveCommand<Unit, Unit> AddGroupCommand { get; }
+        private async Task AddGroup()
         {
-            if (string.IsNullOrEmpty(SelectedType)
-                || string.IsNullOrEmpty(FlatName)
-                || string.IsNullOrEmpty(ValueString))
+            if (string.IsNullOrEmpty(FlatName))
             {
                 return;
             }
 
             // check name
-            if (TweakDocument.Flats.ContainsKey(FlatName))
+            if (TweakDocument.Groups.ContainsKey(FlatName))
             {
-                MessageBox.Show($"A flat with name {FlatName} is already part of your database. Please give a unique name to the item you are adding, or delete the existing item first.",
-                    "WolvenKit", MessageBoxButton.OK, MessageBoxImage.Error);
+                await Interactions.ShowMessageBoxAsync(
+                    $"A group with name {FlatName} is already part of your database. Please give a unique name to the item you are adding, or delete the existing item first.",
+                     "WolvenKit", WMessageBoxButtons.Ok, WMessageBoxImage.Error);
+                return;
+            }
+
+            var record = new Record()
+            {
+                Type = "TYPE NOT SET",
+                Inherits = "INHERITS NOT SET (optional)"
+            };
+            TweakDocument.Groups.Add(FlatName, record);
+
+            GenerateEntries();
+            Document.Text = Serialization.Serialize(TweakDocument);
+        }
+
+        public ReactiveCommand<Unit, Unit> AddFlatCommand { get; }
+        private async Task AddFlat()
+        {
+            if (string.IsNullOrEmpty(SelectedType)
+                || string.IsNullOrEmpty(FlatName)
+                || string.IsNullOrEmpty(ValueString))
+            {
                 return;
             }
 
@@ -96,8 +117,31 @@ namespace WolvenKit.ViewModels.Documents
             }
 
             var newFlat = new FlatViewModel(FlatName, ivalue);
-            TweakDocument.Flats.Add(FlatName, newFlat.GetValue());
 
+            if (SelectedItem is GroupViewModel/* { IsSelected:true }*/ group)
+            {
+                // check name
+                if (group.GetValue().Members.ContainsKey(FlatName))
+                {
+                    await Interactions.ShowMessageBoxAsync(
+                    $"A flat with name {FlatName} is already part of this group. Please give a unique name to the item you are adding, or delete the existing item first.",
+                    "WolvenKit", WMessageBoxButtons.Ok, WMessageBoxImage.Error);
+                    return;
+                }
+                group.GetValue().Members.Add(FlatName, newFlat.GetValue());
+            }
+            else
+            {
+                // check name
+                if (TweakDocument.Flats.ContainsKey(FlatName))
+                {
+                    await Interactions.ShowMessageBoxAsync(
+                    $"A flat with name {FlatName} is already part of your database. Please give a unique name to the item you are adding, or delete the existing item first.",
+                    "WolvenKit", WMessageBoxButtons.Ok, WMessageBoxImage.Error);
+                    return;
+                }
+                TweakDocument.Flats.Add(FlatName, newFlat.GetValue());
+            }
 
 
             GenerateEntries();
@@ -107,7 +151,7 @@ namespace WolvenKit.ViewModels.Documents
         public ReactiveCommand<Unit, Unit> EditFlatCommand { get; }
         private void EditFlat()
         {
-           
+
         }
 
         public ReactiveCommand<Unit, Unit> DeleteFlatCommand { get; }
@@ -121,7 +165,15 @@ namespace WolvenKit.ViewModels.Documents
             switch (SelectedItem)
             {
                 case FlatViewModel fvm:
-                    TweakDocument.Flats.Remove(fvm.Name);
+                    if (string.IsNullOrEmpty(fvm.GroupName))
+                    {
+                        TweakDocument.Flats.Remove(fvm.Name);
+                    }
+                    else
+                    {
+                        TweakDocument.Groups[fvm.GroupName].Members.Remove(fvm.Name);
+                    }
+
                     break;
                 case GroupViewModel gvm:
                     TweakDocument.Groups.Remove(gvm.Name);
@@ -130,7 +182,7 @@ namespace WolvenKit.ViewModels.Documents
                     throw new ArgumentOutOfRangeException();
             }
 
-            
+
             SelectedItem = null;
 
             GenerateEntries();
@@ -149,10 +201,10 @@ namespace WolvenKit.ViewModels.Documents
             var groupvms = TweakDocument.Groups
                 .Select(g => new GroupViewModel(g.Key, g.Value))
                 .Cast<TweakEntryViewModel>();
-            Entries = flatvms.Concat(groupvms);
+            Entries = new ObservableCollection<TweakEntryViewModel>(flatvms.Concat(groupvms));
         }
 
-        public override void OnSave(object parameter)
+        public override async Task OnSave(object parameter)
         {
             using var fs = new FileStream(FilePath, FileMode.Create, FileAccess.ReadWrite);
             using var bw = new StreamWriter(fs);
@@ -168,6 +220,11 @@ namespace WolvenKit.ViewModels.Documents
             }
             catch (Exception e)
             {
+                await Interactions.ShowMessageBoxAsync(
+                        $"The tweak file could not be parsed. Please check the file for errors.",
+                        "WolvenKit",
+                        WMessageBoxButtons.Ok,
+                        WMessageBoxImage.Error);
                 _loggerService.Error(e);
             }
 
@@ -187,7 +244,7 @@ namespace WolvenKit.ViewModels.Documents
         {
             _isInitialized = false;
 
-            LoadDocument(path);
+            await LoadDocument(path);
 
             ContentId = path;
             FilePath = path;
@@ -198,7 +255,7 @@ namespace WolvenKit.ViewModels.Documents
             return await Task.FromResult(true);
         }
 
-        private void LoadDocument(string paramFilePath)
+        private async Task LoadDocument(string paramFilePath)
         {
             if (!File.Exists(paramFilePath))
             {
@@ -244,19 +301,20 @@ namespace WolvenKit.ViewModels.Documents
                 }
                 else
                 {
-                    MessageBox.Show($"The tweak file could not be parsed. Please check the file for errors.",
-                        "WolvenKit",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-
+                    throw new SerializationException();
                 }
             }
             catch (Exception e)
             {
+                await Interactions.ShowMessageBoxAsync(
+                        $"The tweak file could not be parsed. Please check the file for errors.",
+                        "WolvenKit",
+                        WMessageBoxButtons.Ok,
+                        WMessageBoxImage.Error);
                 _loggerService.Error(e);
             }
 
-            
+
         }
 
         #endregion
