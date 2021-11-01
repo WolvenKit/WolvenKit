@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -45,6 +46,8 @@ namespace WolvenKit.Views.Shell
 
             this.WhenActivated(disposables =>
             {
+                // interactions
+
                 Interactions.AddNewFile.RegisterHandler(interaction =>
                 {
                     var dialog = new DialogHostView();
@@ -100,6 +103,14 @@ namespace WolvenKit.Views.Shell
                     }, RxApp.MainThreadScheduler);
                 });
 
+                Interactions.ShowConfirmation.RegisterHandler(interaction =>
+                {
+                    interaction.SetOutput(ShowConfirmation(interaction.Input));
+                });
+
+
+
+
                 this.Bind(ViewModel,
                     vm => vm.ActiveDocument,
                     v => v.dockingAdapter.ActiveDocument)
@@ -110,6 +121,47 @@ namespace WolvenKit.Views.Shell
                     .DisposeWith(disposables);
             });
         }
+
+
+        #region interactions
+
+        private static WMessageBoxResult ShowConfirmation((string, string, WMessageBoxImage, WMessageBoxButtons) input)
+        {
+            var text = input.Item1;
+            var caption = input.Item2;
+            var image = input.Item3;
+            var buttons = input.Item4;
+
+            var messageBox = new MessageBoxModel
+            {
+                Text = text,
+                Caption = caption,
+                Icon = GetAdonisImage(image),
+                Buttons = GetAdonisButtons(buttons)
+            };
+
+            return (WMessageBoxResult)AdonisUI.Controls.MessageBox.Show(messageBox);
+
+
+            AdonisUI.Controls.MessageBoxImage GetAdonisImage(WMessageBoxImage image) => (AdonisUI.Controls.MessageBoxImage)image;
+
+            IEnumerable<IMessageBoxButtonModel> GetAdonisButtons(WMessageBoxButtons buttons)
+            {
+                return buttons switch
+                {
+                    WMessageBoxButtons.Ok => new IMessageBoxButtonModel[1] { MessageBoxButtons.Ok() },
+                    WMessageBoxButtons.OkCancel => MessageBoxButtons.OkCancel(),
+                    WMessageBoxButtons.Yes => new IMessageBoxButtonModel[1] { MessageBoxButtons.Yes() },
+                    WMessageBoxButtons.YesNo => MessageBoxButtons.YesNo(),
+                    WMessageBoxButtons.YesNoCancel => MessageBoxButtons.YesNoCancel(),
+                    WMessageBoxButtons.No => new IMessageBoxButtonModel[1] { MessageBoxButtons.No() },
+                    _ => throw new ArgumentOutOfRangeException(nameof(buttons)),
+                };
+            }
+        }
+
+        #endregion
+
 
         protected override void OnClosing(CancelEventArgs e) => Application.Current.Shutdown();
     }

@@ -153,7 +153,15 @@ namespace WolvenKit.ViewModels.Shared
 
         private async Task<string> LocateMissingProjectAsync(string parameter)
         {
-            var delete = await Interactions.Confirm.Handle(parameter);
+            var result = await Interactions.ShowMessageBoxAsync("The file doesn't seem to exist. Would you like to locate it?", "Project not found");
+            var delete = false;
+            switch (result)
+            {
+                case WMessageBoxResult.OK:
+                case WMessageBoxResult.Yes:
+                    delete = true;
+                    break;
+            }
             if (!delete)
             {
                 var items = _recentlyUsedItemsService.Items.Items
@@ -181,13 +189,13 @@ namespace WolvenKit.ViewModels.Shared
                     return "";
                 }
 
-                var result = dlg.FileName;
-                if (string.IsNullOrEmpty(result))
+                var file = dlg.FileName;
+                if (string.IsNullOrEmpty(file))
                 {
                     return "";
                 }
 
-                parameter = result;
+                parameter = file;
 
                 var items = _recentlyUsedItemsService.Items.Items
                     .Where(_ => Path.GetFileName(_.Name) == Path.GetFileName(parameter))

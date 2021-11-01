@@ -438,8 +438,11 @@ namespace WolvenKit.ViewModels.Shell
             // move file to location
             if (File.Exists(fullPath))
             {
-                MessageBox.Show($"A file with name {filename} is already part of your mod. Please give a unique name to the item you are adding, or delete the existing item first.",
-                    "WolvenKit", MessageBoxButton.OK, MessageBoxImage.Error);
+                await Interactions.ShowMessageBoxAsync(
+                        $"A file with name {filename} is already part of your mod. Please give a unique name to the item you are adding, or delete the existing item first.",
+                        "WolvenKit",
+                        WMessageBoxButtons.Ok,
+                        WMessageBoxImage.Error);
                 return;
             }
 

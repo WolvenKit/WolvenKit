@@ -50,7 +50,7 @@ namespace WolvenKit.ViewModels.Documents
 
         #region methods
 
-        public override void OnSave(object parameter)
+        public override Task OnSave(object parameter)
         {
             using var fs = new FileStream(FilePath, FileMode.Create, FileAccess.ReadWrite);
             using var bw = new BinaryWriter(fs);
@@ -62,6 +62,8 @@ namespace WolvenKit.ViewModels.Documents
 
                 file.Value.GetFile().Write(bw);
             }
+
+            return Task.CompletedTask;
         }
 
         public override async Task<bool> OpenFileAsync(string path)

@@ -24,13 +24,6 @@ namespace WolvenKit.Views.HomePage.Pages
 
             this.WhenActivated(disposables =>
             {
-                Interactions.Confirm.RegisterHandler(
-                    interaction =>
-                    {
-                        var action = this.DisplayConfirmDialog(interaction.Input);
-                        interaction.SetOutput(action);
-                    });
-
                 this.BindCommand(
                     this.ViewModel,
                     vm => vm.OpenLinkCommand,
@@ -76,17 +69,6 @@ namespace WolvenKit.Views.HomePage.Pages
 
             });
 
-        }
-
-        private bool DisplayConfirmDialog(string input)
-        {
-            var result = MessageBox.Show(
-                "The file doesn't seem to exist. Would you like to locate it? ",
-                "Project not found",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question);
-
-            return result == MessageBoxResult.Yes;
         }
 
         private async void InitWebView2()
