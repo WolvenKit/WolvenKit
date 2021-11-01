@@ -582,7 +582,7 @@
                                                     hc:IconElement.Geometry="{DynamicResource AudioPlay}"
                                                     Background="Transparent"
                                                     BorderBrush="Transparent"
-                                                    Command="{Binding PlayAudioCommand}"
+                                                    Click="PlayButton_Click_1"
                                                     Effect="{StaticResource MahApps.DropShadowEffect.Menu}"
                                                     Style="{StaticResource ButtonIcon}" />
                                                 <hc:Divider
@@ -597,7 +597,7 @@
                                                     hc:IconElement.Geometry="{DynamicResource AudioPause}"
                                                     Background="Transparent"
                                                     BorderBrush="Transparent"
-                                                    Command="{Binding PauseAudioCommand}"
+                                                    Click="PauseButton_Click_1"
                                                     Effect="{StaticResource MahApps.DropShadowEffect.Menu}"
                                                     IsEnabled="True"
                                                     Style="{StaticResource ButtonIcon}" />
@@ -613,7 +613,7 @@
                                                     hc:IconElement.Geometry="{DynamicResource AudioStop}"
                                                     Background="Transparent"
                                                     BorderBrush="Transparent"
-                                                    Command="{Binding StopAudioCommand}"
+                                                    Click="StopButton_Click_1"
                                                     Effect="{StaticResource MahApps.DropShadowEffect.Menu}"
                                                     Style="{StaticResource ButtonIcon}" />
                                                 <hc:Divider
@@ -637,7 +637,7 @@
                                                             Effect="{StaticResource MahApps.DropShadowEffect.Menu}"
                                                             ShowHours="True"
                                                             ShowSubSeconds="True"
-                                                            Time="{Binding ChannelPosition}" />
+                                                            />
                                                     </StackPanel>
                                                 </Border>
                                             </StackPanel>
@@ -655,7 +655,9 @@
                                             <svl1:WaveformTimeline
                                                 x:Name="waveformTimeline"
                                                 Margin="5"
-                                                BorderThickness="1" />
+                                                BorderThickness="1"
+                                                
+                                                />
                                         </Grid>
                                     </Border>
 
@@ -693,7 +695,6 @@
                                                 x:Name="RunnerText"
                                                 AutoReverse="True"
                                                 BorderBrush="Transparent"
-                                                Content="{Binding CurrentTrackName}"
                                                 Runaway="False"
                                                 Duration="00:00:30" />
                                         </Grid>
