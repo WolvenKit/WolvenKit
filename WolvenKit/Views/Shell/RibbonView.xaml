@@ -111,7 +111,7 @@
 
         <syncfusion:Ribbon
             x:Name="_ribbon"
-            Margin="0,0,0,0"
+            Margin="60,0,0,0"
             EnableSimplifiedLayoutMode="True" 
             Panel.ZIndex="0"
             BackStageCornerImageVisibility="Collapsed"
@@ -1843,19 +1843,28 @@
             <TextBlock Background="{x:Null}" Text="RED Modding Tools - WolvenKit" />
         </StackPanel>-->
 
-        <Border
+        <!--<Border
             Width="70"
             Height="28"
             Margin="0,-2,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="top"
             Background="{DynamicResource ContentBackgroundAlt2}"
-            CornerRadius="0,5,0,0" />
+            CornerRadius="0,5,0,0" />-->
+
+        <Border
+            Width="61"
+            Height="70"
+            Margin="0,-30,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="top"
+            Background="{DynamicResource ContentBackgroundAlt2}"
+             />
 
         <Border
             Width="42"
             Height="51"
-            Margin="13,-30,0,0"
+            Margin="8,4,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Background="Transparent"
@@ -1880,10 +1889,10 @@
             </Grid>
         </Border>
 
-        <Border
+        <Border ToolTip="Home"
             Width="42"
             Height="51"
-            Margin="13,-30,0,0"
+            Margin="8,4,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="top"
             Background="Transparent"
