@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Data;
 using WolvenKit.Common;
 
-namespace WolvenKit.Functionality.Converters
+namespace WolvenKit.Converters
 {
     public class ExtensionToImageConverter : IValueConverter
     {
@@ -306,7 +306,7 @@ namespace WolvenKit.Functionality.Converters
                 if (extension.Length > 1)
                 {
                     var result = GetSmallIconForFileType(extension) ?? "Icons/Files/default.svg";
-                    string curFile = "pack://application:,,,/WolvenKit;component/Resources/Media/Images/" + result;
+                    var curFile = "pack://application:,,,/WolvenKit;component/Resources/Media/Images/" + result;
                     var IconExists = File.Exists(curFile);
 
 

@@ -7,18 +7,18 @@ using System.Windows.Data;
 using System.Windows.Media;
 using WolvenKit.Common;
 
-namespace WolvenKit.Functionality.Converters
+namespace WolvenKit.Converters
 {
     public class ValueConverterGroup : List<IValueConverter>, IValueConverter
     {
         #region Methods
 
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return this.Aggregate(value, (current, converter) => converter.Convert(current, targetType, parameter, culture));
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

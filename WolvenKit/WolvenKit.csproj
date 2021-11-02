@@ -151,9 +151,6 @@
     <Content Include="AssimpNet.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Config\Layout\DockStatesCR2W.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="lib\WolvenManager.Installer.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -375,12 +372,6 @@
 
 
   <ItemGroup>
-    <Content Include="Config\__xbmdump_3768555366.csv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Config\AvalonDock.Layout.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Resources\Old\Images\git.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1592,7 +1583,6 @@
     <None Remove="Assimp32.dll" />
     <None Remove="Assimp64.dll" />
     <None Remove="AssimpNet.dll" />
-    <None Remove="Config\Layout\DockStatesCR2W.xml" />
     <None Remove="distraction_generic.bk2" />
     <None Remove="lib\WolvenManager.Installer.exe" />
     <None Remove="Obsolete.dll" />
