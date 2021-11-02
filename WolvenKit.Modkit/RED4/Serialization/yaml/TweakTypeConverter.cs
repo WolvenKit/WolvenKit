@@ -181,7 +181,11 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
                     throw new YamlException(type.ToString());
                 }
 
-                foreach (var item in array.GetItems())
+                emitter.Emit(new Scalar(null, s_valueName));
+
+                var items = array.GetItems();
+                emitter.Emit(new SequenceStart(default, default, false, SequenceStyle.Any));
+                foreach (var item in items)
                 {
                     if (item is IType i)
                     {
@@ -192,7 +196,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
                         throw new YamlException(type.ToString());
                     }
                 }
-
+                emitter.Emit(new SequenceEnd());
             }
             else
             {

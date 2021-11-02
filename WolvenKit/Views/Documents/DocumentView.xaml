@@ -21,11 +21,11 @@
         <Grid.Resources>
             
             <DataTemplate x:Key="MainTemplate">
-                <documents1:W2rcMainFileView />
+                <documents1:W2rcMainFileView/>
             </DataTemplate>
 
             <DataTemplate x:Key="BufferTemplate">
-                <documents1:W2rcMainFileView />
+                <documents1:W2rcMainFileView/>
             </DataTemplate>
 
             <templates:RedDocumentTemplateSelector x:Key="RedDocumentTemplateSelector"
@@ -36,6 +36,7 @@
         <hc:TabControl x:Name="TabControl"
                        ItemsSource="{Binding TabItemViewModels, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                        SelectedIndex="{Binding SelectedIndex}"
+                       SelectedItem="{Binding SelectedTabItemViewModel}"
                        ContentTemplateSelector="{StaticResource RedDocumentTemplateSelector}"
                        IsAnimationEnabled="True"
                        ShowCloseButton="False"

@@ -45,6 +45,8 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public int SelectedIndex { get; set; }
 
+        [Reactive] public RedDocumentItemViewModel SelectedTabItemViewModel { get; set; }
+
         #endregion
 
 

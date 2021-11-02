@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +18,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Interaction;
 using WolvenKit.Modkit.RED4.Serialization;
 using WolvenKit.RED4.TweakDB;
+using WolvenKit.RED4.TweakDB.Types;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -32,6 +35,7 @@ namespace WolvenKit.ViewModels.Documents
             Types = new(Enum.GetNames<ETweakType>());
 
             AddFlatCommand = ReactiveCommand.CreateFromTask(AddFlat);
+            AddArrayCommand = ReactiveCommand.CreateFromTask(AddArray);
             AddGroupCommand = ReactiveCommand.CreateFromTask(AddGroup);
             DeleteFlatCommand = ReactiveCommand.Create(DeleteFlat);
             EditFlatCommand = ReactiveCommand.Create(EditFlat);
@@ -116,8 +120,6 @@ namespace WolvenKit.ViewModels.Documents
                 return;
             }
 
-            var newFlat = new FlatViewModel(FlatName, ivalue);
-
             if (SelectedItem is GroupViewModel/* { IsSelected:true }*/ group)
             {
                 // check name
@@ -128,7 +130,15 @@ namespace WolvenKit.ViewModels.Documents
                     "WolvenKit", WMessageBoxButtons.Ok, WMessageBoxImage.Error);
                     return;
                 }
-                group.GetValue().Members.Add(FlatName, newFlat.GetValue());
+                group.GetValue().Members.Add(FlatName, ivalue);
+            }
+            else if (SelectedItem is FlatViewModel { IsArray:true } arrayVm && arrayVm.GetValue() is IArray array)
+            {
+                var x = array.GetItems();
+
+                x.Add(ivalue);
+
+                array.SetItems(x);
             }
             else
             {
@@ -140,7 +150,63 @@ namespace WolvenKit.ViewModels.Documents
                     "WolvenKit", WMessageBoxButtons.Ok, WMessageBoxImage.Error);
                     return;
                 }
-                TweakDocument.Flats.Add(FlatName, newFlat.GetValue());
+                TweakDocument.Flats.Add(FlatName, ivalue);
+            }
+
+
+            GenerateEntries();
+            Document.Text = Serialization.Serialize(TweakDocument);
+        }
+
+        public ReactiveCommand<Unit, Unit> AddArrayCommand { get; }
+        private async Task AddArray()
+        {
+            if (string.IsNullOrEmpty(SelectedType)
+                || string.IsNullOrEmpty(FlatName))
+            {
+                return;
+            }
+
+            // parse type
+            if (!Enum.TryParse<ETweakType>(SelectedType, out var enumType))
+            {
+                return;
+            }
+
+            var innertype = Serialization.GetTypeFromEnum(enumType);
+            var array = Activator.CreateInstance(
+                typeof(CArray<>).MakeGenericType(
+                    new Type[] { innertype }),
+                BindingFlags.Instance | BindingFlags.Public,
+                binder: null,
+                args: null,
+                culture: null);
+
+            var iarray = array as IType;
+
+            if (SelectedItem is GroupViewModel/* { IsSelected:true }*/ group)
+            {
+                // check name
+                if (group.GetValue().Members.ContainsKey(FlatName))
+                {
+                    await Interactions.ShowMessageBoxAsync(
+                    $"A flat with name {FlatName} is already part of this group. Please give a unique name to the item you are adding, or delete the existing item first.",
+                    "WolvenKit", WMessageBoxButtons.Ok, WMessageBoxImage.Error);
+                    return;
+                }
+                group.GetValue().Members.Add(FlatName, iarray);
+            }
+            else
+            {
+                // check name
+                if (TweakDocument.Flats.ContainsKey(FlatName))
+                {
+                    await Interactions.ShowMessageBoxAsync(
+                    $"A flat with name {FlatName} is already part of your database. Please give a unique name to the item you are adding, or delete the existing item first.",
+                    "WolvenKit", WMessageBoxButtons.Ok, WMessageBoxImage.Error);
+                    return;
+                }
+                TweakDocument.Flats.Add(FlatName, iarray);
             }
 
 
@@ -165,13 +231,18 @@ namespace WolvenKit.ViewModels.Documents
             switch (SelectedItem)
             {
                 case FlatViewModel fvm:
-                    if (string.IsNullOrEmpty(fvm.GroupName))
+                    // if not in a group
+                    if (!string.IsNullOrEmpty(fvm.GroupName))
                     {
-                        TweakDocument.Flats.Remove(fvm.Name);
+                        TweakDocument.Groups[fvm.GroupName].Members.Remove(fvm.Name);
+                    }
+                    else if (!string.IsNullOrEmpty(fvm.ArrayName))
+                    {
+                        
                     }
                     else
                     {
-                        TweakDocument.Groups[fvm.GroupName].Members.Remove(fvm.Name);
+                        TweakDocument.Flats.Remove(fvm.Name);
                     }
 
                     break;
@@ -195,13 +266,21 @@ namespace WolvenKit.ViewModels.Documents
 
         private void GenerateEntries()
         {
-            var flatvms = TweakDocument.Flats
+            try
+            {
+                var flatvms = TweakDocument?.Flats
                 .Select(f => new FlatViewModel(f.Key, f.Value))
                 .Cast<TweakEntryViewModel>();
-            var groupvms = TweakDocument.Groups
-                .Select(g => new GroupViewModel(g.Key, g.Value))
-                .Cast<TweakEntryViewModel>();
-            Entries = new ObservableCollection<TweakEntryViewModel>(flatvms.Concat(groupvms));
+                var groupvms = TweakDocument?.Groups
+                    .Select(g => new GroupViewModel(g.Key, g.Value))
+                    .Cast<TweakEntryViewModel>();
+                Entries = new ObservableCollection<TweakEntryViewModel>(flatvms.Concat(groupvms));
+            }
+            catch (Exception)
+            {
+                Entries = new ObservableCollection<TweakEntryViewModel>();
+                TweakDocument = new TweakDocument();
+            }
         }
 
         public override async Task OnSave(object parameter)

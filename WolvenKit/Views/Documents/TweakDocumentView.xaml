@@ -87,6 +87,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
                     <hc:TextBox Grid.Column="0"
@@ -99,8 +100,12 @@
                         <iconPacks:PackIconMaterial Kind="Plus" Foreground="Green"/>
                     </Button>
 
-                    <Button Grid.Column="2" x:Name="AddGroupButton" ToolTip="Add new group" Click="AddButton_Click">
-                        <iconPacks:PackIconMaterial Kind="PlusBoxMultiple" Foreground="Purple"/>
+                    <Button Grid.Column="2" x:Name="AddArrayButton" ToolTip="Add new array" Click="AddButton_Click">
+                        <iconPacks:PackIconMaterial Kind="PlusBoxMultiple" Foreground="Green"/>
+                    </Button>
+
+                    <Button Grid.Column="3" x:Name="AddGroupButton" ToolTip="Add new group" Click="AddButton_Click">
+                        <iconPacks:PackIconMaterial Kind="SelectGroup" Foreground="Purple"/>
                     </Button>
                 </Grid>
                 
@@ -124,7 +129,7 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Grid.Column="0"  Text="{Binding Name}" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" Text="{Binding DisplayType}" VerticalAlignment="Center" />
+                            <TextBlock Grid.Column="1" Text="{Binding DisplayString}" VerticalAlignment="Center" />
 
                             <Button Grid.Column="2" x:Name="DeleteButton"
                                     Click="DeleteButton_OnClick"
