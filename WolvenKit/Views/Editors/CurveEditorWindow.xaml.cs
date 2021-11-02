@@ -315,6 +315,7 @@ namespace WolvenKit.Views.Editors
             // handle visibility
             switch (vm.GetInterpolationTypeEnum())
             {
+                case EInterpolationType.EIT_Constant:
                 case EInterpolationType.EIT_Linear:
                     CanvasLinearCurve.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                     CanvasQuadraticCurve.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
@@ -330,7 +331,6 @@ namespace WolvenKit.Views.Editors
                     CanvasQuadraticCurve.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
                     CanvasCubicCurve.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                     break;
-                case EInterpolationType.EIT_Constant:
                 case EInterpolationType.EIT_Hermite:
                 default:
                     throw new ArgumentOutOfRangeException();
