@@ -276,16 +276,6 @@ namespace WolvenKit.Views.Editors
                 type = EInterpolationType.EIT_Linear;
             }
 
-            // load curve
-            //var c = new List<GeneralizedPoint>
-            //{
-            //    new(-5, 1.5),
-            //    new(2.5, 1),
-            //    new(10, 1),
-            //    new(17.1, 0.99),
-            //    new(25, -0.25)
-            //};
-
             _times = times;
             _values = values;
             _type = type;
@@ -293,21 +283,38 @@ namespace WolvenKit.Views.Editors
             var c = new List<GeneralizedPoint>(times.Select((t, i) => new GeneralizedPoint(t, values[i])));
             InterpolationType = type.ToString();
 
-            MinT = c.Min(_ => _.T);
-            MaxT = Math.Abs(c.Max(_ => _.T) - MinT) < TOLERANCE ? c.Max(_ => _.T) + 1 : c.Max(_ => _.T);
-            MinX = MinT;
-            MaxX = MaxT;
-
-            MinV = c.Min(_ => _.V);
-            MaxV = Math.Abs(c.Max(_ => _.V) - MinV) < TOLERANCE ? c.Max(_ => _.V) + 1 : c.Max(_ => _.V);
-            MinY = MinV;
-            MaxY = MaxV;
+            ScaleCanvas(c);
 
             Curve = new ObservableCollection<GeneralizedPoint>(c);
 
             // set control points
             RecalculateControlPoints();
             IsLoaded = true;
+        }
+
+        /// <summary>
+        /// Scales the canvas to the curve
+        /// </summary>
+        /// <param name="c"></param>
+        public void ScaleCanvas(List<GeneralizedPoint> c)
+        {
+            MinT = c.Min(_ => _.T);
+            MaxT = Math.Abs(c.Max(_ => _.T) - MinT) < TOLERANCE ? c.Max(_ => _.T) + 1 : c.Max(_ => _.T);
+            var stepT = (MaxT - MinT) / 10;
+            MinT -= stepT;
+            MaxT += stepT;
+
+            MinX = MinT;
+            MaxX = MaxT;
+
+            MinV = c.Min(_ => _.V);
+            MaxV = Math.Abs(c.Max(_ => _.V) - MinV) < TOLERANCE ? c.Max(_ => _.V) + 1 : c.Max(_ => _.V);
+            var stepV = (MaxV - MinV) / 10;
+            MinV -= stepV;
+            MaxV += stepV;
+
+            MinY = MinV;
+            MaxY = MaxV;
         }
 
         public void ReLoadCurve()
@@ -567,6 +574,7 @@ namespace WolvenKit.Views.Editors
             }
 
             OnPropertyChanged(nameof(Curve));
+
             RenderCurve();
 
             if (raiseEvent)
