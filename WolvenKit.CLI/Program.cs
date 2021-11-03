@@ -47,6 +47,8 @@ namespace WolvenKit.CLI
                 new HashCommand(),
                 new OodleCommand(),
 
+                new TweakCommand(),
+
                 new SettingsCommand(),
             };
 
