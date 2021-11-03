@@ -89,6 +89,11 @@ namespace WolvenKit.Views.Documents
                     .DisposeWith(disposables);
 
                 this.BindCommand(ViewModel,
+                        viewModel => viewModel.AddArrayCommand,
+                        view => view.AddArrayButton)
+                    .DisposeWith(disposables);
+
+                this.BindCommand(ViewModel,
                         viewModel => viewModel.AddGroupCommand,
                         view => view.AddGroupButton)
                     .DisposeWith(disposables);

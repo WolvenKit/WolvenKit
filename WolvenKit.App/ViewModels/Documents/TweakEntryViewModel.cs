@@ -31,6 +31,7 @@ namespace WolvenKit.ViewModels.Documents
                 }));
             
         }
+
         public ObservableCollection<FlatViewModel> Members { get; set; }
 
         public override string DisplayString => _value.ToString();
@@ -47,13 +48,30 @@ namespace WolvenKit.ViewModels.Documents
         {
             Name = name;
             _value = value;
+
+            if (value is IArray array)
+            {
+                Members = new ObservableCollection<FlatViewModel>(array.GetItems()
+                    .OfType<IType>()
+                    .Select(f => new FlatViewModel(f.Name, f)
+                    {
+                        ArrayName = Name
+                    }));
+            }
+            
         }
+
+        public ObservableCollection<FlatViewModel> Members { get; set; } = new();
+
 
         public override string DisplayString => _value.ToString();
         public override string DisplayType => _value.Name;
 
+        public bool IsArray => _value is IArray array;  
+
         public IType GetValue() => _value;
 
         public string GroupName { get; set; }
+        public string ArrayName { get; set; }
     }
 }
