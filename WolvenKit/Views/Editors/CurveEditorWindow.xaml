@@ -7,6 +7,7 @@
                              xmlns:hc="https://handyorg.github.io/handycontrol"
                              xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
                              xmlns:adonisControls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
+                             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
                              mc:Ignorable="d"
 
                              Title="Curve Editor" 
@@ -46,10 +47,12 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition  Height="*"/>
             <RowDefinition  Height="Auto"/>
         </Grid.RowDefinitions>
 
+        <!-- Header -->
         <StackPanel Grid.Row="0" Orientation="Horizontal"  Margin="0,10,0,0">
             <TextBlock Text="EInterpolationType: " VerticalAlignment="Center" Margin="20,0,10,0"/>
             <ComboBox Width="200" 
@@ -72,147 +75,158 @@
 
         </StackPanel>
 
-        <Grid Grid.Row="1"  Margin="50,20,50,30">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition  Height="*"/>
-            </Grid.RowDefinitions>
+        <!-- Title -->
+        <TextBlock Grid.Row="1" Text="{Binding Text}"/>
 
-            <TextBlock Grid.Row="0" Text="{Binding Text}"/>
+        <!-- Curve -->
+        <Grid Grid.Row="2"  >
 
-            <!-- GRID -->
-            <Canvas Grid.Row="1" 
-                    x:Name="CanvasGrid"
-                    
-                    
-            >
-                <!--DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow1}}}"-->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-                <!--<Canvas.RenderTransform>
-                    <TransformGroup>
-                        -->
-                <!--<ScaleTransform ScaleX="{Binding Zoom}"
-                                        ScaleY="{Binding Zoom}" />-->
-                <!--
-                        <ScaleTransform ScaleY="-1" />
-                        <TranslateTransform Y="{Binding Height}"/>
+            <syncfusion:SfDataGrid Grid.Column="0" x:Name="CurvePointsList"
+                                   AutoGenerateColumns="False"
+                                   ItemsSource="{Binding Curve}"
+                                   AllowEditing="True"
+                                   CurrentCellEndEdit="CurvePointsList_CurrentCellEndEdit">
+                
+                <syncfusion:SfDataGrid.Columns>
+                    <syncfusion:GridNumericColumn HeaderText="Time" MappingName="T" />
+                    <syncfusion:GridNumericColumn HeaderText="Value" MappingName="V" />
+                </syncfusion:SfDataGrid.Columns>
+            </syncfusion:SfDataGrid>
+
+                <!--<ListView x:Name="CurvePointsList"
+                      ItemsSource="{Binding Curve, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Time">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding T}" HorizontalContentAlignment="Stretch"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Value">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding V}" HorizontalContentAlignment="Stretch"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                         
-                        
-                    </TransformGroup>
-                </Canvas.RenderTransform>-->
-                <Canvas.Background>
-                    <DrawingBrush TileMode="Tile" Viewport="0,0,40,40" 
+                    </GridView>
+                </ListView.View>
+            </ListView>-->
+
+            <Grid Grid.Column="1" Margin="50,20,50,30">
+
+                <!-- GRID -->
+                <Canvas x:Name="CanvasGrid" >
+                    <Canvas.Background>
+                        <DrawingBrush TileMode="Tile" Viewport="0,0,40,40" 
                                   ViewportUnits="Absolute" >
-                        <DrawingBrush.Drawing>
-                            <GeometryDrawing>
-                                <GeometryDrawing.Geometry>
-                                    <RectangleGeometry Rect="0,0,50,50"/>
-                                </GeometryDrawing.Geometry>
-                                <GeometryDrawing.Pen>
-                                    <Pen Brush="Gray" Thickness="1"/>
-                                </GeometryDrawing.Pen>
-                            </GeometryDrawing>
-                        </DrawingBrush.Drawing>
-                    </DrawingBrush>
-                </Canvas.Background>
-            </Canvas>
+                            <DrawingBrush.Drawing>
+                                <GeometryDrawing>
+                                    <GeometryDrawing.Geometry>
+                                        <RectangleGeometry Rect="0,0,50,50"/>
+                                    </GeometryDrawing.Geometry>
+                                    <GeometryDrawing.Pen>
+                                        <Pen Brush="Gray" Thickness="1"/>
+                                    </GeometryDrawing.Pen>
+                                </GeometryDrawing>
+                            </DrawingBrush.Drawing>
+                        </DrawingBrush>
+                    </Canvas.Background>
+                </Canvas>
 
-            <!-- Linear -->
-            <Border Grid.Row="1"  
-                    x:Name="CanvasLinearCurve"
-                    
-                    Visibility="Collapsed"
-            >
-                <Path Stroke="Black" StrokeThickness="1">
-                    <Path.Data>
-                        <GeometryGroup>
-                            <PathGeometry>
-                                <PathGeometry.Figures>
-                                    <PathFigureCollection>
-                                        <PathFigure StartPoint="{Binding StartPoint, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-                                            <PathFigure.Segments>
-                                                <PathSegmentCollection>
-                                                    <PolyLineSegment Points="{Binding RenderedPoints, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                                </PathSegmentCollection>
-                                            </PathFigure.Segments>
-                                        </PathFigure>
-                                    </PathFigureCollection>
-                                </PathGeometry.Figures>
-                            </PathGeometry>
-                        </GeometryGroup>
-                    </Path.Data>
-                </Path>
+                <!-- Linear -->
+                <Border x:Name="CanvasLinearCurve" Visibility="Collapsed" >
+                    <Path Stroke="Black" StrokeThickness="1">
+                        <Path.Data>
+                            <GeometryGroup>
+                                <PathGeometry>
+                                    <PathGeometry.Figures>
+                                        <PathFigureCollection>
+                                            <PathFigure StartPoint="{Binding StartPoint, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                                <PathFigure.Segments>
+                                                    <PathSegmentCollection>
+                                                        <PolyLineSegment Points="{Binding RenderedPoints, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    </PathSegmentCollection>
+                                                </PathFigure.Segments>
+                                            </PathFigure>
+                                        </PathFigureCollection>
+                                    </PathGeometry.Figures>
+                                </PathGeometry>
+                            </GeometryGroup>
+                        </Path.Data>
+                    </Path>
 
-            </Border>
+                </Border>
 
-            <!-- Quadratic -->
-            <Border Grid.Row="1" 
-                    x:Name="CanvasQuadraticCurve"
-                    
-                    Visibility="Collapsed"
-            >
-                <Path Stroke="Black" StrokeThickness="1">
-                    <Path.Data>
-                        <GeometryGroup>
-                            <PathGeometry>
-                                <PathGeometry.Figures>
-                                    <PathFigureCollection>
-                                        <PathFigure StartPoint="{Binding StartPoint, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-                                            <PathFigure.Segments>
-                                                <PathSegmentCollection>
-                                                    <PolyQuadraticBezierSegment Points="{Binding RenderedPoints, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                                </PathSegmentCollection>
-                                            </PathFigure.Segments>
-                                        </PathFigure>
-                                    </PathFigureCollection>
-                                </PathGeometry.Figures>
-                            </PathGeometry>
-                        </GeometryGroup>
-                    </Path.Data>
-                </Path>
+                <!-- Quadratic -->
+                <Border x:Name="CanvasQuadraticCurve" Visibility="Collapsed" >
+                    <Path Stroke="Black" StrokeThickness="1">
+                        <Path.Data>
+                            <GeometryGroup>
+                                <PathGeometry>
+                                    <PathGeometry.Figures>
+                                        <PathFigureCollection>
+                                            <PathFigure StartPoint="{Binding StartPoint, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                                <PathFigure.Segments>
+                                                    <PathSegmentCollection>
+                                                        <PolyQuadraticBezierSegment Points="{Binding RenderedPoints, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    </PathSegmentCollection>
+                                                </PathFigure.Segments>
+                                            </PathFigure>
+                                        </PathFigureCollection>
+                                    </PathGeometry.Figures>
+                                </PathGeometry>
+                            </GeometryGroup>
+                        </Path.Data>
+                    </Path>
 
-            </Border>
+                </Border>
 
-            <!-- Cubic -->
-            <Border Grid.Row="1" 
-                    x:Name="CanvasCubicCurve"
-                    
-                    Visibility="Collapsed"
-            >
-                <Path Stroke="Black" StrokeThickness="1">
-                    <Path.Data>
-                        <GeometryGroup>
-                            <PathGeometry>
-                                <PathGeometry.Figures>
-                                    <PathFigureCollection>
-                                        <PathFigure StartPoint="{Binding StartPoint, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-                                            <PathFigure.Segments>
-                                                <PathSegmentCollection>
-                                                    <PolyBezierSegment Points="{Binding RenderedPoints, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                                </PathSegmentCollection>
-                                            </PathFigure.Segments>
-                                        </PathFigure>
-                                    </PathFigureCollection>
-                                </PathGeometry.Figures>
-                            </PathGeometry>
-                        </GeometryGroup>
-                    </Path.Data>
-                </Path>
+                <!-- Cubic -->
+                <Border x:Name="CanvasCubicCurve" Visibility="Collapsed" >
+                    <Path Stroke="Black" StrokeThickness="1">
+                        <Path.Data>
+                            <GeometryGroup>
+                                <PathGeometry>
+                                    <PathGeometry.Figures>
+                                        <PathFigureCollection>
+                                            <PathFigure StartPoint="{Binding StartPoint, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                                <PathFigure.Segments>
+                                                    <PathSegmentCollection>
+                                                        <PolyBezierSegment Points="{Binding RenderedPoints, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                    </PathSegmentCollection>
+                                                </PathFigure.Segments>
+                                            </PathFigure>
+                                        </PathFigureCollection>
+                                    </PathGeometry.Figures>
+                                </PathGeometry>
+                            </GeometryGroup>
+                        </Path.Data>
+                    </Path>
 
-            </Border>
+                </Border>
 
-            <!-- POINTS OVERLAY -->
-            <Canvas Grid.Row="1" 
-                    x:Name="CanvasPoints"
-                    
+                <!-- POINTS OVERLAY -->
+                <Canvas x:Name="CanvasPoints"
+                    MouseWheel="CanvasPoints_MouseWheel"
                     PreviewMouseLeftButtonDown="Border_OnPreviewMouseLeftButtonDown"
                     SizeChanged="CanvasPoints_OnSizeChanged"
                     MouseMove="CanvasPoints_OnMouseMove"
                     Background="Transparent"/>
 
+            </Grid>
         </Grid>
-
-        <Grid Grid.Row="2" Background="{DynamicResource BorderBrush}">
+        
+        <!-- Footer -->
+        <Grid Grid.Row="3" Background="{DynamicResource BorderBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>

@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace WolvenKit.Functionality.Converters
+namespace WolvenKit.Converters
 {
     public class CellStyleConverter : IValueConverter
     {

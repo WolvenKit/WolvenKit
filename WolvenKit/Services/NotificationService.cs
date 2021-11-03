@@ -4,7 +4,7 @@ using System.Windows.Threading;
 using HandyControl.Controls;
 using WolvenKit.Common.Services;
 
-namespace WolvenKit.Functionality.Services
+namespace WolvenKit.Services
 {
     public class NotificationService : INotificationService
     {
@@ -107,7 +107,7 @@ namespace WolvenKit.Functionality.Services
             }
         }
 
-        public void Ask(string message, Func<bool,bool> isConfirmedFunc)
+        public void Ask(string message, Func<bool, bool> isConfirmedFunc)
         {
             switch (NotificationCategory)
             {
@@ -118,7 +118,7 @@ namespace WolvenKit.Functionality.Services
                     AskInDesktop(message, isConfirmedFunc);
                     break;
             }
-            
+
         }
 
         public void AskInApp(string message, Func<bool, bool> func) => Growl.Ask(message, func);

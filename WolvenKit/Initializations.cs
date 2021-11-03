@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Reactive.Linq;
@@ -14,26 +11,22 @@ using ReactiveUI;
 using Splat;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Themes.MaterialDark.WPF;
-using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
-using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.Shell;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using System.Security.Cryptography;
-using WolvenKit.Core;
 
-namespace WolvenKit.Functionality.Initialization
+namespace WolvenKit
 {
     public static class Initializations
     {
         [DllImport("WebView2Loader.dll", CallingConvention = CallingConvention.StdCall)]
         static extern int GetAvailableCoreWebView2BrowserVersionString(string browserExecutableFolder, out string version);
 
-        public static bool IsMissingWebView2() => (GetAvailableCoreWebView2BrowserVersionString(null, out string edgeVersion) != 0) || (edgeVersion == null);
+        public static bool IsMissingWebView2() => GetAvailableCoreWebView2BrowserVersionString(null, out var edgeVersion) != 0 || edgeVersion == null;
 
         public static async Task InitializeWebview2(ILoggerService _loggerService)
         {
@@ -94,7 +87,7 @@ namespace WolvenKit.Functionality.Initialization
 
             var webViewData = ISettingsManager.GetWebViewDataPath();
             Directory.CreateDirectory(webViewData);
-            Helpers.Helpers.objCoreWebView2Environment = await CoreWebView2Environment.CreateAsync(null, webViewData, null);
+            Helpers.objCoreWebView2Environment = await CoreWebView2Environment.CreateAsync(null, webViewData, null);
         }
 
         /// <summary>

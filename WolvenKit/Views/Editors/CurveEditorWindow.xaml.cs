@@ -236,7 +236,7 @@ namespace WolvenKit.Views.Editors
             switch (e.ClickCount)
             {
                 case 1:
-                    // 
+                    // start dragging canvas?
                     break;
                 // Add new point
                 case 2:
@@ -277,7 +277,7 @@ namespace WolvenKit.Views.Editors
                 vm.ReLoadCurve();
             }
 
-            RenderPoints();
+            //RenderPoints();
         }
 
         private void SaveButton_OnClick(object sender, RoutedEventArgs e)
@@ -315,6 +315,7 @@ namespace WolvenKit.Views.Editors
             // handle visibility
             switch (vm.GetInterpolationTypeEnum())
             {
+                case EInterpolationType.EIT_Constant:
                 case EInterpolationType.EIT_Linear:
                     CanvasLinearCurve.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                     CanvasQuadraticCurve.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
@@ -330,7 +331,6 @@ namespace WolvenKit.Views.Editors
                     CanvasQuadraticCurve.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
                     CanvasCubicCurve.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                     break;
-                case EInterpolationType.EIT_Constant:
                 case EInterpolationType.EIT_Hermite:
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -609,5 +609,48 @@ namespace WolvenKit.Views.Editors
         }
 
         #endregion
+
+        private void CanvasPoints_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (DataContext is not CurveEditorViewModel vm)
+            {
+                return;
+            }
+
+            var deltaX = (vm.MaxX - vm.MinX) / 10;
+            var deltaY = (vm.MaxV - vm.MinV) / 10;
+
+            // up
+            if (e.Delta < 0)
+            {
+                vm.MaxX += deltaX;
+                vm.MinX -= deltaX;
+
+                vm.MaxY += deltaY;
+                vm.MinY -= deltaY;
+            }
+
+            //down
+            else if (e.Delta > 0)
+            {
+                vm.MaxX -= deltaX;
+                vm.MinX += deltaX;
+
+                vm.MaxY -= deltaY;
+                vm.MinY += deltaY;
+            }
+        }
+
+        private void CurvePointsList_CurrentCellEndEdit(object sender, Syncfusion.UI.Xaml.Grid.CurrentCellEndEditEventArgs e)
+        {
+            if (DataContext is not CurveEditorViewModel vm)
+            {
+                return;
+            }
+
+            vm.ScaleCanvas(vm.Curve.ToList());
+
+            vm.Reload();
+        }
     }
 }

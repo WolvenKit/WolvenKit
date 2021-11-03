@@ -9,7 +9,7 @@
      xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
      xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters"
+    xmlns:converters="clr-namespace:WolvenKit.Converters"
      xmlns:sfgrid="clr-namespace:Syncfusion.UI.Xaml.Grid;assembly=Syncfusion.SfGrid.WPF"
     xmlns:tools="clr-namespace:WolvenKit.ViewModels.Tools;assembly=WolvenKit.App"
      d:DesignHeight="450"
