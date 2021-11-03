@@ -249,7 +249,7 @@
 
               
             
-            <syncfusion:SfTreeGrid x:Name="MainTreeGrid"
+            <!--<syncfusion:SfTreeGrid x:Name="MainTreeGrid"
                                     AllowFiltering="True"
                                     AllowResizingColumns="True"
                                     
@@ -297,17 +297,17 @@
 
                 </syncfusion:SfTreeGrid.Columns>
 
-            </syncfusion:SfTreeGrid>
+            </syncfusion:SfTreeGrid>-->
 
-            <!--<syncfusion:PropertyGrid
+            <syncfusion:PropertyGrid
                                 x:Name="PropertyGrid"
                                 Grid.Column="1"
-                                SelectedObject="{Binding SelectedChunk.Data}"
                                 PropertyExpandMode="NestedMode"
                                 AutoGeneratingPropertyGridItem="PropertyGrid_AutoGeneratingPropertyGridItem"
-                                >
 
-                            </syncfusion:PropertyGrid>-->
+                >
+
+                            </syncfusion:PropertyGrid>
 
         </Grid>
 

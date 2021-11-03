@@ -28,14 +28,14 @@ namespace WolvenKit.ViewModels.Documents
 
             this.WhenAnyValue(x => x.SelectedChunk).Subscribe(chunk =>
             {
-                if (chunk != null)
-                {
-                    ChunkProperties = new ObservableCollection<ChunkPropertyViewModel>(
-                        SelectedChunk.GetData()
-                            .ChildrEditableVariables
-                            .Select(x => new ChunkPropertyViewModel(x)));
+                //if (chunk != null)
+                //{
+                //    ChunkProperties = new ObservableCollection<ChunkPropertyViewModel>(
+                //        SelectedChunk.GetData()
+                //            .ChildrEditableVariables
+                //            .Select(x => new ChunkPropertyViewModel(x)));
 
-                }
+                //}
             });
             _file = file;
         }

@@ -365,17 +365,13 @@ namespace WolvenKit.RED4.CR2W.Types
         {
             if (IsByteArray())
             {
-                throw new NotImplementedException();
+                return _buffer.Cast<T>().GetEnumerator();
             }
             return Elements.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            if (IsByteArray())
-            {
-                throw new NotImplementedException();
-            }
             return GetEnumerator();
         }
 
