@@ -31,15 +31,15 @@ namespace WolvenKit.Views.Templates
         private DataTemplate GetTemplate(IEditableVariable variable) =>
             variable switch
             {
-                IREDBool => RedboolTemplate,
-                IREDString => StringTemplateView,
-                IREDIntegerType => NumericTemplate,
-                IREDEnum => EnumTemplate,
-                IREDChunkPtr => HandleTemplateView,
-                IREDRef => RefTemplateView,
-                IREDColor x => ColorTemplateView,
-                IREDArray => CommmonTemplate,
-                ICurveDataAccessor => SingleChannelCurveTemplate,
+                IREDBool => RedboolTemplate,        //done in PG
+                IREDString => StringTemplateView,   //done in PG
+                IREDIntegerType => NumericTemplate, //done in PG
+                IREDEnum => EnumTemplate,           //done in PG
+                IREDChunkPtr => HandleTemplateView, //done in PG
+                IREDRef => RefTemplateView,         //done in PG
+                IREDColor x => ColorTemplateView,   //done in PG
+                IREDArray => CommmonTemplate,       //done in PG
+                ICurveDataAccessor => SingleChannelCurveTemplate,   //done in PG
                 _ => CommmonTemplate
             };
     }

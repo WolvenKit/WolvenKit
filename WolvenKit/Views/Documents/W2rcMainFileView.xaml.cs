@@ -65,65 +65,42 @@ namespace WolvenKit.Views.Documents
                        view => view.PropertyGrid.SelectedObject)
                    .DisposeWith(disposables);
 
-
-                //this.Bind(ViewModel,
-                //      view => CustomEditorCollection,
-                //      view => view.PropertyGrid.CustomEditorCollection)
-                //  .DisposeWith(disposables);
-
-
             });
 
 
-            PropertyGrid.CustomEditorCollection = CustomEditorCollection;
-
+            //PropertyGrid.CustomEditorCollection = CustomEditorCollection;
             //MainTreeGrid.RequestTreeItems += TreeGrid_RequestTreeItems;
         }
 
-        public CustomEditorCollection CustomEditorCollection { get; set; } = new()
-        {
-            new CustomEditor { Editor = new IntegerEditor(), HasPropertyType = true, PropertyType = typeof(CFloat) },
-            new CustomEditor { Editor = new IntegerEditor(), HasPropertyType = true, PropertyType = typeof(CDouble) },
+        //public MyEditorCollection CustomEditorCollection { get; set; } = new();
 
-            new CustomEditor { Editor = new IntegerEditor(), HasPropertyType = true, PropertyType = typeof(CUInt8) },
-            new CustomEditor { Editor = new IntegerEditor(), HasPropertyType = true, PropertyType = typeof(CInt8) },
-            new CustomEditor { Editor = new IntegerEditor(), HasPropertyType = true, PropertyType = typeof(CUInt16) },
-            new CustomEditor { Editor = new IntegerEditor(), HasPropertyType = true, PropertyType = typeof(CInt16) },
-            new CustomEditor { Editor = new IntegerEditor(), HasPropertyType = true, PropertyType = typeof(CUInt32) },
-            new CustomEditor { Editor = new IntegerEditor(), HasPropertyType = true, PropertyType = typeof(CInt32) },
-            new CustomEditor { Editor = new IntegerEditor(), HasPropertyType = true, PropertyType = typeof(CUInt64) },
-            new CustomEditor { Editor = new IntegerEditor(), HasPropertyType = true, PropertyType = typeof(CInt64) },
-        };
+        //private void TreeGrid_RequestTreeItems(object sender, TreeGridRequestTreeItemsEventArgs args)
+        //{
+        //    if (DataContext is W2rcFileViewModel vm)
+        //    {
+        //        if (args.ParentItem == null)
+        //        {
+        //            args.ChildItems = vm.ChunkProperties;
+        //        }
+        //        else
+        //        {
+        //            if (args.ParentItem is ChunkPropertyViewModel chunk)
+        //            {
+        //                args.ChildItems = chunk.Children;
+        //            }
+        //        }
+        //    }
 
-        private void TreeGrid_RequestTreeItems(object sender, TreeGridRequestTreeItemsEventArgs args)
-        {
-            if (DataContext is W2rcFileViewModel vm)
-            {
-                if (args.ParentItem == null)
-                {
-                    args.ChildItems = vm.ChunkProperties;
-                }
-                else
-                {
-                    if (args.ParentItem is ChunkPropertyViewModel chunk)
-                    {
-                        args.ChildItems = chunk.Children;
-                    }
-                }
-            }
-           
-               
+        //    //else
+        //    //{
+        //    //    EmployeeInfo employee = args.ParentItem as EmployeeInfo;
 
-            //else
-            //{
-            //    EmployeeInfo employee = args.ParentItem as EmployeeInfo;
-
-            //    if (employee != null)
-            //    {
-            //        args.ChildItems = ViewModel.GetEmployees().Where(x => x.ReportsTo == employee.ID);
-            //    }
-            //}
-        }
+        //    //    if (employee != null)
+        //    //    {
+        //    //        args.ChildItems = ViewModel.GetEmployees().Where(x => x.ReportsTo == employee.ID);
+        //    //    }
+        //    //}
+        //}
 
         private void SetCollapsedAll()
         {
@@ -145,25 +122,7 @@ namespace WolvenKit.Views.Documents
             ViewModel.SelectedChunk = chunk;
         }
 
-        private void CurveEditorButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            var tag = ((Button)sender).Tag;
-            if (tag is ICurveDataAccessor redcurve)
-            {
-                var curveEditorWindow = new CurveEditorWindow(redcurve);
-                var r = curveEditorWindow.ShowDialog();
-                if (r ?? true)
-                {
-                    var c = curveEditorWindow.GetCurve();
-                    if (c is not null)
-                    {
-                        // set tag data
-                        redcurve.SetInterpolationType(c.Type);
-                        redcurve.SetCurvePoints(c.Points);
-                    }
-                }
-            }
-        }
+        
 
         private void ChunksButton_OnClick(object sender, RoutedEventArgs e)
         {
@@ -179,6 +138,8 @@ namespace WolvenKit.Views.Documents
 
         private void PropertyGrid_AutoGeneratingPropertyGridItem(object sender, Syncfusion.Windows.PropertyGrid.AutoGeneratingPropertyGridItemEventArgs e)
         {
+            #region hide properties
+
             //if (e.DisplayName == nameof(IEditableVariable.accessor)
             //    //|| e.DisplayName == nameof(IEditableVariable.ChildrEditableVariables)
             //    //|| e.DisplayName == nameof(IEditableVariable.Cr2wFile)
@@ -197,29 +158,59 @@ namespace WolvenKit.Views.Documents
             //    //|| e.DisplayName == nameof(CVariable.GottenVarChunkIndex)
             //    )
             //{
-            //    e.Cancel = true;
-
-                
+            //    e.Cancel = true;                
             //}
+
+            #endregion
 
             if (e.OriginalSource is PropertyItem { } propertyItem)
             {
-                if (propertyItem.PropertyType == typeof(CUInt8)
-                    || propertyItem.PropertyType == typeof(CInt8)
-                    || propertyItem.PropertyType == typeof(CUInt16)
-                    || propertyItem.PropertyType == typeof(CInt16)
-                    || propertyItem.PropertyType == typeof(CUInt32)
-                    || propertyItem.PropertyType == typeof(CInt32)
-                    || propertyItem.PropertyType == typeof(CUInt64)
-                    || propertyItem.PropertyType == typeof(CInt64)
-                    || propertyItem.PropertyType == typeof(CFloat)
-                    || propertyItem.PropertyType == typeof(CDouble)
-                    )
+                if (propertyItem.PropertyType.IsAssignableTo(typeof(IREDString)))
                 {
+                    propertyItem.Editor = new PropertyGridEditors.TextEditor();
+                    e.ExpandMode = PropertyExpandModes.FlatMode;
+                }
+                else if (propertyItem.PropertyType.IsAssignableTo(typeof(IREDIntegerType)))
+                {
+                    propertyItem.Editor = new PropertyGridEditors.IntegerEditor();
+                    if (propertyItem.PropertyType == typeof(CFloat))
+                    {
+                        propertyItem.Editor = new PropertyGridEditors.FloatEditor();
+                    }
+                    e.ExpandMode = PropertyExpandModes.FlatMode;
+                }
+                else if (propertyItem.PropertyType.IsAssignableTo(typeof(IREDBool)))
+                {
+                    propertyItem.Editor = new PropertyGridEditors.BoolEditor();
+                    e.ExpandMode = PropertyExpandModes.FlatMode;
+                }
+                else if (propertyItem.PropertyType.IsAssignableTo(typeof(IREDEnum)))
+                {
+                    propertyItem.Editor = new PropertyGridEditors.EnumEditor();
+                    e.ExpandMode = PropertyExpandModes.FlatMode;
+                }
+                else if (propertyItem.PropertyType.IsAssignableTo(typeof(IREDChunkPtr)))
+                {
+                    propertyItem.Editor = new PropertyGridEditors.ChunkPtrEditor();
+                    e.ExpandMode = PropertyExpandModes.FlatMode;
+                }
+                else if (propertyItem.PropertyType.IsAssignableTo(typeof(IREDRef)))
+                {
+                    propertyItem.Editor = new PropertyGridEditors.RefEditor();
+                    e.ExpandMode = PropertyExpandModes.FlatMode;
+                }
+                else if (propertyItem.PropertyType.IsAssignableTo(typeof(ICurveDataAccessor)))
+                {
+                    propertyItem.Editor = new PropertyGridEditors.CurveEditor();
+                    e.ExpandMode = PropertyExpandModes.FlatMode;
+                }
+                else if (propertyItem.PropertyType.IsAssignableTo(typeof(IREDColor)))
+                {
+                    propertyItem.Editor = new PropertyGridEditors.ColorEditor();
                     e.ExpandMode = PropertyExpandModes.FlatMode;
                 }
             }
-            
+
 
         }
 

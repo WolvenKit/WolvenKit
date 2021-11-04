@@ -26,8 +26,31 @@ namespace WolvenKit.Views.Editors
             InitializeComponent();
         }
 
+        #region properties
+
+        public IREDIntegerType RedInteger
+        {
+            get => (IREDIntegerType)this.GetValue(RedIntegerProperty);
+            set => this.SetValue(RedIntegerProperty, value);
+        }
+        public static readonly DependencyProperty RedIntegerProperty = DependencyProperty.Register(
+            nameof(RedInteger), typeof(IREDIntegerType), typeof(RedIntegerEditor), new PropertyMetadata(default(IREDIntegerType)));
 
         public int NumberDecimalDigits => GetNumberDecimalDigits();
+
+        public double MinValue => GetMinValue();
+
+        public double MaxValue => GetMaxValue();
+
+        public double Value
+        {
+            get => GetValueFromRedValue();
+            set => SetRedValue(value);
+        }
+
+        #endregion
+
+        #region methods
 
         private int GetNumberDecimalDigits()
         {
@@ -45,8 +68,6 @@ namespace WolvenKit.Views.Editors
 
             return 0;
         }
-
-        public double MinValue => GetMinValue();
 
         private double GetMinValue()
         {
@@ -75,8 +96,6 @@ namespace WolvenKit.Views.Editors
             return double.MinValue;
         }
 
-        public double MaxValue => GetMaxValue();
-
         private double GetMaxValue()
         {
             if (RedInteger != null)
@@ -104,15 +123,10 @@ namespace WolvenKit.Views.Editors
             return double.MinValue;
         }
 
-        public double Value {
-            get => GetValueFromRedValue();
-            set => SetRedValue(value);
-        }
-
         private void SetRedValue(double value)
         {
             var redvalue = RedInteger.GetValue();
-            
+
             _ = redvalue switch
             {
                 float => RedInteger.SetValue((float)value),
@@ -137,15 +151,6 @@ namespace WolvenKit.Views.Editors
             return double.Parse(redvalue.ToString());
         }
 
-       
-
-        public IREDIntegerType RedInteger
-        {
-            get => (IREDIntegerType)this.GetValue(RedIntegerProperty);
-            set => this.SetValue(RedIntegerProperty, value);
-        }
-        public static readonly DependencyProperty RedIntegerProperty = DependencyProperty.Register(
-            nameof(RedInteger), typeof(IREDIntegerType), typeof(RedIntegerEditor), new PropertyMetadata(default(IREDIntegerType)));
-
+        #endregion
     }
 }
