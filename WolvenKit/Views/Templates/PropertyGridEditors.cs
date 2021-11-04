@@ -8,11 +8,61 @@ using Syncfusion.Windows.PropertyGrid;
 using Syncfusion.Windows.Shared;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.Views.Templates;
+using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.Views.Editors
 {
     public class PropertyGridEditors
     {
+        public static void GetPropertyEditor(AutoGeneratingPropertyGridItemEventArgs e, PropertyItem propertyItem)
+        {
+            if (propertyItem.PropertyType.IsAssignableTo(typeof(IREDString)))
+            {
+                propertyItem.Editor = new PropertyGridEditors.TextEditor();
+                e.ExpandMode = PropertyExpandModes.FlatMode;
+            }
+            else if (propertyItem.PropertyType.IsAssignableTo(typeof(IREDIntegerType)))
+            {
+                propertyItem.Editor = new PropertyGridEditors.IntegerEditor();
+                if (propertyItem.PropertyType == typeof(CFloat))
+                {
+                    propertyItem.Editor = new PropertyGridEditors.FloatEditor();
+                }
+                e.ExpandMode = PropertyExpandModes.FlatMode;
+            }
+            else if (propertyItem.PropertyType.IsAssignableTo(typeof(IREDBool)))
+            {
+                propertyItem.Editor = new PropertyGridEditors.BoolEditor();
+                e.ExpandMode = PropertyExpandModes.FlatMode;
+            }
+            else if (propertyItem.PropertyType.IsAssignableTo(typeof(IREDEnum)))
+            {
+                propertyItem.Editor = new PropertyGridEditors.EnumEditor();
+                e.ExpandMode = PropertyExpandModes.FlatMode;
+            }
+            else if (propertyItem.PropertyType.IsAssignableTo(typeof(IREDChunkPtr)))
+            {
+                propertyItem.Editor = new PropertyGridEditors.ChunkPtrEditor();
+                e.ExpandMode = PropertyExpandModes.FlatMode;
+            }
+            else if (propertyItem.PropertyType.IsAssignableTo(typeof(IREDRef)))
+            {
+                propertyItem.Editor = new PropertyGridEditors.RefEditor();
+                e.ExpandMode = PropertyExpandModes.FlatMode;
+            }
+            else if (propertyItem.PropertyType.IsAssignableTo(typeof(ICurveDataAccessor)))
+            {
+                propertyItem.Editor = new PropertyGridEditors.CurveEditor();
+                e.ExpandMode = PropertyExpandModes.FlatMode;
+            }
+            else if (propertyItem.PropertyType.IsAssignableTo(typeof(IREDColor)))
+            {
+                propertyItem.Editor = new PropertyGridEditors.ColorEditor();
+                e.ExpandMode = PropertyExpandModes.FlatMode;
+            }
+        }
+
+
         public class ColorEditor : ITypeEditor
         {
             private RedColorEditor _editor;

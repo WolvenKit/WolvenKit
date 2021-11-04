@@ -35,15 +35,7 @@ namespace WolvenKit.Views.Editors
 
         private string GetValueFromRedValue()
         {
-            var redvalue = RedRef.GetValue();
-            if (redvalue is string redstring)
-            {
-                return redstring;
-            }
-            else 
-            {
-                throw new ArgumentException(nameof(redvalue));
-            }
+            return RedRef.DepotPath;
         }
 
 

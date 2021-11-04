@@ -299,14 +299,12 @@
 
             </syncfusion:SfTreeGrid>-->
 
-            <syncfusion:PropertyGrid
-                                x:Name="PropertyGrid"
-                                Grid.Column="1"
-                                PropertyExpandMode="NestedMode"
-                                AutoGeneratingPropertyGridItem="PropertyGrid_AutoGeneratingPropertyGridItem"
-                >
-
-                            </syncfusion:PropertyGrid>
+            <syncfusion:PropertyGrid x:Name="PropertyGrid" Grid.Column="1"
+                PropertyExpandMode="NestedMode"
+                AutoGeneratingPropertyGridItem="PropertyGrid_AutoGeneratingPropertyGridItem"
+                CollectionEditorOpening ="PropertyGrid_CollectionEditorOpening"
+                
+                />
 
         </Grid>
 

@@ -15,11 +15,9 @@ namespace WolvenKit.Views.Editors
 {
     /*
     TODOS:
-    - Constant curve
     - Hermite curve
 
     - scrolling
-    - zooming
 
     - multi channel curves
     - single channel curves of objects
