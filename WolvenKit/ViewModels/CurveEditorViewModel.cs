@@ -9,9 +9,10 @@ using System.Windows.Media;
 using WinCopies.Util;
 using WolvenKit.Common;
 using WolvenKit.Common.Annotations;
+using WolvenKit.Views.Editors;
 using Math = System.Math;
 
-namespace WolvenKit.Views.Editors
+namespace WolvenKit.ViewModels
 {
     /*
     TODOS:
@@ -249,11 +250,11 @@ namespace WolvenKit.Views.Editors
             return (t, v);
         }
 
-        public double ToWorldCoordinateX(double x) => (x * ScaleXInverse) + MinT;
-        public double ToWorldCoordinateY(double y) => ((Height - y) * ScaleYInverse) + MinV;
+        public double ToWorldCoordinateX(double x) => x * ScaleXInverse + MinT;
+        public double ToWorldCoordinateY(double y) => (Height - y) * ScaleYInverse + MinV;
 
         public double ToCanvasCoordinateX(double x) => (x - MinT) * ScaleX;
-        public double ToCanvasCoordinateY(double y) => Height - ((y - MinV) * ScaleY);
+        public double ToCanvasCoordinateY(double y) => Height - (y - MinV) * ScaleY;
 
         private double GetCurveMinT() => Curve.Min(_ => _.T);
         private double GetCurveMaxT() => Curve.Max(_ => _.T);
@@ -372,7 +373,7 @@ namespace WolvenKit.Views.Editors
         {
             // sort points
             Curve = new ObservableCollection<GeneralizedPoint>(Curve.OrderBy(_ => _.T));
-            
+
 
             // scale points to canvas
             foreach (var p in _curve)
@@ -548,7 +549,7 @@ namespace WolvenKit.Views.Editors
         {
             var ctrlPoint2 = -(previousPoint.Vector - point.Vector);
             ctrlPoint2.Normalize();
-            ctrlPoint2 = point.Vector + (ctrlPoint2 * (nextPoint.Vector - point.Vector).Length / 2);
+            ctrlPoint2 = point.Vector + ctrlPoint2 * (nextPoint.Vector - point.Vector).Length / 2;
             return ctrlPoint2;
         }
 
@@ -557,7 +558,7 @@ namespace WolvenKit.Views.Editors
         {
             var ctrlPoint1 = -(nextPoint.Vector - point.Vector);
             ctrlPoint1.Normalize();
-            ctrlPoint1 = point.Vector + (ctrlPoint1 * (point.Vector - previousPoint.Vector).Length / 2);
+            ctrlPoint1 = point.Vector + ctrlPoint1 * (point.Vector - previousPoint.Vector).Length / 2;
             return ctrlPoint1;
         }
 
@@ -589,10 +590,10 @@ namespace WolvenKit.Views.Editors
         {
             var x = Math.Min(
                 Math.Max(pos.X - XMIN, 0),
-                Width - (2 * XMIN));
+                Width - 2 * XMIN);
             var y = Math.Min(
                 Math.Max(pos.Y - YMIN, 0),
-                Height - (2 * YMIN));
+                Height - 2 * YMIN);
             return new Point(x, y);
         }
 
@@ -601,10 +602,10 @@ namespace WolvenKit.Views.Editors
         {
             var x = Math.Min(
                 Math.Max(pos.X - XMIN, MinT),
-                MaxT - (2 * XMIN));
+                MaxT - 2 * XMIN);
             var y = Math.Min(
                 Math.Max(pos.Y - YMIN, MinV),
-                MaxV - (2 * YMIN));
+                MaxV - 2 * YMIN);
             return new Vector(x, y);
         }
     }

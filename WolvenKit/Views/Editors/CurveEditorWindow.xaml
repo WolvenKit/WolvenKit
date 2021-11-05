@@ -7,7 +7,7 @@
                              xmlns:hc="https://handyorg.github.io/handycontrol"
                              xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
                              xmlns:adonisControls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
-                             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+                             xmlns:syncfusion="http://schemas.syncfusion.com/wpf" xmlns:viewmodels="clr-namespace:WolvenKit.ViewModels"
                              mc:Ignorable="d"
 
                              Title="Curve Editor" 
@@ -22,7 +22,7 @@
     </Window.Style>
 
     <Window.DataContext>
-        <local:CurveEditorViewModel/>
+        <viewmodels:CurveEditorViewModel/>
     </Window.DataContext>
 
     <Window.Resources>

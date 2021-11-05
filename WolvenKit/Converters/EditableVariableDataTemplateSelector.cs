@@ -9,7 +9,7 @@ using Assimp;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.ViewModels.Shell;
 
-namespace WolvenKit.Views.Templates
+namespace WolvenKit.Converters
 {
     public class EditableVariableDataTemplateSelector : DataTemplateSelector
     {

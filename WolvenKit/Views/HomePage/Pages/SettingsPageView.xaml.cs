@@ -4,7 +4,7 @@ using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.Controls.Layout;
 using Syncfusion.Windows.PropertyGrid;
-using WolvenKit.ViewModels.HomePage.Pages;
+using WolvenKit.ViewModels;
 
 namespace WolvenKit.Views.HomePage.Pages
 {

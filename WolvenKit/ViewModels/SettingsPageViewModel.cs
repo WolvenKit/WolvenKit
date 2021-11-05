@@ -17,7 +17,7 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Common;
 
-namespace WolvenKit.ViewModels.HomePage.Pages
+namespace WolvenKit.ViewModels
 {
     public class SettingsPageViewModel : PageViewModel
     {
@@ -138,13 +138,13 @@ namespace WolvenKit.ViewModels.HomePage.Pages
         // until it finds the element with the PropertyView type.
         private ItemCollection GetPropertyViews(DependencyObject currentElement)
         {
-            int childCount = VisualTreeHelper.GetChildrenCount(currentElement);
+            var childCount = VisualTreeHelper.GetChildrenCount(currentElement);
             ItemCollection foundCollection = null;
 
-            for (int i = 0; i < childCount; i++)
+            for (var i = 0; i < childCount; i++)
             {
                 var child = VisualTreeHelper.GetChild(currentElement, i);
-                PropertyView childType = child as PropertyView;
+                var childType = child as PropertyView;
                 if (childType == null)
                 {
                     foundCollection = GetPropertyViews(child);

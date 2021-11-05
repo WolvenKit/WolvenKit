@@ -14,7 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.Common.Model.Cr2w;
-using WolvenKit.Views.Editors;
+using WolvenKit.Converters;
+using WolvenKit.ViewModels;
 
 namespace WolvenKit.Views.Templates
 {

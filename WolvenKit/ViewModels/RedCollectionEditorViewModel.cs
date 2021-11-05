@@ -14,7 +14,7 @@ using WolvenKit.Common.Annotations;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Functionality.Commands;
 
-namespace WolvenKit.Views.Templates
+namespace WolvenKit.ViewModels
 {
     internal class RedCollectionItemViewModel : ObservableObject
     {

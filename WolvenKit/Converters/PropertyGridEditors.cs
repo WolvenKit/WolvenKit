@@ -9,8 +9,9 @@ using Syncfusion.Windows.Shared;
 using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.Views.Templates;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Views.Editors;
 
-namespace WolvenKit.Views.Editors
+namespace WolvenKit.Converters
 {
     public class PropertyGridEditors
     {
@@ -18,46 +19,46 @@ namespace WolvenKit.Views.Editors
         {
             if (PropertyType.IsAssignableTo(typeof(IREDString)))
             {
-                return new PropertyGridEditors.TextEditor();
-                
+                return new TextEditor();
+
             }
             else if (PropertyType.IsAssignableTo(typeof(IREDIntegerType)))
             {
                 if (PropertyType == typeof(CFloat))
                 {
-                    return new PropertyGridEditors.FloatEditor();
+                    return new FloatEditor();
                 }
-                return new PropertyGridEditors.IntegerEditor();
+                return new IntegerEditor();
             }
             else if (PropertyType.IsAssignableTo(typeof(IREDBool)))
             {
-                return new PropertyGridEditors.BoolEditor();
-                
+                return new BoolEditor();
+
             }
             else if (PropertyType.IsAssignableTo(typeof(IREDEnum)))
             {
-                return new PropertyGridEditors.EnumEditor();
-                
+                return new EnumEditor();
+
             }
             else if (PropertyType.IsAssignableTo(typeof(IREDChunkPtr)))
             {
-                return new PropertyGridEditors.ChunkPtrEditor();
-                
+                return new ChunkPtrEditor();
+
             }
             else if (PropertyType.IsAssignableTo(typeof(IREDRef)))
             {
-                return new PropertyGridEditors.RefEditor();
-                
+                return new RefEditor();
+
             }
             else if (PropertyType.IsAssignableTo(typeof(ICurveDataAccessor)))
             {
-                return new PropertyGridEditors.CurveEditor();
-                
+                return new CurveEditor();
+
             }
             else if (PropertyType.IsAssignableTo(typeof(IREDColor)))
             {
-                return new PropertyGridEditors.ColorEditor();
-                
+                return new ColorEditor();
+
             }
 
             return null;
@@ -83,7 +84,7 @@ namespace WolvenKit.Views.Editors
                 }
                 else
                 {
-                    _editor.SetCurrentValue(System.Windows.UIElement.IsEnabledProperty, false);
+                    _editor.SetCurrentValue(UIElement.IsEnabledProperty, false);
                     var binding = new Binding("Value")
                     {
                         Source = info,
@@ -124,7 +125,7 @@ namespace WolvenKit.Views.Editors
                 }
                 else
                 {
-                    _editor.SetCurrentValue(System.Windows.UIElement.IsEnabledProperty, false);
+                    _editor.SetCurrentValue(UIElement.IsEnabledProperty, false);
                     var binding = new Binding("Value")
                     {
                         Source = info,
@@ -165,7 +166,7 @@ namespace WolvenKit.Views.Editors
                 }
                 else
                 {
-                    _editor.SetCurrentValue(System.Windows.UIElement.IsEnabledProperty, false);
+                    _editor.SetCurrentValue(UIElement.IsEnabledProperty, false);
                     var binding = new Binding("Value")
                     {
                         Source = info,
@@ -206,7 +207,7 @@ namespace WolvenKit.Views.Editors
                 }
                 else
                 {
-                    _editor.SetCurrentValue(System.Windows.UIElement.IsEnabledProperty, false);
+                    _editor.SetCurrentValue(UIElement.IsEnabledProperty, false);
                     var binding = new Binding("Value")
                     {
                         Source = info,
@@ -247,7 +248,7 @@ namespace WolvenKit.Views.Editors
                 }
                 else
                 {
-                    _editor.SetCurrentValue(System.Windows.UIElement.IsEnabledProperty, false);
+                    _editor.SetCurrentValue(UIElement.IsEnabledProperty, false);
                     var binding = new Binding("Value")
                     {
                         Source = info,
@@ -288,7 +289,7 @@ namespace WolvenKit.Views.Editors
                 }
                 else
                 {
-                    _editor.SetCurrentValue(System.Windows.UIElement.IsEnabledProperty, false);
+                    _editor.SetCurrentValue(UIElement.IsEnabledProperty, false);
                     var binding = new Binding("Value")
                     {
                         Source = info,
@@ -329,7 +330,7 @@ namespace WolvenKit.Views.Editors
                 }
                 else
                 {
-                    _editor.SetCurrentValue(System.Windows.UIElement.IsEnabledProperty, false);
+                    _editor.SetCurrentValue(UIElement.IsEnabledProperty, false);
                     var binding = new Binding("Value")
                     {
                         Source = info,
@@ -370,7 +371,7 @@ namespace WolvenKit.Views.Editors
                 }
                 else
                 {
-                    _editor.SetCurrentValue(System.Windows.UIElement.IsEnabledProperty, false);
+                    _editor.SetCurrentValue(UIElement.IsEnabledProperty, false);
                     var binding = new Binding("Value")
                     {
                         Source = info,
@@ -411,7 +412,7 @@ namespace WolvenKit.Views.Editors
                 }
                 else
                 {
-                    _editor.SetCurrentValue(System.Windows.UIElement.IsEnabledProperty, false);
+                    _editor.SetCurrentValue(UIElement.IsEnabledProperty, false);
                     var binding = new Binding("Value")
                     {
                         Source = info,
@@ -434,5 +435,5 @@ namespace WolvenKit.Views.Editors
         }
     }
 
-    
+
 }
