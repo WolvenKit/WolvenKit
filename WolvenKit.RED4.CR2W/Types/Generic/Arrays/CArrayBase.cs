@@ -216,7 +216,7 @@ namespace WolvenKit.RED4.CR2W.Types
         {
             if (IsByteArray())
             {
-                throw new NotImplementedException();
+                return false;
             }
 
             return child is T && Elements.Count > 0;
@@ -226,7 +226,7 @@ namespace WolvenKit.RED4.CR2W.Types
         {
             if (IsByteArray())
             {
-                throw new NotImplementedException();
+                return false;
             }
 
             if (child is T tvar)

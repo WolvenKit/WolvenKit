@@ -53,7 +53,32 @@ namespace WolvenKit.Views.Templates
         {
             if (e.OriginalSource is PropertyItem { } propertyItem)
             {
-                PropertyGridEditors.GetPropertyEditor(e, propertyItem);
+                if (DataContext is RedCollectionEditorViewModel viewModel)
+                {
+                    var propertyType = propertyItem.PropertyType;
+                    var propertyName = propertyItem.DisplayName;
+
+                    ITypeEditor customEditor = null;
+
+                    if (propertyType == typeof(object) && propertyName.Equals("Element"))
+                    {
+                        var type = viewModel.SelectedElement.Element.GetType();
+                        customEditor = PropertyGridEditors.GetPropertyEditor(type);
+                    }
+                    else
+                    {
+                        customEditor = PropertyGridEditors.GetPropertyEditor(propertyItem.PropertyType);
+                    }
+
+                    if (customEditor is not null)
+                    {
+                        propertyItem.Editor = customEditor;
+                        e.ExpandMode = PropertyExpandModes.FlatMode;
+                    }
+
+                }
+
+               
             }
         }
 
@@ -82,16 +107,6 @@ namespace WolvenKit.Views.Templates
                     throw new ArgumentException(nameof(editableVariable));
                 }
             }
-        }
-
-        private void AddElementButton_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
-        private void RemoveElementButton_Click(object sender, RoutedEventArgs e)
-        {
-            
         }
     }
 }

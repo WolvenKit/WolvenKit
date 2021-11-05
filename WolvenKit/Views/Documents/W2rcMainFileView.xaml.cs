@@ -143,7 +143,12 @@ namespace WolvenKit.Views.Documents
         {
             if (e.OriginalSource is PropertyItem { } propertyItem)
             {
-                PropertyGridEditors.GetPropertyEditor(e, propertyItem);
+                var customEditor = PropertyGridEditors.GetPropertyEditor(propertyItem.PropertyType);
+                if (customEditor is not null)
+                {
+                    propertyItem.Editor = customEditor;
+                    e.ExpandMode = PropertyExpandModes.FlatMode;
+                }
             }
         }
 

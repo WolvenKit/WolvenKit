@@ -39,9 +39,9 @@
         
         <Grid Grid.Row="0" Margin="10">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
 
             <!-- LeftSide -->
@@ -55,7 +55,7 @@
                 <TextBlock Grid.Row="0" Text="Members:" Margin="10"/>
 
                 <ListView Grid.Row="1" x:Name="ListView"
-                          ItemsSource="{Binding Elements}"
+                          ItemsSource="{Binding Elements, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           SelectedItem="{Binding SelectedElement}">
                     <ListView.View>
                         <GridView>
@@ -65,8 +65,8 @@
                 </ListView>
 
                 <StackPanel Grid.Row="2" Orientation="Horizontal">
-                    <Button Content="Add" Margin="10" x:Name="AddElementButton" Click="AddElementButton_Click" />
-                    <Button Content="Remove" Margin="10" x:Name="RemoveElementButton" Click="RemoveElementButton_Click" />
+                    <Button Content="Add" Margin="10" x:Name="AddElementButton" Command="{Binding AddElementCommand}" />
+                    <Button Content="Remove" Margin="10" x:Name="RemoveElementButton" Command="{Binding RemoveElementCommand}" />
                 </StackPanel>
 
             </Grid>
@@ -88,6 +88,7 @@
                                          AutoGeneratingPropertyGridItem="PropertyGrid_AutoGeneratingPropertyGridItem"
                                          CollectionEditorOpening ="PropertyGrid_CollectionEditorOpening"
                                          SelectedObject="{Binding SelectedElement}"
+                                         
                                          />
 
 
@@ -99,7 +100,7 @@
         <Separator Grid.Row="1" Margin="10"/>
 
         <!-- Footer -->
-        <Grid Grid.Row="2" Background="{DynamicResource BorderBrush}">
+        <!--<Grid Grid.Row="2" Background="{DynamicResource BorderBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -110,7 +111,7 @@
             <Button Grid.Column="1" Content="Save" Margin="5" Click="SaveButton_Click" />
             <Button Grid.Column="2" Content="Close" Margin="5" Click="CloseButton_Click" />
 
-        </Grid>
+        </Grid>-->
 
     </Grid>
 </adonisControls:AdonisWindow>

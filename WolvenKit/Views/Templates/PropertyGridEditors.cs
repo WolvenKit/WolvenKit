@@ -14,52 +14,53 @@ namespace WolvenKit.Views.Editors
 {
     public class PropertyGridEditors
     {
-        public static void GetPropertyEditor(AutoGeneratingPropertyGridItemEventArgs e, PropertyItem propertyItem)
+        public static ITypeEditor GetPropertyEditor(Type PropertyType)
         {
-            if (propertyItem.PropertyType.IsAssignableTo(typeof(IREDString)))
+            if (PropertyType.IsAssignableTo(typeof(IREDString)))
             {
-                propertyItem.Editor = new PropertyGridEditors.TextEditor();
-                e.ExpandMode = PropertyExpandModes.FlatMode;
+                return new PropertyGridEditors.TextEditor();
+                
             }
-            else if (propertyItem.PropertyType.IsAssignableTo(typeof(IREDIntegerType)))
+            else if (PropertyType.IsAssignableTo(typeof(IREDIntegerType)))
             {
-                propertyItem.Editor = new PropertyGridEditors.IntegerEditor();
-                if (propertyItem.PropertyType == typeof(CFloat))
+                if (PropertyType == typeof(CFloat))
                 {
-                    propertyItem.Editor = new PropertyGridEditors.FloatEditor();
+                    return new PropertyGridEditors.FloatEditor();
                 }
-                e.ExpandMode = PropertyExpandModes.FlatMode;
+                return new PropertyGridEditors.IntegerEditor();
             }
-            else if (propertyItem.PropertyType.IsAssignableTo(typeof(IREDBool)))
+            else if (PropertyType.IsAssignableTo(typeof(IREDBool)))
             {
-                propertyItem.Editor = new PropertyGridEditors.BoolEditor();
-                e.ExpandMode = PropertyExpandModes.FlatMode;
+                return new PropertyGridEditors.BoolEditor();
+                
             }
-            else if (propertyItem.PropertyType.IsAssignableTo(typeof(IREDEnum)))
+            else if (PropertyType.IsAssignableTo(typeof(IREDEnum)))
             {
-                propertyItem.Editor = new PropertyGridEditors.EnumEditor();
-                e.ExpandMode = PropertyExpandModes.FlatMode;
+                return new PropertyGridEditors.EnumEditor();
+                
             }
-            else if (propertyItem.PropertyType.IsAssignableTo(typeof(IREDChunkPtr)))
+            else if (PropertyType.IsAssignableTo(typeof(IREDChunkPtr)))
             {
-                propertyItem.Editor = new PropertyGridEditors.ChunkPtrEditor();
-                e.ExpandMode = PropertyExpandModes.FlatMode;
+                return new PropertyGridEditors.ChunkPtrEditor();
+                
             }
-            else if (propertyItem.PropertyType.IsAssignableTo(typeof(IREDRef)))
+            else if (PropertyType.IsAssignableTo(typeof(IREDRef)))
             {
-                propertyItem.Editor = new PropertyGridEditors.RefEditor();
-                e.ExpandMode = PropertyExpandModes.FlatMode;
+                return new PropertyGridEditors.RefEditor();
+                
             }
-            else if (propertyItem.PropertyType.IsAssignableTo(typeof(ICurveDataAccessor)))
+            else if (PropertyType.IsAssignableTo(typeof(ICurveDataAccessor)))
             {
-                propertyItem.Editor = new PropertyGridEditors.CurveEditor();
-                e.ExpandMode = PropertyExpandModes.FlatMode;
+                return new PropertyGridEditors.CurveEditor();
+                
             }
-            else if (propertyItem.PropertyType.IsAssignableTo(typeof(IREDColor)))
+            else if (PropertyType.IsAssignableTo(typeof(IREDColor)))
             {
-                propertyItem.Editor = new PropertyGridEditors.ColorEditor();
-                e.ExpandMode = PropertyExpandModes.FlatMode;
+                return new PropertyGridEditors.ColorEditor();
+                
             }
+
+            return null;
         }
 
 

@@ -97,7 +97,6 @@ namespace WolvenKit.ViewModels.Documents
             var record = new Record()
             {
                 Type = "TYPE NOT SET",
-                Inherits = "INHERITS NOT SET (optional)"
             };
             TweakDocument.Groups.Add(FlatName, record);
 
