@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 using WolvenKit.Common.Model;
+using WolvenKit.Common.RED4.Compiled;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
 
@@ -9,6 +10,14 @@ namespace WolvenKit.RED4.CR2W
 {
     public class Red4ParserService : IRedParserService
     {
+        private readonly IHashService _hashService;
+
+        public Red4ParserService(IHashService hashService)
+        {
+            _hashService = hashService;
+        }
+
+
         #region Methods
 
         /// <summary>
@@ -96,6 +105,22 @@ namespace WolvenKit.RED4.CR2W
             return cr2w;
         }
 
+        public CompiledPackage TryReadCompiledPackage(Stream stream)
+        {
+            using var br = new BinaryReader(stream, Encoding.Default, true);
+            return TryReadCompiledPackage(br);
+        }
+
+        public CompiledPackage TryReadCompiledPackage(BinaryReader br)
+        {
+            var compiledbuffer = new CompiledPackage(_hashService);
+            return compiledbuffer.Read(br) switch
+            {
+                Common.EFileReadErrorCodes.NoError => compiledbuffer,
+                _ => null,
+            };
+        }
+
         #endregion Methods
 
         public IWolvenkitFile TryReadCr2WFile(Stream stream) => TryReadRED4File(stream);
@@ -105,5 +130,6 @@ namespace WolvenKit.RED4.CR2W
         public IWolvenkitFile TryReadCr2WFileHeaders(Stream stream) => TryReadRED4FileHeaders(stream);
 
         public IWolvenkitFile TryReadCr2WFileHeaders(BinaryReader br) => TryReadRED4FileHeaders(br);
+
     }
 }

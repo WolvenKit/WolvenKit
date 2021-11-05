@@ -9,7 +9,7 @@
      xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
      xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters"
+    xmlns:converters="clr-namespace:WolvenKit.Converters"
      xmlns:sfgrid="clr-namespace:Syncfusion.UI.Xaml.Grid;assembly=Syncfusion.SfGrid.WPF"
     xmlns:tools="clr-namespace:WolvenKit.ViewModels.Tools;assembly=WolvenKit.App"
      d:DesignHeight="450"
@@ -30,15 +30,10 @@
     <Grid>
         <Grid.Resources>
             <converters:LogColorConverter x:Key="Converter"/>
-            <Style TargetType="sfgrid:VirtualizingCellsControl" x:Key="CustomRowStyle">
+            <!--<Style TargetType="sfgrid:VirtualizingCellsControl" x:Key="CustomRowStyle">
                 <Setter Property="Foreground" Value="{Binding Path=Level, Converter={StaticResource Converter}}" />
-            </Style>
+            </Style>-->
         </Grid.Resources>
-
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="auto" />
-        </Grid.RowDefinitions>
 
         <!-- <syncfusion:SfDataGrid x:Name="ListView" -->
         <!--                        AutoGenerateColumns="False" -->
@@ -59,7 +54,7 @@
         <!--     </syncfusion:SfDataGrid.Columns> -->
         <!-- </syncfusion:SfDataGrid> -->
 
-        <RichTextBox VerticalScrollBarVisibility="Visible" Grid.Row="0" x:Name="LogRichTextBox" IsReadOnly="True" />
+        <RichTextBox VerticalScrollBarVisibility="Visible" x:Name="LogRichTextBox" IsReadOnly="True" />
 
         <hc:UniformSpacingPanel
          Grid.Row="1"

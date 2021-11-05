@@ -1,48 +1,54 @@
 using System;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
+using System.Reflection;
+using System.Runtime.Serialization;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
-using System.Windows;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Utils;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using Splat;
+using WolvenKit.Common.Services;
+using WolvenKit.Interaction;
+using WolvenKit.Modkit.RED4.Serialization;
 using WolvenKit.RED4.TweakDB;
-using WolvenKit.RED4.TweakDB.Serialization;
 using WolvenKit.RED4.TweakDB.Types;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
 
 namespace WolvenKit.ViewModels.Documents
 {
     public class TweakDocumentViewModel : DocumentViewModel
     {
+        private readonly ILoggerService _loggerService;
+
 
         public TweakDocumentViewModel(string path) : base(path)
         {
             Document = new TextDocument();
-            Flats = new();
+            TweakDocument = new TweakDocument();
 
-            Types = new(Enum.GetNames<EIType>());
+            Types = new(Enum.GetNames<ETweakType>());
 
-            AddFlatCommand = ReactiveCommand.Create(AddFlat);
+            AddFlatCommand = ReactiveCommand.CreateFromTask(AddFlat);
+            AddArrayCommand = ReactiveCommand.CreateFromTask(AddArray);
+            AddGroupCommand = ReactiveCommand.CreateFromTask(AddGroup);
             DeleteFlatCommand = ReactiveCommand.Create(DeleteFlat);
             EditFlatCommand = ReactiveCommand.Create(EditFlat);
 
             var hlManager = HighlightingManager.Instance;
             HighlightingDefinition = hlManager.GetDefinitionByExtension(".json");
 
-
+            _loggerService = Locator.Current.GetService<ILoggerService>();
         }
 
         #region properties
 
-        [Reactive] public TextDocument Document {  get; set; }
+        [Reactive] public TextDocument Document { get; set; }
 
         [Reactive] public IHighlightingDefinition HighlightingDefinition { get; set; }
 
@@ -61,16 +67,46 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public ObservableCollection<string> Types { get; set; }
 
-        [Reactive] public ObservableCollection<FlatViewModel> Flats {  get; set; }
+        [Reactive] public TweakDocument TweakDocument { get; set; }
 
-        [Reactive] public FlatViewModel SelectedItem { get; set; }
+        [Reactive] public ObservableCollection<TweakEntryViewModel> Entries { get; set; }
+
+        [Reactive] public TweakEntryViewModel SelectedItem { get; set; }
 
         #endregion
 
         #region commands
 
+        public ReactiveCommand<Unit, Unit> AddGroupCommand { get; }
+        private async Task AddGroup()
+        {
+            if (string.IsNullOrEmpty(FlatName))
+            {
+                return;
+            }
+
+            // check name
+            if (TweakDocument.Groups.ContainsKey(FlatName))
+            {
+                await Interactions.ShowMessageBoxAsync(
+                    $"A group with name {FlatName} is already part of your database. Please give a unique name to the item you are adding, or delete the existing item first.",
+                     "WolvenKit", WMessageBoxButtons.Ok, WMessageBoxImage.Error);
+                return;
+            }
+
+            var record = new Record()
+            {
+                Type = "TYPE NOT SET",
+                Inherits = "INHERITS NOT SET (optional)"
+            };
+            TweakDocument.Groups.Add(FlatName, record);
+
+            GenerateEntries();
+            Document.Text = Serialization.Serialize(TweakDocument);
+        }
+
         public ReactiveCommand<Unit, Unit> AddFlatCommand { get; }
-        private void AddFlat()
+        private async Task AddFlat()
         {
             if (string.IsNullOrEmpty(SelectedType)
                 || string.IsNullOrEmpty(FlatName)
@@ -79,32 +115,109 @@ namespace WolvenKit.ViewModels.Documents
                 return;
             }
 
-            // check name
-            if (Flats.Any(_ => _.Name == FlatName))
-            {
-                MessageBox.Show($"A flat with name {FlatName} is already part of your database. Please give a unique name to the item you are adding, or delete the existing item first.",
-                    "WolvenKit", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            if (!Serialization.TryParseJsonFlat(SelectedType, ValueString, out var ivalue))
+            if (!Serialization.Json.TryParseJsonFlat(SelectedType, ValueString, out var ivalue))
             {
                 return;
             }
 
-            var newFlat = new FlatViewModel(FlatName, ivalue);
-            Flats.Add(newFlat);
+            if (SelectedItem is GroupViewModel/* { IsSelected:true }*/ group)
+            {
+                // check name
+                if (group.GetValue().Members.ContainsKey(FlatName))
+                {
+                    await Interactions.ShowMessageBoxAsync(
+                    $"A flat with name {FlatName} is already part of this group. Please give a unique name to the item you are adding, or delete the existing item first.",
+                    "WolvenKit", WMessageBoxButtons.Ok, WMessageBoxImage.Error);
+                    return;
+                }
+                group.GetValue().Members.Add(FlatName, ivalue);
+            }
+            else if (SelectedItem is FlatViewModel { IsArray:true } arrayVm && arrayVm.GetValue() is IArray array)
+            {
+                var x = array.GetItems();
 
-            var flatsDict = Flats.ToDictionary(x => x.Name, x => x.GetValue());
-            Document.Text = Serialization.Serialize(flatsDict);
+                x.Add(ivalue);
+
+                array.SetItems(x);
+            }
+            else
+            {
+                // check name
+                if (TweakDocument.Flats.ContainsKey(FlatName))
+                {
+                    await Interactions.ShowMessageBoxAsync(
+                    $"A flat with name {FlatName} is already part of your database. Please give a unique name to the item you are adding, or delete the existing item first.",
+                    "WolvenKit", WMessageBoxButtons.Ok, WMessageBoxImage.Error);
+                    return;
+                }
+                TweakDocument.Flats.Add(FlatName, ivalue);
+            }
+
+
+            GenerateEntries();
+            Document.Text = Serialization.Serialize(TweakDocument);
+        }
+
+        public ReactiveCommand<Unit, Unit> AddArrayCommand { get; }
+        private async Task AddArray()
+        {
+            if (string.IsNullOrEmpty(SelectedType)
+                || string.IsNullOrEmpty(FlatName))
+            {
+                return;
+            }
+
+            // parse type
+            if (!Enum.TryParse<ETweakType>(SelectedType, out var enumType))
+            {
+                return;
+            }
+
+            var innertype = Serialization.GetTypeFromEnum(enumType);
+            var array = Activator.CreateInstance(
+                typeof(CArray<>).MakeGenericType(
+                    new Type[] { innertype }),
+                BindingFlags.Instance | BindingFlags.Public,
+                binder: null,
+                args: null,
+                culture: null);
+
+            var iarray = array as IType;
+
+            if (SelectedItem is GroupViewModel/* { IsSelected:true }*/ group)
+            {
+                // check name
+                if (group.GetValue().Members.ContainsKey(FlatName))
+                {
+                    await Interactions.ShowMessageBoxAsync(
+                    $"A flat with name {FlatName} is already part of this group. Please give a unique name to the item you are adding, or delete the existing item first.",
+                    "WolvenKit", WMessageBoxButtons.Ok, WMessageBoxImage.Error);
+                    return;
+                }
+                group.GetValue().Members.Add(FlatName, iarray);
+            }
+            else
+            {
+                // check name
+                if (TweakDocument.Flats.ContainsKey(FlatName))
+                {
+                    await Interactions.ShowMessageBoxAsync(
+                    $"A flat with name {FlatName} is already part of your database. Please give a unique name to the item you are adding, or delete the existing item first.",
+                    "WolvenKit", WMessageBoxButtons.Ok, WMessageBoxImage.Error);
+                    return;
+                }
+                TweakDocument.Flats.Add(FlatName, iarray);
+            }
+
+
+            GenerateEntries();
+            Document.Text = Serialization.Serialize(TweakDocument);
         }
 
         public ReactiveCommand<Unit, Unit> EditFlatCommand { get; }
         private void EditFlat()
         {
-            if (SelectedItem is null)
-            {
-            }
+
         }
 
         public ReactiveCommand<Unit, Unit> DeleteFlatCommand { get; }
@@ -115,26 +228,86 @@ namespace WolvenKit.ViewModels.Documents
                 return;
             }
 
-            Flats.Remove(SelectedItem);
+            switch (SelectedItem)
+            {
+                case FlatViewModel fvm:
+                    // if not in a group
+                    if (!string.IsNullOrEmpty(fvm.GroupName))
+                    {
+                        TweakDocument.Groups[fvm.GroupName].Members.Remove(fvm.Name);
+                    }
+                    else if (!string.IsNullOrEmpty(fvm.ArrayName))
+                    {
+                        
+                    }
+                    else
+                    {
+                        TweakDocument.Flats.Remove(fvm.Name);
+                    }
+
+                    break;
+                case GroupViewModel gvm:
+                    TweakDocument.Groups.Remove(gvm.Name);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+
             SelectedItem = null;
 
-            var flatsDict = Flats.ToDictionary(x => x.Name, x => x.GetValue());
-            Document.Text = Serialization.Serialize(flatsDict);
+            GenerateEntries();
+            Document.Text = Serialization.Serialize(TweakDocument);
         }
 
         #endregion
 
-        public override void OnSave(object parameter)
+        #region methods
+
+        private void GenerateEntries()
+        {
+            try
+            {
+                var flatvms = TweakDocument?.Flats
+                .Select(f => new FlatViewModel(f.Key, f.Value))
+                .Cast<TweakEntryViewModel>();
+                var groupvms = TweakDocument?.Groups
+                    .Select(g => new GroupViewModel(g.Key, g.Value))
+                    .Cast<TweakEntryViewModel>();
+                Entries = new ObservableCollection<TweakEntryViewModel>(flatvms.Concat(groupvms));
+            }
+            catch (Exception)
+            {
+                Entries = new ObservableCollection<TweakEntryViewModel>();
+                TweakDocument = new TweakDocument();
+            }
+        }
+
+        public override async Task OnSave(object parameter)
         {
             using var fs = new FileStream(FilePath, FileMode.Create, FileAccess.ReadWrite);
             using var bw = new StreamWriter(fs);
             bw.Write(Document.Text);
 
-            if (Serialization.Deserialize(Document.Text, out var dict))
+            try
             {
-                var list = dict.Select(_ => new FlatViewModel(_.Key, _.Value));
-                Flats = new ObservableCollection<FlatViewModel>(list);
+                if (Serialization.Deserialize(Document.Text, out var dict))
+                {
+                    TweakDocument = dict;
+                    GenerateEntries();
+                }
             }
+            catch (Exception e)
+            {
+                await Interactions.ShowMessageBoxAsync(
+                        $"The tweak file could not be parsed. Please check the file for errors.",
+                        "WolvenKit",
+                        WMessageBoxButtons.Ok,
+                        WMessageBoxImage.Error);
+                _loggerService.Error(e);
+            }
+
+            _loggerService.Success($"{this.FilePath} saved.");
 
             //dbg
             //var deltaFilePath = $"{FilePath}.bin";
@@ -150,7 +323,7 @@ namespace WolvenKit.ViewModels.Documents
         {
             _isInitialized = false;
 
-            LoadDocument(path);
+            await LoadDocument(path);
 
             ContentId = path;
             FilePath = path;
@@ -161,7 +334,7 @@ namespace WolvenKit.ViewModels.Documents
             return await Task.FromResult(true);
         }
 
-        private void LoadDocument(string paramFilePath)
+        private async Task LoadDocument(string paramFilePath)
         {
             if (!File.Exists(paramFilePath))
             {
@@ -198,39 +371,32 @@ namespace WolvenKit.ViewModels.Documents
                 return;
             }
 
-            if (Serialization.Deserialize(Document.Text, out var dict))
+            try
             {
-                var list = dict.Select(_ => new FlatViewModel(_.Key, _.Value));
-
-                Flats = new ObservableCollection<FlatViewModel>(list);
+                if (Serialization.Deserialize(Document.Text, out var dict))
+                {
+                    TweakDocument = dict;
+                    GenerateEntries();
+                }
+                else
+                {
+                    throw new SerializationException();
+                }
             }
-            else
+            catch (Exception e)
             {
-                MessageBox.Show($"The tweak file could not be parsed. Please check the file for errors.",
-                    "WolvenKit",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-
+                await Interactions.ShowMessageBoxAsync(
+                        $"The tweak file could not be parsed. Please check the file for errors.",
+                        "WolvenKit",
+                        WMessageBoxButtons.Ok,
+                        WMessageBoxImage.Error);
+                _loggerService.Error(e);
             }
+
+
         }
 
-        public sealed class FlatViewModel
-        {
-            private readonly IType _value;
-
-            public FlatViewModel(string name, IType value)
-            {
-                Name = name;
-                _value = value;
-            }
-
-            public string Name { get; set; }
-
-            public string DisplayString => _value.ToString();
-
-            public IType GetValue() => _value;
-        }
-
+        #endregion
 
     }
 }

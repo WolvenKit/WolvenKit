@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Globalization;
 using WolvenKit.Core.Services;
 
@@ -37,9 +38,14 @@ namespace WolvenKit.Common.Services
                 Console.WriteLine();
             }
         }
+
 #pragma warning disable CS0067
+
         public event EventHandler<double> ProgressChanged;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 #pragma warning restore CS0067 
 
+        public bool IsIndeterminate { get; set; }
     }
 }

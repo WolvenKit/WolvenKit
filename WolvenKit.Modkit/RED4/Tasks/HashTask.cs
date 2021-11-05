@@ -31,12 +31,11 @@ namespace CP77Tools.Tasks
                     _loggerService.Error(new DirectoryNotFoundException(inputDir.FullName).Message);
                 }
 
-                var bm = new ArchiveManager(_hashService);
-                bm.LoadFromFolder(inputDir);
+                _archiveManager.LoadFromFolder(inputDir);
 
                 List<ulong> missing = new();
 
-                var binfiles = bm.GetGroupedFiles()[".bin"];
+                var binfiles = _archiveManager.GetGroupedFiles()[".bin"];
                 missing = binfiles.Select(_ => _.NameHash64).ToList();
 
                 var missinghashtxt = Path.Combine(inputDir.FullName, "missinghashes.txt");

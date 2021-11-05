@@ -178,6 +178,10 @@
                                                     <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mlmask.svg}" />
                                                 </DataTrigger>
 
+                                                <DataTrigger Binding="{Binding Extension}" Value="masklist">
+                                                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mlmask.svg}" />
+                                                </DataTrigger>
+                                                
                                                 <DataTrigger Binding="{Binding Extension}" Value="mltemplate">
                                                     <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mltemplate.svg}" />
                                                 </DataTrigger>
@@ -837,17 +841,35 @@
                         <MenuItem Command="{Binding AddAllImportsCommand}" Header="Add all dependencies" />
                         <MenuItem Command="{Binding FastRenderCommand}" Header="Fast render" />
                     </MenuItem>
-                    
-                    <MenuItem Header="BK2">
-                        <MenuItem
-                            x:Name="BKImport"
-                            Command="{Binding Bk2ImportCommand}"
-                            Header="Import Avi to BK2" />
-                        <MenuItem
-                            x:Name="BKExport"
-                            Command="{Binding Bk2ExportCommand}"
-                            Header="Export BK2 to Avi" />
+
+                    <MenuItem Header="Convert">
+                        
+                        <MenuItem Header="Text">
+                            <MenuItem x:Name="ConvertToJsonMenuItem"
+                                      Command="{Binding ConvertToJsonCommand}"
+                                      Header="Convert to JSON" />
+                            <MenuItem x:Name="ConvertFromJsonMenuItem"
+                                      Command="{Binding ConvertFromJsonCommand}"
+                                      Header="Convert from JSON" />
+                            <Separator/>
+                            <MenuItem x:Name="ConvertToXmlMenuItem"
+                                      Command="{Binding ConvertToXmlCommand}"
+                                      Header="Convert to XML" />
+                            <!--<MenuItem x:Name="ConvertFromXmlMenuItem"
+                                      Command="{Binding ConvertFromXmlCommand}"
+                                      Header="Convert from JSON" />-->
+                        </MenuItem>
+                        <MenuItem Header="Video">
+                            <MenuItem x:Name="BKImport"
+                                      Command="{Binding Bk2ImportCommand}"
+                                      Header="Import Avi to BK2" />
+                            <MenuItem x:Name="BKExport"
+                                      Command="{Binding Bk2ExportCommand}"
+                                      Header="Export BK2 to Avi" />
+                        </MenuItem>
+
                     </MenuItem>
+                    
 
                     <Separator/>
 
@@ -897,8 +919,7 @@
 
                     <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path" />
                     <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer" />
-                    <MenuItem
-                        Command="{Binding OpenInAssetBrowserCommand}"
+                    <MenuItem Command="{Binding OpenInAssetBrowserCommand}"
                         Header="Open in asset browser"
                         Visibility="Collapsed" />
 

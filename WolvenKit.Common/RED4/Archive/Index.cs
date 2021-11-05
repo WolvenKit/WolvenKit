@@ -18,7 +18,7 @@ namespace CP77Tools.Model
     {
         #region Constructors
 
-        private IHashService _hashService;
+        //private IHashService _hashService;
 
         //public Dependency()
         //{
@@ -30,9 +30,14 @@ namespace CP77Tools.Model
         //    _hashService = hashService;
         //}
 
-        public Dependency(IHashService hashService, ulong hash)
+        //public Dependency(IHashService hashService, ulong hash)
+        //{
+        //    _hashService = hashService;
+        //    Hash = hash;
+        //}
+
+        public Dependency(ulong hash)
         {
-            _hashService = hashService;
             Hash = hash;
         }
 
@@ -41,9 +46,7 @@ namespace CP77Tools.Model
         #region Properties
 
         [ProtoMember(1)] public ulong Hash { get; set; }
-        /*[ProtoMember(2)]*/ public string HashStr => _hashService != null ? _hashService.Get(Hash) : Hash.ToString();
-
-        public void SetHashService(IHashService hashService) => _hashService = hashService;
+        ///*[ProtoMember(2)]*/ public string HashStr => _hashService != null ? _hashService.Get(Hash) : Hash.ToString();
 
         #endregion Properties
     }

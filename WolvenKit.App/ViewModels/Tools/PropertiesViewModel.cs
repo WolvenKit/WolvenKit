@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using CP77.CR2W;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
@@ -21,7 +23,6 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
-using WolvenKit.Views.Editor.AudioTool;
 
 namespace WolvenKit.ViewModels.Tools
 {
@@ -30,6 +31,7 @@ namespace WolvenKit.ViewModels.Tools
         #region fields
 
         private readonly ILoggerService _loggerService;
+        private readonly ISettingsManager _settingsManager;
         private readonly IProjectManager _projectManager;
         private readonly MeshTools _meshTools;
         private readonly IModTools _modTools;
@@ -48,10 +50,12 @@ namespace WolvenKit.ViewModels.Tools
         public PropertiesViewModel(
             IProjectManager projectManager,
             ILoggerService loggerService,
+            ISettingsManager settingsManager,
             MeshTools meshTools,
             IModTools modTools
         ) : base(ToolTitle)
         {
+            _settingsManager = settingsManager;
             _projectManager = projectManager;
             _loggerService = loggerService;
             _meshTools = meshTools;
@@ -61,24 +65,10 @@ namespace WolvenKit.ViewModels.Tools
 
             SetToNullAndResetVisibility();
 
-            nAudioSimple = NAudioSimpleEngine.Instance;
-            NAudioSimpleEngine.Instance.PropertyChanged += NAudioEngine_PropertyChanged;
-
-            StopAudioCommand = new RelayCommand(ExecuteStopPlaying, CanStopPlaying);
-            PlayAudioCommand = new RelayCommand(ExecuteStartPlaying, CanStartPlaying);
-            PauseAudioCommand = new RelayCommand(ExecutePausePlaying, CanPausePlaying);
+            PreviewAudioCommand = ReactiveCommand.Create<string,string>(str => str);
         }
 
-        
-
         #region properties
-
-
-        /// <summary>
-        /// Selected Item from Project Explorer If Available.
-        /// </summary>
-        ///
-        [Reactive] public bool canShowPrev { get; set; } = true;
 
         [Reactive] public FileModel PE_SelectedItem { get; set; }
 
@@ -126,11 +116,7 @@ namespace WolvenKit.ViewModels.Tools
 
         #region commands
 
-        public ICommand PlayAudioCommand { get; private set; }
-
-        public ICommand PauseAudioCommand { get; private set; }
-
-        public ICommand StopAudioCommand { get; private set; }
+        public ReactiveCommand<string, string> PreviewAudioCommand { get; set; }
 
         public ICommand FileSelectedCommand { get; private set; }
 
@@ -148,12 +134,15 @@ namespace WolvenKit.ViewModels.Tools
                 return;
             }
 
-            if (canShowPrev)
+            if (_settingsManager.ShowFilePreview)
             {
                 PE_SelectedItem = model;
             }
             else
-            { return; }
+            {
+                return;
+            }
+
             PE_MeshPreviewVisible = false;
             IsAudioPreviewVisible = false;
             IsImagePreviewVisible = false;
@@ -206,11 +195,17 @@ namespace WolvenKit.ViewModels.Tools
                         System.StringComparison.OrdinalIgnoreCase))
                     {
                         PE_MeshPreviewVisible = true;
-
-                        var q = _meshTools.ExportMeshWithoutRigPreviewer(PE_SelectedItem.FullName, Path.Combine(ISettingsManager.GetManagerCacheDir(), "Temp_OBJ"));
-                        if (q.Length > 0)
+                        using (var meshStream = new FileStream(PE_SelectedItem.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                         {
-                            LoadModel(q);
+                            meshStream.Seek(0, SeekOrigin.Begin);
+                            string outPath = Path.Combine(ISettingsManager.GetManagerCacheDir(), "Temp_OBJ",Path.GetFileName(PE_SelectedItem.FullName));
+                            outPath = Path.ChangeExtension(outPath, ".glb");
+                            if (_meshTools.ExportMeshPreviewer(meshStream, new FileInfo(outPath)))
+                            {
+                                LoadModel(outPath);
+                            }
+                            meshStream.Dispose();
+                            meshStream.Close();
                         }
                     }
 
@@ -219,7 +214,7 @@ namespace WolvenKit.ViewModels.Tools
                     {
                         IsAudioPreviewVisible = true;
 
-                        AddAudioItem(PE_SelectedItem.FullName);
+                        PreviewAudioCommand.SafeExecute(PE_SelectedItem.FullName);
                     }
 
                     // textures
@@ -305,27 +300,7 @@ namespace WolvenKit.ViewModels.Tools
             { IsMeshPreviewVisible = false; }
         }
 
-        private bool CanStopPlaying() => true;
-
-        private void ExecuteStopPlaying()
-        {
-            mediaPlayer.Stop();
-            mediaPlayer.Position = new TimeSpan(0);
-        }
-
-        private bool CanStartPlaying() => true;
-
-        private void ExecuteStartPlaying()
-        {
-            mediaPlayer.Play();
-        }
-
-        private bool CanPausePlaying() => true;
-
-        private void ExecutePausePlaying()
-        {
-            mediaPlayer.Pause();
-        }
+        
 
         /// <summary>
         /// Initialize Syncfusion specific defaults that are specific to this tool window.
@@ -347,138 +322,6 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         public List<TextBlock> AudioFileList { get; set; } = new List<TextBlock>();
 
-        /// <summary>
-        /// add an audio item. currently instantly loads this.
-        /// </summary>
-        /// <param name="path"></param>
-        public void AddAudioItem(string path) => TempConvertToWemWav(path);
-
-        /// <summary>
-        /// current track channel position
-        /// </summary>
-        public TimeSpan ChannelPosition { get; set; }
-
-        /// <summary>
-        /// Naudio engine
-        /// </summary>
-        public NAudioSimpleEngine nAudioSimple { get; set; }
-
-        /// <summary>
-        /// current track name.
-        /// </summary>
-        public string CurrentTrackName { get; set; }
-
-        /// <summary>
-        /// convert a file to wav to preview it.
-        /// </summary>
-        /// <param name="path"></param>
-        public void TempConvertToWemWav(string path)
-        {
-            string ManagerCacheDir = Path.Combine(ISettingsManager.GetTemp_AudioPath());
-
-            //Clean directory
-            Directory.CreateDirectory(ManagerCacheDir);
-
-            foreach (var f in Directory.GetFiles(ManagerCacheDir))
-            {
-                try
-                {
-                    File.Delete(f);
-                }
-                catch
-                {
-                }
-            }
-
-            var outf = Path.Combine(ManagerCacheDir, Path.GetFileNameWithoutExtension(path) + ".wav");
-            Trace.WriteLine(outf);
-            Trace.WriteLine(path);
-
-            var arg = path.ToEscapedPath() + " -o " + outf.ToEscapedPath();
-            var p = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", "vgmstream", "test.exe");
-            var si = new ProcessStartInfo(
-                    p,
-                    arg
-                )
-            {
-                CreateNoWindow = true,
-                WindowStyle = ProcessWindowStyle.Hidden,
-                UseShellExecute = false,
-                RedirectStandardError = true,
-                RedirectStandardOutput = true,
-                Verb = "runas"
-            };
-            var proc = Process.Start(si);
-            proc.WaitForExit();
-            Trace.WriteLine(proc.StandardOutput.ReadToEnd());
-
-            mediaPlayer.Open(new Uri(outf));
-
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick += Timer_Tick;
-
-            timer.Start();
-
-            DispatcherTimer ChannelPositionTimer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromMilliseconds(1)
-            };
-            ChannelPositionTimer.Tick += ChannelPositionTimer_Tick;
-            ;
-
-            ChannelPositionTimer.Start();
-
-            ChannelLength =
-                mediaPlayer.Position.TotalMinutes.ToString() + " : " +
-                mediaPlayer.Position.TotalSeconds.ToString() + " : " +
-                mediaPlayer.Position.TotalMilliseconds.ToString();
-            NAudioSimpleEngine.Instance.OpenFile(outf);
-            CurrentTrackName = Path.GetFileNameWithoutExtension(outf);
-
-            //AudioFileList.Add(lvi);
-        }
-
-        private void ChannelPositionTimer_Tick(object sender, EventArgs e)
-        {
-            NAudioSimpleEngine.Instance.ChannelPosition = mediaPlayer.Position.TotalSeconds;
-        }
-
-        public string AudioPositionText { get; set; }
-        public string ChannelLength { get; set; }
-
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            if (mediaPlayer.Source != null)
-            {
-                ChannelPosition = mediaPlayer.Position;
-            }
-            else
-            {
-                AudioPositionText = "No file selected...";
-            }
-        }
-
-        private MediaPlayer mediaPlayer = new MediaPlayer();
-
-        /// <summary>
-        /// property changed for naudio
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void NAudioEngine_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            switch (e.PropertyName)
-            {
-                case "ChannelPosition":
-                    ChannelPosition = TimeSpan.FromSeconds(NAudioSimpleEngine.Instance.ChannelPosition);
-                    break;
-
-                default:
-                    // Do Nothing
-                    break;
-            }
-        }
 
         #endregion AudioPreview
     }

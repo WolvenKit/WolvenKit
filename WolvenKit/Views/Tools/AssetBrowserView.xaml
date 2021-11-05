@@ -4,7 +4,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:reactiveUi="http://reactiveui.net"
-    xmlns:converters1="clr-namespace:WolvenKit.Functionality.Converters"
+    xmlns:converters1="clr-namespace:WolvenKit.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
@@ -159,7 +159,7 @@
                                 AllowTriStateSorting="False"
                                 AutoExpandMode="RootNodesExpanded"
                                 AutoGenerateColumns="False"
-                                ChildPropertyName="Directories"
+                                ChildPropertyName="RedFileSystemModels"
                                 ColumnSizer="FillColumn"
                                 FilterLevel="Extended"
                                 SelectionChanged="LeftNavigation_OnSelectionChanged"
@@ -258,7 +258,7 @@
                             <syncfusion:SfTreeGrid.ExpanderContextMenu>
                                 <ContextMenu>
                                     <MenuItem Click="Expand_OnClick" Header="Expand" />
-                                    <MenuItem Click="ExpandAll_OnClick" Header="Expand all" />
+                                    <!--<MenuItem Click="ExpandAll_OnClick" Header="Expand all" />-->
                                     <MenuItem Click="Collapse_OnClick" Header="Collapse" />
                                     <MenuItem Click="CollapseAll_OnClick" Header="Collapse all" />
                                 </ContextMenu>
@@ -296,12 +296,14 @@
                                 SelectionChanged="InnerList_SelectionChanged"
                                 SelectionMode="Extended"
                                 MouseDoubleClick="InnerList_MouseDoubleClick"
+                                
                                 >
 
                                 <syncfusion:SfDataGrid.RecordContextMenu>
                                     <ContextMenu>
                                         <MenuItem Click="RightContextMenuAddAll_OnClick" Header="Add selected items to Project" />
-                                        <MenuItem Header="BK2">
+                                        <Separator/>
+                                        <MenuItem Header="Video">
                                             <MenuItem
                                                 x:Name="VidPreviewMenuItem"
                                                 Click="VidPreviewMenuItem_Click"
@@ -312,7 +314,9 @@
                                                 Header="Export BK2 to Avi"
                                                 Visibility="Collapsed"/>
                                         </MenuItem>
-                                    </ContextMenu>
+                                    <Separator/>
+                                    <MenuItem Header="Find files using this" x:Name="RightContextMenuFindUsingMenuItem" />
+                                </ContextMenu>
                                 </syncfusion:SfDataGrid.RecordContextMenu>
 
                                 <syncfusion:SfDataGrid.Resources>
@@ -1055,9 +1059,7 @@
 
                                 </syncfusion:SfDataGrid.Columns>
 
-                                <I:Interaction.Behaviors>
-                                    <local:Behaviour />
-                                </I:Interaction.Behaviors>
+                                
 
                                 <hc:Interaction.Triggers>
                                     <hc:EventTrigger EventName="MouseDoubleClick">
@@ -1088,10 +1090,32 @@
             Background="#80000000"
             BorderBrush="Black"
             BorderThickness="1"
-            Visibility="{Binding Path=LoadVisibility}">
+            Visibility="{Binding Path=LoadVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
             <Grid>
                 <syncfusion:SfBusyIndicator AnimationType="Ball" Foreground="{DynamicResource MahApps.Brushes.Accent}" />
 
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock
+                        Margin="0,75,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Foreground="#7EFFFFFF"
+                        Text="Loading game archives.."
+                        TextWrapping="Wrap" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border
+            x:Name="NoProjectBorder"
+            Grid.RowSpan="3"
+            Background="Black"
+            BorderBrush="Black"
+            BorderThickness="1"
+            Visibility="{Binding Path=NoProjectBorderVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+            <Grid>
                 <StackPanel VerticalAlignment="Center">
 
                     <TextBlock
@@ -1101,7 +1125,7 @@
                         FontSize="24"
                         FontWeight="Bold"
                         Foreground="#7EFFFFFF"
-                        Text="Loading game archives.."
+                        Text="Create a new mod project to access the asset browser"
                         TextWrapping="Wrap" />
                 </StackPanel>
             </Grid>

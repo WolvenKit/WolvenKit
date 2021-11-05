@@ -1,5 +1,4 @@
 #define IS_PARALLEL
-//#undef IS_PARALLEL
 
 using System;
 using System.Collections.Concurrent;
@@ -10,6 +9,9 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.RED4.Archive.IO;
+using WolvenKit.Common;
+using WolvenKit.MSTests.Model;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
 

@@ -322,6 +322,7 @@ namespace WolvenKit.RED4.CR2W
         }
 
         public void SetOffset(uint offset) => _export.dataOffset = offset;
+        public uint GetOffset() => _export.dataOffset;
 
         public void SetREDName(string val) => throw new NotImplementedException(nameof(SetREDName));
 

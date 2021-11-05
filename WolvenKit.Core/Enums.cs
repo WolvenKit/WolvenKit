@@ -2,6 +2,22 @@
 
 namespace WolvenKit.Common
 {
+    public enum EInterpolationType
+    {
+        EIT_Constant,
+        EIT_Linear,
+        EIT_BezierQuadratic,
+        EIT_BezierCubic,
+        EIT_Hermite
+    }
+
+    public enum ESegmentsLinkType
+    {
+        ESLT_Normal,
+        ESLT_Smooth,
+        ESLT_SmoothSymmetric
+    };
+
     public enum EWolvenKitFile
     {
         Cr2w,
@@ -25,7 +41,7 @@ namespace WolvenKit.Common
         Nightly
     }
 
-    public enum ESerializeFormat
+    public enum ETextConvertFormat
     {
         json,
         xml
@@ -63,7 +79,8 @@ namespace WolvenKit.Common
         lang_th_text,
         lang_tr_text,
         //lang_zh-cn_text,
-        //lang_zh-tw_text
+        //lang_zh-tw_text,
+        memoryresident_1_general
     }
 
     public enum ERedExtension
@@ -232,7 +249,6 @@ namespace WolvenKit.Common
         //ent,
         //json,
         mlmask,
-
         cubemap,
         envprobe,
         texarray,
@@ -258,7 +274,8 @@ namespace WolvenKit.Common
         glb,
         ttf,
         wav,
-        masklist
+        masklist,
+        csv
     }
 
     public enum EConvertableOutput
@@ -308,12 +325,12 @@ namespace WolvenKit.Common
     /// </summary>
     public enum EUncookExtension
     {
-        bmp = 0,
-        jpg = 1,
-        png = 2,
-        tga = 3,
-        tiff = 4,
-        dds = 5
+        dds,
+        tga,
+        bmp,
+        jpg,
+        png,
+        tiff
     }
 
     /// <summary>

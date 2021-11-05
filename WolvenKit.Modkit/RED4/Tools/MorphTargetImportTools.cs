@@ -14,16 +14,15 @@ using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Oodle;
+using CP77.CR2W;
 
 namespace WolvenKit.Modkit.RED4
 {
     using Vec4 = System.Numerics.Vector4;
-    using Vec2 = System.Numerics.Vector2;
     using Vec3 = System.Numerics.Vector3;
     public partial class ModTools
     {
-
-        public bool ImportTargetBaseMesh(FileInfo inGltfFile, Stream intargetStream, List<Archive> archives, string modFolder, ValidationMode vmode = ValidationMode.Strict, Stream outStream = null)
+        public bool ImportMorphTargets(FileInfo inGltfFile, Stream intargetStream, List<Archive> archives, ValidationMode vmode = ValidationMode.Strict, Stream outStream = null)
         {
             var cr2w = _wolvenkitFileService.TryReadRED4File(intargetStream);
             if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<MorphTargetMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
@@ -32,18 +31,10 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var blob = cr2w.Chunks.Select(_ => _.Data).OfType<MorphTargetMesh>().First();
-
-            string baseMeshPath = blob.BaseMesh.DepotPath;
-            ulong hash = FNV1A64HashAlgorithm.HashString(baseMeshPath);
-            baseMeshPath = Path.Combine(modFolder, baseMeshPath);
-            if (!new FileInfo(baseMeshPath).Directory.Exists)
+            RawArmature newRig = null;
             {
-                Directory.CreateDirectory(new FileInfo(baseMeshPath).Directory.FullName);
-            }
-            using FileStream meshStream = new FileStream(baseMeshPath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-            meshStream.Seek(0, SeekOrigin.Begin);
-            if (meshStream.Length == 0)
-            {
+                ulong hash = FNV1A64HashAlgorithm.HashString(blob.BaseMesh.DepotPath);
+                MemoryStream meshStream = new MemoryStream();
                 foreach (Archive ar in archives)
                 {
                     if (ar.Files.ContainsKey(hash))
@@ -51,6 +42,11 @@ namespace WolvenKit.Modkit.RED4
                         ExtractSingleToStream(ar, hash, meshStream);
                         break;
                     }
+                }
+                var meshCr2w = _wolvenkitFileService.TryReadRED4File(meshStream);
+                if (meshCr2w != null && meshCr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() && meshCr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
+                {
+                    newRig = MeshTools.GetOrphanRig(meshCr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First());
                 }
             }
 
@@ -96,24 +92,24 @@ namespace WolvenKit.Modkit.RED4
             {
                 Meshes.Add(GltfMeshToRawContainer(model.LogicalMeshes[i]));
             }
-            Vec3 max = new Vec3(Meshes[0].vertices[0].X, Meshes[0].vertices[0].Y, Meshes[0].vertices[0].Z);
-            Vec3 min = new Vec3(Meshes[0].vertices[0].X, Meshes[0].vertices[0].Y, Meshes[0].vertices[0].Z);
+            Vec3 max = new Vec3(Meshes[0].positions[0].X, Meshes[0].positions[0].Y, Meshes[0].positions[0].Z);
+            Vec3 min = new Vec3(Meshes[0].positions[0].X, Meshes[0].positions[0].Y, Meshes[0].positions[0].Z);
 
             for (int e = 0; e < Meshes.Count; e++)
-                for (int i = 0; i < Meshes[e].vertices.Length; i++)
+                for (int i = 0; i < Meshes[e].positions.Length; i++)
                 {
-                    if (Meshes[e].vertices[i].X >= max.X)
-                        max.X = Meshes[e].vertices[i].X;
-                    if (Meshes[e].vertices[i].Y >= max.Y)
-                        max.Y = Meshes[e].vertices[i].Y;
-                    if (Meshes[e].vertices[i].Z >= max.Z)
-                        max.Z = Meshes[e].vertices[i].Z;
-                    if (Meshes[e].vertices[i].X <= min.X)
-                        min.X = Meshes[e].vertices[i].X;
-                    if (Meshes[e].vertices[i].Y <= min.Y)
-                        min.Y = Meshes[e].vertices[i].Y;
-                    if (Meshes[e].vertices[i].Z <= min.Z)
-                        min.Z = Meshes[e].vertices[i].Z;
+                    if (Meshes[e].positions[i].X >= max.X)
+                        max.X = Meshes[e].positions[i].X;
+                    if (Meshes[e].positions[i].Y >= max.Y)
+                        max.Y = Meshes[e].positions[i].Y;
+                    if (Meshes[e].positions[i].Z >= max.Z)
+                        max.Z = Meshes[e].positions[i].Z;
+                    if (Meshes[e].positions[i].X <= min.X)
+                        min.X = Meshes[e].positions[i].X;
+                    if (Meshes[e].positions[i].Y <= min.Y)
+                        min.Y = Meshes[e].positions[i].Y;
+                    if (Meshes[e].positions[i].Z <= min.Z)
+                        min.Z = Meshes[e].positions[i].Z;
                 }
 
 
@@ -129,48 +125,19 @@ namespace WolvenKit.Modkit.RED4
             Vec4 QuantScale = new Vec4((max.X - min.X) / 2, (max.Y - min.Y) / 2, (max.Z - min.Z) / 2, 0);
             Vec4 QuantTrans = new Vec4((max.X + min.X) / 2, (max.Y + min.Y) / 2, (max.Z + min.Z) / 2, 1);
 
+
+            RawArmature oldRig = null;
             if (model.LogicalSkins.Count != 0)
             {
-                string[] bones = new string[model.LogicalSkins[0].JointsCount];
+                oldRig = new RawArmature();
+                oldRig.Names = new string[model.LogicalSkins[0].JointsCount];
 
                 for (int i = 0; i < model.LogicalSkins[0].JointsCount; i++)
-                    bones[i] = model.LogicalSkins[0].GetJoint(i).Joint.Name;
-
-                meshStream.Seek(0, SeekOrigin.Begin);
-                string[] meshbones = RIG.GetboneNames(_wolvenkitFileService.TryReadRED4File(meshStream));
-
-                // reset vertex joint indices according to original
-                for (int i = 0; i < Meshes.Count; i++)
-                    for (int e = 0; e < Meshes[i].vertices.Length; e++)
-                        for (int eye = 0; eye < Meshes[i].weightcount; eye++)
-                        {
-                            if (Meshes[i].weights[e, eye] != 0)
-                            {
-                                bool existsInMeshBones = false;
-                                string name = bones[Meshes[i].boneindices[e, eye]];
-                                for (UInt16 t = 0; t < meshbones.Length; t++)
-                                {
-                                    if (name == meshbones[t])
-                                    {
-                                        Meshes[i].boneindices[e, eye] = t;
-                                        existsInMeshBones = true;
-                                    }
-                                }
-                                if (!existsInMeshBones)
-                                {
-                                    throw new Exception("One or more vertices in submesh: " + Meshes[i].name + " was weight Painted to bone: " + name + " Which Doesn't Exist in the provided .mesh file");
-                                }
-                            }
-                            else
-                            {
-                                if (Meshes[i].boneindices[e, eye] > (meshbones.Length - 1))
-                                {
-                                    Meshes[i].boneindices[e, eye] = 0;
-                                }
-                            }
-                        }
-
+                {
+                    oldRig.Names[i] = model.LogicalSkins[0].GetJoint(i).Joint.Name;
+                }
             }
+            MeshTools.UpdateMeshJoints(ref Meshes, newRig, oldRig);
 
             List<Re4MeshContainer> expMeshes = new List<Re4MeshContainer>();
 
@@ -180,8 +147,8 @@ namespace WolvenKit.Modkit.RED4
             MemoryStream meshBuffer = new MemoryStream();
             MeshesInfo meshesInfo = BufferWriter(expMeshes, ref meshBuffer);
 
-            meshesInfo.qScale = QuantScale;
-            meshesInfo.qTrans = QuantTrans;
+            meshesInfo.quantScale = QuantScale;
+            meshesInfo.quantTrans = QuantTrans;
 
             MemoryStream ms = GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer);
 
@@ -195,8 +162,7 @@ namespace WolvenKit.Modkit.RED4
                 intargetStream.SetLength(0);
                 ms.CopyTo(intargetStream);
             }
-            meshStream.Seek(0, SeekOrigin.Begin);
-            return ImportMesh(inGltfFile, meshStream, archives, vmode);
+            return true;
         }
 
         private void WriteTargetBuffer(CR2WFile cr2w, MemoryStream inBuffer, int bufferId)

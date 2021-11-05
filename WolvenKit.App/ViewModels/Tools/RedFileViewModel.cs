@@ -1,21 +1,15 @@
-using System.Collections.Generic;
+using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
-using ReactiveUI;
-using WolvenKit.RED4.CR2W.Archive;
-using System;
-using WolvenKit.Common.Interfaces;
-using WolvenKit.Common.FNV1A;
 using WolvenKit.Common;
-using ReactiveUI.Fody.Helpers;
 
 namespace WolvenKit.ViewModels.Tools
 {
     /// <summary>
     /// Wraps an IGameFile to display in a View
     /// </summary>
-    public class RedFileViewModel : FileSystemViewModel, ISelectableViewModel
+    public class RedFileViewModel : FileSystemViewModel
     {
         private readonly IGameFile _fileEntry;
 
@@ -31,8 +25,6 @@ namespace WolvenKit.ViewModels.Tools
 
         #region Properties
 
-        [Browsable(false)] [Reactive] public bool IsChecked { get; set; }
-
         [Browsable(false)] public string Extension => _fileEntry.Extension.TrimStart('.');
 
         [Browsable(false)] public override string DisplayExtension => Extension;
@@ -43,8 +35,7 @@ namespace WolvenKit.ViewModels.Tools
 
         [Display(Name = "Hash")] public string DisplayHash => _fileEntry.Key.ToString();
 
-
-        public string Size => FormatSize(_fileEntry.Size);
+        public override string Size => FormatSize(_fileEntry.Size);
 
         [Display(Name = "Archive")] public string ArchiveName => _fileEntry.Archive.Name;
 

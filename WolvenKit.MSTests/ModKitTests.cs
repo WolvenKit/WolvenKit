@@ -3,23 +3,17 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Catel.IoC;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using WolvenKit.Common;
-using WolvenKit.Common.DDS;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Common.Tools;
-using WolvenKit.Interfaces.Core;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.Modkit.RED4;
-using WolvenKit.RED4.CR2W;
+using WolvenKit.MSTests.Model;
 using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.MSTests
@@ -32,127 +26,6 @@ namespace WolvenKit.MSTests
 
         [ClassInitialize]
         public static void SetupClass(TestContext context) => Setup(context);
-
-        [TestMethod]
-        //[DataRow("audio_1_general.archive")]
-        [DataRow("basegame_1_engine.archive")]
-        // [DataRow("basegame_2_mainmenu.archive")]
-        // [DataRow("basegame_3_nightcity.archive")]
-        // [DataRow("basegame_3_nightcity_gi.archive")]
-        // [DataRow("basegame_3_nightcity_terrain.archive")]
-        // [DataRow("basegame_4_animation.archive")]
-        // [DataRow("basegame_4_appearance.archive")]
-        // [DataRow("basegame_4_gamedata.archive")]
-        public void Test_Cr2wSerialize(string archivename)
-        {
-            var parsers = ServiceLocator.Default.ResolveType<Red4ParserService>();
-
-            var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
-            Directory.CreateDirectory(resultDir);
-
-            var results = new ConcurrentBag<ArchiveTestResult>();
-            var archiveFullName = Path.Combine(s_gameDirectoryPath, "archive", "pc", "content", archivename);
-
-            var archive = s_bm.Archives.Lookup(archiveFullName).Value as Archive;
-            Parallel.ForEach(archive.Files, keyvalue =>
-            {
-                var (hash, file) = keyvalue;
-
-                try
-                {
-                    #region serialize
-
-                    using var ms = new MemoryStream();
-                    ModTools.ExtractSingleToStream(archive, hash, ms);
-
-                    var cr2w = parsers.TryReadCr2WFile(ms);
-                    if (cr2w == null)
-                    {
-                        return;
-                    }
-
-                    var dto = new Red4W2rcFileDto(cr2w);
-                    var json = JsonConvert.SerializeObject(
-                        dto,
-                        Formatting.Indented
-                    );
-
-                    if (string.IsNullOrEmpty(json))
-                    {
-                        throw new SerializationException();
-                    }
-
-                    #endregion
-
-                    #region deserialize
-
-                    var newdto = JsonConvert.DeserializeObject<Red4W2rcFileDto>(json);
-                    if (newdto == null)
-                    {
-                        throw new SerializationException();
-                    }
-
-                    var w2rc = newdto.ToW2rc();
-
-                    using var newms = new MemoryStream();
-                    using var bw = new BinaryWriter(newms);
-
-                    w2rc.Write(bw);
-
-                    #endregion
-
-                    #region compare
-
-                    var newbytes = newms.ToByteArray();
-                    var oldbytes = ms.ToByteArray();
-                    if (!oldbytes.SequenceEqual(newbytes))
-                    {
-                        throw new SerializationException();
-                    }
-                    else
-                    {
-
-                    }
-
-                    #endregion
-
-                    results.Add(new ArchiveTestResult()
-                    {
-                        ArchiveName = archivename,
-                        Hash = hash.ToString(),
-                        Success = true
-                    });
-                }
-                catch (Exception e)
-                {
-                    results.Add(new ArchiveTestResult()
-                    {
-                        ArchiveName = archivename,
-                        Hash = hash.ToString(),
-                        Success = false,
-                        ExceptionType = e.GetType(),
-                        Message = $"{e.Message}"
-                    });
-                }
-
-
-            });
-
-            var totalCount = archive.Files.Count;
-
-            // Check success
-            var successCount = results.Count(r => r.Success);
-            var sb = new StringBuilder();
-            sb.AppendLine($"Successfully serialized: {successCount} / {totalCount} ({(int)(successCount / (double)totalCount * 100)}%)");
-            var success = results.All(r => r.Success);
-            if (success)
-            {
-                return;
-            }
-
-            var msg = $"Successful serialized: {successCount} / {totalCount}. ";
-            Assert.Fail(msg);
-        }
 
 
         [TestMethod]
@@ -196,7 +69,7 @@ namespace WolvenKit.MSTests
 
             // random tests
             var random = new Random();
-            var limit =  Math.Min(int.Parse(s_config.GetSection(s_LIMIT).Value), infiles.Count);
+            var limit = Math.Min(int.Parse(s_config.GetSection(s_LIMIT).Value), infiles.Count);
             var filesToTest = infiles.OrderBy(a => random.Next()).Take(limit).ToList();
 
             for (var i = 0; i < filesToTest.Count; i++)
@@ -362,7 +235,7 @@ namespace WolvenKit.MSTests
             var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
             Directory.CreateDirectory(resultDir);
 
-            
+
             var results = new ConcurrentBag<ArchiveTestResult>();
             var archiveFullName = Path.Combine(s_gameDirectoryPath, "archive", "pc", "content", archivename);
 
@@ -454,7 +327,7 @@ namespace WolvenKit.MSTests
 
             // random tests
             var random = new Random();
-            var limit =  Math.Min(int.Parse(s_config.GetSection(s_LIMIT).Value), infiles.Count);
+            var limit = Math.Min(int.Parse(s_config.GetSection(s_LIMIT).Value), infiles.Count);
             var filesToTest = infiles.OrderBy(a => random.Next()).Take(limit).ToList();
 
             Parallel.ForEach(filesToTest, fileEntry =>
@@ -487,7 +360,7 @@ namespace WolvenKit.MSTests
                 }
             }
 
-            Assert.AreEqual(limit,  limit - uncookfails.Count);
+            Assert.AreEqual(limit, limit - uncookfails.Count);
         }
 
     }

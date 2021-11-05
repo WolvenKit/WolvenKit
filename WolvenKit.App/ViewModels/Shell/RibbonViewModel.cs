@@ -1,15 +1,22 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WolvenKit.Common;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
+using WolvenKit.Models;
+using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.ViewModels.Shell
 { // #MVVM
@@ -20,7 +27,10 @@ namespace WolvenKit.ViewModels.Shell
 
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
-        private readonly ISettingsManager _settingsManager;
+        private readonly IProgressService<double> _progressService;
+        private readonly IArchiveManager _archiveManager;
+        private readonly IModTools _modTools;
+        public ISettingsManager _settingsManager { get; }
         public readonly AppViewModel _mainViewModel;
 
         #endregion fields
@@ -29,14 +39,20 @@ namespace WolvenKit.ViewModels.Shell
 
         public RibbonViewModel(
             ISettingsManager settingsManager,
+            IProgressService<double> progressService,
+            IArchiveManager archiveManager,
             IProjectManager projectManager,
             ILoggerService loggerService,
+            IModTools modTools,
             AppViewModel appViewModel
         )
         {
             _mainViewModel = appViewModel;
 
+            _archiveManager = archiveManager;
+            _progressService = progressService;
             _projectManager = projectManager;
+            _modTools = modTools;
             _loggerService = loggerService;
             _settingsManager = settingsManager;
 
@@ -64,7 +80,7 @@ namespace WolvenKit.ViewModels.Shell
 
             ShowSettingsCommand = ReactiveCommand.Create(() =>
             {
-
+                BackstageIsOpen = true;
             });
             ShowBugReportCommand = ReactiveCommand.CreateFromTask(async () =>
             {
@@ -74,6 +90,41 @@ namespace WolvenKit.ViewModels.Shell
             {
                 var result = await Interactions.ShowFeedback.Handle(Unit.Default);
             });
+
+            OpenMaterialRepositoryCommand = ReactiveCommand.Create(() =>
+            {
+                Commonfunctions.ShowFolderInExplorer(_settingsManager.MaterialRepositoryPath);
+            });
+
+            UnbundleGameCommand = ReactiveCommand.CreateFromTask(UnbundleGame);
+
+
+        }
+
+        private async Task UnbundleGame()
+        {
+            var depotPath = new DirectoryInfo(_settingsManager.MaterialRepositoryPath);
+            if (depotPath.Exists)
+            {
+                await Task.Run(() =>
+                {
+                    var archives = _archiveManager.Archives.KeyValues.Select(x => x.Value).ToList();
+
+                    var total = archives.Count;
+                    var progress = 0;
+                    _progressService.Report(0);
+
+                    for (int i = 0; i < archives.Count; i++)
+                    {
+                        var archive = archives[i];
+                        _modTools.ExtractAll(archive as Archive, depotPath);
+
+                        progress++;
+                        _progressService.Report(i / (float)total);
+                    }
+                    _progressService.Report(1.0);
+                });
+            }
         }
 
         #endregion constructors
@@ -98,6 +149,9 @@ namespace WolvenKit.ViewModels.Shell
         public ReactiveCommand<Unit, Unit> ShowSettingsCommand { get; }
         public ReactiveCommand<Unit, Unit> ShowBugReportCommand { get; }
         public ReactiveCommand<Unit, Unit> ShowFeedbackCommand { get; }
+
+        public ReactiveCommand<Unit, Unit> OpenMaterialRepositoryCommand { get; }
+        public ReactiveCommand<Unit, Unit> UnbundleGameCommand { get; }
 
         #endregion
 

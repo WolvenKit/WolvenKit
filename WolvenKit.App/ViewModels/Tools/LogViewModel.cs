@@ -36,8 +36,6 @@ namespace WolvenKit.ViewModels.Tools
 
         #endregion Fields
 
-        #region constructors
-
         public LogViewModel(
             ILoggerService loggerService
             ) : base(ToolTitle)
@@ -54,16 +52,6 @@ namespace WolvenKit.ViewModels.Tools
         }
 
 
-
-        #endregion constructors
-
-        #region properties
-
-        #endregion properties
-
-        #region methods
-
         private void SetupToolDefaults() => ContentId = ToolContentId;
-        #endregion methods
     }
 }

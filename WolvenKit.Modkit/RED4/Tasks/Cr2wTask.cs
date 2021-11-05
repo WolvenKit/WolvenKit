@@ -18,7 +18,7 @@ namespace CP77Tools.Tasks
     {
         #region Methods
 
-        public void Cr2wTask(string[] path, string outpath, bool deserialize, bool serialize, string pattern, string regex, ESerializeFormat format)
+        public void Cr2wTask(string[] path, string outpath, bool deserialize, bool serialize, string pattern, string regex, ETextConvertFormat format)
         {
             if (path == null || path.Length < 1)
             {
@@ -38,7 +38,7 @@ namespace CP77Tools.Tasks
         }
 
         private void Cr2wTaskInner(string path, string outputDirectory, bool deserialize, bool serialize,
-            string pattern = "", string regex = "", ESerializeFormat format = ESerializeFormat.json)
+            string pattern = "", string regex = "", ETextConvertFormat format = ETextConvertFormat.json)
         {
             #region checks
 
@@ -120,71 +120,17 @@ namespace CP77Tools.Tasks
                 if (serialize)
                 {
                     var infile = fileInfo.FullName;
-                    using var fs = new FileStream(infile, FileMode.Open, FileAccess.Read);
-                    var cr2w = _wolvenkitFileService.TryReadCr2WFile(fs);
-                    if (cr2w == null)
+                    if (_modTools.ConvertToAndWrite(format, infile, outputDirInfo))
                     {
-                        _loggerService.Error($"Could not parse {infile}.");
-                        return;
+                        _loggerService.Success($"Saved {infile} to {format.ToString()}.");
                     }
-
-                    cr2w.FileName = infile;
-
-                    var json = "";
-                    var dto = new Red4W2rcFileDto(cr2w);
-                    json =
-                        JsonConvert.SerializeObject(
-                            dto,
-                            Formatting.Indented
-                        );
-
-                    if (string.IsNullOrEmpty(json))
-                    {
-                        _loggerService.Error($"Could not process {infile}.");
-                        return;
-                    }
-
-                    var outpath = Path.Combine(outputDirInfo.FullName, $"{infile}.{format.ToString()}");
-
-                    switch (format)
-                    {
-                        case ESerializeFormat.json:
-                            File.WriteAllText(outpath, json);
-                            break;
-                        case ESerializeFormat.xml:
-                            var doc = JsonConvert.DeserializeXmlNode(json, Red4W2rcFileDto.Magic);
-                            doc?.Save(outpath);
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException(nameof(format), format, null);
-                    }
-
-                    _loggerService.Success($"Saved {infile} to {format.ToString()}.");
                 }
 
                 if (deserialize)
                 {
                     try
                     {
-                        var json = File.ReadAllText(fileInfo.FullName);
-                        var newdto = JsonConvert.DeserializeObject<Red4W2rcFileDto>(json);
-                        if (newdto != null)
-                        {
-                            var w2rc = newdto.ToW2rc();
-                            var ext = newdto.Extension;
-                            var outpath = Path.ChangeExtension(Path.Combine(outputDirInfo.FullName, fileInfo.Name),
-                                ext);
-
-                            using var fs2 = new FileStream(outpath, FileMode.Create, FileAccess.ReadWrite);
-                            using var bw = new BinaryWriter(fs2);
-
-                            w2rc.Write(bw);
-                        }
-                        else
-                        {
-                            throw new InvalidParsingException($"Could not parse {fileInfo.FullName}");
-                        }
-
+                        _modTools.ConvertFromAndWrite(fileInfo, outputDirInfo);
                         _loggerService.Success($"Converted {fileInfo.FullName} to CR2W");
                     }
                     catch (Exception e)

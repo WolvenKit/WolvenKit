@@ -32,7 +32,7 @@ namespace WolvenKit.Views.HomePage.Pages
             {
                 await cal.EnsureCoreWebView2Async(Helpers.objCoreWebView2Environment);
 
-                cal.SetCurrentValue(Microsoft.Web.WebView2.Wpf.WebView2.SourceProperty, (System.Uri)new Uri("https://wiki.cybermods.net/wolvenkit/"));
+                cal.SetCurrentValue(Microsoft.Web.WebView2.Wpf.WebView2.SourceProperty, (System.Uri)new Uri("https://wiki.redmodding.org/wolvenkit/"));
             }
             catch (Exception)
             {

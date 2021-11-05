@@ -61,56 +61,24 @@ namespace WolvenKit.Core
                         // We are missing the required dependency assembly.
                         Console.WriteLine($"Error while getting attribute type: {ex.Message}");
                     }
-
-
                 }
-
-
-                //var attr = assembly
-                //    .CustomAttributes.First(_ => _.AttributeType.Name.Equals(nameof(AssemblyInformationalVersionAttribute)));
-                //var productVersion = "8.2.2"; /*(string)attr.ConstructorArguments.First().Value;*/
-
-                //var productVersion = FileVersionInfo.GetVersionInfo(assembly.Location).ProductVersion;
 
                 var version = SemVersion.Parse(productVersion);
                 return version;
             }
-
-            //var name = GetAssembly(assemblyName)?.GetName();
-            //return name?.Version;
-
         }
 
-        public static string HashFile(FileInfo fInfo, SHA256 mySha256)
+        
+
+        public static (string, long) HashFileSHA512(string filepath)
         {
-            var hashStr = "";
-            if (!fInfo.Exists)
+            using (SHA512 shaM = new SHA512Managed())
             {
-                Console.WriteLine($"Tried to hash {fInfo.FullName} but no such file exists");
-                return "";
+                using FileStream fileStream = File.OpenRead(filepath);
+                var hash1 = shaM.ComputeHash(fileStream);
+                var hashStr = BitConverter.ToString(hash1).Replace("-", "").ToLowerInvariant();
+                return (hashStr, fileStream.Length);
             }
-
-            try
-            {
-                var fileStream = fInfo.Open(FileMode.Open);
-                fileStream.Position = 0;
-
-                var hashValue = mySha256.ComputeHash(fileStream);
-
-                hashStr = PrettyByteArray(hashValue);
-
-                fileStream.Close();
-            }
-            catch (IOException e)
-            {
-                Console.WriteLine($"I/O Exception: {e.Message}");
-            }
-            catch (UnauthorizedAccessException e)
-            {
-                Console.WriteLine($"Access Exception: {e.Message}");
-            }
-
-            return hashStr;
         }
 
         // Display a byte array in a readable format.

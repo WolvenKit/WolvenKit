@@ -137,6 +137,8 @@ namespace WolvenKit.Common.Services
         {
             LoadEmbeddedHashes(s_used, _hashes);
 
+            LoadAdditional();
+
             // user hashes
             var assemblyPath = Path.GetDirectoryName(System.AppContext.BaseDirectory);
             var userHashesPath = Path.Combine(assemblyPath ?? throw new InvalidOperationException(), s_userHashes);
@@ -145,6 +147,8 @@ namespace WolvenKit.Common.Services
                 using var userFs = new FileStream(userHashesPath, FileMode.Open, FileAccess.Read);
                 ReadHashes(userFs, _userHashes);
             }
+
+            LoadMissingHashes();
         }
 
         private void LoadEmbeddedHashes(string resourceName, Dictionary<ulong, SAsciiString> hashDictionary)
@@ -172,7 +176,6 @@ namespace WolvenKit.Common.Services
             using var ms = new MemoryStream(outputbuffer);
             ReadHashes(ms, hashDictionary);
 
-            LoadMissingHashes();
         }
 
         private void LoadMissingHashes()
@@ -189,7 +192,11 @@ namespace WolvenKit.Common.Services
             {
                 var hash = ulong.Parse(line);
 
-                _missing.Add(hash);
+                if (!Contains(hash))
+                {
+                    _missing.Add(hash);
+                }
+
             }
         }
 
@@ -213,8 +220,10 @@ namespace WolvenKit.Common.Services
                     continue;
                 }
                 
-
-                hashDict.Add(hash, new SAsciiString(line));
+                if (!hashDict.ContainsKey(hash))
+                {
+                    hashDict.Add(hash, new SAsciiString(line));
+                }
             }
         }
 

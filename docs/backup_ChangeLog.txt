@@ -1,0 +1,340 @@
+CHANGELOG 8.4 - 2021/10/03
+
+Implemented:
+- Import morph targets into a .morphtarget file on exported .glb files.
+- added a toggle button in the ribbon which switches to mod asset browser
+- replace list log with a text log
+- Updated the RTTI types for patch 1.31
+- Add text conversion UI options: convert cr2w to/from json
+- use dds as default texture export format
+- csv import
+- curve editorfor curvedata
+- backend changes
+
+Fixed:
+
+- Exception due to in-use file no longer occurs after import followed by export or vice-versa.
+- LengthPrefixedString methods now support reading and writing UTF8 encoded strings
+- Removed the WolvenKit.Core\RED4\Helpers\___Extensions.cs versions as they were now redundant
+- Updated MSTest.TestAdapter and MSTest.TestFramework libraries from 2.2.4 to 2.2.7 to resolve an issue with the DataRowAttribute mangling data.
+- Fixed: CArrayBase caused an exception when writing certain data types (UInt8) if internal buffer is null.
+- fixed a bug where existing tweak.bin files would not get deleted
+- fixed a bug where sometimes files in archives would not get unbundled correctly
+- fixed a bug where opening empty tweak files would show an error message
+- fixed The error: "unexpected error occured while uncooking: Value cannot be null. (Parameter 'path1')" which occurs when uncooking basegame_4_appearance.archive.
+- some archive service memory opimizations
+- fixed a bug where byte arrays would be written incorrectly
+- fixed a bug where clicking the play button on an audio track wouldnt play the track again if it had previously been played
+- fixed a bug where byte arrays would not be written correctly
+- open raw jsons, csvs as json, csv in default editor
+- fixed a bug where packing would be very slow on certain large cr2w files
+- fixed a bug where CRUIDS would not convert correctly to/from text
+- fixed a bug where TWEAKDBIDs would not convert correctly to/from text
+- fixed a bug where curves would not convert correctly to/from text
+- fixed a bug where Colors would not convert correctly to/from text
+
+
+
+
+CHANGELOG 0.6.0.1 - 2020.05.06
+ - COMPLETE GAME FILE READING SUPPORT
+ - All the unknownbytes have been figured out apart from some minor ones
+ - Collision-cache reading
+ - Apex-file (apb) modding support
+ - PROPER MESH AND TEXTURE MODDING SUPPORT
+ - FBX export with animations (import is in the works so stay tuned)
+ - Better model renderer
+ - Proper texture import and cooking inside WolvenKit
+ - Support for viewing of all the texturecache details
+ - BATCH EDITING OF MULTIPLE FILES AT ONCE
+ - SOUND MODDING SUPPORT
+ - MODERN UI WITH LIGHT, DARK AND BLUE THEMES
+ - many many bugfixes and minor changes
+
+CHANGELOG 0.3.1.0 - 2018.08.02.
+ - Fix loading showing before it knows the paths needed to load
+ - Update version
+ - Fixed license window with the new rtfpipe package
+ - Update nuget packages  
+ - Fixes autoupdates not working.  
+ - Refactor some cr2w stuff.
+ - Fix form icons
+ - Implemented splash screen & Some Particle classes
+ - Create ChangeLog.txt
+ - Added proper wcc_lite patcher
+---------------------------------- LEGACY CHANGELOG ----------------------------------
+CHANGELOG 0.3.0.1 - 2018.07.26. 
+ -  Fix broken wcc_lite license formating
+ - Notes and kind of implementation of CIndexed2dArray. This needs to be discussed or whatever what even this file is.
+ - Add missing file
+ - Implement Grassmask reading
+ - Implement basic Cellmap reading
+ - Refactor CFoliageResource
+ - Fix CFoliageResource reading implemen Grass reading as well
+ - Update README.md
+ - Added IdTag Variable Support (#94)
+ - Proper wcc_lite patcher on first run
+ - Update appveyor.yml
+ - Update issue templates
+ - Create PULL_REQUEST_TEMPLATE.md
+ - Update appveyor.yml
+ - Update appveyor.yml
+ - Update appveyor.yml
+ - AutoUpdate functionality and CCubeTexture figured out mostly
+ - Game asset debug dump tool
+ - Make modmanager less likely to freeze the program when many files are copied into the files directory
+ - Added CSectorData support. (#93)
+ - Merge branch 'master' of https://github.com/Traderain/Wolven-kit
+ - Fix Keyboard shortcuts registering as global
+ - Update appveyor.yml
+ - Implement Copy&Paste hotkeys
+ - Basic shortcuts
+ - Fix renderer not finding the proper textures
+ - Abitility to im- and export Cswf-texture resources
+ - Update appveyor.yml
+ - Update appveyor.yml
+ - Renderer improvements (#87)
+ - Add better versioning
+ - Quick fix texturecache's mod laader crash
+ - Fix WolvenKit generating unusable DLCs
+ - Merge branch 'master' of https://github.com/Traderain/Wolven-kit
+ - Remove Lexar modname check meme
+ - Update appveyor.yml
+ - Solution refactor
+ - Fixed threading problems of initial loading
+ - Use protobuff for manager loading
+ - Fix settings form crashing when string manager is not yet loaded
+ - Implemented file association
+ - Implemented nightly builds for Appveyor (#84)
+ - Implemented a Treeview for easier menu creation with menu creator
+ - Implement an importer for redcloth files
+ - Implement importing models with collision and generating collision cache
+ - Fix CDateTime reading
+ - Add some missing cvectors
+ - Bump version
+ - Refactor usmplayer so it works entirely in memory
+ - Make USM Video player more failsafe
+ - Major performance improvments with the managers
+ - Add revorb to solution and reorganize sound related projects
+ - Add revorb as submodule to the solution
+ - Fix modexplorer jitter
+ - Fix installer layout
+ - Implemented package installation
+ - Finalize package layout
+ - Working package creator implementation
+ - Update nuget packages
+ - Fixed coma in HairWorksInfo writing
+ - HairWorksInstanceDescriptor layout
+ - Added HairAssetDescriptor layout
+ - Implement proper way to create malformed broken xml
+ - Implement HairSceneDescriptor for redfur file conversion
+ - Implement HairWorksInfo writing completely and refactor
+ - Implement writin of NvHairAssetHeaderInfo for redfur export
+ - Stuff from Apex
+ - Merge pull request #82 from Traderain/CacheResearch
+ - Fix dds header
+ - Implement CubeMap and Mipmap reading for TextureCache
+ - Header refactor for TextureItem
+ - Fixed TextureCache field names
+ - Merge pull request #80 from Traderain/Renderer
+ - Implemented all the unknownbytes Flyr files
+ - CTree reading implemented
+ - Merge branch 'master' of https://github.com/Traderain/Wolven-kit into Renderer
+ - Implemented all the unknownbytes in guiconfig
+ - Implemented unknownbytes in w2ragdoll files
+ - Refactor
+ - Renderer: Disable automatic path finding (for now) for rigs
+ - Merge branch 'master' into Renderer
+ - Merge pull request #77 from dnandha/master
+ - Fix solution configuration
+ - Refactor
+ - Refactores texture_cache variables to proper names
+ - Refactor
+ - Updated manager cache saving and publishing
+ - Fixed build
+ - Merge pull request #75 from Traderain/metadata_store
+ - Create ISSUE_TEMPLATE.md
+ - Fixed CTree reading and added all Enums as CName entry
+ - Basic tree reading in flyr files
+ - Fixed strings not loading
+ - Fixed asset browser home button
+ - Project upgrade
+ - Moved modmanager to maincontroller
+ - Fixed build
+ - Apex layout
+ - Refactor files
+ - Grouped main project forms into a folder
+ - Added home button to assset browser
+ - Implemented recent files
+ - PropertyGrid mod settings
+ - Fixed a bug with picture viewer
+ - Added version to projects
+ - Icons cleanup
+ - Made the settings form mora failsafe
+ - Added a way to detect if debug console is enabled
+ - Merge branch 'master' of https://github.com/Traderain/Wolven-kit
+ - Disable CS1591
+ - Update appveyor.yml
+ - Update appveyor.yml
+ - Update VS version in readme
+ - Update appveyor.yml
+ - FrmMain refactor
+ - Remove falsely added nuget packages
+ - Global event based logging
+ - Resolved some warnings
+ - Fixed registry search
+ - Now reads the metadata.store file to the end
+ - Merge pull request #74 from Jicksaw/master
+ - Fix NullReferenceException in get_ExplorerPath() when adding files marked from folder
+ - Update README.md
+ - Implement skeletal animation w/o model skinning yet
+ - Prepare Renderer for animations
+ - Merge pull request #73 from Traderain/Renderer
+ - Update gizmo for Renderer
+ - Add configuration fix
+ - Add axes gizmo to Renderer
+ - Add skeleton to meshes in Renderer
+ - Add Rig data reading for Renderer [Experimental]
+ - Merge branch 'master' into Renderer
+ - endIndices writing fix
+ - Fixed apex vertecie writing
+ - HairAssetDescriptor layout added
+ - CR2W2Apex: HairSceneDescriptor
+ - Bundle padding, Apex layout added
+ - Fixed usm player
+ - Fixed bundle content writing
+ - Couple fixes for bundle writing
+ - Fix name writing
+ - Revert "Corrected TOC writing"
+ - Corrected TOC writing
+ - Merge branch 'master' of https://github.com/Traderain/Wolven-kit
+ - Fixed bundle header writing
+ - Merge pull request #71 from Traderain/StringsGUI
+ - Added XML comments to Commonfunctions
+ - Fixed some stuff not parsing properly in journals
+ - Implemented a better journal preview
+ - Fixed W3StringManager GetLine
+ - Fixed opening CSV files in separate languages mode.
+ - Added option to show IDs in the strings importer.
+ - Implemented writing identical soundbanksinfo.xml
+ - Fixed maincontroller not serializing/desirializing managers properly
+ - Updated nuget packages
+ - Fixed project installer incorrectly deleting the old project
+ - Better exception print for mod packing
+ - Merge pull request #69 from Traderain/DLCSupport
+ - Version bump to 0.2.2
+ - Fixed search
+ - Ability to mark with enter in Asset browser
+ - Fixed some typos
+ - Made path operations more failsafe
+ - Fixed manually entered path browsing
+ - Fixed naming
+ - Fixed Asset browser occasionally extracting the wrong file
+ - Fixed script copy
+ - Fixed exception printing
+ - Fixed mod packing creating empty folders
+ - Fixed bug in modinstall filecopy
+ - Added install log
+ - Fix build
+ - Made packed project copy more failsafe
+ - Made project packing more failsafe
+ - Added notification and dialog for unsaved changes when saving project
+ - Fix Project packing
+ - Commit
+ - Added toolstrip to move files between mod and dlc
+ - Implemented multi purpose project
+ - Merge pull request #68 from Traderain/Renderer
+ - Added different export formats
+ - Merge branch 'master' of https://github.com/Traderain/Wolven-kit into Renderer
+ - Added Model Export
+ - Merge pull request #67 from Traderain/CacheResearch
+ - Fix typo
+ - Refactor
+ - Added Comboboxes in variable view for Enums
+ - Moved registry search to an async thread
+ - Added Dumped CVectors
+ - Refactor
+ - Refactor
+ - Added status display and refactor
+ - Fixed filename typo
+ - Fixed chunk copy
+ - Merge pull request #66 from Traderain/CacheResearch
+ - Cleanup
+ - Fix collision cache reading
+ - Added missing files
+ - Implemented CollisionCache reading
+ - Add Chunk search limit
+ - Seach for chunklist
+ - Added Atvaark
+ - Merge branch 'master' of https://github.com/Traderain/Wolven-kit into CacheResearch
+ - Merge branch 'master' of https://github.com/Traderain/Wolven-kit
+ - Major refactor and cleanup and fixes
+ - Merge pull request #65 from Traderain/Renderer
+
+
+CHANGELOG 0.2.1 - 2017.07.28.
+- Implemented everything strings related. Tools-> Strings Encoder GUI
+- Reworked Asset browser
+- Zoom&Drag etc. for Flowdiagrams
+- Implemented most stuff sound related. (ww2ogg and ogg2ww still needs to be coded)
+- Added Caching for the archive managers
+- HSL Color picker
+- Installer for modpackages. (No gui for creating them yet.)
+- w2mesh renderer
+- reworked about page
+- menu xml creator
+- fixed many bugs
+- minor changes
+
+CHANGELOG 0.1.1 - 2017.05.09.
+- Game debugger form. Not entirely done. But can be used for many stuff. (Tools->Game debugger)
+- Fixed adding files from other mods. (0.1 broke it)
+- Made bug reporting much better and convinient. (Replaced CrashReport.NET with psr.exe)
+- Fixed mod renaming.
+- Replaced tutorial form with the WitcherScript documentation.
+
+CHANGELOG 0.1 - 2017.04.12.
+- XBM Converter fixed.
+- Fixed a nullreference bug for Embeded files
+- Texturecache and cooking
+- Improved speed of bundleexplorer
+- W3Speech parser. Not used anywhere yet but works perfectly.
+- Build date label.
+- Scripts support
+- Cache parser. This is in progress.
+- Costum launch parameters and launch for debugging now uses -net too.
+- Packing settings.
+- StringsGUI for generating strings files.
+- Bundleexplorer reworked a bit.
+- Modexplorer shows mods in separate folders so you know who you are stealing the files from :p
+- Bundleexplorer renamed to "Asset browser" since in the future every file will be in this.
+- Menu creator. Little buggy as of now but most stuff works.
+- Fixed some small bugs.
+
+
+2017-03-02.zip
+- F2 to rename files
+- Folders are cleaned when packing (fixes some stuff)
+- Form for the wcc_lite eula
+- https://github.com/Traderain/Wolven-kit/issues/7
+- Experimental Journal Preview/Editor (doesn't work yet and such, you can't really use it yet may even crash :p)
+- USM Video Player which works completely in memory (no sound yet)
+- Image Preview (still in progress)
+- Added Crashreport.net which emails crashes to me
+- A home/clear button for bundleexplorer so you can exit from search/go to the home dir
+- Added Snappy decompression so it now decompresses compression type 2 files properly
+- Fixed a couple bugs and stuff which would cause stuff to crash
+- xbm unknownbytes fully reversed
+- CSwfTexture and CBitmapTexture implemented
+
+Changelog 0.3 [2017.01.30]
+- Copy paste in Mod Explorer
+- Tutorial form
+- Settings locate button (finds wcc_lite.exe and witcher3.exe automatically)
+- Messagebox for .usm files
+- Experimental w3speech parser (doesnt work properly yet)
+- Flowdiagram only shows now when it should
+- Bundleexplorer context menu to copy path and such
+- Fixed add file button
+- Project reload button
+-  GLControl and opengl scene setup (this is disabled since it doesnt really do anything)

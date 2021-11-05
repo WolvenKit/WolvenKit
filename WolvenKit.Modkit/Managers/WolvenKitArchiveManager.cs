@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using DynamicData;
 using DynamicData.Kernel;
 using ProtoBuf;
 using ReactiveUI;
-using WolvenKit.Common.Services;
 using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.Common.Model
@@ -36,7 +35,6 @@ namespace WolvenKit.Common.Model
 
         #endregion
 
-
         public abstract void LoadGameArchives(FileInfo executable, bool rebuildtree = true);
 
         public abstract void LoadArchive(string path, bool ispatch = false);
@@ -59,10 +57,14 @@ namespace WolvenKit.Common.Model
             RootNode = new RedFileSystemModel(TypeName.ToString());
 
             // loop through all files
-            foreach (var item in Archives.Items.SelectMany(x => x.Files))
+            var allfiles = Archives.Items.SelectMany(x => x.Files);
+
+            //Parallel.ForEach(allfiles, file =>
+            foreach (var file in allfiles)
             {
+                var model = file.Value;
+                var key = file.Key;
                 var currentNode = RootNode;
-                var model = item.Value;
                 var parts = model.Name.Split('\\');
 
                 // loop through path
@@ -71,23 +73,16 @@ namespace WolvenKit.Common.Model
                 {
                     var part = parts[i];
                     fullpath += part + Path.DirectorySeparatorChar;
-                    // directory does not already exist
-                    if (currentNode.Directories.All(_ => _.Name != part))
-                    {
-                        var newNode = new RedFileSystemModel(fullpath.TrimEnd(Path.DirectorySeparatorChar));
-                        currentNode.Directories.Add(newNode);
-                        currentNode = newNode;
-                    }
-                    else
-                    {
-                        // add to existing directory
-                        currentNode = currentNode.Directories.First(_ => _.Name == part);
-                    }
+
+                    var dirPath = fullpath.TrimEnd(Path.DirectorySeparatorChar);
+                    var x = currentNode.Directories.GetOrAdd(dirPath, new RedFileSystemModel(dirPath));
+                    currentNode = x;
                 }
 
                 // add file to the last directory in path
-                currentNode.Files.Add(item.Key);
+                currentNode.Files.Add(key);
             }
+            //);
         }
 
         protected void RebuildModRoot()
@@ -99,6 +94,7 @@ namespace WolvenKit.Common.Model
                 var modroot = new RedFileSystemModel(archive.Name);
 
                 // loop through all files
+                //Parallel.ForEach(archive.Files, item =>
                 foreach (var item in archive.Files)
                 {
                     var currentNode = modroot;
@@ -111,35 +107,34 @@ namespace WolvenKit.Common.Model
                     {
                         var part = parts[i];
                         fullpath += part + Path.DirectorySeparatorChar;
-                        // directory does not already exist
-                        if (currentNode.Directories.All(_ => _.Name != part))
-                        {
-                            var newNode = new RedFileSystemModel(fullpath.TrimEnd(Path.DirectorySeparatorChar));
-                            currentNode.Directories.Add(newNode);
-                            currentNode = newNode;
-                        }
-                        else
-                        {
-                            // add to existing directory
-                            currentNode = currentNode.Directories.First(_ => _.Name == part);
-                        }
+
+                        var dirPath = fullpath.TrimEnd(Path.DirectorySeparatorChar);
+                        var x = currentNode.Directories.GetOrAdd(dirPath, new RedFileSystemModel(dirPath));
+                        currentNode = x;
                     }
 
                     // add file to the last directory in path
                     currentNode.Files.Add(item.Key);
                 }
+                //);
 
                 ModRoots.Add(modroot);
             }
         }
 
         public abstract Optional<IGameFile> Lookup(ulong hash);
+
         public abstract RedFileSystemModel LookupDirectory(string fullpath, bool expandAll = false);
+
         public abstract Dictionary<string, IEnumerable<FileEntry>> GetGroupedFiles();
+
+        public abstract IEnumerable<FileEntry> GetFiles();
+
         public abstract void LoadFromFolder(DirectoryInfo archivedir);
 
 
         public abstract IObservable<IChangeSet<RedFileSystemModel>> ConnectGameRoot();
+
         public abstract IObservable<IChangeSet<RedFileSystemModel>> ConnectModRoot();
     }
 }

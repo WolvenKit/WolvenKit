@@ -1,45 +1,57 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Security.Cryptography;
 using System.Threading;
-using WolvenKit.RED4.CR2W.Archive;
 using CP77Tools.Model;
-using RED.CRC32;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Common.Oodle;
 using WolvenKit.Common.RED4.Archive;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Interfaces.Extensions;
-using WolvenKit.Modkit.RED4;
-using WolvenKit.RED4.CR2W;
-using Index = CP77Tools.Model.Index;
+using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.Modkit.RED4
 {
     /// <summary>
-    /// Collection of common modding utilities.
+    ///     Collection of common modding utilities.
     /// </summary>
     public partial class ModTools
     {
         #region Fields
 
         // The first 4 files need to be aligned to 0x1000, added .bin because of unknown file type
-        private static readonly List<string> s_alignedFiles = new() { ".bk2", ".bnk", ".opusinfo", ".wem", ".bin" };
+        private static readonly List<string> s_alignedFiles = new()
+        {
+            ".bk2",
+            ".bnk",
+            ".opusinfo",
+            ".wem",
+            ".bin"
+        };
 
         // same as above + dat and opuspak, (only one .dat, don't know if it can be compressed)
-        private static readonly List<string> s_uncompressedFiles = new() { ".bk2", ".bnk", ".opusinfo", ".wem", ".bin", ".dat", ".opuspak" };
+        private static readonly List<string> s_uncompressedFiles = new()
+        {
+            ".bk2",
+            ".bnk",
+            ".opusinfo",
+            ".wem",
+            ".bin",
+            ".dat",
+            ".opuspak"
+        };
 
         #endregion
 
         #region Methods
 
         /// <summary>
-        /// Creates and archive from a folder and packs all files inside into it
+        ///     Creates and archive from a folder and packs all files inside into it
         /// </summary>
         /// <param name="infolder"></param>
         /// <param name="outpath"></param>
@@ -83,14 +95,12 @@ namespace WolvenKit.Modkit.RED4
                 outfile = Path.Combine(outpath.FullName, $"{modname}.archive");
             }
 
-            var ar = new Archive
-            {
-                ArchiveAbsolutePath = outfile,
-            };
+            var sw = new Stopwatch();
+            sw.Start();
+
+            var ar = new Archive { ArchiveAbsolutePath = outfile };
             using var fs = new FileStream(outfile, FileMode.Create);
             using var bw = new BinaryWriter(fs);
-
-
 
             #region write header
 
@@ -108,19 +118,21 @@ namespace WolvenKit.Modkit.RED4
                 customDataLength = bw.BaseStream.Position - Header.EXTENDED_SIZE;
             }
 
-
             #endregion
-
 
             #endregion write header
 
             #region write files
+
+            HashSet<ulong> importsHashSet = new();
 
             var progress = 0;
             _progressService.Report(0);
             foreach (var fileInfo in fileInfos)
             {
                 var relpath = fileInfo.FullName.RelativePath(infolder);
+                _loggerService.Log($"packing {relpath}");
+
                 var hash = FNV1A64HashAlgorithm.HashString(relpath);
                 if (fileInfo.Extension.ToLower() == ".bin")
                 {
@@ -136,19 +148,17 @@ namespace WolvenKit.Modkit.RED4
                     {
                         customPaths.Add(relpath);
                     }
-
-                    
                 }
 
                 using var fileStream = new FileStream(fileInfo.FullName, FileMode.Open);
                 using var fileBinaryReader = new BinaryReader(fileStream);
 
                 // fileinfo data
-                uint firstimportidx = (uint)ar.Index.Dependencies.Count;
-                uint lastimportidx = (uint)ar.Index.Dependencies.Count;
-                uint firstoffsetidx = (uint)ar.Index.FileSegments.Count;
-                uint lastoffsetidx = (uint)ar.Index.FileSegments.Count;
-                int flags = 0;
+                var firstimportidx = (uint)importsHashSet.Count;
+                var lastimportidx = (uint)importsHashSet.Count;
+                var firstoffsetidx = (uint)ar.Index.FileSegments.Count;
+                uint lastoffsetidx;
+                var flags = 0;
 
                 var cr2w = _wolvenkitFileService.TryReadRED4FileHeaders(fileBinaryReader);
                 if (cr2w != null)
@@ -156,11 +166,10 @@ namespace WolvenKit.Modkit.RED4
                     //register imports
                     foreach (var cr2WImportWrapper in cr2w.Imports)
                     {
-                        if (!ar.Index.Dependencies.Select(_ => _.HashStr).Contains(cr2WImportWrapper.DepotPathStr))
-                            ar.Index.Dependencies.Add(
-                                new Dependency(_hashService, FNV1A64HashAlgorithm.HashString(cr2WImportWrapper.DepotPathStr)));
+                        importsHashSet.Add(FNV1A64HashAlgorithm.HashString(cr2WImportWrapper.DepotPathStr));
                     }
-                    lastimportidx = (uint)ar.Index.Dependencies.Count;
+
+                    lastimportidx = (uint)importsHashSet.Count;
 
                     // kraken the file and write
                     var cr2wfilesize = (int)cr2w.Header.objectsEnd;
@@ -168,7 +177,7 @@ namespace WolvenKit.Modkit.RED4
                     var cr2winbuffer = fileBinaryReader.ReadBytes(cr2wfilesize);
                     var offset = bw.BaseStream.Position;
 
-                    var (zsize, crc) = bw.CompressAndWrite(cr2winbuffer);
+                    var (zsize, _) = bw.CompressAndWrite(cr2winbuffer);
                     ar.Index.FileSegments.Add(new FileSegment(
                         (ulong)offset,
                         zsize,
@@ -180,9 +189,9 @@ namespace WolvenKit.Modkit.RED4
                     foreach (var buffer in bufferOffsets)
                     {
                         var bsize = buffer.MemSize;
-                        var bzsize = buffer.DiskSize;  //compressed size of the buffer inside the cr2wfile
+                        var bzsize = buffer.DiskSize; //compressed size of the buffer inside the cr2wfile
                         fileBinaryReader.BaseStream.Seek(buffer.Offset, SeekOrigin.Begin);
-                        var b = fileBinaryReader.ReadBytes((int)bzsize);   //read bzsize bytes from the cr2w
+                        var b = fileBinaryReader.ReadBytes((int)bzsize); //read bzsize bytes from the cr2w
                         var boffset = bw.BaseStream.Position;
 
                         bw.Write(b);
@@ -191,6 +200,7 @@ namespace WolvenKit.Modkit.RED4
                             bzsize,
                             bsize));
                     }
+
                     lastoffsetidx = (uint)ar.Index.FileSegments.Count;
 
                     flags = cr2w.Buffers.Count > 0 ? cr2w.Buffers.Count - 1 : 0;
@@ -216,7 +226,7 @@ namespace WolvenKit.Modkit.RED4
                     else
                     {
                         // kraken the file and write
-                        var (zsize, crc) = bw.CompressAndWrite(cr2winbuffer);
+                        var (zsize, _) = bw.CompressAndWrite(cr2winbuffer);
                         ar.Index.FileSegments.Add(new FileSegment(offset, zsize, size));
                     }
 
@@ -224,8 +234,10 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 // save table data
-                var sha1 = new System.Security.Cryptography.SHA1Managed();
-                var sha1hash = sha1.ComputeHash(fileBinaryReader.BaseStream.ToByteArray()); //TODO: this is only correct for files with no buffer
+                var sha1 = new SHA1Managed();
+                var sha1hash =
+                    sha1.ComputeHash(fileBinaryReader.BaseStream
+                        .ToByteArray()); //TODO: this is only correct for files with no buffer
                 var item = new FileEntry(
                     _hashService,
                     hash,
@@ -240,7 +252,10 @@ namespace WolvenKit.Modkit.RED4
 
                 Interlocked.Increment(ref progress);
                 _progressService.Report(progress / (float)fileInfos.Count);
-            };
+            }
+
+            ar.Index.Dependencies = importsHashSet.Select(_ => new Dependency(_)).ToList();
+
 
             #endregion write files
 
@@ -268,10 +283,12 @@ namespace WolvenKit.Modkit.RED4
             bw.WriteHeader(ar.Header);
             bw.Write(customDataLength);
 
+            sw.Stop();
+            _loggerService.Info($"Packing archive took {sw.ElapsedMilliseconds}ms.");
+
             return ar;
         }
 
         #endregion Methods
     }
-
 }

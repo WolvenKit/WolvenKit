@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -8,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
+using System.Windows.Threading;
 using Ab3d;
 using Ab3d.Assimp;
 using Ab3d.Common.Cameras;
@@ -17,11 +19,14 @@ using Ab3d.Visuals;
 using Assimp;
 using ReactiveUI;
 using Splat;
+using Syncfusion.Windows.PropertyGrid;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Helpers;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Tools;
 using WolvenKit.Views.Editor.AudioTool;
+using WPFSoundVisualizationLib;
 
 namespace WolvenKit.Views.Tools
 {
@@ -31,6 +36,8 @@ namespace WolvenKit.Views.Tools
     public partial class PropertiesView : ReactiveUserControl<PropertiesViewModel>
     {
         public string _fileName;
+
+        private MediaPlayer mediaPlayer = new MediaPlayer();
 
         public PropertiesView()
         {
@@ -46,11 +53,14 @@ namespace WolvenKit.Views.Tools
             var assimpWpfExporter = new AssimpWpfExporter();
             string[] supportedExportFormats = assimpWpfExporter.ExportFormatDescriptions.Select(f => f.FileExtension).ToArray();
 
-            var themeResources = Application.LoadComponent(new Uri("Resources/Styles/ExpressionDark.xaml", UriKind.Relative)) as ResourceDictionary;
-            Resources.MergedDictionaries.Add(themeResources);
+            //var themeResources = Application.LoadComponent(new Uri("Resources/Styles/ExpressionDark.xaml", UriKind.Relative)) as ResourceDictionary;
+            //Resources.MergedDictionaries.Add(themeResources);
 
             spectrumAnalyzer.RegisterSoundPlayer(NAudioSimpleEngine.Instance);
             waveformTimeline.RegisterSoundPlayer(NAudioSimpleEngine.Instance);
+
+            nAudioSimple = NAudioSimpleEngine.Instance;
+            NAudioSimpleEngine.Instance.PropertyChanged += NAudioEngine_PropertyChanged;
 
             //appControl.ExeName = "binkpl64.exe";
             //appControl.Args = "test2.bk2 /J /I2 /P";
@@ -72,10 +82,39 @@ namespace WolvenKit.Views.Tools
                         LoadModel(modelpath);
                     }
                 });
+
+                ViewModel.PreviewAudioCommand.Subscribe(path =>
+                {
+                    TempConvertToWemWav(path);
+                });
             });
         }
 
-        private static HandyControl.Controls.GlowWindow XoWindow = new HandyControl.Controls.GlowWindow();
+        #region properties
+
+        public NAudioSimpleEngine nAudioSimple { get; set; }
+
+        //public TimeSpan ChannelPosition { get; set; }
+
+        //public string AudioPositionText { get; set; }
+
+        //public string CurrentTrackName { get; set; }
+
+        //public string ChannelLength { get; set; }
+
+        #endregion
+
+        private void PropertyGrid_OnAutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
+        {
+            switch (e.DisplayName)
+            {
+                case nameof(ReactiveObject.Changed):
+                case nameof(ReactiveObject.Changing):
+                case nameof(ReactiveObject.ThrownExceptions):
+                    e.Cancel = true;
+                    break;
+            }
+        }
 
         private Stream StreamFromBitmapSource(BitmapSource writeBmp)
         {
@@ -406,6 +445,135 @@ namespace WolvenKit.Views.Tools
             {
                 NAudioSimpleEngine.Instance.Stop();
             }
+        }
+
+        /// <summary>
+        /// convert a file to wav to preview it.
+        /// </summary>
+        /// <param name="path"></param>
+        public void TempConvertToWemWav(string path)
+        {
+            string ManagerCacheDir = Path.Combine(ISettingsManager.GetTemp_AudioPath());
+
+            //Clean directory
+            Directory.CreateDirectory(ManagerCacheDir);
+
+            foreach (var f in Directory.GetFiles(ManagerCacheDir))
+            {
+                try
+                {
+                    File.Delete(f);
+                }
+                catch
+                {
+                }
+            }
+
+            var outf = Path.Combine(ManagerCacheDir, Path.GetFileNameWithoutExtension(path) + ".wav");
+            Trace.WriteLine(outf);
+            Trace.WriteLine(path);
+
+            var arg = path.ToEscapedPath() + " -o " + outf.ToEscapedPath();
+            var p = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", "vgmstream", "test.exe");
+            var si = new ProcessStartInfo(
+                    p,
+                    arg
+                )
+            {
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
+                UseShellExecute = false,
+                RedirectStandardError = true,
+                RedirectStandardOutput = true,
+                Verb = "runas"
+            };
+            var proc = Process.Start(si);
+            proc.WaitForExit();
+            Trace.WriteLine(proc.StandardOutput.ReadToEnd());
+
+            mediaPlayer.Open(new Uri(outf));
+
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += Timer_Tick;
+
+            timer.Start();
+
+            DispatcherTimer ChannelPositionTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(1)
+            };
+            ChannelPositionTimer.Tick += ChannelPositionTimer_Tick;
+            ;
+
+            ChannelPositionTimer.Start();
+
+            //ChannelLength = $"{mediaPlayer.Position.TotalMinutes} : {mediaPlayer.Position.TotalSeconds} : {mediaPlayer.Position.TotalMilliseconds}";
+            NAudioSimpleEngine.Instance.OpenFile(outf);
+            RunnerText.SetCurrentValue(ContentProperty, Path.GetFileNameWithoutExtension(outf));
+            
+
+            //AudioFileList.Add(lvi);
+        }
+        
+
+        /// <summary>
+        /// property changed for naudio
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void NAudioEngine_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "ChannelPosition":
+                    clockDisplay.SetCurrentValue(DigitalClock.TimeProperty, TimeSpan.FromSeconds(NAudioSimpleEngine.Instance.ChannelPosition));
+                    break;
+
+                default:
+                    // Do Nothing
+                    break;
+            }
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            if (mediaPlayer.Source != null)
+            {
+                clockDisplay.SetCurrentValue(DigitalClock.TimeProperty, mediaPlayer.Position);
+            }
+            else
+            {
+                //AudioPositionText = "No file selected...";
+            }
+        }
+
+        private void ChannelPositionTimer_Tick(object sender, EventArgs e)
+        {
+            NAudioSimpleEngine.Instance.ChannelPosition = mediaPlayer.Position.TotalSeconds;
+        }
+
+        private void PlayButton_Click_1(object sender, RoutedEventArgs e)
+        {
+            //Call Stop Playing if the media player is at the end of the track
+            if (mediaPlayer.Position >= mediaPlayer.NaturalDuration.TimeSpan)
+            {
+                mediaPlayer.Stop();
+                mediaPlayer.Position = new TimeSpan(0);
+            }
+
+            mediaPlayer.Play();
+        }
+
+        private void PauseButton_Click_1(object sender, RoutedEventArgs e)
+        {
+            mediaPlayer.Pause();
+        }
+
+        private void StopButton_Click_1(object sender, RoutedEventArgs e)
+        {
+            mediaPlayer.Stop();
+            mediaPlayer.Position = new TimeSpan(0);
         }
 
         #endregion AudioPreview

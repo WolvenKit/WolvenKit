@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -90,7 +89,7 @@ namespace WolvenKit.Views.Templates
                 return;
             }
 
-            GoToChunkRequested?.Invoke(this, new GoToChunkRequestedEventArgs() {Export = target});
+            GoToChunkRequested?.Invoke(this, new GoToChunkRequestedEventArgs() { Export = target });
 
         }
     }

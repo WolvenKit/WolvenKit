@@ -24,13 +24,6 @@ namespace WolvenKit.Views.HomePage.Pages
 
             this.WhenActivated(disposables =>
             {
-                Interactions.Confirm.RegisterHandler(
-                    interaction =>
-                    {
-                        var action = this.DisplayConfirmDialog(interaction.Input);
-                        interaction.SetOutput(action);
-                    });
-
                 this.BindCommand(
                     this.ViewModel,
                     vm => vm.OpenLinkCommand,
@@ -39,8 +32,14 @@ namespace WolvenKit.Views.HomePage.Pages
                 this.BindCommand(
                     this.ViewModel,
                     vm => vm.OpenLinkCommand,
-                    v => v.TwitterLinkButton,
-                    vm => vm.TwitterLink);
+                    v => v.YoutubeLinkButton,
+                    vm => vm.YoutubeLink);
+                //Twitter Link Not Used
+                //this.BindCommand(
+                    //this.ViewModel,
+                    //vm => vm.OpenLinkCommand,
+                    //v => v.TwitterLinkButton,
+                    //vm => vm.TwitterLink);
                 this.BindCommand(
                     this.ViewModel,
                     vm => vm.OpenLinkCommand,
@@ -61,35 +60,15 @@ namespace WolvenKit.Views.HomePage.Pages
                         viewModel => viewModel.OpenProjectCommand,
                         view => view.OpenProjectButton)
                     .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.CloseHomePage,
+                        view => view.ContinueWithoutProjectButton)
+                    .DisposeWith(disposables);
 
-
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.SettingsCommand,
-                        view => view.SettingsButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.TutorialsCommand,
-                        view => view.TutorialsButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.WikiCommand,
-                        view => view.WikiButton)
-                    .DisposeWith(disposables);
 
 
             });
 
-        }
-
-        private bool DisplayConfirmDialog(string input)
-        {
-            var result = MessageBox.Show(
-                "The file doesn't seem to exist. Would you like to locate it? ",
-                "Project not found",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question);
-
-            return result == MessageBoxResult.Yes;
         }
 
         private async void InitWebView2()
@@ -101,9 +80,10 @@ namespace WolvenKit.Views.HomePage.Pages
 
             try
             {
-                await cal.EnsureCoreWebView2Async(Helpers.objCoreWebView2Environment);
+                await Task.CompletedTask;
+                //await FeaturedVideo.EnsureCoreWebView2Async(Helpers.objCoreWebView2Environment);
 
-                cal.SetCurrentValue(Microsoft.Web.WebView2.Wpf.WebView2.SourceProperty, (System.Uri)new Uri("https://www.youtube.com/embed/WfEi3QwhTIs"));
+                //FeaturedVideo.SetCurrentValue(Microsoft.Web.WebView2.Wpf.WebView2.SourceProperty, (System.Uri)new Uri("https://www.youtube.com/embed/WfEi3QwhTIs"));
             }
             catch (Exception)
             {

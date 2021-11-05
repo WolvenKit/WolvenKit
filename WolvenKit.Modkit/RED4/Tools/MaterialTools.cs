@@ -19,6 +19,7 @@ using WolvenKit.Common.Tools;
 using Newtonsoft.Json;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.Common;
+using WolvenKit.Common.Conversion;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -38,27 +39,18 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            MeshTools.MeshBones meshBones = new MeshTools.MeshBones();
+            var rendblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
 
-            meshBones.boneCount = cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First().BoneNames.Count;
+            var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer.Value - 1];
+            meshStream.Seek(rendbuffer.Offset, SeekOrigin.Begin);
+            var ms = new MemoryStream();
+            meshStream.DecompressAndCopySegment(ms, rendbuffer.DiskSize, rendbuffer.MemSize);
+            var meshesinfo = MeshTools.GetMeshesinfo(rendblob);
 
-            if (meshBones.boneCount != 0)    // for rigid meshes
-            {
-                meshBones.Names = RIG.GetboneNames(cr2w);
-                meshBones.WorldPosn = MeshTools.GetMeshBonesPosn(cr2w);
-            }
-            RawArmature Rig = MeshTools.GetNonParentedRig(meshBones);
+            List<RawMeshContainer> expMeshes = MeshTools.ContainRawMesh(ms, meshesinfo, LodFilter);
+            MeshTools.UpdateSkinningParamCloth(ref expMeshes, meshStream, cr2w);
 
-            MemoryStream ms = MeshTools.GetMeshBufferStream(meshStream, cr2w);
-            MeshesInfo meshinfo = MeshTools.GetMeshesinfo(cr2w);
-
-            List<RawMeshContainer> expMeshes = MeshTools.ContainRawMesh(ms, meshinfo, LodFilter);
-            if (meshBones.boneCount == 0)    // for rigid meshes
-            {
-                for (int i = 0; i < expMeshes.Count; i++)
-                    expMeshes[i].weightcount = 0;
-            }
-            MeshTools.UpdateMeshJoints(ref expMeshes, Rig, meshBones);
+            RawArmature Rig = MeshTools.GetOrphanRig(rendblob);
 
             ModelRoot model = MeshTools.RawMeshesToGLTF(expMeshes, Rig);
 
@@ -325,7 +317,7 @@ namespace WolvenKit.Modkit.RED4
                                     }
                                     var hp = _wolvenkitFileService.TryReadCr2WFile(ms);
                                     hp.FileName = primaryDependencies[i];
-                                    var dto = new Red4W2rcFileDto(hp);
+                                    var dto = new RedFileDto(hp);
                                     var doc = JsonConvert.SerializeObject(dto, settings);
                                     File.WriteAllText(path, doc);
                                 }
@@ -357,7 +349,7 @@ namespace WolvenKit.Modkit.RED4
                                         Directory.CreateDirectory(new FileInfo(path).Directory.FullName);
                                     }
                                     mls.FileName = primaryDependencies[i];
-                                    var dto = new Red4W2rcFileDto(mls);
+                                    var dto = new RedFileDto(mls);
                                     var doc = JsonConvert.SerializeObject(dto, settings);
                                     File.WriteAllText(path, doc);
                                 }
@@ -406,7 +398,7 @@ namespace WolvenKit.Modkit.RED4
                                                             Directory.CreateDirectory(new FileInfo(path1).Directory.FullName);
                                                         }
                                                         mlt.FileName = mls.Imports[e].DepotPathStr;
-                                                        var dto1 = new Red4W2rcFileDto(mlt);
+                                                        var dto1 = new RedFileDto(mlt);
                                                         var doc1 = JsonConvert.SerializeObject(dto1, settings);
                                                         File.WriteAllText(path1, doc1);
                                                     }
@@ -505,11 +497,14 @@ namespace WolvenKit.Modkit.RED4
                     matTemplates.Add(rawMat);
                 }
             }
-            
-            var obj = new { MaterialRepo = matRepo, Materials = RawMaterials, Info = "Following data is for reference only, has no impact on imports",
-                TexturesList, MaterialTemplates = matTemplates };
 
-            string str = JsonConvert.SerializeObject(obj, settings);
+            var matData = new MatData();
+            matData.MaterialRepo = matRepo;
+            matData.Materials = RawMaterials;
+            matData.TexturesList = TexturesList;
+            matData.MaterialTemplates = matTemplates;
+
+            string str = JsonConvert.SerializeObject(matData, settings);
 
             File.WriteAllText(Path.ChangeExtension(outfile.FullName,".Material.json"), str);
 
@@ -652,20 +647,20 @@ namespace WolvenKit.Modkit.RED4
             {
                 return false;
             }
-            var obj = JsonConvert.DeserializeObject<MatData>(_matData);
+            var matData = JsonConvert.DeserializeObject<MatData>(_matData);
 
             var materialbuffer = new MemoryStream();
             List<UInt32> offsets = new List<UInt32>();
             List<UInt32> sizes = new List<UInt32>();
             List<string> names = new List<string>();
 
-            if (obj.Materials.Count < 1)
+            if (matData.Materials.Count < 1)
                 return false;
 
             Dictionary<string, CMaterialTemplate> mts = new Dictionary<string, CMaterialTemplate>();
-            for (int i = 0; i < obj.Materials.Count; i++)
+            for (int i = 0; i < matData.Materials.Count; i++)
             {
-                var mat = obj.Materials[i];
+                var mat = matData.Materials[i];
                 names.Add(mat.Name);
                 CR2WFile mi = new CR2WFile();
                 {
@@ -697,7 +692,7 @@ namespace WolvenKit.Modkit.RED4
                             }
                         }
                     }
-                    var keys = obj.Materials[i].Data.Keys.ToList();
+                    var keys = matData.Materials[i].Data.Keys.ToList();
                     if (mt != null)
                     {
                         for (int j = 0; j < keys.Count; j++)
@@ -721,7 +716,7 @@ namespace WolvenKit.Modkit.RED4
                                 {
                                     CColor_ value0 = new CColor_(new CR2WFile(),null, keys[j]);
                                     value0.IsSerialized = true;
-                                    value0.SetFromJObject(obj.Materials[i].Data[keys[j]]);
+                                    value0.SetFromJObject(matData.Materials[i].Data[keys[j]]);
 
                                     var variant = new CVariantSizeNameType(mi, chunk.CMaterialInstanceData, keys[j]);
                                     CColor value = new CColor(mi, variant, keys[j]);
@@ -738,7 +733,7 @@ namespace WolvenKit.Modkit.RED4
                                     var variant = new CVariantSizeNameType(mi, chunk.CMaterialInstanceData, keys[j]);
                                     var value = CR2WTypeManager.Create(typename, keys[j], mi, variant);
                                     value.IsSerialized = true;
-                                    value.SetFromJObject(obj.Materials[i].Data[keys[j]]);
+                                    value.SetFromJObject(matData.Materials[i].Data[keys[j]]);
                                     variant.SetVariant(value);
                                     chunk.CMaterialInstanceData.Add(variant);
                                 }

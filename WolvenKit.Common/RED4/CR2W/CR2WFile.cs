@@ -71,15 +71,15 @@ namespace WolvenKit.RED4.CR2W
 
         #region Fields
         // IO
-        private CR2WFileHeader m_fileheader;
-        private CR2WTable[] m_tableheaders;
+        public CR2WFileHeader m_fileheader;
+        public CR2WTable[] m_tableheaders;
         private byte[] m_strings;
 
 
         // misc
         private uint headerOffset = 0;
         //private bool m_hasInternalBuffer;
-        public EHashVersion hashVersion { get; set; } = EHashVersion.Pre120;
+        public EHashVersion hashVersion { get; set; } = EHashVersion.Latest;
 
         private CR2WFile additionalCr2WFile;
 
@@ -167,8 +167,10 @@ namespace WolvenKit.RED4.CR2W
         public CR2WExportWrapper CreateChunk(CVariable cvar, int chunkindex = 0, CR2WExportWrapper parent = null, CR2WExportWrapper virtualparent = null)
         {
             // checks to see if the variable from which the chunk is built is properly constructed
-            if (cvar == null || cvar.REDName != cvar.REDType || cvar.ParentVar != null)
-                throw new InvalidChunkTypeException($"{nameof(CreateChunk)}");
+            if (cvar == null || cvar.REDName != cvar.REDType /*|| cvar.ParentVar != null*/)
+            {
+                throw new InvalidChunkTypeException("Chunk name does not match type");
+            }
 
             var chunk = new CR2WExportWrapper(this, cvar.REDType, parent);
             chunk.CreateDefaultData(cvar);

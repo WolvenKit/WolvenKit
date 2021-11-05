@@ -1,137 +1,72 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using ReactiveUI;
+using DynamicData.Kernel;
 using ReactiveUI.Fody.Helpers;
 using Splat;
-using WolvenKit.Common;
-using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Common.Oodle;
+using WolvenKit.Common.RED4.Compiled;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Services;
-using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.RED4.CR2W;
-using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Documents
 {
+    public enum ERedDocumentItemType
+    {
+        MainFile,
+        W2rcBuffer,
+        Buffer,
+        Editor
+    }
+
+
     public class RedDocumentViewModel : DocumentViewModel
     {
-        private readonly IGameControllerFactory _gameControllerFactory;
-        private readonly IProjectManager _projectManager;
+
         private readonly ILoggerService _loggerService;
-        private readonly Red4ParserService _wolvenkitFileService;
-        private readonly IArchiveManager _archiveManager;
+        private readonly Red4ParserService _parser;
+        private readonly IHashService _hashService;
 
 
         public RedDocumentViewModel(string path) : base(path)
         {
             _loggerService = Locator.Current.GetService<ILoggerService>();
-            _gameControllerFactory = Locator.Current.GetService<IGameControllerFactory>();
-            _projectManager = Locator.Current.GetService<IProjectManager>();
-            _wolvenkitFileService = Locator.Current.GetService<Red4ParserService>();
-            _archiveManager = Locator.Current.GetService<IArchiveManager>();
-
-
-            OpenEditorCommand = new RelayCommand(ExecuteOpenEditor);
-            OpenBufferCommand = new RelayCommand(ExecuteOpenBuffer);
-            OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport);
-
-            this.WhenAnyValue(x => x.SelectedChunk).Subscribe(chunk =>
-            {
-                if (chunk != null)
-                {
-                    ChunkProperties = new ObservableCollection<ChunkPropertyViewModel>(
-                        SelectedChunk.GetData()
-                            .ChildrEditableVariables
-                            .Select(x => new ChunkPropertyViewModel(x)));
-
-                }
-            });
-
-        }
-
-        public ICommand OpenBufferCommand { get; private set; }
-        private bool CanOpenBuffer() => true;
-        private void ExecuteOpenBuffer()
-        {
-            // TODO: Handle command logic here
-        }
-
-        public ICommand OpenEditorCommand { get; private set; }
-        private bool CanOpenEditor() => true;
-        private void ExecuteOpenEditor()
-        {
-            // TODO: Handle command logic here
-        }
-
-
-
-        public ICommand OpenImportCommand { get; private set; }
-        private void ExecuteOpenImport(ICR2WImport input)
-        {
-            var depotpath = input.DepotPathStr;
-            var key = FNV1A64HashAlgorithm.HashString(depotpath);
-
-            if (_archiveManager.Lookup(key).HasValue)
-            {
-                _gameControllerFactory.GetController().AddToMod(key);
-            }
+            _parser = Locator.Current.GetService<Red4ParserService>();
+            _hashService = Locator.Current.GetService<IHashService>();
         }
 
         #region properties
 
-        [Reactive] public ObservableCollection<ChunkPropertyViewModel> ChunkProperties { get; set; } = new();
+        [Reactive] public ObservableCollection<RedDocumentItemViewModel> TabItemViewModels { get; set; } = new();
 
-        /// <summary>
-        /// Gets or sets the editable File.
-        /// </summary>
-        [Reactive] public IWolvenkitFile File { get; set; }
+        [Reactive] public int SelectedIndex { get; set; }
 
-        /// <summary>
-        /// Bound to the View
-        /// </summary>
-        public List<ICR2WImport> Imports => File.Imports;
-
-        /// <summary>
-        /// Bound to the View
-        /// </summary>
-        public List<ICR2WBuffer> Buffers => File.Buffers;
-
-        /// <summary>
-        /// Bound to the View
-        /// </summary>
-        public List<ChunkViewModel> Chunks => File.Chunks
-            .Where(_ => _.VirtualParentChunk == null)
-            .Select(_ => new ChunkViewModel(_)).ToList();
-
-        /// <summary>
-        /// Bound to the View via TreeViewBehavior.cs
-        /// </summary>
-        [Reactive] public ChunkViewModel SelectedChunk { get; set; }
-
-        [Reactive] public ICR2WImport SelectedImport { get; set; }
+        [Reactive] public RedDocumentItemViewModel SelectedTabItemViewModel { get; set; }
 
         #endregion
 
 
         #region methods
 
-        public override void OnSave(object parameter)
+        public override Task OnSave(object parameter)
         {
             using var fs = new FileStream(FilePath, FileMode.Create, FileAccess.ReadWrite);
             using var bw = new BinaryWriter(fs);
-            File.Write(bw);
-        }
+            var file = GetMainFile();
+            if (file.HasValue)
+            {
+                // TODO gather buffers
 
+
+                file.Value.GetFile().Write(bw);
+            }
+
+            return Task.CompletedTask;
+        }
 
         public override async Task<bool> OpenFileAsync(string path)
         {
@@ -143,7 +78,7 @@ namespace WolvenKit.ViewModels.Documents
                 {
                     using var reader = new BinaryReader(stream);
 
-                    var cr2w = _wolvenkitFileService.TryReadCr2WFile(reader);
+                    var cr2w = _parser.TryReadCr2WFile(reader);
                     if (cr2w == null)
                     {
                         _loggerService.Error($"Failed to read cr2w file {path}");
@@ -151,13 +86,13 @@ namespace WolvenKit.ViewModels.Documents
                     }
                     cr2w.FileName = path;
 
-                    File = cr2w;
-
                     ContentId = path;
                     FilePath = path;
                     IsDirty = false;
                     Title = FileName;
                     _isInitialized = true;
+
+                    PopulateItems(cr2w);
                 }
 
                 return true;
@@ -170,6 +105,57 @@ namespace WolvenKit.ViewModels.Documents
             }
 
             return false;
+        }
+
+        private Optional<W2rcFileViewModel> GetMainFile() => Optional<W2rcFileViewModel>.ToOptional(TabItemViewModels
+            .OfType<W2rcFileViewModel>()
+            .Where(x => x.DocumentItemType == ERedDocumentItemType.MainFile)
+            .FirstOrDefault());
+
+        private void PopulateItems(IWolvenkitFile w2rcFile)
+        {
+            TabItemViewModels.Add(new W2rcFileViewModel(w2rcFile));
+
+            foreach (var b in w2rcFile.Buffers)
+            {
+                if (b is CR2WBufferWrapper buffer)
+                {
+                    var data = buffer.GetData();
+
+                    using var uncompressedMS = new MemoryStream();
+                    using (var compressedMs = new MemoryStream(data))
+                    {
+                        OodleHelper.DecompressAndCopySegment(compressedMs, uncompressedMS, b.DiskSize, b.MemSize);
+
+                        //dbg
+                        //var bufferpath = $"{w2rcFile.FileName}.{(w2rcFile as CR2WFile).GetBufferIndex(b)}.buffer";
+                        //using (var fs = new FileStream(bufferpath, FileMode.Create, FileAccess.Write))
+                        //{
+                        //    uncompressedMS.CopyTo(fs);
+                        //}
+                    }
+
+                    // try reading as normal cr2w file
+                    var cr2wbuffer = _parser.TryReadCr2WFile(uncompressedMS);
+                    if (cr2wbuffer != null)
+                    {
+                        TabItemViewModels.Add(new W2rcBufferViewModel(b, cr2wbuffer, w2rcFile as CR2WFile));
+                    }
+                    // try reading as compiled package
+                    else
+                    {
+                        uncompressedMS.Seek(0, SeekOrigin.Begin);
+                        var compiledPackage = _parser.TryReadCompiledPackage(uncompressedMS);
+                        if (compiledPackage != null)
+                        {
+                            TabItemViewModels.Add(new W2rcBufferViewModel(b, compiledPackage, w2rcFile as CR2WFile));
+                        }
+                    }
+                }
+
+            }
+
+            SelectedIndex = 0;
         }
 
         #endregion

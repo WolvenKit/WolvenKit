@@ -7,8 +7,7 @@
     xmlns:cameras="clr-namespace:Ab3d.Cameras;assembly=Ab3d.PowerToys"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:conv="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
-    xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
-    xmlns:converters2="clr-namespace:WolvenKit.Functionality.Converters"
+    xmlns:converters2="clr-namespace:WolvenKit.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dxControls="clr-namespace:Ab3d.DirectX.Controls;assembly=Ab3d.DXEngine.Wpf"
     xmlns:ei="http://schemas.microsoft.com/xaml/behaviors"
@@ -337,8 +336,8 @@
                         </Style>
                     </Grid.Resources>
 
-                    <syncfusion:PropertyGrid
-                        x:Name="PEPropGrid"
+                    <syncfusion:PropertyGrid x:Name="PEPropGrid"
+                                             AutoGeneratingPropertyGridItem="PropertyGrid_OnAutoGeneratingPropertyGridItem"
                         EditableBackground="{DynamicResource MahApps.Brushes.Accent3}"
                         EditableFontWeight="SemiBold"
                         IsEnabled="False"
@@ -347,8 +346,8 @@
                         SelectedObject="{Binding PE_SelectedItem, Mode=OneWay}"
                         Visibility="{Binding PE_FileInfoVisible, Converter={StaticResource boolToVisibilityConverter}}" />
 
-                    <syncfusion:PropertyGrid
-                        x:Name="ABPropGrid"
+                    <syncfusion:PropertyGrid x:Name="ABPropGrid"
+                                             AutoGeneratingPropertyGridItem="PropertyGrid_OnAutoGeneratingPropertyGridItem"
                         EditableBackground="{DynamicResource MahApps.Brushes.Accent3}"
                         EditableFontWeight="SemiBold"
                         IsEnabled="False"
@@ -582,7 +581,7 @@
                                                     hc:IconElement.Geometry="{DynamicResource AudioPlay}"
                                                     Background="Transparent"
                                                     BorderBrush="Transparent"
-                                                    Command="{Binding PlayAudioCommand}"
+                                                    Click="PlayButton_Click_1"
                                                     Effect="{StaticResource MahApps.DropShadowEffect.Menu}"
                                                     Style="{StaticResource ButtonIcon}" />
                                                 <hc:Divider
@@ -597,7 +596,7 @@
                                                     hc:IconElement.Geometry="{DynamicResource AudioPause}"
                                                     Background="Transparent"
                                                     BorderBrush="Transparent"
-                                                    Command="{Binding PauseAudioCommand}"
+                                                    Click="PauseButton_Click_1"
                                                     Effect="{StaticResource MahApps.DropShadowEffect.Menu}"
                                                     IsEnabled="True"
                                                     Style="{StaticResource ButtonIcon}" />
@@ -613,7 +612,7 @@
                                                     hc:IconElement.Geometry="{DynamicResource AudioStop}"
                                                     Background="Transparent"
                                                     BorderBrush="Transparent"
-                                                    Command="{Binding StopAudioCommand}"
+                                                    Click="StopButton_Click_1"
                                                     Effect="{StaticResource MahApps.DropShadowEffect.Menu}"
                                                     Style="{StaticResource ButtonIcon}" />
                                                 <hc:Divider
@@ -637,7 +636,7 @@
                                                             Effect="{StaticResource MahApps.DropShadowEffect.Menu}"
                                                             ShowHours="True"
                                                             ShowSubSeconds="True"
-                                                            Time="{Binding ChannelPosition}" />
+                                                            />
                                                     </StackPanel>
                                                 </Border>
                                             </StackPanel>
@@ -655,7 +654,9 @@
                                             <svl1:WaveformTimeline
                                                 x:Name="waveformTimeline"
                                                 Margin="5"
-                                                BorderThickness="1" />
+                                                BorderThickness="1"
+                                                
+                                                />
                                         </Grid>
                                     </Border>
 
@@ -693,7 +694,6 @@
                                                 x:Name="RunnerText"
                                                 AutoReverse="True"
                                                 BorderBrush="Transparent"
-                                                Content="{Binding CurrentTrackName}"
                                                 Runaway="False"
                                                 Duration="00:00:30" />
                                         </Grid>

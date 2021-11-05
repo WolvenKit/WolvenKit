@@ -17,6 +17,7 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.MSTests.Model;
 
 namespace WolvenKit.MSTests
 {
@@ -103,7 +104,6 @@ namespace WolvenKit.MSTests
             ServiceLocator.Default.RegisterType<IHashService, HashService>();
             ServiceLocator.Default.RegisterType<IProgressService<double>, ProgressService<double>>();
             ServiceLocator.Default.RegisterType<Red4ParserService>();
-            ServiceLocator.Default.RegisterType<RIG>();              //Cp77FileService
             ServiceLocator.Default.RegisterType<MeshTools>();        //RIG, Cp77FileService
             ServiceLocator.Default.RegisterType<IArchiveManager, ArchiveManager>();
             ServiceLocator.Default.RegisterType<IModTools, ModTools>();         //Cp77FileService, ILoggerService, IProgress, IHashService, Mesh, Target
@@ -119,7 +119,7 @@ namespace WolvenKit.MSTests
 
             var keyes = s_groupedFiles.Keys.ToList();
             var keystring = string.Join(',', keyes);
-            Console.WriteLine(keystring);
+            //Console.WriteLine(keystring);
         }
 
         #endregion Methods

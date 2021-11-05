@@ -11,14 +11,16 @@
  mc:Ignorable="d"
  >
     <Grid>
-        <syncfusion:DockingManager
-         x:Name="PART_DockingManager"
-         ActiveWindowChanged="PART_DockingManager_ActiveWindowChanged_1"
-         Background="Transparent"
-         DocumentCloseButtonType="Extended"
-         DraggingType="BorderDragging"
-         PersistState="True"
-         UseDocumentContainer="True"
+        <syncfusion:DockingManager x:Name="PART_DockingManager"
+                                   ActiveWindowChanged="PART_DockingManager_ActiveWindowChanged_1"
+                                   Background="Transparent"
+                                   DocumentCloseButtonType="Extended"
+                                   DraggingType="BorderDragging"
+                                   PersistState="True"
+                                   UseDocumentContainer="True"
+                                   Loaded="PART_DockingManager_Loaded"
+                                   CloseButtonClick="PART_DockingManagerOnCloseButtonClick"
+                                   DockStateChanging="PART_DockingManagerOnDockStateChanging"
          />
     </Grid>
 </UserControl>

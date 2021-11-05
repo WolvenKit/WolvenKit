@@ -9,6 +9,8 @@ using System.Threading;
 using System.Diagnostics;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace System
 {
@@ -66,6 +68,12 @@ namespace System
         /// </remarks>
         public event EventHandler<T>? ProgressChanged;
 
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         /// <summary>Reports a progress change.</summary>
         /// <param name="value">The value of the updated progress.</param>
         protected virtual void OnReport(T value)
@@ -98,6 +106,21 @@ namespace System
 
             handler?.Invoke(value);
             changedEvent?.Invoke(this, value);
+        }
+
+        private bool _isIndeterminate;
+        public bool IsIndeterminate
+        {
+            get => _isIndeterminate;
+
+            set
+            {
+                if (value != _isIndeterminate)
+                {
+                    _isIndeterminate = value;
+                    NotifyPropertyChanged();
+                }
+            }
         }
 
 #pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.

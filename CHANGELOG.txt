@@ -1,0 +1,41 @@
+WolvenKit 8.4.2
+-----------------
+
+Implemented:
+- ribbon restyle: Updated some red file icons to match their functionality, padding
+- Simplify status bar
+- Simplify home/welcome
+- restyled Recent Files List
+- asset browser info overlay for no projects
+- w2rc buffer views
+- add a info unit tests
+- add files used by to asset browser
+- add a statusbar loading bar
+- Add unbundle game button
+- Tweak file UI group adding
+
+Fixed:
+- fixed a bug where parallel unbundling would crash
+- changed the installer into a nuget dependency
+- fixed bugs where importing tga textures would not work
+- better logging
+- homepage clean-up
+- fix settings button
+- fixed a bug where the app would crash on a pre-release version
+- fixes and proper double faces export import
+- morph target basemesh IO change
+- gltf strict to tryfix, some export fixes
+- fixed a bug where the cr2w editor child item arrow expander
+- faster archive manager loading
+- fixed some xaml binding failures
+- fixed hidden properties in Propertygrids
+- fixed error message that states direct imports for {bmp,png,jpg and tiff} files are not supported.
+- fixed home icon in ribbon
+- fix messagebox layout
+- read compiled packages properly
+- fixed a CI bug
+
+@HitmanHimself @ja-to @Fynn @Offline-R503B
+
+WolvenKit 8.4.1
+-----------------

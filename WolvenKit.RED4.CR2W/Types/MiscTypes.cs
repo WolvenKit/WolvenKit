@@ -113,6 +113,14 @@ namespace WolvenKit.RED4.CR2W.Types
             Buffer.Read(file, size);
         }
 
+        public override CVariable SetValue(object val)
+        {
+            this.IsSerialized = true;
+            this.Buffer.SetValue(val);
+           
+            return this;
+        }
+
         public override void Write(BinaryWriter file) => Buffer.Write(file);
     }
 

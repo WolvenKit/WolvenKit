@@ -74,6 +74,8 @@ namespace WolvenKit.Common.Model.Cr2w
 
         public void ReadData(BinaryReader file);
         public void WriteData(BinaryWriter file);
+
+        public uint GetOffset();
     }
 
     #endregion
@@ -130,9 +132,14 @@ namespace WolvenKit.Common.Model.Cr2w
         List<int> Flags { get; set; }
 
         string Elementtype { get; set; }
+
         Type InnerType { get; }
 
         public IEditableVariable GetElementInstance(string varName);
+
+        public bool IsByteArray();
+
+        public byte[] GetBytes();
     }
     public interface IREDArray<T> : IREDArray
     {
@@ -214,11 +221,25 @@ namespace WolvenKit.Common.Model.Cr2w
     public interface ICurveDataAccessor : IEditableVariable
     {
         string Elementtype { get; }
+
+        public IEditableVariable GetElementInstance(string varName);
+
+        public IEnumerable<IREDCurvePoint> GetCurvePoints();
+
+        public void SetCurvePoints(IEnumerable<Tuple<double,object>> points);
+
+        public ESegmentsLinkType GetLinkType();
+
+        public void SetLinkType(ESegmentsLinkType type);
+
+        public EInterpolationType GetInterpolationType();
+
+        public void SetInterpolationType(EInterpolationType type);
     }
 
     public interface IREDCurvePoint : IREDPrimitive
     {
-
+        public float GetTime();
     }
 
     public interface IMultiChannelCurve : IEditableVariable

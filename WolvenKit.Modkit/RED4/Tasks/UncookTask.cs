@@ -87,33 +87,30 @@ namespace CP77Tools.Tasks
             var archiveDepot = exportArgs.Get<MeshExportArgs>().ArchiveDepot;
             if (!string.IsNullOrEmpty(archiveDepot) && Directory.Exists(archiveDepot))
             {
-                var bm = new ArchiveManager(_hashService);
-                bm.LoadFromFolder(new DirectoryInfo(archiveDepot));
-                exportArgs.Get<MeshExportArgs>().Archives = bm.Archives.Items.Cast<Archive>().ToList();
-                exportArgs.Get<MorphTargetExportArgs>().Archives = bm.Archives.Items.Cast<Archive>().ToList();
-                exportArgs.Get<AnimationExportArgs>().Archives = bm.Archives.Items.Cast<Archive>().ToList();
+                _archiveManager.LoadFromFolder(new DirectoryInfo(archiveDepot));
+                exportArgs.Get<MeshExportArgs>().Archives = _archiveManager.Archives.Items.Cast<Archive>().ToList();
+                exportArgs.Get<MorphTargetExportArgs>().Archives = _archiveManager.Archives.Items.Cast<Archive>().ToList();
+                exportArgs.Get<AnimationExportArgs>().Archives = _archiveManager.Archives.Items.Cast<Archive>().ToList();
             }
             else
             {
                 archiveDepot = exportArgs.Get<MorphTargetExportArgs>().ArchiveDepot;
                 if (!string.IsNullOrEmpty(archiveDepot) && Directory.Exists(archiveDepot))
                 {
-                    var bm = new ArchiveManager(_hashService);
-                    bm.LoadFromFolder(new DirectoryInfo(archiveDepot));
-                    exportArgs.Get<MeshExportArgs>().Archives = bm.Archives.Items.Cast<Archive>().ToList();
-                    exportArgs.Get<MorphTargetExportArgs>().Archives = bm.Archives.Items.Cast<Archive>().ToList();
-                    exportArgs.Get<AnimationExportArgs>().Archives = bm.Archives.Items.Cast<Archive>().ToList();
+                    _archiveManager.LoadFromFolder(new DirectoryInfo(archiveDepot));
+                    exportArgs.Get<MeshExportArgs>().Archives = _archiveManager.Archives.Items.Cast<Archive>().ToList();
+                    exportArgs.Get<MorphTargetExportArgs>().Archives = _archiveManager.Archives.Items.Cast<Archive>().ToList();
+                    exportArgs.Get<AnimationExportArgs>().Archives = _archiveManager.Archives.Items.Cast<Archive>().ToList();
                 }
                 else
                 {
                     archiveDepot = exportArgs.Get<AnimationExportArgs>().ArchiveDepot;
                     if (!string.IsNullOrEmpty(archiveDepot) && Directory.Exists(archiveDepot))
                     {
-                        var bm = new ArchiveManager(_hashService);
-                        bm.LoadFromFolder(new DirectoryInfo(archiveDepot));
-                        exportArgs.Get<MeshExportArgs>().Archives = bm.Archives.Items.Cast<Archive>().ToList();
-                        exportArgs.Get<MorphTargetExportArgs>().Archives = bm.Archives.Items.Cast<Archive>().ToList();
-                        exportArgs.Get<AnimationExportArgs>().Archives = bm.Archives.Items.Cast<Archive>().ToList();
+                        _archiveManager.LoadFromFolder(new DirectoryInfo(archiveDepot));
+                        exportArgs.Get<MeshExportArgs>().Archives = _archiveManager.Archives.Items.Cast<Archive>().ToList();
+                        exportArgs.Get<MorphTargetExportArgs>().Archives = _archiveManager.Archives.Items.Cast<Archive>().ToList();
+                        exportArgs.Get<AnimationExportArgs>().Archives = _archiveManager.Archives.Items.Cast<Archive>().ToList();
                     }
                 }
             }
@@ -121,9 +118,8 @@ namespace CP77Tools.Tasks
             List<FileInfo> archiveFileInfos;
             if (isDirectory)
             {
-                var archiveManager = new ArchiveManager(_hashService);
-                archiveManager.LoadFromFolder(basedir);
-                archiveFileInfos = archiveManager.Archives.Items.Select(_ => new FileInfo(_.ArchiveAbsolutePath)).ToList();
+                _archiveManager.LoadFromFolder(basedir);
+                archiveFileInfos = _archiveManager.Archives.Items.Select(_ => new FileInfo(_.ArchiveAbsolutePath)).ToList();
             }
             else
             {

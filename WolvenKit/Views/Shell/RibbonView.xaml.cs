@@ -10,6 +10,7 @@ using Splat;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Interaction;
+using WolvenKit.Models;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Tools;
 using WolvenKit.ViewModels.Wizards;
@@ -44,9 +45,6 @@ namespace WolvenKit.Views.Shell
                 PasteFileContext.DataContext = Locator.Current.GetService<ProjectExplorerViewModel>();
                 DeleteFileContext.DataContext = Locator.Current.GetService<ProjectExplorerViewModel>();
                 RenameFileContext.DataContext = Locator.Current.GetService<ProjectExplorerViewModel>();
-
-                // properties
-                PrevFileInfo.DataContext = Locator.Current.GetService<PropertiesViewModel>();
 
                 // asset browser
                 this.BindCommand(ViewModel,
@@ -159,10 +157,10 @@ namespace WolvenKit.Views.Shell
                 //    .DisposeWith(disposables);
 
                 //Options
-                //this.BindCommand(ViewModel,
-                //        viewModel => viewModel.ShowSettingsCommand,
-                //        view => view.OptionsShowSettingsButton)
-                //    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.ShowSettingsCommand,
+                        view => view.OptionsShowSettingsButton)
+                    .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.ShowBugReportCommand,
                         view => view.OptionsShowBugReportButton)
@@ -286,8 +284,7 @@ namespace WolvenKit.Views.Shell
 
         public static MaterialsRepositoryDialog MaterialsRepositoryDia { get; set; }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-
+        private void GenerateMaterialRepoButton_Click(object sender, RoutedEventArgs e)
         {
             if (MaterialsRepositoryDia == null)
             {
@@ -320,6 +317,8 @@ namespace WolvenKit.Views.Shell
         private void ExpandSingleAB_Click(object sender, RoutedEventArgs e) => _mainViewModel.AssetBrowserVM.Expand.Execute().Subscribe();
 
         private void collapseSingleAB_Click(object sender, RoutedEventArgs e) => _mainViewModel.AssetBrowserVM.Collapse.Execute().Subscribe();
+
+        
 
         ///// <summary>
         ///// Closes material drawer

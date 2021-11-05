@@ -60,7 +60,7 @@ namespace WolvenKit.Views.Documents
 
                 // LIST VIEW
                 this.OneWayBind(ViewModel,
-                        viewModel => viewModel.Flats,
+                        viewModel => viewModel.Entries,
                         view => view.FlatsTree.ItemsSource)
                     .DisposeWith(disposables);
                 this.Bind(ViewModel,
@@ -88,6 +88,16 @@ namespace WolvenKit.Views.Documents
                         view => view.AddButton)
                     .DisposeWith(disposables);
 
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.AddArrayCommand,
+                        view => view.AddArrayButton)
+                    .DisposeWith(disposables);
+
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.AddGroupCommand,
+                        view => view.AddGroupButton)
+                    .DisposeWith(disposables);
+
 
                
             });
@@ -101,6 +111,10 @@ namespace WolvenKit.Views.Documents
         private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
         {
             ViewModel?.DeleteFlatCommand.Execute().Subscribe();
+
+            this.FlatsTree.ExpandAll();
         }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e) => this.FlatsTree.ExpandAll();
     }
 }

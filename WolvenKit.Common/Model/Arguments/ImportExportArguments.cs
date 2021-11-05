@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using ReactiveUI;
-using WolvenKit.Common.DDS;
+using SharpGLTF.Validation;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.Types;
-using SharpGLTF.Validation;
 
 namespace WolvenKit.Common.Model.Arguments
 {
@@ -180,7 +179,7 @@ namespace WolvenKit.Common.Model.Arguments
     public abstract class ImportArgs : ImportExportArgs
     {
         [Category("Default Import Settings")]
-        [Display(Name = "Replace original File?")]
+        [Display(Name = "Use existing file")]
         [Description("If checked the file will replace the original file in the archives.")]
         public bool Keep { get; set; } = true;
     }
@@ -547,6 +546,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// <returns>String</returns>
         public override string ToString() => wemExportType.ToString();
     }
+
     public class AnimationExportArgs : ExportArgs
     {
         /// <summary>
