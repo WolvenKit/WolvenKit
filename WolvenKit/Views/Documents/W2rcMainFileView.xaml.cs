@@ -20,6 +20,15 @@ namespace WolvenKit.Views.Documents
         {
             InitializeComponent();
 
+
+            this.WhenAnyValue(x => x.DataContext).Subscribe(x =>
+            {
+                if (x is W2rcFileViewModel vm)
+                {
+                    SetCurrentValue(ViewModelProperty, vm);
+                }
+            });
+
             //ViewModel = new MainFileViewModel();
             //DataContext = ViewModel;
 
@@ -27,7 +36,7 @@ namespace WolvenKit.Views.Documents
             {
                 if (DataContext is W2rcFileViewModel vm)
                 {
-                    SetCurrentValue(ViewModelProperty, vm);
+                    //SetCurrentValue(ViewModelProperty, vm);
                 }
 
                 // ChunksTreeView
