@@ -48,6 +48,7 @@ namespace WolvenKit.RED4.TweakDB
                 }
 
                 _flats.Add(flat, valueHash);
+                Console.WriteLine($"Adding flat: {flat}: {value}");
             }
 
             private static uint GetValueHash(IType value)

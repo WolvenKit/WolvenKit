@@ -234,6 +234,8 @@ namespace WolvenKit.Modkit.RED4.Serialization
             {
                 ETweakType.CName => typeof(CName),
                 ETweakType.CString => typeof(CString),
+                ETweakType.TweakDBID => typeof(TweakDBID),
+                ETweakType.CResource => typeof(CResource),
                 ETweakType.CFloat => typeof(CFloat),
                 ETweakType.CBool => typeof(CBool),
                 ETweakType.CUint8 => typeof(CUint8),
@@ -249,12 +251,13 @@ namespace WolvenKit.Modkit.RED4.Serialization
                 ETweakType.CQuaternion => typeof(CQuaternion),
                 ETweakType.CVector2 => typeof(CVector2),
                 ETweakType.CVector3 => typeof(CVector3),
+                ETweakType.LocKey => typeof(LocKey),
                 _ => throw new ArgumentOutOfRangeException(nameof(enumType))
             };
 
         private static string GetTypeStrFromRedTypeStr(string redtype)
         {
-            if (!Enum.TryParse<ERedType>(redtype, out var type))
+            if (!Enum.TryParse<ERedType>(redtype.Replace(":", ""), out var type))
             {
                 return null;
             }
@@ -285,9 +288,9 @@ namespace WolvenKit.Modkit.RED4.Serialization
 
                 // check array type
                 var splits = redtype.Split(':');
-                if (splits.Length == 2 && splits[0].Equals("array"))
+                if (splits[0].Equals("array"))
                 {
-                    var innertype = GetTypeFromRedTypeStr(splits[1]);
+                    var innertype = GetTypeFromRedTypeStr(redtype.Replace("array:", ""));
                     var outer = Activator.CreateInstance(
                         typeof(CArray<>).MakeGenericType(
                             new Type[] { innertype }),

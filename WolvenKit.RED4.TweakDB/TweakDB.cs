@@ -60,7 +60,8 @@ namespace WolvenKit.RED4.TweakDB
             var recordParent = record.Inherits; //unused
             var recordType = record.Type;
 
-            _records.Add(name, recordType);
+            _records.Add($"{name}", recordType);
+            System.Console.WriteLine($"Adding record: {name}: {recordType}");
         }
 
         /// <summary>
