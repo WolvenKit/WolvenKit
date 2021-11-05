@@ -493,7 +493,7 @@ namespace WolvenKit.MSTests
 
                         switch (readResult)
                         {
-                            case EFileReadErrorCodes.NoCr2w:
+                            case RED4.Archive.IO.EFileReadErrorCodes.NoCr2w:
                                 results.Add(new ReadTestResult
                                 {
                                     FileEntry = file,
@@ -502,7 +502,7 @@ namespace WolvenKit.MSTests
                                 });
                                 break;
 
-                            case EFileReadErrorCodes.UnsupportedVersion:
+                            case RED4.Archive.IO.EFileReadErrorCodes.UnsupportedVersion:
                                 results.Add(new ReadTestResult
                                 {
                                     FileEntry = file,
@@ -512,7 +512,7 @@ namespace WolvenKit.MSTests
                                 });
                                 break;
 
-                            case EFileReadErrorCodes.NoError:
+                            case RED4.Archive.IO.EFileReadErrorCodes.NoError:
                                 c.MetaData.FileName = file.NameOrHash;
 
                                 var res = ReadTestResult.ReadResultType.NoError;
