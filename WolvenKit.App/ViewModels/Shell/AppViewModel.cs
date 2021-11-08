@@ -751,7 +751,6 @@ namespace WolvenKit.ViewModels.Shell
             //}
 
             ActiveDocument.SaveCommand.SafeExecute();
-            ActiveDocument.SetIsDirty(false);
         }
 
         private bool IsInRawFolder(FileModel model) => IsInRawFolder(model.FullName);

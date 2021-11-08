@@ -63,6 +63,8 @@ namespace WolvenKit.ViewModels.Documents
 
 
                 file.Value.GetFile().Write(bw);
+                SetIsDirty(false);
+                _loggerService.Success($"Saved file {FilePath}");
             }
 
             return Task.CompletedTask;
@@ -88,8 +90,6 @@ namespace WolvenKit.ViewModels.Documents
 
                     ContentId = path;
                     FilePath = path;
-                    IsDirty = false;
-                    Title = FileName;
                     _isInitialized = true;
 
                     PopulateItems(cr2w);

@@ -193,7 +193,7 @@ namespace WolvenKit.Views.Shell
                     {
                         if (item is IDockElement dockElement)
                         {
-                            var _ = dockElement
+                            dockElement
                                 .ObservableForProperty(x => x.State)
                                 .ObserveOnDispatcher()
                                 .Subscribe(OnStateUpdated);
@@ -223,10 +223,27 @@ namespace WolvenKit.Views.Shell
             base.OnPropertyChanged(e);
         }
 
-        private void OnStateUpdated(IObservedChange<IDockElement, DockState> obj)
+        private void OnHeaderChanged(IObservedChange<IDockElement, string> headerChange)
         {
-            var item = obj.Sender;
-            var newstate = obj.Value;
+            var item = headerChange.Sender;
+            var newHeader = headerChange.Value;
+
+            var control = (from ContentControl element in PART_DockingManager.Children
+                           where element.Content == item
+                           select element).FirstOrDefault();
+
+            var header = DockingManager.GetHeader(control) as string;
+
+            if (header is string headerStr && !headerStr.Equals(newHeader))
+            {
+                DockingManager.SetHeader(control, newHeader);
+            }
+        }
+
+        private void OnStateUpdated(IObservedChange<IDockElement, DockState> dockStateChange)
+        {
+            var item = dockStateChange.Sender;
+            var newstate = dockStateChange.Value;
 
             var control = (from ContentControl element in PART_DockingManager.Children
                            where element.Content == item
@@ -251,6 +268,7 @@ namespace WolvenKit.Views.Shell
                     PART_DockingManager.Children.Remove(control);
                     if (control.Content is IDocumentViewModel document)
                     {
+                      
                         if (ActiveDocument == document)
                         {
                             SetCurrentValue(ActiveDocumentProperty, null);
@@ -265,6 +283,11 @@ namespace WolvenKit.Views.Shell
                 {
                     if (item is IDockElement element)
                     {
+                        element
+                               .ObservableForProperty(x => x.Header)
+                               .ObserveOnDispatcher()
+                               .Subscribe(OnHeaderChanged);
+
                         var control = new ContentControl() { Content = element };
                         DockingManager.SetHeader(control, element.Header);
                         if (element.State == DockState.Document)
