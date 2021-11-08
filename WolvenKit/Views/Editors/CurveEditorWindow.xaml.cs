@@ -10,6 +10,7 @@ using System.Windows.Shapes;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.ViewModels;
 using Point = System.Windows.Point;
 
 namespace WolvenKit.Views.Editors

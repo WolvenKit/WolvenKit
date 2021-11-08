@@ -1,13 +1,12 @@
-using System.Linq;
+using System;
 using System.Reactive.Disposables;
 using System.Windows;
-using System.Windows.Controls;
 using ReactiveUI;
-using Syncfusion.UI.Xaml.TreeGrid;
+using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.Converters;
+using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.ViewModels.Documents;
-using WolvenKit.ViewModels.Shell;
-using WolvenKit.Views.Editors;
 using WolvenKit.Views.Templates;
 
 namespace WolvenKit.Views.Documents
@@ -21,6 +20,15 @@ namespace WolvenKit.Views.Documents
         {
             InitializeComponent();
 
+
+            this.WhenAnyValue(x => x.DataContext).Subscribe(x =>
+            {
+                if (x is W2rcFileViewModel vm)
+                {
+                    SetCurrentValue(ViewModelProperty, vm);
+                }
+            });
+
             //ViewModel = new MainFileViewModel();
             //DataContext = ViewModel;
 
@@ -28,7 +36,7 @@ namespace WolvenKit.Views.Documents
             {
                 if (DataContext is W2rcFileViewModel vm)
                 {
-                    SetCurrentValue(ViewModelProperty, vm);
+                    //SetCurrentValue(ViewModelProperty, vm);
                 }
 
                 // ChunksTreeView
@@ -53,55 +61,64 @@ namespace WolvenKit.Views.Documents
 
 
                 // MainTreeGrid
+                //this.OneWayBind(ViewModel,
+                //       viewmodel => viewmodel.ChunkProperties,
+                //       view => view.MainTreeGrid.ItemsSource)
+                //   .DisposeWith(disposables);
+
                 this.OneWayBind(ViewModel,
-                       viewmodel => viewmodel.ChunkProperties,
-                       view => view.MainTreeGrid.ItemsSource)
+                       viewmodel => viewmodel.SelectedChunk.Data,
+                       view => view.PropertyGrid.SelectedObject)
                    .DisposeWith(disposables);
-
-                //this.BindCommand(ViewModel,
-                //        viewModel => viewModel.InstallModCommand,
-                //        view => view.InstallModContextMenuItem)
-                //    .DisposeWith(disposables);
-
-
-
 
             });
 
-            MainTreeGrid.RequestTreeItems += TreeGrid_RequestTreeItems;
+
+            //PropertyGrid.CustomEditorCollection = CustomEditorCollection;
+            //MainTreeGrid.RequestTreeItems += TreeGrid_RequestTreeItems;
         }
 
-        
-      
-        private void TreeGrid_RequestTreeItems(object sender, TreeGridRequestTreeItemsEventArgs args)
-        {
-            if (DataContext is W2rcFileViewModel vm)
-            {
-                if (args.ParentItem == null)
-                {
-                    args.ChildItems = vm.ChunkProperties;
-                }
-                else
-                {
-                    if (args.ParentItem is ChunkPropertyViewModel chunk)
-                    {
-                        args.ChildItems = chunk.Children;
-                    }
-                }
-            }
-           
-               
+        //private void TreeGrid_RequestTreeItems(object sender, TreeGridRequestTreeItemsEventArgs args)
+        //{
+        //    if (DataContext is W2rcFileViewModel vm)
+        //    {
+        //        if (args.ParentItem == null)
+        //        {
+        //            args.ChildItems = vm.ChunkProperties;
+        //        }
+        //        else
+        //        {
+        //            if (args.ParentItem is ChunkPropertyViewModel chunk)
+        //            {
+        //                args.ChildItems = chunk.Children;
+        //            }
+        //        }
+        //    }
 
-            //else
-            //{
-            //    EmployeeInfo employee = args.ParentItem as EmployeeInfo;
+        //    //else
+        //    //{
+        //    //    EmployeeInfo employee = args.ParentItem as EmployeeInfo;
 
-            //    if (employee != null)
-            //    {
-            //        args.ChildItems = ViewModel.GetEmployees().Where(x => x.ReportsTo == employee.ID);
-            //    }
-            //}
-        }
+        //    //    if (employee != null)
+        //    //    {
+        //    //        args.ChildItems = ViewModel.GetEmployees().Where(x => x.ReportsTo == employee.ID);
+        //    //    }
+        //    //}
+        //}
+
+        //private void HandleTemplateView_OnGoToChunkRequested(object sender, GoToChunkRequestedEventArgs e)
+        //{
+        //    var target = e.Export;
+
+        //    if (ViewModel == null || target == null)
+        //    {
+        //        return;
+        //    }
+
+        //    var chunk = ViewModel.Chunks.FirstOrDefault(x => x.Name.Equals(target.REDName));
+        //    chunk.IsSelected = true;
+        //    ViewModel.SelectedChunk = chunk;
+        //}
 
         private void SetCollapsedAll()
         {
@@ -109,39 +126,9 @@ namespace WolvenKit.Views.Documents
             ImportsView.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
         }
 
-        private void HandleTemplateView_OnGoToChunkRequested(object sender, GoToChunkRequestedEventArgs e)
-        {
-            var target = e.Export;
+       
 
-            if (ViewModel == null || target == null)
-            {
-                return;
-            }
 
-            var chunk = ViewModel.Chunks.FirstOrDefault(x => x.Name.Equals(target.REDName));
-            chunk.IsSelected = true;
-            ViewModel.SelectedChunk = chunk;
-        }
-
-        private void CurveEditorButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            var tag = ((Button)sender).Tag;
-            if (tag is ICurveDataAccessor redcurve)
-            {
-                var curveEditorWindow = new CurveEditorWindow(redcurve);
-                var r = curveEditorWindow.ShowDialog();
-                if (r ?? true)
-                {
-                    var c = curveEditorWindow.GetCurve();
-                    if (c is not null)
-                    {
-                        // set tag data
-                        redcurve.SetInterpolationType(c.Type);
-                        redcurve.SetCurvePoints(c.Points);
-                    }
-                }
-            }
-        }
 
         private void ChunksButton_OnClick(object sender, RoutedEventArgs e)
         {
@@ -153,6 +140,52 @@ namespace WolvenKit.Views.Documents
         {
             SetCollapsedAll();
             ImportsView.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        }
+
+
+
+
+
+
+
+        private void PropertyGrid_AutoGeneratingPropertyGridItem(object sender, Syncfusion.Windows.PropertyGrid.AutoGeneratingPropertyGridItemEventArgs e)
+        {
+            if (e.OriginalSource is PropertyItem { } propertyItem)
+            {
+                var customEditor = PropertyGridEditors.GetPropertyEditor(propertyItem.PropertyType);
+                if (customEditor is not null)
+                {
+                    propertyItem.Editor = customEditor;
+                    e.ExpandMode = PropertyExpandModes.FlatMode;
+                }
+            }
+        }
+
+        private void PropertyGrid_CollectionEditorOpening(object sender, CollectionEditorOpeningEventArgs e)
+        {
+            //Restrict collection editor window opening
+            e.Cancel = true;
+
+            if (sender is PropertyGrid pg)
+            {
+                var selectedProperty = pg.SelectedPropertyItem;
+                var prop = selectedProperty.Value;
+
+                if (prop is IREDArray editableVariable)
+                {
+                    // open custom collection editor
+                    var collectionEditor = new RedCollectionEditor(editableVariable);
+                    var r = collectionEditor.ShowDialog();
+                    if (r ?? true)
+                    {
+                        //TODO
+                    }
+                }
+                else
+                {
+                    throw new ArgumentException(nameof(editableVariable));
+                }
+            }
         }
     }
 }

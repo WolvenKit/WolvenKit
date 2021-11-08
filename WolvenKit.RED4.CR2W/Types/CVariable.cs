@@ -61,9 +61,9 @@ namespace WolvenKit.RED4.CR2W.Types
         /// e.g. Color from CColor, or Uint64 from CUInt64
         /// Can be overwritten (e.g. in Array, Ptr and other generic types)
         /// </summary>
-        [JsonIgnore] public virtual string REDType => REDReflection.GetREDTypeString(GetType());
+        [Browsable(false)] [JsonIgnore] public virtual string REDType => REDReflection.GetREDTypeString(GetType());
 
-        [JsonIgnore] public List<IEditableVariable> SerializedProperties => GetExistingVariables();
+        [Browsable(false)] [JsonIgnore] public List<IEditableVariable> SerializedProperties => GetExistingVariables();
 
         /// <summary>
         /// Flags inherited from cr2w export (aka chunk)
@@ -71,7 +71,7 @@ namespace WolvenKit.RED4.CR2W.Types
         /// a different layout in the uncooked and cooked state, e.g. CBitmapTexture)
         /// Is set on file read and should not be modified
         /// </summary>
-        [JsonIgnore] public ushort REDFlags => ParentVar?.REDFlags ?? _redFlags;
+        [Browsable(false)] [JsonIgnore] public ushort REDFlags => ParentVar?.REDFlags ?? _redFlags;
 
         /// <summary>
         /// AspectName in frmChunkProperties
@@ -79,6 +79,7 @@ namespace WolvenKit.RED4.CR2W.Types
         /// otherwise has to be set manually
         /// Consider moving this to the constructor
         /// </summary>
+        [Browsable(false)]
         [JsonIgnore] public string REDName
         {
             get
@@ -99,23 +100,23 @@ namespace WolvenKit.RED4.CR2W.Types
 
 
 #if DEBUG
-        [JsonIgnore] public int GottenVarChunkIndex => LookUpChunkIndex();
+        [Browsable(false)] [JsonIgnore] public int GottenVarChunkIndex => LookUpChunkIndex();
 #endif
-        [JsonIgnore] public List<IEditableVariable> ChildrEditableVariables => GetEditableVariables();
+        [Browsable(false)] [JsonIgnore] public List<IEditableVariable> ChildrEditableVariables => GetEditableVariables();
 
 
 
-        [JsonIgnore] public TypeAccessor accessor { get; }
+        [Browsable(false)] [JsonIgnore] public TypeAccessor accessor { get; }
 
-        [JsonIgnore] public List<IEditableVariable> UnknownCVariables { get; set; } = new();
+        [Browsable(false)] [JsonIgnore] public List<IEditableVariable> UnknownCVariables { get; set; } = new();
 
-        [JsonIgnore] public IWolvenkitFile Cr2wFile { get; set; }
+        [Browsable(false)] [JsonIgnore] public IWolvenkitFile Cr2wFile { get; set; }
 
         /// <summary>
         /// Stores the parent cr2w file.
         /// used a lot
         /// </summary>
-        [JsonIgnore] public IRed4EngineFile cr2w => Cr2wFile as IRed4EngineFile;
+        [Browsable(false)] [JsonIgnore] public IRed4EngineFile cr2w => Cr2wFile as IRed4EngineFile;
 
         /// <summary>
         /// Shows if the CVariable is to be serialized
@@ -124,6 +125,7 @@ namespace WolvenKit.RED4.CR2W.Types
         /// Is set upon read
         /// Must also be set when a variable is edited in the editor
         /// </summary>
+        [Browsable(false)]
         [JsonIgnore]
         public bool IsSerialized
         {
@@ -144,7 +146,7 @@ namespace WolvenKit.RED4.CR2W.Types
         }
 
 
-        [JsonIgnore] public bool IsNulled { get; set; }
+        [Browsable(false)] [JsonIgnore] public bool IsNulled { get; set; }
 
         private ushort _redFlags;
 
@@ -153,7 +155,7 @@ namespace WolvenKit.RED4.CR2W.Types
         /// <summary>
         /// an internal id that is used to track cvariables
         /// </summary>
-        [JsonIgnore] public string UniqueIdentifier => GetFullDependencyStringName();
+        [Browsable(false)] [JsonIgnore] public string UniqueIdentifier => GetFullDependencyStringName();
 
 
 
@@ -164,12 +166,12 @@ namespace WolvenKit.RED4.CR2W.Types
         /// otherwise must be set manually
         /// Consider moving this to the constructor
         /// </summary>
-        [JsonIgnore] public IEditableVariable ParentVar { get; set; }
+        [Browsable(false)] [JsonIgnore] public IEditableVariable ParentVar { get; set; }
 
         /// <summary>
         /// -1 for children CVars, actual chunk index for root cvar aka cr2wexportwrapper.data
         /// </summary>
-        [JsonIgnore] public int VarChunkIndex { get; set; }
+        [Browsable(false)] [JsonIgnore] public int VarChunkIndex { get; set; }
 
 
         private string name;
@@ -188,7 +190,7 @@ namespace WolvenKit.RED4.CR2W.Types
         /// <summary>
         /// AspectName in frmChunkProperties
         /// </summary>
-        [JsonIgnore] public string REDValue => this.ToString();
+        [Browsable(false)] [JsonIgnore] public string REDValue => this.ToString();
         /// <summary>
         /// Exported to database
         /// </summary>

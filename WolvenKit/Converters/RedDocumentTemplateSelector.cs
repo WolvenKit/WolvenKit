@@ -8,7 +8,7 @@ using System.Windows;
 using WolvenKit.ViewModels.Documents;
 using WolvenKit.Views.Documents;
 
-namespace WolvenKit.Views.Templates
+namespace WolvenKit.Converters
 {
     public class RedDocumentTemplateSelector : DataTemplateSelector
     {

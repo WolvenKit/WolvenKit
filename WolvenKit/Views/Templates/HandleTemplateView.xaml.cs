@@ -78,7 +78,7 @@ namespace WolvenKit.Views.Templates
                 return;
             }
 
-            RedChunkPtr.SetValue(SelectedItem);
+            RedChunkPtr.SetValue(SelectedItem.ChunkIndex + 1);
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
