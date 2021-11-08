@@ -152,6 +152,7 @@
                         </Grid>
 
                         <!--Folder Tree -->
+                        <!-- RequestTreeItems="LeftNavigation_RequestTreeItems" -->
                         <syncfusion:SfTreeGrid Grid.Row="1" Margin="2"
                                 x:Name="LeftNavigation"
                                 AllowFiltering="False"
@@ -161,7 +162,7 @@
                                 AutoGenerateColumns="False"
                                 ChildPropertyName="RedFileSystemModels"
                                 ColumnSizer="FillColumn"
-                                FilterLevel="Extended"
+                                FilterLevel="All"
                                 SelectionChanged="LeftNavigation_OnSelectionChanged"
                                 ExpandStateMappingName="IsExpanded"
                             >
