@@ -325,16 +325,23 @@ namespace WolvenKit.ViewModels.Tools
         /// Filters all game files by given keys or regex pattern
         /// </summary>
         /// <param name="query"></param>
-        public void PerformSearch(string query)
+        public async Task PerformSearch(string query)
         {
-            if (IsRegexSearchEnabled)
+            _progressService.IsIndeterminate = true;
+
+            await Task.Run(() =>
             {
-                RegexSearch();
-            }
-            else
-            {
-                KeywordSearch();
-            }
+                if (IsRegexSearchEnabled)
+                {
+                    RegexSearch();
+                }
+                else
+                {
+                    KeywordSearch();
+                }
+            });
+
+            _progressService.IsIndeterminate = false;
         }
 
         /// <summary>
@@ -342,7 +349,7 @@ namespace WolvenKit.ViewModels.Tools
         /// Glob patterns from the additional search bar are evaluated first
         /// Sets the right hand filelist to the result
         /// </summary>
-        public void RegexSearch()
+        private void RegexSearch()
         {
             var matcher = new Matcher();
             matcher.AddInclude(OptionsSearchBarText);
@@ -369,7 +376,7 @@ namespace WolvenKit.ViewModels.Tools
         /// Glob patterns from the additional search bar are evaluated first
         /// Sets the right hand filelist to the result
         /// </summary>
-        public void KeywordSearch()
+        private void KeywordSearch()
         {
             if (string.IsNullOrEmpty(SearchBarText))
             {
