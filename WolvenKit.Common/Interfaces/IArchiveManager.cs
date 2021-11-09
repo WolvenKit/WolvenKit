@@ -27,6 +27,7 @@ namespace WolvenKit.Common
         EArchiveType TypeName { get; }
 
         public bool IsManagerLoaded { get; }
+        bool IsModBrowserActive { get; set; }
 
         #endregion Properties
 

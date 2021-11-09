@@ -62,8 +62,6 @@ namespace WolvenKit.ViewModels.Tools
 
         private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
 
-        private bool _isModBrowserActive;
-
         #endregion fields
 
         #region ctor
@@ -241,7 +239,7 @@ namespace WolvenKit.ViewModels.Tools
         private bool CanToggleModBrowser() => true;//_archiveManager.IsManagerLoaded;
         private void ExecuteToggleModBrowser()
         {
-            if (!_isModBrowserActive)
+            if (!_archiveManager.IsModBrowserActive)
             {
                 _archiveManager.LoadModsArchives(new DirectoryInfo(_settings.GetRED4GameModDir()), null);
                 LeftItems = new ObservableCollection<RedFileSystemModel>(_archiveManager.ModRoots);
@@ -252,7 +250,7 @@ namespace WolvenKit.ViewModels.Tools
             }
 
             RightItems = new ObservableCollection<IFileSystemViewModel>();
-            _isModBrowserActive = !_isModBrowserActive;
+            _archiveManager.IsModBrowserActive = !_archiveManager.IsModBrowserActive;
         }
 
         public ICommand OpenFileLocationCommand { get; private set; }
