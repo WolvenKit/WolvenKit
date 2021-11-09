@@ -16,7 +16,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
         {
             if (parser.Current != null && parser.Current.GetType() != typeof(MappingStart))
             {
-                throw new InvalidDataException("Invalid YAML content.");
+                throw new InvalidDataException($"Invalid YAML content. Got type: {parser.Current.GetType()} for {parser.Current.Start} to {parser.Current.End}");
             }
             parser.MoveNext();
         }
