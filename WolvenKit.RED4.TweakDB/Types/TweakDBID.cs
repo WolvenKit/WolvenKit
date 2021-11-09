@@ -13,7 +13,9 @@ namespace WolvenKit.RED4.TweakDB.Types
         public string Text { get; set; }
         public int Length { get; set; }
         public uint Key { get; set; }
-        public static implicit operator TweakDBID(string value) {
+
+        public static implicit operator TweakDBID(string value)
+        {
             var t = new TweakDBID();
             var rx = new Regex(@"Tw?e?a?k?DBID\w?:\w?0?x?([0-9A-F]{8})\w?:\w?0?x?([0-9A-F]{2})", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             var m = rx.Matches(value);
@@ -30,7 +32,9 @@ namespace WolvenKit.RED4.TweakDB.Types
             t.Length = value.Length;
             return t;
         }
-        public override string ToString() => $"{Text} <TweakDBID 0x{String.Format("{0:X8}", Key)}:0x{String.Format("{0:X2}", Length)} / {Key}:{Length}>";
+
+        public override string ToString() => $"{Text} <TweakDBID 0x{String.Format("{0:X8}", Key)}:0x{Length:X2} / {Key}:{Length}>";
+
         public void Serialize(BinaryWriter writer)
         {
             writer.Write(Key);

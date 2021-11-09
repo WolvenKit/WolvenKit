@@ -288,7 +288,7 @@ namespace WolvenKit.Modkit.RED4.Serialization
 
                 // check array type
                 var splits = redtype.Split(':');
-                if (splits[0].Equals("array"))
+                if (splits.Length > 1 && splits[0].Equals("array"))
                 {
                     var innertype = GetTypeFromRedTypeStr(redtype.Replace("array:", ""));
                     var outer = Activator.CreateInstance(
