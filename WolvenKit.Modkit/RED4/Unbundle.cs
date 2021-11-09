@@ -63,7 +63,6 @@ namespace WolvenKit.Modkit.RED4
                 return;
             }
 
-            using var fs = new FileStream(ar.ArchiveAbsolutePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
             try
             {
 #pragma warning disable CA1416 // Validate platform compatibility
@@ -72,6 +71,7 @@ namespace WolvenKit.Modkit.RED4
             }
             catch (System.IO.IOException)
             {
+                using var fs = new FileStream(ar.ArchiveAbsolutePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
                 mmf = MemoryMappedFile.CreateFromFile(fs, mapName, 0, MemoryMappedFileAccess.ReadWrite, HandleInheritability.None, true);
             }
 
