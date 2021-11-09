@@ -156,6 +156,8 @@ namespace WolvenKit.ViewModels.Documents
             }
 
             SelectedIndex = 0;
+
+            SelectedTabItemViewModel = TabItemViewModels.FirstOrDefault();
         }
 
         #endregion

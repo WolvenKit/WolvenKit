@@ -35,8 +35,8 @@
 
         <hc:TabControl x:Name="TabControl"
                        ItemsSource="{Binding TabItemViewModels, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                       SelectedIndex="{Binding SelectedIndex}"
-                       SelectedItem="{Binding SelectedTabItemViewModel}"
+                       SelectedIndex="{Binding SelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                       SelectedItem="{Binding SelectedTabItemViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                        ContentTemplateSelector="{StaticResource RedDocumentTemplateSelector}"
                        IsAnimationEnabled="True"
                        ShowCloseButton="False"
