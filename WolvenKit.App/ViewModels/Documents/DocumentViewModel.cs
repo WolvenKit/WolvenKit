@@ -110,6 +110,8 @@ namespace WolvenKit.ViewModels.Documents
         /// <returns>True if file read was successful, otherwise false</returns>
         public abstract Task<bool> OpenFileAsync(string path);
 
+        public abstract bool OpenFile(string path);
+
         private bool CanClose() => true;
 
         private bool CanSave(object parameter) => true/*IsDirty*/;

@@ -17,13 +17,13 @@ namespace WolvenKit.Views.Editors
             InitializeComponent();
         }
 
-        public CFloat RedString
+        public IREDIntegerType RedNumber
         {
-            get => (CFloat)this.GetValue(RedStringProperty);
-            set => this.SetValue(RedStringProperty, value);
+            get => (IREDIntegerType)this.GetValue(RedNumberProperty);
+            set => this.SetValue(RedNumberProperty, value);
         }
-        public static readonly DependencyProperty RedStringProperty = DependencyProperty.Register(
-            nameof(RedString), typeof(CFloat), typeof(RedFloatEditor), new PropertyMetadata(default(CFloat)));
+        public static readonly DependencyProperty RedNumberProperty = DependencyProperty.Register(
+            nameof(RedNumber), typeof(IREDIntegerType), typeof(RedFloatEditor), new PropertyMetadata(default(IREDIntegerType)));
 
 
         public string Text
@@ -32,19 +32,17 @@ namespace WolvenKit.Views.Editors
             set => SetRedValue(value);
         }
 
-        private void SetRedValue(string value) => RedString.SetValue(value);
+        private void SetRedValue(string value) => RedNumber.SetValue(value);
 
         private string GetValueFromRedValue()
         {
-            var redvalue = RedString.GetValue();
-            if (redvalue is float redfloat)
+            var redvalue = RedNumber.GetValue();
+            return redvalue switch
             {
-                return redfloat.ToString("R");
-            }
-            else 
-            {
-                throw new ArgumentException(nameof(redvalue));
-            }
+                float redfloat => redfloat.ToString("R"),
+                ulong redulong => redulong.ToString(),
+                _ => throw new ArgumentException(nameof(redvalue))
+            };
         }
 
 

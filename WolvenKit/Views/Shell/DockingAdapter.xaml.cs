@@ -195,7 +195,7 @@ namespace WolvenKit.Views.Shell
                         {
                             dockElement
                                 .ObservableForProperty(x => x.State)
-                                .ObserveOnDispatcher()
+                                .ObserveOn(RxApp.MainThreadScheduler)
                                 .Subscribe(OnStateUpdated);
 
                             var control = new ContentControl() { Content = item };
@@ -285,7 +285,7 @@ namespace WolvenKit.Views.Shell
                     {
                         element
                                .ObservableForProperty(x => x.Header)
-                               .ObserveOnDispatcher()
+                               .ObserveOn(RxApp.MainThreadScheduler)
                                .Subscribe(OnHeaderChanged);
 
                         var control = new ContentControl() { Content = element };

@@ -70,6 +70,43 @@ namespace WolvenKit.ViewModels.Documents
             return Task.CompletedTask;
         }
 
+        public override bool OpenFile(string path)
+        {
+            _isInitialized = false;
+
+            try
+            {
+                using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    using var reader = new BinaryReader(stream);
+
+                    var cr2w = _parser.TryReadCr2WFile(reader);
+                    if (cr2w == null)
+                    {
+                        _loggerService.Error($"Failed to read cr2w file {path}");
+                        return false;
+                    }
+                    cr2w.FileName = path;
+
+                    ContentId = path;
+                    FilePath = path;
+                    _isInitialized = true;
+
+                    PopulateItems(cr2w);
+                }
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error(e);
+                // Not processing this catch in any other way than rejecting to initialize this
+                _isInitialized = false;
+            }
+
+            return false;
+        }
+
         public override async Task<bool> OpenFileAsync(string path)
         {
             _isInitialized = false;

@@ -26,6 +26,14 @@ namespace WolvenKit.Converters
                 {
                     return new FloatEditor();
                 }
+                if (PropertyType == typeof(CUInt64))
+                {
+                    return new FloatEditor();
+                }
+                if (PropertyType == typeof(CRUID))
+                {
+                    return new FloatEditor();
+                }
                 return new IntegerEditor();
             }
             else if (PropertyType.IsAssignableTo(typeof(IREDBool)))
@@ -364,7 +372,7 @@ namespace WolvenKit.Converters
                         ValidatesOnExceptions = true,
                         ValidatesOnDataErrors = true,
                     };
-                    BindingOperations.SetBinding(_editor, RedFloatEditor.RedStringProperty, binding);
+                    BindingOperations.SetBinding(_editor, RedFloatEditor.RedNumberProperty, binding);
                 }
                 else
                 {
@@ -375,7 +383,7 @@ namespace WolvenKit.Converters
                         ValidatesOnExceptions = true,
                         ValidatesOnDataErrors = true
                     };
-                    BindingOperations.SetBinding(_editor, RedFloatEditor.RedStringProperty, binding);
+                    BindingOperations.SetBinding(_editor, RedFloatEditor.RedNumberProperty, binding);
                 }
             }
             public object Create(PropertyInfo propertyInfo)

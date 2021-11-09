@@ -321,6 +321,19 @@ namespace WolvenKit.ViewModels.Documents
             //db.Save(deltaFilePath);
         }
 
+        public override bool OpenFile(string path)
+        {
+            _isInitialized = false;
+
+            Task.Run(() => LoadDocument(path));
+
+            ContentId = path;
+            FilePath = path;
+            _isInitialized = true;
+
+            return true;
+        }
+
         public override async Task<bool> OpenFileAsync(string path)
         {
             _isInitialized = false;

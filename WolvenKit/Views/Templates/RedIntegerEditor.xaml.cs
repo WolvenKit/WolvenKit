@@ -52,22 +52,7 @@ namespace WolvenKit.Views.Editors
 
         #region methods
 
-        private int GetNumberDecimalDigits()
-        {
-            if (RedInteger != null)
-            {
-                var redvalue = RedInteger.GetValue();
-                if (redvalue != null)
-                {
-                    if (redvalue is float)
-                    {
-                        return 8;
-                    }
-                }
-            }
-
-            return 0;
-        }
+        private int GetNumberDecimalDigits() => 0;
 
         private double GetMinValue()
         {
@@ -78,7 +63,6 @@ namespace WolvenKit.Views.Editors
                 {
                     return redvalue switch
                     {
-                        float => float.MinValue,
                         double => double.MinValue,
 
                         byte => byte.MinValue,
@@ -88,7 +72,6 @@ namespace WolvenKit.Views.Editors
                         int => int.MinValue,
                         uint => uint.MinValue,
                         long => long.MinValue,
-                        ulong => ulong.MinValue,
                         _ => throw new ArgumentOutOfRangeException(nameof(redvalue))
                     };
                 }
@@ -105,7 +88,6 @@ namespace WolvenKit.Views.Editors
                 {
                     return redvalue switch
                     {
-                        float => float.MaxValue,
                         double => double.MaxValue,
 
                         byte => byte.MaxValue,
@@ -115,7 +97,6 @@ namespace WolvenKit.Views.Editors
                         int => int.MaxValue,
                         uint => uint.MaxValue,
                         long => long.MaxValue,
-                        ulong => ulong.MaxValue,
                         _ => throw new ArgumentOutOfRangeException(nameof(redvalue))
                     };
                 }
@@ -129,7 +110,6 @@ namespace WolvenKit.Views.Editors
 
             _ = redvalue switch
             {
-                float => RedInteger.SetValue((float)value),
                 double => RedInteger.SetValue((double)value),
 
                 byte => RedInteger.SetValue((byte)value),
@@ -139,7 +119,6 @@ namespace WolvenKit.Views.Editors
                 int => RedInteger.SetValue((int)value),
                 uint => RedInteger.SetValue((uint)value),
                 long => RedInteger.SetValue((long)value),
-                ulong => RedInteger.SetValue((ulong)value),
                 _ => throw new ArgumentOutOfRangeException(nameof(redvalue))
             };
 
@@ -148,7 +127,9 @@ namespace WolvenKit.Views.Editors
         private double GetValueFromRedValue()
         {
             var redvalue = RedInteger.GetValue();
-            return double.Parse(redvalue.ToString());
+            var valstr = redvalue.ToString();
+            var dbl = double.Parse(valstr);
+            return dbl;
         }
 
         #endregion
