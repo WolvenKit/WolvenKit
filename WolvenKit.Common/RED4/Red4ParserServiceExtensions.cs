@@ -20,13 +20,26 @@ namespace WolvenKit.Common.Services
         /// <returns></returns>
         public static Archive ReadArchive(string path, IHashService hashService)
         {
+            var mapName = "archiveMap";
+            MemoryMappedFile mmf;
+            FileStream fs;
+
             var ar = new Archive()
             {
                 ArchiveAbsolutePath = path
             };
 
-            using var mmf = MemoryMappedFile.CreateFromFile(path, FileMode.Open);
-
+            try
+            {
+#pragma warning disable CA1416 // Validate platform compatibility
+                mmf = MemoryMappedFile.OpenExisting(mapName);
+#pragma warning restore CA1416 // Validate platform compatibility
+            }
+            catch(System.IO.IOException)
+            {
+                fs = new FileStream(ar.ArchiveAbsolutePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+                mmf = MemoryMappedFile.CreateFromFile(fs, mapName, 0, MemoryMappedFileAccess.ReadWrite, HandleInheritability.None, true);
+            }
 
             // read header
             uint customDataLength;
@@ -75,6 +88,7 @@ namespace WolvenKit.Common.Services
                 ar.Files.Add(file.Key, file);
             }
 
+            mmf.Dispose();
             return ar;
         }
 
