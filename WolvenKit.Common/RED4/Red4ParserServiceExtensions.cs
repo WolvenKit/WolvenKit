@@ -5,6 +5,7 @@ using System.IO.MemoryMappedFiles;
 using CP77Tools.Model;
 using WolvenKit.Common.RED4.Archive;
 using WolvenKit.Interfaces.Core;
+using WolvenKit.Common.Extensions;
 using WolvenKit.RED4.CR2W.Archive;
 using Index = CP77Tools.Model.Index;
 
@@ -20,26 +21,15 @@ namespace WolvenKit.Common.Services
         /// <returns></returns>
         public static Archive ReadArchive(string path, IHashService hashService)
         {
-            var mapName = "archiveMap";
-            MemoryMappedFile mmf;
-            FileStream fs;
+            var mapName = "ReadArchive_Map";
 
             var ar = new Archive()
             {
                 ArchiveAbsolutePath = path
             };
 
-            try
-            {
-#pragma warning disable CA1416 // Validate platform compatibility
-                mmf = MemoryMappedFile.OpenExisting(mapName);
-#pragma warning restore CA1416 // Validate platform compatibility
-            }
-            catch(System.IO.IOException)
-            {
-                fs = new FileStream(ar.ArchiveAbsolutePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-                mmf = MemoryMappedFile.CreateFromFile(fs, mapName, 0, MemoryMappedFileAccess.ReadWrite, HandleInheritability.None, true);
-            }
+            using var fs = new FileStream(ar.ArchiveAbsolutePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+            using var mmf = MemoryMappedFileExtensions.GetMemoryMappedFile(fs, mapName);
 
             // read header
             uint customDataLength;
@@ -88,7 +78,6 @@ namespace WolvenKit.Common.Services
                 ar.Files.Add(file.Key, file);
             }
 
-            mmf.Dispose();
             return ar;
         }
 

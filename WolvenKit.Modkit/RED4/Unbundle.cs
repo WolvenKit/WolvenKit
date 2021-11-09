@@ -31,10 +31,7 @@ namespace WolvenKit.Modkit.RED4
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
 
-            MemoryMappedFile mmf;
-
-            // name of memory mapped file that's derived from the filestream
-            var mapName = "archiveMapFS";
+            var mapName = "ExtractAll_Map";
 
             // check search pattern then regex
             var finalmatches = ar.Files.Values.Cast<FileEntry>();
@@ -63,17 +60,8 @@ namespace WolvenKit.Modkit.RED4
                 return;
             }
 
-            try
-            {
-#pragma warning disable CA1416 // Validate platform compatibility
-                mmf = MemoryMappedFile.OpenExisting(mapName);
-#pragma warning restore CA1416 // Validate platform compatibility
-            }
-            catch (System.IO.IOException)
-            {
-                using var fs = new FileStream(ar.ArchiveAbsolutePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-                mmf = MemoryMappedFile.CreateFromFile(fs, mapName, 0, MemoryMappedFileAccess.ReadWrite, HandleInheritability.None, true);
-            }
+            using var fs = new FileStream(ar.ArchiveAbsolutePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+            using var mmf = MemoryMappedFileExtensions.GetMemoryMappedFile(fs, mapName);
 
             var progress = 0;
 
@@ -112,7 +100,6 @@ namespace WolvenKit.Modkit.RED4
             {
                 _loggerService.Info(msg);
             }
-            mmf.Dispose();
         }
 
         /// <summary>
