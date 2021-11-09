@@ -11,6 +11,8 @@ namespace WolvenKit.RED4.TweakDB
     {
         CName,
         CString,
+        TweakDBID,
+        CResource,
         CFloat,
         CBool,
         CUint8,
@@ -25,13 +27,16 @@ namespace WolvenKit.RED4.TweakDB
         CEulerAngles,
         CQuaternion,
         CVector2,
-        CVector3
+        CVector3,
+        LocKey
     }
 
     public enum ERedType
     {
         CName,
         String,
+        TweakDBID,
+        raRefCResource,
         Float,
         Bool,
         Uint8,
@@ -46,7 +51,8 @@ namespace WolvenKit.RED4.TweakDB
         EulerAngles,
         Quaternion,
         Vector2,
-        Vector3
+        Vector3,
+        LocKey
     }
 
 
