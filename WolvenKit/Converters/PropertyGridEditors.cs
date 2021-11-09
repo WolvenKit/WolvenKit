@@ -1,15 +1,13 @@
 using System;
 using System.Reflection;
 using System.Windows;
-using System.Windows.Media;
-using System.Windows.Controls;
 using System.Windows.Data;
 using Syncfusion.Windows.PropertyGrid;
-using Syncfusion.Windows.Shared;
-using WolvenKit.RED4.CR2W.Types;
-using WolvenKit.Views.Templates;
+using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.Views.Editors;
+using WolvenKit.Views.Templates;
 
 namespace WolvenKit.Converters
 {
@@ -63,7 +61,6 @@ namespace WolvenKit.Converters
 
             return null;
         }
-
 
         public class ColorEditor : ITypeEditor
         {
@@ -433,7 +430,48 @@ namespace WolvenKit.Converters
 
             }
         }
+
+        public class BrushEditor : ITypeEditor
+        {
+            private ColorPickerPalette _editor;
+
+            public void Attach(PropertyViewItem property, PropertyItem info)
+            {
+                if (info.CanWrite)
+                {
+                    var binding = new Binding("Value")
+                    {
+                        Mode = BindingMode.TwoWay,
+                        Source = info,
+                        ValidatesOnExceptions = true,
+                        ValidatesOnDataErrors = true,
+                        Converter = new StringColorConverter()
+                    };
+                    BindingOperations.SetBinding(_editor, ColorPickerPalette.ColorProperty, binding);
+                }
+                else
+                {
+                    _editor.SetCurrentValue(UIElement.IsEnabledProperty, false);
+                    var binding = new Binding("Value")
+                    {
+                        Source = info,
+                        ValidatesOnExceptions = true,
+                        ValidatesOnDataErrors = true
+                    };
+                    BindingOperations.SetBinding(_editor, ColorPickerPalette.ColorProperty, binding);
+                }
+            }
+            public object Create(PropertyInfo propertyInfo)
+            {
+                _editor = new ColorPickerPalette();
+
+                return _editor;
+            }
+            public void Detach(PropertyViewItem property)
+            {
+
+            }
+        }
+
     }
-
-
 }
