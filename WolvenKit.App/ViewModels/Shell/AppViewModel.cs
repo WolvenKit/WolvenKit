@@ -34,6 +34,7 @@ using WolvenKit.Common.Model;
 using WolvenKit.ViewModels.Tools;
 using WolvenKit.ViewModels.Documents;
 using System.Collections.Generic;
+using WolvenKit.Core.Services;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -48,6 +49,7 @@ namespace WolvenKit.ViewModels.Shell
         private readonly ISettingsManager _settingsManager;
         private readonly INotificationService _notificationService;
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
+        private readonly IProgressService<double> _progressService;
 
 
 
@@ -70,7 +72,8 @@ namespace WolvenKit.ViewModels.Shell
             IUpdateService updateService,
             ISettingsManager settingsManager,
             INotificationService notificationService,
-            IRecentlyUsedItemsService recentlyUsedItemsService
+            IRecentlyUsedItemsService recentlyUsedItemsService,
+            IProgressService<double> progressService
         )
         {
             _updateService = updateService;
@@ -80,6 +83,7 @@ namespace WolvenKit.ViewModels.Shell
             _settingsManager = settingsManager;
             _notificationService = notificationService;
             _recentlyUsedItemsService = recentlyUsedItemsService;
+            _progressService = progressService;
 
             #region commands
 
@@ -96,7 +100,7 @@ namespace WolvenKit.ViewModels.Shell
             ShowImportExportToolCommand = new RelayCommand(ExecuteImportExportTool, CanShowImportExportTool);
             //ShowPackageInstallerCommand = new RelayCommand(ExecuteShowInstaller, CanShowInstaller);
 
-            OpenFileCommand = new DelegateCommand<FileModel>(async (p) => await ExecuteOpenFile(p), CanOpenFile);
+            OpenFileCommand = new DelegateCommand<FileModel>(p => ExecuteOpenFile(p), CanOpenFile);
 
             PackModCommand = new RelayCommand(ExecutePackMod, CanPackMod);
             //BackupModCommand = new RelayCommand(ExecuteBackupMod, CanBackupMod);
@@ -477,7 +481,7 @@ namespace WolvenKit.ViewModels.Shell
 
         public ICommand OpenFileCommand { get; private set; }
         private bool CanOpenFile(FileModel model) => true;
-        private async Task ExecuteOpenFile(FileModel model)
+        private void ExecuteOpenFile(FileModel model)
         {
             if (model == null)
             {
@@ -497,8 +501,11 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else if (!model.IsDirectory)
                 {
-                    // TODO: make this a background task
-                    await RequestFileOpen(model.FullName);
+                    _progressService.IsIndeterminate = true;
+
+                    RequestFileOpen(model.FullName);
+
+                    _progressService.IsIndeterminate = false;
                 }
             }
         }
@@ -676,21 +683,21 @@ namespace WolvenKit.ViewModels.Shell
             //TODO
         }
 
-        private async Task RequestOpenFile(string fullPath)
-        {
-            if (!File.Exists(fullPath))
-            {
-                _ = await Task.FromException<FileNotFoundException>(new FileNotFoundException(nameof(RequestOpenFile), fullPath));
-            }
-            // check if in
-            await RequestFileOpen(fullPath);
-        }
+        //private async Task RequestOpenFile(string fullPath)
+        //{
+        //    if (!File.Exists(fullPath))
+        //    {
+        //        _ = await Task.FromException<FileNotFoundException>(new FileNotFoundException(nameof(RequestOpenFile), fullPath));
+        //    }
+        //    // check if in
+        //    await RequestFileOpen(fullPath);
+        //}
 
         /// <summary>
         /// Open a file and return its content in a viewmodel.
         /// </summary>
         /// <returns></returns>
-        private async Task<IDocumentViewModel> OpenAsync(string fullPath, EWolvenKitFile type)
+        private IDocumentViewModel Open(string fullPath, EWolvenKitFile type)
         {
             // Check if we have already loaded this file and return it if so
             var fileViewModel = OpenDocuments.FirstOrDefault(fm => fm.ContentId == fullPath);
@@ -715,7 +722,8 @@ namespace WolvenKit.ViewModels.Shell
                     break;
             }
 
-            var result = await fileViewModel.OpenFileAsync(fullPath);
+            //var result = await fileViewModel.OpenFileAsync(fullPath);
+            var result = fileViewModel.OpenFile(fullPath);
 
             if (result)
             {
@@ -751,7 +759,6 @@ namespace WolvenKit.ViewModels.Shell
             //}
 
             ActiveDocument.SaveCommand.SafeExecute();
-            ActiveDocument.SetIsDirty(false);
         }
 
         private bool IsInRawFolder(FileModel model) => IsInRawFolder(model.FullName);
@@ -759,59 +766,9 @@ namespace WolvenKit.ViewModels.Shell
                                                        path.Contains(_projectManager.ActiveProject
                                                            .RawDirectory);
 
-        private async Task RequestFileOpen(string fullpath)
+        private void RequestFileOpen(string fullpath)
         {
             var ext = Path.GetExtension(fullpath).ToUpper();
-
-            #region inspect on single click
-
-            //// click
-            //if (e.Inspect)
-            //{
-            //    switch (ext)
-            //    {
-            //        case ".CSV":
-            //        case ".XML":
-            //        case ".TXT":
-            //        case ".BAT":
-            //        case ".WS":
-            //        case ".YML":
-            //        case ".LOG":
-            //        case ".INI":
-            //            {
-            //                var existing = TryOpenExisting(fullpath);
-            //                if (existing == null)
-            //                {
-            //                    MockKernel.Get().ShowScriptPreview().LoadFile(fullpath);
-            //                }
-            //                break;
-            //            }
-            //        case ".PNG":
-            //        case ".JPG":
-            //        case ".TGA":
-            //        case ".BMP":
-            //        case ".JPEG":
-            //        case ".DDS":
-            //            {
-            //                //TODO: unused
-            //                //if (OpenImages.Any(_ => _.Text == Path.GetFileName(fullpath)))
-            //                //{
-            //                //    OpenImages.First(_ => _.Text == Path.GetFileName(fullpath)).Activate();
-            //                //}
-            //                //else
-            //                {
-            //                    MockKernel.Get().ShowImagePreview().SetImage(fullpath);
-            //                }
-            //                break;
-            //            }
-            //        default:
-            //            break;
-            //    }
-            //    return;
-            //}
-
-            #endregion inspect on single click
-
 
             // double click
             switch (ext)
@@ -858,7 +815,7 @@ namespace WolvenKit.ViewModels.Shell
                     }
                     else
                     {
-                        await OpenRedengineFile();
+                        OpenRedengineFile();
                     }
                     break;
 
@@ -890,12 +847,12 @@ namespace WolvenKit.ViewModels.Shell
 
                 default:
 
-                    await OpenRedengineFile();
+                    OpenRedengineFile();
 
                     break;
             }
 
-            async Task OpenRedengineFile()
+            void OpenRedengineFile()
             {
                 var trimmedExt = ext.TrimStart('.').ToUpper();
                 var type = EWolvenKitFile.Cr2w;
@@ -919,7 +876,7 @@ namespace WolvenKit.ViewModels.Shell
                 if (isRedEngineFile || isRedscriptFile || isTweakFile)
                 {
                     /*ActiveDocument =*/
-                    await OpenAsync(fullpath, type);
+                    Open(fullpath, type);
                 }
             }
 

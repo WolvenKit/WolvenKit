@@ -14,7 +14,9 @@ namespace WolvenKit.ViewModels.Documents
         }
 
         public override Task OnSave(object parameter) => throw new NotImplementedException();
-
+        public override bool OpenFile(string path) => throw new NotImplementedException();
         public override Task<bool> OpenFileAsync(string path) => throw new NotImplementedException();
+
+
     }
 }

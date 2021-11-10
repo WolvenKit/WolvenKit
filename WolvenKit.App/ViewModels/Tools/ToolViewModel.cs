@@ -20,7 +20,6 @@ namespace WolvenKit.ViewModels.Tools
             State = DockState.Dock;
 
             Name = name;
-            Title = name;
             Header = name;
 
             this.WhenAnyValue(x => x.IsVisible).Subscribe(b =>

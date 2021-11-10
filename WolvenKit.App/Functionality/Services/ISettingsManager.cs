@@ -16,15 +16,7 @@ namespace WolvenKit.Functionality.Services
 
         bool CheckForUpdates { get; set; }
 
-        string TextLanguage { get; set; }
-
         string ThemeAccentString { get; set; }
-
-        EAnimals CatFactAnimal { get; set; }
-
-        string[] ManagerVersions { get; set; }
-
-        string DepotPath { get; set; }
 
         // red 4
 
@@ -45,13 +37,10 @@ namespace WolvenKit.Functionality.Services
 
     public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
     {
-        // This is here because Catel can't expose inherited Properties ¯\_(ツ)_/¯
-        // and we use this in the first set up viewmodels
+       
         public EUpdateChannel UpdateChannel { get; set; }
 
         bool ShowGuidedTour { get; set; }
-
-        public ImageBrush ProfileImageBrush { get; set; }
 
         string MaterialRepositoryPath { get; set; }
 

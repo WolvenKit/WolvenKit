@@ -14,7 +14,7 @@ namespace WolvenKit.ViewModels.Documents
     public abstract class DocumentViewModel : PaneViewModel, IDocumentViewModel
     {
         #region fields
-        
+
         protected bool _isInitialized;
 
         #endregion fields
@@ -23,9 +23,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public DocumentViewModel(string path) : this()
         {
-            Title = Path.GetFileName(path);
-
-            Header = Title;
+            Header = Path.GetFileName(path);
 
             ContentId = path;
         }
@@ -33,7 +31,7 @@ namespace WolvenKit.ViewModels.Documents
         private DocumentViewModel()
         {
             State = DockState.Document;
-            
+
             Close = ReactiveCommand.Create(() => { });
         }
 
@@ -57,6 +55,7 @@ namespace WolvenKit.ViewModels.Documents
         }
 
         private ICommand _saveCommand = null;
+
         /// <summary>Gets a command to save this document's content into the file system.</summary>
         public ICommand SaveCommand
         {
@@ -81,26 +80,28 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public bool IsDirty { get; protected set; }
 
-
-        /// <summary>Gets the current filename of the file being managed in this document viewmodel.</summary>
-        public string FileName
-        {
-            get
-            {
-                if (FilePath == null)
-                {
-                    return "Noname" + (IsDirty ? "*" : "");
-                }
-
-                return Path.GetFileName(FilePath) + (IsDirty ? "*" : "");
-            }
-        }
+        
 
         #endregion Properties
 
         #region methods
 
-        public void SetIsDirty(bool b) => IsDirty = b;
+        public void SetIsDirty(bool b)
+        {
+            IsDirty = b;
+            Header = GetHeader();
+        }
+
+        private string GetHeader()
+        {
+            if (FilePath == null)
+            {
+                return "Noname" + (IsDirty ? "*" : "");
+            }
+
+            return Path.GetFileName(FilePath) + (IsDirty ? "*" : "");
+        }
+
 
         /// <summary>
         /// Attempts to read the contents of a wolvenkit file
@@ -108,6 +109,8 @@ namespace WolvenKit.ViewModels.Documents
         /// <param name="path"></param>
         /// <returns>True if file read was successful, otherwise false</returns>
         public abstract Task<bool> OpenFileAsync(string path);
+
+        public abstract bool OpenFile(string path);
 
         private bool CanClose() => true;
 
@@ -124,6 +127,6 @@ namespace WolvenKit.ViewModels.Documents
 
         #endregion methods
 
-        
+
     }
 }

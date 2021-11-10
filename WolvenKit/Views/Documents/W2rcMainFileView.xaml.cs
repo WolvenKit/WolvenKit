@@ -29,16 +29,8 @@ namespace WolvenKit.Views.Documents
                 }
             });
 
-            //ViewModel = new MainFileViewModel();
-            //DataContext = ViewModel;
-
             this.WhenActivated(disposables =>
             {
-                if (DataContext is W2rcFileViewModel vm)
-                {
-                    //SetCurrentValue(ViewModelProperty, vm);
-                }
-
                 // ChunksTreeView
                 this.OneWayBind(ViewModel,
                        viewmodel => viewmodel.Chunks,
@@ -158,6 +150,12 @@ namespace WolvenKit.Views.Documents
                     propertyItem.Editor = customEditor;
                     e.ExpandMode = PropertyExpandModes.FlatMode;
                 }
+            }
+
+            // TODO: disable once buffer writing is implemented
+            if (ViewModel is W2rcBufferViewModel w2rcBufferViewModel)
+            {
+                e.ReadOnly = true;
             }
         }
 
