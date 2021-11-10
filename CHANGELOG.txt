@@ -1,3 +1,23 @@
+WolvenKit 8.4.3
+-----------------
+
+Implemented:
+- tweak cli command
+
+Fixed:
+- tweak editor: array editing
+- curve editor: fixes, zoom and editing
+- red resource editor: fixes, array editing, 
+- fixed a bug where w2rc buffers would not update on selection changed
+- fix asset browser alphabetical folder ordering
+- tweakDB fix arrays and adds remaining types
+- Allow simultaneous reads from a single archive file by multiple WolvenKit instances
+- fix dirty filenames for tweak files
+- settings page cleanup and theme settings bug
+- add check for updates button
+- fixed a bug where the mod asset browser would extract vanilla files
+- async file search in Asset browser
+
 WolvenKit 8.4.2
 -----------------
 
@@ -34,8 +54,6 @@ Fixed:
 - fix messagebox layout
 - read compiled packages properly
 - fixed a CI bug
-
-@HitmanHimself @ja-to @Fynn @Offline-R503B
 
 WolvenKit 8.4.1
 -----------------
