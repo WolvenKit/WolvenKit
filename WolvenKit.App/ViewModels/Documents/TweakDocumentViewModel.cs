@@ -325,7 +325,7 @@ namespace WolvenKit.ViewModels.Documents
         {
             _isInitialized = false;
 
-            Task.Run(() => LoadDocument(path));
+            _ = LoadDocument(path);
 
             ContentId = path;
             FilePath = path;
