@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using ProtoBuf;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.Types;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Interfaces.Core;

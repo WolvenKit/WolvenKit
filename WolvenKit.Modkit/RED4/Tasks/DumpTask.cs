@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.Types;
 using Newtonsoft.Json;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Cr2w;

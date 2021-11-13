@@ -1,20 +1,16 @@
 using System.IO;
 using WolvenKit.Common.Model;
+using WolvenKit.Common.RED4.Compiled;
+using WolvenKit.RED4.Archive.CR2W;
 
 namespace WolvenKit.Common.Services
 {
     public interface IRedParserService
     {
-        #region Methods
+        CompiledPackage TryReadCompiledPackage(Stream stream);
 
-        public IWolvenkitFile TryReadCr2WFile(Stream stream);
+        CR2WFile TryReadRED4File(Stream stream);
 
-        public IWolvenkitFile TryReadCr2WFile(BinaryReader br);
-
-        public IWolvenkitFile TryReadCr2WFileHeaders(Stream stream);
-
-        public IWolvenkitFile TryReadCr2WFileHeaders(BinaryReader br);
-
-        #endregion Methods
+        CR2WFile TryReadRED4FileHeaders(Stream stream);
     }
 }

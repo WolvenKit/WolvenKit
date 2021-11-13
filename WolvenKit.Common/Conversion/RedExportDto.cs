@@ -2,8 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Conversion
 {

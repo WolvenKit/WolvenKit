@@ -1,7 +1,7 @@
 using WolvenKit.RED4.CR2W;
 using System.Collections.Generic;
 using System.Linq;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.Types;
 using System.IO;
 using WolvenKit.Common.Oodle;
 using Newtonsoft.Json;

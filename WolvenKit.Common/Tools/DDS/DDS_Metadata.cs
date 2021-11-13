@@ -1,5 +1,5 @@
 using DirectXTexSharp;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.DDS
 {

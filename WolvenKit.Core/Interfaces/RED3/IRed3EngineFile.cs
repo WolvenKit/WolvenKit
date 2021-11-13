@@ -11,12 +11,12 @@ namespace WolvenKit.RED3.CR2W.Reflection
 {
     public interface IRed3EngineFile : IWolvenkitFile
     {
-        public List<ILocalizedString> LocalizedStrings { get; }
+        //public List<ILocalizedString> LocalizedStrings { get; }
 
         public int GetStringIndex(string name, bool addnew = false);
         public string GetLocalizedString(uint val);
 
         public IEditableVariable ReadVariable(BinaryReader file, IEditableVariable parent);
-        public int GetLastChildrenIndexRecursive(ICR2WExport chunk);
+        //public int GetLastChildrenIndexRecursive(ICR2WExport chunk);
     }
 }

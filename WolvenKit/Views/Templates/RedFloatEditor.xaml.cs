@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using WolvenKit.Common.Model.Cr2w;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Editors
 {

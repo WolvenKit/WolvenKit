@@ -5,6 +5,8 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.RED4.Compiled;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
+using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Archive.IO;
 
 namespace WolvenKit.RED4.CR2W
 {
@@ -47,12 +49,11 @@ namespace WolvenKit.RED4.CR2W
                 return null;
             }
 
-            var cr2w = new CR2WFile();
             try
             {
-                //TODO: verify cr2w integrity
-                br.BaseStream.Seek(0, SeekOrigin.Begin);
-                cr2w.Read(br);
+                using var reader = new CR2WReader(br);
+                var readResult = reader.ReadFile(out var c, false);
+                return c;
             }
             catch (MissingRTTIException e)
             {
@@ -64,8 +65,6 @@ namespace WolvenKit.RED4.CR2W
                 Console.WriteLine(e.Message);
                 return null;
             }
-
-            return cr2w;
         }
 
         /// <summary>
@@ -93,16 +92,14 @@ namespace WolvenKit.RED4.CR2W
             var cr2w = new CR2WFile();
             try
             {
-                //TODO: verify cr2w integrity
-                br.BaseStream.Seek(0, SeekOrigin.Begin);
-                cr2w.ReadHeaders(br);
+                using var reader = new CR2WReader(br);
+                var readResult = reader.ReadFile(out var c, false);
+                return c;
             }
             catch (Exception)
             {
                 return null;
             }
-
-            return cr2w;
         }
 
         public CompiledPackage TryReadCompiledPackage(Stream stream)
@@ -122,14 +119,6 @@ namespace WolvenKit.RED4.CR2W
         }
 
         #endregion Methods
-
-        public IWolvenkitFile TryReadCr2WFile(Stream stream) => TryReadRED4File(stream);
-
-        public IWolvenkitFile TryReadCr2WFile(BinaryReader br) => TryReadRED4File(br);
-
-        public IWolvenkitFile TryReadCr2WFileHeaders(Stream stream) => TryReadRED4FileHeaders(stream);
-
-        public IWolvenkitFile TryReadCr2WFileHeaders(BinaryReader br) => TryReadRED4FileHeaders(br);
 
     }
 }

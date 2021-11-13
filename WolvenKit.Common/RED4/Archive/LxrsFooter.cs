@@ -8,7 +8,7 @@ using WolvenKit.Common.Oodle;
 using WolvenKit.Interfaces.Core;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.RED4.Archive
 {

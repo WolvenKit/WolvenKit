@@ -10,7 +10,7 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4
 {

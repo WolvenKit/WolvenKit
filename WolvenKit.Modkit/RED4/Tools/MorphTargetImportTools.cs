@@ -7,7 +7,7 @@ using WolvenKit.Modkit.RED4.GeneralStructs;
 using SharpGLTF.Schema2;
 using SharpGLTF.IO;
 using WolvenKit.Modkit.RED4.RigFile;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.Types;
 using WolvenKit.RED4.CR2W;
 using SharpGLTF.Validation;
 using WolvenKit.Modkit.RED4;

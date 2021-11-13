@@ -5,7 +5,7 @@ using System.Windows.Data;
 using Syncfusion.Windows.PropertyGrid;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Common.Model.Cr2w;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.Types;
 using WolvenKit.Views.Editors;
 using WolvenKit.Views.Templates;
 

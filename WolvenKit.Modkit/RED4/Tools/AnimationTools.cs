@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.Types;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Common.FNV1A;

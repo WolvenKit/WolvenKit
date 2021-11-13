@@ -1,4 +1,4 @@
-#define WRITE
+//#define WRITE
 #define IS_PARALLEL
 
 #if WRITE
@@ -20,7 +20,6 @@ using WolvenKit.Common.Tools;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.MSTests.Model;
-using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.MSTests

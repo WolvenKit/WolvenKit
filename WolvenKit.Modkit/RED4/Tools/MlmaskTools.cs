@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using CP77.Common.Image;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.Types;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Oodle;

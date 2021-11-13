@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Interfaces.Core;
 using WolvenKit.RED4.CR2W.Reflection;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Conversion
 {

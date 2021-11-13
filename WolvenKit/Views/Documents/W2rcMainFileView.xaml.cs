@@ -5,7 +5,7 @@ using ReactiveUI;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Converters;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Documents;
 using WolvenKit.Views.Templates;
 

@@ -4,7 +4,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Services;
 using System.Collections.Generic;
-using static WolvenKit.RED4.CR2W.Types.Enums;
+using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.CR2W
 {

@@ -9,11 +9,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.RED4.Archive.IO;
-using WolvenKit.Common;
 using WolvenKit.MSTests.Model;
-using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.RED4.Types;
 
 #if IS_PARALLEL
 using System.Threading.Tasks;
@@ -476,7 +473,7 @@ namespace WolvenKit.MSTests
                 using var mmf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.Read, HandleInheritability.None, false);
 
 #if IS_PARALLEL
-            Parallel.ForEach(fileList, tmpFile =>
+                Parallel.ForEach(fileList, tmpFile =>
 #else
                 foreach (var tmpFile in fileList)
 #endif
@@ -552,7 +549,7 @@ namespace WolvenKit.MSTests
                         });
                     }
 #if IS_PARALLEL
-            });
+                });
 #else
                 }
 #endif

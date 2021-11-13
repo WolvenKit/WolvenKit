@@ -50,7 +50,7 @@ namespace WolvenKit.Functionality.Controllers
         //        _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         //    };
 
-        public List<string> GetAvaliableClasses();
+        //public List<string> GetAvaliableClasses();
 
         public Task HandleStartup();
 

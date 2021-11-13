@@ -1,5 +1,5 @@
 #define IS_PARALLEL
-//#undef IS_PARALLEL
+#undef IS_PARALLEL
 
 using System;
 using System.Collections.Concurrent;
@@ -31,8 +31,8 @@ namespace WolvenKit.MSTests
         [ClassInitialize]
         public static void SetupClass(TestContext context) => Setup(context);
 
-        private const bool TEST_EXISTING = false;
-        private const bool WRITE_FAILED = false;
+        private const bool TEST_EXISTING = true;
+        private const bool WRITE_FAILED = true;
         private const bool DECOMPRESS_BUFFERS = false;
 
         #region test methods

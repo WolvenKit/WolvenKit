@@ -3,7 +3,7 @@ using System.IO;
 using RED.CRC32;
 using System.Text.RegularExpressions;
 using System.Buffers.Binary;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.TweakDB.Types
 {

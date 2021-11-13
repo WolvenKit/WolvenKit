@@ -1,7 +1,7 @@
 using System.IO;
 using ProtoBuf;
 using WolvenKit.Interfaces.Core;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.Types;
 
 namespace CP77Tools.Model
 {

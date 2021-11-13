@@ -127,9 +127,9 @@ namespace WolvenKit.ViewModels.Tools
                 });
 
 
-            Classes = _gameController
-                .GetController()
-                .GetAvaliableClasses();
+            //Classes = _gameController
+            //    .GetController()
+            //    .GetAvaliableClasses();
         }
 
         #endregion ctor
@@ -152,7 +152,7 @@ namespace WolvenKit.ViewModels.Tools
 
         [Reactive] public ObservableCollection<object> RightSelectedItems { get; set; } = new();
 
-        [Reactive] public List<string> Classes { get; set; }
+        //[Reactive] public List<string> Classes { get; set; }
 
         [Reactive] public string SelectedClass { get; set; }
 

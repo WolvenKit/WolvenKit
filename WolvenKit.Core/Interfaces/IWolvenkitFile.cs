@@ -11,34 +11,34 @@ namespace WolvenKit.Common.Model
     /// Interface for all Files openable in Wkit
     /// Cr2w files, Srt files
     /// </summary>
-    public interface IWolvenkitFile : INotifyPropertyChanged
-    {
-        #region Properties
-        List<ICR2WName> Names { get; }
-        List<ICR2WBuffer> Buffers { get; }
-        List<ICR2WExport> Chunks { get; }
-        string FileName { get; set; }
-        List<ICR2WImport> Imports { get; }
+    //public interface IWolvenkitFile : INotifyPropertyChanged
+    //{
+    //    #region Properties
+    //    List<ICR2WName> Names { get; }
+    //    List<ICR2WBuffer> Buffers { get; }
+    //    List<ICR2WExport> Chunks { get; }
+    //    string FileName { get; set; }
+    //    List<ICR2WImport> Imports { get; }
 
-        public bool IsDirty { get; set; }
+    //    public bool IsDirty { get; set; }
 
-        #endregion Properties
+    //    #endregion Properties
 
-        //List<ICR2WEmbedded> Embedded { get; }
-        public List<string> UnknownTypes { get; }
+    //    //List<ICR2WEmbedded> Embedded { get; }
+    //    public List<string> UnknownTypes { get; }
 
-        #region Methods
+    //    #region Methods
 
-        public EFileReadErrorCodes Read(BinaryReader file);
+    //    public EFileReadErrorCodes Read(BinaryReader file);
 
-        void Write(BinaryWriter writer);
+    //    void Write(BinaryWriter writer);
 
-        public ICR2WExport CreateChunk(string type, int chunkindex = 0, ICR2WExport parent = null,
-            ICR2WExport virtualparent = null, IEditableVariable cvar = null);
+    //    public ICR2WExport CreateChunk(string type, int chunkindex = 0, ICR2WExport parent = null,
+    //        ICR2WExport virtualparent = null, IEditableVariable cvar = null);
 
 
-        #endregion Methods
-    }
+    //    #endregion Methods
+    //}
 
 
 }

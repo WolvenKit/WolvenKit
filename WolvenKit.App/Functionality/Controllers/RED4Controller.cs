@@ -19,7 +19,7 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.Modkit.RED4.Serialization;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.Types;
 using WolvenKit.RED4.TweakDB;
 
 namespace WolvenKit.Functionality.Controllers
@@ -297,7 +297,7 @@ namespace WolvenKit.Functionality.Controllers
 #pragma warning restore 162
         }
 
-        public List<string> GetAvaliableClasses() => CR2WTypeManager.AvailableTypes.ToList();
+        //public List<string> GetAvaliableClasses() => CR2WTypeManager.AvailableTypes.ToList();
 
         public Task<bool> PackageMod()
         {

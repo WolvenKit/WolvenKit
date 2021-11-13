@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using WolvenKit.Common.DDS;
 using System.Diagnostics;
 using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.Types;
 using System.Runtime.InteropServices;
 using WolvenKit.Common;
 using System.Text.RegularExpressions;

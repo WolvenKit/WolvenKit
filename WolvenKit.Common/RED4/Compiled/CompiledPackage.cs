@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.Types;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.RED4.CR2W.Reflection;

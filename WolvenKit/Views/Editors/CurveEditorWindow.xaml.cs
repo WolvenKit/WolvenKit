@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Cr2w;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels;
 using Point = System.Windows.Point;
 
@@ -54,10 +54,10 @@ namespace WolvenKit.Views.Editors
                 case "HDRColor":
                 {
                     var colors = values.OfType<HDRColor>().ToList();
-                    var blue = colors.Select(x => (double)x.Blue.Value).ToArray();
-                    var red = colors.Select(x => (double)x.Red.Value).ToArray();
-                    var green = colors.Select(x => (double)x.Green.Value).ToArray();
-                    var alpha = colors.Select(x => (double)x.Alpha.Value).ToArray();
+                    var blue = colors.Select(x => (double)x.Blue).ToArray();
+                    var red = colors.Select(x => (double)x.Red).ToArray();
+                    var green = colors.Select(x => (double)x.Green).ToArray();
+                    var alpha = colors.Select(x => (double)x.Alpha).ToArray();
 
                     if (DataContext is CurveEditorViewModel vm)
                     {
@@ -69,7 +69,7 @@ namespace WolvenKit.Views.Editors
                 case "Float":
                 {
                     var floats = values.OfType<CFloat>().ToList();
-                    var ys = floats.Select(x => (double)x.Value).ToArray();
+                    var ys = floats.Select(x => (double)x).ToArray();
 
                     if (DataContext is CurveEditorViewModel vm)
                     {
@@ -81,8 +81,8 @@ namespace WolvenKit.Views.Editors
                 case "Vector2":
                 {
                     var floats = values.OfType<Vector2>().ToList();
-                    var xs = floats.Select(x => (double)x.X.Value).ToArray();
-                    var ys = floats.Select(x => (double)x.Y.Value).ToArray();
+                    var xs = floats.Select(x => (double)x.X).ToArray();
+                    var ys = floats.Select(x => (double)x.Y).ToArray();
 
 
                     break;
@@ -90,9 +90,9 @@ namespace WolvenKit.Views.Editors
                 case "Vector3":
                 {
                     var floats = values.OfType<Vector3>().ToList();
-                    var xs = floats.Select(x => (double)x.X.Value).ToArray();
-                    var ys = floats.Select(x => (double)x.Y.Value).ToArray();
-                    var zs = floats.Select(x => (double)x.Z.Value).ToArray();
+                    var xs = floats.Select(x => (double)x.X).ToArray();
+                    var ys = floats.Select(x => (double)x.Y).ToArray();
+                    var zs = floats.Select(x => (double)x.Z).ToArray();
 
 
                     break;
@@ -100,10 +100,10 @@ namespace WolvenKit.Views.Editors
                 case "Vector4":
                 {
                     var floats = values.OfType<Vector4>().ToList();
-                    var xs = floats.Select(x => (double)x.X.Value).ToArray();
-                    var ys = floats.Select(x => (double)x.Y.Value).ToArray();
-                    var zs = floats.Select(x => (double)x.Z.Value).ToArray();
-                    var ws = floats.Select(x => (double)x.W.Value).ToArray();
+                    var xs = floats.Select(x => (double)x.X).ToArray();
+                    var ys = floats.Select(x => (double)x.Y).ToArray();
+                    var zs = floats.Select(x => (double)x.Z).ToArray();
+                    var ws = floats.Select(x => (double)x.W).ToArray();
 
 
                     break;
@@ -556,7 +556,7 @@ namespace WolvenKit.Views.Editors
                         for (var i = 0; i < values.Count; i++)
                         {
                             var item = values[i];
-                            item.Alpha.SetValue(alpha[i].Item2);
+                            item.Alpha = (float)alpha[i].Item2;
                             vec.Add(new Tuple<double, object>(alpha[i].Item1, item));
                         }
 
