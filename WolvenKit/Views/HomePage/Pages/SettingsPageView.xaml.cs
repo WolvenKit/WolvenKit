@@ -1,10 +1,12 @@
+using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
 using ReactiveUI;
 using Splat;
-using Syncfusion.Windows.Controls.Layout;
 using Syncfusion.Windows.PropertyGrid;
-using WolvenKit.ViewModels.HomePage.Pages;
+using WolvenKit.Functionality.Services;
+using WolvenKit.ViewModels;
+using static WolvenKit.Converters.PropertyGridEditors;
 
 namespace WolvenKit.Views.HomePage.Pages
 {
@@ -19,7 +21,18 @@ namespace WolvenKit.Views.HomePage.Pages
             ViewModel = Locator.Current.GetService<SettingsPageViewModel>();
             DataContext = ViewModel;
 
-            AccordionItems = SfAccordion.Items;
+            this.WhenActivated(disposables =>
+            {
+                this.Bind(ViewModel,
+                    viewModel => viewModel.Settings,
+                    view => view.SettingsPropertygrid.SelectedObject)
+                .DisposeWith(disposables);
+
+                this.BindCommand(ViewModel,
+                      viewModel => viewModel.CheckForUpdatesCommand,
+                      view => view.CheckForUpdatesButton)
+                .DisposeWith(disposables);
+            });
         }
 
         #endregion Constructors
@@ -31,27 +44,13 @@ namespace WolvenKit.Views.HomePage.Pages
 
         #endregion
 
-        #region Methods
-
-        private void TabControlDemo_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            // I wanted to add logic that the selected tab item moves to be the first in the row but I am not sure it works with the HC tabcontrol. If someone feels liek testing this later go ahead :D
-        }
-
-        #endregion Methods
-
-        private void SfAccordionItem_Unselected(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void ExitRestart_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.Application.Restart();
             System.Windows.Application.Current.Shutdown();
         }
 
-        private void CP77SettingsPG_OnAutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
+        private void SettingsPropertygrid_OnAutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
         {
             switch (e.DisplayName)
             {
@@ -61,17 +60,21 @@ namespace WolvenKit.Views.HomePage.Pages
                     e.Cancel = true;
                     break;
             }
-        }
 
-        private void GeneralSettingsPG_OnAutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
-        {
-            switch (e.DisplayName)
+            if (e.OriginalSource is PropertyItem { } propertyItem)
             {
-                case nameof(ReactiveObject.Changed):
-                case nameof(ReactiveObject.Changing):
-                case nameof(ReactiveObject.ThrownExceptions):
-                    e.Cancel = true;
-                    break;
+                switch (propertyItem.DisplayName)
+                {
+                    case nameof(ISettingsDto.CP77ExecutablePath):
+                        propertyItem.Editor = new Controls.SingleFilePathEditor();
+                        break;
+                    case nameof(ISettingsManager.MaterialRepositoryPath):
+                        propertyItem.Editor = new Controls.SingleFolderPathEditor();
+                        break;
+                    case nameof(ISettingsDto.ThemeAccentString):
+                        propertyItem.Editor = new BrushEditor();
+                        break;
+                }
             }
         }
     }

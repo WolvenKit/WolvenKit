@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -18,7 +19,7 @@ namespace WolvenKit.Common.Model
 
         public ConcurrentDictionary<string, RedFileSystemModel> Directories { get; } = new();
 
-        public IEnumerable<RedFileSystemModel> RedFileSystemModels => Directories.Values;
+        public IEnumerable<RedFileSystemModel> RedFileSystemModels => Directories.Values.OrderBy(x => x.Name);
 
         public List<ulong> Files { get; } = new();
 
@@ -33,6 +34,5 @@ namespace WolvenKit.Common.Model
             get => _isExpanded;
             set => this.RaiseAndSetIfChanged(ref _isExpanded, value);
         }
-
     }
 }

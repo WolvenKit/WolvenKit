@@ -14,7 +14,7 @@ namespace WolvenKit.ViewModels.Shell
 
         #region Properties
 
-        [Reactive] public string Header { get; set; }
+        [Reactive] public virtual string Header { get; set; }
 
         [Reactive] public DockState State { get; set; }
 
@@ -27,10 +27,6 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         [Reactive] public bool IsActive { get; set; }
-
-        //[Reactive] public bool IsSelected { get; set; }
-
-        [Reactive] public string Title { get; set; }
 
         #endregion Properties
 

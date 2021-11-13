@@ -33,6 +33,8 @@ namespace WolvenKit.Common.Model
 
         public abstract bool IsManagerLoaded { get; set; }
 
+        public bool IsModBrowserActive { get; set; }
+
         #endregion
 
         public abstract void LoadGameArchives(FileInfo executable, bool rebuildtree = true);

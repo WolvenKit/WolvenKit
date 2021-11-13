@@ -443,5 +443,23 @@ namespace WolvenKit.Views.Tools
         #endregion
 
         private void FileSearchBar_SearchStarted(object sender, FunctionEventArgs<string> e) => ViewModel?.PerformSearch(e.Info);
+
+        private void LeftNavigation_RequestTreeItems(object sender, TreeGridRequestTreeItemsEventArgs args)
+        {
+            if (args.ParentItem == null)
+            {
+                args.ChildItems = ViewModel.LeftItems;
+            }
+
+            else
+            {
+                var childFolders = args.ParentItem as RedFileSystemModel;
+
+                if (childFolders is not null)
+                {
+                    args.ChildItems = childFolders.Directories.Values.OrderBy(x => x.Name).ToList();
+                }
+            }
+        }
     }
 }

@@ -17,14 +17,21 @@
     d:DesignHeight="450" d:DesignWidth="800"
     d:DataContext="{d:DesignInstance Type={x:Type documents:W2rcFileViewModel}}">
     
-    <Grid >
+    <Grid>
 
         <Grid.Resources>
             <ResourceDictionary>
-                <ResourceDictionary.MergedDictionaries>
+                <!--<ResourceDictionary.MergedDictionaries>
                     <hc:ThemeResources RequestedTheme="Dark" />
                     <hc:Theme />
+                </ResourceDictionary.MergedDictionaries>-->
+
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="pack://application:,,,/AdonisUI;component/ColorSchemes/Dark.xaml"/>
+                    <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml"/>
                 </ResourceDictionary.MergedDictionaries>
+
+                
 
                 <Style TargetType="{x:Type syncfusion:AdvancedFilterControl}">
                     <Setter Property="CanGenerateUniqueItems" Value="False" />
@@ -35,9 +42,9 @@
         </Grid.Resources>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
 
         <!-- Additional Navigation -->
@@ -129,11 +136,11 @@
 
             <Grid.Resources>
 
-                <DataTemplate x:Key="CommmonTemplate">
+                <!--<DataTemplate x:Key="CommmonTemplate">
                     <TextBlock Padding="5" Text="{Binding Value}" Foreground="Gray" syncfusion:FocusManagerHelper.FocusedElement="True"/>
-                </DataTemplate>
+                </DataTemplate>-->
 
-                <DataTemplate x:Key="StringTemplateView">
+                <!--<DataTemplate x:Key="StringTemplateView">
                     <TextBox syncfusion:FocusManagerHelper.FocusedElement="True"
                                  Height="22"
                                  Margin="0"
@@ -149,9 +156,9 @@
                             </hc:EventTrigger>
                         </hc:Interaction.Triggers>
                     </TextBox>
-                </DataTemplate>
+                </DataTemplate>-->
 
-                <DataTemplate x:Key="ColorTemplateView">
+                <!--<DataTemplate x:Key="ColorTemplateView">
 
                     <syncfusion:ColorPickerPalette syncfusion:FocusManagerHelper.FocusedElement="True"
                                                        GenerateThemeVariants="False"
@@ -160,9 +167,9 @@
                                                        SelectedCommand="{Binding SelectedColorCommand}"
                                                        d:DataContext="{d:DesignInstance shell:RedColorViewModel}"
                                                        />
-                </DataTemplate>
+                </DataTemplate>-->
 
-                <DataTemplate x:Key="RefTemplateView">
+                <!--<DataTemplate x:Key="RefTemplateView">
                     <TextBox    syncfusion:FocusManagerHelper.FocusedElement="True"
                                     Height="22"
                                     Margin="0"
@@ -178,9 +185,9 @@
                             </hc:EventTrigger>
                         </hc:Interaction.Triggers>
                     </TextBox>
-                </DataTemplate>
+                </DataTemplate>-->
 
-                <DataTemplate x:Key="RedboolTemplate">
+                <!--<DataTemplate x:Key="RedboolTemplate">
                     <CheckBox syncfusion:FocusManagerHelper.FocusedElement="True"
                                   Margin="3,0,0,0"
                                   Padding="5"
@@ -197,32 +204,32 @@
                             </hc:EventTrigger>
                         </hc:Interaction.Triggers>
                     </CheckBox>
-                </DataTemplate>
+                </DataTemplate>-->
 
-                <DataTemplate x:Key="EnumTemplate">
+                <!--<DataTemplate x:Key="EnumTemplate">
                     <templates:EnumTemplateView
                             syncfusion:FocusManagerHelper.FocusedElement="True"
                             RedEnum="{Binding Property}"
                             d:DataContext="{d:DesignInstance shell:ChunkPropertyViewModel }" />
-                </DataTemplate>
+                </DataTemplate>-->
 
-                <DataTemplate x:Key="HandleTemplate">
+                <!--<DataTemplate x:Key="HandleTemplate">
                     <templates:HandleTemplateView
                             syncfusion:FocusManagerHelper.FocusedElement="True"
                             RedChunkPtr="{Binding Property}"
                           d:DataContext="{d:DesignInstance shell:ChunkPropertyViewModel }"
                           GoToChunkRequested="HandleTemplateView_OnGoToChunkRequested"
                           />
-                </DataTemplate>
+                </DataTemplate>-->
 
-                <DataTemplate x:Key="SingleChannelCurveTemplate">
+                <!--<DataTemplate x:Key="SingleChannelCurveTemplate">
                     <Button x:Name="CurveEditorButton" Content="Open Curve Editor"
                                 syncfusion:FocusManagerHelper.FocusedElement="True"
                                 d:DataContext="{d:DesignInstance shell:ChunkPropertyViewModel }"
                                 Click="CurveEditorButton_OnClick" Tag="{Binding Property}" />
-                </DataTemplate>
+                </DataTemplate>-->
 
-                <templates:EditableVariableDataTemplateSelector
+                <!--<templates:EditableVariableDataTemplateSelector
                                     x:Key="DataTemplateSelector"
                                     CommmonTemplate="{StaticResource CommmonTemplate}"
 
@@ -241,15 +248,15 @@
                                     ColorTemplateView="{StaticResource ColorTemplateView}"
 
                                     SingleChannelCurveTemplate="{StaticResource SingleChannelCurveTemplate}"
-                                    />
+                                    />-->
 
-                <converters:CellStyleConverter x:Key="converter" />
+                <!--<converters:CellStyleConverter x:Key="converter" />-->
 
             </Grid.Resources>
 
               
             
-            <syncfusion:SfTreeGrid x:Name="MainTreeGrid"
+            <!--<syncfusion:SfTreeGrid x:Name="MainTreeGrid"
                                     AllowFiltering="True"
                                     AllowResizingColumns="True"
                                     
@@ -297,17 +304,14 @@
 
                 </syncfusion:SfTreeGrid.Columns>
 
-            </syncfusion:SfTreeGrid>
+            </syncfusion:SfTreeGrid>-->
 
-            <!--<syncfusion:PropertyGrid
-                                x:Name="PropertyGrid"
-                                Grid.Column="1"
-                                SelectedObject="{Binding SelectedChunk.Data}"
-                                PropertyExpandMode="NestedMode"
-                                AutoGeneratingPropertyGridItem="PropertyGrid_AutoGeneratingPropertyGridItem"
-                                >
-
-                            </syncfusion:PropertyGrid>-->
+            <syncfusion:PropertyGrid x:Name="PropertyGrid" Grid.Column="1"
+                PropertyExpandMode="NestedMode"
+                AutoGeneratingPropertyGridItem="PropertyGrid_AutoGeneratingPropertyGridItem"
+                CollectionEditorOpening ="PropertyGrid_CollectionEditorOpening"
+                
+                />
 
         </Grid>
 

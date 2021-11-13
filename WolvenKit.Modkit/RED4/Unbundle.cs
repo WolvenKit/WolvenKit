@@ -31,6 +31,8 @@ namespace WolvenKit.Modkit.RED4
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
 
+            var mapName = "ExtractAll_Map";
+
             // check search pattern then regex
             var finalmatches = ar.Files.Values.Cast<FileEntry>();
             var totalInArchiveCount = ar.FileCount;
@@ -59,7 +61,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             using var fs = new FileStream(ar.ArchiveAbsolutePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-            using var mmf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.ReadWrite, HandleInheritability.None, false);
+            using var mmf = MemoryMappedFileExtensions.GetMemoryMappedFile(fs, mapName);
 
             var progress = 0;
 

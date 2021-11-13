@@ -19,6 +19,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
         private const string s_valueName = "value";
         private static readonly Type _sequenceEndType = typeof(SequenceEnd);
         private static readonly Type _sequenceStartType = typeof(SequenceStart);
+        private static readonly Type _scalarType = typeof(Scalar);
 
         public bool Accepts(Type type) => typeof(IType).IsAssignableFrom(type);
 
@@ -61,13 +62,22 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
 
                 parser.MoveNext(); // skip the sequence start
 
-                do
+                if (parser.Current is Scalar scalar)
                 {
-                    var x = ReadYaml(parser, innertype);
-
-                    list.Add(x);
-                } while (parser.Current.GetType() != _sequenceEndType);
-
+                    do
+                    {
+                        var x = Parse(parser.ReadScalarValue(), innertype);
+                        list.Add(x);
+                    } while (parser.Current.GetType() != _sequenceEndType);
+                }
+                else if (parser.Current.GetType() != _sequenceEndType)
+                {
+                    do
+                    {
+                        var x = ReadYaml(parser, innertype);
+                        list.Add(x);
+                    } while (parser.Current.GetType() != _sequenceEndType);
+                }
                 parser.MoveNext(); // skip the mapping end (or crash)
 
                 var array = (IArray)Activator.CreateInstance(
@@ -271,12 +281,15 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
                 {
                     ETweakType.CName => (CName)s,
                     ETweakType.CString => (CString)s,
+                    ETweakType.TweakDBID => (TweakDBID)s,
+                    ETweakType.CResource => (CResource)s,
                     ETweakType.CFloat => (CFloat)float.Parse(s),
                     ETweakType.CBool => (CBool)bool.Parse(s),
                     ETweakType.CUint8 => (CUint8)byte.Parse(s),
                     ETweakType.CUint16 => (CUint16)ushort.Parse(s),
                     ETweakType.CUint32 => (CUint32)uint.Parse(s),
                     ETweakType.CUint64 => (CUint64)ulong.Parse(s),
+                    ETweakType.LocKey => (LocKey)ulong.Parse(s),
                     ETweakType.CInt8 => (CInt8)sbyte.Parse(s),
                     ETweakType.CInt16 => (CInt16)short.Parse(s),
                     ETweakType.CInt32 => (CInt32)int.Parse(s),

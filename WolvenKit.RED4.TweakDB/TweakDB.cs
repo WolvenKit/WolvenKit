@@ -57,7 +57,6 @@ namespace WolvenKit.RED4.TweakDB
                 _flats.Add($"{name}.{key}", flat);
             }
 
-            var recordParent = record.Inherits; //unused
             var recordType = record.Type;
 
             _records.Add(name, recordType);
@@ -116,13 +115,8 @@ namespace WolvenKit.RED4.TweakDB
             writer.Write(_records.Count);
             foreach (var (name, type) in _records)
             {
-                // TweakDBID.
-                var hash = Crc32Algorithm.Compute(name);
-                writer.Write(hash);
-                writer.Write((byte)name.Length);
-                writer.Write((byte)0); // TBD offset 0.
-                writer.Write((byte)0); // TBD offset 0.
-                writer.Write((byte)0); // TBD offset 1.
+                TweakDBID tdbid = name;
+                tdbid.Serialize(writer);
 
                 writer.Write(Murmur32.Hash(type, s_recordsSeed));
             }

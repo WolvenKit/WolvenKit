@@ -22,21 +22,20 @@ namespace WolvenKit.ViewModels.Documents
 
         public W2rcFileViewModel(IWolvenkitFile file)
         {
-            
 
             OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport);
 
-            this.WhenAnyValue(x => x.SelectedChunk).Subscribe(chunk =>
-            {
-                if (chunk != null)
-                {
-                    ChunkProperties = new ObservableCollection<ChunkPropertyViewModel>(
-                        SelectedChunk.GetData()
-                            .ChildrEditableVariables
-                            .Select(x => new ChunkPropertyViewModel(x)));
+            //this.WhenAnyValue(x => x.SelectedChunk).Subscribe(chunk =>
+            //{
+            //    //if (chunk != null)
+            //    //{
+            //    //    ChunkProperties = new ObservableCollection<ChunkPropertyViewModel>(
+            //    //        SelectedChunk.GetData()
+            //    //            .ChildrEditableVariables
+            //    //            .Select(x => new ChunkPropertyViewModel(x)));
 
-                }
-            });
+            //    //}
+            //});
             _file = file;
         }
 
@@ -44,7 +43,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.MainFile;
 
-        [Reactive] public ObservableCollection<ChunkPropertyViewModel> ChunkProperties { get; set; } = new();
+        //[Reactive] public ObservableCollection<ChunkPropertyViewModel> ChunkProperties { get; set; } = new();
 
         public List<ICR2WImport> Imports => _file.Imports;
 

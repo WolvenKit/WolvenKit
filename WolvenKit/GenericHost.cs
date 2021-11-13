@@ -16,6 +16,7 @@ using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Services;
+using WolvenKit.ViewModels;
 using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.HomePage.Pages;

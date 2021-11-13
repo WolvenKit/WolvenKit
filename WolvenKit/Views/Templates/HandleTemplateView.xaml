@@ -29,7 +29,7 @@
          Style="{DynamicResource MahApps.Styles.ComboBox.DataGrid.Editing}"
          />
 
-        <Button
+        <!--<Button
          Grid.Column="1"
          Width="35"
          Background="{DynamicResource MahApps.Brushes.Accent}"
@@ -44,6 +44,6 @@
                  Kind="ArrowRight"
                  />
             </Button.Content>
-        </Button>
+        </Button>-->
     </Grid>
 </UserControl>

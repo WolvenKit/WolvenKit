@@ -9,7 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     xmlns:documents="clr-namespace:WolvenKit.ViewModels.Documents;assembly=WolvenKit.App"
-    xmlns:documents1="clr-namespace:WolvenKit.Views.Documents"
+    xmlns:documents1="clr-namespace:WolvenKit.Views.Documents" xmlns:converters="clr-namespace:WolvenKit.Converters"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d"
@@ -28,15 +28,15 @@
                 <documents1:W2rcMainFileView/>
             </DataTemplate>
 
-            <templates:RedDocumentTemplateSelector x:Key="RedDocumentTemplateSelector"
+            <converters:RedDocumentTemplateSelector x:Key="RedDocumentTemplateSelector"
                                                    MainTemplate="{StaticResource MainTemplate}"
                                                    BufferTemplate="{StaticResource BufferTemplate}" />
         </Grid.Resources>
 
         <hc:TabControl x:Name="TabControl"
                        ItemsSource="{Binding TabItemViewModels, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                       SelectedIndex="{Binding SelectedIndex}"
-                       SelectedItem="{Binding SelectedTabItemViewModel}"
+                       SelectedIndex="{Binding SelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                       SelectedItem="{Binding SelectedTabItemViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                        ContentTemplateSelector="{StaticResource RedDocumentTemplateSelector}"
                        IsAnimationEnabled="True"
                        ShowCloseButton="False"

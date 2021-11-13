@@ -5,6 +5,7 @@ using System.IO.MemoryMappedFiles;
 using CP77Tools.Model;
 using WolvenKit.Common.RED4.Archive;
 using WolvenKit.Interfaces.Core;
+using WolvenKit.Common.Extensions;
 using WolvenKit.RED4.CR2W.Archive;
 using Index = CP77Tools.Model.Index;
 
@@ -20,13 +21,15 @@ namespace WolvenKit.Common.Services
         /// <returns></returns>
         public static Archive ReadArchive(string path, IHashService hashService)
         {
+            var mapName = "ReadArchive_Map";
+
             var ar = new Archive()
             {
                 ArchiveAbsolutePath = path
             };
 
-            using var mmf = MemoryMappedFile.CreateFromFile(path, FileMode.Open);
-
+            using var fs = new FileStream(ar.ArchiveAbsolutePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+            using var mmf = MemoryMappedFileExtensions.GetMemoryMappedFile(fs, mapName);
 
             // read header
             uint customDataLength;

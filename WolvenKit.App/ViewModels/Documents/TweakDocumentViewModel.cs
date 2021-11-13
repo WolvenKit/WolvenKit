@@ -97,7 +97,6 @@ namespace WolvenKit.ViewModels.Documents
             var record = new Record()
             {
                 Type = "TYPE NOT SET",
-                Inherits = "INHERITS NOT SET (optional)"
             };
             TweakDocument.Groups.Add(FlatName, record);
 
@@ -281,6 +280,8 @@ namespace WolvenKit.ViewModels.Documents
                 Entries = new ObservableCollection<TweakEntryViewModel>();
                 TweakDocument = new TweakDocument();
             }
+
+            SetIsDirty(true);
         }
 
         public override async Task OnSave(object parameter)
@@ -308,6 +309,7 @@ namespace WolvenKit.ViewModels.Documents
             }
 
             _loggerService.Success($"{this.FilePath} saved.");
+            SetIsDirty(false);
 
             //dbg
             //var deltaFilePath = $"{FilePath}.bin";
@@ -319,6 +321,19 @@ namespace WolvenKit.ViewModels.Documents
             //db.Save(deltaFilePath);
         }
 
+        public override bool OpenFile(string path)
+        {
+            _isInitialized = false;
+
+            _ = LoadDocument(path);
+
+            ContentId = path;
+            FilePath = path;
+            _isInitialized = true;
+
+            return true;
+        }
+
         public override async Task<bool> OpenFileAsync(string path)
         {
             _isInitialized = false;
@@ -327,8 +342,6 @@ namespace WolvenKit.ViewModels.Documents
 
             ContentId = path;
             FilePath = path;
-            IsDirty = false;
-            Title = FileName;
             _isInitialized = true;
 
             return await Task.FromResult(true);
@@ -346,9 +359,6 @@ namespace WolvenKit.ViewModels.Documents
             Document = new TextDocument();
             var extension = Path.GetExtension(paramFilePath);
             HighlightingDefinition = hlManager.GetDefinitionByExtension(extension);
-
-            IsDirty = false;
-            //IsReadOnly = false;
 
             // Check file attributes and set to read-only if file attributes indicate that
             if ((File.GetAttributes(paramFilePath) & FileAttributes.ReadOnly) != 0)

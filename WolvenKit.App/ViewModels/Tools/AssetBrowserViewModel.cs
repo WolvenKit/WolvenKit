@@ -62,8 +62,6 @@ namespace WolvenKit.ViewModels.Tools
 
         private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
 
-        private bool _isModBrowserActive;
-
         #endregion fields
 
         #region ctor
@@ -241,7 +239,7 @@ namespace WolvenKit.ViewModels.Tools
         private bool CanToggleModBrowser() => true;//_archiveManager.IsManagerLoaded;
         private void ExecuteToggleModBrowser()
         {
-            if (!_isModBrowserActive)
+            if (!_archiveManager.IsModBrowserActive)
             {
                 _archiveManager.LoadModsArchives(new DirectoryInfo(_settings.GetRED4GameModDir()), null);
                 LeftItems = new ObservableCollection<RedFileSystemModel>(_archiveManager.ModRoots);
@@ -252,7 +250,7 @@ namespace WolvenKit.ViewModels.Tools
             }
 
             RightItems = new ObservableCollection<IFileSystemViewModel>();
-            _isModBrowserActive = !_isModBrowserActive;
+            _archiveManager.IsModBrowserActive = !_archiveManager.IsModBrowserActive;
         }
 
         public ICommand OpenFileLocationCommand { get; private set; }
@@ -327,16 +325,23 @@ namespace WolvenKit.ViewModels.Tools
         /// Filters all game files by given keys or regex pattern
         /// </summary>
         /// <param name="query"></param>
-        public void PerformSearch(string query)
+        public async Task PerformSearch(string query)
         {
-            if (IsRegexSearchEnabled)
+            _progressService.IsIndeterminate = true;
+
+            await Task.Run(() =>
             {
-                RegexSearch();
-            }
-            else
-            {
-                KeywordSearch();
-            }
+                if (IsRegexSearchEnabled)
+                {
+                    RegexSearch();
+                }
+                else
+                {
+                    KeywordSearch();
+                }
+            });
+
+            _progressService.IsIndeterminate = false;
         }
 
         /// <summary>
@@ -344,7 +349,7 @@ namespace WolvenKit.ViewModels.Tools
         /// Glob patterns from the additional search bar are evaluated first
         /// Sets the right hand filelist to the result
         /// </summary>
-        public void RegexSearch()
+        private void RegexSearch()
         {
             var matcher = new Matcher();
             matcher.AddInclude(OptionsSearchBarText);
@@ -371,7 +376,7 @@ namespace WolvenKit.ViewModels.Tools
         /// Glob patterns from the additional search bar are evaluated first
         /// Sets the right hand filelist to the result
         /// </summary>
-        public void KeywordSearch()
+        private void KeywordSearch()
         {
             if (string.IsNullOrEmpty(SearchBarText))
             {

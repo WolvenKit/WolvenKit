@@ -143,12 +143,8 @@ namespace WolvenKit.RED4.TweakDB
                 writer.Write(bucket.Flats.Count);
                 foreach (var (name, valueHash) in bucket.Flats)
                 {
-                    var hash = Crc32Algorithm.Compute(name);
-                    writer.Write(hash);
-                    writer.Write((byte)name.Length);
-                    writer.Write((byte)0); // TBD offset 0.
-                    writer.Write((byte)0); // TBD offset 0.
-                    writer.Write((byte)0); // TBD offset 1.
+                    TweakDBID tdbid = name;
+                    tdbid.Serialize(writer);
 
                     writer.Write(indexes[valueHash]);
                 }

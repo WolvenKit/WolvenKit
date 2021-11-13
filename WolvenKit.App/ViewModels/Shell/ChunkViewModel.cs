@@ -33,6 +33,8 @@ namespace WolvenKit.ViewModels.Shell
 
         public IEditableVariable GetData() => _export.Data;
 
+        public IEditableVariable Data => _export.Data;
+
         public string Name => _export.REDName;
 
         [Reactive] public bool IsSelected { get; set; }

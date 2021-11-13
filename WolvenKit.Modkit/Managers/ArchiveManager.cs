@@ -22,6 +22,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         public const string Version = "1.1";
 
         private readonly IHashService _hashService;
+
         private readonly ILoggerService _logger;
 
         private readonly SourceList<RedFileSystemModel> _rootCache;
@@ -95,16 +96,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         //    RebuildRootNode();
         //}
 
-        public override Dictionary<string, IEnumerable<FileEntry>> GetGroupedFiles() =>
-           Archives.Items
-               .SelectMany(_ => _.Files.Values)
-               .GroupBy(_ => _.Extension)
-               .ToDictionary(_ => _.Key, _ => _.Select(x => x as FileEntry));
-
-        public override IEnumerable<FileEntry> GetFiles() =>
-            Archives.Items
-                .SelectMany(_ => _.Files.Values)
-                .Cast<FileEntry>();
+        #region loading
 
         /// <summary>
         /// Loads all archives from a folder
@@ -124,9 +116,8 @@ namespace WolvenKit.RED4.CR2W.Archive
             IsManagerLoaded = true;
         }
 
-
         /// <summary>
-        ///     Load every non-mod bundle it can find in ..\..\content and ..\..\DLC, also calls RebuildRootNode()
+        /// Load every non-mod bundle it can find in ..\..\content and ..\..\DLC, also calls RebuildRootNode()
         /// </summary>
         /// <param name="executable"></param>
         /// <param name="rebuildtree"></param>
@@ -187,10 +178,10 @@ namespace WolvenKit.RED4.CR2W.Archive
         }
 
         /// <summary>
-        ///     Load a single mod bundle
+        /// Load a single mod bundle
         /// </summary>
         /// <param name="filename">
-        ///     file to process
+        /// file to process
         /// </param>
         public override void LoadModArchive(string filename)
         {
@@ -240,6 +231,36 @@ namespace WolvenKit.RED4.CR2W.Archive
             IsManagerLoaded = true;
         }
 
+        #endregion
+
+        /// <summary>
+        /// Get files grouped by extension in all archives
+        /// </summary>
+        /// <returns></returns>
+        public override Dictionary<string, IEnumerable<FileEntry>> GetGroupedFiles() =>
+            IsModBrowserActive
+            ? ModArchives.Items
+              .SelectMany(_ => _.Files.Values)
+              .GroupBy(_ => _.Extension)
+              .ToDictionary(_ => _.Key, _ => _.Select(x => x as FileEntry))
+            : Archives.Items
+              .SelectMany(_ => _.Files.Values)
+              .GroupBy(_ => _.Extension)
+              .ToDictionary(_ => _.Key, _ => _.Select(x => x as FileEntry));
+
+        /// <summary>
+        /// Get all files in all archives
+        /// </summary>
+        /// <returns></returns>
+        public override IEnumerable<FileEntry> GetFiles() =>
+            IsModBrowserActive
+            ? ModArchives.Items
+                .SelectMany(_ => _.Files.Values)
+                .Cast<FileEntry>()
+            : Archives.Items
+                .SelectMany(_ => _.Files.Values)
+                .Cast<FileEntry>();
+
         /// <summary>
         /// Checks if a file with the given hash exists in the archivemanager
         /// </summary>
@@ -254,17 +275,18 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <returns></returns>
         public override Optional<IGameFile> Lookup(ulong hash)
         {
-            var vanilla = Optional<IGameFile>.ToOptional(
-                (from item in Archives.Items where item.Files.ContainsKey(hash) select item.Files[hash])
-                .FirstOrDefault());
-            if (vanilla.HasValue)
+            if (IsModBrowserActive)
             {
-                return vanilla;
-            }
-
-            return Optional<IGameFile>.ToOptional(
-                (from item in ModArchives.Items where item.Files.ContainsKey(hash) select item.Files[hash])
+                return Optional<IGameFile>.ToOptional(
+                    (from item in ModArchives.Items where item.Files.ContainsKey(hash) select item.Files[hash])
                 .FirstOrDefault());
+            }
+            else
+            {
+                return Optional<IGameFile>.ToOptional(
+                    (from item in Archives.Items where item.Files.ContainsKey(hash) select item.Files[hash])
+                .FirstOrDefault());
+            }
         }
 
         /// <summary>
@@ -275,9 +297,27 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <returns></returns>
         public override RedFileSystemModel LookupDirectory(string fullpath, bool expandAll = false)
         {
-            var splits = fullpath.Split(Path.DirectorySeparatorChar);
+            if (IsModBrowserActive)
+            {
+                foreach (var item in ModRoots)
+                {
+                    var result = LookupDirectory(fullpath, item, expandAll);
+                    if (result is not null)
+                    {
+                        return result;
+                    }
+                }
+                return null;
+            }
+            else
+            {
+                return LookupDirectory(fullpath, RootNode, expandAll);
+            }
+        }
 
-            var currentDir = RootNode;
+        private static RedFileSystemModel LookupDirectory(string fullpath, RedFileSystemModel currentDir, bool expandAll = false)
+        {
+            var splits = fullpath.Split(Path.DirectorySeparatorChar);
             if (expandAll)
             {
                 currentDir.IsExpanded = true;

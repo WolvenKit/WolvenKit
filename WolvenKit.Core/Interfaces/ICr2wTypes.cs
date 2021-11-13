@@ -94,7 +94,7 @@ namespace WolvenKit.Common.Model.Cr2w
         public T Value { get; set; }
     }
 
-    // UI template TODO
+    // UI template done
     public interface IREDColor : IREDPrimitive<Color> { }
 
     // UI template done
@@ -208,7 +208,7 @@ namespace WolvenKit.Common.Model.Cr2w
         ushort Flags { get; set; }
     }
 
-    // UI template TODO
+    // UI template done
     public interface IREDRef : IREDPrimitive
     {
         string DepotPath { get; set; }
