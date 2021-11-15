@@ -4,13 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.RED4.Types;
 using Newtonsoft.Json;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
-using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Types;
 
 namespace CP77Tools.Tasks
 {
@@ -201,23 +200,23 @@ namespace CP77Tools.Tasks
                         {
                             using var ms = new MemoryStream();
                             ar.CopyFileToStream(ms, fileEntry.NameHash64, false);
-                            var cr2w = _wolvenkitFileService.TryReadCr2WFileHeaders(ms);
+                            var cr2w = _wolvenkitFileService.TryReadRed4FileHeaders(ms);
                             if (cr2w == null)
                             {
                                 return;
                             }
 
-                            if (cr2w.Imports.Count > 0)
+                            if (cr2w.Debug.ImportInfos.Length > 0)
                             {
-                                var localImports = cr2w.Imports.Select(_ => _.DepotPathStr);
-                                foreach (var item in localImports)
-                                {
-                                    var importhash = FNV1A64HashAlgorithm.HashString(item);
-                                    if (!_hashService.Contains(importhash))
-                                    {
-                                        importDictionary.AddOrUpdate(importhash, item, (arg1, o) => item);
-                                    }
-                                }
+                                throw new WolvenKit.RED4.Types.Exceptions.TodoException();
+                                //foreach (var info in cr2w.Debug.ImportInfos)
+                                //{
+                                //    var importhash = cr2w.Debug.s stringDict[info.offset];
+                                //    if (!_hashService.Contains(importhash))
+                                //    {
+                                //        importDictionary.AddOrUpdate(importhash, item, (arg1, o) => item);
+                                //    }
+                                //}
                             }
                         }
 
@@ -227,10 +226,10 @@ namespace CP77Tools.Tasks
                             {
                                 using var ms = new MemoryStream();
                                 ar.CopyFileToStream(ms, (fileEntry as FileEntry).NameHash64, false);
-                                var cr2w = _wolvenkitFileService.TryReadCr2WFile(ms);
+                                var cr2w = _wolvenkitFileService.TryReadRed4File(ms);
 
-                                if (cr2w?.Chunks.FirstOrDefault()?.Data is not CBitmapTexture xbm ||
-                                    !(cr2w.Chunks[1]?.Data is rendRenderTextureBlobPC blob))
+                                if (cr2w?.Chunks.FirstOrDefault() is not CBitmapTexture xbm ||
+                                    cr2w.Chunks[1] is not rendRenderTextureBlobPC blob)
                                 {
                                     return;
                                 }
@@ -239,14 +238,14 @@ namespace CP77Tools.Tasks
                                 var texinfoObj = new Cr2wTextureInfo()
                                 {
                                     Filename = filename,
-                                    width = blob.Header.SizeInfo.Width.IsSerialized ? blob.Header.SizeInfo.Width.Value.ToString() : "null",
-                                    height = blob.Header.SizeInfo.Height.IsSerialized ? blob.Header.SizeInfo.Height.Value.ToString() : "null",
-                                    mips = blob.Header.TextureInfo.MipCount.IsSerialized ? blob.Header.TextureInfo.MipCount.Value.ToString() : "null",
-                                    slicecount = blob.Header.TextureInfo.SliceCount.IsSerialized ? blob.Header.TextureInfo.SliceCount.Value.ToString() : "null",
-                                    alignment = blob.Header.TextureInfo.DataAlignment.IsSerialized ? blob.Header.TextureInfo.DataAlignment.Value.ToString() : "null",
-                                    compression = xbm.Setup.Compression.IsSerialized ? xbm.Setup.Compression.Value.ToString() : "null",
-                                    Group = xbm.Setup.Group.IsSerialized ? xbm.Setup.Group.Value.ToString() : "null",
-                                    rawFormat = xbm.Setup.RawFormat.IsSerialized ? xbm.Setup.RawFormat.Value.ToString() : "null",
+                                    width = blob.Header.SizeInfo.Width.ToString(),
+                                    height = blob.Header.SizeInfo.Height.ToString(),
+                                    mips = blob.Header.TextureInfo.MipCount.ToString(),
+                                    slicecount = blob.Header.TextureInfo.SliceCount.ToString(),
+                                    alignment = blob.Header.TextureInfo.DataAlignment.ToString(),
+                                    compression = xbm.Setup.Compression.Value.ToString(),
+                                    Group = xbm.Setup.Group.Value.ToString(),
+                                    rawFormat = xbm.Setup.RawFormat.Value.ToString()
                                 };
 
                                 texDictionary.AddOrUpdate(hash, texinfoObj, (arg1, o) => texinfoObj);
@@ -340,7 +339,7 @@ namespace CP77Tools.Tasks
                             TypeNameHandling = TypeNameHandling.None
                         });
 
-                    File.WriteAllText($"{ar.ArchiveAbsolutePath}.json",json);
+                    File.WriteAllText($"{ar.ArchiveAbsolutePath}.json", json);
 
                     _loggerService.Success($"Finished dumping {ar.ArchiveAbsolutePath}.");
                 }
@@ -389,9 +388,9 @@ namespace CP77Tools.Tasks
         #region Properties
 
         public List<ICR2WBuffer> Buffers { get; set; }
-        public List<CR2WExportWrapper.Cr2wVariableDumpObject> ChunkData { get; } = new();
-        public List<CR2WExportWrapper> Chunks { get; set; }
-        public string Filename { get; set; }
+        //public List<CR2WExportWrapper.Cr2wVariableDumpObject> ChunkData { get; } = new();
+        //public List<CR2WExportWrapper> Chunks { get; set; }
+        //public string Filename { get; set; }
         public List<ICR2WImport> Imports { get; set; }
         public Dictionary<uint, string> Stringdict { get; set; }
 

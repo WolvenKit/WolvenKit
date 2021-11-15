@@ -2,35 +2,32 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using WolvenKit.Modkit.RED4.GeneralStructs;
-using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.Types;
-using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.Common.DDS;
-using WolvenKit.Common.Oodle;
-using SharpGLTF.Geometry;
-using SharpGLTF.Geometry.VertexTypes;
-using SharpGLTF.Materials;
-using SharpGLTF.Schema2;
-using WolvenKit.Common.Services;
 using CP77.CR2W;
+using SharpGLTF.Schema2;
+using WolvenKit.Common.DDS;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Oodle;
+using WolvenKit.Common.Services;
+using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
+using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4
 {
-    using Vec4 = System.Numerics.Vector4;
     using Vec3 = System.Numerics.Vector3;
+    using Vec4 = System.Numerics.Vector4;
     public partial class ModTools
     {
-        public bool ExportMorphTargets(Stream targetStream, FileInfo outfile,List<Archive> archives, string modFolder, bool isGLBinary = true)
+        public bool ExportMorphTargets(Stream targetStream, FileInfo outfile, List<Archive> archives, string modFolder, bool isGLBinary = true)
         {
-            var cr2w = _wolvenkitFileService.TryReadRED4File(targetStream);
-            if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<MorphTargetMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
+            var cr2w = _wolvenkitFileService.TryReadRed4File(targetStream);
+            if (cr2w == null || !cr2w.Chunks.OfType<MorphTargetMesh>().Any() || !cr2w.Chunks.OfType<rendRenderMeshBlob>().Any())
             {
                 return false;
             }
-            var morphBlob = cr2w.Chunks.Select(_ => _.Data).OfType<MorphTargetMesh>().First();
+            var morphBlob = cr2w.Chunks.OfType<MorphTargetMesh>().First();
 
             RawArmature Rig = null;
             {
@@ -44,15 +41,15 @@ namespace WolvenKit.Modkit.RED4
                         break;
                     }
                 }
-                var meshCr2w = _wolvenkitFileService.TryReadRED4File(meshStream);
-                if (meshCr2w != null && meshCr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() && meshCr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
+                var meshCr2w = _wolvenkitFileService.TryReadRed4File(meshStream);
+                if (meshCr2w != null && meshCr2w.Chunks.OfType<CMesh>().Any() && meshCr2w.Chunks.OfType<rendRenderMeshBlob>().Any())
                 {
-                    Rig = MeshTools.GetOrphanRig(meshCr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First());
+                    Rig = MeshTools.GetOrphanRig(meshCr2w.Chunks.OfType<rendRenderMeshBlob>().First());
                 }
             }
-            var rendblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
+            var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
-            var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer.Value - 1];
+            var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer - 1];
             targetStream.Seek(rendbuffer.Offset, SeekOrigin.Begin);
             var meshbuffer = new MemoryStream();
             targetStream.DecompressAndCopySegment(meshbuffer, rendbuffer.DiskSize, rendbuffer.MemSize);
@@ -60,28 +57,28 @@ namespace WolvenKit.Modkit.RED4
             var meshesinfo = MeshTools.GetMeshesinfo(rendblob);
             List<RawMeshContainer> expMeshes = MeshTools.ContainRawMesh(meshbuffer, meshesinfo, true);
 
-            var blob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMorphTargetMeshBlob>().First();
+            var blob = cr2w.Chunks.OfType<rendRenderMorphTargetMeshBlob>().First();
 
             MemoryStream diffsbuffer = new MemoryStream();
             MemoryStream mappingbuffer = new MemoryStream();
             MemoryStream texbuffer = new MemoryStream();
 
-            if(blob.DiffsBuffer.IsSerialized)
+            if (blob.DiffsBuffer.IsSerialized)
             {
-                targetStream.Seek(cr2w.Buffers[blob.DiffsBuffer.Buffer.Value - 1].Offset, SeekOrigin.Begin);
-                targetStream.DecompressAndCopySegment(diffsbuffer, cr2w.Buffers[blob.DiffsBuffer.Buffer.Value - 1].DiskSize, cr2w.Buffers[blob.DiffsBuffer.Buffer.Value - 1].MemSize);
+                targetStream.Seek(cr2w.Buffers[blob.DiffsBuffer.Buffer - 1].Offset, SeekOrigin.Begin);
+                targetStream.DecompressAndCopySegment(diffsbuffer, cr2w.Buffers[blob.DiffsBuffer.Buffer - 1].DiskSize, cr2w.Buffers[blob.DiffsBuffer.Buffer - 1].MemSize);
             }
 
-            if(blob.MappingBuffer.IsSerialized)
+            if (blob.MappingBuffer.IsSerialized)
             {
-                targetStream.Seek(cr2w.Buffers[blob.MappingBuffer.Buffer.Value - 1].Offset, SeekOrigin.Begin);
-                targetStream.DecompressAndCopySegment(mappingbuffer, cr2w.Buffers[blob.MappingBuffer.Buffer.Value - 1].DiskSize, cr2w.Buffers[blob.MappingBuffer.Buffer.Value - 1].MemSize);
+                targetStream.Seek(cr2w.Buffers[blob.MappingBuffer.Buffer - 1].Offset, SeekOrigin.Begin);
+                targetStream.DecompressAndCopySegment(mappingbuffer, cr2w.Buffers[blob.MappingBuffer.Buffer - 1].DiskSize, cr2w.Buffers[blob.MappingBuffer.Buffer - 1].MemSize);
             }
 
-            if(blob.TextureDiffsBuffer.IsSerialized)
+            if (blob.TextureDiffsBuffer.IsSerialized)
             {
-                targetStream.Seek(cr2w.Buffers[blob.TextureDiffsBuffer.Buffer.Value - 1].Offset, SeekOrigin.Begin);
-                targetStream.DecompressAndCopySegment(texbuffer, cr2w.Buffers[blob.TextureDiffsBuffer.Buffer.Value - 1].DiskSize, cr2w.Buffers[blob.TextureDiffsBuffer.Buffer.Value - 1].MemSize);
+                targetStream.Seek(cr2w.Buffers[blob.TextureDiffsBuffer.Buffer - 1].Offset, SeekOrigin.Begin);
+                targetStream.DecompressAndCopySegment(texbuffer, cr2w.Buffers[blob.TextureDiffsBuffer.Buffer - 1].DiskSize, cr2w.Buffers[blob.TextureDiffsBuffer.Buffer - 1].MemSize);
             }
 
             TargetsInfo targetsInfo = GetTargetInfos(cr2w, expMeshes.Count);
@@ -132,13 +129,13 @@ namespace WolvenKit.Modkit.RED4
         }
         static TargetsInfo GetTargetInfos(CR2WFile cr2w, int SubMeshC)
         {
-            var rendMorphBlob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMorphTargetMeshBlob>().First();
+            var rendMorphBlob = cr2w.Chunks.OfType<rendRenderMorphTargetMeshBlob>().First();
 
-            UInt32 NumTargets = rendMorphBlob.Header.NumTargets.Value;
+            UInt32 NumTargets = rendMorphBlob.Header.NumTargets;
 
             UInt32[,] NumVertexDiffsInEachChunk = new UInt32[NumTargets, SubMeshC];
-            UInt32 NumDiffs = rendMorphBlob.Header.NumDiffs.Value;
-            UInt32 NumDiffsMapping = rendMorphBlob.Header.NumDiffsMapping.Value;
+            UInt32 NumDiffs = rendMorphBlob.Header.NumDiffs;
+            UInt32 NumDiffsMapping = rendMorphBlob.Header.NumDiffsMapping;
             UInt32[,] NumVertexDiffsMappingInEachChunk = new UInt32[NumTargets, SubMeshC];
             UInt32[] TargetStartsInVertexDiffs = new UInt32[NumTargets];
             UInt32[] TargetStartsInVertexDiffsMapping = new UInt32[NumTargets];
@@ -148,21 +145,21 @@ namespace WolvenKit.Modkit.RED4
             {
                 for (int e = 0; e < SubMeshC; e++)
                 {
-                    NumVertexDiffsInEachChunk[i, e] = rendMorphBlob.Header.NumVertexDiffsInEachChunk[i][e].Value;
-                    NumVertexDiffsMappingInEachChunk[i, e] = rendMorphBlob.Header.NumVertexDiffsMappingInEachChunk[i][e].Value;
+                    NumVertexDiffsInEachChunk[i, e] = rendMorphBlob.Header.NumVertexDiffsInEachChunk[i][e];
+                    NumVertexDiffsMappingInEachChunk[i, e] = rendMorphBlob.Header.NumVertexDiffsMappingInEachChunk[i][e];
                 }
 
-                TargetStartsInVertexDiffs[i] = rendMorphBlob.Header.TargetStartsInVertexDiffs[i].Value;
-                TargetStartsInVertexDiffsMapping[i] = rendMorphBlob.Header.TargetStartsInVertexDiffsMapping[i].Value;
+                TargetStartsInVertexDiffs[i] = rendMorphBlob.Header.TargetStartsInVertexDiffs[i];
+                TargetStartsInVertexDiffsMapping[i] = rendMorphBlob.Header.TargetStartsInVertexDiffsMapping[i];
 
 
                 var o = rendMorphBlob.Header.TargetPositionDiffOffset[i];
-                TargetPositionDiffOffset[i] = new Vec4(o.X.Value, o.Y.Value, o.Z.Value, o.W.Value);
+                TargetPositionDiffOffset[i] = new Vec4(o.X, o.Y, o.Z, o.W);
                 var s = rendMorphBlob.Header.TargetPositionDiffScale[i];
-                TargetPositionDiffScale[i] = new Vec4(s.X.Value, s.Y.Value, s.Z.Value, s.W.Value);
+                TargetPositionDiffScale[i] = new Vec4(s.X, s.Y, s.Z, s.W);
             }
 
-            var morphBlob = cr2w.Chunks.Select(_ => _.Data).OfType<MorphTargetMesh>().First();
+            var morphBlob = cr2w.Chunks.OfType<MorphTargetMesh>().First();
 
             string[] Names = new string[NumTargets];
             string[] RegionNames = new string[NumTargets];
@@ -171,8 +168,8 @@ namespace WolvenKit.Modkit.RED4
 
             for (int i = 0; i < NumTargets; i++)
             {
-                Names[i] = morphBlob.Targets[i].Name.Value;
-                RegionNames[i] = morphBlob.Targets[i].RegionName.Value;
+                Names[i] = morphBlob.Targets[i].Name;
+                RegionNames[i] = morphBlob.Targets[i].RegionName;
             }
 
             TargetsInfo targetsInfo = new TargetsInfo()
@@ -235,7 +232,7 @@ namespace WolvenKit.Modkit.RED4
                         normalDelta[e] = new Vec3(n.X, n.Z, -n.Y);
                         Vec4 t = Converters.TenBitShifted(diffsbr.ReadUInt32());
                         tangentDelta[e] = new Vec3(t.X, t.Z, -t.Y);
-                    }                    
+                    }
                 }
 
                 UInt16[] vertexMapping = new UInt16[diffsCount];
@@ -287,10 +284,10 @@ namespace WolvenKit.Modkit.RED4
             {
                 if (blob.Header.TargetTextureDiffsData[i].TargetDiffsDataSize.Count == 0)
                     break;
-                TargetDiffsDataOffset.Add(blob.Header.TargetTextureDiffsData[i].TargetDiffsDataOffset[0].Value);
-                TargetDiffsDataSize.Add(blob.Header.TargetTextureDiffsData[i].TargetDiffsDataSize[0].Value);
-                TargetDiffsMipLevelCounts.Add(blob.Header.TargetTextureDiffsData[i].TargetDiffsMipLevelCounts[0].Value);
-                TargetDiffsWidth.Add(blob.Header.TargetTextureDiffsData[i].TargetDiffsWidth[0].Value);
+                TargetDiffsDataOffset.Add(blob.Header.TargetTextureDiffsData[i].TargetDiffsDataOffset[0]);
+                TargetDiffsDataSize.Add(blob.Header.TargetTextureDiffsData[i].TargetDiffsDataSize[0]);
+                TargetDiffsMipLevelCounts.Add(blob.Header.TargetTextureDiffsData[i].TargetDiffsMipLevelCounts[0]);
+                TargetDiffsWidth.Add(blob.Header.TargetTextureDiffsData[i].TargetDiffsWidth[0]);
                 texCount++;
             }
 
@@ -303,7 +300,7 @@ namespace WolvenKit.Modkit.RED4
                 MemoryStream ms = new MemoryStream();
                 DDSMetadata metadata = new DDSMetadata(
                     TargetDiffsWidth[i], TargetDiffsWidth[i],
-                    1, 1, TargetDiffsMipLevelCounts[i], 0,0, DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 16, true);
+                    1, 1, TargetDiffsMipLevelCounts[i], 0, 0, DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 16, true);
                 DDSUtils.GenerateAndWriteHeader(ms, metadata);
                 BinaryWriter bw = new BinaryWriter(ms);
                 bw.Write(bytes);
@@ -424,7 +421,7 @@ namespace WolvenKit.Modkit.RED4
                     var mappings = expTargets[i][mIndex].vertexMapping.ToList();
                     for (ushort e = 0; e < mesh.positions.Length; e++)
                     {
-                        if(mappings.Contains(e))
+                        if (mappings.Contains(e))
                         {
                             int idx = mappings.IndexOf(e);
                             bw.Write(expTargets[i][mIndex].vertexDelta[idx].X);
@@ -597,7 +594,7 @@ namespace WolvenKit.Modkit.RED4
                         dict.Add("POSITION", acc);
                         BuffViewoffset += mesh.positions.Length * 12;
                     }
-                    if(mesh.normals.Length > 0)
+                    if (mesh.normals.Length > 0)
                     {
                         var acc = model.CreateAccessor();
                         var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.normals.Length * 12);

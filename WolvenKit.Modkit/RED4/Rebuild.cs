@@ -31,7 +31,7 @@ namespace WolvenKit.Modkit.RED4
         {
             using var fileReader = new BinaryReader(redfileStream);
 
-            var cr2w = _wolvenkitFileService.TryReadRED4FileHeaders(fileReader);
+            var cr2w = _wolvenkitFileService.TryReadRed4FileHeaders(fileReader);
             if (cr2w == null)
             {
                 return false;
@@ -104,7 +104,7 @@ namespace WolvenKit.Modkit.RED4
                 //check if cr2w
                 using var fileReader = new BinaryReader(fileStream);
 
-                var cr2w = _wolvenkitFileService.TryReadRED4FileHeaders(fileReader);
+                var cr2w = _wolvenkitFileService.TryReadRed4FileHeaders(fileReader);
                 if (cr2w == null)
                 {
                     return;

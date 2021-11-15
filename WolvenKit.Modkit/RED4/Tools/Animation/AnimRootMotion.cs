@@ -21,7 +21,7 @@ namespace WolvenKit.Modkit.RED4.Animation
         public static void AddRootMotion(ref Dictionary<UInt16, Dictionary<float, Vec3>> positions, ref Dictionary<UInt16, Dictionary<float, Quat>> rotations, animAnimation animAnimDes)
         {
             var motionEx = animAnimDes.MotionExtraction.GetReference().Data as animIMotionExtraction;
-            var duration = animAnimDes.Duration.Value;
+            var duration = animAnimDes.Duration;
             var numFrames = 0;
             var numPositions = 0;
             var numRotations = 0;
@@ -39,10 +39,10 @@ namespace WolvenKit.Modkit.RED4.Animation
                 case "animLinearCompressedMotionExtraction":
                 {
                     var lc = motionEx as animLinearCompressedMotionExtraction;
-                    numPositions = lc.PosFrames.IsSerialized ? lc.PosFrames.Elements.Count : 0;
-                    numRotations = lc.RotFrames.IsSerialized ? lc.RotFrames.Elements.Count : 0;
-                    posTime = lc.PosTime.IsSerialized ? lc.PosTime.Elements.Select(_ => _.Value).ToArray() : new float[numPositions];
-                    rotTime = lc.RotTime.IsSerialized ? lc.RotTime.Elements.Select(_ => _.Value).ToArray() : new float[numRotations];
+                    numPositions = lc.PosFrames.IsSerialized ? lc.PosFrames.Count : 0;
+                    numRotations = lc.RotFrames.IsSerialized ? lc.RotFrames.Count : 0;
+                    posTime = lc.PosTime.IsSerialized ? lc.PosTime.ToArray() : new float[numPositions];
+                    rotTime = lc.RotTime.IsSerialized ? lc.RotTime.ToArray() : new float[numRotations];
 
                     if (numPositions > 0)
                     {
@@ -61,20 +61,20 @@ namespace WolvenKit.Modkit.RED4.Animation
                     for (int i = 0; i < numPositions; i++)
                     {
                         var v = lc.PosFrames[i];
-                        positions[0].Add(posTime[i], new Vec3(v.X.Value, v.Z.Value, -v.Y.Value));
+                        positions[0].Add(posTime[i], new Vec3(v.X, v.Z, -v.Y));
                     }
                     for (int i = 0; i < numRotations; i++)
                     {
                         var q = lc.RotFrames[i];
-                        rotations[0].Add(rotTime[i], new Quat(q.I.Value, q.K.Value, -q.J.Value, q.R.Value));
+                        rotations[0].Add(rotTime[i], new Quat(q.I, q.K, -q.J, q.R));
                     }
                     break;
                 }
                 case "animPlaneUncompressedMotionExtraction":
                 { 
                     var pc = motionEx as animPlaneUncompressedMotionExtraction;
-                    duration = pc.Duration.IsSerialized ? pc.Duration.Value : duration;
-                    numPositions = pc.Frames.IsSerialized ? pc.Frames.Elements.Count : 0;
+                    duration = pc.Duration.IsSerialized ? pc.Duration : duration;
+                    numPositions = pc.Frames.IsSerialized ? pc.Frames.Count : 0;
                     numFrames = numPositions;
                     fps = (numFrames - 1f) / duration;
                     ft = 1f / fps;
@@ -87,20 +87,20 @@ namespace WolvenKit.Modkit.RED4.Animation
                     }
                     for (int i = 0; i < numFrames; i++)
                     {
-                        var v = pc.Frames.Elements[i];
-                        positions[0].Add(ft * i, new Vec3(v.X.Value, v.Z.Value, -v.Y.Value));
+                        var v = pc.Frames[i];
+                        positions[0].Add(ft * i, new Vec3(v.X, v.Z, -v.Y));
                     }
                     break;
                 }
                 case "animSplineCompressedMotionExtraction":
                 {
                     var sc = motionEx as animSplineCompressedMotionExtraction;
-                    duration = sc.Duration.IsSerialized ? sc.Duration.Value : duration;
+                    duration = sc.Duration.IsSerialized ? sc.Duration : duration;
 
                     #region rotations
                     if (sc.RotKeysData.IsSerialized)
                     {
-                        rotBuffer = sc.RotKeysData.Elements.Select(_ => _.Value).ToArray();
+                        rotBuffer = sc.RotKeysData.ToArray();
                         numRotations = rotBuffer.Length / 16;
                         if (numRotations > 0)
                         {
@@ -168,7 +168,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     #endregion
                     if (sc.PosKeysData.IsSerialized)
                     {
-                        posBuffer = sc.PosKeysData.Elements.Select(_ => _.Value).ToArray();
+                        posBuffer = sc.PosKeysData.ToArray();
                         numPositions = posBuffer.Length / 16;
                         if (numPositions > 0)
                         {
@@ -238,8 +238,8 @@ namespace WolvenKit.Modkit.RED4.Animation
                 case "animUncompressedAllAnglesMotionExtraction":
                 {
                     var aa = motionEx as animUncompressedAllAnglesMotionExtraction;
-                    duration = aa.Duration.IsSerialized ? aa.Duration.Value : duration;
-                    numFrames = aa.Frames.IsSerialized ? aa.Frames.Elements.Count : 0;
+                    duration = aa.Duration.IsSerialized ? aa.Duration : duration;
+                    numFrames = aa.Frames.IsSerialized ? aa.Frames.Count : 0;
                     fps = (numFrames - 1f) / duration;
                     ft = 1f / fps;
                     if (numFrames > 0)
@@ -255,18 +255,18 @@ namespace WolvenKit.Modkit.RED4.Animation
                     }
                     for (int i = 0; i < numFrames; i++)
                     {
-                        var v = aa.Frames.Elements[i].Position;
-                        var q = aa.Frames.Elements[i].Orientation;
-                        positions[0].Add(ft * i, new Vec3(v.X.Value, v.Z.Value, -v.Y.Value));
-                        rotations[0].Add(ft * i, new Quat(q.I.Value, q.K.Value, -q.J.Value, q.R.Value));
+                        var v = aa.Frames[i].Position;
+                        var q = aa.Frames[i].Orientation;
+                        positions[0].Add(ft * i, new Vec3(v.X, v.Z, -v.Y));
+                        rotations[0].Add(ft * i, new Quat(q.I, q.K, -q.J, q.R));
                     }
                     break;
                 }
                 case "animUncompressedMotionExtraction":
                 {
                     var uc = motionEx as animUncompressedMotionExtraction;
-                    duration = uc.Duration.IsSerialized ? uc.Duration.Value : duration;
-                    numFrames = uc.Frames.IsSerialized ? uc.Frames.Elements.Count : 0;
+                    duration = uc.Duration.IsSerialized ? uc.Duration : duration;
+                    numFrames = uc.Frames.IsSerialized ? uc.Frames.Count : 0;
                     numPositions = numFrames;
                     fps = (numFrames - 1f) / duration;
                     ft = 1f / fps;
@@ -279,12 +279,12 @@ namespace WolvenKit.Modkit.RED4.Animation
                     }
                     for (int i = 0; i < numFrames; i++)
                     {
-                        var v = uc.Frames.Elements[i];
-                        if(v.W.Value != 0f || v.W.Value != 1f)
+                        var v = uc.Frames[i];
+                        if(v.W != 0f || v.W != 1f)
                         {
                             throw new Exception("vec4 W unexpected value ???");
                         }
-                        positions[0].Add(ft * i, new Vec3(v.X.Value, v.Z.Value, -v.Y.Value));
+                        positions[0].Add(ft * i, new Vec3(v.X, v.Z, -v.Y));
                     }
                     break;
                 }

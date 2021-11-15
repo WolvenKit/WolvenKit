@@ -1,13 +1,11 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
-using WolvenKit.Common.DDS;
-using System.Diagnostics;
-using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.Types;
+using System.IO;
 using System.Runtime.InteropServices;
 using WolvenKit.Common;
-using System.Text.RegularExpressions;
+using WolvenKit.Common.DDS;
+using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4.MLMask
 {
@@ -41,8 +39,8 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
                 var ms = new MemoryStream(File.ReadAllBytes(f));
                 var s = Path.GetExtension(f).ToLower();
-                var euncook = Enum.Parse<EUncookExtension>(Path.GetExtension(f).ToLower().Replace(".",""));
-                if(euncook != EUncookExtension.dds)
+                var euncook = Enum.Parse<EUncookExtension>(Path.GetExtension(f).ToLower().Replace(".", ""));
+                if (euncook != EUncookExtension.dds)
                 {
                     ms = new MemoryStream(DDSUtils.ConvertToDdsMemory(ms, euncook, DXGI_FORMAT.DXGI_FORMAT_R8_UNORM));
                 }
@@ -56,7 +54,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 DDSUtils.TryReadDdsHeader(ms, out header);
                 if (header.dwWidth != header.dwHeight)
                     throw new Exception($"Texture {f}: width={header.dwWidth},height={header.dwHeight} must have an aspect ratio of 1:1");
-                
+
                 // One bitset check
                 if ((((header.dwWidth - 1) & header.dwHeight) != 0) || (header.dwWidth == 0))
                     throw new Exception($"Texture {f}: width={header.dwWidth},height={header.dwHeight} must have dimensions in powers of 2");
@@ -72,9 +70,9 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 ms.Seek(headerLength, SeekOrigin.Begin);
                 Byte[] bytes = br.ReadBytes((int)(header.dwWidth * header.dwHeight));
                 bool whiteCheck = true;
-                for(int i = 0; i < bytes.Length; i++)
+                for (int i = 0; i < bytes.Length; i++)
                 {
-                    if(bytes[i] != 255)
+                    if (bytes[i] != 255)
                     {
                         whiteCheck = false;
                         break;
@@ -101,33 +99,32 @@ namespace WolvenKit.Modkit.RED4.MLMask
         {
             CR2WFile cr2w = new CR2WFile();
             {
-                var blob = new Multilayer_Mask(cr2w, null, "Multilayer_Mask") { IsSerialized = true };
-                blob.CookingPlatform = new CEnum<Enums.ECookingPlatform>(cr2w, blob, "cookingPlatform") { IsSerialized = true, Value = Enums.ECookingPlatform.PLATFORM_PC };
-                blob.CookingPlatform.EnumValueList.Add("PLATFORM_PC");
-                blob.RenderResourceBlob.RenderResourceBlobPC = new CHandle<IRenderResourceBlob>(cr2w, blob.RenderResourceBlob, "renderResourceBlobPC") { IsSerialized = true };
+                var blob = new Multilayer_Mask();
+                blob.CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC;
+                blob.RenderResourceBlob.RenderResourceBlobPC = new CHandle<IRenderResourceBlob>();
                 cr2w.CreateChunk(blob, 0);
             }
             {
-                var blob = new rendRenderMultilayerMaskBlobPC(cr2w, null, "rendRenderMultilayerMaskBlobPC") { IsSerialized = true };
-                blob.Header = new rendRenderMultilayerMaskBlobHeader(cr2w, blob, "header") { IsSerialized = true };
-                blob.Header.Version = new CUInt32(cr2w, blob.Header, "version") { IsSerialized = true, Value = 3 };
-                blob.Header.AtlasWidth = new CUInt32(cr2w, blob.Header, "atlasWidth") { IsSerialized = true, Value = mlmask._atlasWidth };
-                blob.Header.AtlasHeight = new CUInt32(cr2w, blob.Header, "atlasHeight") { IsSerialized = true, Value = mlmask._atlasHeight };
-                blob.Header.NumLayers = new CUInt32(cr2w, blob.Header, "numLayers") { IsSerialized = true, Value = (uint)mlmask.layers.Length };
-                blob.Header.MaskWidth = new CUInt32(cr2w, blob.Header, "maskWidth") { IsSerialized = true, Value = mlmask._widthHigh };
-                blob.Header.MaskHeight = new CUInt32(cr2w, blob.Header, "maskHeight") { IsSerialized = true, Value = mlmask._heightHigh };
-                blob.Header.MaskWidthLow = new CUInt32(cr2w, blob.Header, "maskWidthLow") { IsSerialized = true, Value = mlmask._widthLow };
-                blob.Header.MaskHeightLow = new CUInt32(cr2w, blob.Header, "maskHeightLow") { IsSerialized = true, Value = mlmask._heightLow };
-                blob.Header.MaskTileSize = new CUInt32(cr2w, blob.Header, "maskTileSize") { IsSerialized = true, Value = mlmask._tileSize };
-                blob.Header.Flags = new CUInt32(cr2w, blob.Header, "flags") { IsSerialized = true, Value = 2 };
-                blob.AtlasData = new serializationDeferredDataBuffer(cr2w, blob, "atlasData") { IsSerialized = true };
-                blob.AtlasData.Buffer = new CUInt16(cr2w, blob.AtlasData, "Buffer") { IsSerialized = true, Value = 1 };
-                blob.TilesData = new serializationDeferredDataBuffer(cr2w, blob, "tilesData") { IsSerialized = true };
-                blob.TilesData.Buffer = new CUInt16(cr2w, blob.TilesData, "Buffer") { IsSerialized = true, Value = 2 };
+                var blob = new rendRenderMultilayerMaskBlobPC();
+                blob.Header = new rendRenderMultilayerMaskBlobHeader() ;
+                blob.Header.Version = 3;
+                blob.Header.AtlasWidth = mlmask._atlasWidth;
+                blob.Header.AtlasHeight = mlmask._atlasHeight;
+                blob.Header.NumLayers = (uint)mlmask.layers.Length;
+                blob.Header.MaskWidth = mlmask._widthHigh;
+                blob.Header.MaskHeight = mlmask._heightHigh;
+                blob.Header.MaskWidthLow = mlmask._widthLow;
+                blob.Header.MaskHeightLow = mlmask._heightLow;
+                blob.Header.MaskTileSize = mlmask._tileSize;
+                blob.Header.Flags = 2;
+                blob.AtlasData = new serializationDeferredDataBuffer() ;
+                blob.AtlasData.Buffer = 1;
+                blob.TilesData = new serializationDeferredDataBuffer() ;
+                blob.TilesData.Buffer = 2;
 
                 cr2w.CreateChunk(blob, 1);
             }
-    (cr2w.Chunks[0].Data as Multilayer_Mask).RenderResourceBlob.RenderResourceBlobPC.SetReference(cr2w.Chunks[1]);
+    (cr2w.Chunks[0] as Multilayer_Mask).RenderResourceBlob.RenderResourceBlobPC.SetReference(cr2w.Chunks[1]);
 
             //test write
             var ms = new MemoryStream();
@@ -236,7 +233,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
                         tile._atlasInPosition = uint.MaxValue;
                         tile._atlasUnCompressed = new Byte[mlmask._atlasTileSize * mlmask._atlasTileSize];
 
-                        if(I == 0)
+                        if (I == 0)
                         {
                             tile._rangeMin = 255;
                             tile._rangeMax = 255;
@@ -266,7 +263,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
         }
         Byte GetPixelFromLayer(uint layerIdx, uint tx, uint ty, int x, int y)
         {
-            if(layerIdx == 0)
+            if (layerIdx == 0)
                 return 255;
 
             int xx = Convert.ToInt32(tx * mlmask._tileSize) + x;
@@ -499,7 +496,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
         }
         void CreateAtlasBuffer()
         {
-            if(mlmask._atlasWidth <= 0 || mlmask._atlasHeight <= 0)
+            if (mlmask._atlasWidth <= 0 || mlmask._atlasHeight <= 0)
             {
                 throw new Exception("Unable to generate MLmask atlas data");
             }
@@ -949,7 +946,9 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
                 if (fX > fY)
                 {
-                    float f = fX; fX = fY; fY = f;
+                    float f = fX;
+                    fX = fY;
+                    fY = f;
                 }
 
                 if ((dX * dX < (1.0f / 64.0f)) && (dY * dY < (1.0f / 64.0f)))

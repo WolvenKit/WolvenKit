@@ -1,13 +1,12 @@
-using WolvenKit.RED4.CR2W;
 using System.Collections.Generic;
-using System.Linq;
-using WolvenKit.RED4.Types;
 using System.IO;
-using WolvenKit.Common.Oodle;
+using System.Linq;
 using Newtonsoft.Json;
 using WolvenKit.Common.Conversion;
-using WolvenKit.Common.Tools;
+using WolvenKit.Common.Oodle;
 using WolvenKit.Common.RED4.Compiled;
+using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -16,16 +15,16 @@ namespace WolvenKit.Modkit.RED4
         public bool DumpEntityPackageAsJson(Stream entStream, FileInfo outfile)
         {
             string outpath = Path.ChangeExtension(outfile.FullName, ".json");
-            var cr2w = _wolvenkitFileService.TryReadRED4File(entStream);
-            if (cr2w == null || (!cr2w.Chunks.Select(_ => _.Data).OfType<entEntityTemplate>().Any() && !cr2w.Chunks.Select(_ => _.Data).OfType<appearanceAppearanceResource>().Any()))
+            var cr2w = _wolvenkitFileService.TryReadRed4File(entStream);
+            if (cr2w == null || (!cr2w.Chunks.OfType<entEntityTemplate>().Any() && !cr2w.Chunks.OfType<appearanceAppearanceResource>().Any()))
             {
                 return false;
             }
-            if (cr2w.Chunks.Select(_ => _.Data).OfType<entEntityTemplate>().Any())
+            if (cr2w.Chunks.OfType<entEntityTemplate>().Any())
             {
                 return DumpEntPackage(cr2w, entStream, outpath);
             }
-            if (cr2w.Chunks.Select(_ => _.Data).OfType<appearanceAppearanceResource>().Any())
+            if (cr2w.Chunks.OfType<appearanceAppearanceResource>().Any())
             {
                 return DumpAppPackage(cr2w, entStream, outpath);
             }
@@ -33,15 +32,15 @@ namespace WolvenKit.Modkit.RED4
         }
         private bool DumpEntPackage(CR2WFile cr2w, Stream entStream, string outfile)
         {
-            if (cr2w == null || !cr2w.Chunks.Select(_=>_.Data).OfType<entEntityTemplate>().Any())
+            if (cr2w == null || !cr2w.Chunks.OfType<entEntityTemplate>().Any())
             {
                 return false;
             }
-            var blob = cr2w.Chunks.Select(_ => _.Data).OfType<entEntityTemplate>().First();
+            var blob = cr2w.Chunks.OfType<entEntityTemplate>().First();
 
-            if(blob.CompiledData.IsSerialized)
+            if (blob.CompiledData.IsSerialized)
             {
-                var bufferIdx = blob.CompiledData.Buffer.Value;
+                var bufferIdx = blob.CompiledData.Buffer;
                 var buffer = cr2w.Buffers[bufferIdx - 1];
                 entStream.Seek(buffer.Offset, SeekOrigin.Begin);
                 var packageStream = new MemoryStream();
@@ -58,17 +57,17 @@ namespace WolvenKit.Modkit.RED4
         }
         private bool DumpAppPackage(CR2WFile cr2w, Stream appStream, string outfile)
         {
-            if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<appearanceAppearanceDefinition>().Any())
+            if (cr2w == null || !cr2w.Chunks.OfType<appearanceAppearanceDefinition>().Any())
             {
                 return false;
             }
-            var blobs = cr2w.Chunks.Select(_ => _.Data).OfType<appearanceAppearanceDefinition>().ToList();
+            var blobs = cr2w.Chunks.OfType<appearanceAppearanceDefinition>().ToList();
             List<RedFileDto> datas = new List<RedFileDto>();
-            foreach(var blob in blobs)
+            foreach (var blob in blobs)
             {
                 if (blob.CompiledData.IsSerialized)
                 {
-                    var bufferIdx = blob.CompiledData.Buffer.Value;
+                    var bufferIdx = blob.CompiledData.Buffer;
                     var buffer = cr2w.Buffers[bufferIdx - 1];
                     appStream.Seek(buffer.Offset, SeekOrigin.Begin);
                     var packageStream = new MemoryStream();
@@ -80,9 +79,9 @@ namespace WolvenKit.Modkit.RED4
                     datas.Add(new RedFileDto(package));
                 }
             }
-            if(datas.Count > 1)
+            if (datas.Count > 1)
             {
-                var data = JsonConvert.SerializeObject(datas,Formatting.Indented);
+                var data = JsonConvert.SerializeObject(datas, Formatting.Indented);
                 File.WriteAllText(outfile, data);
                 return true;
             }

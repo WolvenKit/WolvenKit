@@ -7,17 +7,18 @@ using SharpGLTF.Geometry.VertexTypes;
 using SharpGLTF.Materials;
 using SharpGLTF.Scenes;
 using SharpGLTF.Schema2;
-using WolvenKit.Common;
+using SharpGLTF.Validation;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
-using SharpGLTF.Validation;
 
 namespace CP77.CR2W
 {
+    using static WolvenKit.RED4.Types.Enums;
     using Vec2 = System.Numerics.Vector2;
     using Vec3 = System.Numerics.Vector3;
     using Vec4 = System.Numerics.Vector4;
@@ -32,9 +33,9 @@ namespace CP77.CR2W
         }
         public bool ExportMeshPreviewer(Stream meshStream, FileInfo outFile)
         {
-            var cr2w = _red4ParserService.TryReadRED4File(meshStream);
+            var cr2w = _red4ParserService.TryReadRed4File(meshStream);
 
-            if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
+            if (cr2w == null || !cr2w.Chunks.OfType<rendRenderMeshBlob>().Any())
             {
                 return false;
             }
@@ -54,9 +55,9 @@ namespace CP77.CR2W
                 }
             }
 
-            var rendblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
+            var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
-            var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer.Value - 1];
+            var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer - 1];
             meshStream.Seek(rendbuffer.Offset, SeekOrigin.Begin);
             var ms = new MemoryStream();
             meshStream.DecompressAndCopySegment(ms, rendbuffer.DiskSize, rendbuffer.MemSize);
@@ -73,18 +74,18 @@ namespace CP77.CR2W
         }
         public bool ExportMesh(Stream meshStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
         {
-            var cr2w = _red4ParserService.TryReadRED4File(meshStream);
+            var cr2w = _red4ParserService.TryReadRed4File(meshStream);
 
-            if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
+            if (cr2w == null || !cr2w.Chunks.OfType<CMesh>().Any() || !cr2w.Chunks.OfType<rendRenderMeshBlob>().Any())
             {
                 return false;
             }
 
-            var rendblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
+            var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
             RawArmature Rig = GetOrphanRig(rendblob);
 
-            var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer.Value - 1];
+            var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer - 1];
             meshStream.Seek(rendbuffer.Offset, SeekOrigin.Begin);
             var ms = new MemoryStream();
             meshStream.DecompressAndCopySegment(ms, rendbuffer.DiskSize, rendbuffer.MemSize);
@@ -119,15 +120,15 @@ namespace CP77.CR2W
         }
         public bool ExportMeshWithoutRig(Stream meshStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
         {
-            var cr2w = _red4ParserService.TryReadRED4File(meshStream);
+            var cr2w = _red4ParserService.TryReadRed4File(meshStream);
 
-            if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
+            if (cr2w == null || !cr2w.Chunks.OfType<CMesh>().Any() || !cr2w.Chunks.OfType<rendRenderMeshBlob>().Any())
             {
                 return false;
             }
 
-            var rendblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
-            var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer.Value - 1];
+            var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
+            var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer - 1];
             meshStream.Seek(rendbuffer.Offset, SeekOrigin.Begin);
             var ms = new MemoryStream();
             meshStream.DecompressAndCopySegment(ms, rendbuffer.DiskSize, rendbuffer.MemSize);
@@ -162,12 +163,12 @@ namespace CP77.CR2W
 
             foreach (var meshStream in meshStreamS)
             {
-                var cr2w = _red4ParserService.TryReadRED4File(meshStream);
-                if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
+                var cr2w = _red4ParserService.TryReadRed4File(meshStream);
+                if (cr2w == null || !cr2w.Chunks.OfType<CMesh>().Any() || !cr2w.Chunks.OfType<rendRenderMeshBlob>().Any())
                     continue;
 
-                var rendblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
-                var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer.Value - 1];
+                var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
+                var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer - 1];
                 meshStream.Seek(rendbuffer.Offset, SeekOrigin.Begin);
                 var ms = new MemoryStream();
                 meshStream.DecompressAndCopySegment(ms, rendbuffer.DiskSize, rendbuffer.MemSize);
@@ -203,15 +204,15 @@ namespace CP77.CR2W
         }
         public bool ExportMeshWithRig(Stream meshStream, Stream rigStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
         {
-            var cr2w = _red4ParserService.TryReadRED4File(meshStream);
+            var cr2w = _red4ParserService.TryReadRed4File(meshStream);
 
-            if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
+            if (cr2w == null || !cr2w.Chunks.OfType<CMesh>().Any() || !cr2w.Chunks.OfType<rendRenderMeshBlob>().Any())
             {
                 return false;
             }
 
-            var rendblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
-            var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer.Value - 1];
+            var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
+            var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer - 1];
             meshStream.Seek(rendbuffer.Offset, SeekOrigin.Begin);
             var ms = new MemoryStream();
             meshStream.DecompressAndCopySegment(ms, rendbuffer.DiskSize, rendbuffer.MemSize);
@@ -222,7 +223,7 @@ namespace CP77.CR2W
             UpdateSkinningParamCloth(ref expMeshes, meshStream, cr2w);
 
             RawArmature meshRig = GetOrphanRig(rendblob);
-            RawArmature Rig = RIG.ProcessRig(_red4ParserService.TryReadRED4File(rigStream));
+            RawArmature Rig = RIG.ProcessRig(_red4ParserService.TryReadRed4File(rigStream));
 
             UpdateMeshJoints(ref expMeshes, Rig, meshRig);
 
@@ -256,7 +257,7 @@ namespace CP77.CR2W
             List<RawArmature> Rigs = new List<RawArmature>();
             foreach (var rigStream in rigStreamS)
             {
-                RawArmature Rig = RIG.ProcessRig(_red4ParserService.TryReadRED4File(rigStream));
+                RawArmature Rig = RIG.ProcessRig(_red4ParserService.TryReadRed4File(rigStream));
                 Rigs.Add(Rig);
 
                 rigStream.Dispose();
@@ -268,14 +269,14 @@ namespace CP77.CR2W
 
             foreach (var meshStream in meshStreamS)
             {
-                var cr2w = _red4ParserService.TryReadRED4File(meshStream);
-                if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
+                var cr2w = _red4ParserService.TryReadRed4File(meshStream);
+                if (cr2w == null || !cr2w.Chunks.OfType<CMesh>().Any() || !cr2w.Chunks.OfType<rendRenderMeshBlob>().Any())
                 {
                     continue;
                 }
 
-                var rendblob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
-                var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer.Value - 1];
+                var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
+                var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer - 1];
                 meshStream.Seek(rendbuffer.Offset, SeekOrigin.Begin);
                 var ms = new MemoryStream();
                 meshStream.DecompressAndCopySegment(ms, rendbuffer.DiskSize, rendbuffer.MemSize);
@@ -319,59 +320,58 @@ namespace CP77.CR2W
             Vector4 redquantScale = rendmeshblob.Header.QuantizationScale;
             Vector4 redquantTrans = rendmeshblob.Header.QuantizationOffset;
 
-            meshesInfo.quantScale = new Vec4(redquantScale.X.Value, redquantScale.Y.Value, redquantScale.Z.Value, redquantScale.W.Value);
-            meshesInfo.quantTrans = new Vec4(redquantTrans.X.Value, redquantTrans.Y.Value, redquantTrans.Z.Value, redquantTrans.W.Value);
+            meshesInfo.quantScale = new Vec4(redquantScale.X, redquantScale.Y, redquantScale.Z, redquantScale.W);
+            meshesInfo.quantTrans = new Vec4(redquantTrans.X, redquantTrans.Y, redquantTrans.Z, redquantTrans.W);
 
-            meshesInfo.vertBufferSize = rendmeshblob.Header.VertexBufferSize.Value;
-            meshesInfo.indexBufferOffset = rendmeshblob.Header.IndexBufferOffset.Value;
-            meshesInfo.indexBufferSize = rendmeshblob.Header.IndexBufferSize.Value;
+            meshesInfo.vertBufferSize = rendmeshblob.Header.VertexBufferSize;
+            meshesInfo.indexBufferOffset = rendmeshblob.Header.IndexBufferOffset;
+            meshesInfo.indexBufferSize = rendmeshblob.Header.IndexBufferSize;
 
             for (int i = 0; i < meshesInfo.meshCount; i++)
             {
-                meshesInfo.vertCounts[i] = rendmeshblob.Header.RenderChunkInfos[i].NumVertices.Value;
-                meshesInfo.indCounts[i] = rendmeshblob.Header.RenderChunkInfos[i].NumIndices.Value;
-                meshesInfo.posnOffsets[i] = rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[0].Value;
-                meshesInfo.unknownOffsets[i] = rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[4].Value;
+                meshesInfo.vertCounts[i] = rendmeshblob.Header.RenderChunkInfos[i].NumVertices;
+                meshesInfo.indCounts[i] = rendmeshblob.Header.RenderChunkInfos[i].NumIndices;
+                meshesInfo.posnOffsets[i] = rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[0];
+                meshesInfo.unknownOffsets[i] = rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[4];
 
                 var cv = rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices;
                 for (int e = 0; e < cv.VertexLayout.Elements.Count; e++)
                 {
-                    if (cv.VertexLayout.Elements[e].Usage.EnumValueList[0] == "PS_Normal")
+                    if (cv.VertexLayout.Elements[e].Usage.Value == Enums.GpuWrapApiVertexPackingePackingUsage.PS_Normal)
                     {
-                        meshesInfo.normalOffsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex.Value].Value;
+                        meshesInfo.normalOffsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex];
                     }
-                    if (cv.VertexLayout.Elements[e].Usage.EnumValueList[0] == "PS_Tangent")
+                    if (cv.VertexLayout.Elements[e].Usage.Value == Enums.GpuWrapApiVertexPackingePackingUsage.PS_Tangent)
                     {
-                        meshesInfo.tangentOffsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex.Value].Value;
+                        meshesInfo.tangentOffsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex];
                     }
-                    if (cv.VertexLayout.Elements[e].Usage.EnumValueList[0] == "PS_Color")
+                    if (cv.VertexLayout.Elements[e].Usage.Value == Enums.GpuWrapApiVertexPackingePackingUsage.PS_Color)
                     {
-                        meshesInfo.colorOffsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex.Value].Value;
+                        meshesInfo.colorOffsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex];
                     }
-                    if (cv.VertexLayout.Elements[e].Usage.EnumValueList[0] == "PS_TexCoord")
+                    if (cv.VertexLayout.Elements[e].Usage.Value == Enums.GpuWrapApiVertexPackingePackingUsage.PS_TexCoord)
                     {
                         if (meshesInfo.tex0Offsets[i] == 0)
-                            meshesInfo.tex0Offsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex.Value].Value;
+                            meshesInfo.tex0Offsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex];
                         else
-                            meshesInfo.tex1Offsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex.Value].Value;
+                            meshesInfo.tex1Offsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex];
                     }
                 }
 
-                if (rendmeshblob.Header.RenderChunkInfos[i].ChunkIndices.TeOffset == null)
+                if (rendmeshblob.Header.RenderChunkInfos[i].ChunkIndices.TeOffset == 0)
                 {
-                    meshesInfo.indicesOffsets[i] = rendmeshblob.Header.IndexBufferOffset.Value;
+                    meshesInfo.indicesOffsets[i] = rendmeshblob.Header.IndexBufferOffset;
                 }
                 else
                 {
-                    meshesInfo.indicesOffsets[i] = rendmeshblob.Header.IndexBufferOffset.Value + rendmeshblob.Header.RenderChunkInfos[i].ChunkIndices.TeOffset.Value;
+                    meshesInfo.indicesOffsets[i] = rendmeshblob.Header.IndexBufferOffset + rendmeshblob.Header.RenderChunkInfos[i].ChunkIndices.TeOffset;
                 }
-                meshesInfo.vpStrides[i] = rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.SlotStrides[0].Value;
-                meshesInfo.LODLvl[i] = rendmeshblob.Header.RenderChunkInfos[i].LodMask.Value;
+                meshesInfo.vpStrides[i] = rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.SlotStrides[0];
+                meshesInfo.LODLvl[i] = rendmeshblob.Header.RenderChunkInfos[i].LodMask;
             }
 
             int count = 0;
             UInt32 counter = 0;
-            string checker = string.Empty;
             // getting number of weights for the meshes
             for (int i = 0; i < meshesInfo.meshCount; i++)
             {
@@ -379,8 +379,7 @@ namespace CP77.CR2W
                 counter = 0;
                 for (int e = 0; e < count; e++)
                 {
-                    checker = rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].Usage.EnumValueList[0];
-                    if (checker == "PS_SkinIndices")
+                    if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].Usage.Value == GpuWrapApiVertexPackingePackingUsage.PS_SkinIndices)
                         counter++;
                 }
                 meshesInfo.weightCounts[i] = counter * 4;
@@ -393,29 +392,28 @@ namespace CP77.CR2W
 
                 for (int e = 0; e < count; e++)
                 {
-                    checker = rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].Usage.EnumValueList[0];
-                    if (checker == "PS_ExtraData")
+                    if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].Usage.Value == GpuWrapApiVertexPackingePackingUsage.PS_ExtraData)
                     {
-                        if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].StreamIndex.Value == 0)
+                        if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].StreamIndex == 0)
                             meshesInfo.garmentSupportExists[i] = true;
                     }
                 }
-                if(!rendmeshblob.cr2w.Chunks.Select(_=>_.Data).OfType<meshMeshParamGarmentSupport>().Any())
+                if (!rendmeshblob.cr2w.Chunks.OfType<meshMeshParamGarmentSupport>().Any())
                 {
                     meshesInfo.garmentSupportExists[i] = false;
                 }
             }
 
             meshesInfo.appearances = new Dictionary<string, string[]>();
-            var apps = rendmeshblob.cr2w.Chunks.Select(_ => _.Data).OfType<meshMeshAppearance>().ToList();
+            var apps = rendmeshblob.cr2w.Chunks.OfType<meshMeshAppearance>().ToList();
             for (int i = 0; i < apps.Count; i++)
             {
                 string[] materialNames = new string[apps[i].ChunkMaterials.Count];
                 for (int e = 0; e < apps[i].ChunkMaterials.Count; e++)
                 {
-                    materialNames[e] = apps[i].ChunkMaterials[e].Value;
+                    materialNames[e] = apps[i].ChunkMaterials[e];
                 }
-                meshesInfo.appearances.Add(apps[i].Name.Value, materialNames);
+                meshesInfo.appearances.Add(apps[i].Name, materialNames);
             }
 
             return meshesInfo;
@@ -620,7 +618,7 @@ namespace CP77.CR2W
         public static void UpdateMeshJoints(ref List<RawMeshContainer> Meshes, RawArmature newRig, RawArmature oldRig)
         {
             // updating mesh bone indices
-            if(newRig != null && newRig.BoneCount > 0 && oldRig != null && oldRig.BoneCount > 0)
+            if (newRig != null && newRig.BoneCount > 0 && oldRig != null && oldRig.BoneCount > 0)
             {
                 for (int i = 0; i < Meshes.Count; i++)
                 {
@@ -628,7 +626,7 @@ namespace CP77.CR2W
                     {
                         for (int eye = 0; eye < Meshes[i].weightCount; eye++)
                         {
-                            if(Meshes[i].boneindices[e, eye] >= oldRig.BoneCount && Meshes[i].weights[e, eye] == 0)
+                            if (Meshes[i].boneindices[e, eye] >= oldRig.BoneCount && Meshes[i].weights[e, eye] == 0)
                             {
                                 Meshes[i].boneindices[e, eye] = 0;
                             }
@@ -668,7 +666,7 @@ namespace CP77.CR2W
             mat.WithPBRMetallicRoughness().WithDefault();
             mat.DoubleSided = true;
             List<Skin> skins = new List<Skin>();
-            if(Rig != null)
+            if (Rig != null)
             {
                 var skin = model.CreateSkin();
                 skin.BindJoints(RIG.ExportNodes(ref model, Rig).Values.ToArray());
@@ -722,10 +720,10 @@ namespace CP77.CR2W
                     bw.Write(mesh.texCoords1[i].X);
                     bw.Write(mesh.texCoords1[i].Y);
                 }
-                
+
                 if (mesh.weightCount > 0)
                 {
-                    if(Rig != null)
+                    if (Rig != null)
                     {
                         for (int i = 0; i < mesh.positions.Length; i++)
                         {
@@ -760,7 +758,7 @@ namespace CP77.CR2W
                         }
                     }
                 }
-                for(int i = 0; i < mesh.indices.Length; i+= 3)
+                for (int i = 0; i < mesh.indices.Length; i += 3)
                 {
                     bw.Write(Convert.ToUInt16(mesh.indices[i + 1]));
                     bw.Write(Convert.ToUInt16(mesh.indices[i + 0]));
@@ -791,7 +789,7 @@ namespace CP77.CR2W
                     prim.SetVertexAccessor("POSITION", acc);
                     BuffViewoffset += mesh.positions.Length * 12;
                 }
-                if(mesh.normals.Length > 0)
+                if (mesh.normals.Length > 0)
                 {
                     var acc = model.CreateAccessor();
                     var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.normals.Length * 12);
@@ -839,9 +837,9 @@ namespace CP77.CR2W
                     prim.SetVertexAccessor("TEXCOORD_1", acc);
                     BuffViewoffset += mesh.texCoords1.Length * 8;
                 }
-                if(mesh.weightCount > 0)
+                if (mesh.weightCount > 0)
                 {
-                    if(Rig != null)
+                    if (Rig != null)
                     {
                         {
                             var acc = model.CreateAccessor();
@@ -888,7 +886,7 @@ namespace CP77.CR2W
                 if (Rig != null && mesh.weightCount > 0)
                     nod.Skin = skins[0];
 
-                if(mesh.garmentMorph.Length > 0)
+                if (mesh.garmentMorph.Length > 0)
                 {
                     string[] arr = { "GarmentSupport" };
                     var obj = new { materialNames = mesh.materialNames, targetNames = arr };
@@ -899,7 +897,7 @@ namespace CP77.CR2W
                     var obj = new { materialNames = mesh.materialNames };
                     mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
                 }
-                if(mesh.garmentMorph.Length > 0)
+                if (mesh.garmentMorph.Length > 0)
                 {
                     var acc = model.CreateAccessor();
                     var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.garmentMorph.Length * 12);
@@ -963,17 +961,17 @@ namespace CP77.CR2W
                 for (int i = 0; i < Rig.BoneCount; i++)
                 {
                     var vec = rendmeshblob.Header.BonePositions[i];
-                    Rig.LocalPosn[i] = new Vec3(vec.X.Value, vec.Z.Value, -vec.Y.Value);
+                    Rig.LocalPosn[i] = new Vec3(vec.X, vec.Z, -vec.Y);
                     Rig.LocalRot[i] = System.Numerics.Quaternion.Identity;
                     Rig.LocalScale[i] = Vec3.One;
                     Rig.Parent[i] = -1;
                 }
-                if(rendmeshblob.cr2w.Chunks.Select(_=>_.Data).OfType<CMesh>().Any())
+                if (rendmeshblob.cr2w.Chunks.OfType<CMesh>().Any())
                 {
-                    var meshBlob = rendmeshblob.cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First();
+                    var meshBlob = rendmeshblob.cr2w.Chunks.OfType<CMesh>().First();
                     for (int i = 0; i < Rig.BoneCount; i++)
                     {
-                        Rig.Names[i] = meshBlob.BoneNames[i].Value;
+                        Rig.Names[i] = meshBlob.BoneNames[i];
                     }
                 }
                 return Rig;
@@ -982,14 +980,14 @@ namespace CP77.CR2W
         }
         private static void RemoveDoubleFaces(ref List<RawMeshContainer> Meshes)
         {
-            for(int i = 0; i < Meshes.Count; i++)
+            for (int i = 0; i < Meshes.Count; i++)
             {
                 var idx0 = Meshes[i].indices[0];
                 var idx1 = Meshes[i].indices[1];
                 var idx2 = Meshes[i].indices[2];
 
                 bool doubled = false;
-                for (int j = 3; j < Meshes[i].indices.Length; j+= 3)
+                for (int j = 3; j < Meshes[i].indices.Length; j += 3)
                 {
                     var bool0 = (idx0 == Meshes[i].indices[j]) || (idx0 == Meshes[i].indices[j + 1]) || (idx0 == Meshes[i].indices[j + 2]);
                     var bool1 = (idx1 == Meshes[i].indices[j]) || (idx1 == Meshes[i].indices[j + 1]) || (idx1 == Meshes[i].indices[j + 2]);
@@ -1001,7 +999,7 @@ namespace CP77.CR2W
                         break;
                     }
                 }
-                if(doubled)
+                if (doubled)
                 {
                     List<uint> indices = new List<uint>();
                     for (int j = 0; j < Meshes[i].indices.Length; j += 3)
@@ -1016,7 +1014,7 @@ namespace CP77.CR2W
                         var n2 = Meshes[i].normals[Meshes[i].indices[j + 2]];
                         var avg = Vec3.Normalize(new Vec3((n0.X + n1.X + n2.X) / 3, (n0.Y + n1.Y + n2.Y) / 3, (n0.Z + n1.Z + n2.Z) / 3));
 
-                        if(Vec3.Dot(cross,avg) <= 0)
+                        if (Vec3.Dot(cross, avg) <= 0)
                         {
                             indices.Add(Meshes[i].indices[j]);
                             indices.Add(Meshes[i].indices[j + 1]);
@@ -1028,11 +1026,11 @@ namespace CP77.CR2W
                 }
             }
         }
-        public static void UpdateSkinningParamCloth(ref List<RawMeshContainer> meshes,Stream ms, CR2WFile cr2w)
+        public static void UpdateSkinningParamCloth(ref List<RawMeshContainer> meshes, Stream ms, CR2WFile cr2w)
         {
-            if (cr2w.Chunks.Select(_ => _.Data).OfType<meshMeshParamCloth>().Any())
+            if (cr2w.Chunks.OfType<meshMeshParamCloth>().Any())
             {
-                var blob = cr2w.Chunks.Select(_ => _.Data).OfType<meshMeshParamCloth>().First();
+                var blob = cr2w.Chunks.OfType<meshMeshParamCloth>().First();
 
                 for (int i = 0; (i < blob.Chunks.Count) && (i < meshes.Count); i++)
                 {
@@ -1048,7 +1046,7 @@ namespace CP77.CR2W
                     meshes[i].weights = new float[meshes[i].positions.Length, meshes[i].weightCount];
                     if (blob.Chunks[i].SkinIndices.IsSerialized)
                     {
-                        var bufferIdx = blob.Chunks[i].SkinIndices.Buffer.Value;
+                        var bufferIdx = blob.Chunks[i].SkinIndices.Buffer;
                         var buffer = cr2w.Buffers[bufferIdx - 1];
                         ms.Seek(buffer.Offset, SeekOrigin.Begin);
                         var stream = new MemoryStream();
@@ -1065,7 +1063,7 @@ namespace CP77.CR2W
                     }
                     if (blob.Chunks[i].SkinWeights.IsSerialized)
                     {
-                        var bufferIdx = blob.Chunks[i].SkinWeights.Buffer.Value;
+                        var bufferIdx = blob.Chunks[i].SkinWeights.Buffer;
                         var buffer = cr2w.Buffers[bufferIdx - 1];
                         ms.Seek(buffer.Offset, SeekOrigin.Begin);
                         var stream = new MemoryStream();
@@ -1082,7 +1080,7 @@ namespace CP77.CR2W
                     }
                     if (blob.Chunks[i].SkinIndicesExt.IsSerialized)
                     {
-                        var bufferIdx = blob.Chunks[i].SkinIndicesExt.Buffer.Value;
+                        var bufferIdx = blob.Chunks[i].SkinIndicesExt.Buffer;
                         var buffer = cr2w.Buffers[bufferIdx - 1];
                         ms.Seek(buffer.Offset, SeekOrigin.Begin);
                         var stream = new MemoryStream();
@@ -1099,7 +1097,7 @@ namespace CP77.CR2W
                     }
                     if (blob.Chunks[i].SkinWeightsExt.IsSerialized)
                     {
-                        var bufferIdx = blob.Chunks[i].SkinWeightsExt.Buffer.Value;
+                        var bufferIdx = blob.Chunks[i].SkinWeightsExt.Buffer;
                         var buffer = cr2w.Buffers[bufferIdx - 1];
                         ms.Seek(buffer.Offset, SeekOrigin.Begin);
                         var stream = new MemoryStream();
@@ -1134,13 +1132,13 @@ namespace CP77.CR2W
                     }
                 }
             }
-            if (cr2w.Chunks.Select(_ => _.Data).OfType<meshMeshParamCloth_Graphical>().Any())
+            if (cr2w.Chunks.OfType<meshMeshParamCloth_Graphical>().Any())
             {
-                var blob = cr2w.Chunks.Select(_ => _.Data).OfType<meshMeshParamCloth_Graphical>().First();
+                var blob = cr2w.Chunks.OfType<meshMeshParamCloth_Graphical>().First();
 
                 for (int i = 0; (i < blob.Chunks.Count) && (i < meshes.Count); i++)
                 {
-                    if(blob.Chunks[i].Simulation.Count > 0 && meshes[i].colors1.Length != meshes[i].positions.Length)
+                    if (blob.Chunks[i].Simulation.Count > 0 && meshes[i].colors1.Length != meshes[i].positions.Length)
                         meshes[i].colors1 = new Vec4[meshes[i].positions.Length];
 
                     for (int e = 0; e < meshes[i].colors1.Length; e++)
@@ -1149,7 +1147,7 @@ namespace CP77.CR2W
                     }
                     for (int e = 0; e < blob.Chunks[i].Simulation.Count; e++)
                     {
-                        meshes[i].colors1[blob.Chunks[i].Simulation[e].Value].X = 1f;
+                        meshes[i].colors1[blob.Chunks[i].Simulation[e]].X = 1f;
                     }
                     if (blob.Chunks[i].SkinIndices.IsSerialized && blob.Chunks[i].SkinWeights.IsSerialized)
                     {
@@ -1163,7 +1161,7 @@ namespace CP77.CR2W
                     meshes[i].weights = new float[meshes[i].positions.Length, meshes[i].weightCount];
                     if (blob.Chunks[i].SkinIndices.IsSerialized)
                     {
-                        var bufferIdx = blob.Chunks[i].SkinIndices.Buffer.Value;
+                        var bufferIdx = blob.Chunks[i].SkinIndices.Buffer;
                         var buffer = cr2w.Buffers[bufferIdx - 1];
                         ms.Seek(buffer.Offset, SeekOrigin.Begin);
                         var stream = new MemoryStream();
@@ -1180,7 +1178,7 @@ namespace CP77.CR2W
                     }
                     if (blob.Chunks[i].SkinWeights.IsSerialized)
                     {
-                        var bufferIdx = blob.Chunks[i].SkinWeights.Buffer.Value;
+                        var bufferIdx = blob.Chunks[i].SkinWeights.Buffer;
                         var buffer = cr2w.Buffers[bufferIdx - 1];
                         ms.Seek(buffer.Offset, SeekOrigin.Begin);
                         var stream = new MemoryStream();
@@ -1197,7 +1195,7 @@ namespace CP77.CR2W
                     }
                     if (blob.Chunks[i].SkinIndicesExt.IsSerialized)
                     {
-                        var bufferIdx = blob.Chunks[i].SkinIndicesExt.Buffer.Value;
+                        var bufferIdx = blob.Chunks[i].SkinIndicesExt.Buffer;
                         var buffer = cr2w.Buffers[bufferIdx - 1];
                         ms.Seek(buffer.Offset, SeekOrigin.Begin);
                         var stream = new MemoryStream();
@@ -1214,7 +1212,7 @@ namespace CP77.CR2W
                     }
                     if (blob.Chunks[i].SkinWeightsExt.IsSerialized)
                     {
-                        var bufferIdx = blob.Chunks[i].SkinWeightsExt.Buffer.Value;
+                        var bufferIdx = blob.Chunks[i].SkinWeightsExt.Buffer;
                         var buffer = cr2w.Buffers[bufferIdx - 1];
                         ms.Seek(buffer.Offset, SeekOrigin.Begin);
                         var stream = new MemoryStream();

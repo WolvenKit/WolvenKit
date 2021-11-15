@@ -160,7 +160,7 @@ namespace WolvenKit.Modkit.RED4
                 uint lastoffsetidx;
                 var flags = 0;
 
-                var cr2w = _wolvenkitFileService.TryReadRED4FileHeaders(fileBinaryReader);
+                var cr2w = _wolvenkitFileService.TryReadRed4FileHeaders(fileBinaryReader);
                 if (cr2w != null)
                 {
                     //register imports

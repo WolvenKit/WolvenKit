@@ -9,8 +9,8 @@ namespace WolvenKit.Common.Services
     {
         CompiledPackage TryReadCompiledPackage(Stream stream);
 
-        CR2WFile TryReadRED4File(Stream stream);
+        CR2WFile TryReadRed4File(Stream stream);
 
-        CR2WFile TryReadRED4FileHeaders(Stream stream);
+        CR2WFile TryReadRed4FileHeaders(Stream stream);
     }
 }

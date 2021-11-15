@@ -1,18 +1,15 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using WolvenKit.RED4.CR2W;
+using SharpGLTF.Schema2;
+using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Oodle;
+using WolvenKit.Modkit.RED4.Animation;
+using WolvenKit.Modkit.RED4.GeneralStructs;
+using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
-using WolvenKit.Modkit.RED4.RigFile;
-using WolvenKit.Modkit.RED4.GeneralStructs;
-using WolvenKit.Common.FNV1A;
-using SharpGLTF.Schema2;
-using WolvenKit.Common.Oodle;
-using WolvenKit.Modkit.RED4;
-using WolvenKit.Modkit.RED4.Animation;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -20,18 +17,18 @@ namespace WolvenKit.Modkit.RED4
     {
         public bool ExportAnim(Stream animStream, List<Archive> archives, FileInfo outfile, bool isGLBinary = true)
         {
-            var cr2w = _wolvenkitFileService.TryReadRED4File(animStream);
+            var cr2w = _wolvenkitFileService.TryReadRed4File(animStream);
 
-            if (!cr2w.Chunks.Select(_ => _.Data).OfType<animAnimSet>().Any())
+            if (!cr2w.Chunks.OfType<animAnimSet>().Any())
             {
                 return false;
             }
-            var blob = cr2w.Chunks.Select(_ => _.Data).OfType<animAnimSet>().First();
+            var blob = cr2w.Chunks.OfType<animAnimSet>().First();
 
             List<MemoryStream> animDataBuffers = new List<MemoryStream>();
-            foreach(var chk in blob.AnimationDataChunks)
+            foreach (var chk in blob.AnimationDataChunks)
             {
-                UInt16 bufferIdx = chk.Buffer.Buffer.Value;
+                UInt16 bufferIdx = chk.Buffer.Buffer;
                 var b = cr2w.Buffers[bufferIdx - 1];
                 animStream.Seek(b.Offset, SeekOrigin.Begin);
                 var ms = new MemoryStream();
@@ -47,7 +44,7 @@ namespace WolvenKit.Modkit.RED4
                 {
                     var ms = new MemoryStream();
                     ModTools.ExtractSingleToStream(ar, hash, ms);
-                    Rig = RIG.ProcessRig(_wolvenkitFileService.TryReadRED4File(ms));
+                    Rig = RIG.ProcessRig(_wolvenkitFileService.TryReadRed4File(ms));
                     break;
                 }
             }
@@ -66,7 +63,7 @@ namespace WolvenKit.Modkit.RED4
             var skin = model.CreateSkin();
             skin.BindJoints(RIG.ExportNodes(ref model, Rig).Values.ToArray());
 
-            for (int i = 0; i < blob.Animations.Count;i++)
+            for (int i = 0; i < blob.Animations.Count; i++)
             {
                 var setEntry = (blob.Animations[i].GetReference().Data as animAnimSetEntry);
                 var animAnimDes = (setEntry.Animation.GetReference().Data as animAnimation);
@@ -80,7 +77,7 @@ namespace WolvenKit.Modkit.RED4
                         var defferedBuffer = new MemoryStream();
                         if (animBuff.InplaceCompressedBuffer.IsSerialized)
                         {
-                            var bufferIdx = animBuff.InplaceCompressedBuffer.Buffer.Value;
+                            var bufferIdx = animBuff.InplaceCompressedBuffer.Buffer;
                             var b = cr2w.Buffers[bufferIdx - 1];
                             animStream.Seek(b.Offset, SeekOrigin.Begin);
                             animStream.DecompressAndCopySegment(defferedBuffer, b.DiskSize, b.MemSize);
@@ -97,13 +94,13 @@ namespace WolvenKit.Modkit.RED4
                         }
                         else
                         {
-                            var bufferIdx = animBuff.DefferedBuffer.Buffer.Value;
+                            var bufferIdx = animBuff.DefferedBuffer.Buffer;
                             var b = cr2w.Buffers[bufferIdx - 1];
                             animStream.Seek(b.Offset, SeekOrigin.Begin);
                             animStream.DecompressAndCopySegment(defferedBuffer, b.DiskSize, b.MemSize);
                         }
                         defferedBuffer.Seek(0, SeekOrigin.Begin);
-                        SIMD.AddAnimationSIMD(ref model, animBuff, animAnimDes.Name.Value, defferedBuffer, animAnimDes);
+                        SIMD.AddAnimationSIMD(ref model, animBuff, animAnimDes.Name, defferedBuffer, animAnimDes);
                     }
                     break;
                     case "animAnimationBufferCompressed":
@@ -112,13 +109,13 @@ namespace WolvenKit.Modkit.RED4
                         var defferedBuffer = new MemoryStream();
                         if (animBuff.InplaceCompressedBuffer.IsSerialized)
                         {
-                            var bufferIdx = animBuff.InplaceCompressedBuffer.Buffer.Value;
+                            var bufferIdx = animBuff.InplaceCompressedBuffer.Buffer;
                             var b = cr2w.Buffers[bufferIdx - 1];
                             animStream.Seek(b.Offset, SeekOrigin.Begin);
                             animStream.DecompressAndCopySegment(defferedBuffer, b.DiskSize, b.MemSize);
                             var br = new BinaryReader(defferedBuffer);
                             br.BaseStream.Seek(0, SeekOrigin.Begin);
-                            if(br.ReadUInt32() == OodleHelper.KARK)
+                            if (br.ReadUInt32() == OodleHelper.KARK)
                             {
                                 uint size = br.ReadUInt32();
                                 var input = br.ReadBytes((int)(br.BaseStream.Length - 8));
@@ -130,20 +127,20 @@ namespace WolvenKit.Modkit.RED4
                         else if (animBuff.DataAddress.IsSerialized)
                         {
                             var dataAddr = animBuff.DataAddress;
-                            Byte[] bytes = new Byte[dataAddr.ZeInBytes.Value];
-                            animDataBuffers[(int)dataAddr.UnkIndex.Value].Seek(dataAddr.FsetInBytes.Value, SeekOrigin.Begin);
-                            animDataBuffers[(int)dataAddr.UnkIndex.Value].Read(bytes, 0, (int)dataAddr.ZeInBytes.Value);
+                            Byte[] bytes = new Byte[dataAddr.ZeInBytes];
+                            animDataBuffers[(int)dataAddr.UnkIndex].Seek(dataAddr.FsetInBytes, SeekOrigin.Begin);
+                            animDataBuffers[(int)dataAddr.UnkIndex].Read(bytes, 0, (int)dataAddr.ZeInBytes);
                             defferedBuffer = new MemoryStream(bytes);
                         }
                         else if (animBuff.DefferedBuffer.IsSerialized)
                         {
-                            var bufferIdx = animBuff.DefferedBuffer.Buffer.Value;
+                            var bufferIdx = animBuff.DefferedBuffer.Buffer;
                             var b = cr2w.Buffers[bufferIdx - 1];
                             animStream.Seek(b.Offset, SeekOrigin.Begin);
                             animStream.DecompressAndCopySegment(defferedBuffer, b.DiskSize, b.MemSize);
                         }
                         defferedBuffer.Seek(0, SeekOrigin.Begin);
-                        SPLINE.AddAnimationSpline(ref model, animBuff, animAnimDes.Name.Value, defferedBuffer,animAnimDes);
+                        SPLINE.AddAnimationSpline(ref model, animBuff, animAnimDes.Name, defferedBuffer, animAnimDes);
                     }
                     break;
                 }

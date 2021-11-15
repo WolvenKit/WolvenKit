@@ -1,48 +1,51 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.IO;
-using WolvenKit.Modkit.RED4.GeneralStructs;
-using SharpGLTF.Schema2;
-using SharpGLTF.IO;
-using WolvenKit.Modkit.RED4.RigFile;
-using WolvenKit.RED4.Types;
-using WolvenKit.RED4.CR2W;
-using SharpGLTF.Validation;
-using WolvenKit.Modkit.RED4;
-using WolvenKit.RED4.CR2W.Archive;
 using CP77.CR2W;
+using SharpGLTF.Schema2;
+using SharpGLTF.Validation;
+using WolvenKit.Modkit.RED4.GeneralStructs;
+using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4
 {
-    using Vec4 = System.Numerics.Vector4;
     using Vec2 = System.Numerics.Vector2;
     using Vec3 = System.Numerics.Vector3;
+    using Vec4 = System.Numerics.Vector4;
     public partial class ModTools
     {
         public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream, List<Archive> archives = null, ValidationMode vmode = ValidationMode.Strict, bool importMaterialOnly = false, Stream outStream = null)
         {
-            var cr2w = _wolvenkitFileService.TryReadRED4File(inmeshStream);
+            var cr2w = _wolvenkitFileService.TryReadRed4File(inmeshStream);
 
-            if (cr2w == null || !cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any() || !cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().Any())
+            if (cr2w == null || !cr2w.Chunks.OfType<CMesh>().Any() || !cr2w.Chunks.OfType<rendRenderMeshBlob>().Any())
             {
                 return false;
             }
 
-            var meshBlob = cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First();
-            var rendBlob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
+            var meshBlob = cr2w.Chunks.OfType<CMesh>().First();
+            var rendBlob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
             if (File.Exists(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")))
             {
-                if(archives != null)
+                if (archives != null)
                 {
-                    WriteMatToMesh(ref cr2w, File.ReadAllText(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")),archives);
+                    WriteMatToMesh(ref cr2w, File.ReadAllText(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")), archives);
                 }
                 if (importMaterialOnly)
                 {
                     MemoryStream matOnlyStream = new MemoryStream();
-                    cr2w.Write(new BinaryWriter(matOnlyStream));
+
+                    //cr2w.Write(new BinaryWriter(matOnlyStream));
+                    using var writer = new CR2WWriter(matOnlyStream, Encoding.UTF8, true);
+                    writer.WriteFile(cr2w);
+
+
                     matOnlyStream.Seek(0, SeekOrigin.Begin);
                     if (outStream != null)
                     {
@@ -90,18 +93,18 @@ namespace WolvenKit.Modkit.RED4
             }
 
             // updating bounding box
-            meshBlob.BoundingBox.Min.X.Value = min.X;
-            meshBlob.BoundingBox.Min.Y.Value = min.Y;
-            meshBlob.BoundingBox.Min.Z.Value = min.Z;
-            meshBlob.BoundingBox.Max.X.Value = max.X;
-            meshBlob.BoundingBox.Max.Y.Value = max.Y;
-            meshBlob.BoundingBox.Max.Z.Value = max.Z;
+            meshBlob.BoundingBox.Min.X = min.X;
+            meshBlob.BoundingBox.Min.Y = min.Y;
+            meshBlob.BoundingBox.Min.Z = min.Z;
+            meshBlob.BoundingBox.Max.X = max.X;
+            meshBlob.BoundingBox.Max.Y = max.Y;
+            meshBlob.BoundingBox.Max.Z = max.Z;
 
             Vec4 QuantScale = new Vec4((max.X - min.X) / 2, (max.Y - min.Y) / 2, (max.Z - min.Z) / 2, 0);
             Vec4 QuantTrans = new Vec4((max.X + min.X) / 2, (max.Y + min.Y) / 2, (max.Z + min.Z) / 2, 1);
 
 
-            RawArmature newRig = MeshTools.GetOrphanRig(cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First());
+            RawArmature newRig = MeshTools.GetOrphanRig(cr2w.Chunks.OfType<rendRenderMeshBlob>().First());
             RawArmature oldRig = null;
             if (model.LogicalSkins.Count != 0)
             {
@@ -154,7 +157,7 @@ namespace WolvenKit.Modkit.RED4
 
             List<uint> indicesList = mesh.Primitives[0].GetIndices().ToList();
 
-            if(mesh.Name.ToLower().Contains("double"))
+            if (mesh.Name.ToLower().Contains("double"))
             {
                 meshContainer.indices = new uint[indicesList.Count * 2];
                 for (int i = 0; i < indicesList.Count; i += 3)
@@ -348,7 +351,7 @@ namespace WolvenKit.Modkit.RED4
             for (int i = 0; i < vertCount; i++)
                 for (int e = 0; e < Re4Mesh.weightcount; e++)
                     Re4Mesh.boneindices[i, e] = Convert.ToByte(mesh.boneindices[i, e]); // mesh.boneindices are supposed to be processed
-                                                                                // (updated according to the mesh bones rather than rig bones) before putting here
+                                                                                        // (updated according to the mesh bones rather than rig bones) before putting here
 
             Re4Mesh.weights = new byte[vertCount, Re4Mesh.weightcount];
             for (int i = 0; i < vertCount; i++)
@@ -534,19 +537,19 @@ namespace WolvenKit.Modkit.RED4
         }
         static MemoryStream GetEditedCr2wFile(CR2WFile cr2w, MeshesInfo info, MemoryStream buffer)
         {
-            var blob = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First();
+            var blob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
             // removing BS topology data which causes a lot of issues with improved facial lighting geomerty, vertex colors uroborus and what not
             int Count = blob.Header.Topology.Count;
-            
+
             for (int i = 0; i < Count; i++)
             {
                 blob.Header.Topology.Remove(blob.Header.Topology[0]);
             }
             for (int i = 0; i < info.meshCount; i++)
             {
-                blob.Header.Topology.Add(new rendTopologyData(cr2w, blob.Header.Topology, Convert.ToString(i)) { IsSerialized = true, IsNulled = false });
+                blob.Header.Topology.Add(new rendTopologyData() );
             }
-            
+
             //dependent RenderLOD's removal and addition
             Count = blob.Header.RenderLODs.Count;
             if (Count > 1)
@@ -555,23 +558,23 @@ namespace WolvenKit.Modkit.RED4
                 {
                     blob.Header.RenderLODs.Remove(blob.Header.RenderLODs[0]);
                 }
-                blob.Header.RenderLODs.Add(new CFloat(cr2w, blob.Header.RenderLODs, "0") { IsSerialized = true, IsNulled = false, Value = 0f });
+                blob.Header.RenderLODs.Add(0f);
                 if (info.LODLvl.ToList().Contains(2))
                 {
-                    blob.Header.RenderLODs.Add(new CFloat(cr2w, blob.Header.RenderLODs, "1") { IsSerialized = true, IsNulled = false, Value = 3f });
+                    blob.Header.RenderLODs.Add(3f);
                 }
                 if (info.LODLvl.ToList().Contains(4))
                 {
-                    blob.Header.RenderLODs.Add(new CFloat(cr2w, blob.Header.RenderLODs, "2") { IsSerialized = true, IsNulled = false, Value = 6f });
+                    blob.Header.RenderLODs.Add(6f);
                 }
                 if (info.LODLvl.ToList().Contains(8))
                 {
-                    blob.Header.RenderLODs.Add(new CFloat(cr2w, blob.Header.RenderLODs, "3") { IsSerialized = true, IsNulled = false, Value = 9f });
+                    blob.Header.RenderLODs.Add(9f);
                 }
             }
-            if(cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().Any())
+            if (cr2w.Chunks.OfType<CMesh>().Any())
             {
-                var cmeshblob = cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First();
+                var cmeshblob = cr2w.Chunks.OfType<CMesh>().First();
                 Count = cmeshblob.LodLevelInfo.Count;
                 if (Count > 1)
                 {
@@ -579,18 +582,18 @@ namespace WolvenKit.Modkit.RED4
                     {
                         cmeshblob.LodLevelInfo.Remove(cmeshblob.LodLevelInfo[0]);
                     }
-                    cmeshblob.LodLevelInfo.Add(new CFloat(cr2w, cmeshblob.LodLevelInfo, "0") { IsSerialized = true, IsNulled = false, Value = 0f });
+                    cmeshblob.LodLevelInfo.Add(0f);
                     if (info.LODLvl.ToList().Contains(2))
                     {
-                        cmeshblob.LodLevelInfo.Add(new CFloat(cr2w, cmeshblob.LodLevelInfo, "1") { IsSerialized = true, IsNulled = false, Value = 3f });
+                        cmeshblob.LodLevelInfo.Add(3f);
                     }
                     if (info.LODLvl.ToList().Contains(4))
                     {
-                        cmeshblob.LodLevelInfo.Add(new CFloat(cr2w, cmeshblob.LodLevelInfo, "2") { IsSerialized = true, IsNulled = false, Value = 6f });
+                        cmeshblob.LodLevelInfo.Add(6f);
                     }
                     if (info.LODLvl.ToList().Contains(8))
                     {
-                        cmeshblob.LodLevelInfo.Add(new CFloat(cr2w, cmeshblob.LodLevelInfo, "3") { IsSerialized = true, IsNulled = false, Value = 9f });
+                        cmeshblob.LodLevelInfo.Add(9f);
                     }
                 }
             }
@@ -604,306 +607,268 @@ namespace WolvenKit.Modkit.RED4
             // adding new rendChunks
             for (int i = 0; i < info.meshCount; i++)
             {
-                rendChunk chunk = new rendChunk(cr2w, blob.Header.RenderChunkInfos, Convert.ToString(i)) { IsSerialized = true, IsNulled = false };
+                rendChunk chunk = new rendChunk() ;
 
-                chunk.LodMask = new CUInt8(cr2w, chunk, "lodMask") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(info.LODLvl[i]) };
+                chunk.LodMask = Convert.ToByte(info.LODLvl[i]);
 
-                chunk.RenderMask = new CEnum<Enums.EMeshChunkFlags>(cr2w, chunk, "renderMask") { IsSerialized = true, IsNulled = false, Value = Enums.EMeshChunkFlags.MCF_RenderInScene };
-                chunk.RenderMask.EnumValueList.Add("MCF_RenderInScene");
-                chunk.RenderMask.EnumValueList.Add("MCF_RenderInShadows");
+                chunk.RenderMask = Enums.EMeshChunkFlags.MCF_RenderInScene | Enums.EMeshChunkFlags.MCF_RenderInShadows;
 
                 // vertexfactory is really important to be taken care of properly
                 // based upon VertexBlock, subject to change, incremental will be good, for weightcount ++ etc
-                chunk.VertexFactory = new CUInt8(cr2w, chunk, "vertexFactory") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(2) };
+                chunk.VertexFactory = Convert.ToByte(2);
 
-                chunk.NumIndices = new CUInt32(cr2w, chunk, "numIndices") { IsSerialized = true, IsNulled = false, Value = info.indCounts[i] };
-                chunk.NumVertices = new CUInt16(cr2w, chunk, "numVertices") { IsSerialized = true, IsNulled = false, Value = Convert.ToUInt16(info.vertCounts[i]) };
+                chunk.NumIndices = info.indCounts[i];
+                chunk.NumVertices = Convert.ToUInt16(info.vertCounts[i]);
 
-                chunk.ChunkIndices = new rendIndexBufferChunk(cr2w, chunk, "chunkIndices") { IsSerialized = true, IsNulled = false };
-                chunk.ChunkIndices.Pe = new CEnum<Enums.GpuWrapApieIndexBufferChunkType>(cr2w, chunk.ChunkIndices, "pe") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApieIndexBufferChunkType.IBCT_IndexUShort };
-                chunk.ChunkIndices.Pe.EnumValueList.Add("IBCT_IndexUShort");
-                chunk.ChunkIndices.TeOffset = new CUInt32(cr2w, chunk.ChunkIndices, "teOffset") { IsSerialized = true, IsNulled = false, Value = info.indicesOffsets[i] - info.indexBufferOffset };
+                chunk.ChunkIndices = new rendIndexBufferChunk() ;
+                chunk.ChunkIndices.Pe = Enums.GpuWrapApieIndexBufferChunkType.IBCT_IndexUShort;
+                chunk.ChunkIndices.TeOffset = info.indicesOffsets[i] - info.indexBufferOffset;
 
 
-                chunk.ChunkVertices = new rendVertexBufferChunk(cr2w, chunk, "chunkVertices") { IsSerialized = true, IsNulled = false };
-                chunk.ChunkVertices.ByteOffsets.IsSerialized = true;
-                chunk.ChunkVertices.ByteOffsets.Add(new CUInt32(cr2w, chunk.ChunkVertices.ByteOffsets, "0") { IsSerialized = true, IsNulled = false, Value = info.posnOffsets[i] });
-                chunk.ChunkVertices.ByteOffsets.Add(new CUInt32(cr2w, chunk.ChunkVertices.ByteOffsets, "1") { IsSerialized = true, IsNulled = false, Value = info.tex0Offsets[i] });
-                chunk.ChunkVertices.ByteOffsets.Add(new CUInt32(cr2w, chunk.ChunkVertices.ByteOffsets, "2") { IsSerialized = true, IsNulled = false, Value = info.normalOffsets[i] });
-                chunk.ChunkVertices.ByteOffsets.Add(new CUInt32(cr2w, chunk.ChunkVertices.ByteOffsets, "3") { IsSerialized = true, IsNulled = false, Value = info.colorOffsets[i] });
-                chunk.ChunkVertices.ByteOffsets.Add(new CUInt32(cr2w, chunk.ChunkVertices.ByteOffsets, "4") { IsSerialized = true, IsNulled = false, Value = info.unknownOffsets[i] });
+                chunk.ChunkVertices = new rendVertexBufferChunk();
+                chunk.ChunkVertices.ByteOffsets.Add(info.posnOffsets[i]);
+                chunk.ChunkVertices.ByteOffsets.Add(info.tex0Offsets[i]);
+                chunk.ChunkVertices.ByteOffsets.Add(info.normalOffsets[i]);
+                chunk.ChunkVertices.ByteOffsets.Add(info.colorOffsets[i]);
+                chunk.ChunkVertices.ByteOffsets.Add(info.unknownOffsets[i]);
 
-                chunk.ChunkVertices.VertexLayout = new GpuWrapApiVertexLayoutDesc(cr2w, chunk.ChunkVertices, "vertexLayout") { IsSerialized = true, IsNulled = false };
+                chunk.ChunkVertices.VertexLayout = new GpuWrapApiVertexLayoutDesc() ;
 
                 // fishy hash and slotmask, subject to change
-                chunk.ChunkVertices.VertexLayout.Hash = new CUInt32(cr2w, chunk.ChunkVertices.VertexLayout, "hash") { IsSerialized = true, IsNulled = false, Value = 0 };
-                chunk.ChunkVertices.VertexLayout.SlotMask = new CUInt32(cr2w, chunk.ChunkVertices.VertexLayout, "slotMask") { IsSerialized = true, IsNulled = false, Value = 0 };
+                chunk.ChunkVertices.VertexLayout.Hash =  0;
+                chunk.ChunkVertices.VertexLayout.SlotMask = 0;
 
-                chunk.ChunkVertices.VertexLayout.SlotStrides.IsSerialized = true;
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.SlotStrides, "0") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(info.vpStrides[i]) });
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.SlotStrides, "1") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(4) });
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.SlotStrides, "2") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(8) });
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.SlotStrides, "3") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(8) });
+                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(info.vpStrides[i]));
+                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(4));
+                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(8));
+                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(8));
                 if (info.unknownOffsets[i] == 0)
                 {
-                    chunk.ChunkVertices.VertexLayout.SlotStrides.Add(new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.SlotStrides, "4") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(0) });
+                    chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(0));
                 }
                 else
                 {
-                    chunk.ChunkVertices.VertexLayout.SlotStrides.Add(new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.SlotStrides, "4") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(4) });
+                    chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(4));
                 }
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.SlotStrides, "5") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(0) });
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.SlotStrides, "6") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(0) });
+                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(0));
+                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(0));
                 if (info.weightCounts[i] == 0)
                 {
-                    chunk.ChunkVertices.VertexLayout.SlotStrides.Add(new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.SlotStrides, "7") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(48) });
+                    chunk.ChunkVertices.VertexLayout.SlotStrides.Add( Convert.ToByte(48));
                 }
                 else
                 {
-                    chunk.ChunkVertices.VertexLayout.SlotStrides.Add(new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.SlotStrides, "7") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(64) });
+                    chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(64));
                 }
-                chunk.ChunkVertices.VertexLayout.Elements.IsSerialized = true;
 
 
                 int elementCount = 0;
 
                 // Position                                                                                                                              // bs way of setting up index names
-                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement(cr2w, chunk.ChunkVertices.VertexLayout.Elements, Convert.ToString(elementCount)) { IsSerialized = true, IsNulled = false });
+                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
                 // fishy
-                //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "streamIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(0) };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usageIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(0) };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = new CEnum<Enums.GpuWrapApiVertexPackingePackingUsage>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usage") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Position };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage.EnumValueList.Add("PS_Position");
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = new CEnum<Enums.GpuWrapApiVertexPackingePackingType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "type") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingType.PT_Short4N };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type.EnumValueList.Add("PT_Short4N");
+                //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(0);
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(0);
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Position;
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Short4N;
                 elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
 
                 // Joint0
                 if (info.weightCounts[i] > 0)
                 {
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement(cr2w, chunk.ChunkVertices.VertexLayout.Elements, Convert.ToString(elementCount)) { IsSerialized = true, IsNulled = false });
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
                     // fishy
-                    //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "streamIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(0) };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usageIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(0) };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = new CEnum<Enums.GpuWrapApiVertexPackingePackingUsage>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usage") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingUsage.PS_SkinIndices };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage.EnumValueList.Add("PS_SkinIndices");
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = new CEnum<Enums.GpuWrapApiVertexPackingePackingType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "type") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4 };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type.EnumValueList.Add("PT_UByte4");
+                    //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(0);
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(0);
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_SkinIndices;
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4;
                     elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
 
                     // subject to change, maybe, vertfactory is weird
-                    chunk.VertexFactory.Value++;
+                    chunk.VertexFactory++;
                 }
                 // joint1
                 if (info.weightCounts[i] > 4)
                 {
                     // bs way of setting up index names
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement(cr2w, chunk.ChunkVertices.VertexLayout.Elements, Convert.ToString(elementCount)) { IsSerialized = true, IsNulled = false });
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
                     // fishy
-                    //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "streamIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(0) };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usageIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(1) };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = new CEnum<Enums.GpuWrapApiVertexPackingePackingUsage>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usage") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingUsage.PS_SkinIndices };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage.EnumValueList.Add("PS_SkinIndices");
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = new CEnum<Enums.GpuWrapApiVertexPackingePackingType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "type") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4 };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type.EnumValueList.Add("PT_UByte4");
+                    //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(0);
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(1);
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_SkinIndices;
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4;
                     elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
 
                     // subject to change, maybe, vertfactory is weird
-                    chunk.VertexFactory.Value++;
+                    chunk.VertexFactory++;
                 }
 
                 // weight0
                 if (info.weightCounts[i] > 0)
                 {
                     // bs way of setting up index names
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement(cr2w, chunk.ChunkVertices.VertexLayout.Elements, Convert.ToString(elementCount)) { IsSerialized = true, IsNulled = false });
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
                     // fishy
-                    //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "streamIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(0) };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usageIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(0) };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = new CEnum<Enums.GpuWrapApiVertexPackingePackingUsage>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usage") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingUsage.PS_SkinWeights };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage.EnumValueList.Add("PS_SkinWeights");
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = new CEnum<Enums.GpuWrapApiVertexPackingePackingType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "type") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4N };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type.EnumValueList.Add("PT_UByte4N");
+                    //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(0);
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(0);
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_SkinWeights;
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4N;
                     elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
                 }
                 // weight1
                 if (info.weightCounts[i] > 4)
                 {
                     // bs way of setting up index names
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement(cr2w, chunk.ChunkVertices.VertexLayout.Elements, Convert.ToString(elementCount)) { IsSerialized = true, IsNulled = false });
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
                     // fishy
-                    //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "streamIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(0) };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usageIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(1) };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = new CEnum<Enums.GpuWrapApiVertexPackingePackingUsage>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usage") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingUsage.PS_SkinWeights };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage.EnumValueList.Add("PS_SkinWeights");
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = new CEnum<Enums.GpuWrapApiVertexPackingePackingType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "type") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4N };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type.EnumValueList.Add("PT_UByte4N");
+                    //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(0);
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(1);
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_SkinWeights;
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4N;
                     elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
                 }
 
                 // tx0coords
-                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement(cr2w, chunk.ChunkVertices.VertexLayout.Elements, Convert.ToString(elementCount)) { IsSerialized = true, IsNulled = false });
+                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
                 // fishy
-                //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "streamIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(1) };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usageIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(0) };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = new CEnum<Enums.GpuWrapApiVertexPackingePackingUsage>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usage") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingUsage.PS_TexCoord };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage.EnumValueList.Add("PS_TexCoord");
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = new CEnum<Enums.GpuWrapApiVertexPackingePackingType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "type") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingType.PT_Float16_2 };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type.EnumValueList.Add("PT_Float16_2");
+                //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(1);
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(0);
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_TexCoord;
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float16_2;
                 elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
 
                 // normals
-                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement(cr2w, chunk.ChunkVertices.VertexLayout.Elements, Convert.ToString(elementCount)) { IsSerialized = true, IsNulled = false });
+                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
                 // fishy
-                //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "streamIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(2) };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usageIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(0) };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = new CEnum<Enums.GpuWrapApiVertexPackingePackingUsage>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usage") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Normal };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage.EnumValueList.Add("PS_Normal");
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = new CEnum<Enums.GpuWrapApiVertexPackingePackingType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "type") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingType.PT_Dec4 };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type.EnumValueList.Add("PT_Dec4");
+                //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(2);
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(0);
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Normal;
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Dec4;
                 elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
 
                 // tangents
-                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement(cr2w, chunk.ChunkVertices.VertexLayout.Elements, Convert.ToString(elementCount)) { IsSerialized = true, IsNulled = false });
+                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
                 // fishy
-                //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "streamIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(2) };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usageIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(0) };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = new CEnum<Enums.GpuWrapApiVertexPackingePackingUsage>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usage") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Tangent };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage.EnumValueList.Add("PS_Tangent");
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = new CEnum<Enums.GpuWrapApiVertexPackingePackingType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "type") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingType.PT_Dec4 };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type.EnumValueList.Add("PT_Dec4");
+                //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(2);
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(0);
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Tangent;
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Dec4;
                 elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
 
                 // color
-                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement(cr2w, chunk.ChunkVertices.VertexLayout.Elements, Convert.ToString(elementCount)) { IsSerialized = true, IsNulled = false });
+                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
                 // fishy
-                //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "streamIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(3) };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usageIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(0) };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = new CEnum<Enums.GpuWrapApiVertexPackingePackingUsage>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usage") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Color };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage.EnumValueList.Add("PS_Color");
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = new CEnum<Enums.GpuWrapApiVertexPackingePackingType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "type") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingType.PT_Color };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type.EnumValueList.Add("PT_Color");
+                //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(3);
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(0);
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Color;
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Color;
                 elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
 
                 // tx1coords
-                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement(cr2w, chunk.ChunkVertices.VertexLayout.Elements, Convert.ToString(elementCount)) { IsSerialized = true, IsNulled = false });
+                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
                 // fishy
-                //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "streamIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(3) };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usageIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(1) };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = new CEnum<Enums.GpuWrapApiVertexPackingePackingUsage>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usage") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingUsage.PS_TexCoord };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage.EnumValueList.Add("PS_TexCoord");
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = new CEnum<Enums.GpuWrapApiVertexPackingePackingType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "type") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingType.PT_Float16_2 };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type.EnumValueList.Add("PT_Float16_2");
+                //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(3);
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(1);
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_TexCoord;
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float16_2;
                 elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
 
                 // extra data/ morphoffsets
                 if (info.garmentSupportExists[i])
                 {
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement(cr2w, chunk.ChunkVertices.VertexLayout.Elements, Convert.ToString(elementCount)) { IsSerialized = true, IsNulled = false });
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
                     // fishy
-                    //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "streamIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(0) };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usageIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(0) };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = new CEnum<Enums.GpuWrapApiVertexPackingePackingUsage>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usage") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingUsage.PS_ExtraData };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage.EnumValueList.Add("PS_ExtraData");
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = new CEnum<Enums.GpuWrapApiVertexPackingePackingType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "type") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingType.PT_Float16_4 };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type.EnumValueList.Add("PT_Float16_4");
+                    //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(0);
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(0);
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_ExtraData;
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float16_4;
                     elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
 
                     // subject to change, maybe, vertfactory is weird, extra data ads 2 to this
-                    chunk.VertexFactory.Value += 2;
+                    chunk.VertexFactory += 2;
                 }
 
                 // instanceTransforms
                 for (int e = 0; e < 3; e++)
                 {
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement(cr2w, chunk.ChunkVertices.VertexLayout.Elements, Convert.ToString(elementCount)) { IsSerialized = true, IsNulled = false });
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
                     // fishy
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerInstance };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "streamIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(7) };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usageIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(e) };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = new CEnum<Enums.GpuWrapApiVertexPackingePackingUsage>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usage") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingUsage.PS_InstanceTransform };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage.EnumValueList.Add("PS_InstanceTransform");
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = new CEnum<Enums.GpuWrapApiVertexPackingePackingType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "type") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingType.PT_Float4 };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type.EnumValueList.Add("PT_Float4");
+                    //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new Enums.GpuWrapApiVertexPackingEStreamType.;
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(7);
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(e);
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_InstanceTransform;
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float4;
                     elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
                 }
 
                 // instanceSkinningDatas
                 if (info.weightCounts[i] > 0)
                 {
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement(cr2w, chunk.ChunkVertices.VertexLayout.Elements, Convert.ToString(elementCount)) { IsSerialized = true, IsNulled = false });
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
                     // fishy
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerInstance };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "streamIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(7) };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usageIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(0) };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = new CEnum<Enums.GpuWrapApiVertexPackingePackingUsage>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usage") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingUsage.PS_InstanceSkinningData };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage.EnumValueList.Add("PS_InstanceSkinningData");
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = new CEnum<Enums.GpuWrapApiVertexPackingePackingType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "type") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingType.PT_UInt4 };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type.EnumValueList.Add("PT_UInt4");
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerInstance;
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(7);
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(0);
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_InstanceSkinningData;
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UInt4;
                     elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
                 }
 
                 // LightBlockerIntensity
                 if (info.unknownOffsets[i] != 0)
                 {
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement(cr2w, chunk.ChunkVertices.VertexLayout.Elements, Convert.ToString(elementCount)) { IsSerialized = true, IsNulled = false });
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
                     // fishy
-                    //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "streamIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(4) };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usageIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(0) };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = new CEnum<Enums.GpuWrapApiVertexPackingePackingUsage>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usage") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingUsage.PS_LightBlockerIntensity };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage.EnumValueList.Add("PS_LightBlockerIntensity");
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = new CEnum<Enums.GpuWrapApiVertexPackingePackingType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "type") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingType.PT_Float1 };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type.EnumValueList.Add("PT_Float1");
+                    //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(4);
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(0);
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_LightBlockerIntensity;
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float1;
                     elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
 
                     // for lightblocker its 24, after testing some files, somtimes unknownoffsets[4] is used for destruction indices and some paint instead of lightblocker, so this needs to be taken care of
-                    chunk.VertexFactory.Value += 24;
+                    chunk.VertexFactory += 24;
                 }
 
 
                 // Invalid, Required
-                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement(cr2w, chunk.ChunkVertices.VertexLayout.Elements, Convert.ToString(elementCount)) { IsSerialized = true, IsNulled = false });
+                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
                 // fishy
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType.IsSerialized = true;
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType.Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_Invalid;
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType.EnumValueList.Add("ST_Invalid");
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "streamIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(0) };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = new CUInt8(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usageIndex") { IsSerialized = true, IsNulled = false, Value = Convert.ToByte(0) };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = new CEnum<Enums.GpuWrapApiVertexPackingePackingUsage>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "usage") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Invalid };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage.EnumValueList.Add("PS_Invalid");
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = new CEnum<Enums.GpuWrapApiVertexPackingePackingType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[elementCount], "type") { IsSerialized = true, IsNulled = false, Value = Enums.GpuWrapApiVertexPackingePackingType.PT_Invalid };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type.EnumValueList.Add("PT_Invalid");
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_Invalid;
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(0);
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(0);
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Invalid;
+                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Invalid;
                 elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
 
                 // Adding Chunk
                 blob.Header.RenderChunkInfos.Add(chunk);
             }
 
-            blob.Header.QuantizationScale.X.Value = info.quantScale.X;
-            blob.Header.QuantizationScale.Y.Value = info.quantScale.Y;
-            blob.Header.QuantizationScale.Z.Value = info.quantScale.Z;
-            blob.Header.QuantizationOffset.X.Value = info.quantTrans.X;
-            blob.Header.QuantizationOffset.Y.Value = info.quantTrans.Y;
-            blob.Header.QuantizationOffset.Z.Value = info.quantTrans.Z;
+            blob.Header.QuantizationScale.X = info.quantScale.X;
+            blob.Header.QuantizationScale.Y = info.quantScale.Y;
+            blob.Header.QuantizationScale.Z = info.quantScale.Z;
+            blob.Header.QuantizationOffset.X = info.quantTrans.X;
+            blob.Header.QuantizationOffset.Y = info.quantTrans.Y;
+            blob.Header.QuantizationOffset.Z = info.quantTrans.Z;
 
-            blob.Header.VertexBufferSize.Value = info.vertBufferSize;
-            blob.Header.IndexBufferSize.Value = info.indexBufferSize;
-            blob.Header.IndexBufferOffset.Value = info.indexBufferOffset;
+            blob.Header.VertexBufferSize = info.vertBufferSize;
+            blob.Header.IndexBufferSize = info.indexBufferSize;
+            blob.Header.IndexBufferOffset = info.indexBufferOffset;
 
 
-            UInt16 p = (blob.RenderBuffer.Buffer.Value);
+            UInt16 p = (blob.RenderBuffer.Buffer);
 
             var compressed = new MemoryStream();
             using var buff = new BinaryWriter(compressed);
@@ -958,14 +923,14 @@ namespace WolvenKit.Modkit.RED4
                 string name = model.LogicalMeshes[i].Name;
                 UInt32 LOD = 0;
 
-                if(name.Contains("LOD"))
+                if (name.Contains("LOD"))
                 {
                     try
                     {
                         int idx = name.IndexOf("LOD_");
-                        if(idx < name.Length - 1)
+                        if (idx < name.Length - 1)
                         {
-                            LOD = Convert.ToUInt32(name.Substring(idx + 4,1));
+                            LOD = Convert.ToUInt32(name.Substring(idx + 4, 1));
                             LODs.Add(LOD);
                         }
                     }
@@ -988,7 +953,7 @@ namespace WolvenKit.Modkit.RED4
                 throw new Exception("None of the Geometry/sub meshes are of 1 Level of Detail or (LOD 1) in provided GLTF");
             }
         }
-        private static void UpdateSkinningParamCloth(ref List<RawMeshContainer> meshes,ref CR2WFile cr2w)
+        private static void UpdateSkinningParamCloth(ref List<RawMeshContainer> meshes, ref CR2WFile cr2w)
         {
             var LODLvl = new UInt32[meshes.Count];
             for (int i = 0; i < meshes.Count; i++)
@@ -1008,9 +973,9 @@ namespace WolvenKit.Modkit.RED4
 
             }
 
-            int meshBufferIdx = cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First().RenderBuffer.Buffer.Value - 1;
-            int materialBufferIdx = cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First().LocalMaterialBuffer.RawData.Buffer.Value - 1;
-            if (!cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First().LocalMaterialBuffer.RawData.IsSerialized)
+            int meshBufferIdx = cr2w.Chunks.OfType<rendRenderMeshBlob>().First().RenderBuffer.Buffer - 1;
+            int materialBufferIdx = cr2w.Chunks.OfType<CMesh>().First().LocalMaterialBuffer.RawData.Buffer - 1;
+            if (!cr2w.Chunks.OfType<CMesh>().First().LocalMaterialBuffer.RawData.IsSerialized)
                 materialBufferIdx = int.MaxValue;
 
             int buffCount = cr2w.Buffers.Count;
@@ -1027,24 +992,24 @@ namespace WolvenKit.Modkit.RED4
                     idx--;
                 }
             }
-            if (!cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First().LocalMaterialBuffer.RawData.IsSerialized)
+            if (!cr2w.Chunks.OfType<CMesh>().First().LocalMaterialBuffer.RawData.IsSerialized)
                 materialBufferIdx = 0;
 
-            cr2w.Chunks.Select(_ => _.Data).OfType<rendRenderMeshBlob>().First().RenderBuffer.Buffer.Value = Convert.ToUInt16(meshBufferIdx + 1);
-            cr2w.Chunks.Select(_ => _.Data).OfType<CMesh>().First().LocalMaterialBuffer.RawData.Buffer.Value = Convert.ToUInt16(materialBufferIdx + 1);
+            cr2w.Chunks.OfType<rendRenderMeshBlob>().First().RenderBuffer.Buffer = Convert.ToUInt16(meshBufferIdx + 1);
+            cr2w.Chunks.OfType<CMesh>().First().LocalMaterialBuffer.RawData.Buffer = Convert.ToUInt16(materialBufferIdx + 1);
 
 
-            if (cr2w.Chunks.Select(_ => _.Data).OfType<meshMeshParamCloth>().Any())
+            if (cr2w.Chunks.OfType<meshMeshParamCloth>().Any())
             {
-                var blob = cr2w.Chunks.Select(_ => _.Data).OfType<meshMeshParamCloth>().First();
-                blob.Chunks = new CArray<meshPhxClothChunkData>(cr2w, blob, "chunks") { IsSerialized = true };
-                for (int i = 0; i < meshes.Count;i++)
+                var blob = cr2w.Chunks.OfType<meshMeshParamCloth>().First();
+                blob.Chunks = new CArray<meshPhxClothChunkData>();
+                for (int i = 0; i < meshes.Count; i++)
                 {
-                    var chunk = new meshPhxClothChunkData(cr2w, blob.Chunks,Convert.ToString(i)) { IsSerialized = true};
+                    var chunk = new meshPhxClothChunkData();
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for(int e = 0; e < meshes[i].positions.Length; e++)
+                        for (int e = 0; e < meshes[i].positions.Length; e++)
                         {
                             bw.Write(meshes[i].positions[e].X);
                             bw.Write(meshes[i].positions[e].Y);
@@ -1054,8 +1019,8 @@ namespace WolvenKit.Modkit.RED4
                         using var buff = new BinaryWriter(compressed);
                         var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.Positions = new DataBuffer(cr2w, chunk,"positions") { IsSerialized = true };
-                        chunk.Positions.Buffer = new CUInt16(cr2w, chunk.Positions, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+                        chunk.Positions = new DataBuffer();
+                        chunk.Positions.Buffer = (UInt16)(cr2w.Buffers.Count + 1);
 
                         uint idx = (uint)cr2w.Buffers.Count;
                         cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
@@ -1082,8 +1047,8 @@ namespace WolvenKit.Modkit.RED4
                         using var buff = new BinaryWriter(compressed);
                         var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.Indices = new DataBuffer(cr2w, chunk, "indices") { IsSerialized = true };
-                        chunk.Indices.Buffer = new CUInt16(cr2w, chunk.Indices, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+                        chunk.Indices = new DataBuffer();
+                        chunk.Indices.Buffer = (UInt16)(cr2w.Buffers.Count + 1);
 
                         uint idx = (uint)cr2w.Buffers.Count;
                         cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
@@ -1114,8 +1079,8 @@ namespace WolvenKit.Modkit.RED4
                         using var buff = new BinaryWriter(compressed);
                         var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.SkinWeights = new DataBuffer(cr2w, chunk, "skinWeights") { IsSerialized = true };
-                        chunk.SkinWeights.Buffer = new CUInt16(cr2w, chunk.SkinWeights, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+                        chunk.SkinWeights = new DataBuffer();
+                        chunk.SkinWeights.Buffer = (UInt16)(cr2w.Buffers.Count + 1);
 
                         uint idx = (uint)cr2w.Buffers.Count;
                         cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
@@ -1146,8 +1111,8 @@ namespace WolvenKit.Modkit.RED4
                         using var buff = new BinaryWriter(compressed);
                         var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.SkinIndices = new DataBuffer(cr2w, chunk, "skinIndices") { IsSerialized = true };
-                        chunk.SkinIndices.Buffer = new CUInt16(cr2w, chunk.SkinIndices, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+                        chunk.SkinIndices = new DataBuffer();
+                        chunk.SkinIndices.Buffer = (UInt16)(cr2w.Buffers.Count + 1);
 
                         uint idx = (uint)cr2w.Buffers.Count;
                         cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
@@ -1178,8 +1143,8 @@ namespace WolvenKit.Modkit.RED4
                         using var buff = new BinaryWriter(compressed);
                         var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.SkinWeightsExt = new DataBuffer(cr2w, chunk, "skinWeightsExt") { IsSerialized = true };
-                        chunk.SkinWeightsExt.Buffer = new CUInt16(cr2w, chunk.SkinWeightsExt, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+                        chunk.SkinWeightsExt = new DataBuffer();
+                        chunk.SkinWeightsExt.Buffer = (UInt16)(cr2w.Buffers.Count + 1);
 
                         uint idx = (uint)cr2w.Buffers.Count;
                         cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
@@ -1210,8 +1175,8 @@ namespace WolvenKit.Modkit.RED4
                         using var buff = new BinaryWriter(compressed);
                         var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.SkinIndicesExt = new DataBuffer(cr2w, chunk, "skinIndicesExt") { IsSerialized = true };
-                        chunk.SkinIndicesExt.Buffer = new CUInt16(cr2w, chunk.SkinIndicesExt, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+                        chunk.SkinIndicesExt = new DataBuffer(cr2w, chunk, "skinIndicesExt");
+                        chunk.SkinIndicesExt.Buffer = (UInt16)(cr2w.Buffers.Count + 1);
 
                         uint idx = (uint)cr2w.Buffers.Count;
                         cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
@@ -1240,8 +1205,8 @@ namespace WolvenKit.Modkit.RED4
                         using var buff = new BinaryWriter(compressed);
                         var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.Normals = new DataBuffer(cr2w, chunk,"normals") { IsSerialized = true };
-                        chunk.Normals.Buffer = new CUInt16(cr2w, chunk.Normals, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+                        chunk.Normals = new DataBuffer();
+                        chunk.Normals.Buffer = (UInt16)(cr2w.Buffers.Count + 1);
 
                         uint idx = (uint)cr2w.Buffers.Count;
                         cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
@@ -1260,47 +1225,47 @@ namespace WolvenKit.Modkit.RED4
                     blob.Chunks.Add(chunk);
                     meshes[i].weightCount = 0;
                 }
-                blob.LodChunkIndices = new CArray<CArray<CUInt16>>(cr2w, blob, "lodChunkIndices") { IsSerialized = true };
-                blob.LodChunkIndices.Add(new CArray<CUInt16>(cr2w, blob.LodChunkIndices, "0") { IsSerialized = true });
+                blob.LodChunkIndices = new CArray<CArray<CUInt16>>();
+                blob.LodChunkIndices.Add(new CArray<CUInt16>(cr2w, blob.LodChunkIndices, "0"));
                 if (LODLvl.Contains(2U))
                 {
-                    blob.LodChunkIndices.Add(new CArray<CUInt16>(cr2w, blob.LodChunkIndices, "1") { IsSerialized = true });
+                    blob.LodChunkIndices.Add(new CArray<CUInt16>());
                 }
                 if (LODLvl.Contains(4U))
                 {
-                    blob.LodChunkIndices.Add(new CArray<CUInt16>(cr2w, blob.LodChunkIndices, "3") { IsSerialized = true });
+                    blob.LodChunkIndices.Add(new CArray<CUInt16>());
                 }
                 if (LODLvl.Contains(8U))
                 {
-                    blob.LodChunkIndices.Add(new CArray<CUInt16>(cr2w, blob.LodChunkIndices, "4") { IsSerialized = true });
+                    blob.LodChunkIndices.Add(new CArray<CUInt16>());
                 }
-                for(ushort i = 0; i < LODLvl.Length; i++)
+                for (ushort i = 0; i < LODLvl.Length; i++)
                 {
-                    if(LODLvl[i] == 1)
+                    if (LODLvl[i] == 1)
                     {
-                        blob.LodChunkIndices[0].Add(new CUInt16(cr2w, blob.LodChunkIndices[0], Convert.ToString(blob.LodChunkIndices[0].Count)) { IsSerialized = true, Value = i });
+                        blob.LodChunkIndices[0].Add(i);
                     }
                     if (LODLvl[i] == 2)
                     {
-                        blob.LodChunkIndices[1].Add(new CUInt16(cr2w, blob.LodChunkIndices[1], Convert.ToString(blob.LodChunkIndices[1].Count)) { IsSerialized = true, Value = i });
+                        blob.LodChunkIndices[1].Add(i);
                     }
                     if (LODLvl[i] == 4)
                     {
-                        blob.LodChunkIndices[2].Add(new CUInt16(cr2w, blob.LodChunkIndices[2], Convert.ToString(blob.LodChunkIndices[2].Count)) { IsSerialized = true, Value = i });
+                        blob.LodChunkIndices[2].Add(i);
                     }
                     if (LODLvl[i] == 8)
                     {
-                        blob.LodChunkIndices[3].Add(new CUInt16(cr2w, blob.LodChunkIndices[3], Convert.ToString(blob.LodChunkIndices[3].Count)) { IsSerialized = true, Value = i });
+                        blob.LodChunkIndices[3].Add(i);
                     }
                 }
             }
-            if (cr2w.Chunks.Select(_ => _.Data).OfType<meshMeshParamCloth_Graphical>().Any())
+            if (cr2w.Chunks.OfType<meshMeshParamCloth_Graphical>().Any())
             {
-                var blob = cr2w.Chunks.Select(_ => _.Data).OfType<meshMeshParamCloth_Graphical>().First();
-                blob.Chunks = new CArray<meshGfxClothChunkData>(cr2w, blob, "chunks") { IsSerialized = true };
+                var blob = cr2w.Chunks.OfType<meshMeshParamCloth_Graphical>().First();
+                blob.Chunks = new CArray<meshGfxClothChunkData>();
                 for (int i = 0; i < meshes.Count; i++)
                 {
-                    var chunk = new meshGfxClothChunkData(cr2w, blob.Chunks, Convert.ToString(i)) { IsSerialized = true };
+                    var chunk = new meshGfxClothChunkData();
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
@@ -1314,8 +1279,8 @@ namespace WolvenKit.Modkit.RED4
                         using var buff = new BinaryWriter(compressed);
                         var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.Positions = new DataBuffer(cr2w, chunk, "positions") { IsSerialized = true };
-                        chunk.Positions.Buffer = new CUInt16(cr2w, chunk.Positions, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+                        chunk.Positions = new DataBuffer();
+                        chunk.Positions.Buffer = (UInt16)(cr2w.Buffers.Count + 1);
 
                         uint idx = (uint)cr2w.Buffers.Count;
                         cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
@@ -1342,8 +1307,8 @@ namespace WolvenKit.Modkit.RED4
                         using var buff = new BinaryWriter(compressed);
                         var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.Indices = new DataBuffer(cr2w, chunk, "indices") { IsSerialized = true };
-                        chunk.Indices.Buffer = new CUInt16(cr2w, chunk.Indices, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+                        chunk.Indices = new DataBuffer();
+                        chunk.Indices.Buffer = (UInt16)(cr2w.Buffers.Count + 1);
 
                         uint idx = (uint)cr2w.Buffers.Count;
                         cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
@@ -1374,8 +1339,8 @@ namespace WolvenKit.Modkit.RED4
                         using var buff = new BinaryWriter(compressed);
                         var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.SkinWeights = new DataBuffer(cr2w, chunk, "skinWeights") { IsSerialized = true };
-                        chunk.SkinWeights.Buffer = new CUInt16(cr2w, chunk.SkinWeights, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+                        chunk.SkinWeights = new DataBuffer();
+                        chunk.SkinWeights.Buffer = (UInt16)(cr2w.Buffers.Count + 1);
 
                         uint idx = (uint)cr2w.Buffers.Count;
                         cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
@@ -1406,8 +1371,8 @@ namespace WolvenKit.Modkit.RED4
                         using var buff = new BinaryWriter(compressed);
                         var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.SkinIndices = new DataBuffer(cr2w, chunk, "skinIndices") { IsSerialized = true };
-                        chunk.SkinIndices.Buffer = new CUInt16(cr2w, chunk.SkinIndices, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+                        chunk.SkinIndices = new DataBuffer();
+                        chunk.SkinIndices.Buffer = (UInt16)(cr2w.Buffers.Count + 1);
 
                         uint idx = (uint)cr2w.Buffers.Count;
                         cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
@@ -1438,8 +1403,8 @@ namespace WolvenKit.Modkit.RED4
                         using var buff = new BinaryWriter(compressed);
                         var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.SkinWeightsExt = new DataBuffer(cr2w, chunk, "skinWeightsExt") { IsSerialized = true };
-                        chunk.SkinWeightsExt.Buffer = new CUInt16(cr2w, chunk.SkinWeightsExt, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+                        chunk.SkinWeightsExt = new DataBuffer() ;
+                        chunk.SkinWeightsExt.Buffer = (UInt16)(cr2w.Buffers.Count + 1);
 
                         uint idx = (uint)cr2w.Buffers.Count;
                         cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
@@ -1470,8 +1435,8 @@ namespace WolvenKit.Modkit.RED4
                         using var buff = new BinaryWriter(compressed);
                         var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.SkinIndicesExt = new DataBuffer(cr2w, chunk, "skinIndicesExt") { IsSerialized = true };
-                        chunk.SkinIndicesExt.Buffer = new CUInt16(cr2w, chunk.SkinIndicesExt, "Buffer") { Value = (UInt16)(cr2w.Buffers.Count + 1), IsSerialized = true };
+                        chunk.SkinIndicesExt = new DataBuffer();
+                        chunk.SkinIndicesExt.Buffer = (UInt16)(cr2w.Buffers.Count + 1);
 
                         uint idx = (uint)cr2w.Buffers.Count;
                         cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
@@ -1488,13 +1453,13 @@ namespace WolvenKit.Modkit.RED4
                         cr2w.Buffers[(int)idx].Offset = cr2w.Buffers[(int)idx - 1].Offset + cr2w.Buffers[(int)idx - 1].DiskSize;
                     }
                     {
-                        chunk.Simulation = new CArray<CUInt16>(cr2w, chunk, "simulation") { IsSerialized = true };
+                        chunk.Simulation = new CArray<CUInt16>();
                         int z = 0;
                         for (ushort e = 0; e < meshes[i].colors1.Length; e++)
                         {
-                            if(meshes[i].colors1[e].X > 0.01f)
+                            if (meshes[i].colors1[e].X > 0.01f)
                             {
-                                var val = new CUInt16(cr2w, chunk.Simulation, Convert.ToString(z)) { IsSerialized = true, Value = e };
+                                var val =  e ;
                                 chunk.Simulation.Add(val);
                                 z++;
                             }
@@ -1503,37 +1468,37 @@ namespace WolvenKit.Modkit.RED4
                     blob.Chunks.Add(chunk);
                     meshes[i].weightCount = 0;
                 }
-                blob.LodChunkIndices = new CArray<CArray<CUInt16>>(cr2w, blob, "lodChunkIndices") { IsSerialized = true };
-                blob.LodChunkIndices.Add(new CArray<CUInt16>(cr2w, blob.LodChunkIndices, "0") { IsSerialized = true });
+                blob.LodChunkIndices = new CArray<CArray<CUInt16>>();
+                blob.LodChunkIndices.Add(new CArray<CUInt16>());
                 if (LODLvl.Contains(2U))
                 {
-                    blob.LodChunkIndices.Add(new CArray<CUInt16>(cr2w, blob.LodChunkIndices, "1") { IsSerialized = true });
+                    blob.LodChunkIndices.Add(new CArray<CUInt16>());
                 }
                 if (LODLvl.Contains(4U))
                 {
-                    blob.LodChunkIndices.Add(new CArray<CUInt16>(cr2w, blob.LodChunkIndices, "3") { IsSerialized = true });
+                    blob.LodChunkIndices.Add(new CArray<CUInt16>());
                 }
                 if (LODLvl.Contains(8U))
                 {
-                    blob.LodChunkIndices.Add(new CArray<CUInt16>(cr2w, blob.LodChunkIndices, "4") { IsSerialized = true });
+                    blob.LodChunkIndices.Add(new CArray<CUInt16>());
                 }
                 for (ushort i = 0; i < LODLvl.Length; i++)
                 {
                     if (LODLvl[i] == 1)
                     {
-                        blob.LodChunkIndices[0].Add(new CUInt16(cr2w, blob.LodChunkIndices[0], Convert.ToString(blob.LodChunkIndices[0].Count)) { IsSerialized = true, Value = i });
+                        blob.LodChunkIndices[0].Add(i);
                     }
                     if (LODLvl[i] == 2)
                     {
-                        blob.LodChunkIndices[1].Add(new CUInt16(cr2w, blob.LodChunkIndices[1], Convert.ToString(blob.LodChunkIndices[1].Count)) { IsSerialized = true, Value = i });
+                        blob.LodChunkIndices[1].Add(i);
                     }
                     if (LODLvl[i] == 4)
                     {
-                        blob.LodChunkIndices[2].Add(new CUInt16(cr2w, blob.LodChunkIndices[2], Convert.ToString(blob.LodChunkIndices[2].Count)) { IsSerialized = true, Value = i });
+                        blob.LodChunkIndices[2].Add(i);
                     }
                     if (LODLvl[i] == 8)
                     {
-                        blob.LodChunkIndices[3].Add(new CUInt16(cr2w, blob.LodChunkIndices[3], Convert.ToString(blob.LodChunkIndices[3].Count)) { IsSerialized = true, Value = i });
+                        blob.LodChunkIndices[3].Add(i);
                     }
                 }
             }

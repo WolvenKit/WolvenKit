@@ -463,13 +463,13 @@ namespace WolvenKit.Modkit.RED4
 
         private bool UncookFont(Stream redstream, Stream outstream)
         {
-            var cr2w = _wolvenkitFileService.TryReadCr2WFile(redstream);
+            var cr2w = _wolvenkitFileService.TryReadRed4File(redstream);
             if (cr2w == null)
             {
                 return false;
             }
 
-            if (cr2w.Chunks.FirstOrDefault()?.REDType != nameof(rendFont))
+            if (cr2w.Chunks.FirstOrDefault() is rendFont)
             {
                 return false;
             }
@@ -572,7 +572,7 @@ namespace WolvenKit.Modkit.RED4
         public IEnumerable<Stream> GenerateBuffers(Stream cr2wStream)
         {
             // read the cr2wfile
-            var cr2w = _wolvenkitFileService.TryReadCr2WFileHeaders(cr2wStream);
+            var cr2w = _wolvenkitFileService.TryReadRed4FileHeaders(cr2wStream);
             if (cr2w == null)
             {
                 yield break;
@@ -592,35 +592,35 @@ namespace WolvenKit.Modkit.RED4
         private bool UncookTexarray(Stream cr2wStream, Stream outstream)
         {
             // read the cr2wfile
-            var cr2w = _wolvenkitFileService.TryReadCr2WFile(cr2wStream);
+            var cr2w = _wolvenkitFileService.TryReadRed4File(cr2wStream);
             if (cr2w == null)
             {
                 return false;
             }
 
-            if (!(cr2w.Chunks.FirstOrDefault()?.Data is CTextureArray texa) ||
-                !(cr2w.Chunks[1]?.Data is rendRenderTextureBlobPC blob))
+            if (!(cr2w.Chunks.FirstOrDefault() is CTextureArray texa) ||
+                !(cr2w.Chunks[1] is rendRenderTextureBlobPC blob))
             {
                 return false;
             }
 
-            var sliceCount = blob.Header.TextureInfo.SliceCount.Value;
-            var mipCount = blob.Header.TextureInfo.MipCount.Value;
-            var alignment = blob.Header.TextureInfo.DataAlignment.Value;
+            var sliceCount = blob.Header.TextureInfo.SliceCount;
+            var mipCount = blob.Header.TextureInfo.MipCount;
+            var alignment = blob.Header.TextureInfo.DataAlignment;
 
-            var height = blob.Header.SizeInfo.Height.Value;
-            var width = blob.Header.SizeInfo.Width.Value;
+            var height = blob.Header.SizeInfo.Height;
+            var width = blob.Header.SizeInfo.Width;
 
             var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
             if (texa.Setup.RawFormat?.Value != null)
             {
-                rawfmt = texa.Setup.RawFormat.Value;
+                rawfmt = texa.Setup.RawFormat.Value.Value;
             }
 
             var compression = Enums.ETextureCompression.TCM_None;
             if (texa.Setup.Compression?.Value != null)
             {
-                compression = texa.Setup.Compression.Value;
+                compression = texa.Setup.Compression.Value.Value;
             }
 
             var texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
@@ -639,24 +639,24 @@ namespace WolvenKit.Modkit.RED4
         private bool UncookEnvprobe(Stream cr2wStream, Stream outstream)
         {
             // read the cr2wfile
-            var cr2w = _wolvenkitFileService.TryReadCr2WFile(cr2wStream);
+            var cr2w = _wolvenkitFileService.TryReadRed4File(cr2wStream);
             if (cr2w == null)
             {
                 return false;
             }
 
-            if (cr2w.Chunks.FirstOrDefault()?.Data is not CReflectionProbeDataResource ||
-                cr2w.Chunks[1]?.Data is not rendRenderTextureBlobPC blob)
+            if (cr2w.Chunks.FirstOrDefault() is not CReflectionProbeDataResource ||
+                cr2w.Chunks[1] is not rendRenderTextureBlobPC blob)
             {
                 return false;
             }
 
-            var sliceCount = blob.Header.TextureInfo.SliceCount.Value;
-            var mipCount = blob.Header.TextureInfo.MipCount.Value;
-            var alignment = blob.Header.TextureInfo.DataAlignment.Value;
+            var sliceCount = blob.Header.TextureInfo.SliceCount;
+            var mipCount = blob.Header.TextureInfo.MipCount;
+            var alignment = blob.Header.TextureInfo.DataAlignment;
 
-            var height = blob.Header.SizeInfo.Height.Value;
-            var width = blob.Header.SizeInfo.Width.Value;
+            var height = blob.Header.SizeInfo.Height;
+            var width = blob.Header.SizeInfo.Width;
 
             const DXGI_FORMAT texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
 
@@ -673,7 +673,7 @@ namespace WolvenKit.Modkit.RED4
         private bool UncookCubeMap(Stream cr2wStream, Stream outstream)
         {
             // read the cr2wfile
-            var cr2w = _wolvenkitFileService.TryReadCr2WFile(cr2wStream);
+            var cr2w = _wolvenkitFileService.TryReadRed4File(cr2wStream);
             if (cr2w == null)
             {
                 return false;
@@ -685,24 +685,24 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            var sliceCount = blob.Header.TextureInfo.SliceCount.Value;
-            var mipCount = blob.Header.TextureInfo.MipCount.Value;
-            var alignment = blob.Header.TextureInfo.DataAlignment.Value;
+            var sliceCount = blob.Header.TextureInfo.SliceCount;
+            var mipCount = blob.Header.TextureInfo.MipCount;
+            var alignment = blob.Header.TextureInfo.DataAlignment;
 
-            var height = blob.Header.SizeInfo.Height.Value;
-            var width = blob.Header.SizeInfo.Width.Value;
+            var height = blob.Header.SizeInfo.Height;
+            var width = blob.Header.SizeInfo.Width;
 
             var compression = Enums.ETextureCompression.TCM_None;
             var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
 
             if (ctex.Setup.RawFormat?.Value != null)
             {
-                rawfmt = ctex.Setup.RawFormat.Value;
+                rawfmt = ctex.Setup.RawFormat.Value.Value;
             }
 
             if (ctex.Setup.Compression?.Value != null)
             {
-                compression = ctex.Setup.Compression.Value;
+                compression = ctex.Setup.Compression.Value.Value;
             }
 
             var texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
@@ -720,7 +720,7 @@ namespace WolvenKit.Modkit.RED4
         private bool UncookCsv(Stream cr2wStream, Stream outstream)
         {
             // read the cr2wfile
-            var cr2w = _wolvenkitFileService.TryReadRED4File(cr2wStream);
+            var cr2w = _wolvenkitFileService.TryReadRed4File(cr2wStream);
             if (cr2w == null)
             {
                 return false;
@@ -731,7 +731,7 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            if (!(cr2w.Chunks.FirstOrDefault() is { Data: C2dArray redcsv }))
+            if (!(cr2w.Chunks.FirstOrDefault() is C2dArray redcsv ))
             {
                 return false;
             }
@@ -745,7 +745,7 @@ namespace WolvenKit.Modkit.RED4
             texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
 
             // read the cr2wfile
-            var cr2w = _wolvenkitFileService.TryReadRED4File(redInFile);
+            var cr2w = _wolvenkitFileService.TryReadRed4File(redInFile);
             if (cr2w == null)
             {
                 return false;

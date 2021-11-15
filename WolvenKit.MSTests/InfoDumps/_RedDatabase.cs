@@ -147,7 +147,7 @@ namespace WolvenKit.MSTests
                         {
                             using var originalMemoryStream = new MemoryStream();
                             ModTools.ExtractSingleToStream(archive, hash, originalMemoryStream);
-                            var cr2w = parser.TryReadRED4FileHeaders(originalMemoryStream);
+                            var cr2w = parser.TryReadRed4FileHeaders(originalMemoryStream);
                             if (cr2w != null)
                             {
                                 if (cr2w.Imports.Any())

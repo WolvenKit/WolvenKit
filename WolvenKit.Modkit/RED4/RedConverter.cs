@@ -1,10 +1,13 @@
 using System;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Text;
 using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Interfaces.Core;
+using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.Modkit.RED4
@@ -22,7 +25,7 @@ namespace WolvenKit.Modkit.RED4
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public string ConvertToText(ETextConvertFormat format, Stream instream)
         {
-            var cr2w = _wolvenkitFileService.TryReadCr2WFile(instream);
+            var cr2w = _wolvenkitFileService.TryReadRed4File(instream);
             if (cr2w == null)
             {
                 throw new InvalidParsingException();
@@ -113,7 +116,7 @@ namespace WolvenKit.Modkit.RED4
         }
 
         /// <summary>
-        /// Cerates a redengine file from a given textual representation and saves it to a given outputdirectory
+        /// Creates a redengine file from a given textual representation and saves it to a given outputdirectory
         /// </summary>
         /// <param name="fileInfo"></param>
         /// <param name="outputDirInfo"></param>
@@ -146,9 +149,9 @@ namespace WolvenKit.Modkit.RED4
             var outpath = Path.ChangeExtension(Path.Combine(outputDirInfo.FullName, fileInfo.Name), ext);
 
             using var fs2 = new FileStream(outpath, FileMode.Create, FileAccess.ReadWrite);
-            using var bw = new BinaryWriter(fs2);
+            using var writer = new CR2WWriter(fs2, Encoding.UTF8, true);
+            writer.WriteFile(w2rc);
 
-            w2rc.Write(bw);
             return true;
         }
     }

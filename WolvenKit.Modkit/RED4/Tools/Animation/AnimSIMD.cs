@@ -21,16 +21,16 @@ namespace WolvenKit.Modkit.RED4.Animation
             }
             BinaryReader br = new BinaryReader(defferedBuffer);
 
-            UInt32 jointsCountAligned = (blob.NumJoints.Value + 3U) & (~3U); // simd 4 alignment
-            UInt32 totalFloatCount = (blob.NumFrames.Value * jointsCountAligned * 3 + 3U) & (~3U);  // simd 4 alignment
-            UInt32 rotCompressedBuffSize = totalFloatCount * blob.QuantizationBits.Value / 8U;
+            UInt32 jointsCountAligned = (blob.NumJoints + 3U) & (~3U); // simd 4 alignment
+            UInt32 totalFloatCount = (blob.NumFrames * jointsCountAligned * 3 + 3U) & (~3U);  // simd 4 alignment
+            UInt32 rotCompressedBuffSize = totalFloatCount * blob.QuantizationBits / 8U;
             rotCompressedBuffSize = (rotCompressedBuffSize + 15U) & (~15U); // 16byte padding aligment
-            UInt32 mask = (1U << blob.QuantizationBits.Value) - 1U;
+            UInt32 mask = (1U << blob.QuantizationBits) - 1U;
 
             UInt16[] floatsPacked = new UInt16[totalFloatCount];
             for (UInt32 i = 0; i < totalFloatCount; i++)
             {
-                UInt32 bitOff = i * blob.QuantizationBits.Value;
+                UInt32 bitOff = i * blob.QuantizationBits;
                 UInt32 byteOff = bitOff / 8;
                 UInt32 shift = (bitOff % 8);
                 defferedBuffer.Position = byteOff;
@@ -43,10 +43,10 @@ namespace WolvenKit.Modkit.RED4.Animation
             {
                 floatsDecompressed[i] = ((1f / mask) * floatsPacked[i] * 2) - 1f;
             }
-            Quat[,] Rotations = new Quat[blob.NumFrames.Value, blob.NumJoints.Value];
-            for (UInt32 i = 0; i < blob.NumFrames.Value; i++)
+            Quat[,] Rotations = new Quat[blob.NumFrames, blob.NumJoints];
+            for (UInt32 i = 0; i < blob.NumFrames; i++)
             {
-                for (UInt32 e = 0; e < blob.NumJoints.Value; e += 4)
+                for (UInt32 e = 0; e < blob.NumJoints; e += 4)
                 {
                     for (UInt32 eye = 0; eye < 4; eye++)
                     {
@@ -61,28 +61,28 @@ namespace WolvenKit.Modkit.RED4.Animation
                         q.Z = q.Z * Convert.ToSingle(Math.Sqrt(2f - dotPr));
                         q.W = 1f - dotPr;
                         q = Quat.Normalize(q);
-                        if (e + eye < blob.NumJoints.Value)
+                        if (e + eye < blob.NumJoints)
                             Rotations[i, e + eye] = new Quat(q.X, q.Z, -q.Y, q.W);
                     }
                 }
             }
-            float[] EvalAlignedPositions = new float[blob.NumFrames.Value * blob.NumTranslationsToEvalAlignedToSimd.Value * 3];
+            float[] EvalAlignedPositions = new float[blob.NumFrames * blob.NumTranslationsToEvalAlignedToSimd * 3];
             defferedBuffer.Position = rotCompressedBuffSize;
-            for (UInt32 i = 0; i < blob.NumFrames.Value * blob.NumTranslationsToEvalAlignedToSimd.Value * 3; i++)
+            for (UInt32 i = 0; i < blob.NumFrames * blob.NumTranslationsToEvalAlignedToSimd * 3; i++)
             {
                 EvalAlignedPositions[i] = br.ReadSingle();
             }
-            Vec3[,] Scales = new Vec3[blob.NumFrames.Value, blob.NumJoints.Value];
-            if (blob.IsScaleConstant.Value)
+            Vec3[,] Scales = new Vec3[blob.NumFrames, blob.NumJoints];
+            if (blob.IsScaleConstant)
             {
                 float[] scalesRaw = new float[4];
                 for (UInt32 i = 0; i < 4; i++)
                 {
                     scalesRaw[i] = br.ReadSingle();
                 }
-                for (UInt32 i = 0; i < blob.NumFrames.Value; i++)
+                for (UInt32 i = 0; i < blob.NumFrames; i++)
                 {
-                    for (UInt32 e = 0; e < blob.NumJoints.Value; e++)
+                    for (UInt32 e = 0; e < blob.NumJoints; e++)
                     {
                         Vec3 v = new Vec3();
                         v.X = scalesRaw[0];
@@ -94,14 +94,14 @@ namespace WolvenKit.Modkit.RED4.Animation
             }
             else
             {
-                float[] scalesRaw = new float[blob.NumFrames.Value * jointsCountAligned * 3];
-                for (UInt32 i = 0; i < blob.NumFrames.Value * jointsCountAligned * 3; i++)
+                float[] scalesRaw = new float[blob.NumFrames * jointsCountAligned * 3];
+                for (UInt32 i = 0; i < blob.NumFrames * jointsCountAligned * 3; i++)
                 {
                     scalesRaw[i] = br.ReadSingle();
                 }
-                for (UInt32 i = 0; i < blob.NumFrames.Value; i++)
+                for (UInt32 i = 0; i < blob.NumFrames; i++)
                 {
-                    for (UInt32 e = 0; e < blob.NumJoints.Value; e += 4)
+                    for (UInt32 e = 0; e < blob.NumJoints; e += 4)
                     {
                         for (UInt32 eye = 0; eye < 4; eye++)
                         {
@@ -114,11 +114,11 @@ namespace WolvenKit.Modkit.RED4.Animation
                     }
                 }
             }
-            if (blob.NumTracks.Value > 0)
+            if (blob.NumTracks > 0)
             {
-                if (!blob.IsTrackConstant.Value)
+                if (!blob.IsTrackConstant)
                 {
-                    UInt32 asas = ((blob.NumTracks.Value + 3U) & (~3U)) * blob.NumFrames.Value * 4;
+                    UInt32 asas = ((blob.NumTracks + 3U) & (~3U)) * blob.NumFrames * 4;
                     defferedBuffer.Seek(asas, SeekOrigin.Current);
                 }
                 else
@@ -127,32 +127,32 @@ namespace WolvenKit.Modkit.RED4.Animation
                 }
             }
 
-            Vec3[] positionToCopy = new Vec3[blob.NumTranslationsToCopy.Value];
-            for (UInt32 e = 0; e < blob.NumTranslationsToCopy.Value; e++)
+            Vec3[] positionToCopy = new Vec3[blob.NumTranslationsToCopy];
+            for (UInt32 e = 0; e < blob.NumTranslationsToCopy; e++)
             {
                 positionToCopy[e].X = br.ReadSingle();
                 positionToCopy[e].Y = br.ReadSingle();
                 positionToCopy[e].Z = br.ReadSingle();
             }
 
-            Int16[] evalIndices = new Int16[blob.NumTranslationsToEvalAlignedToSimd.Value];
-            Int16[] copyIndices = new Int16[blob.NumTranslationsToCopy.Value];
-            for (UInt32 e = 0; e < blob.NumTranslationsToCopy.Value; e++)
+            Int16[] evalIndices = new Int16[blob.NumTranslationsToEvalAlignedToSimd];
+            Int16[] copyIndices = new Int16[blob.NumTranslationsToCopy];
+            for (UInt32 e = 0; e < blob.NumTranslationsToCopy; e++)
                 copyIndices[e] = br.ReadInt16();
-            for (UInt32 e = 0; e < blob.NumTranslationsToEvalAlignedToSimd.Value; e++)
+            for (UInt32 e = 0; e < blob.NumTranslationsToEvalAlignedToSimd; e++)
                 evalIndices[e] = br.ReadInt16();
 
-            Vec3[,] Positions = new Vec3[blob.NumFrames.Value, blob.NumJoints.Value];
-            for (UInt32 i = 0; i < blob.NumFrames.Value; i++)
+            Vec3[,] Positions = new Vec3[blob.NumFrames, blob.NumJoints];
+            for (UInt32 i = 0; i < blob.NumFrames; i++)
             {
-                for (UInt32 e = 0; e < blob.NumTranslationsToEvalAlignedToSimd.Value; e += 4)
+                for (UInt32 e = 0; e < blob.NumTranslationsToEvalAlignedToSimd; e += 4)
                 {
                     for (UInt32 eye = 0; eye < 4; eye++)
                     {
                         Vec3 v = new Vec3();
-                        v.X = EvalAlignedPositions[i * blob.NumTranslationsToEvalAlignedToSimd.Value * 3 + e * 3 + eye];
-                        v.Y = EvalAlignedPositions[i * blob.NumTranslationsToEvalAlignedToSimd.Value * 3 + e * 3 + 4 + eye];
-                        v.Z = EvalAlignedPositions[i * blob.NumTranslationsToEvalAlignedToSimd.Value * 3 + e * 3 + 8 + eye];
+                        v.X = EvalAlignedPositions[i * blob.NumTranslationsToEvalAlignedToSimd * 3 + e * 3 + eye];
+                        v.Y = EvalAlignedPositions[i * blob.NumTranslationsToEvalAlignedToSimd * 3 + e * 3 + 4 + eye];
+                        v.Z = EvalAlignedPositions[i * blob.NumTranslationsToEvalAlignedToSimd * 3 + e * 3 + 8 + eye];
 
                         if (evalIndices[e + eye] > -1)
                             Positions[i, evalIndices[e + eye]] = new Vec3(v.X, v.Z, -v.Y);
@@ -169,13 +169,13 @@ namespace WolvenKit.Modkit.RED4.Animation
                 }
             }
             var a = model.CreateAnimation(animName);
-            for (int e = 0; e < blob.NumJoints.Value - blob.NumExtraJoints.Value; e++)
+            for (int e = 0; e < blob.NumJoints - blob.NumExtraJoints; e++)
             {
                 var pos = new Dictionary<float, Vec3>();
                 var rot = new Dictionary<float, Quat>();
                 var sca = new Dictionary<float, Vec3>();
-                float diff = blob.Duration.Value / (blob.NumFrames.Value - 1);
-                for (int i = 0; i < blob.NumFrames.Value; i++)
+                float diff = blob.Duration / (blob.NumFrames - 1);
+                for (int i = 0; i < blob.NumFrames; i++)
                 {
                     pos.Add(i * diff, Positions[i, e]);
                     rot.Add(i * diff, Rotations[i, e]);

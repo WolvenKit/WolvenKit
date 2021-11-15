@@ -27,13 +27,13 @@ namespace WolvenKit.RED4.CR2W
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
-        public CR2WFile TryReadRED4File(Stream stream)
+        public CR2WFile TryReadRed4File(Stream stream)
         {
             using var br = new BinaryReader(stream, Encoding.Default, true);
-            return TryReadRED4File(br);
+            return TryReadRed4File(br);
         }
 
-        public CR2WFile TryReadRED4File(BinaryReader br)
+        public CR2WFile TryReadRed4File(BinaryReader br)
         {
             // peak if cr2w
             if (br.BaseStream.Length < 4)
@@ -72,13 +72,13 @@ namespace WolvenKit.RED4.CR2W
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
-        public CR2WFile TryReadRED4FileHeaders(Stream stream)
+        public CR2WFile TryReadRed4FileHeaders(Stream stream)
         {
             using var br = new BinaryReader(stream, Encoding.Default, true);
-            return TryReadRED4FileHeaders(br);
+            return TryReadRed4FileHeaders(br);
         }
 
-        public CR2WFile TryReadRED4FileHeaders(BinaryReader br)
+        public CR2WFile TryReadRed4FileHeaders(BinaryReader br)
         {
             // peak if cr2w
             if (br.BaseStream.Length < 4)

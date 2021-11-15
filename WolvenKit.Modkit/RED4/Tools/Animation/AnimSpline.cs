@@ -31,15 +31,15 @@ namespace WolvenKit.Modkit.RED4.Animation
             }
 
             BinaryReader br = new BinaryReader(defferedBuffer);
-            float duration = blob.Duration.Value;
-            UInt32 numFrames = blob.NumFrames.Value;
-            UInt32 numJoints = blob.NumJoints.Value;
-            UInt32 numTracks = blob.NumTracks.Value;
-            UInt32 numExtraJoints = blob.NumExtraJoints.Value;
-            UInt32 numAnimKeys = blob.NumAnimKeys.Value;
-            UInt32 numAnimKeysRaw = blob.NumAnimKeysRaw.Value;
-            UInt32 NumConstAnimKeys = blob.NumConstAnimKeys.Value;
-            UInt32 numConstTrackKeys = blob.NumConstTrackKeys.Value;
+            float duration = blob.Duration;
+            UInt32 numFrames = blob.NumFrames;
+            UInt32 numJoints = blob.NumJoints;
+            UInt32 numTracks = blob.NumTracks;
+            UInt32 numExtraJoints = blob.NumExtraJoints;
+            UInt32 numAnimKeys = blob.NumAnimKeys;
+            UInt32 numAnimKeysRaw = blob.NumAnimKeysRaw;
+            UInt32 NumConstAnimKeys = blob.NumConstAnimKeys;
+            UInt32 numConstTrackKeys = blob.NumConstTrackKeys;
 
             defferedBuffer.Seek(0, SeekOrigin.Begin);
             for (UInt32 i = 0; i < numAnimKeys; i++)

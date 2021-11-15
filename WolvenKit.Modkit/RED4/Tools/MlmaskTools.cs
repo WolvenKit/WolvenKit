@@ -21,7 +21,7 @@ namespace WolvenKit.Modkit.RED4
         public bool UncookMlmask(Stream cr2wStream, FileInfo outfile, MlmaskExportArgs args)
         {
             // read the cr2wfile
-            var cr2w = _wolvenkitFileService.TryReadCr2WFile(cr2wStream);
+            var cr2w = _wolvenkitFileService.TryReadRed4File(cr2wStream);
             if (cr2w == null)
             {
                 return false;
@@ -29,24 +29,24 @@ namespace WolvenKit.Modkit.RED4
 
             //We need 2 buffers one for atlas one for tile data
 
-            if (!(cr2w.Chunks.FirstOrDefault()?.Data is Multilayer_Mask mlmask) ||
-                !(cr2w.Chunks[1]?.Data is rendRenderMultilayerMaskBlobPC blob))
+            if (!(cr2w.Chunks.FirstOrDefault() is Multilayer_Mask mlmask) ||
+                !(cr2w.Chunks[1] is rendRenderMultilayerMaskBlobPC blob))
             {
                 return false;
             }
 
-            uint atlasWidth = blob.Header.AtlasWidth.Value;
-            uint atlasHeight = blob.Header.AtlasHeight.Value;
+            uint atlasWidth = blob.Header.AtlasWidth;
+            uint atlasHeight = blob.Header.AtlasHeight;
 
-            uint maskWidth = blob.Header.MaskWidth.Value;
-            uint maskHeight = blob.Header.MaskHeight.Value;
+            uint maskWidth = blob.Header.MaskWidth;
+            uint maskHeight = blob.Header.MaskHeight;
 
-            uint maskWidthLow = blob.Header.MaskWidthLow.Value;
-            uint maskHeightLow = blob.Header.MaskHeightLow.Value;
+            uint maskWidthLow = blob.Header.MaskWidthLow;
+            uint maskHeightLow = blob.Header.MaskHeightLow;
 
-            uint maskTileSize = blob.Header.MaskTileSize.Value;
+            uint maskTileSize = blob.Header.MaskTileSize;
 
-            uint maskCount = blob.Header.NumLayers.Value;
+            uint maskCount = blob.Header.NumLayers;
 
             byte[] atlas;
             var atlasRaw = new byte[atlasWidth * atlasHeight];
