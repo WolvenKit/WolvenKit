@@ -13,8 +13,7 @@ namespace WolvenKit.RED4.TweakDB.Types
         public static implicit operator CResource(string value)
         {
             var cres = new CResource();
-            UInt64 key;
-            if (UInt64.TryParse(value, result: out key))
+            if (ulong.TryParse(value, out var key))
             {
                 cres.Text = value;
                 cres.Key = key;
