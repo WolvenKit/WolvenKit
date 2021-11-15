@@ -15,17 +15,16 @@ namespace WolvenKit.RED4.TweakDB.Types
         public static implicit operator CResource(string value)
         {
             var cres = new CResource();
-            var rx = new Regex(@"(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-            var m = rx.Matches(value);
-            if (m.Count == 1)
+            UInt64 key;
+            if (UInt64.TryParse(value, result: out key))
             {
                 cres.Text = value;
-                cres.Key = Convert.ToUInt64(m[0].Groups[1].Value, 10);
-                return cres;
+                cres.Key = key;
+            } else
+            {
+                cres.Text = value;
+                cres.Key = !string.IsNullOrEmpty(value) ? FNV1A64HashAlgorithm.HashString(value) : 0;
             }
-
-            cres.Text = value;
-            cres.Key = (!string.IsNullOrEmpty(value) && value != "0") ? FNV1A64HashAlgorithm.HashString(value) : 0;
             return cres;
         }
 
