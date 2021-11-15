@@ -17,7 +17,8 @@ namespace WolvenKit.RED4.TweakDB.Types
             {
                 cres.Text = value;
                 cres.Key = key;
-            } else
+            } 
+            else
             {
                 cres.Text = value;
                 cres.Key = !string.IsNullOrEmpty(value) ? FNV1A64HashAlgorithm.HashString(value) : 0;
