@@ -1,8 +1,6 @@
 using System;
 using System.IO;
-using RED.CRC32;
 using WolvenKit.Common.FNV1A;
-using System.Text.RegularExpressions;
 
 namespace WolvenKit.RED4.TweakDB.Types
 {
