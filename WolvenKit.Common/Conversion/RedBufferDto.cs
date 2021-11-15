@@ -1,5 +1,5 @@
-using WolvenKit.Common.Model.Cr2w;
-using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.Archive.CR2W;
 
 namespace WolvenKit.Common.Conversion
 {
@@ -21,7 +21,7 @@ namespace WolvenKit.Common.Conversion
         public RedBufferDto(ICR2WBuffer cr2WBuffer)
         {
             Flags = cr2WBuffer.Flags;
-            Index = cr2WBuffer.Index;
+            //Index = cr2WBuffer.Index;
             // Offset = cr2WBuffer.Offset;
             // DiskSize = cr2WBuffer.DiskSize;
             // MemSize = cr2WBuffer.MemSize;
@@ -29,14 +29,14 @@ namespace WolvenKit.Common.Conversion
         }
 
         public ICR2WBuffer ToRedBuffer() =>
-            new CR2WBufferWrapper(new CR2WBuffer()
+            new CR2WBuffer()
             {
-                flags = Flags,
-                index = Index,
+                Flags = Flags,
+                //Index = Index,
                 // offset = Offset,
                 // diskSize = DiskSize,
                 // memSize = MemSize,
                 // crc32 = Crc32,
-            });
+            };
     }
 }

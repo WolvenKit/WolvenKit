@@ -55,7 +55,7 @@ namespace WolvenKit.RED4.Archive.IO
             var nameInfoList = ReadTable<CR2WNameInfo>(tableHeaders[1]); // block 2
             var importInfoList = ReadTable<CR2WImportInfo>(tableHeaders[2]); // block 3
             var propertyInfoList = ReadTable<CR2WPropertyInfo>(tableHeaders[3]); // block 4
-            var chunkInfoList = ReadTable<CR2WChunkInfo>(tableHeaders[4]); // block 5
+            var chunkInfoList = ReadTable<CR2WExportInfo>(tableHeaders[4]); // block 5
             var bufferInfoList = ReadTable<CR2WBufferInfo>(tableHeaders[5]);  // block 6
             var embeddedInfoList = ReadTable<CR2WEmbeddedInfo>(tableHeaders[6]); // block 7
 
@@ -149,7 +149,7 @@ namespace WolvenKit.RED4.Archive.IO
             return new CR2WProperty();
         }
 
-        private IRedClass ReadChunk(CR2WChunkInfo info)
+        private IRedClass ReadChunk(CR2WExportInfo info)
         {
             Debug.Assert(BaseStream.Position == info.dataOffset);
 

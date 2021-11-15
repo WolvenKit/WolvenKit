@@ -355,12 +355,12 @@ namespace WolvenKit.RED4.Archive.IO
 
 
 
-        private CR2WChunkInfo WriteChunk(CR2WWriter file, IRedClass chunkData)
+        private CR2WExportInfo WriteChunk(CR2WWriter file, IRedClass chunkData)
         {
             var redTypeName = RedReflection.GetTypeRedName(chunkData.GetType());
             var typeIndex = file.GetStringIndex(redTypeName);
 
-            var result = new CR2WChunkInfo
+            var result = new CR2WExportInfo
             {
                 className = typeIndex,
                 dataOffset = (uint)file.BaseStream.Position
@@ -377,12 +377,12 @@ namespace WolvenKit.RED4.Archive.IO
 
         #region Support
 
-        private (IList<CName>, IList<(string, CName, ushort)>, List<CR2WChunkInfo>, byte[]) GenerateChunkData()
+        private (IList<CName>, IList<(string, CName, ushort)>, List<CR2WExportInfo>, byte[]) GenerateChunkData()
         {
             using var ms = new MemoryStream();
             using var file = new CR2WWriter(ms);
 
-            var chunkInfoList = new List<CR2WChunkInfo>();
+            var chunkInfoList = new List<CR2WExportInfo>();
             for (int i = 0; i < _file.Chunks.Count; i++)
             {
                 file.StartChunk(i);
@@ -464,7 +464,7 @@ namespace WolvenKit.RED4.Archive.IO
             result += Marshal.SizeOf(typeof(CR2WNameInfo)) * namesCount;
             result += Marshal.SizeOf(typeof(CR2WImportInfo)) * importsCount;
             result += Marshal.SizeOf(typeof(CR2WPropertyInfo)) * _file.Properties.Count;
-            result += Marshal.SizeOf(typeof(CR2WChunkInfo)) * _file.Chunks.Count;
+            result += Marshal.SizeOf(typeof(CR2WExportInfo)) * _file.Chunks.Count;
             result += Marshal.SizeOf(typeof(CR2WBufferInfo)) * _file.Buffers.Count;
             result += Marshal.SizeOf(typeof(CR2WEmbeddedInfo)) * _file.EmbeddedFiles.Count;
 

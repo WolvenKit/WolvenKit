@@ -15,4 +15,9 @@ namespace WolvenKit.RED4.Archive.CR2W
         [FieldOffset(4)]
         public uint hash;
     }
+
+    public class CR2WName : ICR2WName
+    {
+        
+    }
 }

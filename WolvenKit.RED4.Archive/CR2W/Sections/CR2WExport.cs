@@ -8,7 +8,7 @@ using WolvenKit.RED4.Types;
 namespace WolvenKit.RED4.Archive.CR2W
 {
     [StructLayout(LayoutKind.Explicit, Size = 24)]
-    public struct CR2WChunkInfo
+    public struct CR2WExportInfo
     {
         [FieldOffset(0)]
         public ushort className;        //needs to be registered upon new creation and updated on file write!   //done
@@ -30,5 +30,11 @@ namespace WolvenKit.RED4.Archive.CR2W
 
         [FieldOffset(20)]
         public uint crc32;              // created upon write   //done
+    }
+
+
+    public class CR2WExport : ICR2WExport
+    {
+
     }
 }

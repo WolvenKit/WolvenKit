@@ -2,6 +2,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
+using WolvenKit.RED4.Archive;
 
 namespace CP77.Common.Image
 {

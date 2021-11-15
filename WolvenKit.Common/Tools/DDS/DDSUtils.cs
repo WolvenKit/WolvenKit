@@ -7,6 +7,7 @@ using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using System.Buffers;
 using DirectXTexSharp;
+using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.Common.DDS
 {

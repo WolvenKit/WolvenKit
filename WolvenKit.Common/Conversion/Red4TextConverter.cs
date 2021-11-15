@@ -2,11 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using Newtonsoft.Json.Linq;
-using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Interfaces.Core;
-using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Conversion
@@ -19,7 +16,7 @@ namespace WolvenKit.Common.Conversion
         /// <param name="cVariable"></param>
         /// <param name="value">either a JArray, JObject or primitive value</param>
         /// <exception cref="InvalidParsingException"></exception>
-        public static void SetFromJObject(this IEditableVariable cVariable, object value)
+        public static void SetFromJObject(this IRedType cVariable, object value)
         {
             // switch over the jobject
             switch (value)
@@ -29,65 +26,67 @@ namespace WolvenKit.Common.Conversion
                     switch (cVariable)
                     {
                         // enums are serialized as list of strings
-                        case IREDEnum:
+                        case IRedEnum:
                             var enumobj = jArray.ToObject<List<string>>();
                             if (enumobj == null)
                             {
                                 throw new InvalidParsingException("not a CVariable");
                             }
-                            cVariable.SetValue(enumobj);
-                            break;
+                            //cVariable.SetValue(enumobj);
+                            //break;
+                            throw new NotImplementedException();
                         // arrays
-                        case ICurveDataAccessor curve:
+                        case IRedMultiChannelCurve curve:
                         {
                             var curvePoints = jArray.ToObject<List<object>>();
                             if (curvePoints == null)
                             {
                                 throw new InvalidParsingException("not a CVariable");
                             }
-                            for (var i = 0; i < curvePoints.Count; i++)
-                            {
-                                var jitem = curvePoints[i];
+                            throw new NotImplementedException();
+                            //for (var i = 0; i < curvePoints.Count; i++)
+                            //{
+                            //    var jitem = curvePoints[i];
 
-
-                                var element = curve.GetElementInstance(i.ToString());
-                                // parse the elements according to the array type
-                                element.SetFromJObject(jitem);
-                                curve.AddVariable(element);
-                            }
-                            break;
+                            //    var element = curve.GetElementInstance(i.ToString());
+                            //    // parse the elements according to the array type
+                            //    element.SetFromJObject(jitem);
+                            //    curve.AddVariable(element);
+                            //}
+                            //break;
                         }
-                        case IREDArray redArray:
+                        case IRedArray redArray:
                         {
-                            if (redArray.IsByteArray())
-                            {
-                                var bytes = jArray.ToObject<byte[]>();
-                                redArray.SetValue(bytes);
-                            }
-                            else
-                            {
-                                var listOfObjects = jArray.ToObject<List<object>>();
-                                if (listOfObjects == null)
-                                {
-                                    throw new InvalidParsingException("not a CVariable");
-                                }
-                                for (var i = 0; i < listOfObjects.Count; i++)
-                                {
-                                    var jitem = listOfObjects[i];
+                            throw new NotImplementedException();
+                            //if (redArray.IsByteArray())
+                            //{
+                            //    var bytes = jArray.ToObject<byte[]>();
+                            //    redArray.SetValue(bytes);
+                            //}
+                            //else
+                            //{
+                            //    var listOfObjects = jArray.ToObject<List<object>>();
+                            //    if (listOfObjects == null)
+                            //    {
+                            //        throw new InvalidParsingException("not a CVariable");
+                            //    }
+                            //    for (var i = 0; i < listOfObjects.Count; i++)
+                            //    {
+                            //        var jitem = listOfObjects[i];
 
-                                    var element = redArray.GetElementInstance(i.ToString());
-                                    // parse the elements according to the array type
-                                    element.SetFromJObject(jitem);
-                                    redArray.AddVariable(element);
-                                }
-                            }
+                            //        var element = redArray.GetElementInstance(i.ToString());
+                            //        // parse the elements according to the array type
+                            //        element.SetFromJObject(jitem);
+                            //        redArray.AddVariable(element);
+                            //    }
+                            //}
 
-                            break;
+                            //break;
                         }
                         default:
                             throw new InvalidParsingException("not a CVariable");
                     }
-                    break;
+                //break;
                 // complex objects are JObjects and can be deserialized as CVariableDto (recursive)
                 case JObject jObject:
                     cVariable.SetFromDictionary(jObject.ToObject<Dictionary<string, object>>());
@@ -97,32 +96,32 @@ namespace WolvenKit.Common.Conversion
                     throw new InvalidParsingException("file format not supported");
                 // primitive types can be set directly
                 default:
-                    switch (value)
-                    {
-                        // all numeric values
-                        case long:
-                        case double:
-                        case BigInteger:
-                            cVariable.SetValue(value.ToString()); // cast to string to do the parsing in the classes :/
-                            break;
-                        // other primitive types can be set directly
-                        case bool b:
-                            cVariable.SetValue(b);
-                            break;
-                        case string s:
-                            cVariable.SetValue(s);
-                            break;
-                        default:
-                            throw new InvalidParsingException("file format not supported");
-                    }
-
-                    break;
+                    //switch (value)
+                    //{
+                    //    // all numeric values
+                    //    case long:
+                    //    case double:
+                    //    case BigInteger:
+                    //        cVariable.SetValue(value.ToString()); // cast to string to do the parsing in the classes :/
+                    //        break;
+                    //    // other primitive types can be set directly
+                    //    case bool b:
+                    //        cVariable.SetValue(b);
+                    //        break;
+                    //    case string s:
+                    //        cVariable.SetValue(s);
+                    //        break;
+                    //    default:
+                    //        throw new InvalidParsingException("file format not supported");
+                    //}
+                    //break;
+                    throw new NotImplementedException();
             }
         }
 
-        public static void SetFromDictionary(this IEditableVariable cvar, Dictionary<string, object> dictionary)
+        public static void SetFromDictionary(this IRedType cvar, Dictionary<string, object> dictionary)
         {
-            if (cvar is IREDVariant var)
+            if (cvar is CVariant var)
             {
                 var type = dictionary["Type"] as string;
                 var name = "Variant";
@@ -131,29 +130,33 @@ namespace WolvenKit.Common.Conversion
                     name = dictionary["Name"] as string;
                 }
 
-                var jvalue = dictionary["Variant"];
-                var variant = CR2WTypeManager.Create(type, name, cvar.Cr2wFile as IRed4EngineFile, cvar as CVariable);
-                variant.IsSerialized = true;
-                variant.SetFromJObject(jvalue);
-                var.SetVariant(variant);
+                throw new NotImplementedException();
 
-                return;
+                //var jvalue = dictionary["Variant"];
+                //var variant = CR2WTypeManager.Create(type, name, cvar.Cr2wFile as IRed4EngineFile, cvar as CVariable);
+                //variant.IsSerialized = true;
+                //variant.SetFromJObject(jvalue);
+                //var.SetVariant(variant);
+
+                //return;
             }
 
-            if (cvar is ICurveDataAccessor curve)
+            if (cvar is IRedMultiChannelCurve curve)
             {
                 var interpolation = dictionary["InterpolationType"];
                 var interpolationByte = int.Parse(interpolation.ToString());
 
-                curve.SetInterpolationType((EInterpolationType)interpolationByte);
+                throw new NotImplementedException();
 
-                var link = dictionary["LinkType"];
-                var linkByte = int.Parse(link.ToString());
-                curve.SetLinkType((ESegmentsLinkType)linkByte);
+                //curve.SetInterpolationType((EInterpolationType)interpolationByte);
 
-                curve.SetFromJObject(dictionary["Elements"]);
+                //var link = dictionary["LinkType"];
+                //var linkByte = int.Parse(link.ToString());
+                //curve.SetLinkType((ESegmentsLinkType)linkByte);
 
-                return;
+                //curve.SetFromJObject(dictionary["Elements"]);
+
+                //return;
             }
 
             foreach (var (propertyName, value) in dictionary)
@@ -167,34 +170,35 @@ namespace WolvenKit.Common.Conversion
             }
         }
 
-        private static CVariable GetRedProperty(IEditableVariable cvar, string propertyName)
+        private static IRedType GetRedProperty(IRedType cvar, string propertyName)
         {
-            foreach (var member in REDReflection.GetMembers(cvar))
-            {
-                try
-                {
-                    var redname = REDReflection.GetREDNameString(member);
-                    if (redname != propertyName)
-                    {
-                        continue;
-                    }
+            throw new NotImplementedException();
+            //foreach (var member in REDReflection.GetMembers(cvar))
+            //{
+            //    try
+            //    {
+            //        var redname = REDReflection.GetREDNameString(member);
+            //        if (redname != propertyName)
+            //        {
+            //            continue;
+            //        }
 
-                    var prop = cvar.accessor[cvar, member.Name];
-                    var cprop = prop as CVariable;
+            //        var prop = cvar.accessor[cvar, member.Name];
+            //        var cprop = prop as IRedType;
 
-                    return cprop;
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
-            }
+            //        return cprop;
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        Console.WriteLine(e);
+            //        throw;
+            //    }
+            //}
 
-            return null;
+            //return null;
         }
 
-        public static object ToObject(this IEditableVariable data)
+        public static object ToObject(this IRedType data)
         {
             switch (data)
             {
@@ -202,46 +206,48 @@ namespace WolvenKit.Common.Conversion
                     return d.ToUInt64();
                 // special cases of primitive types
                 case CVariant var:
-                    return new Dictionary<string, object>()
-                    {
-                        {"Type", var.Variant.REDType},
-                        {"Variant", var.Variant.ToObject()}
-                    };
-                case CVariantSizeNameType varnt:
-                    return new Dictionary<string, object>()
-                    {
-                        {"Type", varnt.Variant.REDType},
-                        {"Name", varnt.Variant.REDName},
-                        {"Variant", varnt.Variant.ToObject()}
-                    };
-                case IREDCurvePoint cp:
-                    if (cp.GetValue() is Tuple<IEditableVariable, IEditableVariable>(var item1, var item2))
-                    {
-                        return new Dictionary<string, object>() { { "Value", item1.ToObject() }, { "Point", item2.ToObject() } };
-                    }
-                    throw new InvalidParsingException($"{data.REDType} ToObject");
-                // serialize primitive types directly
-                case IREDPrimitive b:
-                    return b.GetValue();
+                    throw new NotImplementedException();
+                //return new Dictionary<string, object>()
+                //{
+                //    {"Type", var.Variant.REDType},
+                //    {"Variant", var.Variant.ToObject()}
+                //};
+                //case CVariantSizeNameType varnt:
+                //    return new Dictionary<string, object>()
+                //    {
+                //        {"Type", varnt.Variant.REDType},
+                //        {"Name", varnt.Variant.REDName},
+                //        {"Variant", varnt.Variant.ToObject()}
+                //    };
+                //case IREDCurvePoint cp:
+                //    if (cp.GetValue() is Tuple<IEditableVariable, IEditableVariable>(var item1, var item2))
+                //    {
+                //        return new Dictionary<string, object>() { { "Value", item1.ToObject() }, { "Point", item2.ToObject() } };
+                //    }
+                //    throw new InvalidParsingException($"{data.REDType} ToObject");
                 // serialize arrays as list of objects
                 // serialize curves as array
-                case IREDArray arr:
+                case IRedArray arr:
                 {
                     if (arr is IList ilist)
                     {
-                        if (arr.IsByteArray())
-                        {
-                            return arr.GetBytes();
-                        }
-                        else
-                        {
-                            return ilist.Cast<IEditableVariable>().Select(_ => _.ToObject());
-                        }
+                        throw new NotImplementedException();
+                        //if (arr.IsByteArray())
+                        //{
+                        //    return arr.GetBytes();
+                        //}
+                        //else
+                        //{
+                        //    return ilist.Cast<IRedType>().Select(_ => _.ToObject());
+                        //}
                     }
 
                     throw new InvalidParsingException("Invalid File");
                 }
-                case ICurveDataAccessor curve:
+                // serialize primitive types directly
+                case IRedPrimitive b:
+                    return b;
+                case IRedMultiChannelCurve curve:
                 {
                     dynamic array = data;
                     if (array.Elements is not IList dyn)
@@ -249,26 +255,28 @@ namespace WolvenKit.Common.Conversion
                         throw new InvalidParsingException("Invalid File");
                     }
                     var elements = dyn
-                        .Cast<IEditableVariable>()
+                        .Cast<IRedType>()
                         .Select(_ => _.ToObject());
 
-                    return new Dictionary<string, object>()
-                    {
-                        {"InterpolationType", curve.GetInterpolationType()},
-                        {"LinkType", curve.GetLinkType()},
-                        {"Elements", elements}
-                    };
+                    throw new NotImplementedException();
+                    //return new Dictionary<string, object>()
+                    //{
+                    //    {"InterpolationType", curve.GetInterpolationType()},
+                    //    {"LinkType", curve.GetLinkType()},
+                    //    {"Elements", elements}
+                    //};
                 }
 
                 // serialize complex properties as Dictionary
                 default:
                     var dict = new Dictionary<string, object>();
-                    foreach (var cvar in data.SerializedProperties)
-                    {
-                        dict.Add(cvar.REDName, cvar.ToObject());
-                    }
+                    throw new NotImplementedException();
+                    //foreach (var cvar in data.SerializedProperties)
+                    //{
+                    //    dict.Add(cvar.REDName, cvar.ToObject());
+                    //}
 
-                    return dict;
+                    //return dict;
             }
 
         }

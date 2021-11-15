@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Archive.CR2W
         public CR2WNameInfo[] NameInfos { get; set; }
         public CR2WImportInfo[] ImportInfos { get; set; }
         public CR2WPropertyInfo[] PropertyInfos { get; set; }
-        public CR2WChunkInfo[] ChunkInfos { get; set; }
+        public CR2WExportInfo[] ChunkInfos { get; set; }
         public CR2WBufferInfo[] BufferInfos { get; set; }
         public CR2WEmbeddedInfo[] EmbeddedInfos { get; set; }
     }

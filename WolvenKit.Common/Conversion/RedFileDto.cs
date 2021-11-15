@@ -1,9 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using WolvenKit.Common.Model;
-using WolvenKit.Common.Tools;
 using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Conversion
 {
@@ -22,20 +21,22 @@ namespace WolvenKit.Common.Conversion
 
         }
 
-        public RedFileDto(IWolvenkitFile cr2w)
+        public RedFileDto(Red4File cr2w)
         {
-            Chunks = cr2w.Chunks.ToDictionary(_ => _.ChunkIndex, _ => new RedExportDto(_));
-            Buffers = cr2w.Buffers.Select(_ => new RedBufferDto(_)).ToList();
+            throw new NotImplementedException();
+
+            //Chunks = cr2w.Chunks.ToDictionary(_ => _.ChunkIndex, _ => new RedExportDto(_));
+            //Buffers = cr2w.Buffers.Select(_ => new RedBufferDto(_)).ToList();
         }
 
         public CR2WFile ToW2rc()
         {
             var cr2w = new CR2WFile
             {
-                Buffers = Buffers
-                    .OrderBy(_ => _.Index)
-                    .Select(_ => _.ToRedBuffer())
-                    .ToList()
+                //Buffers = Buffers
+                //    .OrderBy(_ => _.Index)
+                //    .Select(_ => _.ToRedBuffer())
+                //    .ToList()
             };
 
             // chunks

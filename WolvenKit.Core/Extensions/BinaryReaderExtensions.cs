@@ -7,23 +7,23 @@ namespace WolvenKit.Core.Extensions
 {
     public static class BinaryReaderExtensions
     {
-        public static IEditableVariable CopyViaBuffer(IEditableVariable source, IEditableVariable destination)
-        {
-            using (MemoryStream ms = new MemoryStream())
-            using (BinaryWriter bw = new BinaryWriter(ms))
-            {
-                source.Write(bw);
+        //public static IEditableVariable CopyViaBuffer(IEditableVariable source, IEditableVariable destination)
+        //{
+        //    using (MemoryStream ms = new MemoryStream())
+        //    using (BinaryWriter bw = new BinaryWriter(ms))
+        //    {
+        //        source.Write(bw);
 
-                ms.Position = 0;
+        //        ms.Position = 0;
 
-                using (BinaryReader reader = new BinaryReader(ms))
-                {
-                    destination.Read(reader, (uint)ms.Length);
-                }
-            }
+        //        using (BinaryReader reader = new BinaryReader(ms))
+        //        {
+        //            destination.Read(reader, (uint)ms.Length);
+        //        }
+        //    }
 
-            return destination;
-        }
+        //    return destination;
+        //}
 
         public static int ReadBit6(this BinaryReader stream)
         {

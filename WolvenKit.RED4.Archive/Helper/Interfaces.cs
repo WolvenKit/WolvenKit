@@ -13,12 +13,21 @@ namespace WolvenKit.RED4.Archive
     {
     }
 
+    public interface ICR2WName
+    {
+    }
+
     public interface ICR2WBuffer : IRedBuffer
     {
         public uint Flags { get; set; }
 
         public bool IsCompressed { get; set; }
         public uint MemSize { get; set; }
+    }
+    
+    public interface ICR2WExport
+    {
+
     }
 
     public interface ICR2WEmbeddedFile

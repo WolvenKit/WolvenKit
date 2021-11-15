@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Tools.Oodle;
+using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.Common.Oodle
 {
