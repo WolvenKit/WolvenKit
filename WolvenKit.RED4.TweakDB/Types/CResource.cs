@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using RED.CRC32;
 using WolvenKit.Common.FNV1A;
 
 namespace WolvenKit.RED4.TweakDB.Types
@@ -11,11 +10,21 @@ namespace WolvenKit.RED4.TweakDB.Types
         public string Text { get; set; }
         public ulong Key { get; set; }
 
-        public static implicit operator CResource(string value) => new()
+        public static implicit operator CResource(string value)
         {
-            Text = value,
-            Key = (!string.IsNullOrEmpty(value) && value != "0") ? FNV1A64HashAlgorithm.HashString(value) : 0 
-        };
+            var cres = new CResource();
+            if (ulong.TryParse(value, out var key))
+            {
+                cres.Text = value;
+                cres.Key = key;
+            } 
+            else
+            {
+                cres.Text = value;
+                cres.Key = !string.IsNullOrEmpty(value) ? FNV1A64HashAlgorithm.HashString(value) : 0;
+            }
+            return cres;
+        }
 
         public override string ToString() => $"{Text} <raRef:CResource 0x{Key:X} / {Key}>";
         public void Serialize(BinaryWriter writer) => writer.Write(Key);
