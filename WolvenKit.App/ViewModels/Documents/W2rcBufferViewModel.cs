@@ -1,17 +1,19 @@
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Documents
 {
     public class W2rcBufferViewModel : W2rcFileViewModel
     {
-        private ICR2WBuffer _buffer;
-        private IWolvenkitFile _cr2wbuffer;
+        private IRedBuffer _buffer;
+        private Red4File _cr2wbuffer;
         private readonly CR2WFile _w2RcFile;
 
-        public W2rcBufferViewModel(ICR2WBuffer buffer, IWolvenkitFile redbuffer, CR2WFile w2rcFile) : base(redbuffer)
+        public W2rcBufferViewModel(IRedBuffer buffer, Red4File redbuffer, CR2WFile w2rcFile) : base(redbuffer)
         {
             _buffer = buffer;
             _cr2wbuffer = redbuffer;
@@ -22,7 +24,8 @@ namespace WolvenKit.ViewModels.Documents
 
         #region methods
 
-        public override string ToString() => $"{_w2RcFile.GetBufferIndex(_buffer)}.buffer";
+        //public override string ToString() => $"{_w2RcFile.GetBufferIndex(_buffer)}.buffer";
+        public override string ToString() => $"TODO.buffer";
 
         #endregion
     }

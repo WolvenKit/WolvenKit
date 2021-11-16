@@ -3,39 +3,31 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
-
 using DynamicData;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Common.Services;
+using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Shell
 {
     public class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel
     {
-        #region Fields
-
-        private readonly ICR2WExport _export;
-
-        #endregion Fields
+        private readonly IRedType _data;
 
         #region Constructors
 
-        public ChunkViewModel(ICR2WExport export)
+        public ChunkViewModel(IRedType export)
         {
-            _export = export;
+            _data = export;
         }
 
         #endregion Constructors
 
         #region Properties
 
-        public IEditableVariable GetData() => _export.Data;
-
-        public IEditableVariable Data => _export.Data;
-
-        public string Name => _export.REDName;
+        public IRedType Data => _data;
 
         [Reactive] public bool IsSelected { get; set; }
 

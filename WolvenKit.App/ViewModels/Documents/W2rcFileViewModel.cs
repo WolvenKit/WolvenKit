@@ -9,18 +9,20 @@ using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Documents
 {
     public class W2rcFileViewModel : RedDocumentItemViewModel
     {
-        private readonly IWolvenkitFile _file;
+        private readonly Red4File _file;
 
-        public W2rcFileViewModel(IWolvenkitFile file)
+        public W2rcFileViewModel(Red4File file)
         {
 
             OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport);
@@ -45,12 +47,12 @@ namespace WolvenKit.ViewModels.Documents
 
         //[Reactive] public ObservableCollection<ChunkPropertyViewModel> ChunkProperties { get; set; } = new();
 
-        public List<ICR2WImport> Imports => _file.Imports;
+        //public List<ICR2WImport> Imports => _file.Imports;
 
-        public List<ICR2WBuffer> Buffers => _file.Buffers;
+        //public List<ICR2WBuffer> Buffers => _file.Buffers;
 
         public List<ChunkViewModel> Chunks => _file.Chunks
-            .Where(_ => _.VirtualParentChunk == null)
+            //.Where(_ => _.VirtualParentChunk == null)
             .Select(_ => new ChunkViewModel(_)).ToList();
 
         [Reactive] public ChunkViewModel SelectedChunk { get; set; }
@@ -64,7 +66,7 @@ namespace WolvenKit.ViewModels.Documents
         public ICommand OpenImportCommand { get; private set; }
         private void ExecuteOpenImport(ICR2WImport input)
         {
-            var depotpath = input.DepotPathStr;
+            var depotpath = input.DepotPath;
             var key = FNV1A64HashAlgorithm.HashString(depotpath);
 
             var _gameControllerFactory = Locator.Current.GetService<IGameControllerFactory>();
@@ -80,7 +82,7 @@ namespace WolvenKit.ViewModels.Documents
 
         #region methods
 
-        public IWolvenkitFile GetFile() => _file;
+        public Red4File GetFile() => _file;
 
         public override string ToString() => "MainFile";
 

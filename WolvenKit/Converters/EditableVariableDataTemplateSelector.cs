@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Assimp;
-using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Converters
@@ -28,17 +28,17 @@ namespace WolvenKit.Converters
                 ? null
                 : GetTemplate(editableVariable.Property);
 
-        private DataTemplate GetTemplate(IEditableVariable variable) =>
+        private DataTemplate GetTemplate(IRedType variable) =>
             variable switch
             {
-                IREDBool => RedboolTemplate,        //done in PG
-                IREDString => StringTemplateView,   //done in PG
+                IRedPrimitive<bool> => RedboolTemplate,        //done in PG
+                IRedPrimitive<string> => StringTemplateView,   //done in PG
                 IREDIntegerType => NumericTemplate, //done in PG
-                IREDEnum => EnumTemplate,           //done in PG
+                IRedEnum => EnumTemplate,           //done in PG
                 IREDChunkPtr => HandleTemplateView, //done in PG
-                IREDRef => RefTemplateView,         //done in PG
-                IREDColor x => ColorTemplateView,   //done in PG
-                IREDArray => CommmonTemplate,       //done in PG
+                IRedRef => RefTemplateView,         //done in PG
+                CColor x => ColorTemplateView,   //done in PG
+                IRedArray => CommmonTemplate,       //done in PG
                 ICurveDataAccessor => SingleChannelCurveTemplate,   //done in PG
                 _ => CommmonTemplate
             };

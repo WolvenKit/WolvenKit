@@ -15,6 +15,7 @@ using WolvenKit.Common.Conversion;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Common.Tools;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.Common.RED4.Compiled
 {
@@ -81,7 +82,6 @@ namespace WolvenKit.Common.RED4.Compiled
             public uint ChunkDataOffset;
         }
         private List<ChunkDesc> ChunkDescs { get; set; }
-        public List<ICR2WExport> Chunks { get; private set; }
         public List<ICR2WBuffer> Buffers { get; private set; }
         [JsonIgnore] public bool CreatePropertyOnAccess { get; set; } = true;
         [JsonIgnore] public bool IsDirty { get; set; }
@@ -105,7 +105,6 @@ namespace WolvenKit.Common.RED4.Compiled
 
             Names = new List<ICR2WName>();
             Imports = new List<ICR2WImport>();
-            Chunks = new List<ICR2WExport>();
             Buffers = new List<ICR2WBuffer>();
         }
 
@@ -188,7 +187,7 @@ namespace WolvenKit.Common.RED4.Compiled
             throw new NotImplementedException();
             //return JsonConvert.SerializeObject(new RedFileDto(this), Formatting.Indented);
         }
-        public IEditableVariable ReadVariable(BinaryReader br, IEditableVariable parent)
+        public IRedType ReadVariable(BinaryReader br, IRedType parent)
         {
             throw new WolvenKit.RED4.Types.Exceptions.TodoException();
 
@@ -300,7 +299,7 @@ namespace WolvenKit.Common.RED4.Compiled
         {
             throw new NotImplementedException();
         }
-        public ICR2WExport CreateChunk(string type, int chunkindex = 0, ICR2WExport parent = null, ICR2WExport virtualparent = null, IEditableVariable cvar = null)
+        public ICR2WExport CreateChunk(string type, int chunkindex = 0, ICR2WExport parent = null, ICR2WExport virtualparent = null, IRedType cvar = null)
         {
             var chunk = new Export(this, type, parent as Export);
             chunk.ChunkIndex = chunkindex;
@@ -312,7 +311,7 @@ namespace WolvenKit.Common.RED4.Compiled
             {
                 chunk.CreateDefaultData(cvar);
             }
-            chunk.Data.VarChunkIndex = chunkindex;
+            //chunk.Data.VarChunkIndex = chunkindex;
 
             if (parent != null)
             {
@@ -323,8 +322,9 @@ namespace WolvenKit.Common.RED4.Compiled
                 chunk.MountChunkVirtually(virtualparent);
             }
 
-            Chunks.Insert(chunkindex, chunk);
-            return chunk;
+            throw new TodoException("fix");
+            //Chunks.Insert(chunkindex, chunk);
+            //return chunk;
         }
     }
     public class Import : ICR2WImport
@@ -358,17 +358,17 @@ namespace WolvenKit.Common.RED4.Compiled
     }
     public class Export : ICR2WExport
     {
-        public bool ShouldSerializeData() => Data.IsSerialized == true;
+       // public bool ShouldSerializeData() => Data.IsSerialized == true;
         public string REDType { get; }
         [JsonIgnore] public CompiledPackage Package { get; private set; }
         public int ParentChunkIndex { get; }
 
-        public IEditableVariable Data { get; set; }
+        public IRedType Data { get; set; }
 
         [JsonIgnore] public string REDName => REDType + " #" + ChunkIndex;
         [JsonIgnore] public int ChunkIndex { get; set; }
 
-        [JsonIgnore] public IEditableVariable UnknownBytes { get; }
+        [JsonIgnore] public IRedType UnknownBytes { get; }
 
         [JsonIgnore] public ICR2WExport ParentChunk { get; set; }
         [JsonIgnore] public ICR2WExport VirtualParentChunk { get; set; }
@@ -378,7 +378,7 @@ namespace WolvenKit.Common.RED4.Compiled
         //[JsonIgnore] public List<IREDChunkPtr> AbReferences { get; }
         [JsonIgnore] public List<string> UnknownTypes { get; }
 
-        public void CreateDefaultData(IEditableVariable cvar = null)
+        public void CreateDefaultData(IRedType cvar = null)
         {
             throw new WolvenKit.RED4.Types.Exceptions.TodoException();
 

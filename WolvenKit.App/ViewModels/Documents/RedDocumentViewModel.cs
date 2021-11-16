@@ -11,7 +11,10 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Common.RED4.Compiled;
 using WolvenKit.Common.Services;
+using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -55,16 +58,20 @@ namespace WolvenKit.ViewModels.Documents
         public override Task OnSave(object parameter)
         {
             using var fs = new FileStream(FilePath, FileMode.Create, FileAccess.ReadWrite);
-            using var bw = new BinaryWriter(fs);
             var file = GetMainFile();
             if (file.HasValue)
             {
                 // TODO gather buffers
+                var resource = file.Value.GetFile();
+                if (resource is CR2WFile cr2w)
+                {
+                    using var writer = new CR2WWriter(fs);
+                    writer.WriteFile(cr2w);
 
-
-                file.Value.GetFile().Write(bw);
-                SetIsDirty(false);
-                _loggerService.Success($"Saved file {FilePath}");
+                    SetIsDirty(false);
+                    _loggerService.Success($"Saved file {FilePath}");
+                }
+                throw new ArgumentException();
             }
 
             return Task.CompletedTask;
@@ -80,13 +87,13 @@ namespace WolvenKit.ViewModels.Documents
                 {
                     using var reader = new BinaryReader(stream);
 
-                    var cr2w = _parser.TryReadCr2WFile(reader);
+                    var cr2w = _parser.TryReadRed4File(reader);
                     if (cr2w == null)
                     {
                         _loggerService.Error($"Failed to read cr2w file {path}");
                         return false;
                     }
-                    cr2w.FileName = path;
+                    //cr2w.FileName = path;
 
                     ContentId = path;
                     FilePath = path;
@@ -117,13 +124,13 @@ namespace WolvenKit.ViewModels.Documents
                 {
                     using var reader = new BinaryReader(stream);
 
-                    var cr2w = _parser.TryReadCr2WFile(reader);
+                    var cr2w = _parser.TryReadRed4File(reader);
                     if (cr2w == null)
                     {
                         _loggerService.Error($"Failed to read cr2w file {path}");
                         return false;
                     }
-                    cr2w.FileName = path;
+                    //cr2w.FileName = path;
 
                     ContentId = path;
                     FilePath = path;
@@ -149,20 +156,20 @@ namespace WolvenKit.ViewModels.Documents
             .Where(x => x.DocumentItemType == ERedDocumentItemType.MainFile)
             .FirstOrDefault());
 
-        private void PopulateItems(IWolvenkitFile w2rcFile)
+        private void PopulateItems(CR2WFile w2rcFile)
         {
-            TabItemViewModels.Add(new W2rcFileViewModel(w2rcFile));
+            TabItemViewModels.Add(new W2rcFileViewModel(w2rcFile as Red4File));
 
-            foreach (var b in w2rcFile.Buffers)
+            foreach (var buffer in w2rcFile.Buffers)
             {
-                if (b is CR2WBufferWrapper buffer)
+                //if (b is CR2WBufferWrapper buffer)
                 {
-                    var data = buffer.GetData();
+                    var data = buffer.Data;
 
                     using var uncompressedMS = new MemoryStream();
                     using (var compressedMs = new MemoryStream(data))
                     {
-                        OodleHelper.DecompressAndCopySegment(compressedMs, uncompressedMS, b.DiskSize, b.MemSize);
+                        OodleHelper.DecompressAndCopySegment(compressedMs, uncompressedMS, (uint)data.Length, buffer.MemSize);
 
                         //dbg
                         //var bufferpath = $"{w2rcFile.FileName}.{(w2rcFile as CR2WFile).GetBufferIndex(b)}.buffer";
@@ -173,10 +180,10 @@ namespace WolvenKit.ViewModels.Documents
                     }
 
                     // try reading as normal cr2w file
-                    var cr2wbuffer = _parser.TryReadCr2WFile(uncompressedMS);
+                    var cr2wbuffer = _parser.TryReadRed4File(uncompressedMS);
                     if (cr2wbuffer != null)
                     {
-                        TabItemViewModels.Add(new W2rcBufferViewModel(b, cr2wbuffer, w2rcFile as CR2WFile));
+                        TabItemViewModels.Add(new W2rcBufferViewModel(buffer, cr2wbuffer, w2rcFile));
                     }
                     // try reading as compiled package
                     else
@@ -185,7 +192,7 @@ namespace WolvenKit.ViewModels.Documents
                         var compiledPackage = _parser.TryReadCompiledPackage(uncompressedMS);
                         if (compiledPackage != null)
                         {
-                            TabItemViewModels.Add(new W2rcBufferViewModel(b, compiledPackage, w2rcFile as CR2WFile));
+                            TabItemViewModels.Add(new W2rcBufferViewModel(buffer, compiledPackage, w2rcFile));
                         }
                     }
                 }

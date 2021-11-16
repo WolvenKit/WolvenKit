@@ -22,7 +22,6 @@ namespace WolvenKit.RED4.Archive
         public uint Flags { get; set; }
 
         public bool IsCompressed { get; set; }
-        public uint MemSize { get; set; }
     }
     
     public interface ICR2WExport
@@ -36,12 +35,12 @@ namespace WolvenKit.RED4.Archive
         public IRedClass Content { get; set; }
     }
 
-    public interface IEditableVariable
-    {
-        bool IsSerialized { get; set; }
+    //public interface IEditableVariable
+    //{
+    //    bool IsSerialized { get; set; }
 
-        [JsonIgnore] int VarChunkIndex { get; set; }
+    //    [JsonIgnore] int VarChunkIndex { get; set; }
 
-        void Read(CR2WReader file, uint size);
-    }
+    //    void Read(CR2WReader file, uint size);
+    //}
 }

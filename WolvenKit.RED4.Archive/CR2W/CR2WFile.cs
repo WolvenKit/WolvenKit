@@ -40,11 +40,6 @@ namespace WolvenKit.RED4.Archive.CR2W
 
         public IRedClass RootChunk => Chunks[0];
 
-        public IList<IRedClass> Chunks
-        {
-            get => _chunks;
-        }
-
         public IList<IRedBuffer> Buffers
         {
             get => _buffers;

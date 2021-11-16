@@ -16,5 +16,10 @@ namespace WolvenKit.RED4.Types
             _chunks = new List<IRedClass>();
             _buffers = new List<IRedBuffer>();
         }
+
+        public IList<IRedClass> Chunks
+        {
+            get => _chunks;
+        }
     }
 }
