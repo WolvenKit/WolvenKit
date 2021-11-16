@@ -48,15 +48,12 @@ namespace WolvenKit.Modkit.RED4
 
             uint maskCount = blob.Header.NumLayers;
 
-            byte[] atlas;
             var atlasRaw = new byte[atlasWidth * atlasHeight];
+
+
             var atlasBuffer = cr2w.Buffers[0];
-            cr2wStream.Seek(atlasBuffer.Offset, SeekOrigin.Begin);
-            using (var ms = new MemoryStream())
-            {
-                cr2wStream.DecompressAndCopySegment(ms, atlasBuffer.DiskSize, atlasBuffer.MemSize);
-                atlas = ms.ToArray();
-            }
+            var atlas = new byte[atlasBuffer.MemSize];
+            _ = OodleHelper.Decompress(atlasBuffer.Data, atlas);
 
             //Decode compressed data into single channel uncompressed
             //Mlmask always BC4?
@@ -79,11 +76,13 @@ namespace WolvenKit.Modkit.RED4
             //Read tilesdata buffer into appropriate variable type
             var tileBuffer = cr2w.Buffers[1];
             var tiles = new uint[tileBuffer.MemSize / 4];
-            cr2wStream.Seek(tileBuffer.Offset, SeekOrigin.Begin);
-            using (var ms = new MemoryStream())
+
+            var tileBytes = new byte[tileBuffer.MemSize];
+            _ = OodleHelper.Decompress(tileBuffer.Data, atlas);
+
+            using (var ms = new MemoryStream(tileBytes))
             using (var br = new BinaryReader(ms))
             {
-                cr2wStream.DecompressAndCopySegment(ms, tileBuffer.DiskSize, tileBuffer.MemSize);
                 ms.Seek(0, SeekOrigin.Begin);
 
                 for (var i = 0; i < tiles.Length; i++)

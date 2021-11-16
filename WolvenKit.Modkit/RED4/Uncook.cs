@@ -12,6 +12,7 @@ using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
+using WolvenKit.Modkit.Extensions;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
@@ -474,9 +475,11 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            var b = cr2w.Buffers[0];
-            redstream.Seek(b.Offset, SeekOrigin.Begin);
-            redstream.DecompressAndCopySegment(outstream, b.DiskSize, b.MemSize);
+            var buffer = cr2w.Buffers[0];
+            var unpacked = new byte[buffer.MemSize];
+            _ = OodleHelper.Decompress(buffer.Data, unpacked);
+            outstream.Write(unpacked);
+
             return true;
         }
 
@@ -579,11 +582,12 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var buffers = cr2w.Buffers;
-            foreach (var b in buffers)
+            foreach (var buffer in buffers)
             {
+                var unpacked = new byte[buffer.MemSize];
+                _ = OodleHelper.Decompress(buffer.Data, unpacked);
                 var ms = new MemoryStream();
-                cr2wStream.Seek(b.Offset, SeekOrigin.Begin);
-                cr2wStream.DecompressAndCopySegment(ms, b.DiskSize, b.MemSize);
+                ms.Write(unpacked);
 
                 yield return ms;
             }
@@ -629,9 +633,10 @@ namespace WolvenKit.Modkit.RED4
                 new DDSMetadata(width, height, 1, sliceCount, mipCount,
                     0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
 
-            var b = cr2w.Buffers[0];
-            cr2wStream.Seek(b.Offset, SeekOrigin.Begin);
-            cr2wStream.DecompressAndCopySegment(outstream, b.DiskSize, b.MemSize);
+            var buffer = cr2w.Buffers[0];
+            var unpacked = new byte[buffer.MemSize];
+            _ = OodleHelper.Decompress(buffer.Data, unpacked);
+            outstream.Write(unpacked);
 
             return true;
         }
@@ -663,9 +668,11 @@ namespace WolvenKit.Modkit.RED4
             DDSUtils.GenerateAndWriteHeader(outstream,
                 new DDSMetadata(width, height, 1, sliceCount, mipCount,
                     0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
-            var b = cr2w.Buffers[0];
-            cr2wStream.Seek(b.Offset, SeekOrigin.Begin);
-            cr2wStream.DecompressAndCopySegment(outstream, b.DiskSize, b.MemSize);
+
+            var buffer = cr2w.Buffers[0];
+            var unpacked = new byte[buffer.MemSize];
+            _ = OodleHelper.Decompress(buffer.Data, unpacked);
+            outstream.Write(unpacked);
 
             return true;
         }
@@ -679,8 +686,8 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            if (!(cr2w.Chunks.FirstOrDefault()?.Data is CCubeTexture ctex) ||
-                !(cr2w.Chunks[1]?.Data is rendRenderTextureBlobPC blob))
+            if (!(cr2w.Chunks.FirstOrDefault() is CCubeTexture ctex) ||
+                !(cr2w.Chunks[1] is rendRenderTextureBlobPC blob))
             {
                 return false;
             }
@@ -710,9 +717,11 @@ namespace WolvenKit.Modkit.RED4
             DDSUtils.GenerateAndWriteHeader(outstream,
                 new DDSMetadata(width, height, 1, sliceCount, mipCount,
                     0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
-            var b = cr2w.Buffers[0];
-            cr2wStream.Seek(b.Offset, SeekOrigin.Begin);
-            cr2wStream.DecompressAndCopySegment(outstream, b.DiskSize, b.MemSize);
+
+            var buffer = cr2w.Buffers[0];
+            var unpacked = new byte[buffer.MemSize];
+            _ = OodleHelper.Decompress(buffer.Data, unpacked);
+            outstream.Write(unpacked);
 
             return true;
         }
@@ -726,12 +735,12 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            if (cr2w.StringDictionary[1] != "C2dArray")
+            if (cr2w.Chunks.FirstOrDefault() is not C2dArray)
             {
                 return false;
             }
 
-            if (!(cr2w.Chunks.FirstOrDefault() is C2dArray redcsv ))
+            if (!(cr2w.Chunks.FirstOrDefault() is C2dArray redcsv))
             {
                 return false;
             }
@@ -751,35 +760,35 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            if (cr2w.StringDictionary[1] != "CBitmapTexture")
+            if (cr2w.Chunks.FirstOrDefault() is not CBitmapTexture)
             {
                 return false;
             }
 
-            if (cr2w.Chunks.FirstOrDefault()?.Data is not CBitmapTexture xbm ||
-                cr2w.Chunks[1]?.Data is not rendRenderTextureBlobPC blob)
+            if (cr2w.Chunks.FirstOrDefault() is not CBitmapTexture xbm ||
+                cr2w.Chunks[1] is not rendRenderTextureBlobPC blob)
             {
                 return false;
             }
 
             #region get xbm data
 
-            var width = blob.Header.SizeInfo.Width.Value;
-            var height = blob.Header.SizeInfo.Height.Value;
-            var mipCount = blob.Header.TextureInfo.MipCount.Value;
-            var sliceCount = blob.Header.TextureInfo.SliceCount.Value;
-            var alignment = blob.Header.TextureInfo.DataAlignment.Value;
+            var width = blob.Header.SizeInfo.Width;
+            var height = blob.Header.SizeInfo.Height;
+            var mipCount = blob.Header.TextureInfo.MipCount;
+            var sliceCount = blob.Header.TextureInfo.SliceCount;
+            var alignment = blob.Header.TextureInfo.DataAlignment;
 
             var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
             if (xbm.Setup.RawFormat?.Value != null)
             {
-                rawfmt = xbm.Setup.RawFormat.Value;
+                rawfmt = xbm.Setup.RawFormat.Value.Value;
             }
 
             var compression = Enums.ETextureCompression.TCM_None;
             if (xbm.Setup.Compression?.Value != null)
             {
-                compression = xbm.Setup.Compression.Value;
+                compression = xbm.Setup.Compression.Value.Value;
             }
 
             texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
@@ -790,9 +799,11 @@ namespace WolvenKit.Modkit.RED4
             DDSUtils.GenerateAndWriteHeader(outstream,
                 new DDSMetadata(width, height, 1, sliceCount, mipCount,
                     0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
-            var b = cr2w.Buffers[0];
-            redInFile.Seek(b.Offset, SeekOrigin.Begin);
-            redInFile.DecompressAndCopySegment(outstream, b.DiskSize, b.MemSize);
+
+            var buffer = cr2w.Buffers[0];
+            var unpacked = new byte[buffer.MemSize];
+            _ = OodleHelper.Decompress(buffer.Data, unpacked);
+            outstream.Write(unpacked);
 
             return true;
         }

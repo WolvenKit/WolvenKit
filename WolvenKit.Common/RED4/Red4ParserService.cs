@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Text;
-using WolvenKit.Common.Model;
 using WolvenKit.Common.RED4.Compiled;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
@@ -78,18 +77,55 @@ namespace WolvenKit.RED4.CR2W
             return TryReadRed4FileHeaders(br);
         }
 
+        /// <summary>
+        /// Checks if a stream is a cr2w file
+        /// seeks to the beginning of the stream
+        /// </summary>
+        /// <param name="br"></param>
+        /// <returns></returns>
+        public bool IsCr2wFile(Stream stream, bool seek = true)
+        {
+            if (seek)
+            {
+                stream.Seek(0, SeekOrigin.Begin);
+            }
+
+            // peak if cr2w
+            if (stream.Length < 4)
+            {
+                return false;
+            }
+
+            var word = new byte[4];
+            stream.Read(word, 0, 4);
+            var magic = BitConverter.ToUInt32(word, 0);
+
+            stream.Seek(-4, SeekOrigin.Current);
+
+            if (magic != CR2WFile.MAGIC)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public CR2WFile TryReadRed4FileHeaders(BinaryReader br)
         {
             // peak if cr2w
             if (br.BaseStream.Length < 4)
+            {
                 return null;
+            }
+
             br.BaseStream.Seek(0, SeekOrigin.Begin);
             var magic = br.ReadUInt32();
             var isCr2wFile = magic == CR2WFile.MAGIC;
             if (!isCr2wFile)
+            {
                 return null;
+            }
 
-            var cr2w = new CR2WFile();
             try
             {
                 using var reader = new CR2WReader(br);

@@ -23,6 +23,7 @@ namespace WolvenKit.RED4.Archive.CR2W
         public uint Version { get; set; } = 195;
         public uint BuildVersion { get; set; } = 0;
         public EHashVersion HashVersion { get; set; }
+        public uint ObjectsEnd { get; set; }
     }
 
     public class CR2WFile : Red4File

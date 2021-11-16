@@ -4,13 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
-using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Common.Oodle;
 using WolvenKit.Interfaces.Extensions;
-using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Archive.IO;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -29,61 +28,52 @@ namespace WolvenKit.Modkit.RED4
         /// <returns></returns>
         private bool Rebuild(Stream redfileStream, IEnumerable<byte[]> buffersenumerable)
         {
-            using var fileReader = new BinaryReader(redfileStream);
-
-            var cr2w = _wolvenkitFileService.TryReadRed4FileHeaders(fileReader);
-            if (cr2w == null)
+            var isResource = _wolvenkitFileService.IsCr2wFile(redfileStream);
+            if (!isResource)
             {
                 return false;
             }
 
-            // remove old buffers
-            fileReader.BaseStream.Seek(0, SeekOrigin.Begin);
-            redfileStream.SetLength(cr2w.Header.objectsEnd);
+            using var reader = new CR2WReader(redfileStream);
+            _ = reader.ReadFile(out var cr2w, false);
 
-            // kraken the buffers and handle textures
-            using var fileWriter = new BinaryWriter(redfileStream);
-            fileWriter.BaseStream.Seek(0, SeekOrigin.End);
-
-            var existingBufferCount = cr2w.Buffers.Count;
+            var existingBuffers = cr2w.Debug.BufferInfos.ToList();
 
             var buffers = buffersenumerable.ToList();
             for (var i = 0; i < buffers.Count; i++)
             {
                 var inbuffer = buffers[i];
+                IEnumerable<byte> outBuffer = new List<byte>();
 
-                var offset = (uint)fileWriter.BaseStream.Position;
-                var (zsize, crc) = fileWriter.CompressAndWrite(inbuffer);
+                var r = OodleHelper.Compress(
+                    inbuffer,
+                    inbuffer.Length,
+                    ref outBuffer,
+                    OodleNative.OodleLZ_Compressor.Kraken,
+                    OodleNative.OodleLZ_Compression.Normal);
 
-                if (i < existingBufferCount)
+                var b = outBuffer.ToArray();
+
+                uint flags = 0;
+                if (i < existingBuffers.Count)
                 {
-                    var b = cr2w.Buffers[i];
-                    b.Offset = offset;
-                    b.DiskSize = zsize;
-                    b.MemSize = (uint)inbuffer.Length;
-                    b.Crc32 = crc;
+                    flags = existingBuffers[i].flags;
                 }
-                else
+
+                cr2w.Buffers.Add(new CR2WBuffer()
                 {
-                    cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
-                    {
-                        flags = 0, //TODO: find out what these are
-                        index = (uint)i,
-                        offset = offset,
-                        diskSize = zsize,
-                        memSize = (uint)inbuffer.Length,
-                        crc32 = crc
-                    }));
-                }
+                    Flags = flags, //TODO: find out what these are
+                    MemSize = (uint)inbuffer.Length,
+                    Data = b
+                });
             }
 
-            // write cr2w headers
-            fileWriter.BaseStream.Seek(0, SeekOrigin.Begin);
-            cr2w.WriteHeader(fileWriter);
+            // write cr2w 
+            redfileStream.Seek(0, SeekOrigin.Begin);
+            using var writer = new CR2WWriter(redfileStream);
+            writer.WriteFile(cr2w);
 
             return true;
-
-
         }
 
         /// <summary>
@@ -101,14 +91,16 @@ namespace WolvenKit.Modkit.RED4
 
             void AppendBuffersToFile(Stream fileStream)
             {
-                //check if cr2w
-                using var fileReader = new BinaryReader(fileStream);
-
-                var cr2w = _wolvenkitFileService.TryReadRed4FileHeaders(fileReader);
-                if (cr2w == null)
+                var isResource = _wolvenkitFileService.IsCr2wFile(redfileStream);
+                if (!isResource)
                 {
                     return;
                 }
+
+                using var reader = new CR2WReader(redfileStream);
+                _ = reader.ReadFile(out var cr2w, false);
+
+                var existingBuffers = cr2w.Debug.BufferInfos.ToList();
 
                 // sort buffers numerically
                 var bufferlist = buffers.ToList();
@@ -127,16 +119,6 @@ namespace WolvenKit.Modkit.RED4
                         .ToList();
                 }
 
-                // remove old buffers
-                fileReader.BaseStream.Seek(0, SeekOrigin.Begin);
-                fileStream.SetLength(cr2w.Header.objectsEnd);
-
-                // kraken the buffers and handle textures
-                using var fileWriter = new BinaryWriter(fileStream);
-                fileWriter.BaseStream.Seek(0, SeekOrigin.End);
-
-                var existingBufferCount = cr2w.Buffers.Count;
-
                 for (var i = 0; i < bufferlist.Count; i++)
                 {
                     var buffer = bufferlist[i];
@@ -151,35 +133,35 @@ namespace WolvenKit.Modkit.RED4
                         continue;
                     }
 
-                    var offset = (uint)fileWriter.BaseStream.Position;
-                    var (zsize, crc) = fileWriter.CompressAndWrite(inbuffer);
+                    IEnumerable<byte> outBuffer = new List<byte>();
 
-                    if (i < existingBufferCount)
+                    var r = OodleHelper.Compress(
+                        inbuffer,
+                        inbuffer.Length,
+                        ref outBuffer,
+                        OodleNative.OodleLZ_Compressor.Kraken,
+                        OodleNative.OodleLZ_Compression.Normal);
+
+                    var b = outBuffer.ToArray();
+
+                    uint flags = 0;
+                    if (i < existingBuffers.Count)
                     {
-                        var b = cr2w.Buffers[i];
-                        b.Offset = offset;
-                        b.DiskSize = zsize;
-                        b.MemSize = (uint)inbuffer.Length;
-                        b.Crc32 = crc;
+                        flags = existingBuffers[i].flags;
                     }
-                    else
+
+                    cr2w.Buffers.Add(new CR2WBuffer()
                     {
-                        cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
-                        {
-                            flags = 0, //TODO: find out what these are
-                            index = (uint)i,
-                            offset = offset,
-                            diskSize = zsize,
-                            memSize = (uint)inbuffer.Length,
-                            crc32 = crc
-                        }));
-                    }
+                        Flags = flags, //TODO: find out what these are
+                        MemSize = (uint)inbuffer.Length,
+                        Data = b
+                    });
                 }
 
-                // write cr2w headers
-                fileWriter.BaseStream.Seek(0, SeekOrigin.Begin);
-                cr2w.WriteHeader(fileWriter);
-
+                // write cr2w 
+                redfileStream.Seek(0, SeekOrigin.Begin);
+                using var writer = new CR2WWriter(redfileStream);
+                writer.WriteFile(cr2w);
             }
 
             static byte[] ReadBuffer(FileInfo buffer)

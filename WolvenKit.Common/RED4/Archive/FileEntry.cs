@@ -5,6 +5,7 @@ using WolvenKit.RED4.Types;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Interfaces.Core;
+using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.CR2W.Archive
 {

@@ -20,6 +20,9 @@ using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Types.Exceptions;
+using WolvenKit.RED4.Archive.IO;
+using WolvenKit.Interfaces.Extensions;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -41,16 +44,18 @@ namespace WolvenKit.Modkit.RED4
 
             var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
-            var rendbuffer = cr2w.Buffers[rendblob.RenderBuffer.Buffer - 1];
-            meshStream.Seek(rendbuffer.Offset, SeekOrigin.Begin);
-            var ms = new MemoryStream();
-            meshStream.DecompressAndCopySegment(ms, rendbuffer.DiskSize, rendbuffer.MemSize);
-            var meshesinfo = MeshTools.GetMeshesinfo(rendblob);
+            var rendbuffer = rendblob.RenderBuffer.Buffer;
+            using var ms = new MemoryStream(rendbuffer);
+            throw new WolvenKit.RED4.Types.Exceptions.TodoException("decompress buffer");
+
+#pragma warning disable CS0162 // Unreachable code detected
+            var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w);
+#pragma warning restore CS0162 // Unreachable code detected
 
             List<RawMeshContainer> expMeshes = MeshTools.ContainRawMesh(ms, meshesinfo, LodFilter);
             MeshTools.UpdateSkinningParamCloth(ref expMeshes, meshStream, cr2w);
 
-            RawArmature Rig = MeshTools.GetOrphanRig(rendblob);
+            RawArmature Rig = MeshTools.GetOrphanRig(rendblob, cr2w);
 
             ModelRoot model = MeshTools.RawMeshesToGLTF(expMeshes, Rig);
 
@@ -84,16 +89,25 @@ namespace WolvenKit.Modkit.RED4
                         var ms = new MemoryStream();
                         ExtractSingleToStream(ar, hash, ms);
 
-                        var mi = _wolvenkitFileService.TryReadRed4File(ms);
+                        var isResource = _wolvenkitFileService.IsCr2wFile(ms);
+                        if (!isResource)
+                        {
+                            throw new InvalidParsingException("not a cr2w file");
+                        }
+
+                        using var reader = new CR2WReader(ms);
+                        _ = reader.ReadFile(out var mi, false);
+
                         ExternalMaterial.Add(mi.Chunks[0] as CMaterialInstance);
 
-                        for (int t = 0; t < mi.Imports.Count; t++)
+                        foreach (var import in reader.ImportsList)
                         {
-                            if (!primaryDependencies.Contains(mi.Imports[t].DepotPathStr))
+                            if (!primaryDependencies.Contains(import.DepotPath))
                             {
-                                primaryDependencies.Add(mi.Imports[t].DepotPathStr);
+                                primaryDependencies.Add(import.DepotPath);
                             }
                         }
+
                         break;
                     }
                 }
@@ -110,20 +124,30 @@ namespace WolvenKit.Modkit.RED4
                         var ms = new MemoryStream();
                         ExtractSingleToStream(ar, hash, ms);
 
-                        var mi = _wolvenkitFileService.TryReadRed4File(ms);
+                        var isResource = _wolvenkitFileService.IsCr2wFile(ms);
+                        if (!isResource)
+                        {
+                            throw new InvalidParsingException("not a cr2w file");
+                        }
+
+                        using var reader = new CR2WReader(ms);
+                        _ = reader.ReadFile(out var mi, false);
+
                         ExternalMaterial.Add(mi.Chunks[0] as CMaterialInstance);
 
-                        for (int t = 0; t < mi.Imports.Count; t++)
+                        foreach (var import in reader.ImportsList)
                         {
-                            if (!primaryDependencies.Contains(mi.Imports[t].DepotPathStr))
+                            if (!primaryDependencies.Contains(import.DepotPath))
                             {
-                                primaryDependencies.Add(mi.Imports[t].DepotPathStr);
+                                primaryDependencies.Add(import.DepotPath);
                             }
                         }
+
                         break;
                     }
                 }
             }
+
             List<CMaterialInstance> LocalMaterial = new List<CMaterialInstance>();
 
             bool isbuffered = true;
@@ -139,18 +163,29 @@ namespace WolvenKit.Modkit.RED4
                     UInt32 offset = cmesh.LocalMaterialBuffer.RawDataHeaders[i].Offset;
                     UInt32 size = cmesh.LocalMaterialBuffer.RawDataHeaders[i].Size;
 
-                    MemoryStream ms = new MemoryStream(bytes, (int)offset, (int)size);
-                    var mi = _wolvenkitFileService.TryReadRed4File(ms);
+                    var ms = new MemoryStream(bytes, (int)offset, (int)size);
 
-                    for (int e = 0; e < mi.Imports.Count; e++)
+                    var isResource = _wolvenkitFileService.IsCr2wFile(ms);
+                    if (!isResource)
                     {
-                        if (!primaryDependencies.Contains(mi.Imports[e].DepotPathStr))
+                        throw new InvalidParsingException("not a cr2w file");
+                    }
+
+                    using var reader = new CR2WReader(ms);
+                    _ = reader.ReadFile(out var mi, false);
+
+                    //MemoryStream ms = new MemoryStream(bytes, (int)offset, (int)size);
+                    //var mi = _wolvenkitFileService.TryReadRed4File(ms);
+
+                    foreach (var import in reader.ImportsList)
+                    {
+                        if (!primaryDependencies.Contains(import.DepotPath))
                         {
-                            primaryDependencies.Add(mi.Imports[e].DepotPathStr);
+                            primaryDependencies.Add(import.DepotPath);
                         }
                     }
-                    LocalMaterial.Add(mi.Chunks[0] as CMaterialInstance);
 
+                    LocalMaterial.Add(mi.Chunks[0] as CMaterialInstance);
                 }
             }
             else
@@ -162,13 +197,16 @@ namespace WolvenKit.Modkit.RED4
                         LocalMaterial.Add(cr2w.Chunks[i] as CMaterialInstance);
                     }
                 }
-                for (int i = 0; i < cr2w.Imports.Count; i++)
-                {
-                    if (!primaryDependencies.Contains(cr2w.Imports[i].DepotPathStr))
-                    {
-                        primaryDependencies.Add(cr2w.Imports[i].DepotPathStr);
-                    }
-                }
+
+                throw new TodoException("get import info from cr2w file?");
+                //foreach (var import in cr2w.Debug.ImportInfos)
+                //{
+                    
+                //    if (!primaryDependencies.Contains(import.DepotPath))
+                //    {
+                //        primaryDependencies.Add(import.DepotPath);
+                //    }
+                //}
             }
 
             int Count = cmesh.MaterialEntries.Count;
@@ -194,13 +232,22 @@ namespace WolvenKit.Modkit.RED4
                             var ms = new MemoryStream();
                             ExtractSingleToStream(ar, hash, ms);
 
-                            var mi = _wolvenkitFileService.TryReadRed4File(ms);
-                            path = (mi.Chunks[0] as CMaterialInstance).BaseMaterial.DepotPath;
-                            for (int t = 0; t < mi.Imports.Count; t++)
+                            var isResource = _wolvenkitFileService.IsCr2wFile(ms);
+                            if (!isResource)
                             {
-                                if (!primaryDependencies.Contains(mi.Imports[t].DepotPathStr))
+                                throw new InvalidParsingException("not a cr2w file");
+                            }
+
+                            using var reader = new CR2WReader(ms);
+                            _ = reader.ReadFile(out var mi, false);
+
+                            path = (mi.Chunks[0] as CMaterialInstance).BaseMaterial.DepotPath;
+
+                            foreach (var import in reader.ImportsList)
+                            {
+                                if (!primaryDependencies.Contains(import.DepotPath))
                                 {
-                                    primaryDependencies.Add(mi.Imports[t].DepotPathStr);
+                                    primaryDependencies.Add(import.DepotPath);
                                 }
                             }
                             break;
@@ -215,12 +262,20 @@ namespace WolvenKit.Modkit.RED4
                         var ms = new MemoryStream();
                         ExtractSingleToStream(ar, mt, ms);
 
-                        var mi = _wolvenkitFileService.TryReadRed4File(ms);
-                        for (int t = 0; t < mi.Imports.Count; t++)
+                        var isResource = _wolvenkitFileService.IsCr2wFile(ms);
+                        if (!isResource)
                         {
-                            if (!primaryDependencies.Contains(mi.Imports[t].DepotPathStr))
+                            throw new InvalidParsingException("not a cr2w file");
+                        }
+                        using var reader = new CR2WReader(ms);
+                        _ = reader.ReadFile(out var mi, false);
+
+
+                        foreach (var import in reader.ImportsList)
+                        {
+                            if (!primaryDependencies.Contains(import.DepotPath))
                             {
-                                primaryDependencies.Add(mi.Imports[t].DepotPathStr);
+                                primaryDependencies.Add(import.DepotPath);
                             }
                         }
                         break;
@@ -316,7 +371,7 @@ namespace WolvenKit.Modkit.RED4
                                         Directory.CreateDirectory(new FileInfo(path).Directory.FullName);
                                     }
                                     var hp = _wolvenkitFileService.TryReadRed4File(ms);
-                                    hp.FileName = primaryDependencies[i];
+                                    //hp.FileName = primaryDependencies[i];
                                     var dto = new RedFileDto(hp);
                                     var doc = JsonConvert.SerializeObject(dto, settings);
                                     File.WriteAllText(path, doc);
@@ -338,7 +393,15 @@ namespace WolvenKit.Modkit.RED4
                             {
                                 var ms = new MemoryStream();
                                 ExtractSingleToStream(ar, hash, ms);
-                                var mls = _wolvenkitFileService.TryReadRed4File(ms);
+
+                                var isResource = _wolvenkitFileService.IsCr2wFile(ms);
+                                if (!isResource)
+                                {
+                                    throw new InvalidParsingException("not a cr2w file");
+                                }
+                                using var reader = new CR2WReader(ms);
+                                _ = reader.ReadFile(out var mls, false);
+
                                 mlSetupNames.Add(primaryDependencies[i]);
 
                                 string path = Path.Combine(matRepo, Path.ChangeExtension(primaryDependencies[i], ".mlsetup.json"));
@@ -348,25 +411,25 @@ namespace WolvenKit.Modkit.RED4
                                     {
                                         Directory.CreateDirectory(new FileInfo(path).Directory.FullName);
                                     }
-                                    mls.FileName = primaryDependencies[i];
+                                    //mls.FileName = primaryDependencies[i];
                                     var dto = new RedFileDto(mls);
                                     var doc = JsonConvert.SerializeObject(dto, settings);
                                     File.WriteAllText(path, doc);
                                 }
 
-                                for (int e = 0; e < mls.Imports.Count; e++)
+                                for (int e = 0; e < reader.ImportsList.Count; e++)
                                 {
-                                    if (Path.GetExtension(mls.Imports[e].DepotPathStr) == ".xbm")
+                                    if (Path.GetExtension(reader.ImportsList[e].DepotPath) == ".xbm")
                                     {
-                                        if (!TexturesList.Contains(mls.Imports[e].DepotPathStr))
-                                            TexturesList.Add(mls.Imports[e].DepotPathStr);
+                                        if (!TexturesList.Contains(reader.ImportsList[e].DepotPath))
+                                            TexturesList.Add(reader.ImportsList[e].DepotPath);
 
-                                        ulong hash1 = FNV1A64HashAlgorithm.HashString(mls.Imports[e].DepotPathStr);
+                                        ulong hash1 = FNV1A64HashAlgorithm.HashString(reader.ImportsList[e].DepotPath);
                                         foreach (Archive arr in archives)
                                         {
                                             if (arr.Files.ContainsKey(hash1))
                                             {
-                                                if (!File.Exists(Path.Combine(matRepo, Path.ChangeExtension(mls.Imports[e].DepotPathStr,"." + exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()))))
+                                                if (!File.Exists(Path.Combine(matRepo, Path.ChangeExtension(reader.ImportsList[e].DepotPath, "." + exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()))))
                                                 {
                                                     if (Directory.Exists(matRepo))
                                                         UncookSingle(arr, hash1, new DirectoryInfo(matRepo), exportArgs);
@@ -375,11 +438,11 @@ namespace WolvenKit.Modkit.RED4
                                             }
                                         }
                                     }
-                                    if (Path.GetExtension(mls.Imports[e].DepotPathStr) == ".mltemplate")
+                                    if (Path.GetExtension(reader.ImportsList[e].DepotPath) == ".mltemplate")
                                     {
-                                        if (!mlTemplateNames.Contains(mls.Imports[e].DepotPathStr))
+                                        if (!mlTemplateNames.Contains(reader.ImportsList[e].DepotPath))
                                         {
-                                            ulong hash2 = FNV1A64HashAlgorithm.HashString(mls.Imports[e].DepotPathStr);
+                                            ulong hash2 = FNV1A64HashAlgorithm.HashString(reader.ImportsList[e].DepotPath);
                                             foreach (Archive arr in archives)
                                             {
                                                 if (arr.Files.ContainsKey(hash2))
@@ -388,32 +451,32 @@ namespace WolvenKit.Modkit.RED4
                                                     ExtractSingleToStream(arr, hash2, mss);
 
                                                     var mlt = _wolvenkitFileService.TryReadRed4File(mss);
-                                                    mlTemplateNames.Add(mls.Imports[e].DepotPathStr);
+                                                    mlTemplateNames.Add(reader.ImportsList[e].DepotPath);
 
-                                                    string path1 = Path.Combine(matRepo, Path.ChangeExtension(mls.Imports[e].DepotPathStr, ".mltemplate.json"));
+                                                    string path1 = Path.Combine(matRepo, Path.ChangeExtension(reader.ImportsList[e].DepotPath, ".mltemplate.json"));
                                                     if (!File.Exists(path1))
                                                     {
                                                         if (!new FileInfo(path1).Directory.Exists)
                                                         {
                                                             Directory.CreateDirectory(new FileInfo(path1).Directory.FullName);
                                                         }
-                                                        mlt.FileName = mls.Imports[e].DepotPathStr;
+                                                        //mlt.FileName = mls.Imports[e].DepotPath;
                                                         var dto1 = new RedFileDto(mlt);
                                                         var doc1 = JsonConvert.SerializeObject(dto1, settings);
                                                         File.WriteAllText(path1, doc1);
                                                     }
 
-                                                    for (int eye = 0; eye < mlt.Imports.Count; eye++)
+                                                    for (int eye = 0; eye < reader.ImportsList.Count; eye++)
                                                     {
-                                                        if (!TexturesList.Contains(mlt.Imports[eye].DepotPathStr))
-                                                            TexturesList.Add(mlt.Imports[eye].DepotPathStr);
+                                                        if (!TexturesList.Contains(reader.ImportsList[eye].DepotPath))
+                                                            TexturesList.Add(reader.ImportsList[eye].DepotPath);
 
-                                                        ulong hash3 = FNV1A64HashAlgorithm.HashString(mlt.Imports[eye].DepotPathStr);
+                                                        ulong hash3 = FNV1A64HashAlgorithm.HashString(reader.ImportsList[eye].DepotPath);
                                                         foreach (Archive arrr in archives)
                                                         {
                                                             if (arrr.Files.ContainsKey(hash3))
                                                             {
-                                                                if (!File.Exists(Path.Combine(matRepo, Path.ChangeExtension(mlt.Imports[eye].DepotPathStr,"." + exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()))))
+                                                                if (!File.Exists(Path.Combine(matRepo, Path.ChangeExtension(reader.ImportsList[eye].DepotPath, "." + exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()))))
                                                                 {
                                                                     if (Directory.Exists(matRepo))
                                                                         UncookSingle(arrr, hash3, new DirectoryInfo(matRepo), exportArgs);
@@ -452,38 +515,41 @@ namespace WolvenKit.Modkit.RED4
                 {
                     var rawMat = new RawMaterial();
                     rawMat.Name = keys[i];
-                    rawMat = new Dictionary<string, object>();
-                    for (int e = 0; e < usedMts[keys[i]].Parameters[2].Count; e++)
+                    rawMat.Data = new Dictionary<string, object>();
+
+                    foreach (CHandle<CMaterialParameter> item in usedMts[keys[i]].Parameters[2])
                     {
-                        var refer = usedMts[keys[i]].Parameters[2][e].GetReference();
-                        if (refer.ChildrEditableVariables.Count > 2)
+                        var refer = item.Chunk;
+
+                        if (refer is CMaterialParameterVector vec)
                         {
-                            if(refer.ChildrEditableVariables[2] is Vector4 vec)
-                            {
-                                vec.X = 0f;
-                                vec.Y = 0f;
-                                vec.Z = 0f;
-                                vec.W = 0f;
-                            }
-                            if (refer.ChildrEditableVariables[2] is CFloat flo)
-                            {
-                                flo = 0f;
-                            }
-                            if (refer.ChildrEditableVariables[2] is CColor col)
-                            {
-                                col.Red = 0;
-                                col.Green = 0;
-                                col.Blue = 0;
-                                col.Alpha = 0;
-                            }
-                            if (refer.ChildrEditableVariables[2] is IRedRef dep)
-                            {
-                                dep.DepotPath = "";
-                            }
-                            refer.ChildrEditableVariables[2].IsSerialized = true;
-                            rawMat.Add((refer.ChildrEditableVariables[0] as CName), refer.ChildrEditableVariables[2].ToObject());
+                            vec.Vector.X = 0f;
+                            vec.Vector.Y = 0f;
+                            vec.Vector.Z = 0f;
+                            vec.Vector.W = 0f;
+                            rawMat.Data.Add(refer.ParameterName, vec.Vector.ToObject());
                         }
+                        else if (refer is CMaterialParameterColor col)
+                        {
+                            col.Color.Red = 0;
+                            col.Color.Green = 0;
+                            col.Color.Blue = 0;
+                            col.Color.Alpha = 0;
+                            rawMat.Data.Add(refer.ParameterName, col.Color.ToObject());
+                        }
+                        else if (refer is CMaterialParameterScalar flo)
+                        {
+                            flo.Scalar = 0f;
+                            rawMat.Data.Add(refer.ParameterName, flo.Scalar.ToObject());
+                        }
+
+                        throw new TodoException("add more switch cases for all matinstance param types");
+                        //    if (refer.ChildrEditableVariables[2] is IRedRef dep)
+                        //    {
+                        //        dep.DepotPath = "";
+                        //    }
                     }
+                    
                     matTemplates.Add(rawMat);
                 }
             }
@@ -550,30 +616,31 @@ namespace WolvenKit.Modkit.RED4
             }
             rawMaterial.MaterialTemplate = path;
 
-            rawMaterial = new Dictionary<string, object>();
+            rawMaterial.Data = new Dictionary<string, object>();
             for (int i = 0; i < mt.UsedParameters[2].Count; i++)
             {
                 for (int e = 0; e < mt.Parameters[2].Count; e++)
                 {
-                    var refer = mt.Parameters[2][e].GetReference();
-                    if((refer.ChildrEditableVariables[0] as CName) == mt.UsedParameters[2][i].Name)
+                    var refer = mt.Parameters[2][e].Chunk;
+                    if(refer.ParameterName == mt.UsedParameters[2][i].Name)
                     {
                         // childreditablevars indexing is dangerous(what if someone changes order of vars), just works :D
-                        if(refer.ChildrEditableVariables.Count > 2 && refer.ChildrEditableVariables[2].IsSerialized)
+                        //if(refer.ChildrEditableVariables.Count > 2 && refer.ChildrEditableVariables[2].IsSerialized)
                         {
-                            if(refer.ChildrEditableVariables[2] is CColor col)
+                            if(refer is CMaterialParameterColor col)
                             {
                                 var col_ = new CColor();
-                                col_.Red = col.Red;
-                                col_.Green = col.Green;
-                                col_.Blue = col.Blue;
-                                col_.Alpha = col.Alpha;
+                                col_.Red = col.Color.Red;
+                                col_.Green = col.Color.Green;
+                                col_.Blue = col.Color.Blue;
+                                col_.Alpha = col.Color.Alpha;
 
-                                rawMaterial.Add(mt.UsedParameters[2][i].Name, col_.ToObject());
+                                rawMaterial.Data.Add(mt.UsedParameters[2][i].Name, col_.ToObject());
                             }
                             else
                             {
-                                rawMaterial.Add(mt.UsedParameters[2][i].Name, refer.ChildrEditableVariables[2].ToObject());
+                                throw new TodoException("get parameter for all derived classes");
+                                //rawMaterial.Data.Add(mt.UsedParameters[2][i].Name, refer.ChildrEditableVariables[2].ToObject());
                             }
                         }
                     }
@@ -583,9 +650,12 @@ namespace WolvenKit.Modkit.RED4
             BaseMaterials.Add(cMaterialInstance);
             for (int i = 0; i < BaseMaterials.Count; i++)
             {
-                for (int e = 0; e < BaseMaterials[i].CMaterialInstanceData.Count; e++)
+                var materialInstancedata = (CMaterialInstance_Appendix)BaseMaterials[i].Appendix;
+                var values = materialInstancedata.Values;
+
+                for (int e = 0; e < values.Count; e++)
                 {
-                    var variant = BaseMaterials[i].CMaterialInstanceData[e].Variant;
+                    var variant = values[e].Value;
                     // remove when tobj serialization is fixed
                     if (variant is CColor col)
                     {
@@ -595,24 +665,24 @@ namespace WolvenKit.Modkit.RED4
                         col_.Blue = col.Blue;
                         col_.Alpha = col.Alpha;
 
-                        if (rawMaterial.ContainsKey(BaseMaterials[i].CMaterialInstanceData[e].REDName))
+                        if (rawMaterial.Data.ContainsKey(values[e].Key))
                         {
-                            rawMaterial[BaseMaterials[i].CMaterialInstanceData[e].REDName] = col_.ToObject();
+                            rawMaterial.Data[values[e].Key] = col_.ToObject();
                         }
                         else
                         {
-                            rawMaterial.Add(BaseMaterials[i].CMaterialInstanceData[e].REDName, col_.ToObject());
+                            rawMaterial.Data.Add(values[e].Key, col_.ToObject());
                         }
                     }
                     else
                     {
-                        if (rawMaterial.ContainsKey(BaseMaterials[i].CMaterialInstanceData[e].REDName))
+                        if (rawMaterial.Data.ContainsKey(values[e].Key))
                         {
-                            rawMaterial[BaseMaterials[i].CMaterialInstanceData[e].REDName] = variant.ToObject();
+                            rawMaterial.Data[values[e].Key] = variant.ToObject();
                         }
                         else
                         {
-                            rawMaterial.Add(BaseMaterials[i].CMaterialInstanceData[e].REDName, variant.ToObject());
+                            rawMaterial.Data.Add(values[e].Key, variant.ToObject());
                         }
                     }
                 }
@@ -624,11 +694,14 @@ namespace WolvenKit.Modkit.RED4
         {
             var blob = cr2w.Chunks.OfType<CMesh>().First();
 
-            UInt16 p = blob.LocalMaterialBuffer.RawData.Buffer;
+            var p = blob.LocalMaterialBuffer.RawData.Pointer;
             var b = cr2w.Buffers[p - 1];
-            ms.Seek(b.Offset, SeekOrigin.Begin);
+
+            var unpacked = new byte[b.MemSize];
+            _ = OodleHelper.Decompress(b.Data, unpacked);
             MemoryStream materialStream = new MemoryStream();
-            ms.DecompressAndCopySegment(materialStream, b.DiskSize, b.MemSize);
+            ms.Write(unpacked);
+
             return materialStream;
         }
         public bool WriteMatToMesh(ref CR2WFile cr2w, string _matData, List<Archive> archives)
@@ -658,8 +731,8 @@ namespace WolvenKit.Modkit.RED4
                     chunk.CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC;
                     chunk.EnableMask = true ;
                     chunk.ResourceVersion = 4;
-                    chunk.BaseMaterial = new rRef<IMaterial>() {DepotPath = mat.BaseMaterial };
-                    chunk.CMaterialInstanceData = new CArray<CVariantSizeNameType>();
+                    chunk.BaseMaterial = new CResourceReference<IMaterial>() {DepotPath = mat.BaseMaterial };
+                    //chunk.CMaterialInstanceData = new CArray<CVariantSizeNameType>();
 
                     CMaterialTemplate mt = null;
                     if (mts.ContainsKey(mat.MaterialTemplate))
@@ -681,7 +754,7 @@ namespace WolvenKit.Modkit.RED4
                             }
                         }
                     }
-                    var keys = matData.Materials[i].Keys.ToList();
+                    var keys = matData.Materials[i].Data.Keys.ToList();
                     if (mt != null)
                     {
                         for (int j = 0; j < keys.Count; j++)
@@ -689,54 +762,58 @@ namespace WolvenKit.Modkit.RED4
                             string typename = null;
                             for (int k = 0; k < mt.Parameters[2].Count; k++)
                             {
-                                var refer = mt.Parameters[2][k].GetReference();
-                                if((refer.ChildrEditableVariables[0] as CName) == keys[j])
+                                var refer = mt.Parameters[2][k].Chunk;
+                                if(refer.ParameterName == keys[j])
                                 {
-                                    if (refer.ChildrEditableVariables.Count > 2)
-                                    {
-                                        typename = refer.ChildrEditableVariables[2].REDType;
-                                    }
+                                    throw new TodoException("get the actual parameter type");
+                                    //if (refer.ChildrEditableVariables.Count > 2)
+                                    //{
+                                    //    typename = refer.ChildrEditableVariables[2].REDType;
+                                    //}
                                 }
                             }
                             if(typename != null)
                             {
                                 // remove when setfromobj deserialization is fixed
-                                if(typename == "Color")
-                                {
-                                    CColor value0 = new CColor();
-                                    value0.IsSerialized = true;
-                                    value0.SetFromJObject(matData.Materials[i][keys[j]]);
 
-                                    var variant = new CVariantSizeNameType(mi, chunk.CMaterialInstanceData, keys[j]);
-                                    CColor value = new CColor();
-                                    value.Red = value0.Red;
-                                    value.Green = value0.Green;
-                                    value.Blue = value0.Blue;
-                                    value.Alpha = value0.Alpha;
-                                    variant.SetVariant(value);
-                                    chunk.CMaterialInstanceData.Add(variant);
-                                }
-                                else
-                                {
-                                    var variant = new CVariantSizeNameType();
-                                    var value = CR2WTypeManager.Create(typename, keys[j], mi, variant);
-                                    value.IsSerialized = true;
-                                    value.SetFromJObject(matData.Materials[i][keys[j]]);
-                                    variant.SetVariant(value);
-                                    chunk.CMaterialInstanceData.Add(variant);
-                                }
+                                throw new TodoException("get the actual parameter type");
+
+                                //if (typename == "Color")
+                                //{
+                                //    CColor value0 = new CColor();
+                                //    value0.SetFromJObject(matData.Materials[i].Data[keys[j]]);
+
+                                //    CColor value = new CColor
+                                //    {
+                                //        Red = value0.Red,
+                                //        Green = value0.Green,
+                                //        Blue = value0.Blue,
+                                //        Alpha = value0.Alpha
+                                //    };
+                                //    chunk.CMaterialInstanceData.Add(variant);
+                                //}
+                                //else
+                                //{
+                                //    //var variant = new CVariantSizeNameType();
+                                //    var value = CR2WTypeManager.Create(typename, keys[j], mi, variant);
+                                //    value.SetFromJObject(matData.Materials[i].Data[keys[j]]);
+                                //    variant.SetVariant(value);
+                                //    chunk.CMaterialInstanceData.Add(variant);
+                                //}
                             }
                         }
                     }
 
 
-                    mi.CreateChunk(chunk, 0);
+                    mi.Chunks.Add(chunk);
                 }
 
                 offsets.Add((UInt32)materialbuffer.Position);
                 var m = new MemoryStream();
-                var b = new BinaryWriter(m);
-                mi.Write(b);
+
+                using var writer = new CR2WWriter(m);
+                writer.WriteFile(mi);
+
                 materialbuffer.Write(m.ToArray(), 0, (int)m.Length);
                 sizes.Add((UInt32)m.Length);
             }
@@ -788,36 +865,26 @@ namespace WolvenKit.Modkit.RED4
             var (zsize, crc) = buff.CompressAndWrite(materialbuffer.ToArray());
 
             bool check = false;
-            check = blob.LocalMaterialBuffer.RawData.IsSerialized;
+            check = blob.LocalMaterialBuffer.RawData.Buffer.Length > 0;
             if (!check)
             {
                 blob.LocalMaterialBuffer.RawData = new DataBuffer();
-                blob.LocalMaterialBuffer.RawData.Buffer = (UInt16)(cr2w.Buffers.Count + 1);
+                blob.LocalMaterialBuffer.RawData.Pointer = (UInt16)(cr2w.Buffers.Count + 1);
 
                 uint idx = (uint)cr2w.Buffers.Count;
-                cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
+                cr2w.Buffers.Add(new CR2WBuffer()
                 {
-                    flags = 0,
-                    index = idx,
-                    offset = 0,
-                    diskSize = zsize,
-                    memSize = (UInt32)materialbuffer.Length,
-                    crc32 = crc
-                }));
-
-                cr2w.Buffers[(int)idx].ReadData(new BinaryReader(compressed));
-                cr2w.Buffers[(int)idx].Offset = cr2w.Buffers[(int)idx - 1].Offset + cr2w.Buffers[(int)idx - 1].DiskSize;
+                    Flags = 0,
+                    MemSize = (UInt32)materialbuffer.Length,
+                    Data = compressed.ToByteArray(),
+                    IsCompressed = true
+                });
             }
             else
             {
-                UInt16 p = (blob.LocalMaterialBuffer.RawData.Buffer);
-                cr2w.Buffers[p - 1].DiskSize = zsize;
-                cr2w.Buffers[p - 1].Crc32 = crc;
-                cr2w.Buffers[p - 1].MemSize = (UInt32)materialbuffer.Length;
-                var off = cr2w.Buffers[p - 1].Offset;
-                cr2w.Buffers[p - 1].Offset = 0;
-                cr2w.Buffers[p - 1].ReadData(new BinaryReader(compressed));
-                cr2w.Buffers[p - 1].Offset = off;
+                var p = blob.LocalMaterialBuffer.RawData.Pointer - 1;
+                cr2w.Buffers[p].MemSize = (UInt32)materialbuffer.Length;
+                cr2w.Buffers[p].Data = compressed.ToByteArray();
             }
 
             return true;

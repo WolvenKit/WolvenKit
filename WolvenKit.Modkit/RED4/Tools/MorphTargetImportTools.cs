@@ -41,7 +41,7 @@ namespace WolvenKit.Modkit.RED4
                 var meshCr2w = _wolvenkitFileService.TryReadRed4File(meshStream);
                 if (meshCr2w != null && meshCr2w.Chunks.OfType<CMesh>().Any() && meshCr2w.Chunks.OfType<rendRenderMeshBlob>().Any())
                 {
-                    newRig = MeshTools.GetOrphanRig(meshCr2w.Chunks.OfType<rendRenderMeshBlob>().First());
+                    newRig = MeshTools.GetOrphanRig(meshCr2w.Chunks.OfType<rendRenderMeshBlob>().First(), meshCr2w);
                 }
             }
 
@@ -55,8 +55,8 @@ namespace WolvenKit.Modkit.RED4
 
             var renderblob = cr2w.Chunks.OfType<rendRenderMorphTargetMeshBlob>().First();
 
-            var diffsBufferId = renderblob.DiffsBuffer.Buffer - 1;
-            var mappingsBufferId = renderblob.MappingBuffer.Buffer - 1;
+            var diffsBufferId = renderblob.DiffsBuffer.Pointer - 1;
+            var mappingsBufferId = renderblob.MappingBuffer.Pointer - 1;
 
             using MemoryStream diffsBuffer = new MemoryStream();
             using MemoryStream mappingsBuffer = new MemoryStream();
@@ -168,14 +168,8 @@ namespace WolvenKit.Modkit.RED4
             var (zsize, crc) = diffsWriter.CompressAndWrite(bufferBytes);
 
             var buffer = cr2w.Buffers[bufferId];
-            buffer.DiskSize = zsize;
-            buffer.Crc32 = crc;
             buffer.MemSize = (uint)bufferBytes.Length;
-
-            var offset = buffer.Offset;
-            buffer.Offset = 0;
-            buffer.ReadData(new BinaryReader(compressedDiffs));
-            //buffer.Offset = offset;
+            buffer.Data = compressedDiffs.ToArray();
         }
 
         private (Vec4 scale, Vec4 offset) CalculateTargetQuant(ModelRoot model, int morphTargetId)

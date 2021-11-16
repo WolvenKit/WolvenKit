@@ -9,6 +9,7 @@ using WolvenKit.Interfaces.Core;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -28,7 +29,7 @@ namespace WolvenKit.Modkit.RED4
             var cr2w = _wolvenkitFileService.TryReadRed4File(instream);
             if (cr2w == null)
             {
-                throw new InvalidParsingException();
+                throw new InvalidParsingException("ConvertToText");
             }
 
             var json = "";
@@ -112,7 +113,7 @@ namespace WolvenKit.Modkit.RED4
         public CR2WFile ConvertFromJson(string json)
         {
             var newdto = JsonConvert.DeserializeObject<RedFileDto>(json);
-            return newdto != null ? newdto.ToW2rc() : throw new InvalidParsingException();
+            return newdto != null ? newdto.ToW2rc() : throw new InvalidParsingException("ConvertFromJson");
         }
 
         /// <summary>
@@ -149,7 +150,7 @@ namespace WolvenKit.Modkit.RED4
             var outpath = Path.ChangeExtension(Path.Combine(outputDirInfo.FullName, fileInfo.Name), ext);
 
             using var fs2 = new FileStream(outpath, FileMode.Create, FileAccess.ReadWrite);
-            using var writer = new CR2WWriter(fs2, Encoding.UTF8, true);
+            using var writer = new CR2WWriter(fs2);
             writer.WriteFile(w2rc);
 
             return true;

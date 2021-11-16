@@ -35,6 +35,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             _cr2wFile.MetaData.Version = fileHeader.version;
             _cr2wFile.MetaData.BuildVersion = fileHeader.buildVersion;
+            _cr2wFile.MetaData.ObjectsEnd = fileHeader.objectsEnd;
 
             if (fileHeader.version > 195 || fileHeader.version < 163)
             {
@@ -79,7 +80,7 @@ namespace WolvenKit.RED4.Archive.IO
             _cr2wFile.Debug.ImportInfos = importInfoList;
             foreach (var importInfo in importInfoList)
             {
-                _importsList.Add(ReadImport(importInfo, stringDict));
+                importsList.Add(ReadImport(importInfo, stringDict));
             }
 
             _cr2wFile.Debug.PropertyInfos = propertyInfoList;
@@ -206,7 +207,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             return new CR2WEmbedded
             {
-                FileName = _importsList[(int)info.importIndex - 1].DepotPath,
+                FileName = importsList[(int)info.importIndex - 1].DepotPath,
                 Content = _cr2wFile.Chunks[(int)info.chunkIndex]
             };
         }

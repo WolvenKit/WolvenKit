@@ -16,7 +16,15 @@ namespace WolvenKit.RED4.Types
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public T Chunk
         {
-            get => (T)File.HandleManager.Get(Pointer);
+            get
+            {
+                if (File.HandleManager.Get(Pointer) is T chunk)
+                {
+                    return chunk;
+                }
+                return default(T);
+            }
+
             set => File.HandleManager.Set(this, value);
         }
 

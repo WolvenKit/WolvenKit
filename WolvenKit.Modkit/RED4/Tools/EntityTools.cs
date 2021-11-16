@@ -38,13 +38,15 @@ namespace WolvenKit.Modkit.RED4
             }
             var blob = cr2w.Chunks.OfType<entEntityTemplate>().First();
 
-            if (blob.CompiledData.IsSerialized)
+            if (blob.CompiledData.Buffer.Length > 0)
             {
-                var bufferIdx = blob.CompiledData.Buffer;
+                var bufferIdx = blob.CompiledData.Pointer;
                 var buffer = cr2w.Buffers[bufferIdx - 1];
-                entStream.Seek(buffer.Offset, SeekOrigin.Begin);
+
+                var unpacked = new byte[buffer.MemSize];
+                _ = OodleHelper.Decompress(buffer.Data, unpacked);
                 var packageStream = new MemoryStream();
-                entStream.DecompressAndCopySegment(packageStream, buffer.DiskSize, buffer.MemSize);
+                packageStream.Write(unpacked);
 
                 CompiledPackage package = new CompiledPackage(_hashService);
                 packageStream.Seek(0, SeekOrigin.Begin);
@@ -65,13 +67,15 @@ namespace WolvenKit.Modkit.RED4
             List<RedFileDto> datas = new List<RedFileDto>();
             foreach (var blob in blobs)
             {
-                if (blob.CompiledData.IsSerialized)
+                if (blob.CompiledData.Buffer.Length > 0)
                 {
-                    var bufferIdx = blob.CompiledData.Buffer;
+                    var bufferIdx = blob.CompiledData.Pointer;
                     var buffer = cr2w.Buffers[bufferIdx - 1];
-                    appStream.Seek(buffer.Offset, SeekOrigin.Begin);
+
+                    var unpacked = new byte[buffer.MemSize];
+                    _ = OodleHelper.Decompress(buffer.Data, unpacked);
                     var packageStream = new MemoryStream();
-                    appStream.DecompressAndCopySegment(packageStream, buffer.DiskSize, buffer.MemSize);
+                    packageStream.Write(unpacked);
 
                     CompiledPackage package = new CompiledPackage(_hashService);
                     packageStream.Seek(0, SeekOrigin.Begin);

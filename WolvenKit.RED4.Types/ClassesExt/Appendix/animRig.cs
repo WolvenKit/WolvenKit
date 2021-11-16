@@ -1,4 +1,4 @@
-using System.IO;
+using System.Collections.Generic;
 using WolvenKit.RED4.IO;
 
 namespace WolvenKit.RED4.Types
@@ -9,27 +9,53 @@ namespace WolvenKit.RED4.Types
 
         public void Read(Red4Reader reader, uint size)
         {
-            Appendix = new BaseAppendix { Buffer = reader.BaseReader.ReadBytes((int)size) };
+            var count = BoneNames.Count;
+            for (var i = 0; i < count; i++)
+            {
+                Unk1.Add(reader.ReadCInt16());
+            }
+
+            for (var i = 0; i < count; i++)
+            {
+                var innerlist = new List<Vector4>();
+                for (var j = 0; j < 3; j++)
+                {
+                    var vec = new Vector4()
+                    {
+                        X = reader.ReadCFloat(),
+                        Y = reader.ReadCFloat(),
+                        Z = reader.ReadCFloat(),
+                        W = reader.ReadCFloat(),
+                    };
+                    innerlist.Add(vec);
+                }
+                Unk2.Add(innerlist);
+            }
+
+            //Appendix = new BaseAppendix { Buffer = reader.BaseReader.ReadBytes((int)size) };
         }
 
-        public void Write(Red4Writer writer) => writer.BaseWriter.Write(((BaseAppendix)Appendix).Buffer);
+        public void Write(Red4Writer writer)
+        {
+            foreach (var e in Unk1)
+            {
+                writer.Write(e);
+            }
 
+            foreach (var innerlist in Unk2)
+            {
+                foreach (var e3 in innerlist)
+                {
+                    writer.Write(e3);
+                }
+            }
 
-        //[Ordinal(1000)]
-        //[REDBuffer(true)]
-        //public CArrayCompressed<CInt16> Unk1
-        //{
-        //    get => GetPropertyValue<CArrayCompressed<CInt16>>();
-        //    set => SetPropertyValue<CArrayCompressed<CInt16>>(value);
-        //}
+            //writer.BaseWriter.Write(((BaseAppendix)Appendix).Buffer);
+        }
 
-        //// could be anything, the vector4 is just a wild guess
-        //[Ordinal(1001)]
-        //[REDBuffer(true)]
-        //public CArrayCompressed<CArrayCompressed<Vector4>> Unk2
-        //{
-        //    get => GetPropertyValue<CArrayCompressed<CArrayCompressed<Vector4>>>();
-        //    set => SetPropertyValue<CArrayCompressed<CArrayCompressed<Vector4>>>(value);
-        //}
+        public List<CInt16> Unk1 { get; set; }
+
+        // could be anything, the vector4 is just a wild guess
+        public List<List<Vector4>> Unk2 { get; set; }
     }
 }

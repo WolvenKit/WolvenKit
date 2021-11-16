@@ -17,7 +17,7 @@ namespace WolvenKit.RED4.IO
 
         protected Red4File _outputFile;
         protected List<CName> _namesList = new();
-        protected List<IRedImport> _importsList = new();
+        protected List<IRedImport> importsList = new();
 
         private bool _disposed;
 
@@ -44,6 +44,8 @@ namespace WolvenKit.RED4.IO
         public Stream BaseStream => _reader.BaseStream;
 
         public int Position => (int)_reader.BaseStream.Position;
+
+        public List<IRedImport> ImportsList { get => importsList; set => importsList = value; }
 
         #region Support
 
@@ -420,8 +422,8 @@ namespace WolvenKit.RED4.IO
             {
                 return new CResourceAsyncReference<T>
                 {
-                    DepotPath = _importsList[index - 1].DepotPath,
-                    Flags = _importsList[index - 1].Flags
+                    DepotPath = importsList[index - 1].DepotPath,
+                    Flags = importsList[index - 1].Flags
                 };
             }
 
@@ -450,8 +452,8 @@ namespace WolvenKit.RED4.IO
             {
                 return new CResourceReference<T>
                 {
-                    DepotPath = _importsList[index - 1].DepotPath,
-                    Flags = _importsList[index - 1].Flags
+                    DepotPath = importsList[index - 1].DepotPath,
+                    Flags = importsList[index - 1].Flags
                 };
             }
 

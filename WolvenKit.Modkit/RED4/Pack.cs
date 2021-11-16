@@ -13,6 +13,7 @@ using WolvenKit.Common.RED4.Archive;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Interfaces.Extensions;
+using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.Modkit.RED4
@@ -160,19 +161,15 @@ namespace WolvenKit.Modkit.RED4
                 uint lastoffsetidx;
                 var flags = 0;
 
-                var cr2w = _wolvenkitFileService.TryReadRed4FileHeaders(fileBinaryReader);
-                if (cr2w != null)
+                var isResource = _wolvenkitFileService.IsCr2wFile(fileBinaryReader.BaseStream);
+                if (isResource)
                 {
-                    //register imports
-                    foreach (var cr2WImportWrapper in cr2w.Imports)
-                    {
-                        importsHashSet.Add(FNV1A64HashAlgorithm.HashString(cr2WImportWrapper.DepotPathStr));
-                    }
-
-                    lastimportidx = (uint)importsHashSet.Count;
+                    // read the file
+                    using var reader = new CR2WReader(fileBinaryReader);
+                    _ = reader.ReadFile(out var cr2w, false);
 
                     // kraken the file and write
-                    var cr2wfilesize = (int)cr2w.Header.objectsEnd;
+                    var cr2wfilesize = (int)cr2w.MetaData.ObjectsEnd;
                     fileBinaryReader.BaseStream.Seek(0, SeekOrigin.Begin);
                     var cr2winbuffer = fileBinaryReader.ReadBytes(cr2wfilesize);
                     var offset = bw.BaseStream.Position;
@@ -189,17 +186,28 @@ namespace WolvenKit.Modkit.RED4
                     foreach (var buffer in bufferOffsets)
                     {
                         var bsize = buffer.MemSize;
-                        var bzsize = buffer.DiskSize; //compressed size of the buffer inside the cr2wfile
-                        fileBinaryReader.BaseStream.Seek(buffer.Offset, SeekOrigin.Begin);
-                        var b = fileBinaryReader.ReadBytes((int)bzsize); //read bzsize bytes from the cr2w
+                        
+                        //var bzsize = buffer.DiskSize; //compressed size of the buffer inside the cr2wfile
+                        //fileBinaryReader.BaseStream.Seek(buffer.Offset, SeekOrigin.Begin);
+                        //var b = fileBinaryReader.ReadBytes((int)bzsize); //read bzsize bytes from the cr2w
+                        var b = buffer.Data;
+                        var bzsize = b.Length;
                         var boffset = bw.BaseStream.Position;
 
                         bw.Write(b);
                         ar.Index.FileSegments.Add(new FileSegment(
                             (ulong)boffset,
-                            bzsize,
+                            (uint)bzsize,
                             bsize));
                     }
+
+                    //register imports
+                    foreach (var cr2WImportWrapper in reader.ImportsList)
+                    {
+                        importsHashSet.Add(FNV1A64HashAlgorithm.HashString(cr2WImportWrapper.DepotPath));
+                    }
+
+                    lastimportidx = (uint)importsHashSet.Count;
 
                     lastoffsetidx = (uint)ar.Index.FileSegments.Count;
 

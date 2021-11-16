@@ -16,5 +16,6 @@ namespace WolvenKit.RED4.Types
     public interface IRedBuffer
     {
         public byte[] Data { get; set; }
+        uint MemSize { get; set; }
     }
 }

@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 
         internal IRedClass Get(int pointer)
         {
-            return _file._chunks[pointer];
+            return pointer < _file._chunks.Count ? _file._chunks[pointer] : null;
         }
 
         internal void Set(IRedBaseHandle handle, IRedClass cls)

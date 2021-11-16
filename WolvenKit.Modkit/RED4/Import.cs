@@ -2,18 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using WolvenKit.RED4.Types;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Interfaces.Extensions;
-using WolvenKit.Modkit.Exceptions;
-using WolvenKit.RED4.CR2W;
+using WolvenKit.Modkit.Extensions;
 using WolvenKit.Modkit.RED4.MLMask;
-using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -34,7 +35,7 @@ namespace WolvenKit.Modkit.RED4
         {
             #region checks
 
-            if (rawRelative is null or {Exists: false})
+            if (rawRelative is null or { Exists: false })
             {
                 return false;
             }
@@ -90,8 +91,10 @@ namespace WolvenKit.Modkit.RED4
 
                 // create redfile
                 var red = new CR2WFile();
-                var c2dArray = new C2dArray();
-                c2dArray.CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC;
+                var c2dArray = new C2dArray
+                {
+                    CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC
+                };
 
                 // from csv
                 using (var infs = new FileStream(rawRelative.FullPath, FileMode.Open))
@@ -100,19 +103,15 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 // add chunk
-                red.CreateChunk(c2dArray);
+                red.Chunks.Add(c2dArray);
 
                 // write
                 var outpath = new RedRelativePath(rawRelative)
                     .ChangeBaseDir(outDir)
                     .ChangeExtension("");
                 using var fs = new FileStream(outpath.FullPath, FileMode.Create, FileAccess.ReadWrite);
-                //using (var outms = new MemoryStream())
-                using (var bw = new BinaryWriter(fs))
-                {
-                    // write cr2w file
-                    red.Write(bw);
-                }
+                using var writer = new CR2WWriter(fs);
+                writer.WriteFile(red);
             }
 
             return true;
@@ -130,14 +129,14 @@ namespace WolvenKit.Modkit.RED4
             var ext = rawRelative.Extension;
             if (Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
             {
-                var redfile = new RedRelativePath(rawRelative).ChangeBaseDir(outDir).ChangeExtension(string.IsNullOrEmpty(".mlmask")? FromRawExtension(extAsEnum).ToString(): ".mlmask");
+                var redfile = new RedRelativePath(rawRelative).ChangeBaseDir(outDir).ChangeExtension(string.IsNullOrEmpty(".mlmask") ? FromRawExtension(extAsEnum).ToString() : ".mlmask");
                 try
                 {
                     mlmask.Import(rawRelative.ToFileInfo(), redfile.ToFileInfo());
                     _loggerService.Success($"Successfully created {redfile}");
                     return true;
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     _loggerService.Error(e);
                     return false;
@@ -187,7 +186,7 @@ namespace WolvenKit.Modkit.RED4
                 var ddsPath = Path.ChangeExtension(rawRelative.FullName, ERawFileFormat.dds.ToString());
 
                 using var fileStream = new FileStream(redparent, FileMode.Open, FileAccess.ReadWrite);
-                var result = Rebuild(fileStream, new List<FileInfo>() {new(ddsPath ?? throw new InvalidOperationException())});
+                var result = Rebuild(fileStream, new List<FileInfo>() { new(ddsPath ?? throw new InvalidOperationException()) });
 
                 if (result)
                 {
@@ -263,7 +262,7 @@ namespace WolvenKit.Modkit.RED4
             if (args.Keep)
             {
                 var buffer = new FileInfo(rawRelative.FullName);
-                var redfile = FindRedFile(rawRelative,  outDir);
+                var redfile = FindRedFile(rawRelative, outDir);
 
                 if (string.IsNullOrEmpty(redfile))
                 {
@@ -289,41 +288,56 @@ namespace WolvenKit.Modkit.RED4
             {
                 // create redengine file
                 var red = new CR2WFile();
-                var font = new rendFont();
-                font.CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC;
-                font.FontBuffer = new DataBuffer();
-                font.FontBuffer.Buffer = 1;
+                var font = new rendFont
+                {
+                    CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC,
+                    FontBuffer = new DataBuffer
+                    {
+                        Pointer = 1,
+                    }
+                };
 
                 // add chunk
-                red.CreateChunk(font);
+                red.Chunks.Add(font);
 
-                // add fake buffer
-                red.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()));
-
-                // write main file
+                // add buffer
+                var inbuffer = File.ReadAllBytes(rawRelative.FullName);
                 using var ms = new MemoryStream();
                 using var bw = new BinaryWriter(ms);
-                red.Write(bw);
-
-                // write buffer
-                var offset = (uint)bw.BaseStream.Position;
-                var inbuffer = File.ReadAllBytes(rawRelative.FullName);
                 var (zsize, crc) = bw.CompressAndWrite(inbuffer);
 
-                // add buffer info
-                red.Buffers[0] = new CR2WBufferWrapper(new CR2WBuffer()
+                red.Buffers.Add(new CR2WBuffer()
                 {
-                    flags = 0xE0000, //TODO: find out what to set here, but for fnt files these are always 0xE0000
-                    index = 0,
-                    offset = offset,
-                    diskSize = zsize,
-                    memSize = (uint)inbuffer.Length,
-                    crc32 = crc
+                    Flags = 0xE0000,
+                    Data = ms.ToByteArray(),
+                    IsCompressed = true,
+                    MemSize = (uint)inbuffer.Length,
                 });
 
-                // write header again to update the buffer info
-                bw.Seek(0, SeekOrigin.Begin);
-                red.WriteHeader(bw);
+                //// write main file
+                //using var ms = new MemoryStream();
+                //using var writer = new CR2WWriter(ms);
+                //writer.WriteFile(red);
+
+                //// write buffer
+                //var offset = (uint)bw.BaseStream.Position;
+                //var inbuffer = File.ReadAllBytes(rawRelative.FullName);
+                //var (zsize, crc) = bw.CompressAndWrite(inbuffer);
+
+                //// add buffer info
+                //red.Buffers[0] = new CR2WBufferWrapper(new CR2WBuffer()
+                //{
+                //    flags = 0xE0000, //TODO: find out what to set here, but for fnt files these are always 0xE0000
+                //    index = 0,
+                //    offset = offset,
+                //    diskSize = zsize,
+                //    memSize = (uint)inbuffer.Length,
+                //    crc32 = crc
+                //});
+
+                //// write header again to update the buffer info
+                //bw.Seek(0, SeekOrigin.Begin);
+                //red.WriteHeader(bw);
 
                 // write to file
                 var redpath = Path.ChangeExtension(rawRelative.FullName, ECookedFileFormat.fnt.ToString());
@@ -332,10 +346,13 @@ namespace WolvenKit.Modkit.RED4
                     return false;
                 }
 
-                using var fs = new FileStream(redpath, FileMode.Create, FileAccess.Write);
-                ms.Seek(0, SeekOrigin.Begin);
-                ms.CopyTo(fs);
+                //using var fs = new FileStream(redpath, FileMode.Create, FileAccess.Write);
+                //ms.Seek(0, SeekOrigin.Begin);
+                //ms.CopyTo(fs);
 
+                using var fs = new FileStream(redpath, FileMode.Create, FileAccess.Write);
+                using var writer = new CR2WWriter(fs);
+                writer.WriteFile(red);
                 return true;
             }
 
@@ -385,7 +402,7 @@ namespace WolvenKit.Modkit.RED4
                         return false;
                     }
 
-                    if (cr2w.StringDictionary[1] != "CBitmapTexture")
+                    if (cr2w.Chunks.FirstOrDefault() is not CBitmapTexture)
                     {
                         return false;
                     }
@@ -443,7 +460,7 @@ namespace WolvenKit.Modkit.RED4
             if (args.Keep)
             {
                 using var fileStream = new FileStream(redfile, FileMode.Open, FileAccess.ReadWrite);
-                var result = Rebuild(fileStream, new List<byte[]>() {ms.ToByteArray().Skip(148).ToArray()});
+                var result = Rebuild(fileStream, new List<byte[]>() { ms.ToByteArray().Skip(148).ToArray() });
 
                 if (result)
                 {
@@ -481,51 +498,55 @@ namespace WolvenKit.Modkit.RED4
 
                 // create cr2wfile
                 var red = new CR2WFile();
-                red.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer() { flags= 131072 }));
 
-                // create xbm chunk
-                var xbm = new CBitmapTexture();
-                xbm.CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC;
-                xbm.Width = width;
-                xbm.Height = height;
-                xbm.Setup = new STextureGroupSetup();
+                // xbm chunk
+                var xbm = new CBitmapTexture
+                {
+                    CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC,
+                    Width = width,
+                    Height = height,
+                    Setup = new STextureGroupSetup()
+                };
 
                 SetTextureGroupSetup(xbm.Setup, red);
 
-                // blob
-                var renderTextureResource = new rendRenderTextureResource();
-                renderTextureResource.RenderResourceBlobPC = new CHandle<IRenderResourceBlob>()
-                    .SetValue(2) as CHandle<IRenderResourceBlob>;
-                xbm.RenderTextureResource = renderTextureResource;
+                // blob chunk
+                var blob = new rendRenderTextureBlobPC()
+                {
+                    TextureData = new SerializationDeferredDataBuffer()
+                    {
+                        Pointer = 2,
+                    }
+                };
+
+                xbm.RenderTextureResource = new rendRenderTextureResource
+                {
+                    RenderResourceBlobPC = red.HandleManager.CreateCHandle<IRenderResourceBlob>(blob)
+                };
 
                 // create rendRenderTextureBlobPC chunk
-                var blob = new rendRenderTextureBlobPC();
+
                 // header
                 var header = new rendRenderTextureBlobHeader()
-                    {
-                        Version = 2,
-                        Flags = 1
-                    };
-                // header.SizeInfo
-                var sizeInfo = new rendRenderTextureBlobSizeInfo()
+                {
+                    Version = 2,
+                    Flags = 1,
+                    SizeInfo = new rendRenderTextureBlobSizeInfo()
                     {
                         Width = (ushort)width,
                         Height = (ushort)height
-                    };
-                header.SizeInfo = sizeInfo;
-                // header.TextureInfo
-                var texInfo = new rendRenderTextureBlobTextureInfo()
+                    },
+                    TextureInfo = new rendRenderTextureBlobTextureInfo()
                     {
                         TextureDataSize = (uint)textureDataSize,
                         SliceSize = (uint)textureDataSize,
                         DataAlignment = alignment,
                         SliceCount = (ushort)slicecount,
                         MipCount = (byte)mipCount
+                    }
                 };
-                header.TextureInfo = texInfo;
                 // header.TextureInfo
                 var mipMapInfo = new CArray<rendRenderTextureBlobMipMapInfo>();
-
                 {
                     ms.Seek(148, SeekOrigin.Begin);
 
@@ -536,20 +557,22 @@ namespace WolvenKit.Modkit.RED4
                     {
                         // slicepitch
                         var slicepitch = DDSUtils.ComputeSlicePitch((int)mipsizeW, (int)mipsizeH, fmt);
-                        
+
                         //rowpitch
                         var rowpitch = DDSUtils.ComputeRowPitch((int)mipsizeW, (int)mipsizeH, fmt);
 
-                        var info = new rendRenderTextureBlobMipMapInfo();
-                        info.Layout = new rendRenderTextureBlobMemoryLayout()
+                        var info = new rendRenderTextureBlobMipMapInfo
                         {
-                            RowPitch = (uint)rowpitch,
-                            SlicePitch = (uint)slicepitch
-                        };
-                        info.Placement = new rendRenderTextureBlobPlacement()
-                        {
-                            Offset = (uint)offset,
-                            Size = (uint)slicepitch
+                            Layout = new rendRenderTextureBlobMemoryLayout()
+                            {
+                                RowPitch = (uint)rowpitch,
+                                SlicePitch = (uint)slicepitch
+                            },
+                            Placement = new rendRenderTextureBlobPlacement()
+                            {
+                                Offset = (uint)offset,
+                                Size = (uint)slicepitch
+                            }
                         };
 
                         offset += slicepitch;
@@ -561,15 +584,28 @@ namespace WolvenKit.Modkit.RED4
                     }
                 }
                 header.MipMapInfo = mipMapInfo;
-                blob.Header = header;
-                // texdata buffer ref
-                blob.TextureData = new serializationDeferredDataBuffer()
-                    .SetValue((ushort)1) as serializationDeferredDataBuffer;
 
-                red.CreateChunk(xbm);
-                red.CreateChunk(blob, 1);
+                blob.Header = header;
+
+                // texdata buffer ref
+
+                // add chunks
+                red.Chunks.Add(xbm);
+                red.Chunks.Add(blob);
 
                 // write
+
+                throw new TodoException("compress buffer");
+
+#pragma warning disable CS0162 // Unreachable code detected
+                red.Buffers.Add(new CR2WBuffer()
+                {
+                    Flags = 131072,
+                    Data = ms.ToByteArray().Skip(148).ToArray()
+                });
+#pragma warning restore CS0162 // Unreachable code detected
+
+
                 var outpath = new RedRelativePath(rawRelative)
                     .ChangeBaseDir(outDir)
                     .ChangeExtension(ERedExtension.xbm.ToString());
@@ -577,24 +613,15 @@ namespace WolvenKit.Modkit.RED4
                 {
                     Directory.CreateDirectory(outpath.ToFileInfo().Directory.FullName);
                 }
-                using var fs = new FileStream(outpath.FullPath, FileMode.Create, FileAccess.ReadWrite);
-                //using (var outms = new MemoryStream())
-                using (var bw = new BinaryWriter(fs))
-                {
-                    // write cr2w file
-                    red.Write(bw);
 
-                    // add buffer
-                    fs.Seek(0, SeekOrigin.Begin);
-                    var result = Rebuild(fs, new List<byte[]>() { ms.ToByteArray().Skip(148).ToArray() });
-                    if (!result)
-                    {
-                        throw new ImportException();
-                    }
-                }
+                using var fs = new FileStream(outpath.FullPath, FileMode.Create, FileAccess.ReadWrite);
+                using var writer = new CR2WWriter(fs);
+                writer.WriteFile(red);
             }
 
+#pragma warning disable CS0162 // Unreachable code detected
             return true;
+#pragma warning restore CS0162 // Unreachable code detected
 
             #region local functions
 #pragma warning disable CS8321 // Local function is declared but never used
@@ -661,7 +688,7 @@ namespace WolvenKit.Modkit.RED4
         {
             if (args.Keep)
             {
-                var redfile = FindRedFile(rawRelative,  outDir,$".{args.importFormat.ToString().ToLower()}");
+                var redfile = FindRedFile(rawRelative, outDir, $".{args.importFormat.ToString().ToLower()}");
 
                 if (string.IsNullOrEmpty(redfile))
                 {

@@ -14,7 +14,7 @@ namespace WolvenKit.Modkit.RED4.Animation
         {
             Dictionary<UInt16, Dictionary<float, Vec3>> rootPositions = new Dictionary<ushort, Dictionary<float, Vec3>>();
             Dictionary<UInt16, Dictionary<float, Quat>> rootRotations = new Dictionary<ushort, Dictionary<float, Quat>>();
-            bool hasRootMotion = animAnimDes.MotionExtraction.IsSerialized;
+            bool hasRootMotion = animAnimDes.MotionExtraction.Chunk is not null;
             if(hasRootMotion)
             {
                 ROOT_MOTION.AddRootMotion(ref rootPositions, ref rootRotations, animAnimDes);

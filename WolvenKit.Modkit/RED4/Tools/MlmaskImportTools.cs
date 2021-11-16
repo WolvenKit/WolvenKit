@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
+using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4.MLMask
@@ -97,85 +100,80 @@ namespace WolvenKit.Modkit.RED4.MLMask
         #region Methods
         void Write(FileInfo f)
         {
-            CR2WFile cr2w = new CR2WFile();
+            var cr2w = new CR2WFile();
+            var mask = new Multilayer_Mask
             {
-                var blob = new Multilayer_Mask();
-                blob.CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC;
-                blob.RenderResourceBlob.RenderResourceBlobPC = new CHandle<IRenderResourceBlob>();
-                cr2w.CreateChunk(blob, 0);
-            }
+                CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC
+            };
+            cr2w.Chunks.Add(mask);
+            
+            var blob = new rendRenderMultilayerMaskBlobPC
             {
-                var blob = new rendRenderMultilayerMaskBlobPC();
-                blob.Header = new rendRenderMultilayerMaskBlobHeader() ;
-                blob.Header.Version = 3;
-                blob.Header.AtlasWidth = mlmask._atlasWidth;
-                blob.Header.AtlasHeight = mlmask._atlasHeight;
-                blob.Header.NumLayers = (uint)mlmask.layers.Length;
-                blob.Header.MaskWidth = mlmask._widthHigh;
-                blob.Header.MaskHeight = mlmask._heightHigh;
-                blob.Header.MaskWidthLow = mlmask._widthLow;
-                blob.Header.MaskHeightLow = mlmask._heightLow;
-                blob.Header.MaskTileSize = mlmask._tileSize;
-                blob.Header.Flags = 2;
-                blob.AtlasData = new serializationDeferredDataBuffer() ;
-                blob.AtlasData.Buffer = 1;
-                blob.TilesData = new serializationDeferredDataBuffer() ;
-                blob.TilesData.Buffer = 2;
-
-                cr2w.CreateChunk(blob, 1);
-            }
-    (cr2w.Chunks[0] as Multilayer_Mask).RenderResourceBlob.RenderResourceBlobPC.SetReference(cr2w.Chunks[1]);
-
-            //test write
-            var ms = new MemoryStream();
-            var bw = new BinaryWriter(ms);
-
-            using (var compressed = new MemoryStream())
-            {
-                using var buff = new BinaryWriter(compressed);
-                var (zsize, crc) = buff.CompressAndWrite(mlmask._AtlasBuffer);
-
-                cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
+                Header = new rendRenderMultilayerMaskBlobHeader
                 {
-                    flags = 0,
-                    index = 0,
-                    offset = 0,
-                    diskSize = zsize,
-                    memSize = (UInt32)mlmask._AtlasBuffer.Length,
-                    crc32 = crc
-                }));
-
-                cr2w.Buffers[0].ReadData(new BinaryReader(compressed));
-                // to get offset
-                cr2w.Write(bw);
-                cr2w.Buffers[0].Offset = (uint)ms.Length;
-            }
-            using (var compressed = new MemoryStream())
-            {
-                using var buff = new BinaryWriter(compressed);
-                var (zsize, crc) = buff.CompressAndWrite(mlmask._tilesBuffer);
-
-                cr2w.Buffers.Add(new CR2WBufferWrapper(new CR2WBuffer()
+                    Version = 3,
+                    AtlasWidth = mlmask._atlasWidth,
+                    AtlasHeight = mlmask._atlasHeight,
+                    NumLayers = (uint)mlmask.layers.Length,
+                    MaskWidth = mlmask._widthHigh,
+                    MaskHeight = mlmask._heightHigh,
+                    MaskWidthLow = mlmask._widthLow,
+                    MaskHeightLow = mlmask._heightLow,
+                    MaskTileSize = mlmask._tileSize,
+                    Flags = 2
+                },
+                AtlasData = new SerializationDeferredDataBuffer
                 {
-                    flags = 0,
-                    index = 1,
-                    offset = 0,
-                    diskSize = zsize,
-                    memSize = (UInt32)mlmask._tilesBuffer.Length,
-                    crc32 = crc
-                }));
+                    Pointer = 1
+                },
+                TilesData = new SerializationDeferredDataBuffer
+                {
+                    Pointer = 2
+                }
+            };
 
-                cr2w.Buffers[1].ReadData(new BinaryReader(compressed));
-                cr2w.Buffers[1].Offset = cr2w.Buffers[0].Offset + cr2w.Buffers[0].DiskSize;
+            cr2w.Chunks.Add(blob);
+
+
+            mask.RenderResourceBlob.RenderResourceBlobPC = cr2w.HandleManager.CreateCHandle<IRenderResourceBlob>(blob);
+
+            // AtlasBuffer
+            using (var msAtlas = new MemoryStream())
+            using (var bwAtlas = new BinaryWriter(msAtlas))
+            {
+                var (zsize, crc) = bwAtlas.CompressAndWrite(mlmask._AtlasBuffer);
+
+                cr2w.Buffers.Add(new CR2WBuffer()
+                {
+                    Flags = 0,
+                    MemSize = (UInt32)mlmask._AtlasBuffer.Length,
+                    Data = msAtlas.ToByteArray()
+                });
             }
 
-            cr2w.Write(bw);
+            // TilesBuffer
+            using (var msTiles = new MemoryStream())
+            using (var bwTiles = new BinaryWriter(msTiles))
+            {
+                var (zsize, crc) = bwTiles.CompressAndWrite(mlmask._tilesBuffer);
+
+                cr2w.Buffers.Add(new CR2WBuffer()
+                {
+                    Flags = 0,
+                    MemSize = (UInt32)mlmask._tilesBuffer.Length,
+                    Data = msTiles.ToByteArray()
+                });
+            }
+
             if (!Directory.Exists(f.Directory.FullName))
             {
                 Directory.CreateDirectory(f.Directory.FullName);
             }
-            File.WriteAllBytes(f.FullName, ms.ToArray());
+            using var fs = new FileStream(f.FullName, FileMode.Create, FileAccess.Write);
+            using var writer = new CR2WWriter(fs);
+            writer.WriteFile(cr2w);
         }
+
         void PutTiles(ref List<uint> tilesDataList, MaskTile[] Tilez, uint basisTileIdx, uint widthInTiles0, uint heightInTiles0)
         {
             uint atlasTileSize = mlmask._atlasWidth / mlmask._atlasTileSize;

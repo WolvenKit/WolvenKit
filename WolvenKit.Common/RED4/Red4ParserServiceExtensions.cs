@@ -8,6 +8,7 @@ using WolvenKit.Interfaces.Core;
 using WolvenKit.Common.Extensions;
 using WolvenKit.RED4.CR2W.Archive;
 using Index = CP77Tools.Model.Index;
+using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.Common.Services
 {
