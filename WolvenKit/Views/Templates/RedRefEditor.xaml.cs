@@ -2,7 +2,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Editors
 {
@@ -16,13 +16,13 @@ namespace WolvenKit.Views.Editors
             InitializeComponent();
         }
 
-        public IREDRef RedRef
+        public IRedRef RedRef
         {
-            get => (IREDRef)this.GetValue(RedRefProperty);
+            get => (IRedRef)this.GetValue(RedRefProperty);
             set => this.SetValue(RedRefProperty, value);
         }
         public static readonly DependencyProperty RedRefProperty = DependencyProperty.Register(
-            nameof(RedRef), typeof(IREDRef), typeof(RedRefEditor), new PropertyMetadata(default(IREDRef)));
+            nameof(RedRef), typeof(IRedRef), typeof(RedRefEditor), new PropertyMetadata(default(IRedRef)));
 
 
         public string Text
@@ -31,7 +31,7 @@ namespace WolvenKit.Views.Editors
             set => SetRedValue(value);
         }
 
-        private void SetRedValue(string value) => RedRef.SetValue(value);
+        private void SetRedValue(string value) => RedRef.DepotPath = value;
 
         private string GetValueFromRedValue()
         {

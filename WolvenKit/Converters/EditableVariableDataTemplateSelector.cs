@@ -32,14 +32,14 @@ namespace WolvenKit.Converters
             variable switch
             {
                 IRedPrimitive<bool> => RedboolTemplate,        //done in PG
-                IRedPrimitive<string> => StringTemplateView,   //done in PG
-                IREDIntegerType => NumericTemplate, //done in PG
+                IRedString => StringTemplateView,   //done in PG
+                IRedInteger => NumericTemplate, //done in PG
                 IRedEnum => EnumTemplate,           //done in PG
-                IREDChunkPtr => HandleTemplateView, //done in PG
+                IRedBaseHandle => HandleTemplateView, //done in PG
                 IRedRef => RefTemplateView,         //done in PG
                 CColor x => ColorTemplateView,   //done in PG
                 IRedArray => CommmonTemplate,       //done in PG
-                ICurveDataAccessor => SingleChannelCurveTemplate,   //done in PG
+                IRedLegacySingleChannelCurve => SingleChannelCurveTemplate,   //done in PG
                 _ => CommmonTemplate
             };
     }

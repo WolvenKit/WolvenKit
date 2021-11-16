@@ -6,7 +6,7 @@ namespace WolvenKit.RED4.Types
 {
     [RED("Uint64")]
     [DebuggerDisplay("{_value,nq}", Type = "CUInt64")]
-    public readonly struct CUInt64 : IRedPrimitive<ulong>, IEquatable<CUInt64>
+    public readonly struct CUInt64 : IRedPrimitive<ulong>, IEquatable<CUInt64>, IRedInteger
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly ulong _value;

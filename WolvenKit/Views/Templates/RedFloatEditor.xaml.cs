@@ -1,8 +1,5 @@
-using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Editors
@@ -17,13 +14,13 @@ namespace WolvenKit.Views.Editors
             InitializeComponent();
         }
 
-        public IREDIntegerType RedNumber
+        public CFloat RedNumber
         {
-            get => (IREDIntegerType)this.GetValue(RedNumberProperty);
+            get => (CFloat)this.GetValue(RedNumberProperty);
             set => this.SetValue(RedNumberProperty, value);
         }
         public static readonly DependencyProperty RedNumberProperty = DependencyProperty.Register(
-            nameof(RedNumber), typeof(IREDIntegerType), typeof(RedFloatEditor), new PropertyMetadata(default(IREDIntegerType)));
+            nameof(RedNumber), typeof(CFloat), typeof(RedFloatEditor), new PropertyMetadata(default(CFloat)));
 
 
         public string Text
@@ -32,18 +29,9 @@ namespace WolvenKit.Views.Editors
             set => SetRedValue(value);
         }
 
-        private void SetRedValue(string value) => RedNumber.SetValue(value);
+        private void SetRedValue(string value) => SetCurrentValue(RedNumberProperty, (CFloat)float.Parse(value));
 
-        private string GetValueFromRedValue()
-        {
-            var redvalue = RedNumber.GetValue();
-            return redvalue switch
-            {
-                float redfloat => redfloat.ToString("R"),
-                ulong redulong => redulong.ToString(),
-                _ => throw new ArgumentException(nameof(redvalue))
-            };
-        }
+        private string GetValueFromRedValue() => ((float)RedNumber).ToString("R");
 
 
     }

@@ -17,6 +17,7 @@ namespace WolvenKit.RED4.Types
 
     public interface IRedBaseHandle<T> : IRedBaseHandle where T : IRedClass
     {
+        //Red4File File { get; }
     }
 
     public interface IRedHandle : IRedBaseHandle, IRedType

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.RED4.CR2W.Reflection;
+using WolvenKit.RED4.Types;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace WolvenKit.Views.Templates
@@ -23,14 +23,14 @@ namespace WolvenKit.Views.Templates
 
         public ObservableCollection<string> BindingCollection { get; set; } = new();
 
-        public IREDEnum RedEnum
+        public IRedEnum RedEnum
         {
-            get => (IREDEnum)GetValue(RedEnumProperty);
+            get => (IRedEnum)GetValue(RedEnumProperty);
             set => SetValue(RedEnumProperty, value);
         }
 
         public static readonly DependencyProperty RedEnumProperty =
-            DependencyProperty.Register(nameof(RedEnum), typeof(IREDEnum),
+            DependencyProperty.Register(nameof(RedEnum), typeof(IRedEnum),
                 typeof(EnumTemplateView), new PropertyMetadata(OnRedEnumChanged));
 
 
@@ -44,7 +44,7 @@ namespace WolvenKit.Views.Templates
             {
                 return;
             }
-            if (e.NewValue is not IREDEnum ienum)
+            if (e.NewValue is not IRedEnum ienum)
             {
                 return;
             }
@@ -81,7 +81,7 @@ namespace WolvenKit.Views.Templates
 
         private void ComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (RedEnum is not IEditableVariable cvar)
+            if (RedEnum is not IRedType cvar)
             {
                 return;
             }

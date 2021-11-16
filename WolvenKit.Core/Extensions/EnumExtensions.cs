@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.Core.Extensions
 {

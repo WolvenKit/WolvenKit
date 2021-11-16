@@ -6,7 +6,7 @@ namespace WolvenKit.RED4.Types
 {
     [RED("Int64")]
     [DebuggerDisplay("{_value,nq}", Type = "CInt64")]
-    public readonly struct CInt64 : IRedPrimitive<long>, IEquatable<CInt64>
+    public readonly struct CInt64 : IRedPrimitive<long>, IEquatable<CInt64>, IRedInteger
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly long _value;

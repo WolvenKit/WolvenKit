@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Editors
 {
@@ -28,13 +28,13 @@ namespace WolvenKit.Views.Editors
 
         #region properties
 
-        public IREDIntegerType RedInteger
+        public IRedInteger RedInteger
         {
-            get => (IREDIntegerType)this.GetValue(RedIntegerProperty);
+            get => (IRedInteger)this.GetValue(RedIntegerProperty);
             set => this.SetValue(RedIntegerProperty, value);
         }
         public static readonly DependencyProperty RedIntegerProperty = DependencyProperty.Register(
-            nameof(RedInteger), typeof(IREDIntegerType), typeof(RedIntegerEditor), new PropertyMetadata(default(IREDIntegerType)));
+            nameof(RedInteger), typeof(IRedInteger), typeof(RedIntegerEditor), new PropertyMetadata(default(IRedInteger)));
 
         public int NumberDecimalDigits => GetNumberDecimalDigits();
 

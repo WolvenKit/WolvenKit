@@ -6,7 +6,7 @@ namespace WolvenKit.RED4.Types
 {
     [RED("Uint16")]
     [DebuggerDisplay("{_value,nq}", Type = "CUInt16")]
-    public readonly struct CUInt16 : IRedPrimitive<ushort>, IEquatable<CUInt16>
+    public readonly struct CUInt16 : IRedPrimitive<ushort>, IEquatable<CUInt16>, IRedInteger
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly ushort _value;

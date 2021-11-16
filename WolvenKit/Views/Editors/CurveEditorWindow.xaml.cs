@@ -8,7 +8,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using WolvenKit.Common;
-using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels;
 using Point = System.Windows.Point;
@@ -26,13 +25,13 @@ namespace WolvenKit.Views.Editors
 
         private readonly string _elementType;
 
-        private readonly ICurveDataAccessor _model;
+        private readonly IRedLegacySingleChannelCurve _model;
 
-        public CurveEditorWindow(IEditableVariable property)
+        public CurveEditorWindow(IRedType property)
         {
             InitializeComponent();
 
-            if (property is not ICurveDataAccessor model)
+            if (property is not IRedLegacySingleChannelCurve model)
             {
                 return;
             }
@@ -43,7 +42,7 @@ namespace WolvenKit.Views.Editors
             var times = points.Select(x => (double)x.GetTime()).ToArray();
             var values = points
                 .Select(x => x.GetValue())
-                .OfType<Tuple<IEditableVariable, IEditableVariable>>()
+                .OfType<Tuple<IRedType, IRedType>>()
                 .Select(x => x.Item1);
             var type = model.GetInterpolationType();
 
@@ -541,15 +540,10 @@ namespace WolvenKit.Views.Editors
 
                         var values = _model.GetCurvePoints()
                             .Select(x => x.GetValue())
-                            .OfType<Tuple<IEditableVariable, IEditableVariable>>()
+                            .OfType<Tuple<IRedType, IRedType>>()
                             .Select(x => x.Item1)
                             .OfType<HDRColor>()
                             .ToList();
-
-                        if (alpha.Count != values.Count)
-                        {
-
-                        }
 
 
                         var vec = new List<Tuple<double, object>>();

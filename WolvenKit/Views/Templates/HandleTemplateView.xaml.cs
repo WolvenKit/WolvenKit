@@ -3,8 +3,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.RED4.CR2W.Reflection;
+using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Exceptions;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace WolvenKit.Views.Templates
@@ -19,18 +20,18 @@ namespace WolvenKit.Views.Templates
             InitializeComponent();
         }
 
-        public ICR2WExport SelectedItem { get; set; }
+        public IRedType SelectedItem { get; set; }
 
-        public ObservableCollection<ICR2WExport> BindingCollection { get; set; } = new();
+        public ObservableCollection<IRedType> BindingCollection { get; set; } = new();
 
-        public IREDChunkPtr RedChunkPtr
+        public IRedBaseHandle RedChunkPtr
         {
-            get => (IREDChunkPtr)GetValue(RedChunkPtrProperty);
+            get => (IRedBaseHandle)GetValue(RedChunkPtrProperty);
             set => SetValue(RedChunkPtrProperty, value);
         }
 
         public static readonly DependencyProperty RedChunkPtrProperty =
-            DependencyProperty.Register(nameof(RedChunkPtr), typeof(IREDChunkPtr),
+            DependencyProperty.Register(nameof(RedChunkPtr), typeof(IRedBaseHandle),
                 typeof(HandleTemplateView), new PropertyMetadata(OnRedChunkPtrChanged));
 
         public event EventHandler<GoToChunkRequestedEventArgs> GoToChunkRequested;
@@ -45,26 +46,28 @@ namespace WolvenKit.Views.Templates
             {
                 return;
             }
-            if (e.NewValue is not IREDChunkPtr iptr)
+            if (e.NewValue is not IRedBaseHandle iptr)
             {
                 return;
             }
 
             view.BindingCollection.Clear();
 
+            throw new TodoException("handle editor");
+
             // get all possible chunks in the cr2w file
-            var reftype = AssemblyDictionary.GetTypeByName(iptr.ReferenceType);
-            var available = AssemblyDictionary.GetSubClassesOf(reftype).Select(x => x.Name).ToList();
-            available.Add(reftype.Name);
+            //var reftype = AssemblyDictionary.GetTypeByName(iptr.ReferenceType);
+            //var available = AssemblyDictionary.GetSubClassesOf(reftype).Select(x => x.Name).ToList();
+            //available.Add(reftype.Name);
 
-            var availableChunks = iptr.Cr2wFile.Chunks.Where(x => available.Contains(x.REDType));
+            //var availableChunks = iptr.File.Chunks.Where(x => available.Contains(x.REDType));
 
-            foreach (var s in availableChunks)
-            {
-                view.BindingCollection.Add(s);
-            }
+            //foreach (var s in availableChunks)
+            //{
+            //    view.BindingCollection.Add(s);
+            //}
 
-            view.SelectedItem = iptr.GetReference();
+            //view.SelectedItem = iptr.GetReference();
         }
 
         private void ComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -73,29 +76,27 @@ namespace WolvenKit.Views.Templates
             {
                 return;
             }
-            if (RedChunkPtr.GetReference() == SelectedItem)
-            {
-                return;
-            }
+            throw new TodoException("handle editor");
+            //if (RedChunkPtr.GetReference() == SelectedItem)
+            //{
+            //    return;
+            //}
 
-            RedChunkPtr.SetValue(SelectedItem.ChunkIndex + 1);
+            //RedChunkPtr.SetValue(SelectedItem.ChunkIndex + 1);
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            var target = RedChunkPtr?.GetReference();
-            if (target == null)
-            {
-                return;
-            }
+            var target = RedChunkPtr.Pointer;
 
-            GoToChunkRequested?.Invoke(this, new GoToChunkRequestedEventArgs() { Export = target });
+            throw new TodoException("handle editor");
+            //GoToChunkRequested?.Invoke(this, new GoToChunkRequestedEventArgs() { Export = target });
 
         }
     }
 
     public class GoToChunkRequestedEventArgs : EventArgs
     {
-        public ICR2WExport Export { get; set; }
+        public IRedType Export { get; set; }
     }
 }

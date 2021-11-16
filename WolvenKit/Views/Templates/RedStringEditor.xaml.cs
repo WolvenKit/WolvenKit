@@ -1,8 +1,7 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Editors
 {
@@ -16,13 +15,13 @@ namespace WolvenKit.Views.Editors
             InitializeComponent();
         }
 
-        public IREDString RedString
+        public IRedString RedString
         {
-            get => (IREDString)this.GetValue(RedStringProperty);
+            get => (IRedString)this.GetValue(RedStringProperty);
             set => this.SetValue(RedStringProperty, value);
         }
         public static readonly DependencyProperty RedStringProperty = DependencyProperty.Register(
-            nameof(RedString), typeof(IREDString), typeof(RedStringEditor), new PropertyMetadata(default(IREDString)));
+            nameof(RedString), typeof(IRedString), typeof(RedStringEditor), new PropertyMetadata(default(IRedString)));
 
 
         public string Text
@@ -31,7 +30,18 @@ namespace WolvenKit.Views.Editors
             set => SetRedValue(value);
         }
 
-        private void SetRedValue(string value) => RedString.SetValue(value);
+        private void SetRedValue(string value)
+        {
+            if (RedString is CName)
+            {
+                SetCurrentValue(RedStringProperty, (CName)value);
+            }
+            else if (RedString is CString)
+            {
+                SetCurrentValue(RedStringProperty, (CString)value);
+            }
+            
+        }
 
         private string GetValueFromRedValue()
         {

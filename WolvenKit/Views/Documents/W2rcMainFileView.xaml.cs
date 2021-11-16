@@ -3,7 +3,6 @@ using System.Reactive.Disposables;
 using System.Windows;
 using ReactiveUI;
 using Syncfusion.Windows.PropertyGrid;
-using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Converters;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Documents;
@@ -169,7 +168,7 @@ namespace WolvenKit.Views.Documents
                 var selectedProperty = pg.SelectedPropertyItem;
                 var prop = selectedProperty.Value;
 
-                if (prop is IREDArray editableVariable)
+                if (prop is IRedArray editableVariable)
                 {
                     // open custom collection editor
                     var collectionEditor = new RedCollectionEditor(editableVariable);

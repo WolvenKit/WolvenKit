@@ -314,31 +314,6 @@ namespace WolvenKit.Modkit.RED4
                     MemSize = (uint)inbuffer.Length,
                 });
 
-                //// write main file
-                //using var ms = new MemoryStream();
-                //using var writer = new CR2WWriter(ms);
-                //writer.WriteFile(red);
-
-                //// write buffer
-                //var offset = (uint)bw.BaseStream.Position;
-                //var inbuffer = File.ReadAllBytes(rawRelative.FullName);
-                //var (zsize, crc) = bw.CompressAndWrite(inbuffer);
-
-                //// add buffer info
-                //red.Buffers[0] = new CR2WBufferWrapper(new CR2WBuffer()
-                //{
-                //    flags = 0xE0000, //TODO: find out what to set here, but for fnt files these are always 0xE0000
-                //    index = 0,
-                //    offset = offset,
-                //    diskSize = zsize,
-                //    memSize = (uint)inbuffer.Length,
-                //    crc32 = crc
-                //});
-
-                //// write header again to update the buffer info
-                //bw.Seek(0, SeekOrigin.Begin);
-                //red.WriteHeader(bw);
-
                 // write to file
                 var redpath = Path.ChangeExtension(rawRelative.FullName, ECookedFileFormat.fnt.ToString());
                 if (redpath == null)
@@ -346,18 +321,12 @@ namespace WolvenKit.Modkit.RED4
                     return false;
                 }
 
-                //using var fs = new FileStream(redpath, FileMode.Create, FileAccess.Write);
-                //ms.Seek(0, SeekOrigin.Begin);
-                //ms.CopyTo(fs);
-
                 using var fs = new FileStream(redpath, FileMode.Create, FileAccess.Write);
                 using var writer = new CR2WWriter(fs);
                 writer.WriteFile(red);
+
                 return true;
             }
-
-
-
         }
 
         private bool ImportXbm(RedRelativePath rawRelative, DirectoryInfo outDir, XbmImportArgs args)

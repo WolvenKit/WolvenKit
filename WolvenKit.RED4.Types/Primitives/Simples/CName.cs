@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.Types
 {
     [RED("CName")]
     [DebuggerDisplay("{_value}", Type = "CName")]
-    public sealed class CName : IRedPrimitive<string>, IEquatable<CName>
+    public sealed class CName : IRedPrimitive<string>, IEquatable<CName>, IRedString
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly string _value;
@@ -66,5 +66,7 @@ namespace WolvenKit.RED4.Types
         }
 
         public bool Equals(CName other) => Equals(_value, other._value);
+
+        public string GetValue() => (string)this;
     }
 }

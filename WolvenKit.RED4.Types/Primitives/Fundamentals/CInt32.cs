@@ -6,7 +6,7 @@ namespace WolvenKit.RED4.Types
 {
     [RED("Int32")]
     [DebuggerDisplay("{_value,nq}", Type = "CInt32")]
-    public readonly struct CInt32 : IRedPrimitive<int>, IEquatable<CInt32>
+    public readonly struct CInt32 : IRedPrimitive<int>, IEquatable<CInt32>, IRedInteger
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly int _value;

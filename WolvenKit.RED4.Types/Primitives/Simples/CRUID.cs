@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 {
     [RED("CRUID")]
     [DebuggerDisplay("{_value}", Type = "CRUID")]
-    public readonly struct CRUID : IRedPrimitive<ulong>, IEquatable<CRUID>
+    public readonly struct CRUID : IRedPrimitive<ulong>, IEquatable<CRUID>, IRedInteger
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly ulong _value;

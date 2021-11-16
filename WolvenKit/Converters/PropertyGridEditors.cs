@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Data;
 using Syncfusion.Windows.PropertyGrid;
 using Syncfusion.Windows.Tools.Controls;
-using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Editors;
 using WolvenKit.Views.Templates;
@@ -15,17 +14,12 @@ namespace WolvenKit.Converters
     {
         public static ITypeEditor GetPropertyEditor(Type PropertyType)
         {
-            if (PropertyType.IsAssignableTo(typeof(IREDString)))
+            if (PropertyType.IsAssignableTo(typeof(IRedString)))
             {
                 return new TextEditor();
-
             }
-            else if (PropertyType.IsAssignableTo(typeof(IREDIntegerType)))
+            else if (PropertyType.IsAssignableTo(typeof(IRedInteger)))
             {
-                if (PropertyType == typeof(CFloat))
-                {
-                    return new FloatEditor();
-                }
                 if (PropertyType == typeof(CUInt64))
                 {
                     return new FloatEditor();
@@ -36,35 +30,33 @@ namespace WolvenKit.Converters
                 }
                 return new IntegerEditor();
             }
-            else if (PropertyType.IsAssignableTo(typeof(IREDBool)))
+            else if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<float>)))
+            {
+                return new FloatEditor();
+            }
+            else if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<bool>)))
             {
                 return new BoolEditor();
-
             }
-            else if (PropertyType.IsAssignableTo(typeof(IREDEnum)))
+            else if (PropertyType.IsAssignableTo(typeof(IRedEnum)))
             {
                 return new EnumEditor();
-
             }
-            else if (PropertyType.IsAssignableTo(typeof(IREDChunkPtr)))
+            else if (PropertyType.IsAssignableTo(typeof(IRedBaseHandle)))
             {
                 return new ChunkPtrEditor();
-
             }
-            else if (PropertyType.IsAssignableTo(typeof(IREDRef)))
+            else if (PropertyType.IsAssignableTo(typeof(IRedRef)))
             {
                 return new RefEditor();
-
             }
-            else if (PropertyType.IsAssignableTo(typeof(ICurveDataAccessor)))
+            else if (PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
             {
                 return new CurveEditor();
-
             }
-            else if (PropertyType.IsAssignableTo(typeof(IREDColor)))
+            else if (PropertyType.IsAssignableTo(typeof(CColor)))
             {
                 return new ColorEditor();
-
             }
 
             return null;

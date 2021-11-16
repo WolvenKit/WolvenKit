@@ -47,7 +47,7 @@ namespace WolvenKit.ViewModels.Documents
 
         //[Reactive] public ObservableCollection<ChunkPropertyViewModel> ChunkProperties { get; set; } = new();
 
-        //public List<ICR2WImport> Imports => _file.Imports;
+        public List<CR2WImportInfo> Imports => _file is CR2WFile cr2w ? cr2w.Debug.ImportInfos.ToList() : new List<CR2WImportInfo>();
 
         //public List<ICR2WBuffer> Buffers => _file.Buffers;
 

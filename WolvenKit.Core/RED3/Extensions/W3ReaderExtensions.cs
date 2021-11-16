@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Text;
-using WolvenKit.Common.Model.Cr2w;
 
 namespace WolvenKit.RED3.CR2W
 {

@@ -11,8 +11,8 @@ using System.Windows.Media;
 using WinCopies.Util;
 using WolvenKit.Common;
 using WolvenKit.Common.Annotations;
-using WolvenKit.Common.Model.Cr2w;
 using WolvenKit.Functionality.Commands;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels
 {
@@ -40,8 +40,8 @@ namespace WolvenKit.ViewModels
             }
         }
 
-        public override string ToString() => _element is IEditableVariable variable
-                ? $"[{variable.REDType}] {variable.REDName}"
+        public override string ToString() => _element is IRedType variable
+                ? $"[{variable.GetType().Name}] {variable.ToString()}"
                 : _element.ToString();
     }
 
@@ -50,7 +50,7 @@ namespace WolvenKit.ViewModels
         private RedCollectionItemViewModel _selectedElement;
         //private IEditableVariable _selectedElement;
 
-        private IREDArray _redArray;
+        private IRedArray _redArray;
 
         public RedCollectionEditorViewModel()
         {
@@ -94,14 +94,14 @@ namespace WolvenKit.ViewModels
 
         #region methods
 
-        internal void SetElements(IREDArray redarray)
+        internal void SetElements(IRedArray redarray)
         {
             _redArray = redarray;
 
             Elements.Clear();
             foreach (var item in _redArray)
             {
-                if (item is IEditableVariable editableVariable)
+                if (item is IRedType editableVariable)
                 {
                     Elements.Add(new RedCollectionItemViewModel(editableVariable));
                     //Elements.Add(editableVariable);
@@ -122,7 +122,7 @@ namespace WolvenKit.ViewModels
                     Elements.Clear();
                     foreach (var item in _redArray)
                     {
-                        if (item is IEditableVariable editableVariable)
+                        if (item is IRedType editableVariable)
                         {
                             Elements.Add(new RedCollectionItemViewModel(editableVariable));
                             //Elements.Add(editableVariable);
@@ -134,7 +134,7 @@ namespace WolvenKit.ViewModels
 
         private void RemoveElement()
         {
-            if (SelectedElement != null && SelectedElement.Element is IEditableVariable variable)
+            if (SelectedElement != null && SelectedElement.Element is IRedType variable)
             //if (SelectedElement != null && SelectedElement is IEditableVariable variable)
             {
                 if (_redArray.CanRemoveVariable(variable) && _redArray.RemoveVariable(variable))
@@ -142,7 +142,7 @@ namespace WolvenKit.ViewModels
                     Elements.Clear();
                     foreach (var item in _redArray)
                     {
-                        if (item is IEditableVariable editableVariable)
+                        if (item is IRedType editableVariable)
                         {
                             Elements.Add(new RedCollectionItemViewModel(editableVariable));
                             //Elements.Add(editableVariable);
