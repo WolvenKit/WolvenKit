@@ -13,6 +13,7 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Core;
 using WolvenKit.Interfaces.Extensions;
+using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.MSTests
 {

@@ -71,7 +71,7 @@ namespace WolvenKit.ViewModels.Documents
                     SetIsDirty(false);
                     _loggerService.Success($"Saved file {FilePath}");
                 }
-                throw new ArgumentException();
+                //throw new ArgumentException();
             }
 
             return Task.CompletedTask;

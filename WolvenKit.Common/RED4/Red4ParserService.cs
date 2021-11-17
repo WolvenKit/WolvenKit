@@ -47,6 +47,7 @@ namespace WolvenKit.RED4.CR2W
             {
                 return null;
             }
+            br.BaseStream.Seek(-4, SeekOrigin.Current);
 
             try
             {

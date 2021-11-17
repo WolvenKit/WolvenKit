@@ -21,6 +21,7 @@ namespace WolvenKit.ViewModels.Shell
         public ChunkViewModel(IRedType export)
         {
             _data = export;
+            Name = _data.GetType().Name;
         }
 
         #endregion Constructors
@@ -32,6 +33,8 @@ namespace WolvenKit.ViewModels.Shell
         [Reactive] public bool IsSelected { get; set; }
 
         [Reactive] public bool IsExpanded { get; set; }
+
+        public string Name { get; }
 
         #endregion Properties
     }

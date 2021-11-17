@@ -6,7 +6,7 @@ namespace WolvenKit.RED4.Types
 {
     [RED("Double")]
     [DebuggerDisplay("{_value,nq}", Type = "CDouble")]
-    public readonly struct CDouble : IRedPrimitive<double>, IEquatable<CDouble>
+    public readonly struct CDouble : IRedPrimitive<double>, IEquatable<CDouble>, IRedInteger
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly double _value;

@@ -11,6 +11,7 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Database;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 
@@ -147,14 +148,19 @@ namespace WolvenKit.MSTests
                         {
                             using var originalMemoryStream = new MemoryStream();
                             ModTools.ExtractSingleToStream(archive, hash, originalMemoryStream);
+
+                            using var reader = new CR2WReader(originalMemoryStream);
+
                             var cr2w = parser.TryReadRed4FileHeaders(originalMemoryStream);
                             if (cr2w != null)
                             {
-                                if (cr2w.Imports.Any())
-                                {
-                                    var imports = cr2w.Imports.Select(x => FNV1A64HashAlgorithm.HashString(x.DepotPathStr)).ToArray();
-                                    dbDict.AddOrUpdate(hash, imports, (key, oldValue) => imports);
-                                }
+
+
+                                //if (cr2w.Imports.Any())
+                                //{
+                                //    var imports = cr2w.Imports.Select(x => FNV1A64HashAlgorithm.HashString(x.DepotPathStr)).ToArray();
+                                //    dbDict.AddOrUpdate(hash, imports, (key, oldValue) => imports);
+                                //}
                             }
                             else
                             {

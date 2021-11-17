@@ -18,43 +18,39 @@ namespace WolvenKit.Converters
             {
                 return new TextEditor();
             }
-            else if (PropertyType.IsAssignableTo(typeof(IRedInteger)))
+            if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<ulong>)))
             {
-                if (PropertyType == typeof(CUInt64))
-                {
-                    return new FloatEditor();
-                }
-                if (PropertyType == typeof(CRUID))
-                {
-                    return new FloatEditor();
-                }
+                return new UlongEditor();
+            }
+            if (PropertyType.IsAssignableTo(typeof(IRedInteger)))
+            {
                 return new IntegerEditor();
             }
-            else if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<float>)))
+            if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<float>)))
             {
                 return new FloatEditor();
             }
-            else if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<bool>)))
+            if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<bool>)))
             {
                 return new BoolEditor();
             }
-            else if (PropertyType.IsAssignableTo(typeof(IRedEnum)))
+            if (PropertyType.IsAssignableTo(typeof(IRedEnum)))
             {
                 return new EnumEditor();
             }
-            else if (PropertyType.IsAssignableTo(typeof(IRedBaseHandle)))
+            if (PropertyType.IsAssignableTo(typeof(IRedBaseHandle)))
             {
                 return new ChunkPtrEditor();
             }
-            else if (PropertyType.IsAssignableTo(typeof(IRedRef)))
+            if (PropertyType.IsAssignableTo(typeof(IRedRef)))
             {
                 return new RefEditor();
             }
-            else if (PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
+            if (PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
             {
                 return new CurveEditor();
             }
-            else if (PropertyType.IsAssignableTo(typeof(CColor)))
+            if (PropertyType.IsAssignableTo(typeof(CColor)))
             {
                 return new ColorEditor();
             }
@@ -340,6 +336,47 @@ namespace WolvenKit.Converters
             public object Create(PropertyInfo propertyInfo)
             {
                 _editor = new RedStringEditor();
+
+                return _editor;
+            }
+            public void Detach(PropertyViewItem property)
+            {
+
+            }
+        }
+
+        public class UlongEditor : ITypeEditor
+        {
+            private RedUlongEditor _editor;
+
+            public void Attach(PropertyViewItem property, PropertyItem info)
+            {
+                if (info.CanWrite)
+                {
+                    var binding = new Binding("Value")
+                    {
+                        Mode = BindingMode.TwoWay,
+                        Source = info,
+                        ValidatesOnExceptions = true,
+                        ValidatesOnDataErrors = true,
+                    };
+                    BindingOperations.SetBinding(_editor, RedUlongEditor.RedNumberProperty, binding);
+                }
+                else
+                {
+                    _editor.SetCurrentValue(UIElement.IsEnabledProperty, false);
+                    var binding = new Binding("Value")
+                    {
+                        Source = info,
+                        ValidatesOnExceptions = true,
+                        ValidatesOnDataErrors = true
+                    };
+                    BindingOperations.SetBinding(_editor, RedUlongEditor.RedNumberProperty, binding);
+                }
+            }
+            public object Create(PropertyInfo propertyInfo)
+            {
+                _editor = new RedUlongEditor();
 
                 return _editor;
             }

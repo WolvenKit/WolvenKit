@@ -99,57 +99,64 @@ namespace WolvenKit.ViewModels
             _redArray = redarray;
 
             Elements.Clear();
-            foreach (var item in _redArray)
-            {
-                if (item is IRedType editableVariable)
-                {
-                    Elements.Add(new RedCollectionItemViewModel(editableVariable));
-                    //Elements.Add(editableVariable);
-                }
-            }
+
+            throw new WolvenKit.RED4.Types.Exceptions.TodoException("RedArray");
+
+            //foreach (var item in _redArray)
+            //{
+            //    if (item is IRedType editableVariable)
+            //    {
+            //        Elements.Add(new RedCollectionItemViewModel(editableVariable));
+            //        //Elements.Add(editableVariable);
+            //    }
+            //}
         }
 
         private void AddElement()
         {
-            var count = _redArray.Count;
-            var element = _redArray.GetElementInstance(count.ToString());
-            if (element != null)
-            {
-                if (_redArray.CanAddVariable(element))
-                {
-                    _redArray.AddVariable(element);
+            throw new WolvenKit.RED4.Types.Exceptions.TodoException("RedArray");
 
-                    Elements.Clear();
-                    foreach (var item in _redArray)
-                    {
-                        if (item is IRedType editableVariable)
-                        {
-                            Elements.Add(new RedCollectionItemViewModel(editableVariable));
-                            //Elements.Add(editableVariable);
-                        }
-                    }
-                }
-            }
+            //var count = _redArray.Count;
+            //var element = _redArray.GetElementInstance(count.ToString());
+            //if (element != null)
+            //{
+            //    if (_redArray.CanAddVariable(element))
+            //    {
+            //        _redArray.AddVariable(element);
+
+            //        Elements.Clear();
+            //        foreach (var item in _redArray)
+            //        {
+            //            if (item is IRedType editableVariable)
+            //            {
+            //                Elements.Add(new RedCollectionItemViewModel(editableVariable));
+            //                //Elements.Add(editableVariable);
+            //            }
+            //        }
+            //    }
+            //}
         }
 
         private void RemoveElement()
         {
-            if (SelectedElement != null && SelectedElement.Element is IRedType variable)
-            //if (SelectedElement != null && SelectedElement is IEditableVariable variable)
-            {
-                if (_redArray.CanRemoveVariable(variable) && _redArray.RemoveVariable(variable))
-                {
-                    Elements.Clear();
-                    foreach (var item in _redArray)
-                    {
-                        if (item is IRedType editableVariable)
-                        {
-                            Elements.Add(new RedCollectionItemViewModel(editableVariable));
-                            //Elements.Add(editableVariable);
-                        }
-                    }
-                }
-            }
+            throw new WolvenKit.RED4.Types.Exceptions.TodoException("RedArray");
+
+            //if (SelectedElement != null && SelectedElement.Element is IRedType variable)
+            ////if (SelectedElement != null && SelectedElement is IEditableVariable variable)
+            //{
+            //    if (_redArray.CanRemoveVariable(variable) && _redArray.RemoveVariable(variable))
+            //    {
+            //        Elements.Clear();
+            //        foreach (var item in _redArray)
+            //        {
+            //            if (item is IRedType editableVariable)
+            //            {
+            //                Elements.Add(new RedCollectionItemViewModel(editableVariable));
+            //                //Elements.Add(editableVariable);
+            //            }
+            //        }
+            //    }
+            //}
         }
 
         #endregion

@@ -322,7 +322,7 @@ namespace WolvenKit.Common.RED4.Compiled
                 chunk.MountChunkVirtually(virtualparent);
             }
 
-            throw new TodoException("fix");
+            throw new TodoException("fix everything");
             //Chunks.Insert(chunkindex, chunk);
             //return chunk;
         }

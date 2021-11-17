@@ -53,28 +53,29 @@ namespace WolvenKit.Views.Templates
 
             //dynamic en = view.RedEnum;
             //Type enumtype = en.Value.GetType();
-            Type enumtype = null;
-            if (AssemblyDictionary.EnumExists(view.RedEnum.REDType))
-            {
-                enumtype = AssemblyDictionary.GetEnumByName(view.RedEnum.REDType);
-            }
-            //else if (RED3.CR2W.Reflection.AssemblyDictionary.EnumExists(view.RedEnum.REDType))
+
+            throw new WolvenKit.RED4.Types.Exceptions.TodoException("EnumEditor");
+
+            //Type enumtype = null;
+            //if (AssemblyDictionary.EnumExists(view.RedEnum.REDType))
             //{
-            //    enumtype = RED3.CR2W.Reflection.AssemblyDictionary.GetEnumByName(view.RedEnum.REDType);
+            //    enumtype = AssemblyDictionary.GetEnumByName(view.RedEnum.REDType);
             //}
-            if (enumtype == null)
-            {
-                return;
-            }
+
+
+            //if (enumtype == null)
+            //{
+            //    return;
+            //}
             
-            var vals = Enum.GetNames(enumtype);
+            //var vals = Enum.GetNames(enumtype);
 
-            foreach (var s in vals)
-            {
-                view.BindingCollection.Add(s);
-            }
+            //foreach (var s in vals)
+            //{
+            //    view.BindingCollection.Add(s);
+            //}
 
-            view.SelectedItem = ienum.REDValue;
+            //view.SelectedItem = ienum.REDValue;
         }
 
         
@@ -86,12 +87,14 @@ namespace WolvenKit.Views.Templates
                 return;
             }
 
-            if (cvar.REDValue == SelectedItem)
-            {
-                return;
-            }
+            throw new WolvenKit.RED4.Types.Exceptions.TodoException("EnumEditor");
 
-            cvar.SetValue(new List<string>() { SelectedItem });
+            //if (cvar.REDValue == SelectedItem)
+            //{
+            //    return;
+            //}
+
+            //cvar.SetValue(new List<string>() { SelectedItem });
         }
     }
 }

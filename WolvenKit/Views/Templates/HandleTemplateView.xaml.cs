@@ -34,7 +34,7 @@ namespace WolvenKit.Views.Templates
             DependencyProperty.Register(nameof(RedChunkPtr), typeof(IRedBaseHandle),
                 typeof(HandleTemplateView), new PropertyMetadata(OnRedChunkPtrChanged));
 
-        public event EventHandler<GoToChunkRequestedEventArgs> GoToChunkRequested;
+        //public event EventHandler<GoToChunkRequestedEventArgs> GoToChunkRequested;
 
         private static void OnRedChunkPtrChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
