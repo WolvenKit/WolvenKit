@@ -22,7 +22,17 @@ namespace WolvenKit.Views.Templates
 
             if (DataContext is RedCollectionEditorViewModel vm)
             {
-                vm.SetElements(_redarray);
+                var type = _redarray.GetType();
+                var innerType = type.GetGenericArguments()[0];
+
+                var method = typeof(RedCollectionEditorViewModel)
+                    .GetMethod(nameof(RedCollectionEditorViewModel.SetElements), new[] { typeof(IRedArray) });
+                var generic = method.MakeGenericMethod(innerType);
+
+                generic.Invoke(vm, new object[] { _redarray });
+
+
+                //vm.SetElements(_redarray);
             }
         }
 

@@ -9,42 +9,12 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using WinCopies.Util;
-using WolvenKit.Common;
 using WolvenKit.Common.Annotations;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels
 {
-    internal class RedCollectionItemViewModel : ObservableObject
-    {
-        private object _element;
-
-        public RedCollectionItemViewModel(object element)
-        {
-            _element = element;
-        }
-
-        public object Element
-        {
-            get => _element;
-            set
-            {
-                if (value == _element)
-                {
-                    return;
-                }
-
-                _element = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public override string ToString() => _element is IRedType variable
-                ? $"[{variable.GetType().Name}] {variable.ToString()}"
-                : _element.ToString();
-    }
-
     internal class RedCollectionEditorViewModel : INotifyPropertyChanged
     {
         private RedCollectionItemViewModel _selectedElement;
@@ -94,69 +64,86 @@ namespace WolvenKit.ViewModels
 
         #region methods
 
-        internal void SetElements(IRedArray redarray)
+        private Type _innerType;
+
+        public void SetElements<T>(IRedArray redarray) where T : IRedType
         {
             _redArray = redarray;
+            _innerType = typeof(T);
 
             Elements.Clear();
 
-            throw new WolvenKit.RED4.Types.Exceptions.TodoException("RedArray");
+            var array = redarray as CArray<T>;
 
-            //foreach (var item in _redArray)
-            //{
-            //    if (item is IRedType editableVariable)
-            //    {
-            //        Elements.Add(new RedCollectionItemViewModel(editableVariable));
-            //        //Elements.Add(editableVariable);
-            //    }
-            //}
+            foreach (var item in array)
+            {
+                if (item is IRedType editableVariable)
+                {
+                    Elements.Add(new RedCollectionItemViewModel(editableVariable));
+                    //Elements.Add(editableVariable);
+                }
+            }
         }
 
         private void AddElement()
         {
-            throw new WolvenKit.RED4.Types.Exceptions.TodoException("RedArray");
+            var method = typeof(RedCollectionEditorViewModel)
+                    .GetMethod(nameof(AddElement));
+            var generic = method.MakeGenericMethod(_innerType);
 
-            //var count = _redArray.Count;
-            //var element = _redArray.GetElementInstance(count.ToString());
-            //if (element != null)
-            //{
-            //    if (_redArray.CanAddVariable(element))
-            //    {
-            //        _redArray.AddVariable(element);
+            generic.Invoke(this, new object[] {  });
+        }
 
-            //        Elements.Clear();
-            //        foreach (var item in _redArray)
-            //        {
-            //            if (item is IRedType editableVariable)
-            //            {
-            //                Elements.Add(new RedCollectionItemViewModel(editableVariable));
-            //                //Elements.Add(editableVariable);
-            //            }
-            //        }
-            //    }
-            //}
+        public void AddElement<T>() where T : IRedType
+        {
+            var array = _redArray as CArray<T>;
+
+            var instance = RedTypeManager.Create(_innerType);
+            if (instance is T element)
+            {
+                array.Add(element);
+
+                Elements.Clear();
+                foreach (var item in array)
+                {
+                    if (item is IRedType editableVariable)
+                    {
+                        Elements.Add(new RedCollectionItemViewModel(editableVariable));
+                        //Elements.Add(editableVariable);
+                    }
+                }
+            }
+            
         }
 
         private void RemoveElement()
         {
-            throw new WolvenKit.RED4.Types.Exceptions.TodoException("RedArray");
+            var method = typeof(RedCollectionEditorViewModel)
+                    .GetMethod(nameof(RemoveElement));
+            var generic = method.MakeGenericMethod(_innerType);
 
-            //if (SelectedElement != null && SelectedElement.Element is IRedType variable)
-            ////if (SelectedElement != null && SelectedElement is IEditableVariable variable)
-            //{
-            //    if (_redArray.CanRemoveVariable(variable) && _redArray.RemoveVariable(variable))
-            //    {
-            //        Elements.Clear();
-            //        foreach (var item in _redArray)
-            //        {
-            //            if (item is IRedType editableVariable)
-            //            {
-            //                Elements.Add(new RedCollectionItemViewModel(editableVariable));
-            //                //Elements.Add(editableVariable);
-            //            }
-            //        }
-            //    }
-            //}
+            generic.Invoke(this, new object[] { });
+        }
+
+        public void RemoveElement<T>() where T : IRedType
+        {
+            if (SelectedElement != null && SelectedElement.Element is IRedType variable && variable is T tvar)
+            //if (SelectedElement != null && SelectedElement is IEditableVariable variable)
+            {
+                var array = _redArray as CArray<T>;
+
+                array.Remove(tvar);
+
+                Elements.Clear();
+                foreach (var item in array)
+                {
+                    if (item is IRedType editableVariable)
+                    {
+                        Elements.Add(new RedCollectionItemViewModel(editableVariable));
+                        //Elements.Add(editableVariable);
+                    }
+                }
+            }
         }
 
         #endregion
