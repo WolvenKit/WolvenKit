@@ -131,7 +131,7 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         public ICommand CopyFileCommand { get; private set; }
         private bool CanCopyFile() => _projectManager.ActiveProject != null && SelectedItem != null;
-        private void ExecuteCopyRelPath() => Clipboard.SetText(SelectedItem.Name);
+        private void ExecuteCopyRelPath() => Clipboard.SetText(SelectedItem.GetRelativeName(ActiveMod));
 
         /// <summary>
         /// Copies relative path of node.
