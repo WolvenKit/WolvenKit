@@ -11,7 +11,7 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:viewmodels="clr-namespace:WolvenKit.ViewModels">
    
-    <Grid MinWidth="300" MinHeight="300" Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
+    <Grid MinWidth="300" MinHeight="300" MaxWidth="1200" MaxHeight="600" Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
 
         <Grid.Resources>
             <Style TargetType="CheckBox">
@@ -27,7 +27,10 @@
         <syncfusion:PropertyGrid x:Name="SettingsPropertygrid" Grid.Row="0"  Margin="3,75,3,0"
                             AutoGeneratingPropertyGridItem="SettingsPropertygrid_OnAutoGeneratingPropertyGridItem"
                             CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
-                            EnableGrouping="True"/>
+                            EnableGrouping="True"
+                            SearchBoxVisibility="Collapsed"
+                            ButtonPanelVisibility="Collapsed"
+                            PropertyNameColumnDefinition="200" />
 
         <Grid Grid.Row="1">
 

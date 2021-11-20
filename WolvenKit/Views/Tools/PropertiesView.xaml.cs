@@ -114,6 +114,7 @@ namespace WolvenKit.Views.Tools
                     e.Cancel = true;
                     break;
             }
+            e.ReadOnly = true;
         }
 
         private Stream StreamFromBitmapSource(BitmapSource writeBmp)

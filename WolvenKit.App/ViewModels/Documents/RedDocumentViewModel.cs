@@ -40,6 +40,7 @@ namespace WolvenKit.ViewModels.Documents
             _loggerService = Locator.Current.GetService<ILoggerService>();
             _parser = Locator.Current.GetService<Red4ParserService>();
             _hashService = Locator.Current.GetService<IHashService>();
+            RelativePath = path;
         }
 
         #region properties
@@ -49,6 +50,8 @@ namespace WolvenKit.ViewModels.Documents
         [Reactive] public int SelectedIndex { get; set; }
 
         [Reactive] public RedDocumentItemViewModel SelectedTabItemViewModel { get; set; }
+
+        [Reactive] public string RelativePath { get; set; }
 
         #endregion
 

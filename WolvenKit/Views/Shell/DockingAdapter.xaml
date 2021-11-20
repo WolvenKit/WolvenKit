@@ -10,7 +10,44 @@
  d:DesignWidth="300"
  mc:Ignorable="d"
  >
+
+    <!--UserControl.Resources>
+        <Style x:Key="TabItemStyle1" TargetType="{x:Type TabItem}" >
+            <Setter Property="Header" Value="{Binding Path=(syncfusion:DockingManager.Header)}" />
+            <Setter Property="Syncfusion:DockingManager.ListenTabItemEvents" Value="True" />
+            <Setter Property="MinWidth" Value="21" />
+            <Setter Property="MinHeight" Value="21" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="Tag" Value="IsInternalTabItem" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabItem}">
+                        <Grid Name="Transform">
+                            <syncfusion:ContextMenuBorder Name="Border" Background="{TemplateBinding Background}"
+                              BorderBrush="{TemplateBinding BorderBrush}"BorderThickness="1">
+                                <Border.ContextMenu>
+                                    <syncfusion:CustomContextMenu Name="PART_ContextMenu"  Focusable="false"  />
+                                </Border.ContextMenu>
+                                <Border.LayoutTransform>
+                                    <RotateTransform Angle="0" />
+                                </Border.LayoutTransform>
+                                <DockPanel LastChildFill="True">
+                                    <Image DockPanel.Dock="Left" Margin="1" Height="13" Style="{DynamicResource FileIcons}"/>
+                                    <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Center"
+                  ContentSource="Header" Margin="2,2,2,2" RecognizesAccessKey="True"
+                  ContentTemplate="{Binding Path=(TabItem.Content).(Syncfusion:DockingManager.HeaderTemplate),
+                  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}}"/>
+                                </DockPanel>
+                            </syncfusion:ContextMenuBorder>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources-->
     <Grid>
+        
+
         <syncfusion:DockingManager x:Name="PART_DockingManager"
                                    ActiveWindowChanged="PART_DockingManager_ActiveWindowChanged_1"
                                    Background="Transparent"
@@ -20,7 +57,24 @@
                                    UseDocumentContainer="True"
                                    Loaded="PART_DockingManager_Loaded"
                                    CloseButtonClick="PART_DockingManagerOnCloseButtonClick"
-                                   DockStateChanging="PART_DockingManagerOnDockStateChanging"
-         />
+                                   DockStateChanging="PART_DockingManagerOnDockStateChanging">
+            <syncfusion:DockingManager.TabItemTemplate>
+            <ControlTemplate>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Image Height="13" Style="{DynamicResource FileIcons}" />
+                    <TextBlock
+                                    x:Name="TemplateTextBlock"
+                                    Grid.Column="1"
+                                    Margin="2"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding Path=Name}" />
+                </Grid>
+            </ControlTemplate>
+            </syncfusion:DockingManager.TabItemTemplate>
+        </syncfusion:DockingManager>
     </Grid>
 </UserControl>

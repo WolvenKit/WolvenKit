@@ -322,7 +322,10 @@
             </ResourceDictionary>
         </Grid.Resources>
 
-        <syncfusion:TabControlExt>
+        <syncfusion:TabControlExt
+            EnableLabelEdit="False"
+            CloseButtonType="Hide"
+            CloseTabOnMiddleClick="False">
             <syncfusion:TabItemExt Header="File Properties">
 
                 <Grid>
@@ -337,27 +340,23 @@
                     </Grid.Resources>
 
                     <syncfusion:PropertyGrid x:Name="PEPropGrid"
-                                             AutoGeneratingPropertyGridItem="PropertyGrid_OnAutoGeneratingPropertyGridItem"
-                        EditableBackground="{DynamicResource MahApps.Brushes.Accent3}"
-                        EditableFontWeight="SemiBold"
-                        IsEnabled="False"
-                        ReadOnlyBackground="{DynamicResource MahApps.Brushes.Accent3}"
-                        ReadOnlyFontWeight="SemiBold"
+                        AutoGeneratingPropertyGridItem="PropertyGrid_OnAutoGeneratingPropertyGridItem"
                         SelectedObject="{Binding PE_SelectedItem, Mode=OneWay}"
-                        Visibility="{Binding PE_FileInfoVisible, Converter={StaticResource boolToVisibilityConverter}}" />
+                        Visibility="{Binding PE_FileInfoVisible, Converter={StaticResource boolToVisibilityConverter}}"
+                        SearchBoxVisibility="Collapsed"
+                        ButtonPanelVisibility="Collapsed"
+                        PropertyNameColumnDefinition="150" />
 
                     <syncfusion:PropertyGrid x:Name="ABPropGrid"
-                                             AutoGeneratingPropertyGridItem="PropertyGrid_OnAutoGeneratingPropertyGridItem"
-                        EditableBackground="{DynamicResource MahApps.Brushes.Accent3}"
-                        EditableFontWeight="SemiBold"
-                        IsEnabled="False"
-                        ReadOnlyBackground="{DynamicResource MahApps.Brushes.Accent3}"
-                        ReadOnlyFontWeight="SemiBold"
+                        AutoGeneratingPropertyGridItem="PropertyGrid_OnAutoGeneratingPropertyGridItem"
                         SelectedObject="{Binding AB_SelectedItem, Mode=OneWay}"
-                        Visibility="{Binding AB_FileInfoVisible, Converter={StaticResource boolToVisibilityConverter}}" />
+                        Visibility="{Binding AB_FileInfoVisible, Converter={StaticResource boolToVisibilityConverter}}"
+                        SearchBoxVisibility="Collapsed"
+                        ButtonPanelVisibility="Collapsed"
+                        PropertyNameColumnDefinition="150"/>
                 </Grid>
             </syncfusion:TabItemExt>
-            <syncfusion:TabItemExt Header="Mesh Preview" IsSelected="{Binding IsMeshPreviewVisible}" Visibility="{Binding IsMeshPreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
+            <syncfusion:TabItemExt Header="Mesh Preview" IsSelected="{Binding IsMeshPreviewVisible, Mode=OneWay}" Visibility="{Binding IsMeshPreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
                 <Grid Name="RootGrid" Height="auto">
                     <Border Name="ViewportBorder" Background="Transparent">
                         <dxControls:DXViewportView
@@ -705,7 +704,7 @@
                 </Border>
             </syncfusion:TabItemExt>
 
-            <syncfusion:TabItemExt IsSelected="{Binding IsImagePreviewVisible}" Header="Image Preview" Visibility="{Binding IsImagePreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
+            <syncfusion:TabItemExt IsSelected="{Binding IsImagePreviewVisible, Mode=OneWay}" Header="Image Preview" Visibility="{Binding IsImagePreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
                 <!--<hc:ImageViewer
                     x:Name="bold"
                     Width="auto"

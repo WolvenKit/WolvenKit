@@ -1,6 +1,8 @@
 using System;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using Syncfusion.Windows.PropertyGrid;
+using Syncfusion.Windows.Shared;
 using WolvenKit.Converters;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels;
@@ -77,7 +79,6 @@ namespace WolvenKit.Views.Templates
 
                 }
 
-
             }
         }
 
@@ -104,6 +105,31 @@ namespace WolvenKit.Views.Templates
                 else
                 {
                     throw new ArgumentException(nameof(editableVariable));
+                }
+            }
+        }
+        private void PropertyGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+            PropertyView item1 = VisualUtils.FindDescendant(this, typeof(PropertyView)) as PropertyView;
+
+            if (item1 != null)
+                item1.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
+        }
+
+        void ItemContainerGenerator_StatusChanged(object sender, EventArgs e)
+        {
+            foreach (PropertyCatagoryViewItem item in VisualUtils.EnumChildrenOfType(this, typeof(PropertyCatagoryViewItem)))
+            {
+                foreach (var items in item.Items)
+                {
+                    foreach (PropertyViewItem propertyViewItem in VisualUtils.EnumChildrenOfType(this, typeof(PropertyViewItem)))
+                    {
+                        ToggleButton button = (ToggleButton)propertyViewItem.Template.FindName("ToggleButton", propertyViewItem);
+                        if (button.Visibility == System.Windows.Visibility.Visible && !button.IsMouseOver)
+                        {
+                            button.IsChecked = true;
+                        }
+                    }
                 }
             }
         }

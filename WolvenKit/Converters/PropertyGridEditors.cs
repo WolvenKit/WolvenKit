@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 using Syncfusion.Windows.PropertyGrid;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.RED4.Types;
@@ -501,6 +502,7 @@ namespace WolvenKit.Converters
             public object Create(PropertyInfo propertyInfo)
             {
                 _editor = new ColorPickerPalette();
+                _editor.SetCurrentValue(ColorPickerPalette.AutomaticColorProperty, new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DF2935")));
 
                 return _editor;
             }

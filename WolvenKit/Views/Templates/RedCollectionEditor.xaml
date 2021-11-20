@@ -10,8 +10,8 @@
         xmlns:viewmodels="clr-namespace:WolvenKit.ViewModels"
         mc:Ignorable="d"
         Title="Collection Editor"
-        Height="400"
-        Width="600">
+        Height="640"
+        Width="960">
 
     <Window.Style>
         <Style TargetType="Window" BasedOn="{StaticResource {x:Type Window}}"/>
@@ -38,36 +38,33 @@
         </Grid.RowDefinitions>
 
         
-        <Grid Grid.Row="0" Margin="10">
+        <Grid Grid.Row="0" Margin="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="300" MinWidth="20"/>
                 <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*" MinWidth="20"/>
             </Grid.ColumnDefinitions>
 
             <!-- LeftSide -->
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" Text="Members:" Margin="10"/>
-
-                <ListView Grid.Row="1" x:Name="ListView"
+                <ListView Grid.Row="0" x:Name="ListView"
                           ItemsSource="{Binding Elements, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           SelectedItem="{Binding SelectedElement}">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Elements" DisplayMemberBinding="{Binding}"/>
+                            <GridViewColumn Header="Members" DisplayMemberBinding="{Binding}" Width="Auto" />
                         </GridView>
                     </ListView.View>
                 </ListView>
 
-                <StackPanel Grid.Row="2" Orientation="Horizontal">
-                    <Button Content="Add" Margin="10" x:Name="AddElementButton" Command="{Binding AddElementCommand}" />
-                    <Button Content="Remove" Margin="10" x:Name="RemoveElementButton" Command="{Binding RemoveElementCommand}" />
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                    <Button Content="Add" Margin="6,6,6,6" x:Name="AddElementButton" Command="{Binding AddElementCommand}" Padding="12,6,12,6" />
+                    <Button Content="Remove" Margin="0,6,6,6" x:Name="RemoveElementButton" Command="{Binding RemoveElementCommand}" Padding="12,6,12,6" />
                 </StackPanel>
 
             </Grid>
@@ -76,29 +73,21 @@
 
             <!-- RightSide -->
             <Grid Grid.Column="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" Text="Properties:" Margin="10"/>
-
-                <syncfusion:PropertyGrid Grid.Row="1"
+                <syncfusion:PropertyGrid
                                          x:Name="PropertyGrid"
                                          PropertyExpandMode="NestedMode"
                                          AutoGeneratingPropertyGridItem="PropertyGrid_AutoGeneratingPropertyGridItem"
                                          CollectionEditorOpening ="PropertyGrid_CollectionEditorOpening"
                                          SelectedObject="{Binding SelectedElement}"
-                                         
-                                         />
-
+                                         PropertyNameColumnDefinition="200" />
 
             </Grid>
 
         </Grid>
 
         
-        <Separator Grid.Row="1" Margin="10"/>
+        <!--Separator Grid.Row="1" Margin="10"/-->
 
         <!-- Footer -->
         <!--<Grid Grid.Row="2" Background="{DynamicResource BorderBrush}">

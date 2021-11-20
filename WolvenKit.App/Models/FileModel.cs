@@ -46,11 +46,14 @@ namespace WolvenKit.Models
 
             Hash = GenerateKey(FullName, project);
             ParentHash = GenerateKey(parentfullname, project);
+            RelativePath = GetRelativeName(project);
         }
 
         #region properties
 
         public string FullName { get; }
+
+        public string RelativePath { get; }
 
         public string Name { get; }
 

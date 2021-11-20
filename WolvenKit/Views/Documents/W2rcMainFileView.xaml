@@ -42,9 +42,9 @@
         </Grid.Resources>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="300"/>
             <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <!-- Additional Navigation -->
@@ -62,12 +62,12 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="0" x:Name="ChunksButton"  Height="Auto" Width="Auto" Margin="3" Click="ChunksButton_OnClick" >
+                <Button Grid.Column="0" x:Name="ChunksButton"  Height="Auto" Width="Auto" Margin="3" Click="ChunksButton_OnClick" ToolTip="Chunks">
                     <Button.Content>
                         <iconPacks:PackIconVaadinIcons Kind="Cubes" />
                     </Button.Content>
                 </Button>
-                <Button Grid.Column="1"  x:Name="ImportsButton"  Height="Auto" Width="Auto" Margin="3" Click="ImportsButton_OnClick" >
+                <Button Grid.Column="1"  x:Name="ImportsButton"  Height="Auto" Width="Auto" Margin="3" Click="ImportsButton_OnClick" ToolTip="Imports">
                     <Button.Content>
                         <iconPacks:PackIconMaterialDesign Kind="ImportExport" />
                     </Button.Content>
@@ -310,7 +310,8 @@
                 PropertyExpandMode="NestedMode"
                 AutoGeneratingPropertyGridItem="PropertyGrid_AutoGeneratingPropertyGridItem"
                 CollectionEditorOpening ="PropertyGrid_CollectionEditorOpening"
-                
+                PropertyNameColumnDefinition="200"
+                ButtonPanelVisibility="Collapsed"
                 />
 
         </Grid>
