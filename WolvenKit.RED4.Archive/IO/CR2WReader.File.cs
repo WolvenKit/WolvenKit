@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Compression;
@@ -223,7 +224,7 @@ namespace WolvenKit.RED4.Archive.IO
             var result = new Dictionary<uint, CName>();
             while (BaseStream.Position < (stringInfoTable.offset + stringInfoTable.itemCount))
             {
-                result.Add((uint)BaseStream.Position - stringInfoTable.offset, ReadNullTerminatedString());
+                result.Add((uint)BaseStream.Position - stringInfoTable.offset, _reader.ReadNullTerminatedString());
             }
 
             return result;

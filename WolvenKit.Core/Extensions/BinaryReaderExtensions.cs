@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -254,6 +255,19 @@ namespace WolvenKit.Core.Extensions
             }
 
             return value;
+        }
+
+        public static string ReadNullTerminatedString(this BinaryReader br, Encoding encoding = null)
+        {
+            encoding ??= Encoding.UTF8;
+
+            var bytes = new List<byte>();
+            for (byte b; (b = br.ReadByte()) != 0x00;)
+            {
+                bytes.Add(b);
+            }
+
+            return encoding.GetString(bytes.ToArray());
         }
     }
 }

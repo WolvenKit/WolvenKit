@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.IO
@@ -53,119 +53,9 @@ namespace WolvenKit.RED4.IO
 
         #region Support
 
-        /// <summary>
-        /// Writes a string to a BinaryWriter Stream
-        /// First byte indicates length, where the first 2 bits are reserved
-        /// bit1: 0 if widecharacterset is needed, 1 otherwise
-        /// bit2: 1 if continuation byte is needed, 0 otherwise
-        /// </summary>
-        /// <param name="bw"></param>
-        /// <param name="value"></param>
-        public void WriteLengthPrefixedString(string value)
-        {
-            // WriteVLQInt32 but highest bit is widechar instead of sign
-            if (string.IsNullOrEmpty(value))
-            {
-                _writer.Write((byte)0x00);
-                return;
-            }
-
-            int len = value.Length;
-            bool requiresWideChar = value.Any(c => c > 255);
-
-            byte b = (byte)(len & 0x3F);
-            len >>= 6;
-            if (!requiresWideChar)
-            {
-                b |= 0x80;
-            }
-            bool cont = len != 0;
-            if (cont)
-            {
-                b |= 0x40;
-            }
-            _writer.Write(b);
-            while (cont)
-            {
-                b = (byte)(len & 0x7F);
-                len >>= 7;
-                cont = len != 0;
-                if (cont)
-                {
-                    b |= 0x80;
-                }
-                _writer.Write(b);
-            }
-
-            if (requiresWideChar)
-                _writer.Write(Encoding.Unicode.GetBytes(value));
-            else
-                _writer.Write(Encoding.GetEncoding("ISO-8859-1").GetBytes(value));
-        }
-
-        public void WriteNullTerminatedString(string value)
-        {
-            _writer.Write(_encoding.GetBytes(value));
-            _writer.Write((byte)0);
-        }
-
-        public void WriteVLQ(int value)
-        {
-            // Sign is stored in the 7th bit instead of two's-compliment
-            // so we save the absolute of the value and the sign separately
-            var isNegative = value < 0;
-            uint absVal = (uint)Math.Abs(value);
-
-            // Initial value from the lower 6 bits
-            byte b = (byte)(absVal & 0b00111111);
-
-            if (isNegative)
-            {
-                b |= 0b10000000;
-            }
-
-            absVal >>= 6;
-
-            // Is value larger than 6 bits?
-            if (absVal > 0)
-            {
-                // First octet stores the continuation flag in the 6th bit
-                b |= 0b01000000;
-            }
-            _writer.Write(b);
-
-            // Any remaining octets are written the same as unsigned ints
-            if (absVal > 0)
-            {
-                WriteVLQUInt32(absVal);
-            }
-        }
-
-        public void WriteVLQUInt32(uint value)
-        {
-            do
-            {
-                // Get the value from the lower 7 bits
-                byte b = (byte)(value & 0b01111111);
-                // Shift the value down to the next 7 bits
-                value >>= 7;
-                // Is there any data remaining?
-                if (value > 0)
-                {
-                    // Set the contiuation bit
-                    b |= 0b10000000;
-                }
-                _writer.Write(b);
-            }
-            while (value > 0);
-        }
+        public void WriteVLQ(int value) => _writer.WriteVLQInt32(value);
 
         #endregion
-
-        public uint GetParentChunk(int chunkIndex)
-        {
-            return (uint)_targetList.FirstOrDefault(t => t.Item2 == chunkIndex).Item1;
-        }
 
         public List<(int, int, int, int)> GetTargets(int chunkIndex)
         {
@@ -307,7 +197,7 @@ namespace WolvenKit.RED4.IO
         }
 
         public virtual void Write(CRUID val) => _writer.Write(val);
-        public virtual void Write(CString val) => WriteLengthPrefixedString(val);
+        public virtual void Write(CString val) => _writer.WriteLengthPrefixedString(val);
 
         public virtual void Write(CVariant val)
         {
@@ -344,11 +234,11 @@ namespace WolvenKit.RED4.IO
         public virtual void Write(LocalizationString val)
         {
             _writer.Write(val.Unk1);
-            WriteLengthPrefixedString(val.Value);
+            _writer.WriteLengthPrefixedString(val.Value);
         }
 
         public virtual void Write(MessageResourcePath val) => ThrowNotImplemented();
-        public virtual void Write(NodeRef val) => WriteLengthPrefixedString(val);
+        public virtual void Write(NodeRef val) => _writer.WriteLengthPrefixedString(val);
         public virtual void Write(SerializationDeferredDataBuffer val) => _writer.Write((ushort)(val.Pointer + 1));
         public virtual void Write(SharedDataBuffer val) => _writer.Write(val.Buffer);
         public virtual void Write(TweakDBID val) => _writer.Write(val.Value);
@@ -873,7 +763,7 @@ namespace WolvenKit.RED4.IO
 
         private class HandleInfo
         {
-            
+
         }
     }
 }
