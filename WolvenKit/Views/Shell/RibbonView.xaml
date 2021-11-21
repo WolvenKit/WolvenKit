@@ -1852,71 +1852,63 @@
             Background="{DynamicResource ContentBackgroundAlt2}"
             CornerRadius="0,5,0,0" />-->
 
+        <!--  Titlebar Background - Covers mismatched color due to Ribbon left margin.  -->
         <Border
-            Width="61"
-            Height="70"
+            Width="70"
+            Height="28"
             Margin="0,-30,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="top"
             Background="{DynamicResource ContentBackgroundAlt2}"
              />
-
-        <Border
-            Width="42"
-            Height="51"
-            Margin="8,4,0,0"
+        
+        <!--  Sammy Container  -->
+        <Grid
+            Background="{DynamicResource ContentBackgroundAlt2}"
+            Width="58"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
-            Background="Transparent"
-            MouseEnter="Border_MouseEnter"
-            MouseLeave="Border_MouseLeave"
-            MouseLeftButtonDown="Border_MouseLeftButtonDown">
-            <Grid>
+            Margin="0,-2,0,0" >
 
-                <Border>
-                    <Border.OpacityMask>
-                        <ImageBrush ImageSource="/Resources/Media/Images/Application/Sammy_Grayscale.png" />
-                    </Border.OpacityMask>
+            <!--  Sammy Size  -->
+            <Grid Width="42">
+
+                <Border
+					Background="Transparent"
+					MouseEnter="Border_MouseEnter"
+					MouseLeave="Border_MouseLeave"
+					MouseLeftButtonDown="Border_MouseLeftButtonDown">
                     <Grid>
-
-                        <!--Sets Sammy Color-->  
-                        <Grid
-                            x:Name="HomeHighLighter"
-                            Margin="1"
-                            Background="{DynamicResource MahApps.Brushes.AccentBase}" />
+                        <Border>
+                            <Border.OpacityMask>
+                                <ImageBrush ImageSource="/Resources/Media/Images/Application/Sammy_Grayscale.png" />
+                            </Border.OpacityMask>
+                            <Grid
+								x:Name="HomeHighLighter"
+								Background="{DynamicResource MahApps.Brushes.AccentBase}" >
+                            </Grid>
+                        </Border>
                     </Grid>
                 </Border>
-            </Grid>
-        </Border>
 
-        <Border ToolTip="Home"
-            Width="42"
-            Height="51"
-            Margin="8,4,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="top"
-            Background="Transparent"
-            MouseEnter="Border_MouseEnter"
-            MouseLeave="Border_MouseLeave"
-            MouseLeftButtonDown="Border_MouseLeftButtonDown">
-            <Border>
-                <Border.OpacityMask>
-                    <ImageBrush ImageSource="/Resources/Media/Images/Application/Sammy_Alpha_Mask.png" />
-                </Border.OpacityMask>
-                <Grid>
-
-                    <Grid>
-
-                        <Grid Margin="0">
-                            <Image
-                                Margin="0,0,0,0"
-                                Source="pack://application:,,,/Resources/Media/Images/Application/Sammy_Alpha_Mask.png"
-                                Stretch="Uniform" />
+                <Border
+					Background="Transparent"
+					MouseEnter="Border_MouseEnter"
+					MouseLeave="Border_MouseLeave"
+					MouseLeftButtonDown="Border_MouseLeftButtonDown">
+                    <Border>
+                        <Border.OpacityMask>
+                            <ImageBrush ImageSource="/Resources/Media/Images/Application/Sammy_Alpha_Mask.png" />
+                        </Border.OpacityMask>
+                        <Grid>
+                            <Image Source="pack://application:,,,/Resources/Media/Images/Application/Sammy_Alpha_Mask.png" />
                         </Grid>
-                    </Grid>
-                </Grid>
-            </Border>
-        </Border>
+                    </Border>
+                </Border>
+
+            </Grid>
+
+        </Grid>
 
         <!--<feather:GuidedTour
             Name="guide"
