@@ -6,6 +6,7 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     xmlns:documents="clr-namespace:WolvenKit.ViewModels.Documents;assembly=WolvenKit.App"
@@ -33,16 +34,17 @@
                                                    BufferTemplate="{StaticResource BufferTemplate}" />
         </Grid.Resources>
 
-        <hc:TabControl x:Name="TabControl"
+        <syncfusion:TabControlExt x:Name="TabControl"
                        ItemsSource="{Binding TabItemViewModels, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                        SelectedIndex="{Binding SelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                        SelectedItem="{Binding SelectedTabItemViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                        ContentTemplateSelector="{StaticResource RedDocumentTemplateSelector}"
-                       IsAnimationEnabled="True"
-                       ShowCloseButton="False"
-                       IsDraggable="False"
+                                  CloseButtonType="Hide"
+                                  EnableLabelEdit="False"
+                                  BorderThickness="0"
+                                  Padding="0,2,0,0"
                        >
-        </hc:TabControl>
+        </syncfusion:TabControlExt>
         
        
     </Grid>

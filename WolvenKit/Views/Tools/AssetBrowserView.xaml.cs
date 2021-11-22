@@ -100,6 +100,10 @@ namespace WolvenKit.Views.Tools
                       viewModel => viewModel.FindUsingCommand,
                       view => view.RightContextMenuFindUsingMenuItem)
                   .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                      viewModel => viewModel.CopyRelPathCommand,
+                      view => view.RightContextMenuCopyPathMenuItem)
+                  .DisposeWith(disposables);
             });
 
         }

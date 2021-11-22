@@ -31,14 +31,14 @@ namespace WolvenKit.Views.Documents
             this.WhenActivated(disposables =>
             {
                 // ChunksTreeView
-                this.OneWayBind(ViewModel,
-                       viewmodel => viewmodel.Chunks,
-                       view => view.ChunksTreeView.ItemsSource)
-                   .DisposeWith(disposables);
-                this.Bind(ViewModel,
-                      viewmodel => viewmodel.SelectedChunk,
-                      view => view.ChunksTreeView.SelectedItem)
-                  .DisposeWith(disposables);
+                //this.OneWayBind(ViewModel,
+                //       viewmodel => viewmodel.Chunks,
+                //       view => view.ChunksTreeView.ItemsSource)
+                //   .DisposeWith(disposables);
+                //this.Bind(ViewModel,
+                //      viewmodel => viewmodel.SelectedChunk,
+                //      view => view.ChunksTreeView.SelectedItem)
+                //  .DisposeWith(disposables);
 
                 // ImportsListView
                 this.OneWayBind(ViewModel,

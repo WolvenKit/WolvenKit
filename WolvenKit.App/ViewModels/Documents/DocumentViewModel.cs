@@ -27,7 +27,7 @@ namespace WolvenKit.ViewModels.Documents
             Header = Path.GetFileName(path);
             //string packUri = "pack://application:,,,/AssemblyName;component/WolvenKit/Views/Shell/TaskBarIcon.ico";
             //IconSource = new ImageSourceConverter().ConvertFromString(packUri) as ImageSource;
-            IconSource = new BitmapImage(new Uri("WolvenKit/Views/Shell/TaskBarIcon.ico", UriKind.Relative));
+            //IconSource = new BitmapImage(new Uri("WolvenKit/Views/Shell/TaskBarIcon.ico", UriKind.Relative));
 
             ContentId = path;
         }

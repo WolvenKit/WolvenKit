@@ -89,6 +89,7 @@ namespace WolvenKit.ViewModels.Tools
             AddSelectedCommand = new RelayCommand(ExecuteAddSelected, CanAddSelected);
             ToggleModBrowserCommand = new RelayCommand(ExecuteToggleModBrowser, CanToggleModBrowser);
             OpenFileLocationCommand = new RelayCommand(ExecuteOpenFileLocationCommand, CanOpenFileLocationCommand);
+            CopyRelPathCommand = new RelayCommand(ExecuteCopyRelPath, CanCopyRelPath);
 
             ExpandAll = ReactiveCommand.Create(() => { });
             CollapseAll = ReactiveCommand.Create(() => { });
@@ -169,7 +170,6 @@ namespace WolvenKit.ViewModels.Tools
         #region commands
 
         public ReactiveCommand<string, Unit> AddSearchKeyCommand { get; set; }
-
         public ReactiveCommand<Unit, Unit> FindUsingCommand { get; }
         private async Task FindUsing()
         {
@@ -291,7 +291,12 @@ namespace WolvenKit.ViewModels.Tools
                     break;
             }
         }
-
+        /// <summary>
+        /// Copies relative path of node.
+        /// </summary>
+        public ICommand CopyRelPathCommand { get; private set; }
+        private bool CanCopyRelPath() => _projectManager.ActiveProject != null && RightSelectedItem != null;
+        private void ExecuteCopyRelPath() => Clipboard.SetText(RightSelectedItem.FullName);
         public ReactiveCommand<Unit, Unit> ExpandAll { get; set; }
         public ReactiveCommand<Unit, Unit> CollapseAll { get; set; }
         public ReactiveCommand<Unit, Unit> Expand { get; set; }

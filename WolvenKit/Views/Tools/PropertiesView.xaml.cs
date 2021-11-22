@@ -578,5 +578,10 @@ namespace WolvenKit.Views.Tools
         }
 
         #endregion AudioPreview
+
+        private void CopyMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText((DataContext as PropertiesViewModel).PE_SelectedItem.FullName);
+        }
     }
 }

@@ -27,7 +27,7 @@
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
         <syncfusion:SfTreeGrid
-            Margin="0,0,3,0"
+            Margin="0,30,0,0"
             Name="TreeGrid"
             AllowEditing="False"
             AllowFiltering="False"
@@ -47,6 +47,8 @@
             SelectedItems="{Binding SelectedItems}"
             SelectionMode="Extended"
             SelfRelationRootValue="0"
+            BorderThickness="0"
+            HeaderRowHeight="0"
             >
 
             <syncfusion:SfTreeGrid.Resources>
@@ -62,7 +64,7 @@
 
             <syncfusion:SfTreeGrid.Columns>
                 <syncfusion:TreeGridTextColumn
-                    HeaderText="Name"
+                    HeaderText=""
                     HorizontalHeaderContentAlignment="Left"
                     ImmediateUpdateColumnFilter="True"
                     MappingName="Name">
@@ -70,14 +72,14 @@
                         <DataTemplate>
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="20" />
+                                    <ColumnDefinition Width="13" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <Image Height="13" Style="{DynamicResource FileIcons}" />
                                 <TextBlock
                                     x:Name="TemplateTextBlock"
                                     Grid.Column="1"
-                                    Margin="2"
+                                    Margin="5,0,0,0"
                                     VerticalAlignment="Center"
                                     Text="{Binding Path=Name}" />
                             </Grid>
@@ -204,15 +206,17 @@
 
         <hc:SearchBar
             x:Name="PESearchBar"
-            Margin="0,0,3,0"
+            Margin="0,0,0,0"
+            BorderThickness="0,0,0,1"
+            Height="30"
+            BorderBrush="{StaticResource MahApps.Brushes.Gray.SemiTransparent}"
             VerticalAlignment="Top"
             Background="{DynamicResource ContentBackground}"
-            BorderBrush="{DynamicResource BorderBrush}"
             FlowDirection="LeftToRight"
             SearchStarted="PESearchBar_OnSearchStarted"
             ShowClearButton="True"
-                                hc:InfoElement.Placeholder="Search"
-                                Style="{StaticResource SearchBarExtend}"
-                                hc:InfoElement.Necessary="True" />
+            hc:InfoElement.Placeholder="Search"
+            Style="{StaticResource SearchBarExtendBaseStyle}"
+            hc:InfoElement.Necessary="True" />
     </Grid>
 </reactiveUi:ReactiveUserControl>

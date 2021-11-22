@@ -42,7 +42,7 @@
         </Grid.Resources>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="240"/>
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
@@ -55,60 +55,121 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Grid Grid.Column="0" HorizontalAlignment="Stretch" Margin="2">
+            <Grid Grid.Column="0" HorizontalAlignment="Stretch">
+
+                <Grid.Resources>
+                    <Style x:Key="ChunkImportRadioButton" TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource BaseStyle}" >
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource SecondaryRegionBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource BorderBrush}" />
+                            </Trigger>
+                        </Style.Triggers>
+                        <Setter Property="Background" Value="{DynamicResource RegionBrush}" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                    <Border Name="BorderRoot" HorizontalAlignment="Stretch" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}">
+                                        <ContentPresenter Name="contentPresenter" Width="Auto" HorizontalAlignment="Stretch" RecognizesAccessKey="True" VerticalAlignment="Stretch" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsChecked" Value="true">
+                                            <Setter TargetName="BorderRoot" Property="BorderThickness" Value="0" />
+                                            <Setter TargetName="BorderRoot" Property="Background" Value="{DynamicResource MahApps.Brushes.Accent2}" />
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="true">
+                                            <Setter TargetName="BorderRoot" Property="Background" Value="#222222" />
+                                        </Trigger>
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="IsChecked" Value="true" />
+                                                <Condition Property="IsMouseOver" Value="true" />
+                                            </MultiTrigger.Conditions>
+                                            <Setter TargetName="BorderRoot" Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}" />
+                                        </MultiTrigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Grid.Resources>
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="0" x:Name="ChunksButton"  Height="Auto" Width="Auto" Margin="3" Click="ChunksButton_OnClick" ToolTip="Chunks">
-                    <Button.Content>
-                        <iconPacks:PackIconVaadinIcons Kind="Cubes" />
-                    </Button.Content>
-                </Button>
-                <Button Grid.Column="1"  x:Name="ImportsButton"  Height="Auto" Width="Auto" Margin="3" Click="ImportsButton_OnClick" ToolTip="Imports">
-                    <Button.Content>
-                        <iconPacks:PackIconMaterialDesign Kind="ImportExport" />
-                    </Button.Content>
-                </Button>
+                <RadioButton Grid.Column="0" GroupName="ChunkImportSelect" Height="24" Width="Auto" Margin="0.5,0,0,0" IsChecked="True"
+                        Click="ChunksButton_OnClick" HorizontalAlignment="Stretch" Style="{StaticResource ChunkImportRadioButton}">
+                    <RadioButton.Content>
+                        <Grid Background="Transparent">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <iconPacks:PackIconVaadinIcons Kind="Cubes"
+                                Grid.Column="1" Height="13" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBlock
+                                x:Name="ChunksLabel"
+                                Grid.Column="2"
+                                Foreground="White"
+                                VerticalAlignment="Center"
+                                Text="Chunks"/>
+                        </Grid>
+                    </RadioButton.Content>
+                </RadioButton>
+                <RadioButton Grid.Column="1" GroupName="ChunkImportSelect" x:Name="ImportsButton"  Height="24" Width="Auto" Margin="0.5,0,1.5,0"
+                             Click="ImportsButton_OnClick" HorizontalAlignment="Stretch" Style="{StaticResource ChunkImportRadioButton}">
+                    <RadioButton.Content>
+                        <Grid Background="Transparent">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="17"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <iconPacks:PackIconMaterialDesign Kind="ImportExport" 
+                                Grid.Column="1" Height="13" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBlock
+                                x:Name="ImportsLabel"
+                                Grid.Column="2"
+                                Foreground="White"
+                                VerticalAlignment="Center"
+                                Text="Imports"/>
+                        </Grid>
+                    </RadioButton.Content>
+                </RadioButton>
             </Grid>
 
             <Grid Grid.Row="1"  x:Name="ChunksView">
-                <syncfusion:SfTreeGrid x:Name="ChunksTreeView" Margin="2"
-                                        AllowEditing="False"
-                                        AllowFiltering="True"
-                                        AllowResizingColumns="False"
-                                        AutoExpandMode="RootNodesExpanded"
-                                        AutoGenerateColumns="False"
-                                        ChildPropertyName="Children"
-                                        ColumnSizer="FillColumn"
-                                        Style="{DynamicResource SyncfusionSfTreeGridStyle}">
-
-                    <syncfusion:SfTreeGrid.Resources>
-                        <Style TargetType="syncfusion:TreeGridCell">
-                            <Setter Property="BorderBrush" Value="Transparent" />
-                            <Setter Property="BorderThickness" Value="0" />
+                <ListView x:Name="ChunksTreeView"
+                          Margin="0,2,1.5,0"
+                          Padding="0"
+                          Style="{DynamicResource ListBoxBaseStyle}"
+                          ItemsSource="{Binding Path=Chunks}"
+                          SelectedItem="{Binding Path=SelectedChunk}"
+                          BorderThickness="0">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem" BasedOn="{StaticResource MahApps.Styles.ListViewItem}">
+                            <Setter Property="Height" Value="20" />
                         </Style>
-                        <Style TargetType="syncfusion:TreeGridExpanderCell">
-                            <Setter Property="BorderBrush" Value="Transparent" />
-                            <Setter Property="BorderThickness" Value="0" />
-                        </Style>
-                        <converters:ExtensionToBitmapConverter x:Key="ExtensionToBmp" />
-
-                    </syncfusion:SfTreeGrid.Resources>
-
-                    <syncfusion:SfTreeGrid.Columns>
-
-                        <syncfusion:TreeGridTextColumn HeaderText="Chunks" MappingName="Name" />
-
-                    </syncfusion:SfTreeGrid.Columns>
-
-                </syncfusion:SfTreeGrid>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate DataType="{x:Type shell:ChunkViewModel}">
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </Grid>
 
             <Grid Grid.Row="1" x:Name="ImportsView" Visibility="Collapsed">
-                <ListView x:Name="ImportsListView" Margin="2">
+                <ListView x:Name="ImportsListView" Margin="0,2,2,0" Style="{StaticResource ListBoxBaseStyle}" BorderThickness="0">
 
                     <ListView.View>
                         <GridView>
@@ -306,13 +367,14 @@
 
             </syncfusion:SfTreeGrid>-->
 
-            <syncfusion:PropertyGrid x:Name="PropertyGrid" Grid.Column="1"
+            <syncfusion:PropertyGrid
+                x:Name="PropertyGrid" Grid.Column="1"
                 PropertyExpandMode="NestedMode"
                 AutoGeneratingPropertyGridItem="PropertyGrid_AutoGeneratingPropertyGridItem"
                 CollectionEditorOpening ="PropertyGrid_CollectionEditorOpening"
                 PropertyNameColumnDefinition="200"
                 ButtonPanelVisibility="Collapsed"
-                />
+                BorderThickness="0" />
 
         </Grid>
 

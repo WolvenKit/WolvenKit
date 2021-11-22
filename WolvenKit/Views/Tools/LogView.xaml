@@ -54,7 +54,14 @@
         <!--     </syncfusion:SfDataGrid.Columns> -->
         <!-- </syncfusion:SfDataGrid> -->
 
-        <RichTextBox VerticalScrollBarVisibility="Visible" x:Name="LogRichTextBox" IsReadOnly="True" />
+        <RichTextBox
+            VerticalScrollBarVisibility="Visible"
+            x:Name="LogRichTextBox"
+            IsReadOnly="True"
+            BorderThickness="0"
+            Background="#131313"
+            Margin="0"
+            Padding="0"/>
 
         <hc:UniformSpacingPanel
          Grid.Row="1"

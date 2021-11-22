@@ -131,14 +131,14 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         public ICommand CopyFileCommand { get; private set; }
         private bool CanCopyFile() => _projectManager.ActiveProject != null && SelectedItem != null;
-        private void ExecuteCopyRelPath() => Clipboard.SetText(SelectedItem.GetRelativeName(ActiveMod));
+        private void CopyFile() => Clipboard.SetText(SelectedItem.FullName);
 
         /// <summary>
         /// Copies relative path of node.
         /// </summary>
         public ICommand CopyRelPathCommand { get; private set; }
         private bool CanCopyRelPath() => _projectManager.ActiveProject != null && SelectedItem != null;
-        private void CopyFile() => Clipboard.SetText(SelectedItem.FullName);
+        private void ExecuteCopyRelPath() => Clipboard.SetText(SelectedItem.GetRelativeName(ActiveMod));
 
         /// <summary>
         /// Cuts selected node to the clipboard.

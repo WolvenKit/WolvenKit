@@ -350,40 +350,20 @@ namespace WolvenKit.Views.Shell
                     dockElement.IsActive = true;
                 }
 
-
-                var header = DockingManager.GetHeader(content);
                 var propertiesViewModel = Locator.Current.GetService<PropertiesViewModel>();
-                if (!string.IsNullOrEmpty(header as string))
+                if (content.Content is ProjectExplorerViewModel)
                 {
-                    DiscordHelper.SetDiscordRPCStatus(header as string);
+                    propertiesViewModel.SetToNullAndResetVisibility();
+                    propertiesViewModel.PE_FileInfoVisible = true;
+                }
+                else if (content.Content is AssetBrowserViewModel)
+                {
+                    propertiesViewModel.SetToNullAndResetVisibility();
+                    propertiesViewModel.AB_FileInfoVisible = true;
                 }
 
-                switch (header)
-                {
-                    case "Project Explorer":
-                        propertiesViewModel.SetToNullAndResetVisibility();
-                        propertiesViewModel.PE_FileInfoVisible = true;
-                        break;
-
-                    case "Asset Browser":
-                        propertiesViewModel.SetToNullAndResetVisibility();
-                        propertiesViewModel.AB_FileInfoVisible = true;
-                        break;
-
-                    case "CR2W Editor":
-                        // This never happens as CR2W editor is always named after its active document.
-                        break;
-                    case "Properties":
-                        break;
-                    case "Log":
-                        break;
-                    case "Import Export Tool":
-                        break;
-
-
-                    default:
-
-                        break;
+                if (content.Content != null) {
+                    DiscordHelper.SetDiscordRPCStatus(content.Content as string);
                 }
 
                 //if (((IDockElement)content.Content).State == DockState.Document)

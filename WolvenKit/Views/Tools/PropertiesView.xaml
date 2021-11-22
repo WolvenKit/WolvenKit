@@ -325,7 +325,8 @@
         <syncfusion:TabControlExt
             EnableLabelEdit="False"
             CloseButtonType="Hide"
-            CloseTabOnMiddleClick="False">
+            CloseTabOnMiddleClick="False"
+            BorderThickness="0">
             <syncfusion:TabItemExt Header="File Properties">
 
                 <Grid>
@@ -339,21 +340,39 @@
                         </Style>
                     </Grid.Resources>
 
-                    <syncfusion:PropertyGrid x:Name="PEPropGrid"
+                    <syncfusion:PropertyGrid
+                        x:Name="PEPropGrid"
                         AutoGeneratingPropertyGridItem="PropertyGrid_OnAutoGeneratingPropertyGridItem"
                         SelectedObject="{Binding PE_SelectedItem, Mode=OneWay}"
                         Visibility="{Binding PE_FileInfoVisible, Converter={StaticResource boolToVisibilityConverter}}"
                         SearchBoxVisibility="Collapsed"
                         ButtonPanelVisibility="Collapsed"
-                        PropertyNameColumnDefinition="150" />
+                        PropertyNameColumnDefinition="150"
+                        BorderThickness="0">
 
-                    <syncfusion:PropertyGrid x:Name="ABPropGrid"
+                        <syncfusion:PropertyGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Copy Relative Path" Click="CopyMenuItem_Click" />
+                            </ContextMenu>
+                        </syncfusion:PropertyGrid.ContextMenu>
+                    </syncfusion:PropertyGrid>
+
+                    <syncfusion:PropertyGrid
+                        x:Name="ABPropGrid"
                         AutoGeneratingPropertyGridItem="PropertyGrid_OnAutoGeneratingPropertyGridItem"
                         SelectedObject="{Binding AB_SelectedItem, Mode=OneWay}"
                         Visibility="{Binding AB_FileInfoVisible, Converter={StaticResource boolToVisibilityConverter}}"
                         SearchBoxVisibility="Collapsed"
                         ButtonPanelVisibility="Collapsed"
-                        PropertyNameColumnDefinition="150"/>
+                        PropertyNameColumnDefinition="150"
+                        BorderThickness="0"
+                        Margin="0">
+                        <syncfusion:PropertyGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Copy Relative Path" Click="CopyMenuItem_Click" />
+                        </ContextMenu>
+                        </syncfusion:PropertyGrid.ContextMenu>
+                    </syncfusion:PropertyGrid>
                 </Grid>
             </syncfusion:TabItemExt>
             <syncfusion:TabItemExt Header="Mesh Preview" IsSelected="{Binding IsMeshPreviewVisible, Mode=OneWay}" Visibility="{Binding IsMeshPreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
@@ -704,13 +723,16 @@
                 </Border>
             </syncfusion:TabItemExt>
 
-            <syncfusion:TabItemExt IsSelected="{Binding IsImagePreviewVisible, Mode=OneWay}" Header="Image Preview" Visibility="{Binding IsImagePreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
+            <syncfusion:TabItemExt
+                IsSelected="{Binding IsImagePreviewVisible, Mode=OneWay}"
+                Header="Image Preview"
+                Visibility="{Binding IsImagePreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
                 <!--<hc:ImageViewer
                     x:Name="bold"
                     Width="auto"
                     Background="{DynamicResource SecondaryRegionBrush}" />-->
 
-                <syncfusion:SfImageEditor x:Name="bold" />
+                <syncfusion:SfImageEditor x:Name="bold" BorderThickness="0" Margin="0,0.5,0,0"/>
             </syncfusion:TabItemExt>
 
             <syncfusion:TabItemExt IsSelected="{Binding IsVideoPreviewVisible}"

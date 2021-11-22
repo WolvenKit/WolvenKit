@@ -6,9 +6,12 @@
  xmlns:local="clr-namespace:WolvenKit.Views.Shell"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+ xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+ xmlns:docvm="clr-namespace:WolvenKit.ViewModels.Documents;assembly=WolvenKit.App"
+ xmlns:converters1="clr-namespace:WolvenKit.Converters"
  d:DesignHeight="300"
  d:DesignWidth="300"
- mc:Ignorable="d"
+ mc:Ignorable="d"             
  >
 
     <!--UserControl.Resources>
@@ -46,7 +49,7 @@
         </Style>
     </UserControl.Resources-->
     <Grid>
-        
+
 
         <syncfusion:DockingManager x:Name="PART_DockingManager"
                                    ActiveWindowChanged="PART_DockingManager_ActiveWindowChanged_1"
@@ -58,23 +61,69 @@
                                    Loaded="PART_DockingManager_Loaded"
                                    CloseButtonClick="PART_DockingManagerOnCloseButtonClick"
                                    DockStateChanging="PART_DockingManagerOnDockStateChanging">
-            <syncfusion:DockingManager.TabItemTemplate>
-            <ControlTemplate>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Image Height="13" Style="{DynamicResource FileIcons}" />
-                    <TextBlock
-                                    x:Name="TemplateTextBlock"
-                                    Grid.Column="1"
-                                    Margin="2"
-                                    VerticalAlignment="Center"
-                                    Text="{Binding Path=Name}" />
-                </Grid>
-            </ControlTemplate>
-            </syncfusion:DockingManager.TabItemTemplate>
+
+            <!--ContentControl-->
+                <syncfusion:DockingManager.HeaderTemplate>
+                    <DataTemplate>
+                        <DockPanel ToolTip="{Binding RelativePath}">
+                            <Image x:Name="DockIcon" Width="13" Margin="0,0,4,0" Source="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" Style="{DynamicResource FileIcons}" />
+                            <TextBlock
+                                x:Name="TemplateTextBlock"
+                                Grid.Column="1"
+                                Margin="0,0,0,1"
+                                Foreground="White"
+                                Text="{Binding}"
+                                ToolTip="{Binding RelativePath}"/>
+                        </DockPanel>
+                    </DataTemplate>
+                </syncfusion:DockingManager.HeaderTemplate>
+            <!--/ContentControl-->
+            <!--syncfusion:DockingManager.HeaderTemplate>
+                <DataTemplate>
+                    <DockPanel>
+                        <TextBlock
+                                x:Name="TemplateTextBlock"
+                                Grid.Column="1"
+                                Margin="0,0,0,1"
+                                Foreground="White"
+                                Text="{Binding}" />
+                    </DockPanel>
+                </DataTemplate>
+            </syncfusion:DockingManager.HeaderTemplate-->
+            <!--syncfusion:DockingManager.DocumentTabItemStyle>
+                <Style TargetType="Image">
+                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
+                </Style>
+            </syncfusion:DockingManager.DocumentTabItemStyle-->
+            <!--syncfusion:DockingManager.Icon>
+                <ImageBrush ImageSource="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" Stretch="Uniform" />
+            </syncfusion:DockingManager.Icon-->
+
+            <!--DockedElementTabbedHost.HostedElement.Content == RedDocumentViewModel-->
+            <!--Rectangle Fill="White" Margin="0,0,4,0" Width="13" Height="13">
+                                <Rectangle.OpacityMask>
+                                    <ImageBrush Stretch="Uniform" ImageSource="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
+                                </Rectangle.OpacityMask>
+                            </Rectangle-->
+            <!--syncfusion:DockingManager.HeaderTemplate>
+                    <DataTemplate DataType="{x:Type docvm:RedDocumentViewModel}">
+                    <DockPanel ToolTip="{Binding RelativePath}">
+                        <Image Visibility="Collapsed" x:Name="DockIcon" Width="13" Margin="0,0,4,0" Source="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" Style="{DynamicResource FileIcons}" />
+                        <TextBlock
+                                x:Name="TemplateTextBlock"
+                                Grid.Column="1"
+                                Margin="0,0,0,1"
+                                Foreground="White"
+                                Text="{Binding}"
+                                ToolTip="{Binding RelativePath}"/>
+                    </DockPanel>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Path=Content, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:DockedElementTabbedHost}}}" Value="RedDocumentViewModel">
+                            <Setter Property="Visibility" Value="Visible" TargetName="DockIcon"/>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </syncfusion:DockingManager.HeaderTemplate-->
         </syncfusion:DockingManager>
     </Grid>
 </UserControl>

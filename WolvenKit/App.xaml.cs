@@ -59,7 +59,7 @@ namespace WolvenKit
 
 
             // Startup speed boosting (HC)
-            ApplicationHelper.StartProfileOptimization();
+            //ApplicationHelper.StartProfileOptimization();
 
             loggerService.Log("Starting application");
             await Initializations.InitializeWebview2(loggerService);
