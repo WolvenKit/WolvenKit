@@ -7,19 +7,28 @@
         <AddFileModel>
           <Name>Redscript file</Name>
           <Description>A blank redscript file</Description>
-          <Extension>SWIFT</Extension>
+          <Extension>REDS</Extension>
           <Type>Redscript</Type>
+          <Template></Template>
         </AddFileModel>
       </Files>
     </FileCategoryModel>
     <FileCategoryModel>
-      <Name>Tweak DB</Name>
+      <Name>TweakDB</Name>
       <Files>
         <AddFileModel>
           <Name>Tweak file</Name>
           <Description>A blank tweak delta file</Description>
           <Extension>TWEAK</Extension>
           <Type>Tweak</Type>
+          <Template></Template>
+        </AddFileModel>
+        <AddFileModel>
+          <Name>Vehicle Template</Name>
+          <Description>The default records and flats for a vehicle</Description>
+          <Extension>TWEAK</Extension>
+          <Type>Tweak</Type>
+          <Template>VehicleTemplate.tweak</Template>
         </AddFileModel>
       </Files>
     </FileCategoryModel>

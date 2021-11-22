@@ -48,8 +48,8 @@ namespace WolvenKit.Views.Shell
                 {
                     var dialog = new DialogHostView();
                     dialog.ViewModel.HostedViewModel = Locator.Current.GetService<NewFileViewModel>();
-                    dialog.Height = 600;
-                    dialog.Width = 700;
+                    //dialog.Height = 600;
+                    //dialog.Width = 700;
 
                     return Observable.Start(() =>
                     {

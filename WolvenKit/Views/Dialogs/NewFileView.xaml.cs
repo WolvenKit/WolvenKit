@@ -49,11 +49,6 @@ namespace WolvenKit.Views.Dialogs
                     .DisposeWith(disposables);
 
                 this.Bind(ViewModel,
-                    vm => vm.SelectedFile.Description,
-                    v => v.Properties.Text)
-                    .DisposeWith(disposables);
-
-                this.Bind(ViewModel,
                     vm => vm.FileName,
                     v => v.FileName.Text)
                     .DisposeWith(disposables);

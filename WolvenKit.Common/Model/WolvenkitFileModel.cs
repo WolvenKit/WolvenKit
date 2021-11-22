@@ -29,6 +29,9 @@ namespace WolvenKit.Common.Model
         public string Extension { get; set; }
 
         public EWolvenKitFile Type { get; set; }
+
+        public string Template { get; set; }
+
     }
 
     

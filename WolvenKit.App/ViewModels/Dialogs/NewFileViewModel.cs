@@ -22,7 +22,7 @@ namespace WolvenKit.ViewModels.Dialogs
             OkCommand = ReactiveCommand.Create(() => { });
             CancelCommand = ReactiveCommand.Create(() => { });
 
-            Title = "Add new file";
+            Title = "Create new file";
 
             try
             {

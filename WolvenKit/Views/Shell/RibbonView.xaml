@@ -32,7 +32,7 @@
                                 Width="{TemplateBinding Width}"
                                 Height="{TemplateBinding Height}"
                                 MinHeight="{TemplateBinding MinHeight}"
-                                Margin="0,5,0,0"
+                                Margin="0,0,0,0"
                                 BorderBrush="{DynamicResource MahApps.Brushes.Accent}"
                                 BorderThickness="0,4,0,0"
                                 IsHitTestVisible="False">
@@ -44,7 +44,7 @@
                                         Opacity="0.3" />
                                     <TextBlock
                                         x:Name="PART_Label"
-                                        Margin="0,0,0,0"
+                                        Margin="0,5,0,0"
                                         HorizontalAlignment="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:Ribbon}}, Path=TabGroupLabelAlignment}"
                                         VerticalAlignment="Top"
                                         FontSize="10"
@@ -62,7 +62,7 @@
                                     <MultiDataTrigger.Conditions>
                                         <Condition Binding="{Binding RibbonState, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:Ribbon}}}" Value="Hide" />
                                     </MultiDataTrigger.Conditions>
-                                    <Setter Property="Margin" Value="0,0,0,-3" />
+                                    <Setter Property="Margin" Value="0,0,0,-2" />
                                 </MultiDataTrigger>
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
@@ -122,6 +122,7 @@
             ShowCustomizeRibbon="True"
             Visibility="Visible"
             VerticalAlignment="Top"
+            BorderThickness="0"
             >
 
             <!--<syncfusion:Ribbon.QuickAccessToolBar>

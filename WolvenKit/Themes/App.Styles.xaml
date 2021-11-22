@@ -1,6 +1,8 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"              
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"           
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"  
+    xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF" 
     xmlns:svgc="http://sharpvectors.codeplex.com/svgc/">
 
     <SolidColorBrush x:Key="CustomSliderForegroundBrush" Color="#FF1E91EA" />
@@ -409,6 +411,12 @@
     <Style x:Key="FileIcons" TargetType="Image">
         <Style.Triggers>
 
+            <DataTrigger Binding="{Binding Extension}" Value="TWEAK">
+                <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/default.svg}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Extension}" Value="REDS">
+                <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/default.svg}" />
+            </DataTrigger>
             <DataTrigger Binding="{Binding Extension}" Value="fbx">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
             </DataTrigger>
@@ -1131,6 +1139,565 @@
             <DataTrigger Binding="{Binding Extension}" Value="w3app">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w3app.svg}" />
             </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+
+    <Style x:Key="RedDocumentTabItemExtStyle" TargetType="{x:Type syncfusion:TabItemExt}" >
+        <Setter Property="TextElement.Foreground" 
+				Value="{StaticResource Aero.InactiveForeground}"/>
+        <Setter Property="FrameworkElement.FocusVisualStyle">
+            <Setter.Value>
+                <Style TargetType="IFrameworkInputElement">
+                    <Setter Property="Control.Template">
+                        <Setter.Value>
+                            <x:Null/>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
+
+
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="Yellow"/>
+        <Setter Property="Background" Value="Brown"/>
+        <Setter Property="MinHeight" Value="18"/>
+        <Setter Property="Margin" Value="-8,0,0,0"/>
+        <Setter Property="HeaderMargin" Value="6,0,6,1"/>
+        <Setter Property="IconMargin" Value="0,0,0,4"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Control.HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="Control.VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type syncfusion:TabItemExt}">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" Name="Bd"
+						ToolTip="{Binding Path=ItemToolTip, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabItemExt}},FallbackValue=''}">
+                        <DockPanel x:Name="PART_DockPanel" LastChildFill="True">
+                            <syncfusion:ToggleButtonExt
+                            Name="PART_CloseButton" Width="15" Height="14" Margin="1,0,10,0" VerticalAlignment="Top"                                 
+                            DockPanel.Dock="Right" 
+                            Focusable="False" 
+                            Visibility="Collapsed"
+                            Command="syncfusion:TabControlCommands.CloseTabItem" />
+                            <Image
+                            x:Name="PART_Image"
+					        Source="{TemplateBinding syncfusion:TabControlExt.Image}"
+					        Height="{TemplateBinding syncfusion:TabControlExt.ImageHeight}"
+					        Width="{TemplateBinding syncfusion:TabControlExt.ImageWidth}"
+					        Stretch="Fill" Margin="{TemplateBinding IconMargin}"
+					        SnapsToDevicePixels="True" VerticalAlignment="Center"
+                            DockPanel.Dock="{Binding Path=(syncfusion:TabControlExt.ImageAlignment), Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            <ContentPresenter
+                            ContentSource="Header" x:Name="Content" Margin="{TemplateBinding HeaderMargin}" TextElement.Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabItemExt}},FallbackValue=Transparent}" 
+                            RecognizesAccessKey="False" Content="{TemplateBinding HeaderedContentControl.Header}" 
+                            ContentTemplate="{TemplateBinding HeaderedContentControl.HeaderTemplate}"                                           
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                            SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+
+                            <ContentPresenter
+                            ContentSource="Header" x:Name="PART_EditHeader" Visibility="Collapsed"
+                            Margin="{TemplateBinding HeaderMargin}" TextElement.Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabItemExt}},FallbackValue=Transparent}" 
+                            RecognizesAccessKey="True" Content="{TemplateBinding HeaderedContentControl.Header}" 
+                                                                                   
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                            SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                        </DockPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="shared:SkinStorage.EnableTouch" Value="true">
+                            <Setter Property="HeaderMargin" Value="12,11,12,11"/>
+                            <Setter Property="IconMargin" Value="0,11,8,14"/>
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="Width" Value="24" TargetName="PART_CloseButton"/>
+                            <Setter Property="Height" Value="24" TargetName="PART_CloseButton"/>
+                            <Setter Property="VerticalAlignment" Value="Center" TargetName="PART_CloseButton"/>
+                        </Trigger>
+                        <!--<Trigger Property="syncfusion:TabControlExt.ImageHeight" Value="{StaticResource NanValue}">-->
+
+                        <!--<Trigger Property="syncfusion:TabControlExt.ImageWidth" Value="{StaticResource NanValue}">-->
+
+                        <MultiTrigger>
+
+                            <Setter TargetName="PART_Image" Property="Stretch" Value="None" />
+                        </MultiTrigger>
+                        <!--Initial section-->
+                        <DataTrigger Binding="{Binding Path=CloseButtonType,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Common}" Value="Both">
+                            <Setter TargetName="PART_CloseButton" Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=CloseButtonType,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Common}" Value="Individual">
+                            <Setter TargetName="PART_CloseButton" Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=CloseButtonType,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Common}" Value="IndividualOnMouseOver">
+                            <Setter TargetName="PART_CloseButton" Property="Visibility" Value="Hidden"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=CloseButtonType,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Common}" Value="Extended">
+                            <Setter TargetName="PART_CloseButton" Property="Visibility" Value="Hidden"/>
+                        </DataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=CloseButtonType,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Common}" Value="IndividualOnMouseOver"/>
+                                <Condition Binding="{Binding Path=IsMouseOver, ElementName=Bd}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="PART_CloseButton" Property="Visibility" Value="Visible"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=CloseButtonType,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Common}" Value="Extended"/>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="PART_CloseButton" Property="Visibility" Value="Visible"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=CloseButtonType,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Common}" Value="Extended"/>
+                                <Condition Binding="{Binding Path=IsMouseOver, ElementName=Bd}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="PART_CloseButton" Property="Visibility" Value="Visible"/>
+                        </MultiDataTrigger>
+                        <DataTrigger Binding="{Binding Path=(syncfusion:TabControlExt.Image), RelativeSource={RelativeSource Self}}" Value="{x:Null}">
+                            <Setter Property="UIElement.Visibility" TargetName="PART_Image" Value="Collapsed"/>
+                        </DataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsMouseOver, ElementName=Bd}" Value="True"/>
+                                <Condition Binding="{Binding Path=HotTrackingEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=true}" Value="True"/>
+                                <Condition Binding="{Binding Path=(shared:SkinStorage.EnableTouch),RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="false"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Panel.Background" TargetName="Bd" Value="{Binding Path=(syncfusion:TabControlExt.HoverBackground), RelativeSource={RelativeSource TemplatedParent}}"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsMouseOver, ElementName=Bd}" Value="True"/>
+                                <Condition Binding="{Binding Path=HotTrackingEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=true}" Value="True"/>
+                                <Condition Binding="{Binding Path=(shared:SkinStorage.EnableTouch),RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="true"/>
+                            </MultiDataTrigger.Conditions>
+
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsMouseOver, ElementName=Bd}" Value="True"/>
+                                <Condition Binding="{Binding Path=HotTrackingEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=true}" Value="False"/>
+                                <Condition Binding="{Binding Path=(shared:SkinStorage.EnableTouch),RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="false"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Panel.Background" TargetName="Bd" Value="{Binding Path=TabItemHoverBackground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Transparent}"/>
+                            <!--Setter Property="BorderInnerBrush" TargetName="Bd" Value="{StaticResource Aero.TabHoverBorderInnerBrush}"/-->
+                            <Setter Property="BorderBrush" TargetName="Bd" Value="{Binding Path=TabItemHoverBorderBrush, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Transparent}"/>
+                            <Setter Property="TextElement.Foreground" TargetName="Content"
+						Value="{Binding Path=TabItemHoverForeground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Transparent}" />
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsMouseOver, ElementName=Bd}" Value="True"/>
+                                <Condition Binding="{Binding Path=HotTrackingEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=true}" Value="False"/>
+                                <Condition Binding="{Binding Path=(shared:SkinStorage.EnableTouch),RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="true"/>
+                            </MultiDataTrigger.Conditions>
+
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(syncfusion:TabControlExt.HoverBackground), RelativeSource={RelativeSource Self}}" Value="{x:Null}"/>
+                                <Condition Binding="{Binding Path=IsMouseOver, ElementName=Bd}" Value="True"/>
+                                <Condition Binding="{Binding Path=HotTrackingEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=true}" Value="True"/>
+                                <Condition Binding="{Binding Path=(shared:SkinStorage.EnableTouch),RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="false"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Panel.Background" TargetName="Bd" Value="{Binding Path=TabItemHoverBackground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Transparent}"/>
+                            <!--Setter Property="BorderInnerBrush" TargetName="Bd" Value="{StaticResource Aero.TabHoverBorderInnerBrush}"/-->
+                            <Setter Property="BorderBrush" TargetName="Bd" Value="{Binding Path=TabItemHoverBorderBrush, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Transparent}"/>
+                            <Setter Property="TextElement.Foreground" TargetName="Content"
+						Value="{Binding Path=TabItemHoverForeground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Transparent}" />
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(syncfusion:TabControlExt.HoverBackground), RelativeSource={RelativeSource Self}}" Value="{x:Null}"/>
+                                <Condition Binding="{Binding Path=IsMouseOver, ElementName=Bd}" Value="True"/>
+                                <Condition Binding="{Binding Path=HotTrackingEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=true}" Value="True"/>
+                                <Condition Binding="{Binding Path=(shared:SkinStorage.EnableTouch),RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="true"/>
+                            </MultiDataTrigger.Conditions>
+
+                        </MultiDataTrigger>
+                        <!--End Initial section-->
+
+                        <!--RotateTextWhenVertical section-->
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=TabStripPlacement,RelativeSource={RelativeSource Self},FallbackValue=Top}" Value="Left"/>
+                                <Condition Binding="{Binding Path=RotateTextWhenVertical,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="FlowDirection" TargetName="PART_DockPanel" Value="LeftToRight"/>
+                            <Setter Property="LayoutTransform">
+                                <Setter.Value>
+                                    <RotateTransform Angle="-90"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Border.BorderThickness" TargetName="Bd" Value="1,1,0,1"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=TabStripPlacement,RelativeSource={RelativeSource Self},FallbackValue=Top}" Value="Right"/>
+                                <Condition Binding="{Binding Path=RotateTextWhenVertical,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="LayoutTransform">
+                                <Setter.Value>
+                                    <RotateTransform Angle="-90"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Border.BorderThickness" TargetName="Bd" Value="0,1,1,1"/>
+                        </MultiDataTrigger>
+                        <!--End RotateTextWhenVertical section-->
+
+                        <!--TabStripPlacement section-->
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition  Binding="{Binding Path=TabStripPlacement,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Top}" Value="Bottom"/>
+                                <Condition Binding="{Binding Path=(shared:SkinStorage.EnableTouch),RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="false"/>
+                            </MultiDataTrigger.Conditions>
+
+                            <Setter Property="Border.BorderThickness" TargetName="Bd" Value="1,1,1,0"/>
+                            <!--<Setter Property="Margin" TargetName="Bd" Value="0,0.5,0,0"/>-->
+                            <Setter Property="VerticalAlignment" Value="Stretch" TargetName="PART_DockPanel"/>
+                            <Setter Property="VerticalAlignment" Value="Top" TargetName="PART_CloseButton"/>
+                            <Setter Property="VerticalAlignment" Value="Center" TargetName="Content"/>
+                            <Setter Property="VerticalAlignment" Value="Center" TargetName="PART_Image"/>
+                            <Setter Property="Margin" Value="0,0,0,4" TargetName="PART_DockPanel"/>
+                            <Setter Property="Margin" Value="0,4,0,0" TargetName="PART_Image"/>
+                            <Setter Property="LayoutTransform" TargetName="PART_DockPanel">
+                                <Setter.Value>
+                                    <RotateTransform Angle="-180"/>
+                                </Setter.Value>
+                            </Setter>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition  Binding="{Binding Path=TabStripPlacement,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Top}" Value="Bottom"/>
+                                <Condition Binding="{Binding Path=(shared:SkinStorage.EnableTouch),RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="true"/>
+                            </MultiDataTrigger.Conditions>
+
+                            <Setter Property="Border.BorderThickness" TargetName="Bd" Value="1,1,1,0"/>
+                            <!--<Setter Property="Margin" TargetName="Bd" Value="0,0.5,0,0"/>-->
+                            <Setter Property="VerticalAlignment" Value="Stretch" TargetName="PART_DockPanel"/>
+                            <Setter Property="VerticalAlignment" Value="Center" TargetName="PART_CloseButton"/>
+                            <Setter Property="VerticalAlignment" Value="Center" TargetName="Content"/>
+                            <Setter Property="VerticalAlignment" Value="Center" TargetName="PART_Image"/>
+                            <Setter Property="Margin" Value="0,0,0,4" TargetName="PART_DockPanel"/>
+                            <Setter Property="Margin" Value="0,4,0,0" TargetName="PART_Image"/>
+                            <Setter Property="LayoutTransform" TargetName="PART_DockPanel">
+                                <Setter.Value>
+                                    <RotateTransform Angle="-180"/>
+                                </Setter.Value>
+                            </Setter>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(syncfusion:TabControlExt.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Bottom"/>
+                                <Condition Binding="{Binding Path=(syncfusion:TabControlExt.ImageAlignment), RelativeSource={RelativeSource Self}}" Value="LeftOfText"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Margin" Value="8,0,0,0" TargetName="PART_Image"/>
+                        </MultiDataTrigger>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(syncfusion:TabControlExt.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Left"/>
+                                <Condition Binding="{Binding Path=RotateTextWhenVertical,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="False"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Margin" TargetName="Bd" Value="0,0.5,0,0"/>
+                            <Setter Property="Border.BorderThickness" TargetName="Bd" Value="1,1,1,0"/>
+                            <Setter Property="FlowDirection" Value="LeftToRight"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(syncfusion:TabControlExt.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Right"/>
+                                <Condition Binding="{Binding Path=RotateTextWhenVertical,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="False"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Border.BorderThickness" TargetName="Bd" Value="1,1,1,0"/>
+                        </MultiDataTrigger>
+                        <!--End TabStripPlacement section-->
+                        <!--VS 2008 specifies section-->
+                        <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True">
+                            <!--Setter Property="BottomBorderBrush" TargetName="Bd" Value="{StaticResource Aero.TabSelectedBottomBorderBrush}"/-->
+                            <!--Setter Property="BorderInnerBrush" TargetName="Bd" Value="{StaticResource Aero.TabHoverBorderInnerBrush}"/-->
+                            <Setter Property="Background" TargetName="Bd" Value="{Binding Path=TabItemSelectedBackground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Transparent}"/>
+                            <Setter Property="BorderBrush" TargetName="Bd" Value="{Binding Path=TabItemSelectedBorderBrush, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Transparent}"/>
+                            <Setter Property="TextElement.Foreground" TargetName="Content"
+						Value="{Binding Path=TabItemSelectedForeground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Transparent}" />
+                            <Setter Property="TextElement.FontWeight" TargetName="Content"
+						Value="{Binding Path=SelectedItemFontWeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=SemiBold}" />
+                            <!--Value="SemiBold"/>-->
+                        </DataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                <Condition Binding="{Binding Path=(shared:SkinStorage.EnableTouch),RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="false"/>
+                            </MultiDataTrigger.Conditions>
+                            <!--Setter Property="BottomBorderBrush" TargetName="Bd" Value="{StaticResource Aero.TabSelectedBottomBorderBrush}"/-->
+                            <!--Setter Property="BorderInnerBrush" TargetName="Bd" Value="{StaticResource Aero.TabHoverBorderInnerBrush}"/-->
+                            <Setter Property="TextElement.Foreground" TargetName="Content"
+						Value="{Binding Path=TabItemSelectedForeground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Transparent}" />
+                            <Setter Property="Background" TargetName="Bd" Value="{Binding Path=TabItemSelectedBackground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Transparent}"/>
+                            <Setter Property="BorderBrush" TargetName="Bd" Value="{Binding Path=TabItemSelectedBorderBrush, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Transparent}"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                <Condition Binding="{Binding Path=(shared:SkinStorage.EnableTouch),RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="true"/>
+                            </MultiDataTrigger.Conditions>
+
+                        </MultiDataTrigger>
+                        <!--RotateTextWhenVertical = FALSE-->
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition  Binding="{Binding Path=TabStripPlacement,RelativeSource={RelativeSource Self},FallbackValue=Top}" Value="Bottom"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Margin" Value="0,0,-10,0"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(syncfusion:TabControlExt.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Left"/>
+                                <Condition Binding="{Binding Path=RotateTextWhenVertical,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="False"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Margin" Value="-2,0,-8,0"/>
+                        </MultiDataTrigger>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(Panel.ZIndex), RelativeSource={RelativeSource Self}}" Value="9999"/>
+                                <Condition Binding="{Binding Path=(syncfusion:TabControlExt.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Top"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="FrameworkElement.Margin" Value="2,0,0,0"/>
+                        </MultiDataTrigger>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(Panel.ZIndex), RelativeSource={RelativeSource Self}}" Value="9999"/>
+                                <Condition Binding="{Binding Path=(syncfusion:TabControlExt.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Right"/>
+                                <Condition Binding="{Binding Path=RotateTextWhenVertical,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="False"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="FrameworkElement.Margin" Value="2,0,0,0"/>
+                        </MultiDataTrigger>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(Panel.ZIndex), RelativeSource={RelativeSource Self}}" Value="9999"/>
+                                <Condition  Binding="{Binding Path=TabStripPlacement,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Top}" Value="Bottom"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="FrameworkElement.Margin" Value="0,0,2,0"/>
+                        </MultiDataTrigger>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(Panel.ZIndex), RelativeSource={RelativeSource Self}}" Value="9999"/>
+                                <Condition Binding="{Binding Path=(syncfusion:TabControlExt.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Left"/>
+                                <Condition Binding="{Binding Path=RotateTextWhenVertical,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="False"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="FrameworkElement.Margin" Value="-2,0,0,0"/>
+                        </MultiDataTrigger>
+
+                        <!--IsSelected Section-->
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                <Condition Binding="{Binding Path=(syncfusion:TabControlExt.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Top"/>
+                                <Condition Binding="{Binding Path=(shared:SkinStorage.EnableTouch),RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="false"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="FrameworkElement.Margin" Value="-12,-2,0,-1"/>
+                            <Setter Property="HeaderMargin" Value="6,0,6,6"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                <Condition Binding="{Binding Path=(syncfusion:TabControlExt.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Top"/>
+                                <Condition Binding="{Binding Path=(shared:SkinStorage.EnableTouch),RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="true"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="FrameworkElement.Margin" Value="-12,-2,0,-1"/>
+                            <Setter Property="HeaderMargin" Value="12,10,12,11"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                <Condition Binding="{Binding Path=(Panel.ZIndex), RelativeSource={RelativeSource Self}}" Value="9999"/>
+                                <Condition Binding="{Binding Path=(syncfusion:TabControlExt.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Top"/>
+                                <Condition Binding="{Binding Path=(shared:SkinStorage.EnableTouch),RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="false"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="FrameworkElement.Margin" Value="0,-2,-2,-1"/>
+                            <Setter Property="HeaderMargin" Value="6,0,6,6"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                <Condition Binding="{Binding Path=(Panel.ZIndex), RelativeSource={RelativeSource Self}}" Value="9999"/>
+                                <Condition Binding="{Binding Path=(syncfusion:TabControlExt.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Top"/>
+                                <Condition Binding="{Binding Path=(shared:SkinStorage.EnableTouch),RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="true"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="FrameworkElement.Margin" Value="0,-2,-2,-1"/>
+                            <Setter Property="HeaderMargin" Value="12,10,12,11"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                <Condition Binding="{Binding Path=(syncfusion:TabControlExt.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Right"/>
+                                <Condition Binding="{Binding Path=RotateTextWhenVertical,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="False"/>
+                                <Condition Binding="{Binding Path=(shared:SkinStorage.EnableTouch),RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="false"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="FrameworkElement.Margin" Value="-12,-2,0,-1"/>
+                            <Setter Property="HeaderMargin" Value="6,0,6,6"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                <Condition Binding="{Binding Path=TabStripPlacement,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Top}" Value="Right"/>
+                                <Condition Binding="{Binding Path=RotateTextWhenVertical,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="True"/>
+                                <Condition Binding="{Binding Path=(shared:SkinStorage.EnableTouch),RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="false"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="FrameworkElement.Margin" Value="0"/>
+                            <Setter Property="HeaderMargin" Value="6,0,6,6"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                <Condition Binding="{Binding Path=TabStripPlacement,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Top}" Value="Left"/>
+                                <Condition Binding="{Binding Path=RotateTextWhenVertical,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="True"/>
+                                <Condition Binding="{Binding Path=(shared:SkinStorage.EnableTouch),RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="false"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="FrameworkElement.Margin" Value="0"/>
+                            <Setter Property="HeaderMargin" Value="6,0,6,6"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                <Condition Binding="{Binding Path=(Panel.ZIndex), RelativeSource={RelativeSource Self}}" Value="9999"/>
+                                <Condition Binding="{Binding Path=(syncfusion:TabControlExt.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Right"/>
+                                <Condition Binding="{Binding Path=RotateTextWhenVertical,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="False"/>
+                                <Condition Binding="{Binding Path=(shared:SkinStorage.EnableTouch),RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="false"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="FrameworkElement.Margin" Value="0,-2,-2,-1"/>
+                            <Setter Property="HeaderMargin" Value="6,0,6,6"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                <Condition Binding="{Binding Path=(Panel.ZIndex), RelativeSource={RelativeSource Self}}" Value="9999"/>
+                                <Condition Binding="{Binding Path=(syncfusion:TabControlExt.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Right"/>
+                                <Condition Binding="{Binding Path=RotateTextWhenVertical,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="False"/>
+                                <Condition Binding="{Binding Path=(shared:SkinStorage.EnableTouch),RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="true"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="FrameworkElement.Margin" Value="0,-2,-2,-1"/>
+                            <Setter Property="HeaderMargin" Value="12,10,12,11"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                <Condition  Binding="{Binding Path=TabStripPlacement,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Top}" Value="Bottom"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="FrameworkElement.Margin" Value="0,-2,-12,-1"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                <Condition Binding="{Binding Path=(Panel.ZIndex), RelativeSource={RelativeSource Self}}" Value="0"/>
+                                <Condition  Binding="{Binding Path=TabStripPlacement,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Top}" Value="Bottom"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="FrameworkElement.Margin" Value="-2,-2,0,-1"/>
+                        </MultiDataTrigger>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                <Condition Binding="{Binding Path=(syncfusion:TabControlExt.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Left"/>
+                                <Condition Binding="{Binding Path=RotateTextWhenVertical,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="False"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="FrameworkElement.Margin" Value="-2,-2,-10,-1"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                <Condition Binding="{Binding Path=(Panel.ZIndex), RelativeSource={RelativeSource Self}}" Value="0"/>
+                                <Condition Binding="{Binding Path=(syncfusion:TabControlExt.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Left"/>
+                                <Condition Binding="{Binding Path=RotateTextWhenVertical,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="False"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="FrameworkElement.Margin" Value="-2,-2,0,-1"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(syncfusion:TabControlExt.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Left"/>
+                                <Condition Binding="{Binding Path=RotateTextWhenVertical,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="FrameworkElement.Margin" TargetName="PART_CloseButton" Value="1,0,0,0"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(syncfusion:TabControlExt.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Right"/>
+                                <Condition Binding="{Binding Path=RotateTextWhenVertical,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="FrameworkElement.Margin" TargetName="PART_CloseButton" Value="1,0,0,0"/>
+                        </MultiDataTrigger>
+                        <!--IsSelected Section-->
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                <Condition Binding="{Binding Path=(syncfusion:TabControlExt.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Left"/>
+                                <Condition Binding="{Binding Path=RotateTextWhenVertical,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="FrameworkElement.Margin" Value="-2,-2,2,-2"/>
+                            <Setter Property="Panel.ZIndex" Value="1"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="True"/>
+                                <Condition Binding="{Binding Path=(syncfusion:TabControlExt.TabStripPlacement), RelativeSource={RelativeSource Self}}" Value="Right"/>
+                                <Condition Binding="{Binding Path=RotateTextWhenVertical,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="FrameworkElement.Margin" Value="-2,-2,2,-2"/>
+                            <Setter Property="Panel.ZIndex" Value="1"/>
+                        </MultiDataTrigger>
+                        <DataTrigger Binding="{Binding Path=(syncfusion:TabControlExt.IsEditing), RelativeSource={RelativeSource Self}}" Value="True">
+                            <Setter Property="Visibility" TargetName="PART_EditHeader" Value="Visible"/>
+                            <Setter Property="Visibility" TargetName="Content" Value="Collapsed"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="BorderBrush" Value="{Binding Path=(syncfusion:TabControlExt.TabItemSelectedBorderBrush), RelativeSource={RelativeSource Self}}"/>
+                <Setter Property="Background" Value="{Binding Path=(syncfusion:TabControlExt.TabItemSelectedBackground), RelativeSource={RelativeSource Self}}"/>
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMouseOver" Value="true"/>
+                    <Condition Property="shared:SkinStorage.EnableTouch" Value="false"/>
+                </MultiTrigger.Conditions>
+
+                <Setter Property="Background" Value="{Binding Path=TabItemHoverBackground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Transparent}"/>
+                <Setter Property="BorderBrush" Value="{Binding Path=TabItemHoverBorderBrush, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=Transparent}"/>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMouseOver" Value="true"/>
+                    <Condition Property="shared:SkinStorage.EnableTouch" Value="true"/>
+                </MultiTrigger.Conditions>
+
+
+            </MultiTrigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding Path=(syncfusion:TabControlExt.UseCustomEditableTemplate), RelativeSource={RelativeSource Self}}" Value="True"/>
+                    <Condition Binding="{Binding Path=(syncfusion:TabControlExt.IsEditing), RelativeSource={RelativeSource Self}}" Value="True"/>
+                </MultiDataTrigger.Conditions>
+                <Setter Property="HeaderTemplate" Value="{Binding Path=(syncfusion:TabControlExt.CustomEditableTemplate), RelativeSource={RelativeSource Self}}"/>
+            </MultiDataTrigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}" Value="False"/>
+                    <Condition Binding="{Binding Path=RotateTextWhenVertical,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabControlExt}},FallbackValue=false}" Value="True"/>
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Margin" Value="0"/>
+            </MultiDataTrigger>
         </Style.Triggers>
     </Style>
 </ResourceDictionary>

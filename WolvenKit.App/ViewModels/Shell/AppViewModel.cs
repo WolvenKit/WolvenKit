@@ -35,6 +35,7 @@ using WolvenKit.ViewModels.Tools;
 using WolvenKit.ViewModels.Documents;
 using System.Collections.Generic;
 using WolvenKit.Core.Services;
+using System.Reflection;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -454,7 +455,16 @@ namespace WolvenKit.ViewModels.Shell
             {
                 case EWolvenKitFile.Redscript:
                 case EWolvenKitFile.Tweak:
-                    File.Create(fullPath);
+                    if (!string.IsNullOrEmpty(model.Template))
+                    {
+                        using var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream($"WolvenKit.App.Resources.{model.Template}");
+                        using var fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write);
+                        resource.CopyTo(fileStream);
+                    }
+                    else
+                    {
+                        File.Create(fullPath);
+                    }
                     break;
                 case EWolvenKitFile.Cr2w:
                     CreateCr2wFile(model);

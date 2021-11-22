@@ -54,7 +54,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Resources\VehicleTemplate.tweak" />
     <None Remove="Resources\WolvenKitFileDefinitions.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\VehicleTemplate.tweak" />
+    <EmbeddedResource Include="Resources\WolvenKitFileDefinitions.xml" />
   </ItemGroup>
 
     <ItemGroup>
@@ -98,7 +104,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\WolvenKitFileDefinitions.xml" />
+    <Resource Include="Resources\WolvenKitFileDefinitions.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\VehicleTemplate.tweak" />
   </ItemGroup>
   
 </Project>
