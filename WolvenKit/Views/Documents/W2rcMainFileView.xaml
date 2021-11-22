@@ -152,8 +152,6 @@
                           Margin="0,2,1.5,0"
                           Padding="0"
                           Style="{DynamicResource ListBoxBaseStyle}"
-                          ItemsSource="{Binding Path=Chunks}"
-                          SelectedItem="{Binding Path=SelectedChunk}"
                           BorderThickness="0">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem" BasedOn="{StaticResource MahApps.Styles.ListViewItem}">
