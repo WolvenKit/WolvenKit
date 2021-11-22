@@ -69,6 +69,7 @@ namespace WolvenKit.ViewModels.Tools
         }
 
         #region properties
+        [Reactive] public int SelectedIndex { get; set; }
 
         [Reactive] public FileModel PE_SelectedItem { get; set; }
 
@@ -124,6 +125,7 @@ namespace WolvenKit.ViewModels.Tools
 
         public async Task ExecuteSelectFile(FileModel model)
         {
+            SelectedIndex = 0;
             if (model == null)
             {
                 return;
@@ -185,6 +187,7 @@ namespace WolvenKit.ViewModels.Tools
                     if (Enum.IsDefined(typeof(EConvertableOutput), PE_SelectedItem.GetExtension()))
                     {
                         PE_MeshPreviewVisible = true;
+                        SelectedIndex = 1;
 
                         LoadModel(PE_SelectedItem.FullName);
                     }
@@ -195,6 +198,7 @@ namespace WolvenKit.ViewModels.Tools
                         System.StringComparison.OrdinalIgnoreCase))
                     {
                         PE_MeshPreviewVisible = true;
+                        SelectedIndex = 1;
                         using (var meshStream = new FileStream(PE_SelectedItem.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                         {
                             meshStream.Seek(0, SeekOrigin.Begin);
@@ -213,6 +217,7 @@ namespace WolvenKit.ViewModels.Tools
                         System.StringComparison.OrdinalIgnoreCase))
                     {
                         IsAudioPreviewVisible = true;
+                        SelectedIndex = 2;
 
                         PreviewAudioCommand.SafeExecute(PE_SelectedItem.FullName);
                     }
@@ -222,6 +227,7 @@ namespace WolvenKit.ViewModels.Tools
                             out _))
                     {
                         IsImagePreviewVisible = true;
+                        SelectedIndex = 3;
 
                         var q = await ImageDecoder.RenderToBitmapSource(PE_SelectedItem.FullName);
                         if (q != null)
@@ -236,6 +242,7 @@ namespace WolvenKit.ViewModels.Tools
                             System.StringComparison.OrdinalIgnoreCase))
                     {
                         IsImagePreviewVisible = true;
+                        SelectedIndex = 3;
 
                         // convert xbm to dds stream
                         await using var ddsstream = new MemoryStream();

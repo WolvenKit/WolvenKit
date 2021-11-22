@@ -51,9 +51,9 @@ namespace WolvenKit.Models
 
         #region properties
 
-        public string FullName { get; }
+        [Display(Name = "System Path")] public string FullName { get; }
 
-        public string RelativePath { get; }
+        [Display(Name = "Relative Path")] public string RelativePath { get; }
 
         public string Name { get; }
 

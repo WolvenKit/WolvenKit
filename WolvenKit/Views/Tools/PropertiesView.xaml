@@ -323,6 +323,7 @@
         </Grid.Resources>
 
         <syncfusion:TabControlExt
+            SelectedIndex="{Binding SelectedIndex}"
             EnableLabelEdit="False"
             CloseButtonType="Hide"
             CloseTabOnMiddleClick="False"
@@ -375,7 +376,7 @@
                     </syncfusion:PropertyGrid>
                 </Grid>
             </syncfusion:TabItemExt>
-            <syncfusion:TabItemExt Header="Mesh Preview" IsSelected="{Binding IsMeshPreviewVisible, Mode=OneWay}" Visibility="{Binding IsMeshPreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
+            <syncfusion:TabItemExt Header="Mesh Preview" Visibility="{Binding IsMeshPreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
                 <Grid Name="RootGrid" Height="auto">
                     <Border Name="ViewportBorder" Background="Transparent">
                         <dxControls:DXViewportView
@@ -543,7 +544,7 @@
                 </Grid>
             </syncfusion:TabItemExt>
 
-            <syncfusion:TabItemExt IsSelected="{Binding IsAudioPreviewVisible}" Header="Audio Preview" Visibility="{Binding IsAudioPreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
+            <syncfusion:TabItemExt Header="Audio Preview" Visibility="{Binding IsAudioPreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
 
                 <Border
                     Width="auto"
@@ -724,7 +725,6 @@
             </syncfusion:TabItemExt>
 
             <syncfusion:TabItemExt
-                IsSelected="{Binding IsImagePreviewVisible, Mode=OneWay}"
                 Header="Image Preview"
                 Visibility="{Binding IsImagePreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
                 <!--<hc:ImageViewer
@@ -735,7 +735,7 @@
                 <syncfusion:SfImageEditor x:Name="bold" BorderThickness="0" Margin="0,0.5,0,0"/>
             </syncfusion:TabItemExt>
 
-            <syncfusion:TabItemExt IsSelected="{Binding IsVideoPreviewVisible}"
+            <syncfusion:TabItemExt
                 x:Name="testme"
                 Header="Video Preview"
                 Visibility="{Binding IsVideoPreviewVisible, Converter={StaticResource boolToVisibilityConverter}}" />

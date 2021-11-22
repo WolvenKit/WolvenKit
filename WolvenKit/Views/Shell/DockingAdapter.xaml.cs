@@ -351,15 +351,17 @@ namespace WolvenKit.Views.Shell
                 }
 
                 var propertiesViewModel = Locator.Current.GetService<PropertiesViewModel>();
-                if (content.Content is ProjectExplorerViewModel)
+                if (content.Content is ProjectExplorerViewModel pevm)
                 {
                     propertiesViewModel.SetToNullAndResetVisibility();
                     propertiesViewModel.PE_FileInfoVisible = true;
+                    propertiesViewModel.PE_SelectedItem = pevm.SelectedItem;
                 }
-                else if (content.Content is AssetBrowserViewModel)
+                else if (content.Content is AssetBrowserViewModel abvm)
                 {
                     propertiesViewModel.SetToNullAndResetVisibility();
                     propertiesViewModel.AB_FileInfoVisible = true;
+                    propertiesViewModel.AB_SelectedItem = abvm.RightSelectedItem;
                 }
 
                 if (content.Content != null) {
