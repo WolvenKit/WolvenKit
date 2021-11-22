@@ -169,33 +169,22 @@ namespace WolvenKit.RED4.Archive.IO
             return result;
         }
 
-        private CR2WBuffer ReadBuffer(CR2WBufferInfo info, bool decompress)
+        private RedBuffer ReadBuffer(CR2WBufferInfo info, bool decompress)
         {
             Debug.Assert(BaseStream.Position == info.offset);
-
-            var result = new CR2WBuffer();
-
-            result.Flags = info.flags;
 
             var buffer = BaseReader.ReadBytes((int)info.diskSize);
             if (info.memSize == info.diskSize)
             {
-                result.Data = buffer;
-                return result;
+                return RedBuffer.CreateBuffer(info.flags, buffer);
             }
 
-            if (!decompress)
+            var result = RedBuffer.CreateCompressedBuffer(info.flags, buffer, info.memSize);
+            if (decompress)
             {
-                result.Data = buffer;
-
-                result.IsCompressed = true;
-                result.MemSize = info.memSize;
-
-                return result;
+                result.Decompress();
             }
 
-            OodleLZHelper.DecompressBuffer(buffer, out var decompressedBuffer);
-            result.Data = decompressedBuffer;
             return result;
         }
 

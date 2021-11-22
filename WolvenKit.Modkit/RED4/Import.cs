@@ -10,6 +10,7 @@ using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.Modkit.Extensions;
 using WolvenKit.Modkit.RED4.MLMask;
+using WolvenKit.RED4;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
@@ -286,33 +287,18 @@ namespace WolvenKit.Modkit.RED4
             }
             else
             {
+                var inbuffer = File.ReadAllBytes(rawRelative.FullName);
+
                 // create redengine file
                 var red = new CR2WFile();
                 var font = new rendFont
                 {
                     CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC,
-                    FontBuffer = new DataBuffer
-                    {
-                        Pointer = 1,
-                    }
+                    FontBuffer = red.BufferHandler.CreateDataBuffer(0, inbuffer)
                 };
 
                 // add chunk
                 red.Chunks.Add(font);
-
-                // add buffer
-                var inbuffer = File.ReadAllBytes(rawRelative.FullName);
-                using var ms = new MemoryStream();
-                using var bw = new BinaryWriter(ms);
-                var (zsize, crc) = bw.CompressAndWrite(inbuffer);
-
-                red.Buffers.Add(new CR2WBuffer()
-                {
-                    Flags = 0xE0000,
-                    Data = ms.ToByteArray(),
-                    IsCompressed = true,
-                    MemSize = (uint)inbuffer.Length,
-                });
 
                 // write to file
                 var redpath = Path.ChangeExtension(rawRelative.FullName, ECookedFileFormat.fnt.ToString());
@@ -567,7 +553,7 @@ namespace WolvenKit.Modkit.RED4
                 throw new TodoException("compress buffer");
 
 #pragma warning disable CS0162 // Unreachable code detected
-                red.Buffers.Add(new CR2WBuffer()
+                red.Buffers.Add(new RedBuffer()
                 {
                     Flags = 131072,
                     Data = ms.ToByteArray().Skip(148).ToArray()

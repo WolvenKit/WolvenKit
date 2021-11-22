@@ -9,6 +9,9 @@ namespace WolvenKit.RED4.Types
 
         public void Read(Red4Reader reader, uint size)
         {
+            Unk1 = new List<CInt16>();
+            Unk2 = new List<List<Vector4>>();
+
             var count = BoneNames.Count;
             for (var i = 0; i < count; i++)
             {
@@ -46,16 +49,21 @@ namespace WolvenKit.RED4.Types
             {
                 foreach (var e3 in innerlist)
                 {
-                    writer.Write(e3);
+                    writer.Write(e3.X);
+                    writer.Write(e3.Y);
+                    writer.Write(e3.Z);
+                    writer.Write(e3.W);
                 }
             }
 
             //writer.BaseWriter.Write(((BaseAppendix)Appendix).Buffer);
         }
 
+        [REDProperty(IsIgnored = true)]
         public List<CInt16> Unk1 { get; set; }
 
         // could be anything, the vector4 is just a wild guess
+        [REDProperty(IsIgnored = true)]
         public List<List<Vector4>> Unk2 { get; set; }
     }
 }

@@ -11,25 +11,30 @@ namespace WolvenKit.RED4.Types
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public int Pointer { get; set; } = -1;
 
-        private byte[] _buffer = Array.Empty<byte>();
+        private byte[] _inlineBuffer = Array.Empty<byte>();
 
         public byte[] Buffer
         {
             get
             {
+                if (Pointer < -1 || Pointer >= File._buffers.Count)
+                {
+                    throw new IndexOutOfRangeException(nameof(Pointer));
+                }
+
                 if (Pointer == -1)
                 {
-                    return _buffer;
+                    return _inlineBuffer;
                 }
 
                 return File._buffers[Pointer].Data;
             }
-
             set
             {
-                if (Pointer == -1)
+                var existingBuffer = File.BufferHandler.GetIndex(value);
+                if (existingBuffer != -1)
                 {
-                    _buffer = value;
+                    Pointer = existingBuffer;
                 }
                 else
                 {

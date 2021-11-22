@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -38,13 +39,13 @@ namespace WolvenKit.RED4.Archive.CR2W
         public CR2WMetaData MetaData { get; } = new();
 
 
-        private IDictionary<IRedRef, int> _internalImports;
+        private ConcurrentDictionary<IRedRef, int> _internalImports;
         public IReadOnlyList<IRedRef> Imports => new ReadOnlyCollection<IRedRef>(_internalImports.Keys.ToList());
         public IList<ICR2WProperty> Properties { get; }
 
         public IRedClass RootChunk => Chunks[0];
 
-        public IList<IRedBuffer> Buffers
+        public IList<RedBuffer> Buffers
         {
             get => _buffers;
         }
@@ -53,7 +54,7 @@ namespace WolvenKit.RED4.Archive.CR2W
 
         public CR2WFile()
         {
-            _internalImports = new Dictionary<IRedRef, int>();
+            _internalImports = new ConcurrentDictionary<IRedRef, int>();
 
             Properties = new List<ICR2WProperty>();     //block 4
             EmbeddedFiles = new List<ICR2WEmbeddedFile>();       //block 7
@@ -76,7 +77,7 @@ namespace WolvenKit.RED4.Archive.CR2W
                 _internalImports[oldValue]--;
                 if (_internalImports[oldValue] == 0)
                 {
-                    _internalImports.Remove(oldValue);
+                    _internalImports.TryRemove(oldValue, out var _);
                 }
             }
 
@@ -86,7 +87,7 @@ namespace WolvenKit.RED4.Archive.CR2W
 
                 if (!_internalImports.ContainsKey(newValue))
                 {
-                    _internalImports.Add(newValue, 0);
+                    _internalImports.TryAdd(newValue, 0);
                 }
 
                 _internalImports[newValue]++;

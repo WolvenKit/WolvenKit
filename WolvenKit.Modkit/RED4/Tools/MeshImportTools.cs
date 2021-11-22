@@ -7,6 +7,7 @@ using CP77.CR2W;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
 using WolvenKit.Modkit.RED4.GeneralStructs;
+using WolvenKit.RED4;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W.Archive;
@@ -1017,22 +1018,8 @@ namespace WolvenKit.Modkit.RED4
                             bw.Write(meshes[i].positions[e].Y);
                             bw.Write(meshes[i].positions[e].Z);
                         }
-                        var compressed = new MemoryStream();
-                        using var buff = new BinaryWriter(compressed);
-                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.Positions = new DataBuffer
-                        {
-                            Pointer = cr2w.Buffers.Count + 1
-                        };
-
-                        cr2w.Buffers.Add(new CR2WBuffer()
-                        {
-                            Flags = 0,
-                            MemSize = (UInt32)buffer.Length,
-                            Data = compressed.ToArray(),
-                            IsCompressed = true
-                        });
+                        chunk.Positions = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
                     }
                     {
                         var buffer = new MemoryStream();
@@ -1041,22 +1028,8 @@ namespace WolvenKit.Modkit.RED4
                         {
                             bw.Write(Convert.ToUInt16(meshes[i].indices[e]));
                         }
-                        var compressed = new MemoryStream();
-                        using var buff = new BinaryWriter(compressed);
-                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.Indices = new DataBuffer()
-                        {
-                            Pointer = cr2w.Buffers.Count + 1
-                        };
-
-                        cr2w.Buffers.Add(new CR2WBuffer()
-                        {
-                            Flags = 0,
-                            MemSize = (UInt32)buffer.Length,
-                            Data = compressed.ToArray(),
-                            IsCompressed = true
-                        });
+                        chunk.Indices = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
                     }
                     if (meshes[i].weightCount > 0)
                     {
@@ -1069,22 +1042,8 @@ namespace WolvenKit.Modkit.RED4
                             bw.Write(meshes[i].weights[e, 2]);
                             bw.Write(meshes[i].weights[e, 3]);
                         }
-                        var compressed = new MemoryStream();
-                        using var buff = new BinaryWriter(compressed);
-                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.SkinWeights = new DataBuffer()
-                        {
-                            Pointer = cr2w.Buffers.Count + 1
-                        };
-
-                        cr2w.Buffers.Add(new CR2WBuffer()
-                        {
-                            Flags = 0,
-                            MemSize = (UInt32)buffer.Length,
-                            Data = compressed.ToArray(),
-                            IsCompressed = true
-                        });
+                        chunk.SkinWeights = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
                     }
                     if (meshes[i].weightCount > 0)
                     {
@@ -1097,20 +1056,8 @@ namespace WolvenKit.Modkit.RED4
                             bw.Write(Convert.ToByte(meshes[i].boneindices[e, 2]));
                             bw.Write(Convert.ToByte(meshes[i].boneindices[e, 3]));
                         }
-                        var compressed = new MemoryStream();
-                        using var buff = new BinaryWriter(compressed);
-                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.SkinIndices = new DataBuffer();
-                        chunk.SkinIndices.Pointer = cr2w.Buffers.Count + 1;
-
-                        cr2w.Buffers.Add(new CR2WBuffer()
-                        {
-                            Flags = 0,
-                            MemSize = (UInt32)buffer.Length,
-                            Data = compressed.ToArray(),
-                            IsCompressed = true
-                        });
+                        chunk.SkinIndices = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
                     }
                     if (meshes[i].weightCount > 4)
                     {
@@ -1123,20 +1070,8 @@ namespace WolvenKit.Modkit.RED4
                             bw.Write(meshes[i].weights[e, 6]);
                             bw.Write(meshes[i].weights[e, 7]);
                         }
-                        var compressed = new MemoryStream();
-                        using var buff = new BinaryWriter(compressed);
-                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.SkinWeightsExt = new DataBuffer();
-                        chunk.SkinWeightsExt.Pointer = cr2w.Buffers.Count + 1;
-
-                        cr2w.Buffers.Add(new CR2WBuffer()
-                        {
-                            Flags = 0,
-                            MemSize = (UInt32)buffer.Length,
-                            Data = compressed.ToArray(),
-                            IsCompressed = true
-                        });
+                        chunk.SkinWeightsExt = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
                     }
                     if (meshes[i].weightCount > 4)
                     {
@@ -1149,20 +1084,8 @@ namespace WolvenKit.Modkit.RED4
                             bw.Write(Convert.ToByte(meshes[i].boneindices[e, 6]));
                             bw.Write(Convert.ToByte(meshes[i].boneindices[e, 7]));
                         }
-                        var compressed = new MemoryStream();
-                        using var buff = new BinaryWriter(compressed);
-                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.SkinIndicesExt = new DataBuffer();
-                        chunk.SkinIndicesExt.Pointer = cr2w.Buffers.Count + 1;
-
-                        cr2w.Buffers.Add(new CR2WBuffer()
-                        {
-                            Flags = 0,
-                            MemSize = (UInt32)buffer.Length,
-                            Data = compressed.ToArray(),
-                            IsCompressed = true
-                        });
+                        chunk.SkinIndicesExt = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
                     }
                     {
                         var buffer = new MemoryStream();
@@ -1173,20 +1096,8 @@ namespace WolvenKit.Modkit.RED4
                             bw.Write(meshes[i].normals[e].Y);
                             bw.Write(meshes[i].normals[e].Z);
                         }
-                        var compressed = new MemoryStream();
-                        using var buff = new BinaryWriter(compressed);
-                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.Normals = new DataBuffer();
-                        chunk.Normals.Pointer = cr2w.Buffers.Count + 1;
-
-                        cr2w.Buffers.Add(new CR2WBuffer()
-                        {
-                            Flags = 0,
-                            MemSize = (UInt32)buffer.Length,
-                            Data = compressed.ToArray(),
-                            IsCompressed = true
-                        });
+                        chunk.Normals = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
                     }
                     blob.Chunks.Add(chunk);
                     meshes[i].weightCount = 0;
@@ -1241,20 +1152,8 @@ namespace WolvenKit.Modkit.RED4
                             bw.Write(meshes[i].positions[e].Y);
                             bw.Write(meshes[i].positions[e].Z);
                         }
-                        var compressed = new MemoryStream();
-                        using var buff = new BinaryWriter(compressed);
-                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.Positions = new DataBuffer();
-                        chunk.Positions.Pointer = cr2w.Buffers.Count + 1;
-
-                        cr2w.Buffers.Add(new CR2WBuffer()
-                        {
-                            Flags = 0,
-                            MemSize = (UInt32)buffer.Length,
-                            Data = compressed.ToArray(),
-                            IsCompressed = true
-                        });
+                        chunk.Positions = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
                     }
                     {
                         var buffer = new MemoryStream();
@@ -1263,20 +1162,8 @@ namespace WolvenKit.Modkit.RED4
                         {
                             bw.Write(Convert.ToUInt16(meshes[i].indices[e]));
                         }
-                        var compressed = new MemoryStream();
-                        using var buff = new BinaryWriter(compressed);
-                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.Indices = new DataBuffer();
-                        chunk.Indices.Pointer = (UInt16)(cr2w.Buffers.Count + 1);
-
-                        cr2w.Buffers.Add(new CR2WBuffer()
-                        {
-                            Flags = 0,
-                            MemSize = (UInt32)buffer.Length,
-                            Data = compressed.ToArray(),
-                            IsCompressed = true
-                        });
+                        chunk.Indices = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
                     }
                     if (meshes[i].weightCount > 0)
                     {
@@ -1289,20 +1176,8 @@ namespace WolvenKit.Modkit.RED4
                             bw.Write(meshes[i].weights[e, 2]);
                             bw.Write(meshes[i].weights[e, 3]);
                         }
-                        var compressed = new MemoryStream();
-                        using var buff = new BinaryWriter(compressed);
-                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.SkinWeights = new DataBuffer();
-                        chunk.SkinWeights.Pointer = (UInt16)(cr2w.Buffers.Count + 1);
-
-                        cr2w.Buffers.Add(new CR2WBuffer()
-                        {
-                            Flags = 0,
-                            MemSize = (UInt32)buffer.Length,
-                            Data = compressed.ToArray(),
-                            IsCompressed = true
-                        });
+                        chunk.SkinWeights = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
                     }
                     if (meshes[i].weightCount > 0)
                     {
@@ -1315,20 +1190,8 @@ namespace WolvenKit.Modkit.RED4
                             bw.Write(Convert.ToByte(meshes[i].boneindices[e, 2]));
                             bw.Write(Convert.ToByte(meshes[i].boneindices[e, 3]));
                         }
-                        var compressed = new MemoryStream();
-                        using var buff = new BinaryWriter(compressed);
-                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.SkinIndices = new DataBuffer();
-                        chunk.SkinIndices.Pointer = (UInt16)(cr2w.Buffers.Count + 1);
-
-                        cr2w.Buffers.Add(new CR2WBuffer()
-                        {
-                            Flags = 0,
-                            MemSize = (UInt32)buffer.Length,
-                            Data = compressed.ToArray(),
-                            IsCompressed = true
-                        });
+                        chunk.SkinIndices = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
                     }
                     if (meshes[i].weightCount > 4)
                     {
@@ -1341,20 +1204,8 @@ namespace WolvenKit.Modkit.RED4
                             bw.Write(meshes[i].weights[e, 6]);
                             bw.Write(meshes[i].weights[e, 7]);
                         }
-                        var compressed = new MemoryStream();
-                        using var buff = new BinaryWriter(compressed);
-                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.SkinWeightsExt = new DataBuffer() ;
-                        chunk.SkinWeightsExt.Pointer = (UInt16)(cr2w.Buffers.Count + 1);
-
-                        cr2w.Buffers.Add(new CR2WBuffer()
-                        {
-                            Flags = 0,
-                            MemSize = (UInt32)buffer.Length,
-                            Data = compressed.ToArray(),
-                            IsCompressed = true
-                        });
+                        chunk.SkinWeightsExt = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
                     }
                     if (meshes[i].weightCount > 4)
                     {
@@ -1367,20 +1218,8 @@ namespace WolvenKit.Modkit.RED4
                             bw.Write(Convert.ToByte(meshes[i].boneindices[e, 6]));
                             bw.Write(Convert.ToByte(meshes[i].boneindices[e, 7]));
                         }
-                        var compressed = new MemoryStream();
-                        using var buff = new BinaryWriter(compressed);
-                        var (zsize, crc) = buff.CompressAndWrite(buffer.ToArray());
 
-                        chunk.SkinIndicesExt = new DataBuffer();
-                        chunk.SkinIndicesExt.Pointer = (UInt16)(cr2w.Buffers.Count + 1);
-
-                        cr2w.Buffers.Add(new CR2WBuffer()
-                        {
-                            Flags = 0,
-                            MemSize = (UInt32)buffer.Length,
-                            Data = compressed.ToArray(),
-                            IsCompressed = true
-                        });
+                        chunk.SkinIndicesExt = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
                     }
                     {
                         chunk.Simulation = new CArray<CUInt16>();

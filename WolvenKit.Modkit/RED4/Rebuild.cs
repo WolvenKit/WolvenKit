@@ -8,6 +8,7 @@ using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Interfaces.Extensions;
+using WolvenKit.RED4;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 
@@ -60,7 +61,7 @@ namespace WolvenKit.Modkit.RED4
                     flags = existingBuffers[i].flags;
                 }
 
-                cr2w.Buffers.Add(new CR2WBuffer()
+                cr2w.Buffers.Add(new RedBuffer()
                 {
                     Flags = flags, //TODO: find out what these are
                     MemSize = (uint)inbuffer.Length,
@@ -68,7 +69,7 @@ namespace WolvenKit.Modkit.RED4
                 });
             }
 
-            // write cr2w 
+            // write cr2w
             redfileStream.Seek(0, SeekOrigin.Begin);
             using var writer = new CR2WWriter(redfileStream);
             writer.WriteFile(cr2w);
@@ -150,7 +151,7 @@ namespace WolvenKit.Modkit.RED4
                         flags = existingBuffers[i].flags;
                     }
 
-                    cr2w.Buffers.Add(new CR2WBuffer()
+                    cr2w.Buffers.Add(new RedBuffer()
                     {
                         Flags = flags, //TODO: find out what these are
                         MemSize = (uint)inbuffer.Length,
@@ -158,7 +159,7 @@ namespace WolvenKit.Modkit.RED4
                     });
                 }
 
-                // write cr2w 
+                // write cr2w
                 redfileStream.Seek(0, SeekOrigin.Begin);
                 using var writer = new CR2WWriter(redfileStream);
                 writer.WriteFile(cr2w);
