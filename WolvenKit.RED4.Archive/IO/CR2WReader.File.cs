@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Compression;
@@ -168,33 +169,22 @@ namespace WolvenKit.RED4.Archive.IO
             return result;
         }
 
-        private CR2WBuffer ReadBuffer(CR2WBufferInfo info, bool decompress)
+        private RedBuffer ReadBuffer(CR2WBufferInfo info, bool decompress)
         {
             Debug.Assert(BaseStream.Position == info.offset);
-
-            var result = new CR2WBuffer();
-
-            result.Flags = info.flags;
 
             var buffer = BaseReader.ReadBytes((int)info.diskSize);
             if (info.memSize == info.diskSize)
             {
-                result.Data = buffer;
-                return result;
+                return RedBuffer.CreateBuffer(info.flags, buffer);
             }
 
-            if (!decompress)
+            var result = RedBuffer.CreateCompressedBuffer(info.flags, buffer, info.memSize);
+            if (decompress)
             {
-                result.Data = buffer;
-
-                result.IsCompressed = true;
-                result.MemSize = info.memSize;
-
-                return result;
+                result.Decompress();
             }
 
-            OodleLZHelper.DecompressBuffer(buffer, out var decompressedBuffer);
-            result.Data = decompressedBuffer;
             return result;
         }
 
@@ -223,7 +213,7 @@ namespace WolvenKit.RED4.Archive.IO
             var result = new Dictionary<uint, CName>();
             while (BaseStream.Position < (stringInfoTable.offset + stringInfoTable.itemCount))
             {
-                result.Add((uint)BaseStream.Position - stringInfoTable.offset, ReadNullTerminatedString());
+                result.Add((uint)BaseStream.Position - stringInfoTable.offset, _reader.ReadNullTerminatedString());
             }
 
             return result;

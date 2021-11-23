@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.Types
             writer.WriteVLQ(value.Headers.Length);
             foreach (var entry in value.Headers)
             {
-                writer.WriteLengthPrefixedString(entry);
+                writer.Write((CString)entry);
             }
 
             writer.WriteVLQ(value.Rows.Length);
@@ -49,7 +49,7 @@ namespace WolvenKit.RED4.Types
                 writer.WriteVLQ(row.Length);
                 foreach (var entry in row)
                 {
-                    writer.WriteLengthPrefixedString(entry);
+                    writer.Write((CString)entry);
                 }
             }
         }

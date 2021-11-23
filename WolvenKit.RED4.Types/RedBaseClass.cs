@@ -1,10 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.ComponentModel;
 using System.Dynamic;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace WolvenKit.RED4.Types
@@ -12,6 +10,76 @@ namespace WolvenKit.RED4.Types
     [REDMeta]
     public class RedBaseClass : DynamicObject, IRedClass
     {
+        #region Events
+
+        public class ObjectChangedEventArgs : EventArgs
+        {
+            public string RedName { get; }
+            public object OldValue { get; }
+            public object NewValue { get; }
+
+            public ObjectChangedEventArgs(string redName, object oldValue, object newValue)
+            {
+                RedName = redName;
+                OldValue = oldValue;
+                NewValue = newValue;
+            }
+        }
+
+        private static readonly EventHandlerList s_listEventDelegates = new();
+
+        public delegate void ObjectChangedEventHandler(object sender, ObjectChangedEventArgs e);
+
+        public static bool RegisterEventHandler(Type type, ObjectChangedEventHandler handler)
+        {
+            if (!typeof(IRedType).IsAssignableFrom(type))
+            {
+                return false;
+            }
+
+            s_listEventDelegates.AddHandler(type, handler);
+
+            return true;
+        }
+
+        public static bool RemoveEventHandler(Type type, ObjectChangedEventHandler handler)
+        {
+            if (!typeof(IRedType).IsAssignableFrom(type))
+            {
+                return false;
+            }
+
+            s_listEventDelegates.RemoveHandler(type, handler);
+
+            return true;
+        }
+
+        private void OnObjectChanged(string redPropertyName, object value)
+        {
+            var exists = _properties.ContainsKey(redPropertyName);
+            if ((exists && _properties[redPropertyName] != null) || value != null)
+            {
+                var oldValue = exists ? _properties[redPropertyName] : null;
+
+                var type = value != null ? value.GetType() : oldValue.GetType();
+                if (type.IsGenericType)
+                {
+                    type = type.GetGenericTypeDefinition();
+                }
+
+                if (s_listEventDelegates[type] is ObjectChangedEventHandler del)
+                {
+                    if (!Equals(oldValue, value))
+                    {
+                        del.Invoke(this, new ObjectChangedEventArgs(redPropertyName, oldValue, value));
+                    }
+                }
+
+            }
+        }
+
+        #endregion
+
         private string GetRedName(string propertyName)
         {
             var property = RedReflection.GetPropertyByName(this.GetType(), propertyName);
@@ -63,6 +131,7 @@ namespace WolvenKit.RED4.Types
                 d.Remove();
             }
 
+            OnObjectChanged(redPropertyName, value);
             _properties[redPropertyName] = value;
         }
 
@@ -72,7 +141,9 @@ namespace WolvenKit.RED4.Types
 
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
+            OnObjectChanged(binder.Name, value);
             _properties[binder.Name] = value;
+
             return true;
         }
 
@@ -107,7 +178,7 @@ namespace WolvenKit.RED4.Types
             {
                 return false;
             }
-            
+
             foreach (var property in _properties)
             {
                 if (!Equals(property.Value, other._properties[property.Key]))

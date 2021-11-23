@@ -23,6 +23,7 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types.Exceptions;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.Interfaces.Extensions;
+using WolvenKit.RED4;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -201,7 +202,7 @@ namespace WolvenKit.Modkit.RED4
                 throw new TodoException("get import info from cr2w file?");
                 //foreach (var import in cr2w.Debug.ImportInfos)
                 //{
-                    
+
                 //    if (!primaryDependencies.Contains(import.DepotPath))
                 //    {
                 //        primaryDependencies.Add(import.DepotPath);
@@ -507,7 +508,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 RawMaterials.Add(ContainRawMaterial(materialEntries[i], materialEntryNames[i],archives, ref usedMts));
             }
-            
+
             List<RawMaterial> matTemplates = new List<RawMaterial>();
             {
                 var keys = usedMts.Keys.ToList();
@@ -549,7 +550,7 @@ namespace WolvenKit.Modkit.RED4
                         //        dep.DepotPath = "";
                         //    }
                     }
-                    
+
                     matTemplates.Add(rawMat);
                 }
             }
@@ -868,23 +869,11 @@ namespace WolvenKit.Modkit.RED4
             check = blob.LocalMaterialBuffer.RawData.Buffer.Length > 0;
             if (!check)
             {
-                blob.LocalMaterialBuffer.RawData = new DataBuffer();
-                blob.LocalMaterialBuffer.RawData.Pointer = (UInt16)(cr2w.Buffers.Count + 1);
-
-                uint idx = (uint)cr2w.Buffers.Count;
-                cr2w.Buffers.Add(new CR2WBuffer()
-                {
-                    Flags = 0,
-                    MemSize = (UInt32)materialbuffer.Length,
-                    Data = compressed.ToByteArray(),
-                    IsCompressed = true
-                });
+                blob.LocalMaterialBuffer.RawData = cr2w.BufferHandler.CreateDataBuffer(0, materialbuffer.ToArray());
             }
             else
             {
-                var p = blob.LocalMaterialBuffer.RawData.Pointer - 1;
-                cr2w.Buffers[p].MemSize = (UInt32)materialbuffer.Length;
-                cr2w.Buffers[p].Data = compressed.ToByteArray();
+                blob.LocalMaterialBuffer.RawData.Buffer = materialbuffer.ToArray();
             }
 
             return true;

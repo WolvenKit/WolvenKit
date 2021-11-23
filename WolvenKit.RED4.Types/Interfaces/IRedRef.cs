@@ -5,5 +5,7 @@ namespace WolvenKit.RED4.Types
         public string DepotPath { get; set; }
 
         public InternalEnums.EImportFlags Flags { get; set; }
+
+        public uint GetPersistentHash();
     }
 }

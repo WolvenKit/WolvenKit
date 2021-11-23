@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Interfaces.Extensions;
+using WolvenKit.RED4;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
@@ -106,7 +107,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC
             };
             cr2w.Chunks.Add(mask);
-            
+
             var blob = new rendRenderMultilayerMaskBlobPC
             {
                 Header = new rendRenderMultilayerMaskBlobHeader
@@ -122,48 +123,13 @@ namespace WolvenKit.Modkit.RED4.MLMask
                     MaskTileSize = mlmask._tileSize,
                     Flags = 2
                 },
-                AtlasData = new SerializationDeferredDataBuffer
-                {
-                    Pointer = 1
-                },
-                TilesData = new SerializationDeferredDataBuffer
-                {
-                    Pointer = 2
-                }
+                AtlasData = cr2w.BufferHandler.CreateSerializationDeferredDataBuffer(0, mlmask._AtlasBuffer),
+                TilesData = cr2w.BufferHandler.CreateSerializationDeferredDataBuffer(0, mlmask._tilesBuffer)
             };
 
             cr2w.Chunks.Add(blob);
 
-
             mask.RenderResourceBlob.RenderResourceBlobPC = cr2w.HandleManager.CreateCHandle<IRenderResourceBlob>(blob);
-
-            // AtlasBuffer
-            using (var msAtlas = new MemoryStream())
-            using (var bwAtlas = new BinaryWriter(msAtlas))
-            {
-                var (zsize, crc) = bwAtlas.CompressAndWrite(mlmask._AtlasBuffer);
-
-                cr2w.Buffers.Add(new CR2WBuffer()
-                {
-                    Flags = 0,
-                    MemSize = (UInt32)mlmask._AtlasBuffer.Length,
-                    Data = msAtlas.ToByteArray()
-                });
-            }
-
-            // TilesBuffer
-            using (var msTiles = new MemoryStream())
-            using (var bwTiles = new BinaryWriter(msTiles))
-            {
-                var (zsize, crc) = bwTiles.CompressAndWrite(mlmask._tilesBuffer);
-
-                cr2w.Buffers.Add(new CR2WBuffer()
-                {
-                    Flags = 0,
-                    MemSize = (UInt32)mlmask._tilesBuffer.Length,
-                    Data = msTiles.ToByteArray()
-                });
-            }
 
             if (!Directory.Exists(f.Directory.FullName))
             {

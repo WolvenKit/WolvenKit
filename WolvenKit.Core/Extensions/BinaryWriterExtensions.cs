@@ -201,5 +201,13 @@ namespace WolvenKit.Core.Extensions
                 Marshal.FreeHGlobal(ptr);
             }
         }
+
+        public static void WriteNullTerminatedString(this BinaryWriter bw, string text, Encoding encoding = null)
+        {
+            encoding ??= Encoding.UTF8;
+
+            bw.Write(encoding.GetBytes(text));
+            bw.Write((byte)0);
+        }
     }
 }

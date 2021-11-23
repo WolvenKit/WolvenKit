@@ -204,7 +204,7 @@ namespace WolvenKit.RED4.Archive.IO
                 }
                 tableHeaders[5].crc32 = crc.HashUInt32;
             }
-            
+
             BaseStream.Position = fileHeader.objectsEnd;
             BaseStream.Write(bufferData);
             fileHeader.buffersEnd = (uint)BaseStream.Position;
@@ -257,29 +257,20 @@ namespace WolvenKit.RED4.Archive.IO
 
         #region Buffers
 
-        private CR2WBufferInfo WriteBuffer(CR2WWriter writer, ICR2WBuffer buffer)
+        private CR2WBufferInfo WriteBuffer(CR2WWriter writer, RedBuffer buffer)
         {
-            var compressedBuffer = buffer.Data;
-
             var result = new CR2WBufferInfo
             {
                 flags = buffer.Flags,
                 offset = (uint)writer.BaseStream.Position,
-                diskSize = (uint)compressedBuffer.Length,
-                memSize = (uint)buffer.Data.Length,
-                crc32 = Crc32Algorithm.Compute(compressedBuffer)
+                memSize = buffer.MemSize
             };
 
-            if (buffer.IsCompressed)
-            {
-                result.memSize = buffer.MemSize;
-            }
-            else
-            {
-                var status = OodleLZHelper.CompressBuffer(buffer.Data, out compressedBuffer);
-            }
-            
-            writer.BaseWriter.Write(compressedBuffer);
+            buffer.Compress();
+            writer.BaseWriter.Write(buffer.Data);
+
+            result.diskSize = (uint)buffer.Data.Length;
+            result.crc32 = Crc32Algorithm.Compute(buffer.Data);
 
             return result;
         }
@@ -292,7 +283,7 @@ namespace WolvenKit.RED4.Archive.IO
             var bufferInfoList = new List<CR2WBufferInfo>();
             foreach (var buffer in _file.Buffers)
             {
-                bufferInfoList.Add(WriteBuffer(writer, (ICR2WBuffer)buffer));
+                bufferInfoList.Add(WriteBuffer(writer, buffer));
             }
 
             return (bufferInfoList, ms.ToArray());

@@ -1,5 +1,9 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
+using WolvenKit.Common.FNV1A;
 
 namespace WolvenKit.RED4.Types
 {
@@ -46,5 +50,16 @@ namespace WolvenKit.RED4.Types
         }
 
         public override int GetHashCode() => HashCode.Combine(DepotPath, (int)Flags);
+
+        public uint GetPersistentHash()
+        {
+            using (var fnv = new FNV1A32HashAlgorithm())
+            {
+                fnv.AppendString(DepotPath);
+                fnv.AppendString(Flags.ToString());
+
+                return fnv.HashUInt32;
+            }
+        }
     }
 }

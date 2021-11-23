@@ -1,5 +1,8 @@
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Collections.ObjectModel;
+using System.Linq;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
 
@@ -26,32 +29,100 @@ namespace WolvenKit.RED4.Archive.CR2W
         public uint ObjectsEnd { get; set; }
     }
 
-    public class CR2WFile : Red4File
+    public class CR2WFile : Red4File, IDisposable
     {
         public const uint MAGIC = 0x57325243; // "W2RC"
         public const uint DEADBEEF = 0xDEADBEEF;
 
 
-        public CR2WFileDebug Debug { get; set; } = new();
-        public CR2WMetaData MetaData { get; set; } = new();
+        public CR2WFileDebug Debug { get; } = new();
+        public CR2WMetaData MetaData { get; } = new();
 
-        
+
+        private ConcurrentDictionary<IRedRef, int> _internalImports;
+        public IReadOnlyList<IRedRef> Imports => new ReadOnlyCollection<IRedRef>(_internalImports.Keys.ToList());
         public IList<ICR2WProperty> Properties { get; }
 
         public IRedClass RootChunk => Chunks[0];
 
-        public IList<IRedBuffer> Buffers
+        public IList<RedBuffer> Buffers
         {
             get => _buffers;
         }
 
         public IList<ICR2WEmbeddedFile> EmbeddedFiles { get; }
 
-
         public CR2WFile()
         {
+            _internalImports = new ConcurrentDictionary<IRedRef, int>();
+
             Properties = new List<ICR2WProperty>();     //block 4
             EmbeddedFiles = new List<ICR2WEmbeddedFile>();       //block 7
+
+            RedBaseClass.RegisterEventHandler(typeof(CResourceReference<>), OnImport);
+            RedBaseClass.RegisterEventHandler(typeof(CResourceAsyncReference<>), OnImport);
         }
+
+        private void OnImport(object sender, RedBaseClass.ObjectChangedEventArgs e)
+        {
+            if (e.OldValue != null)
+            {
+                var oldValue = (IRedRef)e.OldValue;
+
+                if (!_internalImports.ContainsKey(oldValue))
+                {
+                    throw new Exception();
+                }
+
+                _internalImports[oldValue]--;
+                if (_internalImports[oldValue] == 0)
+                {
+                    _internalImports.TryRemove(oldValue, out var _);
+                }
+            }
+
+            if (e.NewValue != null)
+            {
+                var newValue = (IRedRef)e.NewValue;
+
+                if (!_internalImports.ContainsKey(newValue))
+                {
+                    _internalImports.TryAdd(newValue, 0);
+                }
+
+                _internalImports[newValue]++;
+            }
+        }
+
+        #region IDisposable
+
+        private bool _disposed;
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    RedBaseClass.RemoveEventHandler(typeof(CResourceReference<>), OnImport);
+                    RedBaseClass.RemoveEventHandler(typeof(CResourceAsyncReference<>), OnImport);
+                }
+
+                _disposed = true;
+            }
+        }
+
+        ~CR2WFile()
+        {
+            Dispose(false);
+        }
+
+        #endregion
     }
 }

@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
 
@@ -47,58 +46,6 @@ namespace WolvenKit.RED4.IO
 
         public List<IRedImport> ImportsList { get => importsList; set => importsList = value; }
 
-        #region Support
-
-        /// <summary>
-        /// Reads a string from a BinaryReader Stream
-        /// First byte indicates length, where the first 2 bits are reserved
-        /// bit1: 0 if widecharacterset is needed, 1 otherwise
-        /// bit2: 1 if continuation byte is needed, 0 otherwise
-        /// </summary>
-        /// <param name="br"></param>
-        /// <returns></returns>
-        private string ReadLengthPrefixedString()
-        {
-            // ReadVLQInt32 but highest bit is widechar instead of sign
-            var b1 = _reader.ReadByte();
-            if (b1 == 0x80)
-                return null;
-            if (b1 == 0x00)
-                return "";
-
-            var widechar = (b1 & 128) == 0;
-            var next = (b1 & 64) == 64;
-            var size = b1 % 128 % 64;
-            var offset = 6;
-            while (next)
-            {
-                var b = _reader.ReadByte();
-                size = (b % 128) << offset | size;
-                next = (b & 128) == 128;
-                offset += 7;
-            }
-
-            string readstring;
-            readstring = widechar
-                ? Encoding.Unicode.GetString(_reader.ReadBytes(size * 2))
-                : Encoding.GetEncoding("ISO-8859-1").GetString(_reader.ReadBytes(size));
-
-            return readstring;
-        }
-
-        public string ReadNullTerminatedString()
-        {
-            var bytes = new List<byte>();
-            for (byte b; (b = _reader.ReadByte()) != 0x00;)
-            {
-                bytes.Add(b);
-            }
-
-            return Encoding.UTF8.GetString(bytes.ToArray());
-        }
-
-        #endregion
-
         protected CName GetStringValue(ushort index)
         {
             if (index >= _namesList.Count)
@@ -132,7 +79,7 @@ namespace WolvenKit.RED4.IO
         public virtual CGuid ReadCGuid() => _reader.ReadBytes(16);
         public virtual CName ReadCName() => GetStringValue(_reader.ReadUInt16());
         public virtual CRUID ReadCRUID() => _reader.ReadUInt64();
-        public virtual CString ReadCString() => ReadLengthPrefixedString();
+        public virtual CString ReadCString() => _reader.ReadLengthPrefixedString();
 
         public virtual CVariant ReadCVariant()
         {
@@ -173,12 +120,12 @@ namespace WolvenKit.RED4.IO
             new()
             {
                 Unk1 = _reader.ReadUInt64(),
-                Value = ReadLengthPrefixedString()
+                Value = _reader.ReadLengthPrefixedString()
             };
 
         public virtual MessageResourcePath ReadMessageResourcePath() => (MessageResourcePath)ThrowNotImplemented();
 
-        public virtual NodeRef ReadNodeRef() => ReadLengthPrefixedString();
+        public virtual NodeRef ReadNodeRef() => _reader.ReadLengthPrefixedString();
 
         public virtual SerializationDeferredDataBuffer ReadSerializationDeferredDataBuffer(uint size)
         {
@@ -186,7 +133,7 @@ namespace WolvenKit.RED4.IO
             {
                 throw new InvalidParsingException(nameof(ReadSerializationDeferredDataBuffer));
             }
-            
+
             return new() { File = _outputFile, Pointer = (ushort)(_reader.ReadUInt16() - 1) };
         }
 
@@ -322,7 +269,7 @@ namespace WolvenKit.RED4.IO
             {
                 return default(T);
             }
-            
+
             return Enum.Parse<T>(enumString);
         }
 
