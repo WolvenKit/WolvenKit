@@ -41,6 +41,7 @@ namespace WolvenKit.ViewModels.Documents
             _parser = Locator.Current.GetService<Red4ParserService>();
             _hashService = Locator.Current.GetService<IHashService>();
             RelativePath = path;
+            Extension = Path.GetExtension(path).Substring(1);
         }
 
         #region properties
@@ -52,6 +53,8 @@ namespace WolvenKit.ViewModels.Documents
         [Reactive] public RedDocumentItemViewModel SelectedTabItemViewModel { get; set; }
 
         [Reactive] public string RelativePath { get; set; }
+
+        [Reactive] public string Extension { get; set; }
 
         #endregion
 

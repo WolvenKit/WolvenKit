@@ -9,173 +9,104 @@
  xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
  xmlns:docvm="clr-namespace:WolvenKit.ViewModels.Documents;assembly=WolvenKit.App"
  xmlns:converters1="clr-namespace:WolvenKit.Converters"
+ xmlns:tools_controls="clr-namespace:Syncfusion.Windows.Tools.Controls;assembly=Syncfusion.Tools.WPF"
  d:DesignHeight="300"
  d:DesignWidth="300"
  mc:Ignorable="d"             
  >
-
-    <!--UserControl.Resources>
-        <Style x:Key="TabItemStyle1" TargetType="{x:Type TabItem}" >
-            <Setter Property="Header" Value="{Binding Path=(syncfusion:DockingManager.Header)}" />
-            <Setter Property="Syncfusion:DockingManager.ListenTabItemEvents" Value="True" />
-            <Setter Property="MinWidth" Value="21" />
-            <Setter Property="MinHeight" Value="21" />
-            <Setter Property="SnapsToDevicePixels" Value="True" />
-            <Setter Property="Tag" Value="IsInternalTabItem" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type TabItem}">
-                        <Grid Name="Transform">
-                            <syncfusion:ContextMenuBorder Name="Border" Background="{TemplateBinding Background}"
-                              BorderBrush="{TemplateBinding BorderBrush}"BorderThickness="1">
-                                <Border.ContextMenu>
-                                    <syncfusion:CustomContextMenu Name="PART_ContextMenu"  Focusable="false"  />
-                                </Border.ContextMenu>
-                                <Border.LayoutTransform>
-                                    <RotateTransform Angle="0" />
-                                </Border.LayoutTransform>
-                                <DockPanel LastChildFill="True">
-                                    <Image DockPanel.Dock="Left" Margin="1" Height="13" Style="{DynamicResource FileIcons}"/>
-                                    <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Center"
-                  ContentSource="Header" Margin="2,2,2,2" RecognizesAccessKey="True"
-                  ContentTemplate="{Binding Path=(TabItem.Content).(Syncfusion:DockingManager.HeaderTemplate),
-                  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TabItem}}}"/>
-                                </DockPanel>
-                            </syncfusion:ContextMenuBorder>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-            <syncfusion:DockingManager.Resources>
-                <DataTemplate x:Key="RedDocumentDockingHeader" DataType="{x:Type docvm:RedDocumentViewModel}">
-                    <DockPanel ToolTip="{Binding RelativePath}">
-                        <Image x:Name="DockIcon" Width="13" Margin="0,0,4,0" Source="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" Style="{DynamicResource FileIcons}" />
-                        <TextBlock
-                        x:Name="TemplateTextBlock"
-                        Grid.Column="1"
-                        Margin="0,0,0,1"
-                        Foreground="White"
-                        Text="{TemplateBinding}"
-                        ToolTip="{Binding RelativePath}"/>
-                    </DockPanel>
-                </DataTemplate>
-                <DataTemplate x:Key="BasicDockingHeader">
-                    <DockPanel>
-                        <TextBlock
-                        x:Name="TemplateTextBlock"
-                        Grid.Column="1"
-                        Margin="0,0,0,1"
-                        Foreground="White"
-                        Text="{TemplateBinding}"/>
-                    </DockPanel>
-                </DataTemplate>
-                <converters1:DockingManagerHeaderTemplateSelector x:Key="dockingManagerHeaderTemplateSelector"/>
-            </syncfusion:DockingManager.Resources>
-    </UserControl.Resources-->
     <Grid>
 
-        <syncfusion:DockingManager x:Name="PART_DockingManager"
-                                   ActiveWindowChanged="PART_DockingManager_ActiveWindowChanged_1"
-                                   Background="Transparent"
-                                   DocumentCloseButtonType="Extended"
-                                   DraggingType="BorderDragging"
-                                   PersistState="True"
-                                   UseDocumentContainer="True"
-                                   Loaded="PART_DockingManager_Loaded"
-                                   CloseButtonClick="PART_DockingManagerOnCloseButtonClick"
-                                   DockStateChanging="PART_DockingManagerOnDockStateChanging"
-                                   DocumentTabItemStyle="{StaticResource RedDocumentTabItemExtStyle}">
-
-            <!--syncfusion:DockingManager.DocumentTabItemStyle>
-                <Style TargetType="{x:Type syncfusion:TabItemExt}">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type syncfusion:TabItemExt}">
-                                <DockPanel ToolTip="{Binding RelativePath}" x:Name="PART_DockPanel">
-                                    <Image x:Name="DockIcon" Width="13" Margin="0,0,4,0" Source="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" Style="{DynamicResource FileIcons}" DataContext="" />
-                                    <ToggleButton
-                                        Name="PART_CloseButton" Width="15" Height="14" Margin="1,0,10,0" VerticalAlignment="Top"                                 
-                                        DockPanel.Dock="Right" 
-                                        Focusable="False" 
-                                        Visibility="Collapsed"
-                                        Command="syncfusion:TabControlCommands.CloseTabItem" />
-                                    <Image
-                                        x:Name="PART_Image"
-					                    Source="{TemplateBinding syncfusion:TabControlExt.Image}"
-					                    Height="{TemplateBinding syncfusion:TabControlExt.ImageHeight}"
-					                    Width="{TemplateBinding syncfusion:TabControlExt.ImageWidth}"
-					                    Stretch="Fill" Margin="{TemplateBinding IconMargin}"
-					                    SnapsToDevicePixels="True" VerticalAlignment="Center"
-                                        DockPanel.Dock="{Binding Path=(syncfusion:TabControlExt.ImageAlignment), Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"/>
-                                    <ContentPresenter
-                                        ContentSource="Header" x:Name="Content" Margin="{TemplateBinding HeaderMargin}" TextElement.Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabItemExt}},FallbackValue=Transparent}" 
-                                        RecognizesAccessKey="False" Content="{TemplateBinding HeaderedContentControl.Header}" 
-                                        ContentTemplate="{TemplateBinding HeaderedContentControl.HeaderTemplate}"                                           
-                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
-                                        SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
-                                    <ContentPresenter
-                                        ContentSource="Header" x:Name="PART_EditHeader" Visibility="Collapsed"
-                                        Margin="{TemplateBinding HeaderMargin}" TextElement.Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:TabItemExt}},FallbackValue=Transparent}" 
-                                        RecognizesAccessKey="True" Content="{TemplateBinding HeaderedContentControl.Header}"               
-                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
-                                        SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
-                                </DockPanel>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
+        <syncfusion:DockingManager
+            x:Name="PART_DockingManager"
+            ActiveWindowChanged="PART_DockingManager_ActiveWindowChanged_1"
+            Background="Transparent"
+            DocumentCloseButtonType="Extended"
+            DraggingType="BorderDragging"
+            PersistState="True"
+            UseDocumentContainer="True"
+            Loaded="PART_DockingManager_Loaded"
+            CloseButtonClick="PART_DockingManagerOnCloseButtonClick"
+            DockStateChanging="PART_DockingManagerOnDockStateChanging">
+            <syncfusion:DockingManager.Style>
+                <Style TargetType="{x:Type syncfusion:DockingManager}" BasedOn="{StaticResource SyncfusionDockingManagerStyle}">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="TabItemsBackground" Value="{StaticResource MahApps.Brushes.Accent3}" />
+                    <Setter Property="TabItemBackgroundSelected" Value="{StaticResource MahApps.Brushes.Accent2}" />
+                    <Setter Property="ElementBorderThickness" Value="1,0,1,1" />
+                    <Setter Property="TabPanelBackground" Value="Transparent" />
+                    <Setter Property="TabPanelBorderThickness" Value="0" />
+                    <Setter Property="TabItemsForeground" Value="#ffffff" />
+                    <Setter Property="TabItemForegroundSelected" Value="#ffffff" />
+                    <Setter Property="HeaderBackground" Value="{StaticResource MahApps.Brushes.Accent4}" />
+                    <Setter Property="SelectedHeaderBackground" Value="{StaticResource MahApps.Brushes.Accent2}" />
+                    <Setter Property="HeaderForeground" Value="#ffffff" />
+                    <Setter Property="HeaderForegroundSelected" Value="#ffffff" />
+                    <Setter Property="HeaderMouseOverBackground" Value="{StaticResource MahApps.Brushes.Accent3}" />
+                    <Setter Property="HeaderBorderThickness" Value="0,1,0,1" />
+                    <Setter Property="TabItemBorderThickness" Value="1,1,0,0" />
                 </Style>
-            </syncfusion:DockingManager.DocumentTabItemStyle-->
-            <!--ContentControl-->
-            <!--/ContentControl-->
-            <!--syncfusion:DockingManager.HeaderTemplate>
+            </syncfusion:DockingManager.Style>
+            <syncfusion:DockingManager.DocumentTabControlStyle>
+                <Style TargetType="{x:Type syncfusion:DocumentTabControl}" BasedOn="{StaticResource SyncfusionDocumentTabControlExtStyle}">
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="0,1,0,0" />
+                    <Setter Property="TabItemHoverForeground" Value="#ffffff" />
+                    <Setter Property="TabItemSelectedBackground" Value="{StaticResource MahApps.Brushes.Accent2}" />
+                    <Setter Property="TabItemSelectedForeground" Value="#ffffff" />
+                    <Setter Property="TabPanelBackground" Value="Transparent" />
+                    <Setter Property="TabItemSelectedBorderBrush" Value="#333333" />
+                    <Setter Property="TabItemHoverBorderBrush" Value="#333333" />
+                </Style>
+            </syncfusion:DockingManager.DocumentTabControlStyle>
+            <syncfusion:DockingManager.DocumentTabItemStyle>
+                <Style TargetType="{x:Type tools_controls:TabItemExt}" BasedOn="{StaticResource SyncfusionDocumentTabItemExtStyle}">
+                    <Setter Property="Background" Value="{StaticResource MahApps.Brushes.Accent4}" />
+                    <Setter Property="HoverBackground" Value="{StaticResource MahApps.Brushes.Accent3}" />
+                    <Setter Property="Foreground" Value="#ffffff" />
+                </Style>
+            </syncfusion:DockingManager.DocumentTabItemStyle>
+            <syncfusion:DockingManager.TabItemStyle>
+                <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabItemStyle}">
+                    <Setter Property="Background" Value="{StaticResource MahApps.Brushes.Accent4}" />
+                    <Setter Property="Foreground" Value="#ffffff" />
+                </Style>
+            </syncfusion:DockingManager.TabItemStyle>
+            <syncfusion:DockingManager.HeaderTemplate>
                 <DataTemplate>
-                    <DockPanel>
-                        <TextBlock
-                                x:Name="TemplateTextBlock"
+                    <Grid>
+                        <DockPanel
+                            x:Name="RedDocumentHeader"
+                            DataContext="{Binding Content.Content.Content, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContentControl}}}"
+                               ToolTip="{Binding RelativePath}">
+                            <Image x:Name="DockIcon" Width="13" Margin="0,1,6,0"
+                               Style="{DynamicResource FileIcons}" />
+                            <TextBlock
                                 Grid.Column="1"
                                 Margin="0,0,0,1"
                                 Foreground="White"
-                                Text="{Binding}" />
-                    </DockPanel>
-                </DataTemplate>
-            </syncfusion:DockingManager.HeaderTemplate-->
-            <!--syncfusion:DockingManager.DocumentTabItemStyle>
-                <Style TargetType="Image">
-                    <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
-                </Style>
-            </syncfusion:DockingManager.DocumentTabItemStyle-->
-            <!--syncfusion:DockingManager.Icon>
-                <ImageBrush ImageSource="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" Stretch="Uniform" />
-            </syncfusion:DockingManager.Icon-->
-
-            <!--DockedElementTabbedHost.HostedElement.Content == RedDocumentViewModel-->
-            <!--Rectangle Fill="White" Margin="0,0,4,0" Width="13" Height="13">
-                                <Rectangle.OpacityMask>
-                                    <ImageBrush Stretch="Uniform" ImageSource="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
-                                </Rectangle.OpacityMask>
-                            </Rectangle-->
-            <!--syncfusion:DockingManager.HeaderTemplate>
-                    <DataTemplate DataType="{x:Type docvm:RedDocumentViewModel}">
-                    <DockPanel ToolTip="{Binding RelativePath}">
-                        <Image Visibility="Collapsed" x:Name="DockIcon" Width="13" Margin="0,0,4,0" Source="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" Style="{DynamicResource FileIcons}" />
-                        <TextBlock
-                                x:Name="TemplateTextBlock"
+                                Text="{Binding Path=Header}"
+                                 />
+                        </DockPanel>
+                        <DockPanel
+                            x:Name="RegularHeader"
+                            Visibility="Collapsed">
+                            <TextBlock
                                 Grid.Column="1"
-                                Margin="0,0,0,1"
+                                Margin="2,0,0,1"
                                 Foreground="White"
                                 Text="{Binding}"
-                                ToolTip="{Binding RelativePath}"/>
-                    </DockPanel>
+                                 />
+                        </DockPanel>
+                    </Grid>
                     <DataTemplate.Triggers>
-                        <DataTrigger Binding="{Binding Path=Content, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:DockedElementTabbedHost}}}" Value="RedDocumentViewModel">
-                            <Setter Property="Visibility" Value="Visible" TargetName="DockIcon"/>
+                        <DataTrigger Binding="{Binding Content.Content.Content.Extension, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContentControl}}}" Value="{x:Null}">
+                            <Setter Property="UIElement.Visibility" TargetName="RegularHeader" Value="Visible"/>
+                            <Setter Property="UIElement.Visibility" TargetName="RedDocumentHeader" Value="Collapsed"/>
                         </DataTrigger>
                     </DataTemplate.Triggers>
                 </DataTemplate>
-            </syncfusion:DockingManager.HeaderTemplate-->
+            </syncfusion:DockingManager.HeaderTemplate>
         </syncfusion:DockingManager>
     </Grid>
 </UserControl>

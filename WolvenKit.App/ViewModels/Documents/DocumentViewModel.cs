@@ -3,7 +3,6 @@ using System.IO;
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Functionality.Commands;
@@ -25,10 +24,6 @@ namespace WolvenKit.ViewModels.Documents
         public DocumentViewModel(string path) : this()
         {
             Header = Path.GetFileName(path);
-            //string packUri = "pack://application:,,,/AssemblyName;component/WolvenKit/Views/Shell/TaskBarIcon.ico";
-            //IconSource = new ImageSourceConverter().ConvertFromString(packUri) as ImageSource;
-            //IconSource = new BitmapImage(new Uri("WolvenKit/Views/Shell/TaskBarIcon.ico", UriKind.Relative));
-
             ContentId = path;
         }
 
