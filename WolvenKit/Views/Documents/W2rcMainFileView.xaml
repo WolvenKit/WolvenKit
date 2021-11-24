@@ -55,7 +55,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Grid Grid.Column="0" HorizontalAlignment="Stretch">
+            <Grid Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,3,0">
 
                 <Grid.Resources>
                     <Style x:Key="ChunkImportRadioButton" TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource BaseStyle}" >
@@ -78,8 +78,8 @@
                                     </Border>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsChecked" Value="true">
-                                            <Setter TargetName="BorderRoot" Property="BorderThickness" Value="0" />
-                                            <Setter TargetName="BorderRoot" Property="Background" Value="{DynamicResource MahApps.Brushes.Accent2}" />
+                                            <Setter TargetName="BorderRoot" Property="Background" Value="{DynamicResource MahApps.Brushes.Accent3}" />
+                                            <Setter TargetName="BorderRoot" Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Accent3}" />
                                         </Trigger>
                                         <Trigger Property="IsMouseOver" Value="true">
                                             <Setter TargetName="BorderRoot" Property="Background" Value="#222222" />
@@ -89,7 +89,7 @@
                                                 <Condition Property="IsChecked" Value="true" />
                                                 <Condition Property="IsMouseOver" Value="true" />
                                             </MultiTrigger.Conditions>
-                                            <Setter TargetName="BorderRoot" Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}" />
+                                            <Setter TargetName="BorderRoot" Property="Background" Value="{DynamicResource MahApps.Brushes.Accent2}" />
                                         </MultiTrigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -99,22 +99,35 @@
                 </Grid.Resources>
 
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <RadioButton Grid.Column="0" GroupName="ChunkImportSelect" Height="24" Width="Auto" Margin="0.5,0,0,0" IsChecked="True"
-                        Click="ChunksButton_OnClick" HorizontalAlignment="Stretch" Style="{StaticResource ChunkImportRadioButton}">
+                <RadioButton
+                    Grid.Column="0"
+                    GroupName="ChunkImportSelect"
+                    Height="24"
+                    Width="Auto"
+                    Margin="0,0,0,0"
+                    IsChecked="True"
+                    BorderThickness="1,1,0,1"
+                    BorderBrush="#373737"
+                    Click="ChunksButton_OnClick"
+                    Style="{StaticResource RadioGroupItemHorizontalFirst}"
+                    hc:VisualElement.HighlightBackground="{StaticResource WolvenKitSammyRedShaded}"
+                    hc:VisualElement.HighlightBorderBrush="{StaticResource WolvenKitSammyRedShaded}">
                     <RadioButton.Content>
-                        <Grid Background="Transparent">
+                        <Grid Background="Transparent" Margin="0,0,2,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="18"/>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <iconPacks:PackIconVaadinIcons Kind="Cubes"
-                                Grid.Column="1" Height="13" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                Grid.Column="1" Height="13" Width="13" VerticalAlignment="Center"/>
                             <TextBlock
                                 x:Name="ChunksLabel"
                                 Grid.Column="2"
@@ -124,10 +137,21 @@
                         </Grid>
                     </RadioButton.Content>
                 </RadioButton>
-                <RadioButton Grid.Column="1" GroupName="ChunkImportSelect" x:Name="ImportsButton"  Height="24" Width="Auto" Margin="0.5,0,1.5,0"
-                             Click="ImportsButton_OnClick" HorizontalAlignment="Stretch" Style="{StaticResource ChunkImportRadioButton}">
+                <RadioButton
+                    Grid.Column="1"
+                    GroupName="ChunkImportSelect"
+                    x:Name="ImportsButton"
+                    Height="24"
+                    Width="Auto"
+                    Margin="0,0,0,0"
+                    BorderThickness="0,1,1,1"
+                    BorderBrush="#373737"
+                    Click="ImportsButton_OnClick"
+                    Style="{StaticResource RadioGroupItemHorizontalLast}"
+                    hc:VisualElement.HighlightBackground="{StaticResource WolvenKitSammyRedShaded}"
+                    hc:VisualElement.HighlightBorderBrush="{StaticResource WolvenKitSammyRedShaded}">
                     <RadioButton.Content>
-                        <Grid Background="Transparent">
+                        <Grid Background="Transparent" Margin="0,0,2,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="17"/>
@@ -135,7 +159,7 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <iconPacks:PackIconMaterialDesign Kind="ImportExport" 
-                                Grid.Column="1" Height="13" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                Grid.Column="1" Height="13" Width="13" VerticalAlignment="Center"/>
                             <TextBlock
                                 x:Name="ImportsLabel"
                                 Grid.Column="2"
@@ -145,22 +169,64 @@
                         </Grid>
                     </RadioButton.Content>
                 </RadioButton>
+                <Button
+                    Grid.Column="3"
+                    Margin="3,0,0,0"
+                    Style="{StaticResource ButtonDefault}"
+                    ToolTip="Add Chunk"
+                    Width="24"
+                    Padding="0"
+                    Height="24">
+                    <Grid Margin="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="11"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <iconPacks:PackIconMaterialDesign Kind="Add"
+                                Grid.Column="0" Height="11" Width="11" VerticalAlignment="Center"/>
+                    </Grid>
+                </Button>
             </Grid>
 
             <Grid Grid.Row="1"  x:Name="ChunksView">
                 <ListView x:Name="ChunksTreeView"
-                          Margin="0,2,1.5,0"
+                          Margin="0,3,0,0"
                           Padding="0"
-                          Style="{DynamicResource ListBoxBaseStyle}"
-                          BorderThickness="0">
+                          BorderThickness="0"
+                          Background="Transparent"
+                          hc:VisualElement.HighlightBackground="{StaticResource WolvenKitSammyRedShaded}"
+                          hc:VisualElement.HighlightBrush="{StaticResource WolvenKitSammyRedShaded}">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem" BasedOn="{StaticResource MahApps.Styles.ListViewItem}">
                             <Setter Property="Height" Value="20" />
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="BorderThickness" Value="0,0,0,1" />
+                            <Setter Property="BorderBrush" Value="#373737" />
+                            <Setter Property="Margin" Value="0,0,0,-1" />
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="BorderThickness" Value="0,1,0,1" />
+                                    <Setter Property="Margin" Value="0,-1,0,0"/>
+                                    <Setter Property="Padding" Value="4,1,4,-1"/>
+                                </Trigger>
+                            </Style.Triggers>
                         </Style>
                     </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
                         <DataTemplate DataType="{x:Type shell:ChunkViewModel}">
-                            <TextBlock Text="{Binding Name}" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding Name}"/>
+                                <Button x:Name="DeleteButton" Grid.Column="1" Visibility="Collapsed" Style="{StaticResource ButtonDefault}" ToolTip="Add Chunk" Height="16" Width="16" Padding="0">
+                                    <Button.Content>
+                                        <iconPacks:PackIconMaterialDesign Kind="Delete"
+                                Grid.Column="0" Height="8" Width="8" VerticalAlignment="Center"/>
+                                    </Button.Content>
+                                </Button>
+                            </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>

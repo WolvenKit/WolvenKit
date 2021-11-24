@@ -9,6 +9,10 @@
     <SolidColorBrush x:Key="CustomSliderBackgroundBrush" Color="#55ffffff" />
     <SolidColorBrush x:Key="CustomSliderHighlightBrush" Color="#FFEFEFEF" />
 
+    <SolidColorBrush x:Key="WolvenKitSammyRed" Color="#DF2935" />
+    <SolidColorBrush x:Key="WolvenKitSammyRedShaded" Color="#B71C34" />
+    <SolidColorBrush x:Key="WolvenKitSammyBlack" Color="#292929" />
+
     <LinearGradientBrush x:Key="ShadedBackgroundBrush" StartPoint="0,0" EndPoint="0,1">
         <GradientStopCollection>
             <GradientStop Offset="0.0" Color="#00000000" />

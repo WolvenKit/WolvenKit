@@ -156,7 +156,7 @@
                             AutoExpandMode="RootNodesExpanded"
                             AutoGenerateColumns="False"
                             ChildPropertyName="RedFileSystemModels"
-                            ColumnSizer="FillColumn"
+                            ColumnSizer="Star"
                             FilterLevel="All"
                             SelectionChanged="LeftNavigation_OnSelectionChanged"
                             ExpandStateMappingName="IsExpanded"
@@ -188,6 +188,7 @@
                                     ImmediateUpdateColumnFilter="True"
                                     MappingName="Name"
                                     ShowToolTip="True"
+                                    ColumnSizer="Star"
                                     ToolTipTemplate="{StaticResource TemplateToolTip}"
                                     HeaderText="">
                                     

@@ -32,7 +32,7 @@
                     <Setter Property="Background" Value="Transparent" />
                     <Setter Property="TabItemsBackground" Value="{StaticResource MahApps.Brushes.Accent3}" />
                     <Setter Property="TabItemBackgroundSelected" Value="{StaticResource MahApps.Brushes.Accent2}" />
-                    <Setter Property="ElementBorderThickness" Value="1,0,1,1" />
+                    <Setter Property="ElementBorderThickness" Value="1,1,1,1" />
                     <Setter Property="TabPanelBackground" Value="Transparent" />
                     <Setter Property="TabPanelBorderThickness" Value="0" />
                     <Setter Property="TabItemsForeground" Value="#ffffff" />
@@ -42,8 +42,8 @@
                     <Setter Property="HeaderForeground" Value="#ffffff" />
                     <Setter Property="HeaderForegroundSelected" Value="#ffffff" />
                     <Setter Property="HeaderMouseOverBackground" Value="{StaticResource MahApps.Brushes.Accent3}" />
-                    <Setter Property="HeaderBorderThickness" Value="0,1,0,1" />
-                    <Setter Property="TabItemBorderThickness" Value="1,1,0,0" />
+                    <Setter Property="HeaderBorderThickness" Value="0,0,0,1" />
+                    <Setter Property="TabItemBorderThickness" Value="0,0,0,0" />
                 </Style>
             </syncfusion:DockingManager.Style>
             <syncfusion:DockingManager.DocumentTabControlStyle>

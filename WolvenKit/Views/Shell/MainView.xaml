@@ -56,9 +56,10 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <shell:RibbonView Margin="0,0,0,0" Grid.Row="0" Panel.ZIndex="5"/>
+        <shell:RibbonView Margin="0" Grid.Row="0" Panel.ZIndex="5" BorderThickness="0,0,0,1" BorderBrush="#131313"/>
 
         <shell:DockingAdapter
+            Margin="5,3,5,5"
             x:Name="dockingAdapter"
             Grid.Row="1"
 

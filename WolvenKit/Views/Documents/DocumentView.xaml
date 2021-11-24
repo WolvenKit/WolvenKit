@@ -42,7 +42,7 @@
                                   CloseButtonType="Hide"
                                   EnableLabelEdit="False"
                                   BorderThickness="0"
-                                  Padding="0,2,0,0"
+                                  Padding="0,3,0,0"
                        >
         </syncfusion:TabControlExt>
         
