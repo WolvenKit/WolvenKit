@@ -735,8 +735,11 @@ namespace WolvenKit.ViewModels.Shell
             //var result = await fileViewModel.OpenFileAsync(fullPath);
             var result = fileViewModel.OpenFile(fullPath);
 
+
             if (result)
             {
+                _loggerService.Success($"Opening File: {fullPath}");
+
                 // TODO: this is not threadsafe
                 DockedViews.Add(fileViewModel);
 
@@ -748,6 +751,7 @@ namespace WolvenKit.ViewModels.Shell
                 return fileViewModel;
             }
 
+            _loggerService.Warning($"Unable to open file: {fullPath}");
             return null;
         }
 
