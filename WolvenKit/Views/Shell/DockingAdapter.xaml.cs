@@ -18,6 +18,7 @@ using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Functionality.Layout;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.ViewModels.Documents;
 using WolvenKit.ViewModels.Shell;
@@ -356,12 +357,14 @@ namespace WolvenKit.Views.Shell
                     propertiesViewModel.SetToNullAndResetVisibility();
                     propertiesViewModel.PE_FileInfoVisible = true;
                     propertiesViewModel.PE_SelectedItem = pevm.SelectedItem;
+                    _ = propertiesViewModel.ExecuteSelectFile(pevm.SelectedItem);
                 }
                 else if (content.Content is AssetBrowserViewModel abvm)
                 {
                     propertiesViewModel.SetToNullAndResetVisibility();
                     propertiesViewModel.AB_FileInfoVisible = true;
                     propertiesViewModel.AB_SelectedItem = abvm.RightSelectedItem;
+                    _ = propertiesViewModel.ExecuteSelectFile(abvm.RightSelectedItem as FileModel);
                 }
 
                 if (content.Content != null) {
