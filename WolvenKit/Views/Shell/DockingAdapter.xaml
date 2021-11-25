@@ -20,7 +20,8 @@
             x:Name="PART_DockingManager"
             ActiveWindowChanged="PART_DockingManager_ActiveWindowChanged_1"
             Background="Transparent"
-            DocumentCloseButtonType="Extended"
+            DocumentCloseButtonType="Both"
+            CloseTabOnMiddleClick="True"
             DraggingType="BorderDragging"
             PersistState="True"
             UseDocumentContainer="True"
@@ -30,48 +31,62 @@
             <syncfusion:DockingManager.Style>
                 <Style TargetType="{x:Type syncfusion:DockingManager}" BasedOn="{StaticResource SyncfusionDockingManagerStyle}">
                     <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="TabItemsBackground" Value="{StaticResource MahApps.Brushes.Accent3}" />
-                    <Setter Property="TabItemBackgroundSelected" Value="{StaticResource MahApps.Brushes.Accent2}" />
+                    <Setter Property="TabItemsBackground" Value="{StaticResource ContentBackgroundAlt2}" />
+                    <Setter Property="TabItemBackgroundSelected" Value="#373737" />
                     <Setter Property="ElementBorderThickness" Value="1,1,1,1" />
-                    <Setter Property="TabPanelBackground" Value="Transparent" />
-                    <Setter Property="TabPanelBorderThickness" Value="0" />
+                    <Setter Property="TabPanelBackground" Value="#373737" />
+                    <Setter Property="TabPanelBorderThickness" Value="1" />
+                    <Setter Property="TabPanelBorderBrush" Value="{StaticResource BorderAlt}" />
                     <Setter Property="TabItemsForeground" Value="#ffffff" />
                     <Setter Property="TabItemForegroundSelected" Value="#ffffff" />
-                    <Setter Property="HeaderBackground" Value="{StaticResource MahApps.Brushes.Accent4}" />
-                    <Setter Property="SelectedHeaderBackground" Value="{StaticResource MahApps.Brushes.Accent2}" />
+                    <Setter Property="HeaderBackground" Value="{StaticResource ContentBackgroundAlt2}" />
+                    <Setter Property="SelectedHeaderBackground" Value="#373737" />
                     <Setter Property="HeaderForeground" Value="#ffffff" />
                     <Setter Property="HeaderForegroundSelected" Value="#ffffff" />
-                    <Setter Property="HeaderMouseOverBackground" Value="{StaticResource MahApps.Brushes.Accent3}" />
+                    <Setter Property="HeaderMouseOverBackground" Value="{StaticResource ContentBackgroundAlt3}" />
                     <Setter Property="HeaderBorderThickness" Value="0,0,0,1" />
                     <Setter Property="TabItemBorderThickness" Value="0,0,0,0" />
+                    <Setter Property="Margin" Value="0" />
                 </Style>
             </syncfusion:DockingManager.Style>
             <syncfusion:DockingManager.DocumentTabControlStyle>
                 <Style TargetType="{x:Type syncfusion:DocumentTabControl}" BasedOn="{StaticResource SyncfusionDocumentTabControlExtStyle}">
                     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                     <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="BorderThickness" Value="0,1,0,0" />
+                    <Setter Property="TabItemSelectedBackground" Value="#373737" />
+                    <Setter Property="TabItemHoverBackground" Value="{StaticResource ContentBackgroundAlt3}" />
                     <Setter Property="TabItemHoverForeground" Value="#ffffff" />
-                    <Setter Property="TabItemSelectedBackground" Value="{StaticResource MahApps.Brushes.Accent2}" />
                     <Setter Property="TabItemSelectedForeground" Value="#ffffff" />
-                    <Setter Property="TabPanelBackground" Value="Transparent" />
+                    <Setter Property="TabPanelBackground" Value="{StaticResource ContentBackgroundAlt2}" />
+                    <Setter Property="BorderThickness" Value="0,1,0,0" />
                     <Setter Property="TabItemSelectedBorderBrush" Value="#333333" />
                     <Setter Property="TabItemHoverBorderBrush" Value="#333333" />
                 </Style>
             </syncfusion:DockingManager.DocumentTabControlStyle>
             <syncfusion:DockingManager.DocumentTabItemStyle>
                 <Style TargetType="{x:Type tools_controls:TabItemExt}" BasedOn="{StaticResource SyncfusionDocumentTabItemExtStyle}">
-                    <Setter Property="Background" Value="{StaticResource MahApps.Brushes.Accent4}" />
-                    <Setter Property="HoverBackground" Value="{StaticResource MahApps.Brushes.Accent3}" />
+                    <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
+                    <Setter Property="HoverBackground" Value="{StaticResource ContentBackgroundAlt3}" />
                     <Setter Property="Foreground" Value="#ffffff" />
                 </Style>
             </syncfusion:DockingManager.DocumentTabItemStyle>
             <syncfusion:DockingManager.TabItemStyle>
                 <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabItemStyle}">
-                    <Setter Property="Background" Value="{StaticResource MahApps.Brushes.Accent4}" />
+                    <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
                     <Setter Property="Foreground" Value="#ffffff" />
                 </Style>
             </syncfusion:DockingManager.TabItemStyle>
+            <syncfusion:DockingManager.TabControlStyle>
+                <Style TargetType="{x:Type TabControl}" BasedOn="{StaticResource DockTabControlStyle}">
+                    <Setter Property="Margin" Value="0" />
+                </Style>
+            </syncfusion:DockingManager.TabControlStyle>
+            <syncfusion:DockingManager.DockedElementTabbedHostStyle>
+                <Style TargetType="{x:Type tools_controls:DockedElementTabbedHost}" BasedOn="{StaticResource SyncfusionDockedElementTabbedHostStyle}">
+                    <Setter Property="Margin" Value="0" />
+                    <Setter Property="Padding" Value="0" />
+                </Style>
+            </syncfusion:DockingManager.DockedElementTabbedHostStyle>
             <syncfusion:DockingManager.HeaderTemplate>
                 <DataTemplate>
                     <Grid>
@@ -79,12 +94,12 @@
                             x:Name="RedDocumentHeader"
                             DataContext="{Binding Content.Content.Content, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContentControl}}}"
                                ToolTip="{Binding RelativePath}">
-                            <Image x:Name="DockIcon" Width="13" Margin="0,1,6,0"
+                            <Image x:Name="DockIcon" Height="15" Margin="0,0,6,0"
                                Style="{DynamicResource FileIcons}" />
                             <TextBlock
                                 Grid.Column="1"
-                                Margin="0,0,0,1"
-                                Foreground="White"
+                                Margin="0,0,5,1"
+                                Foreground="{StaticResource ContentForeground}"
                                 Text="{Binding Path=Header}"
                                  />
                         </DockPanel>
@@ -93,8 +108,8 @@
                             Visibility="Collapsed">
                             <TextBlock
                                 Grid.Column="1"
-                                Margin="2,0,0,1"
-                                Foreground="White"
+                                Margin="2,0,5,1"
+                                Foreground="{StaticResource ContentForeground}"
                                 Text="{Binding}"
                                  />
                         </DockPanel>

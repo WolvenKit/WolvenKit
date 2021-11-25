@@ -203,6 +203,12 @@
     <Content Include="Resources\Media\Images\Icons\Files\bnk.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Media\Images\Icons\Files\reds.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Media\Images\Icons\Files\tweak.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Media\t1.kark">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1712,6 +1718,7 @@
     <None Remove="Resources\Media\Images\Icons\Files\redfur.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\redgame.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\redicsv.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\reds.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\redswf.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\redwpset.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\regionset.svg" />
@@ -1729,6 +1736,7 @@
     <None Remove="Resources\Media\Images\Icons\Files\streamingworld.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\subs.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\terrainsetup.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\tweak.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\Usm.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\w2animev.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\w2em.svg" />

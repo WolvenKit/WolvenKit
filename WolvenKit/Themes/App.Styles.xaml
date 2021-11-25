@@ -415,11 +415,11 @@
     <Style x:Key="FileIcons" TargetType="Image">
         <Style.Triggers>
 
-            <DataTrigger Binding="{Binding Extension}" Value="TWEAK">
-                <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/default.svg}" />
+            <DataTrigger Binding="{Binding Extension}" Value="tweak">
+                <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/tweak.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Extension}" Value="REDS">
-                <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/default.svg}" />
+            <DataTrigger Binding="{Binding Extension}" Value="reds">
+                <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/reds.svg}" />
             </DataTrigger>
             <DataTrigger Binding="{Binding Extension}" Value="fbx">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />

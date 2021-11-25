@@ -116,8 +116,8 @@
                     BorderBrush="#373737"
                     Click="ChunksButton_OnClick"
                     Style="{StaticResource RadioGroupItemHorizontalFirst}"
-                    hc:VisualElement.HighlightBackground="{StaticResource WolvenKitSammyRedShaded}"
-                    hc:VisualElement.HighlightBorderBrush="{StaticResource WolvenKitSammyRedShaded}">
+                    hc:VisualElement.HighlightBackground="#373737"
+                    hc:VisualElement.HighlightBorderBrush="#373737">
                     <RadioButton.Content>
                         <Grid Background="Transparent" Margin="0,0,2,0">
                             <Grid.ColumnDefinitions>
@@ -148,8 +148,8 @@
                     BorderBrush="#373737"
                     Click="ImportsButton_OnClick"
                     Style="{StaticResource RadioGroupItemHorizontalLast}"
-                    hc:VisualElement.HighlightBackground="{StaticResource WolvenKitSammyRedShaded}"
-                    hc:VisualElement.HighlightBorderBrush="{StaticResource WolvenKitSammyRedShaded}">
+                    hc:VisualElement.HighlightBackground="#373737"
+                    hc:VisualElement.HighlightBorderBrush="#373737">
                     <RadioButton.Content>
                         <Grid Background="Transparent" Margin="0,0,2,0">
                             <Grid.ColumnDefinitions>
@@ -174,7 +174,7 @@
                     Margin="3,0,0,0"
                     Style="{StaticResource ButtonDefault}"
                     ToolTip="Add Chunk"
-                    Width="24"
+                    Width="32"
                     Padding="0"
                     Height="24">
                     <Grid Margin="0">
@@ -233,13 +233,41 @@
             </Grid>
 
             <Grid Grid.Row="1" x:Name="ImportsView" Visibility="Collapsed">
-                <ListView x:Name="ImportsListView" Margin="0,2,2,0" Style="{StaticResource ListBoxBaseStyle}" BorderThickness="0">
-
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn DisplayMemberBinding="{Binding DepotPathStr}" Header="Name" />
-                        </GridView>
-                    </ListView.View>
+                <ListView x:Name="ImportsListView" Margin="0,3,0,0" Style="{StaticResource ListBoxBaseStyle}" BorderThickness="0"
+                          Background="Transparent">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem" BasedOn="{StaticResource MahApps.Styles.ListViewItem}">
+                            <Setter Property="Height" Value="20" />
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="BorderThickness" Value="0,0,0,1" />
+                            <Setter Property="BorderBrush" Value="#373737" />
+                            <Setter Property="Margin" Value="0,0,0,-1" />
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="BorderThickness" Value="0,1,0,1" />
+                                    <Setter Property="Margin" Value="0,-1,0,0"/>
+                                    <Setter Property="Padding" Value="4,1,4,-1"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate DataType="{x:Type shell:ChunkViewModel}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding}"/>
+                                <Button x:Name="DeleteButton" Grid.Column="1" Visibility="Collapsed" Style="{StaticResource ButtonDefault}" ToolTip="Add Chunk" Height="16" Width="16" Padding="0">
+                                    <Button.Content>
+                                        <iconPacks:PackIconMaterialDesign Kind="Delete"
+                                Grid.Column="0" Height="8" Width="8" VerticalAlignment="Center"/>
+                                    </Button.Content>
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
 
                     <hc:Interaction.Triggers>
                         <hc:EventTrigger EventName="MouseDoubleClick">

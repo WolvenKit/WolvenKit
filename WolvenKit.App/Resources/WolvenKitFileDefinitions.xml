@@ -7,7 +7,7 @@
         <AddFileModel>
           <Name>Redscript file</Name>
           <Description>A blank redscript file</Description>
-          <Extension>REDS</Extension>
+          <Extension>reds</Extension>
           <Type>Redscript</Type>
           <Template></Template>
         </AddFileModel>
@@ -19,16 +19,28 @@
         <AddFileModel>
           <Name>Tweak file</Name>
           <Description>A blank tweak delta file</Description>
-          <Extension>TWEAK</Extension>
+          <Extension>tweak</Extension>
           <Type>Tweak</Type>
           <Template></Template>
         </AddFileModel>
         <AddFileModel>
           <Name>Vehicle Template</Name>
           <Description>The default records and flats for a vehicle</Description>
-          <Extension>TWEAK</Extension>
+          <Extension>tweak</Extension>
           <Type>Tweak</Type>
           <Template>VehicleTemplate.tweak</Template>
+        </AddFileModel>
+      </Files>
+    </FileCategoryModel>
+    <FileCategoryModel>
+      <Name>CR2W Files</Name>
+      <Files>
+        <AddFileModel>
+          <Name>Texture file</Name>
+          <Description>An empty texture file</Description>
+          <Extension>xbm</Extension>
+          <Type>CBitmapTexture</Type>
+          <Template></Template>
         </AddFileModel>
       </Files>
     </FileCategoryModel>

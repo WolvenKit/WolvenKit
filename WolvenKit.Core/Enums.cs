@@ -27,12 +27,14 @@ namespace WolvenKit.Common
 
     public enum ERedScriptExtension
     {
-        SWIFT
+        swift,
+        reds,
+        redscript
     }
 
     public enum ETweakExtension
     {
-        TWEAK
+        tweak
     }
 
     public enum EUpdateChannel

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 256 256" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.3161;">
+    <g id="Artboard1" transform="matrix(1.04065,0,0,1.04065,-442.276,-85.3333)">
+        <rect x="425" y="82" width="246" height="246" style="fill:none;"/>
+        <clipPath id="_clip1">
+            <rect x="425" y="82" width="246" height="246"/>
+        </clipPath>
+        <g clip-path="url(#_clip1)">
+            <g id="File-outline_1_" transform="matrix(11.1818,0,0,11.327,-5197.39,-3765.68)">
+                <path d="M506,345.4L511.2,340.2L521.6,340.2L511.2,340.2L521.6,340.2L521.6,360.9L506,360.9L506,345.4Z" style="fill:url(#_Linear2);fill-rule:nonzero;stroke:rgb(10,10,10);stroke-width:1px;"/>
+            </g>
+            <g transform="matrix(11.7143,0,0,11.1818,419.143,69.5952)">
+                <path d="M21.5,8.931C21.5,8.693 21.316,8.5 21.089,8.5L0.911,8.5C0.684,8.5 0.5,8.693 0.5,8.931L0.5,18.069C0.5,18.307 0.684,18.5 0.911,18.5L21.089,18.5C21.316,18.5 21.5,18.307 21.5,18.069L21.5,8.931Z" style="fill:rgb(223,41,53);"/>
+            </g>
+            <g transform="matrix(10.2731,0,0,10.2731,415.287,260.074)">
+                <text x="2.757px" y="0px" style="font-family:'Calibri', sans-serif;font-size:12px;fill:white;">RED</text>
+            </g>
+        </g>
+    </g>
+    <defs>
+        <linearGradient id="_Linear2" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1.28138e-15,20.9265,-20.9265,1.28138e-15,513.801,340.003)"><stop offset="0" style="stop-color:white;stop-opacity:1"/><stop offset="1" style="stop-color:white;stop-opacity:1"/></linearGradient>
+    </defs>
+</svg>

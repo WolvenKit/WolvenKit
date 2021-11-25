@@ -15,7 +15,7 @@
     d:DataContext="{d:DesignInstance Type=documents:TweakDocumentViewModel}"
     d:DesignHeight="450" d:DesignWidth="800">
 
-    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}" Margin="3" >
+    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}" Margin="-2" >
 
         <Grid.Resources>
             <ResourceDictionary>
@@ -34,27 +34,29 @@
 
         <!-- TEXT EDITOR -->
         <avalonEdit:TextEditor
-            Margin="5"
+            Margin="0"
             ShowLineNumbers="True"
-                    FontFamily="Consolas"
-                    FontSize="10pt"
-                    Name="textEditor"
-                    Foreground="LightGray"
-                    Document = "{Binding Document, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                    SyntaxHighlighting="C#"
-                    />
+            FontFamily="Consolas"
+            FontSize="10pt"
+            Name="textEditor"
+            Foreground="{StaticResource ContentForeground}"
+            Background="{StaticResource ContentBackgroundAlt2}"
+            Document = "{Binding Document, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+            SyntaxHighlighting="{Binding HighlightingDefinition}"
+            />
 
         <!-- TEXT EDITOR -->
         <syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
 
         <!-- UI EDITOR -->
-        <Grid Grid.Column="2" Margin="5">
+        <Grid Grid.Column="2" Margin="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="1"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0" Background="{DynamicResource BorderBrush}">
+            <Grid Grid.Row="0">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -68,13 +70,13 @@
                     </Grid.ColumnDefinitions>
 
                     <hc:TextBox Grid.Column="0"
-                            Margin="13,0,0,0"
+                            Margin="13,0,0,3"
                             x:Name="ValueTextBox"
                             hc:InfoElement.Title="Value: "
                             hc:InfoElement.TitlePlacement="Left"/>
                     
                     <hc:ComboBox Grid.Column="1"
-                             Margin="10,0,0,0"
+                             Margin="10,0,3,3"
                              x:Name="TypeComboBox"
                              hc:InfoElement.Title="Type: "
                              hc:InfoElement.TitlePlacement="Left"
@@ -91,21 +93,21 @@
                     </Grid.ColumnDefinitions>
 
                     <hc:TextBox Grid.Column="0"
-                            Margin="10,0,0,0"
+                            Margin="10,3,3,3"
                             x:Name="NameTextBox"
                             hc:InfoElement.Title="Name: "
                             hc:InfoElement.TitlePlacement="Left"/>
 
-                    <Button Grid.Column="1" x:Name="AddButton" ToolTip="Add new flat" Click="AddButton_Click">
-                        <iconPacks:PackIconMaterial Kind="Plus" Foreground="Green"/>
+                    <Button Grid.Column="1" x:Name="AddButton" ToolTip="Add new flat" Click="AddButton_Click" Margin="0,0,3,0">
+                        <iconPacks:PackIconMaterial Kind="Plus" Foreground="{StaticResource ContentForeground}" Height="13" Width="13" />
                     </Button>
 
-                    <Button Grid.Column="2" x:Name="AddArrayButton" ToolTip="Add new array" Click="AddButton_Click">
-                        <iconPacks:PackIconMaterial Kind="PlusBoxMultiple" Foreground="Green"/>
+                    <Button Grid.Column="2" x:Name="AddArrayButton" ToolTip="Add new array" Click="AddButton_Click" Margin="0,0,3,0">
+                        <iconPacks:PackIconMaterial Kind="PlusBoxMultiple" Foreground="{StaticResource ContentForeground}" Height="13" Width="13" />
                     </Button>
 
-                    <Button Grid.Column="3" x:Name="AddGroupButton" ToolTip="Add new group" Click="AddButton_Click">
-                        <iconPacks:PackIconMaterial Kind="SelectGroup" Foreground="Purple"/>
+                    <Button Grid.Column="3" x:Name="AddGroupButton" ToolTip="Add new group" Click="AddButton_Click" Margin="0,0,3,0">
+                        <iconPacks:PackIconMaterial Kind="SelectGroup" Foreground="{StaticResource ContentForeground}" Height="13" Width="13" />
                     </Button>
                 </Grid>
                 
@@ -113,15 +115,17 @@
                 
             </Grid>
 
+            <Border Grid.Row="1" BorderThickness="0,1,0,0" BorderBrush="{StaticResource BorderAlt}"/>
 
-            <syncfusion:SfTreeView x:Name="FlatsTree" Grid.Row="1"
+            <syncfusion:SfTreeView x:Name="FlatsTree" Grid.Row="2"
                                    ChildPropertyName="Members"
+                                   BorderBrush="Transparent"
                                    ShowLines="True"
                                    ShowRootLines="True"
                                    AutoExpandMode="AllNodes">
                 <syncfusion:SfTreeView.ItemTemplate>
                     <DataTemplate>
-                        <Grid  Margin="1,0,0,0" VerticalAlignment="Center">
+                        <Grid  Margin="0,0,0,0" VerticalAlignment="Center">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
@@ -132,11 +136,13 @@
                             <TextBlock Grid.Column="1" Text="{Binding DisplayString}" VerticalAlignment="Center" />
 
                             <Button Grid.Column="2" x:Name="DeleteButton"
+                                    Style="{StaticResource ButtonCustom}"
                                     Click="DeleteButton_OnClick"
                                     syncfusion:FocusManagerHelper.FocusedElement="True"
+                                    Padding="8,0"
                                     Background="Transparent"
                                     BorderBrush="Transparent">
-                                <iconPacks:PackIconMaterial Kind="Delete" Foreground="Red" Height="12" />
+                                <iconPacks:PackIconMaterial Kind="Delete" Foreground="#DF2935" Height="12" />
                             </Button>
                         </Grid>
                     </DataTemplate>
