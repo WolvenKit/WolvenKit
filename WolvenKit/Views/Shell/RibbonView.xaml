@@ -1877,11 +1877,11 @@
         <Border
             Width="60"
             Height="28"
-            Margin="0,38,0,0"
+            Margin="0,0,0,1"
             BorderThickness="0,0,0,1"
             BorderBrush="#373737"
             HorizontalAlignment="Left"
-            VerticalAlignment="top"
+            VerticalAlignment="Bottom"
              />
 
         <!--  Sammy Container  -->
