@@ -39,7 +39,7 @@
           <Name>Texture file</Name>
           <Description>An empty texture file</Description>
           <Extension>xbm</Extension>
-          <Type>CBitmapTexture</Type>
+          <Type>Cr2w</Type>
           <Template></Template>
         </AddFileModel>
       </Files>
