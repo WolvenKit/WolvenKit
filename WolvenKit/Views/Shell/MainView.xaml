@@ -16,7 +16,7 @@
     TitleTextAlignment="Left"
     ResizeMode="CanResizeWithGrip"
     UseNativeChrome="True"
-    Title="WolvenKit"
+    Title="{Binding Title}"
     MinWidth="960"
     MinHeight="600"
     AllowsTransparency="True"

@@ -11,6 +11,7 @@
     xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:shell="clr-namespace:WolvenKit.ViewModels.Shell;assembly=WolvenKit.App"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
     >
 
     <!--  Resources  -->
@@ -78,17 +79,408 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <shared:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid
         Background="{DynamicResource ContentBackgroundAlt2}">
 
+
+        
         <Grid.RowDefinitions>
+            <RowDefinition MinHeight="52" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+
+        <!--  Grey Bar for the top -->
+        <Border
+            Height="33"
+            Margin="0,-33,0,0"
+            BorderThickness="0,1,0,0"
+            Background="{StaticResource ContentBackgroundAlt2}"
+            BorderBrush="{StaticResource BorderAlt}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="top"
+            Panel.ZIndex="0"
+             />
+
+        <!--  Light Grey border for the bottom -->
+        <Border
+            Grid.Row="2"
+            BorderThickness="0,0,0,1"
+            Background="{StaticResource ContentBackgroundAlt}"
+            BorderBrush="{StaticResource BorderAlt}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Bottom"
+            Panel.ZIndex="0"
+             />
+
+        <ToolBarTray
+            Margin="54,0,0,0"
+            Height="Auto"
+            VerticalAlignment="Top"
+            IsLocked="{Binding IsChecked, ElementName=lockTop, TargetNullValue=false}"
+            Style="{StaticResource ToolBarTrayBaseStyle}"
+            >
+
+            <ToolBarTray.Resources>
+                <Style x:Key="WolvenKitToolBarButtonIcon" TargetType="{x:Type iconPacks:PackIconControlBase}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type UIElement}, AncestorLevel=2}}" Value="False">
+                            <Setter Property="Foreground" Value="{StaticResource Border}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+                <Style x:Key="WolvenKitToolBarButtonText" TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type UIElement}}}" Value="False">
+                            <Setter Property="Foreground" Value="{StaticResource Border}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+                <Style x:Key="{x:Static ToolBar.ButtonStyleKey}" TargetType="{x:Type Button}">
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Border.Background" Value="Transparent" />
+                    <Setter Property="Height" Value="22" />
+                    <Setter Property="Border.Padding" Value="5,0" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border Background="{TemplateBinding Border.Background}" CornerRadius="3" Padding="{TemplateBinding Border.Padding}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt5}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{StaticResource ContentBackground}" />
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="IsPressed" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Border.Background" Value="{StaticResource ContentBackgroundAlt}" />
+                        </MultiTrigger>
+                    </Style.Triggers>
+                    <Style.Resources>
+                        <Style TargetType="{x:Type iconPacks:PackIconControlBase}" BasedOn="{StaticResource WolvenKitToolBarButtonIcon}">
+                            <Setter Property="Visibility" Value="{Binding IsChecked, ElementName=toolbarIcons, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        </Style>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource WolvenKitToolBarButtonText}">
+                            <Setter Property="Visibility" Value="{Binding IsChecked, ElementName=toolbarLabels, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        </Style>
+                    </Style.Resources>
+                </Style>
+                <Style x:Key="{x:Static ToolBar.ToggleButtonStyleKey}" TargetType="{x:Type ToggleButton}">
+                    <Setter Property="Border.Background" Value="{StaticResource ContentBackgroundAlt4}" />
+                    <Setter Property="Height" Value="22" />
+                    <Setter Property="Border.Padding" Value="5,0" />
+                    <Setter Property="Border.Margin" Value="2,0,0,0" />
+                    <Setter Property="Border.BorderBrush" Value="{StaticResource ContentBackground}" />
+                    <Setter Property="Border.BorderThickness" Value="0,0,0,1" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                <Border Background="{TemplateBinding Border.Background}" CornerRadius="3" Padding="{TemplateBinding Border.Padding}" Margin="{TemplateBinding Border.Margin}" BorderBrush="{TemplateBinding Border.BorderBrush}" BorderThickness="{TemplateBinding Border.BorderThickness}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Border.Background" Value="{StaticResource ContentBackgroundAlt5}" />
+                            <Setter Property="Border.BorderBrush" Value="{StaticResource ContentBackground}" />
+                            <Setter Property="Border.BorderThickness" Value="0,0,0,1" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Border.Background" Value="{StaticResource ContentBackground}" />
+                            <Setter Property="Border.BorderBrush" Value="Black" />
+                            <Setter Property="Border.BorderThickness" Value="0,1,0,0" />
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="IsChecked" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Border.Background" Value="{StaticResource ContentBackgroundAlt}" />
+                            <Setter Property="Border.BorderBrush" Value="{StaticResource ContentBackground}" />
+                            <Setter Property="Border.BorderThickness" Value="0,1,0,0" />
+                        </MultiTrigger>
+                    </Style.Triggers>
+                    <Style.Resources>
+                        <Style TargetType="{x:Type iconPacks:PackIconControlBase}" BasedOn="{StaticResource WolvenKitToolBarButtonIcon}">
+                            <Setter Property="Visibility" Value="{Binding IsChecked, ElementName=toolbarIcons, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        </Style>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource WolvenKitToolBarButtonText}">
+                            <Setter Property="Visibility" Value="{Binding IsChecked, ElementName=toolbarLabels, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        </Style>
+                    </Style.Resources>
+                </Style>
+            </ToolBarTray.Resources>
+            <ToolBar Background="Transparent">
+                <TextBlock Visibility="Collapsed" Text="File:" Height="30" Padding="5,7" Foreground="{StaticResource ContentForeground}" />
+                <Button Command="{Binding NewFileCommand}" ToolTip="New File">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                            Kind="File" />
+                        <TextBlock Text="New File" Padding="5,0,0,0" />
+                    </StackPanel>
+                </Button>
+                <Button Command="{Binding SaveFileCommand}" ToolTip="Save File">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Foreground="CornflowerBlue"
+                                    Kind="Save" />
+                        <TextBlock Text="Save" Padding="5,0,0,0" />
+                    </StackPanel>
+                </Button>
+                <Button Command="{Binding SaveAllCommand}" ToolTip="Save All Files">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Foreground="CornflowerBlue"
+                                    Kind="SaveAll" />
+                        <TextBlock Text="Save All" Padding="5,0,0,0" />
+                    </StackPanel>
+                </Button>
+                <Separator Margin="3" />
+                <TextBlock Text="Project:" Height="30" Padding="5,7" Visibility="Collapsed" />
+                <Button ToolTip="New Project">
+                    <StackPanel Orientation="Horizontal">
+                        <Grid>
+                            <iconPacks:PackIconMaterialDesign Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                Kind="Folder" />
+                            <iconPacks:PackIconForkAwesome
+                                Foreground="{StaticResource ContentBackgroundAlt3}"
+                                Padding="0,5,0,3"
+                                Kind="Plus" />
+                        </Grid>
+                        <TextBlock Text="New Project" Padding="5,0,0,0" />
+                    </StackPanel>
+                </Button>
+                <Button Command="{Binding OpenProjectCommand}" ToolTip="Open Project">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                Foreground="DarkGoldenrod"
+                                Kind="FolderOpen" />
+                        <TextBlock Text="Open Project" Padding="5,0,0,0" />
+                    </StackPanel>
+                </Button>
+                <Button Command="{Binding PackProjectCommand}" ToolTip="Pack Project">
+                    <StackPanel Orientation="Horizontal">
+                        <Grid>
+                            <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                Foreground="#DF2935"
+                                Padding="0,0,2,2"
+                                Kind="Archive" />
+                            <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                Padding="7,7,-2,-2"
+                                Kind="Cog" />
+                        </Grid>
+                        <TextBlock Text="Pack Project" Padding="5,0,0,0" />
+                    </StackPanel>
+                </Button>
+            </ToolBar>
+            <ToolBar Background="Transparent">
+                <TextBlock Text="MatRepo:" Height="30" Padding="5,7" Foreground="{StaticResource ContentForeground}" Visibility="Collapsed"/>
+                <Button Click="GenerateMaterialRepoButton_Click" ToolTip="Generate Repository">
+                    <StackPanel Orientation="Horizontal">
+                        <Grid>
+                            <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                                    Foreground="Orange"
+                                Padding="0,0,2,2"
+                                Kind="List" />
+                            <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                Padding="7,7,-2,-2"
+                                Kind="Cog" />
+                        </Grid>
+                        <TextBlock Text="Generate Depot" Padding="5,0,0,0" />
+                    </StackPanel>
+                </Button>
+                <Button Command="{Binding OpenMaterialRepositoryCommand}" ToolTip="Open Depot">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Foreground="Orange"
+                                    Kind="List" />
+                        <TextBlock Text="Browse Depot" Padding="5,0,0,0" />
+                    </StackPanel>
+                </Button>
+                <Button Command="{Binding UnbundleGameCommand}" ToolTip="Unbundle Game Files">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Kind="CloudDownload" />
+                        <TextBlock Text="Unbundle Game" Padding="5,0,0,0" />
+                    </StackPanel>
+                </Button>
+            </ToolBar>
+            <ToolBar Background="Transparent">
+                <TextBlock Text="Panels:" Height="30" Padding="5,7" Foreground="{StaticResource ContentForeground}" Visibility="Collapsed" />
+                <ToggleButton Command="{Binding ViewProjectExplorerCommand}" ToolTip="Project Explorer">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Kind="Notebook" />
+                        <TextBlock Text="Project Explorer" Padding="5,0,0,0" />
+                    </StackPanel>
+                </ToggleButton>
+                <ToggleButton Command="{Binding ViewAssetBrowserCommand}" ToolTip="Asset Browser">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconBootstrapIcons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Kind="InboxesFill" />
+                        <TextBlock Text="Asset Browser" Padding="5,0,0,0" />
+                    </StackPanel>
+                </ToggleButton>
+                <ToggleButton Command="{Binding ViewPropertiesCommand}" ToolTip="Properties">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Kind="SymbolProperty" />
+                        <TextBlock Text="Properties" Padding="5,0,0,0" />
+                    </StackPanel>
+                </ToggleButton>
+                <ToggleButton Command="{Binding ViewLogCommand}" ToolTip="Log">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Kind="List" />
+                        <TextBlock Text="Log" Padding="5,0,0,0" />
+                    </StackPanel>
+                </ToggleButton>
+                <ToggleButton Command="{Binding ShowImportExportToolCommand}" ToolTip="Import / Export">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconMaterialDesign Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Kind="ImportExport" />
+                        <TextBlock Text="Import / Export" Padding="5,0,0,0" />
+                    </StackPanel>
+                </ToggleButton>
+                <Menu Height="22" Margin="2,0,0,0">
+                    <MenuItem Header="View Options">
+                        <MenuItem Header="Show File Preview" IsCheckable="True" IsChecked="{Binding _settingsManager.ShowFilePreview, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  ToolTip="Toggle interactive file preview for improved performance"/>
+                        <MenuItem Click="RibbonButton_Click" Header="Reset Panel Layout">
+                            <MenuItem.Icon>
+                                <iconPacks:PackIconMaterialDesign Padding="7,1,-2,0"
+                                    Kind="Refresh" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator Background="{StaticResource BorderAlt}" Margin="0,5,0,3"/>
+                        <MenuItem x:Name="lockTop" Header="Lock Toolbar" IsCheckable="True" IsChecked="True" />
+                        <MenuItem x:Name="toolbarIcons" Header="Show Toolbar Icons" IsCheckable="True" IsChecked="True" />
+                        <MenuItem x:Name="toolbarLabels" Header="Show Toolbar Labels" IsCheckable="True" IsChecked="True" />
+                        <MenuItem x:Name="ribbonEnabled" Header="Use Ribbon Instead" IsCheckable="True" IsChecked="False" />
+                    </MenuItem>
+                </Menu>
+            </ToolBar>
+            <ToolBar Background="Transparent">
+                <TextBlock Text="Options:" Height="30" Padding="5,7" Foreground="{StaticResource ContentForeground}" Visibility="Collapsed"/>
+                <Button Command="{Binding ShowSettingsCommand}" ToolTip="Settings">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Kind="Settings" />
+                        <TextBlock Text="Settings" Padding="5,0,0,0" />
+                    </StackPanel>
+                </Button>
+                <Button Command="{Binding ShowBugReportCommand}" ToolTip="Bug Report">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Kind="Bug" />
+                        <TextBlock Text="Report Bug" Padding="5,0,0,0" />
+                    </StackPanel>
+                </Button>
+                <Button Command="{Binding ShowFeedbackCommand}" ToolTip="Feedback">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Kind="Feedback" />
+                        <TextBlock Text="Feedback" Padding="5,0,0,0" />
+                    </StackPanel>
+                </Button>
+            </ToolBar>
+            <ToolBar Background="Transparent" IsEnabled="False" Band="1">
+                <TextBlock Text="Project Explorer:" Height="30" Padding="5,7" Foreground="{StaticResource ContentForeground}" Visibility="Collapsed" />
+                <Button Command="{Binding OpenFileCommand}" ToolTip="Open File">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Kind="File" />
+                        <TextBlock Text="Open File" Padding="5,0,0,0"/>
+                    </StackPanel>
+                </Button>
+                <Button Command="{Binding CopyFileCommand}" ToolTip="Copy File">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconVaadinIcons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Kind="CopyOutline" />
+                        <TextBlock Text="Copy File" Padding="5,0,0,0" />
+                    </StackPanel>
+                </Button>
+                <Button Command="{Binding PasteFileCommand}" ToolTip="Paste File">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconVaadinIcons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Kind="Paste" />
+                        <TextBlock Text="Paste File" Padding="5,0,0,0"/>
+                    </StackPanel>
+                </Button>
+                <Button Command="{Binding DeleteFileCommand}" ToolTip="Delete File">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconMaterialLight Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Kind="Delete" />
+                        <TextBlock Text="Delete File" Padding="5,0,0,0"/>
+                    </StackPanel>
+                </Button>
+                <Button Command="{Binding RenameFileCommand}" ToolTip="Rename File">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconBoxIcons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Kind="RegularRename" />
+                        <TextBlock Text="Rename File" Padding="5,0,0,0"/>
+                    </StackPanel>
+                </Button>
+                <Button Command="{Binding OpenInFileExplorerCommand}" ToolTip="Show in Windows Explorer">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Kind="FolderOpened" />
+                        <TextBlock Text="Show in Folder" Padding="5,0,0,0"/>
+                    </StackPanel>
+                </Button>
+                <Button Command="{Binding OpenInFileExplorerCommand}" ToolTip="Export File">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Kind="Export" />
+                        <TextBlock Text="Export File" Padding="5,0,0,0"/>
+                    </StackPanel>
+                </Button>
+                <Separator Margin="3" />
+                <Button Click="ExandAllNodesContext_Click" ToolTip="Expand All">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Kind="ExpandAll" />
+                        <TextBlock Text="Expand All" Padding="5,0,0,0"/>
+                    </StackPanel>
+                </Button>
+                <Button Click="collapseAllNodesContext_Click" ToolTip="Collapse All">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Kind="CollapseAll" />
+                        <TextBlock Text="Collapse All" Padding="5,0,0,0"/>
+                    </StackPanel>
+                </Button>
+                <Button Click="ExandChildrenContext_Click" ToolTip="Expand Children">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconBootstrapIcons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Kind="ArrowsExpand" />
+                        <TextBlock Text="Expand Children" Padding="5,0,0,0"/>
+                    </StackPanel>
+                </Button>
+                <Button Click="CollapseChildrenContext_Click" ToolTip="Collapse Children">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconBootstrapIcons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Kind="ArrowsCollapse" />
+                        <TextBlock Text="Collapse Children" Padding="5,0,0,0"/>
+                    </StackPanel>
+                </Button>
+            </ToolBar>
+        </ToolBarTray>
 
         <fluent:Ribbon
             x:Name="ribbon"
@@ -109,20 +501,11 @@
 
         </fluent:Ribbon>
 
-        <!--  Grey Bar for the top -->
-        <Border
-            Height="3"
-            Margin="0,-33,0,0"
-            BorderThickness="0,1,0,0"
-            Background="{DynamicResource ContentBackgroundAlt2}"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="top"
-            Panel.ZIndex="0"
-             />
+        
         
         <syncfusion:Ribbon
             x:Name="_ribbon"
-            Margin="60,0,0,0"
+            Margin="60,0,0,-2"
             EnableSimplifiedLayoutMode="True" 
             Panel.ZIndex="0"
             BackStageCornerImageVisibility="Collapsed"
@@ -131,7 +514,7 @@
             EnableMoreCommands="True"
             LayoutMode="Simplified"
             ShowCustomizeRibbon="True"
-            Visibility="Visible"
+            Visibility="{Binding IsChecked, ElementName=ribbonEnabled, Converter={StaticResource BoolToVisibilityConverter}}"
             VerticalAlignment="Top"
             BorderThickness="0"
             >
@@ -1684,6 +2067,15 @@
                         ToolTip="Toggle interactive file preview for improved performance "
                         Padding="6,0"
                         IsChecked="{Binding _settingsManager.ShowFilePreview, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <syncfusion:RibbonCheckBox
+                        x:Name="RibbonEnabled"
+                        Content="Use Ribbon"
+                        ToolTip="Disable to return to the ToolBar view"
+                        Padding="6,0"
+                        IsChecked="{Binding Path=IsChecked, ElementName=ribbonEnabled, Mode=TwoWay}" />
+
+                    
                 </syncfusion:RibbonBar>
                 
                 <!--  Utilities bar  -->
@@ -1862,27 +2254,6 @@
             VerticalAlignment="top"
             Background="{DynamicResource ContentBackgroundAlt2}"
             CornerRadius="0,5,0,0" />-->
-
-        <!--  Titlebar Background - Covers mismatched color due to Ribbon left margin.  -->
-        <Border
-            Width="70"
-            Height="28"
-            Margin="0,-30,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="top"
-            Background="{DynamicResource ContentBackgroundAlt2}"
-             />
-
-        <!--  Extra little line under Sammy -->
-        <Border
-            Width="60"
-            Height="28"
-            Margin="0,0,0,1"
-            BorderThickness="0,0,0,1"
-            BorderBrush="#373737"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Bottom"
-             />
 
         <!--  Sammy Container  -->
         <Grid

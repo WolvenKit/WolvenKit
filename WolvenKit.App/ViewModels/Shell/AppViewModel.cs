@@ -119,6 +119,8 @@ namespace WolvenKit.ViewModels.Shell
 
             #endregion commands
 
+            Title = "WolvenKit";
+
             OnStartup();
 
             DockedViews = new ObservableCollection<IDockElement> {
@@ -291,10 +293,12 @@ namespace WolvenKit.ViewModels.Shell
                 ribbon.StartScreenShown = false;
                 ribbon.BackstageIsOpen = false;
 
+
                 await _projectManager.LoadAsync(location);
 
                 await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
                 {
+                    Title = "WolvenKit - " + Path.GetFileNameWithoutExtension(location);
                     _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
                 } , TaskContinuationOptions.OnlyOnRanToCompletion);
             }
@@ -677,6 +681,8 @@ namespace WolvenKit.ViewModels.Shell
         #endregion ToolViewModels
 
         [Reactive] public string Status { get; set; }
+
+        [Reactive] public string Title { get; set; }
 
         [Reactive] public IDocumentViewModel ActiveDocument { get; set; }
 
