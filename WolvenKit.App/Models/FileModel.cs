@@ -4,11 +4,17 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
+using System.Windows.Input;
 using ReactiveUI;
+using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Interaction;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Models
 {
@@ -47,6 +53,9 @@ namespace WolvenKit.Models
             Hash = GenerateKey(FullName, project);
             ParentHash = GenerateKey(parentfullname, project);
             RelativePath = GetRelativeName(project);
+            OpenFileCommand = new RelayCommand(ExecuteOpenFile, CanOpenFile);
+            DeleteFileCommand = new RelayCommand(ExecuteDeleteFile, CanDeleteFile);
+            RenameFileCommand = new RelayCommand(ExecuteRenameFile, CanRenameFile);
         }
 
         #region properties
@@ -154,8 +163,99 @@ namespace WolvenKit.Models
 
             var filedir = project.FileDirectory;
             return fullname.Equals(filedir, StringComparison.Ordinal)
-                ? (ulong) 0
+                ? (ulong)0
                 : FNV1A64HashAlgorithm.HashString(fullname);
         }
+
+        [Browsable(false)] public ICommand OpenFileCommand { get; private set; }
+        private bool CanOpenFile() => true;
+        private void ExecuteOpenFile()
+        {
+            // TODO: Handle command logic here
+            Locator.Current.GetService<AppViewModel>().OpenFileCommand.SafeExecute(this);
+        }
+
+
+        /// <summary>
+        /// Delets selected node.
+        /// </summary>
+        [Browsable(false)] public ICommand DeleteFileCommand { get; private set; }
+        private bool CanDeleteFile()
+        {
+            return true;
+        }
+        private async void ExecuteDeleteFile()
+        {
+            var delete = await Interactions.DeleteFiles.Handle(new List<string>() { Name });
+            if (!delete)
+            {
+                return;
+            }
+
+            // Delete from file structure
+            var fullpath = FullName;
+            try
+            {
+                if (IsDirectory)
+                {
+                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(fullpath
+                        , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
+                        , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+                }
+                else
+                {
+                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(fullpath
+                        , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
+                        , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+                }
+            }
+            catch (Exception)
+            {
+                //_loggerService.Error("Failed to delete " + fullpath + ".\r\n");
+            }
+        }
+
+
+        /// <summary>
+        /// Renames selected node.
+        /// </summary>
+        [Browsable(false)] public ICommand RenameFileCommand { get; private set; }
+        private bool CanRenameFile() => !IsDirectory;
+        private async void ExecuteRenameFile()
+        {
+            var filename = FullName;
+            var newfilename = await Interactions.Rename.Handle(filename);
+
+            if (string.IsNullOrEmpty(newfilename))
+            {
+                return;
+            }
+
+            var newfullpath = Path.Combine(Path.GetDirectoryName(filename), newfilename);
+
+            if (File.Exists(newfullpath))
+            {
+                return;
+            }
+
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(newfullpath));
+                if (IsDirectory)
+                {
+                    Directory.Move(filename, newfullpath);
+                }
+                else
+                {
+                    File.Move(filename, newfullpath);
+                }
+            }
+            catch
+            {
+            }
+
+
+        }
+
     }
 }

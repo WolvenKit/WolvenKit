@@ -10,6 +10,7 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:tools="clr-namespace:WolvenKit.ViewModels.Tools;assembly=WolvenKit.App"
+    xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     d:DataContext="{d:DesignInstance Type=tools:ProjectExplorerViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="400"
@@ -26,8 +27,70 @@
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <Border BorderThickness="0,0,0,1" BorderBrush="{StaticResource BorderBrush}" Height="Auto" Grid.Row="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <hc:SearchBar
+                    x:Name="PESearchBar"
+                    Margin="3"
+                    BorderThickness="0,0,0,0"
+                    Height="30"
+                    Grid.Column="0"
+                    BorderBrush="{StaticResource MahApps.Brushes.Gray.SemiTransparent}"
+                    VerticalAlignment="Top"
+                    Background="Transparent"
+                    FlowDirection="LeftToRight"
+                    SearchStarted="PESearchBar_OnSearchStarted"
+                    ShowClearButton="True"
+                    hc:InfoElement.Placeholder="Search"
+                    Style="{StaticResource SearchBarExtendBaseStyle}"
+                    hc:InfoElement.Necessary="True" />
+                <StackPanel Orientation="Horizontal" Margin="0,0,3,0"
+                    Grid.Column="1">
+                    <Button Click="ExpandAll_OnClick" ToolTip="Expand All" Margin="3,0,0,0">
+                        <iconPacks:PackIconCodicons
+                                    Width="13"
+                                    Height="13"
+                                    Kind="ExpandAll" />
+                    </Button>
+                    <Button Click="CollapseAll_OnClick" ToolTip="Collapse All" Margin="3,0,0,0">
+                        <iconPacks:PackIconCodicons
+                                    Width="13"
+                                    Height="13"
+                                    Kind="CollapseAll" />
+                    </Button>
+                    <Button Click="ExpandChildren_OnClick" ToolTip="Expand Children" Margin="3,0,0,0">
+                        <iconPacks:PackIconBootstrapIcons
+                                    Width="13"
+                                    Height="13"
+                                    Kind="ArrowsExpand" />
+                    </Button>
+                    <Button Click="CollapseChildren_OnClick" ToolTip="Collapse Children" Margin="3,0,0,0">
+                        <iconPacks:PackIconBootstrapIcons
+                                    Width="13"
+                                    Height="13"
+                                    Kind="ArrowsCollapse" />
+                    </Button>
+                    <Button ToolTip="New Folder" Margin="3,0,0,0">
+                        <iconPacks:PackIconForkAwesome
+                                    Width="13"
+                                    Height="13"
+                                    Kind="FolderOpen" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+        
         <syncfusion:SfTreeGrid
-            Margin="0,30,0,0"
+            Margin="0,0,0,0"
             Name="TreeGrid"
             AllowEditing="False"
             AllowFiltering="False"
@@ -40,7 +103,7 @@
             FilterLevel="Extended"
             IsReadOnly="True"
             LiveNodeUpdateMode="AllowDataShaping"
-            MouseDown="TreeGrid_MouseDown"
+            PreviewMouseDown="TreeGrid_MouseDown"
             ParentPropertyName="Hash"
             RowHeight="17"
             SelectedItem="{Binding SelectedItem}"
@@ -49,6 +112,9 @@
             SelfRelationRootValue="0"
             BorderThickness="0"
             HeaderRowHeight="0"
+            Grid.Row="1"
+            CurrentCellBorderBrush="White"
+            CurrentCellBorderThickness="0"
             >
 
             <syncfusion:SfTreeGrid.Resources>
@@ -71,9 +137,62 @@
                     <syncfusion:TreeGridTextColumn.CellTemplate>
                         <DataTemplate>
                             <Grid>
+                                <Grid.Resources>
+                                    <Style x:Key="WolvenKitTreeGridButton" TargetType="{x:Type helpers:TreeGridButton}">
+                                        <Setter Property="Border.Background" Value="{Binding BorderBrush, RelativeSource={RelativeSource Self}}"/>
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Setter Property="Border.Padding" Value="5,0" />
+                                        <Setter Property="Padding" Value="0" />
+                                        <Setter Property="Margin" Value="5,0,0,0" />
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type helpers:TreeGridButton}">
+                                                    <Border Background="{TemplateBinding Border.Background}" CornerRadius="2" Padding="{TemplateBinding Border.Padding}">
+                                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding IsDirectory}" Value="False"/>
+                                                                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Border}, AncestorLevel=1}}" Value="True" />
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </MultiDataTrigger>
+                                                        <MultiTrigger>
+                                                            <MultiTrigger.Conditions>
+                                                                <Condition Property="IsMouseOver" Value="True"/>
+                                                                <Condition Property="IsPressed" Value="True" />
+                                                            </MultiTrigger.Conditions>
+                                                            <Setter Property="Border.Background" Value="{Binding PressedBackground, RelativeSource={RelativeSource Self}}" />
+                                                        </MultiTrigger>
+                                                        <MultiTrigger>
+                                                            <MultiTrigger.Conditions>
+                                                                <Condition Property="IsMouseOver" Value="True"/>
+                                                                <Condition Property="IsPressed" Value="False" />
+                                                            </MultiTrigger.Conditions>
+                                                            <Setter Property="Border.Background" Value="{Binding HoverBackground, RelativeSource={RelativeSource Self}}" />
+                                                        </MultiTrigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                    <Style x:Key="WolvenKitTreeGridButtonDirectory" TargetType="{x:Type helpers:TreeGridButton}" BasedOn="{StaticResource WolvenKitTreeGridButton}">
+                                        <Setter Property="Border.Padding" Value="2,0" />
+                                        <Style.Triggers>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Border}, AncestorLevel=1}}" Value="True" />
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </MultiDataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Resources>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="13" />
                                     <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <Image Height="13" Style="{DynamicResource FileIcons}" />
                                 <TextBlock
@@ -82,6 +201,20 @@
                                     Margin="5,0,0,0"
                                     VerticalAlignment="Center"
                                     Text="{Binding Path=Name}" />
+                                <StackPanel Orientation="Horizontal" Grid.Column="2" Background="{StaticResource ContentBackground}">
+                                    <helpers:TreeGridButton Style="{StaticResource WolvenKitTreeGridButton}" Content="Open" Command="{Binding OpenFileCommand}" ToolTip="Open this file" BorderBrush="Green" HoverBackground="DarkGreen" PressedBackground="Blue"/>
+                                    <helpers:TreeGridButton Style="{StaticResource WolvenKitTreeGridButton}" Command="{Binding RenameFileCommand}" ToolTip="Rename this file">
+                                        <helpers:TreeGridButton.Content>
+                                            <iconPacks:PackIconForkAwesome Kind="Pencil" Height="11" Width="15"/>
+                                        </helpers:TreeGridButton.Content>
+                                    </helpers:TreeGridButton>
+                                    <helpers:TreeGridButton Style="{StaticResource WolvenKitTreeGridButtonDirectory}" Command="{Binding DeleteFileCommand}" ToolTip="Delete this file/folder" BorderBrush="#DF2935" HoverBackground="DarkRed" PressedBackground="Blue">
+                                        <helpers:TreeGridButton.Content>
+                                            <iconPacks:PackIconForkAwesome Kind="Trash" Height="11" Width="15"/>
+                                        </helpers:TreeGridButton.Content>
+                                    </helpers:TreeGridButton>
+                                    <helpers:TreeGridButton Style="{StaticResource WolvenKitTreeGridButtonDirectory}" Width="0" Margin="0,0,10,0"/>
+                                </StackPanel>
                             </Grid>
                         </DataTemplate>
                     </syncfusion:TreeGridTextColumn.CellTemplate>
@@ -90,20 +223,6 @@
 
             <syncfusion:SfTreeGrid.ContextMenu>
                 <ContextMenu FontSize="11" Style="{DynamicResource ContextMenuBaseStyle}">
-                    <MenuItem Command="{Binding OpenFileCommand}" Header="Open" >
-                        <MenuItem.Icon>
-                            <iconPacks:PackIconMaterial
-                                    Width="16"
-                                    Height="16"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Stretch"
-                                    Foreground="CornflowerBlue"
-                                    Kind="Share" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-
-                    <Separator/>
-                    
                     <MenuItem
                         Margin="0"
                         Header="Actions"
@@ -113,34 +232,27 @@
                         <MenuItem Command="{Binding FastRenderCommand}" Header="Fast render" />
                     </MenuItem>
 
-                    <MenuItem Header="Convert">
-                        
-                        <MenuItem Header="Text">
-                            <MenuItem x:Name="ConvertToJsonMenuItem"
+                        <MenuItem x:Name="ConvertToJsonMenuItem"
                                       Command="{Binding ConvertToJsonCommand}"
                                       Header="Convert to JSON" />
-                            <MenuItem x:Name="ConvertFromJsonMenuItem"
+                        <MenuItem x:Name="ConvertFromJsonMenuItem"
                                       Command="{Binding ConvertFromJsonCommand}"
                                       Header="Convert from JSON" />
-                            <Separator/>
-                            <MenuItem x:Name="ConvertToXmlMenuItem"
+                        <Separator/>
+                        <MenuItem x:Name="ConvertToXmlMenuItem"
                                       Command="{Binding ConvertToXmlCommand}"
                                       Header="Convert to XML" />
-                            <!--<MenuItem x:Name="ConvertFromXmlMenuItem"
+                        <!--<MenuItem x:Name="ConvertFromXmlMenuItem"
                                       Command="{Binding ConvertFromXmlCommand}"
                                       Header="Convert from JSON" />-->
-                        </MenuItem>
-                        <MenuItem Header="Video">
-                            <MenuItem x:Name="BKImport"
+
+                        <MenuItem x:Name="BKImport"
                                       Command="{Binding Bk2ImportCommand}"
                                       Header="Import Avi to BK2" />
-                            <MenuItem x:Name="BKExport"
+                    <MenuItem x:Name="BKExport"
                                       Command="{Binding Bk2ExportCommand}"
                                       Header="Export BK2 to Avi" />
-                        </MenuItem>
 
-                    </MenuItem>
-                    
 
                     <Separator/>
 
@@ -164,27 +276,6 @@
                                     Kind="ContentPaste" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Command="{Binding DeleteFileCommand}" Header="Delete" >
-                        <MenuItem.Icon>
-                            <iconPacks:PackIconMaterial
-                                    Width="16"
-                                    Height="16"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Stretch"
-                                    Foreground="Red"
-                                    Kind="Close" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Command="{Binding RenameFileCommand}" Header="Rename" >
-                        <MenuItem.Icon>
-                            <iconPacks:PackIconMaterial
-                                    Width="16"
-                                    Height="16"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Stretch"
-                                    Kind="FormTextbox" />
-                        </MenuItem.Icon>
-                    </MenuItem>
 
                     <Separator/>
 
@@ -195,7 +286,7 @@
                         Visibility="Collapsed" />
 
                     <!--<Separator/>-->
-                    
+
                     <!--<MenuItem Click="ExpandChildren_OnClick" Header="Expand" />
                     <MenuItem Click="CollapseChildren_OnClick" Header="Collapse" />                    
                     <MenuItem Click="ExpandAll_OnClick" Header="Expand all" />
@@ -203,20 +294,5 @@
                 </ContextMenu>
             </syncfusion:SfTreeGrid.ContextMenu>
         </syncfusion:SfTreeGrid>
-
-        <hc:SearchBar
-            x:Name="PESearchBar"
-            Margin="0,0,0,0"
-            BorderThickness="0,0,0,1"
-            Height="30"
-            BorderBrush="{StaticResource MahApps.Brushes.Gray.SemiTransparent}"
-            VerticalAlignment="Top"
-            Background="{DynamicResource ContentBackground}"
-            FlowDirection="LeftToRight"
-            SearchStarted="PESearchBar_OnSearchStarted"
-            ShowClearButton="True"
-            hc:InfoElement.Placeholder="Search"
-            Style="{StaticResource SearchBarExtendBaseStyle}"
-            hc:InfoElement.Necessary="True" />
     </Grid>
 </reactiveUi:ReactiveUserControl>
