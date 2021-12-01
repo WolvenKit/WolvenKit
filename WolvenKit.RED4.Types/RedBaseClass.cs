@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Dynamic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace WolvenKit.RED4.Types
 {
@@ -26,7 +27,7 @@ namespace WolvenKit.RED4.Types
             }
         }
 
-        private static readonly EventHandlerList s_listEventDelegates = new();
+        private static ThreadLocal<EventHandlerList> s_listEventDelegates = new(() => new EventHandlerList());
 
         public delegate void ObjectChangedEventHandler(object sender, ObjectChangedEventArgs e);
 
@@ -37,7 +38,7 @@ namespace WolvenKit.RED4.Types
                 return false;
             }
 
-            s_listEventDelegates.AddHandler(type, handler);
+            s_listEventDelegates.Value.AddHandler(type, handler);
 
             return true;
         }
@@ -49,7 +50,7 @@ namespace WolvenKit.RED4.Types
                 return false;
             }
 
-            s_listEventDelegates.RemoveHandler(type, handler);
+            s_listEventDelegates.Value.RemoveHandler(type, handler);
 
             return true;
         }
@@ -67,7 +68,7 @@ namespace WolvenKit.RED4.Types
                     type = type.GetGenericTypeDefinition();
                 }
 
-                if (s_listEventDelegates[type] is ObjectChangedEventHandler del)
+                if (s_listEventDelegates.Value[type] is ObjectChangedEventHandler del)
                 {
                     if (!Equals(oldValue, value))
                     {
