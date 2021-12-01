@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.RED4.Types;
+using static WolvenKit.RED4.Types.Enums;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace WolvenKit.Views.Templates
@@ -51,50 +52,27 @@ namespace WolvenKit.Views.Templates
 
             view.BindingCollection.Clear();
 
-            //dynamic en = view.RedEnum;
-            //Type enumtype = en.Value.GetType();
+            var vals = Enum.GetNames(ienum.GetEnumType());
 
-            throw new WolvenKit.RED4.Types.Exceptions.TodoException("EnumEditor");
+            foreach (var s in vals)
+            {
+                view.BindingCollection.Add(s);
+            }
 
-            //Type enumtype = null;
-            //if (AssemblyDictionary.EnumExists(view.RedEnum.REDType))
-            //{
-            //    enumtype = AssemblyDictionary.GetEnumByName(view.RedEnum.REDType);
-            //}
+            view.SelectedItem = ienum.ToEnumString();
 
-
-            //if (enumtype == null)
-            //{
-            //    return;
-            //}
-            
-            //var vals = Enum.GetNames(enumtype);
-
-            //foreach (var s in vals)
-            //{
-            //    view.BindingCollection.Add(s);
-            //}
-
-            //view.SelectedItem = ienum.REDValue;
         }
 
         
 
         private void ComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (RedEnum is not IRedType cvar)
+            if (RedEnum.ToEnumString() == SelectedItem)
             {
                 return;
             }
 
-            throw new WolvenKit.RED4.Types.Exceptions.TodoException("EnumEditor");
-
-            //if (cvar.REDValue == SelectedItem)
-            //{
-            //    return;
-            //}
-
-            //cvar.SetValue(new List<string>() { SelectedItem });
+            RedEnum.SetStringValue(SelectedItem);
         }
     }
 }

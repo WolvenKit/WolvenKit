@@ -14,6 +14,10 @@ namespace WolvenKit.RED4.Types
     public interface IRedEnum : IRedType
     {
         public string ToEnumString();
+
+        public Type GetEnumType();
+
+        public void SetStringValue(string str);
     }
 
     public interface IRedEnum<T> : IRedEnum, IRedPrimitive<T>, IRedGenericType<T> where T : struct, Enum
