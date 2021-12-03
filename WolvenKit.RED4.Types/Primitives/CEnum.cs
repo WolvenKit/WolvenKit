@@ -30,12 +30,6 @@ namespace WolvenKit.RED4.Types
         public T? Value { get; init; }
         public string StringValue { get; init; }
 
-        public void SetValue(string str)
-        {
-            Value = CEnum.Parse<T>(str).Value;
-            StringValue = str;
-        }
-
         public CEnum()
         {
             Value = default(T);
@@ -67,11 +61,6 @@ namespace WolvenKit.RED4.Types
             }
 
             return StringValue;
-        }
-
-        public Type GetInnerType()
-        {
-            return typeof(T);
         }
 
         public bool Equals(CEnum<T> other)

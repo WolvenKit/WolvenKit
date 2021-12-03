@@ -5,7 +5,6 @@ using System.Windows;
 using System.Windows.Controls;
 using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.RED4.Types;
-using static WolvenKit.RED4.Types.Enums;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace WolvenKit.Views.Templates
@@ -20,7 +19,11 @@ namespace WolvenKit.Views.Templates
             InitializeComponent();
         }
 
-        public string SelectedItem { get; set; }
+        public string SelectedItem
+        {
+            get => GetValueFromRedValue();
+            set => SetRedValue(value);
+        }
 
         public ObservableCollection<string> BindingCollection { get; set; } = new();
 
@@ -50,29 +53,19 @@ namespace WolvenKit.Views.Templates
                 return;
             }
 
-            view.BindingCollection.Clear();
-
-            var vals = Enum.GetNames(view.RedEnum.GetInnerType());
-
-            foreach (var s in vals)
+            if (e.OldValue == null)
             {
-                view.BindingCollection.Add(s);
+                view.BindingCollection.Clear();
+                foreach (var s in Enum.GetNames(ienum.GetInnerType()))
+                {
+                    view.BindingCollection.Add(s);
+                }
+                //view.SelectedItem = ienum.ToEnumString();
             }
-
-            view.SelectedItem = ienum.ToEnumString();
-
         }
 
-        
+        private void SetRedValue(string value) => SetCurrentValue(RedEnumProperty, CEnum.Parse(RedEnum.GetInnerType(), value));
 
-        private void ComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (RedEnum.ToEnumString() == SelectedItem)
-            {
-                return;
-            }
-
-            RedEnum.SetValue(SelectedItem);
-        }
+        private string GetValueFromRedValue() => RedEnum.ToEnumString();
     }
 }

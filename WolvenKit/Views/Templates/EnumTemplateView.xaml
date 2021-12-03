@@ -17,7 +17,6 @@
          DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnumTemplateView}}}"
          ItemsSource="{Binding BindingCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
          SelectedItem="{Binding SelectedItem}"
-         SelectionChanged="ComboBox_OnSelectionChanged"
          />
     </Grid>
 </UserControl>
