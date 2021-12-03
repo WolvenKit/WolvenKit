@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
         public T? Value { get; set; } = null;
         public string StringValue { get; set; } = null;
 
-        public void SetStringValue(string str)
+        public void SetValue(string str)
         {
             Value = CEnum.Parse<T>(str).Value;
             StringValue = str;
@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.Types
             return StringValue;
         }
 
-        public Type GetEnumType()
+        public Type GetInnerType()
         {
             return typeof(T);
         }

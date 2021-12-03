@@ -50,12 +50,12 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button Grid.Column="0"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Center"
-                                Background="{DynamicResource ContentBackground}"
-                                Click="LeftNavigationHomeButton_OnClick"
-                                Visibility="Visible">
+                    <Button
+                        Grid.Column="0"
+                        VerticalAlignment="Center"
+                        Click="LeftNavigationHomeButton_OnClick"
+                        Visibility="Visible"
+                        Style="{StaticResource ButtonDefault}">
                         <iconPacks:PackIconCodicons Kind="Home" />
                     </Button>
                     
@@ -246,7 +246,7 @@
                                 AllowResizingColumns="True"
                                 AllowSorting="True"
                                 AutoGenerateColumns="False"
-                                Background="{DynamicResource RegionBrush}"
+                                Background="{StaticResource ContentBackground}"
                                 CurrentCellBorderThickness="0"
                                 ColumnSizer="Auto"
                                 EnableDataVirtualization="True"

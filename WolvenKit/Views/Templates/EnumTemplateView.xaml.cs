@@ -52,7 +52,7 @@ namespace WolvenKit.Views.Templates
 
             view.BindingCollection.Clear();
 
-            var vals = Enum.GetNames(ienum.GetEnumType());
+            var vals = Enum.GetNames(view.RedEnum.GetInnerType());
 
             foreach (var s in vals)
             {
@@ -72,7 +72,7 @@ namespace WolvenKit.Views.Templates
                 return;
             }
 
-            RedEnum.SetStringValue(SelectedItem);
+            RedEnum.SetValue(SelectedItem);
         }
     }
 }

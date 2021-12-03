@@ -15,6 +15,7 @@
             MinValue="{Binding MinValue, Mode=OneWay}"
             MaxValue="{Binding MaxValue, Mode=OneWay}"
             NumberDecimalDigits ="{Binding NumberDecimalDigits, Mode=OneWay}"
+            IsScrollingOnCircle="False"
             />
         
     </Grid>

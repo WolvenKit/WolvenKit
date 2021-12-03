@@ -169,12 +169,7 @@ namespace WolvenKit.Models
 
         [Browsable(false)] public ICommand OpenFileCommand { get; private set; }
         private bool CanOpenFile() => true;
-        private void ExecuteOpenFile()
-        {
-            // TODO: Handle command logic here
-            Locator.Current.GetService<AppViewModel>().OpenFileCommand.SafeExecute(this);
-        }
-
+        private void ExecuteOpenFile() => Locator.Current.GetService<AppViewModel>().OpenFileCommand.SafeExecute(this);
 
         /// <summary>
         /// Delets selected node.

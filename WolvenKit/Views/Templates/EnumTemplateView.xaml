@@ -14,12 +14,10 @@
     <Grid>
         <ComboBox
          x:Name="ComboBox"
-         Background="{DynamicResource MahApps.Brushes.Accent3}"
          DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnumTemplateView}}}"
          ItemsSource="{Binding BindingCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
          SelectedItem="{Binding SelectedItem}"
          SelectionChanged="ComboBox_OnSelectionChanged"
-         Style="{DynamicResource MahApps.Styles.ComboBox.DataGrid.Editing}"
          />
     </Grid>
 </UserControl>
