@@ -116,6 +116,12 @@ namespace WolvenKit.RED4.Types
                         _properties[redPropertyName] = System.Activator.CreateInstance(type, size);
                     }
 
+                    if (typeof(IRedEnum).IsAssignableFrom(type) || typeof(IRedBitField).IsAssignableFrom(type))
+                    {
+                        _properties[redPropertyName] = System.Activator.CreateInstance(type);
+                        return _properties[redPropertyName];
+                    }
+
                     return _properties[redPropertyName];
                 }
 
