@@ -8,7 +8,17 @@ namespace WolvenKit.RED4.Types
     public class CArrayBase<T> : List<T>, IEquatable<CArrayBase<T>>
     {
         public CArrayBase(){}
-        public CArrayBase(int size) : base(new T[size]){}
+
+        public CArrayBase(int size) : base(new T[size])
+        {
+            if (typeof(IRedEnum).IsAssignableFrom(typeof(T)) || typeof(IRedBitField).IsAssignableFrom(typeof(T)))
+            {
+                for (var i = 0; i < Count; i++)
+                {
+                    this[i] = System.Activator.CreateInstance<T>();
+                }
+            }
+        }
 
         public new void Add(T item)
         {

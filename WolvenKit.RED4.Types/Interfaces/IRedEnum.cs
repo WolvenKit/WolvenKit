@@ -13,6 +13,7 @@ namespace WolvenKit.RED4.Types
 
     public interface IRedEnum : IRedType
     {
+        public Type GetInnerType();
         public string ToEnumString();
 
         public Type GetInnerType();
