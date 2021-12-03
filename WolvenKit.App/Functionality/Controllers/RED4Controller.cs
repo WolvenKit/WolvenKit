@@ -348,7 +348,11 @@ namespace WolvenKit.Functionality.Controllers
 
             try
             {
-                Directory.Delete(cp77Proj.PackedModDirectory, true);
+                var archives = Directory.GetFiles(cp77Proj.PackedModDirectory, "*.archive");
+                foreach (var archive in archives)
+                {
+                    File.Delete(archive);
+                }
             }
             catch (Exception e)
             {
@@ -362,7 +366,7 @@ namespace WolvenKit.Functionality.Controllers
                 _modTools.Pack(
                     new DirectoryInfo(cp77Proj.ModDirectory),
                     new DirectoryInfo(cp77Proj.PackedModDirectory),
-                    $"mod{cp77Proj.Name}");
+                    cp77Proj.Name);
                 _loggerService.Info("Packing archives complete!");
             }
 
