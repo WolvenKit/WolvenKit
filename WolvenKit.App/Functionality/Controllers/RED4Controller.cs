@@ -393,8 +393,14 @@ namespace WolvenKit.Functionality.Controllers
             foreach (var f in tweakFiles)
             {
                 var text = File.ReadAllText(f);
+                var folder = Path.GetDirectoryName(Path.GetRelativePath(cp77Proj.TweakDirectory, f));
+                var outDirectory = Path.Combine(cp77Proj.PackedTweakDirectory, folder);
+                if (!Directory.Exists(outDirectory))
+                {
+                    Directory.CreateDirectory(outDirectory);
+                }
                 var filename = Path.GetFileNameWithoutExtension(f) + ".bin";
-                var outPath = Path.Combine(cp77Proj.PackedTweakDirectory, filename);
+                var outPath = Path.Combine(outDirectory, filename);
 
                 try
                 {
