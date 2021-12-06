@@ -89,8 +89,8 @@ namespace WolvenKit.Common.RED4.Compiled
         [JsonIgnore] public List<string> UnknownTypes { get; } = new();
         [JsonIgnore] public List<string> UnknownVars { get; set; } = new();
         [JsonIgnore] public Dictionary<uint, string> StringDictionary { get; private set; }
-        [JsonIgnore] public List<ICR2WName> Names { get; private set; }
-        [JsonIgnore] public List<ICR2WImport> Imports { get; private set; }
+        [JsonIgnore] public List<Name> Names { get; private set; }
+        [JsonIgnore] public List<Import> Imports { get; private set; }
         public CompiledPackage(IHashService hashservice)
         {
             _hashService = hashservice;
@@ -103,8 +103,8 @@ namespace WolvenKit.Common.RED4.Compiled
             NamesTableasStr = new Dictionary<uint, string>();
             ChunkDescs = new List<ChunkDesc>();
 
-            Names = new List<ICR2WName>();
-            Imports = new List<ICR2WImport>();
+            Names = new List<Name>();
+            Imports = new List<Import>();
             Buffers = new List<ICR2WBuffer>();
         }
 
@@ -170,17 +170,17 @@ namespace WolvenKit.Common.RED4.Compiled
 
             var NumChunksDesc = (_header.ChunkDataOffset - _header.ChunkDescOffset) / 8;
 
-            throw new WolvenKit.RED4.Types.Exceptions.TodoException();
-            //for (var i = 0; i < NumChunksDesc; i++)
-            //{
-            //    br.BaseStream.Seek(baseOff + _header.ChunkDescOffset + i * 8, SeekOrigin.Begin);
-            //    var chunkDesc = br.BaseStream.ReadStruct<ChunkDesc>();
-            //    ChunkDescs.Add(chunkDesc);
+            //throw new WolvenKit.RED4.Types.Exceptions.TodoException();
+            for (var i = 0; i < NumChunksDesc; i++)
+            {
+                br.BaseStream.Seek(baseOff + _header.ChunkDescOffset + i * 8, SeekOrigin.Begin);
+                var chunkDesc = br.BaseStream.ReadStruct<ChunkDesc>();
+                ChunkDescs.Add(chunkDesc);
 
-            //    br.BaseStream.Seek(baseOff + chunkDesc.ChunkDataOffset, SeekOrigin.Begin);
-            //    CreateChunk(Names[(int)chunkDesc.ChunkRedTypeIdx].Str, i).ReadData(br);
-            //}
-            //return EFileReadErrorCodes.NoError;
+                br.BaseStream.Seek(baseOff + chunkDesc.ChunkDataOffset, SeekOrigin.Begin);
+                CreateChunk(Names[(int)chunkDesc.ChunkRedTypeIdx].Str, i).ReadData(br);
+            }
+            return EFileReadErrorCodes.NoError;
         }
         public string ToJson()
         {
@@ -299,7 +299,7 @@ namespace WolvenKit.Common.RED4.Compiled
         {
             throw new NotImplementedException();
         }
-        public ICR2WExport CreateChunk(string type, int chunkindex = 0, ICR2WExport parent = null, ICR2WExport virtualparent = null, IRedType cvar = null)
+        public Export CreateChunk(string type, int chunkindex = 0, ICR2WExport parent = null, ICR2WExport virtualparent = null, IRedType cvar = null)
         {
             var chunk = new Export(this, type, parent as Export);
             chunk.ChunkIndex = chunkindex;

@@ -84,7 +84,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public Red4File GetFile() => _file;
 
-        public override string ToString() => "MainFile";
+        public override string ToString() => "Main File";
 
         #endregion
     }

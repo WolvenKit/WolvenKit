@@ -139,20 +139,30 @@ namespace WolvenKit.RED4.CR2W
             }
         }
 
-        public CompiledPackage TryReadCompiledPackage(Stream stream)
+        public CR2WPackage TryReadPackage(Stream stream)
         {
             using var br = new BinaryReader(stream, Encoding.Default, true);
-            return TryReadCompiledPackage(br);
+            return TryReadPackage(br);
         }
 
-        public CompiledPackage TryReadCompiledPackage(BinaryReader br)
+        public CR2WPackage TryReadPackage(BinaryReader br)
         {
-            var compiledbuffer = new CompiledPackage(_hashService);
-            return compiledbuffer.Read(br) switch
-            {
-                Common.EFileReadErrorCodes.NoError => compiledbuffer,
-                _ => null,
-            };
+            //try
+            //{
+                using var reader = new PackageReader(br);
+                var readResult = reader.ReadPackage(out var c);
+                return c;
+            //}
+            //catch (MissingRTTIException e)
+            //{
+            //    Console.WriteLine(e.Message);
+            //    return null;
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e.Message);
+            //    return null;
+            //}
         }
 
         #endregion Methods
