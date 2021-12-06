@@ -49,22 +49,22 @@ namespace WolvenKit.RED4.CR2W
             }
             br.BaseStream.Seek(-4, SeekOrigin.Current);
 
-            try
-            {
+            //try
+            //{
                 using var reader = new CR2WReader(br);
                 var readResult = reader.ReadFile(out var c, false);
                 return c;
-            }
-            catch (MissingRTTIException e)
-            {
-                Console.WriteLine(e.Message);
-                return null;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return null;
-            }
+            //}
+            //catch (MissingRTTIException e)
+            //{
+            //    Console.WriteLine(e.Message);
+            //    return null;
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e.Message);
+            //    return null;
+            //}
         }
 
         /// <summary>

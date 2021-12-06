@@ -45,8 +45,8 @@ namespace WolvenKit.Views.Editors
 
         private string GetValueFromRedValue() => RedNumber switch
         {
-            CRUID cruid => ((ulong)cruid).ToString("R"),
-            CUInt64 uint64 => ((ulong)uint64).ToString("R"),
+            CRUID cruid => ((ulong)cruid).ToString(),
+            CUInt64 uint64 => ((ulong)uint64).ToString(),
             _ => throw new ArgumentOutOfRangeException(nameof(RedNumber)),
         };
     }

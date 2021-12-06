@@ -150,12 +150,6 @@ namespace WolvenKit.Views.Documents
                     e.ExpandMode = PropertyExpandModes.FlatMode;
                 }
             }
-
-            // TODO: disable once buffer writing is implemented
-            if (ViewModel is W2rcBufferViewModel w2rcBufferViewModel)
-            {
-                e.ReadOnly = true;
-            }
         }
 
         private void PropertyGrid_CollectionEditorOpening(object sender, CollectionEditorOpeningEventArgs e)

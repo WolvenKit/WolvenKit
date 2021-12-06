@@ -46,6 +46,10 @@ namespace WolvenKit.Views.Editors
         private string GetValueFromRedValue()
         {
             // null exception here, RedString = null
+            if (RedString is null)
+            {
+                return "";
+            } 
             var redvalue = RedString.GetValue();
             if (redvalue is string redstring)
             {

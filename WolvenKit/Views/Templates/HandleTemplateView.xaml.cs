@@ -53,7 +53,20 @@ namespace WolvenKit.Views.Templates
 
             view.BindingCollection.Clear();
 
-            throw new TodoException("handle editor");
+            //throw new TodoException("handle editor");
+
+            var type = iptr.File.Chunks[iptr.Pointer].GetType();
+            var available = RedReflection.GetSubClassesOf(type).Select(x => x.Name).ToList();
+            available.Add(iptr.File.Chunks[iptr.Pointer].RedType);
+
+            var availableChunks = iptr.File.Chunks.Where(x => available.Contains(x.RedType));
+
+            foreach (var s in availableChunks)
+            {
+                view.BindingCollection.Add(s);
+            }
+
+            view.SelectedItem = iptr.File.Chunks[iptr.Pointer];
 
             // get all possible chunks in the cr2w file
             //var reftype = AssemblyDictionary.GetTypeByName(iptr.ReferenceType);
@@ -76,7 +89,11 @@ namespace WolvenKit.Views.Templates
             {
                 return;
             }
-            throw new TodoException("handle editor");
+
+
+
+            //throw new TodoException("handle editor");
+
             //if (RedChunkPtr.GetReference() == SelectedItem)
             //{
             //    return;

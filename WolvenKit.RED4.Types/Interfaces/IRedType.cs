@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.Types
 {
     public interface IRedType
     {
+        public string RedType => RedReflection.GetTypeRedName(GetType());
     }
 
     public interface IRedType<T> : IRedType

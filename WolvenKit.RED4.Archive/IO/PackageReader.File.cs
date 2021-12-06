@@ -6,7 +6,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Compression;
 using WolvenKit.RED4.Types.Exceptions;
@@ -106,7 +108,7 @@ namespace WolvenKit.RED4.Archive.IO
         }
         private string ReadName(PackageNameHeader n)
         {
-            var s = ReadNullTerminatedString();
+            var s = _reader.ReadNullTerminatedString();
             //Debug.Assert(s.Length == n.size);
             return s;
         }

@@ -35,6 +35,11 @@ namespace WolvenKit.Views.Editors
 
         private string GetValueFromRedValue()
         {
+            // this might need to be handled at the class level like enums
+            if (RedRef is null)
+            {
+                return "";
+            }
             return RedRef.DepotPath;
         }
 

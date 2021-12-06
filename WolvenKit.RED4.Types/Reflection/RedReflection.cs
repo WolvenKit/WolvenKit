@@ -23,6 +23,7 @@ namespace WolvenKit.RED4.Types
         {
             return _typeInfoCache.GetOrAdd(type, new Lazy<ExtendedTypeInfo>(() => new ExtendedTypeInfo(type))).Value;
         }
+        public static IEnumerable<Type> GetSubClassesOf(Type type) => _redTypeCache?.Values.Where(_ => _.IsSubclassOf(type)).ToList();
 
         public static ExtendedPropertyInfo GetPropertyByName(Type type, string propertyName)
         {
