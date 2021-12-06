@@ -24,8 +24,8 @@ namespace WolvenKit.ViewModels.Documents
 
         #region methods
 
-        //public override string ToString() => $"{_w2RcFile.GetBufferIndex(_buffer)}.buffer";
-        public override string ToString() => $"TODO.buffer";
+        public override string ToString() => $"Buffer {_w2RcFile.Buffers.IndexOf(_buffer)}";
+        //public override string ToString() => $"TODO.buffer";
 
         #endregion
     }

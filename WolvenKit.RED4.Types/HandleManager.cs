@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.Types
             return result;
         }
 
-        internal CHandle<T> CreateCHandle<T>(int pointer) where T : IRedClass
+        public CHandle<T> CreateCHandle<T>(int pointer) where T : IRedClass
         {
             var result = new CHandle<T>(_file, pointer);
 

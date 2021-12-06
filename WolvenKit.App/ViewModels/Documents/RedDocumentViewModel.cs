@@ -189,10 +189,10 @@ namespace WolvenKit.ViewModels.Documents
                     else
                     {
                         uncompressedMS.Seek(0, SeekOrigin.Begin);
-                        var compiledPackage = _parser.TryReadCompiledPackage(uncompressedMS);
-                        if (compiledPackage != null)
+                        var package = _parser.TryReadPackage(uncompressedMS);
+                        if (package != null)
                         {
-                            TabItemViewModels.Add(new W2rcBufferViewModel(buffer, compiledPackage, w2rcFile));
+                            TabItemViewModels.Add(new W2rcBufferViewModel(buffer, package, w2rcFile));
                         }
                     }
                 }
