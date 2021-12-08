@@ -7,23 +7,22 @@ using WolvenKit.RED4.Types;
 namespace WolvenKit.Views.Editors
 {
     /// <summary>
-    /// Interaction logic for RedFloatEditor.xaml
+    /// Interaction logic for RedFixedPointEditor.xaml
     /// </summary>
-    public partial class RedFloatEditor : UserControl
+    public partial class RedFixedPointEditor : UserControl
     {
-        public RedFloatEditor()
+        public RedFixedPointEditor()
         {
             InitializeComponent();
         }
 
-        public CFloat RedNumber
+        public FixedPoint RedNumber
         {
-            get => (CFloat)this.GetValue(RedNumberProperty);
+            get => (FixedPoint)this.GetValue(RedNumberProperty);
             set => this.SetValue(RedNumberProperty, value);
         }
         public static readonly DependencyProperty RedNumberProperty = DependencyProperty.Register(
-            nameof(RedNumber), typeof(CFloat), typeof(RedFloatEditor), new PropertyMetadata(default(CFloat)));
-
+            nameof(RedNumber), typeof(FixedPoint), typeof(RedFixedPointEditor), new PropertyMetadata(default(FixedPoint)));
 
         public string Text
         {
@@ -31,9 +30,11 @@ namespace WolvenKit.Views.Editors
             set => SetRedValue(value);
         }
 
-        private void SetRedValue(string value) => SetCurrentValue(RedNumberProperty, (CFloat)float.Parse(value));
+
+        private void SetRedValue(string value) => SetCurrentValue(RedNumberProperty, (FixedPoint)float.Parse(value));
 
         private string GetValueFromRedValue() => ((float)RedNumber).ToString("R");
+
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9\\.]+");

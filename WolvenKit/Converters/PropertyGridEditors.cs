@@ -27,6 +27,10 @@ namespace WolvenKit.Converters
             {
                 return new IntegerEditor();
             }
+            if (PropertyType.IsAssignableTo(typeof(FixedPoint)))
+            {
+                return new FixedPointEditor();
+            }
             if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<float>)))
             {
                 return new FloatEditor();
@@ -419,6 +423,47 @@ namespace WolvenKit.Converters
             public object Create(PropertyInfo propertyInfo)
             {
                 _editor = new RedFloatEditor();
+
+                return _editor;
+            }
+            public void Detach(PropertyViewItem property)
+            {
+
+            }
+        }
+
+        public class FixedPointEditor : ITypeEditor
+        {
+            private RedFixedPointEditor _editor;
+
+            public void Attach(PropertyViewItem property, PropertyItem info)
+            {
+                if (info.CanWrite)
+                {
+                    var binding = new Binding("Value")
+                    {
+                        Mode = BindingMode.TwoWay,
+                        Source = info,
+                        ValidatesOnExceptions = true,
+                        ValidatesOnDataErrors = true,
+                    };
+                    BindingOperations.SetBinding(_editor, RedFixedPointEditor.RedNumberProperty, binding);
+                }
+                else
+                {
+                    _editor.SetCurrentValue(UIElement.IsEnabledProperty, false);
+                    var binding = new Binding("Value")
+                    {
+                        Source = info,
+                        ValidatesOnExceptions = true,
+                        ValidatesOnDataErrors = true
+                    };
+                    BindingOperations.SetBinding(_editor, RedFixedPointEditor.RedNumberProperty, binding);
+                }
+            }
+            public object Create(PropertyInfo propertyInfo)
+            {
+                _editor = new RedFixedPointEditor();
 
                 return _editor;
             }
