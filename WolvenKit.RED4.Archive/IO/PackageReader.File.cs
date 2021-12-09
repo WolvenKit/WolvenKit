@@ -21,8 +21,9 @@ namespace WolvenKit.RED4.Archive.IO
 
         private CR2WPackage _package => (CR2WPackage)_outputFile;
 
-        public EFileReadErrorCodes ReadPackage(out CR2WPackage package)
+        public EFileReadErrorCodes ReadPackage(RedBuffer buffer)
         {
+            var _chunks = new List<IRedClass>();
             _outputFile = new CR2WPackage();
 
             header = BaseStream.ReadStruct<PackageHeader>();
@@ -30,13 +31,11 @@ namespace WolvenKit.RED4.Archive.IO
 
             if (header.refPoolDescOffset != 0)
             {
-                package = null;
                 return EFileReadErrorCodes.NoCr2w;
             }
 
             if (header.numCruids0 != header.numCruids1)
             {
-                package = null;
                 return EFileReadErrorCodes.NoCr2w;
             }
 
@@ -77,10 +76,10 @@ namespace WolvenKit.RED4.Archive.IO
             foreach (var c in chunkDesc)
             {
                 BaseStream.Position = baseOff + c.offset;
-                _package.AddChunk(ReadChunk(c));
+                _chunks.Add(ReadChunk(c));
             }
 
-            package = _package;
+            buffer.SetChunks(_chunks);
 
             return EFileReadErrorCodes.NoError;
         }

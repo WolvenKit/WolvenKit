@@ -174,16 +174,23 @@ namespace WolvenKit.RED4.Archive.IO
             Debug.Assert(BaseStream.Position == info.offset);
 
             var buffer = BaseReader.ReadBytes((int)info.diskSize);
+            RedBuffer result;
             if (info.memSize == info.diskSize)
             {
-                return RedBuffer.CreateBuffer(info.flags, buffer);
+                result = RedBuffer.CreateBuffer(info.flags, buffer);
+            }
+            else
+            {
+                result = RedBuffer.CreateCompressedBuffer(info.flags, buffer, info.memSize);
+                if (decompress)
+                {
+                    result.Decompress();
+                }
             }
 
-            var result = RedBuffer.CreateCompressedBuffer(info.flags, buffer, info.memSize);
-            if (decompress)
-            {
-                result.Decompress();
-            }
+            var ms = new MemoryStream(result.Data);
+            var reader = new PackageReader(ms);
+            reader.ReadPackage(result);
 
             return result;
         }

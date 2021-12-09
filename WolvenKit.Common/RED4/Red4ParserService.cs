@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.CR2W
             //try
             //{
                 using var reader = new CR2WReader(br);
-                var readResult = reader.ReadFile(out var c, false);
+                var readResult = reader.ReadFile(out var c, true);
                 return c;
             //}
             //catch (MissingRTTIException e)
@@ -137,32 +137,6 @@ namespace WolvenKit.RED4.CR2W
             {
                 return null;
             }
-        }
-
-        public CR2WPackage TryReadPackage(Stream stream)
-        {
-            using var br = new BinaryReader(stream, Encoding.Default, true);
-            return TryReadPackage(br);
-        }
-
-        public CR2WPackage TryReadPackage(BinaryReader br)
-        {
-            //try
-            //{
-                using var reader = new PackageReader(br);
-                var readResult = reader.ReadPackage(out var c);
-                return c;
-            //}
-            //catch (MissingRTTIException e)
-            //{
-            //    Console.WriteLine(e.Message);
-            //    return null;
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine(e.Message);
-            //    return null;
-            //}
         }
 
         #endregion Methods

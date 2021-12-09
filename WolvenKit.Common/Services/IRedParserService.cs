@@ -7,8 +7,6 @@ namespace WolvenKit.Common.Services
 {
     public interface IRedParserService
     {
-        CR2WPackage TryReadPackage(Stream stream);
-
         CR2WFile TryReadRed4File(Stream stream);
 
         CR2WFile TryReadRed4FileHeaders(Stream stream);

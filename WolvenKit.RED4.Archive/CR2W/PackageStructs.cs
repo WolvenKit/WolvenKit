@@ -49,6 +49,7 @@ namespace WolvenKit.RED4.Archive.CR2W
 
         private const int sizeShift = 23;
         private const uint offsetMask = (1U << sizeShift) - 1U;
+        private const uint sizeMask = 0xFF << (sizeShift - 1);
         private const int unkShift = 31;
 
         public uint offset
@@ -59,7 +60,7 @@ namespace WolvenKit.RED4.Archive.CR2W
             }
             set
             {
-                bitfield ^= offsetMask;
+                bitfield &= ~offsetMask;
                 bitfield |= value & offsetMask;
             }
         }
@@ -68,12 +69,12 @@ namespace WolvenKit.RED4.Archive.CR2W
         {
             get
             {
-                return (byte)(bitfield >> sizeShift);
+                return (byte)((bitfield & sizeMask) >> sizeShift);
             }
             set
             {
-                bitfield ^= offsetMask;
-                bitfield |= (uint)value << sizeShift;
+                bitfield &= ~sizeMask;
+                bitfield |= ((uint)value << sizeShift) & sizeMask;
             }
         }
 
@@ -85,7 +86,7 @@ namespace WolvenKit.RED4.Archive.CR2W
             }
             set
             {
-                bitfield ^= 1U << unkShift;
+                bitfield &= ~(1U << unkShift);
                 bitfield |= Convert.ToUInt32(value) << unkShift;
             }
         }
@@ -99,6 +100,7 @@ namespace WolvenKit.RED4.Archive.CR2W
 
         private const int sizeShift = 24;
         private const uint offsetMask = (1U << sizeShift) - 1U;
+        private const uint sizeMask = 0xFF << (sizeShift - 1);
 
         public uint offset
         {
@@ -108,7 +110,7 @@ namespace WolvenKit.RED4.Archive.CR2W
             }
             set
             {
-                bitfield ^= offsetMask;
+                bitfield &= ~offsetMask;
                 bitfield |= value & offsetMask;
             }
         }
@@ -117,12 +119,12 @@ namespace WolvenKit.RED4.Archive.CR2W
         {
             get
             {
-                return (byte)(bitfield >> sizeShift);
+                return (byte)((bitfield & sizeMask) >> sizeShift);
             }
             set
             {
-                bitfield ^= offsetMask;
-                bitfield |= (uint)value << sizeShift;
+                bitfield &= ~sizeMask;
+                bitfield |= ((uint)value << sizeShift) & sizeMask;
             }
         }
     }

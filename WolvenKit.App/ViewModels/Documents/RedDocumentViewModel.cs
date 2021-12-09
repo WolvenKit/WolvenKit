@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -164,45 +165,11 @@ namespace WolvenKit.ViewModels.Documents
 
         private void PopulateItems(CR2WFile w2rcFile)
         {
-            TabItemViewModels.Add(new W2rcFileViewModel(w2rcFile as Red4File));
-
+            TabItemViewModels.Add(new W2rcFileViewModel(w2rcFile));
+            w2rcFile.Packages = new List<IList<IRedClass>>();
             foreach (var buffer in w2rcFile.Buffers)
             {
-                //if (b is CR2WBufferWrapper buffer)
-                {
-                    var data = buffer.Data;
-
-                    using var uncompressedMS = new MemoryStream();
-                    using (var compressedMs = new MemoryStream(data))
-                    {
-                        OodleHelper.DecompressAndCopySegment(compressedMs, uncompressedMS, (uint)data.Length, buffer.MemSize);
-
-                        //dbg
-                        //var bufferpath = $"{w2rcFile.FileName}.{(w2rcFile as CR2WFile).GetBufferIndex(b)}.buffer";
-                        //using (var fs = new FileStream(bufferpath, FileMode.Create, FileAccess.Write))
-                        //{
-                        //    uncompressedMS.CopyTo(fs);
-                        //}
-                    }
-
-                    // try reading as normal cr2w file
-                    var cr2wbuffer = _parser.TryReadRed4File(uncompressedMS);
-                    if (cr2wbuffer != null)
-                    {
-                        TabItemViewModels.Add(new W2rcBufferViewModel(buffer, cr2wbuffer, w2rcFile));
-                    }
-                    // try reading as compiled package
-                    else
-                    {
-                        uncompressedMS.Seek(0, SeekOrigin.Begin);
-                        var package = _parser.TryReadPackage(uncompressedMS);
-                        if (package != null)
-                        {
-                            TabItemViewModels.Add(new W2rcBufferViewModel(buffer, package, w2rcFile));
-                        }
-                    }
-                }
-
+                TabItemViewModels.Add(new W2rcBufferViewModel(buffer, w2rcFile));
             }
 
             SelectedIndex = 0;

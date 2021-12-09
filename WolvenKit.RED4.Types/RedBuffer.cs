@@ -1,9 +1,11 @@
-﻿using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Compression;
+using System.Collections.Generic;
+using System.IO;
 
 namespace WolvenKit.RED4
 {
-    public class RedBuffer : IRedBuffer
+    public class RedBuffer : Red4File, IRedBuffer
     {
         private byte[] _data;
 
@@ -28,6 +30,8 @@ namespace WolvenKit.RED4
         public bool IsIncompressable { get; private set; }
 
         public uint MemSize { get; set; }
+
+        public ushort Version { get; set; } = 4;
 
         public void Compress()
         {
@@ -56,6 +60,11 @@ namespace WolvenKit.RED4
             OodleLZHelper.DecompressBuffer(_data, out _data);
 
             IsCompressed = false;
+        }
+
+        public void SetChunks(IList<IRedClass> chunks)
+        {
+            _chunks = chunks;
         }
 
         public static RedBuffer CreateBuffer(uint flags, byte[] data)

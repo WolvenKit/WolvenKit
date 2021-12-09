@@ -266,6 +266,12 @@ namespace WolvenKit.RED4.Archive.IO
                 memSize = buffer.MemSize
             };
 
+            using var ms = new MemoryStream();
+            using var packageWriter = new PackageWriter(ms);
+
+            packageWriter.WritePackage(buffer);
+            buffer.Data = ms.ToArray();
+
             buffer.Compress();
             writer.BaseWriter.Write(buffer.Data);
 

@@ -1,6 +1,7 @@
 using DynamicData;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
+using WolvenKit.RED4;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
@@ -10,14 +11,12 @@ namespace WolvenKit.ViewModels.Documents
 {
     public class W2rcBufferViewModel : W2rcFileViewModel
     {
-        private IRedBuffer _buffer;
-        private Red4File _cr2wbuffer;
+        private RedBuffer _buffer;
         private readonly CR2WFile _w2RcFile;
 
-        public W2rcBufferViewModel(IRedBuffer buffer, Red4File redbuffer, CR2WFile w2rcFile) : base(redbuffer)
+        public W2rcBufferViewModel(RedBuffer buffer, CR2WFile w2rcFile) : base(buffer)
         {
             _buffer = buffer;
-            _cr2wbuffer = redbuffer;
             _w2RcFile = w2rcFile;
         }
 
