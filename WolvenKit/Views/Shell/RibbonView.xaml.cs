@@ -103,6 +103,10 @@ namespace WolvenKit.Views.Shell
                         viewModel => viewModel.SaveFileCommand,
                         view => view.AppMenuSaveFileButton)
                     .DisposeWith(disposables);
+                //this.BindCommand(ViewModel,
+                //        viewModel => viewModel.SaveAsFileCommand,
+                //        view => view.AppMenuSaveAsFileButton)
+                //    .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.SaveAllCommand,
                         view => view.AppMenuSaveAllFileButton)

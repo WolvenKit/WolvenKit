@@ -109,6 +109,7 @@ namespace WolvenKit.ViewModels.Shell
 
             NewFileCommand = new DelegateCommand<string>(ExecuteNewFile, CanNewFile);
             SaveFileCommand = new RelayCommand(ExecuteSaveFile, CanSaveFile);
+            SaveAsCommand = new RelayCommand(ExecuteSaveAs, CanSaveFile);
             SaveAllCommand = new RelayCommand(ExecuteSaveAll, CanSaveAll);
 
             FileSelectedCommand = new DelegateCommand<FileModel>(async (p) => await ExecuteSelectFile(p), CanSelectFile);
@@ -410,6 +411,9 @@ namespace WolvenKit.ViewModels.Shell
         public ICommand SaveFileCommand { get; private set; }
         private bool CanSaveFile() => _projectManager.ActiveProject != null && ActiveDocument != null;
         private void ExecuteSaveFile() => Save(ActiveDocument);
+
+        public ICommand SaveAsCommand { get; private set; }
+        private void ExecuteSaveAs() => Save(ActiveDocument, true);
 
         public ICommand SaveAllCommand { get; private set; }
         private bool CanSaveAll() => _projectManager.ActiveProject != null && OpenDocuments?.Count > 0;
@@ -768,17 +772,23 @@ namespace WolvenKit.ViewModels.Shell
         /// <param name="saveAsFlag"></param>
         public void Save(IDocumentViewModel fileToSave, bool saveAsFlag = false)
         {
-            // remove this?
-            //if (fileToSave.FilePath == null || saveAsFlag)
-            //{
-            //    var dlg = new SaveFileDialog();
-            //    if (dlg.ShowDialog().GetValueOrDefault())
-            //    {
-            //        fileToSave.FilePath = dlg.SafeFileName;
-            //    }
-            //}
+            if (fileToSave.FilePath == null || saveAsFlag)
+            {
+                var dlg = new SaveFileDialog();
+                dlg.FileName = Path.GetFileName(fileToSave.FilePath);
+                //dlg.RestoreDirectory = true;
+                dlg.InitialDirectory = Path.GetDirectoryName(fileToSave.FilePath);
+                if (dlg.ShowDialog().GetValueOrDefault())
+                {
+                    fileToSave.FilePath = dlg.SafeFileName;
+                    ActiveDocument.SaveAsCommand.SafeExecute();
+                }
+            }
+            else
+            {
+                ActiveDocument.SaveCommand.SafeExecute();
+            } 
 
-            ActiveDocument.SaveCommand.SafeExecute();
         }
 
         private bool IsInRawFolder(FileModel model) => IsInRawFolder(model.FullName);

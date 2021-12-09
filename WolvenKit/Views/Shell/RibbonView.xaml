@@ -242,6 +242,14 @@
                         <TextBlock Text="Save" Padding="5,0,0,0" />
                     </StackPanel>
                 </Button>
+                <Button Command="{Binding SaveAsCommand}" ToolTip="Save File">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Foreground="CornflowerBlue"
+                                    Kind="SaveAs" />
+                        <TextBlock Text="Save As" Padding="5,0,0,0" />
+                    </StackPanel>
+                </Button>
                 <Button Command="{Binding SaveAllCommand}" ToolTip="Save All Files">
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"

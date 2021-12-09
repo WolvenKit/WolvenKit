@@ -13,7 +13,7 @@ namespace WolvenKit.ViewModels.Documents
         /// <summary>
         /// Gets the current path of the file being managed in this document viewmodel.
         /// </summary>
-        string FilePath { get; }
+        string FilePath { get; set; }
 
         /// <summary>
         /// Gets a command to save this document's content into another file in the file system.
@@ -35,7 +35,7 @@ namespace WolvenKit.ViewModels.Documents
 
         Task<bool> OpenFileAsync(string path);
 
-        bool OpenFile(string path);
+        bool OpenFile(string path); 
 
         #endregion Methods
     }

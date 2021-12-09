@@ -69,6 +69,7 @@ namespace WolvenKit.ViewModels.Shell
 
             NewFileCommand = ReactiveCommand.Create(() => _mainViewModel.NewFileCommand.SafeExecute(null));
             SaveFileCommand = ReactiveCommand.Create(() => _mainViewModel.SaveFileCommand.SafeExecute());
+            SaveAsCommand = ReactiveCommand.Create(() => _mainViewModel.SaveAsCommand.SafeExecute());
             SaveAllCommand = ReactiveCommand.Create(() => _mainViewModel.SaveAllCommand.SafeExecute());
 
             ViewProjectExplorerCommand = ReactiveCommand.Create(() => _mainViewModel.ShowProjectExplorerCommand.SafeExecute());
@@ -137,6 +138,7 @@ namespace WolvenKit.ViewModels.Shell
 
         public ReactiveCommand<Unit, Unit> NewFileCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveFileCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveAsCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveAllCommand { get; }
 
         public ReactiveCommand<Unit, Unit> ViewProjectExplorerCommand { get; }
