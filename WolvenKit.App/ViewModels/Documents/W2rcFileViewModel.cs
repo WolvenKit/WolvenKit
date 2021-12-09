@@ -47,7 +47,7 @@ namespace WolvenKit.ViewModels.Documents
 
         //[Reactive] public ObservableCollection<ChunkPropertyViewModel> ChunkProperties { get; set; } = new();
 
-        public List<CR2WImportInfo> Imports => _file is CR2WFile cr2w ? cr2w.Debug.ImportInfos.ToList() : new List<CR2WImportInfo>();
+        public IReadOnlyList<IRedRef> Imports => _file is CR2WFile cr2w ? cr2w.Imports : new ReadOnlyCollection<IRedRef>(new List<IRedRef>());
 
         //public List<ICR2WBuffer> Buffers => _file.Buffers;
 
@@ -57,7 +57,7 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public ChunkViewModel SelectedChunk { get; set; }
 
-        [Reactive] public ICR2WImport SelectedImport { get; set; }
+        [Reactive] public IRedRef SelectedImport { get; set; }
 
         #endregion
 

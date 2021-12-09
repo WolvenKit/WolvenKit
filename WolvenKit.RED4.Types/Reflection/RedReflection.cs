@@ -327,7 +327,7 @@ namespace WolvenKit.RED4.Types
             public Type Type { get; set; }
             public object DefaultValue { get; internal set; }
 
-            public object GetValue(IRedClass instance) => instance.InternalGetPropertyValue(Type, RedName, Flags.Clone());
+            public object GetValue(IRedClass instance) => instance.InternalGetPropertyValue(Type, RedName, Flags?.Clone() ?? Flags.Empty);
             public void SetValue(IRedClass instance, object value) => instance.InternalSetPropertyValue(RedName, value);
 
 

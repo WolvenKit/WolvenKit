@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace WolvenKit.RED4.Types
 {
-    public class CArrayBase<T> : List<T>, IEquatable<CArrayBase<T>>
+    public class CArrayBase<T> : List<T>, IEquatable<CArrayBase<T>>, IRedArray
     {
         public CArrayBase(){}
 
@@ -17,6 +17,13 @@ namespace WolvenKit.RED4.Types
                 {
                     this[i] = System.Activator.CreateInstance<T>();
                 }
+            }
+        }
+        public Type InnerType
+        {
+            get
+            {
+                return typeof(T);
             }
         }
 

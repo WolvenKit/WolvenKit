@@ -9,10 +9,14 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:treeViewEngine="clr-namespace:Syncfusion.UI.Xaml.TreeView.Engine;assembly=Syncfusion.SfTreeView.WPF"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     xmlns:documents="clr-namespace:WolvenKit.ViewModels.Documents;assembly=WolvenKit.App"
     xmlns:shell="clr-namespace:WolvenKit.ViewModels.Shell;assembly=WolvenKit.App"
+    xmlns:types="clr-namespace:WolvenKit.RED4.Types;assembly=WolvenKit.RED4.Types"
     xmlns:converters="clr-namespace:WolvenKit.Converters"
+    xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
+    xmlns:archive="clr-namespace:WolvenKit.RED4.Archive.CR2W;assembly=WolvenKit.RED4.Archive"
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="800"
     d:DataContext="{d:DesignInstance Type={x:Type documents:W2rcFileViewModel}}">
@@ -31,12 +35,227 @@
                     <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml"/>
                 </ResourceDictionary.MergedDictionaries>
 
-                
-
                 <Style TargetType="{x:Type syncfusion:AdvancedFilterControl}">
                     <Setter Property="CanGenerateUniqueItems" Value="False" />
                 </Style>
 
+                <!-- Start TreeView Styles & Templates -->
+                
+                <Style x:Key="DeleteButton" TargetType="Button" BasedOn="{StaticResource ButtonCustom}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsInArray}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+
+                <Style x:Key="PropertyValueStyle" TargetType="TextBlock">
+                    <Setter Property="Text" Value="{Binding Value}"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Value}" Value="null">
+                            <Setter Property="Foreground" Value="{StaticResource Border}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding propertyName}" Value="{x:Null}">
+                            <Setter Property="Text" Value=""/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsInArray}" Value="True">
+                            <Setter Property="Text" Value="{Binding Type}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+                
+                <DataTemplate x:Key="PropertyNameTemplate" DataType="{x:Type shell:ChunkViewModel}">
+                    <Grid>
+                        <Grid.Resources>
+                            <Style x:Key="ExpanderHider" TargetType="FrameworkElement">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TreeViewItem}}}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Resources>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <iconPacks:PackIconCodicons Kind="{Binding Extension}" Height="14"
+                            Width="14" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0,0,6,0" />
+                        <TextBlock Width="Auto" Text="{Binding Name}"  Margin="0,0,0,2" Grid.Column="1" />
+                        <TextBlock Width="Auto" Text="{Binding Type, StringFormat=' {0}'}"  Margin="0,0,0,2" Grid.Column="2"
+                            Style="{StaticResource ExpanderHider}" Foreground="{StaticResource Border}" />
+                    </Grid>
+                </DataTemplate>
+
+                <DataTemplate x:Key="PropertyValueTemplate" DataType="{x:Type shell:ChunkViewModel}">
+                    <Grid>
+                        <TextBlock Style="{StaticResource PropertyValueStyle}" Margin="0,0,0,2"/>
+                    </Grid>
+                </DataTemplate>
+                
+                <Style x:Key="ArrayNameColumnWidth" TargetType="ColumnDefinition">
+                    <Setter Property="Width" Value="40" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsInArray}" Value="False">
+                            <Setter Property="Width" Value="218"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+
+                <converters:TreeViewItemTemplateSelector x:Name="itemTemplateSelector" x:Key="itemTemplateSelector">
+                    <converters:TreeViewItemTemplateSelector.PropertyTemplate>
+                        <DataTemplate>
+                            <Grid ToolTip="{Binding Type}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Style="{StaticResource ArrayNameColumnWidth}" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter Grid.Column="0" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                   ContentTemplate="{StaticResource PropertyNameTemplate}"/>
+                                <ContentPresenter Grid.Column="1" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                   ContentTemplate="{StaticResource PropertyValueTemplate}"  />
+                                <Button
+                                    Style="{StaticResource DeleteButton}" Grid.Column="2"
+                                    Margin="5,0,0,0" Padding="0" Height="20" Width="20"
+                                    VerticalAlignment="Center" ToolTip="Delete Property">
+                                    <iconPacks:PackIconVaadinIcons Kind="Trash" Foreground="IndianRed"
+                                        VerticalAlignment="Center" Padding="2"/>
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </converters:TreeViewItemTemplateSelector.PropertyTemplate>
+                    <converters:TreeViewItemTemplateSelector.ArrayTemplate>
+                        <DataTemplate>
+                            <Grid ToolTip="{Binding Type}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Style="{StaticResource ArrayNameColumnWidth}" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter Grid.Column="0" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                   ContentTemplate="{StaticResource PropertyNameTemplate}"/>
+                                <ContentPresenter Grid.Column="2" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                   ContentTemplate="{StaticResource PropertyValueTemplate}"  />
+                                <Button 
+                                    Grid.Column="1" Margin="-25,0,0,0" Padding="0"
+                                    Height="20" Width="20" VerticalAlignment="Center"
+                                    ToolTip="Add Element to Array" Style="{StaticResource ButtonCustom}">
+                                    <iconPacks:PackIconVaadinIcons Kind="PlusCircle"
+                                        VerticalAlignment="Center" Padding="2"/>
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </converters:TreeViewItemTemplateSelector.ArrayTemplate>
+                    <converters:TreeViewItemTemplateSelector.HandleTemplate>
+                        <DataTemplate>
+                            <Grid ToolTip="{Binding Type}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Style="{StaticResource ArrayNameColumnWidth}" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter Grid.Column="0" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                   ContentTemplate="{StaticResource PropertyNameTemplate}"/>
+                                <TextBlock Text="{Binding Value}" VerticalAlignment="Center" Grid.Column="1" />
+                                <Button Grid.Column="2" Margin="5,0,0,0">
+                                    <TextBlock Text="Jump to"/>
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </converters:TreeViewItemTemplateSelector.HandleTemplate>
+                </converters:TreeViewItemTemplateSelector>
+
+                <!-- Editors -->
+
+                <Style x:Key="EditorSelector" TargetType="ContentControl">
+                    <Setter Property="Content">
+                        <Setter.Value>
+                            <TextBox Text="{Binding Text}" />
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+
+                <converters:TreeViewEditorSelector x:Name="editTemplateSelector" x:Key="editTemplateSelector">
+                    <converters:TreeViewEditorSelector.PropertyEditTemplate>
+                        <DataTemplate>
+                            <Grid ToolTip="{Binding Type}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Style="{StaticResource ArrayNameColumnWidth}" />
+                                    <ColumnDefinition Width="Auto" MinWidth="400"/>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter Grid.Column="0" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                   ContentTemplate="{StaticResource PropertyNameTemplate}"/>
+                                <ContentControl  Grid.Column="1" Style="{StaticResource EditorSelector}" />
+                                <Button
+                                    Style="{StaticResource ButtonCustom}" Grid.Column="2"
+                                    Margin="5,0,0,0" Padding="0" Height="20" Width="20"
+                                    VerticalAlignment="Center" ToolTip="Save Property">
+                                    <iconPacks:PackIconCodicons Kind="Save"
+                                        VerticalAlignment="Center" Padding="2"/>
+                                </Button>
+                                <Button
+                                    Style="{StaticResource ButtonCustom}" Grid.Column="3"
+                                    Margin="0,0,0,0" Padding="0" Height="20" Width="20"
+                                    VerticalAlignment="Center" ToolTip="Reset Property">
+                                    <iconPacks:PackIconCodicons Kind="Refresh"
+                                        VerticalAlignment="Center" Padding="2"/>
+                                </Button>
+                                <Button
+                                    Style="{StaticResource DeleteButton}" Grid.Column="4"
+                                    Margin="5,0,0,0" Padding="0" Height="20" Width="20"
+                                    VerticalAlignment="Center" ToolTip="Delete Property">
+                                    <iconPacks:PackIconVaadinIcons Kind="Trash" Foreground="IndianRed"
+                                        VerticalAlignment="Center" Padding="2"/>
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </converters:TreeViewEditorSelector.PropertyEditTemplate>
+                    <converters:TreeViewEditorSelector.ArrayTemplate>
+                        <DataTemplate>
+                            <Grid ToolTip="{Binding Type}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Style="{StaticResource ArrayNameColumnWidth}" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter Grid.Column="0" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                   ContentTemplate="{StaticResource PropertyNameTemplate}"/>
+                                <ContentPresenter Grid.Column="2" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                   ContentTemplate="{StaticResource PropertyValueTemplate}"  />
+                                <Button 
+                                    Grid.Column="1" Margin="-25,0,0,0" Padding="0"
+                                    Height="20" Width="20" VerticalAlignment="Center"
+                                    ToolTip="Add Element to Array" Style="{StaticResource ButtonCustom}">
+                                    <iconPacks:PackIconVaadinIcons Kind="PlusCircle"
+                                        VerticalAlignment="Center" Padding="2"/>
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </converters:TreeViewEditorSelector.ArrayTemplate>
+                    <converters:TreeViewEditorSelector.HandleEditTemplate>
+                        <DataTemplate>
+                            <Grid ToolTip="{Binding Type}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Style="{StaticResource ArrayNameColumnWidth}" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter Grid.Column="0" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                   ContentTemplate="{StaticResource PropertyNameTemplate}"/>
+                                <TextBlock Text="{Binding Value}" VerticalAlignment="Center" Grid.Column="1" />
+                                <Button Grid.Column="2" Margin="5,0,0,0">
+                                    <TextBlock Text="Jump to"/>
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </converters:TreeViewEditorSelector.HandleEditTemplate>
+                </converters:TreeViewEditorSelector>
+                
             </ResourceDictionary>
 
         </Grid.Resources>
@@ -252,13 +471,13 @@
                         </Style>
                     </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
-                        <DataTemplate DataType="{x:Type shell:ChunkViewModel}">
+                        <DataTemplate DataType="{x:Type types:IRedRef}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding}"/>
+                                <TextBlock Text="{Binding DepotPath}"/>
                                 <Button x:Name="DeleteButton" Grid.Column="1" Visibility="Collapsed" Style="{StaticResource ButtonDefault}" ToolTip="Add Chunk" Height="16" Width="16" Padding="0">
                                     <Button.Content>
                                         <iconPacks:PackIconMaterialDesign Kind="Delete"
@@ -468,8 +687,39 @@
                 ButtonPanelVisibility="Collapsed"
                 BorderThickness="0" />
 
+
         </Grid>
+
+
+        <syncfusion:SfTreeView
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            ItemsSource="{Binding Chunks}"
+            ChildPropertyName="Properties"
+            ShowLines="True"
+            ItemTemplateSelector="{StaticResource itemTemplateSelector}"
+            EditTemplateSelector="{StaticResource editTemplateSelector}"
+            SelectionMode="None"
+            EditTrigger="DoubleTap"
+            AutoExpandMode="RootNodes"
+            Visibility="Collapsed"
+            AllowEditing="True">
+            <!--syncfusion:SfTreeView.ItemTemplate>
+                <DataTemplate>
+                    <Grid ToolTip="{Binding Type}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding Value}" VerticalAlignment="Center" Grid.Column="1" />
+                    </Grid>
+                </DataTemplate>
+            </syncfusion:SfTreeView.ItemTemplate-->
+        </syncfusion:SfTreeView>
 
     </Grid>
     
 </reactiveUi:ReactiveUserControl>
+
+

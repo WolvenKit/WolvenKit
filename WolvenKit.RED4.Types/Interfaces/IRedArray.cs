@@ -1,10 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace WolvenKit.RED4.Types
 {
-    public interface IRedArray : IRedPrimitive
+    public interface IRedArray : IRedPrimitive, IList
     {
+        public Type InnerType { get; }
     }
 
     public interface IRedArray<T> : IRedArray, IRedGenericType<T>

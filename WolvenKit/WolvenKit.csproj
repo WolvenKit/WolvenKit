@@ -134,6 +134,7 @@
     <Page Remove="Views\Wizards\PublishWizard\**" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="Views\Templates\RedFixedPointEditor.cs" />
     <Compile Remove="Views\Wizards\PublishWizardView.xaml.cs" />
   </ItemGroup>
     <ItemGroup>

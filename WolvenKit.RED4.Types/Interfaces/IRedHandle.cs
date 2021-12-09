@@ -13,6 +13,12 @@ namespace WolvenKit.RED4.Types
     {
         public Red4File File { get; }
         public int Pointer { get; set; }
+        public Type InnerType {
+            get
+            {
+                return File?.Chunks?[Pointer]?.GetType() ?? null;
+            }
+        }
     }
 
     public interface IRedBaseHandle<T> : IRedBaseHandle where T : IRedClass

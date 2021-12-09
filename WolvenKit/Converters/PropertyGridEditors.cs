@@ -62,6 +62,32 @@ namespace WolvenKit.Converters
 
             return null;
         }
+        public class BaseTypeEditor : ITypeEditor
+        {
+            private RedBaseTypeEditor _editor;
+
+            public void Attach(PropertyViewItem property, PropertyItem info)
+            {
+                _editor.SetCurrentValue(UIElement.IsEnabledProperty, false);
+                var binding = new Binding("Value")
+                {
+                    Source = info,
+                    ValidatesOnExceptions = true,
+                    ValidatesOnDataErrors = true
+                };
+                BindingOperations.SetBinding(_editor, RedBaseTypeEditor.RedTypeProperty, binding);
+            }
+            public object Create(PropertyInfo propertyInfo)
+            {
+                _editor = new RedBaseTypeEditor();
+
+                return _editor;
+            }
+            public void Detach(PropertyViewItem property)
+            {
+
+            }
+        }
 
         public class ColorEditor : ITypeEditor
         {

@@ -52,6 +52,7 @@ namespace WolvenKit.Views.Templates
             }
 
             view.BindingCollection.Clear();
+            //view.BindingCollection.Add(null);
 
             //throw new TodoException("handle editor");
 

@@ -149,6 +149,10 @@ namespace WolvenKit.Views.Documents
                     propertyItem.Editor = customEditor;
                     e.ExpandMode = PropertyExpandModes.FlatMode;
                 }
+                else
+                {
+                    //propertyItem.Editor = new PropertyGridEditors.BaseTypeEditor();
+                } 
             }
         }
 
@@ -170,6 +174,7 @@ namespace WolvenKit.Views.Documents
                     if (r ?? true)
                     {
                         //TODO
+                        throw new Exception("TODO");
                     }
                 }
                 else

@@ -166,7 +166,6 @@ namespace WolvenKit.ViewModels.Documents
         private void PopulateItems(CR2WFile w2rcFile)
         {
             TabItemViewModels.Add(new W2rcFileViewModel(w2rcFile));
-            w2rcFile.Packages = new List<IList<IRedClass>>();
             foreach (var buffer in w2rcFile.Buffers)
             {
                 TabItemViewModels.Add(new W2rcBufferViewModel(buffer, w2rcFile));
