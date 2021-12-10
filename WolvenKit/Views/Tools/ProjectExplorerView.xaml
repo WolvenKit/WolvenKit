@@ -18,11 +18,23 @@
 
    <UserControl.Resources>
        <ResourceDictionary>
-           <ResourceDictionary.MergedDictionaries>
-               <hc:ThemeResources RequestedTheme="Dark" />
-               <hc:Theme />
-           </ResourceDictionary.MergedDictionaries>
-       </ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <hc:ThemeResources RequestedTheme="Dark" />
+                <hc:Theme />
+            </ResourceDictionary.MergedDictionaries>
+            <DataTemplate x:Key="DragDropTemplate">
+                <Border
+                    x:Name="border" Width="250"  
+                    Background="{StaticResource ContentBackgroundAlt}" 
+                    BorderBrush="{StaticResource Border}" Padding="8"
+                    BorderThickness="1">
+                    <!-- this should update based on the context -->
+                    <TextBlock Text="Move file(s) here - hold control to copy"
+                        FontSize="12"
+                        Foreground="#ffffff" />
+                </Border>
+            </DataTemplate>
+        </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
@@ -121,6 +133,10 @@
             Grid.Row="2"
             CurrentCellBorderBrush="White"
             CurrentCellBorderThickness="0"
+            AllowDrop="True"
+            AllowDraggingRows="True"
+            RowDropIndicatorMode="Line"
+            RowDragDropTemplate="{StaticResource DragDropTemplate}"
             >
 
             <syncfusion:SfTreeGrid.Resources>
@@ -209,11 +225,6 @@
                                     Text="{Binding Path=Name}" />
                                 <StackPanel Orientation="Horizontal" Grid.Column="2" Background="{StaticResource ContentBackground}">
                                     <helpers:TreeGridButton Style="{StaticResource WolvenKitTreeGridButton}" Content="Open" Command="{Binding OpenFileCommand}" ToolTip="Open this file" BorderBrush="Green" HoverBackground="DarkGreen" PressedBackground="Blue"/>
-                                    <helpers:TreeGridButton Style="{StaticResource WolvenKitTreeGridButton}" Command="{Binding RenameFileCommand}" ToolTip="Rename this file">
-                                        <helpers:TreeGridButton.Content>
-                                            <iconPacks:PackIconForkAwesome Kind="Pencil" Height="11" Width="15"/>
-                                        </helpers:TreeGridButton.Content>
-                                    </helpers:TreeGridButton>
                                     <helpers:TreeGridButton Style="{StaticResource WolvenKitTreeGridButtonDirectory}" Command="{Binding DeleteFileCommand}" ToolTip="Delete this file/folder" BorderBrush="#DF2935" HoverBackground="DarkRed" PressedBackground="Blue">
                                         <helpers:TreeGridButton.Content>
                                             <iconPacks:PackIconForkAwesome Kind="Trash" Height="11" Width="15"/>
@@ -261,7 +272,16 @@
 
 
                     <Separator/>
-
+                    <MenuItem Command="{Binding RenameFileCommand}" Header="Rename" >
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconForkAwesome
+                                    Width="16"
+                                    Height="16"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Stretch"
+                                    Kind="Pencil" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <MenuItem Command="{Binding CopyFileCommand}" Header="Copy" >
                         <MenuItem.Icon>
                             <iconPacks:PackIconMaterial
@@ -282,7 +302,6 @@
                                     Kind="ContentPaste" />
                         </MenuItem.Icon>
                     </MenuItem>
-
                     <Separator/>
 
                     <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path" />

@@ -25,6 +25,7 @@ using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.ViewModels.Tools;
+using System.Collections.ObjectModel;
 
 namespace WolvenKit.Views.Tools
 {
@@ -39,6 +40,12 @@ namespace WolvenKit.Views.Tools
         {
             InitializeComponent();
             TreeGrid.ItemsSourceChanged += TreeGrid_ItemsSourceChanged;
+            TreeGrid.RowDragDropController.DragStart += RowDragDropController_DragStart;
+            TreeGrid.RowDragDropController.DragOver += RowDragDropController_DragOver;
+            TreeGrid.RowDragDropController.DragLeave += RowDragDropController_DragLeave;
+            TreeGrid.RowDragDropController.Drop += RowDragDropController_Drop;
+            TreeGrid.RowDragDropController.Dropped += RowDragDropController_Dropped;
+            TreeGrid.RowDragDropController.CanAutoExpand = true;
 
             ViewModel = Locator.Current.GetService<ProjectExplorerViewModel>();
             DataContext = ViewModel;
@@ -303,6 +310,141 @@ namespace WolvenKit.Views.Tools
             // filter programmatially
             TreeGrid.View.Filter = FilterNodes;
             TreeGrid.View.RefreshFilter();
+        }
+
+        private void RowDragDropController_DragStart(object sender, TreeGridRowDragStartEventArgs e)
+        {
+
+        }
+        private void RowDragDropController_DragOver(object sender, TreeGridRowDragOverEventArgs e)
+        {
+            if (e.Data.GetDataPresent("Nodes"))
+            {
+                var treeNodes = e.Data.GetData("Nodes") as ObservableCollection<TreeNode>;
+                if (treeNodes[0].Item is FileModel sourceFile)
+                {
+                    if (e.TargetNode.Item is FileModel targetFile)
+                    {
+                        if (targetFile == sourceFile)
+                        {
+                            e.ShowDragUI = false;
+                            e.Handled = true;
+                        }
+                        else
+                        {
+                            e.ShowDragUI = true;
+                            e.Handled = false;
+                        } 
+                    }
+                }
+            }
+        }
+
+        private void RowDragDropController_DragLeave(object sender, TreeGridRowDragLeaveEventArgs e)
+        {
+
+        }
+        private void RowDragDropController_Drop(object sender, TreeGridRowDropEventArgs e)
+        {
+            e.Handled = true;
+            // this should all be somewhere else, right?
+            try
+            {
+                if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                {
+                    if (e.TargetNode.Item is FileModel targetFile)
+                    {
+                        var targetDirectory = Path.GetDirectoryName(targetFile.FullName);
+                        if (File.GetAttributes(targetFile.FullName).HasFlag(FileAttributes.Directory))
+                        {
+                            targetDirectory = targetFile.FullName;
+                        }
+                        var files = new List<string>((string[])e.Data.GetData(DataFormats.FileDrop));
+                        ProcessFileAction(files, targetDirectory, true);
+                    }
+                }
+                else if (e.Data.GetDataPresent("Nodes"))
+                {
+                    var treeNodes = e.Data.GetData("Nodes") as ObservableCollection<TreeNode>;
+
+                    if (treeNodes.Count == 0 || treeNodes == null)
+                        return;
+
+                    if (e.TargetNode.Item is FileModel targetFile)
+                    {
+                        var targetDirectory = Path.GetDirectoryName(targetFile.FullName);
+                        if (File.GetAttributes(targetFile.FullName).HasFlag(FileAttributes.Directory))
+                        {
+                            targetDirectory = targetFile.FullName;
+                        }
+                        var files = new List<string>();
+                        foreach (var node in treeNodes)
+                        {
+                            if (node.Item is FileModel sourceFile)
+                            {
+                                files.Add(sourceFile.FullName);
+                            }
+                        }
+                        ProcessFileAction(files, targetDirectory, false);
+                    }
+                }
+            }
+            catch (Exception error)
+            {
+                Console.WriteLine(error.Message);
+            }
+        }
+        private void RowDragDropController_Dropped(object sender, TreeGridRowDroppedEventArgs e)
+        {
+
+        }
+
+        public bool IsControlBeingHeld
+        {
+            get
+            {
+                return Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+            }
+        }
+
+        private void ProcessFileAction(List<string> sourceFiles, string targetDirectory, bool onlyCopy)
+        {
+            foreach (string sourceFile in sourceFiles)
+            {
+                var newFile = Path.Combine(targetDirectory, Path.GetFileName(sourceFile));
+                if (File.GetAttributes(sourceFile).HasFlag(FileAttributes.Directory))
+                {
+                    foreach (string dirPath in Directory.GetDirectories(sourceFile, "*", SearchOption.AllDirectories))
+                    {
+                        Directory.CreateDirectory(dirPath.Replace(sourceFile, newFile));
+                    }
+
+                    foreach (string newPath in Directory.GetFiles(sourceFile, "*.*", SearchOption.AllDirectories))
+                    {
+                        File.Copy(newPath, newPath.Replace(sourceFile, newFile), true);
+                    }
+                }
+                else
+                {
+                    if (sourceFile == newFile)
+                    {
+                        return;
+                    }
+
+                    if (File.Exists(newFile) && MessageBox.Show("File already exists at that location - overwrite it?", "File Overwrite Confirmation", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+                    {
+                        return;
+                    }
+                    if (IsControlBeingHeld || onlyCopy)
+                    {
+                        File.Copy(sourceFile, newFile, true);
+                    }
+                    else
+                    {
+                        File.Move(sourceFile, newFile, true);
+                    }
+                }
+            }
         }
 
         private void TreeGrid_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
