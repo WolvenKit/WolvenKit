@@ -7,6 +7,9 @@ using WolvenKit.Converters;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Documents;
 using WolvenKit.Views.Templates;
+using Syncfusion.UI.Xaml.TreeView;
+using WolvenKit.ViewModels.Shell;
+using System.Windows.Input;
 
 namespace WolvenKit.Views.Documents
 {
@@ -19,7 +22,6 @@ namespace WolvenKit.Views.Documents
         {
             InitializeComponent();
 
-
             this.WhenAnyValue(x => x.DataContext).Subscribe(x =>
             {
                 if (x is W2rcFileViewModel vm)
@@ -31,24 +33,33 @@ namespace WolvenKit.Views.Documents
             this.WhenActivated(disposables =>
             {
                 // ChunksTreeView
+                //this.OneWayBind(ViewModel,
+                //       viewmodel => viewmodel.Chunks,
+                //       view => view.ChunksTreeView.ItemsSource)
+                //   .DisposeWith(disposables);
+                //this.Bind(ViewModel,
+                //      viewmodel => viewmodel.SelectedChunk,
+                //      view => view.ChunksTreeView.SelectedItem)
+                //  .DisposeWith(disposables);
+
                 this.OneWayBind(ViewModel,
                        viewmodel => viewmodel.Chunks,
-                       view => view.ChunksTreeView.ItemsSource)
+                       view => view.TreeView.ItemsSource)
                    .DisposeWith(disposables);
                 this.Bind(ViewModel,
                       viewmodel => viewmodel.SelectedChunk,
-                      view => view.ChunksTreeView.SelectedItem)
+                      view => view.TreeView.SelectedItem)
                   .DisposeWith(disposables);
 
                 // ImportsListView
-                this.OneWayBind(ViewModel,
-                       viewmodel => viewmodel.Imports,
-                       view => view.ImportsListView.ItemsSource)
-                   .DisposeWith(disposables);
-                this.Bind(ViewModel,
-                      viewmodel => viewmodel.SelectedImport,
-                      view => view.ImportsListView.SelectedItem)
-                  .DisposeWith(disposables);
+                //this.OneWayBind(ViewModel,
+                //       viewmodel => viewmodel.Imports,
+                //       view => view.ImportsListView.ItemsSource)
+                //   .DisposeWith(disposables);
+                //this.Bind(ViewModel,
+                //      viewmodel => viewmodel.SelectedImport,
+                //      view => view.ImportsListView.SelectedItem)
+                //  .DisposeWith(disposables);
 
 
                 // MainTreeGrid
@@ -111,27 +122,27 @@ namespace WolvenKit.Views.Documents
         //    ViewModel.SelectedChunk = chunk;
         //}
 
-        private void SetCollapsedAll()
-        {
-            ChunksView.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-            ImportsView.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-        }
+        //private void SetCollapsedAll()
+        //{
+        //    ChunksView.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+        //    ImportsView.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+        //}
 
        
 
 
 
-        private void ChunksButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            SetCollapsedAll();
-            ChunksView.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-        }
+        //private void ChunksButton_OnClick(object sender, RoutedEventArgs e)
+        //{
+        //    SetCollapsedAll();
+        //    ChunksView.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        //}
 
-        private void ImportsButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            SetCollapsedAll();
-            ImportsView.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-        }
+        //private void ImportsButton_OnClick(object sender, RoutedEventArgs e)
+        //{
+        //    SetCollapsedAll();
+        //    ImportsView.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        //}
 
 
 
@@ -180,6 +191,68 @@ namespace WolvenKit.Views.Documents
                 else
                 {
                     throw new ArgumentException(nameof(editableVariable));
+                }
+            }
+        }
+
+        private void SfTreeView_ItemDragStarting(object sender, TreeViewItemDragStartingEventArgs e)
+        {
+            //var record = e.DraggingNodes[0].Content as ChunkViewModel;
+            //if (typeof(CBool).IsAssignableTo(record.Data.GetType()))
+            //    e.Cancel = true;
+        }
+        private void SfTreeView_ItemDragOver(object sender, TreeViewItemDragOverEventArgs e)
+        {
+            if (sender is SfTreeView tv)
+            {
+                if (e.DraggingNodes[0].Content is ChunkViewModel source)
+                {
+                    if (e.TargetNode.Content is ChunkViewModel target)
+                    {
+                        if (source == target)
+                        {
+                            //tv.Cursor = Cursors.Arrow;
+                            e.DropPosition = DropPosition.DropAsChild;
+                        }
+                        else if (source.CanBeDroppedOn(target))
+                        {
+                            e.DropPosition = DropPosition.DropAsChild;
+                            //tv.Cursor = Cursors.Hand;
+                        }
+                        else
+                        {
+                            e.DropPosition = DropPosition.None;
+                            //tv.Cursor = Cursors.No;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void SfTreeView_ItemDropping(object sender, TreeViewItemDroppingEventArgs e)
+        {
+            e.Handled = true;
+            if (e.DraggingNodes[0].Content is ChunkViewModel source)
+            {
+                if (e.TargetNode.Content is ChunkViewModel target)
+                {
+                    //if (source.CanBeDroppedOn(target))
+                    //{
+                        //e.Handled = false;
+                    //}
+                }
+            }
+        }
+        private void SfTreeView_ItemDropped(object sender, TreeViewItemDroppedEventArgs e)
+        {
+            if (e.DraggingNodes[0].Content is ChunkViewModel source)
+            {
+                if (e.TargetNode.Content is ChunkViewModel target)
+                {
+                    if (source.CanBeDroppedOn(target))
+                    {
+                        target.Data = source.Data;
+                    }
                 }
             }
         }

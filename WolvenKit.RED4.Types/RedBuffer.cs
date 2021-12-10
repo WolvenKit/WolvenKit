@@ -9,7 +9,10 @@ namespace WolvenKit.RED4
     {
         private byte[] _data;
 
-        public RedBuffer() { }
+        public RedBuffer() : base()
+        {
+            Cruids = new List<CRUID>();
+        }
 
         public uint Flags { get; set; }
         public byte[] Data
@@ -32,6 +35,8 @@ namespace WolvenKit.RED4
         public uint MemSize { get; set; }
 
         public ushort Version { get; set; } = 4;
+
+        public IList<CRUID> Cruids;
 
         public void Compress()
         {

@@ -19,6 +19,7 @@ namespace WolvenKit.Converters
         public DataTemplate PropertyTemplate { get; set; }
         public DataTemplate ArrayTemplate { get; set; }
         public DataTemplate HandleTemplate { get; set; }
+        public DataTemplate RefTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
@@ -33,6 +34,10 @@ namespace WolvenKit.Converters
                     else if (vm.Data is IRedHandle)
                     {
                         return HandleTemplate;
+                    }
+                    else if (vm.Data is IRedRef)
+                    {
+                        return RefTemplate;
                     }
                     else
                     {

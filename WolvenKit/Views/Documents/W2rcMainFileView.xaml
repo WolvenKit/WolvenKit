@@ -55,11 +55,11 @@
                         <DataTrigger Binding="{Binding Value}" Value="null">
                             <Setter Property="Foreground" Value="{StaticResource Border}"/>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding propertyName}" Value="{x:Null}">
-                            <Setter Property="Text" Value=""/>
+                        <DataTrigger Binding="{Binding Name}" Value="{x:Null}">
+                            <Setter Property="Text" Value="{Binding Type}"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding IsInArray}" Value="True">
-                            <Setter Property="Text" Value="{Binding Type}"/>
+                            <Setter Property="Text" Value="{Binding Value}"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -77,12 +77,9 @@
                             </Style>
                         </Grid.Resources>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="20" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <iconPacks:PackIconCodicons Kind="{Binding Extension}" Height="14"
-                            Width="14" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0,0,6,0" />
                         <TextBlock Width="Auto" Text="{Binding Name}"  Margin="0,0,0,2" Grid.Column="1" />
                         <TextBlock Width="Auto" Text="{Binding Type, StringFormat=' {0}'}"  Margin="0,0,0,2" Grid.Column="2"
                             Style="{StaticResource ExpanderHider}" Foreground="{StaticResource Border}" />
@@ -91,15 +88,47 @@
 
                 <DataTemplate x:Key="PropertyValueTemplate" DataType="{x:Type shell:ChunkViewModel}">
                     <Grid>
-                        <TextBlock Style="{StaticResource PropertyValueStyle}" Margin="0,0,0,2"/>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <iconPacks:PackIconCodicons Kind="{Binding Extension}" Height="14"
+                            Width="14" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0,0,6,0" />
+                        <TextBlock Style="{StaticResource PropertyValueStyle}" Margin="0,0,0,2" Grid.Column="1"/>
+                        <Button
+                                    Style="{StaticResource DeleteButton}" Grid.Column="2"
+                                    Margin="5,-4,0,-2" Padding="0" Height="20" Width="20"
+                                    VerticalAlignment="Center" ToolTip="Delete Element">
+                            <iconPacks:PackIconVaadinIcons Kind="Trash" Foreground="IndianRed"
+                                        VerticalAlignment="Center" Padding="2"/>
+                        </Button>
                     </Grid>
                 </DataTemplate>
                 
                 <Style x:Key="ArrayNameColumnWidth" TargetType="ColumnDefinition">
-                    <Setter Property="Width" Value="40" />
+                    <Setter Property="Width" Value="218" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsInArray}" Value="False">
-                            <Setter Property="Width" Value="218"/>
+                        <DataTrigger Binding="{Binding Level}" Value="1">
+                            <Setter Property="Width" Value="200"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Level}" Value="2">
+                            <Setter Property="Width" Value="180"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Level}" Value="3">
+                            <Setter Property="Width" Value="160"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Level}" Value="4">
+                            <Setter Property="Width" Value="140"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Level}" Value="5">
+                            <Setter Property="Width" Value="120"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsInArray}" Value="True">
+                            <Setter Property="Width" Value="20"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Name}" Value="{x:Null}">
+                            <Setter Property="Width" Value="0"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -117,13 +146,6 @@
                                    ContentTemplate="{StaticResource PropertyNameTemplate}"/>
                                 <ContentPresenter Grid.Column="1" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center"
                                    ContentTemplate="{StaticResource PropertyValueTemplate}"  />
-                                <Button
-                                    Style="{StaticResource DeleteButton}" Grid.Column="2"
-                                    Margin="5,0,0,0" Padding="0" Height="20" Width="20"
-                                    VerticalAlignment="Center" ToolTip="Delete Property">
-                                    <iconPacks:PackIconVaadinIcons Kind="Trash" Foreground="IndianRed"
-                                        VerticalAlignment="Center" Padding="2"/>
-                                </Button>
                             </Grid>
                         </DataTemplate>
                     </converters:TreeViewItemTemplateSelector.PropertyTemplate>
@@ -142,7 +164,7 @@
                                 <Button 
                                     Grid.Column="1" Margin="-25,0,0,0" Padding="0"
                                     Height="20" Width="20" VerticalAlignment="Center"
-                                    ToolTip="Add Element to Array" Style="{StaticResource ButtonCustom}">
+                                    ToolTip="Add New Element" Style="{StaticResource ButtonCustom}">
                                     <iconPacks:PackIconVaadinIcons Kind="PlusCircle"
                                         VerticalAlignment="Center" Padding="2"/>
                                 </Button>
@@ -159,13 +181,37 @@
                                 </Grid.ColumnDefinitions>
                                 <ContentPresenter Grid.Column="0" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center"
                                    ContentTemplate="{StaticResource PropertyNameTemplate}"/>
-                                <TextBlock Text="{Binding Value}" VerticalAlignment="Center" Grid.Column="1" />
-                                <Button Grid.Column="2" Margin="5,0,0,0">
+                                <ContentPresenter Grid.Column="1" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                   ContentTemplate="{StaticResource PropertyValueTemplate}"  />
+                                <!--Button Grid.Column="2" Margin="5,0,0,0">
                                     <TextBlock Text="Jump to"/>
-                                </Button>
+                                </Button-->
                             </Grid>
                         </DataTemplate>
                     </converters:TreeViewItemTemplateSelector.HandleTemplate>
+                    <converters:TreeViewItemTemplateSelector.RefTemplate>
+                        <DataTemplate>
+                            <Grid ToolTip="{Binding Type}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Style="{StaticResource ArrayNameColumnWidth}" />
+                                    <!--ColumnDefinition Width="20" /-->
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter Grid.Column="0" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                   ContentTemplate="{StaticResource PropertyNameTemplate}"/>
+                                <!--iconPacks:PackIconCodicons Kind="References" Height="14" Grid.Column="1"
+                                    Width="14" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0,0,6,0" />
+                                <TextBlock Text="{Binding Value}" Grid.Column="2" /-->
+                                <ContentPresenter Grid.Column="1" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                   ContentTemplate="{StaticResource PropertyValueTemplate}"  />
+                                <Button Grid.Column="3" Margin="5,0,0,0" Style="{StaticResource ButtonCustom}" Command="{Binding OpenRefCommand}">
+                                    <iconPacks:PackIconVaadinIcons Kind="ArrowCircleRight"
+                                        VerticalAlignment="Center" Padding="2"/>
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </converters:TreeViewItemTemplateSelector.RefTemplate>
                 </converters:TreeViewItemTemplateSelector>
 
                 <!-- Editors -->
@@ -261,244 +307,71 @@
         </Grid.Resources>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="240"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <!-- Additional Navigation -->
-        <Grid Grid.Column="0" >
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <Grid Grid.Column="0" HorizontalAlignment="Stretch" Margin="0,0,3,0">
-
-                <Grid.Resources>
-                    <Style x:Key="ChunkImportRadioButton" TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource BaseStyle}" >
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{DynamicResource SecondaryRegionBrush}" />
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" Value="{DynamicResource BorderBrush}" />
-                            </Trigger>
-                        </Style.Triggers>
-                        <Setter Property="Background" Value="{DynamicResource RegionBrush}" />
-                        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
-                        <Setter Property="BorderThickness" Value="0" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type ToggleButton}">
-                                    <Border Name="BorderRoot" HorizontalAlignment="Stretch" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}">
-                                        <ContentPresenter Name="contentPresenter" Width="Auto" HorizontalAlignment="Stretch" RecognizesAccessKey="True" VerticalAlignment="Stretch" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsChecked" Value="true">
-                                            <Setter TargetName="BorderRoot" Property="Background" Value="{DynamicResource MahApps.Brushes.Accent3}" />
-                                            <Setter TargetName="BorderRoot" Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Accent3}" />
-                                        </Trigger>
-                                        <Trigger Property="IsMouseOver" Value="true">
-                                            <Setter TargetName="BorderRoot" Property="Background" Value="#222222" />
-                                        </Trigger>
-                                        <MultiTrigger>
-                                            <MultiTrigger.Conditions>
-                                                <Condition Property="IsChecked" Value="true" />
-                                                <Condition Property="IsMouseOver" Value="true" />
-                                            </MultiTrigger.Conditions>
-                                            <Setter TargetName="BorderRoot" Property="Background" Value="{DynamicResource MahApps.Brushes.Accent2}" />
-                                        </MultiTrigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </Grid.Resources>
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <RadioButton
-                    Grid.Column="0"
-                    GroupName="ChunkImportSelect"
-                    Height="24"
-                    Width="Auto"
-                    Margin="0,0,0,0"
-                    IsChecked="True"
-                    BorderThickness="1,1,0,1"
-                    BorderBrush="#373737"
-                    Click="ChunksButton_OnClick"
-                    Style="{StaticResource RadioGroupItemHorizontalFirst}"
-                    hc:VisualElement.HighlightBackground="#373737"
-                    hc:VisualElement.HighlightBorderBrush="#373737">
-                    <RadioButton.Content>
-                        <Grid Background="Transparent" Margin="0,0,2,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="18"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <iconPacks:PackIconVaadinIcons Kind="Cubes"
-                                Grid.Column="1" Height="13" Width="13" VerticalAlignment="Center"/>
-                            <TextBlock
-                                x:Name="ChunksLabel"
-                                Grid.Column="2"
-                                Foreground="White"
-                                VerticalAlignment="Center"
-                                Text="Chunks"/>
-                        </Grid>
-                    </RadioButton.Content>
-                </RadioButton>
-                <RadioButton
-                    Grid.Column="1"
-                    GroupName="ChunkImportSelect"
-                    x:Name="ImportsButton"
-                    Height="24"
-                    Width="Auto"
-                    Margin="0,0,0,0"
-                    BorderThickness="0,1,1,1"
-                    BorderBrush="#373737"
-                    Click="ImportsButton_OnClick"
-                    Style="{StaticResource RadioGroupItemHorizontalLast}"
-                    hc:VisualElement.HighlightBackground="#373737"
-                    hc:VisualElement.HighlightBorderBrush="#373737">
-                    <RadioButton.Content>
-                        <Grid Background="Transparent" Margin="0,0,2,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="17"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <iconPacks:PackIconMaterialDesign Kind="ImportExport" 
-                                Grid.Column="1" Height="13" Width="13" VerticalAlignment="Center"/>
-                            <TextBlock
-                                x:Name="ImportsLabel"
-                                Grid.Column="2"
-                                Foreground="White"
-                                VerticalAlignment="Center"
-                                Text="Imports"/>
-                        </Grid>
-                    </RadioButton.Content>
-                </RadioButton>
-                <Button
-                    Grid.Column="3"
-                    Margin="3,0,0,0"
-                    Style="{StaticResource ButtonDefault}"
-                    ToolTip="Add Chunk"
-                    Width="32"
-                    Padding="0"
-                    Height="24">
-                    <Grid Margin="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="11"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <iconPacks:PackIconMaterialDesign Kind="Add"
-                                Grid.Column="0" Height="11" Width="11" VerticalAlignment="Center"/>
-                    </Grid>
-                </Button>
-            </Grid>
-
-            <Grid Grid.Row="1"  x:Name="ChunksView">
-                <ListView x:Name="ChunksTreeView"
+        <!--Grid Grid.Column="0" >
+            <ListView x:Name="ChunksTreeView"
                           Margin="0,3,0,0"
                           Padding="0"
                           BorderThickness="0"
                           Background="Transparent"
                           hc:VisualElement.HighlightBackground="{StaticResource WolvenKitSammyRedShaded}"
                           hc:VisualElement.HighlightBrush="{StaticResource WolvenKitSammyRedShaded}">
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem" BasedOn="{StaticResource MahApps.Styles.ListViewItem}">
-                            <Setter Property="Height" Value="20" />
-                            <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="BorderThickness" Value="0,0,0,1" />
-                            <Setter Property="BorderBrush" Value="#373737" />
-                            <Setter Property="Margin" Value="0,0,0,-1" />
-                            <Style.Triggers>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="BorderThickness" Value="0,1,0,1" />
-                                    <Setter Property="Margin" Value="0,-1,0,0"/>
-                                    <Setter Property="Padding" Value="4,1,4,-1"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                    <ListView.ItemTemplate>
-                        <DataTemplate DataType="{x:Type shell:ChunkViewModel}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding Name}"/>
-                                <Button x:Name="DeleteButton" Grid.Column="1" Visibility="Collapsed" Style="{StaticResource ButtonDefault}" ToolTip="Add Chunk" Height="16" Width="16" Padding="0">
-                                    <Button.Content>
-                                        <iconPacks:PackIconMaterialDesign Kind="Delete"
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem" BasedOn="{StaticResource MahApps.Styles.ListViewItem}">
+                        <Setter Property="Height" Value="20" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderThickness" Value="0,0,0,1" />
+                        <Setter Property="BorderBrush" Value="#373737" />
+                        <Setter Property="Margin" Value="0,0,0,-1" />
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="BorderThickness" Value="0,1,0,1" />
+                                <Setter Property="Margin" Value="0,-1,0,0"/>
+                                <Setter Property="Padding" Value="4,1,4,-1"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate DataType="{x:Type shell:ChunkViewModel}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Name}"/>
+                            <Button x:Name="DeleteButton" Grid.Column="1" Visibility="Collapsed" Style="{StaticResource ButtonDefault}" ToolTip="Add Chunk" Height="16" Width="16" Padding="0">
+                                <Button.Content>
+                                    <iconPacks:PackIconMaterialDesign Kind="Delete"
                                 Grid.Column="0" Height="8" Width="8" VerticalAlignment="Center"/>
-                                    </Button.Content>
-                                </Button>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </Grid>
+                                </Button.Content>
+                            </Button>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
-            <Grid Grid.Row="1" x:Name="ImportsView" Visibility="Collapsed">
-                <ListView x:Name="ImportsListView" Margin="0,3,0,0" Style="{StaticResource ListBoxBaseStyle}" BorderThickness="0"
-                          Background="Transparent">
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem" BasedOn="{StaticResource MahApps.Styles.ListViewItem}">
-                            <Setter Property="Height" Value="20" />
-                            <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="BorderThickness" Value="0,0,0,1" />
-                            <Setter Property="BorderBrush" Value="#373737" />
-                            <Setter Property="Margin" Value="0,0,0,-1" />
-                            <Style.Triggers>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="BorderThickness" Value="0,1,0,1" />
-                                    <Setter Property="Margin" Value="0,-1,0,0"/>
-                                    <Setter Property="Padding" Value="4,1,4,-1"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                    <ListView.ItemTemplate>
-                        <DataTemplate DataType="{x:Type types:IRedRef}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding DepotPath}"/>
-                                <Button x:Name="DeleteButton" Grid.Column="1" Visibility="Collapsed" Style="{StaticResource ButtonDefault}" ToolTip="Add Chunk" Height="16" Width="16" Padding="0">
-                                    <Button.Content>
-                                        <iconPacks:PackIconMaterialDesign Kind="Delete"
-                                Grid.Column="0" Height="8" Width="8" VerticalAlignment="Center"/>
-                                    </Button.Content>
-                                </Button>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
+        </Grid-->
 
-                    <hc:Interaction.Triggers>
-                        <hc:EventTrigger EventName="MouseDoubleClick">
-                            <hc:EventToCommand Command="{Binding OpenImportCommand}" CommandParameter="{Binding SelectedImport}" />
-                        </hc:EventTrigger>
-                    </hc:Interaction.Triggers>
-                </ListView>
-
-            </Grid>
-
-
-        </Grid>
+        <syncfusion:SfTreeView
+            x:Name="TreeView"
+            Grid.Column="0"
+            ChildPropertyName="Properties"
+            ShowLines="True"
+            ItemTemplateSelector="{StaticResource itemTemplateSelector}"
+            SelectionMode="Single"
+            AllowEditing="False"
+            Visibility="Visible"
+            AllowDragging="True"
+            ItemDragStarting="SfTreeView_ItemDragStarting"
+            ItemDragOver="SfTreeView_ItemDragOver"
+            ItemDropping="SfTreeView_ItemDropping"
+            ItemDropped="SfTreeView_ItemDropped" />
 
         <!-- Grid Splitter -->
         <syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
@@ -506,177 +379,6 @@
         <!-- CR2W TreeGrid -->
         <Grid Grid.Column="2">
 
-            <Grid.Resources>
-
-                <!--<DataTemplate x:Key="CommmonTemplate">
-                    <TextBlock Padding="5" Text="{Binding Value}" Foreground="Gray" syncfusion:FocusManagerHelper.FocusedElement="True"/>
-                </DataTemplate>-->
-
-                <!--<DataTemplate x:Key="StringTemplateView">
-                    <TextBox syncfusion:FocusManagerHelper.FocusedElement="True"
-                                 Height="22"
-                                 Margin="0"
-                                 Padding="3,3,0,0"
-                                 VerticalAlignment="Center"
-                                 Background="Transparent"
-                                 BorderBrush="Transparent"
-                                 Style="{DynamicResource MahApps.Styles.TextBox.DataGrid.Editing}"
-                                 Text="{Binding Property.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                        <hc:Interaction.Triggers>
-                            <hc:EventTrigger EventName="PreviewTextInput">
-                                <hc:InvokeCommandAction Command="{Binding PreviewTextInputCommand}" />
-                            </hc:EventTrigger>
-                        </hc:Interaction.Triggers>
-                    </TextBox>
-                </DataTemplate>-->
-
-                <!--<DataTemplate x:Key="ColorTemplateView">
-
-                    <syncfusion:ColorPickerPalette syncfusion:FocusManagerHelper.FocusedElement="True"
-                                                       GenerateThemeVariants="False"
-                                                       Padding="3,-4,0,0"
-                                                       Color="{Binding DisplayColor}"
-                                                       SelectedCommand="{Binding SelectedColorCommand}"
-                                                       d:DataContext="{d:DesignInstance shell:RedColorViewModel}"
-                                                       />
-                </DataTemplate>-->
-
-                <!--<DataTemplate x:Key="RefTemplateView">
-                    <TextBox    syncfusion:FocusManagerHelper.FocusedElement="True"
-                                    Height="22"
-                                    Margin="0"
-                                    Padding="3,3,0,0"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent"
-                                    BorderBrush="Transparent"
-                                    Style="{DynamicResource MahApps.Styles.TextBox.DataGrid.Editing}"
-                                    Text="{Binding Property.DepotPath}">
-                        <hc:Interaction.Triggers>
-                            <hc:EventTrigger EventName="PreviewTextInput">
-                                <hc:InvokeCommandAction Command="{Binding PreviewTextInputCommand}" />
-                            </hc:EventTrigger>
-                        </hc:Interaction.Triggers>
-                    </TextBox>
-                </DataTemplate>-->
-
-                <!--<DataTemplate x:Key="RedboolTemplate">
-                    <CheckBox syncfusion:FocusManagerHelper.FocusedElement="True"
-                                  Margin="3,0,0,0"
-                                  Padding="5"
-                                  HorizontalAlignment="Left"
-                                  IsChecked="{Binding Property.Value}"
-                                  
-                        >
-                        <hc:Interaction.Triggers>
-                            <hc:EventTrigger EventName="Checked">
-                                <hc:InvokeCommandAction Command="{Binding PreviewTextInputCommand}" />
-                            </hc:EventTrigger>
-                            <hc:EventTrigger EventName="Unchecked">
-                                <hc:InvokeCommandAction Command="{Binding PreviewTextInputCommand}" />
-                            </hc:EventTrigger>
-                        </hc:Interaction.Triggers>
-                    </CheckBox>
-                </DataTemplate>-->
-
-                <!--<DataTemplate x:Key="EnumTemplate">
-                    <templates:EnumTemplateView
-                            syncfusion:FocusManagerHelper.FocusedElement="True"
-                            RedEnum="{Binding Property}"
-                            d:DataContext="{d:DesignInstance shell:ChunkPropertyViewModel }" />
-                </DataTemplate>-->
-
-                <!--<DataTemplate x:Key="HandleTemplate">
-                    <templates:HandleTemplateView
-                            syncfusion:FocusManagerHelper.FocusedElement="True"
-                            RedChunkPtr="{Binding Property}"
-                          d:DataContext="{d:DesignInstance shell:ChunkPropertyViewModel }"
-                          GoToChunkRequested="HandleTemplateView_OnGoToChunkRequested"
-                          />
-                </DataTemplate>-->
-
-                <!--<DataTemplate x:Key="SingleChannelCurveTemplate">
-                    <Button x:Name="CurveEditorButton" Content="Open Curve Editor"
-                                syncfusion:FocusManagerHelper.FocusedElement="True"
-                                d:DataContext="{d:DesignInstance shell:ChunkPropertyViewModel }"
-                                Click="CurveEditorButton_OnClick" Tag="{Binding Property}" />
-                </DataTemplate>-->
-
-                <!--<templates:EditableVariableDataTemplateSelector
-                                    x:Key="DataTemplateSelector"
-                                    CommmonTemplate="{StaticResource CommmonTemplate}"
-
-                                    EnumTemplate="{StaticResource EnumTemplate}"
-
-                                    HandleTemplateView="{StaticResource HandleTemplate}"
-
-                                    RedboolTemplate="{StaticResource RedboolTemplate}"
-
-                                    RefTemplateView="{StaticResource RefTemplateView}"
-
-                                    NumericTemplate="{StaticResource StringTemplateView}"
-
-                                    StringTemplateView="{StaticResource StringTemplateView}"
-
-                                    ColorTemplateView="{StaticResource ColorTemplateView}"
-
-                                    SingleChannelCurveTemplate="{StaticResource SingleChannelCurveTemplate}"
-                                    />-->
-
-                <!--<converters:CellStyleConverter x:Key="converter" />-->
-
-            </Grid.Resources>
-
-              
-            
-            <!--<syncfusion:SfTreeGrid x:Name="MainTreeGrid"
-                                    AllowFiltering="True"
-                                    AllowResizingColumns="True"
-                                    
-                                    AutoGenerateColumns="False"
-                                    
-                                    ColumnSizer="Star"
-                                    
-                                    Style="{DynamicResource SyncfusionSfTreeGridStyle}" >
-
-                <syncfusion:SfTreeGrid.Columns>
-
-                    <syncfusion:TreeGridTextColumn MappingName="Name"
-                                        AllowEditing="False"
-                                        ColumnSizer="SizeToCells"
-                                        HeaderText="Name"
-                                        >
-                        <syncfusion:TreeGridTextColumn.CellStyle>
-                            <Style TargetType="syncfusion:TreeGridCell">
-                                <Setter Property="Background" Value="{Binding Converter={StaticResource converter}}"/>
-                            </Style>
-                        </syncfusion:TreeGridTextColumn.CellStyle>
-                    </syncfusion:TreeGridTextColumn>
-
-                    <syncfusion:TreeGridTemplateColumn MappingName="Property"
-                                                       AllowFocus="True"
-                                                        AllowEditing="True"
-                                                        AllowSorting="False"
-                                                        CellTemplateSelector="{StaticResource DataTemplateSelector}"
-                                                        ColumnSizer="FillColumn"
-                                                        HeaderText="Value"
-                                                        />
-
-                    <syncfusion:TreeGridTextColumn MappingName="Type"
-                                        AllowEditing="False"
-                                        ColumnSizer="SizeToCells"
-                                        HeaderText="Type"
-                                         />
-
-                    <syncfusion:TreeGridCheckBoxColumn MappingName="IsSerialized"
-                                        AllowEditing="true"
-                                        HeaderText="Serialized"
-                                        ColumnSizer="SizeToHeader"
-
-                                        />
-
-                </syncfusion:SfTreeGrid.Columns>
-
-            </syncfusion:SfTreeGrid>-->
 
             <syncfusion:PropertyGrid
                 x:Name="PropertyGrid" Grid.Column="1"
@@ -690,33 +392,6 @@
 
         </Grid>
 
-
-        <syncfusion:SfTreeView
-            Grid.Column="0"
-            Grid.ColumnSpan="3"
-            ItemsSource="{Binding Chunks}"
-            ChildPropertyName="Properties"
-            ShowLines="True"
-            ItemTemplateSelector="{StaticResource itemTemplateSelector}"
-            EditTemplateSelector="{StaticResource editTemplateSelector}"
-            SelectionMode="None"
-            EditTrigger="DoubleTap"
-            AutoExpandMode="RootNodes"
-            Visibility="Collapsed"
-            AllowEditing="True">
-            <!--syncfusion:SfTreeView.ItemTemplate>
-                <DataTemplate>
-                    <Grid ToolTip="{Binding Type}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="200" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
-                        <TextBlock Text="{Binding Value}" VerticalAlignment="Center" Grid.Column="1" />
-                    </Grid>
-                </DataTemplate>
-            </syncfusion:SfTreeView.ItemTemplate-->
-        </syncfusion:SfTreeView>
 
     </Grid>
     

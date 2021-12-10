@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Archive.IO
                 BaseStream.Position = baseOff + f.offset;
                 if (prop == null)
                 {
-                    var value = Read(fieldType, 0, prop.Flags.Clone());
+                    var value = Read(fieldType, 0, Flags.Empty);
                     RedReflection.AddDynamicProperty(instance, varName, value);
                 }
                 else
@@ -68,12 +68,22 @@ namespace WolvenKit.RED4.Archive.IO
             
             return base.Read(type, size, flags);
         }
+
         public override CEnum<T> ReadCEnum<T>()
         {
             var index = _reader.ReadUInt16();
             var enumString = GetStringValue((ushort)(index & 0xFF));
 
             return CEnum.Parse<T>(enumString);
+        }
+
+        public override IRedHandle<T> ReadCHandle<T>()
+        {
+            return _outputFile.HandleManager.CreateCHandle<T>(_reader.ReadInt32());
+        }
+        public override IRedWeakHandle<T> ReadCWeakHandle<T>()
+        {
+            return _outputFile.HandleManager.CreateCWeakHandle<T>(_reader.ReadInt32());
         }
 
     }

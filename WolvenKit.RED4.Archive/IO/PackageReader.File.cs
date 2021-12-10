@@ -19,15 +19,13 @@ namespace WolvenKit.RED4.Archive.IO
     {
         private PackageHeader header;
 
-        private CR2WPackage _package => (CR2WPackage)_outputFile;
-
         public EFileReadErrorCodes ReadPackage(RedBuffer buffer)
         {
             var _chunks = new List<IRedClass>();
-            _outputFile = new CR2WPackage();
+            _outputFile = buffer;
 
             header = BaseStream.ReadStruct<PackageHeader>();
-            _package.Version = header.uk1;
+            buffer.Version = header.uk1;
 
             if (header.refPoolDescOffset != 0)
             {
@@ -41,7 +39,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             for (var i = 0; i < header.numCruids0; i++)
             {
-                _package.Cruids.Add(_reader.ReadUInt64());
+                buffer.Cruids.Add(_reader.ReadUInt64());
             }
 
             var baseOff = BaseStream.Position;

@@ -65,7 +65,7 @@ namespace WolvenKit.RED4.Types
             return result;
         }
 
-        internal CWeakHandle<T> CreateCWeakHandle<T>(int pointer) where T : IRedClass
+        public CWeakHandle<T> CreateCWeakHandle<T>(int pointer) where T : IRedClass
         {
             var result = new CWeakHandle<T>(_file, pointer);
 
