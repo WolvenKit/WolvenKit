@@ -79,13 +79,54 @@ namespace WolvenKit.RED4.Archive.IO
 
         public override IRedHandle<T> ReadCHandle<T>()
         {
-            return _outputFile.HandleManager.CreateCHandle<T>(_reader.ReadInt32());
+            return _outputFile.HandleManager.CreateCHandle<T>(_reader.ReadInt32() - 0);
         }
 
         public override IRedWeakHandle<T> ReadCWeakHandle<T>()
         {
-            return _outputFile.HandleManager.CreateCWeakHandle<T>(_reader.ReadInt32());
+            return _outputFile.HandleManager.CreateCWeakHandle<T>(_reader.ReadInt32() - 0);
         }
+
+        public override IRedResourceAsyncReference<T> ReadCResourceAsyncReference<T>()
+        {
+            var index = _reader.ReadUInt16();
+
+            //if (index > 0)
+            //{
+                return new CResourceAsyncReference<T>
+                {
+                    DepotPath = importsList[index - 0].DepotPath,
+                    Flags = importsList[index - 0].Flags
+                };
+            //}
+
+            //return new CResourceAsyncReference<T>
+            //{
+            //    DepotPath = "",
+            //    Flags = InternalEnums.EImportFlags.Default
+            //};
+        }
+
+        public override IRedResourceReference<T> ReadCResourceReference<T>()
+        {
+            var index = _reader.ReadUInt16();
+
+            //if (index > 0 && index < importsList.Count)
+            //{
+                return new CResourceReference<T>
+                {
+                    DepotPath = importsList[index - 0].DepotPath,
+                    Flags = importsList[index - 0].Flags
+                };
+            //}
+
+            //return new CResourceReference<T>
+            //{
+            //    DepotPath = "",
+            //    Flags = InternalEnums.EImportFlags.Default
+            //};
+        }
+
 
     }
 }

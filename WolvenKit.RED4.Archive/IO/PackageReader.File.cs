@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Splat;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
@@ -12,15 +13,19 @@ using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Compression;
 using WolvenKit.RED4.Types.Exceptions;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.RED4.Archive.IO
 {
     public partial class PackageReader
     {
         private PackageHeader header;
+        private IHashService _hashService;
 
         public EFileReadErrorCodes ReadPackage(RedBuffer buffer)
         {
+            _hashService = Locator.Current.GetService<IHashService>();
+
             var _chunks = new List<IRedClass>();
             _outputFile = buffer;
 
@@ -100,6 +105,7 @@ namespace WolvenKit.RED4.Archive.IO
             else
             {
                 import.Hash = _reader.ReadUInt64();
+                import.DepotPath = _hashService.Get(import.Hash);
             }
             return import;
         }

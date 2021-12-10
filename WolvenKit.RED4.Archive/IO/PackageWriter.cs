@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Archive.IO
             _targetList.Add((CurrentChunk, instance.Pointer, StringCacheList.Count, ImportCacheList.Count));
             //}
 
-            _writer.Write(instance.Pointer);
+            _writer.Write(instance.Pointer + 0);
         }
 
         public override void Write(IRedWeakHandle instance)
@@ -102,7 +102,7 @@ namespace WolvenKit.RED4.Archive.IO
             _targetList.Add((CurrentChunk, instance.Pointer, StringCacheList.Count, ImportCacheList.Count));
             //}
 
-            _writer.Write(instance.Pointer);
+            _writer.Write(instance.Pointer + 0);
         }
 
     }

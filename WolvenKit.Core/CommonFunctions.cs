@@ -9,6 +9,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Semver;
+using Splat;
 
 namespace WolvenKit.Core
 {
@@ -68,7 +69,11 @@ namespace WolvenKit.Core
             }
         }
 
-        
+        //public static string GetDepotPathFromHash(UInt64 hash)
+        //{
+        //    var hashService = Locator.Current.GetService<IHashService>();
+        //    return hashService.Get(hash);
+        //}
 
         public static (string, long) HashFileSHA512(string filepath)
         {
