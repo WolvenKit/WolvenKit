@@ -81,6 +81,7 @@ namespace WolvenKit.RED4.Archive.IO
         {
             return _outputFile.HandleManager.CreateCHandle<T>(_reader.ReadInt32());
         }
+
         public override IRedWeakHandle<T> ReadCWeakHandle<T>()
         {
             return _outputFile.HandleManager.CreateCWeakHandle<T>(_reader.ReadInt32());

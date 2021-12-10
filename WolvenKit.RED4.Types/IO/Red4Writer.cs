@@ -25,7 +25,7 @@ namespace WolvenKit.RED4.IO
         private readonly Dictionary<int, StringInfo> _chunkStringList = new();
         private readonly Dictionary<int, List<(string, CName, ushort)>> _chunkImportList = new();
 
-        private readonly List<(int, int, int, int)> _targetList = new();
+        protected readonly List<(int, int, int, int)> _targetList = new();
 
         private Encoding _encoding;
         private bool _disposed;

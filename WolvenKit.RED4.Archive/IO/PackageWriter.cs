@@ -84,5 +84,26 @@ namespace WolvenKit.RED4.Archive.IO
                 app.Write(this);
             }
         }
+
+        public override void Write(IRedHandle instance)
+        {
+            //if (instance.Pointer > 0)
+            //{
+            _targetList.Add((CurrentChunk, instance.Pointer, StringCacheList.Count, ImportCacheList.Count));
+            //}
+
+            _writer.Write(instance.Pointer);
+        }
+
+        public override void Write(IRedWeakHandle instance)
+        {
+            //if (instance.Pointer > 0)
+            //{
+            _targetList.Add((CurrentChunk, instance.Pointer, StringCacheList.Count, ImportCacheList.Count));
+            //}
+
+            _writer.Write(instance.Pointer);
+        }
+
     }
 }

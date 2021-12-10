@@ -33,7 +33,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <syncfusion:TabControlExt Name="tabControl" Height="28" CloseButtonType="Hide" BorderThickness="0,0,0,1">
+        <syncfusion:TabControlExt Name="tabControl" Height="28" CloseButtonType="Hide" BorderThickness="0,0,0,1" Margin="0,3,0,0">
             <syncfusion:TabItemExt Header="Source Files" />
             <syncfusion:TabItemExt Header="Packed Files" />
         </syncfusion:TabControlExt>
