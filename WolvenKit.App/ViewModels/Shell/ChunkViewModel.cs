@@ -58,6 +58,21 @@ namespace WolvenKit.ViewModels.Shell
 
         public ChunkViewModel Parent { get; }
 
+        public IRedType PropertyGridData
+        {
+            get
+            {
+                if (Properties.Count == 0 && !PropertyType.IsAssignableTo(typeof(IRedArray)))
+                {
+                    return Parent.Data;
+                }
+                else
+                {
+                    return Data;
+                }
+            }
+        }
+
         public ObservableCollection<ChunkViewModel> Properties
         {
             get
@@ -78,6 +93,7 @@ namespace WolvenKit.ViewModels.Shell
                         {
                             var obj = handle.File.Chunks[handle.Pointer];
                             var eti = RedReflection.GetTypeInfo(obj.GetType());
+                            eti.PropertyInfos.Sort((a, b) => a.Name.CompareTo(b.Name));
                             eti.PropertyInfos.ForEach((pi) =>
                             {
                                 properties.Add(new ChunkViewModel(pi.Name, (IRedType)pi.GetValue(obj), this));
@@ -86,6 +102,7 @@ namespace WolvenKit.ViewModels.Shell
                         else if (_data is RedBaseClass redClass)
                         {
                             var eti = RedReflection.GetTypeInfo(redClass.GetType());
+                            eti.PropertyInfos.Sort((a, b) => a.Name.CompareTo(b.Name));
                             eti.PropertyInfos.ForEach((pi) =>
                             {
                                 properties.Add(new ChunkViewModel(pi.Name, (IRedType)pi.GetValue(redClass), this));

@@ -28,6 +28,7 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
+using WolvenKit.Models.Docking;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.CR2W.Archive;
 
@@ -113,6 +114,7 @@ namespace WolvenKit.ViewModels.Tools
             _archiveManager = archiveManager;
 
             SetupToolDefaults();
+            SideInDockedMode = DockSide.Tabbed;
 
             ProcessAllCommand = ReactiveCommand.CreateFromTask(ExecuteProcessAll);
             ProcessSelectedCommand = ReactiveCommand.CreateFromTask(ExecuteProcessSelected);

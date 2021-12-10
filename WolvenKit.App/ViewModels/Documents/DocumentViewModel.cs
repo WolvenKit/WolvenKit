@@ -30,6 +30,7 @@ namespace WolvenKit.ViewModels.Documents
         private DocumentViewModel()
         {
             State = DockState.Document;
+            SideInDockedMode = DockSide.Tabbed;
 
             Close = ReactiveCommand.Create(() => { });
         }

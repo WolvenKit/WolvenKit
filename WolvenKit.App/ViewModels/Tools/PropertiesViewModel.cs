@@ -62,6 +62,7 @@ namespace WolvenKit.ViewModels.Tools
             _modTools = modTools;
 
             SetupToolDefaults();
+            SideInDockedMode = DockSide.Left;
 
             SetToNullAndResetVisibility();
 

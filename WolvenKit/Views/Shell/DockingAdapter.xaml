@@ -22,7 +22,7 @@
             Background="Transparent"
             DocumentCloseButtonType="Both"
             CloseTabOnMiddleClick="True"
-            DraggingType="BorderDragging"
+            DraggingType="NormalDragging"
             PersistState="True"
             UseDocumentContainer="True"
             Loaded="PART_DockingManager_Loaded"

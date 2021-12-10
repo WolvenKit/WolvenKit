@@ -22,6 +22,7 @@ using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Models.Docking;
 
 namespace WolvenKit.ViewModels.Tools
 {
@@ -48,6 +49,7 @@ namespace WolvenKit.ViewModels.Tools
         }
 
         public const int SEARCH_LIMIT = 1000;
+
 
         #endregion constants
 
@@ -83,6 +85,9 @@ namespace WolvenKit.ViewModels.Tools
             _progressService = progressService;
 
             ContentId = ToolContentId;
+
+            State = DockState.Dock;
+            SideInDockedMode = DockSide.Tabbed;
 
             TogglePreviewCommand = new RelayCommand(ExecuteTogglePreview, CanTogglePreview);
             OpenFileSystemItemCommand = new RelayCommand(ExecuteOpenFile, CanOpenFile);
@@ -136,6 +141,8 @@ namespace WolvenKit.ViewModels.Tools
         #endregion ctor
 
         #region properties
+
+        [Reactive] public string Extension { get; set; } = "reds";
 
         [Reactive] public GridLength PreviewWidth { get; set; } = new(0, GridUnitType.Pixel);
 

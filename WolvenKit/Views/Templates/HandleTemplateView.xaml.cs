@@ -52,15 +52,15 @@ namespace WolvenKit.Views.Templates
             }
 
             view.BindingCollection.Clear();
-            //view.BindingCollection.Add(null);
+            view.BindingCollection.Add(null);
 
             //throw new TodoException("handle editor");
 
-            var type = iptr.File.Chunks[iptr.Pointer].GetType();
+            var type = iptr.InnerType;
             var available = RedReflection.GetSubClassesOf(type).Select(x => x.Name).ToList();
-            available.Add(iptr.File.Chunks[iptr.Pointer].RedType);
+            available.Add(type.Name);
 
-            var availableChunks = iptr.File.Chunks.Where(x => available.Contains(x.RedType));
+            var availableChunks = iptr.File.Chunks.Where(x => available.Contains(x.GetType().Name));
 
             foreach (var s in availableChunks)
             {

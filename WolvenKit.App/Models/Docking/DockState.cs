@@ -4,14 +4,22 @@ namespace WolvenKit.Models.Docking
 {
     public enum DockState
     {
-        Dock,
+        Dock = 0,
         Float,
         Hidden,
         AutoHidden,
         Document
     }
 
-    
+    public enum DockSide
+    {
+        Bottom = 0,
+        Left,
+        None,
+        Right,
+        Tabbed,
+        Top
+    }
 
     ///// <summary>
     ///// Specifies the state of the control is Dock, Float, Hidden, AutoHidden, or Document.

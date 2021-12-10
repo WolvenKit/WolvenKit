@@ -69,7 +69,7 @@
     <PackageReference Include="NodeNetworkToolkit" Version="6.0.0" />
     <PackageReference Include="Octokit" Version="0.50.0" />
 
-    <PackageReference Include="Syncfusion.Tools.WPF" Version="19.3.0.45" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="19.3.0.57" />
     <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.3.0.45" />
     <PackageReference Include="Syncfusion.SfInput.WPF" Version="19.3.0.45" />
     <PackageReference Include="Syncfusion.SfImageEditor.WPF" Version="19.3.0.45" />

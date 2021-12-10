@@ -20,6 +20,7 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
 using WolvenKit.Models;
+using WolvenKit.Models.Docking;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.ViewModels.Shell;
 
@@ -63,6 +64,8 @@ namespace WolvenKit.ViewModels.Tools
             _loggerService = loggerService;
             _watcherService = watcherService;
             _modTools = modTools;
+
+            SideInDockedMode = DockSide.Left;
 
             SetupCommands();
             SetupToolDefaults();

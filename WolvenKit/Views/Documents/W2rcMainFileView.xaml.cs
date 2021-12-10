@@ -69,7 +69,7 @@ namespace WolvenKit.Views.Documents
                 //   .DisposeWith(disposables);
 
                 this.OneWayBind(ViewModel,
-                       viewmodel => viewmodel.SelectedChunk.Data,
+                       viewmodel => viewmodel.SelectedChunk.PropertyGridData,
                        view => view.PropertyGrid.SelectedObject)
                    .DisposeWith(disposables);
 
@@ -162,7 +162,7 @@ namespace WolvenKit.Views.Documents
                 }
                 else
                 {
-                    //propertyItem.Editor = new PropertyGridEditors.BaseTypeEditor();
+                    propertyItem.Editor = new PropertyGridEditors.BaseTypeEditor();
                 } 
             }
         }

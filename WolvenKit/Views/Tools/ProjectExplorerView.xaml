@@ -29,10 +29,16 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
-        <Border BorderThickness="0,0,0,1" BorderBrush="{StaticResource BorderBrush}" Height="Auto" Grid.Row="0">
+
+        <syncfusion:TabControlExt Name="tabControl" Height="28" CloseButtonType="Hide" BorderThickness="0,0,0,1">
+            <syncfusion:TabItemExt Header="Source Files" />
+            <syncfusion:TabItemExt Header="Packed Files" />
+        </syncfusion:TabControlExt>
+
+        <Border BorderThickness="0,0,0,1" BorderBrush="{StaticResource BorderBrush}" Height="Auto" Grid.Row="1">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -80,10 +86,10 @@
                                     Kind="ArrowsCollapse" />
                     </Button>
                     <Button ToolTip="New Folder" Margin="3,0,0,0">
-                        <iconPacks:PackIconForkAwesome
+                        <iconPacks:PackIconCodicons
                                     Width="13"
                                     Height="13"
-                                    Kind="FolderOpen" />
+                                    Kind="NewFolder" />
                     </Button>
                 </StackPanel>
             </Grid>
@@ -112,7 +118,7 @@
             SelfRelationRootValue="0"
             BorderThickness="0"
             HeaderRowHeight="0"
-            Grid.Row="1"
+            Grid.Row="2"
             CurrentCellBorderBrush="White"
             CurrentCellBorderThickness="0"
             >

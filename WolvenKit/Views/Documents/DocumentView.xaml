@@ -41,7 +41,7 @@
                        ContentTemplateSelector="{StaticResource RedDocumentTemplateSelector}"
                                   CloseButtonType="Hide"
                                   EnableLabelEdit="False"
-                                  BorderThickness="0"
+                                  BorderThickness="0,0,0,1"
                                   Padding="0,3,0,0"
                        >
         </syncfusion:TabControlExt>

@@ -8,6 +8,8 @@ namespace WolvenKit.Models.Docking
 
         public DockState State { get; set; }
 
+        public DockSide SideInDockedMode { get; set; }
+
         public bool IsActive { get; set; }
     }
 }

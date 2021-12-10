@@ -216,7 +216,7 @@
 
                 <!-- Editors -->
 
-                <Style x:Key="EditorSelector" TargetType="ContentControl">
+                <!--Style x:Key="EditorSelector" TargetType="ContentControl">
                     <Setter Property="Content">
                         <Setter.Value>
                             <TextBox Text="{Binding Text}" />
@@ -300,7 +300,7 @@
                             </Grid>
                         </DataTemplate>
                     </converters:TreeViewEditorSelector.HandleEditTemplate>
-                </converters:TreeViewEditorSelector>
+                </converters:TreeViewEditorSelector-->
                 
             </ResourceDictionary>
 
@@ -387,7 +387,7 @@
                 CollectionEditorOpening ="PropertyGrid_CollectionEditorOpening"
                 PropertyNameColumnDefinition="200"
                 ButtonPanelVisibility="Collapsed"
-                BorderThickness="0" />
+                BorderThickness="0,1,1,1" />
 
 
         </Grid>

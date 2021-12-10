@@ -18,6 +18,8 @@ namespace WolvenKit.ViewModels.Shell
 
         [Reactive] public DockState State { get; set; }
 
+        [Reactive] public DockSide SideInDockedMode { get; set; }
+
         [Reactive] public string ContentId { get; set; }
 
         public ImageSource IconSource

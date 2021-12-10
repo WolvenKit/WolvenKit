@@ -76,7 +76,7 @@ namespace WolvenKit.Views.Shell
         {
             try
             {
-                var reader = XmlReader.Create("Config\\Layout\\DockStatesCR2W.xml");
+                var reader = XmlReader.Create("DockStatesDefault.xml");
                 var Debugging_A = PART_DockingManager.LoadDockState(reader);
                 Trace.WriteLine(Debugging_A);
                 reader.Close();
@@ -114,7 +114,7 @@ namespace WolvenKit.Views.Shell
 
             if (DebuggingLayouts)
             {
-                XmlWriter writer = XmlWriter.Create("DockStatesDefault.xml");
+                XmlWriter writer = XmlWriter.Create("DockStates.xml");
 
                 PART_DockingManager.SaveDockState(writer);
 
@@ -204,16 +204,13 @@ namespace WolvenKit.Views.Shell
 
                             var control = new ContentControl() { Content = item };
                             DockingManager.SetHeader(control, dockElement.Header);
-                            if (dockElement.State == DockState.Document)
-                            {
-                                DockingManager.SetState(control, Syncfusion.Windows.Tools.Controls.DockState.Document);
-                            }
-                            else
+                            DockingManager.SetSideInDockedMode(control, (Syncfusion.Windows.Tools.Controls.DockSide)(int)dockElement.SideInDockedMode);
+                            DockingManager.SetState(control, (Syncfusion.Windows.Tools.Controls.DockState)(int)dockElement.State);
+                            if (dockElement.State != DockState.Document)
                             {
                                 if (count != 0)
                                 {
-                                    DockingManager.SetTargetNameInDockedMode(control, "item" + (count - 1).ToString());
-                                    DockingManager.SetSideInDockedMode(control, DockSide.Bottom);
+                                    //DockingManager.SetTargetNameInDockedMode(control, "item" + (count - 1).ToString());
                                 }
                                 DockingManager.SetDesiredWidthInDockedMode(control, 220);
                                 control.Name = "item" + (count++).ToString();
