@@ -259,18 +259,21 @@ namespace WolvenKit.RED4.Archive.IO
 
         private CR2WBufferInfo WriteBuffer(CR2WWriter writer, RedBuffer buffer)
         {
+            if (buffer.IsPackage)
+            {
+                using var ms = new MemoryStream();
+                using var packageWriter = new PackageWriter(ms);
+
+                packageWriter.WritePackage(buffer);
+                buffer.Data = ms.ToArray();
+            }
+
             var result = new CR2WBufferInfo
             {
                 flags = buffer.Flags,
                 offset = (uint)writer.BaseStream.Position,
                 memSize = buffer.MemSize
             };
-
-            using var ms = new MemoryStream();
-            using var packageWriter = new PackageWriter(ms);
-
-            packageWriter.WritePackage(buffer);
-            buffer.Data = ms.ToArray();
 
             buffer.Compress();
             writer.BaseWriter.Write(buffer.Data);

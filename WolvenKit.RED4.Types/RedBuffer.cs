@@ -36,6 +36,8 @@ namespace WolvenKit.RED4
 
         public ushort Version { get; set; } = 4;
 
+        public bool IsPackage { get; set; }
+
         public IList<CRUID> Cruids;
 
         public void Compress()

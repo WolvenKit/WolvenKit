@@ -29,6 +29,13 @@ namespace WolvenKit.RED4.Archive.IO
             var _chunks = new List<IRedClass>();
             _outputFile = buffer;
 
+            var version = BaseReader.ReadInt16();
+            BaseStream.Position -= 2;
+            if (version != 4)
+            {
+                return EFileReadErrorCodes.UnsupportedVersion;
+            }
+
             header = BaseStream.ReadStruct<PackageHeader>();
             buffer.Version = header.uk1;
 
@@ -83,6 +90,8 @@ namespace WolvenKit.RED4.Archive.IO
             }
 
             buffer.SetChunks(_chunks);
+
+            buffer.IsPackage = true;
 
             return EFileReadErrorCodes.NoError;
         }

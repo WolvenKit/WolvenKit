@@ -188,9 +188,12 @@ namespace WolvenKit.RED4.Archive.IO
                 }
             }
 
-            var ms = new MemoryStream(result.Data);
-            var reader = new PackageReader(ms);
-            reader.ReadPackage(result);
+            if (!result.IsCompressed)
+            {
+                var ms = new MemoryStream(result.Data);
+                var reader = new PackageReader(ms);
+                reader.ReadPackage(result);
+            }
 
             return result;
         }

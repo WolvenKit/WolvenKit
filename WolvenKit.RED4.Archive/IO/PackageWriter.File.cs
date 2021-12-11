@@ -35,6 +35,8 @@ namespace WolvenKit.RED4.Archive.IO
             // write cruids
 
             var unique_cruids = _cruids.Distinct().ToList();
+            unique_cruids.Insert(0, 0);
+
             header.numCruids0 = header.numCruids1 = (ushort)unique_cruids.Count;
             foreach (var cruid in unique_cruids)
             {
@@ -139,6 +141,30 @@ namespace WolvenKit.RED4.Archive.IO
             return (nameData.ToArray(), nameDesc);
         }
 
+        private new (Dictionary<CName, ushort>, Dictionary<(string, CName, ushort), ushort>) GenerateStringDictionary()
+        {
+            _chunkStringList.Add(CurrentChunk, new() { List = StringCacheList.ToList() });
+            StringCacheList.Clear();
+            foreach (var stringInfo in _chunkStringList)
+            {
+                if (stringInfo.Value.List.Contains(""))
+                {
+                    stringInfo.Value.List.Remove("");
+                }
+
+                StringCacheList.AddRange(stringInfo.Value.List);
+            }
+
+            _chunkImportList.Add(CurrentChunk, new() { List = ImportCacheList.ToList() });
+            ImportCacheList.Clear();
+            foreach (var stringInfo in _chunkImportList)
+            {
+                ImportCacheList.AddRange(stringInfo.Value.List);
+            }
+
+            return (StringCacheList.ToDictionary(), ImportCacheList.ToDictionary());
+        }
+
         private (IList<CName>, IList<(string, CName, ushort)>, List<PackageChunkHeader>, byte[]) GenerateChunkData()
         {
             using var ms = new MemoryStream();
@@ -149,8 +175,9 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 file.StartChunk(i);
                 chunkDesc.Add(WriteChunk(file, _file.Chunks[i]));
-                _cruids.AddRange(file._cruids);
             }
+
+            _cruids.AddRange(file._cruids);
 
             var (stringDict, importDict) = file.GenerateStringDictionary();
 

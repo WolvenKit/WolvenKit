@@ -395,7 +395,7 @@ namespace WolvenKit.RED4.IO
         {
             var index = _reader.ReadUInt16();
 
-            if (index > 0 && index < importsList.Count)
+            if (index > 0 && index <= importsList.Count)
             {
                 return new CResourceReference<T>
                 {

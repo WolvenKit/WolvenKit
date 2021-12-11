@@ -28,8 +28,13 @@ namespace WolvenKit.RED4.Archive.IO
         public override void Write(CRUID val)
         {
             _writer.Write(val);
-            _cruids.Add(val);
         }
+
+        private readonly List<Type> _ignoreCRUIDS = new()
+        {
+            typeof(entEffectDesc),
+            typeof(worldCompiledEffectEventInfo)
+        };
 
         public override void WriteClass(IRedClass cls)
         {
@@ -76,6 +81,11 @@ namespace WolvenKit.RED4.Archive.IO
                 BaseStream.Position = currentDataPosition;
                 // write data, prefixed with size?
                 Write((IRedType)value);
+                if (propertyInfo.Type == typeof(CRUID) && !_ignoreCRUIDS.Contains(cls.GetType()))
+                {
+                    _cruids.Add((CRUID)value);
+                }
+
                 currentDataPosition = BaseStream.Position;
             }
 

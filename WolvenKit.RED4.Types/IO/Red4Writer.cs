@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.IO
         public readonly Dictionary<long, string> CNameRef = new();
         public readonly Dictionary<long, (string, string, ushort)> ImportRef = new();
 
-        private readonly Dictionary<int, StringInfo> _chunkStringList = new();
-        private readonly Dictionary<int, List<(string, CName, ushort)>> _chunkImportList = new();
+        protected readonly Dictionary<int, StringInfo> _chunkStringList = new();
+        protected readonly Dictionary<int, ImportInfo> _chunkImportList = new();
 
         protected readonly List<(int, int, int, int)> _targetList = new();
 
@@ -105,7 +105,7 @@ namespace WolvenKit.RED4.IO
             _chunkStringList.Add(i - 1, new() {List = StringCacheList.ToList() });
             StringCacheList.Clear();
 
-            _chunkImportList.Add(i - 1, ImportCacheList.ToList());
+            _chunkImportList.Add(i - 1, new (){List = ImportCacheList.ToList()});
             ImportCacheList.Clear();
         }
 
@@ -114,7 +114,7 @@ namespace WolvenKit.RED4.IO
             _chunkStringList.Add(CurrentChunk, new() { List = StringCacheList.ToList() });
             StringCacheList.Clear();
 
-            _chunkImportList.Add(CurrentChunk, ImportCacheList.ToList());
+            _chunkImportList.Add(CurrentChunk, new (){List = ImportCacheList.ToList()});
             ImportCacheList.Clear();
 
             var targetList = new List<(int, int, int, int)>(_targetList);
@@ -135,8 +135,6 @@ namespace WolvenKit.RED4.IO
                 }
 
                 var stringList = _chunkStringList[chunk];
-
-                var importCurrentIndex = 0;
                 var importList = _chunkImportList[chunk];
 
                 var list = targetList.Where(x => x.Item1 == chunk).ToList();
@@ -145,8 +143,8 @@ namespace WolvenKit.RED4.IO
                     StringCacheList.AddRange(stringList.List.GetRange(stringList.LastIndex, tuple.Item3 - stringList.LastIndex));
                     stringList.LastIndex = tuple.Item3;
 
-                    ImportCacheList.AddRange(importList.GetRange(importCurrentIndex, tuple.Item4 - importCurrentIndex));
-                    importCurrentIndex = tuple.Item4;
+                    ImportCacheList.AddRange(importList.List.GetRange(importList.LastIndex, tuple.Item4 - importList.LastIndex));
+                    importList.LastIndex = tuple.Item4;
 
                     targetList.Remove(tuple);
 
@@ -156,16 +154,22 @@ namespace WolvenKit.RED4.IO
                     }
                 }
                 StringCacheList.AddRange(stringList.List.GetRange(stringList.LastIndex, stringList.List.Count - stringList.LastIndex));
-                ImportCacheList.AddRange(importList.GetRange(importCurrentIndex, importList.Count - importCurrentIndex));
+                ImportCacheList.AddRange(importList.List.GetRange(importList.LastIndex, importList.List.Count - importList.LastIndex));
 
                 _chunkStringList.Remove(chunk);
                 _chunkImportList.Remove(chunk);
             }
         }
 
-        private class StringInfo
+        protected class StringInfo
         {
             public List<CName> List { get; set; }
+            public int LastIndex { get; set; }
+        }
+
+        protected class ImportInfo
+        {
+            public List<(string, CName, ushort)> List { get; set; }
             public int LastIndex { get; set; }
         }
 
