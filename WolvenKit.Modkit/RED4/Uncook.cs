@@ -14,6 +14,7 @@ using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.Extensions;
 using WolvenKit.Modkit.RED4.Opus;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
@@ -760,13 +761,19 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            if (cr2w.Chunks.FirstOrDefault() is not CBitmapTexture)
+            return ConvertCR2WToDdsStream(cr2w, outstream, out texformat);
+        }
+
+        public static bool ConvertCR2WToDdsStream(CR2WFile cr2w, Stream outstream, out DXGI_FORMAT texformat)
+        {
+            texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
+
+            if (cr2w.Chunks.FirstOrDefault() is not CBitmapTexture xbm)
             {
                 return false;
             }
 
-            if (cr2w.Chunks.FirstOrDefault() is not CBitmapTexture xbm ||
-                cr2w.Chunks[1] is not rendRenderTextureBlobPC blob)
+            if (cr2w.Chunks[1] is not rendRenderTextureBlobPC blob)
             {
                 return false;
             }
@@ -791,7 +798,7 @@ namespace WolvenKit.Modkit.RED4
                 compression = xbm.Setup.Compression.Value.Value;
             }
 
-            texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
+            texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, null);
 
             #endregion get xbm data
 
@@ -800,13 +807,13 @@ namespace WolvenKit.Modkit.RED4
                 new DDSMetadata(width, height, 1, sliceCount, mipCount,
                     0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
 
-            var buffer = cr2w.Buffers[0];
-            var unpacked = new byte[buffer.MemSize];
-            _ = OodleHelper.Decompress(buffer.Data, unpacked);
-            outstream.Write(unpacked);
+            outstream.Write(cr2w.Buffers[0].Data);
 
             return true;
         }
+
+
+
 
 
     }

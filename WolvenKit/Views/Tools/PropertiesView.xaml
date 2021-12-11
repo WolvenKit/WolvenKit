@@ -727,11 +727,6 @@
             <syncfusion:TabItemExt
                 Header="Image Preview"
                 Visibility="{Binding IsImagePreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
-                <!--<hc:ImageViewer
-                    x:Name="bold"
-                    Width="auto"
-                    Background="{DynamicResource SecondaryRegionBrush}" />-->
-
                 <syncfusion:SfImageEditor x:Name="bold" BorderThickness="0" Margin="0,0.5,0,0"/>
             </syncfusion:TabItemExt>
 

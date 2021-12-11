@@ -23,6 +23,8 @@
             DocumentCloseButtonType="Both"
             CloseTabOnMiddleClick="True"
             DraggingType="NormalDragging"
+            AllowDrop="True"
+            IsTDIDragDropEnabled="True"
             PersistState="True"
             UseDocumentContainer="True"
             Loaded="PART_DockingManager_Loaded"

@@ -373,15 +373,14 @@
             ItemDropping="SfTreeView_ItemDropping"
             ItemDropped="SfTreeView_ItemDropped" />
 
+
         <!-- Grid Splitter -->
         <syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
 
         <!-- CR2W TreeGrid -->
-        <Grid Grid.Column="2">
 
-
-            <syncfusion:PropertyGrid
-                x:Name="PropertyGrid" Grid.Column="1"
+        <syncfusion:PropertyGrid
+                x:Name="PropertyGrid" Grid.Column="2"
                 PropertyExpandMode="NestedMode"
                 AutoGeneratingPropertyGridItem="PropertyGrid_AutoGeneratingPropertyGridItem"
                 CollectionEditorOpening ="PropertyGrid_CollectionEditorOpening"
@@ -389,8 +388,30 @@
                 ButtonPanelVisibility="Collapsed"
                 BorderThickness="0,1,1,1" />
 
-
-        </Grid>
+        <syncfusion:SfImageEditor
+            Image="{Binding ImageStream}"
+            Background="{StaticResource ContentBackground}"
+            x:Name="ImagePreview"
+            Grid.ColumnSpan="3"
+            BorderThickness="0"
+            Margin="0,0.5,0,0"
+            Grid.Column="0"
+            EnablePanning="True"
+            RenderTransformOrigin="0.5,0.5"
+            IsManipulationEnabled="False"
+            Visibility="{Binding IsImagePreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
+            <syncfusion:SfImageEditor.ToolbarSettings>
+                <syncfusion:ToolbarSettings IsToolbarVisiblity="False" />
+            </syncfusion:SfImageEditor.ToolbarSettings>
+            <syncfusion:SfImageEditor.RenderTransform>
+                <ScaleTransform ScaleY="-1"/>
+            </syncfusion:SfImageEditor.RenderTransform>
+            <syncfusion:SfImageEditor.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Reset Zoom" Command="{x:Static syncfusion:ImageEditorCommands.ResetZoom}" />
+                </ContextMenu>
+            </syncfusion:SfImageEditor.ContextMenu>
+        </syncfusion:SfImageEditor>
 
 
     </Grid>

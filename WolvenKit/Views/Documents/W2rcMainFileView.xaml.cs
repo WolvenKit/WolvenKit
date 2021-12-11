@@ -73,6 +73,11 @@ namespace WolvenKit.Views.Documents
                        view => view.PropertyGrid.SelectedObject)
                    .DisposeWith(disposables);
 
+                //this.OneWayBind(ViewModel,
+                //       viewmodel => viewmodel.SelectedChunk.Name,
+                //       view => view.PropertyGrid.SelectedPropertyItem.DisplayName)
+                //   .DisposeWith(disposables);
+
             });
 
 

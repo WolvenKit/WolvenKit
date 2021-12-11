@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using ReactiveUI;
@@ -24,20 +25,10 @@ namespace WolvenKit.ViewModels.Documents
 
         public W2rcFileViewModel(Red4File file)
         {
-
             OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport);
 
-            //this.WhenAnyValue(x => x.SelectedChunk).Subscribe(chunk =>
-            //{
-            //    //if (chunk != null)
-            //    //{
-            //    //    ChunkProperties = new ObservableCollection<ChunkPropertyViewModel>(
-            //    //        SelectedChunk.GetData()
-            //    //            .ChildrEditableVariables
-            //    //            .Select(x => new ChunkPropertyViewModel(x)));
+            IsImagePreviewVisible = false;
 
-            //    //}
-            //});
             _file = file;
         }
 
@@ -58,6 +49,10 @@ namespace WolvenKit.ViewModels.Documents
         [Reactive] public ChunkViewModel SelectedChunk { get; set; }
 
         [Reactive] public IRedRef SelectedImport { get; set; }
+
+        [Reactive] public bool IsImagePreviewVisible { get; set; }
+
+        [Reactive] public Stream ImageStream { get; set; }
 
         #endregion
 

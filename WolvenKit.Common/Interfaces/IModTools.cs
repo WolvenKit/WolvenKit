@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.Common.Interfaces
@@ -16,6 +17,8 @@ namespace WolvenKit.Common.Interfaces
         public Archive Pack(DirectoryInfo infolder, DirectoryInfo outpath, string modname = null);
 
         public bool ConvertXbmToDdsStream(Stream redInFile, Stream outstream, out DXGI_FORMAT texformat);
+
+        //public bool ConvertCR2WToDdsStream(CR2WFile cr2w, Stream outstream, out DXGI_FORMAT texformat);
 
 
         public bool Import(RedRelativePath rawRelative, GlobalImportArgs args, DirectoryInfo outDir = null);

@@ -62,13 +62,31 @@ namespace WolvenKit.ViewModels.Shell
         {
             get
             {
-                if (Properties.Count == 0 && !PropertyType.IsAssignableTo(typeof(IRedArray)))
+                try
                 {
-                    return Parent.Data;
+                    IRedType data;
+                    if (Properties.Count == 0 && !PropertyType.IsAssignableTo(typeof(IRedArray)))
+                    {
+                        data = Parent?.Data ?? null;
+                    }
+                    else
+                    {
+                        data = Data;
+                    }
+
+                    if (data is IRedBaseHandle handle)
+                    {
+                        return handle?.File?.Chunks[handle.Pointer] ?? null;
+                    }
+                    else
+                    {
+                        return data;
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    return Data;
+                    Console.WriteLine(e.Message);
+                    return null;
                 }
             }
         }
@@ -377,11 +395,11 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     return "References";
                 }
-                if (PropertyType.IsAssignableTo(typeof(DataBuffer)))
+                if (PropertyType.IsAssignableTo(typeof(DataBuffer)) || PropertyType.IsAssignableTo(typeof(SerializationDeferredDataBuffer)))
                 {
                     return "GroupByRefType";
                 }
-                if (PropertyType.IsAssignableTo(typeof(CResourceAsyncReference<>)))
+                if (PropertyType.IsAssignableTo(typeof(CResourceAsyncReference<>)) || PropertyType.IsAssignableTo(typeof(CResourceReference<>)))
                 {
                     return "RepoPull";
                 }

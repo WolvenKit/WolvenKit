@@ -262,6 +262,7 @@ namespace WolvenKit.ViewModels.Tools
                         }
                         catch (Exception)
                         {
+                            throw;
                         }
                     }
                 }
