@@ -301,8 +301,39 @@ namespace WolvenKit.Functionality.Controllers
 
         public Task<bool> PackageMod()
         {
-            throw new NotImplementedException();
 
+            if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
+            {
+                _loggerService.Error("Can't pack project (no project/not cyberpunk project)!");
+                return Task.FromResult(false);
+            }
+
+            try
+            {
+                Directory.Delete(cp77Proj.PackedModDirectory, true);
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error(e);
+            }
+
+            // pack mod
+            var modfiles = Directory.GetFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
+            if (modfiles.Any())
+            {
+                _modTools.Pack(
+                    new DirectoryInfo(cp77Proj.ModDirectory),
+                    new DirectoryInfo(cp77Proj.PackedModDirectory),
+                    cp77Proj.Name);
+                _loggerService.Info("Packing archives complete!");
+            }
+
+            // compile tweak files
+            CompileTweakFiles(cp77Proj);
+
+            _loggerService.Success($"{cp77Proj.Name} packed into {cp77Proj.PackedModDirectory}!");
+
+            return Task.FromResult(true);
 
             //var pwm = ServiceLocator.Default.ResolveType<Models.Wizards.PublishWizardModel>();
             //var headerBackground = System.Drawing.Color.FromArgb(
@@ -340,34 +371,11 @@ namespace WolvenKit.Functionality.Controllers
         /// <returns></returns>
         public Task<bool> PackAndInstallProject()
         {
-            if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
+            var packTask = PackageMod();
+            if (!packTask.Result)
             {
-                _loggerService.Error("Can't pack nor install project (no project/not cyberpunk project)!");
                 return Task.FromResult(false);
             }
-
-            try
-            {
-                Directory.Delete(cp77Proj.PackedModDirectory, true);
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error(e);
-            }
-
-            // pack mod
-            var modfiles = Directory.GetFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
-            if (modfiles.Any())
-            {
-                _modTools.Pack(
-                    new DirectoryInfo(cp77Proj.ModDirectory),
-                    new DirectoryInfo(cp77Proj.PackedModDirectory),
-                    $"mod{cp77Proj.Name}");
-                _loggerService.Info("Packing archives complete!");
-            }
-
-            // compile tweak files
-            CompileTweakFiles(cp77Proj);
 
             InstallMod();
 
@@ -488,13 +496,13 @@ namespace WolvenKit.Functionality.Controllers
 
                 installlog.Root.Add(fileroot);
                 installlog.Save(logPath);
-                _loggerService.Success($"{activeMod.Name} installed!\n");
+                _loggerService.Success($"{activeMod.Name} installed!");
                 _notificationService.Success($"{activeMod.Name} installed!");
             }
             catch (Exception ex)
             {
                 //If we screwed up something. Log it.
-                _loggerService.Error(ex + "\n");
+                _loggerService.Error(ex);
             }
         }
 

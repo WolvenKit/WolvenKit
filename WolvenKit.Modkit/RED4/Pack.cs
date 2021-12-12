@@ -153,6 +153,7 @@ namespace WolvenKit.Modkit.RED4
 
                 using var fileStream = new FileStream(fileInfo.FullName, FileMode.Open);
                 using var fileBinaryReader = new BinaryReader(fileStream);
+                using var reader = new CR2WReader(fileBinaryReader);
 
                 // fileinfo data
                 var firstimportidx = (uint)importsHashSet.Count;
@@ -165,7 +166,6 @@ namespace WolvenKit.Modkit.RED4
                 if (isResource)
                 {
                     // read the file
-                    using var reader = new CR2WReader(fileBinaryReader);
                     _ = reader.ReadFile(out var cr2w, false);
 
                     // kraken the file and write

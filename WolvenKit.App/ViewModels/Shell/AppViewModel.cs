@@ -104,6 +104,7 @@ namespace WolvenKit.ViewModels.Shell
             OpenFileCommand = new DelegateCommand<FileModel>(p => ExecuteOpenFile(p), CanOpenFile);
 
             PackModCommand = new RelayCommand(ExecutePackMod, CanPackMod);
+            PackInstallModCommand = new RelayCommand(ExecutePackInstallMod, CanPackInstallMod);
             //BackupModCommand = new RelayCommand(ExecuteBackupMod, CanBackupMod);
             //PublishModCommand = new RelayCommand(ExecutePublishMod, CanPublishMod);
 
@@ -530,7 +531,11 @@ namespace WolvenKit.ViewModels.Shell
 
         public ICommand PackModCommand { get; private set; }
         private bool CanPackMod() => _projectManager.ActiveProject != null;
-        private void ExecutePackMod() => _gameControllerFactory.GetController().PackAndInstallProject();
+        private void ExecutePackMod() => _gameControllerFactory.GetController().PackageMod();
+
+        public ICommand PackInstallModCommand { get; private set; }
+        private bool CanPackInstallMod() => CanPackMod();
+        private void ExecutePackInstallMod() => _gameControllerFactory.GetController().PackAndInstallProject();
 
         //public ICommand PublishModCommand { get; private set; }
         //private bool CanPublishMod() => _projectManager.ActiveProject != null;

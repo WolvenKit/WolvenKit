@@ -180,6 +180,12 @@ namespace WolvenKit.Views.Shell
                         view => view.UtilitiesShowImportExportToolButton)
                     .DisposeWith(disposables);
 
+                // toolbar
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.NewProjectCommand,
+                        view => view.ToolbarNewProjectButton)
+                    .DisposeWith(disposables);
+
                 #endregion
 
                 Interactions.ShowBugReport.RegisterHandler(interaction =>

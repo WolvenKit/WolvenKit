@@ -66,6 +66,7 @@ namespace WolvenKit.ViewModels.Shell
             OpenProjectCommand = ReactiveCommand.Create<string>(s => _mainViewModel.OpenProjectCommand.Execute(s).Subscribe());
             //NewProjectCommand = ReactiveCommand.Create(() => _mainViewModel.NewProjectCommand.Execute().Subscribe());
             PackProjectCommand = ReactiveCommand.Create(() => _mainViewModel.PackModCommand.SafeExecute());
+            PackInstallProjectCommand = ReactiveCommand.Create(() => _mainViewModel.PackInstallModCommand.SafeExecute());
 
             NewFileCommand = ReactiveCommand.Create(() => _mainViewModel.NewFileCommand.SafeExecute(null));
             SaveFileCommand = ReactiveCommand.Create(() => _mainViewModel.SaveFileCommand.SafeExecute());
@@ -135,6 +136,7 @@ namespace WolvenKit.ViewModels.Shell
         public ReactiveCommand<string, Unit> OpenProjectCommand { get; }
         //public ReactiveCommand<Unit, Unit> NewProjectCommand { get; }
         public ReactiveCommand<Unit, Unit> PackProjectCommand { get; }
+        public ReactiveCommand<Unit, Unit> PackInstallProjectCommand { get; }
 
         public ReactiveCommand<Unit, Unit> NewFileCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveFileCommand { get; }

@@ -132,6 +132,24 @@
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
+                <Style x:Key="WolvenKitToolBarButtonIconEraser" TargetType="{x:Type iconPacks:PackIconControlBase}" BasedOn="{StaticResource WolvenKitToolBarButtonIcon}">
+                    <Setter Property="Foreground" Value="{StaticResource ContentBackgroundAlt}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type UIElement}, AncestorLevel=2}}" Value="True">
+                            <Setter Property="Foreground" Value="{StaticResource ContentBackgroundAlt5}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource AncestorType={x:Type UIElement}, AncestorLevel=2}}" Value="True">
+                            <Setter Property="Foreground" Value="{StaticResource ContentBackground}" />
+                        </DataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type UIElement}, AncestorLevel=2}}" Value="True" />
+                                <Condition Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource AncestorType={x:Type UIElement}, AncestorLevel=2}}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Foreground" Value="{StaticResource ContentBackgroundAlt}" />
+                        </MultiDataTrigger>
+                    </Style.Triggers>
+                </Style>
                 <Style x:Key="WolvenKitToolBarButtonText" TargetType="TextBlock">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type UIElement}}}" Value="False">
@@ -260,15 +278,19 @@
                 </Button>
                 <Separator Margin="3" />
                 <TextBlock Text="Project:" Height="30" Padding="5,7" Visibility="Collapsed" />
-                <Button ToolTip="New Project">
+                <Button ToolTip="New Project" x:Name="ToolbarNewProjectButton">
                     <StackPanel Orientation="Horizontal">
                         <Grid>
                             <iconPacks:PackIconMaterialDesign Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                Padding="0,0,2,2"
+                                Foreground="DarkGoldenrod"
                                 Kind="Folder" />
-                            <iconPacks:PackIconForkAwesome
-                                Foreground="{StaticResource ContentBackgroundAlt3}"
-                                Padding="0,5,0,3"
-                                Kind="Plus" />
+                            <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIconEraser}"
+                                Padding="6,6,-3,-3"
+                                Kind="Circle" />
+                            <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                Padding="8,8,-1,-1"
+                                Kind="PlusCircle" />
                         </Grid>
                         <TextBlock Text="New Project" Padding="5,0,0,0" />
                     </StackPanel>
@@ -288,11 +310,31 @@
                                 Foreground="#DF2935"
                                 Padding="0,0,2,2"
                                 Kind="Archive" />
+                            <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIconEraser}"
+                                Padding="6,6,-3,-3"
+                                Kind="Circle" />
                             <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
-                                Padding="7,7,-2,-2"
+                                Padding="8,8,-1,-1"
                                 Kind="Cog" />
                         </Grid>
                         <TextBlock Text="Pack Project" Padding="5,0,0,0" />
+                    </StackPanel>
+                </Button>
+                <Button Command="{Binding PackInstallProjectCommand}" ToolTip="Pack &amp; Install Project">
+                    <StackPanel Orientation="Horizontal">
+                        <Grid>
+                            <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                Foreground="#DF2935"
+                                Padding="0,0,2,2"
+                                Kind="Archive" />
+                            <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIconEraser}"
+                                Padding="7,7,-2,-2"
+                                Kind="ArrowRight" />
+                            <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                Padding="9,8,-1,-1"
+                                Kind="ArrowRight" />
+                        </Grid>
+                        <TextBlock Text="Pack &amp; Install" Padding="5,0,0,0" />
                     </StackPanel>
                 </Button>
             </ToolBar>
@@ -305,8 +347,11 @@
                                                     Foreground="Orange"
                                 Padding="0,0,2,2"
                                 Kind="List" />
+                            <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIconEraser}"
+                                Padding="6,6,-3,-3"
+                                Kind="Circle" />
                             <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
-                                Padding="7,7,-2,-2"
+                                Padding="8,8,-1,-1"
                                 Kind="Cog" />
                         </Grid>
                         <TextBlock Text="Generate Depot" Padding="5,0,0,0" />
