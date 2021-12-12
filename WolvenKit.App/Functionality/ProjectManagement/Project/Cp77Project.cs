@@ -36,7 +36,12 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         {
             get
             {
-                var dir = Path.Combine(FileDirectory, "tweakdbs");
+                var oldDir = Path.Combine(FileDirectory, "tweakdbs");
+                if (Directory.Exists(oldDir))
+                {
+                    return oldDir;
+                }     
+                var dir = Path.Combine(FileDirectory, "tweaks");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);

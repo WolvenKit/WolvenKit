@@ -80,19 +80,20 @@ namespace WolvenKit.Views.Shell
                         if (dialog.ShowDialog() == true)
                         {
                             var innerVm = (ProjectWizardViewModel)dialog.ViewModel.HostedViewModel;
-                            var location = Path.Combine(innerVm.ProjectPath, innerVm.ProjectName);
+                            var projectLocation = Path.Combine(innerVm.ProjectPath, innerVm.ProjectName);
+                            var projectFile = Path.Combine(projectLocation, innerVm.ProjectName);
                             var type = innerVm.ProjectType.First();
                             switch (type)
                             {
                                 case ProjectWizardViewModel.WitcherGameName:
-                                    location += ".w3modproj";
+                                    projectFile += ".w3modproj";
                                     break;
                                 case ProjectWizardViewModel.CyberpunkGameName:
-                                    location += ".cpmodproj";
+                                    projectFile += ".cpmodproj";
                                     break;
                             }
 
-                            result = location;
+                            result = projectFile;
                         }
 
                         interaction.SetOutput(result);

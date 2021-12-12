@@ -169,6 +169,12 @@ namespace WolvenKit.Functionality.Services
         {
             try
             {
+                var projectFolder = Path.GetDirectoryName(ActiveProject.Location);
+                if (!Directory.Exists(projectFolder))
+                {
+                    Directory.CreateDirectory(projectFolder);
+                }
+
                 await using var fs = new FileStream(ActiveProject.Location, FileMode.Create, FileAccess.Write);
                 var ser = new XmlSerializer(typeof(CP77Mod));
                 ser.Serialize(fs, new CP77Mod(ActiveProject));

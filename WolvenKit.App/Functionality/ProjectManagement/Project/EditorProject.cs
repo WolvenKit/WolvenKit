@@ -45,7 +45,12 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         {
             get
             {
-                var dir = Path.Combine(ProjectDirectory, "files");
+                var oldDir = Path.Combine(ProjectDirectory, "files");
+                if (Directory.Exists(oldDir))
+                {
+                    return oldDir;
+                }
+                var dir = Path.Combine(ProjectDirectory, "source");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -59,7 +64,12 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         {
             get
             {
-                var dir = Path.Combine(FileDirectory, "Mod");
+                var oldDir = Path.Combine(FileDirectory, "Mod");
+                if (Directory.Exists(oldDir))
+                {
+                    return oldDir;
+                }
+                var dir = Path.Combine(FileDirectory, "archive");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -87,7 +97,12 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         {
             get
             {
-                var dir = Path.Combine(FileDirectory, "Raw");
+                var oldDir = Path.Combine(FileDirectory, "Raw");
+                if (Directory.Exists(oldDir))
+                {
+                    return oldDir;
+                }
+                var dir = Path.Combine(FileDirectory, "raw");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -140,7 +155,16 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        public string ProjectDirectory => Path.Combine(Path.GetDirectoryName(Location), Name);
+        public string ProjectDirectory { get
+            {
+                var oldDir = Path.Combine(Path.GetDirectoryName(Location), Name);
+                if (Directory.Exists(oldDir))
+                {
+                    return oldDir;
+                }
+                return Path.GetDirectoryName(Location);
+            }
+        }
 
         #endregion not serialized
 
