@@ -14,6 +14,7 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using System.Windows.Input;
 using WolvenKit.Functionality.Commands;
+using static WolvenKit.RED4.Types.RedReflection;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -100,33 +101,37 @@ namespace WolvenKit.ViewModels.Shell
                     properties = new ObservableCollection<ChunkViewModel>();
                     try
                     {
-                        if (_data is IRedArray ary)
+                        var obj = _data;
+                        if (_data is IRedBaseHandle handle)
+                        {
+                            obj = handle.File.Chunks[handle.Pointer];
+                        }
+                        if (obj is IRedArray ary)
                         {
                             for (int i = 0; i < ary.Count; i++)
                             {
                                 properties.Add(new ChunkViewModel(i.ToString(), (IRedType)ary[i], this));
                             }
                         }
-                        else if (_data is IRedBaseHandle handle)
+                        else if (obj is RedBaseClass redClass)
                         {
-                            var obj = handle.File.Chunks[handle.Pointer];
-                            var eti = RedReflection.GetTypeInfo(obj.GetType());
-                            eti.PropertyInfos.Sort((a, b) => a.Name.CompareTo(b.Name));
-                            eti.PropertyInfos.ForEach((pi) =>
+                            var pis = GetTypeInfo(redClass.GetType(), true).PropertyInfos;
+                            pis.Sort((a, b) => a.Name.CompareTo(b.Name));
+                            pis.ForEach((pi) =>
                             {
-                                properties.Add(new ChunkViewModel(pi.Name, (IRedType)pi.GetValue(obj), this));
+                                IRedType value;
+                                if (pi.RedName == null)
+                                {
+                                    value = (IRedType)redClass.GetType().GetProperty(pi.Name).GetValue(redClass, null);
+                                }
+                                else
+                                {
+                                    value = (IRedType)pi.GetValue(redClass);
+                                }
+                                properties.Add(new ChunkViewModel(pi.Name, value, this));
                             });
                         }
-                        else if (_data is RedBaseClass redClass)
-                        {
-                            var eti = RedReflection.GetTypeInfo(redClass.GetType());
-                            eti.PropertyInfos.Sort((a, b) => a.Name.CompareTo(b.Name));
-                            eti.PropertyInfos.ForEach((pi) =>
-                            {
-                                properties.Add(new ChunkViewModel(pi.Name, (IRedType)pi.GetValue(redClass), this));
-                            });
-                        }
-                        else if (_data is SerializationDeferredDataBuffer sddb)
+                        else if (obj is SerializationDeferredDataBuffer sddb)
                         {
                             if (sddb.File is CR2WFile cR2WFile)
                             {
@@ -137,7 +142,7 @@ namespace WolvenKit.ViewModels.Shell
                                 }
                             }
                         }
-                        else if (_data is DataBuffer db)
+                        else if (obj is DataBuffer db)
                         {
                             if (db.File is CR2WFile cR2WFile)
                             {
@@ -152,7 +157,7 @@ namespace WolvenKit.ViewModels.Shell
                     catch (Exception e)
                     {
                         Console.WriteLine(e);
-                        throw;
+                        //throw;
                     }
                 }
 

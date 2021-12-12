@@ -6,30 +6,34 @@ namespace WolvenKit.RED4.Types
     [REDClass(ChildLevel = 1)]
     public partial class CPhysicsDecorationResource : IRedAppendix
     {
-        public object Appendix { get; set; }
-
         public void Read(Red4Reader reader, uint size)
         {
-            var result = new CPhysicsDecorationResource_Appendix();
-
-            result.Unk1 = reader.BaseReader.ReadInt32();
-            result.Unk2 = reader.ReadDataBuffer(0);
-
-            Appendix = result;
+            Unk1 = reader.BaseReader.ReadInt32();
+            var _ = reader.BaseReader.ReadInt16();
+            var buffer_index = reader.BaseReader.ReadUInt16();
+            Unk2 = reader.ReadDataBuffer((uint)(buffer_index - 1));
         }
 
         public void Write(Red4Writer writer)
         {
-            var appendix = (CPhysicsDecorationResource_Appendix)Appendix;
-
-            writer.BaseWriter.Write(appendix.Unk1);
-            writer.Write(appendix.Unk2);
+            writer.BaseWriter.Write(Unk1);
+            writer.Write(Unk2);
         }
-    }
 
-    public class CPhysicsDecorationResource_Appendix
-    {
-        public int Unk1 { get; set; }
-        public DataBuffer Unk2 { get; set; }
+        [REDAttribute("unk1")]
+        [REDProperty(IsIgnored = true)]
+        public CInt32 Unk1
+        {
+            get => GetPropertyValue<CInt32>();
+            set => SetPropertyValue<CInt32>(value);
+        }
+
+        [REDAttribute("unk2")]
+        [REDProperty(IsIgnored = true)]
+        public DataBuffer Unk2
+        {
+            get => GetPropertyValue<DataBuffer>();
+            set => SetPropertyValue<DataBuffer>(value);
+        }
     }
 }

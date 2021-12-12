@@ -85,7 +85,7 @@ namespace WolvenKit.RED4.Types
         {
             var property = RedReflection.GetPropertyByName(this.GetType(), propertyName);
 
-            return property.RedName;
+            return property?.RedName ?? propertyName;
         }
 
         protected T GetPropertyValue<T>([CallerMemberName] string callerName = "") where T : IRedType

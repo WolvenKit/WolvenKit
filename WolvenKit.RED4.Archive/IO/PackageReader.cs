@@ -89,44 +89,49 @@ namespace WolvenKit.RED4.Archive.IO
 
         public override IRedResourceAsyncReference<T> ReadCResourceAsyncReference<T>()
         {
-            var index = _reader.ReadUInt16();
+            var index = _reader.ReadInt16();
 
-            //if (index > 0)
-            //{
+            if (index >= 0 && index < importsList.Count)
+            {
                 return new CResourceAsyncReference<T>
                 {
                     DepotPath = importsList[index - 0].DepotPath,
                     Flags = importsList[index - 0].Flags
                 };
-            //}
+            }
 
-            //return new CResourceAsyncReference<T>
-            //{
-            //    DepotPath = "",
-            //    Flags = InternalEnums.EImportFlags.Default
-            //};
+            return new CResourceAsyncReference<T>
+            {
+                DepotPath = "",
+                Flags = InternalEnums.EImportFlags.Default
+            };
         }
 
         public override IRedResourceReference<T> ReadCResourceReference<T>()
         {
-            var index = _reader.ReadUInt16();
+            var index = _reader.ReadInt16();
 
-            //if (index > 0 && index < importsList.Count)
-            //{
+            if (index >= 0 && index < importsList.Count)
+            {
                 return new CResourceReference<T>
                 {
                     DepotPath = importsList[index - 0].DepotPath,
                     Flags = importsList[index - 0].Flags
                 };
-            //}
+            }
 
-            //return new CResourceReference<T>
-            //{
-            //    DepotPath = "",
-            //    Flags = InternalEnums.EImportFlags.Default
-            //};
+            return new CResourceReference<T>
+            {
+                DepotPath = "",
+                Flags = InternalEnums.EImportFlags.Default
+            };
         }
 
+        public override NodeRef ReadNodeRef()
+        {
+            var length = _reader.ReadInt16();
+            return Encoding.UTF8.GetString(_reader.ReadBytes(length));
+        }
 
     }
 }

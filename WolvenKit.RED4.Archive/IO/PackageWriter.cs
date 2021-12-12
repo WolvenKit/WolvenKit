@@ -62,6 +62,7 @@ namespace WolvenKit.RED4.Archive.IO
             _writer.Write((ushort)nonDefaultProperties.Count);
             var currentDataPosition = BaseStream.Position + nonDefaultProperties.Count * 8;
             var descStartPosition = BaseStream.Position;
+            nonDefaultProperties = nonDefaultProperties.OrderBy(p => p.Ordinal).ToList();
 
             foreach (var propertyInfo in nonDefaultProperties)
             {
@@ -97,22 +98,28 @@ namespace WolvenKit.RED4.Archive.IO
 
         public override void Write(IRedHandle instance)
         {
-            //if (instance.Pointer > 0)
-            //{
-            _targetList.Add((CurrentChunk, instance.Pointer, StringCacheList.Count, ImportCacheList.Count));
-            //}
+            if (instance.Pointer >= 0)
+            {
+                _targetList.Add((CurrentChunk, instance.Pointer, StringCacheList.Count, ImportCacheList.Count));
+            }
 
             _writer.Write(instance.Pointer + 0);
         }
 
         public override void Write(IRedWeakHandle instance)
         {
-            //if (instance.Pointer > 0)
-            //{
-            _targetList.Add((CurrentChunk, instance.Pointer, StringCacheList.Count, ImportCacheList.Count));
-            //}
+            if (instance.Pointer >= 0)
+            {
+                _targetList.Add((CurrentChunk, instance.Pointer, StringCacheList.Count, ImportCacheList.Count));
+            }
 
             _writer.Write(instance.Pointer + 0);
+        }
+
+        public override void Write(NodeRef val)
+        {
+            _writer.Write((short)(val.Text.Length));
+            _writer.Write(val.Text.ToCharArray());
         }
 
     }
