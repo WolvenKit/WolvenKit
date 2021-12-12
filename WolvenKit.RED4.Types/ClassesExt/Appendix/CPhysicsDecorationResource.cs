@@ -9,9 +9,7 @@ namespace WolvenKit.RED4.Types
         public void Read(Red4Reader reader, uint size)
         {
             Unk1 = reader.BaseReader.ReadInt32();
-            var _ = reader.BaseReader.ReadInt16();
-            var buffer_index = reader.BaseReader.ReadUInt16();
-            Unk2 = reader.ReadDataBuffer((uint)(buffer_index - 1));
+            Unk2 = reader.ReadDataBuffer();
         }
 
         public void Write(Red4Writer writer)
@@ -20,7 +18,7 @@ namespace WolvenKit.RED4.Types
             writer.Write(Unk2);
         }
 
-        [REDAttribute("unk1")]
+        [RED("unk1")]
         [REDProperty(IsIgnored = true)]
         public CInt32 Unk1
         {
@@ -28,7 +26,7 @@ namespace WolvenKit.RED4.Types
             set => SetPropertyValue<CInt32>(value);
         }
 
-        [REDAttribute("unk2")]
+        [RED("unk2")]
         [REDProperty(IsIgnored = true)]
         public DataBuffer Unk2
         {

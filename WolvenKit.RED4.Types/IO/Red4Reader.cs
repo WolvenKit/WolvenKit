@@ -96,7 +96,7 @@ namespace WolvenKit.RED4.IO
             return result;
         }
 
-        public virtual DataBuffer ReadDataBuffer(uint size)
+        public virtual DataBuffer ReadDataBuffer()
         {
             var bufferSize = _reader.ReadUInt32();
             if (bufferSize >= 0x80000000)
@@ -575,7 +575,7 @@ namespace WolvenKit.RED4.IO
                     return ReadCVariant();
 
                 case { } when type == typeof(DataBuffer):
-                    return ReadDataBuffer(size);
+                    return ReadDataBuffer();
 
                 case { } when type == typeof(EditorObjectID):
                     return ReadEditorObjectID();

@@ -651,8 +651,7 @@ namespace WolvenKit.Modkit.RED4
             BaseMaterials.Add(cMaterialInstance);
             for (int i = 0; i < BaseMaterials.Count; i++)
             {
-                var materialInstancedata = (CMaterialInstance_Appendix)BaseMaterials[i].Appendix;
-                var values = materialInstancedata.Values;
+                var values = BaseMaterials[i].Values;
 
                 for (int e = 0; e < values.Count; e++)
                 {
