@@ -26,6 +26,7 @@ namespace WolvenKit.RED4.IO
         protected readonly Dictionary<int, ImportInfo> _chunkImportList = new();
 
         protected readonly List<(int, int, int, int)> _targetList = new();
+        protected readonly Dictionary<int, List<int>> ChildChunks = new();
 
         private Encoding _encoding;
         private bool _disposed;
@@ -97,6 +98,8 @@ namespace WolvenKit.RED4.IO
         public void StartChunk(int i)
         {
             CurrentChunk = i;
+            ChildChunks[i] = new();
+
             if (i == 0)
             {
                 return;
@@ -427,6 +430,7 @@ namespace WolvenKit.RED4.IO
             if (instance.Pointer > 0)
             {
                 _targetList.Add((CurrentChunk, instance.Pointer, StringCacheList.Count, ImportCacheList.Count));
+                ChildChunks[CurrentChunk].Add(instance.Pointer);
             }
 
             _writer.Write(instance.Pointer + 1);
@@ -437,6 +441,7 @@ namespace WolvenKit.RED4.IO
             if (instance.Pointer > 0)
             {
                 _targetList.Add((CurrentChunk, instance.Pointer, StringCacheList.Count, ImportCacheList.Count));
+                ChildChunks[CurrentChunk].Add(instance.Pointer);
             }
 
             _writer.Write(instance.Pointer + 1);
