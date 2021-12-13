@@ -228,8 +228,8 @@ namespace WolvenKit.RED4.IO
             }
             else
             {
-                _writer.Write((uint)(val.Buffer.Length));
-                _writer.Write(val.Buffer);
+                _writer.Write((uint)(val.Data.Length));
+                _writer.Write(val.Data);
             }
         }
 

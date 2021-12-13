@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using WolvenKit.RED4.Types.Compression;
 
 namespace WolvenKit.RED4.Types
 {
@@ -13,7 +14,11 @@ namespace WolvenKit.RED4.Types
 
         private byte[] _inlineBuffer = Array.Empty<byte>();
 
-        public byte[] Buffer
+        private bool _inlineIsCompressed = false;
+
+        private bool _inlineIsIncompressable = false;
+
+        public byte[] Data
         {
             get
             {
@@ -43,6 +48,57 @@ namespace WolvenKit.RED4.Types
             }
         }
 
+        public void Compress()
+        {
+            if (Pointer < -1 || Pointer >= File._buffers.Count)
+            {
+                throw new IndexOutOfRangeException(nameof(Pointer));
+            }
+
+            if (Pointer == -1)
+            {
+                if (_inlineIsCompressed || _inlineIsIncompressable)
+                {
+                    return;
+                }
+
+                if (OodleLZHelper.CompressBuffer(_inlineBuffer, out _inlineBuffer) == OodleLZHelper.Status.Compressed)
+                {
+                    _inlineIsCompressed = true;
+                }
+                else
+                {
+                    _inlineIsIncompressable = true;
+                }
+                return;
+            }
+
+            File._buffers[Pointer].Compress();
+        }
+
+        public void Decompress()
+        {
+            if (Pointer < -1 || Pointer >= File._buffers.Count)
+            {
+                throw new IndexOutOfRangeException(nameof(Pointer));
+            }
+
+            if (Pointer == -1)
+            {
+                if (!_inlineIsCompressed)
+                {
+                    return;
+                }
+
+                OodleLZHelper.DecompressBuffer(_inlineBuffer, out _inlineBuffer);
+
+                _inlineIsCompressed = false;
+                return;
+            }
+
+            File._buffers[Pointer].Decompress();
+        }
+
         public bool Equals(DataBuffer other)
         {
             if (ReferenceEquals(null, other))
@@ -55,7 +111,7 @@ namespace WolvenKit.RED4.Types
                 return true;
             }
 
-            return Equals(Buffer, other.Buffer) && Pointer == other.Pointer;
+            return Equals(Data, other.Data) && Pointer == other.Pointer;
         }
 
         public override bool Equals(object obj)
@@ -78,6 +134,6 @@ namespace WolvenKit.RED4.Types
             return Equals((DataBuffer)obj);
         }
 
-        public override int GetHashCode() => HashCode.Combine(Buffer, Pointer);
+        public override int GetHashCode() => HashCode.Combine(Data, Pointer);
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 
 namespace WolvenKit.RED4.Types
@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
             if (inline)
             {
-                return new DataBuffer { File = _file, Buffer = data };
+                return new DataBuffer { File = _file, Data = data };
             }
 
             _file._buffers.Add(RedBuffer.CreateBuffer(flags, data));

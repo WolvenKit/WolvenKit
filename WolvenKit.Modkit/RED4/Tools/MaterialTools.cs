@@ -45,13 +45,11 @@ namespace WolvenKit.Modkit.RED4
 
             var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
-            var rendbuffer = rendblob.RenderBuffer.Buffer;
-            using var ms = new MemoryStream(rendbuffer);
-            throw new WolvenKit.RED4.Types.Exceptions.TodoException("decompress buffer");
+            var rendDB = rendblob.RenderBuffer;
+            rendDB.Decompress();
+            using var ms = new MemoryStream(rendDB.Data);
 
-#pragma warning disable CS0162 // Unreachable code detected
             var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w);
-#pragma warning restore CS0162 // Unreachable code detected
 
             List<RawMeshContainer> expMeshes = MeshTools.ContainRawMesh(ms, meshesinfo, LodFilter);
             MeshTools.UpdateSkinningParamCloth(ref expMeshes, meshStream, cr2w);
@@ -865,14 +863,14 @@ namespace WolvenKit.Modkit.RED4
             var (zsize, crc) = buff.CompressAndWrite(materialbuffer.ToArray());
 
             bool check = false;
-            check = blob.LocalMaterialBuffer.RawData.Buffer.Length > 0;
+            check = blob.LocalMaterialBuffer.RawData.Data.Length > 0;
             if (!check)
             {
                 blob.LocalMaterialBuffer.RawData = cr2w.BufferHandler.CreateDataBuffer(0, materialbuffer.ToArray());
             }
             else
             {
-                blob.LocalMaterialBuffer.RawData.Buffer = materialbuffer.ToArray();
+                blob.LocalMaterialBuffer.RawData.Data = materialbuffer.ToArray();
             }
 
             return true;

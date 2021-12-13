@@ -49,13 +49,10 @@ namespace WolvenKit.Modkit.RED4
             }
             var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
-            var rendbuffer = rendblob.RenderBuffer.Buffer;
-            using var meshbuffer = new MemoryStream(rendbuffer);
-            throw new WolvenKit.RED4.Types.Exceptions.TodoException("decompress buffer");
+            rendblob.RenderBuffer.Decompress();
+            using var meshbuffer = new MemoryStream(rendblob.RenderBuffer.Data);
 
-#pragma warning disable CS0162 // Unreachable code detected
             var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w);
-#pragma warning restore CS0162 // Unreachable code detected
 
             List<RawMeshContainer> expMeshes = MeshTools.ContainRawMesh(meshbuffer, meshesinfo, true);
 
@@ -67,9 +64,8 @@ namespace WolvenKit.Modkit.RED4
 
             if (blob.DiffsBuffer is not null)
             {
-                var diffsbufferBytes = blob.DiffsBuffer.Buffer;
-                diffsbuffer = new MemoryStream(rendbuffer);
-                throw new WolvenKit.RED4.Types.Exceptions.TodoException("decompress buffer");
+                blob.DiffsBuffer.Decompress();
+                mappingbuffer = new MemoryStream(blob.DiffsBuffer.Data);
 
                 //targetStream.Seek(cr2w.Buffers[blob.DiffsBuffer.Buffer - 1].Offset, SeekOrigin.Begin);
                 //targetStream.DecompressAndCopySegment(diffsbuffer, cr2w.Buffers[blob.DiffsBuffer.Buffer - 1].DiskSize, cr2w.Buffers[blob.DiffsBuffer.Buffer - 1].MemSize);
@@ -77,9 +73,8 @@ namespace WolvenKit.Modkit.RED4
 
             if (blob.MappingBuffer is not null)
             {
-                var mappingbufferBytes = blob.MappingBuffer.Buffer;
-                mappingbuffer = new MemoryStream(rendbuffer);
-                throw new WolvenKit.RED4.Types.Exceptions.TodoException("decompress buffer");
+                blob.MappingBuffer.Decompress();
+                mappingbuffer = new MemoryStream(blob.MappingBuffer.Data);
 
                 //targetStream.Seek(cr2w.Buffers[blob.MappingBuffer.Buffer - 1].Offset, SeekOrigin.Begin);
                 //targetStream.DecompressAndCopySegment(mappingbuffer, cr2w.Buffers[blob.MappingBuffer.Buffer - 1].DiskSize, cr2w.Buffers[blob.MappingBuffer.Buffer - 1].MemSize);
@@ -87,9 +82,8 @@ namespace WolvenKit.Modkit.RED4
 
             if (blob.TextureDiffsBuffer is not null)
             {
-                var texbufferBytes = blob.TextureDiffsBuffer.Buffer;
-                texbuffer = new MemoryStream(rendbuffer);
-                throw new WolvenKit.RED4.Types.Exceptions.TodoException("decompress buffer");
+                blob.TextureDiffsBuffer.Decompress();
+                mappingbuffer = new MemoryStream(blob.TextureDiffsBuffer.Data);
 
                 //targetStream.Seek(cr2w.Buffers[blob.TextureDiffsBuffer.Buffer - 1].Offset, SeekOrigin.Begin);
                 //targetStream.DecompressAndCopySegment(texbuffer, cr2w.Buffers[blob.TextureDiffsBuffer.Buffer - 1].DiskSize, cr2w.Buffers[blob.TextureDiffsBuffer.Buffer - 1].MemSize);

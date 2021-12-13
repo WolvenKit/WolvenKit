@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
         public ushort Pointer { get; set; }
 
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-        public byte[] Buffer
+        public byte[] Data
         {
             get
             {
@@ -37,6 +37,26 @@ namespace WolvenKit.RED4.Types
             }
         }
 
+        public void Compress()
+        {
+            if (Pointer >= File._buffers.Count)
+            {
+                throw new IndexOutOfRangeException(nameof(Pointer));
+            }
+
+            File._buffers[Pointer].Compress();
+        }
+
+        public void Decompress()
+        {
+            if (Pointer >= File._buffers.Count)
+            {
+                throw new IndexOutOfRangeException(nameof(Pointer));
+            }
+
+            File._buffers[Pointer].Decompress();
+        }
+
         public bool Equals(SerializationDeferredDataBuffer other)
         {
             if (ReferenceEquals(null, other))
@@ -49,7 +69,7 @@ namespace WolvenKit.RED4.Types
                 return true;
             }
 
-            return Buffer == other.Buffer;
+            return Data == other.Data;
         }
 
         public override bool Equals(object obj)
@@ -72,6 +92,6 @@ namespace WolvenKit.RED4.Types
             return Equals((SerializationDeferredDataBuffer)obj);
         }
 
-        public override int GetHashCode() => Buffer.GetHashCode();
+        public override int GetHashCode() => Data.GetHashCode();
     }
 }

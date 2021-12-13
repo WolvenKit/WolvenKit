@@ -110,7 +110,7 @@ namespace WolvenKit.RED4.IO
 
             return new DataBuffer
             {
-                Buffer = _reader.ReadBytes((int)bufferSize)
+                Data = _reader.ReadBytes((int)bufferSize)
             };
         }
 

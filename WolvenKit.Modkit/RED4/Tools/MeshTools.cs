@@ -57,13 +57,10 @@ namespace CP77.CR2W
 
             var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
-            var rendbuffer = rendblob.RenderBuffer.Buffer;
-            using var ms = new MemoryStream(rendbuffer);
-            throw new WolvenKit.RED4.Types.Exceptions.TodoException("decompress buffer");
+            rendblob.RenderBuffer.Decompress();
+            using var ms = new MemoryStream(rendblob.RenderBuffer.Data);
 
-#pragma warning disable CS0162 // Unreachable code detected
             var meshesinfo = GetMeshesinfo(rendblob, cr2w);
-#pragma warning restore CS0162 // Unreachable code detected
 
             var expMeshes = ContainRawMesh(ms, meshesinfo, true);
 
@@ -86,13 +83,10 @@ namespace CP77.CR2W
 
             RawArmature Rig = GetOrphanRig(rendblob, cr2w);
 
-            var rendbuffer = rendblob.RenderBuffer.Buffer;
-            using var ms = new MemoryStream(rendbuffer);
-            throw new WolvenKit.RED4.Types.Exceptions.TodoException("decompress buffer");
+            rendblob.RenderBuffer.Decompress();
+            using var ms = new MemoryStream(rendblob.RenderBuffer.Data);
 
-#pragma warning disable CS0162 // Unreachable code detected
             var meshesinfo = GetMeshesinfo(rendblob, cr2w);
-#pragma warning restore CS0162 // Unreachable code detected
 
             List<RawMeshContainer> expMeshes = ContainRawMesh(ms, meshesinfo, LodFilter);
             UpdateSkinningParamCloth(ref expMeshes, meshStream, cr2w);
@@ -131,13 +125,10 @@ namespace CP77.CR2W
 
             var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
-            var rendbuffer = rendblob.RenderBuffer.Buffer;
-            using var ms = new MemoryStream(rendbuffer);
-            throw new WolvenKit.RED4.Types.Exceptions.TodoException("decompress buffer");
+            rendblob.RenderBuffer.Decompress();
+            using var ms = new MemoryStream(rendblob.RenderBuffer.Data);
 
-#pragma warning disable CS0162 // Unreachable code detected
             var meshesinfo = GetMeshesinfo(rendblob, cr2w);
-#pragma warning restore CS0162 // Unreachable code detected
 
             List<RawMeshContainer> expMeshes = ContainRawMesh(ms, meshesinfo, LodFilter);
 
@@ -173,13 +164,10 @@ namespace CP77.CR2W
 
                 var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
-                var rendbuffer = rendblob.RenderBuffer.Buffer;
-                using var ms = new MemoryStream(rendbuffer);
-                throw new WolvenKit.RED4.Types.Exceptions.TodoException("decompress buffer");
+                rendblob.RenderBuffer.Decompress();
+                using var ms = new MemoryStream(rendblob.RenderBuffer.Data);
 
-#pragma warning disable CS0162 // Unreachable code detected
                 var meshesinfo = GetMeshesinfo(rendblob, cr2w);
-#pragma warning restore CS0162 // Unreachable code detected
 
                 var Meshes = ContainRawMesh(ms, meshesinfo, LodFilter);
 
@@ -219,13 +207,10 @@ namespace CP77.CR2W
 
             var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
-            var rendbuffer = rendblob.RenderBuffer.Buffer;
-            using var ms = new MemoryStream(rendbuffer);
-            throw new WolvenKit.RED4.Types.Exceptions.TodoException("decompress buffer");
+            rendblob.RenderBuffer.Decompress();
+            using var ms = new MemoryStream(rendblob.RenderBuffer.Data);
 
-#pragma warning disable CS0162 // Unreachable code detected
             var meshesinfo = GetMeshesinfo(rendblob, cr2w);
-#pragma warning restore CS0162 // Unreachable code detected
 
             List<RawMeshContainer> expMeshes = ContainRawMesh(ms, meshesinfo, LodFilter);
             UpdateSkinningParamCloth(ref expMeshes, meshStream, cr2w);
@@ -285,13 +270,10 @@ namespace CP77.CR2W
 
                 var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
-                var rendbuffer = rendblob.RenderBuffer.Buffer;
-                using var ms = new MemoryStream(rendbuffer);
-                throw new WolvenKit.RED4.Types.Exceptions.TodoException("decompress buffer");
+                rendblob.RenderBuffer.Decompress();
+                using var ms = new MemoryStream(rendblob.RenderBuffer.Data);
 
-#pragma warning disable CS0162 // Unreachable code detected
                 var meshesinfo = GetMeshesinfo(rendblob, cr2w);
-#pragma warning restore CS0162 // Unreachable code detected
 
                 List<RawMeshContainer> Meshes = ContainRawMesh(ms, meshesinfo, LodFilter);
                 UpdateSkinningParamCloth(ref Meshes, meshStream, cr2w);
@@ -1044,25 +1026,23 @@ namespace CP77.CR2W
 
                 for (int i = 0; (i < blob.Chunks.Count) && (i < meshes.Count); i++)
                 {
-                    if (blob.Chunks[i].SkinIndices.Buffer.Length > 0 && blob.Chunks[i].SkinWeights.Buffer.Length > 0)
+                    if (blob.Chunks[i].SkinIndices.Data.Length > 0 && blob.Chunks[i].SkinWeights.Data.Length > 0)
                     {
                         meshes[i].weightCount = 4;
                     }
-                    if (blob.Chunks[i].SkinIndicesExt.Buffer.Length > 0 && blob.Chunks[i].SkinWeightsExt.Buffer.Length > 0)
+                    if (blob.Chunks[i].SkinIndicesExt.Data.Length > 0 && blob.Chunks[i].SkinWeightsExt.Data.Length > 0)
                     {
                         meshes[i].weightCount += 4;
                     }
                     meshes[i].boneindices = new ushort[meshes[i].positions.Length, meshes[i].weightCount];
                     meshes[i].weights = new float[meshes[i].positions.Length, meshes[i].weightCount];
-                    if (blob.Chunks[i].SkinIndices.Buffer.Length > 0)
+                    if (blob.Chunks[i].SkinIndices.Data.Length > 0)
                     {
-                        var bufferIdx = blob.Chunks[i].SkinIndices.Pointer;
-                        var buffer = cr2w.Buffers[bufferIdx - 1];
+                        var db = blob.Chunks[i].SkinWeights;
+                        db.Decompress();
 
-                        var unpacked = new byte[buffer.MemSize];
-                        _ = OodleHelper.Decompress(buffer.Data, unpacked);
                         var stream = new MemoryStream();
-                        ms.Write(unpacked);
+                        ms.Write(db.Data);
 
                         var br = new BinaryReader(stream);
                         stream.Seek(0, SeekOrigin.Begin);
@@ -1074,15 +1054,13 @@ namespace CP77.CR2W
                             meshes[i].boneindices[e, 3] = br.ReadByte();
                         }
                     }
-                    if (blob.Chunks[i].SkinWeights.Buffer.Length > 0)
+                    if (blob.Chunks[i].SkinWeights.Data.Length > 0)
                     {
-                        var bufferIdx = blob.Chunks[i].SkinWeights.Pointer;
-                        var buffer = cr2w.Buffers[bufferIdx - 1];
+                        var db = blob.Chunks[i].SkinWeights;
+                        db.Decompress();
 
-                        var unpacked = new byte[buffer.MemSize];
-                        _ = OodleHelper.Decompress(buffer.Data, unpacked);
                         var stream = new MemoryStream();
-                        ms.Write(unpacked);
+                        ms.Write(db.Data);
 
                         var br = new BinaryReader(stream);
                         stream.Seek(0, SeekOrigin.Begin);
@@ -1094,15 +1072,13 @@ namespace CP77.CR2W
                             meshes[i].weights[e, 3] = br.ReadSingle();
                         }
                     }
-                    if (blob.Chunks[i].SkinIndicesExt.Buffer.Length > 0)
+                    if (blob.Chunks[i].SkinIndicesExt.Data.Length > 0)
                     {
-                        var bufferIdx = blob.Chunks[i].SkinIndicesExt.Pointer;
-                        var buffer = cr2w.Buffers[bufferIdx - 1];
+                        var db = blob.Chunks[i].SkinIndicesExt;
+                        db.Decompress();
 
-                        var unpacked = new byte[buffer.MemSize];
-                        _ = OodleHelper.Decompress(buffer.Data, unpacked);
                         var stream = new MemoryStream();
-                        ms.Write(unpacked);
+                        ms.Write(db.Data);
 
                         var br = new BinaryReader(stream);
                         stream.Seek(0, SeekOrigin.Begin);
@@ -1114,15 +1090,13 @@ namespace CP77.CR2W
                             meshes[i].boneindices[e, 7] = br.ReadByte();
                         }
                     }
-                    if (blob.Chunks[i].SkinWeightsExt.Buffer.Length > 0)
+                    if (blob.Chunks[i].SkinWeightsExt.Data.Length > 0)
                     {
-                        var bufferIdx = blob.Chunks[i].SkinWeightsExt.Pointer;
-                        var buffer = cr2w.Buffers[bufferIdx - 1];
+                        var db = blob.Chunks[i].SkinWeightsExt;
+                        db.Decompress();
 
-                        var unpacked = new byte[buffer.MemSize];
-                        _ = OodleHelper.Decompress(buffer.Data, unpacked);
                         var stream = new MemoryStream();
-                        ms.Write(unpacked);
+                        ms.Write(db.Data);
 
                         var br = new BinaryReader(stream);
                         stream.Seek(0, SeekOrigin.Begin);
@@ -1171,25 +1145,23 @@ namespace CP77.CR2W
                     {
                         meshes[i].colors1[blob.Chunks[i].Simulation[e]].X = 1f;
                     }
-                    if (blob.Chunks[i].SkinIndices.Buffer.Length > 0 && blob.Chunks[i].SkinWeights.Buffer.Length > 0)
+                    if (blob.Chunks[i].SkinIndices.Data.Length > 0 && blob.Chunks[i].SkinWeights.Data.Length > 0)
                     {
                         meshes[i].weightCount = 4;
                     }
-                    if (blob.Chunks[i].SkinIndicesExt.Buffer.Length > 0 && blob.Chunks[i].SkinWeightsExt.Buffer.Length > 0)
+                    if (blob.Chunks[i].SkinIndicesExt.Data.Length > 0 && blob.Chunks[i].SkinWeightsExt.Data.Length > 0)
                     {
                         meshes[i].weightCount += 4;
                     }
                     meshes[i].boneindices = new ushort[meshes[i].positions.Length, meshes[i].weightCount];
                     meshes[i].weights = new float[meshes[i].positions.Length, meshes[i].weightCount];
-                    if (blob.Chunks[i].SkinIndices.Buffer.Length > 0)
+                    if (blob.Chunks[i].SkinIndices.Data.Length > 0)
                     {
-                        var bufferIdx = blob.Chunks[i].SkinIndices.Pointer;
-                        var buffer = cr2w.Buffers[bufferIdx - 1];
+                        var db = blob.Chunks[i].SkinIndices;
+                        db.Decompress();
 
-                        var unpacked = new byte[buffer.MemSize];
-                        _ = OodleHelper.Decompress(buffer.Data, unpacked);
                         var stream = new MemoryStream();
-                        ms.Write(unpacked);
+                        ms.Write(db.Data);
 
                         var br = new BinaryReader(stream);
                         stream.Seek(0, SeekOrigin.Begin);
@@ -1201,15 +1173,13 @@ namespace CP77.CR2W
                             meshes[i].boneindices[e, 3] = br.ReadByte();
                         }
                     }
-                    if (blob.Chunks[i].SkinWeights.Buffer.Length > 0)
+                    if (blob.Chunks[i].SkinWeights.Data.Length > 0)
                     {
-                        var bufferIdx = blob.Chunks[i].SkinWeights.Pointer;
-                        var buffer = cr2w.Buffers[bufferIdx - 1];
+                        var db = blob.Chunks[i].SkinWeights;
+                        db.Decompress();
 
-                        var unpacked = new byte[buffer.MemSize];
-                        _ = OodleHelper.Decompress(buffer.Data, unpacked);
                         var stream = new MemoryStream();
-                        ms.Write(unpacked);
+                        ms.Write(db.Data);
 
                         var br = new BinaryReader(stream);
                         stream.Seek(0, SeekOrigin.Begin);
@@ -1221,15 +1191,13 @@ namespace CP77.CR2W
                             meshes[i].weights[e, 3] = br.ReadSingle();
                         }
                     }
-                    if (blob.Chunks[i].SkinIndicesExt.Buffer.Length > 0)
+                    if (blob.Chunks[i].SkinIndicesExt.Data.Length > 0)
                     {
-                        var bufferIdx = blob.Chunks[i].SkinIndicesExt.Pointer;
-                        var buffer = cr2w.Buffers[bufferIdx - 1];
+                        var db = blob.Chunks[i].SkinIndicesExt;
+                        db.Decompress();
 
-                        var unpacked = new byte[buffer.MemSize];
-                        _ = OodleHelper.Decompress(buffer.Data, unpacked);
                         var stream = new MemoryStream();
-                        ms.Write(unpacked);
+                        ms.Write(db.Data);
 
                         var br = new BinaryReader(stream);
                         stream.Seek(0, SeekOrigin.Begin);
@@ -1241,15 +1209,13 @@ namespace CP77.CR2W
                             meshes[i].boneindices[e, 7] = br.ReadByte();
                         }
                     }
-                    if (blob.Chunks[i].SkinWeightsExt.Buffer.Length > 0)
+                    if (blob.Chunks[i].SkinWeightsExt.Data.Length > 0)
                     {
-                        var bufferIdx = blob.Chunks[i].SkinWeightsExt.Pointer;
-                        var buffer = cr2w.Buffers[bufferIdx - 1];
+                        var db = blob.Chunks[i].SkinWeightsExt;
+                        db.Decompress();
 
-                        var unpacked = new byte[buffer.MemSize];
-                        _ = OodleHelper.Decompress(buffer.Data, unpacked);
                         var stream = new MemoryStream();
-                        ms.Write(unpacked);
+                        ms.Write(db.Data);
 
                         var br = new BinaryReader(stream);
                         stream.Seek(0, SeekOrigin.Begin);
