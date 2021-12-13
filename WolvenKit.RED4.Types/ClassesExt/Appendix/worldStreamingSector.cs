@@ -19,11 +19,7 @@ namespace WolvenKit.RED4.Types
 
             var innerSize = reader.BaseReader.ReadInt32();
 
-            result.Unk2 = reader.BaseReader.ReadInt32();
-            if (result.Unk2 != -2147483647)
-            {
-                throw new TodoException();
-            }
+            result.Unk2 = reader.ReadDataBuffer();
 
             result.Handles = new CHandle<worldNode>[reader.BaseReader.ReadVLQInt32()];
             for (int i = 0; i < result.Handles.Length; i++)
@@ -57,7 +53,7 @@ namespace WolvenKit.RED4.Types
             var sizePos = writer.BaseStream.Position;
             writer.BaseWriter.Write(0);
 
-            writer.BaseWriter.Write(appendix.Unk2);
+            writer.Write(appendix.Unk2);
 
             writer.BaseWriter.WriteVLQInt32(appendix.Handles.Length);
             foreach (var handle in appendix.Handles)
@@ -89,7 +85,7 @@ namespace WolvenKit.RED4.Types
     public class worldStreamingSector_Appendix
     {
         public int Unk1 { get; set; }
-        public int Unk2 { get; set; }
+        public DataBuffer Unk2 { get; set; }
         public CHandle<worldNode>[] Handles { get; set; }
         public NodeRef[] NodeRefs { get; set; } // Could also be CString
         public int[] Unk3 { get; set; }
