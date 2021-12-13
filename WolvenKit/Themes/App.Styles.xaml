@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"           
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"  
     xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF" 
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:svgc="http://sharpvectors.codeplex.com/svgc/">
 
     <SolidColorBrush x:Key="CustomSliderForegroundBrush" Color="#FF1E91EA" />
@@ -412,6 +413,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
     <Style x:Key="FileIcons" TargetType="Image">
         <Style.Triggers>
 
@@ -570,6 +572,19 @@
             </DataTrigger>
             <DataTrigger Binding="{Binding Extension}" Value="DlcUncookedImageKey">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
+            </DataTrigger>
+
+            <DataTrigger Binding="{Binding Extension}" Value="ModDirectoryTop">
+                <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/archive-closed.svg}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Extension}" Value="RawDirectoryTop">
+                <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/json.svg}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Extension}" Value="ScriptDirectoryTop">
+                <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/reds.svg}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Extension}" Value="TweakDirectoryTop">
+                <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/tweak.svg}" />
             </DataTrigger>
 
             <DataTrigger Binding="{Binding Extension}" Value="aiarch">

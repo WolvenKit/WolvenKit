@@ -123,13 +123,13 @@
             LiveNodeUpdateMode="AllowDataShaping"
             PreviewMouseDown="TreeGrid_MouseDown"
             ParentPropertyName="Hash"
-            RowHeight="17"
+            RowHeight="19"
             SelectedItem="{Binding SelectedItem}"
             SelectedItems="{Binding SelectedItems}"
             SelectionMode="Extended"
             SelfRelationRootValue="0"
             BorderThickness="0"
-            HeaderRowHeight="0"
+            HeaderRowHeight="3"
             Grid.Row="2"
             CurrentCellBorderBrush="White"
             CurrentCellBorderThickness="0"
@@ -147,6 +147,11 @@
                 <Style TargetType="syncfusion:TreeGridExpanderCell">
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="BorderThickness" Value="0" />
+                </Style>
+                <Style TargetType="syncfusion:TreeGridHeaderRowControl">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="Margin" Value="0,0,0,3" />
                 </Style>
             </syncfusion:SfTreeGrid.Resources>
 
@@ -220,11 +225,11 @@
                                 <TextBlock
                                     x:Name="TemplateTextBlock"
                                     Grid.Column="1"
-                                    Margin="5,0,0,0"
+                                    Margin="5,0,0,2"
                                     VerticalAlignment="Center"
                                     Text="{Binding Path=Name}" />
                                 <StackPanel Orientation="Horizontal" Grid.Column="2" Background="{StaticResource ContentBackground}">
-                                    <helpers:TreeGridButton Style="{StaticResource WolvenKitTreeGridButton}" Content="Open" Command="{Binding OpenFileCommand}" ToolTip="Open this file" BorderBrush="Green" HoverBackground="DarkGreen" PressedBackground="Blue"/>
+                                    <helpers:TreeGridButton Style="{StaticResource WolvenKitTreeGridButton}" Content="Open" Command="{Binding OpenFileCommand}" ToolTip="Open this file" BorderBrush="{StaticResource Border}" HoverBackground="{StaticResource BorderAlt}" PressedBackground="Blue"/>
                                     <helpers:TreeGridButton Style="{StaticResource WolvenKitTreeGridButtonDirectory}" Command="{Binding DeleteFileCommand}" ToolTip="Delete this file/folder" BorderBrush="#DF2935" HoverBackground="DarkRed" PressedBackground="Blue">
                                         <helpers:TreeGridButton.Content>
                                             <iconPacks:PackIconForkAwesome Kind="Trash" Height="11" Width="15"/>
@@ -239,7 +244,7 @@
             </syncfusion:SfTreeGrid.Columns>
 
             <syncfusion:SfTreeGrid.ContextMenu>
-                <ContextMenu FontSize="11" Style="{DynamicResource ContextMenuBaseStyle}">
+                <ContextMenu FontSize="11" Style="{DynamicResource WPFContextMenuStyle}">
                     <MenuItem
                         Margin="0"
                         Header="Actions"
@@ -251,15 +256,72 @@
 
                         <MenuItem x:Name="ConvertToJsonMenuItem"
                                       Command="{Binding ConvertToJsonCommand}"
-                                      Header="Convert to JSON" />
+                                      Header="Convert to JSON">
+                        <MenuItem.Icon>
+                            <Grid>
+                                <iconPacks:PackIconCodicons
+                                    Width="13"
+                                    Height="13"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Padding="4,0,-4,0"
+                                    Kind="Json" />
+                                <iconPacks:PackIconCodicons
+                                    Width="7"
+                                    Height="11"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Padding="-8,0,8,0"
+                                    Kind="ArrowSmallRight" />
+                            </Grid>
+                        </MenuItem.Icon>
+                        </MenuItem>
                         <MenuItem x:Name="ConvertFromJsonMenuItem"
                                       Command="{Binding ConvertFromJsonCommand}"
-                                      Header="Convert from JSON" />
-                        <Separator/>
+                                      Header="Convert from JSON">
+                        <MenuItem.Icon>
+                            <Grid>
+                                <iconPacks:PackIconCodicons
+                                    Width="13"
+                                    Height="13"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Padding="4,0,-4,0"
+                                    Kind="Json" />
+                                <iconPacks:PackIconCodicons
+                                    Width="7"
+                                    Height="11"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Padding="-8,0,8,0"
+                                    Kind="ArrowSmallLeft" />
+                            </Grid>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator/>
                         <MenuItem x:Name="ConvertToXmlMenuItem"
                                       Command="{Binding ConvertToXmlCommand}"
-                                      Header="Convert to XML" />
-                        <!--<MenuItem x:Name="ConvertFromXmlMenuItem"
+                                      Header="Convert to XML">
+                        <MenuItem.Icon>
+                            <Grid>
+                            <iconPacks:PackIconCodicons
+                                    Width="13"
+                                    Height="13"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Padding="4,0,-4,0"
+                                    Kind="Code" />
+                            <iconPacks:PackIconCodicons
+                                    Width="7"
+                                    Height="11"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Padding="-8,0,8,0"
+                                    Kind="ArrowSmallRight" />
+                            </Grid>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <!--<MenuItem x:Name="ConvertFromXmlMenuItem"
                                       Command="{Binding ConvertFromXmlCommand}"
                                       Header="Convert from JSON" />-->
 
@@ -275,8 +337,8 @@
                     <MenuItem Command="{Binding RenameFileCommand}" Header="Rename" >
                         <MenuItem.Icon>
                             <iconPacks:PackIconForkAwesome
-                                    Width="16"
-                                    Height="16"
+                                    Width="13"
+                                    Height="13"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
                                     Kind="Pencil" />
@@ -285,8 +347,8 @@
                     <MenuItem Command="{Binding CopyFileCommand}" Header="Copy" >
                         <MenuItem.Icon>
                             <iconPacks:PackIconMaterial
-                                    Width="16"
-                                    Height="16"
+                                    Width="13"
+                                    Height="13"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
                                     Kind="ContentCopy" />
@@ -295,8 +357,8 @@
                     <MenuItem Command="{Binding PasteFileCommand}" Header="Paste" >
                         <MenuItem.Icon>
                             <iconPacks:PackIconMaterial
-                                    Width="16"
-                                    Height="16"
+                                    Width="13"
+                                    Height="13"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
                                     Kind="ContentPaste" />

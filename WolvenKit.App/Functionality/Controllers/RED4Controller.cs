@@ -549,6 +549,7 @@ namespace WolvenKit.Functionality.Controllers
                         Directory.CreateDirectory(diskPathInfo.Directory.FullName);
                         using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
                         file.Extract(fs);
+                        _loggerService.Success($"{file.Name} added to the project");
                     }
 
                     break;

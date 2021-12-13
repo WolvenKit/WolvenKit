@@ -137,11 +137,8 @@ namespace WolvenKit.ViewModels.Tools
                 return;
             }
 
+            PE_SelectedItem = model;
             if (_settingsManager.ShowFilePreview)
-            {
-                PE_SelectedItem = model;
-            }
-            else
             {
                 return;
             }

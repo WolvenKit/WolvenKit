@@ -302,11 +302,10 @@ namespace WolvenKit.Views.Tools
             }
 
             var settings = Locator.Current.GetService<ISettingsManager>();
-            if (settings.ShowFilePreview)
-            {
-                propertiesViewModel.AB_SelectedItem = vm.RightSelectedItem;
-            }
-            else
+
+            propertiesViewModel.AB_SelectedItem = vm.RightSelectedItem;
+
+            if (!settings.ShowFilePreview)
             {
                 return;
             }

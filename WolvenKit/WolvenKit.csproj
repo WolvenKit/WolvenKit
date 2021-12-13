@@ -229,6 +229,8 @@
     <Resource Include="Resources\Media\Images\Application\Sammy_Grayscale.png" />
     <Resource Include="Resources\Media\Images\Application\Sammy_Home.png" />
     <Resource Include="Resources\Media\Images\Application\wkit_logo_text_singlestack_white.png" />
+    <Resource Include="Resources\Media\Images\Icons\Files\archive-closed.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\archive-opened.svg" />
     <Resource Include="Views\Shell\TaskBarIcon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -1645,6 +1647,8 @@
     <None Remove="Resources\Media\Images\Icons\Files\app.bmp" />
     <None Remove="Resources\Media\Images\Icons\Files\archetypes.bmp" />
     <None Remove="Resources\Media\Images\Icons\Files\archetypes.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\archive-closed.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\archive-opened.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\areas.bmp" />
     <None Remove="Resources\Media\Images\Icons\Files\areas.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\audiovehcurveset.bmp" />

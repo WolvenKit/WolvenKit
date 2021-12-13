@@ -158,10 +158,12 @@
                             ChildPropertyName="RedFileSystemModels"
                             ColumnSizer="Star"
                             FilterLevel="All"
+                            RowHeight="19"
+                            CurrentCellBorderThickness="0"
                             SelectionChanged="LeftNavigation_OnSelectionChanged"
                             ExpandStateMappingName="IsExpanded"
                             ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
-                            HeaderRowHeight="0">
+                            HeaderRowHeight="3">
 
                             <syncfusion:SfTreeGrid.Resources>
                                 <Style TargetType="syncfusion:TreeGridCell">
@@ -179,6 +181,13 @@
                                         </Style>
                                     </Style.Resources>
                                 </Style>
+
+                                <Style TargetType="syncfusion:TreeGridHeaderRowControl">
+                                    <Setter Property="Margin" Value="0,0,0,3" />
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                </Style>
+
                             </syncfusion:SfTreeGrid.Resources>
 
                             <syncfusion:SfTreeGrid.Columns>
@@ -199,11 +208,12 @@
                                                     <ColumnDefinition Width="13" />
                                                     <ColumnDefinition Width="*" />
                                                 </Grid.ColumnDefinitions>
-                                                <Image Height="13" Style="{DynamicResource FileIcons}" />
-                                                    <TextBlock
+                                                <Image Height="13" Width="Auto" Style="{DynamicResource FileIcons}" />
+                                                <!--iconPacks:PackIconCodicons Style="{StaticResource AssetBrowserFileIcons}" Width="12"/-->
+                                                <TextBlock
                                                         x:Name="TemplateTextBlock"
                                                         Grid.Column="1"
-                                                        Margin="5,0,0,0"
+                                                        Margin="5,0,0,2"
                                                         VerticalAlignment="Center"
                                                         Text="{Binding Path=Name}" />
                                             </Grid>
@@ -255,6 +265,7 @@
                                 SelectionMode="Extended"
                                 MouseDoubleClick="InnerList_MouseDoubleClick"
                                 BorderThickness="0"
+                                RowHeight="19"
                                 >
 
                                 <syncfusion:SfDataGrid.RecordContextMenu>
@@ -282,11 +293,13 @@
                                     
                                     <Style TargetType="syncfusion:GridHeaderCellControl">
                                         <Setter Property="BorderThickness" Value="0,0,0,1" />
-                                        <Setter Property="BorderBrush" Value="{DynamicResource SecondaryRegionBrush}" />
-                                    </Style>
-                                    <Style TargetType="syncfusion:GridCell">
-                                        <Setter Property="BorderThickness" Value="0,0,0,0" />
-                                    </Style>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource SecondaryRegionBrush}" />
+                                    <Setter Property="Margin" Value="0,0,0,3" />
+                                </Style>
+                                <Style TargetType="syncfusion:GridCell">
+                                    <Setter Property="BorderThickness" Value="0,0,0,0" />
+                                    <Setter Property="Padding" Value="0,0,0,2" />
+                                </Style>
 
                                     <converters1:ExtensionToBitmapConverter x:Key="ExtensionToBmp" />
 
@@ -316,18 +329,19 @@
                                     </syncfusion:GridCheckBoxColumn>
 
                                     <syncfusion:GridTemplateColumn
-                                        Width="22"
+                                        Width="13"
                                         AllowResizing="False"
                                         AllowFiltering="False"
                                         MappingName="">
                                     <syncfusion:GridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                                <Image Width="17" Margin="0,0,5,0"  Style="{DynamicResource FileIcons}" />
+                                                <Image Height="13" Margin="0,2,0,2" Style="{DynamicResource FileIcons}" />
                                             </DataTemplate>
                                         </syncfusion:GridTemplateColumn.CellTemplate>
                                     </syncfusion:GridTemplateColumn>
 
                                     <syncfusion:GridTextColumn
+                                        Padding="4,0,0,0"
                                         AllowFiltering="True"
                                         ColumnSizer="AutoWithLastColumnFill"
                                         IsReadOnly="True"
