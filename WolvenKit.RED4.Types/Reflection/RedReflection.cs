@@ -19,22 +19,22 @@ namespace WolvenKit.RED4.Types
             cls.InternalSetPropertyValue(propertyName, propertyValue, false);
         }
 
-        public static ExtendedTypeInfo GetTypeInfo(Type type, bool viewHidden = false)
+        public static ExtendedTypeInfo GetTypeInfo(Type type)
         {
-            return _typeInfoCache.GetOrAdd(type, new Lazy<ExtendedTypeInfo>(() => new ExtendedTypeInfo(type, viewHidden))).Value;
+            return _typeInfoCache.GetOrAdd(type, new Lazy<ExtendedTypeInfo>(() => new ExtendedTypeInfo(type))).Value;
         }
         public static IEnumerable<Type> GetSubClassesOf(Type type) => _redTypeCache?.Values.Where(_ => _.IsSubclassOf(type)).ToList();
 
         public static ExtendedPropertyInfo GetPropertyByName(Type type, string propertyName)
         {
-            var typeInfo = GetTypeInfo(type, true);
+            var typeInfo = GetTypeInfo(type);
 
             return typeInfo.PropertyInfos.FirstOrDefault(p => p.Name == propertyName);
         }
 
         public static ExtendedPropertyInfo GetPropertyByRedName(Type type, string redPropertyName)
         {
-            var typeInfo = GetTypeInfo(type, true);
+            var typeInfo = GetTypeInfo(type);
 
             return typeInfo.PropertyInfos.FirstOrDefault(p => p.RedName == redPropertyName);
         }
@@ -282,10 +282,9 @@ namespace WolvenKit.RED4.Types
 
             public List<ExtendedPropertyInfo> PropertyInfos { get; } = new();
 
-            public ExtendedTypeInfo(Type type, bool viewHidden = false)
+            public ExtendedTypeInfo(Type type)
             {
-                // pass viewHidden in here too?
-                var attrs = type.GetCustomAttributes(viewHidden);
+                var attrs = type.GetCustomAttributes(false);
                 foreach (var attribute in attrs)
                 {
                     if (attribute is REDClassAttribute clsAttr)
@@ -297,21 +296,28 @@ namespace WolvenKit.RED4.Types
 
                 foreach (var propertyInfo in type.GetProperties())
                 {
-                    if (!viewHidden && typeof(IRedAppendix).IsAssignableFrom(type) && propertyInfo.Name == "Appendix")
-                    {
-                        continue;
-                    }
-
                     var extendedInfo = new ExtendedPropertyInfo(propertyInfo);
-                    if (!viewHidden && extendedInfo.IsIgnored)
+
+                    if (typeof(IRedAppendix).IsAssignableFrom(type) && propertyInfo.Name == "Appendix")
                     {
-                        continue;
+                        extendedInfo.IsIgnored = true;
                     }
 
                     PropertyInfos.Add(extendedInfo);
                 }
 
                 PropertyInfos = PropertyInfos.OrderBy(p => p.Ordinal).ToList();
+            }
+
+            public IEnumerable<ExtendedPropertyInfo> GetWritableProperties()
+            {
+                foreach (var propertyInfo in PropertyInfos)
+                {
+                    if (!propertyInfo.IsIgnored)
+                    {
+                        yield return propertyInfo;
+                    }
+                }
             }
         }
 
