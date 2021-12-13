@@ -11,6 +11,8 @@ namespace WolvenKit.RED4.Types
     [REDMeta]
     public class RedBaseClass : DynamicObject, IRedClass
     {
+        public int Chunk;
+
         #region Events
 
         public class ObjectChangedEventArgs : EventArgs

@@ -314,24 +314,14 @@ namespace WolvenKit.RED4.Archive.IO
                 }
             }
 
-            var chunkIndex = -1;
-            for (int i = 0; i < _file.Chunks.Count; i++)
-            {
-                if (Equals(_file.Chunks[i], embeddedData.Content))
-                {
-                    chunkIndex = i;
-                    break;
-                }
-            }
-
-            if (importIndex == -1 || chunkIndex == -1)
+            if (importIndex == -1)
             {
                 throw new TodoException();
             }
 
             return new CR2WEmbeddedInfo
             {
-                chunkIndex = (uint)chunkIndex,
+                chunkIndex = (uint)((RedBaseClass)embeddedData.Content).Chunk,
                 importIndex = (uint)importIndex,
                 pathHash = 0
             };
@@ -386,6 +376,8 @@ namespace WolvenKit.RED4.Archive.IO
             for (int i = 0; i < _file.Chunks.Count; i++)
             {
                 file.StartChunk(i);
+
+                ((RedBaseClass)_file.Chunks[i]).Chunk = i;
                 chunkInfoList.Add(WriteChunk(file, _file.Chunks[i]));
             }
 
@@ -396,16 +388,16 @@ namespace WolvenKit.RED4.Archive.IO
                 var chunkInfo = chunkInfoList[i];
                 chunkInfo.className = stringDict[RedReflection.GetTypeRedName(_file.Chunks[i].GetType())];
                 chunkInfoList[i] = chunkInfo;
+            }
 
-                // TODO: Find a "better" way to determine that
-                if (i != 0 || _file.Chunks[i] is worldFoliageBrush)
-                {
-                    var typeInfo = RedReflection.GetTypeInfo(_file.Chunks[i].GetType());
-                    if (typeInfo.ChildLevel > 0)
-                    {
-                        SetParent(i, i, typeInfo.ChildLevel);
-                    }
-                }
+            if (_file.RootChunk is worldFoliageBrush)
+            {
+                SetParent(0);
+            }
+
+            foreach (var embeddedFile in _file.EmbeddedFiles)
+            {
+                SetParent(((RedBaseClass)embeddedFile.Content).Chunk);
             }
 
             var pos = file.BaseStream.Position;
@@ -425,18 +417,22 @@ namespace WolvenKit.RED4.Archive.IO
 
             return (file.StringCacheList.ToList(), file.ImportCacheList.ToList(), chunkInfoList, ms.ToArray());
 
-            void SetParent(int chunkIndex, int parentIndex, int maxLevel = 1, int level = 0)
+            void SetParent(int currentIndex, int parent = -1, int depth = 0)
             {
-                var targets = file.GetTargets(chunkIndex);
-                foreach (var target in targets)
+                if (parent == -1)
                 {
-                    var chunkInfo = chunkInfoList[target.Item2 - 1];
-                    chunkInfo.parentID = (uint)(parentIndex + 1);
-                    chunkInfoList[target.Item2 - 1] = chunkInfo;
+                    parent = currentIndex + 1;
+                }
 
-                    if (level < maxLevel)
+                foreach (var child in file.ChildChunks[currentIndex])
+                {
+                    var chunkInfo = chunkInfoList[child];
+                    chunkInfo.parentID = (uint)parent;
+                    chunkInfoList[child] = chunkInfo;
+
+                    if (depth < 1)
                     {
-                        SetParent(target.Item2 - 1, parentIndex, maxLevel, level + 1);
+                        SetParent(child, parent, depth + 1);
                     }
                 }
             }
