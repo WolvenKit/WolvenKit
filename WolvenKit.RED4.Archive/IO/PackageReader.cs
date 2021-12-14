@@ -69,12 +69,33 @@ namespace WolvenKit.RED4.Archive.IO
             return base.Read(type, size, flags);
         }
 
-        public override CEnum<T> ReadCEnum<T>()
+        public override CBitField<T> ReadCBitField<T>()
         {
-            var index = _reader.ReadUInt16();
-            var enumString = GetStringValue((ushort)(index & 0xFF));
+            var cnt = _reader.ReadByte();
 
-            return CEnum.Parse<T>(enumString);
+            var enumString = "";
+            for (int i = 0; i < cnt; i++)
+            {
+                var index = _reader.ReadUInt16();
+                if (index == 0)
+                {
+                    throw new TodoException();
+                }
+
+                if (!string.IsNullOrEmpty(enumString))
+                {
+                    enumString += ", ";
+                }
+
+                enumString += GetStringValue(index);
+            }
+
+            if (string.IsNullOrEmpty(enumString))
+            {
+                return default(T);
+            }
+
+            return Enum.Parse<T>(enumString);
         }
 
         public override IRedHandle<T> ReadCHandle<T>()
@@ -93,16 +114,19 @@ namespace WolvenKit.RED4.Archive.IO
 
             if (index >= 0 && index < importsList.Count)
             {
+                var import = (PackageImport)importsList[index - 0];
+
                 return new CResourceAsyncReference<T>
                 {
-                    DepotPath = importsList[index - 0].DepotPath,
-                    Flags = importsList[index - 0].Flags
+                    DepotPath = import.DepotPath != "" ? import.DepotPath : import.Hash,
+                    Flags = import.Flags
                 };
             }
 
             return new CResourceAsyncReference<T>
             {
-                DepotPath = "",
+                // TODO: Find a better way (written as -1)
+                DepotPath = "INVALID",
                 Flags = InternalEnums.EImportFlags.Default
             };
         }
@@ -113,16 +137,19 @@ namespace WolvenKit.RED4.Archive.IO
 
             if (index >= 0 && index < importsList.Count)
             {
+                var import = (PackageImport)importsList[index - 0];
+
                 return new CResourceReference<T>
                 {
-                    DepotPath = importsList[index - 0].DepotPath,
-                    Flags = importsList[index - 0].Flags
+                    DepotPath = import.DepotPath != "" ? import.DepotPath : import.Hash,
+                    Flags = import.Flags
                 };
             }
 
             return new CResourceReference<T>
             {
-                DepotPath = "",
+                // TODO: Find a better way (written as -1)
+                DepotPath = "INVALID",
                 Flags = InternalEnums.EImportFlags.Default
             };
         }
@@ -132,6 +159,5 @@ namespace WolvenKit.RED4.Archive.IO
             var length = _reader.ReadInt16();
             return Encoding.UTF8.GetString(_reader.ReadBytes(length));
         }
-
     }
 }

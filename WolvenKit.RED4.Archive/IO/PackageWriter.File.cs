@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Compression;
@@ -15,17 +16,31 @@ namespace WolvenKit.RED4.Archive.IO
     public partial class PackageWriter
     {
         private RedBuffer _file;
+
+        private PackageHeader header;
         private List<CRUID> _cruids = new List<CRUID>();
 
         public void WritePackage(RedBuffer file)
         {
             _file = file;
 
-            var header = new PackageHeader
+            header = new PackageHeader
             {
                 uk1 = _file.Version,
                 numSections = 7
             };
+
+            switch (file.Type)
+            {
+                case RedBuffer.BufferType.DataBuffer:
+                    header.uk2 = 0x0000;
+                    break;
+                case RedBuffer.BufferType.SerializationDeferredDataBuffer:
+                    header.uk2 = 0xffff;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
 
             var headerStart = BaseStream.Position;
             BaseStream.WriteStruct(header);
@@ -34,8 +49,11 @@ namespace WolvenKit.RED4.Archive.IO
 
             // write cruids
 
-            var unique_cruids = _cruids.Distinct().ToList();
-            unique_cruids.Insert(0, 0);
+            var unique_cruids = _cruids;
+            if (file.Type == RedBuffer.BufferType.DataBuffer)
+            {
+                unique_cruids.Insert(0, 0);
+            }
 
             header.numCruids0 = header.numCruids1 = (ushort)unique_cruids.Count;
             foreach (var cruid in unique_cruids)
@@ -112,13 +130,26 @@ namespace WolvenKit.RED4.Archive.IO
             var refData = new List<byte>();
             foreach (var reff in refs)
             {
-                refDesc.Add(new PackageImportHeader
+                if (header.uk2 == 0)
                 {
-                    offset = (uint)refData.Count + position,
-                    size = (byte)reff.Item2.Length,
-                    unk1 = (reff.Item3 & 0b10) > 0
-                });
-                refData.AddRange(Encoding.UTF8.GetBytes(reff.Item2));
+                    refDesc.Add(new PackageImportHeader
+                    {
+                        offset = (uint)refData.Count + position,
+                        size = (byte)reff.Item2.Length,
+                        unk1 = (reff.Item3 & 0b10) > 0
+                    });
+                    refData.AddRange(Encoding.UTF8.GetBytes(reff.Item2));
+                }
+                else
+                {
+                    refDesc.Add(new PackageImportHeader
+                    {
+                        offset = (uint)refData.Count + position,
+                        size = 8,
+                        unk1 = (reff.Item3 & 0b10) > 0
+                    });
+                    refData.AddRange(BitConverter.GetBytes(reff.Item2.GetRedHash()));
+                }
             }
             return (refData.ToArray(), refDesc);
         }

@@ -37,6 +37,14 @@ namespace WolvenKit.RED4.Types
             }
         }
 
+        public SerializationDeferredDataBuffer(Red4File file, ushort pointer)
+        {
+            File = file;
+            Pointer = pointer;
+
+            File.BufferHandler.Register(pointer, this);
+        }
+
         public void Compress()
         {
             if (Pointer >= File._buffers.Count)

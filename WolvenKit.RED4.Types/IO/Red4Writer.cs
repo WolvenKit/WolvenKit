@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.IO
         public int CurrentChunk { get; private set; }
 
         public readonly Dictionary<long, string> CNameRef = new();
-        public readonly Dictionary<long, (string, string, ushort)> ImportRef = new();
+        public readonly Dictionary<long, (string, CName, ushort)> ImportRef = new();
 
         protected readonly Dictionary<int, StringInfo> _chunkStringList = new();
         protected readonly Dictionary<int, ImportInfo> _chunkImportList = new();
@@ -79,7 +79,7 @@ namespace WolvenKit.RED4.IO
             return index;
         }
 
-        public ushort GetImportIndex((string, string, ushort) value, bool add = true)
+        public ushort GetImportIndex((string, CName, ushort) value, bool add = true)
         {
             var index = ImportCacheList.IndexOf(value);
             if (add && index == ushort.MaxValue)
@@ -231,8 +231,15 @@ namespace WolvenKit.RED4.IO
             }
             else
             {
-                _writer.Write((uint)(val.Data.Length));
-                _writer.Write(val.Data);
+                if (val.Data == Array.Empty<byte>())
+                {
+                    _writer.Write(0x80000000);
+                }
+                else
+                {
+                    _writer.Write((uint)(val.Data.Length));
+                    _writer.Write(val.Data);
+                }
             }
         }
 
@@ -525,7 +532,7 @@ namespace WolvenKit.RED4.IO
         public virtual void WriteFixedClass(IRedClass instance)
         {
             var typeInfo = RedReflection.GetTypeInfo(instance.GetType());
-            foreach (var propertyInfo in typeInfo.PropertyInfos)
+            foreach (var propertyInfo in typeInfo.GetWritableProperties())
             {
                 var value = (IRedType)instance.InternalGetPropertyValue(instance.GetType(), propertyInfo.RedName, propertyInfo.Flags.Clone());
                 Write(value);

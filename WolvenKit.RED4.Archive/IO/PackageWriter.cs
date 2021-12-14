@@ -38,12 +38,6 @@ namespace WolvenKit.RED4.Archive.IO
 
         public override void WriteClass(IRedClass cls)
         {
-            if (cls is IRedCustomData customCls)
-            {
-                customCls.CustomWrite(this);
-                return;
-            }
-
             var typeInfo = RedReflection.GetTypeInfo(cls.GetType());
 
 
@@ -96,6 +90,26 @@ namespace WolvenKit.RED4.Archive.IO
             }
         }
 
+        public override void Write(IRedBitField instance)
+        {
+            var enumString = instance.ToBitFieldString();
+            if (enumString == "0")
+            {
+                _writer.Write((byte)0);
+                return;
+            }
+
+            var flags = enumString.Split(',');
+
+            _writer.Write((byte)flags.Length);
+            for (int i = 0; i < flags.Length; i++)
+            {
+                var tFlag = flags[i].Trim();
+                CNameRef.Add(_writer.BaseStream.Position, tFlag);
+                _writer.Write(GetStringIndex(tFlag));
+            }
+        }
+
         public override void Write(IRedHandle instance)
         {
             if (instance.Pointer >= 0)
@@ -114,6 +128,36 @@ namespace WolvenKit.RED4.Archive.IO
             }
 
             _writer.Write(instance.Pointer + 0);
+        }
+
+        public override void Write(IRedResourceReference instance)
+        {
+            // TODO: Find a better way (written as -1)
+            if (instance.DepotPath == "INVALID")
+            {
+                _writer.Write((short)-1);
+                return;
+            }
+
+            var val = ("", instance.DepotPath, (ushort)instance.Flags);
+
+            ImportRef.Add(_writer.BaseStream.Position, val);
+            _writer.Write(GetImportIndex(val));
+        }
+
+        public override void Write(IRedResourceAsyncReference instance)
+        {
+            // TODO: Find a better way (written as -1)
+            if (instance.DepotPath == "INVALID")
+            {
+                _writer.Write((short)-1);
+                return;
+            }
+
+            var val = ("", instance.DepotPath, (ushort)instance.Flags);
+
+            ImportRef.Add(_writer.BaseStream.Position, val);
+            _writer.Write(GetImportIndex(val));
         }
 
         public override void Write(NodeRef val)

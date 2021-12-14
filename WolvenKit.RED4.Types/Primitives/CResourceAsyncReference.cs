@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.Types
     [RED("raRef")]
     public class CResourceAsyncReference<T> : IRedResourceAsyncReference<T>, IEquatable<CResourceAsyncReference<T>> where T : IRedType
     {
-        public string DepotPath { get; set; }
+        public CName DepotPath { get; set; }
         public InternalEnums.EImportFlags Flags { get; set; }
 
 

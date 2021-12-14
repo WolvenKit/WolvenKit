@@ -78,7 +78,7 @@ namespace WolvenKit.RED4.Archive.IO
                 }
                 else
                 {
-                    BaseStream.WriteStruct(new CR2WNameInfo { hash = str.GetRedHash(), offset = stringOffsets[str] }, crc);
+                    BaseStream.WriteStruct(new CR2WNameInfo { hash = str.GetShortRedHash(), offset = stringOffsets[str] }, crc);
                 }
             }
             tableHeaders[1].crc32 = crc.HashUInt32;
@@ -290,9 +290,11 @@ namespace WolvenKit.RED4.Archive.IO
             using var writer = new CR2WWriter(ms);
 
             var bufferInfoList = new List<CR2WBufferInfo>();
-            foreach (var buffer in _file.Buffers)
+            for (int i = 0; i < _file.Buffers.Count; i++)
             {
-                bufferInfoList.Add(WriteBuffer(writer, buffer));
+                _file.Buffers[i].Type = _file.BufferHandler.GetBufferType(i);
+
+                bufferInfoList.Add(WriteBuffer(writer, _file.Buffers[i]));
             }
 
             return (bufferInfoList, ms.ToArray());

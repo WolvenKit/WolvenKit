@@ -237,7 +237,7 @@ namespace WolvenKit.RED4.Archive.IO
 
         public EHashVersion IdentifyHash(CName value, uint hash)
         {
-            if (value.GetRedHash() == hash)
+            if (value.GetShortRedHash() == hash)
             {
                 return EHashVersion.Latest;
             }

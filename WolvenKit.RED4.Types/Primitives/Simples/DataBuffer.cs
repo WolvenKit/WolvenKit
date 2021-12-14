@@ -22,20 +22,26 @@ namespace WolvenKit.RED4.Types
         {
             get
             {
-                if (Pointer < -1 || Pointer >= File._buffers.Count)
-                {
-                    throw new IndexOutOfRangeException(nameof(Pointer));
-                }
-
                 if (Pointer == -1)
                 {
                     return _inlineBuffer;
+                }
+
+                if (Pointer < 0 || Pointer >= File._buffers.Count)
+                {
+                    throw new IndexOutOfRangeException(nameof(Pointer));
                 }
 
                 return File._buffers[Pointer].Data;
             }
             set
             {
+                if (Pointer == -1)
+                {
+                    _inlineBuffer = value;
+                    return;
+                }
+
                 var existingBuffer = File.BufferHandler.GetIndex(value);
                 if (existingBuffer != -1)
                 {
@@ -46,6 +52,16 @@ namespace WolvenKit.RED4.Types
                     File._buffers[Pointer].Data = value;
                 }
             }
+        }
+
+        public DataBuffer() {}
+
+        public DataBuffer(Red4File file, int pointer)
+        {
+            File = file;
+            Pointer = pointer;
+
+            File.BufferHandler.Register(pointer, this);
         }
 
         public void Compress()

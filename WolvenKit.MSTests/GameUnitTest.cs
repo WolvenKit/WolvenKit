@@ -8,6 +8,7 @@ using CP77.CR2W;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProtoBuf.Meta;
+using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
@@ -108,6 +109,7 @@ namespace WolvenKit.MSTests
             ServiceLocator.Default.RegisterType<IArchiveManager, ArchiveManager>();
             ServiceLocator.Default.RegisterType<IModTools, ModTools>();         //Cp77FileService, ILoggerService, IProgress, IHashService, Mesh, Target
 
+            Locator.CurrentMutable.RegisterConstant(new HashService(), typeof(IHashService));
 
 
             var hashService = ServiceLocator.Default.ResolveType<IHashService>();

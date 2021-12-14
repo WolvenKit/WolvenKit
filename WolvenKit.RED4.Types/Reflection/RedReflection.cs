@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.Types
     public static class RedReflection
     {
         private static readonly Dictionary<string, Type> _redTypeCache = new();
-        private static readonly Dictionary<string, Type> _redEnumCache = new();
+        private static readonly Dictionary<string, ExtendedEnumInfo> _redEnumCache = new();
         private static readonly ConcurrentDictionary<Type, Lazy<ExtendedTypeInfo>> _typeInfoCache = new();
 
         public static void AddDynamicProperty(IRedClass cls, string propertyName, object propertyValue)
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 
         public static string GetEnumRedName(Type type)
         {
-            return _redEnumCache.FirstOrDefault(t => t.Value == type).Key;
+            return _redEnumCache.FirstOrDefault(t => t.Value.Type == type).Key;
         }
 
         private static readonly ConcurrentDictionary<string, (Type, Flags)> _csTypeCache2 = new();
@@ -126,7 +126,14 @@ namespace WolvenKit.RED4.Types
                 {
                     if (type == null)
                     {
-                        type = typeof(CEnum<>).MakeGenericType(eType);
+                        if (eType.IsBitfield)
+                        {
+                            type = typeof(CBitField<>).MakeGenericType(eType.Type);
+                        }
+                        else
+                        {
+                            type = typeof(CEnum<>).MakeGenericType(eType.Type);
+                        }
                     }
                     else
                     {
@@ -266,13 +273,25 @@ namespace WolvenKit.RED4.Types
             var types = typeof(Enums).GetNestedTypes();
             foreach (var type in types)
             {
-                _redEnumCache.Add(type.Name, type);
+                _redEnumCache.Add(type.Name, new ExtendedEnumInfo(type));
             }
         }
 
         static RedReflection()
         {
             PreBuildReadTypeCache();
+        }
+
+        public class ExtendedEnumInfo
+        {
+            public Type Type { get; set; }
+            public bool IsBitfield { get; set; }
+
+            public ExtendedEnumInfo(Type type)
+            {
+                Type = type;
+                IsBitfield = type.GetCustomAttribute<FlagsAttribute>() != null;
+            }
         }
 
         public class ExtendedTypeInfo

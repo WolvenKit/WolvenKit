@@ -99,13 +99,17 @@ namespace WolvenKit.RED4.IO
         public virtual DataBuffer ReadDataBuffer()
         {
             var bufferSize = _reader.ReadUInt32();
-            if (bufferSize >= 0x80000000)
+            if (bufferSize == 0x80000000)
             {
                 return new DataBuffer
                 {
-                    File = _outputFile,
-                    Pointer = (int)(bufferSize ^ 0x80000000) - 1
+                    Data = Array.Empty<byte>()
                 };
+            }
+
+            if (bufferSize > 0x80000000)
+            {
+                return new DataBuffer(_outputFile, (int)(bufferSize ^ 0x80000000) - 1);
             }
 
             return new DataBuffer
@@ -134,7 +138,7 @@ namespace WolvenKit.RED4.IO
                 throw new InvalidParsingException(nameof(ReadSerializationDeferredDataBuffer));
             }
 
-            return new() { File = _outputFile, Pointer = (ushort)(_reader.ReadUInt16() - 1) };
+            return new SerializationDeferredDataBuffer(_outputFile, (ushort)(_reader.ReadUInt16() - 1));
         }
 
         public virtual SharedDataBuffer ReadSharedDataBuffer(uint size)
@@ -495,7 +499,7 @@ namespace WolvenKit.RED4.IO
             var typeInfo = RedReflection.GetTypeInfo(type);
 
             var instance = RedTypeManager.Create(type);
-            foreach (var propertyInfo in typeInfo.PropertyInfos)
+            foreach (var propertyInfo in typeInfo.GetWritableProperties())
             {
                 var value = Read(propertyInfo.Type, 0, Flags.Empty);
                 instance.InternalSetPropertyValue(propertyInfo.RedName, value);

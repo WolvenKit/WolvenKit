@@ -14,6 +14,7 @@ namespace WolvenKit.RED4
             Cruids = new List<CRUID>();
         }
 
+        public BufferType Type { get; set; }
         public uint Flags { get; set; }
         public byte[] Data
         {
@@ -82,6 +83,13 @@ namespace WolvenKit.RED4
         public static RedBuffer CreateCompressedBuffer(uint flags, byte[] data, uint memSize)
         {
             return new RedBuffer { Flags = flags, Data = data, IsCompressed = true, MemSize = memSize };
+        }
+
+        public enum BufferType
+        {
+            Invalid,
+            DataBuffer,
+            SerializationDeferredDataBuffer
         }
     }
 }

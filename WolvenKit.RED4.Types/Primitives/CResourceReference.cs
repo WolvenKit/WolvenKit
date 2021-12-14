@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.Types
     [RED("rRef")]
     public class CResourceReference<T> : IRedResourceReference<T>, IEquatable<CResourceReference<T>> where T : IRedType
     {
-        public string DepotPath { get; set; }
+        public CName DepotPath { get; set; }
         public InternalEnums.EImportFlags Flags { get; set; }
 
 

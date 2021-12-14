@@ -468,10 +468,7 @@ namespace WolvenKit.Modkit.RED4
                 // blob chunk
                 var blob = new rendRenderTextureBlobPC()
                 {
-                    TextureData = new SerializationDeferredDataBuffer()
-                    {
-                        Pointer = 2,
-                    }
+                    TextureData = new SerializationDeferredDataBuffer(red, 2)
                 };
 
                 xbm.RenderTextureResource = new rendRenderTextureResource
