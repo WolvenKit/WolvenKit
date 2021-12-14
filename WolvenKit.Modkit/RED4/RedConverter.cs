@@ -33,7 +33,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var json = "";
-            var dto = new RedFileDto(cr2w);
+            var dto = new RedClassDto(cr2w.RootChunk);
             json = JsonConvert.SerializeObject(dto, Formatting.Indented);
 
             if (string.IsNullOrEmpty(json))
@@ -85,6 +85,8 @@ namespace WolvenKit.Modkit.RED4
                     default:
                         throw new ArgumentOutOfRangeException(nameof(format), format, null);
                 }
+
+                _loggerService.Success($"Exported {infile} to {outpath}");
 
                 return true;
             }

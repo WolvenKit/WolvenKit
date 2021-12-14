@@ -136,7 +136,7 @@
                 <converters:TreeViewItemTemplateSelector x:Name="itemTemplateSelector" x:Key="itemTemplateSelector">
                     <converters:TreeViewItemTemplateSelector.PropertyTemplate>
                         <DataTemplate>
-                            <Grid ToolTip="{Binding Type}">
+                            <Grid ToolTip="{Binding Type}" Tag="{Binding}" Background="Transparent">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Style="{StaticResource ArrayNameColumnWidth}" />
                                     <ColumnDefinition Width="Auto" />
@@ -146,6 +146,25 @@
                                    ContentTemplate="{StaticResource PropertyNameTemplate}"/>
                                 <ContentPresenter Grid.Column="1" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center"
                                    ContentTemplate="{StaticResource PropertyValueTemplate}"  />
+                                <Grid.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem
+                                            Style="{StaticResource SyncfusionMenuItemStyle}"
+                                            Header="Export to JSON"
+                                            IsCheckable="False"
+                                            Command="{Binding Path=PlacementTarget.Tag.ExportChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                                            <MenuItem.Icon>
+                                                <iconPacks:PackIconCodicons
+                                                    Width="13"
+                                                    Height="13"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Padding="0,0,0,0"
+                                                    Kind="Json" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                 </Grid.ContextMenu>
                             </Grid>
                         </DataTemplate>
                     </converters:TreeViewItemTemplateSelector.PropertyTemplate>
@@ -371,7 +390,8 @@
             ItemDragStarting="SfTreeView_ItemDragStarting"
             ItemDragOver="SfTreeView_ItemDragOver"
             ItemDropping="SfTreeView_ItemDropping"
-            ItemDropped="SfTreeView_ItemDropped" />
+            ItemDropped="SfTreeView_ItemDropped">
+        </syncfusion:SfTreeView>
 
 
         <!-- Grid Splitter -->

@@ -63,10 +63,10 @@ namespace WolvenKit.RED4.Types
         }
 
         public static implicit operator CName(string value) => new(value);
-        public static implicit operator string(CName value) => value._value;
+        public static implicit operator string(CName value) => value?._value ?? null; 
 
         public static implicit operator CName(ulong value) => new(value);
-        public static implicit operator ulong(CName value) => value._hash;
+        public static implicit operator ulong(CName value) => value?._hash ?? 0;
 
         public override int GetHashCode() => _hash.GetHashCode();
 

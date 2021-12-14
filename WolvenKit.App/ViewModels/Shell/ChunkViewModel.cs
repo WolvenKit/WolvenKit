@@ -15,6 +15,11 @@ using WolvenKit.RED4.Archive.IO;
 using System.Windows.Input;
 using WolvenKit.Functionality.Commands;
 using static WolvenKit.RED4.Types.RedReflection;
+using WolvenKit.Common.Conversion;
+using Newtonsoft.Json;
+using System.Runtime.Serialization;
+using System.Windows.Forms;
+using System.IO;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -29,6 +34,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             _data = export;
             OpenRefCommand = new DelegateCommand<IRedRef>(p => ExecuteOpenRef(p), CanOpenRef);
+            ExportChunkCommand = new DelegateCommand((p) => ExecuteExportChunk(), (p) => CanExportChunk());
         }
 
         public ChunkViewModel(string name, IRedType export) : this(export)
@@ -336,7 +342,7 @@ namespace WolvenKit.ViewModels.Shell
                 else if (PropertyType.IsAssignableTo(typeof(IRedRef)))
                 {
                     var value = (IRedRef)_data;
-                    if (value.DepotPath != "")
+                    if (value != null && value.DepotPath != "")
                     {
                         return value.DepotPath;
                     }
@@ -444,6 +450,51 @@ namespace WolvenKit.ViewModels.Shell
         private void ExecuteOpenRef(IRedRef redRef)
         {
             var depotpath = redRef.DepotPath;
+            //var key = FNV1A64HashAlgorithm.HashString(depotpath);
+
+            //var _gameControllerFactory = Locator.Current.GetService<IGameControllerFactory>();
+            //var _archiveManager = Locator.Current.GetService<IArchiveManager>();
+
+            //if (_archiveManager.Lookup(key).HasValue)
+            //{
+            //    _gameControllerFactory.GetController().AddToMod(key);
+            //}
+        }
+
+        public ICommand ExportChunkCommand { get; private set; }
+        private bool CanExportChunk() => properties.Count > 0;
+        private void ExecuteExportChunk()
+        {
+            Stream myStream;
+            var saveFileDialog = new SaveFileDialog();
+
+            saveFileDialog.Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*";
+            saveFileDialog.FilterIndex = 2;
+            saveFileDialog.FileName = Type + ".json";
+            saveFileDialog.RestoreDirectory = true;
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                if ((myStream = saveFileDialog.OpenFile()) != null)
+                {
+                    var dto = new RedClassDto(PropertyGridData, new
+                    {
+                        Version = "0.0.1",
+                        Exported = DateTime.UtcNow.ToString("o")
+                    });
+                    var json = JsonConvert.SerializeObject(dto, Formatting.Indented);
+
+                    if (string.IsNullOrEmpty(json))
+                    {
+                        throw new SerializationException();
+                    }
+
+                    myStream.Write(json.ToCharArray().Select(c => (byte)c).ToArray());
+                    myStream.Close();
+                }
+            }
+
+            //var depotpath = redRef.DepotPath;
             //var key = FNV1A64HashAlgorithm.HashString(depotpath);
 
             //var _gameControllerFactory = Locator.Current.GetService<IGameControllerFactory>();

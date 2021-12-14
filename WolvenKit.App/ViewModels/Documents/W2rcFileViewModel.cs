@@ -17,6 +17,10 @@ using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Shell;
+using WolvenKit.Common.Conversion;
+using Newtonsoft.Json;
+using System.Runtime.Serialization;
+using System.Windows.Forms;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -27,6 +31,7 @@ namespace WolvenKit.ViewModels.Documents
         public W2rcFileViewModel(Red4File file)
         {
             OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport);
+            //ExportChunkCommand = new DelegateCommand<ChunkViewModel>((p) => ExecuteExportChunk(p), (p) => CanExportChunk(p));
 
             IsImagePreviewVisible = false;
 
@@ -75,6 +80,36 @@ namespace WolvenKit.ViewModels.Documents
                 _gameControllerFactory.GetController().AddToMod(key);
             }
         }
+
+        //public ICommand ExportChunkCommand { get; private set; }
+        //private bool CanExportChunk(ChunkViewModel cvm) => cvm.Properties.Count > 0;
+        //private void ExecuteExportChunk(ChunkViewModel cvm)
+        //{
+        //    Stream myStream;
+        //    var saveFileDialog = new SaveFileDialog();
+
+        //    saveFileDialog.Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*";
+        //    saveFileDialog.FilterIndex = 2;
+        //    saveFileDialog.FileName = cvm.Type + ".json";
+        //    saveFileDialog.RestoreDirectory = true;
+
+        //    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+        //    {
+        //        if ((myStream = saveFileDialog.OpenFile()) != null)
+        //        {
+        //            var dto = new RedClassDto(cvm.Data);
+        //            var json = JsonConvert.SerializeObject(dto, Formatting.Indented);
+
+        //            if (string.IsNullOrEmpty(json))
+        //            {
+        //                throw new SerializationException();
+        //            }
+
+        //            myStream.Write(json.ToCharArray().Select(c => (byte)c).ToArray());
+        //            myStream.Close();
+        //        }
+        //    }
+        //}
 
         #endregion
 

@@ -76,6 +76,9 @@ namespace WolvenKit.Views.Documents
                        view => view.PropertyGrid.SelectedObject)
                    .DisposeWith(disposables);
 
+                //this.BindCommand(ViewModel, vm => vm.ExportChunkCommand, v => v.ExportChunkCommand)
+                //    .DisposeWith(disposables);
+
                 //this.OneWayBind(ViewModel,
                 //       viewmodel => viewmodel.SelectedChunk.Name,
                 //       view => view.PropertyGrid.SelectedPropertyItem.DisplayName)
@@ -87,6 +90,7 @@ namespace WolvenKit.Views.Documents
             //PropertyGrid.CustomEditorCollection = CustomEditorCollection;
             //MainTreeGrid.RequestTreeItems += TreeGrid_RequestTreeItems;
         }
+        public ICommand ExportChunkCommand { get; private set; }
 
         //private void TreeGrid_RequestTreeItems(object sender, TreeGridRequestTreeItemsEventArgs args)
         //{
@@ -136,7 +140,7 @@ namespace WolvenKit.Views.Documents
         //    ImportsView.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
         //}
 
-       
+
 
 
 
