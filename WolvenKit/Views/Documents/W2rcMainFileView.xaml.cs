@@ -321,19 +321,11 @@ namespace WolvenKit.Views.Documents
             TranslateTransform pan = (TranslateTransform)transformGroup.Children[1];
             //TranslateTransform zoomCenter = (TranslateTransform)transformGroup.Children[2];
 
-            double zoom = e.Delta > 0 ? 1.2 : 0.8;
-            double diff = ((transform.ScaleX * zoom) - (transform.ScaleX));
+            double zoom = e.Delta > 0 ? 1.2 : (1/1.2);
 
-            //var CursorPosImage = e.GetPosition(ImagePreview);
             var CursorPosCanvas = e.GetPosition(ImagePreviewCanvas);
-            //pan.X = -(CursorPosCanvas.X - ImagePreviewCanvas.RenderSize.Width / 2.0) * diff + pan.X;
-            //pan.Y = -(CursorPosCanvas.Y - ImagePreviewCanvas.RenderSize.Height / 2.0) * diff + pan.Y;
-            pan.X += -(CursorPosCanvas.X - ImagePreviewCanvas.RenderSize.Width/2) * diff;
-            pan.Y += -(CursorPosCanvas.Y - ImagePreviewCanvas.RenderSize.Height/2) * diff;
-            //transform.CenterX = (CursorPosCanvas.X - ImagePreviewCanvas.RenderSize.Width / 2.0);
-            //transform.CenterY = (CursorPosCanvas.Y - ImagePreviewCanvas.RenderSize.Height / 2.0);
-            //pan.X = 0;
-            //pan.Y = 0;
+            pan.X += -(CursorPosCanvas.X - ImagePreviewCanvas.RenderSize.Width / 2.0 - pan.X) * (zoom - 1.0);
+            pan.Y += -(CursorPosCanvas.Y - ImagePreviewCanvas.RenderSize.Height / 2.0 - pan.Y) * (zoom - 1.0);
 
             transform.ScaleX *= zoom;
             transform.ScaleY *= zoom;
