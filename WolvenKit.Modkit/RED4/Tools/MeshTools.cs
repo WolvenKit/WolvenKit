@@ -329,6 +329,8 @@ namespace CP77.CR2W
                 var cv = rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices;
                 for (int e = 0; e < cv.VertexLayout.Elements.Count; e++)
                 {
+                    if (cv.VertexLayout.Elements[e] == null)
+                        break;
                     if (cv.VertexLayout.Elements[e].Usage.Value == Enums.GpuWrapApiVertexPackingePackingUsage.PS_Normal)
                     {
                         meshesInfo.normalOffsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex];
@@ -371,8 +373,9 @@ namespace CP77.CR2W
                 counter = 0;
                 for (int e = 0; e < count; e++)
                 {
-                    if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].Usage.Value == GpuWrapApiVertexPackingePackingUsage.PS_SkinIndices)
-                        counter++;
+                    if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e] != null)
+                        if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].Usage.Value == GpuWrapApiVertexPackingePackingUsage.PS_SkinIndices)
+                            counter++;
                 }
                 meshesInfo.weightCounts[i] = counter * 4;
             }
@@ -384,11 +387,12 @@ namespace CP77.CR2W
 
                 for (int e = 0; e < count; e++)
                 {
-                    if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].Usage.Value == GpuWrapApiVertexPackingePackingUsage.PS_ExtraData)
-                    {
-                        if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].StreamIndex == 0)
-                            meshesInfo.garmentSupportExists[i] = true;
-                    }
+                    if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e] != null)
+                        if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].Usage.Value == GpuWrapApiVertexPackingePackingUsage.PS_ExtraData)
+                        {
+                            if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].StreamIndex == 0)
+                                meshesInfo.garmentSupportExists[i] = true;
+                        }
                 }
                 if (!cr2w.Chunks.OfType<meshMeshParamGarmentSupport>().Any())
                 {

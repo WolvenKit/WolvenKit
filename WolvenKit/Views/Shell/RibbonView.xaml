@@ -243,36 +243,42 @@
                     </Style.Resources>
                 </Style>
             </ToolBarTray.Resources>
+            
+            <!-- New ToolBar Buttons Start -->
+            
             <ToolBar Background="Transparent">
                 <TextBlock Visibility="Collapsed" Text="File:" Height="30" Padding="5,7" Foreground="{StaticResource ContentForeground}" />
                 <Button Command="{Binding NewFileCommand}" ToolTip="New File">
                     <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
-                            Kind="File" />
+                        <iconPacks:PackIconMaterial
+                            Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                            Kind="FilePlus"
+                            Foreground="{StaticResource WolvenKitCyan}"/>
                         <TextBlock Text="New File" Padding="5,0,0,0" />
                     </StackPanel>
                 </Button>
                 <Button Command="{Binding SaveFileCommand}" ToolTip="Save File">
                     <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
-                                    Foreground="CornflowerBlue"
-                                    Kind="Save" />
+                        <iconPacks:PackIconMaterial
+                            Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                            Foreground="{StaticResource WolvenKitCyan}"
+                            Kind="ContentSave" />
                         <TextBlock Text="Save" Padding="5,0,0,0" />
                     </StackPanel>
                 </Button>
                 <Button Command="{Binding SaveAsCommand}" ToolTip="Save File">
                     <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
-                                    Foreground="CornflowerBlue"
-                                    Kind="SaveAs" />
+                        <iconPacks:PackIconMaterial Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Foreground="{StaticResource WolvenKitCyan}"
+                                    Kind="ContentSaveEdit" />
                         <TextBlock Text="Save As" Padding="5,0,0,0" />
                     </StackPanel>
                 </Button>
                 <Button Command="{Binding SaveAllCommand}" ToolTip="Save All Files">
                     <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
-                                    Foreground="CornflowerBlue"
-                                    Kind="SaveAll" />
+                        <iconPacks:PackIconMaterial Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    Foreground="{StaticResource WolvenKitCyan}"
+                                    Kind="ContentSaveAll" />
                         <TextBlock Text="Save All" Padding="5,0,0,0" />
                     </StackPanel>
                 </Button>
@@ -283,7 +289,7 @@
                         <Grid>
                             <iconPacks:PackIconMaterialDesign Style="{StaticResource WolvenKitToolBarButtonIcon}"
                                 Padding="0,0,2,2"
-                                Foreground="DarkGoldenrod"
+                                Foreground="{StaticResource WolvenKitTan}"
                                 Kind="Folder" />
                             <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIconEraser}"
                                 Padding="6,6,-3,-3"
@@ -298,7 +304,7 @@
                 <Button Command="{Binding OpenProjectCommand}" ToolTip="Open Project">
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
-                                Foreground="DarkGoldenrod"
+                                Foreground="{StaticResource WolvenKitTan}"
                                 Kind="FolderOpen" />
                         <TextBlock Text="Open Project" Padding="5,0,0,0" />
                     </StackPanel>
@@ -307,7 +313,7 @@
                     <StackPanel Orientation="Horizontal">
                         <Grid>
                             <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
-                                Foreground="#DF2935"
+                                Foreground="{StaticResource WolvenKitRed}"
                                 Padding="0,0,2,2"
                                 Kind="Archive" />
                             <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIconEraser}"
@@ -324,7 +330,7 @@
                     <StackPanel Orientation="Horizontal">
                         <Grid>
                             <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
-                                Foreground="#DF2935"
+                                Foreground="{StaticResource WolvenKitRed}"
                                 Padding="0,0,2,2"
                                 Kind="Archive" />
                             <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIconEraser}"
@@ -344,7 +350,7 @@
                     <StackPanel Orientation="Horizontal">
                         <Grid>
                             <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
-                                                    Foreground="Orange"
+                                                    Foreground="{StaticResource WolvenKitTan}"
                                 Padding="0,0,2,2"
                                 Kind="List" />
                             <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIconEraser}"
@@ -360,7 +366,7 @@
                 <Button Command="{Binding OpenMaterialRepositoryCommand}" ToolTip="Open Depot">
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
-                                    Foreground="Orange"
+                                    Foreground="{StaticResource WolvenKitTan}"
                                     Kind="List" />
                         <TextBlock Text="Browse Depot" Padding="5,0,0,0" />
                     </StackPanel>
@@ -433,6 +439,7 @@
                 <Button Command="{Binding ShowSettingsCommand}" ToolTip="Settings">
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                                    Foreground="{StaticResource WolvenKitCyan}"
                                     Kind="Settings" />
                         <TextBlock Text="Settings" Padding="5,0,0,0" />
                     </StackPanel>
@@ -440,6 +447,7 @@
                 <Button Command="{Binding ShowBugReportCommand}" ToolTip="Bug Report">
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                                    Foreground="{StaticResource WolvenKitCyan}"
                                     Kind="Bug" />
                         <TextBlock Text="Report Bug" Padding="5,0,0,0" />
                     </StackPanel>
@@ -447,6 +455,7 @@
                 <Button Command="{Binding ShowFeedbackCommand}" ToolTip="Feedback">
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                                    Foreground="{StaticResource WolvenKitCyan}"
                                     Kind="Feedback" />
                         <TextBlock Text="Feedback" Padding="5,0,0,0" />
                     </StackPanel>

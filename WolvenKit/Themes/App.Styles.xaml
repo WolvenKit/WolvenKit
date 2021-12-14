@@ -14,6 +14,15 @@
     <SolidColorBrush x:Key="WolvenKitSammyRedShaded" Color="#B71C34" />
     <SolidColorBrush x:Key="WolvenKitSammyBlack" Color="#292929" />
 
+    <SolidColorBrush x:Key="WolvenKitRed" Color="#DF2935" />
+    <SolidColorBrush x:Key="WolvenKitRedShadow" Color="#951C2D" />
+    <SolidColorBrush x:Key="WolvenKitCyan" Color="#52F1FF" />
+    <SolidColorBrush x:Key="WolvenKitCyanShadow" Color="#4D8C9A" />
+    <SolidColorBrush x:Key="WolvenKitYellow" Color="#FFEA0A" />
+    <SolidColorBrush x:Key="WolvenKitYellowShadow" Color="#ABA108" />
+    <SolidColorBrush x:Key="WolvenKitPurple" Color="#5760B3" />
+    <SolidColorBrush x:Key="WolvenKitTan" Color="#D0A467" />
+
     <LinearGradientBrush x:Key="ShadedBackgroundBrush" StartPoint="0,0" EndPoint="0,1">
         <GradientStopCollection>
             <GradientStop Offset="0.0" Color="#00000000" />

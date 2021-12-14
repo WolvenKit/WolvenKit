@@ -38,19 +38,19 @@ namespace WolvenKit.Models
                 _extension = ECustomImageKeys.OpenDirImageKey.ToString();
                 if (project is Cp77Project cpp)
                 {
-                    if (Path.Equals(FullName, cpp.ModDirectory))
+                    if (FullName.StartsWith(cpp.ModDirectory))
                     {
                         _extension = "ModDirectoryTop";
                     }
-                    else if (Path.Equals(FullName, cpp.RawDirectory))
+                    else if (FullName.ToLower().StartsWith(cpp.RawDirectory.ToLower()))
                     {
                         _extension = "RawDirectoryTop";
                     }
-                    else if (Path.Equals(FullName, cpp.ScriptDirectory))
+                    else if (FullName.StartsWith(cpp.ScriptDirectory))
                     {
                         _extension = "ScriptDirectoryTop";
                     }
-                    else if (Path.Equals(FullName, cpp.TweakDirectory))
+                    else if (FullName.StartsWith(cpp.TweakDirectory))
                     {
                         _extension = "TweakDirectoryTop";
                     }

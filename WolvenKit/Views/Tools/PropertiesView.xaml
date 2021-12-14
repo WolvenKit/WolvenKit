@@ -327,7 +327,15 @@
             EnableLabelEdit="False"
             CloseButtonType="Hide"
             CloseTabOnMiddleClick="False"
-            BorderThickness="0">
+            AllowDragDrop="False"
+            BorderThickness="0"
+            Margin="0"
+            Padding="0"
+            TabItemSelectedForeground="White"
+            TabItemHoverBackground="{StaticResource WolvenKitRedShadow}"
+            TabItemHoverBorderBrush="{StaticResource WolvenKitRedShadow}"
+            TabItemSelectedBackground="{StaticResource WolvenKitRed}"
+            TabItemSelectedBorderBrush="{StaticResource WolvenKitCyan}">
             <syncfusion:TabItemExt Header="File Properties">
 
                 <Grid>

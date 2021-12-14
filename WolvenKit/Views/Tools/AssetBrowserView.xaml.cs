@@ -113,6 +113,7 @@ namespace WolvenKit.Views.Tools
         private static void PreviewMesh(PropertiesViewModel propertiesViewModel, RedFileViewModel selectedItem, IGameFile selectedGameFile)
         {
             propertiesViewModel.AB_MeshPreviewVisible = true;
+            propertiesViewModel.SelectedIndex = 1;
 
             var managerCacheDir = ISettingsManager.GetTemp_MeshPath();
             _ = Directory.CreateDirectory(managerCacheDir);
@@ -146,6 +147,7 @@ namespace WolvenKit.Views.Tools
         private static void PreviewWem(PropertiesViewModel propertiesViewModel, IFileSystemViewModel selectedItem, IGameFile selectedGameFile)
         {
             propertiesViewModel.IsAudioPreviewVisible = true;
+            propertiesViewModel.SelectedIndex = 2;
 
             var managerCacheDir = ISettingsManager.GetTemp_Audio_importPath();
             _ = Directory.CreateDirectory(managerCacheDir);
@@ -177,6 +179,7 @@ namespace WolvenKit.Views.Tools
         private async void PreviewTexture(PropertiesViewModel propertiesViewModel, RedFileViewModel selectedItem, IGameFile selectedGameFile)
         {
             propertiesViewModel.IsImagePreviewVisible = true;
+            propertiesViewModel.SelectedIndex = 3;
 
             var man = Locator.Current.GetService<IModTools>();
 
@@ -313,6 +316,7 @@ namespace WolvenKit.Views.Tools
             propertiesViewModel.AB_MeshPreviewVisible = false;
             propertiesViewModel.IsAudioPreviewVisible = false;
             propertiesViewModel.IsImagePreviewVisible = false;
+            propertiesViewModel.SelectedIndex = 0;
 
             if (propertiesViewModel.AB_SelectedItem is RedFileViewModel selectedItem)
             {
