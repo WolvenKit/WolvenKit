@@ -10,6 +10,8 @@ using WolvenKit.Views.Templates;
 using Syncfusion.UI.Xaml.TreeView;
 using WolvenKit.ViewModels.Shell;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Linq;
 
 namespace WolvenKit.Views.Documents
 {
@@ -21,6 +23,7 @@ namespace WolvenKit.Views.Documents
         public W2rcMainFileView()
         {
             InitializeComponent();
+            SetupImagePreview();
 
             this.WhenAnyValue(x => x.DataContext).Subscribe(x =>
             {
@@ -260,6 +263,81 @@ namespace WolvenKit.Views.Documents
                     }
                 }
             }
+        }
+
+        private System.Windows.Point origin;
+        private System.Windows.Point start;
+
+        private void SetupImagePreview()
+        {
+            TransformGroup group = new TransformGroup();
+
+
+            ScaleTransform xform = new ScaleTransform();
+            xform.ScaleY = -1;
+            group.Children.Add(xform);
+
+            TranslateTransform tt = new TranslateTransform();
+            group.Children.Add(tt);
+
+            //TranslateTransform zoomCenter = new TranslateTransform();
+            //group.Children.Add(zoomCenter);
+
+            ImagePreview.SetCurrentValue(RenderTransformProperty, group);
+
+            ImagePreviewCanvas.MouseWheel += ImagePreview_MouseWheel;
+            ImagePreviewCanvas.MouseLeftButtonDown += ImagePreview_MouseLeftButtonDown;
+            ImagePreviewCanvas.MouseLeftButtonUp += ImagePreview_MouseLeftButtonUp;
+            ImagePreviewCanvas.MouseMove += ImagePreview_MouseMove;
+        }
+        private void ImagePreview_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            ImagePreviewCanvas.ReleaseMouseCapture();
+        }
+
+        private void ImagePreview_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (!ImagePreviewCanvas.IsMouseCaptured)
+                return;
+
+            TranslateTransform tt = (TranslateTransform)((TransformGroup)ImagePreview.RenderTransform).Children[1];
+            Vector v = start - e.GetPosition(ImagePreviewCanvas);
+            tt.X = origin.X - v.X;
+            tt.Y = origin.Y - v.Y;
+        }
+
+        private void ImagePreview_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ImagePreviewCanvas.CaptureMouse();
+            TranslateTransform tt = (TranslateTransform)((TransformGroup)ImagePreview.RenderTransform).Children[1];
+            start = e.GetPosition(ImagePreviewCanvas);
+            origin = new System.Windows.Point(tt.X, tt.Y);
+        }
+
+        private void ImagePreview_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            TransformGroup transformGroup = (TransformGroup)ImagePreview.RenderTransform;
+            ScaleTransform transform = (ScaleTransform)transformGroup.Children[0];
+            TranslateTransform pan = (TranslateTransform)transformGroup.Children[1];
+            //TranslateTransform zoomCenter = (TranslateTransform)transformGroup.Children[2];
+
+            double zoom = e.Delta > 0 ? 1.2 : 0.8;
+            double diff = ((transform.ScaleX * zoom) - (transform.ScaleX));
+
+            //var CursorPosImage = e.GetPosition(ImagePreview);
+            var CursorPosCanvas = e.GetPosition(ImagePreviewCanvas);
+            //pan.X = -(CursorPosCanvas.X - ImagePreviewCanvas.RenderSize.Width / 2.0) * diff + pan.X;
+            //pan.Y = -(CursorPosCanvas.Y - ImagePreviewCanvas.RenderSize.Height / 2.0) * diff + pan.Y;
+            pan.X += -(CursorPosCanvas.X - ImagePreviewCanvas.RenderSize.Width/2) * diff;
+            pan.Y += -(CursorPosCanvas.Y - ImagePreviewCanvas.RenderSize.Height/2) * diff;
+            //transform.CenterX = (CursorPosCanvas.X - ImagePreviewCanvas.RenderSize.Width / 2.0);
+            //transform.CenterY = (CursorPosCanvas.Y - ImagePreviewCanvas.RenderSize.Height / 2.0);
+            //pan.X = 0;
+            //pan.Y = 0;
+
+            transform.ScaleX *= zoom;
+            transform.ScaleY *= zoom;
+
         }
     }
 }

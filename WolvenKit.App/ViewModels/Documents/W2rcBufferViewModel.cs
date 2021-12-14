@@ -14,6 +14,7 @@ using WolvenKit.Modkit.RED4;
 using Splat;
 using System.Windows.Media.Imaging;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -60,12 +61,14 @@ namespace WolvenKit.ViewModels.Documents
             var qa = await ImageDecoder.RenderToBitmapSourceDds(stream);
             if (qa != null)
             {
-                Stream bmp = new MemoryStream();
+                Image = qa;
+                //Stream bmp = new MemoryStream();
 
-                BitmapEncoder enc = new BmpBitmapEncoder();
-                enc.Frames.Add(BitmapFrame.Create(qa));
-                enc.Save(bmp);
-                ImageStream = bmp;
+                //BitmapEncoder enc = new BmpBitmapEncoder();
+                //var frame = BitmapFrame.Create(qa);
+                //enc.Frames.Add(frame);
+                //enc.Save(bmp);
+                //ImageStream = bmp;
             }
         }
 

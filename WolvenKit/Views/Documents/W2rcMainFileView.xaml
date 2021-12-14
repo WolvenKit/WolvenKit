@@ -388,7 +388,7 @@
                 ButtonPanelVisibility="Collapsed"
                 BorderThickness="0,1,1,1" />
 
-        <syncfusion:SfImageEditor
+        <!--syncfusion:SfImageEditor
             Image="{Binding ImageStream}"
             Background="{StaticResource ContentBackground}"
             x:Name="ImagePreview"
@@ -411,8 +411,28 @@
                     <MenuItem Header="Reset Zoom" Command="{x:Static syncfusion:ImageEditorCommands.ResetZoom}" />
                 </ContextMenu>
             </syncfusion:SfImageEditor.ContextMenu>
-        </syncfusion:SfImageEditor>
+        </syncfusion:SfImageEditor-->
 
+        <Border
+            x:Name="ImagePreviewCanvas"
+            BorderThickness="1"
+            ClipToBounds="True"
+            Margin="0"
+            Background="{StaticResource ContentBackground}"
+            Visibility="{Binding IsImagePreviewVisible, Converter={StaticResource boolToVisibilityConverter}}"
+            Grid.Column="0"
+            Grid.ColumnSpan="3">
+            <Image
+                x:Name="ImagePreview"
+                Source="{Binding Image}"
+                IsHitTestVisible="False"
+                Opacity="1"
+                RenderTransformOrigin="0.5,0.5">
+                <!--Image.RenderTransform>
+                    <ScaleTransform ScaleY="-1"/>
+                </Image.RenderTransform-->
+            </Image>
+        </Border>
 
     </Grid>
     

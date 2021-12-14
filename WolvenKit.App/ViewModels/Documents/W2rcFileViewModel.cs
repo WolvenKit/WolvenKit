@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
+using System.Windows.Media;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -53,6 +54,8 @@ namespace WolvenKit.ViewModels.Documents
         [Reactive] public bool IsImagePreviewVisible { get; set; }
 
         [Reactive] public Stream ImageStream { get; set; }
+
+        [Reactive] public ImageSource Image { get; set; }
 
         #endregion
 
