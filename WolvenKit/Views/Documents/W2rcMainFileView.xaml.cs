@@ -12,6 +12,11 @@ using WolvenKit.ViewModels.Shell;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Linq;
+using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+using System.IO;
+using WolvenKit.Common.Conversion;
 
 namespace WolvenKit.Views.Documents
 {
@@ -290,13 +295,17 @@ namespace WolvenKit.Views.Documents
             ImagePreview.SetCurrentValue(RenderTransformProperty, group);
 
             ImagePreviewCanvas.MouseWheel += ImagePreview_MouseWheel;
-            ImagePreviewCanvas.MouseLeftButtonDown += ImagePreview_MouseLeftButtonDown;
-            ImagePreviewCanvas.MouseLeftButtonUp += ImagePreview_MouseLeftButtonUp;
+            ImagePreviewCanvas.MouseDown += ImagePreview_MouseLeftButtonDown;
+            ImagePreviewCanvas.MouseUp += ImagePreview_MouseLeftButtonUp;
             ImagePreviewCanvas.MouseMove += ImagePreview_MouseMove;
         }
         private void ImagePreview_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            ImagePreviewCanvas.ReleaseMouseCapture();
+            if (e.ChangedButton == MouseButton.Left || e.ChangedButton == MouseButton.Middle)
+            {
+                ImagePreviewCanvas.ReleaseMouseCapture();
+                ImagePreviewCanvas.SetCurrentValue(CursorProperty, Cursors.Arrow);
+            }
         }
 
         private void ImagePreview_MouseMove(object sender, MouseEventArgs e)
@@ -312,10 +321,14 @@ namespace WolvenKit.Views.Documents
 
         private void ImagePreview_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            ImagePreviewCanvas.CaptureMouse();
-            TranslateTransform tt = (TranslateTransform)((TransformGroup)ImagePreview.RenderTransform).Children[1];
             start = e.GetPosition(ImagePreviewCanvas);
-            origin = new System.Windows.Point(tt.X, tt.Y);
+            if (e.ChangedButton == MouseButton.Left || e.ChangedButton == MouseButton.Middle)
+            {
+                ImagePreviewCanvas.CaptureMouse();
+                TranslateTransform tt = (TranslateTransform)((TransformGroup)ImagePreview.RenderTransform).Children[1];
+                origin = new System.Windows.Point(tt.X, tt.Y);
+                ImagePreviewCanvas.SetCurrentValue(CursorProperty, Cursors.ScrollAll);
+            }
         }
 
         private void ImagePreview_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -323,7 +336,6 @@ namespace WolvenKit.Views.Documents
             TransformGroup transformGroup = (TransformGroup)ImagePreview.RenderTransform;
             ScaleTransform transform = (ScaleTransform)transformGroup.Children[0];
             TranslateTransform pan = (TranslateTransform)transformGroup.Children[1];
-            //TranslateTransform zoomCenter = (TranslateTransform)transformGroup.Children[2];
 
             double zoom = e.Delta > 0 ? 1.2 : (1/1.2);
 
@@ -334,6 +346,35 @@ namespace WolvenKit.Views.Documents
             transform.ScaleX *= zoom;
             transform.ScaleY *= zoom;
 
+        }
+
+        public void SetRealPixelZoom(object sender, RoutedEventArgs e)
+        {
+            TransformGroup transformGroup = (TransformGroup)ImagePreview.RenderTransform;
+            ScaleTransform transform = (ScaleTransform)transformGroup.Children[0];
+            TranslateTransform pan = (TranslateTransform)transformGroup.Children[1];
+
+            double zoom = ViewModel.Image.Width / ImagePreview.RenderSize.Width;
+            double zoomQuot = zoom / transform.ScaleX;
+            //ImagePreview.SetCurrentValue(WidthProperty, ViewModel.Image.Width);
+            //ImagePreview.SetCurrentValue(HeightProperty, ViewModel.Image.Height);
+            var CursorPosCanvas = start;
+            pan.X += -(CursorPosCanvas.X - ImagePreviewCanvas.RenderSize.Width / 2.0 - pan.X) * (zoomQuot - 1.0);
+            pan.Y += -(CursorPosCanvas.Y - ImagePreviewCanvas.RenderSize.Height / 2.0 - pan.Y) * (zoomQuot - 1.0);
+            transform.ScaleX = zoom;
+            transform.ScaleY = -zoom;
+        }
+
+        public void ResetZoomPan(object sender, RoutedEventArgs e)
+        {
+            TransformGroup transformGroup = (TransformGroup)ImagePreview.RenderTransform;
+            ScaleTransform transform = (ScaleTransform)transformGroup.Children[0];
+            TranslateTransform pan = (TranslateTransform)transformGroup.Children[1];
+
+            transform.ScaleX = 1;
+            transform.ScaleY = -1;
+            pan.X = 0;
+            pan.Y = 0;
         }
     }
 }

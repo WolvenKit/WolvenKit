@@ -434,24 +434,38 @@
         </syncfusion:SfImageEditor-->
 
         <Border
-            x:Name="ImagePreviewCanvas"
             BorderThickness="1"
-            ClipToBounds="True"
-            Margin="0"
-            Background="{StaticResource ContentBackground}"
-            Visibility="{Binding IsImagePreviewVisible, Converter={StaticResource boolToVisibilityConverter}}"
+            Padding="0"
             Grid.Column="0"
-            Grid.ColumnSpan="3">
-            <Image
-                x:Name="ImagePreview"
-                Source="{Binding Image}"
-                IsHitTestVisible="False"
-                Opacity="1"
-                RenderTransformOrigin="0.5,0.5">
-                <!--Image.RenderTransform>
-                    <ScaleTransform ScaleY="-1"/>
-                </Image.RenderTransform-->
-            </Image>
+            ClipToBounds="True"
+            Grid.ColumnSpan="3"
+            Background="{StaticResource ContentBackground}"
+            Visibility="{Binding IsImagePreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
+            <Border.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Real Image Size" Click="SetRealPixelZoom" />
+                    <MenuItem Header="Reset Zoom/Pan" Click="ResetZoomPan" />
+                </ContextMenu>
+            </Border.ContextMenu>
+            <Border
+                BorderThickness="1"
+                x:Name="ImagePreviewCanvas"
+                ClipToBounds="True"
+                Background="{StaticResource ContentBackground}">
+                <Image
+                    x:Name="ImagePreview"
+                    ClipToBounds="False"
+                    Source="{Binding Image}"
+                    IsHitTestVisible="False"
+                    Opacity="1"
+                    RenderTransformOrigin="0.5,0.5">
+                    <!--Image.RenderTransform>
+                    RenderOptions.BitmapScalingMode="NearestNeighbor"
+                    UseLayoutRounding="True"
+                        <ScaleTransform ScaleY="-1"/>
+                    </Image.RenderTransform-->
+                </Image>
+            </Border>
         </Border>
 
     </Grid>
