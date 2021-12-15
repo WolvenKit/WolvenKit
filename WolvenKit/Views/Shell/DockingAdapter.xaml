@@ -82,7 +82,9 @@
                     <Setter Property="HeaderMouseOverBackground" Value="#1f1f1f" />
                     <Setter Property="HeaderBorderThickness" Value="0,0,0,1" />
                     <Setter Property="TabItemBorderThickness" Value="0,0,0,0" />
+                    <Setter Property="TabItemsBorderThicknessSelected" Value="0,0,0,0" />
                     <Setter Property="Margin" Value="0" />
+                    <Setter Property="EnableMouseHoverBackground" Value="False" />
                 </Style>
             </syncfusion:DockingManager.Style>
             <syncfusion:DockingManager.DocumentTabControlStyle>

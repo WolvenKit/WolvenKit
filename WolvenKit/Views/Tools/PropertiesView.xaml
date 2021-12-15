@@ -328,6 +328,7 @@
             CloseButtonType="Hide"
             CloseTabOnMiddleClick="False"
             AllowDragDrop="False"
+            ShowTabItemContextMenu="False"
             BorderThickness="0"
             Margin="0"
             Padding="0"

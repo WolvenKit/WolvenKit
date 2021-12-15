@@ -42,6 +42,7 @@
             SelectedItem="{Binding SelectedTabItemViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             ContentTemplateSelector="{StaticResource RedDocumentTemplateSelector}"
             CloseButtonType="Hide"
+            ShowTabItemContextMenu="False"
             EnableLabelEdit="False"
             AllowDragDrop="False"
             Margin="-3,-2,-3,-3"
