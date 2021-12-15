@@ -174,6 +174,9 @@ namespace WolvenKit.Views.Shell
                 }
 
                 adapter.PART_DockingManager.SetCurrentValue(DockingManager.ActiveWindowProperty, control);
+
+                if (adapter.viewModel != null)
+                    adapter.viewModel.UpdateTitle();
                 break;
             }
         }
@@ -381,6 +384,9 @@ namespace WolvenKit.Views.Shell
                 }
 
             }
+
+            if (viewModel != null)
+                viewModel.UpdateTitle();
         }
     }
 }

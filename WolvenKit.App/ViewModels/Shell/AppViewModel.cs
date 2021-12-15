@@ -121,7 +121,7 @@ namespace WolvenKit.ViewModels.Shell
 
             #endregion commands
 
-            Title = "WolvenKit";
+            UpdateTitle();
 
             OnStartup();
 
@@ -300,7 +300,7 @@ namespace WolvenKit.ViewModels.Shell
 
                 await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
                 {
-                    Title = "WolvenKit - " + Path.GetFileNameWithoutExtension(location);
+                    UpdateTitle();
                     _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
                 } , TaskContinuationOptions.OnlyOnRanToCompletion);
             }
@@ -703,6 +703,17 @@ namespace WolvenKit.ViewModels.Shell
 
         #region methods
 
+        public void UpdateTitle()
+        {
+            var title = "";
+            if (ActiveDocument != null)
+                title += ActiveDocument.Header + " - ";
+            if (_projectManager.ActiveProject != null)
+                title += _projectManager.ActiveProject.Name + " - ";
+            title += "WolvenKit";
+            Title = title;
+        }
+
         private void CreateCr2wFile(AddFileModel model)
         {
             //TODO
@@ -911,7 +922,12 @@ namespace WolvenKit.ViewModels.Shell
                 if (isRedEngineFile || isRedscriptFile || isTweakFile)
                 {
                     /*ActiveDocument =*/
-                    Open(fullpath, type);
+                    var document = Open(fullpath, type);
+                    if (document != null)
+                    {
+                        UpdateTitle();
+                        ActiveDocument = document;
+                    }
                 }
             }
 
