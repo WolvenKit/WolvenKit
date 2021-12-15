@@ -65,12 +65,11 @@ namespace WolvenKit.Views.Editors
             else if (PropertyType.IsAssignableTo(typeof(IRedArray)))
             {
                 var value = (IRedArray)RedType;
-                return $"Array: {value.InnerType.Name} [{value.Count}]";
+                return RedReflection.GetRedTypeFromCSType(PropertyType) + $"[{value.Count}]";
             }
             else if (PropertyType.IsAssignableTo(typeof(IRedBaseHandle)))
             {
-                var value = (IRedBaseHandle)RedType;
-                return $"Handle: {value.InnerType.Name}";
+                return RedReflection.GetRedTypeFromCSType(PropertyType);
             }
             else if (PropertyType.IsAssignableTo(typeof(IRedEnum)))
             {
@@ -136,7 +135,7 @@ namespace WolvenKit.Views.Editors
             }
             else
             {
-                return PropertyType?.Name ?? "null";
+                return RedReflection.GetRedTypeFromCSType(PropertyType);
             }
         }
 

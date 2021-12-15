@@ -247,12 +247,12 @@ namespace WolvenKit.ViewModels.Shell
         {
             get
             {
-                if (PropertyType == typeof(IRedBaseHandle))
-                {
-                    var handle = (IRedBaseHandle)_data;
-                    return "Handle: " + (handle?.File?.Chunks[handle.Pointer]?.GetType().Name ?? "null");
-                }
-                return PropertyType?.Name ?? "null";
+                //if (PropertyType == typeof(IRedBaseHandle))
+                //{
+                //    var handle = (IRedBaseHandle)_data;
+                //    return "Handle: " + (handle?.File?.Chunks[handle.Pointer]?.GetType().Name ?? "null");
+                //}
+                return RedReflection.GetRedTypeFromCSType(PropertyType);
             }
         }
 
@@ -283,12 +283,12 @@ namespace WolvenKit.ViewModels.Shell
                 else if (PropertyType.IsAssignableTo(typeof(IRedArray)))
                 {
                     var value = (IRedArray)_data;
-                    return $"Array: {value.InnerType.Name} [{value.Count}]";
+                    return $"{Type} [{value.Count}]";
                 }
                 else if (PropertyType.IsAssignableTo(typeof(IRedBaseHandle)))
                 {
                     var value = (IRedBaseHandle)_data;
-                    return $"Handle: {value.InnerType.Name}";
+                    return Type;
                 }
                 else if (PropertyType.IsAssignableTo(typeof(IRedEnum)))
                 {
@@ -353,7 +353,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else
                 {
-                    return PropertyType?.Name ?? "null";
+                    return Type ?? "null";
                 }
             }
             set
@@ -479,7 +479,8 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     var dto = new RedClassDto(PropertyGridData, new
                     {
-                        Version = "0.0.1",
+                        WolvenKitVersion = "8.4.0",
+                        WKitJsonVersion = "0.0.1",
                         Exported = DateTime.UtcNow.ToString("o")
                     });
                     var json = JsonConvert.SerializeObject(dto, Formatting.Indented);
@@ -493,18 +494,6 @@ namespace WolvenKit.ViewModels.Shell
                     myStream.Close();
                 }
             }
-
-            //var depotpath = redRef.DepotPath;
-            //var key = FNV1A64HashAlgorithm.HashString(depotpath);
-
-            //var _gameControllerFactory = Locator.Current.GetService<IGameControllerFactory>();
-            //var _archiveManager = Locator.Current.GetService<IArchiveManager>();
-
-            //if (_archiveManager.Lookup(key).HasValue)
-            //{
-            //    _gameControllerFactory.GetController().AddToMod(key);
-            //}
         }
-
     }
 }

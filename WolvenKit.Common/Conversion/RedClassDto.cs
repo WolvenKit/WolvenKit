@@ -29,6 +29,11 @@ namespace WolvenKit.Common.Conversion
         internal Type _propertyType;
         internal string _propertyName;
 
+        public RedClassDto()
+        {
+
+        }
+
         public RedClassDto(IRedType chunk, object header) : this(chunk)
         {
             Header = header;
@@ -53,7 +58,7 @@ namespace WolvenKit.Common.Conversion
                 type = propInfo?.Type ?? null;
             }
             _propertyType = type;
-            Type = _propertyType?.Name ?? null;
+            Type = RedReflection.GetRedTypeFromCSType(_propertyType);
 
             if (_data == null)
                 return;
@@ -159,6 +164,30 @@ namespace WolvenKit.Common.Conversion
                 default:
                     return new RedClassDto(data, propertyName, parent);
             }
+        }
+
+        public CR2WFile ToW2rc()
+        {
+            var cr2w = new CR2WFile
+            {
+                //Buffers = Buffers
+                //    .OrderBy(_ => _.Index)
+                //    .Select(_ => _.ToRedBuffer())
+                //    .ToList()
+            };
+
+            // chunks
+            // order so that parent chunks get created first
+            //var groupedChunks = Chunks.GroupBy(_ => _.Value.ParentIndex);
+            //foreach (IGrouping<int, KeyValuePair<int, RedExportDto>> groupedChunk in groupedChunks)
+            //{
+            //    foreach (var (chunkIndex, chunk) in groupedChunk.OrderBy(_ => _.Key))
+            //    {
+            //        chunk.CreateChunkInFile(cr2w, chunkIndex);
+            //    }
+            //}
+
+            return cr2w;
         }
     }
 }

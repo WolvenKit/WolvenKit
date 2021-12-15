@@ -173,7 +173,7 @@ namespace WolvenKit.RED4.Types
 
         private static readonly ConcurrentDictionary<int, string> _csTypeCache = new();
 
-        public static string GetRedTypeFromCSType(Type type, Flags flags)
+        public static string GetRedTypeFromCSType(Type type, Flags flags = null)
         {
             var hash = HashCode.Combine(type, flags);
             if (_csTypeCache.TryGetValue(hash, out var result))

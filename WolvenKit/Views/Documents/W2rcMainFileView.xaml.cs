@@ -212,35 +212,55 @@ namespace WolvenKit.Views.Documents
             }
         }
 
+        // Drag & Drop Functionality
+
+        private string dropFileLocation;
+        private RedClassDto dropFile;
+
         private void SfTreeView_ItemDragStarting(object sender, TreeViewItemDragStartingEventArgs e)
         {
             //var record = e.DraggingNodes[0].Content as ChunkViewModel;
             //if (typeof(CBool).IsAssignableTo(record.Data.GetType()))
             //    e.Cancel = true;
         }
+
         private void SfTreeView_ItemDragOver(object sender, TreeViewItemDragOverEventArgs e)
         {
+            e.DropPosition = DropPosition.None;
             if (sender is SfTreeView tv)
             {
-                if (e.DraggingNodes[0].Content is ChunkViewModel source)
+                if (e.DraggingNodes != null && e.DraggingNodes[0].Content is ChunkViewModel source)
                 {
                     if (e.TargetNode.Content is ChunkViewModel target)
                     {
                         if (source == target)
                         {
-                            //tv.Cursor = Cursors.Arrow;
                             e.DropPosition = DropPosition.DropAsChild;
                         }
                         else if (source.CanBeDroppedOn(target))
                         {
                             e.DropPosition = DropPosition.DropAsChild;
-                            //tv.Cursor = Cursors.Hand;
                         }
-                        else
+                    }
+                }
+            }
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                if (e.TargetNode != null && e.TargetNode.Content is ChunkViewModel target)
+                { 
+                    var files = new List<string>((string[])e.Data.GetData(DataFormats.FileDrop));
+                    if (files.Count == 1)
+                    {
+                        if (dropFileLocation != files[0])
                         {
-                            e.DropPosition = DropPosition.None;
-                            //tv.Cursor = Cursors.No;
+                            dropFileLocation = files[0];
+                            var json = File.ReadAllText(files[0]);
+                            dropFile = JsonConvert.DeserializeObject<RedClassDto>(json);
                         }
+                        //if (dropFile != null && dropFile.Type == target.Type)
+                        //{
+                            e.DropPosition = DropPosition.DropAsChild;
+                        //}
                     }
                 }
             }
@@ -249,7 +269,7 @@ namespace WolvenKit.Views.Documents
         private void SfTreeView_ItemDropping(object sender, TreeViewItemDroppingEventArgs e)
         {
             e.Handled = true;
-            if (e.DraggingNodes[0].Content is ChunkViewModel source)
+            if (e.DraggingNodes != null && e.DraggingNodes[0].Content is ChunkViewModel source)
             {
                 if (e.TargetNode.Content is ChunkViewModel target)
                 {
@@ -260,15 +280,31 @@ namespace WolvenKit.Views.Documents
                 }
             }
         }
+
         private void SfTreeView_ItemDropped(object sender, TreeViewItemDroppedEventArgs e)
         {
-            if (e.DraggingNodes[0].Content is ChunkViewModel source)
+            if (e.DraggingNodes != null && e.DraggingNodes[0].Content is ChunkViewModel source)
             {
                 if (e.TargetNode.Content is ChunkViewModel target)
                 {
                     if (source.CanBeDroppedOn(target))
                     {
                         target.Data = source.Data;
+                    }
+                }
+            }
+
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                if (e.TargetNode.Content is ChunkViewModel target)
+                {
+                    var files = new List<string>((string[])e.Data.GetData(DataFormats.FileDrop));
+                    if (files.Count == 1)
+                    {
+                        if (dropFileLocation == files[0])
+                        {
+                            //target.Data = dropFile.Data;
+                        }
                     }
                 }
             }

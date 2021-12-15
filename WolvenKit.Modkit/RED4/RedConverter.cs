@@ -33,7 +33,12 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var json = "";
-            var dto = new RedClassDto(cr2w.RootChunk);
+            var dto = new RedClassDto(cr2w.RootChunk, new
+            {
+                WolvenKitVersion = "8.4.0",
+                WKitJsonVersion = "0.0.1",
+                Exported = DateTime.UtcNow.ToString("o")
+            });
             json = JsonConvert.SerializeObject(dto, Formatting.Indented);
 
             if (string.IsNullOrEmpty(json))
@@ -114,7 +119,7 @@ namespace WolvenKit.Modkit.RED4
         /// <exception cref="InvalidParsingException"></exception>
         public CR2WFile ConvertFromJson(string json)
         {
-            var newdto = JsonConvert.DeserializeObject<RedFileDto>(json);
+            var newdto = JsonConvert.DeserializeObject<RedClassDto>(json);
             return newdto != null ? newdto.ToW2rc() : throw new InvalidParsingException("ConvertFromJson");
         }
 
