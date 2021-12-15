@@ -9,6 +9,7 @@
  xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
  xmlns:docvm="clr-namespace:WolvenKit.ViewModels.Documents;assembly=WolvenKit.App"
  xmlns:converters1="clr-namespace:WolvenKit.Converters"
+ xmlns:others="clr-namespace:WolvenKit.Views.Others"
  xmlns:tools_controls="clr-namespace:Syncfusion.Windows.Tools.Controls;assembly=Syncfusion.Tools.WPF"
  d:DesignHeight="300"
  d:DesignWidth="300"
@@ -96,8 +97,8 @@
                             x:Name="RedDocumentHeader"
                             DataContext="{Binding Content.Content.Content, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContentControl}}}"
                                ToolTip="{Binding RelativePath}">
-                            <Image x:Name="DockIcon" Height="15" Margin="0,0,6,0"
-                               Style="{DynamicResource FileIcons}" />
+                            <others:FileIcon x:Name="DockIcon" Height="15" Margin="0,0,6,0"
+                               Icon="{Binding Extension}" />
                             <TextBlock
                                 Grid.Column="1"
                                 Margin="0,0,5,1"

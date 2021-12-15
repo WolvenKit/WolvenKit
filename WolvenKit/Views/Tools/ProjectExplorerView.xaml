@@ -11,6 +11,7 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:tools="clr-namespace:WolvenKit.ViewModels.Tools;assembly=WolvenKit.App"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
+    xmlns:others="clr-namespace:WolvenKit.Views.Others"
     d:DataContext="{d:DesignInstance Type=tools:ProjectExplorerViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="400"
@@ -50,12 +51,12 @@
             
             Margin="0,0,0,0"
             BorderThickness="0,0,0,1"
-            TabItemSelectedForeground="White"
-            TabItemHoverBackground="{StaticResource WolvenKitRedShadow}"
-            TabItemHoverBorderBrush="{StaticResource WolvenKitRedShadow}"
-            TabItemSelectedBackground="{StaticResource WolvenKitRed}"
-            TabItemSelectedBorderBrush="{StaticResource WolvenKitCyan}">
-            <syncfusion:TabItemExt Header="Source Files" />
+            Style="{StaticResource WolvenKitTabControl}">
+            <syncfusion:TabItemExt Header="All Source Files" />
+            <syncfusion:TabItemExt Header="Archive" />
+            <syncfusion:TabItemExt Header="Raw" />
+            <syncfusion:TabItemExt Header="Scripts" />
+            <syncfusion:TabItemExt Header="Tweaks" />
             <syncfusion:TabItemExt Header="Packed Files" />
         </syncfusion:TabControlExt>
 
@@ -224,57 +225,15 @@
                                             </MultiDataTrigger>
                                         </Style.Triggers>
                                     </Style>
-                                    <Style x:Key="FolderIcon" TargetType="{x:Type iconPacks:PackIconControl}">
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                        <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.Folder}" />
+                                    <Style x:Key="PE_FileIconStyle" TargetType="{x:Type others:FileIcon}">
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Extension}" Value="ModDirectoryTop">
-                                                <Setter Property="Visibility" Value="Visible" />
-                                                <Setter Property="Foreground" Value="{StaticResource WolvenKitRed}" />
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding Extension}" Value="RawDirectoryTop">
-                                                <Setter Property="Visibility" Value="Visible" />
-                                                <Setter Property="Foreground" Value="{StaticResource WolvenKitTan}" />
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding Extension}" Value="ScriptDirectoryTop">
-                                                <Setter Property="Visibility" Value="Visible" />
-                                                <Setter Property="Foreground" Value="{StaticResource WolvenKitCyan}" />
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding Extension}" Value="TweakDirectoryTop">
-                                                <Setter Property="Visibility" Value="Visible" />
-                                                <Setter Property="Foreground" Value="{StaticResource WolvenKitPurple}" />
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding Extension}" Value="OpenDirImageKey">
-                                                <Setter Property="Visibility" Value="Visible" />
-                                                <Setter Property="Foreground" Value="{StaticResource WolvenKitTan}" />
-                                            </DataTrigger>
                                             <MultiDataTrigger>
                                                 <MultiDataTrigger.Conditions>
                                                     <Condition Binding="{Binding Path=IsExpanded, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TreeGridExpanderCell}}}" Value="True" />
                                                     <Condition Binding="{Binding Path=HasChildNodes, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TreeGridExpanderCell}}}" Value="True" />
                                                 </MultiDataTrigger.Conditions>
-                                                <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.FolderOpen}" />
+                                                <Setter Property="Type" Value="Open" />
                                             </MultiDataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                    <Style x:Key="NormalIcon" TargetType="{x:Type Image}" BasedOn="{StaticResource FileIcons}">
-                                        <Setter Property="Visibility" Value="Visible" />
-                                        <Style.Triggers>
-                                            <DataTrigger  Binding="{Binding Extension}" Value="ModDirectoryTop">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                            </DataTrigger>
-                                            <DataTrigger  Binding="{Binding Extension}" Value="RawDirectoryTop">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                            </DataTrigger>
-                                            <DataTrigger  Binding="{Binding Extension}" Value="ScriptDirectoryTop">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                            </DataTrigger>
-                                            <DataTrigger  Binding="{Binding Extension}" Value="TweakDirectoryTop">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                            </DataTrigger>
-                                            <DataTrigger  Binding="{Binding Extension}" Value="OpenDirImageKey">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                            </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
                                 </Grid.Resources>
@@ -283,8 +242,7 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <Image Height="13" Style="{StaticResource NormalIcon}" />
-                                <iconPacks:PackIconControl Style="{StaticResource FolderIcon}" Width="13" Height="19"/>
+                                <others:FileIcon Icon="{Binding Extension}" Style="{StaticResource PE_FileIconStyle}" Width="13" Height="19"/>
                                 <TextBlock
                                     x:Name="TemplateTextBlock"
                                     Grid.Column="1"

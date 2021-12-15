@@ -11,6 +11,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:local="clr-namespace:WolvenKit"
+    xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:tools="clr-namespace:WolvenKit.ViewModels.Tools;assembly=WolvenKit.App"
     d:DataContext="{d:DesignInstance Type=tools:AssetBrowserViewModel}"
     BorderBrush="{x:Null}"
@@ -24,6 +25,20 @@
             BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
             BorderThickness="0">
             <Grid>
+
+                <Grid.Resources>
+                    <Style x:Key="AB_FileIconStyle" TargetType="{x:Type others:FileIcon}">
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding Path=IsExpanded, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TreeGridExpanderCell}}}" Value="True" />
+                                    <Condition Binding="{Binding Path=HasChildNodes, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TreeGridExpanderCell}}}" Value="True" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Type" Value="Open" />
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Resources>
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -208,8 +223,7 @@
                                                     <ColumnDefinition Width="13" />
                                                     <ColumnDefinition Width="*" />
                                                 </Grid.ColumnDefinitions>
-                                                <Image Height="13" Width="Auto" Style="{DynamicResource FileIcons}" />
-                                                <!--iconPacks:PackIconCodicons Style="{StaticResource AssetBrowserFileIcons}" Width="12"/-->
+                                                <others:FileIcon Height="13" Width="Auto" Icon="{Binding Extension}" Style="{StaticResource AB_FileIconStyle}" />
                                                 <TextBlock
                                                         x:Name="TemplateTextBlock"
                                                         Grid.Column="1"
@@ -335,8 +349,8 @@
                                         MappingName="">
                                     <syncfusion:GridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                                <Image Height="13" Margin="0,2,0,2" Style="{DynamicResource FileIcons}" />
-                                            </DataTemplate>
+                                            <others:FileIcon Height="13" Width="Auto" Icon="{Binding Extension}" />
+                                        </DataTemplate>
                                         </syncfusion:GridTemplateColumn.CellTemplate>
                                     </syncfusion:GridTemplateColumn>
 
