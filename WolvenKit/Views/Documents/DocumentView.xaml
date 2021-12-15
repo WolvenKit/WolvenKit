@@ -32,9 +32,7 @@
             <converters:RedDocumentTemplateSelector x:Key="RedDocumentTemplateSelector"
                                                    MainTemplate="{StaticResource MainTemplate}"
                                                    BufferTemplate="{StaticResource BufferTemplate}" />
-            <Style x:Key="WolvenKitTabItem" TargetType="{x:Type syncfusion:TabItemExt}">
-                
-            </Style>
+
         </Grid.Resources>
 
         <syncfusion:TabControlExt
@@ -49,11 +47,7 @@
             Margin="-3,-2,-3,-3"
             BorderThickness="0,0,0,0"
             Padding="0"
-            TabItemSelectedForeground="White"
-            TabItemHoverBackground="{StaticResource WolvenKitRedShadow}"
-            TabItemHoverBorderBrush="{StaticResource WolvenKitRedShadow}"
-            TabItemSelectedBackground="{StaticResource WolvenKitRed}"
-            TabItemSelectedBorderBrush="{StaticResource WolvenKitCyan}">
+            Style="{StaticResource WolvenKitTabControl}">
         </syncfusion:TabControlExt>
         
        

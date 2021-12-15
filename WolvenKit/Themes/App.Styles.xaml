@@ -2,10 +2,17 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"           
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"  
-    xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF" 
+    xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
+    xmlns:sfskin ="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:svgc="http://sharpvectors.codeplex.com/svgc/">
 
+    <ResourceDictionary.MergedDictionaries>
+        <sfskin:ResourceDictionaryProvider DictionaryName="Common" ThemeName="MaterialDark" />
+        <sfskin:ResourceDictionaryProvider DictionaryName="Brushes" ThemeName="MaterialDark" />
+        <ResourceDictionary Source="/Syncfusion.Themes.MaterialDark.WPF;component/DockingManager/DockingManager.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    
     <SolidColorBrush x:Key="CustomSliderForegroundBrush" Color="#FF1E91EA" />
     <SolidColorBrush x:Key="CustomSliderBackgroundBrush" Color="#55ffffff" />
     <SolidColorBrush x:Key="CustomSliderHighlightBrush" Color="#FFEFEFEF" />
@@ -23,6 +30,15 @@
     <SolidColorBrush x:Key="WolvenKitPurple" Color="#5760B3" />
     <SolidColorBrush x:Key="WolvenKitTan" Color="#D0A467" />
 
+    <Style x:Key="WolvenKitTabControl" TargetType="{x:Type syncfusion:TabControlExt}" BasedOn="{StaticResource SyncfusionDocumentTabControlExtStyle}">
+        <Setter Property="TabItemSelectedBackground" Value="{StaticResource WolvenKitRed}" />
+        <Setter Property="TabItemSelectedBorderBrush" Value="{StaticResource WolvenKitRedShadow}" />
+        <Setter Property="TabItemHoverBackground" Value="{StaticResource WolvenKitRedShadow}" />
+        <Setter Property="TabItemHoverBorderBrush" Value="{StaticResource WolvenKitRedShadow}" />
+        <Setter Property="TabItemSelectedForeground" Value="White" />
+        <Setter Property="BorderThickness" Value="0" />
+    </Style>
+    
     <LinearGradientBrush x:Key="ShadedBackgroundBrush" StartPoint="0,0" EndPoint="0,1">
         <GradientStopCollection>
             <GradientStop Offset="0.0" Color="#00000000" />

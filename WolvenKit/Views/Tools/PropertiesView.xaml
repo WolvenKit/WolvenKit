@@ -331,11 +331,7 @@
             BorderThickness="0"
             Margin="0"
             Padding="0"
-            TabItemSelectedForeground="White"
-            TabItemHoverBackground="{StaticResource WolvenKitRedShadow}"
-            TabItemHoverBorderBrush="{StaticResource WolvenKitRedShadow}"
-            TabItemSelectedBackground="{StaticResource WolvenKitRed}"
-            TabItemSelectedBorderBrush="{StaticResource WolvenKitCyan}">
+            Style="{StaticResource WolvenKitTabControl}">
             <syncfusion:TabItemExt Header="File Properties">
 
                 <Grid>
