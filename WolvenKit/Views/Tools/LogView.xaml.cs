@@ -34,6 +34,13 @@ namespace WolvenKit.Views.Tools
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _logEntries)
                 .Subscribe(OnNext);
+
+            var firaCode = new FontFamily("Fira Code");
+            if (firaCode != null)
+            {
+                LogRichTextBox.FontFamily = firaCode;
+                LogRichTextBox.FontSize = 10;
+            }
         }
 
         private void OnNext(IChangeSet<LogEntry> obj)
@@ -95,15 +102,15 @@ namespace WolvenKit.Views.Tools
             {
                 case Logtype.Normal:
                 case Logtype.Wcc:
-                    return Brushes.Wheat;
+                    return Brushes.White;
                 case Logtype.Error:
-                    return Brushes.Red;
+                    return (Brush)Application.Current.FindResource("WolvenKitRed");
                 case Logtype.Important:
-                    return Brushes.Yellow;
+                    return (Brush)Application.Current.FindResource("WolvenKitYellow");
                 case Logtype.Success:
-                    return Brushes.ForestGreen;
+                    return (Brush)Application.Current.FindResource("WolvenKitCyan");
                 case Logtype.Warning:
-                    return Brushes.DarkViolet;
+                    return (Brush)Application.Current.FindResource("WolvenKitPurple");
                 default:
                     throw new ArgumentOutOfRangeException(nameof(level), level, null);
             }

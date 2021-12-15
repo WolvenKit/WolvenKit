@@ -328,7 +328,13 @@ namespace WolvenKit.Views.Shell
 
         private void collapseSingleAB_Click(object sender, RoutedEventArgs e) => _mainViewModel.AssetBrowserVM.Collapse.Execute().Subscribe();
 
-        
+        private void Ribbon_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+            var mainWindow = (MainView)Locator.Current.GetService<IViewFor<AppViewModel>>();
+            if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
+                mainWindow?.DragMove();
+        }
 
         ///// <summary>
         ///// Closes material drawer

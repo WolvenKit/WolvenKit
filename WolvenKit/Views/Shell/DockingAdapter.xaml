@@ -16,7 +16,33 @@
  mc:Ignorable="d"             
  >
     <Grid>
-
+        <Grid.Resources>
+            <ControlTemplate x:Key="WolvenKitButtonsTemplate" TargetType="{x:Type ToggleButton}">
+                <ControlTemplate.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Value="{StaticResource WolvenKitRed}" Property="Foreground" />
+                    </Trigger>
+                    <Trigger Property="IsKeyboardFocused" Value="True">
+                        <Setter Value="{StaticResource WolvenKitYellow}" Property="Foreground" />
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter Value="{StaticResource WolvenKitRedShadow}" Property="Foreground" />
+                    </Trigger>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Value="{StaticResource BorderAlt}" Property="Foreground" />
+                    </Trigger>
+                </ControlTemplate.Triggers>
+                <StackPanel>
+                    <Border Name="ButtonBorder" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" CornerRadius="{StaticResource MaterialDark.ThemeCornerRadiusVariant1}">
+                        <ContentPresenter Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                            <ContentPresenter.Resources>
+                                <Style TargetType="{x:Type TextBlock}" BasedOn="{x:Null}" />
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
+                    </Border>
+                </StackPanel>
+            </ControlTemplate>
+        </Grid.Resources>
         <syncfusion:DockingManager
             x:Name="PART_DockingManager"
             ActiveWindowChanged="PART_DockingManager_ActiveWindowChanged_1"
@@ -27,12 +53,19 @@
             AllowDrop="True"
             IsTDIDragDropEnabled="True"
             PersistState="True"
+            UseNativeFloatWindow="False"
             UseDocumentContainer="True"
             Loaded="PART_DockingManager_Loaded"
             CloseButtonClick="PART_DockingManagerOnCloseButtonClick"
             DockStateChanging="PART_DockingManagerOnDockStateChanging">
             <syncfusion:DockingManager.Style>
-                <Style TargetType="{x:Type syncfusion:DockingManager}" BasedOn="{StaticResource SyncfusionDockingManagerStyle}">
+                    <Style TargetType="{x:Type syncfusion:DockingManager}" BasedOn="{StaticResource SyncfusionDockingManagerStyle}">
+                    <Setter Property="CloseButtonTemplate" Value="{StaticResource WolvenKitButtonsTemplate}" />
+                    <Setter Property="MaximizeButtonTemplate" Value="{StaticResource WolvenKitButtonsTemplate}" />
+                    <Setter Property="MinimizeButtonTemplate" Value="{StaticResource WolvenKitButtonsTemplate}" />
+                    <Setter Property="RestoreButtonTemplate" Value="{StaticResource WolvenKitButtonsTemplate}" />
+                    <Setter Property="MenuButtonTemplate" Value="{StaticResource WolvenKitButtonsTemplate}" />
+                    <Setter Property="AwlButtonTemplate" Value="{StaticResource WolvenKitButtonsTemplate}" />
                     <Setter Property="Background" Value="Transparent" />
                     <Setter Property="TabItemsBackground" Value="{StaticResource ContentBackgroundAlt2}" />
                     <Setter Property="TabItemBackgroundSelected" Value="#373737" />
@@ -43,10 +76,10 @@
                     <Setter Property="TabItemsForeground" Value="#ffffff" />
                     <Setter Property="TabItemForegroundSelected" Value="#ffffff" />
                     <Setter Property="HeaderBackground" Value="{StaticResource ContentBackgroundAlt2}" />
-                    <Setter Property="SelectedHeaderBackground" Value="#373737" />
+                    <Setter Property="SelectedHeaderBackground" Value="#1f1f1f" />
                     <Setter Property="HeaderForeground" Value="#ffffff" />
                     <Setter Property="HeaderForegroundSelected" Value="#ffffff" />
-                    <Setter Property="HeaderMouseOverBackground" Value="{StaticResource ContentBackgroundAlt3}" />
+                    <Setter Property="HeaderMouseOverBackground" Value="#1f1f1f" />
                     <Setter Property="HeaderBorderThickness" Value="0,0,0,1" />
                     <Setter Property="TabItemBorderThickness" Value="0,0,0,0" />
                     <Setter Property="Margin" Value="0" />
@@ -64,6 +97,7 @@
                     <Setter Property="BorderThickness" Value="0,1,0,0" />
                     <Setter Property="TabItemSelectedBorderBrush" Value="#333333" />
                     <Setter Property="TabItemHoverBorderBrush" Value="#333333" />
+                    <Setter Property="CloseButtonType" Value="Individual" />
                 </Style>
             </syncfusion:DockingManager.DocumentTabControlStyle>
             <syncfusion:DockingManager.DocumentTabItemStyle>
@@ -81,7 +115,13 @@
             </syncfusion:DockingManager.TabItemStyle>
             <syncfusion:DockingManager.TabControlStyle>
                 <Style TargetType="{x:Type TabControl}" BasedOn="{StaticResource DockTabControlStyle}">
-                    <Setter Property="Margin" Value="0" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type TabControl}">
+                                <ContentPresenter Name="PART_SelectedContentHost" ContentSource="SelectedContent" />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
             </syncfusion:DockingManager.TabControlStyle>
             <syncfusion:DockingManager.DockedElementTabbedHostStyle>

@@ -16,13 +16,19 @@
     TitleTextAlignment="Left"
     ResizeMode="CanResizeWithGrip"
     UseNativeChrome="True"
-    Title="{Binding Title}"
+    Title="{Binding Title, StringFormat=' {0}'}"
+    TitleFontSize="12"
+    TitleBarForeground="#efefef"
     MinWidth="960"
     MinHeight="600"
     AllowsTransparency="True"
     TitleBarBackground="Transparent"
+    UseLayoutRounding="True"
+    ResizeBorderBrush="#1f1f1f"
+    ResizeBorderThickness="1"
+    Background="{StaticResource ContentBackground}"
     >
-
+    <!--ResizeBorderBrush="#1f1f1f"-->
     <syncfusion:ChromelessWindow.Resources>
         <DrawingBrush
             x:Key="CloudDrawingBrushMain"
@@ -43,7 +49,6 @@
             </DrawingBrush.Drawing>
         </DrawingBrush>
     </syncfusion:ChromelessWindow.Resources>
-
     <Grid Background="{DynamicResource CloudDrawingBrushMain}">
         <Grid.Resources>
             <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" />
@@ -59,7 +64,7 @@
         <shell:RibbonView Margin="0" Grid.Row="0" Panel.ZIndex="5" BorderThickness="0,0,0,1" BorderBrush="#131313"/>
 
         <shell:DockingAdapter
-            Margin="5,3,5,5"
+            Margin="5,4,5,5"
             x:Name="dockingAdapter"
             Grid.Row="1"
 

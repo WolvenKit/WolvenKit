@@ -83,30 +83,31 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid
-        Background="{DynamicResource ContentBackgroundAlt2}">
-
-
-        
-        <Grid.RowDefinitions>
-            <RowDefinition MinHeight="52" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-
-        <!--  Grey Bar for the top -->
-        <Border
-            Height="33"
+    <!--  Grey Bar for the top -->
+    <Border
             Margin="0,-33,0,0"
-            BorderThickness="0,1,0,0"
+            Padding="0,33,0,0"
+            BorderThickness="1,1,1,1"
             Background="{StaticResource ContentBackgroundAlt2}"
             BorderBrush="{StaticResource BorderAlt}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="top"
             Panel.ZIndex="0"
-             />
+            MouseLeftButtonDown="Ribbon_MouseLeftButtonDown"
+             >
+        <Grid
+        Background="{DynamicResource ContentBackgroundAlt2}">
 
-        <!--  Light Grey border for the bottom -->
-        <Border
+
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+
+            <!--  Light Grey border for the bottom -->
+            <!--Border
             Grid.Row="2"
             BorderThickness="0,0,0,1"
             Background="{StaticResource ContentBackgroundAlt}"
@@ -114,377 +115,387 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Bottom"
             Panel.ZIndex="0"
-             />
+             /-->
 
-        <ToolBarTray
-            Margin="54,0,0,0"
+            <ToolBarTray
+            Margin="30,0,0,0"
             Height="Auto"
             VerticalAlignment="Top"
-            IsLocked="{Binding IsChecked, ElementName=lockTop, TargetNullValue=false}"
-            Style="{StaticResource ToolBarTrayBaseStyle}"
+            IsLocked="True"
             >
+                <ToolBarTray.Style>
+                    <Style TargetType="ToolBarTray" BasedOn="{StaticResource ToolBarTrayBaseStyle}">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsChecked, ElementName=ribbonEnabled}" Value="False">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ToolBarTray.Style>
+                <ToolBarTray.Resources>
+                    <Style x:Key="WolvenKitToolBarButtonIcon" TargetType="{x:Type iconPacks:PackIconControlBase}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type UIElement}, AncestorLevel=2}}" Value="False">
+                                <Setter Property="Foreground" Value="{StaticResource Border}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                    <Style x:Key="WolvenKitToolBarButtonIconEraser" TargetType="{x:Type iconPacks:PackIconControlBase}" BasedOn="{StaticResource WolvenKitToolBarButtonIcon}">
+                        <Setter Property="Foreground" Value="{StaticResource ContentBackgroundAlt}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type UIElement}, AncestorLevel=2}}" Value="True">
+                                <Setter Property="Foreground" Value="{StaticResource ContentBackgroundAlt5}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource AncestorType={x:Type UIElement}, AncestorLevel=2}}" Value="True">
+                                <Setter Property="Foreground" Value="{StaticResource ContentBackground}" />
+                            </DataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type UIElement}, AncestorLevel=2}}" Value="True" />
+                                    <Condition Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource AncestorType={x:Type UIElement}, AncestorLevel=2}}" Value="True" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Foreground" Value="{StaticResource ContentBackgroundAlt}" />
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                    <Style x:Key="WolvenKitToolBarButtonText" TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type UIElement}}}" Value="False">
+                                <Setter Property="Foreground" Value="{StaticResource Border}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                    <Style x:Key="{x:Static ToolBar.ButtonStyleKey}" TargetType="{x:Type Button}">
+                        <Setter Property="BorderBrush" Value="Transparent" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="Border.Background" Value="Transparent" />
+                        <Setter Property="Height" Value="22" />
+                        <Setter Property="Border.Padding" Value="5,0" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Background="{TemplateBinding Border.Background}" CornerRadius="3" Padding="{TemplateBinding Border.Padding}">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt5}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="{StaticResource ContentBackground}" />
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="True" />
+                                    <Condition Property="IsPressed" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Border.Background" Value="{StaticResource ContentBackgroundAlt}" />
+                            </MultiTrigger>
+                        </Style.Triggers>
+                        <Style.Resources>
+                            <Style TargetType="{x:Type iconPacks:PackIconControlBase}" BasedOn="{StaticResource WolvenKitToolBarButtonIcon}">
+                                <Setter Property="Visibility" Value="{Binding IsChecked, ElementName=toolbarIcons, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            </Style>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource WolvenKitToolBarButtonText}">
+                                <Setter Property="Visibility" Value="{Binding IsChecked, ElementName=toolbarLabels, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            </Style>
+                        </Style.Resources>
+                    </Style>
+                    <Style x:Key="{x:Static ToolBar.ToggleButtonStyleKey}" TargetType="{x:Type ToggleButton}">
+                        <Setter Property="Border.Background" Value="{StaticResource ContentBackgroundAlt4}" />
+                        <Setter Property="Height" Value="22" />
+                        <Setter Property="Border.Padding" Value="5,0" />
+                        <Setter Property="Border.Margin" Value="2,0,0,0" />
+                        <Setter Property="Border.BorderBrush" Value="{StaticResource ContentBackground}" />
+                        <Setter Property="Border.BorderThickness" Value="0,0,0,1" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                    <Border Background="{TemplateBinding Border.Background}" CornerRadius="3" Padding="{TemplateBinding Border.Padding}" Margin="{TemplateBinding Border.Margin}" BorderBrush="{TemplateBinding Border.BorderBrush}" BorderThickness="{TemplateBinding Border.BorderThickness}">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Border.Background" Value="{StaticResource ContentBackgroundAlt5}" />
+                                <Setter Property="Border.BorderBrush" Value="{StaticResource ContentBackground}" />
+                                <Setter Property="Border.BorderThickness" Value="0,0,0,1" />
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Border.Background" Value="{StaticResource ContentBackground}" />
+                                <Setter Property="Border.BorderBrush" Value="Black" />
+                                <Setter Property="Border.BorderThickness" Value="0,1,0,0" />
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="True" />
+                                    <Condition Property="IsChecked" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Border.Background" Value="{StaticResource ContentBackgroundAlt}" />
+                                <Setter Property="Border.BorderBrush" Value="{StaticResource ContentBackground}" />
+                                <Setter Property="Border.BorderThickness" Value="0,1,0,0" />
+                            </MultiTrigger>
+                        </Style.Triggers>
+                        <Style.Resources>
+                            <Style TargetType="{x:Type iconPacks:PackIconControlBase}" BasedOn="{StaticResource WolvenKitToolBarButtonIcon}">
+                                <Setter Property="Visibility" Value="{Binding IsChecked, ElementName=toolbarIcons, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            </Style>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource WolvenKitToolBarButtonText}">
+                                <Setter Property="Visibility" Value="{Binding IsChecked, ElementName=toolbarLabels, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            </Style>
+                        </Style.Resources>
+                    </Style>
+                </ToolBarTray.Resources>
 
-            <ToolBarTray.Resources>
-                <Style x:Key="WolvenKitToolBarButtonIcon" TargetType="{x:Type iconPacks:PackIconControlBase}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type UIElement}, AncestorLevel=2}}" Value="False">
-                            <Setter Property="Foreground" Value="{StaticResource Border}" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-                <Style x:Key="WolvenKitToolBarButtonIconEraser" TargetType="{x:Type iconPacks:PackIconControlBase}" BasedOn="{StaticResource WolvenKitToolBarButtonIcon}">
-                    <Setter Property="Foreground" Value="{StaticResource ContentBackgroundAlt}" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type UIElement}, AncestorLevel=2}}" Value="True">
-                            <Setter Property="Foreground" Value="{StaticResource ContentBackgroundAlt5}" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource AncestorType={x:Type UIElement}, AncestorLevel=2}}" Value="True">
-                            <Setter Property="Foreground" Value="{StaticResource ContentBackground}" />
-                        </DataTrigger>
-                        <MultiDataTrigger>
-                            <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type UIElement}, AncestorLevel=2}}" Value="True" />
-                                <Condition Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource AncestorType={x:Type UIElement}, AncestorLevel=2}}" Value="True" />
-                            </MultiDataTrigger.Conditions>
-                            <Setter Property="Foreground" Value="{StaticResource ContentBackgroundAlt}" />
-                        </MultiDataTrigger>
-                    </Style.Triggers>
-                </Style>
-                <Style x:Key="WolvenKitToolBarButtonText" TargetType="TextBlock">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type UIElement}}}" Value="False">
-                            <Setter Property="Foreground" Value="{StaticResource Border}" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-                <Style x:Key="{x:Static ToolBar.ButtonStyleKey}" TargetType="{x:Type Button}">
-                    <Setter Property="BorderBrush" Value="Transparent" />
-                    <Setter Property="BorderThickness" Value="0" />
-                    <Setter Property="Border.Background" Value="Transparent" />
-                    <Setter Property="Height" Value="22" />
-                    <Setter Property="Border.Padding" Value="5,0" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type Button}">
-                                <Border Background="{TemplateBinding Border.Background}" CornerRadius="3" Padding="{TemplateBinding Border.Padding}">
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt5}" />
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Background" Value="{StaticResource ContentBackground}" />
-                        </Trigger>
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsMouseOver" Value="True" />
-                                <Condition Property="IsPressed" Value="True" />
-                            </MultiTrigger.Conditions>
-                            <Setter Property="Border.Background" Value="{StaticResource ContentBackgroundAlt}" />
-                        </MultiTrigger>
-                    </Style.Triggers>
-                    <Style.Resources>
-                        <Style TargetType="{x:Type iconPacks:PackIconControlBase}" BasedOn="{StaticResource WolvenKitToolBarButtonIcon}">
-                            <Setter Property="Visibility" Value="{Binding IsChecked, ElementName=toolbarIcons, Converter={StaticResource BoolToVisibilityConverter}}" />
-                        </Style>
-                        <Style TargetType="TextBlock" BasedOn="{StaticResource WolvenKitToolBarButtonText}">
-                            <Setter Property="Visibility" Value="{Binding IsChecked, ElementName=toolbarLabels, Converter={StaticResource BoolToVisibilityConverter}}" />
-                        </Style>
-                    </Style.Resources>
-                </Style>
-                <Style x:Key="{x:Static ToolBar.ToggleButtonStyleKey}" TargetType="{x:Type ToggleButton}">
-                    <Setter Property="Border.Background" Value="{StaticResource ContentBackgroundAlt4}" />
-                    <Setter Property="Height" Value="22" />
-                    <Setter Property="Border.Padding" Value="5,0" />
-                    <Setter Property="Border.Margin" Value="2,0,0,0" />
-                    <Setter Property="Border.BorderBrush" Value="{StaticResource ContentBackground}" />
-                    <Setter Property="Border.BorderThickness" Value="0,0,0,1" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type ToggleButton}">
-                                <Border Background="{TemplateBinding Border.Background}" CornerRadius="3" Padding="{TemplateBinding Border.Padding}" Margin="{TemplateBinding Border.Margin}" BorderBrush="{TemplateBinding Border.BorderBrush}" BorderThickness="{TemplateBinding Border.BorderThickness}">
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Border.Background" Value="{StaticResource ContentBackgroundAlt5}" />
-                            <Setter Property="Border.BorderBrush" Value="{StaticResource ContentBackground}" />
-                            <Setter Property="Border.BorderThickness" Value="0,0,0,1" />
-                        </Trigger>
-                        <Trigger Property="IsChecked" Value="True">
-                            <Setter Property="Border.Background" Value="{StaticResource ContentBackground}" />
-                            <Setter Property="Border.BorderBrush" Value="Black" />
-                            <Setter Property="Border.BorderThickness" Value="0,1,0,0" />
-                        </Trigger>
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsMouseOver" Value="True" />
-                                <Condition Property="IsChecked" Value="True" />
-                            </MultiTrigger.Conditions>
-                            <Setter Property="Border.Background" Value="{StaticResource ContentBackgroundAlt}" />
-                            <Setter Property="Border.BorderBrush" Value="{StaticResource ContentBackground}" />
-                            <Setter Property="Border.BorderThickness" Value="0,1,0,0" />
-                        </MultiTrigger>
-                    </Style.Triggers>
-                    <Style.Resources>
-                        <Style TargetType="{x:Type iconPacks:PackIconControlBase}" BasedOn="{StaticResource WolvenKitToolBarButtonIcon}">
-                            <Setter Property="Visibility" Value="{Binding IsChecked, ElementName=toolbarIcons, Converter={StaticResource BoolToVisibilityConverter}}" />
-                        </Style>
-                        <Style TargetType="TextBlock" BasedOn="{StaticResource WolvenKitToolBarButtonText}">
-                            <Setter Property="Visibility" Value="{Binding IsChecked, ElementName=toolbarLabels, Converter={StaticResource BoolToVisibilityConverter}}" />
-                        </Style>
-                    </Style.Resources>
-                </Style>
-            </ToolBarTray.Resources>
-            
-            <!-- New ToolBar Buttons Start -->
-            
-            <ToolBar Background="Transparent">
-                <TextBlock Visibility="Collapsed" Text="File:" Height="30" Padding="5,7" Foreground="{StaticResource ContentForeground}" />
-                <Button Command="{Binding NewFileCommand}" ToolTip="New File">
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconMaterial
-                            Style="{StaticResource WolvenKitToolBarButtonIcon}"
-                            Kind="FilePlus"
-                            Foreground="{StaticResource WolvenKitCyan}"/>
-                        <TextBlock Text="New File" Padding="5,0,0,0" />
-                    </StackPanel>
-                </Button>
-                <Button Command="{Binding SaveFileCommand}" ToolTip="Save File">
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconMaterial
+                <!-- New ToolBar Buttons Start -->
+
+                <ToolBar Background="Transparent">
+                    <TextBlock Visibility="Collapsed" Text="File:" Height="30" Padding="5,7" Foreground="{StaticResource ContentForeground}" />
+                    <Button Command="{Binding NewFileCommand}" ToolTip="New File">
+                        <StackPanel Orientation="Horizontal">
+                            <Grid>
+                                <iconPacks:PackIconMaterial
+                                Padding="0,0,2,2"
+                                Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                Kind="File"
+                                Foreground="{StaticResource WolvenKitYellow}"/>
+                                <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIconEraser}"
+                                Padding="6,6,-3,-3"
+                                Kind="Circle" />
+                                <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                Padding="8,8,-1,-1"
+                                Kind="PlusCircle" />
+                            </Grid>
+                            <TextBlock Text="New File" Padding="5,0,0,0" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding SaveFileCommand}" ToolTip="Save File">
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconMaterial
+                            Padding="0,1,0,1"
                             Style="{StaticResource WolvenKitToolBarButtonIcon}"
                             Foreground="{StaticResource WolvenKitCyan}"
                             Kind="ContentSave" />
-                        <TextBlock Text="Save" Padding="5,0,0,0" />
-                    </StackPanel>
-                </Button>
-                <Button Command="{Binding SaveAsCommand}" ToolTip="Save File">
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconMaterial Style="{StaticResource WolvenKitToolBarButtonIcon}"
-                                    Foreground="{StaticResource WolvenKitCyan}"
-                                    Kind="ContentSaveEdit" />
-                        <TextBlock Text="Save As" Padding="5,0,0,0" />
-                    </StackPanel>
-                </Button>
-                <Button Command="{Binding SaveAllCommand}" ToolTip="Save All Files">
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconMaterial Style="{StaticResource WolvenKitToolBarButtonIcon}"
-                                    Foreground="{StaticResource WolvenKitCyan}"
+                            <TextBlock Text="Save" Padding="5,0,0,0" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding SaveAsCommand}" ToolTip="Save File">
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconMaterial
+                            Padding="0,1,0,1"
+                            Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                            Foreground="{StaticResource WolvenKitCyan}"
+                            Kind="ContentSaveEdit" />
+                            <TextBlock Text="Save As" Padding="5,0,0,0" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding SaveAllCommand}" ToolTip="Save All Files">
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconMaterial
+                            Padding="0,1,0,1"
+                            Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                            Foreground="{StaticResource WolvenKitCyan}"
                                     Kind="ContentSaveAll" />
-                        <TextBlock Text="Save All" Padding="5,0,0,0" />
-                    </StackPanel>
-                </Button>
-                <Separator Margin="3" />
-                <TextBlock Text="Project:" Height="30" Padding="5,7" Visibility="Collapsed" />
-                <Button ToolTip="New Project" x:Name="ToolbarNewProjectButton">
-                    <StackPanel Orientation="Horizontal">
-                        <Grid>
-                            <iconPacks:PackIconMaterialDesign Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                            <TextBlock Text="Save All" Padding="5,0,0,0" />
+                        </StackPanel>
+                    </Button>
+                    <Separator Margin="3" />
+                    <TextBlock Text="Project:" Height="30" Padding="5,7" Visibility="Collapsed" />
+                    <Button ToolTip="New Project" x:Name="ToolbarNewProjectButton">
+                        <StackPanel Orientation="Horizontal">
+                            <Grid>
+                                <iconPacks:PackIconMaterialDesign Style="{StaticResource WolvenKitToolBarButtonIcon}"
                                 Padding="0,0,2,2"
                                 Foreground="{StaticResource WolvenKitTan}"
                                 Kind="Folder" />
-                            <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIconEraser}"
+                                <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIconEraser}"
                                 Padding="6,6,-3,-3"
                                 Kind="Circle" />
-                            <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
                                 Padding="8,8,-1,-1"
                                 Kind="PlusCircle" />
-                        </Grid>
-                        <TextBlock Text="New Project" Padding="5,0,0,0" />
-                    </StackPanel>
-                </Button>
-                <Button Command="{Binding OpenProjectCommand}" ToolTip="Open Project">
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                            </Grid>
+                            <TextBlock Text="New Project" Padding="5,0,0,0" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding OpenProjectCommand}" ToolTip="Open Project">
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
                                 Foreground="{StaticResource WolvenKitTan}"
                                 Kind="FolderOpen" />
-                        <TextBlock Text="Open Project" Padding="5,0,0,0" />
-                    </StackPanel>
-                </Button>
-                <Button Command="{Binding PackProjectCommand}" ToolTip="Pack Project">
-                    <StackPanel Orientation="Horizontal">
-                        <Grid>
-                            <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                            <TextBlock Text="Open Project" Padding="5,0,0,0" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding PackProjectCommand}" ToolTip="Pack Project">
+                        <StackPanel Orientation="Horizontal">
+                            <Grid>
+                                <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
                                 Foreground="{StaticResource WolvenKitRed}"
                                 Padding="0,0,2,2"
                                 Kind="Archive" />
-                            <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIconEraser}"
+                                <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIconEraser}"
                                 Padding="6,6,-3,-3"
                                 Kind="Circle" />
-                            <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
                                 Padding="8,8,-1,-1"
                                 Kind="Cog" />
-                        </Grid>
-                        <TextBlock Text="Pack Project" Padding="5,0,0,0" />
-                    </StackPanel>
-                </Button>
-                <Button Command="{Binding PackInstallProjectCommand}" ToolTip="Pack &amp; Install Project">
-                    <StackPanel Orientation="Horizontal">
-                        <Grid>
-                            <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                            </Grid>
+                            <TextBlock Text="Pack Project" Padding="5,0,0,0" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding PackInstallProjectCommand}" ToolTip="Pack &amp; Install Project">
+                        <StackPanel Orientation="Horizontal">
+                            <Grid>
+                                <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
                                 Foreground="{StaticResource WolvenKitRed}"
                                 Padding="0,0,2,2"
                                 Kind="Archive" />
-                            <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIconEraser}"
+                                <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIconEraser}"
                                 Padding="7,7,-2,-2"
                                 Kind="ArrowRight" />
-                            <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
                                 Padding="9,8,-1,-1"
                                 Kind="ArrowRight" />
-                        </Grid>
-                        <TextBlock Text="Pack &amp; Install" Padding="5,0,0,0" />
-                    </StackPanel>
-                </Button>
-            </ToolBar>
-            <ToolBar Background="Transparent">
-                <TextBlock Text="MatRepo:" Height="30" Padding="5,7" Foreground="{StaticResource ContentForeground}" Visibility="Collapsed"/>
-                <Button Click="GenerateMaterialRepoButton_Click" ToolTip="Generate Repository">
-                    <StackPanel Orientation="Horizontal">
-                        <Grid>
-                            <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                            </Grid>
+                            <TextBlock Text="Pack &amp; Install" Padding="5,0,0,0" />
+                        </StackPanel>
+                    </Button>
+                    <Separator Margin="3" />
+                    <TextBlock Text="MatRepo:" Height="30" Padding="5,7" Foreground="{StaticResource ContentForeground}" Visibility="Collapsed"/>
+                    <Menu Height="22" Margin="0,0,0,0">
+                        <MenuItem Header="Game Depot" HorizontalContentAlignment="Left">
+                            <MenuItem.Icon>
+                                <iconPacks:PackIconCodicons Margin="2,5,-8,0" Width="7"
+                                    Kind="TriangleDown" />
+                            </MenuItem.Icon>
+
+                            <MenuItem Command="{Binding UnbundleGameCommand}" Header="Unbundle Game to Depot">
+                                <MenuItem.Icon>
+                                    <Grid Margin="0,0,-8,0" Width="18">
+                                        <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
                                                     Foreground="{StaticResource WolvenKitTan}"
                                 Padding="0,0,2,2"
-                                Kind="List" />
-                            <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIconEraser}"
+                                Kind="Archive" />
+                                        <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                                    Foreground="{StaticResource ContentBackgroundAlt2}"
                                 Padding="6,6,-3,-3"
                                 Kind="Circle" />
-                            <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                        <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
                                 Padding="8,8,-1,-1"
                                 Kind="Cog" />
-                        </Grid>
-                        <TextBlock Text="Generate Depot" Padding="5,0,0,0" />
-                    </StackPanel>
-                </Button>
-                <Button Command="{Binding OpenMaterialRepositoryCommand}" ToolTip="Open Depot">
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                    </Grid>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Click="GenerateMaterialRepoButton_Click" Header="Extract Materials to Depot">
+                                <MenuItem.Icon>
+                                    <Grid Margin="0,0,-8,0" Width="18">
+                                        <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                                    Foreground="{StaticResource WolvenKitTan}"
+                                Padding="0,0,2,2"
+                                Kind="PictureOutline" />
+                                        <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                                    Foreground="{StaticResource ContentBackgroundAlt2}"
+                                Padding="6,6,-3,-3"
+                                Kind="Circle" />
+                                        <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                Padding="8,8,-1,-1"
+                                Kind="Cog" />
+                                    </Grid>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Command="{Binding OpenMaterialRepositoryCommand}" Header="Browse Game Depot">
+                                <MenuItem.Icon>
+                                    <Grid Margin="0,0,-8,0" Width="18">
+                                        <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
                                     Foreground="{StaticResource WolvenKitTan}"
-                                    Kind="List" />
-                        <TextBlock Text="Browse Depot" Padding="5,0,0,0" />
-                    </StackPanel>
-                </Button>
-                <Button Command="{Binding UnbundleGameCommand}" ToolTip="Unbundle Game Files">
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
-                                    Kind="CloudDownload" />
-                        <TextBlock Text="Unbundle Game" Padding="5,0,0,0" />
-                    </StackPanel>
-                </Button>
-            </ToolBar>
-            <ToolBar Background="Transparent">
-                <TextBlock Text="Panels:" Height="30" Padding="5,7" Foreground="{StaticResource ContentForeground}" Visibility="Collapsed" />
-                <ToggleButton Command="{Binding ViewProjectExplorerCommand}" ToolTip="Project Explorer">
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
-                                    Kind="Notebook" />
-                        <TextBlock Text="Project Explorer" Padding="5,0,0,0" />
-                    </StackPanel>
-                </ToggleButton>
-                <ToggleButton Command="{Binding ViewAssetBrowserCommand}" ToolTip="Asset Browser">
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconBootstrapIcons Style="{StaticResource WolvenKitToolBarButtonIcon}"
-                                    Kind="InboxesFill" />
-                        <TextBlock Text="Asset Browser" Padding="5,0,0,0" />
-                    </StackPanel>
-                </ToggleButton>
-                <ToggleButton Command="{Binding ViewPropertiesCommand}" ToolTip="Properties">
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
-                                    Kind="SymbolProperty" />
-                        <TextBlock Text="Properties" Padding="5,0,0,0" />
-                    </StackPanel>
-                </ToggleButton>
-                <ToggleButton Command="{Binding ViewLogCommand}" ToolTip="Log">
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
-                                    Kind="List" />
-                        <TextBlock Text="Log" Padding="5,0,0,0" />
-                    </StackPanel>
-                </ToggleButton>
-                <ToggleButton Command="{Binding ShowImportExportToolCommand}" ToolTip="Import / Export">
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconMaterialDesign Style="{StaticResource WolvenKitToolBarButtonIcon}"
-                                    Kind="ImportExport" />
-                        <TextBlock Text="Import / Export" Padding="5,0,0,0" />
-                    </StackPanel>
-                </ToggleButton>
-                <Menu Height="22" Margin="2,0,0,0">
-                    <MenuItem Header="View Options">
-                        <MenuItem Header="Show File Preview" IsCheckable="True" IsChecked="{Binding _settingsManager.ShowFilePreview, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  ToolTip="Toggle interactive file preview for improved performance"/>
-                        <MenuItem Click="RibbonButton_Click" Header="Reset Panel Layout">
-                            <MenuItem.Icon>
-                                <iconPacks:PackIconMaterialDesign Padding="7,1,-2,0"
-                                    Kind="Refresh" />
-                            </MenuItem.Icon>
+                                    Kind="List"/>
+                                    </Grid>
+                                </MenuItem.Icon>
+                            </MenuItem>
                         </MenuItem>
-                        <Separator Background="{StaticResource BorderAlt}" Margin="0,5,0,3"/>
-                        <MenuItem x:Name="lockTop" Header="Lock Toolbar" IsCheckable="True" IsChecked="True" />
-                        <MenuItem x:Name="toolbarIcons" Header="Show Toolbar Icons" IsCheckable="True" IsChecked="True" />
-                        <MenuItem x:Name="toolbarLabels" Header="Show Toolbar Labels" IsCheckable="True" IsChecked="True" />
-                        <MenuItem x:Name="ribbonEnabled" Header="Use Ribbon Instead" IsCheckable="True" IsChecked="False" />
-                    </MenuItem>
-                </Menu>
-            </ToolBar>
-            <ToolBar Background="Transparent">
-                <TextBlock Text="Options:" Height="30" Padding="5,7" Foreground="{StaticResource ContentForeground}" Visibility="Collapsed"/>
-                <Button Command="{Binding ShowSettingsCommand}" ToolTip="Settings">
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
-                                                    Foreground="{StaticResource WolvenKitCyan}"
+                    </Menu>
+                    <TextBlock Text="Panels:" Height="30" Padding="5,7" Foreground="{StaticResource ContentForeground}" Visibility="Collapsed" />
+                    <Menu Height="22" Margin="0,0,3,0">
+                        <MenuItem Header="View Options">
+                            <MenuItem.Icon>
+                                <iconPacks:PackIconCodicons Margin="2,5,-8,0" Width="7"
+                                    Kind="TriangleDown" />
+                            </MenuItem.Icon>
+                            <MenuItem Command="{Binding ViewProjectExplorerCommand}" IsCheckable="True" Header="Project Explorer"/>
+                            <MenuItem Command="{Binding ViewAssetBrowserCommand}" IsCheckable="True" Header="Asset Browser"/>
+                            <MenuItem Command="{Binding ViewPropertiesCommand}" IsCheckable="True" Header="Properties"/>
+                            <MenuItem Command="{Binding ViewLogCommand}" IsCheckable="True" Header="Log"/>
+                            <MenuItem Command="{Binding ShowImportExportToolCommand}" IsCheckable="True" Header="Import / Export"/>
+                            <Separator Background="{StaticResource BorderAlt}" Margin="0,5,0,3"/>
+                            <MenuItem Click="RibbonButton_Click" Header="Reset Panel Layout">
+                                <MenuItem.Icon>
+                                    <iconPacks:PackIconMaterialDesign Padding="7,1,-2,0"
+                                    Kind="Refresh" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <Separator Background="{StaticResource BorderAlt}" Margin="0,5,0,3"/>
+                            <MenuItem Header="Show File Preview" IsCheckable="True" IsChecked="{Binding _settingsManager.ShowFilePreview, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  ToolTip="Toggle interactive file preview for improved performance"/>
+                            <Separator Background="{StaticResource BorderAlt}" Margin="0,5,0,3"/>
+                            <!--MenuItem x:Name="lockTop" Header="Lock Toolbar" IsCheckable="True" IsChecked="True" /-->
+                            <!--MenuItem x:Name="toolbarIcons" Header="Show Toolbar Icons" IsCheckable="True" IsChecked="True" /-->
+                            <MenuItem x:Name="toolbarLabels" Header="Show Toolbar Labels" IsCheckable="True" IsChecked="True" />
+                            <MenuItem x:Name="ribbonEnabled" Header="Use Ribbon Instead" IsCheckable="True" IsChecked="False" />
+                        </MenuItem>
+                    </Menu>
+                    <TextBlock Text="Options:" Height="30" Padding="5,7" Foreground="{StaticResource ContentForeground}" Visibility="Collapsed"/>
+                    <Button Command="{Binding ShowSettingsCommand}" ToolTip="Settings">
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
                                     Kind="Settings" />
-                        <TextBlock Text="Settings" Padding="5,0,0,0" />
-                    </StackPanel>
-                </Button>
-                <Button Command="{Binding ShowBugReportCommand}" ToolTip="Bug Report">
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
-                                                    Foreground="{StaticResource WolvenKitCyan}"
+                            <TextBlock Text="Settings" Padding="5,0,0,0" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding ShowBugReportCommand}" ToolTip="Bug Report">
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
                                     Kind="Bug" />
-                        <TextBlock Text="Report Bug" Padding="5,0,0,0" />
-                    </StackPanel>
-                </Button>
-                <Button Command="{Binding ShowFeedbackCommand}" ToolTip="Feedback">
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
-                                                    Foreground="{StaticResource WolvenKitCyan}"
+                            <TextBlock Text="Report Bug" Padding="5,0,0,0" />
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding ShowFeedbackCommand}" ToolTip="Feedback">
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
                                     Kind="Feedback" />
-                        <TextBlock Text="Feedback" Padding="5,0,0,0" />
-                    </StackPanel>
-                </Button>
-            </ToolBar> 
-        </ToolBarTray>
+                            <TextBlock Text="Feedback" Padding="5,0,0,0" />
+                        </StackPanel>
+                    </Button>
+                </ToolBar>
+            </ToolBarTray>
 
-        <fluent:Ribbon
+            <fluent:Ribbon
             x:Name="ribbon"
             Grid.Row="0"
             Margin="0,0,0,0"
             Panel.ZIndex="0"
             Visibility="Collapsed">
 
-            <!--  StartScreen  -->
-            <fluent:Ribbon.StartScreen>
-                <fluent:StartScreen
+                <!--  StartScreen  -->
+                <fluent:Ribbon.StartScreen>
+                    <fluent:StartScreen
                     x:Name="startScreen"
                     IsOpen="{Binding BackstageIsOpen}"
                     Shown="{Binding StartScreenShown}">
-                    <HomeView:HomePageView x:Name="HMPV" />
-                </fluent:StartScreen>
-            </fluent:Ribbon.StartScreen>
+                        <HomeView:HomePageView x:Name="HMPV" />
+                    </fluent:StartScreen>
+                </fluent:Ribbon.StartScreen>
 
-        </fluent:Ribbon>
+            </fluent:Ribbon>
 
-        
-        
-        <syncfusion:Ribbon
+
+
+            <syncfusion:Ribbon
             x:Name="_ribbon"
             Margin="60,0,0,-2"
             EnableSimplifiedLayoutMode="True" 
@@ -499,49 +510,49 @@
             VerticalAlignment="Top"
             BorderThickness="0"
             >
-            <!--<syncfusion:Ribbon.QuickAccessToolBar>
+                <!--<syncfusion:Ribbon.QuickAccessToolBar>
                 <syncfusion:QuickAccessToolBar Margin="65,0,0,0" />
             </syncfusion:Ribbon.QuickAccessToolBar>-->
 
-            <!--  Contextual Tabs  -->
-            <syncfusion:Ribbon.ContextTabGroups>
+                <!--  Contextual Tabs  -->
+                <syncfusion:Ribbon.ContextTabGroups>
 
-                <!--  Contextual CR2W group  -->
-                <syncfusion:ContextTabGroup
+                    <!--  Contextual CR2W group  -->
+                    <syncfusion:ContextTabGroup
                     x:Name="documentContextTab"
                     Height="90"
                     Margin="14"
                     IsGroupVisible="False"
                     Label="DOCUMENT">
 
-                    <syncfusion:RibbonTab
+                        <syncfusion:RibbonTab
                         MinWidth="100"
                         Caption="EDIT"
                         IsChecked="True" />
 
-                </syncfusion:ContextTabGroup>
+                    </syncfusion:ContextTabGroup>
 
-                <!--  Contextual Asset Browser group  -->
-                <syncfusion:ContextTabGroup
+                    <!--  Contextual Asset Browser group  -->
+                    <syncfusion:ContextTabGroup
                     x:Name="abcontextab"
                     Height="90"
                     Margin="14"
                     IsGroupVisible="False"
                     Label="ASSET BROWSER">
 
-                    <syncfusion:RibbonTab
+                        <syncfusion:RibbonTab
                         MinWidth="100"
                         Caption="ACTIONS"
                         IsChecked="True">
 
-                        <!--  Search bar  -->
-                        <syncfusion:RibbonBar
+                            <!--  Search bar  -->
+                            <syncfusion:RibbonBar
                             x:Name="ABSearchActions"
                             Width="auto"
                             Header="Search">
 
-                            <!--  Search by other keys  -->
-                            <syncfusion:DropDownButton
+                                <!--  Search by other keys  -->
+                                <syncfusion:DropDownButton
                                 x:Name="SearchOther"
                                 IconStretch="Fill"
                                 IconType="Icon"
@@ -550,42 +561,42 @@
                                 SizeForm="Large"
                                 HorizontalAlignment="Left">
 
-                                <syncfusion:DropDownButton.IconTemplate>
-                                    <DataTemplate>
-                                        <iconPacks:PackIconCodicons
+                                    <syncfusion:DropDownButton.IconTemplate>
+                                        <DataTemplate>
+                                            <iconPacks:PackIconCodicons
                                             Width="auto"
                                             Height="auto"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Stretch"
                                             Kind="Search" />
-                                    </DataTemplate>
-                                </syncfusion:DropDownButton.IconTemplate>
+                                        </DataTemplate>
+                                    </syncfusion:DropDownButton.IconTemplate>
 
-                                <syncfusion:DropDownMenuItem x:Name="SearchKindButton" Header="Kind" CommandParameter="kind">
-                                    <syncfusion:DropDownMenuItem.Icon>
-                                        <iconPacks:PackIconCodicons Kind="FileCode" />
-                                    </syncfusion:DropDownMenuItem.Icon>
-                                </syncfusion:DropDownMenuItem>
-                                <syncfusion:DropDownMenuItem x:Name="SearchHashButton" Header="Hash" CommandParameter="hash">
-                                    <syncfusion:DropDownMenuItem.Icon>
-                                        <iconPacks:PackIconCodicons Kind="FileCode" />
-                                    </syncfusion:DropDownMenuItem.Icon>
-                                </syncfusion:DropDownMenuItem>
-                                <syncfusion:DropDownMenuItem x:Name="SearchNameButton" Header="Name" CommandParameter="name">
-                                    <syncfusion:DropDownMenuItem.Icon>
-                                        <iconPacks:PackIconCodicons Kind="FileCode" />
-                                    </syncfusion:DropDownMenuItem.Icon>
-                                </syncfusion:DropDownMenuItem>
-                                <syncfusion:DropDownMenuItem x:Name="SearchLimitButton" Header="Limit" CommandParameter="limit">
-                                    <syncfusion:DropDownMenuItem.Icon>
-                                        <iconPacks:PackIconCodicons Kind="FileCode" />
-                                    </syncfusion:DropDownMenuItem.Icon>
-                                </syncfusion:DropDownMenuItem>
+                                    <syncfusion:DropDownMenuItem x:Name="SearchKindButton" Header="Kind" CommandParameter="kind">
+                                        <syncfusion:DropDownMenuItem.Icon>
+                                            <iconPacks:PackIconCodicons Kind="FileCode" />
+                                        </syncfusion:DropDownMenuItem.Icon>
+                                    </syncfusion:DropDownMenuItem>
+                                    <syncfusion:DropDownMenuItem x:Name="SearchHashButton" Header="Hash" CommandParameter="hash">
+                                        <syncfusion:DropDownMenuItem.Icon>
+                                            <iconPacks:PackIconCodicons Kind="FileCode" />
+                                        </syncfusion:DropDownMenuItem.Icon>
+                                    </syncfusion:DropDownMenuItem>
+                                    <syncfusion:DropDownMenuItem x:Name="SearchNameButton" Header="Name" CommandParameter="name">
+                                        <syncfusion:DropDownMenuItem.Icon>
+                                            <iconPacks:PackIconCodicons Kind="FileCode" />
+                                        </syncfusion:DropDownMenuItem.Icon>
+                                    </syncfusion:DropDownMenuItem>
+                                    <syncfusion:DropDownMenuItem x:Name="SearchLimitButton" Header="Limit" CommandParameter="limit">
+                                        <syncfusion:DropDownMenuItem.Icon>
+                                            <iconPacks:PackIconCodicons Kind="FileCode" />
+                                        </syncfusion:DropDownMenuItem.Icon>
+                                    </syncfusion:DropDownMenuItem>
 
-                            </syncfusion:DropDownButton>
+                                </syncfusion:DropDownButton>
 
-                            <!--  Open file Location  -->
-                            <syncfusion:RibbonButton
+                                <!--  Open file Location  -->
+                                <syncfusion:RibbonButton
                                 x:Name="SearchOpenFileLocation"
                                 IconStretch="Fill"
                                 IconType="Icon"
@@ -593,28 +604,28 @@
                                 Padding="8,0"
                                 SizeForm="Large">
 
-                                <syncfusion:RibbonButton.IconTemplate>
-                                    <DataTemplate>
-                                        <iconPacks:PackIconMaterialDesign
+                                    <syncfusion:RibbonButton.IconTemplate>
+                                        <DataTemplate>
+                                            <iconPacks:PackIconMaterialDesign
                                             Width="auto"
                                             Height="auto"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Stretch"
                                             Kind="OpenInBrowser" />
-                                    </DataTemplate>
-                                </syncfusion:RibbonButton.IconTemplate>
-                            </syncfusion:RibbonButton>
+                                        </DataTemplate>
+                                    </syncfusion:RibbonButton.IconTemplate>
+                                </syncfusion:RibbonButton>
 
-                        </syncfusion:RibbonBar>
+                            </syncfusion:RibbonBar>
 
-                        <!--  File bar  -->
-                        <syncfusion:RibbonBar
+                            <!--  File bar  -->
+                            <syncfusion:RibbonBar
                             x:Name="ABFileActions"
                             Width="auto"
                             Header="File">
 
-                            <!--  Add selected Items(s) to Project Button  -->
-                            <syncfusion:RibbonButton
+                                <!--  Add selected Items(s) to Project Button  -->
+                                <syncfusion:RibbonButton
                                 x:Name="AddSelectedItemsButton"
                                 IconStretch="Fill"
                                 IconType="Icon"
@@ -622,21 +633,21 @@
                                 Padding="8,0"
                                 SizeForm="Large">
 
-                                <syncfusion:RibbonButton.IconTemplate>
-                                    <DataTemplate>
-                                        <iconPacks:PackIconVaadinIcons
+                                    <syncfusion:RibbonButton.IconTemplate>
+                                        <DataTemplate>
+                                            <iconPacks:PackIconVaadinIcons
                                             Width="auto"
                                             Height="auto"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Stretch"
                                             Kind="FileAdd"
                                             Foreground="ForestGreen"/>
-                                    </DataTemplate>
-                                </syncfusion:RibbonButton.IconTemplate>
-                            </syncfusion:RibbonButton>
+                                        </DataTemplate>
+                                    </syncfusion:RibbonButton.IconTemplate>
+                                </syncfusion:RibbonButton>
 
-                            <!--  Toggle Mod Browser Button  -->
-                            <syncfusion:RibbonButton
+                                <!--  Toggle Mod Browser Button  -->
+                                <syncfusion:RibbonButton
                                 x:Name="ModBrowserButton"
                                 IconStretch="Fill"
                                 IconType="Icon"
@@ -644,28 +655,29 @@
                                 Padding="8,0"
                                 SizeForm="Large">
 
-                                <syncfusion:RibbonButton.IconTemplate>
-                                    <DataTemplate>
-                                        <iconPacks:PackIconCodicons
+                                    <syncfusion:RibbonButton.IconTemplate>
+                                        <DataTemplate>
+                                            <iconPacks:PackIconCodicons
                                             Width="auto"
                                             Height="auto"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Stretch"
                                             Kind="Database"
                                             Foreground="DarkViolet"/>
-                                    </DataTemplate>
-                                </syncfusion:RibbonButton.IconTemplate>
-                            </syncfusion:RibbonButton>
+                                        </DataTemplate>
+                                    </syncfusion:RibbonButton.IconTemplate>
+                                </syncfusion:RibbonButton>
 
-                        </syncfusion:RibbonBar>
+                            </syncfusion:RibbonBar>
 
-                        <!--  View bar  -->
-                        <!--syncfusion:RibbonBar
+                            <!--  View bar  -->
+                            <!--syncfusion:RibbonBar
                             Name="ABViewActions"
                             Width="auto"
                             Header="View"-->
 
-                            <!--  Expand All Folders  --><!--
+                            <!--  Expand All Folders  -->
+                            <!--
                             <syncfusion:RibbonButton
                                 x:Name="ExpandAllAB"
                                 Click="ExpandAllAB_Click"
@@ -687,7 +699,9 @@
                                 </syncfusion:RibbonButton.IconTemplate>
                             </syncfusion:RibbonButton>
 
-                            --><!--  Collapse All Folders  --><!--
+                            -->
+                            <!--  Collapse All Folders  -->
+                            <!--
                             <syncfusion:RibbonButton
                                 x:Name="collapseAllAB"
                                 Click="CollapseAllAB_Click"
@@ -709,7 +723,9 @@
                                 </syncfusion:RibbonButton.IconTemplate>
                             </syncfusion:RibbonButton>
 
-                            --><!--  Expand Single Folder  --><!--
+                            -->
+                            <!--  Expand Single Folder  -->
+                            <!--
                             <syncfusion:RibbonButton
                                 x:Name="ExpandSingleAB"
                                 Click="ExpandSingleAB_Click"
@@ -731,7 +747,9 @@
                                 </syncfusion:RibbonButton.IconTemplate>
                             </syncfusion:RibbonButton>
 
-                            --><!--  Collapse Single Folder  --><!--
+                            -->
+                            <!--  Collapse Single Folder  -->
+                            <!--
                             <syncfusion:RibbonButton
                                 x:Name="collapseSingleAB"
                                 Click="collapseSingleAB_Click"
@@ -752,31 +770,31 @@
                                     </DataTemplate>
                                 </syncfusion:RibbonButton.IconTemplate>
                             </syncfusion:RibbonButton>-->
-                            
-                        <!--/syncfusion:RibbonBar-->
-                        
-                    </syncfusion:RibbonTab>
 
-               </syncfusion:ContextTabGroup>
+                            <!--/syncfusion:RibbonBar-->
 
-                <!--  Contextual Project Explorer group  -->
-                <syncfusion:ContextTabGroup
+                        </syncfusion:RibbonTab>
+
+                    </syncfusion:ContextTabGroup>
+
+                    <!--  Contextual Project Explorer group  -->
+                    <syncfusion:ContextTabGroup
                     x:Name="projectexplorercontextab"
                     Height="90"
                     Margin="14"
                     IsGroupVisible="False"
                     Label="PROJECT EXPLORER">
-                    <syncfusion:RibbonTab
+                        <syncfusion:RibbonTab
                         MinWidth="100"
                         Caption="ACTIONS"
                         IsChecked="True">
-                        <!--  File bar  -->
-                        <syncfusion:RibbonBar
+                            <!--  File bar  -->
+                            <syncfusion:RibbonBar
                             Name="Actions"
                             Width="auto"
                             Header="File">
-                            <!--  Open File Button  -->
-                            <syncfusion:RibbonButton
+                                <!--  Open File Button  -->
+                                <syncfusion:RibbonButton
                                 x:Name="CPEOpenFileButton"
                                 Command="{Binding OpenFileCommand}"
                                 IconStretch="Fill"
@@ -785,20 +803,20 @@
                                 Padding="8,0"
                                 SizeForm="Large">
 
-                                <syncfusion:RibbonButton.IconTemplate>
-                                    <DataTemplate>
-                                        <iconPacks:PackIconCodicons
+                                    <syncfusion:RibbonButton.IconTemplate>
+                                        <DataTemplate>
+                                            <iconPacks:PackIconCodicons
                                             Width="auto"
                                             Height="auto"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Stretch"
                                             Kind="File" />
-                                    </DataTemplate>
-                                </syncfusion:RibbonButton.IconTemplate>
-                            </syncfusion:RibbonButton>
+                                        </DataTemplate>
+                                    </syncfusion:RibbonButton.IconTemplate>
+                                </syncfusion:RibbonButton>
 
-                            <!--  Copy File Button  -->
-                            <syncfusion:RibbonButton
+                                <!--  Copy File Button  -->
+                                <syncfusion:RibbonButton
                                 x:Name="CopyFileContext"
                                 Command="{Binding CopyFileCommand}"
                                 IconStretch="Fill"
@@ -807,20 +825,20 @@
                                 Padding="8,0"
                                 SizeForm="Large">
 
-                                <syncfusion:RibbonButton.IconTemplate>
-                                    <DataTemplate>
-                                        <iconPacks:PackIconVaadinIcons
+                                    <syncfusion:RibbonButton.IconTemplate>
+                                        <DataTemplate>
+                                            <iconPacks:PackIconVaadinIcons
                                             Width="auto"
                                             Height="auto"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Stretch"
                                             Kind="CopyOutline" />
-                                    </DataTemplate>
-                                </syncfusion:RibbonButton.IconTemplate>
-                            </syncfusion:RibbonButton>
+                                        </DataTemplate>
+                                    </syncfusion:RibbonButton.IconTemplate>
+                                </syncfusion:RibbonButton>
 
-                            <!--  Paste File Button  -->
-                            <syncfusion:RibbonButton
+                                <!--  Paste File Button  -->
+                                <syncfusion:RibbonButton
                                 x:Name="PasteFileContext"
                                 Command="{Binding PasteFileCommand}"
                                 IconStretch="Fill"
@@ -829,20 +847,20 @@
                                 Padding="8,0"
                                 SizeForm="Large">
 
-                                <syncfusion:RibbonButton.IconTemplate>
-                                    <DataTemplate>
-                                        <iconPacks:PackIconVaadinIcons
+                                    <syncfusion:RibbonButton.IconTemplate>
+                                        <DataTemplate>
+                                            <iconPacks:PackIconVaadinIcons
                                             Width="auto"
                                             Height="auto"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Stretch"
                                             Kind="Paste" />
-                                    </DataTemplate>
-                                </syncfusion:RibbonButton.IconTemplate>
-                            </syncfusion:RibbonButton>
+                                        </DataTemplate>
+                                    </syncfusion:RibbonButton.IconTemplate>
+                                </syncfusion:RibbonButton>
 
-                            <!--  Delete File Button  -->
-                            <syncfusion:RibbonButton
+                                <!--  Delete File Button  -->
+                                <syncfusion:RibbonButton
                                 x:Name="DeleteFileContext"
                                 Command="{Binding DeleteFileCommand}"
                                 IconStretch="Fill"
@@ -851,20 +869,20 @@
                                 Padding="8,0"
                                 SizeForm="Large">
 
-                                <syncfusion:RibbonButton.IconTemplate>
-                                    <DataTemplate>
-                                        <iconPacks:PackIconMaterialLight
+                                    <syncfusion:RibbonButton.IconTemplate>
+                                        <DataTemplate>
+                                            <iconPacks:PackIconMaterialLight
                                             Width="auto"
                                             Height="auto"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Stretch"
                                             Kind="Delete" />
-                                    </DataTemplate>
-                                </syncfusion:RibbonButton.IconTemplate>
-                            </syncfusion:RibbonButton>
+                                        </DataTemplate>
+                                    </syncfusion:RibbonButton.IconTemplate>
+                                </syncfusion:RibbonButton>
 
-                            <!--  Rename File Button  -->
-                            <syncfusion:RibbonButton
+                                <!--  Rename File Button  -->
+                                <syncfusion:RibbonButton
                                 x:Name="RenameFileContext"
                                 Command="{Binding RenameFileCommand}"
                                 IconStretch="Fill"
@@ -873,9 +891,9 @@
                                 Padding="8,0"
                                 SizeForm="Large">
 
-                                <syncfusion:RibbonButton.IconTemplate>
-                                    <DataTemplate>
-                                        <iconPacks:PackIconBoxIcons
+                                    <syncfusion:RibbonButton.IconTemplate>
+                                        <DataTemplate>
+                                            <iconPacks:PackIconBoxIcons
                                             Width="auto"
                                             Height="auto"
                                             MaxWidth="25"
@@ -883,12 +901,12 @@
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Stretch"
                                             Kind="RegularRename" />
-                                    </DataTemplate>
-                                </syncfusion:RibbonButton.IconTemplate>
-                            </syncfusion:RibbonButton>
+                                        </DataTemplate>
+                                    </syncfusion:RibbonButton.IconTemplate>
+                                </syncfusion:RibbonButton>
 
-                            <!--  Open in FileExplorer Button  -->
-                            <syncfusion:RibbonButton
+                                <!--  Open in FileExplorer Button  -->
+                                <syncfusion:RibbonButton
                                 x:Name="OpeninFileContext"
                                 Command="{Binding OpenInFileExplorerCommand}"
                                 IconStretch="Fill"
@@ -897,20 +915,20 @@
                                 Padding="8,0"
                                 SizeForm="Large">
 
-                                <syncfusion:RibbonButton.IconTemplate>
-                                    <DataTemplate>
-                                        <iconPacks:PackIconCodicons
+                                    <syncfusion:RibbonButton.IconTemplate>
+                                        <DataTemplate>
+                                            <iconPacks:PackIconCodicons
                                             Width="auto"
                                             Height="auto"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Stretch"
                                             Kind="FolderOpened" />
-                                    </DataTemplate>
-                                </syncfusion:RibbonButton.IconTemplate>
-                            </syncfusion:RibbonButton>
+                                        </DataTemplate>
+                                    </syncfusion:RibbonButton.IconTemplate>
+                                </syncfusion:RibbonButton>
 
-                            <!--  Export File - Simple Button  -->
-                            <syncfusion:RibbonButton
+                                <!--  Export File - Simple Button  -->
+                                <syncfusion:RibbonButton
                                 x:Name="ExportSimpleContext"
                                 IconStretch="Fill"
                                 IconType="Icon"
@@ -920,20 +938,20 @@
                                 SizeForm="Large"
                                 Visibility="Collapsed">
 
-                                <syncfusion:RibbonButton.IconTemplate>
-                                    <DataTemplate>
-                                        <iconPacks:PackIconCodicons
+                                    <syncfusion:RibbonButton.IconTemplate>
+                                        <DataTemplate>
+                                            <iconPacks:PackIconCodicons
                                             Width="auto"
                                             Height="auto"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Stretch"
                                             Kind="Export" />
-                                    </DataTemplate>
-                                </syncfusion:RibbonButton.IconTemplate>
-                            </syncfusion:RibbonButton>
+                                        </DataTemplate>
+                                    </syncfusion:RibbonButton.IconTemplate>
+                                </syncfusion:RibbonButton>
 
-                            <!--  Export File - Advanced Button  -->
-                            <syncfusion:RibbonButton
+                                <!--  Export File - Advanced Button  -->
+                                <syncfusion:RibbonButton
                                 x:Name="ExportAdvancedContext"
                                 IconStretch="Fill"
                                 IconType="Icon"
@@ -943,25 +961,25 @@
                                 SizeForm="Large"
                                 Visibility="Collapsed">
 
-                                <syncfusion:RibbonButton.IconTemplate>
-                                    <DataTemplate>
-                                        <iconPacks:PackIconCodicons
+                                    <syncfusion:RibbonButton.IconTemplate>
+                                        <DataTemplate>
+                                            <iconPacks:PackIconCodicons
                                             Width="auto"
                                             Height="auto"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Stretch"
                                             Kind="Tools" />
-                                    </DataTemplate>
-                                </syncfusion:RibbonButton.IconTemplate>
-                            </syncfusion:RibbonButton>
-                        </syncfusion:RibbonBar>
-                        <!--  Tree bar  -->
-                        <syncfusion:RibbonBar
+                                        </DataTemplate>
+                                    </syncfusion:RibbonButton.IconTemplate>
+                                </syncfusion:RibbonButton>
+                            </syncfusion:RibbonBar>
+                            <!--  Tree bar  -->
+                            <syncfusion:RibbonBar
                             Name="ActionsView"
                             Width="auto"
                             Header="View">
-                            <!--  Expand All Nodes  -->
-                            <syncfusion:RibbonButton
+                                <!--  Expand All Nodes  -->
+                                <syncfusion:RibbonButton
                                 x:Name="ExandAllNodesContext"
                                 Click="ExandAllNodesContext_Click"
                                 IconStretch="Fill"
@@ -970,20 +988,20 @@
                                 Padding="8,0"
                                 SizeForm="Small">
 
-                                <syncfusion:RibbonButton.IconTemplate>
-                                    <DataTemplate>
-                                        <iconPacks:PackIconCodicons
+                                    <syncfusion:RibbonButton.IconTemplate>
+                                        <DataTemplate>
+                                            <iconPacks:PackIconCodicons
                                             Width="auto"
                                             Height="auto"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Stretch"
                                             Kind="ExpandAll" />
-                                    </DataTemplate>
-                                </syncfusion:RibbonButton.IconTemplate>
-                            </syncfusion:RibbonButton>
+                                        </DataTemplate>
+                                    </syncfusion:RibbonButton.IconTemplate>
+                                </syncfusion:RibbonButton>
 
-                            <!--  Collapse All Nodes  -->
-                            <syncfusion:RibbonButton
+                                <!--  Collapse All Nodes  -->
+                                <syncfusion:RibbonButton
                                 x:Name="collapseAllNodesContext"
                                 Click="collapseAllNodesContext_Click"
                                 IconStretch="Fill"
@@ -992,20 +1010,20 @@
                                 Padding="8,0"
                                 SizeForm="Small">
 
-                                <syncfusion:RibbonButton.IconTemplate>
-                                    <DataTemplate>
-                                        <iconPacks:PackIconCodicons
+                                    <syncfusion:RibbonButton.IconTemplate>
+                                        <DataTemplate>
+                                            <iconPacks:PackIconCodicons
                                             Width="auto"
                                             Height="auto"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Stretch"
                                             Kind="CollapseAll" />
-                                    </DataTemplate>
-                                </syncfusion:RibbonButton.IconTemplate>
-                            </syncfusion:RibbonButton>
+                                        </DataTemplate>
+                                    </syncfusion:RibbonButton.IconTemplate>
+                                </syncfusion:RibbonButton>
 
-                            <!--  Expand Children Nodes  -->
-                            <syncfusion:RibbonButton
+                                <!--  Expand Children Nodes  -->
+                                <syncfusion:RibbonButton
                                 x:Name="ExandChildrenContext"
                                 Click="ExandChildrenContext_Click"
                                 IconStretch="Fill"
@@ -1014,20 +1032,20 @@
                                 Padding="8,0"
                                 SizeForm="Small">
 
-                                <syncfusion:RibbonButton.IconTemplate>
-                                    <DataTemplate>
-                                        <iconPacks:PackIconBootstrapIcons
+                                    <syncfusion:RibbonButton.IconTemplate>
+                                        <DataTemplate>
+                                            <iconPacks:PackIconBootstrapIcons
                                             Width="auto"
                                             Height="auto"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Stretch"
                                             Kind="ArrowsExpand" />
-                                    </DataTemplate>
-                                </syncfusion:RibbonButton.IconTemplate>
-                            </syncfusion:RibbonButton>
+                                        </DataTemplate>
+                                    </syncfusion:RibbonButton.IconTemplate>
+                                </syncfusion:RibbonButton>
 
-                            <!--  collapse Children Nodes  -->
-                            <syncfusion:RibbonButton
+                                <!--  collapse Children Nodes  -->
+                                <syncfusion:RibbonButton
                                 x:Name="CollapseChildrenContext"
                                 Click="CollapseChildrenContext_Click"
                                 IconStretch="Fill"
@@ -1036,27 +1054,27 @@
                                 Padding="8,0"
                                 SizeForm="Small">
 
-                                <syncfusion:RibbonButton.IconTemplate>
-                                    <DataTemplate>
-                                        <iconPacks:PackIconBootstrapIcons
+                                    <syncfusion:RibbonButton.IconTemplate>
+                                        <DataTemplate>
+                                            <iconPacks:PackIconBootstrapIcons
                                             Width="auto"
                                             Height="auto"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Stretch"
                                             Kind="ArrowsCollapse" />
-                                    </DataTemplate>
-                                </syncfusion:RibbonButton.IconTemplate>
-                            </syncfusion:RibbonButton>
-                        </syncfusion:RibbonBar>
-                    </syncfusion:RibbonTab>
-                </syncfusion:ContextTabGroup>
+                                        </DataTemplate>
+                                    </syncfusion:RibbonButton.IconTemplate>
+                                </syncfusion:RibbonButton>
+                            </syncfusion:RibbonBar>
+                        </syncfusion:RibbonTab>
+                    </syncfusion:ContextTabGroup>
 
-            </syncfusion:Ribbon.ContextTabGroups>
+                </syncfusion:Ribbon.ContextTabGroups>
 
-            <!--  Recent Projects Button  -->
-            <syncfusion:Ribbon.ApplicationMenu>
+                <!--  Recent Projects Button  -->
+                <syncfusion:Ribbon.ApplicationMenu>
 
-                <syncfusion:ApplicationMenu
+                    <syncfusion:ApplicationMenu
                     Name="_applicationMenu"
                     Width="38"
                     Height="38"
@@ -1065,10 +1083,10 @@
                     IsBelowAppButton="True"
                     IsPopupOpen="False">
 
-                    <syncfusion:RibbonMenuGroup Header="Project">
+                        <syncfusion:RibbonMenuGroup Header="Project">
 
-                        <!--  Recent Projects Button  -->
-                        <!--<ToggleButton
+                            <!--  Recent Projects Button  -->
+                            <!--<ToggleButton
                             x:Name="FileDrawer2"
                             Grid.Row="0"
                             Grid.Column="1"
@@ -1088,67 +1106,67 @@
                             </StackPanel>
                         </ToggleButton>-->
 
-                        <!--  New Project Button  -->
-                        <syncfusion:RibbonButton
+                            <!--  New Project Button  -->
+                            <syncfusion:RibbonButton
                             x:Name="AppMenuNewProjectButton"
                             IconStretch="Fill"
                             IconType="Icon"
                             Label="New Project"
                             SizeForm="Small">
-                            <syncfusion:RibbonButton.IconTemplate>
-                                <DataTemplate>
-                                    <iconPacks:PackIconCodicons
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconCodicons
                                         Width="auto"
                                         Height="auto"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Stretch"
                                         Kind="NewFolder" />
-                                </DataTemplate>
-                            </syncfusion:RibbonButton.IconTemplate>
-                        </syncfusion:RibbonButton>
-                        
-                        <!--  Open Project Button  -->
-                        <syncfusion:RibbonButton
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
+
+                            <!--  Open Project Button  -->
+                            <syncfusion:RibbonButton
                             x:Name="AppMenuOpenProjectButton"
                             IconStretch="Fill"
                             IconType="Icon"
                             Label="Open Project"
                             SizeForm="Small">
-                            <syncfusion:RibbonButton.IconTemplate>
-                                <DataTemplate>
-                                    <iconPacks:PackIconCodicons
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconCodicons
                                         Width="auto"
                                         Height="auto"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Stretch"
                                         Foreground="{DynamicResource MaterialDarkRibbonBackgroundBrush}"
                                         Kind="FolderOpened" />
-                                </DataTemplate>
-                            </syncfusion:RibbonButton.IconTemplate>
-                        </syncfusion:RibbonButton>
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
 
-                        <!--  Pack Project Button  -->
-                        <syncfusion:RibbonButton
+                            <!--  Pack Project Button  -->
+                            <syncfusion:RibbonButton
                             x:Name="AppMenuPackProjectButton"
                             IconStretch="Fill"
                             IconType="Icon"
                             Label="Pack Project"
                             SizeForm="Small">
-                            <syncfusion:RibbonButton.IconTemplate>
-                                <DataTemplate>
-                                    <iconPacks:PackIconCodicons
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconCodicons
                                         Width="auto"
                                         Height="auto"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Stretch"
                                         Foreground="Green"
                                         Kind="Play" />
-                                </DataTemplate>
-                            </syncfusion:RibbonButton.IconTemplate>
-                        </syncfusion:RibbonButton>
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
 
-                        <!--  Publish Project Button  -->
-                        <!--<syncfusion:RibbonButton
+                            <!--  Publish Project Button  -->
+                            <!--<syncfusion:RibbonButton
                             Command="{catel:CommandManagerBinding Application.PublishProject}"
                             IconStretch="Fill"
                             IconType="Icon"
@@ -1165,8 +1183,8 @@
                                 </DataTemplate>
                             </syncfusion:RibbonButton.IconTemplate>
                         </syncfusion:RibbonButton>-->
-                        <!--  Backup Project Button  -->
-                        <!--<syncfusion:RibbonButton
+                            <!--  Backup Project Button  -->
+                            <!--<syncfusion:RibbonButton
                             Command="{catel:CommandManagerBinding Application.BackupMod}"
                             IconStretch="Fill"
                             IconType="Icon"
@@ -1184,8 +1202,8 @@
                             </syncfusion:RibbonButton.IconTemplate>
                         </syncfusion:RibbonButton>-->
 
-                        <!--  Package installer Button  -->
-                        <!--<syncfusion:RibbonButton
+                            <!--  Package installer Button  -->
+                            <!--<syncfusion:RibbonButton
                             Command="{catel:CommandManagerBinding Application.ShowPackageInstaller}"
                             IconStretch="Fill"
                             IconType="Icon"
@@ -1202,86 +1220,88 @@
                                 </DataTemplate>
                             </syncfusion:RibbonButton.IconTemplate>
                         </syncfusion:RibbonButton>-->
-                    </syncfusion:RibbonMenuGroup>
+                        </syncfusion:RibbonMenuGroup>
 
-                    <syncfusion:RibbonMenuGroup Header="File" Visibility="Visible">
+                        <syncfusion:RibbonMenuGroup Header="File" Visibility="Visible">
 
-                        <!--  New File Button  -->
-                        <syncfusion:RibbonButton
+                            <!--  New File Button  -->
+                            <syncfusion:RibbonButton
                             x:Name="AppMenuNewFileButton"
                             IconStretch="Fill"
                             IconType="Icon"
                             Label="New File"
                             SizeForm="Small">
-                            <syncfusion:RibbonButton.IconTemplate>
-                                <DataTemplate>
-                                    <iconPacks:PackIconCodicons
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconCodicons
                                         Width="auto"
                                         Height="auto"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Stretch"
                                         Kind="NewFile" />
-                                </DataTemplate>
-                            </syncfusion:RibbonButton.IconTemplate>
-                        </syncfusion:RibbonButton>
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
 
-                        <!--  Save File Button  -->
-                        <syncfusion:RibbonButton
+                            <!--  Save File Button  -->
+                            <syncfusion:RibbonButton
                             x:Name="AppMenuSaveFileButton"
                             IconStretch="Fill"
                             IconType="Icon"
                             Label="Save File"
                             SizeForm="Small">
-                            <syncfusion:RibbonButton.IconTemplate>
-                                <DataTemplate>
-                                    <iconPacks:PackIconCodicons
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconCodicons
                                         Width="auto"
                                         Height="auto"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Stretch"
                                         Foreground="CornflowerBlue"
                                         Kind="Save" />
-                                </DataTemplate>
-                            </syncfusion:RibbonButton.IconTemplate>
-                        </syncfusion:RibbonButton>
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
 
-                        <!--  Save All Button  -->
-                        <syncfusion:RibbonButton
+                            <!--  Save All Button  -->
+                            <syncfusion:RibbonButton
                             x:Name="AppMenuSaveAllFileButton"
                             IconStretch="Fill"
                             IconType="Icon"
                             Label="Save All"
                             SizeForm="Small">
-                            <syncfusion:RibbonButton.IconTemplate>
-                                <DataTemplate>
-                                    <iconPacks:PackIconCodicons
+                                <syncfusion:RibbonButton.IconTemplate>
+                                    <DataTemplate>
+                                        <iconPacks:PackIconCodicons
                                         Width="auto"
                                         Height="auto"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Stretch"
                                         Foreground="CornflowerBlue"
                                         Kind="SaveAll" />
-                                </DataTemplate>
-                            </syncfusion:RibbonButton.IconTemplate>
-                        </syncfusion:RibbonButton>
+                                    </DataTemplate>
+                                </syncfusion:RibbonButton.IconTemplate>
+                            </syncfusion:RibbonButton>
 
-                    </syncfusion:RibbonMenuGroup>
-                </syncfusion:ApplicationMenu>
+                        </syncfusion:RibbonMenuGroup>
+                    </syncfusion:ApplicationMenu>
 
-            </syncfusion:Ribbon.ApplicationMenu>
+                </syncfusion:Ribbon.ApplicationMenu>
 
-            <!--  GENERAL TAB  -->
-            <syncfusion:RibbonTab
+                <!--  GENERAL TAB  -->
+                <syncfusion:RibbonTab
                 Caption="GENERAL"
                 IsChecked="True"
 
                 >
 
-                <!--  Project bar  -->
-                <!--<syncfusion:RibbonBar
+                    <!--  Project bar  -->
+                    <!--<syncfusion:RibbonBar
                     Name="HomeRibbonBar"           
                     Header="Home">
-                    --><!--  New Project Button  --><!--
+                    -->
+                    <!--  New Project Button  -->
+                    <!--
                     <syncfusion:RibbonButton
                         x:Name="HomeButton"
                         IconStretch="Fill"
@@ -1297,77 +1317,77 @@
                     </syncfusion:RibbonButton>
                 </syncfusion:RibbonBar>-->
 
-                
-                <!--  Project bar  -->
-                <syncfusion:RibbonBar
+
+                    <!--  Project bar  -->
+                    <syncfusion:RibbonBar
                     Name="ProjectRibbonBar"           
                     Header="Project">
 
-                    <!--  New Project Button  -->
-                    <syncfusion:RibbonButton
+                        <!--  New Project Button  -->
+                        <syncfusion:RibbonButton
                         x:Name="GeneralNewProjectButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="New Project"
                         Padding="12,0"
                         SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconCodicons
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
                                     Width="auto"
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
 
                                     Kind="NewFolder" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
-                    
-                    <!--  Open Project Button  -->
-                    <syncfusion:RibbonButton
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
+
+                        <!--  Open Project Button  -->
+                        <syncfusion:RibbonButton
                         x:Name="GeneralOpenProjectButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Open Project"
                         Padding="12,0"
                         SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconCodicons
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
                                     Width="auto"
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
                                     Foreground="DarkGoldenrod"
                                     Kind="FolderOpened" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
 
-                    <!--  Pack Project Button  -->
-                    <syncfusion:RibbonButton
+                        <!--  Pack Project Button  -->
+                        <syncfusion:RibbonButton
                         x:Name="GeneralPackProjectButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Pack Project"
                         Padding="12,0"
                         SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconCodicons
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
                                     Width="auto"
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
                                     Foreground="Green"
                                     Kind="Play" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
 
-                    <!--  Publish Project Button  -->
-                    <!--<syncfusion:RibbonButton
+                        <!--  Publish Project Button  -->
+                        <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.PublishProject}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1384,8 +1404,8 @@
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>-->
-                    <!--  Backup Project Button  -->
-                    <!--<syncfusion:RibbonButton
+                        <!--  Backup Project Button  -->
+                        <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.BackupMod}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1403,8 +1423,8 @@
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>-->
 
-                    <!--  Package installer Button  -->
-                    <!--<syncfusion:RibbonButton
+                        <!--  Package installer Button  -->
+                        <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowPackageInstaller}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1421,93 +1441,98 @@
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>-->
-                </syncfusion:RibbonBar>
+                    </syncfusion:RibbonBar>
 
-                <!--  File bar  -->
-                <syncfusion:RibbonBar Visibility="Visible"
+                    <!--  File bar  -->
+                    <syncfusion:RibbonBar Visibility="Visible"
                     Name="FileRibbonBar"
                     Header="File"
                     
                     >
 
-                    <!--  New File Button  -->
-                    <syncfusion:RibbonButton
+                        <!--  New File Button  -->
+                        <syncfusion:RibbonButton
                         x:Name="GeneralNewFileButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="New File"
                         Padding="12,0"
                         SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconCodicons
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
                                     Width="auto"
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
                                     Kind="NewFile" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
 
-                    <!--  Save File Button  -->
-                    <syncfusion:RibbonButton
+                        <!--  Save File Button  -->
+                        <syncfusion:RibbonButton
                         x:Name="GeneralSaveFileButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Save File"
                         Padding="12,0"
                         SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconCodicons
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
                                     Width="auto"
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
                                     Foreground="CornflowerBlue"
                                     Kind="Save" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
 
-                    <!--  Save All Button  -->
-                    <syncfusion:RibbonButton
+                        <!--  Save All Button  -->
+                        <syncfusion:RibbonButton
                         x:Name="GeneralSaveAllButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Save All"
                         Padding="12,0"
                         SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconCodicons
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
                                     Width="auto"
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
                                     Foreground="CornflowerBlue"
                                     Kind="SaveAll" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
 
-                </syncfusion:RibbonBar>
+                    </syncfusion:RibbonBar>
 
-            </syncfusion:RibbonTab>
+                </syncfusion:RibbonTab>
 
-            <!--  EDITORS TAB  --><!--
+                <!--  EDITORS TAB  -->
+                <!--
             <syncfusion:RibbonTab Visibility="Collapsed"
                 Caption="EDITORS"
                 IsChecked="False"
                 >
 
-                --><!--  Editors bar  --><!--
+                -->
+                <!--  Editors bar  -->
+                <!--
                 <syncfusion:RibbonBar
                     Name="Editors"
                     Width="auto"
                     Header="Editors">
-                    --><!--  Code Editor Button  --><!--
+                    -->
+                <!--  Code Editor Button  -->
+                <!--
                     <syncfusion:RibbonButton
                         x:Name="ViewCodeEditorButton"
                         IconStretch="Fill"
@@ -1526,8 +1551,9 @@
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>
 
-                    --><!--  Visual Editor Button  -->
-                    <!--<syncfusion:RibbonButton
+                    -->
+                <!--  Visual Editor Button  -->
+                <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowVisualEditor}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1545,8 +1571,8 @@
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>-->
 
-                    <!--  Journal Editor Button  -->
-                    <!--<syncfusion:RibbonButton
+                <!--  Journal Editor Button  -->
+                <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowJournalEditor}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1564,8 +1590,8 @@
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>-->
 
-                    <!--  Hex Editor Button  -->
-                    <!--<syncfusion:RibbonButton
+                <!--  Hex Editor Button  -->
+                <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowHexEditor}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1583,8 +1609,8 @@
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>-->
 
-                    <!--  CSV Editor Button  -->
-                    <!--<syncfusion:RibbonButton
+                <!--  CSV Editor Button  -->
+                <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowCsvEditor}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1602,8 +1628,8 @@
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>-->
 
-                    <!--  Bulk Editor Button  -->
-                    <!--<syncfusion:RibbonButton
+                <!--  Bulk Editor Button  -->
+                <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowBulkEditor}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1619,16 +1645,21 @@
                                     Kind="Command" />
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>--><!--
+                    </syncfusion:RibbonButton>-->
+                <!--
                 </syncfusion:RibbonBar>
 
-                --><!--  CP77 bar  --><!--
+                -->
+                <!--  CP77 bar  -->
+                <!--
                 <syncfusion:RibbonBar
                     Name="CP77BarEditors"
                     Width="auto"
                     Header="Cyberpunk 2077" />
 
-                --><!--  TW3 bar  --><!--
+                -->
+                <!--  TW3 bar  -->
+                <!--
                 <syncfusion:RibbonBar
                     Name="TW3BarEditors"
                     Width="auto"
@@ -1636,20 +1667,20 @@
 
             </syncfusion:RibbonTab>-->
 
-            <!--  TOOLS TAB  -->
-            <syncfusion:RibbonTab Visibility="Collapsed"
+                <!--  TOOLS TAB  -->
+                <syncfusion:RibbonTab Visibility="Collapsed"
                 Caption="TOOLS"
                 IsChecked="False"
                 >
 
-                <!--  Tools bar  -->
-                <!--<syncfusion:RibbonBar 
+                    <!--  Tools bar  -->
+                    <!--<syncfusion:RibbonBar 
                     Name="Tools"
                     Width="auto"
                     Header="Tools">-->
 
                     <!--  Audio Tool Button  -->
-                <!--<syncfusion:RibbonButton
+                    <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowAudioTool}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -1824,74 +1855,74 @@
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>-->
-                <!--</syncfusion:RibbonBar>-->
+                    <!--</syncfusion:RibbonBar>-->
 
-                <!--  Mat Repo bar  -->
-                <syncfusion:RibbonBar
+                    <!--  Mat Repo bar  -->
+                    <syncfusion:RibbonBar
                     Name="MaterialRepository"
                     Width="auto"
                     Header="Depot">
 
-                    <!--  Material Depot Settings Button  -->
-                    <syncfusion:RibbonButton
+                        <!--  Material Depot Settings Button  -->
+                        <syncfusion:RibbonButton
                         Click="GenerateMaterialRepoButton_Click"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Generate Repository"
                         Padding="12,0"
                         SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconBootstrapIcons
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconBootstrapIcons
                                     Width="auto"
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
                                     Kind="Image" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
 
-                    <!--  Browse Material Repository Button  -->
-                    <syncfusion:RibbonButton
+                        <!--  Browse Material Repository Button  -->
+                        <syncfusion:RibbonButton
                         IconStretch="Fill"
                         Command="{Binding OpenMaterialRepositoryCommand}"
                         IconType="Icon"
                         Label="Open Depot"
                         Padding="12,0"
                         SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconCodicons
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
                                     Width="auto"
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
                                     Kind="FolderOpened" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
 
-                    <!--  Browse Material Repository Button  -->
-                    <syncfusion:RibbonButton
+                        <!--  Browse Material Repository Button  -->
+                        <syncfusion:RibbonButton
                         IconStretch="Fill"
                         Command="{Binding UnbundleGameCommand}"
                         IconType="Icon"
                         Label="Unbundle Game Files"
                         Padding="12,0"
                         SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconCodicons
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
                                     Width="auto"
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
                                     Kind="CloudDownload" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
-                    <!--<ToggleButton
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
+                        <!--<ToggleButton
                         x:Name="xa"
                         Width="80"
                         Grid.Row="0"
@@ -1922,145 +1953,145 @@
                                 Kind="Image" />
                         </Grid>
                     </ToggleButton>-->
-                    
-                </syncfusion:RibbonBar>
-                
-            </syncfusion:RibbonTab>
 
-            <!--  VIEW TAB  -->
-            <syncfusion:RibbonTab
+                    </syncfusion:RibbonBar>
+
+                </syncfusion:RibbonTab>
+
+                <!--  VIEW TAB  -->
+                <syncfusion:RibbonTab
                 Caption="VIEW"
                 IsChecked="False">
 
-                <!--  Editor bar  -->
-                <syncfusion:RibbonBar
+                    <!--  Editor bar  -->
+                    <syncfusion:RibbonBar
                     Name="View"
                     Width="auto"
                     Header="Editor">
 
-                    <!--  Project Explorer Button  -->
-                    <syncfusion:RibbonButton
+                        <!--  Project Explorer Button  -->
+                        <syncfusion:RibbonButton
                         x:Name="ViewProjectExplorerButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Project Explorer"
                         Padding="12,0"
                         SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconCodicons
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
                                     Width="auto"
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
                                     Kind="Notebook" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
 
-                    <!--  Asset Browser Button  -->
-                    <syncfusion:RibbonButton
+                        <!--  Asset Browser Button  -->
+                        <syncfusion:RibbonButton
                         x:Name="ViewAssetBrowserButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Asset Browser"
                         Padding="12,0"
                         SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconBootstrapIcons
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconBootstrapIcons
                                     Width="auto"
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
                                     Kind="InboxesFill" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
 
-                    <!--  Properties Button  -->
-                    <syncfusion:RibbonButton
+                        <!--  Properties Button  -->
+                        <syncfusion:RibbonButton
                         x:Name="ViewPropertiesButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Properties"
                         Padding="12,0"
                         SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconCodicons
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
                                     Width="auto"
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
                                     Kind="SymbolProperty" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
 
-                    <!--  Project Log Button  -->
-                    <syncfusion:RibbonButton
+                        <!--  Project Log Button  -->
+                        <syncfusion:RibbonButton
                         x:Name="ViewLogButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Log"
                         Padding="12,0"
                         SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconCodicons
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
                                     Width="auto"
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
                                     Kind="Notebook" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
 
-                    <!--  Import/Export Button  -->
-                    <syncfusion:RibbonButton
+                        <!--  Import/Export Button  -->
+                        <syncfusion:RibbonButton
                         x:Name="UtilitiesShowImportExportToolButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Import Export"
                         Padding="12,0"
                         SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconMaterialDesign
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconMaterialDesign
                                     Width="auto"
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
                                     Kind="ImportExport" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
-                    
-                </syncfusion:RibbonBar>
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
 
-                <!--  Preview bar  -->
-                <syncfusion:RibbonBar Header="Preview">
-                    <syncfusion:RibbonCheckBox
+                    </syncfusion:RibbonBar>
+
+                    <!--  Preview bar  -->
+                    <syncfusion:RibbonBar Header="Preview">
+                        <syncfusion:RibbonCheckBox
                         x:Name="PrevFileInfo"
                         Content="Show File Preview"
                         ToolTip="Toggle interactive file preview for improved performance "
                         Padding="6,0"
                         IsChecked="{Binding _settingsManager.ShowFilePreview, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <syncfusion:RibbonCheckBox
+                        <syncfusion:RibbonCheckBox
                         x:Name="RibbonEnabled"
                         Content="Use Ribbon"
                         ToolTip="Disable to return to the ToolBar view"
                         Padding="6,0"
                         IsChecked="{Binding Path=IsChecked, ElementName=ribbonEnabled, Mode=TwoWay}" />
 
-                    
-                </syncfusion:RibbonBar>
-                
-                <!--  Utilities bar  -->
-                <!--syncfusion:RibbonBar
+
+                    </syncfusion:RibbonBar>
+
+                    <!--  Utilities bar  -->
+                    <!--syncfusion:RibbonBar
                     Name="Utilities"
                     Width="auto"
                     Header="Utilities"-->
@@ -2085,43 +2116,43 @@
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>-->
 
-                <!--/syncfusion:RibbonBar-->
+                    <!--/syncfusion:RibbonBar-->
 
-            </syncfusion:RibbonTab>
+                </syncfusion:RibbonTab>
 
-            <!--  OPTIONS TAB  -->
-            <syncfusion:RibbonTab
+                <!--  OPTIONS TAB  -->
+                <syncfusion:RibbonTab
                 Caption="OPTIONS"
                 IsChecked="False">
 
-                <!--  WolvenKit bar  -->
-                <syncfusion:RibbonBar
+                    <!--  WolvenKit bar  -->
+                    <syncfusion:RibbonBar
                     Name="WolvenKit"
                     Width="auto"
                     Header="WolvenKit">
 
-                    <!--  Settings Button  -->
-                    <syncfusion:RibbonButton
+                        <!--  Settings Button  -->
+                        <syncfusion:RibbonButton
                         x:Name="OptionsShowSettingsButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Settings"
                         Padding="12,0"
                         SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconCodicons
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
                                     Width="auto"
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
                                     Kind="Settings" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
 
-                    <!--  Reset Layout Button  -->
-                    <syncfusion:RibbonButton
+                        <!--  Reset Layout Button  -->
+                        <syncfusion:RibbonButton
                         Click="RibbonButton_Click"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -2129,69 +2160,69 @@
                         Padding="12,0"
                         ToolTip="Resets document layout to fix bugged Editor windows"
                         SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconCodicons
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
                                     Width="auto"
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
                                     Kind="DebugRestart" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
-                    
-                </syncfusion:RibbonBar>
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
 
-                <!--  Help bar  -->
-                <syncfusion:RibbonBar
+                    </syncfusion:RibbonBar>
+
+                    <!--  Help bar  -->
+                    <syncfusion:RibbonBar
                     Name="Help"
                     Width="auto"
                     Header="Help"
                     Visibility="Visible">
 
-                    <!--  BugReport Button  -->
-                    <syncfusion:RibbonButton
+                        <!--  BugReport Button  -->
+                        <syncfusion:RibbonButton
                         x:Name="OptionsShowBugReportButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Bug Report"
                         Padding="12,0"
                         SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconCodicons
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
                                     Width="auto"
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
                                     Kind="Bug" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
 
-                    <!--  Feedback Button  -->
-                    <syncfusion:RibbonButton
+                        <!--  Feedback Button  -->
+                        <syncfusion:RibbonButton
                         x:Name="OptionsShowFeedbackButton"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Feedback"
                         Padding="12,0"
                         SizeForm="Large">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconCodicons
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
                                     Width="auto"
                                     Height="auto"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Stretch"
                                     Kind="Feedback" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
 
-                    <!--  About Button  -->
-                    <!--<syncfusion:RibbonButton
+                        <!--  About Button  -->
+                        <!--<syncfusion:RibbonButton
                         Command="{catel:CommandManagerBinding Application.ShowAbout}"
                         IconStretch="Fill"
                         IconType="Icon"
@@ -2209,15 +2240,15 @@
                             </DataTemplate>
                         </syncfusion:RibbonButton.IconTemplate>
                     </syncfusion:RibbonButton>-->
-                </syncfusion:RibbonBar>
+                    </syncfusion:RibbonBar>
 
-            </syncfusion:RibbonTab>
+                </syncfusion:RibbonTab>
 
 
 
-        </syncfusion:Ribbon>
+            </syncfusion:Ribbon>
 
-        <!--<StackPanel
+            <!--<StackPanel
             Width="auto"
             Height="20"
             Margin="75,-22,0,0"
@@ -2227,7 +2258,7 @@
             <TextBlock Background="{x:Null}" Text="RED Modding Tools - WolvenKit" />
         </StackPanel>-->
 
-        <!--<Border
+            <!--<Border
             Width="70"
             Height="28"
             Margin="0,-2,0,0"
@@ -2236,55 +2267,74 @@
             Background="{DynamicResource ContentBackgroundAlt2}"
             CornerRadius="0,5,0,0" />-->
 
-        <!--  Sammy Container  -->
-        <Grid
-            Background="{DynamicResource ContentBackgroundAlt2}"
-            Width="58"
+            <!--  Sammy Container  -->
+            <Grid
             HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Margin="0,-2,0,0" >
+            VerticalAlignment="Top">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Width" Value="58" />
+                        <Setter Property="Margin" Value="0,-2,0,0" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsChecked, ElementName=ribbonEnabled}" Value="False">
+                                <Setter Property="Width" Value="38" />
+                                <Setter Property="Margin" Value="0,-1,0,0" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
 
-            <!--  Sammy Size  -->
-            <Grid Width="42">
+                <!--  Sammy Size  -->
+                <Grid>
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Setter Property="Width" Value="42" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsChecked, ElementName=ribbonEnabled}" Value="False">
+                                    <Setter Property="Width" Value="20" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
 
-                <Border
+                    <Border
 					Background="Transparent"
 					MouseEnter="Border_MouseEnter"
 					MouseLeave="Border_MouseLeave"
 					MouseLeftButtonDown="Border_MouseLeftButtonDown">
-                    <Grid>
-                        <Border>
-                            <Border.OpacityMask>
-                                <ImageBrush ImageSource="/Resources/Media/Images/Application/Sammy_Grayscale.png" />
-                            </Border.OpacityMask>
-                            <Grid
+                        <Grid>
+                            <Border>
+                                <Border.OpacityMask>
+                                    <ImageBrush ImageSource="/Resources/Media/Images/Application/Sammy_Grayscale.png" />
+                                </Border.OpacityMask>
+                                <Grid
 								x:Name="HomeHighLighter"
 								Background="{DynamicResource MahApps.Brushes.AccentBase}" >
-                            </Grid>
-                        </Border>
-                    </Grid>
-                </Border>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </Border>
 
-                <Border
+                    <Border
 					Background="Transparent"
 					MouseEnter="Border_MouseEnter"
 					MouseLeave="Border_MouseLeave"
 					MouseLeftButtonDown="Border_MouseLeftButtonDown">
-                    <Border>
-                        <Border.OpacityMask>
-                            <ImageBrush ImageSource="/Resources/Media/Images/Application/Sammy_Alpha_Mask.png" />
-                        </Border.OpacityMask>
-                        <Grid>
-                            <Image Source="pack://application:,,,/Resources/Media/Images/Application/Sammy_Alpha_Mask.png" />
-                        </Grid>
+                        <Border>
+                            <Border.OpacityMask>
+                                <ImageBrush ImageSource="/Resources/Media/Images/Application/Sammy_Alpha_Mask.png" />
+                            </Border.OpacityMask>
+                            <Grid>
+                                <Image Source="pack://application:,,,/Resources/Media/Images/Application/Sammy_Alpha_Mask.png" />
+                            </Grid>
+                        </Border>
                     </Border>
-                </Border>
+
+                </Grid>
 
             </Grid>
 
-        </Grid>
-
-        <!--<feather:GuidedTour
+            <!--<feather:GuidedTour
             Name="guide"
             AllowDismiss="True"
             Animate="True" />
@@ -2339,6 +2389,7 @@
             </Border>
         </hc:Drawer>-->
 
-    </Grid>
+        </Grid>
+    </Border>
 
 </reactiveUi:ReactiveUserControl>

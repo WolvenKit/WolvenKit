@@ -133,6 +133,11 @@ namespace WolvenKit.Views.Shell
             }
         }
 
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            PART_DockingManager.SaveDockState();
+        }
+
         public IDocumentViewModel ActiveDocument
         {
             get => (IDocumentViewModel)GetValue(ActiveDocumentProperty);
@@ -215,7 +220,6 @@ namespace WolvenKit.Views.Shell
                                 {
                                     //DockingManager.SetTargetNameInDockedMode(control, "item" + (count - 1).ToString());
                                 }
-                                DockingManager.SetDesiredWidthInDockedMode(control, 220);
                                 control.Name = "item" + (count++).ToString();
                             }
                             PART_DockingManager.Children.Add(control);

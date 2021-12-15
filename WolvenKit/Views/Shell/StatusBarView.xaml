@@ -15,8 +15,8 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
 
-    
-    <Grid>
+
+    <Grid MouseLeftButtonDown="StatusBar_MouseLeftButtonDown">
         <Grid.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
@@ -25,59 +25,40 @@
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1" />
+            <RowDefinition Height="25" />
+        </Grid.RowDefinitions>
+        <Border BorderThickness="0,1,0,1" BorderBrush="{StaticResource BorderAlt}" />
 
-
-        <Fluent:StatusBar Background="{DynamicResource MahApps.Brushes.Accent3}" >
+        <Fluent:StatusBar Background="#1f1f1f" Grid.Row="1">
 
             <Fluent:StatusBarItem Title="Status" HorizontalAlignment="Left">
-                <TextBlock Text="{Binding Status}" Margin="10,0,0,0"/>
+                <TextBlock Text="{Binding Status}" Margin="6,0,0,1"/>
             </Fluent:StatusBarItem>
 
             <Fluent:StatusBarItem HorizontalAlignment="Left"  >
-                <syncfusion:SfLinearProgressBar x:Name="StatusBarProgressBar" Height="16" Margin="10,0,0,0" Width="200"
-                                                TrackColor="{DynamicResource ContentBackgroundAlt1}" ProgressColor="{DynamicResource MahApps.Brushes.AccentBase}"/>
+                <syncfusion:SfLinearProgressBar x:Name="StatusBarProgressBar" Height="16" Margin="6,0,0,0" Width="200"
+                                                TrackColor="#131313" ProgressColor="{StaticResource WolvenKitRed}"/>
             </Fluent:StatusBarItem>
 
             <Fluent:StatusBarItem
-                Title="Current Project"
+                Title="Current Project and Version Number"
                 HorizontalAlignment="Right"
-                ToolTip="Current Project"
-                Value="Displays current project.">
+                ToolTip="Current Project and Version Number"
+                Value="Displays Current Project and Version Number">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock
-                        FontSize="11"
-                        FontWeight="Bold"
-                        Text="{Binding CurrentProject}"/>
+                    <TextBlock Margin="0,0,-10,1">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0} | WolvenKit {1}">
+                                <Binding Path="CurrentProject" />
+                                <Binding Path="VersionNumber" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
                 </StackPanel>
             </Fluent:StatusBarItem>
 
-            <Fluent:StatusBarItem
-                Title="Divider"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                Margin="20,0">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock
-                        FontSize="14"
-                        FontWeight="Bold"
-                        Foreground="{DynamicResource MahApps.Brushes.AccentBase}"
-                        Text="|"/>
-                </StackPanel>
-            </Fluent:StatusBarItem>
-
-            <Fluent:StatusBarItem
-                Title="Version"
-                HorizontalAlignment="Right"
-                ToolTip="Version"
-                Value="Shows the current app version">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock
-                        FontSize="12"
-                        Text="{Binding VersionNumber}"/>
-                </StackPanel>
-            </Fluent:StatusBarItem>
-
-           
         </Fluent:StatusBar>
     </Grid>
 </reactiveUi:ReactiveUserControl>

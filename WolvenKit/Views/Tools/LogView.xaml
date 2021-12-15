@@ -61,7 +61,7 @@
             BorderThickness="0"
             Background="#131313"
             Margin="0"
-            Padding="0"/>
+            Padding="0,4"/>
 
         <hc:UniformSpacingPanel
          Grid.Row="1"
