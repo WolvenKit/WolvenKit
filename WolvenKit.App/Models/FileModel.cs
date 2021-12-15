@@ -28,6 +28,7 @@ namespace WolvenKit.Models
         public FileModel(string path, EditorProject project)
         {
             FullName = path;
+            Project = project;
             string parentfullname;
             if (Directory.Exists(path))
             {
@@ -63,6 +64,13 @@ namespace WolvenKit.Models
                 parentfullname = fi.Directory.FullName;
                 Name = fi.Name;
                 _extension = fi.Extension;
+                if (project is Cp77Project cpp)
+                {
+                    if (FullName.StartsWith(cpp.TweakDirectory) && _extension == "bin")
+                    {
+                        _extension = "tweak";
+                    }
+                }
             }
             else
             {
@@ -89,6 +97,8 @@ namespace WolvenKit.Models
 
         [Display(Name = "Hash")] public string HashStr => Hash.ToString();
 
+
+        [Browsable(false)] public EditorProject Project { get; }
 
         [Browsable(false)] public ulong Hash { get; }
 
@@ -140,6 +150,7 @@ namespace WolvenKit.Models
             var filedir = project.FileDirectory;
             var moddir = project.ModDirectory;
             var rawDirectory = project.RawDirectory;
+            var packedDir = project.PackedRootDirectory;
 
             if (FullName.Equals(filedir, StringComparison.Ordinal))
             {
@@ -153,6 +164,10 @@ namespace WolvenKit.Models
             if (FullName.Equals(rawDirectory, StringComparison.Ordinal))
             {
                 return s_rawdir;
+            }
+            if (FullName.Equals(packedDir, StringComparison.Ordinal))
+            {
+                return "wkitpackeddir";
             }
 
             if (FullName.StartsWith(moddir, StringComparison.Ordinal))
@@ -170,7 +185,13 @@ namespace WolvenKit.Models
                 return FullName[(filedir.Length + 1)..];
             }
 
-            throw new System.NullReferenceException("fuzzy exception");
+            if (FullName.StartsWith(packedDir, StringComparison.Ordinal))
+            {
+                return FullName[(packedDir.Length + 1)..];
+            }
+
+            return FullName;
+            //throw new System.NullReferenceException("fuzzy exception");
         }
 
         public static ulong GenerateKey(string fullname, EditorProject project)
@@ -180,10 +201,18 @@ namespace WolvenKit.Models
                 throw new ArgumentNullException(nameof(project));
             }
 
-            var filedir = project.FileDirectory;
-            return fullname.Equals(filedir, StringComparison.Ordinal)
-                ? (ulong)0
-                : FNV1A64HashAlgorithm.HashString(fullname);
+            if (fullname.Equals(project.FileDirectory, StringComparison.Ordinal))
+            {
+                return (ulong)0;
+            }
+            else if (fullname.Equals(project.PackedRootDirectory, StringComparison.Ordinal))
+            {
+                return (ulong)0;
+            }
+            else
+            {
+                return FNV1A64HashAlgorithm.HashString(fullname);
+            }
         }
 
         [Browsable(false)] public ICommand OpenFileCommand { get; private set; }

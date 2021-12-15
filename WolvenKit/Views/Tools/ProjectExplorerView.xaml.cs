@@ -26,6 +26,7 @@ using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.ViewModels.Tools;
 using System.Collections.ObjectModel;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
 namespace WolvenKit.Views.Tools
 {
@@ -46,6 +47,8 @@ namespace WolvenKit.Views.Tools
             TreeGrid.RowDragDropController.Drop += RowDragDropController_Drop;
             TreeGrid.RowDragDropController.Dropped += RowDragDropController_Dropped;
             TreeGrid.RowDragDropController.CanAutoExpand = true;
+
+            tabControl.SelectedIndexChanged += tabControl_SelectedIndexChanged;
 
             ViewModel = Locator.Current.GetService<ProjectExplorerViewModel>();
             DataContext = ViewModel;
@@ -137,6 +140,8 @@ namespace WolvenKit.Views.Tools
             { return; }
             if (TreeGrid.View != null)
             {
+                TreeGrid.View.Filter = IsFileIn;
+                TreeGrid.View.RefreshFilter();
                 if (!_isfirsttime)
                 {
                     if (viewModel.LastSelected != null)
@@ -154,6 +159,35 @@ namespace WolvenKit.Views.Tools
                 }
                 else
                 { _isfirsttime = false; }
+            }
+        }
+
+        private bool IsFileIn(object o)
+        {
+            if (tabControl != null && o is FileModel fm)
+            {
+                if (tabControl.SelectedIndex == 0)
+                    return fm.FullName.StartsWith((fm.Project as Cp77Project).FileDirectory);
+                if (tabControl.SelectedIndex == 1)
+                    return fm.FullName.StartsWith((fm.Project as Cp77Project).ModDirectory);
+                if (tabControl.SelectedIndex == 2)
+                    return fm.FullName.ToLower().StartsWith((fm.Project as Cp77Project).RawDirectory.ToLower());
+                if (tabControl.SelectedIndex == 3)
+                    return fm.FullName.StartsWith((fm.Project as Cp77Project).ScriptDirectory);
+                if (tabControl.SelectedIndex == 4)
+                    return fm.FullName.StartsWith((fm.Project as Cp77Project).TweakDirectory);
+                if (tabControl.SelectedIndex == 5)
+                    return fm.FullName.StartsWith((fm.Project as Cp77Project).PackedRootDirectory);
+            }
+            return false;
+        }
+
+        private void tabControl_SelectedIndexChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (TreeGrid != null && TreeGrid.View != null)
+            {
+                TreeGrid.View.Filter = IsFileIn;
+                TreeGrid.View.RefreshFilter();
             }
         }
 
