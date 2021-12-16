@@ -58,8 +58,8 @@ namespace WolvenKit.RED4.Archive.CR2W
             Properties = new List<ICR2WProperty>();     //block 4
             EmbeddedFiles = new List<ICR2WEmbeddedFile>();       //block 7
 
-            RedBaseClass.RegisterEventHandler(typeof(CResourceReference<>), OnImport);
-            RedBaseClass.RegisterEventHandler(typeof(CResourceAsyncReference<>), OnImport);
+            //RedBaseClass.RegisterEventHandler(typeof(CResourceReference<>), OnImport);
+            //RedBaseClass.RegisterEventHandler(typeof(CResourceAsyncReference<>), OnImport);
         }
 
         private void OnImport(object sender, RedBaseClass.ObjectChangedEventArgs e)
@@ -109,8 +109,8 @@ namespace WolvenKit.RED4.Archive.CR2W
             {
                 if (disposing)
                 {
-                    RedBaseClass.RemoveEventHandler(typeof(CResourceReference<>), OnImport);
-                    RedBaseClass.RemoveEventHandler(typeof(CResourceAsyncReference<>), OnImport);
+                    //RedBaseClass.RemoveEventHandler(typeof(CResourceReference<>), OnImport);
+                    //RedBaseClass.RemoveEventHandler(typeof(CResourceAsyncReference<>), OnImport);
                 }
 
                 _disposed = true;

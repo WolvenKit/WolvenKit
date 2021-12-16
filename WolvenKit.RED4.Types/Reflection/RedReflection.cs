@@ -11,6 +11,8 @@ namespace WolvenKit.RED4.Types
     public static class RedReflection
     {
         private static readonly Dictionary<string, Type> _redTypeCache = new();
+        private static Dictionary<Type, string> _redTypeCacheReverse = new();
+
         private static readonly Dictionary<string, ExtendedEnumInfo> _redEnumCache = new();
         private static readonly ConcurrentDictionary<Type, Lazy<ExtendedTypeInfo>> _typeInfoCache = new();
 
@@ -63,7 +65,7 @@ namespace WolvenKit.RED4.Types
 
         public static string GetTypeRedName(Type type)
         {
-            return _redTypeCache.FirstOrDefault(t => t.Value == type).Key;
+            return _redTypeCacheReverse[type];
         }
 
         public static string GetEnumRedName(Type type)
@@ -247,6 +249,8 @@ namespace WolvenKit.RED4.Types
                     _redTypeCache.Add(type.Name, type);
                 }
             }
+
+            _redTypeCacheReverse = _redTypeCache.ToDictionary(x => x.Value, x => x.Key);
 
             /*foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {

@@ -28,10 +28,9 @@ namespace WolvenKit.RED4.Types
         {
             var appendix = (CName[])Appendix;
 
-            var isNulled = appendix[^1] == "";
             for (int i = 0; i < appendix.Length; i++)
             {
-                writer.BaseWriter.Write(isNulled ? (ushort)0 : writer.GetStringIndex(appendix[i]));
+                writer.Write(appendix[i]);
             }
         }
     }

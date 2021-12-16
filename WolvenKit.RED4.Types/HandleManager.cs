@@ -8,7 +8,8 @@ namespace WolvenKit.RED4.Types
     {
         private Red4File _file;
 
-        private readonly List<ChunkRef> _refList = new();
+        private readonly HashSet<int> _pointers = new();
+        private readonly Dictionary<int, ChunkRef> _refDict = new();
 
         public HandleManager(Red4File red4File)
         {
@@ -17,11 +18,12 @@ namespace WolvenKit.RED4.Types
 
         internal void RegisterHandle(IRedBaseHandle handle)
         {
-            if (_refList.All(x => x.Pointer != handle.Pointer))
+            if (_pointers.Add(handle.Pointer))
             {
-                _refList.Add(new ChunkRef(handle.Pointer));
+                _refDict.Add(handle.Pointer, new ChunkRef(handle.Pointer));
             }
-            _refList.First(x => x.Pointer == handle.Pointer).Handles.Add(handle);
+
+            _refDict[handle.Pointer].Handles.Add(handle);
         }
 
         public CHandle<T> CreateCHandle<T>(IRedClass cls) where T : IRedClass
@@ -96,16 +98,15 @@ namespace WolvenKit.RED4.Types
 
         internal void RemoveHandle(IRedBaseHandle cHandle)
         {
-            var chunkRef = _refList.FirstOrDefault(x => x.Pointer == cHandle.Pointer);
-            if (chunkRef == null)
+            if (!_pointers.Contains(cHandle.Pointer))
             {
                 throw new Exception();
             }
 
-            chunkRef.Handles.Remove(cHandle);
-            if (chunkRef.Handles.Count == 0)
+            _refDict[cHandle.Pointer].Handles.Remove(cHandle);
+            if (_refDict[cHandle.Pointer].Handles.Count == 0)
             {
-                _refList.Remove(chunkRef);
+                _refDict.Remove(cHandle.Pointer);
 
                 RemoveChunk(cHandle.Pointer);
             }
@@ -115,18 +116,17 @@ namespace WolvenKit.RED4.Types
         {
             for (int i = index + 1; i < _file._chunks.Count; i++)
             {
-                var chunkRef = _refList.FirstOrDefault(x => x.Pointer == i);
-                for (int j = 0; j < chunkRef.Handles.Count; j++)
+                for (int j = 0; j < _refDict[i].Handles.Count; j++)
                 {
-                    chunkRef.Handles[j].Pointer--;
+                    _refDict[i].Handles[j].Pointer--;
                 }
             }
             _file._chunks.RemoveAt(index);
-            foreach (var chunkRef in _refList)
+            foreach (var chunkRef in _refDict)
             {
-                if (chunkRef.Pointer > index)
+                if (chunkRef.Value.Pointer > index)
                 {
-                    chunkRef.Pointer--;
+                    chunkRef.Value.Pointer--;
                 }
             }
         }

@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.IO
                 var stringList = _chunkStringList[chunk];
                 var importList = _chunkImportList[chunk];
 
-                var list = targetList.Where(x => x.Item1 == chunk).ToList();
+                var list = targetList.Where(x => x.Item1 == chunk);
                 foreach (var tuple in list)
                 {
                     StringCacheList.AddRange(stringList.List.GetRange(stringList.LastIndex, tuple.Item3 - stringList.LastIndex));

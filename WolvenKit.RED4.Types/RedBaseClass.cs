@@ -146,7 +146,7 @@ namespace WolvenKit.RED4.Types
                 d.Remove();
             }
 
-            OnObjectChanged(redPropertyName, value);
+            //OnObjectChanged(redPropertyName, value);
             _properties[redPropertyName] = value;
         }
 
@@ -156,7 +156,7 @@ namespace WolvenKit.RED4.Types
 
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
-            OnObjectChanged(binder.Name, value);
+            //OnObjectChanged(binder.Name, value);
             _properties[binder.Name] = value;
 
             return true;
