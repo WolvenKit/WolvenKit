@@ -149,9 +149,7 @@ namespace WolvenKit.RED4.IO
                     ImportCacheList.AddRange(importList.List.GetRange(importList.LastIndex, tuple.Item4 - importList.LastIndex));
                     importList.LastIndex = tuple.Item4;
 
-                    targetList.Remove(tuple);
-
-                    if ((tuple.Item2) > chunk)
+                    if (tuple.Item2 > chunk)
                     {
                         GenerateFor(tuple.Item2);
                     }
