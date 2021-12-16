@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,19 +10,19 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Conversion
 {
-    public class RedClassDto
+    public class RedClassDto : DynamicObject
     {
-        public object Header { get; set; }
+        internal object Header;
 
-        public bool ShouldSerializeHeader() => Header != null;
+        //public bool ShouldSerializeHeader() => Header != null;
 
-        public string Type { get; set; }
+        internal string Type;
 
-        public bool ShouldSerializeType() => Properties.Count > 0;
+        //public bool ShouldSerializeType() => Properties.Count > 0;
 
-        public Dictionary<string, object> Properties { get; set; } = new();
+        internal Dictionary<string, object> Properties = new();
 
-        public bool ShouldSerializeProperties() => Properties.Count > 0;
+        //public bool ShouldSerializeProperties() => Properties.Count > 0;
 
 
         internal RedClassDto _parent;
@@ -65,12 +66,50 @@ namespace WolvenKit.Common.Conversion
 
             try
             {
-                var obj = chunk;
+                var data = chunk;
                 if (chunk is IRedBaseHandle handle)
                 {
-                    obj = handle.File.Chunks[handle.Pointer];
+                    data = handle.File.Chunks[handle.Pointer];
                 }
-                if (obj is RedBaseClass redClass)
+                if (data is SerializationDeferredDataBuffer sddb)
+                {
+                    if (sddb.File is CR2WFile cR2WFile)
+                    {
+                        var chunks = cR2WFile.Buffers[sddb.Pointer].Chunks;
+                        for (var i = 0; i < chunks.Count; i++)
+                        {
+                            var obj = PrimativeDecider(chunks[i], null, this);
+                            if (obj is RedClassDto rcd)
+                            {
+                                Properties.Add(":" + rcd.Type, obj);
+                            }
+                            else
+                            {
+                                Properties.Add(":" + obj.GetType().Name, obj);
+                            }
+                        }
+                    }
+                }
+                else if (data is DataBuffer db)
+                {
+                    if (db.File is CR2WFile cR2WFile)
+                    {
+                        var chunks = cR2WFile.Buffers[db.Pointer].Chunks;
+                        for (var i = 0; i < chunks.Count; i++)
+                        {
+                            var obj = PrimativeDecider(chunks[i], null, this);
+                            if (obj is RedClassDto rcd)
+                            {
+                                Properties.Add(":" + rcd.Type, obj);
+                            }
+                            else
+                            {
+                                Properties.Add(":" + obj.GetType(), obj);
+                            }
+                        }
+                    }
+                }
+                else if (data is RedBaseClass redClass)
                 {
                     var pis = RedReflection.GetTypeInfo(redClass.GetType()).PropertyInfos;
                     pis.Sort((a, b) => a.Name.CompareTo(b.Name));
@@ -85,7 +124,8 @@ namespace WolvenKit.Common.Conversion
                         {
                             value = (IRedType)pi.GetValue(redClass);
                         }
-                        Properties.Add(pi.Name, PrimativeDecider(value, pi.Name, this));
+                        var redType = RedReflection.GetRedTypeFromCSType(pi.Type);
+                        Properties.Add(pi.Name + ":" + redType, PrimativeDecider(value, pi.Name, this));
                     });
                 }
             }
@@ -93,6 +133,47 @@ namespace WolvenKit.Common.Conversion
             {
                 Console.WriteLine(e.Message);
                 //throw;
+            }
+        }
+
+        public override IEnumerable<string> GetDynamicMemberNames()
+        {
+            if (Header != null)
+            {
+                yield return nameof(Header);
+                yield return ":" + Type;
+            }
+            else
+            {
+                foreach (var (name, _) in Properties)
+                {
+                    if (name != null)
+                    {
+                        yield return name;
+                    }
+                }
+            }
+        }
+
+        public override bool TryGetMember(GetMemberBinder binder, out object result)
+        {
+            if (Header != null)
+            {
+                if (binder.Name == "Header")
+                {
+                    result = Header;
+                    return true;
+                }
+                else if (binder.Name == (":" + Type))
+                {
+                    result = Properties;
+                    return true;
+                }
+                return base.TryGetMember(binder, out result);
+            }
+            else
+            {
+                return Properties.TryGetValue(binder.Name, out result);
             }
         }
 
@@ -110,32 +191,6 @@ namespace WolvenKit.Common.Conversion
                 }
                 return list;
             }
-            else if (data is SerializationDeferredDataBuffer sddb)
-            {
-                if (sddb.File is CR2WFile cR2WFile)
-                {
-                    var list = new List<object>();
-                    var chunks = cR2WFile.Buffers[sddb.Pointer].Chunks;
-                    for (var i = 0; i < chunks.Count; i++)
-                    {
-                        list.Add(PrimativeDecider(chunks[i], null, this));
-                    }
-                    return list;
-                }
-            }
-            else if (data is DataBuffer db)
-            {
-                if (db.File is CR2WFile cR2WFile)
-                {
-                    var list = new List<object>();
-                    var chunks = cR2WFile.Buffers[db.Pointer].Chunks;
-                    for (var i = 0; i < chunks.Count; i++)
-                    {
-                        list.Add(PrimativeDecider(chunks[i], null, this));
-                    }
-                    return list;
-                }
-            }
             switch (data)
             {
                 case CBool b:
@@ -146,12 +201,14 @@ namespace WolvenKit.Common.Conversion
                     return r.DepotPath.GetValue();
                 case IRedEnum e:
                     return e.ToEnumString();
+                case IRedBitField e:
+                    return e.ToBitFieldString();
                 case CDateTime d:
                     return d.ToUInt64();
                 case CRUID c:
-                    return ((ulong)c).ToString();
+                    return (ulong)c;
                 case CUInt64 c:
-                    return ((ulong)c).ToString();
+                    return (ulong)c;
                 case CUInt8 uint64:
                     return (byte)uint64;
                 case CInt8 uint64:
