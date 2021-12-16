@@ -49,7 +49,7 @@ namespace WolvenKit.RED4.Archive.CR2W
 
         private const int sizeShift = 23;
         private const uint offsetMask = (1U << sizeShift) - 1U;
-        private const uint sizeMask = 0xFF << (sizeShift - 1);
+        private const uint sizeMask = 0xFF << (sizeShift);
         private const int unkShift = 31;
 
         public uint offset
