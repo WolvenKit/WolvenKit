@@ -70,14 +70,7 @@ namespace WolvenKit.Common.Conversion
                 {
                     obj = handle.File.Chunks[handle.Pointer];
                 }
-                if (obj is IRedArray ary)
-                {
-                    for (var i = 0; i < ary.Count; i++)
-                    {
-                        Properties.Add(i.ToString(), PrimativeDecider((IRedType)ary[i], null, this));
-                    }
-                }
-                else if (obj is RedBaseClass redClass)
+                if (obj is RedBaseClass redClass)
                 {
                     var pis = RedReflection.GetTypeInfo(redClass.GetType()).PropertyInfos;
                     pis.Sort((a, b) => a.Name.CompareTo(b.Name));
@@ -95,28 +88,6 @@ namespace WolvenKit.Common.Conversion
                         Properties.Add(pi.Name, PrimativeDecider(value, pi.Name, this));
                     });
                 }
-                else if (obj is SerializationDeferredDataBuffer sddb)
-                {
-                    if (sddb.File is CR2WFile cR2WFile)
-                    {
-                        var chunks = cR2WFile.Buffers[sddb.Pointer].Chunks;
-                        for (var i = 0; i < chunks.Count; i++)
-                        {
-                            Properties.Add(i.ToString(), PrimativeDecider(chunks[i], null, this));
-                        }
-                    }
-                }
-                else if (obj is DataBuffer db)
-                {
-                    if (db.File is CR2WFile cR2WFile)
-                    {
-                        var chunks = cR2WFile.Buffers[db.Pointer].Chunks;
-                        for (var i = 0; i < chunks.Count; i++)
-                        {
-                            Properties.Add(i.ToString(), PrimativeDecider(chunks[i], null, this));
-                        }
-                    }
-                }
             }
             catch (Exception e)
             {
@@ -129,6 +100,42 @@ namespace WolvenKit.Common.Conversion
         {
             if (data == null)
                 return null;
+
+            if (data is IRedArray ary)
+            {
+                var list = new List<object>();
+                for (var i = 0; i < ary.Count; i++)
+                {
+                    list.Add(PrimativeDecider((IRedType)ary[i], null, this));
+                }
+                return list;
+            }
+            else if (data is SerializationDeferredDataBuffer sddb)
+            {
+                if (sddb.File is CR2WFile cR2WFile)
+                {
+                    var list = new List<object>();
+                    var chunks = cR2WFile.Buffers[sddb.Pointer].Chunks;
+                    for (var i = 0; i < chunks.Count; i++)
+                    {
+                        list.Add(PrimativeDecider(chunks[i], null, this));
+                    }
+                    return list;
+                }
+            }
+            else if (data is DataBuffer db)
+            {
+                if (db.File is CR2WFile cR2WFile)
+                {
+                    var list = new List<object>();
+                    var chunks = cR2WFile.Buffers[db.Pointer].Chunks;
+                    for (var i = 0; i < chunks.Count; i++)
+                    {
+                        list.Add(PrimativeDecider(chunks[i], null, this));
+                    }
+                    return list;
+                }
+            }
             switch (data)
             {
                 case CBool b:
@@ -146,19 +153,19 @@ namespace WolvenKit.Common.Conversion
                 case CUInt64 c:
                     return ((ulong)c).ToString();
                 case CUInt8 uint64:
-                    return uint64;
+                    return (byte)uint64;
                 case CInt8 uint64:
-                    return uint64;
+                    return (sbyte)uint64;
                 case CInt16 uint64:
-                    return uint64;
+                    return (short)uint64;
                 case CUInt16 uint64:
-                    return uint64;
+                    return (ushort)uint64;
                 case CInt32 uint64:
-                    return uint64;
+                    return (int)uint64;
                 case CUInt32 uint64:
-                    return uint64;
+                    return (uint)uint64;
                 case CInt64 uint64:
-                    return uint64;
+                    return (long)uint64;
                 case IRedPrimitive<float> i:
                     return ((float)(CFloat)i);
                 default:
