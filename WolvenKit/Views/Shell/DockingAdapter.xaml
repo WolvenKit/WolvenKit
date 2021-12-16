@@ -23,7 +23,7 @@
                         <Setter Value="{StaticResource WolvenKitRed}" Property="Foreground" />
                     </Trigger>
                     <Trigger Property="IsKeyboardFocused" Value="True">
-                        <Setter Value="{StaticResource WolvenKitYellow}" Property="Foreground" />
+                        <Setter Value="#ffffff" Property="Foreground" />
                     </Trigger>
                     <Trigger Property="IsPressed" Value="True">
                         <Setter Value="{StaticResource WolvenKitRedShadow}" Property="Foreground" />
@@ -109,7 +109,7 @@
                     <Setter Property="Foreground" Value="#ffffff" />
                 </Style>
             </syncfusion:DockingManager.DocumentTabItemStyle>
-            <syncfusion:DockingManager.TabItemStyle>
+            <!--syncfusion:DockingManager.TabItemStyle>
                 <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource TabItemStyle}">
                     <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
                     <Setter Property="Foreground" Value="#ffffff" />
@@ -117,15 +117,9 @@
             </syncfusion:DockingManager.TabItemStyle>
             <syncfusion:DockingManager.TabControlStyle>
                 <Style TargetType="{x:Type TabControl}" BasedOn="{StaticResource DockTabControlStyle}">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type TabControl}">
-                                <ContentPresenter Name="PART_SelectedContentHost" ContentSource="SelectedContent" />
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
+                    <Setter Property="H" Value="30" />
                 </Style>
-            </syncfusion:DockingManager.TabControlStyle>
+            </syncfusion:DockingManager.TabControlStyle-->
             <syncfusion:DockingManager.DockedElementTabbedHostStyle>
                 <Style TargetType="{x:Type tools_controls:DockedElementTabbedHost}" BasedOn="{StaticResource SyncfusionDockedElementTabbedHostStyle}">
                     <Setter Property="Margin" Value="0" />
