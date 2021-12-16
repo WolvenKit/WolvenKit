@@ -166,5 +166,18 @@ namespace WolvenKit.RED4.Archive.IO
             _writer.Write(val.Text.ToCharArray());
         }
 
+        public override void Write(LocalizationString val)
+        {
+            _writer.Write(val.Unk1);
+            _writer.Write((short)(val.Value.Length));
+            _writer.Write(val.Value.ToCharArray());
+        }
+
+        public override void Write(CString val)
+        {
+            _writer.Write((short)(val.GetValue().Length));
+            _writer.Write(val.GetValue().ToCharArray());
+        }
+
     }
 }

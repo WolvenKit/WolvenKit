@@ -159,5 +159,21 @@ namespace WolvenKit.RED4.Archive.IO
             var length = _reader.ReadInt16();
             return Encoding.UTF8.GetString(_reader.ReadBytes(length));
         }
+
+        public override LocalizationString ReadLocalizationString() =>
+            new()
+            {
+                Unk1 = _reader.ReadUInt64(),
+                Value = ReadSimpleString()
+            };
+
+        public string ReadSimpleString()
+        {
+            var length = _reader.ReadUInt16();
+            return Encoding.UTF8.GetString(_reader.ReadBytes(length));
+        }
+
+        public override CString ReadCString() => ReadSimpleString();
+
     }
 }
