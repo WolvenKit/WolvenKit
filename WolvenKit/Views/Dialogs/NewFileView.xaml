@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:local="clr-namespace:WolvenKit.Views.Dialogs"
+    xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:dialogs="clr-namespace:WolvenKit.ViewModels.Dialogs;assembly=WolvenKit.App"
@@ -104,7 +105,7 @@
                                                 <RowDefinition Height="Auto"/>
                                                 <RowDefinition Height="Auto"/>
                                             </Grid.RowDefinitions>
-                                            <Image Width="17" Margin="0" Style="{StaticResource FileIcons}" Grid.Column="0"  Grid.RowSpan="2" />
+                                            <others:FileIcon Width="17" Margin="0" Icon="{Binding Extension}" Grid.Column="0"  Grid.RowSpan="2" />
                                             <TextBlock Text="{Binding Name}" Grid.Column="1" Grid.Row="0" FontWeight="Bold" />
                                             <TextBlock Text="{Binding Description}" Grid.Column="1" Grid.Row="1" />
                                         </Grid>
