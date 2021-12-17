@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.IO
                 var stringList = _chunkStringList[chunk];
                 var importList = _chunkImportList[chunk];
 
-                var list = targetList.Where(x => x.Item1 == chunk).ToList();
+                var list = targetList.Where(x => x.Item1 == chunk);
                 foreach (var tuple in list)
                 {
                     StringCacheList.AddRange(stringList.List.GetRange(stringList.LastIndex, tuple.Item3 - stringList.LastIndex));
@@ -149,9 +149,7 @@ namespace WolvenKit.RED4.IO
                     ImportCacheList.AddRange(importList.List.GetRange(importList.LastIndex, tuple.Item4 - importList.LastIndex));
                     importList.LastIndex = tuple.Item4;
 
-                    targetList.Remove(tuple);
-
-                    if ((tuple.Item2) > chunk)
+                    if (tuple.Item2 > chunk)
                     {
                         GenerateFor(tuple.Item2);
                     }
