@@ -116,6 +116,8 @@ namespace WolvenKit.Views.Shell
                     vm => vm.DockedViews,
                     v => v.dockingAdapter.ItemsSource)
                     .DisposeWith(disposables);
+
+                this.WhenAnyValue(x => x.ViewModel.ActiveProject).Subscribe(_ => dockingAdapter.OnActiveProjectChanged());
             });
         }
 

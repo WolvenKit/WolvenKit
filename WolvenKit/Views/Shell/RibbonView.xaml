@@ -136,7 +136,7 @@
                 <ToolBarTray.Resources>
                     <Style x:Key="WolvenKitToolBarButtonIcon" TargetType="{x:Type iconPacks:PackIconControlBase}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type UIElement}, AncestorLevel=2}}" Value="False">
+                            <DataTrigger Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" Value="False">
                                 <Setter Property="Foreground" Value="{StaticResource Border}" />
                             </DataTrigger>
                         </Style.Triggers>
@@ -144,16 +144,16 @@
                     <Style x:Key="WolvenKitToolBarButtonIconEraser" TargetType="{x:Type iconPacks:PackIconControlBase}" BasedOn="{StaticResource WolvenKitToolBarButtonIcon}">
                         <Setter Property="Foreground" Value="{StaticResource ContentBackgroundAlt}" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type UIElement}, AncestorLevel=2}}" Value="True">
+                            <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type UIElement}, AncestorLevel=4}}" Value="True">
                                 <Setter Property="Foreground" Value="{StaticResource ContentBackgroundAlt5}" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource AncestorType={x:Type UIElement}, AncestorLevel=2}}" Value="True">
+                            <DataTrigger Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource AncestorType={x:Type Button}, AncestorLevel=4}}" Value="True">
                                 <Setter Property="Foreground" Value="{StaticResource ContentBackground}" />
                             </DataTrigger>
                             <MultiDataTrigger>
                                 <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type UIElement}, AncestorLevel=2}}" Value="True" />
-                                    <Condition Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource AncestorType={x:Type UIElement}, AncestorLevel=2}}" Value="True" />
+                                    <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type UIElement}, AncestorLevel=4}}" Value="True" />
+                                    <Condition Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource AncestorType={x:Type Button}, AncestorLevel=4}}" Value="True" />
                                 </MultiDataTrigger.Conditions>
                                 <Setter Property="Foreground" Value="{StaticResource ContentBackgroundAlt}" />
                             </MultiDataTrigger>
@@ -161,7 +161,7 @@
                     </Style>
                     <Style x:Key="WolvenKitToolBarButtonText" TargetType="TextBlock">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type UIElement}}}" Value="False">
+                            <DataTrigger Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type UIElement}, AncestorLevel=4}}" Value="False">
                                 <Setter Property="Foreground" Value="{StaticResource Border}" />
                             </DataTrigger>
                         </Style.Triggers>
@@ -433,7 +433,13 @@
                             <MenuItem Command="{Binding ViewLogCommand}" IsCheckable="True" Header="Log"/>
                             <MenuItem Command="{Binding ShowImportExportToolCommand}" IsCheckable="True" Header="Import / Export"/>
                             <Separator Background="{StaticResource BorderAlt}" Margin="0,5,0,3"/>
-                            <MenuItem Click="RibbonButton_Click" Header="Reset Panel Layout">
+                            <MenuItem Click="SaveLayoutToProject" Header="Save Layout to Project">
+                                <MenuItem.Icon>
+                                    <iconPacks:PackIconMaterialDesign Padding="7,1,-2,0"
+                                    Kind="Save" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Click="SetLayoutToDefault" Header="Reset Panel Layout">
                                 <MenuItem.Icon>
                                     <iconPacks:PackIconMaterialDesign Padding="7,1,-2,0"
                                     Kind="Refresh" />
@@ -2153,7 +2159,7 @@
 
                         <!--  Reset Layout Button  -->
                         <syncfusion:RibbonButton
-                        Click="RibbonButton_Click"
+                        Click="SetLayoutToDefault"
                         IconStretch="Fill"
                         IconType="Icon"
                         Label="Reset Layout"

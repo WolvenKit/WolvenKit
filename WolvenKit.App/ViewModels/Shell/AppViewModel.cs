@@ -36,6 +36,7 @@ using WolvenKit.ViewModels.Documents;
 using System.Collections.Generic;
 using WolvenKit.Core.Services;
 using System.Reflection;
+using System.Windows.Threading;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -102,6 +103,7 @@ namespace WolvenKit.ViewModels.Shell
             //ShowPackageInstallerCommand = new RelayCommand(ExecuteShowInstaller, CanShowInstaller);
 
             OpenFileCommand = new DelegateCommand<FileModel>(p => ExecuteOpenFile(p), CanOpenFile);
+            OpenFileAsyncCommand = ReactiveCommand.CreateFromTask<FileModel, Unit>(OpenFileAsync);
 
             PackModCommand = new RelayCommand(ExecutePackMod, CanPackMod);
             PackInstallModCommand = new RelayCommand(ExecutePackInstallMod, CanPackInstallMod);
@@ -132,7 +134,7 @@ namespace WolvenKit.ViewModels.Shell
                 AssetBrowserVM,
                 ImportExportToolVM,
             };
-
+                
             _settingsManager
                 .WhenAnyValue(x => x.UpdateChannel)
                 .Subscribe(_ =>
@@ -298,6 +300,8 @@ namespace WolvenKit.ViewModels.Shell
 
                 await _projectManager.LoadAsync(location);
 
+                ActiveProject = _projectManager.ActiveProject;
+
                 await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
                 {
                     UpdateTitle();
@@ -371,6 +375,9 @@ namespace WolvenKit.ViewModels.Shell
                 }
 
                 await _projectManager.LoadAsync(location);
+
+                ActiveProject = _projectManager.ActiveProject;
+
                 switch (Path.GetExtension(location))
                 {
                     case ".w3modproj":
@@ -500,7 +507,7 @@ namespace WolvenKit.ViewModels.Shell
 
         public ICommand OpenFileCommand { get; private set; }
         private bool CanOpenFile(FileModel model) => true;
-        private void ExecuteOpenFile(FileModel model)
+        private  void ExecuteOpenFile(FileModel model)
         {
             if (model == null)
             {
@@ -520,13 +527,65 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else if (!model.IsDirectory)
                 {
+                    var progress = new Progress<IDocumentViewModel>();
+                    progress.ProgressChanged += Progress_ProgressChanged;
+
                     _progressService.IsIndeterminate = true;
 
-                    RequestFileOpen(model.FullName);
+                    RequestFileOpen(model.FullName, progress);
 
                     _progressService.IsIndeterminate = false;
                 }
             }
+        }
+
+        private void Progress_ProgressChanged(object sender, IDocumentViewModel e)
+        {
+            if (!DockedViews.Contains(e))
+                DockedViews.Add(e);
+            ActiveDocument = e;
+        }
+
+        public ReactiveCommand<FileModel, Unit> OpenFileAsyncCommand { get; }
+        private async Task<Unit> OpenFileAsync(FileModel model)
+        {
+            if (model == null)
+            {
+                var dlg = new OpenFileDialog();
+                if (dlg.ShowDialog().GetValueOrDefault())
+                {
+                    //model = new FileViewModel(new FileModel(new FileInfo(dlg.FileName)));
+                    //TODO
+                    //ActiveDocument = await OpenAsync(model.FullName);
+                }
+            }
+            else
+            {
+                if (model.IsDirectory)
+                {
+                    model.IsExpanded = !model.IsExpanded;
+                }
+                else if (!model.IsDirectory)
+                {
+                    var progress = new Progress<IDocumentViewModel>();
+                    progress.ProgressChanged += Progress_ProgressChanged;
+                    _progressService.IsIndeterminate = true;
+                    try
+                    {
+                        await RequestFileOpen(model.FullName, progress);
+                    }
+                    catch (Exception e)
+                    {
+                        _loggerService.Error(e.Message);
+                    }
+                    finally
+                    {
+                        _progressService.IsIndeterminate = false;
+                    }
+                }
+            }
+
+            return Unit.Default;
         }
 
         public ICommand PackModCommand { get; private set; }
@@ -695,6 +754,8 @@ namespace WolvenKit.ViewModels.Shell
 
         [Reactive] public IDocumentViewModel ActiveDocument { get; set; }
 
+        [Reactive] public EditorProject ActiveProject { get; set; }
+
         private List<IDocumentViewModel> OpenDocuments => DockedViews.OfType<IDocumentViewModel>().ToList();
 
         [Reactive] public ObservableCollection<IDockElement> DockedViews { get; set; }
@@ -767,7 +828,7 @@ namespace WolvenKit.ViewModels.Shell
                 _loggerService.Success($"Opening File: {fullPath}");
 
                 // TODO: this is not threadsafe
-                DockedViews.Add(fileViewModel);
+                //handler.Report(fileViewModel);
 
                 //Dispatcher.CurrentDispatcher.Invoke(new Action(() =>
                 //{
@@ -812,7 +873,7 @@ namespace WolvenKit.ViewModels.Shell
                                                        path.Contains(_projectManager.ActiveProject
                                                            .RawDirectory);
 
-        private void RequestFileOpen(string fullpath)
+        private Task RequestFileOpen(string fullpath, IProgress<IDocumentViewModel> handler)
         {
             var ext = Path.GetExtension(fullpath).ToUpper();
 
@@ -857,13 +918,12 @@ namespace WolvenKit.ViewModels.Shell
                 case ".JSON":
                     if (IsInRawFolder(fullpath))
                     {
-                        ShellExecute();
+                        return Task.Run(() => ShellExecute());
                     }
                     else
                     {
-                        OpenRedengineFile();
+                        return Task.Run(() => OpenRedengineFile());
                     }
-                    break;
 
                 // VIDEO
                 case ".BK2":
@@ -872,12 +932,10 @@ namespace WolvenKit.ViewModels.Shell
                 // AUDIO
 
                 case ".WEM":
-                    OpenAudioFile();
-                    break;
+                    return Task.Run(() => OpenAudioFile());
 
                 case ".SUBS":
-                    PolymorphExecute(fullpath, ".txt");
-                    break;
+                    return Task.Run(() => PolymorphExecute(fullpath, ".txt"));
 
                 case ".USM":
                 {
@@ -892,11 +950,10 @@ namespace WolvenKit.ViewModels.Shell
                 // TODO SPLIT WEMS TO PLAYLIST FROM BNK
 
                 default:
-
-                    OpenRedengineFile();
-
-                    break;
+                    return Task.Run(() => OpenRedengineFile());
             }
+
+            return Task.Run(() => true);
 
             void OpenRedengineFile()
             {
@@ -925,8 +982,8 @@ namespace WolvenKit.ViewModels.Shell
                     var document = Open(fullpath, type);
                     if (document != null)
                     {
+                        handler.Report(document);
                         UpdateTitle();
-                        ActiveDocument = document;
                     }
                 }
             }

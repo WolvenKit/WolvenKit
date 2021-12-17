@@ -39,7 +39,40 @@
     </UserControl.Resources>
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
-
+        <Grid.Resources>
+            <Style x:Key="WolvenKitPESourceTabs" TargetType="{x:Type syncfusion:TabItemExt}" BasedOn="{StaticResource SyncfusionTabItemExtStyle}">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="BorderThickness" Value="0,0,0,2"/>
+                <Setter Property="BorderBrush" Value="{StaticResource WolvenKitRedShadow}"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type syncfusion:TabItemExt}">
+                            <Border Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}">
+                                <TextBlock Text="{TemplateBinding Header}" VerticalAlignment="Center" Margin="6,0"  HorizontalAlignment="Center" Foreground="{TemplateBinding Foreground}"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="False">
+                                    <Setter Property="Foreground" Value="White" />
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
+                                    <Setter Property="BorderBrush" Value="{StaticResource WolvenKitRed}"/>
+                                    <Setter Property="Foreground" Value="White" />
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="False" />
+                                        <Condition Property="IsMouseOver" Value="True" />
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Opacity" Value="0.8"/>
+                                </MultiTrigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -52,12 +85,70 @@
             Margin="0,0,0,0"
             BorderThickness="0,0,0,1"
             Style="{StaticResource WolvenKitTabControl}">
-            <syncfusion:TabItemExt Header="All Source Files" />
-            <syncfusion:TabItemExt Header="Archive" />
-            <syncfusion:TabItemExt Header="Raw" />
-            <syncfusion:TabItemExt Header="Scripts" />
-            <syncfusion:TabItemExt Header="Tweaks" />
-            <syncfusion:TabItemExt Header="Packed Files" />
+            <syncfusion:TabItemExt>
+                <syncfusion:TabItemExt.Style>
+                    <Style TargetType="{x:Type syncfusion:TabItemExt}" BasedOn="{StaticResource SyncfusionTabItemExtStyle}">
+                        <Setter Property="Background" Value="{StaticResource WolvenKitRedShadow}" />
+                        <Setter Property="FontWeight" Value="Normal"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type syncfusion:TabItemExt}">
+                                    <Border Background="{TemplateBinding Background}">
+                                        <TextBlock Text="SOURCE" VerticalAlignment="Center" Margin="6,0"  HorizontalAlignment="Center" Foreground="White" FontWeight="Normal" FontSize="11"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
+                                            <Setter Property="FontWeight" Value="Bold"/>
+                                        </Trigger>
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="IsSelected" Value="False" />
+                                                <Condition Property="IsMouseOver" Value="True" />
+                                            </MultiTrigger.Conditions>
+                                            <Setter Property="Opacity" Value="0.8"/>
+                                        </MultiTrigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </syncfusion:TabItemExt.Style>
+            </syncfusion:TabItemExt>
+            <syncfusion:TabItemExt Header="archive" Style="{StaticResource WolvenKitPESourceTabs}" />
+            <syncfusion:TabItemExt Header="raw" Style="{StaticResource WolvenKitPESourceTabs}" />
+            <syncfusion:TabItemExt Header="scripts" Style="{StaticResource WolvenKitPESourceTabs}" />
+            <syncfusion:TabItemExt Header="tweaks" Style="{StaticResource WolvenKitPESourceTabs}" />
+            <syncfusion:TabItemExt>
+                <syncfusion:TabItemExt.Style>
+                    <Style TargetType="{x:Type syncfusion:TabItemExt}" BasedOn="{StaticResource SyncfusionTabItemExtStyle}">
+                        <Setter Property="Background" Value="{StaticResource WolvenKitCyanShadow}" />
+                        <Setter Property="FontWeight" Value="Normal"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type syncfusion:TabItemExt}">
+                                    <Border Background="{TemplateBinding Background}">
+                                        <TextBlock Text="PACKED" VerticalAlignment="Center" Margin="6,0"  HorizontalAlignment="Center" Foreground="Black" FontWeight="Normal" FontSize="11"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="{StaticResource WolvenKitCyan}" />
+                                            <Setter Property="FontWeight" Value="Bold"/>
+                                        </Trigger>
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="IsSelected" Value="False" />
+                                                <Condition Property="IsMouseOver" Value="True" />
+                                            </MultiTrigger.Conditions>
+                                            <Setter Property="Opacity" Value="0.8"/>
+                                        </MultiTrigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </syncfusion:TabItemExt.Style>
+            </syncfusion:TabItemExt>
         </syncfusion:TabControlExt>
 
         <Border BorderThickness="0,0,0,1" BorderBrush="{StaticResource BorderBrush}" Height="Auto" Grid.Row="1">

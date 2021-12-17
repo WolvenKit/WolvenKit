@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
@@ -20,6 +21,7 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
+using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.ViewModels.Documents;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Tools;
@@ -32,16 +34,14 @@ namespace WolvenKit.Views.Shell
     /// </summary>
     public partial class DockingAdapter : UserControl
     {
-        private readonly AppViewModel viewModel;
+        private AppViewModel viewModel;
         public static DockingAdapter G_Dock;
+        private bool UsingProjectLayout = false;
 
         public DockingAdapter()
         {
             InitializeComponent();
             G_Dock = this;
-
-           
-
 
             viewModel = DataContext as AppViewModel;
         }
@@ -131,11 +131,17 @@ namespace WolvenKit.Views.Shell
                     }
                 }
             }
+
+            if (viewModel is null)
+                viewModel = DataContext as AppViewModel;
+
+            SizeChanged += Window_SizeChanged;
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            PART_DockingManager.SaveDockState();
+            if (!UsingProjectLayout)
+                PART_DockingManager.SaveDockState();
         }
 
         public IDocumentViewModel ActiveDocument
@@ -184,6 +190,38 @@ namespace WolvenKit.Views.Shell
                     adapter.viewModel.UpdateTitle();
                 break;
             }
+        }
+        public void OnActiveProjectChanged()
+        {
+            if (viewModel is null || viewModel.ActiveProject is null)
+                return;
+            try
+            {
+                var layoutPath = Path.Combine(viewModel.ActiveProject.ProjectDirectory, "layout.xml");
+                if (File.Exists(layoutPath))
+                {
+                    var reader = XmlReader.Create(layoutPath);
+                    var Debugging_A = PART_DockingManager.LoadDockState(reader);
+                    Trace.WriteLine(Debugging_A);
+                    reader.Close();
+                    UsingProjectLayout = true;
+                    //PART_DockingManager.SetCurrentValue(DockingManager.PersistStateProperty, false);
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        public void SaveLayoutToProject()
+        {
+            if (viewModel is null || viewModel.ActiveProject is null)
+                return;
+            var layoutPath = Path.Combine(viewModel.ActiveProject.ProjectDirectory, "layout.xml");
+            var writer = XmlWriter.Create(layoutPath);
+            PART_DockingManager.SaveDockState(writer);
+            writer.Close();
         }
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)

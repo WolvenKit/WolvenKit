@@ -122,7 +122,7 @@ namespace WolvenKit.ViewModels.Tools
         private void ExecuteOpenFile()
         {
             // TODO: Handle command logic here
-            Locator.Current.GetService<AppViewModel>().OpenFileCommand.SafeExecute(SelectedItem);
+            Locator.Current.GetService<AppViewModel>().OpenFileAsyncCommand.SafeExecute(SelectedItem);
 
 
 

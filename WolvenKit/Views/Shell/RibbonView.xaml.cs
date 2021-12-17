@@ -304,7 +304,8 @@ namespace WolvenKit.Views.Shell
             }
         }
 
-        private void RibbonButton_Click(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.SetLayoutToDefault();
+        private void SetLayoutToDefault(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.SetLayoutToDefault();
+        private void SaveLayoutToProject(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.SaveLayoutToProject();
 
         private void ExandAllNodesContext_Click(object sender, RoutedEventArgs e) =>
             _mainViewModel.ProjectExplorer.ExpandAll.Execute().Subscribe();
