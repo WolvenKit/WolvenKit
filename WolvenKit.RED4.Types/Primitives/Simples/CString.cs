@@ -40,5 +40,7 @@ namespace WolvenKit.RED4.Types
 
         public void SetValue(string value) => _value = value;
 
+        public override string ToString() => GetValue();
+
     }
 }

@@ -60,5 +60,7 @@ namespace WolvenKit.RED4.Types
                 return fnv.HashUInt32;
             }
         }
+
+        public override string ToString() => DepotPath;
     }
 }

@@ -84,7 +84,7 @@
                             <Setter Property="Foreground" Value="{StaticResource Border}"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Name}" Value="{x:Null}">
-                            <Setter Property="Text" Value="{Binding Type}"/>
+                            <Setter Property="Text" Value="{Binding Value}"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding IsInArray}" Value="True">
                             <Setter Property="Text" Value="{Binding Value}"/>
@@ -125,7 +125,7 @@
                         <iconPacks:PackIconCodicons Kind="{Binding Extension}" Height="15"
                             Width="15" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0,0,6,0" />
                         <TextBlock Style="{StaticResource PropertyValueStyle}" Margin="0,0,0,2" Grid.Column="1"/>
-                        <ToggleButton x:Name="DeleteButton" HorizontalAlignment="Left"
+                        <ToggleButton x:Name="DeleteButton" HorizontalAlignment="Left" IsChecked="{Binding IsDeleteReady}"
                                     Style="{StaticResource DeleteButtonStyle}" Grid.Column="2"
                                     Margin="5,-4,0,-2" Padding="0"
                                     VerticalAlignment="Center" ToolTip="Delete Element"/>
@@ -413,6 +413,7 @@
         </Grid-->
 
         <syncfusion:SfTreeView
+            Background="{StaticResource ContentBackground}"
             x:Name="TreeView"
             Grid.Column="0"
             ChildPropertyName="Properties"
@@ -426,6 +427,9 @@
             ItemDragOver="SfTreeView_ItemDragOver"
             ItemDropping="SfTreeView_ItemDropping"
             ItemDropped="SfTreeView_ItemDropped">
+            <syncfusion:SfTreeView.HierarchyPropertyDescriptors>
+                <treeViewEngine:HierarchyPropertyDescriptor IsSelectedPropertyName="IsSelected" IsExpandedPropertyName="IsExpanded" ChildPropertyName="Properties" TargetType="{x:Type shell:ChunkViewModel}" />
+            </syncfusion:SfTreeView.HierarchyPropertyDescriptors>
         </syncfusion:SfTreeView>
 
 
@@ -441,6 +445,7 @@
                 CollectionEditorOpening ="PropertyGrid_CollectionEditorOpening"
                 PropertyNameColumnDefinition="200"
                 ButtonPanelVisibility="Collapsed"
+                SelectedObjectChanged="PropertyGrid_SelectedObjectChanged"
                 BorderThickness="0,1,1,1" />
 
         <!--syncfusion:SfImageEditor

@@ -89,5 +89,7 @@ namespace WolvenKit.RED4.Types
             _value = value;
             _hash = CalculateHash();
         }
+
+        public override string ToString() => GetValue();
     }
 }

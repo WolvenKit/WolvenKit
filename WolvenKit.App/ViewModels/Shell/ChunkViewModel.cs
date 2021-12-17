@@ -20,6 +20,10 @@ using Newtonsoft.Json;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.IO;
+using System.Dynamic;
+using System.ComponentModel;
+using Microsoft.EntityFrameworkCore.Metadata;
+using System.Text;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -43,6 +47,11 @@ namespace WolvenKit.ViewModels.Shell
             propertyName = name;
         }
 
+        public ChunkViewModel(int i, IRedType export, ChunkViewModel parent) : this(export, parent)
+        {
+            Index = i;
+        }
+
         public ChunkViewModel(IRedType export, ChunkViewModel parent) : this(export)
         {
             Parent = parent;
@@ -60,6 +69,178 @@ namespace WolvenKit.ViewModels.Shell
         public IRedType Data { get; set; }
 
         public ChunkViewModel Parent { get; set; }
+        public int? Index { get; set; }
+
+        public class OAPropertyDescriptor : PropertyDescriptor
+        {
+            private IRedArray collection = null;
+            private int index = -1;
+
+            public OAPropertyDescriptor(IRedArray coll,
+                   int idx) : base(idx.ToString(), null)
+            {
+                collection = coll;
+                index = idx;
+            }
+            public override AttributeCollection Attributes => new AttributeCollection(null);
+            public override bool CanResetValue(object component) => true;
+            public override Type ComponentType => collection.GetType();
+            public override string DisplayName => index.ToString();
+            public override string Description => collection[index].ToString();
+            public override object GetValue(object component) => collection[index];
+            public override bool IsReadOnly => false;
+            public override string Name => index.ToString();
+            public override Type PropertyType => collection.InnerType;
+            public override void ResetValue(object component) { }
+            public override bool ShouldSerializeValue(object component) => true;
+
+            public override void SetValue(object component, object value)
+            {
+                collection[index] = value;
+            }
+        }
+
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public class OrangeArray : DynamicObject, IRedType, ICustomTypeDescriptor
+        {
+
+            public Dictionary<string, object> Properties
+              = new Dictionary<string, object>();
+            private IRedArray array;
+
+            public OrangeArray(IRedArray properties)
+            {
+                array = properties;
+                for (var i = 0; i < properties.Count; i++)
+                {
+                    var property = properties[i];
+                    Properties.Add(i.ToString(), property);
+                }
+            }
+
+            public AttributeCollection GetAttributes() => TypeDescriptor.GetAttributes(this, true);
+            public string GetClassName() => TypeDescriptor.GetClassName(this, true);
+            public string GetComponentName() => TypeDescriptor.GetComponentName(this, true);
+            public TypeConverter GetConverter() => TypeDescriptor.GetConverter(this, true);
+            public EventDescriptor GetDefaultEvent() => TypeDescriptor.GetDefaultEvent(this, true);
+            public PropertyDescriptor GetDefaultProperty() => TypeDescriptor.GetDefaultProperty(this, true);
+
+            public override IEnumerable<string> GetDynamicMemberNames()
+            {
+                foreach (var (idx, _) in Properties)
+                {
+                    yield return idx;
+                }
+            }
+
+            public object GetEditor(Type editorBaseType) => TypeDescriptor.GetEditor(this, editorBaseType, true);
+            public EventDescriptorCollection GetEvents() => TypeDescriptor.GetEvents(this, true);
+            public EventDescriptorCollection GetEvents(Attribute[] attributes) => TypeDescriptor.GetEvents(this, attributes, true);
+
+            public PropertyDescriptorCollection GetProperties()
+            {
+                var pds = new PropertyDescriptorCollection(null);
+
+                for (int i = 0; i < Properties.Count; i++)
+                {
+                    var pd = new OAPropertyDescriptor(array, i);
+                    pds.Add(pd);
+                }
+                return pds;
+            }
+            public PropertyDescriptorCollection GetProperties(Attribute[] attributes) => GetProperties();
+            public object GetPropertyOwner(PropertyDescriptor pd) => this;
+
+            public override bool TryGetMember(GetMemberBinder binder, out object result)
+            {
+                return Properties.TryGetValue(binder.Name, out result);
+            }
+
+            public override bool TrySetMember(SetMemberBinder binder, object value)
+            {
+                if (Properties.ContainsKey(binder.Name))
+                {
+                    Properties[binder.Name] = value;
+                    return true;
+                }
+                return false;
+            }
+
+        }
+
+        public class RedArrayWrapper : IRedType
+        {
+            private IRedArray list;
+
+            [TypeConverter(typeof(ExpandableObjectConverter))]
+            public Dictionary<string, object> Properties { get; set; }
+
+            public RedArrayWrapper(IRedArray ary)
+            {
+                list = ary;
+                Properties = new Dictionary<string, object>();
+                foreach (var item in ary)
+                {
+                    if (item is IRedBaseHandle hnd)
+                    {
+                        var star = hnd?.File?.Chunks[hnd.Pointer] ?? null;
+                        Properties.Add(ary.IndexOf(item).ToString(), star);
+                    }
+                    else
+                    {
+                        Properties.Add(ary.IndexOf(item).ToString(), item);
+                    }
+                }
+            }
+        }
+
+        public class RedArrayItem<T> : IRedType
+        {
+            private IRedArray list;
+            private int index;
+            public T Value
+            {
+                get => (T)list[index];
+                set => list[index] = value;
+            }
+
+            public RedArrayItem(IRedArray ary, int i)
+            {
+                list = ary;
+                index = i;
+            }
+        }
+
+        public class RedClassProperty<T> : IRedType
+        {
+            private IRedClass obj;
+            private string propertyName;
+            public T Value
+            {
+                get
+                {
+                    var epi = GetPropertyByName(obj.GetType(), propertyName);
+                    if (epi != null)
+                    {
+                        return (T)epi.GetValue(obj);
+                    }
+                    return default(T);
+                }
+                set {
+                    var epi = GetPropertyByName(obj.GetType(), propertyName);
+                    if (epi != null)
+                    {
+                        epi.SetValue(obj, value);
+                    }
+                }
+            }
+
+            public RedClassProperty(IRedClass cls, string i)
+            {
+                obj = cls;
+                propertyName = i;
+            }
+        }
 
         public IRedType PropertyGridData
         {
@@ -68,13 +249,45 @@ namespace WolvenKit.ViewModels.Shell
                 try
                 {
                     IRedType data;
-                    if (Properties.Count == 0 && !Parent.PropertyType.IsAssignableTo(typeof(IRedArray)))
+                    if (Parent != null && Parent.Data is IRedArray ar)
                     {
-                        data = Parent?.Data ?? null;
+                        Type type = typeof(RedArrayItem<>).MakeGenericType(PropertyType);
+                        return (IRedType)System.Activator.CreateInstance(type, ar, ar.IndexOf(Data));
+                        //return new RedArrayItem<>(ar, ar.IndexOf(Data));
+                    }
+                    if (Parent != null && Parent.Data is IRedClass cls && propertyName != null)
+                    {
+                        Type type = typeof(RedClassProperty<>).MakeGenericType(PropertyType);
+                        return (IRedType)System.Activator.CreateInstance(type, cls, propertyName);
+                        //return new RedArrayItem<>(ar, ar.IndexOf(Data));
+                    }
+                    if (Data is IRedArray ary)
+                    {
+                        //if (ary.InnerType.IsAssignableTo(typeof(IRedClass)))
+                        //    return Data;
+                        //var props = new Dictionary<string, object>();
+                        //foreach (var item in ary)
+                        //{
+                        //    if (item is IRedBaseHandle hnd)
+                        //    {
+                        //        var star = hnd?.File?.Chunks[hnd.Pointer] ?? null;
+                        //        props.Add(ary.IndexOf(item).ToString(), star);
+                        //    }
+                        //    else
+                        //    {
+                        //        props.Add(ary.IndexOf(item).ToString(), item);
+                        //    }
+                        //}
+                        data = new OrangeArray(ary);
+                        return new RedArrayWrapper(ary);
+                    }
+                    if (PropertyType.IsAssignableTo(typeof(IRedClass)))
+                    {
+                        data = Data;
                     }
                     else
                     {
-                        data = Data;
+                        data = Parent?.Data ?? null;
                     }
 
                     if (data is IRedBaseHandle handle)
@@ -140,7 +353,7 @@ namespace WolvenKit.ViewModels.Shell
                                 var chunks = cR2WFile.Buffers[sddb.Pointer].Chunks;
                                 for (int i = 0; i < chunks.Count; i++)
                                 {
-                                    properties.Add(new ChunkViewModel(i.ToString(), chunks[i], this));
+                                    properties.Add(new ChunkViewModel(i, chunks[i], this));
                                 }
                             }
                         }
@@ -151,7 +364,7 @@ namespace WolvenKit.ViewModels.Shell
                                 var chunks = cR2WFile.Buffers[db.Pointer].Chunks;
                                 for (int i = 0; i < chunks.Count; i++)
                                 {
-                                    properties.Add(new ChunkViewModel(i.ToString(), chunks[i], this));
+                                    properties.Add(new ChunkViewModel(i, chunks[i], this));
                                 }
                             }
                         }
@@ -173,6 +386,8 @@ namespace WolvenKit.ViewModels.Shell
 
         [Reactive] public bool IsSelected { get; set; }
 
+        [Reactive] public bool IsDeleteReady { get; set; }
+
         [Reactive] public bool IsExpanded { get; set; }
 
         public string propertyName { get; }
@@ -181,6 +396,10 @@ namespace WolvenKit.ViewModels.Shell
                 if (propertyName != null)
                 {
                     return propertyName;
+                }
+                if (Index != null)
+                {
+                    return Index.ToString();
                 }
                 if (Parent != null)
                 {
@@ -264,12 +483,19 @@ namespace WolvenKit.ViewModels.Shell
 
         public int ArrayIndexWidth { get
             {
-                return 10 * (1 + (int)((float)Parent.Properties.Count / 10)) + 5;
+                if (Parent.Properties.Count < 10)
+                    return 16;
+                else if (Parent.Properties.Count < 100)
+                    return 21;
+                else if (Parent.Properties.Count < 1000)
+                    return 26;
+                return 31;
             }
         }
 
         public string Value {
             get {
+                var str = new StringBuilder();
                 if (Data == null)
                 {
                     return "null";
@@ -294,7 +520,7 @@ namespace WolvenKit.ViewModels.Shell
                 else if (PropertyType.IsAssignableTo(typeof(IRedBaseHandle)))
                 {
                     var value = (IRedBaseHandle)Data;
-                    return Type;
+                    str.Append(Type);
                 }
                 else if (PropertyType.IsAssignableTo(typeof(IRedEnum)))
                 {
@@ -359,8 +585,16 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else
                 {
-                    return Type ?? "null";
+                    str.Append(Type ?? "null");
                 }
+
+                var epi = GetPropertyByName(PropertyType, "Name");
+                if (propertyName == null && epi != null)
+                {
+                    str.Append($" ({epi.GetValue((IRedClass)Data)})");
+                }
+
+                return str.ToString();
             }
             set
             {
@@ -484,6 +718,8 @@ namespace WolvenKit.ViewModels.Shell
         {
             if (Parent.Data is IRedArray ary)
             {
+                //IsSelected = false;
+                Parent.IsSelected = true;
                 ary.Remove(Data);
                 Parent.Properties.Remove(this);
             }

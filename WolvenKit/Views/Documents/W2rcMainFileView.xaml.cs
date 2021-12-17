@@ -17,6 +17,10 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.IO;
 using WolvenKit.Common.Conversion;
+using static WolvenKit.ViewModels.Shell.ChunkViewModel;
+using Syncfusion.Windows.Shared;
+using System.Windows.Controls.Primitives;
+using System.Windows.Controls;
 
 namespace WolvenKit.Views.Documents
 {
@@ -29,6 +33,8 @@ namespace WolvenKit.Views.Documents
         {
             InitializeComponent();
             SetupImagePreview();
+
+            PropertyGrid.Loaded += PropertyGrid_Loaded;
 
             this.WhenAnyValue(x => x.DataContext).Subscribe(x =>
             {
@@ -181,7 +187,25 @@ namespace WolvenKit.Views.Documents
                 else
                 {
                     propertyItem.Editor = new PropertyGridEditors.BaseTypeEditor();
-                } 
+                    e.ExpandMode = PropertyExpandModes.NestedMode;
+                }
+                var viewData = ViewModel.SelectedChunk.PropertyGridData;
+                if (e.DisplayName == "Value" && viewData.GetType().IsGenericType && viewData.GetType().GetGenericTypeDefinition() == typeof(RedArrayItem<>))
+                {
+                    if (ViewModel.SelectedChunk.Parent.Data is IRedArray ary)
+                    {
+                        //e.DisplayName = $"[{ary.IndexOf(ViewModel.SelectedChunk.Data)}] {ViewModel.SelectedChunk.Type}";
+                        e.DisplayName = $"{ViewModel.SelectedChunk.Parent.Name} [{ary.IndexOf(ViewModel.SelectedChunk.Data)}]";
+                    }
+                }
+                if (e.DisplayName == "Value" && viewData.GetType().IsGenericType && viewData.GetType().GetGenericTypeDefinition() == typeof(RedClassProperty<>))
+                {
+                    if (ViewModel.SelectedChunk.Parent.Data is IRedClass cls)
+                    {
+                        //e.DisplayName = $"[{ary.IndexOf(ViewModel.SelectedChunk.Data)}] {ViewModel.SelectedChunk.Type}";
+                        e.DisplayName = $"{ViewModel.SelectedChunk.Name} ({ViewModel.SelectedChunk.Type})";
+                    }
+                }
             }
         }
 
@@ -412,6 +436,30 @@ namespace WolvenKit.Views.Documents
             transform.ScaleY = -1;
             pan.X = 0;
             pan.Y = 0;
+        }
+
+        private void PropertyGrid_SelectedObjectChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+
+        }
+
+        private void PropertyGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+            PropertyView item1 = VisualUtils.FindDescendant(this, typeof(PropertyView)) as PropertyView;
+
+            if (item1 != null)
+                item1.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
+        }
+
+        void ItemContainerGenerator_StatusChanged(object sender, EventArgs e)
+        {
+            if (sender is ItemContainerGenerator icg)
+            {
+                foreach (var item in icg.Items)
+                {
+                    var pi = (PropertyItem)item;
+                }
+            }
         }
     }
 }
