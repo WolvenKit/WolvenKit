@@ -4,13 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WolvenKit.Views.Editors"
+             xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
              xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="400">
 
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedRefEditor}}}">
-        
-        <TextBox x:Name="TextBox"
+
+        <TextBox x:Name="TextBox" helpers:TextBoxBehavior.TripleClickSelectAll="True"
             Text="{Binding Text}"
             />
     </Grid>

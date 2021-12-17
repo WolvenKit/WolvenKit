@@ -363,6 +363,74 @@
                         </syncfusion:PropertyGrid.ContextMenu>
                     </syncfusion:PropertyGrid>
 
+                    <!--StackPanel Orientation="Vertical" Background="{StaticResource ContentBackground}" Opacity="1">
+                        <StackPanel.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Margin" Value="5" />
+                                <Setter Property="Foreground" Value="#dddddd" />
+                            </Style>
+                            <Style x:Key="PVTextBoxFocus" TargetType="TextBox">
+                                <Setter Property="BorderBrush" Value="#666666" />
+                            </Style>
+                            <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxTCSA}">
+                                <Setter Property="BorderBrush" Value="#333333" />
+                                <Setter Property="BorderThickness" Value="0,1,0,1" />
+                                <Setter Property="Padding" Value="3" />
+                                <Setter Property="FocusVisualStyle" Value="{StaticResource PVTextBoxFocus}" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="BorderBrush" Value="#666666" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Resources>
+                        <StackPanel Orientation="Vertical">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Filename" />
+                            </Grid>
+                            <TextBox IsReadOnly="True" Text="{Binding PE_SelectedItem.Name, Mode=OneWay}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Game Resource Path" />
+                                <TextBlock
+                                    TextAlignment="Right"
+                                    Text="Hash"
+                                    Grid.Column="1" />
+                                <TextBox
+                                    Grid.Column="2"
+                                    BorderThickness="1,0,0,0"
+                                    IsReadOnly="True"
+                                    Text="{Binding PE_SelectedItem.HashStr, Mode=OneWay}" />
+                            </Grid>
+                            <TextBox IsReadOnly="True" Text="{Binding PE_SelectedItem.RelativePath, Mode=OneWay}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="System Path" />
+                                <Button Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource ButtonCustom}" Padding="5,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <iconPacks:PackIconCodicons Kind="OpenPreview" Height="14" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Open Folder in Explorer" FontSize="10.5"/>
+                                    </StackPanel> 
+                                </Button>
+                            </Grid>
+                            <TextBox IsReadOnly="True" Text="{Binding PE_SelectedItem.FullName, Mode=OneWay}" />
+                        </StackPanel>
+                    </StackPanel-->
+
                     <syncfusion:PropertyGrid
                         x:Name="ABPropGrid"
                         AutoGeneratingPropertyGridItem="PropertyGrid_OnAutoGeneratingPropertyGridItem"

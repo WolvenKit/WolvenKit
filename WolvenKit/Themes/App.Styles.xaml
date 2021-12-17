@@ -5,7 +5,8 @@
     xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
     xmlns:sfskin ="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:svgc="http://sharpvectors.codeplex.com/svgc/">
+    xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+    xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers">
 
     <ResourceDictionary.MergedDictionaries>
         <sfskin:ResourceDictionaryProvider DictionaryName="Common" ThemeName="MaterialDark" />
@@ -38,7 +39,11 @@
         <Setter Property="TabItemSelectedForeground" Value="White" />
         <Setter Property="BorderThickness" Value="0" />
     </Style>
-    
+
+    <Style x:Key="TextBoxTCSA" TargetType="{x:Type TextBox}">
+        <Setter Property="helpers:TextBoxBehavior.TripleClickSelectAll" Value="True" />
+    </Style>
+
     <LinearGradientBrush x:Key="ShadedBackgroundBrush" StartPoint="0,0" EndPoint="0,1">
         <GradientStopCollection>
             <GradientStop Offset="0.0" Color="#00000000" />
