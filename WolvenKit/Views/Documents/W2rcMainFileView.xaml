@@ -214,7 +214,7 @@
                                 <ContentPresenter Grid.Column="2" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center"
                                    ContentTemplate="{StaticResource PropertyValueTemplate}"  />
                                 <Button
-                                    Panel.ZIndex="5"
+                                    Panel.ZIndex="5" Background="Transparent"
                                     Command="{Binding AddItemToArrayCommand}"
                                     Grid.Column="1" Margin="-25,0,0,0" Padding="0"
                                     Height="20" Width="20" VerticalAlignment="Center"
