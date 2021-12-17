@@ -95,7 +95,8 @@ namespace WolvenKit.Views.Documents
             //PropertyGrid.CustomEditorCollection = CustomEditorCollection;
             //MainTreeGrid.RequestTreeItems += TreeGrid_RequestTreeItems;
         }
-        public ICommand ExportChunkCommand { get; private set; }
+        //public ICommand AddItemToArrayCommand { get; private set; }
+        //public ICommand ExportChunkCommand { get; private set; }
 
         //private void TreeGrid_RequestTreeItems(object sender, TreeGridRequestTreeItemsEventArgs args)
         //{

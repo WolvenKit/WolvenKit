@@ -7,5 +7,6 @@ namespace WolvenKit.RED4.Types
     public interface IRedString
     {
         public string GetValue();
+        public void SetValue(string value);
     }
 }

@@ -127,7 +127,10 @@ namespace WolvenKit.RED4.Types
                     return _properties[redPropertyName];
                 }
 
-                if (typeof(IRedEnum).IsAssignableFrom(type) || typeof(IRedBitField).IsAssignableFrom(type) || typeof(IRedRef).IsAssignableFrom(type))
+                if (typeof(IRedEnum).IsAssignableFrom(type) ||
+                    typeof(IRedBitField).IsAssignableFrom(type) ||
+                    typeof(IRedRef).IsAssignableFrom(type) ||
+                    typeof(IRedString).IsAssignableFrom(type))
                 {
                     _properties[redPropertyName] = System.Activator.CreateInstance(type);
                     return _properties[redPropertyName];
@@ -141,7 +144,7 @@ namespace WolvenKit.RED4.Types
 
         void IRedClass.InternalSetPropertyValue(string redPropertyName, object value, bool native)
         {
-            if (value == null && _properties[redPropertyName] is IRedBaseHandle d)
+            if (value == null && _properties.ContainsKey(redPropertyName) && _properties[redPropertyName] is IRedBaseHandle d)
             {
                 d.Remove();
             }

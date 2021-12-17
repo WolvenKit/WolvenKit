@@ -32,15 +32,7 @@ namespace WolvenKit.Views.Editors
 
         private void SetRedValue(string value)
         {
-            if (RedString is CName)
-            {
-                SetCurrentValue(RedStringProperty, (CName)value);
-            }
-            else if (RedString is CString)
-            {
-                SetCurrentValue(RedStringProperty, (CString)value);
-            }
-            
+            RedString.SetValue(value);
         }
 
         private string GetValueFromRedValue()

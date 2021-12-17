@@ -40,11 +40,39 @@
                 </Style>
 
                 <!-- Start TreeView Styles & Templates -->
-                
-                <Style x:Key="DeleteButton" TargetType="Button" BasedOn="{StaticResource ButtonCustom}">
+
+                <Style x:Key="DeleteButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource ToggleButtonCustom}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <Grid Height="20" Width="20" Background="Transparent">
+                                    <iconPacks:PackIconVaadinIcons Kind="Trash" Foreground="{StaticResource WolvenKitRed}"
+                                        VerticalAlignment="Center" HorizontalAlignment="Left" Padding="2"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsInArray}" Value="False">
                             <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <TextBlock Text="Confirm?" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3,0,0,0" />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+
+                <Style x:Key="RealDeleteButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonCustom}">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsChecked, ElementName=DeleteButton}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -92,15 +120,20 @@
                             <ColumnDefinition Width="20" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <iconPacks:PackIconCodicons Kind="{Binding Extension}" Height="14"
-                            Width="14" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0,0,6,0" />
+                        <iconPacks:PackIconCodicons Kind="{Binding Extension}" Height="15"
+                            Width="15" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0,0,6,0" />
                         <TextBlock Style="{StaticResource PropertyValueStyle}" Margin="0,0,0,2" Grid.Column="1"/>
-                        <Button
-                                    Style="{StaticResource DeleteButton}" Grid.Column="2"
-                                    Margin="5,-4,0,-2" Padding="0" Height="20" Width="20"
+                        <ToggleButton x:Name="DeleteButton" HorizontalAlignment="Left"
+                                    Style="{StaticResource DeleteButtonStyle}" Grid.Column="2"
+                                    Margin="5,-4,0,-2" Padding="0"
+                                    VerticalAlignment="Center" ToolTip="Delete Element"/>
+                        <Button x:Name="RealDeleteButton" Command="{Binding DeleteItemCommand}"
+                                    Style="{StaticResource RealDeleteButtonStyle}" Grid.Column="3"
+                                    Margin="2,-4,0,-2" Padding="0" Height="20" Width="20"
                                     VerticalAlignment="Center" ToolTip="Delete Element">
-                            <iconPacks:PackIconVaadinIcons Kind="Trash" Foreground="IndianRed"
+                            <iconPacks:PackIconVaadinIcons Kind="Trash" Foreground="{StaticResource WolvenKitRed}"
                                         VerticalAlignment="Center" Padding="2"/>
                         </Button>
                     </Grid>
@@ -125,7 +158,7 @@
                             <Setter Property="Width" Value="120"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding IsInArray}" Value="True">
-                            <Setter Property="Width" Value="20"/>
+                            <Setter Property="Width" Value="{Binding ArrayIndexWidth}"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Name}" Value="{x:Null}">
                             <Setter Property="Width" Value="0"/>
@@ -180,11 +213,13 @@
                                    ContentTemplate="{StaticResource PropertyNameTemplate}"/>
                                 <ContentPresenter Grid.Column="2" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center"
                                    ContentTemplate="{StaticResource PropertyValueTemplate}"  />
-                                <Button 
+                                <Button
+                                    Panel.ZIndex="5"
+                                    Command="{Binding AddItemToArrayCommand}"
                                     Grid.Column="1" Margin="-25,0,0,0" Padding="0"
                                     Height="20" Width="20" VerticalAlignment="Center"
                                     ToolTip="Add New Element" Style="{StaticResource ButtonCustom}">
-                                    <iconPacks:PackIconVaadinIcons Kind="PlusCircle"
+                                    <iconPacks:PackIconVaadinIcons Kind="PlusCircle" 
                                         VerticalAlignment="Center" Padding="2"/>
                                 </Button>
                             </Grid>

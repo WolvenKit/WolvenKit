@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.Types
     public sealed class CString : IRedPrimitive<string>, IEquatable<CString>, IRedString
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private readonly string _value;
+        private string _value;
 
         public CString() { }
 
@@ -37,5 +37,8 @@ namespace WolvenKit.RED4.Types
         public bool Equals(CString other) => Equals(_value, other._value);
 
         public string GetValue() => (string)this;
+
+        public void SetValue(string value) => _value = value;
+
     }
 }

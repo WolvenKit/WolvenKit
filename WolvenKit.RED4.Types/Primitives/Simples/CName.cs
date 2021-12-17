@@ -11,10 +11,10 @@ namespace WolvenKit.RED4.Types
     public sealed class CName : IRedPrimitive<string>, IEquatable<CName>, IRedString
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private readonly string _value;
+        private string _value;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private readonly ulong _hash;
+        private ulong _hash;
 
         public CName() { }
 
@@ -83,5 +83,11 @@ namespace WolvenKit.RED4.Types
         public bool Equals(CName other) => Equals(GetRedHash(), other.GetRedHash());
 
         public string GetValue() => (string)this;
+
+        public void SetValue(string value)
+        {
+            _value = value;
+            _hash = CalculateHash();
+        }
     }
 }
