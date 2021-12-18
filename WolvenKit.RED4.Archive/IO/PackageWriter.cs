@@ -36,6 +36,13 @@ namespace WolvenKit.RED4.Archive.IO
             typeof(worldCompiledEffectEventInfo)
         };
 
+        private readonly List<Type> _doubleHeaderCRUIDS = new()
+        {
+            typeof(entExternalComponent),
+            typeof(entMeshComponent),
+            typeof(entSkinnedMeshComponent)
+        };
+
         public override void WriteClass(IRedClass cls)
         {
             var typeInfo = RedReflection.GetTypeInfo(cls.GetType());
@@ -48,6 +55,11 @@ namespace WolvenKit.RED4.Archive.IO
                 var value = propertyInfo.GetValue(cls);
                 if (!typeInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), propertyInfo, value))
                 {
+                    if (propertyInfo.Type == typeof(CRUID) && _doubleHeaderCRUIDS.Contains(cls.GetType()))
+                    {
+                        _cruids.Add((CRUID)value);
+                    }
+
                     continue;
                 }
                 nonDefaultProperties.Add(propertyInfo);

@@ -6,7 +6,21 @@ namespace WolvenKit.RED4.Types
 {
     public partial class scnAnimName : IRedAppendix
     {
-        public object Appendix { get; set; }
+        [RED("unk1")]
+        [REDProperty(IsIgnored = true)]
+        public CArray<CName> Unk1
+        {
+            get => GetPropertyValue<CArray<CName>>();
+            set => SetPropertyValue<CArray<CName>>(value);
+        }
+
+        [RED("unk2")]
+        [REDProperty(IsIgnored = true)]
+        public CArray<CUInt16> Unk2
+        {
+            get => GetPropertyValue<CArray<CUInt16>>();
+            set => SetPropertyValue<CArray<CUInt16>>(value);
+        }
 
         public void Read(Red4Reader reader, uint size)
         {
@@ -15,22 +29,41 @@ namespace WolvenKit.RED4.Types
                 throw new TodoException();
             }
 
-            var result = new CName[size / 2];
-            for (int i = 0; i < result.Length; i++)
-            {
-                result[i] = reader.ReadCName();
-            }
+            var cnt = size / 2;
 
-            Appendix = result;
+            if (Type.Value == Enums.scnAnimNameType.reference)
+            {
+                Unk2 = new CArray<CUInt16>();
+                for (int i = 0; i < cnt; i++)
+                {
+                    Unk2.Add(reader.BaseReader.ReadUInt16());
+                }
+            }
+            else
+            {
+                Unk1 = new CArray<CName>();
+                for (int i = 0; i < cnt; i++)
+                {
+                    Unk1.Add(reader.ReadCName());
+                }
+            }
         }
 
         public void Write(Red4Writer writer)
         {
-            var appendix = (CName[])Appendix;
-
-            for (int i = 0; i < appendix.Length; i++)
+            if (Type.Value == Enums.scnAnimNameType.reference)
             {
-                writer.Write(appendix[i]);
+                foreach (var val in Unk2)
+                {
+                    writer.Write(val);
+                }
+            }
+            else
+            {
+                foreach (var val in Unk1)
+                {
+                    writer.Write(val);
+                }
             }
         }
     }

@@ -30,16 +30,17 @@ namespace WolvenKit.RED4.Archive.IO
                 numSections = 7
             };
 
-            switch (file.Type)
+            if (file.Chunks[0] is entEntity)
             {
-                case RedBuffer.BufferType.DataBuffer:
-                    header.uk2 = 0x0000;
-                    break;
-                case RedBuffer.BufferType.SerializationDeferredDataBuffer:
-                    header.uk2 = 0xffff;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                header.uk2 = 0x0000;
+            }
+            else if ((file.Chunks[0] is entIComponent))
+            {
+                header.uk2 = 0xffff;
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException();
             }
 
             var headerStart = BaseStream.Position;
@@ -50,7 +51,7 @@ namespace WolvenKit.RED4.Archive.IO
             // write cruids
 
             var unique_cruids = _cruids;
-            if (file.Type == RedBuffer.BufferType.DataBuffer)
+            if (header.uk2 == 0)
             {
                 unique_cruids.Insert(0, 0);
             }
@@ -138,7 +139,11 @@ namespace WolvenKit.RED4.Archive.IO
                         size = (byte)reff.Item2.Length,
                         unk1 = (reff.Item3 & 0b10) > 0
                     });
-                    refData.AddRange(Encoding.UTF8.GetBytes(reff.Item2));
+
+                    if ((string)reff.Item2 != null)
+                    {
+                        refData.AddRange(Encoding.UTF8.GetBytes(reff.Item2));
+                    }
                 }
                 else
                 {

@@ -100,17 +100,15 @@ namespace WolvenKit.RED4.Archive.IO
                 value = Read(type, size - 4, flags);
 
                 RedReflection.AddDynamicProperty(cls, varname, value);
-                //throw new MissingRTTIException(varname, typename, cls.GetType().Name);
             }
             else
             {
                 value = Read(prop.Type, size - 4, prop.Flags.Clone());
-                //PostProcessing(value);
 
                 var typeInfo = RedReflection.GetTypeInfo(cls.GetType());
                 if (!typeInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), varname, value))
                 {
-                    throw new TodoException();
+                    throw new TodoException($"Invalid default val for: \"{cls.RedType}.{varname}\"");
                 }
 
                 prop.SetValue(cls, value);
