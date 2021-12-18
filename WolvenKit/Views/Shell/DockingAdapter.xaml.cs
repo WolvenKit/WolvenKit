@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
@@ -197,6 +198,10 @@ namespace WolvenKit.Views.Shell
                 return;
             try
             {
+                if (ItemsSource is ObservableCollection<IDockElement> oc)
+                {
+                    oc.Clear();
+                }
                 var layoutPath = Path.Combine(viewModel.ActiveProject.ProjectDirectory, "layout.xml");
                 if (File.Exists(layoutPath))
                 {
@@ -210,7 +215,8 @@ namespace WolvenKit.Views.Shell
             }
             catch (Exception)
             {
-
+                //viewModel.Log(e.Message);
+                throw;
             }
         }
 
