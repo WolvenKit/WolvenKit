@@ -19,6 +19,7 @@ namespace WolvenKit.RED4.Archive.IO
 
         private PackageHeader header;
         private List<CRUID> _cruids = new List<CRUID>();
+        private ushort refsAreStrings = 0;
 
         public void WritePackage(RedBuffer file)
         {
@@ -32,47 +33,51 @@ namespace WolvenKit.RED4.Archive.IO
 
             if (file.Chunks[0] is entEntity)
             {
-                header.uk2 = 0x0000;
+                refsAreStrings = 0x0000;
             }
             else if ((file.Chunks[0] is entIComponent))
             {
-                header.uk2 = 0xffff;
+                refsAreStrings = 0xffff;
             }
-            else
-            {
-                throw new ArgumentOutOfRangeException();
-            }
+            //else
+            //{
+            //    throw new ArgumentOutOfRangeException();
+            //}
 
             var headerStart = BaseStream.Position;
             BaseStream.WriteStruct(header);
 
             var (strings, imports, chunkDesc, chunkData) = GenerateChunkData();
 
-            // write cruids
-
             var unique_cruids = _cruids;
-            if (header.uk2 == 0)
+            if (refsAreStrings == 0)
             {
                 unique_cruids.Insert(0, 0);
             }
 
-            header.numCruids0 = header.numCruids1 = (ushort)unique_cruids.Count;
-            foreach (var cruid in unique_cruids)
+            header.numCruids0 = (ushort)unique_cruids.Count;
+
+            if (header.numCruids0 > 1)
             {
-                Write(cruid);
+                _writer.Write(refsAreStrings);
+                _writer.Write((ushort)header.numCruids0);
+
+                // write cruids
+                foreach (var cruid in unique_cruids)
+                {
+                    Write(cruid);
+                }
             }
 
             var headerEnd = BaseStream.Position;
 
             // write refs
 
-
             header.refPoolDescOffset = Convert.ToUInt32(BaseStream.Position - headerEnd);
             var (refData, refDesc) = GenerateRefBuffer(imports, (uint)(header.refPoolDescOffset + imports.Count * 4));
             BaseStream.WriteStructs(refDesc.ToArray());
 
             header.refPoolDataOffset = Convert.ToUInt32(BaseStream.Position - headerEnd);
-            // do we need a condition for uk3? does it matter?
             BaseStream.Write(refData);
 
             // write names
@@ -131,7 +136,7 @@ namespace WolvenKit.RED4.Archive.IO
             var refData = new List<byte>();
             foreach (var reff in refs)
             {
-                if (header.uk2 == 0)
+                if (refsAreStrings == 0)
                 {
                     refDesc.Add(new PackageImportHeader
                     {
