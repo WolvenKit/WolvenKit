@@ -48,7 +48,8 @@
             Margin="-3,-2,-3,-3"
             BorderThickness="0,0,0,0"
             Padding="0"
-            Style="{StaticResource WolvenKitTabControl}">
+            Style="{StaticResource WolvenKitTabControl}"
+            TabPanelBackground="#313131">
         </syncfusion:TabControlExt>
         
        

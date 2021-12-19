@@ -11,7 +11,7 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:viewmodels="clr-namespace:WolvenKit.ViewModels">
    
-    <Grid MinWidth="300" MinHeight="300" MaxWidth="1200" MaxHeight="600" Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
+    <Grid MinWidth="300" MinHeight="300">
 
         <Grid.Resources>
             <Style TargetType="CheckBox">
@@ -24,15 +24,17 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <syncfusion:PropertyGrid x:Name="SettingsPropertygrid" Grid.Row="0"  Margin="3,75,3,0"
-                            AutoGeneratingPropertyGridItem="SettingsPropertygrid_OnAutoGeneratingPropertyGridItem"
-                            CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
-                            EnableGrouping="True"
-                            SearchBoxVisibility="Collapsed"
-                            ButtonPanelVisibility="Collapsed"
-                            PropertyNameColumnDefinition="200" />
+        <syncfusion:PropertyGrid
+            x:Name="SettingsPropertygrid" Grid.Row="0"  Margin="0,85,0,0"
+            AutoGeneratingPropertyGridItem="SettingsPropertygrid_OnAutoGeneratingPropertyGridItem"
+            CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
+            EnableGrouping="True"
+            BorderThickness="0"
+            SearchBoxVisibility="Collapsed"
+            ButtonPanelVisibility="Collapsed"
+            PropertyNameColumnDefinition="200" />
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" Background="{StaticResource ContentBackgroundAlt2}">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -55,8 +57,9 @@
 
 
         <StackPanel
-            Margin="0,0,5,0"
-            HorizontalAlignment="Right"
+            Margin="25,0,5,0"
+            Height="85"
+            HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Orientation="Horizontal"
             >
@@ -68,7 +71,7 @@
                 Text="Settings"
                 />
             <hc:Divider
-                Height="45"
+                Height="50"
                 Margin="15"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"

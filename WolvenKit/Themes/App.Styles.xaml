@@ -6,6 +6,7 @@
     xmlns:sfskin ="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+    xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers">
 
     <ResourceDictionary.MergedDictionaries>
@@ -31,18 +32,49 @@
     <SolidColorBrush x:Key="WolvenKitPurple" Color="#5760B3" />
     <SolidColorBrush x:Key="WolvenKitTan" Color="#D0A467" />
 
+    <SolidColorBrush x:Key="WolvenKitRed50" Color="#7FDF2935" />
+    <SolidColorBrush x:Key="WolvenKitRedShadow50" Color="#7F951C2D" />
+    <SolidColorBrush x:Key="WolvenKitCyan50" Color="#7F52F1FF" />
+    <SolidColorBrush x:Key="WolvenKitCyanShadow50" Color="#7F4D8C9A" />
+    <SolidColorBrush x:Key="WolvenKitYellow50" Color="#7FFFEA0A" />
+    <SolidColorBrush x:Key="WolvenKitYellowShadow50" Color="#7FABA108" />
+    <SolidColorBrush x:Key="WolvenKitPurple50" Color="#7F5760B3" />
+    <SolidColorBrush x:Key="WolvenKitTan50" Color="#7FD0A467" />
+
     <Style x:Key="WolvenKitTabControl" TargetType="{x:Type syncfusion:TabControlExt}" BasedOn="{StaticResource SyncfusionDocumentTabControlExtStyle}">
         <Setter Property="TabItemSelectedBackground" Value="{StaticResource WolvenKitRed}" />
         <Setter Property="TabItemSelectedBorderBrush" Value="{StaticResource WolvenKitRedShadow}" />
         <Setter Property="TabItemHoverBackground" Value="{StaticResource WolvenKitRedShadow}" />
         <Setter Property="TabItemHoverBorderBrush" Value="{StaticResource WolvenKitRedShadow}" />
         <Setter Property="TabItemSelectedForeground" Value="White" />
+        <Setter Property="TabPanelBackground" Value="{StaticResource ContentBackgroundAlt2}" />
         <Setter Property="BorderThickness" Value="0" />
+
+        <!--Setter Property="TabPanelBackground" Value="#313131" /-->
     </Style>
 
     <Style x:Key="TextBoxTCSA" TargetType="{x:Type TextBox}">
         <Setter Property="helpers:TextBoxBehavior.TripleClickSelectAll" Value="True" />
     </Style>
+    
+    <DrawingBrush
+            x:Key="CloudDrawingBrushMain"
+            o:Freeze="True"
+            Opacity="0.02"
+            RenderOptions.CacheInvalidationThresholdMaximum="2.0"
+            RenderOptions.CacheInvalidationThresholdMinimum="0.5"
+            RenderOptions.CachingHint="Cache"
+            Stretch="Uniform"
+            TileMode="Tile"
+            Viewport="0,0,90,90"
+            ViewportUnits="Absolute">
+        <DrawingBrush.Drawing>
+            <ImageDrawing
+                    o:Freeze="True"
+                    ImageSource="pack://application:,,,/Resources/Media/Images/Application/Sammy_Grayscale.png"
+                    Rect="0,0,70,80" />
+        </DrawingBrush.Drawing>
+    </DrawingBrush>
 
     <LinearGradientBrush x:Key="ShadedBackgroundBrush" StartPoint="0,0" EndPoint="0,1">
         <GradientStopCollection>

@@ -332,9 +332,12 @@ namespace WolvenKit.Views.Shell
         private void Ribbon_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
-            var mainWindow = (MainView)Locator.Current.GetService<IViewFor<AppViewModel>>();
-            if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
-                mainWindow?.DragMove();
+            if (sender == TitlebarCoverer)
+            {
+                var mainWindow = (MainView)Locator.Current.GetService<IViewFor<AppViewModel>>();
+                if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
+                    mainWindow?.DragMove();
+            }
         }
 
         ///// <summary>

@@ -108,6 +108,8 @@ namespace WolvenKit.ViewModels.Tools
 
         [Reactive] public ObservableCollection<object> SelectedItems { get; set; } = new();
 
+        [Reactive] public bool IsFlatModeEnabled { get; set; }
+
 
         public FileModel LastSelected => _watcherService.LastSelect;
 

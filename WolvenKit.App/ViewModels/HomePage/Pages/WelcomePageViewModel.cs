@@ -55,11 +55,6 @@ namespace WolvenKit.ViewModels.Shared
             _settingsManager = settingsManager;
 
             CloseHomePage = new RelayCommand(ExecuteHome, CanHome);
-
-            SettingsCommand = new RelayCommand(ExecSC, CanSC);
-            TutorialsCommand = new RelayCommand(ExecTC, CanTC);
-            WikiCommand = new RelayCommand(ExecWC, CanWC);
-
             PinItem = new DelegateCommand<string>(OnPinItemExecute);
             UnpinItem = new DelegateCommand<string>(OnUnpinItemExecute);
             OpenInExplorer = new DelegateCommand<string>(OnOpenInExplorerExecute);
@@ -203,7 +198,7 @@ namespace WolvenKit.ViewModels.Shared
                 if (items.Count > 0)
                 {
                     var item = items.First();
-                    _recentlyUsedItemsService.AddItem(new RecentlyUsedItemModel(parameter, item.DateTime));
+                    _recentlyUsedItemsService.AddItem(new RecentlyUsedItemModel(parameter, item.DateTime, item.Modified));
                     _recentlyUsedItemsService.RemoveItem(item);
                     return parameter;
                 }
@@ -219,24 +214,40 @@ namespace WolvenKit.ViewModels.Shared
                 FancyProjects.Clear();
             });
 
-            foreach (var item in _recentlyUsedItems)
+            var sorted = _recentlyUsedItems.ToList();
+            sorted.Sort(delegate(RecentlyUsedItemModel a, RecentlyUsedItemModel b)
+            {
+                DateTime ad, bd;
+                if (a.Modified != default(DateTime))
+                    ad = a.Modified;
+                else
+                    ad = a.DateTime;
+                if (b.Modified != default(DateTime))
+                    bd = b.Modified;
+                else
+                    bd = b.DateTime;
+                return bd.CompareTo(ad);
+            });
+
+            foreach (var item in sorted)
             {
                 var fi = new FileInfo(item.Name);
 
                 var n = item.Name;
-                var cd = item.DateTime;
+                var cd = item.Modified != default ? item.Modified : item.DateTime;
                 var p = item.Name;
 
                 var newfo = fi.Name.Split('.');
                 var newfi = fi.Directory + "\\" + newfo[0] + "\\" + "img.png";
 
                 var IsThere = File.Exists(newfi);
+                File.GetLastWriteTime(item.Name);
 
                 FancyProjectObject NewItem;
                 if (Path.GetExtension(item.Name).TrimStart('.') == EProjectType.cpmodproj.ToString())
                 {
                     if (!IsThere)
-                    { newfi = "pack://application:,,,/Resources/Media/Images/Application/CpProj.png"; }
+                    { newfi = "pack://application:,,,/Resources/Media/Images/Application/V Male Logo Cropped.png"; }
                     NewItem = new FancyProjectObject(fi.Name, cd, "Cyberpunk 2077", p, newfi);
                     DispatcherHelper.RunOnMainThread(() =>
                     {
@@ -256,19 +267,6 @@ namespace WolvenKit.ViewModels.Shared
                 }
             }
         }
-
-        private bool CanSC() => true;
-
-        private bool CanTC() => true;
-
-        private bool CanWC() => true;
-
-        private void ExecSC() => Locator.Current.GetService<HomePageViewModel>()?.SetCurrentPage("Settings");
-
-        private void ExecTC() => Locator.Current.GetService<HomePageViewModel>()?.SetCurrentPage("Wiki");
-
-        private void ExecWC() => Locator.Current.GetService<HomePageViewModel>()?.SetCurrentPage("Wiki");
-
         private void OnPinItemExecute(string parameter)
         {
             _recentlyUsedItemsService.PinItem(parameter);
@@ -331,6 +329,7 @@ namespace WolvenKit.ViewModels.Shared
             public DateTime LastEditDate { get; set; }
             public string Name { get; set; }
 
+            public string ProjectColor => ((uint)string.GetHashCode(ProjectPath) % 7).ToString();
 
             public string SafeName { get; set; }
             public string ProjectPath { get; set; }

@@ -83,7 +83,7 @@ namespace WolvenKit.Functionality.Services
 
                         if (_recentlyUsedItemsService.Items.Items.All(item => item.Name != location))
                         {
-                            _recentlyUsedItemsService.AddItem(new RecentlyUsedItemModel(location, DateTime.Now));
+                            _recentlyUsedItemsService.AddItem(new RecentlyUsedItemModel(location, DateTime.Now, DateTime.Now));
                         }
                     }
                 }

@@ -5,7 +5,6 @@
     xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:shell="clr-namespace:WolvenKit.Views.Shell"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
@@ -21,35 +20,16 @@
     TitleBarForeground="#efefef"
     MinWidth="960"
     MinHeight="600"
+    SizeToContent="Manual"
     AllowsTransparency="True"
     TitleBarBackground="Transparent"
     UseLayoutRounding="True"
-    ResizeBorderBrush="#1f1f1f"
+    ResizeBorderBrush="{StaticResource ContentBackgroundAlt4}"
     ResizeBorderThickness="1"
-    Background="{StaticResource ContentBackground}"
+    Background="{StaticResource ContentBackgroundAlt2}"
     >
     <!--ResizeBorderBrush="#1f1f1f"-->
-    <syncfusion:ChromelessWindow.Resources>
-        <DrawingBrush
-            x:Key="CloudDrawingBrushMain"
-            o:Freeze="True"
-            Opacity="0.02"
-            RenderOptions.CacheInvalidationThresholdMaximum="2.0"
-            RenderOptions.CacheInvalidationThresholdMinimum="0.5"
-            RenderOptions.CachingHint="Cache"
-            Stretch="Uniform"
-            TileMode="Tile"
-            Viewport="0,0,90,90"
-            ViewportUnits="Absolute">
-            <DrawingBrush.Drawing>
-                <ImageDrawing
-                    o:Freeze="True"
-                    ImageSource="pack://application:,,,/Resources/Media/Images/Application/Sammy_Grayscale.png"
-                    Rect="0,0,70,80" />
-            </DrawingBrush.Drawing>
-        </DrawingBrush>
-    </syncfusion:ChromelessWindow.Resources>
-    <Grid Background="{DynamicResource CloudDrawingBrushMain}">
+    <Grid Background="{DynamicResource ContentBackgroundAlt2}">
         <Grid.Resources>
             <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" />
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
@@ -61,23 +41,24 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <shell:RibbonView Margin="0" Grid.Row="0" Panel.ZIndex="5" BorderThickness="0,0,0,1" BorderBrush="#131313"/>
+        <shell:RibbonView Grid.Row="0" Margin="0,0,0,0" />
 
+        <shell:StatusBarView Grid.Row="2" Margin="0,0,0,0" />
+        
         <shell:DockingAdapter
-            Margin="5,4,5,5"
+            Margin="5,2,5,0"
             x:Name="dockingAdapter"
             Grid.Row="1"
-
+            Background="{StaticResource ContentBackground}"
              />
 
-        <shell:StatusBarView Grid.Row="2" />
 
-        <ScrollViewer Grid.Row="0" Grid.RowSpan="3"  HorizontalAlignment="Right" VerticalScrollBarVisibility="Hidden" Panel.ZIndex="10">
+        <!--ScrollViewer Grid.Row="3" Grid.RowSpan="3"  HorizontalAlignment="Right" VerticalScrollBarVisibility="Hidden" Panel.ZIndex="10">
             <StackPanel
                 Margin="0,0,10,10"
                 VerticalAlignment="Top"
                 hc:Growl.GrowlParent="True" />
-        </ScrollViewer>
+        </ScrollViewer-->
 
     </Grid>
 </syncfusion:ChromelessWindow>

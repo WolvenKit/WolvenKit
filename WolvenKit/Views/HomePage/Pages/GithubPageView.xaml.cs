@@ -33,7 +33,7 @@ namespace WolvenKit.Views.HomePage.Pages
             {
                 await cal.EnsureCoreWebView2Async(Helpers.objCoreWebView2Environment);
 
-                cal.SetCurrentValue(Microsoft.Web.WebView2.Wpf.WebView2.SourceProperty, (System.Uri)new Uri("https://github.com/WolvenKit/Wolven-kit"));
+                cal.SetCurrentValue(Microsoft.Web.WebView2.Wpf.WebView2.SourceProperty, (System.Uri)new Uri("https://github.com/WolvenKit/WolvenKit"));
             }
             catch (Exception)
             {

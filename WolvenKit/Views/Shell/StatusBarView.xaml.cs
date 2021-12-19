@@ -38,8 +38,11 @@ namespace WolvenKit.Views.Shell
         private void StatusBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
-            var mainWindow = (MainView)Locator.Current.GetService<IViewFor<AppViewModel>>();
-            mainWindow?.DragMove();
+            if (!e.Handled)
+            {
+                var mainWindow = (MainView)Locator.Current.GetService<IViewFor<AppViewModel>>();
+                mainWindow?.DragMove();
+            }
         }
     }
 }

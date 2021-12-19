@@ -29,7 +29,6 @@
             <RowDefinition Height="1" />
             <RowDefinition Height="25" />
         </Grid.RowDefinitions>
-        <Border BorderThickness="0,1,0,1" BorderBrush="{StaticResource BorderAlt}" />
 
         <Fluent:StatusBar Background="#1f1f1f" Grid.Row="1">
 

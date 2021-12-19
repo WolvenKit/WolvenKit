@@ -46,8 +46,10 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
+                <Border Background="{StaticResource ContentBackgroundAlt2}" />
+
                 <!-- Asset Browser Search -->
-                <Grid Grid.Row="0" Margin="3">
+                <Grid Grid.Row="0" Margin="3,0,3,3">
 
                     <Grid.Resources>
                         <ResourceDictionary>
@@ -80,9 +82,7 @@
                                   VerticalAlignment="Top"
                                   FlowDirection="LeftToRight"
                                   ShowClearButton="False"
-                                  hc:InfoElement.Placeholder="(e.g. judy kind:mesh,ent)"
-                                  hc:InfoElement.Title="Search all game files: "
-                                  hc:InfoElement.TitlePlacement="Left"
+                                  hc:InfoElement.Placeholder="Search all game files: (e.g. judy kind:mesh,ent)"
                                   SearchStarted="FileSearchBar_SearchStarted"
                                   Margin="5,0,0,0"
                                   >

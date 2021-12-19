@@ -12,18 +12,22 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:pages="clr-namespace:WolvenKit.Views.HomePage.Pages"
     mc:Ignorable="av"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:homePage="clr-namespace:WolvenKit.ViewModels.HomePage;assembly=WolvenKit.App"
     d:DataContext="{d:DesignInstance Type=homePage:HomePageViewModel}"
     MinWidth="960"
+    BorderThickness="1"
+    BorderBrush="{StaticResource ContentBackgroundAlt4}"
     >
 
-   
+
 
     <Grid
         x:Name="FocusGrid"
+        MouseLeftButtonDown="Grid_MouseLeftButtonDown_1"
         hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
-        Background="{DynamicResource ContentBackgroundAlt}">
+        Background="{DynamicResource ContentBackgroundAlt2}">
 
         <Grid.Resources>
             <ResourceDictionary>
@@ -34,133 +38,7 @@
             </ResourceDictionary>
         </Grid.Resources>
 
-        <!--  Fullscreen mouse drag grid  -->
-        <Grid Background="Transparent" MouseLeftButtonDown="Grid_MouseLeftButtonDown_2" />
-
-        <Grid
-            Height="20"
-            VerticalAlignment="Top"
-            MouseLeftButtonDown="Grid_MouseLeftButtonDown_1" />
-
-        <!--  Left sidebar   -->
-        <Grid
-            Margin="10,25,10,15"
-            HorizontalAlignment="Left"
-            Effect="{DynamicResource MahApps.DropShadowEffect.Menu}">
-
-            <Border
-                Background="{DynamicResource RegionBrush}"
-                BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
-                BorderThickness="1"
-                CornerRadius="15">
-                <hc:SideMenu
-                        x:Name="LeftSideMenu"
-                        Width="140"
-                        Margin="0,90,0,25"
-                        Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                        BorderThickness="0"
-                        ExpandMode="ShowOne"
-                        SideBrush="{DynamicResource MahApps.Brushes.AccentBase}"
-                        SubSideBrush="{DynamicResource MahApps.Brushes.Accent2}"
-                        SelectionChanged="LeftSideMenu_OnSelectionChanged">
-
-                    <hc:SideMenuItem
-                            x:Name="SideMenu_GetStartedItem"
-                            Margin="0,100,0,0"
-                            Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                            Header="Home"
-                            IsSelected="True">
-                            <hc:SideMenuItem.Icon>
-                                <iconPacks:Codicons
-                                    Width="25"
-                                    Height="25"
-                                    Kind="Home" />
-                            </hc:SideMenuItem.Icon>
-                        <hc:SideMenuItem Header="Welcome" Visibility="Collapsed" />
-                    </hc:SideMenuItem>
-
-
-                    <hc:SideMenuItem
-                        x:Name="SideMenu_SettingsItem"
-                        Margin="0,0,0,0"
-                        Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                        Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                        Header="Settings">
-                        <hc:SideMenuItem.Icon>
-                            <iconPacks:Codicons
-                                Width="24"
-                                Height="24"
-                                Kind="Settings" />
-                        </hc:SideMenuItem.Icon>
-                        <hc:SideMenuItem Header="Settings" Visibility="Collapsed" />
-                    </hc:SideMenuItem>
-
-                    <hc:SideMenuItem
-                        x:Name="SideMenu_WikiItem"
-                        Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                        Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                        Header="Wiki">
-                        <hc:SideMenuItem.Icon>
-                            <iconPacks:PackIconBoxIcons
-                                Width="24"
-                                Height="24"
-                                HorizontalAlignment="Center"
-                                Kind="LogosWikipedia" />
-                        </hc:SideMenuItem.Icon>
-                        <hc:SideMenuItem Header="Wiki" Visibility="Collapsed" />
-                    </hc:SideMenuItem>
-
-                    <hc:SideMenuItem
-                        x:Name="SideMenu_GitHubItem"
-                        Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                        Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                        Header="GitHub">
-                        <hc:SideMenuItem.Icon>
-                            <iconPacks:PackIconBoxIcons
-                                Width="24"
-                                Height="24"
-                                HorizontalAlignment="Center"
-                                Kind="LogosGithub" />
-                        </hc:SideMenuItem.Icon>
-                        <hc:SideMenuItem Header="Github" Visibility="Collapsed" />
-                    </hc:SideMenuItem>
-
-                    <hc:SideMenuItem
-                        x:Name="SideMenu_WebsiteItem"
-                        Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                        Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                        Header="Website">
-                        <hc:SideMenuItem.Icon>
-                            <iconPacks:PackIconCodicons
-                                Width="24"
-                                Height="24"
-                                HorizontalAlignment="Center"
-                                Kind="Cloud" />
-                        </hc:SideMenuItem.Icon>
-                        <hc:SideMenuItem Header="Website" Visibility="Collapsed" />
-                    </hc:SideMenuItem>
-
-                    <hc:SideMenuItem
-                            x:Name="SideMenu_DebugItem"
-                            Margin="0,30,0,0"
-                            Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                            Header="DEBUG"
-                            IsSelected="False"
-                            Visibility="Hidden">
-                        <hc:SideMenuItem.Icon>
-                            <iconPacks:Codicons
-                                    Width="25"
-                                    Height="25"
-                                    Kind="Debug" />
-                        </hc:SideMenuItem.Icon>
-                    </hc:SideMenuItem>
-
-                </hc:SideMenu>
-            </Border>
-
-            <!--<Button
+        <!--<Button
                 Margin="0,0,0,0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
@@ -174,7 +52,8 @@
                 </StackPanel>
 
             </Button>-->
-            <Button
+            <!--Button
+                Grid.Row="2"
                 Width="55"
                 Height="55"
                 Margin="0,0,0,25"
@@ -195,197 +74,7 @@
                         <DropShadowEffect />
                     </iconPacks:PackIconBootstrapIcons.Effect>
                 </iconPacks:PackIconBootstrapIcons>
-            </Button>
-
-            <StackPanel
-                Height="54"
-                Margin="5,15,0,0"
-                VerticalAlignment="Top"
-                Orientation="Horizontal" />
-
-            <Grid Margin="0,15,0,0" VerticalAlignment="Top">
-                <Border CornerRadius="0,0,0,0">
-
-                    <Border.OpacityMask>
-                        <ImageBrush ImageSource="/Resources/Media/Images/Application/Sammy_Home.png" Stretch="Uniform"  />
-                    </Border.OpacityMask>
-                    
-                    <Grid>
-
-                        <Image
-                            x:Name="LogoNavi"
-                            Width="140"
-                            Height="140"
-                            Margin="0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Source="pack://application:,,,/Resources/Media/Images/Application/Sammy_Home.png" />
-                        <Button
-                            Width="140"
-                            Height="140"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Style="{DynamicResource HeaderButtonStyle}"
-                            Opacity=".15"
-                            Background="{DynamicResource TransparentWhiteBrush}"
-                            BorderBrush="{DynamicResource TransparentWhiteBrush}"
-                            Foreground="{DynamicResource TransparentWhiteBrush}"
-                            Command="{Binding CloseHomePage}"/>
-                    </Grid>
-                </Border>
-            </Grid>
-        </Grid>
-
-        <!--  Main Area  -->
-        <Border
-            Margin="160,25,15,15"
-            Background="{DynamicResource RegionBrush}"
-            BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
-            BorderThickness="1"
-            CornerRadius="10"
-            Effect="{DynamicResource MahApps.DropShadowEffect.Menu}"
-            MouseLeftButtonDown="Grid_MouseLeftButtonDown_2">
-
-            <Border
-                Margin="1,25,1,25"
-                Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                CornerRadius="0"
-                Visibility="Visible">
-                    <Grid>
-
-                        <Grid
-                            x:Name="DebugPage"
-                            Margin="0"
-                            Visibility="{Binding DebugPV, Converter={StaticResource Boolean2VisibilityConverter}}">
-                            <pages:DebugPageView />
-                        </Grid>
-                        <Grid
-                            x:Name="GithubPage"
-                            Margin="0"
-                            Visibility="{Binding GithubPV, Converter={StaticResource Boolean2VisibilityConverter}}">
-                            <pages:GithubPageView />
-                        </Grid>
-
-
-                        <Grid
-                            x:Name="SettingsPage"
-                            Margin="0"
-                            Visibility="{Binding SettingsPV, Converter={StaticResource Boolean2VisibilityConverter}}">
-                            <pages:SettingsPageView />
-                        </Grid>
-
-                        <Grid
-                            x:Name="WebsitePage"
-                            Margin="0"
-                            Visibility="{Binding WebsitePV, Converter={StaticResource Boolean2VisibilityConverter}}">
-                            <pages:WebsitePageView />
-                        </Grid>
-                        <Grid
-                            x:Name="WelcomePage"
-                            Margin="0"
-                            Visibility="{Binding WelcomePV, Converter={StaticResource Boolean2VisibilityConverter}}">
-                            <pages:WelcomePageView x:Name="WlcmPage" />
-                        </Grid>
-                        <Grid
-                            x:Name="WikiPage"
-                            Margin="0"
-                            Visibility="{Binding WikitPV, Converter={StaticResource Boolean2VisibilityConverter}}">
-                            <pages:WikiPageView />
-                        </Grid>
-                        <Button
-                            x:Name="PageCloseButton"
-                            Margin="25,25,0,0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            Background="Transparent"
-                            BorderBrush="Transparent"
-                            Command="{Binding ClosePage}"
-                            Style="{DynamicResource MahApps.Styles.Button.Chromeless}"
-                            Visibility="{Binding ReturnButtonVisibile, Converter={StaticResource boolToVisibilityConverter}}">
-                            <iconPacks:PackIconCodicons
-                                Width="25"
-                                Height="25"
-                                Foreground="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Foreground}"
-                                Kind="ArrowLeft">
-                                <iconPacks:PackIconCodicons.Effect>
-                                    <DropShadowEffect />
-                                </iconPacks:PackIconCodicons.Effect>
-                            </iconPacks:PackIconCodicons>
-                        </Button>
-                    </Grid>
-            </Border>
-        </Border>
-
-        <!--  Min/Max/Close Buttons  -->
-        <Border
-            Height="25"
-            Margin="0,25,15,0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            Background="{DynamicResource ContentBackgroundAlt}"
-            BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
-            BorderThickness="2,1,2,0"
-            CornerRadius="5">
-            <StackPanel
-                Margin="0,0,0,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center"
-                Orientation="Horizontal">
-                <Button
-                    Width="75"
-                    VerticalAlignment="Center"
-                    BorderBrush="Transparent"
-                    Command="{Binding MinimizeWindow}"
-                    Style="{DynamicResource ModernButtonStyle}">
-                    <iconPacks:PackIconCodicons
-                        Width="13"
-                        Height="13"
-                        Foreground="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Foreground}"
-                        Kind="ChromeMinimize">
-                        <iconPacks:PackIconCodicons.Effect>
-                            <DropShadowEffect />
-                        </iconPacks:PackIconCodicons.Effect>
-                    </iconPacks:PackIconCodicons>
-                </Button>
-
-                <Button
-                    Width="75"
-                    VerticalAlignment="Center"
-                    BorderBrush="Transparent"
-                    Command="{Binding RestoreWindow}"
-                    Style="{DynamicResource ModernButtonStyle}">
-                    <iconPacks:PackIconCodicons
-                        Width="13"
-                        Height="13"
-                        Foreground="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Foreground}"
-                        Kind="ChromeRestore">
-                        <iconPacks:PackIconCodicons.Effect>
-                            <DropShadowEffect />
-                        </iconPacks:PackIconCodicons.Effect>
-                    </iconPacks:PackIconCodicons>
-                </Button>
-
-                <Button
-                    Width="75"
-                    VerticalAlignment="Center"
-                    Command="hc:ControlCommands.ShutdownApp"
-                    Style="{DynamicResource ModernButtonStyle}">
-                    <iconPacks:PackIconCodicons
-                        Width="13"
-                        Height="13"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Foreground="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Foreground}"
-                        Kind="ChromeClose">
-                        <iconPacks:PackIconCodicons.Effect>
-                            <DropShadowEffect />
-                        </iconPacks:PackIconCodicons.Effect>
-                    </iconPacks:PackIconCodicons>
-                </Button>
-            </StackPanel>
-        </Border>
-
-
+            </Button-->
 
         <Grid
             Margin="0,0,25,18"
@@ -400,18 +89,280 @@
                     VerticalAlignment="Center"
                     FlowDirection="LeftToRight"
                     FontSize="14"
-                    Foreground="{DynamicResource Fluent.Ribbon.Brushes.AccentBaseColorBrush}"
+                    Foreground="{StaticResource WolvenKitRed}"
                     IsEnabled="False"
                     Text="{Binding VersionNumber}" />
                 <iconPacks:PackIconCodicons
                     Width="20"
                     Height="20"
                     VerticalAlignment="Center"
-                    Foreground="{DynamicResource Fluent.Ribbon.Brushes.AccentBaseColorBrush}"
+                    Foreground="{StaticResource WolvenKitRed}"
                     Kind="Versions" />
             </StackPanel>
 
         </Grid>
+
+        <TabControl TabStripPlacement="Left" Margin="0">
+            <TabControl.Resources>
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type TabItem}">
+                                <Border
+                                    x:Name="Border"
+                                    Margin="30,0,0,0"
+                                    Background="{TemplateBinding Background}"
+                                    BorderThickness="3,0,0,0"
+                                    BorderBrush="{TemplateBinding BorderBrush}">
+                                    <ContentPresenter
+                                        x:Name="ContentSite"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Left"
+                                        ContentSource="Header"
+                                        Width="160"
+                                        Height="44"
+                                        Margin="8,0,0,0"
+                                        RecognizesAccessKey="True" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="BorderBrush" Value="{StaticResource WolvenKitRed}" />
+                            <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt3}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </TabControl.Resources>
+            <TabControl.Style>
+                <Style TargetType="{x:Type TabControl}">
+                    <Setter Property="OverridesDefaultStyle" Value="True" />
+                    <Setter Property="SnapsToDevicePixels" Value="True" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type TabControl}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="240" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="240" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Border Background="{StaticResource ContentBackgroundAlt}" Grid.RowSpan="2"/>
+                                    <Border>
+                                        <Border.OpacityMask>
+                                            <ImageBrush ImageSource="/Resources/Media/Images/Application/Sammy_Home.png" Stretch="Uniform"  />
+                                        </Border.OpacityMask>
+                                        <Grid>
+                                            <Image
+                                                x:Name="LogoNavi"
+                                                Width="140"
+                                                Height="140"
+                                                Margin="0"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Source="pack://application:,,,/Resources/Media/Images/Application/Sammy_Home.png" />
+                                            <Button
+                                                Width="140"
+                                                Height="140"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Style="{DynamicResource HeaderButtonStyle}"
+                                                Opacity=".15"
+                                                Background="{DynamicResource TransparentWhiteBrush}"
+                                                BorderBrush="{DynamicResource TransparentWhiteBrush}"
+                                                Foreground="{DynamicResource TransparentWhiteBrush}"
+                                                Command="{Binding CloseHomePage}"/>
+                                        </Grid>
+                                    </Border>
+                                    <Grid
+                                        Grid.Column="0"
+                                        Grid.Row="1">
+                                        <TabPanel
+                                            Width="240"
+                                            HorizontalAlignment="Center"
+                                            x:Name="HeaderPanel"
+                                            Panel.ZIndex="1"
+                                            IsItemsHost="True"
+                                            Background="Transparent" />
+                                    </Grid>
+
+                                    <Border
+                                        x:Name="Border"
+                                        Grid.RowSpan="2"
+                                        Grid.Column="1"
+                                        BorderThickness="0">
+                                        <ContentPresenter x:Name="PART_SelectedContentHost"
+                                          Margin="0" ContentSource="SelectedContent" />
+                                    </Border>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Style>
+            <TabItem Name="WelcomePageTab">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconCodicons
+                            Foreground="White"
+                            VerticalAlignment="Center"
+                            Width="20"
+                            Height="20"
+                            Kind="Home" />
+                        <TextBlock Text="Welcome" Margin="8,0,0,0" VerticalAlignment="Center" FontSize="16"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <pages:WelcomePageView x:Name="WlcmPage"/>
+                </TabItem.Content>
+            </TabItem>
+
+            <TabItem Name="SettingsPageTab">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconCodicons
+                            Foreground="White"
+                            VerticalAlignment="Center"
+                            Width="20"
+                            Height="20"
+                            Kind="Settings" />
+                        <TextBlock Text="Settings" Margin="8,0,0,0" VerticalAlignment="Center" FontSize="16"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <pages:SettingsPageView />
+                </TabItem.Content>
+            </TabItem>
+
+            <TabItem Name="WikiPageTab">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconBoxIcons
+                            Foreground="White"
+                            VerticalAlignment="Center"
+                            Width="20"
+                            Height="20"
+                            HorizontalAlignment="Center"
+                            Kind="LogosWikipedia" />
+                        <TextBlock Text="Wiki" Margin="8,0,0,0" VerticalAlignment="Center" FontSize="16"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <pages:WikiPageView />
+                </TabItem.Content>
+            </TabItem>
+
+            <TabItem Name="GithubPageTab">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconBoxIcons
+                            Foreground="White"
+                            VerticalAlignment="Center"
+                            Width="20"
+                            Height="20"
+                            HorizontalAlignment="Center"
+                            Kind="LogosGithub" />
+                        <TextBlock Text="Github" Margin="8,0,0,0" VerticalAlignment="Center" FontSize="16"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <pages:GithubPageView />
+                </TabItem.Content>
+            </TabItem>
+
+            <TabItem Name="WebsitePageTab">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconCodicons
+                            Foreground="White"
+                            VerticalAlignment="Center"
+                            Width="20"
+                            Height="20"
+                            HorizontalAlignment="Center"
+                            Kind="Cloud" />
+                        <TextBlock Text="Website" Margin="8,0,0,0" VerticalAlignment="Center" FontSize="16"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <pages:WebsitePageView />
+                </TabItem.Content>
+            </TabItem>
+        </TabControl>
+
+        <!--  Min/Max/Close Buttons  -->
+        <Grid Grid.Column="2">
+            <Grid.OpacityMask>
+                <VisualBrush Visual="{Binding ElementName=ButtonsBackground}" />
+            </Grid.OpacityMask>
+        <Border
+            Name="ButtonsBackground"
+            Height="30"
+            Margin="0,28,28,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Background="{StaticResource ContentBackgroundAlt}"
+            CornerRadius="5">
+            <StackPanel
+                Margin="0,0,0,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                <Button
+                    Width="63"
+                    VerticalAlignment="Center"
+                    BorderBrush="Transparent"
+                    Command="{Binding MinimizeWindow}"
+                    Style="{StaticResource ModernButtonStyle}">
+                        <iconPacks:PackIconCodicons
+                        Width="13"
+                        Height="13"
+                        Foreground="{StaticResource Fluent.Ribbon.Brushes.Backstage.Foreground}"
+                        Kind="ChromeMinimize">
+                        </iconPacks:PackIconCodicons>
+                </Button>
+
+                <Button
+                    Width="63"
+                    VerticalAlignment="Center"
+                    BorderBrush="Transparent"
+                    Command="{Binding RestoreWindow}"
+                    Style="{StaticResource ModernButtonStyle}">
+                        <iconPacks:PackIconCodicons
+                        Width="13"
+                        Height="13"
+                        Foreground="{StaticResource Fluent.Ribbon.Brushes.Backstage.Foreground}"
+                        Kind="ChromeRestore">
+                        </iconPacks:PackIconCodicons>
+                </Button>
+
+                <Button
+                    Width="63"
+                    VerticalAlignment="Center"
+                    Command="hc:ControlCommands.ShutdownApp"
+                    Style="{StaticResource ModernButtonStyle}">
+                        <iconPacks:PackIconCodicons
+                        Width="13"
+                        Height="13"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Foreground="{StaticResource Fluent.Ribbon.Brushes.Backstage.Foreground}"
+                        Kind="ChromeClose">
+                        </iconPacks:PackIconCodicons>
+                </Button>
+            </StackPanel>
+            </Border>
+        </Grid>
+
 
 
 

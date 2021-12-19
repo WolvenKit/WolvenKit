@@ -12,26 +12,41 @@
      MinWidth="300"
      MinHeight="300"
      hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
-     Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
      >
 
-        <Grid Margin="3,75,3,0">
+        <Grid Margin="0,85,0,0">
 
                 <wv2:WebView2 x:Name="cal" />
         </Grid>
 
             <StackPanel
-             Margin="5"
-             HorizontalAlignment="Right"
+             Margin="25,0,0,0"
+            Height="85"
+             HorizontalAlignment="Left"
              VerticalAlignment="Top"
              Orientation="Horizontal"
              >
                 <TextBlock
                  Margin="0"
                  HorizontalAlignment="Center"
-                 VerticalAlignment="Center "
+                 VerticalAlignment="Center"
                  FontSize="20"
+                    Text="Website"
                  />
+            <!--hc:ComboBox
+             x:Name="SelectWebsiteTypeCombo"
+             Height="85"
+             Margin="85,20,0,0"
+             HorizontalAlignment="Left"
+             VerticalAlignment="Top"
+             HorizontalContentAlignment="Right"
+             Background="Transparent"
+             FontSize="20"
+             SelectedIndex="0"
+             Visibility="Visible"
+             >
+                <ComboBoxItem Content="Organization Website" />
+            </hc:ComboBox-->
                 <hc:Divider
                  Height="45"
                  Margin="15"
@@ -62,19 +77,5 @@
             </StackPanel>
 
 
-            <hc:ComboBox
-             x:Name="SelectWebsiteTypeCombo"
-             Height="45"
-             Margin="0,20,75,0"
-             HorizontalAlignment="Right"
-             VerticalAlignment="Top"
-             HorizontalContentAlignment="Right"
-             Background="Transparent"
-             FontSize="20"
-             SelectedIndex="0"
-             Visibility="Visible"
-             >
-                <ComboBoxItem Content="Organization Website" />
-            </hc:ComboBox>
     </Grid>
 </reactiveUi:ReactiveUserControl>
