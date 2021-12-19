@@ -27,9 +27,17 @@
         </Grid.Resources>
 
         <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
+
+
+        <Menu Height="25" Margin="0,0,0,0" Padding="0,0,0,0" Background="{StaticResource ContentBackgroundAlt4}">
+            <MenuItem Padding="5,0,5,3" Height="25" Header="Maybe a menu?">
+                <MenuItem Header="Maybe not though" />
+            </MenuItem>
+        </Menu>
+
         <!-- TEXT EDITOR -->
         <avalonEdit:TextEditor
             Grid.Row="1"
@@ -39,7 +47,7 @@
             FontSize="10pt"
             Name="textEditor"
             Foreground="{StaticResource ContentForeground}"
-            Background="{StaticResource ContentBackgroundAlt2}"
+            Background="{StaticResource ContentBackground}"
             Document = "{Binding Document, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
             SyntaxHighlighting="{Binding HighlightingDefinition}"
             />

@@ -26,30 +26,42 @@
             </ResourceDictionary>
         </Grid.Resources>
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
+        <Menu Background="{StaticResource ContentBackgroundAlt4}">
+            <MenuItem />
+        </Menu>
+
         <!-- TEXT EDITOR -->
         <avalonEdit:TextEditor
+            Grid.Row="1"
             Margin="0"
             ShowLineNumbers="True"
             FontFamily="Consolas"
             FontSize="10pt"
             Name="textEditor"
             Foreground="{StaticResource ContentForeground}"
-            Background="{StaticResource ContentBackgroundAlt2}"
+            Background="{StaticResource ContentBackground}"
             Document = "{Binding Document, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
             SyntaxHighlighting="{Binding HighlightingDefinition}"
             />
 
         <!-- TEXT EDITOR -->
-        <syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+        <syncfusion:SfGridSplitter Grid.Column="1" Grid.RowSpan="2"
+            HorizontalAlignment="Stretch" />
 
         <!-- UI EDITOR -->
-        <Grid Grid.Column="2" Margin="0">
+        <Grid Grid.Column="2"
+            Grid.Row="0" Grid.RowSpan="2" Margin="0" Background="{StaticResource ContentBackgroundAlt4}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="1"/>
