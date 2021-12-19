@@ -82,7 +82,7 @@ namespace WolvenKit.ViewModels.Documents
             {
                 if (_file.Buffers[_bufferIndex] != null && _file.Buffers[_bufferIndex].Data is Package04 pkg)
                 {
-                    return pkg.Chunks.Select(_ => new ChunkViewModel(_)).ToList();
+                    return pkg.Chunks?.Select(_ => new ChunkViewModel(_)).ToList() ?? null;
                 }
                 return null;
             }

@@ -40,9 +40,12 @@ namespace WolvenKit.ViewModels.Documents
 
             //RootChunk = Chunks[0];
 
-            foreach(ChunkViewModel item in Chunks)
+            if (Chunks != null)
             {
-                item.WhenAnyValue(x => x.IsDirty).Subscribe(x => IsDirty |= x);
+                foreach (ChunkViewModel item in Chunks)
+                {
+                    item.WhenAnyValue(x => x.IsDirty).Subscribe(x => IsDirty |= x);
+                }
             }
             //_file.WhenAnyValue(x => x).Subscribe(x => IsDirty |= true);
         }
