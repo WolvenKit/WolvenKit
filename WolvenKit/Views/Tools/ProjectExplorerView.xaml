@@ -35,11 +35,275 @@
                         Foreground="#ffffff" />
                 </Border>
             </DataTemplate>
-        </ResourceDictionary>
-    </UserControl.Resources>
+            <ContextMenu x:Key="TreeGridContextMenu" FontSize="11" Style="{DynamicResource WPFContextMenuStyle}">
+                <MenuItem
+                        Margin="0"
+                        Header="Actions"
+                        Visibility="Collapsed">
 
-    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
-        <Grid.Resources>
+                    <MenuItem Command="{Binding AddAllImportsCommand}" Header="Add all dependencies" />
+                    <MenuItem Command="{Binding FastRenderCommand}" Header="Fast render" />
+                </MenuItem>
+
+                <MenuItem x:Name="ConvertToJsonMenuItem"
+                                      Command="{Binding ConvertToJsonCommand}"
+                                      Header="Convert to JSON">
+                    <MenuItem.Icon>
+                        <Grid>
+                            <iconPacks:PackIconCodicons
+                                    Width="13"
+                                    Height="13"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Padding="4,0,-4,0"
+                                    Kind="Json" />
+                            <iconPacks:PackIconCodicons
+                                    Width="7"
+                                    Height="11"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Padding="-8,0,8,0"
+                                    Kind="ArrowSmallRight" />
+                        </Grid>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem x:Name="ConvertFromJsonMenuItem"
+                                      Command="{Binding ConvertFromJsonCommand}"
+                                      Header="Convert from JSON">
+                    <MenuItem.Icon>
+                        <Grid>
+                            <iconPacks:PackIconCodicons
+                                    Width="13"
+                                    Height="13"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Padding="4,0,-4,0"
+                                    Kind="Json" />
+                            <iconPacks:PackIconCodicons
+                                    Width="7"
+                                    Height="11"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Padding="-8,0,8,0"
+                                    Kind="ArrowSmallLeft" />
+                        </Grid>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem x:Name="ConvertToXmlMenuItem"
+                                      Command="{Binding ConvertToXmlCommand}"
+                                      Header="Convert to XML">
+                    <MenuItem.Icon>
+                        <Grid>
+                            <iconPacks:PackIconCodicons
+                                    Width="13"
+                                    Height="13"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Padding="4,0,-4,0"
+                                    Kind="Code" />
+                            <iconPacks:PackIconCodicons
+                                    Width="7"
+                                    Height="11"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Padding="-8,0,8,0"
+                                    Kind="ArrowSmallRight" />
+                        </Grid>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!--<MenuItem x:Name="ConvertFromXmlMenuItem"
+                                      Command="{Binding ConvertFromXmlCommand}"
+                                      Header="Convert from JSON" />-->
+
+                <MenuItem x:Name="BKImport"
+                                      Command="{Binding Bk2ImportCommand}"
+                                      Header="Import Avi to BK2" />
+                <MenuItem x:Name="BKExport"
+                                      Command="{Binding Bk2ExportCommand}"
+                                      Header="Export BK2 to Avi" />
+
+
+                <Separator/>
+                <MenuItem Command="{Binding RenameFileCommand}" Header="Rename" >
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconForkAwesome
+                                    Width="13"
+                                    Height="13"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Stretch"
+                                    Kind="Pencil" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Command="{Binding CopyFileCommand}" Header="Copy" >
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial
+                                    Width="13"
+                                    Height="13"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Stretch"
+                                    Kind="ContentCopy" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Command="{Binding PasteFileCommand}" Header="Paste" >
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial
+                                    Width="13"
+                                    Height="13"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Stretch"
+                                    Kind="ContentPaste" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+
+                <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path" />
+                <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer" />
+                <MenuItem Command="{Binding OpenInAssetBrowserCommand}"
+                        Header="Open in asset browser"
+                        Visibility="Collapsed" />
+
+                <!--<Separator/>-->
+
+                <!--<MenuItem Click="ExpandChildren_OnClick" Header="Expand" />
+                    <MenuItem Click="CollapseChildren_OnClick" Header="Collapse" />                    
+                    <MenuItem Click="ExpandAll_OnClick" Header="Expand all" />
+                    <MenuItem Click="CollapseAll_OnClick" Header="Collapse all" />-->
+            </ContextMenu>
+            <DataTemplate x:Key="TreeGridCellTemplate">
+                <Grid>
+                    <Grid.Resources>
+                        <Style x:Key="WolvenKitTreeGridButton" TargetType="{x:Type helpers:TreeGridButton}">
+                            <Setter Property="Border.Background" Value="{Binding BorderBrush, RelativeSource={RelativeSource Self}}"/>
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Setter Property="Border.Padding" Value="5,0" />
+                            <Setter Property="Padding" Value="0" />
+                            <Setter Property="Margin" Value="5,0,0,0" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type helpers:TreeGridButton}">
+                                        <Border Background="{TemplateBinding Border.Background}" CornerRadius="2" Padding="{TemplateBinding Border.Padding}">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding IsDirectory}" Value="False"/>
+                                                    <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Border}, AncestorLevel=1}}" Value="True" />
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </MultiDataTrigger>
+                                            <MultiTrigger>
+                                                <MultiTrigger.Conditions>
+                                                    <Condition Property="IsMouseOver" Value="True"/>
+                                                    <Condition Property="IsPressed" Value="True" />
+                                                </MultiTrigger.Conditions>
+                                                <Setter Property="Border.Background" Value="{Binding PressedBackground, RelativeSource={RelativeSource Self}}" />
+                                            </MultiTrigger>
+                                            <MultiTrigger>
+                                                <MultiTrigger.Conditions>
+                                                    <Condition Property="IsMouseOver" Value="True"/>
+                                                    <Condition Property="IsPressed" Value="False" />
+                                                </MultiTrigger.Conditions>
+                                                <Setter Property="Border.Background" Value="{Binding HoverBackground, RelativeSource={RelativeSource Self}}" />
+                                            </MultiTrigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                        <Style x:Key="WolvenKitTreeGridButtonDirectory" TargetType="{x:Type helpers:TreeGridButton}" BasedOn="{StaticResource WolvenKitTreeGridButton}">
+                            <Setter Property="Border.Padding" Value="2,0" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Border}, AncestorLevel=1}}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                        <Style x:Key="PE_FileIconStyle" TargetType="{x:Type others:FileIcon}">
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=IsExpanded, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TreeGridExpanderCell}}}" Value="True" />
+                                        <Condition Binding="{Binding Path=HasChildNodes, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TreeGridExpanderCell}}}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Type" Value="Open" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Resources>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="13" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <others:FileIcon Icon="{Binding Extension}" Style="{StaticResource PE_FileIconStyle}" Width="13" Height="19"/>
+                    <TextBlock
+                                    x:Name="TemplateTextBlock"
+                                    Grid.Column="1"
+                                    Margin="5,0,0,2"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding Path=Name}" />
+                    <StackPanel Orientation="Horizontal" Grid.Column="2" Background="{StaticResource ContentBackground}">
+                        <helpers:TreeGridButton
+                                        Style="{StaticResource WolvenKitTreeGridButton}"
+                                        Command="{Binding OpenFileCommand}"
+                                        ToolTip="Open this file"
+                                        BorderBrush="{StaticResource WolvenKitCyan}"
+                                        HoverBackground="{StaticResource WolvenKitCyanShadow}">
+                            <helpers:TreeGridButton.Content>
+                                <iconPacks:PackIconMaterial Kind="OpenInNew" Height="11" Width="11" Foreground="#222"
+                                        Margin="-1,0,0,0"/>
+                            </helpers:TreeGridButton.Content>
+                        </helpers:TreeGridButton>
+                        <helpers:TreeGridButton
+                                        Style="{StaticResource WolvenKitTreeGridButtonDirectory}"
+                                        Command="{Binding DeleteFileCommand}"
+                                        ToolTip="Delete this file/folder"
+                                        BorderBrush="{StaticResource WolvenKitRed}"
+                                        HoverBackground="{StaticResource WolvenKitRedShadow}">
+                            <helpers:TreeGridButton.Content>
+                                <iconPacks:PackIconForkAwesome Kind="Trash" Height="11" Width="15"
+                                        Margin="-1,0,0,0"/>
+                            </helpers:TreeGridButton.Content>
+                        </helpers:TreeGridButton>
+                        <helpers:TreeGridButton Style="{StaticResource WolvenKitTreeGridButtonDirectory}" Width="0" Margin="0,0,10,0"/>
+                    </StackPanel>
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="TreeGridCellTemplateSimple">
+                <Grid>
+                    <Grid.Resources>
+                        <Style x:Key="PE_FileIconStyle" TargetType="{x:Type others:FileIcon}">
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=IsExpanded, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TreeGridExpanderCell}}}" Value="True" />
+                                        <Condition Binding="{Binding Path=HasChildNodes, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TreeGridExpanderCell}}}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Type" Value="Open" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Resources>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="13" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <others:FileIcon Icon="{Binding Extension}" Style="{StaticResource PE_FileIconStyle}" Width="13" Height="19"/>
+                    <TextBlock
+                                    x:Name="TemplateTextBlock"
+                                    Grid.Column="1"
+                                    Margin="5,0,0,2"
+                                    TextTrimming="CharacterEllipsis"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding Path=Name}" />
+                </Grid>
+            </DataTemplate>
             <Style x:Key="WolvenKitPESourceTabs" TargetType="{x:Type syncfusion:TabItemExt}" BasedOn="{StaticResource SyncfusionTabItemExtStyle}">
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="Foreground" Value="White" />
@@ -72,6 +336,11 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
+        <Grid.Resources>
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -82,6 +351,9 @@
         <syncfusion:TabControlExt
             Name="tabControl" Height="25" CloseButtonType="Hide"
             ShowTabItemContextMenu="False"
+            ShowTabListContextMenu="False"
+            AllowDragDrop="False"
+            AllowDrop="False"
             Margin="0,0,0,0"
             BorderThickness="0,0,0,1"
             Style="{StaticResource WolvenKitTabControl}">
@@ -204,11 +476,20 @@
                                     Height="13"
                                     Kind="NewFolder" />
                     </Button>
+                    <ToggleButton ToolTip="Toggle Flat File List" Margin="3,0,0,0"
+                                  IsChecked="{Binding IsFlatModeEnabled}"
+                                  hc:VisualElement.HighlightBackground="{StaticResource WolvenKitRed}">
+                        <iconPacks:PackIconCodicons
+                                    Width="13"
+                                    Height="13"
+                                    Kind="ListFlat" />
+                    </ToggleButton>
                 </StackPanel>
             </Grid>
         </Border>
-        
+
         <syncfusion:SfTreeGrid
+            Visibility="{Binding IsFlatModeEnabled, Converter={StaticResource BoolInvertConverter}}"
             Margin="0,0,0,0"
             Name="TreeGrid"
             AllowEditing="False"
@@ -238,6 +519,7 @@
             AllowDraggingRows="True"
             RowDropIndicatorMode="Line"
             RowDragDropTemplate="{StaticResource DragDropTemplate}"
+            ContextMenu="{StaticResource TreeGridContextMenu}"
             >
 
             <syncfusion:SfTreeGrid.Resources>
@@ -261,253 +543,73 @@
                     HeaderText=""
                     HorizontalHeaderContentAlignment="Left"
                     ImmediateUpdateColumnFilter="True"
+                    CellTemplate="{StaticResource TreeGridCellTemplate}"
                     MappingName="Name">
-                    <syncfusion:TreeGridTextColumn.CellTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Grid.Resources>
-                                    <Style x:Key="WolvenKitTreeGridButton" TargetType="{x:Type helpers:TreeGridButton}">
-                                        <Setter Property="Border.Background" Value="{Binding BorderBrush, RelativeSource={RelativeSource Self}}"/>
-                                        <Setter Property="Visibility" Value="Collapsed" />
-                                        <Setter Property="Border.Padding" Value="5,0" />
-                                        <Setter Property="Padding" Value="0" />
-                                        <Setter Property="Margin" Value="5,0,0,0" />
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="{x:Type helpers:TreeGridButton}">
-                                                    <Border Background="{TemplateBinding Border.Background}" CornerRadius="2" Padding="{TemplateBinding Border.Padding}">
-                                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                    </Border>
-                                                    <ControlTemplate.Triggers>
-                                                        <MultiDataTrigger>
-                                                            <MultiDataTrigger.Conditions>
-                                                                <Condition Binding="{Binding IsDirectory}" Value="False"/>
-                                                                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Border}, AncestorLevel=1}}" Value="True" />
-                                                            </MultiDataTrigger.Conditions>
-                                                            <Setter Property="Visibility" Value="Visible" />
-                                                        </MultiDataTrigger>
-                                                        <MultiTrigger>
-                                                            <MultiTrigger.Conditions>
-                                                                <Condition Property="IsMouseOver" Value="True"/>
-                                                                <Condition Property="IsPressed" Value="True" />
-                                                            </MultiTrigger.Conditions>
-                                                            <Setter Property="Border.Background" Value="{Binding PressedBackground, RelativeSource={RelativeSource Self}}" />
-                                                        </MultiTrigger>
-                                                        <MultiTrigger>
-                                                            <MultiTrigger.Conditions>
-                                                                <Condition Property="IsMouseOver" Value="True"/>
-                                                                <Condition Property="IsPressed" Value="False" />
-                                                            </MultiTrigger.Conditions>
-                                                            <Setter Property="Border.Background" Value="{Binding HoverBackground, RelativeSource={RelativeSource Self}}" />
-                                                        </MultiTrigger>
-                                                    </ControlTemplate.Triggers>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                    <Style x:Key="WolvenKitTreeGridButtonDirectory" TargetType="{x:Type helpers:TreeGridButton}" BasedOn="{StaticResource WolvenKitTreeGridButton}">
-                                        <Setter Property="Border.Padding" Value="2,0" />
-                                        <Style.Triggers>
-                                            <MultiDataTrigger>
-                                                <MultiDataTrigger.Conditions>
-                                                    <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Border}, AncestorLevel=1}}" Value="True" />
-                                                </MultiDataTrigger.Conditions>
-                                                <Setter Property="Visibility" Value="Visible" />
-                                            </MultiDataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                    <Style x:Key="PE_FileIconStyle" TargetType="{x:Type others:FileIcon}">
-                                        <Style.Triggers>
-                                            <MultiDataTrigger>
-                                                <MultiDataTrigger.Conditions>
-                                                    <Condition Binding="{Binding Path=IsExpanded, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TreeGridExpanderCell}}}" Value="True" />
-                                                    <Condition Binding="{Binding Path=HasChildNodes, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TreeGridExpanderCell}}}" Value="True" />
-                                                </MultiDataTrigger.Conditions>
-                                                <Setter Property="Type" Value="Open" />
-                                            </MultiDataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Grid.Resources>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="13" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <others:FileIcon Icon="{Binding Extension}" Style="{StaticResource PE_FileIconStyle}" Width="13" Height="19"/>
-                                <TextBlock
-                                    x:Name="TemplateTextBlock"
-                                    Grid.Column="1"
-                                    Margin="5,0,0,2"
-                                    VerticalAlignment="Center"
-                                    Text="{Binding Path=Name}" />
-                                <StackPanel Orientation="Horizontal" Grid.Column="2" Background="{StaticResource ContentBackground}">
-                                    <helpers:TreeGridButton
-                                        Style="{StaticResource WolvenKitTreeGridButton}"
-                                        Command="{Binding OpenFileCommand}"
-                                        ToolTip="Open this file"
-                                        BorderBrush="{StaticResource WolvenKitCyan}"
-                                        HoverBackground="{StaticResource WolvenKitCyanShadow}">
-                                        <helpers:TreeGridButton.Content>
-                                            <iconPacks:PackIconMaterial Kind="OpenInNew" Height="11" Width="11" Foreground="#222"
-                                        Margin="-1,0,0,0"/>
-                                        </helpers:TreeGridButton.Content>
-                                    </helpers:TreeGridButton>
-                                    <helpers:TreeGridButton
-                                        Style="{StaticResource WolvenKitTreeGridButtonDirectory}"
-                                        Command="{Binding DeleteFileCommand}"
-                                        ToolTip="Delete this file/folder"
-                                        BorderBrush="{StaticResource WolvenKitRed}"
-                                        HoverBackground="{StaticResource WolvenKitRedShadow}">
-                                        <helpers:TreeGridButton.Content>
-                                            <iconPacks:PackIconForkAwesome Kind="Trash" Height="11" Width="15"
-                                        Margin="-1,0,0,0"/>
-                                        </helpers:TreeGridButton.Content>
-                                    </helpers:TreeGridButton>
-                                    <helpers:TreeGridButton Style="{StaticResource WolvenKitTreeGridButtonDirectory}" Width="0" Margin="0,0,10,0"/>
-                                </StackPanel>
-                            </Grid>
-                        </DataTemplate>
-                    </syncfusion:TreeGridTextColumn.CellTemplate>
                 </syncfusion:TreeGridTextColumn>
             </syncfusion:SfTreeGrid.Columns>
-
-            <syncfusion:SfTreeGrid.ContextMenu>
-                <ContextMenu FontSize="11" Style="{DynamicResource WPFContextMenuStyle}">
-                    <MenuItem
-                        Margin="0"
-                        Header="Actions"
-                        Visibility="Collapsed">
-
-                        <MenuItem Command="{Binding AddAllImportsCommand}" Header="Add all dependencies" />
-                        <MenuItem Command="{Binding FastRenderCommand}" Header="Fast render" />
-                    </MenuItem>
-
-                        <MenuItem x:Name="ConvertToJsonMenuItem"
-                                      Command="{Binding ConvertToJsonCommand}"
-                                      Header="Convert to JSON">
-                        <MenuItem.Icon>
-                            <Grid>
-                                <iconPacks:PackIconCodicons
-                                    Width="13"
-                                    Height="13"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Padding="4,0,-4,0"
-                                    Kind="Json" />
-                                <iconPacks:PackIconCodicons
-                                    Width="7"
-                                    Height="11"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Padding="-8,0,8,0"
-                                    Kind="ArrowSmallRight" />
-                            </Grid>
-                        </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem x:Name="ConvertFromJsonMenuItem"
-                                      Command="{Binding ConvertFromJsonCommand}"
-                                      Header="Convert from JSON">
-                        <MenuItem.Icon>
-                            <Grid>
-                                <iconPacks:PackIconCodicons
-                                    Width="13"
-                                    Height="13"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Padding="4,0,-4,0"
-                                    Kind="Json" />
-                                <iconPacks:PackIconCodicons
-                                    Width="7"
-                                    Height="11"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Padding="-8,0,8,0"
-                                    Kind="ArrowSmallLeft" />
-                            </Grid>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <Separator/>
-                        <MenuItem x:Name="ConvertToXmlMenuItem"
-                                      Command="{Binding ConvertToXmlCommand}"
-                                      Header="Convert to XML">
-                        <MenuItem.Icon>
-                            <Grid>
-                            <iconPacks:PackIconCodicons
-                                    Width="13"
-                                    Height="13"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Padding="4,0,-4,0"
-                                    Kind="Code" />
-                            <iconPacks:PackIconCodicons
-                                    Width="7"
-                                    Height="11"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Padding="-8,0,8,0"
-                                    Kind="ArrowSmallRight" />
-                            </Grid>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <!--<MenuItem x:Name="ConvertFromXmlMenuItem"
-                                      Command="{Binding ConvertFromXmlCommand}"
-                                      Header="Convert from JSON" />-->
-
-                        <MenuItem x:Name="BKImport"
-                                      Command="{Binding Bk2ImportCommand}"
-                                      Header="Import Avi to BK2" />
-                    <MenuItem x:Name="BKExport"
-                                      Command="{Binding Bk2ExportCommand}"
-                                      Header="Export BK2 to Avi" />
+        </syncfusion:SfTreeGrid>
 
 
-                    <Separator/>
-                    <MenuItem Command="{Binding RenameFileCommand}" Header="Rename" >
-                        <MenuItem.Icon>
-                            <iconPacks:PackIconForkAwesome
-                                    Width="13"
-                                    Height="13"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Stretch"
-                                    Kind="Pencil" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Command="{Binding CopyFileCommand}" Header="Copy" >
-                        <MenuItem.Icon>
-                            <iconPacks:PackIconMaterial
-                                    Width="13"
-                                    Height="13"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Stretch"
-                                    Kind="ContentCopy" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Command="{Binding PasteFileCommand}" Header="Paste" >
-                        <MenuItem.Icon>
-                            <iconPacks:PackIconMaterial
-                                    Width="13"
-                                    Height="13"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Stretch"
-                                    Kind="ContentPaste" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <Separator/>
 
-                    <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path" />
-                    <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer" />
-                    <MenuItem Command="{Binding OpenInAssetBrowserCommand}"
-                        Header="Open in asset browser"
-                        Visibility="Collapsed" />
+        <syncfusion:SfTreeGrid
+            Visibility="{Binding IsFlatModeEnabled, Converter={StaticResource Boolean2VisibilityConverter}}"
+            Margin="0,0,0,0"
+            Name="TreeGridFlat"
+            AllowEditing="False"
+            AllowFiltering="True"
+            AllowResizingColumns="False"
+            AllowSorting="True"
+            AutoExpandMode="AllNodesExpanded"
+            AutoGenerateColumns="False"
+            ColumnSizer="Star"
+            ExpandStateMappingName="IsExpanded"
+            FilterLevel="Extended"
+            IsReadOnly="True"
+            LiveNodeUpdateMode="AllowDataShaping"
+            PreviewMouseDown="TreeGrid_MouseDown"
+            ParentPropertyName="Hash"
+            RowHeight="19"
+            SelectedItem="{Binding SelectedItem}"
+            SelectedItems="{Binding SelectedItems}"
+            SelectionMode="Extended"
+            SelfRelationRootValue="0"
+            BorderThickness="0"
+            HeaderRowHeight="28"
+            Grid.Row="2"
+            CurrentCellBorderBrush="White"
+            CurrentCellBorderThickness="0"
+            ExpanderColumn="False"
+            ContextMenu="{StaticResource TreeGridContextMenu}"
+            >
 
-                    <!--<Separator/>-->
+            <syncfusion:SfTreeGrid.Resources>
+                <Style TargetType="syncfusion:TreeGridCell">
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="0" />
+                </Style>
+                <Style TargetType="syncfusion:TreeGridExpanderCell">
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="0" />
+                </Style>
+                <Style TargetType="syncfusion:TreeGridHeaderRowControl">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="Margin" Value="0,0,0,3" />
+                </Style>
+            </syncfusion:SfTreeGrid.Resources>
 
-                    <!--<MenuItem Click="ExpandChildren_OnClick" Header="Expand" />
-                    <MenuItem Click="CollapseChildren_OnClick" Header="Collapse" />                    
-                    <MenuItem Click="ExpandAll_OnClick" Header="Expand all" />
-                    <MenuItem Click="CollapseAll_OnClick" Header="Collapse all" />-->
-                </ContextMenu>
-            </syncfusion:SfTreeGrid.ContextMenu>
+            <syncfusion:SfTreeGrid.Columns>
+                <syncfusion:TreeGridTextColumn
+                    HeaderText="File Name" Width="220"
+                    TextTrimming="CharacterEllipsis"
+                    ImmediateUpdateColumnFilter="True"
+                    CellTemplate="{StaticResource TreeGridCellTemplateSimple}"
+                    MappingName="Name">
+                </syncfusion:TreeGridTextColumn>
+                <syncfusion:TreeGridTextColumn HeaderText="Path" MappingName="RelativePath" ShowToolTip="True"
+                    TextTrimming="CharacterEllipsis" />
+                <syncfusion:TreeGridTextColumn HeaderText="Kind" MappingName="Extension" Width="70" />
+            </syncfusion:SfTreeGrid.Columns>
         </syncfusion:SfTreeGrid>
     </Grid>
 </reactiveUi:ReactiveUserControl>

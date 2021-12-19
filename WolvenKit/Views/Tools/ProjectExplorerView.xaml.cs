@@ -41,6 +41,7 @@ namespace WolvenKit.Views.Tools
         {
             InitializeComponent();
             TreeGrid.ItemsSourceChanged += TreeGrid_ItemsSourceChanged;
+            TreeGridFlat.ItemsSourceChanged += TreeGridFlat_ItemsSourceChanged;
             TreeGrid.RowDragDropController.DragStart += RowDragDropController_DragStart;
             TreeGrid.RowDragDropController.DragOver += RowDragDropController_DragOver;
             TreeGrid.RowDragDropController.DragLeave += RowDragDropController_DragLeave;
@@ -112,10 +113,22 @@ namespace WolvenKit.Views.Tools
                     .Subscribe(_ => OnCellDoubleTapped(_.Sender, _.EventArgs as TreeGridCellDoubleTappedEventArgs))
                     .DisposeWith(disposables);
 
+                Observable
+                    .FromEventPattern(TreeGridFlat, nameof(TreeGridFlat.CellDoubleTapped))
+                    .Subscribe(_ => OnCellDoubleTapped(_.Sender, _.EventArgs as TreeGridCellDoubleTappedEventArgs))
+                    .DisposeWith(disposables);
+
                 this.OneWayBind(ViewModel,
                         viewModel => viewModel.BindGrid1,
                         view => view.TreeGrid.ItemsSource)
                     .DisposeWith(disposables);
+
+                this.OneWayBind(ViewModel,
+                        viewModel => viewModel.BindGrid1,
+                        view => view.TreeGridFlat.ItemsSource)
+                    .DisposeWith(disposables);
+
+                //ViewModel.WhenAnyValue(x => x.IsFlatModeEnabled).Subscribe(x => UpdateTreeGrid());
 
 
             });
@@ -162,24 +175,93 @@ namespace WolvenKit.Views.Tools
             }
         }
 
+        private void TreeGridFlat_ItemsSourceChanged(object sender, TreeGridItemsSourceChangedEventArgs e)
+        {
+            if (ViewModel is not ProjectExplorerViewModel viewModel)
+            {
+                return;
+            }
+            if (TreeGridFlat == null)
+            { return; }
+            if (TreeGridFlat.View != null)
+            {
+                TreeGridFlat.View.Filter = IsFileInFlat;
+                TreeGridFlat.View.RefreshFilter();
+                if (!_isfirsttime)
+                {
+                    if (viewModel.LastSelected != null)
+                    {
+                        var rowIndex = this.TreeGridFlat.ResolveToRowIndex(viewModel.LastSelected);
+                        if (rowIndex > -1)
+                        {
+                            var q = TreeGridFlat.ResolveToRowIndex(rowIndex - 1);
+                            var columnIndex = this.TreeGridFlat.ResolveToStartColumnIndex();
+                            this.TreeGridFlat.ScrollInView(new RowColumnIndex(q, columnIndex));
+                            TreeGridFlat.SelectRows(q, q);
+                        }
+                    }
+                }
+                else
+                { _isfirsttime = false; }
+            }
+        }
+
         private bool IsFileIn(object o)
+        {
+            var includeFile = false;
+            if (tabControl != null && o is FileModel fm)
+            {
+                includeFile = true;
+                if (tabControl.SelectedIndex == 0)
+                    includeFile &= fm.FullName.StartsWith((fm.Project as Cp77Project).FileDirectory);
+                else if (tabControl.SelectedIndex == 1)
+                    includeFile &= fm.FullName.StartsWith((fm.Project as Cp77Project).ModDirectory);
+                else if (tabControl.SelectedIndex == 2)
+                    includeFile &= fm.FullName.ToLower().StartsWith((fm.Project as Cp77Project).RawDirectory.ToLower());
+                else if (tabControl.SelectedIndex == 3)
+                    includeFile &= fm.FullName.StartsWith((fm.Project as Cp77Project).ScriptDirectory);
+                else if (tabControl.SelectedIndex == 4)
+                    includeFile &= fm.FullName.StartsWith((fm.Project as Cp77Project).TweakDirectory);
+                else if (tabControl.SelectedIndex == 5)
+                    includeFile &= fm.FullName.StartsWith((fm.Project as Cp77Project).PackedRootDirectory);
+
+                //if (ViewModel != null && ViewModel.IsFlatModeEnabled)
+                //    includeFile &= !fm.IsDirectory;
+
+            }
+            return includeFile;
+        }
+
+        private bool IsFileInFlat(object o)
         {
             if (tabControl != null && o is FileModel fm)
             {
-                if (tabControl.SelectedIndex == 0)
-                    return fm.FullName.StartsWith((fm.Project as Cp77Project).FileDirectory);
-                if (tabControl.SelectedIndex == 1)
-                    return fm.FullName.StartsWith((fm.Project as Cp77Project).ModDirectory);
-                if (tabControl.SelectedIndex == 2)
-                    return fm.FullName.ToLower().StartsWith((fm.Project as Cp77Project).RawDirectory.ToLower());
-                if (tabControl.SelectedIndex == 3)
-                    return fm.FullName.StartsWith((fm.Project as Cp77Project).ScriptDirectory);
-                if (tabControl.SelectedIndex == 4)
-                    return fm.FullName.StartsWith((fm.Project as Cp77Project).TweakDirectory);
-                if (tabControl.SelectedIndex == 5)
-                    return fm.FullName.StartsWith((fm.Project as Cp77Project).PackedRootDirectory);
+                return IsFileIn(o) && !fm.IsDirectory;
             }
             return false;
+        }
+
+        private void UpdateTreeGrid()
+        {
+            //if (ViewModel != null && TreeGrid != null)
+            //{
+            //    if (ViewModel.IsFlatModeEnabled)
+            //    {
+            //        TreeGrid.SetCurrentValue(SfTreeGrid.ChildPropertyNameProperty, null);
+            //        //TreeGrid.SetCurrentValue(SfTreeGrid.AllowSortingProperty, true);
+            //        //TreeGrid.SetCurrentValue(SfTreeGrid.AllowDropProperty, false);
+            //        //TreeGrid.SetCurrentValue(SfTreeGrid.AllowDraggingRowsProperty, false);
+            //    }
+            //    else
+            //    {
+            //        TreeGrid.SetCurrentValue(SfTreeGrid.ChildPropertyNameProperty, "ParentHash");
+            //        //TreeGrid.SetCurrentValue(SfTreeGrid.AllowSortingProperty, false);
+            //        //TreeGrid.SetCurrentValue(SfTreeGrid.AllowDropProperty, true);
+            //        //TreeGrid.SetCurrentValue(SfTreeGrid.AllowDraggingRowsProperty, true);
+            //    }
+            //    TreeGrid.RepopulateTree();
+            //    TreeGrid.View.RefreshFilter();
+            //}
         }
 
         private void tabControl_SelectedIndexChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -187,7 +269,9 @@ namespace WolvenKit.Views.Tools
             if (TreeGrid != null && TreeGrid.View != null)
             {
                 TreeGrid.View.Filter = IsFileIn;
+                TreeGridFlat.View.Filter = IsFileInFlat;
                 TreeGrid.View.RefreshFilter();
+                TreeGridFlat.View.RefreshFilter();
             }
         }
 
