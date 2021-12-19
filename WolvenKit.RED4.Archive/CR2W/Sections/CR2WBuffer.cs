@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Compression;
 
 namespace WolvenKit.RED4.Archive.CR2W
@@ -50,10 +51,12 @@ namespace WolvenKit.RED4.Archive.CR2W
 
     public class CR2WBuffer : ICR2WBuffer
     {
-        public byte[] Data { get; set; }
+        public byte[] Bytes { get; set; }
         public uint Flags { get; set; }
 
         public bool IsCompressed { get; set; }
         public uint MemSize { get; set; }
+
+        public IParseableBuffer Data { get; set; }
     }
 }

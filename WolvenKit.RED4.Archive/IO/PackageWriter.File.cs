@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Compression;
@@ -15,16 +16,16 @@ namespace WolvenKit.RED4.Archive.IO
 {
     public partial class PackageWriter
     {
-        private RedBuffer _file;
+        private Package04 _file;
 
-        private PackageHeader header;
-        private List<CRUID> _cruids = new List<CRUID>();
+        private Package04Header _header;
+        private List<CRUID> _cruids = new();
 
-        public void WritePackage(RedBuffer file)
+        public void WritePackage(Package04 file)
         {
             _file = file;
 
-            header = new PackageHeader
+            _header = new Package04Header
             {
                 uk1 = _file.Version,
                 numSections = 7
@@ -32,11 +33,11 @@ namespace WolvenKit.RED4.Archive.IO
 
             if (file.Chunks[0] is entEntity)
             {
-                header.uk2 = 0x0000;
+                _header.uk2 = 0x0000;
             }
             else if ((file.Chunks[0] is entIComponent))
             {
-                header.uk2 = 0xffff;
+                _header.uk2 = 0xffff;
             }
             else
             {
@@ -44,19 +45,19 @@ namespace WolvenKit.RED4.Archive.IO
             }
 
             var headerStart = BaseStream.Position;
-            BaseStream.WriteStruct(header);
+            BaseStream.WriteStruct(_header);
 
             var (strings, imports, chunkDesc, chunkData) = GenerateChunkData();
 
             // write cruids
 
             var unique_cruids = _cruids;
-            if (header.uk2 == 0)
+            if (_header.uk2 == 0)
             {
                 unique_cruids.Insert(0, 0);
             }
 
-            header.numCruids0 = header.numCruids1 = (ushort)unique_cruids.Count;
+            _header.numCruids0 = _header.numCruids1 = (ushort)unique_cruids.Count;
             foreach (var cruid in unique_cruids)
             {
                 Write(cruid);
@@ -67,53 +68,53 @@ namespace WolvenKit.RED4.Archive.IO
             // write refs
 
 
-            header.refPoolDescOffset = Convert.ToUInt32(BaseStream.Position - headerEnd);
-            var (refData, refDesc) = GenerateRefBuffer(imports, (uint)(header.refPoolDescOffset + imports.Count * 4));
+            _header.refPoolDescOffset = Convert.ToUInt32(BaseStream.Position - headerEnd);
+            var (refData, refDesc) = GenerateRefBuffer(imports, (uint)(_header.refPoolDescOffset + imports.Count * 4));
             BaseStream.WriteStructs(refDesc.ToArray());
 
-            header.refPoolDataOffset = Convert.ToUInt32(BaseStream.Position - headerEnd);
+            _header.refPoolDataOffset = Convert.ToUInt32(BaseStream.Position - headerEnd);
             // do we need a condition for uk3? does it matter?
             BaseStream.Write(refData);
 
             // write names
 
 
-            header.namePoolDescOffset = Convert.ToUInt32(BaseStream.Position - headerEnd);
-            var (nameData, nameDesc) = GenerateStringBuffer(strings, (uint)(header.namePoolDescOffset + strings.Count * 4));
+            _header.namePoolDescOffset = Convert.ToUInt32(BaseStream.Position - headerEnd);
+            var (nameData, nameDesc) = GenerateStringBuffer(strings, (uint)(_header.namePoolDescOffset + strings.Count * 4));
             BaseStream.WriteStructs(nameDesc.ToArray());
 
-            header.namePoolDataOffset = Convert.ToUInt32(BaseStream.Position - headerEnd);
+            _header.namePoolDataOffset = Convert.ToUInt32(BaseStream.Position - headerEnd);
             BaseStream.Write(nameData);
 
             // write chunks
 
-            header.chunkDescOffset = Convert.ToUInt32(BaseStream.Position - headerEnd);
+            _header.chunkDescOffset = Convert.ToUInt32(BaseStream.Position - headerEnd);
 
             for (var i = 0; i < chunkDesc.Count; i++)
             {
                 var chunkInfo = chunkDesc[i];
-                chunkInfo.offset += (uint)(header.chunkDescOffset + chunkDesc.Count * 8);
+                chunkInfo.offset += (uint)(_header.chunkDescOffset + chunkDesc.Count * 8);
                 chunkDesc[i] = chunkInfo;
             }
 
             BaseStream.WriteStructs(chunkDesc.ToArray());
 
-            header.chunkDataOffset = Convert.ToUInt32(BaseStream.Position - headerEnd);
+            _header.chunkDataOffset = Convert.ToUInt32(BaseStream.Position - headerEnd);
             BaseStream.Write(chunkData);
 
             // rewrite header with correct info
 
             BaseStream.Position = headerStart;
-            BaseStream.WriteStruct(header);
+            BaseStream.WriteStruct(_header);
 
         }
 
-        private PackageChunkHeader WriteChunk(PackageWriter file, IRedClass chunk)
+        private Package04ChunkHeader WriteChunk(PackageWriter file, IRedClass chunk)
         {
             var redTypeName = RedReflection.GetTypeRedName(chunk.GetType());
             var typeIndex = file.GetStringIndex(redTypeName);
 
-            var result = new PackageChunkHeader
+            var result = new Package04ChunkHeader
             {
                 typeID = typeIndex,
                 offset = (uint)file.BaseStream.Position
@@ -124,16 +125,16 @@ namespace WolvenKit.RED4.Archive.IO
             return result;
         }
 
-        private (byte[], IList<PackageImportHeader>) GenerateRefBuffer(IList<(string, CName, ushort)> refs, uint position)
+        private (byte[], IList<Package04ImportHeader>) GenerateRefBuffer(IList<(string, CName, ushort)> refs, uint position)
         {
 
-            var refDesc = new List<PackageImportHeader>();
+            var refDesc = new List<Package04ImportHeader>();
             var refData = new List<byte>();
             foreach (var reff in refs)
             {
-                if (header.uk2 == 0)
+                if (_header.uk2 == 0)
                 {
-                    refDesc.Add(new PackageImportHeader
+                    refDesc.Add(new Package04ImportHeader
                     {
                         offset = (uint)refData.Count + position,
                         size = (byte)reff.Item2.Length,
@@ -147,7 +148,7 @@ namespace WolvenKit.RED4.Archive.IO
                 }
                 else
                 {
-                    refDesc.Add(new PackageImportHeader
+                    refDesc.Add(new Package04ImportHeader
                     {
                         offset = (uint)refData.Count + position,
                         size = 8,
@@ -159,14 +160,14 @@ namespace WolvenKit.RED4.Archive.IO
             return (refData.ToArray(), refDesc);
         }
 
-        private (byte[], IList<PackageNameHeader>) GenerateStringBuffer(IList<CName> strings, uint position)
+        private (byte[], IList<Package04NameHeader>) GenerateStringBuffer(IList<CName> strings, uint position)
         {
 
-            var nameDesc = new List<PackageNameHeader>();
+            var nameDesc = new List<Package04NameHeader>();
             var nameData = new List<byte>();
             foreach (var str in strings)
             {
-                nameDesc.Add(new PackageNameHeader
+                nameDesc.Add(new Package04NameHeader
                 {
                     offset = (uint)nameData.Count + position,
                     size = (byte)(str.Length + 1)
@@ -201,12 +202,12 @@ namespace WolvenKit.RED4.Archive.IO
             return (StringCacheList.ToDictionary(), ImportCacheList.ToDictionary());
         }
 
-        private (IList<CName>, IList<(string, CName, ushort)>, List<PackageChunkHeader>, byte[]) GenerateChunkData()
+        private (IList<CName>, IList<(string, CName, ushort)>, List<Package04ChunkHeader>, byte[]) GenerateChunkData()
         {
             using var ms = new MemoryStream();
             using var file = new PackageWriter(ms);
 
-            var chunkDesc = new List<PackageChunkHeader>();
+            var chunkDesc = new List<Package04ChunkHeader>();
             for (int i = 0; i < _file.Chunks.Count; i++)
             {
                 file.StartChunk(i);

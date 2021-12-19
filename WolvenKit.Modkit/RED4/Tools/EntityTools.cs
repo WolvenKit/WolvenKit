@@ -38,11 +38,10 @@ namespace WolvenKit.Modkit.RED4
             }
             var blob = cr2w.Chunks.OfType<entEntityTemplate>().First();
 
-            if (blob.CompiledData.Data.Length > 0)
+            if (blob.CompiledData.Data.MemSize > 0)
             {
-                blob.CompiledData.Decompress();
                 var packageStream = new MemoryStream();
-                packageStream.Write(blob.CompiledData.Data);
+                packageStream.Write(blob.CompiledData.Data.GetBytes());
 
                 CompiledPackage package = new CompiledPackage(_hashService);
                 packageStream.Seek(0, SeekOrigin.Begin);
@@ -63,11 +62,10 @@ namespace WolvenKit.Modkit.RED4
             List<RedFileDto> datas = new List<RedFileDto>();
             foreach (var blob in blobs)
             {
-                if (blob.CompiledData.Data.Length > 0)
+                if (blob.CompiledData.Data.MemSize > 0)
                 {
-                    blob.CompiledData.Decompress();
                     var packageStream = new MemoryStream();
-                    packageStream.Write(blob.CompiledData.Data);
+                    packageStream.Write(blob.CompiledData.Data.GetBytes());
 
                     CompiledPackage package = new CompiledPackage(_hashService);
                     packageStream.Seek(0, SeekOrigin.Begin);

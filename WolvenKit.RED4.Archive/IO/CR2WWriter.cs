@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
@@ -66,6 +67,34 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 app.Write(this);
             }
+        }
+
+        public override void Write(DataBuffer val)
+        {
+            if (val.Pointer == -1 && val.Data.Data is Package04 p4)
+            {
+                using var ms = new MemoryStream();
+                using var packageWriter = new PackageWriter(ms);
+
+                packageWriter.WritePackage(p4);
+                val.Data.SetBytes(ms.ToArray());
+            }
+
+            base.Write(val);
+        }
+
+        public override void Write(SharedDataBuffer val)
+        {
+            if (val.Data.Data is Package04 p4)
+            {
+                using var ms = new MemoryStream();
+                using var packageWriter = new PackageWriter(ms);
+
+                packageWriter.WritePackage(p4);
+                val.Data.SetBytes(ms.ToArray());
+            }
+
+            base.Write(val);
         }
     }
 }

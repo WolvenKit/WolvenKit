@@ -1,25 +1,19 @@
-using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Text;
 using Splat;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.Extensions;
-using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
-using WolvenKit.RED4.Types.Compression;
 using WolvenKit.RED4.Types.Exceptions;
 using WolvenKit.Common.Services;
+using WolvenKit.RED4.Archive.Buffer;
 
 namespace WolvenKit.RED4.Archive.IO
 {
     public partial class PackageReader
     {
-        private PackageHeader header;
+        private Package04Header header;
         private IHashService _hashService;
 
         public EFileReadErrorCodes ReadPackage(RedBuffer buffer)
@@ -27,7 +21,9 @@ namespace WolvenKit.RED4.Archive.IO
             _hashService = Locator.Current.GetService<IHashService>();
 
             var _chunks = new List<IRedClass>();
-            _outputFile = buffer;
+
+            var result = new Package04();
+            _outputFile = result;
 
             var version = BaseReader.ReadInt16();
             BaseStream.Position -= 2;
@@ -36,8 +32,7 @@ namespace WolvenKit.RED4.Archive.IO
                 return EFileReadErrorCodes.UnsupportedVersion;
             }
 
-            header = BaseStream.ReadStruct<PackageHeader>();
-            buffer.Version = header.uk1;
+            header = BaseStream.ReadStruct<Package04Header>();
 
             if (header.refPoolDescOffset != 0)
             {
@@ -51,7 +46,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             for (var i = 0; i < header.numCruids0; i++)
             {
-                buffer.Cruids.Add(_reader.ReadUInt64());
+                result.Cruids.Add(_reader.ReadUInt64());
             }
 
             var baseOff = BaseStream.Position;
@@ -59,7 +54,7 @@ namespace WolvenKit.RED4.Archive.IO
             // read refs
             var refCount = (header.refPoolDataOffset - header.refPoolDescOffset) / 4;
             BaseStream.Position = baseOff + header.refPoolDescOffset;
-            var refDesc = BaseStream.ReadStructs<PackageImportHeader>(refCount);
+            var refDesc = BaseStream.ReadStructs<Package04ImportHeader>(refCount);
 
             foreach (var r in refDesc)
             {
@@ -70,7 +65,7 @@ namespace WolvenKit.RED4.Archive.IO
             // read strings
             var nameCount = (header.namePoolDataOffset - header.namePoolDescOffset) / 4;
             BaseStream.Position = baseOff + header.namePoolDescOffset;
-            var nameDesc = BaseStream.ReadStructs<PackageNameHeader>(nameCount);
+            var nameDesc = BaseStream.ReadStructs<Package04NameHeader>(nameCount);
 
             foreach (var s in nameDesc)
             {
@@ -81,7 +76,7 @@ namespace WolvenKit.RED4.Archive.IO
             // read chunks
             var chunkCount = (header.chunkDataOffset - header.chunkDescOffset) / 8;
             BaseStream.Position = baseOff + header.chunkDescOffset;
-            var chunkDesc = BaseStream.ReadStructs<PackageChunkHeader>(chunkCount);
+            var chunkDesc = BaseStream.ReadStructs<Package04ChunkHeader>(chunkCount);
 
             foreach (var c in chunkDesc)
             {
@@ -89,14 +84,13 @@ namespace WolvenKit.RED4.Archive.IO
                 _chunks.Add(ReadChunk(c));
             }
 
-            buffer.SetChunks(_chunks);
-
-            buffer.IsPackage = true;
+            result.SetChunks(_chunks);
+            buffer.Data = result;
 
             return EFileReadErrorCodes.NoError;
         }
 
-        private PackageImport ReadImport(PackageImportHeader r)
+        private PackageImport ReadImport(Package04ImportHeader r)
         {
             // needs header offset
             //Debug.Assert(BaseStream.Position == r.offset);
@@ -118,14 +112,14 @@ namespace WolvenKit.RED4.Archive.IO
             }
             return import;
         }
-        private string ReadName(PackageNameHeader n)
+        private string ReadName(Package04NameHeader n)
         {
             var s = _reader.ReadNullTerminatedString();
             //Debug.Assert(s.Length == n.size);
             return s;
         }
 
-        private IRedClass ReadChunk(PackageChunkHeader c)
+        private IRedClass ReadChunk(Package04ChunkHeader c)
         {
             // needs header offset
             //Debug.Assert(BaseStream.Position == c.offset);

@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 {
     public class SharedDataBuffer : IRedPrimitive, IEquatable<SharedDataBuffer>
     {
-        public byte[] Buffer { get; set; }
+        public RedBuffer Data { get; set; }
 
         public bool Equals(SharedDataBuffer other)
         {
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.Types
                 return true;
             }
 
-            return Equals(Buffer, other.Buffer);
+            return Equals(Data, other.Data);
         }
 
         public override bool Equals(object obj)
@@ -42,6 +42,6 @@ namespace WolvenKit.RED4.Types
             return Equals((SharedDataBuffer)obj);
         }
 
-        public override int GetHashCode() => (Buffer != null ? Buffer.GetHashCode() : 0);
+        public override int GetHashCode() => (Data != null ? Data.GetHashCode() : 0);
     }
 }

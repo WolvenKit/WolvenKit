@@ -31,10 +31,8 @@ namespace WolvenKit.Modkit.RED4
                 UInt16 bufferIdx = chk.Buffer.Pointer;
                 var buffer = cr2w.Buffers[bufferIdx - 1];
 
-                var unpacked = new byte[buffer.MemSize];
-                _ = OodleHelper.Decompress(buffer.Data, unpacked);
                 var ms = new MemoryStream();
-                ms.Write(unpacked);
+                ms.Write(buffer.GetBytes());
 
                 animDataBuffers.Add(ms);
             }
@@ -77,10 +75,9 @@ namespace WolvenKit.Modkit.RED4
                 {
                     var animBuff = (animAnimDes.AnimBuffer.Chunk as animAnimationBufferSimd);
                     var defferedBuffer = new MemoryStream();
-                    if (animBuff.InplaceCompressedBuffer.Data.Length > 0)
+                    if (animBuff.InplaceCompressedBuffer.Data.MemSize > 0)
                     {
-                        animBuff.InplaceCompressedBuffer.Decompress();
-                        animStream.Write(animBuff.InplaceCompressedBuffer.Data);
+                        animStream.Write(animBuff.InplaceCompressedBuffer.Data.GetBytes());
 
                         var br = new BinaryReader(defferedBuffer);
                         br.BaseStream.Seek(0, SeekOrigin.Begin);
@@ -95,8 +92,7 @@ namespace WolvenKit.Modkit.RED4
                     }
                     else
                     {
-                        animBuff.DefferedBuffer.Decompress();
-                        animStream.Write(animBuff.DefferedBuffer.Data);
+                        animStream.Write(animBuff.DefferedBuffer.Data.GetBytes());
                     }
                     defferedBuffer.Seek(0, SeekOrigin.Begin);
                     SIMD.AddAnimationSIMD(ref model, animBuff, animAnimDes.Name, defferedBuffer, animAnimDes);
@@ -105,10 +101,9 @@ namespace WolvenKit.Modkit.RED4
                 {
                     var animBuff = (animAnimDes.AnimBuffer.Chunk as animAnimationBufferCompressed);
                     var defferedBuffer = new MemoryStream();
-                    if (animBuff.InplaceCompressedBuffer.Data.Length > 0)
+                    if (animBuff.InplaceCompressedBuffer.Data.MemSize > 0)
                     {
-                        animBuff.InplaceCompressedBuffer.Decompress();
-                        animStream.Write(animBuff.InplaceCompressedBuffer.Data);
+                        animStream.Write(animBuff.InplaceCompressedBuffer.Data.GetBytes());
 
                         var br = new BinaryReader(defferedBuffer);
                         br.BaseStream.Seek(0, SeekOrigin.Begin);
@@ -129,10 +124,9 @@ namespace WolvenKit.Modkit.RED4
                         animDataBuffers[(int)((uint)dataAddr.UnkIndex)].Read(bytes, 0, (int)((uint)dataAddr.ZeInBytes));
                         defferedBuffer = new MemoryStream(bytes);
                     }
-                    else if (animBuff.DefferedBuffer.Data.Length > 0)
+                    else if (animBuff.DefferedBuffer.Data.MemSize > 0)
                     {
-                        animBuff.DefferedBuffer.Decompress();
-                        defferedBuffer.Write(animBuff.DefferedBuffer.Data);
+                        defferedBuffer.Write(animBuff.DefferedBuffer.Data.GetBytes());
                     }
                     defferedBuffer.Seek(0, SeekOrigin.Begin);
                     SPLINE.AddAnimationSpline(ref model, animBuff, animAnimDes.Name, defferedBuffer, animAnimDes);

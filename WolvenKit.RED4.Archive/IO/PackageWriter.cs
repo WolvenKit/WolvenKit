@@ -191,5 +191,25 @@ namespace WolvenKit.RED4.Archive.IO
             _writer.Write(val.GetValue().ToCharArray());
         }
 
+        // Override this, because buffers in buffers are always uncompressed
+        public override void Write(DataBuffer val)
+        {
+            if (val.Pointer >= 0)
+            {
+                _writer.Write((uint)(val.Pointer | 0x80000000) + 1);
+            }
+            else
+            {
+                if (val.Data.Bytes == Array.Empty<byte>())
+                {
+                    _writer.Write(0x80000000);
+                }
+                else
+                {
+                    _writer.Write(val.Data.MemSize);
+                    _writer.Write(val.Data.GetBytes());
+                }
+            }
+        }
     }
 }

@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
@@ -73,9 +74,9 @@ namespace WolvenKit.Common.Conversion
                 }
                 if (data is SerializationDeferredDataBuffer sddb)
                 {
-                    if (sddb.File is CR2WFile cR2WFile)
+                    if (sddb.Data.Data is Package04 p4)
                     {
-                        var chunks = cR2WFile.Buffers[sddb.Pointer].Chunks;
+                        var chunks = p4.Chunks;
                         for (var i = 0; i < chunks.Count; i++)
                         {
                             var obj = PrimativeDecider(chunks[i], null, this);
@@ -92,9 +93,28 @@ namespace WolvenKit.Common.Conversion
                 }
                 else if (data is DataBuffer db)
                 {
-                    if (db.File is CR2WFile cR2WFile)
+                    if (db.Data.Data is Package04 p4)
                     {
-                        var chunks = cR2WFile.Buffers[db.Pointer].Chunks;
+                        var chunks = p4.Chunks;
+                        for (var i = 0; i < chunks.Count; i++)
+                        {
+                            var obj = PrimativeDecider(chunks[i], null, this);
+                            if (obj is RedClassDto rcd)
+                            {
+                                Properties.Add(":" + rcd.Type, obj);
+                            }
+                            else
+                            {
+                                Properties.Add(":" + obj.GetType(), obj);
+                            }
+                        }
+                    }
+                }
+                else if (data is SharedDataBuffer sdb)
+                {
+                    if (sdb.Data.Data is Package04 p4)
+                    {
+                        var chunks = p4.Chunks;
                         for (var i = 0; i < chunks.Count; i++)
                         {
                             var obj = PrimativeDecider(chunks[i], null, this);

@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
@@ -34,7 +35,7 @@ namespace WolvenKit.RED4.Archive.IO
             var baseOff = BaseStream.Position;
             var fieldCount = _reader.ReadUInt16();
             //var unk = _reader.ReadUInt16();
-            var fields = BaseStream.ReadStructs<PackageFieldHeader>(fieldCount);
+            var fields = BaseStream.ReadStructs<Package04FieldHeader>(fieldCount);
 
             foreach (var f in fields)
             {

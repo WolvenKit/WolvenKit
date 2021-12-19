@@ -25,6 +25,7 @@ using System.ComponentModel;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.Text;
 using System.Reactive;
+using WolvenKit.RED4.Archive.Buffer;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -250,26 +251,20 @@ namespace WolvenKit.ViewModels.Shell
                                 _properties.Add(new ChunkViewModel(pi.Name, value, this));
                             });
                         }
-                        else if (obj is SerializationDeferredDataBuffer sddb)
+                        else if (obj is SerializationDeferredDataBuffer sddb && sddb.Data.Data is Package04 p4)
                         {
-                            if (sddb.File is CR2WFile cR2WFile)
+                            var chunks = p4.Chunks;
+                            for (int i = 0; i < chunks.Count; i++)
                             {
-                                var chunks = cR2WFile.Buffers[sddb.Pointer].Chunks;
-                                for (int i = 0; i < chunks.Count; i++)
-                                {
-                                    _properties.Add(new ChunkViewModel(i, chunks[i], this));
-                                }
+                                _properties.Add(new ChunkViewModel(i, chunks[i], this));
                             }
                         }
-                        else if (obj is DataBuffer db)
+                        else if (obj is DataBuffer db && db.Data.Data is Package04 p42)
                         {
-                            if (db.File is CR2WFile cR2WFile)
+                            var chunks = p42.Chunks;
+                            for (int i = 0; i < chunks.Count; i++)
                             {
-                                var chunks = cR2WFile.Buffers[db.Pointer].Chunks;
-                                for (int i = 0; i < chunks.Count; i++)
-                                {
-                                    _properties.Add(new ChunkViewModel(i, chunks[i], this));
-                                }
+                                _properties.Add(new ChunkViewModel(i, chunks[i], this));
                             }
                         }
                     }

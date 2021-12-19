@@ -1,15 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
-using WolvenKit.RED4.Types.Compression;
 using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.Archive.IO
@@ -17,10 +12,12 @@ namespace WolvenKit.RED4.Archive.IO
     public partial class CR2WReader
     {
         private CR2WFile _cr2wFile => (CR2WFile)_outputFile;
+        private bool _parseBuffer;
 
-        public EFileReadErrorCodes ReadFile(out CR2WFile file, bool decompressBuffers = true)
+        public EFileReadErrorCodes ReadFile(out CR2WFile file, bool parseBuffer = true)
         {
             _outputFile = new CR2WFile();
+            _parseBuffer = parseBuffer;
 
             #region Read Headers
 
@@ -104,7 +101,7 @@ namespace WolvenKit.RED4.Archive.IO
             _cr2wFile.Debug.BufferInfos = bufferInfoList;
             foreach (var bufferInfo in bufferInfoList)
             {
-                _cr2wFile.Buffers.Add(ReadBuffer(bufferInfo, decompressBuffers));
+                _cr2wFile.Buffers.Add(ReadBuffer(bufferInfo));
             }
 
             _cr2wFile.Debug.EmbeddedInfos = embeddedInfoList;
@@ -161,36 +158,24 @@ namespace WolvenKit.RED4.Archive.IO
             ReadClass(result, info.dataSize);
             var bytesRead = BaseStream.Position - startPos;
 
-            if (bytesRead < info.dataSize)
+            if (bytesRead != info.dataSize)
             {
-                throw new TodoException();
+                throw new TodoException($"Chunk size mismatch");
             }
 
             return result;
         }
 
-        private RedBuffer ReadBuffer(CR2WBufferInfo info, bool decompress)
+        private RedBuffer ReadBuffer(CR2WBufferInfo info)
         {
             Debug.Assert(BaseStream.Position == info.offset);
 
             var buffer = BaseReader.ReadBytes((int)info.diskSize);
-            RedBuffer result;
-            if (info.memSize == info.diskSize)
-            {
-                result = RedBuffer.CreateBuffer(info.flags, buffer);
-            }
-            else
-            {
-                result = RedBuffer.CreateCompressedBuffer(info.flags, buffer, info.memSize);
-                if (decompress)
-                {
-                    result.Decompress();
-                }
-            }
+            var result = RedBuffer.CreateBuffer(info.flags, buffer, (int)info.memSize);
 
-            if (!result.IsCompressed)
+            if (_parseBuffer)
             {
-                var ms = new MemoryStream(result.Data);
+                var ms = new MemoryStream(result.GetBytes());
                 var reader = new PackageReader(ms);
                 reader.ReadPackage(result);
             }

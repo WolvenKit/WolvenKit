@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
         public ushort Pointer { get; set; }
 
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-        public byte[] Data
+        public RedBuffer Data
         {
             get
             {
@@ -21,18 +21,18 @@ namespace WolvenKit.RED4.Types
                 {
                     throw new IndexOutOfRangeException(nameof(Pointer));
                 }
-                return File._buffers[Pointer].Data;
+                return File._buffers[Pointer];
             }
             set
             {
-                var existingBuffer = File.BufferHandler.GetIndex(value);
+                var existingBuffer = File.BufferHandler.IndexOf(value);
                 if (existingBuffer != -1)
                 {
                     Pointer = (ushort)existingBuffer;
                 }
                 else
                 {
-                    File._buffers[Pointer].Data = value;
+                    File._buffers[Pointer] = value;
                 }
             }
         }

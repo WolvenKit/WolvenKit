@@ -43,30 +43,13 @@ namespace WolvenKit.Modkit.RED4
             var buffers = buffersenumerable.ToList();
             for (var i = 0; i < buffers.Count; i++)
             {
-                var inbuffer = buffers[i];
-                IEnumerable<byte> outBuffer = new List<byte>();
-
-                var r = OodleHelper.Compress(
-                    inbuffer,
-                    inbuffer.Length,
-                    ref outBuffer,
-                    OodleNative.OodleLZ_Compressor.Kraken,
-                    OodleNative.OodleLZ_Compression.Normal);
-
-                var b = outBuffer.ToArray();
-
                 uint flags = 0;
                 if (i < existingBuffers.Count)
                 {
                     flags = existingBuffers[i].flags;
                 }
 
-                cr2w.Buffers.Add(new RedBuffer()
-                {
-                    Flags = flags, //TODO: find out what these are
-                    MemSize = (uint)inbuffer.Length,
-                    Data = b
-                });
+                cr2w.Buffers.Add(RedBuffer.CreateBuffer(flags, buffers[i]));
             }
 
             // write cr2w
@@ -134,29 +117,13 @@ namespace WolvenKit.Modkit.RED4
                         continue;
                     }
 
-                    IEnumerable<byte> outBuffer = new List<byte>();
-
-                    var r = OodleHelper.Compress(
-                        inbuffer,
-                        inbuffer.Length,
-                        ref outBuffer,
-                        OodleNative.OodleLZ_Compressor.Kraken,
-                        OodleNative.OodleLZ_Compression.Normal);
-
-                    var b = outBuffer.ToArray();
-
                     uint flags = 0;
                     if (i < existingBuffers.Count)
                     {
                         flags = existingBuffers[i].flags;
                     }
 
-                    cr2w.Buffers.Add(new RedBuffer()
-                    {
-                        Flags = flags, //TODO: find out what these are
-                        MemSize = (uint)inbuffer.Length,
-                        Data = b
-                    });
+                    cr2w.Buffers.Add(RedBuffer.CreateBuffer(flags, inbuffer));
                 }
 
                 // write cr2w
