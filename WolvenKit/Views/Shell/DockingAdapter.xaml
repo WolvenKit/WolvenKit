@@ -134,10 +134,14 @@
                                Icon="{Binding Extension}" />
                             <TextBlock
                                 Grid.Column="1"
-                                Margin="0,0,5,1"
+                                Margin="0,0,0,1"
                                 Foreground="{StaticResource ContentForeground}"
                                 Text="{Binding Path=Header}"
                                  />
+                            <!--TextBlock Text="*"
+                                Margin="0,0,0,1"
+                                x:Name="DirtyFlag"
+                                Visibility="Collapsed" /-->
                         </DockPanel>
                         <DockPanel
                             x:Name="RegularHeader"
@@ -155,6 +159,9 @@
                             <Setter Property="UIElement.Visibility" TargetName="RegularHeader" Value="Visible"/>
                             <Setter Property="UIElement.Visibility" TargetName="RedDocumentHeader" Value="Collapsed"/>
                         </DataTrigger>
+                        <!--DataTrigger Binding="{Binding Content.Content.Content.IsDirty, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContentControl}}}" Value="True">
+                            <Setter Property="UIElement.Visibility" TargetName="DirtyFlag" Value="Visible"/>
+                        </DataTrigger-->
                     </DataTemplate.Triggers>
                 </DataTemplate>
             </syncfusion:DockingManager.HeaderTemplate>

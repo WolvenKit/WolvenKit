@@ -444,6 +444,7 @@
                 AutoGeneratingPropertyGridItem="PropertyGrid_AutoGeneratingPropertyGridItem"
                 CollectionEditorOpening ="PropertyGrid_CollectionEditorOpening"
                 PropertyNameColumnDefinition="200"
+                ValueChanged="PropertyGrid_ValueChanged"
                 ButtonPanelVisibility="Collapsed"
                 SelectedObjectChanged="PropertyGrid_SelectedObjectChanged"
                 BorderThickness="0,1,1,1" />

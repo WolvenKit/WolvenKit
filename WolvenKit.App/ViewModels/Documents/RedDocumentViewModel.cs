@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using DynamicData.Kernel;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common.Extensions;
@@ -165,10 +167,14 @@ namespace WolvenKit.ViewModels.Documents
 
         private void PopulateItems(CR2WFile w2rcFile)
         {
+            var main = new W2rcFileViewModel(w2rcFile);
             TabItemViewModels.Add(new W2rcFileViewModel(w2rcFile));
+            main.WhenAnyValue(x => x.IsDirty).Subscribe(x => SetIsDirty(IsDirty || x));
             foreach (var buffer in w2rcFile.Buffers)
             {
-                TabItemViewModels.Add(new W2rcBufferViewModel(buffer, w2rcFile));
+                var view = new W2rcBufferViewModel(buffer, w2rcFile);
+                TabItemViewModels.Add(view);
+                view.WhenAnyValue(x => x.IsDirty).Subscribe(x => SetIsDirty(IsDirty || x));
             }
 
             SelectedIndex = 0;
@@ -178,6 +184,6 @@ namespace WolvenKit.ViewModels.Documents
 
         #endregion
 
-
     }
 }
+

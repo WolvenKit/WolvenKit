@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -6,13 +7,12 @@ namespace WolvenKit.ViewModels.Documents
     {
         public abstract ERedDocumentItemType DocumentItemType { get; }
 
+        [Reactive] public bool IsDirty { get; set; }
+
         public RedDocumentItemViewModel()
         {
-            
-
 
         }
-
         
     }
 }

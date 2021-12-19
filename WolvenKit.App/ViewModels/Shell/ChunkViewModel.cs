@@ -24,18 +24,19 @@ using System.Dynamic;
 using System.ComponentModel;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.Text;
+using System.Reactive;
 
 namespace WolvenKit.ViewModels.Shell
 {
     public class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel
     {
-        private ObservableCollection<ChunkViewModel> properties;
 
         #region Constructors
 
         public ChunkViewModel(IRedType export)
         {
             Data = export;
+            Data.WhenAnyValue(x => x).Subscribe(x => IsDirty = true);
             OpenRefCommand = new DelegateCommand<IRedRef>(p => ExecuteOpenRef(p), CanOpenRef);
             ExportChunkCommand = new DelegateCommand((p) => ExecuteExportChunk(), (p) => CanExportChunk());
             AddItemToArrayCommand = new DelegateCommand((p) => ExecuteAddItemToArray(), (p) => CanAddItemToArray());
@@ -55,118 +56,27 @@ namespace WolvenKit.ViewModels.Shell
         public ChunkViewModel(IRedType export, ChunkViewModel parent) : this(export)
         {
             Parent = parent;
+            this.WhenAnyValue(x => x.IsDirty).Subscribe(x => Parent.IsDirty |= x);
         }
 
-        public ChunkViewModel(string name, IRedType export, ChunkViewModel parent) : this(name, export)
+        public ChunkViewModel(string name, IRedType export, ChunkViewModel parent) : this(export, parent)
         {
-            Parent = parent;
+            propertyName = name;
         }
 
         #endregion Constructors
 
         #region Properties
 
-        public IRedType Data { get; set; }
-
+        private IRedType _data;
+        public IRedType Data
+        {
+            get => _data;
+            set => this.RaiseAndSetIfChanged(ref _data, value);
+        }
+        [Reactive] public bool IsDirty { get; protected set; }
         public ChunkViewModel Parent { get; set; }
         public int? Index { get; set; }
-
-        public class OAPropertyDescriptor : PropertyDescriptor
-        {
-            private IRedArray collection = null;
-            private int index = -1;
-
-            public OAPropertyDescriptor(IRedArray coll,
-                   int idx) : base(idx.ToString(), null)
-            {
-                collection = coll;
-                index = idx;
-            }
-            public override AttributeCollection Attributes => new AttributeCollection(null);
-            public override bool CanResetValue(object component) => true;
-            public override Type ComponentType => collection.GetType();
-            public override string DisplayName => index.ToString();
-            public override string Description => collection[index].ToString();
-            public override object GetValue(object component) => collection[index];
-            public override bool IsReadOnly => false;
-            public override string Name => index.ToString();
-            public override Type PropertyType => collection.InnerType;
-            public override void ResetValue(object component) { }
-            public override bool ShouldSerializeValue(object component) => true;
-
-            public override void SetValue(object component, object value)
-            {
-                collection[index] = value;
-            }
-        }
-
-        [TypeConverter(typeof(ExpandableObjectConverter))]
-        public class OrangeArray : DynamicObject, IRedType, ICustomTypeDescriptor
-        {
-
-            public Dictionary<string, object> Properties
-              = new Dictionary<string, object>();
-            private IRedArray array;
-
-            public OrangeArray(IRedArray properties)
-            {
-                array = properties;
-                for (var i = 0; i < properties.Count; i++)
-                {
-                    var property = properties[i];
-                    Properties.Add(i.ToString(), property);
-                }
-            }
-
-            public AttributeCollection GetAttributes() => TypeDescriptor.GetAttributes(this, true);
-            public string GetClassName() => TypeDescriptor.GetClassName(this, true);
-            public string GetComponentName() => TypeDescriptor.GetComponentName(this, true);
-            public TypeConverter GetConverter() => TypeDescriptor.GetConverter(this, true);
-            public EventDescriptor GetDefaultEvent() => TypeDescriptor.GetDefaultEvent(this, true);
-            public PropertyDescriptor GetDefaultProperty() => TypeDescriptor.GetDefaultProperty(this, true);
-
-            public override IEnumerable<string> GetDynamicMemberNames()
-            {
-                foreach (var (idx, _) in Properties)
-                {
-                    yield return idx;
-                }
-            }
-
-            public object GetEditor(Type editorBaseType) => TypeDescriptor.GetEditor(this, editorBaseType, true);
-            public EventDescriptorCollection GetEvents() => TypeDescriptor.GetEvents(this, true);
-            public EventDescriptorCollection GetEvents(Attribute[] attributes) => TypeDescriptor.GetEvents(this, attributes, true);
-
-            public PropertyDescriptorCollection GetProperties()
-            {
-                var pds = new PropertyDescriptorCollection(null);
-
-                for (int i = 0; i < Properties.Count; i++)
-                {
-                    var pd = new OAPropertyDescriptor(array, i);
-                    pds.Add(pd);
-                }
-                return pds;
-            }
-            public PropertyDescriptorCollection GetProperties(Attribute[] attributes) => GetProperties();
-            public object GetPropertyOwner(PropertyDescriptor pd) => this;
-
-            public override bool TryGetMember(GetMemberBinder binder, out object result)
-            {
-                return Properties.TryGetValue(binder.Name, out result);
-            }
-
-            public override bool TrySetMember(SetMemberBinder binder, object value)
-            {
-                if (Properties.ContainsKey(binder.Name))
-                {
-                    Properties[binder.Name] = value;
-                    return true;
-                }
-                return false;
-            }
-
-        }
 
         public class RedArrayWrapper : IRedType
         {
@@ -242,44 +152,36 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
+        private IRedType _propertyGridData;
+
         public IRedType PropertyGridData
         {
             get
             {
+                if (_propertyGridData != null)
+                    return _propertyGridData;
                 try
                 {
                     IRedType data;
                     if (Parent != null && Parent.Data is IRedArray ar)
                     {
                         Type type = typeof(RedArrayItem<>).MakeGenericType(PropertyType);
-                        return (IRedType)System.Activator.CreateInstance(type, ar, ar.IndexOf(Data));
-                        //return new RedArrayItem<>(ar, ar.IndexOf(Data));
+                        var rai = (IRedType)System.Activator.CreateInstance(type, ar, ar.IndexOf(Data));
+                        rai.WhenAnyValue(x => x).Subscribe(x => IsDirty = true);
+                        return _propertyGridData = rai;
                     }
                     if (Parent != null && Parent.Data is IRedClass cls && propertyName != null)
                     {
                         Type type = typeof(RedClassProperty<>).MakeGenericType(PropertyType);
-                        return (IRedType)System.Activator.CreateInstance(type, cls, propertyName);
-                        //return new RedArrayItem<>(ar, ar.IndexOf(Data));
+                        var rcp = (IRedType)System.Activator.CreateInstance(type, cls, propertyName);
+                        rcp.WhenAnyValue(x => x).Subscribe(x => IsDirty = true);
+                        return _propertyGridData = rcp;
                     }
                     if (Data is IRedArray ary)
                     {
-                        //if (ary.InnerType.IsAssignableTo(typeof(IRedClass)))
-                        //    return Data;
-                        //var props = new Dictionary<string, object>();
-                        //foreach (var item in ary)
-                        //{
-                        //    if (item is IRedBaseHandle hnd)
-                        //    {
-                        //        var star = hnd?.File?.Chunks[hnd.Pointer] ?? null;
-                        //        props.Add(ary.IndexOf(item).ToString(), star);
-                        //    }
-                        //    else
-                        //    {
-                        //        props.Add(ary.IndexOf(item).ToString(), item);
-                        //    }
-                        //}
-                        data = new OrangeArray(ary);
-                        return new RedArrayWrapper(ary);
+                        var raw = new RedArrayWrapper(ary);
+                        raw.WhenAnyValue(x => x).Subscribe(x => IsDirty = true);
+                        return _propertyGridData = raw;
                     }
                     if (PropertyType.IsAssignableTo(typeof(IRedClass)))
                     {
@@ -292,11 +194,11 @@ namespace WolvenKit.ViewModels.Shell
 
                     if (data is IRedBaseHandle handle)
                     {
-                        return handle?.File?.Chunks[handle.Pointer] ?? null;
+                        return _propertyGridData = handle?.File?.Chunks[handle.Pointer] ?? null;
                     }
                     else 
                     {
-                        return data;
+                        return _propertyGridData = data;
                     }
                 }
                 catch (Exception e)
@@ -307,13 +209,15 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
+        private ObservableCollection<ChunkViewModel> _properties;
+
         public ObservableCollection<ChunkViewModel> Properties
         {
             get
             {
-                if (properties == null)
+                if (_properties == null)
                 {
-                    properties = new ObservableCollection<ChunkViewModel>();
+                    _properties = new ObservableCollection<ChunkViewModel>();
                     try
                     {
                         var obj = Data;
@@ -325,7 +229,7 @@ namespace WolvenKit.ViewModels.Shell
                         {
                             for (int i = 0; i < ary.Count; i++)
                             {
-                                properties.Add(new ChunkViewModel((IRedType)ary[i], this));
+                                _properties.Add(new ChunkViewModel((IRedType)ary[i], this));
                             }
                         }
                         else if (obj is RedBaseClass redClass)
@@ -343,7 +247,7 @@ namespace WolvenKit.ViewModels.Shell
                                 {
                                     value = (IRedType)pi.GetValue(redClass);
                                 }
-                                properties.Add(new ChunkViewModel(pi.Name, value, this));
+                                _properties.Add(new ChunkViewModel(pi.Name, value, this));
                             });
                         }
                         else if (obj is SerializationDeferredDataBuffer sddb)
@@ -353,7 +257,7 @@ namespace WolvenKit.ViewModels.Shell
                                 var chunks = cR2WFile.Buffers[sddb.Pointer].Chunks;
                                 for (int i = 0; i < chunks.Count; i++)
                                 {
-                                    properties.Add(new ChunkViewModel(i, chunks[i], this));
+                                    _properties.Add(new ChunkViewModel(i, chunks[i], this));
                                 }
                             }
                         }
@@ -364,7 +268,7 @@ namespace WolvenKit.ViewModels.Shell
                                 var chunks = cR2WFile.Buffers[db.Pointer].Chunks;
                                 for (int i = 0; i < chunks.Count; i++)
                                 {
-                                    properties.Add(new ChunkViewModel(i, chunks[i], this));
+                                    _properties.Add(new ChunkViewModel(i, chunks[i], this));
                                 }
                             }
                         }
@@ -376,7 +280,7 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
 
-                return properties;
+                return _properties;
             }
             set
             {
@@ -708,7 +612,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             var newItem = RedTypeManager.CreateRedType((Data as IRedArray).InnerType);
             (Data as IRedArray).Add(newItem);
-            properties.Add(new ChunkViewModel(newItem, this));
+            _properties.Add(new ChunkViewModel(newItem, this));
             IsExpanded = true;
         }
 
@@ -726,7 +630,7 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public ICommand ExportChunkCommand { get; private set; }
-        private bool CanExportChunk() => properties.Count > 0;
+        private bool CanExportChunk() => _properties.Count > 0;
         private void ExecuteExportChunk()
         {
             Stream myStream;

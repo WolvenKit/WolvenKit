@@ -65,7 +65,7 @@ namespace WolvenKit.RED4.Types
 
         public static string GetTypeRedName(Type type)
         {
-            return _redTypeCacheReverse[type];
+            return _redTypeCacheReverse.ContainsKey(type) ? _redTypeCacheReverse[type] : null;
         }
 
         public static string GetEnumRedName(Type type)

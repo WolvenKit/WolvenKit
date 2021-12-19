@@ -461,5 +461,10 @@ namespace WolvenKit.Views.Documents
                 }
             }
         }
+
+        private void PropertyGrid_ValueChanged(object sender, ValueChangedEventArgs args)
+        {
+            ViewModel.IsDirty = true;
+        }
     }
 }

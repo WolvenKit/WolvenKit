@@ -21,6 +21,7 @@ using WolvenKit.Common.Conversion;
 using Newtonsoft.Json;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
+using System.Collections.Specialized;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -36,6 +37,14 @@ namespace WolvenKit.ViewModels.Documents
             IsImagePreviewVisible = false;
 
             _file = file;
+
+            //RootChunk = Chunks[0];
+
+            foreach(ChunkViewModel item in Chunks)
+            {
+                item.WhenAnyValue(x => x.IsDirty).Subscribe(x => IsDirty |= x);
+            }
+            //_file.WhenAnyValue(x => x).Subscribe(x => IsDirty |= true);
         }
 
         #region properties
@@ -53,6 +62,8 @@ namespace WolvenKit.ViewModels.Documents
             .Select(_ => new ChunkViewModel(_)).ToList();
 
         [Reactive] public ChunkViewModel SelectedChunk { get; set; }
+
+        [Reactive] public ChunkViewModel RootChunk { get; set; }
 
         [Reactive] public IRedRef SelectedImport { get; set; }
 
