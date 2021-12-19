@@ -26,7 +26,7 @@ namespace WolvenKit.RED4.Types
 
             if (inline)
             {
-                return new DataBuffer { Data = RedBuffer.CreateBuffer(flags, data) };
+                return new DataBuffer { Buffer = RedBuffer.CreateBuffer(flags, data) };
             }
 
             _file._buffers.Add(RedBuffer.CreateBuffer(flags, data));

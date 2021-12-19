@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 
         private RedBuffer _inlineBuffer;
 
-        public RedBuffer Data
+        public RedBuffer Buffer
         {
             get
             {
@@ -49,6 +49,12 @@ namespace WolvenKit.RED4.Types
             }
         }
 
+        public IParseableBuffer Data
+        {
+            get => Buffer.Data;
+            set => Buffer.Data = value;
+        }
+
         public DataBuffer() {}
 
         public DataBuffer(Red4File file, int pointer)
@@ -71,7 +77,7 @@ namespace WolvenKit.RED4.Types
                 return true;
             }
 
-            return Equals(Data, other.Data) && Pointer == other.Pointer;
+            return Equals(Buffer, other.Buffer) && Pointer == other.Pointer;
         }
 
         public override bool Equals(object obj)
@@ -94,6 +100,6 @@ namespace WolvenKit.RED4.Types
             return Equals((DataBuffer)obj);
         }
 
-        public override int GetHashCode() => HashCode.Combine(Data, Pointer);
+        public override int GetHashCode() => HashCode.Combine(Buffer, Pointer);
     }
 }

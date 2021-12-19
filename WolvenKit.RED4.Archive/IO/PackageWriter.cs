@@ -200,14 +200,14 @@ namespace WolvenKit.RED4.Archive.IO
             }
             else
             {
-                if (val.Data.Bytes == Array.Empty<byte>())
+                if (val.Buffer.Bytes == Array.Empty<byte>())
                 {
                     _writer.Write(0x80000000);
                 }
                 else
                 {
-                    _writer.Write(val.Data.MemSize);
-                    _writer.Write(val.Data.GetBytes());
+                    _writer.Write(val.Buffer.MemSize);
+                    _writer.Write(val.Buffer.GetBytes());
                 }
             }
         }

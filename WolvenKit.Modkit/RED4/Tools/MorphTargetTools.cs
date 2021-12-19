@@ -49,7 +49,7 @@ namespace WolvenKit.Modkit.RED4
             }
             var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
-            using var meshbuffer = new MemoryStream(rendblob.RenderBuffer.Data.GetBytes());
+            using var meshbuffer = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
             var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w);
 
@@ -63,7 +63,7 @@ namespace WolvenKit.Modkit.RED4
 
             if (blob.DiffsBuffer is not null)
             {
-                mappingbuffer = new MemoryStream(blob.DiffsBuffer.Data.GetBytes());
+                mappingbuffer = new MemoryStream(blob.DiffsBuffer.Buffer.GetBytes());
 
                 //targetStream.Seek(cr2w.Buffers[blob.DiffsBuffer.Buffer - 1].Offset, SeekOrigin.Begin);
                 //targetStream.DecompressAndCopySegment(diffsbuffer, cr2w.Buffers[blob.DiffsBuffer.Buffer - 1].DiskSize, cr2w.Buffers[blob.DiffsBuffer.Buffer - 1].MemSize);
@@ -71,7 +71,7 @@ namespace WolvenKit.Modkit.RED4
 
             if (blob.MappingBuffer is not null)
             {
-                mappingbuffer = new MemoryStream(blob.MappingBuffer.Data.GetBytes());
+                mappingbuffer = new MemoryStream(blob.MappingBuffer.Buffer.GetBytes());
 
                 //targetStream.Seek(cr2w.Buffers[blob.MappingBuffer.Buffer - 1].Offset, SeekOrigin.Begin);
                 //targetStream.DecompressAndCopySegment(mappingbuffer, cr2w.Buffers[blob.MappingBuffer.Buffer - 1].DiskSize, cr2w.Buffers[blob.MappingBuffer.Buffer - 1].MemSize);
@@ -79,7 +79,7 @@ namespace WolvenKit.Modkit.RED4
 
             if (blob.TextureDiffsBuffer is not null)
             {
-                mappingbuffer = new MemoryStream(blob.TextureDiffsBuffer.Data.GetBytes());
+                mappingbuffer = new MemoryStream(blob.TextureDiffsBuffer.Buffer.GetBytes());
 
                 //targetStream.Seek(cr2w.Buffers[blob.TextureDiffsBuffer.Buffer - 1].Offset, SeekOrigin.Begin);
                 //targetStream.DecompressAndCopySegment(texbuffer, cr2w.Buffers[blob.TextureDiffsBuffer.Buffer - 1].DiskSize, cr2w.Buffers[blob.TextureDiffsBuffer.Buffer - 1].MemSize);

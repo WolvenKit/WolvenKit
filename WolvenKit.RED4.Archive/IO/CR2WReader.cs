@@ -121,11 +121,11 @@ namespace WolvenKit.RED4.Archive.IO
         {
             var result = base.ReadDataBuffer();
 
-            if (_parseBuffer && result.Pointer == -1 && result.Data.MemSize > 0)
+            if (_parseBuffer && result.Pointer == -1 && result.Buffer.MemSize > 0)
             {
-                var ms = new MemoryStream(result.Data.GetBytes());
+                var ms = new MemoryStream(result.Buffer.GetBytes());
                 var reader = new PackageReader(ms);
-                reader.ReadPackage(result.Data);
+                reader.ReadPackage(result.Buffer);
             }
 
             return result;
@@ -137,9 +137,9 @@ namespace WolvenKit.RED4.Archive.IO
 
             if (_parseBuffer)
             {
-                var ms = new MemoryStream(result.Data.GetBytes());
+                var ms = new MemoryStream(result.Buffer.GetBytes());
                 var reader = new PackageReader(ms);
-                reader.ReadPackage(result.Data);
+                reader.ReadPackage(result.Buffer);
             }
 
             return result;
