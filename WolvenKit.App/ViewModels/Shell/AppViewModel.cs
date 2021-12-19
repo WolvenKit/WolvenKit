@@ -37,6 +37,7 @@ using System.Collections.Generic;
 using WolvenKit.Core.Services;
 using System.Reflection;
 using System.Windows.Threading;
+using WolvenKit.Functionality.Helpers;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -527,23 +528,13 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else if (!model.IsDirectory)
                 {
-                    var progress = new Progress<IDocumentViewModel>();
-                    progress.ProgressChanged += Progress_ProgressChanged;
-
                     _progressService.IsIndeterminate = true;
 
-                    RequestFileOpen(model.FullName, progress);
+                    RequestFileOpen(model.FullName);
 
                     _progressService.IsIndeterminate = false;
                 }
             }
-        }
-
-        private void Progress_ProgressChanged(object sender, IDocumentViewModel e)
-        {
-            if (!DockedViews.Contains(e))
-                DockedViews.Add(e);
-            ActiveDocument = e;
         }
 
         public ReactiveCommand<FileModel, Unit> OpenFileAsyncCommand { get; }
@@ -567,12 +558,10 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else if (!model.IsDirectory)
                 {
-                    var progress = new Progress<IDocumentViewModel>();
-                    progress.ProgressChanged += Progress_ProgressChanged;
                     _progressService.IsIndeterminate = true;
                     try
                     {
-                        await RequestFileOpen(model.FullName, progress);
+                        await RequestFileOpen(model.FullName);
                     }
                     catch (Exception e)
                     {
@@ -873,7 +862,7 @@ namespace WolvenKit.ViewModels.Shell
                                                        path.Contains(_projectManager.ActiveProject
                                                            .RawDirectory);
 
-        private Task RequestFileOpen(string fullpath, IProgress<IDocumentViewModel> handler)
+        private Task RequestFileOpen(string fullpath)
         {
             var ext = Path.GetExtension(fullpath).ToUpper();
 
@@ -978,13 +967,17 @@ namespace WolvenKit.ViewModels.Shell
 
                 if (isRedEngineFile || isRedscriptFile || isTweakFile)
                 {
-                    /*ActiveDocument =*/
-                    var document = Open(fullpath, type);
-                    if (document != null)
+                    DispatcherHelper.RunOnMainThread(() =>
                     {
-                        handler.Report(document);
-                        UpdateTitle();
-                    }
+                        var document = Open(fullpath, type);
+                        if (document != null)
+                        {
+                            if (!DockedViews.Contains(document))
+                                DockedViews.Add(document);
+                            ActiveDocument = document;
+                            UpdateTitle();
+                        }
+                    });
                 }
             }
 
