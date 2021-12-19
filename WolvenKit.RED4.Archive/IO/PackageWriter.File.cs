@@ -20,6 +20,7 @@ namespace WolvenKit.RED4.Archive.IO
 
         private Package04Header _header;
         private List<CRUID> _cruids = new();
+        private ushort refsAreStrings = 0;
 
         public void WritePackage(Package04 file)
         {
@@ -33,34 +34,40 @@ namespace WolvenKit.RED4.Archive.IO
 
             if (file.Chunks[0] is entEntity)
             {
-                _header.uk2 = 0x0000;
+                refsAreStrings = 0x0000;
             }
             else if ((file.Chunks[0] is entIComponent))
             {
-                _header.uk2 = 0xffff;
+                refsAreStrings = 0xffff;
             }
-            else
-            {
-                throw new ArgumentOutOfRangeException();
-            }
+            //else
+            //{
+            //    throw new ArgumentOutOfRangeException();
+            //}
 
             var headerStart = BaseStream.Position;
             BaseStream.WriteStruct(_header);
 
             var (strings, imports, chunkDesc, chunkData) = GenerateChunkData();
 
-            // write cruids
-
             var unique_cruids = _cruids;
-            if (_header.uk2 == 0)
+            if (refsAreStrings == 0)
             {
                 unique_cruids.Insert(0, 0);
             }
 
-            _header.numCruids0 = _header.numCruids1 = (ushort)unique_cruids.Count;
-            foreach (var cruid in unique_cruids)
+            _header.numCruids0 = (ushort)unique_cruids.Count;
+
+            if (_header.numCruids0 > 1)
             {
-                Write(cruid);
+                _writer.Write(refsAreStrings);
+                _writer.Write((ushort)_header.numCruids0);
+
+                // write cruids
+                foreach (var cruid in unique_cruids)
+                {
+                    Write(cruid);
+                }
             }
 
             var headerEnd = BaseStream.Position;
@@ -132,7 +139,7 @@ namespace WolvenKit.RED4.Archive.IO
             var refData = new List<byte>();
             foreach (var reff in refs)
             {
-                if (_header.uk2 == 0)
+                if (refsAreStrings == 0)
                 {
                     refDesc.Add(new Package04ImportHeader
                     {

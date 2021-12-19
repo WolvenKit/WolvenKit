@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace WolvenKit.RED4.Archive.Buffer
 {
 
-    [StructLayout(LayoutKind.Explicit, Size = 36)]
+    [StructLayout(LayoutKind.Explicit, Size = 32)]
     public struct Package04Header
     {
         [FieldOffset(0)]
@@ -34,11 +34,12 @@ namespace WolvenKit.RED4.Archive.Buffer
         [FieldOffset(28)]
         public uint chunkDataOffset;
 
-        [FieldOffset(32)]
-        public ushort uk2;
+        // need to process separtely
+        //[FieldOffset(32)]
+        //public ushort uk2;
 
-        [FieldOffset(34)]
-        public ushort numCruids1;
+        //[FieldOffset(34)]
+        //public ushort numCruids1;
     }
 
     [StructLayout(LayoutKind.Explicit, Size = 4)]

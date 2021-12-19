@@ -15,6 +15,7 @@ namespace WolvenKit.RED4.Archive.IO
     {
         private Package04Header header;
         private IHashService _hashService;
+        private ushort refsAreStrings = 0;
 
         public EFileReadErrorCodes ReadPackage(RedBuffer buffer)
         {
@@ -39,14 +40,20 @@ namespace WolvenKit.RED4.Archive.IO
                 return EFileReadErrorCodes.NoCr2w;
             }
 
-            if (header.numCruids0 != header.numCruids1)
+            if (header.numCruids0 > 1)
             {
-                return EFileReadErrorCodes.NoCr2w;
-            }
+                refsAreStrings = _reader.ReadUInt16();
+                var numCruids = _reader.ReadUInt16();
 
-            for (var i = 0; i < header.numCruids0; i++)
-            {
-                result.Cruids.Add(_reader.ReadUInt64());
+                if (header.numCruids0 != numCruids)
+                {
+                    return EFileReadErrorCodes.NoCr2w;
+                }
+                for (var i = 0; i < header.numCruids0; i++)
+                {
+                    result.Cruids.Add(_reader.ReadUInt64());
+                }
+
             }
 
             var baseOff = BaseStream.Position;
@@ -99,7 +106,7 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 Flags = (InternalEnums.EImportFlags)(r.unk1 ? 0b10 : 0b00)
             };
-            if (header.uk2 == 0)
+            if (refsAreStrings == 0)
             {
                 var bytes = _reader.ReadBytes(r.size);
                 import.DepotPath = Encoding.UTF8.GetString(bytes.ToArray());
