@@ -15,25 +15,27 @@ using Splat;
 using System.Windows.Media.Imaging;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using WolvenKit.RED4.Archive.Buffer;
+using System.Collections.Generic;
+using System.Linq;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Documents
 {
     public class W2rcBufferViewModel : W2rcFileViewModel
     {
-        private RedBuffer _buffer;
-        private readonly CR2WFile _w2RcFile;
+        private int _bufferIndex;
 
-        public W2rcBufferViewModel(RedBuffer buffer, CR2WFile w2rcFile) : base(buffer)
+        public W2rcBufferViewModel(CR2WFile w2rcFile, int bufferIndex) : base(w2rcFile)
         {
-            _buffer = buffer;
-            _w2RcFile = w2rcFile;
+            _bufferIndex = bufferIndex;
 
-            if (_w2RcFile.Chunks[0] is not CBitmapTexture xbm)
+            if (_file.Chunks[0] is not CBitmapTexture xbm)
             {
                 return;
             }
 
-            if (_w2RcFile.Chunks[1] is not rendRenderTextureBlobPC blob)
+            if (_file.Chunks[1] is not rendRenderTextureBlobPC blob)
             {
                 return;
             }
@@ -43,7 +45,7 @@ namespace WolvenKit.ViewModels.Documents
             using var ddsstream = new MemoryStream();
             try
             {
-                if (ModTools.ConvertCR2WToDdsStream(_w2RcFile, ddsstream, out _))
+                if (ModTools.ConvertCR2WToDdsStream(_file, ddsstream, out _))
                 {
                     _ = LoadImageFromStream(ddsstream);
                 }
@@ -74,9 +76,21 @@ namespace WolvenKit.ViewModels.Documents
 
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.W2rcBuffer;
 
+        public override List<ChunkViewModel> Chunks
+        {
+            get
+            {
+                if (_file.Buffers[_bufferIndex] != null && _file.Buffers[_bufferIndex].Data is Package04 pkg)
+                {
+                    return pkg.Chunks.Select(_ => new ChunkViewModel(_)).ToList();
+                }
+                return null;
+            }
+        }
+
         #region methods
 
-        public override string ToString() => $"Buffer {_w2RcFile.Buffers.IndexOf(_buffer)}";
+        public override string ToString() => $"Buffer {_bufferIndex}";
         //public override string ToString() => $"TODO.buffer";
 
         #endregion

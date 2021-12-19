@@ -13,6 +13,8 @@ namespace WolvenKit.RED4.Types.Compression
 
         private const uint KARK = 1263681867;
 
+        public static bool IsCompressed(byte[] buf) => buf.Length >= 4 && buf[0] == 0x4B && buf[1] == 0x41 && buf[2] == 0x52 && buf[3] == 0x4B;
+
         public static Status CompressBuffer(byte[] rawBuf, out byte[] compBuf)
         {
             if (rawBuf.Length > 256)

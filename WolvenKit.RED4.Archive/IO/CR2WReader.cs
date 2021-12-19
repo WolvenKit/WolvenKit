@@ -116,5 +116,33 @@ namespace WolvenKit.RED4.Archive.IO
 
             return true;
         }
+
+        public override DataBuffer ReadDataBuffer()
+        {
+            var result = base.ReadDataBuffer();
+
+            if (_parseBuffer && result.Pointer == -1 && result.Buffer.MemSize > 0)
+            {
+                var ms = new MemoryStream(result.Buffer.GetBytes());
+                var reader = new PackageReader(ms);
+                reader.ReadPackage(result.Buffer);
+            }
+
+            return result;
+        }
+
+        public override SharedDataBuffer ReadSharedDataBuffer(uint size)
+        {
+            var result = base.ReadSharedDataBuffer(size);
+
+            if (_parseBuffer)
+            {
+                var ms = new MemoryStream(result.Buffer.GetBytes());
+                var reader = new PackageReader(ms);
+                reader.ReadPackage(result.Buffer);
+            }
+
+            return result;
+        }
     }
 }

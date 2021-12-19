@@ -26,7 +26,7 @@ namespace WolvenKit.RED4.Types
 
             if (inline)
             {
-                return new DataBuffer { Data = data };
+                return new DataBuffer { Buffer = RedBuffer.CreateBuffer(flags, data) };
             }
 
             _file._buffers.Add(RedBuffer.CreateBuffer(flags, data));
@@ -45,11 +45,24 @@ namespace WolvenKit.RED4.Types
             return new SerializationDeferredDataBuffer(_file, (ushort)(_file._buffers.Count - 1));
         }
 
+        internal int IndexOf(RedBuffer buffer)
+        {
+            for (int i = 0; i < _file._buffers.Count; i++)
+            {
+                if (_file._buffers[i].Bytes.SequenceEqual(buffer.Bytes))
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
         internal int GetIndex(byte[] data)
         {
             for (int i = 0; i < _file._buffers.Count; i++)
             {
-                if (data.SequenceEqual(_file._buffers[i].Data))
+                if (data.SequenceEqual(_file._buffers[i].Bytes))
                 {
                     return i;
                 }
@@ -76,21 +89,6 @@ namespace WolvenKit.RED4.Types
             }
 
             _refList[pointer].Add(dataBuffer);
-        }
-
-        public RedBuffer.BufferType GetBufferType(int index)
-        {
-            if (_refList[index][0] is DataBuffer)
-            {
-                return RedBuffer.BufferType.DataBuffer;
-            }
-
-            if (_refList[index][0] is SerializationDeferredDataBuffer)
-            {
-                return RedBuffer.BufferType.SerializationDeferredDataBuffer;
-            }
-
-            throw new Exception();
         }
     }
 }

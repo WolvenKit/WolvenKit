@@ -45,9 +45,7 @@ namespace WolvenKit.Modkit.RED4
 
             var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
-            var rendDB = rendblob.RenderBuffer;
-            rendDB.Decompress();
-            using var ms = new MemoryStream(rendDB.Data);
+            using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
             var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w);
 
@@ -695,10 +693,9 @@ namespace WolvenKit.Modkit.RED4
             var p = blob.LocalMaterialBuffer.RawData.Pointer;
             var b = cr2w.Buffers[p - 1];
 
-            var unpacked = new byte[b.MemSize];
-            _ = OodleHelper.Decompress(b.Data, unpacked);
+            // TODO: Is this intended? (return always empty)
             MemoryStream materialStream = new MemoryStream();
-            ms.Write(unpacked);
+            ms.Write(b.GetBytes());
 
             return materialStream;
         }
@@ -863,14 +860,14 @@ namespace WolvenKit.Modkit.RED4
             var (zsize, crc) = buff.CompressAndWrite(materialbuffer.ToArray());
 
             bool check = false;
-            check = blob.LocalMaterialBuffer.RawData.Data.Length > 0;
+            check = blob.LocalMaterialBuffer.RawData.Buffer.MemSize > 0;
             if (!check)
             {
                 blob.LocalMaterialBuffer.RawData = cr2w.BufferHandler.CreateDataBuffer(0, materialbuffer.ToArray());
             }
             else
             {
-                blob.LocalMaterialBuffer.RawData.Data = materialbuffer.ToArray();
+                blob.LocalMaterialBuffer.RawData.Buffer.SetBytes(materialbuffer.ToArray());
             }
 
             return true;

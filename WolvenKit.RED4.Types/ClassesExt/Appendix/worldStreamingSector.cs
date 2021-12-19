@@ -7,88 +7,121 @@ namespace WolvenKit.RED4.Types
 {
     public partial class worldStreamingSector : IRedAppendix
     {
-        public object Appendix { get; set; }
+        [RED("unk1")]
+        [REDProperty(IsIgnored = true)]
+        public CInt32 Unk1
+        {
+            get => GetPropertyValue<CInt32>();
+            set => SetPropertyValue<CInt32>(value);
+        }
+
+        [RED("unk2")]
+        [REDProperty(IsIgnored = true)]
+        public DataBuffer Unk2
+        {
+            get => GetPropertyValue<DataBuffer>();
+            set => SetPropertyValue<DataBuffer>(value);
+        }
+
+        [RED("handles")]
+        [REDProperty(IsIgnored = true)]
+        public CArray<CHandle<worldNode>> Handles
+        {
+            get => GetPropertyValue<CArray<CHandle<worldNode>>>();
+            set => SetPropertyValue<CArray<CHandle<worldNode>>>(value);
+        }
+
+        [RED("nodeRefs")]
+        [REDProperty(IsIgnored = true)]
+        public CArray<NodeRef> NodeRefs // Could also be CString
+        {
+            get => GetPropertyValue<CArray<NodeRef>>();
+            set => SetPropertyValue<CArray<NodeRef>>(value);
+        }
+
+        [RED("unk3")]
+        [REDProperty(IsIgnored = true)]
+        public CArray<CInt32> Unk3
+        {
+            get => GetPropertyValue<CArray<CInt32>>();
+            set => SetPropertyValue<CArray<CInt32>>(value);
+        }
+
+        [RED("unk4")]
+        [REDProperty(IsIgnored = true)]
+        public CInt32 Unk4
+        {
+            get => GetPropertyValue<CInt32>();
+            set => SetPropertyValue<CInt32>(value);
+        }
 
         public void Read(Red4Reader reader, uint size)
         {
-            var result = new worldStreamingSector_Appendix();
+            Handles = new CArray<CHandle<worldNode>>();
+            NodeRefs = new CArray<NodeRef>();
+            Unk3 = new CArray<CInt32>();
 
-            var startPos = reader.BaseStream.Position;
-
-            result.Unk1 = reader.BaseReader.ReadInt32(); // 0x3C
+            Unk1 = reader.ReadCInt32();
 
             var innerSize = reader.BaseReader.ReadInt32();
 
-            result.Unk2 = reader.ReadDataBuffer();
+            Unk2 = reader.ReadDataBuffer();
 
-            result.Handles = new CHandle<worldNode>[reader.BaseReader.ReadVLQInt32()];
-            for (int i = 0; i < result.Handles.Length; i++)
+            
+            var cnt1 = reader.BaseReader.ReadVLQInt32();
+            for (int i = 0; i < cnt1; i++)
             {
-                result.Handles[i] = (CHandle<worldNode>)reader.ReadCHandle<worldNode>();
+                Handles.Add((CHandle<worldNode>)reader.ReadCHandle<worldNode>());
             }
 
-            result.NodeRefs = new NodeRef[reader.BaseReader.ReadVLQInt32()];
-            for (int i = 0; i < result.NodeRefs.Length; i++)
+            var cnt2 = reader.BaseReader.ReadVLQInt32();
+            for (int i = 0; i < cnt2; i++)
             {
-                result.NodeRefs[i] = reader.ReadNodeRef();
+                NodeRefs.Add(reader.ReadNodeRef());
             }
 
-            result.Unk3 = new int[reader.BaseReader.ReadVLQInt32()];
-            for (int i = 0; i < result.Unk3.Length; i++)
+            var cnt3 = reader.BaseReader.ReadVLQInt32();
+            for (int i = 0; i < cnt3; i++)
             {
-                result.Unk3[i] = reader.BaseReader.ReadInt32();
+                Unk3.Add(reader.ReadCInt32());
             }
 
-            result.Unk4 = reader.BaseReader.ReadInt32();
-
-            Appendix = result;
+            Unk4 = reader.ReadCInt32();
         }
 
         public void Write(Red4Writer writer)
         {
-            var appendix = (worldStreamingSector_Appendix)Appendix;
-
-            writer.BaseWriter.Write(appendix.Unk1);
+            writer.Write(Unk1);
 
             var sizePos = writer.BaseStream.Position;
             writer.BaseWriter.Write(0);
 
-            writer.Write(appendix.Unk2);
+            writer.Write(Unk2);
 
-            writer.BaseWriter.WriteVLQInt32(appendix.Handles.Length);
-            foreach (var handle in appendix.Handles)
+            writer.BaseWriter.WriteVLQInt32(Handles.Count);
+            foreach (var handle in Handles)
             {
                 writer.Write(handle);
             }
 
-            writer.BaseWriter.WriteVLQInt32(appendix.NodeRefs.Length);
-            foreach (var nodeRef in appendix.NodeRefs)
+            writer.BaseWriter.WriteVLQInt32(NodeRefs.Count);
+            foreach (var nodeRef in NodeRefs)
             {
                 writer.Write(nodeRef);
             }
 
-            writer.BaseWriter.WriteVLQInt32(appendix.Unk3.Length);
-            foreach (var unk in appendix.Unk3)
+            writer.BaseWriter.WriteVLQInt32(Unk3.Count);
+            foreach (var unk in Unk3)
             {
-                writer.BaseWriter.Write(unk);
+                writer.Write(unk);
             }
 
-            writer.BaseWriter.Write(appendix.Unk4);
+            writer.Write(Unk4);
 
             var endPos = writer.BaseStream.Position;
             writer.BaseStream.Position = sizePos;
             writer.BaseWriter.Write((int)(endPos - sizePos));
             writer.BaseStream.Position = endPos;
         }
-    }
-
-    public class worldStreamingSector_Appendix
-    {
-        public int Unk1 { get; set; }
-        public DataBuffer Unk2 { get; set; }
-        public CHandle<worldNode>[] Handles { get; set; }
-        public NodeRef[] NodeRefs { get; set; } // Could also be CString
-        public int[] Unk3 { get; set; }
-        public int Unk4 { get; set; }
     }
 }
