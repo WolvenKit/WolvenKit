@@ -16,7 +16,7 @@
 
     <Grid
         x:Name="topGrid"
-        Margin="50,10,50,0">
+        Margin="50,00,50,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="PercentageThing" Width="4*" />
             <ColumnDefinition Width="200*" />
@@ -26,9 +26,8 @@
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="150" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="4*" />
         </Grid.RowDefinitions>
 
         <Grid.Resources>
@@ -44,7 +43,7 @@
                 </Style>
                 <Style x:Key="CardViewItemStyle" TargetType="{x:Type syncfusion:CardViewItem}">
                     <Setter Property="Width" Value="Auto"/>
-                    <Setter Property="Margin" Value="0,5,0,5"/>
+                    <Setter Property="Margin" Value="0,0,0,10"/>
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type syncfusion:CardViewItem}">
@@ -199,12 +198,12 @@
             </Grid.RowDefinitions>
 
             <!-- WK Text Logo  -->
-            <Image Margin="56,20" RenderOptions.BitmapScalingMode="HighQuality" Source="pack://application:,,,/Resources/Media/Images/Application/wkit_logo_text_singlestack_white.png" HorizontalAlignment="Center"></Image>
+            <Image Margin="66,30,66,20" RenderOptions.BitmapScalingMode="HighQuality" Source="pack://application:,,,/Resources/Media/Images/Application/wkit_logo_text_singlestack_white.png" HorizontalAlignment="Center"></Image>
 
 
             <!--  Recent Projects Header  -->
             <StackPanel VerticalAlignment="Bottom">
-                <StackPanel Margin="15,0,0,10" Orientation="Horizontal">
+                <StackPanel Margin="9,0,0,20" Orientation="Horizontal">
                     <Border Width="{Binding ActualWidth, ElementName=PercentageThingHalf}"/>
                     <iconPacks:PackIconCodicons
                         Grid.Row="0"
@@ -243,17 +242,22 @@
                     ItemsSource="{Binding FancyProjects}"
                     ItemContainerStyle="{StaticResource CardViewItemStyle}"
                     ShowHeader="False">
-
+                <syncfusion:CardView.Resources>
+                    <!-- gets rid of margin around items -->
+                    <Style TargetType="{x:Type ItemsPresenter}">
+                        <Setter Property="Margin" Value="-10" />
+                    </Style>
+                </syncfusion:CardView.Resources>
             </syncfusion:CardView>
         </Grid>
 
-        <!--  Middle Column  -->
+        <!--  Right Column  -->
         <Grid Grid.Column="2" Grid.Row="2">
             <Grid>
                 <Border
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
-                    Margin="0,10,0,0">
+                    Margin="0,0,0,0">
                     <StackPanel>
                         <Button
                             x:Name="NewProjectButton"

@@ -41,7 +41,7 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" x:Name="HomePageSideBar" />
-                <ColumnDefinition Width="4*" x:Name="HomePageContent" />
+                <ColumnDefinition Width="5*" x:Name="HomePageContent" />
             </Grid.ColumnDefinitions>
         </Grid>
         <!--<Button
@@ -166,8 +166,8 @@
                                     </Grid.ColumnDefinitions>
 
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="{Binding Width, ElementName=HomePageSideBar}" />
-                                        <RowDefinition Height="{Binding Width, ElementName=HomePageContent}" />
+                                        <RowDefinition Height="1*" />
+                                        <RowDefinition Height="4*" />
                                     </Grid.RowDefinitions>
                                     <Border Background="{StaticResource ContentBackgroundAlt}" Grid.RowSpan="2"/>
                                     <Border>
