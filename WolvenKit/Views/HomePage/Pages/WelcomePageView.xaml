@@ -27,7 +27,7 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
-            <RowDefinition Height="4*" />
+            <RowDefinition Height="3*" />
         </Grid.RowDefinitions>
 
         <Grid.Resources>
