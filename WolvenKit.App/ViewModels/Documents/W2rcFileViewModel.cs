@@ -27,9 +27,9 @@ namespace WolvenKit.ViewModels.Documents
 {
     public class W2rcFileViewModel : RedDocumentItemViewModel
     {
-        private readonly Red4File _file;
+        protected readonly CR2WFile _file;
 
-        public W2rcFileViewModel(Red4File file)
+        public W2rcFileViewModel(CR2WFile file)
         {
             OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport);
             //ExportChunkCommand = new DelegateCommand<ChunkViewModel>((p) => ExecuteExportChunk(p), (p) => CanExportChunk(p));
@@ -57,7 +57,7 @@ namespace WolvenKit.ViewModels.Documents
 
         //public List<ICR2WBuffer> Buffers => _file.Buffers;
 
-        public List<ChunkViewModel> Chunks => _file.Chunks
+        public virtual List<ChunkViewModel> Chunks => _file.Chunks
             //.Where(_ => _.VirtualParentChunk == null)
             .Select(_ => new ChunkViewModel(_)).ToList();
 
