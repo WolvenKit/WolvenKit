@@ -15,6 +15,7 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:homePage="clr-namespace:WolvenKit.ViewModels.HomePage;assembly=WolvenKit.App"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     d:DataContext="{d:DesignInstance Type=homePage:HomePageViewModel}"
     MinWidth="960"
     BorderThickness="1"
@@ -37,7 +38,12 @@
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </Grid.Resources>
-
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" x:Name="HomePageSideBar" />
+                <ColumnDefinition Width="4*" x:Name="HomePageContent" />
+            </Grid.ColumnDefinitions>
+        </Grid>
         <!--<Button
                 Margin="0,0,0,0"
                 HorizontalAlignment="Center"
@@ -110,7 +116,12 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type TabItem}">
-                                <Border
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*" />
+                                        <ColumnDefinition Width="11*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Border Grid.Column="1"
                                     x:Name="Border"
                                     Margin="30,0,0,0"
                                     Background="{TemplateBinding Background}"
@@ -125,7 +136,8 @@
                                         Height="44"
                                         Margin="8,0,0,0"
                                         RecognizesAccessKey="True" />
-                                </Border>
+                                    </Border>
+                                </Grid>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -149,13 +161,13 @@
                             <ControlTemplate TargetType="{x:Type TabControl}">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="240" />
-                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="{Binding Width, ElementName=HomePageSideBar}" />
+                                        <ColumnDefinition Width="{Binding Width, ElementName=HomePageContent}" />
                                     </Grid.ColumnDefinitions>
 
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="240" />
-                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="{Binding Width, ElementName=HomePageSideBar}" />
+                                        <RowDefinition Height="{Binding Width, ElementName=HomePageContent}" />
                                     </Grid.RowDefinitions>
                                     <Border Background="{StaticResource ContentBackgroundAlt}" Grid.RowSpan="2"/>
                                     <Border>
@@ -188,8 +200,7 @@
                                         Grid.Column="0"
                                         Grid.Row="1">
                                         <TabPanel
-                                            Width="240"
-                                            HorizontalAlignment="Center"
+                                            HorizontalAlignment="Stretch"
                                             x:Name="HeaderPanel"
                                             Panel.ZIndex="1"
                                             IsItemsHost="True"
