@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
             _hash = value;
         }
 
-        public int Length => _value?.Length ?? -1;
+        public int Length => _value?.Length ?? 0;
 
         private ulong CalculateHash()
         {

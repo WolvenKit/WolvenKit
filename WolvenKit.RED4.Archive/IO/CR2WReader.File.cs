@@ -155,7 +155,7 @@ namespace WolvenKit.RED4.Archive.IO
         {
             Debug.Assert(BaseStream.Position == info.dataOffset);
 
-            var result = RedTypeManager.Create(_namesList[info.className]);
+            var result = RedTypeManager.Create(GetStringValue(info.className));
 
             var startPos = BaseStream.Position;
             ReadClass(result, info.dataSize);

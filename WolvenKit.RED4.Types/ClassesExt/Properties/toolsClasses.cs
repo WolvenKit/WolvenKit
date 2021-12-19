@@ -167,6 +167,8 @@ namespace WolvenKit.RED4.Types
 
         public toolsAudioEventDescriptor()
         {
+            // TODO [RTTI]: default value for toolsAudioEventDescriptor.EmitterName
+            EmitterName = "INVALID";
             FastForwardSupport = Enums.toolsAudioFastForwardSupport.DontMuteDuringFastForward;
         }
     }

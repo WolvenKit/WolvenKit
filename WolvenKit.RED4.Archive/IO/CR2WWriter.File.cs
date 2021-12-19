@@ -399,7 +399,8 @@ namespace WolvenKit.RED4.Archive.IO
 
             foreach (var embeddedFile in _file.EmbeddedFiles)
             {
-                SetParent(((RedBaseClass)embeddedFile.Content).Chunk);
+                var typeInfo = RedReflection.GetTypeInfo(((RedBaseClass)embeddedFile.Content).GetType());
+                SetParent(((RedBaseClass)embeddedFile.Content).Chunk, maxDepth: typeInfo.ChildLevel);
             }
 
             var pos = file.BaseStream.Position;
@@ -419,7 +420,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             return (file.StringCacheList.ToList(), file.ImportCacheList.ToList(), chunkInfoList, ms.ToArray());
 
-            void SetParent(int currentIndex, int parent = -1, int depth = 0)
+            void SetParent(int currentIndex, int parent = -1, int depth = 0, int maxDepth = 1)
             {
                 if (parent == -1)
                 {
@@ -432,9 +433,9 @@ namespace WolvenKit.RED4.Archive.IO
                     chunkInfo.parentID = (uint)parent;
                     chunkInfoList[child] = chunkInfo;
 
-                    if (depth < 1)
+                    if (depth < maxDepth)
                     {
-                        SetParent(child, parent, depth + 1);
+                        SetParent(child, parent, depth + 1, maxDepth);
                     }
                 }
             }
