@@ -1,11 +1,11 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace WolvenKit.RED4.Archive.CR2W
+namespace WolvenKit.RED4.Archive.Buffer
 {
 
     [StructLayout(LayoutKind.Explicit, Size = 32)]
-    public struct PackageHeader
+    public struct Package04Header
     {
         [FieldOffset(0)]
         public ushort uk1;
@@ -43,7 +43,7 @@ namespace WolvenKit.RED4.Archive.CR2W
     }
 
     [StructLayout(LayoutKind.Explicit, Size = 4)]
-    public struct PackageImportHeader
+    public struct Package04ImportHeader
     {
         [FieldOffset(0)]
         public uint bitfield;
@@ -94,7 +94,7 @@ namespace WolvenKit.RED4.Archive.CR2W
     }
 
     [StructLayout(LayoutKind.Explicit, Size = 4)]
-    public struct PackageNameHeader
+    public struct Package04NameHeader
     {
         [FieldOffset(0)]
         public uint bitfield;
@@ -131,7 +131,7 @@ namespace WolvenKit.RED4.Archive.CR2W
     }
 
     [StructLayout(LayoutKind.Explicit, Size = 8)]
-    public struct PackageChunkHeader
+    public struct Package04ChunkHeader
     {
         [FieldOffset(0)]
         public uint typeID;
@@ -141,7 +141,7 @@ namespace WolvenKit.RED4.Archive.CR2W
     }
 
     [StructLayout(LayoutKind.Explicit, Size = 8)]
-    public struct PackageFieldHeader
+    public struct Package04FieldHeader
     {
         [FieldOffset(0)]
         public ushort nameID;

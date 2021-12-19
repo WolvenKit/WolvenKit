@@ -170,9 +170,9 @@ namespace WolvenKit.ViewModels.Documents
             var main = new W2rcFileViewModel(w2rcFile);
             TabItemViewModels.Add(new W2rcFileViewModel(w2rcFile));
             main.WhenAnyValue(x => x.IsDirty).Subscribe(x => SetIsDirty(IsDirty || x));
-            foreach (var buffer in w2rcFile.Buffers)
+            for (int i = 0; i < w2rcFile.Buffers.Count; i++)
             {
-                var view = new W2rcBufferViewModel(buffer, w2rcFile);
+                var view = new W2rcBufferViewModel(w2rcFile, i);
                 TabItemViewModels.Add(view);
                 view.WhenAnyValue(x => x.IsDirty).Subscribe(x => SetIsDirty(IsDirty || x));
             }

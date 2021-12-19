@@ -50,14 +50,9 @@ namespace WolvenKit.Modkit.RED4
 
             var atlasRaw = new byte[atlasWidth * atlasHeight];
 
-
-            var atlasBuffer = cr2w.Buffers[0];
-            var atlas = new byte[atlasBuffer.MemSize];
-            _ = OodleHelper.Decompress(atlasBuffer.Data, atlas);
-
             //Decode compressed data into single channel uncompressed
             //Mlmask always BC4?
-            if (!BlockCompression.DecodeBC(atlas, ref atlasRaw, atlasWidth, atlasHeight, BlockCompression.BlockCompressionType.BC4))
+            if (!BlockCompression.DecodeBC(cr2w.Buffers[0].GetBytes(), ref atlasRaw, atlasWidth, atlasHeight, BlockCompression.BlockCompressionType.BC4))
             {
                 return false;
             }
@@ -77,10 +72,7 @@ namespace WolvenKit.Modkit.RED4
             var tileBuffer = cr2w.Buffers[1];
             var tiles = new uint[tileBuffer.MemSize / 4];
 
-            var tileBytes = new byte[tileBuffer.MemSize];
-            _ = OodleHelper.Decompress(tileBuffer.Data, atlas);
-
-            using (var ms = new MemoryStream(tileBytes))
+            using (var ms = new MemoryStream(tileBuffer.GetBytes()))
             using (var br = new BinaryReader(ms))
             {
                 ms.Seek(0, SeekOrigin.Begin);

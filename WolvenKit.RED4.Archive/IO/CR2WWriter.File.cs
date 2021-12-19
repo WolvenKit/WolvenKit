@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Compression;
@@ -259,13 +260,13 @@ namespace WolvenKit.RED4.Archive.IO
 
         private CR2WBufferInfo WriteBuffer(CR2WWriter writer, RedBuffer buffer)
         {
-            if (buffer.IsPackage)
+            if (buffer.Data is Package04 p4)
             {
                 using var ms = new MemoryStream();
                 using var packageWriter = new PackageWriter(ms);
 
-                packageWriter.WritePackage(buffer);
-                buffer.Data = ms.ToArray();
+                packageWriter.WritePackage(p4);
+                buffer.SetBytes(ms.ToArray());
             }
 
             var result = new CR2WBufferInfo
@@ -275,11 +276,10 @@ namespace WolvenKit.RED4.Archive.IO
                 memSize = buffer.MemSize
             };
 
-            buffer.Compress();
-            writer.BaseWriter.Write(buffer.Data);
+            writer.BaseWriter.Write(buffer.Bytes);
 
-            result.diskSize = (uint)buffer.Data.Length;
-            result.crc32 = Crc32Algorithm.Compute(buffer.Data);
+            result.diskSize = (uint)buffer.Bytes.Length;
+            result.crc32 = Crc32Algorithm.Compute(buffer.Bytes);
 
             return result;
         }
@@ -292,8 +292,6 @@ namespace WolvenKit.RED4.Archive.IO
             var bufferInfoList = new List<CR2WBufferInfo>();
             for (int i = 0; i < _file.Buffers.Count; i++)
             {
-                _file.Buffers[i].Type = _file.BufferHandler.GetBufferType(i);
-
                 bufferInfoList.Add(WriteBuffer(writer, _file.Buffers[i]));
             }
 

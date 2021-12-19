@@ -162,14 +162,7 @@ namespace WolvenKit.Modkit.RED4
 
         private void WriteTargetBuffer(CR2WFile cr2w, MemoryStream inBuffer, int bufferId)
         {
-            var compressedDiffs = new MemoryStream();
-            using var diffsWriter = new BinaryWriter(compressedDiffs);
-            var bufferBytes = inBuffer.ToArray();
-            var (zsize, crc) = diffsWriter.CompressAndWrite(bufferBytes);
-
-            var buffer = cr2w.Buffers[bufferId];
-            buffer.MemSize = (uint)bufferBytes.Length;
-            buffer.Data = compressedDiffs.ToArray();
+            cr2w.Buffers[bufferId].SetBytes(inBuffer.ToArray());
         }
 
         private (Vec4 scale, Vec4 offset) CalculateTargetQuant(ModelRoot model, int morphTargetId)

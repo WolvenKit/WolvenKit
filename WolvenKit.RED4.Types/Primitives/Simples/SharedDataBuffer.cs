@@ -5,7 +5,12 @@ namespace WolvenKit.RED4.Types
 {
     public class SharedDataBuffer : IRedPrimitive, IEquatable<SharedDataBuffer>
     {
-        public byte[] Buffer { get; set; }
+        public RedBuffer Buffer { get; set; }
+        public IParseableBuffer Data
+        {
+            get => Buffer.Data;
+            set => Buffer.Data = value;
+        }
 
         public bool Equals(SharedDataBuffer other)
         {

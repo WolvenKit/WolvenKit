@@ -1,61 +1,43 @@
+using System;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Compression;
 using System.Collections.Generic;
-using System.IO;
 
 namespace WolvenKit.RED4
 {
-    public class RedBuffer : Red4File, IRedBuffer
+    public class RedBuffer : IRedBuffer
     {
-        private byte[] _data;
+        private byte[] _bytes = Array.Empty<byte>();
 
-        public RedBuffer() : base()
-        {
-            Cruids = new List<CRUID>();
-        }
 
-        public BufferType Type { get; set; }
         public uint Flags { get; set; }
-        public byte[] Data
+
+        /// <summary>
+        /// Contains the compressed (if possible) data
+        /// </summary>
+        public byte[] Bytes
         {
-            get => _data;
-            set
-            {
-                _data = value;
-
-                MemSize = (uint)_data.Length;
-
-                IsCompressed = false;
-                IsIncompressable = false;
-            }
+            get => _bytes;
+            protected set => _bytes = value;
         }
 
-        public bool IsCompressed { get; set; }
-        public bool IsIncompressable { get; private set; }
-
+        /// <summary>
+        /// The length of the uncompressed data
+        /// </summary>
         public uint MemSize { get; set; }
+        public bool IsCompressed => OodleLZHelper.IsCompressed(_bytes);
 
-        public ushort Version { get; set; } = 4;
+        public IParseableBuffer Data { get; set; }
 
-        public bool IsPackage { get; set; }
-
-        public IList<CRUID> Cruids;
 
         public void Compress()
         {
-            if (IsCompressed || IsIncompressable)
+            if (IsCompressed || _bytes.Length <= 0xFF)
             {
                 return;
             }
 
-            if (OodleLZHelper.CompressBuffer(_data, out _data) == OodleLZHelper.Status.Compressed)
-            {
-                IsCompressed = true;
-            }
-            else
-            {
-                IsIncompressable = true;
-            }
+            OodleLZHelper.CompressBuffer(_bytes, out _bytes);
         }
 
         public void Decompress()
@@ -65,31 +47,84 @@ namespace WolvenKit.RED4
                 return;
             }
 
-            OodleLZHelper.DecompressBuffer(_data, out _data);
-
-            IsCompressed = false;
+            OodleLZHelper.DecompressBuffer(_bytes, out _bytes);
         }
 
-        public void SetChunks(IList<IRedClass> chunks)
+        /// <summary>
+        /// </summary>
+        /// <returns>The decompressed byte[]</returns>
+        public byte[] GetBytes()
         {
-            _chunks = chunks;
+            if (IsCompressed)
+            {
+                OodleLZHelper.DecompressBuffer(_bytes, out var result);
+                return result;
+            }
+
+            return _bytes;
+        }
+
+        public void SetBytes(byte[] data)
+        {
+            if (OodleLZHelper.IsCompressed(data))
+            {
+                _bytes = data;
+
+                OodleLZHelper.DecompressBuffer(data, out var raw);
+                MemSize = (uint)raw.Length;
+            }
+            else
+            {
+                MemSize = (uint)data.Length;
+                OodleLZHelper.CompressBuffer(data, out _bytes);
+            }
+        }
+
+        public void SetBytes(byte[] data, uint memSize)
+        {
+            if (OodleLZHelper.IsCompressed(data))
+            {
+                _bytes = data;
+                MemSize = memSize;
+            }
+            else
+            {
+                if ((uint)data.Length != memSize)
+                {
+                    throw new ArgumentException(nameof(memSize));
+                }
+
+                OodleLZHelper.CompressBuffer(data, out _bytes);
+                MemSize = memSize;
+            }
         }
 
         public static RedBuffer CreateBuffer(uint flags, byte[] data)
         {
-            return new RedBuffer { Flags = flags, Data = data, IsCompressed = false, MemSize = (uint)data.Length };
+            if (OodleLZHelper.IsCompressed(data))
+            {
+                OodleLZHelper.DecompressBuffer(data, out var raw);
+                return new RedBuffer { Flags = flags, Bytes = data, MemSize = (uint)raw.Length };
+            }
+
+            OodleLZHelper.CompressBuffer(data, out var compressedBuf);
+            return new RedBuffer { Flags = flags, Bytes = compressedBuf, MemSize = (uint)data.Length };
         }
 
-        public static RedBuffer CreateCompressedBuffer(uint flags, byte[] data, uint memSize)
+        public static RedBuffer CreateBuffer(uint flags, byte[] data, int memSize = -1)
         {
-            return new RedBuffer { Flags = flags, Data = data, IsCompressed = true, MemSize = memSize };
-        }
+            if (OodleLZHelper.IsCompressed(data))
+            {
+                if (memSize == -1)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(memSize));
+                }
 
-        public enum BufferType
-        {
-            Invalid,
-            DataBuffer,
-            SerializationDeferredDataBuffer
+                return new RedBuffer { Flags = flags, Bytes = data, MemSize = (uint)memSize };
+            }
+
+            OodleLZHelper.CompressBuffer(data, out var compressedBuf);
+            return new RedBuffer { Flags = flags, Bytes = compressedBuf, MemSize = (uint)data.Length };
         }
     }
 }

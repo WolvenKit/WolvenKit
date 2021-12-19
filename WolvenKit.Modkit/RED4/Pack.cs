@@ -190,7 +190,7 @@ namespace WolvenKit.Modkit.RED4
                         //var bzsize = buffer.DiskSize; //compressed size of the buffer inside the cr2wfile
                         //fileBinaryReader.BaseStream.Seek(buffer.Offset, SeekOrigin.Begin);
                         //var b = fileBinaryReader.ReadBytes((int)bzsize); //read bzsize bytes from the cr2w
-                        var b = buffer.Data;
+                        var b = buffer.Bytes;
                         var bzsize = b.Length;
                         var boffset = bw.BaseStream.Position;
 

@@ -103,7 +103,7 @@ namespace WolvenKit.RED4.IO
             {
                 return new DataBuffer
                 {
-                    Data = Array.Empty<byte>()
+                    Buffer = new RedBuffer()
                 };
             }
 
@@ -114,7 +114,7 @@ namespace WolvenKit.RED4.IO
 
             return new DataBuffer
             {
-                Data = _reader.ReadBytes((int)bufferSize)
+                Buffer = RedBuffer.CreateBuffer(0, _reader.ReadBytes((int)bufferSize))
             };
         }
 
@@ -143,7 +143,7 @@ namespace WolvenKit.RED4.IO
 
         public virtual SharedDataBuffer ReadSharedDataBuffer(uint size)
         {
-            return new SharedDataBuffer { Buffer = _reader.ReadBytes((int)size) };
+            return new SharedDataBuffer { Buffer = RedBuffer.CreateBuffer(0, _reader.ReadBytes((int)size)) };
         }
 
         public virtual TweakDBID ReadTweakDBID() => _reader.ReadUInt64();

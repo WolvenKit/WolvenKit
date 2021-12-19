@@ -550,11 +550,9 @@ namespace WolvenKit.Modkit.RED4
                 throw new TodoException("compress buffer");
 
 #pragma warning disable CS0162 // Unreachable code detected
-                red.Buffers.Add(new RedBuffer()
-                {
-                    Flags = 131072,
-                    Data = ms.ToByteArray().Skip(148).ToArray()
-                });
+                var buffer = new RedBuffer() { Flags = 131072 };
+                buffer.SetBytes(ms.ToByteArray().Skip(148).ToArray());
+                red.Buffers.Add(buffer);
 #pragma warning restore CS0162 // Unreachable code detected
 
 

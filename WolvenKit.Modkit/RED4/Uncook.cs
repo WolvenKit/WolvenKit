@@ -476,10 +476,7 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            var buffer = cr2w.Buffers[0];
-            var unpacked = new byte[buffer.MemSize];
-            _ = OodleHelper.Decompress(buffer.Data, unpacked);
-            outstream.Write(unpacked);
+            outstream.Write(cr2w.Buffers[0].GetBytes());
 
             return true;
         }
@@ -585,10 +582,8 @@ namespace WolvenKit.Modkit.RED4
             var buffers = cr2w.Buffers;
             foreach (var buffer in buffers)
             {
-                var unpacked = new byte[buffer.MemSize];
-                _ = OodleHelper.Decompress(buffer.Data, unpacked);
                 var ms = new MemoryStream();
-                ms.Write(unpacked);
+                ms.Write(buffer.GetBytes());
 
                 yield return ms;
             }
@@ -634,10 +629,7 @@ namespace WolvenKit.Modkit.RED4
                 new DDSMetadata(width, height, 1, sliceCount, mipCount,
                     0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
 
-            var buffer = cr2w.Buffers[0];
-            var unpacked = new byte[buffer.MemSize];
-            _ = OodleHelper.Decompress(buffer.Data, unpacked);
-            outstream.Write(unpacked);
+            outstream.Write(cr2w.Buffers[0].GetBytes());
 
             return true;
         }
@@ -670,10 +662,7 @@ namespace WolvenKit.Modkit.RED4
                 new DDSMetadata(width, height, 1, sliceCount, mipCount,
                     0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
 
-            var buffer = cr2w.Buffers[0];
-            var unpacked = new byte[buffer.MemSize];
-            _ = OodleHelper.Decompress(buffer.Data, unpacked);
-            outstream.Write(unpacked);
+            outstream.Write(cr2w.Buffers[0].GetBytes());
 
             return true;
         }
@@ -719,10 +708,7 @@ namespace WolvenKit.Modkit.RED4
                 new DDSMetadata(width, height, 1, sliceCount, mipCount,
                     0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
 
-            var buffer = cr2w.Buffers[0];
-            var unpacked = new byte[buffer.MemSize];
-            _ = OodleHelper.Decompress(buffer.Data, unpacked);
-            outstream.Write(unpacked);
+            outstream.Write(cr2w.Buffers[0].GetBytes());
 
             return true;
         }
@@ -807,7 +793,7 @@ namespace WolvenKit.Modkit.RED4
                 new DDSMetadata(width, height, 1, sliceCount, mipCount,
                     0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
 
-            outstream.Write(cr2w.Buffers[0].Data);
+            outstream.Write(cr2w.Buffers[0].GetBytes());
 
             return true;
         }
