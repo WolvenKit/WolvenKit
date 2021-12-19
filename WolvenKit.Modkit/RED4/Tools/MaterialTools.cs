@@ -45,7 +45,7 @@ namespace WolvenKit.Modkit.RED4
 
             var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
-            using var ms = new MemoryStream(rendblob.RenderBuffer.Data.GetBytes());
+            using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
             var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w);
 
@@ -860,14 +860,14 @@ namespace WolvenKit.Modkit.RED4
             var (zsize, crc) = buff.CompressAndWrite(materialbuffer.ToArray());
 
             bool check = false;
-            check = blob.LocalMaterialBuffer.RawData.Data.MemSize > 0;
+            check = blob.LocalMaterialBuffer.RawData.Buffer.MemSize > 0;
             if (!check)
             {
                 blob.LocalMaterialBuffer.RawData = cr2w.BufferHandler.CreateDataBuffer(0, materialbuffer.ToArray());
             }
             else
             {
-                blob.LocalMaterialBuffer.RawData.Data.SetBytes(materialbuffer.ToArray());
+                blob.LocalMaterialBuffer.RawData.Buffer.SetBytes(materialbuffer.ToArray());
             }
 
             return true;

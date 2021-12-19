@@ -251,7 +251,7 @@ namespace WolvenKit.ViewModels.Shell
                                 _properties.Add(new ChunkViewModel(pi.Name, value, this));
                             });
                         }
-                        else if (obj is SerializationDeferredDataBuffer sddb && sddb.Data.Data is Package04 p4)
+                        else if (obj is SerializationDeferredDataBuffer sddb && sddb.Data is Package04 p4)
                         {
                             var chunks = p4.Chunks;
                             for (int i = 0; i < chunks.Count; i++)
@@ -259,7 +259,7 @@ namespace WolvenKit.ViewModels.Shell
                                 _properties.Add(new ChunkViewModel(i, chunks[i], this));
                             }
                         }
-                        else if (obj is DataBuffer db && db.Data.Data is Package04 p42)
+                        else if (obj is DataBuffer db && db.Data is Package04 p42)
                         {
                             var chunks = p42.Chunks;
                             for (int i = 0; i < chunks.Count; i++)

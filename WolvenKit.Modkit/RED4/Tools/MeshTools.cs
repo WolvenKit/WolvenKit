@@ -57,7 +57,7 @@ namespace CP77.CR2W
 
             var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
-            using var ms = new MemoryStream(rendblob.RenderBuffer.Data.GetBytes());
+            using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
             var meshesinfo = GetMeshesinfo(rendblob, cr2w);
 
@@ -82,7 +82,7 @@ namespace CP77.CR2W
 
             RawArmature Rig = GetOrphanRig(rendblob, cr2w);
 
-            using var ms = new MemoryStream(rendblob.RenderBuffer.Data.GetBytes());
+            using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
             var meshesinfo = GetMeshesinfo(rendblob, cr2w);
 
@@ -123,7 +123,7 @@ namespace CP77.CR2W
 
             var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
-            using var ms = new MemoryStream(rendblob.RenderBuffer.Data.GetBytes());
+            using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
             var meshesinfo = GetMeshesinfo(rendblob, cr2w);
 
@@ -161,7 +161,7 @@ namespace CP77.CR2W
 
                 var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
-                using var ms = new MemoryStream(rendblob.RenderBuffer.Data.GetBytes());
+                using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
                 var meshesinfo = GetMeshesinfo(rendblob, cr2w);
 
@@ -203,7 +203,7 @@ namespace CP77.CR2W
 
             var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
-            using var ms = new MemoryStream(rendblob.RenderBuffer.Data.GetBytes());
+            using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
             var meshesinfo = GetMeshesinfo(rendblob, cr2w);
 
@@ -265,7 +265,7 @@ namespace CP77.CR2W
 
                 var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
-                using var ms = new MemoryStream(rendblob.RenderBuffer.Data.GetBytes());
+                using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
                 var meshesinfo = GetMeshesinfo(rendblob, cr2w);
 
@@ -1024,20 +1024,20 @@ namespace CP77.CR2W
 
                 for (int i = 0; (i < blob.Chunks.Count) && (i < meshes.Count); i++)
                 {
-                    if (blob.Chunks[i].SkinIndices.Data.MemSize > 0 && blob.Chunks[i].SkinWeights.Data.MemSize > 0)
+                    if (blob.Chunks[i].SkinIndices.Buffer.MemSize > 0 && blob.Chunks[i].SkinWeights.Buffer.MemSize > 0)
                     {
                         meshes[i].weightCount = 4;
                     }
-                    if (blob.Chunks[i].SkinIndicesExt.Data.MemSize > 0 && blob.Chunks[i].SkinWeightsExt.Data.MemSize > 0)
+                    if (blob.Chunks[i].SkinIndicesExt.Buffer.MemSize > 0 && blob.Chunks[i].SkinWeightsExt.Buffer.MemSize > 0)
                     {
                         meshes[i].weightCount += 4;
                     }
                     meshes[i].boneindices = new ushort[meshes[i].positions.Length, meshes[i].weightCount];
                     meshes[i].weights = new float[meshes[i].positions.Length, meshes[i].weightCount];
-                    if (blob.Chunks[i].SkinIndices.Data.MemSize > 0)
+                    if (blob.Chunks[i].SkinIndices.Buffer.MemSize > 0)
                     {
                         var stream = new MemoryStream();
-                        ms.Write(blob.Chunks[i].SkinWeights.Data.GetBytes());
+                        ms.Write(blob.Chunks[i].SkinWeights.Buffer.GetBytes());
 
                         var br = new BinaryReader(stream);
                         stream.Seek(0, SeekOrigin.Begin);
@@ -1049,10 +1049,10 @@ namespace CP77.CR2W
                             meshes[i].boneindices[e, 3] = br.ReadByte();
                         }
                     }
-                    if (blob.Chunks[i].SkinWeights.Data.MemSize > 0)
+                    if (blob.Chunks[i].SkinWeights.Buffer.MemSize > 0)
                     {
                         var stream = new MemoryStream();
-                        ms.Write(blob.Chunks[i].SkinWeights.Data.GetBytes());
+                        ms.Write(blob.Chunks[i].SkinWeights.Buffer.GetBytes());
 
                         var br = new BinaryReader(stream);
                         stream.Seek(0, SeekOrigin.Begin);
@@ -1064,10 +1064,10 @@ namespace CP77.CR2W
                             meshes[i].weights[e, 3] = br.ReadSingle();
                         }
                     }
-                    if (blob.Chunks[i].SkinIndicesExt.Data.MemSize > 0)
+                    if (blob.Chunks[i].SkinIndicesExt.Buffer.MemSize > 0)
                     {
                         var stream = new MemoryStream();
-                        ms.Write(blob.Chunks[i].SkinIndicesExt.Data.GetBytes());
+                        ms.Write(blob.Chunks[i].SkinIndicesExt.Buffer.GetBytes());
 
                         var br = new BinaryReader(stream);
                         stream.Seek(0, SeekOrigin.Begin);
@@ -1079,10 +1079,10 @@ namespace CP77.CR2W
                             meshes[i].boneindices[e, 7] = br.ReadByte();
                         }
                     }
-                    if (blob.Chunks[i].SkinWeightsExt.Data.MemSize > 0)
+                    if (blob.Chunks[i].SkinWeightsExt.Buffer.MemSize > 0)
                     {
                         var stream = new MemoryStream();
-                        ms.Write(blob.Chunks[i].SkinWeightsExt.Data.GetBytes());
+                        ms.Write(blob.Chunks[i].SkinWeightsExt.Buffer.GetBytes());
 
                         var br = new BinaryReader(stream);
                         stream.Seek(0, SeekOrigin.Begin);
@@ -1131,20 +1131,20 @@ namespace CP77.CR2W
                     {
                         meshes[i].colors1[blob.Chunks[i].Simulation[e]].X = 1f;
                     }
-                    if (blob.Chunks[i].SkinIndices.Data.MemSize > 0 && blob.Chunks[i].SkinWeights.Data.MemSize > 0)
+                    if (blob.Chunks[i].SkinIndices.Buffer.MemSize > 0 && blob.Chunks[i].SkinWeights.Buffer.MemSize > 0)
                     {
                         meshes[i].weightCount = 4;
                     }
-                    if (blob.Chunks[i].SkinIndicesExt.Data.MemSize > 0 && blob.Chunks[i].SkinWeightsExt.Data.MemSize > 0)
+                    if (blob.Chunks[i].SkinIndicesExt.Buffer.MemSize > 0 && blob.Chunks[i].SkinWeightsExt.Buffer.MemSize > 0)
                     {
                         meshes[i].weightCount += 4;
                     }
                     meshes[i].boneindices = new ushort[meshes[i].positions.Length, meshes[i].weightCount];
                     meshes[i].weights = new float[meshes[i].positions.Length, meshes[i].weightCount];
-                    if (blob.Chunks[i].SkinIndices.Data.MemSize > 0)
+                    if (blob.Chunks[i].SkinIndices.Buffer.MemSize > 0)
                     {
                         var stream = new MemoryStream();
-                        ms.Write(blob.Chunks[i].SkinIndices.Data.GetBytes());
+                        ms.Write(blob.Chunks[i].SkinIndices.Buffer.GetBytes());
 
                         var br = new BinaryReader(stream);
                         stream.Seek(0, SeekOrigin.Begin);
@@ -1156,10 +1156,10 @@ namespace CP77.CR2W
                             meshes[i].boneindices[e, 3] = br.ReadByte();
                         }
                     }
-                    if (blob.Chunks[i].SkinWeights.Data.MemSize > 0)
+                    if (blob.Chunks[i].SkinWeights.Buffer.MemSize > 0)
                     {
                         var stream = new MemoryStream();
-                        ms.Write(blob.Chunks[i].SkinWeights.Data.GetBytes());
+                        ms.Write(blob.Chunks[i].SkinWeights.Buffer.GetBytes());
 
                         var br = new BinaryReader(stream);
                         stream.Seek(0, SeekOrigin.Begin);
@@ -1171,10 +1171,10 @@ namespace CP77.CR2W
                             meshes[i].weights[e, 3] = br.ReadSingle();
                         }
                     }
-                    if (blob.Chunks[i].SkinIndicesExt.Data.MemSize > 0)
+                    if (blob.Chunks[i].SkinIndicesExt.Buffer.MemSize > 0)
                     {
                         var stream = new MemoryStream();
-                        ms.Write(blob.Chunks[i].SkinIndicesExt.Data.GetBytes());
+                        ms.Write(blob.Chunks[i].SkinIndicesExt.Buffer.GetBytes());
 
                         var br = new BinaryReader(stream);
                         stream.Seek(0, SeekOrigin.Begin);
@@ -1186,10 +1186,10 @@ namespace CP77.CR2W
                             meshes[i].boneindices[e, 7] = br.ReadByte();
                         }
                     }
-                    if (blob.Chunks[i].SkinWeightsExt.Data.MemSize > 0)
+                    if (blob.Chunks[i].SkinWeightsExt.Buffer.MemSize > 0)
                     {
                         var stream = new MemoryStream();
-                        ms.Write(blob.Chunks[i].SkinWeightsExt.Data.GetBytes());
+                        ms.Write(blob.Chunks[i].SkinWeightsExt.Buffer.GetBytes());
 
                         var br = new BinaryReader(stream);
                         stream.Seek(0, SeekOrigin.Begin);

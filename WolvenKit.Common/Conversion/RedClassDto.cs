@@ -74,7 +74,7 @@ namespace WolvenKit.Common.Conversion
                 }
                 if (data is SerializationDeferredDataBuffer sddb)
                 {
-                    if (sddb.Data.Data is Package04 p4)
+                    if (sddb.Buffer.Data is Package04 p4)
                     {
                         var chunks = p4.Chunks;
                         for (var i = 0; i < chunks.Count; i++)
@@ -93,7 +93,7 @@ namespace WolvenKit.Common.Conversion
                 }
                 else if (data is DataBuffer db)
                 {
-                    if (db.Data.Data is Package04 p4)
+                    if (db.Buffer.Data is Package04 p4)
                     {
                         var chunks = p4.Chunks;
                         for (var i = 0; i < chunks.Count; i++)
@@ -112,7 +112,7 @@ namespace WolvenKit.Common.Conversion
                 }
                 else if (data is SharedDataBuffer sdb)
                 {
-                    if (sdb.Data.Data is Package04 p4)
+                    if (sdb.Buffer.Data is Package04 p4)
                     {
                         var chunks = p4.Chunks;
                         for (var i = 0; i < chunks.Count; i++)

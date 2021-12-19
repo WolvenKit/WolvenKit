@@ -71,13 +71,13 @@ namespace WolvenKit.RED4.Archive.IO
 
         public override void Write(DataBuffer val)
         {
-            if (val.Pointer == -1 && val.Data.Data is Package04 p4)
+            if (val.Pointer == -1 && val.Data is Package04 p4)
             {
                 using var ms = new MemoryStream();
                 using var packageWriter = new PackageWriter(ms);
 
                 packageWriter.WritePackage(p4);
-                val.Data.SetBytes(ms.ToArray());
+                val.Buffer.SetBytes(ms.ToArray());
             }
 
             base.Write(val);
@@ -85,13 +85,13 @@ namespace WolvenKit.RED4.Archive.IO
 
         public override void Write(SharedDataBuffer val)
         {
-            if (val.Data.Data is Package04 p4)
+            if (val.Data is Package04 p4)
             {
                 using var ms = new MemoryStream();
                 using var packageWriter = new PackageWriter(ms);
 
                 packageWriter.WritePackage(p4);
-                val.Data.SetBytes(ms.ToArray());
+                val.Buffer.SetBytes(ms.ToArray());
             }
 
             base.Write(val);

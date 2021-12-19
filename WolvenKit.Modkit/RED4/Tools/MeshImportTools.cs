@@ -974,7 +974,7 @@ namespace WolvenKit.Modkit.RED4
 
             int meshBufferIdx = cr2w.Chunks.OfType<rendRenderMeshBlob>().First().RenderBuffer.Pointer - 1;
             int materialBufferIdx = cr2w.Chunks.OfType<CMesh>().First().LocalMaterialBuffer.RawData.Pointer - 1;
-            if (cr2w.Chunks.OfType<CMesh>().First().LocalMaterialBuffer.RawData.Data.MemSize == 0)
+            if (cr2w.Chunks.OfType<CMesh>().First().LocalMaterialBuffer.RawData.Buffer.MemSize == 0)
                 materialBufferIdx = int.MaxValue;
 
             int buffCount = cr2w.Buffers.Count;
@@ -991,7 +991,7 @@ namespace WolvenKit.Modkit.RED4
                     idx--;
                 }
             }
-            if (cr2w.Chunks.OfType<CMesh>().First().LocalMaterialBuffer.RawData.Data.MemSize == 0)
+            if (cr2w.Chunks.OfType<CMesh>().First().LocalMaterialBuffer.RawData.Buffer.MemSize == 0)
                 materialBufferIdx = 0;
 
             cr2w.Chunks.OfType<rendRenderMeshBlob>().First().RenderBuffer.Pointer = meshBufferIdx + 1;

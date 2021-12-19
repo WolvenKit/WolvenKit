@@ -229,14 +229,14 @@ namespace WolvenKit.RED4.IO
             }
             else
             {
-                if (val.Data.Bytes == Array.Empty<byte>())
+                if (val.Buffer.Bytes == Array.Empty<byte>())
                 {
                     _writer.Write(0x80000000);
                 }
                 else
                 {
-                    _writer.Write((uint)(val.Data.Bytes.Length));
-                    _writer.Write(val.Data.Bytes);
+                    _writer.Write((uint)(val.Buffer.Bytes.Length));
+                    _writer.Write(val.Buffer.Bytes);
                 }
             }
         }
@@ -252,7 +252,7 @@ namespace WolvenKit.RED4.IO
         public virtual void Write(MessageResourcePath val) => ThrowNotImplemented();
         public virtual void Write(NodeRef val) => _writer.WriteLengthPrefixedString(val);
         public virtual void Write(SerializationDeferredDataBuffer val) => _writer.Write((ushort)(val.Pointer + 1));
-        public virtual void Write(SharedDataBuffer val) => _writer.Write(val.Data.GetBytes());
+        public virtual void Write(SharedDataBuffer val) => _writer.Write(val.Buffer.GetBytes());
         public virtual void Write(TweakDBID val) => _writer.Write(val.Value);
 
         #endregion Simple

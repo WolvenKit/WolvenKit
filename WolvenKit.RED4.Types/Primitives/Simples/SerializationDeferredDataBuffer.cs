@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
         public ushort Pointer { get; set; }
 
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-        public RedBuffer Data
+        public RedBuffer Buffer
         {
             get
             {
@@ -35,6 +35,12 @@ namespace WolvenKit.RED4.Types
                     File._buffers[Pointer] = value;
                 }
             }
+        }
+
+        public IParseableBuffer Data
+        {
+            get => Buffer.Data;
+            set => Buffer.Data = value;
         }
 
         public SerializationDeferredDataBuffer(Red4File file, ushort pointer)
@@ -77,7 +83,7 @@ namespace WolvenKit.RED4.Types
                 return true;
             }
 
-            return Data == other.Data;
+            return Buffer == other.Buffer;
         }
 
         public override bool Equals(object obj)
@@ -100,6 +106,6 @@ namespace WolvenKit.RED4.Types
             return Equals((SerializationDeferredDataBuffer)obj);
         }
 
-        public override int GetHashCode() => Data.GetHashCode();
+        public override int GetHashCode() => Buffer.GetHashCode();
     }
 }

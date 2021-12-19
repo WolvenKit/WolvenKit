@@ -75,9 +75,9 @@ namespace WolvenKit.Modkit.RED4
                 {
                     var animBuff = (animAnimDes.AnimBuffer.Chunk as animAnimationBufferSimd);
                     var defferedBuffer = new MemoryStream();
-                    if (animBuff.InplaceCompressedBuffer.Data.MemSize > 0)
+                    if (animBuff.InplaceCompressedBuffer.Buffer.MemSize > 0)
                     {
-                        animStream.Write(animBuff.InplaceCompressedBuffer.Data.GetBytes());
+                        animStream.Write(animBuff.InplaceCompressedBuffer.Buffer.GetBytes());
 
                         var br = new BinaryReader(defferedBuffer);
                         br.BaseStream.Seek(0, SeekOrigin.Begin);
@@ -92,7 +92,7 @@ namespace WolvenKit.Modkit.RED4
                     }
                     else
                     {
-                        animStream.Write(animBuff.DefferedBuffer.Data.GetBytes());
+                        animStream.Write(animBuff.DefferedBuffer.Buffer.GetBytes());
                     }
                     defferedBuffer.Seek(0, SeekOrigin.Begin);
                     SIMD.AddAnimationSIMD(ref model, animBuff, animAnimDes.Name, defferedBuffer, animAnimDes);
@@ -101,9 +101,9 @@ namespace WolvenKit.Modkit.RED4
                 {
                     var animBuff = (animAnimDes.AnimBuffer.Chunk as animAnimationBufferCompressed);
                     var defferedBuffer = new MemoryStream();
-                    if (animBuff.InplaceCompressedBuffer.Data.MemSize > 0)
+                    if (animBuff.InplaceCompressedBuffer.Buffer.MemSize > 0)
                     {
-                        animStream.Write(animBuff.InplaceCompressedBuffer.Data.GetBytes());
+                        animStream.Write(animBuff.InplaceCompressedBuffer.Buffer.GetBytes());
 
                         var br = new BinaryReader(defferedBuffer);
                         br.BaseStream.Seek(0, SeekOrigin.Begin);
@@ -124,9 +124,9 @@ namespace WolvenKit.Modkit.RED4
                         animDataBuffers[(int)((uint)dataAddr.UnkIndex)].Read(bytes, 0, (int)((uint)dataAddr.ZeInBytes));
                         defferedBuffer = new MemoryStream(bytes);
                     }
-                    else if (animBuff.DefferedBuffer.Data.MemSize > 0)
+                    else if (animBuff.DefferedBuffer.Buffer.MemSize > 0)
                     {
-                        defferedBuffer.Write(animBuff.DefferedBuffer.Data.GetBytes());
+                        defferedBuffer.Write(animBuff.DefferedBuffer.Buffer.GetBytes());
                     }
                     defferedBuffer.Seek(0, SeekOrigin.Begin);
                     SPLINE.AddAnimationSpline(ref model, animBuff, animAnimDes.Name, defferedBuffer, animAnimDes);
