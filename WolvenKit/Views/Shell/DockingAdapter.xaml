@@ -55,11 +55,20 @@
             IsTDIDragDropEnabled="True"
             AllowProportionalResize="True"
             PersistState="True"
+            IsNative="True"
             UseNativeFloatWindow="False"
             UseDocumentContainer="True"
             Loaded="PART_DockingManager_Loaded"
             CloseButtonClick="PART_DockingManagerOnCloseButtonClick"
             DockStateChanging="PART_DockingManagerOnDockStateChanging">
+            <!--syncfusion:DockingManager.Resources>
+                <Style TargetType="{x:Type ContentPresenter}">
+                    <Setter Property="Margin" Value="-1" />
+                </Style>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="Margin" Value="-1" />
+                </Style>
+            </syncfusion:DockingManager.Resources-->
             <syncfusion:DockingManager.Style>
                     <Style TargetType="{x:Type syncfusion:DockingManager}" BasedOn="{StaticResource SyncfusionDockingManagerStyle}">
                     <Setter Property="CloseButtonTemplate" Value="{StaticResource WolvenKitButtonsTemplate}" />
@@ -90,7 +99,6 @@
                     <Setter Property="SplitterBackground" Value="{StaticResource ContentBackgroundAlt2}" />
                     <Setter Property="HeaderBorderBrush" Value="{StaticResource ContentBackgroundAlt2}" />
                     <Setter Property="TabItemsBorderBrush" Value="{StaticResource ContentBackgroundAlt2}" />
-
                     <!--Setter Property="HeaderMouseOverBackground" Value="#313131" />
                     <Setter Property="HeaderBackground" Value="#313131" />
                     <Setter Property="SelectedHeaderBackground" Value="#313131" />
@@ -103,17 +111,16 @@
                     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                     <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt}" />
                     <Setter Property="TabItemSelectedBackground" Value="{StaticResource ContentBackgroundAlt2}" />
-                    <Setter Property="TabItemHoverBackground" Value="{StaticResource ContentBackgroundAlt4}" />
+                    <Setter Property="TabItemHoverBackground" Value="{StaticResource ContentBackgroundAlt3}" />
                     <Setter Property="TabItemHoverForeground" Value="#ffffff" />
                     <Setter Property="TabItemSelectedForeground" Value="#ffffff" />
                     <Setter Property="TabPanelBackground" Value="{StaticResource ContentBackground}" />
-                    <Setter Property="BorderThickness" Value="0,0,0,0" />
-                    <Setter Property="TabItemSelectedBorderBrush" Value="{StaticResource ContentBackground}" />
+                    <Setter Property="BorderThickness" Value="1,0,1,1" />
+                    <Setter Property="TabItemSelectedBorderBrush" Value="{StaticResource ContentBackgroundAlt4}" />
                     <Setter Property="TabItemHoverBorderBrush" Value="#333333" />
                     <Setter Property="CloseButtonType" Value="Individual" />
                     <Setter Property="BorderBrush" Value="{StaticResource ContentBackground}" />
-                    <Setter Property="Margin" Value="0" />
-
+                    <!--Setter Property="Margin" Value="-1" /-->
 
                     <Setter Property="TabItemSelectedBackground" Value="#313131" />
                     <Setter Property="TabPanelBackground" Value="{StaticResource ContentBackgroundAlt2}" />
@@ -126,6 +133,8 @@
                     <Setter Property="Foreground" Value="#ffffff" />
                     <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt2}" />
                     <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Margin" Value="0" />
+
                 </Style>
             </syncfusion:DockingManager.DocumentTabItemStyle>
             <syncfusion:DockingManager.TabItemStyle>
@@ -137,10 +146,140 @@
                 </Style>
             </syncfusion:DockingManager.TabItemStyle>
             <syncfusion:DockingManager.DockedElementTabbedHostStyle>
-                <Style TargetType="{x:Type tools_controls:DockedElementTabbedHost}" BasedOn="{StaticResource SyncfusionDockedElementTabbedHostStyle}">
-                    <Setter Property="Margin" Value="0" />
-                    <Setter Property="Padding" Value="0" />
-                    <Setter Property="BorderBrush" Value="{StaticResource WolvenKitRed}" />
+                <Style TargetType="{x:Type tools_controls:DockedElementTabbedHost}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=(tools_controls:DockedElementTabbedHost.HostedElement).(tools_controls:DockingManager.IsNative), RelativeSource={RelativeSource Self}}" Value="True">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type tools_controls:DockedElementTabbedHost}">
+                                        <Border Name="BorderWrap" Width="Auto" Background="Transparent" BorderBrush="{StaticResource BorderAlt}" BorderThickness="1" Focusable="True" SnapsToDevicePixels="True" FocusVisualStyle="{Binding Path=(tools_controls:DockedElementTabbedHost.DockingManager).(tools_controls:DockingManager.FocusVisualStyle), RelativeSource={RelativeSource TemplatedParent}}">
+                                            <DockPanel Name="DockPanel" Width="Auto" Focusable="False" LastChildFill="True">
+                                                <tools_controls:DockHeaderPresenter Name="PART_Header" DockPanel.Dock="Top" IsTemplateParenKeyboardFocusWithin="{TemplateBinding IsKeyboardFocusWithin}" RenderTransformOrigin="0.5,0.5" Style="{Binding Path=(tools_controls:DockedElementTabbedHost.HostedElement).(tools_controls:DockingManager.HeaderStyle), RelativeSource={RelativeSource AncestorType={x:Type tools_controls:DockedElementTabbedHost}}}" />
+                                                <Grid Name="hostgrid">
+                                                    <TabPanel>
+                                                        <ContentPresenter Name="HostedElement" ClipToBounds="True" ContentSource="HostedElement" ContentTemplate="{TemplateBinding ContentTemplate}" ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" Width="{Binding Path=ActualWidth, ElementName=hostgrid}" Height="{Binding Path=ActualHeight, ElementName=hostgrid}" />
+                                                        <Border Name="PART_DragBorder" Background="Transparent" Visibility="Collapsed" />
+                                                    </TabPanel>
+                                                </Grid>
+                                            </DockPanel>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <DataTrigger Value="True" Binding="{Binding Path=(tools_controls:DockedElementTabbedHost.HostedElement).(tools_controls:DockingManager.NoHeader), RelativeSource={RelativeSource Self}}">
+                                                <Setter TargetName="PART_Header" Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                            <DataTrigger Value="True" Binding="{Binding Path=(tools_controls:DockedElementTabbedHost.DockingManager).(tools_controls:DockingManager.IsDragging), RelativeSource={RelativeSource TemplatedParent}}">
+                                                <Setter TargetName="PART_DragBorder" Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                            <Trigger Property="MarkAsFrozen" Value="True">
+                                                <Setter TargetName="PART_DragBorder" Property="Visibility" Value="Visible" />
+                                                <Setter TargetName="HostedElement" Property="Visibility" Value="Collapsed" />
+                                            </Trigger>
+                                            <Trigger SourceName="BorderWrap" Property="Visibility" Value="Visible">
+                                                <Setter TargetName="BorderWrap" Value="{Binding Path=(tools_controls:DockedElementTabbedHost.DockingManager).(tools_controls:DockingManager.ElementBorderThickness), RelativeSource={RelativeSource TemplatedParent}}" Property="BorderThickness" />
+                                            </Trigger>
+                                            <DataTrigger Value="True" Binding="{Binding Path=(tools_controls:DockedElementTabbedHost.HostedElement).(tools_controls:DockingManager.NoHeader), RelativeSource={RelativeSource Self}}">
+                                                <Setter TargetName="BorderWrap" Property="BorderThickness" Value="0" />
+                                            </DataTrigger>
+                                            <Trigger Property="Tag" Value="DocumentContainer">
+                                                <Setter TargetName="BorderWrap" Property="BorderThickness" Value="0" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <Trigger Property="ShowTabs" Value="True">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type tools_controls:DockedElementTabbedHost}">
+                                        <Border Name="BorderWrapForTab" Width="Auto" Background="Transparent" BorderBrush="{StaticResource BorderAlt}" BorderThickness="1" SnapsToDevicePixels="True">
+                                            <DockPanel Name="DockPanel" Width="Auto" LastChildFill="True">
+                                                <tools_controls:DockHeaderPresenter Name="PART_Header" DockPanel.Dock="Top" IsTemplateParenKeyboardFocusWithin="{TemplateBinding IsKeyboardFocusWithin}" RenderTransformOrigin="0.5,0.5" Style="{Binding Path=(tools_controls:DockedElementTabbedHost.HostedElement).(tools_controls:DockingManager.HeaderStyle), RelativeSource={RelativeSource AncestorType={x:Type tools_controls:DockedElementTabbedHost}}}" />
+                                                <Grid>
+                                                    <TabControl Name="PART_TabControl" Padding="0" IsSynchronizedWithCurrentItem="True" ItemsSource="{TemplateBinding TabChildren}" Style="{Binding Path=(tools_controls:DockedElementTabbedHost.DockingManager).(tools_controls:DockingManager.TabControlStyle), RelativeSource={RelativeSource TemplatedParent}}" TabStripPlacement="{Binding Path=(tools_controls:DockedElementTabbedHost.DockingManager).(tools_controls:DockingManager.DockTabAlignment), RelativeSource={RelativeSource TemplatedParent}}" />
+                                                    <Border Name="PART_DragBorder" Background="Transparent" Visibility="Collapsed" />
+                                                </Grid>
+                                            </DockPanel>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <DataTrigger Value="True" Binding="{Binding Path=(tools_controls:DockedElementTabbedHost.HostedElement).(tools_controls:DockingManager.NoHeader), RelativeSource={RelativeSource Self}}">
+                                                <Setter TargetName="PART_Header" Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                            <DataTrigger Value="True" Binding="{Binding Path=(tools_controls:DockedElementTabbedHost.DockingManager).(tools_controls:DockingManager.IsDragging), RelativeSource={RelativeSource TemplatedParent}}">
+                                                <Setter TargetName="PART_DragBorder" Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                            <Trigger Property="MarkAsFrozen" Value="True">
+                                                <Setter TargetName="PART_DragBorder" Property="Visibility" Value="Visible" />
+                                                <Setter TargetName="PART_TabControl" Property="Visibility" Value="Collapsed" />
+                                            </Trigger>
+                                            <Trigger SourceName="BorderWrapForTab" Property="Visibility" Value="Visible">
+                                                <Setter TargetName="BorderWrapForTab" Value="{Binding Path=(tools_controls:DockedElementTabbedHost.DockingManager).(tools_controls:DockingManager.ElementBorderThickness), RelativeSource={RelativeSource TemplatedParent}}" Property="BorderThickness" />
+                                            </Trigger>
+                                            <DataTrigger Value="True" Binding="{Binding Path=(tools_controls:DockedElementTabbedHost.HostedElement).(tools_controls:DockingManager.NoHeader), RelativeSource={RelativeSource Self}}">
+                                                <Setter TargetName="BorderWrapForTab" Property="BorderThickness" Value="0" />
+                                            </DataTrigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                    <Setter Property="IsTabStop" Value="False" />
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    <!--Setter Property="InternalDataContext" Value="{Binding Path=(tools_controls:DockedElementTabbedHost.HostedElement), RelativeSource={RelativeSource Self}}" /-->
+                    <Setter Property="FocusVisualStyle" Value="{Binding Path=(tools_controls:DockedElementTabbedHost.DockingManager).(tools_controls:DockingManager.FocusVisualStyle), RelativeSource={RelativeSource TemplatedParent}}" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type tools_controls:DockedElementTabbedHost}">
+                                <Border Name="BorderWrap" Width="Auto" Background="Transparent" BorderBrush="{StaticResource BorderAlt}" BorderThickness="1" SnapsToDevicePixels="True" FocusVisualStyle="{Binding Path=(tools_controls:DockedElementTabbedHost.DockingManager).(tools_controls:DockingManager.FocusVisualStyle), RelativeSource={RelativeSource TemplatedParent}}">
+                                    <DockPanel Name="DockPanel" Width="Auto" Focusable="False" LastChildFill="True">
+                                        <tools_controls:DockHeaderPresenter Name="PART_Header" DockPanel.Dock="Top" IsTemplateParenKeyboardFocusWithin="{TemplateBinding IsKeyboardFocusWithin}" RenderTransformOrigin="0.5,0.5" Style="{Binding Path=(tools_controls:DockedElementTabbedHost.HostedElement).(tools_controls:DockingManager.HeaderStyle), RelativeSource={RelativeSource AncestorType={x:Type tools_controls:DockedElementTabbedHost}}}" />
+                                        <Grid>
+                                            <ContentPresenter Name="HostedElement" ClipToBounds="True" ContentSource="HostedElement" ContentTemplate="{TemplateBinding ContentTemplate}" ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
+                                            <Border Name="PART_DragBorder" Background="Transparent" Visibility="Collapsed" />
+                                        </Grid>
+                                    </DockPanel>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <DataTrigger Value="True" Binding="{Binding Path=(tools_controls:DockedElementTabbedHost.HostedElement).(tools_controls:DockingManager.NoHeader), RelativeSource={RelativeSource Self}}">
+                                        <Setter TargetName="PART_Header" Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                    <DataTrigger Value="True" Binding="{Binding Path=(tools_controls:DockedElementTabbedHost.DockingManager).(tools_controls:DockingManager.IsDragging), RelativeSource={RelativeSource TemplatedParent}}">
+                                        <Setter TargetName="PART_DragBorder" Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                    <Trigger Property="MarkAsFrozen" Value="True">
+                                        <Setter TargetName="PART_DragBorder" Property="Visibility" Value="Visible" />
+                                        <Setter TargetName="HostedElement" Property="Visibility" Value="Collapsed" />
+                                    </Trigger>
+                                    <Trigger SourceName="BorderWrap" Property="Visibility" Value="Visible">
+                                        <Setter TargetName="BorderWrap" Value="{Binding Path=(tools_controls:DockedElementTabbedHost.DockingManager).(tools_controls:DockingManager.ElementBorderThickness), RelativeSource={RelativeSource TemplatedParent}}" Property="BorderThickness" />
+                                    </Trigger>
+                                    <DataTrigger Value="True" Binding="{Binding Path=(tools_controls:DockedElementTabbedHost.HostedElement).(tools_controls:DockingManager.NoHeader), RelativeSource={RelativeSource Self}}">
+                                        <Setter TargetName="BorderWrap" Property="BorderThickness" Value="0" />
+                                    </DataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding Path=(tools_controls:DockedElementTabbedHost.DockingManager).(tools_controls:DockingManager.UseNativeFloatWindow), RelativeSource={RelativeSource Self}}" Value="True" />
+                                            <Condition Binding="{Binding Path=(tools_controls:DockedElementTabbedHost.HostedElement).(tools_controls:DockingManager.State), RelativeSource={RelativeSource Self}}" Value="Float" />
+                                            <Condition Binding="{Binding Path=IsMultiHostsContainer, RelativeSource={RelativeSource AncestorType={x:Type tools_controls:NativeFloatWindow}}}" Value="False" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter TargetName="BorderWrap" Property="BorderThickness" Value="0,0,0,0" />
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding Path=(tools_controls:DockedElementTabbedHost.DockingManager).(tools_controls:DockingManager.UseNativeFloatWindow), RelativeSource={RelativeSource Self}}" Value="False" />
+                                            <Condition Binding="{Binding Path=(tools_controls:DockedElementTabbedHost.HostedElement).(tools_controls:DockingManager.State), RelativeSource={RelativeSource Self}}" Value="Float" />
+                                            <Condition Binding="{Binding Path=IsMultiHostsContainer, RelativeSource={RelativeSource AncestorType={x:Type tools_controls:IWindow}}}" Value="False" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter TargetName="BorderWrap" Property="BorderThickness" Value="0,0,0,0" />
+                                    </MultiDataTrigger>
+                                    <Trigger Property="Tag" Value="DocumentContainer">
+                                        <Setter TargetName="BorderWrap" Property="BorderThickness" Value="0" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
             </syncfusion:DockingManager.DockedElementTabbedHostStyle>
             <syncfusion:DockingManager.HeaderTemplate>

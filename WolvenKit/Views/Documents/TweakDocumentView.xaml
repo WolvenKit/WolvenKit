@@ -13,9 +13,12 @@
     xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=documents:TweakDocumentViewModel}"
-    d:DesignHeight="450" d:DesignWidth="800">
+    d:DesignHeight="450" d:DesignWidth="800"
+    BorderThickness="1,0,1,1"
+    BorderBrush="{StaticResource BorderAlt}"
+    Margin="-3">
 
-    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}" Margin="-2" >
+    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}" Margin="0" >
 
         <Grid.Resources>
             <ResourceDictionary>
@@ -56,8 +59,7 @@
             />
 
         <!-- TEXT EDITOR -->
-        <syncfusion:SfGridSplitter Grid.Column="1" Grid.RowSpan="2"
-            HorizontalAlignment="Stretch" />
+        <syncfusion:SfGridSplitter Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Stretch" BorderBrush="{StaticResource ContentBackgroundAlt4}"/>
 
         <!-- UI EDITOR -->
         <Grid Grid.Column="2"
@@ -105,20 +107,20 @@
                     </Grid.ColumnDefinitions>
 
                     <hc:TextBox Grid.Column="0"
-                            Margin="10,3,3,3"
+                            Margin="10,5,3,3"
                             x:Name="NameTextBox"
                             hc:InfoElement.Title="Name: "
                             hc:InfoElement.TitlePlacement="Left"/>
 
-                    <Button Grid.Column="1" x:Name="AddButton" ToolTip="Add new flat" Click="AddButton_Click" Margin="0,0,3,0">
+                    <Button Grid.Column="1" x:Name="AddButton" ToolTip="Add new flat" Click="AddButton_Click" Margin="0,2,3,0">
                         <iconPacks:PackIconMaterial Kind="Plus" Foreground="{StaticResource ContentForeground}" Height="13" Width="13" />
                     </Button>
 
-                    <Button Grid.Column="2" x:Name="AddArrayButton" ToolTip="Add new array" Click="AddButton_Click" Margin="0,0,3,0">
+                    <Button Grid.Column="2" x:Name="AddArrayButton" ToolTip="Add new array" Click="AddButton_Click" Margin="0,2,3,0">
                         <iconPacks:PackIconMaterial Kind="PlusBoxMultiple" Foreground="{StaticResource ContentForeground}" Height="13" Width="13" />
                     </Button>
 
-                    <Button Grid.Column="3" x:Name="AddGroupButton" ToolTip="Add new group" Click="AddButton_Click" Margin="0,0,3,0">
+                    <Button Grid.Column="3" x:Name="AddGroupButton" ToolTip="Add new group" Click="AddButton_Click" Margin="0,2,3,0">
                         <iconPacks:PackIconMaterial Kind="SelectGroup" Foreground="{StaticResource ContentForeground}" Height="13" Width="13" />
                     </Button>
                 </Grid>

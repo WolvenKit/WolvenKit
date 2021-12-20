@@ -13,9 +13,12 @@
     xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=documents:ScriptDocumentViewModel}"
-    d:DesignHeight="450" d:DesignWidth="800">
+    d:DesignHeight="450" d:DesignWidth="800"
+    BorderThickness="1,0,1,1"
+    BorderBrush="{StaticResource BorderAlt}"
+    Margin="-3">
 
-    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}" Margin="-2" >
+    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
         <Grid.Resources>
             <ResourceDictionary>
@@ -33,7 +36,7 @@
 
 
         <Menu Height="25" Margin="0,0,0,0" Padding="0,0,0,0" Background="{StaticResource ContentBackgroundAlt4}">
-            <MenuItem Padding="5,0,5,3" Height="25" Header="Maybe a menu?">
+            <MenuItem Padding="6,0,6,3" Height="25" Header="Maybe a menu?">
                 <MenuItem Header="Maybe not though" />
             </MenuItem>
         </Menu>
