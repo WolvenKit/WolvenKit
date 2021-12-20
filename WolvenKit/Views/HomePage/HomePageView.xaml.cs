@@ -1,4 +1,6 @@
+using System.Reactive.Disposables;
 using System.Windows;
+using System.Windows.Input;
 using Feather.Controls;
 using HandyControl.Controls;
 using HandyControl.Data;
@@ -21,6 +23,7 @@ namespace WolvenKit.Views.HomePage
 
         #region Constructors
         private readonly ISettingsManager _settingsManager;
+        private readonly RibbonViewModel _ribbon;
 
         public HomePageView()
         {
@@ -30,6 +33,15 @@ namespace WolvenKit.Views.HomePage
             DataContext = ViewModel;
 
             _settingsManager = Locator.Current.GetService<ISettingsManager>();
+            _ribbon = Locator.Current.GetService<RibbonViewModel>();
+
+            this.WhenActivated(disposables =>
+            {
+                this.Bind(ViewModel,
+                      viewmodel => viewmodel.SelectedIndex,
+                      view => view.HomeTabs.SelectedIndex)
+                  .DisposeWith(disposables);
+            });
 
             //guide.SetCurrentValue(GuidedTour.ItemsProperty, new[]{
             //    new GuidedTourItem()
@@ -75,8 +87,16 @@ namespace WolvenKit.Views.HomePage
 
             }
 
+            PreviewKeyDown += new KeyEventHandler(HandleEsc);
+        }
 
-
+        private void HandleEsc(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                e.Handled = true;
+                _ribbon.BackstageIsOpen = false;
+            }
         }
 
         private void Guide_Finished(object sender, RoutedEventArgs e)

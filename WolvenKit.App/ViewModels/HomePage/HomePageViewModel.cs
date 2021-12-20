@@ -38,6 +38,7 @@ namespace WolvenKit.ViewModels.HomePage
 
         #region Properties
 
+        [Reactive] public int SelectedIndex { get; set; }
 
         // Close HomePage (Navigates to Project Editor
         public ICommand CloseHomePage { get; private set; }

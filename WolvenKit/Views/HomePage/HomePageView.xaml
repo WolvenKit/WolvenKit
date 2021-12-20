@@ -108,7 +108,7 @@
 
         </Grid>
 
-        <TabControl TabStripPlacement="Left" Margin="0">
+        <TabControl x:Name="HomeTabs" TabStripPlacement="Left" Margin="0">
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}">
                     <Setter Property="Background" Value="Transparent"/>
@@ -194,6 +194,7 @@
                                                 VerticalAlignment="Stretch"
                                                 Source="pack://application:,,,/Resources/Media/Images/Application/Sammy_Home.png" />
                                             <Button
+                                                IsCancel="True"
                                                 Grid.Column="1"
                                                 Grid.Row="1"
                                                 HorizontalAlignment="Stretch"

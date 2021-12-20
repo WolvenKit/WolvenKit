@@ -484,16 +484,20 @@
             Grid.Row="0"
             Margin="0,0,0,0"
             Visibility="Collapsed">
+                <fluent:Ribbon.Resources>
+                    <PopupAnimation x:Key="{x:Static SystemParameters.MenuPopupAnimationKey}">None</PopupAnimation>
+                </fluent:Ribbon.Resources>
 
                 <!--  StartScreen  -->
-                <fluent:Ribbon.StartScreen>
-                    <fluent:StartScreen
-                    x:Name="startScreen"
-                    IsOpen="{Binding BackstageIsOpen}"
-                    Shown="{Binding StartScreenShown}">
+                <fluent:Ribbon.Menu>
+                    <fluent:Backstage
+                        Width="500"
+                        x:Name="startScreen"
+                        CloseOnEsc="False"
+                        IsOpen="{Binding BackstageIsOpen}">
                         <HomeView:HomePageView x:Name="HMPV" />
-                    </fluent:StartScreen>
-                </fluent:Ribbon.StartScreen>
+                    </fluent:Backstage>
+                </fluent:Ribbon.Menu>
 
             </fluent:Ribbon>
 

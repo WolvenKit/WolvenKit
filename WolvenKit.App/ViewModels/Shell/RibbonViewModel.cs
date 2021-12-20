@@ -17,6 +17,7 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.ViewModels.HomePage;
 
 namespace WolvenKit.ViewModels.Shell
 { // #MVVM
@@ -82,7 +83,11 @@ namespace WolvenKit.ViewModels.Shell
 
             ShowSettingsCommand = ReactiveCommand.Create(() =>
             {
+                var homePage = Locator.Current.GetService<HomePageViewModel>();
+                homePage.SelectedIndex = 1;
                 BackstageIsOpen = true;
+
+                StartScreenShown = false;
             });
             ShowBugReportCommand = ReactiveCommand.CreateFromTask(async () =>
             {
