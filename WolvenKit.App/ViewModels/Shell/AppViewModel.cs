@@ -38,6 +38,7 @@ using WolvenKit.Core.Services;
 using System.Reflection;
 using System.Windows.Threading;
 using WolvenKit.Functionality.Helpers;
+using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -105,6 +106,7 @@ namespace WolvenKit.ViewModels.Shell
 
             OpenFileCommand = new DelegateCommand<FileModel>(p => ExecuteOpenFile(p), CanOpenFile);
             OpenFileAsyncCommand = ReactiveCommand.CreateFromTask<FileModel, Unit>(OpenFileAsync);
+            OpenRedFileAsyncCommand = ReactiveCommand.CreateFromTask<FileEntry, Unit>(OpenRedFileAsync);
 
             PackModCommand = new RelayCommand(ExecutePackMod, CanPackMod);
             PackInstallModCommand = new RelayCommand(ExecutePackInstallMod, CanPackInstallMod);
@@ -418,14 +420,14 @@ namespace WolvenKit.ViewModels.Shell
         private async Task ExecuteSelectFile(FileModel model) => await PropertiesViewModel.ExecuteSelectFile(model);
 
         public ICommand SaveFileCommand { get; private set; }
-        private bool CanSaveFile() => _projectManager.ActiveProject != null && ActiveDocument != null;
+        private bool CanSaveFile() => ActiveDocument != null; // _projectManager.ActiveProject != null && 
         private void ExecuteSaveFile() => Save(ActiveDocument);
 
         public ICommand SaveAsCommand { get; private set; }
         private void ExecuteSaveAs() => Save(ActiveDocument, true);
 
         public ICommand SaveAllCommand { get; private set; }
-        private bool CanSaveAll() => _projectManager.ActiveProject != null && OpenDocuments?.Count > 0;
+        private bool CanSaveAll() => OpenDocuments?.Count > 0; //  _projectManager.ActiveProject != null && 
         private void ExecuteSaveAll()
         {
             foreach (var file in OpenDocuments)
@@ -571,6 +573,39 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         _progressService.IsIndeterminate = false;
                     }
+                }
+            }
+
+            return Unit.Default;
+        }
+
+        public ReactiveCommand<FileEntry, Unit> OpenRedFileAsyncCommand { get; }
+        private async Task<Unit> OpenRedFileAsync(FileEntry file)
+        {
+            if (file != null)
+            {
+                _progressService.IsIndeterminate = true;
+                try
+                {
+                    var fileViewModel = new RedDocumentViewModel(file.FileName);
+                    await using (var stream = new MemoryStream())
+                    {
+                        file.Extract(stream);
+                        fileViewModel.OpenStream(stream, null);
+                    }
+
+                    if (!DockedViews.Contains(fileViewModel))
+                        DockedViews.Add(fileViewModel);
+                    ActiveDocument = fileViewModel;
+                    UpdateTitle();
+                }
+                catch (Exception e)
+                {
+                    _loggerService.Error(e.Message);
+                }
+                finally
+                {
+                    _progressService.IsIndeterminate = false;
                 }
             }
 
@@ -841,7 +876,10 @@ namespace WolvenKit.ViewModels.Shell
             if (fileToSave.FilePath == null || saveAsFlag)
             {
                 var dlg = new SaveFileDialog();
-                dlg.FileName = Path.GetFileName(fileToSave.FilePath);
+                if (fileToSave.FilePath != null)
+                    dlg.FileName = Path.GetFileName(fileToSave.FilePath);
+                else
+                    dlg.FileName = Path.GetFileName(fileToSave.ContentId);
                 //dlg.RestoreDirectory = true;
                 dlg.InitialDirectory = Path.GetDirectoryName(fileToSave.FilePath);
                 if (dlg.ShowDialog().GetValueOrDefault())

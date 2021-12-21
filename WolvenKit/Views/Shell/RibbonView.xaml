@@ -156,6 +156,9 @@
                                 </MultiDataTrigger.Conditions>
                                 <Setter Property="Foreground" Value="{StaticResource ContentBackgroundAlt}" />
                             </MultiDataTrigger>
+                            <DataTrigger Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" Value="False">
+                                <Setter Property="Foreground" Value="{StaticResource ContentBackgroundAlt2}" />
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
                     <Style x:Key="WolvenKitToolBarButtonText" TargetType="TextBlock">
@@ -274,7 +277,7 @@
                             <TextBlock Text="New File" Padding="5,0,0,0" />
                         </StackPanel>
                     </Button>
-                    <Button Command="{Binding SaveFileCommand}" ToolTip="Save File">
+                    <Button x:Name="ToolbarSaveButton" ToolTip="Save File">
                         <StackPanel Orientation="Horizontal">
                             <iconPacks:PackIconMaterial
                             Padding="0,1,0,1"
@@ -284,7 +287,7 @@
                             <TextBlock Text="Save" Padding="5,0,0,0" />
                         </StackPanel>
                     </Button>
-                    <Button Command="{Binding SaveAsCommand}" ToolTip="Save File">
+                    <Button x:Name="ToolbarSaveAsButton" ToolTip="Save File">
                         <StackPanel Orientation="Horizontal">
                             <iconPacks:PackIconMaterial
                             Padding="0,1,0,1"
@@ -294,7 +297,7 @@
                             <TextBlock Text="Save As" Padding="5,0,0,0" />
                         </StackPanel>
                     </Button>
-                    <Button Command="{Binding SaveAllCommand}" ToolTip="Save All Files">
+                    <Button x:Name="ToolbarSaveAllButton" ToolTip="Save All Files">
                         <StackPanel Orientation="Horizontal">
                             <iconPacks:PackIconMaterial
                             Padding="0,1,0,1"
@@ -331,7 +334,7 @@
                             <TextBlock Text="Open Project" Padding="5,0,0,0" />
                         </StackPanel>
                     </Button>
-                    <Button Command="{Binding PackProjectCommand}" ToolTip="Pack Project">
+                    <Button x:Name="ToolbarPackProjectButton" ToolTip="Pack Project">
                         <StackPanel Orientation="Horizontal">
                             <Grid>
                                 <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
@@ -348,7 +351,7 @@
                             <TextBlock Text="Pack Project" Padding="5,0,0,0" />
                         </StackPanel>
                     </Button>
-                    <Button Command="{Binding PackInstallProjectCommand}" ToolTip="Pack &amp; Install Project">
+                    <Button x:Name="ToolbarPackInstallButton" ToolTip="Pack &amp; Install Project">
                         <StackPanel Orientation="Horizontal">
                             <Grid>
                                 <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
@@ -494,7 +497,12 @@
                         Width="500"
                         x:Name="startScreen"
                         CloseOnEsc="False"
+                        Background="{StaticResource ContentBackgroundAlt}"
                         IsOpen="{Binding BackstageIsOpen}">
+                        <fluent:Backstage.Resources>
+                            <SolidColorBrush x:Key="Fluent.Ribbon.Brushes.Backstage.Background">LightBlue</SolidColorBrush>
+                            <SolidColorBrush x:Key="Fluent.Ribbon.Brushes.Backstage.Foreground">LightBlue</SolidColorBrush>
+                        </fluent:Backstage.Resources>
                         <HomeView:HomePageView x:Name="HMPV" />
                     </fluent:Backstage>
                 </fluent:Ribbon.Menu>

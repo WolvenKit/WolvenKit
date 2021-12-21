@@ -37,6 +37,7 @@ namespace WolvenKit.Functionality.Controllers
         private readonly IHashService _hashService;
         private readonly IModTools _modTools;
         private readonly IArchiveManager _archiveManager;
+        private bool _initialized = false;
 
         #endregion
 
@@ -64,22 +65,26 @@ namespace WolvenKit.Functionality.Controllers
 
         public Task HandleStartup()
         {
-            // load oodle
-            if (!OodleLoadLib.Load(_settingsManager.GetRED4OodleDll()))
+            if (!_initialized)
             {
-                throw new FileNotFoundException($"oo2ext_7_win64.dll not found.");
+                _initialized = true;
+                // load oodle
+                if (!OodleLoadLib.Load(_settingsManager.GetRED4OodleDll()))
+                {
+                    throw new FileNotFoundException($"oo2ext_7_win64.dll not found.");
+                }
+
+                // load archives
+                var todo = new List<Func<IArchiveManager>>()
+                {
+                    LoadArchiveManager,
+                };
+                Parallel.ForEach(todo, _ => Task.Run(_));
+
+                // requires oodle
+                InitializeBk();
+                InitializeRedDB();
             }
-
-            // load archives
-            var todo = new List<Func<IArchiveManager>>()
-            {
-                LoadArchiveManager,
-            };
-            Parallel.ForEach(todo, _ => Task.Run(_));
-
-            // requires oodle
-            InitializeBk();
-            InitializeRedDB();
 
             return Task.CompletedTask;
         }
@@ -235,7 +240,7 @@ namespace WolvenKit.Functionality.Controllers
                 return _archiveManager;
             }
 
-            _loggerService.Info("Loading archive Manager ... ");
+            _loggerService.Info("Loading Archive Manager ... ");
             //var chachePath = Path.Combine(ISettingsManager.GetAppData(), "archive_cache.bin");
             try
             {
@@ -289,7 +294,7 @@ namespace WolvenKit.Functionality.Controllers
             }
             finally
             {
-                _loggerService.Success("Finished loading archive manager.");
+                _loggerService.Success("Finished loading Archive Manager.");
             }
 
 #pragma warning disable 162

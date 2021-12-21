@@ -283,8 +283,9 @@
                                 >
 
                                 <syncfusion:SfDataGrid.RecordContextMenu>
-                                    <ContextMenu>
-                                        <MenuItem Click="RightContextMenuAddAll_OnClick" Header="Add selected items to Project" />
+                                <ContextMenu>
+                                    <MenuItem x:Name="OpenFileOnly" Header="Open without adding to project" />
+                                    <MenuItem x:Name="AddSelected" Header="Add selected items to project" />
                                         <Separator/>
                                         <MenuItem Header="Video">
                                             <MenuItem
@@ -413,9 +414,9 @@
         <Border
             x:Name="LoadingBorder"
             Grid.RowSpan="3"
-            Background="#80000000"
+            Background="{StaticResource ContentBackgroundAlt3}"
             BorderBrush="Black"
-            BorderThickness="1"
+            BorderThickness="0"
             Visibility="{Binding Path=LoadVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
             <Grid>
                 <syncfusion:SfBusyIndicator AnimationType="Ball" Foreground="{DynamicResource MahApps.Brushes.Accent}" />
@@ -428,7 +429,7 @@
                         FontSize="24"
                         FontWeight="Bold"
                         Foreground="#7EFFFFFF"
-                        Text="Loading game archives.."
+                        Text="Loading Asset Browser.."
                         TextWrapping="Wrap" />
                 </StackPanel>
             </Grid>
@@ -437,22 +438,13 @@
         <Border
             x:Name="NoProjectBorder"
             Grid.RowSpan="3"
-            Background="Black"
-            BorderBrush="Black"
-            BorderThickness="1"
-            Visibility="{Binding Path=NoProjectBorderVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Opacity="0">
+            Background="{StaticResource ContentBackgroundAlt2}"
+            Visibility="{Binding Path=ShouldShowLoadButton, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
             <Grid>
                 <StackPanel VerticalAlignment="Center">
-
-                    <TextBlock
-                        Margin="0,75,0,0"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        FontSize="24"
-                        FontWeight="Bold"
-                        Foreground="#7EFFFFFF"
-                        Text="Create a new mod project to access the asset browser"
-                        TextWrapping="Wrap" />
+                    <Button HorizontalAlignment="Center" Command="{Binding LoadAssetBrowserCommand}">
+                        <TextBlock Text="Load Asset Browser" FontSize="16" Margin="20,10"/>
+                    </Button>
                 </StackPanel>
             </Grid>
         </Border>

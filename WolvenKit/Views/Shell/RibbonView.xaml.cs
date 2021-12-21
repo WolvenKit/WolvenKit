@@ -185,6 +185,26 @@ namespace WolvenKit.Views.Shell
                         viewModel => viewModel._mainViewModel.NewProjectCommand,
                         view => view.ToolbarNewProjectButton)
                     .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.SaveFileCommand,
+                        view => view.ToolbarSaveButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.SaveAsCommand,
+                        view => view.ToolbarSaveAsButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.SaveAllCommand,
+                        view => view.ToolbarSaveAllButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.PackModCommand,
+                        view => view.ToolbarPackProjectButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.PackInstallModCommand,
+                        view => view.ToolbarPackInstallButton)
+                    .DisposeWith(disposables);
 
                 #endregion
 

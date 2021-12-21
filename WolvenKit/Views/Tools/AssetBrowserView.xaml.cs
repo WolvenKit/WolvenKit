@@ -104,6 +104,15 @@ namespace WolvenKit.Views.Tools
                       viewModel => viewModel.CopyRelPathCommand,
                       view => view.RightContextMenuCopyPathMenuItem)
                   .DisposeWith(disposables);
+
+                this.BindCommand(ViewModel,
+                      viewModel => viewModel.OpenFileOnlyCommand,
+                      view => view.OpenFileOnly)
+                  .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                      viewModel => viewModel.AddSelectedCommand,
+                      view => view.AddSelected)
+                  .DisposeWith(disposables);
             });
 
         }
@@ -344,14 +353,6 @@ namespace WolvenKit.Views.Tools
         {
             var selectedIndex = LeftNavigation.SelectedIndex;
             LeftNavigation.ExpandNode(selectedIndex + 1);
-        }
-
-        private void RightContextMenuAddAll_OnClick(object sender, RoutedEventArgs e)
-        {
-            if (ViewModel is { } vm)
-            {
-                vm.AddSelectedCommand.SafeExecute();
-            }
         }
 
         private void VidPreviewMenuItem_Click(object sender, RoutedEventArgs e)

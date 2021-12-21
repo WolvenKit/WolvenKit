@@ -86,6 +86,27 @@ namespace WolvenKit.ViewModels.Documents
             return Task.CompletedTask;
         }
 
+        public bool OpenStream(Stream stream, string path)
+        {
+            using var reader = new BinaryReader(stream);
+
+            var cr2w = _parser.TryReadRed4File(reader);
+            if (cr2w == null)
+            {
+                _loggerService.Error($"Failed to read cr2w file {path}");
+                return false;
+            }
+            //cr2w.FileName = path;
+
+            // already set by base()?
+            //ContentId = path;
+            FilePath = path;
+            _isInitialized = true;
+
+            PopulateItems(cr2w);
+            return true;
+        }
+
         public override bool OpenFile(string path)
         {
             _isInitialized = false;
@@ -94,21 +115,7 @@ namespace WolvenKit.ViewModels.Documents
             {
                 using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    using var reader = new BinaryReader(stream);
-
-                    var cr2w = _parser.TryReadRed4File(reader);
-                    if (cr2w == null)
-                    {
-                        _loggerService.Error($"Failed to read cr2w file {path}");
-                        return false;
-                    }
-                    //cr2w.FileName = path;
-
-                    ContentId = path;
-                    FilePath = path;
-                    _isInitialized = true;
-
-                    PopulateItems(cr2w);
+                    OpenStream(stream, path);
                 }
 
                 return true;
@@ -131,21 +138,7 @@ namespace WolvenKit.ViewModels.Documents
             {
                 await using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    using var reader = new BinaryReader(stream);
-
-                    var cr2w = _parser.TryReadRed4File(reader);
-                    if (cr2w == null)
-                    {
-                        _loggerService.Error($"Failed to read cr2w file {path}");
-                        return false;
-                    }
-                    //cr2w.FileName = path;
-
-                    ContentId = path;
-                    FilePath = path;
-                    _isInitialized = true;
-
-                    PopulateItems(cr2w);
+                    OpenStream(stream, path);
                 }
 
                 return true;

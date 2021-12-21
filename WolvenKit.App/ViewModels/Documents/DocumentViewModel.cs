@@ -94,12 +94,13 @@ namespace WolvenKit.ViewModels.Documents
 
         private string GetHeader()
         {
-            if (FilePath == null)
-            {
-                return "Noname" + (IsDirty ? "*" : "");
-            }
+            // not sure this is that useful
+            //if (FilePath == null)
+            //{
+            //    return "Noname" + (IsDirty ? "*" : "");
+            //}
 
-            return Path.GetFileName(FilePath) + (IsDirty ? "*" : "");
+            return Path.GetFileName(ContentId) + (IsDirty ? "*" : "");
         }
 
 

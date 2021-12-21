@@ -20,6 +20,7 @@
     MinWidth="960"
     BorderThickness="1"
     BorderBrush="{StaticResource ContentBackgroundAlt4}"
+        Background="{DynamicResource ContentBackgroundAlt2}"
     >
 
 
@@ -27,8 +28,7 @@
     <Grid
         x:Name="FocusGrid"
         MouseLeftButtonDown="Grid_MouseLeftButtonDown_1"
-        hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
-        Background="{DynamicResource ContentBackgroundAlt2}">
+        hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
         <Grid.Resources>
             <ResourceDictionary>

@@ -38,6 +38,7 @@ namespace WolvenKit.Views.Shell
         private AppViewModel viewModel;
         public static DockingAdapter G_Dock;
         private bool UsingProjectLayout = false;
+        private bool _hadLoadedProject = false;
 
         public DockingAdapter()
         {
@@ -198,8 +199,10 @@ namespace WolvenKit.Views.Shell
                 return;
             try
             {
-                if (ItemsSource is ObservableCollection<IDockElement> oc)
+                // need to also handle if files have been modified (probably elsewhere, though)
+                if (!_hadLoadedProject && ItemsSource is ObservableCollection<IDockElement> oc)
                 {
+                    _hadLoadedProject = true;
                     oc.Clear();
                 }
                 var layoutPath = Path.Combine(viewModel.ActiveProject.ProjectDirectory, "layout.xml");

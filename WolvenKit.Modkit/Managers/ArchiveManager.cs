@@ -156,7 +156,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
             sw.Stop();
             var ms = sw.ElapsedMilliseconds;
-            _logger.Info($"Archivemanager loaded in {ms}ms");
+            _logger.Info($"Archive Manager loaded in {ms}ms");
 
             IsManagerLoaded = true;
         }
