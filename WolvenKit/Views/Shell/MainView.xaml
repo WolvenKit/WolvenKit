@@ -28,6 +28,11 @@
     ResizeBorderThickness="1"
     Background="{StaticResource ContentBackgroundAlt2}"
     >
+    <syncfusion:ChromelessWindow.InputBindings>
+        <KeyBinding Modifiers="Control" Key="N" Command="{Binding NewFileCommand}" />
+        <KeyBinding Modifiers="Control" Key="S" Command="{Binding SaveFileCommand}" />
+        <KeyBinding Modifiers="Control" Key="B" Command="{Binding PackModCommand}" />
+    </syncfusion:ChromelessWindow.InputBindings>
     <!--ResizeBorderBrush="#1f1f1f"-->
     <Grid Background="{DynamicResource ContentBackgroundAlt2}">
         <Grid.Resources>
