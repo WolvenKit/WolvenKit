@@ -411,6 +411,18 @@ namespace WolvenKit.ViewModels.Shell
                         return value.GetValue();
                     }
                 }
+                else if (PropertyType.IsAssignableTo(typeof(LocalizationString)))
+                {
+                    var value = (LocalizationString)Data;
+                    if (value.Value == "")
+                    {
+                        return "null";
+                    }
+                    else
+                    {
+                        return value.Value;
+                    }
+                }
                 else if (PropertyType.IsAssignableTo(typeof(IRedArray)))
                 {
                     var value = (IRedArray)Data;
