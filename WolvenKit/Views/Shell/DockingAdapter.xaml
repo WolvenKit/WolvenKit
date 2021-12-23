@@ -69,6 +69,48 @@
                     <Setter Property="Margin" Value="-1" />
                 </Style>
             </syncfusion:DockingManager.Resources-->
+            <syncfusion:DockingManager.ContainerStyle>
+                    <Style TargetType="{x:Type syncfusion:DocumentContainer}" BasedOn="{StaticResource SyncfusionDocumentContainerStyle}">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <DrawingBrush
+                                Opacity="1.0"
+                                RenderOptions.CacheInvalidationThresholdMaximum="2.0"
+                                RenderOptions.CacheInvalidationThresholdMinimum="0.5"
+                                RenderOptions.CachingHint="Cache"
+                                Stretch="Uniform"
+                                TileMode="Tile"
+                                Viewport="0,0,90,90"
+                                ViewportUnits="Absolute">
+                                <DrawingBrush.Drawing>
+                                    <DrawingGroup>
+                                        <GeometryDrawing Brush="{StaticResource ContentBackground}">
+                                            <GeometryDrawing.Geometry>
+                                                <GeometryGroup>
+                                                    <RectangleGeometry Rect="0,0,90,90" />
+                                                </GeometryGroup>
+                                            </GeometryDrawing.Geometry>
+                                        </GeometryDrawing>
+                                        <DrawingGroup Opacity="0.02">
+                                            <ImageDrawing
+                                            ImageSource="pack://application:,,,/Resources/Media/Images/Application/Sammy_Grayscale.png"
+                                            Rect="0,0,70,80" />
+                                        </DrawingGroup>
+                                    </DrawingGroup>
+                                </DrawingBrush.Drawing>
+                            </DrawingBrush>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="CloseTabOnMiddleClick" Value="True" />
+                    <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt4}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=(tools_controls:DocumentContainer.Items).(tools_controls:DocumentCollection.Count), RelativeSource={RelativeSource Self}}" Value="0">
+                            <Setter Property="BorderThickness" Value="1" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </syncfusion:DockingManager.ContainerStyle>
             <syncfusion:DockingManager.Style>
                     <Style TargetType="{x:Type syncfusion:DockingManager}" BasedOn="{StaticResource SyncfusionDockingManagerStyle}">
                     <Setter Property="CloseButtonTemplate" Value="{StaticResource WolvenKitButtonsTemplate}" />
@@ -77,7 +119,7 @@
                     <Setter Property="RestoreButtonTemplate" Value="{StaticResource WolvenKitButtonsTemplate}" />
                     <Setter Property="MenuButtonTemplate" Value="{StaticResource WolvenKitButtonsTemplate}" />
                     <Setter Property="AwlButtonTemplate" Value="{StaticResource WolvenKitButtonsTemplate}" />
-                    <Setter Property="Background" Value="{StaticResource CloudDrawingBrushMain}" />
+                    <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
                     <Setter Property="TabItemsBackground" Value="{StaticResource ContentBackgroundAlt2}" />
                     <Setter Property="TabItemBackgroundSelected" Value="#373737" />
                     <Setter Property="ElementBorderThickness" Value="1" />
@@ -116,10 +158,10 @@
                     <Setter Property="TabItemSelectedForeground" Value="#ffffff" />
                     <Setter Property="TabPanelBackground" Value="{StaticResource ContentBackground}" />
                     <Setter Property="BorderThickness" Value="1,0,1,1" />
-                    <Setter Property="TabItemSelectedBorderBrush" Value="{StaticResource ContentBackgroundAlt4}" />
-                    <Setter Property="TabItemHoverBorderBrush" Value="#333333" />
+                    <Setter Property="TabItemSelectedBorderBrush" Value="{StaticResource BorderAlt}" />
+                    <Setter Property="TabItemHoverBorderBrush" Value="{StaticResource ContentBackgroundAlt3}" />
                     <Setter Property="CloseButtonType" Value="Individual" />
-                    <Setter Property="BorderBrush" Value="{StaticResource ContentBackground}" />
+                    <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt3}" />
                     <!--Setter Property="Margin" Value="-1" /-->
 
                     <Setter Property="TabItemSelectedBackground" Value="#313131" />
@@ -132,7 +174,7 @@
                     <Setter Property="HoverBackground" Value="{StaticResource ContentBackgroundAlt4}" />
                     <Setter Property="Foreground" Value="#ffffff" />
                     <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt2}" />
-                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="BorderThickness" Value="1,1,1,0" />
                     <Setter Property="Margin" Value="0" />
 
                 </Style>
@@ -152,7 +194,7 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type tools_controls:DockedElementTabbedHost}">
-                                        <Border Name="BorderWrap" Width="Auto" Background="Transparent" BorderBrush="{StaticResource BorderAlt}" BorderThickness="1" Focusable="True" SnapsToDevicePixels="True" FocusVisualStyle="{Binding Path=(tools_controls:DockedElementTabbedHost.DockingManager).(tools_controls:DockingManager.FocusVisualStyle), RelativeSource={RelativeSource TemplatedParent}}">
+                                        <Border Name="BorderWrap" Width="Auto" Background="Transparent" BorderBrush="{StaticResource ContentBackgroundAlt4}" BorderThickness="1" Focusable="True" SnapsToDevicePixels="True" FocusVisualStyle="{Binding Path=(tools_controls:DockedElementTabbedHost.DockingManager).(tools_controls:DockingManager.FocusVisualStyle), RelativeSource={RelativeSource TemplatedParent}}">
                                             <DockPanel Name="DockPanel" Width="Auto" Focusable="False" LastChildFill="True">
                                                 <tools_controls:DockHeaderPresenter Name="PART_Header" DockPanel.Dock="Top" IsTemplateParenKeyboardFocusWithin="{TemplateBinding IsKeyboardFocusWithin}" RenderTransformOrigin="0.5,0.5" Style="{Binding Path=(tools_controls:DockedElementTabbedHost.HostedElement).(tools_controls:DockingManager.HeaderStyle), RelativeSource={RelativeSource AncestorType={x:Type tools_controls:DockedElementTabbedHost}}}" />
                                                 <Grid Name="hostgrid">
@@ -192,7 +234,7 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type tools_controls:DockedElementTabbedHost}">
-                                        <Border Name="BorderWrapForTab" Width="Auto" Background="Transparent" BorderBrush="{StaticResource BorderAlt}" BorderThickness="1" SnapsToDevicePixels="True">
+                                        <Border Name="BorderWrapForTab" Width="Auto" Background="Transparent" BorderBrush="{StaticResource ContentBackgroundAlt3}" BorderThickness="1" SnapsToDevicePixels="True">
                                             <DockPanel Name="DockPanel" Width="Auto" LastChildFill="True">
                                                 <tools_controls:DockHeaderPresenter Name="PART_Header" DockPanel.Dock="Top" IsTemplateParenKeyboardFocusWithin="{TemplateBinding IsKeyboardFocusWithin}" RenderTransformOrigin="0.5,0.5" Style="{Binding Path=(tools_controls:DockedElementTabbedHost.HostedElement).(tools_controls:DockingManager.HeaderStyle), RelativeSource={RelativeSource AncestorType={x:Type tools_controls:DockedElementTabbedHost}}}" />
                                                 <Grid>
@@ -231,7 +273,7 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type tools_controls:DockedElementTabbedHost}">
-                                <Border Name="BorderWrap" Width="Auto" Background="Transparent" BorderBrush="{StaticResource BorderAlt}" BorderThickness="1" SnapsToDevicePixels="True" FocusVisualStyle="{Binding Path=(tools_controls:DockedElementTabbedHost.DockingManager).(tools_controls:DockingManager.FocusVisualStyle), RelativeSource={RelativeSource TemplatedParent}}">
+                                <Border Name="BorderWrap" Width="Auto" Background="Transparent" BorderBrush="{StaticResource ContentBackgroundAlt4}" BorderThickness="1" SnapsToDevicePixels="True" FocusVisualStyle="{Binding Path=(tools_controls:DockedElementTabbedHost.DockingManager).(tools_controls:DockingManager.FocusVisualStyle), RelativeSource={RelativeSource TemplatedParent}}">
                                     <DockPanel Name="DockPanel" Width="Auto" Focusable="False" LastChildFill="True">
                                         <tools_controls:DockHeaderPresenter Name="PART_Header" DockPanel.Dock="Top" IsTemplateParenKeyboardFocusWithin="{TemplateBinding IsKeyboardFocusWithin}" RenderTransformOrigin="0.5,0.5" Style="{Binding Path=(tools_controls:DockedElementTabbedHost.HostedElement).(tools_controls:DockingManager.HeaderStyle), RelativeSource={RelativeSource AncestorType={x:Type tools_controls:DockedElementTabbedHost}}}" />
                                         <Grid>

@@ -39,6 +39,10 @@ using System.Reflection;
 using System.Windows.Threading;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.ViewModels.Dialogs;
+using WolvenKit.ViewModels.HomePage;
+using System.Windows.Controls;
+using WolvenKit.ViewModels.Wizards;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -54,13 +58,9 @@ namespace WolvenKit.ViewModels.Shell
         private readonly INotificationService _notificationService;
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
         private readonly IProgressService<double> _progressService;
+        private readonly IWatcherService _watcherService;
 
-
-
-
-
-
-
+        private readonly HomePageViewModel _homePageViewModel;
 
         #endregion fields
 
@@ -77,7 +77,8 @@ namespace WolvenKit.ViewModels.Shell
             ISettingsManager settingsManager,
             INotificationService notificationService,
             IRecentlyUsedItemsService recentlyUsedItemsService,
-            IProgressService<double> progressService
+            IProgressService<double> progressService,
+            IWatcherService watcherService
         )
         {
             _updateService = updateService;
@@ -88,6 +89,9 @@ namespace WolvenKit.ViewModels.Shell
             _notificationService = notificationService;
             _recentlyUsedItemsService = recentlyUsedItemsService;
             _progressService = progressService;
+            _watcherService = watcherService;
+
+            _homePageViewModel = Locator.Current.GetService<HomePageViewModel>();
 
             #region commands
 
@@ -122,11 +126,20 @@ namespace WolvenKit.ViewModels.Shell
 
             OpenProjectCommand = ReactiveCommand.CreateFromTask<string, Unit>(OpenProjectAsync);
             DeleteProjectCommand = ReactiveCommand.Create<string>(DeleteProject);
-            NewProjectCommand = ReactiveCommand.CreateFromTask(NewProjectAsync);
+            NewProjectCommand = ReactiveCommand.Create(ExecuteNewProject);
+
+            ShowHomePageCommand = new RelayCommand(ExecuteShowHomePage, CanShowHomePage);
+            ShowSettingsCommand = new RelayCommand(ExecuteShowSettings, CanShowSettings);
+
+            CloseModalCommand = new RelayCommand(ExecuteCloseModal, CanCloseModal);
+            CloseOverlayCommand = new RelayCommand(ExecuteCloseOverlay, CanCloseOverlay);
+            CloseDialogCommand = new RelayCommand(ExecuteCloseDialog, CanCloseDialog);
 
             #endregion commands
 
             UpdateTitle();
+
+            SetActiveOverlay(_homePageViewModel);
 
             OnStartup();
 
@@ -296,10 +309,7 @@ namespace WolvenKit.ViewModels.Shell
                     return Unit.Default;
                 }
 
-                var ribbon = Locator.Current.GetService<RibbonViewModel>();
-                ribbon.StartScreenShown = false;
-                ribbon.BackstageIsOpen = false;
-
+                CloseModalCommand.Execute(null);
 
                 await _projectManager.LoadAsync(location);
 
@@ -321,97 +331,62 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public ReactiveCommand<Unit, Unit> NewProjectCommand { get; }
-        private async Task<Unit> NewProjectAsync()
+        private void ExecuteNewProject()
+        {
+            //IsOverlayShown = false;
+            SetActiveDialog(new ProjectWizardViewModel()
+            {
+                FileHandler = NewProject
+            });
+        }
+        private async Task NewProject(ProjectWizardViewModel project)
+        {
+
+            if (project == null)
+            {
+                CloseDialogCommand.Execute(null);
+                return;
+            }
+            CloseModalCommand.Execute(null);
+            await Task.Run(() => NewProjectTask(project)).ContinueWith((result) =>
+            {
+            });
+        }
+
+        private async Task NewProjectTask(ProjectWizardViewModel project)
         {
             try
             {
-                var location = await Interactions.NewProjectInteraction.Handle(Unit.Default);
-
-                if (string.IsNullOrWhiteSpace(location))
+                var projectLocation = Path.Combine(project.ProjectPath, project.ProjectName, project.ProjectName + ".cpmodproj");
+                var np = new Cp77Project(projectLocation)
                 {
-                    return Unit.Default;
-                }
+                    Name = project.ProjectName,
+                    Author = project.Author,
+                    Email = project.Email,
+                    Version = project.Version
+                };
+                _projectManager.ActiveProject = np;
+                await _projectManager.SaveAsync();
+                np.CreateDefaultDirectories();
 
-                var ribbon = Locator.Current.GetService<RibbonViewModel>();
-                ribbon.StartScreenShown = false;
-                ribbon.BackstageIsOpen = false;
+                await _projectManager.LoadAsync(projectLocation);
 
-                //using (_pleaseWaitService.PushInScope())
+                DispatcherHelper.RunOnMainThread(() =>
                 {
-                    switch (Path.GetExtension(location))
-                    {
-                        case ".w3modproj":
-                        {
-                            //var np = new Tw3Project(location)
-                            //{
-                            //    Name = Path.GetFileNameWithoutExtension(location),
-                            //    Author = "WolvenKit",
-                            //    Email = "",
-                            //    Version = "1.0"
+                    ActiveProject = _projectManager.ActiveProject;
+                });
 
-                            //};
-                            //_projectManager.ActiveProject = np;
-                            //await _projectManager.SaveAsync();
-                            //np.CreateDefaultDirectories();
-                            ////saveProjectImg(location);
-                            break;
-                        }
-                        case ".cpmodproj":
-                        {
-                            var np = new Cp77Project(location)
-                            {
-                                Name = Path.GetFileNameWithoutExtension(location),
-                                Author = "WolvenKit",
-                                Email = "",
-                                Version = "1.0"
-                            };
-                            _projectManager.ActiveProject = np;
-                            await _projectManager.SaveAsync();
-                            np.CreateDefaultDirectories();
-                            //saveProjectImg(location);
-                            break;
-                        }
-                        default:
-                            _loggerService.Error("Invalid project path!");
-                            break;
-                    }
-                }
-
-                await _projectManager.LoadAsync(location);
-
-                ActiveProject = _projectManager.ActiveProject;
-
-                switch (Path.GetExtension(location))
+                await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
                 {
-                    case ".w3modproj":
-                        await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
-                        {
-                            _notificationService.Success(
-                                "Project " + Path.GetFileNameWithoutExtension(location) +
-                                " loaded!");
-
-                        }, TaskContinuationOptions.OnlyOnRanToCompletion);
-                        break;
-                    case ".cpmodproj":
-                        await _gameControllerFactory.GetController().HandleStartup().ContinueWith(
-                            _ =>
-                            {
-                                _notificationService.Success("Project " +
-                                                             Path.GetFileNameWithoutExtension(location) +
-                                                             " loaded!");
-
-                            },
-                            TaskContinuationOptions.OnlyOnRanToCompletion);
-                        break;
-                }
+                    UpdateTitle();
+                    _notificationService.Success("Project " + project.ProjectName + " loaded!");
+                }, TaskContinuationOptions.OnlyOnRanToCompletion);
             }
             catch (Exception ex)
             {
                 _loggerService.Error(ex.Message);
                 _loggerService.Error("Failed to create a new project!");
             }
-
-            return Unit.Default;
 
         }
 
@@ -443,68 +418,105 @@ namespace WolvenKit.ViewModels.Shell
         //    // TODO: Implement this
         //}
 
-        public ICommand NewFileCommand { get; private set; }
-        private bool CanNewFile(string inputDir) => true;
-        private async void ExecuteNewFile(string inputDir)
+        public ICommand ShowHomePageCommand { get; private set; }
+        private bool CanShowHomePage() => !IsDialogShown;
+        private void ExecuteShowHomePage()
         {
-            var (model, file) = await Interactions.AddNewFile.Handle(Unit.Default);
-            if (file == null || string.IsNullOrEmpty(file))
+            _homePageViewModel.SelectedIndex = 0;
+            SetActiveOverlay(_homePageViewModel);
+        }
+
+        public ICommand ShowSettingsCommand { get; private set; }
+        private bool CanShowSettings() => !IsDialogShown;
+        private void ExecuteShowSettings()
+        {
+
+            _homePageViewModel.SelectedIndex = 1;
+            SetActiveOverlay(_homePageViewModel);
+        }
+
+        public ICommand NewFileCommand { get; private set; }
+        private bool CanNewFile(string inputDir) => ActiveProject != null && !IsDialogShown;
+        private void ExecuteNewFile(string inputDir)
+        {
+            SetActiveDialog(new NewFileViewModel()
             {
+                FileHandler = OpenFromNewFile
+            });
+        }
+
+        public async Task OpenFromNewFile(NewFileViewModel file)
+        {
+            CloseModalCommand.Execute(null);
+            if (file == null)
                 return;
-            }
-
-            var filename = $"{Path.GetFileNameWithoutExtension(file)}.{model.Extension.ToLower()}";
-
-            var fullPath = string.IsNullOrEmpty(inputDir)
-            ? Path.Combine(GetDefaultDir(model.Type), filename)
-            : Path.Combine(inputDir, filename);
-
-            // move file to location
-            if (File.Exists(fullPath))
+            _watcherService.IsSuspended = true;
+            await Task.Run(() => OpenFromNewFileTask(file)).ContinueWith(async (result) =>
             {
-                await Interactions.ShowMessageBoxAsync(
-                        $"A file with name {filename} is already part of your mod. Please give a unique name to the item you are adding, or delete the existing item first.",
-                        "WolvenKit",
-                        WMessageBoxButtons.Ok,
-                        WMessageBoxImage.Error);
-                return;
-            }
+                _watcherService.IsSuspended = false;
+                await _watcherService.RefreshAsync(ActiveProject);
+                await RequestFileOpen(file.FullPath);
+            });
+        }
 
-            switch (model.Type)
+        public async Task OpenFromNewFileTask(NewFileViewModel file)
+        {
+            Stream stream = null;
+            switch (file.SelectedFile.Type)
             {
                 case EWolvenKitFile.Redscript:
                 case EWolvenKitFile.Tweak:
-                    if (!string.IsNullOrEmpty(model.Template))
+                    if (!string.IsNullOrEmpty(file.SelectedFile.Template))
                     {
-                        using var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream($"WolvenKit.App.Resources.{model.Template}");
-                        using var fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write);
-                        resource.CopyTo(fileStream);
+                        await using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream($"WolvenKit.App.Resources.{file.SelectedFile.Template}"))
+                        {
+                            stream = new FileStream(file.FullPath, FileMode.Create, FileAccess.Write);
+                            resource.CopyTo(stream);
+                        }
                     }
                     else
                     {
-                        File.Create(fullPath);
+                        stream = File.Create(file.FullPath);
                     }
                     break;
                 case EWolvenKitFile.Cr2w:
-                    CreateCr2wFile(model);
+                    //CreateCr2wFile(SelectedFile);
                     break;
             }
+            stream.Dispose();
+
+            //return Task.CompletedTask;
 
             // Open file
-            //await RequestOpenFile(fullPath);
+            //await Locator.Current.GetService<AppViewModel>().RequestFileOpen(file.FullPath);
 
 
-            string GetDefaultDir(EWolvenKitFile type)
-            {
-                var project = _projectManager.ActiveProject as Cp77Project;
-                return type switch
-                {
-                    EWolvenKitFile.Redscript => project.ScriptDirectory,
-                    EWolvenKitFile.Tweak => project.TweakDirectory,
-                    EWolvenKitFile.Cr2w => project.ModDirectory,
-                    _ => throw new ArgumentOutOfRangeException(nameof(type)),
-                };
-            }
+            //if (file != null)
+            //{
+            //    _progressService.IsIndeterminate = true;
+            //    try
+            //    {
+            //        var fileViewModel = new RedDocumentViewModel(file.FileName);
+            //        await using (var stream = new MemoryStream())
+            //        {
+            //            file.Extract(stream);
+            //            fileViewModel.OpenStream(stream, null);
+            //        }
+
+            //        if (!DockedViews.Contains(fileViewModel))
+            //            DockedViews.Add(fileViewModel);
+            //        ActiveDocument = fileViewModel;
+            //        UpdateTitle();
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        _loggerService.Error(e.Message);
+            //    }
+            //    finally
+            //    {
+            //        _progressService.IsIndeterminate = false;
+            //    }
+            //}
 
         }
 
@@ -694,6 +706,35 @@ namespace WolvenKit.ViewModels.Shell
         //private bool CanShowCodeEditor() => _projectManager.ActiveProject != null;
         //private void ExecuteCodeEditor() => CodeEditorVM.IsVisible = !CodeEditorVM.IsVisible;
 
+        public ICommand CloseModalCommand { get; private set; }
+        private bool CanCloseModal() => IsDialogShown || IsOverlayShown;
+        private void ExecuteCloseModal()
+        {
+            if (IsDialogShown)
+                ShouldDialogShow = false;
+            if (IsOverlayShown)
+                ShouldOverlayShow = false;
+        }
+        public void FinishedClosingModal()
+        {
+            if (!ShouldDialogShow)
+                IsDialogShown = false;
+            if (!ShouldOverlayShow)
+                IsOverlayShown = false;
+        }
+        public ICommand CloseOverlayCommand { get; private set; }
+        private bool CanCloseOverlay() => IsOverlayShown;
+        private void ExecuteCloseOverlay()
+        {
+            ShouldOverlayShow = false;
+        }
+        public ICommand CloseDialogCommand { get; private set; }
+        private bool CanCloseDialog() => IsDialogShown;
+        private void ExecuteCloseDialog()
+        {
+            ShouldDialogShow = false;
+        }
+
         #endregion commands
 
         #region properties
@@ -775,6 +816,39 @@ namespace WolvenKit.ViewModels.Shell
         [Reactive] public string Status { get; set; }
 
         [Reactive] public string Title { get; set; }
+
+        [Reactive] public bool ShouldDialogShow { get; set; }
+        [Reactive] public bool ShouldOverlayShow { get; set; }
+        [Reactive] public bool IsOverlayShown { get; set; }
+        [Reactive] public bool IsDialogShown { get; set; }
+
+        private void OnAfterOverlayRendered()
+        {
+            IsOverlayShown = true;
+            ShouldOverlayShow = true;
+        }
+        private void OnAfterDialogRendered()
+        {
+            IsDialogShown = true;
+            ShouldDialogShow = true;
+        }
+
+        [Reactive] public ReactiveObject ActiveOverlay { get; set; }
+
+        public void SetActiveOverlay(ReactiveObject overlay)
+        {
+            ActiveOverlay = overlay;
+            //Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Render, (Action)OnAfterRendered);
+            Task.Run(OnAfterOverlayRendered);
+        }
+
+        [Reactive] public DialogViewModel ActiveDialog { get; set; }
+        public void SetActiveDialog(DialogViewModel modal)
+        {
+            ActiveDialog = modal;
+            //Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Render, (Action)OnAfterRendered);
+            Task.Run(OnAfterDialogRendered);
+        }
 
         [Reactive] public IDocumentViewModel ActiveDocument { get; set; }
 
@@ -900,7 +974,7 @@ namespace WolvenKit.ViewModels.Shell
                                                        path.Contains(_projectManager.ActiveProject
                                                            .RawDirectory);
 
-        private Task RequestFileOpen(string fullpath)
+        public Task RequestFileOpen(string fullpath)
         {
             var ext = Path.GetExtension(fullpath).ToUpper();
 
@@ -1067,6 +1141,7 @@ namespace WolvenKit.ViewModels.Shell
 
         //    mediator.SendMessage<string>(fullpath);
         //}
+
 
         #endregion methods
     }

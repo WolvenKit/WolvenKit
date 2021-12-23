@@ -86,17 +86,6 @@ namespace WolvenKit.Views.HomePage
                 guide.Visibility = Visibility.Hidden;
 
             }
-
-            PreviewKeyDown += new KeyEventHandler(HandleEsc);
-        }
-
-        private void HandleEsc(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Escape)
-            {
-                e.Handled = true;
-                _ribbon.BackstageIsOpen = false;
-            }
         }
 
         private void Guide_Finished(object sender, RoutedEventArgs e)

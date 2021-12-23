@@ -9,12 +9,16 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.Functionality.Commands;
+using System.Threading.Tasks;
 
 namespace WolvenKit.ViewModels.Wizards
 {
     public class ProjectWizardViewModel : DialogViewModel
     {
         #region Fields
+
+        public delegate Task ReturnHandler(ProjectWizardViewModel project);
+        public ReturnHandler FileHandler;
 
         public const string WitcherGameName = "Witcher 3";
         public const string CyberpunkGameName = "Cyberpunk 2077";
@@ -31,8 +35,8 @@ namespace WolvenKit.ViewModels.Wizards
             OpenProjectPathCommand = new RelayCommand(ExecuteOpenProjectPath, CanOpenProjectPath);
 
             CloseCommand = ReactiveCommand.Create(() => { });
-            OkCommand = ReactiveCommand.Create(() => { }, CanExecute);
-            CancelCommand = ReactiveCommand.Create(() => { });
+            CreateCommand = ReactiveCommand.Create(() => FileHandler(this), CanExecute);
+            Cancel2Command = ReactiveCommand.Create(() => FileHandler(null));
 
             ProjectType = new ObservableCollection<string> {"Cyberpunk 2077"};
             //ProjectType.Add("Witcher 3");
@@ -44,6 +48,9 @@ namespace WolvenKit.ViewModels.Wizards
         public sealed override ReactiveCommand<Unit, Unit> CancelCommand { get; set; }
         public sealed override ReactiveCommand<Unit, Unit> OkCommand { get; set; }
 
+        public ICommand CreateCommand { get; set; }
+        public ICommand Cancel2Command { get; set; }
+        [Reactive] public string WhyNotCreate { get; set; }
 
         #region Properties
 
@@ -51,6 +58,9 @@ namespace WolvenKit.ViewModels.Wizards
 
         [Reactive] public string ProjectName { get; set; }
         [Reactive] public string ProjectPath { get; set; }
+        [Reactive] public string Author { get; set; }
+        [Reactive] public string Email { get; set; }
+        [Reactive] public string Version { get; set; }
         [Reactive] public ObservableCollection<string> ProjectType { get; set; }
 
         private IObservable<bool> CanExecute =>
@@ -89,7 +99,7 @@ namespace WolvenKit.ViewModels.Wizards
                 AllowNonFileSystemItems = false,
                 Multiselect = false,
                 IsFolderPicker = true,
-                Title = "Select the WolvenKit project folder"
+                Title = "Select the folder to create the project in"
             };
             //dlg.Filters.Add(new CommonFileDialogFilter("Cyberpunk 2077 Project", "*.cpmodproj"));
 

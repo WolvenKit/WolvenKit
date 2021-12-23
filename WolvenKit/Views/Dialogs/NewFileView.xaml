@@ -13,50 +13,23 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     mc:Ignorable="d" 
     d:DesignHeight="600" d:DesignWidth="800"
-        xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
-
+    Width="800"
+    Height="600"
+    Background="{StaticResource ContentBackgroundAlt3}"
     >
 
-    <Grid
-        Margin="0"
-        HorizontalAlignment="Stretch"
-        VerticalAlignment="Stretch"
-        hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
+    <Grid Margin="20">
 
-        <Grid.Resources>
-            <ResourceDictionary>
-                <ResourceDictionary.MergedDictionaries>
-                    <hc:ThemeResources />
-                    <hc:Theme />
-                </ResourceDictionary.MergedDictionaries>
-            </ResourceDictionary>
-        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-
-        <syncfusion:WizardControl
-            CancelButtonCancelsWindow="True"
-            FinishButtonClosesWindow="True"
-            >
-            <syncfusion:WizardPage
-                BackVisibility="Collapsed"
-                CancelVisibility="Visible"
-                FinishVisibility="Visible"
-                HelpVisibility="Collapsed"
-                NextVisibility="Collapsed"
-                PageType="Exterior"
-                >
-
-                <Grid>
-
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
 
                     <!-- TOP FILE SELECTOR -->
                     <syncfusion:SfDataGrid Margin="5" x:Name="Categories"
@@ -116,23 +89,27 @@
                     </syncfusion:SfDataGrid>
 
                     <!-- BOTTOM NAME BAR -->
-                    <Border Grid.Row="1"  Grid.ColumnSpan="2" Margin="5">
-                        <hc:TextBox 
+            <Border Grid.Row="1"  Grid.ColumnSpan="2" Margin="5">
+                <hc:TextBox 
                             x:Name="FileName"
                             FlowDirection="LeftToRight"
                             hc:InfoElement.Title="Name: "
                             hc:InfoElement.TitlePlacement="Left" />
 
-                    </Border>
-                    
+            </Border>
+        <Grid Grid.Row="2" Height="28" Grid.ColumnSpan="2" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="1" Text="{Binding WhyNotCreate}" VerticalAlignment="Center" Foreground="{StaticResource WolvenKitRed}"/>
+            <Button Grid.Column="2"  Command="{Binding Cancel2Command}" Content="Cancel" Margin="10,0,0,0" Padding="12,0" HorizontalAlignment="Right"/>
+            <Button Grid.Column="3" Command="{Binding CreateCommand}" Content="Create" Margin="10,0,0,0" Padding="12,0" HorizontalAlignment="Right"/>
+        </Grid>
 
 
-
-
-                </Grid>
-
-            </syncfusion:WizardPage>
-        </syncfusion:WizardControl>
 
     </Grid>
 </reactiveUi:ReactiveUserControl>

@@ -81,6 +81,11 @@ namespace WolvenKit.Views.Shell
                 //    documentContextTab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, b));
 
                 #region commands
+                
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.ShowHomePageCommand,
+                        view => view.HomePageButton)
+                    .DisposeWith(disposables);
 
                 // App Menu
                 this.BindCommand(ViewModel,
@@ -162,7 +167,7 @@ namespace WolvenKit.Views.Shell
 
                 //Options
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel.ShowSettingsCommand,
+                        viewModel => viewModel._mainViewModel.ShowSettingsCommand,
                         view => view.OptionsShowSettingsButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
@@ -182,8 +187,8 @@ namespace WolvenKit.Views.Shell
 
                 // toolbar
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel._mainViewModel.NewProjectCommand,
-                        view => view.ToolbarNewProjectButton)
+                        viewModel => viewModel._mainViewModel.NewFileCommand,
+                        view => view.ToolbarNewButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
                         viewModel => viewModel._mainViewModel.SaveFileCommand,
@@ -198,12 +203,20 @@ namespace WolvenKit.Views.Shell
                         view => view.ToolbarSaveAllButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.NewProjectCommand,
+                        view => view.ToolbarNewProjectButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
                         viewModel => viewModel._mainViewModel.PackModCommand,
                         view => view.ToolbarPackProjectButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
                         viewModel => viewModel._mainViewModel.PackInstallModCommand,
                         view => view.ToolbarPackInstallButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.ShowSettingsCommand,
+                        view => view.ToolbarSettingsButton)
                     .DisposeWith(disposables);
 
                 #endregion
@@ -243,8 +256,6 @@ namespace WolvenKit.Views.Shell
 
         #endregion
 
-
-
         //private void SetRibbonUI()
         //{
         //    while (_ribbon.BackStageButton.IsVisible)
@@ -253,28 +264,6 @@ namespace WolvenKit.Views.Shell
         //    }
         //    Trace.WriteLine("Disabled File Button");
         //}
-
-        private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            //_ribbon.SetCurrentValue(Syncfusion.Windows.Tools.Controls.Ribbon.IsBackStageVisibleProperty, true);
-
-            ViewModel.StartScreenShown = false;
-            ViewModel.BackstageIsOpen = true;
-        }
-
-        private void Border_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            var brush = (Brush)Application.Current.FindResource("MahApps.Brushes.Accent3");
-
-            HomeHighLighter.SetCurrentValue(System.Windows.Controls.Panel.BackgroundProperty, brush);
-        }
-
-        private void Border_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            var brush = (Brush)Application.Current.FindResource("MahApps.Brushes.AccentBase");
-
-            HomeHighLighter.SetCurrentValue(System.Windows.Controls.Panel.BackgroundProperty, brush);
-        }
 
         private double _selectedDpiScale = double.NaN;
 
@@ -352,12 +341,9 @@ namespace WolvenKit.Views.Shell
         private void Ribbon_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
-            if (sender == TitlebarCoverer)
-            {
-                var mainWindow = (MainView)Locator.Current.GetService<IViewFor<AppViewModel>>();
-                if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
-                    mainWindow?.DragMove();
-            }
+            var mainWindow = (MainView)Locator.Current.GetService<IViewFor<AppViewModel>>();
+            if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
+                mainWindow?.DragMove();
         }
 
         ///// <summary>

@@ -276,9 +276,8 @@ namespace WolvenKit.ViewModels.Shared
 
         private void ExecuteHome()
         {
-            var ribbon = Locator.Current.GetService<RibbonViewModel>();
-            ribbon.StartScreenShown = false;
-            ribbon.BackstageIsOpen = false;
+            var main = Locator.Current.GetService<AppViewModel>();
+            main.CloseModalCommand.Execute(null);
         }
 
         //private void OnRecentlyUsedItemsServiceUpdated(object sender, EventArgs e)

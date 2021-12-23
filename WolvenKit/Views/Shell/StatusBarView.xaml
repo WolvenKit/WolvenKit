@@ -33,11 +33,11 @@
         <Fluent:StatusBar Background="#1f1f1f" Grid.Row="1">
 
             <Fluent:StatusBarItem Title="Status" HorizontalAlignment="Left">
-                <TextBlock Text="{Binding Status}" Margin="6,0,0,1"/>
+                <TextBlock Text="{Binding Status}" Margin="6,0,0,4"/>
             </Fluent:StatusBarItem>
 
             <Fluent:StatusBarItem HorizontalAlignment="Left"  >
-                <syncfusion:SfLinearProgressBar x:Name="StatusBarProgressBar" Height="16" Margin="6,0,0,0" Width="200"
+                <syncfusion:SfLinearProgressBar x:Name="StatusBarProgressBar" Height="16" Margin="6,0,0,2" Width="200"
                                                 TrackColor="#131313" ProgressColor="{StaticResource WolvenKitRed}"/>
             </Fluent:StatusBarItem>
 
@@ -47,7 +47,7 @@
                 ToolTip="Current Project and Version Number"
                 Value="Displays Current Project and Version Number">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="0,0,-10,1">
+                    <TextBlock Margin="0,0,-10,4">
                         <TextBlock.Text>
                             <MultiBinding StringFormat="{}{0} | WolvenKit {1}">
                                 <Binding Path="CurrentProject" />

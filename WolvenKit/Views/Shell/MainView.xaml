@@ -8,6 +8,12 @@
     xmlns:shell="clr-namespace:WolvenKit.Views.Shell"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
+    xmlns:dialogs="clr-namespace:WolvenKit.Views.Dialogs"
+    xmlns:dialogVMs="clr-namespace:WolvenKit.ViewModels.Dialogs;assembly=WolvenKit.App"
+    xmlns:wizards="clr-namespace:WolvenKit.Views.Wizards"
+    xmlns:wizardVMs="clr-namespace:WolvenKit.ViewModels.Wizards;assembly=WolvenKit.App"
+    xmlns:hpvm="clr-namespace:WolvenKit.ViewModels.HomePage;assembly=WolvenKit.App"
+    xmlns:hpv="clr-namespace:WolvenKit.Views.HomePage"
     syncfusionskin:SfSkinManager.Theme="{syncfusionskin:SkinManagerExtension ThemeName=MaterialDark}"
     IconAlignment="Left"
     Icon="TaskBarIcon.ico"
@@ -15,55 +21,244 @@
     TitleTextAlignment="Left"
     ResizeMode="CanResizeWithGrip"
     UseNativeChrome="True"
-    Title="{Binding Title, StringFormat=' {0}'}"
+    Title="{Binding Title}"
+    TitleBarHeight="32"
     TitleFontSize="12"
-    TitleBarForeground="#efefef"
     MinWidth="960"
     MinHeight="600"
     SizeToContent="Manual"
     AllowsTransparency="True"
     TitleBarBackground="Transparent"
     UseLayoutRounding="True"
-    ResizeBorderBrush="{StaticResource ContentBackgroundAlt4}"
-    ResizeBorderThickness="1"
-    Background="{StaticResource ContentBackgroundAlt2}"
+    ResizeBorderBrush="Transparent"
+    Background="Transparent"
     >
+    <!--TextBlock Text="{Binding Title}" FontSize="{Binding TitileFontSize}" VerticalAlignment="Center" Margin="10,0,0,0" Opacity="{Binding Opacity, ElementName=ModalOverlay}"/-->
+
+    <syncfusion:ChromelessWindow.Style>
+        <Style TargetType="{x:Type syncfusion:ChromelessWindow}" BasedOn="{StaticResource SyncfusionChromelessWindowStyle}">
+            <Setter Property="ResizeBorderThickness" Value="5,3,5,7" />
+            <Setter Property="TitleBarForeground" Value="#ffefefef" />
+            <Setter Property="TitleBarTemplate">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type syncfusion:TitleBar}">
+                        <Border Name="border" Width="Auto" BorderThickness="{StaticResource MaterialDark.BorderThickness}" Background="{Binding RelativeSource={RelativeSource FindAncestor , AncestorType={x:Type syncfusion:ChromelessWindow}}, Path=TitleBarBackground}" CornerRadius="{Binding RelativeSource={RelativeSource FindAncestor , AncestorType={x:Type syncfusion:ChromelessWindow}}, Path=CornerRadius, Converter={StaticResource CRConvert}, ConverterParameter=Top}">
+                            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,0,0,0" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="WindowState" Value="{x:Static WindowState.Maximized}" >
+                    <Setter Property="ResizeBorderThickness" Value="0,0,0,0" />
+                    <Setter Property="Margin" Value="-1,-2,-1,2" />
+                </Trigger>
+                <DataTrigger Binding="{Binding ShouldOverlayShow}" Value="True" >
+                    <Setter Property="TitleBarForeground" Value="#00efefef" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ShouldOverlayShow}" Value="True">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetProperty="TitleBarForeground.(SolidColorBrush.Color)" From="#ffefefef" To="#00efefef" Duration="0:0:0.3"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetProperty="TitleBarForeground.(SolidColorBrush.Color)" From="#00efefef" To="#ffefefef" Duration="0:0:0.3"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ShouldDialogShow}" Value="True">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetProperty="TitleBarForeground.(SolidColorBrush.Color)" From="#ffefefef" To="#22efefef" Duration="0:0:0.3" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetProperty="TitleBarForeground.(SolidColorBrush.Color)" From="#22efefef" To="#ffefefef" Duration="0:0:0.3"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </syncfusion:ChromelessWindow.Style>
     <syncfusion:ChromelessWindow.InputBindings>
         <KeyBinding Modifiers="Control" Key="N" Command="{Binding NewFileCommand}" />
         <KeyBinding Modifiers="Control" Key="S" Command="{Binding SaveFileCommand}" />
         <KeyBinding Modifiers="Control" Key="B" Command="{Binding PackModCommand}" />
+        <KeyBinding Key="Esc" Command="{Binding CloseModalCommand}" />
     </syncfusion:ChromelessWindow.InputBindings>
     <!--ResizeBorderBrush="#1f1f1f"-->
-    <Grid Background="{DynamicResource ContentBackgroundAlt2}">
-        <Grid.Resources>
-            <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" />
-            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-        </Grid.Resources>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <Grid Margin="0,-32,0,0">
+        <Border Margin="-6,-4,-6,-8">
+            <Grid>
+                <Rectangle Stroke="Black" Margin="7" RadiusX="8" RadiusY="8" Opacity="0.25"/>
+                <Rectangle Stroke="Black" Margin="6" RadiusX="9" RadiusY="9" Opacity="0.2"/>
+                <Rectangle Stroke="Black" Margin="5" RadiusX="10" RadiusY="10" Opacity="0.15"/>
+                <Rectangle Stroke="Black" Margin="4" RadiusX="11" RadiusY="11" Opacity="0.1"/>
+                <Rectangle Stroke="Black" Margin="3" RadiusX="12" RadiusY="12" Opacity="0.05"/>
+                <Rectangle Stroke="Black" Margin="2" RadiusX="13" RadiusY="13" Opacity="0.035"/>
+                <Rectangle Stroke="Black" Margin="1" RadiusX="14" RadiusY="14" Opacity="0.02"/>
+                <Rectangle Stroke="Black" Margin="0" RadiusX="15" RadiusY="15" Opacity="0.01"/>
+            </Grid>
+        </Border>
+        <Border Name="WindowMask" CornerRadius="5" Background="Black" BorderThickness="1" />
+        <Grid Background="{DynamicResource ContentBackgroundAlt2}">
+            <Grid.Resources>
+                <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" />
+                <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            </Grid.Resources>
 
-        <shell:RibbonView Grid.Row="0" Margin="0,0,0,0" />
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.OpacityMask>
+                <VisualBrush Visual="{Binding ElementName=WindowMask}" />
+            </Grid.OpacityMask>
 
-        <shell:StatusBarView Grid.Row="2" Margin="0,0,0,0" />
+            <Grid Grid.RowSpan="3" Panel.ZIndex="1000">
+                <Grid.Resources>
+                    <DataTemplate DataType="{x:Type dialogVMs:NewFileViewModel}">
+                        <dialogs:NewFileView ViewModel="{Binding}" />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type wizardVMs:ProjectWizardViewModel}">
+                        <wizards:ProjectWizardView ViewModel="{Binding}" />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type hpvm:HomePageViewModel}">
+                        <hpv:HomePageView ViewModel="{Binding}" />
+                    </DataTemplate>
+                    <Storyboard x:Key="OverlayFadeIn">
+                        <DoubleAnimation              
+                            Storyboard.TargetProperty="Opacity"
+                            From="0.0" To="1.0"
+                            Duration="0:0:0.3" FillBehavior="HoldEnd" />
+                        <!--ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)">
+                            <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Visible}"/>
+                        </ObjectAnimationUsingKeyFrames-->
+                        <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="IsHitTestVisible">
+                            <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True"/>
+                        </BooleanAnimationUsingKeyFrames>
+                    </Storyboard>
+                    <Storyboard x:Key="OverlayFadeOut" Completed="FadeOut_Completed">
+                        <DoubleAnimation
+                            Storyboard.TargetProperty="Opacity"
+                            From="1.0" To="0.0"
+                            Duration="0:0:0.3" />
+                        <!--ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)">
+                            <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="{x:Static Visibility.Visible}"/>
+                            <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Visibility.Collapsed}"/>
+                        </ObjectAnimationUsingKeyFrames-->
+                        <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="IsHitTestVisible">
+                            <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="False"/>
+                        </BooleanAnimationUsingKeyFrames>
+                    </Storyboard>
+                </Grid.Resources>
+                <ContentControl Content="{Binding ActiveOverlay}" Grid.RowSpan="5" Grid.ColumnSpan="5" Visibility="{Binding IsOverlayShown, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <ContentControl.Style>
+                        <Style TargetType="{x:Type ContentControl}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ShouldOverlayShow}" Value="True">
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard Storyboard="{StaticResource OverlayFadeIn}" />
+                                    </DataTrigger.EnterActions>
+                                    <DataTrigger.ExitActions>
+                                        <BeginStoryboard Storyboard="{StaticResource OverlayFadeOut}" />
+                                    </DataTrigger.ExitActions>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl>
+                <Border Name="ModalDialog" >
+                    <Border.Style>
+                        <Style TargetType="{x:Type Border}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ShouldDialogShow}" Value="True">
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard Storyboard="{StaticResource OverlayFadeIn}" />
+                                    </DataTrigger.EnterActions>
+                                    <DataTrigger.ExitActions>
+                                        <BeginStoryboard Storyboard="{StaticResource OverlayFadeOut}" />
+                                    </DataTrigger.ExitActions>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2*" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="15" />
+                            <RowDefinition Height="2*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="2*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Rectangle Fill="{StaticResource ContentBackground}" Opacity="0.8" Grid.RowSpan="5" Grid.ColumnSpan="5" MouseLeftButtonDown="Overlay_MouseLeftButtonDown" Visibility="{Binding IsDialogShown, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                        <Grid Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" Grid.ColumnSpan="3" Opacity="0.3" Visibility="{Binding IsDialogShown, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Rectangle Stroke="Black" Margin="15" RadiusX="3" RadiusY="3" Opacity="0.8"/>
+                            <Rectangle Stroke="Black" Margin="14" RadiusX="4" RadiusY="4" Opacity="0.75"/>
+                            <Rectangle Stroke="Black" Margin="13" RadiusX="5" RadiusY="5" Opacity="0.7"/>
+                            <Rectangle Stroke="Black" Margin="12" RadiusX="6" RadiusY="6" Opacity="0.65"/>
+                            <Rectangle Stroke="Black" Margin="11" RadiusX="7" RadiusY="7" Opacity="0.6"/>
+                            <Rectangle Stroke="Black" Margin="10" RadiusX="8" RadiusY="8" Opacity="0.55"/>
+                            <Rectangle Stroke="Black" Margin="9" RadiusX="9" RadiusY="9" Opacity="0.5"/>
+                            <Rectangle Stroke="Black" Margin="8" RadiusX="10" RadiusY="10" Opacity="0.45"/>
+                            <Rectangle Stroke="Black" Margin="7" RadiusX="11" RadiusY="11" Opacity="0.4"/>
+                            <Rectangle Stroke="Black" Margin="6" RadiusX="12" RadiusY="12" Opacity="0.35"/>
+                            <Rectangle Stroke="Black" Margin="5" RadiusX="13" RadiusY="13" Opacity="0.3"/>
+                            <Rectangle Stroke="Black" Margin="4" RadiusX="14" RadiusY="14" Opacity="0.25"/>
+                            <Rectangle Stroke="Black" Margin="3" RadiusX="15" RadiusY="15" Opacity="0.2"/>
+                            <Rectangle Stroke="Black" Margin="2" RadiusX="16" RadiusY="16" Opacity="0.15"/>
+                            <Rectangle Stroke="Black" Margin="1" RadiusX="17" RadiusY="17" Opacity="0.1"/>
+                            <Rectangle Stroke="Black" Margin="0" RadiusX="18" RadiusY="18" Opacity="0.05"/>
+                        </Grid>
+
+                        <Grid Grid.Row="2" Grid.Column="2" Visibility="{Binding IsDialogShown, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Grid.OpacityMask>
+                                <VisualBrush Visual="{Binding ElementName=ModalOverlayMask}" />
+                            </Grid.OpacityMask>
+                            <Border Name="ModalOverlayMask" CornerRadius="8" Background="White" BorderThickness="1"/>
+                            <Border CornerRadius="8" Background="{StaticResource ContentBackgroundAlt2}"/>
+                            <TextBlock Text="Loading..." FontSize="16" Margin="20,10"/>
+                            <ContentControl Content="{Binding ActiveDialog}" />
+                            <Border CornerRadius="8" BorderThickness="1" BorderBrush="{StaticResource BorderAlt}"/>
+                        </Grid>
+                    </Grid>
+                </Border>
+            </Grid>
         
-        <shell:DockingAdapter
+            <shell:RibbonView Grid.Row="0" Margin="0,0,0,0" />
+
+            <shell:StatusBarView Grid.Row="2" Margin="0,0,0,0" />
+
+            <shell:DockingAdapter
             Margin="5,2,5,0"
             x:Name="dockingAdapter"
             Grid.Row="1"
             Background="{StaticResource ContentBackground}"
              />
 
-
-        <!--ScrollViewer Grid.Row="3" Grid.RowSpan="3"  HorizontalAlignment="Right" VerticalScrollBarVisibility="Hidden" Panel.ZIndex="10">
-            <StackPanel
-                Margin="0,0,10,10"
-                VerticalAlignment="Top"
-                hc:Growl.GrowlParent="True" />
-        </ScrollViewer-->
-
+        </Grid>
+        <Border Name="WindowBorder" CornerRadius="{Binding CornerRadius, ElementName=WindowMask}" BorderBrush="{StaticResource ContentBackgroundAlt4}" BorderThickness="1" />
     </Grid>
 </syncfusion:ChromelessWindow>

@@ -18,7 +18,7 @@ namespace WolvenKit.ViewModels
     public class SettingsPageViewModel : PageViewModel
     {
         private readonly IUpdateService _updateService;
-        private readonly RibbonViewModel _ribbon;
+        private readonly AppViewModel _main;
 
         public SettingsPageViewModel(
             IUpdateService updateService,
@@ -26,7 +26,7 @@ namespace WolvenKit.ViewModels
         )
         {
             _updateService = updateService;
-            _ribbon = Locator.Current.GetService<RibbonViewModel>();
+            _main = Locator.Current.GetService<AppViewModel>();
             Settings = settingsManager;
 
             CheckForUpdatesCommand = ReactiveCommand.CreateFromTask(CheckForUpdates);
@@ -39,7 +39,7 @@ namespace WolvenKit.ViewModels
         public ReactiveCommand<Unit, Unit> CheckForUpdatesCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveCloseCommand { get; }
         private async Task CheckForUpdates() => await Task.Run(() => _updateService.CheckForUpdatesAsync());
-        private async Task SaveClose() => await Task.Run(() => _ribbon.BackstageIsOpen = false);
+        private async Task SaveClose() => await Task.Run(() => _main.CloseModalCommand.Execute(null));
 
     }
 }

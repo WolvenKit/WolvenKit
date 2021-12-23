@@ -85,7 +85,7 @@
 
     <!--  Grey Bar for the top -->
     <Border x:Name="TitlebarCoverer"
-            Margin="0,-32,0,0"
+            Margin="0,0,0,0"
             Padding="0,32,0,0"
             BorderThickness="0,0,0,0"
             Background="{StaticResource ContentBackgroundAlt2}"
@@ -137,7 +137,15 @@
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" Value="False">
                                 <Setter Property="Foreground" Value="{StaticResource Border}" />
+                                <Setter Property="Opacity" Value="0.5" />
                             </DataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding Foreground, RelativeSource={RelativeSource Self}}" Value="{StaticResource Border}" />
+                                    <Condition Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" Value="False" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Opacity" Value="1.0" />
+                            </MultiDataTrigger>
                         </Style.Triggers>
                     </Style>
                     <Style x:Key="WolvenKitToolBarButtonIconEraser" TargetType="{x:Type iconPacks:PackIconControlBase}" BasedOn="{StaticResource WolvenKitToolBarButtonIcon}">
@@ -145,9 +153,11 @@
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type UIElement}, AncestorLevel=4}}" Value="True">
                                 <Setter Property="Foreground" Value="{StaticResource ContentBackgroundAlt5}" />
+                                <Setter Property="Opacity" Value="1.0" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource AncestorType={x:Type Button}, AncestorLevel=4}}" Value="True">
                                 <Setter Property="Foreground" Value="{StaticResource ContentBackground}" />
+                                <Setter Property="Opacity" Value="1.0" />
                             </DataTrigger>
                             <MultiDataTrigger>
                                 <MultiDataTrigger.Conditions>
@@ -155,9 +165,11 @@
                                     <Condition Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource AncestorType={x:Type Button}, AncestorLevel=4}}" Value="True" />
                                 </MultiDataTrigger.Conditions>
                                 <Setter Property="Foreground" Value="{StaticResource ContentBackgroundAlt}" />
+                                <Setter Property="Opacity" Value="1.0" />
                             </MultiDataTrigger>
                             <DataTrigger Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" Value="False">
                                 <Setter Property="Foreground" Value="{StaticResource ContentBackgroundAlt2}" />
+                                <Setter Property="Opacity" Value="1.0" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -259,7 +271,31 @@
 
                 <ToolBar Background="Transparent">
                     <TextBlock Visibility="Collapsed" Text="File:" Height="30" Padding="5,7" Foreground="{StaticResource ContentForeground}" />
-                    <Button Command="{Binding NewFileCommand}" ToolTip="New File">
+                    <!--syncfusion:SplitButtonAdv Command="{Binding NewFileCommand}" Label="New File" Style="{StaticResource SyncfusionSplitButtonAdvStyle}" IconWidth="20">
+                        <syncfusion:SplitButtonAdv.IconTemplate>
+                            <DataTemplate>
+                                <Grid HorizontalAlignment="Center">
+                                <iconPacks:PackIconMaterial
+                                Padding="0,0,2,2"
+                                Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                Kind="File"
+                                Foreground="{StaticResource WolvenKitYellow}"/>
+                                    <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIconEraser}"
+                                Padding="6,6,-3,-3"
+                                Kind="Circle" />
+                                    <iconPacks:PackIconForkAwesome Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                Padding="8,8,-1,-1"
+                                Kind="PlusCircle" />
+                                </Grid>
+                            </DataTemplate>
+                        </syncfusion:SplitButtonAdv.IconTemplate>
+                    <syncfusion:DropDownMenuGroup>
+                            <MenuItem HorizontalAlignment="Left" Header="Tweak" />
+                            <MenuItem HorizontalAlignment="Left" Header="Redscript"/>
+                            <MenuItem HorizontalAlignment="Left" Header="RED File"/>
+                        </syncfusion:DropDownMenuGroup>
+                    </syncfusion:SplitButtonAdv-->
+                    <Button x:Name="ToolbarNewButton" ToolTip="New File">
                         <StackPanel Orientation="Horizontal">
                             <Grid>
                                 <iconPacks:PackIconMaterial
@@ -458,7 +494,7 @@
                         </MenuItem>
                     </Menu>
                     <TextBlock Text="Options:" Height="30" Padding="5,7" Foreground="{StaticResource ContentForeground}" Visibility="Collapsed"/>
-                    <Button Command="{Binding ShowSettingsCommand}" ToolTip="Settings">
+                    <Button x:Name="ToolbarSettingsButton" ToolTip="Settings">
                         <StackPanel Orientation="Horizontal">
                             <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
                                     Kind="Settings" />
@@ -481,35 +517,6 @@
                     </Button>
                 </ToolBar>
             </ToolBarTray>
-
-            <fluent:Ribbon
-            x:Name="ribbon"
-            Grid.Row="0"
-            Margin="0,0,0,0"
-            Visibility="Collapsed">
-                <fluent:Ribbon.Resources>
-                    <PopupAnimation x:Key="{x:Static SystemParameters.MenuPopupAnimationKey}">None</PopupAnimation>
-                </fluent:Ribbon.Resources>
-
-                <!--  StartScreen  -->
-                <fluent:Ribbon.Menu>
-                    <fluent:Backstage
-                        Width="500"
-                        x:Name="startScreen"
-                        CloseOnEsc="False"
-                        Background="{StaticResource ContentBackgroundAlt}"
-                        IsOpen="{Binding BackstageIsOpen}">
-                        <fluent:Backstage.Resources>
-                            <SolidColorBrush x:Key="Fluent.Ribbon.Brushes.Backstage.Background">LightBlue</SolidColorBrush>
-                            <SolidColorBrush x:Key="Fluent.Ribbon.Brushes.Backstage.Foreground">LightBlue</SolidColorBrush>
-                        </fluent:Backstage.Resources>
-                        <HomeView:HomePageView x:Name="HMPV" />
-                    </fluent:Backstage>
-                </fluent:Ribbon.Menu>
-
-            </fluent:Ribbon>
-
-
 
             <syncfusion:Ribbon
             x:Name="_ribbon"
@@ -2313,38 +2320,20 @@
                         </Style>
                     </Grid.Style>
 
-                    <Border
-					Background="Transparent"
-					MouseEnter="Border_MouseEnter"
-					MouseLeave="Border_MouseLeave"
-					MouseLeftButtonDown="Border_MouseLeftButtonDown">
-                        <Grid>
-                            <Border>
-                                <Border.OpacityMask>
-                                    <ImageBrush ImageSource="/Resources/Media/Images/Application/Sammy_Grayscale.png" />
-                                </Border.OpacityMask>
-                                <Grid
-								x:Name="HomeHighLighter"
-								Background="{DynamicResource MahApps.Brushes.AccentBase}" >
-                                </Grid>
-                            </Border>
-                        </Grid>
-                    </Border>
-
-                    <Border
-					Background="Transparent"
-					MouseEnter="Border_MouseEnter"
-					MouseLeave="Border_MouseLeave"
-					MouseLeftButtonDown="Border_MouseLeftButtonDown">
-                        <Border>
-                            <Border.OpacityMask>
-                                <ImageBrush ImageSource="/Resources/Media/Images/Application/Sammy_Alpha_Mask.png" />
-                            </Border.OpacityMask>
-                            <Grid>
-                                <Image Source="pack://application:,,,/Resources/Media/Images/Application/Sammy_Alpha_Mask.png" />
-                            </Grid>
-                        </Border>
-                    </Border>
+                    <Button Style="{StaticResource ButtonCustom}" Background="Transparent" x:Name="HomePageButton">
+                        <Image Source="pack://application:,,,/Resources/Media/Images/Application/Sammy_Home.png">
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Setter Property="Opacity" Value="1" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsMouseOver, ElementName=HomePageButton}" Value="True">
+                                            <Setter Property="Opacity" Value="0.8" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                    </Button>
 
                 </Grid>
 

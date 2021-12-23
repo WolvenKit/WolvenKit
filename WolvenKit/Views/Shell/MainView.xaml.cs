@@ -39,7 +39,6 @@ namespace WolvenKit.Views.Shell
 
             InitializeComponent();
 
-
             this.WhenActivated(disposables =>
             {
                 // interactions
@@ -121,6 +120,10 @@ namespace WolvenKit.Views.Shell
             });
         }
 
+        private void FadeOut_Completed(object sender, EventArgs e)
+        {
+            ViewModel.FinishedClosingModal();
+        }
 
         #region interactions
 
@@ -161,6 +164,13 @@ namespace WolvenKit.Views.Shell
 
         #endregion
 
+        private void Overlay_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+            var mainWindow = (MainView)Locator.Current.GetService<IViewFor<AppViewModel>>();
+            if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
+                mainWindow?.DragMove();
+        }
 
         protected override void OnClosing(CancelEventArgs e) => Application.Current.Shutdown();
     }

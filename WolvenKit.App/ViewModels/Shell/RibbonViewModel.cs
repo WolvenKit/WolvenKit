@@ -57,9 +57,6 @@ namespace WolvenKit.ViewModels.Shell
             _loggerService = loggerService;
             _settingsManager = settingsManager;
 
-            StartScreenShown = false;
-            BackstageIsOpen = true;
-
             //ViewSelectedCommand = new DelegateCommand<object>(ExecuteViewSelected, CanViewSelected);
             //AssetBrowserAddCommand = new RelayCommand(ExecuteAssetBrowserAdd, CanAssetBrowserAdd);
             //AssetBrowserOpenFileLocation = new RelayCommand(ExecuteAssetBrowserOpenFileLocation, CanAssetBrowserOpenFileLocation);
@@ -81,14 +78,6 @@ namespace WolvenKit.ViewModels.Shell
             //ViewCodeEditorCommand = ReactiveCommand.Create(() => _mainViewModel.ShowCodeEditorCommand.SafeExecute());
             ShowImportExportToolCommand = ReactiveCommand.Create(() => _mainViewModel.ShowImportExportToolCommand.SafeExecute());
 
-            ShowSettingsCommand = ReactiveCommand.Create(() =>
-            {
-                var homePage = Locator.Current.GetService<HomePageViewModel>();
-                homePage.SelectedIndex = 1;
-                BackstageIsOpen = true;
-
-                StartScreenShown = false;
-            });
             ShowBugReportCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 var result = await Interactions.ShowBugReport.Handle(Unit.Default);
@@ -155,7 +144,6 @@ namespace WolvenKit.ViewModels.Shell
         public ReactiveCommand<Unit, Unit> ViewCodeEditorCommand { get; }
         public ReactiveCommand<Unit, Unit> ShowImportExportToolCommand { get; }
 
-        public ReactiveCommand<Unit, Unit> ShowSettingsCommand { get; }
         public ReactiveCommand<Unit, Unit> ShowBugReportCommand { get; }
         public ReactiveCommand<Unit, Unit> ShowFeedbackCommand { get; }
 
@@ -165,10 +153,6 @@ namespace WolvenKit.ViewModels.Shell
         #endregion
 
         #region properties
-
-        [Reactive] public bool StartScreenShown { get; set; }
-
-        [Reactive] public bool BackstageIsOpen { get; set; }
 
         #endregion properties
 

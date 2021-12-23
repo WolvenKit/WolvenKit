@@ -21,13 +21,13 @@
     BorderThickness="1"
     BorderBrush="{StaticResource ContentBackgroundAlt4}"
         Background="{DynamicResource ContentBackgroundAlt2}"
+        MouseLeftButtonDown="Grid_MouseLeftButtonDown_1"
     >
 
 
 
     <Grid
         x:Name="FocusGrid"
-        MouseLeftButtonDown="Grid_MouseLeftButtonDown_1"
         hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
         <Grid.Resources>
@@ -324,7 +324,7 @@
         </TabControl>
 
         <!--  Min/Max/Close Buttons  -->
-        <Grid Grid.Column="2">
+        <!--Grid Grid.Column="2">
             <Grid.OpacityMask>
                 <VisualBrush Visual="{Binding ElementName=ButtonsBackground}" />
             </Grid.OpacityMask>
@@ -385,7 +385,7 @@
                 </Button>
             </StackPanel>
             </Border>
-        </Grid>
+        </Grid-->
 
 
 
