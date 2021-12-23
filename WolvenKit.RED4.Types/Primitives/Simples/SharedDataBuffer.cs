@@ -1,11 +1,15 @@
 using System;
+using System.ComponentModel;
 using System.Linq;
 
 namespace WolvenKit.RED4.Types
 {
     public class SharedDataBuffer : IRedPrimitive, IEquatable<SharedDataBuffer>
     {
+        [Browsable(false)]
         public RedBuffer Buffer { get; set; }
+
+        [Browsable(false)]
         public IParseableBuffer Data
         {
             get => Buffer.Data;

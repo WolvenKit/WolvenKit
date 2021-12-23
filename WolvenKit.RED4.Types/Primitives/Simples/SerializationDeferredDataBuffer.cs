@@ -1,17 +1,21 @@
 using System;
 using System.Diagnostics;
+using System.ComponentModel;
 
 namespace WolvenKit.RED4.Types
 {
     [RED("serializationDeferredDataBuffer")]
     public class SerializationDeferredDataBuffer : IRedPrimitive, IEquatable<SerializationDeferredDataBuffer>
     {
+        [Browsable(false)]
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public Red4File File { get; set; }
+
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ushort Pointer { get; set; }
 
+        [Browsable(false)]
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public RedBuffer Buffer
         {
@@ -37,6 +41,7 @@ namespace WolvenKit.RED4.Types
             }
         }
 
+        [Browsable(false)]
         public IParseableBuffer Data
         {
             get => Buffer.Data;

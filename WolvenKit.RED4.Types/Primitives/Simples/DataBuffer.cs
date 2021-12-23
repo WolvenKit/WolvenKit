@@ -1,18 +1,22 @@
 using System;
 using System.Diagnostics;
+using System.ComponentModel;
 
 namespace WolvenKit.RED4.Types
 {
     public class DataBuffer : IRedDataBuffer, IEquatable<DataBuffer>
     {
+        [Browsable(false)]
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public Red4File File { get; set; }
 
+        [Browsable(false)]
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public int Pointer { get; set; } = -1;
 
         private RedBuffer _inlineBuffer;
 
+        [Browsable(false)]
         public RedBuffer Buffer
         {
             get
@@ -49,6 +53,7 @@ namespace WolvenKit.RED4.Types
             }
         }
 
+        [Browsable(false)]
         public IParseableBuffer Data
         {
             get => Buffer.Data;

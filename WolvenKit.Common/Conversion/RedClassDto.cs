@@ -14,18 +14,8 @@ namespace WolvenKit.Common.Conversion
     public class RedClassDto : DynamicObject
     {
         internal object Header;
-
-        //public bool ShouldSerializeHeader() => Header != null;
-
         internal string Type;
-
-        //public bool ShouldSerializeType() => Properties.Count > 0;
-
         internal Dictionary<string, object> Properties = new();
-
-        //public bool ShouldSerializeProperties() => Properties.Count > 0;
-
-
         internal RedClassDto _parent;
         internal IRedType _data;
         internal Type _propertyType;
@@ -72,64 +62,7 @@ namespace WolvenKit.Common.Conversion
                 {
                     data = handle.File.Chunks[handle.Pointer];
                 }
-                if (data is SerializationDeferredDataBuffer sddb)
-                {
-                    if (sddb.Buffer.Data is Package04 p4)
-                    {
-                        var chunks = p4.Chunks;
-                        for (var i = 0; i < chunks.Count; i++)
-                        {
-                            var obj = PrimativeDecider(chunks[i], null, this);
-                            if (obj is RedClassDto rcd)
-                            {
-                                Properties.Add(":" + rcd.Type, obj);
-                            }
-                            else
-                            {
-                                Properties.Add(":" + obj.GetType().Name, obj);
-                            }
-                        }
-                    }
-                }
-                else if (data is DataBuffer db)
-                {
-                    if (db.Buffer.Data is Package04 p4)
-                    {
-                        var chunks = p4.Chunks;
-                        for (var i = 0; i < chunks.Count; i++)
-                        {
-                            var obj = PrimativeDecider(chunks[i], null, this);
-                            if (obj is RedClassDto rcd)
-                            {
-                                Properties.Add(":" + rcd.Type, obj);
-                            }
-                            else
-                            {
-                                Properties.Add(":" + obj.GetType(), obj);
-                            }
-                        }
-                    }
-                }
-                else if (data is SharedDataBuffer sdb)
-                {
-                    if (sdb.Buffer.Data is Package04 p4)
-                    {
-                        var chunks = p4.Chunks;
-                        for (var i = 0; i < chunks.Count; i++)
-                        {
-                            var obj = PrimativeDecider(chunks[i], null, this);
-                            if (obj is RedClassDto rcd)
-                            {
-                                Properties.Add(":" + rcd.Type, obj);
-                            }
-                            else
-                            {
-                                Properties.Add(":" + obj.GetType(), obj);
-                            }
-                        }
-                    }
-                }
-                else if (data is RedBaseClass redClass)
+                if (data is RedBaseClass redClass)
                 {
                     var pis = RedReflection.GetTypeInfo(redClass.GetType()).PropertyInfos;
                     pis.Sort((a, b) => a.Name.CompareTo(b.Name));
@@ -211,6 +144,39 @@ namespace WolvenKit.Common.Conversion
                 }
                 return list;
             }
+
+            Package04 pkg = null;
+
+            if (data is SerializationDeferredDataBuffer sddb && sddb.Buffer.Data is Package04 sddbp4)
+                pkg = sddbp4;
+            else if (data is DataBuffer db && db.Buffer.Data is Package04 dbp4)
+                pkg = dbp4;
+            else if (data is SharedDataBuffer sdb && sdb.Buffer.Data is Package04 sdbp4)
+                pkg = sdbp4;
+
+            if (pkg != null)
+            {
+                var list = new List<object>();
+                var chunks = pkg.Chunks;
+                for (var i = 0; i < chunks.Count; i++)
+                {
+                    var obj = PrimativeDecider(chunks[i], null, this);
+                    if (obj is RedClassDto rcd)
+                    {
+                        list.Add(new Dictionary<string, object>() {
+                            {":" + rcd.Type, obj }
+                        });
+                    }
+                    else
+                    {
+                        list.Add(new Dictionary<string, object>() {
+                            { ":" + obj.GetType(), obj }
+                        });
+                    }
+                }
+                return list;
+            }
+
             switch (data)
             {
                 case CBool b:
