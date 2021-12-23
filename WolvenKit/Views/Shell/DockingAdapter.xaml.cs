@@ -63,12 +63,17 @@ namespace WolvenKit.Views.Shell
         /// <param name="e"></param>
         private void PART_DockingManagerOnCloseButtonClick(object sender, CloseButtonEventArgs e)
         {
-            if (e.TargetItem is ContentControl { Content: IDocumentViewModel vm })
+            if (e.TargetItem is ContentControl { Content: DocumentViewModel vm })
             {
+                if (vm.IsDirty && MessageBox.Show("Unsaved changes will be lost - are you sure you want to close this file?", "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                {
+                    e.Cancel = true;
+                    return;
+                }
                 vm.Close.Execute().Subscribe();
 
                 (ItemsSource as IList).Remove(vm);
-
+                viewModel.UpdateTitle();
             }
         }
 

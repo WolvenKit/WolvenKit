@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using DynamicData.Kernel;
 using ReactiveUI;
@@ -160,20 +161,28 @@ namespace WolvenKit.ViewModels.Documents
 
         private void PopulateItems(CR2WFile w2rcFile)
         {
-            var main = new W2rcFileViewModel(w2rcFile);
-            TabItemViewModels.Add(new W2rcFileViewModel(w2rcFile));
-            main.WhenAnyValue(x => x.IsDirty).Subscribe(x => SetIsDirty(IsDirty || x));
+            var main = new W2rcFileViewModel(w2rcFile, SetIsDirty);
+            TabItemViewModels.Add(main);
             for (int i = 0; i < w2rcFile.Buffers.Count; i++)
             {
-                var view = new W2rcBufferViewModel(w2rcFile, i);
+                var view = new W2rcBufferViewModel(w2rcFile, i, SetIsDirty);
                 TabItemViewModels.Add(view);
-                view.WhenAnyValue(x => x.IsDirty).Subscribe(x => SetIsDirty(IsDirty || x));
             }
-
             SelectedIndex = 0;
 
             SelectedTabItemViewModel = TabItemViewModels.FirstOrDefault();
+
+            //TabItemViewModels.CollectionChanged += TabItemViewModels_CollectionChanged;
+            //this.WhenAnyValue(x => x.TabItemViewModels).Select(items => items.Any(x => x.IsDirty)).Subscribe(items => SetIsDirty(true));
         }
+
+        //private void TabItemViewModels_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        //{
+        //    foreach (RedDocumentItemViewModel item in e.NewItems)
+        //    {
+        //        SetIsDirty(IsDirty || item.IsDirty);
+        //    }
+        //}
 
         #endregion
 

@@ -26,9 +26,14 @@ namespace WolvenKit.ViewModels.Documents
     {
         private int _bufferIndex;
 
-        public W2rcBufferViewModel(CR2WFile w2rcFile, int bufferIndex) : base(w2rcFile)
+        public W2rcBufferViewModel(CR2WFile w2rcFile, int bufferIndex, DirtyDelegate setIsDirty) : base(w2rcFile, setIsDirty)
         {
             _bufferIndex = bufferIndex;
+
+            if (_file.Buffers[_bufferIndex] != null && _file.Buffers[_bufferIndex].Data is Package04 pkg)
+            {
+                Chunks = pkg.Chunks?.Select(_ => new ChunkViewModel(_, this)).ToList() ?? null;
+            }
 
             if (_file.Chunks[0] is not CBitmapTexture xbm)
             {
@@ -75,18 +80,6 @@ namespace WolvenKit.ViewModels.Documents
         }
 
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.W2rcBuffer;
-
-        public override List<ChunkViewModel> Chunks
-        {
-            get
-            {
-                if (_file.Buffers[_bufferIndex] != null && _file.Buffers[_bufferIndex].Data is Package04 pkg)
-                {
-                    return pkg.Chunks?.Select(_ => new ChunkViewModel(_)).ToList() ?? null;
-                }
-                return null;
-            }
-        }
 
         #region methods
 

@@ -7,7 +7,8 @@ namespace WolvenKit.ViewModels.Documents
     {
         public abstract ERedDocumentItemType DocumentItemType { get; }
 
-        [Reactive] public bool IsDirty { get; set; }
+        public delegate void DirtyDelegate(bool isDirty);
+        public DirtyDelegate SetIsDirty { get; set; }
 
         public RedDocumentItemViewModel()
         {

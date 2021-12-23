@@ -29,7 +29,7 @@ namespace WolvenKit.ViewModels.Documents
     {
         protected readonly CR2WFile _file;
 
-        public W2rcFileViewModel(CR2WFile file)
+        public W2rcFileViewModel(CR2WFile file, DirtyDelegate setIsDirty)
         {
             OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport);
             //ExportChunkCommand = new DelegateCommand<ChunkViewModel>((p) => ExecuteExportChunk(p), (p) => CanExportChunk(p));
@@ -38,15 +38,19 @@ namespace WolvenKit.ViewModels.Documents
 
             _file = file;
 
+            SetIsDirty = setIsDirty;
+
             //RootChunk = Chunks[0];
 
-            if (Chunks != null)
-            {
-                foreach (ChunkViewModel item in Chunks)
-                {
-                    item.WhenAnyValue(x => x.IsDirty).Subscribe(x => IsDirty |= x);
-                }
-            }
+            Chunks = _file.Chunks.Select(_ => new ChunkViewModel(_, this)).ToList();
+
+            //if (Chunks != null)
+            //{
+            //    foreach (ChunkViewModel item in Chunks)
+            //    {
+            //        item.WhenAnyValue(x => x.IsDirty).Subscribe(x => IsDirty |= x);
+            //    }
+            //}
             //_file.WhenAnyValue(x => x).Subscribe(x => IsDirty |= true);
         }
 
@@ -60,9 +64,7 @@ namespace WolvenKit.ViewModels.Documents
 
         //public List<ICR2WBuffer> Buffers => _file.Buffers;
 
-        public virtual List<ChunkViewModel> Chunks => _file.Chunks
-            //.Where(_ => _.VirtualParentChunk == null)
-            .Select(_ => new ChunkViewModel(_)).ToList();
+        public virtual List<ChunkViewModel> Chunks { get; set; }
 
         [Reactive] public ChunkViewModel SelectedChunk { get; set; }
 

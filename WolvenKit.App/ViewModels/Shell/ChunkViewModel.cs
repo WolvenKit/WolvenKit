@@ -26,6 +26,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using System.Text;
 using System.Reactive;
 using WolvenKit.RED4.Archive.Buffer;
+using WolvenKit.ViewModels.Documents;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -37,11 +38,19 @@ namespace WolvenKit.ViewModels.Shell
         public ChunkViewModel(IRedType export)
         {
             Data = export;
-            Data.WhenAnyValue(x => x).Subscribe(x => IsDirty = true);
             OpenRefCommand = new DelegateCommand<IRedRef>(p => ExecuteOpenRef(p), CanOpenRef);
             ExportChunkCommand = new DelegateCommand((p) => ExecuteExportChunk(), (p) => CanExportChunk());
             AddItemToArrayCommand = new DelegateCommand((p) => ExecuteAddItemToArray(), (p) => CanAddItemToArray());
             DeleteItemCommand = new DelegateCommand((p) => ExecuteDeleteItem(), (p) => CanDeleteItem());
+        }
+
+        public ChunkViewModel(IRedType export, W2rcFileViewModel file) : this(export)
+        {
+            File = file;
+            this.Data.WhenAnyValue(x => x).Subscribe((x) =>
+            {
+                this.File.SetIsDirty(true);
+            });
         }
 
         public ChunkViewModel(string name, IRedType export) : this(export)
@@ -57,7 +66,7 @@ namespace WolvenKit.ViewModels.Shell
         public ChunkViewModel(IRedType export, ChunkViewModel parent) : this(export)
         {
             Parent = parent;
-            this.WhenAnyValue(x => x.IsDirty).Subscribe(x => Parent.IsDirty |= x);
+            File = Parent.File;
         }
 
         public ChunkViewModel(string name, IRedType export, ChunkViewModel parent) : this(export, parent)
@@ -69,13 +78,13 @@ namespace WolvenKit.ViewModels.Shell
 
         #region Properties
 
+        public W2rcFileViewModel File;
         private IRedType _data;
         public IRedType Data
         {
             get => _data;
             set => this.RaiseAndSetIfChanged(ref _data, value);
         }
-        [Reactive] public bool IsDirty { get; protected set; }
         public ChunkViewModel Parent { get; set; }
         public int? Index { get; set; }
 
@@ -168,20 +177,19 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         Type type = typeof(RedArrayItem<>).MakeGenericType(PropertyType);
                         var rai = (IRedType)System.Activator.CreateInstance(type, ar, ar.IndexOf(Data));
-                        rai.WhenAnyValue(x => x).Subscribe(x => IsDirty = true);
                         return _propertyGridData = rai;
                     }
                     if (Parent != null && Parent.Data is IRedClass cls && propertyName != null)
                     {
                         Type type = typeof(RedClassProperty<>).MakeGenericType(PropertyType);
                         var rcp = (IRedType)System.Activator.CreateInstance(type, cls, propertyName);
-                        rcp.WhenAnyValue(x => x).Subscribe(x => IsDirty = true);
+                        //rcp.WhenAnyValue(x => x).Subscribe(x => IsDirty = true);
                         return _propertyGridData = rcp;
                     }
                     if (Data is IRedArray ary)
                     {
                         var raw = new RedArrayWrapper(ary);
-                        raw.WhenAnyValue(x => x).Subscribe(x => IsDirty = true);
+                        //raw.WhenAnyValue(x => x).Subscribe(x => IsDirty = true);
                         return _propertyGridData = raw;
                     }
                     if (PropertyType.IsAssignableTo(typeof(IRedClass)))
@@ -621,6 +629,7 @@ namespace WolvenKit.ViewModels.Shell
             (Data as IRedArray).Add(newItem);
             _properties.Add(new ChunkViewModel(newItem, this));
             IsExpanded = true;
+            this.File.SetIsDirty(true);
         }
 
         public ICommand DeleteItemCommand { get; private set; }
@@ -633,6 +642,7 @@ namespace WolvenKit.ViewModels.Shell
                 Parent.IsSelected = true;
                 ary.Remove(Data);
                 Parent.Properties.Remove(this);
+                this.File.SetIsDirty(true);
             }
         }
 
