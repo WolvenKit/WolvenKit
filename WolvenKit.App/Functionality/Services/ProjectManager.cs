@@ -169,10 +169,9 @@ namespace WolvenKit.Functionality.Services
         {
             try
             {
-                var projectFolder = Path.GetDirectoryName(ActiveProject.Location);
-                if (!Directory.Exists(projectFolder))
+                if (!Directory.Exists(ActiveProject.ProjectDirectory))
                 {
-                    Directory.CreateDirectory(projectFolder);
+                    Directory.CreateDirectory(ActiveProject.ProjectDirectory);
                 }
 
                 await using var fs = new FileStream(ActiveProject.Location, FileMode.Create, FileAccess.Write);
