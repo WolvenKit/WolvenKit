@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
@@ -33,12 +34,20 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var json = "";
-            var dto = new RedClassDto(cr2w.RootChunk, new
+            var list = new List<object>();
+            foreach (var chunk in cr2w.Chunks)
+            {
+                list.Add(new Dictionary<string, object>() {
+                    { ":" + chunk.RedType, new RedClassDto(chunk) }
+                });
+            }
+            var dto = new
             {
                 WolvenKitVersion = "8.4.0",
                 WKitJsonVersion = "0.0.1",
-                Exported = DateTime.UtcNow.ToString("o")
-            });
+                Exported = DateTime.UtcNow.ToString("o"),
+                Chunks = list
+            };
             json = JsonConvert.SerializeObject(dto, Formatting.Indented);
 
             if (string.IsNullOrEmpty(json))

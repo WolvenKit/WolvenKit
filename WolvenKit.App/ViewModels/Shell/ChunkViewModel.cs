@@ -177,6 +177,7 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         Type type = typeof(RedArrayItem<>).MakeGenericType(PropertyType);
                         var rai = (IRedType)System.Activator.CreateInstance(type, ar, ar.IndexOf(Data));
+                        //rai.WhenAnyValue(x => x).Subscribe(x => IsDirty = true);
                         return _propertyGridData = rai;
                     }
                     if (Parent != null && Parent.Data is IRedClass cls && propertyName != null)
@@ -203,6 +204,7 @@ namespace WolvenKit.ViewModels.Shell
 
                     if (data is IRedBaseHandle handle)
                     {
+                        this.File.Chunks[handle.Pointer].IsHandled = true;
                         return _propertyGridData = handle?.File?.Chunks[handle.Pointer] ?? null;
                     }
                     else 
@@ -232,6 +234,7 @@ namespace WolvenKit.ViewModels.Shell
                         var obj = Data;
                         if (Data is IRedBaseHandle handle)
                         {
+                            this.File.Chunks[handle.Pointer].IsHandled = true;
                             obj = handle.File.Chunks[handle.Pointer];
                         }
                         if (obj is IRedArray ary)
@@ -267,9 +270,28 @@ namespace WolvenKit.ViewModels.Shell
                                 _properties.Add(new ChunkViewModel(i, chunks[i], this));
                             }
                         }
-                        else if (obj is DataBuffer db && db.Data is Package04 p42)
+                        else if (obj is SharedDataBuffer sdb)
                         {
-                            var chunks = p42.Chunks;
+                            if (sdb.Data is Package04 p42)
+                            {
+                                var chunks = p42.Chunks;
+                                for (int i = 0; i < chunks.Count; i++)
+                                {
+                                    _properties.Add(new ChunkViewModel(i, chunks[i], this));
+                                }
+                            }
+                            if (sdb.File is CR2WFile cr2)
+                            {
+                                var chunks = cr2.Chunks;
+                                for (int i = 0; i < chunks.Count; i++)
+                                {
+                                    _properties.Add(new ChunkViewModel(i, chunks[i], this));
+                                }
+                            }
+                        }
+                        else if (obj is DataBuffer db && db.Data is Package04 p43)
+                        {
+                            var chunks = p43.Chunks;
                             for (int i = 0; i < chunks.Count; i++)
                             {
                                 _properties.Add(new ChunkViewModel(i, chunks[i], this));
@@ -296,6 +318,8 @@ namespace WolvenKit.ViewModels.Shell
         [Reactive] public bool IsDeleteReady { get; set; }
 
         [Reactive] public bool IsExpanded { get; set; }
+
+        [Reactive] public bool IsHandled { get; set; }
 
         public string propertyName { get; }
         public string Name { get
@@ -384,7 +408,7 @@ namespace WolvenKit.ViewModels.Shell
 
         public bool IsInArray { get
             {
-                return Parent != null && (Parent.Data is IRedArray || Parent.Data is DataBuffer || Parent.Data is SerializationDeferredDataBuffer);
+                return Parent != null && (Parent.Data is IRedArray || Parent.Data is DataBuffer || Parent.Data is SerializationDeferredDataBuffer || Parent.Data is SharedDataBuffer);
             }
         }
 
@@ -450,6 +474,11 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     var value = (IRedBitField)Data;
                     return value.ToBitFieldString();
+                }
+                else if (PropertyType.IsAssignableTo(typeof(TweakDBID)))
+                {
+                    var value = (TweakDBID)Data;
+                    return value.Value.ToString();
                 }
                 else if (PropertyType.IsAssignableTo(typeof(CBool)))
                 {

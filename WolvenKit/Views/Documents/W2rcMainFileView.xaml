@@ -91,6 +91,9 @@
                         <DataTrigger Binding="{Binding IsInArray}" Value="True">
                             <Setter Property="Text" Value="{Binding Value}"/>
                         </DataTrigger>
+                        <DataTrigger Binding="{Binding IsHandled}" Value="True">
+                            <Setter Property="Foreground" Value="{StaticResource Border}" />
+                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
                 
@@ -105,12 +108,19 @@
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsHandled}" Value="True">
+                                        <Setter Property="Foreground" Value="{StaticResource Border}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
                         </Grid.Resources>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Width="Auto" Text="{Binding Name}"  Margin="0,0,0,2" Grid.Column="1" />
+                        <TextBlock Width="Auto" Text="{Binding Name}"  Margin="0,0,0,2" Grid.Column="1"/>
                         <TextBlock Width="Auto" Text="{Binding Type, StringFormat=' {0}'}"  Margin="0,0,0,2" Grid.Column="2"
                             Style="{StaticResource ExpanderHider}" Foreground="{StaticResource Border}" />
                     </Grid>
@@ -118,6 +128,22 @@
 
                 <DataTemplate x:Key="PropertyValueTemplate" DataType="{x:Type shell:ChunkViewModel}">
                     <Grid>
+                        <Grid.Resources>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsHandled}" Value="True">
+                                        <Setter Property="Foreground" Value="{StaticResource Border}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                            <Style TargetType="{x:Type iconPacks:PackIconCodicons}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsHandled}" Value="True">
+                                        <Setter Property="Foreground" Value="{StaticResource Border}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Resources>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="20" />
                             <ColumnDefinition Width="Auto" />
@@ -126,7 +152,7 @@
                         </Grid.ColumnDefinitions>
                         <iconPacks:PackIconCodicons Kind="{Binding Extension}" Height="15"
                             Width="15" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0,0,6,0" />
-                        <TextBlock Style="{StaticResource PropertyValueStyle}" Margin="0,0,0,2" Grid.Column="1"/>
+                        <TextBlock Name="PropertyValue" Style="{StaticResource PropertyValueStyle}" Margin="0,0,0,2" Grid.Column="1"/>
                         <ToggleButton x:Name="DeleteButton" HorizontalAlignment="Left" IsChecked="{Binding IsDeleteReady}"
                                     Style="{StaticResource DeleteButtonStyle}" Grid.Column="2"
                                     Margin="5,-4,0,-2" Padding="0"
@@ -170,8 +196,11 @@
 
                 <converters:TreeViewItemTemplateSelector x:Name="itemTemplateSelector" x:Key="itemTemplateSelector">
                     <converters:TreeViewItemTemplateSelector.PropertyTemplate>
-                        <DataTemplate>
+                        <DataTemplate DataType="{x:Type shell:ChunkViewModel}">
                             <Grid ToolTip="{Binding Type}" Tag="{Binding}" Background="Transparent">
+                                <Grid.CommandBindings>
+                                    <CommandBinding Command="ApplicationCommands.Copy" Executed="Copy_Executed" CanExecute="Copy_CanExecute"/>
+                                </Grid.CommandBindings>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Style="{StaticResource ArrayNameColumnWidth}" />
                                     <ColumnDefinition Width="Auto" />
@@ -182,7 +211,24 @@
                                 <ContentPresenter Grid.Column="1" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center"
                                    ContentTemplate="{StaticResource PropertyValueTemplate}"  />
                                 <Grid.ContextMenu>
-                                    <ContextMenu>
+                                    <ContextMenu DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
+                                        <MenuItem
+                                            Style="{StaticResource SyncfusionMenuItemStyle}"
+                                            Header="Copy Value to Clipboard"
+                                            IsCheckable="False"
+                                            Command="ApplicationCommands.Copy"
+                                            CommandTarget="{Binding}"
+                                            CommandParameter="{Binding}">
+                                            <MenuItem.Icon>
+                                                <iconPacks:PackIconCodicons
+                                                    Width="13"
+                                                    Height="13"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Padding="0,0,0,0"
+                                                    Kind="Copy" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
                                         <MenuItem
                                             Style="{StaticResource SyncfusionMenuItemStyle}"
                                             Header="Export to JSON"
@@ -239,9 +285,10 @@
                                    ContentTemplate="{StaticResource PropertyNameTemplate}"/>
                                 <ContentPresenter Grid.Column="1" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center"
                                    ContentTemplate="{StaticResource PropertyValueTemplate}"  />
-                                <!--Button Grid.Column="2" Margin="5,0,0,0">
-                                    <TextBlock Text="Jump to"/>
-                                </Button-->
+                                <Button Grid.Column="2" Margin="5,0,0,0" Style="{StaticResource ButtonCustom}" Command="{Binding NewHandleCommand}">
+                                    <iconPacks:PackIconVaadinIcons Kind="PlusCircle"
+                                        VerticalAlignment="Center" Padding="2"/>
+                                </Button>
                             </Grid>
                         </DataTemplate>
                     </converters:TreeViewItemTemplateSelector.HandleTemplate>

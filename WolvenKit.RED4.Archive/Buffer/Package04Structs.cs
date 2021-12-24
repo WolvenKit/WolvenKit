@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.Archive.Buffer
     public struct Package04Header
     {
         [FieldOffset(0)]
-        public ushort uk1;
+        public ushort version;
 
         [FieldOffset(2)]
         public ushort numSections;

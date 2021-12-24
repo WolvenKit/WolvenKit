@@ -15,9 +15,17 @@
     <Grid MinWidth="300" MinHeight="300">
 
         <Grid.Resources>
-            <Style TargetType="CheckBox">
-                <Setter Property="HorizontalAlignment" Value="Left" />
-            </Style>
+            <ResourceDictionary>
+                <!--<ResourceDictionary.MergedDictionaries>
+                    <hc:ThemeResources RequestedTheme="Dark" />
+                    <hc:Theme />
+                </ResourceDictionary.MergedDictionaries>-->
+
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="pack://application:,,,/AdonisUI;component/ColorSchemes/Dark.xaml"/>
+                    <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml"/>
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
         </Grid.Resources>
 
         <Grid.RowDefinitions>
@@ -88,6 +96,7 @@
                 VerticalAlignment="Center"
                 FontSize="20"
                 Text="Settings"
+                Foreground="White"
                 />
 
             <Button x:Name="CheckForUpdatesButton" Margin="15" Height="40">

@@ -42,8 +42,6 @@ namespace WolvenKit.ViewModels.Documents
 
             //RootChunk = Chunks[0];
 
-            Chunks = _file.Chunks.Select(_ => new ChunkViewModel(_, this)).ToList();
-
             //if (Chunks != null)
             //{
             //    foreach (ChunkViewModel item in Chunks)
@@ -64,7 +62,28 @@ namespace WolvenKit.ViewModels.Documents
 
         //public List<ICR2WBuffer> Buffers => _file.Buffers;
 
-        public virtual List<ChunkViewModel> Chunks { get; set; }
+        private List<ChunkViewModel> _chunks;
+
+        public List<ChunkViewModel> Chunks
+        {
+            get
+            {
+                if (_chunks == null)
+                {
+                    _chunks = GenerateChunks();
+                }
+                return _chunks;
+            }
+            set
+            {
+                _chunks = value;
+            }
+        }
+
+        public virtual List<ChunkViewModel> GenerateChunks()
+        {
+            return _file.Chunks.Select(_ => new ChunkViewModel(_, this)).ToList();
+        }
 
         [Reactive] public ChunkViewModel SelectedChunk { get; set; }
 

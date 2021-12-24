@@ -29,12 +29,7 @@ namespace WolvenKit.ViewModels.Documents
         public W2rcBufferViewModel(CR2WFile w2rcFile, int bufferIndex, DirtyDelegate setIsDirty) : base(w2rcFile, setIsDirty)
         {
             _bufferIndex = bufferIndex;
-
-            if (_file.Buffers[_bufferIndex] != null && _file.Buffers[_bufferIndex].Data is Package04 pkg)
-            {
-                Chunks = pkg.Chunks?.Select(_ => new ChunkViewModel(_, this)).ToList() ?? null;
-            }
-
+            
             if (_file.Chunks[0] is not CBitmapTexture xbm)
             {
                 return;
@@ -82,6 +77,18 @@ namespace WolvenKit.ViewModels.Documents
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.W2rcBuffer;
 
         #region methods
+
+        public override List<ChunkViewModel> GenerateChunks()
+        {
+            if (_file.Buffers[_bufferIndex] != null && _file.Buffers[_bufferIndex].Data is Package04 pkg)
+            {
+                return pkg.Chunks?.Select(_ => new ChunkViewModel(_, this)).ToList() ?? null;
+            }
+            else
+            {
+                return null;
+            }
+        }
 
         public override string ToString() => $"Buffer {_bufferIndex}";
         //public override string ToString() => $"TODO.buffer";

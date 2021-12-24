@@ -16,6 +16,8 @@ namespace WolvenKit.RED4.Types
             set => Buffer.Data = value;
         }
 
+        public Red4File File { get; set; }
+
         public bool Equals(SharedDataBuffer other)
         {
             if (ReferenceEquals(null, other))

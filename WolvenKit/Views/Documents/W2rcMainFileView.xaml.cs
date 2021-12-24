@@ -203,7 +203,8 @@ namespace WolvenKit.Views.Documents
                     if (ViewModel.SelectedChunk.Parent.Data is IRedClass cls)
                     {
                         //e.DisplayName = $"[{ary.IndexOf(ViewModel.SelectedChunk.Data)}] {ViewModel.SelectedChunk.Type}";
-                        e.DisplayName = $"{ViewModel.SelectedChunk.Name} ({ViewModel.SelectedChunk.Type})";
+                        //e.DisplayName = $"{ViewModel.SelectedChunk.Name} ({ViewModel.SelectedChunk.Type})";
+                        e.DisplayName = ViewModel.SelectedChunk.Name;
                     }
                 }
             }
@@ -465,6 +466,26 @@ namespace WolvenKit.Views.Documents
         private void PropertyGrid_ValueChanged(object sender, ValueChangedEventArgs args)
         {
             ViewModel.SetIsDirty(true);
+        }
+
+        private void Copy_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (sender is Grid g && g.DataContext is ChunkViewModel cvm)
+            {
+                if (cvm.Value != "null")
+                {
+                    e.CanExecute = true;
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private void Copy_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (sender is Grid g && g.DataContext is ChunkViewModel cvm)
+            {
+                Clipboard.SetText(cvm.Value);
+            }
         }
     }
 }

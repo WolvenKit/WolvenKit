@@ -154,13 +154,11 @@ namespace WolvenKit.MSTests
                             var cr2w = parser.TryReadRed4FileHeaders(originalMemoryStream);
                             if (cr2w != null)
                             {
-
-
-                                //if (cr2w.Imports.Any())
-                                //{
-                                //    var imports = cr2w.Imports.Select(x => FNV1A64HashAlgorithm.HashString(x.DepotPathStr)).ToArray();
-                                //    dbDict.AddOrUpdate(hash, imports, (key, oldValue) => imports);
-                                //}
+                                if (cr2w.Imports.Any())
+                                {
+                                    var imports = cr2w.Imports.Select(x => FNV1A64HashAlgorithm.HashString(x.DepotPath)).ToArray();
+                                    dbDict.AddOrUpdate(hash, imports, (key, oldValue) => imports);
+                                }
                             }
                             else
                             {

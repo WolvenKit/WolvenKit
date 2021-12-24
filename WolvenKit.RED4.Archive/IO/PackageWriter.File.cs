@@ -26,9 +26,11 @@ namespace WolvenKit.RED4.Archive.IO
         {
             _file = file;
 
+            // might need to work through chunks to figure out if there are 7 sections
+            // setup a separate stream for that?
             _header = new Package04Header
             {
-                uk1 = _file.Version,
+                version = _file.Version,
                 numSections = 7
             };
 
@@ -46,7 +48,23 @@ namespace WolvenKit.RED4.Archive.IO
             //}
 
             var headerStart = BaseStream.Position;
-            BaseStream.WriteStruct(_header);
+            //BaseStream.WriteStruct(_header);
+
+            _writer.Write(_header.version);
+            _writer.Write(_header.numSections);
+            _writer.Write(_header.numCruids0);
+
+            if (_header.numSections == 7)
+            {
+                _writer.Write(_header.refPoolDescOffset);
+                _writer.Write(_header.refPoolDataOffset);
+            }
+
+            _writer.Write(_header.namePoolDescOffset);
+            _writer.Write(_header.namePoolDataOffset);
+
+            _writer.Write(_header.chunkDescOffset);
+            _writer.Write(_header.chunkDataOffset);
 
             var (strings, imports, chunkDesc, chunkData) = GenerateChunkData();
 
@@ -74,17 +92,17 @@ namespace WolvenKit.RED4.Archive.IO
 
             // write refs
 
+            if (_header.numSections == 7)
+            {
+                _header.refPoolDescOffset = Convert.ToUInt32(BaseStream.Position - headerEnd);
+                var (refData, refDesc) = GenerateRefBuffer(imports, (uint)(_header.refPoolDescOffset + imports.Count * 4));
+                BaseStream.WriteStructs(refDesc.ToArray());
 
-            _header.refPoolDescOffset = Convert.ToUInt32(BaseStream.Position - headerEnd);
-            var (refData, refDesc) = GenerateRefBuffer(imports, (uint)(_header.refPoolDescOffset + imports.Count * 4));
-            BaseStream.WriteStructs(refDesc.ToArray());
-
-            _header.refPoolDataOffset = Convert.ToUInt32(BaseStream.Position - headerEnd);
-            // do we need a condition for uk3? does it matter?
-            BaseStream.Write(refData);
+                _header.refPoolDataOffset = Convert.ToUInt32(BaseStream.Position - headerEnd);
+                BaseStream.Write(refData);
+            }
 
             // write names
-
 
             _header.namePoolDescOffset = Convert.ToUInt32(BaseStream.Position - headerEnd);
             var (nameData, nameDesc) = GenerateStringBuffer(strings, (uint)(_header.namePoolDescOffset + strings.Count * 4));

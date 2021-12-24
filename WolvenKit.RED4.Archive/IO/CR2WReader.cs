@@ -4,6 +4,8 @@ using System.Text;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
+using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.Archive.CR2W;
 
 namespace WolvenKit.RED4.Archive.IO
 {
@@ -133,13 +135,31 @@ namespace WolvenKit.RED4.Archive.IO
 
         public override SharedDataBuffer ReadSharedDataBuffer(uint size)
         {
-            var result = base.ReadSharedDataBuffer(size);
+            var bufferSize = _reader.ReadUInt32();
+            var result = base.ReadSharedDataBuffer(bufferSize);
 
             if (_parseBuffer)
             {
                 var ms = new MemoryStream(result.Buffer.GetBytes());
-                var reader = new PackageReader(ms);
-                reader.ReadPackage(result.Buffer);
+
+                using var br = new BinaryReader(ms, Encoding.Default, true);
+                //br.BaseStream.Position += 4;
+                var magic = br.ReadUInt32();
+                var isCr2wFile = magic == CR2WFile.MAGIC;
+                if (isCr2wFile)
+                {
+                    br.BaseStream.Seek(-4, SeekOrigin.Current);
+
+                    using var cr2wReader = new CR2WReader(br);
+                    var readResult = cr2wReader.ReadFile(out var c, true);
+
+                    result.File = c;
+                }
+                else
+                {
+                    var reader = new PackageReader(ms);
+                    reader.ReadPackage(result.Buffer);
+                }
             }
 
             return result;

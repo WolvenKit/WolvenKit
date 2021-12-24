@@ -33,9 +33,23 @@ namespace WolvenKit.RED4.Archive.IO
                 return EFileReadErrorCodes.UnsupportedVersion;
             }
 
-            header = BaseStream.ReadStruct<Package04Header>();
+            header.version = _reader.ReadUInt16();
+            header.numSections = _reader.ReadUInt16();
+            header.numCruids0 = _reader.ReadUInt32();
 
-            if (header.refPoolDescOffset != 0)
+            if (header.numSections == 7)
+            {
+                header.refPoolDescOffset = _reader.ReadUInt32();
+                header.refPoolDataOffset = _reader.ReadUInt32();
+            }
+
+            header.namePoolDescOffset = _reader.ReadUInt32();
+            header.namePoolDataOffset = _reader.ReadUInt32();
+
+            header.chunkDescOffset = _reader.ReadUInt32();
+            header.chunkDataOffset = _reader.ReadUInt32();
+
+            if (header.numSections == 7 && header.refPoolDescOffset != 0)
             {
                 return EFileReadErrorCodes.NoCr2w;
             }

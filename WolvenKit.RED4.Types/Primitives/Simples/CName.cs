@@ -34,7 +34,7 @@ namespace WolvenKit.RED4.Types
 
         private ulong CalculateHash()
         {
-            if (_value == "")
+            if (_value == null || _value == "")
             {
                 return 0;
             }

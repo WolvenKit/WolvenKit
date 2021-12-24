@@ -27,15 +27,19 @@ namespace WolvenKit.Converters
             {
                 if (tvn.Content is ChunkViewModel vm)
                 {
-                    if (vm.Data is IRedArray)
+                    if (vm.PropertyType == null)
+                    {
+                        return PropertyTemplate;
+                    }
+                    else if (vm.PropertyType.IsAssignableTo(typeof(IRedArray)))
                     {
                         return ArrayTemplate;
                     }
-                    else if (vm.Data is IRedHandle)
+                    else if (vm.PropertyType.IsAssignableTo(typeof(IRedHandle)))
                     {
                         return HandleTemplate;
                     }
-                    else if (vm.Data is IRedRef)
+                    else if (vm.PropertyType.IsAssignableTo(typeof(IRedRef)))
                     {
                         return RefTemplate;
                     }
