@@ -3,6 +3,7 @@ using System.Diagnostics;
 
 namespace WolvenKit.RED4.Types
 {
+    [REDType(IsValueType = true)]
     [DebuggerDisplay("{Value}")]
     public class CBitField<T> : IRedBitField<T>, IEquatable<CBitField<T>> where T : struct, Enum
     {

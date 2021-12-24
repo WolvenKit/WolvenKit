@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
-
+    [REDType(IsValueType = true)]
     public class CEnum<T> : IRedEnum<T>, IEquatable<CEnum<T>> where T : struct, Enum
     {
         public T? Value { get; init; }

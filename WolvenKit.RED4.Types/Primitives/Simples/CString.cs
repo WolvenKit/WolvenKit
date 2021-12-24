@@ -5,6 +5,7 @@ using System.IO;
 namespace WolvenKit.RED4.Types
 {
     [RED("String")]
+    [REDType(IsValueType = true)]
     [DebuggerDisplay("{_value}", Type = "CString")]
     public sealed class CString : IRedPrimitive<string>, IEquatable<CString>, IRedString
     {

@@ -7,6 +7,7 @@ using WolvenKit.Common.FNV1A;
 namespace WolvenKit.RED4.Types
 {
     [RED("rRef")]
+    [REDType(IsValueType = true)]
     public class CResourceReference<T> : IRedResourceReference<T>, IEquatable<CResourceReference<T>> where T : IRedType
     {
         public CName DepotPath { get; set; }

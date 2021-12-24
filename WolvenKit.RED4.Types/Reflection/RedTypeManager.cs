@@ -17,6 +17,8 @@ namespace WolvenKit.RED4.Types
                 tCls.ConstructorOverload();
             }
 
+            instance?.InternalInitClass();
+
             return instance;
         }
 

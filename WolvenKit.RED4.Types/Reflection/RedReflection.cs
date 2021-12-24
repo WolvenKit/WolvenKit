@@ -303,6 +303,8 @@ namespace WolvenKit.RED4.Types
             public bool SerializeDefault { get; }
             public int ChildLevel { get; }
 
+            public bool IsValueType { get; set; }
+
             public List<ExtendedPropertyInfo> PropertyInfos { get; } = new();
 
             public ExtendedTypeInfo(Type type)
@@ -314,6 +316,11 @@ namespace WolvenKit.RED4.Types
                     {
                         SerializeDefault = clsAttr.SerializeDefault;
                         ChildLevel = clsAttr.ChildLevel;
+                    }
+
+                    if (attribute is REDTypeAttribute typeAttr)
+                    {
+                        IsValueType = typeAttr.IsValueType;
                     }
                 }
 

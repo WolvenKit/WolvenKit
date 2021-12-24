@@ -50,7 +50,7 @@ namespace WolvenKit.RED4.Types
                 return true;
             }
 
-            return Equals(_value, other._value) && _index == other._index;
+            return _value.SequenceEqual(other._value) && _index == other._index;
         }
 
         public override bool Equals(object obj)

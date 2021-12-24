@@ -103,41 +103,40 @@ namespace WolvenKit.RED4.Types
             ((IRedClass)this).InternalSetPropertyValue(redName, value);
         }
 
+        void IRedClass.InternalInitClass()
+        {
+            var info = RedReflection.GetTypeInfo(GetType());
+            foreach (var propertyInfo in info.PropertyInfos)
+            {
+                if (!_properties.ContainsKey(propertyInfo.RedName))
+                {
+                    var propTypeInfo = RedReflection.GetTypeInfo(propertyInfo.Type);
+                    if (propertyInfo.Type.IsValueType || propTypeInfo.IsValueType)
+                    {
+                        if (propertyInfo.Flags.Equals(Flags.Empty))
+                        {
+                            _properties[propertyInfo.RedName] = System.Activator.CreateInstance(propertyInfo.Type);
+                        }
+                        else
+                        {
+                            var size = propertyInfo.Flags.MoveNext() ? propertyInfo.Flags.Current : 0;
+                            _properties[propertyInfo.RedName] = System.Activator.CreateInstance(propertyInfo.Type, size);
+                        }
+                    }
+                }
+
+                if (_properties.ContainsKey(propertyInfo.RedName) && typeof(IRedClass).IsAssignableFrom(propertyInfo.Type))
+                {
+                    ((IRedClass)_properties[propertyInfo.RedName]).InternalInitClass();
+                }
+            }
+        }
+
         object IRedClass.InternalGetPropertyValue(Type type, string redPropertyName, Flags flags)
         {
             if (!_properties.ContainsKey(redPropertyName))
             {
-                if (type.IsValueType)
-                {
-                    if (flags.Equals(Flags.Empty))
-                    {
-                        _properties[redPropertyName] = System.Activator.CreateInstance(type);
-                    }
-                    else
-                    {
-                        var size = flags.MoveNext() ? flags.Current : 0;
-                        _properties[redPropertyName] = System.Activator.CreateInstance(type, size);
-                    }
-
-                    //if (typeof(IRedEnum).IsAssignableFrom(type) || typeof(IRedBitField).IsAssignableFrom(type))
-                    //{
-                    //    _properties[redPropertyName] = System.Activator.CreateInstance(type);
-                    //    return _properties[redPropertyName];
-                    //}
-
-                    return _properties[redPropertyName];
-                }
-
-                if (typeof(IRedEnum).IsAssignableFrom(type) ||
-                    typeof(IRedBitField).IsAssignableFrom(type) ||
-                    typeof(IRedRef).IsAssignableFrom(type) ||
-                    typeof(IRedString).IsAssignableFrom(type))
-                {
-                    _properties[redPropertyName] = System.Activator.CreateInstance(type);
-                    return _properties[redPropertyName];
-                }
-
-                return null;
+                _properties[redPropertyName] = null;
             }
 
             return _properties[redPropertyName];
@@ -180,6 +179,9 @@ namespace WolvenKit.RED4.Types
 
         public bool Equals(RedBaseClass other)
         {
+            var tmp1 = _properties.Count;
+            var tmp2 = other._properties.Count;
+
             if (_properties.Count != other._properties.Count)
             {
                 return false;

@@ -7,6 +7,7 @@ using WolvenKit.Common.FNV1A;
 namespace WolvenKit.RED4.Types
 {
     [RED("CName")]
+    [REDType(IsValueType = true)]
     [DebuggerDisplay("{_value}", Type = "CName")]
     public sealed class CName : IRedPrimitive<string>, IEquatable<CName>, IRedString
     {
