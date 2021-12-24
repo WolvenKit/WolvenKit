@@ -558,14 +558,13 @@
                 x:Name="ImagePreviewCanvas"
                 ClipToBounds="True"
                 Background="{StaticResource ContentBackground}">
-                <Canvas x:Name="ImagePreview"
-                        RenderTransformOrigin="0.5,0.5">
+                <Canvas x:Name="ImagePreview" IsHitTestVisible="False"
+                        RenderTransformOrigin="0.5,0.5" Background="Transparent">
                     <Image
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         ClipToBounds="False"
                         Source="{Binding Image}"
-                        IsHitTestVisible="False"
                         RenderTransformOrigin="0.5,0.5"
                         Opacity="1">
                         <Image.RenderTransform>
@@ -582,14 +581,14 @@
                             <Style TargetType="ContentPresenter">
                                 <Setter Property="Canvas.Left" Value="{Binding Left}"/>
                                 <Setter Property="Canvas.Top" Value="{Binding Top}"/>
-                                <Setter Property="Canvas.Right" Value="{Binding Right}"/>
-                                <Setter Property="Canvas.Bottom" Value="{Binding Bottom}"/>
+                                <Setter Property="Width" Value="{Binding Width}"/>
+                                <Setter Property="Height" Value="{Binding Height}"/>
                             </Style>
                         </ItemsControl.ItemContainerStyle>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border BorderThickness="1" BorderBrush="{StaticResource WolvenKitCyan}">
-                                    <TextBlock Text="{Binding Name}" />
+                                <Border Canvas.Left="{Binding Left}" BorderThickness="1" BorderBrush="{StaticResource WolvenKitCyan50}">
+                                    <TextBlock Text="{Binding Name}" FontSize="8" VerticalAlignment="Bottom" HorizontalAlignment="Left" Foreground="{StaticResource WolvenKitCyan50}"/>
                                 </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

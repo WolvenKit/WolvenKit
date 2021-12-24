@@ -28,7 +28,7 @@ namespace WolvenKit.ViewModels.Documents
         {
             foreach (var part in atlas.Slots[0].Parts)
             {
-                OverlayItems.Add(new InkTextureAtlasMapperViewModel(part));
+                OverlayItems.Add(new InkTextureAtlasMapperViewModel(part, xbm));
             }
         }
 
@@ -38,16 +38,16 @@ namespace WolvenKit.ViewModels.Documents
         {
             [Reactive] public float Left { get; set; }
             [Reactive] public float Top { get; set; }
-            [Reactive] public float Right { get; set; }
-            [Reactive] public float Bottom { get; set; }
+            [Reactive] public float Width { get; set; }
+            [Reactive] public float Height { get; set; }
             [Reactive] public string Name { get; set; }
 
-            public InkTextureAtlasMapperViewModel(inkTextureAtlasMapper itam)
+            public InkTextureAtlasMapperViewModel(inkTextureAtlasMapper itam, CBitmapTexture xbm)
             {
-                Left = (float)(int)itam.ClippingRectInPixels.Left;
-                Top = (float)(int)itam.ClippingRectInPixels.Top;
-                Right = (float)(int)itam.ClippingRectInPixels.Right;
-                Bottom = (float)(int)itam.ClippingRectInPixels.Bottom;
+                Left = itam.ClippingRectInUVCoords.Left * xbm.Width;
+                Top = itam.ClippingRectInUVCoords.Top * xbm.Height;
+                Width = itam.ClippingRectInUVCoords.Right * xbm.Width - Left;
+                Height = itam.ClippingRectInUVCoords.Bottom * xbm.Height - Top;
                 Name = itam.PartName;
             }
         }
