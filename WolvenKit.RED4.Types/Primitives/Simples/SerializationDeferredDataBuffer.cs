@@ -5,41 +5,10 @@ using System.ComponentModel;
 namespace WolvenKit.RED4.Types
 {
     [RED("serializationDeferredDataBuffer")]
-    public class SerializationDeferredDataBuffer : IRedPrimitive, IEquatable<SerializationDeferredDataBuffer>
+    public class SerializationDeferredDataBuffer : IRedPrimitive, IRedBufferPointer, IEquatable<SerializationDeferredDataBuffer>
     {
         [Browsable(false)]
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Red4File File { get; set; }
-
-
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ushort Pointer { get; set; }
-
-        [Browsable(false)]
-        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-        public RedBuffer Buffer
-        {
-            get
-            {
-                if (Pointer >= File._buffers.Count)
-                {
-                    throw new IndexOutOfRangeException(nameof(Pointer));
-                }
-                return File._buffers[Pointer];
-            }
-            set
-            {
-                var existingBuffer = File.BufferHandler.IndexOf(value);
-                if (existingBuffer != -1)
-                {
-                    Pointer = (ushort)existingBuffer;
-                }
-                else
-                {
-                    File._buffers[Pointer] = value;
-                }
-            }
-        }
+        public RedBuffer Buffer { get; set; }
 
         [Browsable(false)]
         public IParseableBuffer Data
@@ -48,33 +17,17 @@ namespace WolvenKit.RED4.Types
             set => Buffer.Data = value;
         }
 
-        public SerializationDeferredDataBuffer(Red4File file, ushort pointer)
-        {
-            File = file;
-            Pointer = pointer;
 
-            File.BufferHandler.Register(pointer, this);
+        public SerializationDeferredDataBuffer(){}
+
+        public SerializationDeferredDataBuffer(byte[] data)
+        {
+            Buffer = RedBuffer.CreateBuffer(0, data);
         }
 
-        public void Compress()
-        {
-            if (Pointer >= File._buffers.Count)
-            {
-                throw new IndexOutOfRangeException(nameof(Pointer));
-            }
 
-            File._buffers[Pointer].Compress();
-        }
-
-        public void Decompress()
-        {
-            if (Pointer >= File._buffers.Count)
-            {
-                throw new IndexOutOfRangeException(nameof(Pointer));
-            }
-
-            File._buffers[Pointer].Decompress();
-        }
+        public RedBuffer GetValue() => Buffer;
+        public void SetValue(RedBuffer instance) => Buffer = instance;
 
         public bool Equals(SerializationDeferredDataBuffer other)
         {

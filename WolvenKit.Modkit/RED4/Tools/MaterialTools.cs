@@ -690,8 +690,7 @@ namespace WolvenKit.Modkit.RED4
         {
             var blob = cr2w.Chunks.OfType<CMesh>().First();
 
-            var p = blob.LocalMaterialBuffer.RawData.Pointer;
-            var b = cr2w.Buffers[p - 1];
+            var b = blob.LocalMaterialBuffer.RawData.Buffer;
 
             // TODO: Is this intended? (return always empty)
             MemoryStream materialStream = new MemoryStream();
@@ -863,7 +862,7 @@ namespace WolvenKit.Modkit.RED4
             check = blob.LocalMaterialBuffer.RawData.Buffer.MemSize > 0;
             if (!check)
             {
-                blob.LocalMaterialBuffer.RawData = cr2w.BufferHandler.CreateDataBuffer(0, materialbuffer.ToArray());
+                blob.LocalMaterialBuffer.RawData = new DataBuffer(materialbuffer.ToArray());
             }
             else
             {

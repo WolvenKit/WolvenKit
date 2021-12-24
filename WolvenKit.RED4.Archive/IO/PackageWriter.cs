@@ -88,6 +88,7 @@ namespace WolvenKit.RED4.Archive.IO
                 BaseStream.Position = currentDataPosition;
                 // write data, prefixed with size?
                 Write((IRedType)value);
+
                 if (propertyInfo.Type == typeof(CRUID) && !_ignoreCRUIDS.Contains(cls.GetType()))
                 {
                     _cruids.Add((CRUID)value);
@@ -124,23 +125,19 @@ namespace WolvenKit.RED4.Archive.IO
 
         public override void Write(IRedHandle instance)
         {
-            if (instance.Pointer >= 0)
-            {
-                _targetList.Add((CurrentChunk, instance.Pointer, StringCacheList.Count, ImportCacheList.Count));
-            }
+            var target = (RedBaseClass)instance.GetValue();
 
-            _writer.Write(instance.Pointer + 0);
+            if (target != null)
+            {
+                InternalHandleWriter(target, 0);
+            }
+            else
+            {
+                BaseWriter.Write(-1);
+            }
         }
 
-        public override void Write(IRedWeakHandle instance)
-        {
-            if (instance.Pointer >= 0)
-            {
-                _targetList.Add((CurrentChunk, instance.Pointer, StringCacheList.Count, ImportCacheList.Count));
-            }
-
-            _writer.Write(instance.Pointer + 0);
-        }
+        public override void Write(IRedWeakHandle instance) => InternalHandleWriter((RedBaseClass)instance.GetValue(), 0);
 
         public override void Write(IRedResourceReference instance)
         {
@@ -191,24 +188,16 @@ namespace WolvenKit.RED4.Archive.IO
             _writer.Write(val.GetValue().ToCharArray());
         }
 
-        // Override this, because buffers in buffers are always uncompressed
         public override void Write(DataBuffer val)
         {
-            if (val.Pointer >= 0)
+            if (val.Buffer.Bytes == Array.Empty<byte>())
             {
-                _writer.Write((uint)(val.Pointer | 0x80000000) + 1);
+                _writer.Write(0x80000000);
             }
             else
             {
-                if (val.Buffer.Bytes == Array.Empty<byte>())
-                {
-                    _writer.Write(0x80000000);
-                }
-                else
-                {
-                    _writer.Write(val.Buffer.MemSize);
-                    _writer.Write(val.Buffer.GetBytes());
-                }
+                _writer.Write(val.Buffer.MemSize);
+                _writer.Write(val.Buffer.GetBytes());
             }
         }
     }

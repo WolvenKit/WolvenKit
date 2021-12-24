@@ -34,11 +34,11 @@ namespace WolvenKit.RED4.Archive.IO
                 numSections = 7
             };
 
-            if (file.Chunks[0] is entEntity)
+            if (file.RootChunk is entEntity)
             {
                 refsAreStrings = 0x0000;
             }
-            else if ((file.Chunks[0] is entIComponent))
+            else if (file.RootChunk is entIComponent)
             {
                 refsAreStrings = 0xffff;
             }
@@ -76,16 +76,13 @@ namespace WolvenKit.RED4.Archive.IO
 
             _header.numCruids0 = (ushort)unique_cruids.Count;
 
-            if (_header.numCruids0 > 1)
-            {
-                _writer.Write(refsAreStrings);
-                _writer.Write((ushort)_header.numCruids0);
+            _writer.Write(refsAreStrings);
+            _writer.Write((ushort)_header.numCruids0);
 
-                // write cruids
-                foreach (var cruid in unique_cruids)
-                {
-                    Write(cruid);
-                }
+            // write cruids
+            foreach (var cruid in unique_cruids)
+            {
+                Write(cruid);
             }
 
             var headerEnd = BaseStream.Position;
@@ -233,10 +230,43 @@ namespace WolvenKit.RED4.Archive.IO
             using var file = new PackageWriter(ms);
 
             var chunkDesc = new List<Package04ChunkHeader>();
-            for (int i = 0; i < _file.Chunks.Count; i++)
+            var chunkClassNames = new List<string>();
+            var chunkCounter = 0;
+
+            foreach (var chunk in _file.Chunks)
             {
-                file.StartChunk(i);
-                chunkDesc.Add(WriteChunk(file, _file.Chunks[i]));
+                file.ChunkQueue.AddLast((RedBaseClass)chunk);
+            }
+
+            while (file.ChunkQueue.Count > 0)
+            {
+                var chunk = file.ChunkQueue.First.Value;
+                file.ChunkQueue.RemoveFirst();
+
+                if (chunk.Chunk != -1)
+                {
+                    continue;
+                }
+
+                chunkClassNames.Add(RedReflection.GetTypeRedName(chunk.GetType()));
+
+                chunk.Chunk = chunkCounter;
+                file.StartChunk(chunk);
+                chunkDesc.Add(WriteChunk(file, chunk));
+                
+                var guid = chunk.Guid;
+                if (guid != Guid.Empty && file.ChunkReferences.ContainsKey(guid))
+                {
+                    var startPos = file.BaseStream.Position;
+                    foreach (var (position, offset) in file.ChunkReferences[guid])
+                    {
+                        file.BaseStream.Position = position;
+                        file.BaseWriter.Write(chunk.Chunk + offset);
+                    }
+                    file.BaseStream.Position = startPos;
+                }
+
+                chunkCounter++;
             }
 
             _cruids.AddRange(file._cruids);
@@ -245,21 +275,21 @@ namespace WolvenKit.RED4.Archive.IO
 
             stringDict.Remove("");
 
-            for (int i = 0; i < _file.Chunks.Count; i++)
+            for (int i = 0; i < chunkDesc.Count; i++)
             {
                 var chunkInfo = chunkDesc[i];
-                chunkInfo.typeID = stringDict[RedReflection.GetTypeRedName(_file.Chunks[i].GetType())];
+                chunkInfo.typeID = stringDict[chunkClassNames[i]];
                 chunkDesc[i] = chunkInfo;
 
                 // TODO: Find a "better" way to determine that
-                if (i != 0 || _file.Chunks[i] is worldFoliageBrush)
+                /*if (i != 0 || _file.Chunks[i] is worldFoliageBrush)
                 {
                     var typeInfo = RedReflection.GetTypeInfo(_file.Chunks[i].GetType());
                     if (typeInfo.ChildLevel > 0)
                     {
                         SetParent(i, i, typeInfo.ChildLevel);
                     }
-                }
+                }*/
             }
 
             var pos = file.BaseStream.Position;
@@ -279,7 +309,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             return (file.StringCacheList.ToList(), file.ImportCacheList.ToList(), chunkDesc, ms.ToArray());
 
-            void SetParent(int chunkIndex, int parentIndex, int maxLevel = 1, int level = 0)
+            /*void SetParent(int chunkIndex, int parentIndex, int maxLevel = 1, int level = 0)
             {
                 var targets = file.GetTargets(chunkIndex);
                 foreach (var target in targets)
@@ -292,7 +322,7 @@ namespace WolvenKit.RED4.Archive.IO
                         SetParent(target.Item2 - 1, parentIndex, maxLevel, level + 1);
                     }
                 }
-            }
+            }*/
         }
 
     }

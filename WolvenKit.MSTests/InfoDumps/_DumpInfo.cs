@@ -51,7 +51,7 @@ namespace WolvenKit.MSTests
                         var originalFile = parser.TryReadRed4FileHeaders(originalMemoryStream);
                         if (originalFile != null)
                         {
-                            var c = originalFile.Chunks.FirstOrDefault().GetType().Name;
+                            var c = originalFile.RootChunk.GetType().Name;
                             results[ext].TryAdd(c, 0);
                         }
                         else

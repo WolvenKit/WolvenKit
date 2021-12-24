@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -36,8 +37,6 @@ namespace WolvenKit.RED4.IO
         {
             _reader = reader;
         }
-
-        public int CurrentChunk { get; private set; }
 
         public BinaryReader BaseReader => _reader;
         public Stream BaseStream => _reader.BaseStream;
@@ -101,15 +100,21 @@ namespace WolvenKit.RED4.IO
             var bufferSize = _reader.ReadUInt32();
             if (bufferSize == 0x80000000)
             {
-                return new DataBuffer
-                {
-                    Buffer = new RedBuffer()
-                };
+                return new DataBuffer();
             }
 
             if (bufferSize > 0x80000000)
             {
-                return new DataBuffer(_outputFile, (int)(bufferSize ^ 0x80000000) - 1);
+                var pointer = (int)(bufferSize ^ 0x80000000) - 1;
+                var result = new DataBuffer();
+
+                if (!BufferQueue.ContainsKey(pointer))
+                {
+                    BufferQueue.Add(pointer, new List<IRedBufferPointer>());
+                }
+
+                BufferQueue[pointer].Add(result);
+                return result;
             }
 
             return new DataBuffer
@@ -138,7 +143,17 @@ namespace WolvenKit.RED4.IO
                 throw new InvalidParsingException(nameof(ReadSerializationDeferredDataBuffer));
             }
 
-            return new SerializationDeferredDataBuffer(_outputFile, (ushort)(_reader.ReadUInt16() - 1));
+            var pointer = (ushort)(_reader.ReadUInt16() - 1);
+            var result = new SerializationDeferredDataBuffer();
+
+            if (!BufferQueue.ContainsKey(pointer))
+            {
+                BufferQueue.Add(pointer, new List<IRedBufferPointer>());
+            }
+
+            BufferQueue[pointer].Add(result);
+
+            return result;
         }
 
         public virtual SharedDataBuffer ReadSharedDataBuffer(uint size)
@@ -305,9 +320,22 @@ namespace WolvenKit.RED4.IO
             return (IRedHandle)generic.Invoke(this, null);
         }
 
+        protected Dictionary<int, List<IRedBaseHandle>> HandleQueue = new();
+        protected Dictionary<int, List<IRedBufferPointer>> BufferQueue = new();
+
         public virtual IRedHandle<T> ReadCHandle<T>() where T : IRedClass
         {
-            return _outputFile.HandleManager.CreateCHandle<T>(_reader.ReadInt32() - 1);
+            var handle = new CHandle<T>();
+
+            var pointer = _reader.ReadInt32() - 1;
+            if (!HandleQueue.ContainsKey(pointer))
+            {
+                HandleQueue.Add(pointer, new List<IRedBaseHandle>());
+            }
+
+            HandleQueue[pointer].Add(handle);
+
+            return handle;
         }
 
         public virtual IRedLegacySingleChannelCurve ReadCLegacySingleChannelCurve(Type type)
@@ -458,7 +486,17 @@ namespace WolvenKit.RED4.IO
 
         public virtual IRedWeakHandle<T> ReadCWeakHandle<T>() where T : IRedClass
         {
-            return _outputFile.HandleManager.CreateCWeakHandle<T>(_reader.ReadInt32() - 1);
+            var handle = new CWeakHandle<T>();
+
+            var pointer = _reader.ReadInt32() - 1;
+            if (!HandleQueue.ContainsKey(pointer))
+            {
+                HandleQueue.Add(pointer, new List<IRedBaseHandle>());
+            }
+
+            HandleQueue[pointer].Add(handle);
+
+            return handle;
         }
 
         #endregion General

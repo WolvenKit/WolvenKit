@@ -9,14 +9,13 @@ namespace WolvenKit.RED4.Archive.Buffer
 
         public IList<CRUID> Cruids;
 
+        
+        public IList<IRedClass> Chunks { get; set; }
+        public IRedClass RootChunk => Chunks[0];
+
         public Package04()
         {
             Cruids = new List<CRUID>();
-        }
-
-        public void SetChunks(IList<IRedClass> chunks)
-        {
-            _chunks = chunks;
         }
     }
 }

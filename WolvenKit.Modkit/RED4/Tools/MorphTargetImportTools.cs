@@ -55,9 +55,6 @@ namespace WolvenKit.Modkit.RED4
 
             var renderblob = cr2w.Chunks.OfType<rendRenderMorphTargetMeshBlob>().First();
 
-            var diffsBufferId = renderblob.DiffsBuffer.Pointer - 1;
-            var mappingsBufferId = renderblob.MappingBuffer.Pointer - 1;
-
             using MemoryStream diffsBuffer = new MemoryStream();
             using MemoryStream mappingsBuffer = new MemoryStream();
 
@@ -77,8 +74,8 @@ namespace WolvenKit.Modkit.RED4
                 renderblob.Header.TargetStartsInVertexDiffsMapping[i] = 0;
 
             SetTargets(cr2w, model, renderblob, diffsBuffer, mappingsBuffer);
-            WriteTargetBuffer(cr2w, diffsBuffer, diffsBufferId);
-            WriteTargetBuffer(cr2w, mappingsBuffer, mappingsBufferId);
+            renderblob.DiffsBuffer.Buffer.SetBytes(diffsBuffer.ToArray());
+            renderblob.MappingBuffer.Buffer.SetBytes(mappingsBuffer.ToArray());
 
             VerifyGLTF(model);
             List<RawMeshContainer> Meshes = new List<RawMeshContainer>();

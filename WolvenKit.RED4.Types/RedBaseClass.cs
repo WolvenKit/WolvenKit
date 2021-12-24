@@ -11,7 +11,8 @@ namespace WolvenKit.RED4.Types
     [REDMeta]
     public class RedBaseClass : DynamicObject, IRedClass
     {
-        public int Chunk;
+        public int Chunk = -1;
+        public Guid Guid;
 
         #region Events
 
@@ -144,11 +145,6 @@ namespace WolvenKit.RED4.Types
 
         void IRedClass.InternalSetPropertyValue(string redPropertyName, object value, bool native)
         {
-            if (value == null && _properties.ContainsKey(redPropertyName) && _properties[redPropertyName] is IRedBaseHandle d)
-            {
-                d.Remove();
-            }
-
             //OnObjectChanged(redPropertyName, value);
             _properties[redPropertyName] = value;
         }

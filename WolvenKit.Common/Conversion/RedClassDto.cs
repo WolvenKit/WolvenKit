@@ -44,7 +44,7 @@ namespace WolvenKit.Common.Conversion
                 if (_parent._propertyType == typeof(IRedBaseHandle))
                 {
                     var handle = (IRedBaseHandle)parentData;
-                    parentData = handle.File.Chunks[handle.Pointer];
+                    parentData = handle.GetValue();
                 }
                 var propInfo = RedReflection.GetPropertyByName(parent.GetType(), _propertyName) ?? null;
                 type = propInfo?.Type ?? null;
@@ -60,7 +60,7 @@ namespace WolvenKit.Common.Conversion
                 var data = chunk;
                 if (chunk is IRedBaseHandle handle)
                 {
-                    data = handle.File.Chunks[handle.Pointer];
+                    data = handle.GetValue();
                 }
                 if (data is RedBaseClass redClass)
                 {

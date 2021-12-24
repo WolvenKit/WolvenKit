@@ -103,7 +103,7 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     if (item is IRedBaseHandle hnd)
                     {
-                        var star = hnd?.File?.Chunks[hnd.Pointer] ?? null;
+                        var star = hnd.GetValue();
                         Properties.Add(ary.IndexOf(item).ToString(), star);
                     }
                     else
@@ -204,8 +204,8 @@ namespace WolvenKit.ViewModels.Shell
 
                     if (data is IRedBaseHandle handle)
                     {
-                        this.File.Chunks[handle.Pointer].IsHandled = true;
-                        return _propertyGridData = handle?.File?.Chunks[handle.Pointer] ?? null;
+                        //this.File.Chunks[handle.Pointer].IsHandled = true;
+                        return _propertyGridData = handle.GetValue();
                     }
                     else 
                     {
@@ -234,8 +234,8 @@ namespace WolvenKit.ViewModels.Shell
                         var obj = Data;
                         if (Data is IRedBaseHandle handle)
                         {
-                            this.File.Chunks[handle.Pointer].IsHandled = true;
-                            obj = handle.File.Chunks[handle.Pointer];
+                            //this.File.Chunks[handle.Pointer].IsHandled = true;
+                            obj = handle.GetValue();
                         }
                         if (obj is IRedArray ary)
                         {
@@ -282,11 +282,13 @@ namespace WolvenKit.ViewModels.Shell
                             }
                             if (sdb.File is CR2WFile cr2)
                             {
-                                var chunks = cr2.Chunks;
-                                for (int i = 0; i < chunks.Count; i++)
-                                {
-                                    _properties.Add(new ChunkViewModel(i, chunks[i], this));
-                                }
+                                //var chunks = cr2.Chunks;
+                                //for (int i = 0; i < chunks.Count; i++)
+                                //{
+                                //    _properties.Add(new ChunkViewModel(i, chunks[i], this));
+                                //}
+                                _properties.Add(new ChunkViewModel(cr2.RootChunk, this));
+
                             }
                         }
                         else if (obj is DataBuffer db && db.Data is Package04 p43)
@@ -384,7 +386,7 @@ namespace WolvenKit.ViewModels.Shell
                     if (Parent.PropertyType == typeof(IRedBaseHandle))
                     {
                         var handle = (IRedBaseHandle)parent;
-                        parent = handle.File.Chunks[handle.Pointer];
+                        parent = handle.GetValue();
                     }
                     var propInfo = RedReflection.GetPropertyByName(parent.GetType(), propertyName) ?? null;
                     type = propInfo?.Type ?? null;

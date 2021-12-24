@@ -4,54 +4,10 @@ using System.ComponentModel;
 
 namespace WolvenKit.RED4.Types
 {
-    public class DataBuffer : IRedDataBuffer, IEquatable<DataBuffer>
+    public class DataBuffer : IRedDataBuffer, IRedBufferPointer, IEquatable<DataBuffer>
     {
         [Browsable(false)]
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Red4File File { get; set; }
-
-        [Browsable(false)]
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public int Pointer { get; set; } = -1;
-
-        private RedBuffer _inlineBuffer;
-
-        [Browsable(false)]
-        public RedBuffer Buffer
-        {
-            get
-            {
-                if (Pointer == -1)
-                {
-                    return _inlineBuffer;
-                }
-
-                if (Pointer < 0 || Pointer >= File._buffers.Count)
-                {
-                    throw new IndexOutOfRangeException(nameof(Pointer));
-                }
-
-                return File._buffers[Pointer];
-            }
-            set
-            {
-                if (Pointer == -1)
-                {
-                    _inlineBuffer = value;
-                    return;
-                }
-
-                var existingBuffer = File.BufferHandler.IndexOf(value);
-                if (existingBuffer != -1)
-                {
-                    Pointer = existingBuffer;
-                }
-                else
-                {
-                    File._buffers[Pointer] = value;
-                }
-            }
-        }
+        public RedBuffer Buffer { get; set; }
 
         [Browsable(false)]
         public IParseableBuffer Data
@@ -60,15 +16,19 @@ namespace WolvenKit.RED4.Types
             set => Buffer.Data = value;
         }
 
-        public DataBuffer() {}
-
-        public DataBuffer(Red4File file, int pointer)
+        public DataBuffer()
         {
-            File = file;
-            Pointer = pointer;
-
-            File.BufferHandler.Register(pointer, this);
+            Buffer = new RedBuffer();
         }
+
+        public DataBuffer(byte[] data)
+        {
+            Buffer = RedBuffer.CreateBuffer(0, data);
+        }
+
+
+        public RedBuffer GetValue() => Buffer;
+        public void SetValue(RedBuffer instance) => Buffer = instance;
 
         public bool Equals(DataBuffer other)
         {
@@ -82,7 +42,7 @@ namespace WolvenKit.RED4.Types
                 return true;
             }
 
-            return Equals(Buffer, other.Buffer) && Pointer == other.Pointer;
+            return Equals(Buffer, other.Buffer);
         }
 
         public override bool Equals(object obj)
@@ -105,6 +65,6 @@ namespace WolvenKit.RED4.Types
             return Equals((DataBuffer)obj);
         }
 
-        public override int GetHashCode() => HashCode.Combine(Buffer, Pointer);
+        public override int GetHashCode() => Buffer.GetHashCode();
     }
 }

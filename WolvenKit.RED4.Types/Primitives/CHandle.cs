@@ -7,34 +7,28 @@ namespace WolvenKit.RED4.Types
     [RED("handle")]
     public class CHandle<T> : IRedHandle<T>, IEquatable<CHandle<T>> where T : IRedClass
     {
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Red4File File { get; }
-
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public int Pointer { get; set; }
-
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-        public T Chunk
-        {
-            get
-            {
-                if (File.HandleManager.Get(Pointer) is T chunk)
-                {
-                    return chunk;
-                }
-                return default(T);
-            }
+        public T Chunk { get; set; }
 
-            set => File.HandleManager.Set(this, value);
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Type InnerType => typeof(T);
+
+
+        public IRedClass GetValue() => Chunk;
+        public void SetValue(IRedClass cls) => Chunk = (T)cls;
+
+
+        public CHandle(){}
+
+        public CHandle(T chunk)
+        {
+            Chunk = chunk;
         }
 
-        internal CHandle(Red4File file, int pointer)
-        {
-            File = file;
-            Pointer = pointer;
-        }
 
-        public void Remove() => File.HandleManager.RemoveHandle(this);
+        public static implicit operator CHandle<T>(T value) => new(value);
+        public static implicit operator T(CHandle<T> value) => value.Chunk;
+
 
         public bool Equals(CHandle<T> other)
         {

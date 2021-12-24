@@ -28,11 +28,8 @@ namespace WolvenKit.Modkit.RED4
             List<MemoryStream> animDataBuffers = new List<MemoryStream>();
             foreach (var chk in blob.AnimationDataChunks)
             {
-                UInt16 bufferIdx = chk.Buffer.Pointer;
-                var buffer = cr2w.Buffers[bufferIdx - 1];
-
                 var ms = new MemoryStream();
-                ms.Write(buffer.GetBytes());
+                ms.Write(chk.Buffer.Buffer.GetBytes());
 
                 animDataBuffers.Add(ms);
             }

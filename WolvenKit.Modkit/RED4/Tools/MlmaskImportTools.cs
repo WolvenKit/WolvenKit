@@ -123,13 +123,13 @@ namespace WolvenKit.Modkit.RED4.MLMask
                     MaskTileSize = mlmask._tileSize,
                     Flags = 2
                 },
-                AtlasData = cr2w.BufferHandler.CreateSerializationDeferredDataBuffer(0, mlmask._AtlasBuffer),
-                TilesData = cr2w.BufferHandler.CreateSerializationDeferredDataBuffer(0, mlmask._tilesBuffer)
+                AtlasData = new SerializationDeferredDataBuffer(mlmask._AtlasBuffer),
+                TilesData = new SerializationDeferredDataBuffer(mlmask._tilesBuffer)
             };
 
             cr2w.Chunks.Add(blob);
 
-            mask.RenderResourceBlob.RenderResourceBlobPC = cr2w.HandleManager.CreateCHandle<IRenderResourceBlob>(blob);
+            mask.RenderResourceBlob.RenderResourceBlobPC = blob;
 
             if (!Directory.Exists(f.Directory.FullName))
             {

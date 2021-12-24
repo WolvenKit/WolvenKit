@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
@@ -13,6 +15,9 @@ namespace WolvenKit.RED4.Archive.IO
     {
         private CR2WFile _cr2wFile => (CR2WFile)_outputFile;
         private bool _parseBuffer;
+
+        private Dictionary<int, IRedClass> _chunks = new();
+        private Dictionary<int, RedBuffer> _buffers = new();
 
         public EFileReadErrorCodes ReadFile(out CR2WFile file, bool parseBuffer = true)
         {
@@ -93,15 +98,48 @@ namespace WolvenKit.RED4.Archive.IO
             }
 
             _cr2wFile.Debug.ChunkInfos = chunkInfoList;
-            foreach (var chunkInfo in chunkInfoList)
+            for (int i = 0; i < chunkInfoList.Length; i++)
             {
-                _cr2wFile.Chunks.Add(ReadChunk(chunkInfo));
+                var chunk = ReadChunk(chunkInfoList[i]);
+                if (i == 0)
+                {
+                    _cr2wFile.RootChunk = chunk;
+                }
+                
+                _chunks.Add(i, chunk);
+            }
+
+            _cr2wFile.Chunks = _chunks.Values.ToList();
+
+            for (int i = _chunks.Count - 1; i >= 0; i--)
+            {
+                if (!HandleQueue.ContainsKey(i))
+                {
+                    continue;
+                }
+
+                foreach (var handle in HandleQueue[i])
+                {
+                    handle.SetValue(_chunks[i]);
+                }
+
+                //_chunks.Remove(i);
             }
 
             _cr2wFile.Debug.BufferInfos = bufferInfoList;
-            foreach (var bufferInfo in bufferInfoList)
+            for (int i = 0; i < bufferInfoList.Length; i++)
             {
-                _cr2wFile.Buffers.Add(ReadBuffer(bufferInfo));
+                var buffer = ReadBuffer(bufferInfoList[i]);
+                _cr2wFile.Buffers.Add(buffer);
+                if (!BufferQueue.ContainsKey(i))
+                {
+                    throw new TodoException("Unused buffer");
+                }
+
+                foreach (var pointers in BufferQueue[i])
+                {
+                    pointers.SetValue(buffer);
+                }
             }
 
             _cr2wFile.Debug.EmbeddedInfos = embeddedInfoList;
@@ -116,6 +154,11 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 throw new TodoException();
             }
+
+            /*if (_chunks.Count > 1)
+            {
+                throw new TodoException();
+            }*/
 
             file = _cr2wFile;
             return EFileReadErrorCodes.NoError;
@@ -190,11 +233,15 @@ namespace WolvenKit.RED4.Archive.IO
                 throw new TodoException();
             }
 
-            return new CR2WEmbedded
+            var result = new CR2WEmbedded
             {
                 FileName = importsList[(int)info.importIndex - 1].DepotPath,
-                Content = _cr2wFile.Chunks[(int)info.chunkIndex]
+                Content = _chunks[(int)info.chunkIndex]
             };
+
+            _chunks.Remove((int)info.chunkIndex);
+
+            return result;
         }
 
         #endregion Read Sections
