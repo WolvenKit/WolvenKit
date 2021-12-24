@@ -45,9 +45,11 @@
                     <MenuItem Command="{Binding FastRenderCommand}" Header="Fast render" />
                 </MenuItem>
 
-                <MenuItem x:Name="ConvertToJsonMenuItem"
-                                      Command="{Binding ConvertToJsonCommand}"
-                                      Header="Convert to JSON">
+                <MenuItem
+                    x:Name="ConvertToJsonMenuItem"
+                    Command="{Binding ConvertToJsonCommand}"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}"
+                    Header="Export to JSON">
                     <MenuItem.Icon>
                         <Grid>
                             <iconPacks:PackIconCodicons
@@ -55,21 +57,16 @@
                                     Height="13"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Padding="4,0,-4,0"
+                                    Padding="0,0,0,0"
                                     Kind="Json" />
-                            <iconPacks:PackIconCodicons
-                                    Width="7"
-                                    Height="11"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Padding="-8,0,8,0"
-                                    Kind="ArrowSmallRight" />
                         </Grid>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Name="ConvertFromJsonMenuItem"
-                                      Command="{Binding ConvertFromJsonCommand}"
-                                      Header="Convert from JSON">
+                <MenuItem
+                    x:Name="ConvertFromJsonMenuItem"
+                    Command="{Binding ConvertFromJsonCommand}"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}"
+                    Header="Import from JSON">
                     <MenuItem.Icon>
                         <Grid>
                             <iconPacks:PackIconCodicons
@@ -77,15 +74,8 @@
                                     Height="13"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Padding="4,0,-4,0"
+                                    Padding="0,0,0,0"
                                     Kind="Json" />
-                            <iconPacks:PackIconCodicons
-                                    Width="7"
-                                    Height="11"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Padding="-8,0,8,0"
-                                    Kind="ArrowSmallLeft" />
                         </Grid>
                     </MenuItem.Icon>
                 </MenuItem>
@@ -100,15 +90,8 @@
                                     Height="13"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Padding="4,0,-4,0"
+                                    Padding="0,0,0,0"
                                     Kind="Code" />
-                            <iconPacks:PackIconCodicons
-                                    Width="7"
-                                    Height="11"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Padding="-8,0,8,0"
-                                    Kind="ArrowSmallRight" />
                         </Grid>
                     </MenuItem.Icon>
                 </MenuItem>

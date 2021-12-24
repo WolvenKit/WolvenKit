@@ -112,7 +112,7 @@
                 <Rectangle Stroke="Black" Margin="0" RadiusX="15" RadiusY="15" Opacity="0.01"/>
             </Grid>
         </Border>
-        <Border Name="WindowMask" CornerRadius="5" Background="Black" BorderThickness="1" />
+        <!--Border Name="WindowMask" CornerRadius="0" Background="Black" BorderThickness="1" /-->
         <Grid Background="{DynamicResource ContentBackgroundAlt2}">
             <Grid.Resources>
                 <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" />
@@ -124,9 +124,9 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Grid.OpacityMask>
+            <!--Grid.OpacityMask>
                 <VisualBrush Visual="{Binding ElementName=WindowMask}" />
-            </Grid.OpacityMask>
+            </Grid.OpacityMask-->
 
             <Grid Grid.RowSpan="3" Panel.ZIndex="1000">
                 <Grid.Resources>
@@ -259,6 +259,6 @@
              />
 
         </Grid>
-        <Border Name="WindowBorder" CornerRadius="{Binding CornerRadius, ElementName=WindowMask}" BorderBrush="{StaticResource ContentBackgroundAlt4}" BorderThickness="1" />
+        <Border Name="WindowBorder" BorderBrush="{StaticResource ContentBackgroundAlt4}" BorderThickness="1" />
     </Grid>
 </syncfusion:ChromelessWindow>

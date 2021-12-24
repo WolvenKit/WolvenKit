@@ -336,6 +336,8 @@ namespace WolvenKit.Views.Documents
             }
         }
 
+        // Image Preview
+
         private System.Windows.Point origin;
         private System.Windows.Point start;
 
@@ -345,7 +347,7 @@ namespace WolvenKit.Views.Documents
 
 
             ScaleTransform xform = new ScaleTransform();
-            xform.ScaleY = -1;
+            //xform.ScaleY = -1;
             group.Children.Add(xform);
 
             TranslateTransform tt = new TranslateTransform();
@@ -416,15 +418,20 @@ namespace WolvenKit.Views.Documents
             ScaleTransform transform = (ScaleTransform)transformGroup.Children[0];
             TranslateTransform pan = (TranslateTransform)transformGroup.Children[1];
 
-            double zoom = ViewModel.Image.Width / ImagePreview.RenderSize.Width;
-            double zoomQuot = zoom / transform.ScaleX;
-            //ImagePreview.SetCurrentValue(WidthProperty, ViewModel.Image.Width);
-            //ImagePreview.SetCurrentValue(HeightProperty, ViewModel.Image.Height);
-            var CursorPosCanvas = start;
-            pan.X += -(CursorPosCanvas.X - ImagePreviewCanvas.RenderSize.Width / 2.0 - pan.X) * (zoomQuot - 1.0);
-            pan.Y += -(CursorPosCanvas.Y - ImagePreviewCanvas.RenderSize.Height / 2.0 - pan.Y) * (zoomQuot - 1.0);
-            transform.ScaleX = zoom;
-            transform.ScaleY = -zoom;
+            //double zoom = ViewModel.Image.Width / ImagePreview.RenderSize.Width;
+            //double zoomQuot = zoom / transform.ScaleX;
+            ////ImagePreview.SetCurrentValue(WidthProperty, ViewModel.Image.Width);
+            ////ImagePreview.SetCurrentValue(HeightProperty, ViewModel.Image.Height);
+            //var CursorPosCanvas = start;
+            //pan.X += -(CursorPosCanvas.X - ImagePreviewCanvas.RenderSize.Width / 2.0 - pan.X) * (zoomQuot - 1.0);
+            //pan.Y += -(CursorPosCanvas.Y - ImagePreviewCanvas.RenderSize.Height / 2.0 - pan.Y) * (zoomQuot - 1.0);
+            //transform.ScaleX = zoom;
+            //transform.ScaleY = zoom;
+
+            transform.ScaleX = 1;
+            transform.ScaleY = 1;
+            pan.X = 0;
+            pan.Y = 0;
         }
 
         public void ResetZoomPan(object sender, RoutedEventArgs e)
@@ -434,7 +441,7 @@ namespace WolvenKit.Views.Documents
             TranslateTransform pan = (TranslateTransform)transformGroup.Children[1];
 
             transform.ScaleX = 1;
-            transform.ScaleY = -1;
+            transform.ScaleY = 1;
             pan.X = 0;
             pan.Y = 0;
         }
@@ -465,7 +472,7 @@ namespace WolvenKit.Views.Documents
 
         private void PropertyGrid_ValueChanged(object sender, ValueChangedEventArgs args)
         {
-            ViewModel.SetIsDirty(true);
+            ViewModel.File.SetIsDirty(true);
         }
 
         private void Copy_CanExecute(object sender, CanExecuteRoutedEventArgs e)

@@ -754,12 +754,12 @@ namespace WolvenKit.Modkit.RED4
         {
             texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
 
-            if (cr2w.Chunks.FirstOrDefault() is not CBitmapTexture xbm)
+            if (cr2w.RootChunk is not CBitmapTexture xbm)
             {
                 return false;
             }
 
-            if (cr2w.Chunks[1] is not rendRenderTextureBlobPC blob)
+            if (xbm.RenderTextureResource.RenderResourceBlobPC.GetValue() is not rendRenderTextureBlobPC blob)
             {
                 return false;
             }
@@ -794,6 +794,49 @@ namespace WolvenKit.Modkit.RED4
                     0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
 
             outstream.Write(cr2w.Buffers[0].GetBytes());
+
+            return true;
+        }
+
+        public static bool ConvertXBMToDdsStream(CBitmapTexture xbm, Stream outstream, out DXGI_FORMAT texformat)
+        {
+            texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
+
+            if (xbm.RenderTextureResource.RenderResourceBlobPC.GetValue() is not rendRenderTextureBlobPC blob)
+            {
+                return false;
+            }
+
+            #region get xbm data
+
+            var width = blob.Header.SizeInfo.Width;
+            var height = blob.Header.SizeInfo.Height;
+            var mipCount = blob.Header.TextureInfo.MipCount;
+            var sliceCount = blob.Header.TextureInfo.SliceCount;
+            var alignment = blob.Header.TextureInfo.DataAlignment;
+
+            var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
+            if (xbm.Setup.RawFormat?.Value != null)
+            {
+                rawfmt = xbm.Setup.RawFormat.Value.Value;
+            }
+
+            var compression = Enums.ETextureCompression.TCM_None;
+            if (xbm.Setup.Compression?.Value != null)
+            {
+                compression = xbm.Setup.Compression.Value.Value;
+            }
+
+            texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, null);
+
+            #endregion get xbm data
+
+            // extract and write dds to stream
+            DDSUtils.GenerateAndWriteHeader(outstream,
+                new DDSMetadata(width, height, 1, sliceCount, mipCount,
+                    0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
+
+            outstream.Write(blob.TextureData.Buffer.GetBytes());
 
             return true;
         }

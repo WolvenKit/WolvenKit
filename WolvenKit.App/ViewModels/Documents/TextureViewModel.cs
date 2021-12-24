@@ -22,30 +22,24 @@ using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Documents
 {
-    public class W2rcBufferViewModel : W2rcFileViewModel
+    public class TextureViewModel : W2rcFileViewModel
     {
-        private int _bufferIndex;
+        protected string _header { get; set; }
 
-        public W2rcBufferViewModel(CR2WFile w2rcFile, int bufferIndex, DirtyDelegate setIsDirty) : base(w2rcFile, setIsDirty)
+        public TextureViewModel(CBitmapTexture data, RedDocumentViewModel file) : base(data, file)
         {
-            _bufferIndex = bufferIndex;
-            
-            if (_file.Chunks[0] is not CBitmapTexture xbm)
-            {
-                return;
-            }
-
-            if (_file.Chunks[1] is not rendRenderTextureBlobPC blob)
-            {
-                return;
-            }
-
             IsImagePreviewVisible = true;
+            _header = "Preview";
 
+            SetupImage(data);
+        }
+
+        protected void SetupImage(CBitmapTexture xbm)
+        {
             using var ddsstream = new MemoryStream();
             try
             {
-                if (ModTools.ConvertCR2WToDdsStream(_file, ddsstream, out _))
+                if (ModTools.ConvertXBMToDdsStream(xbm, ddsstream, out _))
                 {
                     _ = LoadImageFromStream(ddsstream);
                 }
@@ -57,7 +51,7 @@ namespace WolvenKit.ViewModels.Documents
             }
         }
 
-        async Task LoadImageFromStream(Stream stream)
+        protected async Task LoadImageFromStream(Stream stream)
         {
 
             var qa = await ImageDecoder.RenderToBitmapSourceDds(stream);
@@ -78,20 +72,9 @@ namespace WolvenKit.ViewModels.Documents
 
         #region methods
 
-        public override List<ChunkViewModel> GenerateChunks()
-        {
-            if (_file.Buffers[_bufferIndex] != null && _file.Buffers[_bufferIndex].Data is Package04 pkg)
-            {
-                return pkg.Chunks?.Select(_ => new ChunkViewModel(_, this)).ToList() ?? null;
-            }
-            else
-            {
-                return null;
-            }
-        }
+        public override ChunkViewModel GenerateChunks() => null;
 
-        public override string ToString() => $"Buffer {_bufferIndex}";
-        //public override string ToString() => $"TODO.buffer";
+        public override string ToString() => _header;
 
         #endregion
     }

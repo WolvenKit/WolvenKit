@@ -216,7 +216,7 @@ namespace WolvenKit.RED4.Types
 
                     if (genericType == typeof(CStatic<>))
                     {
-                        result += flags != null ? (flags.MoveNext() ? flags.Current : 0) + "," : "";
+                        result +=  (flags.MoveNext() ? flags.Current : 0) + ",";
                     }
 
                     tType = innerType;

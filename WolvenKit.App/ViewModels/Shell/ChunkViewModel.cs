@@ -42,14 +42,16 @@ namespace WolvenKit.ViewModels.Shell
             ExportChunkCommand = new DelegateCommand((p) => ExecuteExportChunk(), (p) => CanExportChunk());
             AddItemToArrayCommand = new DelegateCommand((p) => ExecuteAddItemToArray(), (p) => CanAddItemToArray());
             DeleteItemCommand = new DelegateCommand((p) => ExecuteDeleteItem(), (p) => CanDeleteItem());
+            OpenChunkCommand = new DelegateCommand((p) => ExecuteOpenChunk(), (p) => CanOpenChunk());
         }
 
-        public ChunkViewModel(IRedType export, W2rcFileViewModel file) : this(export)
+        public ChunkViewModel(IRedType export, W2rcFileViewModel tab) : this(export)
         {
-            File = file;
+            Tab = tab;
+            IsExpanded = true;
             this.Data.WhenAnyValue(x => x).Subscribe((x) =>
             {
-                this.File.SetIsDirty(true);
+                Tab.File.SetIsDirty(true);
             });
         }
 
@@ -66,7 +68,7 @@ namespace WolvenKit.ViewModels.Shell
         public ChunkViewModel(IRedType export, ChunkViewModel parent) : this(export)
         {
             Parent = parent;
-            File = Parent.File;
+            Tab = Parent.Tab;
         }
 
         public ChunkViewModel(string name, IRedType export, ChunkViewModel parent) : this(export, parent)
@@ -78,7 +80,7 @@ namespace WolvenKit.ViewModels.Shell
 
         #region Properties
 
-        public W2rcFileViewModel File;
+        public W2rcFileViewModel Tab;
         private IRedType _data;
         public IRedType Data
         {
@@ -375,12 +377,14 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
+        private Flags _flags;
+
         public Type PropertyType
         {
             get
             {
                 var type = Data?.GetType() ?? null;
-                if (type == null)
+                if (Parent != null)
                 {
                     var parent = Parent.Data;
                     if (Parent.PropertyType == typeof(IRedBaseHandle))
@@ -389,7 +393,14 @@ namespace WolvenKit.ViewModels.Shell
                         parent = handle.GetValue();
                     }
                     var propInfo = RedReflection.GetPropertyByName(parent.GetType(), propertyName) ?? null;
-                    type = propInfo?.Type ?? null;
+                    if (propInfo != null)
+                    {
+                        if (type == null || type == propInfo.Type)
+                        {
+                            _flags = propInfo.Flags;
+                            type = propInfo.Type;
+                        }
+                    }
                 }
                 return type;
             }
@@ -404,7 +415,7 @@ namespace WolvenKit.ViewModels.Shell
                 //    var handle = (IRedBaseHandle)Data;
                 //    return "Handle: " + (handle?.File?.Chunks[handle.Pointer]?.GetType().Name ?? "null");
                 //}
-                return PropertyType != null ? RedReflection.GetRedTypeFromCSType(PropertyType) : "null";
+                return PropertyType != null ? GetRedTypeFromCSType(PropertyType, _flags) : "null";
             }
         }
 
@@ -538,12 +549,20 @@ namespace WolvenKit.ViewModels.Shell
                     str.Append(Type ?? "null");
                 }
 
-                var epi = GetPropertyByName(PropertyType, "Name");
-                if (propertyName == null && epi != null)
+                if (propertyName == null)
                 {
-                    str.Append($" ({epi.GetValue((IRedClass)Data)})");
+                    // some common "names" of classes that might be useful to display in the UI
+                    var name = GetPropertyByName(PropertyType, "Name");
+                    var partName = GetPropertyByName(PropertyType, "PartName");
+                    if (name != null)
+                    {
+                        str.Append($" ({name.GetValue((IRedClass)Data)})");
+                    }
+                    else if (partName != null)
+                    {
+                        str.Append($" ({partName.GetValue((IRedClass)Data)})");
+                    }
                 }
-
                 return str.ToString();
             }
             set
@@ -660,7 +679,7 @@ namespace WolvenKit.ViewModels.Shell
             (Data as IRedArray).Add(newItem);
             _properties.Add(new ChunkViewModel(newItem, this));
             IsExpanded = true;
-            this.File.SetIsDirty(true);
+            Tab.File.SetIsDirty(true);
         }
 
         public ICommand DeleteItemCommand { get; private set; }
@@ -673,7 +692,7 @@ namespace WolvenKit.ViewModels.Shell
                 Parent.IsSelected = true;
                 ary.Remove(Data);
                 Parent.Properties.Remove(this);
-                this.File.SetIsDirty(true);
+                Tab.File.SetIsDirty(true);
             }
         }
 
@@ -710,6 +729,14 @@ namespace WolvenKit.ViewModels.Shell
                     myStream.Close();
                 }
             }
+        }
+
+        public ICommand OpenChunkCommand { get; private set; }
+        private bool CanOpenChunk() => Data is IRedClass && Parent != null;
+        private void ExecuteOpenChunk()
+        {
+            if (Data is IRedClass cls)
+                Tab.File.TabItemViewModels.Add(new W2rcFileViewModel(cls, Tab.File));
         }
     }
 }

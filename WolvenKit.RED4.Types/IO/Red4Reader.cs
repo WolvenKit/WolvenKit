@@ -235,7 +235,9 @@ namespace WolvenKit.RED4.IO
 
         public virtual IRedArrayFixedSize<T> ReadCArrayFixedSize<T>(uint size, Flags flags) where T : IRedType
         {
-            var array = new CArrayFixedSize<T>(flags.MoveNext() ? flags.Current : 0);
+            //var array = new CArrayFixedSize<T>(flags.MoveNext() ? flags.Current : 0);
+            flags.MoveNext();
+            var array = new CArrayFixedSize<T>(flags.Current);
 
             var elementCount = _reader.ReadUInt32();
 

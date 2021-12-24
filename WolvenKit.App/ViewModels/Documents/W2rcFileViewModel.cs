@@ -27,18 +27,19 @@ namespace WolvenKit.ViewModels.Documents
 {
     public class W2rcFileViewModel : RedDocumentItemViewModel
     {
-        protected readonly CR2WFile _file;
+        protected readonly IRedClass _data;
 
-        public W2rcFileViewModel(CR2WFile file, DirtyDelegate setIsDirty)
+        public RedDocumentViewModel File;
+
+        public W2rcFileViewModel(IRedClass data, RedDocumentViewModel file)
         {
             OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport);
             //ExportChunkCommand = new DelegateCommand<ChunkViewModel>((p) => ExecuteExportChunk(p), (p) => CanExportChunk(p));
 
             IsImagePreviewVisible = false;
 
-            _file = file;
-
-            SetIsDirty = setIsDirty;
+            File = file;
+            _data = data;
 
             //RootChunk = Chunks[0];
 
@@ -58,7 +59,7 @@ namespace WolvenKit.ViewModels.Documents
 
         //[Reactive] public ObservableCollection<ChunkPropertyViewModel> ChunkProperties { get; set; } = new();
 
-        public IReadOnlyList<IRedRef> Imports => _file is CR2WFile cr2w ? cr2w.Imports : new ReadOnlyCollection<IRedRef>(new List<IRedRef>());
+        //public IReadOnlyList<IRedRef> Imports => _file is CR2WFile cr2w ? cr2w.Imports : new ReadOnlyCollection<IRedRef>(new List<IRedRef>());
 
         //public List<ICR2WBuffer> Buffers => _file.Buffers;
 
@@ -68,9 +69,10 @@ namespace WolvenKit.ViewModels.Documents
         {
             get
             {
-                if (_chunks == null)
+                if (_chunks == null || _chunks.Count == 0)
                 {
-                    _chunks = GenerateChunks();
+                    _chunks = new List<ChunkViewModel>();
+                    _chunks.Add(GenerateChunks());
                 }
                 return _chunks;
             }
@@ -80,9 +82,9 @@ namespace WolvenKit.ViewModels.Documents
             }
         }
 
-        public virtual List<ChunkViewModel> GenerateChunks()
+        public virtual ChunkViewModel GenerateChunks()
         {
-            return _file.Chunks.Select(_ => new ChunkViewModel(_, this)).ToList();
+            return new ChunkViewModel(_data, this);
         }
 
         [Reactive] public ChunkViewModel SelectedChunk { get; set; }
@@ -150,9 +152,9 @@ namespace WolvenKit.ViewModels.Documents
 
         #region methods
 
-        public Red4File GetFile() => _file;
+        //public Red4File GetFile() => _file;
 
-        public override string ToString() => "Main File";
+        public override string ToString() => _data.GetType().Name;
 
         #endregion
     }

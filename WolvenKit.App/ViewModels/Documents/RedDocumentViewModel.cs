@@ -6,11 +6,14 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using DynamicData;
 using DynamicData.Kernel;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Common.RED4.Compiled;
@@ -18,6 +21,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Documents
@@ -37,6 +41,7 @@ namespace WolvenKit.ViewModels.Documents
         private readonly ILoggerService _loggerService;
         private readonly Red4ParserService _parser;
         private readonly IHashService _hashService;
+        public CR2WFile Cr2wFile;
 
 
         public RedDocumentViewModel(string path) : base(path)
@@ -72,7 +77,7 @@ namespace WolvenKit.ViewModels.Documents
             if (file.HasValue)
             {
                 // TODO gather buffers
-                var resource = file.Value.GetFile();
+                var resource = Cr2wFile;
                 if (resource is CR2WFile cr2w)
                 {
                     using var writer = new CR2WWriter(fs);
@@ -91,8 +96,8 @@ namespace WolvenKit.ViewModels.Documents
         {
             using var reader = new BinaryReader(stream);
 
-            var cr2w = _parser.TryReadRed4File(reader);
-            if (cr2w == null)
+            Cr2wFile = _parser.TryReadRed4File(reader);
+            if (Cr2wFile == null)
             {
                 _loggerService.Error($"Failed to read cr2w file {path}");
                 return false;
@@ -104,7 +109,7 @@ namespace WolvenKit.ViewModels.Documents
             FilePath = path;
             _isInitialized = true;
 
-            PopulateItems(cr2w);
+            PopulateItems();
             return true;
         }
 
@@ -159,30 +164,47 @@ namespace WolvenKit.ViewModels.Documents
             .Where(x => x.DocumentItemType == ERedDocumentItemType.MainFile)
             .FirstOrDefault());
 
-        private void PopulateItems(CR2WFile w2rcFile)
+        private void PopulateItems()
         {
-            var main = new W2rcFileViewModel(w2rcFile, SetIsDirty);
-            TabItemViewModels.Add(main);
-            for (int i = 0; i < w2rcFile.Buffers.Count; i++)
+            TabItemViewModels.Add(new W2rcFileViewModel(Cr2wFile.RootChunk, this));
+            if (Cr2wFile.RootChunk is CBitmapTexture xbm)
             {
-                var view = new W2rcBufferViewModel(w2rcFile, i, SetIsDirty);
-                TabItemViewModels.Add(view);
+                TabItemViewModels.Add(new TextureViewModel(xbm, this));
             }
+            if (Cr2wFile.RootChunk is inkTextureAtlas atlas)
+            {
+                var xbmHash = FNV1A64HashAlgorithm.HashString(atlas.Slots[0].Texture.DepotPath.ToString());
+                var file = GetFileFromHash(xbmHash);
+                if (file != null)
+                {
+                    TabItemViewModels.Add(new InkTextureAtlasViewModel(atlas, (CBitmapTexture)file.RootChunk, this));
+                }
+            }
+
             SelectedIndex = 0;
 
             SelectedTabItemViewModel = TabItemViewModels.FirstOrDefault();
-
-            //TabItemViewModels.CollectionChanged += TabItemViewModels_CollectionChanged;
-            //this.WhenAnyValue(x => x.TabItemViewModels).Select(items => items.Any(x => x.IsDirty)).Subscribe(items => SetIsDirty(true));
         }
 
-        //private void TabItemViewModels_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        //{
-        //    foreach (RedDocumentItemViewModel item in e.NewItems)
-        //    {
-        //        SetIsDirty(IsDirty || item.IsDirty);
-        //    }
-        //}
+        private CR2WFile GetFileFromHash(ulong hash)
+        {
+            // TODO: need to look locally first
+            var _archiveManager = Locator.Current.GetService<IArchiveManager>();
+            var file = _archiveManager.Lookup(hash);
+            if (file.HasValue && file.Value is FileEntry fe)
+            {
+                CR2WFile cr2wFile = null;
+                using (var stream = new MemoryStream())
+                {
+                    fe.Extract(stream);
+                    using var reader = new BinaryReader(stream);
+                    cr2wFile = _parser.TryReadRed4File(reader);
+                }
+
+                return cr2wFile;
+            }
+            return null;
+        }
 
         #endregion
 

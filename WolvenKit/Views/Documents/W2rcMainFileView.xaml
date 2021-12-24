@@ -194,10 +194,60 @@
                     </Style.Triggers>
                 </Style>
 
+                <ContextMenu x:Key="TreeViewContextMenu" DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
+                    <MenuItem
+                        Style="{StaticResource SyncfusionMenuItemStyle}"
+                        Header="Open in New Tab"
+                        IsCheckable="False"
+                        Command="{Binding Path=PlacementTarget.Tag.OpenChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconCodicons
+                                Width="13"
+                                Height="13"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Padding="0,0,0,0"
+                                Kind="References" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem
+                        Style="{StaticResource SyncfusionMenuItemStyle}"
+                        Header="Copy Value to Clipboard"
+                        IsCheckable="False"
+                        Command="ApplicationCommands.Copy"
+                        CommandTarget="{Binding}"
+                        CommandParameter="{Binding}">
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconCodicons
+                                Width="13"
+                                Height="13"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Padding="0,0,0,0"
+                                Kind="Copy" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem
+                        Style="{StaticResource SyncfusionMenuItemStyle}"
+                        Header="Export to JSON"
+                        IsCheckable="False"
+                        Command="{Binding Path=PlacementTarget.Tag.ExportChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconCodicons
+                                Width="13"
+                                Height="13"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Padding="0,0,0,0"
+                                Kind="Json" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+                
                 <converters:TreeViewItemTemplateSelector x:Name="itemTemplateSelector" x:Key="itemTemplateSelector">
                     <converters:TreeViewItemTemplateSelector.PropertyTemplate>
                         <DataTemplate DataType="{x:Type shell:ChunkViewModel}">
-                            <Grid ToolTip="{Binding Type}" Tag="{Binding}" Background="Transparent">
+                            <Grid ToolTip="{Binding Type}" Tag="{Binding}" Background="Transparent" ContextMenu="{StaticResource TreeViewContextMenu}">
                                 <Grid.CommandBindings>
                                     <CommandBinding Command="ApplicationCommands.Copy" Executed="Copy_Executed" CanExecute="Copy_CanExecute"/>
                                 </Grid.CommandBindings>
@@ -210,48 +260,12 @@
                                    ContentTemplate="{StaticResource PropertyNameTemplate}"/>
                                 <ContentPresenter Grid.Column="1" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center"
                                    ContentTemplate="{StaticResource PropertyValueTemplate}"  />
-                                <Grid.ContextMenu>
-                                    <ContextMenu DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
-                                        <MenuItem
-                                            Style="{StaticResource SyncfusionMenuItemStyle}"
-                                            Header="Copy Value to Clipboard"
-                                            IsCheckable="False"
-                                            Command="ApplicationCommands.Copy"
-                                            CommandTarget="{Binding}"
-                                            CommandParameter="{Binding}">
-                                            <MenuItem.Icon>
-                                                <iconPacks:PackIconCodicons
-                                                    Width="13"
-                                                    Height="13"
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"
-                                                    Padding="0,0,0,0"
-                                                    Kind="Copy" />
-                                            </MenuItem.Icon>
-                                        </MenuItem>
-                                        <MenuItem
-                                            Style="{StaticResource SyncfusionMenuItemStyle}"
-                                            Header="Export to JSON"
-                                            IsCheckable="False"
-                                            Command="{Binding Path=PlacementTarget.Tag.ExportChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}">
-                                            <MenuItem.Icon>
-                                                <iconPacks:PackIconCodicons
-                                                    Width="13"
-                                                    Height="13"
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"
-                                                    Padding="0,0,0,0"
-                                                    Kind="Json" />
-                                            </MenuItem.Icon>
-                                        </MenuItem>
-                                    </ContextMenu>
-                                 </Grid.ContextMenu>
                             </Grid>
                         </DataTemplate>
                     </converters:TreeViewItemTemplateSelector.PropertyTemplate>
                     <converters:TreeViewItemTemplateSelector.ArrayTemplate>
                         <DataTemplate>
-                            <Grid ToolTip="{Binding Type}">
+                            <Grid ToolTip="{Binding Type}" Tag="{Binding}" Background="Transparent" ContextMenu="{StaticResource TreeViewContextMenu}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Style="{StaticResource ArrayNameColumnWidth}" />
                                     <ColumnDefinition Width="Auto" />
@@ -275,7 +289,7 @@
                     </converters:TreeViewItemTemplateSelector.ArrayTemplate>
                     <converters:TreeViewItemTemplateSelector.HandleTemplate>
                         <DataTemplate>
-                            <Grid ToolTip="{Binding Type}">
+                            <Grid ToolTip="{Binding Type}" Tag="{Binding}" Background="Transparent" ContextMenu="{StaticResource TreeViewContextMenu}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Style="{StaticResource ArrayNameColumnWidth}" />
                                     <ColumnDefinition Width="Auto" />
@@ -294,7 +308,7 @@
                     </converters:TreeViewItemTemplateSelector.HandleTemplate>
                     <converters:TreeViewItemTemplateSelector.RefTemplate>
                         <DataTemplate>
-                            <Grid ToolTip="{Binding Type}">
+                            <Grid ToolTip="{Binding Type}" Tag="{Binding}" Background="Transparent" ContextMenu="{StaticResource TreeViewContextMenu}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Style="{StaticResource ArrayNameColumnWidth}" />
                                     <!--ColumnDefinition Width="20" /-->
@@ -544,19 +558,43 @@
                 x:Name="ImagePreviewCanvas"
                 ClipToBounds="True"
                 Background="{StaticResource ContentBackground}">
-                <Image
-                    x:Name="ImagePreview"
-                    ClipToBounds="False"
-                    Source="{Binding Image}"
-                    IsHitTestVisible="False"
-                    Opacity="1"
-                    RenderTransformOrigin="0.5,0.5">
-                    <!--Image.RenderTransform>
-                    RenderOptions.BitmapScalingMode="NearestNeighbor"
-                    UseLayoutRounding="True"
-                        <ScaleTransform ScaleY="-1"/>
-                    </Image.RenderTransform-->
-                </Image>
+                <Canvas x:Name="ImagePreview"
+                        RenderTransformOrigin="0.5,0.5">
+                    <Image
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        ClipToBounds="False"
+                        Source="{Binding Image}"
+                        IsHitTestVisible="False"
+                        RenderTransformOrigin="0.5,0.5"
+                        Opacity="1">
+                        <Image.RenderTransform>
+                            <ScaleTransform ScaleY="-1"/>
+                        </Image.RenderTransform>
+                    </Image>
+                    <ItemsControl ItemsSource="{Binding OverlayItems}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="ContentPresenter">
+                                <Setter Property="Canvas.Left" Value="{Binding Left}"/>
+                                <Setter Property="Canvas.Top" Value="{Binding Top}"/>
+                                <Setter Property="Canvas.Right" Value="{Binding Right}"/>
+                                <Setter Property="Canvas.Bottom" Value="{Binding Bottom}"/>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderThickness="1" BorderBrush="{StaticResource WolvenKitCyan}">
+                                    <TextBlock Text="{Binding Name}" />
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Canvas>
             </Border>
         </Border>
 
