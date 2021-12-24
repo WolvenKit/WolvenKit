@@ -38,61 +38,26 @@ namespace WolvenKit.RED4.Archive.CR2W
         public CR2WMetaData MetaData { get; } = new();
 
 
-        private Dictionary<IRedRef, int> _internalImports;
-        public IReadOnlyList<IRedRef> Imports => new ReadOnlyCollection<IRedRef>(_internalImports.Keys.ToList());
+        public IReadOnlyList<IRedRef> Imports { get; }
         public IList<ICR2WProperty> Properties { get; }
 
-        public IRedClass RootChunk => Chunks[0];
+        public IRedClass RootChunk { get; set; }
 
-        public IList<RedBuffer> Buffers
-        {
-            get => _buffers;
-        }
+        [Obsolete]
+        public IList<IRedClass> Chunks { get; set; } = new List<IRedClass>();
+
+        [Obsolete]
+        public IList<RedBuffer> Buffers { get; set; } = new List<RedBuffer>();
 
         public IList<ICR2WEmbeddedFile> EmbeddedFiles { get; }
 
         public CR2WFile()
         {
-            _internalImports = new Dictionary<IRedRef, int>();
-
             Properties = new List<ICR2WProperty>();     //block 4
             EmbeddedFiles = new List<ICR2WEmbeddedFile>();       //block 7
-
-            //RedBaseClass.RegisterEventHandler(typeof(CResourceReference<>), OnImport);
-            //RedBaseClass.RegisterEventHandler(typeof(CResourceAsyncReference<>), OnImport);
         }
 
-        private void OnImport(object sender, RedBaseClass.ObjectChangedEventArgs e)
-        {
-            if (e.OldValue != null)
-            {
-                var oldValue = (IRedRef)e.OldValue;
-
-                if (!_internalImports.ContainsKey(oldValue))
-                {
-                    throw new Exception();
-                }
-
-                _internalImports[oldValue]--;
-                if (_internalImports[oldValue] == 0)
-                {
-                    _internalImports.Remove(oldValue);
-                }
-            }
-
-            if (e.NewValue != null)
-            {
-                var newValue = (IRedRef)e.NewValue;
-
-                if (!_internalImports.ContainsKey(newValue))
-                {
-                    _internalImports.Add(newValue, 0);
-                }
-
-                _internalImports[newValue]++;
-            }
-        }
-
+        
         #region IDisposable
 
         private bool _disposed;
@@ -109,8 +74,6 @@ namespace WolvenKit.RED4.Archive.CR2W
             {
                 if (disposing)
                 {
-                    //RedBaseClass.RemoveEventHandler(typeof(CResourceReference<>), OnImport);
-                    //RedBaseClass.RemoveEventHandler(typeof(CResourceAsyncReference<>), OnImport);
                 }
 
                 _disposed = true;

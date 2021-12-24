@@ -98,14 +98,7 @@ namespace WolvenKit.RED4.Types
         public new T this[int index]
         {
             get => base[index];
-            set
-            {
-                if (value == null && base[index] is IRedBaseHandle d)
-                {
-                    d.Remove();
-                }
-                base[index] = value;
-            }
+            set => base[index] = value;
         }
 
         public override bool Equals(object obj)

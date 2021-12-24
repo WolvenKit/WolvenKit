@@ -9,16 +9,12 @@ namespace WolvenKit.RED4.Types
         public void Remove();
     }
 
-    public interface IRedBaseHandle : IRedRemoveable
+    public interface IRedBaseHandle
     {
-        public Red4File File { get; }
-        public int Pointer { get; set; }
-        public Type InnerType {
-            get
-            {
-                return File?.Chunks?[Pointer]?.GetType() ?? null;
-            }
-        }
+        public Type InnerType { get; }
+
+        public IRedClass GetValue();
+        public void SetValue(IRedClass cls);
     }
 
     public interface IRedBaseHandle<T> : IRedBaseHandle where T : IRedClass

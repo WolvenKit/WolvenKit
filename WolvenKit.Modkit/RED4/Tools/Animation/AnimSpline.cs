@@ -25,7 +25,7 @@ namespace WolvenKit.Modkit.RED4.Animation
 
             Dictionary<UInt16, float> tracks = new Dictionary<UInt16, float>();
 
-            if(animAnimDes.MotionExtraction.Pointer > 0)
+            if(animAnimDes.MotionExtraction.Chunk != null)
             {
                 ROOT_MOTION.AddRootMotion(ref positions, ref rotations, animAnimDes);
             }

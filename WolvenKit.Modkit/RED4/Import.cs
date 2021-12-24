@@ -294,7 +294,7 @@ namespace WolvenKit.Modkit.RED4
                 var font = new rendFont
                 {
                     CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC,
-                    FontBuffer = red.BufferHandler.CreateDataBuffer(0, inbuffer)
+                    FontBuffer = new DataBuffer(inbuffer)
                 };
 
                 // add chunk
@@ -466,14 +466,11 @@ namespace WolvenKit.Modkit.RED4
                 SetTextureGroupSetup(xbm.Setup, red);
 
                 // blob chunk
-                var blob = new rendRenderTextureBlobPC()
-                {
-                    TextureData = new SerializationDeferredDataBuffer(red, 2)
-                };
+                var blob = new rendRenderTextureBlobPC();
 
                 xbm.RenderTextureResource = new rendRenderTextureResource
                 {
-                    RenderResourceBlobPC = red.HandleManager.CreateCHandle<IRenderResourceBlob>(blob)
+                    RenderResourceBlobPC = blob
                 };
 
                 // create rendRenderTextureBlobPC chunk
@@ -542,19 +539,13 @@ namespace WolvenKit.Modkit.RED4
                 // texdata buffer ref
 
                 // add chunks
-                red.Chunks.Add(xbm);
-                red.Chunks.Add(blob);
+                red.RootChunk = xbm;
 
                 // write
-
-                throw new TodoException("compress buffer");
-
-#pragma warning disable CS0162 // Unreachable code detected
-                var buffer = new RedBuffer() { Flags = 131072 };
-                buffer.SetBytes(ms.ToByteArray().Skip(148).ToArray());
-                red.Buffers.Add(buffer);
-#pragma warning restore CS0162 // Unreachable code detected
-
+                blob.TextureData = new SerializationDeferredDataBuffer
+                {
+                    Buffer = RedBuffer.CreateBuffer(131072, ms.ToByteArray().Skip(148).ToArray())
+                };
 
                 var outpath = new RedRelativePath(rawRelative)
                     .ChangeBaseDir(outDir)

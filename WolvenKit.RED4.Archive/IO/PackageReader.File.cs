@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Splat;
@@ -35,25 +36,26 @@ namespace WolvenKit.RED4.Archive.IO
 
             header = BaseStream.ReadStruct<Package04Header>();
 
+            if (header.numSections != 7)
+            {
+                return EFileReadErrorCodes.NoCr2w;
+            }
+
             if (header.refPoolDescOffset != 0)
             {
                 return EFileReadErrorCodes.NoCr2w;
             }
 
-            if (header.numCruids0 > 1)
+            refsAreStrings = _reader.ReadUInt16();
+            var numCruids = _reader.ReadUInt16();
+
+            if (header.numCruids0 != numCruids)
             {
-                refsAreStrings = _reader.ReadUInt16();
-                var numCruids = _reader.ReadUInt16();
-
-                if (header.numCruids0 != numCruids)
-                {
-                    return EFileReadErrorCodes.NoCr2w;
-                }
-                for (var i = 0; i < header.numCruids0; i++)
-                {
-                    result.Cruids.Add(_reader.ReadUInt64());
-                }
-
+                return EFileReadErrorCodes.NoCr2w;
+            }
+            for (var i = 0; i < header.numCruids0; i++)
+            {
+                result.Cruids.Add(_reader.ReadUInt64());
             }
 
             var baseOff = BaseStream.Position;
@@ -74,6 +76,8 @@ namespace WolvenKit.RED4.Archive.IO
             BaseStream.Position = baseOff + header.namePoolDescOffset;
             var nameDesc = BaseStream.ReadStructs<Package04NameHeader>(nameCount);
 
+            //File.WriteAllBytes(@"C:\Users\seber\RiderProjects\WolvenKit\WolvenKit.MSTests\bin\x64\Debug\net5.0\_CR2WTestResults\OldBuffer.bin", buffer.GetBytes());
+
             foreach (var s in nameDesc)
             {
                 BaseStream.Position = baseOff + s.offset;
@@ -85,13 +89,28 @@ namespace WolvenKit.RED4.Archive.IO
             BaseStream.Position = baseOff + header.chunkDescOffset;
             var chunkDesc = BaseStream.ReadStructs<Package04ChunkHeader>(chunkCount);
 
-            foreach (var c in chunkDesc)
+            for (int i = 0; i < chunkDesc.Length; i++)
             {
-                BaseStream.Position = baseOff + c.offset;
-                _chunks.Add(ReadChunk(c));
+                _chunks.Add(ReadChunk(chunkDesc[i]));
             }
 
-            result.SetChunks(_chunks);
+            var newChunks = new List<IRedClass>();
+            for (int i = 0; i < _chunks.Count; i++)
+            {
+                if (!HandleQueue.ContainsKey(i))
+                {
+                    newChunks.Add(_chunks[i]);
+                    continue;
+                }
+
+                foreach (var handle in HandleQueue[i])
+                {
+                    handle.SetValue(_chunks[i]);
+                }
+            }
+
+            result.Chunks = newChunks;
+
             buffer.Data = result;
 
             return EFileReadErrorCodes.NoError;

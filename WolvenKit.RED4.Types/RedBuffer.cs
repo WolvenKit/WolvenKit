@@ -28,7 +28,7 @@ namespace WolvenKit.RED4
         public bool IsCompressed => OodleLZHelper.IsCompressed(_bytes);
 
         public IParseableBuffer Data { get; set; }
-
+        
 
         public void Compress()
         {

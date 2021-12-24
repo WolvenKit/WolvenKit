@@ -12,6 +12,7 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -869,9 +870,7 @@ namespace WolvenKit.Modkit.RED4
             blob.Header.IndexBufferOffset = info.indexBufferOffset;
 
 
-            UInt16 p = (UInt16)(blob.RenderBuffer.Pointer - 1);
-
-            cr2w.Buffers[p].SetBytes(buffer.ToArray());
+            blob.RenderBuffer.Buffer.SetBytes(buffer.ToArray());
 
             //cr2w.Buffers[p].DiskSize = zsize;
             //cr2w.Buffers[p].Crc32 = crc;
@@ -972,7 +971,9 @@ namespace WolvenKit.Modkit.RED4
 
             }
 
-            int meshBufferIdx = cr2w.Chunks.OfType<rendRenderMeshBlob>().First().RenderBuffer.Pointer - 1;
+            throw new TodoException("Whats this?");
+
+            /*int meshBufferIdx = cr2w.Chunks.OfType<rendRenderMeshBlob>().First().RenderBuffer.Pointer - 1;
             int materialBufferIdx = cr2w.Chunks.OfType<CMesh>().First().LocalMaterialBuffer.RawData.Pointer - 1;
             if (cr2w.Chunks.OfType<CMesh>().First().LocalMaterialBuffer.RawData.Buffer.MemSize == 0)
                 materialBufferIdx = int.MaxValue;
@@ -997,7 +998,6 @@ namespace WolvenKit.Modkit.RED4
             cr2w.Chunks.OfType<rendRenderMeshBlob>().First().RenderBuffer.Pointer = meshBufferIdx + 1;
             cr2w.Chunks.OfType<CMesh>().First().LocalMaterialBuffer.RawData.Pointer = materialBufferIdx + 1;
 
-
             if (cr2w.Chunks.OfType<meshMeshParamCloth>().Any())
             {
                 var blob = cr2w.Chunks.OfType<meshMeshParamCloth>().First();
@@ -1015,7 +1015,7 @@ namespace WolvenKit.Modkit.RED4
                             bw.Write(meshes[i].positions[e].Z);
                         }
 
-                        chunk.Positions = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
+                        chunk.Positions = new DataBuffer(buffer.ToArray());
                     }
                     {
                         var buffer = new MemoryStream();
@@ -1025,7 +1025,7 @@ namespace WolvenKit.Modkit.RED4
                             bw.Write(Convert.ToUInt16(meshes[i].indices[e]));
                         }
 
-                        chunk.Indices = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
+                        chunk.Indices = new DataBuffer(buffer.ToArray());
                     }
                     if (meshes[i].weightCount > 0)
                     {
@@ -1039,7 +1039,7 @@ namespace WolvenKit.Modkit.RED4
                             bw.Write(meshes[i].weights[e, 3]);
                         }
 
-                        chunk.SkinWeights = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
+                        chunk.SkinWeights = new DataBuffer(buffer.ToArray());
                     }
                     if (meshes[i].weightCount > 0)
                     {
@@ -1053,7 +1053,7 @@ namespace WolvenKit.Modkit.RED4
                             bw.Write(Convert.ToByte(meshes[i].boneindices[e, 3]));
                         }
 
-                        chunk.SkinIndices = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
+                        chunk.SkinIndices = new DataBuffer(buffer.ToArray());
                     }
                     if (meshes[i].weightCount > 4)
                     {
@@ -1067,7 +1067,7 @@ namespace WolvenKit.Modkit.RED4
                             bw.Write(meshes[i].weights[e, 7]);
                         }
 
-                        chunk.SkinWeightsExt = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
+                        chunk.SkinWeightsExt = new DataBuffer(buffer.ToArray());
                     }
                     if (meshes[i].weightCount > 4)
                     {
@@ -1081,7 +1081,7 @@ namespace WolvenKit.Modkit.RED4
                             bw.Write(Convert.ToByte(meshes[i].boneindices[e, 7]));
                         }
 
-                        chunk.SkinIndicesExt = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
+                        chunk.SkinIndicesExt = new DataBuffer(buffer.ToArray());
                     }
                     {
                         var buffer = new MemoryStream();
@@ -1093,7 +1093,7 @@ namespace WolvenKit.Modkit.RED4
                             bw.Write(meshes[i].normals[e].Z);
                         }
 
-                        chunk.Normals = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
+                        chunk.Normals = new DataBuffer(buffer.ToArray());
                     }
                     blob.Chunks.Add(chunk);
                     meshes[i].weightCount = 0;
@@ -1149,7 +1149,7 @@ namespace WolvenKit.Modkit.RED4
                             bw.Write(meshes[i].positions[e].Z);
                         }
 
-                        chunk.Positions = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
+                        chunk.Positions = new DataBuffer(buffer.ToArray());
                     }
                     {
                         var buffer = new MemoryStream();
@@ -1159,7 +1159,7 @@ namespace WolvenKit.Modkit.RED4
                             bw.Write(Convert.ToUInt16(meshes[i].indices[e]));
                         }
 
-                        chunk.Indices = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
+                        chunk.Indices = new DataBuffer(buffer.ToArray());
                     }
                     if (meshes[i].weightCount > 0)
                     {
@@ -1173,7 +1173,7 @@ namespace WolvenKit.Modkit.RED4
                             bw.Write(meshes[i].weights[e, 3]);
                         }
 
-                        chunk.SkinWeights = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
+                        chunk.SkinWeights = new DataBuffer(buffer.ToArray());
                     }
                     if (meshes[i].weightCount > 0)
                     {
@@ -1187,7 +1187,7 @@ namespace WolvenKit.Modkit.RED4
                             bw.Write(Convert.ToByte(meshes[i].boneindices[e, 3]));
                         }
 
-                        chunk.SkinIndices = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
+                        chunk.SkinIndices = new DataBuffer(buffer.ToArray());
                     }
                     if (meshes[i].weightCount > 4)
                     {
@@ -1201,7 +1201,7 @@ namespace WolvenKit.Modkit.RED4
                             bw.Write(meshes[i].weights[e, 7]);
                         }
 
-                        chunk.SkinWeightsExt = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
+                        chunk.SkinWeightsExt = new DataBuffer(buffer.ToArray());
                     }
                     if (meshes[i].weightCount > 4)
                     {
@@ -1215,7 +1215,7 @@ namespace WolvenKit.Modkit.RED4
                             bw.Write(Convert.ToByte(meshes[i].boneindices[e, 7]));
                         }
 
-                        chunk.SkinIndicesExt = cr2w.BufferHandler.CreateDataBuffer(0, buffer.ToArray());
+                        chunk.SkinIndicesExt = new DataBuffer(buffer.ToArray());
                     }
                     {
                         chunk.Simulation = new CArray<CUInt16>();
@@ -1267,6 +1267,7 @@ namespace WolvenKit.Modkit.RED4
                     }
                 }
             }
+*/
         }
     }
 }

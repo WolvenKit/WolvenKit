@@ -7,26 +7,16 @@ namespace WolvenKit.RED4.Types
     [RED("whandle")]
     public class CWeakHandle<T> : IRedWeakHandle<T>, IEquatable<CWeakHandle<T>> where T : IRedClass
     {
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Red4File File { get; }
-
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public int Pointer { get; set; }
-
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-        public T Chunk
-        {
-            get => (T)File.HandleManager.Get(Pointer);
-            set => File.HandleManager.Set(this, value);
-        }
+        public T Chunk { get; set; }
 
-        internal CWeakHandle(Red4File file, int pointer)
-        {
-            File = file;
-            Pointer = pointer;
-        }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public Type InnerType => typeof(T);
 
-        public void Remove() => File.HandleManager.RemoveHandle(this);
+
+        public IRedClass GetValue() => Chunk;
+        public void SetValue(IRedClass cls) => Chunk = (T)cls;
+
 
         public bool Equals(CWeakHandle<T> other)
         {

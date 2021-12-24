@@ -103,7 +103,7 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     if (item is IRedBaseHandle hnd)
                     {
-                        var star = hnd?.File?.Chunks[hnd.Pointer] ?? null;
+                        var star = hnd.GetValue();
                         Properties.Add(ary.IndexOf(item).ToString(), star);
                     }
                     else
@@ -203,7 +203,7 @@ namespace WolvenKit.ViewModels.Shell
 
                     if (data is IRedBaseHandle handle)
                     {
-                        return _propertyGridData = handle?.File?.Chunks[handle.Pointer] ?? null;
+                        return _propertyGridData = handle.GetValue();
                     }
                     else 
                     {
@@ -232,7 +232,7 @@ namespace WolvenKit.ViewModels.Shell
                         var obj = Data;
                         if (Data is IRedBaseHandle handle)
                         {
-                            obj = handle.File.Chunks[handle.Pointer];
+                            obj = handle.GetValue();
                         }
                         if (obj is IRedArray ary)
                         {
@@ -360,7 +360,7 @@ namespace WolvenKit.ViewModels.Shell
                     if (Parent.PropertyType == typeof(IRedBaseHandle))
                     {
                         var handle = (IRedBaseHandle)parent;
-                        parent = handle.File.Chunks[handle.Pointer];
+                        parent = handle.GetValue();
                     }
                     var propInfo = RedReflection.GetPropertyByName(parent.GetType(), propertyName) ?? null;
                     type = propInfo?.Type ?? null;

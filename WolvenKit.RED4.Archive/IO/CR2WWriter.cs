@@ -68,33 +68,5 @@ namespace WolvenKit.RED4.Archive.IO
                 app.Write(this);
             }
         }
-
-        public override void Write(DataBuffer val)
-        {
-            if (val.Pointer == -1 && val.Data is Package04 p4)
-            {
-                using var ms = new MemoryStream();
-                using var packageWriter = new PackageWriter(ms);
-
-                packageWriter.WritePackage(p4);
-                val.Buffer.SetBytes(ms.ToArray());
-            }
-
-            base.Write(val);
-        }
-
-        public override void Write(SharedDataBuffer val)
-        {
-            if (val.Data is Package04 p4)
-            {
-                using var ms = new MemoryStream();
-                using var packageWriter = new PackageWriter(ms);
-
-                packageWriter.WritePackage(p4);
-                val.Buffer.SetBytes(ms.ToArray());
-            }
-
-            base.Write(val);
-        }
     }
 }

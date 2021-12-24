@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -101,12 +102,32 @@ namespace WolvenKit.RED4.Archive.IO
 
         public override IRedHandle<T> ReadCHandle<T>()
         {
-            return _outputFile.HandleManager.CreateCHandle<T>(_reader.ReadInt32() - 0);
+            var handle = new CHandle<T>();
+
+            var pointer = _reader.ReadInt32();
+            if (!HandleQueue.ContainsKey(pointer))
+            {
+                HandleQueue.Add(pointer, new List<IRedBaseHandle>());
+            }
+
+            HandleQueue[pointer].Add(handle);
+
+            return handle;
         }
 
         public override IRedWeakHandle<T> ReadCWeakHandle<T>()
         {
-            return _outputFile.HandleManager.CreateCWeakHandle<T>(_reader.ReadInt32() - 0);
+            var handle = new CWeakHandle<T>();
+
+            var pointer = _reader.ReadInt32();
+            if (!HandleQueue.ContainsKey(pointer))
+            {
+                HandleQueue.Add(pointer, new List<IRedBaseHandle>());
+            }
+
+            HandleQueue[pointer].Add(handle);
+
+            return handle;
         }
 
         public override IRedResourceAsyncReference<T> ReadCResourceAsyncReference<T>()
@@ -154,6 +175,8 @@ namespace WolvenKit.RED4.Archive.IO
                 Flags = InternalEnums.EImportFlags.Default
             };
         }
+
+        public override DataBuffer ReadDataBuffer() => base.ReadDataBuffer();
 
         public override NodeRef ReadNodeRef()
         {

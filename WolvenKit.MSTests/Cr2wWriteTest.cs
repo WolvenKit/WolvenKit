@@ -1,5 +1,5 @@
 #define IS_PARALLEL
-#undef IS_PARALLEL
+// #undef IS_PARALLEL
 
 using System;
 using System.Collections.Concurrent;
@@ -32,8 +32,8 @@ namespace WolvenKit.MSTests
         public static void SetupClass(TestContext context) => Setup(context);
 
         private const bool TEST_EXISTING = true;
-        private const bool WRITE_FAILED = true;
-        private const bool DECOMPRESS_BUFFERS = false;
+        private const bool WRITE_FAILED = false;
+        private const bool DECOMPRESS_BUFFERS = true;
 
         #region test methods
 
@@ -46,11 +46,13 @@ namespace WolvenKit.MSTests
         //[TestMethod]
         public void Debug()
         {
-            var files = s_groupedFiles[".folbrush"].ToList();
+            var files = s_groupedFiles[".ent"].ToList();
+
+            //var sorted = files.OrderByDescending(x => x.Size).ToList();
 
             foreach (var file in files)
             {
-                if (!file.Name.Contains("layer6.folbrush"))
+                if (!file.Name.Contains("base\\gameplay\\devices\\ventilation_system\\activators\\ventilation_activator_vent.ent"))
                 {
                     continue;
                 }
@@ -58,6 +60,8 @@ namespace WolvenKit.MSTests
                 var list = new List<FileEntry>();
                 list.Add(file);
                 Write_Archive_Items(list);
+
+                return;
             }
         }
 
@@ -873,7 +877,7 @@ namespace WolvenKit.MSTests
             }
 
             // Logging
-            var totalCount = s_groupedFiles[extension].Count();
+            var totalCount = filesToTest.Count;
             var sb = new StringBuilder();
             sb.AppendLine(
                 $"{extension} -> Successful Writes: {successCount} / {totalCount} ({(int)(((double)successCount / (double)totalCount) * 100)}%)");

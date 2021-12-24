@@ -17,11 +17,5 @@ namespace WolvenKit.RED4.Archive.CR2W
         {
             Cruids = new List<CRUID>();
         }
-
-        public void AddChunk(IRedClass chunk)
-        {
-            _chunks.Add(chunk);
-        }
-
     }
 }
