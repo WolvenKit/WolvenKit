@@ -33,13 +33,13 @@ namespace WolvenKit.ViewModels.Documents
 
         public W2rcFileViewModel(IRedClass data, RedDocumentViewModel file)
         {
+
             OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport);
             //ExportChunkCommand = new DelegateCommand<ChunkViewModel>((p) => ExecuteExportChunk(p), (p) => CanExportChunk(p));
 
-            IsImagePreviewVisible = false;
-
             File = file;
             _data = data;
+            Header = _data.GetType().Name;
 
             //RootChunk = Chunks[0];
 
@@ -92,12 +92,6 @@ namespace WolvenKit.ViewModels.Documents
         [Reactive] public ChunkViewModel RootChunk { get; set; }
 
         [Reactive] public IRedRef SelectedImport { get; set; }
-
-        [Reactive] public bool IsImagePreviewVisible { get; set; }
-
-        [Reactive] public Stream ImageStream { get; set; }
-
-        [Reactive] public ImageSource Image { get; set; }
 
         #endregion
 
@@ -153,8 +147,6 @@ namespace WolvenKit.ViewModels.Documents
         #region methods
 
         //public Red4File GetFile() => _file;
-
-        public override string ToString() => _data.GetType().Name;
 
         #endregion
     }

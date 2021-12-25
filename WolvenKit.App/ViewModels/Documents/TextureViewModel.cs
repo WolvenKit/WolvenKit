@@ -22,14 +22,16 @@ using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Documents
 {
-    public class TextureViewModel : W2rcFileViewModel
+    public class TextureViewModel : RedDocumentItemViewModel
     {
-        protected string _header { get; set; }
+        protected readonly IRedClass _data;
+        public RedDocumentViewModel File;
 
-        public TextureViewModel(CBitmapTexture data, RedDocumentViewModel file) : base(data, file)
+        public TextureViewModel(CBitmapTexture data, RedDocumentViewModel file)
         {
-            IsImagePreviewVisible = true;
-            _header = "Preview";
+            Header = "Preview";
+            File = file;
+            _data = data;
 
             SetupImage(data);
         }
@@ -70,12 +72,9 @@ namespace WolvenKit.ViewModels.Documents
 
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.W2rcBuffer;
 
-        #region methods
+        [Reactive] public ImageSource Image { get; set; }
 
-        public override ChunkViewModel GenerateChunks() => null;
+        [Reactive] public object SelectedItem { get; set; }
 
-        public override string ToString() => _header;
-
-        #endregion
     }
 }
