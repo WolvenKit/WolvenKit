@@ -27,15 +27,21 @@ namespace WolvenKit.RED4.Archive.IO
             var result = new Package04();
             _outputFile = result;
 
-            var version = BaseReader.ReadInt16();
-            BaseStream.Position -= 2;
-            if (version != 4)
+            header.version = BaseReader.ReadUInt16();
+            if (header.version != 4)
             {
                 return EFileReadErrorCodes.UnsupportedVersion;
             }
 
-            header.version = _reader.ReadUInt16();
             header.numSections = _reader.ReadUInt16();
+            if (header.numSections < 6 || header.numSections > 7)
+            {
+                return EFileReadErrorCodes.UnsupportedVersion;
+            }
+
+            result.Version = header.version;
+            result.Sections = header.numSections;
+
             header.numCruids0 = _reader.ReadUInt32();
 
             if (header.numSections == 7)

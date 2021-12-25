@@ -73,7 +73,7 @@ namespace WolvenKit.RED4.Types
                         entry2.Unk2.Add(entry3);
                     }
 
-                    entry2.Unk3 = reader.ReadSharedDataBuffer(20);
+                    entry2.Unk3 = reader.BaseReader.ReadBytes(20);
                     entry1.Unk2.Add(entry2);
                 }
                 entry1.Unk3 = reader.ReadCUInt32();
@@ -146,7 +146,7 @@ namespace WolvenKit.RED4.Types
                         writer.Write(vec.W);
                     }
 
-                    writer.Write(app2.Unk3);
+                    writer.BaseWriter.Write(app2.Unk3);
                 }
                 writer.Write(app1.Unk3);
             }
@@ -236,10 +236,10 @@ namespace WolvenKit.RED4.Types
 
         [RED("unk3")]
         [REDProperty(IsIgnored = true)]
-        public SharedDataBuffer Unk3
+        public CByteArray Unk3
         {
-            get => GetPropertyValue<SharedDataBuffer>();
-            set => SetPropertyValue<SharedDataBuffer>(value);
+            get => GetPropertyValue<CByteArray>();
+            set => SetPropertyValue<CByteArray>(value);
         }
 
         public gameSmartObjectAnimationDatabase_App2()

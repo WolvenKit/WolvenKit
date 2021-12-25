@@ -68,5 +68,26 @@ namespace WolvenKit.RED4.Archive.IO
                 app.Write(this);
             }
         }
+
+        public override void Write(SharedDataBuffer val)
+        {
+            if (val.File != null)
+            {
+                using var ms = new MemoryStream();
+                using var cr2wWriter = new CR2WWriter(ms);
+
+                cr2wWriter.WriteFile((CR2WFile)val.File);
+
+                ms.Seek(0, SeekOrigin.Begin);
+
+                var buffer = ms.ToArray();
+                BaseWriter.Write(buffer.Length);
+                BaseWriter.Write(buffer);
+            }
+            else
+            {
+                base.Write(val);
+            }
+        }
     }
 }

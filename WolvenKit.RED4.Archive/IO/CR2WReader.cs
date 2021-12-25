@@ -121,31 +121,27 @@ namespace WolvenKit.RED4.Archive.IO
 
         public override SharedDataBuffer ReadSharedDataBuffer(uint size)
         {
-            var bufferSize = _reader.ReadUInt32();
-            var result = base.ReadSharedDataBuffer(bufferSize);
+            var innerSize = BaseReader.ReadUInt32();
+            if (size != innerSize + 4)
+            {
+                throw new TodoException("ReadSharedDataBuffer");
+            }
+
+            var result = base.ReadSharedDataBuffer(innerSize);
 
             if (_parseBuffer)
             {
-                var ms = new MemoryStream(result.Buffer.GetBytes());
-
+                using var ms = new MemoryStream(result.Buffer.GetBytes());
                 using var br = new BinaryReader(ms, Encoding.Default, true);
-                //br.BaseStream.Position += 4;
-                var magic = br.ReadUInt32();
-                var isCr2wFile = magic == CR2WFile.MAGIC;
-                if (isCr2wFile)
-                {
-                    br.BaseStream.Seek(-4, SeekOrigin.Current);
 
-                    using var cr2wReader = new CR2WReader(br);
-                    var readResult = cr2wReader.ReadFile(out var c, true);
-
-                    result.File = c;
-                }
-                else
+                using var cr2wReader = new CR2WReader(br);
+                var readResult = cr2wReader.ReadFile(out var c, true);
+                if (readResult == EFileReadErrorCodes.NoCr2w)
                 {
-                    var reader = new PackageReader(ms);
-                    reader.ReadPackage(result.Buffer);
+                    throw new TodoException("ReadSharedDataBuffer");
                 }
+
+                result.File = c;
             }
 
             return result;

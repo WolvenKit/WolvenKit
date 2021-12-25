@@ -6,6 +6,7 @@ namespace WolvenKit.RED4.Archive.Buffer
     public class Package04 : Red4File, IParseableBuffer
     {
         public ushort Version = 4;
+        public ushort Sections = 7;
 
         public IList<CRUID> Cruids;
 
