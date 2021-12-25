@@ -67,6 +67,8 @@ namespace WolvenKit.RED4.Archive.IO
             }
 
             refsAreStrings = _reader.ReadUInt16();
+            result.RefsAreStrings = refsAreStrings;
+
             var numCruids = _reader.ReadUInt16();
 
             if (header.numCruids0 != numCruids)

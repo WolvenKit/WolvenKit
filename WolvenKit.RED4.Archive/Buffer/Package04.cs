@@ -7,6 +7,7 @@ namespace WolvenKit.RED4.Archive.Buffer
     {
         public ushort Version = 4;
         public ushort Sections = 7;
+        public ushort RefsAreStrings;
 
         public IList<CRUID> Cruids;
 

@@ -324,19 +324,46 @@ namespace WolvenKit.RED4.Types
                     }
                 }
 
+                var cusProps = new List<ExtendedPropertyInfo>();
                 foreach (var propertyInfo in type.GetProperties())
                 {
-                    var extendedInfo = new ExtendedPropertyInfo(propertyInfo);
+                    var extendedInfo = new ExtendedPropertyInfo(type, propertyInfo);
 
                     if (typeof(IRedAppendix).IsAssignableFrom(type) && propertyInfo.Name == "Appendix")
                     {
                         extendedInfo.IsIgnored = true;
                     }
 
-                    PropertyInfos.Add(extendedInfo);
+                    if (extendedInfo.Ordinal != -1)
+                    {
+                        PropertyInfos.Add(extendedInfo);
+                    }
+                    else
+                    {
+                        cusProps.Add(extendedInfo);
+                    }
                 }
 
                 PropertyInfos = PropertyInfos.OrderBy(p => p.Ordinal).ToList();
+                var clone = new List<ExtendedPropertyInfo>(PropertyInfos);
+                foreach (var extendedInfo in cusProps)
+                {
+                    if (extendedInfo.Before != -1)
+                    {
+                        var index = PropertyInfos.IndexOf(clone[extendedInfo.Before]);
+                        PropertyInfos.Insert(index, extendedInfo);
+                        continue;
+                    }
+
+                    if (extendedInfo.After != -1)
+                    {
+                        var index = PropertyInfos.IndexOf(clone[extendedInfo.After]);
+                        PropertyInfos.Insert(index + 1, extendedInfo);
+                        continue;
+                    }
+
+                    PropertyInfos.Add(extendedInfo);
+                }
             }
 
             public IEnumerable<ExtendedPropertyInfo> GetWritableProperties()
@@ -356,19 +383,24 @@ namespace WolvenKit.RED4.Types
             internal bool _isDefaultSet;
 
             public int Ordinal { get; set; } = -1;
+            public int Before { get; set; } = -1;
+            public int After { get; set; } = -1;
+
             public string Name { get; set; }
             public string RedName { get; set; }
             public Flags Flags { get; set; }
             public bool IsIgnored { get; set; }
 
             public Type Type { get; set; }
+
+            public bool SerializeDefault { get; set; }
             public object DefaultValue { get; internal set; }
 
             public object GetValue(IRedClass instance) => instance.InternalGetPropertyValue(Type, RedName, Flags?.Clone() ?? Flags.Empty);
             public void SetValue(IRedClass instance, object value) => instance.InternalSetPropertyValue(RedName, value);
 
 
-            public ExtendedPropertyInfo(PropertyInfo propertyInfo)
+            public ExtendedPropertyInfo(Type parent, PropertyInfo propertyInfo)
             {
                 Name = propertyInfo.Name;
                 Type = propertyInfo.PropertyType;
@@ -376,26 +408,47 @@ namespace WolvenKit.RED4.Types
                 var attrs = propertyInfo.GetCustomAttributes();
                 foreach (var attribute in attrs)
                 {
-                    if (attribute is OrdinalAttribute ordinalAttribute)
-                    {
-                        Ordinal = ordinalAttribute.Ordinal;
-                    }
+                    ProcessAttribute(attribute);
+                }
 
-                    if (attribute is REDAttribute redAttribute)
+                var propName = $"{parent.Name}.{Name}";
+                if (Patches.AttributePatches.ContainsKey(propName))
+                {
+                    foreach (var attribute in Patches.AttributePatches[propName])
                     {
-                        RedName = redAttribute.Name;
-                        Flags = new Flags(redAttribute.Flags);
+                        ProcessAttribute(attribute);
                     }
+                }
+            }
 
-                    if (attribute is REDBufferAttribute redBufferAttribute)
-                    {
-                        IsIgnored = redBufferAttribute.IsIgnored;
-                    }
+            private void ProcessAttribute(Attribute attribute)
+            {
+                if (attribute is OrdinalAttribute ordinalAttribute)
+                {
+                    Ordinal = ordinalAttribute.Ordinal;
+                }
 
-                    if (attribute is REDPropertyAttribute redPropertyAttribute)
-                    {
-                        IsIgnored = redPropertyAttribute.IsIgnored;
-                    }
+                if (attribute is OrdinalOverrideAttribute ordinalOverrideAttribute)
+                {
+                    Before = ordinalOverrideAttribute.Before;
+                    After = ordinalOverrideAttribute.After;
+                }
+
+                if (attribute is REDAttribute redAttribute)
+                {
+                    RedName = redAttribute.Name;
+                    Flags = new Flags(redAttribute.Flags);
+                }
+
+                if (attribute is REDBufferAttribute redBufferAttribute)
+                {
+                    IsIgnored = redBufferAttribute.IsIgnored;
+                }
+
+                if (attribute is REDPropertyAttribute redPropertyAttribute)
+                {
+                    SerializeDefault = redPropertyAttribute.SerializeDefault;
+                    IsIgnored = redPropertyAttribute.IsIgnored;
                 }
             }
         }

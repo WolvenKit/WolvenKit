@@ -42,6 +42,9 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 refsAreStrings = 0xffff;
             }
+
+            refsAreStrings = file.RefsAreStrings;
+
             //else
             //{
             //    throw new ArgumentOutOfRangeException();
@@ -55,11 +58,12 @@ namespace WolvenKit.RED4.Archive.IO
 
             var (strings, imports, chunkDesc, chunkData) = GenerateChunkData();
 
-            var unique_cruids = _cruids;
+            var unique_cruids = file.Cruids;
+            /*var unique_cruids = _cruids;
             if (refsAreStrings == 0 && (unique_cruids.Count == 0 || unique_cruids[0] != 0))
             {
                 unique_cruids.Insert(0, 0);
-            }
+            }*/
 
             _header.numCruids0 = (ushort)unique_cruids.Count;
             _writer.Write((ushort)_header.numCruids0);

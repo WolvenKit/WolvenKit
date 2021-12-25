@@ -148,6 +148,7 @@ namespace WolvenKit.RED4.Types
     {
         internal REDPropertyAttribute() { }
 
+        public bool SerializeDefault { get; set; } = false;
         public bool IsIgnored { get; set; } = false;
     }
 

@@ -53,7 +53,7 @@ namespace WolvenKit.RED4.Archive.IO
             foreach (var propertyInfo in typeInfo.PropertyInfos)
             {
                 var value = propertyInfo.GetValue(cls);
-                if (!typeInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), propertyInfo, value))
+                if (!typeInfo.SerializeDefault && !propertyInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), propertyInfo, value))
                 {
                     if (propertyInfo.Type == typeof(CRUID) && _doubleHeaderCRUIDS.Contains(cls.GetType()))
                     {
@@ -68,7 +68,6 @@ namespace WolvenKit.RED4.Archive.IO
             _writer.Write((ushort)nonDefaultProperties.Count);
             var currentDataPosition = BaseStream.Position + nonDefaultProperties.Count * 8;
             var descStartPosition = BaseStream.Position;
-            nonDefaultProperties = nonDefaultProperties.OrderBy(p => p.Ordinal).ToList();
 
             foreach (var propertyInfo in nonDefaultProperties)
             {
