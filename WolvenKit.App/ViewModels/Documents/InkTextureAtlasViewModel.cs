@@ -35,7 +35,7 @@ namespace WolvenKit.ViewModels.Documents
             Height = xbm.Height;
             foreach (var part in atlas.Slots[0].Parts)
             {
-                OverlayItems.Add(new InkTextureAtlasMapperViewModel(part, xbm, atlas.Slots[0].Texture.DepotPath.ToString()));
+                OverlayItems.Add(new InkTextureAtlasMapperViewModel(part, xbm, atlas.Slots[0].Texture.DepotPath.ToString(), file.FilePath));
             }
         }
 
@@ -51,6 +51,7 @@ namespace WolvenKit.ViewModels.Documents
             [Reactive] public string DepotPath { get; set; }
             [Reactive] public double Width { get; set; }
             [Reactive] public double Height { get; set; }
+            [Reactive] public string AtlasPath { get; set; }
             [Browsable(false)]
             public inkTextureAtlasMapper Itam;
             [Browsable(false)]
@@ -59,12 +60,27 @@ namespace WolvenKit.ViewModels.Documents
             [Reactive] public double Top { get; set; }
             [Browsable(false)]
             [Reactive] public string Name { get; set; }
+            [Browsable(false)]
+            [Reactive] public string RedscriptExample
+            {
+                get
+                {
+                    return $@"let image = new inkImage();
+image.SetAtlasResource(r""{AtlasPath}"");
+image.SetTexturePart(n""{PartName}"");";
+                }
+                set
+                {
 
-            public InkTextureAtlasMapperViewModel(inkTextureAtlasMapper itam, CBitmapTexture xbm, string path)
+                }
+            }
+
+            public InkTextureAtlasMapperViewModel(inkTextureAtlasMapper itam, CBitmapTexture xbm, string path, string atlasPath)
             {
                 Itam = itam;
                 PartName = itam.PartName;
                 DepotPath = path;
+                AtlasPath = atlasPath;
                 Left = Math.Round(itam.ClippingRectInUVCoords.Left * xbm.Width);
                 Top = Math.Round(itam.ClippingRectInUVCoords.Top * xbm.Height);
                 Width = Math.Round(itam.ClippingRectInUVCoords.Right * xbm.Width) - Left;

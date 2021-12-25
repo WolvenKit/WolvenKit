@@ -35,15 +35,19 @@
         </Grid.ColumnDefinitions>
 
         <syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
-
-        <syncfusion:PropertyGrid
+        <StackPanel Grid.Column="2">
+            <syncfusion:PropertyGrid
             AutoGenerateItems="True"
             SelectedObject="{Binding SelectedItem}"
             PropertyNameColumnDefinition="100"
             SearchBoxVisibility="Collapsed"
-            ButtonPanelVisibility="Collapsed"
-            Grid.Column="2" />
-
+            PropertyExpandMode="FlatMode"
+            ButtonPanelVisibility="Collapsed"/>
+            <TextBlock Text="Redscript Example" Padding="10,5"/>
+            <syncfusion:EditControl FontFamily="Fira Code" ShowLineNumber="False" Text="{Binding SelectedItem.RedscriptExample}"/>
+            <TextBlock Text="UIIcon TweakDB Example" Padding="10,5"/>
+            <syncfusion:EditControl FontFamily="Fira Code" ShowLineNumber="False" Text="{Binding SelectedItem.TweakDBExample}"/>
+        </StackPanel>
         <Border
         BorderThickness="1"
         Padding="0"
