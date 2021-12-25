@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Archive.IO
             _header = new Package04Header
             {
                 version = _file.Version,
-                numSections = 7
+                numSections = _file.Sections
             };
 
             if (file.RootChunk is entEntity)
@@ -50,33 +50,18 @@ namespace WolvenKit.RED4.Archive.IO
             var headerStart = BaseStream.Position;
             //BaseStream.WriteStruct(_header);
 
-            _writer.Write(_header.version);
-            _writer.Write(_header.numSections);
-            _writer.Write(_header.numCruids0);
-
-            if (_header.numSections == 7)
-            {
-                _writer.Write(_header.refPoolDescOffset);
-                _writer.Write(_header.refPoolDataOffset);
-            }
-
-            _writer.Write(_header.namePoolDescOffset);
-            _writer.Write(_header.namePoolDataOffset);
-
-            _writer.Write(_header.chunkDescOffset);
-            _writer.Write(_header.chunkDataOffset);
+            WriteHeader();
+            _writer.Write(refsAreStrings);
 
             var (strings, imports, chunkDesc, chunkData) = GenerateChunkData();
 
             var unique_cruids = _cruids;
-            if (refsAreStrings == 0)
+            if (refsAreStrings == 0 && (unique_cruids.Count == 0 || unique_cruids[0] != 0))
             {
                 unique_cruids.Insert(0, 0);
             }
 
             _header.numCruids0 = (ushort)unique_cruids.Count;
-
-            _writer.Write(refsAreStrings);
             _writer.Write((ushort)_header.numCruids0);
 
             // write cruids
@@ -127,8 +112,26 @@ namespace WolvenKit.RED4.Archive.IO
             // rewrite header with correct info
 
             BaseStream.Position = headerStart;
-            BaseStream.WriteStruct(_header);
+            WriteHeader();
+        }
 
+        private void WriteHeader()
+        {
+            _writer.Write(_header.version);
+            _writer.Write(_header.numSections);
+            _writer.Write(_header.numCruids0);
+
+            if (_header.numSections == 7)
+            {
+                _writer.Write(_header.refPoolDescOffset);
+                _writer.Write(_header.refPoolDataOffset);
+            }
+
+            _writer.Write(_header.namePoolDescOffset);
+            _writer.Write(_header.namePoolDataOffset);
+
+            _writer.Write(_header.chunkDescOffset);
+            _writer.Write(_header.chunkDataOffset);
         }
 
         private Package04ChunkHeader WriteChunk(PackageWriter file, IRedClass chunk)

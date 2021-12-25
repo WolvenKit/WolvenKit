@@ -108,6 +108,11 @@ namespace WolvenKit.RED4.Types
             var info = RedReflection.GetTypeInfo(GetType());
             foreach (var propertyInfo in info.PropertyInfos)
             {
+                if (string.IsNullOrEmpty(propertyInfo.RedName))
+                {
+                    continue;
+                }
+
                 if (!_properties.ContainsKey(propertyInfo.RedName))
                 {
                     var propTypeInfo = RedReflection.GetTypeInfo(propertyInfo.Type);

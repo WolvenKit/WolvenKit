@@ -49,7 +49,7 @@ namespace WolvenKit.RED4.Types
                     }
                 };
                 entry1.Unk3 = reader.ReadCUInt64();
-                entry1.Unk4 = reader.ReadSharedDataBuffer(5);
+                entry1.Unk4 = reader.BaseReader.ReadBytes(5);
                 entry1.Unk5 = reader.ReadCFloat();
                 entry1.Unk6 = reader.ReadCFloat();
 
@@ -107,7 +107,7 @@ namespace WolvenKit.RED4.Types
                 writer.Write(app1.Unk2.Min.W);
 
                 writer.Write(app1.Unk3);
-                writer.Write(app1.Unk4);
+                writer.BaseWriter.Write(app1.Unk4);
                 writer.Write(app1.Unk5);
                 writer.Write(app1.Unk6);
 
@@ -164,10 +164,10 @@ namespace WolvenKit.RED4.Types
 
         [RED("unk4")]
         [REDProperty(IsIgnored = true)]
-        public SharedDataBuffer Unk4
+        public CByteArray Unk4
         {
-            get => GetPropertyValue<SharedDataBuffer>();
-            set => SetPropertyValue<SharedDataBuffer>(value);
+            get => GetPropertyValue<CByteArray>();
+            set => SetPropertyValue<CByteArray>(value);
         }
 
         [RED("unk5")]
