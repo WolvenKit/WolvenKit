@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ReactiveUI;
+using Syncfusion.Windows.Edit;
 using WolvenKit.ViewModels.Documents;
 
 namespace WolvenKit.Views.Documents
@@ -27,6 +28,13 @@ namespace WolvenKit.Views.Documents
         {
             InitializeComponent();
 
+            //var redscriptResourceDictionary = new ResourceDictionary();
+            //redscriptResourceDictionary.Source = new Uri(";component/Functionality/RedscriptLanguage.xaml",UriKind.RelativeOrAbsolute);
+
+            RedscriptLanguage redscriptLanguage = new RedscriptLanguage(editControl1);
+            redscriptLanguage.Lexem = editControl1.Resources["redscriptLanguageLexems"] as LexemCollection;
+            redscriptLanguage.Formats = editControl1.Resources["redscriptLanguageFormats"] as FormatsCollection;
+            editControl1.CustomLanguage = redscriptLanguage;
 
             this.WhenActivated(disposables =>
             {
@@ -44,18 +52,18 @@ namespace WolvenKit.Views.Documents
                 //        view => view.textEditor.Document)
                 //    .DisposeWith(disposables);
 
-                this.Bind(ViewModel,
-                        viewModel => viewModel.IsDirty,
-                        view => view.textEditor.IsModified)
-                    .DisposeWith(disposables);
-                this.OneWayBind(ViewModel,
-                        viewModel => viewModel.IsReadOnly,
-                        view => view.textEditor.IsReadOnly)
-                    .DisposeWith(disposables);
-                this.OneWayBind(ViewModel,
-                        viewModel => viewModel.HighlightingDefinition,
-                        view => view.textEditor.SyntaxHighlighting)
-                    .DisposeWith(disposables);
+                //this.Bind(ViewModel,
+                //        viewModel => viewModel.IsDirty,
+                //        view => view.textEditor.IsModified)
+                //    .DisposeWith(disposables);
+                //this.OneWayBind(ViewModel,
+                //        viewModel => viewModel.IsReadOnly,
+                //        view => view.textEditor.IsReadOnly)
+                //    .DisposeWith(disposables);
+                //this.OneWayBind(ViewModel,
+                //        viewModel => viewModel.HighlightingDefinition,
+                //        view => view.textEditor.SyntaxHighlighting)
+                //    .DisposeWith(disposables);
 
             });
         }
