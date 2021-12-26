@@ -22,12 +22,12 @@ using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Documents
 {
-    public class TextureViewModel : RedDocumentItemViewModel
+    public class RDTTextureViewModel : RedDocumentTabViewModel
     {
         protected readonly IRedClass _data;
         public RedDocumentViewModel File;
 
-        public TextureViewModel(CBitmapTexture data, RedDocumentViewModel file)
+        public RDTTextureViewModel(CBitmapTexture data, RedDocumentViewModel file)
         {
             Header = "Preview";
             File = file;

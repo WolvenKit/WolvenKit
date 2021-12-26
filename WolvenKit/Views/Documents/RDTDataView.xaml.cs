@@ -25,11 +25,11 @@ using System.Windows.Controls;
 namespace WolvenKit.Views.Documents
 {
     /// <summary>
-    /// Interaction logic for W2rcMainFileView.xaml
+    /// Interaction logic for RDTDataView.xaml
     /// </summary>
-    public partial class W2rcMainFileView : ReactiveUserControl<W2rcFileViewModel>
+    public partial class RDTDataView : ReactiveUserControl<RDTDataViewModel>
     {
-        public W2rcMainFileView()
+        public RDTDataView()
         {
             InitializeComponent();
 
@@ -37,7 +37,7 @@ namespace WolvenKit.Views.Documents
 
             this.WhenAnyValue(x => x.DataContext).Subscribe(x =>
             {
-                if (x is W2rcFileViewModel vm)
+                if (x is RDTDataViewModel vm)
                 {
                     SetCurrentValue(ViewModelProperty, vm);
                 }

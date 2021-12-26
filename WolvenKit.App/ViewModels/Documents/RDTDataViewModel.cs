@@ -25,13 +25,13 @@ using System.Collections.Specialized;
 
 namespace WolvenKit.ViewModels.Documents
 {
-    public class W2rcFileViewModel : RedDocumentItemViewModel
+    public class RDTDataViewModel : RedDocumentTabViewModel
     {
         protected readonly IRedClass _data;
 
         public RedDocumentViewModel File;
 
-        public W2rcFileViewModel(IRedClass data, RedDocumentViewModel file)
+        public RDTDataViewModel(IRedClass data, RedDocumentViewModel file)
         {
 
             OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport);
@@ -52,6 +52,12 @@ namespace WolvenKit.ViewModels.Documents
             //}
             //_file.WhenAnyValue(x => x).Subscribe(x => IsDirty |= true);
         }
+
+        public RDTDataViewModel(string header, IRedClass data, RedDocumentViewModel file) : this(data, file)
+        {
+            Header = header;
+        }
+
 
         #region properties
 

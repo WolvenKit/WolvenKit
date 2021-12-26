@@ -3,11 +3,11 @@ using WolvenKit.ViewModels.Documents;
 
 namespace WolvenKit.Views.Documents
 {
-    public partial class DocumentView : ReactiveUserControl<RedDocumentViewModel>
+    public partial class RedDocumentView : ReactiveUserControl<RedDocumentViewModel>
     {
         #region Constructors
 
-        public DocumentView()
+        public RedDocumentView()
         {
 
             InitializeComponent();

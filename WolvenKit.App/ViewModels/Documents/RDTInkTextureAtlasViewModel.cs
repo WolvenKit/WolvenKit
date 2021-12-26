@@ -23,11 +23,11 @@ using System.ComponentModel;
 
 namespace WolvenKit.ViewModels.Documents
 {
-    public class InkTextureAtlasViewModel : TextureViewModel
+    public class RDTInkTextureAtlasViewModel : RDTTextureViewModel
     {
         private inkTextureAtlas _atlas;
 
-        public InkTextureAtlasViewModel(inkTextureAtlas atlas, CBitmapTexture xbm, RedDocumentViewModel file) : base(xbm, file)
+        public RDTInkTextureAtlasViewModel(inkTextureAtlas atlas, CBitmapTexture xbm, RedDocumentViewModel file) : base(xbm, file)
         {
             _atlas = atlas;
             Header = "Part Mapping";

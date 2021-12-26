@@ -1,6 +1,6 @@
 <reactiveUi:ReactiveUserControl
     x:TypeArguments="docVM:RedDocumentViewModel"
-    x:Class="WolvenKit.Views.Documents.DocumentView"
+    x:Class="WolvenKit.Views.Documents.RedDocumentView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:reactiveUi="http://reactiveui.net"
@@ -21,12 +21,16 @@
 
         <Grid.Resources>
             
-            <DataTemplate DataType="{x:Type docVM:W2rcFileViewModel}">
-                <docV:W2rcMainFileView/>
+            <DataTemplate DataType="{x:Type docVM:RDTDataViewModel}">
+                <docV:RDTDataView/>
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type docVM:TextureViewModel}">
-                <docV:TextureView/>
+            <DataTemplate DataType="{x:Type docVM:RDTTextureViewModel}">
+                <docV:RDTTextureView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type docVM:RDTMeshViewModel}">
+                <docV:RDTMeshView/>
             </DataTemplate>
 
         </Grid.Resources>
@@ -39,7 +43,7 @@
             CloseButtonType="Hide"
             ShowTabItemContextMenu="False"
             EnableLabelEdit="False"
-            AllowDragDrop="False"
+            AllowDragDrop="True"
             Margin="-3,-2,-3,-3"
             BorderThickness="0,0,0,0"
             Padding="0"

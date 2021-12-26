@@ -17,7 +17,7 @@ namespace WolvenKit.Converters
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            if (item is RedDocumentItemViewModel vm)
+            if (item is RedDocumentTabViewModel vm)
             {
                 switch (vm.DocumentItemType)
                 {

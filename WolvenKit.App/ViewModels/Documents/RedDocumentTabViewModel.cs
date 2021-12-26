@@ -3,12 +3,15 @@ using ReactiveUI.Fody.Helpers;
 
 namespace WolvenKit.ViewModels.Documents
 {
-    public abstract class RedDocumentItemViewModel : ReactiveObject
+    public abstract class RedDocumentTabViewModel : ReactiveObject
     {
         public abstract ERedDocumentItemType DocumentItemType { get; }
         public string Header { get; set; }
+        public string FilePath { get; set; }
 
-        public RedDocumentItemViewModel()
+        [Reactive] public bool CanClose { get; set; }
+
+        public RedDocumentTabViewModel()
         {
 
         }

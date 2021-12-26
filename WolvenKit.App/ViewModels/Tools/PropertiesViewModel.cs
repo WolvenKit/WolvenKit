@@ -138,7 +138,7 @@ namespace WolvenKit.ViewModels.Tools
             }
 
             PE_SelectedItem = model;
-            if (_settingsManager.ShowFilePreview)
+            if (!_settingsManager.ShowFilePreview)
             {
                 return;
             }
@@ -159,13 +159,14 @@ namespace WolvenKit.ViewModels.Tools
                 return;
             }
             // string.Equals(model.GetExtension(), ERedExtension.bk2.ToString(), StringComparison.OrdinalIgnoreCase) ||
-            if (!(string.Equals(model.GetExtension(), ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
+            if (!(
+              string.Equals(model.GetExtension(), ERedExtension.physicalscene.ToString(), StringComparison.OrdinalIgnoreCase) ||
+              string.Equals(model.GetExtension(), ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
               string.Equals(model.GetExtension(), ERedExtension.wem.ToString(), StringComparison.OrdinalIgnoreCase) ||
               string.Equals(model.GetExtension(), ERedExtension.xbm.ToString(), StringComparison.OrdinalIgnoreCase)
               || Enum.TryParse<EConvertableOutput>(PE_SelectedItem.GetExtension(), out _)
               || Enum.TryParse<EUncookExtension>(PE_SelectedItem.GetExtension(), out _)
-            )
-        )
+            ))
             {
                 return;
             }
@@ -190,10 +191,8 @@ namespace WolvenKit.ViewModels.Tools
                         LoadModel(PE_SelectedItem.FullName);
                     }
 
-
-
-                    if (string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.mesh.ToString(),
-                        System.StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.physicalscene.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
                         PE_MeshPreviewVisible = true;
                         SelectedIndex = 1;

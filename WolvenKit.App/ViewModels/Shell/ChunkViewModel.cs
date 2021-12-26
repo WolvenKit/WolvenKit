@@ -38,14 +38,14 @@ namespace WolvenKit.ViewModels.Shell
         public ChunkViewModel(IRedType export)
         {
             Data = export;
-            OpenRefCommand = new DelegateCommand<IRedRef>(p => ExecuteOpenRef(p), CanOpenRef);
+            OpenRefCommand = new DelegateCommand(p => ExecuteOpenRef(), (p) => CanOpenRef());
             ExportChunkCommand = new DelegateCommand((p) => ExecuteExportChunk(), (p) => CanExportChunk());
             AddItemToArrayCommand = new DelegateCommand((p) => ExecuteAddItemToArray(), (p) => CanAddItemToArray());
             DeleteItemCommand = new DelegateCommand((p) => ExecuteDeleteItem(), (p) => CanDeleteItem());
             OpenChunkCommand = new DelegateCommand((p) => ExecuteOpenChunk(), (p) => CanOpenChunk());
         }
 
-        public ChunkViewModel(IRedType export, W2rcFileViewModel tab) : this(export)
+        public ChunkViewModel(IRedType export, RDTDataViewModel tab) : this(export)
         {
             Tab = tab;
             IsExpanded = true;
@@ -80,7 +80,7 @@ namespace WolvenKit.ViewModels.Shell
 
         #region Properties
 
-        public W2rcFileViewModel Tab;
+        public RDTDataViewModel Tab;
         private IRedType _data;
         public IRedType Data
         {
@@ -427,13 +427,18 @@ namespace WolvenKit.ViewModels.Shell
 
         public int ArrayIndexWidth { get
             {
+                var width = 0;
                 if (Parent.Properties.Count < 10)
-                    return 16;
+                    width += 16;
                 else if (Parent.Properties.Count < 100)
-                    return 21;
+                    width += 21;
                 else if (Parent.Properties.Count < 1000)
-                    return 26;
-                return 31;
+                    width += 26;
+                else
+                    width += 31;
+                if (PropertyType.IsAssignableTo(typeof(IRedArray)))
+                    width += 20;
+                return width;
             }
         }
 
@@ -655,10 +660,14 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public ICommand OpenRefCommand { get; private set; }
-        private bool CanOpenRef(IRedRef redRef) => redRef != null && redRef.DepotPath != null;
-        private void ExecuteOpenRef(IRedRef redRef)
+        private bool CanOpenRef() => Data is IRedRef r && r.DepotPath != null;
+        private void ExecuteOpenRef()
         {
-            var depotpath = redRef.DepotPath;
+            if (Data is IRedRef r)
+            {
+                string depotpath = r.DepotPath;
+                Tab.File.OpenRefAsTab(depotpath);
+            }
             //var key = FNV1A64HashAlgorithm.HashString(depotpath);
 
             //var _gameControllerFactory = Locator.Current.GetService<IGameControllerFactory>();
@@ -736,7 +745,7 @@ namespace WolvenKit.ViewModels.Shell
         private void ExecuteOpenChunk()
         {
             if (Data is IRedClass cls)
-                Tab.File.TabItemViewModels.Add(new W2rcFileViewModel(cls, Tab.File));
+                Tab.File.TabItemViewModels.Add(new RDTDataViewModel(cls, Tab.File));
         }
     }
 }

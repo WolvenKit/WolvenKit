@@ -54,7 +54,7 @@ namespace WolvenKit.Views.Templates
             view.BindingCollection.Clear();
             view.BindingCollection.Add(null);
 
-            throw new TodoException("handle editor");
+            //throw new TodoException("handle editor");
 
             //var type = iptr.InnerType;
             //var available = RedReflection.GetSubClassesOf(type).Select(x => x.Name).ToList();

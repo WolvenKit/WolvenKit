@@ -18,11 +18,11 @@ using WolvenKit.ViewModels.Documents;
 namespace WolvenKit.Views.Documents
 {
     /// <summary>
-    /// Interaction logic for TextureView.xaml
+    /// Interaction logic for RDTTextureView.xaml
     /// </summary>
-    public partial class TextureView : ReactiveUserControl<TextureViewModel>
+    public partial class RDTTextureView : ReactiveUserControl<RDTTextureViewModel>
     {
-        public TextureView()
+        public RDTTextureView()
         {
             InitializeComponent();
             SetupImagePreview();
@@ -134,6 +134,8 @@ namespace WolvenKit.Views.Documents
             transform.ScaleY = 1;
             pan.X = 0;
             pan.Y = 0;
+            end.X = 0;
+            end.Y = 0;
         }
 
         public void ResetZoomPan(object sender, RoutedEventArgs e)
@@ -146,6 +148,8 @@ namespace WolvenKit.Views.Documents
             transform.ScaleY = 1;
             pan.X = 0;
             pan.Y = 0;
+            end.X = 0;
+            end.Y = 0;
         }
     }
 }

@@ -55,11 +55,11 @@ namespace WolvenKit.ViewModels.Documents
 
         #region properties
 
-        [Reactive] public ObservableCollection<RedDocumentItemViewModel> TabItemViewModels { get; set; } = new();
+        [Reactive] public ObservableCollection<RedDocumentTabViewModel> TabItemViewModels { get; set; } = new();
 
         [Reactive] public int SelectedIndex { get; set; }
 
-        [Reactive] public RedDocumentItemViewModel SelectedTabItemViewModel { get; set; }
+        [Reactive] public RedDocumentTabViewModel SelectedTabItemViewModel { get; set; }
 
         [Reactive] public string RelativePath { get; set; }
 
@@ -159,17 +159,17 @@ namespace WolvenKit.ViewModels.Documents
             return false;
         }
 
-        private Optional<W2rcFileViewModel> GetMainFile() => Optional<W2rcFileViewModel>.ToOptional(TabItemViewModels
-            .OfType<W2rcFileViewModel>()
+        private Optional<RDTDataViewModel> GetMainFile() => Optional<RDTDataViewModel>.ToOptional(TabItemViewModels
+            .OfType<RDTDataViewModel>()
             .Where(x => x.DocumentItemType == ERedDocumentItemType.MainFile)
             .FirstOrDefault());
 
         private void PopulateItems()
         {
-            TabItemViewModels.Add(new W2rcFileViewModel(Cr2wFile.RootChunk, this));
+            TabItemViewModels.Add(new RDTDataViewModel(Cr2wFile.RootChunk, this));
             if (Cr2wFile.RootChunk is CBitmapTexture xbm)
             {
-                TabItemViewModels.Add(new TextureViewModel(xbm, this));
+                TabItemViewModels.Add(new RDTTextureViewModel(xbm, this));
             }
             if (Cr2wFile.RootChunk is inkTextureAtlas atlas)
             {
@@ -177,7 +177,7 @@ namespace WolvenKit.ViewModels.Documents
                 var file = GetFileFromHash(xbmHash);
                 if (file != null)
                 {
-                    TabItemViewModels.Add(new InkTextureAtlasViewModel(atlas, (CBitmapTexture)file.RootChunk, this));
+                    TabItemViewModels.Add(new RDTInkTextureAtlasViewModel(atlas, (CBitmapTexture)file.RootChunk, this));
                 }
             }
 
@@ -202,6 +202,26 @@ namespace WolvenKit.ViewModels.Documents
                 }
 
                 return cr2wFile;
+            }
+            return null;
+        }
+
+        public RedDocumentTabViewModel OpenRefAsTab(string path)
+        {
+            var tab = OpenRefAsTab(FNV1A64HashAlgorithm.HashString(path));
+            tab.Header = Path.GetFileName(path);
+            tab.FilePath = path;
+            return tab;
+        }
+
+        public RedDocumentTabViewModel OpenRefAsTab(ulong hash)
+        {
+            var file = GetFileFromHash(hash);
+            if (file != null)
+            {
+                var tab = new RDTDataViewModel(hash.ToString(), file.RootChunk, this);
+                TabItemViewModels.Add(tab);
+                return tab;
             }
             return null;
         }
