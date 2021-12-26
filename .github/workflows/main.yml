@@ -92,7 +92,7 @@ jobs:
         proj-path: ./WolvenKit.CLI/WolvenKit.CLI.csproj
 
     - name: publish WolvenKit.Console
-      run: msbuild .\WolvenKit.CLI\WolvenKit.CLI.csproj -t:restore -t:Build -t:Publish /p:PublishDir="../publish/console/" /p:Configuration=Release /p:Platform=x64 /p:SelfContained=False /p:PublishReadyToRun=False /p:PublishTrimmed=False
+      run: msbuild .\WolvenKit.CLI\WolvenKit.CLI.csproj -t:restore -t:Build -t:Publish /p:PublishDir="../publish/console/" /p:Configuration=Release /p:Platform=x64 /p:SelfContained=True /p:PublishReadyToRun=False /p:PublishTrimmed=False
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
