@@ -160,10 +160,12 @@ namespace WolvenKit.ViewModels.Tools
             }
             // string.Equals(model.GetExtension(), ERedExtension.bk2.ToString(), StringComparison.OrdinalIgnoreCase) ||
             if (!(
+              string.Equals(model.GetExtension(), ERedExtension.ent.ToString(), StringComparison.OrdinalIgnoreCase) ||
               string.Equals(model.GetExtension(), ERedExtension.physicalscene.ToString(), StringComparison.OrdinalIgnoreCase) ||
               string.Equals(model.GetExtension(), ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
               string.Equals(model.GetExtension(), ERedExtension.wem.ToString(), StringComparison.OrdinalIgnoreCase) ||
-              string.Equals(model.GetExtension(), ERedExtension.xbm.ToString(), StringComparison.OrdinalIgnoreCase)
+              string.Equals(model.GetExtension(), ERedExtension.xbm.ToString(), StringComparison.OrdinalIgnoreCase) ||
+              string.Equals(model.GetExtension(), ERedExtension.envprobe.ToString(), StringComparison.OrdinalIgnoreCase)
               || Enum.TryParse<EConvertableOutput>(PE_SelectedItem.GetExtension(), out _)
               || Enum.TryParse<EUncookExtension>(PE_SelectedItem.GetExtension(), out _)
             ))
@@ -192,10 +194,9 @@ namespace WolvenKit.ViewModels.Tools
                     }
 
                     if (string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.ent.ToString(), StringComparison.OrdinalIgnoreCase) ||
                         string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.physicalscene.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
-                        PE_MeshPreviewVisible = true;
-                        SelectedIndex = 1;
                         using (var meshStream = new FileStream(PE_SelectedItem.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                         {
                             meshStream.Seek(0, SeekOrigin.Begin);
@@ -204,6 +205,8 @@ namespace WolvenKit.ViewModels.Tools
                             if (_meshTools.ExportMeshPreviewer(meshStream, new FileInfo(outPath)))
                             {
                                 LoadModel(outPath);
+                                PE_MeshPreviewVisible = true;
+                                SelectedIndex = 1;
                             }
                             meshStream.Dispose();
                             meshStream.Close();
@@ -223,42 +226,43 @@ namespace WolvenKit.ViewModels.Tools
                     if (Enum.TryParse<EUncookExtension>(PE_SelectedItem.GetExtension(),
                             out _))
                     {
-                        IsImagePreviewVisible = true;
-                        SelectedIndex = 3;
-
                         var q = await ImageDecoder.RenderToBitmapSource(PE_SelectedItem.FullName);
                         if (q != null)
                         {
                             var g = BitmapFrame.Create(q);
                             LoadImage(g);
+                            IsImagePreviewVisible = true;
+                            SelectedIndex = 3;
                         }
                     }
 
                     // xbm
-                    if (string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.xbm.ToString(),
-                            System.StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.xbm.ToString(), StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.envprobe.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
-                        IsImagePreviewVisible = true;
-                        SelectedIndex = 3;
 
                         // convert xbm to dds stream
                         await using var ddsstream = new MemoryStream();
                         await using var filestream = new FileStream(PE_SelectedItem.FullName,
                             FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan);
-                        _modTools.ConvertXbmToDdsStream(filestream, ddsstream, out _);
-
-                        // try loading it in pfim
-                        try
+                        if (_modTools.ConvertXbmToDdsStream(filestream, ddsstream, out _))
                         {
-                            var qa = await ImageDecoder.RenderToBitmapSourceDds(ddsstream);
-                            if (qa != null)
+                            // try loading it in pfim
+                            try
                             {
-                                LoadImage(qa);
+                                var qa = await ImageDecoder.RenderToBitmapSourceDds(ddsstream);
+                                if (qa != null)
+                                {
+                                    LoadImage(qa);
+                                    IsImagePreviewVisible = true;
+                                    SelectedIndex = 3;
+                                }
                             }
-                        }
-                        catch (Exception)
-                        {
-                            throw;
+                            catch (Exception)
+                            {
+                                throw;
+                            }
                         }
                     }
                 }

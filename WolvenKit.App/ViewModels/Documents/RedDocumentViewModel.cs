@@ -14,10 +14,12 @@ using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Common.RED4.Compiled;
 using WolvenKit.Common.Services;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
@@ -34,15 +36,12 @@ namespace WolvenKit.ViewModels.Documents
         Editor
     }
 
-
     public class RedDocumentViewModel : DocumentViewModel
     {
-
         private readonly ILoggerService _loggerService;
         private readonly Red4ParserService _parser;
         private readonly IHashService _hashService;
         public CR2WFile Cr2wFile;
-
 
         public RedDocumentViewModel(string path) : base(path)
         {
@@ -170,6 +169,25 @@ namespace WolvenKit.ViewModels.Documents
             if (Cr2wFile.RootChunk is CBitmapTexture xbm)
             {
                 TabItemViewModels.Add(new RDTTextureViewModel(xbm, this));
+            }
+            if (Cr2wFile.RootChunk is CMesh mesh && mesh.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC)
+            {
+                TabItemViewModels.Add(new RDTTextureViewModel(mesh, this));
+            }
+            if (Cr2wFile.RootChunk is CReflectionProbeDataResource probe && probe.TextureData.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
+            {
+                TabItemViewModels.Add(new RDTTextureViewModel(probe, this));
+            }
+            if (Cr2wFile.RootChunk is Multilayer_Mask mlmask)
+            {
+                // maybe it makes more sense to put these all into one tab?
+                ModTools.ConvertMultilayerMaskToDdsStreams(mlmask, out List<Stream> streams);
+                for (var i = 0; i < streams.Count; i++)
+                {
+                    var tab = new RDTTextureViewModel(streams[i], this);
+                    tab.Header = $"Layer {i}";
+                    TabItemViewModels.Add(tab);
+                }
             }
             if (Cr2wFile.RootChunk is inkTextureAtlas atlas)
             {

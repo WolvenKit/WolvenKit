@@ -403,7 +403,7 @@ namespace CP77.CR2W
                 {
                     materialNames[e] = apps[i].ChunkMaterials[e];
                 }
-                meshesInfo.appearances.Add(apps[i].Name, materialNames);
+                meshesInfo.appearances.Add(apps[i].Name + $"{i}", materialNames);
             }
 
             return meshesInfo;
@@ -596,7 +596,7 @@ namespace CP77.CR2W
                 var apps = info.appearances.Keys.ToList();
                 for (int e = 0; e < apps.Count; e++)
                 {
-                    meshContainer.materialNames[e] = info.appearances[apps[e]][index];
+                    meshContainer.materialNames[e] = info.appearances[apps[e]][0];
                 }
 
                 meshContainer.colors1 = new Vec4[0];

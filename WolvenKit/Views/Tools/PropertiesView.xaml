@@ -452,7 +452,7 @@
             </syncfusion:TabItemExt>
             <syncfusion:TabItemExt Header="Mesh Preview" Visibility="{Binding IsMeshPreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
                 <Grid Name="RootGrid" Height="auto">
-                    <Border Name="ViewportBorder" Background="Transparent">
+                    <Border Name="ViewportBorder" Background="{StaticResource ContentBackground}">
                         <dxControls:DXViewportView
                             Name="MainDXViewportView"
                             BackgroundColor="Transparent"

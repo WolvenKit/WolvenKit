@@ -9,6 +9,7 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Interfaces
 {

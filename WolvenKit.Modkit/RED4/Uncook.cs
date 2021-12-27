@@ -747,22 +747,51 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            return ConvertCR2WToDdsStream(cr2w, outstream, out texformat);
+            return ConvertRedClassToDdsStream(cr2w.RootChunk, outstream, out texformat);
         }
 
-        public static bool ConvertCR2WToDdsStream(CR2WFile cr2w, Stream outstream, out DXGI_FORMAT texformat)
+        public static bool ConvertRedClassToDdsStream(IRedClass cls, Stream outstream, out DXGI_FORMAT texformat)
         {
             texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
 
-            if (cr2w.RootChunk is not CBitmapTexture xbm)
+            rendRenderTextureBlobPC blob = null;
+            var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
+            var compression = Enums.ETextureCompression.TCM_None;
+
+            if (cls is CBitmapTexture xbm)
             {
-                return false;
+                if (xbm.RenderTextureResource.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC xbmBlob)
+                {
+                    blob = xbmBlob;
+                }
+                if (xbm.Setup.RawFormat?.Value != null)
+                {
+                    rawfmt = xbm.Setup.RawFormat.Value.Value;
+                }
+                if (xbm.Setup.Compression?.Value != null)
+                {
+                    compression = xbm.Setup.Compression.Value.Value;
+                }
             }
 
-            if (xbm.RenderTextureResource.RenderResourceBlobPC.GetValue() is not rendRenderTextureBlobPC blob)
+            if (cls is CMesh mesh)
             {
-                return false;
+                if (mesh.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC meshBlob)
+                {
+                    blob = meshBlob;
+                }
             }
+
+            if (cls is CReflectionProbeDataResource probe)
+            {
+                if (probe.TextureData.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC probeBlob)
+                {
+                    blob = probeBlob;
+                }
+            }
+
+            if (blob == null)
+                return false;
 
             #region get xbm data
 
@@ -771,61 +800,6 @@ namespace WolvenKit.Modkit.RED4
             var mipCount = blob.Header.TextureInfo.MipCount;
             var sliceCount = blob.Header.TextureInfo.SliceCount;
             var alignment = blob.Header.TextureInfo.DataAlignment;
-
-            var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
-            if (xbm.Setup.RawFormat?.Value != null)
-            {
-                rawfmt = xbm.Setup.RawFormat.Value.Value;
-            }
-
-            var compression = Enums.ETextureCompression.TCM_None;
-            if (xbm.Setup.Compression?.Value != null)
-            {
-                compression = xbm.Setup.Compression.Value.Value;
-            }
-
-            texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, null);
-
-            #endregion get xbm data
-
-            // extract and write dds to stream
-            DDSUtils.GenerateAndWriteHeader(outstream,
-                new DDSMetadata(width, height, 1, sliceCount, mipCount,
-                    0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
-
-            outstream.Write(cr2w.Buffers[0].GetBytes());
-
-            return true;
-        }
-
-        public static bool ConvertXBMToDdsStream(CBitmapTexture xbm, Stream outstream, out DXGI_FORMAT texformat)
-        {
-            texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
-
-            if (xbm.RenderTextureResource.RenderResourceBlobPC.GetValue() is not rendRenderTextureBlobPC blob)
-            {
-                return false;
-            }
-
-            #region get xbm data
-
-            var width = blob.Header.SizeInfo.Width;
-            var height = blob.Header.SizeInfo.Height;
-            var mipCount = blob.Header.TextureInfo.MipCount;
-            var sliceCount = blob.Header.TextureInfo.SliceCount;
-            var alignment = blob.Header.TextureInfo.DataAlignment;
-
-            var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
-            if (xbm.Setup.RawFormat?.Value != null)
-            {
-                rawfmt = xbm.Setup.RawFormat.Value.Value;
-            }
-
-            var compression = Enums.ETextureCompression.TCM_None;
-            if (xbm.Setup.Compression?.Value != null)
-            {
-                compression = xbm.Setup.Compression.Value.Value;
-            }
 
             texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, null);
 
@@ -840,10 +814,5 @@ namespace WolvenKit.Modkit.RED4
 
             return true;
         }
-
-
-
-
-
     }
 }

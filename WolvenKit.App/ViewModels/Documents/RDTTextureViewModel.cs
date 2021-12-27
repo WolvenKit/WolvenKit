@@ -26,22 +26,33 @@ namespace WolvenKit.ViewModels.Documents
     {
         protected readonly IRedClass _data;
         public RedDocumentViewModel File;
+        //protected Stream ImageStream;
 
-        public RDTTextureViewModel(CBitmapTexture data, RedDocumentViewModel file)
+        public RDTTextureViewModel(IRedClass data, RedDocumentViewModel file)
         {
-            Header = "Preview";
+            Header = "Texture Preview";
             File = file;
             _data = data;
 
-            SetupImage(data);
+            SetupImage();
         }
 
-        protected void SetupImage(CBitmapTexture xbm)
+        public RDTTextureViewModel(Stream stream, RedDocumentViewModel file)
+        {
+            Header = "Preview";
+            File = file;
+            //_data = data;
+            //ImageStream = stream;
+
+            _ = LoadImageFromStream(stream);
+        }
+
+        protected void SetupImage()
         {
             using var ddsstream = new MemoryStream();
             try
             {
-                if (ModTools.ConvertXBMToDdsStream(xbm, ddsstream, out _))
+                if (ModTools.ConvertRedClassToDdsStream(_data, ddsstream, out _))
                 {
                     _ = LoadImageFromStream(ddsstream);
                 }
@@ -55,18 +66,10 @@ namespace WolvenKit.ViewModels.Documents
 
         protected async Task LoadImageFromStream(Stream stream)
         {
-
             var qa = await ImageDecoder.RenderToBitmapSourceDds(stream);
             if (qa != null)
             {
                 Image = qa;
-                //Stream bmp = new MemoryStream();
-
-                //BitmapEncoder enc = new BmpBitmapEncoder();
-                //var frame = BitmapFrame.Create(qa);
-                //enc.Frames.Add(frame);
-                //enc.Save(bmp);
-                //ImageStream = bmp;
             }
         }
 

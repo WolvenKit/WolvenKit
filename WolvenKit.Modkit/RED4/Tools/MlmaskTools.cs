@@ -10,6 +10,8 @@ using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
 using WolvenKit.Common;
+using System.Collections.Generic;
+using WolvenKit.Core;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -136,6 +138,87 @@ namespace WolvenKit.Modkit.RED4
                         }
                     }
                 }
+            }
+            return true;
+        }
+
+        public static bool ConvertMultilayerMaskToDdsStreams(Multilayer_Mask mask, out List<Stream> streams)
+        {
+            streams = new List<Stream>();
+            if (mask.RenderResourceBlob.RenderResourceBlobPC.GetValue() is not rendRenderMultilayerMaskBlobPC blob)
+            {
+                return false;
+            }
+
+            uint atlasWidth = blob.Header.AtlasWidth;
+            uint atlasHeight = blob.Header.AtlasHeight;
+
+            uint maskWidth = blob.Header.MaskWidth;
+            uint maskHeight = blob.Header.MaskHeight;
+
+            uint maskWidthLow = blob.Header.MaskWidthLow;
+            uint maskHeightLow = blob.Header.MaskHeightLow;
+
+            uint maskTileSize = blob.Header.MaskTileSize;
+
+            uint maskCount = blob.Header.NumLayers;
+
+            var atlasRaw = new byte[atlasWidth * atlasHeight];
+
+            //Decode compressed data into single channel uncompressed
+            //Mlmask always BC4?
+            if (!BlockCompression.DecodeBC(blob.AtlasData.Buffer.GetBytes(), ref atlasRaw, atlasWidth, atlasHeight, BlockCompression.BlockCompressionType.BC4))
+            {
+                return false;
+            }
+
+            //atlasRaw = blob.AtlasData.Buffer.GetBytes();
+
+            //Read tilesdata buffer into appropriate variable type
+            var tileBuffer = blob.TilesData.Buffer;
+            var tiles = new uint[tileBuffer.MemSize / 4];
+
+            using (var ms = new MemoryStream(tileBuffer.GetBytes()))
+            using (var br = new BinaryReader(ms))
+            {
+                ms.Seek(0, SeekOrigin.Begin);
+
+                for (var i = 0; i < tiles.Length; i++)
+                {
+                    tiles[i] = br.ReadUInt32();
+                }
+            }
+
+            byte[] maskData = new byte[maskWidth * maskHeight];
+
+            for (int i = 0; i < maskCount; i++)
+            {
+                //Clear instead of allocate new is faster?
+                //Mandatory cause decode does not always write to every pixel
+                Array.Clear(maskData, 0, maskData.Length);
+                try
+                {
+                    Decode(ref maskData, maskWidth, maskHeight, maskWidthLow, maskHeightLow, atlasRaw, atlasWidth,
+                        atlasHeight, tiles, maskTileSize, i);
+                }
+                catch
+                {
+                    throw;
+                }
+
+                if (WolvenTesting.IsTesting)
+                {
+                    continue;
+                }
+
+                var ms = new MemoryStream();
+                DDSUtils.GenerateAndWriteHeader(ms, new DDSMetadata(maskWidth, maskHeight,
+                    1, 1, 0, 0, 0, DXGI_FORMAT.DXGI_FORMAT_R8_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 8, true));
+                ms.Write(maskData);
+                ms.Seek(0, SeekOrigin.Begin);
+                //var stream = new MemoryStream(DDSUtils.ConvertToDdsMemory(ms, EUncookExtension.tga, DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM, false, false));
+                ms = new MemoryStream(DDSUtils.ConvertToDdsMemory(new MemoryStream(DDSUtils.ConvertFromDdsMemory(ms, EUncookExtension.tga)), EUncookExtension.tga, DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM));
+                streams.Add(ms);
             }
             return true;
         }
