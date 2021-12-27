@@ -11,6 +11,8 @@
     <OutputType>WinExe</OutputType>
       <ApplicationIcon>Resources\Media\Images\Icons\Application\TaskBarIcon.ico</ApplicationIcon>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
     <DebugType>embedded</DebugType>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>$(NoWarn);SA1652</NoWarn>
