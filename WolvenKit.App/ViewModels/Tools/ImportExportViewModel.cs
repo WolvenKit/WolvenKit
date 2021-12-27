@@ -789,7 +789,7 @@ namespace WolvenKit.ViewModels.Tools
                         file.Extract(meshStream);
                         meshStream.Seek(0, SeekOrigin.Begin);
 
-                        outfile = Path.Combine(ISettingsManager.GetManagerCacheDir(), "Temp_OBJ", qx.Name);
+                        outfile = Path.Combine(ISettingsManager.GetTemp_OBJPath(), qx.Name);
                         outfile = Path.ChangeExtension(outfile, ".glb");
 
                         if(!_meshTools.ExportMeshPreviewer(meshStream, new FileInfo(outfile)))
