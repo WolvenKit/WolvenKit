@@ -128,6 +128,33 @@ namespace WolvenKit.Modkit.RED4
                             ms.CopyTo(ddsStream);
                         }
                     }
+                    //else if (args.UncookExtension == EUncookExtension.tga)
+                    //{
+                    //    using (var ddsStream = new FileStream($"{newpath}.tga", FileMode.Create, FileAccess.Write))
+                    //    {
+                    //        ms.Seek(0, SeekOrigin.Begin);
+                    //        using (var ms2 = new MemoryStream(DDSUtils.ConvertFromDdsMemory(ms, EUncookExtension.tga)))
+                    //        {
+                    //            var br = new BinaryReader(ms2);
+                    //            br.BaseStream.Seek(14, SeekOrigin.Begin);
+                    //            ushort height = br.ReadUInt16();
+                    //            br.BaseStream.Seek(17, SeekOrigin.Begin);
+                    //            byte descriptor = br.ReadByte();
+
+                    //            var bw = new BinaryWriter(ms2);
+                    //            bw.BaseStream.Seek(10, SeekOrigin.Begin);
+                    //            bw.Write(height);
+
+                    //            bw.BaseStream.Seek(17, SeekOrigin.Begin);
+                    //            bw.Write(descriptor ^ 0b00001000);
+
+                    //            bw.Flush();
+
+                    //            ms2.Position = 0;
+                    //            ms2.CopyTo(ddsStream);
+                    //        }
+                    //    }
+                    //}
                     else
                     {
                         // convert
