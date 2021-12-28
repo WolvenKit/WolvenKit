@@ -24,6 +24,7 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
@@ -58,6 +59,7 @@ namespace WolvenKit.ViewModels.Tools
         private readonly ILoggerService _loggerService;
         private readonly INotificationService _notificationService;
         private readonly IProjectManager _projectManager;
+        private readonly IProgressService<double> _progressService;
         private readonly IWatcherService _watcherService;
         private readonly IGameControllerFactory _gameController;
         private readonly MeshTools _meshTools;
@@ -94,6 +96,7 @@ namespace WolvenKit.ViewModels.Tools
         public ImportExportViewModel(
            IProjectManager projectManager,
            ILoggerService loggerService,
+           IProgressService<double> progressService,
            IWatcherService watcherService,
            INotificationService notificationService,
            IGameControllerFactory gameController,
@@ -105,6 +108,7 @@ namespace WolvenKit.ViewModels.Tools
         {
             _projectManager = projectManager;
             _loggerService = loggerService;
+            _progressService = progressService;
             _watcherService = watcherService;
             _modTools = modTools;
             _gameController = gameController;
@@ -688,43 +692,57 @@ namespace WolvenKit.ViewModels.Tools
         private async Task ExecuteProcessSelected()
         {
             IsProcessing = true;
-            if (IsImportsSelected)
+            _progressService.IsIndeterminate = true;
+            try
             {
-                var wavs = new List<string>();
-                // split up wavs
-                var toBeConverted = ImportableItems.Where(_ => _.IsChecked).ToList();
-                foreach (var item in toBeConverted)
+                if (IsImportsSelected)
                 {
-                    if (item.Extension.Equals(ERawFileFormat.wav.ToString()))
+                    var wavs = new List<string>();
+                    // split up wavs
+                    var toBeConverted = ImportableItems.Where(_ => _.IsChecked).ToList();
+                    foreach (var item in toBeConverted)
                     {
-                        wavs.Add(item.FullName);
+                        if (item.Extension.Equals(ERawFileFormat.wav.ToString()))
+                        {
+                            wavs.Add(item.FullName);
+                        }
+                        else
+                        {
+                            await ImportSingle(item);
+                        }
                     }
-                    else
+                    await ImportWavs(wavs);
+                }
+                if (IsExportsSelected)
+                {
+                    var toBeConverted = ExportableItems.Where(_ => _.IsChecked).ToList();
+                    foreach (var item in toBeConverted)
                     {
-                        await ImportSingle(item);
+                        await ExportSingle(item);
                     }
                 }
-                await ImportWavs(wavs);
-            }
-            if (IsExportsSelected)
-            {
-                var toBeConverted = ExportableItems.Where(_ => _.IsChecked).ToList();
-                foreach (var item in toBeConverted)
+                if (IsConvertsSelected)
                 {
-                    await ExportSingle(item);
-                }
-            }
-            if (IsConvertsSelected)
-            {
 
-                var toBeConverted = ConvertableItems.Where(_ => _.IsChecked).ToList();
-                foreach (var itemViewModel in toBeConverted)
-                {
-                    await Task.Run(() => ConvertSingle(itemViewModel));
+                    var toBeConverted = ConvertableItems.Where(_ => _.IsChecked).ToList();
+                    foreach (var itemViewModel in toBeConverted)
+                    {
+                        await Task.Run(() => ConvertSingle(itemViewModel));
+                    }
                 }
+                _notificationService.Success($"Files have been processed and are available in the Project Explorer");
+                _loggerService.Success("Files have been processed and are available in the Project Explorer");
             }
-            IsProcessing = false;
-            _notificationService.Success($"Files have been processed and are available in the Project Explorer");
+            catch (Exception e)
+            {
+                _notificationService.Error(e.Message);
+                _loggerService.Error(e.Message);
+            }
+            finally
+            {
+                IsProcessing = false;
+                _progressService.IsIndeterminate = false;
+            }
         }
         private Dictionary<string, object> _namedObjects;
 
