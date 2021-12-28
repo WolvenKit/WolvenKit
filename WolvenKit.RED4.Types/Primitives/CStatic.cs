@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.Types
     {
         public CStatic(int size) : base(size)
         {
-            IsReadOnly = true;
+            //IsReadOnly = true;
         }
     }
 }

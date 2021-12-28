@@ -35,7 +35,7 @@ namespace CP77.CR2W
         {
             var cr2w = _red4ParserService.TryReadRed4File(meshStream);
 
-            if (cr2w == null || !cr2w.Chunks.OfType<rendRenderMeshBlob>().Any())
+            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
                 return false;
             }
@@ -55,8 +55,6 @@ namespace CP77.CR2W
                 }
             }
 
-            var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
-
             using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
             var meshesinfo = GetMeshesinfo(rendblob, cr2w);
@@ -69,16 +67,15 @@ namespace CP77.CR2W
 
             return true;
         }
+
         public bool ExportMesh(Stream meshStream, FileInfo outfile, bool LodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
         {
             var cr2w = _red4ParserService.TryReadRed4File(meshStream);
 
-            if (cr2w == null || !cr2w.Chunks.OfType<CMesh>().Any() || !cr2w.Chunks.OfType<rendRenderMeshBlob>().Any())
+            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
                 return false;
             }
-
-            var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
             RawArmature Rig = GetOrphanRig(rendblob, cr2w);
 
@@ -116,12 +113,10 @@ namespace CP77.CR2W
         {
             var cr2w = _red4ParserService.TryReadRed4File(meshStream);
 
-            if (cr2w == null || !cr2w.Chunks.OfType<CMesh>().Any() || !cr2w.Chunks.OfType<rendRenderMeshBlob>().Any())
+            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
                 return false;
             }
-
-            var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
             using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
@@ -156,10 +151,11 @@ namespace CP77.CR2W
             foreach (var meshStream in meshStreamS)
             {
                 var cr2w = _red4ParserService.TryReadRed4File(meshStream);
-                if (cr2w == null || !cr2w.Chunks.OfType<CMesh>().Any() || !cr2w.Chunks.OfType<rendRenderMeshBlob>().Any())
-                    continue;
 
-                var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
+                if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
+                {
+                    continue;
+                }
 
                 using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
@@ -196,12 +192,10 @@ namespace CP77.CR2W
         {
             var cr2w = _red4ParserService.TryReadRed4File(meshStream);
 
-            if (cr2w == null || !cr2w.Chunks.OfType<CMesh>().Any() || !cr2w.Chunks.OfType<rendRenderMeshBlob>().Any())
+            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
                 return false;
             }
-
-            var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
             using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
@@ -258,12 +252,10 @@ namespace CP77.CR2W
             foreach (var meshStream in meshStreamS)
             {
                 var cr2w = _red4ParserService.TryReadRed4File(meshStream);
-                if (cr2w == null || !cr2w.Chunks.OfType<CMesh>().Any() || !cr2w.Chunks.OfType<rendRenderMeshBlob>().Any())
+                if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
                 {
                     continue;
                 }
-
-                var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
                 using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 

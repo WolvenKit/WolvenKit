@@ -16,15 +16,15 @@ namespace WolvenKit.Modkit.RED4
         {
             string outpath = Path.ChangeExtension(outfile.FullName, ".json");
             var cr2w = _wolvenkitFileService.TryReadRed4File(entStream);
-            if (cr2w == null || (!cr2w.Chunks.OfType<entEntityTemplate>().Any() && !cr2w.Chunks.OfType<appearanceAppearanceResource>().Any()))
+            if (cr2w == null)
             {
                 return false;
             }
-            if (cr2w.Chunks.OfType<entEntityTemplate>().Any())
+            if (cr2w.RootChunk is entEntityTemplate)
             {
                 return DumpEntPackage(cr2w, entStream, outpath);
             }
-            if (cr2w.Chunks.OfType<appearanceAppearanceResource>().Any())
+            if (cr2w.RootChunk is appearanceAppearanceResource)
             {
                 return DumpAppPackage(cr2w, entStream, outpath);
             }
@@ -32,11 +32,7 @@ namespace WolvenKit.Modkit.RED4
         }
         private bool DumpEntPackage(CR2WFile cr2w, Stream entStream, string outfile)
         {
-            if (cr2w == null || !cr2w.Chunks.OfType<entEntityTemplate>().Any())
-            {
-                return false;
-            }
-            var blob = cr2w.Chunks.OfType<entEntityTemplate>().First();
+            var blob = cr2w.RootChunk as entEntityTemplate;
 
             if (blob.CompiledData.Buffer.MemSize > 0)
             {
@@ -54,18 +50,15 @@ namespace WolvenKit.Modkit.RED4
         }
         private bool DumpAppPackage(CR2WFile cr2w, Stream appStream, string outfile)
         {
-            if (cr2w == null || !cr2w.Chunks.OfType<appearanceAppearanceDefinition>().Any())
-            {
-                return false;
-            }
-            var blobs = cr2w.Chunks.OfType<appearanceAppearanceDefinition>().ToList();
+            var blob = cr2w.RootChunk as appearanceAppearanceResource;
+
             List<RedFileDto> datas = new List<RedFileDto>();
-            foreach (var blob in blobs)
+            foreach (var appearance in blob.Appearances)
             {
-                if (blob.CompiledData.Buffer.MemSize > 0)
+                if (appearance.Chunk.CompiledData.Buffer.MemSize > 0)
                 {
                     var packageStream = new MemoryStream();
-                    packageStream.Write(blob.CompiledData.Buffer.GetBytes());
+                    packageStream.Write(appearance.Chunk.CompiledData.Buffer.GetBytes());
 
                     CompiledPackage package = new CompiledPackage(_hashService);
                     packageStream.Seek(0, SeekOrigin.Begin);

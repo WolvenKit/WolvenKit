@@ -177,6 +177,8 @@ namespace WolvenKit.RED4.Types
 
         public static string GetRedTypeFromCSType(Type type, Flags flags = null)
         {
+            flags ??= Flags.Empty;
+
             var hash = HashCode.Combine(type, flags);
             if (_csTypeCache.TryGetValue(hash, out var result))
             {

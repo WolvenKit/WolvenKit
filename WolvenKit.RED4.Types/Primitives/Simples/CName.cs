@@ -35,7 +35,7 @@ namespace WolvenKit.RED4.Types
 
         private ulong CalculateHash()
         {
-            if (_value == null || _value == "")
+            if (string.IsNullOrEmpty(_value))
             {
                 return 0;
             }
@@ -49,19 +49,7 @@ namespace WolvenKit.RED4.Types
         public uint GetShortRedHash() => (uint)((_hash >> 32) ^ (uint)_hash);
 
         [Obsolete("Use GetRedHash instead")]
-        public uint GetOldRedHash()
-        {
-            if (string.IsNullOrEmpty(_value))
-            {
-                return 0;
-            }
-
-            var buffer = Encoding.UTF8.GetBytes(_value);
-            var sBuffer = Array.ConvertAll(buffer, b => b != 0x80 ? (byte)Math.Abs((sbyte)b) : (byte)0x80);
-            var hash64 = FNV1A64HashAlgorithm.HashReadOnlySpan(sBuffer);
-
-            return (uint)(hash64 & 0xFFFFFFFF);
-        }
+        public uint GetOldRedHash() => (uint)(_hash & 0xFFFFFFFF);
 
         public static implicit operator CName(string value) => new(value);
         public static implicit operator string(CName value) => value?._value ?? null; 

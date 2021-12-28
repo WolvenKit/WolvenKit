@@ -268,10 +268,13 @@ namespace WolvenKit.Common.Conversion
                     //};
                 }
 
+                case RedBaseClass cls:
+                    return cls.ToDictionary();
+
                 // serialize complex properties as Dictionary
                 default:
-                    var dict = new Dictionary<string, object>();
                     throw new NotImplementedException();
+                    //var dict = new Dictionary<string, object>();
                     //foreach (var cvar in data.SerializedProperties)
                     //{
                     //    dict.Add(cvar.REDName, cvar.ToObject());

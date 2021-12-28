@@ -25,13 +25,10 @@ namespace WolvenKit.Modkit.RED4
         {
             var cr2w = _wolvenkitFileService.TryReadRed4File(inmeshStream);
 
-            if (cr2w == null || !cr2w.Chunks.OfType<CMesh>().Any() || !cr2w.Chunks.OfType<rendRenderMeshBlob>().Any())
+            if (cr2w == null || cr2w.RootChunk is not CMesh meshBlob || meshBlob.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
                 return false;
             }
-
-            var meshBlob = cr2w.Chunks.OfType<CMesh>().First();
-            var rendBlob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
             if (File.Exists(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")))
             {
@@ -106,7 +103,7 @@ namespace WolvenKit.Modkit.RED4
             Vec4 QuantTrans = new Vec4((max.X + min.X) / 2, (max.Y + min.Y) / 2, (max.Z + min.Z) / 2, 1);
 
 
-            RawArmature newRig = MeshTools.GetOrphanRig(cr2w.Chunks.OfType<rendRenderMeshBlob>().First(), cr2w);
+            RawArmature newRig = MeshTools.GetOrphanRig(rendblob, cr2w);
             RawArmature oldRig = null;
             if (model.LogicalSkins.Count != 0)
             {
@@ -539,7 +536,7 @@ namespace WolvenKit.Modkit.RED4
         }
         static MemoryStream GetEditedCr2wFile(CR2WFile cr2w, MeshesInfo info, MemoryStream buffer)
         {
-            var blob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
+            var blob = (rendRenderMeshBlob)((CMesh)cr2w.RootChunk).RenderResourceBlob.Chunk;
             // removing BS topology data which causes a lot of issues with improved facial lighting geomerty, vertex colors uroborus and what not
             int Count = blob.Header.Topology.Count;
 
@@ -549,7 +546,7 @@ namespace WolvenKit.Modkit.RED4
             }
             for (int i = 0; i < info.meshCount; i++)
             {
-                blob.Header.Topology.Add(new rendTopologyData() );
+                blob.Header.Topology.Add(RedTypeManager.Create<rendTopologyData>());
             }
 
             //dependent RenderLOD's removal and addition
@@ -574,9 +571,8 @@ namespace WolvenKit.Modkit.RED4
                     blob.Header.RenderLODs.Add(9f);
                 }
             }
-            if (cr2w.Chunks.OfType<CMesh>().Any())
+            if (cr2w.RootChunk is CMesh cmeshblob)
             {
-                var cmeshblob = cr2w.Chunks.OfType<CMesh>().First();
                 Count = cmeshblob.LodLevelInfo.Count;
                 if (Count > 1)
                 {
@@ -609,7 +605,7 @@ namespace WolvenKit.Modkit.RED4
             // adding new rendChunks
             for (int i = 0; i < info.meshCount; i++)
             {
-                rendChunk chunk = new rendChunk() ;
+                var chunk = RedTypeManager.Create<rendChunk>();
 
                 chunk.LodMask = Convert.ToByte(info.LODLvl[i]);
 
@@ -622,19 +618,19 @@ namespace WolvenKit.Modkit.RED4
                 chunk.NumIndices = info.indCounts[i];
                 chunk.NumVertices = Convert.ToUInt16(info.vertCounts[i]);
 
-                chunk.ChunkIndices = new rendIndexBufferChunk() ;
+                chunk.ChunkIndices = RedTypeManager.Create<rendIndexBufferChunk>();
                 chunk.ChunkIndices.Pe = Enums.GpuWrapApieIndexBufferChunkType.IBCT_IndexUShort;
                 chunk.ChunkIndices.TeOffset = info.indicesOffsets[i] - info.indexBufferOffset;
 
 
-                chunk.ChunkVertices = new rendVertexBufferChunk();
+                chunk.ChunkVertices = RedTypeManager.Create<rendVertexBufferChunk>();
                 chunk.ChunkVertices.ByteOffsets.Add(info.posnOffsets[i]);
                 chunk.ChunkVertices.ByteOffsets.Add(info.tex0Offsets[i]);
                 chunk.ChunkVertices.ByteOffsets.Add(info.normalOffsets[i]);
                 chunk.ChunkVertices.ByteOffsets.Add(info.colorOffsets[i]);
                 chunk.ChunkVertices.ByteOffsets.Add(info.unknownOffsets[i]);
 
-                chunk.ChunkVertices.VertexLayout = new GpuWrapApiVertexLayoutDesc() ;
+                chunk.ChunkVertices.VertexLayout = RedTypeManager.Create<GpuWrapApiVertexLayoutDesc>();
 
                 // fishy hash and slotmask, subject to change
                 chunk.ChunkVertices.VertexLayout.Hash =  0;
@@ -667,7 +663,7 @@ namespace WolvenKit.Modkit.RED4
                 int elementCount = 0;
 
                 // Position                                                                                                                              // bs way of setting up index names
-                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
+                chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
                 // fishy
                 //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
                 chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(0);
@@ -679,7 +675,7 @@ namespace WolvenKit.Modkit.RED4
                 // Joint0
                 if (info.weightCounts[i] > 0)
                 {
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
                     // fishy
                     //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
                     chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(0);
@@ -695,7 +691,7 @@ namespace WolvenKit.Modkit.RED4
                 if (info.weightCounts[i] > 4)
                 {
                     // bs way of setting up index names
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
                     // fishy
                     //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
                     chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(0);
@@ -712,7 +708,7 @@ namespace WolvenKit.Modkit.RED4
                 if (info.weightCounts[i] > 0)
                 {
                     // bs way of setting up index names
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
                     // fishy
                     //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
                     chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(0);
@@ -725,7 +721,7 @@ namespace WolvenKit.Modkit.RED4
                 if (info.weightCounts[i] > 4)
                 {
                     // bs way of setting up index names
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
                     // fishy
                     //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
                     chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(0);
@@ -736,7 +732,7 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 // tx0coords
-                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
+                chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
                 // fishy
                 //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
                 chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(1);
@@ -746,7 +742,7 @@ namespace WolvenKit.Modkit.RED4
                 elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
 
                 // normals
-                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
+                chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
                 // fishy
                 //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
                 chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(2);
@@ -756,7 +752,7 @@ namespace WolvenKit.Modkit.RED4
                 elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
 
                 // tangents
-                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
+                chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
                 // fishy
                 //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
                 chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(2);
@@ -766,7 +762,7 @@ namespace WolvenKit.Modkit.RED4
                 elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
 
                 // color
-                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
+                chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
                 // fishy
                 //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
                 chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(3);
@@ -776,7 +772,7 @@ namespace WolvenKit.Modkit.RED4
                 elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
 
                 // tx1coords
-                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
+                chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
                 // fishy
                 //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
                 chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(3);
@@ -788,7 +784,7 @@ namespace WolvenKit.Modkit.RED4
                 // extra data/ morphoffsets
                 if (info.garmentSupportExists[i])
                 {
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
                     // fishy
                     //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
                     chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(0);
@@ -804,7 +800,7 @@ namespace WolvenKit.Modkit.RED4
                 // instanceTransforms
                 for (int e = 0; e < 3; e++)
                 {
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
                     // fishy
                     //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new Enums.GpuWrapApiVertexPackingEStreamType.;
                     chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(7);
@@ -817,7 +813,7 @@ namespace WolvenKit.Modkit.RED4
                 // instanceSkinningDatas
                 if (info.weightCounts[i] > 0)
                 {
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
                     // fishy
                     chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerInstance;
                     chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(7);
@@ -830,7 +826,7 @@ namespace WolvenKit.Modkit.RED4
                 // LightBlockerIntensity
                 if (info.unknownOffsets[i] != 0)
                 {
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
                     // fishy
                     //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
                     chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(4);
@@ -845,7 +841,7 @@ namespace WolvenKit.Modkit.RED4
 
 
                 // Invalid, Required
-                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement() );
+                chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
                 // fishy
                 chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_Invalid;
                 chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(0);
@@ -880,8 +876,8 @@ namespace WolvenKit.Modkit.RED4
             //cr2w.Buffers[p].ReadData(new BinaryReader(compressed));
             //cr2w.Buffers[p].Offset = off;
 
-            MemoryStream ms = new MemoryStream();
-            using var writer = new CR2WWriter(ms);
+            var ms = new MemoryStream();
+            using var writer = new CR2WWriter(ms, Encoding.UTF8, true);
             writer.WriteFile(cr2w);
 
             return ms;
@@ -953,6 +949,8 @@ namespace WolvenKit.Modkit.RED4
         }
         private static void UpdateSkinningParamCloth(ref List<RawMeshContainer> meshes, ref CR2WFile cr2w)
         {
+            var cmesh = (CMesh)cr2w.RootChunk;
+
             var LODLvl = new UInt32[meshes.Count];
             for (int i = 0; i < meshes.Count; i++)
             {
@@ -971,8 +969,7 @@ namespace WolvenKit.Modkit.RED4
 
             }
 
-            throw new TodoException("Whats this?");
-
+            // TODO: What should happen here?
             /*int meshBufferIdx = cr2w.Chunks.OfType<rendRenderMeshBlob>().First().RenderBuffer.Pointer - 1;
             int materialBufferIdx = cr2w.Chunks.OfType<CMesh>().First().LocalMaterialBuffer.RawData.Pointer - 1;
             if (cr2w.Chunks.OfType<CMesh>().First().LocalMaterialBuffer.RawData.Buffer.MemSize == 0)
@@ -996,11 +993,14 @@ namespace WolvenKit.Modkit.RED4
                 materialBufferIdx = 0;
 
             cr2w.Chunks.OfType<rendRenderMeshBlob>().First().RenderBuffer.Pointer = meshBufferIdx + 1;
-            cr2w.Chunks.OfType<CMesh>().First().LocalMaterialBuffer.RawData.Pointer = materialBufferIdx + 1;
+            cr2w.Chunks.OfType<CMesh>().First().LocalMaterialBuffer.RawData.Pointer = materialBufferIdx + 1;*/
 
-            if (cr2w.Chunks.OfType<meshMeshParamCloth>().Any())
+            var clothBlob = cmesh.Parameters.FirstOrDefault(x => x.Chunk is meshMeshParamCloth);
+            var clothGraphicalBlob = cmesh.Parameters.FirstOrDefault(x => x.Chunk is meshMeshParamCloth_Graphical);
+
+            if (clothBlob != null)
             {
-                var blob = cr2w.Chunks.OfType<meshMeshParamCloth>().First();
+                var blob = (meshMeshParamCloth)clothBlob.Chunk;
                 blob.Chunks = new CArray<meshPhxClothChunkData>();
                 for (int i = 0; i < meshes.Count; i++)
                 {
@@ -1132,13 +1132,13 @@ namespace WolvenKit.Modkit.RED4
                     }
                 }
             }
-            if (cr2w.Chunks.OfType<meshMeshParamCloth_Graphical>().Any())
+            if (clothGraphicalBlob != null)
             {
-                var blob = cr2w.Chunks.OfType<meshMeshParamCloth_Graphical>().First();
+                var blob = (meshMeshParamCloth_Graphical)clothGraphicalBlob.Chunk;
                 blob.Chunks = new CArray<meshGfxClothChunkData>();
                 for (int i = 0; i < meshes.Count; i++)
                 {
-                    var chunk = new meshGfxClothChunkData();
+                    var chunk = RedTypeManager.Create<meshGfxClothChunkData>();
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
@@ -1267,7 +1267,6 @@ namespace WolvenKit.Modkit.RED4
                     }
                 }
             }
-*/
         }
     }
 }

@@ -8,6 +8,18 @@ namespace WolvenKit.RED4.Types
 {
     public class RedTypeManager
     {
+        public static T Create<T>()
+        {
+            var instance = (IRedClass)System.Activator.CreateInstance<T>();
+            if (instance is IRedOverload tCls)
+            {
+                tCls.ConstructorOverload();
+            }
+
+            instance?.InternalInitClass();
+
+            return (T)instance;
+        }
 
         public static IRedClass Create(Type type)
         {

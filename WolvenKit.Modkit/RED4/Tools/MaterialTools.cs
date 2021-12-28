@@ -16,6 +16,7 @@ using System.Diagnostics;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Tools;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
@@ -35,15 +36,15 @@ namespace WolvenKit.Modkit.RED4
         public bool ExportMeshWithMaterials(Stream meshStream, FileInfo outfile, List<Archive> archives,string matRepo, EUncookExtension eUncookExtension = EUncookExtension.dds, bool isGLBinary = true, bool LodFilter = true)
         {
             if (matRepo == null)
+            {
                 throw new Exception("Material Repository Path is not set, Please select a folder in the Material Repository Settings where your textures will output, Generating the complete dump is not required.");
+            }
 
             var cr2w = _wolvenkitFileService.TryReadRed4File(meshStream);
-            if (cr2w == null || !cr2w.Chunks.OfType<CMesh>().Any() || !cr2w.Chunks.OfType<rendRenderMeshBlob>().Any())
+            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
                 return false;
             }
-
-            var rendblob = cr2w.Chunks.OfType<rendRenderMeshBlob>().First();
 
             using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
@@ -70,7 +71,7 @@ namespace WolvenKit.Modkit.RED4
         }
         private void GetMateriaEntries(CR2WFile cr2w, Stream meshStream, ref List<string> primaryDependencies,ref List<string> materialEntryNames, ref List<CMaterialInstance> materialEntries, List<Archive> archives)
         {
-            var cmesh = cr2w.Chunks.OfType<CMesh>().First();
+            var cmesh = cr2w.RootChunk as CMesh;
 
             List<CMaterialInstance> ExternalMaterial = new List<CMaterialInstance>();
 
@@ -95,7 +96,7 @@ namespace WolvenKit.Modkit.RED4
                         using var reader = new CR2WReader(ms);
                         _ = reader.ReadFile(out var mi, false);
 
-                        ExternalMaterial.Add(mi.Chunks[0] as CMaterialInstance);
+                        ExternalMaterial.Add(mi.RootChunk as CMaterialInstance);
 
                         foreach (var import in reader.ImportsList)
                         {
@@ -130,7 +131,7 @@ namespace WolvenKit.Modkit.RED4
                         using var reader = new CR2WReader(ms);
                         _ = reader.ReadFile(out var mi, false);
 
-                        ExternalMaterial.Add(mi.Chunks[0] as CMaterialInstance);
+                        ExternalMaterial.Add(mi.RootChunk as CMaterialInstance);
 
                         foreach (var import in reader.ImportsList)
                         {
@@ -182,28 +183,31 @@ namespace WolvenKit.Modkit.RED4
                         }
                     }
 
-                    LocalMaterial.Add(mi.Chunks[0] as CMaterialInstance);
+                    LocalMaterial.Add(mi.RootChunk as CMaterialInstance);
                 }
             }
             else
             {
-                for (int i = 0; i < cr2w.Chunks.Count; i++)
+                
+
+                foreach (var handle in cmesh.PreloadLocalMaterialInstances)
                 {
-                    if (cr2w.Chunks[i] is CMaterialInstance)
+                    if (handle.Chunk is CMaterialInstance mi1)
                     {
-                        LocalMaterial.Add(cr2w.Chunks[i] as CMaterialInstance);
+                        LocalMaterial.Add(mi1);
                     }
                 }
 
-                throw new TodoException("get import info from cr2w file?");
-                //foreach (var import in cr2w.Debug.ImportInfos)
-                //{
+                //throw new TodoException("get import info from cr2w file?");
 
-                //    if (!primaryDependencies.Contains(import.DepotPath))
-                //    {
-                //        primaryDependencies.Add(import.DepotPath);
-                //    }
-                //}
+                /*foreach (var import in cr2w.Debug.ImportInfos)
+                {
+
+                    if (!primaryDependencies.Contains(import.DepotPath))
+                    {
+                        primaryDependencies.Add(import.DepotPath);
+                    }
+                }*/
             }
 
             int Count = cmesh.MaterialEntries.Count;
@@ -238,7 +242,7 @@ namespace WolvenKit.Modkit.RED4
                             using var reader = new CR2WReader(ms);
                             _ = reader.ReadFile(out var mi, false);
 
-                            path = (mi.Chunks[0] as CMaterialInstance).BaseMaterial.DepotPath;
+                            path = (mi.RootChunk as CMaterialInstance).BaseMaterial.DepotPath;
 
                             foreach (var import in reader.ImportsList)
                             {
@@ -517,34 +521,9 @@ namespace WolvenKit.Modkit.RED4
                     foreach (CHandle<CMaterialParameter> item in usedMts[keys[i]].Parameters[2])
                     {
                         var refer = item.Chunk;
+                        var inst = (CMaterialParameter)RedTypeManager.Create(refer.GetType());
 
-                        if (refer is CMaterialParameterVector vec)
-                        {
-                            vec.Vector.X = 0f;
-                            vec.Vector.Y = 0f;
-                            vec.Vector.Z = 0f;
-                            vec.Vector.W = 0f;
-                            rawMat.Data.Add(refer.ParameterName, vec.Vector.ToObject());
-                        }
-                        else if (refer is CMaterialParameterColor col)
-                        {
-                            col.Color.Red = 0;
-                            col.Color.Green = 0;
-                            col.Color.Blue = 0;
-                            col.Color.Alpha = 0;
-                            rawMat.Data.Add(refer.ParameterName, col.Color.ToObject());
-                        }
-                        else if (refer is CMaterialParameterScalar flo)
-                        {
-                            flo.Scalar = 0f;
-                            rawMat.Data.Add(refer.ParameterName, flo.Scalar.ToObject());
-                        }
-
-                        throw new TodoException("add more switch cases for all matinstance param types");
-                        //    if (refer.ChildrEditableVariables[2] is IRedRef dep)
-                        //    {
-                        //        dep.DepotPath = "";
-                        //    }
+                        rawMat.Data.Add(refer.ParameterName, GetMaterialParameter(inst));
                     }
 
                     matTemplates.Add(rawMat);
@@ -562,6 +541,187 @@ namespace WolvenKit.Modkit.RED4
             File.WriteAllText(Path.ChangeExtension(outfile.FullName,".Material.json"), str);
 
         }
+
+        private void SetMaterialParameter(CMaterialParameter materialParameter, object value)
+        {
+            if (materialParameter is CMaterialParameterColor col)
+            {
+                var cVal = ((JObject)value).ToObject<Dictionary<string, byte>>();
+
+                col.Color.Red = cVal["Red"];
+                col.Color.Green = cVal["Green"];
+                col.Color.Blue = cVal["Blue"];
+                col.Color.Alpha = cVal["Alpha"];
+            }
+
+            if (materialParameter is CMaterialParameterCpuNameU64 cpu)
+            {
+                cpu.Name = (string)value;
+            }
+
+            if (materialParameter is CMaterialParameterCube cub)
+            {
+                cub.Texture.DepotPath = (string)value;
+            }
+
+            if (materialParameter is CMaterialParameterFoliageParameters fol)
+            {
+                fol.FoliageProfile.DepotPath = (string)value;
+            }
+
+            if (materialParameter is CMaterialParameterGradient gra)
+            {
+                gra.Gradient.DepotPath = (string)value;
+            }
+
+            if (materialParameter is CMaterialParameterHairParameters hai)
+            {
+                hai.HairProfile.DepotPath = (string)value;
+            }
+
+            if (materialParameter is CMaterialParameterMultilayerMask mulm)
+            {
+                mulm.Mask.DepotPath = (string)value;
+            }
+
+            if (materialParameter is CMaterialParameterMultilayerSetup muls)
+            {
+                muls.Setup.DepotPath = (string)value;
+            }
+
+            if (materialParameter is CMaterialParameterScalar sca)
+            {
+                sca.Scalar = Convert.ToSingle(value);
+            }
+
+            if (materialParameter is CMaterialParameterSkinParameters ski)
+            {
+                ski.SkinProfile.DepotPath = (string)value;
+            }
+
+            if (materialParameter is CMaterialParameterStructBuffer str)
+            {
+                throw new TodoException(nameof(CMaterialParameterStructBuffer));
+            }
+
+            if (materialParameter is CMaterialParameterTerrainSetup ter)
+            {
+                ter.Setup.DepotPath = (string)value;
+            }
+
+            if (materialParameter is CMaterialParameterTexture tex)
+            {
+                tex.Texture.DepotPath = (string)value;
+            }
+
+            if (materialParameter is CMaterialParameterTextureArray texa)
+            {
+                texa.Texture.DepotPath = (string)value;
+            }
+
+            if (materialParameter is CMaterialParameterVector vec)
+            {
+                var cVal = ((JObject)value).ToObject<Dictionary<string, float>>();
+
+                vec.Vector.X = cVal["X"];
+                vec.Vector.Y = cVal["Y"];
+                vec.Vector.Z = cVal["Z"];
+                vec.Vector.W = cVal["W"];
+            }
+        }
+
+        public object GetMaterialParameter(CMaterialParameter materialParameter)
+        {
+            if (materialParameter is CMaterialParameterColor col)
+            {
+                return new Dictionary<string, byte>
+                {
+                    {"Red", col.Color.Red},
+                    {"Green", col.Color.Green},
+                    {"Blue", col.Color.Blue},
+                    {"Alpha", col.Color.Alpha},
+                };
+            }
+
+            if (materialParameter is CMaterialParameterCpuNameU64 cpu)
+            {
+                return (string)cpu.Name ?? "";
+            }
+
+            if (materialParameter is CMaterialParameterCube cub)
+            {
+                return (string)cub.Texture.DepotPath ?? "";
+            }
+
+            if (materialParameter is CMaterialParameterFoliageParameters fol)
+            {
+                return (string)fol.FoliageProfile.DepotPath ?? "";
+            }
+
+            if (materialParameter is CMaterialParameterGradient gra)
+            {
+                return (string)gra.Gradient.DepotPath ?? "";
+            }
+
+            if (materialParameter is CMaterialParameterHairParameters hai)
+            {
+                return (string)hai.HairProfile.DepotPath ?? "";
+            }
+
+            if (materialParameter is CMaterialParameterMultilayerMask mulm)
+            {
+                return (string)mulm.Mask.DepotPath ?? "";
+            }
+
+            if (materialParameter is CMaterialParameterMultilayerSetup muls)
+            {
+                return (string)muls.Setup.DepotPath ?? "";
+            }
+
+            if (materialParameter is CMaterialParameterScalar sca)
+            {
+                return (float)sca.Scalar;
+            }
+
+            if (materialParameter is CMaterialParameterSkinParameters ski)
+            {
+                return (string)ski.SkinProfile.DepotPath ?? "";
+            }
+
+            if (materialParameter is CMaterialParameterStructBuffer str)
+            {
+                throw new TodoException(nameof(CMaterialParameterStructBuffer));
+            }
+
+            if (materialParameter is CMaterialParameterTerrainSetup ter)
+            {
+                return (string)ter.Setup.DepotPath ?? "";
+            }
+
+            if (materialParameter is CMaterialParameterTexture tex)
+            {
+                return (string)tex.Texture.DepotPath ?? "";
+            }
+
+            if (materialParameter is CMaterialParameterTextureArray texa)
+            {
+                return (string)texa.Texture.DepotPath ?? "";
+            }
+
+            if (materialParameter is CMaterialParameterVector vec)
+            {
+                return new Dictionary<string, float>
+                {
+                    {"X", vec.Vector.X},
+                    {"Y", vec.Vector.Y},
+                    {"Z", vec.Vector.Z},
+                    {"W", vec.Vector.W},
+                };
+            }
+
+            throw new NotImplementedException(materialParameter.GetType().Name);
+        }
+
         private RawMaterial ContainRawMaterial(CMaterialInstance cMaterialInstance, string Name, List<Archive> archives, ref Dictionary<string, CMaterialTemplate> mts)
         {
             RawMaterial rawMaterial = new RawMaterial();
@@ -583,8 +743,8 @@ namespace WolvenKit.Modkit.RED4
                         var ms = new MemoryStream();
                         ModTools.ExtractSingleToStream(ar, hash, ms);
                         var mi = _wolvenkitFileService.TryReadRed4File(ms);
-                        BaseMaterials.Add(mi.Chunks[0] as CMaterialInstance);
-                        path = (mi.Chunks[0] as CMaterialInstance).BaseMaterial.DepotPath;
+                        BaseMaterials.Add(mi.RootChunk as CMaterialInstance);
+                        path = (mi.RootChunk as CMaterialInstance).BaseMaterial.DepotPath;
                         break;
                     }
                 }
@@ -605,7 +765,7 @@ namespace WolvenKit.Modkit.RED4
                     {
                         var ms = new MemoryStream();
                         ModTools.ExtractSingleToStream(ar, hash, ms);
-                        mt = _wolvenkitFileService.TryReadRed4File(ms).Chunks.OfType<CMaterialTemplate>().First();
+                        mt = (CMaterialTemplate)_wolvenkitFileService.TryReadRed4File(ms).RootChunk;
                         mts.Add(path, mt);
                         break;
                     }
@@ -621,25 +781,7 @@ namespace WolvenKit.Modkit.RED4
                     var refer = mt.Parameters[2][e].Chunk;
                     if(refer.ParameterName == mt.UsedParameters[2][i].Name)
                     {
-                        // childreditablevars indexing is dangerous(what if someone changes order of vars), just works :D
-                        //if(refer.ChildrEditableVariables.Count > 2 && refer.ChildrEditableVariables[2].IsSerialized)
-                        {
-                            if(refer is CMaterialParameterColor col)
-                            {
-                                var col_ = new CColor();
-                                col_.Red = col.Color.Red;
-                                col_.Green = col.Color.Green;
-                                col_.Blue = col.Color.Blue;
-                                col_.Alpha = col.Color.Alpha;
-
-                                rawMaterial.Data.Add(mt.UsedParameters[2][i].Name, col_.ToObject());
-                            }
-                            else
-                            {
-                                throw new TodoException("get parameter for all derived classes");
-                                //rawMaterial.Data.Add(mt.UsedParameters[2][i].Name, refer.ChildrEditableVariables[2].ToObject());
-                            }
-                        }
+                        rawMaterial.Data.Add(mt.UsedParameters[2][i].Name, GetMaterialParameter(refer));
                     }
                 }
             }
@@ -686,21 +828,19 @@ namespace WolvenKit.Modkit.RED4
 
             return rawMaterial;
         }
+
         private static MemoryStream GetMaterialStream(Stream ms, CR2WFile cr2w)
         {
-            var blob = cr2w.Chunks.OfType<CMesh>().First();
+            var blob = (CMesh)cr2w.RootChunk;
 
             var b = blob.LocalMaterialBuffer.RawData.Buffer;
 
-            // TODO: Is this intended? (return always empty)
-            MemoryStream materialStream = new MemoryStream();
-            ms.Write(b.GetBytes());
-
-            return materialStream;
+            return new MemoryStream(b.GetBytes());
         }
+
         public bool WriteMatToMesh(ref CR2WFile cr2w, string _matData, List<Archive> archives)
         {
-            if (cr2w == null || !cr2w.Chunks.OfType<CMesh>().Any() || !cr2w.Chunks.OfType<rendRenderMeshBlob>().Any() || cr2w.Buffers.Count < 1)
+            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob)
             {
                 return false;
             }
@@ -712,7 +852,9 @@ namespace WolvenKit.Modkit.RED4
             List<string> names = new List<string>();
 
             if (matData.Materials.Count < 1)
+            {
                 return false;
+            }
 
             Dictionary<string, CMaterialTemplate> mts = new Dictionary<string, CMaterialTemplate>();
             for (int i = 0; i < matData.Materials.Count; i++)
@@ -721,7 +863,7 @@ namespace WolvenKit.Modkit.RED4
                 names.Add(mat.Name);
                 CR2WFile mi = new CR2WFile();
                 {
-                    var chunk = new CMaterialInstance();
+                    var chunk = RedTypeManager.Create<CMaterialInstance>();
                     chunk.CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC;
                     chunk.EnableMask = true ;
                     chunk.ResourceVersion = 4;
@@ -742,7 +884,7 @@ namespace WolvenKit.Modkit.RED4
                             {
                                 var ms = new MemoryStream();
                                 ModTools.ExtractSingleToStream(ar, hash, ms);
-                                mt = _wolvenkitFileService.TryReadRed4File(ms).Chunks.OfType<CMaterialTemplate>().First();
+                                mt = (CMaterialTemplate)_wolvenkitFileService.TryReadRed4File(ms).RootChunk;
                                 mts.Add(mat.MaterialTemplate, mt);
                                 break;
                             }
@@ -753,114 +895,73 @@ namespace WolvenKit.Modkit.RED4
                     {
                         for (int j = 0; j < keys.Count; j++)
                         {
-                            string typename = null;
                             for (int k = 0; k < mt.Parameters[2].Count; k++)
                             {
                                 var refer = mt.Parameters[2][k].Chunk;
                                 if(refer.ParameterName == keys[j])
                                 {
-                                    throw new TodoException("get the actual parameter type");
-                                    //if (refer.ChildrEditableVariables.Count > 2)
-                                    //{
-                                    //    typename = refer.ChildrEditableVariables[2].REDType;
-                                    //}
+                                    SetMaterialParameter(refer, matData.Materials[i].Data[keys[j]]);
                                 }
-                            }
-                            if(typename != null)
-                            {
-                                // remove when setfromobj deserialization is fixed
-
-                                throw new TodoException("get the actual parameter type");
-
-                                //if (typename == "Color")
-                                //{
-                                //    CColor value0 = new CColor();
-                                //    value0.SetFromJObject(matData.Materials[i].Data[keys[j]]);
-
-                                //    CColor value = new CColor
-                                //    {
-                                //        Red = value0.Red,
-                                //        Green = value0.Green,
-                                //        Blue = value0.Blue,
-                                //        Alpha = value0.Alpha
-                                //    };
-                                //    chunk.CMaterialInstanceData.Add(variant);
-                                //}
-                                //else
-                                //{
-                                //    //var variant = new CVariantSizeNameType();
-                                //    var value = CR2WTypeManager.Create(typename, keys[j], mi, variant);
-                                //    value.SetFromJObject(matData.Materials[i].Data[keys[j]]);
-                                //    variant.SetVariant(value);
-                                //    chunk.CMaterialInstanceData.Add(variant);
-                                //}
                             }
                         }
                     }
 
-
-                    mi.Chunks.Add(chunk);
+                    mi.RootChunk = chunk;
                 }
 
-                offsets.Add((UInt32)materialbuffer.Position);
-                var m = new MemoryStream();
+                offsets.Add((uint)materialbuffer.Position);
 
+                using var m = new MemoryStream();
                 using var writer = new CR2WWriter(m);
                 writer.WriteFile(mi);
 
                 materialbuffer.Write(m.ToArray(), 0, (int)m.Length);
-                sizes.Add((UInt32)m.Length);
+                sizes.Add((uint)m.Length);
             }
 
-            var blob = cr2w.Chunks.OfType<CMesh>().First();
+            var blob = (CMesh)cr2w.RootChunk;
 
             // remove existing data
             while (blob.MaterialEntries.Count != 0)
             {
-                blob.MaterialEntries.Remove(blob.MaterialEntries[blob.MaterialEntries.Count - 1]);
+                blob.MaterialEntries.Remove(blob.MaterialEntries[^1]);
             }
             while (blob.LocalMaterialBuffer.RawDataHeaders.Count != 0)
             {
-                blob.LocalMaterialBuffer.RawDataHeaders.Remove(blob.LocalMaterialBuffer.RawDataHeaders[blob.LocalMaterialBuffer.RawDataHeaders.Count - 1]);
+                blob.LocalMaterialBuffer.RawDataHeaders.Remove(blob.LocalMaterialBuffer.RawDataHeaders[^1]);
             }
             while (blob.PreloadLocalMaterialInstances.Count != 0)
             {
-                blob.PreloadLocalMaterialInstances.Remove(blob.PreloadLocalMaterialInstances[blob.PreloadLocalMaterialInstances.Count - 1]);
+                blob.PreloadLocalMaterialInstances.Remove(blob.PreloadLocalMaterialInstances[^1]);
             }
             while (blob.PreloadExternalMaterials.Count != 0)
             {
-                blob.PreloadExternalMaterials.Remove(blob.PreloadExternalMaterials[blob.PreloadExternalMaterials.Count - 1]);
+                blob.PreloadExternalMaterials.Remove(blob.PreloadExternalMaterials[^1]);
             }
             while (blob.ExternalMaterials.Count != 0)
             {
-                blob.ExternalMaterials.Remove(blob.ExternalMaterials[blob.ExternalMaterials.Count - 1]);
+                blob.ExternalMaterials.Remove(blob.ExternalMaterials[^1]);
             }
             while (blob.LocalMaterialInstances.Count != 0)
             {
-                blob.LocalMaterialInstances.Remove(blob.LocalMaterialInstances[blob.LocalMaterialInstances.Count - 1]);
+                blob.LocalMaterialInstances.Remove(blob.LocalMaterialInstances[^1]);
             }
-            //
-            for (int i = 0; i < names.Count; i++)
+
+            for (var i = 0; i < names.Count; i++)
             {
-                var c = new CMeshMaterialEntry();
-                c.IsLocalInstance = true;
-                c.Name = names[i];
-                c.Index = (UInt16)i;
-                blob.MaterialEntries.Add(c);
+                var entry = RedTypeManager.Create<CMeshMaterialEntry>();
+                entry.IsLocalInstance = true;
+                entry.Name = names[i];
+                entry.Index = (ushort)i;
+                blob.MaterialEntries.Add(entry);
 
-                var m = new meshLocalMaterialHeader();
-                m.Offset = offsets[i];
-                m.Size =sizes[i];
-                blob.LocalMaterialBuffer.RawDataHeaders.Add(m);
+                var header = RedTypeManager.Create<meshLocalMaterialHeader>();
+                header.Offset = offsets[i];
+                header.Size = sizes[i];
+                blob.LocalMaterialBuffer.RawDataHeaders.Add(header);
             }
 
-            var compressed = new MemoryStream();
-            using var buff = new BinaryWriter(compressed);
-            var (zsize, crc) = buff.CompressAndWrite(materialbuffer.ToArray());
-
-            bool check = false;
-            check = blob.LocalMaterialBuffer.RawData.Buffer.MemSize > 0;
-            if (!check)
+            if (blob.LocalMaterialBuffer.RawData == null)
             {
                 blob.LocalMaterialBuffer.RawData = new DataBuffer(materialbuffer.ToArray());
             }

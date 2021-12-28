@@ -4,11 +4,6 @@ using System.Collections.Generic;
 
 namespace WolvenKit.RED4.Types
 {
-    public interface IRedRemoveable
-    {
-        public void Remove();
-    }
-
     public interface IRedBaseHandle
     {
         public Type InnerType { get; }

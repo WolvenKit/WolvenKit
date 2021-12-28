@@ -104,7 +104,7 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 // add chunk
-                red.Chunks.Add(c2dArray);
+                red.RootChunk = c2dArray;
 
                 // write
                 var outpath = new RedRelativePath(rawRelative)
@@ -298,7 +298,7 @@ namespace WolvenKit.Modkit.RED4
                 };
 
                 // add chunk
-                red.Chunks.Add(font);
+                red.RootChunk = font;
 
                 // write to file
                 var redpath = Path.ChangeExtension(rawRelative.FullName, ECookedFileFormat.fnt.ToString());
@@ -352,18 +352,7 @@ namespace WolvenKit.Modkit.RED4
                     using var fileReader = new BinaryReader(redstream);
 
                     var cr2w = _wolvenkitFileService.TryReadRed4File(fileReader);
-                    if (cr2w == null)
-                    {
-                        return false;
-                    }
-
-                    if (cr2w.Chunks.FirstOrDefault() is not CBitmapTexture)
-                    {
-                        return false;
-                    }
-
-                    if (cr2w.Chunks.FirstOrDefault() is not CBitmapTexture xbm ||
-                        cr2w.Chunks[1] is not rendRenderTextureBlobPC)
+                    if (cr2w == null || cr2w.RootChunk is not CBitmapTexture xbm || xbm.RenderResourceBlob.Chunk is not rendIRenderTextureBlob)
                     {
                         return false;
                     }
@@ -381,8 +370,6 @@ namespace WolvenKit.Modkit.RED4
                     }
 
                     format = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
-
-
                 }
                 else
                 {

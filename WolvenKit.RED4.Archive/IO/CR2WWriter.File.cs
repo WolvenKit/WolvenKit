@@ -60,6 +60,11 @@ namespace WolvenKit.RED4.Archive.IO
 
             BaseWriter.Write(stringBuffer);
 
+            if (_file.Properties.Count < 1)
+            {
+                _file.Properties.Add(new CR2WProperty());
+            }
+
             var afterHeaderPosition = CalculateHeaderLength(dataCollection);
             fileHeader.objectsEnd += (uint)afterHeaderPosition;
 
@@ -112,11 +117,6 @@ namespace WolvenKit.RED4.Archive.IO
             #endregion Imports
 
             #region Properties
-
-            if (_file.Properties.Count < 1)
-            {
-                _file.Properties.Add(new CR2WProperty());
-            }
 
             tableHeaders[3].offset = (uint)BaseStream.Position;
             tableHeaders[3].itemCount = (uint)_file.Properties.Count;
@@ -214,7 +214,7 @@ namespace WolvenKit.RED4.Archive.IO
             BaseStream.WriteStruct(fileHeader);
             BaseStream.WriteStructs(tableHeaders);
 
-            for (int i = 0; i < dataCollection.ChunkInfoList.Count; i++)
+            /*for (int i = 0; i < dataCollection.ChunkInfoList.Count; i++)
             {
                 var newInfo = dataCollection.ChunkInfoList[i];
                 var oldInfo = _file.Debug.ChunkInfos[i];
@@ -250,7 +250,7 @@ namespace WolvenKit.RED4.Archive.IO
                 }
 
                 dataCollection.ChunkInfoList[i] = oldInfo;
-            }
+            }*/
         }
 
         #region Write Sections

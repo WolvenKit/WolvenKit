@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,11 +6,14 @@ namespace WolvenKit.RED4.Types
 {
     public class CArrayBase<T> : List<T>, IEquatable<CArrayBase<T>>, IRedArray
     {
+        public int MaxSize { get; set; } = -1;
+
         public CArrayBase(){}
 
         public CArrayBase(int size) : base(new T[size])
         {
-            if (typeof(IRedEnum).IsAssignableFrom(typeof(T)) || typeof(IRedBitField).IsAssignableFrom(typeof(T)))
+            var propTypeInfo = RedReflection.GetTypeInfo(typeof(T));
+            if (propTypeInfo.IsValueType)
             {
                 for (var i = 0; i < Count; i++)
                 {
@@ -19,17 +21,16 @@ namespace WolvenKit.RED4.Types
                 }
             }
         }
-        public Type InnerType
-        {
-            get
-            {
-                return typeof(T);
-            }
-        }
+        public Type InnerType => typeof(T);
 
         public new void Add(T item)
         {
             if (IsReadOnly)
+            {
+                throw new NotSupportedException();
+            }
+
+            if (Count == MaxSize)
             {
                 throw new NotSupportedException();
             }
@@ -44,13 +45,6 @@ namespace WolvenKit.RED4.Types
                 throw new NotSupportedException();
             }
 
-            foreach (var item in this)
-            {
-                if (item is IRedRemoveable obj)
-                {
-                    obj.Remove();
-                }
-            }
             base.Clear();
         }
 
@@ -60,13 +54,8 @@ namespace WolvenKit.RED4.Types
             {
                 throw new NotSupportedException();
             }
-
-            var result = base.Remove(item);
-            if (result && item is IRedRemoveable obj)
-            {
-                obj.Remove();
-            }
-            return result;
+            
+            return base.Remove(item);
         }
 
         public bool IsReadOnly { get; set; }
@@ -74,6 +63,11 @@ namespace WolvenKit.RED4.Types
         public new void Insert(int index, T item)
         {
             if (IsReadOnly)
+            {
+                throw new NotSupportedException();
+            }
+
+            if (Count == MaxSize)
             {
                 throw new NotSupportedException();
             }
@@ -88,10 +82,6 @@ namespace WolvenKit.RED4.Types
                 throw new NotSupportedException();
             }
 
-            if (this[index] is IRedRemoveable obj)
-            {
-                obj.Remove();
-            }
             base.RemoveAt(index);
         }
 

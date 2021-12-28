@@ -9,7 +9,7 @@ using System.Threading;
 namespace WolvenKit.RED4.Types
 {
     [REDMeta]
-    public class RedBaseClass : DynamicObject, IRedClass
+    public class RedBaseClass : DynamicObject, IRedClass, IRedCloneable
     {
         public int Chunk = -1;
         public Guid Guid;
@@ -130,9 +130,18 @@ namespace WolvenKit.RED4.Types
                     }
                 }
 
-                if (_properties.ContainsKey(propertyInfo.RedName) && typeof(IRedClass).IsAssignableFrom(propertyInfo.Type))
+                if (_properties.ContainsKey(propertyInfo.RedName))
                 {
-                    ((IRedClass)_properties[propertyInfo.RedName]).InternalInitClass();
+                    if (propertyInfo.Type.IsGenericType && propertyInfo.Type.GetGenericTypeDefinition() == typeof(CStatic<>))
+                    {
+                        var flags = propertyInfo.Flags.Clone();
+                        ((IRedArray)_properties[propertyInfo.RedName]).MaxSize = flags.MoveNext() ? flags.Current : 0;
+                    }
+
+                    if (typeof(IRedClass).IsAssignableFrom(propertyInfo.Type))
+                    {
+                        ((IRedClass)_properties[propertyInfo.RedName]).InternalInitClass();
+                    }
                 }
             }
         }
@@ -151,6 +160,50 @@ namespace WolvenKit.RED4.Types
         {
             //OnObjectChanged(redPropertyName, value);
             _properties[redPropertyName] = value;
+        }
+
+        public Dictionary<string, object> ToDictionary(bool clone = true)
+        {
+            if (clone)
+            {
+                var copy = (RedBaseClass)DeepCopy();
+                return copy.ToDictionary(false);
+            }
+
+            var dict = new Dictionary<string, object>();
+            foreach (var property in _properties)
+            {
+                if (property.Value is RedBaseClass rbc)
+                {
+                    dict.Add(property.Key, rbc.ToDictionary(false));
+                }
+                else
+                {
+                    dict.Add(property.Key, property.Value);
+                }
+            }
+
+            return dict;
+        }
+
+        public object ShallowCopy()
+        {
+            return MemberwiseClone();
+        }
+
+        public object DeepCopy()
+        {
+            var other = (RedBaseClass)MemberwiseClone();
+
+            foreach (var property in _properties)
+            {
+                if (property.Value is IRedCloneable cl)
+                {
+                    other._properties[property.Key] = cl.DeepCopy();
+                }
+            }
+
+            return other;
         }
 
         #region DynamicObject
