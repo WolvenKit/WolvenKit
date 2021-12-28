@@ -45,8 +45,26 @@
             ButtonPanelVisibility="Collapsed"/>
             <TextBlock Text="Redscript Example" Padding="10,5"/>
             <syncfusion:EditControl FontFamily="Fira Code" ShowLineNumber="False" Text="{Binding SelectedItem.RedscriptExample}"/>
-            <TextBlock Text="UIIcon TweakDB Example" Padding="10,5"/>
-            <syncfusion:EditControl FontFamily="Fira Code" ShowLineNumber="False" Text="{Binding SelectedItem.TweakDBExample}"/>
+            <!--TextBlock Text="UIIcon TweakDB Example" Padding="10,5"/>
+            <syncfusion:EditControl FontFamily="Fira Code" ShowLineNumber="False" Text="{Binding SelectedItem.TweakDBExample}"/-->
+            <Canvas>
+            <Image
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Source="{Binding SelectedItem.Image}"
+                RenderTransformOrigin="0.5,0.5"
+                RenderOptions.BitmapScalingMode="NearestNeighbor"
+                Opacity="1">
+                    <Image.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding SelectedItem.SaveImageCommand}" Header="Save as PNG"/>
+                        </ContextMenu>
+                    </Image.ContextMenu>
+                <Image.RenderTransform>
+                    <ScaleTransform ScaleY="-1"/>
+                </Image.RenderTransform>
+                </Image>
+            </Canvas>
         </StackPanel>
         <Border
         BorderThickness="1"

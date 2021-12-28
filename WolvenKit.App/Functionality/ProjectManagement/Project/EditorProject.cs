@@ -98,7 +98,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             get
             {
                 var oldDir = Path.Combine(FileDirectory, "Raw");
-                if (Directory.Exists(oldDir))
+                if (DirExistsMatchCase(oldDir))
                 {
                     return oldDir;
                 }
@@ -110,6 +110,18 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
                 return dir;
             }
+        }
+
+        static public bool DirExistsMatchCase(string path)
+        {
+            // If it definitely doesn't return false
+            if (!Directory.Exists(path))
+                return false;
+
+            // Figure out if the case (of the final part) is the same
+            string thisDir = Path.GetFileName(path);
+            string actualDir = Path.GetFileName(Directory.GetDirectories(Path.GetDirectoryName(path), thisDir)[0]);
+            return thisDir == actualDir;
         }
 
 

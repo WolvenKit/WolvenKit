@@ -20,6 +20,10 @@ using System.Collections.Generic;
 using System.Linq;
 using WolvenKit.ViewModels.Shell;
 using System.ComponentModel;
+using System.Windows;
+using System.Windows.Input;
+using Microsoft.Win32;
+using WolvenKit.Functionality.Commands;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -35,8 +39,9 @@ namespace WolvenKit.ViewModels.Documents
             Height = xbm.Height;
             foreach (var part in atlas.Slots[0].Parts)
             {
-                OverlayItems.Add(new InkTextureAtlasMapperViewModel(part, xbm, atlas.Slots[0].Texture.DepotPath.ToString(), file.FilePath));
+                OverlayItems.Add(new InkTextureAtlasMapperViewModel(part, xbm, atlas.Slots[0].Texture.DepotPath.ToString(), file.FilePath, (BitmapSource)Image));
             }
+
         }
 
         [Reactive] public List<InkTextureAtlasMapperViewModel> OverlayItems { get; set; } = new List<InkTextureAtlasMapperViewModel>();
@@ -52,6 +57,7 @@ namespace WolvenKit.ViewModels.Documents
             [Reactive] public double Width { get; set; }
             [Reactive] public double Height { get; set; }
             [Reactive] public string AtlasPath { get; set; }
+            [Reactive] public ImageSource Image { get; set; }
             [Browsable(false)]
             public inkTextureAtlasMapper Itam;
             [Browsable(false)]
@@ -75,7 +81,7 @@ image.SetTexturePart(n""{PartName}"");";
                 }
             }
 
-            public InkTextureAtlasMapperViewModel(inkTextureAtlasMapper itam, CBitmapTexture xbm, string path, string atlasPath)
+            public InkTextureAtlasMapperViewModel(inkTextureAtlasMapper itam, CBitmapTexture xbm, string path, string atlasPath, BitmapSource image)
             {
                 Itam = itam;
                 PartName = itam.PartName;
@@ -86,7 +92,40 @@ image.SetTexturePart(n""{PartName}"");";
                 Width = Math.Round(itam.ClippingRectInUVCoords.Right * xbm.Width) - Left;
                 Height = Math.Round(itam.ClippingRectInUVCoords.Bottom * xbm.Height) - Top;
                 Name = $"{itam.PartName} ({(uint)Width}x{(uint)Height})";
+                SaveImageCommand = new RelayCommand(ExecuteSaveImage, CanSaveImage);
+                try
+                {
+                    Image = new CroppedBitmap(image, new Int32Rect((int)Left, (int)(xbm.Height - itam.ClippingRectInUVCoords.Bottom * xbm.Height), (int)Width, (int)Height));
+                }
+                catch
+                {
+
+                }
             }
+
+            public ICommand SaveImageCommand { get; private set; }
+            private bool CanSaveImage() => Image != null;
+            private void ExecuteSaveImage()
+            {
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+                saveFileDialog1.Filter = "PNG Image|*.png";
+                saveFileDialog1.Title = "Save an Image As";
+                saveFileDialog1.FileName = PartName + ".png";
+                saveFileDialog1.ShowDialog();
+
+                if (saveFileDialog1.FileName != "")
+                {
+
+                    BitmapEncoder encoder = new PngBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(Image as BitmapSource));
+
+                    using (var fileStream = new FileStream(saveFileDialog1.FileName, FileMode.Create))
+                    {
+                        encoder.Save(fileStream);
+                    }
+                }
+            }
+
         }
     }
 }
