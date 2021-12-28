@@ -442,18 +442,15 @@ namespace WolvenKit.Modkit.RED4
                 var red = new CR2WFile();
 
                 // xbm chunk
-                var xbm = new CBitmapTexture
-                {
-                    CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC,
-                    Width = width,
-                    Height = height,
-                    Setup = new STextureGroupSetup()
-                };
+                var xbm = RedTypeManager.Create<CBitmapTexture>();
+                xbm.CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC;
+                xbm.Width = width;
+                xbm.Height = height;
 
                 SetTextureGroupSetup(xbm.Setup, red);
 
                 // blob chunk
-                var blob = new rendRenderTextureBlobPC();
+                var blob = RedTypeManager.Create<rendRenderTextureBlobPC>();
 
                 xbm.RenderTextureResource = new rendRenderTextureResource
                 {
@@ -463,26 +460,24 @@ namespace WolvenKit.Modkit.RED4
                 // create rendRenderTextureBlobPC chunk
 
                 // header
-                var header = new rendRenderTextureBlobHeader()
-                {
-                    Version = 2,
-                    Flags = 1,
-                    SizeInfo = new rendRenderTextureBlobSizeInfo()
-                    {
-                        Width = (ushort)width,
-                        Height = (ushort)height
-                    },
-                    TextureInfo = new rendRenderTextureBlobTextureInfo()
-                    {
-                        TextureDataSize = (uint)textureDataSize,
-                        SliceSize = (uint)textureDataSize,
-                        DataAlignment = alignment,
-                        SliceCount = (ushort)slicecount,
-                        MipCount = (byte)mipCount
-                    }
-                };
+                var header = RedTypeManager.Create<rendRenderTextureBlobHeader>();
+                header.Version = 2;
+                header.Flags = 1;
+
+                header.SizeInfo = RedTypeManager.Create<rendRenderTextureBlobSizeInfo>();
+                header.SizeInfo.Width = (ushort)width;
+                header.SizeInfo.Height = (ushort)height;
+
+                header.TextureInfo = RedTypeManager.Create<rendRenderTextureBlobTextureInfo>();
+                header.TextureInfo.TextureDataSize = (uint)textureDataSize;
+                header.TextureInfo.SliceSize = (uint)textureDataSize;
+                header.TextureInfo.DataAlignment = alignment;
+                header.TextureInfo.SliceCount = (ushort)slicecount;
+                header.TextureInfo.MipCount = (byte)mipCount;
+
                 // header.TextureInfo
                 var mipMapInfo = new CArray<rendRenderTextureBlobMipMapInfo>();
+                //var mipMapInfo = RedTypeManager.Create<CArray<rendRenderTextureBlobMipMapInfo>>();
                 {
                     ms.Seek(148, SeekOrigin.Begin);
 
@@ -497,18 +492,16 @@ namespace WolvenKit.Modkit.RED4
                         //rowpitch
                         var rowpitch = DDSUtils.ComputeRowPitch((int)mipsizeW, (int)mipsizeH, fmt);
 
-                        var info = new rendRenderTextureBlobMipMapInfo
+                        var info = RedTypeManager.Create<rendRenderTextureBlobMipMapInfo>();
+                        info.Layout = new rendRenderTextureBlobMemoryLayout()
                         {
-                            Layout = new rendRenderTextureBlobMemoryLayout()
-                            {
-                                RowPitch = (uint)rowpitch,
-                                SlicePitch = (uint)slicepitch
-                            },
-                            Placement = new rendRenderTextureBlobPlacement()
-                            {
-                                Offset = (uint)offset,
-                                Size = (uint)slicepitch
-                            }
+                            RowPitch = (uint)rowpitch,
+                            SlicePitch = (uint)slicepitch
+                        };
+                        info.Placement = new rendRenderTextureBlobPlacement()
+                        {
+                            Offset = (uint)offset,
+                            Size = (uint)slicepitch
                         };
 
                         offset += slicepitch;
