@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BigGustave;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
@@ -352,7 +353,7 @@ namespace WolvenKit.Modkit.RED4
                     using var fileReader = new BinaryReader(redstream);
 
                     var cr2w = _wolvenkitFileService.TryReadRed4File(fileReader);
-                    if (cr2w == null || cr2w.RootChunk is not CBitmapTexture xbm || xbm.RenderResourceBlob.Chunk is not rendIRenderTextureBlob)
+                    if (cr2w == null || cr2w.RootChunk is not CBitmapTexture xbm || xbm.RenderResourceBlob == null || xbm.RenderResourceBlob.Chunk is not rendIRenderTextureBlob)
                     {
                         return false;
                     }
@@ -406,11 +407,11 @@ namespace WolvenKit.Modkit.RED4
 
                 if (result)
                 {
-                    _loggerService.Success($"Rebuilt {redfile} with buffers");
+                    _loggerService.Success($"Rebuilt with buffers: {redfile}");
                 }
                 else
                 {
-                    _loggerService.Error($"Failed to rebuild {redfile} with buffers");
+                    _loggerService.Error($"Failed to rebuild with buffers: {redfile}");
                 }
 
                 return result;
@@ -634,11 +635,11 @@ namespace WolvenKit.Modkit.RED4
 
                     if (result)
                     {
-                        _loggerService.Success($"Rebuilt {redfileName} with buffers");
+                        _loggerService.Success($"Rebuilt with buffers: {redfileName} ");
                     }
                     else
                     {
-                        _loggerService.Error($"Failed to rebuild {redfileName} with buffers");
+                        _loggerService.Error($"Failed to rebuild with buffers: {redfileName}");
                     }
                     return result;
                 }

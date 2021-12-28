@@ -21,6 +21,7 @@ using WolvenKit.Modkit.RED4.Serialization;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.TweakDB;
+using System.Windows;
 
 namespace WolvenKit.Functionality.Controllers
 {
@@ -561,10 +562,26 @@ namespace WolvenKit.Functionality.Controllers
                             break;
                         }
 
-                        Directory.CreateDirectory(diskPathInfo.Directory.FullName);
-                        using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
-                        file.Extract(fs);
-                        _loggerService.Success($"{file.Name} added to the project");
+                        if (File.Exists(diskPathInfo.FullName))
+                        {
+                            if (MessageBox.Show($"The file {file.Name} already exists in project - overwrite it with game file?", $"Confirm overwrite: {file.Name}", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                            {
+                                using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
+                                file.Extract(fs);
+                                _loggerService.Success($"Overwrote existing file with game file: {file.Name}");
+                            }
+                            else
+                            {
+                                _loggerService.Info($"Declined to overwrite existing file: {file.Name}");
+                            }
+                        }
+                        else
+                        {
+                            Directory.CreateDirectory(diskPathInfo.Directory.FullName);
+                            using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
+                            file.Extract(fs);
+                            _loggerService.Success($"Added game file to project: {file.Name}");
+                        }
                     }
 
                     break;
