@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+      <PackageReference Include="BigGustave" Version="1.0.6" />
       <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
       <PackageReference Include="AsyncEnumerator" Version="4.0.2" />
       <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0023" />

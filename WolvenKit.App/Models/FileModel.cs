@@ -121,7 +121,7 @@ namespace WolvenKit.Models
                 {
                     "bmp",
                     "jpg",
-                    "png",
+                    //"png",
                     //"tga",
                     "tiff",
                 };

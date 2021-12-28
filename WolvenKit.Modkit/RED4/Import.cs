@@ -380,6 +380,19 @@ namespace WolvenKit.Modkit.RED4
                         var md = DDSUtils.GetMetadataFromTGAFile(infile);
                         format = md.Format;
                     }
+                    else if (rawExt == EUncookExtension.png.ToString())
+                    {
+                        using (var stream = new FileStream(infile, FileMode.Open, FileAccess.Read, FileShare.Read))
+                        {
+                            // need to figure out how to decide format/etc from png header
+                            //var image = Png.Open(stream);
+                            //image.Header.ColorType;
+                            //var md = new DDSMetadata(new DirectXTexSharp.TexMetadata(), image.Header.BitDepth, true);
+
+                            //format = md.Format;
+                            format = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
+                        }
+                    }
                     else
                     {
                         _loggerService.Error($"Direct {rawExt} import is not supported yet.");
