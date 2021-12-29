@@ -43,10 +43,10 @@ namespace WolvenKit.Views.Dialogs
                     vm => vm.HostedViewModel,
                     view => view.ViewModelViewHost.ViewModel)
                     .DisposeWith(disposables);
-                this.Bind(ViewModel,
-                        vm => vm.HostedViewModel.Title,
-                        view => view.Title)
-                    .DisposeWith(disposables);
+                //this.Bind(ViewModel,
+                //        vm => vm.HostedViewModel.Title,
+                //        view => view.Title)
+                //    .DisposeWith(disposables);
 
             });
 

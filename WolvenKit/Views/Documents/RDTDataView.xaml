@@ -95,17 +95,25 @@
                         <DataTrigger Binding="{Binding IsHandled}" Value="True">
                             <Setter Property="Foreground" Value="{StaticResource Border}" />
                         </DataTrigger>
+                        <DataTrigger Binding="{Binding IsDefault}" Value="True">
+                            <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
+                            <Setter Property="FontStyle" Value="Italic" />
+                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
                 
                 <DataTemplate x:Key="PropertyNameTemplate" DataType="{x:Type shell:ChunkViewModel}">
                     <Grid>
                         <Grid.Resources>
-                            <Style x:Key="ExpanderHider" TargetType="FrameworkElement">
+                            <Style x:Key="ExpanderHider" TargetType="TextBlock">
                                 <Setter Property="Visibility" Value="Collapsed"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TreeViewItem}}}" Value="True">
                                         <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsDefault}" Value="True">
+                                        <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
+                                        <Setter Property="FontStyle" Value="Italic" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -113,6 +121,10 @@
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsHandled}" Value="True">
                                         <Setter Property="Foreground" Value="{StaticResource Border}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsDefault}" Value="True">
+                                        <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
+                                        <Setter Property="FontStyle" Value="Italic" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -135,12 +147,19 @@
                                     <DataTrigger Binding="{Binding IsHandled}" Value="True">
                                         <Setter Property="Foreground" Value="{StaticResource Border}" />
                                     </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsDefault}" Value="True">
+                                        <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
+                                        <Setter Property="FontStyle" Value="Italic" />
+                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                             <Style TargetType="{x:Type iconPacks:PackIconCodicons}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsHandled}" Value="True">
                                         <Setter Property="Foreground" Value="{StaticResource Border}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsDefault}" Value="True">
+                                        <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -259,8 +278,18 @@
                                 </Grid.ColumnDefinitions>
                                 <ContentPresenter Grid.Column="0" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center"
                                    ContentTemplate="{StaticResource PropertyNameTemplate}"/>
-                                <ContentPresenter Grid.Column="1" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                <ContentPresenter Grid.Column="2" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center"
                                    ContentTemplate="{StaticResource PropertyValueTemplate}"  />
+                                <Button
+                                    Panel.ZIndex="5" Background="Transparent"
+                                    Command="{Binding AddItemToCompiledDataCommand}"
+                                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                                    Grid.Column="1" Margin="-25,0,0,0" Padding="0"
+                                    Height="20" Width="20" VerticalAlignment="Center"
+                                    ToolTip="Add New Chunk" Style="{StaticResource ButtonCustom}">
+                                    <iconPacks:PackIconVaadinIcons Kind="PlusCircle" 
+                                        VerticalAlignment="Center" Padding="2"/>
+                                </Button>
                             </Grid>
                         </DataTemplate>
                     </converters:TreeViewItemTemplateSelector.PropertyTemplate>
@@ -279,6 +308,7 @@
                                 <Button
                                     Panel.ZIndex="5" Background="Transparent"
                                     Command="{Binding AddItemToArrayCommand}"
+                                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" 
                                     Grid.Column="1" Margin="-25,0,0,0" Padding="0"
                                     Height="20" Width="20" VerticalAlignment="Center"
                                     ToolTip="Add New Element" Style="{StaticResource ButtonCustom}">
@@ -300,10 +330,10 @@
                                    ContentTemplate="{StaticResource PropertyNameTemplate}"/>
                                 <ContentPresenter Grid.Column="1" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Center"
                                    ContentTemplate="{StaticResource PropertyValueTemplate}"  />
-                                <Button Grid.Column="2" Margin="5,0,0,0" Style="{StaticResource ButtonCustom}" Command="{Binding NewHandleCommand}">
+                                <!--Button Grid.Column="2" Margin="5,0,0,0" Style="{StaticResource ButtonCustom}" Command="{Binding NewHandleCommand}">
                                     <iconPacks:PackIconVaadinIcons Kind="PlusCircle"
                                         VerticalAlignment="Center" Padding="2"/>
-                                </Button>
+                                </Button-->
                             </Grid>
                         </DataTemplate>
                     </converters:TreeViewItemTemplateSelector.HandleTemplate>
@@ -322,7 +352,7 @@
                                 <TextBlock Text="{Binding Value}" Grid.Column="2" /-->
                                 <ContentPresenter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center"
                                    ContentTemplate="{StaticResource PropertyValueTemplate}"  />
-                                <Button Grid.Column="2" Margin="5,0,0,0" Style="{StaticResource ButtonCustom}" Command="{Binding OpenRefCommand}" ToolTip="Open in new tab">
+                                <Button Background="Transparent" Grid.Column="2" Margin="5,0,0,0" Style="{StaticResource ButtonCustom}" Command="{Binding OpenRefCommand}" ToolTip="Open in new tab">
                                     <iconPacks:PackIconVaadinIcons Kind="ArrowBackward" RotationAngle="90"
                                         VerticalAlignment="Center" Padding="2"/>
                                 </Button>

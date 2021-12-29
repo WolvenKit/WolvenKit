@@ -133,6 +133,9 @@
                     <DataTemplate DataType="{x:Type dialogVMs:NewFileViewModel}">
                         <dialogs:NewFileView ViewModel="{Binding}" />
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type dialogVMs:AddChunkDialogViewModel}">
+                        <dialogs:AddChunkDialog ViewModel="{Binding}" />
+                    </DataTemplate>
                     <DataTemplate DataType="{x:Type wizardVMs:ProjectWizardViewModel}">
                         <wizards:ProjectWizardView ViewModel="{Binding}" />
                     </DataTemplate>

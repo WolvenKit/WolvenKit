@@ -15,10 +15,10 @@ namespace WolvenKit.ViewModels.Wizards
             Title = "Feedback";
         }
 
-        public sealed override string Title { get; set; }
+        public string Title { get; set; }
 
-        public sealed override ReactiveCommand<Unit, Unit> CloseCommand { get; set; }
-        public sealed override ReactiveCommand<Unit, Unit> CancelCommand { get; set; }
-        public sealed override ReactiveCommand<Unit, Unit> OkCommand { get; set; }
+        public ReactiveCommand<Unit, Unit> CloseCommand { get; set; }
+        public ReactiveCommand<Unit, Unit> CancelCommand { get; set; }
+        public ReactiveCommand<Unit, Unit> OkCommand { get; set; }
     }
 }

@@ -262,9 +262,13 @@ namespace WolvenKit.Views.Documents
                         {
                             e.DropPosition = DropPosition.DropAsChild;
                         }
-                        else if (source.CanBeDroppedOn(target))
+                        //else if (source.CanBeDroppedOn(target))
+                        //{
+                        //    e.DropPosition = DropPosition.DropAsChild;
+                        //}
+                        else if (source.Data is RedBaseClass rbc && target.Parent.Data is DataBuffer db)
                         {
-                            e.DropPosition = DropPosition.DropAsChild;
+                            e.DropPosition = DropPosition.DropBelow;
                         }
                     }
                 }
@@ -298,41 +302,41 @@ namespace WolvenKit.Views.Documents
             {
                 if (e.TargetNode.Content is ChunkViewModel target)
                 {
-                    //if (source.CanBeDroppedOn(target))
-                    //{
-                        //e.Handled = false;
-                    //}
+                    if (source.Data is RedBaseClass rbc && target.Parent.Data is DataBuffer)
+                    {
+                        target.Parent.AddChunkToDataBuffer((IRedClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
+                    }
                 }
             }
         }
 
         private void SfTreeView_ItemDropped(object sender, TreeViewItemDroppedEventArgs e)
         {
-            if (e.DraggingNodes != null && e.DraggingNodes[0].Content is ChunkViewModel source)
-            {
-                if (e.TargetNode.Content is ChunkViewModel target)
-                {
-                    if (source.CanBeDroppedOn(target))
-                    {
-                        target.Data = source.Data;
-                    }
-                }
-            }
+            //if (e.DraggingNodes != null && e.DraggingNodes[0].Content is ChunkViewModel source)
+            //{
+            //    if (e.TargetNode.Content is ChunkViewModel target)
+            //    {
+            //        if (source.Data is RedBaseClass rbc && target.Parent.Data is DataBuffer)
+            //        {
+            //            target.Parent.AddChunkToDataBuffer((IRedClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
+            //        }
+            //    }
+            //}
 
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                if (e.TargetNode.Content is ChunkViewModel target)
-                {
-                    var files = new List<string>((string[])e.Data.GetData(DataFormats.FileDrop));
-                    if (files.Count == 1)
-                    {
-                        if (dropFileLocation == files[0])
-                        {
-                            //target.Data = dropFile.Data;
-                        }
-                    }
-                }
-            }
+            //if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            //{
+            //    if (e.TargetNode.Content is ChunkViewModel target)
+            //    {
+            //        var files = new List<string>((string[])e.Data.GetData(DataFormats.FileDrop));
+            //        if (files.Count == 1)
+            //        {
+            //            if (dropFileLocation == files[0])
+            //            {
+            //                //target.Data = dropFile.Data;
+            //            }
+            //        }
+            //    }
+            //}
         }
 
         private void PropertyGrid_SelectedObjectChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

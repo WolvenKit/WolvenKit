@@ -43,6 +43,7 @@ using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.HomePage;
 using System.Windows.Controls;
 using WolvenKit.ViewModels.Wizards;
+using WolvenKit.Common.FNV1A;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -334,7 +335,7 @@ namespace WolvenKit.ViewModels.Shell
         private void ExecuteNewProject()
         {
             //IsOverlayShown = false;
-            SetActiveDialog(new ProjectWizardViewModel()
+            SetActiveDialog(new ProjectWizardViewModel
             {
                 FileHandler = NewProject
             });
@@ -439,7 +440,7 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanNewFile(string inputDir) => ActiveProject != null && !IsDialogShown;
         private void ExecuteNewFile(string inputDir)
         {
-            SetActiveDialog(new NewFileViewModel()
+            SetActiveDialog(new NewFileViewModel
             {
                 FileHandler = OpenFromNewFile
             });
@@ -622,6 +623,42 @@ namespace WolvenKit.ViewModels.Shell
             }
 
             return Unit.Default;
+        }
+
+        public void OpenFileFromDepotPath(string path) => OpenFileFromHash(FNV1A64HashAlgorithm.HashString(path));
+
+        public void OpenFileFromHash(ulong hash)
+        {
+            if (hash != 0)
+            {
+                _progressService.IsIndeterminate = true;
+                try
+                {
+                    var _archiveManager = Locator.Current.GetService<IArchiveManager>();
+                    var file = _archiveManager.Lookup(hash);
+                    if (file.HasValue && file.Value is FileEntry fe)
+                    {
+                        var fileViewModel = new RedDocumentViewModel(fe.FileName);
+                        using (var stream = new MemoryStream())
+                        {
+                            fe.Extract(stream);
+                            fileViewModel.OpenStream(stream, null);
+                        }
+                        if (!DockedViews.Contains(fileViewModel))
+                            DockedViews.Add(fileViewModel);
+                        ActiveDocument = fileViewModel;
+                        UpdateTitle();
+                    }
+                }
+                catch (Exception e)
+                {
+                    _loggerService.Error(e.Message);
+                }
+                finally
+                {
+                    _progressService.IsIndeterminate = false;
+                }
+            }
         }
 
         public ICommand PackModCommand { get; private set; }

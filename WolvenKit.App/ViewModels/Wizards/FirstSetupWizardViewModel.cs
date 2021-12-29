@@ -94,7 +94,7 @@ namespace WolvenKit.ViewModels.Wizards
 
         #region Properties
 
-        public sealed override string Title { get; set; }
+        public string Title { get; set; }
 
         //public string Author { get; set; }
         //public string Email { get; set; }
@@ -149,9 +149,9 @@ namespace WolvenKit.ViewModels.Wizards
 
         #region Commands
 
-        public sealed override ReactiveCommand<Unit, Unit> CloseCommand { get; set; }
-        public sealed override ReactiveCommand<Unit, Unit> CancelCommand { get; set; }
-        public sealed override ReactiveCommand<Unit, Unit> OkCommand { get; set; }
+        public ReactiveCommand<Unit, Unit> CloseCommand { get; set; }
+        public ReactiveCommand<Unit, Unit> CancelCommand { get; set; }
+        public ReactiveCommand<Unit, Unit> OkCommand { get; set; }
 
 
         private void ExecuteFinish()

@@ -30,7 +30,6 @@ namespace WolvenKit.ViewModels.Dialogs
 
         public NewFileViewModel()
         {
-            CloseCommand = ReactiveCommand.Create(() => { });
             CreateCommand = ReactiveCommand.Create(() =>
             {
                 IsCreating = true;
@@ -42,7 +41,7 @@ namespace WolvenKit.ViewModels.Dialogs
                     file != null &&
                     !string.IsNullOrEmpty(file) &&
                     !File.Exists(path)));
-            Cancel2Command = ReactiveCommand.Create(() => FileHandler(null));
+            CancelCommand = ReactiveCommand.Create(() => FileHandler(null));
 
             Title = "Create new file";
 
@@ -101,12 +100,7 @@ namespace WolvenKit.ViewModels.Dialogs
         [Reactive] public string FileName { get; set; }
         [Reactive] public string FullPath { get; set; }
 
-        public sealed override string Title { get; set; }
-
-        public sealed override ReactiveCommand<Unit, Unit> CloseCommand { get; set; }
-        public sealed override ReactiveCommand<Unit, Unit> CancelCommand { get; set; }
-        public sealed override ReactiveCommand<Unit, Unit> OkCommand { get; set; }
-
+        public string Title { get; set; }
 
         [Reactive] public ObservableCollection<FileCategoryModel> Categories { get; set; } = new();
 
@@ -115,7 +109,7 @@ namespace WolvenKit.ViewModels.Dialogs
         [Reactive] public AddFileModel SelectedFile { get; set; }
 
         public ICommand CreateCommand { get; private set; }
-        public ICommand Cancel2Command { get; private set; }
+        public ICommand CancelCommand { get; private set; }
         [Reactive] public string WhyNotCreate { get; set; }
         //private async Task ExecuteCreate()
         //{

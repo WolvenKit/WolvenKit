@@ -44,9 +44,9 @@ namespace WolvenKit.ViewModels.Wizards
 
         #endregion Constructors
 
-        public sealed override ReactiveCommand<Unit, Unit> CloseCommand { get; set; }
-        public sealed override ReactiveCommand<Unit, Unit> CancelCommand { get; set; }
-        public sealed override ReactiveCommand<Unit, Unit> OkCommand { get; set; }
+        public ReactiveCommand<Unit, Unit> CloseCommand { get; set; }
+        public ReactiveCommand<Unit, Unit> CancelCommand { get; set; }
+        public ReactiveCommand<Unit, Unit> OkCommand { get; set; }
 
         public ICommand CreateCommand { get; set; }
         public ICommand Cancel2Command { get; set; }
@@ -54,7 +54,7 @@ namespace WolvenKit.ViewModels.Wizards
 
         #region Properties
 
-        public sealed override string Title { get; set; }
+        public string Title { get; set; }
 
         [Reactive] public string ProjectName { get; set; }
         [Reactive] public string ProjectPath { get; set; }
