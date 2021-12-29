@@ -77,9 +77,9 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            byte[] maskData = new byte[maskWidth * maskHeight];
+            var maskData = new byte[maskWidth * maskHeight];
 
-            for (int i = 0; i < maskCount; i++)
+            for (var i = 0; i < maskCount; i++)
             {
                 var mFilename = Path.GetFileNameWithoutExtension(outfile.FullName) + $"_{i}.dds";
                 //var mFilename = Path.GetFileName(outfile.FullName) + $".{i}.dds"; // TODO:we should use this at some point
@@ -104,57 +104,53 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 // write texture to file
-                using (var ms = new MemoryStream())
+                using var ms = new MemoryStream();
+                // create dds stream
+                DDSUtils.GenerateAndWriteHeader(ms, new DDSMetadata(
+                    maskWidth, maskHeight,
+                    1, 1, 0, 0, 0, DXGI_FORMAT.DXGI_FORMAT_R8_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 8,  true));
+                ms.Write(maskData);
+
+                if (args.UncookExtension == EUncookExtension.dds)
                 {
-                    // create dds stream
-                    DDSUtils.GenerateAndWriteHeader(ms, new DDSMetadata(
-                        maskWidth, maskHeight,
-                        1, 1, 0, 0, 0, DXGI_FORMAT.DXGI_FORMAT_R8_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 8,  true));
-                    ms.Write(maskData);
+                    using var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
+                    ms.Seek(0, SeekOrigin.Begin);
+                    ms.CopyTo(ddsStream);
+                }
+                //else if (args.UncookExtension == EUncookExtension.tga)
+                //{
+                //    using (var ddsStream = new FileStream($"{newpath}.tga", FileMode.Create, FileAccess.Write))
+                //    {
+                //        ms.Seek(0, SeekOrigin.Begin);
+                //        using (var ms2 = new MemoryStream(DDSUtils.ConvertFromDdsMemory(ms, EUncookExtension.tga)))
+                //        {
+                //            var br = new BinaryReader(ms2);
+                //            br.BaseStream.Seek(14, SeekOrigin.Begin);
+                //            ushort height = br.ReadUInt16();
+                //            br.BaseStream.Seek(17, SeekOrigin.Begin);
+                //            byte descriptor = br.ReadByte();
 
-                    if (args.UncookExtension == EUncookExtension.dds)
+                //            var bw = new BinaryWriter(ms2);
+                //            bw.BaseStream.Seek(10, SeekOrigin.Begin);
+                //            bw.Write(height);
+
+                //            bw.BaseStream.Seek(17, SeekOrigin.Begin);
+                //            bw.Write(descriptor ^ 0b00001000);
+
+                //            bw.Flush();
+
+                //            ms2.Position = 0;
+                //            ms2.CopyTo(ddsStream);
+                //        }
+                //    }
+                //}
+                else
+                {
+                    // convert
+                    ms.Seek(0, SeekOrigin.Begin);
+                    if (!DDSUtils.ConvertFromDdsAndSave(ms, newpath, args))
                     {
-                        using (var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write))
-                        {
-                            ms.Seek(0, SeekOrigin.Begin);
-                            ms.CopyTo(ddsStream);
-                        }
-                    }
-                    //else if (args.UncookExtension == EUncookExtension.tga)
-                    //{
-                    //    using (var ddsStream = new FileStream($"{newpath}.tga", FileMode.Create, FileAccess.Write))
-                    //    {
-                    //        ms.Seek(0, SeekOrigin.Begin);
-                    //        using (var ms2 = new MemoryStream(DDSUtils.ConvertFromDdsMemory(ms, EUncookExtension.tga)))
-                    //        {
-                    //            var br = new BinaryReader(ms2);
-                    //            br.BaseStream.Seek(14, SeekOrigin.Begin);
-                    //            ushort height = br.ReadUInt16();
-                    //            br.BaseStream.Seek(17, SeekOrigin.Begin);
-                    //            byte descriptor = br.ReadByte();
-
-                    //            var bw = new BinaryWriter(ms2);
-                    //            bw.BaseStream.Seek(10, SeekOrigin.Begin);
-                    //            bw.Write(height);
-
-                    //            bw.BaseStream.Seek(17, SeekOrigin.Begin);
-                    //            bw.Write(descriptor ^ 0b00001000);
-
-                    //            bw.Flush();
-
-                    //            ms2.Position = 0;
-                    //            ms2.CopyTo(ddsStream);
-                    //        }
-                    //    }
-                    //}
-                    else
-                    {
-                        // convert
-                        ms.Seek(0, SeekOrigin.Begin);
-                        if (!DDSUtils.ConvertFromDdsAndSave(ms, newpath, args))
-                        {
-                            return false;
-                        }
+                        return false;
                     }
                 }
             }
@@ -208,9 +204,9 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            byte[] maskData = new byte[maskWidth * maskHeight];
+            var maskData = new byte[maskWidth * maskHeight];
 
-            for (int i = 0; i < maskCount; i++)
+            for (var i = 0; i < maskCount; i++)
             {
                 //Clear instead of allocate new is faster?
                 //Mandatory cause decode does not always write to every pixel
@@ -247,28 +243,33 @@ namespace WolvenKit.Modkit.RED4
             const int sc = 256;
 
             if (x1 == 0 || y1 == 0)
+            {
                 return q00;
+            }
 
-            int q00s = q00 * sc;
-            int q10s = q10 * sc;
-            int q01s = q01 * sc;
-            int q11s = q11 * sc;
+            var q00s = q00 * sc;
+            var q10s = q10 * sc;
+            var q01s = q01 * sc;
+            var q11s = q11 * sc;
 
-            int a0 = q00s;
-            int a1 = (q10s - q00s) * x / x1;
-            int a2 = (q01s - q00s) * y / y1;
-            int a3 = (q00s - q01s - q10s + q11s) * x * y / x1 / y1;
+            var a0 = q00s;
+            var a1 = (q10s - q00s) * x / x1;
+            var a2 = (q01s - q00s) * y / y1;
+            var a3 = (q00s - q01s - q10s + q11s) * x * y / x1 / y1;
 
-            int a = a0 + a1 + a2 + a3;
-            int r = a / sc;
+            var a = a0 + a1 + a2 + a3;
+            var r = a / sc;
             if (r > 255)
+            {
                 r = 255;
+            }
+
             return (byte)r;
         }
 
         private static uint CountBits(uint v)
         {
-            uint t = v;
+            var t = v;
             uint count = 0;
             for (uint i = 0; i < 32; i++)
             {
@@ -283,11 +284,11 @@ namespace WolvenKit.Modkit.RED4
 
         private static void Decode(ref byte[] maskData, uint maskWidth, uint maskHeight, uint mWidthLow, uint mHeightLow, byte[] atlasData, uint atlasWidth, uint atlasHeight, uint[] tileData, uint maskTileSize, int maskIndex)
         {
-            uint widthInTiles0 = DivCeil(maskWidth, maskTileSize);
-            uint heightInTiles0 = DivCeil(maskHeight, maskTileSize);
-            uint smallOffset = (widthInTiles0 * heightInTiles0);
+            var widthInTiles0 = DivCeil(maskWidth, maskTileSize);
+            var heightInTiles0 = DivCeil(maskHeight, maskTileSize);
+            var smallOffset = widthInTiles0 * heightInTiles0;
 
-            uint smallScale = maskWidth / mWidthLow;
+            var smallScale = maskWidth / mWidthLow;
 
             for (uint x = 0; x < maskWidth; x++)
             {
@@ -301,24 +302,28 @@ namespace WolvenKit.Modkit.RED4
 
         private static void DecodeSingle(ref byte[] maskData, uint maskWidth, uint maskHeight, byte[] atlasData, uint atlasWidth, uint atlasHeight, uint x, uint y, uint[] tilesData, uint maskTileSize, int maskIndex, uint tilesOffset, uint smallScale)
         {
-            uint widthInTiles = DivCeil(maskWidth / smallScale, maskTileSize);
+            var widthInTiles = DivCeil(maskWidth / smallScale, maskTileSize);
 
             var xTile = x / maskTileSize / smallScale;
             var yTile = y / maskTileSize / smallScale;
 
-            var tileIndex = widthInTiles * yTile + xTile + tilesOffset;
+            var tileIndex = (widthInTiles * yTile) + xTile + tilesOffset;
 
             var paramOffset = tilesData[tileIndex * 2];
-            var paramBits = tilesData[tileIndex * 2 + 1];
+            var paramBits = tilesData[(tileIndex * 2) + 1];
 
             if ((uint)(paramBits & (1 << maskIndex)) == 0U)
+            {
                 return;
+            }
 
             var extraAdd = CountBits((uint)(paramBits & ((1 << maskIndex) - 1)));
 
             uint tileDecl = 0;
             if (paramOffset + extraAdd < tilesData.Length)
+            {
                 tileDecl = tilesData[paramOffset + extraAdd];
+            }
 
             var dx = tileDecl & 0x3ff;
             var dy = (tileDecl >> 10) & 0x3ff;
@@ -332,23 +337,20 @@ namespace WolvenKit.Modkit.RED4
             var y1 = (1 << (int)sy) - 1;
             var yi = (int)(y & y1);
 
-            uint ux = (x >> (int)sx) % maskTileSize + 1 + dx * atlasTileSize;
-            uint uy = (y >> (int)sy) % maskTileSize + 1 + dy * atlasTileSize;
+            var ux = ((x >> (int)sx) % maskTileSize) + 1 + (dx * atlasTileSize);
+            var uy = ((y >> (int)sy) % maskTileSize) + 1 + (dy * atlasTileSize);
 
-            byte q00 = atlasData[(ux + 0) + (uy + 0) * atlasWidth];
-            byte q10 = atlasData[(ux + 1) + (uy + 0) * atlasWidth];
-            byte q01 = atlasData[(ux + 0) + (uy + 1) * atlasWidth];
-            byte q11 = atlasData[(ux + 1) + (uy + 1) * atlasWidth];
+            var q00 = atlasData[ux + 0 + ((uy + 0) * atlasWidth)];
+            var q10 = atlasData[ux + 1 + ((uy + 0) * atlasWidth)];
+            var q01 = atlasData[ux + 0 + ((uy + 1) * atlasWidth)];
+            var q11 = atlasData[ux + 1 + ((uy + 1) * atlasWidth)];
 
-            byte p = BilinearInterpolation(q00, q10, q01, q11, xi, x1, yi, y1);
+            var p = BilinearInterpolation(q00, q10, q01, q11, xi, x1, yi, y1);
 
-            maskData[x + y * maskWidth] = p;
+            maskData[x + (y * maskWidth)] = p;
         }
 
-        private static uint DivCeil(uint l, uint r)
-        {
-            return (l + r - 1) / r;
-        }
+        private static uint DivCeil(uint l, uint r) => (l + r - 1) / r;
 
         #endregion Methods
     }

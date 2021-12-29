@@ -69,12 +69,12 @@ namespace WolvenKit.ViewModels.Tools
         /// <summary>
         /// Private NameOf Selected Item in Grid.
         /// </summary>
-        private string _CurrentSelectionInGridName;
+        private string _currentSelectionInGridName;
 
         /// <summary>
         /// Private Last Selected Item, Used for Selection Lock.
         /// </summary>
-        private ImportExportItemViewModel lastselected;
+        private ImportExportItemViewModel _lastselected;
 
         private readonly ReadOnlyObservableCollection<ConvertableItemViewModel> _convertableItems;
 
@@ -225,23 +225,23 @@ namespace WolvenKit.ViewModels.Tools
                 {
                     if (!SelectionLocked)
                     {
-                        lastselected = SelectedObject;
+                        _lastselected = SelectedObject;
                         return SelectedObject.Name;
                     }
                     else
                     {
-                        if (lastselected == null)
+                        if (_lastselected == null)
                         { return ""; }
                         else
                         {
-                            return lastselected.Name;
+                            return _lastselected.Name;
                         }
                     }
                 }
                 else
                 { return ""; }
             }
-            set => _CurrentSelectionInGridName = value;
+            set => _currentSelectionInGridName = value;
         }
 
         /// <summary>
@@ -793,7 +793,7 @@ namespace WolvenKit.ViewModels.Tools
                 var proj = _projectManager.ActiveProject;
                 var relativename = qx.GetRelativeName(proj);
                 var newname = Path.ChangeExtension(relativename, ".mesh");
-                ulong hash = FNV1A64HashAlgorithm.HashString(newname);
+                var hash = FNV1A64HashAlgorithm.HashString(newname);
                 var cp77Controller = _gameController.GetController() as RED4Controller;
 
                 string outfile;
@@ -855,8 +855,10 @@ namespace WolvenKit.ViewModels.Tools
                 if (readModel3D != null)
                 {
                     // First create an instance of AssimpWpfExporter
-                    var assimpWpfExporter = new AssimpWpfExporter();
-                    assimpWpfExporter.NamedObjects = _namedObjects;
+                    var assimpWpfExporter = new AssimpWpfExporter
+                    {
+                        NamedObjects = _namedObjects
+                    };
 
                     // We can export Model3D, Visual3D or entire Viewport3D:
                     //assimpWpfExporter.AddModel(model3D);

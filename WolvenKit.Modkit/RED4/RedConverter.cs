@@ -35,12 +35,11 @@ namespace WolvenKit.Modkit.RED4
 
             var json = "";
             var list = new List<object>();
-            foreach (var chunk in cr2w.Chunks)
-            {
-                list.Add(new Dictionary<string, object>() {
-                    { ":" + chunk.RedType, new RedClassDto(chunk) }
-                });
-            }
+
+            list.Add(new Dictionary<string, object>() {
+                { ":" + cr2w.RootChunk.RedType, new RedClassDto(cr2w.RootChunk) }
+            });
+
             var dto = new
             {
                 WolvenKitVersion = "8.4.0",
@@ -85,7 +84,7 @@ namespace WolvenKit.Modkit.RED4
             try
             {
                 var json = ConvertToText(format, fs);
-                var outpath = Path.Combine(outputDirInfo.FullName, $"{Path.GetFileName(infile)}.{format.ToString()}");
+                var outpath = Path.Combine(outputDirInfo.FullName, $"{Path.GetFileName(infile)}.{format}");
 
                 switch (format)
                 {
@@ -126,7 +125,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="json"></param>
         /// <returns></returns>
         /// <exception cref="InvalidParsingException"></exception>
-        public CR2WFile ConvertFromJson(string json)
+        public static CR2WFile ConvertFromJson(string json)
         {
             var newdto = JsonConvert.DeserializeObject<RedClassDto>(json);
             return newdto != null ? newdto.ToW2rc() : throw new InvalidParsingException("ConvertFromJson");
@@ -149,20 +148,13 @@ namespace WolvenKit.Modkit.RED4
             var text = File.ReadAllText(fileInfo.FullName);
 
             // get extension from filename //TODO pass?
-            var filenameWithoutConvertExtension = fileInfo.Name.Substring(0, fileInfo.Name.Length - convertExtension.Length);
+            var filenameWithoutConvertExtension = fileInfo.Name[..^convertExtension.Length];
             var ext = Path.GetExtension(filenameWithoutConvertExtension);
-
-            CR2WFile w2rc;
-            switch (textConvertFormat)
+            var w2rc = textConvertFormat switch
             {
-                case ETextConvertFormat.json:
-                    w2rc = ConvertFromJson(text);
-                    break;
-                case ETextConvertFormat.xml:
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
+                ETextConvertFormat.json => ConvertFromJson(text),
+                _ => throw new NotSupportedException(),
+            };
             var outpath = Path.ChangeExtension(Path.Combine(outputDirInfo.FullName, fileInfo.Name), ext);
 
             using var fs2 = new FileStream(outpath, FileMode.Create, FileAccess.ReadWrite);

@@ -109,8 +109,6 @@ namespace WolvenKit.RED4.Archive.IO
                 _chunks.Add(i, chunk);
             }
 
-            _cr2wFile.Chunks = _chunks.Values.ToList();
-
             for (int i = _chunks.Count - 1; i >= 0; i--)
             {
                 if (!HandleQueue.ContainsKey(i))
@@ -130,7 +128,6 @@ namespace WolvenKit.RED4.Archive.IO
             for (int i = 0; i < bufferInfoList.Length; i++)
             {
                 var buffer = ReadBuffer(bufferInfoList[i]);
-                _cr2wFile.Buffers.Add(buffer);
                 if (!BufferQueue.ContainsKey(i))
                 {
                     throw new TodoException("Unused buffer");

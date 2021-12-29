@@ -15,12 +15,6 @@ namespace CP77Tools.Tasks
 {
     public partial class ConsoleFunctions
     {
-        #region Fields
-
-        private static byte[] MAGIC = { 0x43, 0x52, 0x32, 0x57 };
-
-        #endregion Fields
-
         #region Methods
 
         public void DumpTask(string[] path, bool imports, bool missinghashes,
@@ -32,14 +26,10 @@ namespace CP77Tools.Tasks
                 return;
             }
 
-            Parallel.ForEach(path, file =>
-            {
-                DumpTaskInner(file, imports, missinghashes, texinfo, dump, list);
-            });
+            Parallel.ForEach(path, file => DumpTaskInner(file, imports, missinghashes, texinfo, dump, list));
         }
 
-        public int DumpTaskInner(string path, bool imports, bool missinghashes,
-            bool texinfo, bool dump, bool list)
+        public int DumpTaskInner(string path, bool imports, bool missinghashes, bool texinfo, bool dump, bool list)
         {
             #region checks
 
@@ -178,7 +168,7 @@ namespace CP77Tools.Tasks
                     }
 
                     var fileDictionary = new ConcurrentDictionary<ulong, Cr2wChunkInfo>();
-                    var texDictionary = new ConcurrentDictionary<ulong, Cr2wTextureInfo>();
+                    var texDictionary = new ConcurrentDictionary<ulong, Cr2WTextureInfo>();
                     var importDictionary = new ConcurrentDictionary<ulong, string>();
 
                     // get info
@@ -186,7 +176,7 @@ namespace CP77Tools.Tasks
                     _loggerService.Info($"Exporting {count} bundle entries ");
 
                     Thread.Sleep(1000);
-                    int progress = 0;
+                    var progress = 0;
                     _progressService.Report(0);
 
                     // process files
@@ -233,17 +223,17 @@ namespace CP77Tools.Tasks
                                 }
 
                                 // create dds header
-                                var texinfoObj = new Cr2wTextureInfo()
+                                var texinfoObj = new Cr2WTextureInfo()
                                 {
                                     Filename = filename,
-                                    width = blob.Header.SizeInfo.Width.ToString(),
-                                    height = blob.Header.SizeInfo.Height.ToString(),
-                                    mips = blob.Header.TextureInfo.MipCount.ToString(),
-                                    slicecount = blob.Header.TextureInfo.SliceCount.ToString(),
-                                    alignment = blob.Header.TextureInfo.DataAlignment.ToString(),
-                                    compression = xbm.Setup.Compression.Value.ToString(),
+                                    Width = blob.Header.SizeInfo.Width.ToString(),
+                                    Height = blob.Header.SizeInfo.Height.ToString(),
+                                    Mips = blob.Header.TextureInfo.MipCount.ToString(),
+                                    Slicecount = blob.Header.TextureInfo.SliceCount.ToString(),
+                                    Alignment = blob.Header.TextureInfo.DataAlignment.ToString(),
+                                    Compression = xbm.Setup.Compression.Value.ToString(),
                                     Group = xbm.Setup.Group.Value.ToString(),
-                                    rawFormat = xbm.Setup.RawFormat.Value.ToString()
+                                    RawFormat = xbm.Setup.RawFormat.Value.ToString()
                                 };
 
                                 texDictionary.AddOrUpdate(hash, texinfoObj, (arg1, o) => texinfoObj);
@@ -288,16 +278,16 @@ namespace CP77Tools.Tasks
                             sw.WriteLine(
                                 $"{value.Filename};" +
 
-                                $"{value.compression};" +
+                                $"{value.Compression};" +
                                 $"{value.Group};" +
-                                $"{value.rawFormat};" +
+                                $"{value.RawFormat};" +
 
-                                $"{value.alignment};" +
-                                $"{value.slicecount};" +
-                                $"{value.mips};" +
+                                $"{value.Alignment};" +
+                                $"{value.Slicecount};" +
+                                $"{value.Mips};" +
 
-                                $"{value.height};" +
-                                $"{value.width};"
+                                $"{value.Height};" +
+                                $"{value.Width};"
                             );
                         }
 
@@ -314,7 +304,7 @@ namespace CP77Tools.Tasks
 
                     if (imports)
                     {
-                        if (importDictionary.Count > 0)
+                        if (!importDictionary.IsEmpty)
                         {
                             _loggerService.Success($"Found {importDictionary.Count} new imports in {ar.ArchiveAbsolutePath}.");
                             missingImports.AddRange(importDictionary.Values);
@@ -376,7 +366,7 @@ namespace CP77Tools.Tasks
 
         public ConcurrentDictionary<ulong, Cr2wChunkInfo> FileDictionary { get; set; }
         public string Filename { get; set; }
-        public ConcurrentDictionary<ulong, Cr2wTextureInfo> TextureDictionary { get; set; }
+        public ConcurrentDictionary<ulong, Cr2WTextureInfo> TextureDictionary { get; set; }
 
         #endregion Properties
     }
@@ -395,20 +385,20 @@ namespace CP77Tools.Tasks
         #endregion Properties
     }
 
-    public class Cr2wTextureInfo
+    public class Cr2WTextureInfo
     {
         #region Properties
 
-        public string alignment { get; set; }
-        public string compression { get; set; }
+        public string Alignment { get; set; }
+        public string Compression { get; set; }
         public string Filename { get; set; }
 
         public string Group { get; set; }
-        public string height { get; set; }
-        public string mips { get; set; }
-        public string rawFormat { get; set; }
-        public string slicecount { get; set; }
-        public string width { get; set; }
+        public string Height { get; set; }
+        public string Mips { get; set; }
+        public string RawFormat { get; set; }
+        public string Slicecount { get; set; }
+        public string Width { get; set; }
 
         #endregion Properties
     }

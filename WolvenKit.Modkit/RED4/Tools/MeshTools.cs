@@ -396,8 +396,9 @@ namespace CP77.CR2W
                         }
                     }
                 }
-                
-                if (!cr2w.Chunks.OfType<meshMeshParamGarmentSupport>().Any())
+
+                var garmentBlob = ((CMesh)cr2w.RootChunk).Parameters.FirstOrDefault(x => x.Chunk is meshMeshParamGarmentSupport);
+                if (garmentBlob == null)
                 {
                     meshesInfo.garmentSupportExists[i] = false;
                 }

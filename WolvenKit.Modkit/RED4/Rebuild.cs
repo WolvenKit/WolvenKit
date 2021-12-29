@@ -11,6 +11,7 @@ using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -29,7 +30,8 @@ namespace WolvenKit.Modkit.RED4
         /// <returns></returns>
         private bool Rebuild(Stream redfileStream, IEnumerable<byte[]> buffersenumerable)
         {
-            var isResource = _wolvenkitFileService.IsCr2wFile(redfileStream);
+            throw new TodoException();
+            /*var isResource = _wolvenkitFileService.IsCr2wFile(redfileStream);
             if (!isResource)
             {
                 return false;
@@ -57,7 +59,7 @@ namespace WolvenKit.Modkit.RED4
             using var writer = new CR2WWriter(redfileStream);
             writer.WriteFile(cr2w);
 
-            return true;
+            return true;*/
         }
 
         /// <summary>
@@ -69,7 +71,9 @@ namespace WolvenKit.Modkit.RED4
         /// <exception cref="FileNotFoundException"></exception>
         private bool Rebuild(Stream redfileStream, IEnumerable<FileInfo> buffers)
         {
-            AppendBuffersToFile(redfileStream);
+            throw new TodoException();
+
+            /*AppendBuffersToFile(redfileStream);
 
             return true;
 
@@ -166,7 +170,7 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 return Array.Empty<byte>();
-            }
+            }*/
         }
 
         /// <summary>

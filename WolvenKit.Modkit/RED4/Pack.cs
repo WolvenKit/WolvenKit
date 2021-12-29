@@ -180,21 +180,19 @@ namespace WolvenKit.Modkit.RED4
                         zsize,
                         (uint)cr2winbuffer.Length));
 
+                    var savedSpace = cr2winbuffer.Length - zsize;
+
                     // HINT: each cr2w needs to have the buffer already kraken'd
                     // foreach buffer write
-                    var bufferOffsets = cr2w.Buffers;
-                    foreach (var buffer in bufferOffsets)
+                    foreach (var bufferInfo in cr2w.Debug.BufferInfos)
                     {
-                        var bsize = buffer.MemSize;
-                        
-                        //var bzsize = buffer.DiskSize; //compressed size of the buffer inside the cr2wfile
-                        //fileBinaryReader.BaseStream.Seek(buffer.Offset, SeekOrigin.Begin);
-                        //var b = fileBinaryReader.ReadBytes((int)bzsize); //read bzsize bytes from the cr2w
-                        var b = buffer.Bytes;
-                        var bzsize = b.Length;
+                        var bufferBuffer = fileBinaryReader.ReadBytes((int)bufferInfo.diskSize);
+
+                        var bsize = bufferInfo.memSize;
+                        var bzsize = bufferInfo.diskSize;
                         var boffset = bw.BaseStream.Position;
 
-                        bw.Write(b);
+                        bw.Write(bufferBuffer);
                         ar.Index.FileSegments.Add(new FileSegment(
                             (ulong)boffset,
                             (uint)bzsize,
@@ -211,7 +209,7 @@ namespace WolvenKit.Modkit.RED4
 
                     lastoffsetidx = (uint)ar.Index.FileSegments.Count;
 
-                    flags = cr2w.Buffers.Count > 0 ? cr2w.Buffers.Count - 1 : 0;
+                    flags = cr2w.Debug.BufferInfos.Length > 0 ? cr2w.Debug.BufferInfos.Length - 1 : 0;
                 }
                 else
                 {

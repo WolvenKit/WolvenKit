@@ -43,12 +43,6 @@ namespace WolvenKit.RED4.Archive.CR2W
 
         public IRedClass RootChunk { get; set; }
 
-        [Obsolete("", false)]
-        public IList<IRedClass> Chunks { get; set; } = new List<IRedClass>();
-
-        [Obsolete("", false)]
-        public IList<RedBuffer> Buffers { get; set; } = new List<RedBuffer>();
-
         public IList<ICR2WEmbeddedFile> EmbeddedFiles { get; }
 
         public CR2WFile()
@@ -57,7 +51,6 @@ namespace WolvenKit.RED4.Archive.CR2W
             EmbeddedFiles = new List<ICR2WEmbeddedFile>();       //block 7
         }
 
-        
         #region IDisposable
 
         private bool _disposed;
