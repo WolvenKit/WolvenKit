@@ -158,7 +158,7 @@ namespace WolvenKit.ViewModels.Documents
             return false;
         }
 
-        private Optional<RDTDataViewModel> GetMainFile() => Optional<RDTDataViewModel>.ToOptional(TabItemViewModels
+        public Optional<RDTDataViewModel> GetMainFile() => Optional<RDTDataViewModel>.ToOptional(TabItemViewModels
             .OfType<RDTDataViewModel>()
             .Where(x => x.DocumentItemType == ERedDocumentItemType.MainFile)
             .FirstOrDefault());

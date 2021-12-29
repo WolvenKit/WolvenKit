@@ -19,6 +19,7 @@ using WolvenKit.RED4.Archive.Buffer;
 using System.Collections.Generic;
 using System.Linq;
 using WolvenKit.ViewModels.Shell;
+using ReactiveUI;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -69,7 +70,18 @@ namespace WolvenKit.ViewModels.Documents
             var qa = await ImageDecoder.RenderToBitmapSourceDds(stream);
             if (qa != null)
             {
-                Image = qa;
+                //Image = qa;
+                Image = new TransformedBitmap(qa, new ScaleTransform(1, -1));
+            }
+        }
+
+        public void UpdateFromImage()
+        {
+            if (_data is CBitmapTexture xbm)
+            {
+                xbm.Width = (uint)Image.Width;
+                xbm.Height = (uint)Image.Height;
+                File.GetMainFile().Value.Chunks[0].Properties.Where(x => x.Name == "Width" || x.Name == "Height").ToList().ForEach(x => x.RaisePropertyChanged("Data"));
             }
         }
 
@@ -78,6 +90,8 @@ namespace WolvenKit.ViewModels.Documents
         [Reactive] public ImageSource Image { get; set; }
 
         [Reactive] public object SelectedItem { get; set; }
+
+        [Reactive] public bool IsDragging { get; set; }
 
     }
 }

@@ -22,15 +22,15 @@
         <Grid.Resources>
             
             <DataTemplate DataType="{x:Type docVM:RDTDataViewModel}">
-                <docV:RDTDataView/>
+                <docV:RDTDataView ViewModel="{Binding}"/>
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type docVM:RDTTextureViewModel}">
-                <docV:RDTTextureView/>
+                <docV:RDTTextureView ViewModel="{Binding}"/>
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type docVM:RDTMeshViewModel}">
-                <docV:RDTMeshView/>
+                <docV:RDTMeshView ViewModel="{Binding}"/>
             </DataTemplate>
 
         </Grid.Resources>

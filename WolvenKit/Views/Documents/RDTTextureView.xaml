@@ -14,7 +14,7 @@
     BorderBrush="{StaticResource BorderAlt}"
     Margin="0">
 
-    <Grid>
+    <Grid AllowDrop="True" x:Name="ImageDropZone" Background="Transparent">
         <Grid.Resources>
             <ResourceDictionary>
                 <!--<ResourceDictionary.MergedDictionaries>
@@ -33,6 +33,7 @@
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
+        
 
         <syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
         <StackPanel Grid.Column="2">
@@ -85,19 +86,16 @@
             <Canvas
                 x:Name="ImagePreview"
                 RenderTransformOrigin="0.5,0.5">
-                <Image
+                    <Image
+                    x:Name="ActualImage"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     ClipToBounds="False"
                     Source="{Binding Image}"
                     RenderTransformOrigin="0.5,0.5"
                     RenderOptions.BitmapScalingMode="NearestNeighbor"
-                    Opacity="1">
-                    <Image.RenderTransform>
-                        <ScaleTransform ScaleY="-1"/>
-                    </Image.RenderTransform>
-                </Image>
-                <ListBox ItemsSource="{Binding OverlayItems}" SelectedItem="{Binding SelectedItem}" Width="{Binding Width}" Height="{Binding Height}">
+                    Opacity="1"/>
+                    <ListBox ItemsSource="{Binding OverlayItems}" SelectedItem="{Binding SelectedItem}" Width="{Binding SelectedItem.Width}" Height="{Binding SelectedItem.Height}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas/>
@@ -133,6 +131,22 @@
                 </ListBox>
             </Canvas>
         </Border>
-    </Border>
+        </Border>
+        
+        <Border IsHitTestVisible="False">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <!--Setter Property="Background" Value="{StaticResource WolvenKitRed50}" /-->
+                    <Setter Property="BorderThickness" Value="2" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsDragging}" Value="True">
+                            <Setter Property="Background" Value="{StaticResource WolvenKitRed50}" />
+                            <Setter Property="BorderBrush" Value="{StaticResource WolvenKitRed}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+        </Border>
     </Grid>
 </reactiveUi:ReactiveUserControl>

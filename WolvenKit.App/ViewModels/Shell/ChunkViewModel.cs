@@ -32,22 +32,29 @@ using WolvenKit.ViewModels.Dialogs;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel, INotifyPropertyChanged
+    public class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel
     {
+
+        [ObservableAsProperty] public string Value { get; }
+        [ObservableAsProperty] public bool IsDefault { get; }
+        [ObservableAsProperty] public ObservableCollection<ChunkViewModel> Properties { get; }
 
         #region Constructors
 
         public ChunkViewModel(IRedType export)
         {
             Data = export;
-            //this.Data.WhenAnyValue(x => x).Subscribe((x) =>
-            //{
-            //    this.RaisePropertyChanged("Value");
-            //});
-            //this.PropertyGridData.WhenAnyValue(x => x).Subscribe((x) =>
-            //{
-            //    this.RaisePropertyChanged("Value");
-            //});
+
+            this.WhenAnyValue(x => x.Data)
+                .Select(x => CalculateValue())
+                .ToPropertyEx(this, x => x.Value);
+            this.WhenAnyValue(x => x.Data)
+                .Select(x => CalculateIsDefault())
+                .ToPropertyEx(this, x => x.IsDefault);
+            this.WhenAnyValue(x => x.Data)
+                .Select(x => CalculateProperties())
+                .ToPropertyEx(this, x => x.Properties);
+
             OpenRefCommand = new DelegateCommand(p => ExecuteOpenRef(), (p) => CanOpenRef());
             ExportChunkCommand = new DelegateCommand((p) => ExecuteExportChunk(), (p) => CanExportChunk());
             AddItemToArrayCommand = new DelegateCommand((p) => ExecuteAddItemToArray(), (p) => CanAddItemToArray());
@@ -60,6 +67,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             Tab = tab;
             IsExpanded = true;
+            Data = export;
             this.Data.WhenAnyValue(x => x).Subscribe((x) =>
             {
                 Tab.File.SetIsDirty(true);
@@ -69,14 +77,7 @@ namespace WolvenKit.ViewModels.Shell
         public ChunkViewModel(string name, IRedType export) : this(export)
         {
             propertyName = name;
-            if (Parent != null && propertyName != null)
-            {
-                IsDefault = IsDefault(Parent.PropertyType, GetPropertyByName(Parent.PropertyType, propertyName), Data);
-                this.Data.WhenAnyValue(x => x).Subscribe((x) =>
-                {
-                    IsDefault = IsDefault(Parent.PropertyType, GetPropertyByName(Parent.PropertyType, propertyName), x);
-                });
-            }
+            Data = export;
         }
 
         //public ChunkViewModel(int i, IRedType export, ChunkViewModel parent) : this(export, parent)
@@ -88,36 +89,25 @@ namespace WolvenKit.ViewModels.Shell
         {
             Parent = parent;
             Tab = Parent.Tab;
+            Data = export;
         }
 
         public ChunkViewModel(string name, IRedType export, ChunkViewModel parent) : this(export, parent)
         {
             propertyName = name;
-            if (Parent != null && propertyName != null)
-            {
-                IsDefault = IsDefault(Parent.PropertyType, GetPropertyByName(Parent.PropertyType, propertyName), Data);
-                this.Data.WhenAnyValue(x => x).Subscribe((x) =>
-                {
-                    IsDefault = IsDefault(Parent.PropertyType, GetPropertyByName(Parent.PropertyType, propertyName), x);
-                });
-            }
+            Data = export;
         }
 
         #endregion Constructors
 
         #region Properties
 
-        [Reactive] public bool IsDefault { get; set; }
 
         public RDTDataViewModel Tab;
-        private IRedType _data;
-        public IRedType Data
-        {
-            get => _data;
-            set => this.RaiseAndSetIfChanged(ref _data, value);
-        }
+
+        [Reactive] public IRedType Data { get; set; }
+
         public ChunkViewModel Parent { get; set; }
-        //public int? Index { get; set; }
 
         public class RedArrayWrapper : IRedType
         {
@@ -238,7 +228,7 @@ namespace WolvenKit.ViewModels.Shell
                         //this.File.Chunks[handle.Pointer].IsHandled = true;
                         return _propertyGridData = handle.GetValue();
                     }
-                    else 
+                    else
                     {
                         return _propertyGridData = data;
                     }
@@ -251,11 +241,11 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        private ObservableCollection<ChunkViewModel> _properties;
+        //private ObservableCollection<ChunkViewModel> _properties;
 
-        private void GenerateProperties()
+        private ObservableCollection<ChunkViewModel> CalculateProperties()
         {
-            _properties = new ObservableCollection<ChunkViewModel>();
+            var properties = new ObservableCollection<ChunkViewModel>();
             try
             {
                 var obj = Data;
@@ -268,7 +258,7 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     for (int i = 0; i < ary.Count; i++)
                     {
-                        _properties.Add(new ChunkViewModel((IRedType)ary[i], this));
+                        properties.Add(new ChunkViewModel((IRedType)ary[i], this));
                     }
                 }
                 else if (obj is RedBaseClass redClass)
@@ -286,7 +276,7 @@ namespace WolvenKit.ViewModels.Shell
                         {
                             value = (IRedType)pi.GetValue(redClass);
                         }
-                        _properties.Add(new ChunkViewModel(pi.Name, value, this));
+                        properties.Add(new ChunkViewModel(pi.Name, value, this));
                     });
                 }
                 else if (obj is SerializationDeferredDataBuffer sddb && sddb.Data is Package04 p4)
@@ -294,7 +284,7 @@ namespace WolvenKit.ViewModels.Shell
                     var chunks = p4.Chunks;
                     for (int i = 0; i < chunks.Count; i++)
                     {
-                        _properties.Add(new ChunkViewModel(chunks[i], this));
+                        properties.Add(new ChunkViewModel(chunks[i], this));
                     }
                 }
                 else if (obj is SharedDataBuffer sdb)
@@ -304,7 +294,7 @@ namespace WolvenKit.ViewModels.Shell
                         var chunks = p42.Chunks;
                         for (int i = 0; i < chunks.Count; i++)
                         {
-                            _properties.Add(new ChunkViewModel(chunks[i], this));
+                            properties.Add(new ChunkViewModel(chunks[i], this));
                         }
                     }
                     if (sdb.File is CR2WFile cr2)
@@ -312,9 +302,9 @@ namespace WolvenKit.ViewModels.Shell
                         //var chunks = cr2.Chunks;
                         //for (int i = 0; i < chunks.Count; i++)
                         //{
-                        //    _properties.Add(new ChunkViewModel(i, chunks[i], this));
+                        //    properties.Add(new ChunkViewModel(i, chunks[i], this));
                         //}
-                        _properties.Add(new ChunkViewModel(cr2.RootChunk, this));
+                        properties.Add(new ChunkViewModel(cr2.RootChunk, this));
 
                     }
                 }
@@ -323,7 +313,7 @@ namespace WolvenKit.ViewModels.Shell
                     var chunks = p43.Chunks;
                     for (int i = 0; i < chunks.Count; i++)
                     {
-                        _properties.Add(new ChunkViewModel(chunks[i], this));
+                        properties.Add(new ChunkViewModel(chunks[i], this));
                     }
                 }
             }
@@ -332,17 +322,7 @@ namespace WolvenKit.ViewModels.Shell
                 Console.WriteLine(e);
                 //throw;
             }
-        }
-
-        public ObservableCollection<ChunkViewModel> Properties
-        {
-            get
-            {
-                if (_properties == null)
-                    GenerateProperties();
-                return _properties;
-            }
-            set => this.RaiseAndSetIfChanged(ref _properties, value);
+            return properties;
         }
 
         [Reactive] public bool IsSelected { get; set; }
@@ -372,9 +352,18 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
+        private bool CalculateIsDefault()
+        {
+            if (Data == null)
+                return true;
+            if (Parent != null && propertyName != null && Data is not IRedBaseHandle)
+                return IsDefault(Parent.PropertyType, GetPropertyByName(Parent.PropertyType, propertyName), Data);
+            return false;
+        }
+
         public int GetIndexOf(ChunkViewModel child)
         {
-            return _properties.IndexOf(child);
+            return Properties.IndexOf(child);
         }
 
         public int Level { get
@@ -457,157 +446,157 @@ namespace WolvenKit.ViewModels.Shell
         public int ArrayIndexWidth { get
             {
                 var width = 0;
-                if (Parent.Properties.Count < 10)
-                    width += 16;
-                else if (Parent.Properties.Count < 100)
-                    width += 21;
-                else if (Parent.Properties.Count < 1000)
-                    width += 26;
-                else
-                    width += 31;
+                if (Parent != null)
+                {
+                    if (Parent.Properties.Count < 10)
+                        width += 16;
+                    else if (Parent.Properties.Count < 100)
+                        width += 21;
+                    else if (Parent.Properties.Count < 1000)
+                        width += 26;
+                    else
+                        width += 31;
+                }
                 if (PropertyType?.IsAssignableTo(typeof(IRedArray)) ?? false)
-                    width += 20;
+                        width += 20;
                 return width;
             }
         }
 
-        public string Value {
-            get {
-                var str = new StringBuilder();
-                if (Data == null)
+        //[Reactive] public string Value { get; set; }
+
+        private string CalculateValue()
+        {
+            var str = new StringBuilder();
+            if (Data == null)
+            {
+                return "null";
+            }
+            else if (PropertyType.IsAssignableTo(typeof(IRedString)))
+            {
+                var value = (IRedString)Data;
+                if (value.GetValue() == "")
                 {
                     return "null";
                 }
-                else if (PropertyType.IsAssignableTo(typeof(IRedString)))
+                else
                 {
-                    var value = (IRedString)Data;
-                    if (value.GetValue() == "")
-                    {
-                        return "null";
-                    }
-                    else
-                    {
-                        return value.GetValue();
-                    }
+                    return value.GetValue();
                 }
-                else if (PropertyType.IsAssignableTo(typeof(LocalizationString)))
+            }
+            else if (PropertyType.IsAssignableTo(typeof(LocalizationString)))
+            {
+                var value = (LocalizationString)Data;
+                if (value.Value == "")
                 {
-                    var value = (LocalizationString)Data;
-                    if (value.Value == "")
-                    {
-                        return "null";
-                    }
-                    else
-                    {
-                        return value.Value;
-                    }
-                }
-                else if (PropertyType.IsAssignableTo(typeof(IRedArray)))
-                {
-                    var value = (IRedArray)Data;
-                    return $"{Type} [{value.Count}]";
-                }
-                else if (PropertyType.IsAssignableTo(typeof(IRedBaseHandle)))
-                {
-                    var value = (IRedBaseHandle)Data;
-                    str.Append(Type);
-                }
-                else if (PropertyType.IsAssignableTo(typeof(IRedEnum)))
-                {
-                    var value = (IRedEnum)Data;
-                    return value.ToEnumString();
-                }
-                else if (PropertyType.IsAssignableTo(typeof(IRedBitField)))
-                {
-                    var value = (IRedBitField)Data;
-                    return value.ToBitFieldString();
-                }
-                else if (PropertyType.IsAssignableTo(typeof(TweakDBID)))
-                {
-                    var value = (TweakDBID)Data;
-                    return value.Value.ToString();
-                }
-                else if (PropertyType.IsAssignableTo(typeof(CBool)))
-                {
-                    var value = (CBool)Data;
-                    return value ? "True" : "False";
-                }
-                else if (PropertyType.IsAssignableTo(typeof(CRUID)))
-                {
-                    var value = (CRUID)Data;
-                    return ((ulong)value).ToString();
-                }
-                else if (PropertyType.IsAssignableTo(typeof(CUInt64)))
-                {
-                    var value = (CUInt64)Data;
-                    return ((ulong)value).ToString();
-                }
-                else if (PropertyType.IsAssignableTo(typeof(IRedInteger)))
-                {
-                    var value = (IRedInteger)Data;
-                    return (value switch {
-                        CUInt8 uint64 => (float)uint64,
-                        CInt8 uint64 => (float)uint64,
-                        CInt16 uint64 => (float)uint64,
-                        CUInt16 uint64 => (float)uint64,
-                        CInt32 uint64 => (float)uint64,
-                        CUInt32 uint64 => (float)uint64,
-                        CInt64 uint64 => (float)uint64,
-                        _ => throw new ArgumentOutOfRangeException(nameof(value)),
-                    }).ToString();
-                }
-                else if (PropertyType.IsAssignableTo(typeof(FixedPoint)))
-                {
-                    var value = (FixedPoint)Data;
-                    return ((float)value).ToString("R");
-                }
-                else if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<float>)))
-                {
-                    var value = (IRedPrimitive)Data;
-                    return ((float)(CFloat)value).ToString("R");
-                }
-                else if (PropertyType.IsAssignableTo(typeof(IRedRef)))
-                {
-                    var value = (IRedRef)Data;
-                    if (value != null && value.DepotPath != "")
-                    {
-                        return value.DepotPath;
-                    }
-                    else
-                    {
-                        return "null";
-                    }
+                    return "null";
                 }
                 else
                 {
-                    str.Append(Type ?? "null");
+                    return value.Value;
                 }
-
-                if (propertyName == null)
-                {
-                    // some common "names" of classes that might be useful to display in the UI
-                    var name = GetPropertyByName(PropertyType, "Name");
-                    var partName = GetPropertyByName(PropertyType, "PartName");
-                    var slotName = GetPropertyByName(PropertyType, "SlotName");
-                    if (name != null)
-                    {
-                        str.Append($" ({name.GetValue((IRedClass)Data)})");
-                    }
-                    else if (partName != null)
-                    {
-                        str.Append($" ({partName.GetValue((IRedClass)Data)})");
-                    }
-                    else if (slotName != null)
-                    {
-                        str.Append($" ({slotName.GetValue((IRedClass)Data)})");
-                    }
-                }
-                return str.ToString();
             }
-            set
+            else if (PropertyType.IsAssignableTo(typeof(IRedArray)))
             {
-
+                var value = (IRedArray)Data;
+                return $"{Type} [{value.Count}]";
             }
+            else if (PropertyType.IsAssignableTo(typeof(IRedBaseHandle)))
+            {
+                var value = (IRedBaseHandle)Data;
+                str.Append(Type);
+            }
+            else if (PropertyType.IsAssignableTo(typeof(IRedEnum)))
+            {
+                var value = (IRedEnum)Data;
+                return value.ToEnumString();
+            }
+            else if (PropertyType.IsAssignableTo(typeof(IRedBitField)))
+            {
+                var value = (IRedBitField)Data;
+                return value.ToBitFieldString();
+            }
+            else if (PropertyType.IsAssignableTo(typeof(TweakDBID)))
+            {
+                var value = (TweakDBID)Data;
+                return value.Value.ToString();
+            }
+            else if (PropertyType.IsAssignableTo(typeof(CBool)))
+            {
+                var value = (CBool)Data;
+                return value ? "True" : "False";
+            }
+            else if (PropertyType.IsAssignableTo(typeof(CRUID)))
+            {
+                var value = (CRUID)Data;
+                return ((ulong)value).ToString();
+            }
+            else if (PropertyType.IsAssignableTo(typeof(CUInt64)))
+            {
+                var value = (CUInt64)Data;
+                return ((ulong)value).ToString();
+            }
+            else if (PropertyType.IsAssignableTo(typeof(IRedInteger)))
+            {
+                var value = (IRedInteger)Data;
+                return (value switch {
+                    CUInt8 uint64 => (float)uint64,
+                    CInt8 uint64 => (float)uint64,
+                    CInt16 uint64 => (float)uint64,
+                    CUInt16 uint64 => (float)uint64,
+                    CInt32 uint64 => (float)uint64,
+                    CUInt32 uint64 => (float)uint64,
+                    CInt64 uint64 => (float)uint64,
+                    _ => throw new ArgumentOutOfRangeException(nameof(value)),
+                }).ToString();
+            }
+            else if (PropertyType.IsAssignableTo(typeof(FixedPoint)))
+            {
+                var value = (FixedPoint)Data;
+                return ((float)value).ToString("R");
+            }
+            else if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<float>)))
+            {
+                var value = (IRedPrimitive)Data;
+                return ((float)(CFloat)value).ToString("R");
+            }
+            else if (PropertyType.IsAssignableTo(typeof(IRedRef)))
+            {
+                var value = (IRedRef)Data;
+                if (value != null && value.DepotPath != "")
+                {
+                    return value.DepotPath;
+                }
+                else
+                {
+                    return "null";
+                }
+            }
+            else
+            {
+                str.Append(Type ?? "null");
+            }
+
+            if (propertyName == null)
+            {
+                // some common "names" of classes that might be useful to display in the UI
+                var name = GetPropertyByName(PropertyType, "Name");
+                var partName = GetPropertyByName(PropertyType, "PartName");
+                var slotName = GetPropertyByName(PropertyType, "SlotName");
+                if (name != null)
+                {
+                    str.Append($" ({name.GetValue((IRedClass)Data)})");
+                }
+                else if (partName != null)
+                {
+                    str.Append($" ({partName.GetValue((IRedClass)Data)})");
+                }
+                else if (slotName != null)
+                {
+                    str.Append($" ({slotName.GetValue((IRedClass)Data)})");
+                }
+            }
+            return str.ToString();
         }
 
         public string Extension
@@ -721,7 +710,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             var newItem = RedTypeManager.CreateRedType((Data as IRedArray).InnerType);
             (Data as IRedArray).Add(newItem);
-            _properties.Add(new ChunkViewModel(newItem, this));
+            //_properties.Add(new ChunkViewModel(newItem, this));
             IsExpanded = true;
             Tab.File.SetIsDirty(true);
         }
@@ -761,9 +750,9 @@ namespace WolvenKit.ViewModels.Shell
                 //pkg.Chunks.Add(instance);
                 pkg.Chunks.Insert(index, instance);
                 //_properties.Add(new ChunkViewModel(instance, this));
-                _properties.Insert(index, new ChunkViewModel(instance, this));
-                foreach (var prop in _properties)
-                    prop.RaisePropertyChanged("Name");
+                //_properties.Insert(index, new ChunkViewModel(instance, this));
+                //foreach (var prop in _properties)
+                    //prop.RaisePropertyChanged("Name");
                 IsExpanded = true;
                 Tab.File.SetIsDirty(true);
             }
@@ -794,7 +783,7 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public ICommand ExportChunkCommand { get; private set; }
-        private bool CanExportChunk() => _properties.Count > 0;
+        private bool CanExportChunk() => Properties.Count > 0;
         private void ExecuteExportChunk()
         {
             Stream myStream;

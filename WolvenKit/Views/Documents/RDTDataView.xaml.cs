@@ -35,13 +35,13 @@ namespace WolvenKit.Views.Documents
 
             PropertyGrid.Loaded += PropertyGrid_Loaded;
 
-            this.WhenAnyValue(x => x.DataContext).Subscribe(x =>
-            {
-                if (x is RDTDataViewModel vm)
-                {
-                    SetCurrentValue(ViewModelProperty, vm);
-                }
-            });
+            //this.WhenAnyValue(x => x.DataContext).Subscribe(x =>
+            //{
+            //    if (x is RDTDataViewModel vm)
+            //    {
+            //        SetCurrentValue(ViewModelProperty, vm);
+            //    }
+            //});
 
             this.WhenActivated(disposables =>
             {
@@ -366,6 +366,7 @@ namespace WolvenKit.Views.Documents
         private void PropertyGrid_ValueChanged(object sender, ValueChangedEventArgs args)
         {
             ViewModel.File.SetIsDirty(true);
+            ViewModel.SelectedChunk.RaisePropertyChanged("Data");
         }
 
         private void Copy_CanExecute(object sender, CanExecuteRoutedEventArgs e)
