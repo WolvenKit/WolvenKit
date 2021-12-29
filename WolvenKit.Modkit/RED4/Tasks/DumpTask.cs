@@ -227,9 +227,7 @@ namespace CP77Tools.Tasks
                                 using var ms = new MemoryStream();
                                 ar.CopyFileToStream(ms, (fileEntry as FileEntry).NameHash64, false);
                                 var cr2w = _wolvenkitFileService.TryReadRed4File(ms);
-
-                                if (cr2w?.Chunks.FirstOrDefault() is not CBitmapTexture xbm ||
-                                    cr2w.Chunks[1] is not rendRenderTextureBlobPC blob)
+                                if (cr2w == null || cr2w.RootChunk is not CBitmapTexture xbm || xbm.RenderTextureResource.RenderResourceBlobPC.Chunk is not rendIRenderTextureBlob blob)
                                 {
                                     return;
                                 }

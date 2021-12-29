@@ -24,15 +24,7 @@ namespace WolvenKit.Modkit.RED4
         {
             // read the cr2wfile
             var cr2w = _wolvenkitFileService.TryReadRed4File(cr2wStream);
-            if (cr2w == null)
-            {
-                return false;
-            }
-
-            //We need 2 buffers one for atlas one for tile data
-
-            if (!(cr2w.Chunks.FirstOrDefault() is Multilayer_Mask mlmask) ||
-                !(cr2w.Chunks[1] is rendRenderMultilayerMaskBlobPC blob))
+            if (cr2w == null || cr2w.RootChunk is not Multilayer_Mask mlmask || mlmask.RenderResourceBlob.RenderResourceBlobPC.Chunk is not rendRenderMultilayerMaskBlobPC blob)
             {
                 return false;
             }
@@ -54,7 +46,7 @@ namespace WolvenKit.Modkit.RED4
 
             //Decode compressed data into single channel uncompressed
             //Mlmask always BC4?
-            if (!BlockCompression.DecodeBC(cr2w.Buffers[0].GetBytes(), ref atlasRaw, atlasWidth, atlasHeight, BlockCompression.BlockCompressionType.BC4))
+            if (!BlockCompression.DecodeBC(blob.AtlasData.Buffer.GetBytes(), ref atlasRaw, atlasWidth, atlasHeight, BlockCompression.BlockCompressionType.BC4))
             {
                 return false;
             }
@@ -71,7 +63,7 @@ namespace WolvenKit.Modkit.RED4
             //}
 
             //Read tilesdata buffer into appropriate variable type
-            var tileBuffer = cr2w.Buffers[1];
+            var tileBuffer = blob.TilesData.Buffer;
             var tiles = new uint[tileBuffer.MemSize / 4];
 
             using (var ms = new MemoryStream(tileBuffer.GetBytes()))

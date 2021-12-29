@@ -19,11 +19,10 @@ namespace WolvenKit.Modkit.RED4
         {
             var cr2w = _wolvenkitFileService.TryReadRed4File(animStream);
 
-            if (!cr2w.Chunks.OfType<animAnimSet>().Any())
+            if (cr2w == null || cr2w.RootChunk is not animAnimSet blob)
             {
                 return false;
             }
-            var blob = cr2w.Chunks.OfType<animAnimSet>().First();
 
             List<MemoryStream> animDataBuffers = new List<MemoryStream>();
             foreach (var chk in blob.AnimationDataChunks)
@@ -66,30 +65,21 @@ namespace WolvenKit.Modkit.RED4
                 var setEntry = (blob.Animations[i].Chunk as animAnimSetEntry);
                 var animAnimDes = (setEntry.Animation.Chunk as animAnimation);
                 if (animAnimDes.AnimationType.Value != Enums.animAnimationType.Normal)
+                {
                     continue;
+                }
 
                 if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferSimd)
                 {
                     var animBuff = (animAnimDes.AnimBuffer.Chunk as animAnimationBufferSimd);
-                    var defferedBuffer = new MemoryStream();
-                    if (animBuff.InplaceCompressedBuffer.Buffer.MemSize > 0)
+                    MemoryStream defferedBuffer;
+                    if (animBuff.InplaceCompressedBuffer != null)
                     {
-                        animStream.Write(animBuff.InplaceCompressedBuffer.Buffer.GetBytes());
-
-                        var br = new BinaryReader(defferedBuffer);
-                        br.BaseStream.Seek(0, SeekOrigin.Begin);
-                        if (br.ReadUInt32() == OodleHelper.KARK)
-                        {
-                            uint size = br.ReadUInt32();
-                            var input = br.ReadBytes((int)(br.BaseStream.Length - 8));
-                            var output = new Byte[size];
-                            OodleHelper.Decompress(input, output);
-                            defferedBuffer = new MemoryStream(output);
-                        }
+                        defferedBuffer = new MemoryStream(animBuff.InplaceCompressedBuffer.Buffer.GetBytes());
                     }
                     else
                     {
-                        animStream.Write(animBuff.DefferedBuffer.Buffer.GetBytes());
+                        defferedBuffer = new MemoryStream(animBuff.DefferedBuffer.Buffer.GetBytes());
                     }
                     defferedBuffer.Seek(0, SeekOrigin.Begin);
                     SIMD.AddAnimationSIMD(ref model, animBuff, animAnimDes.Name, defferedBuffer, animAnimDes);
@@ -98,20 +88,9 @@ namespace WolvenKit.Modkit.RED4
                 {
                     var animBuff = (animAnimDes.AnimBuffer.Chunk as animAnimationBufferCompressed);
                     var defferedBuffer = new MemoryStream();
-                    if (animBuff.InplaceCompressedBuffer.Buffer.MemSize > 0)
+                    if (animBuff.InplaceCompressedBuffer != null )
                     {
-                        animStream.Write(animBuff.InplaceCompressedBuffer.Buffer.GetBytes());
-
-                        var br = new BinaryReader(defferedBuffer);
-                        br.BaseStream.Seek(0, SeekOrigin.Begin);
-                        if (br.ReadUInt32() == OodleHelper.KARK)
-                        {
-                            uint size = br.ReadUInt32();
-                            var input = br.ReadBytes((int)(br.BaseStream.Length - 8));
-                            var output = new Byte[size];
-                            OodleHelper.Decompress(input, output);
-                            defferedBuffer = new MemoryStream(output);
-                        }
+                        defferedBuffer = new MemoryStream(animBuff.InplaceCompressedBuffer.Buffer.GetBytes());
                     }
                     else if (animBuff.DataAddress != null)
                     {
@@ -130,9 +109,13 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
             if (isGLBinary)
+            {
                 model.SaveGLB(outfile.FullName);
+            }
             else
+            {
                 model.SaveGLTF(outfile.FullName);
+            }
 
             return true;
         }

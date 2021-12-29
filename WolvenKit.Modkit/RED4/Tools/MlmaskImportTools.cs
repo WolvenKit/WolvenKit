@@ -106,7 +106,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
             {
                 CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC
             };
-            cr2w.Chunks.Add(mask);
+            cr2w.RootChunk = mask;
 
             var blob = new rendRenderMultilayerMaskBlobPC
             {
@@ -126,8 +126,6 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 AtlasData = new SerializationDeferredDataBuffer(mlmask._AtlasBuffer),
                 TilesData = new SerializationDeferredDataBuffer(mlmask._tilesBuffer)
             };
-
-            cr2w.Chunks.Add(blob);
 
             mask.RenderResourceBlob.RenderResourceBlobPC = blob;
 

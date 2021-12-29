@@ -13,12 +13,12 @@ using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
+using Vec2 = System.Numerics.Vector2;
+using Vec3 = System.Numerics.Vector3;
+using Vec4 = System.Numerics.Vector4;
 
 namespace WolvenKit.Modkit.RED4
 {
-    using Vec2 = System.Numerics.Vector2;
-    using Vec3 = System.Numerics.Vector3;
-    using Vec4 = System.Numerics.Vector4;
     public partial class ModTools
     {
         public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream, List<Archive> archives = null, ValidationMode vmode = ValidationMode.Strict, bool importMaterialOnly = false, Stream outStream = null)
@@ -38,7 +38,7 @@ namespace WolvenKit.Modkit.RED4
                 }
                 if (importMaterialOnly)
                 {
-                    MemoryStream matOnlyStream = new MemoryStream();
+                    var matOnlyStream = new MemoryStream();
 
                     //cr2w.Write(new BinaryWriter(matOnlyStream));
                     using var writer = new CR2WWriter(matOnlyStream);
@@ -63,31 +63,48 @@ namespace WolvenKit.Modkit.RED4
             var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(vmode));
 
             VerifyGLTF(model);
-            List<RawMeshContainer> Meshes = new List<RawMeshContainer>();
+            var Meshes = new List<RawMeshContainer>();
 
-            for (int i = 0; i < model.LogicalMeshes.Count; i++)
+            for (var i = 0; i < model.LogicalMeshes.Count; i++)
             {
                 Meshes.Add(GltfMeshToRawContainer(model.LogicalMeshes[i]));
             }
-            Vec3 max = new Vec3(Meshes[0].positions[0].X, Meshes[0].positions[0].Y, Meshes[0].positions[0].Z);
-            Vec3 min = new Vec3(Meshes[0].positions[0].X, Meshes[0].positions[0].Y, Meshes[0].positions[0].Z);
+            var max = new Vec3(Meshes[0].positions[0].X, Meshes[0].positions[0].Y, Meshes[0].positions[0].Z);
+            var min = new Vec3(Meshes[0].positions[0].X, Meshes[0].positions[0].Y, Meshes[0].positions[0].Z);
 
-            for (int e = 0; e < Meshes.Count; e++)
+            for (var e = 0; e < Meshes.Count; e++)
             {
-                for (int i = 0; i < Meshes[e].positions.Length; i++)
+                for (var i = 0; i < Meshes[e].positions.Length; i++)
                 {
                     if (Meshes[e].positions[i].X >= max.X)
+                    {
                         max.X = Meshes[e].positions[i].X;
+                    }
+
                     if (Meshes[e].positions[i].Y >= max.Y)
+                    {
                         max.Y = Meshes[e].positions[i].Y;
+                    }
+
                     if (Meshes[e].positions[i].Z >= max.Z)
+                    {
                         max.Z = Meshes[e].positions[i].Z;
+                    }
+
                     if (Meshes[e].positions[i].X <= min.X)
+                    {
                         min.X = Meshes[e].positions[i].X;
+                    }
+
                     if (Meshes[e].positions[i].Y <= min.Y)
+                    {
                         min.Y = Meshes[e].positions[i].Y;
+                    }
+
                     if (Meshes[e].positions[i].Z <= min.Z)
+                    {
                         min.Z = Meshes[e].positions[i].Z;
+                    }
                 }
             }
 
@@ -99,19 +116,21 @@ namespace WolvenKit.Modkit.RED4
             meshBlob.BoundingBox.Max.Y = max.Y;
             meshBlob.BoundingBox.Max.Z = max.Z;
 
-            Vec4 QuantScale = new Vec4((max.X - min.X) / 2, (max.Y - min.Y) / 2, (max.Z - min.Z) / 2, 0);
-            Vec4 QuantTrans = new Vec4((max.X + min.X) / 2, (max.Y + min.Y) / 2, (max.Z + min.Z) / 2, 1);
+            var QuantScale = new Vec4((max.X - min.X) / 2, (max.Y - min.Y) / 2, (max.Z - min.Z) / 2, 0);
+            var QuantTrans = new Vec4((max.X + min.X) / 2, (max.Y + min.Y) / 2, (max.Z + min.Z) / 2, 1);
 
 
-            RawArmature newRig = MeshTools.GetOrphanRig(rendblob, cr2w);
+            var newRig = MeshTools.GetOrphanRig(rendblob, cr2w);
             RawArmature oldRig = null;
             if (model.LogicalSkins.Count != 0)
             {
-                oldRig = new RawArmature();
-                oldRig.BoneCount = model.LogicalSkins[0].JointsCount;
-                oldRig.Names = new string[oldRig.BoneCount];
+                oldRig = new RawArmature
+                {
+                    BoneCount = model.LogicalSkins[0].JointsCount,
+                    Names = new string[model.LogicalSkins[0].JointsCount]
+                };
 
-                for (int i = 0; i < model.LogicalSkins[0].JointsCount; i++)
+                for (var i = 0; i < model.LogicalSkins[0].JointsCount; i++)
                 {
                     oldRig.Names[i] = model.LogicalSkins[0].GetJoint(i).Joint.Name;
                 }
@@ -120,20 +139,20 @@ namespace WolvenKit.Modkit.RED4
 
             UpdateSkinningParamCloth(ref Meshes, ref cr2w);
 
-            List<Re4MeshContainer> expMeshes = new List<Re4MeshContainer>();
+            var expMeshes = new List<Re4MeshContainer>();
 
-            for (int i = 0; i < Meshes.Count; i++)
+            for (var i = 0; i < Meshes.Count; i++)
             {
                 expMeshes.Add(RawMeshToRE4Mesh(Meshes[i], QuantScale, QuantTrans));
             }
 
-            MemoryStream meshBuffer = new MemoryStream();
-            MeshesInfo meshesInfo = BufferWriter(expMeshes, ref meshBuffer);
+            var meshBuffer = new MemoryStream();
+            var meshesInfo = BufferWriter(expMeshes, ref meshBuffer);
 
             meshesInfo.quantScale = QuantScale;
             meshesInfo.quantTrans = QuantTrans;
 
-            MemoryStream ms = GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer);
+            var ms = GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer);
 
             ms.Seek(0, SeekOrigin.Begin);
             if (outStream != null)
@@ -147,19 +166,22 @@ namespace WolvenKit.Modkit.RED4
             }
             return true;
         }
-        static RawMeshContainer GltfMeshToRawContainer(Mesh mesh)
+
+        private static RawMeshContainer GltfMeshToRawContainer(Mesh mesh)
         {
-            RawMeshContainer meshContainer = new RawMeshContainer();
-            meshContainer.name = mesh.Name;
+            var meshContainer = new RawMeshContainer
+            {
+                name = mesh.Name
+            };
 
-            List<string> accessors = mesh.Primitives[0].VertexAccessors.Keys.ToList();
+            var accessors = mesh.Primitives[0].VertexAccessors.Keys.ToList();
 
-            List<uint> indicesList = mesh.Primitives[0].GetIndices().ToList();
+            var indicesList = mesh.Primitives[0].GetIndices().ToList();
 
             if (mesh.Name.ToLower().Contains("double"))
             {
                 meshContainer.indices = new uint[indicesList.Count * 2];
-                for (int i = 0; i < indicesList.Count; i += 3)
+                for (var i = 0; i < indicesList.Count; i += 3)
                 {
                     // RHS to LHS face orientations
                     meshContainer.indices[i] = indicesList[i + 1];
@@ -174,7 +196,7 @@ namespace WolvenKit.Modkit.RED4
             else
             {
                 meshContainer.indices = new uint[indicesList.Count];
-                for (int i = 0; i < indicesList.Count; i += 3)
+                for (var i = 0; i < indicesList.Count; i += 3)
                 {
                     // RHS to LHS face orientations
                     meshContainer.indices[i] = indicesList[i + 1];
@@ -184,17 +206,17 @@ namespace WolvenKit.Modkit.RED4
             }
 
 
-            List<Vec3> verticesList = mesh.Primitives[0].GetVertices("POSITION").AsVector3Array().ToList();
-            List<Vec3> normalsList = mesh.Primitives[0].GetVertices("NORMAL").AsVector3Array().ToList();
-            List<Vec4> tangentsList = mesh.Primitives[0].GetVertices("TANGENT").AsVector4Array().ToList();
+            var verticesList = mesh.Primitives[0].GetVertices("POSITION").AsVector3Array().ToList();
+            var normalsList = mesh.Primitives[0].GetVertices("NORMAL").AsVector3Array().ToList();
+            var tangentsList = mesh.Primitives[0].GetVertices("TANGENT").AsVector4Array().ToList();
 
-            int vertCount = verticesList.Count;
+            var vertCount = verticesList.Count;
             meshContainer.positions = new Vec3[verticesList.Count];
             meshContainer.normals = new Vec3[normalsList.Count];
             meshContainer.tangents = new Vec4[tangentsList.Count];
 
             // changing orientation of geomerty, Y+ Z+ RHS-LHS BS
-            for (int i = 0; i < vertCount; i++)
+            for (var i = 0; i < vertCount; i++)
             {
                 meshContainer.positions[i] = new Vec3(verticesList[i].X, -verticesList[i].Z, verticesList[i].Y);
                 meshContainer.normals[i] = new Vec3(normalsList[i].X, -normalsList[i].Z, normalsList[i].Y);
@@ -203,55 +225,76 @@ namespace WolvenKit.Modkit.RED4
 
             meshContainer.colors0 = new Vec4[vertCount];
             if (accessors.Contains("COLOR_0"))
+            {
                 meshContainer.colors0 = mesh.Primitives[0].GetVertices("COLOR_0").AsVector4Array().ToArray();
+            }
 
             meshContainer.colors1 = new Vec4[vertCount];
             if (accessors.Contains("COLOR_1"))
+            {
                 meshContainer.colors1 = mesh.Primitives[0].GetVertices("COLOR_1").AsVector4Array().ToArray();
+            }
 
             meshContainer.texCoords0 = new Vec2[vertCount];
             if (accessors.Contains("TEXCOORD_0"))
+            {
                 meshContainer.texCoords0 = mesh.Primitives[0].GetVertices("TEXCOORD_0").AsVector2Array().ToArray();
+            }
 
             meshContainer.texCoords1 = new Vec2[vertCount];
             if (accessors.Contains("TEXCOORD_1"))
+            {
                 meshContainer.texCoords1 = mesh.Primitives[0].GetVertices("TEXCOORD_1").AsVector2Array().ToArray();
+            }
 
-            List<Vec4> joints0 = new List<Vec4>();
+            var joints0 = new List<Vec4>();
             if (accessors.Contains("JOINTS_0"))
+            {
                 joints0 = mesh.Primitives[0].GetVertices("JOINTS_0").AsVector4Array().ToList();
+            }
 
-            List<Vec4> joints1 = new List<Vec4>();
+            var joints1 = new List<Vec4>();
             if (accessors.Contains("JOINTS_1"))
+            {
                 joints1 = mesh.Primitives[0].GetVertices("JOINTS_1").AsVector4Array().ToList();
+            }
 
-            List<Vec4> weights0 = new List<Vec4>();
+            var weights0 = new List<Vec4>();
             if (accessors.Contains("WEIGHTS_0"))
+            {
                 weights0 = mesh.Primitives[0].GetVertices("WEIGHTS_0").AsVector4Array().ToList();
+            }
 
-            List<Vec4> weights1 = new List<Vec4>();
+            var weights1 = new List<Vec4>();
             if (accessors.Contains("WEIGHTS_1"))
+            {
                 weights1 = mesh.Primitives[0].GetVertices("WEIGHTS_1").AsVector4Array().ToList();
+            }
 
             meshContainer.weightCount = 0;
 
             if (joints0.Count != 0)
+            {
                 meshContainer.weightCount += 4;
+            }
+
             if (joints1.Count != 0)
+            {
                 meshContainer.weightCount += 4;
+            }
 
 
-            meshContainer.boneindices = new UInt16[vertCount, meshContainer.weightCount];
+            meshContainer.boneindices = new ushort[vertCount, meshContainer.weightCount];
             meshContainer.weights = new float[vertCount, meshContainer.weightCount];
 
-            for (int i = 0; i < vertCount; i++)
+            for (var i = 0; i < vertCount; i++)
             {
                 if (joints0.Count != 0)
                 {
-                    meshContainer.boneindices[i, 0] = (UInt16)joints0[i].X;
-                    meshContainer.boneindices[i, 1] = (UInt16)joints0[i].Y;
-                    meshContainer.boneindices[i, 2] = (UInt16)joints0[i].Z;
-                    meshContainer.boneindices[i, 3] = (UInt16)joints0[i].W;
+                    meshContainer.boneindices[i, 0] = (ushort)joints0[i].X;
+                    meshContainer.boneindices[i, 1] = (ushort)joints0[i].Y;
+                    meshContainer.boneindices[i, 2] = (ushort)joints0[i].Z;
+                    meshContainer.boneindices[i, 3] = (ushort)joints0[i].W;
 
                     meshContainer.weights[i, 0] = weights0[i].X;
                     meshContainer.weights[i, 1] = weights0[i].Y;
@@ -260,10 +303,10 @@ namespace WolvenKit.Modkit.RED4
                 }
                 if (joints1.Count != 0)
                 {
-                    meshContainer.boneindices[i, 4] = (UInt16)joints1[i].X;
-                    meshContainer.boneindices[i, 5] = (UInt16)joints1[i].Y;
-                    meshContainer.boneindices[i, 6] = (UInt16)joints1[i].Z;
-                    meshContainer.boneindices[i, 7] = (UInt16)joints1[i].W;
+                    meshContainer.boneindices[i, 4] = (ushort)joints1[i].X;
+                    meshContainer.boneindices[i, 5] = (ushort)joints1[i].Y;
+                    meshContainer.boneindices[i, 6] = (ushort)joints1[i].Z;
+                    meshContainer.boneindices[i, 7] = (ushort)joints1[i].W;
 
                     meshContainer.weights[i, 4] = weights1[i].X;
                     meshContainer.weights[i, 5] = weights1[i].Y;
@@ -272,14 +315,14 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            meshContainer.garmentMorph = new Vec3[0];
+            meshContainer.garmentMorph = Array.Empty<Vec3>();
             if (mesh.Primitives[0].MorphTargetsCount > 0)
             {
                 meshContainer.garmentMorph = new Vec3[vertCount];
-                int idx = mesh.Primitives[0].GetMorphTargetAccessors(0).Keys.ToList().IndexOf("POSITION");
-                List<Vec3> extraDataList = mesh.Primitives[0].GetMorphTargetAccessors(0).Values.ToList()[idx].AsVector3Array().ToList();
+                var idx = mesh.Primitives[0].GetMorphTargetAccessors(0).Keys.ToList().IndexOf("POSITION");
+                var extraDataList = mesh.Primitives[0].GetMorphTargetAccessors(0).Values.ToList()[idx].AsVector3Array().ToList();
 
-                for (int i = 0; i < extraDataList.Count; i++)
+                for (var i = 0; i < extraDataList.Count; i++)
                 {
                     meshContainer.garmentMorph[i] = new Vec3(extraDataList[i].X, -extraDataList[i].Z, extraDataList[i].Y);
                 }
@@ -287,56 +330,59 @@ namespace WolvenKit.Modkit.RED4
 
             return meshContainer;
         }
-        static Re4MeshContainer RawMeshToRE4Mesh(RawMeshContainer mesh, Vec4 qScale, Vec4 qTrans)
+
+        private static Re4MeshContainer RawMeshToRE4Mesh(RawMeshContainer mesh, Vec4 qScale, Vec4 qTrans)
         {
-            Re4MeshContainer Re4Mesh = new Re4MeshContainer();
-            Re4Mesh.name = mesh.name;
-
-            int vertCount = mesh.positions.Length;
-            Re4Mesh.ExpVerts = new Int16[vertCount, 3];
-
-            for (int i = 0; i < vertCount; i++)
+            var Re4Mesh = new Re4MeshContainer
             {
-                float x = (mesh.positions[i].X - qTrans.X) / qScale.X;
-                float y = (mesh.positions[i].Y - qTrans.Y) / qScale.Y;
-                float z = (mesh.positions[i].Z - qTrans.Z) / qScale.Z;
+                name = mesh.name
+            };
+
+            var vertCount = mesh.positions.Length;
+            Re4Mesh.ExpVerts = new short[vertCount, 3];
+
+            for (var i = 0; i < vertCount; i++)
+            {
+                var x = (mesh.positions[i].X - qTrans.X) / qScale.X;
+                var y = (mesh.positions[i].Y - qTrans.Y) / qScale.Y;
+                var z = (mesh.positions[i].Z - qTrans.Z) / qScale.Z;
                 Re4Mesh.ExpVerts[i, 0] = Convert.ToInt16(x * 32767);
                 Re4Mesh.ExpVerts[i, 1] = Convert.ToInt16(y * 32767);
                 Re4Mesh.ExpVerts[i, 2] = Convert.ToInt16(z * 32767);
             }
 
             // managing normals
-            Re4Mesh.Nor32s = new UInt32[vertCount];
-            for (int i = 0; i < vertCount; i++)
+            Re4Mesh.Nor32s = new uint[vertCount];
+            for (var i = 0; i < vertCount; i++)
             {
-                Vec4 v = new Vec4(mesh.normals[i], 0); // for normal w == 0
+                var v = new Vec4(mesh.normals[i], 0); // for normal w == 0
                 Re4Mesh.Nor32s[i] = Converters.Vec4ToU32(v);
             }
 
             // managing tangents
-            Re4Mesh.Tan32s = new UInt32[vertCount];
-            for (int i = 0; i < vertCount; i++)
+            Re4Mesh.Tan32s = new uint[vertCount];
+            for (var i = 0; i < vertCount; i++)
             {
-                Vec4 v = mesh.tangents[i]; // for tangents w == 1 or -1
+                var v = mesh.tangents[i]; // for tangents w == 1 or -1
                 Re4Mesh.Tan32s[i] = Converters.Vec4ToU32(v);
             }
 
-            Re4Mesh.uv0s = new UInt16[vertCount, 2];
-            for (int i = 0; i < mesh.texCoords0.Length; i++)
+            Re4Mesh.uv0s = new ushort[vertCount, 2];
+            for (var i = 0; i < mesh.texCoords0.Length; i++)
             {
                 Re4Mesh.uv0s[i, 0] = Converters.converthf(mesh.texCoords0[i].X);
                 Re4Mesh.uv0s[i, 1] = Converters.converthf(mesh.texCoords0[i].Y);
             }
 
-            Re4Mesh.uv1s = new UInt16[vertCount, 2];
-            for (int i = 0; i < mesh.texCoords1.Length; i++)
+            Re4Mesh.uv1s = new ushort[vertCount, 2];
+            for (var i = 0; i < mesh.texCoords1.Length; i++)
             {
                 Re4Mesh.uv1s[i, 0] = Converters.converthf(mesh.texCoords1[i].X);
                 Re4Mesh.uv1s[i, 1] = Converters.converthf(mesh.texCoords1[i].Y);
             }
 
             Re4Mesh.colors = new byte[vertCount, 4];
-            for (int i = 0; i < mesh.colors0.Length; i++)
+            for (var i = 0; i < mesh.colors0.Length; i++)
             {
                 Re4Mesh.colors[i, 0] = Convert.ToByte(mesh.colors0[i].X * 255);
                 Re4Mesh.colors[i, 1] = Convert.ToByte(mesh.colors0[i].Y * 255);
@@ -347,15 +393,19 @@ namespace WolvenKit.Modkit.RED4
             Re4Mesh.weightcount = mesh.weightCount;
 
             Re4Mesh.boneindices = new byte[vertCount, Re4Mesh.weightcount];
-            for (int i = 0; i < vertCount; i++)
-                for (int e = 0; e < Re4Mesh.weightcount; e++)
+            for (var i = 0; i < vertCount; i++)
+            {
+                for (var e = 0; e < Re4Mesh.weightcount; e++)
+                {
                     Re4Mesh.boneindices[i, e] = Convert.ToByte(mesh.boneindices[i, e]); // mesh.boneindices are supposed to be processed
-                                                                                        // (updated according to the mesh bones rather than rig bones) before putting here
+                }
+            }
+            // (updated according to the mesh bones rather than rig bones) before putting here
 
             Re4Mesh.weights = new byte[vertCount, Re4Mesh.weightcount];
-            for (int i = 0; i < vertCount; i++)
+            for (var i = 0; i < vertCount; i++)
             {
-                for (int e = 0; e < Re4Mesh.weightcount; e++)
+                for (var e = 0; e < Re4Mesh.weightcount; e++)
                 {
                     Re4Mesh.weights[i, e] = Convert.ToByte(mesh.weights[i, e] * 255);
                 }
@@ -363,11 +413,11 @@ namespace WolvenKit.Modkit.RED4
             }
 
             // extradata/ morphoffsetbs
-            Re4Mesh.garmentMorph = new UInt16[0, 0];
+            Re4Mesh.garmentMorph = new ushort[0, 0];
             if (mesh.garmentMorph.Length > 0)
             {
-                Re4Mesh.garmentMorph = new UInt16[vertCount, 3];
-                for (int i = 0; i < vertCount; i++)
+                Re4Mesh.garmentMorph = new ushort[vertCount, 3];
+                for (var i = 0; i < vertCount; i++)
                 {
                     Re4Mesh.garmentMorph[i, 0] = Converters.converthf(mesh.garmentMorph[i].X);
                     Re4Mesh.garmentMorph[i, 1] = Converters.converthf(mesh.garmentMorph[i].Y);
@@ -375,25 +425,28 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            Re4Mesh.indices = new UInt16[mesh.indices.Length];
-            for (int i = 0; i < mesh.indices.Length; i++)
+            Re4Mesh.indices = new ushort[mesh.indices.Length];
+            for (var i = 0; i < mesh.indices.Length; i++)
+            {
                 Re4Mesh.indices[i] = Convert.ToUInt16(mesh.indices[i]);
+            }
 
             return Re4Mesh;
         }
-        static MeshesInfo BufferWriter(List<Re4MeshContainer> expMeshes, ref MemoryStream ms)
+
+        private static MeshesInfo BufferWriter(List<Re4MeshContainer> expMeshes, ref MemoryStream ms)
         {
-            MeshesInfo meshesInfo = new MeshesInfo(expMeshes.Count);
+            var meshesInfo = new MeshesInfo(expMeshes.Count);
 
-            BinaryWriter bw = new BinaryWriter(ms);
-            for (int i = 0; i < expMeshes.Count; i++)
+            var bw = new BinaryWriter(ms);
+            for (var i = 0; i < expMeshes.Count; i++)
             {
-                int vertCount = expMeshes[i].ExpVerts.Length / 3;
+                var vertCount = expMeshes[i].ExpVerts.Length / 3;
 
-                meshesInfo.vertCounts[i] = (UInt32)vertCount;
-                meshesInfo.posnOffsets[i] = (UInt32)ms.Position;
+                meshesInfo.vertCounts[i] = (uint)vertCount;
+                meshesInfo.posnOffsets[i] = (uint)ms.Position;
 
-                meshesInfo.vpStrides[i] = expMeshes[i].weightcount * 2 + 8;
+                meshesInfo.vpStrides[i] = (expMeshes[i].weightcount * 2) + 8;
                 meshesInfo.weightCounts[i] = expMeshes[i].weightcount;
 
                 if (expMeshes[i].garmentMorph.Length > 0)
@@ -402,24 +455,28 @@ namespace WolvenKit.Modkit.RED4
                     meshesInfo.vpStrides[i] += 8;
                 }
 
-                for (int e = 0; e < vertCount; e++)
+                for (var e = 0; e < vertCount; e++)
                 {
                     bw.Write(expMeshes[i].ExpVerts[e, 0]);
                     bw.Write(expMeshes[i].ExpVerts[e, 1]);
                     bw.Write(expMeshes[i].ExpVerts[e, 2]);
-                    bw.Write((Int16)32767);
-                    for (int eye = 0; eye < expMeshes[i].weightcount; eye++)
+                    bw.Write((short)32767);
+                    for (var eye = 0; eye < expMeshes[i].weightcount; eye++)
+                    {
                         bw.Write(expMeshes[i].boneindices[e, eye]);
+                    }
 
-                    for (int eye = 0; eye < expMeshes[i].weightcount; eye++)
+                    for (var eye = 0; eye < expMeshes[i].weightcount; eye++)
+                    {
                         bw.Write(expMeshes[i].weights[e, eye]);
+                    }
 
                     if (meshesInfo.garmentSupportExists[i])
                     {
                         bw.Write(expMeshes[i].garmentMorph[e, 0]);
                         bw.Write(expMeshes[i].garmentMorph[e, 1]);
                         bw.Write(expMeshes[i].garmentMorph[e, 2]);
-                        bw.Write((UInt16)0);
+                        bw.Write((ushort)0);
                     }
                 }
 
@@ -427,11 +484,11 @@ namespace WolvenKit.Modkit.RED4
 
                 // 16 bytes Padding between vertexBlock and uv0, if required
                 paddingLen = ((ms.Length + 15U) & (~15)) - ms.Length;
-                bw.Write(new Byte[paddingLen]);
+                bw.Write(new byte[paddingLen]);
 
                 // writing tx0s
-                meshesInfo.tex0Offsets[i] = (UInt32)ms.Position;
-                for (int e = 0; e < vertCount; e++)
+                meshesInfo.tex0Offsets[i] = (uint)ms.Position;
+                for (var e = 0; e < vertCount; e++)
                 {
                     bw.Write(expMeshes[i].uv0s[e, 0]);
                     bw.Write(expMeshes[i].uv0s[e, 1]);
@@ -439,11 +496,11 @@ namespace WolvenKit.Modkit.RED4
 
                 // 16 bytes Padding between uv0 and normals, if required
                 paddingLen = ((ms.Length + 15U) & (~15)) - ms.Length;
-                bw.Write(new Byte[paddingLen]);
+                bw.Write(new byte[paddingLen]);
 
                 // writing normals and tangents
-                meshesInfo.normalOffsets[i] = (UInt32)ms.Position;
-                for (int e = 0; e < vertCount; e++)
+                meshesInfo.normalOffsets[i] = (uint)ms.Position;
+                for (var e = 0; e < vertCount; e++)
                 {
                     bw.Write(expMeshes[i].Nor32s[e]);
                     bw.Write(expMeshes[i].Tan32s[e]);
@@ -451,11 +508,11 @@ namespace WolvenKit.Modkit.RED4
 
                 // 16 bytes Padding between nors/tans and colors/uv1s, if required
                 paddingLen = ((ms.Length + 15U) & (~15)) - ms.Length;
-                bw.Write(new Byte[paddingLen]);
+                bw.Write(new byte[paddingLen]);
 
                 // writing colors and tx1s
-                meshesInfo.colorOffsets[i] = (UInt32)ms.Position;
-                for (int e = 0; e < vertCount; e++)
+                meshesInfo.colorOffsets[i] = (uint)ms.Position;
+                for (var e = 0; e < vertCount; e++)
                 {
 
                     bw.Write(expMeshes[i].colors[e, 0]);
@@ -477,7 +534,7 @@ namespace WolvenKit.Modkit.RED4
 
                 // 16 bytes Padding if necessary
                 paddingLen = ((ms.Length + 15U) & (~15)) - ms.Length;
-                bw.Write(new Byte[paddingLen]);
+                bw.Write(new byte[paddingLen]);
 
                 // for the unusual lightblocker data
                 /*
@@ -488,7 +545,7 @@ namespace WolvenKit.Modkit.RED4
                     bw.Write((float)0f);
                 }
                 */
-                meshesInfo.vertBufferSize = (UInt32)ms.Length;
+                meshesInfo.vertBufferSize = (uint)ms.Length;
 
                 // this padding writer if that unusual lightblocker data is written
                 /*
@@ -502,24 +559,26 @@ namespace WolvenKit.Modkit.RED4
                 */
             }
 
-            meshesInfo.indexBufferOffset = (UInt32)ms.Position;
-            for (int i = 0; i < expMeshes.Count; i++)
+            meshesInfo.indexBufferOffset = (uint)ms.Position;
+            for (var i = 0; i < expMeshes.Count; i++)
             {
-                int indCount = expMeshes[i].indices.Length;
-                meshesInfo.indCounts[i] = (UInt32)indCount;
+                var indCount = expMeshes[i].indices.Length;
+                meshesInfo.indCounts[i] = (uint)indCount;
 
-                meshesInfo.indicesOffsets[i] = (UInt32)ms.Position;
-                for (int e = 0; e < indCount; e++)
+                meshesInfo.indicesOffsets[i] = (uint)ms.Position;
+                for (var e = 0; e < indCount; e++)
+                {
                     bw.Write(expMeshes[i].indices[e]);
+                }
             }
-            meshesInfo.indexBufferSize = (UInt32)ms.Length - meshesInfo.indexBufferOffset;
+            meshesInfo.indexBufferSize = (uint)ms.Length - meshesInfo.indexBufferOffset;
 
 
-            for (int i = 0; i < meshesInfo.meshCount; i++)
+            for (var i = 0; i < meshesInfo.meshCount; i++)
             {
                 if (expMeshes[i].name.Contains("LOD"))
                 {
-                    int idx = expMeshes[i].name.IndexOf("LOD_");
+                    var idx = expMeshes[i].name.IndexOf("LOD_");
                     if (idx < expMeshes[i].name.Length - 1)
                     {
                         meshesInfo.LODLvl[i] = Convert.ToUInt32(expMeshes[i].name.Substring(idx + 4, 1));
@@ -534,17 +593,28 @@ namespace WolvenKit.Modkit.RED4
 
             return meshesInfo;
         }
-        static MemoryStream GetEditedCr2wFile(CR2WFile cr2w, MeshesInfo info, MemoryStream buffer)
-        {
-            var blob = (rendRenderMeshBlob)((CMesh)cr2w.RootChunk).RenderResourceBlob.Chunk;
-            // removing BS topology data which causes a lot of issues with improved facial lighting geomerty, vertex colors uroborus and what not
-            int Count = blob.Header.Topology.Count;
 
-            for (int i = 0; i < Count; i++)
+        private static MemoryStream GetEditedCr2wFile(CR2WFile cr2w, MeshesInfo info, MemoryStream buffer)
+        {
+            rendRenderMeshBlob blob = null;
+            if (cr2w.RootChunk is CMesh obj1 && obj1.RenderResourceBlob.Chunk is rendRenderMeshBlob obj2)
+            {
+                blob = obj2;
+            }
+
+            if (cr2w.RootChunk is MorphTargetMesh obj3 && obj3.Blob.Chunk is rendRenderMorphTargetMeshBlob obj4 && obj4.BaseBlob.Chunk is rendRenderMeshBlob obj5)
+            {
+                blob = obj5;
+            }
+
+            // removing BS topology data which causes a lot of issues with improved facial lighting geomerty, vertex colors uroborus and what not
+            var Count = blob.Header.Topology.Count;
+
+            for (var i = 0; i < Count; i++)
             {
                 blob.Header.Topology.Remove(blob.Header.Topology[0]);
             }
-            for (int i = 0; i < info.meshCount; i++)
+            for (var i = 0; i < info.meshCount; i++)
             {
                 blob.Header.Topology.Add(RedTypeManager.Create<rendTopologyData>());
             }
@@ -553,7 +623,7 @@ namespace WolvenKit.Modkit.RED4
             Count = blob.Header.RenderLODs.Count;
             if (Count > 1)
             {
-                for (int i = 0; i < Count; i++)
+                for (var i = 0; i < Count; i++)
                 {
                     blob.Header.RenderLODs.Remove(blob.Header.RenderLODs[0]);
                 }
@@ -576,7 +646,7 @@ namespace WolvenKit.Modkit.RED4
                 Count = cmeshblob.LodLevelInfo.Count;
                 if (Count > 1)
                 {
-                    for (int i = 0; i < Count; i++)
+                    for (var i = 0; i < Count; i++)
                     {
                         cmeshblob.LodLevelInfo.Remove(cmeshblob.LodLevelInfo[0]);
                     }
@@ -597,13 +667,13 @@ namespace WolvenKit.Modkit.RED4
             }
             // removing existing rendChunks
             Count = blob.Header.RenderChunkInfos.Count;
-            for (int i = 0; i < Count; i++)
+            for (var i = 0; i < Count; i++)
             {
                 blob.Header.RenderChunkInfos.Remove(blob.Header.RenderChunkInfos[0]);
             }
 
             // adding new rendChunks
-            for (int i = 0; i < info.meshCount; i++)
+            for (var i = 0; i < info.meshCount; i++)
             {
                 var chunk = RedTypeManager.Create<rendChunk>();
 
@@ -660,7 +730,7 @@ namespace WolvenKit.Modkit.RED4
                 }
 
 
-                int elementCount = 0;
+                var elementCount = 0;
 
                 // Position                                                                                                                              // bs way of setting up index names
                 chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
@@ -798,7 +868,7 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 // instanceTransforms
-                for (int e = 0; e < 3; e++)
+                for (var e = 0; e < 3; e++)
                 {
                     chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
                     // fishy
@@ -882,7 +952,8 @@ namespace WolvenKit.Modkit.RED4
 
             return ms;
         }
-        static void VerifyGLTF(ModelRoot model)
+
+        private static void VerifyGLTF(ModelRoot model)
         {
             if (model.LogicalMeshes.Count == 0)
             {
@@ -893,10 +964,10 @@ namespace WolvenKit.Modkit.RED4
                 throw new Exception($"Armature Count: {model.LogicalSkins.Count}, Only 1 Armature is allowed");
             }
 
-            List<UInt32> LODs = new List<UInt32>();
-            for (int i = 0; i < model.LogicalMeshes.Count; i++)
+            var LODs = new List<uint>();
+            for (var i = 0; i < model.LogicalMeshes.Count; i++)
             {
-                List<string> accessors = model.LogicalMeshes[i].Primitives[0].VertexAccessors.Keys.ToList();
+                var accessors = model.LogicalMeshes[i].Primitives[0].VertexAccessors.Keys.ToList();
 
                 if (!accessors.Contains("POSITION"))
                 {
@@ -914,14 +985,14 @@ namespace WolvenKit.Modkit.RED4
                 {
                     throw new Exception("One or more Geometry in provided GLTF doesn't contain any Triangle primitives");
                 }
-                string name = model.LogicalMeshes[i].Name;
-                UInt32 LOD = 0;
+                var name = model.LogicalMeshes[i].Name;
+                uint LOD = 0;
 
                 if (name.Contains("LOD"))
                 {
                     try
                     {
-                        int idx = name.IndexOf("LOD_");
+                        var idx = name.IndexOf("LOD_");
                         if (idx < name.Length - 1)
                         {
                             LOD = Convert.ToUInt32(name.Substring(idx + 4, 1));
@@ -932,7 +1003,7 @@ namespace WolvenKit.Modkit.RED4
                     {
                         throw new Exception("Invalid Geometry/sub mesh name: " + name + " , Character after \"LOD_\" should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
                     }
-                    if (LOD != 1 && LOD != 2 && LOD != 4 && LOD != 8)
+                    if (LOD is not 1 and not 2 and not 4 and not 8)
                     {
                         throw new Exception("Invalid Geometry/sub mesh name: " + name + " , Character after \"LOD_\"  should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
                     }
@@ -951,12 +1022,12 @@ namespace WolvenKit.Modkit.RED4
         {
             var cmesh = (CMesh)cr2w.RootChunk;
 
-            var LODLvl = new UInt32[meshes.Count];
-            for (int i = 0; i < meshes.Count; i++)
+            var LODLvl = new uint[meshes.Count];
+            for (var i = 0; i < meshes.Count; i++)
             {
                 if (meshes[i].name.Contains("LOD"))
                 {
-                    int idx = meshes[i].name.IndexOf("LOD_");
+                    var idx = meshes[i].name.IndexOf("LOD_");
                     if (idx < meshes[i].name.Length - 1)
                     {
                         LODLvl[i] = Convert.ToUInt32(meshes[i].name.Substring(idx + 4, 1));
@@ -1002,13 +1073,13 @@ namespace WolvenKit.Modkit.RED4
             {
                 var blob = (meshMeshParamCloth)clothBlob.Chunk;
                 blob.Chunks = new CArray<meshPhxClothChunkData>();
-                for (int i = 0; i < meshes.Count; i++)
+                for (var i = 0; i < meshes.Count; i++)
                 {
                     var chunk = new meshPhxClothChunkData();
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (int e = 0; e < meshes[i].positions.Length; e++)
+                        for (var e = 0; e < meshes[i].positions.Length; e++)
                         {
                             bw.Write(meshes[i].positions[e].X);
                             bw.Write(meshes[i].positions[e].Y);
@@ -1020,7 +1091,7 @@ namespace WolvenKit.Modkit.RED4
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (int e = 0; e < meshes[i].indices.Length; e++)
+                        for (var e = 0; e < meshes[i].indices.Length; e++)
                         {
                             bw.Write(Convert.ToUInt16(meshes[i].indices[e]));
                         }
@@ -1031,7 +1102,7 @@ namespace WolvenKit.Modkit.RED4
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (int e = 0; e < meshes[i].positions.Length; e++)
+                        for (var e = 0; e < meshes[i].positions.Length; e++)
                         {
                             bw.Write(meshes[i].weights[e, 0]);
                             bw.Write(meshes[i].weights[e, 1]);
@@ -1045,7 +1116,7 @@ namespace WolvenKit.Modkit.RED4
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (int e = 0; e < meshes[i].positions.Length; e++)
+                        for (var e = 0; e < meshes[i].positions.Length; e++)
                         {
                             bw.Write(Convert.ToByte(meshes[i].boneindices[e, 0]));
                             bw.Write(Convert.ToByte(meshes[i].boneindices[e, 1]));
@@ -1059,7 +1130,7 @@ namespace WolvenKit.Modkit.RED4
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (int e = 0; e < meshes[i].positions.Length; e++)
+                        for (var e = 0; e < meshes[i].positions.Length; e++)
                         {
                             bw.Write(meshes[i].weights[e, 4]);
                             bw.Write(meshes[i].weights[e, 5]);
@@ -1073,7 +1144,7 @@ namespace WolvenKit.Modkit.RED4
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (int e = 0; e < meshes[i].positions.Length; e++)
+                        for (var e = 0; e < meshes[i].positions.Length; e++)
                         {
                             bw.Write(Convert.ToByte(meshes[i].boneindices[e, 4]));
                             bw.Write(Convert.ToByte(meshes[i].boneindices[e, 5]));
@@ -1086,7 +1157,7 @@ namespace WolvenKit.Modkit.RED4
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (int e = 0; e < meshes[i].normals.Length; e++)
+                        for (var e = 0; e < meshes[i].normals.Length; e++)
                         {
                             bw.Write(meshes[i].normals[e].X);
                             bw.Write(meshes[i].normals[e].Y);
@@ -1098,8 +1169,10 @@ namespace WolvenKit.Modkit.RED4
                     blob.Chunks.Add(chunk);
                     meshes[i].weightCount = 0;
                 }
-                blob.LodChunkIndices = new CArray<CArray<CUInt16>>();
-                blob.LodChunkIndices.Add(new CArray<CUInt16>());
+                blob.LodChunkIndices = new CArray<CArray<CUInt16>>
+                {
+                    new()
+                };
                 if (LODLvl.Contains(2U))
                 {
                     blob.LodChunkIndices.Add(new CArray<CUInt16>());
@@ -1136,13 +1209,13 @@ namespace WolvenKit.Modkit.RED4
             {
                 var blob = (meshMeshParamCloth_Graphical)clothGraphicalBlob.Chunk;
                 blob.Chunks = new CArray<meshGfxClothChunkData>();
-                for (int i = 0; i < meshes.Count; i++)
+                for (var i = 0; i < meshes.Count; i++)
                 {
                     var chunk = RedTypeManager.Create<meshGfxClothChunkData>();
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (int e = 0; e < meshes[i].positions.Length; e++)
+                        for (var e = 0; e < meshes[i].positions.Length; e++)
                         {
                             bw.Write(meshes[i].positions[e].X);
                             bw.Write(meshes[i].positions[e].Y);
@@ -1154,7 +1227,7 @@ namespace WolvenKit.Modkit.RED4
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (int e = 0; e < meshes[i].indices.Length; e++)
+                        for (var e = 0; e < meshes[i].indices.Length; e++)
                         {
                             bw.Write(Convert.ToUInt16(meshes[i].indices[e]));
                         }
@@ -1165,7 +1238,7 @@ namespace WolvenKit.Modkit.RED4
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (int e = 0; e < meshes[i].positions.Length; e++)
+                        for (var e = 0; e < meshes[i].positions.Length; e++)
                         {
                             bw.Write(meshes[i].weights[e, 0]);
                             bw.Write(meshes[i].weights[e, 1]);
@@ -1179,7 +1252,7 @@ namespace WolvenKit.Modkit.RED4
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (int e = 0; e < meshes[i].positions.Length; e++)
+                        for (var e = 0; e < meshes[i].positions.Length; e++)
                         {
                             bw.Write(Convert.ToByte(meshes[i].boneindices[e, 0]));
                             bw.Write(Convert.ToByte(meshes[i].boneindices[e, 1]));
@@ -1193,7 +1266,7 @@ namespace WolvenKit.Modkit.RED4
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (int e = 0; e < meshes[i].positions.Length; e++)
+                        for (var e = 0; e < meshes[i].positions.Length; e++)
                         {
                             bw.Write(meshes[i].weights[e, 4]);
                             bw.Write(meshes[i].weights[e, 5]);
@@ -1207,7 +1280,7 @@ namespace WolvenKit.Modkit.RED4
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (int e = 0; e < meshes[i].positions.Length; e++)
+                        for (var e = 0; e < meshes[i].positions.Length; e++)
                         {
                             bw.Write(Convert.ToByte(meshes[i].boneindices[e, 4]));
                             bw.Write(Convert.ToByte(meshes[i].boneindices[e, 5]));
@@ -1219,7 +1292,7 @@ namespace WolvenKit.Modkit.RED4
                     }
                     {
                         chunk.Simulation = new CArray<CUInt16>();
-                        int z = 0;
+                        var z = 0;
                         for (ushort e = 0; e < meshes[i].colors1.Length; e++)
                         {
                             if (meshes[i].colors1[e].X > 0.01f)
@@ -1233,8 +1306,10 @@ namespace WolvenKit.Modkit.RED4
                     blob.Chunks.Add(chunk);
                     meshes[i].weightCount = 0;
                 }
-                blob.LodChunkIndices = new CArray<CArray<CUInt16>>();
-                blob.LodChunkIndices.Add(new CArray<CUInt16>());
+                blob.LodChunkIndices = new CArray<CArray<CUInt16>>
+                {
+                    new()
+                };
                 if (LODLvl.Contains(2U))
                 {
                     blob.LodChunkIndices.Add(new CArray<CUInt16>());

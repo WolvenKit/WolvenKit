@@ -18,6 +18,7 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -349,11 +350,9 @@ namespace WolvenKit.Modkit.RED4
                         {
                             //TODO: flip dds
 
-                            using (var fs = new FileStream(ddsPath, FileMode.Create, FileAccess.Write))
-                            {
-                                ms.Seek(0, SeekOrigin.Begin);
-                                ms.CopyTo(fs);
-                            }
+                            using var fs = new FileStream(ddsPath, FileMode.Create, FileAccess.Write);
+                            ms.Seek(0, SeekOrigin.Begin);
+                            ms.CopyTo(fs);
                         }
                     }
 
@@ -443,7 +442,7 @@ namespace WolvenKit.Modkit.RED4
             return false;
         }
 
-        private bool HandleOpus(OpusExportArgs opusExportArgs)
+        private static bool HandleOpus(OpusExportArgs opusExportArgs)
         {
             OpusTools opusTools = new(
                 opusExportArgs.SoundbanksArchive,
@@ -471,12 +470,12 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            if (cr2w.Chunks.FirstOrDefault() is rendFont)
+            if (cr2w.RootChunk is not rendFont font)
             {
                 return false;
             }
 
-            outstream.Write(cr2w.Buffers[0].GetBytes());
+            outstream.Write(font.FontBuffer.Buffer.GetBytes());
 
             return true;
         }
@@ -579,27 +578,23 @@ namespace WolvenKit.Modkit.RED4
                 yield break;
             }
 
-            var buffers = cr2w.Buffers;
+            throw new TodoException("get all buffers");
+
+            /*var buffers = cr2w.Buffers;
             foreach (var buffer in buffers)
             {
                 var ms = new MemoryStream();
                 ms.Write(buffer.GetBytes());
 
                 yield return ms;
-            }
+            }*/
         }
 
         private bool UncookTexarray(Stream cr2wStream, Stream outstream)
         {
             // read the cr2wfile
             var cr2w = _wolvenkitFileService.TryReadRed4File(cr2wStream);
-            if (cr2w == null)
-            {
-                return false;
-            }
-
-            if (!(cr2w.Chunks.FirstOrDefault() is CTextureArray texa) ||
-                !(cr2w.Chunks[1] is rendRenderTextureBlobPC blob))
+            if (cr2w == null || cr2w.RootChunk is not CTextureArray texa || texa.RenderTextureResource.RenderResourceBlobPC.Chunk is not rendRenderTextureBlobPC blob)
             {
                 return false;
             }
@@ -629,7 +624,7 @@ namespace WolvenKit.Modkit.RED4
                 new DDSMetadata(width, height, 1, sliceCount, mipCount,
                     0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
 
-            outstream.Write(cr2w.Buffers[0].GetBytes());
+            outstream.Write(blob.TextureData.Buffer.GetBytes());
 
             return true;
         }
@@ -638,13 +633,7 @@ namespace WolvenKit.Modkit.RED4
         {
             // read the cr2wfile
             var cr2w = _wolvenkitFileService.TryReadRed4File(cr2wStream);
-            if (cr2w == null)
-            {
-                return false;
-            }
-
-            if (cr2w.Chunks.FirstOrDefault() is not CReflectionProbeDataResource ||
-                cr2w.Chunks[1] is not rendRenderTextureBlobPC blob)
+            if (cr2w == null || cr2w.RootChunk is not CReflectionProbeDataResource refl || refl.TextureData.RenderResourceBlobPC.Chunk is not rendRenderTextureBlobPC blob)
             {
                 return false;
             }
@@ -662,7 +651,7 @@ namespace WolvenKit.Modkit.RED4
                 new DDSMetadata(width, height, 1, sliceCount, mipCount,
                     0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
 
-            outstream.Write(cr2w.Buffers[0].GetBytes());
+            outstream.Write(blob.TextureData.Buffer.GetBytes());
 
             return true;
         }
@@ -671,13 +660,7 @@ namespace WolvenKit.Modkit.RED4
         {
             // read the cr2wfile
             var cr2w = _wolvenkitFileService.TryReadRed4File(cr2wStream);
-            if (cr2w == null)
-            {
-                return false;
-            }
-
-            if (!(cr2w.Chunks.FirstOrDefault() is CCubeTexture ctex) ||
-                !(cr2w.Chunks[1] is rendRenderTextureBlobPC blob))
+            if (cr2w == null || cr2w.RootChunk is not CCubeTexture ctex || ctex.RenderTextureResource.RenderResourceBlobPC.Chunk is not rendRenderTextureBlobPC blob)
             {
                 return false;
             }
@@ -708,7 +691,7 @@ namespace WolvenKit.Modkit.RED4
                 new DDSMetadata(width, height, 1, sliceCount, mipCount,
                     0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
 
-            outstream.Write(cr2w.Buffers[0].GetBytes());
+            outstream.Write(blob.TextureData.Buffer.GetBytes());
 
             return true;
         }
@@ -722,15 +705,11 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            if (cr2w.Chunks.FirstOrDefault() is not C2dArray)
+            if (cr2w.RootChunk is not C2dArray redcsv)
             {
                 return false;
             }
 
-            if (!(cr2w.Chunks.FirstOrDefault() is C2dArray redcsv))
-            {
-                return false;
-            }
 
             redcsv.ToCsvStream(outstream);
             return true;
@@ -791,7 +770,9 @@ namespace WolvenKit.Modkit.RED4
             }
 
             if (blob == null)
+            {
                 return false;
+            }
 
             #region get xbm data
 

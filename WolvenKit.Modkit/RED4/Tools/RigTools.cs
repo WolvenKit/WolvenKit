@@ -17,11 +17,10 @@ namespace WolvenKit.Modkit.RED4.RigFile
     {
         public static RawArmature ProcessRig(CR2WFile cr2w)
         {
-            if (cr2w == null || !cr2w.Chunks.OfType<animRig>().Any())
+            if (cr2w == null || cr2w.RootChunk is not animRig animrig)
             {
                 return null;
             }
-            var animrig = cr2w.Chunks.OfType<animRig>().First();
 
             RawArmature Rig = new RawArmature();
             Rig.BoneCount = animrig.BoneNames.Count;
@@ -61,57 +60,60 @@ namespace WolvenKit.Modkit.RED4.RigFile
             }
 
             // if AposeWorld/AposeMS Exists then..... this can be done better i guess...
-            if ((cr2w.Chunks[0] as animRig).APoseMS.Count != 0)
+            if (cr2w.RootChunk is animRig aRig)
             {
-                Rig.AposeMSExits = true;
-                Rig.AposeMSTrans = new Vec3[Rig.BoneCount];
-                Rig.AposeMSRot = new Quat[Rig.BoneCount];
-                Rig.AposeMSScale = new Vec3[Rig.BoneCount];
-
-                for (int i = 0; i < Rig.BoneCount; i++)
+                if (aRig.APoseMS.Count != 0)
                 {
-                    float x = (cr2w.Chunks[0] as animRig).APoseMS[i].Translation.X;
-                    float y = (cr2w.Chunks[0] as animRig).APoseMS[i].Translation.Y;
-                    float z = (cr2w.Chunks[0] as animRig).APoseMS[i].Translation.Z;
-                    Rig.AposeMSTrans[i] = new Vec3(x, z, -y);
-                    float I = (cr2w.Chunks[0] as animRig).APoseMS[i].Rotation.I;
-                    float J = (cr2w.Chunks[0] as animRig).APoseMS[i].Rotation.J;
-                    float K = (cr2w.Chunks[0] as animRig).APoseMS[i].Rotation.K;
-                    float R = (cr2w.Chunks[0] as animRig).APoseMS[i].Rotation.R;
-                    Rig.AposeMSRot[i] = new Quat(I, K, -J, R);
-                    float t = (cr2w.Chunks[0] as animRig).APoseMS[i].Scale.X;
-                    float u = (cr2w.Chunks[0] as animRig).APoseMS[i].Scale.Y;
-                    float v = (cr2w.Chunks[0] as animRig).APoseMS[i].Scale.Z;
-                    Rig.AposeMSScale[i] = new Vec3(t, v, u);
+                    Rig.AposeMSExits = true;
+                    Rig.AposeMSTrans = new Vec3[Rig.BoneCount];
+                    Rig.AposeMSRot = new Quat[Rig.BoneCount];
+                    Rig.AposeMSScale = new Vec3[Rig.BoneCount];
+
+                    for (int i = 0; i < Rig.BoneCount; i++)
+                    {
+                        float x = aRig.APoseMS[i].Translation.X;
+                        float y = aRig.APoseMS[i].Translation.Y;
+                        float z = aRig.APoseMS[i].Translation.Z;
+                        Rig.AposeMSTrans[i] = new Vec3(x, z, -y);
+                        float I = aRig.APoseMS[i].Rotation.I;
+                        float J = aRig.APoseMS[i].Rotation.J;
+                        float K = aRig.APoseMS[i].Rotation.K;
+                        float R = aRig.APoseMS[i].Rotation.R;
+                        Rig.AposeMSRot[i] = new Quat(I, K, -J, R);
+                        float t = aRig.APoseMS[i].Scale.X;
+                        float u = aRig.APoseMS[i].Scale.Y;
+                        float v = aRig.APoseMS[i].Scale.Z;
+                        Rig.AposeMSScale[i] = new Vec3(t, v, u);
+                    }
+                }
+
+                // not sure how APose works or how the matrix multiplication will be, maybe its a recursive mul
+                if (aRig.APoseLS.Count != 0)
+                {
+                    Rig.AposeLSExits = true;
+                    Rig.AposeLSTrans = new Vec3[Rig.BoneCount];
+                    Rig.AposeLSRot = new Quat[Rig.BoneCount];
+                    Rig.AposeLSScale = new Vec3[Rig.BoneCount];
+
+                    for (int i = 0; i < Rig.BoneCount; i++)
+                    {
+                        float x = aRig.APoseLS[i].Translation.X;
+                        float y = aRig.APoseLS[i].Translation.Y;
+                        float z = aRig.APoseLS[i].Translation.Z;
+                        Rig.AposeLSTrans[i] = new Vec3(x, z, -y);
+                        float I = aRig.APoseLS[i].Rotation.I;
+                        float J = aRig.APoseLS[i].Rotation.J;
+                        float K = aRig.APoseLS[i].Rotation.K;
+                        float R = aRig.APoseLS[i].Rotation.R;
+                        Rig.AposeLSRot[i] = new Quat(I, K, -J, R);
+                        float t = aRig.APoseLS[i].Scale.X;
+                        float u = aRig.APoseLS[i].Scale.Y;
+                        float v = aRig.APoseLS[i].Scale.Z;
+                        Rig.AposeLSScale[i] = new Vec3(t, v, u);
+                    }
                 }
             }
 
-            // not sure how APose works or how the matrix multiplication will be, maybe its a recursive mul
-            if ((cr2w.Chunks[0] as animRig).APoseLS.Count != 0)
-            {
-                Rig.AposeLSExits = true;
-                Rig.AposeLSTrans = new Vec3[Rig.BoneCount];
-                Rig.AposeLSRot = new Quat[Rig.BoneCount];
-                Rig.AposeLSScale = new Vec3[Rig.BoneCount];
-
-                for (int i = 0; i < Rig.BoneCount; i++)
-                {
-                    float x = (cr2w.Chunks[0] as animRig).APoseLS[i].Translation.X;
-                    float y = (cr2w.Chunks[0] as animRig).APoseLS[i].Translation.Y;
-                    float z = (cr2w.Chunks[0] as animRig).APoseLS[i].Translation.Z;
-                    Rig.AposeLSTrans[i] = new Vec3(x, z, -y);
-                    float I = (cr2w.Chunks[0] as animRig).APoseLS[i].Rotation.I;
-                    float J = (cr2w.Chunks[0] as animRig).APoseLS[i].Rotation.J;
-                    float K = (cr2w.Chunks[0] as animRig).APoseLS[i].Rotation.K;
-                    float R = (cr2w.Chunks[0] as animRig).APoseLS[i].Rotation.R;
-                    Rig.AposeLSRot[i] = new Quat(I, K, -J, R);
-                    float t = (cr2w.Chunks[0] as animRig).APoseLS[i].Scale.X;
-                    float u = (cr2w.Chunks[0] as animRig).APoseLS[i].Scale.Y;
-                    float v = (cr2w.Chunks[0] as animRig).APoseLS[i].Scale.Z;
-                    Rig.AposeLSScale[i] = new Vec3(t, v, u);
-
-                }
-            }
             string[] baseTendencyBoneNames = new string[] { "Root", "Hips", "Spine", "LeftUpLeg", "RightUpLeg", "Spine1", "LeftLeg", "RightLeg", "Spine2", "LeftFoot", "RightFoot", "Spine3",
                 "LeftShoulder", "RightShoulder", "Neck", "LeftArm", "RightArm", "Neck1", "LeftForeArm", "RightForeArm", "Head" };
             Rig.baseTendencyCount = 0;
