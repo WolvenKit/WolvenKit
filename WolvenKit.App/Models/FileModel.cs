@@ -14,6 +14,7 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.RED4.Archive;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Models
@@ -71,6 +72,14 @@ namespace WolvenKit.Models
                         _extension = "tweak";
                     }
                 }
+                /*if (_extension == "")
+                {
+                    var guessedExtensions = FileTypeHelper.GetFileExtensions(FullName);
+                    if (guessedExtensions.Length == 1)
+                    {
+                        _extension = guessedExtensions[0];
+                    }
+                }*/
             }
             else
             {

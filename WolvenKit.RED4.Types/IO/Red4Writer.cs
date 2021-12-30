@@ -57,6 +57,8 @@ namespace WolvenKit.RED4.IO
 
         public int Position => (int)_writer.BaseStream.Position;
 
+        protected Dictionary<RedBaseClass, ChunkInfo> _chunkInfos = new();
+
         #region Support
 
         public void WriteVLQ(int value) => _writer.WriteVLQInt32(value);
@@ -118,26 +120,26 @@ namespace WolvenKit.RED4.IO
 
         public void StartChunk(RedBaseClass chunk)
         {
-            CurrentChunk = chunk.Chunk;
-            ChildChunks[chunk.Chunk] = new();
+            CurrentChunk = _chunkInfos[chunk].Id;
+            ChildChunks[_chunkInfos[chunk].Id] = new();
 
-            if (chunk.Guid != Guid.Empty)
+            if (_chunkInfos[chunk].Guid != Guid.Empty)
             {
-                _chunkGuidToId.Add(chunk.Guid, chunk.Chunk);
+                _chunkGuidToId.Add(_chunkInfos[chunk].Guid, _chunkInfos[chunk].Id);
             }
 
-            if (chunk.Chunk == 0)
+            if (_chunkInfos[chunk].Id == 0)
             {
                 return;
             }
 
-            _chunkStringList.Add(chunk.Chunk - 1, new() {List = StringCacheList.ToList() });
+            _chunkStringList.Add(_chunkInfos[chunk].Id - 1, new() {List = StringCacheList.ToList() });
             StringCacheList.Clear();
 
-            _chunkImportList.Add(chunk.Chunk - 1, new (){List = ImportCacheList.ToList()});
+            _chunkImportList.Add(_chunkInfos[chunk].Id - 1, new (){List = ImportCacheList.ToList()});
             ImportCacheList.Clear();
 
-            _chunkBufferList.Add(chunk.Chunk - 1, new() { List = BufferCacheList.ToList() });
+            _chunkBufferList.Add(_chunkInfos[chunk].Id - 1, new() { List = BufferCacheList.ToList() });
             BufferCacheList.Clear();
         }
 
@@ -485,28 +487,31 @@ namespace WolvenKit.RED4.IO
                 return;
             }
 
-            var chunkIndex = classRef.Chunk;
+            if (!_chunkInfos.ContainsKey(classRef))
+            {
+                _chunkInfos.Add(classRef, new ChunkInfo());
+            }
+
+            var chunkIndex = _chunkInfos[classRef].Id;
             if (chunkIndex != -1)
             {
                 _writer.Write(chunkIndex + pointerOffset);
                 return;
             }
 
-            var guid = classRef.Guid;
-            if (guid == Guid.Empty)
+            if (_chunkInfos[classRef].Guid == Guid.Empty)
             {
-                guid = Guid.NewGuid();
-                classRef.Guid = guid;
+                _chunkInfos[classRef].Guid = Guid.NewGuid();
 
-                ChunkReferences.Add(guid, new List<(long, int)>());
+                ChunkReferences.Add(_chunkInfos[classRef].Guid, new List<(long, int)>());
             }
 
             ChunkQueue.AddLast(classRef);
 
-            _targetList.Add((CurrentChunk, guid, StringCacheList.Count, ImportCacheList.Count, BufferCacheList.Count));
-            ChildChunks[CurrentChunk].Add(guid);
+            _targetList.Add((CurrentChunk, _chunkInfos[classRef].Guid, StringCacheList.Count, ImportCacheList.Count, BufferCacheList.Count));
+            ChildChunks[CurrentChunk].Add(_chunkInfos[classRef].Guid);
 
-            ChunkReferences[guid].Add((BaseStream.Position, pointerOffset));
+            ChunkReferences[_chunkInfos[classRef].Guid].Add((BaseStream.Position, pointerOffset));
             _writer.Write(0);
         }
 
@@ -836,5 +841,11 @@ namespace WolvenKit.RED4.IO
         public virtual void Close() => Dispose(true);
 
         #endregion IDisposable
+
+        protected class ChunkInfo
+        {
+            public int Id { get; set; } = -1;
+            public Guid Guid { get; set; } = Guid.Empty;
+        }
     }
 }

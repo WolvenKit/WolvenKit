@@ -43,10 +43,10 @@ namespace WolvenKit.MSTests
         //    Test_Extension();
         //}
 
-        //[TestMethod]
+        [TestMethod]
         public void Debug()
         {
-            var files = s_groupedFiles[".ent"].ToList();
+            /*var files = s_groupedFiles[".ent"].ToList();
 
             //var sorted = files.OrderByDescending(x => x.Size).ToList();
 
@@ -62,7 +62,14 @@ namespace WolvenKit.MSTests
                 Write_Archive_Items(list);
 
                 return;
-            }
+            }*/
+
+            using var fs = File.OpenRead(@"C:\Dev\C77\arroyo_warehouse_v16_mproxy.mesh");
+            using var cr = new CR2WReader(fs);
+
+            var r = cr.ReadFile(out var c, true);
+
+            c.GetFromXPath("preloadLocalMaterialInstances:0");
         }
 
         [TestMethod]

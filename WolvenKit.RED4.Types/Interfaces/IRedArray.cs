@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.Types
     {
     }
 
-    public interface IRedArrayFixedSize : IRedPrimitive
+    public interface IRedArrayFixedSize : IRedPrimitive, IList
     {
     }
 
@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
     {
     }
 
-    public interface IRedStatic : IRedPrimitive
+    public interface IRedStatic : IRedPrimitive, IList
     {
     }
 

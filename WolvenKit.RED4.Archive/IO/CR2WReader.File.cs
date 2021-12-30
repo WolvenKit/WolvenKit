@@ -19,88 +19,92 @@ namespace WolvenKit.RED4.Archive.IO
         private Dictionary<int, IRedClass> _chunks = new();
         private Dictionary<int, RedBuffer> _buffers = new();
 
-        public EFileReadErrorCodes ReadFile(out CR2WFile file, bool parseBuffer = true)
+        public EFileReadErrorCodes ReadFileInfo(out CR2WFileInfo info)
         {
-            _outputFile = new CR2WFile();
-            _parseBuffer = parseBuffer;
-
-            #region Read Headers
-
-            // read file header
             var id = BaseStream.ReadStruct<uint>();
             if (id != CR2WFile.MAGIC)
             {
-                file = null;
+                info = null;
                 return EFileReadErrorCodes.NoCr2w;
             }
 
-            var fileHeader = BaseStream.ReadStruct<CR2WFileHeader>();
+            var result = new CR2WFileInfo();
+            result.FileHeader = BaseStream.ReadStruct<CR2WFileHeader>();
 
-            _cr2wFile.MetaData.Version = fileHeader.version;
-            _cr2wFile.MetaData.BuildVersion = fileHeader.buildVersion;
-            _cr2wFile.MetaData.ObjectsEnd = fileHeader.objectsEnd;
-
-            if (fileHeader.version > 195 || fileHeader.version < 163)
+            if (result.FileHeader.version > 195 || result.FileHeader.version < 163)
             {
-                file = null;
+                info = null;
                 return EFileReadErrorCodes.UnsupportedVersion;
             }
-
 
             // Tables [7-9] are not used in cr2w so far.
             var tableHeaders = BaseStream.ReadStructs<CR2WTable>(10);
 
             // read strings - block 1 (index 0)
-            var stringDict = ReadStringDict(tableHeaders[0]);
-            _cr2wFile.Debug.Strings = new List<CName>(_namesList);
+            result.StringDict = ReadStringDict(tableHeaders[0]);
 
             // read the other tables
 
-            var nameInfoList = ReadTable<CR2WNameInfo>(tableHeaders[1]); // block 2
-            var importInfoList = ReadTable<CR2WImportInfo>(tableHeaders[2]); // block 3
-            var propertyInfoList = ReadTable<CR2WPropertyInfo>(tableHeaders[3]); // block 4
-            var chunkInfoList = ReadTable<CR2WExportInfo>(tableHeaders[4]); // block 5
-            var bufferInfoList = ReadTable<CR2WBufferInfo>(tableHeaders[5]);  // block 6
-            var embeddedInfoList = ReadTable<CR2WEmbeddedInfo>(tableHeaders[6]); // block 7
+            result.NameInfo = ReadTable<CR2WNameInfo>(tableHeaders[1]); // block 2
+            result.ImportInfo = ReadTable<CR2WImportInfo>(tableHeaders[2]); // block 3
+            result.PropertyInfo = ReadTable<CR2WPropertyInfo>(tableHeaders[3]); // block 4
+            result.ExportInfo = ReadTable<CR2WExportInfo>(tableHeaders[4]); // block 5
+            result.BufferInfo = ReadTable<CR2WBufferInfo>(tableHeaders[5]);  // block 6
+            result.EmbeddedInfo = ReadTable<CR2WEmbeddedInfo>(tableHeaders[6]); // block 7
 
-            #endregion
+            info = result;
+            return EFileReadErrorCodes.NoError;
+        }
 
+        public EFileReadErrorCodes ReadFile(out CR2WFile file, bool parseBuffer = true)
+        {
+            var result = ReadFileInfo(out var info);
+            if (result != EFileReadErrorCodes.NoError)
+            {
+                file = null;
+                return result;
+            }
+
+            _outputFile = new CR2WFile();
+            _parseBuffer = parseBuffer;
+
+            _cr2wFile.Info = info;
+            _cr2wFile.MetaData.Version = _cr2wFile.Info.FileHeader.version;
+            _cr2wFile.MetaData.BuildVersion = _cr2wFile.Info.FileHeader.buildVersion;
+            _cr2wFile.MetaData.ObjectsEnd = _cr2wFile.Info.FileHeader.objectsEnd;
+            
             // use 1 as 0 is always empty
-            _cr2wFile.MetaData.HashVersion = IdentifyHash(stringDict[1], nameInfoList[1].hash);
+            _cr2wFile.MetaData.HashVersion = IdentifyHash(_cr2wFile.Info.StringDict[1], _cr2wFile.Info.NameInfo[1].hash);
             if (_cr2wFile.MetaData.HashVersion == EHashVersion.Unknown)
             {
                 throw new Exception();
             }
 
             #region Read Data
-
-            _cr2wFile.Debug.NameInfos = nameInfoList;
-            foreach (var nameInfo in nameInfoList)
+            
+            foreach (var nameInfo in _cr2wFile.Info.NameInfo)
             {
-                _namesList.Add(ReadName(nameInfo, stringDict));
+                _namesList.Add(ReadName(nameInfo, _cr2wFile.Info.StringDict));
             }
-
-            _cr2wFile.Debug.ImportInfos = importInfoList;
-            foreach (var importInfo in importInfoList)
+            
+            foreach (var importInfo in _cr2wFile.Info.ImportInfo)
             {
-                importsList.Add(ReadImport(importInfo, stringDict));
+                importsList.Add(ReadImport(importInfo, _cr2wFile.Info.StringDict));
             }
-
-            _cr2wFile.Debug.PropertyInfos = propertyInfoList;
-            foreach (var propertyInfo in propertyInfoList)
+            
+            foreach (var propertyInfo in _cr2wFile.Info.PropertyInfo)
             {
                 _cr2wFile.Properties.Add(ReadProperty(propertyInfo));
             }
 
-            if (propertyInfoList.Length > 1)
+            if (_cr2wFile.Info.PropertyInfo.Length > 1)
             {
                 throw new TodoException();
             }
-
-            _cr2wFile.Debug.ChunkInfos = chunkInfoList;
-            for (int i = 0; i < chunkInfoList.Length; i++)
+            
+            for (int i = 0; i < _cr2wFile.Info.ExportInfo.Length; i++)
             {
-                var chunk = ReadChunk(chunkInfoList[i]);
+                var chunk = ReadChunk(_cr2wFile.Info.ExportInfo[i]);
                 if (i == 0)
                 {
                     _cr2wFile.RootChunk = chunk;
@@ -123,11 +127,10 @@ namespace WolvenKit.RED4.Archive.IO
 
                 //_chunks.Remove(i);
             }
-
-            _cr2wFile.Debug.BufferInfos = bufferInfoList;
-            for (int i = 0; i < bufferInfoList.Length; i++)
+            
+            for (int i = 0; i < _cr2wFile.Info.BufferInfo.Length; i++)
             {
-                var buffer = ReadBuffer(bufferInfoList[i]);
+                var buffer = ReadBuffer(_cr2wFile.Info.BufferInfo[i]);
                 if (!BufferQueue.ContainsKey(i))
                 {
                     throw new TodoException("Unused buffer");
@@ -138,9 +141,8 @@ namespace WolvenKit.RED4.Archive.IO
                     pointers.SetValue(buffer);
                 }
             }
-
-            _cr2wFile.Debug.EmbeddedInfos = embeddedInfoList;
-            foreach (var embeddedInfo in embeddedInfoList)
+            
+            foreach (var embeddedInfo in _cr2wFile.Info.EmbeddedInfo)
             {
                 _cr2wFile.EmbeddedFiles.Add(ReadEmbedded(embeddedInfo));
             }

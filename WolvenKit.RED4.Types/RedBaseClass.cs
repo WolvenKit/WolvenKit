@@ -11,9 +11,6 @@ namespace WolvenKit.RED4.Types
     [REDMeta]
     public class RedBaseClass : DynamicObject, IRedClass, IRedCloneable
     {
-        public int Chunk = -1;
-        public Guid Guid;
-
         #region Events
 
         public class ObjectChangedEventArgs : EventArgs
@@ -160,6 +157,16 @@ namespace WolvenKit.RED4.Types
         {
             //OnObjectChanged(redPropertyName, value);
             _properties[redPropertyName] = value;
+        }
+
+        public IRedType GetObjectByRedName(string redName)
+        {
+            if (_properties.ContainsKey(redName))
+            {
+                return (IRedType)_properties[redName];
+            }
+
+            return null;
         }
 
         public Dictionary<string, object> ToDictionary(bool clone = true)
