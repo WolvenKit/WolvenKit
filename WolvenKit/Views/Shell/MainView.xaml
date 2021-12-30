@@ -51,7 +51,7 @@
             <Style.Triggers>
                 <Trigger Property="WindowState" Value="{x:Static WindowState.Maximized}" >
                     <Setter Property="ResizeBorderThickness" Value="0,0,0,0" />
-                    <Setter Property="Margin" Value="-1,-2,-1,2" />
+                    <Setter Property="Margin" Value="0,0,0,0" />
                 </Trigger>
                 <DataTrigger Binding="{Binding ShouldOverlayShow}" Value="True" >
                     <Setter Property="TitleBarForeground" Value="#00efefef" />

@@ -21,9 +21,9 @@
     <AssemblyVersion>8.4.4</AssemblyVersion>
     <InformationalVersion>8.4.4</InformationalVersion>
     <Description>WPF</Description>
-    <NoWin32Manifest>true</NoWin32Manifest>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
       <Product>WolvenKit</Product>
+      <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0-windows|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
