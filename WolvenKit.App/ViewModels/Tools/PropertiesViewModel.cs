@@ -162,6 +162,7 @@ namespace WolvenKit.ViewModels.Tools
             if (!(
               string.Equals(model.GetExtension(), ERedExtension.ent.ToString(), StringComparison.OrdinalIgnoreCase) ||
               string.Equals(model.GetExtension(), ERedExtension.physicalscene.ToString(), StringComparison.OrdinalIgnoreCase) ||
+              string.Equals(model.GetExtension(), ERedExtension.w2mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
               string.Equals(model.GetExtension(), ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
               string.Equals(model.GetExtension(), ERedExtension.wem.ToString(), StringComparison.OrdinalIgnoreCase) ||
               string.Equals(model.GetExtension(), ERedExtension.xbm.ToString(), StringComparison.OrdinalIgnoreCase) ||
@@ -194,6 +195,7 @@ namespace WolvenKit.ViewModels.Tools
                     }
 
                     if (string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.w2mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
                         string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.ent.ToString(), StringComparison.OrdinalIgnoreCase) ||
                         string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.physicalscene.ToString(), StringComparison.OrdinalIgnoreCase))
                     {

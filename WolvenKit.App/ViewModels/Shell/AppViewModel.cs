@@ -1086,7 +1086,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 //case ".BNK":
                 // TODO SPLIT WEMS TO PLAYLIST FROM BNK
-
+                case "":
                 default:
                     return Task.Run(() => OpenRedengineFile());
             }
@@ -1095,10 +1095,10 @@ namespace WolvenKit.ViewModels.Shell
 
             void OpenRedengineFile()
             {
-                var trimmedExt = ext.TrimStart('.').ToUpper();
+                var trimmedExt = ext.TrimStart('.')?.ToUpper() ?? "";
                 var type = EWolvenKitFile.Cr2w;
 
-                var isRedEngineFile = Enum.GetNames<ERedExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal));
+                var isRedEngineFile = Enum.GetNames<ERedExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal)) || trimmedExt == "";
                 if (isRedEngineFile)
                 {
                     type = EWolvenKitFile.Cr2w;

@@ -49,7 +49,7 @@ namespace WolvenKit.ViewModels.Documents
             _parser = Locator.Current.GetService<Red4ParserService>();
             _hashService = Locator.Current.GetService<IHashService>();
             RelativePath = path;
-            Extension = Path.GetExtension(path).Substring(1);
+            Extension = Path.GetExtension(path) != "" ? Path.GetExtension(path).Substring(1) : "";
         }
 
         #region properties
