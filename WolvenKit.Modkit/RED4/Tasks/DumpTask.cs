@@ -196,7 +196,7 @@ namespace CP77Tools.Tasks
                                 return;
                             }
 
-                            if (cr2w.Debug.ImportInfos.Length > 0)
+                            if (cr2w.Info.ImportInfo.Length > 0)
                             {
                                 throw new WolvenKit.RED4.Types.Exceptions.TodoException();
                                 //foreach (var info in cr2w.Debug.ImportInfos)

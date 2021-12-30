@@ -184,7 +184,7 @@ namespace WolvenKit.Modkit.RED4
 
                     // HINT: each cr2w needs to have the buffer already kraken'd
                     // foreach buffer write
-                    foreach (var bufferInfo in cr2w.Debug.BufferInfos)
+                    foreach (var bufferInfo in cr2w.Info.BufferInfo)
                     {
                         var bufferBuffer = fileBinaryReader.ReadBytes((int)bufferInfo.diskSize);
 
@@ -209,7 +209,7 @@ namespace WolvenKit.Modkit.RED4
 
                     lastoffsetidx = (uint)ar.Index.FileSegments.Count;
 
-                    flags = cr2w.Debug.BufferInfos.Length > 0 ? cr2w.Debug.BufferInfos.Length - 1 : 0;
+                    flags = cr2w.Info.BufferInfo.Length > 0 ? cr2w.Info.BufferInfo.Length - 1 : 0;
                 }
                 else
                 {

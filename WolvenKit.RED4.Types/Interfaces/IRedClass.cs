@@ -8,6 +8,8 @@ namespace WolvenKit.RED4.Types
 
         internal object InternalGetPropertyValue(Type type, string redPropertyName, Flags flags);
         internal void InternalSetPropertyValue(string redPropertyName, object value, bool isNative = true);
+
+        public IRedType GetObjectByRedName(string redName);
     }
 
     public interface IRedOverload

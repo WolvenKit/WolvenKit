@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive
@@ -134,6 +136,28 @@ namespace WolvenKit.RED4.Archive
             _fileTypes.Add("workspot", new[] { typeof(workWorkspotResource) });
             _fileTypes.Add("xbm", new[] { typeof(CBitmapTexture) });
             _fileTypes.Add("xcube", new[] { typeof(CCubeTexture) });
+        }
+
+        public static string[] GetFileExtensions(string filePath)
+        {
+            using var fs = File.OpenRead(filePath);
+            using var cr2wReader = new CR2WReader(fs);
+
+            if (cr2wReader.ReadFileInfo(out var info) != EFileReadErrorCodes.NoError)
+            {
+                return Array.Empty<string>();
+            }
+
+            var extensions = new List<string>();
+            foreach (var kvp in _fileTypes)
+            {
+                if (kvp.Value.Any(x => x.Name == info.StringDict[1]))
+                {
+                    extensions.Add(kvp.Key);
+                }
+            }
+
+            return extensions.ToArray();
         }
 
         public static string[] GetFileExtensions(CR2WFile file)

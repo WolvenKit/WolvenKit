@@ -316,7 +316,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             return new CR2WEmbeddedInfo
             {
-                chunkIndex = (uint)((RedBaseClass)embeddedData.Content).Chunk,
+                chunkIndex = (uint)_chunkInfos[(RedBaseClass)embeddedData.Content].Id,
                 importIndex = (uint)importIndex,
                 pathHash = 0
             };
@@ -389,6 +389,8 @@ namespace WolvenKit.RED4.Archive.IO
             using var ms = new MemoryStream();
             using var file = new CR2WWriter(ms);
 
+            file._chunkInfos = _chunkInfos;
+
             var chunkCounter = 0;
             var chunkInfoList = new List<CR2WExportInfo>();
             var chunkClassNames = new List<string>();
@@ -409,26 +411,31 @@ namespace WolvenKit.RED4.Archive.IO
                     var chunk = file.ChunkQueue.First.Value;
                     file.ChunkQueue.RemoveFirst();
 
-                    if (chunk.Chunk != -1)
+                    if (!_chunkInfos.ContainsKey(chunk))
+                    {
+                        _chunkInfos.Add(chunk, new ChunkInfo());
+                    }
+
+                    if (_chunkInfos[chunk].Id != -1)
                     {
                         continue;
                     }
 
                     chunkClassNames.Add(RedReflection.GetTypeRedName(chunk.GetType()));
 
-                    chunk.Chunk = chunkCounter;
+                    _chunkInfos[chunk].Id = chunkCounter;
                     file.StartChunk(chunk);
                     chunkInfoList.Add(WriteChunk(file, chunk));
                     _chunks.Add(chunk);
 
-                    var guid = chunk.Guid;
+                    var guid = _chunkInfos[chunk].Guid;
                     if (guid != Guid.Empty && file.ChunkReferences.ContainsKey(guid))
                     {
                         var startPos = file.BaseStream.Position;
                         foreach (var (position, offset) in file.ChunkReferences[guid])
                         {
                             file.BaseStream.Position = position;
-                            file.BaseWriter.Write(chunk.Chunk + offset);
+                            file.BaseWriter.Write(_chunkInfos[chunk].Id + offset);
                         }
                         file.BaseStream.Position = startPos;
                     }
@@ -456,7 +463,7 @@ namespace WolvenKit.RED4.Archive.IO
             foreach (var embeddedFile in _file.EmbeddedFiles)
             {
                 var typeInfo = RedReflection.GetTypeInfo(((RedBaseClass)embeddedFile.Content).GetType());
-                SetParent(((RedBaseClass)embeddedFile.Content).Chunk, maxDepth: typeInfo.ChildLevel);
+                SetParent(_chunkInfos[(RedBaseClass)embeddedFile.Content].Id, maxDepth: typeInfo.ChildLevel);
             }
 
             var ms2 = new MemoryStream();

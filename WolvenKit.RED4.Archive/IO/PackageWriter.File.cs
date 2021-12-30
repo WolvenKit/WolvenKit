@@ -236,6 +236,8 @@ namespace WolvenKit.RED4.Archive.IO
             using var ms = new MemoryStream();
             using var file = new PackageWriter(ms);
 
+            file._chunkInfos = _chunkInfos;
+
             var chunkDesc = new List<Package04ChunkHeader>();
             var chunkClassNames = new List<string>();
             var chunkCounter = 0;
@@ -250,25 +252,25 @@ namespace WolvenKit.RED4.Archive.IO
                 var chunk = file.ChunkQueue.First.Value;
                 file.ChunkQueue.RemoveFirst();
 
-                if (chunk.Chunk != -1)
+                if (_chunkInfos[chunk].Id != -1)
                 {
                     continue;
                 }
 
                 chunkClassNames.Add(RedReflection.GetTypeRedName(chunk.GetType()));
 
-                chunk.Chunk = chunkCounter;
+                _chunkInfos[chunk].Id = chunkCounter;
                 file.StartChunk(chunk);
                 chunkDesc.Add(WriteChunk(file, chunk));
                 
-                var guid = chunk.Guid;
+                var guid = _chunkInfos[chunk].Guid;
                 if (guid != Guid.Empty && file.ChunkReferences.ContainsKey(guid))
                 {
                     var startPos = file.BaseStream.Position;
                     foreach (var (position, offset) in file.ChunkReferences[guid])
                     {
                         file.BaseStream.Position = position;
-                        file.BaseWriter.Write(chunk.Chunk + offset);
+                        file.BaseWriter.Write(_chunkInfos[chunk].Id + offset);
                     }
                     file.BaseStream.Position = startPos;
                 }
