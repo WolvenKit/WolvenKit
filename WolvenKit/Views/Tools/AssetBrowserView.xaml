@@ -367,7 +367,7 @@
                                         ShowToolTip="True" ToolTipTemplate="{StaticResource TemplateToolTip}"
                                         />
 
-                                    <syncfusion:GridTextColumn
+                                <syncfusion:GridTextColumn
                                         AllowFiltering="True"
                                         AllowResizing="False"
                                         HeaderText="Kind"
@@ -376,15 +376,20 @@
                                         HorizontalHeaderContentAlignment="Left"
                                         MappingName="DisplayExtension" />
 
-                                    <syncfusion:GridTextColumn
+                                <syncfusion:GridTextColumn
                                         AllowFiltering="True"
                                         AllowResizing="False"
                                         ColumnSizer="Auto"
                                         IsReadOnly="True"
                                         HorizontalHeaderContentAlignment="Left"
-                                        MappingName="Size" />
+                                        AllowSorting="True"
+                                        SortMode="Value"
+                                        DisplayBinding="{Binding SizeString}"
+                                        HeaderText="Size"
+                                        MappingName="Size"
+                                        ValueBinding="{Binding Size}" />
 
-                                </syncfusion:SfDataGrid.Columns>
+                            </syncfusion:SfDataGrid.Columns>
 
                                 
 

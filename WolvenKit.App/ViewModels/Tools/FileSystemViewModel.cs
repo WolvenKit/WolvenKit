@@ -13,7 +13,9 @@ namespace WolvenKit.ViewModels.Tools
 
         public abstract string DisplayExtension { get; }
 
-        public abstract string Size { get; }
+        public abstract uint Size { get; }
+
+        public abstract string SizeString { get; }
 
         //public abstract ulong Key { get; }
 

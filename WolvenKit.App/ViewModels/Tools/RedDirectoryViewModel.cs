@@ -28,7 +28,9 @@ namespace WolvenKit.ViewModels.Tools
 
         [Browsable(false)] public List<ulong> Files => _model.Files;
 
-        public override string Size => "";
+        public override uint Size => 0;
+
+        public override string SizeString => "";
 
         public override string Name => _model.Name;
 

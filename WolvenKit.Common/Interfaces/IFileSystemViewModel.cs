@@ -10,6 +10,10 @@ namespace WolvenKit.Common.Interfaces
 
         public string DisplayExtension { get; }
 
+        public uint Size { get; }
+
+        public string SizeString { get; }
+
         //public ulong Key { get; }
 
         //public ulong ParentKey {  get; }
