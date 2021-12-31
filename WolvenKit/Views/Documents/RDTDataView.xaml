@@ -533,7 +533,7 @@
 
         <!-- CR2W TreeGrid -->
 
-        <syncfusion:PropertyGrid
+        <!--syncfusion:PropertyGrid
                 x:Name="PropertyGrid" Grid.Column="2"
                 PropertyExpandMode="NestedMode"
                 AutoGeneratingPropertyGridItem="PropertyGrid_AutoGeneratingPropertyGridItem"
@@ -542,7 +542,9 @@
                 ValueChanged="PropertyGrid_ValueChanged"
                 ButtonPanelVisibility="Collapsed"
                 SelectedObjectChanged="PropertyGrid_SelectedObjectChanged"
-                BorderThickness="0" />
+                BorderThickness="0" /-->
+
+        <editors:RedTypeView x:Name="CustomPG" ViewModel="{Binding}" DataContext="{Binding SelectedChunk}" Grid.Column="2"/>
 
         <!--syncfusion:SfImageEditor
             Image="{Binding ImageStream}"

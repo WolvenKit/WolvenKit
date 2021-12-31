@@ -199,6 +199,12 @@ namespace WolvenKit.ViewModels.Documents
                 }
             }
 
+            foreach (var file in Cr2wFile.EmbeddedFiles)
+            {
+                if (file.Content != null)
+                    TabItemViewModels.Add(new RDTDataViewModel(file.Content, this));
+            }
+
             SelectedIndex = 0;
 
             SelectedTabItemViewModel = TabItemViewModels.FirstOrDefault();

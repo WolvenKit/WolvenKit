@@ -21,6 +21,7 @@ using static WolvenKit.ViewModels.Shell.ChunkViewModel;
 using Syncfusion.Windows.Shared;
 using System.Windows.Controls.Primitives;
 using System.Windows.Controls;
+using System.Reactive.Linq;
 
 namespace WolvenKit.Views.Documents
 {
@@ -33,7 +34,7 @@ namespace WolvenKit.Views.Documents
         {
             InitializeComponent();
 
-            PropertyGrid.Loaded += PropertyGrid_Loaded;
+            //PropertyGrid.Loaded += PropertyGrid_Loaded;
 
             //this.WhenAnyValue(x => x.DataContext).Subscribe(x =>
             //{
@@ -81,10 +82,31 @@ namespace WolvenKit.Views.Documents
                 //       view => view.MainTreeGrid.ItemsSource)
                 //   .DisposeWith(disposables);
 
-                this.OneWayBind(ViewModel,
-                       viewmodel => viewmodel.SelectedChunk.PropertyGridData,
-                       view => view.PropertyGrid.SelectedObject)
-                   .DisposeWith(disposables);
+                //this.OneWayBind(ViewModel,
+                //       viewmodel => viewmodel.SelectedChunk.PropertyGridData,
+                //       view => view.PropertyGrid.SelectedObject)
+                //   .DisposeWith(disposables);
+
+                //this.OneWayBind(ViewModel,
+                //       viewmodel => viewmodel.SelectedChunk.PropertyGridItems,
+                //       view => view.PropertyGrid.Items)
+                //   .DisposeWith(disposables);
+
+                //this.OneWayBind(ViewModel,
+                //       viewmodel => viewmodel.SelectedChunk,
+                //       view => view.CustomPG.DataContext)
+                //   .DisposeWith(disposables);
+
+                //this.ViewModel.WhenAnyValue(x => x.SelectedChunk)
+                //    .Where(x => x != null)
+                //    .Select(x => new ObservableCollection<PropertyGridItem>(x.Properties
+                //        .Where(x => x != null)
+                //        .Select(x => new PropertyGridItem()
+                //        {
+                //            PropertyName = x.Name,
+                //            Editor = PropertyGridEditors.GetPropertyEditor(x.PropertyType)
+                //        }
+                //    ))).BindTo(PropertyGrid, x => x.Items);
 
                 //this.BindCommand(ViewModel, vm => vm.ExportChunkCommand, v => v.ExportChunkCommand)
                 //    .DisposeWith(disposables);
@@ -173,69 +195,69 @@ namespace WolvenKit.Views.Documents
 
 
 
-        private void PropertyGrid_AutoGeneratingPropertyGridItem(object sender, Syncfusion.Windows.PropertyGrid.AutoGeneratingPropertyGridItemEventArgs e)
-        {
-            if (e.OriginalSource is PropertyItem { } propertyItem)
-            {
-                var customEditor = PropertyGridEditors.GetPropertyEditor(propertyItem.PropertyType);
-                if (customEditor is not null)
-                {
-                    propertyItem.Editor = customEditor;
-                    e.ExpandMode = PropertyExpandModes.FlatMode;
-                }
-                else
-                {
-                    propertyItem.Editor = new PropertyGridEditors.BaseTypeEditor();
-                    e.ExpandMode = PropertyExpandModes.NestedMode;
-                }
-                var viewData = ViewModel.SelectedChunk.PropertyGridData;
-                if (e.DisplayName == "Value" && viewData.GetType().IsGenericType && viewData.GetType().GetGenericTypeDefinition() == typeof(RedArrayItem<>))
-                {
-                    if (ViewModel.SelectedChunk.Parent.Data is IRedArray ary)
-                    {
-                        //e.DisplayName = $"[{ary.IndexOf(ViewModel.SelectedChunk.Data)}] {ViewModel.SelectedChunk.Type}";
-                        e.DisplayName = $"{ViewModel.SelectedChunk.Parent.Name} [{ary.IndexOf(ViewModel.SelectedChunk.Data)}]";
-                    }
-                }
-                if (e.DisplayName == "Value" && viewData.GetType().IsGenericType && viewData.GetType().GetGenericTypeDefinition() == typeof(RedClassProperty<>))
-                {
-                    if (ViewModel.SelectedChunk.Parent.Data is IRedClass cls)
-                    {
-                        //e.DisplayName = $"[{ary.IndexOf(ViewModel.SelectedChunk.Data)}] {ViewModel.SelectedChunk.Type}";
-                        //e.DisplayName = $"{ViewModel.SelectedChunk.Name} ({ViewModel.SelectedChunk.Type})";
-                        e.DisplayName = ViewModel.SelectedChunk.Name;
-                    }
-                }
-            }
-        }
+        //private void PropertyGrid_AutoGeneratingPropertyGridItem(object sender, Syncfusion.Windows.PropertyGrid.AutoGeneratingPropertyGridItemEventArgs e)
+        //{
+        //    if (e.OriginalSource is PropertyItem { } propertyItem)
+        //    {
+        //        var customEditor = PropertyGridEditors.GetPropertyEditor(propertyItem.PropertyType);
+        //        if (customEditor is not null)
+        //        {
+        //            propertyItem.Editor = customEditor;
+        //            e.ExpandMode = PropertyExpandModes.FlatMode;
+        //        }
+        //        else
+        //        {
+        //            propertyItem.Editor = new PropertyGridEditors.BaseTypeEditor();
+        //            e.ExpandMode = PropertyExpandModes.NestedMode;
+        //        }
+        //        var viewData = ViewModel.SelectedChunk.PropertyGridData;
+        //        if (e.DisplayName == "Value" && viewData.GetType().IsGenericType && viewData.GetType().GetGenericTypeDefinition() == typeof(RedArrayItem<>))
+        //        {
+        //            if (ViewModel.SelectedChunk.Parent.Data is IRedArray ary)
+        //            {
+        //                //e.DisplayName = $"[{ary.IndexOf(ViewModel.SelectedChunk.Data)}] {ViewModel.SelectedChunk.Type}";
+        //                e.DisplayName = $"{ViewModel.SelectedChunk.Parent.Name} [{ary.IndexOf(ViewModel.SelectedChunk.Data)}]";
+        //            }
+        //        }
+        //        if (e.DisplayName == "Value" && viewData.GetType().IsGenericType && viewData.GetType().GetGenericTypeDefinition() == typeof(RedClassProperty<>))
+        //        {
+        //            if (ViewModel.SelectedChunk.Parent.Data is IRedClass cls)
+        //            {
+        //                //e.DisplayName = $"[{ary.IndexOf(ViewModel.SelectedChunk.Data)}] {ViewModel.SelectedChunk.Type}";
+        //                //e.DisplayName = $"{ViewModel.SelectedChunk.Name} ({ViewModel.SelectedChunk.Type})";
+        //                e.DisplayName = ViewModel.SelectedChunk.Name;
+        //            }
+        //        }
+        //    }
+        //}
 
-        private void PropertyGrid_CollectionEditorOpening(object sender, CollectionEditorOpeningEventArgs e)
-        {
-            //Restrict collection editor window opening
-            e.Cancel = true;
+        //private void PropertyGrid_CollectionEditorOpening(object sender, CollectionEditorOpeningEventArgs e)
+        //{
+        //    //Restrict collection editor window opening
+        //    e.Cancel = true;
 
-            if (sender is PropertyGrid pg)
-            {
-                var selectedProperty = pg.SelectedPropertyItem;
-                var prop = selectedProperty.Value;
+        //    if (sender is PropertyGrid pg)
+        //    {
+        //        var selectedProperty = pg.SelectedPropertyItem;
+        //        var prop = selectedProperty.Value;
 
-                if (prop is IRedArray editableVariable)
-                {
-                    // open custom collection editor
-                    var collectionEditor = new RedCollectionEditor(editableVariable);
-                    var r = collectionEditor.ShowDialog();
-                    if (r ?? true)
-                    {
-                        //TODO
-                        throw new Exception("TODO");
-                    }
-                }
-                else
-                {
-                    throw new ArgumentException(nameof(editableVariable));
-                }
-            }
-        }
+        //        if (prop is IRedArray editableVariable)
+        //        {
+        //            // open custom collection editor
+        //            var collectionEditor = new RedCollectionEditor(editableVariable);
+        //            var r = collectionEditor.ShowDialog();
+        //            if (r ?? true)
+        //            {
+        //                //TODO
+        //                throw new Exception("TODO");
+        //            }
+        //        }
+        //        else
+        //        {
+        //            throw new ArgumentException(nameof(editableVariable));
+        //        }
+        //    }
+        //}
 
         // Drag & Drop Functionality
 
@@ -339,35 +361,35 @@ namespace WolvenKit.Views.Documents
             //}
         }
 
-        private void PropertyGrid_SelectedObjectChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
+        //private void PropertyGrid_SelectedObjectChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        //{
 
-        }
+        //}
 
-        private void PropertyGrid_Loaded(object sender, RoutedEventArgs e)
-        {
-            PropertyView item1 = VisualUtils.FindDescendant(this, typeof(PropertyView)) as PropertyView;
+        //private void PropertyGrid_Loaded(object sender, RoutedEventArgs e)
+        //{
+        //    PropertyView item1 = VisualUtils.FindDescendant(this, typeof(PropertyView)) as PropertyView;
 
-            if (item1 != null)
-                item1.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
-        }
+        //    if (item1 != null)
+        //        item1.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
+        //}
 
-        void ItemContainerGenerator_StatusChanged(object sender, EventArgs e)
-        {
-            if (sender is ItemContainerGenerator icg)
-            {
-                foreach (var item in icg.Items)
-                {
-                    var pi = (PropertyItem)item;
-                }
-            }
-        }
+        //void ItemContainerGenerator_StatusChanged(object sender, EventArgs e)
+        //{
+        //    if (sender is ItemContainerGenerator icg)
+        //    {
+        //        foreach (var item in icg.Items)
+        //        {
+        //            var pi = (PropertyItem)item;
+        //        }
+        //    }
+        //}
 
-        private void PropertyGrid_ValueChanged(object sender, ValueChangedEventArgs args)
-        {
-            ViewModel.File.SetIsDirty(true);
-            ViewModel.SelectedChunk.RaisePropertyChanged("Data");
-        }
+        //private void PropertyGrid_ValueChanged(object sender, ValueChangedEventArgs args)
+        //{
+        //    //ViewModel.File.SetIsDirty(true);
+        //    ViewModel.SelectedChunk.RaisePropertyChanged("Data");
+        //}
 
         private void Copy_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {

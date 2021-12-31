@@ -1,6 +1,7 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Editors
@@ -13,6 +14,7 @@ namespace WolvenKit.Views.Editors
         public RedStringEditor()
         {
             InitializeComponent();
+            TextBox.KeyUp += TextBox_KeyUp;
         }
 
         public IRedString RedString
@@ -30,9 +32,18 @@ namespace WolvenKit.Views.Editors
             set => SetRedValue(value);
         }
 
+        private void TextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            SetRedValue(TextBox.Text);
+        }
+
         private void SetRedValue(string value)
         {
-            RedString.SetValue(value);
+            //RedString.SetValue(value);
+            if (RedString is CName)
+                SetCurrentValue(RedStringProperty, (CName)value);
+            else if (RedString is CString)
+                SetCurrentValue(RedStringProperty, (CString)value);
         }
 
         private string GetValueFromRedValue()

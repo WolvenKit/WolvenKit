@@ -38,12 +38,15 @@ namespace WolvenKit.ViewModels.Shell
         [ObservableAsProperty] public string Value { get; }
         [ObservableAsProperty] public bool IsDefault { get; }
         [ObservableAsProperty] public ObservableCollection<ChunkViewModel> Properties { get; }
+        [ObservableAsProperty] public IRedType PropertyGridData { get; }
 
         #region Constructors
 
-        public ChunkViewModel(IRedType export)
+        public ChunkViewModel(IRedType export, ChunkViewModel parent = null, string name = null)
         {
             Data = export;
+            Parent = parent;
+            propertyName = name;
 
             this.WhenAnyValue(x => x.Data)
                 .Select(x => CalculateValue())
@@ -54,6 +57,29 @@ namespace WolvenKit.ViewModels.Shell
             this.WhenAnyValue(x => x.Data)
                 .Select(x => CalculateProperties())
                 .ToPropertyEx(this, x => x.Properties);
+            this.WhenAnyValue(x => x.Data)
+                .Select(x => CalculatePropertyGridData())
+                .ToPropertyEx(this, x => x.PropertyGridData);
+            this.WhenAnyValue(x => x.Data)
+                .Subscribe((x) =>
+                {
+                    if (Parent != null && propertyName != null && Data is not IRedBaseHandle)
+                    {
+                        Type parentType = Parent.PropertyType;
+                        var parentData = Parent.Data;
+                        if (Parent.Data is IRedBaseHandle handle && handle != null)
+                        {
+                            parentData = handle.GetValue();
+                            parentType = handle.GetValue().GetType();
+                        }
+                        var epi = GetPropertyByName(parentType, propertyName);
+                        if (epi != null)
+                        {
+                            epi.SetValue((IRedClass)parentData, Data);
+                        }
+                    }
+                    //Parent.RaisePropertyChanged("Data");
+                });
 
             OpenRefCommand = new DelegateCommand(p => ExecuteOpenRef(), (p) => CanOpenRef());
             ExportChunkCommand = new DelegateCommand((p) => ExecuteExportChunk(), (p) => CanExportChunk());
@@ -65,45 +91,28 @@ namespace WolvenKit.ViewModels.Shell
 
         public ChunkViewModel(IRedType export, RDTDataViewModel tab) : this(export)
         {
-            Tab = tab;
+            _tab = tab;
             IsExpanded = true;
             Data = export;
-            this.Data.WhenAnyValue(x => x).Subscribe((x) =>
+            this.RaisePropertyChanged("Data");
+            this.WhenAnyValue(x => x.Data).Skip(1).Subscribe((x) =>
             {
-                Tab.File.SetIsDirty(true);
+                GetTab().File.SetIsDirty(true);
             });
-        }
-
-        public ChunkViewModel(string name, IRedType export) : this(export)
-        {
-            propertyName = name;
-            Data = export;
-        }
-
-        //public ChunkViewModel(int i, IRedType export, ChunkViewModel parent) : this(export, parent)
-        //{
-        //    Index = i;
-        //}
-
-        public ChunkViewModel(IRedType export, ChunkViewModel parent) : this(export)
-        {
-            Parent = parent;
-            Tab = Parent.Tab;
-            Data = export;
-        }
-
-        public ChunkViewModel(string name, IRedType export, ChunkViewModel parent) : this(export, parent)
-        {
-            propertyName = name;
-            Data = export;
         }
 
         #endregion Constructors
 
         #region Properties
 
+        private RDTDataViewModel _tab;
 
-        public RDTDataViewModel Tab;
+        public RDTDataViewModel GetTab()
+        {
+            if (_tab != null)
+                return _tab;
+            return Parent.GetTab();
+        }
 
         [Reactive] public IRedType Data { get; set; }
 
@@ -183,61 +192,54 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        private IRedType _propertyGridData;
-
-        public IRedType PropertyGridData
+        private IRedType CalculatePropertyGridData()
         {
-            get
+            try
             {
-                if (_propertyGridData != null)
-                    return _propertyGridData;
-                try
+                IRedType data;
+                if (Parent != null && Parent.Data is IRedArray ar)
                 {
-                    IRedType data;
-                    if (Parent != null && Parent.Data is IRedArray ar)
-                    {
-                        Type type = typeof(RedArrayItem<>).MakeGenericType(PropertyType);
-                        var rai = (IRedType)System.Activator.CreateInstance(type, ar, ar.IndexOf(Data));
-                        //rai.WhenAnyValue(x => x).Subscribe(x => IsDirty = true);
-                        return _propertyGridData = rai;
-                    }
-                    if (Parent != null && Parent.Data is IRedClass cls && propertyName != null)
-                    {
-                        Type type = typeof(RedClassProperty<>).MakeGenericType(PropertyType);
-                        var rcp = (IRedType)System.Activator.CreateInstance(type, cls, propertyName);
-                        //rcp.WhenAnyValue(x => x).Subscribe(x => IsDirty = true);
-                        return _propertyGridData = rcp;
-                    }
-                    if (Data is IRedArray ary)
-                    {
-                        var raw = new RedArrayWrapper(ary);
-                        //raw.WhenAnyValue(x => x).Subscribe(x => IsDirty = true);
-                        return _propertyGridData = raw;
-                    }
-                    if (PropertyType.IsAssignableTo(typeof(IRedClass)))
-                    {
-                        data = Data;
-                    }
-                    else
-                    {
-                        data = Parent?.Data ?? null;
-                    }
+                    Type type = typeof(RedArrayItem<>).MakeGenericType(PropertyType);
+                    var rai = (IRedType)System.Activator.CreateInstance(type, ar, ar.IndexOf(Data));
+                    //rai.WhenAnyValue(x => x).Subscribe(x => IsDirty = true);
+                    return rai;
+                }
+                if (Parent != null && Parent.Data is IRedClass cls && propertyName != null)
+                {
+                    Type type = typeof(RedClassProperty<>).MakeGenericType(PropertyType);
+                    var rcp = (IRedType)System.Activator.CreateInstance(type, cls, propertyName);
+                    //rcp.WhenAnyValue(x => x).Subscribe(x => IsDirty = true);
+                    return rcp;
+                }
+                if (Data is IRedArray ary)
+                {
+                    var raw = new RedArrayWrapper(ary);
+                    //raw.WhenAnyValue(x => x).Subscribe(x => IsDirty = true);
+                    return raw;
+                }
+                if (PropertyType.IsAssignableTo(typeof(IRedClass)))
+                {
+                    data = Data;
+                }
+                else
+                {
+                    data = Parent?.Data ?? null;
+                }
 
-                    if (data is IRedBaseHandle handle)
-                    {
-                        //this.File.Chunks[handle.Pointer].IsHandled = true;
-                        return _propertyGridData = handle.GetValue();
-                    }
-                    else
-                    {
-                        return _propertyGridData = data;
-                    }
-                }
-                catch (Exception e)
+                if (data is IRedBaseHandle handle)
                 {
-                    Console.WriteLine(e.Message);
-                    return null;
+                    //this.File.Chunks[handle.Pointer].IsHandled = true;
+                    return handle.GetValue();
                 }
+                else
+                {
+                    return data;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
             }
         }
 
@@ -276,7 +278,7 @@ namespace WolvenKit.ViewModels.Shell
                         {
                             value = (IRedType)pi.GetValue(redClass);
                         }
-                        properties.Add(new ChunkViewModel(pi.Name, value, this));
+                        properties.Add(new ChunkViewModel(value, this, pi.Name));
                     });
                 }
                 else if (obj is SerializationDeferredDataBuffer sddb && sddb.Data is Package04 p4)
@@ -357,7 +359,19 @@ namespace WolvenKit.ViewModels.Shell
             if (Data == null)
                 return true;
             if (Parent != null && propertyName != null && Data is not IRedBaseHandle)
-                return IsDefault(Parent.PropertyType, GetPropertyByName(Parent.PropertyType, propertyName), Data);
+            {
+                Type parentType = Parent.PropertyType;
+                if (Parent.Data is IRedBaseHandle handle && handle != null)
+                {
+                    parentType = handle.GetValue().GetType();
+                }
+                var epi = GetPropertyByName(parentType, propertyName);
+                if (epi != null)
+                {
+                    return IsDefault(parentType, GetPropertyByName(parentType, propertyName), Data);
+                }
+                return false;
+            }
             return false;
         }
 
@@ -405,12 +419,13 @@ namespace WolvenKit.ViewModels.Shell
                 if (Parent != null)
                 {
                     var parent = Parent.Data;
-                    if (Parent.PropertyType == typeof(IRedBaseHandle))
+                    Type parentType = Parent.PropertyType;
+                    if (Parent.Data is IRedBaseHandle handle && handle != null)
                     {
-                        var handle = (IRedBaseHandle)parent;
                         parent = handle.GetValue();
+                        parentType = handle.GetValue().GetType();
                     }
-                    var propInfo = RedReflection.GetPropertyByName(parent.GetType(), propertyName) ?? null;
+                    var propInfo = RedReflection.GetPropertyByName(parentType, propertyName) ?? null;
                     if (propInfo != null)
                     {
                         if (type == null || type == propInfo.Type)
@@ -437,11 +452,9 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public bool IsInArray { get
-            {
-                return Parent != null && (Parent.Data is IRedArray || Parent.Data is DataBuffer || Parent.Data is SerializationDeferredDataBuffer || Parent.Data is SharedDataBuffer);
-            }
-        }
+        public bool IsInArray => Parent != null && Parent.IsArray;
+
+        public bool IsArray => PropertyType != null && (PropertyType.IsAssignableTo(typeof(IRedArray)) || PropertyType.IsAssignableTo(typeof(DataBuffer)) || PropertyType.IsAssignableTo(typeof(SharedDataBuffer)));
 
         public int ArrayIndexWidth { get
             {
@@ -458,8 +471,28 @@ namespace WolvenKit.ViewModels.Shell
                         width += 31;
                 }
                 if (PropertyType?.IsAssignableTo(typeof(IRedArray)) ?? false)
-                        width += 20;
+                    width += 20;
                 return width;
+            }
+        }
+
+        public string XPath
+        {
+            get
+            {
+                if (Parent == null)
+                {
+                    return Type;
+                }
+                else
+                {
+                    var xpath = Parent.XPath;
+                    if (IsInArray)
+                        xpath += $"[{Name}]";
+                    else if (Name != "")
+                        xpath += "." + Name;
+                    return xpath;
+                }
             }
         }
 
@@ -689,7 +722,7 @@ namespace WolvenKit.ViewModels.Shell
             if (Data is IRedRef r)
             {
                 //string depotpath = r.DepotPath;
-                //Tab.File.OpenRefAsTab(depotpath);
+                //GetTab().File.OpenRefAsTab(depotpath);
                 Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(r.DepotPath);
             }
             //var key = FNV1A64HashAlgorithm.HashString(depotpath);
@@ -712,7 +745,7 @@ namespace WolvenKit.ViewModels.Shell
             (Data as IRedArray).Add(newItem);
             //_properties.Add(new ChunkViewModel(newItem, this));
             IsExpanded = true;
-            Tab.File.SetIsDirty(true);
+            GetTab().File.SetIsDirty(true);
         }
 
         public ICommand AddItemToCompiledDataCommand { get; private set; }
@@ -754,7 +787,7 @@ namespace WolvenKit.ViewModels.Shell
                 //foreach (var prop in _properties)
                     //prop.RaisePropertyChanged("Name");
                 IsExpanded = true;
-                Tab.File.SetIsDirty(true);
+                GetTab().File.SetIsDirty(true);
             }
         }
 
@@ -769,7 +802,7 @@ namespace WolvenKit.ViewModels.Shell
                 Parent.IsSelected = true;
                 ary.Remove(Data);
                 Parent.Properties.Remove(this);
-                Tab.File.SetIsDirty(true);
+                GetTab().File.SetIsDirty(true);
             }
             if (Parent.Data is DataBuffer db && db.Data is Package04 pkg)
             {
@@ -778,7 +811,7 @@ namespace WolvenKit.ViewModels.Shell
                 Parent.Properties.Remove(this);
                 foreach (var prop in Parent.Properties)
                     prop.RaisePropertyChanged("Name");
-                Tab.File.SetIsDirty(true);
+                GetTab().File.SetIsDirty(true);
             }
         }
 
@@ -822,7 +855,7 @@ namespace WolvenKit.ViewModels.Shell
         private void ExecuteOpenChunk()
         {
             if (Data is IRedClass cls)
-                Tab.File.TabItemViewModels.Add(new RDTDataViewModel(cls, Tab.File));
+                GetTab().File.TabItemViewModels.Add(new RDTDataViewModel(cls, GetTab().File));
         }
     }
 }

@@ -10,7 +10,7 @@
 
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedBoolEditor}}}">
         
-        <CheckBox IsChecked="{Binding IsChecked}" />
+        <CheckBox IsChecked="{Binding IsChecked}"/>
         
     </Grid>
 </UserControl>
