@@ -202,6 +202,11 @@ namespace WolvenKit.RED4.IO
             return (IRedArray)generic.Invoke(this, new object[] { size });
         }
 
+        protected virtual IRedType ReadArrayItem(int index, Type type, uint elementSize, Flags flags)
+        {
+            return Read(type, elementSize, flags);
+        }
+
         public virtual IRedArray<T> ReadCArray<T>(uint size) where T : IRedType
         {
             var array = new CArray<T>();
@@ -216,7 +221,7 @@ namespace WolvenKit.RED4.IO
 
             for (var i = 0; i < elementCount; i++)
             {
-                var element = Read(typeof(T), elementSize, Flags.Empty);
+                var element = ReadArrayItem(i, typeof(T), elementSize, Flags.Empty);
                 array.Add((T)element);
             }
 
@@ -249,7 +254,7 @@ namespace WolvenKit.RED4.IO
 
             for (var i = 0; i < elementCount; i++)
             {
-                var element = Read(typeof(T), elementSize, flags.Clone());
+                var element = ReadArrayItem(i, typeof(T), elementSize, flags.Clone());
                 ((IList<T>)array)[i] = (T)element;
             }
 
@@ -469,7 +474,7 @@ namespace WolvenKit.RED4.IO
 
             for (var i = 0; i < elementCount; i++)
             {
-                var element = Read(typeof(T), elementSize, flags.Clone());
+                var element = ReadArrayItem(i, typeof(T), elementSize, flags.Clone());
                 ((IList<T>)array)[i] = (T)element;
             }
 

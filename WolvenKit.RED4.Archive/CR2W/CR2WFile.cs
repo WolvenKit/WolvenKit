@@ -37,6 +37,44 @@ namespace WolvenKit.RED4.Archive.CR2W
             EmbeddedFiles = new List<ICR2WEmbeddedFile>();       //block 7
         }
 
+        #region Methods
+
+        public List<string> FindType(Type type)
+        {
+            var result = new List<string>();
+
+            result.AddRange(((RedBaseClass)RootChunk).FindType(type));
+
+            for (int i = 0; i < EmbeddedFiles.Count; i++)
+            {
+                result.AddRange(((RedBaseClass)EmbeddedFiles[i].Content).FindType(type, $"emb{i}"));
+            }
+
+            return result;
+        }
+
+        public (bool, object) GetFromXPath(string xPath)
+        {
+            var parts = xPath.Split('.');
+
+            if (parts[0] == "root")
+            {
+                return ((RedBaseClass)RootChunk).GetFromXPath(parts[1..]);
+            }
+
+            if (parts[0].StartsWith("emb"))
+            {
+                if (int.TryParse(parts[0][3..], out var index))
+                {
+                    return ((RedBaseClass)EmbeddedFiles[index].Content).GetFromXPath(parts[1..]);
+                }
+            }
+
+            return (false, null);
+        }
+
+        #endregion Methods
+
         #region IDisposable
 
         private bool _disposed;

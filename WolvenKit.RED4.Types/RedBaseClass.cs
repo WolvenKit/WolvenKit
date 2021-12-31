@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Dynamic;
@@ -191,6 +192,128 @@ namespace WolvenKit.RED4.Types
             }
 
             return dict;
+        }
+
+        public List<string> FindType(Type targetType, string rootName = "root")
+        {
+            var queue = new Queue<(RedBaseClass, string)>();
+            var visited = new List<RedBaseClass>();
+            var result = new List<string>();
+
+            InternalFindType(this);
+
+            return result;
+
+            void InternalFindType(RedBaseClass cls)
+            {
+                queue.Enqueue((cls, rootName));
+                while (queue.Count != 0)
+                {
+                    var (cls1, path) = queue.Dequeue();
+
+                    if (visited.Contains(cls1))
+                    {
+                        continue;
+                    }
+
+                    foreach (var entry in cls1._properties)
+                    {
+                        var propPath = $"{path}.{entry.Key}";
+
+                        ProcessValue(propPath, entry.Value);
+                    }
+
+                    visited.Add(cls1);
+                }
+            }
+
+            void ProcessValue(string propPath, object value)
+            {
+                if (value == null)
+                {
+                    return;
+                }
+
+                if (value.GetType() == targetType)
+                {
+                    result.Add(propPath);
+                }
+
+                if (value is IList lst)
+                {
+                    for (int i = 0; i < lst.Count; i++)
+                    {
+                        var arrPath = $"{propPath}:{i}";
+                        ProcessValue(arrPath, lst[i]);
+                    }
+                }
+
+                if (value is RedBaseClass subCls)
+                {
+                    queue.Enqueue((subCls, propPath));
+                }
+
+                if (value is IRedBaseHandle handle)
+                {
+                    queue.Enqueue(((RedBaseClass)handle.GetValue(), propPath));
+                }
+            }
+        }
+
+        public (bool, object) GetFromXPath(string xPath)
+        {
+            return GetFromXPath(xPath.Split('.'));
+        }
+
+        public (bool, object) GetFromXPath(string[] xPath)
+        {
+            object result = null;
+            var currentProps = _properties;
+            foreach (var part in xPath)
+            {
+                if (currentProps == null)
+                {
+                    return (false, null);
+                }
+
+                var arrPath = part.Split(':');
+                if (currentProps.ContainsKey(arrPath[0]))
+                {
+                    result = currentProps[arrPath[0]];
+
+                    currentProps = null;
+
+                    if (result is IList lst)
+                    {
+                        if (arrPath.Length == 2 && int.TryParse(arrPath[1], out var index))
+                        {
+                            if (index >= lst.Count)
+                            {
+                                return (false, null);
+                            }
+
+                            result = lst[index];
+                        }
+                    }
+
+                    if (result is RedBaseClass subCls)
+                    {
+                        currentProps = subCls._properties;
+                    }
+
+                    if (result is IRedBaseHandle handle)
+                    {
+                        var cCls = handle.GetValue();
+                        currentProps = ((RedBaseClass)cCls)._properties;
+                    }
+
+                    continue;
+                }
+
+                return (false, null);
+            }
+
+            return (true, result);
         }
 
         public object ShallowCopy()

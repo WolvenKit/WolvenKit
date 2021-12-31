@@ -18,7 +18,10 @@ namespace WolvenKit.RED4.Types
         }
 
 
-        public SerializationDeferredDataBuffer(){}
+        public SerializationDeferredDataBuffer()
+        {
+            Buffer = new RedBuffer();
+        }
 
         public SerializationDeferredDataBuffer(byte[] data)
         {
