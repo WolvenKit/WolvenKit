@@ -67,6 +67,11 @@
                         <editors:RedVector3Editor X="{Binding Data.X, Mode=TwoWay}" Y="{Binding Data.Y, Mode=TwoWay}" Z="{Binding Data.Z, Mode=TwoWay}"/>
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedVector3Editor>
+                <converters:RedEditorTemplateSelector.RedWorldPositionEditor>
+                    <DataTemplate>
+                        <editors:RedWorldPositionEditor X="{Binding Data.X, Mode=TwoWay}" Y="{Binding Data.Y, Mode=TwoWay}" Z="{Binding Data.Z, Mode=TwoWay}"/>
+                    </DataTemplate>
+                </converters:RedEditorTemplateSelector.RedWorldPositionEditor>
                 <converters:RedEditorTemplateSelector.RedVector4Editor>
                     <DataTemplate>
                         <editors:RedVector4Editor X="{Binding Data.X, Mode=TwoWay}" Y="{Binding Data.Y, Mode=TwoWay}" Z="{Binding Data.Z, Mode=TwoWay}" W="{Binding Data.W, Mode=TwoWay}"/>
@@ -110,7 +115,7 @@
                                     <Border x:Name="TopLine" BorderThickness="0,1,0,0" BorderBrush="{StaticResource BorderAlt}" MinHeight="{DynamicResource RowHeight}">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="120" />
                                                 <ColumnDefinition Width="1"  />
                                                 <ColumnDefinition Width="6*" />
                                             </Grid.ColumnDefinitions>
@@ -185,7 +190,7 @@
                                     <ColumnDefinition>
                                         <ColumnDefinition.Style>
                                             <Style TargetType="ColumnDefinition">
-                                                <Setter Property="Width" Value="1*"/>
+                                                <Setter Property="Width" Value="120"/>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding IsInArray}" Value="True">
                                                         <Setter Property="Width" Value="{Binding ArrayIndexWidth}"/>

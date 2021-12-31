@@ -31,6 +31,7 @@ namespace WolvenKit.Converters
         public DataTemplate RedVector3Editor { get; set; }
         public DataTemplate RedVector4Editor { get; set; }
         public DataTemplate RedQuaternionEditor { get; set; }
+        public DataTemplate RedWorldPositionEditor { get; set; }
         public DataTemplate RedArrayEditor { get; set; }
         public DataTemplate RedTypeViewer { get; set; }
 
@@ -70,6 +71,10 @@ namespace WolvenKit.Converters
                 {
                     return RedQuaternionEditor;
                 }
+                if (vm.PropertyType.IsAssignableTo(typeof(WorldPosition)))
+                {
+                    return RedWorldPositionEditor;
+                }
                 if (vm.PropertyType.IsAssignableTo(typeof(IRedPrimitive<float>)))
                 {
                     return RedFloatEditor;
@@ -102,7 +107,7 @@ namespace WolvenKit.Converters
                 {
                     return RedArrayEditor;
                 }
-                if (vm.PropertyType.IsAssignableTo(typeof(RedBaseClass)) && vm.Properties.Count < 5)
+                if (vm.PropertyType.IsAssignableTo(typeof(RedBaseClass)) && vm.Properties != null && vm.Properties.Count < 5)
                 {
                     return RedArrayEditor;
                 }
