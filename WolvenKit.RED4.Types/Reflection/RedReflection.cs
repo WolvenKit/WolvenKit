@@ -382,6 +382,7 @@ namespace WolvenKit.RED4.Types
 
         public class ExtendedPropertyInfo
         {
+            private Flags _flags;
             internal bool _isDefaultSet;
 
             public int Ordinal { get; set; } = -1;
@@ -390,7 +391,7 @@ namespace WolvenKit.RED4.Types
 
             public string Name { get; set; }
             public string RedName { get; set; }
-            public Flags Flags { get; set; }
+            public Flags Flags => _flags != null ? _flags.Clone() : Flags.Empty;
             public bool IsIgnored { get; set; }
 
             public Type Type { get; set; }
@@ -398,7 +399,7 @@ namespace WolvenKit.RED4.Types
             public bool SerializeDefault { get; set; }
             public object DefaultValue { get; internal set; }
 
-            public object GetValue(IRedClass instance) => instance.InternalGetPropertyValue(Type, RedName, Flags?.Clone() ?? Flags.Empty);
+            public object GetValue(IRedClass instance) => instance.InternalGetPropertyValue(Type, RedName, Flags);
             public void SetValue(IRedClass instance, object value) => instance.InternalSetPropertyValue(RedName, value);
 
 
@@ -439,7 +440,7 @@ namespace WolvenKit.RED4.Types
                 if (attribute is REDAttribute redAttribute)
                 {
                     RedName = redAttribute.Name;
-                    Flags = new Flags(redAttribute.Flags);
+                    _flags = new Flags(redAttribute.Flags);
                 }
 
                 if (attribute is REDBufferAttribute redBufferAttribute)

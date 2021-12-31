@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
         protected T GetPropertyValue<T>([CallerMemberName] string callerName = "") where T : IRedType
         {
             var propertyInfo = RedReflection.GetPropertyByName(this.GetType(), callerName);
-            return (T)((IRedClass)this).InternalGetPropertyValue(typeof(T), propertyInfo.RedName, propertyInfo.Flags.Clone());
+            return (T)((IRedClass)this).InternalGetPropertyValue(typeof(T), propertyInfo.RedName, propertyInfo.Flags);
         }
 
         protected void SetPropertyValue<T>(T value, [CallerMemberName] string callerName = "") where T : IRedType
@@ -194,17 +194,17 @@ namespace WolvenKit.RED4.Types
             return dict;
         }
 
-        public List<string> FindType(Type targetType, string rootName = "root")
+        public IEnumerable<(string propPath, object value)> GetEnumerator(string rootName = "root")
         {
             var queue = new Queue<(RedBaseClass, string)>();
             var visited = new List<RedBaseClass>();
-            var result = new List<string>();
 
-            InternalFindType(this);
+            foreach (var tuple in InternalFindType(this))
+            {
+                yield return tuple;
+            }
 
-            return result;
-
-            void InternalFindType(RedBaseClass cls)
+            IEnumerable<(string propPath, object value)> InternalFindType(RedBaseClass cls)
             {
                 queue.Enqueue((cls, rootName));
                 while (queue.Count != 0)
@@ -220,31 +220,34 @@ namespace WolvenKit.RED4.Types
                     {
                         var propPath = $"{path}.{entry.Key}";
 
-                        ProcessValue(propPath, entry.Value);
+                        foreach (var tuple in ProcessValue(propPath, entry.Value))
+                        {
+                            yield return tuple;
+                        }
                     }
 
                     visited.Add(cls1);
                 }
             }
 
-            void ProcessValue(string propPath, object value)
+            IEnumerable<(string propPath, object value)> ProcessValue(string propPath, object value)
             {
                 if (value == null)
                 {
-                    return;
+                    yield break;
                 }
 
-                if (value.GetType() == targetType)
-                {
-                    result.Add(propPath);
-                }
+                yield return (propPath, value);
 
                 if (value is IList lst)
                 {
                     for (int i = 0; i < lst.Count; i++)
                     {
                         var arrPath = $"{propPath}:{i}";
-                        ProcessValue(arrPath, lst[i]);
+                        foreach (var tuple in ProcessValue(arrPath, lst[i]))
+                        {
+                            yield return tuple;
+                        }
                     }
                 }
 
@@ -258,6 +261,20 @@ namespace WolvenKit.RED4.Types
                     queue.Enqueue(((RedBaseClass)handle.GetValue(), propPath));
                 }
             }
+        }
+
+        public List<string> FindType(Type targetType, string rootName = "root")
+        {
+            var result = new List<string>();
+            foreach (var tuple in GetEnumerator(rootName))
+            {
+                if (tuple.value.GetType() == targetType)
+                {
+                    result.Add(tuple.propPath);
+                }
+            }
+
+            return result;
         }
 
         public (bool, object) GetFromXPath(string xPath)

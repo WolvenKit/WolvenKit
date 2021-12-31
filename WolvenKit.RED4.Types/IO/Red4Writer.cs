@@ -599,7 +599,7 @@ namespace WolvenKit.RED4.IO
             var typeInfo = RedReflection.GetTypeInfo(instance.GetType());
             foreach (var propertyInfo in typeInfo.GetWritableProperties())
             {
-                var value = (IRedType)instance.InternalGetPropertyValue(instance.GetType(), propertyInfo.RedName, propertyInfo.Flags.Clone());
+                var value = (IRedType)instance.InternalGetPropertyValue(instance.GetType(), propertyInfo.RedName, propertyInfo.Flags);
                 Write(value);
             }
         }

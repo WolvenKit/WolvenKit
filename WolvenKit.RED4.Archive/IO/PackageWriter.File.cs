@@ -252,6 +252,11 @@ namespace WolvenKit.RED4.Archive.IO
                 var chunk = file.ChunkQueue.First.Value;
                 file.ChunkQueue.RemoveFirst();
 
+                if (!_chunkInfos.ContainsKey(chunk))
+                {
+                    _chunkInfos.Add(chunk, new ChunkInfo());
+                }
+
                 if (_chunkInfos[chunk].Id != -1)
                 {
                     continue;
