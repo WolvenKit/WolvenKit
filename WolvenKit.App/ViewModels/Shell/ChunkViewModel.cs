@@ -49,19 +49,30 @@ namespace WolvenKit.ViewModels.Shell
             propertyName = name;
 
             this.WhenAnyValue(x => x.Data)
-                .Select(x => CalculateValue())
+                .Select(_ => CalculateValue())
                 .ToPropertyEx(this, x => x.Value);
             this.WhenAnyValue(x => x.Data)
-                .Select(x => CalculateIsDefault())
+                .Select(_ => CalculateIsDefault())
                 .ToPropertyEx(this, x => x.IsDefault);
+            if (Parent != null)
+            {
+                this.WhenAnyValue(x => x.Data, x => x.Parent.IsExpanded)
+                    .Where(_ => Parent.IsExpanded)
+                    .Select(_ => CalculateProperties())
+                    .ToPropertyEx(this, x => x.Properties);
+            }
+            else
+            {
+                this.WhenAnyValue(x => x.Data)
+                    .Select(_ => CalculateProperties())
+                    .ToPropertyEx(this, x => x.Properties);
+            }
+
+            //this.WhenAnyValue(x => x.Data)
+            //    .Select(x => CalculatePropertyGridData())
+            //    .ToPropertyEx(this, x => x.PropertyGridData);
             this.WhenAnyValue(x => x.Data)
-                .Select(x => CalculateProperties())
-                .ToPropertyEx(this, x => x.Properties);
-            this.WhenAnyValue(x => x.Data)
-                .Select(x => CalculatePropertyGridData())
-                .ToPropertyEx(this, x => x.PropertyGridData);
-            this.WhenAnyValue(x => x.Data)
-                .Subscribe((x) =>
+                .Subscribe((_) =>
                 {
                     if (Parent != null && propertyName != null && Data is not IRedBaseHandle)
                     {
@@ -482,7 +493,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 if (Parent == null)
                 {
-                    return Type;
+                    return "root";
                 }
                 else
                 {
