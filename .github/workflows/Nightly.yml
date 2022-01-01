@@ -12,6 +12,8 @@ jobs:
       should_run: ${{ steps.should_run.outputs.should_run }}
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: develop
       - name: print latest_commit
         run: echo ${{ github.sha }}
 
@@ -31,6 +33,7 @@ jobs:
     - name: checkout
       uses: actions/checkout@v2
       with:
+        ref: develop
         submodules: recursive
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
