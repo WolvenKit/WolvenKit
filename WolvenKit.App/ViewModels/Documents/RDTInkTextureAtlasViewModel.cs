@@ -95,7 +95,7 @@ image.SetTexturePart(n""{PartName}"");";
                 SaveImageCommand = new RelayCommand(ExecuteSaveImage, CanSaveImage);
                 try
                 {
-                    Image = new CroppedBitmap(image, new Int32Rect((int)Left, (int)(xbm.Height - itam.ClippingRectInUVCoords.Bottom * xbm.Height), (int)Width, (int)Height));
+                    Image = new CroppedBitmap(image, new Int32Rect((int)Left, (int)Top, (int)Width, (int)Height));
                 }
                 catch
                 {

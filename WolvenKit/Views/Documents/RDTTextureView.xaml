@@ -61,9 +61,6 @@
                             <MenuItem Command="{Binding SelectedItem.SaveImageCommand}" Header="Save as PNG"/>
                         </ContextMenu>
                     </Image.ContextMenu>
-                <Image.RenderTransform>
-                    <ScaleTransform ScaleY="-1"/>
-                </Image.RenderTransform>
                 </Image>
             </Canvas>
         </StackPanel>
@@ -95,7 +92,7 @@
                     RenderTransformOrigin="0.5,0.5"
                     RenderOptions.BitmapScalingMode="NearestNeighbor"
                     Opacity="1"/>
-                    <ListBox ItemsSource="{Binding OverlayItems}" SelectedItem="{Binding SelectedItem}" Width="{Binding SelectedItem.Width}" Height="{Binding SelectedItem.Height}">
+                    <ListBox ItemsSource="{Binding OverlayItems}" SelectedItem="{Binding SelectedItem}" Width="{Binding Image.Width}" Height="{Binding Image.Height}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas/>
