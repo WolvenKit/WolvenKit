@@ -21,6 +21,7 @@
         <Grid Background="{StaticResource ContentBackground}">
             <Grid.Resources>
             <sys:Double x:Key="RowHeight">26</sys:Double>
+            <SolidColorBrush x:Key="RedTypeColor" Color="{StaticResource WolvenKitTanColor}"/>
             <converters:RedEditorTemplateSelector x:Key="redEditorTemplates">
                     <converters:RedEditorTemplateSelector.RedStringEditor>
                         <DataTemplate>
@@ -99,12 +100,20 @@
                 </converters:RedEditorTemplateSelector.RedFloatEditor>
                 <converters:RedEditorTemplateSelector.RedTypeViewer>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Value}" VerticalAlignment="Center" Margin="5,0"/>
+                        <TextBlock Text="{Binding Value}" VerticalAlignment="Center" Margin="5,0" Foreground="{StaticResource RedTypeColor}"/>
                         </DataTemplate>
                     </converters:RedEditorTemplateSelector.RedTypeViewer>
                     <converters:RedEditorTemplateSelector.RedArrayEditor>
                         <DataTemplate>
-                        <ItemsControl ItemsSource="{Binding Properties}" Grid.Column="2" AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Border BorderThickness="0,0,0,0" BorderBrush="{StaticResource BorderAlt}" Height="{DynamicResource RowHeight}">
+                                <TextBlock Text="{Binding EndType}" VerticalAlignment="Center" Margin="5,0" Foreground="{StaticResource RedTypeColor}"/>
+                            </Border>
+                            <ItemsControl ItemsSource="{Binding Properties}" Grid.Row="1" AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Vertical" />
@@ -124,15 +133,16 @@
                                             <ContentControl Grid.Column="2" ToolTip="{Binding Type}" ContentTemplateSelector="{DynamicResource redEditorTemplates}" Content="{Binding}" />
                                         </Grid>
                                     </Border>
-                                    <DataTemplate.Triggers>
+                                    <!--DataTemplate.Triggers>
                                         <Trigger Property="ItemsControl.AlternationIndex" Value="0">
                                             <Setter TargetName="TopLine" Property="BorderThickness" Value="0"/>
                                         </Trigger>
-                                    </DataTemplate.Triggers>
+                                    </DataTemplate.Triggers-->
                                 </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                        </DataTemplate>
+                        </Grid>
+                    </DataTemplate>
                     </converters:RedEditorTemplateSelector.RedArrayEditor>
             </converters:RedEditorTemplateSelector>
             <Style TargetType="TextBox">
@@ -158,18 +168,20 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <!-- info at top -->
         <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,0,0,1">
             <Grid Margin="5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding XPath}" VerticalAlignment="Center" FontWeight="Bold"/>
-                <TextBlock Text="{Binding Type, StringFormat=' redtype: {0}'}" Grid.Column="1" VerticalAlignment="Center" Foreground="#666666"/>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="{Binding XPath}" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                <TextBlock Text="{Binding EndType}" Grid.Row="1" VerticalAlignment="Center" Foreground="{StaticResource RedTypeColor}"/>
             </Grid>
         </Border>
+        <!-- main editor list -->
         <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0" Grid.Row="1">
-            <ItemsControl ItemsSource="{Binding Properties}" Grid.Column="2" AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}">
+            <ItemsControl ItemsSource="{Binding DisplayProperties}" Grid.Column="2" AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical" />

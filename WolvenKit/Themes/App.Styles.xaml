@@ -23,14 +23,23 @@
     <SolidColorBrush x:Key="WolvenKitSammyRedShaded" Color="#B71C34" />
     <SolidColorBrush x:Key="WolvenKitSammyBlack" Color="#292929" />
 
-    <SolidColorBrush x:Key="WolvenKitRed" Color="#DF2935" />
-    <SolidColorBrush x:Key="WolvenKitRedShadow" Color="#951C2D" />
-    <SolidColorBrush x:Key="WolvenKitCyan" Color="#52F1FF" />
-    <SolidColorBrush x:Key="WolvenKitCyanShadow" Color="#4D8C9A" />
-    <SolidColorBrush x:Key="WolvenKitYellow" Color="#FFEA0A" />
-    <SolidColorBrush x:Key="WolvenKitYellowShadow" Color="#ABA108" />
-    <SolidColorBrush x:Key="WolvenKitPurple" Color="#5760B3" />
-    <SolidColorBrush x:Key="WolvenKitTan" Color="#D0A467" />
+    <Color x:Key="WolvenKitRedColor">#DF2935</Color>
+    <Color x:Key="WolvenKitRedShadowColor">#951C2D</Color>
+    <Color x:Key="WolvenKitCyanColor">#52F1FF</Color>
+    <Color x:Key="WolvenKitCyanShadowColor">#4D8C9A</Color>
+    <Color x:Key="WolvenKitYellowColor">#FFEA0A</Color>
+    <Color x:Key="WolvenKitYellowShadowColor">#ABA108</Color>
+    <Color x:Key="WolvenKitPurpleColor">#5760B3</Color>
+    <Color x:Key="WolvenKitTanColor">#D0A467</Color>
+    
+    <SolidColorBrush x:Key="WolvenKitRed" Color="{StaticResource WolvenKitRedColor}" />
+    <SolidColorBrush x:Key="WolvenKitRedShadow" Color="{StaticResource WolvenKitRedShadowColor}" />
+    <SolidColorBrush x:Key="WolvenKitCyan" Color="{StaticResource WolvenKitCyanColor}" />
+    <SolidColorBrush x:Key="WolvenKitCyanShadow" Color="{StaticResource WolvenKitCyanShadowColor}" />
+    <SolidColorBrush x:Key="WolvenKitYellow" Color="{StaticResource WolvenKitYellowColor}" />
+    <SolidColorBrush x:Key="WolvenKitYellowShadow" Color="{StaticResource WolvenKitYellowShadowColor}" />
+    <SolidColorBrush x:Key="WolvenKitPurple" Color="{StaticResource WolvenKitPurpleColor}" />
+    <SolidColorBrush x:Key="WolvenKitTan" Color="{StaticResource WolvenKitTanColor}" />
 
     <SolidColorBrush x:Key="WolvenKitRed50" Color="#7FDF2935" />
     <SolidColorBrush x:Key="WolvenKitRedShadow50" Color="#7F951C2D" />

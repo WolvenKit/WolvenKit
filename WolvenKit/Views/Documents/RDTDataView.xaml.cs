@@ -34,8 +34,6 @@ namespace WolvenKit.Views.Documents
         {
             InitializeComponent();
 
-            //PropertyGrid.Loaded += PropertyGrid_Loaded;
-
             //this.WhenAnyValue(x => x.DataContext).Subscribe(x =>
             //{
             //    if (x is RDTDataViewModel vm)
@@ -46,15 +44,6 @@ namespace WolvenKit.Views.Documents
 
             this.WhenActivated(disposables =>
             {
-                // ChunksTreeView
-                //this.OneWayBind(ViewModel,
-                //       viewmodel => viewmodel.Chunks,
-                //       view => view.ChunksTreeView.ItemsSource)
-                //   .DisposeWith(disposables);
-                //this.Bind(ViewModel,
-                //      viewmodel => viewmodel.SelectedChunk,
-                //      view => view.ChunksTreeView.SelectedItem)
-                //  .DisposeWith(disposables);
 
                 this.OneWayBind(ViewModel,
                        viewmodel => viewmodel.Chunks,
@@ -65,22 +54,7 @@ namespace WolvenKit.Views.Documents
                       view => view.TreeView.SelectedItem)
                   .DisposeWith(disposables);
 
-                // ImportsListView
-                //this.OneWayBind(ViewModel,
-                //       viewmodel => viewmodel.Imports,
-                //       view => view.ImportsListView.ItemsSource)
-                //   .DisposeWith(disposables);
-                //this.Bind(ViewModel,
-                //      viewmodel => viewmodel.SelectedImport,
-                //      view => view.ImportsListView.SelectedItem)
-                //  .DisposeWith(disposables);
 
-
-                // MainTreeGrid
-                //this.OneWayBind(ViewModel,
-                //       viewmodel => viewmodel.ChunkProperties,
-                //       view => view.MainTreeGrid.ItemsSource)
-                //   .DisposeWith(disposables);
 
                 //this.OneWayBind(ViewModel,
                 //       viewmodel => viewmodel.SelectedChunk.PropertyGridData,
@@ -125,34 +99,6 @@ namespace WolvenKit.Views.Documents
         //public ICommand AddItemToArrayCommand { get; private set; }
         //public ICommand ExportChunkCommand { get; private set; }
 
-        //private void TreeGrid_RequestTreeItems(object sender, TreeGridRequestTreeItemsEventArgs args)
-        //{
-        //    if (DataContext is W2rcFileViewModel vm)
-        //    {
-        //        if (args.ParentItem == null)
-        //        {
-        //            args.ChildItems = vm.ChunkProperties;
-        //        }
-        //        else
-        //        {
-        //            if (args.ParentItem is ChunkPropertyViewModel chunk)
-        //            {
-        //                args.ChildItems = chunk.Children;
-        //            }
-        //        }
-        //    }
-
-        //    //else
-        //    //{
-        //    //    EmployeeInfo employee = args.ParentItem as EmployeeInfo;
-
-        //    //    if (employee != null)
-        //    //    {
-        //    //        args.ChildItems = ViewModel.GetEmployees().Where(x => x.ReportsTo == employee.ID);
-        //    //    }
-        //    //}
-        //}
-
         //private void HandleTemplateView_OnGoToChunkRequested(object sender, GoToChunkRequestedEventArgs e)
         //{
         //    var target = e.Export;
@@ -167,97 +113,8 @@ namespace WolvenKit.Views.Documents
         //    ViewModel.SelectedChunk = chunk;
         //}
 
-        //private void SetCollapsedAll()
-        //{
-        //    ChunksView.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-        //    ImportsView.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-        //}
 
 
-
-
-
-        //private void ChunksButton_OnClick(object sender, RoutedEventArgs e)
-        //{
-        //    SetCollapsedAll();
-        //    ChunksView.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-        //}
-
-        //private void ImportsButton_OnClick(object sender, RoutedEventArgs e)
-        //{
-        //    SetCollapsedAll();
-        //    ImportsView.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-        //}
-
-
-
-
-
-
-
-        //private void PropertyGrid_AutoGeneratingPropertyGridItem(object sender, Syncfusion.Windows.PropertyGrid.AutoGeneratingPropertyGridItemEventArgs e)
-        //{
-        //    if (e.OriginalSource is PropertyItem { } propertyItem)
-        //    {
-        //        var customEditor = PropertyGridEditors.GetPropertyEditor(propertyItem.PropertyType);
-        //        if (customEditor is not null)
-        //        {
-        //            propertyItem.Editor = customEditor;
-        //            e.ExpandMode = PropertyExpandModes.FlatMode;
-        //        }
-        //        else
-        //        {
-        //            propertyItem.Editor = new PropertyGridEditors.BaseTypeEditor();
-        //            e.ExpandMode = PropertyExpandModes.NestedMode;
-        //        }
-        //        var viewData = ViewModel.SelectedChunk.PropertyGridData;
-        //        if (e.DisplayName == "Value" && viewData.GetType().IsGenericType && viewData.GetType().GetGenericTypeDefinition() == typeof(RedArrayItem<>))
-        //        {
-        //            if (ViewModel.SelectedChunk.Parent.Data is IRedArray ary)
-        //            {
-        //                //e.DisplayName = $"[{ary.IndexOf(ViewModel.SelectedChunk.Data)}] {ViewModel.SelectedChunk.Type}";
-        //                e.DisplayName = $"{ViewModel.SelectedChunk.Parent.Name} [{ary.IndexOf(ViewModel.SelectedChunk.Data)}]";
-        //            }
-        //        }
-        //        if (e.DisplayName == "Value" && viewData.GetType().IsGenericType && viewData.GetType().GetGenericTypeDefinition() == typeof(RedClassProperty<>))
-        //        {
-        //            if (ViewModel.SelectedChunk.Parent.Data is IRedClass cls)
-        //            {
-        //                //e.DisplayName = $"[{ary.IndexOf(ViewModel.SelectedChunk.Data)}] {ViewModel.SelectedChunk.Type}";
-        //                //e.DisplayName = $"{ViewModel.SelectedChunk.Name} ({ViewModel.SelectedChunk.Type})";
-        //                e.DisplayName = ViewModel.SelectedChunk.Name;
-        //            }
-        //        }
-        //    }
-        //}
-
-        //private void PropertyGrid_CollectionEditorOpening(object sender, CollectionEditorOpeningEventArgs e)
-        //{
-        //    //Restrict collection editor window opening
-        //    e.Cancel = true;
-
-        //    if (sender is PropertyGrid pg)
-        //    {
-        //        var selectedProperty = pg.SelectedPropertyItem;
-        //        var prop = selectedProperty.Value;
-
-        //        if (prop is IRedArray editableVariable)
-        //        {
-        //            // open custom collection editor
-        //            var collectionEditor = new RedCollectionEditor(editableVariable);
-        //            var r = collectionEditor.ShowDialog();
-        //            if (r ?? true)
-        //            {
-        //                //TODO
-        //                throw new Exception("TODO");
-        //            }
-        //        }
-        //        else
-        //        {
-        //            throw new ArgumentException(nameof(editableVariable));
-        //        }
-        //    }
-        //}
 
         // Drag & Drop Functionality
 

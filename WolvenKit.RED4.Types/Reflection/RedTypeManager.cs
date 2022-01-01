@@ -53,6 +53,9 @@ namespace WolvenKit.RED4.Types
                 tCls.ConstructorOverload();
             }
 
+            if (instance is IRedClass irc)
+                irc?.InternalInitClass();
+
             return instance;
         }
 

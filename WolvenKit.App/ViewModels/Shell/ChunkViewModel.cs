@@ -83,7 +83,7 @@ namespace WolvenKit.ViewModels.Shell
                             parentData = handle.GetValue();
                             parentType = handle.GetValue().GetType();
                         }
-                        var epi = GetPropertyByName(parentType, propertyName);
+                        var epi = GetPropertyByRedName(parentType, propertyName);
                         if (epi != null)
                         {
                             epi.SetValue((IRedClass)parentData, Data);
@@ -128,6 +128,30 @@ namespace WolvenKit.ViewModels.Shell
         [Reactive] public IRedType Data { get; set; }
 
         public ChunkViewModel Parent { get; set; }
+
+        public ChunkViewModel DisplayChunk
+        {
+            get
+            {
+                if (Properties == null || Properties.Count == 0)
+                    return Parent;
+                else
+                    return this;
+            }
+        }
+
+        public object DisplayProperties
+        {
+            get
+            {
+                if (Properties == null || Properties.Count == 0)
+                    return new ObservableCollection<object>(new[] {
+                       this
+                    });
+                else
+                    return Properties;
+            }
+        }
 
         public class RedArrayWrapper : IRedType
         {
@@ -180,7 +204,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 get
                 {
-                    var epi = GetPropertyByName(obj.GetType(), propertyName);
+                    var epi = GetPropertyByRedName(obj.GetType(), propertyName);
                     if (epi != null)
                     {
                         return (T)epi.GetValue(obj);
@@ -188,7 +212,7 @@ namespace WolvenKit.ViewModels.Shell
                     return default(T);
                 }
                 set {
-                    var epi = GetPropertyByName(obj.GetType(), propertyName);
+                    var epi = GetPropertyByRedName(obj.GetType(), propertyName);
                     if (epi != null)
                     {
                         epi.SetValue(obj, value);
@@ -289,7 +313,7 @@ namespace WolvenKit.ViewModels.Shell
                         {
                             value = (IRedType)pi.GetValue(redClass);
                         }
-                        properties.Add(new ChunkViewModel(value, this, pi.Name));
+                        properties.Add(new ChunkViewModel(value, this, pi.RedName));
                     });
                 }
                 else if (obj is SerializationDeferredDataBuffer sddb && sddb.Data is Package04 p4)
@@ -347,6 +371,7 @@ namespace WolvenKit.ViewModels.Shell
         [Reactive] public bool IsHandled { get; set; }
 
         public string propertyName { get; }
+
         public string Name { get
             {
                 if (propertyName != null)
@@ -376,10 +401,10 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     parentType = handle.GetValue().GetType();
                 }
-                var epi = GetPropertyByName(parentType, propertyName);
+                var epi = GetPropertyByRedName(parentType, propertyName);
                 if (epi != null)
                 {
-                    return IsDefault(parentType, GetPropertyByName(parentType, propertyName), Data);
+                    return IsDefault(parentType, epi, Data);
                 }
                 return false;
             }
@@ -391,34 +416,7 @@ namespace WolvenKit.ViewModels.Shell
             return Properties.IndexOf(child);
         }
 
-        public int Level { get
-            {
-                if (Parent == null)
-                {
-                    return 0;
-                }
-                else if (Parent.Parent == null)
-                {
-                    return 1;
-                }
-                else if (Parent.Parent.Parent == null)
-                {
-                    return 2;
-                }
-                else if (Parent.Parent.Parent.Parent == null)
-                {
-                    return 3;
-                }
-                else if (Parent.Parent.Parent.Parent.Parent == null)
-                {
-                    return 4;
-                }
-                else
-                {
-                    return 5;
-                }
-            }
-        }
+        public int Level => Parent == null ? 0 : Parent.Level + 1;
 
         private Flags _flags;
 
@@ -436,7 +434,7 @@ namespace WolvenKit.ViewModels.Shell
                         parent = handle.GetValue();
                         parentType = handle.GetValue().GetType();
                     }
-                    var propInfo = RedReflection.GetPropertyByName(parentType, propertyName) ?? null;
+                    var propInfo = GetPropertyByRedName(parentType, propertyName) ?? null;
                     if (propInfo != null)
                     {
                         if (type == null || type == propInfo.Type)
@@ -460,6 +458,18 @@ namespace WolvenKit.ViewModels.Shell
                 //    return "Handle: " + (handle?.File?.Chunks[handle.Pointer]?.GetType().Name ?? "null");
                 //}
                 return PropertyType != null ? GetRedTypeFromCSType(PropertyType, _flags) : "null";
+            }
+        }
+
+        public string EndType
+        {
+            get
+            {
+                if (Data is IRedBaseHandle handle)
+                {
+                    return GetTypeRedName(handle.InnerType);
+                }
+                return Type;
             }
         }
 
@@ -506,8 +516,6 @@ namespace WolvenKit.ViewModels.Shell
                 }
             }
         }
-
-        //[Reactive] public string Value { get; set; }
 
         private string CalculateValue()
         {
@@ -752,9 +760,16 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanAddItemToArray() => Data is IRedArray;
         private void ExecuteAddItemToArray()
         {
-            var newItem = RedTypeManager.CreateRedType((Data as IRedArray).InnerType);
+            var type = (Data as IRedArray).InnerType;
+            var newItem = RedTypeManager.CreateRedType(type);
+            if (newItem is IRedBaseHandle handle)
+            {
+                var pointee = RedTypeManager.CreateRedType(handle.InnerType);
+                handle.SetValue((IRedClass)pointee);
+            }
             (Data as IRedArray).Add(newItem);
-            //_properties.Add(new ChunkViewModel(newItem, this));
+            Properties.Add(new ChunkViewModel(newItem, this));
+            //this.RaisePropertyChanged("Data");
             IsExpanded = true;
             GetTab().File.SetIsDirty(true);
         }
@@ -795,8 +810,9 @@ namespace WolvenKit.ViewModels.Shell
                 pkg.Chunks.Insert(index, instance);
                 //_properties.Add(new ChunkViewModel(instance, this));
                 //_properties.Insert(index, new ChunkViewModel(instance, this));
-                //foreach (var prop in _properties)
-                    //prop.RaisePropertyChanged("Name");
+                foreach (var prop in Properties)
+                    prop.RaisePropertyChanged("Name");
+                this.RaisePropertyChanged("Data");
                 IsExpanded = true;
                 GetTab().File.SetIsDirty(true);
             }
