@@ -34,7 +34,6 @@ namespace WolvenKit.ViewModels.Shell
 {
     public class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel
     {
-
         [ObservableAsProperty] public string Value { get; }
         [ObservableAsProperty] public bool IsDefault { get; }
         [ObservableAsProperty] public ObservableCollection<ChunkViewModel> Properties { get; }
@@ -108,7 +107,7 @@ namespace WolvenKit.ViewModels.Shell
             this.RaisePropertyChanged("Data");
             this.WhenAnyValue(x => x.Data).Skip(1).Subscribe((x) =>
             {
-                GetTab().File.SetIsDirty(true);
+                Tab.File.SetIsDirty(true);
             });
         }
 
@@ -118,27 +117,19 @@ namespace WolvenKit.ViewModels.Shell
 
         private RDTDataViewModel _tab;
 
-        public RDTDataViewModel GetTab()
+        public RDTDataViewModel Tab
         {
-            if (_tab != null)
-                return _tab;
-            return Parent.GetTab();
+            get
+            {
+                if (_tab != null)
+                    return _tab;
+                return Parent.Tab;
+            }
         }
 
         [Reactive] public IRedType Data { get; set; }
 
         public ChunkViewModel Parent { get; set; }
-
-        public ChunkViewModel DisplayChunk
-        {
-            get
-            {
-                if (Properties == null || Properties.Count == 0)
-                    return Parent;
-                else
-                    return this;
-            }
-        }
 
         public object DisplayProperties
         {
@@ -741,7 +732,7 @@ namespace WolvenKit.ViewModels.Shell
             if (Data is IRedRef r)
             {
                 //string depotpath = r.DepotPath;
-                //GetTab().File.OpenRefAsTab(depotpath);
+                //Tab.File.OpenRefAsTab(depotpath);
                 Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(r.DepotPath);
             }
             //var key = FNV1A64HashAlgorithm.HashString(depotpath);
@@ -771,7 +762,7 @@ namespace WolvenKit.ViewModels.Shell
             Properties.Add(new ChunkViewModel(newItem, this));
             //this.RaisePropertyChanged("Data");
             IsExpanded = true;
-            GetTab().File.SetIsDirty(true);
+            Tab.File.SetIsDirty(true);
         }
 
         public ICommand AddItemToCompiledDataCommand { get; private set; }
@@ -814,7 +805,7 @@ namespace WolvenKit.ViewModels.Shell
                     prop.RaisePropertyChanged("Name");
                 this.RaisePropertyChanged("Data");
                 IsExpanded = true;
-                GetTab().File.SetIsDirty(true);
+                Tab.File.SetIsDirty(true);
             }
         }
 
@@ -829,7 +820,7 @@ namespace WolvenKit.ViewModels.Shell
                 Parent.IsSelected = true;
                 ary.Remove(Data);
                 Parent.Properties.Remove(this);
-                GetTab().File.SetIsDirty(true);
+                Tab.File.SetIsDirty(true);
             }
             if (Parent.Data is DataBuffer db && db.Data is Package04 pkg)
             {
@@ -838,7 +829,7 @@ namespace WolvenKit.ViewModels.Shell
                 Parent.Properties.Remove(this);
                 foreach (var prop in Parent.Properties)
                     prop.RaisePropertyChanged("Name");
-                GetTab().File.SetIsDirty(true);
+                Tab.File.SetIsDirty(true);
             }
         }
 
@@ -882,7 +873,7 @@ namespace WolvenKit.ViewModels.Shell
         private void ExecuteOpenChunk()
         {
             if (Data is IRedClass cls)
-                GetTab().File.TabItemViewModels.Add(new RDTDataViewModel(cls, GetTab().File));
+                Tab.File.TabItemViewModels.Add(new RDTDataViewModel(cls, Tab.File));
         }
     }
 }

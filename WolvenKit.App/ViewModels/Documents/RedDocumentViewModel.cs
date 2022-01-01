@@ -19,6 +19,7 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Common.RED4.Compiled;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -48,7 +49,9 @@ namespace WolvenKit.ViewModels.Documents
             _loggerService = Locator.Current.GetService<ILoggerService>();
             _parser = Locator.Current.GetService<Red4ParserService>();
             _hashService = Locator.Current.GetService<IHashService>();
-            RelativePath = path;
+            var projectManager = Locator.Current.GetService<IProjectManager>();
+            if (projectManager.ActiveProject != null)
+                RelativePath = Path.GetRelativePath(projectManager.ActiveProject.ModDirectory, path);
             Extension = Path.GetExtension(path) != "" ? Path.GetExtension(path).Substring(1) : "";
         }
 

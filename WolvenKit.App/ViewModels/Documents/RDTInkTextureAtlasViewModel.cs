@@ -39,7 +39,7 @@ namespace WolvenKit.ViewModels.Documents
             Height = xbm.Height;
             foreach (var part in atlas.Slots[0].Parts)
             {
-                OverlayItems.Add(new InkTextureAtlasMapperViewModel(part, xbm, atlas.Slots[0].Texture.DepotPath.ToString(), file.FilePath, (BitmapSource)Image));
+                OverlayItems.Add(new InkTextureAtlasMapperViewModel(part, xbm, atlas.Slots[0].Texture.DepotPath.ToString(), file.RelativePath, (BitmapSource)Image));
             }
 
         }
@@ -103,6 +103,7 @@ image.SetTexturePart(n""{PartName}"");";
                 }
             }
 
+            [Browsable(false)]
             public ICommand SaveImageCommand { get; private set; }
             private bool CanSaveImage() => Image != null;
             private void ExecuteSaveImage()

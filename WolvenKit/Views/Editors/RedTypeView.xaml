@@ -1,7 +1,8 @@
 <reactiveUi:ReactiveUserControl
-    x:TypeArguments="documents:ChunkViewModel"
+    x:TypeArguments="shell:ChunkViewModel"
     x:Class="WolvenKit.Views.Editors.RedTypeView"
-    xmlns:documents="clr-namespace:WolvenKit.ViewModels.Shell;assembly=WolvenKit.App"
+    xmlns:shell="clr-namespace:WolvenKit.ViewModels.Shell;assembly=WolvenKit.App"
+    xmlns:documents="clr-namespace:WolvenKit.ViewModels.Documents;assembly=WolvenKit.App"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     xmlns:converters="clr-namespace:WolvenKit.Converters"
@@ -16,7 +17,7 @@
     xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance Type=documents:ChunkViewModel}"
+    d:DataContext="{d:DesignInstance Type=shell:ChunkViewModel}"
     d:DesignHeight="450" d:DesignWidth="800">
         <Grid Background="{StaticResource ContentBackground}">
             <Grid.Resources>
@@ -172,11 +173,13 @@
         <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,0,0,1">
             <Grid Margin="5">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="{Binding XPath}" VerticalAlignment="Center" FontWeight="SemiBold"/>
-                <TextBlock Text="{Binding EndType}" Grid.Row="1" VerticalAlignment="Center" Foreground="{StaticResource RedTypeColor}"/>
+                <TextBlock Text="{Binding Tab.File.RelativePath}" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding XPath}" VerticalAlignment="Center" FontWeight="SemiBold" Grid.Row="1"/>
+                <TextBlock Text="{Binding EndType}" Grid.Row="2" VerticalAlignment="Center" Foreground="{StaticResource RedTypeColor}"/>
             </Grid>
         </Border>
         <!-- main editor list -->

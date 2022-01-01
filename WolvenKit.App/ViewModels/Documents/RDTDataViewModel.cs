@@ -29,7 +29,7 @@ namespace WolvenKit.ViewModels.Documents
     {
         protected readonly IRedClass _data;
 
-        public RedDocumentViewModel File;
+        [Reactive] public RedDocumentViewModel File { get; set; }
 
         public RDTDataViewModel(IRedClass data, RedDocumentViewModel file)
         {
