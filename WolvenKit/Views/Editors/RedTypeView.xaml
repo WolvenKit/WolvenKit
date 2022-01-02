@@ -144,6 +144,11 @@
                         <TextBlock Text="{Binding Value}" VerticalAlignment="Center" Margin="5,0"/>
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.HandleTemplateView>
+                <converters:RedEditorTemplateSelector.BitfieldTemplateView>
+                    <DataTemplate>
+                        <templates:BitfieldTemplateView RedBitfield="{Binding Data, Mode=TwoWay}"/>
+                    </DataTemplate>
+                </converters:RedEditorTemplateSelector.BitfieldTemplateView>
                 <converters:RedEditorTemplateSelector.EnumTemplateView>
                     <DataTemplate>
                         <templates:EnumTemplateView RedEnum="{Binding Data, Mode=TwoWay}"/>
