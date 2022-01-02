@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -89,6 +90,17 @@ namespace WolvenKit.ViewModels.Shell
             dataObserver
                 .Subscribe((_) =>
                 {
+                    if (Parent != null && Parent.Properties != null && Parent.Data is IRedArray arr)
+                    {
+                        var index = int.Parse(Name);
+                        if (index != -1)
+                        {
+                            arr[index] = Data;
+
+                            Parent.NotifyChain("Data");
+                        }
+                    }
+
                     if (Parent != null && propertyName != null && Data is not IRedBaseHandle)
                     {
                         Type parentType = Parent.PropertyType;
