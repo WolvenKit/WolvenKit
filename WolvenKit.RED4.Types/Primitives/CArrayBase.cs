@@ -1,17 +1,29 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace WolvenKit.RED4.Types
 {
-    public class CArrayBase<T> : List<T>, IEquatable<CArrayBase<T>>, IRedArray
+    public class CArrayBase<T> : IRedArray<T>, IRedNotifyObjectChanged, IEquatable<CArrayBase<T>>
     {
         public int MaxSize { get; set; } = -1;
 
-        public CArrayBase(){}
+        public event ObjectChangedEventHandler ObjectChanged;
 
-        public CArrayBase(int size) : base(new T[size])
+
+        private readonly List<T> _internalList;
+
+
+        public CArrayBase()
         {
+            _internalList = new List<T>();
+        }
+
+        public CArrayBase(int size)
+        {
+            _internalList = new List<T>(new T[size]);
+
             var propTypeInfo = RedReflection.GetTypeInfo(typeof(T));
             if (propTypeInfo.IsValueType)
             {
@@ -23,44 +35,191 @@ namespace WolvenKit.RED4.Types
         }
         public Type InnerType => typeof(T);
 
-        public new void Add(T item)
+        #region Event
+
+        private readonly Dictionary<object, ObjectChangedEventHandler> _delegateCache = new();
+
+        private void AddEventHandler(object item)
         {
-            if (IsReadOnly)
+            if (item is IRedNotifyObjectChanged notify)
             {
-                throw new NotSupportedException();
-            }
+                if (!_delegateCache.ContainsKey(item))
+                {
+                    _delegateCache.Add(item, delegate (object sender, ObjectChangedEventArgs args)
+                    {
+                        var index = ((IList)_internalList).IndexOf(item);
+                        var path = $":{index}.{args.RedPath}";
+                        ObjectChanged?.Invoke(sender, new ObjectChangedEventArgs(path, args.RedName, args.OldValue, args.NewValue));
+                    });
+                }
 
-            if (Count == MaxSize)
-            {
-                throw new NotSupportedException();
+                notify.ObjectChanged += _delegateCache[item];
             }
-
-            base.Add(item);
         }
 
-        public new void Clear()
+        private void RemoveEventHandler(object item)
         {
-            if (IsReadOnly)
+            if (!_delegateCache.ContainsKey(item))
             {
-                throw new NotSupportedException();
+                return;
             }
 
-            base.Clear();
-        }
-
-        public new bool Remove(T item)
-        {
-            if (IsReadOnly)
+            if (item is IRedNotifyObjectChanged notify)
             {
-                throw new NotSupportedException();
+                notify.ObjectChanged -= _delegateCache[item];
             }
-            
-            return base.Remove(item);
         }
 
+        private void OnObjectChanged(object sender, ObjectChangedEventArgs e)
+        {
+            ObjectChanged?.Invoke(sender, e);
+        }
+
+        #endregion
+
+        #region IList<>, ILits Methods
+
+        public int Count => _internalList.Count;
+        public bool IsFixedSize => ((IList)_internalList).IsFixedSize;
         public bool IsReadOnly { get; set; }
+        public bool IsSynchronized => ((ICollection)_internalList).IsSynchronized;
+        public object SyncRoot => ((ICollection)_internalList).IsSynchronized;
 
-        public new void Insert(int index, T item)
+        private int AddItem(object value)
+        {
+            if (value is not T castedValue)
+            {
+                return -1;
+            }
+
+            if (IsReadOnly)
+            {
+                throw new NotSupportedException();
+            }
+
+            if (Count == MaxSize)
+            {
+                throw new NotSupportedException();
+            }
+
+            _internalList.Add(castedValue);
+
+            AddEventHandler(castedValue);
+
+            var index = _internalList.Count - 1;
+            ObjectChanged?.Invoke(this, new ObjectChangedEventArgs($":{index}", null, null, castedValue));
+
+            return index;
+        }
+
+        private void SetItem(int index, object value)
+        {
+            if (!Equals(_internalList[index], value))
+            {
+                var oldValue = _internalList[index];
+
+                if (_internalList[index] != null)
+                {
+                    RemoveEventHandler(_internalList[index]);
+                }
+                
+                _internalList[index] = (T)value;
+
+                if (_internalList[index] != null)
+                {
+                    AddEventHandler(_internalList[index]);
+                }
+
+                var typeInfo = RedReflection.GetTypeInfo(_internalList[index].GetType());
+                if (_internalList[index].GetType().IsValueType || typeInfo.IsValueType)
+                {
+                    ObjectChanged?.Invoke(this, new ObjectChangedEventArgs($":{index}", null, oldValue, _internalList[index]));
+                }
+            }
+        }
+        
+        public T this[int index]
+        {
+            get => _internalList[index];
+            set => SetItem(index, value);
+        }
+
+        object IList.this[int index]
+        {
+            get => _internalList[index];
+            set => SetItem(index, value);
+        }
+
+        public void Add(T item) => AddItem(item);
+
+        public int Add(object item) => AddItem(item);
+
+        public void CopyTo(Array array, int index) => throw new NotImplementedException();
+
+        public void Clear()
+        {
+            if (IsReadOnly)
+            {
+                throw new NotSupportedException();
+            }
+
+            for (int i = 0; i < _internalList.Count; i++)
+            {
+                if (_internalList[i] != null)
+                {
+                    RemoveEventHandler(_internalList[i]);
+                }
+
+                ObjectChanged?.Invoke(this, new ObjectChangedEventArgs($":{i}", null, _internalList[i], null));
+            }
+
+            _internalList.Clear();
+        }
+
+        public bool Contains(T item) => _internalList.Contains(item);
+
+        public void CopyTo(T[] array, int arrayIndex) => throw new NotImplementedException();
+
+        public bool Contains(object value) => ((IList)_internalList).Contains(value);
+
+        public int IndexOf(object value) => ((IList)_internalList).IndexOf(value);
+
+        public void Insert(int index, object value)
+        {
+            ObjectChanged?.Invoke(this, new ObjectChangedEventArgs($":{index}", null, null, value));
+
+            ((IList)_internalList).Insert(index, value);
+        }
+
+        public void Remove(object value)
+        {
+            if (IsReadOnly)
+            {
+                throw new NotSupportedException();
+            }
+
+            var index = ((IList)_internalList).IndexOf(value);
+            ObjectChanged?.Invoke(this, new ObjectChangedEventArgs($":{index}", null, value, null));
+
+            ((IList)_internalList).Remove(value);
+        }
+
+        public bool Remove(T item)
+        {
+            if (IsReadOnly)
+            {
+                throw new NotSupportedException();
+            }
+
+            var index = _internalList.IndexOf(item);
+            ObjectChanged?.Invoke(this, new ObjectChangedEventArgs($":{index}", null, item, null));
+
+            return _internalList.Remove(item);
+        }
+
+        public int IndexOf(T item) => _internalList.IndexOf(item);
+
+        public void Insert(int index, T item)
         {
             if (IsReadOnly)
             {
@@ -72,24 +231,29 @@ namespace WolvenKit.RED4.Types
                 throw new NotSupportedException();
             }
 
-            base.Insert(index, item);
+            ObjectChanged?.Invoke(this, new ObjectChangedEventArgs($":{index}", null, null, item));
+
+            _internalList.Insert(index, item);
         }
 
-        public new void RemoveAt(int index)
+        public void RemoveAt(int index)
         {
             if (IsReadOnly)
             {
                 throw new NotSupportedException();
             }
 
-            base.RemoveAt(index);
+            ObjectChanged?.Invoke(this, new ObjectChangedEventArgs($":{index}", null, _internalList[index], null));
+
+            _internalList.RemoveAt(index);
         }
 
-        public new T this[int index]
-        {
-            get => base[index];
-            set => base[index] = value;
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public IEnumerator<T> GetEnumerator() => _internalList.GetEnumerator();
+
+        #endregion IList<>, ILits Methods
+
+        #region IEquatable
 
         public override bool Equals(object obj)
         {
@@ -112,5 +276,7 @@ namespace WolvenKit.RED4.Types
         }
 
         public override int GetHashCode() => base.GetHashCode();
+
+        #endregion IEquatable
     }
 }
