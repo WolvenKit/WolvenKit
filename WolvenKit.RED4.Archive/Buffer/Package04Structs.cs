@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Archive.Buffer
         public ushort numSections;
 
         [FieldOffset(4)]
-        public uint numCruids0;
+        public uint numComponents;
 
         [FieldOffset(8)]
         public uint refPoolDescOffset;

@@ -42,7 +42,7 @@ namespace WolvenKit.RED4.Archive.IO
             result.Version = header.version;
             result.Sections = header.numSections;
 
-            header.numCruids0 = _reader.ReadUInt32();
+            header.numComponents = _reader.ReadUInt32();
 
             if (header.numSections == 7)
             {
@@ -71,11 +71,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             var numCruids = _reader.ReadUInt16();
 
-            if (header.numCruids0 != numCruids)
-            {
-                return EFileReadErrorCodes.NoCr2w;
-            }
-            for (var i = 0; i < header.numCruids0; i++)
+            for (var i = 0; i < numCruids; i++)
             {
                 result.Cruids.Add(_reader.ReadUInt64());
             }

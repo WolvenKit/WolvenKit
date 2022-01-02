@@ -31,7 +31,8 @@ namespace WolvenKit.RED4.Archive.IO
             _header = new Package04Header
             {
                 version = _file.Version,
-                numSections = _file.Sections
+                numSections = _file.Sections,
+                numComponents = (uint)_file.Chunks.Count
             };
 
             if (file.RootChunk is entEntity)
@@ -65,8 +66,7 @@ namespace WolvenKit.RED4.Archive.IO
                 unique_cruids.Insert(0, 0);
             }*/
 
-            _header.numCruids0 = (ushort)unique_cruids.Count;
-            _writer.Write((ushort)_header.numCruids0);
+            _writer.Write((ushort)unique_cruids.Count);
 
             // write cruids
             foreach (var cruid in unique_cruids)
@@ -123,7 +123,7 @@ namespace WolvenKit.RED4.Archive.IO
         {
             _writer.Write(_header.version);
             _writer.Write(_header.numSections);
-            _writer.Write(_header.numCruids0);
+            _writer.Write(_header.numComponents);
 
             if (_header.numSections == 7)
             {
