@@ -101,9 +101,9 @@ namespace WolvenKit.ViewModels.Shell
                         var epi = GetPropertyByRedName(parentType, propertyName);
                         if (epi != null)
                         {
-                            if (epi.GetValue((IRedClass)parentData) != Data)
+                            if (epi.GetValue((RedBaseClass)parentData) != Data)
                             {
-                                epi.SetValue((IRedClass)parentData, Data);
+                                epi.SetValue((RedBaseClass)parentData, Data);
                                 Tab.File.SetIsDirty(true);
                             }
                         }
@@ -221,7 +221,7 @@ namespace WolvenKit.ViewModels.Shell
 
         public class RedClassProperty<T> : IRedType
         {
-            private IRedClass obj;
+            private RedBaseClass obj;
             private string propertyName;
             public T Value
             {
@@ -243,7 +243,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
             }
 
-            public RedClassProperty(IRedClass cls, string i)
+            public RedClassProperty(RedBaseClass cls, string i)
             {
                 obj = cls;
                 propertyName = i;
@@ -262,7 +262,7 @@ namespace WolvenKit.ViewModels.Shell
                     //rai.WhenAnyValue(x => x).Subscribe(x => IsDirty = true);
                     return rai;
                 }
-                if (Parent != null && Parent.Data is IRedClass cls && propertyName != null)
+                if (Parent != null && Parent.Data is RedBaseClass cls && propertyName != null)
                 {
                     Type type = typeof(RedClassProperty<>).MakeGenericType(PropertyType);
                     var rcp = (IRedType)System.Activator.CreateInstance(type, cls, propertyName);
@@ -275,7 +275,7 @@ namespace WolvenKit.ViewModels.Shell
                     //raw.WhenAnyValue(x => x).Subscribe(x => IsDirty = true);
                     return raw;
                 }
-                if (PropertyType.IsAssignableTo(typeof(IRedClass)))
+                if (PropertyType.IsAssignableTo(typeof(RedBaseClass)))
                 {
                     data = Data;
                 }
@@ -650,7 +650,7 @@ namespace WolvenKit.ViewModels.Shell
             if (Data is IRedBaseHandle handle)
                 data = handle.GetValue();
 
-            if (data is IRedClass irc)
+            if (data is RedBaseClass irc)
             {
                 // some common "names" of classes that might be useful to display in the UI
                 var name = GetPropertyByName(irc.GetType(), "Name");
@@ -778,7 +778,7 @@ namespace WolvenKit.ViewModels.Shell
 
 
         public ICommand ForceLoadCommand { get; private set; }
-        private bool CanForceLoad() => (Properties is null || Properties.Count >= 5) && !ForceLoadProperties && Data != null && (Data is IRedClass || Data is IRedArray || Data is IRedBaseHandle);
+        private bool CanForceLoad() => (Properties is null || Properties.Count >= 5) && !ForceLoadProperties && Data != null && (Data is RedBaseClass || Data is IRedArray || Data is IRedBaseHandle);
         private void ExecuteForceLoad()
         {
             ForceLoadProperties = true;
@@ -796,7 +796,7 @@ namespace WolvenKit.ViewModels.Shell
             if (newItem is IRedBaseHandle handle)
             {
                 var pointee = RedTypeManager.CreateRedType(handle.InnerType);
-                handle.SetValue((IRedClass)pointee);
+                handle.SetValue((RedBaseClass)pointee);
             }
             (Data as IRedArray).Add(newItem);
             Properties.Add(new ChunkViewModel(newItem, this));
@@ -834,7 +834,7 @@ namespace WolvenKit.ViewModels.Shell
                 AddChunkToDataBuffer(instance, Properties.Count);
             }
         }
-        public void AddChunkToDataBuffer(IRedClass instance, int index)
+        public void AddChunkToDataBuffer(RedBaseClass instance, int index)
         {
             if (Data is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
             {
@@ -868,7 +868,7 @@ namespace WolvenKit.ViewModels.Shell
             if (Parent.Data is DataBuffer db && db.Data is Package04 pkg)
             {
                 Parent.IsSelected = true;
-                pkg.Chunks.Remove((IRedClass)Data);
+                pkg.Chunks.Remove((RedBaseClass)Data);
                 Parent.Properties.Remove(this);
                 foreach (var prop in Parent.Properties)
                     prop.RaisePropertyChanged("Name");
@@ -912,10 +912,10 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public ICommand OpenChunkCommand { get; private set; }
-        private bool CanOpenChunk() => Data is IRedClass && Parent != null;
+        private bool CanOpenChunk() => Data is RedBaseClass && Parent != null;
         private void ExecuteOpenChunk()
         {
-            if (Data is IRedClass cls)
+            if (Data is RedBaseClass cls)
                 Tab.File.TabItemViewModels.Add(new RDTDataViewModel(cls, Tab.File));
         }
     }

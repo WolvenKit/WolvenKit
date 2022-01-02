@@ -43,7 +43,7 @@ namespace WolvenKit.RED4.Archive.IO
             typeof(entSkinnedMeshComponent)
         };
 
-        public override void WriteClass(IRedClass cls)
+        public override void WriteClass(RedBaseClass cls)
         {
             var typeInfo = RedReflection.GetTypeInfo(cls.GetType());
 

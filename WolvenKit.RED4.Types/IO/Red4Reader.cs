@@ -330,7 +330,7 @@ namespace WolvenKit.RED4.IO
         protected Dictionary<int, List<IRedBaseHandle>> HandleQueue = new();
         protected Dictionary<int, List<IRedBufferPointer>> BufferQueue = new();
 
-        public virtual IRedHandle<T> ReadCHandle<T>() where T : IRedClass
+        public virtual IRedHandle<T> ReadCHandle<T>() where T : RedBaseClass
         {
             var handle = new CHandle<T>();
 
@@ -365,7 +365,7 @@ namespace WolvenKit.RED4.IO
                 var curvePoint = new CurvePoint<T>();
 
                 IRedType element;
-                if (typeof(IRedClass).IsAssignableFrom(typeof(T)))
+                if (typeof(RedBaseClass).IsAssignableFrom(typeof(T)))
                 {
                     element = ReadFixedClass(typeof(T), 0);
                 }
@@ -400,7 +400,7 @@ namespace WolvenKit.RED4.IO
             return (IRedResourceAsyncReference)generic.Invoke(this, null);
         }
 
-        public virtual IRedResourceAsyncReference<T> ReadCResourceAsyncReference<T>() where T : IRedClass
+        public virtual IRedResourceAsyncReference<T> ReadCResourceAsyncReference<T>() where T : RedBaseClass
         {
             var index = _reader.ReadUInt16();
 
@@ -430,7 +430,7 @@ namespace WolvenKit.RED4.IO
             return (IRedResourceReference)generic.Invoke(this, null);
         }
 
-        public virtual IRedResourceReference<T> ReadCResourceReference<T>() where T : IRedClass
+        public virtual IRedResourceReference<T> ReadCResourceReference<T>() where T : RedBaseClass
         {
             var index = _reader.ReadUInt16();
 
@@ -491,7 +491,7 @@ namespace WolvenKit.RED4.IO
             return (IRedWeakHandle)generic.Invoke(this, null);
         }
 
-        public virtual IRedWeakHandle<T> ReadCWeakHandle<T>() where T : IRedClass
+        public virtual IRedWeakHandle<T> ReadCWeakHandle<T>() where T : RedBaseClass
         {
             var handle = new CWeakHandle<T>();
 
@@ -522,9 +522,9 @@ namespace WolvenKit.RED4.IO
 
         #endregion
 
-        public virtual IRedClass ReadClass(Type type, uint size)
+        public virtual RedBaseClass ReadClass(Type type, uint size)
         {
-            if (!typeof(IRedClass).IsAssignableFrom(type))
+            if (!typeof(RedBaseClass).IsAssignableFrom(type))
             {
                 throw new ArgumentException(nameof(type));
             }
@@ -534,12 +534,12 @@ namespace WolvenKit.RED4.IO
             return instance;
         }
 
-        public virtual void ReadClass(IRedClass cls, uint size)
+        public virtual void ReadClass(RedBaseClass cls, uint size)
         {
             ThrowNotImplemented();
         }
 
-        public virtual IRedClass ReadFixedClass(Type type, uint size)
+        public virtual RedBaseClass ReadFixedClass(Type type, uint size)
         {
             var typeInfo = RedReflection.GetTypeInfo(type);
 
@@ -547,7 +547,7 @@ namespace WolvenKit.RED4.IO
             foreach (var propertyInfo in typeInfo.GetWritableProperties())
             {
                 var value = Read(propertyInfo.Type, 0, Flags.Empty);
-                instance.InternalSetPropertyValue(propertyInfo.RedName, value);
+                instance.InternalSetPropertyValue(propertyInfo.RedName, value, true);
             }
 
             return instance;
@@ -555,7 +555,7 @@ namespace WolvenKit.RED4.IO
 
         public virtual IRedType Read(Type type, uint size = 0, Flags flags = null)
         {
-            if (typeof(IRedClass).IsAssignableFrom(type))
+            if (typeof(RedBaseClass).IsAssignableFrom(type))
             {
                 return ReadClass(type, size);
             }

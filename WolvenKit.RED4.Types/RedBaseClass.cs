@@ -10,7 +10,7 @@ using System.Threading;
 namespace WolvenKit.RED4.Types
 {
     [REDMeta]
-    public class RedBaseClass : DynamicObject, IRedClass, IRedCloneable
+    public class RedBaseClass : DynamicObject, IRedType, IRedCloneable, IEquatable<RedBaseClass>
     {
         #region Events
 
@@ -92,16 +92,16 @@ namespace WolvenKit.RED4.Types
         protected T GetPropertyValue<T>([CallerMemberName] string callerName = "") where T : IRedType
         {
             var propertyInfo = RedReflection.GetPropertyByName(this.GetType(), callerName);
-            return (T)((IRedClass)this).InternalGetPropertyValue(typeof(T), propertyInfo.RedName, propertyInfo.Flags);
+            return (T)InternalGetPropertyValue(typeof(T), propertyInfo.RedName, propertyInfo.Flags);
         }
 
         protected void SetPropertyValue<T>(T value, [CallerMemberName] string callerName = "") where T : IRedType
         {
             var redName = GetRedName(callerName);
-            ((IRedClass)this).InternalSetPropertyValue(redName, value);
+            InternalSetPropertyValue(redName, value, true);
         }
 
-        void IRedClass.InternalInitClass()
+        internal void InternalInitClass()
         {
             var info = RedReflection.GetTypeInfo(GetType());
             foreach (var propertyInfo in info.PropertyInfos)
@@ -136,15 +136,15 @@ namespace WolvenKit.RED4.Types
                         ((IRedArray)_properties[propertyInfo.RedName]).MaxSize = flags.MoveNext() ? flags.Current : 0;
                     }
 
-                    if (typeof(IRedClass).IsAssignableFrom(propertyInfo.Type))
+                    if (typeof(RedBaseClass).IsAssignableFrom(propertyInfo.Type))
                     {
-                        ((IRedClass)_properties[propertyInfo.RedName]).InternalInitClass();
+                        ((RedBaseClass)_properties[propertyInfo.RedName]).InternalInitClass();
                     }
                 }
             }
         }
 
-        object IRedClass.InternalGetPropertyValue(Type type, string redPropertyName, Flags flags)
+        internal object InternalGetPropertyValue(Type type, string redPropertyName, Flags flags)
         {
             if (!_properties.ContainsKey(redPropertyName))
             {
@@ -154,7 +154,7 @@ namespace WolvenKit.RED4.Types
             return _properties[redPropertyName];
         }
 
-        void IRedClass.InternalSetPropertyValue(string redPropertyName, object value, bool native)
+        internal void InternalSetPropertyValue(string redPropertyName, object value, bool native)
         {
             //OnObjectChanged(redPropertyName, value);
             _properties[redPropertyName] = value;

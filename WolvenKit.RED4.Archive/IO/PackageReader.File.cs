@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Archive.IO
         {
             _hashService = Locator.Current.GetService<IHashService>();
 
-            var _chunks = new List<IRedClass>();
+            var _chunks = new List<RedBaseClass>();
 
             var result = new Package04();
             _outputFile = result;
@@ -112,7 +112,7 @@ namespace WolvenKit.RED4.Archive.IO
                 _chunks.Add(ReadChunk(chunkDesc[i]));
             }
 
-            var newChunks = new List<IRedClass>();
+            var newChunks = new List<RedBaseClass>();
             for (int i = 0; i < _chunks.Count; i++)
             {
                 if (!HandleQueue.ContainsKey(i))
@@ -163,7 +163,7 @@ namespace WolvenKit.RED4.Archive.IO
             return s;
         }
 
-        private IRedClass ReadChunk(Package04ChunkHeader c)
+        private RedBaseClass ReadChunk(Package04ChunkHeader c)
         {
             // needs header offset
             //Debug.Assert(BaseStream.Position == c.offset);

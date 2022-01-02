@@ -21,6 +21,6 @@ namespace WolvenKit.RED4.Archive.CR2W
     public class CR2WEmbedded : ICR2WEmbeddedFile
     {
         public string FileName { get; set; }
-        public IRedClass Content { get; set; }
+        public RedBaseClass Content { get; set; }
     }
 }

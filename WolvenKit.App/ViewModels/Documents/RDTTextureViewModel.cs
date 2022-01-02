@@ -25,11 +25,11 @@ namespace WolvenKit.ViewModels.Documents
 {
     public class RDTTextureViewModel : RedDocumentTabViewModel
     {
-        protected readonly IRedClass _data;
+        protected readonly RedBaseClass _data;
         public RedDocumentViewModel File;
         //protected Stream ImageStream;
 
-        public RDTTextureViewModel(IRedClass data, RedDocumentViewModel file)
+        public RDTTextureViewModel(RedBaseClass data, RedDocumentViewModel file)
         {
             Header = "Texture Preview";
             File = file;

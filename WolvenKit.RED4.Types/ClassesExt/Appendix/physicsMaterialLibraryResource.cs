@@ -41,7 +41,7 @@ namespace WolvenKit.RED4.Types
 
             foreach (var unk in appendix.Unk2)
             {
-                writer.Write(unk);
+                writer.Write((IRedHandle)unk);
             }
         }
     }

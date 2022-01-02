@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace WolvenKit.RED4.Types
 {
     [RED("handle")]
-    public class CHandle<T> : IRedHandle<T>, IEquatable<CHandle<T>> where T : IRedClass
+    public class CHandle<T> : IRedHandle<T>, IEquatable<CHandle<T>> where T : RedBaseClass
     {
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public T Chunk { get; set; }
@@ -14,8 +14,8 @@ namespace WolvenKit.RED4.Types
         public Type InnerType => typeof(T);
 
 
-        public IRedClass GetValue() => Chunk;
-        public void SetValue(IRedClass cls) => Chunk = (T)cls;
+        public RedBaseClass GetValue() => Chunk;
+        public void SetValue(RedBaseClass cls) => Chunk = (T)cls;
 
 
         public CHandle(){}

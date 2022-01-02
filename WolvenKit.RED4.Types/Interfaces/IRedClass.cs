@@ -2,16 +2,6 @@ using System;
 
 namespace WolvenKit.RED4.Types
 {
-    public interface IRedClass : IEquatable<RedBaseClass>, IRedType
-    {
-        internal void InternalInitClass();
-
-        internal object InternalGetPropertyValue(Type type, string redPropertyName, Flags flags);
-        internal void InternalSetPropertyValue(string redPropertyName, object value, bool isNative = true);
-
-        public IRedType GetObjectByRedName(string redName);
-    }
-
     public interface IRedOverload
     {
         internal void ConstructorOverload();

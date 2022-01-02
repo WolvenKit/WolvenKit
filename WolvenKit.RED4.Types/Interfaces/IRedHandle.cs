@@ -8,11 +8,11 @@ namespace WolvenKit.RED4.Types
     {
         public Type InnerType { get; }
 
-        public IRedClass GetValue();
-        public void SetValue(IRedClass cls);
+        public RedBaseClass GetValue();
+        public void SetValue(RedBaseClass cls);
     }
 
-    public interface IRedBaseHandle<T> : IRedBaseHandle where T : IRedClass
+    public interface IRedBaseHandle<T> : IRedBaseHandle where T : RedBaseClass
     {
         //Red4File File { get; }
     }
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
     {
     }
 
-    public interface IRedHandle<T> : IRedHandle, IRedBaseHandle<T>, IRedGenericType<T> where T : IRedClass
+    public interface IRedHandle<T> : IRedHandle, IRedBaseHandle<T>, IRedGenericType<T> where T : RedBaseClass
     {
     }
 }

@@ -130,7 +130,7 @@ namespace WolvenKit.RED4.Types
                 writer.BaseWriter.WriteVLQInt32(app1.Handles.Count);
                 foreach (var handle in app1.Handles)
                 {
-                    writer.Write(handle);
+                    writer.Write((IRedHandle)handle);
                 }
             }
         }

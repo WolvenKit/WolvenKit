@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.Archive.IO
         {
         }
 
-        public override void ReadClass(IRedClass cls, uint size)
+        public override void ReadClass(RedBaseClass cls, uint size)
         {
             if (cls is IRedCustomData customCls)
             {
@@ -71,7 +71,7 @@ namespace WolvenKit.RED4.Archive.IO
             }
         }
 
-        public bool ReadVariable(IRedClass cls)
+        public bool ReadVariable(RedBaseClass cls)
         {
             var nameId = _reader.ReadUInt16();
             if (nameId == 0)
@@ -110,7 +110,7 @@ namespace WolvenKit.RED4.Archive.IO
                 var typeInfo = RedReflection.GetTypeInfo(cls.GetType());
                 if (!typeInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), varname, value))
                 {
-                    throw new TodoException($"Invalid default val for: \"{cls.RedType}.{varname}\"");
+                    throw new TodoException($"Invalid default val for: \"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varname}\"");
                 }
 
                 prop.SetValue(cls, value);

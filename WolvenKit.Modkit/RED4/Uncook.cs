@@ -729,7 +729,7 @@ namespace WolvenKit.Modkit.RED4
             return ConvertRedClassToDdsStream(cr2w.RootChunk, outstream, out texformat);
         }
 
-        public static bool ConvertRedClassToDdsStream(IRedClass cls, Stream outstream, out DXGI_FORMAT texformat)
+        public static bool ConvertRedClassToDdsStream(RedBaseClass cls, Stream outstream, out DXGI_FORMAT texformat)
         {
             texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
 

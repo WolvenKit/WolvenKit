@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.Archive.IO
         private CR2WFile _cr2wFile => (CR2WFile)_outputFile;
         private bool _parseBuffer;
 
-        private Dictionary<int, IRedClass> _chunks = new();
+        private Dictionary<int, RedBaseClass> _chunks = new();
         private Dictionary<int, RedBuffer> _buffers = new();
 
         public EFileReadErrorCodes ReadFileInfo(out CR2WFileInfo info)
@@ -190,7 +190,7 @@ namespace WolvenKit.RED4.Archive.IO
             return new CR2WProperty();
         }
 
-        private IRedClass ReadChunk(CR2WExportInfo info)
+        private RedBaseClass ReadChunk(CR2WExportInfo info)
         {
             Debug.Assert(BaseStream.Position == info.dataOffset);
 

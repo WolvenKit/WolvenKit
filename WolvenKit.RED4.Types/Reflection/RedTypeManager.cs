@@ -8,9 +8,9 @@ namespace WolvenKit.RED4.Types
 {
     public class RedTypeManager
     {
-        public static T Create<T>()
+        public static T Create<T>() where T : RedBaseClass
         {
-            var instance = (IRedClass)System.Activator.CreateInstance<T>();
+            var instance = (RedBaseClass)System.Activator.CreateInstance<T>();
             if (instance is IRedOverload tCls)
             {
                 tCls.ConstructorOverload();
@@ -21,9 +21,9 @@ namespace WolvenKit.RED4.Types
             return (T)instance;
         }
 
-        public static IRedClass Create(Type type)
+        public static RedBaseClass Create(Type type)
         {
-            var instance = (IRedClass)System.Activator.CreateInstance(type);
+            var instance = (RedBaseClass)System.Activator.CreateInstance(type);
             if (instance is IRedOverload tCls)
             {
                 tCls.ConstructorOverload();
@@ -34,7 +34,7 @@ namespace WolvenKit.RED4.Types
             return instance;
         }
 
-        public static IRedClass Create(string redTypeName)
+        public static RedBaseClass Create(string redTypeName)
         {
             var (type, _) = RedReflection.GetCSTypeFromRedType(redTypeName);
             if (type == null)
@@ -53,8 +53,10 @@ namespace WolvenKit.RED4.Types
                 tCls.ConstructorOverload();
             }
 
-            if (instance is IRedClass irc)
-                irc?.InternalInitClass();
+            if (instance is RedBaseClass irc)
+            {
+                irc.InternalInitClass();
+            }
 
             return instance;
         }

@@ -338,9 +338,9 @@ namespace WolvenKit.RED4.Archive.IO
 
         #endregion Embedded
 
-        private List<IRedClass> _chunks = new();
+        private List<RedBaseClass> _chunks = new();
 
-        private CR2WExportInfo WriteChunk(CR2WWriter file, IRedClass chunkData)
+        private CR2WExportInfo WriteChunk(CR2WWriter file, RedBaseClass chunkData)
         {
             var tmpQueue = file.ChunkQueue;
             file.ChunkQueue = new LinkedList<RedBaseClass>();

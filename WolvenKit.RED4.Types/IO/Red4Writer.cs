@@ -526,7 +526,7 @@ namespace WolvenKit.RED4.IO
             foreach (var curvePoint in instance)
             {
                 var value = curvePoint.GetValue();
-                if (value is IRedClass cls)
+                if (value is RedBaseClass cls)
                 {
                     WriteFixedClass(cls);
                 }
@@ -592,9 +592,9 @@ namespace WolvenKit.RED4.IO
 
         #endregion General
 
-        public virtual void Write(IRedClass instance) => ThrowNotImplemented();
+        public virtual void Write(RedBaseClass instance) => ThrowNotImplemented();
 
-        public virtual void WriteFixedClass(IRedClass instance)
+        public virtual void WriteFixedClass(RedBaseClass instance)
         {
             var typeInfo = RedReflection.GetTypeInfo(instance.GetType());
             foreach (var propertyInfo in typeInfo.GetWritableProperties())
@@ -618,7 +618,7 @@ namespace WolvenKit.RED4.IO
 
         #endregion
 
-        public virtual void WriteClass(IRedClass instance)
+        public virtual void WriteClass(RedBaseClass instance)
         {
             ThrowNotImplemented();
         }
@@ -630,7 +630,7 @@ namespace WolvenKit.RED4.IO
                 throw new Exception();
             }
 
-            if (instance is IRedClass cls)
+            if (instance is RedBaseClass cls)
             {
                 WriteClass(cls);
                 return;

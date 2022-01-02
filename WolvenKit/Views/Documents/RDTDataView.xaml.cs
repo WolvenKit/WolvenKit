@@ -190,7 +190,7 @@ namespace WolvenKit.Views.Documents
                 {
                     if (source.Data is RedBaseClass rbc && target.Parent.Data is DataBuffer)
                     {
-                        target.Parent.AddChunkToDataBuffer((IRedClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
+                        target.Parent.AddChunkToDataBuffer((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
                     }
                 }
             }
@@ -204,7 +204,7 @@ namespace WolvenKit.Views.Documents
             //    {
             //        if (source.Data is RedBaseClass rbc && target.Parent.Data is DataBuffer)
             //        {
-            //            target.Parent.AddChunkToDataBuffer((IRedClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
+            //            target.Parent.AddChunkToDataBuffer((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
             //        }
             //    }
             //}

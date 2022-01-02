@@ -24,7 +24,7 @@ namespace WolvenKit.ViewModels.Documents
 {
     public class RDTMeshViewModel : RedDocumentTabViewModel
     {
-        protected readonly IRedClass _data;
+        protected readonly RedBaseClass _data;
         public RedDocumentViewModel File;
 
         public RDTMeshViewModel(CMesh data, RedDocumentViewModel file)

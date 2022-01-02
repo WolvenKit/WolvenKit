@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.Archive.CR2W
         public IReadOnlyList<IRedRef> Imports { get; }
         public IList<ICR2WProperty> Properties { get; }
 
-        public IRedClass RootChunk { get; set; }
+        public RedBaseClass RootChunk { get; set; }
 
         public IList<ICR2WEmbeddedFile> EmbeddedFiles { get; }
 

@@ -138,7 +138,7 @@ namespace WolvenKit.RED4.Archive.IO
             _writer.Write(_header.chunkDataOffset);
         }
 
-        private Package04ChunkHeader WriteChunk(PackageWriter file, IRedClass chunk)
+        private Package04ChunkHeader WriteChunk(PackageWriter file, RedBaseClass chunk)
         {
             var redTypeName = RedReflection.GetTypeRedName(chunk.GetType());
             var typeIndex = file.GetStringIndex(redTypeName);

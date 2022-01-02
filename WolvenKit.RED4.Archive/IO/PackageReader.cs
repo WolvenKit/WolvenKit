@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Archive.IO
         {
         }
 
-        public IRedClass ReadClass(Type type)
+        public RedBaseClass ReadClass(Type type)
         {
             var instance = RedTypeManager.Create(type);
 
@@ -63,7 +63,7 @@ namespace WolvenKit.RED4.Archive.IO
 
         public override IRedType Read(Type type, uint size = 0, Flags flags = null)
         {
-            if (typeof(IRedClass).IsAssignableFrom(type))
+            if (typeof(RedBaseClass).IsAssignableFrom(type))
             {
                 return ReadClass(type);
             }

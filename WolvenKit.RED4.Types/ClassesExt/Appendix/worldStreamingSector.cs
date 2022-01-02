@@ -101,7 +101,7 @@ namespace WolvenKit.RED4.Types
             writer.BaseWriter.WriteVLQInt32(Handles.Count);
             foreach (var handle in Handles)
             {
-                writer.Write(handle);
+                writer.Write((IRedHandle)handle);
             }
 
             writer.BaseWriter.WriteVLQInt32(NodeRefs.Count);
