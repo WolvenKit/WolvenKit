@@ -8,9 +8,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="400">
     
-    <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedIntegerEditor}}}">
+    <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedIntegerEditor}}}" Background="#252525">
         
-        <syncfusion:UpDown x:Name="UpDown"
+        <syncfusion:UpDown
+            x:Name="UpDown"
             Value="{Binding Value}"
             MinValue="{Binding MinValue, Mode=OneWay}"
             MaxValue="{Binding MaxValue, Mode=OneWay}"
@@ -19,6 +20,7 @@
             BorderThickness="0"
             Margin="5,0,0,0"
             Padding="0"
+            Background="Transparent"
             />
         
     </Grid>

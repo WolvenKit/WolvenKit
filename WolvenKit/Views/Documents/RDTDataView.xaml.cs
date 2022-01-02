@@ -54,7 +54,7 @@ namespace WolvenKit.Views.Documents
                       view => view.TreeView.SelectedItem)
                   .DisposeWith(disposables);
 
-
+                ViewModel.SelectedChunk = ViewModel.Chunks[0];
 
                 //this.OneWayBind(ViewModel,
                 //       viewmodel => viewmodel.SelectedChunk.PropertyGridData,
@@ -217,36 +217,6 @@ namespace WolvenKit.Views.Documents
             //    }
             //}
         }
-
-        //private void PropertyGrid_SelectedObjectChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        //{
-
-        //}
-
-        //private void PropertyGrid_Loaded(object sender, RoutedEventArgs e)
-        //{
-        //    PropertyView item1 = VisualUtils.FindDescendant(this, typeof(PropertyView)) as PropertyView;
-
-        //    if (item1 != null)
-        //        item1.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
-        //}
-
-        //void ItemContainerGenerator_StatusChanged(object sender, EventArgs e)
-        //{
-        //    if (sender is ItemContainerGenerator icg)
-        //    {
-        //        foreach (var item in icg.Items)
-        //        {
-        //            var pi = (PropertyItem)item;
-        //        }
-        //    }
-        //}
-
-        //private void PropertyGrid_ValueChanged(object sender, ValueChangedEventArgs args)
-        //{
-        //    //ViewModel.File.SetIsDirty(true);
-        //    ViewModel.SelectedChunk.RaisePropertyChanged("Data");
-        //}
 
         private void Copy_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {

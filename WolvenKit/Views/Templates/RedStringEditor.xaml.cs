@@ -1,8 +1,12 @@
 using System;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using WolvenKit.RED4.Types;
+using System.Windows.Threading;
+using ReactiveUI;
 
 namespace WolvenKit.Views.Editors
 {
@@ -14,7 +18,19 @@ namespace WolvenKit.Views.Editors
         public RedStringEditor()
         {
             InitializeComponent();
-            TextBox.KeyUp += TextBox_KeyUp;
+            //TextBox.TextChanged += TextBox_TextChanged;
+
+            // causes things to be redrawn :/
+            Observable.FromEventPattern<TextChangedEventHandler, TextChangedEventArgs>(
+                handler => TextBox.TextChanged += handler,
+                handler => TextBox.TextChanged -= handler)
+                .Throttle(TimeSpan.FromSeconds(.5))
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(x =>
+                {
+                    SetRedValue(TextBox.Text);
+                });
+
         }
 
         public IRedString RedString
@@ -32,7 +48,7 @@ namespace WolvenKit.Views.Editors
             set => SetRedValue(value);
         }
 
-        private void TextBox_KeyUp(object sender, KeyEventArgs e)
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             SetRedValue(TextBox.Text);
         }
