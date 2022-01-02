@@ -646,22 +646,28 @@ namespace WolvenKit.ViewModels.Shell
                 var value = (IRedArray)Data;
                 return $"[{value.Count}]";
             }
+            var data = Data;
+            if (Data is IRedBaseHandle handle)
+                data = handle.GetValue();
 
-            // some common "names" of classes that might be useful to display in the UI
-            var name = GetPropertyByName(PropertyType, "Name");
-            var partName = GetPropertyByName(PropertyType, "PartName");
-            var slotName = GetPropertyByName(PropertyType, "SlotName");
-            if (name != null)
+            if (data is IRedClass irc)
             {
-                return name.GetValue((IRedClass)Data).ToString();
-            }
-            else if (partName != null)
-            {
-                return partName.GetValue((IRedClass)Data).ToString();
-            }
-            else if (slotName != null)
-            {
-                return slotName.GetValue((IRedClass)Data).ToString();
+                // some common "names" of classes that might be useful to display in the UI
+                var name = GetPropertyByName(irc.GetType(), "Name");
+                var partName = GetPropertyByName(irc.GetType(), "PartName");
+                var slotName = GetPropertyByName(irc.GetType(), "SlotName");
+                if (name != null)
+                {
+                    return name.GetValue(irc).ToString();
+                }
+                else if (partName != null)
+                {
+                    return partName.GetValue(irc).ToString();
+                }
+                else if (slotName != null)
+                {
+                    return slotName.GetValue(irc).ToString();
+                }
             }
             return "";
         }
@@ -801,12 +807,12 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public ICommand AddItemToCompiledDataCommand { get; private set; }
-        private bool CanAddItemToCompiledData() => Data is DataBuffer && Properties != null;
+        private bool CanAddItemToCompiledData() => (Data is IRedBufferPointer) && Properties != null;
         private void ExecuteAddItemToCompiledData()
         {
-            var db = Data as DataBuffer;
+            var db = Data as IRedBufferPointer;
             ObservableCollection<string> existing = null;
-            if (db.Data is Package04 pkg)
+            if (db.GetValue().Data is Package04 pkg)
             {
                 existing = new ObservableCollection<string>(pkg.Chunks.Select(t => t.GetType().Name).Distinct());
             }
@@ -821,7 +827,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             var app = Locator.Current.GetService<AppViewModel>();
             app.CloseDialogCommand.Execute(null);
-            if (sender != null && Data is DataBuffer db && db.Data is Package04 pkg)
+            if (sender != null && Data is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
             {
                 var vm = sender as AddChunkDialogViewModel;
                 var instance = RedTypeManager.Create(vm.SelectedClass);
@@ -830,7 +836,7 @@ namespace WolvenKit.ViewModels.Shell
         }
         public void AddChunkToDataBuffer(IRedClass instance, int index)
         {
-            if (Data is DataBuffer db && db.Data is Package04 pkg)
+            if (Data is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
             {
                 //pkg.Chunks.Add(instance);
                 pkg.Chunks.Insert(index, instance);

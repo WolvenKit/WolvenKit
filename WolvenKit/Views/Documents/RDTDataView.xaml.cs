@@ -161,9 +161,16 @@ namespace WolvenKit.Views.Documents
                     {
                         if (dropFileLocation != files[0])
                         {
-                            dropFileLocation = files[0];
-                            var json = File.ReadAllText(files[0]);
-                            dropFile = JsonConvert.DeserializeObject<RedClassDto>(json);
+                            try
+                            {
+                                dropFileLocation = files[0];
+                                var json = File.ReadAllText(files[0]);
+                                dropFile = JsonConvert.DeserializeObject<RedClassDto>(json);
+                            }
+                            catch (Exception)
+                            {
+
+                            }
                         }
                         //if (dropFile != null && dropFile.Type == target.Type)
                         //{
