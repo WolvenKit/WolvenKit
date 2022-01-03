@@ -739,7 +739,8 @@ namespace WolvenKit.Modkit.RED4
 
             if (cls is CBitmapTexture xbm)
             {
-                if (xbm.RenderTextureResource.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC xbmBlob)
+                if (xbm.RenderTextureResource.RenderResourceBlobPC != null &&
+                    xbm.RenderTextureResource.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC xbmBlob)
                 {
                     blob = xbmBlob;
                 }

@@ -12,22 +12,26 @@ namespace WolvenKit.RED4.CR2W
     {
         public static string[] GetResourceClassesFromExtension(ERedExtension extension)
         {
-            var result = s_extensionsToClass[extension];
-            if (string.IsNullOrEmpty(result))
+            try
+            {
+                return s_extensionsToClass[extension].Split(',');
+            }
+            catch (KeyNotFoundException)
             {
                 return null;
             }
-            return result.Split(',');
         }
 
         public static ERedExtension[] GetExtensionFromResourceClass(string resourceClass)
         {
-            var result = s_classToExtensions[resourceClass];
-            if (string.IsNullOrEmpty(result))
+            try
+            {
+                return s_classToExtensions[resourceClass].Split(',').Select(x => Enum.Parse<ERedExtension>(x)).ToArray();
+            }
+            catch (KeyNotFoundException)
             {
                 return null;
             }
-            return result.Split(',').Select(x => Enum.Parse<ERedExtension>(x)).ToArray();
         }
 
         private static readonly Dictionary<ERedExtension, string> s_extensionsToClass = new()
