@@ -35,13 +35,6 @@
     <FileCategoryModel>
       <Name>CR2W Files</Name>
       <Files>
-        <AddFileModel>
-          <Name>Texture file</Name>
-          <Description>An empty texture file</Description>
-          <Extension>xbm</Extension>
-          <Type>Cr2w</Type>
-          <Template></Template>
-        </AddFileModel>
       </Files>
     </FileCategoryModel>
   </Categories>

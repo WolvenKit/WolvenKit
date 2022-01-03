@@ -1,8 +1,32 @@
 using System;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace WolvenKit.RED4.Types
 {
+
+    public static class CBitField
+    {
+        public static IRedBitField Parse(Type enumType, string value)
+        {
+            var method = typeof(CBitField).GetMethod(nameof(Parse), BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(string) }, null);
+            var generic = method.MakeGenericMethod(enumType);
+
+            return (IRedBitField)generic.Invoke(null, new object[] { value });
+        }
+
+        public static CBitField<T> Parse<T>(string value) where T : struct, Enum
+        {
+            if (Enum.TryParse<T>(value, out var result))
+            {
+                return result;
+            }
+
+            return null;
+            //return new CBitField<T>(value);
+        }
+    }
+
     [REDType(IsValueType = true)]
     [DebuggerDisplay("{Value}")]
     public class CBitField<T> : IRedBitField<T>, IEquatable<CBitField<T>> where T : struct, Enum
@@ -21,6 +45,8 @@ namespace WolvenKit.RED4.Types
 
         public static implicit operator CBitField<T>(Enum value) => new((T)value);
         public static implicit operator Enum(CBitField<T> value) => (Enum)value.Value;
+
+        public Type GetInnerType() => typeof(T);
 
         public string ToBitFieldString()
         {

@@ -25,6 +25,7 @@ namespace WolvenKit.Converters
         public DataTemplate RedCurveEditor { get; set; }
         public DataTemplate RedRefEditor { get; set; }
         public DataTemplate HandleTemplateView { get; set; }
+        public DataTemplate BitfieldTemplateView { get; set; }
         public DataTemplate EnumTemplateView { get; set; }
         public DataTemplate ColorPickerPalette { get; set; }
         public DataTemplate RedBoolEditor { get; set; }
@@ -82,6 +83,10 @@ namespace WolvenKit.Converters
                 if (vm.PropertyType.IsAssignableTo(typeof(IRedPrimitive<bool>)))
                 {
                     return RedBoolEditor;
+                }
+                if (vm.PropertyType.IsAssignableTo(typeof(IRedBitField)))
+                {
+                    return BitfieldTemplateView;
                 }
                 if (vm.PropertyType.IsAssignableTo(typeof(IRedEnum)))
                 {

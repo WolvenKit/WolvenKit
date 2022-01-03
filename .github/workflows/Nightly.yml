@@ -12,14 +12,20 @@ jobs:
       should_run: ${{ steps.should_run.outputs.should_run }}
     steps:
       - uses: actions/checkout@v2
-      - name: print latest_commit
-        run: echo ${{ github.sha }}
+        with:
+          ref: develop
+         
+      - name: Get commit
+        run: |
+          $commit = git log -1 --format=%H
+          echo "SHA=$commit" >> $env:GITHUB_ENV
+      - run: echo ${{ env.SHA }}
 
       - id: should_run
         continue-on-error: true
         name: check latest commit is less than a day
         if: ${{ github.event_name == 'schedule' }}
-        run: test -z $(git rev-list  --after="24 hours"  ${{ github.sha }}) && echo "::set-output name=should_run::false"
+        run: test -z $(git rev-list  --after="24 hours"  ${{ env.SHA }}) && echo "::set-output name=should_run::false"
 
   nightly-wkit-win:
     needs: check_date
@@ -31,7 +37,15 @@ jobs:
     - name: checkout
       uses: actions/checkout@v2
       with:
+        ref: develop
         submodules: recursive
+    
+    - name: Get commit
+      run: |
+        $commit = git log -1 --format=%H
+        echo "SHA=$commit" >> $env:GITHUB_ENV
+    - run: echo ${{ env.SHA }}
+        
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
@@ -46,7 +60,6 @@ jobs:
     - run: echo "FINALOUT=./publish" >> $env:GITHUB_ENV
     - run: echo "NAME=WolvenKit" >> $env:GITHUB_ENV
     - run: echo "REF=${{github.ref}}" >> $env:GITHUB_ENV
-    - run: echo "SHA=${{github.sha}}" >> $env:GITHUB_ENV
     - run: echo "MREPO=${{github.repository}}" >> $env:GITHUB_ENV
     
     - name: Get version

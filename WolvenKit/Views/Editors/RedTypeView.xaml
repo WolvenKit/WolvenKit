@@ -22,6 +22,21 @@
             <Grid.Resources>
             <sys:Double x:Key="RowHeight">26</sys:Double>
             <SolidColorBrush x:Key="RedTypeColor" Color="{StaticResource WolvenKitTanColor}"/>
+            <DataTemplate x:Key="AddHandleButton" DataType="{x:Type shell:ChunkViewModel}">
+                <Button
+                    Background="Transparent"
+                    Command="{Binding AddHandleCommand}"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                    Padding="0"
+                    Height="12" Width="20" VerticalAlignment="Center"
+                    ToolTip="Add Handle" Style="{StaticResource ButtonCustom}">
+                    <iconPacks:PackIconVaadinIcons
+                        Foreground="{StaticResource WolvenKitYellow}"
+                        Kind="PlusCircle" 
+                        VerticalAlignment="Center"
+                        Padding="2"/>
+                </Button>
+            </DataTemplate>
             <DataTemplate x:Key="AddToCompiledDataButton" DataType="{x:Type shell:ChunkViewModel}">
                 <Button
                     Background="Transparent"
@@ -144,6 +159,11 @@
                         <TextBlock Text="{Binding Value}" VerticalAlignment="Center" Margin="5,0"/>
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.HandleTemplateView>
+                <converters:RedEditorTemplateSelector.BitfieldTemplateView>
+                    <DataTemplate>
+                        <templates:BitfieldTemplateView RedBitfield="{Binding Data, Mode=TwoWay}"/>
+                    </DataTemplate>
+                </converters:RedEditorTemplateSelector.BitfieldTemplateView>
                 <converters:RedEditorTemplateSelector.EnumTemplateView>
                     <DataTemplate>
                         <templates:EnumTemplateView RedEnum="{Binding Data, Mode=TwoWay}"/>
@@ -219,6 +239,7 @@
                                     Padding="2"/>
                             </Button>
                             <ContentPresenter ContentTemplate="{StaticResource AddToCompiledDataButton}" />
+                            <ContentPresenter ContentTemplate="{StaticResource AddHandleButton}" />
                         </StackPanel>
                         </DataTemplate>
                     </converters:RedEditorTemplateSelector.RedTypeViewer>
@@ -247,6 +268,7 @@
                                             Padding="2"/>
                                     </Button>
                                     <ContentPresenter ContentTemplate="{StaticResource AddToArrayButton}" />
+                                    <ContentPresenter ContentTemplate="{StaticResource AddHandleButton}" />
                                 </StackPanel>
                             </Border>
                             <ItemsControl ItemsSource="{Binding Properties}" Grid.Row="1" AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}">
@@ -343,9 +365,10 @@
                 <TextBlock Text="{Binding Tab.File.RelativePath}" VerticalAlignment="Center"/>
                 <TextBlock Text="{Binding XPath}" VerticalAlignment="Center" FontWeight="SemiBold" Grid.Row="1"/>
                 <StackPanel Orientation="Horizontal" Grid.Row="2">
-                    <TextBlock Text="{Binding EndType}" VerticalAlignment="Center" Foreground="{StaticResource RedTypeColor}"/>
+                    <TextBlock Text="{Binding ResolvedType}" VerticalAlignment="Center" Foreground="{StaticResource RedTypeColor}"/>
                     <ContentPresenter ContentTemplate="{StaticResource AddToCompiledDataButton}" Content="{Binding}"/>
                     <ContentPresenter ContentTemplate="{StaticResource AddToArrayButton}" Content="{Binding}"/>
+                    <ContentPresenter ContentTemplate="{StaticResource AddHandleButton}" Content="{Binding}" />
                 </StackPanel>
             </Grid>
         </Border>

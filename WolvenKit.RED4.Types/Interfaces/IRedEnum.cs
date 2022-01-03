@@ -4,6 +4,7 @@ namespace WolvenKit.RED4.Types
 {
     public interface IRedBitField : IRedType
     {
+        public Type GetInnerType();
         public string ToBitFieldString();
     }
 

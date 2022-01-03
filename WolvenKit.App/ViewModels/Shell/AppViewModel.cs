@@ -44,6 +44,9 @@ using WolvenKit.ViewModels.HomePage;
 using System.Windows.Controls;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Archive.IO;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -481,7 +484,19 @@ namespace WolvenKit.ViewModels.Shell
                     }
                     break;
                 case EWolvenKitFile.Cr2w:
-                    //CreateCr2wFile(SelectedFile);
+                    var redType = file.SelectedFile.Name;
+                    if (redType != "")
+                    {
+                        var cr2w = new CR2WFile()
+                        {
+                            RootChunk = RedTypeManager.Create(redType)
+                        };
+                        stream = new FileStream(file.FullPath, FileMode.Create, FileAccess.Write);
+                        using (var writer = new CR2WWriter(stream))
+                        {
+                            writer.WriteFile(cr2w);
+                        }
+                    }
                     break;
             }
             stream.Dispose();
@@ -908,11 +923,6 @@ namespace WolvenKit.ViewModels.Shell
                 title += _projectManager.ActiveProject.Name + " - ";
             title += "WolvenKit";
             Title = title;
-        }
-
-        private void CreateCr2wFile(AddFileModel model)
-        {
-            //TODO
         }
 
         //private async Task RequestOpenFile(string fullPath)

@@ -19,6 +19,7 @@ using Splat;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.ViewModels.Shell;
 using System.Reactive.Linq;
+using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.ViewModels.Dialogs
 {
@@ -52,6 +53,20 @@ namespace WolvenKit.ViewModels.Dialogs
                     .GetManifestResourceStream(@"WolvenKit.App.Resources.WolvenKitFileDefinitions.xml"))
                 {
                     var newdef = (WolvenKitFileDefinitions)serializer.Deserialize(stream);
+                    foreach (ERedExtension ext in Enum.GetValues(typeof(ERedExtension)))
+                    {
+                        if (CommonFunctions.GetResourceClassesFromExtension(ext) != null)
+                        {
+                            newdef.Categories[2].Files.Add(new AddFileModel()
+                            {
+                                Name = CommonFunctions.GetResourceClassesFromExtension(ext).FirstOrDefault(),
+                                Description = $"A .{ext} File",
+                                Extension = ext.ToString(),
+                                Type = EWolvenKitFile.Cr2w,
+                                Template = ""
+                            });
+                        }
+                    }
                     Categories = new ObservableCollection<FileCategoryModel>(newdef.Categories);
                 }
 

@@ -105,7 +105,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="1" Text="{Binding WhyNotCreate}" VerticalAlignment="Center" Foreground="{StaticResource WolvenKitRed}"/>
-            <Button Grid.Column="2"  Command="{Binding Cancel2Command}" Content="Cancel" Margin="10,0,0,0" Padding="12,0" HorizontalAlignment="Right"/>
+            <Button Grid.Column="2"  Command="{Binding CancelCommand}" Content="Cancel" Margin="10,0,0,0" Padding="12,0" HorizontalAlignment="Right"/>
             <Button Grid.Column="3" Command="{Binding CreateCommand}" Content="Create" Margin="10,0,0,0" Padding="12,0" HorizontalAlignment="Right"/>
         </Grid>
 
