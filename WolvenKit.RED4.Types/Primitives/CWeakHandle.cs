@@ -5,10 +5,39 @@ using System.Diagnostics;
 namespace WolvenKit.RED4.Types
 {
     [RED("whandle")]
-    public class CWeakHandle<T> : IRedWeakHandle<T>, IEquatable<CWeakHandle<T>> where T : RedBaseClass
+    public class CWeakHandle<T> : IRedWeakHandle<T>, IRedNotifyObjectChanged, IEquatable<CWeakHandle<T>> where T : RedBaseClass
     {
+        public event ObjectChangedEventHandler ObjectChanged;
+
+        private T _chunk;
+
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-        public T Chunk { get; set; }
+        public T Chunk
+        {
+            get => _chunk;
+            set
+            {
+                if (!Equals(_chunk, value))
+                {
+                    if (_chunk != null)
+                    {
+                        _chunk.ObjectChanged -= OnObjectChanged;
+                    }
+
+                    _chunk = value;
+
+                    if (_chunk != null)
+                    {
+                        _chunk.ObjectChanged += OnObjectChanged;
+                    }
+                }
+            }
+        }
+
+        private void OnObjectChanged(object sender, ObjectChangedEventArgs e)
+        {
+            ObjectChanged?.Invoke(sender, e);
+        }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public Type InnerType => typeof(T);

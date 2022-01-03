@@ -160,6 +160,8 @@ namespace WolvenKit.RED4.Archive.IO
             }*/
 
             file = _cr2wFile;
+            _cr2wFile.AttachEventHandler();
+
             return EFileReadErrorCodes.NoError;
         }
 
