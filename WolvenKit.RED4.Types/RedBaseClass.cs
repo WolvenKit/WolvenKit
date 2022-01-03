@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
                     {
                         path = $"{redPropertyName}{args.RedPath}";
                     }
-                    ObjectChanged?.Invoke(sender, new ObjectChangedEventArgs(path, args.RedName, args.OldValue, args.NewValue));
+                    ObjectChanged?.Invoke(sender, new ObjectChangedEventArgs(args.ChangeType, path, args.RedName, args.OldValue, args.NewValue));
                 });
             }
 
@@ -51,6 +51,11 @@ namespace WolvenKit.RED4.Types
             {
                 notify.ObjectChanged -= _delegateCache[redPropertyName];
             }
+        }
+
+        private void OnObjectChanged(string redPropertyName, object oldValue, object newValue)
+        {
+            ObjectChanged?.Invoke(this, new ObjectChangedEventArgs(ObjectChangedType.Modified, redPropertyName, redPropertyName, oldValue, newValue));
         }
 
         #endregion
@@ -143,7 +148,7 @@ namespace WolvenKit.RED4.Types
 
                 AddEventHandler(redPropertyName);
 
-                ObjectChanged?.Invoke(this, new ObjectChangedEventArgs(redPropertyName, redPropertyName, oldValue, _properties[redPropertyName]));
+                OnObjectChanged(redPropertyName, oldValue, value);
             }
         }
 

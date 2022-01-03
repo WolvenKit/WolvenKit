@@ -49,7 +49,7 @@ namespace WolvenKit.RED4.Types
                     {
                         var index = ((IList)_internalList).IndexOf(item);
                         var path = $":{index}.{args.RedPath}";
-                        ObjectChanged?.Invoke(sender, new ObjectChangedEventArgs(path, args.RedName, args.OldValue, args.NewValue));
+                        ObjectChanged?.Invoke(sender, new ObjectChangedEventArgs(args.ChangeType, path, args.RedName, args.OldValue, args.NewValue));
                     });
                 }
 
@@ -70,9 +70,9 @@ namespace WolvenKit.RED4.Types
             }
         }
 
-        private void OnObjectChanged(object sender, ObjectChangedEventArgs e)
+        private void OnObjectChanged(ObjectChangedType type, int index, object oldValue, object newValue)
         {
-            ObjectChanged?.Invoke(sender, e);
+            ObjectChanged?.Invoke(this, new ObjectChangedEventArgs(type, $":{index}", null, oldValue, newValue));
         }
 
         #endregion
@@ -107,7 +107,7 @@ namespace WolvenKit.RED4.Types
             AddEventHandler(castedValue);
 
             var index = _internalList.Count - 1;
-            ObjectChanged?.Invoke(this, new ObjectChangedEventArgs($":{index}", null, null, castedValue));
+            OnObjectChanged(ObjectChangedType.Added, index, null, castedValue);
 
             return index;
         }
@@ -133,7 +133,7 @@ namespace WolvenKit.RED4.Types
                 var typeInfo = RedReflection.GetTypeInfo(_internalList[index].GetType());
                 if (_internalList[index].GetType().IsValueType || typeInfo.IsValueType)
                 {
-                    ObjectChanged?.Invoke(this, new ObjectChangedEventArgs($":{index}", null, oldValue, _internalList[index]));
+                    OnObjectChanged(ObjectChangedType.Modified, index, oldValue, _internalList[index]);
                 }
             }
         }
@@ -170,7 +170,7 @@ namespace WolvenKit.RED4.Types
                     RemoveEventHandler(_internalList[i]);
                 }
 
-                ObjectChanged?.Invoke(this, new ObjectChangedEventArgs($":{i}", null, _internalList[i], null));
+                OnObjectChanged(ObjectChangedType.Deleted, i, _internalList[i], null);
             }
 
             _internalList.Clear();
@@ -186,7 +186,7 @@ namespace WolvenKit.RED4.Types
 
         public void Insert(int index, object value)
         {
-            ObjectChanged?.Invoke(this, new ObjectChangedEventArgs($":{index}", null, null, value));
+            OnObjectChanged(ObjectChangedType.Added, index, null, value);
 
             ((IList)_internalList).Insert(index, value);
         }
@@ -199,7 +199,7 @@ namespace WolvenKit.RED4.Types
             }
 
             var index = ((IList)_internalList).IndexOf(value);
-            ObjectChanged?.Invoke(this, new ObjectChangedEventArgs($":{index}", null, value, null));
+            OnObjectChanged(ObjectChangedType.Deleted, index, value, null);
 
             ((IList)_internalList).Remove(value);
         }
@@ -212,7 +212,7 @@ namespace WolvenKit.RED4.Types
             }
 
             var index = _internalList.IndexOf(item);
-            ObjectChanged?.Invoke(this, new ObjectChangedEventArgs($":{index}", null, item, null));
+            OnObjectChanged(ObjectChangedType.Deleted, index, item, null);
 
             return _internalList.Remove(item);
         }
@@ -231,7 +231,7 @@ namespace WolvenKit.RED4.Types
                 throw new NotSupportedException();
             }
 
-            ObjectChanged?.Invoke(this, new ObjectChangedEventArgs($":{index}", null, null, item));
+            OnObjectChanged(ObjectChangedType.Added, index, null, item);
 
             _internalList.Insert(index, item);
         }
@@ -243,7 +243,7 @@ namespace WolvenKit.RED4.Types
                 throw new NotSupportedException();
             }
 
-            ObjectChanged?.Invoke(this, new ObjectChangedEventArgs($":{index}", null, _internalList[index], null));
+            OnObjectChanged(ObjectChangedType.Deleted, index, _internalList[index], null);
 
             _internalList.RemoveAt(index);
         }
