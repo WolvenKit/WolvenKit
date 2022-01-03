@@ -143,7 +143,10 @@ namespace WolvenKit.ViewModels.Shell
 
             UpdateTitle();
 
-            SetActiveOverlay(_homePageViewModel);
+            if (!TryLoadingArguments())
+            {
+                SetActiveOverlay(_homePageViewModel);
+            }
 
             OnStartup();
 
@@ -167,6 +170,41 @@ namespace WolvenKit.ViewModels.Shell
         #endregion constructors
 
         #region init
+
+        private bool TryLoadingArguments()
+        {
+            string[] args = Environment.GetCommandLineArgs();
+
+            if (args.Length != 2)
+            {
+                return false;
+            }
+
+            if (!File.Exists(args[1]))
+            {
+                var message = $"Sorry, '{args[1]}' could not be found";
+                _loggerService.Error(message);
+                MessageBox.Show(message);
+                return false;
+            }
+
+            if (Path.GetExtension(args[1]) == ".cpmodproj")
+            {
+                _ = OpenProjectAsync(args[1]);
+                return true;
+            }
+
+            if (Enum.TryParse<ERedExtension>(Path.GetExtension(args[1]).Substring(1), out var _))
+            {
+                _ = OpenFileAsync(new FileModel(args[1], null));
+                return true;
+            }
+
+            var message2 = $"Sorry, {Path.GetExtension(args[1])} files aren't supported by WolvenKit";
+            _loggerService.Error(message2);
+            MessageBox.Show(message2);
+            return false;
+        }
 
         private void OnStartup()
         {
