@@ -156,6 +156,8 @@ namespace WolvenKit.Models
 
         public string GetRelativeName(EditorProject project)
         {
+            if (project == null)
+                return FullName;
             var filedir = project.FileDirectory;
             var moddir = project.ModDirectory;
             var rawDirectory = project.RawDirectory;
@@ -207,7 +209,7 @@ namespace WolvenKit.Models
         {
             if (project == null)
             {
-                throw new ArgumentNullException(nameof(project));
+                return (ulong)0;
             }
 
             if (fullname.Equals(project.FileDirectory, StringComparison.Ordinal))
