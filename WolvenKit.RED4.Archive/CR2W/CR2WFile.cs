@@ -37,6 +37,27 @@ namespace WolvenKit.RED4.Archive.CR2W
             EmbeddedFiles = new List<ICR2WEmbeddedFile>();       //block 7
         }
 
+        #region Events
+
+        public event ObjectChangedEventHandler ObjectChanged;
+
+        public void AttachEventHandler()
+        {
+            RootChunk.ObjectChanged += OnObjectChanged;
+
+            foreach (var embeddedFile in EmbeddedFiles)
+            {
+                embeddedFile.Content.ObjectChanged += OnObjectChanged;
+            }
+        }
+
+        private void OnObjectChanged(object sender, ObjectChangedEventArgs e)
+        {
+            
+        }
+
+        #endregion
+
         #region Methods
 
         public List<string> FindType(Type type)

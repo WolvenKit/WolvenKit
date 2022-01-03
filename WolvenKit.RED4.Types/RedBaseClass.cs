@@ -10,74 +10,52 @@ using System.Threading;
 namespace WolvenKit.RED4.Types
 {
     [REDMeta]
-    public class RedBaseClass : DynamicObject, IRedType, IRedCloneable, IEquatable<RedBaseClass>
+    public class RedBaseClass : DynamicObject, IRedType, IRedNotifyObjectChanged, IRedCloneable, IEquatable<RedBaseClass>
     {
         #region Events
 
-        public class ObjectChangedEventArgs : EventArgs
+        public event ObjectChangedEventHandler ObjectChanged;
+
+        private readonly Dictionary<string, ObjectChangedEventHandler> _delegateCache = new();
+
+
+        private void AddEventHandler(string redPropertyName)
         {
-            public string RedName { get; }
-            public object OldValue { get; }
-            public object NewValue { get; }
-
-            public ObjectChangedEventArgs(string redName, object oldValue, object newValue)
+            if (!_delegateCache.ContainsKey(redPropertyName))
             {
-                RedName = redName;
-                OldValue = oldValue;
-                NewValue = newValue;
-            }
-        }
-
-        private static ThreadLocal<EventHandlerList> s_listEventDelegates = new(() => new EventHandlerList());
-
-        public delegate void ObjectChangedEventHandler(object sender, ObjectChangedEventArgs e);
-
-        public static bool RegisterEventHandler(Type type, ObjectChangedEventHandler handler)
-        {
-            if (!typeof(IRedType).IsAssignableFrom(type))
-            {
-                return false;
-            }
-
-            s_listEventDelegates.Value.AddHandler(type, handler);
-
-            return true;
-        }
-
-        public static bool RemoveEventHandler(Type type, ObjectChangedEventHandler handler)
-        {
-            if (!typeof(IRedType).IsAssignableFrom(type))
-            {
-                return false;
-            }
-
-            s_listEventDelegates.Value.RemoveHandler(type, handler);
-
-            return true;
-        }
-
-        private void OnObjectChanged(string redPropertyName, object value)
-        {
-            var exists = _properties.ContainsKey(redPropertyName);
-            if ((exists && _properties[redPropertyName] != null) || value != null)
-            {
-                var oldValue = exists ? _properties[redPropertyName] : null;
-
-                var type = value != null ? value.GetType() : oldValue.GetType();
-                if (type.IsGenericType)
+                _delegateCache.Add(redPropertyName, delegate (object sender, ObjectChangedEventArgs args)
                 {
-                    type = type.GetGenericTypeDefinition();
-                }
-
-                if (s_listEventDelegates.Value[type] is ObjectChangedEventHandler del)
-                {
-                    if (!Equals(oldValue, value))
+                    var path = $"{redPropertyName}.{args.RedPath}";
+                    if (args.RedPath.StartsWith(':'))
                     {
-                        del.Invoke(this, new ObjectChangedEventArgs(redPropertyName, oldValue, value));
+                        path = $"{redPropertyName}{args.RedPath}";
                     }
-                }
-
+                    ObjectChanged?.Invoke(sender, new ObjectChangedEventArgs(args.ChangeType, path, args.RedName, args.OldValue, args.NewValue));
+                });
             }
+
+            if (_properties[redPropertyName] is IRedNotifyObjectChanged notify)
+            {
+                notify.ObjectChanged += _delegateCache[redPropertyName];
+            }
+        }
+
+        private void RemoveEventHandler(string redPropertyName)
+        {
+            if (!_delegateCache.ContainsKey(redPropertyName))
+            {
+                return;
+            }
+
+            if (_properties[redPropertyName] is IRedNotifyObjectChanged notify)
+            {
+                notify.ObjectChanged -= _delegateCache[redPropertyName];
+            }
+        }
+
+        private void OnObjectChanged(string redPropertyName, object oldValue, object newValue)
+        {
+            ObjectChanged?.Invoke(this, new ObjectChangedEventArgs(ObjectChangedType.Modified, redPropertyName, redPropertyName, oldValue, newValue));
         }
 
         #endregion
@@ -156,8 +134,22 @@ namespace WolvenKit.RED4.Types
 
         internal void InternalSetPropertyValue(string redPropertyName, object value, bool native)
         {
-            //OnObjectChanged(redPropertyName, value);
-            _properties[redPropertyName] = value;
+            object oldValue = null;
+            if (_properties.ContainsKey(redPropertyName))
+            {
+                oldValue = _properties[redPropertyName];
+            }
+
+            if (!Equals(oldValue, value))
+            {
+                RemoveEventHandler(redPropertyName);
+
+                _properties[redPropertyName] = value;
+
+                AddEventHandler(redPropertyName);
+
+                OnObjectChanged(redPropertyName, oldValue, value);
+            }
         }
 
         public IRedType GetObjectByRedName(string redName)
@@ -258,7 +250,7 @@ namespace WolvenKit.RED4.Types
 
                 if (value is IRedBaseHandle handle)
                 {
-                    queue.Enqueue(((RedBaseClass)handle.GetValue(), propPath));
+                    queue.Enqueue((handle.GetValue(), propPath));
                 }
             }
         }
@@ -359,8 +351,7 @@ namespace WolvenKit.RED4.Types
 
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
-            //OnObjectChanged(binder.Name, value);
-            _properties[binder.Name] = value;
+            InternalSetPropertyValue(binder.Name, value, false);
 
             return true;
         }

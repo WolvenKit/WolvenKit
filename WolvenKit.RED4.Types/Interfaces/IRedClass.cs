@@ -7,13 +7,9 @@ namespace WolvenKit.RED4.Types
         internal void ConstructorOverload();
     }
 
-    public interface IRedBuffer
+    public interface IRedCloneable
     {
-        public uint Flags { get; }
-        public byte[] Bytes { get; }
-        public uint MemSize { get; set; }
-        public bool IsCompressed { get; }
-
-        public IParseableBuffer Data { get; set; }
+        public object ShallowCopy();
+        public object DeepCopy();
     }
 }
