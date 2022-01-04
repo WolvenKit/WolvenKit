@@ -137,7 +137,7 @@
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
-                        <TextBlock Name="PropertyDescriptor" Text="{Binding Descriptor}" Style="{StaticResource PropertyValueStyle}" Margin="0,0,4,2" Grid.Column="2" TextTrimming="CharacterEllipsis"/>
+                        <TextBlock Name="PropertyDescriptor" Text="{Binding Descriptor, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource PropertyValueStyle}" Margin="0,0,4,2" Grid.Column="2" TextTrimming="CharacterEllipsis"/>
                         <TextBlock Name="PropertyValue" Text="{Binding Value}" Style="{StaticResource PropertyValueStyle}" Margin="0,0,0,2" Grid.Column="2" TextTrimming="CharacterEllipsis"/>
                     </Grid>
                 </DataTemplate>

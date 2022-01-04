@@ -133,6 +133,7 @@ namespace WolvenKit.ViewModels.Shell
             ForceLoadCommand = new DelegateCommand((p) => ExecuteForceLoad(), (p) => CanForceLoad());
             AddItemToCompiledDataCommand = new DelegateCommand((p) => ExecuteAddItemToCompiledData(), (p) => CanAddItemToCompiledData());
             DeleteItemCommand = new DelegateCommand((p) => ExecuteDeleteItem(), (p) => CanDeleteItem());
+            DeleteAllCommand = new DelegateCommand((p) => ExecuteDeleteAll(), (p) => CanDeleteAll());
             OpenChunkCommand = new DelegateCommand((p) => ExecuteOpenChunk(), (p) => CanOpenChunk());
         }
 
@@ -172,6 +173,8 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         [Reactive] public IRedType Data { get; set; }
+
+        public IRedType ResolvedData => Data is IRedBaseHandle handle ? handle.GetValue() : Data;
 
         public ChunkViewModel Parent { get; set; }
 
@@ -853,14 +856,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             if (Data == null)
             {
-                if (ResolvedPropertyType.IsAssignableTo(typeof(DataBuffer)))
-                {
-                    Data = RedTypeManager.CreateRedType(typeof(DataBuffer));
-                }
-                if (ResolvedPropertyType.IsAssignableTo(typeof(SerializationDeferredDataBuffer)))
-                {
-                    Data = RedTypeManager.CreateRedType(typeof(SerializationDeferredDataBuffer));
-                }
+                Data = RedTypeManager.CreateRedType(ResolvedPropertyType);
                 (Data as IRedBufferPointer).SetValue(new RED4.RedBuffer()
                 {
                     Data = new Package04()
@@ -925,13 +921,35 @@ namespace WolvenKit.ViewModels.Shell
                     prop.RaisePropertyChanged("Name");
                 Tab.File.SetIsDirty(true);
             }
-            if (Parent.Data is DataBuffer db && db.Data is Package04 pkg)
+            if (Parent.Data is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
             {
                 Tab.SelectedChunk = Parent;
                 pkg.Chunks.Remove((RedBaseClass)Data);
                 Parent.Properties.Remove(this);
                 foreach (var prop in Parent.Properties)
                     prop.RaisePropertyChanged("Name");
+                Tab.File.SetIsDirty(true);
+            }
+        }
+
+        public ICommand DeleteAllCommand { get; private set; }
+        private bool CanDeleteAll() => IsArray && Properties != null && Properties.Count > 0;
+        private void ExecuteDeleteAll()
+        {
+            if (ResolvedData is IRedArray ary)
+            {
+                ary.Clear();
+                Properties.Clear();
+                this.RaisePropertyChanged("Data");
+                IsDeleteReady = false;
+                Tab.File.SetIsDirty(true);
+            }
+            if (ResolvedData is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
+            {
+                pkg.Chunks.Clear();
+                Properties.Clear();
+                this.RaisePropertyChanged("Data");
+                IsDeleteReady = false;
                 Tab.File.SetIsDirty(true);
             }
         }
