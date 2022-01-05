@@ -233,6 +233,8 @@ namespace WolvenKit.Common.Model.Arguments
         public Enums.GpuWrapApieTextureGroup TextureGroup { get; internal set; } =
             Enums.GpuWrapApieTextureGroup.TEXG_Generic_Color;
 
+        public bool IsGamma { get; set; }
+
         /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>
