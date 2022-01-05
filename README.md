@@ -1,27 +1,26 @@
 <p align="center">
+  <a href="https://wiki.redmodding.org/wolvenkit"><img src="https://cdn.discordapp.com/attachments/819016885239676978/847565560229527602/wkit_sammy_white_text_ffffff_800x200.png"/></a><br /><br />
   <a href="https://github.com/WolvenKit/Wolvenkit/releases"><img src="https://img.shields.io/github/downloads/WolvenKit/Wolven-Kit/total"></a>
   <a href="https://github.com/WolvenKit/Wolvenkit/actions?query=workflow%3AWolvenKit-Nightly"><img src="https://github.com/WolvenKit/Wolven-kit/workflows/WolvenKit-Nightly/badge.svg"></a>
   <a href="https://github.com/WolvenKit/Wolven-kit/issues"><img src="https://img.shields.io/github/issues/WolvenKit/Wolven-kit.svg"></a>
   <a href="https://github.com/WolvenKit/Wolven-kit/network"><img src="https://img.shields.io/github/forks/WolvenKit/Wolven-kit.svg"></a>
   <a href="https://github.com/WolvenKit/Wolven-kit/stargazers"><img src="https://img.shields.io/github/stars/WolvenKit/Wolven-kit.svg"></a>    
   <a href="https://raw.githubusercontent.com/WolvenKit/Wolven-kit/master/LICENSE"><img src="https://img.shields.io/badge/license-AGPL-blue.svg"></a>
-  <a href="https://discord.gg/cp77modding"><img src="https://img.shields.io/discord/717692382849663036.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2">  </a>  
+  <a href="https://discord.gg/cp77modding"><img src="https://img.shields.io/discord/717692382849663036.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2"></a>
+</p>
 
-# WolvenKit
-
-This repository was created to demonstrate how [CDPR](https://en.wikipedia.org/wiki/CD_Projekt)'s proprietary [**REDEngine**](https://en.wikipedia.org/wiki/CD_Projekt#REDengine) reads and writes file formats.
-And to experiment with the working of games running on this engine i.e. **The Witcher 3: The Wild Hunt** and **Cyberpunk 2077**. 
+<p align="center">
+  This repository was created to demonstrate how <a href="https://en.wikipedia.org/wiki/CD_Projekt">CDPR</a>'s proprietary <a href="https://en.wikipedia.org/wiki/CD_Projekt#REDengine"><strong>REDEngine</strong></a> reads and writes file formats.
+And to experiment with the working of games running on this engine i.e. <em>The Witcher 3: The Wild Hunt</em> and <em>Cyberpunk 2077</em>. 
 This toolkit is being made solely for research and educational purposes, and the dev team is in no way responsible for any malfunctions that occur from its use.
-Its completely open source, licensed under GPL v3.0, and in no way is it made to generate revenue.
-An ancestor to this tool was [W3Edit](https://drive.google.com/file/d/0B3axqSlhNHOOYmpkWk83TXRkZmM/view), initially developed by [Sarcen](http://forums.cdprojektred.com/forum/en/the-witcher-series/the-witcher-3-wild-hunt/mod-discussions/58758-mod-editor) in 2015, around the time The Witcher 3 first came out.
-After Sarcen stopped working on it, a few of us picked it up and continued from there.
-
+Its completely open source, licensed under the <a href="https://github.com/WolvenKit/WolvenKit/blob/master/LICENSE">GPL v3.0</a>, and in no way is it made to generate revenue.
+An ancestor to this tool was <a href="https://drive.google.com/file/d/0B3axqSlhNHOOYmpkWk83TXRkZmM/view">W3Edit</a>, initially developed by <a href="https://forums.cdprojektred.com/forum/en/the-witcher-series/the-witcher-3-wild-hunt/mod-discussions/58758-mod-editor">Sarcen</a> in 2015, around the time The Witcher 3 first came out.
+After Sarcen stopped working on it, a few of us picked it up and continued from there.<br /><br />
 Currently, WolvenKit allows reading and writing nearly every REDEngine file format to some extent. 
 It can also be used to create file modifications to the assets of the game, though this is currently beign actively worked upon, so do make sure to check it regularly.
 Our primary focus at the moment is progressing with support for the new game, Cyberpunk 2077.
-
-:question: Check out the wiki: https://wiki.redmodding.org/wolvenkit
-
+</p>
+  
 ---
   
 <h3 align="center">
@@ -33,9 +32,8 @@ Our primary focus at the moment is progressing with support for the new game, Cy
   <a href="#license">License</a>
 </h3>
 
-</p>
-  <p align="center"> 
-    <a href="https://patreon.com/traderain"><img src="https://i.ibb.co/RBZKRg4/Become-a-patron-button.png" alt="Become-a-patron-button" border="0"></a>
+<p align="center"> 
+  <a href="https://patreon.com/traderain"><img src="https://i.ibb.co/RBZKRg4/Become-a-patron-button.png" alt="Become-a-patron-button" border="0"></a>
   <a href="https://github.com/WolvenKit/Wolvenkit/releases/latest"><img src="https://i.ibb.co/272nyjJ/Pngtree-file-download-icon-4719240.png" alt="Pngtree-file-download-icon-4719240" border="0"></a>  
 </p>
 
@@ -60,7 +58,7 @@ Download either the latest stable version or the current nightly (beta) version 
 
 ## Usage
 
-:question: Check out the wiki: https://wiki.redmodding.org/wolvenkit
+📑 Check out the wiki: https://wiki.redmodding.org/wolvenkit
 
 
 ## Build instructions
