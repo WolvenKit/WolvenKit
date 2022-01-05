@@ -6,42 +6,46 @@ namespace WolvenKit.RED4.Types
 {
     public partial class gameLootResourceData : IRedAppendix
     {
-        public object Appendix { get; set; }
+        [RED("unk1")]
+        [REDProperty(IsIgnored = true)]
+        public CArray<CUInt64> Unk1
+        {
+            get => GetPropertyValue<CArray<CUInt64>>();
+            set => SetPropertyValue<CArray<CUInt64>>(value);
+        }
+
+        [RED("buffer")]
+        [REDProperty(IsIgnored = true)]
+        public CByteArray Buffer
+        {
+            get => GetPropertyValue<CByteArray>();
+            set => SetPropertyValue<CByteArray>(value);
+        }
 
         public void Read(Red4Reader reader, uint size)
         {
-            var result = new gameLootResourceData_Appendix();
+            Unk1 = new CArray<CUInt64>();
 
             var startPos = reader.BaseReader.BaseStream.Position;
 
-            result.Unk1 = new ulong[reader.BaseReader.ReadVLQInt32()];
-            for (int i = 0; i < result.Unk1.Length; i++)
+            var cnt = reader.BaseReader.ReadVLQInt32();
+            for (int i = 0; i < cnt; i++)
             {
-                result.Unk1[i] = reader.BaseReader.ReadUInt64();
+                Unk1.Add(reader.ReadCUInt64());
             }
 
             var bytesRead = reader.BaseReader.BaseStream.Position - startPos;
-            result.Buffer = reader.BaseReader.ReadBytes((int)(size - bytesRead));
-
-            Appendix = result;
+            Buffer = reader.BaseReader.ReadBytes((int)(size - bytesRead));
         }
 
         public void Write(Red4Writer writer)
         {
-            var appendix = (gameLootResourceData_Appendix)Appendix;
-
-            writer.WriteVLQ(appendix.Unk1.Length);
-            foreach (var entry in appendix.Unk1)
+            writer.WriteVLQ(Unk1.Count);
+            foreach (var entry in Unk1)
             {
-                writer.BaseWriter.Write(entry);
+                writer.Write(entry);
             }
-            writer.BaseWriter.Write(appendix.Buffer);
+            writer.BaseWriter.Write(Buffer);
         }
-    }
-
-    public class gameLootResourceData_Appendix
-    {
-        public ulong[] Unk1 { get; set; }
-        public byte[] Buffer { get; set; }
     }
 }

@@ -6,38 +6,43 @@ namespace WolvenKit.RED4.Types
 {
     public partial class physicsColliderMesh : IRedAppendix
     {
-        public object Appendix { get; set; }
+        [RED("unk1")]
+        [REDProperty(IsIgnored = true)]
+        public CUInt16 Unk1
+        {
+            get => GetPropertyValue<CUInt16>();
+            set => SetPropertyValue<CUInt16>(value);
+        }
+
+        [RED("unk2")]
+        [REDProperty(IsIgnored = true)]
+        public CArray<CUInt16> Unk2
+        {
+            get => GetPropertyValue<CArray<CUInt16>>();
+            set => SetPropertyValue<CArray<CUInt16>>(value);
+        }
 
         public void Read(Red4Reader reader, uint size)
         {
-            var result = new physicsColliderMesh_Appendix();
+            Unk2 = new CArray<CUInt16>();
 
-            result.Unk1 = reader.BaseReader.ReadUInt16();
-            result.Unk2 = new ushort[reader.BaseReader.ReadVLQInt32()];
-            for (int i = 0; i < result.Unk2.Length; i++)
+            Unk1 = reader.ReadCUInt16();
+
+            var cnt = reader.BaseReader.ReadVLQInt32();
+            for (int i = 0; i < cnt; i++)
             {
-                result.Unk2[i] = reader.BaseReader.ReadUInt16();
+                Unk2.Add(reader.ReadCUInt16());
             }
-
-            Appendix = result;
         }
 
         public void Write(Red4Writer writer)
         {
-            var appendix = (physicsColliderMesh_Appendix)Appendix;
-
-            writer.BaseWriter.Write(appendix.Unk1);
-            writer.WriteVLQ(appendix.Unk2.Length);
-            foreach (var entry in appendix.Unk2)
+            writer.Write(Unk1);
+            writer.WriteVLQ(Unk2.Count);
+            foreach (var entry in Unk2)
             {
-                writer.BaseWriter.Write(entry);
+                writer.Write(entry);
             }
         }
-    }
-
-    public class physicsColliderMesh_Appendix
-    {
-        public ushort Unk1 { get; set; }
-        public ushort[] Unk2 { get; set; }
     }
 }

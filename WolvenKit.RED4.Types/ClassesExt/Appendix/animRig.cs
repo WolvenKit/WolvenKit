@@ -5,12 +5,27 @@ namespace WolvenKit.RED4.Types
 {
     public partial class animRig : IRedAppendix
     {
-        public object Appendix { get; set; }
+        [RED("unk1")]
+        [REDProperty(IsIgnored = true)]
+        public CArray<CInt16> Unk1
+        {
+            get => GetPropertyValue<CArray<CInt16>>();
+            set => SetPropertyValue<CArray<CInt16>>(value);
+        }
+
+        // could be anything, the vector4 is just a wild guess
+        [RED("unk2")]
+        [REDProperty(IsIgnored = true)]
+        public CArray<CArray<Vector4>> Unk2
+        {
+            get => GetPropertyValue<CArray<CArray<Vector4>>>();
+            set => SetPropertyValue<CArray<CArray<Vector4>>>(value);
+        }
 
         public void Read(Red4Reader reader, uint size)
         {
-            Unk1 = new List<CInt16>();
-            Unk2 = new List<List<Vector4>>();
+            Unk1 = new CArray<CInt16>();
+            Unk2 = new CArray<CArray<Vector4>>();
 
             var count = BoneNames.Count;
             for (var i = 0; i < count; i++)
@@ -20,7 +35,7 @@ namespace WolvenKit.RED4.Types
 
             for (var i = 0; i < count; i++)
             {
-                var innerlist = new List<Vector4>();
+                var innerlist = new CArray<Vector4>();
                 for (var j = 0; j < 3; j++)
                 {
                     var vec = new Vector4()
@@ -34,8 +49,6 @@ namespace WolvenKit.RED4.Types
                 }
                 Unk2.Add(innerlist);
             }
-
-            //Appendix = new BaseAppendix { Buffer = reader.BaseReader.ReadBytes((int)size) };
         }
 
         public void Write(Red4Writer writer)
@@ -55,15 +68,6 @@ namespace WolvenKit.RED4.Types
                     writer.Write(e3.W);
                 }
             }
-
-            //writer.BaseWriter.Write(((BaseAppendix)Appendix).Buffer);
         }
-
-        [REDProperty(IsIgnored = true)]
-        public List<CInt16> Unk1 { get; set; }
-
-        // could be anything, the vector4 is just a wild guess
-        [REDProperty(IsIgnored = true)]
-        public List<List<Vector4>> Unk2 { get; set; }
     }
 }
