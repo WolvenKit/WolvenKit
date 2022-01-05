@@ -25,12 +25,19 @@ namespace WolvenKit.RED4.Types
             {
                 _delegateCache.Add(redPropertyName, delegate (object sender, ObjectChangedEventArgs args)
                 {
-                    var path = $"{redPropertyName}.{args.RedPath}";
-                    if (args.RedPath.StartsWith(':'))
+                    if (sender != null)
                     {
-                        path = $"{redPropertyName}{args.RedPath}";
+                        var path = $"{redPropertyName}.{args.RedPath}";
+                        if (args.RedPath.StartsWith(':'))
+                        {
+                            path = $"{redPropertyName}{args.RedPath}";
+                        }
+                        ObjectChanged?.Invoke(sender, new ObjectChangedEventArgs(args.ChangeType, path, args.RedName, args.OldValue, args.NewValue));
                     }
-                    ObjectChanged?.Invoke(sender, new ObjectChangedEventArgs(args.ChangeType, path, args.RedName, args.OldValue, args.NewValue));
+                    else
+                    {
+                        ObjectChanged?.Invoke(this, new ObjectChangedEventArgs(args.ChangeType, redPropertyName, redPropertyName, args.OldValue, args.NewValue));
+                    }
                 });
             }
 
