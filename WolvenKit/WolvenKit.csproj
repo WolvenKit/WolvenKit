@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Platforms>x64</Platforms>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <AssemblyName>WolvenKit</AssemblyName>
     <RootNamespace>WolvenKit</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -11,7 +11,7 @@
     <OutputType>WinExe</OutputType>
       <ApplicationIcon>Resources\Media\Images\Icons\Application\TaskBarIcon.ico</ApplicationIcon>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-    <PublishSingleFile>true</PublishSingleFile>
+    <PublishSingleFile>false</PublishSingleFile>
     <SelfContained>true</SelfContained>
     <DebugType>embedded</DebugType>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

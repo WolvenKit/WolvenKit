@@ -18,6 +18,7 @@ using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.Shell;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace WolvenKit
 {
@@ -54,8 +55,12 @@ namespace WolvenKit
                     if (!File.Exists(bootstrapper))
                     {
                         // download
-                        using var wc = new WebClient();
-                        wc.DownloadFile(new Uri(bootstrapperLink), bootstrapper);
+                        HttpClient client = new();
+                        var response = await client.GetAsync(new Uri(bootstrapperLink));
+                        response.EnsureSuccessStatusCode();
+
+                        await using var fs = new FileStream(bootstrapper, System.IO.FileMode.Create);
+                        await response.Content.CopyToAsync(fs);
                     }
 
                     var result = AdonisUI.Controls.MessageBox.Show(

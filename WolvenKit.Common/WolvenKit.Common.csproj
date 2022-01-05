@@ -12,7 +12,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>wolvenkit</PackageTags>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-      <TargetFramework>net5.0</TargetFramework>
+      <TargetFramework>net6.0</TargetFramework>
       <AssemblyVersion>2.4</AssemblyVersion>
       <PackageOutputPath>./nupkg</PackageOutputPath>
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
