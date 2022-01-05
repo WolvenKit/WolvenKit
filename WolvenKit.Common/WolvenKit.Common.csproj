@@ -12,7 +12,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>wolvenkit</PackageTags>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-      <TargetFramework>net5.0</TargetFramework>
+      <TargetFramework>net6.0</TargetFramework>
       <AssemblyVersion>2.4</AssemblyVersion>
       <PackageOutputPath>./nupkg</PackageOutputPath>
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -141,7 +141,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DirectXTexSharp\DirectXTexSharp\DirectXTexSharp_2019.vcxproj" />
+    <ProjectReference Include="..\DirectXTexSharp\DirectXTexSharp\DirectXTexSharp_2022.vcxproj" />
     <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
     <ProjectReference Include="..\WolvenKit.RED4.Archive\WolvenKit.RED4.Archive.csproj" />
     <ProjectReference Include="..\WolvenKit.RED4.Types\WolvenKit.RED4.Types.csproj" />

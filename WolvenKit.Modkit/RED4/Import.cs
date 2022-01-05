@@ -322,6 +322,8 @@ namespace WolvenKit.Modkit.RED4
             var redfile = "";
             var infile = rawRelative.FullName;
 
+            CR2WFile cr2w = null;
+
             // checks
             if (args.Keep)
             {
@@ -332,8 +334,17 @@ namespace WolvenKit.Modkit.RED4
                     _loggerService.Warning($"No existing redfile found to rebuild for {rawRelative.Name}");
                     return false;
                 }
-            }
 
+                using var redstream = new FileStream(redfile, FileMode.Open);
+                using var fileReader = new BinaryReader(redstream);
+
+                cr2w = _wolvenkitFileService.TryReadRed4File(fileReader);
+                if (cr2w == null || cr2w.RootChunk is not CBitmapTexture xbm || xbm.RenderTextureResource == null || xbm.RenderTextureResource.RenderResourceBlobPC.Chunk is not rendRenderTextureBlobPC)
+                {
+                    return false;
+                }
+            }
+            
             using var ms = new MemoryStream();
 
             // convert to dds if not already
@@ -347,29 +358,50 @@ namespace WolvenKit.Modkit.RED4
 
                 DXGI_FORMAT? format;
 
-                // TODO
-                if (rawExt == EUncookExtension.tga.ToString())
+                if (args.Keep)
                 {
-                    var md = DDSUtils.GetMetadataFromTGAFile(infile);
-                    format = md.Format;
-                }
-                else if (rawExt == EUncookExtension.png.ToString())
-                {
-                    using (var stream = new FileStream(infile, FileMode.Open, FileAccess.Read, FileShare.Read))
-                    {
-                        // need to figure out how to decide format/etc from png header
-                        //var image = Png.Open(stream);
-                        //image.Header.ColorType;
-                        //var md = new DDSMetadata(new DirectXTexSharp.TexMetadata(), image.Header.BitDepth, true);
+                    var xbm = (CBitmapTexture)cr2w.RootChunk;
 
-                        //format = md.Format;
-                        format = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
+                    var compression = Enums.ETextureCompression.TCM_None;
+                    if (xbm.Setup.Compression?.Value != null)
+                    {
+                        compression = xbm.Setup.Compression.Value.Value;
                     }
+
+                    var rawfmt = Enums.ETextureRawFormat.TRF_TrueColor;
+                    if (xbm.Setup.RawFormat?.Value != null)
+                    {
+                        rawfmt = xbm.Setup.RawFormat.Value.Value;
+                    }
+
+                    format = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
                 }
                 else
                 {
-                    _loggerService.Error($"Direct {rawExt} import is not supported yet.");
-                    return false;
+                    // TODO
+                    if (rawExt == EUncookExtension.tga.ToString())
+                    {
+                        var md = DDSUtils.GetMetadataFromTGAFile(infile);
+                        format = md.Format;
+                    }
+                    else if (rawExt == EUncookExtension.png.ToString())
+                    {
+                        using (var stream = new FileStream(infile, FileMode.Open, FileAccess.Read, FileShare.Read))
+                        {
+                            // need to figure out how to decide format/etc from png header
+                            //var image = Png.Open(stream);
+                            //image.Header.ColorType;
+                            //var md = new DDSMetadata(new DirectXTexSharp.TexMetadata(), image.Header.BitDepth, true);
+
+                            //format = md.Format;
+                            format = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
+                        }
+                    }
+                    else
+                    {
+                        _loggerService.Error($"Direct {rawExt} import is not supported yet.");
+                        return false;
+                    }
                 }
 
                 using var fs = new FileStream(infile, FileMode.Open);
@@ -397,41 +429,14 @@ namespace WolvenKit.Modkit.RED4
             // create xbm
             if (args.Keep)
             {
-                using var redstream = new FileStream(redfile, FileMode.Open);
-                using var fileReader = new BinaryReader(redstream);
-
-                var cr2w = _wolvenkitFileService.TryReadRed4File(fileReader);
-                if (cr2w == null || cr2w.RootChunk is not CBitmapTexture xbm || xbm.RenderTextureResource == null || xbm.RenderTextureResource.RenderResourceBlobPC.Chunk is not rendRenderTextureBlobPC rend)
-                {
-                    return false;
-                }
-
-                var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
-                if (xbm.Setup.RawFormat?.Value != null)
-                {
-                    rawfmt = xbm.Setup.RawFormat.Value.Value;
-                }
-
-                var compression = Enums.ETextureCompression.TCM_None;
-                if (xbm.Setup.Compression?.Value != null)
-                {
-                    compression = xbm.Setup.Compression.Value.Value;
-                }
-
-                DXGI_FORMAT? oldFormat = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
-
-                if (!Equals(oldFormat, metadata.Format))
-                {
-                    _loggerService.Error($"Format doesn't match. Aborting.");
-                    return false;
-                }
-
+                var xbm = (CBitmapTexture)cr2w.RootChunk;
                 if (!Equals((uint)xbm.Width, metadata.Width) || !Equals((uint)xbm.Height, metadata.Height))
                 {
                     _loggerService.Error($"Resolution doesn't match. Aborting.");
                     return false;
                 }
 
+                var rend = (rendRenderTextureBlobPC)xbm.RenderTextureResource.RenderResourceBlobPC.Chunk;
                 rend.TextureData.Buffer = RedBuffer.CreateBuffer(rend.TextureData.Buffer.Flags, ms.ToByteArray().Skip(148).ToArray());
 
                 using var fs = new FileStream(redfile, FileMode.Create, FileAccess.ReadWrite);
@@ -450,10 +455,8 @@ namespace WolvenKit.Modkit.RED4
                 var fmt = metadata.Format;
                 var textureDataSize = ms.Length - 148; //GetBlockSize(width, fmt);
 
-
-
                 // create cr2wfile
-                var red = new CR2WFile();
+                cr2w = new CR2WFile();
 
                 // xbm chunk
                 var xbm = RedTypeManager.Create<CBitmapTexture>();
@@ -461,7 +464,7 @@ namespace WolvenKit.Modkit.RED4
                 xbm.Width = width;
                 xbm.Height = height;
 
-                SetTextureGroupSetup(xbm.Setup, red);
+                SetTextureGroupSetup(xbm.Setup, cr2w);
 
                 // blob chunk
                 var blob = RedTypeManager.Create<rendRenderTextureBlobPC>();
@@ -533,7 +536,7 @@ namespace WolvenKit.Modkit.RED4
                 // texdata buffer ref
 
                 // add chunks
-                red.RootChunk = xbm;
+                cr2w.RootChunk = xbm;
 
                 // write
                 blob.TextureData = new SerializationDeferredDataBuffer
@@ -551,7 +554,7 @@ namespace WolvenKit.Modkit.RED4
 
                 using var fs = new FileStream(outpath.FullPath, FileMode.Create, FileAccess.ReadWrite);
                 using var writer = new CR2WWriter(fs);
-                writer.WriteFile(red);
+                writer.WriteFile(cr2w);
             }
 
 #pragma warning disable CS0162 // Unreachable code detected
@@ -571,6 +574,7 @@ namespace WolvenKit.Modkit.RED4
                 setup.Group = args.TextureGroup;
                 setup.Compression = Enums.ETextureCompression.TCM_None;
                 setup.RawFormat = Enums.ETextureRawFormat.TRF_TrueColor;
+                setup.IsGamma = args.IsGamma;
 
                 //if (flags is CommonFunctions.ETexGroupFlags.Both or CommonFunctions.ETexGroupFlags.CompressionOnly)
                 //{

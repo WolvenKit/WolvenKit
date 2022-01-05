@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Platforms>x64</Platforms>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyVersion>1.5.2</AssemblyVersion>
     <InformationalVersion>1.5.2</InformationalVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -23,7 +23,7 @@
       <StartupObject>WolvenKit.CLI.Program</StartupObject>
       <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
       <DebugType>embedded</DebugType>
-    <PublishSingleFile>true</PublishSingleFile>
+    <PublishSingleFile>false</PublishSingleFile>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <SelfContained>true</SelfContained>
   </PropertyGroup>
