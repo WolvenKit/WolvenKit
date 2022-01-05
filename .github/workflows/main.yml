@@ -11,7 +11,7 @@ on:
 
 jobs:   
   check-wkit-win:
-    runs-on: windows-latest
+    runs-on: windows-2022
 
     steps:
     # setup  
@@ -73,7 +73,7 @@ jobs:
 
 
   check-console-win:
-    runs-on: windows-latest
+    runs-on: windows-2022
     
     steps:
     # setup  
