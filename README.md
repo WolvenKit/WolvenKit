@@ -76,7 +76,7 @@ Download either the latest stable version or the current nightly (beta) version 
 Do you want to contribute? Community feedback and contributions are highly appreciated!
 It's a good idea to create an issue when implementing a feature so people don't work on the same feature/issue in an asynchronous manner.
 
-**For general rules and guidelines see [CONTRIBUTING.md](/CONTRIBUTING.md).**
+**For general rules and guidelines see [CONTRIBUTING.md](/docs/CONTRIBUTING.md).**
 
 For any questions:
 Developer | Role | Email
