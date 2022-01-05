@@ -151,7 +151,7 @@ namespace WolvenKit.ViewModels.Shell
 
         #endregion Constructors
 
-        protected void NotifyChain(string property)
+        public void NotifyChain(string property)
         {
             this.RaisePropertyChanged(property);
             if (Parent != null)
@@ -459,6 +459,8 @@ namespace WolvenKit.ViewModels.Shell
 
         public int Level => Parent == null ? 0 : Parent.Level + 1;
 
+        public int DetailsLevel => (IsSelected || Parent == null) ? 0 : Parent.DetailsLevel + 1;
+
         private Flags _flags;
 
         public Type PropertyType
@@ -669,16 +671,15 @@ namespace WolvenKit.ViewModels.Shell
         {
             if (PropertyType == null)
                 return "";
-            if (PropertyType.IsAssignableTo(typeof(IRedArray)))
+            if (ResolvedData is IRedArray ary)
             {
-                var value = (IRedArray)Data;
-                return $"[{value.Count}]";
+                return $"[{ary.Count}]";
             }
-            var data = Data;
-            if (Data is IRedBaseHandle handle)
-                data = handle.GetValue();
-
-            if (data is RedBaseClass irc)
+            if (ResolvedData is IRedBufferPointer rbp && rbp.GetValue().Data is Package04 pkg)
+            {
+                return $"[{pkg.Chunks.Count}]";
+            }
+            if (ResolvedData is RedBaseClass irc)
             {
                 // some common "names" of classes that might be useful to display in the UI
                 var name = GetPropertyByName(irc.GetType(), "Name");
@@ -806,7 +807,7 @@ namespace WolvenKit.ViewModels.Shell
 
 
         public ICommand ForceLoadCommand { get; private set; }
-        private bool CanForceLoad() => (Properties is null || Properties.Count >= 5) && !ForceLoadProperties && Data != null && (Data is RedBaseClass || Data is IRedArray || Data is IRedBaseHandle);
+        private bool CanForceLoad() => Properties is null;
         private void ExecuteForceLoad()
         {
             ForceLoadProperties = true;

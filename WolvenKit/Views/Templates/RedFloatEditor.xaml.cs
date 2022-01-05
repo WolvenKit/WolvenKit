@@ -1,8 +1,12 @@
+using System;
+using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ReactiveUI;
 using WolvenKit.RED4.Types;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Views.Editors
 {
@@ -11,9 +15,21 @@ namespace WolvenKit.Views.Editors
     /// </summary>
     public partial class RedFloatEditor : UserControl
     {
+        public ChunkViewModel cvm => DataContext as ChunkViewModel;
+
         public RedFloatEditor()
         {
             InitializeComponent();
+
+            Observable.FromEventPattern<TextChangedEventHandler, TextChangedEventArgs>(
+                handler => TextBox.TextChanged += handler,
+                handler => TextBox.TextChanged -= handler)
+                .Throttle(TimeSpan.FromSeconds(.5))
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(x =>
+                {
+                    SetRedValue(TextBox.Text);
+                });
         }
 
         public CFloat RedNumber
@@ -31,13 +47,26 @@ namespace WolvenKit.Views.Editors
             set => SetRedValue(value);
         }
 
-        private void SetRedValue(string value) => SetCurrentValue(RedNumberProperty, (CFloat)float.Parse(value));
+        private void SetRedValue(string value)
+        {
+            try
+            {
+                if (cvm != null)
+                    cvm.Data = (CFloat)float.Parse(value);
+                else
+                    SetCurrentValue(RedNumberProperty, (CFloat)float.Parse(value));
+            }
+            catch (FormatException)
+            {
 
-        private string GetValueFromRedValue() => ((float)RedNumber).ToString("R");
+            }
+        }
+
+        private string GetValueFromRedValue() => cvm != null ? ((float)(CFloat)cvm.Data).ToString("R") : ((float)RedNumber).ToString("R");
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
-            Regex regex = new Regex("[^0-9\\.]+");
-            e.Handled = regex.IsMatch(e.Text);
+            var tb = (TextBox)e.Source;
+            e.Handled = !float.TryParse(tb.Text.Insert(tb.CaretIndex, e.Text), out _);
         }
 
     }

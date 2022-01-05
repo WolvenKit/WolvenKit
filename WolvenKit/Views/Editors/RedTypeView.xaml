@@ -36,7 +36,7 @@
                         Kind="ArrowCircleDown" 
                         VerticalAlignment="Center"
                         Padding="2"/>
-                        <TextBlock Text="Force Load" VerticalAlignment="Center" Margin="1,0,4,0" Foreground="{StaticResource WolvenKitCyan}" />
+                        <TextBlock Text="Load" VerticalAlignment="Center" Margin="1,0,4,0" Foreground="{StaticResource WolvenKitCyan}" />
                     </StackPanel>
                 </Button>
             </DataTemplate>
@@ -159,7 +159,7 @@
                                             <Grid Height="12" Background="Transparent">
                                                 <StackPanel Orientation="Horizontal">
                                                     <iconPacks:PackIconVaadinIcons Kind="Trash" Foreground="{StaticResource WolvenKitRed}"
-                                VerticalAlignment="Center" Padding="2"/>
+                                                        VerticalAlignment="Center" Padding="2"/>
                                                     <TextBlock Text="Delete All Items" VerticalAlignment="Center" Margin="1,0,4,0" Foreground="{StaticResource WolvenKitRed}" />
                                                 </StackPanel>
                                             </Grid>
@@ -305,7 +305,7 @@
                 </converters:RedEditorTemplateSelector.RedVector4Editor>
                 <converters:RedEditorTemplateSelector.RedQuaternionEditor>
                     <DataTemplate>
-                        <editors:RedQuaternionEditor I="{Binding Data.I, Mode=TwoWay}" J="{Binding Data.J, Mode=TwoWay}" K="{Binding Data.K, Mode=TwoWay}" R="{Binding Data.R, Mode=TwoWay}"/>
+                        <editors:RedQuaternionEditor DataContext="{Binding}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedQuaternionEditor>
                 <converters:RedEditorTemplateSelector.RedIntegerEditor>
@@ -320,7 +320,7 @@
                 </converters:RedEditorTemplateSelector.RedFixedPointEditor>
                 <converters:RedEditorTemplateSelector.RedFloatEditor>
                     <DataTemplate>
-                        <editors:RedFloatEditor RedNumber="{Binding Data, Mode=TwoWay}"/>
+                        <editors:RedFloatEditor DataContext="{Binding}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedFloatEditor>
                 <converters:RedEditorTemplateSelector.RedTypeViewer>
@@ -338,7 +338,7 @@
                                     </Style>
                                 </TextBlock.Style>
                             </TextBlock>
-                            <ContentPresenter ContentTemplate="{StaticResource ForceLoadButton}" />
+                            <!--ContentPresenter ContentTemplate="{StaticResource ForceLoadButton}" /-->
                             <ContentPresenter ContentTemplate="{StaticResource AddToCompiledDataButton}" />
                             <ContentPresenter ContentTemplate="{StaticResource AddHandleButton}" />
                             <ContentPresenter ContentTemplate="{StaticResource DeleteAllButton}" />
@@ -368,6 +368,7 @@
                                     </TextBlock>
                                     <ContentPresenter ContentTemplate="{StaticResource ForceLoadButton}" />
                                     <ContentPresenter ContentTemplate="{StaticResource AddToArrayButton}" />
+                                    <ContentPresenter ContentTemplate="{StaticResource AddToCompiledDataButton}" />
                                     <ContentPresenter ContentTemplate="{StaticResource AddHandleButton}" />
                                     <ContentPresenter ContentTemplate="{StaticResource DeleteAllButton}" />
                                 </StackPanel>
@@ -441,7 +442,7 @@
             </Grid>
         </Border>
         <!-- main editor list -->
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0" Grid.Row="1" Margin="0,-1,0,0">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0" Grid.Row="1" Margin="0,-1,0,0" Tag="{Binding Level}">
             <ItemsControl ItemsSource="{Binding DisplayProperties}" ItemTemplate="{StaticResource ItemTemplate}" Grid.Column="2" AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

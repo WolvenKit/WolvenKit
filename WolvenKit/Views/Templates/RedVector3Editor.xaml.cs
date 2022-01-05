@@ -69,8 +69,7 @@ namespace WolvenKit.Views.Editors
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
-            Regex regex = new Regex("[^0-9\\.]+");
-            e.Handled = regex.IsMatch(e.Text);
+            e.Handled = float.TryParse(e.Text, out var _);
         }
 
     }
