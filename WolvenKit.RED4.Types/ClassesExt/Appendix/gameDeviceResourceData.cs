@@ -6,58 +6,62 @@ namespace WolvenKit.RED4.Types
 {
     public partial class gameDeviceResourceData : IRedAppendix
     {
-        public object Appendix { get; set; }
+        [RED("unk1")]
+        [REDProperty(IsIgnored = true)]
+        public CArray<gameDeviceResourceData_Cls1> Unk1
+        {
+            get => GetPropertyValue<CArray<gameDeviceResourceData_Cls1>>();
+            set => SetPropertyValue<CArray<gameDeviceResourceData_Cls1>>(value);
+        }
 
         public void Read(Red4Reader reader, uint size)
         {
+            Unk1 = new CArray<gameDeviceResourceData_Cls1>();
+
             var innerSize = reader.BaseReader.ReadInt32();
 
-            var result = new gameDeviceResourceData_Appendix();
-
-            result.Unk1 = new gameDeviceResourceData_Appendix1[reader.BaseReader.ReadInt32()];
-            for (int i = 0; i < result.Unk1.Length; i++)
+            var cnt = reader.BaseReader.ReadInt32();
+            for (int i = 0; i < cnt; i++)
             {
-                result.Unk1[i] = new gameDeviceResourceData_Appendix1();
+                var entry = new gameDeviceResourceData_Cls1();
 
-                result.Unk1[i].Hash = reader.ReadCUInt64();
-                result.Unk1[i].ClassName = reader.ReadCName();
+                entry.Hash = reader.ReadCUInt64();
+                entry.ClassName = reader.ReadCName();
 
-                result.Unk1[i].Children = new CUInt64[reader.BaseReader.ReadVLQInt32()];
-                result.Unk1[i].Parents = new CUInt64[reader.BaseReader.ReadVLQInt32()];
+                var childCnt = reader.BaseReader.ReadVLQInt32();
+                var parentCnt = reader.BaseReader.ReadVLQInt32();
 
-                for (int j = 0; j < result.Unk1[i].Children.Length; j++)
+                for (int j = 0; j < childCnt; j++)
                 {
-                    result.Unk1[i].Children[j] = reader.BaseReader.ReadUInt64();
+                    entry.Children.Add(reader.BaseReader.ReadUInt64());
                 }
 
-                for (int j = 0; j < result.Unk1[i].Parents.Length; j++)
+                for (int j = 0; j < parentCnt; j++)
                 {
-                    result.Unk1[i].Parents[j] = reader.BaseReader.ReadUInt64();
+                    entry.Parents.Add(reader.BaseReader.ReadUInt64());
                 }
 
-                result.Unk1[i].NodePosition.X = reader.ReadCFloat();
-                result.Unk1[i].NodePosition.Y = reader.ReadCFloat();
-                result.Unk1[i].NodePosition.Z = reader.ReadCFloat();
+                entry.NodePosition.X = reader.ReadCFloat();
+                entry.NodePosition.Y = reader.ReadCFloat();
+                entry.NodePosition.Z = reader.ReadCFloat();
+
+                Unk1.Add(entry);
             }
-
-            Appendix = result;
         }
 
         public void Write(Red4Writer writer)
         {
-            var appendix = (gameDeviceResourceData_Appendix)Appendix;
-
             var startPos = writer.BaseStream.Position;
             writer.BaseWriter.Write(0);
 
-            writer.BaseWriter.Write(appendix.Unk1.Length);
-            foreach (var entry in appendix.Unk1)
+            writer.BaseWriter.Write(Unk1.Count);
+            foreach (var entry in Unk1)
             {
                 writer.Write(entry.Hash);
                 writer.Write(entry.ClassName);
 
-                writer.WriteVLQ(entry.Children.Length);
-                writer.WriteVLQ(entry.Parents.Length);
+                writer.WriteVLQ(entry.Children.Count);
+                writer.WriteVLQ(entry.Parents.Count);
 
                 foreach (var child in entry.Children)
                 {
@@ -82,17 +86,19 @@ namespace WolvenKit.RED4.Types
         }
     }
 
-    public class gameDeviceResourceData_Appendix
-    {
-        public gameDeviceResourceData_Appendix1[] Unk1 { get; set; }
-    }
-
-    public class gameDeviceResourceData_Appendix1
+    public class gameDeviceResourceData_Cls1 : RedBaseClass
     {
         public CUInt64 Hash { get; set; }
         public CName ClassName { get; set; }
-        public CUInt64[] Children { get; set; }
-        public CUInt64[] Parents { get; set; }
-        public Vector3 NodePosition { get; set; } = new();
+        public CArray<CUInt64> Children { get; set; }
+        public CArray<CUInt64> Parents { get; set; }
+        public Vector3 NodePosition { get; set; }
+
+        public gameDeviceResourceData_Cls1()
+        {
+            Children = new CArray<CUInt64>();
+            Parents = new CArray<CUInt64>();
+            NodePosition = new Vector3();
+        }
     }
 }

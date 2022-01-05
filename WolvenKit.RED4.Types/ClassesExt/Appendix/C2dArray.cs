@@ -6,58 +6,65 @@ namespace WolvenKit.RED4.Types
 {
     public partial class C2dArray : IRedAppendix
     {
-        public object Appendix { get; set; }
+        [RED("customHeaders")]
+        [REDProperty(IsIgnored = true)]
+        public CArray<CString> CustomHeaders
+        {
+            get => GetPropertyValue<CArray<CString>>();
+            set => SetPropertyValue<CArray<CString>>(value);
+        }
+
+        [RED("customRows")]
+        [REDProperty(IsIgnored = true)]
+        public CArray<CArray<CString>> CustomRows
+        {
+            get => GetPropertyValue<CArray<CArray<CString>>>();
+            set => SetPropertyValue<CArray<CArray<CString>>>(value);
+        }
 
         public void Read(Red4Reader reader, uint size)
         {
-            var result = new C2dArray_Appendix();
-
-            result.Headers = new string[reader.BaseReader.ReadVLQInt32()];
-            for (int i = 0; i < result.Headers.Length; i++)
+            CustomHeaders = new CArray<CString>();
+            CustomRows = new CArray<CArray<CString>>();
+            
+            var cnt1 = reader.BaseReader.ReadVLQInt32();
+            for (int i = 0; i < cnt1; i++)
             {
-                result.Headers[i] = reader.ReadCString();
+                CustomHeaders.Add(reader.ReadCString());
             }
 
-            result.Rows = new string[reader.BaseReader.ReadVLQInt32()][];
-            for (int i = 0; i < result.Rows.Length; i++)
+            cnt1 = reader.BaseReader.ReadVLQInt32();
+            for (int i = 0; i < cnt1; i++)
             {
-                var row = new string[reader.BaseReader.ReadVLQInt32()];
-                for (int j = 0; j < row.Length; j++)
+                var row = new CArray<CString>();
+
+                var cnt2 = reader.BaseReader.ReadVLQInt32();
+                for (int j = 0; j < cnt2; j++)
                 {
-                    row[j] = reader.ReadCString();
+                    row.Add(reader.ReadCString());
                 }
 
-                result.Rows[i] = row;
+                CustomRows.Add(row);
             }
-
-            Appendix = result;
         }
 
         public void Write(Red4Writer writer)
         {
-            var value = (C2dArray_Appendix)Appendix;
-
-            writer.WriteVLQ(value.Headers.Length);
-            foreach (var entry in value.Headers)
+            writer.WriteVLQ(CustomHeaders.Count);
+            foreach (var entry in CustomHeaders)
             {
-                writer.Write((CString)entry);
+                writer.Write(entry);
             }
 
-            writer.WriteVLQ(value.Rows.Length);
-            foreach (var row in value.Rows)
+            writer.WriteVLQ(CustomRows.Count);
+            foreach (var row in CustomRows)
             {
-                writer.WriteVLQ(row.Length);
+                writer.WriteVLQ(row.Count);
                 foreach (var entry in row)
                 {
-                    writer.Write((CString)entry);
+                    writer.Write(entry);
                 }
             }
         }
-    }
-
-    public class C2dArray_Appendix
-    {
-        public string[] Headers { get; set; }
-        public string[][] Rows { get; set; }
     }
 }

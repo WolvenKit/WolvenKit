@@ -6,49 +6,52 @@ namespace WolvenKit.RED4.Types
 {
     public partial class physicsMaterialLibraryResource : IRedAppendix
     {
-        public object Appendix { get; set; }
+        [RED("unk1")]
+        [REDProperty(IsIgnored = true)]
+        public CArray<CName> Unk1
+        {
+            get => GetPropertyValue<CArray<CName>>();
+            set => SetPropertyValue<CArray<CName>>(value);
+        }
+
+        [RED("unk2")]
+        [REDProperty(IsIgnored = true)]
+        public CArray<CHandle<physicsMaterialResource>> Unk2
+        {
+            get => GetPropertyValue<CArray<CHandle<physicsMaterialResource>>>();
+            set => SetPropertyValue<CArray<CHandle<physicsMaterialResource>>>(value);
+        }
 
         public void Read(Red4Reader reader, uint size)
         {
-            var result = new physicsMaterialLibraryResource_Appendix();
+            Unk1 = new CArray<CName>();
+            Unk2 = new CArray<CHandle<physicsMaterialResource>>();
 
             var cnt = reader.BaseReader.ReadVLQInt32();
-
-            result.Unk1 = new CName[cnt];
-            for (int i = 0; i < result.Unk1.Length; i++)
+            for (int i = 0; i < cnt; i++)
             {
-                result.Unk1[i] = reader.ReadCName();
+                Unk1.Add(reader.ReadCName());
             }
 
-            result.Unk2 = new CHandle<physicsMaterialResource>[cnt];
-            for (int i = 0; i < result.Unk2.Length; i++)
+            for (int i = 0; i < cnt; i++)
             {
-                result.Unk2[i] = (CHandle<physicsMaterialResource>)reader.ReadCHandle<physicsMaterialResource>();
+                Unk2.Add(reader.ReadCHandle<physicsMaterialResource>());
             }
-
-            Appendix = result;
         }
 
         public void Write(Red4Writer writer)
         {
-            var appendix = (physicsMaterialLibraryResource_Appendix)Appendix;
 
-            writer.WriteVLQ(appendix.Unk1.Length);
-            foreach (var unk in appendix.Unk1)
+            writer.WriteVLQ(Unk1.Count);
+            foreach (var unk in Unk1)
             {
                 writer.Write(unk);
             }
 
-            foreach (var unk in appendix.Unk2)
+            foreach (var unk in Unk2)
             {
                 writer.Write((IRedHandle)unk);
             }
         }
-    }
-
-    public class physicsMaterialLibraryResource_Appendix
-    {
-        public CName[] Unk1 { get; set; }
-        public CHandle<physicsMaterialResource>[] Unk2 { get; set; }
     }
 }

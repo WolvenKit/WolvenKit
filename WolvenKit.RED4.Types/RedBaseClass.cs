@@ -352,7 +352,7 @@ namespace WolvenKit.RED4.Types
         #region DynamicObject
 
         private readonly IDictionary<string, IRedType> _properties = new Dictionary<string, IRedType>();
-        protected readonly IList<string> _dynamicProperties = new List<string>();
+        private readonly IList<string> _dynamicProperties = new List<string>();
 
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
@@ -367,6 +367,11 @@ namespace WolvenKit.RED4.Types
 
             result = obj;
             return success;
+        }
+
+        public List<string> GetDynamicPropertyNames()
+        {
+            return new List<string>(_dynamicProperties);
         }
 
         #endregion DynamicObject

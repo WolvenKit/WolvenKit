@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.IO;
 using WolvenKit.RED4.IO;
 
 namespace WolvenKit.RED4.Types
@@ -8,11 +6,15 @@ namespace WolvenKit.RED4.Types
     {
         [RED("values")]
         [REDProperty(IsIgnored = true)]
-        public List<KeyValuePair<CName, IRedType>> Values { get; set; } = new();
+        public CMaterialInstance_CustomProps Values
+        {
+            get => GetPropertyValue<CMaterialInstance_CustomProps>();
+            set => SetPropertyValue<CMaterialInstance_CustomProps>(value);
+        }
 
         public void Read(Red4Reader reader, uint size)
         {
-            Values.Clear();
+            Values = new CMaterialInstance_CustomProps();
 
             var entryCount = reader.BaseReader.ReadInt32();
             for (int i = 0; i < entryCount; i++)
@@ -24,23 +26,27 @@ namespace WolvenKit.RED4.Types
                 var (type, flags) = RedReflection.GetCSTypeFromRedType(typename);
                 var value = reader.Read(type, (uint)valueSize, flags);
 
-                Values.Add(new KeyValuePair<CName, IRedType>(name, value));
+                Values.InternalSetPropertyValue(name, value, false);
             }
         }
 
         public void Write(Red4Writer writer)
         {
-            writer.BaseWriter.Write(Values.Count);
-            foreach (var entry in Values)
+            var dynProps = GetDynamicPropertyNames();
+
+            writer.BaseWriter.Write(dynProps.Count);
+            foreach (var propertyName in dynProps)
             {
+                var value = GetObjectByRedName(propertyName);
+
                 var startPos = writer.BaseStream.Position;
 
-                var redTypeName = (CName)RedReflection.GetRedTypeFromCSType(entry.Value.GetType(), Flags.Empty);
+                var redTypeName = (CName)RedReflection.GetRedTypeFromCSType(value.GetType(), Flags.Empty);
 
                 writer.BaseWriter.Write(0);
-                writer.Write(entry.Key);
+                writer.Write((CName)propertyName);
                 writer.Write(redTypeName);
-                writer.Write(entry.Value);
+                writer.Write(value);
 
                 var endPos = writer.BaseStream.Position;
                 var innerSize = endPos - startPos;
@@ -49,5 +55,10 @@ namespace WolvenKit.RED4.Types
                 writer.BaseStream.Position = endPos;
             }
         }
+    }
+
+    public class CMaterialInstance_CustomProps : RedBaseClass
+    {
+
     }
 }
