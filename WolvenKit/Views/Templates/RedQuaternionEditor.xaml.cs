@@ -100,7 +100,7 @@ namespace WolvenKit.Views.Editors
         private void SetIValue(string value)
         {
             ((Quaternion)cvm.Data).I = float.Parse(value);
-            var x = cvm.Properties.FirstOrDefault(prop => prop.Name == "i");
+            var x = cvm.Properties?.FirstOrDefault(prop => prop.Name == "i") ?? null;
             if (x != null)
                 x.Data = (CFloat)float.Parse(value);
         }
@@ -108,7 +108,7 @@ namespace WolvenKit.Views.Editors
         private void SetJValue(string value)
         {
             ((Quaternion)cvm.Data).J = float.Parse(value);
-            var x = cvm.Properties.FirstOrDefault(prop => prop.Name == "j");
+            var x = cvm.Properties?.FirstOrDefault(prop => prop.Name == "j") ?? null;
             if (x != null)
                 x.Data = (CFloat)float.Parse(value);
         }
@@ -116,7 +116,7 @@ namespace WolvenKit.Views.Editors
         private void SetKValue(string value)
         {
             ((Quaternion)cvm.Data).K = float.Parse(value);
-            var x = cvm.Properties.FirstOrDefault(prop => prop.Name == "k");
+            var x = cvm.Properties?.FirstOrDefault(prop => prop.Name == "k") ?? null;
             if (x != null)
                 x.Data = (CFloat)float.Parse(value);
         }
@@ -124,7 +124,7 @@ namespace WolvenKit.Views.Editors
         private void SetRValue(string value)
         {
             ((Quaternion)cvm.Data).R = float.Parse(value);
-            var x = cvm.Properties.FirstOrDefault(prop => prop.Name == "r");
+            var x = cvm.Properties?.FirstOrDefault(prop => prop.Name == "r") ?? null;
             if (x != null)
                 x.Data = (CFloat)float.Parse(value);
         }
