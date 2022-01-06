@@ -518,11 +518,13 @@ namespace WolvenKit.ViewModels.Shell
             {
                 if (Data is IRedBaseHandle handle)
                 {
-                    return GetTypeRedName(handle.InnerType);
+                    return GetTypeRedName(handle?.GetValue().GetType() ?? handle.InnerType);
                 }
                 return Type;
             }
         }
+
+        public bool TypesDiffer => Type != ResolvedType;
 
         public bool IsInArray => Parent != null && Parent.IsArray;
 
@@ -682,20 +684,21 @@ namespace WolvenKit.ViewModels.Shell
             if (ResolvedData is RedBaseClass irc)
             {
                 // some common "names" of classes that might be useful to display in the UI
-                var name = GetPropertyByName(irc.GetType(), "Name");
-                var partName = GetPropertyByName(irc.GetType(), "PartName");
-                var slotName = GetPropertyByName(irc.GetType(), "SlotName");
-                if (name != null)
+                var propNames = new string[]
                 {
-                    return name.GetValue(irc).ToString();
-                }
-                else if (partName != null)
+                    "name",
+                    "partName",
+                    "slotName",
+                    "hudEntryName"
+                };
+
+                foreach (var propName in propNames)
                 {
-                    return partName.GetValue(irc).ToString();
-                }
-                else if (slotName != null)
-                {
-                    return slotName.GetValue(irc).ToString();
+                    var prop = GetPropertyByRedName(irc.GetType(), propName);
+                    if (prop != null)
+                    {
+                        return prop.GetValue(irc).ToString();
+                    }
                 }
             }
             return "";
