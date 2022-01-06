@@ -47,15 +47,24 @@ namespace WolvenKit.RED4.Types
                 {
                     _delegateCache.Add(item, delegate (object sender, ObjectChangedEventArgs args)
                     {
+                        if (args._callStack.Contains(this))
+                        {
+                            return;
+                        }
+                        args._callStack.Add(this);
+
                         var index = ((IList)_internalList).IndexOf(item);
                         if (sender != null)
                         {
-                            var path = $":{index}.{args.RedPath}";
-                            ObjectChanged?.Invoke(sender, new ObjectChangedEventArgs(args.ChangeType, path, args.RedName, args.OldValue, args.NewValue));
+                            args.RedPath = $":{index}.{args.RedPath}";
+
+                            ObjectChanged?.Invoke(sender, args);
                         }
                         else
                         {
-                            OnObjectChanged(args.ChangeType, index, args.OldValue, args.NewValue);
+                            args.RedPath = $":{index}";
+
+                            ObjectChanged?.Invoke(this, args);
                         }
                     });
                 }
@@ -79,7 +88,13 @@ namespace WolvenKit.RED4.Types
 
         private void OnObjectChanged(ObjectChangedType type, int index, object oldValue, object newValue)
         {
-            ObjectChanged?.Invoke(this, new ObjectChangedEventArgs(type, $":{index}", null, oldValue, newValue));
+            if (ObjectChanged != null)
+            {
+                var args = new ObjectChangedEventArgs(type, $":{index}", null, oldValue, newValue);
+                args._callStack.Add(this);
+
+                ObjectChanged.Invoke(this, args);
+            }
         }
 
         #endregion

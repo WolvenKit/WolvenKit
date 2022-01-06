@@ -25,6 +25,12 @@ namespace WolvenKit.RED4.Types
             {
                 _delegateCache.Add(redPropertyName, delegate (object sender, ObjectChangedEventArgs args)
                 {
+                    if (args._callStack.Contains(this))
+                    {
+                        return;
+                    }
+                    args._callStack.Add(this);
+
                     if (sender != null)
                     {
                         var path = $"{redPropertyName}.{args.RedPath}";
@@ -32,11 +38,17 @@ namespace WolvenKit.RED4.Types
                         {
                             path = $"{redPropertyName}{args.RedPath}";
                         }
-                        ObjectChanged?.Invoke(sender, new ObjectChangedEventArgs(args.ChangeType, path, args.RedName, args.OldValue, args.NewValue));
+
+                        args.RedPath = path;
+
+                        ObjectChanged?.Invoke(sender, args);
                     }
                     else
                     {
-                        ObjectChanged?.Invoke(this, new ObjectChangedEventArgs(args.ChangeType, redPropertyName, redPropertyName, args.OldValue, args.NewValue));
+                        args.RedName = redPropertyName;
+                        args.RedPath = redPropertyName;
+
+                        ObjectChanged?.Invoke(this, args);
                     }
                 });
             }
@@ -62,7 +74,13 @@ namespace WolvenKit.RED4.Types
 
         private void OnObjectChanged(string redPropertyName, object oldValue, object newValue)
         {
-            ObjectChanged?.Invoke(this, new ObjectChangedEventArgs(ObjectChangedType.Modified, redPropertyName, redPropertyName, oldValue, newValue));
+            if (ObjectChanged != null)
+            {
+                var args = new ObjectChangedEventArgs(ObjectChangedType.Modified, redPropertyName, redPropertyName, oldValue, newValue);
+                args._callStack.Add(this);
+
+                ObjectChanged.Invoke(this, args);
+            }
         }
 
         #endregion
