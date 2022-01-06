@@ -101,6 +101,10 @@ namespace WolvenKit.Views.Shell
                         view => view.AppMenuPackProjectButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.PackInstallModCommand,
+                        view => view.AppMenuPackInstallButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
                         viewModel => viewModel.NewFileCommand,
                         view => view.AppMenuNewFileButton)
                     .DisposeWith(disposables);
@@ -108,10 +112,10 @@ namespace WolvenKit.Views.Shell
                         viewModel => viewModel.SaveFileCommand,
                         view => view.AppMenuSaveFileButton)
                     .DisposeWith(disposables);
-                //this.BindCommand(ViewModel,
-                //        viewModel => viewModel.SaveAsFileCommand,
-                //        view => view.AppMenuSaveAsFileButton)
-                //    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.SaveAsCommand,
+                        view => view.AppMenuSaveAsFileButton)
+                    .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.SaveAllCommand,
                         view => view.AppMenuSaveAllFileButton)
@@ -131,12 +135,20 @@ namespace WolvenKit.Views.Shell
                         view => view.GeneralPackProjectButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.PackInstallModCommand,
+                        view => view.GeneralPackInstallButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
                         viewModel => viewModel.NewFileCommand,
                         view => view.GeneralNewFileButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.SaveFileCommand,
                         view => view.GeneralSaveFileButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.SaveAsCommand,
+                        view => view.GeneralSaveAsButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.SaveAllCommand,
