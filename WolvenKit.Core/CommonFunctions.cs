@@ -77,7 +77,7 @@ namespace WolvenKit.Core
 
         public static (string, long) HashFileSHA512(string filepath)
         {
-            using (SHA512 shaM = new SHA512Managed())
+            using (SHA512 shaM = SHA512.Create())
             {
                 using FileStream fileStream = File.OpenRead(filepath);
                 var hash1 = shaM.ComputeHash(fileStream);

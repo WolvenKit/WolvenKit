@@ -25,12 +25,19 @@ namespace WolvenKit.RED4.Types
             {
                 _delegateCache.Add(redPropertyName, delegate (object sender, ObjectChangedEventArgs args)
                 {
-                    var path = $"{redPropertyName}.{args.RedPath}";
-                    if (args.RedPath.StartsWith(':'))
+                    if (sender != null)
                     {
-                        path = $"{redPropertyName}{args.RedPath}";
+                        var path = $"{redPropertyName}.{args.RedPath}";
+                        if (args.RedPath.StartsWith(':'))
+                        {
+                            path = $"{redPropertyName}{args.RedPath}";
+                        }
+                        ObjectChanged?.Invoke(sender, new ObjectChangedEventArgs(args.ChangeType, path, args.RedName, args.OldValue, args.NewValue));
                     }
-                    ObjectChanged?.Invoke(sender, new ObjectChangedEventArgs(args.ChangeType, path, args.RedName, args.OldValue, args.NewValue));
+                    else
+                    {
+                        ObjectChanged?.Invoke(this, new ObjectChangedEventArgs(args.ChangeType, redPropertyName, redPropertyName, args.OldValue, args.NewValue));
+                    }
                 });
             }
 
@@ -96,12 +103,12 @@ namespace WolvenKit.RED4.Types
                     {
                         if (propertyInfo.Flags.Equals(Flags.Empty))
                         {
-                            _properties[propertyInfo.RedName] = System.Activator.CreateInstance(propertyInfo.Type);
+                            _properties[propertyInfo.RedName] = (IRedType)System.Activator.CreateInstance(propertyInfo.Type);
                         }
                         else
                         {
                             var size = propertyInfo.Flags.MoveNext() ? propertyInfo.Flags.Current : 0;
-                            _properties[propertyInfo.RedName] = System.Activator.CreateInstance(propertyInfo.Type, size);
+                            _properties[propertyInfo.RedName] = (IRedType)System.Activator.CreateInstance(propertyInfo.Type, size);
                         }
                     }
                 }
@@ -132,7 +139,7 @@ namespace WolvenKit.RED4.Types
             return _properties[redPropertyName];
         }
 
-        internal void InternalSetPropertyValue(string redPropertyName, object value, bool native)
+        internal void InternalSetPropertyValue(string redPropertyName, IRedType value, bool native)
         {
             object oldValue = null;
             if (_properties.ContainsKey(redPropertyName))
@@ -145,6 +152,10 @@ namespace WolvenKit.RED4.Types
                 RemoveEventHandler(redPropertyName);
 
                 _properties[redPropertyName] = value;
+                if (!native)
+                {
+                    _dynamicProperties.Add(redPropertyName);
+                }
 
                 AddEventHandler(redPropertyName);
 
@@ -156,7 +167,7 @@ namespace WolvenKit.RED4.Types
         {
             if (_properties.ContainsKey(redName))
             {
-                return (IRedType)_properties[redName];
+                return _properties[redName];
             }
 
             return null;
@@ -186,7 +197,7 @@ namespace WolvenKit.RED4.Types
             return dict;
         }
 
-        public IEnumerable<(string propPath, object value)> GetEnumerator(string rootName = "root")
+        public IEnumerable<(string propPath, IRedType value)> GetEnumerator(string rootName = "root")
         {
             var queue = new Queue<(RedBaseClass, string)>();
             var visited = new List<RedBaseClass>();
@@ -196,7 +207,7 @@ namespace WolvenKit.RED4.Types
                 yield return tuple;
             }
 
-            IEnumerable<(string propPath, object value)> InternalFindType(RedBaseClass cls)
+            IEnumerable<(string propPath, IRedType value)> InternalFindType(RedBaseClass cls)
             {
                 queue.Enqueue((cls, rootName));
                 while (queue.Count != 0)
@@ -222,7 +233,7 @@ namespace WolvenKit.RED4.Types
                 }
             }
 
-            IEnumerable<(string propPath, object value)> ProcessValue(string propPath, object value)
+            IEnumerable<(string propPath, IRedType value)> ProcessValue(string propPath, IRedType value)
             {
                 if (value == null)
                 {
@@ -236,7 +247,7 @@ namespace WolvenKit.RED4.Types
                     for (int i = 0; i < lst.Count; i++)
                     {
                         var arrPath = $"{propPath}:{i}";
-                        foreach (var tuple in ProcessValue(arrPath, lst[i]))
+                        foreach (var tuple in ProcessValue(arrPath, (IRedType)lst[i]))
                         {
                             yield return tuple;
                         }
@@ -338,7 +349,7 @@ namespace WolvenKit.RED4.Types
             {
                 if (property.Value is IRedCloneable cl)
                 {
-                    other._properties[property.Key] = cl.DeepCopy();
+                    other._properties[property.Key] = (IRedType)cl.DeepCopy();
                 }
             }
 
@@ -347,18 +358,27 @@ namespace WolvenKit.RED4.Types
 
         #region DynamicObject
 
-        private readonly IDictionary<string, object> _properties = new Dictionary<string, object>();
+        private readonly IDictionary<string, IRedType> _properties = new Dictionary<string, IRedType>();
+        private readonly IList<string> _dynamicProperties = new List<string>();
 
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
-            InternalSetPropertyValue(binder.Name, value, false);
+            InternalSetPropertyValue(binder.Name, (IRedType)value, false);
 
             return true;
         }
 
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            return _properties.TryGetValue(binder.Name, out result);
+            var success = _properties.TryGetValue(binder.Name, out var obj);
+
+            result = obj;
+            return success;
+        }
+
+        public List<string> GetDynamicPropertyNames()
+        {
+            return new List<string>(_dynamicProperties);
         }
 
         #endregion DynamicObject

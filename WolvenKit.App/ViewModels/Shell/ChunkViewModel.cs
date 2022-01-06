@@ -235,7 +235,7 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public class RedClassProperty<T> : IRedType
+        public class RedClassProperty<T> : IRedType where T : IRedType
         {
             private RedBaseClass obj;
             private string propertyName;

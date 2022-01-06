@@ -5,10 +5,15 @@ using System.Linq;
 namespace WolvenKit.RED4.Types
 {
     [DebuggerDisplay("{_value,nq}", Type = "CByteArray")]
-    public readonly struct CByteArray : IRedPrimitive<byte[]>, IEquatable<CByteArray>
+    public sealed class CByteArray : IRedPrimitive<byte[]>, IEquatable<CByteArray>
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly byte[] _value;
+
+        public CByteArray()
+        {
+            _value = Array.Empty<byte>();
+        }
 
         private CByteArray(byte[] data)
         {
@@ -18,7 +23,7 @@ namespace WolvenKit.RED4.Types
         public static implicit operator CByteArray(byte[] value) => new(value);
         public static implicit operator byte[](CByteArray value) => value._value;
 
-        public bool Equals(CByteArray other) => _value.Length == other._value.Length && _value.SequenceEqual(other._value);
+        public bool Equals(CByteArray other) => Equals(_value.Length, other._value.Length) && _value.SequenceEqual(other._value);
 
         public override bool Equals(object obj)
         {

@@ -24,12 +24,15 @@ namespace WolvenKit.RED4.Types
                         _chunk.ObjectChanged -= OnObjectChanged;
                     }
 
+                    var oldChunk = _chunk;
                     _chunk = value;
 
                     if (_chunk != null)
                     {
                         _chunk.ObjectChanged += OnObjectChanged;
                     }
+
+                    ObjectChanged?.Invoke(null, new ObjectChangedEventArgs(ObjectChangedType.Modified, null, null, oldChunk, _chunk));
                 }
             }
         }

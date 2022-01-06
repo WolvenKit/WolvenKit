@@ -5,7 +5,7 @@ on:
 jobs:
 
   draft-wkit-win:
-    runs-on: windows-latest
+    runs-on: windows-2022
 
     steps:
     # setup  
@@ -16,8 +16,11 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.x
-    - uses: microsoft/setup-msbuild@v1.0.2
+        dotnet-version: 6.0.x
+    - uses: microsoft/setup-msbuild@v1.1
+      with:
+        vs-version: '17.0'
+        msbuild-architecture: x64
 
      # environmental variables
     - run: echo "PROJ=./WolvenKit/WolvenKit.csproj" >> $env:GITHUB_ENV

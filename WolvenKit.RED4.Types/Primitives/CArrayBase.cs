@@ -48,8 +48,15 @@ namespace WolvenKit.RED4.Types
                     _delegateCache.Add(item, delegate (object sender, ObjectChangedEventArgs args)
                     {
                         var index = ((IList)_internalList).IndexOf(item);
-                        var path = $":{index}.{args.RedPath}";
-                        ObjectChanged?.Invoke(sender, new ObjectChangedEventArgs(args.ChangeType, path, args.RedName, args.OldValue, args.NewValue));
+                        if (sender != null)
+                        {
+                            var path = $":{index}.{args.RedPath}";
+                            ObjectChanged?.Invoke(sender, new ObjectChangedEventArgs(args.ChangeType, path, args.RedName, args.OldValue, args.NewValue));
+                        }
+                        else
+                        {
+                            OnObjectChanged(args.ChangeType, index, args.OldValue, args.NewValue);
+                        }
                     });
                 }
 

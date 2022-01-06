@@ -240,7 +240,7 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 // save table data
-                var sha1 = new SHA1Managed();
+                using SHA1 sha1 = SHA1.Create();
                 var sha1hash =
                     sha1.ComputeHash(fileBinaryReader.BaseStream
                         .ToByteArray()); //TODO: this is only correct for files with no buffer

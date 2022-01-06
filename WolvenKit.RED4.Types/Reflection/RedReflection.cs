@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.Types
         private static readonly Dictionary<string, ExtendedEnumInfo> _redEnumCache = new();
         private static readonly ConcurrentDictionary<Type, Lazy<ExtendedTypeInfo>> _typeInfoCache = new();
 
-        public static void AddDynamicProperty(RedBaseClass cls, string propertyName, object propertyValue)
+        public static void AddDynamicProperty(RedBaseClass cls, string propertyName, IRedType propertyValue)
         {
             cls.InternalSetPropertyValue(propertyName, propertyValue, false);
         }
@@ -400,7 +400,7 @@ namespace WolvenKit.RED4.Types
             public object DefaultValue { get; internal set; }
 
             public object GetValue(RedBaseClass instance) => instance.InternalGetPropertyValue(Type, RedName, Flags);
-            public void SetValue(RedBaseClass instance, object value) => instance.InternalSetPropertyValue(RedName, value, true);
+            public void SetValue(RedBaseClass instance, IRedType value) => instance.InternalSetPropertyValue(RedName, value, true);
 
 
             public ExtendedPropertyInfo(Type parent, PropertyInfo propertyInfo)

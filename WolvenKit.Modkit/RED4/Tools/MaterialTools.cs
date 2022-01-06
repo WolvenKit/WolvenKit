@@ -787,15 +787,13 @@ namespace WolvenKit.Modkit.RED4
             }
 
             BaseMaterials.Add(cMaterialInstance);
-            for (int i = 0; i < BaseMaterials.Count; i++)
+            foreach (var mi in BaseMaterials)
             {
-                var values = BaseMaterials[i].Values;
-
-                for (int e = 0; e < values.Count; e++)
+                foreach (var propertyName in mi.Values.GetDynamicPropertyNames())
                 {
-                    var variant = values[e].Value;
-                    // remove when tobj serialization is fixed
-                    if (variant is CColor col)
+                    var value = mi.Values.GetObjectByRedName(propertyName);
+
+                    if (value is CColor col)
                     {
                         var col_ = new CColor();
                         col_.Red = col.Red;
@@ -803,24 +801,24 @@ namespace WolvenKit.Modkit.RED4
                         col_.Blue = col.Blue;
                         col_.Alpha = col.Alpha;
 
-                        if (rawMaterial.Data.ContainsKey(values[e].Key))
+                        if (rawMaterial.Data.ContainsKey(propertyName))
                         {
-                            rawMaterial.Data[values[e].Key] = col_.ToObject();
+                            rawMaterial.Data[propertyName] = col_.ToObject();
                         }
                         else
                         {
-                            rawMaterial.Data.Add(values[e].Key, col_.ToObject());
+                            rawMaterial.Data.Add(propertyName, col_.ToObject());
                         }
                     }
                     else
                     {
-                        if (rawMaterial.Data.ContainsKey(values[e].Key))
+                        if (rawMaterial.Data.ContainsKey(propertyName))
                         {
-                            rawMaterial.Data[values[e].Key] = variant.ToObject();
+                            rawMaterial.Data[propertyName] = value.ToObject();
                         }
                         else
                         {
-                            rawMaterial.Data.Add(values[e].Key, variant.ToObject());
+                            rawMaterial.Data.Add(propertyName, value.ToObject());
                         }
                     }
                 }
