@@ -66,14 +66,28 @@ namespace WolvenKit.RED4.Archive.IO
                 return EFileReadErrorCodes.NoCr2w;
             }
 
-            refsAreStrings = _reader.ReadUInt16();
-            result.RefsAreStrings = refsAreStrings;
-
-            var numCruids = _reader.ReadUInt16();
-
-            for (var i = 0; i < numCruids; i++)
+            if (header.numComponents > 1 || header.numSections != 7)
             {
-                result.Cruids.Add(_reader.ReadUInt64());
+                ushort numCruids;
+                if (header.numComponents > 1 && header.numSections != 7)
+                {
+                    numCruids = _reader.ReadUInt16();
+
+                    refsAreStrings = _reader.ReadUInt16();
+                    result.RefsAreStrings = refsAreStrings;
+                }
+                else
+                {
+                    refsAreStrings = _reader.ReadUInt16();
+                    result.RefsAreStrings = refsAreStrings;
+
+                    numCruids = _reader.ReadUInt16();
+                }
+
+                for (var i = 0; i < numCruids; i++)
+                {
+                    result.Cruids.Add(_reader.ReadUInt64());
+                }
             }
 
             var baseOff = BaseStream.Position;
