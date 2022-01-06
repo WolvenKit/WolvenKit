@@ -14,7 +14,7 @@
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:tools="clr-namespace:WolvenKit.ViewModels.Tools;assembly=WolvenKit.App"
     d:DataContext="{d:DesignInstance Type=tools:AssetBrowserViewModel}"
-    BorderBrush="{x:Null}"
+    BorderBrush="Transparent"
     mc:Ignorable="d">
 
 
@@ -96,7 +96,7 @@
                                 <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
                                     <Style.Triggers>
                                         <Trigger Property="IsChecked" Value="True">
-                                            <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.Accent}" />
+                                            <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>
@@ -436,7 +436,7 @@
                         FontSize="24"
                         FontWeight="Bold"
                         Foreground="#7EFFFFFF"
-                        Text="Loading Asset Browser.."
+                        Text="Loading Asset Browser..."
                         TextWrapping="Wrap" />
                 </StackPanel>
             </Grid>
