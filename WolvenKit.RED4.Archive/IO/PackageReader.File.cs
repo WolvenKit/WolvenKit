@@ -66,11 +66,13 @@ namespace WolvenKit.RED4.Archive.IO
                 return EFileReadErrorCodes.NoCr2w;
             }
 
-            if (header.numComponents > 1 || header.numSections != 7)
+            var numCruids = _reader.ReadUInt16();
+            BaseStream.Position -= 2;
+            if (numCruids <= header.numComponents)
             {
-                ushort numCruids;
                 if (header.numComponents > 1 && header.numSections != 7)
                 {
+                    // these are reversed for some reason
                     numCruids = _reader.ReadUInt16();
 
                     refsAreStrings = _reader.ReadUInt16();
