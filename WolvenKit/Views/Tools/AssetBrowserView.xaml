@@ -1,19 +1,19 @@
 <reactiveUi:ReactiveUserControl
-    x:TypeArguments="tools:AssetBrowserViewModel"
     x:Class="WolvenKit.Views.Tools.AssetBrowserView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:reactiveUi="http://reactiveui.net"
     xmlns:converters1="clr-namespace:WolvenKit.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:local="clr-namespace:WolvenKit"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:tools="clr-namespace:WolvenKit.ViewModels.Tools;assembly=WolvenKit.App"
     d:DataContext="{d:DesignInstance Type=tools:AssetBrowserViewModel}"
+    x:TypeArguments="tools:AssetBrowserViewModel"
     BorderBrush="Transparent"
     mc:Ignorable="d">
 
@@ -41,14 +41,14 @@
                 </Grid.Resources>
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="1"/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="1" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
                 <Border Background="{StaticResource ContentBackgroundAlt2}" />
 
-                <!-- Asset Browser Search -->
+                <!--  Asset Browser Search  -->
                 <Grid Grid.Row="0" Margin="3,0,3,3">
 
                     <Grid.Resources>
@@ -61,39 +61,41 @@
                     </Grid.Resources>
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
                     <Button
                         Grid.Column="0"
                         VerticalAlignment="Center"
                         Click="LeftNavigationHomeButton_OnClick"
-                        Visibility="Visible"
-                        Style="{StaticResource ButtonDefault}">
+                        Style="{StaticResource ButtonDefault}"
+                        Visibility="Visible">
                         <iconPacks:PackIconCodicons Kind="Home" />
                     </Button>
-                    
-                    <hc:SearchBar Grid.Column="1"
-                                  x:Name="FileSearchBar"
-                                  Style="{StaticResource SearchBarPlus}"
-                                  VerticalAlignment="Top"
-                                  FlowDirection="LeftToRight"
-                                  ShowClearButton="False"
-                                  hc:InfoElement.Placeholder="Search all game files: (e.g. judy kind:mesh,ent)"
-                                  SearchStarted="FileSearchBar_SearchStarted"
-                                  Margin="5,0,0,0"
-                                  >
-                    </hc:SearchBar>
 
-                    <Viewbox Grid.Column="2"  Margin="-35,0,0,0" Height="30" Width="30" >
-                        <ToggleButton IsChecked="{Binding IsRegexSearchEnabled}"
-                                      ToolTip="Toggle Regex">
+                    <hc:SearchBar
+                        x:Name="FileSearchBar"
+                        Grid.Column="1"
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Top"
+                        hc:InfoElement.Placeholder="Search all game files: (e.g. judy kind:mesh,ent)"
+                        FlowDirection="LeftToRight"
+                        SearchStarted="FileSearchBar_SearchStarted"
+                        ShowClearButton="False"
+                        Style="{StaticResource SearchBarPlus}" />
+
+                    <Viewbox
+                        Grid.Column="2"
+                        Width="30"
+                        Height="30"
+                        Margin="-35,0,0,0">
+                        <ToggleButton IsChecked="{Binding IsRegexSearchEnabled}" ToolTip="Toggle Regex">
 
                             <ToggleButton.Style>
-                                <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
+                                <Style BasedOn="{StaticResource {x:Type ToggleButton}}" TargetType="ToggleButton">
                                     <Style.Triggers>
                                         <Trigger Property="IsChecked" Value="True">
                                             <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
@@ -103,38 +105,37 @@
                             </ToggleButton.Style>
 
                             <iconPacks:PackIconCodicons Kind="Regex" />
-                            
+
                         </ToggleButton>
                     </Viewbox>
-                    
-                    <hc:SearchBar  Grid.Column="3" Margin="10,0,0,0"
-                                  x:Name="OptionsSearchBar"
-                                  Style="{StaticResource SearchBarPlus}"
-                                  VerticalAlignment="Top"
-                                  FlowDirection="LeftToRight"
-                                  ShowClearButton="True"
-                                  hc:InfoElement.Placeholder="(e.g. *.ent, base/**/judy)"
-                                  hc:InfoElement.Title="Files to include: "
-                                  hc:InfoElement.TitlePlacement="Left"
-                                  SearchStarted="FileSearchBar_SearchStarted"
-                                  >
-                       
-                    </hc:SearchBar>
+
+                    <hc:SearchBar
+                        x:Name="OptionsSearchBar"
+                        Grid.Column="3"
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Top"
+                        hc:InfoElement.Placeholder="(e.g. *.ent, base/**/judy)"
+                        hc:InfoElement.Title="Files to include: "
+                        hc:InfoElement.TitlePlacement="Left"
+                        FlowDirection="LeftToRight"
+                        SearchStarted="FileSearchBar_SearchStarted"
+                        ShowClearButton="True"
+                        Style="{StaticResource SearchBarPlus}" />
 
                 </Grid>
 
-                <syncfusion:Splitter Background="{DynamicResource MahApps.Brushes.Gray.SemiTransparent}" Grid.Row="1"/>
+                <syncfusion:Splitter Grid.Row="1" Background="{DynamicResource MahApps.Brushes.Gray.SemiTransparent}" />
 
-                <!-- Asset Browser  -->
+                <!--  Asset Browser  -->
                 <Grid Grid.Row="2">
-                    
+
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" MinWidth="200"/>
+                        <ColumnDefinition Width="Auto" MinWidth="200" />
                         <ColumnDefinition Width="5" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <!-- Left Navigation -->
+                    <!--  Left Navigation  -->
                     <Grid Grid.Column="0" Margin="0">
 
                         <Grid.Resources>
@@ -142,43 +143,45 @@
                             <DataTemplate x:Key="TemplateToolTip">
                                 <Grid>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
-                                    <TextBlock Grid.Row="1" Text="{Binding FullName}" HorizontalAlignment="Center"/>
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        HorizontalAlignment="Center"
+                                        Text="{Binding FullName}" />
                                 </Grid>
                             </DataTemplate>
                         </Grid.Resources>
 
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
-                        <!-- Search Bar -->
-                        <Grid Grid.Row="0">
-                        </Grid>
+                        <!--  Search Bar  -->
+                        <Grid Grid.Row="0" />
 
-                        <!--Folder Tree -->
-                        <!-- RequestTreeItems="LeftNavigation_RequestTreeItems" -->
+                        <!--  Folder Tree  -->
+                        <!--  RequestTreeItems="LeftNavigation_RequestTreeItems"  -->
                         <syncfusion:SfTreeGrid
+                            x:Name="LeftNavigation"
                             Grid.Row="1"
                             Margin="0"
-                            BorderThickness="0"
-                            x:Name="LeftNavigation"
                             AllowFiltering="False"
                             AllowSorting="False"
                             AllowTriStateSorting="False"
                             AutoExpandMode="RootNodesExpanded"
                             AutoGenerateColumns="False"
+                            BorderThickness="0"
                             ChildPropertyName="RedFileSystemModels"
                             ColumnSizer="Star"
-                            FilterLevel="All"
-                            RowHeight="19"
                             CurrentCellBorderThickness="0"
-                            SelectionChanged="LeftNavigation_OnSelectionChanged"
                             ExpandStateMappingName="IsExpanded"
-                            ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
-                            HeaderRowHeight="3">
+                            FilterLevel="All"
+                            HeaderRowHeight="3"
+                            RowHeight="19"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            SelectionChanged="LeftNavigation_OnSelectionChanged">
 
                             <syncfusion:SfTreeGrid.Resources>
                                 <Style TargetType="syncfusion:TreeGridCell">
@@ -192,7 +195,7 @@
                                 <Style TargetType="Grid">
                                     <Style.Resources>
                                         <Style TargetType="Border">
-                                            <Setter Property="BorderThickness" Value="0"/>
+                                            <Setter Property="BorderThickness" Value="0" />
                                         </Style>
                                     </Style.Resources>
                                 </Style>
@@ -208,14 +211,14 @@
                             <syncfusion:SfTreeGrid.Columns>
 
                                 <syncfusion:TreeGridTextColumn
+                                    ColumnSizer="Star"
+                                    HeaderText=""
                                     HorizontalHeaderContentAlignment="Left"
                                     ImmediateUpdateColumnFilter="True"
                                     MappingName="Name"
                                     ShowToolTip="True"
-                                    ColumnSizer="Star"
-                                    ToolTipTemplate="{StaticResource TemplateToolTip}"
-                                    HeaderText="">
-                                    
+                                    ToolTipTemplate="{StaticResource TemplateToolTip}">
+
                                     <syncfusion:TreeGridTextColumn.CellTemplate>
                                         <DataTemplate>
                                             <Grid>
@@ -223,17 +226,21 @@
                                                     <ColumnDefinition Width="13" />
                                                     <ColumnDefinition Width="*" />
                                                 </Grid.ColumnDefinitions>
-                                                <others:FileIcon Height="13" Width="Auto" Icon="{Binding Extension}" Style="{StaticResource AB_FileIconStyle}" />
+                                                <others:FileIcon
+                                                    Width="Auto"
+                                                    Height="13"
+                                                    Icon="{Binding Extension}"
+                                                    Style="{StaticResource AB_FileIconStyle}" />
                                                 <TextBlock
-                                                        x:Name="TemplateTextBlock"
-                                                        Grid.Column="1"
-                                                        Margin="5,0,0,2"
-                                                        VerticalAlignment="Center"
-                                                        Text="{Binding Path=Name}" />
+                                                    x:Name="TemplateTextBlock"
+                                                    Grid.Column="1"
+                                                    Margin="5,0,0,2"
+                                                    VerticalAlignment="Center"
+                                                    Text="{Binding Path=Name}" />
                                             </Grid>
                                         </DataTemplate>
                                     </syncfusion:TreeGridTextColumn.CellTemplate>
-                                    
+
                                 </syncfusion:TreeGridTextColumn>
                             </syncfusion:SfTreeGrid.Columns>
 
@@ -252,62 +259,61 @@
 
                     <syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
 
-                    <!-- Right File List -->
+                    <!--  Right File List  -->
                     <Grid Grid.Column="2" Margin="0">
-                            
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
 
-                            <syncfusion:SfDataGrid
-                                x:Name="InnerList"
-                                AllowDeleting="False"
-                                AllowDraggingColumns="False"
-                                AllowDraggingRows="False"
-                                AllowEditing="False"
-                                AllowFiltering="True"
-                                AllowResizingColumns="True"
-                                AllowSorting="True"
-                                AutoGenerateColumns="False"
-                                Background="{StaticResource ContentBackground}"
-                                CurrentCellBorderThickness="0"
-                                ColumnSizer="Auto"
-                                EnableDataVirtualization="True"
-                                IsManipulationEnabled="False"
-                                SelectionChanged="InnerList_SelectionChanged"
-                                SelectionMode="Extended"
-                                MouseDoubleClick="InnerList_MouseDoubleClick"
-                                BorderThickness="0"
-                                RowHeight="19"
-                                >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
 
-                                <syncfusion:SfDataGrid.RecordContextMenu>
+                        <syncfusion:SfDataGrid
+                            x:Name="InnerList"
+                            AllowDeleting="False"
+                            AllowDraggingColumns="False"
+                            AllowDraggingRows="False"
+                            AllowEditing="False"
+                            AllowFiltering="True"
+                            AllowResizingColumns="True"
+                            AllowSorting="True"
+                            AutoGenerateColumns="False"
+                            Background="{StaticResource ContentBackground}"
+                            BorderThickness="0"
+                            ColumnSizer="Auto"
+                            CurrentCellBorderThickness="0"
+                            EnableDataVirtualization="True"
+                            IsManipulationEnabled="False"
+                            MouseDoubleClick="InnerList_MouseDoubleClick"
+                            RowHeight="19"
+                            SelectionChanged="InnerList_SelectionChanged"
+                            SelectionMode="Extended">
+
+                            <syncfusion:SfDataGrid.RecordContextMenu>
                                 <ContextMenu>
                                     <MenuItem x:Name="OpenFileOnly" Header="Open without adding to project" />
                                     <MenuItem x:Name="AddSelected" Header="Add selected items to project" />
-                                        <Separator/>
-                                        <MenuItem Header="Video">
-                                            <MenuItem
-                                                x:Name="VidPreviewMenuItem"
-                                                Click="VidPreviewMenuItem_Click"
-                                                Header="Preview BK2" />
-                                            <MenuItem
-                                                x:Name="BKExport"
-                                                Click="BKExport_Click"
-                                                Header="Export BK2 to Avi"
-                                                Visibility="Collapsed"/>
-                                        </MenuItem>
-                                    <Separator/>
-                                    <MenuItem Header="Find files using this" x:Name="RightContextMenuFindUsingMenuItem" />
-                                    <MenuItem Header="Copy Relative Path" x:Name="RightContextMenuCopyPathMenuItem" />
+                                    <Separator />
+                                    <MenuItem Header="Video">
+                                        <MenuItem
+                                            x:Name="VidPreviewMenuItem"
+                                            Click="VidPreviewMenuItem_Click"
+                                            Header="Preview BK2" />
+                                        <MenuItem
+                                            x:Name="BKExport"
+                                            Click="BKExport_Click"
+                                            Header="Export BK2 to Avi"
+                                            Visibility="Collapsed" />
+                                    </MenuItem>
+                                    <Separator />
+                                    <MenuItem x:Name="RightContextMenuFindUsingMenuItem" Header="Find files using this" />
+                                    <MenuItem x:Name="RightContextMenuCopyPathMenuItem" Header="Copy Relative Path" />
                                 </ContextMenu>
-                                </syncfusion:SfDataGrid.RecordContextMenu>
+                            </syncfusion:SfDataGrid.RecordContextMenu>
 
-                                <syncfusion:SfDataGrid.Resources>
-                                    
-                                    <Style TargetType="syncfusion:GridHeaderCellControl">
-                                        <Setter Property="BorderThickness" Value="0,0,0,1" />
+                            <syncfusion:SfDataGrid.Resources>
+
+                                <Style TargetType="syncfusion:GridHeaderCellControl">
+                                    <Setter Property="BorderThickness" Value="0,0,0,1" />
                                     <Setter Property="BorderBrush" Value="{DynamicResource SecondaryRegionBrush}" />
                                     <Setter Property="Margin" Value="0,0,0,3" />
                                 </Style>
@@ -316,7 +322,7 @@
                                     <Setter Property="Padding" Value="0,0,0,2" />
                                 </Style>
 
-                                    <converters1:ExtensionToBitmapConverter x:Key="ExtensionToBmp" />
+                                <converters1:ExtensionToBitmapConverter x:Key="ExtensionToBmp" />
 
                                 <DataTemplate x:Key="TemplateToolTip">
                                     <TextBlock Text="{Binding FullName}" />
@@ -324,84 +330,84 @@
 
                             </syncfusion:SfDataGrid.Resources>
 
-                                <syncfusion:SfDataGrid.Columns>
+                            <syncfusion:SfDataGrid.Columns>
 
-                                    <syncfusion:GridCheckBoxColumn
-                                        AllowEditing="True"
-                                        AllowFiltering="False"
-                                        AllowResizing="False"
-                                        Width="32"
-                                        HeaderText="#"
-                                        MappingName="IsChecked">
-                                        <syncfusion:GridCheckBoxColumn.HeaderTemplate>
-                                            <DataTemplate>
-                                            <CheckBox
-                                                Command="local:SFDataGridCommands.CheckAndUnCheck"
-                                                CommandParameter="{Binding ElementName=InnerList}"
-                                                />
-                                            </DataTemplate>
-                                        </syncfusion:GridCheckBoxColumn.HeaderTemplate>
-                                    </syncfusion:GridCheckBoxColumn>
+                                <syncfusion:GridCheckBoxColumn
+                                    Width="32"
+                                    AllowEditing="True"
+                                    AllowFiltering="False"
+                                    AllowResizing="False"
+                                    HeaderText="#"
+                                    MappingName="IsChecked">
+                                    <syncfusion:GridCheckBoxColumn.HeaderTemplate>
+                                        <DataTemplate>
+                                            <CheckBox Command="local:SFDataGridCommands.CheckAndUnCheck" CommandParameter="{Binding ElementName=InnerList}" />
+                                        </DataTemplate>
+                                    </syncfusion:GridCheckBoxColumn.HeaderTemplate>
+                                </syncfusion:GridCheckBoxColumn>
 
-                                    <syncfusion:GridTemplateColumn
-                                        Width="13"
-                                        AllowResizing="False"
-                                        AllowFiltering="False"
-                                        MappingName="">
+                                <syncfusion:GridTemplateColumn
+                                    Width="13"
+                                    AllowFiltering="False"
+                                    AllowResizing="False"
+                                    MappingName="">
                                     <syncfusion:GridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <others:FileIcon Height="13" Width="Auto" Icon="{Binding Extension}" />
+                                            <others:FileIcon
+                                                Width="Auto"
+                                                Height="13"
+                                                Icon="{Binding Extension}" />
                                         </DataTemplate>
-                                        </syncfusion:GridTemplateColumn.CellTemplate>
-                                    </syncfusion:GridTemplateColumn>
-
-                                    <syncfusion:GridTextColumn
-                                        Padding="4,0,0,0"
-                                        AllowFiltering="True"
-                                        ColumnSizer="AutoWithLastColumnFill"
-                                        IsReadOnly="True"
-                                        MappingName="Name"
-                                        AllowResizing="False"
-                                        HorizontalHeaderContentAlignment="Left"
-                                        HeaderText="File Name"
-                                        ShowToolTip="True" ToolTipTemplate="{StaticResource TemplateToolTip}"
-                                        />
+                                    </syncfusion:GridTemplateColumn.CellTemplate>
+                                </syncfusion:GridTemplateColumn>
 
                                 <syncfusion:GridTextColumn
-                                        AllowFiltering="True"
-                                        AllowResizing="False"
-                                        HeaderText="Kind"
-                                        ColumnSizer="Auto"
-                                        IsReadOnly="True"
-                                        HorizontalHeaderContentAlignment="Left"
-                                        MappingName="DisplayExtension" />
+                                    Padding="4,0,0,0"
+                                    AllowFiltering="True"
+                                    AllowResizing="False"
+                                    ColumnSizer="AutoWithLastColumnFill"
+                                    HeaderText="File Name"
+                                    HorizontalHeaderContentAlignment="Left"
+                                    IsReadOnly="True"
+                                    MappingName="Name"
+                                    ShowToolTip="True"
+                                    ToolTipTemplate="{StaticResource TemplateToolTip}" />
 
                                 <syncfusion:GridTextColumn
-                                        AllowFiltering="True"
-                                        AllowResizing="False"
-                                        ColumnSizer="Auto"
-                                        IsReadOnly="True"
-                                        HorizontalHeaderContentAlignment="Left"
-                                        AllowSorting="True"
-                                        SortMode="Value"
-                                        DisplayBinding="{Binding SizeString}"
-                                        HeaderText="Size"
-                                        MappingName="Size"
-                                        ValueBinding="{Binding Size}" />
+                                    AllowFiltering="True"
+                                    AllowResizing="False"
+                                    ColumnSizer="Auto"
+                                    HeaderText="Kind"
+                                    HorizontalHeaderContentAlignment="Left"
+                                    IsReadOnly="True"
+                                    MappingName="DisplayExtension" />
+
+                                <syncfusion:GridTextColumn
+                                    AllowFiltering="True"
+                                    AllowResizing="False"
+                                    AllowSorting="True"
+                                    ColumnSizer="Auto"
+                                    DisplayBinding="{Binding SizeString}"
+                                    HeaderText="Size"
+                                    HorizontalHeaderContentAlignment="Left"
+                                    IsReadOnly="True"
+                                    MappingName="Size"
+                                    SortMode="Value"
+                                    ValueBinding="{Binding Size}" />
 
                             </syncfusion:SfDataGrid.Columns>
 
-                                
 
-                                <hc:Interaction.Triggers>
-                                    <hc:EventTrigger EventName="MouseDoubleClick">
+
+                            <hc:Interaction.Triggers>
+                                <hc:EventTrigger EventName="MouseDoubleClick">
                                     <hc:EventToCommand Command="{Binding OpenFileSystemItemCommand}" />
-                                    </hc:EventTrigger>
-                                </hc:Interaction.Triggers>
+                                </hc:EventTrigger>
+                            </hc:Interaction.Triggers>
 
-                            </syncfusion:SfDataGrid>
+                        </syncfusion:SfDataGrid>
 
-                            <!--<syncfusion:SfDataPager
+                        <!--<syncfusion:SfDataPager
                                 x:Name="dataPager"
                                 Grid.Row="1"
                                 PageCount="5"
@@ -412,10 +418,10 @@
                     </Grid>
 
                 </Grid>
-                
+
             </Grid>
         </Border>
-        
+
         <Border
             x:Name="LoadingBorder"
             Grid.RowSpan="3"
@@ -425,8 +431,9 @@
             Visibility="{Binding Path=LoadVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
             <Grid>
                 <syncfusion:SfBusyIndicator
-                    AnimationType="Ball" Foreground="{DynamicResource MahApps.Brushes.Accent}"
-                    Visibility="{Binding Path=LoadVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    AnimationType="Ball"
+                    Foreground="{DynamicResource MahApps.Brushes.Accent}"
+                    Visibility="{Binding Path=LoadVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
 
                 <StackPanel VerticalAlignment="Center">
                     <TextBlock
@@ -450,11 +457,14 @@
             <Grid>
                 <StackPanel VerticalAlignment="Center">
                     <Button HorizontalAlignment="Center" Command="{Binding LoadAssetBrowserCommand}">
-                        <TextBlock Text="Load Asset Browser" FontSize="16" Margin="20,10"/>
+                        <TextBlock
+                            Margin="20,10"
+                            FontSize="16"
+                            Text="Load Asset Browser" />
                     </Button>
                 </StackPanel>
             </Grid>
         </Border>
-        
+
     </Grid>
 </reactiveUi:ReactiveUserControl>

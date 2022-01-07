@@ -148,7 +148,7 @@
                                 <Style TargetType="StackPanel">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Value}" Value="">
+                                        <DataTrigger Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="">
                                             <Setter Property="Visibility" Value="Visible" />
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -162,7 +162,7 @@
                                 <StackPanel.Style>
                                     <Style TargetType="StackPanel">
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding TypesDiffer}" Value="False">
+                                            <DataTrigger Binding="{Binding TypesDiffer, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="False">
                                                 <Setter Property="Visibility" Value="Collapsed" />
                                             </DataTrigger>
                                         </Style.Triggers>
@@ -172,7 +172,7 @@
                                     Height="7"
                                     VerticalAlignment="Center"
                                     Kind="ArrowRight" />
-                                <TextBlock Foreground="{StaticResource WolvenKitTan}" Text="{Binding ResolvedType}" />
+                                <TextBlock Foreground="{StaticResource WolvenKitTan}" Text="{Binding ResolvedType, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
                         </StackPanel>
                         <TextBlock
@@ -187,7 +187,7 @@
                             Grid.Column="2"
                             Margin="0,0,0,2"
                             Style="{StaticResource PropertyValueStyle}"
-                            Text="{Binding Value}"
+                            Text="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                             TextTrimming="CharacterEllipsis" />
                     </Grid>
                 </DataTemplate>

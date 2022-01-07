@@ -498,7 +498,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 if (Data is IRedBaseHandle handle)
                 {
-                    return handle.InnerType;
+                    return handle?.GetValue().GetType() ?? handle.InnerType;
                 }
                 return PropertyType;
             }
@@ -516,15 +516,11 @@ namespace WolvenKit.ViewModels.Shell
         {
             get
             {
-                if (Data is IRedBaseHandle handle)
-                {
-                    return GetTypeRedName(handle?.GetValue().GetType() ?? handle.InnerType);
-                }
-                return Type;
+                return GetTypeRedName(ResolvedPropertyType);
             }
         }
 
-        public bool TypesDiffer => Type != ResolvedType;
+        public bool TypesDiffer => PropertyType != ResolvedPropertyType;
 
         public bool IsInArray => Parent != null && Parent.IsArray;
 

@@ -201,6 +201,10 @@ namespace WolvenKit.ViewModels.Documents
                     TabItemViewModels.Add(new RDTInkTextureAtlasViewModel(atlas, (CBitmapTexture)file.RootChunk, this));
                 }
             }
+            if (Cr2wFile.RootChunk is inkWidgetLibraryResource library)
+            {
+                TabItemViewModels.Add(new RDTWidgetViewModel(library, this));
+            }
 
             foreach (var file in Cr2wFile.EmbeddedFiles)
             {
@@ -213,7 +217,7 @@ namespace WolvenKit.ViewModels.Documents
             SelectedTabItemViewModel = TabItemViewModels.FirstOrDefault();
         }
 
-        private CR2WFile GetFileFromHash(ulong hash)
+        public CR2WFile GetFileFromHash(ulong hash)
         {
             // TODO: need to look locally first
             var _archiveManager = Locator.Current.GetService<IArchiveManager>();
