@@ -1,11 +1,11 @@
 <p align="center">
   <a href="https://wiki.redmodding.org/wolvenkit"><img src="https://cdn.discordapp.com/attachments/819016885239676978/847565560229527602/wkit_sammy_white_text_ffffff_800x200.png"/></a><br /><br />
-  <a href="https://github.com/WolvenKit/Wolvenkit/releases"><img src="https://img.shields.io/github/downloads/WolvenKit/Wolven-Kit/total"></a>
-  <a href="https://github.com/WolvenKit/Wolvenkit/actions?query=workflow%3AWolvenKit-Nightly"><img src="https://github.com/WolvenKit/Wolven-kit/workflows/WolvenKit-Nightly/badge.svg"></a>
-  <a href="https://github.com/WolvenKit/Wolven-kit/issues"><img src="https://img.shields.io/github/issues/WolvenKit/Wolven-kit.svg"></a>
-  <a href="https://github.com/WolvenKit/Wolven-kit/network"><img src="https://img.shields.io/github/forks/WolvenKit/Wolven-kit.svg"></a>
-  <a href="https://github.com/WolvenKit/Wolven-kit/stargazers"><img src="https://img.shields.io/github/stars/WolvenKit/Wolven-kit.svg"></a>    
-  <a href="https://raw.githubusercontent.com/WolvenKit/Wolven-kit/master/LICENSE"><img src="https://img.shields.io/badge/license-AGPL-blue.svg"></a>
+  <a href="https://github.com/WolvenKit/Wolvenkit/releases"><img src="https://img.shields.io/github/downloads/WolvenKit/WolvenKit/total"></a>
+  <a href="https://github.com/WolvenKit/Wolvenkit/actions?query=workflow%3AWolvenKit-Nightly"><img src="https://github.com/WolvenKit/WolvenKit/workflows/WolvenKit-Nightly/badge.svg"></a>
+  <a href="https://github.com/WolvenKit/WolvenKit/issues"><img src="https://img.shields.io/github/issues/WolvenKit/WolvenKit.svg"></a>
+  <a href="https://github.com/WolvenKit/WolvenKit/network"><img src="https://img.shields.io/github/forks/WolvenKit/WolvenKit.svg"></a>
+  <a href="https://github.com/WolvenKit/WolvenKit/stargazers"><img src="https://img.shields.io/github/stars/WolvenKit/WolvenKit.svg"></a>    
+  <a href="https://raw.githubusercontent.com/WolvenKit/WolvenKit/master/LICENSE"><img src="https://img.shields.io/github/license/WolvenKit/WolvenKit.svg"></a>
   <a href="https://discord.gg/cp77modding"><img src="https://img.shields.io/discord/717692382849663036.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2"></a>
 </p>
 
