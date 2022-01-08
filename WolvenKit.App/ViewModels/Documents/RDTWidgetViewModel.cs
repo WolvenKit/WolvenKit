@@ -38,6 +38,9 @@ namespace WolvenKit.ViewModels.Documents
         // [atlasPath][partName]
         public Dictionary<string, Dictionary<string, ImageSource>> AtlasParts = new();
 
+        // [atlasPath][partName]
+        public Dictionary<string, Dictionary<string, RectF>> AtlasSlices = new();
+
         // [fontfamily][styleName] 
         public Dictionary<string, Dictionary<string, PrivateFontCollection>> Fonts = new();
 
@@ -59,6 +62,7 @@ namespace WolvenKit.ViewModels.Documents
                         continue;
 
                     AtlasParts[itemPath] = new Dictionary<string, ImageSource>();
+                    AtlasSlices[itemPath] = new Dictionary<string, RectF>();
                     var xbmHash = FNV1A64HashAlgorithm.HashString(atlas.Slots[0].Texture.DepotPath.ToString());
                     var xbmFile = File.GetFileFromHash(xbmHash);
                     if (xbmFile == null || xbmFile.RootChunk is not CBitmapTexture xbm)
@@ -82,6 +86,11 @@ namespace WolvenKit.ViewModels.Documents
                         var Height = Math.Round(part.ClippingRectInUVCoords.Bottom * xbm.Height) - Top;
                         var partImage = new CroppedBitmap(image, new Int32Rect((int)Left, (int)Top, (int)Width, (int)Height));
                         AtlasParts[itemPath][part.PartName] = partImage;
+                    }
+
+                    foreach (var slice in atlas.Slots[0].Slices)
+                    {
+                        AtlasSlices[itemPath][slice.PartName] = slice.NineSliceScaleRect;
                     }
                 }
                 else if (Path.GetExtension(itemPath) == ".inkfontfamily")

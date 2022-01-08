@@ -18,6 +18,7 @@ using System.Windows.Shapes;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Layout;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Documents;
@@ -131,18 +132,20 @@ namespace WolvenKit.Views.Documents
                 {
                     if (hpw.ChildOrder.Value == Enums.inkEChildOrder.Forward)
                     {
+                        left += (float)(parent.Children[0] as FrameworkElement).Margin.Left;
                         foreach (FrameworkElement child in parent.Children)
                         {
-                            left += (float)child.Width;
-                            width -= (float)child.Width;
+                            left += (float)(child.Width);
+                            //width -= (float)(child.Width + child.Margin.Left);
                         }
                     }
                     else
                     {
+                        right += (float)(parent.Children[0] as FrameworkElement).Margin.Right;
                         foreach (FrameworkElement child in parent.Children)
                         {
-                            right += (float)child.Width;
-                            width -= (float)child.Width;
+                            right += (float)(child.Width);
+                            //width -= (float)(child.Width + child.Margin.Right);
                         }
                     }
                 }
@@ -150,24 +153,32 @@ namespace WolvenKit.Views.Documents
                 {
                     if (vpw.ChildOrder.Value == Enums.inkEChildOrder.Forward)
                     {
+                        top += (float)(parent.Children[0] as FrameworkElement).Margin.Top;
                         foreach (FrameworkElement child in parent.Children)
                         {
-                            top += (float)child.Height;
-                            height -= (float)child.Height;
+                            top += (float)(child.Height);
+                            //height -= (float)child.Height;
                         }
                     }
                     else
                     {
+                        bottom += (float)(parent.Children[0] as FrameworkElement).Margin.Bottom;
                         foreach (FrameworkElement child in parent.Children)
                         {
                             bottom += (float)child.Height;
-                            height -= (float)child.Height;
+                            //height -= (float)child.Height;
                         }
                     }
                 }
             }
 
-            if ((parent.Tag is inkFlexWidget || 
+            if (widget.Layout.HAlign.Value == Enums.inkEHorizontalAlign.Center && widget.Layout.Anchor.Value == Enums.inkEAnchor.TopLeft)
+            {
+                left -= width / 2;
+                right -= width / 2;
+            }
+
+            if ((parent.Tag is inkFlexWidget ||
                 widget.Layout.Anchor.Value == Enums.inkEAnchor.Fill ||
                 widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomFillHorizontaly ||
                 widget.Layout.Anchor.Value == Enums.inkEAnchor.CenterFillHorizontaly ||
@@ -175,13 +186,14 @@ namespace WolvenKit.Views.Documents
                 ) && !Double.IsNaN(parent.Width))
             {
                 width = (float)parent.Width;
-                //left = 0;
-                //right = 0;
+                left = 0;
+                right = 0;
             }
-            else if (widget.Layout.HAlign.Value == Enums.inkEHorizontalAlign.Center)
+
+                if (widget.Layout.VAlign.Value == Enums.inkEVerticalAlign.Center && widget.Layout.Anchor.Value == Enums.inkEAnchor.TopLeft)
             {
-                left -= width / 2;
-                right -= width / 2;
+                top -= height / 2;
+                bottom -= height / 2;
             }
 
             if ((parent.Tag is inkFlexWidget ||
@@ -192,13 +204,8 @@ namespace WolvenKit.Views.Documents
                 ) && !Double.IsNaN(parent.Height))
             {
                 height = (float)parent.Height;
-                //top = 0;
-                //bottom = 0;
-            }
-            else if (widget.Layout.VAlign.Value == Enums.inkEVerticalAlign.Center)
-            {
-                top -= height / 2;
-                bottom -= height / 2;
+                top = 0;
+                bottom = 0;
             }
 
 
@@ -357,7 +364,19 @@ namespace WolvenKit.Views.Documents
                             bitmap = new Bitmap(outStream);
                         }
 
-                        Bitmap bmp = new Bitmap((int)width, (int)height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                        int renderWidth, renderHeight;
+                        if (imageWidget.UseNineSliceScale)
+                        {
+                            renderWidth = bitmap.Width;
+                            renderHeight = bitmap.Height;
+                        }
+                        else
+                        {
+                            renderWidth = (int)Math.Round(width);
+                            renderHeight = (int)Math.Round(height);
+                        }
+
+                        Bitmap bmp = new Bitmap(renderWidth, renderHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
                         using (Graphics gfx = Graphics.FromImage(bmp))
                         {
@@ -385,18 +404,36 @@ namespace WolvenKit.Views.Documents
                             Int32Rect.Empty,
                             BitmapSizeOptions.FromEmptyOptions());
 
+                        //var hb = bitmap.GetHbitmap();
+                        //var stride = ((renderWidth * 32 + 31) & ~31) >> 3;
+
+                        //var bitmapSource = BitmapSource.Create(renderWidth, renderHeight,
+                        //    96, 96, System.Windows.Media.PixelFormats.Pbgra32, null, hb, renderHeight * renderWidth * 4, stride);
+
                         //var image = new System.Windows.Controls.Image();
                         //image.Source = bitmapSource;
                         //element = image;
 
-                        var imagebrush = new ImageBrush();
-                        imagebrush.ImageSource = bitmapSource;
+                        if (imageWidget.UseNineSliceScale && ViewModel.AtlasSlices.ContainsKey(atlasPath) && ViewModel.AtlasSlices[atlasPath].ContainsKey(imageWidget.TexturePart))
+                        {
+                            var rect = ViewModel.AtlasSlices[atlasPath][imageWidget.TexturePart];
+                            var ns = new NineSlicePanel()
+                            {
+                                BackgroundImage = bitmapSource,
+                                NineSlice = ToThickness(rect)
+                            };
+                            element = ns;
+                        }
+                        else
+                        {
+                            var imagebrush = new ImageBrush();
+                            imagebrush.ImageSource = bitmapSource;
 
-                        var grid = new Canvas();
-                        grid.Background = new SolidColorBrush(ToColor(widget.TintColor));
-                        grid.OpacityMask = imagebrush;
-                        element = grid;
-
+                            var grid = new Canvas();
+                            grid.Background = new SolidColorBrush(ToColor(widget.TintColor));
+                            grid.OpacityMask = imagebrush;
+                            element = grid;
+                        }
                         RenderOptions.SetBitmapScalingMode(element, BitmapScalingMode.NearestNeighbor);
                     }
                 }
@@ -410,7 +447,7 @@ namespace WolvenKit.Views.Documents
 
             element.Tag = widget;
             element.ToolTip = widget.Name + $" ({widget.GetType().Name})";
-            element.Name = widget.GetType().Name + "_" + widget.Name.GetValue().Replace(" ", "_").Replace("-", "_");
+            element.Name = widget.GetType().Name + "_" + widget.Name.GetValue().Replace(" ", "_").Replace("-", "_").Replace("/", "_");
 
             //if (parent.Tag is inkCanvasWidget)
             //{
@@ -437,7 +474,7 @@ namespace WolvenKit.Views.Documents
                 widget.Layout.Anchor.Value == Enums.inkEAnchor.TopLeft
                 )
             {
-                Canvas.SetLeft(element, left);
+                //Canvas.SetLeft(element, left);
             }
             else if (widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomRight ||
                 widget.Layout.Anchor.Value == Enums.inkEAnchor.RightFillVerticaly ||
@@ -445,11 +482,11 @@ namespace WolvenKit.Views.Documents
                 widget.Layout.Anchor.Value == Enums.inkEAnchor.TopRight
                 )
             {
-                Canvas.SetRight(element, right);
+                //Canvas.SetRight(element, right);
             }
             else
             {
-                Canvas.SetLeft(element, parent.Width / 2 - element.Width / 2 + widget.Layout.Margin.Left - widget.Layout.Margin.Right);
+                Canvas.SetLeft(element, parent.Width / 2 - element.Width / 2);
             }
 
             if (widget.Layout.Anchor.Value == Enums.inkEAnchor.TopCenter ||
@@ -458,7 +495,7 @@ namespace WolvenKit.Views.Documents
                 widget.Layout.Anchor.Value == Enums.inkEAnchor.TopRight
                 )
             {
-                Canvas.SetTop(element, top);
+                //Canvas.SetTop(element, top);
             }
             else if (widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomCenter ||
                 widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomFillHorizontaly ||
@@ -466,16 +503,18 @@ namespace WolvenKit.Views.Documents
                 widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomRight
                 )
             {
-                Canvas.SetBottom(element, bottom);
+                //Canvas.SetBottom(element, bottom);
             }
             else
             {
-                Canvas.SetTop(element, parent.Height / 2 - element.Height / 2 + widget.Layout.Margin.Top - widget.Layout.Margin.Bottom);
+                Canvas.SetTop(element, parent.Height / 2 - element.Height / 2);
             }
+
+            element.Margin = new Thickness(left, top, right, bottom);
 
 
             // lots of elements are hidden by default
-            if (widget.Name != "Root")
+            if (widget.Name != "Root" && parent is not StackPanel)
                 element.Opacity = widget.Opacity;
 
             //element.Visibility = widget.Visible ? Visibility.Visible : Visibility.Collapsed;
@@ -540,6 +579,11 @@ namespace WolvenKit.Views.Documents
         private Thickness ToThickness(inkMargin value)
         {
             return new Thickness(value.Left, value.Top, value.Right, value.Bottom);
+}
+
+        private Thickness ToThickness(RectF value)
+        {
+            return new Thickness(value.Left, value.Top, value.Right, value.Bottom);
         }
 
         private void WidgetPreview_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -549,7 +593,7 @@ namespace WolvenKit.Views.Documents
                 WidgetPreviewCanvas.ReleaseMouseCapture();
                 WidgetPreviewCanvas.SetCurrentValue(CursorProperty, Cursors.Arrow);
                 TranslateTransform tt = (TranslateTransform)((TransformGroup)WidgetPreview.RenderTransform).Children[1];
-                end = new System.Windows.Point(tt.X, tt.Y);
+                end = new System.Windows.Point(Math.Round(tt.X), Math.Round(tt.Y));
             }
         }
 
@@ -560,8 +604,8 @@ namespace WolvenKit.Views.Documents
 
             TranslateTransform tt = (TranslateTransform)((TransformGroup)WidgetPreview.RenderTransform).Children[1];
             Vector v = start - Mouse.GetPosition(WidgetPreviewCanvas);
-            tt.X = origin.X - v.X;
-            tt.Y = origin.Y - v.Y;
+            tt.X = Math.Round(origin.X - v.X);
+            tt.Y = Math.Round(origin.Y - v.Y);
         }
 
         private void WidgetPreview_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -574,8 +618,8 @@ namespace WolvenKit.Views.Documents
                 // resets when children are hittble? idk
                 TranslateTransform tt = (TranslateTransform)((TransformGroup)WidgetPreview.RenderTransform).Children[1];
                 origin = end;
-                tt.X = origin.X;
-                tt.Y = origin.Y;
+                tt.X = Math.Round(origin.X);
+                tt.Y = Math.Round(origin.Y);
                 WidgetPreviewCanvas.SetCurrentValue(CursorProperty, Cursors.ScrollAll);
             }
         }
@@ -589,8 +633,8 @@ namespace WolvenKit.Views.Documents
             double zoom = e.Delta > 0 ? 1.2 : (1 / 1.2);
 
             var CursorPosCanvas = e.GetPosition(WidgetPreviewCanvas);
-            pan.X += -(CursorPosCanvas.X - WidgetPreviewCanvas.RenderSize.Width / 2.0 - pan.X) * (zoom - 1.0);
-            pan.Y += -(CursorPosCanvas.Y - WidgetPreviewCanvas.RenderSize.Height / 2.0 - pan.Y) * (zoom - 1.0);
+            pan.X += Math.Round(-(CursorPosCanvas.X - WidgetPreviewCanvas.RenderSize.Width / 2.0 - pan.X) * (zoom - 1.0));
+            pan.Y += Math.Round(-(CursorPosCanvas.Y - WidgetPreviewCanvas.RenderSize.Height / 2.0 - pan.Y) * (zoom - 1.0));
             end.X = pan.X;
             end.Y = pan.Y;
 
