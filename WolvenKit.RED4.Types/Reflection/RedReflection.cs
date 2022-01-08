@@ -400,7 +400,11 @@ namespace WolvenKit.RED4.Types
             public object DefaultValue { get; internal set; }
 
             public object GetValue(RedBaseClass instance) => instance.InternalGetPropertyValue(Type, RedName, Flags);
-            public void SetValue(RedBaseClass instance, IRedType value) => instance.InternalSetPropertyValue(RedName, value, true);
+            public void SetValue(RedBaseClass instance, IRedType value)
+            {
+                instance.InternalForceSetPropertyValue(RedName, value, true);
+                instance._writtenProperties.Add(RedName);
+            }
 
 
             public ExtendedPropertyInfo(Type parent, PropertyInfo propertyInfo)
