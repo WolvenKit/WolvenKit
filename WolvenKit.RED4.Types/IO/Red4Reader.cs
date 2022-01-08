@@ -462,8 +462,6 @@ namespace WolvenKit.RED4.IO
 
         public virtual IRedStatic<T> ReadCStaticArray<T>(uint size, Flags flags) where T : IRedType
         {
-            var array = new CStatic<T>(flags.MoveNext() ? flags.Current : 0);
-
             var elementCount = _reader.ReadUInt32();
 
             uint elementSize = 0;
@@ -471,6 +469,9 @@ namespace WolvenKit.RED4.IO
             {
                 elementSize = (size - 4) / elementCount;
             }
+
+            var array = new CStatic<T>((int)elementCount);
+            array.MaxSize = flags.MoveNext() ? flags.Current : 0;
 
             for (var i = 0; i < elementCount; i++)
             {

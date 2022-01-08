@@ -82,7 +82,7 @@ namespace WolvenKit.RED4.Types
                 return true;
             }
 
-            return EqualityComparer<T>.Default.Equals((T)Chunk, (T)other.Chunk);
+            return ReferenceEquals(Chunk, other.Chunk);
         }
 
         public override bool Equals(object obj)

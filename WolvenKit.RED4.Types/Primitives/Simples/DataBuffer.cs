@@ -42,7 +42,7 @@ namespace WolvenKit.RED4.Types
                 return true;
             }
 
-            return Equals(Buffer, other.Buffer);
+            return ReferenceEquals(Buffer, other.Buffer);
         }
 
         public override bool Equals(object obj)

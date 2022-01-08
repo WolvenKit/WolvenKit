@@ -19,6 +19,17 @@ namespace WolvenKit.RED4.Archive.IO
         private Dictionary<int, RedBaseClass> _chunks = new();
         private Dictionary<int, RedBuffer> _buffers = new();
 
+        private static readonly Dictionary<string, Type> _bufferReaders = new();
+
+        static CR2WReader()
+        {
+            _bufferReaders.Add("appearanceAppearanceDefinition.compiledData", typeof(PackageReader));
+            _bufferReaders.Add("entEntityTemplate.compiledData", typeof(PackageReader));
+            _bufferReaders.Add("inkWidgetLibraryItem.packageData", typeof(PackageReader));
+            _bufferReaders.Add("entEntityInstanceData.buffer", typeof(PackageReader));
+            _bufferReaders.Add("gamePersistentStateDataResource.buffer", typeof(PackageReader));
+        }
+
         public EFileReadErrorCodes ReadFileInfo(out CR2WFileInfo info)
         {
             var id = BaseStream.ReadStruct<uint>();
@@ -138,8 +149,15 @@ namespace WolvenKit.RED4.Archive.IO
 
                 foreach (var pointers in BufferQueue[i])
                 {
+                    foreach (var parentType in pointers.GetValue().ParentTypes)
+                    {
+                        buffer.ParentTypes.Add(parentType);
+                    }
+
                     pointers.SetValue(buffer);
                 }
+
+                ParseBuffer(buffer);
             }
             
             foreach (var embeddedInfo in _cr2wFile.Info.EmbeddedInfo)
@@ -215,16 +233,28 @@ namespace WolvenKit.RED4.Archive.IO
             Debug.Assert(BaseStream.Position == info.offset);
 
             var buffer = BaseReader.ReadBytes((int)info.diskSize);
-            var result = RedBuffer.CreateBuffer(info.flags, buffer, (int)info.memSize);
+            return RedBuffer.CreateBuffer(info.flags, buffer, (int)info.memSize);
+        }
 
-            if (_parseBuffer)
+        private void ParseBuffer(RedBuffer buffer)
+        {
+            if (!_parseBuffer)
             {
-                var ms = new MemoryStream(result.GetBytes());
-                var reader = new PackageReader(ms);
-                reader.ReadPackage(result);
+                return;
             }
 
-            return result;
+            if (buffer.ParentTypes.Count != 1)
+            {
+                return;
+            }
+
+            var parentType = buffer.ParentTypes.First();
+            if (_bufferReaders.ContainsKey(parentType))
+            {
+                var ms = new MemoryStream(buffer.GetBytes());
+                var reader = (IBufferReader)System.Activator.CreateInstance(_bufferReaders[parentType], ms);
+                reader.ReadBuffer(buffer, _cr2wFile.RootChunk.GetType());
+            }
         }
 
         private CR2WEmbedded ReadEmbedded(CR2WEmbeddedInfo info)

@@ -181,6 +181,27 @@ namespace WolvenKit.RED4.Types
             }
         }
 
+        internal void InternalForceSetPropertyValue(string redPropertyName, IRedType value, bool native)
+        {
+            object oldValue = null;
+            if (_properties.ContainsKey(redPropertyName))
+            {
+                oldValue = _properties[redPropertyName];
+            }
+
+            RemoveEventHandler(redPropertyName);
+
+            _properties[redPropertyName] = value;
+            if (!native)
+            {
+                _dynamicProperties.Add(redPropertyName);
+            }
+
+            AddEventHandler(redPropertyName);
+
+            OnObjectChanged(redPropertyName, oldValue, value);
+        }
+
         public IRedType GetObjectByRedName(string redName)
         {
             if (_properties.ContainsKey(redName))
@@ -342,7 +363,7 @@ namespace WolvenKit.RED4.Types
                     if (result is IRedBaseHandle handle)
                     {
                         var cCls = handle.GetValue();
-                        currentProps = ((RedBaseClass)cCls)._properties;
+                        currentProps = cCls._properties;
                     }
 
                     continue;
@@ -377,6 +398,7 @@ namespace WolvenKit.RED4.Types
         #region DynamicObject
 
         private readonly IDictionary<string, IRedType> _properties = new Dictionary<string, IRedType>();
+        internal readonly IList<string> _writtenProperties = new List<string>();
         private readonly IList<string> _dynamicProperties = new List<string>();
 
         public override bool TrySetMember(SetMemberBinder binder, object value)
@@ -392,6 +414,11 @@ namespace WolvenKit.RED4.Types
 
             result = obj;
             return success;
+        }
+
+        public List<string> GetWrittenPropertyNames()
+        {
+            return new List<string>(_writtenProperties);
         }
 
         public List<string> GetDynamicPropertyNames()

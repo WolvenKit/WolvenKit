@@ -7,9 +7,9 @@ namespace WolvenKit.RED4.Archive.Buffer
     {
         public ushort Version = 4;
         public ushort Sections = 7;
-        public ushort RefsAreStrings;
 
-        public IList<CRUID> Cruids;
+        public short CruidIndex;
+        public IList<CRUID> RootCruids;
 
         
         public IList<RedBaseClass> Chunks { get; set; }
@@ -17,7 +17,7 @@ namespace WolvenKit.RED4.Archive.Buffer
 
         public Package04()
         {
-            Cruids = new List<CRUID>();
+            RootCruids = new List<CRUID>();
         }
     }
 }

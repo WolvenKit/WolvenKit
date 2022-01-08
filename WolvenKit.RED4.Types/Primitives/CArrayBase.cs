@@ -109,7 +109,7 @@ namespace WolvenKit.RED4.Types
 
         private int AddItem(object value)
         {
-            if (value is not T castedValue)
+            if (value != null && value is not T)
             {
                 return -1;
             }
@@ -124,12 +124,16 @@ namespace WolvenKit.RED4.Types
                 throw new NotSupportedException();
             }
 
+            var castedValue = (T)value;
+
             _internalList.Add(castedValue);
-
-            AddEventHandler(castedValue);
-
             var index = _internalList.Count - 1;
-            OnObjectChanged(ObjectChangedType.Added, index, null, castedValue);
+
+            if (castedValue != null)
+            {
+                AddEventHandler(castedValue);
+                OnObjectChanged(ObjectChangedType.Added, index, null, castedValue);
+            }
 
             return index;
         }
