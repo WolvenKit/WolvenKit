@@ -28,7 +28,6 @@ using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using WolvenManager.Installer.Services;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 using WolvenKit.Common.Model;
 using WolvenKit.ViewModels.Tools;
@@ -57,7 +56,6 @@ namespace WolvenKit.ViewModels.Shell
         private readonly ILoggerService _loggerService;
         private readonly IProjectManager _projectManager;
         private readonly IGameControllerFactory _gameControllerFactory;
-        private readonly IUpdateService _updateService;
         private readonly ISettingsManager _settingsManager;
         private readonly INotificationService _notificationService;
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
@@ -77,7 +75,6 @@ namespace WolvenKit.ViewModels.Shell
             IProjectManager projectManager,
             ILoggerService loggerService,
             IGameControllerFactory gameControllerFactory,
-            IUpdateService updateService,
             ISettingsManager settingsManager,
             INotificationService notificationService,
             IRecentlyUsedItemsService recentlyUsedItemsService,
@@ -85,7 +82,6 @@ namespace WolvenKit.ViewModels.Shell
             IWatcherService watcherService
         )
         {
-            _updateService = updateService;
             _projectManager = projectManager;
             _loggerService = loggerService;
             _gameControllerFactory = gameControllerFactory;
@@ -155,13 +151,13 @@ namespace WolvenKit.ViewModels.Shell
                 ImportExportToolVM,
             };
                 
-            _settingsManager
-                .WhenAnyValue(x => x.UpdateChannel)
-                .Subscribe(_ =>
-                {
-                    _updateService.SetUpdateChannel((WolvenManager.Installer.Models.EUpdateChannel)_settingsManager.UpdateChannel);
-                    Task.Run(() => _updateService.CheckForUpdatesAsync());
-                });
+            //_settingsManager
+            //    .WhenAnyValue(x => x.UpdateChannel)
+            //    .Subscribe(_ =>
+            //    {
+
+
+            //    });
         }
 
         #endregion constructors
@@ -177,45 +173,9 @@ namespace WolvenKit.ViewModels.Shell
 
         private void InitUpdateService()
         {
-            _updateService.SetUpdateChannel((WolvenManager.Installer.Models.EUpdateChannel)_settingsManager.UpdateChannel);
-            _updateService.Init(new[] { Constants.UpdateUrl, Constants.UpdateUrlNightly },
-                Constants.AssemblyName,
-                delegate (FileInfo path, bool isManaged)
-                {
-                    if (isManaged)
-                    {
-                        _ = Process.Start(path.FullName, "/SILENT /NOCANCEL");      //INNO
-                                                                                    //_ = Process.Start(path.FullName, "/qr");                  //Advanced Installer
-                    }
-                    else
-                    {
-                        // move installer helper
-                        var basedir = new DirectoryInfo(Path.GetDirectoryName(System.AppContext.BaseDirectory));
-                        var shippedInstaller = new FileInfo(Path.Combine(basedir.FullName, "lib", Constants.UpdaterName));
-                        var newPath = Path.Combine(ISettingsManager.GetAppData(), Constants.UpdaterName);
-                        try
-                        {
-                            shippedInstaller.MoveTo(newPath, true);
-                        }
-                        catch (Exception e)
-                        {
-                            _loggerService.Error("Could not initialize auto-installer.");
-                            _loggerService.Error(e);
-                            return;
-                        }
-
-                        // start installer helper
-                        var psi = new ProcessStartInfo
-                        {
-                            FileName = "CMD.EXE",
-                            Arguments = $"/K {newPath} install -i \"{path}\" -o \"{basedir.FullName}\" -r {Constants.AppName}"
-                        };
-                        var p = Process.Start(psi);
-                    }
-
-                    Application.Current.Shutdown();
-                }, _notificationService.AskInApp);
+            
         }
+
 
         private async void ShowFirstTimeSetup()
         {
