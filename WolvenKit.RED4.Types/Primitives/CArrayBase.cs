@@ -200,7 +200,7 @@ namespace WolvenKit.RED4.Types
 
         public bool Contains(T item) => _internalList.Contains(item);
 
-        public void CopyTo(T[] array, int arrayIndex) => throw new NotImplementedException();
+        public void CopyTo(T[] array, int arrayIndex) => ((IList)_internalList).CopyTo(array, arrayIndex);
 
         public bool Contains(object value) => ((IList)_internalList).Contains(value);
 
